@@ -1,0 +1,16 @@
+#!/bin/bash
+
+SRC_DIR=../IBIS_SOURCE/
+
+cmake -G"Eclipse CDT4 - Unix Makefiles" \
+        -DCMAKE_ECLIPSE_GENERATE_SOURCE_PROJECT=TRUE \
+        -DCMAKE_ECLIPSE_VERSION=4.6 \
+        -DCMAKE_ECLIPSE_MAKE_ARGUMENTS=-j4 \
+        -DCMAKE_RULE_MESSAGES:BOOL=OFF \
+        -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON \
+        -DCMAKE_BUILD_TYPE=Debug \
+        -DCMAKE_CXX_COMPILER=g++ \
+        ${SRC_DIR}
+
+make -j4
+
