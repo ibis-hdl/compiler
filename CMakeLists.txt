@@ -65,7 +65,7 @@ include_directories(${GSL_INCLUDE_DIR})
 include_directories(${SPIRIT_X3_INCLUDE_DIR})
 
 
-add_executable(hello ${PROJECT_SOURCE_DIR}/src/test.cpp)
+add_executable(hello ${PROJECT_SOURCE_DIR}/src/x3_stringview_quoted_string.cpp)
 add_dependencies(hello gsl)
 add_dependencies(hello boost-spirit-x3)
 
