@@ -26,7 +26,7 @@ void move_to(It b, It e, std::experimental::string_view& v)
 
 namespace client { namespace ast
 {
-	using std::experimental::string_view;
+	using std_string_view = std::experimental::string_view;
 
     ///////////////////////////////////////////////////////////////////////////
     //  Our employee struct
@@ -34,7 +34,7 @@ namespace client { namespace ast
     struct employee
     {
         int age;
-        string_view surname;
+        std_string_view surname;
         std::string forename;
         double salary;
     };
