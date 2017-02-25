@@ -4,6 +4,9 @@
 *~
 \#*\#
 
+# eclipse
+.project
+
 # cmake
 CMakeCache.txt
 CMakeFiles
