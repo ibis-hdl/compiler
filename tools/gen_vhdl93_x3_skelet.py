@@ -1095,7 +1095,7 @@ auto const {0}_def =
     ;
 #endif""".format(
         p.name, 
-        p.rule,
+        p.rule.replace(r"'", r"\'"),
         def_desc)
     # macro
     if n != len(bnf_rules) - 1: mdef_ = """//    {0},""".format(p.name)
