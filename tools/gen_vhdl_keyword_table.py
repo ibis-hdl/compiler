@@ -3,7 +3,7 @@
 # generate keyword list
 
 # https://www.csee.umbc.edu/portal/help/VHDL/reserved.html
-vhdl_reserved = """
+vhdl93_reserved_words = """
 abs           operator, absolute value of right operand. No () needed.
 access        used to define an access type, pointer
 after         specifies a time after NOW
@@ -104,7 +104,7 @@ xor           operator, exclusive "or" of left and right operands
 """
 
 
-kw_list = [line.split()[0] for line in vhdl_reserved.splitlines()  if line.strip()]
+kw_list = [line.split()[0] for line in vhdl93_reserved_words.splitlines() if line.strip()]
 
 x3_symbol_ids = """
 enum class keyword_sym_id_t {
