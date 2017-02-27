@@ -1034,6 +1034,7 @@ waveform_element ::=
 
 import collections
 
+
 ## keywords
 kw_list = [l.split()[0] for l in vhdl93_words.splitlines() if l.strip()]
 x3_words = ["""
@@ -1055,18 +1056,23 @@ for n, line in enumerate(kw_list):
 rule_tuple = collections.namedtuple("BNF_Rule", ["name", "rule"])
 x3_rules = []
 
+name = ""
+rest = ""
 for line in [l for l in vhdl97_ebnf.splitlines() if l.strip()]:
     #print(line)
     if "::=" in line:
+        # avoid inserting empty (name, rest) tuple
+        if name:
+            #rest.replace(';', '') # some rules have terminals, other haven't
+            x3_rules.append(rule_tuple(name, rest))
+            
+        rest = ""
         p = line.split("::=", 1)
         name = p[0].strip()
-        rest = p[1].strip()
-        x3_rules.append(rule_tuple(name, rest));
+        rest = p[1].strip().rstrip(';')
     else:
-        n, r = x3_rules[-1]
-        r += line
-        #print(r)
-        x3_rules[-1]._replace(rule = r) # this isn't what you may expect!
+        rest += "    " + line.strip().rstrip(';') + '\n'
+
 
 declaration = []
 definition  = []
@@ -1085,14 +1091,14 @@ for n, p in enumerate(x3_rules):
     defines.append(mdef_)
 
 
-for w in x3_words:
-    print(w)
+#for w in x3_words:
+#    print(w)
     
 #for p in declaration:
 #    print(p)
 
-#for d in definition:
-#    print(d)
+for d in definition:
+    print(d)
 
 #for d in defines:
 #    print(d)
