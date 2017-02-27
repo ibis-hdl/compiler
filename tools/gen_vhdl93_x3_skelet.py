@@ -1052,7 +1052,7 @@ for n, line in enumerate(kw_list):
 
 
 ## declaration, definitions
-production_rule = collections.namedtuple("BNF_Rule", ["name", "rule"])
+rule_tuple = collections.namedtuple("BNF_Rule", ["name", "rule"])
 x3_rules = []
 
 for line in [l for l in vhdl97_ebnf.splitlines() if l.strip()]:
@@ -1061,7 +1061,7 @@ for line in [l for l in vhdl97_ebnf.splitlines() if l.strip()]:
         p = line.split("::=", 1)
         name = p[0].strip()
         rest = p[1].strip()
-        x3_rules.append(production_rule(name, rest));
+        x3_rules.append(rule_tuple(name, rest));
     else:
         n, r = x3_rules[-1]
         r += line
