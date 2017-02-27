@@ -1035,8 +1035,32 @@ waveform_element ::=
 import collections
 
 
-## keywords
+## BNF keywords
 kw_list = [l.split()[0] for l in vhdl93_words.splitlines() if l.strip()]
+
+
+## BNF production rules
+bnf_tuple = collections.namedtuple("BNF_Rule", ["name", "rule"])
+bnf_rules = []
+
+name = ""
+rest = ""
+for line in [l for l in vhdl97_ebnf.splitlines() if l.strip()]:
+    #print(line)
+    if "::=" in line:
+        # avoid inserting empty (name, rest) tuple
+        if name:
+            #rest.replace(';', '') # some rules have terminals, other haven't
+            bnf_rules.append(bnf_tuple(name, rest))
+            
+        rest = ""
+        p = line.split("::=", 1)
+        name = p[0].strip()
+        rest = p[1].strip().rstrip(';')
+    else:
+        rest += "    " + line.strip().rstrip(';') + '\n'
+
+## X3 keywords
 x3_words = ["""
 namespace x3 = boost::spirit::x3;
 namespace ascii = boost::spirit::x3::ascii;
@@ -1050,55 +1074,41 @@ for n, line in enumerate(kw_list):
     def_ = "auto const {0}_ = kw(\"{0}\");".format(line.lower())
     x3_words.append(def_)
 
-
-
-## declaration, definitions
-rule_tuple = collections.namedtuple("BNF_Rule", ["name", "rule"])
-x3_rules = []
-
-name = ""
-rest = ""
-for line in [l for l in vhdl97_ebnf.splitlines() if l.strip()]:
-    #print(line)
-    if "::=" in line:
-        # avoid inserting empty (name, rest) tuple
-        if name:
-            #rest.replace(';', '') # some rules have terminals, other haven't
-            x3_rules.append(rule_tuple(name, rest))
-            
-        rest = ""
-        p = line.split("::=", 1)
-        name = p[0].strip()
-        rest = p[1].strip().rstrip(';')
-    else:
-        rest += "    " + line.strip().rstrip(';') + '\n'
-
-
+## X3 rules
 declaration = []
 definition  = []
 defines     = ["BOOST_SPIRIT_DEFINE("]
 
-for n, p in enumerate(x3_rules):
+for n, p in enumerate(bnf_rules):
     decl_ = """x3::rule<class {0}> const {0} {{ "{0}" }};""".format(p.name)
-    def_  = """auto const {0}_def = 
+    def_desc = "// " + p.name + " ::= \n"
+    for l in p.rule.splitlines():
+        def_desc += "// " + l + "\n"
+    def_desc = def_desc[1:-1] # skip last '\n'
+    def_  = """
+{2}
+auto const {0}_def = 
     {1}
-    ;""".format(p.name, p.rule)
-    if n != len(x3_rules) - 1: mdef_ = """    {0},""".format(p.name)
-    else                             : mdef_ = """    {0}
+    ;""".format(
+        p.name, 
+        p.rule,
+        def_desc)
+    if n != len(bnf_rules) - 1: mdef_ = """    {0},""".format(p.name)
+    else                      : mdef_ = """    {0}
 );""".format(p.name)
     declaration.append(decl_)
     definition.append(def_)
     defines.append(mdef_)
 
-
-#for w in x3_words:
-#    print(w)
+## X3 code print
+for w in x3_words:
+    print(w)
     
-#for p in declaration:
-#    print(p)
+for p in declaration:
+    print(p)
 
 for d in definition:
     print(d)
 
-#for d in defines:
-#    print(d)
+for d in defines:
+    print(d)
