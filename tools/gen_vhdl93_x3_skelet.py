@@ -1080,22 +1080,29 @@ definition  = []
 defines     = ["BOOST_SPIRIT_DEFINE("]
 
 for n, p in enumerate(bnf_rules):
+    # declaration
     decl_ = """x3::rule<class {0}> const {0} {{ "{0}" }};""".format(p.name)
+    # definition
     def_desc = "// " + p.name + " ::= \n"
     for l in p.rule.splitlines():
         def_desc += "// " + l + "\n"
-    def_desc = def_desc[1:-1] # skip last '\n'
+    def_desc = def_desc[0:-1] # skip last '\n'
     def_  = """
+#if 0
 {2}
 auto const {0}_def = 
     {1}
-    ;""".format(
+    ;
+#endif""".format(
         p.name, 
         p.rule,
         def_desc)
-    if n != len(bnf_rules) - 1: mdef_ = """    {0},""".format(p.name)
-    else                      : mdef_ = """    {0}
-);""".format(p.name)
+    # macro
+    if n != len(bnf_rules) - 1: mdef_ = """//    {0},""".format(p.name)
+    else                      : mdef_ = """//    {0}
+);
+""".format(p.name)
+    
     declaration.append(decl_)
     definition.append(def_)
     defines.append(mdef_)
