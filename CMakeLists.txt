@@ -34,19 +34,8 @@ set(LIBRARY_OUTPUT_PATH         ${CMAKE_BINARY_DIR})
 ## External, 3rd party projects
 include(ExternalProject)
 
-
-#set(EXTERNAL_INSTALL_LOCATION ${CMAKE_BINARY_DIR}/external)
-#ExternalProject_Add(googletest
-#    GIT_REPOSITORY https://github.com/google/googletest
-#    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
-#)
-
-#include_directories(${EXTERNAL_INSTALL_LOCATION}/include)
-#link_directories(${EXTERNAL_INSTALL_LOCATION}/lib)
-
-#add_executable(FirstTest main.cpp)
-#add_dependencies(FirstTest googletest)
-#target_link_libraries(FirstTest gtest gtest_main pthread)
+## Requirements
+find_package(Boost REQUIRED COMPONENTS system)
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 include(external-gsl)
@@ -64,18 +53,6 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${GSL_INCLUDE_DIR})
 include_directories(${SPIRIT_X3_INCLUDE_DIR})
 
+add_subdirectory(src)
+#add_subdirectory(scratch_pad)
 
-add_executable(hello ${PROJECT_SOURCE_DIR}/src/x3_stringview_quoted_string.cpp)
-add_dependencies(hello gsl)
-add_dependencies(hello boost-spirit-x3)
-
-set_target_properties(hello PROPERTIES CXX_STANDARD 14)
-set_target_properties(hello PROPERTIES CXX_STANDARD_REQUIRED ON)
-set_target_properties(hello PROPERTIES DEBUG_POSTFIX "_d")
-target_compile_options(hello PRIVATE -Wall -Wextra)
-
-
-#target_compile_options(foo PUBLIC "$<$<CONFIG:DEBUG>:${MY_DEBUG_OPTIONS}>")
-#target_compile_options(foo PUBLIC "$<$<CONFIG:RELEASE>:${MY_RELEASE_OPTIONS}>")
-
-# https://ecrafter.wordpress.com/2012/05/01/cmake-tutorial-part-4/
