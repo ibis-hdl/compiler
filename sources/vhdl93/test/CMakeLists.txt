@@ -14,6 +14,7 @@ target_include_directories (${PROJECT_LIB} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 ## bin
 set(BIN_SOURCES
+    basic_production_rules.cpp
     test_vhdl93.cpp
 )
 
@@ -30,5 +31,6 @@ target_compile_options(${PROJECT_BIN} PRIVATE -Wall -Wextra)
 target_link_libraries(${PROJECT_BIN} 
     PRIVATE
     ${PROJECT_LIB}
+    vhdl93_grammar
     ${Boost_SYSTEM_LIBRARY}
 )

@@ -1,8 +1,9 @@
 ## EDA/VHDL93 project
 project(vhdl93 LANGUAGES CXX)
-message(INFO "cmake'ing <vhdl93>")
 
-set(VHDL93_SOURCES
+set(PROJECT_LIB vhdl93_grammar)
+
+set(LIB_SOURCES
     src/grammar.cpp
 )
 
@@ -10,16 +11,17 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${SPIRIT_X3_INCLUDE_DIR})
 include_directories(${GSL_INCLUDE_DIR})
 
-add_executable(vhdl93 ${VHDL93_SOURCES})
+add_library(${PROJECT_LIB} STATIC ${LIB_SOURCES})
 
-add_dependencies(vhdl93 boost-spirit-x3)
-add_dependencies(vhdl93 gsl)
+#target_include_directories (${PROJECT_LIB} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-set_target_properties(vhdl93 PROPERTIES CXX_STANDARD 14)
-set_target_properties(vhdl93 PROPERTIES CXX_STANDARD_REQUIRED ON)
-set_target_properties(vhdl93 PROPERTIES DEBUG_POSTFIX "_d")
-target_compile_options(vhdl93 PRIVATE -Wall -Wextra)
+add_dependencies(${PROJECT_LIB} boost-spirit-x3)
+add_dependencies(${PROJECT_LIB} gsl)
 
-target_link_libraries(vhdl93 ${Boost_SYSTEM_LIBRARY})
+set_target_properties(${PROJECT_LIB} PROPERTIES CXX_STANDARD 14)
+set_target_properties(${PROJECT_LIB} PROPERTIES CXX_STANDARD_REQUIRED ON)
+set_target_properties(${PROJECT_LIB} PROPERTIES DEBUG_POSTFIX "_d")
+target_compile_options(${PROJECT_LIB} PRIVATE -Wall -Wextra)
 
+# test suite
 add_subdirectory(test)

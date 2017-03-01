@@ -5,10 +5,7 @@
  *      Author: olaf
  */
 
+#define BOOST_TEST_DYN_LINK
+#define BOOST_TEST_MODULE vhdl93_test_suite
+#include <boost/test/included/unit_test.hpp>
 
-#include "grammar_api.hpp"
-
-int main()
-{
-	return 0;
-}
