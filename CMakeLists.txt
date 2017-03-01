@@ -1,6 +1,7 @@
+## The EDA project
 cmake_minimum_required(VERSION 3.6)
 
-project(ibis VERSION 0.0.1 LANGUAGES CXX)
+project(eda VERSION 0.0.1 LANGUAGES CXX)
 
 # Catch in-source builds
 if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
@@ -49,10 +50,6 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "(GNU|Clang)")
 endif()
 
 
-include_directories(${PROJECT_SOURCE_DIR}/include)
-include_directories(${GSL_INCLUDE_DIR})
-include_directories(${SPIRIT_X3_INCLUDE_DIR})
-
-add_subdirectory(src)
+add_subdirectory(sources)
 #add_subdirectory(scratch_pad)
 

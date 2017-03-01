@@ -1,17 +1,19 @@
+## EDA/VHDL93 project
 project(vhdl93 LANGUAGES CXX)
 message(INFO "cmake'ing <vhdl93>")
 
 set(VHDL93_SOURCES
-    grammar.cpp
+    src/grammar.cpp
 )
 
+include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${SPIRIT_X3_INCLUDE_DIR})
 include_directories(${GSL_INCLUDE_DIR})
 
 add_executable(vhdl93 ${VHDL93_SOURCES})
 
-add_dependencies(vhdl93 gsl)
 add_dependencies(vhdl93 boost-spirit-x3)
+add_dependencies(vhdl93 gsl)
 
 set_target_properties(vhdl93 PROPERTIES CXX_STANDARD 14)
 set_target_properties(vhdl93 PROPERTIES CXX_STANDARD_REQUIRED ON)
