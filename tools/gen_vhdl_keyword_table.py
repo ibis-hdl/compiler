@@ -105,7 +105,10 @@ xor           operator, exclusive "or" of left and right operands
 
 # copy&paste VHDL93 rule 
 # from https://tams.informatik.uni-hamburg.de/vhdl/tools/grammar/vhdl93-bnf.txt
-vhdl97_ebnf = """
+## TopUnit => design_file ???
+# see https://tams-www.informatik.uni-hamburg.de/vhdl/doc/cookbook/VHDL-Cookbook.pdf
+# 5.1 "Design Units and Libraries"
+vhdl93_ebnf = """
 abstract_literal ::= decimal_literal | based_literal
 
 access_type_definition ::= access subtype_indication
@@ -1076,7 +1079,7 @@ class vhdl93Bnf:
     def __init__(self, snipet):
         name = ""
         rest = ""
-        self.bnf_tuple = collections.namedtuple("BNF_Rule", ["name", "rule"])
+        bnf_tuple = collections.namedtuple("BNF_Rule", ["name", "rule"])
         for line in [l for l in snipet.splitlines() if l.strip()]:
             #print(line)
             if "::=" in line:
@@ -1088,13 +1091,40 @@ class vhdl93Bnf:
             else:
                 rest += "    " + line.strip().rstrip(';') + '\n'
 
-    def x3_declarations(self):
-        declarations = []
-        for p in self.bnf_rules:
-            declarations.append(
-                """x3::rule<class {0}> const {0} {{ "{0}" }};""".format(p.name)
+    def x3_rule_id_name(self, name):
+        return name + '_class'
+
+    def x3_rule_type_name(self, name):
+        return name + '_type'
+
+    def x3_rule_ids(self):
+        id_list = []
+        for t in self.bnf_rules:
+            id_list.append(
+                """struct {0};""".format(self.x3_rule_id_name(t.name))
             )
-        return declarations
+        return id_list
+
+    def x3_rule_typedefs(self):
+        type_list = []
+        for p in self.bnf_rules:
+            type_list.append(
+                """typedef x3::rule<{0}> {1};""".format(
+                    self.x3_rule_id_name(p.name),
+                    self.x3_rule_type_name(p.name))
+            )
+        return type_list
+
+    def x3_rules(self):
+        instance_list = []
+        for p in self.bnf_rules:
+            instance_list.append(
+                """{0} const {1} {{ "{2}" }};""".format(
+                    self.x3_rule_type_name(p.name),
+                    p.name,
+                    p.name)
+            )
+        return instance_list
 
     def x3_substitute(self, txt):
         sub_dict = {
@@ -1135,83 +1165,179 @@ auto const {1}_def =
             definitions.append(definition)
         return definitions
 
+    def x3_declare_macro(self):
+        decl_macro = []
+        for r in self.bnf_rules:
+            decl_macro.append("""BOOST_SPIRIT_DECLARE({0});""".format(
+                self.x3_rule_type_name(r.name))
+            )
+        return decl_macro
 
-bnf_tuple = collections.namedtuple("BNF_Rule", ["name", "rule"])
-bnf_rules = []
-
-name = ""
-rest = ""
-for line in [l for l in vhdl97_ebnf.splitlines() if l.strip()]:
-    #print(line)
-    if "::=" in line:
-        # avoid inserting empty (name, rest) tuple
-        if name:
-            #rest.replace(';', '') # some rules have terminals, other haven't
-            bnf_rules.append(bnf_tuple(name, rest))
-            
-        rest = ""
-        p = line.split("::=", 1)
-        name = p[0].strip()
-        rest = p[1].strip().rstrip(';')
-    else:
-        rest += "    " + line.strip().rstrip(';') + '\n'
+    def x3_define_macro(self):
+        def_macro = ['BOOST_SPIRIT_DEFINE(']
+        for n, p in enumerate(self.bnf_rules):
+            if n != len(self.bnf_rules) - 1:
+                def_macro.append("""//    {0},""".format(p.name))
+            else:
+                def_macro.append("""//    {0}""".format(p.name))
+        def_macro.append(");")
+        return def_macro
 
 
-## X3 rules
+## main
+class x3_vhdl93:
+    keywords = None
+    grammar  = None
+    def_ns   = []
+    
+    def __init__(self):
+        self.keywords = vhdl93Keywords(vhdl93_words)
+        self.grammar  = vhdl93Bnf(vhdl93_ebnf)
+        self.def_ns   = ['eda', 'vhdl93']
 
-definition  = []
-defines     = ["BOOST_SPIRIT_DEFINE("]
+    def embrace_ns(self, contents, ns):
+        top = ""
+        for n in ns: top += "namespace {0} {{ ".format(n)
+        btm = ""
+        for n in ns: btm += "} "
+        btm += "// namespace "
+        # add ns path comment
+        for n in ns: btm += "{0}.".format(n)
+        return top.strip() + '\n' + contents + btm.rstrip('.') + '\n'
 
-for n, p in enumerate(bnf_rules):
-    # declaration
-    decl_ = """x3::rule<class {0}> const {0} {{ "{0}" }};""".format(p.name)
-    # definition
-    def_desc = "// " + p.name + " ::= \n"
-    for l in p.rule.splitlines():
-        def_desc += "// " + l + "\n"
-    def_desc = def_desc[0:-1] # skip last '\n'
-    def_  = """
+    def generate_keywords(self, in_ns=True):
+        contents = ""
+        ns = self.def_ns + ["parser"]
+        for k in self.keywords.x3(): contents += k + '\n'
+        if in_ns: return self.embrace_ns(contents, ns)
+        else:     return contents
+
+    def generate_rule_ids(self, in_ns=True):
+        contents = ""
+        ns = self.def_ns + ["parser"]
+        for k in self.grammar.x3_rule_ids(): contents += k + '\n'
+        if in_ns: return self.embrace_ns(contents, ns)
+        else:     return contents
+
+    def generate_typedefs(self, in_ns=True):
+        contents = ""
+        ns = self.def_ns + ["parser"]
+        for k in self.grammar.x3_rule_typedefs(): contents += k + '\n'
+        if in_ns: return self.embrace_ns(contents, ns)
+        else:     return contents
+
+    def generate_rules(self, in_ns=True):
+        contents = ""
+        ns = self.def_ns + ["parser"]
+        for k in self.grammar.x3_rules(): contents += k + '\n'
+        if in_ns: return self.embrace_ns(contents, ns)
+        else:     return contents
+
+    def generate_definitions(self, in_ns=True):
+        contents = ""
+        ns = self.def_ns + ["parser"]
+        for k in self.grammar.x3_definition(): contents += k + '\n'
+        if in_ns: return self.embrace_ns(contents, ns)
+        else:     return contents
+
+    def generate_define_macros(self, in_ns=True):
+        contents = ""
+        ns = self.def_ns + ["parser"]
+        for k in self.grammar.x3_define_macro(): contents += k + '\n'
+        if in_ns: return self.embrace_ns(contents, ns)
+        else:     return contents
+
+    def generate_declare_macros(self, in_ns=True):
+        contents = ""
+        ns = self.def_ns + ["parser"]
+        for k in self.grammar.x3_declare_macro(): contents += k + '\n'
+        if in_ns: return self.embrace_ns(contents, ns)
+        else:     return contents
+
+    def generate_call_declaration(self, in_ns=True):
+        contents = ""
+        ns = "parser"
+        for t in self.grammar.bnf_rules:
+            contents += "{0}::{1} const& {2}();\n".format(
+                ns,
+                self.grammar.x3_rule_type_name(t.name),
+                t.name
+            )
+        if in_ns: return self.embrace_ns(contents, self.def_ns)
+        else:     return contents
+
+    def generate_call_definition(self, in_ns=True):
+        contents = ""
+        ns = "parser"
+        for t in self.grammar.bnf_rules:
+            contents += """
 #if 0
-{2}
-auto const {0}_def = 
-    {1}
-    ;
-#endif""".format(
-        p.name, 
-        p.rule.replace(r"'", r"\'"),
-        def_desc)
-    # macro
-    if n != len(bnf_rules) - 1: mdef_ = """//    {0},""".format(p.name)
-    else                      : mdef_ = """//    {0}
-);
-""".format(p.name)
+{0}::{1} const& {2}() {{
+    return {0}::{2};
+}}
+#endif
+""".format(
+                ns,
+                self.grammar.x3_rule_type_name(t.name),
+                t.name
+            )
+        if in_ns: return self.embrace_ns(contents, self.def_ns)
+        else:     return contents
+
+    def generate_x3(self):
+        header = """
+/*
+ * VHDL93 Grammar {0}
+ */
+"""
+        decls = '\n'
+        decls += 'namespace x3 = boost::spirit::x3;\n\n'
+        decls += '// Parser Rule IDs\n'
+        decls += self.generate_rule_ids(False) + '\n'
+        decls += '// Parser Rule Types\n'
+        decls += self.generate_typedefs(False) + '\n'
+        decls = header.format('Declaration') + self.embrace_ns(decls, self.def_ns + ['parser'])
+        
+        defs = '\n'
+        defs += 'namespace x3 = boost::spirit::x3;\n\n'
+        defs += '// Parser Declarations\n'
+        defs += self.generate_rules(False) + '\n'
+        defs += '// Parser Definitions\n'
+        defs += self.generate_definitions(False) + '\n'
+        defs += '// Parser Defines\n'
+        defs += self.generate_define_macros(False) + '\n'
+        defs = header.format('Definition') + self.embrace_ns(defs, self.def_ns + ['parser'])
+        
+        return decls + defs
+        
+    def generate_x3_api(self):
+        header = """
+/*
+ * VHDL93 Grammar Test Bench API {0}
+ */
+"""
+        # declaration has nested namespaces
+        decls = '\n'
+        decls += self.generate_declare_macros(False) # ns eda.vhdl.parser
+        decls = self.embrace_ns(decls, ['parser'])
+        decls += '\n'
+        decls += self.generate_call_declaration(False) # ns eda.vhdl
+        decls = header.format('Declaration') + self.embrace_ns(decls, self.def_ns)
+        # definitions hasn't nested namespaces
+        defs = '\n'
+        defs += self.generate_call_definition() 
+        defs = header.format('Definition') + defs
+        
+        return decls + defs
     
-    #declaration.append(decl_)
-    definition.append(def_)
-    defines.append(mdef_)
-
-## X3 code print
-'''
-for w in x3_words:
-    print(w)
-    
-for p in declaration:
-    print(p)
-
-for d in definition:
-    print(d)
-
-for d in defines:
-    print(d)
-'''
+    def generate(self):
+        # grammar decl/def
+        print(self.generate_x3())
+        
+        # test bench related stuff
+        print(self.generate_x3_api())
 
 if __name__ == "__main__":
-    keywords = vhdl93Keywords(vhdl93_words)
-    grammar  = vhdl93Bnf(vhdl97_ebnf)
+    x3 = x3_vhdl93()
+    x3.generate()
     
-    for kw in keywords.x3():
-        print(kw)
-    for d in grammar.x3_declarations():
-        print(d)
-    for d in grammar.x3_definition():
-        print(d)
