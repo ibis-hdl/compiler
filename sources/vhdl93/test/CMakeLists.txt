@@ -9,7 +9,7 @@ set(LIB_SOURCES
     grammar_api.cpp
 )
 
-add_library(${PROJECT_LIB} ${LIB_SOURCES})
+add_library(${PROJECT_LIB} STATIC ${LIB_SOURCES})
 target_include_directories (${PROJECT_LIB} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 ## bin
@@ -28,7 +28,7 @@ set_target_properties(${PROJECT_BIN} PROPERTIES DEBUG_POSTFIX "_d")
 target_compile_options(${PROJECT_BIN} PRIVATE -Wall -Wextra)
 
 target_link_libraries(${PROJECT_BIN} 
-    LINK_PRIVATE
+    PRIVATE
     ${PROJECT_LIB}
     ${Boost_SYSTEM_LIBRARY}
 )
