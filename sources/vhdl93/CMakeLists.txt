@@ -21,3 +21,5 @@ set_target_properties(vhdl93 PROPERTIES DEBUG_POSTFIX "_d")
 target_compile_options(vhdl93 PRIVATE -Wall -Wextra)
 
 target_link_libraries(vhdl93 ${Boost_SYSTEM_LIBRARY})
+
+add_subdirectory(test)
