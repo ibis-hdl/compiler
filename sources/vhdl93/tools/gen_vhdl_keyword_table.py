@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from pyxb.utils.utility import _XMLIdentifierToPython
 
 
 # copy&paste reserved keywords
@@ -1066,7 +1067,13 @@ auto kw = [](auto xx) {
         return self.x3_words
 
 
-
+## global helper class
+def cxx_ify(identier):
+    cpp_reserved = [ # C++ reserved words
+            'and', 'or', 'xor', 'not'
+            ]
+    if identier in cpp_reserved: identier += '_'
+    return identier    
 
 ## BNF operator symbol production rules
 class Operatorsymbols:
@@ -1079,6 +1086,8 @@ class Operatorsymbols:
         'relational_operator'    : ['=', '/=', '<', '<=', '>', '>='],
         'shift_operator'         : ['sll', 'srl', 'sla', 'sra', 'rol', 'ror']
     }
+    
+    
     
     def is_operator(self, op):
         for name in self.operators:
@@ -1100,7 +1109,7 @@ class Operatorsymbols:
             '>'  : 'greater',
             '>=' : 'greater_equals'
         }
-        return subs_dic.get(symbol, symbol)
+        return cxx_ify(subs_dic.get(symbol, symbol))
 
     def as_enums(self, operator_name):
         text = ""
