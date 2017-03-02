@@ -1047,9 +1047,6 @@ class vhdl93Keywords:
     def __init__(self, snippet):
         self.kw_list = [l.split()[0] for l in snippet.splitlines() if l.strip()]
         self.x3_words.append("""
-namespace x3 = boost::spirit::x3;
-namespace ascii = boost::spirit::x3::ascii;
-
 auto kw = [](auto xx) {
     return x3::lexeme [ x3::no_case[ xx ] >> !(ascii::alnum | '_') ];
 };
@@ -1071,9 +1068,92 @@ auto kw = [](auto xx) {
 
 
 
+## BNF operator symbol production rules
+class Operatorsymbols:
+    
+    operators = {    # hand selected operators from BNF
+        'adding_operator'        : ['+', '-', '&'],
+        'logical_operator'       : ['and', 'or', 'nand', 'nor', 'xor', 'xnor'],
+        'miscellaneous_operator' : ['**', 'abs', 'not'],
+        'multiplying_operator'   : ['*', '/', 'mod', 'rem'],
+        'relational_operator'    : ['=', '/=', '<', '<=', '>', '>='],
+        'shift_operator'         : ['sll', 'srl', 'sla', 'sra', 'rol', 'ror']
+    }
+    
+    def is_operator(self, op):
+        for name in self.operators:
+            if name == op.split(): return True
+            else:                  return False
+
+    def as_name(self, symbol):
+        subs_dic = {
+            '+'  : 'add',
+            '-'  : 'sub',
+            '*'  : 'mul',
+            '/'  : 'div',
+            '**' : 'exponent',
+            '&'  : 'concat',
+            '='  : 'equal',
+            '/=' : 'not_equals',
+            '<'  : 'less',
+            '<=' : 'less_equals',
+            '>'  : 'greater',
+            '>=' : 'greater_equals'
+        }
+        return subs_dic.get(symbol, symbol)
+
+    def as_enums(self, operator_name):
+        text = ""
+        ops = self.operators.get(operator_name)
+        for n, o in enumerate(ops):
+            text += '    {0},\n'.format(self.as_name(o))
+        return text
+
+    def enum_class(self):
+        text = "// operator symbol enums\n"
+        text += "enum class operator_type {\n"
+        ops_list = list(self.operators.keys())
+        for n, o in enumerate(ops_list):
+            text += "    // {0}\n".format(o)
+            text += self.as_enums(o)
+        text.rstrip(',') # fails
+        text += "};\n"
+        return text
+
+    def x3_operator_declare(self, ast_node):
+        text = ""
+        ops_list = list(self.operators.keys())
+        for n, o in enumerate(ops_list):
+            text += 'x3::symbols<{0}> {1};\n'.format(
+                ast_node,
+                o
+            )
+        return text
+
+    def x3_op_define(self, operator_name, ast_node):
+        text = "{0}.add\n".format(operator_name)
+        ops = self.operators.get(operator_name)
+        for n, o in enumerate(ops):
+            text += '    ("{0}", {1}::{2})\n'.format(
+                o,
+                ast_node,
+                self.as_name(o)
+            )
+        text += '    ;\n'
+        return text
+        
+    def x3_operator_defines(self, ast_node):
+        text = "// operator symbol definition\n"
+        ops_list = list(self.operators.keys())
+        for n, o in enumerate(ops_list):
+            text += self.x3_op_define(o, ast_node)
+        return text
+
+
 ## BNF production rules
 class vhdl93Bnf:
     bnf_rules = []
+    bnf_operators = None
 
     # initialize private tuple with 'parsed' data
     def __init__(self, snipet):
@@ -1090,6 +1170,7 @@ class vhdl93Bnf:
                 rest = p[1].strip().rstrip(';')
             else:
                 rest += "    " + line.strip().rstrip(';') + '\n'
+        self.bnf_operators = Operatorsymbols()
 
     def x3_rule_id_name(self, name):
         return name + '_class'
@@ -1098,6 +1179,10 @@ class vhdl93Bnf:
         return name + '_type'
 
     def x3_rule_ids(self):
+        """
+        Create a list over for all X3/BNF rules ID.
+        The name scheme is: struct <rule>_class;
+        """
         id_list = []
         for t in self.bnf_rules:
             id_list.append(
@@ -1106,8 +1191,13 @@ class vhdl93Bnf:
         return id_list
 
     def x3_rule_typedefs(self):
+        """
+        Create a list over for all X3/BNF rules types.
+        The name scheme is: typedef x3::rule<rule_id> rule_type;
+        """
         type_list = []
         for p in self.bnf_rules:
+            if self.bnf_operators.is_operator(p.name): continue
             type_list.append(
                 """typedef x3::rule<{0}> {1};""".format(
                     self.x3_rule_id_name(p.name),
@@ -1118,6 +1208,7 @@ class vhdl93Bnf:
     def x3_rules(self):
         instance_list = []
         for p in self.bnf_rules:
+            if self.bnf_operators.is_operator(p.name): continue
             instance_list.append(
                 """{0} const {1} {{ "{2}" }};""".format(
                     self.x3_rule_type_name(p.name),
@@ -1147,6 +1238,7 @@ class vhdl93Bnf:
     def x3_definition(self):
         definitions = []
         for d in self.bnf_rules:
+            if self.bnf_operators.is_operator(d.name): continue
             comment = """// {0} ::= \n""".format(d.name)
             for r in d.rule.splitlines():
                 comment += """// {0}\n""".format(r)
@@ -1168,6 +1260,7 @@ auto const {1}_def =
     def x3_declare_macro(self):
         decl_macro = []
         for r in self.bnf_rules:
+            if self.bnf_operators.is_operator(r.name): continue
             decl_macro.append("""BOOST_SPIRIT_DECLARE({0});""".format(
                 self.x3_rule_type_name(r.name))
             )
@@ -1176,6 +1269,7 @@ auto const {1}_def =
     def x3_define_macro(self):
         def_macro = ['BOOST_SPIRIT_DEFINE(']
         for n, p in enumerate(self.bnf_rules):
+            if self.bnf_operators.is_operator(p.name): continue
             if n != len(self.bnf_rules) - 1:
                 def_macro.append("""//    {0},""".format(p.name))
             else:
@@ -1189,13 +1283,17 @@ class x3_vhdl93:
     keywords = None
     grammar  = None
     def_ns   = []
-    
+
     def __init__(self):
         self.keywords = vhdl93Keywords(vhdl93_words)
         self.grammar  = vhdl93Bnf(vhdl93_ebnf)
+        #self.operators = Operatorsymbols()
         self.def_ns   = ['eda', 'vhdl93']
 
     def embrace_ns(self, contents, ns):
+        """
+        embrace the given (string) contents with the given namespace 'ns'
+        """
         top = ""
         for n in ns: top += "namespace {0} {{ ".format(n)
         btm = ""
@@ -1266,6 +1364,14 @@ class x3_vhdl93:
         if in_ns: return self.embrace_ns(contents, self.def_ns)
         else:     return contents
 
+    def generate_keywords(self, in_ns=True):
+        contents = ""
+        ns = "parser"
+        for k in self.keywords.x3():
+            contents += "{0}\n".format(k)
+        if in_ns: return self.embrace_ns(contents, self.def_ns)
+        else:     return contents
+    
     def generate_call_definition(self, in_ns=True):
         contents = ""
         ns = "parser"
@@ -1285,6 +1391,18 @@ class x3_vhdl93:
         else:     return contents
 
     def generate_x3(self):
+        ast_operator_enums = """
+/*
+ * VHDL93 AST
+ */
+ {0}
+""".format(
+            self.embrace_ns(
+                self.grammar.bnf_operators.enum_class(), 
+                self.def_ns + ['ast']
+            )
+        )
+        
         header = """
 /*
  * VHDL93 Grammar {0}
@@ -1299,16 +1417,29 @@ class x3_vhdl93:
         decls = header.format('Declaration') + self.embrace_ns(decls, self.def_ns + ['parser'])
         
         defs = '\n'
-        defs += 'namespace x3 = boost::spirit::x3;\n\n'
+        defs += 'namespace x3 = boost::spirit::x3;\n'
+        defs += 'namespace ascii = boost::spirit::x3::ascii;\n\n'
         defs += '// Parser Declarations\n'
         defs += self.generate_rules(False) + '\n'
+        defs += '// Keywords'
+        defs += self.generate_keywords(False) + '\n'
+        defs += '//Parser Operator Symbol Declaration\n'
+        defs += self.grammar.bnf_operators.x3_operator_declare('ast::operator') + '\n'
+        defs += '//Parser Operator Symbol Definition'
+        defs += """
+void add_keywords() {
+static bool once = false;
+if(once) { return; }
+once = true;
+"""
+        defs += self.grammar.bnf_operators.x3_operator_defines('ast::operator') + '}\n\n'
         defs += '// Parser Definitions\n'
         defs += self.generate_definitions(False) + '\n'
         defs += '// Parser Defines\n'
         defs += self.generate_define_macros(False) + '\n'
         defs = header.format('Definition') + self.embrace_ns(defs, self.def_ns + ['parser'])
         
-        return decls + defs
+        return ast_operator_enums + decls + defs
         
     def generate_x3_api(self):
         header = """
@@ -1340,4 +1471,3 @@ class x3_vhdl93:
 if __name__ == "__main__":
     x3 = x3_vhdl93()
     x3.generate()
-    
