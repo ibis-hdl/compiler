@@ -11,6 +11,10 @@ set(LIB_SOURCES
 
 add_library(${PROJECT_LIB} STATIC ${LIB_SOURCES})
 target_include_directories (${PROJECT_LIB} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+set_target_properties(${PROJECT_LIB} PROPERTIES CXX_STANDARD 14)
+set_target_properties(${PROJECT_LIB} PROPERTIES CXX_STANDARD_REQUIRED ON)
+set_target_properties(${PROJECT_LIB} PROPERTIES DEBUG_POSTFIX "_d")
+target_compile_options(${PROJECT_LIB} PRIVATE -Wall -Wextra)
 
 ## bin
 set(BIN_SOURCES

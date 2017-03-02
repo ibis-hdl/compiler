@@ -7,17 +7,31 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <eda/vhdl93/parser_config.hpp>
 
 #include "grammar_api.hpp"
 
 
-BOOST_AUTO_TEST_SUITE( test_basic_productions )
+BOOST_AUTO_TEST_SUITE( basic_productions )
+
+namespace x3 = boost::spirit::x3;
 
 
-
-BOOST_AUTO_TEST_CASE( test_identifier )
+BOOST_AUTO_TEST_CASE( string_literal )
 {
-  BOOST_TEST_WARN( sizeof(int) < 4U );
+	using namespace eda::vhdl93;
+
+	std::string const input = "\"foo\"";
+
+	parser::iterator_type begin = input.begin();
+	parser::iterator_type end   = input.end();
+#if 1
+	bool ok = x3::parse(begin, end, parser::string_literal());
+
+	BOOST_TEST_WARN( ok == true );
+#else
+	auto foo = parser::string_literal();
+#endif
 }
 
 #if 0

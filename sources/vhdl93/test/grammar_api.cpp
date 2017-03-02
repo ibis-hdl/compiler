@@ -1286,7 +1286,7 @@ parser::slice_name_type const& slice_name() {
 }
 #endif
 
-#if 0
+#if 1
 parser::string_literal_type const& string_literal() {
 	return parser::string_literal;
 }

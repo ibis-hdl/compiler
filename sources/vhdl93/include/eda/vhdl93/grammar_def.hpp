@@ -2722,7 +2722,7 @@ auto const slice_name_def =
 // string_literal ::=
 // " { graphic_character } "
 auto const string_literal_def =
-	char_('"') > *graph > char_('"')
+	'"' > *graph > '"'
     ;
 #endif
 
@@ -2989,6 +2989,12 @@ auto const waveform_def =
 #else
     auto const waveform_def = *x3::char_;
 #endif
+
+    // Utilities
+    auto const skipper =
+    	  x3::space
+		| "--" >> *(char_ - x3::eol)// required??? >> x3::eol
+		;
 
 
     BOOST_SPIRIT_DEFINE(

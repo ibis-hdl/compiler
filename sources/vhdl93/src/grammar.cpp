@@ -10,14 +10,15 @@
 #include <eda/vhdl93/parser_config.hpp>
 
 
-namespace eda { namespace vhdl93 {
+namespace eda { namespace vhdl93 { namespace parser {
 
-	//BOOST_SPIRIT_INSTANTIATE(MyGrammer_type, iterator_type, context_type);
+	BOOST_SPIRIT_INSTANTIATE(
+		string_literal_type,
+		iterator_type,
+		context_type
+	);
 
-} }
-
-int main()
-{ return 0; }
+} } }  // namespace eda.vhdl93.parser
 
 
 //see https://github.com/cppljevans/spirit/blob/trace-design/example/x3/rexpr/rexpr_full/rexpr/rexpr.hpp

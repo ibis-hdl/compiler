@@ -10,6 +10,7 @@
 
 
 #include <eda/vhdl93/grammar.hpp>
+#include <eda/vhdl93/grammar_def.hpp> // FIXME: better not to include
 
 
 /*

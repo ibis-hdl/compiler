@@ -1,0 +1,77 @@
+project organization:
+
+* include/my/grammar.hpp:
+----8<----
+namespace parser {
+        // Parser Rule IDs
+        struct string_literal_class;
+        ...
+        // Parser Rule Types
+        typedef x3::rule<string_literal_class> string_literal_type;
+}
+----8<----
+
+* include/my/grammar_def.hpp:
+----8<----
+#include "my/grammar.hpp"
+namespace parser {
+        // Parser Declarations
+        string_literal_type const string_literal { "string_literal" };
+        // Parser Definition
+        auto const string_literal_def =
+	    '"' > *graph > '"'
+            ;
+        // Definition
+        BOOST_SPIRIT_DEFINE(string_literal)
+}
+----8<----
+
+* include/my/config.hpp:
+----8<----
+namespace parser {
+        typedef std::string::const_iterator iterator_type;
+        typedef x3::unused_type context_type;
+}
+----8<----
+
+
+* src/grammar.cpp:
+----8<----
+#include <eda/vhdl93/grammar_def.hpp>
+#include <eda/vhdl93/parser_config.hpp>
+namespace parser {
+        BOOST_SPIRIT_INSTANTIATE(string_literal, iterator_type, context_type);
+}
+----8<----
+
+* test/grammar_api.h:
+----8<----
+#include "my/grammar.hpp"
+// Grammar Test Bench API Definition
+namespace parser {
+        BOOST_SPIRIT_DECLARE(string_literal_type);
+}
+parser::string_literal_type const& string_literal();
+----8<----
+
+* test/grammar_api.cpp
+----8<----
+// Grammar Test Bench API Definition
+#include "grammar_api.hpp"
+parser::string_literal_type const& string_literal() {
+	return parser::string_literal;
+}
+----8<----
+
+* test/main.cpp
+----8<----
+using the string_literal() parser
+----8<----
+
+
+* compiler error:
+test/grammar_api.cpp: In function 'const string_literal_type& string_literal()':
+test/grammar_api.cpp:1291:9: error: 'string_literal' is not a member of 'parser'
+  return parser::string_literal;
+         ^~~~~~
+
