@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-from pyxb.utils.utility import _XMLIdentifierToPython
+#from pyxb.utils.utility import _XMLIdentifierToPython
+from ply.yacc import Production
 
 
 # copy&paste reserved keywords
@@ -1037,8 +1038,307 @@ waveform_element ::=
 """
 
 import collections
+import re
 
 
+class Vhdl93Bnf:
+    kw_list = []
+    rule_list = []
+    rule_name_list = []
+    operator_dict = {}
+    
+    def __init__(self):
+        
+        # reserved keywords
+        self.kw_list = [l.split()[0] for l in vhdl93_words.splitlines() if l.strip()]
+        
+        # bnf rules
+        rule_name = ""
+        rest = ""
+        bnf_tuple = collections.namedtuple("BNF_Rule", ["name", "rule"])
+        for line in [l for l in vhdl93_ebnf.splitlines() if l.strip()]:
+            if "::=" in line:
+                # avoid inserting empty (rule_name, rest) tuple
+                if rule_name: self.rule_list.append(bnf_tuple(rule_name, rest.strip()))
+                p = line.split("::=", 1)
+                rule_name = p[0].rstrip('\n').strip()
+                rest = p[1].strip()
+            else:
+                rest += "    " + line.strip().rstrip('\n') + '\n'
+                
+        # generate list of all rules
+        for r in self.rule_list: self.rule_name_list.append(r.name)
+        
+        # hand made operator rules from BNF
+        self.operator_dict = {
+            'adding_operator'        : ['+', '-', '&'],
+            'logical_operator'       : ['and', 'or', 'nand', 'nor', 'xor', 'xnor'],
+            'miscellaneous_operator' : ['**', 'abs', 'not'],
+            'multiplying_operator'   : ['*', '/', 'mod', 'rem'],
+            'relational_operator'    : ['=', '/=', '<', '<=', '>', '>='],
+            'shift_operator'         : ['sll', 'srl', 'sla', 'sra', 'rol', 'ror']
+        }
+        
+    def keywords(self):
+        """
+        Returns a list of all keywords
+        """
+        return self.kw_list
+    
+    def rules(self, with_operators=False):
+        """
+        Returns a list of tuples(name, rule) of BNF rules. If the argument
+        with_operators=True the operator related rule names are included.
+        """
+        if with_operators: return self.rule_list
+        else:
+            alist = []
+            for r in self.rule_list:
+                if r.name not in self.operator_dict.keys():
+                    alist.append(r)
+            return alist
+    
+    def rule_names(self, with_operators=False):
+        """
+        Returns a list of all BNF production rule names. If the argument
+        with_operators=True the operator related rule names are included.
+        """
+        if with_operators: return self.rule_name_list
+        else:
+            name_list = []
+            for r in self.rule_name_list:
+                if r not in self.operator_dict.keys():
+                    name_list.append(r)
+            return name_list
+        
+    def operator_rules(self):
+        """
+        Returns a dict of BNF operator rules
+        """
+        return self.operator_dict
+        
+    def operator_rule_names(self):
+        """
+        Returns a list of BNF operator rule names
+        """
+        return self.operator_dict.keys()
+                
+    def operator_as_name(self, symbol):
+        """
+        Substitute an operator symbol, e.g. '+', to their name correspondending
+        name 'plus'.
+        """
+        subs_dic = {
+            '+'  : 'add',
+            '-'  : 'sub',
+            '*'  : 'mul',
+            '/'  : 'div',
+            '**' : 'exponent',
+            '&'  : 'concat',
+            '='  : 'equal',
+            '/=' : 'not_equals',
+            '<'  : 'less',
+            '<=' : 'less_equals',
+            '>'  : 'greater',
+            '>=' : 'greater_equals'
+        }
+        return subs_dic.get(symbol, symbol)
+
+
+class X3:
+    bnf = None
+    ns  = []
+    parser_ns = []
+    kw_re = None
+    kw_dict = None
+    re_label = None
+    re_dblcol = None
+    re_var_assign = None
+    re_semicol = None
+    re_lbrace = None
+    le_rbrace = None
+    
+    def __init__(self, NS=['eda', 'vhdl93']):
+        self.bnf = Vhdl93Bnf()
+        self.ns = NS
+        self.parser_ns = NS + ['parser']
+        # replace the keywords using regular expressions
+        kw = self.bnf.keywords() 
+        x3_kw = list(map(self.keyword_ify, kw))
+        self.kw_dict = dict(zip(kw, x3_kw))
+        # FixMe: the following doesn't work - results into {'ABS':'abs', ...}
+        #kw_dict = { self.keyword_ify(x): x for x in self.bnf.keywords() }
+        self.kw_re = re.compile(r"\b(%s)\b" % "|".join(map(re.escape, self.kw_dict.keys())))
+        self.re_label = re.compile(r"\[ label : \]")
+        self.re_dblcol = re.compile(r"\s:\s")
+        self.re_var_assign = re.compile(r":=")
+        self.re_semicol = re.compile(r"\s;")
+        self.re_lbrace = re.compile(r"\s\(\s")
+        self.re_rbrace = re.compile(r"\s\)\s")
+    
+    def section(self, title):
+        text = """\n
+    Simple embrace a title into C comment style to sectionize the generated
+    """
+        return """/*
+ * {0}
+ */
+""".format(title)
+        return text
+        
+    def namespace_alias_block(self):
+        """
+        Return a string of the (mosst used) namespace aliases from x3
+        """
+        return "namespace x3 = boost::spirit::x3;\nnamespace ascii = boost::spirit::x3::ascii;"
+        
+    def embrace_ns(self, text, ns):
+        """
+        embrace the given (string) text with the given namespace 'ns'
+        """
+        top = ""
+        for n in ns: top += "namespace {0} {{ ".format(n)
+        btm = ""
+        for n in ns: btm += "} "
+        btm += "// namespace "
+        # add ns path as comment
+        for n in ns: btm += "{0}.".format(n)
+        return top.strip() + '\n' + text + btm.rstrip('.') + '\n'
+
+    def embrace_fcn(self, fcn_sig, fcn_body):
+        """
+        Embrace a function body fcn_body into a function call with the function
+        signature fcn_sig
+        """
+        text = "{0} {{\n".format(fcn_sig) + fcn_body + "}} // {0}\n".format(fcn_sig)
+        return text
+    
+    def embrace_pp(self, define, body):
+        """
+        Embrace a body into a function call with the macro define
+        """
+        return "#if {0}\n{1}\n#endif\n".format(define, body)
+    
+    def keyword_ify(self, name):
+        return name.upper()
+    
+    def keyword_defs(self):
+        """
+        Returns a list of C++ keyword definitions
+        """
+        alist = []
+        for kw in self.bnf.keywords():
+            kw = kw.lower()
+            alist.append(
+                "auto const {0} = kw(\"{1}\");".format(self.keyword_ify(kw), kw)
+            )
+        return alist
+ 
+    def keyword_block(self):
+        """
+        Returns the code block for the keyword rules
+        """
+        text = """
+auto kw = [](auto xx) {
+    return x3::lexeme [ x3::no_case[ xx ] >> !(ascii::alnum | '_') ];
+};\n
+"""
+        return text + '\n'.join(self.keyword_defs()) + '\n'
+        
+    def operator_decl(self, ast_node):
+        alist = []
+        for o in self.bnf.operator_rule_names():
+            text = 'x3::symbols<{0}> {1};'.format(
+                ast_node,
+                o)
+            alist.append(text)
+        return alist
+    
+    def operator_decl_block(self, ast_node):
+        return '\n'.join(self.operator_decl(ast_node)) + '\n'
+    
+    def operator_def(self, ast_node):
+        alist = []
+        for op_name, value in self.bnf.operator_rules().items():
+            text = "{0}.add\n".format(op_name)
+            for r in value:
+                text += '    ("{0}", {1}::{2})\n'.format(
+                    r,
+                    ast_node,
+                    self.bnf.operator_as_name(r)
+                )                
+            text += '    ;\n'
+            alist.append(text)
+        return alist
+    
+    def operator_def_block(self, ast_node):
+        body = """
+static bool once = false;
+if(once) {{ return; }}
+once = true;
+
+{0}
+""".format('\n'.join(self.operator_def(ast_node)) + '\n')        
+        text = self.embrace_fcn('void add_operator_symbols()', body)
+        return text
+
+    def parser_rule_keywords_subs(self, rule):
+        return self.kw_re.sub(lambda match: self.kw_dict[match.group(0)], rule)
+    
+    
+    def parser_definition_list(self):
+        alist = []
+        for r in self.bnf.rules():
+            comment = """// {0} ::= \n""".format(r.name)
+            for line in r.rule.splitlines():
+                comment += """// {0}\n""".format(line)
+            comment = comment[0:-1] # skip last '\n', FixMe: .rstrip('\n') not working
+            production = r.rule
+            # Note, partially order matches
+            production = self.re_label.sub(" -( LABEL > ':' ) >> ", production)
+            production = self.re_lbrace.sub(" '(' > ", production)
+            production = self.re_rbrace.sub(" > ')' ", production)
+            production = self.re_var_assign.sub(' ":=" > ', production)
+            production = self.re_dblcol.sub(" > ':' > ", production)
+            production = self.re_semicol.sub(" > ';'", production)
+            production = self.parser_rule_keywords_subs(production)
+            definition = """
+{0}
+auto const {1}_def = 
+    {2}
+    ;
+""".format(comment, r.name, production)
+            alist.append(definition)
+        return alist
+            
+    def parser_definition(self):
+        alist = []
+        for d in self.parser_definition_list():
+            alist.append(self.embrace_pp('0', d.lstrip().rstrip()))
+        return "\n".join(alist)
+        
+    def definition(self):
+        text =  self.section('Keywords')
+        text += self.keyword_block()
+        
+        text += self.section('Parser Operator Symbol Declaration') 
+        text += self.operator_decl_block('ast::operator')
+        
+        text += self.section('Parser Operator Symbol Definition')
+        text += self.operator_def_block('ast::operator')
+
+        text += self.section('Parser Rule Definition')
+        text += self.parser_definition()
+
+        return text
+        
+        
+if __name__ == "__main__":
+    x3 = X3(['eda', 'vhdl93'])
+    print(x3.definition())
+        
+################################################################################
+'''
 ## BNF keywords
 class vhdl93Keywords:
     'extracts the VHDL93 keywords from given copy&paste arg'
@@ -1046,7 +1346,7 @@ class vhdl93Keywords:
     x3_words = []
     
     def __init__(self, snippet):
-        self.kw_list = [l.split()[0] for l in snippet.splitlines() if l.strip()]
+        
         self.x3_words.append("""
 auto kw = [](auto xx) {
     return x3::lexeme [ x3::no_case[ xx ] >> !(ascii::alnum | '_') ];
@@ -1161,7 +1461,7 @@ class Operatorsymbols:
 
 ## BNF production rules
 class vhdl93Bnf:
-    bnf_rules = []
+    rule_list = []
     bnf_operators = None
 
     # initialize private tuple with 'parsed' data
@@ -1173,7 +1473,7 @@ class vhdl93Bnf:
             #print(line)
             if "::=" in line:
                 # avoid inserting empty (name, rest) tuple
-                if name: self.bnf_rules.append(bnf_tuple(name, rest))
+                if name: self.rule_list.append(bnf_tuple(name, rest))
                 p = line.split("::=", 1)
                 name = p[0].strip()
                 rest = p[1].strip().rstrip(';')
@@ -1193,7 +1493,7 @@ class vhdl93Bnf:
         The name scheme is: struct <rule>_class;
         """
         id_list = []
-        for t in self.bnf_rules:
+        for t in self.rule_list:
             id_list.append(
                 """struct {0};""".format(self.x3_rule_id_name(t.name))
             )
@@ -1205,7 +1505,7 @@ class vhdl93Bnf:
         The name scheme is: typedef x3::rule<rule_id> rule_type;
         """
         type_list = []
-        for p in self.bnf_rules:
+        for p in self.rule_list:
             if self.bnf_operators.is_operator(p.name): continue
             type_list.append(
                 """typedef x3::rule<{0}> {1};""".format(
@@ -1216,7 +1516,7 @@ class vhdl93Bnf:
 
     def x3_rules(self):
         instance_list = []
-        for p in self.bnf_rules:
+        for p in self.rule_list:
             if self.bnf_operators.is_operator(p.name): continue
             instance_list.append(
                 """{0} const {1} {{ "{2}" }};""".format(
@@ -1246,7 +1546,7 @@ class vhdl93Bnf:
 
     def x3_definition(self):
         definitions = []
-        for d in self.bnf_rules:
+        for d in self.rule_list:
             if self.bnf_operators.is_operator(d.name): continue
             comment = """// {0} ::= \n""".format(d.name)
             for r in d.rule.splitlines():
@@ -1268,7 +1568,7 @@ auto const {1}_def =
 
     def x3_declare_macro(self):
         decl_macro = []
-        for r in self.bnf_rules:
+        for r in self.rule_list:
             if self.bnf_operators.is_operator(r.name): continue
             decl_macro.append("""BOOST_SPIRIT_DECLARE({0});""".format(
                 self.x3_rule_type_name(r.name))
@@ -1277,9 +1577,9 @@ auto const {1}_def =
 
     def x3_define_macro(self):
         def_macro = ['BOOST_SPIRIT_DEFINE(']
-        for n, p in enumerate(self.bnf_rules):
+        for n, p in enumerate(self.rule_list):
             if self.bnf_operators.is_operator(p.name): continue
-            if n != len(self.bnf_rules) - 1:
+            if n != len(self.rule_list) - 1:
                 def_macro.append("""//    {0},""".format(p.name))
             else:
                 def_macro.append("""//    {0}""".format(p.name))
@@ -1364,7 +1664,7 @@ class x3_vhdl93:
     def generate_call_declaration(self, in_ns=True):
         contents = ""
         ns = "parser"
-        for t in self.grammar.bnf_rules:
+        for t in self.grammar.rule_list:
             contents += "{0}::{1} const& {2}();\n".format(
                 ns,
                 self.grammar.x3_rule_type_name(t.name),
@@ -1384,7 +1684,7 @@ class x3_vhdl93:
     def generate_call_definition(self, in_ns=True):
         contents = ""
         ns = "parser"
-        for t in self.grammar.bnf_rules:
+        for t in self.grammar.rule_list:
             contents += """
 #if 0
 {0}::{1} const& {2}() {{
@@ -1480,3 +1780,4 @@ once = true;
 if __name__ == "__main__":
     x3 = x3_vhdl93()
     x3.generate()
+'''
