@@ -1169,7 +1169,7 @@ class X3:
         # FixMe: the following doesn't work - results into {'ABS':'abs', ...}
         #kw_dict = { self.keyword_ify(x): x for x in self.bnf.keywords() }
         self.kw_re = re.compile(r"\b(%s)\b" % "|".join(map(re.escape, self.kw_dict.keys())))
-        self.re_label = re.compile(r"\[ label : \]")
+        self.re_label = re.compile(r"label :")
         self.re_dblcol = re.compile(r"\s:\s")
         self.re_var_assign = re.compile(r":=")
         self.re_semicol = re.compile(r"\s;")
@@ -1244,6 +1244,75 @@ auto kw = [](auto xx) {
 };\n
 """
         return text + '\n'.join(self.keyword_defs()) + '\n'
+    
+    def rule_id_name(self, name):
+        return name + '_class'
+
+    def rule_type_name(self, name):
+        return name + '_type'
+
+    def rule_id(self):
+        """
+        Create a list over for all X3/BNF rules ID.
+        The name scheme is: struct <rule>_class;
+        """
+        alist = []
+        for r in self.bnf.rules():
+            alist.append(
+                "struct {0};".format(self.rule_id_name(r.name))
+            )
+        return alist
+    
+    def rule_id_block(self):
+        return "\n".join(self.rule_id()) + '\n'
+
+    def rule_typedef(self):
+        """
+        Create a list over for all X3/BNF rules types.
+        The name scheme is: typedef x3::rule<rule_id> rule_type;
+        """
+        alist = []
+        for name in self.bnf.rule_names():
+            alist.append(
+                "typedef x3::rule<{0}> {1};".format(
+                    self.rule_id_name(name),
+                    self.rule_type_name(name))
+            )
+        return alist
+
+    def rule_typedef_block(self):
+        return "\n".join(self.rule_typedef()) + '\n'
+    
+    def rule_type_instance(self):
+        alist = []
+        for name in self.bnf.rule_names():
+            alist.append(
+                """{0} const {1} {{ "{1}" }};""".format(
+                    self.rule_type_name(name),
+                    name)
+            )
+        return alist
+
+    def rule_type_instance_block(self):
+        return '\n'.join(self.rule_type_instance()) + '\n'
+
+    def rule_definition_macro(self, pre):
+        alist = []
+        for n, name in enumerate(self.bnf.rule_names()):
+            text = ("{0}    {1}".format(pre, name))
+            if n != len(self.bnf.rule_names()) - 1: text += ","
+            alist.append(text)
+        return alist
+    
+    def rule_definition_macro_block(self):
+        text = '\nBOOST_SPIRIT_DEFINE(\n'
+        text += "\n".join(self.rule_definition_macro('//')) + '\n'
+        text += ');\n'
+        return text
+    
+    '''
+    ----------------------------------------------------------------------------
+    '''
         
     def operator_decl(self, ast_node):
         alist = []
@@ -1298,8 +1367,16 @@ once = true;
         """
         # Note, partially order matches
         
-        bnf_rule = self.re_label.sub(" -( LABEL > ':' ) >> ", bnf_rule)
-
+        bnf_rule = self.re_label.sub("LABEL > ':'", bnf_rule)
+        '''
+        # match outer optional expression something like '[ bar ]'
+        me = re.search(r"\w*\s*(?P<AA>\[\s\w+\s\])", bnf_rule)
+        # match optional's inner expression, here 'bar'
+        m = re.search(r"\[\s(?P<BB>\w+)\s\]", bnf_rule)
+        # replace them
+        if me:
+            bnf_rule = re.sub(me.group('AA'), "-( " + m.group('BB') + ")", bnf_rule)
+        '''
         # match outer repetition expression something like '{ , bar }'
         me = re.search(r"\w*\s*(?P<AA>\{\s,\s\w+\s\})", bnf_rule)
         # match repetition's inner expression, here 'bar'
@@ -1338,14 +1415,28 @@ auto const {1}_def =
             alist.append(definition)
         return alist
             
-    def parser_definition(self):
+    def parser_definition_block(self):
         alist = []
         for d in self.parser_definition_list():
             alist.append(self.embrace_pp('0', d.lstrip().rstrip()))
         return "\n".join(alist)
         
+    def declaration(self):
+        return ""
+    
     def definition(self):
-        text =  self.section('Keywords')
+        text = ""
+        
+        text += self.section('Rule IDs')
+        text += self.rule_id_block()        
+
+        text += self.section('Rule Types')
+        text += self.rule_typedef_block()
+        
+        text += self.section('Rule Instances')
+        text += self.rule_type_instance_block()
+        
+        text +=  self.section('Keywords')
         text += self.keyword_block()
         
         text += self.section('Parser Operator Symbol Declaration') 
@@ -1355,7 +1446,9 @@ auto const {1}_def =
         text += self.operator_def_block('ast::operator')
 
         text += self.section('Parser Rule Definition')
-        text += self.parser_definition()
+        text += self.parser_definition_block()
+        
+        text += self.rule_definition_macro_block()
 
         return text
         
