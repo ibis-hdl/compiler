@@ -1283,25 +1283,52 @@ once = true;
         return text
 
     def parser_rule_keywords_subs(self, rule):
+        """
+        Replace in the given rule the keywords with their C++ x3 keyword rules. 
+        For this it's using an internal list/dictionary with well known keywords
+        and their x3 rules.
+        """
         return self.kw_re.sub(lambda match: self.kw_dict[match.group(0)], rule)
     
+    def x3_ify(self, bnf_rule):
+        """
+        Search and Replace some of the BNF rules into x3 rules
+        
+        FixMe: not all is working as expecting, e.g. related to '(|)'
+        """
+        # Note, partially order matches
+        
+        bnf_rule = self.re_label.sub(" -( LABEL > ':' ) >> ", bnf_rule)
+
+        # match outer repetition expression something like '{ , bar }'
+        me = re.search(r"\w*\s*(?P<AA>\{\s,\s\w+\s\})", bnf_rule)
+        # match repetition's inner expression, here 'bar'
+        m = re.search(r"\{\s,\s(?P<BB>\w+)\s\}", bnf_rule)
+        # replace them
+        if me:
+            bnf_rule = re.sub(me.group('AA'), ">> ( " + m.group('BB') + " % ',' )", bnf_rule)
+
+        bnf_rule = self.re_lbrace.sub(" '(' > ", bnf_rule)
+        bnf_rule = self.re_rbrace.sub(" > ')' ", bnf_rule)
+        bnf_rule = self.re_var_assign.sub(' ":=" > ', bnf_rule)
+        bnf_rule = self.re_dblcol.sub(" > ':' > ", bnf_rule)
+        bnf_rule = self.re_semicol.sub(" > ';'", bnf_rule)
+        
+        bnf_rule = self.parser_rule_keywords_subs(bnf_rule)
+        
+        return bnf_rule     
     
     def parser_definition_list(self):
+        """
+        Generate a list of C++ definitions for the parser using x3 
+        """
         alist = []
         for r in self.bnf.rules():
             comment = """// {0} ::= \n""".format(r.name)
             for line in r.rule.splitlines():
                 comment += """// {0}\n""".format(line)
             comment = comment[0:-1] # skip last '\n', FixMe: .rstrip('\n') not working
-            production = r.rule
-            # Note, partially order matches
-            production = self.re_label.sub(" -( LABEL > ':' ) >> ", production)
-            production = self.re_lbrace.sub(" '(' > ", production)
-            production = self.re_rbrace.sub(" > ')' ", production)
-            production = self.re_var_assign.sub(' ":=" > ', production)
-            production = self.re_dblcol.sub(" > ':' > ", production)
-            production = self.re_semicol.sub(" > ';'", production)
-            production = self.parser_rule_keywords_subs(production)
+            production = self.x3_ify(r.rule)
             definition = """
 {0}
 auto const {1}_def = 
