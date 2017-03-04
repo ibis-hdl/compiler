@@ -903,6 +903,11 @@ void add_operator_symbols() {
 
 /*
 * Parser Rule Definition
+*
+* FixMe: CharSets, e.g. 'basic_graphic_character_def' etc needs more
+* investigating, see
+* http://rti.etf.bg.ac.rs/rti/ri5rvl/tutorial/TUTORIAL/IEEE/HTML/1076_13.HTM
+*
 */
 #if 0
 // abstract_literal ::= 
@@ -2107,7 +2112,6 @@ auto const generic_map_aspect_def =
 #if 1
 // graphic_character ::=
 // basic_graphic_character | lower_case_letter | other_special_character
-// FixMe: Needs more investigating, see http://rti.etf.bg.ac.rs/rti/ri5rvl/tutorial/TUTORIAL/IEEE/HTML/1076_13.HTM
 auto const graphic_character_def =
 	  basic_graphic_character
 	| x3::lower

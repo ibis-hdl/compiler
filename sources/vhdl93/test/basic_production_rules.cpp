@@ -20,7 +20,7 @@ BOOST_AUTO_TEST_CASE( string_literal )
 {
 	using namespace eda::vhdl93;
 
-	std::string const input = "\"foo\"";
+	std::string const input = "\"?foo";
 
 	parser::iterator_type begin = input.begin();
 	parser::iterator_type end   = input.end();

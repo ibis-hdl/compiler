@@ -51,5 +51,5 @@ endif()
 
 
 add_subdirectory(sources)
-#add_subdirectory(scratch_pad)
+
 
