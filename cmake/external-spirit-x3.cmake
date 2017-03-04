@@ -15,3 +15,14 @@ ExternalProject_Add(
 
 ExternalProject_Get_Property(boost-spirit-x3 source_dir)
 set(SPIRIT_X3_INCLUDE_DIR ${source_dir}/include)
+
+
+# create a .no_backup file for bacula
+ExternalProject_Get_Property(boost-spirit-x3 PREFIX)
+
+ExternalProject_Add_Step(
+  boost-spirit-x3
+  tag_no_backup
+  COMMAND              touch ${PREFIX}/.no_backup
+) 
+
