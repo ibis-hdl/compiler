@@ -1145,10 +1145,31 @@ class Vhdl93Bnf:
         return subs_dic.get(symbol, symbol)
 
 
+def cxx_ify(name_before):
+    cxx_rerserved = ['and', 'or', 'xor', 'not',
+                     'operator']
+    name_list = name_before.split('::')
+    ns = ""
+    name = ""
+    
+    if len(name_list) == 1: 
+        # no namespace given
+        name = name_before
+    else:
+        ns = name_list[0:-1]
+        name  = name_list[-1]
+ 
+    if name in cxx_rerserved: name += '_'
+    
+    if ns: return "::".join(ns) + '::' + name
+    else:  return name
+    
+
 class X3:
     bnf = None
     ns  = []
     parser_ns = []
+    ast_ns = []
     kw_re = None
     kw_dict = None
     re_dblcol = None
@@ -1161,6 +1182,7 @@ class X3:
         self.bnf = Vhdl93Bnf()
         self.ns = NS
         self.parser_ns = NS + ['parser']
+        self.ast_ns = NS + ['ast']
         # replace the keywords using regular expressions
         kw = self.bnf.keywords() 
         x3_kw = list(map(self.keyword_ify, kw))
@@ -1308,19 +1330,18 @@ auto kw = [](auto xx) {
         text += ');\n'
         return text
 
-    def operator_ast_enum(self, ast_node):
+    def operator_ast_enum(self):
         alist = []
         for name, rule in self.bnf.operator_rules().items():
-            alist.append("// {0}".format(name))
+            alist.append("    // {0}".format(name))
             for op in rule:
-                alist.append("{0},".format(self.bnf.operator_as_name(op)))
+                alist.append("    {0},".format(cxx_ify(self.bnf.operator_as_name(op))))
         alist[-1] = alist[-1].strip(',')
         return alist        
     
-    def operator_ast_enum_bock(self):
-        ast_node = 'ast::operator'
-        text = "enum class operator_type {\n"
-        text += "\n".join(self.operator_ast_enum(ast_node)) + '\n'
+    def operator_ast_enum_bock(self, op_type_name):
+        text = "enum class {0} {{\n".format(cxx_ify(op_type_name))
+        text += "\n".join(self.operator_ast_enum()) + '\n'
         text += "};\n"
         return text
         
@@ -1328,13 +1349,13 @@ auto kw = [](auto xx) {
         alist = []
         for o in self.bnf.operator_rule_names():
             text = 'x3::symbols<{0}> {1};'.format(
-                ast_node,
+                cxx_ify(ast_node),
                 o)
             alist.append(text)
         return alist
     
-    def operator_decl_block(self, ast_node):
-        return '\n'.join(self.operator_decl(ast_node)) + '\n'
+    def operator_decl_block(self, ast_type):
+        return '\n'.join(self.operator_decl(ast_type)) + '\n'
     
     def operator_def(self, ast_node):
         alist = []
@@ -1343,8 +1364,8 @@ auto kw = [](auto xx) {
             for r in value:
                 text += '    ("{0}", {1}::{2})\n'.format(
                     r,
-                    ast_node,
-                    self.bnf.operator_as_name(r)
+                    cxx_ify(ast_node),
+                    cxx_ify(self.bnf.operator_as_name(r))
                 )                
             text += '    ;\n'
             alist.append(text)
@@ -1427,17 +1448,21 @@ auto const {1}_def =
         return "\n".join(alist)
         
     def ast(self):
+        operator_enum_name = 'operator'
         text = ""
         text += self.section('AST operator')
-        text += self.operator_ast_enum_bock()
-        return text
+        text += self.operator_ast_enum_bock(operator_enum_name)
+        
+        return self.embrace_ns(text, self.ast_ns)
         
     def declaration(self):
         return ""
     
     def definition(self):
+        operator_enum_name = 'operator'
+        ns_op_type_name = self.ast_ns[-1] + '::' + operator_enum_name
         text = ""
-        
+
         text += self.section('Rule IDs')
         text += self.rule_id_block()        
 
@@ -1448,26 +1473,31 @@ auto const {1}_def =
         text += self.rule_type_instance_block()
         
         text +=  self.section('Keywords')
+        text += """
+#if defined(NULL)
+#undef NULL
+#endif
+"""
         text += self.keyword_block()
-        
+
         text += self.section('Parser Operator Symbol Declaration') 
-        text += self.operator_decl_block('ast::operator')
+        text += self.operator_decl_block(ns_op_type_name)
         
         text += self.section('Parser Operator Symbol Definition')
-        text += self.operator_def_block('ast::operator')
+        text += self.operator_def_block(ns_op_type_name)
 
         text += self.section('Parser Rule Definition')
         text += self.parser_definition_block()
         
         text += self.rule_definition_macro_block()
-
-        return text
+        
+        return self.embrace_ns(text, self.parser_ns)
         
         
 if __name__ == "__main__":
     x3 = X3(['eda', 'vhdl93'])
     print(x3.ast())
-    #print(x3.definition())
+    print(x3.definition())
         
 ################################################################################
 '''
