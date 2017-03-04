@@ -1151,7 +1151,6 @@ class X3:
     parser_ns = []
     kw_re = None
     kw_dict = None
-    re_label = None
     re_dblcol = None
     re_var_assign = None
     re_semicol = None
@@ -1169,7 +1168,6 @@ class X3:
         # FixMe: the following doesn't work - results into {'ABS':'abs', ...}
         #kw_dict = { self.keyword_ify(x): x for x in self.bnf.keywords() }
         self.kw_re = re.compile(r"\b(%s)\b" % "|".join(map(re.escape, self.kw_dict.keys())))
-        self.re_label = re.compile(r"label :")
         self.re_dblcol = re.compile(r"\s:\s")
         self.re_var_assign = re.compile(r":=")
         self.re_semicol = re.compile(r"\s;")
@@ -1367,16 +1365,17 @@ once = true;
         """
         # Note, partially order matches
         
-        bnf_rule = self.re_label.sub("LABEL > ':'", bnf_rule)
-        '''
-        # match outer optional expression something like '[ bar ]'
-        me = re.search(r"\w*\s*(?P<AA>\[\s\w+\s\])", bnf_rule)
-        # match optional's inner expression, here 'bar'
-        m = re.search(r"\[\s(?P<BB>\w+)\s\]", bnf_rule)
-        # replace them
-        if me:
-            bnf_rule = re.sub(me.group('AA'), "-( " + m.group('BB') + ")", bnf_rule)
-        '''
+        bnf_rule = self.re_lbrace.sub(" '(' ", bnf_rule)
+        bnf_rule = self.re_rbrace.sub(" ')' ", bnf_rule)
+        
+        
+        bnf_rule = self.re_var_assign.sub(' ":=" > ', bnf_rule)
+        bnf_rule = self.re_dblcol.sub(" > ':' ", bnf_rule)
+        bnf_rule = self.re_semicol.sub(" > ';'", bnf_rule)
+        
+        # optional expression handling like '[ bar ]' to '-( bar )'
+        bnf_rule = bnf_rule.replace('[', '-(').replace(']', ')')
+        
         # match outer repetition expression something like '{ , bar }'
         me = re.search(r"\w*\s*(?P<AA>\{\s,\s\w+\s\})", bnf_rule)
         # match repetition's inner expression, here 'bar'
@@ -1385,12 +1384,6 @@ once = true;
         if me:
             bnf_rule = re.sub(me.group('AA'), ">> ( " + m.group('BB') + " % ',' )", bnf_rule)
 
-        bnf_rule = self.re_lbrace.sub(" '(' > ", bnf_rule)
-        bnf_rule = self.re_rbrace.sub(" > ')' ", bnf_rule)
-        bnf_rule = self.re_var_assign.sub(' ":=" > ', bnf_rule)
-        bnf_rule = self.re_dblcol.sub(" > ':' > ", bnf_rule)
-        bnf_rule = self.re_semicol.sub(" > ';'", bnf_rule)
-        
         bnf_rule = self.parser_rule_keywords_subs(bnf_rule)
         
         return bnf_rule     
