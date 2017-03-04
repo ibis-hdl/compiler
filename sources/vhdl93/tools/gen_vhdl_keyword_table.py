@@ -1307,10 +1307,22 @@ auto kw = [](auto xx) {
         text += "\n".join(self.rule_definition_macro('//')) + '\n'
         text += ');\n'
         return text
+
+    def operator_ast_enum(self, ast_node):
+        alist = []
+        for name, rule in self.bnf.operator_rules().items():
+            alist.append("// {0}".format(name))
+            for op in rule:
+                alist.append("{0},".format(self.bnf.operator_as_name(op)))
+        alist[-1] = alist[-1].strip(',')
+        return alist        
     
-    '''
-    ----------------------------------------------------------------------------
-    '''
+    def operator_ast_enum_bock(self):
+        ast_node = 'ast::operator'
+        text = "enum class operator_type {\n"
+        text += "\n".join(self.operator_ast_enum(ast_node)) + '\n'
+        text += "};\n"
+        return text
         
     def operator_decl(self, ast_node):
         alist = []
@@ -1414,6 +1426,12 @@ auto const {1}_def =
             alist.append(self.embrace_pp('0', d.lstrip().rstrip()))
         return "\n".join(alist)
         
+    def ast(self):
+        text = ""
+        text += self.section('AST operator')
+        text += self.operator_ast_enum_bock()
+        return text
+        
     def declaration(self):
         return ""
     
@@ -1448,7 +1466,8 @@ auto const {1}_def =
         
 if __name__ == "__main__":
     x3 = X3(['eda', 'vhdl93'])
-    print(x3.definition())
+    print(x3.ast())
+    #print(x3.definition())
         
 ################################################################################
 '''
