@@ -6,6 +6,6 @@
  */
 
 #define BOOST_TEST_DYN_LINK
-#define BOOST_TEST_MODULE vhdl93_test_suite
+#define BOOST_TEST_MODULE "VHDL93 Parser Test Suite"
 #include <boost/test/included/unit_test.hpp>
 

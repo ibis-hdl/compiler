@@ -8,8 +8,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <eda/vhdl93/parser_config.hpp>
-
-#include "grammar_api.hpp"
+#include <eda/vhdl93/grammar_def.hpp>
 
 
 BOOST_AUTO_TEST_SUITE( basic_productions )
@@ -26,7 +25,7 @@ BOOST_AUTO_TEST_CASE( string_literal )
 	parser::iterator_type begin = input.begin();
 	parser::iterator_type end   = input.end();
 #if 1
-	bool ok = x3::parse(begin, end, parser::string_literal());
+	bool ok = x3::parse(begin, end, parser::string_literal);
 
 	BOOST_TEST_WARN( ok == true );
 #else
