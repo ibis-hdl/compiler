@@ -52,4 +52,6 @@ endif()
 
 add_subdirectory(sources)
 
+add_subdirectory(playground)
+
 

@@ -7,8 +7,43 @@
 
 
 #include <boost/spirit/home/x3.hpp>
+
+#include <boost/fusion/include/adapt_struct.hpp>
+#include <boost/fusion/include/io.hpp>
+
 #include <iostream>
 #include <vector>
+
+// c++14 experimental
+#include <experimental/string_view>
+
+namespace boost { namespace spirit { namespace x3 { namespace traits {
+
+template <typename It>
+void move_to(It b, It e, std::experimental::string_view& v)
+{
+	// FixMe: storage is contiguous as a concept check for input range
+    v = std::experimental::string_view(&*b, std::size_t(std::distance(b,e)));
+}
+
+} } } }
+
+namespace ast
+{
+	using std_string_view = std::experimental::string_view;
+
+    struct foo
+    {
+        std_string_view string;
+    };
+
+    using boost::fusion::operator<<;
+}
+
+BOOST_FUSION_ADAPT_STRUCT(ast::foo,
+    string
+)
+
 
 namespace parser {
 
@@ -28,7 +63,7 @@ namespace parser {
 
 	typedef x3::rule<basic_graphic_character_class> basic_graphic_character_type;
 	typedef x3::rule<graphic_character_class> graphic_character_type;
-	typedef x3::rule<string_literal_class> string_literal_type;
+	typedef x3::rule<string_literal_class, ast::foo> string_literal_type;
 
 	basic_graphic_character_type const basic_graphic_character { "basic_graphic_character" };
 	graphic_character_type const graphic_character { "graphic_character" };
@@ -48,9 +83,9 @@ namespace parser {
 		;
 
 	auto const string_literal_def =
-		x3::lexeme[
+		x3::lexeme[ x3::raw[
 			'"' >> ( *(graphic_character - '"') ) >> '"'
-		]
+		] ]
 		;
 
 	BOOST_SPIRIT_DEFINE(
@@ -63,6 +98,7 @@ namespace parser {
 int main()
 {
 	namespace x3 = boost::spirit::x3;
+	namespace iso8859_1 = boost::spirit::x3::iso8859_1;
 
 	std::vector<std::string> const test_cases {
 		"\" aa\"",
@@ -81,11 +117,13 @@ int main()
 		iterator_type const end = str.end();
 
 		auto& rule = parser::string_literal;
+		ast::foo foo;
 
-		bool r = phrase_parse(iter, end, rule, x3::space);
+		bool r = phrase_parse(iter, end, rule, iso8859_1::space, foo);
 
 		if (r && iter == end) {
-			std::cout << "Parsing succeeded\n";
+			std::cout << "Parsing succeeded, got "
+			          << foo.string << '\n';
 		} else {
 			std::cout << "Parsing failed\n";
 		}
@@ -93,14 +131,3 @@ int main()
 
     return 0;
 }
-
-/*
-LANG=en g++ -std=c++14 ../IBIS_SOURCE/playground/x3_quoted_string.cpp -o x3_quoted_string && ./x3_quoted_string
-Parsing succeeded
-Parsing succeeded
-Parsing succeeded
-Parsing succeeded
-Parsing succeeded
-Parsing succeeded
-Parsing failed
- */

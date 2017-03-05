@@ -1,0 +1,20 @@
+(1)
+
+  ( " ({graphic_character} | ("") | %)* " )
+| ( % ({graphic_character} | (%%) | ")* % ) 
+
+
+(2)
+
+  ( " ( {graphic_character}
+      | ("")
+      | %
+      )*
+    "
+  )
+| ( % ( {graphic_character}
+      | (%%)
+      | "
+      )*
+    %
+  ) 

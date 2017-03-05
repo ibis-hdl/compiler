@@ -14,6 +14,12 @@
 
 #include <boost/spirit/home/x3.hpp>
 
+/*
+ * http://www.amos.eguru-il.com/vhdl_info/vhdl87_syntax.html
+ * http://www.amos.eguru-il.com/vhdl_info/vhdl93_syntax.html
+ * http://rti.etf.bg.ac.rs/rti/ri5rvl/tutorial/TUTORIAL/IEEE/HTML/1076_AXA.HTM
+ *
+ */
 
 namespace eda { namespace vhdl93 { namespace parser {
 

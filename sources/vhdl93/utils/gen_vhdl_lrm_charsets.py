@@ -17,11 +17,14 @@ SpecialCharacters = r" # & ' () * + , - . / : ; < = > [ ] _ |"
 LowercaseLetters = r"a b c d e f g h i j k l m n o p q r s t u v w x y z Я а б в г д е ж з и й к л м н о п ð с т у ф х ц ø щ ъ ы ь ý þ я"
 OtherSpecialCharacters = r"! $ % @ ? \ ^ ` { } ~ ¡ ¢ £ ¤ ¥ ¦ § ¨ © ª « ~ ® ¯ ° ± ² ³ ' µ ¶ · ¸ ¹ º » 1/4 1/2 3/4 ¿ × ÷ -"
 
-def cxx_char_list(alist):
+def cxx_char_list(alist, as_cp=False):
     '''
     Create C++11 raw char list
     '''
-    return map(lambda x: 'u"' + x + '"', alist.split())
+    if as_cp:
+        return map(lambda x: '"' + str(ord(x)) + '"', alist.split())
+    else:
+        return map(lambda x: 'u"' + x + '"', alist.split())
 
 def my_list_printer(name, alist):
     tmp = cxx_char_list(alist)
