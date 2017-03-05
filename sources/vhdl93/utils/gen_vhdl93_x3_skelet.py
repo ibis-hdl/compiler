@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #from pyxb.utils.utility import _XMLIdentifierToPython
-from ply.yacc import Production
+
 
 
 # copy&paste reserved keywords
