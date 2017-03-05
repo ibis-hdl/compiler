@@ -123,7 +123,6 @@ namespace parser {
             (      '"'
                 >> *(  (graphic_character - '"')
 				       | "\"\""
-				       //| "%"
 				   )
                 >> '"'
             )
