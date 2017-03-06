@@ -942,6 +942,7 @@ end_of_line_type const end_of_line { "end_of_line" };
 lower_case_letter_type const lower_case_letter { "lower_case_letter" };
 other_special_character_type const other_special_character { "other_special_character" };
 
+// FixMe: This is VHDL87
 auto const upper_case_letter_def = char_("A-Z");
 auto const digit_def = char_("0-9");
 auto const special_character_def = char_("#&\'()*+,-./:;<=>_|");
@@ -3141,9 +3142,9 @@ auto const slice_name_def =
 auto const string_literal_def =
     x3::lexeme[
         (      '"'
-            >> *(  (graphic_character - '"')
-                   | "\"\""
-               )
+            >> *( (graphic_character - '"')
+                | "\"\""
+                )
             >> '"'
         )
     ]

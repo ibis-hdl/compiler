@@ -122,16 +122,14 @@ namespace parser {
 	auto const string_literal_def =
         x3::lexeme[
             (      '"'
-                >> *(  (graphic_character - '"')
-				       | "\"\""
-				   )
+                >> *( (graphic_character - '"')
+				    | "\"\""
+				    )
                 >> '"'
             )
         ]
 		;
-#if 0
 
-#endif
 	BOOST_SPIRIT_DEFINE(
 		basic_graphic_character,
 		graphic_character,
@@ -144,17 +142,10 @@ int main()
 	namespace x3 = boost::spirit::x3;
 
 	std::vector<std::string> const test_cases {
-		"",
-		" ",
-		" A ",
-		"ERROR",
-		"Both S and Q equal to 1",
-		"X",
-		"BB$CC",
-		"{LOW}",
-		"Characters such as $, %, and } are allowed in string literals.",
-		"& ' ( ) * + , - . / : ; < = > | [ ]",
-		"Quotation: \"\"REPORT...\"\" is also allowed"
+		"\"Both S and Q equal to 1\"",
+		"\"Characters such as $, %, and } are allowed in string literals.\"",
+		"\"& ' ( ) * + , - . / : ; < = > | [ ]\"",
+		"\"Quotation: \"\"REPORT...\"\" is also allowed\""
 		};
 
     typedef std::string::const_iterator iterator_type;
@@ -166,7 +157,7 @@ int main()
 		//auto& rule = parser::graphic_character;
 		auto& rule = parser::string_literal;
 
-                std::cout << "parse \"" << str << "\": ";
+                std::cout << "parse [" << str << "]: ";
 
 		bool r = phrase_parse(iter, end, *rule, x3::space);
 

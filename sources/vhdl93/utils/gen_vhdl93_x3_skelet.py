@@ -1040,7 +1040,7 @@ waveform_element ::=
 import collections
 import re
 
-
+# http://www.externsoft.ch/download/vhdl.html#vhdl
 class Vhdl93Bnf:
     kw_list = []
     rule_list = []
@@ -1457,7 +1457,23 @@ auto const {1}_def =
         text += self.operator_ast_enum_bock(operator_enum_name)
         
         return self.embrace_ns(text, self.ast_ns)
-        
+    
+    def error_handler_map_initializer_list(self):
+        pretty_name_dict = {'foo' : 'bar'} # FixMe: Fill Me
+        alist = []
+        for rule_name in self.bnf.rule_names():
+            exception_name = rule_name
+            descr_def = ''.join(x for x in rule_name.title()).replace('_', ' ')
+            descr = pretty_name_dict.get(rule_name, descr_def)
+            alist.append('{ "' + exception_name + '" , "' + descr + '" }')
+        return alist    
+         
+    def error_handler_map_initial_block(self, map_name):
+        text = map_name + ' { \n'
+        text += ",\n".join(self.error_handler_map_initializer_list()) + '\n'
+        text += '};\n'
+        return text
+       
     def declaration(self):
         return ""
     
@@ -1497,10 +1513,14 @@ auto const {1}_def =
         text += self.rule_definition_macro_block()
         
         return self.embrace_ns(text, self.parser_ns)
+    
+    def error_handler(self):
+        return self.error_handler_map_initial_block('id_map')
         
         
 if __name__ == "__main__":
     x3 = X3(['eda', 'vhdl93'])
     print(x3.ast())
     print(x3.definition())
+    print(x3.error_handler())
         
