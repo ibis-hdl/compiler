@@ -64,6 +64,7 @@ namespace parser {
 	lower_case_letter_type const lower_case_letter { "lower_case_letter" };
 	other_special_character_type const other_special_character { "other_special_character" };
 
+	// FixMe: This is VHDL87!
 	auto const upper_case_letter_def = char_("A-Z");
 	auto const digit_def = char_("0-9");
 	auto const special_character_def = char_("#&\'()*+,-./:;<=>_|");
@@ -126,16 +127,6 @@ namespace parser {
 				   )
                 >> '"'
             )
-#if 0 // for what is it good ???
-            |
-            (      '%'
-                >> *(  (graphic_character - '"')
-				       | "%%"
-				       | '"'
-				   )
-                >> '%'
-            )
-#endif
         ]
 		;
 #if 0
