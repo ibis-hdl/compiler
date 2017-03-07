@@ -20,9 +20,9 @@ namespace parser {
 
 	using iso8859_1::char_;
 
-	struct string_literal_class;
+	struct integer_class;
 
-	typedef x3::rule<string_literal_class> string_literal_type;
+	typedef x3::rule<integer_class> string_literal_type;
 
 	string_literal_type const string_literal { "string_literal" };
 

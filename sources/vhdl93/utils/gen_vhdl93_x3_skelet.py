@@ -1348,45 +1348,8 @@ auto kw = [](auto xx) {
         text += "\n".join(self.operator_ast_enum()) + '\n'
         text += "};\n"
         return text
-
-    def operator_decl(self, ast_node):
-        alist = []
-        for o in self.bnf.operator_rule_names():
-            text = 'x3::symbols<{0}> {1};'.format(
-                cxx_ify(ast_node),
-                o)
-            alist.append(text)
-        return alist
     
-    def operator_decl_block(self, ast_type):
-        return '\n'.join(self.operator_decl(ast_type)) + '\n'
-
-    def operator_def(self, ast_node):
-        alist = []
-        for op_name, value in self.bnf.operator_rules().items():
-            text = "{0}.add\n".format(op_name)
-            for r in value:
-                text += '    ("{0}", {1}::{2})\n'.format(
-                    r,
-                    cxx_ify(ast_node),
-                    cxx_ify(self.bnf.operator_as_name(r))
-                )                
-            text += '    ;\n'
-            alist.append(text)
-        return alist
-    
-    def operator_def_block(self, ast_node):
-        body = """
-static bool once = false;
-if(once) {{ return; }}
-once = true;
-
-{0}
-""".format('\n'.join(self.operator_def(ast_node)) + '\n')        
-        text = self.embrace_fcn('void add_operator_symbols()', body)
-        return text
-    
-    def operator_def_new(self, operator_class, ast_node):
+    def operator_def(self, operator_class, ast_node):
         inner_text = ""
         for op in self.bnf.operator_rules().get(operator_class):
             inner_text += '   ("{0}", {1}::{2})\n'.format(
@@ -1414,10 +1377,10 @@ struct {0}_symbols : x3::symbols<{1}> {{
         )
         return outer_text
     
-    def operator_def_block_new(self, ast_node):
+    def operator_def_block(self, ast_node):
         text = ""
         for op_name, value in self.bnf.operator_rules().items():
-            text += self.operator_def_new(op_name, ast_node) + '\n'
+            text += self.operator_def(op_name, ast_node) + '\n'
         return text
     
     def parser_rule_keywords_subs(self, rule):
@@ -1540,7 +1503,7 @@ auto const {1}_def =
         #text += self.operator_decl_block(ns_op_type_name)
         
         text += self.section('Parser Operator Symbol Definition')
-        text += self.operator_def_block_new(ns_op_type_name)
+        text += self.operator_def_block(ns_op_type_name)
 
         text += self.section('Parser Rule Definition')
         text += self.parser_definition_block()

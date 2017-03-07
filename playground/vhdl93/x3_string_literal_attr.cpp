@@ -59,11 +59,11 @@ namespace parser {
 
 	struct basic_graphic_character_class;
 	struct graphic_character_class;
-	struct string_literal_class;
+	struct integer_class;
 
 	typedef x3::rule<basic_graphic_character_class> basic_graphic_character_type;
 	typedef x3::rule<graphic_character_class> graphic_character_type;
-	typedef x3::rule<string_literal_class, ast::foo> string_literal_type;
+	typedef x3::rule<integer_class, ast::foo> string_literal_type;
 
 	basic_graphic_character_type const basic_graphic_character { "basic_graphic_character" };
 	graphic_character_type const graphic_character { "graphic_character" };
