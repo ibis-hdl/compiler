@@ -15,7 +15,7 @@ add_library(${PROJECT_LIB} STATIC ${LIB_SOURCES})
 
 #target_include_directories (${PROJECT_LIB} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_dependencies(${PROJECT_LIB} boost-spirit-x3)
+#add_dependencies(${PROJECT_LIB} boost-spirit-x3)
 add_dependencies(${PROJECT_LIB} gsl)
 
 set_target_properties(${PROJECT_LIB} PROPERTIES CXX_STANDARD 14)

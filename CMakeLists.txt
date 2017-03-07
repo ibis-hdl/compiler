@@ -40,7 +40,7 @@ find_package(Boost REQUIRED COMPONENTS system)
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 include(external-gsl)
-include(external-spirit-x3)
+#include(external-spirit-x3)
 
 
 ## IDE support

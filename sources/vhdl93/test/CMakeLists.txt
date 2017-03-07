@@ -10,7 +10,7 @@ set(BIN_SOURCES
 
 add_executable(${PROJECT_BIN} ${BIN_SOURCES})
 
-add_dependencies(${PROJECT_BIN} boost-spirit-x3)
+#add_dependencies(${PROJECT_BIN} boost-spirit-x3)
 add_dependencies(${PROJECT_BIN} gsl)
 
 set_target_properties(${PROJECT_BIN} PROPERTIES CXX_STANDARD 14)
