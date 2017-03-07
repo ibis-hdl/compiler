@@ -841,72 +841,103 @@ auto const XNOR = kw("xnor");
 auto const XOR = kw("xor");
 
 /*
- * Parser Operator Symbol Declaration
- */
-x3::symbols<ast::operator_> logical_operator;
-x3::symbols<ast::operator_> relational_operator;
-x3::symbols<ast::operator_> miscellaneous_operator;
-x3::symbols<ast::operator_> adding_operator;
-x3::symbols<ast::operator_> multiplying_operator;
-x3::symbols<ast::operator_> shift_operator;
-
-/*
  * Parser Operator Symbol Definition
  */
-void add_operator_symbols() {
 
-	static bool once = false;
-	if(once) { return; }
-	once = true;
+struct logical_operator_symbols : x3::symbols<ast::operator_> {
 
-	logical_operator.add
-	("and", ast::operator_::and_)
-	("or", ast::operator_::or_)
-	("nand", ast::operator_::nand)
-	("nor", ast::operator_::nor)
-	("xor", ast::operator_::xor_)
-	("xnor", ast::operator_::xnor)
-	;
+    logical_operator_symbols() {
 
-	relational_operator.add
-	("=", ast::operator_::equal)
-	("/=", ast::operator_::not_equals)
-	("<", ast::operator_::less)
-	("<=", ast::operator_::less_equals)
-	(">", ast::operator_::greater)
-	(">=", ast::operator_::greater_equals)
-	;
+        name("logical_operator");
 
-	miscellaneous_operator.add
-	("**", ast::operator_::exponent)
-	("abs", ast::operator_::abs)
-	("not", ast::operator_::not_)
-	;
-
-	adding_operator.add
-	("+", ast::operator_::add)
-	("-", ast::operator_::sub)
-	("&", ast::operator_::concat)
-	;
-
-	multiplying_operator.add
-	("*", ast::operator_::mul)
-	("/", ast::operator_::div)
-	("mod", ast::operator_::mod)
-	("rem", ast::operator_::rem)
-	;
-
-	shift_operator.add
-	("sll", ast::operator_::sll)
-	("srl", ast::operator_::srl)
-	("sla", ast::operator_::sla)
-	("sra", ast::operator_::sra)
-	("rol", ast::operator_::rol)
-	("ror", ast::operator_::ror)
-	;
+        add("and", ast::operator_::and_)
+           ("or", ast::operator_::or_)
+           ("nand", ast::operator_::nand)
+           ("nor", ast::operator_::nor)
+           ("xor", ast::operator_::xor_)
+           ("xnor", ast::operator_::xnor)
+           ;
+    }
+} const logical_operator;
 
 
-} // void add_operator_symbols()
+struct relational_operator_symbols : x3::symbols<ast::operator_> {
+
+    relational_operator_symbols() {
+
+        name("relational_operator");
+
+        add("=", ast::operator_::equal)
+           ("/=", ast::operator_::not_equals)
+           ("<", ast::operator_::less)
+           ("<=", ast::operator_::less_equals)
+           (">", ast::operator_::greater)
+           (">=", ast::operator_::greater_equals)
+           ;
+    }
+} const relational_operator;
+
+
+struct miscellaneous_operator_symbols : x3::symbols<ast::operator_> {
+
+    miscellaneous_operator_symbols() {
+
+        name("miscellaneous_operator");
+
+        add("**", ast::operator_::exponent)
+           ("abs", ast::operator_::abs)
+           ("not", ast::operator_::not_)
+           ;
+    }
+} const miscellaneous_operator;
+
+
+struct adding_operator_symbols : x3::symbols<ast::operator_> {
+
+    adding_operator_symbols() {
+
+        name("adding_operator");
+
+        add("+", ast::operator_::add)
+           ("-", ast::operator_::sub)
+           ("&", ast::operator_::concat)
+           ;
+    }
+} const adding_operator;
+
+
+struct multiplying_operator_symbols : x3::symbols<ast::operator_> {
+
+    multiplying_operator_symbols() {
+
+        name("multiplying_operator");
+
+        add("*", ast::operator_::mul)
+           ("/", ast::operator_::div)
+           ("mod", ast::operator_::mod)
+           ("rem", ast::operator_::rem)
+           ;
+    }
+} const multiplying_operator;
+
+
+struct shift_operator_symbols : x3::symbols<ast::operator_> {
+
+    shift_operator_symbols() {
+
+        name("shift_operator");
+
+        add("sll", ast::operator_::sll)
+           ("srl", ast::operator_::srl)
+           ("sla", ast::operator_::sla)
+           ("sra", ast::operator_::sra)
+           ("rol", ast::operator_::rol)
+           ("ror", ast::operator_::ror)
+           ;
+    }
+} const shift_operator;
+
+
 
 
 using iso8859_1::char_;
@@ -2327,12 +2358,12 @@ auto const instantiation_list_def =
 		;
 #endif
 
-#if 0
+#if 1
 // integer ::=
 // digit { [ underline ] digit }
 auto const integer_def =
-		digit { -( underline ) digit }
-;
+	x3::digit >> *( -char_('_') >> x3::digit )
+	;
 #endif
 
 #if 0
@@ -3527,7 +3558,7 @@ BOOST_SPIRIT_DEFINE(
 		//    indexed_name,
 		//    instantiated_unit,
 		//    instantiation_list,
-		//    integer,
+		integer,
 		//    integer_type_definition,
 		//    interface_constant_declaration,
 		//    interface_declaration,

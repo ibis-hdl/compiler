@@ -110,6 +110,7 @@ xor           operator, exclusive "or" of left and right operands
 ## TopUnit => design_file ???
 # see https://tams-www.informatik.uni-hamburg.de/vhdl/doc/cookbook/VHDL-Cookbook.pdf
 # 5.1 "Design Units and Libraries"
+# http://www.externsoft.ch/download/vhdl.html#vhdl
 vhdl93_ebnf = """
 abstract_literal ::= decimal_literal | based_literal
 
@@ -1040,7 +1041,7 @@ waveform_element ::=
 import collections
 import re
 
-# http://www.externsoft.ch/download/vhdl.html#vhdl
+
 class Vhdl93Bnf:
     kw_list = []
     rule_list = []
@@ -1347,7 +1348,7 @@ auto kw = [](auto xx) {
         text += "\n".join(self.operator_ast_enum()) + '\n'
         text += "};\n"
         return text
-        
+
     def operator_decl(self, ast_node):
         alist = []
         for o in self.bnf.operator_rule_names():
@@ -1359,7 +1360,7 @@ auto kw = [](auto xx) {
     
     def operator_decl_block(self, ast_type):
         return '\n'.join(self.operator_decl(ast_type)) + '\n'
-    
+
     def operator_def(self, ast_node):
         alist = []
         for op_name, value in self.bnf.operator_rules().items():
@@ -1384,7 +1385,41 @@ once = true;
 """.format('\n'.join(self.operator_def(ast_node)) + '\n')        
         text = self.embrace_fcn('void add_operator_symbols()', body)
         return text
+    
+    def operator_def_new(self, operator_class, ast_node):
+        inner_text = ""
+        for op in self.bnf.operator_rules().get(operator_class):
+            inner_text += '   ("{0}", {1}::{2})\n'.format(
+                    op,
+                    cxx_ify(ast_node),
+                    cxx_ify(self.bnf.operator_as_name(op))
+            )
+        inner_text += '   ;'
+        inner_text = "add" + inner_text.lstrip()
+        inner_text = "".join('        ' + line for line in inner_text.splitlines(True))
+        outer_text = """
+struct {0}_symbols : x3::symbols<{1}> {{
+    
+    {0}_symbols() {{
 
+        name("{0}");
+    
+{2}
+    }}
+}} const {0};
+""".format(
+        operator_class,
+        cxx_ify(ast_node),
+        inner_text
+        )
+        return outer_text
+    
+    def operator_def_block_new(self, ast_node):
+        text = ""
+        for op_name, value in self.bnf.operator_rules().items():
+            text += self.operator_def_new(op_name, ast_node) + '\n'
+        return text
+    
     def parser_rule_keywords_subs(self, rule):
         """
         Replace in the given rule the keywords with their C++ x3 keyword rules. 
@@ -1459,13 +1494,13 @@ auto const {1}_def =
         return self.embrace_ns(text, self.ast_ns)
     
     def error_handler_map_initializer_list(self):
-        pretty_name_dict = {'foo' : 'bar'} # FixMe: Fill Me
+        pretty_name_dict = dict() # FixMe: Fill Me
         alist = []
-        for rule_name in self.bnf.rule_names():
+        for rule_name in self.bnf.rule_names(True):
             exception_name = rule_name
             descr_def = ''.join(x for x in rule_name.title()).replace('_', ' ')
             descr = pretty_name_dict.get(rule_name, descr_def)
-            alist.append('{ "' + exception_name + '" , "' + descr + '" }')
+            alist.append('    { "' + exception_name + '" , "' + descr + '" }')
         return alist    
          
     def error_handler_map_initial_block(self, map_name):
@@ -1501,11 +1536,11 @@ auto const {1}_def =
 """
         text += self.keyword_block()
 
-        text += self.section('Parser Operator Symbol Declaration') 
-        text += self.operator_decl_block(ns_op_type_name)
+        #text += self.section('Parser Operator Symbol Declaration') 
+        #text += self.operator_decl_block(ns_op_type_name)
         
         text += self.section('Parser Operator Symbol Definition')
-        text += self.operator_def_block(ns_op_type_name)
+        text += self.operator_def_block_new(ns_op_type_name)
 
         text += self.section('Parser Rule Definition')
         text += self.parser_definition_block()
@@ -1523,4 +1558,30 @@ if __name__ == "__main__":
     print(x3.ast())
     print(x3.definition())
     print(x3.error_handler())
+
         
+"""
+ALTERNATIVE for keywords:
+https://stackoverflow.com/questions/38039237/parsing-identifiers-except-keywords
+struct keywords_t : x3::symbols<x3::unused_type> {
+    keywords_t() {
+        add("for", x3::unused)
+                ("in", x3::unused)
+                ("while", x3::unused);
+    }
+} const keywords;
+
+ALSO:
+struct instructions : x3::symbols<OpCode> {
+    instructions()
+    {
+        name("instructions");
+    }
+
+    void set_instruction_set(const std::unordered_map<std::string, OpCode>& instruction_set) {
+        for (const auto& var : instruction_set) {
+            add(var.first, var.second);
+        }
+    }
+} instructions_parser;
+"""
