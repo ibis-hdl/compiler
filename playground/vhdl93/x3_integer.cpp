@@ -14,8 +14,16 @@
 #include <iostream>
 #include <vector>
 #include <algorithm> // for copy
-#include <iterator> // for ostream_iterator
-#include <typeinfo>
+#include <iterator>  // for ostream_iterator
+#include <sstream>
+
+namespace std {
+    template<class T>
+    std::ostream& operator<<(std::ostream& os, std::vector<T> const& v) {
+        std::copy(v.begin(), v.end(), std::ostream_iterator<T>(os, ", "));
+        return os;
+    }
+}
 
 namespace parser {
 
@@ -29,25 +37,22 @@ namespace parser {
   integer_type const integer { "integer" };
 
 
-  auto combine_to_int = [](auto &ctx) {
-    using x3::_val;
-    auto& v = _val(ctx);
-    std::copy(v.begin(), v.end(), std::ostream_iterator<int>(std::cout, ", "));
+  auto combine_to_uint = [](auto &ctx) {
+    auto const &v = x3::_attr(ctx);
+    std::ostringstream ss;
+    std::copy(v.begin(), v.end(), std::ostream_iterator<int>(ss, ""));
+    uint int_ { 0 };
+    x3::parse(ss.str().begin(), ss.str().end(), x3::uint_, int_);
+    std::cout << int_ << '\n';
   };
 
+  x3::uint_parser<int, 10, 1, 1>  const digit = { };
+
   // Parse '1_000' as 1000
-  // Note: 'x3::digit >> *( -char_('_') >> x3::digit )' parses also '_' into
-#if 1
-  auto const integer_def =
+  auto const integer_def = integer %=
     (
-     x3::digit >> *( x3::omit[ -char_('_') ] >> x3::digit )
-    )
-#else
-  auto const integer_def %=
-    (
-     x3::digit >> *( x3::omit[ -char_('_') ] >> x3::digit )
-    )[combine_to_int]
-#endif
+     digit >> *( x3::omit[ -char_('_') ] >> digit )
+    )[combine_to_uint]
     ;
 
   BOOST_SPIRIT_DEFINE(integer)
@@ -74,7 +79,7 @@ int main()
 
     auto& rule = parser::integer;
 
-    std::cout << "parse " << str << ": ";
+    std::cout << "parse `" << str << "´:\n";
 
     std::vector<int> i;
 
@@ -82,7 +87,7 @@ int main()
 
     if (r && iter == end) {
       std::cout << "succeeded\n";
-      std::copy(i.begin(), i.end(), std::ostream_iterator<char>(std::cout, " "));
+      //std::copy(i.begin(), i.end(), std::ostream_iterator<int>(std::cout, " "));
       std::cout << '\n';
     } else {
       std::cout << "failed\n";
