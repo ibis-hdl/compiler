@@ -52,23 +52,27 @@ namespace parser {
      std::cout << boost::typeindex::type_id<decltype(ctx)>().pretty_name() << "\n";
   };
 
-  constexpr uint32_t deckel() {
-      return std::numeric_limits<uint32_t>::max() % 10;
+  constexpr uint32_t digit_treshold() {
+      return std::numeric_limits<uint32_t>::max() % 10 + 1;
   };
 
   auto const combine = [](auto &ctx) {
-      std::cout << "TT = " << deckel() << '\n';
       uint32_t result { 0 };
       int32_t iter_cnt { 0 };
       for (auto&& ch : x3::_attr(ctx)) {
           switch (ch) {
               case '_': break;
               default:
+                  if(iter_cnt > std::numeric_limits<uint32_t>::digits10) {
+                      x3::_pass(ctx) = false;
+                      continue;
+                  }
                   if(iter_cnt++ < std::numeric_limits<uint32_t>::digits10) {
                       result = result*10 + (ch - '0');
-                      std::cout << "> c = " << iter_cnt << ", r = " << result << '\n';
+                      //std::cout << "> c = " << iter_cnt << ", r = " << result << '\n';
                   }
                   else {
+#if 0
                       switch(ch - '0') {
                       case 0: // [[fallthrough]];
                       case 1: // [[fallthrough]];
@@ -77,11 +81,19 @@ namespace parser {
                       case 4: // [[fallthrough]];
                       case 5:
                           result = result*10 + (ch - '0');
-                          std::cout << ". c = " << iter_cnt << ", r = " << result << '\n';
+                          //std::cout << ". c = " << iter_cnt << ", r = " << result << '\n';
                           break;
                       default:
                           x3::_pass(ctx) = false;
                       }
+#else
+                      if((ch - '0') < digit_treshold()) {
+                          result = result*10 + (ch - '0');
+                      }
+                      else {
+                          x3::_pass(ctx) = false;
+                      }
+#endif
                   }
           }
       }
