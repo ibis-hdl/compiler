@@ -36,6 +36,7 @@
 #include <boost/type_index.hpp>
 
 
+
 namespace parser {
 
   namespace x3 = boost::spirit::x3;
@@ -43,31 +44,54 @@ namespace parser {
 
   using iso8859_1::char_;
 
-  typedef x3::rule<struct integer_class, std::vector<int>> integer_type;
+  typedef x3::rule<struct integer_class, uint32_t> integer_type;
 
   integer_type const integer { "integer" };
 
-  auto type_of = [](auto &ctx) {
+  auto print_type_of = [](auto &ctx) {
      std::cout << boost::typeindex::type_id<decltype(ctx)>().pretty_name() << "\n";
   };
 
-  auto combine_to_uint = [](auto &ctx) {
-    auto const &v = x3::_attr(ctx);
-    std::ostringstream ss;
-    std::copy(v.begin(), v.end(), std::ostream_iterator<int>(ss, ""));
-    uint int_ { 0 };
-    x3::_pass(ctx) = x3::parse(ss.str().begin(), ss.str().end(), x3::long_, int_);
-    std::cout << int_ << '\n';
-    x3::_val(ctx) = std::move(std::vector<int>() = {1,2,3,4});
+  constexpr uint32_t deckel() {
+      return std::numeric_limits<uint32_t>::max() % 10;
   };
 
-  x3::uint_parser<int, 10, 1, 1>  const digit = { };
+  auto const combine = [](auto &ctx) {
+      std::cout << "TT = " << deckel() << '\n';
+      uint32_t result { 0 };
+      int32_t iter_cnt { 0 };
+      for (auto&& ch : x3::_attr(ctx)) {
+          switch (ch) {
+              case '_': break;
+              default:
+                  if(iter_cnt++ < std::numeric_limits<uint32_t>::digits10) {
+                      result = result*10 + (ch - '0');
+                      std::cout << "> c = " << iter_cnt << ", r = " << result << '\n';
+                  }
+                  else {
+                      switch(ch - '0') {
+                      case 0: // [[fallthrough]];
+                      case 1: // [[fallthrough]];
+                      case 2: // [[fallthrough]];
+                      case 3: // [[fallthrough]];
+                      case 4: // [[fallthrough]];
+                      case 5:
+                          result = result*10 + (ch - '0');
+                          std::cout << ". c = " << iter_cnt << ", r = " << result << '\n';
+                          break;
+                      default:
+                          x3::_pass(ctx) = false;
+                      }
+                  }
+          }
+      }
+
+      x3::_val(ctx) = result;
+  };
 
   // Parse '1_000' as 1000
-  auto const integer_def = integer %=
-    (
-     digit[type_of] >> *( -x3::lit('_') >> digit )
-    )[combine_to_uint]
+  auto const integer_def =
+    x3::lexeme [ +char_("0-9_") ] [combine]
     ;
 
   BOOST_SPIRIT_DEFINE(integer)
@@ -85,7 +109,9 @@ int main()
       "1_000",
       "42_666_4711",
       "4_294_967_295", // uint32::max
-      "4_294_967_296" // ??? how to get message about UINT_MAX failed??
+      "4_294_967_296",
+      "4_294_967_295_0",
+      "4_294_967_295_00",
       };
 
   typedef std::string::const_iterator iterator_type;
@@ -98,14 +124,12 @@ int main()
 
     std::cout << "parse `" << str << "´:\n";
 
-    std::vector<int> v;
+    uint32_t i;
 
-    bool r = x3::phrase_parse(iter, end, rule, x3::space, v);
+    bool r = x3::phrase_parse(iter, end, rule, x3::space, i);
 
     if (r && iter == end) {
-      std::cout << "succeeded: ";
-      std::copy(v.begin(), v.end(), std::ostream_iterator<int>(std::cout, ""));
-      std::cout << "\n";
+      std::cout << "succeeded: '" << str << "' -> " << i << "\n";
     } else {
       std::cout << "failed\n";
     }
