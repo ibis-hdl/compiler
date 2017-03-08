@@ -390,6 +390,7 @@ class Iso8859_1_Gen:
                 #descr = unicodedata.name(chr(codepoint), 'UNNAMED')
                 descr = self.iso8859_1_dict[codepoint]
                 adict.update({codepoint : descr})
+            print("{0} : {1}".format(codepoint, unicodedata.category(chr(codepoint))))
         return adict
     
     def as_cxx_hex_format(self, adict):
