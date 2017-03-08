@@ -52,27 +52,29 @@ namespace parser {
      std::cout << boost::typeindex::type_id<decltype(ctx)>().pretty_name() << "\n";
   };
 
-  constexpr uint32_t digit_treshold() {
-      return std::numeric_limits<uint32_t>::max() % 10 + 1;
+  constexpr uint32_t digit_treshold(auto i) {
+      return std::numeric_limits<decltype(i)>::max() % 10 + 1;
   };
 
   auto const combine = [](auto &ctx) {
-      uint32_t result { 0 };
-      int32_t iter_cnt { 0 };
+      //typedef decltype(x3::_(ctx)) base_type;
+      typedef uint32_t base_type;
+      base_type result { 0 };
+      uint32_t iter_cnt { 0 };
       for (auto&& ch : x3::_attr(ctx)) {
           switch (ch) {
               case '_': break;
               default:
-                  if(iter_cnt > std::numeric_limits<uint32_t>::digits10) {
+                  if(iter_cnt > std::numeric_limits<base_type>::digits10) {
                       x3::_pass(ctx) = false;
                       continue;
                   }
-                  if(iter_cnt++ < std::numeric_limits<uint32_t>::digits10) {
+                  if(iter_cnt++ < std::numeric_limits<base_type>::digits10) {
                       result = result*10 + (ch - '0');
                       //std::cout << "> c = " << iter_cnt << ", r = " << result << '\n';
                   }
                   else {
-#if 0
+#if 1
                       switch(ch - '0') {
                       case 0: // [[fallthrough]];
                       case 1: // [[fallthrough]];
@@ -87,7 +89,7 @@ namespace parser {
                           x3::_pass(ctx) = false;
                       }
 #else
-                      if((ch - '0') < digit_treshold()) {
+                      if((ch - '0') < digit_treshold(result)) {
                           result = result*10 + (ch - '0');
                       }
                       else {
