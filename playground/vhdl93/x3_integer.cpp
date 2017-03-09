@@ -5,23 +5,6 @@
  *      Author: olaf
  */
 
-/*
- * consider: BOOST_TEST_CONTEXT and BOOST_TEST_INFO
- * http://www.boost.org/doc/libs/1_60_0/libs/test/doc/html/boost_test/test_output/contexts.html
- */
-
- /*
- * x3_integer.cpp
- *
- *  Created on: 06.03.2017
- *      Author: olaf
- */
-
-/*
- * consider: BOOST_TEST_CONTEXT and BOOST_TEST_INFO
- * http://www.boost.org/doc/libs/1_60_0/libs/test/doc/html/boost_test/test_output/contexts.html
- */
- 
 #include <iosfwd>
 //#define BOOST_SPIRIT_X3_DEBUG
 
