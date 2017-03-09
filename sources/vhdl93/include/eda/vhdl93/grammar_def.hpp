@@ -293,7 +293,7 @@ typedef x3::rule<base_unit_declaration_class> base_unit_declaration_type;
 typedef x3::rule<based_integer_class> based_integer_type;
 typedef x3::rule<based_literal_class> based_literal_type;
 typedef x3::rule<basic_character_class> basic_character_type;
-typedef x3::rule<basic_graphic_character_class> basic_graphic_character_type;
+typedef x3::rule<basic_graphic_character_class, char> basic_graphic_character_type;
 typedef x3::rule<basic_identifier_class> basic_identifier_type;
 typedef x3::rule<binding_indication_class> binding_indication_type;
 typedef x3::rule<bit_string_literal_class> bit_string_literal_type;
@@ -381,7 +381,7 @@ typedef x3::rule<generation_scheme_class> generation_scheme_type;
 typedef x3::rule<generic_clause_class> generic_clause_type;
 typedef x3::rule<generic_list_class> generic_list_type;
 typedef x3::rule<generic_map_aspect_class> generic_map_aspect_type;
-typedef x3::rule<graphic_character_class> graphic_character_type;
+typedef x3::rule<graphic_character_class, char> graphic_character_type;
 typedef x3::rule<group_constituent_class> group_constituent_type;
 typedef x3::rule<group_constituent_list_class> group_constituent_list_type;
 typedef x3::rule<group_template_declaration_class> group_template_declaration_type;
@@ -472,7 +472,7 @@ typedef x3::rule<signature_class> signature_type;
 typedef x3::rule<simple_expression_class> simple_expression_type;
 typedef x3::rule<simple_name_class> simple_name_type;
 typedef x3::rule<slice_name_class> slice_name_type;
-typedef x3::rule<string_literal_class> string_literal_type;
+typedef x3::rule<string_literal_class, std::string> string_literal_type;
 typedef x3::rule<subprogram_body_class> subprogram_body_type;
 typedef x3::rule<subprogram_declaration_class> subprogram_declaration_type;
 typedef x3::rule<subprogram_declarative_item_class> subprogram_declarative_item_type;
@@ -947,41 +947,44 @@ using iso8859_1::char_;
  * Some helper char parser classes to implement the BNF
  */
 struct upper_case_letter_class;
+struct lower_case_letter_class;
 struct digit_class;
 struct special_character_class;
+struct other_special_character_class;
+
 struct space_character_class;
 struct format_effector_class;
 struct end_of_line_class;
-struct lower_case_letter_class;
-struct other_special_character_class;
 
-typedef x3::rule<upper_case_letter_class> upper_case_letter_type;
-typedef x3::rule<digit_class> digit_type;
-typedef x3::rule<special_character_class> special_character_type;
-typedef x3::rule<space_character_class> space_character_type;
+typedef x3::rule<upper_case_letter_class, char> upper_case_letter_type;
+typedef x3::rule<lower_case_letter_class, char> lower_case_letter_type;
+typedef x3::rule<digit_class, char> digit_type;
+typedef x3::rule<special_character_class, char> special_character_type;
+typedef x3::rule<other_special_character_class, char> other_special_character_type;
+
+typedef x3::rule<space_character_class, char> space_character_type;
 typedef x3::rule<format_effector_class> format_effector_type;
 typedef x3::rule<end_of_line_class> end_of_line_type;
-typedef x3::rule<lower_case_letter_class> lower_case_letter_type;
-typedef x3::rule<other_special_character_class> other_special_character_type;
 
 upper_case_letter_type const upper_case_letter { "upper_case_letter" };
+lower_case_letter_type const lower_case_letter { "lower_case_letter" };
 digit_type const digit { "digit" };
 special_character_type const special_character { "special_character" };
+other_special_character_type const other_special_character { "other_special_character" };
+
 space_character_type const space_character { "space_character" };
 format_effector_type const format_effector { "format_effector" };
 end_of_line_type const end_of_line { "end_of_line" };
-lower_case_letter_type const lower_case_letter { "lower_case_letter" };
-other_special_character_type const other_special_character { "other_special_character" };
 
-// FixMe: This is VHDL87
-auto const upper_case_letter_def = char_("A-Z");
+auto const upper_case_letter_def = char_("ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞ");
+auto const lower_case_letter_def = char_("abcdefghijklmnopqrstuvwxyzßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ");
 auto const digit_def = char_("0-9");
-auto const special_character_def = char_("#&\'()*+,-./:;<=>_|");
-auto const space_character_def = char_(" \t");
-auto const format_effector_def = char_("\t\v\r\f"); // what about '\l' ???
-auto const end_of_line_def = char_("\n");
-auto const lower_case_letter_def = char_("a-z");
-auto const other_special_character_def = char_("!$%@\?[\\]^`{}~");
+auto const special_character_def = char_("\"#&'()*+,-./:;<=>[]_|");
+auto const other_special_character_def = char_("!$%?@\\^`{}~¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿×÷");
+
+auto const space_character_def = iso8859_1::space;
+auto const format_effector_def = char_("\t\n\v\r\f");
+auto const end_of_line_def = x3::eol;
 
 BOOST_SPIRIT_DEFINE(
     upper_case_letter,
@@ -3174,9 +3177,16 @@ auto const string_literal_def =
     x3::lexeme[
         (      '"'
             >> *( (graphic_character - '"')
-                | "\"\""
+                | x3::no_skip[char_('"') >> char_('"')]
                 )
             >> '"'
+        )
+        |
+        (      '%' // LRM Chapter 13.10
+            >> *( (graphic_character - '%')
+                | x3::no_skip[char_('%') >> char_('%')]
+                )
+            >> '%'
         )
     ]
     ;
