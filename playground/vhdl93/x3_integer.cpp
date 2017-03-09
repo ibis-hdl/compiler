@@ -53,7 +53,7 @@ namespace parser {
   };
 
   constexpr uint32_t digit_treshold(auto i) {
-      return std::numeric_limits<decltype(i)>::max() % 10 + 1;
+      return std::numeric_limits<decltype(i)>::max() % 10;
   };
 
   auto const combine = [](auto &ctx) {
@@ -74,7 +74,7 @@ namespace parser {
                       //std::cout << "> c = " << iter_cnt << ", r = " << result << '\n';
                   }
                   else {
-#if 1
+#if 0
                       switch(ch - '0') {
                       case 0: // [[fallthrough]];
                       case 1: // [[fallthrough]];
@@ -89,11 +89,11 @@ namespace parser {
                           x3::_pass(ctx) = false;
                       }
 #else
-                      if((ch - '0') < digit_treshold(result)) {
-                          result = result*10 + (ch - '0');
+                      if((ch - '0') > digit_treshold(result)) { // FixMe: > trshhld! erspart +1 in constexpr()
+                    	  x3::_pass(ctx) = false;
                       }
                       else {
-                          x3::_pass(ctx) = false;
+                    	  result = result*10 + (ch - '0');
                       }
 #endif
                   }
