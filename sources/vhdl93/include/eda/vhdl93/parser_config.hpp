@@ -11,7 +11,7 @@
 
 //#include <eda/vhdl93/error_handler.hpp>
 
-#include <boost/spirit/home/x3.hpp>
+#include <boost/spirit/home/x3/support/unused.hpp>
 
 #include <string>
 
