@@ -145,6 +145,56 @@ namespace parser2 {
    BOOST_SPIRIT_DEFINE(integer)
 }
 
+namespace parser3 {
+
+   namespace x3 = boost::spirit::x3;
+
+   using x3::char_;
+
+   auto const combine_to_uint = [](auto &ctx) {
+
+       namespace fu = boost::fusion;
+
+       // Attr: boost::fusion::deque<char, std::vector<boost::variant<boost::detail::variant::over_sequence<boost::mpl::v_item<char,
+       // boost::mpl::vector<mpl_::na, mpl_::na, mpl_::na, mpl_::na, mpl_::na, mpl_::na, mpl_::na,
+       // mpl_::na, mpl_::na, mpl_::na, mpl_::na, mpl_::na, mpl_::na, mpl_::na, mpl_::na, mpl_::na,
+       // mpl_::na, mpl_::na, mpl_::na, mpl_::na>, 0> >>,
+       std::cout << "\nVal: " << boost::typeindex::type_id<decltype(x3::_val(ctx))>().pretty_name() << "\n";
+       std::cout << "Attr: " << boost::typeindex::type_id<decltype(x3::_attr(ctx))>().pretty_name() << "\n";
+
+       typedef typename std::decay<decltype(x3::_val(ctx))>::type value_type;
+       typedef typename boost::uint_t<sizeof(value_type)*8+1>::fast acc_type;
+
+       static_assert(sizeof(value_type) < sizeof(acc_type), "Accumulator to small");
+
+       auto as_uint = [](auto ch) { return static_cast<uint>(ch - '0'); };
+#if 0
+       acc_type acc { as_uint(fu::at_c<0>(x3::_attr(ctx))) };
+
+        for (auto&& ch : fu::at_c<1>(x3::_attr(ctx))) {
+            acc = acc*10 + as_uint(ch);
+            if(acc > std::numeric_limits<value_type>::max()) {
+                x3::_pass(ctx) = false;
+            }
+        }
+
+        x3::_val(ctx) = static_cast<value_type>(acc);
+#endif
+   };
+
+   auto const underline = x3::rule<struct _> { "underline" } = char_('_');
+
+   typedef x3::rule<struct _, uint32_t> integer_type;
+
+   integer_type const integer {};
+   // Parse '1_000' as 1000
+   auto const integer_def = x3::lexeme [
+       char_("0-9") >> *(char_("0-9") | underline)
+    ] [combine_to_uint] ;
+
+   BOOST_SPIRIT_DEFINE(integer)
+}
+
 int main()
 {
    namespace x3 = boost::spirit::x3;
