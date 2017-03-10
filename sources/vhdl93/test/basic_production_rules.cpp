@@ -100,7 +100,6 @@ BOOST_AUTO_TEST_CASE( string_literal )
             BOOST_TEST(!test_attr(str, parser, x3::space, attr));
         }
     }
-
 }
 
 
@@ -126,6 +125,52 @@ BOOST_AUTO_TEST_CASE( integer )
         };
 
     auto& parser = parser::integer;
+
+    for(auto const& str : pass_test_cases) {
+        BOOST_TEST_CONTEXT("test cases to PASS") {
+            std::string const& input = str.first;
+            uint32_t const gold = str.second;
+            uint32_t attr;
+            BOOST_TEST_INFO("input = '" << input << "'");
+            BOOST_TEST(test_attr(input, parser, x3::space, attr));
+            BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
+            BOOST_TEST(gold == attr);
+        }
+    }
+
+    for(auto const& str : fail_test_cases) {
+        BOOST_TEST_CONTEXT("test cases to FAIL") {
+            uint32_t attr;
+            BOOST_TEST_INFO("input = '" << str << "'");
+            BOOST_TEST(!test_attr(str, parser, x3::space, attr));
+        }
+    }
+}
+
+
+
+BOOST_AUTO_TEST_CASE( based_integer )
+{
+    using namespace eda::vhdl93;
+    using x3_test::test_attr;
+
+    std::vector<std::pair<std::string, uint32_t>> const pass_test_cases {
+        std::make_pair("0", 0),
+        std::make_pair("1", 1),
+        std::make_pair("1_000", 1000),
+        std::make_pair("42_666_4711", 426664711),
+        std::make_pair("4_294_967_295", 4294967295) // uint32::max
+    };
+
+    std::vector<std::string> const fail_test_cases {
+        "4_294_967_296", // greater uint32::max
+        "4_294_967_295_0",
+        "4_294_967_295_00",
+        "_42",
+        //"42_",  // FixMe: shouldn't pass!
+        };
+
+    auto& parser = parser::based_integer;
 
     for(auto const& str : pass_test_cases) {
         BOOST_TEST_CONTEXT("test cases to PASS") {
