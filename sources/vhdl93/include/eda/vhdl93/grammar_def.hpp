@@ -14,6 +14,8 @@
 
 #include <boost/spirit/home/x3.hpp>
 
+#include <boost/integer.hpp>
+
 /*
  * http://www.amos.eguru-il.com/vhdl_info/vhdl87_syntax.html
  * http://www.amos.eguru-il.com/vhdl_info/vhdl93_syntax.html
@@ -397,7 +399,7 @@ typedef x3::rule<index_subtype_definition_class> index_subtype_definition_type;
 typedef x3::rule<indexed_name_class> indexed_name_type;
 typedef x3::rule<instantiated_unit_class> instantiated_unit_type;
 typedef x3::rule<instantiation_list_class> instantiation_list_type;
-typedef x3::rule<integer_class> integer_type;
+typedef x3::rule<integer_class, uint32_t> integer_type;
 typedef x3::rule<integer_type_definition_class> integer_type_definition_type;
 typedef x3::rule<interface_constant_declaration_class> interface_constant_declaration_type;
 typedef x3::rule<interface_declaration_class> interface_declaration_type;
@@ -2361,13 +2363,41 @@ auto const instantiation_list_def =
 		;
 #endif
 
-#if 1
+
 // integer ::=
 // digit { [ underline ] digit }
+auto const combine_to_uint = [](auto &ctx) {
+
+    namespace fu = boost::fusion;
+
+    typedef typename std::decay<decltype(x3::_val(ctx))>::type value_type;
+    typedef typename boost::uint_t<sizeof(value_type)*8+1>::fast acc_type;
+
+    static_assert(sizeof(value_type) < sizeof(acc_type), "Accumulator to small");
+
+    auto as_uint = [](auto ch) { return static_cast<uint>(ch - '0'); };
+
+    acc_type acc { as_uint(fu::at_c<0>(x3::_attr(ctx))) };
+
+    for (auto&& ch : fu::at_c<1>(x3::_attr(ctx))) {
+        switch (ch) {
+        case '_': break;
+        default:  acc = acc*10 + as_uint(ch);
+        }
+        if(acc > std::numeric_limits<value_type>::max()) {
+            x3::_pass(ctx) = false;
+        }
+    }
+
+    x3::_val(ctx) = static_cast<value_type>(acc);
+};
+
 auto const integer_def =
-	x3::digit >> *( -char_('_') >> x3::digit )
+    x3::lexeme [
+       (char_("0-9") >> *char_("0-9_"))
+    ] [combine_to_uint]
 	;
-#endif
+
 
 #if 0
 // integer_type_definition ::=
@@ -3170,7 +3200,7 @@ auto const slice_name_def =
 ;
 #endif
 
-#if 1
+
 // string_literal ::=
 // " { graphic_character } "
 auto const string_literal_def =
@@ -3190,7 +3220,7 @@ auto const string_literal_def =
         )
     ]
     ;
-#endif
+
 
 #if 0
 // subprogram_body ::=
