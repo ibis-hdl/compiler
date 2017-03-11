@@ -45,7 +45,7 @@ namespace parser {
            | x3::attr(1)) // doesn't work???
            ;
 
-   auto const literal = x3::rule<struct _, std::string> {} =
+   auto const literal = x3::rule<struct _, ast::literal> {} =
            x3::lexeme [
                   // int         string   optional<string>    int
                   int_ >> '#' >> part >> -('.' >> part) >> '#' >> exponent
