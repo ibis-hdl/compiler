@@ -52,24 +52,26 @@ namespace x3_utils {
     namespace fu = boost::fusion;
 
     struct x3_info {
+        x3_info(std::ostream& os = std::cout): os { os } {};
         auto operator()(auto& ctx) {
 
-            auto const attr_info = [&n = this->n](auto const& attr) {
+            auto const attr_info = [&](auto const& attr) {
 
                 typedef decltype(attr) attr_type;
 
-                std::cout << "attr #" << n++ << ": <"
-                          << boost::typeindex::type_id<attr_type>().pretty_name() << "> = '"
-                          << attr << "'\n";
+                os << "attr #" << n++ << ": <"
+                   << boost::typeindex::type_id<attr_type>().pretty_name() << "> = '"
+                   << attr << "'\n";
 
             };
-            std::cout << "\n---8<------8<---\n";
-            std::cout << "value <" << boost::typeindex::type_id<decltype(x3::_val(ctx))>().pretty_name() << ">\n";
+            os << "\n---8<--- X3 ---8<---\n";
+            os << "value <" << boost::typeindex::type_id<decltype(x3::_val(ctx))>().pretty_name() << ">\n";
             fu::for_each(x3::_attr(ctx), attr_info);
-            std::cout << "\n--->8------>8---\n";
+            os << "--->8---->8---->8---\n";
         }
 
         uint  n { 0 };
+        std::ostream & os;
     };
 }
 // --->8----
@@ -133,16 +135,17 @@ namespace parser {
        x3::_val(ctx) = fu::at_c<0>(x3::_attr(ctx)) ? -fu::at_c<1>(x3::_attr(ctx)) : fu::at_c<1>(x3::_attr(ctx));
    };
    auto const exponent = x3::rule<struct exponent_class, int32_t> { "exponent" } =
-           x3::lexeme [
-                     (x3::lit("E") | "e") >> signum >> integer
-           ] [combine_exp]
+           (x3::lexeme [
+                      (x3::lit("E") | "e") >> signum >> integer
+           ][combine_exp]
+           | x3::attr(1))
            ;
 
    auto const based_literal_helper = [](auto& ctx) {
    };
    auto const based_literal = x3::rule<struct _, std::string> { "based_literal" } =
            x3::lexeme [
-                  base >> '#' >> based_integer >> -('.' >> based_integer) >> '#' >> (exponent | x3::attr(1))
+                  base >> '#' >> based_integer >> -('.' >> based_integer) >> '#' >> exponent
            ] [x3_info()]//[based_literal_helper]
            ;
 }
