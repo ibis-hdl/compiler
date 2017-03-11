@@ -11,9 +11,7 @@
 
 namespace eda { namespace vhdl93 { namespace ast {
 
-/*
- * AST operator
- */
+
 enum class operator_ {
 	// logical_operator
 	and_,
@@ -50,6 +48,7 @@ enum class operator_ {
 	rol,
 	ror,
 };
+
 
 } } } // namespace eda.vhdl93.ast
 
