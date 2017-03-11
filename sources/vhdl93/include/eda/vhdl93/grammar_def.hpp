@@ -947,58 +947,35 @@ using iso8859_1::char_;
 
 
 /*
- * Some helper char parser classes to implement the BNF
+ * Character Sets                                                       [§ 13.1]
  */
-struct upper_case_letter_class;
-struct lower_case_letter_class;
-struct digit_class;
-struct special_character_class;
-struct other_special_character_class;
 
-struct space_character_class;
-struct format_effector_class;
-struct end_of_line_class;
+auto const upper_case_letter =
+    x3::rule<struct upper_case_letter_class, char> { "upper_case_letter" } =
+            char_("ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞ");
+auto const lower_case_letter =
+    x3::rule<struct lower_case_letter_class, char> { "lower_case_letter" } =
+        char_("abcdefghijklmnopqrstuvwxyzßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ");
+auto const digit =
+    x3::rule<struct digit_class, char> { "digit" } =
+        char_("0-9");
+auto const special_character =
+    x3::rule<struct special_character_class, char> { "special_character" } =
+        char_("\"#&'()*+,-./:;<=>[]_|");
+auto const other_special_character =
+    x3::rule<struct other_special_character_class, char> { "other_special_character" } =
+        char_("!$%?@\\^`{}~¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿×÷");
 
-typedef x3::rule<upper_case_letter_class, char> upper_case_letter_type;
-typedef x3::rule<lower_case_letter_class, char> lower_case_letter_type;
-typedef x3::rule<digit_class, char> digit_type;
-typedef x3::rule<special_character_class, char> special_character_type;
-typedef x3::rule<other_special_character_class, char> other_special_character_type;
+auto const space_character =
+    x3::rule<struct space_character_class, char> { "space_character" } =
+        iso8859_1::space;
+auto const format_effector =
+    x3::rule<struct format_effector_class> { "format_effector" } =
+        char_("\t\n\v\r\f");
+auto const end_of_line =
+    x3::rule<struct end_of_line_class> { "end_of_line" } =
+        x3::eol;
 
-typedef x3::rule<space_character_class, char> space_character_type;
-typedef x3::rule<format_effector_class> format_effector_type;
-typedef x3::rule<end_of_line_class> end_of_line_type;
-
-upper_case_letter_type const upper_case_letter { "upper_case_letter" };
-lower_case_letter_type const lower_case_letter { "lower_case_letter" };
-digit_type const digit { "digit" };
-special_character_type const special_character { "special_character" };
-other_special_character_type const other_special_character { "other_special_character" };
-
-space_character_type const space_character { "space_character" };
-format_effector_type const format_effector { "format_effector" };
-end_of_line_type const end_of_line { "end_of_line" };
-
-auto const upper_case_letter_def = char_("ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞ");
-auto const lower_case_letter_def = char_("abcdefghijklmnopqrstuvwxyzßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ");
-auto const digit_def = char_("0-9");
-auto const special_character_def = char_("\"#&'()*+,-./:;<=>[]_|");
-auto const other_special_character_def = char_("!$%?@\\^`{}~¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿×÷");
-
-auto const space_character_def = iso8859_1::space;
-auto const format_effector_def = char_("\t\n\v\r\f");
-auto const end_of_line_def = x3::eol;
-
-BOOST_SPIRIT_DEFINE(
-    upper_case_letter,
-    digit,
-    special_character,
-    space_character,
-    format_effector,
-    end_of_line,
-    lower_case_letter,
-    other_special_character
-);
 
 /*
  * Parser Rule Definition
