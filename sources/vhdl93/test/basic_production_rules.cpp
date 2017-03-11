@@ -174,28 +174,6 @@ BOOST_AUTO_TEST_CASE( based_literal )
                  attribute_type { 2, "1", std::string("11111111111"), 11}),
 
     };
-
-    std::vector<std::string> const fail_test_cases {
-        "_42",
-        //"42_",  // FixMe: shouldn't pass!
-    };
-
-    uint n = 0 ;
-    for(auto const& str : pass_test_cases) {
-        BOOST_TEST_CONTEXT("test cases to pass") {
-            std::string const& input = str.first;
-            attribute_type const gold = str.second;
-            attribute_type attr;
-            BOOST_TEST_INFO("Test #" << n++ << ", input = '" << input << "'");
-            BOOST_TEST(test_attr(input, parser::based_literal, x3::space, attr));
-            BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
-            BOOST_TEST(gold.base == attr.base);
-            BOOST_TEST(gold.integer_part == attr.integer_part);
-            BOOST_TEST(gold.fractional_part == attr.fractional_part);
-            BOOST_TEST(gold.exponent == attr.exponent);
-        }
-    }
-
 }
 
 
