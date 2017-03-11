@@ -13,3 +13,4 @@ include_directories(${GSL_INCLUDE_DIR})
 add_executable(x3_string_literal_attr       x3_string_literal_attr.cpp)
 
 add_executable(x3_integer                   x3_integer.cpp)
+add_executable(x3_based_literal             x3_based_literal.cpp)
