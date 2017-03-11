@@ -23,13 +23,14 @@
  *
  */
 
+
 namespace eda { namespace vhdl93 { namespace parser {
 
 // VHDL char set is iso8859:1
 
 namespace x3 = boost::spirit::x3;
 namespace iso8859_1 = boost::spirit::x3::iso8859_1;
-namespace ascii = boost::spirit::x3::ascii;
+namespace fu = boost::fusion;
 
 /*
  * Rule IDs
@@ -289,11 +290,11 @@ typedef x3::rule<attribute_declaration_class> attribute_declaration_type;
 typedef x3::rule<attribute_designator_class> attribute_designator_type;
 typedef x3::rule<attribute_name_class> attribute_name_type;
 typedef x3::rule<attribute_specification_class> attribute_specification_type;
-typedef x3::rule<base_class> base_type;
+typedef x3::rule<base_class, int32_t> base_type;
 typedef x3::rule<base_specifier_class> base_specifier_type;
 typedef x3::rule<base_unit_declaration_class> base_unit_declaration_type;
-typedef x3::rule<based_integer_class> based_integer_type;
-typedef x3::rule<based_literal_class> based_literal_type;
+typedef x3::rule<based_integer_class, std::string> based_integer_type;
+typedef x3::rule<based_literal_class, ast::based_literal> based_literal_type;
 typedef x3::rule<basic_character_class> basic_character_type;
 typedef x3::rule<basic_graphic_character_class, char> basic_graphic_character_type;
 typedef x3::rule<basic_identifier_class> basic_identifier_type;
@@ -364,9 +365,9 @@ typedef x3::rule<entity_tag_class> entity_tag_type;
 typedef x3::rule<enumeration_literal_class> enumeration_literal_type;
 typedef x3::rule<enumeration_type_definition_class> enumeration_type_definition_type;
 typedef x3::rule<exit_statement_class> exit_statement_type;
-typedef x3::rule<exponent_class> exponent_type;
+typedef x3::rule<exponent_class, int32_t> exponent_type;
 typedef x3::rule<expression_class> expression_type;
-typedef x3::rule<extended_digit_class> extended_digit_type;
+typedef x3::rule<extended_digit_class, char> extended_digit_type;
 typedef x3::rule<extended_identifier_class> extended_identifier_type;
 typedef x3::rule<factor_class> factor_type;
 typedef x3::rule<file_declaration_class> file_declaration_type;
@@ -1001,11 +1002,6 @@ BOOST_SPIRIT_DEFINE(
 
 /*
  * Parser Rule Definition
- *
- * FixMe: CharSets, e.g. 'basic_graphic_character_def' etc needs more
- * investigating, see
- * http://rti.etf.bg.ac.rs/rti/ri5rvl/tutorial/TUTORIAL/IEEE/HTML/1076_13.HTM
- *
  */
 #if 0
 // abstract_literal ::= 
@@ -1200,21 +1196,21 @@ auto const attribute_specification_def =
 ;
 #endif
 
-#if 0
-// base ::=
+
+// base ::=                                                           [§ 13.4.2]
 // integer
 auto const base_def =
-		integer
-		;
-#endif
+	integer
+	;
 
-#if 0
-// base_specifier ::=
+
+
+// base_specifier ::=                                                   [§ 13.7]
 // B | O | X
 auto const base_specifier_def =
-		B | O | X
-		;
-#endif
+	'B' | 'O' | 'X'
+	;
+
 
 #if 0
 // base_unit_declaration ::=
@@ -1224,21 +1220,29 @@ auto const base_unit_declaration_def =
 ;
 #endif
 
-#if 0
-// based_integer ::=
+
+// based_integer ::=                                                  [§ 13.4.2]
 // extended_digit { [ underline ] extended_digit }
 auto const based_integer_def =
-		extended_digit { -( underline ) extended_digit }
-;
-#endif
+     x3::lexeme[
+         extended_digit >> *( -x3::lit('_') >> extended_digit )
+     ]
+     ;
 
-#if 0
-// based_literal ::=
+
+
+// based_literal ::=                                                  [§ 13.4.2]
 // base # based_integer [ . based_integer ] # [ exponent ]
 auto const based_literal_def =
-		base # based_integer -( . based_integer ) # -( exponent )
-		;
-#endif
+    x3::lexeme [
+           base
+        >> '#'
+        >> based_integer >> -('.' >> based_integer)
+        >> '#'
+        >> (exponent | x3::attr(1))
+    ]
+    ;
+
 
 #if 0
 // basic_character ::=
@@ -1248,8 +1252,8 @@ auto const basic_character_def =
 		;
 #endif
 
-#if 1
-// basic_graphic_character ::=
+
+// basic_graphic_character ::=                                          [§ 13.1]
 // upper_case_letter | digit | special_character| space_character
 auto const basic_graphic_character_def =
         upper_case_letter
@@ -1257,7 +1261,7 @@ auto const basic_graphic_character_def =
       | special_character
       | space_character
       ;
-#endif
+
 
 #if 0
 // basic_identifier ::=
@@ -2021,13 +2025,29 @@ auto const exit_statement_def =
 ;
 #endif
 
-#if 0
-// exponent ::=
+
+// exponent ::=                                                       [§ 13.4.1]
 // E [ + ] integer | E - integer
+
+auto signum_pos = [](auto& ctx) { x3::_val(ctx) = false; };
+auto signum_neg = [](auto& ctx) { x3::_val(ctx) = true;  };
+
+auto const signum = x3::rule<struct signum_class, bool> { "signum" } =
+      x3::lit('+')[ signum_pos ]
+    | x3::lit('-')[ signum_neg ]
+    | x3::eps[ signum_pos]
+    ;
+
+auto combine_exp = [](auto& ctx) {
+    x3::_val(ctx) = fu::at_c<0>(x3::_attr(ctx)) ? -fu::at_c<1>(x3::_attr(ctx)) : fu::at_c<1>(x3::_attr(ctx));
+};
+
 auto const exponent_def =
-		E -( + ) integer | E - integer
-		;
-#endif
+    x3::lexeme [
+        (x3::lit("E") | "e") >> signum >> integer
+    ][combine_exp]
+    ;
+
 
 #if 0
 // expression ::=
@@ -2047,13 +2067,13 @@ auto const expression_def =
 ;
 #endif
 
-#if 0
-// extended_digit ::=
+
+// extended_digit ::=                                                 [§ 13.4.2]
 // digit | letter
 auto const extended_digit_def =
-		digit | letter
-		;
-#endif
+    char_("0-9") | char_("A-Fa-f") // FixMe: Failure -> char_("1-9") >> -char_("0123456") | char_("A-Fa-f")
+    ;
+
 
 #if 0
 // extended_identifier ::=
@@ -2208,7 +2228,7 @@ auto const generic_map_aspect_def =
 #endif
 
 #if 1
-// graphic_character ::=
+// graphic_character ::=                                                [§ 13.1]
 // basic_graphic_character | lower_case_letter | other_special_character
     auto const graphic_character_def =
           basic_graphic_character
@@ -2364,7 +2384,7 @@ auto const instantiation_list_def =
 #endif
 
 
-// integer ::=
+// integer ::=                                                         § 13.4.1]
 // digit { [ underline ] digit }
 auto const combine_to_uint = [](auto &ctx) {
 
@@ -2487,21 +2507,21 @@ auto const label_def =
 		;
 #endif
 
-#if 0
-// letter ::=
+
+// letter ::=                                                         [§ 13.3.1]
 // upper_case_letter | lower_case_letter
 auto const letter_def =
-		upper_case_letter | lower_case_letter
-		;
-#endif
+    upper_case_letter | lower_case_letter
+	;
 
-#if 0
-// letter_or_digit ::=
+
+
+// letter_or_digit ::=                                                [§ 13.3.1]
 // letter | digit
 auto const letter_or_digit_def =
-		letter | digit
-		;
-#endif
+	letter | digit
+	;
+
 
 #if 0
 // library_clause ::=
@@ -3201,7 +3221,7 @@ auto const slice_name_def =
 #endif
 
 
-// string_literal ::=
+// string_literal ::=                                                   [§ 13.6]
 // " { graphic_character } "
 auto const string_literal_def =
     x3::lexeme[
@@ -3488,11 +3508,11 @@ BOOST_SPIRIT_DEFINE(
 		//    attribute_designator,
 		//    attribute_name,
 		//    attribute_specification,
-		//    base,
-		//    base_specifier,
+		base,
+		base_specifier,
 		//    base_unit_declaration,
-		//    based_integer,
-		//    based_literal,
+		based_integer,
+		based_literal,
 		//    basic_character,
 		basic_graphic_character,
 		//    basic_identifier,
@@ -3563,9 +3583,9 @@ BOOST_SPIRIT_DEFINE(
 		//    enumeration_literal,
 		//    enumeration_type_definition,
 		//    exit_statement,
-		//    exponent,
+		exponent,
 		//    expression,
-		//    extended_digit,
+		extended_digit,
 		//    extended_identifier,
 		//    factor,
 		//    file_declaration,
@@ -3609,8 +3629,8 @@ BOOST_SPIRIT_DEFINE(
 		//    interface_variable_declaration,
 		//    iteration_scheme,
 		//    label,
-		//    letter,
-		//    letter_or_digit,
+		letter,
+		letter_or_digit,
 		//    library_clause,
 		//    library_unit,
 		//    literal,

@@ -132,8 +132,6 @@ namespace parser {
            ][combine_exp]
            ;
 
-   auto const based_literal_helper = [](auto& ctx) {
-   };
    auto const based_literal = x3::rule<struct based_literal_class, ast::based_literal> { "based_literal" } =
            x3::lexeme [
                   base >> '#' >> based_integer >> -('.' >> based_integer) >> '#' >> (exponent | x3::attr(1))
