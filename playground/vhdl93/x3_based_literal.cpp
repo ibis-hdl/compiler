@@ -24,10 +24,10 @@ namespace stdx {
 
 namespace ast {
 
-    struct based_integer {
+    struct based_literal {
         int32_t                     base;
         std::string                 integer_part;
-        stdx::optional<std::string> fractional_part;
+        boost::optional<std::string> fractional_part;
         int32_t                     exponent;
     };
 
@@ -35,11 +35,11 @@ namespace ast {
 }
 
 BOOST_FUSION_ADAPT_STRUCT(
-    ast::based_integer,
-    (int32_t, base)
-    (std::string, integer_part)
+    ast::based_literal,
+    (int32_t,                      base)
+    (std::string,                  integer_part)
     (boost::optional<std::string>, fractional_part)
-    (int32_t, exponent)
+    (int32_t,                      exponent)
 )
 
 // ------8<----
@@ -85,24 +85,17 @@ namespace parser {
 
    using x3_utils::x3_info;
 
+
+
    auto const show_me = [](auto &ctx) {
 
        namespace fu = boost::fusion;
        
-       /*
-        * Val: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >
-        * Attr: boost::fusion::deque<char, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >
-        */
        std::cout << "\nVal: " << boost::typeindex::type_id<decltype(x3::_val(ctx))>().pretty_name() << "\n";
        std::cout << "Attr: " << boost::typeindex::type_id<decltype(x3::_attr(ctx))>().pretty_name() << "\n";
-
-       auto const inner_attr = [](auto& i) {
-           std::cout << "InnerAttr: " << boost::typeindex::type_id<i>().pretty_name() << "\n";
-       };
-
-       //fu::for_each(x3::_attr(ctx), inner_attr);
-        //x3::_val(ctx) = static_cast<value_type>(acc);
    };
+
+
 
    auto const integer = x3::rule<struct integer_class, uint> { "integer" } =
            x3::uint_
@@ -116,11 +109,10 @@ namespace parser {
            char_("0-9") | char_("A-Fa-f")
            ;
 
-   auto const underline = x3::rule<struct underline_class> { "underline" } = char_('_');
    auto const based_integer = x3::rule<struct based_integer_class, std::string> { "based_integer" } =
            x3::lexeme[
                   extended_digit >> *( -x3::lit('_') >> extended_digit )
-           ] //[ show_me]
+           ]
            ;
 
    auto signum_pos = [](auto& ctx) { x3::_val(ctx) = false; };
@@ -143,10 +135,10 @@ namespace parser {
 
    auto const based_literal_helper = [](auto& ctx) {
    };
-   auto const based_literal = x3::rule<struct _, std::string> { "based_literal" } =
+   auto const based_literal = x3::rule<struct based_literal_class, ast::based_literal> { "based_literal" } =
            x3::lexeme [
                   base >> '#' >> based_integer >> -('.' >> based_integer) >> '#' >> exponent
-           ] [x3_info()]//[based_literal_helper]
+           ]
            ;
 }
 
@@ -225,16 +217,14 @@ int main()
          iterator_type const end = str.end();
 
          auto& rule = parser::based_literal;
-         ast::based_integer attr;
+         ast::based_literal attr;
 
          std::cout << "parse `" << str << ": ";
 
-         bool r = x3::phrase_parse(iter, end, rule, x3::space);
+         bool r = x3::phrase_parse(iter, end, rule, x3::space, attr);
 
          if (r && iter == end) {
-           std::cout << "succeeded:\n";
-
-           std::cout << '\n';
+           std::cout << "succeeded: " << attr << "\n";
          } else {
            std::cout << "*** failed ***\n";
          }
