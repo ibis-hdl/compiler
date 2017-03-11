@@ -8,23 +8,71 @@
 
 #include <boost/type_index.hpp>
 
-#include <boost/fusion/algorithm/iteration/for_each.hpp>
-#include <boost/fusion/include/for_each.hpp>
-
 #include <boost/integer.hpp>
 
 #include <algorithm>
 #include <iterator>
 
+/* AST */
+#include <experimental/optional>
+
+/* hot fix for C++17 */
+namespace stdx {
+    template<class T>
+    using optional = ::std::experimental::optional<T>;
+}
 
 namespace ast {
 
     struct based_integer {
-        char    extended_digit;
+        int32_t                     base;
+        std::string                 integer_part;
+        stdx::optional<std::string> fractional_part;
+        int32_t                     exponent;
     };
 
     using boost::fusion::operator<<;
 }
+
+BOOST_FUSION_ADAPT_STRUCT(
+    ast::based_integer,
+    (int32_t, base)
+    (std::string, integer_part)
+    (boost::optional<std::string>, fractional_part)
+    (int32_t, exponent)
+)
+
+// ------8<----
+#include <boost/fusion/algorithm/iteration/for_each.hpp>
+#include <boost/fusion/include/for_each.hpp>
+
+namespace x3_utils {
+
+    namespace x3 = boost::spirit::x3;
+    namespace fu = boost::fusion;
+
+    struct x3_info {
+        auto operator()(auto& ctx) {  // FixMe: not compiling
+
+            uint  n { 0 };
+
+            // how to iterate with n ??
+            auto const attr_info = [&n](auto const& attr) {
+
+                typedef decltype(fu::at_c<0>(x3::_attr(attr))) attr_type;
+
+                std::cout << "attr #" << n++ << ": <"
+                          << boost::typeindex::type_id<attr_type>().pretty_name() << "> = '"
+                          << fu::at_c<0>(x3::_attr(attr)) << "'\n";
+
+            };
+            std::cout << "\n---8<------8<---\n";
+            fu::for_each(x3::_attr(ctx), attr_info);
+            std::cout << "\n--->8------>8---\n";
+        }
+    };
+}
+// --->8----
 
 namespace parser {
 
@@ -32,6 +80,8 @@ namespace parser {
    namespace fu = boost::fusion;
 
    using x3::char_;
+
+   using x3_utils::x3_info;
 
    auto const show_me = [](auto &ctx) {
 
@@ -84,15 +134,34 @@ namespace parser {
    };
    auto const exponent = x3::rule<struct exponent_class, int32_t> { "exponent" } =
            x3::lexeme [
-                   (x3::lit("E") | "e") >> signum >> integer
+                     (x3::lit("E") | "e") >> signum >> integer
            ] [combine_exp]
            ;
 
-   auto const based_literal = x3::rule<struct _, std::string> {} =
+   auto const based_literal_helper = [](auto& ctx) {
+       typedef decltype(fu::at_c<0>(x3::_attr(ctx))) t0;
+       typedef decltype(fu::at_c<1>(x3::_attr(ctx))) t1;
+       typedef decltype(fu::at_c<2>(x3::_attr(ctx))) t2;
+       typedef decltype(fu::at_c<3>(x3::_attr(ctx))) t3;
+       std::cout << "\n---8<------8<---\n";
+       std::cout << "arg #0: "
+                 << "Attr: <" << boost::typeindex::type_id<t0>().pretty_name() << "> = "
+                 << fu::at_c<0>(x3::_attr(ctx)) << "\n";
+       std::cout << "arg #1: "
+                 << "Attr: <" << boost::typeindex::type_id<t1>().pretty_name() << "> = "
+                 << fu::at_c<1>(x3::_attr(ctx)) << "\n";
+       std::cout << "arg #2: "
+                 << "Attr: <" << boost::typeindex::type_id<t2>().pretty_name() << "> = "
+                 << fu::at_c<2>(x3::_attr(ctx)) << "\n";
+       std::cout << "arg #3: "
+                 << "Attr: <" << boost::typeindex::type_id<t3>().pretty_name() << "> = "
+                 << fu::at_c<3>(x3::_attr(ctx)) << "\n";
+       std::cout << "\n--->8------>8---\n";
+   };
+   auto const based_literal = x3::rule<struct _, std::string> { "based_literal" } =
            x3::lexeme [
-
-                  base >> '#' >> based_integer /* .... */ >> '#' >> exponent
-           ]// [show_me]
+                  base >> '#' >> based_integer >> -('.' >> based_integer) >> '#' >> (exponent | x3::attr(1))
+           ] [based_literal_helper]
            ;
 }
 
@@ -161,8 +230,9 @@ int main()
    }
    {
        std::vector<std::string> const test_cases {
-           " 4711#1111_1111#E65 ",
-           " 42#AA_FF_FF_EE#e42"
+           "4711#1111_1111.32#",
+           "4711#1111_1111.32#E65",
+           "42#AA_FF_FF_EE#e42"
            };
 
        for(auto str: test_cases) {
@@ -170,15 +240,15 @@ int main()
          iterator_type const end = str.end();
 
          auto& rule = parser::based_literal;
-         std::string attr;
+         ast::based_integer attr;
 
          std::cout << "parse `" << str << ": ";
 
-         bool r = x3::phrase_parse(iter, end, rule, x3::space, attr);
+         bool r = x3::phrase_parse(iter, end, rule, x3::space);
 
          if (r && iter == end) {
            std::cout << "succeeded:\n";
-           std::copy(attr.begin(), attr.end(), std::ostream_iterator<boost::optional<char>>(std::cout, ", "));
+           //std::copy(attr.begin(), attr.end(), std::ostream_iterator<boost::optional<char>>(std::cout, ", "));
            std::cout << '\n';
          } else {
            std::cout << "*** failed ***\n";
