@@ -52,24 +52,24 @@ namespace x3_utils {
     namespace fu = boost::fusion;
 
     struct x3_info {
-        auto operator()(auto& ctx) {  // FixMe: not compiling
+        auto operator()(auto& ctx) {
 
-            uint  n { 0 };
+            auto const attr_info = [&n = this->n](auto const& attr) {
 
-            // how to iterate with n ??
-            auto const attr_info = [&n](auto const& attr) {
-
-                typedef decltype(fu::at_c<0>(x3::_attr(attr))) attr_type;
+                typedef decltype(attr) attr_type;
 
                 std::cout << "attr #" << n++ << ": <"
                           << boost::typeindex::type_id<attr_type>().pretty_name() << "> = '"
-                          << fu::at_c<0>(x3::_attr(attr)) << "'\n";
+                          << attr << "'\n";
 
             };
             std::cout << "\n---8<------8<---\n";
+            std::cout << "value <" << boost::typeindex::type_id<decltype(x3::_val(ctx))>().pretty_name() << ">\n";
             fu::for_each(x3::_attr(ctx), attr_info);
             std::cout << "\n--->8------>8---\n";
         }
+
+        uint  n { 0 };
     };
 }
 // --->8----
@@ -139,29 +139,11 @@ namespace parser {
            ;
 
    auto const based_literal_helper = [](auto& ctx) {
-       typedef decltype(fu::at_c<0>(x3::_attr(ctx))) t0;
-       typedef decltype(fu::at_c<1>(x3::_attr(ctx))) t1;
-       typedef decltype(fu::at_c<2>(x3::_attr(ctx))) t2;
-       typedef decltype(fu::at_c<3>(x3::_attr(ctx))) t3;
-       std::cout << "\n---8<------8<---\n";
-       std::cout << "arg #0: "
-                 << "Attr: <" << boost::typeindex::type_id<t0>().pretty_name() << "> = "
-                 << fu::at_c<0>(x3::_attr(ctx)) << "\n";
-       std::cout << "arg #1: "
-                 << "Attr: <" << boost::typeindex::type_id<t1>().pretty_name() << "> = "
-                 << fu::at_c<1>(x3::_attr(ctx)) << "\n";
-       std::cout << "arg #2: "
-                 << "Attr: <" << boost::typeindex::type_id<t2>().pretty_name() << "> = "
-                 << fu::at_c<2>(x3::_attr(ctx)) << "\n";
-       std::cout << "arg #3: "
-                 << "Attr: <" << boost::typeindex::type_id<t3>().pretty_name() << "> = "
-                 << fu::at_c<3>(x3::_attr(ctx)) << "\n";
-       std::cout << "\n--->8------>8---\n";
    };
    auto const based_literal = x3::rule<struct _, std::string> { "based_literal" } =
            x3::lexeme [
                   base >> '#' >> based_integer >> -('.' >> based_integer) >> '#' >> (exponent | x3::attr(1))
-           ] [based_literal_helper]
+           ] [x3_info()]//[based_literal_helper]
            ;
 }
 
@@ -248,7 +230,7 @@ int main()
 
          if (r && iter == end) {
            std::cout << "succeeded:\n";
-           //std::copy(attr.begin(), attr.end(), std::ostream_iterator<boost::optional<char>>(std::cout, ", "));
+
            std::cout << '\n';
          } else {
            std::cout << "*** failed ***\n";
