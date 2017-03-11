@@ -127,17 +127,16 @@ namespace parser {
        x3::_val(ctx) = fu::at_c<0>(x3::_attr(ctx)) ? -fu::at_c<1>(x3::_attr(ctx)) : fu::at_c<1>(x3::_attr(ctx));
    };
    auto const exponent = x3::rule<struct exponent_class, int32_t> { "exponent" } =
-           (x3::lexeme [
+           x3::lexeme [
                       (x3::lit("E") | "e") >> signum >> integer
            ][combine_exp]
-           | x3::attr(1))
            ;
 
    auto const based_literal_helper = [](auto& ctx) {
    };
    auto const based_literal = x3::rule<struct based_literal_class, ast::based_literal> { "based_literal" } =
            x3::lexeme [
-                  base >> '#' >> based_integer >> -('.' >> based_integer) >> '#' >> exponent
+                  base >> '#' >> based_integer >> -('.' >> based_integer) >> '#' >> (exponent | x3::attr(1))
            ]
            ;
 }
