@@ -245,9 +245,6 @@ BOOST_AUTO_TEST_CASE( decimal_literal )
             BOOST_TEST(gold.exponent == attr.exponent);
         }
     }
-
-    boost::optional<int32_t> bo(023);
-    BOOST_TEST(bo == 23, "leading zero's on integer shal not influence result!");
 }
 
 
