@@ -74,7 +74,6 @@ namespace parser {
                   | decimal_literal_int  >> x3::attr(ast::decimal_literal::tag::integer)
            ]//[show_attr]
            ;
-#endif
 }
 
 int main()
