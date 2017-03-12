@@ -336,7 +336,7 @@ typedef x3::rule<constrained_array_definition_class> constrained_array_definitio
 typedef x3::rule<constraint_class> constraint_type;
 typedef x3::rule<context_clause_class> context_clause_type;
 typedef x3::rule<context_item_class> context_item_type;
-typedef x3::rule<decimal_literal_class> decimal_literal_type;
+typedef x3::rule<decimal_literal_class, ast::decimal_literal> decimal_literal_type;
 typedef x3::rule<declaration_class> declaration_type;
 typedef x3::rule<delay_mechanism_class> delay_mechanism_type;
 typedef x3::rule<design_file_class> design_file_type;
@@ -1682,13 +1682,13 @@ auto const context_item_def =
 		;
 #endif
 
-#if 0
-// decimal_literal ::=
+
+// decimal_literal ::=                                                [§ 13.4.1]
 // integer [ . integer ] [ exponent ]
 auto const decimal_literal_def =
-		integer -( . integer ) -( exponent )
-		;
-#endif
+    integer >> -('.' >> integer) >> (exponent | x3::attr(1))
+    ;
+
 
 #if 0
 // declaration ::=
@@ -3531,7 +3531,7 @@ BOOST_SPIRIT_DEFINE(
 		//    constraint,
 		//    context_clause,
 		//    context_item,
-		//    decimal_literal,
+		decimal_literal,
 		//    declaration,
 		//    delay_mechanism,
 		//    design_file,

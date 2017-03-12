@@ -80,7 +80,7 @@ BOOST_AUTO_TEST_CASE( string_literal )
         "\"Both S and Q equal to 1", // missing closing '"'
         };
 
-    uint n = 0;
+    uint n = 1;
 	for(auto const& str : pass_test_cases) {
 	    BOOST_TEST_CONTEXT("test case #" << n++ << " to pass") {
 	        std::string const& input = str.first;
@@ -93,7 +93,7 @@ BOOST_AUTO_TEST_CASE( string_literal )
 	    }
 	}
 
-	n = 0;
+	n = 1;
     for(auto const& str : fail_test_cases) {
         BOOST_TEST_CONTEXT("test case #" << n++ << " to fail") {
             std::string attr;
@@ -125,7 +125,7 @@ BOOST_AUTO_TEST_CASE( integer )
         //"42_",  // FixMe: This test shouldn't pass!
         };
 
-    uint n = 0;
+    uint n = 1;
     for(auto const& str : pass_test_cases) {
         BOOST_TEST_CONTEXT("test case #" << n++ << " to pass") {
             std::string const& input = str.first;
@@ -138,7 +138,7 @@ BOOST_AUTO_TEST_CASE( integer )
         }
     }
 
-    n = 0;
+    n = 1;
     for(auto const& str : fail_test_cases) {
         BOOST_TEST_CONTEXT("test case #" << n++ << " to fail") {
             uint32_t attr;
@@ -156,7 +156,7 @@ BOOST_AUTO_TEST_CASE( based_literal )
 
     typedef ast::based_literal attribute_type;
 
-    std::vector<std::pair<std::string, ast::based_literal>> const pass_test_cases {
+    std::vector<std::pair<std::string, attribute_type>> const pass_test_cases {
         // Integer literals of value 255:
         std::make_pair("2#1111_1111#",
                 attribute_type { 2, "11111111", boost::optional<std::string>(), 1}),
@@ -176,7 +176,7 @@ BOOST_AUTO_TEST_CASE( based_literal )
                  attribute_type { 2, "1", std::string("11111111111"), 11}),
     };
 
-    uint n = 0;
+    uint n = 1;
     for(auto const& str : pass_test_cases) {
         BOOST_TEST_CONTEXT("test case #" << n++ << " to pass") {
             std::string const& input = str.first;
@@ -191,10 +191,59 @@ BOOST_AUTO_TEST_CASE( based_literal )
             BOOST_TEST(gold.exponent == attr.exponent);
         }
     }
-
 }
 
+BOOST_AUTO_TEST_CASE( decimal_literal )
+{
+    using namespace eda::vhdl93;
+    using x3_test::test_attr;
 
+    typedef ast::decimal_literal attribute_type;
+
+    std::vector<std::pair<std::string, attribute_type>> const pass_test_cases {
+        // Integer literals
+        std::make_pair("12",
+                attribute_type { 12, boost::optional<int32_t>(), 1}),
+        std::make_pair("0",
+                attribute_type { 0, boost::optional<int32_t>(), 1}),
+        std::make_pair("1e6",
+                attribute_type { 1, boost::optional<int32_t>(), 6}),
+        std::make_pair("123_456",
+                attribute_type { 123456, boost::optional<int32_t>(), 1}),
+        // Real literals
+        std::make_pair("12.0",
+                attribute_type { 12, 0, 1}),
+        std::make_pair("0.0",
+                attribute_type { 0, 0, 1}),
+        std::make_pair("0.456",
+                attribute_type { 0, 456, 1}),
+        std::make_pair("3.14159_26",
+                attribute_type { 3, 1415926, 1}),
+        // Real literals with exponents
+        std::make_pair("1.34E-12",
+                attribute_type { 1, 34, -12}),
+        std::make_pair("1.0E+6",
+                attribute_type { 1, 0, 6}),
+        std::make_pair("6.023E+24",
+                attribute_type { 6, 023, 24}),
+    };
+
+    uint n = 1;
+    for(auto const& str : pass_test_cases) {
+        BOOST_TEST_CONTEXT("test case #" << n++ << " to pass") {
+            std::string const& input = str.first;
+            attribute_type const gold = str.second;
+            attribute_type attr;
+            BOOST_TEST_INFO("input = '" << input << "'");
+            BOOST_TEST(test_attr(input, parser::decimal_literal, x3::space, attr));
+            BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
+            BOOST_TEST(gold.integer_part == attr.integer_part);
+            BOOST_TEST(gold.fractional_part == attr.fractional_part);
+            BOOST_TEST(gold.exponent == attr.exponent);
+        }
+    }
+
+}
 
 
 BOOST_AUTO_TEST_SUITE_END()
