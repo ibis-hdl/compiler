@@ -2372,14 +2372,14 @@ auto const combine_to_uint = [](auto &ctx) {
 
     static_assert(sizeof(value_type) < sizeof(acc_type), "Accumulator to small");
 
-    auto as_uint = [](auto ch) { return static_cast<uint>(ch - '0'); };
+    auto as_value = [](auto ch) { return static_cast<value_type>(ch - '0'); };
 
-    acc_type acc { as_uint(fu::at_c<0>(x3::_attr(ctx))) };
+    acc_type acc { as_value(fu::at_c<0>(x3::_attr(ctx))) };
 
     for (auto&& ch : fu::at_c<1>(x3::_attr(ctx))) {
         switch (ch) {
         case '_': break;
-        default:  acc = acc*10 + as_uint(ch);
+        default:  acc = acc*10 + as_value(ch);
         }
         if(acc > std::numeric_limits<value_type>::max()) {
             x3::_pass(ctx) = false;
@@ -2391,7 +2391,7 @@ auto const combine_to_uint = [](auto &ctx) {
 
 auto const integer_def =
     x3::lexeme [
-       (char_("0-9") >> *char_("0-9_"))
+        (char_("0-9") >> *char_("0-9_"))
     ] [combine_to_uint]
 	;
 
