@@ -61,7 +61,7 @@ int main()
    for(std::string const str: {
            "4711#11111111.32#e42",
            "4711#11111111.32#E-65",
-           "4711#11112222#", // why is attr<3> = 0, expected = 1 ???
+           "4711#11112222#",
    }) {
      auto iter = str.begin(), end = str.end();
 
