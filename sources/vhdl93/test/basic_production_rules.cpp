@@ -115,6 +115,7 @@ BOOST_AUTO_TEST_CASE( integer )
         std::make_pair("1", 1),
         std::make_pair("1_000", 1000),
         std::make_pair("00_1_000", 1000),
+        std::make_pair("023", 23),
         std::make_pair("21_47_48_36_46", 2147483646),
         std::make_pair("2_147_483_647", 2147483647) // int32::max
     };
@@ -227,7 +228,7 @@ BOOST_AUTO_TEST_CASE( decimal_literal )
         std::make_pair("1.0E+6",
                 attribute_type { 1, 0, 6}),
         std::make_pair("6.023E+24",
-                attribute_type { 6, 023, 24}),
+                attribute_type { 6, 23, 24}), // FixMe: This result is misleading and wrong
     };
 
     uint n = 1;
@@ -244,6 +245,9 @@ BOOST_AUTO_TEST_CASE( decimal_literal )
             BOOST_TEST(gold.exponent == attr.exponent);
         }
     }
+
+    boost::optional<int32_t> bo(023);
+    BOOST_TEST(bo == 23, "leading zero's on integer shal not influence result!");
 }
 
 
