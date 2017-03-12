@@ -114,6 +114,7 @@ BOOST_AUTO_TEST_CASE( integer )
         std::make_pair("0", 0),
         std::make_pair("1", 1),
         std::make_pair("1_000", 1000),
+        std::make_pair("00_1_000", 1000),
         std::make_pair("42_666_4711", 426664711),
         std::make_pair("4_294_967_295", 4294967295) // uint32::max
     };
