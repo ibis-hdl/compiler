@@ -110,19 +110,19 @@ BOOST_AUTO_TEST_CASE( integer )
     using namespace eda::vhdl93;
     using x3_test::test_attr;
 
-    std::vector<std::pair<std::string, uint32_t>> const pass_test_cases {
+    std::vector<std::pair<std::string, int32_t>> const pass_test_cases {
         std::make_pair("0", 0),
         std::make_pair("1", 1),
         std::make_pair("1_000", 1000),
         std::make_pair("00_1_000", 1000),
-        std::make_pair("42_666_4711", 426664711),
-        std::make_pair("4_294_967_295", 4294967295) // uint32::max
+        std::make_pair("21_47_48_36_46", 2147483646),
+        std::make_pair("2_147_483_647", 2147483647) // int32::max
     };
 
     std::vector<std::string> const fail_test_cases {
-        "4_294_967_296", // greater uint32::max
-        "4_294_967_295_0",
-        "4_294_967_295_00",
+        "2_147_483_648", // int32::max + 1
+        "2_147_483_648_0",
+        "2_147_483_648_00",
         "_42",
         //"42_",  // FixMe: This test shouldn't pass!
         };
@@ -130,8 +130,8 @@ BOOST_AUTO_TEST_CASE( integer )
     uint n = 1;
     for(auto const& str : pass_test_cases) {
         std::string const& input = str.first;
-        uint32_t const gold = str.second;
-        uint32_t attr;
+        int32_t const gold = str.second;
+        int32_t attr;
         BOOST_TEST_CONTEXT("'integer' test case #" << n++ << " to pass "
                            "input = '" << input << "'") {
             BOOST_TEST(test_attr(input, parser::integer, x3::space, attr));
@@ -143,7 +143,7 @@ BOOST_AUTO_TEST_CASE( integer )
     n = 1;
     for(auto const& str : fail_test_cases) {
         BOOST_TEST_CONTEXT("'integer' test case #" << n++ << " to fail") {
-            uint32_t attr;
+            int32_t attr;
             BOOST_TEST_INFO("input = '" << str << "'");
             BOOST_TEST(!test_attr(str, parser::integer, x3::space, attr));
         }

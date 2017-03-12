@@ -400,7 +400,7 @@ typedef x3::rule<index_subtype_definition_class> index_subtype_definition_type;
 typedef x3::rule<indexed_name_class> indexed_name_type;
 typedef x3::rule<instantiated_unit_class> instantiated_unit_type;
 typedef x3::rule<instantiation_list_class> instantiation_list_type;
-typedef x3::rule<integer_class, uint32_t> integer_type;
+typedef x3::rule<integer_class, int32_t> integer_type;
 typedef x3::rule<integer_type_definition_class> integer_type_definition_type;
 typedef x3::rule<interface_constant_declaration_class> interface_constant_declaration_type;
 typedef x3::rule<interface_declaration_class> interface_declaration_type;
@@ -2363,12 +2363,12 @@ auto const instantiation_list_def =
 
 // integer ::=                                                         § 13.4.1]
 // digit { [ underline ] digit }
-auto const combine_to_uint = [](auto &ctx) {
+auto const combine_to_int = [](auto &ctx) {
 
     namespace fu = boost::fusion;
 
     typedef typename std::decay<decltype(x3::_val(ctx))>::type value_type;
-    typedef typename boost::uint_t<sizeof(value_type)*8+1>::fast acc_type;
+    typedef typename boost::int_t<sizeof(value_type)*8+1>::fast acc_type;
 
     static_assert(sizeof(value_type) < sizeof(acc_type), "Accumulator to small");
 
@@ -2392,7 +2392,7 @@ auto const combine_to_uint = [](auto &ctx) {
 auto const integer_def =
     x3::lexeme [
         (char_("0-9") >> *char_("0-9_"))
-    ] [combine_to_uint]
+    ] [combine_to_int]
 	;
 
 
