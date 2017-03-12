@@ -121,7 +121,7 @@ BOOST_AUTO_TEST_CASE( integer )
         "4_294_967_295_0",
         "4_294_967_295_00",
         "_42",
-        //"42_",  // FixMe: shouldn't pass!
+        //"42_",  // FixMe: This test shouldn't pass!
         };
 
     uint n = 0;

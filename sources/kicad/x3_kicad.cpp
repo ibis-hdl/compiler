@@ -195,7 +195,7 @@ namespace ascii = boost::spirit::x3::ascii;
         > uint_
         > nonQuotedStringMultiWord;
 
-    // #TODO rename this to symbol fields
+    // -> rename this to symbol fields
     const auto heirarchicalSheetSymbolLabel_def=
         lexeme[lit("F") > uint_]
         > quotedString
@@ -296,7 +296,7 @@ namespace ascii = boost::spirit::x3::ascii;
     struct wireSegment_class : x3::annotate_on_success {};
     struct textNote_class : x3::annotate_on_success {};
     struct schematicDescription_class : x3::annotate_on_success {};
-    struct schematicHeader_class : x3::annotate_on_success {}; // #TODO add rectshape to lib
+    struct schematicHeader_class : x3::annotate_on_success {}; // -> add rectshape to lib
     struct globalLabel_class : x3::annotate_on_success {};
     struct busSegment_class : x3::annotate_on_success {};
     struct componentField_class : x3::annotate_on_success {};

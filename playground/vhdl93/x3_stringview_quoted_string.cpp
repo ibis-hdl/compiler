@@ -7,7 +7,7 @@ namespace boost { namespace spirit { namespace x3 { namespace traits {
 template <typename It>
 void move_to(It b, It e, std::experimental::string_view& v)
 {
-	// FixMe: storage is contiguous as a concept check for input range
+	// Note storage is contiguous as a concept check for input range
     v = std::experimental::string_view(&*b, std::size_t(std::distance(b,e)));
 }
 

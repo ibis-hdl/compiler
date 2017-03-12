@@ -2048,7 +2048,7 @@ auto const expression_def =
 // extended_digit ::=                                                 [§ 13.4.2]
 // digit | letter
 auto const extended_digit_def =
-    char_("0-9") | char_("A-Fa-f") // FixMe: Failure -> char_("1-9") >> -char_("0123456") | char_("A-Fa-f")
+    char_("0-9") | char_("A-Fa-f") //  Failure -> char_("1-9") >> -char_("0123456") | char_("A-Fa-f")
     ;
 
 
