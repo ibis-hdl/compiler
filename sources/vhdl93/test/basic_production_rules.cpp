@@ -128,11 +128,11 @@ BOOST_AUTO_TEST_CASE( integer )
 
     uint n = 1;
     for(auto const& str : pass_test_cases) {
-        BOOST_TEST_CONTEXT("'integer' test case #" << n++ << " to pass") {
-            std::string const& input = str.first;
-            uint32_t const gold = str.second;
-            uint32_t attr;
-            BOOST_TEST_INFO("input = '" << input << "'");
+        std::string const& input = str.first;
+        uint32_t const gold = str.second;
+        uint32_t attr;
+        BOOST_TEST_CONTEXT("'integer' test case #" << n++ << " to pass "
+                           "input = '" << input << "'") {
             BOOST_TEST(test_attr(input, parser::integer, x3::space, attr));
             BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
             BOOST_TEST(gold == attr);
@@ -179,16 +179,16 @@ BOOST_AUTO_TEST_CASE( based_literal )
 
     uint n = 1;
     for(auto const& str : pass_test_cases) {
-        BOOST_TEST_CONTEXT("'based_literal' test case #" << n++ << " to pass") {
-            std::string const& input = str.first;
-            attribute_type const gold = str.second;
-            attribute_type attr;
-            BOOST_TEST_INFO("input = '" << input << "'");
+        std::string const& input = str.first;
+        attribute_type const gold = str.second;
+        attribute_type attr;
+        BOOST_TEST_CONTEXT("'based_literal' test case #" << n++ << " to pass "
+                           "input = '" << input << "'") {
             BOOST_TEST(test_attr(input, parser::based_literal, x3::space, attr));
             BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
             BOOST_TEST(gold.base == attr.base);
             BOOST_TEST(gold.integer_part == attr.integer_part, btt::per_element());
-            BOOST_TEST(gold.fractional_part == attr.fractional_part /*, btt::per_element() */);
+            BOOST_TEST(gold.fractional_part == attr.fractional_part /* FixMe optional btt::per_element() */);
             BOOST_TEST(gold.exponent == attr.exponent);
         }
     }
@@ -231,11 +231,11 @@ BOOST_AUTO_TEST_CASE( decimal_literal )
 
     uint n = 1;
     for(auto const& str : pass_test_cases) {
-        BOOST_TEST_CONTEXT("'decimal_literal' test case #" << n++ << " to pass") {
-            std::string const& input = str.first;
-            attribute_type const gold = str.second;
-            attribute_type attr;
-            BOOST_TEST_INFO("input = '" << input << "'");
+        std::string const& input = str.first;
+        attribute_type const gold = str.second;
+        attribute_type attr;
+        BOOST_TEST_CONTEXT("'decimal_literal' test case #" << n++ << " to pass "
+                           "input = '" << input << "'") {
             BOOST_TEST(test_attr(input, parser::decimal_literal, x3::space, attr));
             BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
             BOOST_TEST(gold.integer_part == attr.integer_part);
@@ -243,7 +243,6 @@ BOOST_AUTO_TEST_CASE( decimal_literal )
             BOOST_TEST(gold.exponent == attr.exponent);
         }
     }
-
 }
 
 
