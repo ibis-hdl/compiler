@@ -19,6 +19,7 @@ namespace ast {
         enum class tag { integer, real };
         std::string                 literal;
         tag                         hint;
+        void get();
     };
 
     std::ostream& operator<<(std::ostream& os, decimal_literal::tag const& tag);
@@ -43,11 +44,14 @@ namespace parser {
        std::cout << "attr= " << boost::typeindex::type_id<decltype(x3::_attr(ctx))>().pretty_name() << "\n";
    };
 
+   template<typename T>
+   auto as_rule = [](auto p) { return x3::rule<struct _, T>{} = x3::as_parser(p); };
+
    auto const integer_ = x3::rule<struct integer_class, std::string> { "integer" } =
            +char_("0-9") >> *(char_("0-9") | "_")
        ;
    auto const integer = x3::rule<struct _, std::string> {} =
-       +char_("0-9") >> *(char_("0-9") | "_")
+       +char_("0-9") >> *(char_("0-9") | "_") // XXX This inserts a 0x00 for '_'
        ;
 
    auto const exponent = x3::rule<struct exponent_class, std::string> { "exponent" } =
@@ -56,17 +60,13 @@ namespace parser {
        ]
        ;
 
-   auto const decimal_literal_real = x3::rule<struct based_literal_class, std::string> { "decimal_literal<real>" } =
-           x3::lexeme [
+   auto const decimal_literal_real = as_rule<std::string>( x3::lexeme [
                     (integer >> char_('.') >> integer >> -exponent)
-           ]
-           ;
+           ]);
 
-   auto const decimal_literal_int = x3::rule<struct based_literal_class, std::string> { "decimal_literal<int>" } =
-           x3::lexeme [
+   auto const decimal_literal_int = as_rule<std::string>(  x3::lexeme [
                   (integer >> -exponent)
-           ]
-           ;
+           ]);
 
    auto const decimal_literal = x3::rule<struct based_literal_class, ast::decimal_literal> { "decimal_literal" } =
            x3::lexeme [
@@ -96,7 +96,7 @@ int main()
 
      std::cout << "parse '" << str << "': ";
      if (r && iter == end) {
-       std::cout << "succeeded: '" << attr << "'\n";
+       std::cout << "succeeded: '" << attr << "/"; attr.get(); std::cout << "'\n";
      } else {
        std::cout << "*** failed ***\n";
      }
@@ -114,6 +114,25 @@ namespace ast {
         default: os << "N/A";
         }
         return os;
+    }
+    void decimal_literal::get() {
+        namespace x3 = boost::spirit::x3;
+        switch(hint) {
+        case decimal_literal::tag::integer: {
+            int attr { 0 };
+            x3::parse(literal.begin(), literal.end(), x3::int_, attr);
+            std::cout << "<" << attr << ">";
+            break;
+        }
+        case decimal_literal::tag::real: {
+            double attr { 0 };
+            x3::parse(literal.begin(), literal.end(), x3::double_, attr);
+            std::cout << "<" << attr << ">";
+            break;
+        }
+        default: std::cout << "N/A";
+        }
+
     }
 }
 
