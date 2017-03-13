@@ -4,6 +4,8 @@ project(vhdl93 LANGUAGES CXX)
 set(PROJECT_LIB vhdl93_grammar)
 
 set(LIB_SOURCES
+    src/ast/based_literal.cpp
+    src/ast/decimal_literal.cpp
     src/grammar.cpp
 )
 

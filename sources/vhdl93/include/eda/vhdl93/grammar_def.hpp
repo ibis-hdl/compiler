@@ -290,7 +290,7 @@ typedef x3::rule<attribute_declaration_class> attribute_declaration_type;
 typedef x3::rule<attribute_designator_class> attribute_designator_type;
 typedef x3::rule<attribute_name_class> attribute_name_type;
 typedef x3::rule<attribute_specification_class> attribute_specification_type;
-typedef x3::rule<base_class, int32_t> base_type;
+typedef x3::rule<base_class, std::string> base_type;
 typedef x3::rule<base_specifier_class> base_specifier_type;
 typedef x3::rule<base_unit_declaration_class> base_unit_declaration_type;
 typedef x3::rule<based_integer_class, std::string> based_integer_type;
@@ -365,7 +365,7 @@ typedef x3::rule<entity_tag_class> entity_tag_type;
 typedef x3::rule<enumeration_literal_class> enumeration_literal_type;
 typedef x3::rule<enumeration_type_definition_class> enumeration_type_definition_type;
 typedef x3::rule<exit_statement_class> exit_statement_type;
-typedef x3::rule<exponent_class, int32_t> exponent_type;
+typedef x3::rule<exponent_class, std::string> exponent_type;
 typedef x3::rule<expression_class> expression_type;
 typedef x3::rule<extended_digit_class, char> extended_digit_type;
 typedef x3::rule<extended_identifier_class> extended_identifier_type;
@@ -400,7 +400,7 @@ typedef x3::rule<index_subtype_definition_class> index_subtype_definition_type;
 typedef x3::rule<indexed_name_class> indexed_name_type;
 typedef x3::rule<instantiated_unit_class> instantiated_unit_type;
 typedef x3::rule<instantiation_list_class> instantiation_list_type;
-typedef x3::rule<integer_class, int32_t> integer_type;
+typedef x3::rule<integer_class, std::string> integer_type;
 typedef x3::rule<integer_type_definition_class> integer_type_definition_type;
 typedef x3::rule<interface_constant_declaration_class> interface_constant_declaration_type;
 typedef x3::rule<interface_declaration_class> interface_declaration_type;
@@ -978,6 +978,13 @@ auto const end_of_line =
 
 
 /*
+ * Parser helper
+ */
+template<typename T>
+auto as_rule = [](auto p) { return x3::rule<struct _, T>{} = x3::as_parser(p); };
+
+
+/*
  * Parser Rule Definition
  */
 #if 0
@@ -1210,13 +1217,21 @@ auto const based_integer_def =
 
 // based_literal ::=                                                  [§ 13.4.2]
 // base # based_integer [ . based_integer ] # [ exponent ]
+auto const based_literal_base = as_rule<std::string>(
+    x3::lexeme[ based_integer ]
+    );
+auto const based_literal_int_exp = as_rule<std::string>(
+     x3::lexeme[
+             based_integer >> -(char_('.') >> based_integer)
+          >> char_('#')
+          >> -exponent
+    ]);
+
 auto const based_literal_def =
     x3::lexeme [
-           base
+           based_literal_base
         >> '#'
-        >> based_integer >> -('.' >> based_integer)
-        >> '#'
-        >> (exponent | x3::attr(1))
+        >> based_literal_int_exp
     ]
     ;
 
@@ -1685,8 +1700,15 @@ auto const context_item_def =
 
 // decimal_literal ::=                                                [§ 13.4.1]
 // integer [ . integer ] [ exponent ]
+auto const decimal_literal_real = as_rule<std::string>(
+    x3::lexeme[ (integer >> char_('.') >> integer >> -exponent) ]);
+
+auto const decimal_literal_int = as_rule<std::string>(
+    x3::lexeme[ (integer >> -exponent) ]);
+
 auto const decimal_literal_def =
-    integer >> -('.' >> integer) >> (exponent | x3::attr(1))
+      decimal_literal_real >> x3::attr(ast::decimal_literal::tag::real)
+    | decimal_literal_int  >> x3::attr(ast::decimal_literal::tag::integer)
     ;
 
 
@@ -2005,24 +2027,10 @@ auto const exit_statement_def =
 
 // exponent ::=                                                       [§ 13.4.1]
 // E [ + ] integer | E - integer
-
-auto signum_pos = [](auto& ctx) { x3::_val(ctx) = false; };
-auto signum_neg = [](auto& ctx) { x3::_val(ctx) = true;  };
-
-auto const signum = x3::rule<struct signum_class, bool> { "signum" } =
-      x3::lit('+')[ signum_pos ]
-    | x3::lit('-')[ signum_neg ]
-    | x3::eps[ signum_pos]
-    ;
-
-auto combine_exp = [](auto& ctx) {
-    x3::_val(ctx) = fu::at_c<0>(x3::_attr(ctx)) ? -fu::at_c<1>(x3::_attr(ctx)) : fu::at_c<1>(x3::_attr(ctx));
-};
-
 auto const exponent_def =
     x3::lexeme [
-        (x3::lit("E") | "e") >> signum >> integer
-    ][combine_exp]
+        char_("Ee") >> -char_("+-") >> integer
+    ]
     ;
 
 
@@ -2048,7 +2056,7 @@ auto const expression_def =
 // extended_digit ::=                                                 [§ 13.4.2]
 // digit | letter
 auto const extended_digit_def =
-    char_("0-9") | char_("A-Fa-f") //  Failure -> char_("1-9") >> -char_("0123456") | char_("A-Fa-f")
+    char_("0-9") | char_("A-Fa-f")
     ;
 
 
@@ -2204,17 +2212,15 @@ auto const generic_map_aspect_def =
 ;
 #endif
 
-#if 1
+
 // graphic_character ::=                                                [§ 13.1]
 // basic_graphic_character | lower_case_letter | other_special_character
-    auto const graphic_character_def =
-          basic_graphic_character
-        | lower_case_letter
-        | other_special_character
-        ;
+auto const graphic_character_def =
+      basic_graphic_character
+    | lower_case_letter
+    | other_special_character
+    ;
 
-	;
-#endif
 
 #if 0
 // group_constituent ::=
@@ -2363,36 +2369,10 @@ auto const instantiation_list_def =
 
 // integer ::=                                                         § 13.4.1]
 // digit { [ underline ] digit }
-auto const combine_to_int = [](auto &ctx) {
-
-    namespace fu = boost::fusion;
-
-    typedef typename std::decay<decltype(x3::_val(ctx))>::type value_type;
-    typedef typename boost::int_t<sizeof(value_type)*8+1>::fast acc_type;
-
-    static_assert(sizeof(value_type) < sizeof(acc_type), "Accumulator to small");
-
-    auto as_value = [](auto ch) { return static_cast<value_type>(ch - '0'); };
-
-    acc_type acc { as_value(fu::at_c<0>(x3::_attr(ctx))) };
-
-    for (auto&& ch : fu::at_c<1>(x3::_attr(ctx))) {
-        switch (ch) {
-        case '_': break;
-        default:  acc = acc*10 + as_value(ch);
-        }
-        if(acc > std::numeric_limits<value_type>::max()) {
-            x3::_pass(ctx) = false;
-        }
-    }
-
-    x3::_val(ctx) = static_cast<value_type>(acc);
-};
-
 auto const integer_def =
     x3::lexeme [
-        (char_("0-9") >> *char_("0-9_"))
-    ] [combine_to_int]
+        x3::lexeme[ +char_("0-9") >> *(-x3::lit("_") >> char_("0-9")) ]
+    ]
 	;
 
 
