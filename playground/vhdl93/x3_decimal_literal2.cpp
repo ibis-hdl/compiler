@@ -134,35 +134,43 @@ namespace ast {
         auto iter { std::begin(decimal.literal) };
         auto end  { std::end(decimal.literal)   };
         
-        auto const full_match = [](auto const& iter, auto const& end) { return iter == end; };
+        auto const int_1 = [&os](auto& iter, auto const& end, auto&& attr) {
+            bool ok = x3::parse(iter, end, x3::long_long, attr);
+            os << "i1[" << std::boolalpha << ok << ", " << (iter == end) << "]";
+            return std::make_tuple(ok,  iter == end);
+        };
+        
+        auto const int_2 = [&os](auto& iter, auto const& end, auto&& attr) {
+            double d { std::numeric_limits<double>::quiet_NaN() } ;
+            bool ok = x3::parse(iter, end, int_exp, d);
+            os << "i2[" << std::boolalpha << ok << ", " << (iter == end) << "]";
+            if(   static_cast<int>(d) > std::numeric_limits<int32_t>::min() 
+               || static_cast<int>(d) < std::numeric_limits<int32_t>::max()) {
+                    attr = static_cast<int>(d);
+            } else {
+                os << "<d/int32> overflow";
+                ok = false;
+            }
+            return std::make_tuple(ok,  iter == end);
+        };
         
         switch(decimal.hint) {
         case decimal_literal::tag::integer: {
             int32_t attr { 0 };
-            bool r = x3::parse(iter, end, x3::long_long, attr);
-            os << "i1[" << std::boolalpha << r << ", " << (iter == end) << "]";
-            if (r && full_match(iter, end)) {
+            bool ok, full_match;
+            std::tie(ok, full_match) = int_1(iter, end, attr);
+            if (ok && full_match) {
                 os << "(ok), ";
             }
-            if (r && !full_match(iter, end)) {
+            else if (ok && !full_match) {
                 // fallback for integers like 1e6
-                double d { std::numeric_limits<double>::quiet_NaN() } ;
-                iter = std::begin(decimal.literal);
-                r = x3::parse(iter, end, int_exp, d);
-                os << "i2[" << std::boolalpha << r << ", " << (iter == end) << "]";
-                if(   static_cast<int>(d) < std::numeric_limits<int32_t>::min() 
-                   || static_cast<int>(d) > std::numeric_limits<int32_t>::max()) {
-                    os << "<d/int32> overflow";
-                } else {
-                    attr = static_cast<int>(d);
-                }
+                iter = std::begin(decimal.literal); // restore iter
+                std::tie(ok, full_match) = int_2(iter, end, attr);
             }
-            if (!r && !full_match(iter, end)) {
-                // failure or even overflow
-                os << "<int32> overflow";
-            } else {
-                os << "i=" << attr;
+            else {
+                os << "NO <int32>";
             }
+            os << "i=" << attr;
             break;
         }
         case decimal_literal::tag::real: {
