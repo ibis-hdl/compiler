@@ -41,55 +41,45 @@ std::ostream& operator<<(std::ostream& os, decimal_literal::tag const& tag)
 }
 
 
-x3::real_parser<double, detail::integer_policies<double>> int_exp;
+namespace parser {
+    x3::real_parser<double, detail::integer_policies<double>> real_integer;
+}
 
 
 std::ostream& operator<<(std::ostream& os, decimal_literal const& decimal)
 {
-    os << "lit='" << decimal.literal << "', ";
+    os << "lit='" << decimal.literal << "', tag='" << decimal.hint << "'\n";
 
     auto iter { std::begin(decimal.literal) };
     auto end  { std::end(decimal.literal)   };
 
-    auto const full_match = [](auto const& iter, auto const& end) { return iter == end; };
+    double attr { std::numeric_limits<double>::quiet_NaN() } ;
 
-    switch(decimal.hint) {
-        case decimal_literal::tag::integer: {
-            int32_t attr { 0 };
-            bool r = x3::parse(iter, end, x3::long_long, attr);
-            os << "i1[" << std::boolalpha << r << ", " << (iter == end) << "]";
-            if (r && full_match(iter, end)) {
-                os << "(ok), ";
-            }
-            if (r && !full_match(iter, end)) {
-                // fallback for integers like 1e6
-                double d { std::numeric_limits<double>::quiet_NaN() } ;
-                iter = std::begin(decimal.literal);
-                r = x3::parse(iter, end, int_exp, d);
-                os << "i2[" << std::boolalpha << r << ", " << (iter == end) << "]";
-                if(   static_cast<int>(d) < std::numeric_limits<int32_t>::min()
-                   || static_cast<int>(d) > std::numeric_limits<int32_t>::max()) {
-                    os << "<d/int32> overflow";
+    bool ok  = x3::parse(iter, end, parser::real_integer, attr);
+
+    if(ok && iter == end) {
+        switch(decimal.hint) {
+            case decimal_literal::tag::integer:
+            {
+                if(static_cast<int32_t>(attr) > std::numeric_limits<int32_t>::min() && static_cast<int32_t>(attr) < std::numeric_limits<int32_t>::max()) {
+                    os << "i=" << static_cast<int32_t>(attr);
                 } else {
-                    attr = static_cast<int>(d);
+                    os << "overflow<int32>";
                 }
+                break;
             }
-            if (!r && !full_match(iter, end)) {
-                // failure or even overflow
-                os << "<int32> overflow";
-            } else {
-                os << "i=" << attr;
+            case decimal_literal::tag::real:
+            {
+                os << "d=" << attr;
+                break;
             }
-            break;
+            default: os << "INVALID_TAG";
         }
-        case decimal_literal::tag::real: {
-            double attr { 0 };
-            x3::parse(iter, end, x3::double_, attr);
-            os << "d=" << attr;
-            break;
-        }
-        default: os << "INVALID";
+    } else {
+        // parser failed and shouldn't
+        os << "INVALID";
     }
+
 
     return os;
 }

@@ -211,7 +211,14 @@ BOOST_AUTO_TEST_CASE( decimal_literal )
         std::make_pair("1.34E-12", attribute_type { "1.34E-12", tag::real } ),
         std::make_pair("1.0E+6", attribute_type { "1.0E+6", tag::real } ),
         std::make_pair("6.023E+24", attribute_type { "6.023E+24", tag::real } ),
+        // also, this is valid even if it's overflows int32
+        std::make_pair("12345678901234567890", attribute_type { "12345678901234567890", tag::integer } ),
     };
+
+    std::vector<std::string> const fail_test_cases {
+        // FixMe: Handle overflows on converting
+        "12345678901234567890",
+        };
 
     uint n = 1;
     for(auto const& str : pass_test_cases) {
@@ -226,6 +233,16 @@ BOOST_AUTO_TEST_CASE( decimal_literal )
             BOOST_TEST(attr.hint == gold.hint);
         }
     }
+#if 0
+    n = 1;
+    for(auto const& str : fail_test_cases) {
+        BOOST_TEST_CONTEXT("'decimal_literal' test case #" << n++ << " to fail") {
+            attribute_type attr;
+            BOOST_TEST_INFO("input = '" << str << "'");
+            BOOST_TEST(test_attr(str, parser::decimal_literal, x3::space, attr));
+        }
+    }
+#endif
 }
 
 
