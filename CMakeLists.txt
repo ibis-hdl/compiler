@@ -50,7 +50,9 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "(GNU|Clang)")
 endif()
 
 
-add_subdirectory(sources)
+# sub projects
+enable_testing()
+add_subdirectory(sources/vhdl93)
 
 add_subdirectory(playground)
 

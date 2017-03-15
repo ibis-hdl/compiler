@@ -15,7 +15,6 @@ add_dependencies(${PROJECT_BIN} gsl)
 
 set_target_properties(${PROJECT_BIN} PROPERTIES CXX_STANDARD 14)
 set_target_properties(${PROJECT_BIN} PROPERTIES CXX_STANDARD_REQUIRED ON)
-set_target_properties(${PROJECT_BIN} PROPERTIES DEBUG_POSTFIX "_d")
 target_compile_options(${PROJECT_BIN} PRIVATE -Wall -Wextra)
 
 target_link_libraries(${PROJECT_BIN} 
@@ -23,3 +22,5 @@ target_link_libraries(${PROJECT_BIN}
     vhdl93_grammar
     ${Boost_SYSTEM_LIBRARY}
 )
+
+add_test(test ${EXECUTABLE_OUTPUT_PATH}/${PROJECT_BIN})
