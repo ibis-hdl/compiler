@@ -9,9 +9,6 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_DECIMAL_LITERAL_HPP_
 
 
-#include <boost/fusion/include/adapt_struct.hpp>
-#include <boost/fusion/include/io.hpp>
-
 #include <string>
 
 
@@ -27,18 +24,9 @@ struct decimal_literal {
 
 std::ostream& operator<<(std::ostream& os, decimal_literal const& decimal);
 std::ostream& operator<<(std::ostream& os, decimal_literal::tag const& tag);
-using boost::fusion::operator<<;
 
 
 } } } // namespace eda.vhdl93.ast
-
-
-BOOST_FUSION_ADAPT_STRUCT(
-    eda::vhdl93::ast::decimal_literal,
-    (std::string,                   literal)
-    (eda::vhdl93::ast::decimal_literal::tag,     hint)
-)
-
 
 
 #endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_DECIMAL_LITERAL_HPP_ */

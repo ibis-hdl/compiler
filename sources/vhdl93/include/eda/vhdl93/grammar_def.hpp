@@ -11,6 +11,7 @@
 
 #include <eda/vhdl93/grammar.hpp>
 #include <eda/vhdl93/ast.hpp>
+#include <eda/vhdl93/ast_adapted.hpp>
 
 #include <boost/spirit/home/x3.hpp>
 
