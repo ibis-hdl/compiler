@@ -14,7 +14,8 @@ class AstFusionAdapter:
     global_namespace = None
     ns_ast = None
     node_list = []
-    width = 40
+    l_width = 0
+    r_width = 0
     indent = "    "
     
     def __init__(self):
@@ -59,6 +60,8 @@ class AstFusionAdapter:
                 continue
             else:
                 member_dict.update({ str(member.decl_type) : member.name })
+                self.l_width = max(self.l_width, len(str(member.decl_type)))
+                self.r_width = max(self.r_width, len(member.name))
         return (cls.decl_string, member_dict)
         
     def update_db(self):
@@ -72,7 +75,7 @@ class AstFusionAdapter:
         alist = [node_name.lstrip('::') + ',']
         for attr in attr_dict.items():
             alist.append("({0:<{1}}, {2:>{3}})".format(
-                attr[0], self.width, attr[1], self.width/2))
+                attr[0], self.l_width, attr[1], self.r_width))
         text = "\n".join(self.indent + line for line in alist)
         return "BOOST_FUSION_ADAPT_STRUCT(\n{0}\n)\n".format(text)   
             
