@@ -269,7 +269,7 @@ struct waveform_class;
 /*
  * Rule Types
  */
-typedef x3::rule<abstract_literal_class> abstract_literal_type;
+typedef x3::rule<abstract_literal_class, ast::abstract_literal> abstract_literal_type;
 typedef x3::rule<access_type_definition_class> access_type_definition_type;
 typedef x3::rule<actual_designator_class> actual_designator_type;
 typedef x3::rule<actual_parameter_part_class> actual_parameter_part_type;
@@ -310,7 +310,7 @@ typedef x3::rule<block_statement_class> block_statement_type;
 typedef x3::rule<block_statement_part_class> block_statement_part_type;
 typedef x3::rule<case_statement_class> case_statement_type;
 typedef x3::rule<case_statement_alternative_class> case_statement_alternative_type;
-typedef x3::rule<character_literal_class> character_literal_type;
+typedef x3::rule<character_literal_class, char> character_literal_type;
 typedef x3::rule<choice_class> choice_type;
 typedef x3::rule<choices_class> choices_type;
 typedef x3::rule<component_configuration_class> component_configuration_type;
@@ -989,13 +989,14 @@ auto as_rule = [](auto p) { return x3::rule<struct _, T>{} = x3::as_parser(p); }
 /*
  * Parser Rule Definition
  */
-#if 0
+
 // abstract_literal ::= 
 // decimal_literal | based_literal
 auto const abstract_literal_def = 
-decimal_literal | based_literal
-;
-#endif
+      decimal_literal
+    | based_literal
+    ;
+
 
 #if 0
 // access_type_definition ::= 
@@ -1458,13 +1459,13 @@ sequence_of_statements
 ;
 #endif
 
-#if 0
-// character_literal ::=
+
+// character_literal ::=                                                [§ 13.5]
 // ' graphic_character '
 auto const character_literal_def =
-		' graphic_character '
-		;
-#endif
+    lit('\'') >> graphic_character >> lit('\'')
+    ;
+
 
 #if 0
 // choice ::=
@@ -3470,7 +3471,7 @@ auto const waveform_def = *x3::char_ ;
 #endif
 
 BOOST_SPIRIT_DEFINE(
-		//    abstract_literal,
+		abstract_literal,
 		//    access_type_definition,
 		//    actual_designator,
 		//    actual_parameter_part,
@@ -3511,7 +3512,7 @@ BOOST_SPIRIT_DEFINE(
 		//    block_statement_part,
 		//    case_statement,
 		//    case_statement_alternative,
-		//    character_literal,
+		character_literal,
 		//    choice,
 		//    choices,
 		//    component_configuration,
