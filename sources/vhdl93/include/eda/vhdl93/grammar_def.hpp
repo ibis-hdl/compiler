@@ -1220,21 +1220,25 @@ auto const based_integer_def =
 
 // based_literal ::=                                                  [§ 13.4.2]
 // base # based_integer [ . based_integer ] # [ exponent ]
-auto const based_literal_base = as_rule<std::string>(
-        lexeme[ based_integer ]
-    );
-auto const based_literal_int_exp = as_rule<std::string>(
-     lexeme[
-             based_integer >> -(char_('.') >> based_integer)
-          >> char_('#')
-          >> -exponent
-    ]);
+namespace detail {
+
+    auto const based_literal_base = as_rule<std::string>(
+            lexeme[ based_integer ]
+        );
+
+    auto const based_literal_int_exp = as_rule<std::string>(
+         lexeme[
+                 based_integer >> -(char_('.') >> based_integer)
+              >> char_('#')
+              >> -exponent
+        ]);
+}
 
 auto const based_literal_def =
     lexeme [
-           based_literal_base
+           detail::based_literal_base
         >> '#'
-        >> based_literal_int_exp
+        >> detail::based_literal_int_exp
     ]
     ;
 
@@ -1279,32 +1283,36 @@ auto const binding_indication_def =
 #endif
 
 
-/* Note: The BNF rule captures too wide for a specific base. §13.7 explains the
- *       valid characters depending on it.
- *       Here it's clever to get an parse error if the rules are violated by
- *      splitting it into several sub rules. */
 // bit_string_literal ::=                                               [§ 13.7]
 // base_specifier " bit_value "
-auto const bit_value_bin = as_rule<std::string>(
-    lexeme[
-        char_("01") >> *( -lit("_") >> char_("01") )
-    ]);
+namespace detail {
 
-auto const bit_value_oct = as_rule<std::string>(
-    lexeme[
-        char_("0-7") >> *( -lit("_") >> char_("0-7") )
-    ]);
+    /* Note: The BNF rule captures too wide for a specific base. §13.7 explains the
+     *       valid characters depending on it.
+     *       Here it's clever to get an parse error if the rules are violated by
+     *      splitting it into several sub rules. */
 
-auto const bit_value_hex = as_rule<std::string>(
-    lexeme[
-        char_("0-9A-Fa-f") >> *( -lit("_") >> char_("0-9A-Fa-f") )
-    ]);
+    auto const bit_value_bin = as_rule<std::string>(
+        lexeme[
+            char_("01") >> *( -lit("_") >> char_("01") )
+        ]);
+
+    auto const bit_value_oct = as_rule<std::string>(
+        lexeme[
+            char_("0-7") >> *( -lit("_") >> char_("0-7") )
+        ]);
+
+    auto const bit_value_hex = as_rule<std::string>(
+        lexeme[
+            char_("0-9A-Fa-f") >> *( -lit("_") >> char_("0-9A-Fa-f") )
+        ]);
+}
 
 auto const bit_string_literal_def =
     lexeme[
-          lit("B\"") >> bit_value_bin >> lit('"') >> x3::attr(ast::bit_string_literal::tag::bin)
-        | lit("X\"") >> bit_value_hex >> lit('"') >> x3::attr(ast::bit_string_literal::tag::hex)
-        | lit("O\"") >> bit_value_oct >> lit('"') >> x3::attr(ast::bit_string_literal::tag::oct)
+          lit("B\"") >> detail::bit_value_bin >> lit('"') >> x3::attr(ast::bit_string_literal::tag::bin)
+        | lit("X\"") >> detail::bit_value_hex >> lit('"') >> x3::attr(ast::bit_string_literal::tag::hex)
+        | lit("O\"") >> detail::bit_value_oct >> lit('"') >> x3::attr(ast::bit_string_literal::tag::oct)
     ];
 
 
@@ -1727,15 +1735,18 @@ auto const context_item_def =
 
 // decimal_literal ::=                                                [§ 13.4.1]
 // integer [ . integer ] [ exponent ]
-auto const decimal_literal_real = as_rule<std::string>(
-    lexeme[ (integer >> char_('.') >> integer >> -exponent) ]);
+namespace detail {
 
-auto const decimal_literal_int = as_rule<std::string>(
-    lexeme[ (integer >> -exponent) ]);
+    auto const decimal_literal_real = as_rule<std::string>(
+        lexeme[ (integer >> char_('.') >> integer >> -exponent) ]);
+
+    auto const decimal_literal_int = as_rule<std::string>(
+        lexeme[ (integer >> -exponent) ]);
+}
 
 auto const decimal_literal_def =
-      decimal_literal_real >> x3::attr(ast::decimal_literal::tag::real)
-    | decimal_literal_int  >> x3::attr(ast::decimal_literal::tag::integer)
+      detail::decimal_literal_real >> x3::attr(ast::decimal_literal::tag::real)
+    | detail::decimal_literal_int  >> x3::attr(ast::decimal_literal::tag::integer)
     ;
 
 
