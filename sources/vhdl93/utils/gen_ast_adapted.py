@@ -78,7 +78,7 @@ class AstFusionAdapter:
             
     def fusionize(self):
         text = ""
-        for node in self.node_list:
+        for node in sorted(self.node_list, key=lambda tpl: tpl[0]):
             text += self.fusion_adapt(node) + '\n'
         return text
     
