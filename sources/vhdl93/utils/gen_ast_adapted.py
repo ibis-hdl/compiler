@@ -53,16 +53,16 @@ class AstFusionAdapter:
         Extract the name of the ast node self and member variables. The order of
         structure members matters here for BOOST_FUSION_ADAPT_STRUCT macro!
         '''
-        member_dict = OrderedDict()
+        member_list = []
         members = [m for m in cls.get_members(access='public') if m.is_artificial == False]
         for member in members:
             if declarations.is_enum(member):
                 continue
             else:
-                member_dict.update({ str(member.decl_type) : member.name })
+                member_list.append((str(member.decl_type) , member.name ))
                 self.l_width = max(self.l_width, len(str(member.decl_type)))
                 self.r_width = max(self.r_width, len(member.name))
-        return (cls.decl_string, member_dict)
+        return (cls.decl_string, member_list)
         
     def update_db(self):
         cls_list = [cls for cls in self.ns_ast.classes() if cls.class_type == 'struct']
@@ -73,9 +73,9 @@ class AstFusionAdapter:
         node_name = node[0]
         attr_dict = node[1]
         alist = [node_name.lstrip('::') + ',']
-        for attr in attr_dict.items():
-            alist.append("({0:<{1}}, {2:>{3}})".format(
-                attr[0], self.l_width, attr[1], self.r_width))
+        for attr in attr_dict:
+            alist.append("({0:<{1}} {2:>{3}})".format(
+                attr[0] + ',', self.l_width, attr[1], self.r_width))
         text = "\n".join(self.indent + line for line in alist)
         return "BOOST_FUSION_ADAPT_STRUCT(\n{0}\n)\n".format(text)   
             
@@ -87,14 +87,16 @@ class AstFusionAdapter:
     
     def print_all(self):
         declarations.print_declarations(self.ns_ast)
+        
+    def dump_db(self):
+        for node in self.node_list:
+            print(node)
             
     
 if __name__ == "__main__":
     adapter = AstFusionAdapter()
-    print(adapter.fusionize())
-    
-    
-    #adapter.print_all()
+    print(adapter.fusionize())    
+    #adapter.dump_db()
 
     
     
