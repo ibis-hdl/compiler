@@ -24,17 +24,22 @@ using boost::fusion::operator<<;
 
 
 BOOST_FUSION_ADAPT_STRUCT(
-    eda::vhdl93::ast::decimal_literal,
-    (std::string                             ,              literal)
-    (eda::vhdl93::ast::decimal_literal::tag  ,                 hint)
+    eda::vhdl93::ast::based_literal,
+    (std::string,                                 base)
+    (std::string,                              literal)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-    eda::vhdl93::ast::based_literal,
-    (std::string                             ,                 base)
-    (std::string                             ,              literal)
+    eda::vhdl93::ast::bit_string_literal,
+    (std::string,                               literal)
+    (eda::vhdl93::ast::bit_string_literal::tag,    hint)
 )
 
+BOOST_FUSION_ADAPT_STRUCT(
+    eda::vhdl93::ast::decimal_literal,
+    (std::string,                              literal)
+    (eda::vhdl93::ast::decimal_literal::tag,      hint)
+)
 
 
 #endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_ADAPTED_HPP_ */

@@ -10,6 +10,7 @@
 
 
 #include <eda/vhdl93/ast/based_literal.hpp>
+#include <eda/vhdl93/ast/bit_string_literal.hpp>
 #include <eda/vhdl93/ast/decimal_literal.hpp>
 #include <eda/vhdl93/ast/operator.hpp>
 

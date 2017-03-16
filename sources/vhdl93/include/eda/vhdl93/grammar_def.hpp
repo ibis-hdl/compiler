@@ -299,7 +299,7 @@ typedef x3::rule<basic_character_class> basic_character_type;
 typedef x3::rule<basic_graphic_character_class, char> basic_graphic_character_type;
 typedef x3::rule<basic_identifier_class> basic_identifier_type;
 typedef x3::rule<binding_indication_class> binding_indication_type;
-typedef x3::rule<bit_string_literal_class> bit_string_literal_type;
+typedef x3::rule<bit_string_literal_class, ast::bit_string_literal> bit_string_literal_type;
 typedef x3::rule<bit_value_class> bit_value_type;
 typedef x3::rule<block_configuration_class> block_configuration_type;
 typedef x3::rule<block_declarative_item_class> block_declarative_item_type;
@@ -944,6 +944,8 @@ struct shift_operator_symbols : x3::symbols<ast::operator_> {
 
 
 using iso8859_1::char_;
+using iso8859_1::lit;
+using x3::lexeme;
 
 
 /*
@@ -1180,13 +1182,13 @@ auto const attribute_specification_def =
 ;
 #endif
 
-
+#if 0
 // base ::=                                                           [§ 13.4.2]
 // integer
 auto const base_def =
 	integer
 	;
-
+#endif
 
 
 // base_specifier ::=                                                   [§ 13.7]
@@ -1208,8 +1210,8 @@ auto const base_unit_declaration_def =
 // based_integer ::=                                                  [§ 13.4.2]
 // extended_digit { [ underline ] extended_digit }
 auto const based_integer_def =
-     x3::lexeme[
-         extended_digit >> *( -x3::lit('_') >> extended_digit )
+     lexeme[
+         extended_digit >> *( -lit('_') >> extended_digit )
      ]
      ;
 
@@ -1218,17 +1220,17 @@ auto const based_integer_def =
 // based_literal ::=                                                  [§ 13.4.2]
 // base # based_integer [ . based_integer ] # [ exponent ]
 auto const based_literal_base = as_rule<std::string>(
-    x3::lexeme[ based_integer ]
+        lexeme[ based_integer ]
     );
 auto const based_literal_int_exp = as_rule<std::string>(
-     x3::lexeme[
+     lexeme[
              based_integer >> -(char_('.') >> based_integer)
           >> char_('#')
           >> -exponent
     ]);
 
 auto const based_literal_def =
-    x3::lexeme [
+    lexeme [
            based_literal_base
         >> '#'
         >> based_literal_int_exp
@@ -1275,15 +1277,39 @@ auto const binding_indication_def =
 		;
 #endif
 
-#if 0
-// bit_string_literal ::=
+
+/* Note: The BNF rule captures too wide for a specific base. §13.7 explains the
+ *       valid characters depending on it.
+ *       Here it's clever to get an parse error if the rules are violated by
+ *      splitting it into several sub rules. */
+// bit_string_literal ::=                                               [§ 13.7]
 // base_specifier " bit_value "
+auto const bit_value_bin = as_rule<std::string>(
+    lexeme[
+        char_("01") >> *( -lit("_") >> char_("01") )
+    ]);
+
+auto const bit_value_oct = as_rule<std::string>(
+    lexeme[
+        char_("0-7") >> *( -lit("_") >> char_("0-7") )
+    ]);
+
+auto const bit_value_hex = as_rule<std::string>(
+    lexeme[
+        char_("0-9A-Fa-f") >> *( -lit("_") >> char_("0-9A-Fa-f") )
+    ]);
+
 auto const bit_string_literal_def =
-		base_specifier " bit_value "
-		;
-#endif
+    lexeme[
+          lit("B\"") >> bit_value_bin >> lit('"') >> x3::attr(ast::bit_string_literal::tag::bin)
+        | lit("H\"") >> bit_value_hex >> lit('"') >> x3::attr(ast::bit_string_literal::tag::hex)
+        | lit("O\"") >> bit_value_oct >> lit('"') >> x3::attr(ast::bit_string_literal::tag::oct)
+    ];
+
+
 
 #if 0
+/* Note: superseed by bit_string_literal */
 // bit_value ::=
 // extended_digit { [ underline ] extended_digit }
 auto const bit_value_def =
@@ -1701,10 +1727,10 @@ auto const context_item_def =
 // decimal_literal ::=                                                [§ 13.4.1]
 // integer [ . integer ] [ exponent ]
 auto const decimal_literal_real = as_rule<std::string>(
-    x3::lexeme[ (integer >> char_('.') >> integer >> -exponent) ]);
+    lexeme[ (integer >> char_('.') >> integer >> -exponent) ]);
 
 auto const decimal_literal_int = as_rule<std::string>(
-    x3::lexeme[ (integer >> -exponent) ]);
+    lexeme[ (integer >> -exponent) ]);
 
 auto const decimal_literal_def =
       decimal_literal_real >> x3::attr(ast::decimal_literal::tag::real)
@@ -2028,7 +2054,7 @@ auto const exit_statement_def =
 // exponent ::=                                                       [§ 13.4.1]
 // E [ + ] integer | E - integer
 auto const exponent_def =
-    x3::lexeme [
+    lexeme [
         char_("Ee") >> -char_("+-") >> integer
     ]
     ;
@@ -2370,8 +2396,8 @@ auto const instantiation_list_def =
 // integer ::=                                                         § 13.4.1]
 // digit { [ underline ] digit }
 auto const integer_def =
-    x3::lexeme [
-        x3::lexeme[ +char_("0-9") >> *(-x3::lit("_") >> char_("0-9")) ]
+    lexeme [
+        +char_("0-9") >> *(-lit("_") >> char_("0-9"))
     ]
 	;
 
@@ -3181,7 +3207,7 @@ auto const slice_name_def =
 // string_literal ::=                                                   [§ 13.6]
 // " { graphic_character } "
 auto const string_literal_def =
-    x3::lexeme[
+    lexeme[
         (      '"'
             >> *( (graphic_character - '"')
                 | x3::no_skip[char_('"') >> char_('"')]
@@ -3465,7 +3491,7 @@ BOOST_SPIRIT_DEFINE(
 		//    attribute_designator,
 		//    attribute_name,
 		//    attribute_specification,
-		base,
+		//base,
 		base_specifier,
 		//    base_unit_declaration,
 		based_integer,
@@ -3474,7 +3500,7 @@ BOOST_SPIRIT_DEFINE(
 		basic_graphic_character,
 		//    basic_identifier,
 		//    binding_indication,
-		//    bit_string_literal,
+		bit_string_literal,
 		//    bit_value,
 		//    block_configuration,
 		//    block_declarative_item,
