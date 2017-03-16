@@ -1302,7 +1302,7 @@ auto const bit_value_hex = as_rule<std::string>(
 auto const bit_string_literal_def =
     lexeme[
           lit("B\"") >> bit_value_bin >> lit('"') >> x3::attr(ast::bit_string_literal::tag::bin)
-        | lit("H\"") >> bit_value_hex >> lit('"') >> x3::attr(ast::bit_string_literal::tag::hex)
+        | lit("X\"") >> bit_value_hex >> lit('"') >> x3::attr(ast::bit_string_literal::tag::hex)
         | lit("O\"") >> bit_value_oct >> lit('"') >> x3::attr(ast::bit_string_literal::tag::oct)
     ];
 

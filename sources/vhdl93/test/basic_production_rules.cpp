@@ -194,7 +194,7 @@ BOOST_AUTO_TEST_CASE( decimal_literal )
 
     typedef ast::decimal_literal attribute_type;
 
-    using tag = ast::decimal_literal::tag;
+    using tag = attribute_type::tag;
 
     std::vector<std::pair<std::string, attribute_type>> const pass_test_cases {
         // Integer literals
@@ -243,6 +243,38 @@ BOOST_AUTO_TEST_CASE( decimal_literal )
         }
     }
 #endif
+}
+
+
+BOOST_AUTO_TEST_CASE( bit_string_literal )
+{
+    using namespace eda::vhdl93;
+    using x3_test::test_attr;
+
+    typedef ast::bit_string_literal attribute_type;
+
+    using tag = attribute_type::tag;
+
+    std::vector<std::pair<std::string, attribute_type>> const pass_test_cases {
+        std::make_pair("B\"1111_1111_1111\"", attribute_type {"111111111111", tag::bin}),
+        std::make_pair("X\"FFF\"", attribute_type {"FFF", tag::hex}),
+        std::make_pair("O\"777\"", attribute_type {"777", tag::oct}),
+        std::make_pair("X\"777\"", attribute_type {"777", tag::hex}),
+    };
+
+    uint n = 1;
+    for(auto const& str : pass_test_cases) {
+        auto const& input = str.first;
+        auto const& gold = str.second;
+        attribute_type attr;
+        BOOST_TEST_CONTEXT("'bit_string_literal' test case #" << n++ << " to pass "
+                           "input = '" << input << "'") {
+            BOOST_TEST(test_attr(input, parser::bit_string_literal, x3::space, attr));
+            BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
+            BOOST_TEST(attr.literal == gold.literal, btt::per_element());
+            BOOST_TEST(attr.hint == gold.hint);
+        }
+    }
 }
 
 

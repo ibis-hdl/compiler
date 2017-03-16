@@ -5,6 +5,7 @@ set(PROJECT_LIB vhdl93_grammar)
 
 set(LIB_SOURCES
     src/ast/based_literal.cpp
+    src/ast/bit_string_literal.cpp
     src/ast/decimal_literal.cpp
     src/grammar.cpp
 )

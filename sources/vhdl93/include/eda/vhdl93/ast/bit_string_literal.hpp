@@ -23,6 +23,7 @@ struct bit_string_literal {
 
 
 std::ostream& operator<<(std::ostream& os, bit_string_literal const& literal);
+std::ostream& operator<<(std::ostream& os, bit_string_literal::tag const& tag);
 
 
 } } } // namespace eda.vhdl93.ast
