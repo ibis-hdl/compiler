@@ -9,9 +9,6 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_ABSTRACT_LITERAL_HPP_
 
 
-//#include <eda/vhdl93/ast/based_literal.hpp>
-//#include <eda/vhdl93/ast/decimal_literal.hpp>
-
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
 
 
