@@ -362,7 +362,7 @@ typedef x3::rule<entity_specification_class> entity_specification_type;
 typedef x3::rule<entity_statement_class> entity_statement_type;
 typedef x3::rule<entity_statement_part_class> entity_statement_part_type;
 typedef x3::rule<entity_tag_class> entity_tag_type;
-typedef x3::rule<enumeration_literal_class> enumeration_literal_type;
+typedef x3::rule<enumeration_literal_class, ast::enumeration_literal> enumeration_literal_type;
 typedef x3::rule<enumeration_type_definition_class> enumeration_type_definition_type;
 typedef x3::rule<exit_statement_class> exit_statement_type;
 typedef x3::rule<exponent_class, std::string> exponent_type;
@@ -423,7 +423,7 @@ typedef x3::rule<mode_class> mode_type;
 typedef x3::rule<name_class> name_type;
 typedef x3::rule<next_statement_class> next_statement_type;
 typedef x3::rule<null_statement_class> null_statement_type;
-typedef x3::rule<numeric_literal_class> numeric_literal_type;
+typedef x3::rule<numeric_literal_class, ast::numeric_literal> numeric_literal_type;
 typedef x3::rule<object_declaration_class> object_declaration_type;
 typedef x3::rule<operator_symbol_class> operator_symbol_type;
 typedef x3::rule<options_class> options_type;
@@ -2038,13 +2038,14 @@ auto const entity_tag_def =
 		;
 #endif
 
-#if 0
-// enumeration_literal ::=
+
+// enumeration_literal ::=                                             [§ 3.1.1]
 // identifier | character_literal
 auto const enumeration_literal_def =
-		identifier | character_literal
-		;
-#endif
+      identifier
+    | character_literal
+    ;
+
 
 #if 0
 // enumeration_type_definition ::=
@@ -2624,15 +2625,15 @@ auto const null_statement_def =
 ;
 #endif
 
-#if 0
-// numeric_literal ::=
+
+// numeric_literal ::=                                                 [§ 7.3.1]
 // abstract_literal
 //     | physical_literal
 auto const numeric_literal_def =
-		abstract_literal
-		| physical_literal
-		;
-#endif
+      abstract_literal
+    | physical_literal
+    ;
+
 
 #if 0
 // object_declaration ::=
@@ -2776,13 +2777,20 @@ auto const parameter_specification_def =
 		;
 #endif
 
-#if 0
-// physical_literal ::=
+
+// physical_literal ::=                                                [§ 3.1.3]
 // [ abstract_literal ] unit_name
+namespace detail {
+
+    auto const unit_name = as_rule<std::string>(
+        lexeme[ +char_("A-Za-z") ]);
+
+}
+
 auto const physical_literal_def =
-		-( abstract_literal ) unit_name
-		;
-#endif
+    -( abstract_literal ) >> detail::unit_name
+    ;
+
 
 #if 0
 // physical_type_definition ::=

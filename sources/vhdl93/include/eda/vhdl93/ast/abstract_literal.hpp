@@ -22,10 +22,15 @@ struct decimal_literal;
 struct based_literal;
 
 
-typedef x3::variant<
-        decimal_literal
-      , based_literal
-    > abstract_literal;
+struct abstract_literal :
+    x3::variant<
+        x3::forward_ast<decimal_literal>
+      , x3::forward_ast<based_literal>
+    >
+{
+    using base_type::base_type;
+    using base_type::operator=;
+};
 
 
 } } } // namespace eda.vhdl93.ast

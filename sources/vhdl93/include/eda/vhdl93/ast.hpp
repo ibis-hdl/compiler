@@ -13,8 +13,10 @@
 #include <eda/vhdl93/ast/based_literal.hpp>
 #include <eda/vhdl93/ast/bit_string_literal.hpp>
 #include <eda/vhdl93/ast/decimal_literal.hpp>
+#include <eda/vhdl93/ast/enumeration_literal.hpp>
+#include <eda/vhdl93/ast/numeric_literal.hpp>
 #include <eda/vhdl93/ast/operator.hpp>
-
+#include <eda/vhdl93/ast/physical_literal.hpp>
 
 
 #endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_AST_HPP_ */
