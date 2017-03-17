@@ -18,9 +18,10 @@ class AstFusionAdapter:
     r_width = 0
     max_width=60
     indent = "    "
-    parse_blacklist = [ # problem headers
+    parse_blacklist = [ # problem headers with boost::variant
         'abstract_literal.hpp',
-        'numeric_literal.hpp'
+        'numeric_literal.hpp',
+        'enumeration_literal.hpp'
     ]
     
     def __init__(self):
@@ -109,8 +110,8 @@ class AstFusionAdapter:
     
 if __name__ == "__main__":
     adapter = AstFusionAdapter()
-    print(adapter.fusionize())    
     print(adapter.ast_header_collector())
+    print(adapter.fusionize())    
     #adapter.dump_db()
 
     
