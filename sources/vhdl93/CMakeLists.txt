@@ -8,6 +8,7 @@ set(LIB_SOURCES
     src/ast/bit_string_literal.cpp
     src/ast/decimal_literal.cpp
     src/grammar.cpp
+    src/error_handler.cpp
 )
 
 include_directories(${SPIRIT_X3_INCLUDE_DIR})

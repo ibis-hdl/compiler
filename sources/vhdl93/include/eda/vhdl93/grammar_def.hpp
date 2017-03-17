@@ -13,8 +13,8 @@
 #include <eda/vhdl93/ast_adapted.hpp>
 
 #include <boost/spirit/home/x3.hpp>
+#include <boost/spirit/home/x3/support/utility/annotate_on_success.hpp>
 
-#include <boost/integer.hpp>
 
 /*
  * http://www.amos.eguru-il.com/vhdl_info/vhdl87_syntax.html
@@ -1310,9 +1310,9 @@ namespace detail {
 
 auto const bit_string_literal_def =
     lexeme[
-          lit("B\"") >> detail::bit_value_bin >> lit('"') >> x3::attr(ast::bit_string_literal::tag::bin)
-        | lit("X\"") >> detail::bit_value_hex >> lit('"') >> x3::attr(ast::bit_string_literal::tag::hex)
-        | lit("O\"") >> detail::bit_value_oct >> lit('"') >> x3::attr(ast::bit_string_literal::tag::oct)
+          (lit("B\"") > detail::bit_value_bin >> lit('"')) >> x3::attr(ast::bit_string_literal::tag::bin)
+        | (lit("X\"") > detail::bit_value_hex >> lit('"')) >> x3::attr(ast::bit_string_literal::tag::hex)
+        | (lit("O\"") > detail::bit_value_oct >> lit('"')) >> x3::attr(ast::bit_string_literal::tag::oct)
     ];
 
 
@@ -3713,6 +3713,13 @@ BOOST_SPIRIT_DEFINE(
 		//    wait_statement,
 		waveform
 );
+
+
+/*
+ * Annotation and Error handling
+ */
+struct bit_string_literal_class : x3::annotate_on_success {};
+
 
 } } } // namespace eda.vhdl93.parser
 

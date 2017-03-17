@@ -5,7 +5,9 @@ set(PROJECT_BIN test_vhdl93)
 
 set(BIN_SOURCES
     basic_production_rules.cpp
+    error_reporting.cpp
     test_vhdl93.cpp
+    
 )
 
 add_executable(${PROJECT_BIN} ${BIN_SOURCES})

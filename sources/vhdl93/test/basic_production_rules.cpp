@@ -18,18 +18,27 @@ BOOST_AUTO_TEST_SUITE( basic_productions )
 
 namespace x3_test {
 
+    namespace x3 = boost::spirit::x3;
     namespace parser = eda::vhdl93::parser;
 
 
     template <typename Parser, typename Skipper>
     bool test(
           std::string const& input
-        , Parser const& parser
+        , Parser const& parser_rule
         , Skipper const& skipper
         , bool full_match = true)
     {
         parser::iterator_type iter = input.begin();
         parser::iterator_type const end = input.end();
+
+        parser::error_handler_type error_handler(iter, end, std::cout);
+
+        auto const parser =
+            x3::with<x3::error_handler_tag>(std::ref(error_handler))
+            [
+                parser_rule
+            ];
 
         return boost::spirit::x3::phrase_parse(iter, end, parser, skipper)
                && (!full_match || (iter == end));
@@ -38,7 +47,7 @@ namespace x3_test {
     template <typename Parser, typename Skipper, typename Attr>
     bool test_attr(
           std::string const& input
-        , Parser const& parser
+        , Parser const& parser_rule
         , Skipper const& skipper
         , Attr& attr
         , bool full_match = true)
@@ -46,8 +55,23 @@ namespace x3_test {
         parser::iterator_type iter = input.begin();
         parser::iterator_type const end = input.end();
 
-        return boost::spirit::x3::phrase_parse(iter, end, parser, skipper, attr)
-               && (!full_match || (iter == end));
+        parser::error_handler_type error_handler(iter, end, std::cout);
+
+        auto const parser =
+            x3::with<x3::error_handler_tag>(std::ref(error_handler))
+            [
+                parser_rule
+            ];
+
+        bool success = boost::spirit::x3::phrase_parse(iter, end, parser, skipper, attr);
+
+        if (success) {
+            if (iter != end) {
+                error_handler(iter, "Error! Expecting end of input here: ");
+            }
+        }
+
+        return success && (!full_match || (iter == end));
     }
 
 }
