@@ -23,7 +23,7 @@ class AstFusionAdapter:
         xml_generator_config = parser.xml_generator_configuration_t(
             xml_generator_path=generator_path,
             xml_generator=generator_name,
-            cflags='-std=c++11')
+            cflags='-std=c++14')
         header_list = [self.include_prefix() + hpp for hpp in self.find_hpp()]
         decls = parser.parse(header_list, xml_generator_config)
         self.global_namespace = declarations.get_global_namespace(decls)
