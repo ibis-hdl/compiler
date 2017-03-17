@@ -93,6 +93,12 @@ class AstFusionAdapter:
             text += self.fusion_adapt(node) + '\n'
         return text
     
+    def ast_header_collector(self):
+        hxx_list = []
+        for hpp in sorted(self.find_hpp()):
+            hxx_list.append("#include <eda/vhdl93/ast/{0}>".format(hpp))
+        return "\n".join(hxx_list)
+    
     def print_all(self):
         declarations.print_declarations(self.ns_ast)
         
@@ -104,6 +110,7 @@ class AstFusionAdapter:
 if __name__ == "__main__":
     adapter = AstFusionAdapter()
     print(adapter.fusionize())    
+    print(adapter.ast_header_collector())
     #adapter.dump_db()
 
     
