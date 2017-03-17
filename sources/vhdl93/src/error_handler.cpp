@@ -9,7 +9,7 @@
 
 
 
-namespace eda { namespace vhdl93 {
+namespace eda { namespace vhdl93 { namespace parser {
 
 
 namespace x3 = boost::spirit::x3;
@@ -258,5 +258,5 @@ error_handler_base::error_handler_base()
 
 
 
-}}
+}}} // namespace eda.vhdl93.parser
 

@@ -3720,6 +3720,8 @@ BOOST_SPIRIT_DEFINE(
  */
 struct bit_string_literal_class : x3::annotate_on_success {};
 
+//struct bit_string_literal_class : x3::annotate_on_success, error_handler_base {};
+
 
 } } } // namespace eda.vhdl93.parser
 

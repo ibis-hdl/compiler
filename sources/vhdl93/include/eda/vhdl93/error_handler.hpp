@@ -16,7 +16,7 @@
 #include <map>
 
 
-namespace eda { namespace vhdl93 {
+namespace eda { namespace vhdl93 { namespace parser {
 
     namespace x3 = boost::spirit::x3;
 
@@ -39,13 +39,14 @@ namespace eda { namespace vhdl93 {
 
         std::map<std::string, std::string> const m_ruleid_map;
     };
-}}
+
+}}} // namespace eda.vhdl93.parser
 
 
 /*
  * Implementation
  */
-namespace eda { namespace vhdl93 {
+namespace eda { namespace vhdl93 { namespace parser {
 
 
 namespace x3 = boost::spirit::x3;
@@ -72,7 +73,7 @@ error_handler_base::on_error(
 }
 
 
-}}
+}}} // namespace eda.vhdl93.parser
 
 
 
