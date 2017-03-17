@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from pygccxml import utils
 from pygccxml import declarations
@@ -16,7 +16,12 @@ class AstFusionAdapter:
     node_list = []
     l_width = 0
     r_width = 0
+    max_width=60
     indent = "    "
+    parse_blacklist = [ # problem headers
+        'abstract_literal.hpp',
+        'numeric_literal.hpp'
+    ]
     
     def __init__(self):
         generator_path, generator_name = utils.find_xml_generator()
@@ -24,7 +29,8 @@ class AstFusionAdapter:
             xml_generator_path=generator_path,
             xml_generator=generator_name,
             cflags='-std=c++14')
-        header_list = [self.include_prefix() + hpp for hpp in self.find_hpp()]
+        hxx_list = list(filter(lambda hxx: hxx not in self.parse_blacklist, self.find_hpp()))
+        header_list = [self.include_prefix() + hpp for hpp in hxx_list]
         decls = parser.parse(header_list, xml_generator_config)
         self.global_namespace = declarations.get_global_namespace(decls)
         self.ns_ast = self.global_namespace.namespace("ast")
@@ -61,6 +67,8 @@ class AstFusionAdapter:
             else:
                 member_list.append((str(member.decl_type) , member.name ))
                 self.l_width = max(self.l_width, len(str(member.decl_type)))
+                # there are some long types to be limited
+                self.l_width = min(self.l_width, self.max_width) 
                 self.r_width = max(self.r_width, len(member.name))
         return (cls.decl_string, member_list)
         
