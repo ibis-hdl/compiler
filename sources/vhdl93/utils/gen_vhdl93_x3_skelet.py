@@ -1215,7 +1215,13 @@ class X3:
 namespace x3 = boost::spirit::x3;
 namespace ascii = boost::spirit::x3::ascii;
 """
-        
+   
+    def indent(self, n):
+        text = "    "
+        for i in range(0, n-1):
+            text += text
+        return text
+            
     def embrace_ns(self, text, ns):
         """
         embrace the given (string) text with the given namespace 'ns'
@@ -1243,6 +1249,13 @@ namespace ascii = boost::spirit::x3::ascii;
         """
         return "#if {0}\n{1}\n#endif\n".format(define, body)
     
+    def embrace_hxx_guard(self, name, body):
+        """
+        Embrace a body into a header guard
+        """
+        h_name = name.upper() + "_HPP_"
+        return "#ifndef {0}\n#define {0}\n{1}\n#endif /* {0} */\n".format(h_name, body)
+   
     def keyword_ify(self, name):
         return name.upper()
     
@@ -1521,12 +1534,152 @@ auto const {1}_def =
         """
         alist = []
         incl_prefix='/'.join(self.ast_ns)
-        for r in sorted(self.bnf.rules()):
+        for name in sorted(self.bnf.rule_names()):
             alist.append(
-                "//#include <{0}/{1}.hpp>".format(incl_prefix, r.name)
+                "//#include <{0}/{1}.hpp>".format(incl_prefix, name)
             )
         return "\n".join(alist)
 
+    def ast_nodes(self):
+        """
+        Create the ast node structure
+        """
+        alist = []
+        garb_specifier = [
+            ':', ', ', ';', '{', '}', '(', ')', '[', ']', '=', 
+            '<' , '>', "'", '"', '#', '.'
+        ]
+        for r in sorted(self.bnf.rules()):
+            name = r.name
+            rule = r.rule.replace('\n', '')
+            #print(rule)
+            for x in garb_specifier:
+                rule = rule.replace(x, '')
+            if any((c in set('|')) for c in rule): # is_varaint
+                # variant
+                alist.append(
+                    self.ast_node_variant(name, rule)
+                )
+            else:
+                alist.append(
+                    self.ast_node(name, rule)
+                )
+        return "\n".join(alist)
+    
+    def ast_node(self, name, rule):
+        alist = []
+        element_list = [e for e in rule.split()]
+        for e in element_list:
+            alist.append(e)
+        # remove duplicates and sort
+        element_list = sorted(list(set(alist)))
+        decl_list = []
+        for e in element_list: 
+            decl_list.append("struct " + e + ";")
+        member_list = []
+        for e in element_list:
+            member_list.append(self.indent(1) + "{0:<20}{1:<20}".format(e, e + ';'))
+        text = """
+/*
+ * {0}.hpp
+ *
+ *  Created on: 18.03.2017
+ *      Author: olaf
+ */
+        
+#ifndef SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_{1}_HPP_
+#define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_{1}_HPP_
+
+#include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
+#include <string>
+
+
+namespace eda {{ namespace vhdl93 {{ namespace ast {{
+
+
+namespace x3 = boost::spirit::x3;
+
+
+{2}
+
+struct {0} : x3::position_tagged
+{{
+{3}
+}};
+
+
+std::ostream& operator<<(std::ostream& os, {0} const& node);
+
+
+}} }} }} // namespace eda.vhdl93.ast
+
+
+#endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_{1}_HPP_ */
+""".format(
+        name,
+        name.upper(),
+        "\n".join(decl_list),
+        "\n".join(member_list),
+        )        
+        return text
+    
+    def ast_node_variant(self, name, rule):
+        alist = []
+        element_list = [e for e in rule.split() if e != '|']
+        for e in element_list:
+            alist.append(e)
+        # remove duplicates and sort
+        element_list = sorted(list(set(alist)))
+        decl_list = []
+        for e in element_list:
+            decl_list.append("struct " + e + ";")
+        variant_list = []
+        for e in element_list:
+            variant_list.append(self.indent(2) + "x3::forward_ast<{0}>".format(e))
+        text = """
+/*
+ * {0}.hpp
+ *
+ *  Created on: 18.03.2017
+ *      Author: olaf
+ */
+        
+#ifndef SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_{1}_HPP_
+#define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_{1}_HPP_
+
+#include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
+#include <boost/spirit/home/x3/support/ast/variant.hpp>
+
+
+namespace eda {{ namespace vhdl93 {{ namespace ast {{
+
+
+namespace x3 = boost::spirit::x3;
+
+
+{2}
+
+struct {0} :
+    x3::variant<
+{3}
+    >
+{{
+    using base_type::base_type;
+    using base_type::operator=;
+}};
+
+
+}} }} }} // namespace eda.vhdl93.ast
+
+
+#endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_{1}_HPP_ */
+""".format(
+        name,
+        name.upper(),
+        "\n".join(decl_list),
+        ",\n".join(variant_list)
+        )
+        return text
         
         
 if __name__ == "__main__":
@@ -1535,3 +1688,4 @@ if __name__ == "__main__":
     print(x3.definition())
     print(x3.error_handler())
     print(x3.ast_include_global())
+    print(x3.ast_nodes())
