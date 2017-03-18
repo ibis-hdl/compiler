@@ -23,29 +23,22 @@ using boost::fusion::operator<<;
 } } } // namespace eda.vhdl93.ast
 
 
-BOOST_FUSION_ADAPT_STRUCT(
-    eda::vhdl93::ast::based_literal,
-    (std::string,                                                      base)
-    (std::string,                                                   literal)
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::based_literal,
+    base, literal
 )
 
-BOOST_FUSION_ADAPT_STRUCT(
-    eda::vhdl93::ast::bit_string_literal,
-    (std::string,                                                   literal)
-    (eda::vhdl93::ast::bit_string_literal::tag,                        hint)
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::bit_string_literal,
+    literal, hint
 )
 
-BOOST_FUSION_ADAPT_STRUCT(
-    eda::vhdl93::ast::decimal_literal,
-    (std::string,                                                   literal)
-    (eda::vhdl93::ast::decimal_literal::tag,                           hint)
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::decimal_literal,
+    literal, hint
 )
 
-BOOST_FUSION_ADAPT_STRUCT(
-    eda::vhdl93::ast::physical_literal,
-    (boost::spirit::x3::forward_ast<eda::vhdl93::ast::abstract_literal>,   literal)
-    (std::string,                                                 unit_name)
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::physical_literal,
+    literal, unit_name
 )
+
 
 
 
