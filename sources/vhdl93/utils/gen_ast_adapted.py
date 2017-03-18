@@ -7,8 +7,6 @@ from pygccxml import parser
 import os
 import sys
 
-from collections import OrderedDict
-
 
 class AstFusionAdapter:
     global_namespace = None
@@ -88,10 +86,29 @@ class AstFusionAdapter:
         text = "\n".join(self.indent + line for line in alist)
         return "BOOST_FUSION_ADAPT_STRUCT(\n{0}\n)\n".format(text)   
             
-    def fusionize(self):
+    def fusion_adapt_ligth(self, node):
+        '''
+        X3 example Calc9 shows an alternative way to fusionize ast structures 
+        which provides this function.
+        '''
+        node_name = node[0]
+        attr_dict = node[1]
+        member_list = [] ##
+        for attr in attr_dict:
+            member_list.append("{0}".format(attr[1]))
+        ast_type = node_name.lstrip('::') + ','
+        text = ", ".join(line for line in member_list)
+        text = "".join(self.indent + line for line in text.splitlines(True))
+        return "BOOST_FUSION_ADAPT_STRUCT({0}\n{1}\n)\n".format(
+            ast_type, text)   
+            
+    def fusionize(self, compact=True):
         text = ""
         for node in sorted(self.node_list, key=lambda tpl: tpl[0]):
-            text += self.fusion_adapt(node) + '\n'
+            if compact:
+                text += self.fusion_adapt_ligth(node) + '\n'
+            else:
+                text += self.fusion_adapt(node) + '\n'
         return text
     
     def ast_header_collector(self):
