@@ -434,7 +434,7 @@ typedef x3::rule<package_declaration_class> package_declaration_type;
 typedef x3::rule<package_declarative_item_class> package_declarative_item_type;
 typedef x3::rule<package_declarative_part_class> package_declarative_part_type;
 typedef x3::rule<parameter_specification_class> parameter_specification_type;
-typedef x3::rule<physical_literal_class> physical_literal_type;
+typedef x3::rule<physical_literal_class, ast::physical_literal> physical_literal_type;
 typedef x3::rule<physical_type_definition_class> physical_type_definition_type;
 typedef x3::rule<port_clause_class> port_clause_type;
 typedef x3::rule<port_list_class> port_list_type;
@@ -2537,21 +2537,21 @@ auto const library_unit_def =
 		;
 #endif
 
-#if 0
-// literal ::=
+
+// literal ::=                                                         [§ 7.3.1]
 // numeric_literal
 //     | enumeration_literal
 //     | string_literal
 //     | bit_string_literal
 //     | null
 auto const literal_def =
-		numeric_literal
-		| enumeration_literal
-		| string_literal
-		| bit_string_literal
-		| NULL
-		;
-#endif
+      numeric_literal
+    | enumeration_literal
+    | string_literal
+    | bit_string_literal
+    | NULL
+    ;
+
 
 #if 0
 // logical_name ::=

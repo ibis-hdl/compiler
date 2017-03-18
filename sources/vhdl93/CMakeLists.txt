@@ -7,6 +7,7 @@ set(LIB_SOURCES
     src/ast/based_literal.cpp
     src/ast/bit_string_literal.cpp
     src/ast/decimal_literal.cpp
+    src/ast/physical_literal.cpp
     src/grammar.cpp
     src/error_handler.cpp
 )
