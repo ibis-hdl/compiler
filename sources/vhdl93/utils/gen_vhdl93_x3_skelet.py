@@ -1514,6 +1514,19 @@ auto const {1}_def =
     
     def error_handler(self):
         return self.error_handler_map_initial_block('id_map')
+    
+    def ast_include_global(self):
+        """
+        Create the <ast.h> which includes all separated ast nodes header.
+        """
+        alist = []
+        incl_prefix='/'.join(self.ast_ns)
+        for r in sorted(self.bnf.rules()):
+            alist.append(
+                "//#include <{0}/{1}.hpp>".format(incl_prefix, r.name)
+            )
+        return "\n".join(alist)
+
         
         
 if __name__ == "__main__":
@@ -1521,3 +1534,4 @@ if __name__ == "__main__":
     print(x3.ast())
     print(x3.definition())
     print(x3.error_handler())
+    print(x3.ast_include_global())
