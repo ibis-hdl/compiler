@@ -1680,6 +1680,38 @@ struct {0} :
         ",\n".join(variant_list)
         )
         return text
+    
+    def ast_printer_decl(self):
+        call_list = []
+        for name in sorted(self.bnf.rule_names(True)):
+            call_list.append("{0}void operator()({1} const& node) const;".format(
+                "//" + self.indent(1), name))
+        text = """
+struct ast_printer
+{{
+    // ...    
+    ast_printer(std::ostream& out, uint16_t indent = 0);
+    
+{0}
+
+}};
+""".format(
+        "\n".join(call_list)
+        )
+        return self.embrace_ns(text, self.ast_ns)
+        
+    def ast_printer_def(self):
+        call_list = []
+        for name in sorted(self.bnf.rule_names(True)):
+            call_list.append("""
+#if 0            
+void ast_printer::operator()({0} const& node) const {{
+
+}}
+#endif
+""".format(name))
+        text = "\n".join(call_list)
+        return self.embrace_ns(text, self.ast_ns)
         
         
 if __name__ == "__main__":
@@ -1689,3 +1721,5 @@ if __name__ == "__main__":
     print(x3.error_handler())
     print(x3.ast_include_global())
     print(x3.ast_nodes())
+    print(x3.ast_printer_decl())
+    print(x3.ast_printer_def())

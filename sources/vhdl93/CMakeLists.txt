@@ -10,6 +10,7 @@ set(LIB_SOURCES
     src/ast/physical_literal.cpp
     src/grammar.cpp
     src/error_handler.cpp
+    src/ast_printer.cpp
 )
 
 include_directories(${SPIRIT_X3_INCLUDE_DIR})
