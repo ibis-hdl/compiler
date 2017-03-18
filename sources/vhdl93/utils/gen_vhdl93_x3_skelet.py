@@ -1521,30 +1521,3 @@ if __name__ == "__main__":
     print(x3.ast())
     print(x3.definition())
     print(x3.error_handler())
-
-        
-"""
-ALTERNATIVE for keywords:
-https://stackoverflow.com/questions/38039237/parsing-identifiers-except-keywords
-struct keywords_t : x3::symbols<x3::unused_type> {
-    keywords_t() {
-        add("for", x3::unused)
-                ("in", x3::unused)
-                ("while", x3::unused);
-    }
-} const keywords;
-
-ALSO:
-struct instructions : x3::symbols<OpCode> {
-    instructions()
-    {
-        name("instructions");
-    }
-
-    void set_instruction_set(const std::unordered_map<std::string, OpCode>& instruction_set) {
-        for (const auto& var : instruction_set) {
-            add(var.first, var.second);
-        }
-    }
-} instructions_parser;
-"""
