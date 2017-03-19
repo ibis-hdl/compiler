@@ -87,9 +87,9 @@ int get<int32_t>(bit_string_literal const& node)
     }
     else {
         static std::array<unsigned, 3> const length {
-                8*sizeof(int32_t), // BIN
-                4*sizeof(int32_t), // OCT
-                2*sizeof(int32_t)  // HEX
+                8*sizeof(int32_t), // bin
+                4*sizeof(int32_t), // oct
+                2*sizeof(int32_t)  // hex
         };
 
         BOOST_THROW_EXCEPTION(
