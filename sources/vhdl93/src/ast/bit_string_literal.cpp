@@ -22,19 +22,6 @@ namespace eda { namespace vhdl93 { namespace ast {
 namespace x3 = boost::spirit::x3;
 
 
-namespace detail {
-
-    template <typename T>
-    struct integer_policies : x3::real_policies<T>
-    {
-        static bool const allow_leading_dot = false;
-        static bool const allow_trailing_dot = false;
-        static bool const expect_dot = false;
-        // ...
-    };
-}
-
-
 std::string compress(std::string const& str, std::size_t len)
 {
     static const char* const ellipsis = "...";
