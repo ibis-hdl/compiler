@@ -26,6 +26,14 @@ std::ostream& operator<<(std::ostream& os, bit_string_literal const& literal);
 std::ostream& operator<<(std::ostream& os, bit_string_literal::tag const& tag);
 
 
+/**
+ * Convert the literal to the type T. The type T can be <int> or <double> due to
+ * the provided specializations. On overflow it will though an exception.
+ */
+template<typename T>
+T get(bit_string_literal const& literal);
+
+
 } } } // namespace eda.vhdl93.ast
 
 

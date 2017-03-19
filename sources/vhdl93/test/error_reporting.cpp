@@ -130,6 +130,24 @@ BOOST_AUTO_TEST_CASE( simple_report )
     BOOST_TEST( output.is_equal("FixMe\n"));
 }
 
+#if 0
+BOOST_AUTO_TEST_CASE( get_ast_values )
+{
+    using namespace eda::vhdl93;
+    using x3_test::test;
+    namespace test_parser = x3_test::test_parser;
+
+    ast::bit_string_literal l { "111111111111111111111111111111111", ast::bit_string_literal::tag::bin };
+
+    boost::test_tools::output_test_stream output;
+    {
+        std::cout << l << '\n';
+    }
+
+    BOOST_TEST( output.is_equal("FixMe\n"));
+}
+#endif
+
 
 BOOST_AUTO_TEST_SUITE_END()
 

@@ -13,6 +13,10 @@ set(LIB_SOURCES
     src/ast_printer.cpp
 )
 
+## FixMe: temporary for interface target of cmake getting working
+include_directories(../../include)
+
+
 include_directories(${SPIRIT_X3_INCLUDE_DIR})
 include_directories(${GSL_INCLUDE_DIR})
 

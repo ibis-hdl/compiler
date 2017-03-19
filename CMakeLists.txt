@@ -3,7 +3,8 @@ cmake_minimum_required(VERSION 3.6)
 
 project(eda VERSION 0.0.1 LANGUAGES CXX)
 
-# Catch in-source builds
+
+## Catch in-source builds
 if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
     message(FATAL_ERROR "\
 In-source builds not allowed. Please make a new directory (called a build \
@@ -26,6 +27,16 @@ Release, RelWithDebInfo (case-insensitive).")
 endif()
 
 
+## create a dummy header-only target
+### FixMe: won't work / build
+#add_library(eda_prj INTERFACE)
+#target_sources(eda_prj INTERFACE 
+#    ${CMAKE_SOURCE_DIR}/include/eda/version.hpp)
+#target_include_directories(eda_prj INTERFACE 
+#    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+#    $<INSTALL_INTERFACE:include>)
+    
+
 # Set the output folder where your program will be created
 set(CMAKE_BINARY_DIR            ${CMAKE_BINARY_DIR}/bin)
 set(EXECUTABLE_OUTPUT_PATH      ${CMAKE_BINARY_DIR})
@@ -35,12 +46,38 @@ set(LIBRARY_OUTPUT_PATH         ${CMAKE_BINARY_DIR})
 ## External, 3rd party projects
 include(ExternalProject)
 
+
 ## Requirements
 find_package(Boost REQUIRED COMPONENTS system)
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 include(external-gsl)
 #include(external-spirit-x3)
+
+
+## Compiler Feature support
+include(CheckCXXCompilerFlag)
+
+CHECK_CXX_SOURCE_COMPILES("
+int main() {
+    __builtin_unreachable();
+    return 0;
+}" HAVE_BUILTIN_UNREACHABLE)
+
+CHECK_CXX_SOURCE_COMPILES("
+int main() {
+    __builtin_expect();
+    return 0;
+}" HAVE_BUILTIN_EXPECT)
+
+
+## targets
+## FixMe: won't work/build
+#target_include_directories(eda_prj PUBLIC
+#    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+#    $<INSTALL_INTERFACE:include>
+#    PRIVATE playground)
+
 
 
 ## IDE support
