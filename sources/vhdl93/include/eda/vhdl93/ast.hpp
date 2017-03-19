@@ -8,6 +8,15 @@
 #ifndef SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_AST_HPP_
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_AST_HPP_
 
+#include <string>
+
+
+namespace eda { namespace vhdl93 { namespace ast {
+
+//using integer = std::string;
+
+} } } // namespace eda.vhdl93.ast
+
 
 #include <eda/vhdl93/ast/abstract_literal.hpp>
 //#include <eda/vhdl93/ast/access_type_definition.hpp>
