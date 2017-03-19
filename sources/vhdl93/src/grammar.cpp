@@ -6,8 +6,8 @@
  */
 
 
-#include <eda/vhdl93/parser_config.hpp>
-#include <eda/vhdl93/grammar_def.hpp>
+#include <eda/vhdl93/parser/grammar_def.hpp>
+#include <eda/vhdl93/parser/parser_config.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace parser {

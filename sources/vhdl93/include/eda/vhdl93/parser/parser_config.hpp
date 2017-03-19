@@ -9,9 +9,8 @@
 #define INCLUDE_EDA_VHDL93_PARSER_CONFIG_HPP_
 
 
-#include <eda/vhdl93/error_handler.hpp>
-
 #include <boost/spirit/home/x3.hpp>
+#include <eda/vhdl93/parser/error_handler.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace parser {

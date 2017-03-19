@@ -5,7 +5,7 @@
  *      Author: olaf
  */
 
-#include <eda/vhdl93/error_handler.hpp>
+#include <eda/vhdl93/parser/error_handler.hpp>
 
 
 

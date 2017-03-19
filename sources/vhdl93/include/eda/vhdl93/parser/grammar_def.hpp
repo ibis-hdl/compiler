@@ -5,12 +5,12 @@
  *      Author: olaf
  */
 
-#ifndef SOURCES_VHDL93_INCLUDE_EDA_VHDL93_GRAMMAR_DEF_HPP_
-#define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_GRAMMAR_DEF_HPP_
+#ifndef SOURCES_VHDL93_INCLUDE_EDA_VHDL93_PARSER_GRAMMAR_DEF_HPP_
+#define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_PARSER_GRAMMAR_DEF_HPP_
 
 
-#include <eda/vhdl93/grammar.hpp>
 #include <eda/vhdl93/ast_adapted.hpp>
+#include <eda/vhdl93/parser/grammar.hpp>
 
 #include <boost/spirit/home/x3.hpp>
 #include <boost/spirit/home/x3/support/utility/annotate_on_success.hpp>
@@ -3764,4 +3764,4 @@ BOOST_SPIRIT_DEFINE(skipper)
 
 
 
-#endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_GRAMMAR_DEF_HPP_ */
+#endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_PARSER_GRAMMAR_DEF_HPP_ */

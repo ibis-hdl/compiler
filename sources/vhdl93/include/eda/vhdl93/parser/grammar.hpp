@@ -5,8 +5,8 @@
  *      Author: olaf
  */
 
-#ifndef SOURCES_VHDL93_INCLUDE_EDA_VHDL93_GRAMMAR_HPP_
-#define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_GRAMMAR_HPP_
+#ifndef SOURCES_VHDL93_INCLUDE_EDA_VHDL93_PARSER_GRAMMAR_HPP_
+#define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_PARSER_GRAMMAR_HPP_
 
 
 #include <boost/spirit/home/x3.hpp>
@@ -20,4 +20,4 @@ namespace x3 = boost::spirit::x3;
 } } } // namespace eda.vhdl93.parser
 
 
-#endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_GRAMMAR_HPP_ */
+#endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_PARSER_GRAMMAR_HPP_ */

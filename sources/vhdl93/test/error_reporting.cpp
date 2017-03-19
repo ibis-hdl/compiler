@@ -7,11 +7,11 @@
 
 
 #include <boost/test/unit_test.hpp>
-
-#include <eda/vhdl93/parser_config.hpp>
-#include <eda/vhdl93/grammar_def.hpp>
-
 #include <boost/test/output_test_stream.hpp>
+
+#include <eda/vhdl93/parser/grammar_def.hpp>
+#include <eda/vhdl93/parser/parser_config.hpp>
+
 #include <iostream>
 
 
