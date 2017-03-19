@@ -4,13 +4,13 @@
 
 #include <boost/spirit/home/x3.hpp>
 
-int main()
+int main() // THIS IS THE WRONG WAY
 {
    namespace x3 = boost::spirit::x3;
    using x3::char_;
 
    auto const integer =  x3::rule<struct _, std::string>{} =
-       x3::lexeme[ +char_("0-9") >> *(char_("0-9") | "_") ]; // XXX This inserts a 0x00 for '_'
+       x3::lexeme[ +char_("0-9") >> *(char_("0-9") | "_") ]; // Note, This inserts a 0x00 for '_'
 
    for(std::string const str: {
            "4711", "123_456"
@@ -52,7 +52,6 @@ namespace parser {
    auto as_rule = [](auto p) { return x3::rule<struct _, T>{} = x3::as_parser(p); };
 
    auto const integer = as_rule<std::string>(
-       //x3::lexeme[ +char_("0-9") >> *(char_("0-9") | "_") ]); // XXX This inserts a 0x00 for '_'
        x3::lexeme[ +char_("0-9") >> *(-x3::lit("_") >> char_("0-9")) ]; // solution
    auto const exponent = as_rule<std::string>(
        x3::lexeme [ char_("Ee") >> -char_("+-") >> integer ]);
