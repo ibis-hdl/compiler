@@ -14,7 +14,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 void ast_printer::tab(uint16_t spaces) {
 
     for (unsigned i = 0; i != spaces; ++i)
-        out << ' ';
+        os << ' ';
 }
 
 
@@ -236,7 +236,7 @@ void ast_printer::operator()(binding_indication const& node) const {
 
 
 void ast_printer::operator()(bit_string_literal const& node) const {
-
+    os << node;
 }
 
 

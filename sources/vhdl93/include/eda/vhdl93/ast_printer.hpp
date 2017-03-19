@@ -19,7 +19,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 class ast_printer
 {
-    std::ostream&   out;
+    std::ostream&   os;
     uint16_t        indent;
     uint16_t const  tab_size { 4 };
 
@@ -28,7 +28,7 @@ class ast_printer
 public:
     // ...
     ast_printer(std::ostream& out, uint16_t indent = 0)
-    : out{ out }, indent { indent }
+    : os{ out }, indent { indent }
     { }
 
     void operator()(abstract_literal const& node) const;
