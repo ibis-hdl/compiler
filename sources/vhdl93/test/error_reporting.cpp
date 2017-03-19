@@ -110,7 +110,7 @@ namespace x3_test {
 namespace x3 = boost::spirit::x3;
 namespace btt = boost::test_tools;
 
-
+#if 0
 BOOST_AUTO_TEST_CASE( simple_report )
 {
     using namespace eda::vhdl93;
@@ -129,6 +129,7 @@ BOOST_AUTO_TEST_CASE( simple_report )
 
     BOOST_TEST( output.is_equal("FixMe\n"));
 }
+#endif
 
 #if 0
 BOOST_AUTO_TEST_CASE( get_ast_values )
