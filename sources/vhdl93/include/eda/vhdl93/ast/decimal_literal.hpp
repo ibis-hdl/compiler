@@ -22,8 +22,16 @@ struct decimal_literal {
 };
 
 
-std::ostream& operator<<(std::ostream& os, decimal_literal const& decimal);
+std::ostream& operator<<(std::ostream& os, decimal_literal const& node);
 std::ostream& operator<<(std::ostream& os, decimal_literal::tag const& tag);
+
+
+/**
+ * Convert the literal to the type T. The type T can be <int> or <double> due to
+ * the provided specializations. On overflow it will throw an exception.
+ */
+template<typename T>
+T get(decimal_literal const& literal);
 
 
 } } } // namespace eda.vhdl93.ast

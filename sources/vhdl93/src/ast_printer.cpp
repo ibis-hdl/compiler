@@ -6,6 +6,10 @@
  */
 
 #include <eda/vhdl93/ast_printer.hpp>
+#include <eda/utils/cxx_bug_fatal.hpp>
+#include <eda/exception.hpp>
+
+#include <boost/exception/all.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -495,7 +499,7 @@ void ast_printer::operator()(context_item const& node) const {
 
 
 void ast_printer::operator()(decimal_literal const& node) const {
-
+    os << node;
 }
 
 

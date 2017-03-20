@@ -8,40 +8,18 @@
 #include <eda/vhdl93/ast/bit_string_literal.hpp>
 #include <eda/utils/cxx_bug_fatal.hpp>
 #include <eda/exception.hpp>
+#include <eda/vhdl93/utils/literal_ellipsis.hpp>
 
 #include <boost/spirit/home/x3.hpp>
 #include <boost/exception/all.hpp>
 
 #include <array>
-#include <utility> // pair
 
 
 namespace eda { namespace vhdl93 { namespace ast {
 
 
 namespace x3 = boost::spirit::x3;
-
-
-std::string compress(std::string const& str, std::size_t len)
-{
-    static const char* const ellipsis = "...";
-
-    if(str.size() < len + 1)
-        return str;
-
-    std::size_t const offset = (len - strlen(ellipsis))/2;
-
-    using range_t = std::pair<std::size_t, std::size_t>;
-
-    range_t const left  { 0,                           offset       };
-    range_t const right { (str.length() - offset - 1), str.length() };
-
-    return std::string {
-          str.substr(left.first, left.second)
-        + ellipsis
-        + str.substr(right.first, right.second)
-    };
-}
 
 
 template<>
@@ -72,7 +50,8 @@ int get<int32_t>(bit_string_literal const& node)
     if(ok && iter == cend) {
         return attr;
     }
-    else {
+    else if(ok && iter != cend) {
+
         static std::array<unsigned, 3> const length {
                 8*sizeof(int32_t), // bin
                 4*sizeof(int32_t), // oct
@@ -82,7 +61,7 @@ int get<int32_t>(bit_string_literal const& node)
         BOOST_THROW_EXCEPTION(
             eda::range_error(
                 "VHDL93 Bit String Literal='"
-                + compress(node.literal, length[static_cast<unsigned>(node.hint)])
+                + literal_ellipsis(node.literal, length[static_cast<unsigned>(node.hint)])
                 + "' <int32> Range Error")
         );
     }
