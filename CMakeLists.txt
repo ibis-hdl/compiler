@@ -60,17 +60,25 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 ## Compiler Features
 include(CheckCXXCompilerFlag)
 
-CHECK_CXX_SOURCE_COMPILES("
+check_cxx_source_compiles("
 int main() {
     __builtin_unreachable();
     return 0;
-}" HAVE_BUILTIN_UNREACHABLE)
+}" EDA_HAVE_BUILTIN_UNREACHABLE)
 
-CHECK_CXX_SOURCE_COMPILES("
+if(EDA_HAVE_BUILTIN_UNREACHABLE)
+    add_definitions( -DEDA_HAVE_BUILTIN_UNREACHABLE )
+endif()
+
+check_cxx_source_compiles("
 int main() {
-    __builtin_expect();
+    __builtin_expect(1, 0);
     return 0;
-}" HAVE_BUILTIN_EXPECT)
+}" EDA_HAVE_BUILTIN_EXPECT)
+
+if(EDA_HAVE_BUILTIN_EXPECT)
+    add_definitions( -DEDA_HAVE_BUILTIN_EXPECT )
+endif()
 
 
 ## IDE support
@@ -85,5 +93,4 @@ enable_testing()
 add_subdirectory(sources/vhdl93)
 
 add_subdirectory(playground/vhdl93)
-
 

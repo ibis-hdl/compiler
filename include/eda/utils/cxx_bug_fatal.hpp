@@ -31,12 +31,9 @@ void assertion_failed_msg(const CharT* expr, const char* msg, const char* functi
 
 } } } // namespace eda.utils.detail
 
-#define HAVE_BUILTIN_UNREACHABLE
-#define HAVE_BUILTIN_EXPECT
-
 
 // use __builtin_expect to provide the compiler with branch prediction information
-#if defined(HAVE_BUILTIN_EXPECT)
+#if defined(EDA_HAVE_BUILTIN_EXPECT)
 #define cxx_expect(x)       __builtin_expect(!!(x), 1)
 #define cxx_expect_not(x)   __builtin_expect(!!(x), 0)
 #else
@@ -52,7 +49,7 @@ void assertion_failed_msg(const CharT* expr, const char* msg, const char* functi
        __PRETTY_FUNCTION__, __FILE__, __LINE__))
 
 
-#if defined (HAVE_BUILTIN_UNREACHABLE)
+#if defined (EDA_HAVE_BUILTIN_UNREACHABLE)
 #define cxx_bug_fatal(message) \
     cxx_assert(false, message);  \
     __builtin_unreachable();
