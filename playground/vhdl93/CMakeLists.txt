@@ -2,7 +2,7 @@
 # scratchpad projects
 ################################################################################
 
-project(playground)
+project(vhdl_playground)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${SPIRIT_X3_INCLUDE_DIR})

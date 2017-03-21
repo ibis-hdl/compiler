@@ -1,7 +1,5 @@
 ## EDA/VHDL93 project
-project(vhdl93 LANGUAGES CXX)
-
-set(PROJECT_LIB vhdl93_grammar)
+project(vhdl93_grammar LANGUAGES CXX)
 
 set(LIB_SOURCES
     src/ast/based_literal.cpp
@@ -15,43 +13,43 @@ set(LIB_SOURCES
 
 ## FixMe: temporary for interface target of cmake getting working
 include_directories(../../include)
-#target_link_libraries(${PROJECT_LIB} eda)
+#add_dependencies(${PROJECT_NAME} eda)  # FixMe: cmake_check_build_system error
 
-include_directories(${SPIRIT_X3_INCLUDE_DIR})
+## Project Depend Includes
+#include_directories(${SPIRIT_X3_INCLUDE_DIR})
 include_directories(${GSL_INCLUDE_DIR})
 
-add_library(${PROJECT_LIB} STATIC ${LIB_SOURCES})
+add_library(${PROJECT_NAME} STATIC ${LIB_SOURCES})
 
-target_include_directories(${PROJECT_LIB} PUBLIC
+target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
     PRIVATE src)
 
-target_compile_options(${PROJECT_LIB} 
+target_compile_options(${PROJECT_NAME} 
     PRIVATE -Wall -Wextra)
 
-#add_dependencies(${PROJECT_LIB} boost-spirit-x3)
-#add_dependencies(${PROJECT_LIB} eda)
-#add_dependencies(${PROJECT_LIB} gsl)
+#add_dependencies(${PROJECT_NAME} boost-spirit-x3)
+#add_dependencies(${PROJECT_NAME} eda)
+#add_dependencies(${PROJECT_NAME} gsl)
 
-set_target_properties(${PROJECT_LIB} PROPERTIES CXX_STANDARD 14)
-set_target_properties(${PROJECT_LIB} PROPERTIES CXX_STANDARD_REQUIRED ON)
-set_target_properties(${PROJECT_LIB} PROPERTIES DEBUG_POSTFIX "_d")
+set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX "_d")
 
 # 'make install' to the correct location
-install(TARGETS ${PROJECT_LIB} EXPORT Vhdl93LibraryConfig
-    ARCHIVE  DESTINATION ${PROJECT_LIB}
-    LIBRARY  DESTINATION ${PROJECT_LIB}
-    RUNTIME  DESTINATION ${PROJECT_LIB})  # This is for Windows
+install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Config
+    ARCHIVE  DESTINATION ${PROJECT_NAME}
+    LIBRARY  DESTINATION ${PROJECT_NAME}
+    RUNTIME  DESTINATION ${PROJECT_NAME})  # This is for Windows
 install(DIRECTORY include/ DESTINATION include)
 
 # This makes the project importable from the install directory
 # Put config file in per-project dir (name MUST match), can also
 # just go into <prefix>/cmake.
-install(EXPORT Vhdl93LibraryConfig DESTINATION share/Vhdl93LibraryConfig/cmake)
+install(EXPORT ${PROJECT_NAME}Config 
+    DESTINATION share/cmake/${PROJECT_NAME}Config)
 
 # This makes the project importable from the build directory
-export(TARGETS ${PROJECT_LIB} FILE Vhdl93LibraryConfig.cmake)
+export(TARGETS ${PROJECT_NAME} FILE ${PROJECT_NAME}Config.cmake)
 
 
 # test suite

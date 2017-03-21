@@ -16,7 +16,7 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
 endif()
 
-# Catch unsupported build-type strings
+## Catch unsupported build-type strings
 string(TOLOWER "${CMAKE_BUILD_TYPE}" project_build_type)
 if(     NOT project_build_type STREQUAL "debug"
     AND NOT project_build_type STREQUAL "release"
@@ -32,7 +32,6 @@ add_library(eda INTERFACE)
 target_include_directories(eda INTERFACE 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>)
-    
 
 # Set the output folder where your program will be created
 set(CMAKE_BINARY_DIR            ${CMAKE_BINARY_DIR}/bin)
@@ -52,7 +51,13 @@ include(external-gsl)
 #include(external-spirit-x3)
 
 
-## Compiler Feature support
+## C++ Standards
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+
+## Compiler Features
 include(CheckCXXCompilerFlag)
 
 CHECK_CXX_SOURCE_COMPILES("
@@ -68,15 +73,6 @@ int main() {
 }" HAVE_BUILTIN_EXPECT)
 
 
-## targets
-## FixMe: won't work/build
-#target_include_directories(eda_prj PUBLIC
-#    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-#    $<INSTALL_INTERFACE:include>
-#    PRIVATE playground)
-
-
-
 ## IDE support
 # Parsing Errors more efficiently in eclipse
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "(GNU|Clang)")
@@ -84,10 +80,10 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "(GNU|Clang)")
 endif()
 
 
-# sub projects
+## Sub Projects
 enable_testing()
 add_subdirectory(sources/vhdl93)
 
-add_subdirectory(playground)
+add_subdirectory(playground/vhdl93)
 
 

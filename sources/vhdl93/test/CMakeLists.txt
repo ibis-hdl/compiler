@@ -1,8 +1,6 @@
 ## EDA/VHDL93 project TestBemch
 project(test_vhdl93 LANGUAGES CXX)
 
-set(PROJECT_BIN test_vhdl93)
-
 set(BIN_SOURCES
     basic_production_rules.cpp
     error_reporting.cpp
@@ -10,19 +8,19 @@ set(BIN_SOURCES
     
 )
 
-add_executable(${PROJECT_BIN} ${BIN_SOURCES})
+add_executable(${PROJECT_NAME} ${BIN_SOURCES})
 
-#add_dependencies(${PROJECT_BIN} boost-spirit-x3)
-add_dependencies(${PROJECT_BIN} gsl)
+#add_dependencies(${PROJECT_NAME} boost-spirit-x3)
+add_dependencies(${PROJECT_NAME} gsl)
 
-set_target_properties(${PROJECT_BIN} PROPERTIES CXX_STANDARD 14)
-set_target_properties(${PROJECT_BIN} PROPERTIES CXX_STANDARD_REQUIRED ON)
-target_compile_options(${PROJECT_BIN} PRIVATE -Wall -Wextra)
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 14)
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD_REQUIRED ON)
+target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra)
 
-target_link_libraries(${PROJECT_BIN} 
+target_link_libraries(${PROJECT_NAME} 
     PRIVATE
     vhdl93_grammar
     ${Boost_SYSTEM_LIBRARY}
 )
 
-add_test(test_vhdl93 ${EXECUTABLE_OUTPUT_PATH}/${PROJECT_BIN})
+add_test(test_vhdl93 ${EXECUTABLE_OUTPUT_PATH}/${PROJECT_NAME})
