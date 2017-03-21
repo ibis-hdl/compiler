@@ -21,9 +21,11 @@ namespace detail { }
 
 
 
-std::ostream& operator<<(std::ostream& os, based_literal const& decimal)
+std::ostream& operator<<(std::ostream& os, based_literal const& node)
 {
-    os << "b=" << decimal.base << ", n=" << decimal.literal;
+    // FixMe: Encode based_literal as of bit_string_literal, decimal_literal etc.
+
+    os << "b=" << node.base << ", n=" << node.literal;
 
     return os;
 }

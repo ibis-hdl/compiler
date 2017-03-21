@@ -24,11 +24,7 @@ namespace eda {
  */
 struct range_error : public boost::exception, public std::range_error
 {
-    explicit range_error(const std::string& what_arg)
-    : std::range_error(what_arg) { }
-
-    explicit range_error(const char* what_arg)
-    : std::range_error(what_arg) { }
+    using std::range_error::range_error;
 };
 
 using range_error_min = boost::error_info<struct tag_int32_range_min, int32_t>;

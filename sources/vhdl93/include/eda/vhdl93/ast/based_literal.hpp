@@ -21,7 +21,7 @@ struct based_literal {
 };
 
 
-std::ostream& operator<<(std::ostream& os, based_literal const& based);
+std::ostream& operator<<(std::ostream& os, based_literal const& node);
 
 
 

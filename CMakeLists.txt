@@ -1,6 +1,6 @@
-## The EDA project
 cmake_minimum_required(VERSION 3.6)
 
+## The EDA project
 project(eda VERSION 0.0.1 LANGUAGES CXX)
 
 
@@ -28,13 +28,10 @@ endif()
 
 
 ## create a dummy header-only target
-### FixMe: won't work / build
-#add_library(eda_prj INTERFACE)
-#target_sources(eda_prj INTERFACE 
-#    ${CMAKE_SOURCE_DIR}/include/eda/version.hpp)
-#target_include_directories(eda_prj INTERFACE 
-#    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-#    $<INSTALL_INTERFACE:include>)
+add_library(eda INTERFACE)
+target_include_directories(eda INTERFACE 
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>)
     
 
 # Set the output folder where your program will be created

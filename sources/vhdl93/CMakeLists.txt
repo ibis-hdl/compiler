@@ -15,7 +15,7 @@ set(LIB_SOURCES
 
 ## FixMe: temporary for interface target of cmake getting working
 include_directories(../../include)
-
+#target_link_libraries(${PROJECT_LIB} eda)
 
 include_directories(${SPIRIT_X3_INCLUDE_DIR})
 include_directories(${GSL_INCLUDE_DIR})
@@ -31,7 +31,8 @@ target_compile_options(${PROJECT_LIB}
     PRIVATE -Wall -Wextra)
 
 #add_dependencies(${PROJECT_LIB} boost-spirit-x3)
-add_dependencies(${PROJECT_LIB} gsl)
+#add_dependencies(${PROJECT_LIB} eda)
+#add_dependencies(${PROJECT_LIB} gsl)
 
 set_target_properties(${PROJECT_LIB} PROPERTIES CXX_STANDARD 14)
 set_target_properties(${PROJECT_LIB} PROPERTIES CXX_STANDARD_REQUIRED ON)
