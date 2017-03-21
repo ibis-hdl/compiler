@@ -220,6 +220,8 @@ BOOST_AUTO_TEST_CASE( based_literal )
         // Real literals of value 4095.0
         std::make_pair("16#F.FF#E+2", attribute_type {"16", "F.FF#E+2"}),
         std::make_pair("2#1.1111_1111_111#E11", attribute_type {"2", "1.11111111111#E11"}),
+		// others
+		std::make_pair("16#E#E123", attribute_type {"16", "E#E123"}),
     };
 
     uint n = 1;
@@ -331,16 +333,14 @@ BOOST_AUTO_TEST_CASE( physical_literal )
 {
     using namespace eda::vhdl93;
     using x3_test::test_attr;
-#if 0
-    typedef ast::bit_string_literal attribute_type;
 
-    using tag = attribute_type::tag;
+    typedef ast::physical_literal attribute_type;
+
+#if 0
+    using deci_tag = ast::decimal_literal::tag;
 
     std::vector<std::pair<std::string, attribute_type>> const pass_test_cases {
-        std::make_pair("B\"1111_1111_1111\"", attribute_type {"111111111111", tag::bin}),
-        std::make_pair("X\"FFF\"", attribute_type {"FFF", tag::hex}),
-        std::make_pair("O\"777\"", attribute_type {"777", tag::oct}),
-        std::make_pair("X\"777\"", attribute_type {"777", tag::hex}),
+        std::make_pair("100 fs", attribute_type { ast::decimal_literal{ "12", deci_tag::integer }, "fs" }),
     };
 
     uint n = 1;
@@ -348,22 +348,37 @@ BOOST_AUTO_TEST_CASE( physical_literal )
         auto const& input = str.first;
         auto const& gold = str.second;
         attribute_type attr;
-        BOOST_TEST_CONTEXT("'bit_string_literal' test case #" << n++ << " to pass "
+        BOOST_TEST_CONTEXT("'physical_literal' test case #" << n++ << " to pass "
                            "input = '" << input << "'") {
-            BOOST_TEST(test_attr(input, parser::bit_string_literal, x3::space, attr));
+            BOOST_TEST(test_attr(input, parser::physical_literal, x3::space, attr));
             BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
-            BOOST_TEST(attr.literal == gold.literal, btt::per_element());
-            BOOST_TEST(attr.hint == gold.hint);
+            //BOOST_TEST(attr.literal == gold.literal, btt::per_element());
+            //BOOST_TEST(attr.hint == gold.hint);
         }
     }
+#else
+    // FixMe: How to create an ast attribute as reference? It's declared as ast_forward etc.
+    std::vector<std::string> const pass_test_cases {
+        "100 fs",
+		"ps",
+		// FixMe: all based_literals failed!!!
+		"2#1111_1111# d",
+		"10#42# ms",
+		"16#AFFE.42#E+69 h",
+    };
+
+    uint n = 1;
+    for(auto const& str : pass_test_cases) {
+        auto const& input = str;
+        attribute_type attr;
+        BOOST_TEST_CONTEXT("'physical_literal' test case #" << n++ << " to pass "
+                           "input = '" << input << "'") {
+            BOOST_TEST(test_attr(input, parser::physical_literal, x3::space, attr));
+            BOOST_TEST_INFO("attr = '" << attr << "'");
+        }
+    }
+
 #endif
-
-    ast::abstract_literal l(ast::decimal_literal { "12", ast::decimal_literal::tag::integer });
-
-    ast::printer print(std::cout);
-
-    //print(l);
-    //std::cout << '\n';
 }
 
 

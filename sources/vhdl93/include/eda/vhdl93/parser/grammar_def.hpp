@@ -3655,7 +3655,7 @@ BOOST_SPIRIT_DEFINE(
 		//    package_declarative_item,
 		//    package_declarative_part,
 		//    parameter_specification,
-		//    physical_literal,
+		physical_literal,
 		//    physical_type_definition,
 		//    port_clause,
 		//    port_list,
