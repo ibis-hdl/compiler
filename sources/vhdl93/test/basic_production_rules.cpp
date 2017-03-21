@@ -11,8 +11,12 @@
 #include <eda/vhdl93/parser/grammar_def.hpp>
 #include <eda/vhdl93/parser/parser_config.hpp>
 
+#include <eda/exception.hpp>
+
 #include <boost/optional/optional_io.hpp>
 #include <iostream>
+
+#include <eda/vhdl93/ast_printer.hpp>
 
 BOOST_AUTO_TEST_SUITE( basic_productions )
 
@@ -258,12 +262,10 @@ BOOST_AUTO_TEST_CASE( decimal_literal )
         std::make_pair("1.34E-12", attribute_type { "1.34E-12", tag::real } ),
         std::make_pair("1.0E+6", attribute_type { "1.0E+6", tag::real } ),
         std::make_pair("6.023E+24", attribute_type { "6.023E+24", tag::real } ),
-        // also, this is valid even if it's overflows int32
-        std::make_pair("12345678901234567890", attribute_type { "12345678901234567890", tag::integer } ),
     };
 
-    std::vector<std::string> const fail_test_cases {
-        // FixMe: Handle overflows on converting
+    std::vector<std::string> const pass_with_exception_test_cases {
+        //  this is syntactically valid even if it's overflows int32
         "12345678901234567890",
         };
 
@@ -280,16 +282,16 @@ BOOST_AUTO_TEST_CASE( decimal_literal )
             BOOST_TEST(attr.hint == gold.hint);
         }
     }
-#if 0
+
     n = 1;
-    for(auto const& str : fail_test_cases) {
-        BOOST_TEST_CONTEXT("'decimal_literal' test case #" << n++ << " to fail") {
+    for(auto const& str : pass_with_exception_test_cases) {
+        BOOST_TEST_CONTEXT("'decimal_literal' test case #" << n++ << " to fail with overflow exception") {
             attribute_type attr;
             BOOST_TEST_INFO("input = '" << str << "'");
             BOOST_TEST(test_attr(str, parser::decimal_literal, x3::space, attr));
+            BOOST_CHECK_THROW(ast::get<int>(attr), ::eda::range_error);
         }
     }
-#endif
 }
 
 
@@ -322,6 +324,46 @@ BOOST_AUTO_TEST_CASE( bit_string_literal )
             BOOST_TEST(attr.hint == gold.hint);
         }
     }
+}
+
+
+BOOST_AUTO_TEST_CASE( physical_literal )
+{
+    using namespace eda::vhdl93;
+    using x3_test::test_attr;
+#if 0
+    typedef ast::bit_string_literal attribute_type;
+
+    using tag = attribute_type::tag;
+
+    std::vector<std::pair<std::string, attribute_type>> const pass_test_cases {
+        std::make_pair("B\"1111_1111_1111\"", attribute_type {"111111111111", tag::bin}),
+        std::make_pair("X\"FFF\"", attribute_type {"FFF", tag::hex}),
+        std::make_pair("O\"777\"", attribute_type {"777", tag::oct}),
+        std::make_pair("X\"777\"", attribute_type {"777", tag::hex}),
+    };
+
+    uint n = 1;
+    for(auto const& str : pass_test_cases) {
+        auto const& input = str.first;
+        auto const& gold = str.second;
+        attribute_type attr;
+        BOOST_TEST_CONTEXT("'bit_string_literal' test case #" << n++ << " to pass "
+                           "input = '" << input << "'") {
+            BOOST_TEST(test_attr(input, parser::bit_string_literal, x3::space, attr));
+            BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
+            BOOST_TEST(attr.literal == gold.literal, btt::per_element());
+            BOOST_TEST(attr.hint == gold.hint);
+        }
+    }
+#endif
+
+    ast::abstract_literal l(ast::decimal_literal { "12", ast::decimal_literal::tag::integer });
+
+    ast::printer print(std::cout);
+
+    //print(l);
+    //std::cout << '\n';
 }
 
 

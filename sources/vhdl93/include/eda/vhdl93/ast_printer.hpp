@@ -17,7 +17,7 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-class ast_printer
+class printer
 {
     std::ostream&   os;
     uint16_t        indent;
@@ -27,7 +27,7 @@ class ast_printer
 
 public:
     // ...
-    ast_printer(std::ostream& out, uint16_t indent = 0)
+    printer(std::ostream& out, uint16_t indent = 0)
     : os{ out }, indent { indent }
     { }
 
