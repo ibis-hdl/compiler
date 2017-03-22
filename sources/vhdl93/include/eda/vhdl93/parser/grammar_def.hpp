@@ -990,6 +990,8 @@ auto as_rule = [](auto p) { return x3::rule<struct _, T>{} = x3::as_parser(p); }
  * Parser Rule Definition
  */
 
+/* Note, order matches - otherwise parser failed due to valid digits in integer
+ * followed by '#' will fail */
 // abstract_literal ::= 
 // decimal_literal | based_literal
 auto const abstract_literal_def = 
