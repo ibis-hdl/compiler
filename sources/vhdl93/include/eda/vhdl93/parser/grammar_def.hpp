@@ -993,8 +993,8 @@ auto as_rule = [](auto p) { return x3::rule<struct _, T>{} = x3::as_parser(p); }
 // abstract_literal ::= 
 // decimal_literal | based_literal
 auto const abstract_literal_def = 
-      decimal_literal
-    | based_literal
+	  based_literal
+	| decimal_literal
     ;
 
 

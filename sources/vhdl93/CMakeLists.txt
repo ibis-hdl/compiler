@@ -2,6 +2,7 @@
 project(vhdl93_grammar LANGUAGES CXX)
 
 set(LIB_SOURCES
+    src/ast/abstract_literal.cpp
     src/ast/based_literal.cpp
     src/ast/bit_string_literal.cpp
     src/ast/decimal_literal.cpp

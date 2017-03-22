@@ -109,8 +109,8 @@ namespace x3_test {
 
 BOOST_AUTO_TEST_CASE( string_literal )
 {
-	using namespace eda::vhdl93;
-	using x3_test::test_attr;
+    using namespace eda::vhdl93;
+    using x3_test::test_attr;
 
     std::vector<std::pair<std::string, std::string>> const pass_test_cases {
         std::make_pair("\"Both S and Q equal to 1\"",
@@ -133,11 +133,11 @@ BOOST_AUTO_TEST_CASE( string_literal )
 
     uint n = 1;
 	for(auto const& str : pass_test_cases) {
-	    BOOST_TEST_CONTEXT("'string_literal' test case #" << n++ << " to pass") {
+	    BOOST_TEST_CONTEXT("'string_literal' test case #" << n++ << " to pass:") {
 	        std::string const& input = str.first;
 	        std::string const& gold = str.second;
 	        std::string attr;
-            BOOST_TEST_INFO("input = '" << input << "'");
+            BOOST_TEST_INFO("input ='" << input << "'");
 	        BOOST_TEST(test_attr(input, parser::string_literal, x3::space, attr));
 	        BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
 	        BOOST_TEST(attr == gold, btt::per_element());
@@ -146,9 +146,9 @@ BOOST_AUTO_TEST_CASE( string_literal )
 
 	n = 1;
     for(auto const& str : fail_test_cases) {
-        BOOST_TEST_CONTEXT("'string_literal' test case #" << n++ << " to fail") {
+        BOOST_TEST_CONTEXT("'string_literal' test case #" << n++ << " to fail:") {
             std::string attr;
-            BOOST_TEST_INFO("input = '" << str << "'");
+            BOOST_TEST_INFO("with input ='" << str << "'");
             BOOST_TEST(!test_attr(str, parser::string_literal, x3::space, attr));
         }
     }
@@ -180,11 +180,11 @@ BOOST_AUTO_TEST_CASE( integer )
 
     uint n = 1;
     for(auto const& str : pass_test_cases) {
-        auto const& input = str.first;
-        auto const& gold = str.second;
-        attribute_type attr;
-        BOOST_TEST_CONTEXT("'integer' test case #" << n++ << " to pass "
-                           "input = '" << input << "'") {
+        BOOST_TEST_CONTEXT("'integer' test case #" << n++ << " to pass:") {
+        	auto const& input = str.first;
+        	auto const& gold = str.second;
+        	attribute_type attr;
+        	BOOST_TEST_INFO("input ='" << input << "'");
             BOOST_TEST(test_attr(input, parser::integer, x3::space, attr));
             BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
             BOOST_TEST(attr == gold, btt::per_element());
@@ -193,9 +193,9 @@ BOOST_AUTO_TEST_CASE( integer )
 
     n = 1;
     for(auto const& str : fail_test_cases) {
-        BOOST_TEST_CONTEXT("'integer' test case #" << n++ << " to fail") {
+        BOOST_TEST_CONTEXT("'integer' test case #" << n++ << " to fail:") {
             attribute_type attr;
-            BOOST_TEST_INFO("input = '" << str << "'");
+            BOOST_TEST_INFO("input ='" << str << "'");
             BOOST_TEST(!test_attr(str, parser::integer, x3::space, attr));
         }
     }
@@ -226,11 +226,11 @@ BOOST_AUTO_TEST_CASE( based_literal )
 
     uint n = 1;
     for(auto const& str : pass_test_cases) {
-        auto const& input = str.first;
-        auto const& gold = str.second;
-        attribute_type attr;
-        BOOST_TEST_CONTEXT("'based_literal' test case #" << n++ << " to pass "
-                           "input = '" << input << "'") {
+    	BOOST_TEST_CONTEXT("'based_literal' test case #" << n++ << " to pass:") {
+    		auto const& input = str.first;
+    		auto const& gold = str.second;
+    		attribute_type attr;
+    		BOOST_TEST_INFO("input ='" << input << "'");
             BOOST_TEST(test_attr(input, parser::based_literal, x3::space, attr));
             BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
             BOOST_TEST(attr.base == gold.base, btt::per_element());
@@ -273,11 +273,11 @@ BOOST_AUTO_TEST_CASE( decimal_literal )
 
     uint n = 1;
     for(auto const& str : pass_test_cases) {
-        auto const& input = str.first;
-        auto const& gold = str.second;
-        attribute_type attr;
-        BOOST_TEST_CONTEXT("'decimal_literal' test case #" << n++ << " to pass "
-                           "input = '" << input << "'") {
+    	BOOST_TEST_CONTEXT("'decimal_literal' test case #" << n++ << " to pass:") {
+    	    auto const& input = str.first;
+        	auto const& gold = str.second;
+        	attribute_type attr;
+        	BOOST_TEST_INFO("input ='" << input << "'");
             BOOST_TEST(test_attr(input, parser::decimal_literal, x3::space, attr));
             BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
             BOOST_TEST(attr.literal == gold.literal, btt::per_element());
@@ -287,9 +287,10 @@ BOOST_AUTO_TEST_CASE( decimal_literal )
 
     n = 1;
     for(auto const& str : pass_with_exception_test_cases) {
-        BOOST_TEST_CONTEXT("'decimal_literal' test case #" << n++ << " to fail with overflow exception") {
+        BOOST_TEST_CONTEXT("'decimal_literal' test case #" << n++ <<
+        		           " to fail with overflow exception:") {
             attribute_type attr;
-            BOOST_TEST_INFO("input = '" << str << "'");
+            BOOST_TEST_INFO("input ='" << str << "'");
             BOOST_TEST(test_attr(str, parser::decimal_literal, x3::space, attr));
             BOOST_CHECK_THROW(ast::get<int>(attr), ::eda::range_error);
         }
@@ -315,15 +316,46 @@ BOOST_AUTO_TEST_CASE( bit_string_literal )
 
     uint n = 1;
     for(auto const& str : pass_test_cases) {
-        auto const& input = str.first;
-        auto const& gold = str.second;
-        attribute_type attr;
-        BOOST_TEST_CONTEXT("'bit_string_literal' test case #" << n++ << " to pass "
-                           "input = '" << input << "'") {
+    	BOOST_TEST_CONTEXT("'bit_string_literal' test case #" << n++ << " to pass:") {
+            auto const& input = str.first;
+            auto const& gold = str.second;
+            attribute_type attr;
+            BOOST_TEST_INFO("input ='" << input << "'");
             BOOST_TEST(test_attr(input, parser::bit_string_literal, x3::space, attr));
             BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
             BOOST_TEST(attr.literal == gold.literal, btt::per_element());
             BOOST_TEST(attr.hint == gold.hint);
+        }
+    }
+}
+
+
+BOOST_AUTO_TEST_CASE( abstract_literal )
+{
+    using namespace eda::vhdl93;
+    using x3_test::test_attr;
+
+    typedef ast::abstract_literal attribute_type;
+
+    using d_tag = ast::decimal_literal::tag;
+
+    // {decimal|based}_literal
+    std::vector<std::pair<std::string, attribute_type>> const pass_test_cases {
+        std::make_pair("1e3", attribute_type { ast::decimal_literal {"1e3", d_tag::integer} }),
+        std::make_pair("42.42e-3", attribute_type { ast::decimal_literal {"42.42e-3", d_tag::real} }),
+		std::make_pair("16#0_FF#", attribute_type { ast::based_literal {"16", "0FF#"} }),
+		std::make_pair("016#0_FF#e-23", attribute_type { ast::based_literal {"16", "0FF#e-23"} }),
+    };
+
+    uint n = 1;
+    for(auto const& str : pass_test_cases) {
+    	BOOST_TEST_CONTEXT("'bit_string_literal' test case #" << n++ << " to pass:") {
+    	    auto const& input = str.first;
+            auto const& gold = str.second;
+            attribute_type attr;
+            BOOST_TEST_INFO("input = '" << input << "'");
+            BOOST_TEST(test_attr(input, parser::abstract_literal, x3::space, attr));
+            BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
         }
     }
 }
@@ -349,7 +381,7 @@ BOOST_AUTO_TEST_CASE( physical_literal )
         auto const& gold = str.second;
         attribute_type attr;
         BOOST_TEST_CONTEXT("'physical_literal' test case #" << n++ << " to pass "
-                           "input = '" << input << "'") {
+                           "input ='" << input << "'") {
             BOOST_TEST(test_attr(input, parser::physical_literal, x3::space, attr));
             BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
             //BOOST_TEST(attr.literal == gold.literal, btt::per_element());
@@ -361,7 +393,7 @@ BOOST_AUTO_TEST_CASE( physical_literal )
     std::vector<std::string> const pass_test_cases {
         "100 fs",
 		"ps",
-		// FixMe: all based_literals failed!!!
+		"16#FF# ns",
 		"2#1111_1111# d",
 		"10#42# ms",
 		"16#AFFE.42#E+69 h",
@@ -372,7 +404,7 @@ BOOST_AUTO_TEST_CASE( physical_literal )
         auto const& input = str;
         attribute_type attr;
         BOOST_TEST_CONTEXT("'physical_literal' test case #" << n++ << " to pass "
-                           "input = '" << input << "'") {
+                           "input ='" << input << "'") {
             BOOST_TEST(test_attr(input, parser::physical_literal, x3::space, attr));
             BOOST_TEST_INFO("attr = '" << attr << "'");
         }

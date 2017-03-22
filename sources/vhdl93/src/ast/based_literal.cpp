@@ -25,7 +25,7 @@ std::ostream& operator<<(std::ostream& os, based_literal const& node)
 {
     // FixMe: Encode based_literal as of bit_string_literal, decimal_literal etc.
 
-    os << "b=" << node.base << ", n=" << node.literal;
+    os << "{b=" << node.base << ", n=" << node.literal << "}";
 
     return os;
 }
