@@ -4,29 +4,6 @@ cmake_minimum_required(VERSION 3.6)
 project(eda VERSION 0.0.1 LANGUAGES CXX)
 
 
-## Catch in-source builds
-if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
-    message(FATAL_ERROR "\
-In-source builds not allowed. Please make a new directory (called a build \
-directory) and run CMake from there. You may need to remove CMakeCache.txt.")
-endif()
-
-if(NOT CMAKE_BUILD_TYPE)
-    message(NOTICE "Build type unspecified, set to Release")
-    set(CMAKE_BUILD_TYPE "Release")
-endif()
-
-## Catch unsupported build-type strings
-string(TOLOWER "${CMAKE_BUILD_TYPE}" project_build_type)
-if(     NOT project_build_type STREQUAL "debug"
-    AND NOT project_build_type STREQUAL "release"
-    AND NOT project_build_type STREQUAL "relwithdebinfo")
-    message(FATAL_ERROR "\
-Unknown build type \"${CMAKE_BUILD_TYPE}\". Allowed values are Debug, \
-Release, RelWithDebInfo (case-insensitive).")
-endif()
-
-
 ## create a dummy header-only target
 add_library(eda INTERFACE)
 target_include_directories(eda INTERFACE 
