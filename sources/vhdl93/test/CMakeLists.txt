@@ -19,7 +19,7 @@ target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra)
 
 target_link_libraries(${PROJECT_NAME} 
     PRIVATE
-    vhdl93_grammar
+    eda::vhdl93_grammar
     ${Boost_SYSTEM_LIBRARY}
 )
 

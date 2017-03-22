@@ -11,6 +11,20 @@ set(LIB_SOURCES
     src/ast_printer.cpp
 )
 
+add_library(${PROJECT_NAME} STATIC ${LIB_SOURCES})
+add_library(eda::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+
+target_include_directories(${PROJECT_NAME} PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+    PRIVATE src)
+
+target_compile_definitions(${PROJECT_NAME} 
+    PRIVATE FOO)
+    
+target_compile_options(${PROJECT_NAME} 
+    PRIVATE -Wall -Wextra)
+
 ## FixMe: temporary for interface target of cmake getting working
 include_directories(../../include)
 #add_dependencies(${PROJECT_NAME} eda)  # FixMe: cmake_check_build_system error
@@ -18,16 +32,6 @@ include_directories(../../include)
 ## Project Depend Includes
 #include_directories(${SPIRIT_X3_INCLUDE_DIR})
 include_directories(${GSL_INCLUDE_DIR})
-
-add_library(${PROJECT_NAME} STATIC ${LIB_SOURCES})
-
-target_include_directories(${PROJECT_NAME} PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-    PRIVATE src)
-
-target_compile_options(${PROJECT_NAME} 
-    PRIVATE -Wall -Wextra)
 
 #add_dependencies(${PROJECT_NAME} boost-spirit-x3)
 #add_dependencies(${PROJECT_NAME} eda)
