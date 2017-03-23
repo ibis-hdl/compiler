@@ -153,7 +153,7 @@ public:
 //    void operator()(group_declaration const& node) const;
 //    void operator()(group_template_declaration const& node) const;
 //    void operator()(guarded_signal_specification const& node) const;
-void operator()(identifier const& node) const;
+    void operator()(identifier const& node) const;
 //    void operator()(identifier_list const& node) const;
 //    void operator()(if_statement const& node) const;
 //    void operator()(incomplete_type_declaration const& node) const;
@@ -243,7 +243,7 @@ void operator()(identifier const& node) const;
 //    void operator()(simple_expression const& node) const;
 //    void operator()(simple_name const& node) const;
 //    void operator()(slice_name const& node) const;
-void operator()(string_literal const& node) const;
+    void operator()(string_literal const& node) const;
 //    void operator()(subprogram_body const& node) const;
 //    void operator()(subprogram_declaration const& node) const;
 //    void operator()(subprogram_declarative_item const& node) const;
