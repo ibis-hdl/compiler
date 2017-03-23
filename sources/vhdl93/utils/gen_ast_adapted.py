@@ -16,13 +16,13 @@ class AstFusionAdapter:
     r_width = 0
     max_width=60
     indent = "    "
-    parse_blacklist = [ # problem headers with boost::variant
-        'abstract_literal.hpp',
-        'numeric_literal.hpp',
-        'enumeration_literal.hpp'
-    ]
+    parse_blacklist = []
     
     def __init__(self):
+        # problem headers with boost::variant
+        self.parse_blacklist = self.find_x3_variant()
+        print("blacklisted <x3::variant> headers = " 
+            + ", ".join("{0}".format(x) for x in self.parse_blacklist))
         generator_path, generator_name = utils.find_xml_generator()
         xml_generator_config = parser.xml_generator_configuration_t(
             xml_generator_path=generator_path,
@@ -41,13 +41,29 @@ class AstFusionAdapter:
         header_list = [hxx for hxx in os.listdir(ast_include_path)
                       if any(hxx.endswith(ext) for ext in file_ext)]
         return header_list
+        
+    def find_x3_variant(self):
+        '''
+        pygccxml has problems to parse / build AST by boost's variant headers.
+        Until this getn't solved, we use a black list here. In real world it
+        doesn't matter since the variants doesn't have any attributes which 
+        needs to be adapted to fusion sequences.
+        '''
+        hxx_list = []
+        for hpp in sorted(self.find_hpp()):
+            #print("inspect " + self.include_prefix() + hpp + ' for x3::variant')
+            with open(self.include_prefix() + hpp, 'r') as f:
+                contents = f.read()
+                if contents.find('x3::variant') > 0:
+                    hxx_list.append(hpp)
+        return hxx_list
 
     def include_prefix(self):
-        """
+        '''
         This script assumed the file layout of:
         $project_root/utils/__this_file__
         $project_root/include/...
-        """ 
+        ''' 
         selfy = os.path.abspath(
             os.path.dirname(sys.modules[__name__].__file__))
         prefix = selfy + "/../include/eda/vhdl93" + '/ast' + '/'
@@ -93,7 +109,9 @@ class AstFusionAdapter:
         '''
         node_name = node[0]
         attr_dict = node[1]
-        member_list = [] ##
+        if not attr_dict:  # skip empty classes used for strong types
+            return ""
+        member_list = [] 
         for attr in attr_dict:
             member_list.append("{0}".format(attr[1]))
         ast_type = node_name.lstrip('::') + ','
