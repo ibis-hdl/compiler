@@ -67,6 +67,7 @@ double get<double>(decimal_literal const& node)
     }
 
     // 1st pass did pass characters which failed here to parse
+    std::cout << "INVALID CODEPATH @'" << node.literal << node.hint << "'\n";
     cxx_bug_fatal("Invalid code path");
     return 0;
 }

@@ -297,7 +297,7 @@ typedef x3::rule<based_integer_class, std::string> based_integer_type;
 typedef x3::rule<based_literal_class, ast::based_literal> based_literal_type;
 typedef x3::rule<basic_character_class> basic_character_type;
 typedef x3::rule<basic_graphic_character_class, char> basic_graphic_character_type;
-typedef x3::rule<basic_identifier_class> basic_identifier_type;
+typedef x3::rule<basic_identifier_class, std::string> basic_identifier_type;
 typedef x3::rule<binding_indication_class> binding_indication_type;
 typedef x3::rule<bit_string_literal_class, ast::bit_string_literal> bit_string_literal_type;
 typedef x3::rule<bit_value_class> bit_value_type;
@@ -310,7 +310,7 @@ typedef x3::rule<block_statement_class> block_statement_type;
 typedef x3::rule<block_statement_part_class> block_statement_part_type;
 typedef x3::rule<case_statement_class> case_statement_type;
 typedef x3::rule<case_statement_alternative_class> case_statement_alternative_type;
-typedef x3::rule<character_literal_class, char> character_literal_type;
+typedef x3::rule<character_literal_class, ast::character_literal> character_literal_type;
 typedef x3::rule<choice_class> choice_type;
 typedef x3::rule<choices_class> choices_type;
 typedef x3::rule<component_configuration_class> component_configuration_type;
@@ -368,7 +368,7 @@ typedef x3::rule<exit_statement_class> exit_statement_type;
 typedef x3::rule<exponent_class, std::string> exponent_type;
 typedef x3::rule<expression_class> expression_type;
 typedef x3::rule<extended_digit_class, char> extended_digit_type;
-typedef x3::rule<extended_identifier_class> extended_identifier_type;
+typedef x3::rule<extended_identifier_class, std::string> extended_identifier_type;
 typedef x3::rule<factor_class> factor_type;
 typedef x3::rule<file_declaration_class> file_declaration_type;
 typedef x3::rule<file_logical_name_class> file_logical_name_type;
@@ -390,7 +390,7 @@ typedef x3::rule<group_constituent_list_class> group_constituent_list_type;
 typedef x3::rule<group_template_declaration_class> group_template_declaration_type;
 typedef x3::rule<group_declaration_class> group_declaration_type;
 typedef x3::rule<guarded_signal_specification_class> guarded_signal_specification_type;
-typedef x3::rule<identifier_class> identifier_type;
+typedef x3::rule<identifier_class, ast::identifier> identifier_type;
 typedef x3::rule<identifier_list_class> identifier_list_type;
 typedef x3::rule<if_statement_class> if_statement_type;
 typedef x3::rule<incomplete_type_declaration_class> incomplete_type_declaration_type;
@@ -412,7 +412,7 @@ typedef x3::rule<interface_variable_declaration_class> interface_variable_declar
 typedef x3::rule<iteration_scheme_class> iteration_scheme_type;
 typedef x3::rule<label_class> label_type;
 typedef x3::rule<letter_class> letter_type;
-typedef x3::rule<letter_or_digit_class> letter_or_digit_type;
+typedef x3::rule<letter_or_digit_class, char> letter_or_digit_type;
 typedef x3::rule<library_clause_class> library_clause_type;
 typedef x3::rule<library_unit_class> library_unit_type;
 typedef x3::rule<literal_class> literal_type;
@@ -475,7 +475,7 @@ typedef x3::rule<signature_class> signature_type;
 typedef x3::rule<simple_expression_class> simple_expression_type;
 typedef x3::rule<simple_name_class> simple_name_type;
 typedef x3::rule<slice_name_class> slice_name_type;
-typedef x3::rule<string_literal_class, std::string> string_literal_type;
+typedef x3::rule<string_literal_class, ast::string_literal> string_literal_type;
 typedef x3::rule<subprogram_body_class> subprogram_body_type;
 typedef x3::rule<subprogram_declaration_class> subprogram_declaration_type;
 typedef x3::rule<subprogram_declarative_item_class> subprogram_declarative_item_type;
@@ -1264,13 +1264,13 @@ auto const basic_graphic_character_def =
       ;
 
 
-#if 0
-// basic_identifier ::=
+
+// basic_identifier ::=                                                 [§ 13.3]
 // letter { [ underline ] letter_or_digit }
 auto const basic_identifier_def =
-		letter { -( underline ) letter_or_digit }
-;
-#endif
+	letter >> *( -lit("_") >> letter_or_digit )
+	;
+
 
 #if 0
 // binding_indication ::=
@@ -2101,13 +2101,13 @@ auto const extended_digit_def =
     ;
 
 
-#if 0
-// extended_identifier ::=
+
+// extended_identifier ::=                                            [§ 13.3.2]
 // \ graphic_character { graphic_character }
 auto const extended_identifier_def =
-		\ graphic_character { graphic_character }
-;
-#endif
+	'\\' >> graphic_character >> *( graphic_character )
+	;
+
 
 #if 0
 // factor ::=
@@ -2303,13 +2303,13 @@ auto const guarded_signal_specification_def =
 		;
 #endif
 
-#if 0
-// identifier ::=
+
+// identifier ::=                                                       [§ 13.3]
 // basic_identifier | extended_identifier
 auto const identifier_def =
 		basic_identifier | extended_identifier
 		;
-#endif
+
 
 #if 0
 // identifier_list ::=
@@ -3613,7 +3613,7 @@ BOOST_SPIRIT_DEFINE(
 		//    group_template_declaration,
 		//    group_declaration,
 		//    guarded_signal_specification,
-		//    identifier,
+		identifier,
 		//    identifier_list,
 		//    if_statement,
 		//    incomplete_type_declaration,

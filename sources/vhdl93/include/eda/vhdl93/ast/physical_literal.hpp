@@ -35,6 +35,4 @@ std::ostream& operator<<(std::ostream& os, physical_literal const& literal);
 } } } // namespace eda.vhdl93.ast
 
 
-// [abstract_literal ] unit_name
-
 #endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_PHYSICAL_LITERAL_HPP_ */

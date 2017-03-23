@@ -205,7 +205,7 @@ void printer::operator()(based_integer const& node) const {
 
 
 void printer::operator()(based_literal const& node) const {
-
+	os << "{b=" << node.base << ", l=" << node.literal << "}";
 }
 
 
@@ -316,8 +316,8 @@ void printer::operator()(case_statement_alternative const& node) const {
 
 
 
-void printer::operator()(character_literal const& node) const {
-
+void printer::operator()(character_literal const& chr) const {
+	os << chr;
 }
 
 
@@ -681,7 +681,7 @@ void printer::operator()(entity_tag const& node) const {
 
 
 void printer::operator()(enumeration_literal const& node) const {
-
+	boost::apply_visitor(*this, node);
 }
 
 
@@ -875,11 +875,11 @@ void printer::operator()(guarded_signal_specification const& node) const {
 #endif
 
 
-#if 0
-void printer::operator()(identifier const& node) const {
 
+void printer::operator()(identifier const& node) const {
+	os << node;
 }
-#endif
+
 
 
 #if 0
@@ -1129,7 +1129,7 @@ void printer::operator()(null_statement const& node) const {
 
 
 void printer::operator()(numeric_literal const& node) const {
-
+	boost::apply_visitor(*this, node);
 }
 
 
@@ -1206,7 +1206,7 @@ void printer::operator()(parameter_specification const& node) const {
 
 
 void printer::operator()(physical_literal const& node) const {
-
+	os << node.literal << node.unit_name;
 }
 
 
@@ -1507,7 +1507,7 @@ void printer::operator()(slice_name const& node) const {
 
 
 void printer::operator()(string_literal const& node) const {
-
+	os << node;
 }
 
 

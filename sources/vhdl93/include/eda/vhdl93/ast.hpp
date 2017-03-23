@@ -14,6 +14,7 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 //using integer = std::string;
+using character_literal = char;
 
 } } } // namespace eda.vhdl93.ast
 
@@ -59,7 +60,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 //#include <eda/vhdl93/ast/block_statement_part.hpp>
 //#include <eda/vhdl93/ast/case_statement.hpp>
 //#include <eda/vhdl93/ast/case_statement_alternative.hpp>
-//#include <eda/vhdl93/ast/character_literal.hpp>
+#include <eda/vhdl93/ast/character_literal.hpp>
 //#include <eda/vhdl93/ast/choice.hpp>
 //#include <eda/vhdl93/ast/choices.hpp>
 //#include <eda/vhdl93/ast/component_configuration.hpp>
@@ -139,7 +140,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 //#include <eda/vhdl93/ast/group_declaration.hpp>
 //#include <eda/vhdl93/ast/group_template_declaration.hpp>
 //#include <eda/vhdl93/ast/guarded_signal_specification.hpp>
-//#include <eda/vhdl93/ast/identifier.hpp>
+#include <eda/vhdl93/ast/identifier.hpp>
 //#include <eda/vhdl93/ast/identifier_list.hpp>
 //#include <eda/vhdl93/ast/if_statement.hpp>
 //#include <eda/vhdl93/ast/incomplete_type_declaration.hpp>
@@ -225,7 +226,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 //#include <eda/vhdl93/ast/simple_expression.hpp>
 //#include <eda/vhdl93/ast/simple_name.hpp>
 //#include <eda/vhdl93/ast/slice_name.hpp>
-//#include <eda/vhdl93/ast/string_literal.hpp>
+#include <eda/vhdl93/ast/string_literal.hpp>
 //#include <eda/vhdl93/ast/subprogram_body.hpp>
 //#include <eda/vhdl93/ast/subprogram_declaration.hpp>
 //#include <eda/vhdl93/ast/subprogram_declarative_item.hpp>

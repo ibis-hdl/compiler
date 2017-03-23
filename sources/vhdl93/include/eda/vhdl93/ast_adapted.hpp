@@ -35,11 +35,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::decimal_literal,
     literal, hint
 )
 
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::physical_literal,
     literal, unit_name
 )
-
-
 
 
 
