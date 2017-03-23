@@ -1052,7 +1052,7 @@ void printer::operator()(library_unit const& node) const {
 
 #if 0
 void printer::operator()(literal const& node) const {
-
+	boost::apply_visitor(*this, node);
 }
 #endif
 

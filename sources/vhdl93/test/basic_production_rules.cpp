@@ -393,6 +393,90 @@ BOOST_AUTO_TEST_CASE( physical_literal )
     }
 }
 
+BOOST_AUTO_TEST_CASE( numeric_literal )
+{
+    using namespace eda::vhdl93;
+    using x3_test::test_attr;
+
+    typedef ast::numeric_literal attribute_type;
+
+    std::vector<std::pair<std::string, std::string>> const pass_test_cases {
+    	// abstract_literal := decimal_literal | based_literal
+    	std::make_pair("1e3",             "1000"),
+    	std::make_pair("42.42e-3",        "0.04242"),
+    	std::make_pair("16#0_FF#",        "{b=16, l=0FF#}"),
+    	std::make_pair("016#0_FF#e-23",   "{b=016, l=0FF#e-23}"),
+		// physical_literal
+    	std::make_pair("100 fs",          "100fs"),
+    	std::make_pair("16#FF# ns",       "{b=16, l=FF#}ns"),
+		std::make_pair("2#1111_1111# d",  "{b=2, l=11111111#}d"),
+		std::make_pair("10#42# ms",       "{b=10, l=42#}ms"),
+    };
+
+    uint n = 1;
+    for(auto const& str : pass_test_cases) {
+        auto const& input = str.first;
+        auto const& gold  = str.second;
+        attribute_type attr;
+        BOOST_TEST_CONTEXT("'numeric_literal' test case #" << n++ << " to pass "
+                           "input ='" << input << "'") {
+            BOOST_TEST(test_attr(input, parser::numeric_literal, x3::space, attr));
+            btt::output_test_stream os;
+            os << attr;
+            BOOST_TEST_INFO("attr = '" << os.str() << "'");
+            BOOST_TEST(gold == os.str(), btt::per_element());
+        }
+    }
+}
+
+#if 0
+BOOST_AUTO_TEST_CASE( literal )
+{
+    using namespace eda::vhdl93;
+    using x3_test::test_attr;
+
+    typedef ast::literal attribute_type;
+
+    std::vector<std::pair<std::string, std::string>> const pass_test_cases {
+    	// abstract_literal := decimal_literal | based_literal
+    	std::make_pair("1e3", ""),
+    	std::make_pair("42.42e-3", ""),
+    	std::make_pair("16#0_FF#", ""),
+    	std::make_pair("016#0_FF#e-23", ""),
+		std::make_pair("100 fs", ""),
+		// enumeration_literal ::=  identifier | character_literal
+		std::make_pair("identifier", ""),
+		std::make_pair("'A'", ""),
+		// string_literal
+		std::make_pair("\"VHDL\"", ""),
+		// bit_string_literal
+        std::make_pair("B\"1111_1111_1111\"", ""),
+        std::make_pair("X\"FFF\"", ""),
+        std::make_pair("O\"777\"", ""),
+		std::make_pair("O\"777\"", ""),
+		// NULL
+		std::make_pair("NULL", ""),
+		std::make_pair("null", ""),
+		std::make_pair("Null", ""),
+    };
+
+    uint n = 1;
+    for(auto const& str : pass_test_cases) {
+        auto const& input = str.first;
+        auto const& gold  = str.second;
+        attribute_type attr;
+        BOOST_TEST_CONTEXT("'literal' test case #" << n++ << " to pass "
+                           "input ='" << input << "'") {
+            BOOST_TEST(test_attr(input, parser::literal, x3::space, attr));
+            btt::output_test_stream os;
+            os << attr;
+            BOOST_TEST_INFO("attr = '" << os.str() << "'");
+            BOOST_TEST(gold == os.str(), btt::per_element());
+        }
+    }
+}
+#endif
+
 
 BOOST_AUTO_TEST_SUITE_END()
 

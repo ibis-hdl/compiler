@@ -415,7 +415,7 @@ typedef x3::rule<letter_class> letter_type;
 typedef x3::rule<letter_or_digit_class, char> letter_or_digit_type;
 typedef x3::rule<library_clause_class> library_clause_type;
 typedef x3::rule<library_unit_class> library_unit_type;
-typedef x3::rule<literal_class> literal_type;
+typedef x3::rule<literal_class/*, ast::literal*/> literal_type;
 typedef x3::rule<logical_name_class> logical_name_type;
 typedef x3::rule<logical_name_list_class> logical_name_list_type;
 typedef x3::rule<loop_statement_class> loop_statement_type;
@@ -990,11 +990,9 @@ auto as_rule = [](auto p) { return x3::rule<struct _, T>{} = x3::as_parser(p); }
  * Parser Rule Definition
  */
 
-/* Note, order matches - otherwise parser failed due to valid digits in integer
- * followed by '#' will fail */
 // abstract_literal ::= 
 // decimal_literal | based_literal
-auto const abstract_literal_def = 
+auto const abstract_literal_def = /* Note, order changed since matters */
 	  based_literal
 	| decimal_literal
     ;
@@ -2629,11 +2627,11 @@ auto const null_statement_def =
 
 
 // numeric_literal ::=                                                 [§ 7.3.1]
-// abstract_literal
+//       abstract_literal
 //     | physical_literal
-auto const numeric_literal_def =
-      abstract_literal
-    | physical_literal
+auto const numeric_literal_def = /* Note, order changed since matters */
+      physical_literal
+    | abstract_literal
     ;
 
 
@@ -3646,7 +3644,7 @@ BOOST_SPIRIT_DEFINE(
 		//    name,
 		//    next_statement,
 		//    null_statement,
-		//    numeric_literal,
+		numeric_literal,
 		//    object_declaration,
 		//    operator_symbol,
 		//    options,

@@ -33,6 +33,9 @@ struct numeric_literal :
 };
 
 
+std::ostream& operator<<(std::ostream& os, numeric_literal const& node);
+
+
 } } } // namespace eda.vhdl93.ast
 
 
