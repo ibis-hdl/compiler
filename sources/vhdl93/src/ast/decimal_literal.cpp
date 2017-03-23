@@ -49,10 +49,6 @@ double get<double>(decimal_literal const& node)
 
     bool ok  = x3::parse(iter, cend, parser::real_integer, attr);
 
-    /* FixMe: Is it really necessary to tag the literal, here the x3::double_
-     *        is used! Further, how to get advantage from type tag?
-     */
-
     if(ok && iter == cend) {
         return attr;
     }
