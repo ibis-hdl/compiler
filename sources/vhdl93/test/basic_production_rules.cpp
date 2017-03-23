@@ -358,9 +358,6 @@ BOOST_AUTO_TEST_CASE( abstract_literal )
             BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
         }
     }
-
-    attribute_type a { ast::based_literal {"16", "0FF#e-23"} };
-    std::cerr << "test = '" << a << "'\n";
 }
 
 
@@ -371,48 +368,29 @@ BOOST_AUTO_TEST_CASE( physical_literal )
 
     typedef ast::physical_literal attribute_type;
 
-#if 0
-    using deci_tag = ast::decimal_literal::tag;
-
-    std::vector<std::pair<std::string, attribute_type>> const pass_test_cases {
-        std::make_pair("100 fs", attribute_type { ast::decimal_literal{ "12", deci_tag::integer }, "fs" }),
+    std::vector<std::pair<std::string, std::string>> const pass_test_cases {
+    	std::make_pair("100 fs",             "100fs"),
+		//"ps", FixMe: This: 'ps', results into "Invalid code path" exception in ast/decimal_literal.cpp(71) due to empty abstract_literal
+    	std::make_pair("16#FF# ns",          "{b=16, l=FF#}ns"),
+		std::make_pair("2#1111_1111# d",     "{b=2, l=11111111#}d"),
+		std::make_pair("10#42# ms",          "{b=10, l=42#}ms"),
+		std::make_pair("016#AFFE.42#E+69 h", "{b=016, l=AFFE.42#E+69}h")
     };
 
     uint n = 1;
     for(auto const& str : pass_test_cases) {
         auto const& input = str.first;
-        auto const& gold = str.second;
+        auto const& gold  = str.second;
         attribute_type attr;
         BOOST_TEST_CONTEXT("'physical_literal' test case #" << n++ << " to pass "
                            "input ='" << input << "'") {
             BOOST_TEST(test_attr(input, parser::physical_literal, x3::space, attr));
-            BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
-            //BOOST_TEST(attr.literal == gold.literal, btt::per_element());
-            //BOOST_TEST(attr.hint == gold.hint);
+            btt::output_test_stream os;
+            os << attr;
+            BOOST_TEST_INFO("attr = '" << os.str() << "'");
+            BOOST_TEST(gold == os.str(), btt::per_element());
         }
     }
-#else
-    std::vector<std::string> const pass_test_cases {
-        "100 fs",
-		//"ps", FixMe: This: 'ps', results into "Invalid code path" exception in ast/decimal_literal.cpp(71) due to empty abstract_literal
-		"16#FF# ns",
-		"2#1111_1111# d",
-		"10#42# ms",
-		"16#AFFE.42#E+69 h",
-    };
-
-    uint n = 1;
-    for(auto const& str : pass_test_cases) {
-        auto const& input = str;
-        attribute_type attr;
-        BOOST_TEST_CONTEXT("'physical_literal' test case #" << n++ << " to pass "
-                           "input ='" << input << "'") {
-            BOOST_TEST(test_attr(input, parser::physical_literal, x3::space, attr));
-            BOOST_TEST_INFO("attr = '" << attr << "'");
-        }
-    }
-
-#endif
 }
 
 
