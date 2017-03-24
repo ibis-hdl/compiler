@@ -29,9 +29,6 @@ struct physical_literal
 };
 
 
-std::ostream& operator<<(std::ostream& os, physical_literal const& literal);
-
-
 } } } // namespace eda.vhdl93.ast
 
 

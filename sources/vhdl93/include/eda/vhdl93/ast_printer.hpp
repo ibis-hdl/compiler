@@ -495,7 +495,6 @@ public:
     void operator()(variable_declaration const& node) const;
     void operator()(wait_statement const& node) const;
     void operator()(waveform const& node) const;
-
 };
 
 

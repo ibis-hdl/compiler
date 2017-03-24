@@ -22,6 +22,19 @@ namespace eda { namespace vhdl93 { namespace ast {
 namespace x3 = boost::spirit::x3;
 
 
+std::ostream& operator<<(std::ostream& os, bit_string_literal::tag const& hint)
+{
+    switch(hint) {
+        case bit_string_literal::tag::bin: os << "<bin>"; break;
+        case bit_string_literal::tag::oct: os << "<oct>"; break;
+        case bit_string_literal::tag::hex: os << "<hex>"; break;
+        default:                           os << "INVALID";
+    }
+
+    return os;
+}
+
+
 template<>
 int get<int32_t>(bit_string_literal const& node)
 {
@@ -78,35 +91,6 @@ double get<double>(bit_string_literal const& node)
     return static_cast<double>(get<int32_t>(node));
 }
 
-
-std::ostream& operator<<(std::ostream& os, bit_string_literal::tag const& tag)
-{
-    switch(tag) {
-        case bit_string_literal::tag::bin: os << "<bin>"; break;
-        case bit_string_literal::tag::oct: os << "<oct>"; break;
-        case bit_string_literal::tag::hex: os << "<hex>"; break;
-        default: cxx_bug_fatal("Invalid bit_string_literal::tag");
-    }
-
-    return os;
-}
-
-
-std::ostream& operator<<(std::ostream& os, bit_string_literal const& literal)
-{
-    try {
-        os << get<int>(literal);
-    }
-    catch(::eda::range_error const& e) {
-        std::cerr << "Exception caught:\n"
-                  << e.what() << '\n'
-                  << "Diagnostic Details:\n"
-                  << boost::current_exception_diagnostic_information();
-        os << "INVALID";
-    }
-
-    return os;
-}
 
 
 } } } // namespace eda.vhdl93.ast

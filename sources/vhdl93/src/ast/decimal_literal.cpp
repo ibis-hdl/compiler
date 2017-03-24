@@ -20,6 +20,18 @@ namespace eda { namespace vhdl93 { namespace ast {
 namespace x3 = boost::spirit::x3;
 
 
+std::ostream& operator<<(std::ostream& os, decimal_literal::tag const& hint)
+{
+    switch(hint) {
+        case decimal_literal::tag::integer: os << "<int>";    break;
+        case decimal_literal::tag::real:    os << "<double>"; break;
+        default:                            os << "INVALID";
+    }
+
+    return os;
+}
+
+
 namespace parser {
 
     namespace detail {
@@ -63,7 +75,7 @@ double get<double>(decimal_literal const& node)
     }
 
     // 1st pass did pass characters which failed here to parse
-    std::cout << "INVALID CODEPATH @'" << node.literal << node.hint << "'\n";
+    std::cout << "INVALID CODEPATH @'" << node.literal /* << node.hint */ << "'\n";
     cxx_bug_fatal("Invalid code path");
     return 0;
 }
@@ -92,45 +104,6 @@ int get<int>(decimal_literal const& node)
     return 0;
 }
 
-
-std::ostream& operator<<(std::ostream& os, decimal_literal::tag const& tag)
-{
-    switch(tag) {
-        case decimal_literal::tag::integer: os << "<int>";    break;
-        case decimal_literal::tag::real:    os << "<double>"; break;
-        default: cxx_bug_fatal("Invalid bit_string_literal::tag");
-    }
-
-    return os;
-}
-
-
-std::ostream& operator<<(std::ostream& os, decimal_literal const& node)
-{
-    using tag = decimal_literal::tag;
-
-    try {
-        switch(node.hint) {
-        case tag::integer:
-            os << get<int32_t>(node);
-            break;
-        case tag::real:
-            os << get<double>(node);
-            break;
-        default:
-            cxx_bug_fatal("Invalid decimal_literal::tag");
-        }
-    }
-    catch(::eda::range_error const& e) {
-        std::cerr << "Exception caught:\n"
-                  << e.what() << '\n'
-                  << "Diagnostic Details:\n"
-                  << boost::current_exception_diagnostic_information();
-        os << "INVALID";
-    }
-
-    return os;
-}
 
 
 } } } // namespace eda.vhdl93.ast

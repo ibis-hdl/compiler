@@ -18,6 +18,33 @@
 
 #include <eda/vhdl93/ast_printer.hpp>
 
+/*----------------------------------------------------------------------------*/
+namespace eda { namespace vhdl93 { namespace ast {
+
+//std::ostream& operator<<(std::ostream& os, bit_string_literal const& node)
+//{
+//	ast::printer print(os);
+//	print(node);
+//	return os;
+//}
+
+std::ostream& operator<<(std::ostream& os, decimal_literal const& node)
+{
+	ast::printer print(os);
+	print(node);
+	return os;
+}
+
+std::ostream& operator<<(std::ostream& os, based_literal const& node)
+{
+	ast::printer print(os);
+	print(node);
+	return os;
+}
+
+} } } // namespace eda.vhdl93.ast
+/*----------------------------------------------------------------------------*/
+
 BOOST_AUTO_TEST_SUITE( basic_productions )
 
 
@@ -322,7 +349,7 @@ BOOST_AUTO_TEST_CASE( bit_string_literal )
             attribute_type attr;
             BOOST_TEST_INFO("input ='" << input << "'");
             BOOST_TEST(test_attr(input, parser::bit_string_literal, x3::space, attr));
-            BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
+            //BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
             BOOST_TEST(attr.literal == gold.literal, btt::per_element());
             BOOST_TEST(attr.hint == gold.hint);
         }
@@ -386,7 +413,8 @@ BOOST_AUTO_TEST_CASE( physical_literal )
                            "input ='" << input << "'") {
             BOOST_TEST(test_attr(input, parser::physical_literal, x3::space, attr));
             btt::output_test_stream os;
-            os << attr;
+            ast::printer print(os);
+            print(attr);
             BOOST_TEST_INFO("attr = '" << os.str() << "'");
             BOOST_TEST(gold == os.str(), btt::per_element());
         }
@@ -422,7 +450,8 @@ BOOST_AUTO_TEST_CASE( numeric_literal )
                            "input ='" << input << "'") {
             BOOST_TEST(test_attr(input, parser::numeric_literal, x3::space, attr));
             btt::output_test_stream os;
-            os << attr;
+            ast::printer print(os);
+            print(attr);
             BOOST_TEST_INFO("attr = '" << os.str() << "'");
             BOOST_TEST(gold == os.str(), btt::per_element());
         }
@@ -472,7 +501,8 @@ BOOST_AUTO_TEST_CASE( literal )
                            "input ='" << input << "'") {
             BOOST_TEST(test_attr(input, parser::literal, x3::space, attr));
             btt::output_test_stream os;
-            os << attr;
+            ast::printer print(os);
+            print(attr);
             BOOST_TEST_INFO("attr = '" << os.str() << "'");
             BOOST_TEST(gold == os.str(), btt::per_element());
         }

@@ -21,10 +21,6 @@ struct based_literal {
 };
 
 
-std::ostream& operator<<(std::ostream& os, based_literal const& node);
-
-
-
 } } } // namespace eda.vhdl93.ast
 
 

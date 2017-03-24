@@ -22,8 +22,7 @@ struct bit_string_literal {
 };
 
 
-std::ostream& operator<<(std::ostream& os, bit_string_literal const& node);
-std::ostream& operator<<(std::ostream& os, bit_string_literal::tag const& tag);
+std::ostream& operator<<(std::ostream& os, bit_string_literal::tag const& hint);
 
 
 /**

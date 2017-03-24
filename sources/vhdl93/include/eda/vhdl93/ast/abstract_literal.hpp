@@ -33,9 +33,6 @@ struct abstract_literal :
 };
 
 
-std::ostream& operator<<(std::ostream& os, abstract_literal const& node);
-
-
 } } } // namespace eda.vhdl93.ast
 
 
