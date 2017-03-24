@@ -1771,7 +1771,7 @@ void printer::operator()({0} const &node) const {{
     def visit_variant_def(self, name):
         text = """
 void printer::operator()({0} const &node) const {{
-    os << "(XXXX {0}=";
+    os << "(v: XXXX {0}=";
     //boost::apply_visitor(*this, node);  // FixMe: Review and Implement
     os << ")";
 }}
