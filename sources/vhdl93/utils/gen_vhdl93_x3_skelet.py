@@ -1761,9 +1761,9 @@ struct ast_printer
     def visit_node_def(self, name):
         text = """
 void printer::operator()({0} const &node) const {{
-    os << "( {0} = ";
+    os << "({0}=";
     os << "XXXX"; //os << node; // FixMe: Review and Implement
-    os << " )";
+    os << ")";
 }}
 """.format(name)
         return text
@@ -1771,9 +1771,9 @@ void printer::operator()({0} const &node) const {{
     def visit_variant_def(self, name):
         text = """
 void printer::operator()({0} const &node) const {{
-    os << "( XXXX {0} = ";
+    os << "(XXXX {0}=";
     //boost::apply_visitor(*this, node);  // FixMe: Review and Implement
-    os << " )";
+    os << ")";
 }}
 """.format(name)
         return text
