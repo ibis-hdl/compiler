@@ -415,7 +415,7 @@ typedef x3::rule<letter_class> letter_type;
 typedef x3::rule<letter_or_digit_class, char> letter_or_digit_type;
 typedef x3::rule<library_clause_class> library_clause_type;
 typedef x3::rule<library_unit_class> library_unit_type;
-typedef x3::rule<literal_class/*, ast::literal*/> literal_type;
+typedef x3::rule<literal_class, ast::literal> literal_type;
 typedef x3::rule<logical_name_class> logical_name_type;
 typedef x3::rule<logical_name_list_class> logical_name_list_type;
 typedef x3::rule<loop_statement_class> loop_statement_type;
@@ -3518,7 +3518,7 @@ BOOST_SPIRIT_DEFINE(
 		based_literal,
 		//    basic_character,
 		basic_graphic_character,
-		//    basic_identifier,
+		basic_identifier,
 		//    binding_indication,
 		bit_string_literal,
 		//    bit_value,
@@ -3583,13 +3583,13 @@ BOOST_SPIRIT_DEFINE(
 		//    entity_statement,
 		//    entity_statement_part,
 		//    entity_tag,
-		//    enumeration_literal,
+		enumeration_literal,
 		//    enumeration_type_definition,
 		//    exit_statement,
 		exponent,
 		//    expression,
 		extended_digit,
-		//    extended_identifier,
+		extended_identifier,
 		//    factor,
 		//    file_declaration,
 		//    file_logical_name,
@@ -3636,7 +3636,7 @@ BOOST_SPIRIT_DEFINE(
 		letter_or_digit,
 		//    library_clause,
 		//    library_unit,
-		//    literal,
+		literal,
 		//    logical_name,
 		//    logical_name_list,
 		//    loop_statement,

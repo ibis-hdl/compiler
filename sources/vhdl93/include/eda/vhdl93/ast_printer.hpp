@@ -178,7 +178,7 @@ public:
 //    void operator()(letter_or_digit const& node) const;
 //    void operator()(library_clause const& node) const;
 //    void operator()(library_unit const& node) const;
-//    void operator()(literal const& node) const;
+    void operator()(literal const& node) const;
 //    void operator()(logical_name const& node) const;
 //    void operator()(logical_name_list const& node) const;
 //    void operator()(logical_operator const& node) const;

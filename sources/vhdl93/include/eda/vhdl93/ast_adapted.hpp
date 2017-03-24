@@ -18,7 +18,7 @@
 
 namespace eda { namespace vhdl93 { namespace ast {
 
-using boost::fusion::operator<<;
+//using boost::fusion::operator<<;
 
 } } } // namespace eda.vhdl93.ast
 

@@ -429,7 +429,7 @@ BOOST_AUTO_TEST_CASE( numeric_literal )
     }
 }
 
-#if 0
+
 BOOST_AUTO_TEST_CASE( literal )
 {
     using namespace eda::vhdl93;
@@ -437,27 +437,30 @@ BOOST_AUTO_TEST_CASE( literal )
 
     typedef ast::literal attribute_type;
 
+    // FixMe: One Test triggers decimal_literal.cpp(67): Invalid code path
+
     std::vector<std::pair<std::string, std::string>> const pass_test_cases {
+    	// numeric_literal ::= abstract_literal | physical_literal
     	// abstract_literal := decimal_literal | based_literal
-    	std::make_pair("1e3", ""),
-    	std::make_pair("42.42e-3", ""),
-    	std::make_pair("16#0_FF#", ""),
-    	std::make_pair("016#0_FF#e-23", ""),
-		std::make_pair("100 fs", ""),
+    	std::make_pair("1e3", "1000"),
+    	std::make_pair("42.42e-3", "0.04242"),
+    	std::make_pair("16#0_FF#", "{b=16, l=0FF#}"),
+    	std::make_pair("016#0_FF#e-23", "{b=016, l=0FF#e-23}"),
+		// physical_literal
+		std::make_pair("100 fs", "100fs"),
 		// enumeration_literal ::=  identifier | character_literal
-		std::make_pair("identifier", ""),
-		std::make_pair("'A'", ""),
+		//std::make_pair("identifier", "identifier"), // <- HERE
+		std::make_pair("'A'", "A"),
 		// string_literal
-		std::make_pair("\"VHDL\"", ""),
+		std::make_pair("\"VHDL\"", "VHDL"),
 		// bit_string_literal
-        std::make_pair("B\"1111_1111_1111\"", ""),
-        std::make_pair("X\"FFF\"", ""),
-        std::make_pair("O\"777\"", ""),
-		std::make_pair("O\"777\"", ""),
+        //std::make_pair("B\"1111_1111_1111\"", "B111111111111"), // <- HERE
+        //std::make_pair("X\"FFF\"", "XFFF"),
+        //std::make_pair("O\"777\"", "O777"),
 		// NULL
-		std::make_pair("NULL", ""),
-		std::make_pair("null", ""),
-		std::make_pair("Null", ""),
+		//std::make_pair("NULL", ""),// <- HERE
+		//std::make_pair("null", ""),
+		//std::make_pair("Null", ""),
     };
 
     uint n = 1;
@@ -475,7 +478,7 @@ BOOST_AUTO_TEST_CASE( literal )
         }
     }
 }
-#endif
+
 
 
 BOOST_AUTO_TEST_SUITE_END()

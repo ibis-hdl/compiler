@@ -29,7 +29,7 @@ struct literal :
     x3::variant<
         x3::forward_ast<bit_string_literal>,
         x3::forward_ast<enumeration_literal>,
-        x3::forward_ast<null>,
+        //x3::forward_ast<null>,
         x3::forward_ast<numeric_literal>,
         x3::forward_ast<string_literal>
     >
@@ -37,6 +37,9 @@ struct literal :
     using base_type::base_type;
     using base_type::operator=;
 };
+
+
+std::ostream& operator<<(std::ostream& os, literal const& node);
 
 
 } } } // namespace eda.vhdl93.ast
