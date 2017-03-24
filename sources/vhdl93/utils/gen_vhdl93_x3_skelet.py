@@ -1681,37 +1681,103 @@ struct {0} :
         )
         return text
     
-    def ast_printer_decl(self):
-        call_list = []
-        for name in sorted(self.bnf.rule_names(True)):
-            call_list.append("{0}void operator()({1} const& node) const;".format(
-                "//" + self.indent(1), name))
-        text = """
+        
+        
+        
+class AstPrinter:
+    x3 = None
+    rule_blacklist = [
+        'underline', 
+        'format_effector', 
+        'upper_case_letter',
+        'lower_case_letter',
+        'letter',
+        'digit',
+        'special_character',
+        'other_special_character',
+        'space_character'
+        ]
+    
+    def __init__(self, X3):
+        self.x3 = X3
+        
+    def nodes(self):
+        """
+        Create the ast visitor structure
+        """
+        node_fw_list = []
+        decl_list = []
+        def_list = []
+        garb_specifier = [
+            ':', ', ', ';', '{', '}', '(', ')', '[', ']', '=', 
+            '<' , '>', "'", '"', '#', '.'
+        ]
+        for r in sorted(self.x3.bnf.rules()):
+            name = r.name
+            rule = r.rule.replace('\n', '')
+            if name in self.rule_blacklist:
+                continue
+            #print(rule)
+            for x in garb_specifier:
+                rule = rule.replace(x, '')
+            node_fw_list.append(self.node_fw(name))
+            decl_list.append(self.visit_node_decl(name))
+            if any((c in set('|')) for c in rule): # is_variant
+                # variant
+                def_list.append(
+                    self.visit_variant_def(name)
+                )
+            else:
+                def_list.append(
+                    self.visit_node_def(name)
+                )
+                
+        text  = "\n".join(node_fw_list) + '\n'
+        text += """
+{0}
+        
 struct ast_printer
 {{
     // ...    
     ast_printer(std::ostream& out, uint16_t indent = 0);
     
-{0}
-
-}};
+{1}
+}};        
 """.format(
-        "\n".join(call_list)
-        )
-        return self.embrace_ns(text, self.ast_ns)
+    "\n".join(node_fw_list),
+    "\n".join(decl_list) 
+    )
+        text += "\n".join(def_list)
+        return text
+    
+    def node_fw(self, name):
+        text = "struct {0};".format(name)
+        return text
         
-    def ast_printer_def(self):
-        call_list = []
-        for name in sorted(self.bnf.rule_names(True)):
-            call_list.append("""
-#if 0            
-void ast_printer::operator()({0} const& node) const {{
-
+    def visit_node_decl(self, name):
+        text = "    void operator()({0} const& node) const;".format(name)
+        return text
+        
+    def visit_node_def(self, name):
+        text = """
+void printer::operator()({0} const &node) const {{
+    os << "( {0} = ";
+    os << "XXXX"; //os << node; // FixMe: Review and Implement
+    os << " )";
 }}
-#endif
-""".format(name))
-        text = "\n".join(call_list)
-        return self.embrace_ns(text, self.ast_ns)
+""".format(name)
+        return text
+        
+    def visit_variant_def(self, name):
+        text = """
+void printer::operator()({0} const &node) const {{
+    os << "( XXXX {0} = ";
+    //boost::apply_visitor(*this, node);  // FixMe: Review and Implement
+    os << " )";
+}}
+""".format(name)
+        return text
+        
         
         
 if __name__ == "__main__":
@@ -1721,5 +1787,9 @@ if __name__ == "__main__":
     print(x3.error_handler())
     print(x3.ast_include_global())
     print(x3.ast_nodes())
-    print(x3.ast_printer_decl())
-    print(x3.ast_printer_def())
+    #print(x3.ast_printer_decl())
+    #print(x3.ast_printer_def())
+
+    printer = AstPrinter(x3)
+    print(printer.nodes())
+    
