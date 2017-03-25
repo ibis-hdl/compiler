@@ -1689,6 +1689,7 @@ class AstPrinter:
     rule_blacklist = [
         'base_specifier',
         'digit',
+        'extended_digit',
         'format_effector',
         'letter',
         'lower_case_letter',

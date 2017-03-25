@@ -822,14 +822,6 @@ void printer::operator()(expression const &node) const
 }
 
 
-void printer::operator()(extended_digit const &node) const
-{
-    os << "(XXXX extended_digit="; // FixMe: Review and Implement
-    // boost::apply_visitor(*this, node);
-    os << ")";
-}
-
-
 void printer::operator()(extended_identifier const &node) const
 {
     os << "(extended_identifier=";

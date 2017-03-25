@@ -113,7 +113,6 @@ struct enumeration_type_definition;
 struct exit_statement;
 struct exponent;
 struct expression;
-struct extended_digit;
 struct extended_identifier;
 struct factor;
 struct file_declaration;
@@ -362,7 +361,6 @@ public:
     void operator()(exit_statement const& node) const;
     void operator()(exponent const& node) const;
     void operator()(expression const& node) const;
-    void operator()(extended_digit const& node) const;
     void operator()(extended_identifier const& node) const;
     void operator()(factor const& node) const;
     void operator()(file_declaration const& node) const;
