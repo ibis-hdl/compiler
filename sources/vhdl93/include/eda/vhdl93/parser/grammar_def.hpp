@@ -2782,6 +2782,8 @@ auto const parameter_specification_def =
 // [ abstract_literal ] unit_name
 namespace detail {
 
+	/* Note, the LRM doesn't specify the allowed characters, hence it's assumed
+	 * that it follows the natural conventions. */
     auto const unit_name = as_rule<std::string>(
         lexeme[ +char_("A-Za-z") ]);
 
