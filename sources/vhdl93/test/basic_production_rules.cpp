@@ -152,6 +152,11 @@ BOOST_AUTO_TEST_CASE( string_literal )
                 "see \"LRM 13.10\", it's legal VHDL"),
         std::make_pair("%Quotation: %%REPORT...%% is also allowed%",
                 "Quotation: %REPORT...% is also allowed"),
+		// empty string literal
+		std::make_pair("\"\"", ""),
+		// string literals of length 1.
+		std::make_pair("\" \"", " "),
+		std::make_pair("\"A\"", "A"),
         };
 
     std::vector<std::string> const fail_test_cases {
