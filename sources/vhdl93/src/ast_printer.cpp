@@ -276,14 +276,6 @@ void printer::operator()(bit_string_literal const &node) const
 }
 
 
-void printer::operator()(bit_value const &node) const
-{
-    os << "(bit_value=";
-    os << "XXXX"; //os << node; // FixMe: Review and Implement
-    os << ")";
-}
-
-
 void printer::operator()(block_configuration const &node) const
 {
     os << "(block_configuration=";

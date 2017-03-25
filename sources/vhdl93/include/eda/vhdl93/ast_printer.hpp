@@ -46,7 +46,6 @@ struct basic_graphic_character;
 struct basic_identifier;
 struct binding_indication;
 struct bit_string_literal;
-struct bit_value;
 struct block_configuration;
 struct block_declarative_item;
 struct block_declarative_part;
@@ -294,7 +293,6 @@ public:
     void operator()(basic_identifier const& node) const;
     void operator()(binding_indication const& node) const;
     void operator()(bit_string_literal const& node) const;
-    void operator()(bit_value const& node) const;
     void operator()(block_configuration const& node) const;
     void operator()(block_declarative_item const& node) const;
     void operator()(block_declarative_part const& node) const;

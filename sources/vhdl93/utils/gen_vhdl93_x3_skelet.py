@@ -1688,6 +1688,7 @@ class AstPrinter:
     x3 = None
     rule_blacklist = [
         'base_specifier',
+        'bit_value',
         'digit',
         'extended_digit',
         'format_effector',

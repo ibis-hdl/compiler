@@ -65,7 +65,6 @@ struct basic_graphic_character_class;
 struct basic_identifier_class;
 struct binding_indication_class;
 struct bit_string_literal_class;
-struct bit_value_class;
 struct block_configuration_class;
 struct block_declarative_item_class;
 struct block_declarative_part_class;
@@ -298,7 +297,6 @@ typedef x3::rule<basic_graphic_character_class, char> basic_graphic_character_ty
 typedef x3::rule<basic_identifier_class, std::string> basic_identifier_type;
 typedef x3::rule<binding_indication_class> binding_indication_type;
 typedef x3::rule<bit_string_literal_class, ast::bit_string_literal> bit_string_literal_type;
-typedef x3::rule<bit_value_class> bit_value_type;
 typedef x3::rule<block_configuration_class> block_configuration_type;
 typedef x3::rule<block_declarative_item_class> block_declarative_item_type;
 typedef x3::rule<block_declarative_part_class> block_declarative_part_type;
@@ -531,7 +529,6 @@ basic_graphic_character_type const basic_graphic_character { "basic_graphic_char
 basic_identifier_type const basic_identifier { "basic_identifier" };
 binding_indication_type const binding_indication { "binding_indication" };
 bit_string_literal_type const bit_string_literal { "bit_string_literal" };
-bit_value_type const bit_value { "bit_value" };
 block_configuration_type const block_configuration { "block_configuration" };
 block_declarative_item_type const block_declarative_item { "block_declarative_item" };
 block_declarative_part_type const block_declarative_part { "block_declarative_part" };
@@ -980,7 +977,7 @@ auto const end_of_line =
  * Parser helper
  */
 template<typename T>
-auto as_rule = [](auto p) { return x3::rule<struct _, T>{} = x3::as_parser(p); };
+auto as_rule = [](auto p) { return x3::rule<struct _, T>{ "as" } = x3::as_parser(p); };
 
 
 /*
@@ -1289,20 +1286,20 @@ namespace detail {
      *       Here it's clever to get an parse error if the rules are violated by
      *      splitting it into several sub rules. */
 
-    auto const bit_value_bin = as_rule<std::string>(
+    auto const bit_value_bin = x3::rule<struct _, std::string> { "bit_value" } =
         lexeme[
             char_("01") >> *( -lit("_") >> char_("01") )
-        ]);
+        ];
 
-    auto const bit_value_oct = as_rule<std::string>(
+    auto const bit_value_oct = x3::rule<struct _, std::string> { "bit_value" } =
         lexeme[
             char_("0-7") >> *( -lit("_") >> char_("0-7") )
-        ]);
+        ];
 
-    auto const bit_value_hex = as_rule<std::string>(
+    auto const bit_value_hex = x3::rule<struct _, std::string> { "bit_value" } =
         lexeme[
             char_("0-9A-Fa-f") >> *( -lit("_") >> char_("0-9A-Fa-f") )
-        ]);
+        ];
 }
 
 auto const bit_string_literal_def =
@@ -1315,7 +1312,7 @@ auto const bit_string_literal_def =
 
 
 #if 0
-/* Note: superseed by bit_string_literal */
+/* Note: unused, directly used by rule bit_string_literal */
 // bit_value ::=
 // extended_digit { [ underline ] extended_digit }
 auto const bit_value_def =
@@ -3519,7 +3516,6 @@ BOOST_SPIRIT_DEFINE(
 		basic_identifier,
 		//    binding_indication,
 		bit_string_literal,
-		//    bit_value,
 		//    block_configuration,
 		//    block_declarative_item,
 		//    block_declarative_part,
