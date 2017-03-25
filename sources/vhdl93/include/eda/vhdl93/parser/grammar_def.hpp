@@ -2065,7 +2065,7 @@ auto const exit_statement_def =
 // E [ + ] integer | E - integer
 auto const exponent_def =
     lexeme [
-        char_("Ee") >> -char_("+-") >> integer
+        char_("Ee") >> -char_("-+") >> integer
     ]
     ;
 
