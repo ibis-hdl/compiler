@@ -2407,7 +2407,7 @@ auto const instantiation_list_def =
 // digit { [ underline ] digit }
 auto const integer_def =
     lexeme [
-        +char_("0-9") >> *(-lit("_") >> char_("0-9"))
+        char_("0-9") >> *( -lit("_") >> char_("0-9") )
     ]
 	;
 
