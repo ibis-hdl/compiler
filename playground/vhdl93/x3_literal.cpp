@@ -80,10 +80,10 @@ namespace parser {
 		;
 
    auto const literal = x3::rule<struct _> { "literal" } =
-         numeric_literal
-       | enumeration_literal
+         enumeration_literal
        | string_literal
        | bit_string_literal
+	   | numeric_literal
        | "NULL"
        ;
 
@@ -98,15 +98,16 @@ int main()
 
    std::vector<std::string> const test_cases {
 	   //"foobar"
-	   //"B\"1111_1111_1111\""
-	   "'A'"
+	   //"B\"1111\"",
+	   "\\Foo\\oh\\"
+	   //"'A'"
 	   };
 
    for(auto str: test_cases) {
 	 iterator_type iter = str.begin();
 	 iterator_type const end = str.end();
 
-	 auto& rule = parser::character_literal;
+	 auto& rule = parser::extended_identifier;
 
 	 std::cout << "parse `" << str << "`:\n";
 
