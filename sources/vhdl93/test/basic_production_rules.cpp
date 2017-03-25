@@ -336,9 +336,9 @@ BOOST_AUTO_TEST_CASE( bit_string_literal )
 
     std::vector<std::pair<std::string, attribute_type>> const pass_test_cases {
         std::make_pair("B\"1111_1111_1111\"", attribute_type {"111111111111", tag::bin}),
-        std::make_pair("X\"FFF\"", attribute_type {"FFF", tag::hex}),
-        std::make_pair("O\"777\"", attribute_type {"777", tag::oct}),
-        std::make_pair("X\"777\"", attribute_type {"777", tag::hex}),
+        std::make_pair("X\"FFF\"",            attribute_type {"FFF", tag::hex}),
+        std::make_pair("O\"777\"",            attribute_type {"777", tag::oct}),
+        std::make_pair("X\"777\"",            attribute_type {"777", tag::hex}),
     };
 
     uint n = 1;
@@ -367,10 +367,10 @@ BOOST_AUTO_TEST_CASE( abstract_literal )
     using d_tag = ast::decimal_literal::tag;
 
     // {decimal|based}_literal
-    std::vector<std::pair<std::string, attribute_type>> const pass_test_cases {
-        std::make_pair("1e3", attribute_type { ast::decimal_literal {"1e3", d_tag::integer} }),
-        std::make_pair("42.42e-3", attribute_type { ast::decimal_literal {"42.42e-3", d_tag::real} }),
-		std::make_pair("16#0_FF#", attribute_type { ast::based_literal {"16", "0FF#"} }),
+    std::vector<std::pair<std::string,  attribute_type>> const pass_test_cases {
+        std::make_pair("1e3",           attribute_type { ast::decimal_literal {"1e3", d_tag::integer} }),
+        std::make_pair("42.42e-3",      attribute_type { ast::decimal_literal {"42.42e-3", d_tag::real} }),
+		std::make_pair("16#0_FF#",      attribute_type { ast::based_literal {"16", "0FF#"} }),
 		std::make_pair("016#0_FF#e-23", attribute_type { ast::based_literal {"16", "0FF#e-23"} }),
     };
 
@@ -396,21 +396,24 @@ BOOST_AUTO_TEST_CASE( physical_literal )
     typedef ast::physical_literal attribute_type;
 
     std::vector<std::pair<std::string, std::string>> const pass_test_cases {
-    	std::make_pair("100 fs",             "100fs"),
-		//"ps", FixMe: This: 'ps', results into "Invalid code path" exception in ast/decimal_literal.cpp(71) due to empty abstract_literal
-    	std::make_pair("16#FF# ns",          "{b=16, l=FF#}ns"),
-		std::make_pair("2#1111_1111# d",     "{b=2, l=11111111#}d"),
-		std::make_pair("10#42# ms",          "{b=10, l=42#}ms"),
-		std::make_pair("016#AFFE.42#E+69 h", "{b=016, l=AFFE.42#E+69}h")
+    	std::make_pair("100 fs",             "(physical_literal={l=(v:abstract_literal=(decimal_literal={l=100, tag=int})), u=fs})"),
+    	/* This is an interesting test; obviously the integer value equals to
+    	 * 1 (one), even if the ast's integer part empty. To be investigated
+    	 * later  */
+    	std::make_pair("ps",                 "(physical_literal={l=(v:abstract_literal=(decimal_literal={l=, tag=int})), u=ps})"),
+    	std::make_pair("16#FF# ns",          "(physical_literal={l=(v:abstract_literal=(based_literal={b=16, n=FF#})), u=ns})"),
+		std::make_pair("2#1111_1111# d",     "(physical_literal={l=(v:abstract_literal=(based_literal={b=2, n=11111111#})), u=d})"),
+		std::make_pair("10#42# ms",          "(physical_literal={l=(v:abstract_literal=(based_literal={b=10, n=42#})), u=ms})"),
+		std::make_pair("016#AFFE.42#E+69 h", "(physical_literal={l=(v:abstract_literal=(based_literal={b=016, n=AFFE.42#E+69})), u=h})")
     };
 
     uint n = 1;
     for(auto const& str : pass_test_cases) {
-        auto const& input = str.first;
-        auto const& gold  = str.second;
-        attribute_type attr;
-        BOOST_TEST_CONTEXT("'physical_literal' test case #" << n++ << " to pass "
-                           "input ='" << input << "'") {
+        BOOST_TEST_CONTEXT("'physical_literal' test case #" << n++ << " to pass:") {
+            auto const& input = str.first;
+            auto const& gold  = str.second;
+            attribute_type attr;
+            BOOST_TEST_INFO("input = '" << input << "'");
             BOOST_TEST(test_attr(input, parser::physical_literal, x3::space, attr));
             btt::output_test_stream os;
             ast::printer print(os);
@@ -430,24 +433,24 @@ BOOST_AUTO_TEST_CASE( numeric_literal )
 
     std::vector<std::pair<std::string, std::string>> const pass_test_cases {
     	// abstract_literal := decimal_literal | based_literal
-    	std::make_pair("1e3",             "1000"),
-    	std::make_pair("42.42e-3",        "0.04242"),
-    	std::make_pair("16#0_FF#",        "{b=16, l=0FF#}"),
-    	std::make_pair("016#0_FF#e-23",   "{b=016, l=0FF#e-23}"),
+    	std::make_pair("1e3",             "(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=1e3, tag=int})))"),
+    	std::make_pair("42.42e-3",        "(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42.42e-3, tag=double})))"),
+    	std::make_pair("16#0_FF#",        "(v:numeric_literal=(v:abstract_literal=(based_literal={b=16, n=0FF#})))"),
+    	std::make_pair("016#0_FF#e-23",   "(v:numeric_literal=(v:abstract_literal=(based_literal={b=016, n=0FF#e-23})))"),
 		// physical_literal
-    	std::make_pair("100 fs",          "100fs"),
-    	std::make_pair("16#FF# ns",       "{b=16, l=FF#}ns"),
-		std::make_pair("2#1111_1111# d",  "{b=2, l=11111111#}d"),
-		std::make_pair("10#42# ms",       "{b=10, l=42#}ms"),
+    	std::make_pair("100 fs",          "(v:numeric_literal=(physical_literal={l=(v:abstract_literal=(decimal_literal={l=100, tag=int})), u=fs}))"),
+    	std::make_pair("16#FF# ns",       "(v:numeric_literal=(physical_literal={l=(v:abstract_literal=(based_literal={b=16, n=FF#})), u=ns}))"),
+		std::make_pair("2#1111_1111# d",  "(v:numeric_literal=(physical_literal={l=(v:abstract_literal=(based_literal={b=2, n=11111111#})), u=d}))"),
+		std::make_pair("10#42# ms",       "(v:numeric_literal=(physical_literal={l=(v:abstract_literal=(based_literal={b=10, n=42#})), u=ms}))"),
     };
 
     uint n = 1;
     for(auto const& str : pass_test_cases) {
-        auto const& input = str.first;
-        auto const& gold  = str.second;
-        attribute_type attr;
-        BOOST_TEST_CONTEXT("'numeric_literal' test case #" << n++ << " to pass "
-                           "input ='" << input << "'") {
+        BOOST_TEST_CONTEXT("'numeric_literal' test case #" << n++ << " to pass:") {
+            auto const& input = str.first;
+            auto const& gold  = str.second;
+            attribute_type attr;
+            BOOST_TEST_INFO("input = '" << input << "'");
             BOOST_TEST(test_attr(input, parser::numeric_literal, x3::space, attr));
             btt::output_test_stream os;
             ast::printer print(os);
@@ -471,34 +474,35 @@ BOOST_AUTO_TEST_CASE( literal )
     std::vector<std::pair<std::string, std::string>> const pass_test_cases {
     	// numeric_literal ::= abstract_literal | physical_literal
     	// abstract_literal := decimal_literal | based_literal
-    	std::make_pair("1e3", "1000"),
-    	std::make_pair("42.42e-3", "0.04242"),
-    	std::make_pair("16#0_FF#", "{b=16, l=0FF#}"),
-    	std::make_pair("016#0_FF#e-23", "{b=016, l=0FF#e-23}"),
+    	std::make_pair("1e3", "(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=1e3, tag=int}))))"),
+    	std::make_pair("42.42e-3", "(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42.42e-3, tag=double}))))"),
+    	std::make_pair("16#0_FF#", "(v:literal=(v:numeric_literal=(v:abstract_literal=(based_literal={b=16, n=0FF#}))))"),
+    	std::make_pair("016#0_FF#e-23", "(v:literal=(v:numeric_literal=(v:abstract_literal=(based_literal={b=016, n=0FF#e-23}))))"),
 		// physical_literal
-		std::make_pair("100 fs", "100fs"),
+		std::make_pair("100 fs", "(v:literal=(v:numeric_literal=(physical_literal={l=(v:abstract_literal=(decimal_literal={l=100, tag=int})), u=fs})))"),
+		std::make_pair("fs", "fs"), // XXX
 		// enumeration_literal ::=  identifier | character_literal
-		//std::make_pair("identifier", "identifier"), // <- HERE
-		std::make_pair("'A'", "A"),
+		std::make_pair("identifier", "identifier"), // XXX
+		std::make_pair("'A'", "(v:literal=(v:enumeration_literal=(character_literal=A)))"),
 		// string_literal
-		std::make_pair("\"VHDL\"", "VHDL"),
+		std::make_pair("\"VHDL\"", "(v:literal=(string_literal=VHDL))"),
 		// bit_string_literal
-        //std::make_pair("B\"1111_1111_1111\"", "B111111111111"), // <- HERE
-        //std::make_pair("X\"FFF\"", "XFFF"),
-        //std::make_pair("O\"777\"", "O777"),
+        std::make_pair("B\"1111_1111_1111\"", "B111111111111"),
+        std::make_pair("X\"FFF\"", "XFFF"),
+        std::make_pair("O\"777\"", "O777"),
 		// NULL
-		//std::make_pair("NULL", ""),// <- HERE
-		//std::make_pair("null", ""),
-		//std::make_pair("Null", ""),
+		std::make_pair("NULL", ""),
+		std::make_pair("null", ""),
+		std::make_pair("Null", ""),
     };
 
     uint n = 1;
     for(auto const& str : pass_test_cases) {
-        auto const& input = str.first;
-        auto const& gold  = str.second;
-        attribute_type attr;
-        BOOST_TEST_CONTEXT("'literal' test case #" << n++ << " to pass "
-                           "input ='" << input << "'") {
+        BOOST_TEST_CONTEXT("'literal' test case #" << n++ << " to pass:") {
+            auto const& input = str.first;
+            auto const& gold  = str.second;
+            attribute_type attr;
+            BOOST_TEST_INFO("input = '" << input << "'");
             BOOST_TEST(test_attr(input, parser::literal, x3::space, attr));
             btt::output_test_stream os;
             ast::printer print(os);
