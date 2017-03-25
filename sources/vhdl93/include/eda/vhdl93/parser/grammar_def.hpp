@@ -3240,15 +3240,15 @@ auto const slice_name_def =
 auto const string_literal_def =
     lexeme[
         (      '"'
-            >> *( (graphic_character - '"')
-                | x3::no_skip[char_('"') >> char_('"')]
+            >> *( ( graphic_character - '"'  )
+                | ( char_('"') >> char_('"') )
                 )
             >> '"'
         )
         |
         (      '%' // LRM [§ 13.10]
-            >> *( (graphic_character - '%')
-                | x3::no_skip[char_('%') >> char_('%')]
+            >> *( ( graphic_character - '%'  )
+                | ( char_('%') >> char_('%') )
                 )
             >> '%'
         )
