@@ -2784,7 +2784,7 @@ namespace detail {
 }
 
 auto const physical_literal_def =
-    -( abstract_literal ) >> detail::unit_name
+    -abstract_literal >> detail::unit_name
     ;
 
 
