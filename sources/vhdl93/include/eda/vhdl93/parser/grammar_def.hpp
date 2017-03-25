@@ -2095,9 +2095,9 @@ auto const extended_digit_def =
 
 
 // extended_identifier ::=                                            [§ 13.3.2]
-// \ graphic_character { graphic_character }
+// \ graphic_character { graphic_character } <backslash>
 auto const extended_identifier_def =
-	'\\' >> graphic_character >> *( graphic_character )
+	'\\' >> graphic_character >> *( graphic_character ) >> '\\'
 	;
 
 
