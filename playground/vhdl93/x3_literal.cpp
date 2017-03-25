@@ -6,6 +6,7 @@
  */
 
 #include <iostream>
+#define BOOST_SPIRIT_X3_DEBUG_OUT std::cout
 #define BOOST_SPIRIT_X3_DEBUG
 
 #include <boost/spirit/home/x3.hpp>
@@ -36,18 +37,12 @@ namespace parser {
 		| decimal_literal
 		;
 
-   auto const bit_string_literal = x3::rule<struct _> { "bit_string_literal" } = //XXXXXX
-		lexeme[
-			  char_("HBO") >> lit("\"") >> +char_("0-9a-fA-F") >> lit('"')
-		]
-		;
-
    auto const basic_identifier = x3::rule<struct _> { "basic_identifier" } =
 		char_("A-Za-z") >> *( -lit("_") >> +char_("A-Za-z0-9") )
 		;
 
    auto const extended_identifier = x3::rule<struct _> { "extended_identifier" } =
-		'\\' >> char_("A-Za-z0-9") >> *char_("A-Za-z0-9") >> '\\'
+		'\\' >> char_("A-Za-z0-9") >> *char_("A-Za-z0-9_") >> '\\'
 		;
 
    auto const identifier = x3::rule<struct _> { "identifier" } =
@@ -55,7 +50,7 @@ namespace parser {
    		;
 
    auto const character_literal = x3::rule<struct _> { "character_literal" } =
-		lit('\'') >> +char_ >> lit('\'')
+		lit("\'") >> ( char_ - char_("\'") ) >> lit("\'")
         ;
 
    auto const enumeration_literal = x3::rule<struct _> { "enumeration_literal" } =
@@ -74,9 +69,15 @@ namespace parser {
 
    auto const string_literal = x3::rule<struct _> { "string_literal" } =
 	   lexeme [
-			'"' >> +char_ >> '"'
+			'"' >> (char_ - '"') >> '"'
 	   ]
 	   ;
+
+   auto const bit_string_literal = x3::rule<struct _> { "bit_string_literal" } =
+		lexeme[
+			  char_("HBO") >> lit("\"") >> +char_("0-9a-fA-F") >> lit('"')
+		]
+		;
 
    auto const literal = x3::rule<struct _> { "literal" } =
          numeric_literal
@@ -96,17 +97,18 @@ int main()
    typedef std::string::const_iterator iterator_type;
 
    std::vector<std::string> const test_cases {
-	   "foobar"
+	   //"foobar"
 	   //"B\"1111_1111_1111\""
+	   "'A'"
 	   };
 
    for(auto str: test_cases) {
 	 iterator_type iter = str.begin();
 	 iterator_type const end = str.end();
 
-	 auto& rule = parser::literal;
+	 auto& rule = parser::character_literal;
 
-	 std::cout << "parse `" << str << ":\n";
+	 std::cout << "parse `" << str << "`:\n";
 
 	 bool r = x3::phrase_parse(iter, end, rule, x3::space);
 
