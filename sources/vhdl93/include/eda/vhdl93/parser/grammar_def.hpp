@@ -19,8 +19,10 @@
 /*
  * http://www.amos.eguru-il.com/vhdl_info/vhdl87_syntax.html
  * http://www.amos.eguru-il.com/vhdl_info/vhdl93_syntax.html
- * http://rti.etf.bg.ac.rs/rti/ri5rvl/tutorial/TUTORIAL/IEEE/HTML/1076_AXA.HTM
  *
+ * IEEE Standard VHDL Language Reference Manual
+ * (IEEE Std. 1076-1993)
+ * http://rti.etf.bg.ac.rs/rti/ri5rvl/tutorial/TUTORIAL/IEEE/HTML/1076_TOC.HTM
  */
 
 
@@ -1465,9 +1467,22 @@ sequence_of_statements
 // character_literal ::=                                                [§ 13.5]
 // ' graphic_character '
 auto const character_literal_def =
-    lit('\'') >> graphic_character >> lit('\'')
+    x3::no_skip [
+           "\'"
+        >> ( ( graphic_character - '\'' )
+           | char_("\'")
+           )
+        >> "\'"
+    ]
     ;
-
+#if 0
+(      '"'
+    >> *( (graphic_character - '"')
+        | x3::no_skip[char_('"') >> char_('"')]
+        )
+    >> '"'
+)
+#endif
 
 #if 0
 // choice ::=
@@ -2097,7 +2112,7 @@ auto const extended_digit_def =
 // extended_identifier ::=                                            [§ 13.3.2]
 // \ graphic_character { graphic_character } <backslash>
 auto const extended_identifier_def =
-	'\\' >> graphic_character >> *( graphic_character ) >> '\\'
+	'\\' >> graphic_character >> *graphic_character >> '\\'
 	;
 
 
@@ -3231,7 +3246,7 @@ auto const string_literal_def =
             >> '"'
         )
         |
-        (      '%' // LRM Chapter 13.10
+        (      '%' // LRM [§ 13.10]
             >> *( (graphic_character - '%')
                 | x3::no_skip[char_('%') >> char_('%')]
                 )

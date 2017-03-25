@@ -351,7 +351,7 @@ void printer::operator()(case_statement_alternative const &node) const
 void printer::operator()(character_literal const &node) const
 {
     os << "(character_literal=";
-    os << node; // FixMe: operator<<
+    os << node.literal;
     os << ")";
 }
 

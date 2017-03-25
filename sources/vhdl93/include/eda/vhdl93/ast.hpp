@@ -13,9 +13,6 @@
 
 namespace eda { namespace vhdl93 { namespace ast {
 
-//using integer = std::string;
-using character_literal = char;
-
 } } } // namespace eda.vhdl93.ast
 
 

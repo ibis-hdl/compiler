@@ -12,7 +12,10 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-using character_literal = char;
+struct character_literal
+{
+	char	literal;
+};
 
 
 } } } // namespace eda.vhdl93.ast

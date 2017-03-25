@@ -55,7 +55,7 @@ struct block_statement;
 struct block_statement_part;
 struct case_statement;
 struct case_statement_alternative;
-//struct character_literal;
+struct character_literal;
 struct choice;
 struct choices;
 struct component_configuration;

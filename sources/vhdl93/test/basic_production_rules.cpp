@@ -181,6 +181,36 @@ BOOST_AUTO_TEST_CASE( string_literal )
     }
 }
 
+BOOST_AUTO_TEST_CASE( character_literal )
+{
+    using namespace eda::vhdl93;
+    using x3_test::test_attr;
+
+    typedef ast::character_literal attribute_type;
+
+    std::vector<std::pair<std::string, std::string>> const pass_test_cases {
+        std::make_pair("'A'", "(character_literal=A)"),
+        std::make_pair("'*'", "(character_literal=*)"),
+		std::make_pair("'\''", "(character_literal=\')"),
+		std::make_pair("' '", "(character_literal= )"),
+    };
+
+    uint n = 1;
+    for(auto const& str : pass_test_cases) {
+    	BOOST_TEST_CONTEXT("'character_literal' test case #" << n++ << " to pass:") {
+            auto const& input = str.first;
+            auto const& gold = str.second;
+            attribute_type attr;
+            BOOST_TEST_INFO("input =\"" << input << "\"");
+            BOOST_TEST(test_attr(input, parser::character_literal, x3::space, attr));
+            btt::output_test_stream os;
+            ast::printer print(os);
+            print(attr);
+            BOOST_TEST_INFO("attr = '" << os.str() << "'");
+            BOOST_TEST(gold == os.str(), btt::per_element());
+        }
+    }
+}
 
 BOOST_AUTO_TEST_CASE( integer )
 {
@@ -461,7 +491,7 @@ BOOST_AUTO_TEST_CASE( numeric_literal )
     }
 }
 
-#if 0
+
 BOOST_AUTO_TEST_CASE( literal )
 {
     using namespace eda::vhdl93;
@@ -474,26 +504,27 @@ BOOST_AUTO_TEST_CASE( literal )
     std::vector<std::pair<std::string, std::string>> const pass_test_cases {
     	// numeric_literal ::= abstract_literal | physical_literal
     	// abstract_literal := decimal_literal | based_literal
-    	std::make_pair("1e3", "(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=1e3, tag=int}))))"),
-    	std::make_pair("42.42e-3", "(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42.42e-3, tag=double}))))"),
-    	std::make_pair("16#0_FF#", "(v:literal=(v:numeric_literal=(v:abstract_literal=(based_literal={b=16, n=0FF#}))))"),
+    	std::make_pair("1e3",           "(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=1e3, tag=int}))))"),
+    	std::make_pair("42.42e-3",      "(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42.42e-3, tag=double}))))"),
+    	std::make_pair("16#0_FF#",      "(v:literal=(v:numeric_literal=(v:abstract_literal=(based_literal={b=16, n=0FF#}))))"),
     	std::make_pair("016#0_FF#e-23", "(v:literal=(v:numeric_literal=(v:abstract_literal=(based_literal={b=016, n=0FF#e-23}))))"),
 		// physical_literal
-		std::make_pair("100 fs", "(v:literal=(v:numeric_literal=(physical_literal={l=(v:abstract_literal=(decimal_literal={l=100, tag=int})), u=fs})))"),
-		std::make_pair("fs", "fs"), // XXX
-		// enumeration_literal ::=  identifier | character_literal
-		std::make_pair("identifier", "identifier"), // XXX
-		std::make_pair("'A'", "(v:literal=(v:enumeration_literal=(character_literal=A)))"),
-		// string_literal
-		std::make_pair("\"VHDL\"", "(v:literal=(string_literal=VHDL))"),
-		// bit_string_literal
+		std::make_pair("100 fs",        "(v:literal=(v:numeric_literal=(physical_literal={l=(v:abstract_literal=(decimal_literal={l=100, tag=int})), u=fs})))"),
+		std::make_pair("10#42# ms",     "(v:literal=(v:numeric_literal=(physical_literal={l=(v:abstract_literal=(based_literal={b=10, n=42#})), u=ms})))"),
+		std::make_pair("fs",            "(v:literal=(v:numeric_literal=(physical_literal={l=(v:abstract_literal=(decimal_literal={l=, tag=int})), u=fs})))"),
+//		// enumeration_literal ::=  identifier | character_literal
+//		std::make_pair("identifier", "identifier"), // XXX
+//		std::make_pair("'A'", "(v:literal=(v:enumeration_literal=(character_literal=A)))"),
+//		// string_literal
+//		std::make_pair("\"VHDL\"", "(v:literal=(string_literal=VHDL))"),
+//		// bit_string_literal
         std::make_pair("B\"1111_1111_1111\"", "B111111111111"),
-        std::make_pair("X\"FFF\"", "XFFF"),
-        std::make_pair("O\"777\"", "O777"),
-		// NULL
-		std::make_pair("NULL", ""),
-		std::make_pair("null", ""),
-		std::make_pair("Null", ""),
+//        std::make_pair("X\"FFF\"", "XFFF"),
+//        std::make_pair("O\"777\"", "O777"),
+//		// NULL
+//		std::make_pair("NULL", ""),
+//		std::make_pair("null", ""),
+//		std::make_pair("Null", ""),
     };
 
     uint n = 1;
@@ -512,8 +543,6 @@ BOOST_AUTO_TEST_CASE( literal )
         }
     }
 }
-#endif
-
 
 BOOST_AUTO_TEST_SUITE_END()
 
