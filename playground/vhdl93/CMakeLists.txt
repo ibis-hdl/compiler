@@ -17,5 +17,7 @@ add_executable(x3_integer                    EXCLUDE_FROM_ALL x3_integer.cpp)
 add_executable(x3_based_literal              EXCLUDE_FROM_ALL x3_based_literal.cpp)
 add_executable(x3_based_literal_minimal      EXCLUDE_FROM_ALL x3_based_literal_minimal.cpp)
 add_executable(x3_decimal_literal            EXCLUDE_FROM_ALL x3_decimal_literal.cpp)
+add_executable(x3_literal                    EXCLUDE_FROM_ALL x3_literal.cpp)
 
 add_executable(ellipsis_compress             EXCLUDE_FROM_ALL ellipsis_compress.cpp)
+
