@@ -201,14 +201,6 @@ void printer::operator()(base const &node) const
 }
 
 
-void printer::operator()(base_specifier const &node) const
-{
-    os << "(XXXX base_specifier="; // FixMe: Review and Implement
-    // boost::apply_visitor(*this, node);
-    os << ")";
-}
-
-
 void printer::operator()(base_unit_declaration const &node) const
 {
     os << "(base_unit_declaration=";

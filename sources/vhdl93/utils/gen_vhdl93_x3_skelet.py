@@ -1687,15 +1687,16 @@ struct {0} :
 class AstPrinter:
     x3 = None
     rule_blacklist = [
-        'underline', 
-        'format_effector', 
-        'upper_case_letter',
-        'lower_case_letter',
-        'letter',
+        'base_specifier',
         'digit',
-        'special_character',
+        'format_effector',
+        'letter',
+        'lower_case_letter',
         'other_special_character',
-        'space_character'
+        'space_character',
+        'special_character',
+        'underline',
+        'upper_case_letter',
         ]
     
     def __init__(self, X3):

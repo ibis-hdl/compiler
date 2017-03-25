@@ -461,7 +461,7 @@ BOOST_AUTO_TEST_CASE( numeric_literal )
     }
 }
 
-
+#if 0
 BOOST_AUTO_TEST_CASE( literal )
 {
     using namespace eda::vhdl93;
@@ -512,7 +512,7 @@ BOOST_AUTO_TEST_CASE( literal )
         }
     }
 }
-
+#endif
 
 
 BOOST_AUTO_TEST_SUITE_END()

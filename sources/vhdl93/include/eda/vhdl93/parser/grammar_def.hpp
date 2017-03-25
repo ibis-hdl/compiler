@@ -57,7 +57,6 @@ struct attribute_designator_class;
 struct attribute_name_class;
 struct attribute_specification_class;
 struct base_class;
-struct base_specifier_class;
 struct base_unit_declaration_class;
 struct based_integer_class;
 struct based_literal_class;
@@ -291,7 +290,6 @@ typedef x3::rule<attribute_designator_class> attribute_designator_type;
 typedef x3::rule<attribute_name_class> attribute_name_type;
 typedef x3::rule<attribute_specification_class> attribute_specification_type;
 typedef x3::rule<base_class, std::string> base_type;
-typedef x3::rule<base_specifier_class> base_specifier_type;
 typedef x3::rule<base_unit_declaration_class> base_unit_declaration_type;
 typedef x3::rule<based_integer_class, std::string> based_integer_type;
 typedef x3::rule<based_literal_class, ast::based_literal> based_literal_type;
@@ -525,7 +523,6 @@ attribute_designator_type const attribute_designator { "attribute_designator" };
 attribute_name_type const attribute_name { "attribute_name" };
 attribute_specification_type const attribute_specification { "attribute_specification" };
 base_type const base { "base" };
-base_specifier_type const base_specifier { "base_specifier" };
 base_unit_declaration_type const base_unit_declaration { "base_unit_declaration" };
 based_integer_type const based_integer { "based_integer" };
 based_literal_type const based_literal { "based_literal" };
@@ -1191,13 +1188,13 @@ auto const base_def =
 	;
 #endif
 
-
+#if 0 /* Note: UNUSED, embedded directly into bit_string_literal rule */
 // base_specifier ::=                                                   [§ 13.7]
 // B | O | X
 auto const base_specifier_def =
 	'B' | 'O' | 'X'
 	;
-
+#endif
 
 #if 0
 // base_unit_declaration ::=
@@ -3514,7 +3511,6 @@ BOOST_SPIRIT_DEFINE(
 		//    attribute_name,
 		//    attribute_specification,
 		//base,
-		base_specifier,
 		//    base_unit_declaration,
 		based_integer,
 		based_literal,
