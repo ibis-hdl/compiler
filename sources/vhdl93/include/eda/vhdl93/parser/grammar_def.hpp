@@ -2092,7 +2092,7 @@ auto const expression_def =
 // extended_digit ::=                                                 [§ 13.4.2]
 // digit | letter
 auto const extended_digit_def =
-    char_("0-9") | char_("A-Fa-f")
+    char_("0-9a-fA-F")
     ;
 
 
