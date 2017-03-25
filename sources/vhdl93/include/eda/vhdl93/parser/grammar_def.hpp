@@ -738,7 +738,7 @@ waveform_type const waveform { "waveform" };
 #endif
 
 auto kw = [](auto xx) {
-	return x3::lexeme [ x3::no_case[ xx ] >> !(iso8859_1::alnum | '_') ];
+    return x3::lexeme [ x3::no_case[ xx ] >> !(iso8859_1::alnum | '_') ];
 };
 
 auto const ABS = kw("abs");
@@ -989,8 +989,8 @@ auto as_rule = [](auto p) { return x3::rule<struct _, T>{ "as" } = x3::as_parser
 // abstract_literal ::= 
 // decimal_literal | based_literal
 auto const abstract_literal_def = /* Note, order changed since matters */
-	  based_literal
-	| decimal_literal
+      based_literal
+    | decimal_literal
     ;
 
 
@@ -1041,15 +1041,15 @@ actual_designator
 // aggregate ::=
 // ( element_association { , element_association } )
 auto const aggregate_def =
-		( element_association >> ( element_association % ',' ) )
-		;
+        ( element_association >> ( element_association % ',' ) )
+        ;
 #endif
 
 #if 0
 // alias_declaration ::=
 // alias alias_designator [ : subtype_indication ] is name [ signature ] ;
 auto const alias_declaration_def =
-		ALIAS alias_designator -( > ':' subtype_indication ) IS name -( signature ) > ';'
+        ALIAS alias_designator -( > ':' subtype_indication ) IS name -( signature ) > ';'
 ;
 #endif
 
@@ -1057,8 +1057,8 @@ auto const alias_declaration_def =
 // alias_designator ::=
 // identifier | character_literal | operator_symbol
 auto const alias_designator_def =
-		identifier | character_literal | operator_symbol
-		;
+        identifier | character_literal | operator_symbol
+        ;
 #endif
 
 #if 0
@@ -1066,9 +1066,9 @@ auto const alias_designator_def =
 // new subtype_indication
 //     | new qualified_expression
 auto const allocator_def =
-		NEW subtype_indication
-		| NEW qualified_expression
-		;
+        NEW subtype_indication
+        | NEW qualified_expression
+        ;
 #endif
 
 #if 0
@@ -1079,11 +1079,11 @@ auto const allocator_def =
 //     architecture_statement_part
 //     end [ architecture ] [ architecture_simple_name ] ;
 auto const architecture_body_def =
-		ARCHITECTURE identifier OF entity_name IS
-		architecture_declarative_part
-		BEGIN
-		architecture_statement_part
-		END -( ARCHITECTURE ) -( architecture_simple_name ) > ';'
+        ARCHITECTURE identifier OF entity_name IS
+        architecture_declarative_part
+        BEGIN
+        architecture_statement_part
+        END -( ARCHITECTURE ) -( architecture_simple_name ) > ';'
 ;
 #endif
 
@@ -1107,8 +1107,8 @@ auto const architecture_statement_part_def =
 // array_type_definition ::=
 // unconstrained_array_definition    |   constrained_array_definition
 auto const array_type_definition_def =
-		unconstrained_array_definition    |   constrained_array_definition
-		;
+        unconstrained_array_definition    |   constrained_array_definition
+        ;
 #endif
 
 #if 0
@@ -1117,17 +1117,17 @@ auto const array_type_definition_def =
 //     [ report expression ]
 //     [ severity expression ]
 auto const assertion_def =
-		ASSERT condition
-		-( REPORT expression )
-		-( SEVERITY expression )
-		;
+        ASSERT condition
+        -( REPORT expression )
+        -( SEVERITY expression )
+        ;
 #endif
 
 #if 0
 // assertion_statement ::=
 // [ label : ] assertion ;
 auto const assertion_statement_def =
-		-( LABEL > ':' ) assertion > ';'
+        -( LABEL > ':' ) assertion > ';'
 ;
 #endif
 
@@ -1135,23 +1135,23 @@ auto const assertion_statement_def =
 // association_element ::=
 // [ formal_part => ] actual_part
 auto const association_element_def =
-		-( formal_part => ) actual_part
-		;
+        -( formal_part => ) actual_part
+        ;
 #endif
 
 #if 0
 // association_list ::=
 // association_element { , association_element }
 auto const association_list_def =
-		association_element >> ( association_element % ',' )
-		;
+        association_element >> ( association_element % ',' )
+        ;
 #endif
 
 #if 0
 // attribute_declaration ::=
 // attribute identifier : type_mark ;
 auto const attribute_declaration_def =
-		ATTRIBUTE identifier > ':' type_mark > ';'
+        ATTRIBUTE identifier > ':' type_mark > ';'
 ;
 #endif
 
@@ -1159,23 +1159,23 @@ auto const attribute_declaration_def =
 // attribute_designator ::=
 // attribute_simple_name
 auto const attribute_designator_def =
-		attribute_simple_name
-		;
+        attribute_simple_name
+        ;
 #endif
 
 #if 0
 // attribute_name ::=
 // prefix [ signature ] ' attribute_designator [ ( expression ) ]
 auto const attribute_name_def =
-		//prefix -( signature ) ' attribute_designator -( '(' expression ')' )
-		;
+        //prefix -( signature ) ' attribute_designator -( '(' expression ')' )
+        ;
 #endif
 
 #if 0
 // attribute_specification ::=
 // attribute attribute_designator of entity_specification is expression ;
 auto const attribute_specification_def =
-		ATTRIBUTE attribute_designator OF entity_specification IS expression > ';'
+        ATTRIBUTE attribute_designator OF entity_specification IS expression > ';'
 ;
 #endif
 
@@ -1183,23 +1183,23 @@ auto const attribute_specification_def =
 // base ::=                                                           [§ 13.4.2]
 // integer
 auto const base_def =
-	integer
-	;
+    integer
+    ;
 #endif
 
 #if 0 /* Note: UNUSED, embedded directly into bit_string_literal rule */
 // base_specifier ::=                                                   [§ 13.7]
 // B | O | X
 auto const base_specifier_def =
-	'B' | 'O' | 'X'
-	;
+    'B' | 'O' | 'X'
+    ;
 #endif
 
 #if 0
 // base_unit_declaration ::=
 // identifier ;
 auto const base_unit_declaration_def =
-		identifier > ';'
+        identifier > ';'
 ;
 #endif
 
@@ -1243,8 +1243,8 @@ auto const based_literal_def =
 // basic_character ::=
 // basic_graphic_character | format_effector
 auto const basic_character_def =
-		basic_graphic_character | format_effector
-		;
+        basic_graphic_character | format_effector
+        ;
 #endif
 
 
@@ -1262,8 +1262,8 @@ auto const basic_graphic_character_def =
 // basic_identifier ::=                                                 [§ 13.3]
 // letter { [ underline ] letter_or_digit }
 auto const basic_identifier_def =
-	letter >> *( -lit("_") >> letter_or_digit )
-	;
+    letter >> *( -lit("_") >> letter_or_digit )
+    ;
 
 
 #if 0
@@ -1272,10 +1272,10 @@ auto const basic_identifier_def =
 //     [ generic_map_aspect ]
 //     [ port_map_aspect ]
 auto const binding_indication_def =
-		-( USE entity_aspect )
-		-( generic_map_aspect )
-		-( port_map_aspect )
-		;
+        -( USE entity_aspect )
+        -( generic_map_aspect )
+        -( port_map_aspect )
+        ;
 #endif
 
 
@@ -1318,7 +1318,7 @@ auto const bit_string_literal_def =
 // bit_value ::=
 // extended_digit { [ underline ] extended_digit }
 auto const bit_value_def =
-		extended_digit { -( underline ) extended_digit }
+        extended_digit { -( underline ) extended_digit }
 ;
 #endif
 
@@ -1329,8 +1329,8 @@ auto const bit_value_def =
 //     { configuration_item }
 //     end for ;
 auto const block_configuration_def =
-		FOR block_specification
-		{ use_clause }
+        FOR block_specification
+        { use_clause }
 { configuration_item }
 END FOR > ';'
 ;
@@ -1356,24 +1356,24 @@ END FOR > ';'
 //     | group_template_declaration
 //     | group_declaration
 auto const block_declarative_item_def =
-		subprogram_declaration
-		| subprogram_body
-		| type_declaration
-		| subtype_declaration
-		| constant_declaration
-		| signal_declaration
-		| shared_variable_declaration
-		| file_declaration
-		| alias_declaration
-		| component_declaration
-		| attribute_declaration
-		| attribute_specification
-		| configuration_specification
-		| disconnection_specification
-		| use_clause
-		| group_template_declaration
-		| group_declaration
-		;
+        subprogram_declaration
+        | subprogram_body
+        | type_declaration
+        | subtype_declaration
+        | constant_declaration
+        | signal_declaration
+        | shared_variable_declaration
+        | file_declaration
+        | alias_declaration
+        | component_declaration
+        | attribute_declaration
+        | attribute_specification
+        | configuration_specification
+        | disconnection_specification
+        | use_clause
+        | group_template_declaration
+        | group_declaration
+        ;
 #endif
 
 #if 0
@@ -1391,11 +1391,11 @@ auto const block_declarative_part_def =
 //     [ port_clause
 //     [ port_map_aspect ; ] ]
 auto const block_header_def =
-		-( generic_clause
-				-( generic_map_aspect > ';' ) )
-				-( port_clause
-						-( port_map_aspect > ';' ) )
-						;
+        -( generic_clause
+                -( generic_map_aspect > ';' ) )
+                -( port_clause
+                        -( port_map_aspect > ';' ) )
+                        ;
 #endif
 
 #if 0
@@ -1404,10 +1404,10 @@ auto const block_header_def =
 //     | block_statement_label
 //     | generate_statement_label [ ( index_specification ) ]
 auto const block_specification_def =
-		architecture_name
-		| block_statement_label
-		| generate_statement_label -( '(' index_specification ')' )
-		;
+        architecture_name
+        | block_statement_label
+        | generate_statement_label -( '(' index_specification ')' )
+        ;
 #endif
 
 #if 0
@@ -1420,12 +1420,12 @@ auto const block_specification_def =
 //     block_statement_part
 //     end block [ block_label ] ;
 auto const block_statement_def =
-		block_label > ':'     BLOCK -( '(' guard_expression ')' ) -( IS )
-		block_header
-		block_declarative_part
-		BEGIN
-		block_statement_part
-		END BLOCK -( block_label ) > ';'
+        block_label > ':'     BLOCK -( '(' guard_expression ')' ) -( IS )
+        block_header
+        block_declarative_part
+        BEGIN
+        block_statement_part
+        END BLOCK -( block_label ) > ';'
 ;
 #endif
 
@@ -1445,10 +1445,10 @@ auto const block_statement_part_def =
 //     { case_statement_alternative }
 //     end case [ case_label ] ;
 auto const case_statement_def =
-		-( case_label > ':' )
-		CASE expression IS
-		case_statement_alternative
-		{ case_statement_alternative }
+        -( case_label > ':' )
+        CASE expression IS
+        case_statement_alternative
+        { case_statement_alternative }
 END CASE -( case_label ) > ';'
 ;
 #endif
@@ -1458,7 +1458,7 @@ END CASE -( case_label ) > ';'
 // when choices =>
 //     sequence_of_statements
 auto const case_statement_alternative_def =
-		WHEN choices =>
+        WHEN choices =>
 sequence_of_statements
 ;
 #endif
@@ -1491,18 +1491,18 @@ auto const character_literal_def =
 //     | element_simple_name
 //     | others
 auto const choice_def =
-		simple_expression
-		| discrete_range
-		| element_simple_name
-		| OTHERS
-		;
+        simple_expression
+        | discrete_range
+        | element_simple_name
+        | OTHERS
+        ;
 #endif
 
 #if 0
 // choices ::=
 // choice { | choice }
 auto const choices_def =
-		choice { | choice }
+        choice { | choice }
 ;
 #endif
 
@@ -1513,10 +1513,10 @@ auto const choices_def =
 //     [ block_configuration ]
 //     end for ;
 auto const component_configuration_def =
-		FOR component_specification
-		-( binding_indication > ';' )
-		-( block_configuration )
-		END FOR > ';'
+        FOR component_specification
+        -( binding_indication > ';' )
+        -( block_configuration )
+        END FOR > ';'
 ;
 #endif
 
@@ -1527,10 +1527,10 @@ auto const component_configuration_def =
 //     [ local_port_clause ]
 //     end component [ component_simple_name ] ;
 auto const component_declaration_def =
-		COMPONENT identifier -( IS )
-		-( local_generic_clause )
-		-( local_port_clause )
-		END COMPONENT -( component_simple_name ) > ';'
+        COMPONENT identifier -( IS )
+        -( local_generic_clause )
+        -( local_port_clause )
+        END COMPONENT -( component_simple_name ) > ';'
 ;
 #endif
 
@@ -1541,9 +1541,9 @@ auto const component_declaration_def =
 //     [ generic_map_aspect ]
 //     [ port_map_aspect ] ;
 auto const component_instantiation_statement_def =
-		instantiation_label > ':'     instantiated_unit
-		-( generic_map_aspect )
-		-( port_map_aspect ) > ';'
+        instantiation_label > ':'     instantiated_unit
+        -( generic_map_aspect )
+        -( port_map_aspect ) > ';'
 ;
 #endif
 
@@ -1551,8 +1551,8 @@ auto const component_instantiation_statement_def =
 // component_specification ::=
 // instantiation_list : component_name
 auto const component_specification_def =
-		instantiation_list > ':' component_name
-		;
+        instantiation_list > ':' component_name
+        ;
 #endif
 
 #if 0
@@ -1560,16 +1560,16 @@ auto const component_specification_def =
 // array_type_definition
 //     | record_type_definition
 auto const composite_type_definition_def =
-		array_type_definition
-		| record_type_definition
-		;
+        array_type_definition
+        | record_type_definition
+        ;
 #endif
 
 #if 0
 // concurrent_assertion_statement ::=
 // [ label : ] [ postponed ] assertion ;
 auto const concurrent_assertion_statement_def =
-		-( LABEL > ':' ) -( POSTPONED ) assertion > ';'
+        -( LABEL > ':' ) -( POSTPONED ) assertion > ';'
 ;
 #endif
 
@@ -1577,7 +1577,7 @@ auto const concurrent_assertion_statement_def =
 // concurrent_procedure_call_statement ::=
 // [ label : ] [ postponed ] procedure_call ;
 auto const concurrent_procedure_call_statement_def =
-		-( LABEL > ':' ) -( POSTPONED ) procedure_call > ';'
+        -( LABEL > ':' ) -( POSTPONED ) procedure_call > ';'
 ;
 #endif
 
@@ -1586,9 +1586,9 @@ auto const concurrent_procedure_call_statement_def =
 // [ label : ] [ postponed ] conditional_signal_assignment
 //     | [ label : ] [ postponed ] selected_signal_assignment
 auto const concurrent_signal_assignment_statement_def =
-		-( LABEL > ':' ) -( POSTPONED ) conditional_signal_assignment
-		| -( LABEL > ':' ) -( POSTPONED ) selected_signal_assignment
-		;
+        -( LABEL > ':' ) -( POSTPONED ) conditional_signal_assignment
+        | -( LABEL > ':' ) -( POSTPONED ) selected_signal_assignment
+        ;
 #endif
 
 #if 0
@@ -1601,37 +1601,37 @@ auto const concurrent_signal_assignment_statement_def =
 //     | component_instantiation_statement
 //     | generate_statement
 auto const concurrent_statement_def =
-		block_statement
-		| process_statement
-		| concurrent_procedure_call_statement
-		| concurrent_assertion_statement
-		| concurrent_signal_assignment_statement
-		| component_instantiation_statement
-		| generate_statement
-		;
+        block_statement
+        | process_statement
+        | concurrent_procedure_call_statement
+        | concurrent_assertion_statement
+        | concurrent_signal_assignment_statement
+        | component_instantiation_statement
+        | generate_statement
+        ;
 #endif
 
 #if 0
 // condition ::=
 // boolean_expression
 auto const condition_def =
-		boolean_expression
-		;
+        boolean_expression
+        ;
 #endif
 
 #if 0
 // condition_clause ::=
 // until condition
 auto const condition_clause_def =
-		UNTIL condition
-		;
+        UNTIL condition
+        ;
 #endif
 
 #if 0
 // conditional_signal_assignment ::=
 // target    <= options conditional_waveforms ;
 auto const conditional_signal_assignment_def =
-		target    <= options conditional_waveforms > ';'
+        target    <= options conditional_waveforms > ';'
 ;
 #endif
 
@@ -1642,7 +1642,7 @@ auto const conditional_signal_assignment_def =
 auto const conditional_waveforms_def =
 { waveform WHEN condition ELSE }
 waveform -( WHEN condition )
-	;
+    ;
 #endif
 
 #if 0
@@ -1652,10 +1652,10 @@ waveform -( WHEN condition )
 //     block_configuration
 //     end [ configuration ] [ configuration_simple_name ] ;
 auto const configuration_declaration_def =
-		CONFIGURATION identifier OF entity_name IS
-		configuration_declarative_part
-		block_configuration
-		END -( CONFIGURATION ) -( configuration_simple_name ) > ';'
+        CONFIGURATION identifier OF entity_name IS
+        configuration_declarative_part
+        block_configuration
+        END -( CONFIGURATION ) -( configuration_simple_name ) > ';'
 ;
 #endif
 
@@ -1665,10 +1665,10 @@ auto const configuration_declaration_def =
 //     | attribute_specification
 //     | group_declaration
 auto const configuration_declarative_item_def =
-		use_clause
-		| attribute_specification
-		| group_declaration
-		;
+        use_clause
+        | attribute_specification
+        | group_declaration
+        ;
 #endif
 
 #if 0
@@ -1684,16 +1684,16 @@ auto const configuration_declarative_part_def =
 // block_configuration
 //     | component_configuration
 auto const configuration_item_def =
-		block_configuration
-		| component_configuration
-		;
+        block_configuration
+        | component_configuration
+        ;
 #endif
 
 #if 0
 // configuration_specification ::=
 // for component_specification binding_indication ;
 auto const configuration_specification_def =
-		FOR component_specification binding_indication > ';'
+        FOR component_specification binding_indication > ';'
 ;
 #endif
 
@@ -1701,7 +1701,7 @@ auto const configuration_specification_def =
 // constant_declaration ::=
 // constant identifier_list : subtype_indication [ := expression ] ;
 auto const constant_declaration_def =
-		CONSTANT identifier_list > ':' subtype_indication -(  ":=" >  expression ) > ';'
+        CONSTANT identifier_list > ':' subtype_indication -(  ":=" >  expression ) > ';'
 ;
 #endif
 
@@ -1709,8 +1709,8 @@ auto const constant_declaration_def =
 // constrained_array_definition ::=
 // array index_constraint of element_subtype_indication
 auto const constrained_array_definition_def =
-		ARRAY index_constraint OF element_subtype_indication
-		;
+        ARRAY index_constraint OF element_subtype_indication
+        ;
 #endif
 
 #if 0
@@ -1718,9 +1718,9 @@ auto const constrained_array_definition_def =
 // range_constraint
 //     | index_constraint
 auto const constraint_def =
-		range_constraint
-		| index_constraint
-		;
+        range_constraint
+        | index_constraint
+        ;
 #endif
 
 #if 0
@@ -1736,9 +1736,9 @@ auto const context_clause_def =
 // library_clause
 //     | use_clause
 auto const context_item_def =
-		library_clause
-		| use_clause
-		;
+        library_clause
+        | use_clause
+        ;
 #endif
 
 
@@ -1775,20 +1775,20 @@ auto const decimal_literal_def =
 //     | subprogram_declaration
 //     | package_declaration
 auto const declaration_def =
-		type_declaration
-		| subtype_declaration
-		| object_declaration
-		| interface_declaration
-		| alias_declaration
-		| attribute_declaration
-		| component_declaration
-		| group_template_declaration
-		| group_declaration
-		| entity_declaration
-		| configuration_declaration
-		| subprogram_declaration
-		| package_declaration
-		;
+        type_declaration
+        | subtype_declaration
+        | object_declaration
+        | interface_declaration
+        | alias_declaration
+        | attribute_declaration
+        | component_declaration
+        | group_template_declaration
+        | group_declaration
+        | entity_declaration
+        | configuration_declaration
+        | subprogram_declaration
+        | package_declaration
+        ;
 #endif
 
 #if 0
@@ -1796,16 +1796,16 @@ auto const declaration_def =
 // transport
 //     | [ reject time_expression ] inertial
 auto const delay_mechanism_def =
-		TRANSPORT
-		| -( REJECT time_expression ) INERTIAL
-		;
+        TRANSPORT
+        | -( REJECT time_expression ) INERTIAL
+        ;
 #endif
 
 #if 0
 // design_file ::=
 // design_unit { design_unit }
 auto const design_file_def =
-		design_unit { design_unit }
+        design_unit { design_unit }
 ;
 #endif
 
@@ -1813,31 +1813,31 @@ auto const design_file_def =
 // design_unit ::=
 // context_clause library_unit
 auto const design_unit_def =
-		context_clause library_unit
-		;
+        context_clause library_unit
+        ;
 #endif
 
 #if 0
 // designator ::=
 // identifier  |  operator_symbol
 auto const designator_def =
-		identifier  |  operator_symbol
-		;
+        identifier  |  operator_symbol
+        ;
 #endif
 
 #if 0
 // direction ::=
 // to | downto
 auto const direction_def =
-		TO | DOWNTO
-		;
+        TO | DOWNTO
+        ;
 #endif
 
 #if 0
 // disconnection_specification ::=
 // disconnect guarded_signal_specification after time_expression ;
 auto const disconnection_specification_def =
-		DISCONNECT guarded_signal_specification AFTER time_expression > ';'
+        DISCONNECT guarded_signal_specification AFTER time_expression > ';'
 ;
 #endif
 
@@ -1845,23 +1845,23 @@ auto const disconnection_specification_def =
 // discrete_range ::=
 // discrete_subtype_indication | range
 auto const discrete_range_def =
-		discrete_subtype_indication | RANGE
-		;
+        discrete_subtype_indication | RANGE
+        ;
 #endif
 
 #if 0
 // element_association ::=
 // [ choices => ] expression
 auto const element_association_def =
-		-( choices => ) expression
-		;
+        -( choices => ) expression
+        ;
 #endif
 
 #if 0
 // element_declaration ::=
 // identifier_list : element_subtype_definition ;
 auto const element_declaration_def =
-		identifier_list > ':' element_subtype_definition > ';'
+        identifier_list > ':' element_subtype_definition > ';'
 ;
 #endif
 
@@ -1869,8 +1869,8 @@ auto const element_declaration_def =
 // element_subtype_definition ::=
 // subtype_indication
 auto const element_subtype_definition_def =
-		subtype_indication
-		;
+        subtype_indication
+        ;
 #endif
 
 #if 0
@@ -1879,7 +1879,7 @@ auto const element_subtype_definition_def =
 //     | configuration configuration_name
 //     | open
 auto const entity_aspect_def =
-		ENTITY entity_name -( '(' architecture_identifier) )
+        ENTITY entity_name -( '(' architecture_identifier) )
 | CONFIGURATION configuration_name
 | OPEN
 ;
@@ -1894,29 +1894,29 @@ auto const entity_aspect_def =
 //     | label         | literal         | units
 //     | group         | file
 auto const entity_class_def =
-		ENTITY         | ARCHITECTURE  | CONFIGURATION
-		| PROCEDURE  | FUNCTION         | PACKAGE
-		| TYPE         | SUBTYPE         | CONSTANT
-		| SIGNAL     | VARIABLE         | COMPONENT
-		| LABEL         | LITERAL         | UNITS
-		| GROUP         | FILE
-		;
+        ENTITY         | ARCHITECTURE  | CONFIGURATION
+        | PROCEDURE  | FUNCTION         | PACKAGE
+        | TYPE         | SUBTYPE         | CONSTANT
+        | SIGNAL     | VARIABLE         | COMPONENT
+        | LABEL         | LITERAL         | UNITS
+        | GROUP         | FILE
+        ;
 #endif
 
 #if 0
 // entity_class_entry ::=
 // entity_class [ <> ]
 auto const entity_class_entry_def =
-		entity_class -( <> )
-		;
+        entity_class -( <> )
+        ;
 #endif
 
 #if 0
 // entity_class_entry_list ::=
 // entity_class_entry { , entity_class_entry }
 auto const entity_class_entry_list_def =
-		entity_class_entry >> ( entity_class_entry % ',' )
-		;
+        entity_class_entry >> ( entity_class_entry % ',' )
+        ;
 #endif
 
 #if 0
@@ -1928,12 +1928,12 @@ auto const entity_class_entry_list_def =
 //     entity_statement_part ]
 //     end [ entity ] [ entity_simple_name ] ;
 auto const entity_declaration_def =
-		ENTITY identifier IS
-		entity_header
-		entity_declarative_part
-		-( BEGIN
-				entity_statement_part )
-				END -( ENTITY ) -( entity_simple_name ) > ';'
+        ENTITY identifier IS
+        entity_header
+        entity_declarative_part
+        -( BEGIN
+                entity_statement_part )
+                END -( ENTITY ) -( entity_simple_name ) > ';'
 ;
 #endif
 
@@ -1955,22 +1955,22 @@ auto const entity_declaration_def =
 //     | group_template_declaration
 //     | group_declaration
 auto const entity_declarative_item_def =
-		subprogram_declaration
-		| subprogram_body
-		| type_declaration
-		| subtype_declaration
-		| constant_declaration
-		| signal_declaration
-		| shared_variable_declaration
-		| file_declaration
-		| alias_declaration
-		| attribute_declaration
-		| attribute_specification
-		| disconnection_specification
-		| use_clause
-		| group_template_declaration
-		| group_declaration
-		;
+        subprogram_declaration
+        | subprogram_body
+        | type_declaration
+        | subtype_declaration
+        | constant_declaration
+        | signal_declaration
+        | shared_variable_declaration
+        | file_declaration
+        | alias_declaration
+        | attribute_declaration
+        | attribute_specification
+        | disconnection_specification
+        | use_clause
+        | group_template_declaration
+        | group_declaration
+        ;
 #endif
 
 #if 0
@@ -1985,8 +1985,8 @@ auto const entity_declarative_part_def =
 // entity_designator ::=
 // entity_tag [ signature ]
 auto const entity_designator_def =
-		entity_tag -( signature )
-		;
+        entity_tag -( signature )
+        ;
 #endif
 
 #if 0
@@ -1994,9 +1994,9 @@ auto const entity_designator_def =
 // [ formal_generic_clause ]
 //     [ formal_port_clause ]
 auto const entity_header_def =
-		-( formal_generic_clause )
-		-( formal_port_clause )
-		;
+        -( formal_generic_clause )
+        -( formal_port_clause )
+        ;
 #endif
 
 #if 0
@@ -2005,18 +2005,18 @@ auto const entity_header_def =
 //     | others
 //     | all
 auto const entity_name_list_def =
-		entity_designator >> ( entity_designator % ',' )
-		| OTHERS
-		| ALL
-		;
+        entity_designator >> ( entity_designator % ',' )
+        | OTHERS
+        | ALL
+        ;
 #endif
 
 #if 0
 // entity_specification ::=
 // entity_name_list : entity_class
 auto const entity_specification_def =
-		entity_name_list > ':' entity_class
-		;
+        entity_name_list > ':' entity_class
+        ;
 #endif
 
 #if 0
@@ -2025,10 +2025,10 @@ auto const entity_specification_def =
 //     | passive_concurrent_procedure_call_statement
 //     | passive_process_statement
 auto const entity_statement_def =
-		concurrent_assertion_statement
-		| passive_concurrent_procedure_call_statement
-		| passive_process_statement
-		;
+        concurrent_assertion_statement
+        | passive_concurrent_procedure_call_statement
+        | passive_process_statement
+        ;
 #endif
 
 #if 0
@@ -2043,8 +2043,8 @@ auto const entity_statement_part_def =
 // entity_tag ::=
 // simple_name | character_literal | operator_symbol
 auto const entity_tag_def =
-		simple_name | character_literal | operator_symbol
-		;
+        simple_name | character_literal | operator_symbol
+        ;
 #endif
 
 
@@ -2060,15 +2060,15 @@ auto const enumeration_literal_def =
 // enumeration_type_definition ::=
 // ( enumeration_literal { , enumeration_literal } )
 auto const enumeration_type_definition_def =
-		( enumeration_literal >> ( enumeration_literal % ',' ) )
-		;
+        ( enumeration_literal >> ( enumeration_literal % ',' ) )
+        ;
 #endif
 
 #if 0
 // exit_statement ::=
 // [ label : ] exit [ loop_label ] [ when condition ] ;
 auto const exit_statement_def =
-		-( LABEL > ':' ) EXIT -( loop_label ) -( WHEN condition ) > ';'
+        -( LABEL > ':' ) EXIT -( loop_label ) -( WHEN condition ) > ';'
 ;
 #endif
 
@@ -2091,12 +2091,12 @@ auto const exponent_def =
 //     | relation [ nor relation ]
 //     | relation { xnor relation }
 auto const expression_def =
-		relation { AND relation }
+        relation { AND relation }
 | relation { OR relation }
 | relation { XOR relation }
 | relation -( NAND relation )
-	| relation -( NOR relation )
-	| relation { XNOR relation }
+    | relation -( NOR relation )
+    | relation { XNOR relation }
 ;
 #endif
 
@@ -2112,8 +2112,8 @@ auto const extended_digit_def =
 // extended_identifier ::=                                            [§ 13.3.2]
 // \ graphic_character { graphic_character } <backslash>
 auto const extended_identifier_def =
-	'\\' >> graphic_character >> *graphic_character >> '\\'
-	;
+    '\\' >> graphic_character >> *graphic_character >> '\\'
+    ;
 
 
 #if 0
@@ -2122,74 +2122,74 @@ auto const extended_identifier_def =
 //     | abs primary
 //     | not primary
 auto const factor_def =
-		primary -( ** primary )
-		| ABS primary
-		| NOT primary
-		;
+        primary -( ** primary )
+        | ABS primary
+        | NOT primary
+        ;
 #endif
 
 #if 0
 // file_declaration ::=
 // file identifier_list : subtype_indication file_open_information ] ;
 auto const file_declaration_def =
-		FILE identifier_list > ':' subtype_indication file_open_information ) > ';'
-		;
+        FILE identifier_list > ':' subtype_indication file_open_information ) > ';'
+        ;
 #endif
 
 #if 0
-		// file_logical_name ::=
-		// string_expression
-		auto const file_logical_name_def =
-				string_expression
-				;
+        // file_logical_name ::=
+        // string_expression
+        auto const file_logical_name_def =
+                string_expression
+                ;
 #endif
 
 #if 0
-		// file_open_information ::=
-		// [ open file_open_kind_expression ] is file_logical_name
-		auto const file_open_information_def =
-				-( OPEN file_open_kind_expression ) IS file_logical_name
-				;
+        // file_open_information ::=
+        // [ open file_open_kind_expression ] is file_logical_name
+        auto const file_open_information_def =
+                -( OPEN file_open_kind_expression ) IS file_logical_name
+                ;
 #endif
 
 #if 0
-		// file_type_definition ::=
-		// file  of type_mark
-		//     floating_type_definition  :=  range_constraint
-		auto const file_type_definition_def =
-				FILE  OF type_mark
-				floating_type_definition   ":=" >   range_constraint
-				;
+        // file_type_definition ::=
+        // file  of type_mark
+        //     floating_type_definition  :=  range_constraint
+        auto const file_type_definition_def =
+                FILE  OF type_mark
+                floating_type_definition   ":=" >   range_constraint
+                ;
 #endif
 
 #if 0
-		// formal_designator ::=
-		// generic_name
-		//     | port_name
-		//     | parameter_name
-		auto const formal_designator_def =
-				generic_name
-				| port_name
-				| parameter_name
-				;
+        // formal_designator ::=
+        // generic_name
+        //     | port_name
+        //     | parameter_name
+        auto const formal_designator_def =
+                generic_name
+                | port_name
+                | parameter_name
+                ;
 #endif
 
 #if 0
-		// formal_parameter_list ::=
-		// parameter_interface_list
-		auto const formal_parameter_list_def =
-				parameter_interface_list
-				;
+        // formal_parameter_list ::=
+        // parameter_interface_list
+        auto const formal_parameter_list_def =
+                parameter_interface_list
+                ;
 #endif
 
 #if 0
-		// formal_part ::=
-		// formal_designator
-		//     | function_name ( formal_designator )
-		//     | type_mark ( formal_designator )
-		auto const formal_part_def =
-				formal_designator
-				| function_name '(' formal_designator ')'     | type_mark '(' formal_designator )
+        // formal_part ::=
+        // formal_designator
+        //     | function_name ( formal_designator )
+        //     | type_mark ( formal_designator )
+        auto const formal_part_def =
+                formal_designator
+                | function_name '(' formal_designator ')'     | type_mark '(' formal_designator )
 ;
 #endif
 
@@ -2197,7 +2197,7 @@ auto const file_declaration_def =
 // full_type_declaration ::=
 // type identifier is type_definition ;
 auto const full_type_declaration_def =
-		TYPE identifier IS type_definition > ';'
+        TYPE identifier IS type_definition > ';'
 ;
 #endif
 
@@ -2205,8 +2205,8 @@ auto const full_type_declaration_def =
 // function_call ::=
 // function_name [ ( actual_parameter_part ) ]
 auto const function_call_def =
-		function_name -( '(' actual_parameter_part ')' )
-		;
+        function_name -( '(' actual_parameter_part ')' )
+        ;
 #endif
 
 #if 0
@@ -2218,8 +2218,8 @@ auto const function_call_def =
 //     { concurrent_statement }
 //     end generate [ generate_label ] ;
 auto const generate_statement_def =
-		generate_label > ':'     generation_scheme GENERATE
-		-( { block_declarative_item }
+        generate_label > ':'     generation_scheme GENERATE
+        -( { block_declarative_item }
 BEGIN )
 { concurrent_statement }
 END GENERATE -( generate_label ) > ';'
@@ -2231,16 +2231,16 @@ END GENERATE -( generate_label ) > ';'
 // for generate_parameter_specification
 //     | if condition
 auto const generation_scheme_def =
-		FOR generate_parameter_specification
-		| IF condition
-		;
+        FOR generate_parameter_specification
+        | IF condition
+        ;
 #endif
 
 #if 0
 // generic_clause ::=
 // generic ( generic_list ) ;
 auto const generic_clause_def =
-		GENERIC '(' generic_list ')' > ';'
+        GENERIC '(' generic_list ')' > ';'
 ;
 #endif
 
@@ -2248,15 +2248,15 @@ auto const generic_clause_def =
 // generic_list ::=
 // generic_interface_list
 auto const generic_list_def =
-		generic_interface_list
-		;
+        generic_interface_list
+        ;
 #endif
 
 #if 0
 // generic_map_aspect ::=
 // generic map ( generic_association_list )
 auto const generic_map_aspect_def =
-		GENERIC MAP '(' generic_association_list )
+        GENERIC MAP '(' generic_association_list )
 ;
 #endif
 
@@ -2274,23 +2274,23 @@ auto const graphic_character_def =
 // group_constituent ::=
 // name | character_literal
 auto const group_constituent_def =
-		name | character_literal
-		;
+        name | character_literal
+        ;
 #endif
 
 #if 0
 // group_constituent_list ::=
 // group_constituent { , group_constituent }
 auto const group_constituent_list_def =
-		group_constituent >> ( group_constituent % ',' )
-		;
+        group_constituent >> ( group_constituent % ',' )
+        ;
 #endif
 
 #if 0
 // group_template_declaration ::=
 // group identifier is ( entity_class_entry_list ) ;
 auto const group_template_declaration_def =
-		GROUP identifier IS '(' entity_class_entry_list ')' > ';'
+        GROUP identifier IS '(' entity_class_entry_list ')' > ';'
 ;
 #endif
 
@@ -2298,7 +2298,7 @@ auto const group_template_declaration_def =
 // group_declaration ::=
 // group identifier : group_template_name ( group_constituent_list ) ;
 auto const group_declaration_def =
-		GROUP identifier > ':' group_template_name '(' group_constituent_list ')' > ';'
+        GROUP identifier > ':' group_template_name '(' group_constituent_list ')' > ';'
 ;
 #endif
 
@@ -2306,24 +2306,24 @@ auto const group_declaration_def =
 // guarded_signal_specification ::=
 // guarded_signal_list : type_mark
 auto const guarded_signal_specification_def =
-		guarded_signal_list > ':' type_mark
-		;
+        guarded_signal_list > ':' type_mark
+        ;
 #endif
 
 
 // identifier ::=                                                       [§ 13.3]
 // basic_identifier | extended_identifier
 auto const identifier_def =
-		basic_identifier | extended_identifier
-		;
+        basic_identifier | extended_identifier
+        ;
 
 
 #if 0
 // identifier_list ::=
 // identifier { , identifier }
 auto const identifier_list_def =
-		identifier >> ( identifier % ',' )
-		;
+        identifier >> ( identifier % ',' )
+        ;
 #endif
 
 #if 0
@@ -2337,14 +2337,14 @@ auto const identifier_list_def =
 //     sequence_of_statements ]
 //     end if [ if_label ] ;
 auto const if_statement_def =
-		-( if_label > ':' )
-		IF condition THEN
-		sequence_of_statements
-		{ ELSIF condition THEN
-	sequence_of_statements }
+        -( if_label > ':' )
+        IF condition THEN
+        sequence_of_statements
+        { ELSIF condition THEN
+    sequence_of_statements }
 -( ELSE
-		sequence_of_statements )
-	END IF -( if_label ) > ';'
+        sequence_of_statements )
+    END IF -( if_label ) > ';'
 ;
 #endif
 
@@ -2352,7 +2352,7 @@ auto const if_statement_def =
 // incomplete_type_declaration ::=
 // type identifier ;
 auto const incomplete_type_declaration_def =
-		TYPE identifier > ';'
+        TYPE identifier > ';'
 ;
 #endif
 
@@ -2360,8 +2360,8 @@ auto const incomplete_type_declaration_def =
 // index_constraint ::=
 // ( discrete_range { , discrete_range } )
 auto const index_constraint_def =
-		( discrete_range >> ( discrete_range % ',' ) )
-		;
+        ( discrete_range >> ( discrete_range % ',' ) )
+        ;
 #endif
 
 #if 0
@@ -2369,16 +2369,16 @@ auto const index_constraint_def =
 // discrete_range
 //     | static_expression
 auto const index_specification_def =
-		discrete_range
-		| static_expression
-		;
+        discrete_range
+        | static_expression
+        ;
 #endif
 
 #if 0
 // index_subtype_definition ::=
 // type_mark range <>
 auto const index_subtype_definition_def =
-		type_mark RANGE <>
+        type_mark RANGE <>
 ;
 #endif
 
@@ -2386,7 +2386,7 @@ auto const index_subtype_definition_def =
 // indexed_name ::=
 // prefix ( expression { , expression } )
 auto const indexed_name_def =
-		prefix '(' expression >> ( expression % ',' ) )
+        prefix '(' expression >> ( expression % ',' ) )
 ;
 #endif
 
@@ -2396,10 +2396,10 @@ auto const indexed_name_def =
 //     | entity entity_name [ ( architecture_identifier ) ]
 //     | configuration configuration_name
 auto const instantiated_unit_def =
-		-( COMPONENT ) component_name
-		| ENTITY entity_name -( '(' architecture_identifier ')' )
-		| CONFIGURATION configuration_name
-		;
+        -( COMPONENT ) component_name
+        | ENTITY entity_name -( '(' architecture_identifier ')' )
+        | CONFIGURATION configuration_name
+        ;
 #endif
 
 #if 0
@@ -2408,10 +2408,10 @@ auto const instantiated_unit_def =
 //     | others
 //     | all
 auto const instantiation_list_def =
-		instantiation_label >> ( instantiation_label % ',' )
-		| OTHERS
-		| ALL
-		;
+        instantiation_label >> ( instantiation_label % ',' )
+        | OTHERS
+        | ALL
+        ;
 #endif
 
 
@@ -2421,23 +2421,23 @@ auto const integer_def =
     lexeme [
         char_("0-9") >> *( -lit("_") >> char_("0-9") )
     ]
-	;
+    ;
 
 
 #if 0
 // integer_type_definition ::=
 // range_constraint
 auto const integer_type_definition_def =
-		range_constraint
-		;
+        range_constraint
+        ;
 #endif
 
 #if 0
 // interface_constant_declaration ::=
 // [ constant ] identifier_list : [ in ] subtype_indication [ := static_expression ]
 auto const interface_constant_declaration_def =
-		-( CONSTANT ) identifier_list > ':' -( IN ) subtype_indication -(  ":=" >  static_expression )
-		;
+        -( CONSTANT ) identifier_list > ':' -( IN ) subtype_indication -(  ":=" >  static_expression )
+        ;
 #endif
 
 #if 0
@@ -2447,34 +2447,34 @@ auto const interface_constant_declaration_def =
 //     | interface_variable_declaration
 //     | interface_file_declaration
 auto const interface_declaration_def =
-		interface_constant_declaration
-		| interface_signal_declaration
-		| interface_variable_declaration
-		| interface_file_declaration
-		;
+        interface_constant_declaration
+        | interface_signal_declaration
+        | interface_variable_declaration
+        | interface_file_declaration
+        ;
 #endif
 
 #if 0
 // interface_element ::=
 // interface_declaration
 auto const interface_element_def =
-		interface_declaration
-		;
+        interface_declaration
+        ;
 #endif
 
 #if 0
 // interface_file_declaration ::=
 // file identifier_list : subtype_indication
 auto const interface_file_declaration_def =
-		FILE identifier_list > ':' subtype_indication
-		;
+        FILE identifier_list > ':' subtype_indication
+        ;
 #endif
 
 #if 0
 // interface_list ::=
 // interface_element { ; interface_element }
 auto const interface_list_def =
-		interface_element { > ';' interface_element }
+        interface_element { > ';' interface_element }
 ;
 #endif
 
@@ -2482,16 +2482,16 @@ auto const interface_list_def =
 // interface_signal_declaration ::=
 // [signal] identifier_list : [ mode ] subtype_indication [ bus ] [ := static_expression ]
 auto const interface_signal_declaration_def =
-		-(SIGNAL) identifier_list > ':' -( mode ) subtype_indication -( BUS ) -(  ":=" >  static_expression )
-		;
+        -(SIGNAL) identifier_list > ':' -( mode ) subtype_indication -( BUS ) -(  ":=" >  static_expression )
+        ;
 #endif
 
 #if 0
 // interface_variable_declaration ::=
 // [variable] identifier_list : [ mode ] subtype_indication [ := static_expression ]
 auto const interface_variable_declaration_def =
-		-(VARIABLE) identifier_list > ':' -( mode ) subtype_indication -(  ":=" >  static_expression )
-		;
+        -(VARIABLE) identifier_list > ':' -( mode ) subtype_indication -(  ":=" >  static_expression )
+        ;
 #endif
 
 #if 0
@@ -2499,17 +2499,17 @@ auto const interface_variable_declaration_def =
 // while condition
 //     | for loop_parameter_specification
 auto const iteration_scheme_def =
-		WHILE condition
-		| FOR loop_parameter_specification
-		;
+        WHILE condition
+        | FOR loop_parameter_specification
+        ;
 #endif
 
 #if 0
 // label ::=
 // identifier
 auto const label_def =
-		identifier
-		;
+        identifier
+        ;
 #endif
 
 
@@ -2517,22 +2517,22 @@ auto const label_def =
 // upper_case_letter | lower_case_letter
 auto const letter_def =
     upper_case_letter | lower_case_letter
-	;
+    ;
 
 
 
 // letter_or_digit ::=                                                [§ 13.3.1]
 // letter | digit
 auto const letter_or_digit_def =
-	letter | digit
-	;
+    letter | digit
+    ;
 
 
 #if 0
 // library_clause ::=
 // library logical_name_list ;
 auto const library_clause_def =
-		LIBRARY logical_name_list > ';'
+        LIBRARY logical_name_list > ';'
 ;
 #endif
 
@@ -2541,9 +2541,9 @@ auto const library_clause_def =
 // primary_unit
 //     | secondary_unit
 auto const library_unit_def =
-		primary_unit
-		| secondary_unit
-		;
+        primary_unit
+        | secondary_unit
+        ;
 #endif
 
 
@@ -2566,16 +2566,16 @@ auto const literal_def =
 // logical_name ::=
 // identifier
 auto const logical_name_def =
-		identifier
-		;
+        identifier
+        ;
 #endif
 
 #if 0
 // logical_name_list ::=
 // logical_name { , logical_name }
 auto const logical_name_list_def =
-		logical_name >> ( logical_name % ',' )
-		;
+        logical_name >> ( logical_name % ',' )
+        ;
 #endif
 
 #if 0
@@ -2585,10 +2585,10 @@ auto const logical_name_list_def =
 //     sequence_of_statements
 //     end loop [ loop_label ] ;
 auto const loop_statement_def =
-		-( loop_label > ':' )
-		-( iteration_scheme ) LOOP
-		sequence_of_statements
-		END LOOP -( loop_label ) > ';'
+        -( loop_label > ':' )
+        -( iteration_scheme ) LOOP
+        sequence_of_statements
+        END LOOP -( loop_label ) > ';'
 ;
 #endif
 
@@ -2596,8 +2596,8 @@ auto const loop_statement_def =
 // mode ::=
 // in | out | inout | buffer | linkage
 auto const mode_def =
-		IN | OUT | INOUT | BUFFER | LINKAGE
-		;
+        IN | OUT | INOUT | BUFFER | LINKAGE
+        ;
 #endif
 
 #if 0
@@ -2609,20 +2609,20 @@ auto const mode_def =
 //     | slice_name
 //     | attribute_name
 auto const name_def =
-		simple_name
-		| operator_symbol
-		| selected_name
-		| indexed_name
-		| slice_name
-		| attribute_name
-		;
+        simple_name
+        | operator_symbol
+        | selected_name
+        | indexed_name
+        | slice_name
+        | attribute_name
+        ;
 #endif
 
 #if 0
 // next_statement ::=
 // [ label : ] next [ loop_label ] [ when condition ] ;
 auto const next_statement_def =
-		-( LABEL > ':' ) NEXT -( loop_label ) -( WHEN condition ) > ';'
+        -( LABEL > ':' ) NEXT -( loop_label ) -( WHEN condition ) > ';'
 ;
 #endif
 
@@ -2630,7 +2630,7 @@ auto const next_statement_def =
 // null_statement ::=
 // [ label : ] null ;
 auto const null_statement_def =
-		-( LABEL > ':' ) NULL > ';'
+        -( LABEL > ':' ) NULL > ';'
 ;
 #endif
 
@@ -2651,27 +2651,27 @@ auto const numeric_literal_def = /* Note, order changed since matters */
 //     | variable_declaration
 //     | file_declaration
 auto const object_declaration_def =
-		constant_declaration
-		| signal_declaration
-		| variable_declaration
-		| file_declaration
-		;
+        constant_declaration
+        | signal_declaration
+        | variable_declaration
+        | file_declaration
+        ;
 #endif
 
 #if 0
 // operator_symbol ::=
 // string_literal
 auto const operator_symbol_def =
-		string_literal
-		;
+        string_literal
+        ;
 #endif
 
 #if 0
 // options ::=
 // [ guarded ] [ delay_mechanism ]
 auto const options_def =
-		-( GUARDED ) -( delay_mechanism )
-		;
+        -( GUARDED ) -( delay_mechanism )
+        ;
 #endif
 
 #if 0
@@ -2680,9 +2680,9 @@ auto const options_def =
 //     package_body_declarative_part
 //     end [ package body ] [ package_simple_name ] ;
 auto const package_body_def =
-		PACKAGE BODY package_simple_name IS
-		package_body_declarative_part
-		END -( PACKAGE BODY ) -( package_simple_name ) > ';'
+        PACKAGE BODY package_simple_name IS
+        package_body_declarative_part
+        END -( PACKAGE BODY ) -( package_simple_name ) > ';'
 ;
 #endif
 
@@ -2700,18 +2700,18 @@ auto const package_body_def =
 //     | group_template_declaration
 //     | group_declaration
 auto const package_body_declarative_item_def =
-		subprogram_declaration
-		| subprogram_body
-		| type_declaration
-		| subtype_declaration
-		| constant_declaration
-		| shared_variable_declaration
-		| file_declaration
-		| alias_declaration
-		| use_clause
-		| group_template_declaration
-		| group_declaration
-		;
+        subprogram_declaration
+        | subprogram_body
+        | type_declaration
+        | subtype_declaration
+        | constant_declaration
+        | shared_variable_declaration
+        | file_declaration
+        | alias_declaration
+        | use_clause
+        | group_template_declaration
+        | group_declaration
+        ;
 #endif
 
 #if 0
@@ -2728,9 +2728,9 @@ auto const package_body_declarative_part_def =
 //     package_declarative_part
 //     end [ package ] [ package_simple_name ] ;
 auto const package_declaration_def =
-		PACKAGE identifier IS
-		package_declarative_part
-		END -( PACKAGE ) -( package_simple_name ) > ';'
+        PACKAGE identifier IS
+        package_declarative_part
+        END -( PACKAGE ) -( package_simple_name ) > ';'
 ;
 #endif
 
@@ -2752,22 +2752,22 @@ auto const package_declaration_def =
 //     | group_template_declaration
 //     | group_declaration
 auto const package_declarative_item_def =
-		subprogram_declaration
-		| type_declaration
-		| subtype_declaration
-		| constant_declaration
-		| signal_declaration
-		| shared_variable_declaration
-		| file_declaration
-		| alias_declaration
-		| component_declaration
-		| attribute_declaration
-		| attribute_specification
-		| disconnection_specification
-		| use_clause
-		| group_template_declaration
-		| group_declaration
-		;
+        subprogram_declaration
+        | type_declaration
+        | subtype_declaration
+        | constant_declaration
+        | signal_declaration
+        | shared_variable_declaration
+        | file_declaration
+        | alias_declaration
+        | component_declaration
+        | attribute_declaration
+        | attribute_specification
+        | disconnection_specification
+        | use_clause
+        | group_template_declaration
+        | group_declaration
+        ;
 #endif
 
 #if 0
@@ -2782,8 +2782,8 @@ auto const package_declarative_part_def =
 // parameter_specification ::=
 // identifier in discrete_range
 auto const parameter_specification_def =
-		identifier IN discrete_range
-		;
+        identifier IN discrete_range
+        ;
 #endif
 
 
@@ -2791,8 +2791,8 @@ auto const parameter_specification_def =
 // [ abstract_literal ] unit_name
 namespace detail {
 
-	/* Note, the LRM doesn't specify the allowed characters, hence it's assumed
-	 * that it follows the natural conventions. */
+    /* Note, the LRM doesn't specify the allowed characters, hence it's assumed
+     * that it follows the natural conventions. */
     auto const unit_name = as_rule<std::string>(
         lexeme[ +char_("A-Za-z") ]);
 
@@ -2811,19 +2811,19 @@ auto const physical_literal_def =
 //     { secondary_unit_declaration }
 //     end units [ physical_type_simple_name ]
 auto const physical_type_definition_def =
-		range_constraint
-		UNITS
-		base_unit_declaration
-		{ secondary_unit_declaration }
+        range_constraint
+        UNITS
+        base_unit_declaration
+        { secondary_unit_declaration }
 END UNITS -( physical_type_simple_name )
-	;
+    ;
 #endif
 
 #if 0
 // port_clause ::=
 // port ( port_list ) ;
 auto const port_clause_def =
-		PORT '(' port_list ')' > ';'
+        PORT '(' port_list ')' > ';'
 ;
 #endif
 
@@ -2831,15 +2831,15 @@ auto const port_clause_def =
 // port_list ::=
 // port_interface_list
 auto const port_list_def =
-		port_interface_list
-		;
+        port_interface_list
+        ;
 #endif
 
 #if 0
 // port_map_aspect ::=
 // port map ( port_association_list )
 auto const port_map_aspect_def =
-		PORT MAP '(' port_association_list )
+        PORT MAP '(' port_association_list )
 ;
 #endif
 
@@ -2848,9 +2848,9 @@ auto const port_map_aspect_def =
 // name
 //     | function_call
 auto const prefix_def =
-		name
-		| function_call
-		;
+        name
+        | function_call
+        ;
 #endif
 
 #if 0
@@ -2864,14 +2864,14 @@ auto const prefix_def =
 //     | allocator
 //     | ( expression )
 auto const primary_def =
-		name
-		| LITERAL
-		| aggregate
-		| function_call
-		| qualified_expression
-		| type_conversion
-		| allocator
-		| '(' expression )
+        name
+        | LITERAL
+        | aggregate
+        | function_call
+        | qualified_expression
+        | type_conversion
+        | allocator
+        | '(' expression )
 ;
 #endif
 
@@ -2881,25 +2881,25 @@ auto const primary_def =
 //     | configuration_declaration
 //     | package_declaration
 auto const primary_unit_def =
-		entity_declaration
-		| configuration_declaration
-		| package_declaration
-		;
+        entity_declaration
+        | configuration_declaration
+        | package_declaration
+        ;
 #endif
 
 #if 0
 // procedure_call ::=
 // procedure_name [ ( actual_parameter_part ) ]
 auto const procedure_call_def =
-		procedure_name -( '(' actual_parameter_part ')' )
-		;
+        procedure_name -( '(' actual_parameter_part ')' )
+        ;
 #endif
 
 #if 0
 // procedure_call_statement ::=
 // [ label : ] procedure_call ;
 auto const procedure_call_statement_def =
-		-( LABEL > ':' ) procedure_call > ';'
+        -( LABEL > ':' ) procedure_call > ';'
 ;
 #endif
 
@@ -2919,20 +2919,20 @@ auto const procedure_call_statement_def =
 //     | group_template_declaration
 //     | group_declaration
 auto const process_declarative_item_def =
-		subprogram_declaration
-		| subprogram_body
-		| type_declaration
-		| subtype_declaration
-		| constant_declaration
-		| variable_declaration
-		| file_declaration
-		| alias_declaration
-		| attribute_declaration
-		| attribute_specification
-		| use_clause
-		| group_template_declaration
-		| group_declaration
-		;
+        subprogram_declaration
+        | subprogram_body
+        | type_declaration
+        | subtype_declaration
+        | constant_declaration
+        | variable_declaration
+        | file_declaration
+        | alias_declaration
+        | attribute_declaration
+        | attribute_specification
+        | use_clause
+        | group_template_declaration
+        | group_declaration
+        ;
 #endif
 
 #if 0
@@ -2952,12 +2952,12 @@ auto const process_declarative_part_def =
 //     process_statement_part
 //     end [ postponed ] process [ process_label ] ;
 auto const process_statement_def =
-		-( process_label > ':' )
-		-( POSTPONED ) PROCESS -( '(' sensitivity_list ')' ) -( IS )
-		process_declarative_part
-		BEGIN
-		process_statement_part
-		END -( POSTPONED ) PROCESS -( process_label ) > ';'
+        -( process_label > ':' )
+        -( POSTPONED ) PROCESS -( '(' sensitivity_list ')' ) -( IS )
+        process_declarative_part
+        BEGIN
+        process_statement_part
+        END -( POSTPONED ) PROCESS -( process_label ) > ';'
 ;
 #endif
 
@@ -2974,8 +2974,8 @@ auto const process_statement_part_def =
 // type_mark ' ( expression )
 //     | type_mark ' aggregate
 auto const qualified_expression_def =
-		type_mark ' '(' expression ')'     | type_mark ' aggregate
-		;
+        type_mark ' '(' expression ')'     | type_mark ' aggregate
+        ;
 #endif
 
 #if 0
@@ -2983,17 +2983,17 @@ auto const qualified_expression_def =
 // range_attribute_name
 //     | simple_expression direction simple_expression
 auto const range_def =
-		range_attribute_name
-		| simple_expression direction simple_expression
-		;
+        range_attribute_name
+        | simple_expression direction simple_expression
+        ;
 #endif
 
 #if 0
 // range_constraint ::=
 // range range
 auto const range_constraint_def =
-		RANGE RANGE
-		;
+        RANGE RANGE
+        ;
 #endif
 
 #if 0
@@ -3003,19 +3003,19 @@ auto const range_constraint_def =
 //     { element_declaration }
 //     end record [ record_type_simple_name ]
 auto const record_type_definition_def =
-		RECORD
-		element_declaration
-		{ element_declaration }
+        RECORD
+        element_declaration
+        { element_declaration }
 END RECORD -( record_type_simple_name )
-	;
+    ;
 #endif
 
 #if 0
 // relation ::=
 // shift_expression [ relational_operator shift_expression ]
 auto const relation_def =
-		shift_expression -( relational_operator shift_expression )
-		;
+        shift_expression -( relational_operator shift_expression )
+        ;
 #endif
 
 #if 0
@@ -3024,9 +3024,9 @@ auto const relation_def =
 //     report expression
 //     [ severity expression ] ;
 auto const report_statement_def =
-		-( LABEL > ':' )
-		REPORT expression
-		-( SEVERITY expression ) > ';'
+        -( LABEL > ':' )
+        REPORT expression
+        -( SEVERITY expression ) > ';'
 ;
 #endif
 
@@ -3034,7 +3034,7 @@ auto const report_statement_def =
 // return_statement ::=
 // [ label : ] return [ expression ] ;
 auto const return_statement_def =
-		-( LABEL > ':' ) RETURN -( expression ) > ';'
+        -( LABEL > ':' ) RETURN -( expression ) > ';'
 ;
 #endif
 
@@ -3043,9 +3043,9 @@ auto const return_statement_def =
 // enumeration_type_definition   | integer_type_definition
 //     | floating_type_definition      | physical_type_definition
 auto const scalar_type_definition_def =
-		enumeration_type_definition   | integer_type_definition
-		| floating_type_definition      | physical_type_definition
-		;
+        enumeration_type_definition   | integer_type_definition
+        | floating_type_definition      | physical_type_definition
+        ;
 #endif
 
 #if 0
@@ -3053,16 +3053,16 @@ auto const scalar_type_definition_def =
 // architecture_body
 //     | package_body
 auto const secondary_unit_def =
-		architecture_body
-		| package_body
-		;
+        architecture_body
+        | package_body
+        ;
 #endif
 
 #if 0
 // secondary_unit_declaration ::=
 // identifier = physical_literal ;
 auto const secondary_unit_declaration_def =
-		identifier = physical_literal > ';'
+        identifier = physical_literal > ';'
 ;
 #endif
 
@@ -3070,8 +3070,8 @@ auto const secondary_unit_declaration_def =
 // selected_name ::=
 // prefix . suffix
 auto const selected_name_def =
-		prefix . suffix
-		;
+        prefix . suffix
+        ;
 #endif
 
 #if 0
@@ -3079,8 +3079,8 @@ auto const selected_name_def =
 // with expression select
 //     target    <= options selected_waveforms ;
 auto const selected_signal_assignment_def =
-		WITH expression SELECT
-		target    <= options selected_waveforms > ';'
+        WITH expression SELECT
+        target    <= options selected_waveforms > ';'
 ;
 #endif
 
@@ -3098,16 +3098,16 @@ waveform WHEN choices
 // sensitivity_clause ::=
 // on sensitivity_list
 auto const sensitivity_clause_def =
-		ON sensitivity_list
-		;
+        ON sensitivity_list
+        ;
 #endif
 
 #if 0
 // sensitivity_list ::=
 // signal_name { , signal_name }
 auto const sensitivity_list_def =
-		signal_name >> ( signal_name % ',' )
-		;
+        signal_name >> ( signal_name % ',' )
+        ;
 #endif
 
 #if 0
@@ -3134,43 +3134,43 @@ auto const sequence_of_statements_def =
 //     | return_statement
 //     | null_statement
 auto const sequential_statement_def =
-		wait_statement
-		| assertion_statement
-		| report_statement
-		| signal_assignment_statement
-		| variable_assignment_statement
-		| procedure_call_statement
-		| if_statement
-		| case_statement
-		| loop_statement
-		| next_statement
-		| exit_statement
-		| return_statement
-		| null_statement
-		;
+        wait_statement
+        | assertion_statement
+        | report_statement
+        | signal_assignment_statement
+        | variable_assignment_statement
+        | procedure_call_statement
+        | if_statement
+        | case_statement
+        | loop_statement
+        | next_statement
+        | exit_statement
+        | return_statement
+        | null_statement
+        ;
 #endif
 
 #if 0
 // shift_expression ::=
 // simple_expression [ shift_operator simple_expression ]
 auto const shift_expression_def =
-		simple_expression -( shift_operator simple_expression )
-		;
+        simple_expression -( shift_operator simple_expression )
+        ;
 #endif
 
 #if 0
 // sign ::=
 // + | -
 auto const sign_def =
-		+ | -
-		;
+        + | -
+        ;
 #endif
 
 #if 0
 // signal_assignment_statement ::=
 // [ label : ] target <= [ delay_mechanism ] waveform ;
 auto const signal_assignment_statement_def =
-		-( LABEL > ':' ) target <= -( delay_mechanism ) waveform > ';'
+        -( LABEL > ':' ) target <= -( delay_mechanism ) waveform > ';'
 ;
 #endif
 
@@ -3178,7 +3178,7 @@ auto const signal_assignment_statement_def =
 // signal_declaration ::=
 // signal identifier_list : subtype_indication [ signal_kind ] [ := expression ] ;
 auto const signal_declaration_def =
-		SIGNAL identifier_list > ':' subtype_indication -( signal_kind ) -(  ":=" >  expression ) > ';'
+        SIGNAL identifier_list > ':' subtype_indication -( signal_kind ) -(  ":=" >  expression ) > ';'
 ;
 #endif
 
@@ -3186,8 +3186,8 @@ auto const signal_declaration_def =
 // signal_kind ::=
 // register  |  bus
 auto const signal_kind_def =
-		REGISTER  |  BUS
-		;
+        REGISTER  |  BUS
+        ;
 #endif
 
 #if 0
@@ -3196,25 +3196,25 @@ auto const signal_kind_def =
 //     | others
 //     | all
 auto const signal_list_def =
-		signal_name >> ( signal_name % ',' )
-		| OTHERS
-		| ALL
-		;
+        signal_name >> ( signal_name % ',' )
+        | OTHERS
+        | ALL
+        ;
 #endif
 
 #if 0
 // signature ::=
 // [ [ type_mark { , type_mark } ] [ return type_mark ] ]
 auto const signature_def =
-		-( -( type_mark >> ( type_mark % ',' ) ) -( RETURN type_mark ) )
-		;
+        -( -( type_mark >> ( type_mark % ',' ) ) -( RETURN type_mark ) )
+        ;
 #endif
 
 #if 0
 // simple_expression ::=
 // [ sign ] term { adding_operator term }
 auto const simple_expression_def =
-		-( sign ) term { adding_operator term }
+        -( sign ) term { adding_operator term }
 ;
 #endif
 
@@ -3222,15 +3222,15 @@ auto const simple_expression_def =
 // simple_name ::=
 // identifier
 auto const simple_name_def =
-		identifier
-		;
+        identifier
+        ;
 #endif
 
 #if 0
 // slice_name ::=
 // prefix ( discrete_range )
 auto const slice_name_def =
-		prefix '(' discrete_range )
+        prefix '(' discrete_range )
 ;
 #endif
 
@@ -3264,11 +3264,11 @@ auto const string_literal_def =
 //     subprogram_statement_part
 //     end [ subprogram_kind ] [ designator ] ;
 auto const subprogram_body_def =
-		subprogram_specification IS
-		subprogram_declarative_part
-		BEGIN
-		subprogram_statement_part
-		END -( subprogram_kind ) -( designator ) > ';'
+        subprogram_specification IS
+        subprogram_declarative_part
+        BEGIN
+        subprogram_statement_part
+        END -( subprogram_kind ) -( designator ) > ';'
 ;
 #endif
 
@@ -3276,7 +3276,7 @@ auto const subprogram_body_def =
 // subprogram_declaration ::=
 // subprogram_specification ;
 auto const subprogram_declaration_def =
-		subprogram_specification > ';'
+        subprogram_specification > ';'
 ;
 #endif
 
@@ -3296,20 +3296,20 @@ auto const subprogram_declaration_def =
 //     | group_template_declaration
 //     | group_declaration
 auto const subprogram_declarative_item_def =
-		subprogram_declaration
-		| subprogram_body
-		| type_declaration
-		| subtype_declaration
-		| constant_declaration
-		| variable_declaration
-		| file_declaration
-		| alias_declaration
-		| attribute_declaration
-		| attribute_specification
-		| use_clause
-		| group_template_declaration
-		| group_declaration
-		;
+        subprogram_declaration
+        | subprogram_body
+        | type_declaration
+        | subtype_declaration
+        | constant_declaration
+        | variable_declaration
+        | file_declaration
+        | alias_declaration
+        | attribute_declaration
+        | attribute_specification
+        | use_clause
+        | group_template_declaration
+        | group_declaration
+        ;
 #endif
 
 #if 0
@@ -3324,8 +3324,8 @@ auto const subprogram_declarative_part_def =
 // subprogram_kind ::=
 // procedure | function
 auto const subprogram_kind_def =
-		PROCEDURE | FUNCTION
-		;
+        PROCEDURE | FUNCTION
+        ;
 #endif
 
 #if 0
@@ -3334,10 +3334,10 @@ auto const subprogram_kind_def =
 //     | [ pure | impure ]  function designator [ ( formal_parameter_list ) ]
 //     return type_mark
 auto const subprogram_specification_def =
-		PROCEDURE designator -( '(' formal_parameter_list ')' )
-		| -( PURE | IMPURE )  FUNCTION designator -( '(' formal_parameter_list ')' )
-		RETURN type_mark
-		;
+        PROCEDURE designator -( '(' formal_parameter_list ')' )
+        | -( PURE | IMPURE )  FUNCTION designator -( '(' formal_parameter_list ')' )
+        RETURN type_mark
+        ;
 #endif
 
 #if 0
@@ -3352,7 +3352,7 @@ auto const subprogram_statement_part_def =
 // subtype_declaration ::=
 // subtype identifier is subtype_indication ;
 auto const subtype_declaration_def =
-		SUBTYPE identifier IS subtype_indication > ';'
+        SUBTYPE identifier IS subtype_indication > ';'
 ;
 #endif
 
@@ -3360,8 +3360,8 @@ auto const subtype_declaration_def =
 // subtype_indication ::=
 // [ resolution_function_name ] type_mark [ constraint ]
 auto const subtype_indication_def =
-		-( resolution_function_name ) type_mark -( constraint )
-		;
+        -( resolution_function_name ) type_mark -( constraint )
+        ;
 #endif
 
 #if 0
@@ -3371,11 +3371,11 @@ auto const subtype_indication_def =
 //     | operator_symbol
 //     | all
 auto const suffix_def =
-		simple_name
-		| character_literal
-		| operator_symbol
-		| ALL
-		;
+        simple_name
+        | character_literal
+        | operator_symbol
+        | ALL
+        ;
 #endif
 
 #if 0
@@ -3383,16 +3383,16 @@ auto const suffix_def =
 // name
 //     | aggregate
 auto const target_def =
-		name
-		| aggregate
-		;
+        name
+        | aggregate
+        ;
 #endif
 
 #if 0
 // term ::=
 // factor { multiplying_operator factor }
 auto const term_def =
-		factor { multiplying_operator factor }
+        factor { multiplying_operator factor }
 ;
 #endif
 
@@ -3400,15 +3400,15 @@ auto const term_def =
 // timeout_clause ::=
 // for time_expression
 auto const timeout_clause_def =
-		FOR time_expression
-		;
+        FOR time_expression
+        ;
 #endif
 
 #if 0
 // type_conversion ::=
 // type_mark ( expression )
 auto const type_conversion_def =
-		type_mark '(' expression )
+        type_mark '(' expression )
 ;
 #endif
 
@@ -3417,9 +3417,9 @@ auto const type_conversion_def =
 // full_type_declaration
 //     | incomplete_type_declaration
 auto const type_declaration_def =
-		full_type_declaration
-		| incomplete_type_declaration
-		;
+        full_type_declaration
+        | incomplete_type_declaration
+        ;
 #endif
 
 #if 0
@@ -3429,11 +3429,11 @@ auto const type_declaration_def =
 //     | access_type_definition
 //     | file_type_definition
 auto const type_definition_def =
-		scalar_type_definition
-		| composite_type_definition
-		| access_type_definition
-		| file_type_definition
-		;
+        scalar_type_definition
+        | composite_type_definition
+        | access_type_definition
+        | file_type_definition
+        ;
 #endif
 
 #if 0
@@ -3441,9 +3441,9 @@ auto const type_definition_def =
 // type_name
 //     | subtype_name
 auto const type_mark_def =
-		type_name
-		| subtype_name
-		;
+        type_name
+        | subtype_name
+        ;
 #endif
 
 #if 0
@@ -3451,15 +3451,15 @@ auto const type_mark_def =
 // array ( index_subtype_definition { , index_subtype_definition } )
 //     of element_subtype_indication
 auto const unconstrained_array_definition_def =
-		ARRAY '(' index_subtype_definition >> ( index_subtype_definition % ',' ) ')'     OF element_subtype_indication
-		;
+        ARRAY '(' index_subtype_definition >> ( index_subtype_definition % ',' ) ')'     OF element_subtype_indication
+        ;
 #endif
 
 #if 0
 // use_clause ::=
 // use selected_name { , selected_name } ;
 auto const use_clause_def =
-		USE selected_name >> ( selected_name % ',' ) > ';'
+        USE selected_name >> ( selected_name % ',' ) > ';'
 ;
 #endif
 
@@ -3467,7 +3467,7 @@ auto const use_clause_def =
 // variable_assignment_statement ::=
 // [ label : ] target  := expression ;
 auto const variable_assignment_statement_def =
-		-( LABEL > ':' ) target   ":=" >  expression > ';'
+        -( LABEL > ':' ) target   ":=" >  expression > ';'
 ;
 #endif
 
@@ -3475,7 +3475,7 @@ auto const variable_assignment_statement_def =
 // variable_declaration ::=
 // [ shared ] variable identifier_list : subtype_indication [ := expression ] ;
 auto const variable_declaration_def =
-		-( SHARED ) VARIABLE identifier_list > ':' subtype_indication -(  ":=" >  expression ) > ';'
+        -( SHARED ) VARIABLE identifier_list > ':' subtype_indication -(  ":=" >  expression ) > ';'
 ;
 #endif
 
@@ -3483,7 +3483,7 @@ auto const variable_declaration_def =
 // wait_statement ::=
 // [ label : ] wait [ sensitivity_clause ] [ condition_clause ] [ timeout_clause ] ;
 auto const wait_statement_def =
-		-( LABEL > ':' ) WAIT -( sensitivity_clause ) -( condition_clause ) -( timeout_clause ) > ';'
+        -( LABEL > ':' ) WAIT -( sensitivity_clause ) -( condition_clause ) -( timeout_clause ) > ';'
 ;
 #endif
 
@@ -3492,243 +3492,243 @@ auto const wait_statement_def =
 // waveform_element { , waveform_element }
 //     | unaffected
 auto const waveform_def =
-		waveform_element >> ( waveform_element % ',' )
-		| UNAFFECTED
-		;
+        waveform_element >> ( waveform_element % ',' )
+        | UNAFFECTED
+        ;
 #else
 auto const waveform_def = *x3::char_ ;
 
 #endif
 
 BOOST_SPIRIT_DEFINE(
-		abstract_literal,
-		//    access_type_definition,
-		//    actual_designator,
-		//    actual_parameter_part,
-		//    actual_part,
-		//    aggregate,
-		//    alias_declaration,
-		//    alias_designator,
-		//    allocator,
-		//    architecture_body,
-		//    architecture_declarative_part,
-		//    architecture_statement_part,
-		//    array_type_definition,
-		//    assertion,
-		//    assertion_statement,
-		//    association_element,
-		//    association_list,
-		//    attribute_declaration,
-		//    attribute_designator,
-		//    attribute_name,
-		//    attribute_specification,
-		//base,
-		//    base_unit_declaration,
-		based_integer,
-		based_literal,
-		//    basic_character,
-		basic_graphic_character,
-		basic_identifier,
-		//    binding_indication,
-		bit_string_literal,
-		//    block_configuration,
-		//    block_declarative_item,
-		//    block_declarative_part,
-		//    block_header,
-		//    block_specification,
-		//    block_statement,
-		//    block_statement_part,
-		//    case_statement,
-		//    case_statement_alternative,
-		character_literal,
-		//    choice,
-		//    choices,
-		//    component_configuration,
-		//    component_declaration,
-		//    component_instantiation_statement,
-		//    component_specification,
-		//    composite_type_definition,
-		//    concurrent_assertion_statement,
-		//    concurrent_procedure_call_statement,
-		//    concurrent_signal_assignment_statement,
-		//    concurrent_statement,
-		//    condition,
-		//    condition_clause,
-		//    conditional_signal_assignment,
-		//    conditional_waveforms,
-		//    configuration_declaration,
-		//    configuration_declarative_item,
-		//    configuration_declarative_part,
-		//    configuration_item,
-		//    configuration_specification,
-		//    constant_declaration,
-		//    constrained_array_definition,
-		//    constraint,
-		//    context_clause,
-		//    context_item,
-		decimal_literal,
-		//    declaration,
-		//    delay_mechanism,
-		//    design_file,
-		//    design_unit,
-		//    designator,
-		//    direction,
-		//    disconnection_specification,
-		//    discrete_range,
-		//    element_association,
-		//    element_declaration,
-		//    element_subtype_definition,
-		//    entity_aspect,
-		//    entity_class,
-		//    entity_class_entry,
-		//    entity_class_entry_list,
-		//    entity_declaration,
-		//    entity_declarative_item,
-		//    entity_declarative_part,
-		//    entity_designator,
-		//    entity_header,
-		//    entity_name_list,
-		//    entity_specification,
-		//    entity_statement,
-		//    entity_statement_part,
-		//    entity_tag,
-		enumeration_literal,
-		//    enumeration_type_definition,
-		//    exit_statement,
-		exponent,
-		//    expression,
-		extended_digit,
-		extended_identifier,
-		//    factor,
-		//    file_declaration,
-		//    file_logical_name,
-		//    file_open_information,
-		//    file_type_definition,
-		//    formal_designator,
-		//    formal_parameter_list,
-		//    formal_part,
-		//    full_type_declaration,
-		//    function_call,
-		//    generate_statement,
-		//    generation_scheme,
-		//    generic_clause,
-		//    generic_list,
-		//    generic_map_aspect,
-		graphic_character,
-		//    group_constituent,
-		//    group_constituent_list,
-		//    group_template_declaration,
-		//    group_declaration,
-		//    guarded_signal_specification,
-		identifier,
-		//    identifier_list,
-		//    if_statement,
-		//    incomplete_type_declaration,
-		//    index_constraint,
-		//    index_specification,
-		//    index_subtype_definition,
-		//    indexed_name,
-		//    instantiated_unit,
-		//    instantiation_list,
-		integer,
-		//    integer_type_definition,
-		//    interface_constant_declaration,
-		//    interface_declaration,
-		//    interface_element,
-		//    interface_file_declaration,
-		//    interface_list,
-		//    interface_signal_declaration,
-		//    interface_variable_declaration,
-		//    iteration_scheme,
-		//    label,
-		letter,
-		letter_or_digit,
-		//    library_clause,
-		//    library_unit,
-		literal,
-		//    logical_name,
-		//    logical_name_list,
-		//    loop_statement,
-		//    mode,
-		//    name,
-		//    next_statement,
-		//    null_statement,
-		numeric_literal,
-		//    object_declaration,
-		//    operator_symbol,
-		//    options,
-		//    package_body,
-		//    package_body_declarative_item,
-		//    package_body_declarative_part,
-		//    package_declaration,
-		//    package_declarative_item,
-		//    package_declarative_part,
-		//    parameter_specification,
-		physical_literal,
-		//    physical_type_definition,
-		//    port_clause,
-		//    port_list,
-		//    port_map_aspect,
-		//    prefix,
-		//    primary,
-		//    primary_unit,
-		//    procedure_call,
-		//    procedure_call_statement,
-		//    process_declarative_item,
-		//    process_declarative_part,
-		//    process_statement,
-		//    process_statement_part,
-		//    qualified_expression,
-		//    range,
-		//    range_constraint,
-		//    record_type_definition,
-		//    relation,
-		//    report_statement,
-		//    return_statement,
-		//    scalar_type_definition,
-		//    secondary_unit,
-		//    secondary_unit_declaration,
-		//    selected_name,
-		//    selected_signal_assignment,
-		//    selected_waveforms,
-		//    sensitivity_clause,
-		//    sensitivity_list,
-		//    sequence_of_statements,
-		//    sequential_statement,
-		//    shift_expression,
-		//    sign,
-		//    signal_assignment_statement,
-		//    signal_declaration,
-		//    signal_kind,
-		//    signal_list,
-		//    signature,
-		//    simple_expression,
-		//    simple_name,
-		//    slice_name,
-		string_literal,
-		//    subprogram_body,
-		//    subprogram_declaration,
-		//    subprogram_declarative_item,
-		//    subprogram_declarative_part,
-		//    subprogram_kind,
-		//    subprogram_specification,
-		//    subprogram_statement_part,
-		//    subtype_declaration,
-		//    subtype_indication,
-		//    suffix,
-		//    target,
-		//    term,
-		//    timeout_clause,
-		//    type_conversion,
-		//    type_declaration,
-		//    type_definition,
-		//    type_mark,
-		//    unconstrained_array_definition,
-		//    use_clause,
-		//    variable_assignment_statement,
-		//    variable_declaration,
-		//    wait_statement,
-		waveform
+        abstract_literal,
+        //    access_type_definition,
+        //    actual_designator,
+        //    actual_parameter_part,
+        //    actual_part,
+        //    aggregate,
+        //    alias_declaration,
+        //    alias_designator,
+        //    allocator,
+        //    architecture_body,
+        //    architecture_declarative_part,
+        //    architecture_statement_part,
+        //    array_type_definition,
+        //    assertion,
+        //    assertion_statement,
+        //    association_element,
+        //    association_list,
+        //    attribute_declaration,
+        //    attribute_designator,
+        //    attribute_name,
+        //    attribute_specification,
+        //base,
+        //    base_unit_declaration,
+        based_integer,
+        based_literal,
+        //    basic_character,
+        basic_graphic_character,
+        basic_identifier,
+        //    binding_indication,
+        bit_string_literal,
+        //    block_configuration,
+        //    block_declarative_item,
+        //    block_declarative_part,
+        //    block_header,
+        //    block_specification,
+        //    block_statement,
+        //    block_statement_part,
+        //    case_statement,
+        //    case_statement_alternative,
+        character_literal,
+        //    choice,
+        //    choices,
+        //    component_configuration,
+        //    component_declaration,
+        //    component_instantiation_statement,
+        //    component_specification,
+        //    composite_type_definition,
+        //    concurrent_assertion_statement,
+        //    concurrent_procedure_call_statement,
+        //    concurrent_signal_assignment_statement,
+        //    concurrent_statement,
+        //    condition,
+        //    condition_clause,
+        //    conditional_signal_assignment,
+        //    conditional_waveforms,
+        //    configuration_declaration,
+        //    configuration_declarative_item,
+        //    configuration_declarative_part,
+        //    configuration_item,
+        //    configuration_specification,
+        //    constant_declaration,
+        //    constrained_array_definition,
+        //    constraint,
+        //    context_clause,
+        //    context_item,
+        decimal_literal,
+        //    declaration,
+        //    delay_mechanism,
+        //    design_file,
+        //    design_unit,
+        //    designator,
+        //    direction,
+        //    disconnection_specification,
+        //    discrete_range,
+        //    element_association,
+        //    element_declaration,
+        //    element_subtype_definition,
+        //    entity_aspect,
+        //    entity_class,
+        //    entity_class_entry,
+        //    entity_class_entry_list,
+        //    entity_declaration,
+        //    entity_declarative_item,
+        //    entity_declarative_part,
+        //    entity_designator,
+        //    entity_header,
+        //    entity_name_list,
+        //    entity_specification,
+        //    entity_statement,
+        //    entity_statement_part,
+        //    entity_tag,
+        enumeration_literal,
+        //    enumeration_type_definition,
+        //    exit_statement,
+        exponent,
+        //    expression,
+        extended_digit,
+        extended_identifier,
+        //    factor,
+        //    file_declaration,
+        //    file_logical_name,
+        //    file_open_information,
+        //    file_type_definition,
+        //    formal_designator,
+        //    formal_parameter_list,
+        //    formal_part,
+        //    full_type_declaration,
+        //    function_call,
+        //    generate_statement,
+        //    generation_scheme,
+        //    generic_clause,
+        //    generic_list,
+        //    generic_map_aspect,
+        graphic_character,
+        //    group_constituent,
+        //    group_constituent_list,
+        //    group_template_declaration,
+        //    group_declaration,
+        //    guarded_signal_specification,
+        identifier,
+        //    identifier_list,
+        //    if_statement,
+        //    incomplete_type_declaration,
+        //    index_constraint,
+        //    index_specification,
+        //    index_subtype_definition,
+        //    indexed_name,
+        //    instantiated_unit,
+        //    instantiation_list,
+        integer,
+        //    integer_type_definition,
+        //    interface_constant_declaration,
+        //    interface_declaration,
+        //    interface_element,
+        //    interface_file_declaration,
+        //    interface_list,
+        //    interface_signal_declaration,
+        //    interface_variable_declaration,
+        //    iteration_scheme,
+        //    label,
+        letter,
+        letter_or_digit,
+        //    library_clause,
+        //    library_unit,
+        literal,
+        //    logical_name,
+        //    logical_name_list,
+        //    loop_statement,
+        //    mode,
+        //    name,
+        //    next_statement,
+        //    null_statement,
+        numeric_literal,
+        //    object_declaration,
+        //    operator_symbol,
+        //    options,
+        //    package_body,
+        //    package_body_declarative_item,
+        //    package_body_declarative_part,
+        //    package_declaration,
+        //    package_declarative_item,
+        //    package_declarative_part,
+        //    parameter_specification,
+        physical_literal,
+        //    physical_type_definition,
+        //    port_clause,
+        //    port_list,
+        //    port_map_aspect,
+        //    prefix,
+        //    primary,
+        //    primary_unit,
+        //    procedure_call,
+        //    procedure_call_statement,
+        //    process_declarative_item,
+        //    process_declarative_part,
+        //    process_statement,
+        //    process_statement_part,
+        //    qualified_expression,
+        //    range,
+        //    range_constraint,
+        //    record_type_definition,
+        //    relation,
+        //    report_statement,
+        //    return_statement,
+        //    scalar_type_definition,
+        //    secondary_unit,
+        //    secondary_unit_declaration,
+        //    selected_name,
+        //    selected_signal_assignment,
+        //    selected_waveforms,
+        //    sensitivity_clause,
+        //    sensitivity_list,
+        //    sequence_of_statements,
+        //    sequential_statement,
+        //    shift_expression,
+        //    sign,
+        //    signal_assignment_statement,
+        //    signal_declaration,
+        //    signal_kind,
+        //    signal_list,
+        //    signature,
+        //    simple_expression,
+        //    simple_name,
+        //    slice_name,
+        string_literal,
+        //    subprogram_body,
+        //    subprogram_declaration,
+        //    subprogram_declarative_item,
+        //    subprogram_declarative_part,
+        //    subprogram_kind,
+        //    subprogram_specification,
+        //    subprogram_statement_part,
+        //    subtype_declaration,
+        //    subtype_indication,
+        //    suffix,
+        //    target,
+        //    term,
+        //    timeout_clause,
+        //    type_conversion,
+        //    type_declaration,
+        //    type_definition,
+        //    type_mark,
+        //    unconstrained_array_definition,
+        //    use_clause,
+        //    variable_assignment_statement,
+        //    variable_declaration,
+        //    wait_statement,
+        waveform
 );
 
 
