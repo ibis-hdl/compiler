@@ -1467,7 +1467,7 @@ sequence_of_statements
 // character_literal ::=                                                [§ 13.5]
 // ' graphic_character '
 auto const character_literal_def =
-    x3::no_skip [
+    x3::lexeme [
            "\'"
         >> ( ( graphic_character - '\'' )
            | char_("\'")
@@ -1475,14 +1475,7 @@ auto const character_literal_def =
         >> "\'"
     ]
     ;
-#if 0
-(      '"'
-    >> *( (graphic_character - '"')
-        | x3::no_skip[char_('"') >> char_('"')]
-        )
-    >> '"'
-)
-#endif
+
 
 #if 0
 // choice ::=
