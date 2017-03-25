@@ -122,14 +122,14 @@ namespace parser {
         x3::lexeme[
             (      '"'
                 >> *( (graphic_character - '"')
-                    | x3::no_skip[char_('"') >> char_('"')]
+                    | (char_('"') >> char_('"'))
                     )
                 >> '"'
             )
             |
             (      '%' // LRM Chapter 13.10
                 >> *( (graphic_character - '%')
-                    | x3::no_skip[char_('%') >> char_('%')]
+                    | (char_('%') >> char_('%'))
                     )
                 >> '%'
             )
