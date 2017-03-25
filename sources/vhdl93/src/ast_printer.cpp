@@ -992,8 +992,8 @@ void printer::operator()(guarded_signal_specification const &node) const
 
 void printer::operator()(identifier const &node) const
 {
-    os << "(XXXX identifier="; // FixMe: Review and Implement
-    os << node; // FixMe: operator<<
+    os << "(identifier=";
+    os << node;
     os << ")";
 }
 
@@ -1666,7 +1666,7 @@ void printer::operator()(slice_name const &node) const
 void printer::operator()(string_literal const &node) const
 {
     os << "(string_literal=";
-    os << node; // FixMe: operator<<
+    os << node;
     os << ")";
 }
 
