@@ -53,7 +53,7 @@ namespace x3_utils {
 
     struct x3_info {
         x3_info(std::ostream& os = std::cout): os { os } {};
-        auto operator()(auto& ctx) {
+        void operator()(auto& ctx) {
 
             auto const attr_info = [&](auto const& attr) {
 
