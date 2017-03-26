@@ -15,15 +15,6 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-/* Note, simply deriving from std::string like
- *
- *    struct identifier : public std::string
- *    {
- *        using std::string::string;
- *    };
- *
- * breaks BOOST_SPIRIT_X3_DEBUG compilation.
- */
 struct identifier
 {
     std::string        name;
