@@ -8,7 +8,7 @@
 
 #include <iostream>
 #define BOOST_SPIRIT_X3_DEBUG_OUT std::cout
-#define BOOST_SPIRIT_X3_DEBUG
+//#define BOOST_SPIRIT_X3_DEBUG
 
 #include <boost/spirit/home/x3.hpp>
 
@@ -25,17 +25,22 @@ namespace parser {
 		char_("A-Za-z") >> *( -lit("_") >> +char_("A-Za-z0-9") )
 		;
 
-   auto const extended_identifier_str = x3::rule<struct _, std::string> { "extended_identifier (inner)" } =
+   auto const extended_identifier_chars = x3::rule<struct _, std::string> { "extended_identifier (chars)" } =
         +( char_ - char_('\\') )
         ;
 
-   auto const extended_identifier = x3::rule<struct _, std::string> { "extended_identifier" } =
+   auto const extended_identifier_atom = x3::rule<struct _, std::string> { "extended_identifier (atom)" } =
 		lexeme [
 			   char_('\\')
-			>> ( extended_identifier_str
-			   | extended_identifier_str % ( char_('\\') >> char_('\\') )
-			   )
+			>> extended_identifier_chars
 			>> char_('\\')
+		]
+		;
+
+   auto const extended_identifier = x3::rule<struct _, std::string> { "extended_identifier" } =
+		lexeme [
+			    extended_identifier_atom
+			>> *(extended_identifier_atom % (char_('\\') >> char_('\\')))
 		]
 		;
 
@@ -50,8 +55,10 @@ int main()
    namespace x3 = boost::spirit::x3;
 
    for(std::string const str: {
-	   "\\BoBus\\",			// expected '\Bus\'
-	   "\\Foo\\\\oh\\", 	// expected '\Foo\\oh\'
+	   "\\BoBus\\",				// expected '\Bus\'
+	   "\\Foo\\\\oh\\", 		// expected '\Foo\\oh\'
+	   "\\Foo\\\\Bar\\\\Baz\\", // expected '\Foo\\Bar\\Baz\'
+	   "VHDL"
     })
     {
 	 auto iter = str.begin(), end = str.end();
@@ -63,7 +70,7 @@ int main()
 	 bool r = x3::phrase_parse(iter, end, parser::identifier, x3::space, attr);
 
 	 if (r && iter == end) {
-	   std::cout << "succeeded: \"" << attr << "\"\n";
+	   std::cout << "succeeded: \'" << attr << "\'\n";
 	   std::cout << '\n';
 	 } else {
 	   std::cout << "*** failed ***\n";
