@@ -15,14 +15,6 @@
 #include <boost/fusion/include/io.hpp>
 
 
-
-namespace eda { namespace vhdl93 { namespace ast {
-
-//using boost::fusion::operator<<;
-
-} } } // namespace eda.vhdl93.ast
-
-
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::based_literal,
     base, literal
 )
@@ -37,6 +29,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::character_literal,
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::decimal_literal,
     literal, hint
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::identifier,
+    name
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::physical_literal,

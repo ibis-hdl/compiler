@@ -2324,10 +2324,22 @@ auto const guarded_signal_specification_def =
 
 // identifier ::=                                                       [§ 13.3]
 // basic_identifier | extended_identifier
+namespace detail {
+
+    /* The identifier is treated as string. The basic_identifier and 
+     * extended_identifier can be distuingished simply by test on leading (and
+     * trailing) '/'. To enforce use of a single string member on AST node resp. 
+     * identifier the rule is splitted, otherwise ast::identifier has to handle
+     * the variant type. Generalizing these identifiers simplifies (hopefully)
+     * the type/identifier handling (without applying the boost visitor). */
+    auto const identifier = x3::rule<struct _, std::string> { "identifier" } =
+          basic_identifier
+        | extended_identifier
+        ;
+}
 auto const identifier_def =
-	  basic_identifier
-	| extended_identifier
-	;
+    detail::identifier
+    ;
 
 
 #if 0

@@ -990,7 +990,7 @@ void printer::operator()(guarded_signal_specification const &node) const
 void printer::operator()(identifier const &node) const
 {
     os << "(identifier=";
-    os << node;
+    os << node.name;
     os << ")";
 }
 
