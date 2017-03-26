@@ -24,3 +24,11 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 add_test(test_vhdl93 ${EXECUTABLE_OUTPUT_PATH}/${PROJECT_NAME})
+
+
+add_executable(x3_debug EXCLUDE_FROM_ALL x3_debug.cpp)
+target_link_libraries(x3_debug
+    PRIVATE
+    eda::vhdl93_grammar
+    ${Boost_SYSTEM_LIBRARY}
+)
