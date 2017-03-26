@@ -1262,7 +1262,7 @@ auto const basic_graphic_character_def =
 // basic_identifier ::=                                                 [§ 13.3]
 // letter { [ underline ] letter_or_digit }
 auto const basic_identifier_def =
-    letter >> *( -lit("_") >> letter_or_digit )
+    letter >> *( -char_("_") >> letter_or_digit )
     ;
 
 

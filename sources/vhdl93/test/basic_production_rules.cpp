@@ -275,7 +275,12 @@ BOOST_AUTO_TEST_CASE( identifier )
 
     std::vector<std::pair<std::string, std::string>> const pass_test_cases {
         // basic_identifier
-    	std::make_pair("VHDL", "(identifier=VHDL)"),
+		std::make_pair("X", "(identifier=X)"),
+		std::make_pair("X1", "(identifier=X1)"),
+    	std::make_pair("VHDL93", "(identifier=VHDL93)"),
+		std::make_pair("COUNT", "(identifier=COUNT)"),
+		std::make_pair("STORE_NEXT_ITEM", "(identifier=STORE_NEXT_ITEM)"),
+    	std::make_pair("c_out", "(identifier=c_out)"),
     	// extended_identifier
 		std::make_pair("\\Bus\\", "(identifier=\\Bus\\)"),
 		std::make_pair("\\Foo\\\\Bar\\", "(identifier=\\Foo\\\\Bar\\)"),
