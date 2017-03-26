@@ -1262,7 +1262,9 @@ auto const basic_graphic_character_def =
 // basic_identifier ::=                                                 [§ 13.3]
 // letter { [ underline ] letter_or_digit }
 auto const basic_identifier_def =
-    letter >> *( -char_("_") >> letter_or_digit )
+    letter
+    >> ~char_('"') // reject bit_string_literal
+    >> *( -char_("_") >> letter_or_digit )
     ;
 
 
@@ -1306,9 +1308,9 @@ namespace detail {
 
 auto const bit_string_literal_def =
     lexeme[
-          (lit("B\"") > detail::bit_value_bin >> lit('"')) >> x3::attr(ast::bit_string_literal::tag::bin)
-        | (lit("X\"") > detail::bit_value_hex >> lit('"')) >> x3::attr(ast::bit_string_literal::tag::hex)
-        | (lit("O\"") > detail::bit_value_oct >> lit('"')) >> x3::attr(ast::bit_string_literal::tag::oct)
+          (lit("B") >> lit('"') >> detail::bit_value_bin >> lit('"')) >> x3::attr(ast::bit_string_literal::tag::bin)
+        | (lit("X") >> lit('"') >> detail::bit_value_hex >> lit('"')) >> x3::attr(ast::bit_string_literal::tag::hex)
+        | (lit("O") >> lit('"') >> detail::bit_value_oct >> lit('"')) >> x3::attr(ast::bit_string_literal::tag::oct)
     ];
 
 
@@ -2577,11 +2579,11 @@ auto const library_unit_def =
 //     | string_literal
 //     | bit_string_literal
 //     | null
-auto const literal_def =
-      numeric_literal
-    | enumeration_literal
+auto const literal_def = /* Note, order changed since matters */
+      enumeration_literal
     | string_literal
     | bit_string_literal
+	| numeric_literal
     | NULL
     ;
 
