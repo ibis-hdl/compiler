@@ -153,7 +153,6 @@ struct interface_signal_declaration;
 struct interface_variable_declaration;
 struct iteration_scheme;
 struct label;
-struct letter_or_digit;
 struct library_clause;
 struct library_unit;
 struct literal;
@@ -416,7 +415,6 @@ public:
     void operator()(interface_variable_declaration const& node) const;
     void operator()(iteration_scheme const& node) const;
     void operator()(label const& node) const;
-    void operator()(letter_or_digit const& node) const;
     void operator()(library_clause const& node) const;
     void operator()(library_unit const& node) const;
     void operator()(literal const& node) const;

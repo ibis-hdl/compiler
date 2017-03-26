@@ -1695,6 +1695,7 @@ class AstPrinter:
         'extended_identifier',
         'format_effector',
         'letter',
+        'letter_or_digit',
         'lower_case_letter',
         'other_special_character',
         'space_character',

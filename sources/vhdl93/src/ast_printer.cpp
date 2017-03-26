@@ -1155,14 +1155,6 @@ void printer::operator()(label const &node) const
 }
 
 
-void printer::operator()(letter_or_digit const &node) const
-{
-    os << "(XXXX letter_or_digit="; // FixMe: Review and Implement
-    // boost::apply_visitor(*this, node);
-    os << ")";
-}
-
-
 void printer::operator()(library_clause const &node) const
 {
     os << "(library_clause=";
