@@ -252,14 +252,32 @@ class printer
     std::ostream&   os;
     uint16_t        indent;
     uint16_t const  tab_size { 4 };
+    uint			level { 0 };
+    bool			print_variant { false };
 
     void tab(uint16_t spaces);
+
+	template<typename NodeType>
+	void apply_visitor(NodeType const& node, const char* const name) const
+	{
+		if(print_variant) {
+			os << "(v:" << name << "=";
+			boost::apply_visitor(*this, node);
+			os << ")";
+		}
+		else {
+			boost::apply_visitor(*this, node);
+		}
+	}
+
 
 public:
     // ...
     printer(std::ostream& out, uint16_t indent = 0)
     : os{ out }, indent { indent }
     { }
+
+    void verbose(uint level);
 
     void operator()(abstract_literal const& node) const;
     void operator()(access_type_definition const& node) const;

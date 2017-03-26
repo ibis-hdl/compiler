@@ -1688,11 +1688,11 @@ class AstPrinter:
     x3 = None
     rule_blacklist = [
         'base_specifier',
-        'basic_identifier',         # no special ast class
+        'basic_identifier',
         'bit_value',
         'digit',
         'extended_digit',
-        'extended_identifier',      # no special ast class
+        'extended_identifier',
         'format_effector',
         'letter',
         'lower_case_letter',
@@ -1743,8 +1743,26 @@ class AstPrinter:
         
 struct ast_printer
 {{
+    std::ostream&   os;
+    uint16_t        indent;
+    uint16_t const  tab_size {{ 4 }};
+    bool            print_variant {{ false }};
     // ...    
+
     ast_printer(std::ostream& out, uint16_t indent = 0);
+    
+    template<typename NodeType>
+    void apply_visitor(NodeType const& node, const char* const name) const
+    {{
+        if(print_variant) {{
+            os << "(v:" << name << "=";
+            boost::apply_visitor(*this, node);
+            os << ")";
+        }}
+        else {{
+            boost::apply_visitor(*this, node);
+        }}
+    }}
     
 {1}
 }};        
@@ -1779,7 +1797,7 @@ void printer::operator()({0} const &node) const
 void printer::operator()({0} const &node) const 
 {{
     os << "(v: XXXX {0}=";
-    //boost::apply_visitor(*this, node);  // FixMe: Review and Implement
+    //apply_visitor(node, "XXX {0}"); // FixMe: Review and Implement
     os << ")";
 }}
 """.format(name)
@@ -1794,8 +1812,6 @@ if __name__ == "__main__":
     print(x3.error_handler())
     print(x3.ast_include_global())
     print(x3.ast_nodes())
-    #print(x3.ast_printer_decl())
-    #print(x3.ast_printer_def())
 
     printer = AstPrinter(x3)
     print(printer.nodes())

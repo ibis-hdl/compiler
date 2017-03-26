@@ -25,11 +25,26 @@ void printer::tab(uint16_t spaces)
         os << ' ';
 }
 
+void printer::verbose(uint level)
+{
+	(*this).level = level;
+
+	switch(level) {
+	case 0:
+		print_variant = false;
+		break;
+	case 1:
+		print_variant = true;
+		break;
+	default:
+		std::cerr << "*** invalid ast::printer verbose level ***\n";
+	}
+}
+
+
 void printer::operator()(abstract_literal const &node) const
 {
-    os << "(v:abstract_literal=";
-    boost::apply_visitor(*this, node);
-    os << ")";
+    apply_visitor(node, "abstract_literal");
 }
 
 
@@ -768,9 +783,7 @@ void printer::operator()(entity_tag const &node) const
 
 void printer::operator()(enumeration_literal const &node) const
 {
-    os << "(v:enumeration_literal=";
-    boost::apply_visitor(*this, node);
-    os << ")";
+    apply_visitor(node, "enumeration_literal");
 }
 
 
@@ -1168,9 +1181,7 @@ void printer::operator()(library_unit const &node) const
 
 void printer::operator()(literal const &node) const
 {
-    os << "(v:literal=";
-    boost::apply_visitor(*this, node);
-    os << ")";
+    apply_visitor(node, "literal");
 }
 
 
@@ -1232,9 +1243,7 @@ void printer::operator()(null_statement const &node) const
 
 void printer::operator()(numeric_literal const &node) const
 {
-    os << "(v:numeric_literal=";
-    boost::apply_visitor(*this, node);
-    os << ")";
+	apply_visitor(node, "numeric_literal");
 }
 
 

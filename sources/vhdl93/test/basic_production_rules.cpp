@@ -211,6 +211,7 @@ BOOST_AUTO_TEST_CASE( character_literal )
             BOOST_TEST(test_attr(input, parser::character_literal, x3::space, attr));
             btt::output_test_stream os;
             ast::printer print(os);
+            print.verbose(1);
             print(attr);
             BOOST_TEST_INFO("attr = '" << os.str() << "'");
             BOOST_TEST(gold == os.str(), btt::per_element());
@@ -292,6 +293,7 @@ BOOST_AUTO_TEST_CASE( identifier )
             BOOST_TEST(test_attr(input, parser::identifier, x3::space, attr));
             btt::output_test_stream os;
             ast::printer print(os);
+            print.verbose(1);
             print(attr);
             BOOST_TEST_INFO("attr = '" << os.str() << "'");
             BOOST_TEST(gold == os.str(), btt::per_element());
@@ -489,6 +491,7 @@ BOOST_AUTO_TEST_CASE( physical_literal )
             BOOST_TEST(test_attr(input, parser::physical_literal, x3::space, attr));
             btt::output_test_stream os;
             ast::printer print(os);
+            print.verbose(1);
             print(attr);
             BOOST_TEST_INFO("attr = '" << os.str() << "'");
             BOOST_TEST(gold == os.str(), btt::per_element());
@@ -526,6 +529,7 @@ BOOST_AUTO_TEST_CASE( numeric_literal )
             BOOST_TEST(test_attr(input, parser::numeric_literal, x3::space, attr));
             btt::output_test_stream os;
             ast::printer print(os);
+            print.verbose(1);
             print(attr);
             BOOST_TEST_INFO("attr = '" << os.str() << "'");
             BOOST_TEST(gold == os.str(), btt::per_element());
@@ -579,6 +583,7 @@ BOOST_AUTO_TEST_CASE( literal )
             BOOST_TEST(test_attr(input, parser::literal, x3::space, attr));
             btt::output_test_stream os;
             ast::printer print(os);
+            print.verbose(1);
             print(attr);
             BOOST_TEST_INFO("attr = '" << os.str() << "'");
             BOOST_TEST(gold == os.str(), btt::per_element());
