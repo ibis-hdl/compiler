@@ -20,5 +20,3 @@ namespace eda { namespace vhdl93 { namespace parser {
 
 } } }  // namespace eda.vhdl93.parser
 
-
-//see https://github.com/cppljevans/spirit/blob/trace-design/example/x3/rexpr/rexpr_full/rexpr/rexpr.hpp
