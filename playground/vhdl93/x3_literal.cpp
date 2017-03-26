@@ -20,7 +20,9 @@ namespace parser {
    using x3::lit;
 
    auto const integer = x3::rule<struct _, std::string> { "integer" } =
-        char_("0-9") >> *char_("0-9")
+        lexeme [
+            char_("0-9") >> *char_("0-9")
+        ]
         ;
 
    auto const based_literal = x3::rule<struct _, std::string> { "based_literal" } =
