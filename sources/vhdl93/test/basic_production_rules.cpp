@@ -157,6 +157,7 @@ BOOST_AUTO_TEST_CASE( string_literal )
 		// string literals of length 1.
 		std::make_pair("\" \"", " "),
 		std::make_pair("\"A\"", "A"),
+		//std::make_pair("\"\"", "\"\""), // FixMe: This test case fails
         };
 
     std::vector<std::string> const fail_test_cases {
@@ -262,6 +263,42 @@ BOOST_AUTO_TEST_CASE( integer )
         }
     }
 }
+
+
+BOOST_AUTO_TEST_CASE( identifier )
+{
+    using namespace eda::vhdl93;
+    using x3_test::test_attr;
+
+    typedef ast::identifier attribute_type;
+
+    std::vector<std::pair<std::string, std::string>> const pass_test_cases {
+        // basic_identifier
+    	std::make_pair("VHDL", "(identifier=VHDL)"),
+    	// extended_identifier
+		std::make_pair("\\Bus\\", "(identifier=\\Bus\\)"),
+		std::make_pair("\\Foo\\\\Bar\\", "(identifier=\\Foo\\\\Bar\\)"),
+		std::make_pair("\\Foo\\\\Bar\\\\Baz\\", "(identifier=\\Foo\\\\Bar\\\\Baz\\)"),
+		std::make_pair("\\a\\\\b\\", "(identifier=\\a\\\\b\\)"),
+    };
+
+    uint n = 1;
+    for(auto const& str : pass_test_cases) {
+    	BOOST_TEST_CONTEXT("'identifier' test case #" << n++ << " to pass:") {
+    		auto const& input = str.first;
+    		auto const& gold = str.second;
+    		attribute_type attr;
+    		BOOST_TEST_INFO("input ='" << input << "'");
+            BOOST_TEST(test_attr(input, parser::identifier, x3::space, attr));
+            btt::output_test_stream os;
+            ast::printer print(os);
+            print(attr);
+            BOOST_TEST_INFO("attr = '" << os.str() << "'");
+            BOOST_TEST(gold == os.str(), btt::per_element());
+        }
+    }
+}
+
 
 
 BOOST_AUTO_TEST_CASE( based_literal )

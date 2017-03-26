@@ -241,14 +241,6 @@ void printer::operator()(basic_graphic_character const &node) const
 }
 
 
-void printer::operator()(basic_identifier const &node) const
-{
-    os << "(basic_identifier=";
-    os << "XXXX"; //os << node; // FixMe: Review and Implement
-    os << ")";
-}
-
-
 void printer::operator()(binding_indication const &node) const
 {
     os << "(binding_indication=";
@@ -810,14 +802,6 @@ void printer::operator()(expression const &node) const
 {
     os << "(XXXX expression="; // FixMe: Review and Implement
     // boost::apply_visitor(*this, node);
-    os << ")";
-}
-
-
-void printer::operator()(extended_identifier const &node) const
-{
-    os << "(extended_identifier=";
-    os << "XXXX"; //os << node; // FixMe: Review and Implement
     os << ")";
 }
 

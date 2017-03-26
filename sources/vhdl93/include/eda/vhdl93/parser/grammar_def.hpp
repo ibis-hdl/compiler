@@ -2104,9 +2104,27 @@ auto const extended_digit_def =
 
 // extended_identifier ::=                                            [§ 13.3.2]
 // \ graphic_character { graphic_character } <backslash>
+namespace detail {
+
+	auto const extended_identifier_chars = x3::rule<struct _, std::string> { "extended_identifier (chars)" } =
+		 +( graphic_character - char_('\\') )
+		 ;
+
+	auto const extended_identifier_atom = x3::rule<struct _, std::string> { "extended_identifier (atom)" } =
+		lexeme [
+			   char_('\\')
+			>> extended_identifier_chars
+			>> char_('\\')
+		]
+		;
+}
+
 auto const extended_identifier_def =
-    '\\' >> graphic_character >> *graphic_character >> '\\'
-    ;
+	lexeme [
+			detail::extended_identifier_atom
+		>> *(detail::extended_identifier_atom % (char_('\\') >> char_('\\')))
+	]
+	;
 
 
 #if 0
@@ -2307,8 +2325,9 @@ auto const guarded_signal_specification_def =
 // identifier ::=                                                       [§ 13.3]
 // basic_identifier | extended_identifier
 auto const identifier_def =
-        basic_identifier | extended_identifier
-        ;
+	  basic_identifier
+	| extended_identifier
+	;
 
 
 #if 0
@@ -2411,10 +2430,10 @@ auto const instantiation_list_def =
 // integer ::=                                                         § 13.4.1]
 // digit { [ underline ] digit }
 auto const integer_def =
-    lexeme [
-        char_("0-9") >> *( -lit("_") >> char_("0-9") )
-    ]
-    ;
+	lexeme [
+		char_("0-9") >> *( -lit("_") >> char_("0-9") )
+	]
+	;
 
 
 #if 0
