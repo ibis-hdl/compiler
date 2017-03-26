@@ -21,26 +21,15 @@
 /*----------------------------------------------------------------------------*/
 namespace eda { namespace vhdl93 { namespace ast {
 
-//std::ostream& operator<<(std::ostream& os, bit_string_literal const& node)
-//{
-//    ast::printer print(os);
-//    print(node);
-//    return os;
-//}
 
-std::ostream& operator<<(std::ostream& os, decimal_literal const& node)
+template<typename NodeType>
+std::ostream& operator<<(std::ostream& os, NodeType const& node)
 {
     ast::printer print(os);
     print(node);
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os, based_literal const& node)
-{
-    ast::printer print(os);
-    print(node);
-    return os;
-}
 
 } } } // namespace eda.vhdl93.ast
 /*----------------------------------------------------------------------------*/
