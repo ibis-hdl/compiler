@@ -1036,7 +1036,10 @@ waveform ::=
 waveform_element ::=
     value_expression [ after time_expression ]
     | null [ after time_expression ]
+    
+__end_dummy__ ::= __ignore__
 """
+# The last line fixes the problem of forgetting the last element
 
 import collections
 import re
@@ -1144,6 +1147,13 @@ class Vhdl93Bnf:
             '>=' : 'greater_equals'
         }
         return subs_dic.get(symbol, symbol)
+        
+    def is_variant(self, bnf_rule):
+        name = bnf_rule.name
+        rule = bnf_rule.rule.replace('\n', '')
+        if any((c in set('|')) for c in rule):
+            return True
+        return False
 
 
 def cxx_ify(name_before):
@@ -1165,6 +1175,21 @@ def cxx_ify(name_before):
     if ns: return "::".join(ns) + '::' + name
     else:  return name
     
+# usefull free functions
+def embrace_ns(text, ns):
+    """
+    embrace the given (string) text with the given namespace 'ns'
+    """
+    top = ""
+    for n in ns: top += "namespace {0} {{ ".format(n)
+    btm = ""
+    for n in ns: btm += "} "
+    btm += "// namespace "
+    # add ns path as comment
+    for n in ns: btm += "{0}.".format(n)
+    return top.strip() + '\n' + text + btm.rstrip('.') + '\n'
+
+
 
 class X3:
     bnf = None
@@ -1222,19 +1247,6 @@ namespace ascii = boost::spirit::x3::ascii;
             text += text
         return text
             
-    def embrace_ns(self, text, ns):
-        """
-        embrace the given (string) text with the given namespace 'ns'
-        """
-        top = ""
-        for n in ns: top += "namespace {0} {{ ".format(n)
-        btm = ""
-        for n in ns: btm += "} "
-        btm += "// namespace "
-        # add ns path as comment
-        for n in ns: btm += "{0}.".format(n)
-        return top.strip() + '\n' + text + btm.rstrip('.') + '\n'
-
     def embrace_fcn(self, fcn_sig, fcn_body):
         """
         Embrace a function body fcn_body into a function call with the function
@@ -1467,7 +1479,7 @@ auto const {1}_def =
         text += self.section('AST operator')
         text += self.operator_ast_enum_bock(operator_enum_name)
         
-        return self.embrace_ns(text, self.ast_ns)
+        return embrace_ns(text, self.ast_ns)
     
     def error_handler_map_initializer_list(self):
         pretty_name_dict = dict() # FixMe: Fill Me
@@ -1523,7 +1535,7 @@ auto const {1}_def =
         
         text += self.rule_definition_macro_block()
         
-        return self.embrace_ns(text, self.parser_ns)
+        return embrace_ns(text, self.parser_ns)
     
     def error_handler(self):
         return self.error_handler_map_initial_block('id_map')
@@ -1549,14 +1561,13 @@ auto const {1}_def =
             ':', ', ', ';', '{', '}', '(', ')', '[', ']', '=', 
             '<' , '>', "'", '"', '#', '.'
         ]
-        for r in sorted(self.bnf.rules()):
-            name = r.name
-            rule = r.rule.replace('\n', '')
+        for bnf_rule in sorted(self.bnf.rules()):
+            name = bnf_rule.name
+            rule = bnf_rule.rule.replace('\n', '')
             #print(rule)
             for x in garb_specifier:
                 rule = rule.replace(x, '')
-            if any((c in set('|')) for c in rule): # is_varaint
-                # variant
+            if self.bnf.is_variant(bnf_rule):
                 alist.append(
                     self.ast_node_variant(name, rule)
                 )
@@ -1686,7 +1697,7 @@ struct {0} :
         
 class AstPrinter:
     x3 = None
-    rule_blacklist = [
+    rule_blacklist = [ # these has no own ast nodes
         'base_specifier',
         'basic_identifier',
         'bit_value',
@@ -1703,9 +1714,11 @@ class AstPrinter:
         'underline',
         'upper_case_letter',
         ]
+    ns = []
     
-    def __init__(self, X3):
+    def __init__(self, X3, NS):
         self.x3 = X3
+        self.ns = NS
         
     def nodes(self):
         """
@@ -1714,22 +1727,14 @@ class AstPrinter:
         node_fw_list = []
         decl_list = []
         def_list = []
-        garb_specifier = [
-            ':', ', ', ';', '{', '}', '(', ')', '[', ']', '=', 
-            '<' , '>', "'", '"', '#', '.'
-        ]
         for r in sorted(self.x3.bnf.rules()):
             name = r.name
             rule = r.rule.replace('\n', '')
             if name in self.rule_blacklist:
                 continue
-            #print(rule)
-            for x in garb_specifier:
-                rule = rule.replace(x, '')
             node_fw_list.append(self.node_fw(name))
             decl_list.append(self.visit_node_decl(name))
-            if any((c in set('|')) for c in rule): # is_variant
-                # variant
+            if self.x3.bnf.is_variant(r):
                 def_list.append(
                     self.visit_variant_def(name)
                 )
@@ -1738,8 +1743,7 @@ class AstPrinter:
                     self.visit_node_def(name)
                 )
                 
-        text  = "\n".join(node_fw_list) + '\n'
-        text += """
+        text = """
 {0}
         
 struct ast_printer
@@ -1771,8 +1775,9 @@ struct ast_printer
     "\n".join(node_fw_list),
     "\n".join(decl_list) 
     )
-        text += "\n".join(def_list)
-        return text
+        text_decl = embrace_ns(text, self.ns)
+        text_def  = embrace_ns("\n".join(def_list), self.ns) + '\n'
+        return text_decl + '\n' + text_def
     
     def node_fw(self, name):
         text = "struct {0};".format(name)
@@ -1807,13 +1812,14 @@ void printer::operator()({0} const &node) const
         
         
 if __name__ == "__main__":
-    x3 = X3(['eda', 'vhdl93'])
+    ns = ['eda', 'vhdl93']
+    x3 = X3(ns)
     print(x3.ast())
     print(x3.definition())
     print(x3.error_handler())
     print(x3.ast_include_global())
     print(x3.ast_nodes())
 
-    printer = AstPrinter(x3)
+    printer = AstPrinter(x3, ns + ['ast'])
     print(printer.nodes())
     
