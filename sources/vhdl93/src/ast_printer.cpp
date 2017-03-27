@@ -1839,6 +1839,14 @@ void printer::operator()(waveform const &node) const
     os << ")";
 }
 
+
+void printer::operator()(waveform_element const &node) const
+{
+    os << "(v: XXXX waveform_element=";
+    //apply_visitor(node, "XXX waveform_element"); // FixMe: Review and Implement
+    os << ")";
+}
+
 } } } // namespace eda.vhdl93.ast
 
 

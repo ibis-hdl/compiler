@@ -252,7 +252,8 @@ error_handler_base::error_handler_base()
     { "variable_assignment_statement" , "Variable Assignment Statement" },
     { "variable_declaration" , "Variable Declaration" },
     { "wait_statement" , "Wait Statement" },
-    { "waveform" , "Waveform" }
+    { "waveform" , "Waveform" },
+    { "waveform_element" , "Waveform Element" }
 }
 { }
 

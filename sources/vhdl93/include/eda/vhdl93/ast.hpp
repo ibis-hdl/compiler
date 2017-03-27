@@ -247,6 +247,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 //#include <eda/vhdl93/ast/variable_declaration.hpp>
 //#include <eda/vhdl93/ast/wait_statement.hpp>
 //#include <eda/vhdl93/ast/waveform.hpp>
+//#include <eda/vhdl93/ast/waveform_element.hpp>
 
 
 #endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_AST_HPP_ */

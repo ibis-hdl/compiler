@@ -265,6 +265,7 @@ struct variable_assignment_statement_class;
 struct variable_declaration_class;
 struct wait_statement_class;
 struct waveform_class;
+struct waveform_element_class;
 
 /*
  * Rule Types
@@ -497,6 +498,7 @@ typedef x3::rule<variable_assignment_statement_class> variable_assignment_statem
 typedef x3::rule<variable_declaration_class> variable_declaration_type;
 typedef x3::rule<wait_statement_class> wait_statement_type;
 typedef x3::rule<waveform_class> waveform_type;
+typedef x3::rule<waveform_element_class> waveform_element_type;
 
 /*
  * Rule Instances
@@ -729,6 +731,7 @@ variable_assignment_statement_type const variable_assignment_statement { "variab
 variable_declaration_type const variable_declaration { "variable_declaration" };
 wait_statement_type const wait_statement { "wait_statement" };
 waveform_type const waveform { "waveform" };
+waveform_element_type const waveform_element { "waveform_element" };
 
 /*
  * Keywords
@@ -3526,6 +3529,16 @@ auto const waveform_def = *x3::char_ ;
 
 #endif
 
+#if 0
+// waveform_element ::=
+// value_expression [ after time_expression ]
+//     | null [ after time_expression ]
+auto const waveform_element_def =
+    value_expression -( AFTER time_expression )
+    | NULL -( AFTER time_expression )
+    ;
+#endif
+
 BOOST_SPIRIT_DEFINE(
         abstract_literal,
         //    access_type_definition,
@@ -3755,6 +3768,7 @@ BOOST_SPIRIT_DEFINE(
         //    variable_declaration,
         //    wait_statement,
         waveform
+		//    waveform_element
 );
 
 

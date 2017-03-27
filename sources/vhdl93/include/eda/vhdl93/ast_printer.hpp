@@ -239,6 +239,7 @@ struct variable_assignment_statement;
 struct variable_declaration;
 struct wait_statement;
 struct waveform;
+struct waveform_element;
 
 } } } // namespace eda.vhdl93.ast
 
@@ -501,6 +502,7 @@ public:
     void operator()(variable_declaration const& node) const;
     void operator()(wait_statement const& node) const;
     void operator()(waveform const& node) const;
+    void operator()(waveform_element const& node) const;
 };
 
 
