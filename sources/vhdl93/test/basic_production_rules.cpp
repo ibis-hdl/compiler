@@ -45,79 +45,35 @@ namespace x3_test {
 
     namespace parser = eda::vhdl93::parser;
 
-
-    struct cerr_redirect {
-        cerr_redirect(std::ostream& os)
-            : m_bak(std::cerr.rdbuf(os.rdbuf())) // save and redirect
-        {  }
-
-        ~cerr_redirect() {
-            std::cerr.rdbuf( m_bak );
-        }
-
-    private:
-        std::streambuf* m_bak;
-    };
-
-
-    template <typename Parser, typename Skipper>
-    bool test(
-          std::string const& input
-        , Parser const& parser_rule
-        , Skipper const& skipper
-        , bool full_match = true)
-    {
-        parser::iterator_type iter = input.begin();
-        parser::iterator_type const end = input.end();
-
-        parser::error_handler_type error_handler(iter, end, std::cout);
-
-        auto const parser =
-            x3::with<x3::error_handler_tag>(std::ref(error_handler))
-            [
-                parser_rule
-            ];
-
-        return boost::spirit::x3::phrase_parse(iter, end, parser, skipper)
-               && (!full_match || (iter == end));
-    }
-
-
     template <typename Parser, typename Skipper, typename Attr>
-    bool test_attr(
-          std::string const& input
-        , Parser const& parser_rule
-        , Skipper const& skipper
-        , Attr& attr
-        , bool full_match = true)
+    bool parse(
+    		std::string const &input,
+    		Parser const &parser_rule,
+			Skipper const &skipper,
+			Attr &attr,
+			bool full_match = true)
     {
-        btt::output_test_stream output; // sink all error handler messages
-        {
-            cerr_redirect guard(output);
+      btt::output_test_stream output; // sink all error handler messages
 
-            parser::iterator_type iter = input.begin();
-            parser::iterator_type const end = input.end();
+      parser::iterator_type iter = input.begin();
+      parser::iterator_type const end = input.end();
 
-            parser::error_handler_type error_handler(iter, end, std::cerr);
+      parser::error_handler_type error_handler(iter, end, output);
 
-            auto const parser =
-                x3::with<x3::error_handler_tag>(std::ref(error_handler))
-                [
-                    parser_rule
-                ];
+      auto const parser =
+          x3::with<x3::error_handler_tag>(std::ref(error_handler))[parser_rule];
 
-            bool success = boost::spirit::x3::phrase_parse(iter, end, parser, skipper, attr);
+      bool success =
+          x3::phrase_parse(iter, end, parser, skipper, attr);
 
-            if (success) {
-                if (iter != end) {
-                    error_handler(iter, "Error! Expecting end of input here: ");
-                }
-            }
-
-            return success && (!full_match || (iter == end));
+      if (success) {
+        if (iter != end) {
+          error_handler(iter, "Error! Expecting end of input here: ");
         }
-    }
+      }
 
+      return success && (!full_match || (iter == end));
+    }
 
 } // namespace x3_test
 
@@ -126,7 +82,7 @@ namespace x3_test {
 BOOST_AUTO_TEST_CASE( string_literal )
 {
     using namespace eda::vhdl93;
-    using x3_test::test_attr;
+    using x3_test::parse;
 
     std::vector<std::pair<std::string, std::string>> const pass_test_cases {
         std::make_pair("\"Both S and Q equal to 1\"",
@@ -160,7 +116,7 @@ BOOST_AUTO_TEST_CASE( string_literal )
             std::string const& gold = str.second;
             std::string attr;
             BOOST_TEST_INFO("input ='" << input << "'");
-            BOOST_TEST(test_attr(input, parser::string_literal, x3::space, attr));
+            BOOST_TEST(parse(input, parser::string_literal, x3::space, attr));
             BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
             BOOST_TEST(attr == gold, btt::per_element());
         }
@@ -171,7 +127,7 @@ BOOST_AUTO_TEST_CASE( string_literal )
         BOOST_TEST_CONTEXT("'string_literal' test case #" << n++ << " to fail:") {
             std::string attr;
             BOOST_TEST_INFO("with input ='" << str << "'");
-            BOOST_TEST(!test_attr(str, parser::string_literal, x3::space, attr));
+            BOOST_TEST(!parse(str, parser::string_literal, x3::space, attr));
         }
     }
 }
@@ -179,7 +135,7 @@ BOOST_AUTO_TEST_CASE( string_literal )
 BOOST_AUTO_TEST_CASE( character_literal )
 {
     using namespace eda::vhdl93;
-    using x3_test::test_attr;
+    using x3_test::parse;
 
     typedef ast::character_literal attribute_type;
 
@@ -197,7 +153,7 @@ BOOST_AUTO_TEST_CASE( character_literal )
             auto const& gold = str.second;
             attribute_type attr;
             BOOST_TEST_INFO("input =\"" << input << "\"");
-            BOOST_TEST(test_attr(input, parser::character_literal, x3::space, attr));
+            BOOST_TEST(parse(input, parser::character_literal, x3::space, attr));
             btt::output_test_stream os;
             ast::printer print(os);
             print.verbose(1);
@@ -211,8 +167,7 @@ BOOST_AUTO_TEST_CASE( character_literal )
 BOOST_AUTO_TEST_CASE( integer )
 {
     using namespace eda::vhdl93;
-    using x3_test::test_attr;
-    using x3_test::cerr_redirect;
+    using x3_test::parse;
 
     typedef std::string attribute_type;
 
@@ -238,7 +193,7 @@ BOOST_AUTO_TEST_CASE( integer )
             auto const& gold = str.second;
             attribute_type attr;
             BOOST_TEST_INFO("input ='" << input << "'");
-            BOOST_TEST(test_attr(input, parser::integer, x3::space, attr));
+            BOOST_TEST(parse(input, parser::integer, x3::space, attr));
             BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
             BOOST_TEST(attr == gold, btt::per_element());
         }
@@ -249,7 +204,7 @@ BOOST_AUTO_TEST_CASE( integer )
         BOOST_TEST_CONTEXT("'integer' test case #" << n++ << " to fail:") {
             attribute_type attr;
             BOOST_TEST_INFO("input ='" << str << "'");
-            BOOST_TEST(!test_attr(str, parser::integer, x3::space, attr));
+            BOOST_TEST(!parse(str, parser::integer, x3::space, attr));
         }
     }
 }
@@ -258,7 +213,7 @@ BOOST_AUTO_TEST_CASE( integer )
 BOOST_AUTO_TEST_CASE( identifier )
 {
     using namespace eda::vhdl93;
-    using x3_test::test_attr;
+    using x3_test::parse;
 
     typedef ast::identifier attribute_type;
 
@@ -284,7 +239,7 @@ BOOST_AUTO_TEST_CASE( identifier )
             auto const& gold = str.second;
             attribute_type attr;
             BOOST_TEST_INFO("input ='" << input << "'");
-            BOOST_TEST(test_attr(input, parser::identifier, x3::space, attr));
+            BOOST_TEST(parse(input, parser::identifier, x3::space, attr));
             btt::output_test_stream os;
             ast::printer print(os);
             print.verbose(1);
@@ -300,7 +255,7 @@ BOOST_AUTO_TEST_CASE( identifier )
 BOOST_AUTO_TEST_CASE( based_literal )
 {
     using namespace eda::vhdl93;
-    using x3_test::test_attr;
+    using x3_test::parse;
 
     typedef ast::based_literal attribute_type;
 
@@ -326,7 +281,7 @@ BOOST_AUTO_TEST_CASE( based_literal )
             auto const& gold = str.second;
             attribute_type attr;
             BOOST_TEST_INFO("input ='" << input << "'");
-            BOOST_TEST(test_attr(input, parser::based_literal, x3::space, attr));
+            BOOST_TEST(parse(input, parser::based_literal, x3::space, attr));
             BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
             BOOST_TEST(attr.base == gold.base, btt::per_element());
             BOOST_TEST(attr.literal == gold.literal, btt::per_element());
@@ -338,7 +293,7 @@ BOOST_AUTO_TEST_CASE( based_literal )
 BOOST_AUTO_TEST_CASE( decimal_literal )
 {
     using namespace eda::vhdl93;
-    using x3_test::test_attr;
+    using x3_test::parse;
 
     typedef ast::decimal_literal attribute_type;
 
@@ -373,7 +328,7 @@ BOOST_AUTO_TEST_CASE( decimal_literal )
             auto const& gold = str.second;
             attribute_type attr;
             BOOST_TEST_INFO("input ='" << input << "'");
-            BOOST_TEST(test_attr(input, parser::decimal_literal, x3::space, attr));
+            BOOST_TEST(parse(input, parser::decimal_literal, x3::space, attr));
             BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
             BOOST_TEST(attr.literal == gold.literal, btt::per_element());
             BOOST_TEST(attr.hint == gold.hint);
@@ -386,7 +341,7 @@ BOOST_AUTO_TEST_CASE( decimal_literal )
                            " to fail with overflow exception:") {
             attribute_type attr;
             BOOST_TEST_INFO("input ='" << str << "'");
-            BOOST_TEST(test_attr(str, parser::decimal_literal, x3::space, attr));
+            BOOST_TEST(parse(str, parser::decimal_literal, x3::space, attr));
             BOOST_CHECK_THROW(ast::get<int>(attr), ::eda::range_error);
         }
     }
@@ -396,7 +351,7 @@ BOOST_AUTO_TEST_CASE( decimal_literal )
 BOOST_AUTO_TEST_CASE( bit_string_literal )
 {
     using namespace eda::vhdl93;
-    using x3_test::test_attr;
+    using x3_test::parse;
 
     typedef ast::bit_string_literal attribute_type;
 
@@ -416,7 +371,7 @@ BOOST_AUTO_TEST_CASE( bit_string_literal )
             auto const& gold = str.second;
             attribute_type attr;
             BOOST_TEST_INFO("input ='" << input << "'");
-            BOOST_TEST(test_attr(input, parser::bit_string_literal, x3::space, attr));
+            BOOST_TEST(parse(input, parser::bit_string_literal, x3::space, attr));
             //BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
             BOOST_TEST(attr.literal == gold.literal, btt::per_element());
             BOOST_TEST(attr.hint == gold.hint);
@@ -428,7 +383,7 @@ BOOST_AUTO_TEST_CASE( bit_string_literal )
 BOOST_AUTO_TEST_CASE( abstract_literal )
 {
     using namespace eda::vhdl93;
-    using x3_test::test_attr;
+    using x3_test::parse;
 
     typedef ast::abstract_literal attribute_type;
 
@@ -449,7 +404,7 @@ BOOST_AUTO_TEST_CASE( abstract_literal )
             auto const& gold = str.second;
             attribute_type attr;
             BOOST_TEST_INFO("input = '" << input << "'");
-            BOOST_TEST(test_attr(input, parser::abstract_literal, x3::space, attr));
+            BOOST_TEST(parse(input, parser::abstract_literal, x3::space, attr));
             BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
         }
     }
@@ -459,7 +414,7 @@ BOOST_AUTO_TEST_CASE( abstract_literal )
 BOOST_AUTO_TEST_CASE( physical_literal )
 {
     using namespace eda::vhdl93;
-    using x3_test::test_attr;
+    using x3_test::parse;
 
     typedef ast::physical_literal attribute_type;
 
@@ -482,7 +437,7 @@ BOOST_AUTO_TEST_CASE( physical_literal )
             auto const& gold  = str.second;
             attribute_type attr;
             BOOST_TEST_INFO("input = '" << input << "'");
-            BOOST_TEST(test_attr(input, parser::physical_literal, x3::space, attr));
+            BOOST_TEST(parse(input, parser::physical_literal, x3::space, attr));
             btt::output_test_stream os;
             ast::printer print(os);
             print.verbose(1);
@@ -496,7 +451,7 @@ BOOST_AUTO_TEST_CASE( physical_literal )
 BOOST_AUTO_TEST_CASE( numeric_literal )
 {
     using namespace eda::vhdl93;
-    using x3_test::test_attr;
+    using x3_test::parse;
 
     typedef ast::numeric_literal attribute_type;
 
@@ -520,7 +475,7 @@ BOOST_AUTO_TEST_CASE( numeric_literal )
             auto const& gold  = str.second;
             attribute_type attr;
             BOOST_TEST_INFO("input = '" << input << "'");
-            BOOST_TEST(test_attr(input, parser::numeric_literal, x3::space, attr));
+            BOOST_TEST(parse(input, parser::numeric_literal, x3::space, attr));
             btt::output_test_stream os;
             ast::printer print(os);
             print.verbose(1);
@@ -535,7 +490,7 @@ BOOST_AUTO_TEST_CASE( numeric_literal )
 BOOST_AUTO_TEST_CASE( literal )
 {
     using namespace eda::vhdl93;
-    using x3_test::test_attr;
+    using x3_test::parse;
 
     typedef ast::literal attribute_type;
 
@@ -582,7 +537,7 @@ BOOST_AUTO_TEST_CASE( literal )
             auto const& gold  = str.second;
             attribute_type attr;
             BOOST_TEST_INFO("input = '" << input << "'");
-            BOOST_TEST(test_attr(input, parser::literal, x3::space, attr));
+            BOOST_TEST(parse(input, parser::literal, x3::space, attr));
             btt::output_test_stream os;
             ast::printer print(os);
             print.verbose(1);
