@@ -556,46 +556,23 @@ BOOST_AUTO_TEST_CASE( literal )
     	std::make_pair("B\"1111\"", "(v:literal=(bit_string_literal={l=1111, tag=bin}))"),
         // numeric_literal/physical_literal
     	std::make_pair("42 fs", "(v:literal=(v:numeric_literal=(physical_literal={l=(v:abstract_literal=(decimal_literal={l=42, tag=int})), u=fs})))"),
-        // numeric_literal/physical_literal
+        std::make_pair("100 fs",        "(v:literal=(v:numeric_literal=(physical_literal={l=(v:abstract_literal=(decimal_literal={l=100, tag=int})), u=fs})))"),
+        std::make_pair("10#42# ms",     "(v:literal=(v:numeric_literal=(physical_literal={l=(v:abstract_literal=(based_literal={b=10, n=42#})), u=ms})))"),
         // ATTENTION: This is a special case for 'literal' since it can't be
         //       distinct from basic_identifier without context !!
         //"ps",
         // numeric_literal/abstract_literal/based_literal
     	std::make_pair("8#42#", "(v:literal=(v:numeric_literal=(v:abstract_literal=(based_literal={b=8, n=42#}))))"),
     	std::make_pair("16#42#E4", "(v:literal=(v:numeric_literal=(v:abstract_literal=(based_literal={b=16, n=42#E4}))))"),
-        // numeric_literal/abstract_literal/decimal_literal
-    	std::make_pair("42", "(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int}))))"),
-    	std::make_pair("42e6", "(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42e6, tag=int}))))"),
-        // NULL, FixMe: how to handle NULL keyword here??
-		std::make_pair("NULL", "(v:literal=(v:enumeration_literal=(identifier=NULL)))"),
-
-#if 0
-
-        // numeric_literal ::= abstract_literal | physical_literal
-        // abstract_literal := decimal_literal | based_literal
-        std::make_pair("1e3",           "(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=1e3, tag=int}))))"),
-        std::make_pair("42.42e-3",      "(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42.42e-3, tag=double}))))"),
         std::make_pair("16#0_FF#",      "(v:literal=(v:numeric_literal=(v:abstract_literal=(based_literal={b=16, n=0FF#}))))"),
         std::make_pair("016#0_FF#e-23", "(v:literal=(v:numeric_literal=(v:abstract_literal=(based_literal={b=016, n=0FF#e-23}))))"),
-        // physical_literal
-        std::make_pair("100 fs",        "(v:literal=(v:numeric_literal=(physical_literal={l=(v:abstract_literal=(decimal_literal={l=100, tag=int})), u=fs})))"),
-        std::make_pair("10#42# ms",     "(v:literal=(v:numeric_literal=(physical_literal={l=(v:abstract_literal=(based_literal={b=10, n=42#})), u=ms})))"),
-
-		std::make_pair("fs",            "(v:literal=(v:numeric_literal=(physical_literal={l=(v:abstract_literal=(decimal_literal={l=, tag=int})), u=fs})))"),
-//        // enumeration_literal ::=  identifier | character_literal
-//        std::make_pair("identifier", "identifier"), // XXX
-//        std::make_pair("'A'", "(v:literal=(v:enumeration_literal=(character_literal=A)))"),
-//        // string_literal
-//        std::make_pair("\"VHDL\"", "(v:literal=(string_literal=VHDL))"),
-//        // bit_string_literal
-        std::make_pair("B\"1111_1111_1111\"", "(v:literal=(bit_string_literal={l=111111111111, tag=bin}))"),
-//        std::make_pair("X\"FFF\"", "XFFF"),
-//        std::make_pair("O\"777\"", "O777"),
-//        // NULL
-//        std::make_pair("NULL", ""),
-//        std::make_pair("null", ""),
-//        std::make_pair("Null", ""),
-#endif
+		// numeric_literal/abstract_literal/decimal_literal
+    	std::make_pair("42", "(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int}))))"),
+    	std::make_pair("42e6", "(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42e6, tag=int}))))"),
+        std::make_pair("1e3",           "(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=1e3, tag=int}))))"),
+        std::make_pair("42.42e-3",      "(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42.42e-3, tag=double}))))"),
+        // NULL, FixMe: how to handle NULL keyword here??
+		std::make_pair("NULL", "(v:literal=(v:enumeration_literal=(identifier=NULL)))"),
     };
 
     uint n = 1;
