@@ -1263,7 +1263,7 @@ auto const basic_graphic_character_def =
 // letter { [ underline ] letter_or_digit }
 auto const basic_identifier_def =
     letter
-    >> ~char_('"') // reject bit_string_literal
+    >> !char_('"') // reject bit_string_literal
     >> *( -char_("_") >> letter_or_digit )
     ;
 
