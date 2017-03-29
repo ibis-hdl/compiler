@@ -467,14 +467,13 @@ literal_dataset.input() ^ literal_dataset.expect(),
     typedef ast::literal attribute_type;
 
     bool parse_ok{ false };
-	std::string parse_result {};
-	attribute_type attr;
+    std::string parse_result {};
 
-	testing_parser<attribute_type> parse;
-	std::tie(parse_ok, parse_result) =  parse(input, parser::literal);
+    testing_parser<attribute_type> parse;
+    std::tie(parse_ok, parse_result) =  parse(input, parser::literal);
 
     BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("attr = '" << parse_result << "'");
+    if(!parse_ok) BOOST_TEST_INFO("got attr = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
 
