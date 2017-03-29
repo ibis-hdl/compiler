@@ -1,12 +1,12 @@
 /*
- * parser_test.hpp
+ * testing_parser.hpp
  *
  *  Created on: 29.03.2017
  *      Author: olaf
  */
 
-#ifndef SOURCES_VHDL93_TEST_PARSER_TEST_HPP_
-#define SOURCES_VHDL93_TEST_PARSER_TEST_HPP_
+#ifndef SOURCES_VHDL93_TEST_TESTING_PARSER_HPP_
+#define SOURCES_VHDL93_TEST_TESTING_PARSER_HPP_
 
 #include <eda/vhdl93/parser/grammar_def.hpp>
 #include <eda/vhdl93/parser/parser_config.hpp>
@@ -96,4 +96,4 @@ struct testing_parser
 
 
 
-#endif /* SOURCES_VHDL93_TEST_PARSER_TEST_HPP_ */
+#endif /* SOURCES_VHDL93_TEST_TESTING_PARSER_HPP_ */

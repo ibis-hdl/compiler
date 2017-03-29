@@ -15,7 +15,7 @@
 
 #include "app_mock.hpp"
 #include "data_set.hpp"
-#include "parser_test.hpp"
+#include "testing_parser.hpp"
 
 
 /*----------------------------------------------------------------------------*/
