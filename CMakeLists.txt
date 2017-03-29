@@ -70,4 +70,5 @@ enable_testing()
 add_subdirectory(sources/vhdl93)
 
 add_subdirectory(playground/vhdl93)
+add_subdirectory(playground/boost_test)
 
