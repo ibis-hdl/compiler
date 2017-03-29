@@ -6,20 +6,16 @@
  */
 
 #include <boost/test/unit_test.hpp>
-#include <boost/test/output_test_stream.hpp>
 
-#include <eda/vhdl93/parser/grammar_def.hpp>
-#include <eda/vhdl93/parser/parser_config.hpp>
+//#include <eda/exception.hpp>
 
-#include <eda/exception.hpp>
-
-#include <boost/optional/optional_io.hpp>
+//#include <boost/optional/optional_io.hpp>
 #include <iostream>
 
-#include <eda/vhdl93/ast_printer.hpp>
 
 #include "app_mock.hpp"
 #include "data_set.hpp"
+#include "parser_test.hpp"
 
 
 /*----------------------------------------------------------------------------*/
@@ -41,102 +37,11 @@ std::ostream& operator<<(std::ostream& os, NodeType const& node)
 BOOST_AUTO_TEST_SUITE( basic_productions )
 
 
-namespace btt = boost::test_tools;
 namespace x3 = boost::spirit::x3;
-namespace fs = boost::filesystem;
-
-
-namespace x3_test {
+namespace btt = boost::test_tools;
 
 namespace parser = eda::vhdl93::parser;
-    namespace ast    = eda::vhdl93::ast;
-
-    template <typename Parser, typename AstAttr>
-    std::tuple<bool, std::string>
-    parse(
-    std::string const &input,
-    Parser const &parser_rule,
-AstAttr &ast_attr,
-bool full_match = true)
-    {
-      btt::output_test_stream output;
-
-      parser::iterator_type iter = input.begin();
-      parser::iterator_type const end = input.end();
-
-      parser::error_handler_type error_handler(iter, end, output);
-
-      auto const parser =
-          x3::with<x3::error_handler_tag>(std::ref(error_handler))
-  [
-     parser_rule
-  ];
-
-      BOOST_TEST_INFO("parse input = '" << input << "'");
-
-      bool success =
-          x3::phrase_parse(iter, end, parser, parser::skipper, ast_attr);
-
-      if (success) {
-      if (iter != end) {
-      error_handler(iter, "Error! Expecting end of input here: ");
-      }
-      else {
-      ast::printer print(output);
-      print.verbose_symbol = true;
-      print.verbose_variant = true;
-      print(ast_attr);
-      }
-      }
-
-      // FixMe: C++17 Structured Bindings
-      return std::make_tuple(
-      success && (!full_match || (iter == end)),
-  output.str()
-      );
-    }
-
-    class tester
-{
-    fs::path prefix {
-    fs::path("/home/olaf/work/CXX/IBIS_SOURCE/sources/vhdl93/test/literal")
-    //fs::path(app_mock().argv[0]).filename()
-    }; // FixMe: extra cmd args
-
-    unsigned num_files_tested { 0 };
-
-    public:
-    tester()
-    {
-    std::cout << "CTOR " << fs::absolute(fs::path(prefix)) << '\n';
-    BOOST_TEST_INFO("Testing: " << fs::absolute(fs::path(prefix)));
-    }
-
-//void compare(fs::path const& input_path, fs::path expect_path)
-//{
-//BOOST_TEST_INFO("Testing: " << fs::path(prefix));
-//
-//std::cout << input_path.root_name() << '\n';
-//std::cout << input_path.root_directory() << '\n';
-//std::cout << input_path.root_path() << '\n';
-//std::cout << input_path.relative_path() << '\n';
-//std::cout << input_path.filename() << '\n';
-//std::cout << input_path.stem() << '\n';
-//
-//std::string input = read_file(input_path);
-//std::string gold  = read_file(expect_path);
-//
-////testing::compare(input_path, expect_path, parse);
-//std::cout << "input = " << input << '\n';
-//std::cout << "gold = " << gold << '\n';
-//
-//++num_files_tested;
-//}
-
-    };
-
-} // namespace x3_test
-
+namespace ast    = eda::vhdl93::ast;
 
 
 #if 0
@@ -548,86 +453,31 @@ BOOST_AUTO_TEST_CASE( numeric_literal )
 }
 #endif
 
-BOOST_AUTO_TEST_CASE( literal )
+
+
+::x3_test::dataset_loader literal_dataset{ R"(/home/olaf/work/CXX/IBIS_SOURCE/sources/vhdl93/test/literal)" };
+
+
+BOOST_DATA_TEST_CASE(literal,
+literal_dataset.input() ^ literal_dataset.expect(),
+    input, expect)
 {
     using namespace eda::vhdl93;
     using x3_test::parse;
 
     typedef ast::literal attribute_type;
 
-    // FixMe: One Test triggers decimal_literal.cpp(67): Invalid code path
+    bool parse_ok{ false };
+	std::string parse_result {};
+	attribute_type attr;
 
-    std::vector<std::pair<std::string, std::string>> const pass_test_cases {
-        // enumeration_literal/identifier/basic_identifier
-    std::make_pair("Bar", "(v:literal=(v:enumeration_literal=(identifier=Bar)))"),
-    std::make_pair("X", "(v:literal=(v:enumeration_literal=(identifier=X)))"),
-    std::make_pair("X2", "(v:literal=(v:enumeration_literal=(identifier=X2)))"),
-        // enumeration_literal/identifier/extended_identifier
-    std::make_pair("\\Foo\\", "(v:literal=(v:enumeration_literal=(identifier=\\Foo\\)))"),
-        // enumeration_literal/character_literal
-    std::make_pair("'A'", "(v:literal=(v:enumeration_literal=(character_literal=A)))"),
-        // string_literal
-    std::make_pair("\"FooBar\"", "(v:literal=(string_literal=FooBar))"),
-        // bit_string_literal
-    std::make_pair("B\"1111\"", "(v:literal=(bit_string_literal={l=1111, tag=bin}))"),
-        // numeric_literal/physical_literal
-    std::make_pair("42 fs", "(v:literal=(v:numeric_literal=(physical_literal={l=(v:abstract_literal=(decimal_literal={l=42, tag=int})), u=fs})))"),
-        std::make_pair("100 fs",        "(v:literal=(v:numeric_literal=(physical_literal={l=(v:abstract_literal=(decimal_literal={l=100, tag=int})), u=fs})))"),
-        std::make_pair("10#42# ms",     "(v:literal=(v:numeric_literal=(physical_literal={l=(v:abstract_literal=(based_literal={b=10, n=42#})), u=ms})))"),
-        // ATTENTION: This is a special case for 'literal' since it can't be
-        //       distinct from basic_identifier without context !!
-        //"ps",
-        // numeric_literal/abstract_literal/based_literal
-    std::make_pair("8#42#", "(v:literal=(v:numeric_literal=(v:abstract_literal=(based_literal={b=8, n=42#}))))"),
-    std::make_pair("16#42#E4", "(v:literal=(v:numeric_literal=(v:abstract_literal=(based_literal={b=16, n=42#E4}))))"),
-        std::make_pair("16#0_FF#",      "(v:literal=(v:numeric_literal=(v:abstract_literal=(based_literal={b=16, n=0FF#}))))"),
-        std::make_pair("016#0_FF#e-23", "(v:literal=(v:numeric_literal=(v:abstract_literal=(based_literal={b=016, n=0FF#e-23}))))"),
-// numeric_literal/abstract_literal/decimal_literal
-    std::make_pair("42", "(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int}))))"),
-    std::make_pair("42e6", "(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42e6, tag=int}))))"),
-        std::make_pair("1e3",           "(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=1e3, tag=int}))))"),
-        std::make_pair("42.42e-3",      "(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42.42e-3, tag=double}))))"),
-        // NULL, FixMe: how to handle NULL keyword here??
-std::make_pair("NULL", "(v:literal=(v:enumeration_literal=(identifier=NULL)))"),
-    };
+	std::tie(parse_ok, parse_result) =  parse(input, parser::literal, attr);
 
-    uint n = 1;
-    for(auto const& str : pass_test_cases) {
-        BOOST_TEST_CONTEXT("'literal' test case #" << n++ << " to pass:") {
-
-        auto const& input = str.first;
-            auto const& gold  = str.second;
-
-            attribute_type attr;
-
-            bool parse_ok;
-            std::string result;
-            std::tie(parse_ok, result) = parse(input, parser::literal, attr);
-
-            BOOST_TEST(parse_ok);
-            BOOST_TEST_INFO("attr = '" << result << "'");
-            BOOST_TEST(gold == result, btt::per_element());
-        }
-    }
-//
-//    std::cout << "-----------------------------------\n";
-//    x3_test::tester t;
-//    t.foo();
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("attr = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expect, btt::per_element());
 }
 
-using ::boost::unit_test::data::monomorphic::operator^;
-
-
-::x3_test::dataset_loader literal_dataset{ fs::path("/home/olaf/work/CXX/IBIS_SOURCE/sources/vhdl93/test/literal") };
-
-#if 0
-BOOST_DATA_TEST_CASE(literal_new,
-literal_dataset.input() ^ literal_dataset.expect(),
-    input, expect)
-{
-      BOOST_TEST(input == expect);
-}
-#endif
 
 
 BOOST_AUTO_TEST_SUITE_END()
