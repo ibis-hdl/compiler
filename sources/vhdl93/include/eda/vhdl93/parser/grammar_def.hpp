@@ -3803,7 +3803,7 @@ skipper_type const skipper { "skipper" };
 
 auto const skipper_def =
       space
-    | "--" >> (*char_ - x3::eol) >> x3::eol
+    | "--" >> *(char_ - x3::eol) >> x3::eol
     ;
 
 BOOST_SPIRIT_DEFINE(skipper)
