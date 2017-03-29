@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-#from pyxb.utils.utility import _XMLIdentifierToPython
-
 
 
 # copy&paste reserved keywords
@@ -1750,24 +1748,19 @@ struct ast_printer
 {{
     std::ostream&   os;
     uint16_t        indent;
-    uint16_t const  tab_size {{ 4 }};
-    bool            print_variant {{ false }};
+    uint16_t const  tab_size{{ 4 }};
+    bool            verbose_symbol{{ false }};
+    bool            verbose_variant{{ false }};
+    const char      prefix_{{ '(' }};  
+    const char      postfix_{{ ')' }};    
+
+    struct scope_printer;
+    struct symbol_scope;
+    struct variant_scope;
+
     // ...    
 
     ast_printer(std::ostream& out, uint16_t indent = 0);
-    
-    template<typename NodeType>
-    void apply_visitor(NodeType const& node, const char* const name) const
-    {{
-        if(print_variant) {{
-            os << "(v:" << name << "=";
-            boost::apply_visitor(*this, node);
-            os << ")";
-        }}
-        else {{
-            boost::apply_visitor(*this, node);
-        }}
-    }}
     
 {1}
 }};        
@@ -1776,7 +1769,9 @@ struct ast_printer
     "\n".join(decl_list) 
     )
         text_decl = embrace_ns(text, self.ns)
-        text_def  = embrace_ns("\n".join(def_list), self.ns) + '\n'
+        text_def   = self.visitor_helper()
+        text_def  += "\n".join(def_list)
+        text_def  = embrace_ns(text_def, self.ns) + '\n'
         return text_decl + '\n' + text_def
     
     def node_fw(self, name):
@@ -1787,13 +1782,60 @@ struct ast_printer
         text = "    void operator()({0} const& node) const;".format(name)
         return text
         
+    def visitor_helper(self):
+        text = """
+struct ast_printer::scope_printer
+{
+    scope_printer(printer const& parent, bool verbose, char const name[], char const name_pfx[] = nullptr) 
+    : parent{ parent }
+    , verbose{ verbose }
+    , name{ name }
+    {
+        if(verbose) {
+            parent.os << parent.prefix_;
+            if(name_pfx) 
+                parent.os << name_pfx;
+            parent.os << name << "=";
+        }
+    }
+    
+    ~scope_printer()
+    {
+        if(verbose) {
+            parent.os << parent.postfix_;
+        }  
+    }
+    
+    printer const& parent;
+    bool const verbose;
+    const char* const name{ nullptr };
+};
+
+struct ast_printer::symbol_scope
+: public scope_printer
+{
+    symbol_scope(printer const& parent, char const name[]) 
+    : scope_printer(parent, parent.verbose_symbol, name)
+    { }
+};
+
+struct ast_printer::variant_scope
+: public scope_printer
+{
+    variant_scope(printer const& parent, char const name[]) 
+    : scope_printer(parent, parent.verbose_variant, name, "v:")
+    { }
+};
+"""
+        return text
+        
     def visit_node_def(self, name):
         text = """
 void printer::operator()({0} const &node) const 
 {{
-    os << "({0}=";
-    os << "XXXX"; //os << node; // FixMe: Review and Implement
-    os << ")";
+    static char const symbol[]{{ "XXX {0}" }}; // FixMe: Review and Implement
+    symbol_scope _(*this, symbol);
+    //os << node; 
 }}
 """.format(name)
         return text
@@ -1802,9 +1844,9 @@ void printer::operator()({0} const &node) const
         text = """
 void printer::operator()({0} const &node) const 
 {{
-    os << "(v: XXXX {0}=";
-    //apply_visitor(node, "XXX {0}"); // FixMe: Review and Implement
-    os << ")";
+    static char const symbol[]{{ "XXX {0}" }}; // FixMe: Review and Implement
+    variant_scope _(*this, symbol);
+    //boost::apply_visitor(*this, node);
 }}
 """.format(name)
         return text
