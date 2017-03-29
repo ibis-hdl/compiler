@@ -463,7 +463,7 @@ literal_dataset.input() ^ literal_dataset.expect(),
     input, expect)
 {
     using namespace eda::vhdl93;
-    using x3_test::parse;
+    using x3_test::testing_parser;
 
     typedef ast::literal attribute_type;
 
@@ -471,7 +471,8 @@ literal_dataset.input() ^ literal_dataset.expect(),
 	std::string parse_result {};
 	attribute_type attr;
 
-	std::tie(parse_ok, parse_result) =  parse(input, parser::literal, attr);
+	testing_parser<attribute_type> parse;
+	std::tie(parse_ok, parse_result) =  parse(input, parser::literal);
 
     BOOST_TEST(parse_ok);
     BOOST_TEST_INFO("attr = '" << parse_result << "'");
