@@ -462,7 +462,6 @@ BOOST_DATA_TEST_CASE(literal,
 literal_dataset.input() ^ literal_dataset.expect(),
     input, expect)
 {
-    using namespace eda::vhdl93;
     using x3_test::testing_parser;
 
     typedef ast::literal attribute_type;
