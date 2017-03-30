@@ -414,46 +414,33 @@ BOOST_AUTO_TEST_CASE( physical_literal )
         }
     }
 }
+#endif
 
-BOOST_AUTO_TEST_CASE( numeric_literal )
+
+::x3_test::dataset_loader numeric_dataset{ R"(/home/olaf/work/CXX/IBIS_SOURCE/sources/vhdl93/test/numeric_literal)" };
+
+
+BOOST_DATA_TEST_CASE(numeric_literal,
+	numeric_dataset.input() ^ numeric_dataset.expect() ^ numeric_dataset.test_file_name(),
+    input, expect, file)
 {
-    using namespace eda::vhdl93;
-    using x3_test::parse;
+    using x3_test::testing_parser;
 
     typedef ast::numeric_literal attribute_type;
 
-    std::vector<std::pair<std::string, std::string>> const pass_test_cases {
-        // abstract_literal := decimal_literal | based_literal
-        std::make_pair("1e3",             "(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=1e3, tag=int})))"),
-        std::make_pair("42.42e-3",        "(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42.42e-3, tag=double})))"),
-        std::make_pair("16#0_FF#",        "(v:numeric_literal=(v:abstract_literal=(based_literal={b=16, n=0FF#})))"),
-        std::make_pair("016#0_FF#e-23",   "(v:numeric_literal=(v:abstract_literal=(based_literal={b=016, n=0FF#e-23})))"),
-        // physical_literal
-        std::make_pair("100 fs",          "(v:numeric_literal=(physical_literal={l=(v:abstract_literal=(decimal_literal={l=100, tag=int})), u=fs}))"),
-        std::make_pair("16#FF# ns",       "(v:numeric_literal=(physical_literal={l=(v:abstract_literal=(based_literal={b=16, n=FF#})), u=ns}))"),
-        std::make_pair("2#1111_1111# d",  "(v:numeric_literal=(physical_literal={l=(v:abstract_literal=(based_literal={b=2, n=11111111#})), u=d}))"),
-        std::make_pair("10#42# ms",       "(v:numeric_literal=(physical_literal={l=(v:abstract_literal=(based_literal={b=10, n=42#})), u=ms}))"),
-    };
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
 
-    uint n = 1;
-    for(auto const& str : pass_test_cases) {
-        BOOST_TEST_CONTEXT("'numeric_literal' test case #" << n++ << " to pass:") {
-            auto const& input = str.first;
-            auto const& gold  = str.second;
-            attribute_type attr;
-            BOOST_TEST_INFO("input = '" << input << "'");
-            BOOST_TEST(parse(input, parser::numeric_literal, x3::space, attr));
-            btt::output_test_stream os;
-            ast::printer print(os);
-            print.verbose(1);
-            print(attr);
-            BOOST_TEST_INFO("attr = '" << os.str() << "'");
-            BOOST_TEST(gold == os.str(), btt::per_element());
-        }
-    }
+    bool parse_ok{ false };
+    std::string parse_result {};
+
+    testing_parser<attribute_type> parse;
+    std::tie(parse_ok, parse_result) =  parse(input, parser::numeric_literal);
+
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("parsed attr = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expect, btt::per_element());
 }
-#endif
-
 
 
 ::x3_test::dataset_loader literal_dataset{ R"(/home/olaf/work/CXX/IBIS_SOURCE/sources/vhdl93/test/literal)" };
@@ -467,7 +454,7 @@ literal_dataset.input() ^ literal_dataset.expect() ^ literal_dataset.test_file_n
 
     typedef ast::literal attribute_type;
 
-    // avoid warning, only used in case of error
+    // avoid warning, used in case of error for error message by boost.test
     boost::ignore_unused(file);
 
     bool parse_ok{ false };
@@ -477,7 +464,7 @@ literal_dataset.input() ^ literal_dataset.expect() ^ literal_dataset.test_file_n
     std::tie(parse_ok, parse_result) =  parse(input, parser::literal);
 
     BOOST_TEST(parse_ok);
-    if(!parse_ok) BOOST_TEST_INFO("got attr = '" << parse_result << "'");
+    BOOST_TEST_INFO("parsed attr = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
 

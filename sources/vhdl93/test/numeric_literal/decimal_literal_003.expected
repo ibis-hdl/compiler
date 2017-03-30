@@ -1,0 +1,1 @@
+(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42.42e-3, tag=double})))
