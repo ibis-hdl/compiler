@@ -6,6 +6,7 @@
  */
 
 #include <boost/test/unit_test.hpp>
+#include <boost/core/ignore_unused.hpp>
 
 //#include <eda/exception.hpp>
 
@@ -459,12 +460,15 @@ BOOST_AUTO_TEST_CASE( numeric_literal )
 
 
 BOOST_DATA_TEST_CASE(literal,
-literal_dataset.input() ^ literal_dataset.expect(),
-    input, expect)
+literal_dataset.input() ^ literal_dataset.expect() ^ literal_dataset.test_file_name(),
+    input, expect, file)
 {
     using x3_test::testing_parser;
 
     typedef ast::literal attribute_type;
+
+    // avoid warning, only used in case of error
+    boost::ignore_unused(file);
 
     bool parse_ok{ false };
     std::string parse_result {};

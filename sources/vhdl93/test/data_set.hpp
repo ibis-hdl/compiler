@@ -34,6 +34,7 @@ public:
 public:
     class data_set;
 
+    data_set test_file_name() const;
     data_set input() const;
     data_set expect() const;
 
@@ -55,7 +56,9 @@ private:
 
                     if (fs::extension(dir_iter->path()) == ".input") {
 
-                        auto input_path  = dir_iter->path();
+                    	m_file_path.emplace_back(dir_iter->path().native().c_str());
+
+                        auto const input_path  = dir_iter->path();
                         auto expect_path = dir_iter->path();
                         expect_path.replace_extension(".expected");
 
@@ -101,6 +104,7 @@ private:
     }
 
 private:
+    dataset_type	 m_file_path;
     dataset_type     m_input;
     dataset_type     m_expected;
 };
@@ -140,6 +144,12 @@ dataset_loader::data_set dataset_loader::input() const
 dataset_loader::data_set dataset_loader::expect() const
 {
     return data_set(m_expected);
+}
+
+
+dataset_loader::data_set dataset_loader::test_file_name() const
+{
+    return data_set(m_file_path);
 }
 
 
