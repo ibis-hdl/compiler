@@ -1748,19 +1748,18 @@ struct ast_printer
 {{
     std::ostream&   os;
     uint16_t        indent;
-    uint16_t const  tab_size{{ 4 }};
     bool            verbose_symbol{{ false }};
     bool            verbose_variant{{ false }};
-    const char      prefix_{{ '(' }};  
-    const char      postfix_{{ ')' }};    
+    uint16_t const  tab_size{{ 4 }};
 
     struct scope_printer;
+    
+    template<typename T, typename Enable = void>
     struct symbol_scope;
-    struct variant_scope;
 
     // ...    
 
-    ast_printer(std::ostream& out, uint16_t indent = 0);
+    ast_printer(std::ostream& os, uint16_t indent = 0);
     
 {1}
 }};        
@@ -1784,48 +1783,65 @@ struct ast_printer
         
     def visitor_helper(self):
         text = """
-struct ast_printer::scope_printer
+#include <boost/spirit/home/x3/support/traits/is_variant.hpp>
+       
+        
+printer::printer(std::ostream& os, uint16_t indent) 
+    : os{ os }
+    , indent{ indent }
+    , verbose_symbol {false}
+    , verbose_variant{ false }
+    {}
+
+struct printer::scope_printer
 {
-    scope_printer(printer const& parent, bool verbose, char const name[], char const name_pfx[] = nullptr) 
-    : parent{ parent }
-    , verbose{ verbose }
-    , name{ name }
+    scope_printer(std::ostream& os, char const name[], bool verbose, char const name_pfx[] = nullptr) 
+        : os{ os }
+        , name{ name }
+        , verbose{ verbose }
     {
         if(verbose) {
-            parent.os << parent.prefix_;
+            os << prefix;
             if(name_pfx) 
-                parent.os << name_pfx;
-            parent.os << name << "=";
+                os << name_pfx;
+            os << name << "=";
         }
     }
     
     ~scope_printer()
     {
         if(verbose) {
-            parent.os << parent.postfix_;
+            os << postfix;
         }  
     }
     
-    printer const& parent;
-    bool const verbose;
+    std::ostream& os;
     const char* const name{ nullptr };
+    bool const verbose;
+    const char prefix{ '(' };  
+    const char postfix{ ')' };
 };
 
-struct ast_printer::symbol_scope
+template<typename T, typename Enable>
+struct printer::symbol_scope
 : public scope_printer
 {
-    symbol_scope(printer const& parent, char const name[]) 
-    : scope_printer(parent, parent.verbose_symbol, name)
+    symbol_scope(printer const& root, char const name[]) 
+    : scope_printer(root.os, name, root.verbose_symbol)
     { }
 };
 
-struct ast_printer::variant_scope
+template<typename T>
+struct printer::symbol_scope<
+    T, typename std::enable_if<x3::traits::is_variant<T>::value>::type
+>
 : public scope_printer
 {
-    variant_scope(printer const& parent, char const name[]) 
-    : scope_printer(parent, parent.verbose_variant, name, "v:")
+    symbol_scope(printer const& root, char const name[]) 
+    : scope_printer(root.os, name, root.verbose_variant, "v:")
     { }
 };
+
 """
         return text
         
@@ -1833,8 +1849,8 @@ struct ast_printer::variant_scope
         text = """
 void printer::operator()({0} const &node) const 
 {{
-    static char const symbol[]{{ "XXX {0}" }}; // FixMe: Review and Implement
-    symbol_scope _(*this, symbol);
+    static char const symbol[]{{ "XXX {0}" }};
+    symbol_scope<{0}> _(*this, symbol);
     //os << node; 
 }}
 """.format(name)
@@ -1844,8 +1860,8 @@ void printer::operator()({0} const &node) const
         text = """
 void printer::operator()({0} const &node) const 
 {{
-    static char const symbol[]{{ "XXX {0}" }}; // FixMe: Review and Implement
-    variant_scope _(*this, symbol);
+    static char const symbol[]{{ "XXX {0}" }};
+    symbol_scope<{0}> _(*this, symbol);
     //boost::apply_visitor(*this, node);
 }}
 """.format(name)

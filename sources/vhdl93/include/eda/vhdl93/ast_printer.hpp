@@ -252,26 +252,21 @@ class printer
     std::ostream&   os;
     uint16_t        indent;
     uint16_t const  tab_size { 4 };
-    const char      prefix_{ '(' };
-    const char      postfix_{ ')' };
 
     void tab(uint16_t spaces);
 
     struct scope_printer;
+
+    template<typename T, typename Enable = void>
     struct symbol_scope;
-    struct variant_scope;
 
 public:
     bool            verbose_symbol{ false };
     bool            verbose_variant{ false };
 
 public:
-    // ...
-    printer(std::ostream& out, uint16_t indent = 0)
-    : os{ out }, indent { indent }
-    { }
+    printer(std::ostream& out, uint16_t indent = 0);
 
-    void verbose(uint level);
 
     void operator()(abstract_literal const& node) const;
     void operator()(access_type_definition const& node) const;
