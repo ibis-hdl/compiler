@@ -376,45 +376,34 @@ BOOST_AUTO_TEST_CASE( abstract_literal )
         }
     }
 }
+#endif
 
 
-BOOST_AUTO_TEST_CASE( physical_literal )
+::x3_test::dataset_loader physical_literal_dataset{ R"(/home/olaf/work/CXX/IBIS_SOURCE/sources/vhdl93/test/physical_literal)" };
+
+
+BOOST_DATA_TEST_CASE( physical_literal,
+		physical_literal_dataset.input() ^ physical_literal_dataset.expect() ^ physical_literal_dataset.test_file_name(),
+	input, expect, file)
 {
-    using namespace eda::vhdl93;
-    using x3_test::parse;
+    using x3_test::testing_parser;
 
     typedef ast::physical_literal attribute_type;
 
-    std::vector<std::pair<std::string, std::string>> const pass_test_cases {
-        std::make_pair("100 fs",             "(physical_literal={l=(v:abstract_literal=(decimal_literal={l=100, tag=int})), u=fs})"),
-        /* This is an interesting test; obviously the integer value equals to
-         * 1 (one), even if the ast's integer part empty. To be investigated
-         * later  */
-        std::make_pair("ps",                 "(physical_literal={l=(v:abstract_literal=(decimal_literal={l=, tag=int})), u=ps})"),
-        std::make_pair("16#FF# ns",          "(physical_literal={l=(v:abstract_literal=(based_literal={b=16, n=FF#})), u=ns})"),
-        std::make_pair("2#1111_1111# d",     "(physical_literal={l=(v:abstract_literal=(based_literal={b=2, n=11111111#})), u=d})"),
-        std::make_pair("10#42# ms",          "(physical_literal={l=(v:abstract_literal=(based_literal={b=10, n=42#})), u=ms})"),
-        std::make_pair("016#AFFE.42#E+69 h", "(physical_literal={l=(v:abstract_literal=(based_literal={b=016, n=AFFE.42#E+69})), u=h})")
-    };
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
 
-    uint n = 1;
-    for(auto const& str : pass_test_cases) {
-        BOOST_TEST_CONTEXT("'physical_literal' test case #" << n++ << " to pass:") {
-            auto const& input = str.first;
-            auto const& gold  = str.second;
-            attribute_type attr;
-            BOOST_TEST_INFO("input = '" << input << "'");
-            BOOST_TEST(parse(input, parser::physical_literal, x3::space, attr));
-            btt::output_test_stream os;
-            ast::printer print(os);
-            print.verbose(1);
-            print(attr);
-            BOOST_TEST_INFO("attr = '" << os.str() << "'");
-            BOOST_TEST(gold == os.str(), btt::per_element());
-        }
-    }
+    bool parse_ok{ false };
+    std::string parse_result {};
+
+    testing_parser<attribute_type> parse;
+    std::tie(parse_ok, parse_result) =  parse(input, parser::physical_literal);
+
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("parsed attr = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expect, btt::per_element());
 }
-#endif
+
 
 
 ::x3_test::dataset_loader numeric_dataset{ R"(/home/olaf/work/CXX/IBIS_SOURCE/sources/vhdl93/test/numeric_literal)" };

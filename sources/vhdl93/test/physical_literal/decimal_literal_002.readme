@@ -1,0 +1,2 @@
+This is an interesting test; obviously the integer value equals implicit to
+1 (one), even if the ast's integer part empty. To be investigated later.
