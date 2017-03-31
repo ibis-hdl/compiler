@@ -2,6 +2,7 @@
 project(test_vhdl93 LANGUAGES CXX)
 
 set(BIN_SOURCES
+    app_mock.cpp
     basic_production_rules.cpp
     error_reporting.cpp
     test_vhdl93.cpp
@@ -42,8 +43,9 @@ target_link_libraries(${PROJECT_NAME}
     ${Boost_SYSTEM_LIBRARY}
 )
 
-add_test(test_vhdl93 ${EXECUTABLE_OUTPUT_PATH}/${PROJECT_NAME})
-
+add_test(NAME test_vhdl93_parser
+    COMMAND ${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}
+)
 
 add_executable(x3_debug EXCLUDE_FROM_ALL x3_debug.cpp)
 target_link_libraries(x3_debug
