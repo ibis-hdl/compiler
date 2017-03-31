@@ -1,5 +1,5 @@
 /*
- * cxx_unreachable.hpp
+ * cxx_bug_fatal.hpp
  *
  *  Created on: 19.03.2017
  *      Author: olaf

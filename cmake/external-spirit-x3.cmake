@@ -1,5 +1,9 @@
 message("External project: boost.org spirit parser X3")
 
+
+include(ExternalProject)
+
+
 # for boost self see https://github.com/arnaudgelas/ExternalProject/blob/master/External-Boost.cmake
 
 ExternalProject_Add(

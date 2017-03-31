@@ -1,6 +1,8 @@
 message("External project: C++ Guideline Support Library (Microsoft/GSL)")
 
 
+include(ExternalProject)
+
 
 ExternalProject_Add(
   gsl

@@ -7,7 +7,6 @@
 
 #include <eda/vhdl93/ast_printer.hpp>
 #include <eda/utils/cxx_bug_fatal.hpp>
-#include <eda/exception.hpp>
 
 #include <boost/spirit/home/x3/support/traits/is_variant.hpp>
 

@@ -7,7 +7,7 @@
 
 #include <eda/vhdl93/ast/bit_string_literal.hpp>
 #include <eda/utils/cxx_bug_fatal.hpp>
-#include <eda/exception.hpp>
+#include <eda/exception/exception.hpp>
 #include <eda/vhdl93/utils/literal_ellipsis.hpp>
 
 #include <boost/spirit/home/x3.hpp>

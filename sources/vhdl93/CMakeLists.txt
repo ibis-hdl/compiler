@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.6)
+
 ## EDA/VHDL93 project
 project(vhdl93_grammar LANGUAGES CXX)
 
@@ -24,7 +26,7 @@ target_compile_options(${PROJECT_NAME}
     PRIVATE -Wall -Wextra)
 
 ## FixMe: temporary for interface target of cmake getting working
-include_directories(../../include)
+include_directories(../common/include)
 #add_dependencies(${PROJECT_NAME} eda)  # FixMe: cmake_check_build_system error
 
 ## Project Depend Includes

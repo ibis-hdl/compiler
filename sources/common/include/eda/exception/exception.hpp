@@ -5,8 +5,8 @@
  *      Author: olaf
  */
 
-#ifndef INCLUDE_EDA_EXCEPTION_HPP_
-#define INCLUDE_EDA_EXCEPTION_HPP_
+#ifndef SOURCES_COMMON_INCLUDE_EDA_EXCEPTION_EXCEPTION_HPP_
+#define SOURCES_COMMON_INCLUDE_EDA_EXCEPTION_EXCEPTION_HPP_
 
 
 #include <stdexcept>
@@ -34,4 +34,4 @@ using range_error_max = boost::error_info<struct tag_int32_range_max, int32_t>;
 } // namespace eda
 
 
-#endif /* INCLUDE_EDA_EXCEPTION_HPP_ */
+#endif /* SOURCES_COMMON_INCLUDE_EDA_EXCEPTION_EXCEPTION_HPP_ */
