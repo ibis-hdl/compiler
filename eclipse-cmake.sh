@@ -6,6 +6,8 @@ SCRIPT_PATH="${BASH_SOURCE%/*}"
 # this script is in the same directory
 EDA_SRC_DIR=${SCRIPT_PATH}
 
+CPU_COUNT=$(grep ^processor /proc/cpuinfo | wc -l)
+
 cmake ${EDA_SRC_DIR} \
 		-G "Eclipse CDT4 - Unix Makefiles" \
         -DCMAKE_ECLIPSE_GENERATE_SOURCE_PROJECT=TRUE \
@@ -19,5 +21,5 @@ cmake ${EDA_SRC_DIR} \
         -DBUILD_SHARED_LIBS:BOOL=OFF 
         
 #cmake --build .
-make -j4
+make -j${CPU_COUNT}
 
