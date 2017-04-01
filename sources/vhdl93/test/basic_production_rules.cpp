@@ -131,6 +131,7 @@ BOOST_DATA_TEST_CASE( integer,
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
 
+
 ::x3_test::dataset_loader integer_failure_dataset{ "test/integer_failure" };
 
 
@@ -159,49 +160,37 @@ BOOST_DATA_TEST_CASE( integer_failure,    // should fail
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
 
-#if 0
-BOOST_AUTO_TEST_CASE( identifier )
+
+::x3_test::dataset_loader identifier_dataset{ "test/identifier" };
+
+
+BOOST_DATA_TEST_CASE( identifier,
+      identifier_dataset.input()
+    ^ identifier_dataset.expect()
+    ^ identifier_dataset.test_file_name(),
+    input, expect, file )
 {
-    using namespace eda::vhdl93;
-    using x3_test::parse;
+    using x3_test::testing_parser;
 
     typedef ast::identifier attribute_type;
 
-    std::vector<std::pair<std::string, std::string>> const pass_test_cases {
-        // basic_identifier
-        std::make_pair("X", "(identifier=X)"),
-        std::make_pair("X1", "(identifier=X1)"),
-        std::make_pair("VHDL93", "(identifier=VHDL93)"),
-        std::make_pair("COUNT", "(identifier=COUNT)"),
-        std::make_pair("STORE_NEXT_ITEM", "(identifier=STORE_NEXT_ITEM)"),
-        std::make_pair("c_out", "(identifier=c_out)"),
-        // extended_identifier
-        std::make_pair("\\Bus\\", "(identifier=\\Bus\\)"),
-        std::make_pair("\\Foo\\\\Bar\\", "(identifier=\\Foo\\\\Bar\\)"),
-        std::make_pair("\\Foo\\\\Bar\\\\Baz\\", "(identifier=\\Foo\\\\Bar\\\\Baz\\)"),
-        std::make_pair("\\a\\\\b\\", "(identifier=\\a\\\\b\\)"),
-    };
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
 
-    uint n = 1;
-    for(auto const& str : pass_test_cases) {
-        BOOST_TEST_CONTEXT("'identifier' test case #" << n++ << " to pass:") {
-            auto const& input = str.first;
-            auto const& gold = str.second;
-            attribute_type attr;
-            BOOST_TEST_INFO("input ='" << input << "'");
-            BOOST_TEST(parse(input, parser::identifier, x3::space, attr));
-            btt::output_test_stream os;
-            ast::printer print(os);
-            print.verbose(1);
-            print(attr);
-            BOOST_TEST_INFO("attr = '" << os.str() << "'");
-            BOOST_TEST(gold == os.str(), btt::per_element());
-        }
-    }
+    bool parse_ok{ false };
+    std::string parse_result {};
+
+    testing_parser<attribute_type> parse;
+    std::tie(parse_ok, parse_result) = parse(input, parser::identifier);
+
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("parsed attr (result) = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expect, btt::per_element());
+
 }
 
 
-
+#if 0
 BOOST_AUTO_TEST_CASE( based_literal )
 {
     using namespace eda::vhdl93;
