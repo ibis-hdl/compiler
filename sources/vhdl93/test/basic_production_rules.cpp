@@ -59,7 +59,6 @@ BOOST_DATA_TEST_CASE( string_literal,
 
 ::x3_test::dataset_loader character_literal_dataset{ "test/character_literal" };
 
-
 BOOST_DATA_TEST_CASE( character_literal,
       character_literal_dataset.input()
     ^ character_literal_dataset.expect()
@@ -86,7 +85,6 @@ BOOST_DATA_TEST_CASE( character_literal,
 
 
 ::x3_test::dataset_loader integer_dataset{ "test/integer" };
-
 
 BOOST_DATA_TEST_CASE( integer,
       integer_dataset.input()
@@ -116,7 +114,6 @@ BOOST_DATA_TEST_CASE( integer,
 
 ::x3_test::dataset_loader integer_failure_dataset{ "test/integer_failure" };
 
-
 BOOST_DATA_TEST_CASE( integer_failure,    // should fail
       integer_failure_dataset.input()
     ^ integer_failure_dataset.expect()
@@ -144,7 +141,6 @@ BOOST_DATA_TEST_CASE( integer_failure,    // should fail
 
 
 ::x3_test::dataset_loader identifier_dataset{ "test/identifier" };
-
 
 BOOST_DATA_TEST_CASE( identifier,
       identifier_dataset.input()
@@ -272,7 +268,6 @@ BOOST_AUTO_TEST_CASE( decimal_literal )
 
 ::x3_test::dataset_loader bit_string_literal_dataset{ "test/bit_string_literal" };
 
-
 BOOST_DATA_TEST_CASE( bit_string_literal,
       bit_string_literal_dataset.input()
     ^ bit_string_literal_dataset.expect()
@@ -299,7 +294,6 @@ BOOST_DATA_TEST_CASE( bit_string_literal,
 
 
 ::x3_test::dataset_loader abstract_literal_dataset{ "test/abstract_literal" };
-
 
 BOOST_DATA_TEST_CASE( abstract_literal,
       abstract_literal_dataset.input()
@@ -328,7 +322,6 @@ BOOST_DATA_TEST_CASE( abstract_literal,
 
 ::x3_test::dataset_loader physical_literal_dataset{ "test/physical_literal" };
 
-
 BOOST_DATA_TEST_CASE( physical_literal,
       physical_literal_dataset.input()
     ^ physical_literal_dataset.expect()
@@ -354,9 +347,7 @@ BOOST_DATA_TEST_CASE( physical_literal,
 }
 
 
-
 ::x3_test::dataset_loader numeric_dataset{ "test/numeric_literal" };
-
 
 BOOST_DATA_TEST_CASE(numeric_literal,
       numeric_dataset.input()
@@ -384,7 +375,6 @@ BOOST_DATA_TEST_CASE(numeric_literal,
 
 
 ::x3_test::dataset_loader literal_dataset{ "test/literal" };
-
 
 BOOST_DATA_TEST_CASE(literal,
       literal_dataset.input()
