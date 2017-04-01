@@ -41,14 +41,14 @@ int dataset_loader::read_files(fs::path const& path)
 
             std::sort(dir_list.begin(), dir_list.end());
 
-            for(auto const& dir_iter : dir_list) {
+            for(auto const& file : dir_list) {
 
-                if (fs::extension(dir_iter) == ".input") {
+                if (fs::extension(file) == ".input") {
 
-                    m_file_path.emplace_back(dir_iter.native().c_str());
+                    m_file_path.emplace_back(file.native().c_str());
 
-                    auto const input_path  = dir_iter;
-                    auto expect_path = dir_iter;
+                    auto const input_path  = file;
+                    auto expect_path = file;
                     expect_path.replace_extension(".expected");
 
                     m_input.emplace_back(   read_file(input_path) );
