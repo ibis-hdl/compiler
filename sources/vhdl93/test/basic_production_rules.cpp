@@ -345,46 +345,40 @@ BOOST_AUTO_TEST_CASE( bit_string_literal )
         }
     }
 }
+#endif
+
+::x3_test::dataset_loader abstract_literal_dataset{ "test/abstract_literal" };
 
 
-BOOST_AUTO_TEST_CASE( abstract_literal )
+BOOST_DATA_TEST_CASE( abstract_literal,
+        abstract_literal_dataset.input() ^ abstract_literal_dataset.expect() ^ abstract_literal_dataset.test_file_name(),
+        input, expect, file)
 {
-    using namespace eda::vhdl93;
-    using x3_test::parse;
+    using x3_test::testing_parser;
 
     typedef ast::abstract_literal attribute_type;
 
-    using d_tag = ast::decimal_literal::tag;
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
 
-    // {decimal|based}_literal
-    std::vector<std::pair<std::string,  attribute_type>> const pass_test_cases {
-        std::make_pair("1e3",           attribute_type { ast::decimal_literal {"1e3", d_tag::integer} }),
-        std::make_pair("42.42e-3",      attribute_type { ast::decimal_literal {"42.42e-3", d_tag::real} }),
-        std::make_pair("16#0_FF#",      attribute_type { ast::based_literal {"16", "0FF#"} }),
-        std::make_pair("016#0_FF#e-23", attribute_type { ast::based_literal {"16", "0FF#e-23"} }),
-    };
+    bool parse_ok{ false };
+    std::string parse_result {};
 
-    uint n = 1;
-    for(auto const& str : pass_test_cases) {
-        BOOST_TEST_CONTEXT("'bit_string_literal' test case #" << n++ << " to pass:") {
-            auto const& input = str.first;
-            auto const& gold = str.second;
-            attribute_type attr;
-            BOOST_TEST_INFO("input = '" << input << "'");
-            BOOST_TEST(parse(input, parser::abstract_literal, x3::space, attr));
-            BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
-        }
-    }
+    testing_parser<attribute_type> parse;
+    std::tie(parse_ok, parse_result) =  parse(input, parser::abstract_literal);
+
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("parsed attr = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expect, btt::per_element());
 }
-#endif
 
 
-::x3_test::dataset_loader physical_literal_dataset{ R"(test/physical_literal)" };
+::x3_test::dataset_loader physical_literal_dataset{ "test/physical_literal" };
 
 
 BOOST_DATA_TEST_CASE( physical_literal,
-		physical_literal_dataset.input() ^ physical_literal_dataset.expect() ^ physical_literal_dataset.test_file_name(),
-	input, expect, file)
+        physical_literal_dataset.input() ^ physical_literal_dataset.expect() ^ physical_literal_dataset.test_file_name(),
+    input, expect, file)
 {
     using x3_test::testing_parser;
 
@@ -406,11 +400,11 @@ BOOST_DATA_TEST_CASE( physical_literal,
 
 
 
-::x3_test::dataset_loader numeric_dataset{ R"(test/numeric_literal)" };
+::x3_test::dataset_loader numeric_dataset{ "test/numeric_literal" };
 
 
 BOOST_DATA_TEST_CASE(numeric_literal,
-	numeric_dataset.input() ^ numeric_dataset.expect() ^ numeric_dataset.test_file_name(),
+    numeric_dataset.input() ^ numeric_dataset.expect() ^ numeric_dataset.test_file_name(),
     input, expect, file)
 {
     using x3_test::testing_parser;
@@ -432,7 +426,7 @@ BOOST_DATA_TEST_CASE(numeric_literal,
 }
 
 
-::x3_test::dataset_loader literal_dataset{ R"(test/literal)" };
+::x3_test::dataset_loader literal_dataset{ "test/literal" };
 
 
 BOOST_DATA_TEST_CASE(literal,
@@ -460,10 +454,10 @@ literal_dataset.input() ^ literal_dataset.expect() ^ literal_dataset.test_file_n
 #if 0
 BOOST_AUTO_TEST_CASE( app_mocker )
 {
-	app_mock app;
-	std::cout << "Count = " << app.argc << '\n';
-	for(int i = 0; i != app.argc; i++)
-		std::cout << "Arg = " << app.argv[i] << '\n';
+    app_mock app;
+    std::cout << "Count = " << app.argc << '\n';
+    for(int i = 0; i != app.argc; i++)
+        std::cout << "Arg = " << app.argv[i] << '\n';
 }
 #endif
 

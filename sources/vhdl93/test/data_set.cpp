@@ -20,9 +20,10 @@ namespace fs = boost::filesystem;
 
 dataset_loader::dataset_loader(fs::path const& path)
 {
-	fs::path source_dir{ R"(/home/olaf/work/CXX/IBIS_SOURCE/sources/vhdl93)" };
+    fs::path source_dir{ R"(/home/olaf/work/CXX/IBIS_SOURCE/sources/vhdl93)" };
 
-	read_files(source_dir / path);
+    std::cout << "dataset_loader fetch " << path << '\n';
+    read_files(source_dir / path);
 }
 
 
@@ -37,7 +38,7 @@ int dataset_loader::read_files(fs::path const& path)
 
                 if (fs::extension(dir_iter->path()) == ".input") {
 
-                	m_file_path.emplace_back(dir_iter->path().native().c_str());
+                    m_file_path.emplace_back(dir_iter->path().native().c_str());
 
                     auto const input_path  = dir_iter->path();
                     auto expect_path = dir_iter->path();
@@ -54,7 +55,7 @@ int dataset_loader::read_files(fs::path const& path)
             return 1;
         }
     }
-    catch(fs::filesystem_error const& e) {
+    catch(std::exception const& e) {
         std::cerr << "Caught " << e.what() << " exception\n";
         return 1;
     }
@@ -72,6 +73,7 @@ std::string dataset_loader::read_file(fs::path const& file_path)
     fs::ifstream file{ file_path };
 
     if(!file) {
+        std::cerr << "ERROR: unable to open '" << file_path << "'\n";
         throw std::ios_base::failure{ "file open error" };
     }
 
@@ -79,6 +81,7 @@ std::string dataset_loader::read_file(fs::path const& file_path)
     ss << file.rdbuf();
 
     if(file.fail() && !file.eof()) {
+        std::cerr << "ERROR: unable to open '" << file_path << "'\n";
         throw std::ios_base::failure{ "rdbuf() read error" };
     }
 
