@@ -42,6 +42,13 @@ void assertion_failed_msg(const CharT* expr, const char* msg, const char* functi
 #endif
 
 
+#if defined (EDA_HAVE_BUILTIN_UNREACHABLE)
+#define cxx_unreachable(message) __builtin_unreachable();
+#else
+#define cxx_unreachable(message) ((void)0)
+#endif
+
+
 #define cxx_assert(condition, message) \
     (cxx_expect(condition) \
     ? ((void)0)            \
@@ -49,13 +56,11 @@ void assertion_failed_msg(const CharT* expr, const char* msg, const char* functi
        __PRETTY_FUNCTION__, __FILE__, __LINE__))
 
 
-#if defined (EDA_HAVE_BUILTIN_UNREACHABLE)
+
 #define cxx_bug_fatal(message) \
     cxx_assert(false, message);  \
-    __builtin_unreachable();
-#else
-#error "There is no support for __builtin_unreachable()"
-#endif
+    cxx_unreachable(message);
+
 
 
 #endif /* INCLUDE_EDA_UTILS_CXX_BUG_FATAL_HPP_ */
