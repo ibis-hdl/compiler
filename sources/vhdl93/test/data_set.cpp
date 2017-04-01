@@ -32,16 +32,23 @@ int dataset_loader::read_files(fs::path const& path)
     try {
         if(fs::exists(path) && fs::is_directory(path)) {
 
-            auto dir_iter = fs::directory_iterator(path);
-            auto const& dir_end  = fs::directory_iterator();
-            for( ; dir_iter != dir_end; dir_iter++) {
+           std::vector<fs::path> dir_list { };
+            std::copy(
+                fs::directory_iterator(path),
+                fs::directory_iterator(),
+                back_inserter(dir_list)
+            );
 
-                if (fs::extension(dir_iter->path()) == ".input") {
+            std::sort(dir_list.begin(), dir_list.end());
 
-                    m_file_path.emplace_back(dir_iter->path().native().c_str());
+            for(auto const& dir_iter : dir_list) {
 
-                    auto const input_path  = dir_iter->path();
-                    auto expect_path = dir_iter->path();
+                if (fs::extension(dir_iter) == ".input") {
+
+                    m_file_path.emplace_back(dir_iter.native().c_str());
+
+                    auto const input_path  = dir_iter;
+                    auto expect_path = dir_iter;
                     expect_path.replace_extension(".expected");
 
                     m_input.emplace_back(   read_file(input_path) );
