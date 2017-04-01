@@ -47,6 +47,13 @@ namespace ast    = eda::vhdl93::ast;
 
 ::x3_test::dataset_loader string_literal_dataset{ "test/string_literal" };
 
+/* FixMe: What about:
+ * "FIRST PART OF A SEQUENCE OF CHARACTERS " &
+ * "THAT CONTINUES ON THE NEXT LINE"
+ *
+ * "Sequence that includes the" & ACK & "control character"
+ */
+
 BOOST_DATA_TEST_CASE( string_literal,
       string_literal_dataset.input()
     ^ string_literal_dataset.expect()
