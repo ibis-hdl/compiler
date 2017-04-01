@@ -78,39 +78,36 @@ BOOST_DATA_TEST_CASE( string_literal,
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
 
-#if 0
-BOOST_AUTO_TEST_CASE( character_literal )
+
+::x3_test::dataset_loader character_literal_dataset{ "test/character_literal" };
+
+
+BOOST_DATA_TEST_CASE( character_literal,
+      string_literal_dataset.input()
+    ^ string_literal_dataset.expect()
+    ^ string_literal_dataset.test_file_name(),
+    input, expect, file )
 {
-    using namespace eda::vhdl93;
-    using x3_test::parse;
+    using x3_test::testing_parser;
 
     typedef ast::character_literal attribute_type;
 
-    std::vector<std::pair<std::string, std::string>> const pass_test_cases {
-        std::make_pair("'A'", "(character_literal=A)"),
-        std::make_pair("'*'", "(character_literal=*)"),
-        std::make_pair("'\''", "(character_literal=\')"),
-        std::make_pair("' '", "(character_literal= )"),
-    };
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
 
-    uint n = 1;
-    for(auto const& str : pass_test_cases) {
-        BOOST_TEST_CONTEXT("'character_literal' test case #" << n++ << " to pass:") {
-            auto const& input = str.first;
-            auto const& gold = str.second;
-            attribute_type attr;
-            BOOST_TEST_INFO("input =\"" << input << "\"");
-            BOOST_TEST(parse(input, parser::character_literal, x3::space, attr));
-            btt::output_test_stream os;
-            ast::printer print(os);
-            print.verbose(1);
-            print(attr);
-            BOOST_TEST_INFO("attr = '" << os.str() << "'");
-            BOOST_TEST(gold == os.str(), btt::per_element());
-        }
-    }
+    bool parse_ok{ false };
+    std::string parse_result {};
+
+    testing_parser<attribute_type> parse;
+    std::tie(parse_ok, parse_result) =  parse(input, parser::character_literal);
+
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("parsed attr = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expect, btt::per_element());
+
 }
 
+#if 0
 BOOST_AUTO_TEST_CASE( integer )
 {
     using namespace eda::vhdl93;
