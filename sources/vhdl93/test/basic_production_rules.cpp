@@ -13,9 +13,9 @@
 //#include <boost/optional/optional_io.hpp>
 #include <iostream>
 
+#include "data_set.hpp"
 
 #include "app_mock.hpp"
-#include "data_set.hpp"
 #include "testing_parser.hpp"
 
 
@@ -379,7 +379,7 @@ BOOST_AUTO_TEST_CASE( abstract_literal )
 #endif
 
 
-::x3_test::dataset_loader physical_literal_dataset{ R"(/home/olaf/work/CXX/IBIS_SOURCE/sources/vhdl93/test/physical_literal)" };
+::x3_test::dataset_loader physical_literal_dataset{ R"(test/physical_literal)" };
 
 
 BOOST_DATA_TEST_CASE( physical_literal,
@@ -406,7 +406,7 @@ BOOST_DATA_TEST_CASE( physical_literal,
 
 
 
-::x3_test::dataset_loader numeric_dataset{ R"(/home/olaf/work/CXX/IBIS_SOURCE/sources/vhdl93/test/numeric_literal)" };
+::x3_test::dataset_loader numeric_dataset{ R"(test/numeric_literal)" };
 
 
 BOOST_DATA_TEST_CASE(numeric_literal,
@@ -432,7 +432,7 @@ BOOST_DATA_TEST_CASE(numeric_literal,
 }
 
 
-::x3_test::dataset_loader literal_dataset{ R"(/home/olaf/work/CXX/IBIS_SOURCE/sources/vhdl93/test/literal)" };
+::x3_test::dataset_loader literal_dataset{ R"(test/literal)" };
 
 
 BOOST_DATA_TEST_CASE(literal,
@@ -457,7 +457,15 @@ literal_dataset.input() ^ literal_dataset.expect() ^ literal_dataset.test_file_n
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
 
-
+#if 0
+BOOST_AUTO_TEST_CASE( app_mocker )
+{
+	app_mock app;
+	std::cout << "Count = " << app.argc << '\n';
+	for(int i = 0; i != app.argc; i++)
+		std::cout << "Arg = " << app.argv[i] << '\n';
+}
+#endif
 
 BOOST_AUTO_TEST_SUITE_END()
 
