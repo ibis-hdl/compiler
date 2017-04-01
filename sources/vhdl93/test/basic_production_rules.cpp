@@ -320,7 +320,9 @@ BOOST_AUTO_TEST_CASE( decimal_literal )
 
 
 BOOST_DATA_TEST_CASE( bit_string_literal,
-    bit_string_literal_dataset.input() ^ bit_string_literal_dataset.expect() ^ bit_string_literal_dataset.test_file_name(),
+      bit_string_literal_dataset.input()
+    ^ bit_string_literal_dataset.expect()
+    ^ bit_string_literal_dataset.test_file_name(),
     input, expect, file )
 {
     using x3_test::testing_parser;
@@ -347,7 +349,9 @@ BOOST_DATA_TEST_CASE( bit_string_literal,
 
 
 BOOST_DATA_TEST_CASE( abstract_literal,
-    abstract_literal_dataset.input() ^ abstract_literal_dataset.expect() ^ abstract_literal_dataset.test_file_name(),
+      abstract_literal_dataset.input()
+    ^ abstract_literal_dataset.expect()
+    ^ abstract_literal_dataset.test_file_name(),
     input, expect, file)
 {
     using x3_test::testing_parser;
@@ -373,7 +377,9 @@ BOOST_DATA_TEST_CASE( abstract_literal,
 
 
 BOOST_DATA_TEST_CASE( physical_literal,
-    physical_literal_dataset.input() ^ physical_literal_dataset.expect() ^ physical_literal_dataset.test_file_name(),
+      physical_literal_dataset.input()
+    ^ physical_literal_dataset.expect()
+    ^ physical_literal_dataset.test_file_name(),
     input, expect, file)
 {
     using x3_test::testing_parser;
@@ -400,7 +406,9 @@ BOOST_DATA_TEST_CASE( physical_literal,
 
 
 BOOST_DATA_TEST_CASE(numeric_literal,
-    numeric_dataset.input() ^ numeric_dataset.expect() ^ numeric_dataset.test_file_name(),
+      numeric_dataset.input()
+    ^ numeric_dataset.expect()
+    ^ numeric_dataset.test_file_name(),
     input, expect, file)
 {
     using x3_test::testing_parser;
@@ -426,7 +434,9 @@ BOOST_DATA_TEST_CASE(numeric_literal,
 
 
 BOOST_DATA_TEST_CASE(literal,
-literal_dataset.input() ^ literal_dataset.expect() ^ literal_dataset.test_file_name(),
+      literal_dataset.input()
+    ^ literal_dataset.expect()
+    ^ literal_dataset.test_file_name(),
     input, expect, file)
 {
     using x3_test::testing_parser;
