@@ -11,26 +11,8 @@
 #include <iostream>
 
 #include "data_set.hpp"
-
-#include "app_mock.hpp"
 #include "testing_parser.hpp"
 
-
-/*----------------------------------------------------------------------------*/
-namespace eda { namespace vhdl93 { namespace ast {
-
-
-template<typename NodeType>
-std::ostream& operator<<(std::ostream& os, NodeType const& node)
-{
-    ast::printer print(os);
-    print(node);
-    return os;
-}
-
-
-} } } // namespace eda.vhdl93.ast
-/*----------------------------------------------------------------------------*/
 
 BOOST_AUTO_TEST_SUITE( basic_productions )
 
@@ -428,15 +410,6 @@ BOOST_DATA_TEST_CASE(literal,
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
 
-#if 0
-BOOST_AUTO_TEST_CASE( app_mocker )
-{
-    app_mock app;
-    std::cout << "Count = " << app.argc << '\n';
-    for(int i = 0; i != app.argc; i++)
-        std::cout << "Arg = " << app.argv[i] << '\n';
-}
-#endif
 
 BOOST_AUTO_TEST_SUITE_END()
 
