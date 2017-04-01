@@ -45,60 +45,33 @@ namespace parser = eda::vhdl93::parser;
 namespace ast    = eda::vhdl93::ast;
 
 
-#if 0
-BOOST_AUTO_TEST_CASE( string_literal )
+::x3_test::dataset_loader string_literal_dataset{ "test/string_literal" };
+
+BOOST_DATA_TEST_CASE( string_literal,
+      string_literal_dataset.input()
+    ^ string_literal_dataset.expect()
+    ^ string_literal_dataset.test_file_name(),
+    input, expect, file)
 {
-    using namespace eda::vhdl93;
-    using x3_test::parse;
+    using x3_test::testing_parser;
 
-    std::vector<std::pair<std::string, std::string>> const pass_test_cases {
-        std::make_pair("\"Both S and Q equal to 1\"",
-                "Both S and Q equal to 1"),
-        std::make_pair("\"Characters such as $, %, and } are allowed in string literals.\"",
-                "Characters such as $, %, and } are allowed in string literals."),
-        std::make_pair("\"& ' ( ) * + , - . / : ; < = > | [ ]\"",
-                "& ' ( ) * + , - . / : ; < = > | [ ]"),
-        std::make_pair("\"Quotation: \"\"REPORT...\"\" is also allowed\"",
-                "Quotation: \"REPORT...\" is also allowed"),
-        std::make_pair("%see \"LRM 13.10\", it's legal VHDL%",
-                "see \"LRM 13.10\", it's legal VHDL"),
-        std::make_pair("%Quotation: %%REPORT...%% is also allowed%",
-                "Quotation: %REPORT...% is also allowed"),
-        // empty string literal
-        std::make_pair("\"\"", ""),
-        // string literals of length 1.
-        std::make_pair("\" \"", " "),
-        std::make_pair("\"A\"", "A"),
-        //std::make_pair("\"\"", "\"\""), // FixMe: This test case fails
-        };
+    typedef ast::string_literal attribute_type;
 
-    std::vector<std::string> const fail_test_cases {
-        "\"Both S and Q equal to 1", // missing closing '"'
-        };
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
 
-    uint n = 1;
-    for(auto const& str : pass_test_cases) {
-        BOOST_TEST_CONTEXT("'string_literal' test case #" << n++ << " to pass:") {
-            std::string const& input = str.first;
-            std::string const& gold = str.second;
-            std::string attr;
-            BOOST_TEST_INFO("input ='" << input << "'");
-            BOOST_TEST(parse(input, parser::string_literal, x3::space, attr));
-            BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
-            BOOST_TEST(attr == gold, btt::per_element());
-        }
-    }
+    bool parse_ok{ false };
+    std::string parse_result {};
 
-    n = 1;
-    for(auto const& str : fail_test_cases) {
-        BOOST_TEST_CONTEXT("'string_literal' test case #" << n++ << " to fail:") {
-            std::string attr;
-            BOOST_TEST_INFO("with input ='" << str << "'");
-            BOOST_TEST(!parse(str, parser::string_literal, x3::space, attr));
-        }
-    }
+    testing_parser<attribute_type> parse;
+    std::tie(parse_ok, parse_result) =  parse(input, parser::string_literal);
+
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("parsed attr = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expect, btt::per_element());
 }
 
+#if 0
 BOOST_AUTO_TEST_CASE( character_literal )
 {
     using namespace eda::vhdl93;
