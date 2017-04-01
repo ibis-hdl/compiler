@@ -1,4 +1,6 @@
-## EDA/VHDL93 project TestBemch
+cmake_minimum_required(VERSION 3.6)
+
+## EDA/VHDL93 project TestBench
 project(test_vhdl93 LANGUAGES CXX)
 
 set(BIN_SOURCES
@@ -7,7 +9,6 @@ set(BIN_SOURCES
     basic_production_rules.cpp
     error_reporting.cpp
     test_vhdl93.cpp
-    
 )
 
 add_executable(${PROJECT_NAME} ${BIN_SOURCES})
@@ -37,7 +38,7 @@ set_property(TARGET boost-system PROPERTY IMPORTED_LOCATION ${Boost_SYSTEM_LIBRA
 
 
 
-target_link_libraries(${PROJECT_NAME} 
+target_link_libraries(${PROJECT_NAME}
     PRIVATE
     eda::vhdl93_grammar
     ${Boost_FILESYSTEM_LIBRARY}
