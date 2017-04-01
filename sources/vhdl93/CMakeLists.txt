@@ -19,19 +19,22 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     $<INSTALL_INTERFACE:include>
     PRIVATE src)
 
-target_compile_definitions(${PROJECT_NAME} 
+target_compile_definitions(${PROJECT_NAME}
     PRIVATE FOO)
-    
-target_compile_options(${PROJECT_NAME} 
+
+target_compile_options(${PROJECT_NAME}
     PRIVATE -Wall -Wextra)
 
-## FixMe: temporary for interface target of cmake getting working
-include_directories(../common/include)
-#add_dependencies(${PROJECT_NAME} eda)  # FixMe: cmake_check_build_system error
+## Depencies
+target_link_libraries(${PROJECT_NAME}
+    PRIVATE
+    eda::common
+)
+
 
 ## Project Depend Includes
 #include_directories(${SPIRIT_X3_INCLUDE_DIR})
-include_directories(${GSL_INCLUDE_DIR})
+#include_directories(${GSL_INCLUDE_DIR})
 
 #add_dependencies(${PROJECT_NAME} boost-spirit-x3)
 #add_dependencies(${PROJECT_NAME} eda)
@@ -39,20 +42,17 @@ include_directories(${GSL_INCLUDE_DIR})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX "_d")
 
-# 'make install' to the correct location
+
+## Install targets
 install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Config
     ARCHIVE  DESTINATION ${PROJECT_NAME}
     LIBRARY  DESTINATION ${PROJECT_NAME}
     RUNTIME  DESTINATION ${PROJECT_NAME})  # This is for Windows
 install(DIRECTORY include/ DESTINATION include)
 
-# This makes the project importable from the install directory
-# Put config file in per-project dir (name MUST match), can also
-# just go into <prefix>/cmake.
-install(EXPORT ${PROJECT_NAME}Config 
+install(EXPORT ${PROJECT_NAME}Config
     DESTINATION share/cmake/${PROJECT_NAME}Config)
 
-# This makes the project importable from the build directory
 export(TARGETS ${PROJECT_NAME} FILE ${PROJECT_NAME}Config.cmake)
 
 
