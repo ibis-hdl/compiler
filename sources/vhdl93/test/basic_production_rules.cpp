@@ -8,9 +8,6 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/core/ignore_unused.hpp>
 
-//#include <eda/exception.hpp>
-
-//#include <boost/optional/optional_io.hpp>
 #include <iostream>
 
 #include "data_set.hpp"
@@ -46,8 +43,7 @@ namespace ast    = eda::vhdl93::ast;
 
 
 ::x3_test::dataset_loader string_literal_dataset{ "test/string_literal" };
-
-/* FixMe: What about:
+/* FixMe: What about the following string literals:
  * "FIRST PART OF A SEQUENCE OF CHARACTERS " &
  * "THAT CONTINUES ON THE NEXT LINE"
  *
@@ -74,7 +70,7 @@ BOOST_DATA_TEST_CASE( string_literal,
     std::tie(parse_ok, parse_result) =  parse(input, parser::string_literal);
 
     BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("parsed attr = '" << parse_result << "'");
+    BOOST_TEST_INFO("parsed attr (result) = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
 
@@ -102,58 +98,68 @@ BOOST_DATA_TEST_CASE( character_literal,
     std::tie(parse_ok, parse_result) =  parse(input, parser::character_literal);
 
     BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("parsed attr = '" << parse_result << "'");
+    BOOST_TEST_INFO("parsed attr (result) = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
+}
 
+
+::x3_test::dataset_loader integer_dataset{ "test/integer" };
+
+
+BOOST_DATA_TEST_CASE( integer,
+      integer_dataset.input()
+    ^ integer_dataset.expect()
+    ^ integer_dataset.test_file_name(),
+    input, expect, file )
+{
+    using x3_test::testing_parser;
+
+    // Note, integer isn't an AST member
+    typedef std::string attribute_type;
+
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
+
+    bool parse_ok{ false };
+    std::string parse_result {};
+
+    testing_parser<attribute_type> parse;
+    std::tie(parse_ok, parse_result) =  parse(input, parser::integer);
+
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("parsed attr (result) = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expect, btt::per_element());
+}
+
+::x3_test::dataset_loader integer_failure_dataset{ "test/integer_failure" };
+
+
+BOOST_DATA_TEST_CASE( integer_failure,    // should fail
+      integer_failure_dataset.input()
+    ^ integer_failure_dataset.expect()
+    ^ integer_failure_dataset.test_file_name(),
+    input, expect, file )
+{
+    using x3_test::testing_parser;
+
+    // Note, integer isn't an AST member
+    typedef std::string attribute_type;
+
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
+
+    bool parse_ok{ false };
+    std::string parse_result {};
+
+    testing_parser<attribute_type> parse;
+    std::tie(parse_ok, parse_result) = parse(input, parser::integer);
+
+    BOOST_TEST(!parse_ok);
+    BOOST_TEST_INFO("parsed attr (result) = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expect, btt::per_element());
 }
 
 #if 0
-BOOST_AUTO_TEST_CASE( integer )
-{
-    using namespace eda::vhdl93;
-    using x3_test::parse;
-
-    typedef std::string attribute_type;
-
-    std::vector<std::pair<std::string, attribute_type>> const pass_test_cases {
-        std::make_pair("0", "0"),
-        std::make_pair("1", "1"),
-        std::make_pair("1_000", "1000"),
-        std::make_pair("00_1_000", "001000"),
-        std::make_pair("023", "023"),
-        std::make_pair("21_47_48_36_46", "2147483646"),
-        std::make_pair("2_147_483_647", "2147483647") // int32::max
-    };
-
-    std::vector<std::string> const fail_test_cases {
-        "_42",
-        "42_",
-        };
-
-    uint n = 1;
-    for(auto const& str : pass_test_cases) {
-        BOOST_TEST_CONTEXT("'integer' test case #" << n++ << " to pass:") {
-            auto const& input = str.first;
-            auto const& gold = str.second;
-            attribute_type attr;
-            BOOST_TEST_INFO("input ='" << input << "'");
-            BOOST_TEST(parse(input, parser::integer, x3::space, attr));
-            BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
-            BOOST_TEST(attr == gold, btt::per_element());
-        }
-    }
-
-    n = 1;
-    for(auto const& str : fail_test_cases) {
-        BOOST_TEST_CONTEXT("'integer' test case #" << n++ << " to fail:") {
-            attribute_type attr;
-            BOOST_TEST_INFO("input ='" << str << "'");
-            BOOST_TEST(!parse(str, parser::integer, x3::space, attr));
-        }
-    }
-}
-
-
 BOOST_AUTO_TEST_CASE( identifier )
 {
     using namespace eda::vhdl93;
@@ -316,9 +322,8 @@ BOOST_DATA_TEST_CASE( bit_string_literal,
     std::tie(parse_ok, parse_result) =  parse(input, parser::bit_string_literal);
 
     BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("parsed attr = '" << parse_result << "'");
+    BOOST_TEST_INFO("parsed attr (result) = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
-
 }
 
 
@@ -345,7 +350,7 @@ BOOST_DATA_TEST_CASE( abstract_literal,
     std::tie(parse_ok, parse_result) =  parse(input, parser::abstract_literal);
 
     BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("parsed attr = '" << parse_result << "'");
+    BOOST_TEST_INFO("parsed attr (result) = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
 
@@ -373,7 +378,7 @@ BOOST_DATA_TEST_CASE( physical_literal,
     std::tie(parse_ok, parse_result) =  parse(input, parser::physical_literal);
 
     BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("parsed attr = '" << parse_result << "'");
+    BOOST_TEST_INFO("parsed attr (result) = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
 
@@ -402,7 +407,7 @@ BOOST_DATA_TEST_CASE(numeric_literal,
     std::tie(parse_ok, parse_result) =  parse(input, parser::numeric_literal);
 
     BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("parsed attr = '" << parse_result << "'");
+    BOOST_TEST_INFO("parsed attr (result) = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
 
@@ -430,7 +435,7 @@ BOOST_DATA_TEST_CASE(literal,
     std::tie(parse_ok, parse_result) =  parse(input, parser::literal);
 
     BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("parsed attr = '" << parse_result << "'");
+    BOOST_TEST_INFO("parsed attr (result) = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
 

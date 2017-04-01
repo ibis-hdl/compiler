@@ -492,6 +492,8 @@ public:
     void operator()(wait_statement const& node) const;
     void operator()(waveform const& node) const;
     void operator()(waveform_element const& node) const;
+
+    void operator()(std::string const& node) const;
 };
 
 
