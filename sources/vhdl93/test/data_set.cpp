@@ -22,7 +22,7 @@ dataset_loader::dataset_loader(fs::path const& path)
 {
     fs::path source_dir{ R"(/home/olaf/work/CXX/IBIS_SOURCE/sources/vhdl93)" };
 
-    std::cout << "dataset_loader fetch " << path << '\n';
+    std::cout << "dataset_loader load test files from " << path << '\n';
     read_files(source_dir / path);
 }
 

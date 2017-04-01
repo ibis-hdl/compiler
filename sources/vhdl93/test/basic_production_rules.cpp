@@ -83,9 +83,9 @@ BOOST_DATA_TEST_CASE( string_literal,
 
 
 BOOST_DATA_TEST_CASE( character_literal,
-      string_literal_dataset.input()
-    ^ string_literal_dataset.expect()
-    ^ string_literal_dataset.test_file_name(),
+      character_literal_dataset.input()
+    ^ character_literal_dataset.expect()
+    ^ character_literal_dataset.test_file_name(),
     input, expect, file )
 {
     using x3_test::testing_parser;
