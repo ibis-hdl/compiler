@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.6)
 
 ## EDA/VHDL93 project
-project(vhdl93_grammar LANGUAGES CXX)
+project(eda_vhdl93_grammar LANGUAGES CXX)
 
 set(LIB_SOURCES
     src/ast/bit_string_literal.cpp
@@ -12,7 +12,7 @@ set(LIB_SOURCES
 )
 
 add_library(${PROJECT_NAME} STATIC ${LIB_SOURCES})
-add_library(eda::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+add_library(eda::vhdl93_grammar ALIAS ${PROJECT_NAME})
 
 target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
