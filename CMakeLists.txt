@@ -5,7 +5,7 @@ project(eda VERSION 0.0.1 LANGUAGES CXX)
 
 ## create a dummy header-only target
 add_library(eda INTERFACE)
-target_include_directories(eda INTERFACE 
+target_include_directories(eda INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>)
 
@@ -49,11 +49,11 @@ endif()
 if(EDA_HAVE_BUILTIN_EXPECT)
     add_definitions( -DEDA_HAVE_BUILTIN_EXPECT )
 endif()
- 
- 
+
+
 ## Sub Projects
 enable_testing()
-#add_subdirectory(sources/common)
+add_subdirectory(sources/common)
 add_subdirectory(sources/vhdl93)
 
 # other playground projects, not build by default
