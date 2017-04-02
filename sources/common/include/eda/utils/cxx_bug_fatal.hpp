@@ -8,14 +8,15 @@
 #ifndef INCLUDE_EDA_UTILS_CXX_BUG_FATAL_HPP_
 #define INCLUDE_EDA_UTILS_CXX_BUG_FATAL_HPP_
 
+
+#include <eda/utils/compiler_support.hpp>
+
 #include <cstdlib>
 #include <iostream>
 
 
-// based on ideas from Baptiste Wicht <wichtounet>
-// https://github.com/wichtounet/cpp_utils/blob/master/assert.hpp
-
 namespace eda { namespace utils { namespace detail {
+
 
 template <typename CharT>
 void assertion_failed_msg(const CharT* expr, const char* msg, const char* function, const char* file, long line) {
@@ -26,27 +27,12 @@ void assertion_failed_msg(const CharT* expr, const char* msg, const char* functi
         << "assertion (" << expr << ") failed in "
         << function << ":\n"
         << file << '(' << line << "): " << msg << std::endl;
-    std::abort();
+    std::quick_exit(EXIT_FAILURE);
 }
 
 } } } // namespace eda.utils.detail
 
 
-// use __builtin_expect to provide the compiler with branch prediction information
-#if defined(EDA_HAVE_BUILTIN_EXPECT)
-#define cxx_expect(x)       __builtin_expect(!!(x), 1)
-#define cxx_expect_not(x)   __builtin_expect(!!(x), 0)
-#else
-#define cxx_expect(x)       x
-#define cxx_expect_not(x)   x
-#endif
-
-
-#if defined (EDA_HAVE_BUILTIN_UNREACHABLE)
-#define cxx_unreachable(message) __builtin_unreachable();
-#else
-#define cxx_unreachable(message) ((void)0)
-#endif
 
 
 #define cxx_assert(condition, message) \
