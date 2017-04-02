@@ -110,7 +110,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 //#include <eda/vhdl93/ast/entity_statement_part.hpp>
 //#include <eda/vhdl93/ast/entity_tag.hpp>
 #include <eda/vhdl93/ast/enumeration_literal.hpp>
-//#include <eda/vhdl93/ast/enumeration_type_definition.hpp>
+#include <eda/vhdl93/ast/enumeration_type_definition.hpp>
 //#include <eda/vhdl93/ast/exit_statement.hpp>
 //#include <eda/vhdl93/ast/exponent.hpp>
 //#include <eda/vhdl93/ast/expression.hpp>

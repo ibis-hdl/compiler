@@ -1,0 +1,1 @@
+(enumeration_type_definition=(v:enumeration_literal=(identifier=LOW))(v:enumeration_literal=(identifier=HIGH))(v:enumeration_literal=(identifier=RISING))(v:enumeration_literal=(identifier=FALLING))(v:enumeration_literal=(identifier=AMBIGUOUS)))

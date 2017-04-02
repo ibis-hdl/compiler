@@ -845,9 +845,12 @@ void printer::operator()(enumeration_literal const &node) const
 
 void printer::operator()(enumeration_type_definition const &node) const
 {
-    static char const symbol[]{ "XXX enumeration_type_definition" };
+    static char const symbol[]{ "enumeration_type_definition" };
     symbol_scope<enumeration_type_definition> _(*this, symbol);
-    //os << node;
+
+    for(auto const& enumeration_literal : node.list) {
+        (*this)(enumeration_literal);
+    }
 }
 
 
@@ -1059,21 +1062,9 @@ void printer::operator()(identifier_list const &node) const
     static char const symbol[]{ "identifier_list" };
     symbol_scope<identifier_list> _(*this, symbol);
 
-#if 0 // FixMe: beautified list doesn't compile
-    // Note, per see (parser grammar), there at least 2 elements
-    for(auto iter = std::begin(node.list), auto const end = std::prev(node.list);
-            iter != end;
-            ++iter)
-    {
-        (*this)(*iter);
-        os << " ";
-    }
-    (*this)(node.list.back());
-#else
     for(auto const& identifier : node.list) {
         (*this)(identifier);
     }
-#endif
 }
 
 

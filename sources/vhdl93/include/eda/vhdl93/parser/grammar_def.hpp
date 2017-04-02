@@ -362,7 +362,7 @@ typedef x3::rule<entity_statement_class> entity_statement_type;
 typedef x3::rule<entity_statement_part_class> entity_statement_part_type;
 typedef x3::rule<entity_tag_class> entity_tag_type;
 typedef x3::rule<enumeration_literal_class, ast::enumeration_literal> enumeration_literal_type;
-typedef x3::rule<enumeration_type_definition_class> enumeration_type_definition_type;
+typedef x3::rule<enumeration_type_definition_class, ast::enumeration_type_definition> enumeration_type_definition_type;
 typedef x3::rule<exit_statement_class> exit_statement_type;
 typedef x3::rule<exponent_class, std::string> exponent_type;
 typedef x3::rule<expression_class> expression_type;
@@ -1885,11 +1885,11 @@ auto const entity_aspect_def =
 
 #if 0
 // entity_class ::=
-// entity         | architecture  | configuration
-//     | procedure  | function         | package
-//     | type         | subtype         | constant
-//     | signal     | variable         | component
-//     | label         | literal         | units
+//       entity        | architecture  | configuration
+//     | procedure     | function      | package
+//     | type          | subtype       | constant
+//     | signal        | variable      | component
+//     | label         | literal       | units
 //     | group         | file
 auto const entity_class_def =
         ENTITY         | ARCHITECTURE  | CONFIGURATION
@@ -2054,13 +2054,13 @@ auto const enumeration_literal_def =
     ;
 
 
-#if 0
+
 // enumeration_type_definition ::=
 // ( enumeration_literal { , enumeration_literal } )
 auto const enumeration_type_definition_def =
-        ( enumeration_literal >> ( enumeration_literal % ',' ) )
-        ;
-#endif
+    enumeration_literal % ','
+    ;
+
 
 #if 0
 // exit_statement ::=
@@ -3633,7 +3633,7 @@ BOOST_SPIRIT_DEFINE(
         //    entity_statement_part,
         //    entity_tag,
         enumeration_literal,
-        //    enumeration_type_definition,
+        enumeration_type_definition,
         //    exit_statement,
         exponent,
         //    expression,

@@ -7,6 +7,7 @@ set(BIN_SOURCES
     app_mock.cpp
     data_set.cpp
     basic_production_rules.cpp
+    production_rules.cpp
     error_reporting.cpp
     test_vhdl93.cpp
 )
