@@ -3,6 +3,12 @@ cmake_minimum_required(VERSION 3.6)
 ## EDA/VHDL93 project
 project(eda_vhdl93_grammar LANGUAGES CXX)
 
+## C++ Standards
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+
 set(LIB_SOURCES
     src/ast/bit_string_literal.cpp
     src/ast/decimal_literal.cpp
