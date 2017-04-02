@@ -138,7 +138,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 //#include <eda/vhdl93/ast/group_template_declaration.hpp>
 //#include <eda/vhdl93/ast/guarded_signal_specification.hpp>
 #include <eda/vhdl93/ast/identifier.hpp>
-//#include <eda/vhdl93/ast/identifier_list.hpp>
+#include <eda/vhdl93/ast/identifier_list.hpp>
 //#include <eda/vhdl93/ast/if_statement.hpp>
 //#include <eda/vhdl93/ast/incomplete_type_declaration.hpp>
 //#include <eda/vhdl93/ast/index_constraint.hpp>

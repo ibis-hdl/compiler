@@ -17,8 +17,6 @@
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
 
-
-
 namespace eda { namespace vhdl93 { namespace ast {
 
 
@@ -1058,9 +1056,24 @@ void printer::operator()(identifier const &node) const
 
 void printer::operator()(identifier_list const &node) const
 {
-    static char const symbol[]{ "XXX identifier_list" };
+    static char const symbol[]{ "identifier_list" };
     symbol_scope<identifier_list> _(*this, symbol);
-    //os << node;
+
+#if 0 // FixMe: beautified list doesn't compile
+    // Note, per see (parser grammar), there at least 2 elements
+    for(auto iter = std::begin(node.list), auto const end = std::prev(node.list);
+            iter != end;
+            ++iter)
+    {
+        (*this)(*iter);
+        os << " ";
+    }
+    (*this)(node.list.back());
+#else
+    for(auto const& identifier : node.list) {
+        (*this)(identifier);
+    }
+#endif
 }
 
 

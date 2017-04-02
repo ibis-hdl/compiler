@@ -390,7 +390,7 @@ typedef x3::rule<group_template_declaration_class> group_template_declaration_ty
 typedef x3::rule<group_declaration_class> group_declaration_type;
 typedef x3::rule<guarded_signal_specification_class> guarded_signal_specification_type;
 typedef x3::rule<identifier_class, ast::identifier> identifier_type;
-typedef x3::rule<identifier_list_class> identifier_list_type;
+typedef x3::rule<identifier_list_class, ast::identifier_list> identifier_list_type;
 typedef x3::rule<if_statement_class> if_statement_type;
 typedef x3::rule<incomplete_type_declaration_class> incomplete_type_declaration_type;
 typedef x3::rule<index_constraint_class> index_constraint_type;
@@ -989,7 +989,7 @@ auto as_rule = [](auto p) { return x3::rule<struct _, T>{ "as" } = x3::as_parser
  * Parser Rule Definition
  */
 
-// abstract_literal ::= 
+// abstract_literal ::=
 // decimal_literal | based_literal
 auto const abstract_literal_def = /* Note, order changed since matters */
       based_literal
@@ -998,21 +998,21 @@ auto const abstract_literal_def = /* Note, order changed since matters */
 
 
 #if 0
-// access_type_definition ::= 
+// access_type_definition ::=
 // access subtype_indication
-auto const access_type_definition_def = 
+auto const access_type_definition_def =
 ACCESS subtype_indication
 ;
 #endif
 
 #if 0
-// actual_designator ::= 
+// actual_designator ::=
 // expression
 //     | signal_name
 //     | variable_name
 //     | file_name
 //     | open
-auto const actual_designator_def = 
+auto const actual_designator_def =
 expression
 | signal_name
 | variable_name
@@ -1022,19 +1022,19 @@ expression
 #endif
 
 #if 0
-// actual_parameter_part ::= 
+// actual_parameter_part ::=
 // parameter_association_list
-auto const actual_parameter_part_def = 
+auto const actual_parameter_part_def =
 parameter_association_list
 ;
 #endif
 
 #if 0
-// actual_part ::= 
+// actual_part ::=
 // actual_designator
 //     | function_name ( actual_designator )
 //     | type_mark ( actual_designator )
-auto const actual_part_def = 
+auto const actual_part_def =
 actual_designator
 | function_name '(' actual_designator ')'     | type_mark '(' actual_designator )
 ;
@@ -2111,25 +2111,25 @@ auto const extended_digit_def =
 // \ graphic_character { graphic_character } <backslash>
 namespace detail {
 
-	auto const extended_identifier_chars = x3::rule<struct _, std::string> { "extended_identifier (chars)" } =
-		 +( graphic_character - char_('\\') )
-		 ;
+    auto const extended_identifier_chars = x3::rule<struct _, std::string> { "extended_identifier (chars)" } =
+         +( graphic_character - char_('\\') )
+         ;
 
-	auto const extended_identifier_atom = x3::rule<struct _, std::string> { "extended_identifier (atom)" } =
-		lexeme [
-			   char_('\\')
-			>> extended_identifier_chars
-			>> char_('\\')
-		]
-		;
+    auto const extended_identifier_atom = x3::rule<struct _, std::string> { "extended_identifier (atom)" } =
+        lexeme [
+               char_('\\')
+            >> extended_identifier_chars
+            >> char_('\\')
+        ]
+        ;
 }
 
 auto const extended_identifier_def =
-	lexeme [
-			detail::extended_identifier_atom
-		>> *(detail::extended_identifier_atom % (char_('\\') >> char_('\\')))
-	]
-	;
+    lexeme [
+            detail::extended_identifier_atom
+        >> *(detail::extended_identifier_atom % (char_('\\') >> char_('\\')))
+    ]
+    ;
 
 
 #if 0
@@ -2331,9 +2331,9 @@ auto const guarded_signal_specification_def =
 // basic_identifier | extended_identifier
 namespace detail {
 
-    /* The identifier is treated as string. The basic_identifier and 
+    /* The identifier is treated as string. The basic_identifier and
      * extended_identifier can be distuingished simply by test on leading (and
-     * trailing) '/'. To enforce use of a single string member on AST node resp. 
+     * trailing) '/'. To enforce use of a single string member on AST node resp.
      * identifier the rule is splitted, otherwise ast::identifier has to handle
      * the variant type. Generalizing these identifiers simplifies (hopefully)
      * the type/identifier handling (without applying the boost visitor). */
@@ -2347,13 +2347,13 @@ auto const identifier_def =
     ;
 
 
-#if 0
-// identifier_list ::=
+
+// identifier_list ::=                                                 [§ 3.2.2]
 // identifier { , identifier }
 auto const identifier_list_def =
-        identifier >> ( identifier % ',' )
-        ;
-#endif
+    identifier % ','
+    ;
+
 
 #if 0
 // if_statement ::=
@@ -2447,10 +2447,10 @@ auto const instantiation_list_def =
 // integer ::=                                                         § 13.4.1]
 // digit { [ underline ] digit }
 auto const integer_def =
-	lexeme [
-		char_("0-9") >> *( -lit("_") >> char_("0-9") )
-	]
-	;
+    lexeme [
+        char_("0-9") >> *( -lit("_") >> char_("0-9") )
+    ]
+    ;
 
 
 #if 0
@@ -2577,7 +2577,7 @@ auto const library_unit_def =
 
 
 // literal ::=                                                         [§ 7.3.1]
-// numeric_literal
+//       numeric_literal
 //     | enumeration_literal
 //     | string_literal
 //     | bit_string_literal
@@ -2586,7 +2586,7 @@ auto const literal_def = /* Note, order changed since matters */
       enumeration_literal
     | string_literal
     | bit_string_literal
-	| numeric_literal
+    | numeric_literal
     | NULL
     ;
 
@@ -3660,7 +3660,7 @@ BOOST_SPIRIT_DEFINE(
         //    group_declaration,
         //    guarded_signal_specification,
         identifier,
-        //    identifier_list,
+        identifier_list,
         //    if_statement,
         //    incomplete_type_declaration,
         //    index_constraint,
@@ -3768,7 +3768,7 @@ BOOST_SPIRIT_DEFINE(
         //    variable_declaration,
         //    wait_statement,
         waveform
-		//    waveform_element
+        //    waveform_element
 );
 
 
