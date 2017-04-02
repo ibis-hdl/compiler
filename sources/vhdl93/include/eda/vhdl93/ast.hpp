@@ -233,7 +233,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 //#include <eda/vhdl93/ast/subprogram_statement_part.hpp>
 //#include <eda/vhdl93/ast/subtype_declaration.hpp>
 //#include <eda/vhdl93/ast/subtype_indication.hpp>
-//#include <eda/vhdl93/ast/suffix.hpp>
+#include <eda/vhdl93/ast/suffix.hpp>
 //#include <eda/vhdl93/ast/target.hpp>
 //#include <eda/vhdl93/ast/term.hpp>
 //#include <eda/vhdl93/ast/timeout_clause.hpp>

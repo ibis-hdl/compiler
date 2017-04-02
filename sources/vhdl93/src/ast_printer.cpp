@@ -1813,9 +1813,9 @@ void printer::operator()(subtype_indication const &node) const
 
 void printer::operator()(suffix const &node) const
 {
-    static char const symbol[]{ "XXX suffix" };
+    static char const symbol[]{ "suffix" };
     symbol_scope<suffix> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    boost::apply_visitor(*this, node);
 }
 
 

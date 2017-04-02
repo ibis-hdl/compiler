@@ -2584,7 +2584,7 @@ auto const library_unit_def =
 //     | bit_string_literal
 //     | null
 auto const literal_def = /* Note, order changed since matters */
-      enumeration_literal
+      enumeration_literal   // FixMe: Treats keyword NULL as identifier
     | string_literal
     | bit_string_literal
     | numeric_literal
@@ -3394,19 +3394,19 @@ auto const subtype_indication_def =
         ;
 #endif
 
-#if 0
-// suffix ::=
-// simple_name
+
+// suffix ::=                                                            [§ 6.3]
+//       simple_name
 //     | character_literal
 //     | operator_symbol
 //     | all
 auto const suffix_def =
-        simple_name
-        | character_literal
-        | operator_symbol
-        | ALL
-        ;
-#endif
+      simple_name       // FixMe: treats keyword NULL as identifier
+    | character_literal
+//  | operator_symbol   // FixMe: No idea about operator_symbol, aka string_literal
+    | ALL
+    ;
+
 
 #if 0
 // target ::=
@@ -3755,7 +3755,7 @@ BOOST_SPIRIT_DEFINE(
         //    subprogram_statement_part,
         //    subtype_declaration,
         //    subtype_indication,
-        //    suffix,
+        suffix,
         //    target,
         //    term,
         //    timeout_clause,
