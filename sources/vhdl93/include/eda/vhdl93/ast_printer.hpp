@@ -232,7 +232,6 @@ struct timeout_clause;
 struct type_conversion;
 struct type_declaration;
 struct type_definition;
-struct type_mark;
 struct unconstrained_array_definition;
 struct use_clause;
 struct variable_assignment_statement;
@@ -484,7 +483,6 @@ public:
     void operator()(type_conversion const& node) const;
     void operator()(type_declaration const& node) const;
     void operator()(type_definition const& node) const;
-    void operator()(type_mark const& node) const;
     void operator()(unconstrained_array_definition const& node) const;
     void operator()(use_clause const& node) const;
     void operator()(variable_assignment_statement const& node) const;

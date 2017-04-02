@@ -240,7 +240,6 @@ namespace eda { namespace vhdl93 { namespace ast {
 //#include <eda/vhdl93/ast/type_conversion.hpp>
 //#include <eda/vhdl93/ast/type_declaration.hpp>
 //#include <eda/vhdl93/ast/type_definition.hpp>
-//#include <eda/vhdl93/ast/type_mark.hpp>
 //#include <eda/vhdl93/ast/unconstrained_array_definition.hpp>
 //#include <eda/vhdl93/ast/use_clause.hpp>
 //#include <eda/vhdl93/ast/variable_assignment_statement.hpp>

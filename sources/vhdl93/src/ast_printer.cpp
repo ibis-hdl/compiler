@@ -1858,14 +1858,6 @@ void printer::operator()(type_definition const &node) const
 }
 
 
-void printer::operator()(type_mark const &node) const
-{
-    static char const symbol[]{ "XXX type_mark" };
-    symbol_scope<type_mark> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
-}
-
-
 void printer::operator()(unconstrained_array_definition const &node) const
 {
     static char const symbol[]{ "XXX unconstrained_array_definition" };

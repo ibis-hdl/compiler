@@ -491,7 +491,7 @@ typedef x3::rule<timeout_clause_class> timeout_clause_type;
 typedef x3::rule<type_conversion_class> type_conversion_type;
 typedef x3::rule<type_declaration_class> type_declaration_type;
 typedef x3::rule<type_definition_class> type_definition_type;
-typedef x3::rule<type_mark_class> type_mark_type;
+typedef x3::rule<type_mark_class, std::string> type_mark_type;
 typedef x3::rule<unconstrained_array_definition_class> unconstrained_array_definition_type;
 typedef x3::rule<use_clause_class> use_clause_type;
 typedef x3::rule<variable_assignment_statement_class> variable_assignment_statement_type;
@@ -3466,15 +3466,17 @@ auto const type_definition_def =
         ;
 #endif
 
-#if 0
+
 // type_mark ::=
-// type_name
+//       type_name
 //     | subtype_name
+/* Note, there is no way to distinguish between type_name and subtype_name at
+ * parser level. It's used as simple string parser for symantic sugar at parser
+ * level*/
 auto const type_mark_def =
-        type_name
-        | subtype_name
-        ;
-#endif
+    detail::identifier_str
+    ;
+
 
 #if 0
 // unconstrained_array_definition ::=
