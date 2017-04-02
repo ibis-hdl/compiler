@@ -1715,9 +1715,10 @@ void printer::operator()(simple_expression const &node) const
 
 void printer::operator()(simple_name const &node) const
 {
-    static char const symbol[]{ "XXX simple_name" };
+    static char const symbol[]{ "simple_name" };
     symbol_scope<simple_name> _(*this, symbol);
-    //os << node;
+
+    os << node.name;
 }
 
 

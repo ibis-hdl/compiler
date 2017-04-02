@@ -43,6 +43,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::physical_literal,
     literal, unit_name
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::simple_name,
+    name
+)
+
 
 
 #endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_ADAPTED_HPP_ */

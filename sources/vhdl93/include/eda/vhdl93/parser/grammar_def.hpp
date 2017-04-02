@@ -472,7 +472,7 @@ typedef x3::rule<signal_kind_class> signal_kind_type;
 typedef x3::rule<signal_list_class> signal_list_type;
 typedef x3::rule<signature_class> signature_type;
 typedef x3::rule<simple_expression_class> simple_expression_type;
-typedef x3::rule<simple_name_class> simple_name_type;
+typedef x3::rule<simple_name_class, ast::simple_name> simple_name_type;
 typedef x3::rule<slice_name_class> slice_name_type;
 typedef x3::rule<string_literal_class, ast::string_literal> string_literal_type;
 typedef x3::rule<subprogram_body_class> subprogram_body_type;
@@ -2337,13 +2337,14 @@ namespace detail {
      * identifier the rule is splitted, otherwise ast::identifier has to handle
      * the variant type. Generalizing these identifiers simplifies (hopefully)
      * the type/identifier handling (without applying the boost visitor). */
-    auto const identifier = x3::rule<struct _, std::string> { "identifier" } =
+    auto const identifier_str = x3::rule<struct _, std::string> { "identifier" } =
           basic_identifier
         | extended_identifier
         ;
 }
+
 auto const identifier_def =
-    detail::identifier
+    detail::identifier_str
     ;
 
 
@@ -2688,11 +2689,11 @@ auto const object_declaration_def =
 #endif
 
 #if 0
-// operator_symbol ::=
+// operator_symbol ::=                                                   [§ 2.1]
 // string_literal
 auto const operator_symbol_def =
-        string_literal
-        ;
+    string_literal
+    ;
 #endif
 
 #if 0
@@ -3247,13 +3248,13 @@ auto const simple_expression_def =
 ;
 #endif
 
-#if 0
-// simple_name ::=
+
+// simple_name ::=                                                       [§ 6.2]
 // identifier
 auto const simple_name_def =
-        identifier
-        ;
-#endif
+    detail::identifier_str
+    ;
+
 
 #if 0
 // slice_name ::=
@@ -3742,7 +3743,7 @@ BOOST_SPIRIT_DEFINE(
         //    signal_list,
         //    signature,
         //    simple_expression,
-        //    simple_name,
+        simple_name,
         //    slice_name,
         string_literal,
         //    subprogram_body,
