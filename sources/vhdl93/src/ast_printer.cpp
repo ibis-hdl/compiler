@@ -1917,7 +1917,7 @@ void printer::operator()(waveform_element const &node) const
 }
 
 /*
- * Non AST members, used e.g. for unit tests
+ * Non AST members, used e.g. for unit tests (namely ast::integer)
  */
 void printer::operator()(std::string const &node) const
 {
