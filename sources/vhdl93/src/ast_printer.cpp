@@ -677,9 +677,16 @@ void printer::operator()(designator const &node) const
 
 void printer::operator()(direction const &node) const
 {
-    static char const symbol[]{ "XXX direction" };
+    static char const symbol[]{ "direction" };
     symbol_scope<direction> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+
+    using dir = direction::direction_type;
+
+    switch(node.direction) {
+    case dir::to:       os << "to";     break;
+    case dir::downto:   os << "downto"; break;
+    default:            os << "INVALID";
+    }
 }
 
 

@@ -89,7 +89,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 //#include <eda/vhdl93/ast/design_file.hpp>
 //#include <eda/vhdl93/ast/design_unit.hpp>
 //#include <eda/vhdl93/ast/designator.hpp>
-//#include <eda/vhdl93/ast/direction.hpp>
+#include <eda/vhdl93/ast/direction.hpp>
 //#include <eda/vhdl93/ast/disconnection_specification.hpp>
 //#include <eda/vhdl93/ast/discrete_range.hpp>
 //#include <eda/vhdl93/ast/element_association.hpp>
