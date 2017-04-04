@@ -167,7 +167,7 @@ BOOST_DATA_TEST_CASE( identifier,
 }
 
 
-::x3_test::dataset_loader identifier_fail_dataset{ "test/identifier_fail" };
+::x3_test::dataset_loader identifier_fail_dataset{ "test/identifier_failure" };
 
 BOOST_DATA_TEST_CASE( identifier_fail,
       identifier_fail_dataset.input()
@@ -480,6 +480,39 @@ BOOST_DATA_TEST_CASE(simple_name,
     BOOST_TEST_INFO("parse result = '" << parse_result << "'");
     BOOST_TEST(parse_result == expected, btt::per_element());
 }
+
+#if 0
+struct foo_dataset : public ::x3_test::dataset_loader {
+    /* Note, foo is same as identifier. */
+    foo_dataset() : dataset_loader { "test/foo" }
+    { }
+};
+
+BOOST_DATA_TEST_CASE_F(foo_dataset,
+    foo_test_case,
+      foo_dataset.input()
+    ^ foo_dataset.expect()
+    ^ foo_dataset.test_file_name(),
+    input, expected, file)
+{
+    using x3_test::testing_parser;
+
+    typedef ast::foo attribute_type;
+
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
+
+    bool parse_ok{ false };
+    std::string parse_result {};
+
+    testing_parser<attribute_type> parse;
+    std::tie(parse_ok, parse_result) =  parse(input, parser::foo);
+
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("parse result = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expected, btt::per_element());
+}
+#endif
 
 
 BOOST_AUTO_TEST_SUITE_END()
