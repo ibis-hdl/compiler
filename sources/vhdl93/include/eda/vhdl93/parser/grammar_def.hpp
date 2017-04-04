@@ -842,6 +842,37 @@ auto const WITH = kw("with");
 auto const XNOR = kw("xnor");
 auto const XOR = kw("xor");
 
+struct keyword_symbols : x3::symbols<char> {
+
+    keyword_symbols() {
+
+        name("keyword");
+
+        add("abs") ("access") ("after") ("alias") ("all") ("and")
+           ("architecture") ("array") ("assert") ("attribute") ("begin")
+           ("block") ("body") ("buffer") ("bus") ("case") ("component")
+           ("configuration") ("constant") ("disconnect") ("downto") ("else")
+           ("elsif") ("end") ("entity") ("exit") ("file") ("for")
+           ("function") ("generate") ("generic") ("group") ("guarded")
+           ("if") ("impure") ("in") ("inertial") ("inout") ("is") ("label")
+           ("library") ("linkage") ("literal") ("loop") ("map") ("mod")
+           ("nand") ("new") ("next") ("nor") ("not") ("null") ("of") ("on")
+           ("open") ("or") ("others") ("out") ("package") ("port")
+           ("postponed") ("procedure") ("process") ("pure") ("range")
+           ("record") ("register") ("reject") ("rem") ("report") ("return")
+           ("rol") ("ror") ("select") ("severity") ("signal") ("shared")
+           ("sla") ("sll") ("sra") ("srl") ("subtype") ("then") ("to")
+           ("transport") ("type") ("unaffected") ("units") ("until") ("use")
+           ("variable") ("wait") ("when") ("while") ("with") ("xnor")
+           ("xor")
+           ;
+    }
+} const keywords;
+
+auto const keyword = x3::rule<struct _> { "keyword" } =
+    kw( keywords )
+    ;
+
 /*
  * Parser Operator Symbol Definition
  */
@@ -1264,10 +1295,17 @@ auto const basic_graphic_character_def =
 
 // basic_identifier ::=                                                 [§ 13.3]
 // letter { [ underline ] letter_or_digit }
+namespace detail {
+    auto const basic_identifier_feasible = x3::rule<struct _, std::string> { "basic_identifier" } =
+        x3::lexeme [
+               letter
+            >> !char_('"') // reject bit_string_literal
+            >> *( letter_or_digit | char_("_") )
+        ]
+        ;
+}
 auto const basic_identifier_def =
-    letter
-    >> !char_('"') // reject bit_string_literal
-    >> *( -char_("_") >> letter_or_digit )
+    detail::basic_identifier_feasible - keyword
     ;
 
 
@@ -2583,12 +2621,18 @@ auto const library_unit_def =
 //     | string_literal
 //     | bit_string_literal
 //     | null
+namespace detail {
+    auto const null = x3::rule<struct _, ast::null> { "null" } =
+        // FixMe: maybe better identifier
+        NULL >> x3::attr( ast::null() )
+    ;
+}
 auto const literal_def = /* Note, order changed since matters */
       enumeration_literal   // FixMe: Treats keyword NULL as identifier
     | string_literal
     | bit_string_literal
     | numeric_literal
-    | NULL
+    | detail::null
     ;
 
 
@@ -2829,7 +2873,7 @@ namespace detail {
 }
 
 auto const physical_literal_def =
-    -abstract_literal >> detail::unit_name
+    -abstract_literal >> (detail::unit_name - keyword)
     ;
 
 

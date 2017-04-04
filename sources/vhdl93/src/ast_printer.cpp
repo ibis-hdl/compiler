@@ -1932,6 +1932,15 @@ void printer::operator()(std::string const &node) const
 }
 
 
+void printer::operator()(null const &node) const
+{
+    static char const symbol[]{ "keyword" };
+    symbol_scope<std::string> _(*this, symbol);
+
+    os << "NULL";
+}
+
+
 } } } // namespace eda.vhdl93.ast
 
 

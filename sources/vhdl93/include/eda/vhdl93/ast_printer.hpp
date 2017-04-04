@@ -240,6 +240,9 @@ struct wait_statement;
 struct waveform;
 struct waveform_element;
 
+// keywords and miscellaneous
+struct null;
+
 } } } // namespace eda.vhdl93.ast
 
 
@@ -491,7 +494,9 @@ public:
     void operator()(waveform const& node) const;
     void operator()(waveform_element const& node) const;
 
+    // keywords and miscellaneous
     void operator()(std::string const& node) const;
+    void operator()(null const& node) const;
 };
 
 
