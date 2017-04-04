@@ -1041,6 +1041,7 @@ __end_dummy__ ::= __ignore__
 
 import collections
 import re
+import textwrap
 
 
 class Vhdl93Bnf:
@@ -1281,13 +1282,46 @@ namespace ascii = boost::spirit::x3::ascii;
             )
         return alist
  
+    def keyword_symbol_block(self):
+        """
+        Returns a x3::symbols map of C++ keyword definitions
+        """
+        kw_list = []
+        for kw in self.bnf.keywords():
+            kw_list.append(
+                "(\"{0}\")".format(kw.lower())
+            )
+        inner_text = textwrap.fill(
+            " ".join(k for k in kw_list), width=65
+            )
+        inner_text = "".join('           ' + line for line in inner_text.splitlines(True))
+        outer_text = """
+struct {0}_symbols : x3::symbols<{1}> {{
+    
+    {0}_symbols() {{
+
+        name("{0}");
+
+        add{2}
+           ;
+    }}
+}} const {3};
+
+""".format(
+        'keyword',
+        'char',
+        inner_text.lstrip(),
+        'keywords'
+        )
+        return outer_text
+ 
     def keyword_block(self):
         """
         Returns the code block for the keyword rules
         """
         text = """
 auto kw = [](auto xx) {
-    return x3::lexeme [ x3::no_case[ xx ] >> !(ascii::alnum | '_') ];
+    return x3::lexeme [ x3::no_case[ xx ] >> !(x3::alnum | '_') ];
 };\n
 """
         return text + '\n'.join(self.keyword_defs()) + '\n'
@@ -1521,6 +1555,7 @@ auto const {1}_def =
 #endif
 """
         text += self.keyword_block()
+        text += self.keyword_symbol_block()
 
         #text += self.section('Parser Operator Symbol Declaration') 
         #text += self.operator_decl_block(ns_op_type_name)
