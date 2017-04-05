@@ -1932,7 +1932,7 @@ void printer::operator()(std::string const &node) const
 }
 
 
-void printer::operator()(all const &node) const
+void printer::operator()(kw_all const &node) const
 {
     static char const symbol[]{ "keyword" };
     symbol_scope<std::string> _(*this, symbol);
@@ -1950,7 +1950,7 @@ void printer::operator()(kw_literal const &node) const
 }
 
 
-void printer::operator()(null const &node) const
+void printer::operator()(kw_null const &node) const
 {
     static char const symbol[]{ "keyword" };
     symbol_scope<std::string> _(*this, symbol);

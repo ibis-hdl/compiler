@@ -877,95 +877,95 @@ auto const keyword = x3::rule<struct _> { "keyword" } =
  * Parser Operator Symbol Definition
  */
 
-struct logical_operator_symbols : x3::symbols<ast::operator_> {
+struct logical_operator_symbols : x3::symbols<ast::operator_token> {
 
     logical_operator_symbols() {
 
         name("logical_operator");
 
-        add("and", ast::operator_::and_)
-           ("or", ast::operator_::or_)
-           ("nand", ast::operator_::nand)
-           ("nor", ast::operator_::nor)
-           ("xor", ast::operator_::xor_)
-           ("xnor", ast::operator_::xnor)
+        add("and", ast::operator_token::and_)
+           ("or", ast::operator_token::or_)
+           ("nand", ast::operator_token::nand)
+           ("nor", ast::operator_token::nor)
+           ("xor", ast::operator_token::xor_)
+           ("xnor", ast::operator_token::xnor)
            ;
     }
 } const logical_operator;
 
 
-struct relational_operator_symbols : x3::symbols<ast::operator_> {
+struct relational_operator_symbols : x3::symbols<ast::operator_token> {
 
     relational_operator_symbols() {
 
         name("relational_operator");
 
-        add("=", ast::operator_::equal)
-           ("/=", ast::operator_::not_equals)
-           ("<", ast::operator_::less)
-           ("<=", ast::operator_::less_equals)
-           (">", ast::operator_::greater)
-           (">=", ast::operator_::greater_equals)
+        add("=", ast::operator_token::equal)
+           ("/=", ast::operator_token::not_equals)
+           ("<", ast::operator_token::less)
+           ("<=", ast::operator_token::less_equals)
+           (">", ast::operator_token::greater)
+           (">=", ast::operator_token::greater_equals)
            ;
     }
 } const relational_operator;
 
 
-struct miscellaneous_operator_symbols : x3::symbols<ast::operator_> {
+struct miscellaneous_operator_symbols : x3::symbols<ast::operator_token> {
 
     miscellaneous_operator_symbols() {
 
         name("miscellaneous_operator");
 
-        add("**", ast::operator_::exponent)
-           ("abs", ast::operator_::abs)
-           ("not", ast::operator_::not_)
+        add("**", ast::operator_token::exponent)
+           ("abs", ast::operator_token::abs)
+           ("not", ast::operator_token::not_)
            ;
     }
 } const miscellaneous_operator;
 
 
-struct adding_operator_symbols : x3::symbols<ast::operator_> {
+struct adding_operator_symbols : x3::symbols<ast::operator_token> {
 
     adding_operator_symbols() {
 
         name("adding_operator");
 
-        add("+", ast::operator_::add)
-           ("-", ast::operator_::sub)
-           ("&", ast::operator_::concat)
+        add("+", ast::operator_token::add)
+           ("-", ast::operator_token::sub)
+           ("&", ast::operator_token::concat)
            ;
     }
 } const adding_operator;
 
 
-struct multiplying_operator_symbols : x3::symbols<ast::operator_> {
+struct multiplying_operator_symbols : x3::symbols<ast::operator_token> {
 
     multiplying_operator_symbols() {
 
         name("multiplying_operator");
 
-        add("*", ast::operator_::mul)
-           ("/", ast::operator_::div)
-           ("mod", ast::operator_::mod)
-           ("rem", ast::operator_::rem)
+        add("*", ast::operator_token::mul)
+           ("/", ast::operator_token::div)
+           ("mod", ast::operator_token::mod)
+           ("rem", ast::operator_token::rem)
            ;
     }
 } const multiplying_operator;
 
 
-struct shift_operator_symbols : x3::symbols<ast::operator_> {
+struct shift_operator_symbols : x3::symbols<ast::operator_token> {
 
     shift_operator_symbols() {
 
         name("shift_operator");
 
-        add("sll", ast::operator_::sll)
-           ("srl", ast::operator_::srl)
-           ("sla", ast::operator_::sla)
-           ("sra", ast::operator_::sra)
-           ("rol", ast::operator_::rol)
-           ("ror", ast::operator_::ror)
+        add("sll", ast::operator_token::sll)
+           ("srl", ast::operator_token::srl)
+           ("sla", ast::operator_token::sla)
+           ("sra", ast::operator_token::sra)
+           ("rol", ast::operator_token::rol)
+           ("ror", ast::operator_token::ror)
            ;
     }
 } const shift_operator;
@@ -2170,17 +2170,17 @@ auto const extended_identifier_def =
     ;
 
 
-#if 0
-// factor ::=
-// primary [ ** primary ]
+
+// factor ::=                                                            [§ 7.1]
+//       primary [ ** primary ]
 //     | abs primary
 //     | not primary
 auto const factor_def =
-        primary -( ** primary )
-        | ABS primary
-        | NOT primary
-        ;
-#endif
+      primary >> -( "**" >> primary )
+    | ABS >> primary
+    | NOT >> primary
+    ;
+
 
 #if 0
 // file_declaration ::=
@@ -2622,9 +2622,9 @@ auto const library_unit_def =
 //     | bit_string_literal
 //     | null
 namespace detail {
-    auto const null = x3::rule<struct _, ast::null> { "null" } =
+    auto const null = x3::rule<struct _, ast::kw_null> { "null" } =
         // FixMe: maybe better identifier
-        NULL >> x3::attr( ast::null() )
+        NULL >> x3::attr( ast::kw_null() )
     ;
 }
 auto const literal_def = /* Note, order changed since matters */
@@ -3685,7 +3685,7 @@ BOOST_SPIRIT_DEFINE(
         //    expression,
         extended_digit,
         extended_identifier,
-        //    factor,
+        factor,
         //    file_declaration,
         //    file_logical_name,
         //    file_open_information,

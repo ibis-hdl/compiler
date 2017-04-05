@@ -172,7 +172,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 //#include <eda/vhdl93/ast/null_statement.hpp>
 #include <eda/vhdl93/ast/numeric_literal.hpp>
 //#include <eda/vhdl93/ast/object_declaration.hpp>
-#include <eda/vhdl93/ast/operator.hpp>
+#include <eda/vhdl93/ast/operator_token.hpp>
 //#include <eda/vhdl93/ast/operator_symbol.hpp>
 //#include <eda/vhdl93/ast/options.hpp>
 //#include <eda/vhdl93/ast/package_body.hpp>
@@ -249,13 +249,20 @@ namespace eda { namespace vhdl93 { namespace ast {
 //#include <eda/vhdl93/ast/waveform_element.hpp>
 
 
-// keywords and miscellaneous
+/*
+ *  some AST helper
+ */
+#include <eda/vhdl93/ast/unary_expression.hpp>
+
+
+/*
+ *  keywords and miscellaneous
+ */
 namespace eda { namespace vhdl93 { namespace ast {
 
-struct all  { };
+struct kw_all  { };
 struct kw_literal { };
-struct null { };
-
+struct kw_null { };
 
 } } } // namespace eda.vhdl93.ast
 

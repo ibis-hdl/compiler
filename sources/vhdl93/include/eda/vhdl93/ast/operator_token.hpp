@@ -5,14 +5,14 @@
  *      Author: olaf
  */
 
-#ifndef SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_OPERATOR_HPP_
-#define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_OPERATOR_HPP_
+#ifndef SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_OPERATOR_TOKEN_HPP_
+#define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_OPERATOR_TOKEN_HPP_
 
 
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-enum class operator_ {
+enum class operator_token {
 	// logical_operator
 	and_,
 	or_,
@@ -53,4 +53,4 @@ enum class operator_ {
 } } } // namespace eda.vhdl93.ast
 
 
-#endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_OPERATOR_HPP_ */
+#endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_OPERATOR_TOKEN_HPP_ */

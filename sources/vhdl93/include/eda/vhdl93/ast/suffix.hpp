@@ -18,7 +18,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 namespace x3 = boost::spirit::x3;
 
 
-struct all;
+struct kw_all;
 struct character_literal;
 struct operator_symbol;
 struct simple_name;
@@ -28,7 +28,7 @@ struct suffix :
         x3::forward_ast<simple_name>,
         x3::forward_ast<character_literal>,
         //x3::forward_ast<operator_symbol>,
-        x3::forward_ast<all>
+        x3::forward_ast<kw_all>
     >
 {
     using base_type::base_type;
