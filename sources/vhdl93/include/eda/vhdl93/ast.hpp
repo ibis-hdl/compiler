@@ -248,8 +248,16 @@ namespace eda { namespace vhdl93 { namespace ast {
 //#include <eda/vhdl93/ast/waveform.hpp>
 //#include <eda/vhdl93/ast/waveform_element.hpp>
 
+
 // keywords and miscellaneous
-#include <eda/vhdl93/ast/null.hpp>
+namespace eda { namespace vhdl93 { namespace ast {
+
+
+struct null { };
+
+
+} } } // namespace eda.vhdl93.ast
+
 
 
 #endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_AST_HPP_ */
