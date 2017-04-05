@@ -25,7 +25,16 @@ namespace parser = eda::vhdl93::parser;
 namespace ast    = eda::vhdl93::ast;
 
 
-::x3_test::dataset_loader enumeration_type_definition_dataset{ "test/enumeration_type_definition" };
+/*
+ * enumeration_type_definition
+ */
+struct enumeration_type_definition_dataset : public ::x3_test::dataset_loader
+{
+    enumeration_type_definition_dataset()
+    : dataset_loader{ "test/enumeration_type_definition" }
+    { }
+} const enumeration_type_definition_dataset;
+
 
 BOOST_DATA_TEST_CASE( enumeration_type_definition,
       enumeration_type_definition_dataset.input()
@@ -52,7 +61,16 @@ BOOST_DATA_TEST_CASE( enumeration_type_definition,
 }
 
 
-::x3_test::dataset_loader name_definition_dataset{ "test/name" };
+/*
+ * names
+ */
+struct name_definition_dataset : public ::x3_test::dataset_loader
+{
+    name_definition_dataset()
+    : dataset_loader{ "test/name" }
+    { }
+} const name_definition_dataset;
+
 
 BOOST_DATA_TEST_CASE( name,
       name_definition_dataset.input()
@@ -79,7 +97,16 @@ BOOST_DATA_TEST_CASE( name,
 }
 
 
-::x3_test::dataset_loader primary_dataset{ "test/primary" };
+/*
+ * primary
+ */
+struct primary_dataset : public ::x3_test::dataset_loader
+{
+    primary_dataset()
+    : dataset_loader{ "test/primary" }
+    { }
+} const primary_dataset;
+
 
 BOOST_DATA_TEST_CASE( primary,
       primary_dataset.input()
