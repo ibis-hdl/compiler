@@ -419,7 +419,7 @@ typedef x3::rule<logical_name_class> logical_name_type;
 typedef x3::rule<logical_name_list_class> logical_name_list_type;
 typedef x3::rule<loop_statement_class> loop_statement_type;
 typedef x3::rule<mode_class> mode_type;
-typedef x3::rule<name_class> name_type;
+typedef x3::rule<name_class, ast::name> name_type;
 typedef x3::rule<next_statement_class> next_statement_type;
 typedef x3::rule<null_statement_class> null_statement_type;
 typedef x3::rule<numeric_literal_class, ast::numeric_literal> numeric_literal_type;
@@ -439,7 +439,7 @@ typedef x3::rule<port_clause_class> port_clause_type;
 typedef x3::rule<port_list_class> port_list_type;
 typedef x3::rule<port_map_aspect_class> port_map_aspect_type;
 typedef x3::rule<prefix_class> prefix_type;
-typedef x3::rule<primary_class> primary_type;
+typedef x3::rule<primary_class, ast::primary> primary_type;
 typedef x3::rule<primary_unit_class> primary_unit_type;
 typedef x3::rule<procedure_call_class> procedure_call_type;
 typedef x3::rule<procedure_call_statement_class> procedure_call_statement_type;
@@ -2674,23 +2674,23 @@ auto const mode_def =
         ;
 #endif
 
-#if 0
-// name ::=
+
+// name ::=                                                              [§ 6.1]
 // simple_name
 //     | operator_symbol
 //     | selected_name
 //     | indexed_name
 //     | slice_name
 //     | attribute_name
-auto const name_def =
-        simple_name
-        | operator_symbol
-        | selected_name
-        | indexed_name
-        | slice_name
-        | attribute_name
-        ;
-#endif
+auto const name_def =  // FixMe: support other alternatives
+      simple_name
+//    | operator_symbol
+//    | selected_name
+//    | indexed_name
+//    | slice_name
+//    | attribute_name
+    ;
+
 
 #if 0
 // next_statement ::=
@@ -2927,8 +2927,8 @@ auto const prefix_def =
         ;
 #endif
 
-#if 0
-// primary ::=
+
+// primary ::=                                                           [§ 7.1]
 // name
 //     | literal
 //     | aggregate
@@ -2937,17 +2937,17 @@ auto const prefix_def =
 //     | type_conversion
 //     | allocator
 //     | ( expression )
-auto const primary_def =
-        name
-        | LITERAL
-        | aggregate
-        | function_call
-        | qualified_expression
-        | type_conversion
-        | allocator
-        | '(' expression )
+auto const primary_def = // FixMe: support other alternatives
+      name
+    | LITERAL
+//    | aggregate
+//    | function_call
+//    | qualified_expression
+//    | type_conversion
+//    | allocator
+//    | '(' expression )
 ;
-#endif
+
 
 #if 0
 // primary_unit ::=
@@ -3736,7 +3736,7 @@ BOOST_SPIRIT_DEFINE(
         //    logical_name_list,
         //    loop_statement,
         //    mode,
-        //    name,
+        name,
         //    next_statement,
         //    null_statement,
         numeric_literal,
@@ -3756,7 +3756,7 @@ BOOST_SPIRIT_DEFINE(
         //    port_list,
         //    port_map_aspect,
         //    prefix,
-        //    primary,
+        primary,
         //    primary_unit,
         //    procedure_call,
         //    procedure_call_statement,

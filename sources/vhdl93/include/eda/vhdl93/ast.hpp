@@ -167,7 +167,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 //#include <eda/vhdl93/ast/logical_name_list.hpp>
 //#include <eda/vhdl93/ast/loop_statement.hpp>
 //#include <eda/vhdl93/ast/mode.hpp>
-//#include <eda/vhdl93/ast/name.hpp>
+#include <eda/vhdl93/ast/name.hpp>
 //#include <eda/vhdl93/ast/next_statement.hpp>
 //#include <eda/vhdl93/ast/null_statement.hpp>
 #include <eda/vhdl93/ast/numeric_literal.hpp>
@@ -188,7 +188,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 //#include <eda/vhdl93/ast/port_list.hpp>
 //#include <eda/vhdl93/ast/port_map_aspect.hpp>
 //#include <eda/vhdl93/ast/prefix.hpp>
-//#include <eda/vhdl93/ast/primary.hpp>
+#include <eda/vhdl93/ast/primary.hpp>
 //#include <eda/vhdl93/ast/primary_unit.hpp>
 //#include <eda/vhdl93/ast/procedure_call.hpp>
 //#include <eda/vhdl93/ast/procedure_call_statement.hpp>
@@ -252,9 +252,9 @@ namespace eda { namespace vhdl93 { namespace ast {
 // keywords and miscellaneous
 namespace eda { namespace vhdl93 { namespace ast {
 
-
-struct null { };
 struct all  { };
+struct kw_literal { };
+struct null { };
 
 
 } } } // namespace eda.vhdl93.ast

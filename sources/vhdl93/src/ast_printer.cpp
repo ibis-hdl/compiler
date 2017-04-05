@@ -1285,9 +1285,9 @@ void printer::operator()(mode const &node) const
 
 void printer::operator()(name const &node) const
 {
-    static char const symbol[]{ "XXX name" };
+    static char const symbol[]{ "name" };
     symbol_scope<name> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    boost::apply_visitor(*this, node);
 }
 
 
@@ -1449,9 +1449,9 @@ void printer::operator()(prefix const &node) const
 
 void printer::operator()(primary const &node) const
 {
-    static char const symbol[]{ "XXX primary" };
+    static char const symbol[]{ "primary" };
     symbol_scope<primary> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    boost::apply_visitor(*this, node);
 }
 
 
@@ -1932,6 +1932,24 @@ void printer::operator()(std::string const &node) const
 }
 
 
+void printer::operator()(all const &node) const
+{
+    static char const symbol[]{ "keyword" };
+    symbol_scope<std::string> _(*this, symbol);
+
+    os << "ALL";
+}
+
+
+void printer::operator()(kw_literal const &node) const
+{
+    static char const symbol[]{ "keyword" };
+    symbol_scope<std::string> _(*this, symbol);
+
+    os << "LITERAL";
+}
+
+
 void printer::operator()(null const &node) const
 {
     static char const symbol[]{ "keyword" };
@@ -1941,13 +1959,6 @@ void printer::operator()(null const &node) const
 }
 
 
-void printer::operator()(all const &node) const
-{
-    static char const symbol[]{ "keyword" };
-    symbol_scope<std::string> _(*this, symbol);
-
-    os << "ALL";
-}
 
 
 } } } // namespace eda.vhdl93.ast
