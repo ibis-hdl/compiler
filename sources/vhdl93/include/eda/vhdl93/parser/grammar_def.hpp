@@ -3445,7 +3445,7 @@ auto const subtype_indication_def =
 //     | operator_symbol
 //     | all
 auto const suffix_def =
-      simple_name       // FixMe: treats keyword NULL as identifier
+      simple_name
     | character_literal
 //  | operator_symbol   // FixMe: No idea about operator_symbol, aka string_literal
     | ALL

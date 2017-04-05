@@ -1941,6 +1941,15 @@ void printer::operator()(null const &node) const
 }
 
 
+void printer::operator()(all const &node) const
+{
+    static char const symbol[]{ "keyword" };
+    symbol_scope<std::string> _(*this, symbol);
+
+    os << "ALL";
+}
+
+
 } } } // namespace eda.vhdl93.ast
 
 

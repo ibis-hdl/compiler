@@ -254,6 +254,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 
 struct null { };
+struct all  { };
 
 
 } } } // namespace eda.vhdl93.ast

@@ -497,6 +497,7 @@ public:
     // keywords and miscellaneous
     void operator()(std::string const& node) const;
     void operator()(null const& node) const;
+    void operator()(all const& node) const;
 };
 
 
