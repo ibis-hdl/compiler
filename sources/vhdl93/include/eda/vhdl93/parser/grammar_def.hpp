@@ -842,7 +842,7 @@ auto const WITH = kw("with");
 auto const XNOR = kw("xnor");
 auto const XOR = kw("xor");
 
-struct keyword_symbols : x3::symbols<char> {
+struct keyword_symbols : x3::symbols<> {
 
     keyword_symbols() {
 
