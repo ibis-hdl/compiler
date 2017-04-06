@@ -1909,7 +1909,9 @@ void printer::operator()({0} const &node) const
             alist.append("// {0}".format(name))
             for op in rule:
                 op_name = cxx_ify(self.x3.bnf.operator_as_name(op))
-                alist.append('operator_::{0:<{1}} os << "{2}"; {3:>{4}};'.format(op_name + ':', tab_sz*4, op, 'break', tab_sz*2))
+                alist.append('case operator_::{0:<{1}} os << "{2}"; {3:>{4}};'.format(
+                    op_name + ':', tab_sz*4, op, 'break', tab_sz*2)
+                )
         alist[-1] = alist[-1].strip(',')
         text = """
 std::ostream& operator<<(std::ostream& os, operator_ op_token)
@@ -1917,8 +1919,10 @@ std::ostream& operator<<(std::ostream& os, operator_ op_token)
     switch(op_token) {{
 {0}
 
-        default:                    os << "FAILURE";
+        default:                         os << "FAILURE";
     }}
+
+    return os;
 }}
 """.format(#'\n'.join(alist))
         "\n".join('        ' + line for line in alist)
