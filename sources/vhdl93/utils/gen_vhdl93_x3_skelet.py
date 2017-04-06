@@ -1292,7 +1292,7 @@ namespace ascii = boost::spirit::x3::ascii;
                 "(\"{0}\")".format(kw.lower())
             )
         inner_text = textwrap.fill(
-            " ".join(k for k in kw_list), width=65
+            " ".join(k for k in kw_list)
             )
         inner_text = "".join('           ' + line for line in inner_text.splitlines(True))
         outer_text = """
@@ -1902,6 +1902,28 @@ void printer::operator()({0} const &node) const
 """.format(name)
         return text
 
+    def visit_operator(self):
+        tab_sz = 4
+        alist = []
+        for name, rule in self.x3.bnf.operator_rules().items():
+            alist.append("// {0}".format(name))
+            for op in rule:
+                op_name = cxx_ify(self.x3.bnf.operator_as_name(op))
+                alist.append('operator_::{0:<{1}} os << "{2}"; {3:>{4}};'.format(op_name + ':', tab_sz*4, op, 'break', tab_sz*2))
+        alist[-1] = alist[-1].strip(',')
+        text = """
+std::ostream& operator<<(std::ostream& os, operator_ op_token)
+{{
+    switch(op_token) {{
+{0}
+
+        default:                    os << "FAILURE";
+    }}
+}}
+""".format(#'\n'.join(alist))
+        "\n".join('        ' + line for line in alist)
+    )
+        return text
 
 
 if __name__ == "__main__":
@@ -1915,4 +1937,4 @@ if __name__ == "__main__":
 
     printer = AstPrinter(x3, ns + ['ast'])
     print(printer.nodes())
-
+    print(printer.visit_operator())
