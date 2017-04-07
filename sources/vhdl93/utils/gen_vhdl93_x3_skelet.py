@@ -1404,6 +1404,7 @@ auto kw = [](auto xx) {
         text = "enum class {0} {{\n".format(cxx_ify(op_type_name))
         text += "\n".join(self.operator_ast_enum()) + '\n'
         text += "};\n"
+        text += self.operator_ostream_print(op_type_name) + '\n'
         return text
 
     def operator_def(self, operator_class, ast_node):
@@ -1438,6 +1439,81 @@ struct {0}_symbols : x3::symbols<{1}> {{
         text = ""
         for op_name, value in self.bnf.operator_rules().items():
             text += self.operator_def(op_name, ast_node) + '\n'
+        return text
+
+    def operator_ostream_print(self, op_type_name):
+        tab_sz = 4
+        alist = []
+        for name, rule in self.bnf.operator_rules().items():
+            alist.append("// {0}".format(name))
+            for op in rule:
+                op_name = cxx_ify(self.bnf.operator_as_name(op))
+                alist.append('case operator_::{0:<{1}} os << "{2}"; {3:>{4}};'.format(
+                    op_name + ':', tab_sz*4, op, 'break', tab_sz*2)
+                )
+        alist[-1] = alist[-1].strip(',')
+        text = """
+std::ostream& operator<<(std::ostream& os, {1} op_token)
+{{
+    switch(op_token) {{
+{0}
+
+        default:                         os << "FAILURE";
+    }}
+
+    return os;
+}}
+""".format(
+        "\n".join('        ' + line for line in alist),
+        op_type_name
+    )
+        return text
+
+    def ast_keyword_token(self, kw_type_name):
+        kw_list = []
+        for kw in self.bnf.keywords():
+            kw_list.append(self.keyword_ify(kw))
+        inner_text = textwrap.fill(
+            ", ".join(kw_list)
+            , width=60)
+        text = """
+#if defined(NULL)
+#undef NULL
+#endif
+
+enum class {0} {{
+{1}
+}};
+
+""".format(
+        kw_type_name,
+        "".join('    ' + line for line in inner_text.splitlines(True))
+    )
+        return text
+
+    def ast_keyword_ostream_print(self, kw_type_name):
+        alist = []
+        for kw in self.bnf.keywords():
+            line = 'case {0}::{1:<12} os << "{2}"; break;'.format(
+                kw_type_name,
+                self.keyword_ify(kw) + ':',
+                kw
+                )
+            alist.append(line)
+        text = """
+std::ostream& operator<<(std::ostream& os, {0} kw_token)
+{{
+    switch(kw_token) {{
+{1}
+
+        default:                         os << "INVALID";
+    }}
+    return os;
+}}
+""".format(
+    kw_type_name,
+    "\n".join('        ' + l for l in alist)
+    )
         return text
 
     def parser_rule_keywords_subs(self, rule):
@@ -1506,10 +1582,13 @@ auto const {1}_def =
         return "\n".join(alist)
 
     def ast(self):
-        operator_enum_name = 'operator'
+        operator_enum_name = 'operator_token'
+        keyword_enum_name = 'keyword_token'
         text = ""
         text += self.section('AST operator')
         text += self.operator_ast_enum_bock(operator_enum_name)
+        text += self.ast_keyword_token(keyword_enum_name)
+        text += self.ast_keyword_ostream_print(keyword_enum_name)
 
         return embrace_ns(text, self.ast_ns)
 
@@ -1902,32 +1981,6 @@ void printer::operator()({0} const &node) const
 """.format(name)
         return text
 
-    def visit_operator(self):
-        tab_sz = 4
-        alist = []
-        for name, rule in self.x3.bnf.operator_rules().items():
-            alist.append("// {0}".format(name))
-            for op in rule:
-                op_name = cxx_ify(self.x3.bnf.operator_as_name(op))
-                alist.append('case operator_::{0:<{1}} os << "{2}"; {3:>{4}};'.format(
-                    op_name + ':', tab_sz*4, op, 'break', tab_sz*2)
-                )
-        alist[-1] = alist[-1].strip(',')
-        text = """
-std::ostream& operator<<(std::ostream& os, operator_ op_token)
-{{
-    switch(op_token) {{
-{0}
-
-        default:                         os << "FAILURE";
-    }}
-
-    return os;
-}}
-""".format(#'\n'.join(alist))
-        "\n".join('        ' + line for line in alist)
-    )
-        return text
 
 
 if __name__ == "__main__":
@@ -1941,4 +1994,3 @@ if __name__ == "__main__":
 
     printer = AstPrinter(x3, ns + ['ast'])
     print(printer.nodes())
-    print(printer.visit_operator())
