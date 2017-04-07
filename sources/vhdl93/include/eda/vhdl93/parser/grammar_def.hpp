@@ -341,7 +341,7 @@ typedef x3::rule<delay_mechanism_class> delay_mechanism_type;
 typedef x3::rule<design_file_class> design_file_type;
 typedef x3::rule<design_unit_class> design_unit_type;
 typedef x3::rule<designator_class> designator_type;
-typedef x3::rule<direction_class, ast::direction> direction_type;
+typedef x3::rule<direction_class, ast::keyword_token> direction_type;
 typedef x3::rule<disconnection_specification_class> disconnection_specification_type;
 typedef x3::rule<discrete_range_class> discrete_range_type;
 typedef x3::rule<element_association_class> element_association_type;
@@ -891,6 +891,14 @@ auto const LITERAL_token = x3::rule<struct _, ast::keyword_token> { "LITERAL" } 
 
 auto const NULL_token = x3::rule<struct _, ast::keyword_token> { "NULL" } =
     NULL >> x3::attr(ast::keyword_token::NULL)
+    ;
+
+auto const TO_token = x3::rule<struct _, ast::keyword_token> { "TO" } =
+    TO >> x3::attr(ast::keyword_token::TO)
+    ;
+
+auto const DOWNTO_token = x3::rule<struct _, ast::keyword_token> { "DOWNTO" } =
+    DOWNTO >> x3::attr(ast::keyword_token::DOWNTO)
     ;
 
 
@@ -1897,7 +1905,8 @@ auto const designator_def =
 // direction ::=                                                         [§ 3.1]
 // to | downto
 auto const direction_def =
-    TO | DOWNTO
+      TO_token
+    | DOWNTO_token
     ;
 
 

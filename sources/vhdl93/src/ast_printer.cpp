@@ -675,21 +675,6 @@ void printer::operator()(designator const &node) const
 }
 
 
-void printer::operator()(direction const &node) const
-{
-    static char const symbol[]{ "direction" };
-    symbol_scope<direction> _(*this, symbol);
-
-    using dir = direction::direction_type;
-
-    switch(node.direction) {
-    case dir::to:       os << "to";     break;
-    case dir::downto:   os << "downto"; break;
-    default:            os << "INVALID";
-    }
-}
-
-
 void printer::operator()(disconnection_specification const &node) const
 {
     static char const symbol[]{ "XXX disconnection_specification" };

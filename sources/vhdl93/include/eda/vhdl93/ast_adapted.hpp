@@ -31,10 +31,6 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::decimal_literal,
     literal, hint
 )
 
-BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::direction,
-    direction
-)
-
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::enumeration_type_definition,
     list
 )

@@ -86,7 +86,6 @@ struct delay_mechanism;
 struct design_file;
 struct design_unit;
 struct designator;
-struct direction;
 struct disconnection_specification;
 struct discrete_range;
 struct element_association;
@@ -343,7 +342,6 @@ public:
     void operator()(design_file const& node) const;
     void operator()(design_unit const& node) const;
     void operator()(designator const& node) const;
-    void operator()(direction const& node) const;
     void operator()(disconnection_specification const& node) const;
     void operator()(discrete_range const& node) const;
     void operator()(element_association const& node) const;
