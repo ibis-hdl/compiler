@@ -1932,30 +1932,12 @@ void printer::operator()(std::string const &node) const
 }
 
 
-void printer::operator()(kw_all const &node) const
+void printer::operator()(keyword_token token) const
 {
     static char const symbol[]{ "keyword" };
-    symbol_scope<kw_all> _(*this, symbol);
+    symbol_scope<keyword_token> _(*this, symbol);
 
-    os << "ALL";
-}
-
-
-void printer::operator()(kw_literal const &node) const
-{
-    static char const symbol[]{ "keyword" };
-    symbol_scope<kw_literal> _(*this, symbol);
-
-    os << "LITERAL";
-}
-
-
-void printer::operator()(kw_null const &node) const
-{
-    static char const symbol[]{ "keyword" };
-    symbol_scope<kw_null> _(*this, symbol);
-
-    os << "NULL";
+    os << token;
 }
 
 

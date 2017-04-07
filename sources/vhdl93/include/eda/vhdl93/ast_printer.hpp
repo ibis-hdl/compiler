@@ -241,9 +241,7 @@ struct waveform;
 struct waveform_element;
 
 // keywords and miscellaneous
-struct kw_all;
-struct kw_literal;
-struct kw_null;
+enum class keyword_token;
 struct unary_expression;
 struct binary_expression;
 
@@ -501,9 +499,7 @@ public:
 
     // keywords and miscellaneous
     void operator()(std::string const& node) const;
-    void operator()(kw_all const& node) const;
-    void operator()(kw_literal const &node) const;
-    void operator()(kw_null const& node) const;
+    void operator()(keyword_token token) const;
 
     void operator()(unary_expression const& node) const;
     void operator()(binary_expression const& node) const;

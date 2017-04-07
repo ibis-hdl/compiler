@@ -21,7 +21,7 @@ namespace x3 = boost::spirit::x3;
 
 struct bit_string_literal;
 struct enumeration_literal;
-struct kw_null;
+enum class keyword_token;
 struct numeric_literal;
 struct string_literal;
 
@@ -29,7 +29,7 @@ struct literal :
     x3::variant<
         x3::forward_ast<bit_string_literal>,
         x3::forward_ast<enumeration_literal>,
-        x3::forward_ast<kw_null>,
+        x3::forward_ast<keyword_token>,
         x3::forward_ast<numeric_literal>,
         x3::forward_ast<string_literal>
     >

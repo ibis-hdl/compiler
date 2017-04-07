@@ -842,6 +842,10 @@ auto const WITH = kw("with");
 auto const XNOR = kw("xnor");
 auto const XOR = kw("xor");
 
+
+/*
+ * Symbols of all keyword to them distinguish from identifier by rule
+ */
 struct keyword_symbols : x3::symbols<> {
 
     keyword_symbols() {
@@ -872,6 +876,23 @@ struct keyword_symbols : x3::symbols<> {
 auto const keyword = x3::rule<struct _> { "keyword" } =
     kw( keywords )
     ;
+
+
+/*
+ * Keyword helper rules to tag the AST with token IDs
+ */
+auto const ALL_token = x3::rule<struct _, ast::keyword_token> { "ALL" } =
+    ALL >> x3::attr(ast::keyword_token::ALL)
+    ;
+
+auto const LITERAL_token = x3::rule<struct _, ast::keyword_token> { "LITERAL" } =
+    LITERAL >> x3::attr(ast::keyword_token::LITERAL)
+    ;
+
+auto const NULL_token = x3::rule<struct _, ast::keyword_token> { "NULL" } =
+    NULL >> x3::attr(ast::keyword_token::NULL)
+    ;
+
 
 /*
  * Parser Operator Symbol Definition
@@ -2648,18 +2669,12 @@ auto const library_unit_def =
 //     | string_literal
 //     | bit_string_literal
 //     | null
-namespace detail {
-    auto const null = x3::rule<struct _, ast::kw_null> { "null" } =
-        // FixMe: maybe better identifier
-        NULL >> x3::attr( ast::kw_null() )
-    ;
-}
 auto const literal_def = /* Note, order changed since matters */
-      enumeration_literal   // FixMe: Treats keyword NULL as identifier
+      enumeration_literal
     | string_literal
     | bit_string_literal
     | numeric_literal
-    | detail::null
+    | NULL_token
     ;
 
 
@@ -2966,7 +2981,7 @@ auto const prefix_def =
 //     | ( expression )
 auto const primary_def = // FixMe: support other alternatives
       name
-    | LITERAL
+    | LITERAL_token
 //    | aggregate
 //    | function_call
 //    | qualified_expression
@@ -3475,7 +3490,7 @@ auto const suffix_def =
       simple_name
     | character_literal
 //  | operator_symbol   // FixMe: No idea about operator_symbol, aka string_literal
-    | ALL
+    | ALL_token
     ;
 
 

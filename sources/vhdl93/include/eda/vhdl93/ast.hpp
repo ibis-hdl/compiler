@@ -252,18 +252,16 @@ namespace eda { namespace vhdl93 { namespace ast {
 /*
  *  some AST helper
  */
+#include <eda/vhdl93/ast/keyword_token.hpp>
 #include <eda/vhdl93/ast/unary_expression.hpp>
 #include <eda/vhdl93/ast/binary_expression.hpp>
 
 
 /*
- *  keywords and miscellaneous
+ *  miscellaneous
  */
 namespace eda { namespace vhdl93 { namespace ast {
 
-struct kw_all  { };
-struct kw_literal { };
-struct kw_null { };
 
 } } } // namespace eda.vhdl93.ast
 

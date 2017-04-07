@@ -12,6 +12,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(LIB_SOURCES
     src/ast/bit_string_literal.cpp
     src/ast/decimal_literal.cpp
+    src/ast/keyword_token.cpp
     src/ast/operator_token.cpp
     src/grammar.cpp
     src/error_handler.cpp

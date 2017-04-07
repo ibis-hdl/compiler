@@ -18,11 +18,11 @@ namespace eda { namespace vhdl93 { namespace ast {
 namespace x3 = boost::spirit::x3;
 
 
+enum class keyword_token;
 struct aggregate;
 struct allocator;
 struct expression;
 struct function_call;
-struct kw_literal;
 struct name;
 struct qualified_expression;
 struct type_conversion;
@@ -33,7 +33,7 @@ struct primary :
 //        x3::forward_ast<allocator>,
 //        x3::forward_ast<expression>,
 //        x3::forward_ast<function_call>,
-        x3::forward_ast<kw_literal>,
+        x3::forward_ast<keyword_token>,
         x3::forward_ast<name>
 //        x3::forward_ast<qualified_expression>,
 //        x3::forward_ast<type_conversion>
