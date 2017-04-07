@@ -241,7 +241,12 @@ struct waveform;
 struct waveform_element;
 
 // keywords and miscellaneous
+struct kw_all;
+struct kw_literal;
 struct kw_null;
+struct unary_expression;
+struct binary_expression;
+
 
 } } } // namespace eda.vhdl93.ast
 
@@ -499,6 +504,9 @@ public:
     void operator()(kw_all const& node) const;
     void operator()(kw_literal const &node) const;
     void operator()(kw_null const& node) const;
+
+    void operator()(unary_expression const& node) const;
+    void operator()(binary_expression const& node) const;
 
 
 };

@@ -1449,9 +1449,9 @@ void printer::operator()(prefix const &node) const
 
 void printer::operator()(primary const &node) const
 {
-    static char const symbol[]{ "primary" };
+    static char const symbol[]{ "XXX primary" };
     symbol_scope<primary> _(*this, symbol);
-    boost::apply_visitor(*this, node);
+    //boost::apply_visitor(*this, node);
 }
 
 
@@ -1935,7 +1935,7 @@ void printer::operator()(std::string const &node) const
 void printer::operator()(kw_all const &node) const
 {
     static char const symbol[]{ "keyword" };
-    symbol_scope<std::string> _(*this, symbol);
+    symbol_scope<kw_all> _(*this, symbol);
 
     os << "ALL";
 }
@@ -1944,7 +1944,7 @@ void printer::operator()(kw_all const &node) const
 void printer::operator()(kw_literal const &node) const
 {
     static char const symbol[]{ "keyword" };
-    symbol_scope<std::string> _(*this, symbol);
+    symbol_scope<kw_literal> _(*this, symbol);
 
     os << "LITERAL";
 }
@@ -1953,9 +1953,27 @@ void printer::operator()(kw_literal const &node) const
 void printer::operator()(kw_null const &node) const
 {
     static char const symbol[]{ "keyword" };
-    symbol_scope<std::string> _(*this, symbol);
+    symbol_scope<kw_null> _(*this, symbol);
 
     os << "NULL";
+}
+
+
+void printer::operator()(unary_expression const& node) const
+{
+    static char const symbol[]{ "unary_expression" };
+    symbol_scope<unary_expression> _(*this, symbol);
+
+    os << "XXX";
+}
+
+
+void printer::operator()(binary_expression const& node) const
+{
+    static char const symbol[]{ "binary_expression" };
+    symbol_scope<binary_expression> _(*this, symbol);
+
+    os << "XXX";
 }
 
 

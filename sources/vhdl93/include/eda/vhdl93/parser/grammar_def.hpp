@@ -368,7 +368,7 @@ typedef x3::rule<exponent_class, std::string> exponent_type;
 typedef x3::rule<expression_class> expression_type;
 typedef x3::rule<extended_digit_class, char> extended_digit_type;
 typedef x3::rule<extended_identifier_class, std::string> extended_identifier_type;
-typedef x3::rule<factor_class> factor_type;
+typedef x3::rule<factor_class/*, ast::factor*/> factor_type;
 typedef x3::rule<file_declaration_class> file_declaration_type;
 typedef x3::rule<file_logical_name_class> file_logical_name_type;
 typedef x3::rule<file_open_information_class> file_open_information_type;
@@ -439,7 +439,7 @@ typedef x3::rule<port_clause_class> port_clause_type;
 typedef x3::rule<port_list_class> port_list_type;
 typedef x3::rule<port_map_aspect_class> port_map_aspect_type;
 typedef x3::rule<prefix_class> prefix_type;
-typedef x3::rule<primary_class, ast::primary> primary_type;
+typedef x3::rule<primary_class/*, ast::primary*/> primary_type;
 typedef x3::rule<primary_unit_class> primary_unit_type;
 typedef x3::rule<procedure_call_class> procedure_call_type;
 typedef x3::rule<procedure_call_statement_class> procedure_call_statement_type;
@@ -911,18 +911,29 @@ struct relational_operator_symbols : x3::symbols<ast::operator_token> {
 } const relational_operator;
 
 
-struct miscellaneous_operator_symbols : x3::symbols<ast::operator_token> {
+struct unary_miscellaneous_operator_symbols : x3::symbols<ast::operator_token> {
 
-    miscellaneous_operator_symbols() {
+    unary_miscellaneous_operator_symbols() {
+
+        name("miscellaneous_operator");
+
+        add("abs", ast::operator_token::abs)
+           ("not", ast::operator_token::not_)
+           ;
+    }
+} const unary_miscellaneous_operator;
+
+
+struct binary_miscellaneous_operator_symbols : x3::symbols<ast::operator_token> {
+
+    binary_miscellaneous_operator_symbols() {
 
         name("miscellaneous_operator");
 
         add("**", ast::operator_token::exponent)
-           ("abs", ast::operator_token::abs)
-           ("not", ast::operator_token::not_)
            ;
     }
-} const miscellaneous_operator;
+} const binary_miscellaneous_operator;
 
 
 struct adding_operator_symbols : x3::symbols<ast::operator_token> {
@@ -2175,10 +2186,26 @@ auto const extended_identifier_def =
 //       primary [ ** primary ]
 //     | abs primary
 //     | not primary
-auto const factor_def =
-      primary >> -( "**" >> primary )
-    | ABS >> primary
-    | NOT >> primary
+namespace detail {
+
+    // Note the miscellaneous_operator ::=  ** | abs | not               [§ 7.2]
+
+    auto const binary_expr = x3::rule<struct _, ast::binary_expression> { "factor (binary)" } =
+           primary
+        >> binary_miscellaneous_operator // ** (exponent)
+        >> primary
+        ;
+
+    // ABS >> primary | NOT >> primary
+    auto const unary_expr = x3::rule<struct _, ast::unary_expression> { "factor (unary)" } =
+        // ABS | NOT
+        unary_miscellaneous_operator >> primary
+        ;
+}
+auto const factor_def =    // Note, order and others changed
+      detail::binary_expr
+    | detail::unary_expr
+    | primary
     ;
 
 

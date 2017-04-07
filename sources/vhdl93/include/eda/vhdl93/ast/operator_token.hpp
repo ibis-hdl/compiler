@@ -9,45 +9,51 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_OPERATOR_TOKEN_HPP_
 
 
+#include <iosfwd>
+
+
 namespace eda { namespace vhdl93 { namespace ast {
 
 
 enum class operator_token {
-	// logical_operator
-	and_,
-	or_,
-	nand,
-	nor,
-	xor_,
-	xnor,
-	// relational_operator
-	equal,
-	not_equals,
-	less,
-	less_equals,
-	greater,
-	greater_equals,
-	// miscellaneous_operator
-	exponent,
-	abs,
-	not_,
-	// adding_operator
-	add,
-	sub,
-	concat,
-	// multiplying_operator
-	mul,
-	div,
-	mod,
-	rem,
-	// shift_operator
-	sll,
-	srl,
-	sla,
-	sra,
-	rol,
-	ror,
+    // logical_operator
+    and_,
+    or_,
+    nand,
+    nor,
+    xor_,
+    xnor,
+    // relational_operator
+    equal,
+    not_equals,
+    less,
+    less_equals,
+    greater,
+    greater_equals,
+    // miscellaneous_operator
+    exponent,
+    abs,
+    not_,
+    // adding_operator
+    add,
+    sub,
+    concat,
+    // multiplying_operator
+    mul,
+    div,
+    mod,
+    rem,
+    // shift_operator
+    sll,
+    srl,
+    sla,
+    sra,
+    rol,
+    ror,
 };
+
+
+std::ostream& operator<<(std::ostream& os, operator_token op_token);
 
 
 } } } // namespace eda.vhdl93.ast
