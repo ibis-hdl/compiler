@@ -34,5 +34,4 @@ struct binary_expression :  x3::position_tagged
 
 
 
-
 #endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_BINARY_EXPRESSION_HPP_ */

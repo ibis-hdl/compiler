@@ -9,7 +9,6 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_LITERAL_HPP_
 
 
-#include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
 
 

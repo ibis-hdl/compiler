@@ -9,7 +9,6 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_UNARY_EXPRESSION_HPP_
 
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
 #include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
 
 

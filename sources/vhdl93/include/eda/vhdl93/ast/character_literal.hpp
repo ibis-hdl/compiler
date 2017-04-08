@@ -9,12 +9,18 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_CHARACTER_LITERAL_HPP_
 
 
+#include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
+
+
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-struct character_literal
+namespace x3 = boost::spirit::x3;
+
+
+struct character_literal : x3::position_tagged
 {
-	char	literal;
+    char    literal;
 };
 
 

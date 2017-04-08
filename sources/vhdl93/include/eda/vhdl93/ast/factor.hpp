@@ -17,6 +17,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 namespace x3 = boost::spirit::x3;
 
+
 struct primary;
 struct unary_expression;
 struct binary_expression;

@@ -9,13 +9,18 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_BIT_STRING_LITERAL_HPP_
 
 
+#include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
 #include <string>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-struct bit_string_literal {
+namespace x3 = boost::spirit::x3;
+
+
+struct bit_string_literal  : x3::position_tagged
+{
     enum class tag { bin, oct, hex };
     std::string                     literal;
     tag                             hint;

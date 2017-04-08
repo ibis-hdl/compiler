@@ -9,17 +9,14 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_SIMPLE_NAME_HPP_
 
 
-#include <string>
+#include <eda/vhdl93/ast/identifier.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-/* FixMe: same as ast::identifier, may be used or not. */
-struct simple_name
-{
-    std::string        name;
-};
+struct simple_name : ast::identifier
+{ };
 
 
 } } } // namespace eda.vhdl93.ast

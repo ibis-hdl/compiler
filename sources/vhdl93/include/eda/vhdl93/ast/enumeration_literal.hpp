@@ -11,8 +11,6 @@
 
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
 
-#include <eda/vhdl93/ast/character_literal.hpp>
-
 
 namespace eda { namespace vhdl93 { namespace ast {
 
@@ -21,12 +19,13 @@ namespace x3 = boost::spirit::x3;
 
 
 struct identifier;
+struct character_literal;
 
 
 struct enumeration_literal :
     x3::variant<
         x3::forward_ast<identifier>
-      , character_literal
+      , x3::forward_ast<character_literal>
     >
 {
     using base_type::base_type;

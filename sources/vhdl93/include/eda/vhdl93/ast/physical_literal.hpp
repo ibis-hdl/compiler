@@ -9,7 +9,7 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_PHYSICAL_LITERAL_HPP_
 
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
+#include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
 #include <string>
 
 
@@ -22,7 +22,7 @@ namespace x3 = boost::spirit::x3;
 struct abstract_literal;
 
 
-struct physical_literal
+struct physical_literal : x3::position_tagged
 {
     x3::forward_ast<abstract_literal> literal;
     std::string                     unit_name;
