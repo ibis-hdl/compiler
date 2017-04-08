@@ -1497,7 +1497,7 @@ enum class {0} {{
             line = 'case {0}::{1:<12} os << "{2}"; break;'.format(
                 kw_type_name,
                 self.keyword_ify(kw) + ':',
-                kw
+                kw.upper()
                 )
             alist.append(line)
         text = """
