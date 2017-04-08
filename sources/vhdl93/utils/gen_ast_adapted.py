@@ -110,7 +110,7 @@ class AstFusionAdapter:
         text = "\n".join(self.indent + line for line in alist)
         return "BOOST_FUSION_ADAPT_STRUCT(\n{0}\n)\n".format(text)
 
-    def fusion_adapt_ligth(self, node):
+    def fusion_adapt_light(self, node):
         '''
         X3 example Calc9 shows an alternative way to fusionize ast structures
         which provides this function.
@@ -132,7 +132,7 @@ class AstFusionAdapter:
         text = ""
         for node in sorted(self.node_list, key=lambda tpl: tpl[0]):
             if compact:
-                text += self.fusion_adapt_ligth(node) + '\n'
+                text += self.fusion_adapt_light(node) + '\n'
             else:
                 text += self.fusion_adapt(node) + '\n'
         return text
