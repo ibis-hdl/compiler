@@ -96,7 +96,7 @@ BOOST_DATA_TEST_CASE( name,
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
 
-#if 0
+
 /*
  * primary
  */
@@ -133,7 +133,7 @@ BOOST_DATA_TEST_CASE( primary,
 }
 
 
-
+#if 0
 /*
  * factor
  */

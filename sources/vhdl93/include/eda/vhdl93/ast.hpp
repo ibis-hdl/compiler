@@ -187,7 +187,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 //#include <eda/vhdl93/ast/port_list.hpp>
 //#include <eda/vhdl93/ast/port_map_aspect.hpp>
 //#include <eda/vhdl93/ast/prefix.hpp>
-//#include <eda/vhdl93/ast/primary.hpp>
+#include <eda/vhdl93/ast/primary.hpp>
 //#include <eda/vhdl93/ast/primary_unit.hpp>
 //#include <eda/vhdl93/ast/procedure_call.hpp>
 //#include <eda/vhdl93/ast/procedure_call_statement.hpp>

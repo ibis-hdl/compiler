@@ -439,7 +439,7 @@ typedef x3::rule<port_clause_class> port_clause_type;
 typedef x3::rule<port_list_class> port_list_type;
 typedef x3::rule<port_map_aspect_class> port_map_aspect_type;
 typedef x3::rule<prefix_class> prefix_type;
-typedef x3::rule<primary_class/*, ast::primary*/> primary_type;
+typedef x3::rule<primary_class, ast::primary> primary_type;
 typedef x3::rule<primary_unit_class> primary_unit_type;
 typedef x3::rule<procedure_call_class> procedure_call_type;
 typedef x3::rule<procedure_call_statement_class> procedure_call_statement_type;
@@ -2990,14 +2990,14 @@ auto const prefix_def =
 //     | ( expression )
 auto const primary_def = // FixMe: support other alternatives
       name
-    | LITERAL_token
-//    | aggregate
-//    | function_call
-//    | qualified_expression
-//    | type_conversion
-//    | allocator
-//    | '(' expression )
-;
+    | literal
+    //     | aggregate
+    //     | function_call
+    //     | qualified_expression
+    //     | type_conversion
+    //     | allocator
+    //     | '(' >> expression >> ')'
+    ;
 
 
 #if 0

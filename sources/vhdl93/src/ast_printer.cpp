@@ -1434,9 +1434,9 @@ void printer::operator()(prefix const &node) const
 
 void printer::operator()(primary const &node) const
 {
-    static char const symbol[]{ "XXX primary" };
+    static char const symbol[]{ "primary" };
     symbol_scope<primary> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    boost::apply_visitor(*this, node);
 }
 
 
