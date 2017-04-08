@@ -84,6 +84,19 @@ class AstFusionAdapter:
         '''
         member_list = []
         members = [m for m in cls.get_members(access='public') if m.is_artificial == False]
+
+        if not members:
+            # probably derived to retain semantic
+            for base in cls.bases:
+                base_class_name =  base.related_class.name
+                # some may derive from std::string
+                if 'basic_string' in base_class_name: continue
+                print("CLASS = " + cls.name + " has base: " + base_class_name)
+                for cls_ in self.ns_ast.classes():
+                    if cls_.name == base_class_name: break
+                print('using base class ' + cls_.name + ' to get members')
+                members = [m for m in cls_.get_members(access='public') if m.is_artificial == False]
+
         for member in members:
             if declarations.is_enum(member):
                 continue
