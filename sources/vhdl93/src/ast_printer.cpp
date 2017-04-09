@@ -1930,26 +1930,21 @@ void printer::operator()(binary_operation const& node) const
 {
     static char const symbol[]{ "binary_operation" };
     symbol_scope<binary_operation> _(*this, symbol);
-#if 0
-    os << "{\n"
-       << "op=" << node.operator_ << ",\n";
+
+    os << "{\n";
+    tab(indent+tab_size);
+    os << "op=" << node.operator_ << ",\n";
+
+    tab(indent+tab_size);
     os << "lhs=";
-    printer print(os, indent+tab_size);
-    os << ",\n";
-    boost::apply_visitor(print, node.lhs);
-    os << ",";
-    os << "rhs=";
-    boost::apply_visitor(print, node.rhs);
-    os << "\n}";
-#else
-    os << "{"
-       << "op=" << node.operator_ << ","
-       << "lhs=";
     boost::apply_visitor(*this, node.lhs);
-    os << ",rhs=";
+
+    os << ",\n";
+
+    tab(indent+tab_size);
+    os << "rhs=";
     boost::apply_visitor(*this, node.rhs);
-    os << "}";
-#endif
+    os << "\n}";
 }
 
 
@@ -1957,15 +1952,14 @@ void printer::operator()(unary_operation const& node) const
 {
     static char const symbol[]{ "unary_operation" };
     symbol_scope<unary_operation> _(*this, symbol);
-#if 0
 
-#else
-    os << "{"
-       << "op=" << node.operator_ << ","
-       << "operand=";
+    os << "{\n";
+    tab(indent+tab_size);
+    os << "op=" << node.operator_ << ",\n";
+    tab(indent+tab_size);
+    os << "operand=";
     boost::apply_visitor(*this, node.operand_);
-    os << "}";
-#endif
+    os << "\n}";
 }
 
 
@@ -1973,7 +1967,6 @@ void printer::operator()(operand const& node) const
 {
     static char const symbol[]{ "operand" };
     symbol_scope<operand> _(*this, symbol);
-    tab(indent);
     boost::apply_visitor(*this, node);
 }
 
