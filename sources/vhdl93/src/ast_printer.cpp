@@ -77,7 +77,7 @@ struct printer::symbol_scope<
 };
 
 
-void printer::tab(uint16_t spaces)
+void printer::tab(uint16_t spaces) const
 {
     for (unsigned i=0; i != spaces; ++i)
         os << ' ';
@@ -872,9 +872,9 @@ void printer::operator()(expression const &node) const
 
 void printer::operator()(factor const &node) const
 {
-    static char const symbol[]{ "XXX factor" };
+    static char const symbol[]{ "factor" };
     symbol_scope<factor> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    boost::apply_visitor(*this, node);
 }
 
 
@@ -1926,21 +1926,55 @@ void printer::operator()(keyword_token token) const
 }
 
 
-void printer::operator()(unary_expression const& node) const
+void printer::operator()(binary_operation const& node) const
 {
-    static char const symbol[]{ "unary_expression" };
-    symbol_scope<unary_expression> _(*this, symbol);
-
-    os << "XXX";
+    static char const symbol[]{ "binary_operation" };
+    symbol_scope<binary_operation> _(*this, symbol);
+#if 0
+    os << "{\n"
+       << "op=" << node.operator_ << ",\n";
+    os << "lhs=";
+    printer print(os, indent+tab_size);
+    os << ",\n";
+    boost::apply_visitor(print, node.lhs);
+    os << ",";
+    os << "rhs=";
+    boost::apply_visitor(print, node.rhs);
+    os << "\n}";
+#else
+    os << "{"
+       << "op=" << node.operator_ << ","
+       << "lhs=";
+    boost::apply_visitor(*this, node.lhs);
+    os << ",rhs=";
+    boost::apply_visitor(*this, node.rhs);
+    os << "}";
+#endif
 }
 
 
-void printer::operator()(binary_expression const& node) const
+void printer::operator()(unary_operation const& node) const
 {
-    static char const symbol[]{ "binary_expression" };
-    symbol_scope<binary_expression> _(*this, symbol);
+    static char const symbol[]{ "unary_operation" };
+    symbol_scope<unary_operation> _(*this, symbol);
+#if 0
 
-    os << "XXX";
+#else
+    os << "{"
+       << "op=" << node.operator_ << ","
+       << "operand=";
+    boost::apply_visitor(*this, node.operand_);
+    os << "}";
+#endif
+}
+
+
+void printer::operator()(operand const& node) const
+{
+    static char const symbol[]{ "operand" };
+    symbol_scope<operand> _(*this, symbol);
+    tab(indent);
+    boost::apply_visitor(*this, node);
 }
 
 

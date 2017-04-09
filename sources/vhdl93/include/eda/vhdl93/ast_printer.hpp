@@ -241,8 +241,10 @@ struct waveform_element;
 
 // keywords and miscellaneous
 enum class keyword_token;
-struct unary_expression;
-struct binary_expression;
+
+struct binary_operation;
+struct operand;
+struct unary_operation;
 
 
 } } } // namespace eda.vhdl93.ast
@@ -257,7 +259,7 @@ class printer
     uint16_t        indent;
     uint16_t const  tab_size { 4 };
 
-    void tab(uint16_t spaces);
+    void tab(uint16_t spaces) const;
 
     struct scope_printer;
 
@@ -499,9 +501,9 @@ public:
     void operator()(std::string const& node) const;
     void operator()(keyword_token token) const;
 
-    void operator()(unary_expression const& node) const;
-    void operator()(binary_expression const& node) const;
-
+    void operator()(binary_operation const& node) const;
+    void operator()(unary_operation const& node) const;
+    void operator()(operand const& node) const;
 
 };
 

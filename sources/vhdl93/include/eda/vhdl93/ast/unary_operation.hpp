@@ -5,8 +5,8 @@
  *      Author: olaf
  */
 
-#ifndef SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_UNARY_EXPRESSION_HPP_
-#define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_UNARY_EXPRESSION_HPP_
+#ifndef SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_UNARY_OPERATION_HPP_
+#define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_UNARY_OPERATION_HPP_
 
 
 #include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
@@ -23,15 +23,14 @@ enum class operator_token;
 struct operand;
 
 
-struct unary_expression :  x3::position_tagged
+struct unary_operation :  x3::position_tagged
 {
-    x3::forward_ast<operator_token>     operator_;
-    x3::forward_ast<operand>            operand_;
+    operator_token                  operator_;
+    operand                         operand_;
 };
 
 
 } } } // namespace eda.vhdl93.ast
 
 
-
-#endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_UNARY_EXPRESSION_HPP_ */
+#endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_UNARY_OPERATION_HPP_ */

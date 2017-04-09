@@ -8,13 +8,6 @@
 #ifndef SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_AST_HPP_
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_AST_HPP_
 
-#include <string>
-
-
-namespace eda { namespace vhdl93 { namespace ast {
-
-} } } // namespace eda.vhdl93.ast
-
 
 #include <eda/vhdl93/ast/abstract_literal.hpp>
 //#include <eda/vhdl93/ast/access_type_definition.hpp>
@@ -115,7 +108,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 //#include <eda/vhdl93/ast/expression.hpp>
 //#include <eda/vhdl93/ast/extended_digit.hpp>
 //#include <eda/vhdl93/ast/extended_identifier.hpp>
-//#include <eda/vhdl93/ast/factor.hpp>
+#include <eda/vhdl93/ast/factor.hpp>
 //#include <eda/vhdl93/ast/file_declaration.hpp>
 //#include <eda/vhdl93/ast/file_logical_name.hpp>
 //#include <eda/vhdl93/ast/file_open_information.hpp>
@@ -252,18 +245,10 @@ namespace eda { namespace vhdl93 { namespace ast {
  *  some AST helper
  */
 #include <eda/vhdl93/ast/keyword_token.hpp>
-#include <eda/vhdl93/ast/unary_expression.hpp>
-#include <eda/vhdl93/ast/binary_expression.hpp>
 
-
-/*
- *  miscellaneous
- */
-namespace eda { namespace vhdl93 { namespace ast {
-
-
-} } } // namespace eda.vhdl93.ast
-
+#include <eda/vhdl93/ast/operand.hpp>
+#include <eda/vhdl93/ast/binary_operation.hpp>
+#include <eda/vhdl93/ast/unary_operation.hpp>
 
 
 #endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_AST_HPP_ */

@@ -1,0 +1,1 @@
+(v:factor=(binary_operation={op=**,lhs=(v:primary=(v:literal=(bit_string_literal={l=42FF, tag=hex}))),rhs=(v:primary=(v:literal=(bit_string_literal={l=0111, tag=bin})))}))

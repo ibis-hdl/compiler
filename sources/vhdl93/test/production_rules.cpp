@@ -5,12 +5,12 @@
  *      Author: olaf
  */
 
-
 #include <boost/test/unit_test.hpp>
 #include <boost/core/ignore_unused.hpp>
 
 #include <iostream>
 
+#include <eda/vhdl93/ast.hpp>
 #include "data_set.hpp"
 #include "testing_parser.hpp"
 
@@ -133,7 +133,6 @@ BOOST_DATA_TEST_CASE( primary,
 }
 
 
-#if 0
 /*
  * factor
  */
@@ -168,7 +167,6 @@ BOOST_DATA_TEST_CASE( factor,
     BOOST_TEST_INFO("parsed attr (result) = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
-#endif
 
 
 BOOST_AUTO_TEST_SUITE_END()

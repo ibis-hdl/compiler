@@ -368,7 +368,7 @@ typedef x3::rule<exponent_class, std::string> exponent_type;
 typedef x3::rule<expression_class> expression_type;
 typedef x3::rule<extended_digit_class, char> extended_digit_type;
 typedef x3::rule<extended_identifier_class, std::string> extended_identifier_type;
-typedef x3::rule<factor_class/*, ast::factor*/> factor_type;
+typedef x3::rule<factor_class, ast::factor> factor_type;
 typedef x3::rule<file_declaration_class> file_declaration_type;
 typedef x3::rule<file_logical_name_class> file_logical_name_type;
 typedef x3::rule<file_open_information_class> file_open_information_type;
@@ -2218,16 +2218,14 @@ auto const extended_identifier_def =
 //     | not primary
 namespace detail {
 
-    // Note the miscellaneous_operator ::=  ** | abs | not               [§ 7.2]
-
-    auto const binary_expr = x3::rule<struct _, ast::binary_expression> { "factor (binary)" } =
+    auto const binary_expr = x3::rule<struct _, ast::binary_operation> { "factor (binary)" } =
            primary
         >> binary_miscellaneous_operator // ** (exponent)
         >> primary
         ;
 
     // ABS >> primary | NOT >> primary
-    auto const unary_expr = x3::rule<struct _, ast::unary_expression> { "factor (unary)" } =
+    auto const unary_expr = x3::rule<struct _, ast::unary_operation> { "factor (unary)" } =
         // ABS | NOT
         unary_miscellaneous_operator >> primary
         ;
