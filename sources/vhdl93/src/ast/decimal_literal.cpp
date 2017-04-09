@@ -20,18 +20,6 @@ namespace eda { namespace vhdl93 { namespace ast {
 namespace x3 = boost::spirit::x3;
 
 
-std::ostream& operator<<(std::ostream& os, decimal_literal::tag const& hint)
-{
-    switch(hint) {
-        case decimal_literal::tag::integer: os << "<int>";    break;
-        case decimal_literal::tag::real:    os << "<double>"; break;
-        default:                            os << "INVALID";
-    }
-
-    return os;
-}
-
-
 namespace parser {
 
     namespace detail {

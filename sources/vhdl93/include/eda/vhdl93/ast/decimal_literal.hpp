@@ -27,9 +27,6 @@ struct decimal_literal : x3::position_tagged
 };
 
 
-std::ostream& operator<<(std::ostream& os, decimal_literal::tag const& hint);
-
-
 /**
  * Convert the literal to the type T. The type T can be <int> or <double> due to
  * the provided specializations. On overflow it will throw an exception.

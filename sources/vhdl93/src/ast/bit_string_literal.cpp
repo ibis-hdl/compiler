@@ -22,19 +22,6 @@ namespace eda { namespace vhdl93 { namespace ast {
 namespace x3 = boost::spirit::x3;
 
 
-std::ostream& operator<<(std::ostream& os, bit_string_literal::tag const& hint)
-{
-    switch(hint) {
-        case bit_string_literal::tag::bin: os << "<bin>"; break;
-        case bit_string_literal::tag::oct: os << "<oct>"; break;
-        case bit_string_literal::tag::hex: os << "<hex>"; break;
-        default:                           os << "INVALID";
-    }
-
-    return os;
-}
-
-
 template<>
 int get<int32_t>(bit_string_literal const& node)
 {
