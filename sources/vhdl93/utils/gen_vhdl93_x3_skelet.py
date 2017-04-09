@@ -1965,6 +1965,7 @@ void printer::operator()({0} const &node) const
 {{
     static char const symbol[]{{ "XXX {0}" }};
     symbol_scope<{0}> _(*this, symbol);
+    tab(indent);
     //os << node;
 }}
 """.format(name)
