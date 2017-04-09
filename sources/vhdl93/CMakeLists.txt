@@ -51,6 +51,32 @@ target_link_libraries(${PROJECT_NAME}
 set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX "_d")
 
 
+## test suite
+add_subdirectory(test)
+
+
+## API documentation with Doxygen
+find_package(Doxygen)
+option(BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen)" ${DOXYGEN_FOUND})
+
+if(BUILD_DOCUMENTATION)
+    if(NOT DOXYGEN_FOUND)
+        message(FATAL_ERROR "Doxygen is needed to build the documentation.")
+    endif()
+
+    set(doxyfile_in ${CMAKE_CURRENT_SOURCE_DIR}/doc/doxyfile.in)
+    set(doxyfile ${CMAKE_CURRENT_BINARY_DIR}/doc/doxyfile)
+
+    configure_file(${doxyfile_in} ${doxyfile} @ONLY)
+
+    add_custom_target(doc
+        COMMAND ${DOXYGEN_EXECUTABLE} ${doxyfile}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        COMMENT "Generating API documentation with Doxygen"
+        VERBATIM)
+endif()
+
+
 ## Install targets
 install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Config
     ARCHIVE  DESTINATION ${PROJECT_NAME}
@@ -64,5 +90,3 @@ install(EXPORT ${PROJECT_NAME}Config
 export(TARGETS ${PROJECT_NAME} FILE ${PROJECT_NAME}Config.cmake)
 
 
-# test suite
-add_subdirectory(test)
