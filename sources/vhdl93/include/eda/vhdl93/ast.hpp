@@ -227,7 +227,7 @@
 //#include <eda/vhdl93/ast/subtype_indication.hpp>
 #include <eda/vhdl93/ast/suffix.hpp>
 //#include <eda/vhdl93/ast/target.hpp>
-//#include <eda/vhdl93/ast/term.hpp>
+#include <eda/vhdl93/ast/term.hpp>
 //#include <eda/vhdl93/ast/timeout_clause.hpp>
 //#include <eda/vhdl93/ast/type_conversion.hpp>
 //#include <eda/vhdl93/ast/type_declaration.hpp>

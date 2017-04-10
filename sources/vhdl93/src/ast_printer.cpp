@@ -102,6 +102,7 @@ void printer::operator()(access_type_definition const &node) const
 {
     static char const symbol[]{ "XXX access_type_definition" };
     symbol_scope<access_type_definition> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -118,6 +119,7 @@ void printer::operator()(actual_parameter_part const &node) const
 {
     static char const symbol[]{ "XXX actual_parameter_part" };
     symbol_scope<actual_parameter_part> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -134,6 +136,7 @@ void printer::operator()(aggregate const &node) const
 {
     static char const symbol[]{ "XXX aggregate" };
     symbol_scope<aggregate> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -142,6 +145,7 @@ void printer::operator()(alias_declaration const &node) const
 {
     static char const symbol[]{ "XXX alias_declaration" };
     symbol_scope<alias_declaration> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -166,6 +170,7 @@ void printer::operator()(architecture_body const &node) const
 {
     static char const symbol[]{ "XXX architecture_body" };
     symbol_scope<architecture_body> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -174,6 +179,7 @@ void printer::operator()(architecture_declarative_part const &node) const
 {
     static char const symbol[]{ "XXX architecture_declarative_part" };
     symbol_scope<architecture_declarative_part> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -182,6 +188,7 @@ void printer::operator()(architecture_statement_part const &node) const
 {
     static char const symbol[]{ "XXX architecture_statement_part" };
     symbol_scope<architecture_statement_part> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -198,6 +205,7 @@ void printer::operator()(assertion const &node) const
 {
     static char const symbol[]{ "XXX assertion" };
     symbol_scope<assertion> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -206,6 +214,7 @@ void printer::operator()(assertion_statement const &node) const
 {
     static char const symbol[]{ "XXX assertion_statement" };
     symbol_scope<assertion_statement> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -214,6 +223,7 @@ void printer::operator()(association_element const &node) const
 {
     static char const symbol[]{ "XXX association_element" };
     symbol_scope<association_element> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -222,6 +232,7 @@ void printer::operator()(association_list const &node) const
 {
     static char const symbol[]{ "XXX association_list" };
     symbol_scope<association_list> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -230,6 +241,7 @@ void printer::operator()(attribute_declaration const &node) const
 {
     static char const symbol[]{ "XXX attribute_declaration" };
     symbol_scope<attribute_declaration> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -238,6 +250,7 @@ void printer::operator()(attribute_designator const &node) const
 {
     static char const symbol[]{ "XXX attribute_designator" };
     symbol_scope<attribute_designator> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -246,6 +259,7 @@ void printer::operator()(attribute_name const &node) const
 {
     static char const symbol[]{ "XXX attribute_name" };
     symbol_scope<attribute_name> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -254,6 +268,7 @@ void printer::operator()(attribute_specification const &node) const
 {
     static char const symbol[]{ "XXX attribute_specification" };
     symbol_scope<attribute_specification> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -262,6 +277,7 @@ void printer::operator()(base const &node) const
 {
     static char const symbol[]{ "XXX base" };
     symbol_scope<base> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -270,6 +286,7 @@ void printer::operator()(base_unit_declaration const &node) const
 {
     static char const symbol[]{ "XXX base_unit_declaration" };
     symbol_scope<base_unit_declaration> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -278,6 +295,7 @@ void printer::operator()(based_integer const &node) const
 {
     static char const symbol[]{ "XXX based_integer" };
     symbol_scope<based_integer> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -311,6 +329,7 @@ void printer::operator()(binding_indication const &node) const
 {
     static char const symbol[]{ "XXX binding_indication" };
     symbol_scope<binding_indication> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -339,6 +358,7 @@ void printer::operator()(block_configuration const &node) const
 {
     static char const symbol[]{ "XXX block_configuration" };
     symbol_scope<block_configuration> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -355,6 +375,7 @@ void printer::operator()(block_declarative_part const &node) const
 {
     static char const symbol[]{ "XXX block_declarative_part" };
     symbol_scope<block_declarative_part> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -363,6 +384,7 @@ void printer::operator()(block_header const &node) const
 {
     static char const symbol[]{ "XXX block_header" };
     symbol_scope<block_header> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -379,6 +401,7 @@ void printer::operator()(block_statement const &node) const
 {
     static char const symbol[]{ "XXX block_statement" };
     symbol_scope<block_statement> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -387,6 +410,7 @@ void printer::operator()(block_statement_part const &node) const
 {
     static char const symbol[]{ "XXX block_statement_part" };
     symbol_scope<block_statement_part> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -395,6 +419,7 @@ void printer::operator()(case_statement const &node) const
 {
     static char const symbol[]{ "XXX case_statement" };
     symbol_scope<case_statement> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -403,6 +428,7 @@ void printer::operator()(case_statement_alternative const &node) const
 {
     static char const symbol[]{ "XXX case_statement_alternative" };
     symbol_scope<case_statement_alternative> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -436,6 +462,7 @@ void printer::operator()(component_configuration const &node) const
 {
     static char const symbol[]{ "XXX component_configuration" };
     symbol_scope<component_configuration> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -444,6 +471,7 @@ void printer::operator()(component_declaration const &node) const
 {
     static char const symbol[]{ "XXX component_declaration" };
     symbol_scope<component_declaration> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -452,6 +480,7 @@ void printer::operator()(component_instantiation_statement const &node) const
 {
     static char const symbol[]{ "XXX component_instantiation_statement" };
     symbol_scope<component_instantiation_statement> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -460,6 +489,7 @@ void printer::operator()(component_specification const &node) const
 {
     static char const symbol[]{ "XXX component_specification" };
     symbol_scope<component_specification> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -476,6 +506,7 @@ void printer::operator()(concurrent_assertion_statement const &node) const
 {
     static char const symbol[]{ "XXX concurrent_assertion_statement" };
     symbol_scope<concurrent_assertion_statement> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -484,6 +515,7 @@ void printer::operator()(concurrent_procedure_call_statement const &node) const
 {
     static char const symbol[]{ "XXX concurrent_procedure_call_statement" };
     symbol_scope<concurrent_procedure_call_statement> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -508,6 +540,7 @@ void printer::operator()(condition const &node) const
 {
     static char const symbol[]{ "XXX condition" };
     symbol_scope<condition> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -516,6 +549,7 @@ void printer::operator()(condition_clause const &node) const
 {
     static char const symbol[]{ "XXX condition_clause" };
     symbol_scope<condition_clause> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -524,6 +558,7 @@ void printer::operator()(conditional_signal_assignment const &node) const
 {
     static char const symbol[]{ "XXX conditional_signal_assignment" };
     symbol_scope<conditional_signal_assignment> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -532,6 +567,7 @@ void printer::operator()(conditional_waveforms const &node) const
 {
     static char const symbol[]{ "XXX conditional_waveforms" };
     symbol_scope<conditional_waveforms> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -540,6 +576,7 @@ void printer::operator()(configuration_declaration const &node) const
 {
     static char const symbol[]{ "XXX configuration_declaration" };
     symbol_scope<configuration_declaration> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -556,6 +593,7 @@ void printer::operator()(configuration_declarative_part const &node) const
 {
     static char const symbol[]{ "XXX configuration_declarative_part" };
     symbol_scope<configuration_declarative_part> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -572,6 +610,7 @@ void printer::operator()(configuration_specification const &node) const
 {
     static char const symbol[]{ "XXX configuration_specification" };
     symbol_scope<configuration_specification> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -580,6 +619,7 @@ void printer::operator()(constant_declaration const &node) const
 {
     static char const symbol[]{ "XXX constant_declaration" };
     symbol_scope<constant_declaration> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -588,6 +628,7 @@ void printer::operator()(constrained_array_definition const &node) const
 {
     static char const symbol[]{ "XXX constrained_array_definition" };
     symbol_scope<constrained_array_definition> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -604,6 +645,7 @@ void printer::operator()(context_clause const &node) const
 {
     static char const symbol[]{ "XXX context_clause" };
     symbol_scope<context_clause> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -622,6 +664,8 @@ void printer::operator()(decimal_literal const &node) const
     symbol_scope<decimal_literal> _(*this, symbol);
 
     using tag = decimal_literal::tag;
+
+    tab(indent);
 
     os << "{l=" << node.literal << ", tag=";
 
@@ -655,6 +699,7 @@ void printer::operator()(design_file const &node) const
 {
     static char const symbol[]{ "XXX design_file" };
     symbol_scope<design_file> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -663,6 +708,7 @@ void printer::operator()(design_unit const &node) const
 {
     static char const symbol[]{ "XXX design_unit" };
     symbol_scope<design_unit> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -679,6 +725,7 @@ void printer::operator()(disconnection_specification const &node) const
 {
     static char const symbol[]{ "XXX disconnection_specification" };
     symbol_scope<disconnection_specification> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -695,6 +742,7 @@ void printer::operator()(element_association const &node) const
 {
     static char const symbol[]{ "XXX element_association" };
     symbol_scope<element_association> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -703,6 +751,7 @@ void printer::operator()(element_declaration const &node) const
 {
     static char const symbol[]{ "XXX element_declaration" };
     symbol_scope<element_declaration> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -711,6 +760,7 @@ void printer::operator()(element_subtype_definition const &node) const
 {
     static char const symbol[]{ "XXX element_subtype_definition" };
     symbol_scope<element_subtype_definition> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -735,6 +785,7 @@ void printer::operator()(entity_class_entry const &node) const
 {
     static char const symbol[]{ "XXX entity_class_entry" };
     symbol_scope<entity_class_entry> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -743,6 +794,7 @@ void printer::operator()(entity_class_entry_list const &node) const
 {
     static char const symbol[]{ "XXX entity_class_entry_list" };
     symbol_scope<entity_class_entry_list> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -751,6 +803,7 @@ void printer::operator()(entity_declaration const &node) const
 {
     static char const symbol[]{ "XXX entity_declaration" };
     symbol_scope<entity_declaration> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -767,6 +820,7 @@ void printer::operator()(entity_declarative_part const &node) const
 {
     static char const symbol[]{ "XXX entity_declarative_part" };
     symbol_scope<entity_declarative_part> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -775,6 +829,7 @@ void printer::operator()(entity_designator const &node) const
 {
     static char const symbol[]{ "XXX entity_designator" };
     symbol_scope<entity_designator> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -783,6 +838,7 @@ void printer::operator()(entity_header const &node) const
 {
     static char const symbol[]{ "XXX entity_header" };
     symbol_scope<entity_header> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -799,6 +855,7 @@ void printer::operator()(entity_specification const &node) const
 {
     static char const symbol[]{ "XXX entity_specification" };
     symbol_scope<entity_specification> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -815,6 +872,7 @@ void printer::operator()(entity_statement_part const &node) const
 {
     static char const symbol[]{ "XXX entity_statement_part" };
     symbol_scope<entity_statement_part> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -850,6 +908,7 @@ void printer::operator()(exit_statement const &node) const
 {
     static char const symbol[]{ "XXX exit_statement" };
     symbol_scope<exit_statement> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -882,6 +941,7 @@ void printer::operator()(file_declaration const &node) const
 {
     static char const symbol[]{ "XXX file_declaration" };
     symbol_scope<file_declaration> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -890,6 +950,7 @@ void printer::operator()(file_logical_name const &node) const
 {
     static char const symbol[]{ "XXX file_logical_name" };
     symbol_scope<file_logical_name> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -898,6 +959,7 @@ void printer::operator()(file_open_information const &node) const
 {
     static char const symbol[]{ "XXX file_open_information" };
     symbol_scope<file_open_information> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -906,6 +968,7 @@ void printer::operator()(file_type_definition const &node) const
 {
     static char const symbol[]{ "XXX file_type_definition" };
     symbol_scope<file_type_definition> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -922,6 +985,7 @@ void printer::operator()(formal_parameter_list const &node) const
 {
     static char const symbol[]{ "XXX formal_parameter_list" };
     symbol_scope<formal_parameter_list> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -938,6 +1002,7 @@ void printer::operator()(full_type_declaration const &node) const
 {
     static char const symbol[]{ "XXX full_type_declaration" };
     symbol_scope<full_type_declaration> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -946,6 +1011,7 @@ void printer::operator()(function_call const &node) const
 {
     static char const symbol[]{ "XXX function_call" };
     symbol_scope<function_call> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -954,6 +1020,7 @@ void printer::operator()(generate_statement const &node) const
 {
     static char const symbol[]{ "XXX generate_statement" };
     symbol_scope<generate_statement> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -970,6 +1037,7 @@ void printer::operator()(generic_clause const &node) const
 {
     static char const symbol[]{ "XXX generic_clause" };
     symbol_scope<generic_clause> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -978,6 +1046,7 @@ void printer::operator()(generic_list const &node) const
 {
     static char const symbol[]{ "XXX generic_list" };
     symbol_scope<generic_list> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -986,6 +1055,7 @@ void printer::operator()(generic_map_aspect const &node) const
 {
     static char const symbol[]{ "XXX generic_map_aspect" };
     symbol_scope<generic_map_aspect> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1010,6 +1080,7 @@ void printer::operator()(group_constituent_list const &node) const
 {
     static char const symbol[]{ "XXX group_constituent_list" };
     symbol_scope<group_constituent_list> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1018,6 +1089,7 @@ void printer::operator()(group_declaration const &node) const
 {
     static char const symbol[]{ "XXX group_declaration" };
     symbol_scope<group_declaration> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1026,6 +1098,7 @@ void printer::operator()(group_template_declaration const &node) const
 {
     static char const symbol[]{ "XXX group_template_declaration" };
     symbol_scope<group_template_declaration> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1034,6 +1107,7 @@ void printer::operator()(guarded_signal_specification const &node) const
 {
     static char const symbol[]{ "XXX guarded_signal_specification" };
     symbol_scope<guarded_signal_specification> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1064,6 +1138,7 @@ void printer::operator()(if_statement const &node) const
 {
     static char const symbol[]{ "XXX if_statement" };
     symbol_scope<if_statement> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1072,6 +1147,7 @@ void printer::operator()(incomplete_type_declaration const &node) const
 {
     static char const symbol[]{ "XXX incomplete_type_declaration" };
     symbol_scope<incomplete_type_declaration> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1080,6 +1156,7 @@ void printer::operator()(index_constraint const &node) const
 {
     static char const symbol[]{ "XXX index_constraint" };
     symbol_scope<index_constraint> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1096,6 +1173,7 @@ void printer::operator()(index_subtype_definition const &node) const
 {
     static char const symbol[]{ "XXX index_subtype_definition" };
     symbol_scope<index_subtype_definition> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1104,6 +1182,7 @@ void printer::operator()(indexed_name const &node) const
 {
     static char const symbol[]{ "XXX indexed_name" };
     symbol_scope<indexed_name> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1128,6 +1207,7 @@ void printer::operator()(integer const &node) const
 {
     static char const symbol[]{ "XXX integer" };
     symbol_scope<integer> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1136,6 +1216,7 @@ void printer::operator()(integer_type_definition const &node) const
 {
     static char const symbol[]{ "XXX integer_type_definition" };
     symbol_scope<integer_type_definition> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1144,6 +1225,7 @@ void printer::operator()(interface_constant_declaration const &node) const
 {
     static char const symbol[]{ "XXX interface_constant_declaration" };
     symbol_scope<interface_constant_declaration> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1160,6 +1242,7 @@ void printer::operator()(interface_element const &node) const
 {
     static char const symbol[]{ "XXX interface_element" };
     symbol_scope<interface_element> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1168,6 +1251,7 @@ void printer::operator()(interface_file_declaration const &node) const
 {
     static char const symbol[]{ "XXX interface_file_declaration" };
     symbol_scope<interface_file_declaration> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1176,6 +1260,7 @@ void printer::operator()(interface_list const &node) const
 {
     static char const symbol[]{ "XXX interface_list" };
     symbol_scope<interface_list> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1184,6 +1269,7 @@ void printer::operator()(interface_signal_declaration const &node) const
 {
     static char const symbol[]{ "XXX interface_signal_declaration" };
     symbol_scope<interface_signal_declaration> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1192,6 +1278,7 @@ void printer::operator()(interface_variable_declaration const &node) const
 {
     static char const symbol[]{ "XXX interface_variable_declaration" };
     symbol_scope<interface_variable_declaration> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1208,6 +1295,7 @@ void printer::operator()(label const &node) const
 {
     static char const symbol[]{ "XXX label" };
     symbol_scope<label> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1216,6 +1304,7 @@ void printer::operator()(library_clause const &node) const
 {
     static char const symbol[]{ "XXX library_clause" };
     symbol_scope<library_clause> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1240,6 +1329,7 @@ void printer::operator()(logical_name const &node) const
 {
     static char const symbol[]{ "XXX logical_name" };
     symbol_scope<logical_name> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1248,6 +1338,7 @@ void printer::operator()(logical_name_list const &node) const
 {
     static char const symbol[]{ "XXX logical_name_list" };
     symbol_scope<logical_name_list> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1256,6 +1347,7 @@ void printer::operator()(loop_statement const &node) const
 {
     static char const symbol[]{ "XXX loop_statement" };
     symbol_scope<loop_statement> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1280,6 +1372,7 @@ void printer::operator()(next_statement const &node) const
 {
     static char const symbol[]{ "XXX next_statement" };
     symbol_scope<next_statement> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1288,6 +1381,7 @@ void printer::operator()(null_statement const &node) const
 {
     static char const symbol[]{ "XXX null_statement" };
     symbol_scope<null_statement> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1312,6 +1406,7 @@ void printer::operator()(operator_symbol const &node) const
 {
     static char const symbol[]{ "XXX operator_symbol" };
     symbol_scope<operator_symbol> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1320,6 +1415,7 @@ void printer::operator()(options const &node) const
 {
     static char const symbol[]{ "XXX options" };
     symbol_scope<options> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1328,6 +1424,7 @@ void printer::operator()(package_body const &node) const
 {
     static char const symbol[]{ "XXX package_body" };
     symbol_scope<package_body> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1344,6 +1441,7 @@ void printer::operator()(package_body_declarative_part const &node) const
 {
     static char const symbol[]{ "XXX package_body_declarative_part" };
     symbol_scope<package_body_declarative_part> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1352,6 +1450,7 @@ void printer::operator()(package_declaration const &node) const
 {
     static char const symbol[]{ "XXX package_declaration" };
     symbol_scope<package_declaration> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1368,6 +1467,7 @@ void printer::operator()(package_declarative_part const &node) const
 {
     static char const symbol[]{ "XXX package_declarative_part" };
     symbol_scope<package_declarative_part> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1376,6 +1476,7 @@ void printer::operator()(parameter_specification const &node) const
 {
     static char const symbol[]{ "XXX parameter_specification" };
     symbol_scope<parameter_specification> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1396,6 +1497,7 @@ void printer::operator()(physical_type_definition const &node) const
 {
     static char const symbol[]{ "XXX physical_type_definition" };
     symbol_scope<physical_type_definition> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1404,6 +1506,7 @@ void printer::operator()(port_clause const &node) const
 {
     static char const symbol[]{ "XXX port_clause" };
     symbol_scope<port_clause> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1412,6 +1515,7 @@ void printer::operator()(port_list const &node) const
 {
     static char const symbol[]{ "XXX port_list" };
     symbol_scope<port_list> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1420,6 +1524,7 @@ void printer::operator()(port_map_aspect const &node) const
 {
     static char const symbol[]{ "XXX port_map_aspect" };
     symbol_scope<port_map_aspect> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1452,6 +1557,7 @@ void printer::operator()(procedure_call const &node) const
 {
     static char const symbol[]{ "XXX procedure_call" };
     symbol_scope<procedure_call> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1460,6 +1566,7 @@ void printer::operator()(procedure_call_statement const &node) const
 {
     static char const symbol[]{ "XXX procedure_call_statement" };
     symbol_scope<procedure_call_statement> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1476,6 +1583,7 @@ void printer::operator()(process_declarative_part const &node) const
 {
     static char const symbol[]{ "XXX process_declarative_part" };
     symbol_scope<process_declarative_part> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1484,6 +1592,7 @@ void printer::operator()(process_statement const &node) const
 {
     static char const symbol[]{ "XXX process_statement" };
     symbol_scope<process_statement> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1492,6 +1601,7 @@ void printer::operator()(process_statement_part const &node) const
 {
     static char const symbol[]{ "XXX process_statement_part" };
     symbol_scope<process_statement_part> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1516,6 +1626,7 @@ void printer::operator()(range_constraint const &node) const
 {
     static char const symbol[]{ "XXX range_constraint" };
     symbol_scope<range_constraint> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1524,6 +1635,7 @@ void printer::operator()(record_type_definition const &node) const
 {
     static char const symbol[]{ "XXX record_type_definition" };
     symbol_scope<record_type_definition> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1532,6 +1644,7 @@ void printer::operator()(relation const &node) const
 {
     static char const symbol[]{ "XXX relation" };
     symbol_scope<relation> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1540,6 +1653,7 @@ void printer::operator()(report_statement const &node) const
 {
     static char const symbol[]{ "XXX report_statement" };
     symbol_scope<report_statement> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1548,6 +1662,7 @@ void printer::operator()(return_statement const &node) const
 {
     static char const symbol[]{ "XXX return_statement" };
     symbol_scope<return_statement> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1572,6 +1687,7 @@ void printer::operator()(secondary_unit_declaration const &node) const
 {
     static char const symbol[]{ "XXX secondary_unit_declaration" };
     symbol_scope<secondary_unit_declaration> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1580,6 +1696,7 @@ void printer::operator()(selected_name const &node) const
 {
     static char const symbol[]{ "XXX selected_name" };
     symbol_scope<selected_name> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1588,6 +1705,7 @@ void printer::operator()(selected_signal_assignment const &node) const
 {
     static char const symbol[]{ "XXX selected_signal_assignment" };
     symbol_scope<selected_signal_assignment> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1596,6 +1714,7 @@ void printer::operator()(selected_waveforms const &node) const
 {
     static char const symbol[]{ "XXX selected_waveforms" };
     symbol_scope<selected_waveforms> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1604,6 +1723,7 @@ void printer::operator()(sensitivity_clause const &node) const
 {
     static char const symbol[]{ "XXX sensitivity_clause" };
     symbol_scope<sensitivity_clause> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1612,6 +1732,7 @@ void printer::operator()(sensitivity_list const &node) const
 {
     static char const symbol[]{ "XXX sensitivity_list" };
     symbol_scope<sensitivity_list> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1620,6 +1741,7 @@ void printer::operator()(sequence_of_statements const &node) const
 {
     static char const symbol[]{ "XXX sequence_of_statements" };
     symbol_scope<sequence_of_statements> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1636,6 +1758,7 @@ void printer::operator()(shift_expression const &node) const
 {
     static char const symbol[]{ "XXX shift_expression" };
     symbol_scope<shift_expression> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1652,6 +1775,7 @@ void printer::operator()(signal_assignment_statement const &node) const
 {
     static char const symbol[]{ "XXX signal_assignment_statement" };
     symbol_scope<signal_assignment_statement> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1660,6 +1784,7 @@ void printer::operator()(signal_declaration const &node) const
 {
     static char const symbol[]{ "XXX signal_declaration" };
     symbol_scope<signal_declaration> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1684,6 +1809,7 @@ void printer::operator()(signature const &node) const
 {
     static char const symbol[]{ "XXX signature" };
     symbol_scope<signature> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1692,6 +1818,7 @@ void printer::operator()(simple_expression const &node) const
 {
     static char const symbol[]{ "XXX simple_expression" };
     symbol_scope<simple_expression> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1709,6 +1836,7 @@ void printer::operator()(slice_name const &node) const
 {
     static char const symbol[]{ "XXX slice_name" };
     symbol_scope<slice_name> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1726,6 +1854,7 @@ void printer::operator()(subprogram_body const &node) const
 {
     static char const symbol[]{ "XXX subprogram_body" };
     symbol_scope<subprogram_body> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1734,6 +1863,7 @@ void printer::operator()(subprogram_declaration const &node) const
 {
     static char const symbol[]{ "XXX subprogram_declaration" };
     symbol_scope<subprogram_declaration> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1750,6 +1880,7 @@ void printer::operator()(subprogram_declarative_part const &node) const
 {
     static char const symbol[]{ "XXX subprogram_declarative_part" };
     symbol_scope<subprogram_declarative_part> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1774,6 +1905,7 @@ void printer::operator()(subprogram_statement_part const &node) const
 {
     static char const symbol[]{ "XXX subprogram_statement_part" };
     symbol_scope<subprogram_statement_part> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1782,6 +1914,7 @@ void printer::operator()(subtype_declaration const &node) const
 {
     static char const symbol[]{ "XXX subtype_declaration" };
     symbol_scope<subtype_declaration> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1790,6 +1923,7 @@ void printer::operator()(subtype_indication const &node) const
 {
     static char const symbol[]{ "XXX subtype_indication" };
     symbol_scope<subtype_indication> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1812,9 +1946,24 @@ void printer::operator()(target const &node) const
 
 void printer::operator()(term const &node) const
 {
-    static char const symbol[]{ "XXX term" };
+    static char const symbol[]{ "term" };
     symbol_scope<term> _(*this, symbol);
-    //os << node;
+
+    os << "{\n";
+    tab(indent+tab_size);
+    boost::apply_visitor(*this, node.factor_);
+    os << ",\n";
+
+    for(auto const& r: node.rest) {
+        tab(indent+tab_size);
+        os << "operator=" << r.operator_ << ",\n";
+        boost::apply_visitor(ast::printer(os, indent+tab_size), node.factor_);
+        //boost::apply_visitor(*this, node.factor_);
+        os << ",";
+    }
+
+    tab(indent);
+    os << "\n}";
 }
 
 
@@ -1822,6 +1971,7 @@ void printer::operator()(timeout_clause const &node) const
 {
     static char const symbol[]{ "XXX timeout_clause" };
     symbol_scope<timeout_clause> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1830,6 +1980,7 @@ void printer::operator()(type_conversion const &node) const
 {
     static char const symbol[]{ "XXX type_conversion" };
     symbol_scope<type_conversion> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1854,6 +2005,7 @@ void printer::operator()(unconstrained_array_definition const &node) const
 {
     static char const symbol[]{ "XXX unconstrained_array_definition" };
     symbol_scope<unconstrained_array_definition> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1862,6 +2014,7 @@ void printer::operator()(use_clause const &node) const
 {
     static char const symbol[]{ "XXX use_clause" };
     symbol_scope<use_clause> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1870,6 +2023,7 @@ void printer::operator()(variable_assignment_statement const &node) const
 {
     static char const symbol[]{ "XXX variable_assignment_statement" };
     symbol_scope<variable_assignment_statement> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1878,6 +2032,7 @@ void printer::operator()(variable_declaration const &node) const
 {
     static char const symbol[]{ "XXX variable_declaration" };
     symbol_scope<variable_declaration> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 
@@ -1886,6 +2041,7 @@ void printer::operator()(wait_statement const &node) const
 {
     static char const symbol[]{ "XXX wait_statement" };
     symbol_scope<wait_statement> _(*this, symbol);
+    tab(indent);
     //os << node;
 }
 

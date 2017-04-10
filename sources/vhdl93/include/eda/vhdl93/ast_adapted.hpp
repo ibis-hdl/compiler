@@ -51,6 +51,17 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::simple_name,
     name
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::term_rest,
+    operator_, factor_
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::term,
+    factor_, rest
+)
+
+
+
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::binary_operation,
     lhs, operator_, rhs
 )

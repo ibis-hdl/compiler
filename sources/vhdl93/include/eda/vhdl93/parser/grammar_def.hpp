@@ -486,7 +486,7 @@ typedef x3::rule<subtype_declaration_class> subtype_declaration_type;
 typedef x3::rule<subtype_indication_class> subtype_indication_type;
 typedef x3::rule<suffix_class> suffix_type;
 typedef x3::rule<target_class> target_type;
-typedef x3::rule<term_class> term_type;
+typedef x3::rule<term_class, ast::term> term_type;
 typedef x3::rule<timeout_clause_class> timeout_clause_type;
 typedef x3::rule<type_conversion_class> type_conversion_type;
 typedef x3::rule<type_declaration_class> type_declaration_type;
@@ -3511,13 +3511,13 @@ auto const target_def =
         ;
 #endif
 
-#if 0
-// term ::=
+
+// term ::=                                                              [§ 7.1]
 // factor { multiplying_operator factor }
 auto const term_def =
-        factor { multiplying_operator factor }
-;
-#endif
+    factor >> *( multiplying_operator > factor )
+    ;
+
 
 #if 0
 // timeout_clause ::=
@@ -3852,7 +3852,7 @@ BOOST_SPIRIT_DEFINE(
         //    subtype_indication,
         suffix,
         //    target,
-        //    term,
+        term,
         //    timeout_clause,
         //    type_conversion,
         //    type_declaration,
