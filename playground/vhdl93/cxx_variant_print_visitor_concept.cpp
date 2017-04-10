@@ -48,6 +48,16 @@ struct verbose_printer : scope_printer_base
 };
 
 
+struct silent_printer : scope_printer_base
+{
+    silent_printer(std::ostream& os, char const name[])
+    : scope_printer_base(os, name)
+    { }
+    ~silent_printer()
+    { }
+};
+
+
 struct verbose_variant_printer : scope_printer_base
 {
     char prefix() const { return '('; };
@@ -137,21 +147,39 @@ struct printer
         symbol_scope<variant> _(*this, symbol);
         // decltype doesn't work as expected (*1)
         //symbol_scope<decltype(v)> _(*this, symbol);
-        //boost::apply_visitor(*this, v);
-        boost::apply_visitor(printer_type(os), v);
+        boost::apply_visitor(*this, v);
+        // or recursive:
+        //boost::apply_visitor(printer_type(os), v);
     }
 
     std::ostream& os;
 };
 
 
+
+typedef printer<detail::verbose_printer, detail::verbose_variant_printer> verbose_printer;
+typedef printer<detail::verbose_printer, detail::silent_variant_printer> verbose_node_printer;
+typedef printer<detail::silent_printer, detail::silent_variant_printer> node_printer;
+
 int main()
 {
 
     variant v { "Hello" };
-    printer<> print{ std::cout };
-    print(v);
-    std::cout << '\n';
+    {
+        printer<> print{ std::cout };
+        print(v);
+        std::cout << "\n";
+    }
+    {
+        verbose_node_printer print{ std::cout };
+        print(v);
+        std::cout << "\n";
+    }
+    {
+        node_printer print{ std::cout };
+        print(v);
+        std::cout << "\n";
+    }
 }
 
 /*
