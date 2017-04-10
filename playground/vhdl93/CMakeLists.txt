@@ -17,3 +17,5 @@ add_executable(x3_literal                    EXCLUDE_FROM_ALL x3_literal.cpp)
 
 add_executable(ellipsis_compress             EXCLUDE_FROM_ALL ellipsis_compress.cpp)
 
+add_executable(cxx_variant_print_visitor_concept EXCLUDE_FROM_ALL cxx_variant_print_visitor_concept.cpp)
+
