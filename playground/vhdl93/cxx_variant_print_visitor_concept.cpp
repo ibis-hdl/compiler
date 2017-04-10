@@ -9,148 +9,152 @@
 namespace x3 = boost::spirit::x3;
 
 
+// variant to test proof-of-concept
 struct variant : public x3::variant<double, std::string>
-{ 
+{
     using base_type::base_type;
 };
 
-struct printer 
-{
-    printer(std::ostream& os) 
-    : os{ os }
-    , verbose_symbol {false}
-    , verbose_variant{ false }
-    {}
-    
-    struct scope_printer
-    {
-        scope_printer(std::ostream& os, char const name[], bool verbose, char const name_pfx[] = nullptr) 
-        : os{ os }
-        , name{ name }
-        , verbose{ verbose }
-        {
-            if(verbose) {
-                os << prefix;
-                if(name_pfx) 
-                    os << name_pfx;
-                os << name << "=";
-            }
-        }
-        
-        ~scope_printer()
-        {
-            if(verbose) {
-                os << postfix;
-            }  
-        }
-        
-        std::ostream& os;
-        const char* const name{ nullptr };
-        bool const verbose;
-        const char prefix{ '(' };  
-        const char postfix{ ')' };
 
-    };
-    
+namespace detail {
+
+
+struct scope_printer_base
+{
+    scope_printer_base(std::ostream& os, char const name[])
+    : os{ os }
+    , name{ name }
+    { }
+
+    std::ostream& os;
+    const char* const name{ nullptr };
+};
+
+
+struct verbose_printer : scope_printer_base
+{
+    char prefix() const { return '('; };
+    char postfix() const { return ')'; };
+
+    verbose_printer(std::ostream& os, char const name[])
+    : scope_printer_base(os, name)
+    {
+        os << prefix() << name << "=";
+    }
+    ~verbose_printer()
+    {
+        os << postfix();
+    }
+};
+
+
+struct verbose_variant_printer : scope_printer_base
+{
+    char prefix() const { return '('; };
+    char postfix() const { return ')'; };
+
+    verbose_variant_printer(std::ostream& os, char const name[])
+    : scope_printer_base(os, name)
+    {
+        os << prefix() << "v:" << name << "=";
+    }
+    ~verbose_variant_printer()
+    {
+        os << postfix();
+    }
+};
+
+
+struct silent_variant_printer : scope_printer_base
+{
+    silent_variant_printer(std::ostream& os, char const name[])
+    : scope_printer_base(os, name)
+    { }
+    ~silent_variant_printer()
+    { }
+};
+
+
+} // detail
+
+
+template<
+    typename NodePrinterT    = detail::verbose_printer,
+    typename VariantPrinterT = detail::verbose_variant_printer
+    >
+struct printer
+{
+    printer(std::ostream& os)
+    : os{ os }
+    { }
+
+    typedef NodePrinterT        node_printer;
+    typedef VariantPrinterT     variant_printer;
+
+    typedef printer<node_printer, variant_printer> printer_type;
+
     template<
         typename T,
         typename Enable = void
     >
     struct symbol_scope
-    : public scope_printer
+    : public node_printer
     {
-        symbol_scope(printer const& root, char const name[]) 
-        : scope_printer(root.os, name, root.verbose_symbol)
+        symbol_scope(printer const& root, char const name[])
+        : node_printer(root.os, name)
         { }
     };
-    
+
     template<
         typename T
     >
     struct symbol_scope<T, typename std::enable_if<x3::traits::is_variant<T>::value>::type>
-    : public scope_printer
+    : public variant_printer
     {
-        symbol_scope(printer const& root, char const name[]) 
-        : scope_printer(root.os, name, root.verbose_variant, "v:")
+        symbol_scope(printer const& root, char const name[])
+        : variant_printer(root.os, name)
         { }
     };
-    
-    void operator()(double d)
+
+
+    void operator()(double d) const
     {
         static char const symbol[]{ "double" };
         symbol_scope<double> _(*this, symbol);
         os << d;
     }
-    
-    void operator()(std::string const& str)
+
+    void operator()(std::string const& str) const
     {
         static char const symbol[]{ "string" };
         symbol_scope<std::string> _(*this, symbol);
         os << str;
     }
-    
-    void operator()(variant const& v)
+
+    void operator()(variant const& v) const
     {
         static char const symbol[]{ "variant" };
         symbol_scope<variant> _(*this, symbol);
-        // Note, decltype doesn't work here!! (*1)
+        // decltype doesn't work as expected (*1)
         //symbol_scope<decltype(v)> _(*this, symbol);
-        boost::apply_visitor(*this, v);
+        //boost::apply_visitor(*this, v);
+        boost::apply_visitor(printer_type(os), v);
     }
 
-    std::ostream& os;    
-    bool verbose_symbol;
-    bool verbose_variant;
+    std::ostream& os;
 };
 
 
 int main()
 {
-    
-    variant v { "Hello" };
-    printer print{ std::cout };
-    
-    print.verbose_symbol = true;
-    print.verbose_variant = true;
-    print(v);    
-    std::cout << '\n';
 
-    print.verbose_symbol = true;
-    print.verbose_variant = false;
+    variant v { "Hello" };
+    printer<> print{ std::cout };
     print(v);
     std::cout << '\n';
-
-    print.verbose_symbol = false;
-    print.verbose_variant = false;
-    print(v);    
-    std::cout << '\n';
 }
 
-/* (1*)
-----8<----
-#include <iostream>
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
-#include <boost/spirit/home/x3/support/traits/is_variant.hpp>
-
-namespace x3 = boost::spirit::x3;
-
-struct variant : public x3::variant<double, std::string>
-{
-    using base_type::base_type;
-};
-
-int main() 
-{
-    std::cout << std::boolalpha
-              << x3::traits::is_variant<variant>::value 
-              << '\n';
-    
-    variant v { "Hello" };
-    std::cout << std::boolalpha
-              << x3::traits::is_variant<decltype(v)>::value 
-              << '\n';
-}
----->8----
-true
-true
-*/
+/*
+ * *(1)
+ * (variant=(string=Hello))
+ */
