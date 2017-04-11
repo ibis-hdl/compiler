@@ -52,7 +52,7 @@ BOOST_DATA_TEST_CASE( string_literal,
     std::tie(parse_ok, parse_result) =  parse(input, parser::string_literal);
 
     BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("parse result = '" << parse_result << "'");
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expected, btt::per_element());
 }
 
@@ -79,7 +79,7 @@ BOOST_DATA_TEST_CASE( character_literal,
     std::tie(parse_ok, parse_result) =  parse(input, parser::character_literal);
 
     BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("parse result = '" << parse_result << "'");
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expected, btt::per_element());
 }
 
@@ -107,7 +107,7 @@ BOOST_DATA_TEST_CASE( integer,
     std::tie(parse_ok, parse_result) =  parse(input, parser::integer);
 
     BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("parse result = '" << parse_result << "'");
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expected, btt::per_element());
 }
 
@@ -135,7 +135,7 @@ BOOST_DATA_TEST_CASE( integer_failure,    // should fail
     std::tie(parse_ok, parse_result) = parse(input, parser::integer);
 
     BOOST_TEST(!parse_ok);
-    BOOST_TEST_INFO("parse result = '" << parse_result << "'");
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expected, btt::per_element());
 }
 
@@ -162,7 +162,7 @@ BOOST_DATA_TEST_CASE( identifier,
     std::tie(parse_ok, parse_result) = parse(input, parser::identifier);
 
     BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("parse result = '" << parse_result << "'");
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expected, btt::per_element());
 }
 
@@ -189,7 +189,7 @@ BOOST_DATA_TEST_CASE( identifier_fail,
     std::tie(parse_ok, parse_result) = parse(input, parser::identifier);
 
     BOOST_TEST(!parse_ok);
-    BOOST_TEST_INFO("parse result = '" << parse_result << "'");
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expected, btt::per_element());
 }
 
@@ -216,7 +216,7 @@ BOOST_DATA_TEST_CASE( identifier_list,
     std::tie(parse_ok, parse_result) = parse(input, parser::identifier_list);
 
     BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("parse result = '" << parse_result << "'");
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expected, btt::per_element());
 }
 
@@ -341,7 +341,7 @@ BOOST_DATA_TEST_CASE( bit_string_literal,
     std::tie(parse_ok, parse_result) =  parse(input, parser::bit_string_literal);
 
     BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("parse result = '" << parse_result << "'");
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expected, btt::per_element());
 }
 
@@ -368,7 +368,7 @@ BOOST_DATA_TEST_CASE( abstract_literal,
     std::tie(parse_ok, parse_result) =  parse(input, parser::abstract_literal);
 
     BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("parse result = '" << parse_result << "'");
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expected, btt::per_element());
 }
 
@@ -395,7 +395,7 @@ BOOST_DATA_TEST_CASE( physical_literal,
     std::tie(parse_ok, parse_result) =  parse(input, parser::physical_literal);
 
     BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("parse result = '" << parse_result << "'");
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expected, btt::per_element());
 }
 
@@ -422,7 +422,7 @@ BOOST_DATA_TEST_CASE(numeric_literal,
     std::tie(parse_ok, parse_result) =  parse(input, parser::numeric_literal);
 
     BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("parse result = '" << parse_result << "'");
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expected, btt::per_element());
 }
 
@@ -449,7 +449,7 @@ BOOST_DATA_TEST_CASE(literal,
     std::tie(parse_ok, parse_result) =  parse(input, parser::literal);
 
     BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("parse result = '" << parse_result << "'");
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expected, btt::per_element());
 }
 
@@ -477,7 +477,7 @@ BOOST_DATA_TEST_CASE(simple_name,
     std::tie(parse_ok, parse_result) =  parse(input, parser::simple_name);
 
     BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("parse result = '" << parse_result << "'");
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expected, btt::per_element());
 }
 
@@ -509,7 +509,7 @@ BOOST_DATA_TEST_CASE_F(foo_dataset,
     std::tie(parse_ok, parse_result) =  parse(input, parser::foo);
 
     BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("parse result = '" << parse_result << "'");
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expected, btt::per_element());
 }
 #endif

@@ -56,7 +56,7 @@ BOOST_DATA_TEST_CASE( enumeration_type_definition,
     std::tie(parse_ok, parse_result) = parse(input, parser::enumeration_type_definition);
 
     BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("parsed attr (result) = '" << parse_result << "'");
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
 
@@ -92,7 +92,7 @@ BOOST_DATA_TEST_CASE( name,
     std::tie(parse_ok, parse_result) = parse(input, parser::name);
 
     BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("parsed attr (result) = '" << parse_result << "'");
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
 
@@ -128,7 +128,7 @@ BOOST_DATA_TEST_CASE( primary,
     std::tie(parse_ok, parse_result) = parse(input, parser::primary);
 
     BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("parsed attr (result) = '" << parse_result << "'");
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
 
@@ -164,7 +164,7 @@ BOOST_DATA_TEST_CASE( factor,
     std::tie(parse_ok, parse_result) = parse(input, parser::factor);
 
     BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("parsed attr (result) = '" << parse_result << "'");
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
 
@@ -199,7 +199,7 @@ BOOST_DATA_TEST_CASE( term,
     std::tie(parse_ok, parse_result) = parse(input, parser::term);
 
     BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("parsed attr (result) = '" << parse_result << "'");
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
 
