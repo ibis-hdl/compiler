@@ -205,7 +205,6 @@ struct sensitivity_list;
 struct sequence_of_statements;
 struct sequential_statement;
 struct shift_expression;
-struct sign;
 struct signal_assignment_statement;
 struct signal_declaration;
 struct signal_kind;
@@ -463,7 +462,6 @@ public:
     void operator()(sequence_of_statements const& node) const;
     void operator()(sequential_statement const& node) const;
     void operator()(shift_expression const& node) const;
-    void operator()(sign const& node) const;
     void operator()(signal_assignment_statement const& node) const;
     void operator()(signal_declaration const& node) const;
     void operator()(signal_kind const& node) const;

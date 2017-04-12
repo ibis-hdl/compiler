@@ -1641,14 +1641,6 @@ void printer::operator()(shift_expression const &node) const
 }
 
 
-void printer::operator()(sign const &node) const
-{
-    static char const symbol[]{ "XXX sign" };
-    symbol_scope<sign> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
-}
-
-
 void printer::operator()(signal_assignment_statement const &node) const
 {
     static char const symbol[]{ "XXX signal_assignment_statement" };
