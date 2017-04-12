@@ -1816,10 +1816,10 @@ void printer::operator()(term const &node) const
         return;
     }
 
-    for(auto const& r: node.rest) {
-        os << "\noperator=" << r.operator_;
+    for(auto const& term_rest: node.rest) {
+        os << "\noperator=" << term_rest.operator_;
         os << "\nfactor=";
-        boost::apply_visitor(*this, r.factor_);
+        boost::apply_visitor(*this, term_rest.factor_);
     }
 
     os << "}";
