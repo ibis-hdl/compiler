@@ -165,7 +165,7 @@
 #include <eda/vhdl93/ast/numeric_literal.hpp>
 //#include <eda/vhdl93/ast/object_declaration.hpp>
 #include <eda/vhdl93/ast/operator_token.hpp>
-//#include <eda/vhdl93/ast/operator_symbol.hpp>
+#include <eda/vhdl93/ast/operator_symbol.hpp>
 //#include <eda/vhdl93/ast/options.hpp>
 //#include <eda/vhdl93/ast/package_body.hpp>
 //#include <eda/vhdl93/ast/package_body_declarative_item.hpp>
@@ -206,7 +206,6 @@
 //#include <eda/vhdl93/ast/sequence_of_statements.hpp>
 //#include <eda/vhdl93/ast/sequential_statement.hpp>
 //#include <eda/vhdl93/ast/shift_expression.hpp>
-//#include <eda/vhdl93/ast/sign.hpp>
 //#include <eda/vhdl93/ast/signal_assignment_statement.hpp>
 //#include <eda/vhdl93/ast/signal_declaration.hpp>
 //#include <eda/vhdl93/ast/signal_kind.hpp>

@@ -1311,9 +1311,9 @@ void printer::operator()(object_declaration const &node) const
 
 void printer::operator()(operator_symbol const &node) const
 {
-    static char const symbol[]{ "XXX operator_symbol" };
+    static char const symbol[]{ "operator_symbol" };
     symbol_scope<operator_symbol> _(*this, symbol);
-    //os << node;
+    os << node.symbol;
 }
 
 

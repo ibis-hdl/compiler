@@ -43,6 +43,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::identifier_list,
     list
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::operator_symbol,
+    symbol
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::physical_literal,
     literal, unit_name
 )

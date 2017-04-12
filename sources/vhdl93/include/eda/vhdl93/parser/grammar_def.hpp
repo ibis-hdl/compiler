@@ -423,7 +423,7 @@ typedef x3::rule<next_statement_class> next_statement_type;
 typedef x3::rule<null_statement_class> null_statement_type;
 typedef x3::rule<numeric_literal_class, ast::numeric_literal> numeric_literal_type;
 typedef x3::rule<object_declaration_class> object_declaration_type;
-typedef x3::rule<operator_symbol_class> operator_symbol_type;
+typedef x3::rule<operator_symbol_class, ast::operator_symbol> operator_symbol_type;
 typedef x3::rule<options_class> options_type;
 typedef x3::rule<package_body_class> package_body_type;
 typedef x3::rule<package_body_declarative_item_class> package_body_declarative_item_type;
@@ -1063,6 +1063,37 @@ auto const end_of_line =
  */
 template<typename T>
 auto as_rule = [](auto p) { return x3::rule<struct _, T>{ "as" } = x3::as_parser(p); };
+
+
+/*
+ * Common parsers, reused by several rules to hive it into semantic
+ *
+ */
+
+// string_literal ::=                                                   [§ 13.6]
+// " { graphic_character } "
+namespace detail {
+
+auto const common_string_literal = x3::rule<struct _, std::string> { "string_literal" } =
+    lexeme[
+        (      '"'
+            >> *( ( graphic_character - '"'  )
+                | ( char_('"') >> char_('"') )
+                )
+            >> '"'
+        )
+        |
+        (      '%' // LRM [§ 13.10]
+            >> *( ( graphic_character - '%'  )
+                | ( char_('%') >> char_('%') )
+                )
+            >> '%'
+        )
+    ]
+    ;
+
+
+}
 
 
 /*
@@ -2741,8 +2772,8 @@ auto const mode_def =
 //     | slice_name
 //     | attribute_name
 auto const name_def =  // FixMe: support other alternatives
-      simple_name
-//    | operator_symbol
+        simple_name
+//      | operator_symbol // FixMe: disabled, conflicts with primary.literal.string_literal
 //    | selected_name
 //    | indexed_name
 //    | slice_name
@@ -2790,13 +2821,13 @@ auto const object_declaration_def =
         ;
 #endif
 
-#if 0
+
 // operator_symbol ::=                                                   [§ 2.1]
 // string_literal
 auto const operator_symbol_def =
-    string_literal
+    detail::common_string_literal
     ;
-#endif
+
 
 #if 0
 // options ::=
@@ -3371,21 +3402,7 @@ auto const slice_name_def =
 // string_literal ::=                                                   [§ 13.6]
 // " { graphic_character } "
 auto const string_literal_def =
-    lexeme[
-        (      '"'
-            >> *( ( graphic_character - '"'  )
-                | ( char_('"') >> char_('"') )
-                )
-            >> '"'
-        )
-        |
-        (      '%' // LRM [§ 13.10]
-            >> *( ( graphic_character - '%'  )
-                | ( char_('%') >> char_('%') )
-                )
-            >> '%'
-        )
-    ]
+    detail::common_string_literal
     ;
 
 
@@ -3506,7 +3523,7 @@ auto const subtype_indication_def =
 auto const suffix_def =
       simple_name
     | character_literal
-//  | operator_symbol   // FixMe: No idea about operator_symbol, aka string_literal
+    | operator_symbol
     | ALL_token
     ;
 
@@ -3800,7 +3817,7 @@ BOOST_SPIRIT_DEFINE(
         //    null_statement,
         numeric_literal,
         //    object_declaration,
-        //    operator_symbol,
+        operator_symbol,
         //    options,
         //    package_body,
         //    package_body_declarative_item,

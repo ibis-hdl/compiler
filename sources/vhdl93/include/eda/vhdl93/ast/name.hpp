@@ -29,7 +29,7 @@ struct name :
     x3::variant<
 //        x3::forward_ast<attribute_name>,
 //        x3::forward_ast<indexed_name>,
-//        x3::forward_ast<operator_symbol>,
+        x3::forward_ast<operator_symbol>,
 //        x3::forward_ast<selected_name>,
         x3::forward_ast<simple_name>
 //        x3::forward_ast<slice_name>
