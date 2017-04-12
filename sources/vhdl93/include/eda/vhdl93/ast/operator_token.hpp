@@ -9,40 +9,45 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_OPERATOR_TOKEN_HPP_
 
 
+#include <eda/utils/cxx_bug_fatal.hpp>
+
 #include <iosfwd>
+
+
+// check on C++17 compiler features
+#if defined(__has_cpp_attribute)
+#if     __has_cpp_attribute(fallthrough)
+#define     FALLTHROUGH [[fallthrough]]
+#elif     __has_cpp_attribute(clang::fallthrough)
+#define     FALLTHROUGH [[clang::fallthrough]]
+#else
+#define FALLTHROUGH        // [[fallthrough]]
+#endif
+#else
+#define FALLTHROUGH        // [[fallthrough]]
+#endif
 
 
 namespace eda { namespace vhdl93 { namespace ast {
 
 
 enum class operator_token {
-    // logical_operator
-    and_,
-    or_,
-    nand,
-    nor,
-    xor_,
-    xnor,
-    // relational_operator
-    equal,
-    not_equals,
-    less,
-    less_equals,
-    greater,
-    greater_equals,
     // miscellaneous_operator
     exponent,
     abs,
     not_,
-    // adding_operator
-    add,
-    sub,
-    concat,
     // multiplying_operator
     mul,
     div,
     mod,
     rem,
+    // sign_operator
+    sign_pos,
+    sign_neg,
+    // adding_operator
+    add,
+    sub,
+    concat,
     // shift_operator
     sll,
     srl,
@@ -50,10 +55,27 @@ enum class operator_token {
     sra,
     rol,
     ror,
+    // relational_operator
+    equal,
+    not_equals,
+    less,
+    less_equals,
+    greater,
+    greater_equals,
+    // logical_operator
+    and_,
+    or_,
+    nand,
+    nor,
+    xor_,
+    xnor
 };
 
 
 std::ostream& operator<<(std::ostream& os, operator_token op_token);
+
+
+unsigned precedence(operator_token token);
 
 
 } } } // namespace eda.vhdl93.ast

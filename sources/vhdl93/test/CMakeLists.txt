@@ -41,6 +41,7 @@ set_property(TARGET boost-system PROPERTY IMPORTED_LOCATION ${Boost_SYSTEM_LIBRA
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
     eda::vhdl93_grammar
+    eda::common # FixMe: shouldn't this depency propagated by eda::vhdl93_grammar?
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}
 )

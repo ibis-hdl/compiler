@@ -232,7 +232,6 @@ struct sensitivity_list_class;
 struct sequence_of_statements_class;
 struct sequential_statement_class;
 struct shift_expression_class;
-struct sign_class;
 struct signal_assignment_statement_class;
 struct signal_declaration_class;
 struct signal_kind_class;
@@ -465,7 +464,6 @@ typedef x3::rule<sensitivity_list_class> sensitivity_list_type;
 typedef x3::rule<sequence_of_statements_class> sequence_of_statements_type;
 typedef x3::rule<sequential_statement_class> sequential_statement_type;
 typedef x3::rule<shift_expression_class> shift_expression_type;
-typedef x3::rule<sign_class> sign_type;
 typedef x3::rule<signal_assignment_statement_class> signal_assignment_statement_type;
 typedef x3::rule<signal_declaration_class> signal_declaration_type;
 typedef x3::rule<signal_kind_class> signal_kind_type;
@@ -698,7 +696,6 @@ sensitivity_list_type const sensitivity_list { "sensitivity_list" };
 sequence_of_statements_type const sequence_of_statements { "sequence_of_statements" };
 sequential_statement_type const sequential_statement { "sequential_statement" };
 shift_expression_type const shift_expression { "shift_expression" };
-sign_type const sign { "sign" };
 signal_assignment_statement_type const signal_assignment_statement { "signal_assignment_statement" };
 signal_declaration_type const signal_declaration { "signal_declaration" };
 signal_kind_type const signal_kind { "signal_kind" };
@@ -1010,6 +1007,18 @@ struct shift_operator_symbols : x3::symbols<ast::operator_token> {
     }
 } const shift_operator;
 
+
+struct sign_operator_symbols : x3::symbols<ast::operator_token> {
+
+    sign_operator_symbols() {
+
+        name("sign_operator");
+
+        add("+", ast::operator_token::sign_pos)
+           ("-", ast::operator_token::sign_neg)
+           ;
+    }
+} const sign;
 
 
 
@@ -3282,8 +3291,9 @@ auto const shift_expression_def =
 #endif
 
 #if 0
-// sign ::=
+// sign ::=                                                              [§ 7.2]
 // + | -
+// Note, unused since directly embedded into simple_expression rule
 auto const sign_def =
         + | -
         ;
