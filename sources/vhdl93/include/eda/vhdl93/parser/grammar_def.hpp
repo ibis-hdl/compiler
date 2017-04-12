@@ -909,11 +909,11 @@ struct logical_operator_symbols : x3::symbols<ast::operator_token> {
 
         name("logical_operator");
 
-        add("and", ast::operator_token::and_)
-           ("or", ast::operator_token::or_)
+        add("and",  ast::operator_token::and_)
+           ("or",   ast::operator_token::or_)
            ("nand", ast::operator_token::nand)
-           ("nor", ast::operator_token::nor)
-           ("xor", ast::operator_token::xor_)
+           ("nor",  ast::operator_token::nor)
+           ("xor",  ast::operator_token::xor_)
            ("xnor", ast::operator_token::xnor)
            ;
     }
@@ -926,11 +926,11 @@ struct relational_operator_symbols : x3::symbols<ast::operator_token> {
 
         name("relational_operator");
 
-        add("=", ast::operator_token::equal)
+        add("=",  ast::operator_token::equal)
            ("/=", ast::operator_token::not_equals)
-           ("<", ast::operator_token::less)
+           ("<",  ast::operator_token::less)
            ("<=", ast::operator_token::less_equals)
-           (">", ast::operator_token::greater)
+           (">",  ast::operator_token::greater)
            (">=", ast::operator_token::greater_equals)
            ;
     }
@@ -982,8 +982,8 @@ struct multiplying_operator_symbols : x3::symbols<ast::operator_token> {
 
         name("multiplying_operator");
 
-        add("*", ast::operator_token::mul)
-           ("/", ast::operator_token::div)
+        add("*",   ast::operator_token::mul)
+           ("/",   ast::operator_token::div)
            ("mod", ast::operator_token::mod)
            ("rem", ast::operator_token::rem)
            ;
