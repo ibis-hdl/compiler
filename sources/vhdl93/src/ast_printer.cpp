@@ -1819,7 +1819,7 @@ void printer::operator()(term const &node) const
     for(auto const& r: node.rest) {
         os << "\noperator=" << r.operator_;
         os << "\nfactor=";
-        boost::apply_visitor(*this, node.factor_);
+        boost::apply_visitor(*this, r.factor_);
     }
 
     os << "}";
