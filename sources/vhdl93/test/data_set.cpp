@@ -20,7 +20,7 @@ namespace fs = boost::filesystem;
 
 dataset_loader::dataset_loader(fs::path const& path)
 {
-    fs::path source_dir{ R"(/home/olaf/work/CXX/IBIS_SOURCE/sources/vhdl93)" };
+    fs::path source_dir{ R"(/home/olaf/work/CXX/IBIS_SOURCE/sources/vhdl93/test)" };
 
     BOOST_TEST_INFO("dataset_loader load test files from " << path);
     read_files(source_dir / path);

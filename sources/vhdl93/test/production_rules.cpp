@@ -31,7 +31,7 @@ namespace ast    = eda::vhdl93::ast;
 struct enumeration_type_definition_dataset : public ::x3_test::dataset_loader
 {
     enumeration_type_definition_dataset()
-    : dataset_loader{ "test/enumeration_type_definition" }
+    : dataset_loader{ "test_case/enumeration_type_definition" }
     { }
 } const enumeration_type_definition_dataset;
 
@@ -67,7 +67,7 @@ BOOST_DATA_TEST_CASE( enumeration_type_definition,
 struct name_definition_dataset : public ::x3_test::dataset_loader
 {
     name_definition_dataset()
-    : dataset_loader{ "test/name" }
+    : dataset_loader{ "test_case/name" }
     { }
 } const name_definition_dataset;
 
@@ -103,7 +103,7 @@ BOOST_DATA_TEST_CASE( name,
 struct primary_dataset : public ::x3_test::dataset_loader
 {
     primary_dataset()
-    : dataset_loader{ "test/primary" }
+    : dataset_loader{ "test_case/primary" }
     { }
 } const primary_dataset;
 
@@ -139,7 +139,7 @@ BOOST_DATA_TEST_CASE( primary,
 struct factor_dataset : public ::x3_test::dataset_loader
 {
     factor_dataset()
-    : dataset_loader{ "test/factor" }
+    : dataset_loader{ "test_case/factor" }
     { }
 } const factor_dataset;
 
@@ -174,7 +174,7 @@ BOOST_DATA_TEST_CASE( factor,
 struct term_dataset : public ::x3_test::dataset_loader
 {
     term_dataset()
-    : dataset_loader{ "test/term" }
+    : dataset_loader{ "test_case/term" }
     { }
 } const term_dataset;
 

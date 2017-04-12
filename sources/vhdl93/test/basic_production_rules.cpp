@@ -24,7 +24,7 @@ namespace parser = eda::vhdl93::parser;
 namespace ast    = eda::vhdl93::ast;
 
 
-::x3_test::dataset_loader string_literal_dataset{ "test/string_literal" };
+::x3_test::dataset_loader string_literal_dataset{ "test_case/string_literal" };
 /* FixMe: What about the following string literals:
  * "FIRST PART OF A SEQUENCE OF CHARACTERS " &
  * "THAT CONTINUES ON THE NEXT LINE"
@@ -57,7 +57,7 @@ BOOST_DATA_TEST_CASE( string_literal,
 }
 
 
-::x3_test::dataset_loader character_literal_dataset{ "test/character_literal" };
+::x3_test::dataset_loader character_literal_dataset{ "test_case/character_literal" };
 
 BOOST_DATA_TEST_CASE( character_literal,
       character_literal_dataset.input()
@@ -84,7 +84,7 @@ BOOST_DATA_TEST_CASE( character_literal,
 }
 
 
-::x3_test::dataset_loader integer_dataset{ "test/integer" };
+::x3_test::dataset_loader integer_dataset{ "test_case/integer" };
 
 BOOST_DATA_TEST_CASE( integer,
       integer_dataset.input()
@@ -112,7 +112,7 @@ BOOST_DATA_TEST_CASE( integer,
 }
 
 
-::x3_test::dataset_loader integer_failure_dataset{ "test/integer_failure" };
+::x3_test::dataset_loader integer_failure_dataset{ "test_case/integer_failure" };
 
 BOOST_DATA_TEST_CASE( integer_failure,    // should fail
       integer_failure_dataset.input()
@@ -140,7 +140,7 @@ BOOST_DATA_TEST_CASE( integer_failure,    // should fail
 }
 
 
-::x3_test::dataset_loader identifier_dataset{ "test/identifier" };
+::x3_test::dataset_loader identifier_dataset{ "test_case/identifier" };
 
 BOOST_DATA_TEST_CASE( identifier,
       identifier_dataset.input()
@@ -167,7 +167,7 @@ BOOST_DATA_TEST_CASE( identifier,
 }
 
 
-::x3_test::dataset_loader identifier_fail_dataset{ "test/identifier_failure" };
+::x3_test::dataset_loader identifier_fail_dataset{ "test_case/identifier_failure" };
 
 BOOST_DATA_TEST_CASE( identifier_fail,
       identifier_fail_dataset.input()
@@ -194,7 +194,7 @@ BOOST_DATA_TEST_CASE( identifier_fail,
 }
 
 
-::x3_test::dataset_loader identifier_list_dataset{ "test/identifier_list" };
+::x3_test::dataset_loader identifier_list_dataset{ "test_case/identifier_list" };
 
 BOOST_DATA_TEST_CASE( identifier_list,
       identifier_list_dataset.input()
@@ -319,7 +319,7 @@ BOOST_AUTO_TEST_CASE( decimal_literal )
 
 #endif
 
-::x3_test::dataset_loader bit_string_literal_dataset{ "test/bit_string_literal" };
+::x3_test::dataset_loader bit_string_literal_dataset{ "test_case/bit_string_literal" };
 
 BOOST_DATA_TEST_CASE( bit_string_literal,
       bit_string_literal_dataset.input()
@@ -346,7 +346,7 @@ BOOST_DATA_TEST_CASE( bit_string_literal,
 }
 
 
-::x3_test::dataset_loader abstract_literal_dataset{ "test/abstract_literal" };
+::x3_test::dataset_loader abstract_literal_dataset{ "test_case/abstract_literal" };
 
 BOOST_DATA_TEST_CASE( abstract_literal,
       abstract_literal_dataset.input()
@@ -373,7 +373,7 @@ BOOST_DATA_TEST_CASE( abstract_literal,
 }
 
 
-::x3_test::dataset_loader physical_literal_dataset{ "test/physical_literal" };
+::x3_test::dataset_loader physical_literal_dataset{ "test_case/physical_literal" };
 
 BOOST_DATA_TEST_CASE( physical_literal,
       physical_literal_dataset.input()
@@ -400,7 +400,7 @@ BOOST_DATA_TEST_CASE( physical_literal,
 }
 
 
-::x3_test::dataset_loader numeric_dataset{ "test/numeric_literal" };
+::x3_test::dataset_loader numeric_dataset{ "test_case/numeric_literal" };
 
 BOOST_DATA_TEST_CASE(numeric_literal,
       numeric_dataset.input()
@@ -427,7 +427,7 @@ BOOST_DATA_TEST_CASE(numeric_literal,
 }
 
 
-::x3_test::dataset_loader literal_dataset{ "test/literal" };
+::x3_test::dataset_loader literal_dataset{ "test_case/literal" };
 
 BOOST_DATA_TEST_CASE(literal,
       literal_dataset.input()
@@ -454,7 +454,7 @@ BOOST_DATA_TEST_CASE(literal,
 }
 
 
-::x3_test::dataset_loader simple_name_dataset{ "test/simple_name" };
+::x3_test::dataset_loader simple_name_dataset{ "test_case/simple_name" };
 /* Note, simple_name is same as identifier. */
 
 BOOST_DATA_TEST_CASE(simple_name,
@@ -484,7 +484,7 @@ BOOST_DATA_TEST_CASE(simple_name,
 #if 0
 struct foo_dataset : public ::x3_test::dataset_loader {
     /* Note, foo is same as identifier. */
-    foo_dataset() : dataset_loader { "test/foo" }
+    foo_dataset() : dataset_loader { "test_case/foo" }
     { }
 };
 
