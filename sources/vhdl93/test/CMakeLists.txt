@@ -18,6 +18,18 @@ set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD_REQUIRED ON)
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra)
 
 
+## since boost.test does not expose the argc/argv values outside of the
+## test case we have to provide the path to the test case files manualy
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/test_case_path.hpp.in
+    ${CMAKE_CURRENT_BINARY_DIR}/test_case_path.hpp
+    @ONLY)
+
+# and adjust include path
+target_include_directories(${PROJECT_NAME} PRIVATE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>)
+
+
 #add_dependencies(${PROJECT_NAME} boost-spirit-x3)
 #add_dependencies(${PROJECT_NAME} gsl)
 
@@ -37,7 +49,6 @@ set_property(TARGET boost-system PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${Boost_
 set_property(TARGET boost-system PROPERTY IMPORTED_LOCATION ${Boost_SYSTEM_LIBRARY})
 
 
-
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
     eda::vhdl93_grammar
@@ -50,6 +61,8 @@ add_test(NAME test_vhdl93_parser
     COMMAND ${PROJECT_NAME} -- ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+
+## Special target no used here, maybe later to test error messages
 add_executable(x3_debug EXCLUDE_FROM_ALL x3_debug.cpp)
 target_link_libraries(x3_debug
     PRIVATE

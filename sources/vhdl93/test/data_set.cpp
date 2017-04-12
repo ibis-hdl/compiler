@@ -7,6 +7,7 @@
 
 #include "data_set.hpp"
 #include "app_mock.hpp"
+#include "test_case_path.hpp"
 
 #include <boost/filesystem/fstream.hpp>
 #include <iostream>
@@ -20,7 +21,7 @@ namespace fs = boost::filesystem;
 
 dataset_loader::dataset_loader(fs::path const& path)
 {
-    fs::path source_dir{ R"(/home/olaf/work/CXX/IBIS_SOURCE/sources/vhdl93/test)" };
+    fs::path source_dir{ TEST_CASE_PATH };
 
     BOOST_TEST_INFO("dataset_loader load test files from " << path);
     read_files(source_dir / path);
