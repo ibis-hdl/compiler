@@ -287,7 +287,16 @@ void printer::operator()(based_literal const &node) const
     static char const symbol[]{ "based_literal" };
     symbol_scope<based_literal> _(*this, symbol);
 
-    os << "{b=" << node.base << ", n=" << node.literal << "}";
+    os << "{"
+       << "b=" << node.base << ", "
+       << "n=" << node.number
+       ;
+
+    if(!node.exponent.empty()) {
+        os << ", e=" << node.exponent;
+    }
+
+    os << "}";
 }
 
 
@@ -1711,7 +1720,7 @@ void printer::operator()(string_literal const &node) const
     static char const symbol[]{ "string_literal" };
     symbol_scope<string_literal> _(*this, symbol);
 
-    os << node;
+    os << node.literal;
 }
 
 

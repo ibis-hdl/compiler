@@ -16,7 +16,7 @@
 
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::based_literal,
-    base, literal
+    base, number, exponent
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::bit_string_literal,
@@ -53,6 +53,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::physical_literal,
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::simple_name,
     name
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::string_literal,
+    literal
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::term_rest,
