@@ -3373,12 +3373,14 @@ auto const signature_def =
         ;
 #endif
 
-#if 0
+#if 1
 // simple_expression ::=
 // [ sign ] term { adding_operator term }
 auto const simple_expression_def =
-        -( sign ) term { adding_operator term }
-;
+       -sign
+    >> term
+    >> *( adding_operator >> term )
+    ;
 #endif
 
 
@@ -3863,7 +3865,7 @@ BOOST_SPIRIT_DEFINE(
         //    signal_kind,
         //    signal_list,
         //    signature,
-        //    simple_expression,
+        simple_expression,
         simple_name,
         //    slice_name,
         string_literal,
