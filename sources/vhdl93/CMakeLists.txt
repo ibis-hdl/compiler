@@ -31,7 +31,11 @@ target_compile_definitions(${PROJECT_NAME}
     PRIVATE FOO)
 
 target_compile_options(${PROJECT_NAME}
-    PRIVATE -Wall -Wextra -ftemplate-backtrace-limit=1)
+    PRIVATE -Wall -Wextra)
+
+# limit gcc template error depth printing
+target_compile_options(${PROJECT_NAME}
+    PRIVATE -ftemplate-backtrace-limit=1) # -ferror-limit=1)
 
 ## Depencies
 target_link_libraries(${PROJECT_NAME}
