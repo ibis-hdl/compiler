@@ -11,7 +11,8 @@
 
 #include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
 #include <boost/spirit/home/x3/support/ast/variant.hpp> // x3::forward_ast
-#include <string>
+
+#include <eda/support/boost/spirit_x3/string_view.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -26,7 +27,7 @@ struct abstract_literal;
 struct physical_literal : x3::position_tagged
 {
     x3::forward_ast<abstract_literal> literal;
-    std::string                     unit_name;
+    std::string_view                  unit_name;
 };
 
 
