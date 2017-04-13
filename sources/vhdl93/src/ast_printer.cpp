@@ -1917,9 +1917,9 @@ void printer::operator()(waveform_element const &node) const
 /*
  * Non AST members, used e.g. for unit tests (namely ast::integer)
  */
-void printer::operator()(std::string const &node) const
+void printer::operator()(std::string_view const &node) const
 {
-    static char const symbol[]{ "std::string" };
+    static char const symbol[]{ "std::string_view" };
     symbol_scope<std::string> _(*this, symbol);
 
     os << node;

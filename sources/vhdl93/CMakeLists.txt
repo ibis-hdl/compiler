@@ -31,7 +31,7 @@ target_compile_definitions(${PROJECT_NAME}
     PRIVATE FOO)
 
 target_compile_options(${PROJECT_NAME}
-    PRIVATE -Wall -Wextra)
+    PRIVATE -Wall -Wextra -ftemplate-backtrace-limit=1)
 
 ## Depencies
 target_link_libraries(${PROJECT_NAME}

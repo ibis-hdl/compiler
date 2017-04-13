@@ -1,1 +1,1 @@
-(v:abstract_literal=(decimal_literal={l=1000, tag=int}))
+(v:abstract_literal=(decimal_literal={l=1_000, tag=int}))

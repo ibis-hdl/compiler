@@ -5,4 +5,4 @@ lhs=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_litera
 rhs=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int})))))
 })
 operator=*
-factor=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(based_literal={b=16, n=AFFE#})))))})
+factor=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(based_literal={b=16, n=AFFE})))))})

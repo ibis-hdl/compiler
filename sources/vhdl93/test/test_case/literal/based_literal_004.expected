@@ -1,1 +1,1 @@
-(v:literal=(v:numeric_literal=(v:abstract_literal=(based_literal={b=016, n=0FF#e-23}))))
+(v:literal=(v:numeric_literal=(v:abstract_literal=(based_literal={b=016, n=0_FF, e=e-23}))))

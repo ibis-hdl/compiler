@@ -494,7 +494,7 @@ public:
     void operator()(waveform_element const& node) const;
 
     // keywords and miscellaneous
-    void operator()(std::string const& node) const;
+    void operator()(std::string_view const& node) const;
     void operator()(keyword_token token) const;
 
     void operator()(binary_operation const& node) const;
