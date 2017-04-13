@@ -37,7 +37,6 @@ struct attribute_declaration;
 struct attribute_designator;
 struct attribute_name;
 struct attribute_specification;
-struct base;
 struct base_unit_declaration;
 struct based_integer;
 struct based_literal;
@@ -294,7 +293,6 @@ public:
     void operator()(attribute_designator const& node) const;
     void operator()(attribute_name const& node) const;
     void operator()(attribute_specification const& node) const;
-    void operator()(base const& node) const;
     void operator()(base_unit_declaration const& node) const;
     void operator()(based_integer const& node) const;
     void operator()(based_literal const& node) const;

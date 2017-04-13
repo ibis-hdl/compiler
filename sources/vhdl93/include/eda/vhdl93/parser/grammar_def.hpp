@@ -58,7 +58,6 @@ struct attribute_declaration_class;
 struct attribute_designator_class;
 struct attribute_name_class;
 struct attribute_specification_class;
-struct base_class;
 struct base_unit_declaration_class;
 struct based_integer_class;
 struct based_literal_class;
@@ -290,9 +289,8 @@ typedef x3::rule<attribute_declaration_class> attribute_declaration_type;
 typedef x3::rule<attribute_designator_class> attribute_designator_type;
 typedef x3::rule<attribute_name_class> attribute_name_type;
 typedef x3::rule<attribute_specification_class> attribute_specification_type;
-typedef x3::rule<base_class, std::string> base_type;
 typedef x3::rule<base_unit_declaration_class> base_unit_declaration_type;
-typedef x3::rule<based_integer_class, std::string> based_integer_type;
+typedef x3::rule<based_integer_class, std::string_view> based_integer_type;
 typedef x3::rule<based_literal_class, ast::based_literal> based_literal_type;
 typedef x3::rule<basic_character_class> basic_character_type;
 typedef x3::rule<basic_graphic_character_class, char> basic_graphic_character_type;
@@ -398,7 +396,7 @@ typedef x3::rule<index_subtype_definition_class> index_subtype_definition_type;
 typedef x3::rule<indexed_name_class> indexed_name_type;
 typedef x3::rule<instantiated_unit_class> instantiated_unit_type;
 typedef x3::rule<instantiation_list_class> instantiation_list_type;
-typedef x3::rule<integer_class, std::string> integer_type;
+typedef x3::rule<integer_class, std::string_view> integer_type;
 typedef x3::rule<integer_type_definition_class> integer_type_definition_type;
 typedef x3::rule<interface_constant_declaration_class> interface_constant_declaration_type;
 typedef x3::rule<interface_declaration_class> interface_declaration_type;
@@ -522,7 +520,6 @@ attribute_declaration_type const attribute_declaration { "attribute_declaration"
 attribute_designator_type const attribute_designator { "attribute_designator" };
 attribute_name_type const attribute_name { "attribute_name" };
 attribute_specification_type const attribute_specification { "attribute_specification" };
-base_type const base { "base" };
 base_unit_declaration_type const base_unit_declaration { "base_unit_declaration" };
 based_integer_type const based_integer { "based_integer" };
 based_literal_type const based_literal { "based_literal" };
@@ -1025,6 +1022,7 @@ struct sign_operator_symbols : x3::symbols<ast::operator_token> {
 using iso8859_1::char_;
 using iso8859_1::lit;
 using x3::lexeme;
+using x3::raw;
 
 
 /*
@@ -1090,7 +1088,7 @@ namespace detail {
     // string_literal ::=                                               [§ 13.6]
     // " { graphic_character } "
     auto const common_string_literal = x3::rule<struct _, std::string_view> { "string_literal" } =
-        x3::raw[ lexeme[
+        raw[ lexeme[
             (      '"'
                 >> *( ( graphic_character - '"'  )
                     | ( char_('"') >> char_('"') )
@@ -1306,7 +1304,7 @@ auto const attribute_specification_def =
 ;
 #endif
 
-#if 0
+#if 0 /* Note: UNUSED, embedded directly into based_literal rule */
 // base ::=                                                           [§ 13.4.2]
 // integer
 auto const base_def =
@@ -1334,10 +1332,10 @@ auto const base_unit_declaration_def =
 // based_integer ::=                                                  [§ 13.4.2]
 // extended_digit { [ underline ] extended_digit }
 auto const based_integer_def =
-     lexeme[
-         extended_digit >> *( -lit('_') >> extended_digit )
-     ]
-     ;
+    raw [ lexeme[
+        extended_digit >> *( -lit('_') >> extended_digit )
+    ]]
+    ;
 
 
 
@@ -1346,17 +1344,12 @@ auto const based_integer_def =
 namespace detail {
 
     auto const based_literal_base = as_rule<std::string_view>(
-        x3::raw[
-            lexeme[ based_integer ]
-        ]);
+        raw[ lexeme[ integer ]]);
 
     auto const based_literal_number = as_rule<std::string_view>(
-        x3::raw[
-            lexeme[
-                   based_integer >> -(char_('.') >> based_integer)
-
-            ]
-        ]);
+        raw[ lexeme[
+            based_integer >> -(char_('.') >> based_integer)
+        ]]);
 }
 
 auto const based_literal_def =
@@ -1394,7 +1387,7 @@ auto const basic_graphic_character_def =
 // letter { [ underline ] letter_or_digit }
 namespace detail {
     auto const basic_identifier_feasible = x3::rule<struct _, std::string_view> { "basic_identifier" } =
-        x3::raw[ lexeme [
+        raw[ lexeme [
                letter
             >> !char_('"') // reject bit_string_literal
             >> *( letter_or_digit | char_("_") )
@@ -1429,17 +1422,17 @@ namespace detail {
      *      splitting it into several sub rules. */
 
     auto const bit_value_bin = x3::rule<struct _, std::string_view> { "bit_value" } =
-        x3::raw[ lexeme[
+        raw[ lexeme[
             char_("01") >> *( -lit("_") >> char_("01") )
         ]];
 
     auto const bit_value_oct = x3::rule<struct _, std::string_view> { "bit_value" } =
-        x3::raw[lexeme[
+        raw[ lexeme[
             char_("0-7") >> *( -lit("_") >> char_("0-7") )
         ]];
 
     auto const bit_value_hex = x3::rule<struct _, std::string_view> { "bit_value" } =
-        x3::raw[lexeme[
+        raw[ lexeme[
             char_("0-9A-Fa-f") >> *( -lit("_") >> char_("0-9A-Fa-f") )
         ]];
 }
@@ -1880,12 +1873,12 @@ auto const context_item_def =
 namespace detail {
 
     auto const decimal_literal_real = as_rule<std::string_view>(
-        x3::raw[ lexeme[
+        raw[ lexeme[
             (integer >> char_('.') >> integer >> -exponent)
         ]]);
 
     auto const decimal_literal_int = as_rule<std::string_view>(
-        x3::raw[ lexeme[
+        raw[ lexeme[
              (integer >> -exponent)
         ]]);
 }
@@ -2214,11 +2207,9 @@ auto const exit_statement_def =
 // exponent ::=                                                       [§ 13.4.1]
 // E [ + ] integer | E - integer
 auto const exponent_def =
-    x3::raw[
-        lexeme [
-            char_("Ee") >> -char_("-+") >> integer
-        ]
-    ]
+    raw[ lexeme [
+         char_("Ee") >> -char_("-+") >> integer
+    ]]
     ;
 
 
@@ -2258,7 +2249,7 @@ namespace detail {
          ;
 
     auto const extended_identifier_atom = x3::rule<struct _, std::string_view> { "extended_identifier (atom)" } =
-        x3::raw[ lexeme [
+        raw[ lexeme [
                char_('\\')
             >> extended_identifier_chars
             >> char_('\\')
@@ -2267,7 +2258,7 @@ namespace detail {
 }
 
 auto const extended_identifier_def =
-    x3::raw[ lexeme [
+    raw[ lexeme [
             detail::extended_identifier_atom
         >> *(detail::extended_identifier_atom % (char_('\\') >> char_('\\')))
     ]]
@@ -2590,9 +2581,9 @@ auto const instantiation_list_def =
 // integer ::=                                                         § 13.4.1]
 // digit { [ underline ] digit }
 auto const integer_def =
-    lexeme [
+    raw[ lexeme [
         char_("0-9") >> *( -lit("_") >> char_("0-9") )
-    ]
+    ]]
     ;
 
 
@@ -2966,9 +2957,9 @@ namespace detail {
     /* Note, the LRM doesn't specify the allowed characters, hence it's assumed
      * that it follows the natural conventions. */
     auto const unit_name = as_rule<std::string_view>(
-        x3::raw[
-            lexeme[ +char_("A-Za-z") ]
-        ]);
+        raw[ lexeme[
+            +char_("A-Za-z")
+        ]]);
 
 }
 

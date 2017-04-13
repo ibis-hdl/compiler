@@ -258,14 +258,6 @@ void printer::operator()(attribute_specification const &node) const
 }
 
 
-void printer::operator()(base const &node) const
-{
-    static char const symbol[]{ "XXX base" };
-    symbol_scope<base> _(*this, symbol);
-    //os << node;
-}
-
-
 void printer::operator()(base_unit_declaration const &node) const
 {
     static char const symbol[]{ "XXX base_unit_declaration" };
