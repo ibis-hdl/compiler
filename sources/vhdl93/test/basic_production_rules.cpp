@@ -31,7 +31,7 @@ namespace ast    = eda::vhdl93::ast;
  *
  * "Sequence that includes the" & ACK & "control character"
  */
-
+#if 0
 BOOST_DATA_TEST_CASE( string_literal,
       string_literal_dataset.input()
     ^ string_literal_dataset.expect()
@@ -55,7 +55,7 @@ BOOST_DATA_TEST_CASE( string_literal,
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expected, btt::per_element());
 }
-
+#endif
 
 ::x3_test::dataset_loader character_literal_dataset{ "test_case/character_literal" };
 

@@ -1658,14 +1658,6 @@ void printer::operator()(signal_declaration const &node) const
 }
 
 
-void printer::operator()(signal_kind const &node) const
-{
-    static char const symbol[]{ "XXX signal_kind" };
-    symbol_scope<signal_kind> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
-}
-
-
 void printer::operator()(signal_list const &node) const
 {
     static char const symbol[]{ "XXX signal_list" };

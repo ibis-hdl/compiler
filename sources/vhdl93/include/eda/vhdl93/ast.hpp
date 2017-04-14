@@ -208,7 +208,6 @@
 //#include <eda/vhdl93/ast/shift_expression.hpp>
 //#include <eda/vhdl93/ast/signal_assignment_statement.hpp>
 //#include <eda/vhdl93/ast/signal_declaration.hpp>
-//#include <eda/vhdl93/ast/signal_kind.hpp>
 //#include <eda/vhdl93/ast/signal_list.hpp>
 //#include <eda/vhdl93/ast/signature.hpp>
 //#include <eda/vhdl93/ast/simple_expression.hpp>

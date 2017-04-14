@@ -206,7 +206,6 @@ struct sequential_statement;
 struct shift_expression;
 struct signal_assignment_statement;
 struct signal_declaration;
-struct signal_kind;
 struct signal_list;
 struct signature;
 struct simple_expression;
