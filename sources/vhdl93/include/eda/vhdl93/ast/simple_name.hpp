@@ -16,7 +16,13 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 
 struct simple_name : ast::identifier
-{ };
+{
+    simple_name& operator=(std::string_view const& sv)
+    {
+        name = sv;
+        return *this;
+    }
+};
 
 
 } } } // namespace eda.vhdl93.ast

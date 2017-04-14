@@ -1314,7 +1314,7 @@ void printer::operator()(operator_symbol const &node) const
 {
     static char const symbol[]{ "operator_symbol" };
     symbol_scope<operator_symbol> _(*this, symbol);
-    os << node.symbol;
+    os << node.literal;
 }
 
 

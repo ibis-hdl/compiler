@@ -43,17 +43,19 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::identifier_list,
     list
 )
 
-BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::operator_symbol,
-    symbol
-)
+// base class: string_literal
+//BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::operator_symbol,
+//    literal
+//)
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::physical_literal,
     literal, unit_name
 )
 
-BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::simple_name,
-    name
-)
+// base class: identifier
+//BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::simple_name,
+//    name
+//)
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::string_literal,
     literal

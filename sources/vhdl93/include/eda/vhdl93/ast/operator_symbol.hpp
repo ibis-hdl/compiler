@@ -11,18 +11,14 @@
 
 #include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
 
-#include <eda/support/boost/spirit_x3/string_view.hpp>
+#include <eda/vhdl93/ast/string_literal.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-namespace x3 = boost::spirit::x3;
-
-
-struct operator_symbol : x3::position_tagged
+struct operator_symbol : ast::string_literal
 {
-    std::string_view                symbol;
 };
 
 
