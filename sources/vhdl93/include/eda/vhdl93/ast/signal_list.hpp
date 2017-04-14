@@ -30,8 +30,7 @@ struct signal_name : ast::name
 
 struct signal_list_names
 {
-    signal_name                 name;
-    std::list<signal_name>      rest;
+    std::list<signal_name>      list;
 };
 #else
 
