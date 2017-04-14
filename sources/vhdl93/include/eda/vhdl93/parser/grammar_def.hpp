@@ -1482,8 +1482,7 @@ auto const bit_string_literal_def =
 
 
 
-#if 0
-/* Note: unused, directly used by rule bit_string_literal */
+#if 0 /* Note: UNUSED, embedded directly into bit_string_literal */
 // bit_value ::=
 // extended_digit { [ underline ] extended_digit }
 auto const bit_value_def =
@@ -3359,10 +3358,9 @@ auto const shift_expression_def =
         ;
 #endif
 
-#if 0
+#if 0 /* Note: UNUSED, directly used by rule simple_expression */
 // sign ::=                                                              [§ 7.2]
 // + | -
-// Note, unused since directly embedded into simple_expression rule
 auto const sign_def =
         + | -
         ;
@@ -3642,7 +3640,7 @@ auto const type_definition_def =
 //     | subtype_name
 /* Note, there is no way to distinguish between type_name and subtype_name at
  * parser level. It's used as simple string parser for symantic sugar at parser
- * level exposing a std::string attribute. */
+ * level exposing a std::string_view attribute. */
 auto const type_mark_def =
     detail::common_identifier
     ;
