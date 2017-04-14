@@ -169,7 +169,7 @@ BOOST_DATA_TEST_CASE( factor,
 }
 
 /*
- * factor
+ * term
  */
 struct term_dataset : public ::x3_test::dataset_loader
 {
