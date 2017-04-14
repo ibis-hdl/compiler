@@ -7,6 +7,7 @@ project(vhdl_playground)
 
 add_executable(x3_string_literal_minimal     EXCLUDE_FROM_ALL x3_string_literal_minimal.cpp)
 add_executable(x3_string_literal_attr        EXCLUDE_FROM_ALL x3_string_literal_attr.cpp)
+add_executable(x3_string_literal_view        EXCLUDE_FROM_ALL x3_string_literal_view.cpp)
 
 add_executable(x3_integer                    EXCLUDE_FROM_ALL x3_integer.cpp)
 add_executable(x3_based_literal              EXCLUDE_FROM_ALL x3_based_literal.cpp)
