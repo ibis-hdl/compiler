@@ -461,7 +461,6 @@ public:
     void operator()(shift_expression const& node) const;
     void operator()(signal_assignment_statement const& node) const;
     void operator()(signal_declaration const& node) const;
-    void operator()(signal_kind const& node) const;
     void operator()(signal_list const& node) const;
     void operator()(signature const& node) const;
     void operator()(simple_expression const& node) const;

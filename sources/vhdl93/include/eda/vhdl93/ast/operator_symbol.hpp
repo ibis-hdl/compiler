@@ -25,5 +25,4 @@ struct operator_symbol : ast::string_literal
 } } } // namespace eda.vhdl93.ast
 
 
-
 #endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_OPERATOR_SYMBOL_HPP_ */
