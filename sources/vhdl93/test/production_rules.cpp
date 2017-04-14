@@ -241,7 +241,7 @@ BOOST_DATA_TEST_CASE( simple_expression,
 
 
 /*
- * term
+ * signal_list
  */
 struct signal_list_dataset : public ::x3_test::dataset_loader
 {
