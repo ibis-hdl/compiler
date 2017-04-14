@@ -6,6 +6,7 @@ INPUT                  = @doxy_main_page@ \
                          @PROJECT_SOURCE_DIR@ \
                          @PROJECT_BINARY_DIR@
 OUTPUT_DIRECTORY       = @PROJECT_BINARY_DIR@/doc/api
+GENERATE_LATEX         = NO
 FILE_PATTERNS          = *.hpp \
                          *.cpp
 RECURSIVE              = YES
