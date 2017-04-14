@@ -203,6 +203,77 @@ BOOST_DATA_TEST_CASE( term,
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
 
+#if 0
+/*
+ * simple_expression
+ */
+struct simple_expression_dataset : public ::x3_test::dataset_loader
+{
+    simple_expression_dataset()
+    : dataset_loader{ "test_case/simple_expression" }
+    { }
+} const simple_expression_dataset;
+
+
+BOOST_DATA_TEST_CASE( simple_expression,
+      simple_expression_dataset.input()
+    ^ simple_expression_dataset.expect()
+    ^ simple_expression_dataset.test_file_name(),
+    input, expect, file)
+{
+    using x3_test::testing_parser;
+
+    typedef ast::simple_expression attribute_type;
+
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
+
+    bool parse_ok{ false };
+    std::string parse_result {};
+
+    testing_parser<attribute_type> parse;
+    std::tie(parse_ok, parse_result) = parse(input, parser::simple_expression);
+
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expect, btt::per_element());
+}
+#endif
+
+/*
+ * term
+ */
+struct signal_list_dataset : public ::x3_test::dataset_loader
+{
+    signal_list_dataset()
+    : dataset_loader{ "test_case/signal_list" }
+    { }
+} const signal_list_dataset;
+
+
+BOOST_DATA_TEST_CASE( signal_list,
+      signal_list_dataset.input()
+    ^ signal_list_dataset.expect()
+    ^ signal_list_dataset.test_file_name(),
+    input, expect, file)
+{
+    using x3_test::testing_parser;
+
+    typedef ast::signal_list attribute_type;
+
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
+
+    bool parse_ok{ false };
+    std::string parse_result {};
+
+    testing_parser<attribute_type> parse;
+    std::tie(parse_ok, parse_result) = parse(input, parser::signal_list);
+
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expect, btt::per_element());
+}
 
 BOOST_AUTO_TEST_SUITE_END()
 

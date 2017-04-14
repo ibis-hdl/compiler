@@ -52,6 +52,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::physical_literal,
     literal, unit_name
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::signal_list_names,
+    list
+)
+
 // base class: identifier
 //BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::simple_name,
 //    name

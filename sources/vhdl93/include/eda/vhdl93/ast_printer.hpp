@@ -243,6 +243,9 @@ struct binary_operation;
 struct operand;
 struct unary_operation;
 
+// signal_list sub node
+struct signal_list_names;
+
 
 } } } // namespace eda.vhdl93.ast
 
@@ -461,6 +464,7 @@ public:
     void operator()(shift_expression const& node) const;
     void operator()(signal_assignment_statement const& node) const;
     void operator()(signal_declaration const& node) const;
+    void operator()(signal_list_names const& node) const; // signal_list helper (not in BNF)
     void operator()(signal_list const& node) const;
     void operator()(signature const& node) const;
     void operator()(simple_expression const& node) const;

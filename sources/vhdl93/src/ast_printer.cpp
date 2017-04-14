@@ -1657,12 +1657,23 @@ void printer::operator()(signal_declaration const &node) const
     //os << node;
 }
 
+void printer::operator()(signal_list_names const& node) const
+{
+    static char const symbol[]{ "signal_list.names" };
+    symbol_scope<signal_list_names> _(*this, symbol);
+
+    for(auto const& name : node.list) {
+        boost::apply_visitor(*this, name);
+    }
+}
+
 
 void printer::operator()(signal_list const &node) const
 {
-    static char const symbol[]{ "XXX signal_list" };
+    static char const symbol[]{ "signal_list" };
     symbol_scope<signal_list> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+
+    boost::apply_visitor(*this, node);
 }
 
 

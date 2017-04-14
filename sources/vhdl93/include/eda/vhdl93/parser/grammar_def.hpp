@@ -465,7 +465,7 @@ typedef x3::rule<shift_expression_class> shift_expression_type;
 typedef x3::rule<signal_assignment_statement_class> signal_assignment_statement_type;
 typedef x3::rule<signal_declaration_class> signal_declaration_type;
 typedef x3::rule<signal_kind_class, ast::keyword_token> signal_kind_type;
-typedef x3::rule<signal_list_class> signal_list_type;
+typedef x3::rule<signal_list_class, ast::signal_list> signal_list_type;
 typedef x3::rule<signature_class> signature_type;
 typedef x3::rule<simple_expression_class> simple_expression_type;
 typedef x3::rule<simple_name_class, ast::simple_name> simple_name_type;
@@ -903,6 +903,9 @@ auto const BUS_token = x3::rule<struct _, ast::keyword_token> { "BUS" } =
     BUS >> x3::attr(ast::keyword_token::BUS)
     ;
 
+auto const OTHERS_token = x3::rule<struct _, ast::keyword_token> { "OTHERS" } =
+    OTHERS >> x3::attr(ast::keyword_token::OTHERS)
+    ;
 
 /*
  * Parser Operator Symbol Definition
@@ -3390,17 +3393,26 @@ auto const signal_kind_def =
     ;
 
 
-#if 0
-// signal_list ::=
+
+// signal_list ::=                                                       [§ 5.3]
 // signal_name { , signal_name }
 //     | others
 //     | all
-auto const signal_list_def =
-        signal_name >> ( signal_name % ',' )
-        | OTHERS
-        | ALL
+namespace detail {
+
+    auto const signal_name = x3::rule<struct _, ast::name> { "signal_name" } =
+        name
         ;
-#endif
+    auto const signal_names = x3::rule<struct _, ast::signal_list_names> { "signal_list" } =
+        signal_name % ','
+        ;
+}
+auto const signal_list_def =
+      detail::signal_names
+    | OTHERS_token
+    | ALL_token
+    ;
+
 
 #if 0
 // signature ::=
@@ -3899,8 +3911,8 @@ BOOST_SPIRIT_DEFINE(
         //    sign,
         //    signal_assignment_statement,
         //    signal_declaration,
-        //    signal_kind,
-        //    signal_list,
+        signal_kind,
+        signal_list,
         //    signature,
         simple_expression,
         simple_name,
