@@ -464,7 +464,7 @@ typedef x3::rule<sequential_statement_class> sequential_statement_type;
 typedef x3::rule<shift_expression_class> shift_expression_type;
 typedef x3::rule<signal_assignment_statement_class> signal_assignment_statement_type;
 typedef x3::rule<signal_declaration_class> signal_declaration_type;
-typedef x3::rule<signal_kind_class> signal_kind_type;
+typedef x3::rule<signal_kind_class, ast::keyword_token> signal_kind_type;
 typedef x3::rule<signal_list_class> signal_list_type;
 typedef x3::rule<signature_class> signature_type;
 typedef x3::rule<simple_expression_class> simple_expression_type;
@@ -893,6 +893,14 @@ auto const TO_token = x3::rule<struct _, ast::keyword_token> { "TO" } =
 
 auto const DOWNTO_token = x3::rule<struct _, ast::keyword_token> { "DOWNTO" } =
     DOWNTO >> x3::attr(ast::keyword_token::DOWNTO)
+    ;
+
+auto const REGISTER_token = x3::rule<struct _, ast::keyword_token> { "REGISTER" } =
+    REGISTER >> x3::attr(ast::keyword_token::REGISTER)
+    ;
+
+auto const BUS_token = x3::rule<struct _, ast::keyword_token> { "BUS" } =
+    BUS >> x3::attr(ast::keyword_token::BUS)
     ;
 
 
@@ -3373,13 +3381,14 @@ auto const signal_declaration_def =
 ;
 #endif
 
-#if 0
-// signal_kind ::=
+
+// signal_kind ::=                                                   [§ 4.3.1.2]
 // register  |  bus
 auto const signal_kind_def =
-        REGISTER  |  BUS
-        ;
-#endif
+      REGISTER_token
+    | BUS_token
+    ;
+
 
 #if 0
 // signal_list ::=
