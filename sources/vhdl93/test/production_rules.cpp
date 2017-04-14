@@ -203,7 +203,7 @@ BOOST_DATA_TEST_CASE( term,
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
 
-#if 0
+
 /*
  * simple_expression
  */
@@ -238,7 +238,7 @@ BOOST_DATA_TEST_CASE( simple_expression,
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
-#endif
+
 
 /*
  * term

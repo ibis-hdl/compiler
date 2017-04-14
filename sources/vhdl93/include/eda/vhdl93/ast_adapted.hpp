@@ -56,6 +56,14 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::signal_list_names,
     list
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::simple_expression_rest,
+    operator_, term
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::simple_expression,
+    sign, term, rest
+)
+
 // base class: identifier
 //BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::simple_name,
 //    name

@@ -1684,12 +1684,34 @@ void printer::operator()(signature const &node) const
     //os << node;
 }
 
+void printer::operator()(simple_expression_rest const& node) const
+{
+    static char const symbol[]{ "simple_expression.rest" };
+    symbol_scope<simple_expression_rest> _(*this, symbol);
+
+    os << "op=" << node.operator_;
+    (*this)(node.term);
+}
+
 
 void printer::operator()(simple_expression const &node) const
 {
-    static char const symbol[]{ "XXX simple_expression" };
+    static char const symbol[]{ "simple_expression" };
     symbol_scope<simple_expression> _(*this, symbol);
-    //os << node;
+
+    if(node.sign.is_initialized()) {
+        os << "sign=" << node.sign.get() << ", ";
+    }
+
+    (*this)(node.term);
+
+    if(node.rest.empty()) {
+        return;
+    }
+
+    for(auto const& term : node.rest) {
+        (*this)(term);
+    }
 }
 
 

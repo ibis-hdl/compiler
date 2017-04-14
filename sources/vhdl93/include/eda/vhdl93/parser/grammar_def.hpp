@@ -467,7 +467,7 @@ typedef x3::rule<signal_declaration_class> signal_declaration_type;
 typedef x3::rule<signal_kind_class, ast::keyword_token> signal_kind_type;
 typedef x3::rule<signal_list_class, ast::signal_list> signal_list_type;
 typedef x3::rule<signature_class> signature_type;
-typedef x3::rule<simple_expression_class> simple_expression_type;
+typedef x3::rule<simple_expression_class, ast::simple_expression> simple_expression_type;
 typedef x3::rule<simple_name_class, ast::simple_name> simple_name_type;
 typedef x3::rule<slice_name_class> slice_name_type;
 typedef x3::rule<string_literal_class, ast::string_literal> string_literal_type;

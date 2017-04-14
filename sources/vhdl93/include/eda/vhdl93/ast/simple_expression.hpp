@@ -11,6 +11,9 @@
 
 #include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
 #include <boost/spirit/home/x3/support/ast/variant.hpp> // x3::position_tagged
+
+#include <eda/vhdl93/ast/term.hpp>
+
 #include <boost/optional.hpp>
 
 #include <list>
@@ -23,19 +26,19 @@ namespace x3 = boost::spirit::x3;
 
 
 enum class operator_token;
-struct term;
 
 
+// FixMe: find a better name for this
 struct simple_expression_rest {
     operator_token                  operator_;
-    term                            term;
+    ast::term                       term;
 };
 
 
 struct simple_expression : x3::position_tagged
 {
     boost::optional<operator_token> sign;
-    term                            term;
+    ast::term                       term;
     std::list<simple_expression_rest> rest;
 };
 

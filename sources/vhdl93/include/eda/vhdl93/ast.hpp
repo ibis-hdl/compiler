@@ -210,7 +210,7 @@
 //#include <eda/vhdl93/ast/signal_declaration.hpp>
 #include <eda/vhdl93/ast/signal_list.hpp>
 //#include <eda/vhdl93/ast/signature.hpp>
-//#include <eda/vhdl93/ast/simple_expression.hpp>
+#include <eda/vhdl93/ast/simple_expression.hpp>
 #include <eda/vhdl93/ast/simple_name.hpp>
 //#include <eda/vhdl93/ast/slice_name.hpp>
 #include <eda/vhdl93/ast/string_literal.hpp>
