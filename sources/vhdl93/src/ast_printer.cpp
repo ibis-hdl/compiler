@@ -1532,9 +1532,18 @@ void printer::operator()(record_type_definition const &node) const
 
 void printer::operator()(relation const &node) const
 {
-    static char const symbol[]{ "XXX relation" };
+    static char const symbol[]{ "relation" };
     symbol_scope<relation> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.shift_expression);
+
+    if(!node.chunk.is_initialized()) {
+        return;
+    }
+
+    auto const& chunk = node.chunk.get();
+    os << "\n" << "operator=" << chunk.operator_ << "\n";
+    (*this)(chunk.shift_expression);
 }
 
 
@@ -1644,7 +1653,7 @@ void printer::operator()(shift_expression const &node) const
         return;
     }
 
-    shift_expression_chunk const& chunk = node.chunk.get();
+    auto const& chunk = node.chunk.get();
     os << "\n" << "operator=" << chunk.operator_ << "\n";
     (*this)(chunk.simple_expression);
 }
@@ -1834,7 +1843,7 @@ void printer::operator()(term const &node) const
     symbol_scope<term> _(*this, symbol);
 
     os << "{\n";
-    boost::apply_visitor(*this, node.factor_);
+    boost::apply_visitor(*this, node.factor);
 
     if(node.chunk_list.empty()) {
         os << "}";
@@ -1844,7 +1853,7 @@ void printer::operator()(term const &node) const
     for(auto const& term_chunk: node.chunk_list) {
         os << "\noperator=" << term_chunk.operator_;
         os << "\nfactor=";
-        boost::apply_visitor(*this, term_chunk.factor_);
+        boost::apply_visitor(*this, term_chunk.factor);
     }
 
     os << "}";

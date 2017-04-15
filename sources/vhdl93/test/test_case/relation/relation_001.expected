@@ -1,0 +1,7 @@
+(relation=(shift_expression=(simple_expression=(term={
+(v:primary=(v:literal=(string_literal="0111")))
+operator=*
+factor=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int})))))})))
+operator=<
+(shift_expression=(simple_expression=(term={
+(v:primary=(v:literal=(v:enumeration_literal=(character_literal=1))))}))))

@@ -3213,10 +3213,16 @@ END RECORD -( record_type_simple_name )
 
 // relation ::=                                                          [§ 7.1]
 // shift_expression [ relational_operator shift_expression ]
+namespace detail {
+
+    auto const relation_chunk = x3::rule<struct _, ast::relation_chunk> { "relation" } =
+        relational_operator > shift_expression
+        ;
+
+}
 auto const relation_def =
        shift_expression
-    >> relational_operator
-    >> shift_expression
+    >> -detail::relation_chunk
     ;
 
 
@@ -3356,6 +3362,7 @@ auto const sequential_statement_def =
 // shift_expression ::=                                                  [§ 7.1]
 // simple_expression [ shift_operator simple_expression ]
 namespace detail {
+
     auto const shift_expression_chunk = x3::rule<struct _, ast::shift_expression_chunk> { "shift_expression" } =
         shift_operator > simple_expression
         ;
@@ -3900,7 +3907,7 @@ BOOST_SPIRIT_DEFINE(
         //    range,
         //    range_constraint,
         //    record_type_definition,
-        //    relation,
+        relation,
         //    report_statement,
         //    return_statement,
         //    scalar_type_definition,

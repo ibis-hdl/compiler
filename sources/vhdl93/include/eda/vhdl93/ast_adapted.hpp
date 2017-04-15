@@ -35,6 +35,14 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::enumeration_type_definition,
     list
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::expression_chunk,
+    operator_, relation
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::expression,
+    relation, chunk_list
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::identifier,
     name
 )
@@ -52,8 +60,12 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::physical_literal,
     literal, unit_name
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::relation_chunk,
+    operator_, shift_expression
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::relation,
-    lhs, operator_, rhs
+    shift_expression, chunk
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::shift_expression_chunk,
@@ -86,11 +98,11 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::string_literal,
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::term_chunk,
-    operator_, factor_
+    operator_, factor
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::term,
-    factor_, chunk_list
+    factor, chunk_list
 )
 
 

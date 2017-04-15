@@ -1,0 +1,12 @@
+(relation=(shift_expression=(simple_expression=(term={
+(v:primary=(v:name=(simple_name=a)))})
+operator=+(term={
+(v:primary=(v:name=(simple_name=b)))})))
+operator=>
+(shift_expression=(simple_expression=(term={
+(v:primary=(v:name=(simple_name=c)))})
+operator=-(term={
+(unary_operation={
+op=not,
+operand=(v:primary=(v:literal=(string_literal="101")))
+})}))))

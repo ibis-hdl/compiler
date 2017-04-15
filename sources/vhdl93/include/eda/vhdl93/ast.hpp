@@ -105,7 +105,7 @@
 #include <eda/vhdl93/ast/enumeration_type_definition.hpp>
 //#include <eda/vhdl93/ast/exit_statement.hpp>
 //#include <eda/vhdl93/ast/exponent.hpp>
-//#include <eda/vhdl93/ast/expression.hpp>
+#include <eda/vhdl93/ast/expression.hpp>
 //#include <eda/vhdl93/ast/extended_digit.hpp>
 //#include <eda/vhdl93/ast/extended_identifier.hpp>
 #include <eda/vhdl93/ast/factor.hpp>

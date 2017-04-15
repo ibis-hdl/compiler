@@ -12,6 +12,8 @@
 #include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
 #include <boost/spirit/home/x3/support/ast/variant.hpp> // x3::position_tagged
 
+#include <eda/vhdl93/ast/factor.hpp>
+
 #include <list>
 
 
@@ -21,19 +23,18 @@ namespace eda { namespace vhdl93 { namespace ast {
 namespace x3 = boost::spirit::x3;
 
 
-struct factor;
 enum class operator_token;
 
 
 struct term_chunk {
     operator_token              operator_;
-    factor                      factor_;
+    ast::factor                 factor;
 };
 
 
 struct term : x3::position_tagged
 {
-    factor                      factor_;
+    ast::factor                 factor;
     std::list<term_chunk>       chunk_list;
 };
 
