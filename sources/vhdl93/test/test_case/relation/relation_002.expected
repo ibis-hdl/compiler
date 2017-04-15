@@ -7,6 +7,6 @@ operator=>
 (v:primary=(v:name=(simple_name=c)))})
 operator=-(term={
 (unary_operation={
-op=not,
+operator=not
 operand=(v:primary=(v:literal=(string_literal="101")))
 })}))))

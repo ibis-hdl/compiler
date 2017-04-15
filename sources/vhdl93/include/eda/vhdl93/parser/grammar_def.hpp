@@ -727,6 +727,14 @@ wait_statement_type const wait_statement { "wait_statement" };
 waveform_type const waveform { "waveform" };
 waveform_element_type const waveform_element { "waveform_element" };
 
+
+/*
+ * Parser helper
+ */
+template<typename T>
+auto as_rule = [](auto p) { return x3::rule<struct _, T>{ "as" } = x3::as_parser(p); };
+
+
 /*
  * Keywords
  */
@@ -925,7 +933,11 @@ struct logical_operator_symbols : x3::symbols<ast::operator_token> {
            ("xnor", ast::operator_token::xnor)
            ;
     }
-} const logical_operator;
+} const logical_operator_symbols;
+
+auto const logical_operator = as_rule<ast::operator_token>(
+        x3::no_case[ logical_operator_symbols ]
+    );
 
 
 struct relational_operator_symbols : x3::symbols<ast::operator_token> {
@@ -955,7 +967,11 @@ struct unary_miscellaneous_operator_symbols : x3::symbols<ast::operator_token> {
            ("not", ast::operator_token::not_)
            ;
     }
-} const unary_miscellaneous_operator;
+} const unary_miscellaneous_operator_symbols;
+
+auto const unary_miscellaneous_operator = as_rule<ast::operator_token>(
+        x3::no_case[ unary_miscellaneous_operator_symbols ]
+    );
 
 
 struct binary_miscellaneous_operator_symbols : x3::symbols<ast::operator_token> {
@@ -996,7 +1012,11 @@ struct multiplying_operator_symbols : x3::symbols<ast::operator_token> {
            ("rem", ast::operator_token::rem)
            ;
     }
-} const multiplying_operator;
+} const multiplying_operator_symbols;
+
+auto const multiplying_operator = as_rule<ast::operator_token>(
+        x3::no_case[ multiplying_operator_symbols ]
+    );
 
 
 struct shift_operator_symbols : x3::symbols<ast::operator_token> {
@@ -1013,7 +1033,11 @@ struct shift_operator_symbols : x3::symbols<ast::operator_token> {
            ("ror", ast::operator_token::ror)
            ;
     }
-} const shift_operator;
+} const shift_operator_symbols;
+
+auto const shift_operator = as_rule<ast::operator_token>(
+        x3::no_case[ shift_operator_symbols ]
+    );
 
 
 struct sign_operator_symbols : x3::symbols<ast::operator_token> {
@@ -1065,13 +1089,6 @@ auto const format_effector =
 auto const end_of_line =
     x3::rule<struct end_of_line_class> { "end_of_line" } =
         x3::eol;
-
-
-/*
- * Parser helper
- */
-template<typename T>
-auto as_rule = [](auto p) { return x3::rule<struct _, T>{ "as" } = x3::as_parser(p); };
 
 
 /*
@@ -2248,23 +2265,20 @@ auto const exponent_def =
     ;
 
 
-#if 0
-// expression ::=
-// relation { and relation }
+
+// expression ::=                                                        [§ 7.1]
+//       relation { and relation }
 //     | relation { or relation }
 //     | relation { xor relation }
 //     | relation [ nand relation ]
 //     | relation [ nor relation ]
 //     | relation { xnor relation }
 auto const expression_def =
-        relation { AND relation }
-| relation { OR relation }
-| relation { XOR relation }
-| relation -( NAND relation )
-    | relation -( NOR relation )
-    | relation { XNOR relation }
-;
-#endif
+      relation >> *( logical_operator > relation )
+//    | relation -( NAND relation )
+//    | relation -( NOR relation )
+    ;
+
 
 
 // extended_digit ::=                                                 [§ 13.4.2]
@@ -3071,7 +3085,7 @@ auto const primary_def = // FixMe: support other alternatives
     //     | qualified_expression
     //     | type_conversion
     //     | allocator
-    //     | '(' >> expression >> ')'
+    | ( '(' > expression > ')' )
     ;
 
 
@@ -3821,7 +3835,7 @@ BOOST_SPIRIT_DEFINE(
         enumeration_type_definition,
         //    exit_statement,
         exponent,
-        //    expression,
+        expression,
         extended_digit,
         extended_identifier,
         factor,

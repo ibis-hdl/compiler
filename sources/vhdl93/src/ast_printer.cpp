@@ -858,12 +858,39 @@ void printer::operator()(exit_statement const &node) const
 
 void printer::operator()(expression const &node) const
 {
-    static char const symbol[]{ "XXX expression" };
+    static char const symbol[]{ "expression" };
     symbol_scope<expression> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+
+    (*this)(node.relation);
+
+    if(node.chunk_list.empty()) {
+        return;
+    }
+
+    for(auto const& chunk : node.chunk_list) {
+        os << "\noperator=" << chunk.operator_;
+        os << "\noperator ID = " << (unsigned)chunk.operator_;
+        (*this)(chunk.relation);
+    }
 }
 
+#if 0
+if(node.sign.is_initialized()) { // optional
+    os << "sign=" << node.sign.get() << ", ";
+}
 
+(*this)(node.term);
+
+if(node.chunk_list.empty()) {
+    return;
+}
+
+for(auto const& chunk : node.chunk_list) {
+    os << "\noperator=" << chunk.operator_;
+    (*this)(chunk.term);
+}
+
+#endif
 void printer::operator()(factor const &node) const
 {
     static char const symbol[]{ "factor" };
@@ -1966,12 +1993,12 @@ void printer::operator()(binary_operation const& node) const
     symbol_scope<binary_operation> _(*this, symbol);
 
     os << "{\n";
-    os << "op=" << node.operator_ << ",\n";
+    os << "operator=" << node.operator_ << "\n";
 
     os << "lhs=";
     boost::apply_visitor(*this, node.lhs);
 
-    os << ",\n";
+    os << "\n";
 
     os << "rhs=";
     boost::apply_visitor(*this, node.rhs);
@@ -1985,7 +2012,7 @@ void printer::operator()(unary_operation const& node) const
     symbol_scope<unary_operation> _(*this, symbol);
 
     os << "{\n";
-    os << "op=" << node.operator_ << ",\n";
+    os << "operator=" << node.operator_ << "\n";
     os << "operand=";
     boost::apply_visitor(*this, node.operand_);
     os << "\n}";

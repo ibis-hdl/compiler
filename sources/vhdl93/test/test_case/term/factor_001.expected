@@ -1,5 +1,5 @@
 (term={
 (unary_operation={
-op=abs,
+operator=abs
 operand=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int})))))
 })})
