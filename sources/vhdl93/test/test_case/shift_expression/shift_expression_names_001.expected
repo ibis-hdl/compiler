@@ -1,0 +1,5 @@
+(shift_expression=(simple_expression=(term={
+(v:primary=(v:literal=(string_literal="1110_1110")))}))
+operator=sll
+(simple_expression=(term={
+(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=1, tag=int})))))})))

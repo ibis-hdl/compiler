@@ -3357,13 +3357,12 @@ auto const sequential_statement_def =
 // simple_expression [ shift_operator simple_expression ]
 namespace detail {
     auto const shift_expression_chunk = x3::rule<struct _, ast::shift_expression_chunk> { "shift_expression" } =
-           shift_operator
-        >> simple_expression
+        shift_operator > simple_expression
         ;
 }
 auto const shift_expression_def =
        simple_expression
-    >> detail::shift_expression_chunk
+    >> -detail::shift_expression_chunk
     ;
 
 

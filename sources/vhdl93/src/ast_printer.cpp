@@ -1645,7 +1645,7 @@ void printer::operator()(shift_expression const &node) const
     }
 
     shift_expression_chunk const& chunk = node.chunk.get();
-    os << "operator=" << chunk.operator_;
+    os << "\n" << "operator=" << chunk.operator_ << "\n";
     (*this)(chunk.simple_expression);
 }
 
