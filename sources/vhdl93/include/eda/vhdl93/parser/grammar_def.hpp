@@ -461,7 +461,7 @@ typedef x3::rule<sensitivity_clause_class> sensitivity_clause_type;
 typedef x3::rule<sensitivity_list_class> sensitivity_list_type;
 typedef x3::rule<sequence_of_statements_class> sequence_of_statements_type;
 typedef x3::rule<sequential_statement_class> sequential_statement_type;
-typedef x3::rule<shift_expression_class> shift_expression_type;
+typedef x3::rule<shift_expression_class, ast::shift_expression> shift_expression_type;
 typedef x3::rule<signal_assignment_statement_class> signal_assignment_statement_type;
 typedef x3::rule<signal_declaration_class> signal_declaration_type;
 typedef x3::rule<signal_kind_class, ast::keyword_token> signal_kind_type;
@@ -2993,7 +2993,7 @@ namespace detail {
      * that it follows the natural conventions. */
     auto const unit_name = as_rule<std::string_view>(
         raw[ lexeme[
-            +char_("A-Za-z")
+            +(lower_case_letter | upper_case_letter)
         ]]);
 
 }
@@ -3350,13 +3350,16 @@ auto const sequential_statement_def =
         ;
 #endif
 
-#if 0
-// shift_expression ::=
+
+// shift_expression ::=                                                  [§ 7.1]
 // simple_expression [ shift_operator simple_expression ]
+// Note, optional  --^-- IGNORED, doesn't make sense?
 auto const shift_expression_def =
-        simple_expression -( shift_operator simple_expression )
-        ;
-#endif
+       simple_expression
+    >> shift_operator
+    >> simple_expression
+    ;
+
 
 #if 0 /* Note: UNUSED, directly used by rule simple_expression */
 // sign ::=                                                              [§ 7.2]
@@ -3420,7 +3423,7 @@ auto const signature_def =
         ;
 #endif
 
-#if 1
+
 // simple_expression ::=
 // [ sign ] term { adding_operator term }
 auto const simple_expression_def =
@@ -3428,7 +3431,7 @@ auto const simple_expression_def =
     >> term
     >> *( adding_operator >> term )
     ;
-#endif
+
 
 
 // simple_name ::=                                                       [§ 6.2]
@@ -3905,7 +3908,7 @@ BOOST_SPIRIT_DEFINE(
         //    sensitivity_list,
         //    sequence_of_statements,
         //    sequential_statement,
-        //    shift_expression,
+        shift_expression,
         //    sign,
         //    signal_assignment_statement,
         //    signal_declaration,

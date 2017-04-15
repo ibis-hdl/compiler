@@ -52,6 +52,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::physical_literal,
     literal, unit_name
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::shift_expression,
+    lhs, operator_, rhs
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::signal_list_names,
     list
 )

@@ -241,6 +241,42 @@ BOOST_DATA_TEST_CASE( simple_expression,
 
 
 /*
+ * shift_expression
+ */
+struct shift_expression_dataset : public ::x3_test::dataset_loader
+{
+    shift_expression_dataset()
+    : dataset_loader{ "test_case/shift_expression" }
+    { }
+} const shift_expression_dataset;
+
+
+BOOST_DATA_TEST_CASE( shift_expression,
+      shift_expression_dataset.input()
+    ^ shift_expression_dataset.expect()
+    ^ shift_expression_dataset.test_file_name(),
+    input, expect, file)
+{
+    using x3_test::testing_parser;
+
+    typedef ast::shift_expression attribute_type;
+
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
+
+    bool parse_ok{ false };
+    std::string parse_result {};
+
+    testing_parser<attribute_type> parse;
+    std::tie(parse_ok, parse_result) = parse(input, parser::shift_expression);
+
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expect, btt::per_element());
+}
+
+
+/*
  * signal_list
  */
 struct signal_list_dataset : public ::x3_test::dataset_loader
