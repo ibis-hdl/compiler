@@ -1684,10 +1684,10 @@ void printer::operator()(signature const &node) const
     //os << node;
 }
 
-void printer::operator()(simple_expression_rest const& node) const
+void printer::operator()(simple_expression_chunk const& node) const
 {
     static char const symbol[]{ "simple_expression.rest" };
-    symbol_scope<simple_expression_rest> _(*this, symbol);
+    symbol_scope<simple_expression_chunk> _(*this, symbol);
 
     os << "op=" << node.operator_;
     (*this)(node.term);

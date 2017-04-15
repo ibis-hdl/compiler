@@ -28,18 +28,17 @@ namespace x3 = boost::spirit::x3;
 enum class operator_token;
 
 
-// FixMe: find a better name for this
-struct simple_expression_rest {
-    operator_token                  operator_;
-    ast::term                       term;
+struct simple_expression_chunk {
+    operator_token                      operator_;
+    ast::term                           term;
 };
 
 
 struct simple_expression : x3::position_tagged
 {
-    boost::optional<operator_token> sign;
-    ast::term                       term;
-    std::list<simple_expression_rest> rest;
+    boost::optional<operator_token>     sign;
+    ast::term                           term;
+    std::list<simple_expression_chunk>  rest;
 };
 
 

@@ -64,7 +64,7 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::signal_list_names,
     list
 )
 
-BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::simple_expression_rest,
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::simple_expression_chunk,
     operator_, term
 )
 
