@@ -1636,9 +1636,17 @@ void printer::operator()(sequential_statement const &node) const
 
 void printer::operator()(shift_expression const &node) const
 {
-    static char const symbol[]{ "XXX shift_expression" };
+    static char const symbol[]{ "shift_expression" };
     symbol_scope<shift_expression> _(*this, symbol);
-    //os << node;
+    (*this)(node.simple_expression);
+
+    if(!node.chunk.is_initialized()) {
+        return;
+    }
+
+    shift_expression_chunk const& chunk = node.chunk.get();
+    os << "operator=" << chunk.operator_;
+    (*this)(chunk.simple_expression);
 }
 
 
@@ -1684,33 +1692,24 @@ void printer::operator()(signature const &node) const
     //os << node;
 }
 
-void printer::operator()(simple_expression_chunk const& node) const
-{
-    static char const symbol[]{ "simple_expression.rest" };
-    symbol_scope<simple_expression_chunk> _(*this, symbol);
-
-    os << "op=" << node.operator_;
-    (*this)(node.term);
-}
-
-
 void printer::operator()(simple_expression const &node) const
 {
     static char const symbol[]{ "simple_expression" };
     symbol_scope<simple_expression> _(*this, symbol);
 
-    if(node.sign.is_initialized()) {
+    if(node.sign.is_initialized()) { // optional
         os << "sign=" << node.sign.get() << ", ";
     }
 
     (*this)(node.term);
 
-    if(node.rest.empty()) {
+    if(node.chunk_list.empty()) {
         return;
     }
 
-    for(auto const& term : node.rest) {
-        (*this)(term);
+    for(auto const& chunk : node.chunk_list) {
+        os << "\noperator=" << chunk.operator_;
+        (*this)(chunk.term);
     }
 }
 
@@ -1837,15 +1836,15 @@ void printer::operator()(term const &node) const
     os << "{\n";
     boost::apply_visitor(*this, node.factor_);
 
-    if(node.rest.empty()) {
+    if(node.chunk_list.empty()) {
         os << "}";
         return;
     }
 
-    for(auto const& term_rest: node.rest) {
-        os << "\noperator=" << term_rest.operator_;
+    for(auto const& term_chunk: node.chunk_list) {
+        os << "\noperator=" << term_chunk.operator_;
         os << "\nfactor=";
-        boost::apply_visitor(*this, term_rest.factor_);
+        boost::apply_visitor(*this, term_chunk.factor_);
     }
 
     os << "}";

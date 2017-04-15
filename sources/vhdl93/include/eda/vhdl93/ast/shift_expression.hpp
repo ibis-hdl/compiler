@@ -15,6 +15,8 @@
 #include <eda/vhdl93/ast/operator_token.hpp>
 #include <eda/vhdl93/ast/simple_expression.hpp>
 
+#include <boost/optional.hpp>
+
 
 namespace eda { namespace vhdl93 { namespace ast {
 
@@ -22,11 +24,17 @@ namespace eda { namespace vhdl93 { namespace ast {
 namespace x3 = boost::spirit::x3;
 
 
+struct shift_expression_chunk
+{
+    operator_token                  operator_;
+    ast::simple_expression          simple_expression;
+};
+
+
 struct shift_expression : x3::position_tagged
 {
-    simple_expression       lhs;
-    operator_token          operator_;
-    simple_expression       rhs;
+    ast::simple_expression          simple_expression;
+    boost::optional<shift_expression_chunk> chunk;
 };
 
 

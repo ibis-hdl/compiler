@@ -3352,16 +3352,20 @@ auto const sequential_statement_def =
         ;
 #endif
 
-
+#if 0
 // shift_expression ::=                                                  [§ 7.1]
 // simple_expression [ shift_operator simple_expression ]
-// Note, optional  --^-- IGNORED, doesn't make sense?
+namespace detail {
+    auto const shift_expression_chunk = x3::rule<struct _, ast::shift_expression_chunk> { "shift_expression" } =
+           shift_operator
+        >> simple_expression
+        ;
+}
 auto const shift_expression_def =
        simple_expression
-    >> shift_operator
-    >> simple_expression
+    >> detail::shift_expression_chunk
     ;
-
+#endif
 
 #if 0 /* Note: UNUSED, directly used by rule simple_expression */
 // sign ::=                                                              [§ 7.2]
@@ -3910,7 +3914,7 @@ BOOST_SPIRIT_DEFINE(
         //    sensitivity_list,
         //    sequence_of_statements,
         //    sequential_statement,
-        shift_expression,
+        //shift_expression,
         //    sign,
         //    signal_assignment_statement,
         //    signal_declaration,

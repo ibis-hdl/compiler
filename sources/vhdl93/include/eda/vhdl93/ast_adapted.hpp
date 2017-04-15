@@ -56,8 +56,12 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::relation,
     lhs, operator_, rhs
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::shift_expression_chunk,
+    operator_, simple_expression
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::shift_expression,
-    lhs, operator_, rhs
+    simple_expression, chunk
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::signal_list_names,
@@ -69,7 +73,7 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::simple_expression_chunk,
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::simple_expression,
-    sign, term, rest
+    sign, term, chunk_list
 )
 
 // base class: identifier
@@ -81,12 +85,12 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::string_literal,
     literal
 )
 
-BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::term_rest,
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::term_chunk,
     operator_, factor_
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::term,
-    factor_, rest
+    factor_, chunk_list
 )
 
 

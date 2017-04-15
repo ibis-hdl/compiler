@@ -1,7 +1,8 @@
 (simple_expression=sign=-, (term={
 (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int})))))
 operator=*
-factor=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=66, tag=int})))))})(simple_expression.rest=op=+(term={
+factor=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=66, tag=int})))))})
+operator=+(term={
 (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=18, tag=int})))))
 operator=*
-factor=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=88, tag=int})))))})))
+factor=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=88, tag=int})))))}))

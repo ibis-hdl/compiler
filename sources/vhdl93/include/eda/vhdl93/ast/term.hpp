@@ -25,7 +25,7 @@ struct factor;
 enum class operator_token;
 
 
-struct term_rest {
+struct term_chunk {
     operator_token              operator_;
     factor                      factor_;
 };
@@ -34,7 +34,7 @@ struct term_rest {
 struct term : x3::position_tagged
 {
     factor                      factor_;
-    std::list<term_rest>        rest;
+    std::list<term_chunk>       chunk_list;
 };
 
 

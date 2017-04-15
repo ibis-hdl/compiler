@@ -38,7 +38,7 @@ struct simple_expression : x3::position_tagged
 {
     boost::optional<operator_token>     sign;
     ast::term                           term;
-    std::list<simple_expression_chunk>  rest;
+    std::list<simple_expression_chunk>  chunk_list;
 };
 
 
