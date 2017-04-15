@@ -856,14 +856,6 @@ void printer::operator()(exit_statement const &node) const
 }
 
 
-void printer::operator()(exponent const &node) const
-{
-    static char const symbol[]{ "XXX exponent" };
-    symbol_scope<exponent> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
-}
-
-
 void printer::operator()(expression const &node) const
 {
     static char const symbol[]{ "XXX expression" };

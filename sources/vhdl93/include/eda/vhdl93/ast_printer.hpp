@@ -107,7 +107,6 @@ struct entity_tag;
 struct enumeration_literal;
 struct enumeration_type_definition;
 struct exit_statement;
-struct exponent;
 struct expression;
 struct factor;
 struct file_declaration;
@@ -365,7 +364,6 @@ public:
     void operator()(enumeration_literal const& node) const;
     void operator()(enumeration_type_definition const& node) const;
     void operator()(exit_statement const& node) const;
-    void operator()(exponent const& node) const;
     void operator()(expression const& node) const;
     void operator()(factor const& node) const;
     void operator()(file_declaration const& node) const;
