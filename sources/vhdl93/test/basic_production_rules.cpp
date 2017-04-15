@@ -400,6 +400,33 @@ BOOST_DATA_TEST_CASE( physical_literal,
 }
 
 
+::x3_test::dataset_loader physical_literal_fail_dataset{ "test_case/physical_literal_fail" };
+
+BOOST_DATA_TEST_CASE( physical_literal_fail,
+      physical_literal_fail_dataset.input()
+    ^ physical_literal_fail_dataset.expect()
+    ^ physical_literal_fail_dataset.test_file_name(),
+    input, expected, file)
+{
+    using x3_test::testing_parser;
+
+    typedef ast::physical_literal attribute_type;
+
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
+
+    bool parse_ok{ false };
+    std::string parse_result {};
+
+    testing_parser<attribute_type> parse;
+    std::tie(parse_ok, parse_result) =  parse(input, parser::physical_literal);
+
+    BOOST_TEST(!parse_ok);
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expected, btt::per_element());
+}
+
+
 ::x3_test::dataset_loader numeric_dataset{ "test_case/numeric_literal" };
 
 BOOST_DATA_TEST_CASE(numeric_literal,
