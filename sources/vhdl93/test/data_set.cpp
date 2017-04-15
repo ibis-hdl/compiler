@@ -58,8 +58,8 @@ int dataset_loader::read_files(fs::path const& path)
             }
         }
         else {
-            std::cerr << "Directory: " << fs::absolute(path)
-            << " does not exist.\n";
+            std::cerr << "*** Directory: " << fs::absolute(path)
+            << " does not exist. ***\n";
             return 1;
         }
     }
