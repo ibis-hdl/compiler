@@ -24,13 +24,17 @@ namespace parser = eda::vhdl93::parser;
 namespace ast    = eda::vhdl93::ast;
 
 
-::x3_test::dataset_loader string_literal_dataset{ "test_case/string_literal" };
-/* FixMe: What about the following string literals:
- * "FIRST PART OF A SEQUENCE OF CHARACTERS " &
- * "THAT CONTINUES ON THE NEXT LINE"
- *
- * "Sequence that includes the" & ACK & "control character"
+/*
+ * string_literal
  */
+struct string_literal_dataset : public ::x3_test::dataset_loader
+{
+    string_literal_dataset()
+    : dataset_loader{ "test_case/string_literal" }
+    { }
+} const string_literal_dataset;
+
+// NOTE; DISABLED until x3::raw rule problem is solved
 #if 0
 BOOST_DATA_TEST_CASE( string_literal,
       string_literal_dataset.input()
@@ -57,7 +61,17 @@ BOOST_DATA_TEST_CASE( string_literal,
 }
 #endif
 
-::x3_test::dataset_loader character_literal_dataset{ "test_case/character_literal" };
+
+/*
+ * character_literal
+ */
+struct character_literal_dataset : public ::x3_test::dataset_loader
+{
+    character_literal_dataset()
+    : dataset_loader{ "test_case/character_literal" }
+    { }
+} const character_literal_dataset;
+
 
 BOOST_DATA_TEST_CASE( character_literal,
       character_literal_dataset.input()
@@ -84,7 +98,16 @@ BOOST_DATA_TEST_CASE( character_literal,
 }
 
 
-::x3_test::dataset_loader integer_dataset{ "test_case/integer" };
+/*
+ * integer
+ */
+struct integer_dataset : public ::x3_test::dataset_loader
+{
+    integer_dataset()
+    : dataset_loader{ "test_case/integer" }
+    { }
+} const integer_dataset;
+
 
 BOOST_DATA_TEST_CASE( integer,
       integer_dataset.input()
@@ -112,7 +135,16 @@ BOOST_DATA_TEST_CASE( integer,
 }
 
 
-::x3_test::dataset_loader integer_failure_dataset{ "test_case/integer_failure" };
+/*
+ * integer (failure)
+ */
+struct integer_failure_dataset : public ::x3_test::dataset_loader
+{
+    integer_failure_dataset()
+    : dataset_loader{ "test_case/integer_failure" }
+    { }
+} const integer_failure_dataset;
+
 
 BOOST_DATA_TEST_CASE( integer_failure,    // should fail
       integer_failure_dataset.input()
@@ -140,7 +172,16 @@ BOOST_DATA_TEST_CASE( integer_failure,    // should fail
 }
 
 
-::x3_test::dataset_loader identifier_dataset{ "test_case/identifier" };
+/*
+ * identifier
+ */
+struct identifier_dataset : public ::x3_test::dataset_loader
+{
+    identifier_dataset()
+    : dataset_loader{ "test_case/identifier" }
+    { }
+} const identifier_dataset;
+
 
 BOOST_DATA_TEST_CASE( identifier,
       identifier_dataset.input()
@@ -167,12 +208,21 @@ BOOST_DATA_TEST_CASE( identifier,
 }
 
 
-::x3_test::dataset_loader identifier_fail_dataset{ "test_case/identifier_failure" };
+/*
+ * identifier (failure)
+ */
+struct identifier_failure_dataset : public ::x3_test::dataset_loader
+{
+    identifier_failure_dataset()
+    : dataset_loader{ "test_case/identifier_failure" }
+    { }
+} const identifier_failure_dataset;
+
 
 BOOST_DATA_TEST_CASE( identifier_fail,
-      identifier_fail_dataset.input()
-    ^ identifier_fail_dataset.expect()
-    ^ identifier_fail_dataset.test_file_name(),
+      identifier_failure_dataset.input()
+    ^ identifier_failure_dataset.expect()
+    ^ identifier_failure_dataset.test_file_name(),
     input, expected, file )
 {
     using x3_test::testing_parser;
@@ -194,7 +244,16 @@ BOOST_DATA_TEST_CASE( identifier_fail,
 }
 
 
-::x3_test::dataset_loader identifier_list_dataset{ "test_case/identifier_list" };
+/*
+ * identifier_list
+ */
+struct identifier_list_dataset : public ::x3_test::dataset_loader
+{
+    identifier_list_dataset()
+    : dataset_loader{ "test_case/identifier_list" }
+    { }
+} const identifier_list_dataset;
+
 
 BOOST_DATA_TEST_CASE( identifier_list,
       identifier_list_dataset.input()
@@ -319,7 +378,17 @@ BOOST_AUTO_TEST_CASE( decimal_literal )
 
 #endif
 
-::x3_test::dataset_loader bit_string_literal_dataset{ "test_case/bit_string_literal" };
+
+/*
+ * bit_string_literal
+ */
+struct bit_string_literal_dataset : public ::x3_test::dataset_loader
+{
+    bit_string_literal_dataset()
+    : dataset_loader{ "test_case/bit_string_literal" }
+    { }
+} const bit_string_literal_dataset;
+
 
 BOOST_DATA_TEST_CASE( bit_string_literal,
       bit_string_literal_dataset.input()
@@ -346,7 +415,16 @@ BOOST_DATA_TEST_CASE( bit_string_literal,
 }
 
 
-::x3_test::dataset_loader abstract_literal_dataset{ "test_case/abstract_literal" };
+/*
+ * abstract_literal
+ */
+struct abstract_literal_dataset : public ::x3_test::dataset_loader
+{
+    abstract_literal_dataset()
+    : dataset_loader{ "test_case/abstract_literal" }
+    { }
+} const abstract_literal_dataset;
+
 
 BOOST_DATA_TEST_CASE( abstract_literal,
       abstract_literal_dataset.input()
@@ -373,7 +451,16 @@ BOOST_DATA_TEST_CASE( abstract_literal,
 }
 
 
-::x3_test::dataset_loader physical_literal_dataset{ "test_case/physical_literal" };
+/*
+ * physical_literal
+ */
+struct physical_literal_dataset : public ::x3_test::dataset_loader
+{
+    physical_literal_dataset()
+    : dataset_loader{ "test_case/physical_literal" }
+    { }
+} const physical_literal_dataset;
+
 
 BOOST_DATA_TEST_CASE( physical_literal,
       physical_literal_dataset.input()
@@ -400,12 +487,21 @@ BOOST_DATA_TEST_CASE( physical_literal,
 }
 
 
-::x3_test::dataset_loader physical_literal_fail_dataset{ "test_case/physical_literal_fail" };
+/*
+ * physical_literal_failure
+ */
+struct physical_literal_failure_dataset : public ::x3_test::dataset_loader
+{
+    physical_literal_failure_dataset()
+    : dataset_loader{ "test_case/physical_literal_failure" }
+    { }
+} const physical_literal_failure_dataset;
+
 
 BOOST_DATA_TEST_CASE( physical_literal_fail,
-      physical_literal_fail_dataset.input()
-    ^ physical_literal_fail_dataset.expect()
-    ^ physical_literal_fail_dataset.test_file_name(),
+      physical_literal_failure_dataset.input()
+    ^ physical_literal_failure_dataset.expect()
+    ^ physical_literal_failure_dataset.test_file_name(),
     input, expected, file)
 {
     using x3_test::testing_parser;
@@ -427,7 +523,16 @@ BOOST_DATA_TEST_CASE( physical_literal_fail,
 }
 
 
-::x3_test::dataset_loader numeric_dataset{ "test_case/numeric_literal" };
+/*
+ * numeric_literal
+ */
+struct numeric_dataset : public ::x3_test::dataset_loader
+{
+    numeric_dataset()
+    : dataset_loader{ "test_case/numeric_literal" }
+    { }
+} const numeric_dataset;
+
 
 BOOST_DATA_TEST_CASE(numeric_literal,
       numeric_dataset.input()
@@ -454,7 +559,16 @@ BOOST_DATA_TEST_CASE(numeric_literal,
 }
 
 
-::x3_test::dataset_loader literal_dataset{ "test_case/literal" };
+/*
+ * literal
+ */
+struct literal_dataset : public ::x3_test::dataset_loader
+{
+    literal_dataset()
+    : dataset_loader{ "test_case/literal" }
+    { }
+} const literal_dataset;
+
 
 BOOST_DATA_TEST_CASE(literal,
       literal_dataset.input()
@@ -481,8 +595,17 @@ BOOST_DATA_TEST_CASE(literal,
 }
 
 
-::x3_test::dataset_loader simple_name_dataset{ "test_case/simple_name" };
-/* Note, simple_name is same as identifier. */
+/*
+ * simple_name
+ * Note, simple_name is same as identifier
+ */
+struct simple_name_dataset : public ::x3_test::dataset_loader
+{
+    simple_name_dataset()
+    : dataset_loader{ "test_case/simple_name" }
+    { }
+} const simple_name_dataset;
+
 
 BOOST_DATA_TEST_CASE(simple_name,
       simple_name_dataset.input()
