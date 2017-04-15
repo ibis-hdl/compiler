@@ -448,7 +448,7 @@ typedef x3::rule<qualified_expression_class> qualified_expression_type;
 typedef x3::rule<range_class> range_type;
 typedef x3::rule<range_constraint_class> range_constraint_type;
 typedef x3::rule<record_type_definition_class> record_type_definition_type;
-typedef x3::rule<relation_class> relation_type;
+typedef x3::rule<relation_class, ast::relation> relation_type;
 typedef x3::rule<report_statement_class> report_statement_type;
 typedef x3::rule<return_statement_class> return_statement_type;
 typedef x3::rule<scalar_type_definition_class> scalar_type_definition_type;
@@ -3210,13 +3210,15 @@ END RECORD -( record_type_simple_name )
     ;
 #endif
 
-#if 0
-// relation ::=
+
+// relation ::=                                                          [§ 7.1]
 // shift_expression [ relational_operator shift_expression ]
 auto const relation_def =
-        shift_expression -( relational_operator shift_expression )
-        ;
-#endif
+       shift_expression
+    >> relational_operator
+    >> shift_expression
+    ;
+
 
 #if 0
 // report_statement ::=
