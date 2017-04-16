@@ -11,6 +11,8 @@
 
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
 
+#include <eda/vhdl93/ast/nullary.hpp>
+
 
 namespace eda { namespace vhdl93 { namespace ast {
 
@@ -27,6 +29,7 @@ struct slice_name;
 
 struct name :
     x3::variant<
+        nullary,
 //        x3::forward_ast<attribute_name>,
 //        x3::forward_ast<indexed_name>,
         x3::forward_ast<operator_symbol>,

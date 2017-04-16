@@ -11,7 +11,9 @@
 
 #include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
 
+#include <eda/vhdl93/ast/nullary.hpp>
 #include <eda/vhdl93/ast/name.hpp>
+#include <eda/vhdl93/ast/keyword_token.hpp>
 
 #include <list>
 
@@ -42,13 +44,11 @@ struct signal_list_names
 #endif
 
 
-enum class keyword_token;
-
-
 struct signal_list :
     x3::variant<
+        nullary,
         signal_list_names,
-        x3::forward_ast<keyword_token>
+        keyword_token
     >
 {
     using base_type::base_type;

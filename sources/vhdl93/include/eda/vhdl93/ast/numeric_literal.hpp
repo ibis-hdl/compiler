@@ -11,6 +11,8 @@
 
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
 
+#include <eda/vhdl93/ast/nullary.hpp>
+
 
 namespace eda { namespace vhdl93 { namespace ast {
 
@@ -24,6 +26,7 @@ struct physical_literal;
 
 struct numeric_literal :
     x3::variant<
+        nullary,
         x3::forward_ast<abstract_literal>
       , x3::forward_ast<physical_literal>
     >

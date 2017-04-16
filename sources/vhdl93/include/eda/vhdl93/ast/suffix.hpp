@@ -11,6 +11,8 @@
 
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
 
+#include <eda/vhdl93/ast/nullary.hpp>
+
 
 namespace eda { namespace vhdl93 { namespace ast {
 
@@ -25,6 +27,7 @@ struct simple_name;
 
 struct suffix :
     x3::variant<
+        nullary,
         x3::forward_ast<simple_name>,
         x3::forward_ast<character_literal>,
         //x3::forward_ast<operator_symbol>,
