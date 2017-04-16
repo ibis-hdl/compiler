@@ -71,7 +71,8 @@ int dataset_loader::read_files(fs::path const& path)
         if(   m_file_path.size() == m_input.size()
            && m_input.size()     == m_expected.size() + 1
           ) {
-            std::cerr << "*** Remove file '" << m_file_path.back() << "' from data set\n";
+            std::cerr << "*** Remove file '" << m_file_path.back()
+                      << "' from data set\n";
             m_file_path.pop_back();
             m_input.pop_back();
         }
