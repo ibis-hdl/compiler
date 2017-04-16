@@ -750,7 +750,9 @@ auto const ABS = kw("abs");
 auto const ACCESS = kw("access");
 auto const AFTER = kw("after");
 auto const ALIAS = kw("alias");
-auto const ALL = kw("all");
+auto const ALL = as_rule<ast::keyword_token>(
+    kw("all") >> x3::attr(ast::keyword_token::ALL)
+);
 auto const AND = kw("and");
 auto const ARCHITECTURE = kw("architecture");
 auto const ARRAY = kw("array");
@@ -760,13 +762,17 @@ auto const BEGIN = kw("begin");
 auto const BLOCK = kw("block");
 auto const BODY = kw("body");
 auto const BUFFER = kw("buffer");
-auto const BUS = kw("bus");
+auto const BUS = as_rule<ast::keyword_token>(
+    kw("bus") >> x3::attr(ast::keyword_token::BUS)
+);
 auto const CASE = kw("case");
 auto const COMPONENT = kw("component");
 auto const CONFIGURATION = kw("configuration");
 auto const CONSTANT = kw("constant");
 auto const DISCONNECT = kw("disconnect");
-auto const DOWNTO = kw("downto");
+auto const DOWNTO = as_rule<ast::keyword_token>(
+    kw("downto") >> x3::attr(ast::keyword_token::DOWNTO)
+);
 auto const ELSE = kw("else");
 auto const ELSIF = kw("elsif");
 auto const END = kw("end");
@@ -788,7 +794,9 @@ auto const IS = kw("is");
 auto const LABEL = kw("label");
 auto const LIBRARY = kw("library");
 auto const LINKAGE = kw("linkage");
-auto const LITERAL = kw("literal");
+auto const LITERAL = as_rule<ast::keyword_token>(
+    kw("literal") >> x3::attr(ast::keyword_token::LITERAL)
+);
 auto const LOOP = kw("loop");
 auto const MAP = kw("map");
 auto const MOD = kw("mod");
@@ -797,12 +805,16 @@ auto const NEW = kw("new");
 auto const NEXT = kw("next");
 auto const NOR = kw("nor");
 auto const NOT = kw("not");
-auto const NULL = kw("null");
+auto const NULL = as_rule<ast::keyword_token>(
+    kw("null") >> x3::attr(ast::keyword_token::NULL)
+);
 auto const OF = kw("of");
 auto const ON = kw("on");
 auto const OPEN = kw("open");
 auto const OR = kw("or");
-auto const OTHERS = kw("others");
+auto const OTHERS = as_rule<ast::keyword_token>(
+    kw("others") >> x3::attr(ast::keyword_token::OTHERS)
+);
 auto const OUT = kw("out");
 auto const PACKAGE = kw("package");
 auto const PORT = kw("port");
@@ -812,7 +824,9 @@ auto const PROCESS = kw("process");
 auto const PURE = kw("pure");
 auto const RANGE = kw("range");
 auto const RECORD = kw("record");
-auto const REGISTER = kw("register");
+auto const REGISTER = as_rule<ast::keyword_token>(
+    kw("register") >> x3::attr(ast::keyword_token::REGISTER)
+);
 auto const REJECT = kw("reject");
 auto const REM = kw("rem");
 auto const REPORT = kw("report");
@@ -829,7 +843,9 @@ auto const SRA = kw("sra");
 auto const SRL = kw("srl");
 auto const SUBTYPE = kw("subtype");
 auto const THEN = kw("then");
-auto const TO = kw("to");
+auto const TO = as_rule<ast::keyword_token>(
+    kw("to") >> x3::attr(ast::keyword_token::TO)
+);
 auto const TRANSPORT = kw("transport");
 auto const TYPE = kw("type");
 auto const UNAFFECTED = kw("unaffected");
@@ -877,42 +893,6 @@ struct keyword_symbols : x3::symbols<> {
 
 auto const keyword = x3::rule<struct _> { "keyword" } =
     kw( keywords )
-    ;
-
-
-/*
- * Keyword helper rules to tag the AST with token IDs
- */
-auto const ALL_token = x3::rule<struct _, ast::keyword_token> { "ALL" } =
-    ALL >> x3::attr(ast::keyword_token::ALL)
-    ;
-
-auto const LITERAL_token = x3::rule<struct _, ast::keyword_token> { "LITERAL" } =
-    LITERAL >> x3::attr(ast::keyword_token::LITERAL)
-    ;
-
-auto const NULL_token = x3::rule<struct _, ast::keyword_token> { "NULL" } =
-    NULL >> x3::attr(ast::keyword_token::NULL)
-    ;
-
-auto const TO_token = x3::rule<struct _, ast::keyword_token> { "TO" } =
-    TO >> x3::attr(ast::keyword_token::TO)
-    ;
-
-auto const DOWNTO_token = x3::rule<struct _, ast::keyword_token> { "DOWNTO" } =
-    DOWNTO >> x3::attr(ast::keyword_token::DOWNTO)
-    ;
-
-auto const REGISTER_token = x3::rule<struct _, ast::keyword_token> { "REGISTER" } =
-    REGISTER >> x3::attr(ast::keyword_token::REGISTER)
-    ;
-
-auto const BUS_token = x3::rule<struct _, ast::keyword_token> { "BUS" } =
-    BUS >> x3::attr(ast::keyword_token::BUS)
-    ;
-
-auto const OTHERS_token = x3::rule<struct _, ast::keyword_token> { "OTHERS" } =
-    OTHERS >> x3::attr(ast::keyword_token::OTHERS)
     ;
 
 /*
@@ -2026,8 +2006,8 @@ auto const designator_def =
 // direction ::=                                                         [§ 3.1]
 // to | downto
 auto const direction_def =
-      TO_token
-    | DOWNTO_token
+      TO
+    | DOWNTO
     ;
 
 
@@ -2793,7 +2773,7 @@ auto const literal_def = /* Note, order changed since matters */
     | string_literal
     | bit_string_literal
     | numeric_literal
-    | NULL_token
+    | NULL
     ;
 
 
@@ -3438,8 +3418,8 @@ auto const signal_declaration_def =
 // signal_kind ::=                                                   [§ 4.3.1.2]
 // register  |  bus
 auto const signal_kind_def =
-      REGISTER_token
-    | BUS_token
+      REGISTER
+    | BUS
     ;
 
 
@@ -3459,8 +3439,8 @@ namespace detail {
 }
 auto const signal_list_def =
       detail::signal_names
-    | OTHERS_token
-    | ALL_token
+    | OTHERS
+    | ALL
     ;
 
 
@@ -3630,7 +3610,7 @@ auto const suffix_def =
       simple_name
     | character_literal
     | operator_symbol
-    | ALL_token
+    | ALL
     ;
 
 
