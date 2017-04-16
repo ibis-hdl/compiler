@@ -2289,7 +2289,7 @@ auto const exponent_def =
 //     | relation [ nor relation ]
 //     | relation { xnor relation }
 auto const expression_def =
-      relation % logical_operator          // AND, ...
+      relation >> *( logical_operator        > relation )    // AND, ...
     | relation >>  ( logical_operator_option > relation )   // NAND, NOR
     ;
 
