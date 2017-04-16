@@ -11,3 +11,6 @@ FILE_PATTERNS          = *.hpp \
                          *.cpp
 RECURSIVE              = YES
 USE_MDFILE_AS_MAINPAGE = @doxy_main_page@
+
+CLASS_DIAGRAMS         = YES
+SOURCE_BROWSER         = YES
