@@ -362,7 +362,7 @@ typedef x3::rule<enumeration_literal_class, ast::enumeration_literal> enumeratio
 typedef x3::rule<enumeration_type_definition_class, ast::enumeration_type_definition> enumeration_type_definition_type;
 typedef x3::rule<exit_statement_class> exit_statement_type;
 typedef x3::rule<exponent_class, std::string_view> exponent_type;
-typedef x3::rule<expression_class> expression_type;
+typedef x3::rule<expression_class /*, ast::expression */> expression_type;
 typedef x3::rule<extended_digit_class, char> extended_digit_type;
 typedef x3::rule<extended_identifier_class, std::string_view> extended_identifier_type;
 typedef x3::rule<factor_class, ast::factor> factor_type;
@@ -2288,11 +2288,20 @@ auto const exponent_def =
 //     | relation [ nand relation ]
 //     | relation [ nor relation ]
 //     | relation { xnor relation }
-auto const expression_def =
-      relation >> *( logical_operator        > relation )    // AND, ...
-    | relation >>  ( logical_operator_option > relation )   // NAND, NOR
-    ;
+namespace detail {
 
+    auto const expression_chunk_1 = x3::rule<struct _, ast::expression_chunk> { "expression" } =
+        logical_operator > relation
+        ;
+
+    auto const expression_chunk_2 = x3::rule<struct _, ast::expression_chunk> { "expression" } =
+        logical_operator_option > relation
+        ;
+}
+auto const expression_def =
+      relation >> *detail::expression_chunk_1   // AND, ...
+    | relation >>  detail::expression_chunk_2   // NAND, NOR
+    ;
 
 
 // extended_digit ::=                                                 [§ 13.4.2]
