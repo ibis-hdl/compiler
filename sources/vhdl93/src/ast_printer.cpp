@@ -2027,6 +2027,12 @@ void printer::operator()(operand const& node) const
 }
 
 
+void printer::operator()(nullary const& node) const
+{
+    os << "\n*****************************";
+    os << "\n*    SHALL NEVER BE HERE    *";
+    os << "\n*****************************\n";
+}
 
 
 } } } // namespace eda.vhdl93.ast

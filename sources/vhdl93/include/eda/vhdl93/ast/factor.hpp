@@ -11,6 +11,8 @@
 
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
 
+#include <eda/vhdl93/ast/nullary.hpp>
+
 
 namespace eda { namespace vhdl93 { namespace ast {
 
@@ -22,8 +24,10 @@ struct primary;
 struct unary_operation;
 struct binary_operation;
 
+
 struct factor :
     x3::variant<
+        nullary,
         x3::forward_ast<unary_operation>,
         x3::forward_ast<binary_operation>,
         x3::forward_ast<primary>

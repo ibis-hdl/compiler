@@ -235,16 +235,6 @@ struct wait_statement;
 struct waveform;
 struct waveform_element;
 
-// keywords and miscellaneous
-enum class keyword_token;
-
-struct binary_operation;
-struct operand;
-struct unary_operation;
-
-// ast helper node
-struct signal_list_names;
-
 
 } } } // namespace eda.vhdl93.ast
 
@@ -501,6 +491,7 @@ public:
     void operator()(unary_operation const& node) const;
     void operator()(operand const& node) const;
 
+    void operator()(nullary const& node) const;
 };
 
 
