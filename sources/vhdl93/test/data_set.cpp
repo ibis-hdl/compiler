@@ -47,6 +47,7 @@ int dataset_loader::read_files(fs::path const& path)
                 if (fs::extension(file) == ".input") {
 
                     m_file_path.emplace_back(file.native().c_str());
+                    //std::cerr << "INFO: read '" << m_file_path.back() << "'\n";
 
                     auto const input_path  = file;
                     auto expect_path = file;
@@ -58,17 +59,25 @@ int dataset_loader::read_files(fs::path const& path)
             }
         }
         else {
-            std::cerr << "*** Directory: " << fs::absolute(path)
-            << " does not exist. ***\n";
+            std::cerr << "*** Directory: '" << fs::absolute(path)
+                      << "' does not exist. ***\n";
             return 1;
         }
     }
     catch(std::exception const& e) {
-        std::cerr << "Caught " << e.what() << " exception\n";
-        return 1;
+        std::cerr << "*** Caught \"" << e.what() << "\" exception\n";
+        /* try to recover from error and continue; probably no {file}.expected
+         * was found. */
+        if(   m_file_path.size() == m_input.size()
+           && m_input.size()     == m_expected.size() + 1
+          ) {
+            std::cerr << "*** Remove file '" << m_file_path.back() << "' from data set\n";
+            m_file_path.pop_back();
+            m_input.pop_back();
+        }
     }
     catch(...) {
-        std::cerr << "Caught unexpected exception !!!\n";
+        std::cerr << "*** Caught unexpected exception !!!\n";
         return 1;
 
     }
@@ -81,7 +90,7 @@ std::string dataset_loader::read_file(fs::path const& file_path)
     fs::ifstream file{ file_path };
 
     if(!file) {
-        std::cerr << "ERROR: unable to open '" << file_path << "'\n";
+        std::cerr << "ERROR: unable to open '" << file_path.native() << "'\n";
         throw std::ios_base::failure{ "file open error" };
     }
 
@@ -89,7 +98,7 @@ std::string dataset_loader::read_file(fs::path const& file_path)
     ss << file.rdbuf();
 
     if(file.fail() && !file.eof()) {
-        std::cerr << "ERROR: unable to open '" << file_path << "'\n";
+        std::cerr << "ERROR: unable to open '" << file_path.native() << "'\n";
         throw std::ios_base::failure{ "rdbuf() read error" };
     }
 
