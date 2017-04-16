@@ -3466,10 +3466,16 @@ auto const signature_def =
 
 // simple_expression ::=
 // [ sign ] term { adding_operator term }
+namespace detail {
+
+    auto const simple_expression_chunk = x3::rule<struct _, ast::simple_expression_chunk> { "simple_expression_chunk" } =
+        adding_operator > term
+        ;
+}
 auto const simple_expression_def =
        -sign
     >> term
-    >> *( adding_operator >> term )
+    >> *detail::simple_expression_chunk
     ;
 
 
