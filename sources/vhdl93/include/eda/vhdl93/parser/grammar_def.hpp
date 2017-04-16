@@ -927,8 +927,6 @@ struct logical_operator_symbols : x3::symbols<ast::operator_token> {
 
         add("and",  ast::operator_token::and_)
            ("or",   ast::operator_token::or_)
-           ("nand", ast::operator_token::nand)
-           ("nor",  ast::operator_token::nor)
            ("xor",  ast::operator_token::xor_)
            ("xnor", ast::operator_token::xnor)
            ;
@@ -937,6 +935,23 @@ struct logical_operator_symbols : x3::symbols<ast::operator_token> {
 
 auto const logical_operator = as_rule<ast::operator_token>(
         x3::no_case[ logical_operator_symbols ]
+    );
+
+
+struct logical_operator_option_symbols : x3::symbols<ast::operator_token> {
+
+    logical_operator_option_symbols() {
+
+        name("logical_operator");
+
+        add("nand", ast::operator_token::nand)
+           ("nor",  ast::operator_token::nor)
+           ;
+    }
+} const logical_operator_option_symbols;
+
+auto const logical_operator_option = as_rule<ast::operator_token>(
+        x3::no_case[ logical_operator_option_symbols ]
     );
 
 
@@ -2274,9 +2289,8 @@ auto const exponent_def =
 //     | relation [ nor relation ]
 //     | relation { xnor relation }
 auto const expression_def =
-      relation >> *( logical_operator > relation )
-//    | relation -( NAND relation )
-//    | relation -( NOR relation )
+      relation % logical_operator          // AND, ...
+    | relation >>  ( logical_operator_option > relation )   // NAND, NOR
     ;
 
 
