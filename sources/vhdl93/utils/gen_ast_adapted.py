@@ -20,10 +20,18 @@ class AstFusionAdapter:
     parse_blacklist = []
 
     def __init__(self):
+        modules = [
+            '../include',               # eda.vhdl self
+            '../../common/include/'     # eda.common
+        ]
         pathname = os.path.dirname(__file__)
         self.script_path = os.path.abspath(pathname)
-        include_paths = os.path.abspath(pathname + '/' + '../include')
-        print('using include_paths = ' + include_paths)
+        include_paths = []
+        for include in modules:
+            include_paths.append(os.path.abspath(pathname + '/' + include))
+        fake_paths = [os.path.abspath(pathname + '/' + 'fake_header')]
+        print('using include_paths = ' + ", ".join(include_paths))
+        print('using fake include_paths = ' + ", ".join(fake_paths))
 
         # problem headers with boost::variant
         self.parse_blacklist = self.find_x3_variant()
@@ -35,7 +43,7 @@ class AstFusionAdapter:
             xml_generator_path=generator_path,
             xml_generator=generator_name,
             cflags='-std=c++14',
-            include_paths=[include_paths])
+            include_paths=fake_paths + include_paths)
         hxx_list = list(filter(lambda hxx: hxx not in self.parse_blacklist, self.find_hpp()))
         header_list = [self.include_prefix() + hpp for hpp in hxx_list]
         decls = parser.parse(header_list, xml_generator_config)
