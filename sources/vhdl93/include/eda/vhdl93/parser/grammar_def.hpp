@@ -732,7 +732,7 @@ waveform_element_type const waveform_element { "waveform_element" };
  * Parser helper
  */
 template<typename T>
-auto as_rule = [](auto p) { return x3::rule<struct _, T>{ "as" } = x3::as_parser(p); };
+auto as_type = [](auto p) { return x3::rule<struct _, T>{ "as" } = x3::as_parser(p); };
 
 
 /*
@@ -750,7 +750,7 @@ auto const ABS = kw("abs");
 auto const ACCESS = kw("access");
 auto const AFTER = kw("after");
 auto const ALIAS = kw("alias");
-auto const ALL = as_rule<ast::keyword_token>(
+auto const ALL = as_type<ast::keyword_token>(
     kw("all") >> x3::attr(ast::keyword_token::ALL)
 );
 auto const AND = kw("and");
@@ -762,7 +762,7 @@ auto const BEGIN = kw("begin");
 auto const BLOCK = kw("block");
 auto const BODY = kw("body");
 auto const BUFFER = kw("buffer");
-auto const BUS = as_rule<ast::keyword_token>(
+auto const BUS = as_type<ast::keyword_token>(
     kw("bus") >> x3::attr(ast::keyword_token::BUS)
 );
 auto const CASE = kw("case");
@@ -770,7 +770,7 @@ auto const COMPONENT = kw("component");
 auto const CONFIGURATION = kw("configuration");
 auto const CONSTANT = kw("constant");
 auto const DISCONNECT = kw("disconnect");
-auto const DOWNTO = as_rule<ast::keyword_token>(
+auto const DOWNTO = as_type<ast::keyword_token>(
     kw("downto") >> x3::attr(ast::keyword_token::DOWNTO)
 );
 auto const ELSE = kw("else");
@@ -794,7 +794,7 @@ auto const IS = kw("is");
 auto const LABEL = kw("label");
 auto const LIBRARY = kw("library");
 auto const LINKAGE = kw("linkage");
-auto const LITERAL = as_rule<ast::keyword_token>(
+auto const LITERAL = as_type<ast::keyword_token>(
     kw("literal") >> x3::attr(ast::keyword_token::LITERAL)
 );
 auto const LOOP = kw("loop");
@@ -805,14 +805,14 @@ auto const NEW = kw("new");
 auto const NEXT = kw("next");
 auto const NOR = kw("nor");
 auto const NOT = kw("not");
-auto const NULL = as_rule<ast::keyword_token>(
+auto const NULL = as_type<ast::keyword_token>(
     kw("null") >> x3::attr(ast::keyword_token::NULL)
 );
 auto const OF = kw("of");
 auto const ON = kw("on");
 auto const OPEN = kw("open");
 auto const OR = kw("or");
-auto const OTHERS = as_rule<ast::keyword_token>(
+auto const OTHERS = as_type<ast::keyword_token>(
     kw("others") >> x3::attr(ast::keyword_token::OTHERS)
 );
 auto const OUT = kw("out");
@@ -824,7 +824,7 @@ auto const PROCESS = kw("process");
 auto const PURE = kw("pure");
 auto const RANGE = kw("range");
 auto const RECORD = kw("record");
-auto const REGISTER = as_rule<ast::keyword_token>(
+auto const REGISTER = as_type<ast::keyword_token>(
     kw("register") >> x3::attr(ast::keyword_token::REGISTER)
 );
 auto const REJECT = kw("reject");
@@ -843,7 +843,7 @@ auto const SRA = kw("sra");
 auto const SRL = kw("srl");
 auto const SUBTYPE = kw("subtype");
 auto const THEN = kw("then");
-auto const TO = as_rule<ast::keyword_token>(
+auto const TO = as_type<ast::keyword_token>(
     kw("to") >> x3::attr(ast::keyword_token::TO)
 );
 auto const TRANSPORT = kw("transport");
@@ -913,7 +913,7 @@ struct logical_operator_symbols : x3::symbols<ast::operator_token> {
     }
 } const logical_operator_symbols;
 
-auto const logical_operator = as_rule<ast::operator_token>(
+auto const logical_operator = as_type<ast::operator_token>(
         x3::no_case[ logical_operator_symbols ]
     );
 
@@ -930,7 +930,7 @@ struct logical_operator_option_symbols : x3::symbols<ast::operator_token> {
     }
 } const logical_operator_option_symbols;
 
-auto const logical_operator_option = as_rule<ast::operator_token>(
+auto const logical_operator_option = as_type<ast::operator_token>(
         x3::no_case[ logical_operator_option_symbols ]
     );
 
@@ -964,7 +964,7 @@ struct unary_miscellaneous_operator_symbols : x3::symbols<ast::operator_token> {
     }
 } const unary_miscellaneous_operator_symbols;
 
-auto const unary_miscellaneous_operator = as_rule<ast::operator_token>(
+auto const unary_miscellaneous_operator = as_type<ast::operator_token>(
         x3::no_case[ unary_miscellaneous_operator_symbols ]
     );
 
@@ -1009,7 +1009,7 @@ struct multiplying_operator_symbols : x3::symbols<ast::operator_token> {
     }
 } const multiplying_operator_symbols;
 
-auto const multiplying_operator = as_rule<ast::operator_token>(
+auto const multiplying_operator = as_type<ast::operator_token>(
         x3::no_case[ multiplying_operator_symbols ]
     );
 
@@ -1030,7 +1030,7 @@ struct shift_operator_symbols : x3::symbols<ast::operator_token> {
     }
 } const shift_operator_symbols;
 
-auto const shift_operator = as_rule<ast::operator_token>(
+auto const shift_operator = as_type<ast::operator_token>(
         x3::no_case[ shift_operator_symbols ]
     );
 
@@ -1391,10 +1391,10 @@ auto const based_integer_def =
 // base # based_integer [ . based_integer ] # [ exponent ]
 namespace detail {
 
-    auto const based_literal_base = as_rule<std::string_view>(
+    auto const based_literal_base = as_type<std::string_view>(
         raw[ lexeme[ integer ]]);
 
-    auto const based_literal_number = as_rule<std::string_view>(
+    auto const based_literal_number = as_type<std::string_view>(
         raw[ lexeme[
             based_integer >> -(char_('.') >> based_integer)
         ]]);
@@ -1919,12 +1919,12 @@ auto const context_item_def =
 // integer [ . integer ] [ exponent ]
 namespace detail {
 
-    auto const decimal_literal_real = as_rule<std::string_view>(
+    auto const decimal_literal_real = as_type<std::string_view>(
         raw[ lexeme[
             (integer >> char_('.') >> integer >> -exponent)
         ]]);
 
-    auto const decimal_literal_int = as_rule<std::string_view>(
+    auto const decimal_literal_int = as_type<std::string_view>(
         raw[ lexeme[
              (integer >> -exponent)
         ]]);
@@ -3008,7 +3008,7 @@ namespace detail {
 
     /* Note, the LRM doesn't specify the allowed characters, hence it's assumed
      * that it follows the natural conventions. */
-    auto const unit_name = as_rule<std::string_view>(
+    auto const unit_name = as_type<std::string_view>(
         raw[ lexeme[
             +(lower_case_letter | upper_case_letter)
         ]]);
