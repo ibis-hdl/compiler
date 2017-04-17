@@ -28,17 +28,16 @@ namespace x3 = boost::spirit::x3;
 enum class operator_token;
 
 
-struct simple_expression_chunk {
-    operator_token                      operator_;
-    ast::term                           term;
-};
-
-
 struct simple_expression : x3::position_tagged
 {
+    struct chunk {
+        operator_token                  operator_;
+        ast::term                       term;
+    };
+
     boost::optional<operator_token>     sign;
     ast::term                           term;
-    std::list<simple_expression_chunk>  chunk_list;
+    std::list<chunk>                    chunk_list;
 };
 
 

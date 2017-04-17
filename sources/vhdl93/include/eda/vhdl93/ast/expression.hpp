@@ -24,17 +24,16 @@ namespace eda { namespace vhdl93 { namespace ast {
 namespace x3 = boost::spirit::x3;
 
 
-struct expression_chunk
-{
-    operator_token                  operator_;
-    ast::relation                   relation;
-};
-
-
 struct expression : x3::position_tagged
 {
+    struct chunk
+    {
+        operator_token              operator_;
+        ast::relation               relation;
+    };
+
     ast::relation                   relation;
-    std::list<expression_chunk>     chunk_list;
+    std::list<chunk>                chunk_list;
 };
 
 

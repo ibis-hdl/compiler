@@ -31,6 +31,13 @@ struct relation_chunk
 
 struct relation : x3::position_tagged
 {
+//    FixMe: Nested structure results into naming conflict of 'chunk'
+//    struct chunk_
+//    {
+//        operator_token              operator_;
+//        ast::shift_expression       shift_expression;
+//    };
+
     ast::shift_expression           shift_expression;
     boost::optional<relation_chunk> chunk;
 };

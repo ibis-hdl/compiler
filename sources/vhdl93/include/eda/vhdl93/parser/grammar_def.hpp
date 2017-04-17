@@ -2270,11 +2270,11 @@ auto const exponent_def =
 //     | relation { xnor relation }
 namespace detail {
 
-    auto const expression_chunk_1 = x3::rule<struct _, ast::expression_chunk> { "expression" } =
+    auto const expression_chunk_1 = x3::rule<struct _, ast::expression::chunk> { "expression" } =
         logical_operator > relation
         ;
 
-    auto const expression_chunk_2 = x3::rule<struct _, ast::expression_chunk> { "expression" } =
+    auto const expression_chunk_2 = x3::rule<struct _, ast::expression::chunk> { "expression" } =
         logical_operator_option > relation
         ;
 }
@@ -3235,7 +3235,6 @@ namespace detail {
     auto const relation_chunk = x3::rule<struct _, ast::relation_chunk> { "relation" } =
         relational_operator > shift_expression
         ;
-
 }
 auto const relation_def =
        shift_expression
@@ -3455,16 +3454,10 @@ auto const signature_def =
 
 // simple_expression ::=
 // [ sign ] term { adding_operator term }
-namespace detail {
-
-    auto const simple_expression_chunk = x3::rule<struct _, ast::simple_expression_chunk> { "simple_expression_chunk" } =
-        adding_operator > term
-        ;
-}
 auto const simple_expression_def =
        -sign
     >> term
-    >> *detail::simple_expression_chunk
+    >> *(adding_operator > term)
     ;
 
 

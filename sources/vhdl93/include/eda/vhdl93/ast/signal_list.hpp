@@ -21,27 +21,10 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-// ToDo: derive signal_name from ast::name, which gives compile errors
-#if 0
-struct signal_name : ast::name
-{
-    // XXX DOESN'T COMPILE
-    using base_type::base_type;
-    using base_type::operator=;
-};
-
-struct signal_list_names
-{
-    std::list<signal_name>      list;
-};
-#else
-
-
 struct signal_list_names
 {
     std::list<ast::name>        list;
 };
-#endif
 
 
 struct signal_list :

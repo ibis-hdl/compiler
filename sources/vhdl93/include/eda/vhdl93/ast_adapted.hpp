@@ -35,7 +35,7 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::enumeration_type_definition,
     list
 )
 
-BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::expression_chunk,
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::expression::chunk,
     operator_, relation
 )
 
@@ -80,7 +80,7 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::signal_list_names,
     list
 )
 
-BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::simple_expression_chunk,
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::simple_expression::chunk,
     operator_, term
 )
 
@@ -97,7 +97,7 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::string_literal,
     literal
 )
 
-BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::term_chunk,
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::term::chunk,
     operator_, factor
 )
 
