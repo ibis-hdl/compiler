@@ -113,7 +113,7 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::binary_operation,
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::unary_operation,
-    operator_, operand_
+    operator_, operand
 )
 
 #endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_ADAPTED_HPP_ */

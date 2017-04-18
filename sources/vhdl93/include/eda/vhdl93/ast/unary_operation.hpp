@@ -26,7 +26,7 @@ struct operand;
 struct unary_operation :  x3::position_tagged
 {
     operator_token                  operator_;
-    operand                         operand_;
+    ast::operand                    operand;
 };
 
 
