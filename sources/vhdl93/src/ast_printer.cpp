@@ -2014,7 +2014,7 @@ void printer::operator()(unary_operation const& node) const
     os << "{\n";
     os << "operator=" << node.operator_ << "\n";
     os << "operand=";
-    boost::apply_visitor(*this, node.operand);
+    boost::apply_visitor(*this, node.operand_);
     os << "\n}";
 }
 
