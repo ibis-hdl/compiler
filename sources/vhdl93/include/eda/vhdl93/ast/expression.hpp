@@ -33,7 +33,7 @@ struct expression : x3::position_tagged
     };
 
     ast::relation                   relation;
-    std::list<chunk>                chunk_list;
+    std::list<chunk>                rest_list;
 };
 
 

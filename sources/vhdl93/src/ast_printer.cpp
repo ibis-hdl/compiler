@@ -863,11 +863,11 @@ void printer::operator()(expression const &node) const
 
     (*this)(node.relation);
 
-    if(node.chunk_list.empty()) {
+    if(node.rest_list.empty()) {
         return;
     }
 
-    for(auto const& chunk : node.chunk_list) {
+    for(auto const& chunk : node.rest_list) {
         os << "\noperator=" << chunk.operator_;
         os << "\noperator ID = " << (unsigned)chunk.operator_;
         (*this)(chunk.relation);
@@ -881,13 +881,13 @@ if(node.sign.is_initialized()) { // optional
 
 (*this)(node.term);
 
-if(node.chunk_list.empty()) {
+if(node.rest_list.empty()) {
     return;
 }
 
-for(auto const& chunk : node.chunk_list) {
-    os << "\noperator=" << chunk.operator_;
-    (*this)(chunk.term);
+for(auto const& rest : node.rest_list) {
+    os << "\noperator=" << rest.operator_;
+    (*this)(rest.term);
 }
 
 #endif
@@ -1556,11 +1556,11 @@ void printer::operator()(relation const &node) const
 
     (*this)(node.shift_expression);
 
-    if(!node.chunk.is_initialized()) {
+    if(!node.rest.is_initialized()) {
         return;
     }
 
-    auto const& chunk = node.chunk.get();
+    auto const& chunk = node.rest.get();
     os << "\n" << "operator=" << chunk.operator_ << "\n";
     (*this)(chunk.shift_expression);
 }
@@ -1668,11 +1668,11 @@ void printer::operator()(shift_expression const &node) const
     symbol_scope<shift_expression> _(*this, symbol);
     (*this)(node.simple_expression);
 
-    if(!node.chunk.is_initialized()) {
+    if(!node.rest.is_initialized()) {
         return;
     }
 
-    auto const& chunk = node.chunk.get();
+    auto const& chunk = node.rest.get();
     os << "\n" << "operator=" << chunk.operator_ << "\n";
     (*this)(chunk.simple_expression);
 }
@@ -1731,11 +1731,11 @@ void printer::operator()(simple_expression const &node) const
 
     (*this)(node.term);
 
-    if(node.chunk_list.empty()) {
+    if(node.rest_list.empty()) {
         return;
     }
 
-    for(auto const& chunk : node.chunk_list) {
+    for(auto const& chunk : node.rest_list) {
         os << "\noperator=" << chunk.operator_;
         (*this)(chunk.term);
     }
@@ -1864,12 +1864,12 @@ void printer::operator()(term const &node) const
     os << "{\n";
     boost::apply_visitor(*this, node.factor);
 
-    if(node.chunk_list.empty()) {
+    if(node.rest_list.empty()) {
         os << "}";
         return;
     }
 
-    for(auto const& term_chunk: node.chunk_list) {
+    for(auto const& term_chunk: node.rest_list) {
         os << "\noperator=" << term_chunk.operator_;
         os << "\nfactor=";
         boost::apply_visitor(*this, term_chunk.factor);

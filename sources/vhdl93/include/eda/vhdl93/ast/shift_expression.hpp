@@ -24,24 +24,16 @@ namespace eda { namespace vhdl93 { namespace ast {
 namespace x3 = boost::spirit::x3;
 
 
-struct shift_expression_chunk
-{
-    operator_token                  operator_;
-    ast::simple_expression          simple_expression;
-};
-
-
 struct shift_expression : x3::position_tagged
 {
-//    FixMe: Nested structure results into naming conflict of 'chunk'
-//    struct chunk
-//    {
-//        operator_token                  operator_;
-//        ast::simple_expression          simple_expression;
-//    };
+    struct chunk
+    {
+        operator_token              operator_;
+        ast::simple_expression      simple_expression;
+    };
 
     ast::simple_expression          simple_expression;
-    boost::optional<shift_expression_chunk> chunk;
+    boost::optional<chunk>          rest;
 };
 
 

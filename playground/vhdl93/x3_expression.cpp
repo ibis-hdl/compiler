@@ -78,12 +78,21 @@ namespace parser
         }
     } const keyword;
 
-    struct logical_operator : x3::symbols<ast::operator_token> {
-        logical_operator() {
-            add("and", ast::operator_token::and_)
-               ("nor", ast::operator_token::nor);
+    struct logical_operator_1 : x3::symbols<ast::operator_token> {
+        logical_operator_1() {
+            add("and",  ast::operator_token::and_)
+               ("or",   ast::operator_token::or_);
+               ("xor",  ast::operator_token::xor_);
+               ("xnor", ast::operator_token::xnor);
             }
-    } const logical_operator;
+    } const logical_operator_1;
+
+    struct logical_operator_2 : x3::symbols<ast::operator_token> {
+        logical_operator_2() {
+            add("nand", ast::operator_token::nand)
+               ("nor",  ast::operator_token::nor);
+            }
+    } const logical_operator_2;
 
     auto const identifier = x3::rule<struct _, std::string> { "identifier" } =
         x3::lexeme[((alpha | char_('_')) >> *(alnum | char_('_'))) - keyword];
@@ -101,15 +110,23 @@ namespace parser
            | relation [ nor relation ]
            | relation { xnor relation }
 */
-    auto const expression_chunk = x3::rule<struct _, ast::expression::chunk> { "expression" } =
-        logical_operator > relation;
+    auto const expression_chunk_1 = x3::rule<struct _, ast::expression::chunk> { "expression" } =
+        logical_operator_1 > relation;
+    auto const expression_chunk_2 = x3::rule<struct _, ast::expression::chunk> { "expression" } =
+        logical_operator_2 > relation;
 
-    auto const append = [](auto& ctx) {
-        auto& list = x3::_val(ctx).chunk_list;
-        list.push_back(list.end(), std::move(x3::_attr(ctx)));
-    };
     auto const expression = x3::rule<struct _, ast::expression> { "expression" } =
-        relation >> expression_chunk;
+#if 0
+          identifier >> x3::repeat(1)[ expression_chunk_2 ] // artificially vector<T>
+        | identifier >> *expression_chunk_1
+        ;
+#else
+           identifier
+        >> ( *expression_chunk_1
+           | x3::repeat(1)[ expression_chunk_2 ] // artificially vector<T>
+           )
+        ;
+#endif
 }
 
 
@@ -137,8 +154,11 @@ int main()
     namespace x3 = boost::spirit::x3;
 
     for(std::string const str: {
+        "Foo",
         "Hello and Bello",
-        "Hello and Bello and Trello"
+        "Hello and Bello and Trello",
+        "Foo nand Bar",
+        "Foo annd Bar nand Baz",
     }) {
       auto iter = str.begin(), end = str.end();
 
@@ -149,7 +169,7 @@ int main()
       if (r && iter == end) {
         std::cout << "succeeded:\n";
         visitor(std::cout)(attr);
-
+        std::cout << "\n";
       } else {
         std::cout << "*** failed ***\n";
       }

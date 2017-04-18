@@ -3232,7 +3232,7 @@ END RECORD -( record_type_simple_name )
 // shift_expression [ relational_operator shift_expression ]
 namespace detail {
 
-    auto const relation_chunk = x3::rule<struct _, ast::relation_chunk> { "relation" } =
+    auto const relation_chunk = x3::rule<struct _, ast::relation::chunk> { "relation" } =
         relational_operator > shift_expression
         ;
 }
@@ -3379,7 +3379,7 @@ auto const sequential_statement_def =
 // simple_expression [ shift_operator simple_expression ]
 namespace detail {
 
-    auto const shift_expression_chunk = x3::rule<struct _, ast::shift_expression_chunk> { "shift_expression" } =
+    auto const shift_expression_chunk = x3::rule<struct _, ast::shift_expression::chunk> { "shift_expression" } =
         shift_operator > simple_expression
         ;
 }

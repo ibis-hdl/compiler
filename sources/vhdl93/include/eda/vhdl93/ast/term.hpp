@@ -34,7 +34,7 @@ struct term : x3::position_tagged
     };
 
     ast::factor                 factor;
-    std::list<chunk>            chunk_list;
+    std::list<chunk>            rest_list;
 };
 
 
