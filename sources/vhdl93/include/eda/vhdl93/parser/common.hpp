@@ -9,11 +9,15 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_PARSER_COMMON_HPP_
 
 
-namespace boost { namespace spirit { namespace x3 {
+namespace boost {
 
-     namespace iso8859_1 { }
+    namespace spirit { namespace x3 {
 
-} } } // namespace boost.spirit.x3
+         namespace iso8859_1 { }
+
+    } }  // namespace spirit.x3
+
+} // namespace boost
 
 
 
