@@ -64,9 +64,9 @@ namespace parser
         operator_2 > identifier
         ;
     auto const expression = x3::rule<struct _, ast::expression> { "expression" } =
-          identifier >> *expression_chunk_1 // foo { and  foo }
-        // rule below fails to compile, chunk_list contains only one value
-        | identifier >>  expression_chunk_2 // foo [ nand foo ]
+        // artificially vector<T>
+          identifier >> x3::repeat(1)[ expression_chunk_2 ] // foo [ nand foo ]
+        | identifier >> *expression_chunk_1 // foo { and  foo }
         ;
 }
 
