@@ -9,6 +9,8 @@
 #define INCLUDE_EDA_VHDL93_ERROR_HANDLER_HPP_
 
 
+#include <eda/vhdl93/parser/common.hpp>
+
 #include <boost/spirit/home/x3/support/utility/error_reporting.hpp>
 #include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
 #include <boost/spirit/home/x3/auxiliary/guard.hpp> // error_handler_result
@@ -17,8 +19,6 @@
 
 
 namespace eda { namespace vhdl93 { namespace parser {
-
-    namespace x3 = boost::spirit::x3;
 
     // Error Handler Utility
     template <typename Iterator>
@@ -47,9 +47,6 @@ namespace eda { namespace vhdl93 { namespace parser {
  * Implementation
  */
 namespace eda { namespace vhdl93 { namespace parser {
-
-
-namespace x3 = boost::spirit::x3;
 
 
 template <typename Iterator, typename Exception, typename Context>

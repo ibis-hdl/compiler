@@ -9,15 +9,15 @@
 #define INCLUDE_EDA_VHDL93_PARSER_CONFIG_HPP_
 
 
-#include <boost/spirit/home/x3.hpp>
+#include <eda/vhdl93/parser/common.hpp>
 #include <eda/vhdl93/parser/error_handler.hpp>
 #include <eda/vhdl93/parser/skipper.hpp>
+
+#include <boost/spirit/home/x3.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace parser {
 
-
-namespace x3 = boost::spirit::x3;
 
 typedef std::string::const_iterator                     iterator_type;
 

@@ -10,6 +10,7 @@
 
 
 #include <eda/vhdl93/ast_adapted.hpp>
+#include <eda/vhdl93/parser/common.hpp>
 #include <eda/vhdl93/parser/utils.hpp>
 #include <eda/vhdl93/parser/operator_def.hpp>
 #include <eda/vhdl93/parser/keyword_def.hpp>
@@ -31,10 +32,7 @@
 
 namespace eda { namespace vhdl93 { namespace parser {
 
-// VHDL char set is iso8859:1
 
-namespace x3 = boost::spirit::x3;
-namespace iso8859_1 = boost::spirit::x3::iso8859_1;
 namespace fu = boost::fusion;
 
 /*

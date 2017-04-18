@@ -9,6 +9,8 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_PARSER_UTILS_HPP_
 
 
+#include <eda/vhdl93/parser/common.hpp>
+
 #include <boost/spirit/home/x3/nonterminal/rule.hpp>
 #include <boost/spirit/home/x3/core/parser.hpp>
 
@@ -23,8 +25,6 @@
 
 namespace eda { namespace vhdl93 { namespace parser {
 
-
-namespace x3 = boost::spirit::x3;
 
 /*
  * Parser helper

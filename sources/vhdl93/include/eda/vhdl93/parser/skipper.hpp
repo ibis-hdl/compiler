@@ -9,6 +9,8 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_PARSER_SKIPPER_HPP_
 
 
+#include <eda/vhdl93/parser/common.hpp>
+
 #include <boost/spirit/home/x3/nonterminal/rule.hpp>
 
 
@@ -16,9 +18,6 @@
  * VHDL Skipper
  */
 namespace eda { namespace vhdl93 { namespace parser {
-
-
-namespace x3 = boost::spirit::x3;
 
 
 struct skipper_class;

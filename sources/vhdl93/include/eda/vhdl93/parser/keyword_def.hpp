@@ -9,6 +9,7 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_PARSER_KEYWORDS_HPP_
 
 
+#include <eda/vhdl93/parser/common.hpp>
 #include <eda/vhdl93/parser/utils.hpp>
 #include <eda/vhdl93/ast/keyword_token.hpp>
 
@@ -25,10 +26,6 @@
 
 
 namespace eda { namespace vhdl93 { namespace parser {
-
-
-namespace x3 = boost::spirit::x3;
-namespace iso8859_1 = boost::spirit::x3::iso8859_1;
 
 
 /*

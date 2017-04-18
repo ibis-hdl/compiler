@@ -20,12 +20,6 @@
 namespace eda { namespace vhdl93 { namespace parser {
 
 
-namespace x3 = boost::spirit::x3;
-
-// VHDL char set is iso8859:1
-namespace iso8859_1 = boost::spirit::x3::iso8859_1;
-
-
 using iso8859_1::char_;
 using iso8859_1::space;
 
