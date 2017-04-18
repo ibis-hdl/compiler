@@ -33,8 +33,6 @@
 namespace eda { namespace vhdl93 { namespace parser {
 
 
-namespace fu = boost::fusion;
-
 /*
  * Rule IDs
  */
