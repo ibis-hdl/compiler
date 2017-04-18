@@ -14,6 +14,7 @@ set(LIB_SOURCES
     src/ast/decimal_literal.cpp
     src/ast/keyword_token.cpp
     src/ast/operator_token.cpp
+    src/skipper.cpp
     src/grammar.cpp
     src/error_handler.cpp
     src/ast_printer.cpp

@@ -9,6 +9,7 @@
 #define SOURCES_VHDL93_TEST_TESTING_PARSER_HPP_
 
 #include <eda/vhdl93/parser/grammar_def.hpp>
+#include <eda/vhdl93/parser/skipper.hpp>
 #include <eda/vhdl93/parser/parser_config.hpp>
 
 #include <eda/vhdl93/ast_printer.hpp>
@@ -26,16 +27,11 @@ namespace ast    = eda::vhdl93::ast;
 
 
 template <
-    typename AttrType = x3::unused_type,
-    typename SkipperType = parser::skipper_type
+    typename AttrType = x3::unused_type
 >
 struct testing_parser
 {
     typedef AttrType                    attribute_type;
-    typedef SkipperType                 skipper_type;
-
-    skipper_type                        skipper;
-
 
     template <typename ParserType>
     std::tuple<bool, std::string>
@@ -60,7 +56,7 @@ struct testing_parser
             ];
 
         bool success =
-          x3::phrase_parse(iter, end, parser, skipper, attr);
+          x3::phrase_parse(iter, end, parser, parser::skipper_(), attr);
 
         if (success) {
             if (iter != end) {
