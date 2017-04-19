@@ -522,7 +522,6 @@ attribute_specification_type const attribute_specification { "attribute_specific
 base_unit_declaration_type const base_unit_declaration { "base_unit_declaration" };
 based_integer_type const based_integer { "based_integer" };
 based_literal_type const based_literal { "based_literal" };
-basic_character_type const basic_character { "basic_character" };
 basic_graphic_character_type const basic_graphic_character { "basic_graphic_character" };
 basic_identifier_type const basic_identifier { "basic_identifier" };
 binding_indication_type const binding_indication { "binding_indication" };
