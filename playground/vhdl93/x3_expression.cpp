@@ -120,7 +120,7 @@ namespace parser
         >> ( x3::repeat(1)[ expression_chunk_2 ] // artificially vector<T>
            | *expression_chunk_1
            )
-#else
+#else      // doesn't compile :(
            identifier
         >> (  expression_chunk_2
            | *expression_chunk_1
