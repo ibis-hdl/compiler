@@ -16,7 +16,7 @@ namespace boost { namespace spirit { namespace x3 { namespace traits {
 template <typename It>
 void move_to(It b, It e, std::experimental::string_view& v)
 {
-    // Note storage is contiguous as a concept check for input range
+    // Note requires storage to be contiguous
     v = std::experimental::string_view(&*b, e - b);
 }
 
@@ -26,7 +26,7 @@ void move_to(It b, It e, std::experimental::string_view& v)
 //#define BOOST_SPIRIT_X3_DEBUG
 #include <boost/spirit/home/x3.hpp>
 
-#if 0
+#if 1
 // XXX basic_string_view<char>« has no member named »insert« XXX
 typedef std::experimental::string_view  attribute_type;
 #else
@@ -40,22 +40,6 @@ namespace parser {
 
     using iso8859_1::char_;
 
-    auto const string_literal_atom = x3::rule<struct _, attribute_type> { "string_literal" } =
-        x3::raw[ x3::lexeme [
-            *(  (char_ - '"')
-             | "\"\""
-             )
-        ]]
-        ;
-#if 1
-    auto const string_literal = x3::rule<struct _, attribute_type> { "string_literal" } =
-        x3::no_skip[
-           '"'
-        >> string_literal_atom
-        >> '"'
-        ]
-        ;
-#else
     auto const string_literal = x3::rule<struct _, attribute_type> { "string_literal" } =
         x3::lexeme[
             (      '"'
@@ -68,7 +52,6 @@ namespace parser {
             )
         ]
         ;
-#endif
 }
 
 
@@ -82,6 +65,13 @@ int main()
         R"(    "FooBar"  )",
         R"(" "" FooBarBaz "" ")"       // with ""inner escaped"" quotes
         };
+
+    /* expected output:
+     * parse '"FooBar"': succeeded: 'FooBar'
+     * parse '"FooBar"  ': succeeded: 'FooBar'
+     * parse '    "FooBar"  ': succeeded: 'FooBar'
+     * parse '" "" FooBarBaz "" "': succeeded: ' "" FooBarBaz "" '
+     */
 
     typedef std::string::const_iterator iterator_type;
 
