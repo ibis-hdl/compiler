@@ -57,7 +57,7 @@ namespace boost { namespace spirit { namespace x3 { namespace traits {
 
 
 void move_to(ast::expression::chunk&& chunk, std::list<ast::expression::chunk>& chunk_list,
-        mpl::identity<container_attribute>)
+        mpl::true_)
 {
     chunk_list.emplace(chunk_list.end(), std::move(chunk));
 }
@@ -114,12 +114,19 @@ namespace parser
         logical_operator_1 > relation;
     auto const expression_chunk_2 = x3::rule<struct _, ast::expression::chunk> { "expression" } =
         logical_operator_2 > relation;
-
     auto const expression = x3::rule<struct _, ast::expression> { "expression" } =
+#if 1
            identifier
         >> ( x3::repeat(1)[ expression_chunk_2 ] // artificially vector<T>
            | *expression_chunk_1
            )
+#else
+           identifier
+        >> (  expression_chunk_2
+           | *expression_chunk_1
+           )
+
+#endif
         ;
 }
 
