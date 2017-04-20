@@ -116,17 +116,11 @@ namespace parser
         logical_operator_2 > relation;
 
     auto const expression = x3::rule<struct _, ast::expression> { "expression" } =
-#if 0
-          identifier >> x3::repeat(1)[ expression_chunk_2 ] // artificially vector<T>
-        | identifier >> *expression_chunk_1
-        ;
-#else
            identifier
-        >> ( *expression_chunk_1
-           | x3::repeat(1)[ expression_chunk_2 ] // artificially vector<T>
+        >> ( x3::repeat(1)[ expression_chunk_2 ] // artificially vector<T>
+           | *expression_chunk_1
            )
         ;
-#endif
 }
 
 
@@ -158,7 +152,7 @@ int main()
         "Hello and Bello",
         "Hello and Bello and Trello",
         "Foo nand Bar",
-        "Foo annd Bar nand Baz",
+        "Foo nand Bar nand Baz",
     }) {
       auto iter = str.begin(), end = str.end();
 
