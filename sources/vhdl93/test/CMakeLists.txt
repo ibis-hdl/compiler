@@ -69,3 +69,23 @@ target_link_libraries(x3_debug
     eda::vhdl93_grammar
     ${Boost_SYSTEM_LIBRARY}
 )
+
+## Generate the TestMatrix
+set(TEST_MATRIX_GENERATOR        ${CMAKE_CURRENT_SOURCE_DIR}/../utils/gen_test_matrix.py)
+set(TEST_MATRIX_GENERATOR_TARGET ${CMAKE_CURRENT_SOURCE_DIR}/test_matrix.rst)
+file(GLOB_RECURSE TEST_CASE_FILES
+    LIST_DIRECTORIES true
+    "${CMAKE_CURRENT_SOURCE_DIR}/test_case/" "*.expected"
+)
+add_custom_command(
+    TARGET  ${PROJECT_NAME} POST_BUILD
+    COMMAND ${TEST_MATRIX_GENERATOR} ${CMAKE_CURRENT_SOURCE_DIR} > ${TEST_MATRIX_GENERATOR_TARGET}
+    DEPENDS ${TEST_MATRIX_GENERATOR} ${TEST_CASE_FILES}
+    BYPRODUCT ${TEST_MATRIX_GENERATOR_TARGET}
+    COMMENT "Generate VHDL93 TestCase Matrix (RST)"
+)
+
+set_source_files_properties(
+    ${TEST_MATRIX_GENERATOR_TARGET}
+    PROPERTIES GENERATED TRUE
+)
