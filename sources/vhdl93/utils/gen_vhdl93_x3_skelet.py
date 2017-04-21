@@ -1087,7 +1087,7 @@ class Vhdl93Bnf:
             'relational_operator'    : ['=', '/=', '<', '<=', '>', '>='],
             'logical_operator'       : ['and', 'or', 'nand', 'nor', 'xor', 'xnor']
         }
-        
+
         print("/* BNF KEYWORD COUNT = " + str(len(self.kw_list)) + " */")
         print("/* BNF RULES COUNT = " + str(len(self.rule_list)) + " */")
 
@@ -1198,14 +1198,14 @@ def embrace_ns(text, ns):
     ns_text = """
 {0}
 {1}
-{2} // namespace {3} 
+{2} // namespace {3}
 """.format(
-    top,
-    text,
-    btm,
+        top,
+        text,
+        btm,
     ".".join(ns)
-    )    
-    
+    )
+
     return ns_text + '\n'
 
 def embrace_fcn(fcn_sig, fcn_body):
@@ -1214,14 +1214,14 @@ def embrace_fcn(fcn_sig, fcn_body):
     signature fcn_sig
     """
     text = """
-{0} 
+{0}
 {{
 {1}
 }} // {{0}}
 """.format(
-    fcn_sig, 
-    fcn_body
-    )    
+        fcn_sig,
+        fcn_body
+    )
     return text
 
 def embrace_pp(define, body):
@@ -1239,7 +1239,7 @@ def section(title):
     """
     Simple embrace a title into C comment style to sectionize the generated
     """
-    text = """    
+    text = """
 /*
  * {0}
  */
@@ -1252,11 +1252,11 @@ class Ast:
     bnf = None
     ns  = []
     tab_sz = 4
-        
+
     def __init__(self,  NS):
         self.bnf = Vhdl93Bnf()
         self.ns = NS
-        
+
     def keyword_token(self, kw_type_name = 'keyword_token'):
         """
         Generate an enum token list of all keywords
@@ -1272,7 +1272,7 @@ class Ast:
 #undef NULL
 #endif
 
-enum class {0} 
+enum class {0}
 {{
 {1}
 }};
@@ -1282,7 +1282,7 @@ enum class {0}
         "".join('    ' + line for line in inner_text.splitlines(True))
     )
         return embrace_ns(text, self.ns)
-    
+
     def keyword_token_print(self, kw_type_name = 'keyword_token'):
         alist = []
         for kw in self.bnf.keywords():
@@ -1326,7 +1326,7 @@ enum class {0} {{
 """.format(
         cxx_ify_name(op_type_name),
         "\n".join('    ' + l for l in alist)
-        )                
+        )
         return embrace_ns(text, self.ns)
 
     def operator_token_print(self, op_type_name = 'operator_token'):
@@ -1335,17 +1335,20 @@ enum class {0} {{
             alist.append("// {0}".format(name))
             for op in rule:
                 op_name = cxx_ify_name(self.bnf.operator_as_name(op))
-                alist.append('case operator_::{0:<{1}} os << {2:<{3}} break;'.format(
-                    op_name + ':', self.tab_sz*4, '"'+op+'";', self.tab_sz*2)
+                alist.append('case {0}::{1:<{2}} os << {3:<{4}} break;'.format(
+                    op_type_name,
+                    op_name + ':', self.tab_sz*4,
+                    '"'+op+'";', self.tab_sz*2
+                    )
                 )
         alist[-1] = alist[-1].strip(',')
         text = """
-std::ostream& operator<<(std::ostream& os, {1} op_token)
+std::ostream& operator<<(std::ostream& os, {1} token)
 {{
-    switch(op_token) {{
+    switch(token) {{
 {0}
 
-        default:                         os << "FAILURE";
+        default:                              os << "FAILURE";
     }}
 
     return os;
@@ -1409,7 +1412,7 @@ struct {1} : x3::position_tagged
         "\n".join(member_list),
         )
         text  = """
-#include <boost/spirit/home/x3/support/ast/position_tagged.hpp>        
+#include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
 
 {0}
 """.format(
@@ -1468,7 +1471,7 @@ struct {1} :
                 "//#include <{0}/{1}.hpp>".format(incl_prefix, name)
             )
         return "\n".join(alist)
-    
+
     def all(self):
         operator_token_name = 'operator_token'
         keyword_token_name = 'keyword_token'
@@ -2011,31 +2014,31 @@ auto const {1}_def =
             alist.append("// parser::{0}_type const& {0}();".format(r.name))
         text = "\n".join(alist)
         return embrace_ns(text, self.parser_ns + ['api'])
-    
+
     def api_definition(self):
         """
         Definition for different compile units
         """
         alist = []
         template = """
-#if 0        
+#if 0
 parser::{0}_type const& {0}()
 {{
     return parser::{0};
 }}
 #endif
-""" 
+"""
         for r in self.bnf.rules():
             alist.append(template.format(r.name))
         text = "".join(alist)
         return embrace_ns(text, self.parser_ns + ['api'])
-    
-    
+
+
 
 ################################################################################
 if __name__ == "__main__":
     ns = ['eda', 'vhdl93']
-    
+
     ast = Ast(ns + ['ast'])
     #print(ast.keyword_token())
     #print(ast.keyword_token_print())
@@ -2044,14 +2047,14 @@ if __name__ == "__main__":
     #print(ast.include_global())
     print(ast.nodes())
     print(ast.all())
-    
+
     printer = AstPrinter(ns + ['ast'])
     print(printer.all())
-    
+
     x3 = X3(ns)
     print(x3.definition())
     print(x3.error_handler())
-    
+
     print(x3.api_declaration())
     print(x3.api_definition())
 
