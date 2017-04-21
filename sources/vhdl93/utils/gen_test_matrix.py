@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import sys
 from prettytable import PrettyTable
 import prettytable
 
@@ -24,7 +25,7 @@ class RstMaker:
         width=len(header)
         text='''\n{0:<{1}}\n{2}\n'''.format(header, width, adornment*width)
         return text
-    
+
     def simple_table(self, header_list, subject_list):
         tbl = PrettyTable(header_list)
         for row in subject_list:
@@ -36,9 +37,13 @@ class RstMaker:
 
 class TestMatrixGenerator:
     rst = RstMaker()
+    testcase_path = None
+
+    def __init__(self):
+        self.testcase_path = sys.argv[1]
 
     def contents(self):
-        for root, dirs, files in sorted(os.walk('test_case')):
+        for root, dirs, files in sorted(os.walk(self.testcase_path + '/' + 'test_case')):
             #print("root=" + str(root) + ", dirs=" + str(dirs) + ", files=" + str(files))
             if files and not dirs:
                 subject_list = []
@@ -47,7 +52,12 @@ class TestMatrixGenerator:
                     (base, ext) = os.path.splitext(file)
                     if ext == '.input':
                         input    = self.read_content(os.path.join(root, base + '.input'))
-                        expected = self.read_content(os.path.join(root, base + '.expected'))
+                        expected = None
+                        try:
+                            expected = self.read_content(os.path.join(root, base + '.expected'))
+                        except Exception as e:
+                            print('Note: exception %s' %e)
+                            continue
                         test_case = (base, input, expected)
                         subject_list.append(test_case)
 
