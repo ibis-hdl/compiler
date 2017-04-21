@@ -1,4 +1,4 @@
 (v:factor=(unary_operation={
-operator=abs
+operator=ABS
 operand=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int})))))
 }))

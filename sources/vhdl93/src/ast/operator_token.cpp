@@ -32,42 +32,42 @@ std::ostream& operator<<(std::ostream& os, operator_token op_token)
 {
     switch(op_token) {
         // miscellaneous_operator
-        case operator_token::exponent:        os << "**";     break;
-        case operator_token::abs:             os << "abs";    break;
-        case operator_token::not_:            os << "not";    break;
+        case operator_token::EXPONENT:        os << "**";    break;
+        case operator_token::ABS:             os << "ABS";   break;
+        case operator_token::NOT:             os << "NOT";   break;
         // multiplying_operator
-        case operator_token::mul:             os << "*";      break;
-        case operator_token::div:             os << "/";      break;
-        case operator_token::mod:             os << "mod";    break;
-        case operator_token::rem:             os << "rem";    break;
+        case operator_token::MUL:             os << "*";     break;
+        case operator_token::DIV:             os << "/";     break;
+        case operator_token::MOD:             os << "MOD";   break;
+        case operator_token::REM:             os << "REM";   break;
         // sign_operator
-        case operator_token::sign_pos:        os << "+";      break;
-        case operator_token::sign_neg:        os << "-";      break;
+        case operator_token::SIGN_POS:        os << "+";     break;
+        case operator_token::SIGN_NEG:        os << "-";     break;
         // adding_operator
-        case operator_token::add:             os << "+";      break;
-        case operator_token::sub:             os << "-";      break;
-        case operator_token::concat:          os << "&";      break;
+        case operator_token::ADD:             os << "+";     break;
+        case operator_token::SUB:             os << "-";     break;
+        case operator_token::CONCAT:          os << "&";     break;
         // shift_operator
-        case operator_token::sll:             os << "sll";    break;
-        case operator_token::srl:             os << "srl";    break;
-        case operator_token::sla:             os << "sla";    break;
-        case operator_token::sra:             os << "sra";    break;
-        case operator_token::rol:             os << "rol";    break;
-        case operator_token::ror:             os << "ror";    break;
+        case operator_token::SLL:             os << "SLL";   break;
+        case operator_token::SRL:             os << "SRL";   break;
+        case operator_token::SLA:             os << "SLA";   break;
+        case operator_token::SRA:             os << "SRA";   break;
+        case operator_token::ROL:             os << "ROL";   break;
+        case operator_token::ROR:             os << "ROR";   break;
         // relational_operator
-        case operator_token::equal:           os << "=";      break;
-        case operator_token::not_equals:      os << "/=";     break;
-        case operator_token::less:            os << "<";      break;
-        case operator_token::less_equals:     os << "<=";     break;
-        case operator_token::greater:         os << ">";      break;
-        case operator_token::greater_equals:  os << ">=";     break;
+        case operator_token::EQUAL:           os << "=";     break;
+        case operator_token::NOT_EQUALS:      os << "/=";    break;
+        case operator_token::LESS:            os << "<";     break;
+        case operator_token::LESS_EQUALS:     os << "<=";    break;
+        case operator_token::GREATER:         os << ">";     break;
+        case operator_token::GREATER_EQUALS:  os << ">=";    break;
         // logical_operator
-        case operator_token::and_:            os << "and";    break;
-        case operator_token::or_:             os << "or";     break;
-        case operator_token::nand:            os << "nand";   break;
-        case operator_token::nor:             os << "nor";    break;
-        case operator_token::xor_:            os << "xor";    break;
-        case operator_token::xnor:            os << "xnor";   break;
+        case operator_token::AND:             os << "AND";   break;
+        case operator_token::OR:              os << "OR";    break;
+        case operator_token::NAND:            os << "NAND";  break;
+        case operator_token::NOR:             os << "NOR";   break;
+        case operator_token::XOR:             os << "XOR";   break;
+        case operator_token::XNOR:            os << "XNOR";  break;
 
         default:                              os << "FAILURE";
     }
@@ -96,71 +96,71 @@ unsigned precedence(operator_token token)
 {
     switch(token) {
         // miscellaneous_operator
-        case operator_token::exponent:
+        case operator_token::EXPONENT:
             FALLTHROUGH;
-        case operator_token::abs:
+        case operator_token::ABS:
             FALLTHROUGH;
-        case operator_token::not_: { return 6; }
+        case operator_token::NOT: { return 6; }
 
         // multiplying_operator
-        case operator_token::mul:
+        case operator_token::MUL:
             FALLTHROUGH;
-        case operator_token::div:
+        case operator_token::DIV:
             FALLTHROUGH;
-        case operator_token::mod:
+        case operator_token::MOD:
             FALLTHROUGH;
-        case operator_token::rem: { return 5; }
+        case operator_token::REM: { return 5; }
 
         // unary
-        case operator_token::sign_neg:
+        case operator_token::SIGN_NEG:
             FALLTHROUGH;
-        case operator_token::sign_pos: { return 4; }
+        case operator_token::SIGN_POS: { return 4; }
 
         // adding_operator
-        case operator_token::add:
+        case operator_token::ADD:
             FALLTHROUGH;
-        case operator_token::sub:
+        case operator_token::SUB:
             FALLTHROUGH;
-        case operator_token::concat: { return 3; }
+        case operator_token::CONCAT: { return 3; }
 
         // shift_operator
-        case operator_token::sll:
+        case operator_token::SLL:
             FALLTHROUGH;
-        case operator_token::srl:
+        case operator_token::SRL:
             FALLTHROUGH;
-        case operator_token::sla:
+        case operator_token::SLA:
             FALLTHROUGH;
-        case operator_token::sra:
+        case operator_token::SRA:
             FALLTHROUGH;
-        case operator_token::rol:
+        case operator_token::ROL:
             FALLTHROUGH;
-        case operator_token::ror: { return 2; }
+        case operator_token::ROR: { return 2; }
 
         // relational_operator
-        case operator_token::equal:
+        case operator_token::EQUAL:
             FALLTHROUGH;
-        case operator_token::not_equals:
+        case operator_token::NOT_EQUALS:
             FALLTHROUGH;
-        case operator_token::less:
+        case operator_token::LESS:
             FALLTHROUGH;
-        case operator_token::less_equals:
+        case operator_token::LESS_EQUALS:
             FALLTHROUGH;
-        case operator_token::greater:
+        case operator_token::GREATER:
             FALLTHROUGH;
-        case operator_token::greater_equals: { return 1; }
+        case operator_token::GREATER_EQUALS: { return 1; }
 
         // logical_operator
-        case operator_token::and_:
+        case operator_token::AND:
             FALLTHROUGH;
-        case operator_token::or_:
+        case operator_token::OR:
             FALLTHROUGH;
-        case operator_token::nand:
+        case operator_token::NAND:
             FALLTHROUGH;
-        case operator_token::nor:
+        case operator_token::NOR:
             FALLTHROUGH;
-        case operator_token::xor_:
+        case operator_token::XOR:
             FALLTHROUGH;
-        case operator_token::xnor: { return 0; }
+        case operator_token::XNOR: { return 0; }
 
         default:
             cxx_bug_fatal("vhdl93/ast operator_token out of range");

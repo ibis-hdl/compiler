@@ -38,10 +38,10 @@ struct logical_operator_symbols : x3::symbols<ast::operator_token> {
 
         name("logical_operator");
 
-        add("and",  ast::operator_token::and_)
-           ("or",   ast::operator_token::or_)
-           ("xor",  ast::operator_token::xor_)
-           ("xnor", ast::operator_token::xnor)
+        add("and",  ast::operator_token::AND)
+           ("or",   ast::operator_token::OR)
+           ("xor",  ast::operator_token::XOR)
+           ("xnor", ast::operator_token::XNOR)
            ;
     }
 } const logical_operator_symbols;
@@ -57,8 +57,8 @@ struct logical_operator_option_symbols : x3::symbols<ast::operator_token> {
 
         name("logical_operator");
 
-        add("nand", ast::operator_token::nand)
-           ("nor",  ast::operator_token::nor)
+        add("nand", ast::operator_token::NAND)
+           ("nor",  ast::operator_token::NOR)
            ;
     }
 } const logical_operator_option_symbols;
@@ -74,12 +74,12 @@ struct relational_operator_symbols : x3::symbols<ast::operator_token> {
 
         name("relational_operator");
 
-        add("=",  ast::operator_token::equal)
-           ("/=", ast::operator_token::not_equals)
-           ("<",  ast::operator_token::less)
-           ("<=", ast::operator_token::less_equals)
-           (">",  ast::operator_token::greater)
-           (">=", ast::operator_token::greater_equals)
+        add("=",  ast::operator_token::EQUAL)
+           ("/=", ast::operator_token::NOT_EQUALS)
+           ("<",  ast::operator_token::LESS)
+           ("<=", ast::operator_token::LESS_EQUALS)
+           (">",  ast::operator_token::GREATER)
+           (">=", ast::operator_token::GREATER_EQUALS)
            ;
     }
 } const relational_operator;
@@ -91,8 +91,8 @@ struct unary_miscellaneous_operator_symbols : x3::symbols<ast::operator_token> {
 
         name("miscellaneous_operator");
 
-        add("abs", ast::operator_token::abs)
-           ("not", ast::operator_token::not_)
+        add("abs", ast::operator_token::ABS)
+           ("not", ast::operator_token::NOT)
            ;
     }
 } const unary_miscellaneous_operator_symbols;
@@ -108,7 +108,7 @@ struct binary_miscellaneous_operator_symbols : x3::symbols<ast::operator_token> 
 
         name("miscellaneous_operator");
 
-        add("**", ast::operator_token::exponent)
+        add("**", ast::operator_token::EXPONENT)
            ;
     }
 } const binary_miscellaneous_operator;
@@ -120,9 +120,9 @@ struct adding_operator_symbols : x3::symbols<ast::operator_token> {
 
         name("adding_operator");
 
-        add("+", ast::operator_token::add)
-           ("-", ast::operator_token::sub)
-           ("&", ast::operator_token::concat)
+        add("+", ast::operator_token::ADD)
+           ("-", ast::operator_token::SUB)
+           ("&", ast::operator_token::CONCAT)
            ;
     }
 } const adding_operator;
@@ -134,10 +134,10 @@ struct multiplying_operator_symbols : x3::symbols<ast::operator_token> {
 
         name("multiplying_operator");
 
-        add("*",   ast::operator_token::mul)
-           ("/",   ast::operator_token::div)
-           ("mod", ast::operator_token::mod)
-           ("rem", ast::operator_token::rem)
+        add("*",   ast::operator_token::MUL)
+           ("/",   ast::operator_token::DIV)
+           ("mod", ast::operator_token::MOD)
+           ("rem", ast::operator_token::REM)
            ;
     }
 } const multiplying_operator_symbols;
@@ -153,12 +153,12 @@ struct shift_operator_symbols : x3::symbols<ast::operator_token> {
 
         name("shift_operator");
 
-        add("sll", ast::operator_token::sll)
-           ("srl", ast::operator_token::srl)
-           ("sla", ast::operator_token::sla)
-           ("sra", ast::operator_token::sra)
-           ("rol", ast::operator_token::rol)
-           ("ror", ast::operator_token::ror)
+        add("sll", ast::operator_token::SLL)
+           ("srl", ast::operator_token::SRL)
+           ("sla", ast::operator_token::SLA)
+           ("sra", ast::operator_token::SRA)
+           ("rol", ast::operator_token::ROL)
+           ("ror", ast::operator_token::ROR)
            ;
     }
 } const shift_operator_symbols;
@@ -174,8 +174,8 @@ struct sign_operator_symbols : x3::symbols<ast::operator_token> {
 
         name("sign_operator");
 
-        add("+", ast::operator_token::sign_pos)
-           ("-", ast::operator_token::sign_neg)
+        add("+", ast::operator_token::SIGN_POS)
+           ("-", ast::operator_token::SIGN_NEG)
            ;
     }
 } const sign;

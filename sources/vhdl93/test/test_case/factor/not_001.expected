@@ -1,4 +1,4 @@
 (v:factor=(unary_operation={
-operator=not
+operator=NOT
 operand=(v:primary=(v:literal=(v:enumeration_literal=(character_literal=0))))
 }))

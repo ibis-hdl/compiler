@@ -19,42 +19,19 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 enum class operator_token {
     // miscellaneous_operator
-    exponent,
-    abs,
-    not_,
+    EXPONENT, ABS, NOT,
     // multiplying_operator
-    mul,
-    div,
-    mod,
-    rem,
-    // sign_operator
-    sign_pos,
-    sign_neg,
+    MUL, DIV, MOD, REM,
+    // sign operator
+    SIGN_POS, SIGN_NEG,
     // adding_operator
-    add,
-    sub,
-    concat,
+    ADD, SUB, CONCAT,
     // shift_operator
-    sll,
-    srl,
-    sla,
-    sra,
-    rol,
-    ror,
+    SLL, SRL, SLA, SRA, ROL, ROR,
     // relational_operator
-    equal,
-    not_equals,
-    less,
-    less_equals,
-    greater,
-    greater_equals,
+    EQUAL, NOT_EQUALS, LESS, LESS_EQUALS, GREATER, GREATER_EQUALS,
     // logical_operator
-    and_,
-    or_,
-    nand,
-    nor,
-    xor_,
-    xnor
+    AND, OR, NAND, NOR, XOR, XNOR
 };
 
 
