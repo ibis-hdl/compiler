@@ -8,5 +8,5 @@ operator=>
 operator=-(term={
 (unary_operation={
 operator=NOT
-operand=(v:primary=(v:literal=(string_literal="101")))
+operand=(v:primary=(v:literal=(string_literal=101)))
 })}))))

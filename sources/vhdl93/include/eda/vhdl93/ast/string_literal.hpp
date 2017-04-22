@@ -13,6 +13,8 @@
 
 #include <eda/support/boost/spirit_x3/string_view.hpp>
 
+#include <string>
+
 
 namespace eda { namespace vhdl93 { namespace ast {
 
@@ -22,7 +24,8 @@ namespace x3 = boost::spirit::x3;
 
 struct string_literal : x3::position_tagged
 {
-    std::string_view                literal;
+    std::string                     literal;
+//    std::string_view                literal;
 };
 
 

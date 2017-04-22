@@ -801,9 +801,9 @@ namespace detail {
 
     // string_literal ::=                                               [§ 13.6]
     // " { graphic_character } "
-#if 1
+#if 0
     auto const common_string_literal = x3::rule<struct _, std::string_view> { "string_literal" } =
-            // FixMe: contains " at begin and end of string
+        // FixMe: using x3::raw[] contains " at begin and end of string, otherwise doesn't compile
         lexeme[ raw[
             (      '"'
                 >> *( ( graphic_character - '"'  )
@@ -836,7 +836,7 @@ namespace detail {
         ]
         ;
 
-    auto const common_string_literal = x3::rule<struct _, std::string_view> { "string_literal" } =
+    auto const common_string_literal = x3::rule<struct _, std::string> { "string_literal" } =
         lexeme [
               (lit('"') >> common_string_literal_1 >> lit('"'))
             | (lit('%') >> common_string_literal_2 >> lit('%'))
