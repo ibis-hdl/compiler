@@ -9,7 +9,6 @@
 #define SOURCES_VHDL93_TEST_TESTING_PARSER_HPP_
 
 #include <eda/vhdl93/parser/grammar_def.hpp>
-#include <eda/vhdl93/parser/skipper.hpp>
 #include <eda/vhdl93/parser/parser_config.hpp>
 
 #include <eda/vhdl93/ast_printer.hpp>
@@ -56,7 +55,7 @@ struct testing_parser
             ];
 
         bool success =
-          x3::phrase_parse(iter, end, parser, parser::skipper_(), attr);
+            x3::phrase_parse(iter, end, parser, parser::skipper, attr);
 
         if (success) {
             if (iter != end) {

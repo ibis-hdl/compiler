@@ -11,7 +11,6 @@
 
 #include <eda/vhdl93/parser/common.hpp>
 #include <eda/vhdl93/parser/error_handler.hpp>
-#include <eda/vhdl93/parser/skipper.hpp>
 
 #include <boost/spirit/home/x3.hpp>
 
@@ -23,7 +22,7 @@ typedef std::string::const_iterator                     iterator_type;
 
 typedef error_handler<iterator_type>                    error_handler_type;
 
-typedef x3::phrase_parse_context<skipper_type>::type    phrase_context_type;
+typedef x3::phrase_parse_context<iso8859_1::space_type>::type    phrase_context_type;
 
 typedef x3::with_context<
     error_handler_tag

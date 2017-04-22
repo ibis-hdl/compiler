@@ -3676,6 +3676,33 @@ struct bit_string_literal_class : x3::annotate_on_success {};
 } } } // namespace eda.vhdl93.parser
 
 
+/*
+ * VHDL Skipper
+ */
+namespace eda { namespace vhdl93 { namespace parser {
+
+
+struct skipper_class;
+typedef x3::rule<skipper_class> skipper_type;
+
+
+skipper_type const skipper { "skipper" };
+
+
+using iso8859_1::char_;
+using iso8859_1::space;
+
+
+auto const skipper_def =
+      space
+    | "--" >> *(char_ - x3::eol) >> x3::eol
+    ;
+
+BOOST_SPIRIT_DEFINE(skipper)
+
+
+
+} } } // namespace eda.vhdl93.parser
 
 
 #endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_PARSER_GRAMMAR_DEF_HPP_ */

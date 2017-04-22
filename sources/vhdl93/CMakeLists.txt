@@ -14,7 +14,6 @@ set(LIB_SOURCES
     src/ast/decimal_literal.cpp
     src/ast/keyword_token.cpp
     src/ast/operator_token.cpp
-    src/skipper.cpp
     #src/new_operator.cpp
     src/grammar.cpp
     src/literal.cpp
