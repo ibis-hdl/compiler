@@ -838,8 +838,8 @@ namespace detail {
 
     auto const common_string_literal = x3::rule<struct _, std::string> { "string_literal" } =
         lexeme [
-              (lit('"') >> common_string_literal_1 >> lit('"'))
-            | (lit('%') >> common_string_literal_2 >> lit('%'))
+              ('"' >> common_string_literal_1 >> '"')
+            | ('%' >> common_string_literal_2 >> '%')
         ]
         ;
 #endif
