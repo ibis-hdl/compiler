@@ -476,7 +476,6 @@ primary
 | string_literal_001      | "FooBar" | (v:primary=(v:literal=(string_literal=FooBar)))                                                    |
 |                         |          |                                                                                                    |
 +-------------------------+----------+----------------------------------------------------------------------------------------------------+
-Note: exception [Errno 2] No such file or directory: '/home/olaf/work/CXX/IBIS_SOURCE/sources/vhdl93/test/test_case/relation/relation_003.expected'
 
 ========
 relation
@@ -486,7 +485,7 @@ relation
 | File         | Input                 | Expected                                                                                                      |
 +--------------+-----------------------+---------------------------------------------------------------------------------------------------------------+
 | relation_001 | "0111" * 42 < '1'     | (relation=(shift_expression=(simple_expression=(term={                                                        |
-|              |                       | (v:primary=(v:literal=(string_literal="0111")))                                                               |
+|              |                       | (v:primary=(v:literal=(string_literal=0111)))                                                                 |
 |              |                       | operator=*                                                                                                    |
 |              |                       | factor=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int})))))}))) |
 |              |                       | operator=<                                                                                                    |
@@ -503,7 +502,7 @@ relation
 |              |                       | operator=-(term={                                                                                             |
 |              |                       | (unary_operation={                                                                                            |
 |              |                       | operator=NOT                                                                                                  |
-|              |                       | operand=(v:primary=(v:literal=(string_literal="101")))                                                        |
+|              |                       | operand=(v:primary=(v:literal=(string_literal=101)))                                                          |
 |              |                       | })}))))                                                                                                       |
 +--------------+-----------------------+---------------------------------------------------------------------------------------------------------------+
 
@@ -515,7 +514,7 @@ shift_expression
 | File                       | Input             | Expected                                                                                                   |
 +----------------------------+-------------------+------------------------------------------------------------------------------------------------------------+
 | shift_expression_names_001 | "1110_1110" sll 1 | (shift_expression=(simple_expression=(term={                                                               |
-|                            |                   | (v:primary=(v:literal=(string_literal="1110_1110")))}))                                                    |
+|                            |                   | (v:primary=(v:literal=(string_literal=1110_1110)))}))                                                      |
 |                            |                   | operator=SLL                                                                                               |
 |                            |                   | (simple_expression=(term={                                                                                 |
 |                            |                   | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=1, tag=int})))))})))      |
