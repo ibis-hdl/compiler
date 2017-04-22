@@ -17,6 +17,7 @@ set(LIB_SOURCES
     src/skipper.cpp
     #src/new_operator.cpp
     src/grammar.cpp
+    src/literal.cpp
     src/error_handler.cpp
     src/ast_printer.cpp
 )
