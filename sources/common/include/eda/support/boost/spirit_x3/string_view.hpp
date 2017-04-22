@@ -33,5 +33,25 @@ void move_to(It b, It e, std::string_view& v)
 
 
 
+#include <string>
+#include <type_traits>
+
+namespace eda {
+
+static inline
+std::string const& to_string(std::string const& str) { return str; }
+
+static inline
+std::string& to_string(std::string& str) { return str; }
+
+static inline
+std::string to_string(std::string_view const& str) { return str.to_string(); }
+
+static inline
+std::string to_string(std::string_view& str) { return str.to_string(); }
+
+
+} // namespace eda
+
 
 #endif /* SOURCES_COMMON_INCLUDE_EDA_SUPPORT_BOOST_SPIRIT_X3_STRING_VIEW_HPP_ */
