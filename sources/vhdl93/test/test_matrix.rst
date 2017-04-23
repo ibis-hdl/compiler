@@ -209,36 +209,36 @@ expression
 factor
 ======
 
-+-------------------------+---------------------+------------------------------------------------------------------------------------------------------------+
-| File                    | Input               | Expected                                                                                                   |
-+-------------------------+---------------------+------------------------------------------------------------------------------------------------------------+
-| extended_identifier_001 | \BUS\               | (v:factor=(v:primary=(v:name=(simple_name=\BUS\))))                                                        |
-|                         |                     |                                                                                                            |
-|                         |                     |                                                                                                            |
-+-------------------------+---------------------+------------------------------------------------------------------------------------------------------------+
-| basic_identifier_001    | FooBar              | (v:factor=(v:primary=(v:name=(simple_name=FooBar))))                                                       |
-|                         |                     |                                                                                                            |
-|                         |                     |                                                                                                            |
-+-------------------------+---------------------+------------------------------------------------------------------------------------------------------------+
-| abs_001                 | abs 42              | (v:factor=(unary_operation={                                                                               |
-|                         |                     | operator=ABS                                                                                               |
-|                         |                     | operand=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int}))))) |
-|                         |                     | }))                                                                                                        |
-+-------------------------+---------------------+------------------------------------------------------------------------------------------------------------+
-| based_literal_001       | 8#42#               | (v:factor=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(based_literal={b=8, n=42}))))))    |
-|                         |                     |                                                                                                            |
-+-------------------------+---------------------+------------------------------------------------------------------------------------------------------------+
-| not_001                 | not '0'             | (v:factor=(unary_operation={                                                                               |
-|                         |                     | operator=NOT                                                                                               |
-|                         |                     | operand=(v:primary=(v:literal=(v:enumeration_literal=(character_literal=0))))                              |
-|                         |                     | }))                                                                                                        |
-+-------------------------+---------------------+------------------------------------------------------------------------------------------------------------+
-| exponentiation_001      | X"42_FF" ** B"0111" | (v:factor=(binary_operation={                                                                              |
-|                         |                     | operator=**                                                                                                |
-|                         |                     | lhs=(v:primary=(v:literal=(bit_string_literal={l=42_FF, tag=hex})))                                        |
-|                         |                     | rhs=(v:primary=(v:literal=(bit_string_literal={l=0111, tag=bin})))                                         |
-|                         |                     | }))                                                                                                        |
-+-------------------------+---------------------+------------------------------------------------------------------------------------------------------------+
++-------------------------+---------------------+---------------------------------------------------------------------------------------------------------+
+| File                    | Input               | Expected                                                                                                |
++-------------------------+---------------------+---------------------------------------------------------------------------------------------------------+
+| extended_identifier_001 | \BUS\               | (v:factor=(v:primary=(v:name=(simple_name=\BUS\))))                                                     |
+|                         |                     |                                                                                                         |
+|                         |                     |                                                                                                         |
++-------------------------+---------------------+---------------------------------------------------------------------------------------------------------+
+| basic_identifier_001    | FooBar              | (v:factor=(v:primary=(v:name=(simple_name=FooBar))))                                                    |
+|                         |                     |                                                                                                         |
+|                         |                     |                                                                                                         |
++-------------------------+---------------------+---------------------------------------------------------------------------------------------------------+
+| abs_001                 | abs 42              | (v:factor=(factor_unary_operation={                                                                     |
+|                         |                     | operator=ABS                                                                                            |
+|                         |                     | primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int}))))          |
+|                         |                     | }))                                                                                                     |
++-------------------------+---------------------+---------------------------------------------------------------------------------------------------------+
+| based_literal_001       | 8#42#               | (v:factor=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(based_literal={b=8, n=42})))))) |
+|                         |                     |                                                                                                         |
++-------------------------+---------------------+---------------------------------------------------------------------------------------------------------+
+| not_001                 | not '0'             | (v:factor=(factor_unary_operation={                                                                     |
+|                         |                     | operator=NOT                                                                                            |
+|                         |                     | primary=(v:literal=(v:enumeration_literal=(character_literal=0)))                                       |
+|                         |                     | }))                                                                                                     |
++-------------------------+---------------------+---------------------------------------------------------------------------------------------------------+
+| exponentiation_001      | X"42_FF" ** B"0111" | (v:factor=(factor_binary_operation={                                                                    |
+|                         |                     | operator=**                                                                                             |
+|                         |                     | primary_lhs=(v:literal=(bit_string_literal={l=42_FF, tag=hex}))                                         |
+|                         |                     | primary_rhs=(v:literal=(bit_string_literal={l=0111, tag=bin}))                                          |
+|                         |                     | }))                                                                                                     |
++-------------------------+---------------------+---------------------------------------------------------------------------------------------------------+
 
 ==========
 identifier
@@ -602,9 +602,9 @@ relation
 |              |                       | (shift_expression=(simple_expression=(term={                                                                  |
 |              |                       | (v:primary=(v:name=(simple_name=c)))})                                                                        |
 |              |                       | operator=-(term={                                                                                             |
-|              |                       | (unary_operation={                                                                                            |
+|              |                       | (factor_unary_operation={                                                                                     |
 |              |                       | operator=NOT                                                                                                  |
-|              |                       | operand=(v:primary=(v:literal=(string_literal=101)))                                                          |
+|              |                       | primary=(v:literal=(string_literal=101))                                                                      |
 |              |                       | })}))))                                                                                                       |
 +--------------+-----------------------+---------------------------------------------------------------------------------------------------------------+
 
@@ -612,28 +612,28 @@ relation
 shift_expression
 ================
 
-+----------------------------+-------------------+------------------------------------------------------------------------------------------------------------+
-| File                       | Input             | Expected                                                                                                   |
-+----------------------------+-------------------+------------------------------------------------------------------------------------------------------------+
-| shift_expression_names_001 | "1110_1110" sll 1 | (shift_expression=(simple_expression=(term={                                                               |
-|                            |                   | (v:primary=(v:literal=(string_literal=1110_1110)))}))                                                      |
-|                            |                   | operator=SLL                                                                                               |
-|                            |                   | (simple_expression=(term={                                                                                 |
-|                            |                   | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=1, tag=int})))))})))      |
-+----------------------------+-------------------+------------------------------------------------------------------------------------------------------------+
-| shift_expression_names_002 | 66**42 ror abs 66 | (shift_expression=(simple_expression=(term={                                                               |
-|                            |                   | (binary_operation={                                                                                        |
-|                            |                   | operator=**                                                                                                |
-|                            |                   | lhs=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=66, tag=int})))))     |
-|                            |                   | rhs=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int})))))     |
-|                            |                   | })}))                                                                                                      |
-|                            |                   | operator=ROR                                                                                               |
-|                            |                   | (simple_expression=(term={                                                                                 |
-|                            |                   | (unary_operation={                                                                                         |
-|                            |                   | operator=ABS                                                                                               |
-|                            |                   | operand=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=66, tag=int}))))) |
-|                            |                   | })})))                                                                                                     |
-+----------------------------+-------------------+------------------------------------------------------------------------------------------------------------+
++----------------------------+-------------------+-------------------------------------------------------------------------------------------------------+
+| File                       | Input             | Expected                                                                                              |
++----------------------------+-------------------+-------------------------------------------------------------------------------------------------------+
+| shift_expression_names_001 | "1110_1110" sll 1 | (shift_expression=(simple_expression=(term={                                                          |
+|                            |                   | (v:primary=(v:literal=(string_literal=1110_1110)))}))                                                 |
+|                            |                   | operator=SLL                                                                                          |
+|                            |                   | (simple_expression=(term={                                                                            |
+|                            |                   | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=1, tag=int})))))}))) |
++----------------------------+-------------------+-------------------------------------------------------------------------------------------------------+
+| shift_expression_names_002 | 66**42 ror abs 66 | (shift_expression=(simple_expression=(term={                                                          |
+|                            |                   | (factor_binary_operation={                                                                            |
+|                            |                   | operator=**                                                                                           |
+|                            |                   | primary_lhs=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=66, tag=int}))))    |
+|                            |                   | primary_rhs=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int}))))    |
+|                            |                   | })}))                                                                                                 |
+|                            |                   | operator=ROR                                                                                          |
+|                            |                   | (simple_expression=(term={                                                                            |
+|                            |                   | (factor_unary_operation={                                                                             |
+|                            |                   | operator=ABS                                                                                          |
+|                            |                   | primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=66, tag=int}))))        |
+|                            |                   | })})))                                                                                                |
++----------------------------+-------------------+-------------------------------------------------------------------------------------------------------+
 
 ===========
 signal_list
@@ -666,16 +666,16 @@ simple_expression
 | File                  | Input             | Expected                                                                                                     |
 +-----------------------+-------------------+--------------------------------------------------------------------------------------------------------------+
 | simple_expression_001 | not '1'           | (simple_expression=(term={                                                                                   |
-|                       |                   | (unary_operation={                                                                                           |
+|                       |                   | (factor_unary_operation={                                                                                    |
 |                       |                   | operator=NOT                                                                                                 |
-|                       |                   | operand=(v:primary=(v:literal=(v:enumeration_literal=(character_literal=1))))                                |
+|                       |                   | primary=(v:literal=(v:enumeration_literal=(character_literal=1)))                                            |
 |                       |                   | })}))                                                                                                        |
 +-----------------------+-------------------+--------------------------------------------------------------------------------------------------------------+
 | simple_expression_002 | 66**42 * 16#AFFE# | (simple_expression=(term={                                                                                   |
-|                       |                   | (binary_operation={                                                                                          |
+|                       |                   | (factor_binary_operation={                                                                                   |
 |                       |                   | operator=**                                                                                                  |
-|                       |                   | lhs=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=66, tag=int})))))       |
-|                       |                   | rhs=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int})))))       |
+|                       |                   | primary_lhs=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=66, tag=int}))))           |
+|                       |                   | primary_rhs=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int}))))           |
 |                       |                   | })                                                                                                           |
 |                       |                   | operator=*                                                                                                   |
 |                       |                   | factor=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(based_literal={b=16, n=AFFE})))))}))    |
@@ -806,16 +806,16 @@ term
 |            |                   | factor=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=99, tag=int})))))}) |
 +------------+-------------------+-------------------------------------------------------------------------------------------------------------+
 | factor_001 | abs 42            | (term={                                                                                                     |
-|            |                   | (unary_operation={                                                                                          |
+|            |                   | (factor_unary_operation={                                                                                   |
 |            |                   | operator=ABS                                                                                                |
-|            |                   | operand=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int})))))  |
+|            |                   | primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int}))))              |
 |            |                   | })})                                                                                                        |
 +------------+-------------------+-------------------------------------------------------------------------------------------------------------+
 | term_003   | 66**42 * 16#AFFE# | (term={                                                                                                     |
-|            |                   | (binary_operation={                                                                                         |
+|            |                   | (factor_binary_operation={                                                                                  |
 |            |                   | operator=**                                                                                                 |
-|            |                   | lhs=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=66, tag=int})))))      |
-|            |                   | rhs=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int})))))      |
+|            |                   | primary_lhs=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=66, tag=int}))))          |
+|            |                   | primary_rhs=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int}))))          |
 |            |                   | })                                                                                                          |
 |            |                   | operator=*                                                                                                  |
 |            |                   | factor=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(based_literal={b=16, n=AFFE})))))})    |
