@@ -6,7 +6,7 @@ operator=>
 (shift_expression=(simple_expression=(term={
 (v:primary=(v:name=(simple_name=c)))})
 operator=-(term={
-(unary_operation={
+(factor_unary_operation={
 operator=NOT
-operand=(v:primary=(v:literal=(string_literal=101)))
+primary=(v:literal=(string_literal=101))
 })}))))

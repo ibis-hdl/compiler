@@ -9,28 +9,56 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_FACTOR_HPP_
 
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
+#include <eda/vhdl93/ast/namespace_alias.hpp>
 
 #include <eda/vhdl93/ast/nullary.hpp>
+#include <eda/vhdl93/ast/primary.hpp>
+
+#include <boost/spirit/home/x3/support/ast/variant.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
 
+#if 0
+struct factor_stuff : position_tagged
+{
+    struct chunk {
+        operator_token              operator_;
+        ast::primary                primary;
 
-namespace x3 = boost::spirit::x3;
+    };
+    ast::primary                    primary;
+    boost::optional<chunk>          rest;
+};
+#endif
 
 
-struct primary;
-struct unary_operation;
-struct binary_operation;
+struct factor_binary_operation : position_tagged
+{
+    ast::primary                    primary_lhs;
+    operator_token                  operator_;
+    ast::primary                    primary_rhs;
+};
+
+struct factor_unary_operation : position_tagged
+{
+    operator_token                  operator_;
+    ast::primary                    primary;
+};
 
 
+/*
+ * factor ::=
+ *     primary [ ** primary ]
+ *     | ABS primary
+ *     | NOT primary
+ */
 struct factor :
     x3::variant<
         nullary,
-        x3::forward_ast<unary_operation>,
-        x3::forward_ast<binary_operation>,
-        x3::forward_ast<primary>
+        primary,
+        factor_binary_operation,
+        factor_unary_operation
     >
 {
     using base_type::base_type;

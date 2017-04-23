@@ -9,22 +9,18 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_EXPRESSION_HPP_
 
 
-#include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
-#include <boost/spirit/home/x3/support/ast/variant.hpp> // x3::position_tagged
+#include <eda/vhdl93/ast/namespace_alias.hpp>
+#include <eda/vhdl93/ast/position_tagged.hpp>
 
 #include <eda/vhdl93/ast/operator_token.hpp>
 #include <eda/vhdl93/ast/relation.hpp>
-
-#include <list>
+#include <vector>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-namespace x3 = boost::spirit::x3;
-
-
-struct expression : x3::position_tagged
+struct expression : position_tagged
 {
     struct chunk
     {
@@ -33,7 +29,7 @@ struct expression : x3::position_tagged
     };
 
     ast::relation                   relation;
-    std::list<chunk>                rest_list;
+    std::vector<chunk>              rest_list;
 };
 
 

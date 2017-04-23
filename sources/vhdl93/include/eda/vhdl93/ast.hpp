@@ -238,14 +238,4 @@
 //#include <eda/vhdl93/ast/waveform_element.hpp>
 
 
-/*
- *  some AST helper
- */
-#include <eda/vhdl93/ast/keyword_token.hpp>
-
-#include <eda/vhdl93/ast/operand.hpp>
-#include <eda/vhdl93/ast/binary_operation.hpp>
-#include <eda/vhdl93/ast/unary_operation.hpp>
-
-
 #endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_AST_HPP_ */

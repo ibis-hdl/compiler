@@ -9,24 +9,18 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_TERM_HPP_
 
 
-#include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
-#include <boost/spirit/home/x3/support/ast/variant.hpp> // x3::position_tagged
+#include <eda/vhdl93/ast/namespace_alias.hpp>
+#include <eda/vhdl93/ast/position_tagged.hpp>
 
+#include <eda/vhdl93/ast/operator_token.hpp>
 #include <eda/vhdl93/ast/factor.hpp>
-
 #include <list>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-namespace x3 = boost::spirit::x3;
-
-
-enum class operator_token;
-
-
-struct term : x3::position_tagged
+struct term : position_tagged
 {
     struct chunk {
         operator_token          operator_;

@@ -891,6 +891,38 @@ for(auto const& rest : node.rest_list) {
 }
 
 #endif
+
+void printer::operator()(factor_binary_operation const& node) const
+{
+    static char const symbol[]{ "factor_binary_operation" };
+    symbol_scope<factor_binary_operation> _(*this, symbol);
+
+    os << "{\n";
+    os << "operator=" << node.operator_ << "\n";
+
+    os << "primary_lhs=";
+    boost::apply_visitor(*this, node.primary_lhs);
+
+    os << "\n";
+
+    os << "primary_rhs=";
+    boost::apply_visitor(*this, node.primary_rhs);
+    os << "\n}";
+}
+
+
+void printer::operator()(factor_unary_operation const& node) const
+{
+    static char const symbol[]{ "factor_unary_operation" };
+    symbol_scope<factor_unary_operation> _(*this, symbol);
+
+    os << "{\n";
+    os << "operator=" << node.operator_ << "\n";
+    os << "primary=";
+    boost::apply_visitor(*this, node.primary);
+    os << "\n}";
+}
+
 void printer::operator()(factor const &node) const
 {
     static char const symbol[]{ "factor" };
@@ -1984,46 +2016,6 @@ void printer::operator()(keyword_token token) const
     symbol_scope<keyword_token> _(*this, symbol);
 
     os << token;
-}
-
-
-void printer::operator()(binary_operation const& node) const
-{
-    static char const symbol[]{ "binary_operation" };
-    symbol_scope<binary_operation> _(*this, symbol);
-
-    os << "{\n";
-    os << "operator=" << node.operator_ << "\n";
-
-    os << "lhs=";
-    boost::apply_visitor(*this, node.lhs);
-
-    os << "\n";
-
-    os << "rhs=";
-    boost::apply_visitor(*this, node.rhs);
-    os << "\n}";
-}
-
-
-void printer::operator()(unary_operation const& node) const
-{
-    static char const symbol[]{ "unary_operation" };
-    symbol_scope<unary_operation> _(*this, symbol);
-
-    os << "{\n";
-    os << "operator=" << node.operator_ << "\n";
-    os << "operand=";
-    boost::apply_visitor(*this, node.operand_);
-    os << "\n}";
-}
-
-
-void printer::operator()(operand const& node) const
-{
-    static char const symbol[]{ "operand" };
-    symbol_scope<operand> _(*this, symbol);
-    boost::apply_visitor(*this, node);
 }
 
 

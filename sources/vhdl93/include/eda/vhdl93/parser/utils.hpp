@@ -9,10 +9,9 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_PARSER_UTILS_HPP_
 
 
-#include <eda/vhdl93/parser/common.hpp>
-
 #include <boost/spirit/home/x3/nonterminal/rule.hpp>
 #include <boost/spirit/home/x3/core/parser.hpp>
+#include <eda/vhdl93/parser/namespace_alias.hpp>
 
 /*
  * IEEE Standard VHDL Language Reference Manual

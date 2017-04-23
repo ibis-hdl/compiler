@@ -1,5 +1,5 @@
-(v:factor=(binary_operation={
+(v:factor=(factor_binary_operation={
 operator=**
-lhs=(v:primary=(v:literal=(bit_string_literal={l=42_FF, tag=hex})))
-rhs=(v:primary=(v:literal=(bit_string_literal={l=0111, tag=bin})))
+primary_lhs=(v:literal=(bit_string_literal={l=42_FF, tag=hex}))
+primary_rhs=(v:literal=(bit_string_literal={l=0111, tag=bin}))
 }))

@@ -9,10 +9,10 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_PARSER_LITERAL_HPP_
 
 
-#include <eda/vhdl93/parser/common.hpp>
 #include <eda/vhdl93/ast/string_literal.hpp>
 
 #include <boost/spirit/home/x3/nonterminal/rule.hpp>
+#include <eda/vhdl93/parser/namespace_alias.hpp>
 
 
 /*

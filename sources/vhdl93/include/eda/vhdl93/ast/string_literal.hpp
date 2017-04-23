@@ -9,20 +9,17 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_STRING_LITERAL_HPP_
 
 
-#include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
+#include <eda/vhdl93/ast/namespace_alias.hpp>
+#include <eda/vhdl93/ast/position_tagged.hpp>
 
 #include <eda/support/boost/spirit_x3/string_view.hpp>
-
 #include <string>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-namespace x3 = boost::spirit::x3;
-
-
-struct string_literal : x3::position_tagged
+struct string_literal : position_tagged
 {
     std::string                     literal;
 //    std::string_view                literal;

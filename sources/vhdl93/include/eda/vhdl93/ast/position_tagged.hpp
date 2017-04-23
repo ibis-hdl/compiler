@@ -1,0 +1,37 @@
+/*
+ * position_tagged.hpp
+ *
+ *  Created on: 23.04.2017
+ *      Author: olaf
+ */
+
+#ifndef SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_POSITION_TAGGED_HPP_
+#define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_POSITION_TAGGED_HPP_
+
+
+#include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
+
+
+namespace boost {
+
+    namespace spirit { namespace x3 {
+
+    } }  // namespace spirit.x3
+
+} // namespace boost
+
+
+namespace eda { namespace vhdl93 { namespace ast {
+
+
+// namespace alias
+namespace x3 = boost::spirit::x3;
+
+
+struct position_tagged : x3::position_tagged { };
+
+
+} } } // namespace eda.vhdl93.ast
+
+
+#endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_POSITION_TAGGED_HPP_ */

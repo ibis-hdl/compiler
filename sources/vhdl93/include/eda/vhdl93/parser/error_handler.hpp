@@ -9,11 +9,10 @@
 #define INCLUDE_EDA_VHDL93_ERROR_HANDLER_HPP_
 
 
-#include <eda/vhdl93/parser/common.hpp>
-
 #include <boost/spirit/home/x3/support/utility/error_reporting.hpp>
 #include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
 #include <boost/spirit/home/x3/auxiliary/guard.hpp> // error_handler_result
+#include <eda/vhdl93/parser/namespace_alias.hpp>
 
 #include <map>
 

@@ -9,31 +9,29 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_LITERAL_HPP_
 
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
+#include <eda/vhdl93/ast/namespace_alias.hpp>
 
 #include <eda/vhdl93/ast/nullary.hpp>
+#include <eda/vhdl93/ast/bit_string_literal.hpp>
+#include <eda/vhdl93/ast/enumeration_literal.hpp>
+#include <eda/vhdl93/ast/keyword_token.hpp>
+#include <eda/vhdl93/ast/numeric_literal.hpp>
+#include <eda/vhdl93/ast/string_literal.hpp>
+
+#include <boost/spirit/home/x3/support/ast/variant.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-namespace x3 = boost::spirit::x3;
-
-
-struct bit_string_literal;
-struct enumeration_literal;
-enum class keyword_token;
-struct numeric_literal;
-struct string_literal;
-
 struct literal :
     x3::variant<
         nullary,
-        x3::forward_ast<bit_string_literal>,
-        x3::forward_ast<enumeration_literal>,
-        x3::forward_ast<keyword_token>,
-        x3::forward_ast<numeric_literal>,
-        x3::forward_ast<string_literal>
+        bit_string_literal,
+        enumeration_literal,
+        keyword_token,          // NULL
+        numeric_literal,
+        string_literal
     >
 {
     using base_type::base_type;

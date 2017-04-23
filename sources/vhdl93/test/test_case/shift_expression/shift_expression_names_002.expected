@@ -1,12 +1,12 @@
 (shift_expression=(simple_expression=(term={
-(binary_operation={
+(factor_binary_operation={
 operator=**
-lhs=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=66, tag=int})))))
-rhs=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int})))))
+primary_lhs=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=66, tag=int}))))
+primary_rhs=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int}))))
 })}))
 operator=ROR
 (simple_expression=(term={
-(unary_operation={
+(factor_unary_operation={
 operator=ABS
-operand=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=66, tag=int})))))
+primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=66, tag=int}))))
 })})))

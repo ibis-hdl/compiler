@@ -10,7 +10,7 @@
 
 
 #include <eda/vhdl93/ast_adapted.hpp>
-#include <eda/vhdl93/parser/common.hpp>
+#include <eda/vhdl93/parser/namespace_alias.hpp>
 #include <eda/vhdl93/parser/utils.hpp>
 #include <eda/vhdl93/parser/operator_def.hpp>
 #include <eda/vhdl93/parser/keyword_def.hpp>
@@ -1969,21 +1969,20 @@ auto const extended_identifier_def =
 //     | not primary
 namespace detail {
 
-    auto const binary_expr = x3::rule<struct _, ast::binary_operation> { "factor (binary)" } =
+    auto const factor_binary_expr = x3::rule<struct _, ast::factor_binary_operation> { "factor (binary)" } =
            primary
         >> binary_miscellaneous_operator // ** (exponent)
         >> primary
         ;
 
     // ABS >> primary | NOT >> primary
-    auto const unary_expr = x3::rule<struct _, ast::unary_operation> { "factor (unary)" } =
-        // ABS | NOT
-        unary_miscellaneous_operator >> primary
+    auto const factor_unary_expr = x3::rule<struct _, ast::factor_unary_operation> { "factor (unary)" } =
+        unary_miscellaneous_operator >> primary // ABS | NOT
         ;
 }
 auto const factor_def =    // Note, order and others changed
-      detail::binary_expr
-    | detail::unary_expr
+      detail::factor_binary_expr
+    | detail::factor_unary_expr
     | primary
     ;
 

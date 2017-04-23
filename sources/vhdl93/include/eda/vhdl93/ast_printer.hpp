@@ -108,6 +108,8 @@ struct enumeration_literal;
 struct enumeration_type_definition;
 struct exit_statement;
 struct expression;
+struct factor_binary_operation;
+struct factor_unary_operation;
 struct factor;
 struct file_declaration;
 struct file_logical_name;
@@ -355,6 +357,8 @@ public:
     void operator()(enumeration_type_definition const& node) const;
     void operator()(exit_statement const& node) const;
     void operator()(expression const& node) const;
+    void operator()(factor_binary_operation const& node) const;
+    void operator()(factor_unary_operation const& node) const;
     void operator()(factor const& node) const;
     void operator()(file_declaration const& node) const;
     void operator()(file_logical_name const& node) const;
@@ -486,10 +490,6 @@ public:
     // keywords and miscellaneous
     void operator()(std::string_view const& node) const;
     void operator()(keyword_token token) const;
-
-    void operator()(binary_operation const& node) const;
-    void operator()(unary_operation const& node) const;
-    void operator()(operand const& node) const;
 
     void operator()(nullary const& node) const;
 };

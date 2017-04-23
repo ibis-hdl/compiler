@@ -9,33 +9,27 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_NAME_HPP_
 
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
+#include <eda/vhdl93/ast/namespace_alias.hpp>
 
 #include <eda/vhdl93/ast/nullary.hpp>
+#include <eda/vhdl93/ast/operator_symbol.hpp>
+#include <eda/vhdl93/ast/simple_name.hpp>
+
+#include <boost/spirit/home/x3/support/ast/variant.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-namespace x3 = boost::spirit::x3;
-
-
-struct attribute_name;
-struct indexed_name;
-struct operator_symbol;
-struct selected_name;
-struct simple_name;
-struct slice_name;
-
 struct name :
     x3::variant<
         nullary,
-//        x3::forward_ast<attribute_name>,
-//        x3::forward_ast<indexed_name>,
-        x3::forward_ast<operator_symbol>,
-//        x3::forward_ast<selected_name>,
-        x3::forward_ast<simple_name>
-//        x3::forward_ast<slice_name>
+        // attribute_name,
+        // indexed_name,
+        operator_symbol,
+        // selected_name,
+        simple_name
+        // slice_name
     >
 {
     using base_type::base_type;

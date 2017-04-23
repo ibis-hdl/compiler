@@ -9,29 +9,27 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_SUFFIX_HPP_
 
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
+#include <eda/vhdl93/ast/namespace_alias.hpp>
 
 #include <eda/vhdl93/ast/nullary.hpp>
+#include <eda/vhdl93/ast/keyword_token.hpp>
+#include <eda/vhdl93/ast/character_literal.hpp>
+#include <eda/vhdl93/ast/operator_symbol.hpp>
+#include <eda/vhdl93/ast/simple_name.hpp>
+
+#include <boost/spirit/home/x3/support/ast/variant.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-namespace x3 = boost::spirit::x3;
-
-
-enum class keyword_token;
-struct character_literal;
-struct operator_symbol;
-struct simple_name;
-
 struct suffix :
     x3::variant<
         nullary,
-        x3::forward_ast<simple_name>,
-        x3::forward_ast<character_literal>,
-        //x3::forward_ast<operator_symbol>,
-        x3::forward_ast<keyword_token>
+        simple_name,
+        character_literal,
+        // operator_symbol,
+        keyword_token
     >
 {
     using base_type::base_type;

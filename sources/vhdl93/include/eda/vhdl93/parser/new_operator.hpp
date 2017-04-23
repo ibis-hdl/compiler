@@ -10,10 +10,9 @@
 
 
 #include <eda/vhdl93/ast/operator_token.hpp>
-#include <eda/vhdl93/parser/common.hpp>
-
 #include <boost/spirit/home/x3/nonterminal/rule.hpp>
 #include <boost/spirit/home/x3/string/symbols.hpp>
+#include <eda/vhdl93/parser/namespace_alias.hpp>
 
 
 /*

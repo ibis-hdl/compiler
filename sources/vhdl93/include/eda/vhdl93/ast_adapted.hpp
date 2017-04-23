@@ -43,6 +43,15 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::expression,
     relation, rest_list
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::factor_binary_operation,
+    primary_lhs, operator_, primary_rhs
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::factor_unary_operation,
+    operator_, primary
+)
+
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::identifier,
     name
 )
@@ -108,12 +117,5 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::term,
 
 
 
-BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::binary_operation,
-    lhs, operator_, rhs
-)
-
-BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::unary_operation,
-    operator_, operand_
-)
 
 #endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_ADAPTED_HPP_ */
