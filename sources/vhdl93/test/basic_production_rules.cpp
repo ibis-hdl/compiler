@@ -277,103 +277,76 @@ BOOST_DATA_TEST_CASE( identifier_list,
 }
 
 
-#if 0
-BOOST_AUTO_TEST_CASE( based_literal )
+/*
+ * based_literal
+ */
+struct based_literal_dataset : public ::x3_test::dataset_loader
 {
-    using namespace eda::vhdl93;
-    using x3_test::parse;
+    based_literal_dataset()
+    : dataset_loader{ "test_case/based_literal" }
+    { }
+} const based_literal_dataset;
+
+
+BOOST_DATA_TEST_CASE( based_literal,
+      based_literal_dataset.input()
+    ^ based_literal_dataset.expect()
+    ^ based_literal_dataset.test_file_name(),
+    input, expected, file )
+{
+    using x3_test::testing_parser;
 
     typedef ast::based_literal attribute_type;
 
-    std::vector<std::pair<std::string, attribute_type>> const pass_test_cases {
-        // Integer literals of value 255:
-        std::make_pair("2#1111_1111#", attribute_type {"2", "11111111#"}),
-        std::make_pair("16#FF#", attribute_type {"16", "FF#"}),
-        std::make_pair("016#0_FF#", attribute_type {"016", "0FF#"}),
-        // Integer literals of value 224
-        std::make_pair("16#E#E1", attribute_type {"16", "E#E1"}),
-        std::make_pair("2#1110_0000#", attribute_type {"2", "11100000#"}),
-        // Real literals of value 4095.0
-        std::make_pair("16#F.FF#E+2", attribute_type {"16", "F.FF#E+2"}),
-        std::make_pair("2#1.1111_1111_111#E11", attribute_type {"2", "1.11111111111#E11"}),
-        // others
-        std::make_pair("16#E#E123", attribute_type {"16", "E#E123"}),
-    };
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
 
-    uint n = 1;
-    for(auto const& str : pass_test_cases) {
-        BOOST_TEST_CONTEXT("'based_literal' test case #" << n++ << " to pass:") {
-            auto const& input = str.first;
-            auto const& gold = str.second;
-            attribute_type attr;
-            BOOST_TEST_INFO("input ='" << input << "'");
-            BOOST_TEST(parse(input, parser::based_literal, x3::space, attr));
-            BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
-            BOOST_TEST(attr.base == gold.base, btt::per_element());
-            BOOST_TEST(attr.literal == gold.literal, btt::per_element());
-        }
-    }
+    bool parse_ok{ false };
+    std::string parse_result {};
+
+    testing_parser<attribute_type> parse;
+    std::tie(parse_ok, parse_result) = parse(input, parser::based_literal);
+
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expected, btt::per_element());
 }
 
 
-BOOST_AUTO_TEST_CASE( decimal_literal )
+/*
+ * decimal_literal
+ */
+struct decimal_literal_dataset : public ::x3_test::dataset_loader
 {
-    using namespace eda::vhdl93;
-    using x3_test::parse;
+    decimal_literal_dataset()
+    : dataset_loader{ "test_case/decimal_literal" }
+    { }
+} const decimal_literal_dataset;
+
+
+BOOST_DATA_TEST_CASE( decimal_literal,
+      decimal_literal_dataset.input()
+    ^ decimal_literal_dataset.expect()
+    ^ decimal_literal_dataset.test_file_name(),
+    input, expected, file )
+{
+    using x3_test::testing_parser;
 
     typedef ast::decimal_literal attribute_type;
 
-    using tag = attribute_type::tag;
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
 
-    std::vector<std::pair<std::string, attribute_type>> const pass_test_cases {
-        // Integer literals
-        std::make_pair("12", attribute_type { "12", tag::integer } ),
-        std::make_pair("0",  attribute_type { "0", tag::integer } ),
-        std::make_pair("1e6", attribute_type { "1e6", tag::integer } ),
-        std::make_pair("123_456", attribute_type { "123456", tag::integer }),
-        // Real literals
-        std::make_pair("12.0", attribute_type { "12.0", tag::real } ),
-        std::make_pair("0.0", attribute_type { "0.0", tag::real } ),
-        std::make_pair("0.456", attribute_type { "0.456", tag::real } ),
-        std::make_pair("3.14159_26", attribute_type { "3.1415926", tag::real } ),
-        // Real literals with exponents
-        std::make_pair("1.34E-12", attribute_type { "1.34E-12", tag::real } ),
-        std::make_pair("1.0E+6", attribute_type { "1.0E+6", tag::real } ),
-        std::make_pair("6.023E+24", attribute_type { "6.023E+24", tag::real } ),
-    };
+    bool parse_ok{ false };
+    std::string parse_result {};
 
-    std::vector<std::string> const pass_with_exception_test_cases {
-        //  this is syntactically valid even if it's overflows int32
-        "12345678901234567890",
-        };
+    testing_parser<attribute_type> parse;
+    std::tie(parse_ok, parse_result) = parse(input, parser::decimal_literal);
 
-    uint n = 1;
-    for(auto const& str : pass_test_cases) {
-        BOOST_TEST_CONTEXT("'decimal_literal' test case #" << n++ << " to pass:") {
-            auto const& input = str.first;
-            auto const& gold = str.second;
-            attribute_type attr;
-            BOOST_TEST_INFO("input ='" << input << "'");
-            BOOST_TEST(parse(input, parser::decimal_literal, x3::space, attr));
-            BOOST_TEST_INFO("gold = '" << gold << "', attr = '" << attr << "'");
-            BOOST_TEST(attr.literal == gold.literal, btt::per_element());
-            BOOST_TEST(attr.hint == gold.hint);
-        }
-    }
-
-    n = 1;
-    for(auto const& str : pass_with_exception_test_cases) {
-        BOOST_TEST_CONTEXT("'decimal_literal' test case #" << n++ <<
-                           " to fail with overflow exception:") {
-            attribute_type attr;
-            BOOST_TEST_INFO("input ='" << str << "'");
-            BOOST_TEST(parse(str, parser::decimal_literal, x3::space, attr));
-            BOOST_CHECK_THROW(ast::get<int>(attr), ::eda::range_error);
-        }
-    }
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expected, btt::per_element());
 }
-
-#endif
 
 
 /*
