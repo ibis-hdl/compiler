@@ -95,29 +95,34 @@ auto const graphic_character = x3::rule<graphic_character_class, char> { "graphi
 
 // string_literal ::=                                                   [§ 13.6]
 // " { graphic_character } "
-auto const common_string_literal_1 = x3::rule<struct _, std::string_view> { "string_literal" }
-    =
-    raw[
+/* Note, std::using string_view and hence x3::raw directive, the complete
+ * contents including '""' (or even '%%') will be included into the parsed
+ * string! If changed to this, the test cases will be fail. Using this will
+ * require some post processing. */
+namespace detail
+{
+    auto const string_literal_1 = x3::rule<struct _, std::string> { "string_literal" } =
        *( ( graphic_character - '"'  )
         | ( char_('"') >> char_('"') )
         )
-    ]
-    ;
-auto const common_string_literal_2 = x3::rule<struct _, std::string_view> { "string_literal" }
-    =
-    raw[
+        ;
+
+    auto const string_literal_2 = x3::rule<struct _, std::string> { "string_literal" } =
        *( ( graphic_character - '%'  )
         | ( char_('%') >> char_('%') )
         )
-    ]
-    ;
+        ;
 
-auto const string_literal_def
-    =
-    lexeme [
-          ('"' >> common_string_literal_1 >> '"')
-        | ('%' >> common_string_literal_2 >> '%')
-    ]
+    auto const string_literal = x3::rule<struct _, std::string> { "string_literal" } =
+        lexeme [
+              ('"' >> string_literal_1 >> '"')
+            | ('%' >> string_literal_2 >> '%')
+        ]
+        ;
+}
+auto const string_literal_def =
+    // FixMe: direct embedding the rule results into twice concatenated attributes!
+    detail::string_literal
     ;
 
 

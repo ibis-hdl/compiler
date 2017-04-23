@@ -797,52 +797,6 @@ namespace detail {
           basic_identifier
         | extended_identifier
         ;
-
-
-    // string_literal ::=                                               [§ 13.6]
-    // " { graphic_character } "
-#if 0
-    auto const common_string_literal = x3::rule<struct _, std::string_view> { "string_literal" } =
-        // FixMe: using x3::raw[] contains " at begin and end of string, otherwise doesn't compile
-        lexeme[ raw[
-            (      '"'
-                >> *( ( graphic_character - '"'  )
-                    | ( char_('"') >> char_('"') )
-                    )
-                >> '"'
-            )
-            |
-            (      '%' // LRM [§ 13.10]
-                >> *( ( graphic_character - '%'  )
-                    | ( char_('%') >> char_('%') )
-                    )
-                >> '%'
-            )
-        ]]
-        ;
-#else
-    auto const common_string_literal_1 = x3::rule<struct _, std::string_view> { "string_literal" } =
-        raw[
-           *( ( graphic_character - '"'  )
-            | ( char_('"') >> char_('"') )
-            )
-        ]
-        ;
-    auto const common_string_literal_2 = x3::rule<struct _, std::string_view> { "string_literal" } =
-        raw[
-           *( ( graphic_character - '%'  )
-            | ( char_('%') >> char_('%') )
-            )
-        ]
-        ;
-
-    auto const common_string_literal = x3::rule<struct _, std::string> { "string_literal" } =
-        lexeme [
-              ('"' >> common_string_literal_1 >> '"')
-            | ('%' >> common_string_literal_2 >> '%')
-        ]
-        ;
-#endif
 }
 
 
@@ -2568,7 +2522,7 @@ auto const object_declaration_def =
 // operator_symbol ::=                                                   [§ 2.1]
 // string_literal
 auto const operator_symbol_def =
-    detail::common_string_literal
+    string_literal
     ;
 
 
@@ -3171,8 +3125,29 @@ auto const slice_name_def =
 
 // string_literal ::=                                                   [§ 13.6]
 // " { graphic_character } "
+namespace detail {
+    auto const string_literal_1 = x3::rule<struct _, std::string> { "string_literal" } =
+       *( ( graphic_character - '"'  )
+        | ( char_('"') >> char_('"') )
+        )
+        ;
+
+    auto const string_literal_2 = x3::rule<struct _, std::string> { "string_literal" } =
+       *( ( graphic_character - '%'  )
+        | ( char_('%') >> char_('%') )
+        )
+        ;
+
+    auto const string_literal = x3::rule<struct _, std::string> { "string_literal" } =
+        lexeme [
+              ('"' >> string_literal_1 >> '"')
+            | ('%' >> string_literal_2 >> '%')
+        ]
+        ;
+}
 auto const string_literal_def =
-    detail::common_string_literal
+    // FixMe: direct embedding the rule results into twice concatenated attributes!
+    detail::string_literal
     ;
 
 
