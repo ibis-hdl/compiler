@@ -14,6 +14,7 @@
 
 
 #include <eda/vhdl93/ast/nullary.hpp>
+//#include <eda/vhdl93/ast/expression.hpp>
 #include <eda/vhdl93/ast/literal.hpp>
 #include <eda/vhdl93/ast/name.hpp>
 
@@ -24,12 +25,14 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
+struct expression;
+
 struct primary :
     x3::variant<
         nullary,
         // aggregate,
         // allocator,
-        // expression,
+        x3::forward_ast<expression>,
         // function_call,
         literal,
         name
