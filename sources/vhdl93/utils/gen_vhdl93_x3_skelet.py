@@ -1515,7 +1515,7 @@ class AstPrinter:
         self.bnf = Vhdl93Bnf()
         self.ns = NS
 
-    def all(self):
+    def all(self, result_type = 'void'):
         """
         Create the ast visitor structure
         """
@@ -1528,20 +1528,20 @@ class AstPrinter:
             if name in self.rule_blacklist:
                 continue
             node_fw_list.append(self.node_fw(name))
-            decl_list.append(self.visit_node_decl(name))
+            decl_list.append(self.visit_node_decl(name, result_type))
             if self.bnf.is_variant(r):
                 def_list.append(
-                    self.visit_variant_def(name)
+                    self.visit_variant_def(name, result_type)
                 )
             else:
                 def_list.append(
-                    self.visit_node_def(name)
+                    self.visit_node_def(name, result_type)
                 )
 
         text = """
 {0}
 
-struct ast_printer
+struct ast_printer: public boost::static_visitor<{2}>
 {{
     std::ostream&   os;
     uint16_t        indent;
@@ -1562,7 +1562,8 @@ struct ast_printer
 }};
 """.format(
     "\n".join(node_fw_list),
-    "\n".join(decl_list)
+    "\n".join(decl_list),
+    result_type
     )
         text_decl = embrace_ns(text, self.ns)
         text_def   = self.visitor_helper()
@@ -1574,8 +1575,9 @@ struct ast_printer
         text = "struct {0};".format(name)
         return text
 
-    def visit_node_decl(self, name):
-        text = "    void operator()({0} const& node) const;".format(name)
+    def visit_node_decl(self, name, result_type):
+        text = "    {0} operator()({1} const& node) const;".format(
+            result_type, name)
         return text
 
     def visitor_helper(self):
@@ -1642,27 +1644,28 @@ struct printer::symbol_scope<
 """
         return text
 
-    def visit_node_def(self, name):
+    def visit_node_def(self, name, result_type):
         text = """
-void printer::operator()({0} const &node) const
+{0} printer::operator()({1} const &node) const
 {{
-    static char const symbol[]{{ "XXX {0}" }};
-    symbol_scope<{0}> _(*this, symbol);
+    static char const symbol[]{{ "XXX {1}" }};
+    symbol_scope<{1}> _(*this, symbol);
     tab(indent);
     //os << node;
 }}
-""".format(name)
+""".format(
+        result_type, name)
         return text
 
-    def visit_variant_def(self, name):
+    def visit_variant_def(self, name, result_type):
         text = """
-void printer::operator()({0} const &node) const
+{0} printer::operator()({1} const &node) const
 {{
-    static char const symbol[]{{ "XXX {0}" }};
-    symbol_scope<{0}> _(*this, symbol);
+    static char const symbol[]{{ "XXX {1}" }};
+    symbol_scope<{1}> _(*this, symbol);
     //boost::apply_visitor(*this, node);
 }}
-""".format(name)
+""".format(result_type, name)
         return text
 
 
@@ -2055,7 +2058,8 @@ if __name__ == "__main__":
     print(x3.definition())
     print(x3.error_handler())
 
-    print(x3.api_declaration())
-    print(x3.api_definition())
+    # disabled, far away from praxis
+    #print(x3.api_declaration())
+    #print(x3.api_definition())
 
 
