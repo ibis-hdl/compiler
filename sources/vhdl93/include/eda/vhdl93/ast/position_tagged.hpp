@@ -9,23 +9,12 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_POSITION_TAGGED_HPP_
 
 
+#include <eda/vhdl93/ast/namespace_alias.hpp>
+
 #include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
 
 
-namespace boost {
-
-    namespace spirit { namespace x3 {
-
-    } }  // namespace spirit.x3
-
-} // namespace boost
-
-
 namespace eda { namespace vhdl93 { namespace ast {
-
-
-// namespace alias
-namespace x3 = boost::spirit::x3;
 
 
 struct position_tagged : x3::position_tagged { };
