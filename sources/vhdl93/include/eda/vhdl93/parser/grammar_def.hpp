@@ -3288,8 +3288,16 @@ auto const target_def =
 
 // term ::=                                                              [§ 7.1]
 // factor { multiplying_operator factor }
+/* Note: There is no expectation point: Consider the case of '-5 mod -3', where
+ *       mod is a multiplying operator with an higher operator precedence as the
+ *       sign operator. This is no valid VHDL and would in case of use of an
+ *       expectation point result into expectation_failure. See
+ *       'test_case/expression_failure/expression_failure_003', or even the
+ *       Blog at Sigasi_ .
+ *       .. _Sigasi: http://insights.sigasi.com/tech/be-careful-vhdl-operator-precedence.html
+ */
 auto const term_def =
-    factor >> *( multiplying_operator > factor )
+    factor >> *( multiplying_operator >> factor )
     ;
 
 
