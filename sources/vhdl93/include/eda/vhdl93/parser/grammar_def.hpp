@@ -1926,8 +1926,8 @@ namespace detail {
 }
 auto const expression_def =
        relation
-    >> ( detail::expression_chunks_1   // AND, ...
-       | detail::expression_chunk_2    // NAND, NOR
+    >> ( detail::expression_chunk_2    // NAND, NOR
+       | detail::expression_chunks_1   // AND, ...
        )
     ;
 

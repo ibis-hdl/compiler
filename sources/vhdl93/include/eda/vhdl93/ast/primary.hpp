@@ -32,7 +32,7 @@ struct primary :
         nullary,
         // aggregate,
         // allocator,
-        x3::forward_ast<expression>,
+        x3::forward_ast<expression>, // break cycle
         // function_call,
         literal,
         name

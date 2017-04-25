@@ -1,0 +1,6 @@
+(expression=(relation=(shift_expression=(simple_expression=sign=-, (term={
+(factor_binary_operation={
+operator=**
+primary_lhs=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=16, tag=int}))))
+primary_rhs=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=2, tag=int}))))
+})})))))

@@ -1,8 +1,8 @@
 (expression=(relation=(shift_expression=(simple_expression=(term={
 (v:primary=(v:literal=(string_literal=0011)))}))))
-operator=AND
+operator=XOR
 (relation=(shift_expression=(simple_expression=(term={
 (v:primary=(v:literal=(string_literal=0010)))}))))
-operator=AND
+operator=XOR
 (relation=(shift_expression=(simple_expression=(term={
 (v:primary=(v:literal=(string_literal=1000)))})))))

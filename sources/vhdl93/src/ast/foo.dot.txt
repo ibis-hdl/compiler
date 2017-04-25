@@ -1,0 +1,44 @@
+graph ast_variant {
+
+    //abstract_literal -- nullary;
+    abstract_literal -- decimal_literal
+    abstract_literal -- based_literal;
+
+    //numeric_literal -- nullary;
+    numeric_literal -- abstract_literal;
+    numeric_literal -- physical_literal;
+
+    //enumeration_literal -- nullary;
+    enumeration_literal -- identifier;
+    enumeration_literal -- character_literal;
+
+    //literal -- nullary;
+    literal -- bit_string_literal;
+    literal -- enumeration_literal;
+    literal -- keyword_token;
+    literal -- numeric_literal;
+    literal -- string_literal;
+
+    //name -- nullary;
+    name -- operator_symbol;
+    name -- simple_name;
+
+    //factor -- nullary;
+    factor -- primary;
+    factor -- factor_binary_operation;
+    factor -- factor_unary_operation;
+
+    //primary -- nullary;
+    primary -- literal;
+    primary -- name;
+    primary -- expression;
+
+    //signal_list -- nullary;
+    signal_list -- signal_list_names;
+    signal_list -- keyword_token;
+
+    //suffix -- nullary;
+    suffix -- simple_name;
+    suffix -- character_literal;
+    suffix -- keyword_token;
+}

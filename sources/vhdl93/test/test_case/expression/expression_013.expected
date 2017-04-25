@@ -1,0 +1,8 @@
+(expression=(relation=(shift_expression=(simple_expression=sign=-, (term={
+(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int})))))}))))
+operator=AND
+(relation=(shift_expression=(simple_expression=(term={
+(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=48, tag=int})))))}))))
+operator=OR
+(relation=(shift_expression=(simple_expression=(term={
+(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=4711, tag=int})))))})))))

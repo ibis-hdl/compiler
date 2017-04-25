@@ -349,6 +349,42 @@ BOOST_DATA_TEST_CASE( expression,
 
 
 /*
+ * expression failure
+ */
+struct expression_failure_dataset : public ::x3_test::dataset_loader
+{
+    expression_failure_dataset()
+    : dataset_loader{ "test_case/expression_failure" }
+    { }
+} const expression_failure_dataset;
+
+
+BOOST_DATA_TEST_CASE( expression_failure,
+      expression_failure_dataset.input()
+    ^ expression_failure_dataset.expect()
+    ^ expression_failure_dataset.test_file_name(),
+    input, expect, file)
+{
+    using x3_test::testing_parser;
+
+    typedef ast::expression attribute_type;
+
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
+
+    bool parse_ok{ false };
+    std::string parse_result {};
+
+    testing_parser<attribute_type> parse;
+    std::tie(parse_ok, parse_result) = parse(input, parser::expression);
+
+    BOOST_TEST(!parse_ok);
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expect, btt::per_element());
+}
+
+
+/*
  * signal_list
  */
 struct signal_list_dataset : public ::x3_test::dataset_loader

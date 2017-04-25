@@ -868,8 +868,7 @@ void printer::operator()(expression const &node) const
     }
 
     for(auto const& chunk : node.rest_list) {
-        os << "\noperator=" << chunk.operator_;
-        os << "\noperator ID = " << (unsigned)chunk.operator_;
+        os << "\noperator=" << chunk.operator_ << "\n";
         (*this)(chunk.relation);
     }
 }

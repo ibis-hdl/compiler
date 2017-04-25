@@ -1,0 +1,6 @@
+(expression=(relation=(shift_expression=(simple_expression=sign=-, (term={
+(v:primary=(expression=(relation=(shift_expression=(simple_expression=(term={
+(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=5, tag=int})))))
+operator=MOD
+factor=(v:primary=(expression=(relation=(shift_expression=(simple_expression=sign=-, (term={
+(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=3, tag=int})))))}))))))}))))))})))))

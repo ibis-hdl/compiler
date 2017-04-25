@@ -197,13 +197,232 @@ enumeration_type_definition
 expression
 ==========
 
-+----------------+--------+----------+
-| File           | Input  | Expected |
-+----------------+--------+----------+
-| expression_001 | 16#32# |          |
-|                |        |          |
-|                |        |          |
-+----------------+--------+----------+
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| File           | Input                           | Expected                                                                                                               |
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| expression_004 | "0011" xnor "0010" xnor "1000"  | (expression=(relation=(shift_expression=(simple_expression=(term={                                                     |
+|                |                                 | (v:primary=(v:literal=(string_literal=0011)))}))))                                                                     |
+|                |                                 | operator=XNOR                                                                                                          |
+|                |                                 | (relation=(shift_expression=(simple_expression=(term={                                                                 |
+|                |                                 | (v:primary=(v:literal=(string_literal=0010)))}))))                                                                     |
+|                |                                 | operator=XNOR                                                                                                          |
+|                |                                 | (relation=(shift_expression=(simple_expression=(term={                                                                 |
+|                |                                 | (v:primary=(v:literal=(string_literal=1000)))})))))                                                                    |
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| expression_022 | -16 ** 2                        | (expression=(relation=(shift_expression=(simple_expression=sign=-, (term={                                             |
+|                |                                 | (factor_binary_operation={                                                                                             |
+|                |                                 | operator=**                                                                                                            |
+|                |                                 | primary_lhs=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=16, tag=int}))))                     |
+|                |                                 | primary_rhs=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=2, tag=int}))))                      |
+|                |                                 | })})))))                                                                                                               |
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| expression_023 | -(16 ** 2)                      | (expression=(relation=(shift_expression=(simple_expression=sign=-, (term={                                             |
+|                |                                 | (v:primary=(expression=(relation=(shift_expression=(simple_expression=(term={                                          |
+|                |                                 | (factor_binary_operation={                                                                                             |
+|                |                                 | operator=**                                                                                                            |
+|                |                                 | primary_lhs=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=16, tag=int}))))                     |
+|                |                                 | primary_rhs=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=2, tag=int}))))                      |
+|                |                                 | })}))))))})))))                                                                                                        |
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| expression_001 | "0011" and "0010" and "1000"    | (expression=(relation=(shift_expression=(simple_expression=(term={                                                     |
+|                |                                 | (v:primary=(v:literal=(string_literal=0011)))}))))                                                                     |
+|                |                                 | operator=AND                                                                                                           |
+|                |                                 | (relation=(shift_expression=(simple_expression=(term={                                                                 |
+|                |                                 | (v:primary=(v:literal=(string_literal=0010)))}))))                                                                     |
+|                |                                 | operator=AND                                                                                                           |
+|                |                                 | (relation=(shift_expression=(simple_expression=(term={                                                                 |
+|                |                                 | (v:primary=(v:literal=(string_literal=1000)))})))))                                                                    |
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| expression_014 | 7**3 or 42                      | (expression=(relation=(shift_expression=(simple_expression=(term={                                                     |
+|                |                                 | (factor_binary_operation={                                                                                             |
+|                |                                 | operator=**                                                                                                            |
+|                |                                 | primary_lhs=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=7, tag=int}))))                      |
+|                |                                 | primary_rhs=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=3, tag=int}))))                      |
+|                |                                 | })}))))                                                                                                                |
+|                |                                 | operator=OR                                                                                                            |
+|                |                                 | (relation=(shift_expression=(simple_expression=(term={                                                                 |
+|                |                                 | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int})))))})))))               |
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| expression_002 | "0011" or  "0010" or  "1000"    | (expression=(relation=(shift_expression=(simple_expression=(term={                                                     |
+|                |                                 | (v:primary=(v:literal=(string_literal=0011)))}))))                                                                     |
+|                |                                 | operator=OR                                                                                                            |
+|                |                                 | (relation=(shift_expression=(simple_expression=(term={                                                                 |
+|                |                                 | (v:primary=(v:literal=(string_literal=0010)))}))))                                                                     |
+|                |                                 | operator=OR                                                                                                            |
+|                |                                 | (relation=(shift_expression=(simple_expression=(term={                                                                 |
+|                |                                 | (v:primary=(v:literal=(string_literal=1000)))})))))                                                                    |
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| expression_008 | "0011" and "0010" >= "1000"     | (expression=(relation=(shift_expression=(simple_expression=(term={                                                     |
+|                |                                 | (v:primary=(v:literal=(string_literal=0011)))}))))                                                                     |
+|                |                                 | operator=AND                                                                                                           |
+|                |                                 | (relation=(shift_expression=(simple_expression=(term={                                                                 |
+|                |                                 | (v:primary=(v:literal=(string_literal=0010)))})))                                                                      |
+|                |                                 | operator=>=                                                                                                            |
+|                |                                 | (shift_expression=(simple_expression=(term={                                                                           |
+|                |                                 | (v:primary=(v:literal=(string_literal=1000)))})))))                                                                    |
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| expression_005 | "0011" nand "0010"              | (expression=(relation=(shift_expression=(simple_expression=(term={                                                     |
+|                |                                 | (v:primary=(v:literal=(string_literal=0011)))}))))                                                                     |
+|                |                                 | operator=NAND                                                                                                          |
+|                |                                 | (relation=(shift_expression=(simple_expression=(term={                                                                 |
+|                |                                 | (v:primary=(v:literal=(string_literal=0010)))})))))                                                                    |
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| expression_007 | "0011" <= "0010" and "1000"     | (expression=(relation=(shift_expression=(simple_expression=(term={                                                     |
+|                |                                 | (v:primary=(v:literal=(string_literal=0011)))})))                                                                      |
+|                |                                 | operator=<=                                                                                                            |
+|                |                                 | (shift_expression=(simple_expression=(term={                                                                           |
+|                |                                 | (v:primary=(v:literal=(string_literal=0010)))}))))                                                                     |
+|                |                                 | operator=AND                                                                                                           |
+|                |                                 | (relation=(shift_expression=(simple_expression=(term={                                                                 |
+|                |                                 | (v:primary=(v:literal=(string_literal=1000)))})))))                                                                    |
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| expression_006 | "0011" nor "0010"               | (expression=(relation=(shift_expression=(simple_expression=(term={                                                     |
+|                |                                 | (v:primary=(v:literal=(string_literal=0011)))}))))                                                                     |
+|                |                                 | operator=NOR                                                                                                           |
+|                |                                 | (relation=(shift_expression=(simple_expression=(term={                                                                 |
+|                |                                 | (v:primary=(v:literal=(string_literal=0010)))})))))                                                                    |
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| expression_013 | -42 and 48 or 4711              | (expression=(relation=(shift_expression=(simple_expression=sign=-, (term={                                             |
+|                |                                 | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int})))))}))))                |
+|                |                                 | operator=AND                                                                                                           |
+|                |                                 | (relation=(shift_expression=(simple_expression=(term={                                                                 |
+|                |                                 | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=48, tag=int})))))}))))                |
+|                |                                 | operator=OR                                                                                                            |
+|                |                                 | (relation=(shift_expression=(simple_expression=(term={                                                                 |
+|                |                                 | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=4711, tag=int})))))})))))             |
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| expression_024 | (-16) ** 2                      | (expression=(relation=(shift_expression=(simple_expression=(term={                                                     |
+|                |                                 | (factor_binary_operation={                                                                                             |
+|                |                                 | operator=**                                                                                                            |
+|                |                                 | primary_lhs=(expression=(relation=(shift_expression=(simple_expression=sign=-, (term={                                 |
+|                |                                 | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=16, tag=int})))))})))))               |
+|                |                                 | primary_rhs=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=2, tag=int}))))                      |
+|                |                                 | })})))))                                                                                                               |
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| expression_009 | "0011" SRL "0010" and "1000"    | (expression=(relation=(shift_expression=(simple_expression=(term={                                                     |
+|                |                                 | (v:primary=(v:literal=(string_literal=0011)))}))                                                                       |
+|                |                                 | operator=SRL                                                                                                           |
+|                |                                 | (simple_expression=(term={                                                                                             |
+|                |                                 | (v:primary=(v:literal=(string_literal=0010)))}))))                                                                     |
+|                |                                 | operator=AND                                                                                                           |
+|                |                                 | (relation=(shift_expression=(simple_expression=(term={                                                                 |
+|                |                                 | (v:primary=(v:literal=(string_literal=1000)))})))))                                                                    |
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| expression_017 | 42 + 10 - 2**3                  | (expression=(relation=(shift_expression=(simple_expression=(term={                                                     |
+|                |                                 | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int})))))})                   |
+|                |                                 | operator=+(term={                                                                                                      |
+|                |                                 | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=10, tag=int})))))})                   |
+|                |                                 | operator=-(term={                                                                                                      |
+|                |                                 | (factor_binary_operation={                                                                                             |
+|                |                                 | operator=**                                                                                                            |
+|                |                                 | primary_lhs=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=2, tag=int}))))                      |
+|                |                                 | primary_rhs=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=3, tag=int}))))                      |
+|                |                                 | })})))))                                                                                                               |
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| expression_016 | 42 - (5*2)                      | (expression=(relation=(shift_expression=(simple_expression=(term={                                                     |
+|                |                                 | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int})))))})                   |
+|                |                                 | operator=-(term={                                                                                                      |
+|                |                                 | (v:primary=(expression=(relation=(shift_expression=(simple_expression=(term={                                          |
+|                |                                 | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=5, tag=int})))))                      |
+|                |                                 | operator=*                                                                                                             |
+|                |                                 | factor=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=2, tag=int})))))}))))))})))))  |
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| expression_010 | "0011" and "0010" SRL "1000"    | (expression=(relation=(shift_expression=(simple_expression=(term={                                                     |
+|                |                                 | (v:primary=(v:literal=(string_literal=0011)))}))))                                                                     |
+|                |                                 | operator=AND                                                                                                           |
+|                |                                 | (relation=(shift_expression=(simple_expression=(term={                                                                 |
+|                |                                 | (v:primary=(v:literal=(string_literal=0010)))}))                                                                       |
+|                |                                 | operator=SRL                                                                                                           |
+|                |                                 | (simple_expression=(term={                                                                                             |
+|                |                                 | (v:primary=(v:literal=(string_literal=1000)))})))))                                                                    |
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| expression_003 | "0011" xor "0010" xor "1000"    | (expression=(relation=(shift_expression=(simple_expression=(term={                                                     |
+|                |                                 | (v:primary=(v:literal=(string_literal=0011)))}))))                                                                     |
+|                |                                 | operator=XOR                                                                                                           |
+|                |                                 | (relation=(shift_expression=(simple_expression=(term={                                                                 |
+|                |                                 | (v:primary=(v:literal=(string_literal=0010)))}))))                                                                     |
+|                |                                 | operator=XOR                                                                                                           |
+|                |                                 | (relation=(shift_expression=(simple_expression=(term={                                                                 |
+|                |                                 | (v:primary=(v:literal=(string_literal=1000)))})))))                                                                    |
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| expression_018 | (42)*(42) + ((12 + 12)*(12-12)) | (expression=(relation=(shift_expression=(simple_expression=(term={                                                     |
+|                |                                 | (v:primary=(expression=(relation=(shift_expression=(simple_expression=(term={                                          |
+|                |                                 | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int})))))}))))))              |
+|                |                                 | operator=*                                                                                                             |
+|                |                                 | factor=(v:primary=(expression=(relation=(shift_expression=(simple_expression=(term={                                   |
+|                |                                 | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int})))))}))))))})            |
+|                |                                 | operator=+(term={                                                                                                      |
+|                |                                 | (v:primary=(expression=(relation=(shift_expression=(simple_expression=(term={                                          |
+|                |                                 | (v:primary=(expression=(relation=(shift_expression=(simple_expression=(term={                                          |
+|                |                                 | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=12, tag=int})))))})                   |
+|                |                                 | operator=+(term={                                                                                                      |
+|                |                                 | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=12, tag=int})))))}))))))              |
+|                |                                 | operator=*                                                                                                             |
+|                |                                 | factor=(v:primary=(expression=(relation=(shift_expression=(simple_expression=(term={                                   |
+|                |                                 | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=12, tag=int})))))})                   |
+|                |                                 | operator=-(term={                                                                                                      |
+|                |                                 | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=12, tag=int})))))}))))))}))))))}))))) |
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| expression_011 | "0011" <= "0010" + "1000"       | (expression=(relation=(shift_expression=(simple_expression=(term={                                                     |
+|                |                                 | (v:primary=(v:literal=(string_literal=0011)))})))                                                                      |
+|                |                                 | operator=<=                                                                                                            |
+|                |                                 | (shift_expression=(simple_expression=(term={                                                                           |
+|                |                                 | (v:primary=(v:literal=(string_literal=0010)))})                                                                        |
+|                |                                 | operator=+(term={                                                                                                      |
+|                |                                 | (v:primary=(v:literal=(string_literal=1000)))})))))                                                                    |
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| expression_012 | "0011" * "0010" and "1000"      | (expression=(relation=(shift_expression=(simple_expression=(term={                                                     |
+|                |                                 | (v:primary=(v:literal=(string_literal=0011)))                                                                          |
+|                |                                 | operator=*                                                                                                             |
+|                |                                 | factor=(v:primary=(v:literal=(string_literal=0010)))}))))                                                              |
+|                |                                 | operator=AND                                                                                                           |
+|                |                                 | (relation=(shift_expression=(simple_expression=(term={                                                                 |
+|                |                                 | (v:primary=(v:literal=(string_literal=1000)))})))))                                                                    |
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| expression_020 | -(5 mod (-3))                   | (expression=(relation=(shift_expression=(simple_expression=sign=-, (term={                                             |
+|                |                                 | (v:primary=(expression=(relation=(shift_expression=(simple_expression=(term={                                          |
+|                |                                 | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=5, tag=int})))))                      |
+|                |                                 | operator=MOD                                                                                                           |
+|                |                                 | factor=(v:primary=(expression=(relation=(shift_expression=(simple_expression=sign=-, (term={                           |
+|                |                                 | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=3, tag=int})))))}))))))}))))))})))))  |
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| expression_021 | (-5) mod (-3)                   | (expression=(relation=(shift_expression=(simple_expression=(term={                                                     |
+|                |                                 | (v:primary=(expression=(relation=(shift_expression=(simple_expression=sign=-, (term={                                  |
+|                |                                 | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=5, tag=int})))))}))))))               |
+|                |                                 | operator=MOD                                                                                                           |
+|                |                                 | factor=(v:primary=(expression=(relation=(shift_expression=(simple_expression=sign=-, (term={                           |
+|                |                                 | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=3, tag=int})))))}))))))})))))         |
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| expression_019 | -5 mod (-3)                     | (expression=(relation=(shift_expression=(simple_expression=sign=-, (term={                                             |
+|                |                                 | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=5, tag=int})))))                      |
+|                |                                 | operator=MOD                                                                                                           |
+|                |                                 | factor=(v:primary=(expression=(relation=(shift_expression=(simple_expression=sign=-, (term={                           |
+|                |                                 | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=3, tag=int})))))}))))))})))))         |
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+| expression_015 | 42 - 5*2                        | (expression=(relation=(shift_expression=(simple_expression=(term={                                                     |
+|                |                                 | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int})))))})                   |
+|                |                                 | operator=-(term={                                                                                                      |
+|                |                                 | (v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=5, tag=int})))))                      |
+|                |                                 | operator=*                                                                                                             |
+|                |                                 | factor=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=2, tag=int})))))})))))         |
++----------------+---------------------------------+------------------------------------------------------------------------------------------------------------------------+
+
+==================
+expression_failure
+==================
+
++------------------------+--------------------------------+----------+
+| File                   | Input                          | Expected |
++------------------------+--------------------------------+----------+
+| expression_failure_002 | -- not valid VHDL              |          |
+|                        | "0011" nor "0010" nor "1000"   |          |
++------------------------+--------------------------------+----------+
+| expression_failure_001 | -- not valid VHDL              |          |
+|                        | "0011" nand "0010" nand "1000" |          |
++------------------------+--------------------------------+----------+
+| expression_failure_003 | -- not valid VHDL.             |          |
+|                        | -5 mod -3                      |          |
++------------------------+--------------------------------+----------+
 
 ======
 factor
