@@ -28,46 +28,46 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-std::ostream& operator<<(std::ostream& os, operator_token op_token)
+std::ostream& operator<<(std::ostream& os, operator_token token)
 {
-    switch(op_token) {
+    switch(token) {
         // miscellaneous_operator
-        case operator_token::EXPONENT:        os << "**";    break;
-        case operator_token::ABS:             os << "ABS";   break;
-        case operator_token::NOT:             os << "NOT";   break;
+        case operator_token::EXPONENT:        os << "EXPONENT";      break;
+        case operator_token::ABS:             os << "ABS";           break;
+        case operator_token::NOT:             os << "NOT";           break;
         // multiplying_operator
-        case operator_token::MUL:             os << "*";     break;
-        case operator_token::DIV:             os << "/";     break;
-        case operator_token::MOD:             os << "MOD";   break;
-        case operator_token::REM:             os << "REM";   break;
+        case operator_token::MUL:             os << "MUL";           break;
+        case operator_token::DIV:             os << "DIV";           break;
+        case operator_token::MOD:             os << "MOD";           break;
+        case operator_token::REM:             os << "REM";           break;
         // sign_operator
-        case operator_token::SIGN_POS:        os << "+";     break;
-        case operator_token::SIGN_NEG:        os << "-";     break;
+        case operator_token::SIGN_POS:        os << "SIGN_POS";      break;
+        case operator_token::SIGN_NEG:        os << "SIGN_NEG";      break;
         // adding_operator
-        case operator_token::ADD:             os << "+";     break;
-        case operator_token::SUB:             os << "-";     break;
-        case operator_token::CONCAT:          os << "&";     break;
+        case operator_token::ADD:             os << "ADD";           break;
+        case operator_token::SUB:             os << "SUB";           break;
+        case operator_token::CONCAT:          os << "CONCAT";        break;
         // shift_operator
-        case operator_token::SLL:             os << "SLL";   break;
-        case operator_token::SRL:             os << "SRL";   break;
-        case operator_token::SLA:             os << "SLA";   break;
-        case operator_token::SRA:             os << "SRA";   break;
-        case operator_token::ROL:             os << "ROL";   break;
-        case operator_token::ROR:             os << "ROR";   break;
+        case operator_token::SLL:             os << "SLL";           break;
+        case operator_token::SRL:             os << "SRL";           break;
+        case operator_token::SLA:             os << "SLA";           break;
+        case operator_token::SRA:             os << "SRA";           break;
+        case operator_token::ROL:             os << "ROL";           break;
+        case operator_token::ROR:             os << "ROR";           break;
         // relational_operator
-        case operator_token::EQUAL:           os << "=";     break;
-        case operator_token::NOT_EQUALS:      os << "/=";    break;
-        case operator_token::LESS:            os << "<";     break;
-        case operator_token::LESS_EQUALS:     os << "<=";    break;
-        case operator_token::GREATER:         os << ">";     break;
-        case operator_token::GREATER_EQUALS:  os << ">=";    break;
+        case operator_token::EQUAL:           os << "EQUAL";         break;
+        case operator_token::NOT_EQUALS:      os << "NOT_EQUALS";    break;
+        case operator_token::LESS:            os << "LESS";          break;
+        case operator_token::LESS_EQUALS:     os << "LESS_EQUALS";   break;
+        case operator_token::GREATER:         os << "GREATER";       break;
+        case operator_token::GREATER_EQUALS:  os << "GREATER_EQUALS"; break;
         // logical_operator
-        case operator_token::AND:             os << "AND";   break;
-        case operator_token::OR:              os << "OR";    break;
-        case operator_token::NAND:            os << "NAND";  break;
-        case operator_token::NOR:             os << "NOR";   break;
-        case operator_token::XOR:             os << "XOR";   break;
-        case operator_token::XNOR:            os << "XNOR";  break;
+        case operator_token::AND:             os << "AND";           break;
+        case operator_token::OR:              os << "OR";            break;
+        case operator_token::NAND:            os << "NAND";          break;
+        case operator_token::NOR:             os << "NOR";           break;
+        case operator_token::XOR:             os << "XOR";           break;
+        case operator_token::XNOR:            os << "XNOR";          break;
 
         default:                              os << "FAILURE";
     }

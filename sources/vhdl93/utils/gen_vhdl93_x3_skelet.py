@@ -1338,7 +1338,7 @@ enum class {0} {{
                 alist.append('case {0}::{1:<{2}} os << {3:<{4}} break;'.format(
                     op_type_name,
                     op_name + ':', self.tab_sz*4,
-                    '"'+op+'";', self.tab_sz*2
+                    '"'+op_name+'";', self.tab_sz*4
                     )
                 )
         alist[-1] = alist[-1].strip(',')
