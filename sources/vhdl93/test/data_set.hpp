@@ -45,7 +45,7 @@ private:
     std::string read_file(fs::path const& file_path);
 
 private:
-    dataset_type	 m_file_path;
+    dataset_type     m_file_path;
     dataset_type     m_input;
     dataset_type     m_expected;
 };
@@ -59,7 +59,7 @@ namespace x3_test {
 class dataset_loader::data_set
 {
 public:
-	typedef dataset_type::const_iterator	iterator;
+    typedef dataset_type::const_iterator    iterator;
 
 public:
     data_set(dataset_type const& data)
@@ -84,9 +84,9 @@ using ::boost::unit_test::data::monomorphic::operator^;
 
 
 namespace boost { namespace unit_test { namespace data { namespace monomorphic {
-	  // registering fibonacci_dataset as a proper dataset
-	  template <>
-	  struct is_dataset<x3_test::dataset_loader::data_set> : boost::mpl::true_ {};
+      // registering as a proper dataset
+      template <>
+      struct is_dataset<x3_test::dataset_loader::data_set> : boost::mpl::true_ {};
 }}}}
 
 
