@@ -33,12 +33,12 @@ class indent_sbuf : public std::streambuf
     std::streambuf*     m_sbuf;
     std::string         m_indent_str;
     bool                m_start_of_line;
-    static const int    TAB_WIDTH = 4;
+    static const int    TAB_WIDTH = 2;
 
 public:
     explicit indent_sbuf(std::streambuf* sbuf, size_t indent = 0)
         : m_sbuf{ sbuf }
-        , m_indent_str(indent, ' ')
+        , m_indent_str(indent, '.')
         , m_start_of_line{ false }
     { }
 
@@ -49,14 +49,14 @@ public:
 
     indent_sbuf& increase()
     {
-        m_indent_str = std::string(m_indent_str.size() + TAB_WIDTH, ' ');
+        m_indent_str = std::string(m_indent_str.size() + TAB_WIDTH, '.');
         return *this;
     }
 
     indent_sbuf& decrease()
     {
         if(m_indent_str.size() > TAB_WIDTH) {
-            m_indent_str = std::string(m_indent_str.size() - TAB_WIDTH, ' ');
+            m_indent_str = std::string(m_indent_str.size() - TAB_WIDTH, '.');
         }
         else {
             m_indent_str.clear();
@@ -106,13 +106,11 @@ std::ostream& decrease_indent(std::ostream& os)
 struct printer
 {
     indent_ostream os;
-    int indent_level;
     bool verbose_symbol;
     bool verbose_variant;
 
     printer(std::ostream& os_)
     : os{ os_ , 0}
-    , indent_level { 0 }
     , verbose_symbol {false}
     , verbose_variant{ false }
     {}
@@ -120,13 +118,11 @@ struct printer
     struct scope_printer
     {
         indent_ostream& os;
-        int& indent_level;
         const char* const name{ nullptr };
         bool const verbose;
 
-        scope_printer(indent_ostream& os_, int& indent_level, char const name[], bool verbose, char const name_pfx[] = nullptr)
+        scope_printer(indent_ostream& os_, char const name[], bool verbose, char const name_pfx[] = nullptr)
         : os{ os_ }
-        , indent_level{ indent_level }
         , name{ name }
         , verbose{ verbose }
         {
@@ -136,7 +132,7 @@ struct printer
                 if(name_pfx)
                     os << "<" << name_pfx << ">";
                 os << "\n";
-                os << "_"; // FixMe, required for correct indent
+                //os << "_"; // FixMe, required for correct indent
             }
         }
 
@@ -156,7 +152,7 @@ struct printer
     : public scope_printer
     {
         symbol_scope(printer & root, char const name[])
-        : scope_printer(root.os, root.indent_level, name, root.verbose_symbol)
+        : scope_printer(root.os, name, root.verbose_symbol)
         { }
     };
 
@@ -167,7 +163,7 @@ struct printer
     : public scope_printer
     {
         symbol_scope(printer & root, char const name[])
-        : scope_printer(root.os, root.indent_level, name, root.verbose_variant, "v")
+        : scope_printer(root.os, name, root.verbose_variant, "v")
         { }
     };
 
