@@ -94,7 +94,7 @@ void printer::operator()(abstract_literal const &node) const
 {
     static char const symbol[]{ "abstract_literal" };
     symbol_scope<abstract_literal> _(*this, symbol);
-    boost::apply_visitor(*this, node);
+    visit(node);
 }
 
 
@@ -110,7 +110,7 @@ void printer::operator()(actual_designator const &node) const
 {
     static char const symbol[]{ "XXX actual_designator" };
     symbol_scope<actual_designator> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -126,7 +126,7 @@ void printer::operator()(actual_part const &node) const
 {
     static char const symbol[]{ "XXX actual_part" };
     symbol_scope<actual_part> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -150,7 +150,7 @@ void printer::operator()(alias_designator const &node) const
 {
     static char const symbol[]{ "XXX alias_designator" };
     symbol_scope<alias_designator> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -158,7 +158,7 @@ void printer::operator()(allocator const &node) const
 {
     static char const symbol[]{ "XXX allocator" };
     symbol_scope<allocator> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -190,7 +190,7 @@ void printer::operator()(array_type_definition const &node) const
 {
     static char const symbol[]{ "XXX array_type_definition" };
     symbol_scope<array_type_definition> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -296,7 +296,7 @@ void printer::operator()(basic_character const &node) const
 {
     static char const symbol[]{ "XXX basic_character" };
     symbol_scope<basic_character> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -304,7 +304,7 @@ void printer::operator()(basic_graphic_character const &node) const
 {
     static char const symbol[]{ "XXX basic_graphic_character" };
     symbol_scope<basic_graphic_character> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -348,7 +348,7 @@ void printer::operator()(block_declarative_item const &node) const
 {
     static char const symbol[]{ "XXX block_declarative_item" };
     symbol_scope<block_declarative_item> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -372,7 +372,7 @@ void printer::operator()(block_specification const &node) const
 {
     static char const symbol[]{ "XXX block_specification" };
     symbol_scope<block_specification> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -421,7 +421,7 @@ void printer::operator()(choice const &node) const
 {
     static char const symbol[]{ "XXX choice" };
     symbol_scope<choice> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -429,7 +429,7 @@ void printer::operator()(choices const &node) const
 {
     static char const symbol[]{ "XXX choices" };
     symbol_scope<choices> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -469,7 +469,7 @@ void printer::operator()(composite_type_definition const &node) const
 {
     static char const symbol[]{ "XXX composite_type_definition" };
     symbol_scope<composite_type_definition> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -493,7 +493,7 @@ void printer::operator()(concurrent_signal_assignment_statement const &node) con
 {
     static char const symbol[]{ "XXX concurrent_signal_assignment_statement" };
     symbol_scope<concurrent_signal_assignment_statement> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -501,7 +501,7 @@ void printer::operator()(concurrent_statement const &node) const
 {
     static char const symbol[]{ "XXX concurrent_statement" };
     symbol_scope<concurrent_statement> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -549,7 +549,7 @@ void printer::operator()(configuration_declarative_item const &node) const
 {
     static char const symbol[]{ "XXX configuration_declarative_item" };
     symbol_scope<configuration_declarative_item> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -565,7 +565,7 @@ void printer::operator()(configuration_item const &node) const
 {
     static char const symbol[]{ "XXX configuration_item" };
     symbol_scope<configuration_item> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -597,7 +597,7 @@ void printer::operator()(constraint const &node) const
 {
     static char const symbol[]{ "XXX constraint" };
     symbol_scope<constraint> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -613,7 +613,7 @@ void printer::operator()(context_item const &node) const
 {
     static char const symbol[]{ "XXX context_item" };
     symbol_scope<context_item> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -641,7 +641,7 @@ void printer::operator()(declaration const &node) const
 {
     static char const symbol[]{ "XXX declaration" };
     symbol_scope<declaration> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -649,7 +649,7 @@ void printer::operator()(delay_mechanism const &node) const
 {
     static char const symbol[]{ "XXX delay_mechanism" };
     symbol_scope<delay_mechanism> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -673,7 +673,7 @@ void printer::operator()(designator const &node) const
 {
     static char const symbol[]{ "XXX designator" };
     symbol_scope<designator> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -689,7 +689,7 @@ void printer::operator()(discrete_range const &node) const
 {
     static char const symbol[]{ "XXX discrete_range" };
     symbol_scope<discrete_range> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -721,7 +721,7 @@ void printer::operator()(entity_aspect const &node) const
 {
     static char const symbol[]{ "XXX entity_aspect" };
     symbol_scope<entity_aspect> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -729,7 +729,7 @@ void printer::operator()(entity_class const &node) const
 {
     static char const symbol[]{ "XXX entity_class" };
     symbol_scope<entity_class> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -761,7 +761,7 @@ void printer::operator()(entity_declarative_item const &node) const
 {
     static char const symbol[]{ "XXX entity_declarative_item" };
     symbol_scope<entity_declarative_item> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -793,7 +793,7 @@ void printer::operator()(entity_name_list const &node) const
 {
     static char const symbol[]{ "XXX entity_name_list" };
     symbol_scope<entity_name_list> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -809,7 +809,7 @@ void printer::operator()(entity_statement const &node) const
 {
     static char const symbol[]{ "XXX entity_statement" };
     symbol_scope<entity_statement> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -825,7 +825,7 @@ void printer::operator()(entity_tag const &node) const
 {
     static char const symbol[]{ "XXX entity_tag" };
     symbol_scope<entity_tag> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -833,7 +833,7 @@ void printer::operator()(enumeration_literal const &node) const
 {
     static char const symbol[]{ "enumeration_literal" };
     symbol_scope<enumeration_literal> _(*this, symbol);
-    boost::apply_visitor(*this, node);
+    visit(node);
 }
 
 
@@ -926,7 +926,7 @@ void printer::operator()(factor const &node) const
 {
     static char const symbol[]{ "factor" };
     symbol_scope<factor> _(*this, symbol);
-    boost::apply_visitor(*this, node);
+    visit(node);
 }
 
 
@@ -966,7 +966,7 @@ void printer::operator()(formal_designator const &node) const
 {
     static char const symbol[]{ "XXX formal_designator" };
     symbol_scope<formal_designator> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -982,7 +982,7 @@ void printer::operator()(formal_part const &node) const
 {
     static char const symbol[]{ "XXX formal_part" };
     symbol_scope<formal_part> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1014,7 +1014,7 @@ void printer::operator()(generation_scheme const &node) const
 {
     static char const symbol[]{ "XXX generation_scheme" };
     symbol_scope<generation_scheme> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1046,7 +1046,7 @@ void printer::operator()(graphic_character const &node) const
 {
     static char const symbol[]{ "XXX graphic_character" };
     symbol_scope<graphic_character> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1054,7 +1054,7 @@ void printer::operator()(group_constituent const &node) const
 {
     static char const symbol[]{ "XXX group_constituent" };
     symbol_scope<group_constituent> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1140,7 +1140,7 @@ void printer::operator()(index_specification const &node) const
 {
     static char const symbol[]{ "XXX index_specification" };
     symbol_scope<index_specification> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1164,7 +1164,7 @@ void printer::operator()(instantiated_unit const &node) const
 {
     static char const symbol[]{ "XXX instantiated_unit" };
     symbol_scope<instantiated_unit> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1172,7 +1172,7 @@ void printer::operator()(instantiation_list const &node) const
 {
     static char const symbol[]{ "XXX instantiation_list" };
     symbol_scope<instantiation_list> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1204,7 +1204,7 @@ void printer::operator()(interface_declaration const &node) const
 {
     static char const symbol[]{ "XXX interface_declaration" };
     symbol_scope<interface_declaration> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1252,7 +1252,7 @@ void printer::operator()(iteration_scheme const &node) const
 {
     static char const symbol[]{ "XXX iteration_scheme" };
     symbol_scope<iteration_scheme> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1276,7 +1276,7 @@ void printer::operator()(library_unit const &node) const
 {
     static char const symbol[]{ "XXX library_unit" };
     symbol_scope<library_unit> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1284,7 +1284,7 @@ void printer::operator()(literal const &node) const
 {
     static char const symbol[]{ "literal" };
     symbol_scope<literal> _(*this, symbol);
-    boost::apply_visitor(*this, node);
+    visit(node);
 }
 
 
@@ -1316,7 +1316,7 @@ void printer::operator()(mode const &node) const
 {
     static char const symbol[]{ "XXX mode" };
     symbol_scope<mode> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1324,7 +1324,7 @@ void printer::operator()(name const &node) const
 {
     static char const symbol[]{ "name" };
     symbol_scope<name> _(*this, symbol);
-    boost::apply_visitor(*this, node);
+    visit(node);
 }
 
 
@@ -1348,7 +1348,7 @@ void printer::operator()(numeric_literal const &node) const
 {
     static char const symbol[]{ "numeric_literal" };
     symbol_scope<numeric_literal> _(*this, symbol);
-    boost::apply_visitor(*this, node);
+    visit(node);
 }
 
 
@@ -1356,7 +1356,7 @@ void printer::operator()(object_declaration const &node) const
 {
     static char const symbol[]{ "XXX object_declaration" };
     symbol_scope<object_declaration> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1388,7 +1388,7 @@ void printer::operator()(package_body_declarative_item const &node) const
 {
     static char const symbol[]{ "XXX package_body_declarative_item" };
     symbol_scope<package_body_declarative_item> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1412,7 +1412,7 @@ void printer::operator()(package_declarative_item const &node) const
 {
     static char const symbol[]{ "XXX package_declarative_item" };
     symbol_scope<package_declarative_item> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1480,7 +1480,7 @@ void printer::operator()(prefix const &node) const
 {
     static char const symbol[]{ "XXX prefix" };
     symbol_scope<prefix> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1488,7 +1488,7 @@ void printer::operator()(primary const &node) const
 {
     static char const symbol[]{ "primary" };
     symbol_scope<primary> _(*this, symbol);
-    boost::apply_visitor(*this, node);
+    visit(node);
 }
 
 
@@ -1496,7 +1496,7 @@ void printer::operator()(primary_unit const &node) const
 {
     static char const symbol[]{ "XXX primary_unit" };
     symbol_scope<primary_unit> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1520,7 +1520,7 @@ void printer::operator()(process_declarative_item const &node) const
 {
     static char const symbol[]{ "XXX process_declarative_item" };
     symbol_scope<process_declarative_item> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1552,7 +1552,7 @@ void printer::operator()(qualified_expression const &node) const
 {
     static char const symbol[]{ "XXX qualified_expression" };
     symbol_scope<qualified_expression> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1560,7 +1560,7 @@ void printer::operator()(range const &node) const
 {
     static char const symbol[]{ "XXX range" };
     symbol_scope<range> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1617,7 +1617,7 @@ void printer::operator()(scalar_type_definition const &node) const
 {
     static char const symbol[]{ "XXX scalar_type_definition" };
     symbol_scope<scalar_type_definition> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1625,7 +1625,7 @@ void printer::operator()(secondary_unit const &node) const
 {
     static char const symbol[]{ "XXX secondary_unit" };
     symbol_scope<secondary_unit> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1689,7 +1689,7 @@ void printer::operator()(sequential_statement const &node) const
 {
     static char const symbol[]{ "XXX sequential_statement" };
     symbol_scope<sequential_statement> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1740,7 +1740,7 @@ void printer::operator()(signal_list const &node) const
     static char const symbol[]{ "signal_list" };
     symbol_scope<signal_list> _(*this, symbol);
 
-    boost::apply_visitor(*this, node);
+    visit(node);
 }
 
 
@@ -1819,7 +1819,7 @@ void printer::operator()(subprogram_declarative_item const &node) const
 {
     static char const symbol[]{ "XXX subprogram_declarative_item" };
     symbol_scope<subprogram_declarative_item> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1835,7 +1835,7 @@ void printer::operator()(subprogram_kind const &node) const
 {
     static char const symbol[]{ "XXX subprogram_kind" };
     symbol_scope<subprogram_kind> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1843,7 +1843,7 @@ void printer::operator()(subprogram_specification const &node) const
 {
     static char const symbol[]{ "XXX subprogram_specification" };
     symbol_scope<subprogram_specification> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1875,7 +1875,7 @@ void printer::operator()(suffix const &node) const
 {
     static char const symbol[]{ "suffix" };
     symbol_scope<suffix> _(*this, symbol);
-    boost::apply_visitor(*this, node);
+    visit(node);
 }
 
 
@@ -1883,7 +1883,7 @@ void printer::operator()(target const &node) const
 {
     static char const symbol[]{ "XXX target" };
     symbol_scope<target> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1930,7 +1930,7 @@ void printer::operator()(type_declaration const &node) const
 {
     static char const symbol[]{ "XXX type_declaration" };
     symbol_scope<type_declaration> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1938,7 +1938,7 @@ void printer::operator()(type_definition const &node) const
 {
     static char const symbol[]{ "XXX type_definition" };
     symbol_scope<type_definition> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1986,7 +1986,7 @@ void printer::operator()(waveform const &node) const
 {
     static char const symbol[]{ "XXX waveform" };
     symbol_scope<waveform> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 
@@ -1994,7 +1994,7 @@ void printer::operator()(waveform_element const &node) const
 {
     static char const symbol[]{ "XXX waveform_element" };
     symbol_scope<waveform_element> _(*this, symbol);
-    //boost::apply_visitor(*this, node);
+    //visit(node);
 }
 
 /*
