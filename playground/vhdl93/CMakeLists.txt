@@ -17,11 +17,13 @@ add_executable(x3_extended_identifier        EXCLUDE_FROM_ALL x3_extended_identi
 add_executable(x3_literal                    EXCLUDE_FROM_ALL x3_literal.cpp)
 add_executable(x3_expression                 EXCLUDE_FROM_ALL x3_expression.cpp)
 add_executable(x3_simple_expr                EXCLUDE_FROM_ALL x3_simple_expr.cpp)
+add_executable(x3_list_chunk                 EXCLUDE_FROM_ALL x3_list_chunk.cpp)
 
 add_executable(x3_variant_inheritance        EXCLUDE_FROM_ALL x3_variant_inheritance.cpp)
 
 add_executable(ellipsis_compress             EXCLUDE_FROM_ALL ellipsis_compress.cpp)
 
 add_executable(cxx_variant_print_visitor_concept EXCLUDE_FROM_ALL cxx_variant_print_visitor_concept.cpp)
-add_executable(x3_list_chunk                 EXCLUDE_FROM_ALL x3_list_chunk.cpp)
+add_executable(cxx_indent_ostreambuf         EXCLUDE_FROM_ALL cxx_indent_ostreambuf.cpp)
+
 
