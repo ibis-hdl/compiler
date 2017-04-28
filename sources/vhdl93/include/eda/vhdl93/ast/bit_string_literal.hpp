@@ -18,6 +18,7 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
+// FixMe: change to {Base, Literal}
 struct bit_string_literal : position_tagged
 {
     enum class tag { bin, oct, hex };
