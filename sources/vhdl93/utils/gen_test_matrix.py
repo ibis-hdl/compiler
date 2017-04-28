@@ -48,7 +48,7 @@ class TestMatrixGenerator:
             if files and not dirs:
                 subject_list = []
                 subject = os.path.basename(root)
-                for file in files:
+                for file in sorted(files):
                     (base, ext) = os.path.splitext(file)
                     if ext == '.input':
                         input    = self.read_content(os.path.join(root, base + '.input'))
