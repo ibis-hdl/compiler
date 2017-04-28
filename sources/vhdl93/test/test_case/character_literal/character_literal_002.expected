@@ -1,1 +1,3 @@
-(character_literal=*)
+(character_literal
+  '*'
+)

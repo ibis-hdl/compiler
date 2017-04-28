@@ -1,8 +1,35 @@
-(term={
-(factor_binary_operation={
-operator=**
-primary_lhs=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=66, tag=int}))))
-primary_rhs=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int}))))
-})
-operator=*
-factor=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(based_literal={b=16, n=AFFE})))))})
+(term
+  (factor_binary_operation
+    primary_lhs: (literal<v>
+      (numeric_literal<v>
+        (abstract_literal<v>
+          (decimal_literal
+            literal: 66, hint: int
+          )
+        )
+      )
+    )
+    operator: EXPONENT,
+    primary_rhs: (literal<v>
+      (numeric_literal<v>
+        (abstract_literal<v>
+          (decimal_literal
+            literal: 42, hint: int
+          )
+        )
+      )
+    )
+  ),
+  operator: MUL,
+  (primary<v>
+    (literal<v>
+      (numeric_literal<v>
+        (abstract_literal<v>
+          (based_literal
+            base: 16, number: AFFE
+          )
+        )
+      )
+    )
+  )
+)

@@ -1,6 +1,59 @@
-(expression=(relation=(shift_expression=(simple_expression=(term={
-(v:primary=(expression=(relation=(shift_expression=(simple_expression=sign=-, (term={
-(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=5, tag=int})))))}))))))
-operator=MOD
-factor=(v:primary=(expression=(relation=(shift_expression=(simple_expression=sign=-, (term={
-(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=3, tag=int})))))}))))))})))))
+(expression
+  (relation
+    (shift_expression
+      (simple_expression
+        term: (term
+          (primary<v>
+            (expression
+              (relation
+                (shift_expression
+                  (simple_expression
+                    sign: SIGN_NEG,
+                    term: (term
+                      (primary<v>
+                        (literal<v>
+                          (numeric_literal<v>
+                            (abstract_literal<v>
+                              (decimal_literal
+                                literal: 5, hint: int
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          ),
+          operator: MOD,
+          (primary<v>
+            (expression
+              (relation
+                (shift_expression
+                  (simple_expression
+                    sign: SIGN_NEG,
+                    term: (term
+                      (primary<v>
+                        (literal<v>
+                          (numeric_literal<v>
+                            (abstract_literal<v>
+                              (decimal_literal
+                                literal: 3, hint: int
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

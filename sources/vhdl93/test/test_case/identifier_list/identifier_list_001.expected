@@ -1,1 +1,11 @@
-(identifier_list=(identifier=foo)(identifier=bar)(identifier=baz))
+(identifier_list
+  (identifier
+    foo
+  ),
+  (identifier
+    bar
+  ),
+  (identifier
+    baz
+  )
+)

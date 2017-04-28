@@ -1,1 +1,5 @@
-(v:abstract_literal=(based_literal={b=016, n=00_FF, e=e-42}))
+(abstract_literal<v>
+  (based_literal
+    base: 016, number: 00_FF, exp: e-42
+  )
+)

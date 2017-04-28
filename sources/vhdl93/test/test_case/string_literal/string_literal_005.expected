@@ -1,1 +1,3 @@
-(string_literal=see \"LRM 13.10\", it's legal VHDL)
+(string_literal
+  see \"LRM 13.10\", it's legal VHDL
+)

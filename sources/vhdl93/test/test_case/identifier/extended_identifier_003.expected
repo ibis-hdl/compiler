@@ -1,1 +1,3 @@
-(identifier=\Foo\\Bar\\Baz\)
+(identifier
+  \Foo\\Bar\\Baz\
+)

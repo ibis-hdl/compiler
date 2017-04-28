@@ -1,1 +1,5 @@
-(v:name=(simple_name=\BUS\))
+(name<v>
+  (simple_name
+    \BUS\
+  )
+)

@@ -1,1 +1,3 @@
-(identifier=STORE_NEXT_ITEM)
+(identifier
+  STORE_NEXT_ITEM
+)

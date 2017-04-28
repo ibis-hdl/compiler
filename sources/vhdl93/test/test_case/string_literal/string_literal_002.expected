@@ -1,1 +1,3 @@
-(string_literal=Characters such as $, %, and } are allowed in string literals.)
+(string_literal
+  Characters such as $, %, and } are allowed in string literals.
+)

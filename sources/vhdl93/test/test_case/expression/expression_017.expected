@@ -1,10 +1,61 @@
-(expression=(relation=(shift_expression=(simple_expression=(term={
-(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int})))))})
-operator=+(term={
-(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=10, tag=int})))))})
-operator=-(term={
-(factor_binary_operation={
-operator=**
-primary_lhs=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=2, tag=int}))))
-primary_rhs=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=3, tag=int}))))
-})})))))
+(expression
+  (relation
+    (shift_expression
+      (simple_expression
+        term: (term
+          (primary<v>
+            (literal<v>
+              (numeric_literal<v>
+                (abstract_literal<v>
+                  (decimal_literal
+                    literal: 42, hint: int
+                  )
+                )
+              )
+            )
+          )
+        ),
+        operator: ADD,
+        (term
+          (primary<v>
+            (literal<v>
+              (numeric_literal<v>
+                (abstract_literal<v>
+                  (decimal_literal
+                    literal: 10, hint: int
+                  )
+                )
+              )
+            )
+          )
+        ),
+        ,
+        operator: SUB,
+        (term
+          (factor_binary_operation
+            primary_lhs: (literal<v>
+              (numeric_literal<v>
+                (abstract_literal<v>
+                  (decimal_literal
+                    literal: 2, hint: int
+                  )
+                )
+              )
+            )
+            operator: EXPONENT,
+            primary_rhs: (literal<v>
+              (numeric_literal<v>
+                (abstract_literal<v>
+                  (decimal_literal
+                    literal: 3, hint: int
+                  )
+                )
+              )
+            )
+          )
+        ),
+        
+      )
+    )
+  )
+)

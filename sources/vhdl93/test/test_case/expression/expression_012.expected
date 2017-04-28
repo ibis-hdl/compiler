@@ -1,7 +1,41 @@
-(expression=(relation=(shift_expression=(simple_expression=(term={
-(v:primary=(v:literal=(string_literal=0011)))
-operator=*
-factor=(v:primary=(v:literal=(string_literal=0010)))}))))
-operator=AND
-(relation=(shift_expression=(simple_expression=(term={
-(v:primary=(v:literal=(string_literal=1000)))})))))
+(expression
+  (relation
+    (shift_expression
+      (simple_expression
+        term: (term
+          (primary<v>
+            (literal<v>
+              (string_literal
+                0011
+              )
+            )
+          ),
+          operator: MUL,
+          (primary<v>
+            (literal<v>
+              (string_literal
+                0010
+              )
+            )
+          )
+        )
+      )
+    )
+  ),
+  operator: AND,
+  (relation
+    (shift_expression
+      (simple_expression
+        term: (term
+          (primary<v>
+            (literal<v>
+              (string_literal
+                1000
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

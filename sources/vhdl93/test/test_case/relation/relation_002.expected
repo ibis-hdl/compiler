@@ -1,12 +1,50 @@
-(relation=(shift_expression=(simple_expression=(term={
-(v:primary=(v:name=(simple_name=a)))})
-operator=+(term={
-(v:primary=(v:name=(simple_name=b)))})))
-operator=>
-(shift_expression=(simple_expression=(term={
-(v:primary=(v:name=(simple_name=c)))})
-operator=-(term={
-(factor_unary_operation={
-operator=NOT
-primary=(v:literal=(string_literal=101))
-})}))))
+(relation
+  (shift_expression
+    (simple_expression
+      term: (term
+        (primary<v>
+          (name<v>
+            (simple_name
+              a
+            )
+          )
+        )
+      ),
+      operator: ADD,
+      (term
+        (primary<v>
+          (name<v>
+            (simple_name
+              b
+            )
+          )
+        )
+      )
+    )
+  ),
+  operator: GREATER,
+  (shift_expression
+    (simple_expression
+      term: (term
+        (primary<v>
+          (name<v>
+            (simple_name
+              c
+            )
+          )
+        )
+      ),
+      operator: SUB,
+      (term
+        (factor_unary_operation
+          operator: NOT,
+          primary: (literal<v>
+            (string_literal
+              101
+            )
+          )
+        )
+      )
+    )
+  )
+)

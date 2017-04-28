@@ -1,1 +1,14 @@
-(identifier_list=(identifier=Foo)(identifier=\Foo\\Bar\)(identifier=\Foo\\Bar\\Baz\)(identifier=\X\))
+(identifier_list
+  (identifier
+    Foo
+  ),
+  (identifier
+    \Foo\\Bar\
+  ),
+  (identifier
+    \Foo\\Bar\\Baz\
+  ),
+  (identifier
+    \X\
+  )
+)

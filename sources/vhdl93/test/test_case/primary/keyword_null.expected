@@ -1,1 +1,7 @@
-(v:primary=(v:literal=(keyword=NULL)))
+(primary<v>
+  (literal<v>
+    (keyword
+      NULL
+    )
+  )
+)

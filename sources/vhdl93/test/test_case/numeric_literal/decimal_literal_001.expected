@@ -1,1 +1,7 @@
-(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=1, tag=int})))
+(numeric_literal<v>
+  (abstract_literal<v>
+    (decimal_literal
+      literal: 1, hint: int
+    )
+  )
+)

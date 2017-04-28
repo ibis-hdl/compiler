@@ -1,1 +1,3 @@
-(character_literal=X)
+(character_literal
+  'X'
+)

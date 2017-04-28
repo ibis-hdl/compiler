@@ -1,8 +1,54 @@
-(simple_expression=sign=-, (term={
-(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int})))))
-operator=*
-factor=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=66, tag=int})))))})
-operator=+(term={
-(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=18, tag=int})))))
-operator=*
-factor=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=88, tag=int})))))}))
+(simple_expression
+  sign: SIGN_NEG,
+  term: (term
+    (primary<v>
+      (literal<v>
+        (numeric_literal<v>
+          (abstract_literal<v>
+            (decimal_literal
+              literal: 42, hint: int
+            )
+          )
+        )
+      )
+    ),
+    operator: MUL,
+    (primary<v>
+      (literal<v>
+        (numeric_literal<v>
+          (abstract_literal<v>
+            (decimal_literal
+              literal: 66, hint: int
+            )
+          )
+        )
+      )
+    )
+  ),
+  operator: ADD,
+  (term
+    (primary<v>
+      (literal<v>
+        (numeric_literal<v>
+          (abstract_literal<v>
+            (decimal_literal
+              literal: 18, hint: int
+            )
+          )
+        )
+      )
+    ),
+    operator: MUL,
+    (primary<v>
+      (literal<v>
+        (numeric_literal<v>
+          (abstract_literal<v>
+            (decimal_literal
+              literal: 88, hint: int
+            )
+          )
+        )
+      )
+    )
+  )
+)

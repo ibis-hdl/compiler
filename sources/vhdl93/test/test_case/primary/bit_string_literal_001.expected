@@ -1,1 +1,7 @@
-(v:primary=(v:literal=(bit_string_literal={l=1111, tag=bin})))
+(primary<v>
+  (literal<v>
+    (bit_string_literal
+      base: BIN, literal: 1111
+    )
+  )
+)

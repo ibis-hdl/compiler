@@ -1,1 +1,7 @@
-(v:literal=(v:enumeration_literal=(character_literal=A)))
+(literal<v>
+  (enumeration_literal<v>
+    (character_literal
+      'A'
+    )
+  )
+)

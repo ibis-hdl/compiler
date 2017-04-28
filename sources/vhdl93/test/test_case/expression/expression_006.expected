@@ -1,5 +1,33 @@
-(expression=(relation=(shift_expression=(simple_expression=(term={
-(v:primary=(v:literal=(string_literal=0011)))}))))
-operator=NOR
-(relation=(shift_expression=(simple_expression=(term={
-(v:primary=(v:literal=(string_literal=0010)))})))))
+(expression
+  (relation
+    (shift_expression
+      (simple_expression
+        term: (term
+          (primary<v>
+            (literal<v>
+              (string_literal
+                0011
+              )
+            )
+          )
+        )
+      )
+    )
+  ),
+  operator: NOR,
+  (relation
+    (shift_expression
+      (simple_expression
+        term: (term
+          (primary<v>
+            (literal<v>
+              (string_literal
+                0010
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

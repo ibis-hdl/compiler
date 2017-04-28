@@ -1,1 +1,3 @@
-(string_literal=Quotation: "REPORT..." is also allowed)
+(string_literal
+  Quotation: "REPORT..." is also allowed
+)

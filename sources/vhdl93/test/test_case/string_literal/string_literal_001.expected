@@ -1,1 +1,3 @@
-(string_literal=Both S and Q equal to 1)
+(string_literal
+  Both S and Q equal to 1
+)

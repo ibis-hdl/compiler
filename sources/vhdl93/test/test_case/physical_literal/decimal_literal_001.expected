@@ -1,1 +1,8 @@
-(physical_literal={l=(v:abstract_literal=(decimal_literal={l=100, tag=int})), u=fs})
+(physical_literal
+  literal: (abstract_literal<v>
+    (decimal_literal
+      literal: 100, hint: int
+    )
+  ),
+  unit: fs
+)

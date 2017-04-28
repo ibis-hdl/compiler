@@ -1,5 +1,14 @@
-(simple_expression=(term={
-(factor_unary_operation={
-operator=NOT
-primary=(v:literal=(v:enumeration_literal=(character_literal=1)))
-})}))
+(simple_expression
+  term: (term
+    (factor_unary_operation
+      operator: NOT,
+      primary: (literal<v>
+        (enumeration_literal<v>
+          (character_literal
+            '1'
+          )
+        )
+      )
+    )
+  )
+)

@@ -1,1 +1,7 @@
-(v:signal_list=(signal_list.names=(simple_name=FooBar)))
+(signal_list<v>
+  (signal_list.names
+    (simple_name
+      FooBar
+    )
+  )
+)

@@ -1,1 +1,5 @@
-(v:signal_list=(keyword=ALL))
+(signal_list<v>
+  (keyword
+    ALL
+  )
+)

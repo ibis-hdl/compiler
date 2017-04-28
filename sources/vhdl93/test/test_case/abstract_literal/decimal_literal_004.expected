@@ -1,1 +1,5 @@
-(v:abstract_literal=(decimal_literal={l=42.42, tag=double}))
+(abstract_literal<v>
+  (decimal_literal
+    literal: 42.42, hint: double
+  )
+)

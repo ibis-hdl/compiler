@@ -1,1 +1,3 @@
-(string_literal=A)
+(string_literal
+  A
+)

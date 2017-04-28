@@ -1,1 +1,7 @@
-(v:primary=(v:name=(simple_name=\BUS\)))
+(primary<v>
+  (name<v>
+    (simple_name
+      \BUS\
+    )
+  )
+)

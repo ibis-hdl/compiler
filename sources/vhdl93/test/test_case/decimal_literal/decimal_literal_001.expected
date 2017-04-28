@@ -1,1 +1,3 @@
-(decimal_literal={l=12, tag=int})
+(decimal_literal
+  literal: 12, hint: int
+)

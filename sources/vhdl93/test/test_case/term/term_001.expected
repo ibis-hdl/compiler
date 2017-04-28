@@ -1,4 +1,25 @@
-(term={
-(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int})))))
-operator=*
-factor=(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(decimal_literal={l=42, tag=int})))))})
+(term
+  (primary<v>
+    (literal<v>
+      (numeric_literal<v>
+        (abstract_literal<v>
+          (decimal_literal
+            literal: 42, hint: int
+          )
+        )
+      )
+    )
+  ),
+  operator: MUL,
+  (primary<v>
+    (literal<v>
+      (numeric_literal<v>
+        (abstract_literal<v>
+          (decimal_literal
+            literal: 42, hint: int
+          )
+        )
+      )
+    )
+  )
+)

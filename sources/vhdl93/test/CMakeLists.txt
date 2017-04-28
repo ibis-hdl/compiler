@@ -90,3 +90,18 @@ set_source_files_properties(
     ${TEST_MATRIX_GENERATOR_TARGET}
     PROPERTIES GENERATED TRUE
 )
+
+
+add_executable(make_gold EXCLUDE_FROM_ALL make_gold.cpp)
+set_target_properties(make_gold PROPERTIES CXX_STANDARD 14)
+set_target_properties(make_gold PROPERTIES CXX_STANDARD_REQUIRED ON)
+target_include_directories(make_gold PRIVATE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>)
+target_link_libraries(make_gold
+    PRIVATE
+    eda::vhdl93_grammar
+    eda::common # FixMe: shouldn't this depency propagated by eda::vhdl93_grammar?
+    ${Boost_FILESYSTEM_LIBRARY}
+    ${Boost_SYSTEM_LIBRARY}
+)
+

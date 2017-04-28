@@ -1,1 +1,3 @@
-(decimal_literal={l=1.34E-12, tag=double})
+(decimal_literal
+  literal: 1.34E-12, hint: double
+)

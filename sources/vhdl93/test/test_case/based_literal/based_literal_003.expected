@@ -1,1 +1,3 @@
-(based_literal={b=016, n=0_FF})
+(based_literal
+  base: 016, number: 0_FF
+)

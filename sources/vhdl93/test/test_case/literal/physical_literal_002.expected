@@ -1,1 +1,12 @@
-(v:literal=(v:numeric_literal=(physical_literal={l=(v:abstract_literal=(based_literal={b=10, n=42})), u=ms})))
+(literal<v>
+  (numeric_literal<v>
+    (physical_literal
+      literal: (abstract_literal<v>
+        (based_literal
+          base: 10, number: 42
+        )
+      ),
+      unit: ms
+    )
+  )
+)

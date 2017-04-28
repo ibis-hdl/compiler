@@ -1,1 +1,11 @@
-(v:primary=(v:literal=(v:numeric_literal=(v:abstract_literal=(based_literal={b=8, n=42})))))
+(primary<v>
+  (literal<v>
+    (numeric_literal<v>
+      (abstract_literal<v>
+        (based_literal
+          base: 8, number: 42
+        )
+      )
+    )
+  )
+)

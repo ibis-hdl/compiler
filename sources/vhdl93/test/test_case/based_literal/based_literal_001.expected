@@ -1,1 +1,3 @@
-(based_literal={b=2, n=1111_1111})
+(based_literal
+  base: 2, number: 1111_1111
+)

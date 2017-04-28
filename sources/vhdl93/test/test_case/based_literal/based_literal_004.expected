@@ -1,1 +1,3 @@
-(based_literal={b=16, n=E, e=E1})
+(based_literal
+  base: 16, number: E, exp: E1
+)

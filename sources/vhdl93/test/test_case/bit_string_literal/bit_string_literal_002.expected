@@ -1,1 +1,3 @@
-(bit_string_literal={l=FFF, tag=hex})
+(bit_string_literal
+  base: HEX, literal: FFF
+)

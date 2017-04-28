@@ -1,1 +1,9 @@
-(v:factor=(v:primary=(v:name=(simple_name=FooBar))))
+(factor<v>
+  (primary<v>
+    (name<v>
+      (simple_name
+        FooBar
+      )
+    )
+  )
+)
