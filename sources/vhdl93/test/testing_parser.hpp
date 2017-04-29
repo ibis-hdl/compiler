@@ -54,19 +54,46 @@ struct testing_parser
                   parser_rule
             ];
 
-        bool success =
-            x3::phrase_parse(iter, end, parser, parser::skipper, attr);
+        bool success = false;
 
-        if (success) {
-            if (iter != end) {
-                error_handler(iter, "Error! Expecting end of input here: ");
+        try {
+            success = x3::phrase_parse(iter, end, parser, parser::skipper, attr);
+
+            if (success) {
+                if (iter != end) {
+                    error_handler(iter, "Error! Expecting end of input here: ");
+                }
+                else {
+                    ast::printer print(output);
+                    print.verbose_symbol = true;
+                    print.verbose_variant = true;
+                    print(attr);
+                }
             }
-            else {
-                ast::printer print(output);
-                print.verbose_symbol = true;
-                print.verbose_variant = true;
-                print(attr);
-            }
+        } catch(x3::expectation_failure<parser::iterator_type> const& e) {
+            /* ToDo: Some investigating is required here - BNF and X3. Both
+             * message creations differs in the point of concrete failure. My
+             * guess is the first approach of error printing is correct, but
+             * BNF must be studied carefully. A testing use case for this is
+             * 'expression_failure/expression_failure_003' with enabled expectation
+             * point at term rule (term_def):
+             * 'In line 2:
+             * Error! Expecting end of input here:
+             * -5 mod -3
+             * ___^_
+             * vs.
+             * 'In line 2:
+             * Error! Expecting factor here:
+             * -5 mod -3
+             * _______^_
+             * (or alternative 'Error! Expecting factor at ' -3') if enabled
+             */
+#if 1
+            output << "Error! Expecting " << e.which()
+                   << " at '" << std::string(e.where(), input.end()) << "'\n";
+#else
+            error_handler(e.where(), "Error! Expecting " + e.which() + " here: ");
+#endif
         }
 
         // FixMe: C++17 Structured Bindings
