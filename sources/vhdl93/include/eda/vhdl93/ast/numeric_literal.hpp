@@ -21,16 +21,11 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-struct numeric_literal :
-    x3::variant<
-        nullary,
-        abstract_literal,
-        physical_literal
-    >
-{
-    using base_type::base_type;
-    using base_type::operator=;
-};
+using numeric_literal = x3::variant<
+	nullary,
+	abstract_literal,
+	physical_literal
+>;
 
 
 } } } // namespace eda.vhdl93.ast

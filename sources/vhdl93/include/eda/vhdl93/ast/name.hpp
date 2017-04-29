@@ -21,20 +21,15 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-struct name :
-    x3::variant<
-        nullary,
-        // attribute_name,
-        // indexed_name,
-        operator_symbol,
-        // selected_name,
-        simple_name
-        // slice_name
-    >
-{
-    using base_type::base_type;
-    using base_type::operator=;
-};
+using name = x3::variant<
+	nullary,
+	// attribute_name,
+	// indexed_name,
+	operator_symbol,
+	// selected_name,
+	simple_name
+	// slice_name
+>;
 
 
 } } } // namespace eda.vhdl93.ast

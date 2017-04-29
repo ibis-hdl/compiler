@@ -24,19 +24,14 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-struct literal :
-    x3::variant<
-        nullary,
-        bit_string_literal,
-        enumeration_literal,
-        keyword_token,          // NULL
-        numeric_literal,
-        string_literal
-    >
-{
-    using base_type::base_type;
-    using base_type::operator=;
-};
+using literal = x3::variant<
+	nullary,
+	bit_string_literal,
+	enumeration_literal,
+	keyword_token,          // NULL
+	numeric_literal,
+	string_literal
+>;
 
 
 } } } // namespace eda.vhdl93.ast

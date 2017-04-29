@@ -53,17 +53,12 @@ struct factor_unary_operation : position_tagged
  *     | ABS primary
  *     | NOT primary
  */
-struct factor :
-    x3::variant<
-        nullary,
-        primary,
-        factor_binary_operation,
-        factor_unary_operation
-    >
-{
-    using base_type::base_type;
-    using base_type::operator=;
-};
+using factor = x3::variant<
+	nullary,
+	primary,
+	factor_binary_operation,
+	factor_unary_operation
+>;
 
 
 } } } // namespace eda.vhdl93.ast
