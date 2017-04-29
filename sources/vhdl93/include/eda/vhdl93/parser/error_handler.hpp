@@ -51,16 +51,18 @@ namespace eda { namespace vhdl93 { namespace parser {
 template <typename Iterator, typename Exception, typename Context>
 inline x3::error_handler_result
 error_handler_base::on_error(
-      Iterator& first, Iterator const& last
+      Iterator& /* first */, Iterator const& /* last */
     , Exception const& x, Context const& context)
 {
-    std::string which = x.which();
+    std::string which{ x.which() };
     auto iter = m_ruleid_map.find(which);
 
     if (iter != m_ruleid_map.end())
         which = iter->second;
 
-    std::string message = "Error! Expecting: " + which + " here:";
+    std::string const message{
+        "Error! Expecting the VHDL93-BNF rule: '" + which + "' here:"
+    };
 
     auto& error_handler = x3::get<error_handler_tag>(context).get();
     error_handler(x.where(), message);

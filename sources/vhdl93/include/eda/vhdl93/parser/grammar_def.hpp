@@ -15,6 +15,7 @@
 #include <eda/vhdl93/parser/operator_def.hpp>
 #include <eda/vhdl93/parser/keyword_def.hpp>
 #include <eda/vhdl93/parser/grammar.hpp>
+#include <eda/vhdl93/parser/error_handler.hpp>
 
 #include <boost/spirit/home/x3.hpp>
 #include <boost/spirit/home/x3/support/utility/annotate_on_success.hpp>
@@ -3296,7 +3297,7 @@ auto const target_def =
  *       .. _Sigasi: http://insights.sigasi.com/tech/be-careful-vhdl-operator-precedence.html
  */
 auto const term_def =
-    factor >> *( multiplying_operator >> factor )
+    factor >> *( multiplying_operator > factor )
     ;
 
 
@@ -3652,9 +3653,10 @@ BOOST_SPIRIT_DEFINE(
 /*
  * Annotation and Error handling
  */
-struct bit_string_literal_class : x3::annotate_on_success {};
+//struct bit_string_literal_class : x3::annotate_on_success {};
 
-//struct bit_string_literal_class : x3::annotate_on_success, error_handler_base {};
+struct expression_class : x3::annotate_on_success, error_handler_base {};
+//struct design_file_class : x3::annotate_on_success, error_handler_base {};
 
 
 } } } // namespace eda.vhdl93.parser
