@@ -3148,7 +3148,6 @@ namespace detail {
         ;
 }
 auto const string_literal_def =
-    // FixMe: direct embedding the rule results into twice concatenated attributes!
     detail::string_literal
     ;
 
