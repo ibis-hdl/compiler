@@ -16,15 +16,6 @@
 #include <eda/vhdl93/parser/namespace_alias.hpp>
 
 
-/*
- * IEEE Standard VHDL Language Reference Manual
- * (IEEE Std. 1076-1993)
- * http://rti.etf.bg.ac.rs/rti/ri5rvl/tutorial/TUTORIAL/IEEE/HTML/1076_TOC.HTM
- *
- * http://www.amos.eguru-il.com/vhdl_info/vhdl93_syntax.html
- */
-
-
 namespace eda { namespace vhdl93 { namespace parser {
 
 

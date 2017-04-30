@@ -26,16 +26,6 @@
 #include <boost/spirit/home/x3.hpp>
 
 
-/*
- * http://www.amos.eguru-il.com/vhdl_info/vhdl87_syntax.html
- * http://www.amos.eguru-il.com/vhdl_info/vhdl93_syntax.html
- *
- * IEEE Standard VHDL Language Reference Manual
- * (IEEE Std. 1076-1993)
- * http://rti.etf.bg.ac.rs/rti/ri5rvl/tutorial/TUTORIAL/IEEE/HTML/1076_TOC.HTM
- */
-
-
 namespace eda { namespace vhdl93 { namespace parser {
 
 
@@ -3302,7 +3292,7 @@ auto const target_def =
  *       .. _Sigasi: http://insights.sigasi.com/tech/be-careful-vhdl-operator-precedence.html
  */
 auto const term_def =
-    factor >> *( multiplying_operator > factor )
+    factor >> *( multiplying_operator >> factor )
     ;
 
 
