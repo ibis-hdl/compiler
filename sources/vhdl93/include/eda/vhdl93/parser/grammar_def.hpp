@@ -15,10 +15,15 @@
 #include <eda/vhdl93/parser/operator_def.hpp>
 #include <eda/vhdl93/parser/keyword_def.hpp>
 #include <eda/vhdl93/parser/grammar.hpp>
-#include <eda/vhdl93/parser/error_handler.hpp>
+
+/* enable this header at last for tagging the outermost rule (design_file) for
+ * handling expectation points. At this point  annotate_on_success comes into
+ * play to get the handler an hint. Otherwise this increase the compile time
+ * a bit. */
+//#include <eda/vhdl93/parser/error_handler.hpp>
+//#include <boost/spirit/home/x3/support/utility/annotate_on_success.hpp>
 
 #include <boost/spirit/home/x3.hpp>
-#include <boost/spirit/home/x3/support/utility/annotate_on_success.hpp>
 
 
 /*
@@ -3656,7 +3661,7 @@ BOOST_SPIRIT_DEFINE(
 //struct bit_string_literal_class : x3::annotate_on_success {};
 //struct primary_class : x3::annotate_on_success {}; // works on x3::variant too
 
-struct expression_class : x3::annotate_on_success, error_handler_base {};
+//struct expression_class : x3::annotate_on_success, error_handler_base {};
 //struct design_file_class : x3::annotate_on_success, error_handler_base {};
 
 
