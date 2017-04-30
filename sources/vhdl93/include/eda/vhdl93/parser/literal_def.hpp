@@ -126,10 +126,15 @@ auto const string_literal_def =
     ;
 
 
+/* get rid off the annoying unused parameter warnings from x3 */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+
 BOOST_SPIRIT_DEFINE(
     string_literal
 )
 
+#pragma GCC diagnostic pop
 
 } } } // namespace eda.vhdl93.parser
 

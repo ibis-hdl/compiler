@@ -33,8 +33,13 @@ struct string_literal_class;
 typedef x3::rule<string_literal_class, ast::string_literal> string_literal_type;
 
 
+/* get rid off the annoying unused parameter warnings from x3 */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+
 BOOST_SPIRIT_DECLARE(string_literal_type);
 
+#pragma GCC diagnostic pop
 
 } } } // namespace eda.vhdl93.parser
 

@@ -33,7 +33,7 @@ target_compile_definitions(${PROJECT_NAME}
     PRIVATE FOO)
 
 target_compile_options(${PROJECT_NAME}
-    PRIVATE -Wall -Wextra -Wno-unused-parameter)
+    PRIVATE -Wall -Wextra)
 
 # limit gcc template error depth printing
 target_compile_options(${PROJECT_NAME}
