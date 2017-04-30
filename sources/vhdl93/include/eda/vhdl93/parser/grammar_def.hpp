@@ -3654,6 +3654,7 @@ BOOST_SPIRIT_DEFINE(
  * Annotation and Error handling
  */
 //struct bit_string_literal_class : x3::annotate_on_success {};
+//struct primary_class : x3::annotate_on_success {}; // works on x3::variant too
 
 struct expression_class : x3::annotate_on_success, error_handler_base {};
 //struct design_file_class : x3::annotate_on_success, error_handler_base {};
