@@ -11,7 +11,6 @@
 
 #include <eda/vhdl93/ast_adapted.hpp>
 #include <eda/vhdl93/parser/namespace_alias.hpp>
-#include <eda/vhdl93/parser/utils.hpp>
 #include <eda/vhdl93/parser/operator_def.hpp>
 #include <eda/vhdl93/parser/keyword_def.hpp>
 #include <eda/vhdl93/parser/grammar.hpp>
@@ -23,7 +22,7 @@
 //#include <eda/vhdl93/parser/error_handler.hpp>
 //#include <boost/spirit/home/x3/support/utility/annotate_on_success.hpp>
 
-#include <boost/spirit/home/x3.hpp>
+#include <eda/vhdl93/parser/spirit_x3.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace parser {
@@ -726,6 +725,13 @@ using iso8859_1::char_;
 using iso8859_1::lit;
 using x3::lexeme;
 using x3::raw;
+
+
+/*
+ * Parser helper
+ */
+template<typename T>
+auto as_type = [](auto p) { return x3::rule<struct _, T>{ "as" } = x3::as_parser(p); };
 
 
 /*
@@ -3412,6 +3418,10 @@ auto const waveform_element_def =
     ;
 #endif
 
+/* get rid off the annoying unused parameter warnings from x3 */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+
 BOOST_SPIRIT_DEFINE(
         abstract_literal,
         //    access_type_definition,
@@ -3644,6 +3654,8 @@ BOOST_SPIRIT_DEFINE(
         //    waveform_element
 );
 
+#pragma GCC diagnostic pop
+
 
 /*
  * Annotation and Error handling
@@ -3680,8 +3692,14 @@ auto const skipper_def =
     | "--" >> *(char_ - x3::eol) >> x3::eol
     ;
 
+
+/* get rid off the annoying unused parameter warnings from x3 */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+
 BOOST_SPIRIT_DEFINE(skipper)
 
+#pragma GCC diagnostic pop
 
 
 } } } // namespace eda.vhdl93.parser

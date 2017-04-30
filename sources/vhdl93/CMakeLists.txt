@@ -33,7 +33,7 @@ target_compile_definitions(${PROJECT_NAME}
     PRIVATE FOO)
 
 target_compile_options(${PROJECT_NAME}
-    PRIVATE -Wall -Wextra)
+    PRIVATE -Wall -Wextra -Wno-unused-parameter)
 
 # limit gcc template error depth printing
 target_compile_options(${PROJECT_NAME}
@@ -45,12 +45,13 @@ target_link_libraries(${PROJECT_NAME}
     eda::common
 )
 
+include(external-spirit-x3)
 
 ## Project Depend Includes
-#include_directories(${SPIRIT_X3_INCLUDE_DIR})
+include_directories(${SPIRIT_X3_INCLUDE_DIR})
 #include_directories(${GSL_INCLUDE_DIR})
 
-#add_dependencies(${PROJECT_NAME} boost-spirit-x3)
+add_dependencies(${PROJECT_NAME} boost-spirit-x3)
 #add_dependencies(${PROJECT_NAME} eda)
 #add_dependencies(${PROJECT_NAME} gsl)
 

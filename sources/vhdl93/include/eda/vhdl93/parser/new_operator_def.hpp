@@ -11,7 +11,7 @@
 
 #include <eda/vhdl93/parser/operator.hpp>
 
-#include <boost/spirit/home/x3.hpp>
+#include <eda/vhdl93/parser/spirit_x3.hpp>
 
 
 /*

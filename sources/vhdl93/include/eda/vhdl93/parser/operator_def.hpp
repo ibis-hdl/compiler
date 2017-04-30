@@ -8,15 +8,21 @@
 #ifndef SOURCES_VHDL93_INCLUDE_EDA_VHDL93_PARSER_OPERATORS_HPP_
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_PARSER_OPERATORS_HPP_
 
+#include <eda/vhdl93/parser/spirit_x3.hpp>
 
-#include <eda/vhdl93/parser/utils.hpp>
+#include <eda/vhdl93/parser/namespace_alias.hpp>
 #include <eda/vhdl93/ast/operator_token.hpp>
 
-#include <boost/spirit/home/x3.hpp>
-#include <eda/vhdl93/parser/namespace_alias.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace parser {
+
+
+/*
+ * Parser helper
+ */
+template<typename T>
+auto as_type = [](auto p) { return x3::rule<struct _, T>{ "as" } = x3::as_parser(p); };
 
 
 /*

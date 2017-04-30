@@ -9,11 +9,11 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_PARSER_LITERAL_DEF_HPP_
 
 
+#include <eda/vhdl93/parser/spirit_x3.hpp>
 
 #include <eda/vhdl93/parser/literal.hpp>
 #include <eda/vhdl93/ast_adapted.hpp>
 
-#include <boost/spirit/home/x3.hpp>
 
 
 /*
