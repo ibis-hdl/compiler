@@ -35,7 +35,7 @@ int main()
 
      std::cout << "parse `" << str << "`:\n";
 
-     bool r = x3::phrase_parse(iter, end, parser::expression, x3::space, attr);
+     bool r = x3::phrase_parse(iter, end, parser::expression, x3::iso8859_1::space, attr);
 
      if (r && iter == end) {
        std::cout << "succeeded: ";
