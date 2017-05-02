@@ -67,6 +67,7 @@ add_test(NAME test_vhdl93_parser
 add_executable(x3_debug EXCLUDE_FROM_ALL x3_debug.cpp)
 target_link_libraries(x3_debug
     PRIVATE
+    eda::common
     eda::vhdl93_grammar
     ${Boost_SYSTEM_LIBRARY}
 )

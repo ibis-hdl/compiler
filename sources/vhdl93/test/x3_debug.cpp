@@ -23,28 +23,28 @@ int main()
    namespace parser = eda::vhdl93::parser;
 
    for(std::string const str: {
-	   "VHDL",
-	   "\\BoBus\\",				// expected '\Bus\'
-	   "\\Foo\\\\oh\\", 		// expected '\Foo\\oh\'
-	   "\\Foo\\\\Bar\\\\Baz\\", // expected '\Foo\\Bar\\Baz\'
+       "VHDL",
+       "\\BoBus\\",                // expected '\Bus\'
+       "\\Foo\\\\oh\\",         // expected '\Foo\\oh\'
+       "\\Foo\\\\Bar\\\\Baz\\", // expected '\Foo\\Bar\\Baz\'
     })
     {
-	 auto iter = str.begin(), end = str.end();
+     parser::iterator_type iter = str.begin(), end = str.end();
 
-	 ast::identifier attr;
+     ast::expression attr;
 
-	 std::cout << "parse `" << str << "`:\n";
+     std::cout << "parse `" << str << "`:\n";
 
-	 bool r = x3::phrase_parse(iter, end, parser::identifier, x3::space, attr);
+     bool r = x3::phrase_parse(iter, end, parser::expression, x3::space, attr);
 
-	 if (r && iter == end) {
-	   std::cout << "succeeded: ";
-	   ast::printer print(std::cout);
-	   print(attr);
-	   std::cout << '\n';
-	 } else {
-	   std::cout << "*** failed ***\n";
-	 }
+     if (r && iter == end) {
+       std::cout << "succeeded: ";
+       ast::printer print(std::cout);
+       print(attr);
+       std::cout << '\n';
+     } else {
+       std::cout << "*** failed ***\n";
+     }
    }
 
    return 0;
