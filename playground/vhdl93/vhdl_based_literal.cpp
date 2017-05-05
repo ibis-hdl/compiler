@@ -37,48 +37,13 @@ struct foo
         return ok && (iter == end);
     }
 
-    template<typename AttrT>
-    bool parse_bin(AttrT& attr)
+
+    template<typename AttrT, unsigned Radix>
+    bool parse_attr(AttrT& attr)
     {
         auto iter = scratch_buf.begin(), end = scratch_buf.end();
 
-        typedef x3::uint_parser<AttrT, 2 /* Radix */> parser_type;
-        parser_type const parser = parser_type();
-
-        bool ok = x3::parse(iter, end, parser, attr);
-        return ok && (iter == end);
-    }
-
-    template<typename AttrT>
-    bool parse_oct(AttrT& attr)
-    {
-        auto iter = scratch_buf.begin(), end = scratch_buf.end();
-
-        typedef x3::uint_parser<AttrT, 8 /* Radix */> parser_type;
-        parser_type const parser = parser_type();
-
-        bool ok = x3::parse(iter, end, parser, attr);
-        return ok && (iter == end);
-    }
-
-    template<typename AttrT>
-    bool parse_dec(AttrT& attr)
-    {
-        auto iter = scratch_buf.begin(), end = scratch_buf.end();
-
-        typedef x3::uint_parser<AttrT, 10 /* Radix */> parser_type;
-        parser_type const parser = parser_type();
-
-        bool ok = x3::parse(iter, end, parser, attr);
-        return ok && (iter == end);
-    }
-
-    template<typename AttrT>
-    bool parse_hex(AttrT& attr)
-    {
-        auto iter = scratch_buf.begin(), end = scratch_buf.end();
-
-        typedef x3::uint_parser<AttrT, 16 /* Radix */> parser_type;
+        typedef x3::uint_parser<AttrT, Radix> parser_type;
         parser_type const parser = parser_type();
 
         bool ok = x3::parse(iter, end, parser, attr);
@@ -93,7 +58,7 @@ struct foo
         // base is decimal
         bool ok = parse_separated(literal.base, charset);
         assert(ok);
-        ok = parse_dec(base);
+        ok = parse_attr<unsigned, 10>(base);
         assert(ok);
         return base;
     }
@@ -118,19 +83,19 @@ struct foo
         switch(base) {
         case 2:
             ok = parse_integer(literal, std::string(*bin_charset));
-            ok = parse_bin(int_part);
+            ok = parse_attr<unsigned,  2>(int_part);
             break;
         case 8:
             ok = parse_integer(literal, std::string(*oct_charset));
-            ok = parse_oct(int_part);
+            ok = parse_attr<unsigned,  8>(int_part);
             break;
         case 10:
             ok = parse_integer(literal, std::string(*dec_charset));
-            ok = parse_dec(int_part);
+            ok = parse_attr<unsigned, 10>(int_part);
             break;
         case 16:
             ok = parse_integer(literal, std::string(*hex_charset));
-            ok = parse_hex(int_part);
+            ok = parse_attr<unsigned, 16>(int_part);
             break;
         default:
             std::cerr << "only bases of 2, 8, 10 and 16 are supported.";
