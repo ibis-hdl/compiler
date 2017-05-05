@@ -4,6 +4,9 @@
 #include <boost/spirit/home/x3.hpp>
 #include <boost/optional.hpp>
 
+#include <algorithm> //copy_if
+
+
 namespace ast {
     struct based_literal {
         std::string                 base;
@@ -17,31 +20,25 @@ namespace x3 = boost::spirit::x3;
 
 struct foo
 {
-    std::string        scratch_buf;
-    static constexpr const char* bin_charset[] = { "01" };
-    static constexpr const char* oct_charset[] = { "0-7" };
-    static constexpr const char* dec_charset[] = { "0-9" };
-    static constexpr const char* hex_charset[] = { "0-9A-Za-z" };
+    static constexpr const char* binary_charset[] = { "01" };
+    static constexpr const char* octal_charset[] = { "0-7" };
+    static constexpr const char* decimal_charset[] = { "0-9" };
+    static constexpr const char* hexadecimal_charset[] = { "0-9A-Za-z" };
 
     template<typename RangeT>
-    bool parse_separated(RangeT const& input, std::string const& charset)
+    bool strip_separator(RangeT const& input, std::string const& charset, std::string& stripped)
     {
-        auto iter = input.begin(), end = input.end();
-        bool ok = x3::parse(iter, end,
-                             x3::char_(charset)
-                          >> *( -x3::lit('_')
-                              >> x3::char_(charset)
-                              )
-                        , scratch_buf);
-        std::cout << "buf = " << scratch_buf << "\n";
-        return ok && (iter == end);
+        std::copy_if(input.begin(), input.end(),
+            std::back_inserter(stripped),
+            [](auto c) {
+                return c != '_';
+        });
     }
 
-
     template<typename AttrT, unsigned Radix>
-    bool parse_attr(AttrT& attr)
+    bool parse_numeric_attr(std::string const& input, AttrT& attr)
     {
-        auto iter = scratch_buf.begin(), end = scratch_buf.end();
+        auto iter = input.begin(), end = input.end();
 
         typedef x3::uint_parser<AttrT, Radix> parser_type;
         parser_type const parser = parser_type();
@@ -50,58 +47,68 @@ struct foo
         return ok && (iter == end);
     }
 
-    unsigned parse_base(ast::based_literal const& literal, std::string const& charset)
+    unsigned base(ast::based_literal const& literal, std::string const& charset, std::string& buffer)
     {
-        scratch_buf.clear();
+        unsigned base_{0};
 
-        unsigned base{0};
-        // base is decimal
-        bool ok = parse_separated(literal.base, charset);
+        bool ok = strip_separator(literal.base, charset, buffer);
         assert(ok);
-        ok = parse_attr<unsigned, 10>(base);
+
+        ok = parse_numeric_attr<unsigned, 10>(buffer, base_);
         assert(ok);
-        return base;
+
+        return base_;
     }
 
-    unsigned parse_integer(ast::based_literal const& literal, std::string const& charset)
+    unsigned integer(ast::based_literal const& literal, std::string const& charset, std::string& buffer)
     {
-        scratch_buf.clear();
-
-        bool ok = parse_separated(literal.integer_part, charset);
+        bool ok = strip_separator(literal.integer_part, charset, buffer);
         assert(ok);
-        std::cout << "integer(str) = " << scratch_buf << "\n";
+
         return ok;
     }
 
     bool extract(ast::based_literal const& literal)
     {
-        unsigned base = parse_base(literal, *dec_charset);
+        std::string       scratch_buf;
+        std::string const dec_charset{ *decimal_charset };
+
+        unsigned base_ = base(literal, dec_charset, scratch_buf);
+
+        scratch_buf.clear(); // reuse buffer
 
         bool ok;
         unsigned int_part{ 0 };
 
-        switch(base) {
-        case 2:
-            ok = parse_integer(literal, std::string(*bin_charset));
-            ok = parse_attr<unsigned,  2>(int_part);
+        switch(base_) {
+        case 2: {
+            std::string const charset{ *binary_charset };
+            ok = integer(literal, charset, scratch_buf);
+            ok = parse_numeric_attr<unsigned,  2>(scratch_buf, int_part);
             break;
-        case 8:
-            ok = parse_integer(literal, std::string(*oct_charset));
-            ok = parse_attr<unsigned,  8>(int_part);
+        }
+        case 8: {
+            std::string const charset{ *octal_charset };
+            ok = integer(literal, charset, scratch_buf);
+            ok = parse_numeric_attr<unsigned,  8>(scratch_buf, int_part);
             break;
-        case 10:
-            ok = parse_integer(literal, std::string(*dec_charset));
-            ok = parse_attr<unsigned, 10>(int_part);
+        }
+        case 10: {
+            ok = integer(literal, dec_charset, scratch_buf);
+            ok = parse_numeric_attr<unsigned, 10>(scratch_buf, int_part);
             break;
-        case 16:
-            ok = parse_integer(literal, std::string(*hex_charset));
-            ok = parse_attr<unsigned, 16>(int_part);
+        }
+        case 16: {
+            std::string const charset{ *hexadecimal_charset };
+            ok = integer(literal, charset, scratch_buf);
+            ok = parse_numeric_attr<unsigned, 16>(scratch_buf, int_part);
             break;
+        }
         default:
             std::cerr << "only bases of 2, 8, 10 and 16 are supported.";
         }
 
-        std::cout << "int = " << int_part << "\n";
+        std::cout << "base = " << base_ << ", int = " << int_part << "\n";
 
         return ok;
     }
