@@ -24,8 +24,15 @@ namespace x3 = boost::spirit::x3;
 namespace detail {
 
     template<unsigned Radix>
-    double exponent(unsigned n)
+    double pow(unsigned n)
     {
+        // Ensure n *= Radix will not overflow
+        static constexpr unsigned max = (std::numeric_limits<unsigned>::max)();
+        static constexpr unsigned val = max / Radix;
+        if (n > val) {
+            assert(false && "exponent exceeds numeric limits");
+        }
+
         double exp{ 1 };
         for(unsigned i = 0; i != n; ++i) {
             exp *= Radix;
@@ -113,7 +120,7 @@ struct foo
         }
 
         unsigned const exp_n = scratch_buf.length();
-        frac_part /= detail::exponent<Radix>(exp_n);
+        frac_part /= detail::pow<Radix>(exp_n);
 
         return ok;
     }
@@ -132,14 +139,12 @@ struct foo
         assert((part[0] == 'E' || part[0] == 'e') && "Parser internal Error! No exponent found!");
 
         bool pos_sign = true;
-        unsigned first = 0;
+        unsigned first = 2;
         switch(part[1]) {
+        case '+':
+            break;
         case '-':
             pos_sign = false;
-            first = 2;
-            break;
-        case '+':
-            first = 2;
             break;
         default:
             first = 1;
@@ -159,10 +164,10 @@ struct foo
 
         std::cout << "=> exp = " << Radix << "^" << exp_n << "\n";
         if(pos_sign) {
-            exponent_part *= detail::exponent<Radix>(exp_n);
+            exponent_part *= detail::pow<Radix>(exp_n);
         }
         else {
-            exponent_part /= detail::exponent<Radix>(exp_n);
+            exponent_part /= detail::pow<Radix>(exp_n);
         }
 
         return ok;
