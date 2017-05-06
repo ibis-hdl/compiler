@@ -6,6 +6,7 @@
 #include <boost/optional.hpp>
 
 #include <algorithm> //copy_if
+#include <iomanip>
 
 
 namespace ast {
@@ -23,17 +24,11 @@ namespace x3 = boost::spirit::x3;
 
 struct foo
 {
-    static constexpr const char* binary_charset[] = { "01" };
-    static constexpr const char* octal_charset[] = { "0-7" };
-    static constexpr const char* decimal_charset[] = { "0-9" };
-    static constexpr const char* hexadecimal_charset[] = { "0-9A-Za-z" };
-
     template<typename RangeT>
-    void strip_separator(RangeT const& input, std::string const& charset, std::string& stripped)
+    void strip_separator(RangeT const& input, std::string& stripped)
     {
         std::copy_if(input.begin(), input.end(),
-            std::back_inserter(stripped),
-            [](auto c) {
+            std::back_inserter(stripped), [](auto c) {
                 return c != '_';
         });
     }
@@ -50,11 +45,11 @@ struct foo
         return ok && (iter == end);
     }
 
-    unsigned base(ast::based_literal const& literal, std::string const& charset, std::string& buffer)
+    unsigned extract_base(ast::based_literal const& literal, std::string& buffer)
     {
         unsigned base_{0};
 
-        strip_separator(literal.base, charset, buffer);
+        strip_separator(literal.base, buffer);
 
         auto iter = buffer.begin(), end = buffer.end();
         bool ok = x3::parse(iter, end, x3::uint_, base_);
@@ -63,81 +58,107 @@ struct foo
         return base_;
     }
 
+    template<unsigned Radix>
+    bool extract_integer(ast::based_literal const& literal, unsigned& int_part)
+    {
+        std::string scratch_buf;
+        strip_separator(literal.integer_part, scratch_buf);
+
+        bool ok = parse_numeric_attr<unsigned, Radix>(scratch_buf, int_part);
+        if(!ok) {
+            std::cout << "parsing with base of " << Radix << " failed for integer part\n";
+        }
+
+        return ok;
+    }
+
+    template<unsigned Radix>
+    bool extract_fractional(ast::based_literal const& literal, double& frac_part)
+    {
+        std::string scratch_buf;
+        if(!literal.fractional_part) {
+            std::cout << "there is no fractional part\n";
+            frac_part = 0;
+            return true;
+        }
+
+        strip_separator(literal.fractional_part.get(), scratch_buf);
+
+        bool ok = parse_numeric_attr<double, Radix>(scratch_buf, frac_part);
+        if(!ok) {
+            std::cout << "parsing with base of " << Radix << " failed for fractional part\n";
+        }
+
+        using x3::extension::pow10;
+
+        unsigned const exp_n = scratch_buf.length();
+        double const exp = pow10<unsigned>(exp_n);
+        frac_part /= exp;
+
+        return ok;
+    }
+
     bool extract(ast::based_literal const& literal)
     {
         std::string       scratch_buf;
-        std::string const dec_charset{ *decimal_charset };
 
-        unsigned base_ = base(literal, dec_charset, scratch_buf);
+        unsigned base_ = extract_base(literal, scratch_buf);
 
         scratch_buf.clear(); // reuse buffer
 
         bool ok;
         unsigned int_part{ 0 };
-        unsigned frac_part{ 0 };
+        double frac_part{ 0 };
 
         switch(base_) {
         case 2: {
             static constexpr unsigned radix{2};
-            std::string const charset{ *binary_charset };
 
-            strip_separator(literal.integer_part, charset, scratch_buf);
-            ok = parse_numeric_attr<unsigned, radix>(scratch_buf, int_part);
+            ok = extract_integer<radix>(literal, int_part);
+            if(!ok) return false;
 
-            if(literal.fractional_part) {
-                scratch_buf.clear();
-                strip_separator(literal.fractional_part.value(), charset, scratch_buf);
-                ok = parse_numeric_attr<unsigned, radix>(scratch_buf, frac_part);
-            }
+            ok = extract_fractional<radix>(literal, frac_part);
+            if(!ok) return false;
 
             break;
         }
         case 8: {
             static constexpr unsigned radix{8};
-            std::string const charset{ *octal_charset };
-            strip_separator(literal.integer_part, charset, scratch_buf);
-            ok = parse_numeric_attr<unsigned, radix>(scratch_buf, int_part);
 
-            if(literal.fractional_part) {
-                scratch_buf.clear();
-                strip_separator(literal.fractional_part.value(), charset, scratch_buf);
-                ok = parse_numeric_attr<unsigned, radix>(scratch_buf, frac_part);
-            }
+            ok = extract_integer<radix>(literal, int_part);
+            if(!ok) return false;
+
+            ok = extract_fractional<radix>(literal, frac_part);
+            if(!ok) return false;
 
             break;
         }
         case 10: {
             static constexpr unsigned radix{10};
-            strip_separator(literal.integer_part, dec_charset, scratch_buf);
-            ok = parse_numeric_attr<unsigned, radix>(scratch_buf, int_part);
 
-            if(literal.fractional_part) {
-                scratch_buf.clear();
-                strip_separator(literal.fractional_part.value(), dec_charset, scratch_buf);
-                ok = parse_numeric_attr<unsigned, radix>(scratch_buf, frac_part);
-            }
+            ok = extract_integer<radix>(literal, int_part);
+            if(!ok) return false;
+
+            ok = extract_fractional<radix>(literal, frac_part);
+            if(!ok) return false;
 
             break;
         }
         case 16: {
             static constexpr unsigned radix{16};
-            std::string const charset{ *hexadecimal_charset };
-            strip_separator(literal.integer_part, charset, scratch_buf);
-            ok = parse_numeric_attr<unsigned, radix>(scratch_buf, int_part);
 
-            if(literal.fractional_part) {
-                scratch_buf.clear();
-                strip_separator(literal.fractional_part.value(), charset, scratch_buf);
-                ok = parse_numeric_attr<unsigned, radix>(scratch_buf, frac_part);
-            }
+            ok = extract_integer<radix>(literal, int_part);
+            if(!ok) return false;
+
+            ok = extract_fractional<radix>(literal, frac_part);
+            if(!ok) return false;
 
             break;
         }
         default:
             std::cerr << "only bases of 2, 8, 10 and 16 are supported.";
+            return false;
         }
-
-        //assert(ok && "parse <based_literal.integer_part> failed!");
 
         std::cout << "input: " << literal.integer_part;
         if(literal.fractional_part) {
@@ -146,15 +167,16 @@ struct foo
         std::cout << "base = " << base_
                   << ", int = " << int_part
                   << ", frac = " << frac_part
+                  << " => " << std::fixed << (int_part + frac_part)
                   << "\n";
 
-        return ok;
+        return true;
     }
 };
 
 int main()
 {
-    ast::based_literal literal{ "002", "1_009", boost::optional<std::string>("012"), "e-12" };
+    ast::based_literal literal{ "010", "1_009", boost::optional<std::string>("012"), "e-12" };
 
     foo f;
     f.extract(literal);
