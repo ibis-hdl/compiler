@@ -14,16 +14,38 @@ namespace ast {
         std::string                 base;
         std::string                 integer_part;
         boost::optional<std::string> fractional_part;
-        std::string                 exponent;
+        boost::optional<std::string> exponent_part;
     };
 }
 
 namespace x3 = boost::spirit::x3;
 
 
+namespace detail {
+
+    template<unsigned Radix>
+    double exponent(unsigned n)
+    {
+        double exp{ 1 };
+        for(unsigned i = 0; i != n; ++i) {
+            exp *= Radix;
+        }
+        return exp;
+    }
+}
 
 struct foo
 {
+    /*
+     * Parsing separated numeric literals aren't directly support by spirit.x3.
+     * On character level a string(_view) is created, on lexeme level a vector
+     * of integers are created which doesn't simplify the process since several
+     * separators are allowed. Hence this approach uses a scratch buffer string
+     * to prune the separators.
+     * Useful may be a string which works on stack using a buffer or heap for
+     * larger strings, e.g. see
+     * https://stackoverflow.com/questions/39896348/does-a-stdstring-always-require-heap-memory/39896438
+     */
     template<typename RangeT>
     void strip_separator(RangeT const& input, std::string& stripped)
     {
@@ -89,11 +111,58 @@ struct foo
             std::cout << "parsing with base of " << Radix << " failed for fractional part\n";
         }
 
-        using x3::extension::pow10;
-
         unsigned const exp_n = scratch_buf.length();
-        double const exp = pow10<unsigned>(exp_n);
-        frac_part /= exp;
+        frac_part /= detail::exponent<Radix>(exp_n);
+
+        return ok;
+    }
+
+    template<unsigned Radix>
+    bool extract_exponent(ast::based_literal const& literal, double& exponent_part)
+    {
+        exponent_part = 1;
+
+        if(!literal.exponent_part) {
+            std::cout << "there is no exponent part\n";
+            return true;
+        }
+
+        std::string const& part = literal.exponent_part.get();
+        assert((part[0] == 'E' || part[0] == 'e') && "Parser internal Error! No exponent found!");
+
+        bool pos_sign = true;
+        unsigned first = 0;
+        switch(part[1]) {
+        case '-':
+            pos_sign = false;
+            first = 2;
+            break;
+        case '+':
+            first = 2;
+            break;
+        default:
+            first = 1;
+        }
+        std::cout << "pure exp = " <<  Radix << "^" << (pos_sign ? '+' : '-')
+                  << part.substr(first, std::string::npos) << "\n";
+
+        std::string scratch_buf;
+
+        strip_separator(part.substr(first, std::string::npos), scratch_buf); // string_view candidate
+
+        unsigned exp_n{ 0 };
+        bool ok = parse_numeric_attr<unsigned, 10>(scratch_buf, exp_n);
+        if(!ok) {
+            std::cout << "parsing with base of " << Radix << " failed for exponent part\n";
+        }
+
+        std::cout << "=> exp = " << Radix << "^" << exp_n << "\n";
+        if(pos_sign) {
+            exponent_part *= detail::exponent<Radix>(exp_n);
+        }
+        else {
+            exponent_part /= detail::exponent<Radix>(exp_n);
+        }
 
         return ok;
     }
@@ -109,6 +178,7 @@ struct foo
         bool ok;
         unsigned int_part{ 0 };
         double frac_part{ 0 };
+        double exp_part{ 0 };
 
         switch(base_) {
         case 2: {
@@ -118,6 +188,9 @@ struct foo
             if(!ok) return false;
 
             ok = extract_fractional<radix>(literal, frac_part);
+            if(!ok) return false;
+
+            ok = extract_exponent<radix>(literal, exp_part);
             if(!ok) return false;
 
             break;
@@ -131,6 +204,9 @@ struct foo
             ok = extract_fractional<radix>(literal, frac_part);
             if(!ok) return false;
 
+            ok = extract_exponent<radix>(literal, exp_part);
+            if(!ok) return false;
+
             break;
         }
         case 10: {
@@ -140,6 +216,9 @@ struct foo
             if(!ok) return false;
 
             ok = extract_fractional<radix>(literal, frac_part);
+            if(!ok) return false;
+
+            ok = extract_exponent<radix>(literal, exp_part);
             if(!ok) return false;
 
             break;
@@ -153,6 +232,9 @@ struct foo
             ok = extract_fractional<radix>(literal, frac_part);
             if(!ok) return false;
 
+            ok = extract_exponent<radix>(literal, exp_part);
+            if(!ok) return false;
+
             break;
         }
         default:
@@ -162,12 +244,17 @@ struct foo
 
         std::cout << "input: " << literal.integer_part;
         if(literal.fractional_part) {
-            std::cout << "." << literal.fractional_part.value() << "\n";
+            std::cout << "." << literal.fractional_part.value();
         }
+        if(literal.exponent_part) {
+            std::cout << literal.exponent_part.value();
+        }
+        std::cout << "\n";
         std::cout << "base = " << base_
                   << ", int = " << int_part
                   << ", frac = " << frac_part
-                  << " => " << std::fixed << (int_part + frac_part)
+                  << ", exp = " << exp_part
+                  << " => " << std::fixed << (int_part + frac_part)*exp_part
                   << "\n";
 
         return true;
@@ -176,7 +263,17 @@ struct foo
 
 int main()
 {
-    ast::based_literal literal{ "010", "1_009", boost::optional<std::string>("012"), "e-12" };
+#if 0
+    // 4096.0
+    ast::based_literal literal{ "016", "F",
+                                boost::optional<std::string>("FF"),
+                                boost::optional<std::string>("e+2") };
+#else
+    // 4096.0
+    ast::based_literal literal{ "2", "1",
+                                boost::optional<std::string>("1111_1111_111"),
+                                boost::optional<std::string>("e11") };
+#endif
 
     foo f;
     f.extract(literal);
