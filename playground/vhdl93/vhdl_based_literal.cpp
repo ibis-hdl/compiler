@@ -67,16 +67,18 @@ struct foo
         return ok && (iter == end);
     }
 
-    unsigned extract_base(ast::based_literal const& literal, std::string& buffer)
+    unsigned extract_base(ast::based_literal const& literal, unsigned& base)
     {
-        unsigned base_{0};
+        std::string scratch_buf;
 
-        strip_separator(literal.base, buffer);
+        strip_separator(literal.base, scratch_buf);
 
-        bool ok = parse_numeric_attr<unsigned, 10>(buffer, base_);
-        assert(ok && "parse <based_literal.base> failed!");
+        bool ok = parse_numeric_attr<unsigned, 10>(scratch_buf, base);
+        if(!ok) {
+            std::cout << "parsing of base part failed\n";
+        }
 
-        return base_;
+        return ok;
     }
 
     template<unsigned Radix>
@@ -166,80 +168,68 @@ struct foo
         return ok;
     }
 
-    bool extract(ast::based_literal const& literal)
+    struct string_literal_components
     {
-        std::string       scratch_buf;
-
-        unsigned base_ = extract_base(literal, scratch_buf);
-
-        scratch_buf.clear(); // reuse buffer
-
-        bool ok;
         unsigned int_part{ 0 };
         double frac_part{ 0 };
         double exp_part{ 0 };
 
-        switch(base_) {
+        double value() const
+        {
+            return (int_part + frac_part) * exp_part;
+        }
+    };
+
+    template<unsigned Radix>
+    bool extract_all(ast::based_literal const& literal, string_literal_components& parts)
+    {
+        bool ok;
+
+        ok = extract_integer<Radix>(literal, parts.int_part);
+        if(!ok) return false;
+
+        ok = extract_fractional<Radix>(literal, parts.frac_part);
+        if(!ok) return false;
+
+        ok = extract_exponent<Radix>(literal, parts.exp_part);
+        if(!ok) return false;
+
+        return true;
+    }
+
+    bool extract(ast::based_literal const& literal)
+    {
+        unsigned base{ 0 };
+
+        bool ok = extract_base(literal, base);
+
+        if(!ok) return false;
+
+        string_literal_components parts;
+
+        switch(base) {
         case 2: {
-            static constexpr unsigned radix{2};
-
-            ok = extract_integer<radix>(literal, int_part);
-            if(!ok) return false;
-
-            ok = extract_fractional<radix>(literal, frac_part);
-            if(!ok) return false;
-
-            ok = extract_exponent<radix>(literal, exp_part);
-            if(!ok) return false;
-
+            ok = extract_all< 2>(literal, parts);
             break;
         }
         case 8: {
-            static constexpr unsigned radix{8};
-
-            ok = extract_integer<radix>(literal, int_part);
-            if(!ok) return false;
-
-            ok = extract_fractional<radix>(literal, frac_part);
-            if(!ok) return false;
-
-            ok = extract_exponent<radix>(literal, exp_part);
-            if(!ok) return false;
-
+            ok = extract_all< 8>(literal, parts);
             break;
         }
         case 10: {
-            static constexpr unsigned radix{10};
-
-            ok = extract_integer<radix>(literal, int_part);
-            if(!ok) return false;
-
-            ok = extract_fractional<radix>(literal, frac_part);
-            if(!ok) return false;
-
-            ok = extract_exponent<radix>(literal, exp_part);
-            if(!ok) return false;
-
+            ok = extract_all<10>(literal, parts);
             break;
         }
         case 16: {
-            static constexpr unsigned radix{16};
-
-            ok = extract_integer<radix>(literal, int_part);
-            if(!ok) return false;
-
-            ok = extract_fractional<radix>(literal, frac_part);
-            if(!ok) return false;
-
-            ok = extract_exponent<radix>(literal, exp_part);
-            if(!ok) return false;
-
+            ok = extract_all<16>(literal, parts);
             break;
         }
         default:
             std::cerr << "only bases of 2, 8, 10 and 16 are supported.";
             return false;
         }
+
+        if(!ok) return false;
 
         std::cout << "input: " << literal.integer_part;
         if(literal.fractional_part) {
@@ -249,11 +239,11 @@ struct foo
             std::cout << literal.exponent_part.value();
         }
         std::cout << "\n";
-        std::cout << "base = " << base_
-                  << ", int = " << int_part
-                  << ", frac = " << frac_part
-                  << ", exp = " << exp_part
-                  << " => " << std::fixed << (int_part + frac_part)*exp_part
+        std::cout << "base = " << base
+                  << ", int = " << parts.int_part
+                  << ", frac = " << parts.frac_part
+                  << ", exp = " << parts.exp_part
+                  << " => " << std::fixed << parts.value()
                   << "\n";
 
         return true;
