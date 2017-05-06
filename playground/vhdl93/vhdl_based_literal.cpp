@@ -21,6 +21,223 @@ namespace ast {
 namespace x3 = boost::spirit::x3;
 
 
+/*
+ * The parser code is basically a copy of the relevant spirit x3 code, with
+ * changes inside the extract_int SPIRIT_NUMERIC_INNER_LOOP code to allow
+ * separator '_'. Works so far, but looks fragile on changes by the x3
+ * developer. */
+namespace parser {
+
+namespace detail {
+
+///////////////////////////////////////////////////////////////////////////
+// Low level signed integer parser
+///////////////////////////////////////////////////////////////////////////
+template <
+    typename T, unsigned Radix, unsigned MinDigits, int MaxDigits
+  , typename Accumulator
+  , bool Accumulate
+>
+struct extract_int;
+
+///////////////////////////////////////////////////////////////////////////
+//  extract_int: main code for extracting integers
+//  common case where MinDigits == 1 and MaxDigits = -1
+///////////////////////////////////////////////////////////////////////////
+#define SPIRIT_NUMERIC_INNER_LOOP(z, x, data)                               \
+    if (it == last)                                                         \
+        break;                                                              \
+    ch = *it;                                                               \
+    if (ch != '_') {                                                        \
+        if (!radix_check::is_valid(ch))                                     \
+            break;                                                          \
+        if (!extractor::call(ch, count, val))                               \
+            return false;                                                   \
+    }                                                                       \
+    ++it;                                                                   \
+    ++count;                                                                \
+/**/
+
+template <typename T, unsigned Radix, typename Accumulator, bool Accumulate>
+struct extract_int<T, Radix, 1, -1, Accumulator, Accumulate>
+{
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
+# pragma warning(push)
+# pragma warning(disable: 4127)   // conditional expression is constant
+#endif
+    template <typename Iterator, typename Attribute>
+    inline static bool
+    parse_main(
+        Iterator& first
+      , Iterator const& last
+      , Attribute& attr)
+    {
+        typedef x3::detail::radix_traits<Radix> radix_check;
+        typedef x3::detail::int_extractor<Radix, Accumulator, -1> extractor;
+        typedef typename
+            boost::detail::iterator_traits<Iterator>::value_type
+        char_type;
+
+        Iterator it = first;
+        std::size_t count = 0;
+        if (!Accumulate)
+        {
+            // skip leading zeros
+            while (it != last && *it == '0')
+            {
+                ++it;
+                ++count;
+            }
+
+            if (it == last)
+            {
+                if (count == 0) // must have at least one digit
+                    return false;
+                attr = 0;
+                first = it;
+                return true;
+            }
+        }
+
+        typedef typename
+            x3::traits::attribute_type<Attribute>::type
+        attribute_type;
+
+        attribute_type val = Accumulate ? attr : attribute_type(0);
+        char_type ch = *it;
+
+        if (!radix_check::is_valid(ch) || !extractor::call(ch, 0, val))
+        {
+            if (count == 0) // must have at least one digit
+                return false;
+            x3::traits::move_to(val, attr);
+            first = it;
+            return true;
+        }
+
+        count = 0;
+        ++it;
+        while (true)
+        {
+            BOOST_PP_REPEAT(
+                SPIRIT_NUMERICS_LOOP_UNROLL
+              , SPIRIT_NUMERIC_INNER_LOOP, _)
+        }
+
+        x3::traits::move_to(val, attr);
+        first = it;
+        return true;
+    }
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
+# pragma warning(pop)
+#endif
+
+    template <typename Iterator>
+    inline static bool
+    parse(
+        Iterator& first
+      , Iterator const& last
+      , x3::unused_type)
+    {
+        T n = 0; // must calculate value to detect over/underflow
+        return parse_main(first, last, n);
+    }
+
+    template <typename Iterator, typename Attribute>
+    inline static bool
+    parse(
+        Iterator& first
+      , Iterator const& last
+      , Attribute& attr)
+    {
+        return parse_main(first, last, attr);
+    }
+};
+
+#undef SPIRIT_NUMERIC_INNER_LOOP
+
+}
+
+///////////////////////////////////////////////////////////////////////////
+// Low level unsigned integer parser
+///////////////////////////////////////////////////////////////////////////
+template <typename T, unsigned Radix, unsigned MinDigits, int MaxDigits
+  , bool Accumulate = false>
+struct extract_uint
+{
+    // check template parameter 'Radix' for validity
+    static_assert(
+        (Radix >= 2 && Radix <= 36),
+        "Error Unsupported Radix");
+
+    template <typename Iterator>
+    inline static bool call(Iterator& first, Iterator const& last, T& attr)
+    {
+        if (first == last)
+            return false;
+
+        typedef detail::extract_int<
+            T
+          , Radix
+          , MinDigits
+          , MaxDigits
+          , x3::detail::positive_accumulator<Radix>
+          , Accumulate>
+        extract_type;
+
+        Iterator save = first;
+        if (!extract_type::parse(first, last,
+            x3::detail::cast_unsigned<T>::call(attr)))
+        {
+            first = save;
+            return false;
+        }
+        return true;
+    }
+
+    template <typename Iterator, typename Attribute>
+    inline static bool call(Iterator& first, Iterator const& last, Attribute& attr_)
+    {
+        // this case is called when Attribute is not T
+        T attr;
+        if (call(first, last, attr))
+        {
+            x3::traits::move_to(attr, attr_);
+            return true;
+        }
+        return false;
+    }
+};
+
+
+template <
+    typename T
+  , unsigned Radix = 10
+  , unsigned MinDigits = 1
+  , int MaxDigits = -1>
+struct uint_parser : x3::parser<uint_parser<T, Radix, MinDigits, MaxDigits>>
+{
+    // check template parameter 'Radix' for validity
+    static_assert(
+        (Radix >= 2 && Radix <= 36),
+        "Error Unsupported Radix");
+
+    typedef T attribute_type;
+    static bool const has_attribute = true;
+
+    template <typename Iterator, typename Context, typename Attribute>
+    bool parse(Iterator& first, Iterator const& last
+      , Context const& context, x3::unused_type, Attribute& attr) const
+    {
+        typedef extract_uint<T, Radix, MinDigits, MaxDigits> extract;
+        x3::skip_over(first, last, context);
+        return extract::call(first, last, attr);
+    }
+};
+
+}
+
+
 namespace detail {
 
     template<unsigned Radix>
@@ -52,10 +269,15 @@ struct foo
      * Useful may be a string which works on stack using a buffer or heap for
      * larger strings, e.g. see
      * https://stackoverflow.com/questions/39896348/does-a-stdstring-always-require-heap-memory/39896438
+     * or even
+     * https://stackoverflow.com/questions/783944/how-do-i-allocate-a-stdstring-on-the-stack-using-glibcs-string-implementation
+     * suggest Chronium's stack_container.h
+     * https://src.chromium.org/viewvc/chrome/trunk/src/base/containers/stack_container.h?view=markup
      */
     template<typename RangeT>
     void strip_separator(RangeT const& input, std::string& stripped)
     {
+        stripped.reserve(input.size());
         std::copy_if(input.begin(), input.end(),
             std::back_inserter(stripped), [](auto c) {
                 return c != '_';
@@ -67,7 +289,7 @@ struct foo
     {
         auto iter = input.begin(), end = input.end();
 
-        typedef x3::uint_parser<AttrT, Radix> parser_type;
+        typedef parser::uint_parser<AttrT, Radix> parser_type;
         parser_type const parser = parser_type{};
 
         bool ok = x3::parse(iter, end, parser, attr);
