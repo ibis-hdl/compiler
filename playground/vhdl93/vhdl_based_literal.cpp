@@ -73,8 +73,7 @@ struct foo
 
         strip_separator(literal.base, buffer);
 
-        auto iter = buffer.begin(), end = buffer.end();
-        bool ok = x3::parse(iter, end, x3::uint_, base_);
+        bool ok = parse_numeric_attr<unsigned, 10>(buffer, base_);
         assert(ok && "parse <based_literal.base> failed!");
 
         return base_;
@@ -264,12 +263,12 @@ struct foo
 int main()
 {
 #if 0
-    // 4096.0
+    // 4095.0
     ast::based_literal literal{ "016", "F",
                                 boost::optional<std::string>("FF"),
                                 boost::optional<std::string>("e+2") };
 #else
-    // 4096.0
+    // 4095.0
     ast::based_literal literal{ "2", "1",
                                 boost::optional<std::string>("1111_1111_111"),
                                 boost::optional<std::string>("e11") };
