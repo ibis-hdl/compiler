@@ -16,6 +16,7 @@ set(LIB_SOURCES
     src/ast/operator_token.cpp
     #src/new_operator.cpp
     src/grammar.cpp
+    src/expression.cpp
     src/literal.cpp
     src/error_handler.cpp
     src/ast_printer.cpp

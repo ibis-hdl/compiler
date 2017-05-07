@@ -11,7 +11,7 @@
 
 #include <eda/vhdl93/ast_adapted.hpp>
 #include <eda/vhdl93/parser/namespace_alias.hpp>
-#include <eda/vhdl93/parser/operator_def.hpp>
+#include <eda/vhdl93/parser/expression_def.hpp>
 #include <eda/vhdl93/parser/keyword_def.hpp>
 #include <eda/vhdl93/parser/grammar.hpp>
 
