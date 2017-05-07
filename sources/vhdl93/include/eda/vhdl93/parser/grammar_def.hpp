@@ -764,22 +764,6 @@ auto const end_of_line =
     x3::rule<struct end_of_line_class> { "end_of_line" } =
         x3::eol;
 
-#if 0
-/*
- *  Import rules
- */
-namespace {
-    auto const& logical_operator = api::logical_operator();
-    auto const& logical_operator_option = api::logical_operator_option();
-    auto const& relational_operator = api::relational_operator();
-    auto const& unary_miscellaneous_operator = api::unary_miscellaneous_operator();
-    auto const& binary_miscellaneous_operator = api::binary_miscellaneous_operator();
-    auto const& adding_operator = api::adding_operator();
-    auto const& multiplying_operator = api::multiplying_operator();
-    auto const& shift_operator = api::shift_operator();
-    auto const& sign = api::sign_operator();
-}
-#endif
 
 /*
  * Common parsers, reused by several rules to hive it into semantic
