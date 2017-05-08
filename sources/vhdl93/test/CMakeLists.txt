@@ -4,7 +4,6 @@ cmake_minimum_required(VERSION 3.6)
 project(test_vhdl93 LANGUAGES CXX)
 
 set(BIN_SOURCES
-    app_mock.cpp
     data_set.cpp
     basic_production_rules.cpp
     production_rules.cpp
@@ -62,15 +61,6 @@ add_test(NAME test_vhdl93_parser
     COMMAND ${PROJECT_NAME} -- ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-
-## Special target no used here, maybe later to test error messages
-add_executable(x3_debug EXCLUDE_FROM_ALL x3_debug.cpp)
-target_link_libraries(x3_debug
-    PRIVATE
-    eda::common
-    eda::vhdl93_grammar
-    ${Boost_SYSTEM_LIBRARY}
-)
 
 ## Generate the TestMatrix
 set(TEST_MATRIX_GENERATOR        ${CMAKE_CURRENT_SOURCE_DIR}/../utils/gen_test_matrix.py)

@@ -6,7 +6,6 @@
  */
 
 #include "data_set.hpp"
-#include "app_mock.hpp"
 #include "test_case_path.hpp"
 
 #include <boost/filesystem/fstream.hpp>
