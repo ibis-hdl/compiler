@@ -9,7 +9,8 @@ include(ExternalProject)
 ExternalProject_Add(
   boost-spirit-x3
   GIT_REPOSITORY        https://github.com/boostorg/spirit.git
-  GIT_TAG               boost-1.64.0 #develop
+  GIT_TAG               boost-1.64.0
+#  GIT_TAG               develop
   PREFIX                ${PROJECT_BINARY_DIR}/external
   PATCH_COMMAND         ""
   CONFIGURE_COMMAND     ""
