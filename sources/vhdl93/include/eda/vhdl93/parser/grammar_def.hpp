@@ -1037,27 +1037,6 @@ auto as_type = [](auto p) { return x3::rule<struct _, T>{ "as" } = x3::as_parser
 
 
 /*
- * Common parsers, reused by several rules to hive it into semantic
- *
- */
-namespace detail {
-
-    /* The identifier is treated as string. The basic_identifier and
-     * extended_identifier can be distinguished simply by test on leading (and
-     * trailing) '/'. To enforce use of a single string member on AST node resp.
-     * identifier the rule is splitted, otherwise ast::identifier has to handle
-     * the variant type. Generalizing these identifiers simplifies (hopefully)
-     * the type/identifier handling (without applying the boost visitor). */
-    // identifier ::=                                                   [§ 13.3]
-    // basic_identifier | extended_identifier
-    auto const common_identifier = x3::rule<struct _, std::string_view> { "identifier" } =
-          basic_identifier
-        | extended_identifier
-        ;
-}
-
-
-/*
  * Parser Rule Definition
  */
 
@@ -2426,7 +2405,8 @@ auto const guarded_signal_specification_def =
 // identifier ::=                                                       [§ 13.3]
 // basic_identifier | extended_identifier
 auto const identifier_def =
-    detail::common_identifier
+      basic_identifier
+    | extended_identifier
     ;
 
 
@@ -3362,7 +3342,7 @@ auto const simple_expression_def =
 // simple_name ::=                                                       [§ 6.2]
 // identifier
 auto const simple_name_def =
-    detail::common_identifier
+    identifier
     ;
 
 
@@ -3598,7 +3578,7 @@ auto const type_definition_def =
  * parser level. It's used as simple string parser for symantic sugar at parser
  * level exposing a std::string_view attribute. */
 auto const type_mark_def =
-    detail::common_identifier
+    identifier
     ;
 
 
