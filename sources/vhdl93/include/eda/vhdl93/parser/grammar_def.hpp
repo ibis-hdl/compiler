@@ -82,11 +82,7 @@ BOOST_SPIRIT_DECLARE(sign_operator_type);
  * Rule Definitions
  */
 
-
-/*
- * logical_operator ::=  and | or | nand | nor | xor | xnor              [§ 7.2]
- */
-
+// logical_operator ::=  and | or | nand | nor | xor | xnor              [§ 7.2]
 struct logical_operator_symbols : x3::symbols<ast::operator_token> {
 
     logical_operator_symbols() {
@@ -127,10 +123,7 @@ auto const logical_operator_option_def =
     ;
 
 
-/*
- * relational_operator ::=   =  |  /=  |  <  |  <=  |  >  |  >=          [§ 7.2]
- */
-
+// relational_operator ::=   =  |  /=  |  <  |  <=  |  >  |  >=          [§ 7.2]
 struct relational_operator_symbols : x3::symbols<ast::operator_token> {
 
     relational_operator_symbols() {
@@ -148,10 +141,7 @@ struct relational_operator_symbols : x3::symbols<ast::operator_token> {
 } const relational_operator;
 
 
-/*
- * miscellaneous_operator ::=  ** | abs | not                            [§ 7.2]
- */
-
+// miscellaneous_operator ::=  ** | abs | not                            [§ 7.2]
 struct unary_miscellaneous_operator_symbols : x3::symbols<ast::operator_token> {
 
     unary_miscellaneous_operator_symbols() {
@@ -184,10 +174,7 @@ struct binary_miscellaneous_operator_symbols : x3::symbols<ast::operator_token> 
 } const binary_miscellaneous_operator;
 
 
-/*
- * adding_operator ::=  + | -  | &                                       [§ 7.2]
- */
-
+// adding_operator ::=  + | -  | &                                       [§ 7.2]
 struct adding_operator_symbols : x3::symbols<ast::operator_token> {
 
     adding_operator_symbols() {
@@ -202,10 +189,7 @@ struct adding_operator_symbols : x3::symbols<ast::operator_token> {
 } const adding_operator;
 
 
-/*
- * multiplying_operator ::=  * | / | mod | rem                           [§ 7.2]
- */
-
+// multiplying_operator ::=  * | / | mod | rem                           [§ 7.2]
 struct multiplying_operator_symbols : x3::symbols<ast::operator_token> {
 
     multiplying_operator_symbols() {
@@ -228,10 +212,7 @@ auto const multiplying_operator_def =
     ;
 
 
-/*
- * shift_operator ::=  sll | srl | sla | sra | rol | ror                 [§ 7.2]
- */
-
+// shift_operator ::=  sll | srl | sla | sra | rol | ror                 [§ 7.2]
 struct shift_operator_symbols : x3::symbols<ast::operator_token> {
 
     shift_operator_symbols() {
@@ -256,9 +237,7 @@ auto const shift_operator_def =
     ;
 
 
-/*
- * sign ::=  + | -                                                       [§ 7.2]
- */
+// sign ::=  + | -                                                       [§ 7.2]
 struct sign_operator_symbols : x3::symbols<ast::operator_token> {
 
     sign_operator_symbols() {
@@ -319,7 +298,6 @@ struct attribute_specification_class;
 struct base_unit_declaration_class;
 struct based_integer_class;
 struct based_literal_class;
-struct basic_character_class;
 struct basic_graphic_character_class;
 struct basic_identifier_class;
 struct binding_indication_class;
@@ -549,7 +527,6 @@ typedef x3::rule<attribute_specification_class> attribute_specification_type;
 typedef x3::rule<base_unit_declaration_class> base_unit_declaration_type;
 typedef x3::rule<based_integer_class, std::string_view> based_integer_type;
 typedef x3::rule<based_literal_class, ast::based_literal> based_literal_type;
-typedef x3::rule<basic_character_class> basic_character_type;
 typedef x3::rule<basic_graphic_character_class, char> basic_graphic_character_type;
 typedef x3::rule<basic_identifier_class, std::string_view> basic_identifier_type;
 typedef x3::rule<binding_indication_class> binding_indication_type;
@@ -1020,13 +997,42 @@ auto const end_of_line =
         x3::eol;
 
 
-/*
- * extended_digit ::=                                                 [§ 13.4.2]
- * digit | letter
- */
+#if 0
+// basic_character ::=
+// basic_graphic_character | format_effector
+auto const basic_character_def =
+        basic_graphic_character | format_effector
+        ;
+#endif
+
+
+// basic_graphic_character ::=                                          [§ 13.1]
+// upper_case_letter | digit | special_character| space_character
+auto const basic_graphic_character_def =
+        upper_case_letter
+      | digit
+      | special_character
+      | space_character
+      ;
+
+
+// extended_digit ::=                                                 [§ 13.4.2]
+// digit | letter
 auto const extended_digit =
     x3::rule<struct extended_digit_class, char> { "extended_digit" } =
         char_("0-9a-fA-F");
+
+
+// graphic_character ::=                                                [§ 13.1]
+// basic_graphic_character | lower_case_letter | other_special_character
+auto const graphic_character_def =
+      basic_graphic_character
+    | lower_case_letter
+    | other_special_character
+    ;
+
+
+
 /*
  * Parser helper
  */
@@ -1290,26 +1296,6 @@ auto const based_literal_def =
         >> -exponent
     ]
     ;
-
-
-#if 0
-// basic_character ::=
-// basic_graphic_character | format_effector
-auto const basic_character_def =
-        basic_graphic_character | format_effector
-        ;
-#endif
-
-
-// basic_graphic_character ::=                                          [§ 13.1]
-// upper_case_letter | digit | special_character| space_character
-auto const basic_graphic_character_def =
-        upper_case_letter
-      | digit
-      | special_character
-      | space_character
-      ;
-
 
 
 // basic_identifier ::=                                                 [§ 13.3]
@@ -2173,11 +2159,11 @@ auto const expression_def =
 // \ graphic_character { graphic_character } <backslash>
 namespace detail {
 
-    auto const extended_identifier_chars = x3::rule<struct _, std::string_view> { "extended_identifier (chars)" } =
+    auto const extended_identifier_chars = x3::rule<struct _, std::string_view> { "extended_identifier" } =
          +( graphic_character - char_('\\') )
          ;
 
-    auto const extended_identifier_atom = x3::rule<struct _, std::string_view> { "extended_identifier (atom)" } =
+    auto const extended_identifier_atom = x3::rule<struct _, std::string_view> { "extended_identifier" } =
         raw[ lexeme [
                char_('\\')
             >> extended_identifier_chars
@@ -2201,14 +2187,14 @@ auto const extended_identifier_def =
 //     | not primary
 namespace detail {
 
-    auto const factor_binary_expr = x3::rule<struct _, ast::factor_binary_operation> { "factor (binary)" } =
+    auto const factor_binary_expr = x3::rule<struct _, ast::factor_binary_operation> { "factor" } =
            primary
         >> binary_miscellaneous_operator // ** (exponent)
         >> primary
         ;
 
     // ABS >> primary | NOT >> primary
-    auto const factor_unary_expr = x3::rule<struct _, ast::factor_unary_operation> { "factor (unary)" } =
+    auto const factor_unary_expr = x3::rule<struct _, ast::factor_unary_operation> { "factor" } =
         unary_miscellaneous_operator >> primary // ABS | NOT
         ;
 }
@@ -2350,15 +2336,6 @@ auto const generic_map_aspect_def =
         GENERIC MAP '(' generic_association_list )
 ;
 #endif
-
-
-// graphic_character ::=                                                [§ 13.1]
-// basic_graphic_character | lower_case_letter | other_special_character
-auto const graphic_character_def =
-      basic_graphic_character
-    | lower_case_letter
-    | other_special_character
-    ;
 
 
 #if 0
