@@ -2951,7 +2951,7 @@ auto const primary_def = // FixMe: support other alternatives
       name
     | literal
     //     | aggregate
-    //     | function_call
+    | function_call
     //     | qualified_expression
     //     | type_conversion
     //     | allocator
