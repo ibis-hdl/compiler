@@ -32,6 +32,7 @@ namespace x3 = boost::spirit::x3;
  * https://stackoverflow.com/questions/29132809/using-boostspiritqi-to-parse-numbers-with-separators
  * https://github.com/boostorg/spirit/compare/master...sehe:so_q29132809
  * http://coliru.stacked-crooked.com/a/d45cc286c63c104d
+ * https://sourceforge.net/p/spirit/mailman/message/14462904/
  */
 namespace parser {
 
