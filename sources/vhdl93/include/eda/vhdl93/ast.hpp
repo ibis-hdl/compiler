@@ -196,7 +196,7 @@
 //#include <eda/vhdl93/ast/scalar_type_definition.hpp>
 //#include <eda/vhdl93/ast/secondary_unit.hpp>
 //#include <eda/vhdl93/ast/secondary_unit_declaration.hpp>
-//#include <eda/vhdl93/ast/selected_name.hpp>
+#include <eda/vhdl93/ast/selected_name.hpp>
 //#include <eda/vhdl93/ast/selected_signal_assignment.hpp>
 //#include <eda/vhdl93/ast/selected_waveforms.hpp>
 //#include <eda/vhdl93/ast/sensitivity_clause.hpp>

@@ -666,7 +666,7 @@ typedef x3::rule<physical_type_definition_class> physical_type_definition_type;
 typedef x3::rule<port_clause_class> port_clause_type;
 typedef x3::rule<port_list_class> port_list_type;
 typedef x3::rule<port_map_aspect_class> port_map_aspect_type;
-typedef x3::rule<prefix_class> prefix_type;
+typedef x3::rule<prefix_class, ast::prefix> prefix_type;
 typedef x3::rule<primary_class, ast::primary> primary_type;
 typedef x3::rule<primary_unit_class> primary_unit_type;
 typedef x3::rule<procedure_call_class> procedure_call_type;
@@ -685,7 +685,7 @@ typedef x3::rule<return_statement_class> return_statement_type;
 typedef x3::rule<scalar_type_definition_class> scalar_type_definition_type;
 typedef x3::rule<secondary_unit_class> secondary_unit_type;
 typedef x3::rule<secondary_unit_declaration_class> secondary_unit_declaration_type;
-typedef x3::rule<selected_name_class> selected_name_type;
+typedef x3::rule<selected_name_class, ast::selected_name> selected_name_type;
 typedef x3::rule<selected_signal_assignment_class> selected_signal_assignment_type;
 typedef x3::rule<selected_waveforms_class> selected_waveforms_type;
 typedef x3::rule<sensitivity_clause_class> sensitivity_clause_type;
@@ -2927,15 +2927,15 @@ auto const port_map_aspect_def =
 ;
 #endif
 
-#if 0
-// prefix ::=
+
+// prefix ::=                                                            [§ 6.1]
 // name
 //     | function_call
 auto const prefix_def =
-        name
-        | function_call
-        ;
-#endif
+      name
+    | function_call
+    ;
+
 
 
 // primary ::=                                                           [§ 7.1]
@@ -3157,13 +3157,17 @@ auto const secondary_unit_declaration_def =
 ;
 #endif
 
-#if 0
-// selected_name ::=
+
+// selected_name ::=                                                     [§ 6.3]
 // prefix . suffix
 auto const selected_name_def =
-        prefix . suffix
-        ;
-#endif
+    x3::lexeme[
+           prefix
+        >> '.'
+        >> suffix
+    ]
+    ;
+
 
 #if 0
 // selected_signal_assignment ::=
@@ -3827,7 +3831,7 @@ BOOST_SPIRIT_DEFINE(
         //    scalar_type_definition,
         //    secondary_unit,
         //    secondary_unit_declaration,
-        //    selected_name,
+        selected_name,
         //    selected_signal_assignment,
         //    selected_waveforms,
         //    sensitivity_clause,

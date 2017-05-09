@@ -1456,9 +1456,9 @@ void printer::operator()(port_map_aspect const &node)
 
 void printer::operator()(prefix const &node)
 {
-    static char const symbol[]{ "XXX prefix" };
+    static char const symbol[]{ "prefix" };
     symbol_scope<prefix> _(*this, symbol);
-    //visit(node);
+    visit(node);
 }
 
 
@@ -1617,9 +1617,12 @@ void printer::operator()(secondary_unit_declaration const &node)
 
 void printer::operator()(selected_name const &node)
 {
-    static char const symbol[]{ "XXX selected_name" };
+    static char const symbol[]{ "selected_name" };
     symbol_scope<selected_name> _(*this, symbol);
-    //os << node;
+
+    visit(node.prefix);
+    os << ".\n";
+    visit(node.suffix);
 }
 
 

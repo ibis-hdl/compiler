@@ -1698,6 +1698,7 @@ function_call
 | function_call_001 | the_function_name ( actual_parameter_part ) | (function_call                                |
 |                   |                                             |   the_function_name ( actual_parameter_part ) |
 |                   |                                             | )                                             |
+|                   |                                             |                                               |
 +-------------------+---------------------------------------------+-----------------------------------------------+
 
 ==========

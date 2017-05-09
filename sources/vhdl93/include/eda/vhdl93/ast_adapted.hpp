@@ -80,6 +80,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::relation,
     shift_expression, rest
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::selected_name,
+    prefix, suffix
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::shift_expression::chunk,
     operator_, simple_expression
 )
