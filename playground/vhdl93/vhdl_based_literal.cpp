@@ -25,7 +25,14 @@ namespace x3 = boost::spirit::x3;
  * The parser code is basically a copy of the relevant spirit x3 code, with
  * changes inside the extract_int SPIRIT_NUMERIC_INNER_LOOP code to allow
  * separator '_'. Works so far, but looks fragile on changes by the x3
- * developer. */
+ * developer.
+ *
+ * Also, read here:
+ * Using boost::spirit::qi to parse numbers with separators
+ * https://stackoverflow.com/questions/29132809/using-boostspiritqi-to-parse-numbers-with-separators
+ * https://github.com/boostorg/spirit/compare/master...sehe:so_q29132809
+ * http://coliru.stacked-crooked.com/a/d45cc286c63c104d
+ */
 namespace parser {
 
 namespace detail {
