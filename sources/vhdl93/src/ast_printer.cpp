@@ -1297,14 +1297,6 @@ void printer::operator()(loop_statement const &node)
 }
 
 
-void printer::operator()(mode const &node)
-{
-    static char const symbol[]{ "XXX mode" };
-    symbol_scope<mode> _(*this, symbol);
-    //visit(node);
-}
-
-
 void printer::operator()(name const &node)
 {
     static char const symbol[]{ "name" };

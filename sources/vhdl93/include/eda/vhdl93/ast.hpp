@@ -157,7 +157,6 @@
 //#include <eda/vhdl93/ast/logical_name.hpp>
 //#include <eda/vhdl93/ast/logical_name_list.hpp>
 //#include <eda/vhdl93/ast/loop_statement.hpp>
-//#include <eda/vhdl93/ast/mode.hpp>
 #include <eda/vhdl93/ast/name.hpp>
 //#include <eda/vhdl93/ast/next_statement.hpp>
 //#include <eda/vhdl93/ast/null_statement.hpp>

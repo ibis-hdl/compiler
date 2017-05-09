@@ -419,7 +419,6 @@ struct literal_class;
 struct logical_name_class;
 struct logical_name_list_class;
 struct loop_statement_class;
-struct mode_class;
 struct name_class;
 struct next_statement_class;
 struct null_statement_class;
@@ -648,7 +647,6 @@ typedef x3::rule<literal_class, ast::literal> literal_type;
 typedef x3::rule<logical_name_class> logical_name_type;
 typedef x3::rule<logical_name_list_class> logical_name_list_type;
 typedef x3::rule<loop_statement_class> loop_statement_type;
-typedef x3::rule<mode_class> mode_type;
 typedef x3::rule<name_class, ast::name> name_type;
 typedef x3::rule<next_statement_class> next_statement_type;
 typedef x3::rule<null_statement_class> null_statement_type;
@@ -877,7 +875,6 @@ literal_type const literal { "literal" };
 logical_name_type const logical_name { "logical_name" };
 logical_name_list_type const logical_name_list { "logical_name_list" };
 loop_statement_type const loop_statement { "loop_statement" };
-mode_type const mode { "mode" };
 name_type const name { "name" };
 next_statement_type const next_statement { "next_statement" };
 null_statement_type const null_statement { "null_statement" };
@@ -2661,8 +2658,8 @@ auto const loop_statement_def =
 ;
 #endif
 
-#if 0
-// mode ::=
+#if 0 /* Note: UNUSED, using x3::symbols with keyword_token */
+// mode ::=                                                            [§ 4.3.2]
 // in | out | inout | buffer | linkage
 auto const mode_def =
         IN | OUT | INOUT | BUFFER | LINKAGE

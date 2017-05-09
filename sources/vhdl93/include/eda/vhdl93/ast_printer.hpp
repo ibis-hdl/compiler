@@ -407,7 +407,6 @@ public:
     void operator()(logical_name const& node);
     void operator()(logical_name_list const& node);
     void operator()(loop_statement const& node);
-    void operator()(mode const& node);
     void operator()(name const& node);
     void operator()(next_statement const& node);
     void operator()(null_statement const& node);

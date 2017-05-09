@@ -37,14 +37,12 @@ auto kw = [](auto xx) {
     return x3::lexeme [ x3::no_case[ xx ] >> !(iso8859_1::alnum | '_') ];
 };
 
-auto const ABS = kw("abs");
 auto const ACCESS = kw("access");
 auto const AFTER = kw("after");
 auto const ALIAS = kw("alias");
 auto const ALL = as_type<ast::keyword_token>(
     kw("all") >> x3::attr(ast::keyword_token::ALL)
 );
-auto const AND = kw("and");
 auto const ARCHITECTURE = kw("architecture");
 auto const ARRAY = kw("array");
 auto const ASSERT = kw("assert");
@@ -52,7 +50,6 @@ auto const ATTRIBUTE = kw("attribute");
 auto const BEGIN = kw("begin");
 auto const BLOCK = kw("block");
 auto const BODY = kw("body");
-auto const BUFFER = kw("buffer");
 auto const BUS = as_type<ast::keyword_token>(
     kw("bus") >> x3::attr(ast::keyword_token::BUS)
 );
@@ -78,35 +75,26 @@ auto const GROUP = kw("group");
 auto const GUARDED = kw("guarded");
 auto const IF = kw("if");
 auto const IMPURE = kw("impure");
-auto const IN = kw("in");
 auto const INERTIAL = kw("inertial");
-auto const INOUT = kw("inout");
 auto const IS = kw("is");
 auto const LABEL = kw("label");
 auto const LIBRARY = kw("library");
-auto const LINKAGE = kw("linkage");
 auto const LITERAL = as_type<ast::keyword_token>(
     kw("literal") >> x3::attr(ast::keyword_token::LITERAL)
 );
 auto const LOOP = kw("loop");
 auto const MAP = kw("map");
-auto const MOD = kw("mod");
-auto const NAND = kw("nand");
 auto const NEW = kw("new");
 auto const NEXT = kw("next");
-auto const NOR = kw("nor");
-auto const NOT = kw("not");
 auto const NULL = as_type<ast::keyword_token>(
     kw("null") >> x3::attr(ast::keyword_token::NULL)
 );
 auto const OF = kw("of");
 auto const ON = kw("on");
 auto const OPEN = kw("open");
-auto const OR = kw("or");
 auto const OTHERS = as_type<ast::keyword_token>(
     kw("others") >> x3::attr(ast::keyword_token::OTHERS)
 );
-auto const OUT = kw("out");
 auto const PACKAGE = kw("package");
 auto const PORT = kw("port");
 auto const POSTPONED = kw("postponed");
@@ -119,19 +107,12 @@ auto const REGISTER = as_type<ast::keyword_token>(
     kw("register") >> x3::attr(ast::keyword_token::REGISTER)
 );
 auto const REJECT = kw("reject");
-auto const REM = kw("rem");
 auto const REPORT = kw("report");
 auto const RETURN = kw("return");
-auto const ROL = kw("rol");
-auto const ROR = kw("ror");
 auto const SELECT = kw("select");
 auto const SEVERITY = kw("severity");
 auto const SIGNAL = kw("signal");
 auto const SHARED = kw("shared");
-auto const SLA = kw("sla");
-auto const SLL = kw("sll");
-auto const SRA = kw("sra");
-auto const SRL = kw("srl");
 auto const SUBTYPE = kw("subtype");
 auto const THEN = kw("then");
 auto const TO = as_type<ast::keyword_token>(
@@ -148,8 +129,6 @@ auto const WAIT = kw("wait");
 auto const WHEN = kw("when");
 auto const WHILE = kw("while");
 auto const WITH = kw("with");
-auto const XNOR = kw("xnor");
-auto const XOR = kw("xor");
 
 
 /*
@@ -184,6 +163,29 @@ struct keyword_symbols : x3::symbols<> {
 
 auto const keyword = x3::rule<struct _> { "keyword" } =
     kw( keywords )
+    ;
+
+
+/*
+ * Symbols for mode
+ */
+struct mode_symbols : x3::symbols<ast::keyword_token> {
+    //IN | OUT | INOUT | BUFFER | LINKAGE
+    mode_symbols() {
+
+        name("mode");
+
+        add("in"     , ast::keyword_token::IN)
+           ("out"    , ast::keyword_token::OUT)
+           ("inout"  , ast::keyword_token::INOUT)
+           ("buffer" , ast::keyword_token::BUFFER)
+           ("linkage", ast::keyword_token::LINKAGE)
+           ;
+    }
+} const mode_symbols;
+
+auto const mode = x3::rule<struct _> { "mode" } =
+    kw( mode_symbols )
     ;
 
 
