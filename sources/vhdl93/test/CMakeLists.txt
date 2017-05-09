@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.6)
 
 ## EDA/VHDL93 project TestBench
-project(test_vhdl93 LANGUAGES CXX)
+project(test_vhdl93_parser LANGUAGES CXX)
 
 set(BIN_SOURCES
     data_set.cpp
-    basic_production_rules.cpp
-    production_rules.cpp
-    test_vhdl93.cpp
+    parser_literals.cpp
+    parser_expression.cpp
+    test_vhdl93_parser.cpp
 )
 
 add_executable(${PROJECT_NAME} ${BIN_SOURCES})
