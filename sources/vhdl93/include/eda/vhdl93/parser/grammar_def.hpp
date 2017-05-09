@@ -606,7 +606,7 @@ typedef x3::rule<formal_designator_class> formal_designator_type;
 typedef x3::rule<formal_parameter_list_class> formal_parameter_list_type;
 typedef x3::rule<formal_part_class> formal_part_type;
 typedef x3::rule<full_type_declaration_class> full_type_declaration_type;
-typedef x3::rule<function_call_class> function_call_type;
+typedef x3::rule<function_call_class, ast::function_call> function_call_type;
 typedef x3::rule<generate_statement_class> generate_statement_type;
 typedef x3::rule<generation_scheme_class> generation_scheme_type;
 typedef x3::rule<generic_clause_class> generic_clause_type;
@@ -2275,13 +2275,29 @@ auto const full_type_declaration_def =
 ;
 #endif
 
-#if 0
-// function_call ::=
+
+// function_call ::=                                                   [§ 7.3.3]
 // function_name [ ( actual_parameter_part ) ]
-auto const function_call_def =
-        function_name -( '(' actual_parameter_part ')' )
+namespace detail {
+
+    auto const function_name = x3::rule<struct _, ast::function_name>{ "function_name" } =
+        identifier;
+
+
+    auto const actual_parameter_part = x3::rule<struct _, std::string>{ "actual_parameter_part" } =
+        +(char_ - char_(')'))
         ;
-#endif
+
+}
+/* FixMe: actual_parameter_part -> parameter_association_list; also string_view mess */
+auto const function_call_def =
+       detail::function_name
+    >> -(  '('
+        >> detail::actual_parameter_part
+        >> ')'
+        )
+    ;
+
 
 #if 0
 // generate_statement ::=
@@ -3731,7 +3747,7 @@ BOOST_SPIRIT_DEFINE(
         //    formal_parameter_list,
         //    formal_part,
         //    full_type_declaration,
-        //    function_call,
+        function_call,
         //    generate_statement,
         //    generation_scheme,
         //    generic_clause,

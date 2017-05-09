@@ -976,9 +976,11 @@ void printer::operator()(full_type_declaration const &node)
 
 void printer::operator()(function_call const &node)
 {
-    static char const symbol[]{ "XXX function_call" };
+    static char const symbol[]{ "function_call" };
     symbol_scope<function_call> _(*this, symbol);
-    //os << node;
+
+    os << node.name.name
+       << " ( " << node.actual_parameter_part << " )";
 }
 
 

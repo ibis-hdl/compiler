@@ -7,6 +7,7 @@ set(BIN_SOURCES
     data_set.cpp
     parser_literals.cpp
     parser_expression.cpp
+    parser_production.cpp
     test_vhdl93_parser.cpp
 )
 
@@ -51,7 +52,7 @@ set_property(TARGET boost-system PROPERTY IMPORTED_LOCATION ${Boost_SYSTEM_LIBRA
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
-    eda::vhdl93_grammar
+    eda::vhdl93_parser
     eda::common # FixMe: shouldn't this depency propagated by eda::vhdl93_grammar?
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}
@@ -90,7 +91,7 @@ target_include_directories(make_gold PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>)
 target_link_libraries(make_gold
     PRIVATE
-    eda::vhdl93_grammar
+    eda::vhdl93_parser
     eda::common # FixMe: shouldn't this depency propagated by eda::vhdl93_grammar?
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}

@@ -116,7 +116,7 @@
 //#include <eda/vhdl93/ast/formal_parameter_list.hpp>
 //#include <eda/vhdl93/ast/formal_part.hpp>
 //#include <eda/vhdl93/ast/full_type_declaration.hpp>
-//#include <eda/vhdl93/ast/function_call.hpp>
+#include <eda/vhdl93/ast/function_call.hpp>
 //#include <eda/vhdl93/ast/generate_statement.hpp>
 //#include <eda/vhdl93/ast/generation_scheme.hpp>
 //#include <eda/vhdl93/ast/generic_clause.hpp>

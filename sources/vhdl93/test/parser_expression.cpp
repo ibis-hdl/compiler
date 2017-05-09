@@ -1,5 +1,5 @@
 /*
- * production_rules.cpp
+ * parser_expression.cpp
  *
  *  Created on: 02.04.2017
  *      Author: olaf
@@ -15,7 +15,7 @@
 #include "testing_parser.hpp"
 
 
-BOOST_AUTO_TEST_SUITE( productions )
+BOOST_AUTO_TEST_SUITE( parser_expression )
 
 
 namespace x3 = boost::spirit::x3;

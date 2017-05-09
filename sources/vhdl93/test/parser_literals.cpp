@@ -1,5 +1,5 @@
 /*
- * basic_production_rules.cpp
+ * parser_literals.cpp
  *
  *  Created on: 01.03.2017
  *      Author: olaf
@@ -14,7 +14,7 @@
 #include "testing_parser.hpp"
 
 
-BOOST_AUTO_TEST_SUITE( basic_productions )
+BOOST_AUTO_TEST_SUITE( parser_literals )
 
 
 namespace x3 = boost::spirit::x3;
