@@ -35,6 +35,7 @@ is also useful.
 There are also public online resources, especially for VHDL's BNF only:
 - http://www.amos.eguru-il.com/vhdl_info/vhdl87_syntax.html
 - http://www.amos.eguru-il.com/vhdl_info/vhdl93_syntax.html
+- http://insights.sigasi.com/tech/vhdl2008.ebnf.html
 
 This is not the first attempt to write an VHDL parser.
 [Parsing VHDL is [very] hard](http://eli.thegreenplace.net/2009/05/19/parsing-vhdl-is-very-hard)
