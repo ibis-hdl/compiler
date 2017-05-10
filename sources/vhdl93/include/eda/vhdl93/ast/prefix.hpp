@@ -20,13 +20,23 @@
 
 namespace eda { namespace vhdl93 { namespace ast {
 
-
+#if 0
 using prefix = x3::variant<
     nullary,
     name,
     function_call
 >;
-
+#else
+struct prefix : x3::variant<
+    nullary,
+    name,
+    function_call
+>
+{
+    using base_type::base_type;
+    using base_type::operator=;
+};
+#endif
 
 } } } // namespace eda.vhdl93.ast
 

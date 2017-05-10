@@ -22,15 +22,27 @@
 
 namespace eda { namespace vhdl93 { namespace ast {
 
-
+#if 0
 using suffix = x3::variant<
-	nullary,
-	simple_name,
-	character_literal,
-	// operator_symbol,
-	keyword_token
+    nullary,
+    simple_name,
+    character_literal,
+    operator_symbol,
+    keyword_token
 >;
-
+#else
+struct suffix : x3::variant<
+    nullary,
+    simple_name,
+    character_literal,
+    operator_symbol,
+    keyword_token
+>
+{
+    using base_type::base_type;
+    using base_type::operator=;
+};
+#endif
 
 } } } // namespace eda.vhdl93.ast
 

@@ -22,13 +22,13 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 
 using name = x3::variant<
-	nullary,
-	// attribute_name,
-	// indexed_name,
-	operator_symbol,
-	// selected_name,
-	simple_name
-	// slice_name
+    nullary,
+    // attribute_name,
+    // indexed_name,
+    operator_symbol,
+    // selected_name,
+    simple_name
+    // slice_name
 >;
 
 

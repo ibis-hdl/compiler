@@ -711,7 +711,7 @@ typedef x3::rule<subprogram_specification_class> subprogram_specification_type;
 typedef x3::rule<subprogram_statement_part_class> subprogram_statement_part_type;
 typedef x3::rule<subtype_declaration_class> subtype_declaration_type;
 typedef x3::rule<subtype_indication_class> subtype_indication_type;
-typedef x3::rule<suffix_class> suffix_type;
+typedef x3::rule<suffix_class, ast::suffix> suffix_type;
 typedef x3::rule<target_class> target_type;
 typedef x3::rule<term_class, ast::term> term_type;
 typedef x3::rule<timeout_clause_class> timeout_clause_type;
@@ -3812,7 +3812,7 @@ BOOST_SPIRIT_DEFINE(
         //    port_clause,
         //    port_list,
         //    port_map_aspect,
-        //    prefix,
+        prefix,
         primary,
         //    primary_unit,
         //    procedure_call,
