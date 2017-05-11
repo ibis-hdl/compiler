@@ -229,7 +229,7 @@
 //#include <eda/vhdl93/ast/type_declaration.hpp>
 //#include <eda/vhdl93/ast/type_definition.hpp>
 //#include <eda/vhdl93/ast/unconstrained_array_definition.hpp>
-//#include <eda/vhdl93/ast/use_clause.hpp>
+#include <eda/vhdl93/ast/use_clause.hpp>
 //#include <eda/vhdl93/ast/variable_assignment_statement.hpp>
 //#include <eda/vhdl93/ast/variable_declaration.hpp>
 //#include <eda/vhdl93/ast/wait_statement.hpp>

@@ -1,0 +1,17 @@
+(use_clause
+  (name<v>
+    (simple_name
+      ieee
+    )
+  ).
+  (name<v>
+    (simple_name
+      math_real
+    )
+  ).
+  (suffix<v>
+    (simple_name
+      MATH_PI
+    )
+  )
+)

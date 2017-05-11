@@ -121,8 +121,13 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::term,
     factor, rest_list
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::use_clause::selected_name,
+    prefix_list, suffix
+)
 
-
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::use_clause,
+    list
+)
 
 
 #endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_ADAPTED_HPP_ */

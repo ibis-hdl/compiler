@@ -720,7 +720,7 @@ typedef x3::rule<type_declaration_class> type_declaration_type;
 typedef x3::rule<type_definition_class> type_definition_type;
 typedef x3::rule<type_mark_class, std::string_view> type_mark_type;
 typedef x3::rule<unconstrained_array_definition_class> unconstrained_array_definition_type;
-typedef x3::rule<use_clause_class> use_clause_type;
+typedef x3::rule<use_clause_class, ast::use_clause> use_clause_type;
 typedef x3::rule<variable_assignment_statement_class> variable_assignment_statement_type;
 typedef x3::rule<variable_declaration_class> variable_declaration_type;
 typedef x3::rule<wait_statement_class> wait_statement_type;
@@ -3570,7 +3570,8 @@ auto const type_definition_def =
 //     | subtype_name
 /* Note, there is no way to distinguish between type_name and subtype_name at
  * parser level. It's used as simple string parser for symantic sugar at parser
- * level exposing a std::string_view attribute. */
+ * level exposing a std::string_view attribute. Further read
+ * [Question about type_mark bnf](https://groups.google.com/forum/#!topic/comp.lang.vhdl/exUhoMrFavU) */
 auto const type_mark_def =
     identifier
     ;
@@ -3585,13 +3586,55 @@ auto const unconstrained_array_definition_def =
         ;
 #endif
 
-#if 0
-// use_clause ::=
+
+// use_clause ::=                                                       [§ 10.4]
 // use selected_name { , selected_name } ;
+namespace use_clause_detail {
+
+    /* LRM93 [§6.3] defined a concept of an expanded name: A selected name (in
+     * the syntactic sense) that denotes one or all of the primary units in a
+     * library or any named entity within a primary unit.
+     * [...]
+     * The prefix of an expanded name may not be a function call.
+     *
+     * For the use clause hence an specialized version is required. See Notes
+     * at the AST node ast::use_clause. */
+
+    auto const lib_prefix = x3::rule<prefix_class, std::list<ast::name>> { "prefix" } =
+        name >> '.' >> name;
+
+    auto const pkg_prefix = x3::rule<prefix_class, std::list<ast::name>> { "prefix" } =
+        x3::repeat(1)[ // enforce artificial vector
+            name
+        ];
+
+    auto const lib_selected_name = x3::rule<selected_name_class, ast::use_clause::selected_name> { "selected_name" } =
+        x3::lexeme[
+               lib_prefix
+            >> '.'
+            >> suffix
+        ]
+        ;
+
+    auto const pkg_selected_name = x3::rule<selected_name_class, ast::use_clause::selected_name> { "selected_name" } =
+        x3::lexeme[
+               pkg_prefix
+            >> '.'
+            >> suffix
+        ]
+        ;
+
+    auto const selected_name = x3::rule<selected_name_class, ast::use_clause::selected_name> { "selected_name" } =
+          lib_selected_name
+        | pkg_selected_name
+        ;
+}
 auto const use_clause_def =
-        USE selected_name >> ( selected_name % ',' ) > ';'
-;
-#endif
+       USE
+    >> ( use_clause_detail::selected_name % ',' )
+    >  ';'
+    ;
+
 
 #if 0
 // variable_assignment_statement ::=
@@ -3867,7 +3910,7 @@ BOOST_SPIRIT_DEFINE(
         //    type_definition,
         //    type_mark,
         //    unconstrained_array_definition,
-        //    use_clause,
+        use_clause,
         //    variable_assignment_statement,
         //    variable_declaration,
         //    wait_statement,

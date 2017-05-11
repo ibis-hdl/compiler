@@ -1,0 +1,22 @@
+(use_clause
+  (name<v>
+    (simple_name
+      MKS
+    )
+  ).
+  (suffix<v>
+    (simple_name
+      MEASUREMENTS
+    )
+  ),
+  (name<v>
+    (simple_name
+      STD
+    )
+  ).
+  (suffix<v>
+    (simple_name
+      STANDARD
+    )
+  )
+)

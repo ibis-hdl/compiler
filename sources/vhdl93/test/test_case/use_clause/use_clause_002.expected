@@ -1,0 +1,17 @@
+(use_clause
+  (name<v>
+    (simple_name
+      ieee
+    )
+  ).
+  (name<v>
+    (simple_name
+      std_logic_1164
+    )
+  ).
+  (suffix<v>
+    (keyword
+      ALL
+    )
+  )
+)

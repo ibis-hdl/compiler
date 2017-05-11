@@ -1620,9 +1620,9 @@ void printer::operator()(selected_name const &node)
     static char const symbol[]{ "selected_name" };
     symbol_scope<selected_name> _(*this, symbol);
 
-    visit(node.prefix);
+    (*this)(node.prefix);
     os << ".\n";
-    visit(node.suffix);
+    (*this)(node.suffix);
 }
 
 
@@ -1945,9 +1945,19 @@ void printer::operator()(unconstrained_array_definition const &node)
 
 void printer::operator()(use_clause const &node)
 {
-    static char const symbol[]{ "XXX use_clause" };
+    static char const symbol[]{ "use_clause" };
     symbol_scope<use_clause> _(*this, symbol);
-    //os << node;
+
+    auto const N = node.list.size() - 1;
+    unsigned i = 0;
+    for(auto const& selected_name : node.list) {
+        for(auto const& name : selected_name.prefix_list) {
+            (*this)(name);
+            os << ".\n";
+        }
+        (*this)(selected_name.suffix);
+        if(i++ != N) { os << ",\n"; }
+    }
 }
 
 
