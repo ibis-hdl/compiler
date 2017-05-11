@@ -16,7 +16,7 @@
 //#include <eda/vhdl93/ast/actual_part.hpp>
 //#include <eda/vhdl93/ast/aggregate.hpp>
 //#include <eda/vhdl93/ast/alias_declaration.hpp>
-//#include <eda/vhdl93/ast/alias_designator.hpp>
+#include <eda/vhdl93/ast/alias_designator.hpp>
 //#include <eda/vhdl93/ast/allocator.hpp>
 //#include <eda/vhdl93/ast/architecture_body.hpp>
 //#include <eda/vhdl93/ast/architecture_declarative_part.hpp>

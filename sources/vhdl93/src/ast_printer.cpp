@@ -146,9 +146,9 @@ void printer::operator()(alias_declaration const &node)
 
 void printer::operator()(alias_designator const &node)
 {
-    static char const symbol[]{ "XXX alias_designator" };
+    static char const symbol[]{ "alias_designator" };
     symbol_scope<alias_designator> _(*this, symbol);
-    //visit(node);
+    (*this)(node);
 }
 
 

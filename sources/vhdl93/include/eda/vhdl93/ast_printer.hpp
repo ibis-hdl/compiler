@@ -21,7 +21,6 @@ struct actual_parameter_part;
 struct actual_part;
 struct aggregate;
 struct alias_declaration;
-struct alias_designator;
 struct allocator;
 struct architecture_body;
 struct architecture_declarative_part;

@@ -509,7 +509,7 @@ typedef x3::rule<actual_parameter_part_class> actual_parameter_part_type;
 typedef x3::rule<actual_part_class> actual_part_type;
 typedef x3::rule<aggregate_class> aggregate_type;
 typedef x3::rule<alias_declaration_class> alias_declaration_type;
-typedef x3::rule<alias_designator_class> alias_designator_type;
+typedef x3::rule<alias_designator_class, ast::alias_designator> alias_designator_type;
 typedef x3::rule<allocator_class> allocator_type;
 typedef x3::rule<architecture_body_class> architecture_body_type;
 typedef x3::rule<architecture_declarative_part_class> architecture_declarative_part_type;
@@ -1110,13 +1110,15 @@ auto const alias_declaration_def =
 ;
 #endif
 
-#if 0
-// alias_designator ::=
+
+// alias_designator ::=                                                [§ 4.3.3]
 // identifier | character_literal | operator_symbol
 auto const alias_designator_def =
-        identifier | character_literal | operator_symbol
-        ;
-#endif
+      identifier
+    | character_literal
+    | operator_symbol
+    ;
+
 
 #if 0
 // allocator ::=
@@ -3705,7 +3707,7 @@ BOOST_SPIRIT_DEFINE(
         //    actual_part,
         //    aggregate,
         //    alias_declaration,
-        //    alias_designator,
+        alias_designator,
         //    allocator,
         //    architecture_body,
         //    architecture_declarative_part,
