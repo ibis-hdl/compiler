@@ -1260,34 +1260,12 @@ void printer::operator()(library_clause const &node)
     unsigned i = 0;
     for(auto const& logical_name : node.logical_name_list) {
         (*this)(logical_name);
-        if(i++ != N) { os << ",\n"; }
+        if(i++ != N) {
+            os << ",\n";
+        }
     }
 
 }
-//auto const N = node.list.size() - 1;
-//unsigned i = 0;
-//for(auto const& selected_name : node.list) {
-//    for(auto const& name : selected_name.prefix_list) {
-//        (*this)(name);
-//        os << ".\n";
-//    }
-//    (*this)(selected_name.suffix);
-//    if(i++ != N) { os << ",\n"; }
-//}
-
-//struct library_clause : position_tagged
-//{
-//    struct logical_name  : ast::identifier
-//    {
-//        logical_name& operator=(std::string_view&& sv)
-//        {
-//            name = std::move(sv);
-//            return *this;
-//        }
-//    };
-//
-//    std::list<logical_name>        logical_name_list;
-//};
 
 
 void printer::operator()(library_unit const &node)
