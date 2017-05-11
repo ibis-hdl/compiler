@@ -22,7 +22,6 @@
       )
     )
   ),
-  ,
   operator: MUL,
   (primary<v>
     (literal<v>
@@ -34,6 +33,5 @@
         )
       )
     )
-  ),
-  
+  )
 )
