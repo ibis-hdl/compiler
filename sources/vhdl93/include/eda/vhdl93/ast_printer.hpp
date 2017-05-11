@@ -150,8 +150,6 @@ struct iteration_scheme;
 struct label;
 struct library_clause;
 struct library_unit;
-struct logical_name;
-struct logical_name_list;
 struct loop_statement;
 struct mode;
 struct next_statement;
@@ -393,8 +391,6 @@ public:
     void operator()(library_clause const& node);
     void operator()(library_unit const& node);
     void operator()(literal const& node);
-    void operator()(logical_name const& node);
-    void operator()(logical_name_list const& node);
     void operator()(loop_statement const& node);
     void operator()(name const& node);
     void operator()(next_statement const& node);

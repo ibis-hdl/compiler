@@ -1253,10 +1253,41 @@ void printer::operator()(label const &node)
 
 void printer::operator()(library_clause const &node)
 {
-    static char const symbol[]{ "XXX library_clause" };
+    static char const symbol[]{ "library_clause" };
     symbol_scope<library_clause> _(*this, symbol);
-    //os << node;
+
+    auto const N = node.logical_name_list.size() - 1;
+    unsigned i = 0;
+    for(auto const& logical_name : node.logical_name_list) {
+        (*this)(logical_name);
+        if(i++ != N) { os << ",\n"; }
+    }
+
 }
+//auto const N = node.list.size() - 1;
+//unsigned i = 0;
+//for(auto const& selected_name : node.list) {
+//    for(auto const& name : selected_name.prefix_list) {
+//        (*this)(name);
+//        os << ".\n";
+//    }
+//    (*this)(selected_name.suffix);
+//    if(i++ != N) { os << ",\n"; }
+//}
+
+//struct library_clause : position_tagged
+//{
+//    struct logical_name  : ast::identifier
+//    {
+//        logical_name& operator=(std::string_view&& sv)
+//        {
+//            name = std::move(sv);
+//            return *this;
+//        }
+//    };
+//
+//    std::list<logical_name>        logical_name_list;
+//};
 
 
 void printer::operator()(library_unit const &node)
@@ -1272,22 +1303,6 @@ void printer::operator()(literal const &node)
     static char const symbol[]{ "literal" };
     symbol_scope<literal> _(*this, symbol);
     visit(node);
-}
-
-
-void printer::operator()(logical_name const &node)
-{
-    static char const symbol[]{ "XXX logical_name" };
-    symbol_scope<logical_name> _(*this, symbol);
-    //os << node;
-}
-
-
-void printer::operator()(logical_name_list const &node)
-{
-    static char const symbol[]{ "XXX logical_name_list" };
-    symbol_scope<logical_name_list> _(*this, symbol);
-    //os << node;
 }
 
 

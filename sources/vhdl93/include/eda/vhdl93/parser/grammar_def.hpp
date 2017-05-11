@@ -644,8 +644,8 @@ typedef x3::rule<letter_or_digit_class, char> letter_or_digit_type;
 typedef x3::rule<library_clause_class> library_clause_type;
 typedef x3::rule<library_unit_class> library_unit_type;
 typedef x3::rule<literal_class, ast::literal> literal_type;
-typedef x3::rule<logical_name_class> logical_name_type;
-typedef x3::rule<logical_name_list_class> logical_name_list_type;
+//typedef x3::rule<logical_name_class> logical_name_type;
+//typedef x3::rule<logical_name_list_class, ast::library_clause::l> logical_name_list_type;
 typedef x3::rule<loop_statement_class> loop_statement_type;
 typedef x3::rule<name_class, ast::name> name_type;
 typedef x3::rule<next_statement_class> next_statement_type;
@@ -872,8 +872,8 @@ letter_or_digit_type const letter_or_digit { "letter_or_digit" };
 library_clause_type const library_clause { "library_clause" };
 library_unit_type const library_unit { "library_unit" };
 literal_type const literal { "literal" };
-logical_name_type const logical_name { "logical_name" };
-logical_name_list_type const logical_name_list { "logical_name_list" };
+//logical_name_type const logical_name { "logical_name" };
+//logical_name_list_type const logical_name_list { "logical_name_list" };
 loop_statement_type const loop_statement { "loop_statement" };
 name_type const name { "name" };
 next_statement_type const next_statement { "next_statement" };
@@ -2610,13 +2610,23 @@ auto const letter_or_digit_def =
     ;
 
 
-#if 0
-// library_clause ::=
+
+// library_clause ::=                                                   [§ 11.2]
 // library logical_name_list ;
+namespace library_clause_detail {
+
+    auto const logical_name = x3::rule<logical_name_class, ast::library_clause::logical_name> { "logical_name" } =
+        identifier
+        ;
+
+    auto const logical_name_list = x3::rule<logical_name_list_class, ast::library_clause> { "logical_name_list" } =
+        logical_name % ','
+        ;
+}
 auto const library_clause_def =
-        LIBRARY logical_name_list > ';'
-;
-#endif
+    LIBRARY >> library_clause_detail::logical_name_list > ';'
+    ;
+
 
 #if 0
 // library_unit ::=
@@ -2644,20 +2654,20 @@ auto const literal_def = /* Note, order changed since matters */
     ;
 
 
-#if 0
-// logical_name ::=
+#if 0 /* UNUSED; embedded into library_clause rule */
+// logical_name ::=                                                     [§ 11.2]
 // identifier
 auto const logical_name_def =
-        identifier
-        ;
+    identifier
+    ;
 #endif
 
-#if 0
-// logical_name_list ::=
+#if 0 /* UNUSED; embedded into library_clause rule */
+// logical_name_list ::=                                                [§ 11.2]
 // logical_name { , logical_name }
 auto const logical_name_list_def =
-        logical_name >> ( logical_name % ',' )
-        ;
+    logical_name % ','
+    ;
 #endif
 
 #if 0
@@ -3829,11 +3839,9 @@ BOOST_SPIRIT_DEFINE(
         //    label,
         letter,
         letter_or_digit,
-        //    library_clause,
+        library_clause,
         //    library_unit,
         literal,
-        //    logical_name,
-        //    logical_name_list,
         //    loop_statement,
         //    mode,
         name,

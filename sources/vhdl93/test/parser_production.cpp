@@ -117,7 +117,7 @@ BOOST_DATA_TEST_CASE( xxxx,
 {
     using x3_test::testing_parser;
 
-    typedef ast::selected_name attribute_type;
+    typedef ast::library_clause attribute_type;
 
     // avoid warning, used in case of error for error message by boost.test
     boost::ignore_unused(file);
@@ -126,7 +126,7 @@ BOOST_DATA_TEST_CASE( xxxx,
     std::string parse_result {};
 
     testing_parser<attribute_type> parse;
-    std::tie(parse_ok, parse_result) = parse(input, parser::selected_name);
+    std::tie(parse_ok, parse_result) = parse(input, parser::library_clause);
 
     BOOST_TEST(parse_ok);
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");

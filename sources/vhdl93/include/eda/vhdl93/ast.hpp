@@ -151,11 +151,9 @@
 //#include <eda/vhdl93/ast/label.hpp>
 //#include <eda/vhdl93/ast/letter.hpp>
 //#include <eda/vhdl93/ast/letter_or_digit.hpp>
-//#include <eda/vhdl93/ast/library_clause.hpp>
+#include <eda/vhdl93/ast/library_clause.hpp>
 //#include <eda/vhdl93/ast/library_unit.hpp>
 #include <eda/vhdl93/ast/literal.hpp>
-//#include <eda/vhdl93/ast/logical_name.hpp>
-//#include <eda/vhdl93/ast/logical_name_list.hpp>
 //#include <eda/vhdl93/ast/loop_statement.hpp>
 #include <eda/vhdl93/ast/name.hpp>
 //#include <eda/vhdl93/ast/next_statement.hpp>
