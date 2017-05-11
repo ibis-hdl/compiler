@@ -645,7 +645,7 @@ typedef x3::rule<library_clause_class> library_clause_type;
 typedef x3::rule<library_unit_class> library_unit_type;
 typedef x3::rule<literal_class, ast::literal> literal_type;
 //typedef x3::rule<logical_name_class> logical_name_type;
-//typedef x3::rule<logical_name_list_class, ast::library_clause::l> logical_name_list_type;
+//typedef x3::rule<logical_name_list_class> logical_name_list_type;
 typedef x3::rule<loop_statement_class> loop_statement_type;
 typedef x3::rule<name_class, ast::name> name_type;
 typedef x3::rule<next_statement_class> next_statement_type;
