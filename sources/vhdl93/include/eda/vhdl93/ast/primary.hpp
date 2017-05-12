@@ -28,18 +28,44 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 struct expression;
 
+// primary ::=
+//      name
+//    | literal
+//    | aggregate
+//    | function_call
+//    | qualified_expression
+//    | type_conversion
+//    | allocator
+//    | ( expression )
+#if 0
 using primary = x3::variant<
     nullary,
     // aggregate,
     // allocator,
-    x3::forward_ast<expression>, // break cycle
+    expression,
     function_call,
     literal,
     name
     // qualified_expression,
     // type_conversion
 >;
-
+#else
+struct primary : x3::variant<
+    nullary,
+    // aggregate,
+    // allocator,
+    x3::forward_ast<expression>,
+    function_call,
+    literal,
+    name
+    // qualified_expression,
+    // type_conversion
+>
+{
+    using base_type::base_type;
+    using base_type::operator=;
+};
+#endif
 
 } } } // namespace eda.vhdl93.ast
 
