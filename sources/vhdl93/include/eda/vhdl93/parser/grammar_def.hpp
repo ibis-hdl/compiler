@@ -2708,7 +2708,11 @@ auto const mode_def =
 auto const name_def =
       simple_name
 //      | operator_symbol // FixMe: disabled, conflicts with primary.literal.string_literal
+<<<<<<< HEAD
 //    | selected_name // FixMe: Crash in  "parser_expression/primary": memory access violation
+=======
+    | selected_name
+>>>>>>> branch 'master' of /home/olaf/work/CXX/ibis.git
 //    | indexed_name
 //    | slice_name
 //    | attribute_name
