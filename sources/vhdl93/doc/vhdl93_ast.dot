@@ -1,44 +1,59 @@
 graph ast_variant {
 
-    //abstract_literal -- nullary;
     abstract_literal -- decimal_literal
     abstract_literal -- based_literal;
 
-    //numeric_literal -- nullary;
     numeric_literal -- abstract_literal;
     numeric_literal -- physical_literal;
 
-    //enumeration_literal -- nullary;
     enumeration_literal -- identifier;
     enumeration_literal -- character_literal;
 
-    //literal -- nullary;
     literal -- bit_string_literal;
     literal -- enumeration_literal;
-    literal -- keyword_token;
     literal -- numeric_literal;
     literal -- string_literal;
+    //literal -- keyword_token;
 
-    //name -- nullary;
-    name -- operator_symbol;
     name -- simple_name;
+    name -- operator_symbol;
+    name -- selected_name;
+    name -- indexed_name;
+    name -- slice_name;
+    name -- attribute_name;
 
-    //factor -- nullary;
     factor -- primary;
     factor -- factor_binary_operation;
     factor -- factor_unary_operation;
 
-    //primary -- nullary;
-    primary -- literal;
+    prefix -- name;
+    prefix -- function_call;
+
     primary -- name;
+    primary -- literal;
+    primary -- aggregate;
+    primary -- function_call;
+    primary -- qualified_expression;
+    primary -- type_conversion;
+    primary -- allocator;
     primary -- expression;
 
-    //signal_list -- nullary;
     signal_list -- signal_list_names;
-    signal_list -- keyword_token;
+    //signal_list -- keyword_token;
 
-    //suffix -- nullary;
     suffix -- simple_name;
     suffix -- character_literal;
-    suffix -- keyword_token;
+    suffix -- operator_symbol;
+    //suffix -- keyword_token;
+
+    selected_name -- prefix;
+    selected_name -- suffix;
+
+    indexed_name -- prefix;
+    indexed_name -- expression;
+
+    expression -- relation;
+    relation -- shift_expression;
+    shift_expression -- simple_expression;
+    simple_expression -- term;
 }
