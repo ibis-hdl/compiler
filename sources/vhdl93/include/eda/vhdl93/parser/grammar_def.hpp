@@ -2705,10 +2705,10 @@ auto const mode_def =
 //     | indexed_name
 //     | slice_name
 //     | attribute_name
-auto const name_def =  // FixMe: support other alternatives
-        simple_name
+auto const name_def =
+      simple_name
 //      | operator_symbol // FixMe: disabled, conflicts with primary.literal.string_literal
-//    | selected_name
+    | selected_name
 //    | indexed_name
 //    | slice_name
 //    | attribute_name
