@@ -28,11 +28,27 @@ struct signal_list_names
 };
 
 
+// signal_list ::=
+//           signal_name { , signal_name }
+//         | others
+//         | all
+#if 0
 using signal_list = x3::variant<
-	nullary,
-	signal_list_names,
-	keyword_token           // OTHERS | ALL
+    nullary,
+    signal_list_names,
+    keyword_token           // OTHERS | ALL
 >;
+#else
+struct signal_list : x3::variant<
+    nullary,
+    signal_list_names,
+    keyword_token           // OTHERS | ALL
+>
+{
+    using base_type::base_type;
+    using base_type::operator=;
+};
+#endif
 
 
 } } } // namespace eda.vhdl93.ast
