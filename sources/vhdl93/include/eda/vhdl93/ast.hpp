@@ -104,10 +104,10 @@
 #include <eda/vhdl93/ast/enumeration_literal.hpp>
 #include <eda/vhdl93/ast/enumeration_type_definition.hpp>
 //#include <eda/vhdl93/ast/exit_statement.hpp>
-#include <eda/vhdl93/ast/expression.hpp>
+//XXX#include <eda/vhdl93/ast/expression.hpp>
 //#include <eda/vhdl93/ast/extended_digit.hpp>
 //#include <eda/vhdl93/ast/extended_identifier.hpp>
-#include <eda/vhdl93/ast/factor.hpp>
+//XXX #include <eda/vhdl93/ast/factor.hpp>
 //#include <eda/vhdl93/ast/file_declaration.hpp>
 //#include <eda/vhdl93/ast/file_logical_name.hpp>
 //#include <eda/vhdl93/ast/file_open_information.hpp>
@@ -138,7 +138,6 @@
 #include <eda/vhdl93/ast/indexed_name.hpp>
 //#include <eda/vhdl93/ast/instantiated_unit.hpp>
 //#include <eda/vhdl93/ast/instantiation_list.hpp>
-//#include <eda/vhdl93/ast/integer.hpp>
 //#include <eda/vhdl93/ast/integer_type_definition.hpp>
 //#include <eda/vhdl93/ast/interface_constant_declaration.hpp>
 //#include <eda/vhdl93/ast/interface_declaration.hpp>
@@ -149,8 +148,6 @@
 //#include <eda/vhdl93/ast/interface_variable_declaration.hpp>
 //#include <eda/vhdl93/ast/iteration_scheme.hpp>
 //#include <eda/vhdl93/ast/label.hpp>
-//#include <eda/vhdl93/ast/letter.hpp>
-//#include <eda/vhdl93/ast/letter_or_digit.hpp>
 #include <eda/vhdl93/ast/library_clause.hpp>
 //#include <eda/vhdl93/ast/library_unit.hpp>
 #include <eda/vhdl93/ast/literal.hpp>
@@ -175,7 +172,7 @@
 //#include <eda/vhdl93/ast/port_clause.hpp>
 //#include <eda/vhdl93/ast/port_list.hpp>
 //#include <eda/vhdl93/ast/port_map_aspect.hpp>
-//#include <eda/vhdl93/ast/prefix.hpp>
+//XXX#include <eda/vhdl93/ast/prefix.hpp>
 #include <eda/vhdl93/ast/primary.hpp>
 //#include <eda/vhdl93/ast/primary_unit.hpp>
 //#include <eda/vhdl93/ast/procedure_call.hpp>
@@ -219,7 +216,7 @@
 //#include <eda/vhdl93/ast/subprogram_statement_part.hpp>
 //#include <eda/vhdl93/ast/subtype_declaration.hpp>
 //#include <eda/vhdl93/ast/subtype_indication.hpp>
-#include <eda/vhdl93/ast/suffix.hpp>
+//XXX#include <eda/vhdl93/ast/suffix.hpp>
 //#include <eda/vhdl93/ast/target.hpp>
 #include <eda/vhdl93/ast/term.hpp>
 //#include <eda/vhdl93/ast/timeout_clause.hpp>

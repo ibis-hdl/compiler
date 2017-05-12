@@ -14,6 +14,8 @@
 #include <eda/vhdl93/ast/nullary.hpp>
 #include <eda/vhdl93/ast/simple_name.hpp>
 #include <eda/vhdl93/ast/operator_symbol.hpp>
+#include <eda/vhdl93/ast/selected_name.hpp>
+#include <eda/vhdl93/ast/indexed_name.hpp>
 
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
 
@@ -42,9 +44,9 @@ using name = x3::variant<
 struct name : x3::variant<
     nullary,
     simple_name,
-    operator_symbol
-    // indexed_name,
-    // selected_name,
+    operator_symbol,
+    selected_name
+    //indexed_name
     // slice_name
     // attribute_name,
 >
