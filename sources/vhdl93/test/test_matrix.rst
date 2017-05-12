@@ -1856,46 +1856,94 @@ identifier_list
 indexed_name
 ============
 
-+------------------+--------------------------------------------+---------------------------------------------+
-| File             | Input                                      | Expected                                    |
-+------------------+--------------------------------------------+---------------------------------------------+
-| indexed_name_001 | --  An element of a one-dimensional array. | (indexed_name                               |
-|                  | REGISTER_ARRAY(5)                          |   (prefix<v>                                |
-|                  |                                            |     (name<v>                                |
-|                  |                                            |       (simple_name                          |
-|                  |                                            |         REGISTER_ARRAY                      |
-|                  |                                            |       )                                     |
-|                  |                                            |     )                                       |
-|                  |                                            |   )                                         |
-|                  |                                            |   (expression                               |
-|                  |                                            |     (relation                               |
-|                  |                                            |       (shift_expression                     |
-|                  |                                            |         (simple_expression                  |
-|                  |                                            |           term: (term                       |
-|                  |                                            |             (primary<v>                     |
-|                  |                                            |               (literal<v>                   |
-|                  |                                            |                 (numeric_literal<v>         |
-|                  |                                            |                   (abstract_literal<v>      |
-|                  |                                            |                     (decimal_literal        |
-|                  |                                            |                       literal: 5, hint: int |
-|                  |                                            |                     )                       |
-|                  |                                            |                   )                         |
-|                  |                                            |                 )                           |
-|                  |                                            |               )                             |
-|                  |                                            |             )                               |
-|                  |                                            |           )                                 |
-|                  |                                            |         )                                   |
-|                  |                                            |       )                                     |
-|                  |                                            |     )                                       |
-|                  |                                            |   )                                         |
-|                  |                                            | )                                           |
-+------------------+--------------------------------------------+---------------------------------------------+
-| indexed_name_002 | --  An element of a two-dimensional array. |                                             |
-|                  | MEMORY_CELL(1024,7)                        |                                             |
-|                  |                                            |                                             |
-+------------------+--------------------------------------------+---------------------------------------------+
-| indexed_name_003 |                                            |                                             |
-+------------------+--------------------------------------------+---------------------------------------------+
++------------------+--------------------------------------------+------------------------------------------------+
+| File             | Input                                      | Expected                                       |
++------------------+--------------------------------------------+------------------------------------------------+
+| indexed_name_001 | --  An element of a one-dimensional array. | (indexed_name                                  |
+|                  | REGISTER_ARRAY(5)                          |   (prefix<v>                                   |
+|                  |                                            |     (name<v>                                   |
+|                  |                                            |       (simple_name                             |
+|                  |                                            |         REGISTER_ARRAY                         |
+|                  |                                            |       )                                        |
+|                  |                                            |     )                                          |
+|                  |                                            |   )                                            |
+|                  |                                            |   (expression                                  |
+|                  |                                            |     (relation                                  |
+|                  |                                            |       (shift_expression                        |
+|                  |                                            |         (simple_expression                     |
+|                  |                                            |           term: (term                          |
+|                  |                                            |             (primary<v>                        |
+|                  |                                            |               (literal<v>                      |
+|                  |                                            |                 (numeric_literal<v>            |
+|                  |                                            |                   (abstract_literal<v>         |
+|                  |                                            |                     (decimal_literal           |
+|                  |                                            |                       literal: 5, hint: int    |
+|                  |                                            |                     )                          |
+|                  |                                            |                   )                            |
+|                  |                                            |                 )                              |
+|                  |                                            |               )                                |
+|                  |                                            |             )                                  |
+|                  |                                            |           )                                    |
+|                  |                                            |         )                                      |
+|                  |                                            |       )                                        |
+|                  |                                            |     )                                          |
+|                  |                                            |   )                                            |
+|                  |                                            | )                                              |
+|                  |                                            |                                                |
++------------------+--------------------------------------------+------------------------------------------------+
+| indexed_name_002 | --  An element of a two-dimensional array. | (indexed_name                                  |
+|                  | MEMORY_CELL(1024,7)                        |   (prefix<v>                                   |
+|                  |                                            |     (name<v>                                   |
+|                  |                                            |       (simple_name                             |
+|                  |                                            |         MEMORY_CELL                            |
+|                  |                                            |       )                                        |
+|                  |                                            |     )                                          |
+|                  |                                            |   )                                            |
+|                  |                                            |   (expression                                  |
+|                  |                                            |     (relation                                  |
+|                  |                                            |       (shift_expression                        |
+|                  |                                            |         (simple_expression                     |
+|                  |                                            |           term: (term                          |
+|                  |                                            |             (primary<v>                        |
+|                  |                                            |               (literal<v>                      |
+|                  |                                            |                 (numeric_literal<v>            |
+|                  |                                            |                   (abstract_literal<v>         |
+|                  |                                            |                     (decimal_literal           |
+|                  |                                            |                       literal: 1024, hint: int |
+|                  |                                            |                     )                          |
+|                  |                                            |                   )                            |
+|                  |                                            |                 )                              |
+|                  |                                            |               )                                |
+|                  |                                            |             )                                  |
+|                  |                                            |           )                                    |
+|                  |                                            |         )                                      |
+|                  |                                            |       )                                        |
+|                  |                                            |     )                                          |
+|                  |                                            |   ),                                           |
+|                  |                                            |   (expression                                  |
+|                  |                                            |     (relation                                  |
+|                  |                                            |       (shift_expression                        |
+|                  |                                            |         (simple_expression                     |
+|                  |                                            |           term: (term                          |
+|                  |                                            |             (primary<v>                        |
+|                  |                                            |               (literal<v>                      |
+|                  |                                            |                 (numeric_literal<v>            |
+|                  |                                            |                   (abstract_literal<v>         |
+|                  |                                            |                     (decimal_literal           |
+|                  |                                            |                       literal: 7, hint: int    |
+|                  |                                            |                     )                          |
+|                  |                                            |                   )                            |
+|                  |                                            |                 )                              |
+|                  |                                            |               )                                |
+|                  |                                            |             )                                  |
+|                  |                                            |           )                                    |
+|                  |                                            |         )                                      |
+|                  |                                            |       )                                        |
+|                  |                                            |     )                                          |
+|                  |                                            |   )                                            |
+|                  |                                            | )                                              |
+|                  |                                            |                                                |
++------------------+--------------------------------------------+------------------------------------------------+
 
 =======
 integer
