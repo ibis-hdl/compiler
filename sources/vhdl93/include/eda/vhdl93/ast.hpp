@@ -135,7 +135,7 @@
 //#include <eda/vhdl93/ast/index_constraint.hpp>
 //#include <eda/vhdl93/ast/index_specification.hpp>
 //#include <eda/vhdl93/ast/index_subtype_definition.hpp>
-//#include <eda/vhdl93/ast/indexed_name.hpp>
+#include <eda/vhdl93/ast/indexed_name.hpp>
 //#include <eda/vhdl93/ast/instantiated_unit.hpp>
 //#include <eda/vhdl93/ast/instantiation_list.hpp>
 //#include <eda/vhdl93/ast/integer.hpp>

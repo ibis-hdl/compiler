@@ -133,7 +133,6 @@ struct incomplete_type_declaration;
 struct index_constraint;
 struct index_specification;
 struct index_subtype_definition;
-struct indexed_name;
 struct instantiated_unit;
 struct instantiation_list;
 struct integer;

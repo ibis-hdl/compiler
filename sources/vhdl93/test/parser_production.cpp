@@ -99,6 +99,42 @@ BOOST_DATA_TEST_CASE( use_clause,
 
 
 /*
+ * indexed_name
+ */
+struct indexed_name_dataset : public ::x3_test::dataset_loader
+{
+    indexed_name_dataset()
+    : dataset_loader{ "test_case/indexed_name" }
+    { }
+} const indexed_name_dataset;
+
+
+BOOST_DATA_TEST_CASE( indexed_name,
+      indexed_name_dataset.input()
+    ^ indexed_name_dataset.expect()
+    ^ indexed_name_dataset.test_file_name(),
+    input, expect, file)
+{
+    using x3_test::testing_parser;
+
+    typedef ast::indexed_name attribute_type;
+
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
+
+    bool parse_ok{ false };
+    std::string parse_result {};
+
+    testing_parser<attribute_type> parse;
+    std::tie(parse_ok, parse_result) = parse(input, parser::indexed_name);
+
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expect, btt::per_element());
+}
+
+
+/*
  * XXXX
  */
 struct xxx_dataset : public ::x3_test::dataset_loader

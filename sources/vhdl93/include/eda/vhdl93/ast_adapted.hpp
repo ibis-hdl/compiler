@@ -63,6 +63,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::identifier_list,
     list
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::indexed_name,
+    prefix, expression_list
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::library_clause,
     logical_name_list
 )

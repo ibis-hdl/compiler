@@ -1,0 +1,30 @@
+(indexed_name
+  (prefix<v>
+    (name<v>
+      (simple_name
+        REGISTER_ARRAY
+      )
+    )
+  )
+  (expression
+    (relation
+      (shift_expression
+        (simple_expression
+          term: (term
+            (primary<v>
+              (literal<v>
+                (numeric_literal<v>
+                  (abstract_literal<v>
+                    (decimal_literal
+                      literal: 5, hint: int
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

@@ -29,7 +29,7 @@ struct library_clause : position_tagged
         }
     };
 
-    std::list<logical_name>        logical_name_list;
+    std::vector<logical_name>       logical_name_list;
 };
 
 

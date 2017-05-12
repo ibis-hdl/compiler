@@ -1141,9 +1141,20 @@ void printer::operator()(index_subtype_definition const &node)
 
 void printer::operator()(indexed_name const &node)
 {
-    static char const symbol[]{ "XXX indexed_name" };
+    static char const symbol[]{ "indexed_name" };
     symbol_scope<indexed_name> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.prefix);
+    os << "\n";
+
+    auto const N = node.expression_list.size() - 1;
+    unsigned i = 0;
+    for(auto const& expression : node.expression_list) {
+        (*this)(expression);
+        if(i++ != N) {
+            os << ",\n";
+        }
+    }
 }
 
 
@@ -1264,7 +1275,6 @@ void printer::operator()(library_clause const &node)
             os << ",\n";
         }
     }
-
 }
 
 

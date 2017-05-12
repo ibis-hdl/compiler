@@ -625,7 +625,7 @@ typedef x3::rule<incomplete_type_declaration_class> incomplete_type_declaration_
 typedef x3::rule<index_constraint_class> index_constraint_type;
 typedef x3::rule<index_specification_class> index_specification_type;
 typedef x3::rule<index_subtype_definition_class> index_subtype_definition_type;
-typedef x3::rule<indexed_name_class> indexed_name_type;
+typedef x3::rule<indexed_name_class, ast::indexed_name> indexed_name_type;
 typedef x3::rule<instantiated_unit_class> instantiated_unit_type;
 typedef x3::rule<instantiation_list_class> instantiation_list_type;
 typedef x3::rule<integer_class, std::string_view> integer_type;
@@ -2466,13 +2466,16 @@ auto const index_subtype_definition_def =
 ;
 #endif
 
-#if 0
-// indexed_name ::=
+
+// indexed_name ::=                                                      [§ 6.4]
 // prefix ( expression { , expression } )
 auto const indexed_name_def =
-        prefix '(' expression >> ( expression % ',' ) )
-;
-#endif
+       prefix
+    >> '('
+    >> ( expression % ',' )
+    >> ')'
+    ;
+
 
 #if 0
 // instantiated_unit ::=
@@ -3825,7 +3828,7 @@ BOOST_SPIRIT_DEFINE(
         //    index_constraint,
         //    index_specification,
         //    index_subtype_definition,
-        //    indexed_name,
+        indexed_name,
         //    instantiated_unit,
         //    instantiation_list,
         integer,
