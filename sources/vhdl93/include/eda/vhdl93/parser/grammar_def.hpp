@@ -2699,20 +2699,16 @@ auto const mode_def =
 
 
 // name ::=                                                              [§ 6.1]
-// simple_name
+//       simple_name
 //     | operator_symbol
 //     | selected_name
 //     | indexed_name
 //     | slice_name
 //     | attribute_name
 auto const name_def =
-      simple_name
+       simple_name
 //      | operator_symbol // FixMe: disabled, conflicts with primary.literal.string_literal
-<<<<<<< HEAD
 //    | selected_name // FixMe: Crash in  "parser_expression/primary": memory access violation
-=======
-    | selected_name
->>>>>>> branch 'master' of /home/olaf/work/CXX/ibis.git
 //    | indexed_name
 //    | slice_name
 //    | attribute_name
