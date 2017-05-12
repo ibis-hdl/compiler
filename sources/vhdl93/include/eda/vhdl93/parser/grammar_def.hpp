@@ -2708,7 +2708,7 @@ auto const mode_def =
 auto const name_def =
       simple_name
 //      | operator_symbol // FixMe: disabled, conflicts with primary.literal.string_literal
-//    | selected_name
+//    | selected_name // FixMe: Crash in  "parser_expression/primary": memory access violation
 //    | indexed_name
 //    | slice_name
 //    | attribute_name
@@ -2944,7 +2944,7 @@ auto const port_map_aspect_def =
 
 
 // prefix ::=                                                            [§ 6.1]
-// name
+//       name
 //     | function_call
 auto const prefix_def =
       name
