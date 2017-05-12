@@ -14,11 +14,10 @@
 
 
 #include <eda/vhdl93/ast/nullary.hpp>
-//#include <eda/vhdl93/ast/expression.hpp>
-#include <eda/vhdl93/ast/function_call.hpp>
-#include <eda/vhdl93/ast/literal.hpp>
 #include <eda/vhdl93/ast/name.hpp>
-
+#include <eda/vhdl93/ast/literal.hpp>
+#include <eda/vhdl93/ast/function_call.hpp>
+//#include <eda/vhdl93/ast/expression.hpp>
 
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
 
@@ -52,14 +51,14 @@ using primary = x3::variant<
 #else
 struct primary : x3::variant<
     nullary,
-    // aggregate,
-    // allocator,
-    x3::forward_ast<expression>,
-    function_call,
+    name,
     literal,
-    name
+    // aggregate,
+    function_call,
     // qualified_expression,
-    // type_conversion
+    // type_conversion,
+    // allocator,
+    x3::forward_ast<expression>
 >
 {
     using base_type::base_type;

@@ -56,4 +56,16 @@ graph ast_variant {
     relation -- shift_expression;
     shift_expression -- simple_expression;
     simple_expression -- term;
+
+    slice_name -- prefix;
+    slice_name -- discrete_range;
+
+    attribute_name -- prefix;
+    attribute_name -- signature;
+    attribute_name -- attribute_designator;
+    attribute_name -- expression;
+
+    signature -- type_mark;
+
+    attribute_designator -- attribute_simple_name;
 }
