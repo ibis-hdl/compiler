@@ -13,6 +13,7 @@
 
 #include <eda/vhdl93/ast/nullary.hpp>
 #include <eda/vhdl93/ast/primary.hpp>
+#include <eda/vhdl93/ast/operator_token.hpp>
 
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
 
@@ -47,18 +48,30 @@ struct factor_unary_operation : position_tagged
 };
 
 
-/*
- * factor ::=
- *     primary [ ** primary ]
- *     | ABS primary
- *     | NOT primary
- */
+
+// factor ::=
+//     primary [ ** primary ]
+//     | ABS primary
+//     | NOT primary
+#if 0
 using factor = x3::variant<
-	nullary,
-	primary,
-	factor_binary_operation,
-	factor_unary_operation
+    nullary,
+    primary,
+    factor_binary_operation,
+    factor_unary_operation
 >;
+#else
+struct factor : x3::variant<
+    nullary,
+    primary,
+    factor_binary_operation,
+    factor_unary_operation
+>
+{
+    using base_type::base_type;
+    using base_type::operator=;
+};
+#endif
 
 
 } } } // namespace eda.vhdl93.ast
