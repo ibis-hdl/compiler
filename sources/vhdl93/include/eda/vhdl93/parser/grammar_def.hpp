@@ -1029,6 +1029,22 @@ auto const graphic_character_def =
     ;
 
 
+// letter ::=                                                         [§ 13.3.1]
+// upper_case_letter | lower_case_letter
+auto const letter_def =
+    upper_case_letter | lower_case_letter
+    ;
+
+
+
+// letter_or_digit ::=                                                [§ 13.3.1]
+// letter | digit
+auto const letter_or_digit_def =
+    letter | digit
+    ;
+
+
+
 
 /*
  * Parser helper
@@ -2598,22 +2614,6 @@ auto const label_def =
         identifier
         ;
 #endif
-
-
-// letter ::=                                                         [§ 13.3.1]
-// upper_case_letter | lower_case_letter
-auto const letter_def =
-    upper_case_letter | lower_case_letter
-    ;
-
-
-
-// letter_or_digit ::=                                                [§ 13.3.1]
-// letter | digit
-auto const letter_or_digit_def =
-    letter | digit
-    ;
-
 
 
 // library_clause ::=                                                   [§ 11.2]
