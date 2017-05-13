@@ -551,8 +551,8 @@ typedef x3::rule<concurrent_assertion_statement_class> concurrent_assertion_stat
 typedef x3::rule<concurrent_procedure_call_statement_class> concurrent_procedure_call_statement_type;
 typedef x3::rule<concurrent_signal_assignment_statement_class> concurrent_signal_assignment_statement_type;
 typedef x3::rule<concurrent_statement_class> concurrent_statement_type;
-typedef x3::rule<condition_class> condition_type;
-typedef x3::rule<condition_clause_class> condition_clause_type;
+typedef x3::rule<condition_class, ast::condition> condition_type;
+typedef x3::rule<condition_clause_class, ast::condition_clause> condition_clause_type;
 typedef x3::rule<conditional_signal_assignment_class> conditional_signal_assignment_type;
 typedef x3::rule<conditional_waveforms_class> conditional_waveforms_type;
 typedef x3::rule<configuration_declaration_class> configuration_declaration_type;
@@ -638,7 +638,7 @@ typedef x3::rule<interface_list_class> interface_list_type;
 typedef x3::rule<interface_signal_declaration_class> interface_signal_declaration_type;
 typedef x3::rule<interface_variable_declaration_class> interface_variable_declaration_type;
 typedef x3::rule<iteration_scheme_class> iteration_scheme_type;
-typedef x3::rule<label_class> label_type;
+typedef x3::rule<label_class, ast::label> label_type;
 typedef x3::rule<letter_class, char> letter_type;
 typedef x3::rule<letter_or_digit_class, char> letter_or_digit_type;
 typedef x3::rule<library_clause_class> library_clause_type;
@@ -714,7 +714,7 @@ typedef x3::rule<subtype_indication_class> subtype_indication_type;
 typedef x3::rule<suffix_class, ast::suffix> suffix_type;
 typedef x3::rule<target_class> target_type;
 typedef x3::rule<term_class, ast::term> term_type;
-typedef x3::rule<timeout_clause_class> timeout_clause_type;
+typedef x3::rule<timeout_clause_class, ast::timeout_clause> timeout_clause_type;
 typedef x3::rule<type_conversion_class> type_conversion_type;
 typedef x3::rule<type_declaration_class> type_declaration_type;
 typedef x3::rule<type_definition_class> type_definition_type;
@@ -723,7 +723,7 @@ typedef x3::rule<unconstrained_array_definition_class> unconstrained_array_defin
 typedef x3::rule<use_clause_class, ast::use_clause> use_clause_type;
 typedef x3::rule<variable_assignment_statement_class> variable_assignment_statement_type;
 typedef x3::rule<variable_declaration_class> variable_declaration_type;
-typedef x3::rule<wait_statement_class> wait_statement_type;
+typedef x3::rule<wait_statement_class, ast::wait_statement> wait_statement_type;
 typedef x3::rule<waveform_class> waveform_type;
 typedef x3::rule<waveform_element_class> waveform_element_type;
 
@@ -1053,6 +1053,15 @@ template<typename T>
 auto as_type = [](auto p) { return x3::rule<struct _, T>{ "as" } = x3::as_parser(p); };
 
 
+/*
+ * Common aliases used in BNF
+ */
+
+auto const boolean_expression = x3::rule<expression_class, ast::expression> { "boolean_expression" } =
+    expression;
+
+auto const time_expression = x3::rule<expression_class, ast::expression> { "time_expression" } =
+    expression;
 
 
 /*
@@ -1666,21 +1675,21 @@ auto const concurrent_statement_def =
         ;
 #endif
 
-#if 0
-// condition ::=
-// boolean_expression
-auto const condition_def =
-        boolean_expression
-        ;
-#endif
 
-#if 0
-// condition_clause ::=
-// until condition
+// condition ::=                                                         [§ 8.1]
+//     boolean_expression
+auto const condition_def =
+    boolean_expression
+    ;
+
+
+
+// condition_clause ::=                                                  [§ 8.1]
+//     until condition
 auto const condition_clause_def =
-        UNTIL condition
-        ;
-#endif
+    UNTIL >> condition
+    ;
+
 
 #if 0
 // conditional_signal_assignment ::=
@@ -2607,13 +2616,13 @@ auto const iteration_scheme_def =
         ;
 #endif
 
-#if 0
-// label ::=
-// identifier
+
+// label ::=                                                             [§ 9.7]
+//     identifier
 auto const label_def =
-        identifier
-        ;
-#endif
+    identifier
+    ;
+
 
 
 // library_clause ::=                                                   [§ 11.2]
@@ -2962,7 +2971,7 @@ auto const prefix_def =
 //     | type_conversion
 //     | allocator
 //     | ( expression )
-auto const primary_def = // FixMe: support other alternatives
+auto const primary_def =
       name
     | literal
     //     | aggregate
@@ -3206,7 +3215,7 @@ waveform WHEN choices
 
 
 // sensitivity_clause ::=                                                [§ 8.1]
-// on sensitivity_list
+//     on sensitivity_list
 auto const sensitivity_clause_def =
     ON >> sensitivity_list
     ;
@@ -3214,7 +3223,7 @@ auto const sensitivity_clause_def =
 
 
 // sensitivity_list ::=                                                  [§ 8.1]
-// signal_name { , signal_name }
+//     signal_name { , signal_name }
 namespace sensitivity_list_detail {
     auto const signal_name = x3::rule<struct signal_name, ast::name> { "signal_name" } =
         name
@@ -3544,13 +3553,13 @@ auto const term_def =
     ;
 
 
-#if 0
-// timeout_clause ::=
-// for time_expression
+
+// timeout_clause ::=                                                    [§ 8.1]
+//     for time_expression
 auto const timeout_clause_def =
-        FOR time_expression
-        ;
-#endif
+    FOR >> time_expression
+    ;
+
 
 #if 0
 // type_conversion ::=
@@ -3672,13 +3681,18 @@ auto const variable_declaration_def =
 ;
 #endif
 
-#if 0
-// wait_statement ::=
-// [ label : ] wait [ sensitivity_clause ] [ condition_clause ] [ timeout_clause ] ;
+
+// wait_statement ::=                                                    [§ 8.1]
+//     [ label : ] wait [ sensitivity_clause ] [ condition_clause ] [ timeout_clause ] ;
 auto const wait_statement_def =
-        -( LABEL > ':' ) WAIT -( sensitivity_clause ) -( condition_clause ) -( timeout_clause ) > ';'
-;
-#endif
+       -( label >> ':' )
+    >> WAIT
+    >> -sensitivity_clause
+    >> -condition_clause
+    >> -timeout_clause
+    > ';'
+    ;
+
 
 #if 0
 // waveform ::=
@@ -3759,8 +3773,8 @@ BOOST_SPIRIT_DEFINE(
         //    concurrent_procedure_call_statement,
         //    concurrent_signal_assignment_statement,
         //    concurrent_statement,
-        //    condition,
-        //    condition_clause,
+        condition,
+        condition_clause,
         //    conditional_signal_assignment,
         //    conditional_waveforms,
         //    configuration_declaration,
@@ -3846,7 +3860,7 @@ BOOST_SPIRIT_DEFINE(
         //    interface_signal_declaration,
         //    interface_variable_declaration,
         //    iteration_scheme,
-        //    label,
+        label,
         letter,
         letter_or_digit,
         library_clause,
@@ -3922,7 +3936,7 @@ BOOST_SPIRIT_DEFINE(
         suffix,
         //    target,
         term,
-        //    timeout_clause,
+        timeout_clause,
         //    type_conversion,
         //    type_declaration,
         //    type_definition,
@@ -3931,7 +3945,7 @@ BOOST_SPIRIT_DEFINE(
         use_clause,
         //    variable_assignment_statement,
         //    variable_declaration,
-        //    wait_statement,
+        wait_statement,
         waveform
         //    waveform_element
 );

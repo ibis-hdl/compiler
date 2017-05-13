@@ -145,7 +145,6 @@ struct interface_list;
 struct interface_signal_declaration;
 struct interface_variable_declaration;
 struct iteration_scheme;
-struct label;
 struct library_clause;
 struct library_unit;
 struct loop_statement;
@@ -430,6 +429,7 @@ public:
     void operator()(selected_signal_assignment const& node);
     void operator()(selected_waveforms const& node);
     void operator()(sensitivity_clause const& node);
+    void operator()(sensitivity_list const& node);
     void operator()(sequence_of_statements const& node);
     void operator()(sequential_statement const& node);
     void operator()(shift_expression const& node);

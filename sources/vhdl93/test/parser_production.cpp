@@ -135,6 +135,42 @@ BOOST_DATA_TEST_CASE( indexed_name,
 
 
 /*
+ * wait_statement
+ */
+struct wait_statement_dataset : public ::x3_test::dataset_loader
+{
+    wait_statement_dataset()
+    : dataset_loader{ "test_case/wait_statement" }
+    { }
+} const wait_statement_dataset;
+
+
+BOOST_DATA_TEST_CASE( wait_statement,
+      wait_statement_dataset.input()
+    ^ wait_statement_dataset.expect()
+    ^ wait_statement_dataset.test_file_name(),
+    input, expect, file)
+{
+    using x3_test::testing_parser;
+
+    typedef ast::wait_statement attribute_type;
+
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
+
+    bool parse_ok{ false };
+    std::string parse_result {};
+
+    testing_parser<attribute_type> parse;
+    std::tie(parse_ok, parse_result) = parse(input, parser::wait_statement);
+
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expect, btt::per_element());
+}
+
+
+/*
  * XXXX
  */
 struct xxx_dataset : public ::x3_test::dataset_loader

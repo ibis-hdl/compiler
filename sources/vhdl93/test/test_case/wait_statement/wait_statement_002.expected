@@ -1,0 +1,5 @@
+(wait_statement
+  (label
+    wait_label
+  )
+)

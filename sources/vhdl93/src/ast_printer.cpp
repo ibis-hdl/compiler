@@ -502,17 +502,17 @@ void printer::operator()(concurrent_statement const &node)
 
 void printer::operator()(condition const &node)
 {
-    static char const symbol[]{ "XXX condition" };
+    static char const symbol[]{ "condition" };
     symbol_scope<condition> _(*this, symbol);
-    //os << node;
+    (*this)(node.boolean_expression);
 }
 
 
 void printer::operator()(condition_clause const &node)
 {
-    static char const symbol[]{ "XXX condition_clause" };
+    static char const symbol[]{ "condition_clause" };
     symbol_scope<condition_clause> _(*this, symbol);
-    //os << node;
+    (*this)(node.condition);
 }
 
 
@@ -1256,9 +1256,9 @@ void printer::operator()(iteration_scheme const &node)
 
 void printer::operator()(label const &node)
 {
-    static char const symbol[]{ "XXX label" };
+    static char const symbol[]{ "label" };
     symbol_scope<label> _(*this, symbol);
-    //os << node;
+    os << node.name;
 }
 
 
@@ -1649,18 +1649,21 @@ void printer::operator()(sensitivity_clause const &node)
 {
     static char const symbol[]{ "sensitivity_clause" };
     symbol_scope<sensitivity_clause> _(*this, symbol);
+    (*this)(node.sensitivity_list);
+}
 
-    {
-        static char const symbol[]{ "sensitivity_list" };
-        symbol_scope<sensitivity_list> _(*this, symbol);
 
-        auto const N = node.sensitivity_list.size() - 1;
-        unsigned i = 0;
-        for(auto const& signal_name : node.sensitivity_list) {
-            (*this)(signal_name);
-            if(i++ != N) {
-                os << ",\n";
-            }
+void printer::operator()(sensitivity_list const& node)
+{
+    static char const symbol[]{ "sensitivity_list" };
+    symbol_scope<sensitivity_list> _(*this, symbol);
+
+    auto const N = node.size() - 1;
+    unsigned i = 0;
+    for(auto const& signal_name : node) {
+        (*this)(signal_name);
+        if(i++ != N) {
+            os << ",\n";
         }
     }
 }
@@ -1915,9 +1918,9 @@ void printer::operator()(term const &node)
 
 void printer::operator()(timeout_clause const &node)
 {
-    static char const symbol[]{ "XXX timeout_clause" };
+    static char const symbol[]{ "timeout_clause" };
     symbol_scope<timeout_clause> _(*this, symbol);
-    //os << node;
+    (*this)(node.time_expression);
 }
 
 
@@ -1991,9 +1994,21 @@ void printer::operator()(variable_declaration const &node)
 
 void printer::operator()(wait_statement const &node)
 {
-    static char const symbol[]{ "XXX wait_statement" };
+    static char const symbol[]{ "wait_statement" };
     symbol_scope<wait_statement> _(*this, symbol);
-    //os << node;
+
+    if(node.label) {
+        (*this)(node.label.value());
+    }
+    if(node.sensitivity_clause) {
+        (*this)(node.sensitivity_clause.value());
+    }
+    if(node.condition_clause) {
+        (*this)(node.condition_clause.value());
+    }
+    if(node.timeout_clause) {
+        (*this)(node.timeout_clause.value());
+    }
 }
 
 

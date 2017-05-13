@@ -3180,3 +3180,265 @@ use_clause
 |                |                                                                      | )                    |
 |                |                                                                      |                      |
 +----------------+----------------------------------------------------------------------+----------------------+
+
+==============
+wait_statement
+==============
+
++--------------------+----------------------------------+-----------------------------------------------------+
+| File               | Input                            | Expected                                            |
++--------------------+----------------------------------+-----------------------------------------------------+
+| wait_statement_001 | WAIT;                            | (wait_statement                                     |
+|                    |                                  |                                                     |
+|                    |                                  | )                                                   |
+|                    |                                  |                                                     |
++--------------------+----------------------------------+-----------------------------------------------------+
+| wait_statement_002 | wait_label: WAIT;                | (wait_statement                                     |
+|                    |                                  |   (label                                            |
+|                    |                                  |     wait_label                                      |
+|                    |                                  |   )                                                 |
+|                    |                                  | )                                                   |
+|                    |                                  |                                                     |
++--------------------+----------------------------------+-----------------------------------------------------+
+| wait_statement_003 | wait on A,B;                     | (wait_statement                                     |
+|                    |                                  |   (sensitivity_clause                               |
+|                    |                                  |     (sensitivity_list                               |
+|                    |                                  |       (name<v>                                      |
+|                    |                                  |         (simple_name                                |
+|                    |                                  |           A                                         |
+|                    |                                  |         )                                           |
+|                    |                                  |       ),                                            |
+|                    |                                  |       (name<v>                                      |
+|                    |                                  |         (simple_name                                |
+|                    |                                  |           B                                         |
+|                    |                                  |         )                                           |
+|                    |                                  |       )                                             |
+|                    |                                  |     )                                               |
+|                    |                                  |   )                                                 |
+|                    |                                  | )                                                   |
+|                    |                                  |                                                     |
++--------------------+----------------------------------+-----------------------------------------------------+
+| wait_statement_004 | dummy: WAIT on X,Y,Z;            | (wait_statement                                     |
+|                    |                                  |   (label                                            |
+|                    |                                  |     dummy                                           |
+|                    |                                  |   )(sensitivity_clause                              |
+|                    |                                  |     (sensitivity_list                               |
+|                    |                                  |       (name<v>                                      |
+|                    |                                  |         (simple_name                                |
+|                    |                                  |           X                                         |
+|                    |                                  |         )                                           |
+|                    |                                  |       ),                                            |
+|                    |                                  |       (name<v>                                      |
+|                    |                                  |         (simple_name                                |
+|                    |                                  |           Y                                         |
+|                    |                                  |         )                                           |
+|                    |                                  |       ),                                            |
+|                    |                                  |       (name<v>                                      |
+|                    |                                  |         (simple_name                                |
+|                    |                                  |           Z                                         |
+|                    |                                  |         )                                           |
+|                    |                                  |       )                                             |
+|                    |                                  |     )                                               |
+|                    |                                  |   )                                                 |
+|                    |                                  | )                                                   |
+|                    |                                  |                                                     |
++--------------------+----------------------------------+-----------------------------------------------------+
+| wait_statement_005 | wait until CLK='1';              | (wait_statement                                     |
+|                    |                                  |   (condition_clause                                 |
+|                    |                                  |     (condition                                      |
+|                    |                                  |       (expression                                   |
+|                    |                                  |         (relation                                   |
+|                    |                                  |           (shift_expression                         |
+|                    |                                  |             (simple_expression                      |
+|                    |                                  |               term: (term                           |
+|                    |                                  |                 (primary<v>                         |
+|                    |                                  |                   (name<v>                          |
+|                    |                                  |                     (simple_name                    |
+|                    |                                  |                       CLK                           |
+|                    |                                  |                     )                               |
+|                    |                                  |                   )                                 |
+|                    |                                  |                 )                                   |
+|                    |                                  |               )                                     |
+|                    |                                  |             )                                       |
+|                    |                                  |           ),                                        |
+|                    |                                  |           operator: EQUAL,                          |
+|                    |                                  |           (shift_expression                         |
+|                    |                                  |             (simple_expression                      |
+|                    |                                  |               term: (term                           |
+|                    |                                  |                 (primary<v>                         |
+|                    |                                  |                   (literal<v>                       |
+|                    |                                  |                     (enumeration_literal<v>         |
+|                    |                                  |                       (character_literal            |
+|                    |                                  |                         '1'                         |
+|                    |                                  |                       )                             |
+|                    |                                  |                     )                               |
+|                    |                                  |                   )                                 |
+|                    |                                  |                 )                                   |
+|                    |                                  |               )                                     |
+|                    |                                  |             )                                       |
+|                    |                                  |           )                                         |
+|                    |                                  |         )                                           |
+|                    |                                  |       )                                             |
+|                    |                                  |     )                                               |
+|                    |                                  |   )                                                 |
+|                    |                                  | )                                                   |
+|                    |                                  |                                                     |
++--------------------+----------------------------------+-----------------------------------------------------+
+| wait_statement_006 | wait on A, B until CLK = '1';    | (wait_statement                                     |
+|                    |                                  |   (sensitivity_clause                               |
+|                    |                                  |     (sensitivity_list                               |
+|                    |                                  |       (name<v>                                      |
+|                    |                                  |         (simple_name                                |
+|                    |                                  |           A                                         |
+|                    |                                  |         )                                           |
+|                    |                                  |       ),                                            |
+|                    |                                  |       (name<v>                                      |
+|                    |                                  |         (simple_name                                |
+|                    |                                  |           B                                         |
+|                    |                                  |         )                                           |
+|                    |                                  |       )                                             |
+|                    |                                  |     )                                               |
+|                    |                                  |   )(condition_clause                                |
+|                    |                                  |     (condition                                      |
+|                    |                                  |       (expression                                   |
+|                    |                                  |         (relation                                   |
+|                    |                                  |           (shift_expression                         |
+|                    |                                  |             (simple_expression                      |
+|                    |                                  |               term: (term                           |
+|                    |                                  |                 (primary<v>                         |
+|                    |                                  |                   (name<v>                          |
+|                    |                                  |                     (simple_name                    |
+|                    |                                  |                       CLK                           |
+|                    |                                  |                     )                               |
+|                    |                                  |                   )                                 |
+|                    |                                  |                 )                                   |
+|                    |                                  |               )                                     |
+|                    |                                  |             )                                       |
+|                    |                                  |           ),                                        |
+|                    |                                  |           operator: EQUAL,                          |
+|                    |                                  |           (shift_expression                         |
+|                    |                                  |             (simple_expression                      |
+|                    |                                  |               term: (term                           |
+|                    |                                  |                 (primary<v>                         |
+|                    |                                  |                   (literal<v>                       |
+|                    |                                  |                     (enumeration_literal<v>         |
+|                    |                                  |                       (character_literal            |
+|                    |                                  |                         '1'                         |
+|                    |                                  |                       )                             |
+|                    |                                  |                     )                               |
+|                    |                                  |                   )                                 |
+|                    |                                  |                 )                                   |
+|                    |                                  |               )                                     |
+|                    |                                  |             )                                       |
+|                    |                                  |           )                                         |
+|                    |                                  |         )                                           |
+|                    |                                  |       )                                             |
+|                    |                                  |     )                                               |
+|                    |                                  |   )                                                 |
+|                    |                                  | )                                                   |
+|                    |                                  |                                                     |
++--------------------+----------------------------------+-----------------------------------------------------+
+| wait_statement_007 | wait for 100 ns;                 | (wait_statement                                     |
+|                    |                                  |   (timeout_clause                                   |
+|                    |                                  |     (expression                                     |
+|                    |                                  |       (relation                                     |
+|                    |                                  |         (shift_expression                           |
+|                    |                                  |           (simple_expression                        |
+|                    |                                  |             term: (term                             |
+|                    |                                  |               (primary<v>                           |
+|                    |                                  |                 (literal<v>                         |
+|                    |                                  |                   (numeric_literal<v>               |
+|                    |                                  |                     (physical_literal               |
+|                    |                                  |                       literal: (abstract_literal<v> |
+|                    |                                  |                         (decimal_literal            |
+|                    |                                  |                           literal: 100, hint: int   |
+|                    |                                  |                         )                           |
+|                    |                                  |                       ),                            |
+|                    |                                  |                       unit: ns                      |
+|                    |                                  |                     )                               |
+|                    |                                  |                   )                                 |
+|                    |                                  |                 )                                   |
+|                    |                                  |               )                                     |
+|                    |                                  |             )                                       |
+|                    |                                  |           )                                         |
+|                    |                                  |         )                                           |
+|                    |                                  |       )                                             |
+|                    |                                  |     )                                               |
+|                    |                                  |   )                                                 |
+|                    |                                  | )                                                   |
+|                    |                                  |                                                     |
++--------------------+----------------------------------+-----------------------------------------------------+
+| wait_statement_008 | Wait on EN until EN='1' for 1ms; | (wait_statement                                     |
+|                    |                                  |   (sensitivity_clause                               |
+|                    |                                  |     (sensitivity_list                               |
+|                    |                                  |       (name<v>                                      |
+|                    |                                  |         (simple_name                                |
+|                    |                                  |           EN                                        |
+|                    |                                  |         )                                           |
+|                    |                                  |       )                                             |
+|                    |                                  |     )                                               |
+|                    |                                  |   )(condition_clause                                |
+|                    |                                  |     (condition                                      |
+|                    |                                  |       (expression                                   |
+|                    |                                  |         (relation                                   |
+|                    |                                  |           (shift_expression                         |
+|                    |                                  |             (simple_expression                      |
+|                    |                                  |               term: (term                           |
+|                    |                                  |                 (primary<v>                         |
+|                    |                                  |                   (name<v>                          |
+|                    |                                  |                     (simple_name                    |
+|                    |                                  |                       EN                            |
+|                    |                                  |                     )                               |
+|                    |                                  |                   )                                 |
+|                    |                                  |                 )                                   |
+|                    |                                  |               )                                     |
+|                    |                                  |             )                                       |
+|                    |                                  |           ),                                        |
+|                    |                                  |           operator: EQUAL,                          |
+|                    |                                  |           (shift_expression                         |
+|                    |                                  |             (simple_expression                      |
+|                    |                                  |               term: (term                           |
+|                    |                                  |                 (primary<v>                         |
+|                    |                                  |                   (literal<v>                       |
+|                    |                                  |                     (enumeration_literal<v>         |
+|                    |                                  |                       (character_literal            |
+|                    |                                  |                         '1'                         |
+|                    |                                  |                       )                             |
+|                    |                                  |                     )                               |
+|                    |                                  |                   )                                 |
+|                    |                                  |                 )                                   |
+|                    |                                  |               )                                     |
+|                    |                                  |             )                                       |
+|                    |                                  |           )                                         |
+|                    |                                  |         )                                           |
+|                    |                                  |       )                                             |
+|                    |                                  |     )                                               |
+|                    |                                  |   )(timeout_clause                                  |
+|                    |                                  |     (expression                                     |
+|                    |                                  |       (relation                                     |
+|                    |                                  |         (shift_expression                           |
+|                    |                                  |           (simple_expression                        |
+|                    |                                  |             term: (term                             |
+|                    |                                  |               (primary<v>                           |
+|                    |                                  |                 (literal<v>                         |
+|                    |                                  |                   (numeric_literal<v>               |
+|                    |                                  |                     (physical_literal               |
+|                    |                                  |                       literal: (abstract_literal<v> |
+|                    |                                  |                         (decimal_literal            |
+|                    |                                  |                           literal: 1, hint: int     |
+|                    |                                  |                         )                           |
+|                    |                                  |                       ),                            |
+|                    |                                  |                       unit: ms                      |
+|                    |                                  |                     )                               |
+|                    |                                  |                   )                                 |
+|                    |                                  |                 )                                   |
+|                    |                                  |               )                                     |
+|                    |                                  |             )                                       |
+|                    |                                  |           )                                         |
+|                    |                                  |         )                                           |
+|                    |                                  |       )                                             |
+|                    |                                  |     )                                               |
+|                    |                                  |   )                                                 |
+|                    |                                  | )                                                   |
+|                    |                                  |                                                     |
++--------------------+----------------------------------+-----------------------------------------------------+

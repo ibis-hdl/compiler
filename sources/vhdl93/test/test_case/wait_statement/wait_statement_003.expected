@@ -1,0 +1,16 @@
+(wait_statement
+  (sensitivity_clause
+    (sensitivity_list
+      (name<v>
+        (simple_name
+          A
+        )
+      ),
+      (name<v>
+        (simple_name
+          B
+        )
+      )
+    )
+  )
+)

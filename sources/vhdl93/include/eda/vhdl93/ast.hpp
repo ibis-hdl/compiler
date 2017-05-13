@@ -226,7 +226,7 @@
 #include <eda/vhdl93/ast/use_clause.hpp>
 //#include <eda/vhdl93/ast/variable_assignment_statement.hpp>
 //#include <eda/vhdl93/ast/variable_declaration.hpp>
-//#include <eda/vhdl93/ast/wait_statement.hpp>
+#include <eda/vhdl93/ast/wait_statement.hpp>
 //#include <eda/vhdl93/ast/waveform.hpp>
 //#include <eda/vhdl93/ast/waveform_element.hpp>
 

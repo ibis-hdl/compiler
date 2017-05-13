@@ -27,6 +27,14 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::character_literal,
     literal
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::condition,
+   boolean_expression
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::condition_clause,
+    condition
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::decimal_literal,
     literal, hint
 )
@@ -133,12 +141,20 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::term,
     factor, rest_list
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::timeout_clause,
+    time_expression
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::use_clause::selected_name,
     prefix_list, suffix
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::use_clause,
     list
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::wait_statement,
+    label, sensitivity_clause, condition_clause, timeout_clause
 )
 
 
