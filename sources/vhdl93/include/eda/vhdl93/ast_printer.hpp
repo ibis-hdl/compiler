@@ -186,8 +186,6 @@ struct secondary_unit;
 struct secondary_unit_declaration;
 struct selected_signal_assignment;
 struct selected_waveforms;
-struct sensitivity_clause;
-struct sensitivity_list;
 struct sequence_of_statements;
 struct sequential_statement;
 struct shift_expression;
@@ -432,7 +430,6 @@ public:
     void operator()(selected_signal_assignment const& node);
     void operator()(selected_waveforms const& node);
     void operator()(sensitivity_clause const& node);
-    void operator()(sensitivity_list const& node);
     void operator()(sequence_of_statements const& node);
     void operator()(sequential_statement const& node);
     void operator()(shift_expression const& node);

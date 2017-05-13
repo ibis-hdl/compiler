@@ -1647,17 +1647,22 @@ void printer::operator()(selected_waveforms const &node)
 
 void printer::operator()(sensitivity_clause const &node)
 {
-    static char const symbol[]{ "XXX sensitivity_clause" };
+    static char const symbol[]{ "sensitivity_clause" };
     symbol_scope<sensitivity_clause> _(*this, symbol);
-    //os << node;
-}
 
+    {
+        static char const symbol[]{ "sensitivity_list" };
+        symbol_scope<sensitivity_list> _(*this, symbol);
 
-void printer::operator()(sensitivity_list const &node)
-{
-    static char const symbol[]{ "XXX sensitivity_list" };
-    symbol_scope<sensitivity_list> _(*this, symbol);
-    //os << node;
+        auto const N = node.sensitivity_list.size() - 1;
+        unsigned i = 0;
+        for(auto const& signal_name : node.sensitivity_list) {
+            (*this)(signal_name);
+            if(i++ != N) {
+                os << ",\n";
+            }
+        }
+    }
 }
 
 

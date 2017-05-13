@@ -688,8 +688,8 @@ typedef x3::rule<secondary_unit_declaration_class> secondary_unit_declaration_ty
 typedef x3::rule<selected_name_class, ast::selected_name> selected_name_type;
 typedef x3::rule<selected_signal_assignment_class> selected_signal_assignment_type;
 typedef x3::rule<selected_waveforms_class> selected_waveforms_type;
-typedef x3::rule<sensitivity_clause_class> sensitivity_clause_type;
-typedef x3::rule<sensitivity_list_class> sensitivity_list_type;
+typedef x3::rule<sensitivity_clause_class, ast::sensitivity_clause> sensitivity_clause_type;
+typedef x3::rule<sensitivity_list_class, ast::sensitivity_list> sensitivity_list_type;
 typedef x3::rule<sequence_of_statements_class> sequence_of_statements_type;
 typedef x3::rule<sequential_statement_class> sequential_statement_type;
 typedef x3::rule<shift_expression_class, ast::shift_expression> shift_expression_type;
@@ -3204,21 +3204,26 @@ waveform WHEN choices
 ;
 #endif
 
-#if 0
-// sensitivity_clause ::=
+
+// sensitivity_clause ::=                                                [§ 8.1]
 // on sensitivity_list
 auto const sensitivity_clause_def =
-        ON sensitivity_list
-        ;
-#endif
+    ON >> sensitivity_list
+    ;
 
-#if 0
-// sensitivity_list ::=
+
+
+// sensitivity_list ::=                                                  [§ 8.1]
 // signal_name { , signal_name }
-auto const sensitivity_list_def =
-        signal_name >> ( signal_name % ',' )
+namespace sensitivity_list_detail {
+    auto const signal_name = x3::rule<struct signal_name, ast::name> { "signal_name" } =
+        name
         ;
-#endif
+}
+auto const sensitivity_list_def =
+    ( sensitivity_list_detail::signal_name % ',' )
+    ;
+
 
 #if 0
 // sequence_of_statements ::=
@@ -3890,8 +3895,8 @@ BOOST_SPIRIT_DEFINE(
         selected_name,
         //    selected_signal_assignment,
         //    selected_waveforms,
-        //    sensitivity_clause,
-        //    sensitivity_list,
+        sensitivity_clause,
+        sensitivity_list,
         //    sequence_of_statements,
         //    sequential_statement,
         shift_expression,
