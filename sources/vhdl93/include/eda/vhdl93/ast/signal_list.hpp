@@ -14,7 +14,7 @@
 #include <eda/vhdl93/ast/nullary.hpp>
 #include <eda/vhdl93/ast/name.hpp>
 #include <eda/vhdl93/ast/keyword_token.hpp>
-#include <list>
+#include <vector>
 
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
 
@@ -22,10 +22,7 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-struct signal_list_names
-{
-    std::list<ast::name>        list;
-};
+struct signal_list_names : std::list<ast::name>  { };
 
 
 // signal_list ::=

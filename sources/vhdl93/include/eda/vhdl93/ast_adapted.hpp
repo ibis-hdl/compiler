@@ -112,10 +112,6 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::shift_expression,
     simple_expression, rest
 )
 
-BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::signal_list_names,
-    list
-)
-
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::simple_expression::chunk,
     operator_, term
 )

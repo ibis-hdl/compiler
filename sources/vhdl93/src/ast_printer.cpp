@@ -1717,14 +1717,15 @@ void printer::operator()(signal_declaration const &node)
     //os << node;
 }
 
+
 void printer::operator()(signal_list_names const& node)
 {
     static char const symbol[]{ "signal_list.names" };
     symbol_scope<signal_list_names> _(*this, symbol);
 
-    auto const N = node.list.size() - 1;
+    auto const N = node.size() - 1;
     unsigned i = 0;
-    for(auto const& name : node.list) {
+    for(auto const& name : node) {
         visit(name);
         if(i++ != N) {
             os << ",\n";
