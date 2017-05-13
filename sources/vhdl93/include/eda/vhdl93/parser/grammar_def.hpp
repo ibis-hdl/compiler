@@ -638,7 +638,7 @@ typedef x3::rule<interface_list_class> interface_list_type;
 typedef x3::rule<interface_signal_declaration_class> interface_signal_declaration_type;
 typedef x3::rule<interface_variable_declaration_class> interface_variable_declaration_type;
 typedef x3::rule<iteration_scheme_class> iteration_scheme_type;
-typedef x3::rule<label_class> label_type;
+typedef x3::rule<label_class, ast::identifier> label_type;
 typedef x3::rule<letter_class, char> letter_type;
 typedef x3::rule<letter_or_digit_class, char> letter_or_digit_type;
 typedef x3::rule<library_clause_class> library_clause_type;
@@ -2607,13 +2607,13 @@ auto const iteration_scheme_def =
         ;
 #endif
 
-#if 0
-// label ::=
-// identifier
+
+// label ::=                                                             [§ 9.7]
+//     identifier
 auto const label_def =
-        identifier
-        ;
-#endif
+    identifier
+    ;
+
 
 
 // library_clause ::=                                                   [§ 11.2]
@@ -3846,7 +3846,7 @@ BOOST_SPIRIT_DEFINE(
         //    interface_signal_declaration,
         //    interface_variable_declaration,
         //    iteration_scheme,
-        //    label,
+        label,
         letter,
         letter_or_digit,
         library_clause,
