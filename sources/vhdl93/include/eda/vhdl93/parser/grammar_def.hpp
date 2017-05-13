@@ -638,11 +638,7 @@ typedef x3::rule<interface_list_class> interface_list_type;
 typedef x3::rule<interface_signal_declaration_class> interface_signal_declaration_type;
 typedef x3::rule<interface_variable_declaration_class> interface_variable_declaration_type;
 typedef x3::rule<iteration_scheme_class> iteration_scheme_type;
-<<<<<<< HEAD
 typedef x3::rule<label_class, ast::label> label_type;
-=======
-typedef x3::rule<label_class, ast::identifier> label_type;
->>>>>>> 3425b7362f01d720d36e25e0d9b8e036af8daa3c
 typedef x3::rule<letter_class, char> letter_type;
 typedef x3::rule<letter_or_digit_class, char> letter_or_digit_type;
 typedef x3::rule<library_clause_class> library_clause_type;
