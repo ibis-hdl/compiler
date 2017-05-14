@@ -26,9 +26,8 @@
 //#include <eda/vhdl93/ast/assertion_statement.hpp>
 //#include <eda/vhdl93/ast/association_element.hpp>
 //#include <eda/vhdl93/ast/association_list.hpp>
-//#include <eda/vhdl93/ast/attribute_declaration.hpp>
-//#include <eda/vhdl93/ast/attribute_designator.hpp>
-//#include <eda/vhdl93/ast/attribute_name.hpp>
+#include <eda/vhdl93/ast/attribute_declaration.hpp>
+#include <eda/vhdl93/ast/attribute_name.hpp>
 //#include <eda/vhdl93/ast/attribute_specification.hpp>
 //#include <eda/vhdl93/ast/base.hpp>
 //#include <eda/vhdl93/ast/base_specifier.hpp>
@@ -201,7 +200,7 @@
 //#include <eda/vhdl93/ast/signal_assignment_statement.hpp>
 //#include <eda/vhdl93/ast/signal_declaration.hpp>
 #include <eda/vhdl93/ast/signal_list.hpp>
-//#include <eda/vhdl93/ast/signature.hpp>
+//XXX#include <eda/vhdl93/ast/signature.hpp>
 //XXX#include <eda/vhdl93/ast/simple_expression.hpp>
 //XXX#include <eda/vhdl93/ast/simple_name.hpp>
 //#include <eda/vhdl93/ast/slice_name.hpp>

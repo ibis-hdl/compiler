@@ -1,0 +1,38 @@
+(attribute_name
+  (prefix<v>
+    (name<v>
+      (simple_name
+        CLK
+      )
+    )
+  )
+  (attribute_designator
+    (simple_name
+      DELAYED
+    )
+  )
+  (expression
+    (relation
+      (shift_expression
+        (simple_expression
+          term: (term
+            (primary<v>
+              (literal<v>
+                (numeric_literal<v>
+                  (physical_literal
+                    literal: (abstract_literal<v>
+                      (decimal_literal
+                        literal: 5, hint: int
+                      )
+                    ),
+                    unit: ns
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

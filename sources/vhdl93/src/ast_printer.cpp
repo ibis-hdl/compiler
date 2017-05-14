@@ -232,19 +232,38 @@ void printer::operator()(attribute_declaration const &node)
 }
 
 
-void printer::operator()(attribute_designator const &node)
+void printer::operator()(attribute_designator const &node) // UNUSED
 {
     static char const symbol[]{ "XXX attribute_designator" };
     symbol_scope<attribute_designator> _(*this, symbol);
-    //os << node;
+    //os << node.name;
 }
 
 
 void printer::operator()(attribute_name const &node)
 {
-    static char const symbol[]{ "XXX attribute_name" };
+    static char const symbol[]{ "attribute_name" };
     symbol_scope<attribute_name> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.prefix);
+
+    if(node.signature) {
+        os << "\n";
+        (*this)(node.signature.get());
+    }
+
+    os << "\n";
+    {   // no own type, printing here
+        static char const symbol[]{ "attribute_designator" };
+        symbol_scope<attribute_name> _(*this, symbol);
+
+        (*this)(node.attribute_designator);
+    }
+
+    if(node.expression) {
+        os << "\n";
+        (*this)(node.expression.get());
+    }
 }
 
 
@@ -1745,9 +1764,31 @@ void printer::operator()(signal_list const &node)
 
 void printer::operator()(signature const &node)
 {
-    static char const symbol[]{ "XXX signature" };
+    static char const symbol[]{ "signature" };
     symbol_scope<signature> _(*this, symbol);
-    //os << node;
+
+    if(node.parameter_type_list) {
+        static char const symbol[]{ "signature.parameter_type(s)" };
+        symbol_scope<signature> _(*this, symbol);
+
+        auto const N = node.parameter_type_list.get().size() - 1;
+        unsigned i = 0;
+        for(auto const& type_mark : node.parameter_type_list.get()) {
+            (*this)(type_mark);
+            if(i++ != N) {
+                os << ",\n";
+            }
+        }
+    }
+
+    if(node.return_type) {
+        if(node.parameter_type_list) { os << "\n"; }
+
+        static char const symbol[]{ "signature.return_type" };
+        symbol_scope<signature> _(*this, symbol);
+
+        (*this)(node.return_type.get());
+    }
 }
 
 void printer::operator()(simple_expression const &node)
@@ -1946,6 +1987,14 @@ void printer::operator()(type_definition const &node)
     static char const symbol[]{ "XXX type_definition" };
     symbol_scope<type_definition> _(*this, symbol);
     //visit(node);
+}
+
+
+void printer::operator()(type_mark const &node)
+{
+    static char const symbol[]{ "type_mark" };
+    symbol_scope<type_mark> _(*this, symbol);
+    os << node.name;
 }
 
 

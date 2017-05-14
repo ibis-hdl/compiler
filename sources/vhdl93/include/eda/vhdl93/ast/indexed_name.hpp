@@ -16,7 +16,11 @@
 #include <eda/vhdl93/ast/expression.hpp>
 #include <vector>
 
+
 namespace eda { namespace vhdl93 { namespace ast {
+
+
+struct expression;
 
 
 struct indexed_name : position_tagged

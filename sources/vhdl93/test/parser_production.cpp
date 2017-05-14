@@ -207,6 +207,42 @@ BOOST_DATA_TEST_CASE( waveform,
 
 
 /*
+ * attribute_name
+ */
+struct attribute_name_dataset : public ::x3_test::dataset_loader
+{
+    attribute_name_dataset()
+    : dataset_loader{ "test_case/attribute_name" }
+    { }
+} const attribute_name_dataset;
+
+
+BOOST_DATA_TEST_CASE( attribute_name,
+      attribute_name_dataset.input()
+    ^ attribute_name_dataset.expect()
+    ^ attribute_name_dataset.test_file_name(),
+    input, expect, file)
+{
+    using x3_test::testing_parser;
+
+    typedef ast::attribute_name attribute_type;
+
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
+
+    bool parse_ok{ false };
+    std::string parse_result {};
+
+    testing_parser<attribute_type> parse;
+    std::tie(parse_ok, parse_result) = parse(input, parser::attribute_name);
+
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expect, btt::per_element());
+}
+
+
+/*
  * XXXX
  */
 struct xxx_dataset : public ::x3_test::dataset_loader
@@ -217,7 +253,7 @@ struct xxx_dataset : public ::x3_test::dataset_loader
 } const xxx_dataset;
 
 
-BOOST_DATA_TEST_CASE( xxxx,
+BOOST_DATA_TEST_CASE( xxx,
       xxx_dataset.input()
     ^ xxx_dataset.expect()
     ^ xxx_dataset.test_file_name(),
@@ -225,7 +261,7 @@ BOOST_DATA_TEST_CASE( xxxx,
 {
     using x3_test::testing_parser;
 
-    typedef ast::waveform attribute_type;
+    typedef ast::attribute_name attribute_type;
 
     // avoid warning, used in case of error for error message by boost.test
     boost::ignore_unused(file);
@@ -234,12 +270,13 @@ BOOST_DATA_TEST_CASE( xxxx,
     std::string parse_result {};
 
     testing_parser<attribute_type> parse;
-    std::tie(parse_ok, parse_result) = parse(input, parser::waveform);
+    std::tie(parse_ok, parse_result) = parse(input, parser::attribute_name);
 
     BOOST_TEST(parse_ok);
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
+
 
 
 BOOST_AUTO_TEST_SUITE_END()

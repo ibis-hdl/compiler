@@ -519,9 +519,9 @@ typedef x3::rule<assertion_class> assertion_type;
 typedef x3::rule<assertion_statement_class> assertion_statement_type;
 typedef x3::rule<association_element_class> association_element_type;
 typedef x3::rule<association_list_class> association_list_type;
-typedef x3::rule<attribute_declaration_class> attribute_declaration_type;
-typedef x3::rule<attribute_designator_class> attribute_designator_type;
-typedef x3::rule<attribute_name_class> attribute_name_type;
+typedef x3::rule<attribute_declaration_class, ast::attribute_declaration> attribute_declaration_type;
+typedef x3::rule<attribute_designator_class, ast::simple_name> attribute_designator_type;
+typedef x3::rule<attribute_name_class, ast::attribute_name> attribute_name_type;
 typedef x3::rule<attribute_specification_class> attribute_specification_type;
 typedef x3::rule<base_unit_declaration_class> base_unit_declaration_type;
 typedef x3::rule<based_integer_class, std::string_view> based_integer_type;
@@ -697,7 +697,7 @@ typedef x3::rule<signal_assignment_statement_class> signal_assignment_statement_
 typedef x3::rule<signal_declaration_class> signal_declaration_type;
 typedef x3::rule<signal_kind_class, ast::keyword_token> signal_kind_type;
 typedef x3::rule<signal_list_class, ast::signal_list> signal_list_type;
-typedef x3::rule<signature_class> signature_type;
+typedef x3::rule<signature_class, ast::signature> signature_type;
 typedef x3::rule<simple_expression_class, ast::simple_expression> simple_expression_type;
 typedef x3::rule<simple_name_class, ast::simple_name> simple_name_type;
 typedef x3::rule<slice_name_class> slice_name_type;
@@ -718,7 +718,7 @@ typedef x3::rule<timeout_clause_class, ast::timeout_clause> timeout_clause_type;
 typedef x3::rule<type_conversion_class> type_conversion_type;
 typedef x3::rule<type_declaration_class> type_declaration_type;
 typedef x3::rule<type_definition_class> type_definition_type;
-typedef x3::rule<type_mark_class, std::string_view> type_mark_type;
+typedef x3::rule<type_mark_class, ast::type_mark> type_mark_type;
 typedef x3::rule<unconstrained_array_definition_class> unconstrained_array_definition_type;
 typedef x3::rule<use_clause_class, ast::use_clause> use_clause_type;
 typedef x3::rule<variable_assignment_statement_class> variable_assignment_statement_type;
@@ -1239,29 +1239,39 @@ auto const association_list_def =
         ;
 #endif
 
-#if 0
-// attribute_declaration ::=
-// attribute identifier : type_mark ;
+
+// attribute_declaration ::=                                             [§ 4.4]
+//     attribute identifier : type_mark ;
 auto const attribute_declaration_def =
-        ATTRIBUTE identifier > ':' type_mark > ';'
-;
-#endif
+      ATTRIBUTE
+    > identifier
+    > ':'
+    > type_mark
+    > ';'
+    ;
 
-#if 0
-// attribute_designator ::=
-// attribute_simple_name
+
+
+// attribute_designator ::=                                              [§ 6.6]
+//     attribute_simple_name
 auto const attribute_designator_def =
-        attribute_simple_name
-        ;
-#endif
+    simple_name
+    ;
 
-#if 0
-// attribute_name ::=
-// prefix [ signature ] ' attribute_designator [ ( expression ) ]
+
+
+// attribute_name ::=                                                    [§ 6.6]
+//     prefix [ signature ] ' attribute_designator [ ( expression ) ]
 auto const attribute_name_def =
-        //prefix -( signature ) ' attribute_designator -( '(' expression ')' )
-        ;
-#endif
+       prefix
+    >> -signature
+    >> '\''
+    >> attribute_designator
+    >> -(
+        '(' >> expression >> ')'
+        )
+    ;
+
 
 #if 0
 // attribute_specification ::=
@@ -3335,13 +3345,24 @@ auto const signal_list_def =
     ;
 
 
-#if 0
-// signature ::=
-// [ [ type_mark { , type_mark } ] [ return type_mark ] ]
+
+// signature ::=                                                       [§ 2.3.2]
+//     [ [ type_mark { , type_mark } ] [ return type_mark ] ]
+namespace signature_detail {
+    auto const parameter_list = x3::rule<struct parameter_class, ast::signature_parameter_type_list> { "signature_type_mark_list" } =
+        ( type_mark % ',' )
+    ;
+}
 auto const signature_def =
-        -( -( type_mark >> ( type_mark % ',' ) ) -( RETURN type_mark ) )
-        ;
-#endif
+       '['
+    >> -signature_detail::parameter_list
+    >> -(
+          RETURN
+       >> type_mark
+       )
+    >> ']'
+    ;
+
 
 
 // simple_expression ::=
@@ -3734,9 +3755,9 @@ BOOST_SPIRIT_DEFINE(
         //    assertion_statement,
         //    association_element,
         //    association_list,
-        //    attribute_declaration,
-        //    attribute_designator,
-        //    attribute_name,
+        attribute_declaration,
+        attribute_designator,
+        attribute_name,
         //    attribute_specification,
         //base,
         //    base_unit_declaration,
@@ -3914,7 +3935,7 @@ BOOST_SPIRIT_DEFINE(
         //    signal_declaration,
         signal_kind,
         signal_list,
-        //    signature,
+        signature,
         simple_expression,
         simple_name,
         //    slice_name,
@@ -3935,7 +3956,7 @@ BOOST_SPIRIT_DEFINE(
         //    type_conversion,
         //    type_declaration,
         //    type_definition,
-        //    type_mark,
+        type_mark,
         //    unconstrained_array_definition,
         use_clause,
         //    variable_assignment_statement,

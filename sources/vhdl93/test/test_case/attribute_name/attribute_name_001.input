@@ -1,0 +1,3 @@
+--  The leftmost index bound of array REG.
+REG'LEFT(1)              
+

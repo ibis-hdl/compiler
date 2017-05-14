@@ -56,6 +56,159 @@ abstract_literal
 |                     |                |                                         |
 +---------------------+----------------+-----------------------------------------+
 
+==============
+attribute_name
+==============
+
++--------------------+-------------------------------------------------------+---------------------------------------------------+
+| File               | Input                                                 | Expected                                          |
++--------------------+-------------------------------------------------------+---------------------------------------------------+
+| attribute_name_001 | --  The leftmost index bound of array REG.            | (attribute_name                                   |
+|                    | REG'LEFT(1)                                           |   (prefix<v>                                      |
+|                    |                                                       |     (name<v>                                      |
+|                    |                                                       |       (simple_name                                |
+|                    |                                                       |         REG                                       |
+|                    |                                                       |       )                                           |
+|                    |                                                       |     )                                             |
+|                    |                                                       |   )                                               |
+|                    |                                                       |   (attribute_designator                           |
+|                    |                                                       |     (simple_name                                  |
+|                    |                                                       |       LEFT                                        |
+|                    |                                                       |     )                                             |
+|                    |                                                       |   )                                               |
+|                    |                                                       |   (expression                                     |
+|                    |                                                       |     (relation                                     |
+|                    |                                                       |       (shift_expression                           |
+|                    |                                                       |         (simple_expression                        |
+|                    |                                                       |           term: (term                             |
+|                    |                                                       |             (primary<v>                           |
+|                    |                                                       |               (literal<v>                         |
+|                    |                                                       |                 (numeric_literal<v>               |
+|                    |                                                       |                   (abstract_literal<v>            |
+|                    |                                                       |                     (decimal_literal              |
+|                    |                                                       |                       literal: 1, hint: int       |
+|                    |                                                       |                     )                             |
+|                    |                                                       |                   )                               |
+|                    |                                                       |                 )                                 |
+|                    |                                                       |               )                                   |
+|                    |                                                       |             )                                     |
+|                    |                                                       |           )                                       |
+|                    |                                                       |         )                                         |
+|                    |                                                       |       )                                           |
+|                    |                                                       |     )                                             |
+|                    |                                                       |   )                                               |
+|                    |                                                       | )                                                 |
+|                    |                                                       |                                                   |
++--------------------+-------------------------------------------------------+---------------------------------------------------+
+| attribute_name_002 | --  The hierarchical path name of the port INPUT_PIN. | (attribute_name                                   |
+|                    | INPUT_PIN'PATH_NAME                                   |   (prefix<v>                                      |
+|                    |                                                       |     (name<v>                                      |
+|                    |                                                       |       (simple_name                                |
+|                    |                                                       |         INPUT_PIN                                 |
+|                    |                                                       |       )                                           |
+|                    |                                                       |     )                                             |
+|                    |                                                       |   )                                               |
+|                    |                                                       |   (attribute_designator                           |
+|                    |                                                       |     (simple_name                                  |
+|                    |                                                       |       PATH_NAME                                   |
+|                    |                                                       |     )                                             |
+|                    |                                                       |   )                                               |
+|                    |                                                       | )                                                 |
+|                    |                                                       |                                                   |
++--------------------+-------------------------------------------------------+---------------------------------------------------+
+| attribute_name_003 | --  The signal CLK delayed by 5 ns.                   | (attribute_name                                   |
+|                    | CLK'DELAYED(5 ns)                                     |   (prefix<v>                                      |
+|                    |                                                       |     (name<v>                                      |
+|                    |                                                       |       (simple_name                                |
+|                    |                                                       |         CLK                                       |
+|                    |                                                       |       )                                           |
+|                    |                                                       |     )                                             |
+|                    |                                                       |   )                                               |
+|                    |                                                       |   (attribute_designator                           |
+|                    |                                                       |     (simple_name                                  |
+|                    |                                                       |       DELAYED                                     |
+|                    |                                                       |     )                                             |
+|                    |                                                       |   )                                               |
+|                    |                                                       |   (expression                                     |
+|                    |                                                       |     (relation                                     |
+|                    |                                                       |       (shift_expression                           |
+|                    |                                                       |         (simple_expression                        |
+|                    |                                                       |           term: (term                             |
+|                    |                                                       |             (primary<v>                           |
+|                    |                                                       |               (literal<v>                         |
+|                    |                                                       |                 (numeric_literal<v>               |
+|                    |                                                       |                   (physical_literal               |
+|                    |                                                       |                     literal: (abstract_literal<v> |
+|                    |                                                       |                       (decimal_literal            |
+|                    |                                                       |                         literal: 5, hint: int     |
+|                    |                                                       |                       )                           |
+|                    |                                                       |                     ),                            |
+|                    |                                                       |                     unit: ns                      |
+|                    |                                                       |                   )                               |
+|                    |                                                       |                 )                                 |
+|                    |                                                       |               )                                   |
+|                    |                                                       |             )                                     |
+|                    |                                                       |           )                                       |
+|                    |                                                       |         )                                         |
+|                    |                                                       |       )                                           |
+|                    |                                                       |     )                                             |
+|                    |                                                       |   )                                               |
+|                    |                                                       | )                                                 |
+|                    |                                                       |                                                   |
++--------------------+-------------------------------------------------------+---------------------------------------------------+
+| attribute_name_004 | -- test for signature parser check                    | (attribute_name                                   |
+|                    | Foo [A, B return C]'Buzz(42)                          |   (prefix<v>                                      |
+|                    |                                                       |     (name<v>                                      |
+|                    |                                                       |       (simple_name                                |
+|                    |                                                       |         Foo                                       |
+|                    |                                                       |       )                                           |
+|                    |                                                       |     )                                             |
+|                    |                                                       |   )                                               |
+|                    |                                                       |   (signature                                      |
+|                    |                                                       |     (signature.parameter_type(s)                  |
+|                    |                                                       |       (type_mark                                  |
+|                    |                                                       |         A                                         |
+|                    |                                                       |       ),                                          |
+|                    |                                                       |       (type_mark                                  |
+|                    |                                                       |         B                                         |
+|                    |                                                       |       )                                           |
+|                    |                                                       |     )                                             |
+|                    |                                                       |     (signature.return_type                        |
+|                    |                                                       |       (type_mark                                  |
+|                    |                                                       |         C                                         |
+|                    |                                                       |       )                                           |
+|                    |                                                       |     )                                             |
+|                    |                                                       |   )                                               |
+|                    |                                                       |   (attribute_designator                           |
+|                    |                                                       |     (simple_name                                  |
+|                    |                                                       |       Buzz                                        |
+|                    |                                                       |     )                                             |
+|                    |                                                       |   )                                               |
+|                    |                                                       |   (expression                                     |
+|                    |                                                       |     (relation                                     |
+|                    |                                                       |       (shift_expression                           |
+|                    |                                                       |         (simple_expression                        |
+|                    |                                                       |           term: (term                             |
+|                    |                                                       |             (primary<v>                           |
+|                    |                                                       |               (literal<v>                         |
+|                    |                                                       |                 (numeric_literal<v>               |
+|                    |                                                       |                   (abstract_literal<v>            |
+|                    |                                                       |                     (decimal_literal              |
+|                    |                                                       |                       literal: 42, hint: int      |
+|                    |                                                       |                     )                             |
+|                    |                                                       |                   )                               |
+|                    |                                                       |                 )                                 |
+|                    |                                                       |               )                                   |
+|                    |                                                       |             )                                     |
+|                    |                                                       |           )                                       |
+|                    |                                                       |         )                                         |
+|                    |                                                       |       )                                           |
+|                    |                                                       |     )                                             |
+|                    |                                                       |   )                                               |
+|                    |                                                       | )                                                 |
+|                    |                                                       |                                                   |
++--------------------+-------------------------------------------------------+---------------------------------------------------+
+
 =============
 based_literal
 =============
@@ -3587,3 +3740,21 @@ waveform
 |              |                                       | )                                                   |
 |              |                                       |                                                     |
 +--------------+---------------------------------------+-----------------------------------------------------+
+
+=============
+xxx_signature
+=============
+
++---------+-----------------------+----------+
+| File    | Input                 | Expected |
++---------+-----------------------+----------+
+| xxx_001 | [MVL, MVL return MVL] |          |
+|         |                       |          |
+|         |                       |          |
++---------+-----------------------+----------+
+| xxx_002 | [return OpCode]       |          |
+|         |                       |          |
+|         |                       |          |
++---------+-----------------------+----------+
+| xxx_003 |                       |          |
++---------+-----------------------+----------+

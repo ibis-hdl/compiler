@@ -1,0 +1,35 @@
+(attribute_name
+  (prefix<v>
+    (name<v>
+      (simple_name
+        REG
+      )
+    )
+  )
+  (attribute_designator
+    (simple_name
+      LEFT
+    )
+  )
+  (expression
+    (relation
+      (shift_expression
+        (simple_expression
+          term: (term
+            (primary<v>
+              (literal<v>
+                (numeric_literal<v>
+                  (abstract_literal<v>
+                    (decimal_literal
+                      literal: 1, hint: int
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

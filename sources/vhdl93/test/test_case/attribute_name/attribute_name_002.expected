@@ -1,0 +1,14 @@
+(attribute_name
+  (prefix<v>
+    (name<v>
+      (simple_name
+        INPUT_PIN
+      )
+    )
+  )
+  (attribute_designator
+    (simple_name
+      PATH_NAME
+    )
+  )
+)

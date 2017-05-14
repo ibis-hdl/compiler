@@ -15,6 +15,14 @@
 #include <boost/fusion/include/io.hpp>
 
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::attribute_declaration,
+    identifier, type_mark
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::attribute_name,
+    prefix, signature, attribute_designator, expression
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::based_literal,
     base, number, exponent
 )
@@ -110,6 +118,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::shift_expression::chunk,
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::shift_expression,
     simple_expression, rest
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::signature,
+    parameter_type_list, return_type
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::simple_expression::chunk,
