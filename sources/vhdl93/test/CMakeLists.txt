@@ -18,6 +18,13 @@ set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD_REQUIRED ON)
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra)
 target_compile_options(${PROJECT_NAME} PRIVATE -ftemplate-backtrace-limit=1)
 
+# increase limit for clang recursive template instantiation
+# otherwise exceedes maximum depth of 256
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    target_compile_options(${PROJECT_NAME}
+        PRIVATE -ftemplate-depth=1024)
+endif()
+
 
 ## since boost.test does not expose the argc/argv values outside of the
 ## test case we have to provide the path to the test case files manualy

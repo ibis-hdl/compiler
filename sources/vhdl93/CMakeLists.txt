@@ -36,6 +36,13 @@ target_compile_options(${PROJECT_NAME}
 target_compile_options(${PROJECT_NAME}
     PRIVATE -ftemplate-backtrace-limit=1)
 
+# increase limit for clang recursive template instantiation
+# otherwise exceedes maximum depth of 256
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    target_compile_options(${PROJECT_NAME}
+        PRIVATE -ftemplate-depth=1024)
+endif()
+
 ## Depencies
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
