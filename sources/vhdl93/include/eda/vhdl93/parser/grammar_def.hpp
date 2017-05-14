@@ -1077,7 +1077,7 @@ auto const signal_name = x3::rule<struct signal_name_class, ast::name> { "signal
  */
 
 // abstract_literal ::=
-// decimal_literal | based_literal
+//     decimal_literal | based_literal
 auto const abstract_literal_def = /* Note, order changed since matters */
       based_literal
     | decimal_literal
@@ -1145,7 +1145,7 @@ auto const alias_declaration_def =
 
 
 // alias_designator ::=                                                [§ 4.3.3]
-// identifier | character_literal | operator_symbol
+//     identifier | character_literal | operator_symbol
 auto const alias_designator_def =
       identifier
     | character_literal
@@ -1297,7 +1297,7 @@ auto const base_unit_declaration_def =
 
 
 // based_integer ::=                                                  [§ 13.4.2]
-// extended_digit { [ underline ] extended_digit }
+//     extended_digit { [ underline ] extended_digit }
 auto const based_integer_def =
     raw [ lexeme[
         extended_digit >> *( -lit('_') >> extended_digit )
@@ -1307,13 +1307,13 @@ auto const based_integer_def =
 
 
 // based_literal ::=                                                  [§ 13.4.2]
-// base # based_integer [ . based_integer ] # [ exponent ]
-namespace detail {
+//     base # based_integer [ . based_integer ] # [ exponent ]
+namespace based_literal_detail {
 
-    auto const based_literal_base = as_type<std::string_view>(
+    auto const base = as_type<std::string_view>(
         raw[ lexeme[ integer ]]);
 
-    auto const based_literal_number = as_type<std::string_view>(
+    auto const number = as_type<std::string_view>(
         raw[ lexeme[
             based_integer >> -(char_('.') >> based_integer)
         ]]);
@@ -1321,9 +1321,9 @@ namespace detail {
 
 auto const based_literal_def =
     lexeme [
-           detail::based_literal_base
+           based_literal_detail::base
         >> '#'
-        >> detail::based_literal_number
+        >> based_literal_detail::number
         >> '#'
         >> -exponent
     ]
@@ -1331,9 +1331,9 @@ auto const based_literal_def =
 
 
 // basic_identifier ::=                                                 [§ 13.3]
-// letter { [ underline ] letter_or_digit }
-namespace detail {
-    auto const basic_identifier_feasible = x3::rule<struct _, std::string_view> { "basic_identifier" } =
+//     letter { [ underline ] letter_or_digit }
+namespace basic_identifier_detail {
+    auto const feasible = x3::rule<struct _, std::string_view> { "basic_identifier" } =
         raw[ lexeme [
                letter
             >> !char_('"') // reject bit_string_literal
@@ -1342,7 +1342,7 @@ namespace detail {
         ;
 }
 auto const basic_identifier_def =
-    detail::basic_identifier_feasible - keyword
+    basic_identifier_detail::feasible - keyword
     ;
 
 
@@ -1360,8 +1360,8 @@ auto const binding_indication_def =
 
 
 // bit_string_literal ::=                                               [§ 13.7]
-// base_specifier " bit_value "
-namespace detail {
+//     base_specifier " bit_value "
+namespace bit_string_literal_detail {
 
     /* Note: The BNF rule captures too wide for a specific base. §13.7 explains the
      *       valid characters depending on it.
@@ -1386,9 +1386,9 @@ namespace detail {
 
 auto const bit_string_literal_def =
     lexeme[
-          (lit("B") >> lit('"') >> detail::bit_value_bin >> lit('"')) >> x3::attr(ast::bit_string_literal::tag::bin)
-        | (lit("X") >> lit('"') >> detail::bit_value_hex >> lit('"')) >> x3::attr(ast::bit_string_literal::tag::hex)
-        | (lit("O") >> lit('"') >> detail::bit_value_oct >> lit('"')) >> x3::attr(ast::bit_string_literal::tag::oct)
+          (lit("B") >> lit('"') >> bit_string_literal_detail::bit_value_bin >> lit('"')) >> x3::attr(ast::bit_string_literal::tag::bin)
+        | (lit("X") >> lit('"') >> bit_string_literal_detail::bit_value_hex >> lit('"')) >> x3::attr(ast::bit_string_literal::tag::hex)
+        | (lit("O") >> lit('"') >> bit_string_literal_detail::bit_value_oct >> lit('"')) >> x3::attr(ast::bit_string_literal::tag::oct)
     ];
 
 
@@ -1544,7 +1544,7 @@ sequence_of_statements
 
 
 // character_literal ::=                                                [§ 13.5]
-// ' graphic_character '
+//     ' graphic_character '
 auto const character_literal_def =
     x3::lexeme [
            "\'"
@@ -1815,23 +1815,23 @@ auto const context_item_def =
 
 
 // decimal_literal ::=                                                [§ 13.4.1]
-// integer [ . integer ] [ exponent ]
-namespace detail {
+//     integer [ . integer ] [ exponent ]
+namespace decimal_literal_detail {
 
-    auto const decimal_literal_real = as_type<std::string_view>(
+    auto const real = as_type<std::string_view>(
         raw[ lexeme[
             (integer >> char_('.') >> integer >> -exponent)
         ]]);
 
-    auto const decimal_literal_int = as_type<std::string_view>(
+    auto const integer = as_type<std::string_view>(
         raw[ lexeme[
-             (integer >> -exponent)
+             (parser::integer >> -exponent)
         ]]);
 }
 
 auto const decimal_literal_def =
-      detail::decimal_literal_real >> x3::attr(ast::decimal_literal::tag::real)
-    | detail::decimal_literal_int  >> x3::attr(ast::decimal_literal::tag::integer)
+      decimal_literal_detail::real     >> x3::attr(ast::decimal_literal::tag::real)
+    | decimal_literal_detail::integer  >> x3::attr(ast::decimal_literal::tag::integer)
     ;
 
 
@@ -1903,7 +1903,7 @@ auto const designator_def =
 
 
 // direction ::=                                                         [§ 3.1]
-// to | downto
+//     to | downto
 auto const direction_def =
       TO
     | DOWNTO
@@ -2126,7 +2126,7 @@ auto const entity_tag_def =
 
 
 // enumeration_literal ::=                                             [§ 3.1.1]
-// identifier | character_literal
+//     identifier | character_literal
 auto const enumeration_literal_def =
       identifier
     | character_literal
@@ -2135,7 +2135,7 @@ auto const enumeration_literal_def =
 
 
 // enumeration_type_definition ::=
-// ( enumeration_literal { , enumeration_literal } )
+//     ( enumeration_literal { , enumeration_literal } )
 auto const enumeration_type_definition_def =
     enumeration_literal % ','
     ;
@@ -2151,7 +2151,7 @@ auto const exit_statement_def =
 
 
 // exponent ::=                                                       [§ 13.4.1]
-// E [ + ] integer | E - integer
+//     E [ + ] integer | E - integer
 auto const exponent_def =
     raw[ lexeme [
          char_("Ee") >> -char_("-+") >> integer
@@ -2167,38 +2167,38 @@ auto const exponent_def =
 //     | relation [ nand relation ]
 //     | relation [ nor relation ]
 //     | relation { xnor relation }
-namespace detail {
+namespace expression_detail {
 
-    auto const expression_chunks_1 = x3::rule<struct _, std::vector<ast::expression::chunk>> { "expression" } =
+    auto const chunks_1 = x3::rule<struct _, std::vector<ast::expression::chunk>> { "expression" } =
         *(logical_operator > relation)
         ;
 
-    auto const expression_chunk_2 = x3::rule<struct _, std::vector<ast::expression::chunk>> { "expression" } =
-        x3::repeat(1)[ // enforce artificial vector
+    auto const chunk_2 = x3::rule<struct _, std::vector<ast::expression::chunk>> { "expression" } =
+        x3::repeat(1)[ // enforce artificial vector to unify ast node
             logical_operator_option > relation
         ];
 }
 auto const expression_def =
        relation
-    >> ( detail::expression_chunk_2    // NAND, NOR
-       | detail::expression_chunks_1   // AND, ...
+    >> ( expression_detail::chunk_2    // NAND, NOR
+       | expression_detail::chunks_1   // AND, ...
        )
     ;
 
 
 
 // extended_identifier ::=                                            [§ 13.3.2]
-// \ graphic_character { graphic_character } <backslash>
-namespace detail {
+//     \ graphic_character { graphic_character } \                             .
+namespace extended_identifier_detail {
 
-    auto const extended_identifier_chars = x3::rule<struct _, std::string_view> { "extended_identifier" } =
+    auto const charset = x3::rule<struct _, std::string_view> { "extended_identifier" } =
          +( graphic_character - char_('\\') )
          ;
 
-    auto const extended_identifier_atom = x3::rule<struct _, std::string_view> { "extended_identifier" } =
+    auto const atom = x3::rule<struct _, std::string_view> { "extended_identifier" } =
         raw[ lexeme [
                char_('\\')
-            >> extended_identifier_chars
+            >> charset
             >> char_('\\')
         ]]
         ;
@@ -2206,8 +2206,8 @@ namespace detail {
 
 auto const extended_identifier_def =
     raw[ lexeme [
-            detail::extended_identifier_atom
-        >> *(detail::extended_identifier_atom % (char_('\\') >> char_('\\')))
+           extended_identifier_detail::atom
+        >> *(extended_identifier_detail::atom % (char_('\\') >> char_('\\')))
     ]]
     ;
 
@@ -2217,22 +2217,22 @@ auto const extended_identifier_def =
 //       primary [ ** primary ]
 //     | abs primary
 //     | not primary
-namespace detail {
+namespace factor_detail {
 
-    auto const factor_binary_expr = x3::rule<struct _, ast::factor_binary_operation> { "factor" } =
+    auto const binary_expr = x3::rule<struct _, ast::factor_binary_operation> { "factor" } =
            primary
         >> binary_miscellaneous_operator // ** (exponent)
         >> primary
         ;
 
     // ABS >> primary | NOT >> primary
-    auto const factor_unary_expr = x3::rule<struct _, ast::factor_unary_operation> { "factor" } =
+    auto const unary_expr = x3::rule<struct _, ast::factor_unary_operation> { "factor" } =
         unary_miscellaneous_operator >> primary // ABS | NOT
         ;
 }
 auto const factor_def =    // Note, order and others changed
-      detail::factor_binary_expr
-    | detail::factor_unary_expr
+      factor_detail::binary_expr
+    | factor_detail::unary_expr
     | primary
     ;
 
@@ -2312,8 +2312,8 @@ auto const full_type_declaration_def =
 
 
 // function_call ::=                                                   [§ 7.3.3]
-// function_name [ ( actual_parameter_part ) ]
-namespace detail {
+//     function_name [ ( actual_parameter_part ) ]
+namespace function_call_detail {
 
     auto const function_name = x3::rule<struct _, ast::function_name>{ "function_name" } =
         identifier;
@@ -2326,9 +2326,9 @@ namespace detail {
 }
 /* FixMe: actual_parameter_part -> parameter_association_list; also string_view mess */
 auto const function_call_def =
-       detail::function_name
+        function_call_detail::function_name
     >> -(  '('
-        >> detail::actual_parameter_part
+        >> function_call_detail::actual_parameter_part
         >> ')'
         )
     ;
@@ -2428,7 +2428,7 @@ auto const guarded_signal_specification_def =
 
 
 // identifier ::=                                                       [§ 13.3]
-// basic_identifier | extended_identifier
+//     basic_identifier | extended_identifier
 auto const identifier_def =
       basic_identifier
     | extended_identifier
@@ -2437,7 +2437,7 @@ auto const identifier_def =
 
 
 // identifier_list ::=                                                 [§ 3.2.2]
-// identifier { , identifier }
+//     identifier { , identifier }
 auto const identifier_list_def =
     identifier % ','
     ;
@@ -2501,7 +2501,7 @@ auto const index_subtype_definition_def =
 
 
 // indexed_name ::=                                                      [§ 6.4]
-// prefix ( expression { , expression } )
+//     prefix ( expression { , expression } )
 auto const indexed_name_def =
        prefix
     >> '('
@@ -2536,7 +2536,7 @@ auto const instantiation_list_def =
 
 
 // integer ::=                                                         § 13.4.1]
-// digit { [ underline ] digit }
+//     digit { [ underline ] digit }
 auto const integer_def =
     raw[ lexeme [
         char_("0-9") >> *( -lit("_") >> char_("0-9") )
@@ -2634,19 +2634,17 @@ auto const label_def =
 
 
 // library_clause ::=                                                   [§ 11.2]
-// library logical_name_list ;
+//     library logical_name_list ;
 namespace library_clause_detail {
 
     auto const logical_name = x3::rule<logical_name_class, ast::library_clause::logical_name> { "logical_name" } =
         identifier
         ;
-
-    auto const logical_name_list = x3::rule<logical_name_list_class, ast::library_clause> { "logical_name_list" } =
-        logical_name % ','
-        ;
 }
 auto const library_clause_def =
-    LIBRARY >> library_clause_detail::logical_name_list > ';'
+       LIBRARY
+    >> (library_clause_detail::logical_name % ',')
+    > ';'
     ;
 
 
@@ -2774,7 +2772,7 @@ auto const object_declaration_def =
 
 
 // operator_symbol ::=                                                   [§ 2.1]
-// string_literal
+//     string_literal
 auto const operator_symbol_def =
     string_literal
     ;
@@ -2903,7 +2901,7 @@ auto const parameter_specification_def =
 
 // physical_literal ::=                                                [§ 3.1.3]
 // [ abstract_literal ] unit_name
-namespace detail {
+namespace abstract_literal_detail {
 
     /* Note, the LRM doesn't specify the allowed characters, hence it's assumed
      * that it follows the natural conventions. */
@@ -2915,7 +2913,7 @@ namespace detail {
 }
 
 auto const physical_literal_def =
-    -abstract_literal >> (detail::unit_name - keyword)
+    -abstract_literal >> (abstract_literal_detail::unit_name - keyword)
     ;
 
 
@@ -3128,16 +3126,16 @@ END RECORD -( record_type_simple_name )
 
 
 // relation ::=                                                          [§ 7.1]
-// shift_expression [ relational_operator shift_expression ]
-namespace detail {
+//     shift_expression [ relational_operator shift_expression ]
+namespace relation_detail {
 
-    auto const relation_chunk = x3::rule<struct _, ast::relation::chunk> { "relation" } =
+    auto const chunk = x3::rule<struct _, ast::relation::chunk> { "relation" } =
         relational_operator > shift_expression
         ;
 }
 auto const relation_def =
        shift_expression
-    >> -detail::relation_chunk
+    >> -relation_detail::chunk
     ;
 
 
@@ -3191,7 +3189,7 @@ auto const secondary_unit_declaration_def =
 
 
 // selected_name ::=                                                     [§ 6.3]
-// prefix . suffix
+//     prefix . suffix
 auto const selected_name_def =
     x3::lexeme[
            prefix
@@ -3279,16 +3277,16 @@ auto const sequential_statement_def =
 
 
 // shift_expression ::=                                                  [§ 7.1]
-// simple_expression [ shift_operator simple_expression ]
-namespace detail {
+//     simple_expression [ shift_operator simple_expression ]
+namespace shift_expression_detail {
 
-    auto const shift_expression_chunk = x3::rule<struct _, ast::shift_expression::chunk> { "shift_expression" } =
+    auto const chunk = x3::rule<struct _, ast::shift_expression::chunk> { "shift_expression" } =
         shift_operator > simple_expression
         ;
 }
 auto const shift_expression_def =
        simple_expression
-    >> -detail::shift_expression_chunk
+    >> -shift_expression_detail::chunk
     ;
 
 
@@ -3318,7 +3316,7 @@ auto const signal_declaration_def =
 
 
 // signal_kind ::=                                                   [§ 4.3.1.2]
-// register  |  bus
+//     register  |  bus
 auto const signal_kind_def =
       REGISTER
     | BUS
@@ -3347,7 +3345,7 @@ auto const signature_def =
 
 
 // simple_expression ::=
-// [ sign ] term { adding_operator term }
+//     [ sign ] term { adding_operator term }
 auto const simple_expression_def =
        -sign
     >> term
@@ -3357,7 +3355,7 @@ auto const simple_expression_def =
 
 
 // simple_name ::=                                                       [§ 6.2]
-// identifier
+//     identifier
 auto const simple_name_def =
     identifier
     ;
@@ -3373,8 +3371,8 @@ auto const slice_name_def =
 
 
 // string_literal ::=                                                   [§ 13.6]
-// " { graphic_character } "
-namespace detail {
+//     " { graphic_character } "
+namespace string_literal_detail {
     auto const string_literal_1 = x3::rule<struct _, std::string> { "string_literal" } =
        *( ( graphic_character - '"'  )
         | ( char_('"') >> char_('"') )
@@ -3387,7 +3385,7 @@ namespace detail {
         )
         ;
 
-    auto const string_literal = x3::rule<struct _, std::string> { "string_literal" } =
+    auto const literal = x3::rule<struct _, std::string> { "string_literal" } =
         lexeme [
               ('"' >> string_literal_1 >> '"')
             | ('%' >> string_literal_2 >> '%')
@@ -3395,7 +3393,7 @@ namespace detail {
         ;
 }
 auto const string_literal_def =
-    detail::string_literal
+        string_literal_detail::literal
     ;
 
 
@@ -3533,7 +3531,7 @@ auto const target_def =
 
 
 // term ::=                                                              [§ 7.1]
-// factor { multiplying_operator factor }
+//     factor { multiplying_operator factor }
 /* Note: There is no expectation point: Consider the case of '-5 mod -3', where
  *       mod is a multiplying operator with an higher operator precedence as the
  *       sign operator. This is no valid VHDL and would in case of use of an
@@ -3611,7 +3609,7 @@ auto const unconstrained_array_definition_def =
 
 
 // use_clause ::=                                                       [§ 10.4]
-// use selected_name { , selected_name } ;
+//     use selected_name { , selected_name } ;
 namespace use_clause_detail {
 
     /* LRM93 [§6.3] defined a concept of an expanded name: A selected name (in
@@ -3627,7 +3625,7 @@ namespace use_clause_detail {
         name >> '.' >> name;
 
     auto const pkg_prefix = x3::rule<prefix_class, std::list<ast::name>> { "prefix" } =
-        x3::repeat(1)[ // enforce artificial vector
+        x3::repeat(1)[ // enforce artificial vector to unify ast node
             name
         ];
 
