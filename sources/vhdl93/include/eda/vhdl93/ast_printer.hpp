@@ -243,6 +243,16 @@ public:
     bool verbose_variant{ false };
 
 public:
+    /* FixMe: ugly hack to get visitors printing for BNF ast varaint members.
+     * This can be avoided using lambda visitors as described at
+     * [visiting variants using lambdas](https://vittorioromeo.info/index/blog/variants_lambdas_part_1.html)
+     * but requires boost.hanna and C++17. */
+    std::ostream& print(char const str[]) {
+        os << str;
+        return os;
+    }
+
+public:
     printer(std::ostream& out, uint16_t start_indent = 0);
 
 
