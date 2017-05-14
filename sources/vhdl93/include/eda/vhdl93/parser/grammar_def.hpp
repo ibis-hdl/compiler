@@ -1067,6 +1067,11 @@ auto const value_expression = x3::rule<expression_class, ast::expression> { "val
     expression;
 
 
+auto const signal_name = x3::rule<struct signal_name_class, ast::name> { "signal_name" } =
+    name
+    ;
+
+
 /*
  * Parser Rule Definition
  */
@@ -3227,13 +3232,8 @@ auto const sensitivity_clause_def =
 
 // sensitivity_list ::=                                                  [§ 8.1]
 //     signal_name { , signal_name }
-namespace sensitivity_list_detail {
-    auto const signal_name = x3::rule<struct signal_name, ast::name> { "signal_name" } =
-        name
-        ;
-}
 auto const sensitivity_list_def =
-    ( sensitivity_list_detail::signal_name % ',' )
+    signal_name % ','
     ;
 
 
@@ -3327,20 +3327,11 @@ auto const signal_kind_def =
 
 
 // signal_list ::=                                                       [§ 5.3]
-// signal_name { , signal_name }
+//       signal_name { , signal_name }
 //     | others
 //     | all
-namespace detail {
-
-    auto const signal_name = x3::rule<struct _, ast::name> { "signal_name" } =
-        name
-        ;
-    auto const signal_names = x3::rule<struct _, ast::signal_list_names> { "signal_list" } =
-        signal_name % ','
-        ;
-}
 auto const signal_list_def =
-      detail::signal_names
+      (signal_name % ',')
     | OTHERS
     | ALL
     ;

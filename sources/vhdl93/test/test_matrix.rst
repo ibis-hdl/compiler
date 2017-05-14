@@ -3497,6 +3497,93 @@ waveform
 |              |                                       | )                                                   |
 |              |                                       |                                                     |
 +--------------+---------------------------------------+-----------------------------------------------------+
-| waveform_002 |  "0000" after 2 ns, "1111" after 7 ns |                                                     |
+| waveform_002 |  "0000" after 2 ns, "1111" after 7 ns | (waveform<v>                                        |
+|              |                                       |   (waveform_element                                 |
+|              |                                       |     (expression                                     |
+|              |                                       |       (relation                                     |
+|              |                                       |         (shift_expression                           |
+|              |                                       |           (simple_expression                        |
+|              |                                       |             term: (term                             |
+|              |                                       |               (primary<v>                           |
+|              |                                       |                 (literal<v>                         |
+|              |                                       |                   (string_literal                   |
+|              |                                       |                     0000                            |
+|              |                                       |                   )                                 |
+|              |                                       |                 )                                   |
+|              |                                       |               )                                     |
+|              |                                       |             )                                       |
+|              |                                       |           )                                         |
+|              |                                       |         )                                           |
+|              |                                       |       )                                             |
+|              |                                       |     )                                               |
+|              |                                       |     (expression                                     |
+|              |                                       |       (relation                                     |
+|              |                                       |         (shift_expression                           |
+|              |                                       |           (simple_expression                        |
+|              |                                       |             term: (term                             |
+|              |                                       |               (primary<v>                           |
+|              |                                       |                 (literal<v>                         |
+|              |                                       |                   (numeric_literal<v>               |
+|              |                                       |                     (physical_literal               |
+|              |                                       |                       literal: (abstract_literal<v> |
+|              |                                       |                         (decimal_literal            |
+|              |                                       |                           literal: 2, hint: int     |
+|              |                                       |                         )                           |
+|              |                                       |                       ),                            |
+|              |                                       |                       unit: ns                      |
+|              |                                       |                     )                               |
+|              |                                       |                   )                                 |
+|              |                                       |                 )                                   |
+|              |                                       |               )                                     |
+|              |                                       |             )                                       |
+|              |                                       |           )                                         |
+|              |                                       |         )                                           |
+|              |                                       |       )                                             |
+|              |                                       |     )                                               |
+|              |                                       |   ),                                                |
+|              |                                       |   (waveform_element                                 |
+|              |                                       |     (expression                                     |
+|              |                                       |       (relation                                     |
+|              |                                       |         (shift_expression                           |
+|              |                                       |           (simple_expression                        |
+|              |                                       |             term: (term                             |
+|              |                                       |               (primary<v>                           |
+|              |                                       |                 (literal<v>                         |
+|              |                                       |                   (string_literal                   |
+|              |                                       |                     1111                            |
+|              |                                       |                   )                                 |
+|              |                                       |                 )                                   |
+|              |                                       |               )                                     |
+|              |                                       |             )                                       |
+|              |                                       |           )                                         |
+|              |                                       |         )                                           |
+|              |                                       |       )                                             |
+|              |                                       |     )                                               |
+|              |                                       |     (expression                                     |
+|              |                                       |       (relation                                     |
+|              |                                       |         (shift_expression                           |
+|              |                                       |           (simple_expression                        |
+|              |                                       |             term: (term                             |
+|              |                                       |               (primary<v>                           |
+|              |                                       |                 (literal<v>                         |
+|              |                                       |                   (numeric_literal<v>               |
+|              |                                       |                     (physical_literal               |
+|              |                                       |                       literal: (abstract_literal<v> |
+|              |                                       |                         (decimal_literal            |
+|              |                                       |                           literal: 7, hint: int     |
+|              |                                       |                         )                           |
+|              |                                       |                       ),                            |
+|              |                                       |                       unit: ns                      |
+|              |                                       |                     )                               |
+|              |                                       |                   )                                 |
+|              |                                       |                 )                                   |
+|              |                                       |               )                                     |
+|              |                                       |             )                                       |
+|              |                                       |           )                                         |
+|              |                                       |         )                                           |
+|              |                                       |       )                                             |
+|              |                                       |     )                                               |
+|              |                                       |   )                                                 |
+|              |                                       | )                                                   |
 |              |                                       |                                                     |
 +--------------+---------------------------------------+-----------------------------------------------------+

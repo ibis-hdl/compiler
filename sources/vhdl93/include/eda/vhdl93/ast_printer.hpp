@@ -444,7 +444,7 @@ public:
     void operator()(shift_expression const& node);
     void operator()(signal_assignment_statement const& node);
     void operator()(signal_declaration const& node);
-    void operator()(signal_list_names const& node); // signal_list helper (not in BNF)
+    void operator()(signal_list_list const& node); // signal_list helper (not in BNF)
     void operator()(signal_list const& node);
     void operator()(signature const& node);
     void operator()(simple_expression const& node);

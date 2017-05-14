@@ -1718,10 +1718,10 @@ void printer::operator()(signal_declaration const &node)
 }
 
 
-void printer::operator()(signal_list_names const& node)
+void printer::operator()(signal_list_list const& node)
 {
     static char const symbol[]{ "signal_list.names" };
-    symbol_scope<signal_list_names> _(*this, symbol);
+    symbol_scope<signal_list_list> _(*this, symbol);
 
     auto const N = node.size() - 1;
     unsigned i = 0;

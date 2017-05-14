@@ -22,7 +22,7 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-struct signal_list_names : std::list<ast::name>  { };
+struct signal_list_list : std::vector<ast::name>  { };
 
 
 // signal_list ::=
@@ -32,13 +32,13 @@ struct signal_list_names : std::list<ast::name>  { };
 #if 0
 using signal_list = x3::variant<
     nullary,
-    signal_list_names,
+    signal_list_list,
     keyword_token           // OTHERS | ALL
 >;
 #else
 struct signal_list : x3::variant<
     nullary,
-    signal_list_names,
+    signal_list_list,
     keyword_token           // OTHERS | ALL
 >
 {
