@@ -2013,20 +2013,70 @@ void printer::operator()(wait_statement const &node)
 }
 
 
+struct waveform_visitor     /* FixMe: Lambda Visitor */
+{
+    printer& parent;
+    waveform_visitor(printer& parent_) : parent{ parent_ }
+    { }
+
+    void operator()(ast::waveform const& node) {
+        (*this)(node);
+    }
+    void operator()(ast::waveform_element_list const& list) {
+        for(auto const& waveform_element : list) {
+            auto const N = list.size() - 1;
+            unsigned i = 0;
+            parent(waveform_element);
+            if(i++ != N) {
+                //parent.os << ",\n"; // FIXME: private member
+            }
+        }
+    }
+    void operator()(ast::keyword_token token) {
+        parent(token);
+    }
+};
+
 void printer::operator()(waveform const &node)
 {
     static char const symbol[]{ "XXX waveform" };
     symbol_scope<waveform> _(*this, symbol);
-    //visit(node);
+    waveform_visitor v(*this);
+    v(node);
 }
+
+
+struct waveform_element_visitor     /* FixMe: Lambda Visitor */
+{
+    printer& parent;
+    waveform_element_visitor(printer& parent_) : parent{ parent_ }
+    { }
+
+    void operator()(ast::waveform_element_form const& form_) {
+        (*this)(form_);
+    }
+    void operator()(ast::expression const& expr) {
+        parent(expr);
+    }
+    void operator()(ast::keyword_token token) {
+        parent(token);
+    }
+};
 
 
 void printer::operator()(waveform_element const &node)
 {
-    static char const symbol[]{ "XXX waveform_element" };
+    static char const symbol[]{ "waveform_element" };
     symbol_scope<waveform_element> _(*this, symbol);
-    //visit(node);
+
+    waveform_element_visitor v(*this);
+    v(node.form);
+
+    if(node.time_expression) {
+        (*this)(node.time_expression.value());
+    }
 }
+
 
 /*
  * Non AST members, used e.g. for unit tests (namely ast::integer)

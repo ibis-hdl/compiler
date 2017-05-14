@@ -171,6 +171,42 @@ BOOST_DATA_TEST_CASE( wait_statement,
 
 
 /*
+ * waveform
+ */
+struct waveform_dataset : public ::x3_test::dataset_loader
+{
+    waveform_dataset()
+    : dataset_loader{ "test_case/waveform" }
+    { }
+} const waveform_dataset;
+
+
+BOOST_DATA_TEST_CASE( waveform,
+      waveform_dataset.input()
+    ^ waveform_dataset.expect()
+    ^ waveform_dataset.test_file_name(),
+    input, expect, file)
+{
+    using x3_test::testing_parser;
+
+    typedef ast::waveform attribute_type;
+
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
+
+    bool parse_ok{ false };
+    std::string parse_result {};
+
+    testing_parser<attribute_type> parse;
+    std::tie(parse_ok, parse_result) = parse(input, parser::waveform);
+
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expect, btt::per_element());
+}
+
+
+/*
  * XXXX
  */
 struct xxx_dataset : public ::x3_test::dataset_loader
@@ -189,7 +225,7 @@ BOOST_DATA_TEST_CASE( xxxx,
 {
     using x3_test::testing_parser;
 
-    typedef ast::sensitivity_clause attribute_type;
+    typedef ast::waveform attribute_type;
 
     // avoid warning, used in case of error for error message by boost.test
     boost::ignore_unused(file);
@@ -198,13 +234,12 @@ BOOST_DATA_TEST_CASE( xxxx,
     std::string parse_result {};
 
     testing_parser<attribute_type> parse;
-    std::tie(parse_ok, parse_result) = parse(input, parser::sensitivity_clause);
+    std::tie(parse_ok, parse_result) = parse(input, parser::waveform);
 
     BOOST_TEST(parse_ok);
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
-
 
 
 BOOST_AUTO_TEST_SUITE_END()

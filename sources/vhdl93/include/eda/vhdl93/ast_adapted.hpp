@@ -153,5 +153,9 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::wait_statement,
     label, sensitivity_clause, condition_clause, timeout_clause
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::waveform_element,
+    form, time_expression
+)
+
 
 #endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_ADAPTED_HPP_ */

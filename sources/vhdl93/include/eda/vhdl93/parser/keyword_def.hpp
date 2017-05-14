@@ -120,7 +120,9 @@ auto const TO = as_type<ast::keyword_token>(
 );
 auto const TRANSPORT = kw("transport");
 auto const TYPE = kw("type");
-auto const UNAFFECTED = kw("unaffected");
+auto const UNAFFECTED = as_type<ast::keyword_token>(
+    kw("unaffected") >> x3::attr(ast::keyword_token::UNAFFECTED)
+);
 auto const UNITS = kw("units");
 auto const UNTIL = kw("until");
 auto const USE = kw("use");

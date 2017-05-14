@@ -253,10 +253,16 @@ error_handler_base::error_handler_base()
     { "variable_declaration" , "Variable Declaration" },
     { "wait_statement" , "Wait Statement" },
     { "waveform" , "Waveform" },
-    { "waveform_element" , "Waveform Element" }
+    { "waveform_element" , "Waveform Element" },
+
+    /* other */
+    { "signal_name", "Signal Name" },
+
+    { "boolean_expression", "Boolean Expression" },
+    { "time_expression", "Time Expression" },
+    { "value_expression", "Value Eexpression" }
 }
 { }
-
 
 
 }}} // namespace eda.vhdl93.parser

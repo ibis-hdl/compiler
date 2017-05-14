@@ -724,8 +724,8 @@ typedef x3::rule<use_clause_class, ast::use_clause> use_clause_type;
 typedef x3::rule<variable_assignment_statement_class> variable_assignment_statement_type;
 typedef x3::rule<variable_declaration_class> variable_declaration_type;
 typedef x3::rule<wait_statement_class, ast::wait_statement> wait_statement_type;
-typedef x3::rule<waveform_class> waveform_type;
-typedef x3::rule<waveform_element_class> waveform_element_type;
+typedef x3::rule<waveform_class, ast::waveform> waveform_type;
+typedef x3::rule<waveform_element_class, ast::waveform_element> waveform_element_type;
 
 /*
  * Rule Instances
@@ -1061,6 +1061,9 @@ auto const boolean_expression = x3::rule<expression_class, ast::expression> { "b
     expression;
 
 auto const time_expression = x3::rule<expression_class, ast::expression> { "time_expression" } =
+    expression;
+
+auto const value_expression = x3::rule<expression_class, ast::expression> { "value_expression" } =
     expression;
 
 
@@ -3694,28 +3697,31 @@ auto const wait_statement_def =
     ;
 
 
-#if 0
-// waveform ::=
-// waveform_element { , waveform_element }
+
+// waveform ::=                                                          [§ 8.4]
+//       waveform_element { , waveform_element }
 //     | unaffected
 auto const waveform_def =
-        waveform_element >> ( waveform_element % ',' )
-        | UNAFFECTED
-        ;
-#else
-auto const waveform_def = *x3::char_ ;
-
-#endif
-
-#if 0
-// waveform_element ::=
-// value_expression [ after time_expression ]
-//     | null [ after time_expression ]
-auto const waveform_element_def =
-    value_expression -( AFTER time_expression )
-    | NULL -( AFTER time_expression )
+    ( waveform_element % ',' )
+    | UNAFFECTED
     ;
-#endif
+
+
+
+// waveform_element ::=                                                [§ 8.4.1]
+//       value_expression [ after time_expression ]
+//     | null [ after time_expression ]
+namespace waveform_element_detail {
+    auto const time_expression = x3::rule<expression_class, boost::optional<ast::expression>> { "time_expression" } =
+        -( AFTER >> expression )
+        ;
+}
+auto const waveform_element_def =
+    ( value_expression | NULL )
+    >> waveform_element_detail::time_expression
+    ;
+
+
 
 /* get rid off the annoying unused parameter warnings from x3 */
 #pragma GCC diagnostic push
@@ -3946,8 +3952,8 @@ BOOST_SPIRIT_DEFINE(
         //    variable_assignment_statement,
         //    variable_declaration,
         wait_statement,
-        waveform
-        //    waveform_element
+        waveform,
+        waveform_element
 );
 
 #pragma GCC diagnostic pop
