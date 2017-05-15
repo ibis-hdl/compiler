@@ -1042,6 +1042,8 @@ __end_dummy__ ::= __ignore__
 import collections
 import re
 import textwrap
+import itertools
+
 
 ################################################################################
 # BNF 'parser'
@@ -1057,8 +1059,24 @@ class Vhdl93Bnf:
         # over all instances! Brutal-Delux-Fix ^TM
         self.rule_list[:] = []
         self.rule_name_list[:] = []
+
+        # hand made operator rules from BNF
+        self.operator_dict = {
+            'miscellaneous_operator' : ['**', 'abs', 'not'],
+            'multiplying_operator'   : ['*', '/', 'mod', 'rem'],
+            # unary minus/plus
+            'adding_operator'        : ['+', '-', '&'],
+            'shift_operator'         : ['sll', 'srl', 'sla', 'sra', 'rol', 'ror'],
+            'relational_operator'    : ['=', '/=', '<', '<=', '>', '>='],
+            'logical_operator'       : ['and', 'or', 'nand', 'nor', 'xor', 'xnor']
+        }
+        
         # reserved keywords
-        self.kw_list = [l.split()[0] for l in vhdl93_words.splitlines() if l.strip()]
+        operator_list = list(itertools.chain(*self.operator_dict.values()))
+        for kw in [l.split()[0] for l in vhdl93_words.splitlines() if l.strip()]:
+            if kw not in operator_list:
+                self.kw_list.append(kw)
+
         # bnf rules
         rule_name = ""
         rest = ""
@@ -1076,17 +1094,6 @@ class Vhdl93Bnf:
         # generate list of all rules
         for r in self.rule_list:
             self.rule_name_list.append(r.name)
-
-        # hand made operator rules from BNF
-        self.operator_dict = {
-            'miscellaneous_operator' : ['**', 'abs', 'not'],
-            'multiplying_operator'   : ['*', '/', 'mod', 'rem'],
-            # unary minus/plus
-            'adding_operator'        : ['+', '-', '&'],
-            'shift_operator'         : ['sll', 'srl', 'sla', 'sra', 'rol', 'ror'],
-            'relational_operator'    : ['=', '/=', '<', '<=', '>', '>='],
-            'logical_operator'       : ['and', 'or', 'nand', 'nor', 'xor', 'xnor']
-        }
 
         print("/* BNF KEYWORD COUNT = " + str(len(self.kw_list)) + " */")
         print("/* BNF RULES COUNT = " + str(len(self.rule_list)) + " */")
@@ -2043,8 +2050,8 @@ if __name__ == "__main__":
     ns = ['eda', 'vhdl93']
 
     ast = Ast(ns + ['ast'])
-    #print(ast.keyword_token())
-    #print(ast.keyword_token_print())
+    print(ast.keyword_token())
+    print(ast.keyword_token_print())
     #print(ast.operator_token())
     #print(ast.operator_token_print())
     #print(ast.include_global())
