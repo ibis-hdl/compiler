@@ -146,6 +146,7 @@
 //#include <eda/vhdl93/ast/interface_signal_declaration.hpp>
 //#include <eda/vhdl93/ast/interface_variable_declaration.hpp>
 //#include <eda/vhdl93/ast/iteration_scheme.hpp>
+#include <eda/vhdl93/ast/keyword_token.hpp>
 //#include <eda/vhdl93/ast/label.hpp>
 #include <eda/vhdl93/ast/library_clause.hpp>
 //#include <eda/vhdl93/ast/library_unit.hpp>
