@@ -1053,12 +1053,14 @@ class Vhdl93Bnf:
     rule_list = []
     rule_name_list = []
     operator_dict = collections.OrderedDict()
+    operator_list = []
 
     def __init__(self):
         # There is somwhere a bug inside the script where the the list increases
         # over all instances! Brutal-Delux-Fix ^TM
         self.rule_list[:] = []
         self.rule_name_list[:] = []
+        self.operator_list[:] = []
 
         # hand made operator rules from BNF
         self.operator_dict = {
@@ -1070,12 +1072,10 @@ class Vhdl93Bnf:
             'relational_operator'    : ['=', '/=', '<', '<=', '>', '>='],
             'logical_operator'       : ['and', 'or', 'nand', 'nor', 'xor', 'xnor']
         }
-        
+
         # reserved keywords
-        operator_list = list(itertools.chain(*self.operator_dict.values()))
-        for kw in [l.split()[0] for l in vhdl93_words.splitlines() if l.strip()]:
-            if kw not in operator_list:
-                self.kw_list.append(kw)
+        self.operator_list = list(itertools.chain(*self.operator_dict.values()))
+        self.kw_list = [l.split()[0] for l in vhdl93_words.splitlines() if l.strip()]
 
         # bnf rules
         rule_name = ""
@@ -1098,11 +1098,18 @@ class Vhdl93Bnf:
         print("/* BNF KEYWORD COUNT = " + str(len(self.kw_list)) + " */")
         print("/* BNF RULES COUNT = " + str(len(self.rule_list)) + " */")
 
-    def keywords(self):
+    def keywords(self, with_operators=True):
         """
         Returns a list of all keywords
         """
-        return self.kw_list
+        if with_operators:
+            return self.kw_list
+        else:
+            kw_list = []
+            for kw in self.kw_list:
+                if kw not in self.operator_list:
+                    kw_list.append(kw)
+            return kw_list
 
     def rules(self, with_operators=False):
         """
