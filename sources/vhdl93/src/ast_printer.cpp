@@ -10,7 +10,7 @@
 
 #include <boost/spirit/home/x3/support/traits/is_variant.hpp>
 
-#include <boost/exception/all.hpp>
+#include <eda/support/boost/hana_overload.hpp>
 
 
 #pragma GCC diagnostic push
@@ -2062,58 +2062,30 @@ void printer::operator()(wait_statement const &node)
 }
 
 
-struct waveform_visitor     /* FixMe: Lambda Visitor: https://vittorioromeo.info/index/blog/variants_lambdas_part_1.html */
-{
-    printer& parent;
-    unsigned i{ 0 }; // state
-
-    waveform_visitor(printer& parent_) : parent{ parent_ }
-    { }
-
-    void operator()(ast::waveform const& node) {
-        boost::apply_visitor(*this, node);
-    }
-    void operator()(ast::waveform_element_list const& list) {
-        for(auto const& waveform_element : list) {
-            auto const N = list.size() - 1;
-            parent(waveform_element);
-            if(i++ != N) {
-                parent.print(",\n");
-            }
-        }
-    }
-    void operator()(ast::keyword_token token) {
-        parent(token);
-    }
-};
-
 void printer::operator()(waveform const &node)
 {
     static char const symbol[]{ "waveform" };
     symbol_scope<waveform> _(*this, symbol);
 
-    waveform_visitor visitor(*this);
-    visitor(node);
+    auto waveform_visitor = util::overload
+    (
+        [this](ast::waveform_element_list const& list) {
+            auto const N = list.size() - 1;
+            unsigned i = 0;
+            for(auto const& waveform_element : list) {
+                (*this)(waveform_element);
+                if(i++ != N) {
+                    os << ",\n";
+                }
+            }
+        },
+        [this](ast::keyword_token token) {
+            (*this)(token);
+        }
+    );
+
+    boost::apply_visitor(waveform_visitor, node);
 }
-
-
-struct waveform_element_visitor     /* FixMe: Lambda Visitor: https://vittorioromeo.info/index/blog/variants_lambdas_part_1.html */
-{
-    printer& parent;
-    waveform_element_visitor(printer& parent_) : parent{ parent_ }
-    { }
-
-    void operator()(ast::waveform_element_form const& form_) {
-        boost::apply_visitor(*this, form_);
-        parent.print("\n");
-    }
-    void operator()(ast::expression const& expr) {
-        parent(expr);
-    }
-    void operator()(ast::keyword_token token) {
-        parent(token);
-    }
-};
 
 
 void printer::operator()(waveform_element const &node)
@@ -2121,8 +2093,18 @@ void printer::operator()(waveform_element const &node)
     static char const symbol[]{ "waveform_element" };
     symbol_scope<waveform_element> _(*this, symbol);
 
-    waveform_element_visitor visitor(*this);
-    visitor(node.form);
+    auto form_visitor = util::overload
+    (
+        [this](ast::expression const& expr) {
+            (*this)(expr);
+            os << "\n";
+        },
+        [this](ast::keyword_token token) {
+            (*this)(token);
+        }
+    );
+
+    boost::apply_visitor(form_visitor, node.form);
 
     if(node.time_expression) {
         (*this)(node.time_expression.value());
