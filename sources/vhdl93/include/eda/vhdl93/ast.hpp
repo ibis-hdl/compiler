@@ -77,7 +77,7 @@
 //#include <eda/vhdl93/ast/context_item.hpp>
 //XXX#include <eda/vhdl93/ast/decimal_literal.hpp>
 //#include <eda/vhdl93/ast/declaration.hpp>
-//#include <eda/vhdl93/ast/delay_mechanism.hpp>
+#include <eda/vhdl93/ast/delay_mechanism.hpp>
 //#include <eda/vhdl93/ast/design_file.hpp>
 //#include <eda/vhdl93/ast/design_unit.hpp>
 //#include <eda/vhdl93/ast/designator.hpp>

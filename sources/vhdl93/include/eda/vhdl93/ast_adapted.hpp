@@ -51,6 +51,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::decimal_literal,
     literal, hint
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::delay_mechanism,
+    type, time_expression
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::entity_designator,
     entity_tag, signature
 )

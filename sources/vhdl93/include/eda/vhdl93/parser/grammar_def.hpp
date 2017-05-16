@@ -330,7 +330,9 @@ auto const GROUP = kw("group");
 auto const GUARDED = kw("guarded");
 auto const IF = kw("if");
 auto const IMPURE = kw("impure");
-auto const INERTIAL = kw("inertial");
+auto const INERTIAL = as_type<ast::delay_mechanism::delay_type>(
+    kw("inertial") >> x3::attr(ast::delay_mechanism::delay_type::INERTIAL_DELAY)
+);
 auto const IS = kw("is");
 auto const LABEL = kw("label");
 auto const LIBRARY = kw("library");
@@ -373,7 +375,9 @@ auto const THEN = kw("then");
 auto const TO = as_type<ast::keyword_token>(
     kw("to") >> x3::attr(ast::keyword_token::TO)
 );
-auto const TRANSPORT = kw("transport");
+auto const TRANSPORT = as_type<ast::delay_mechanism::delay_type>(
+    kw("transport")  >> x3::attr(ast::delay_mechanism::delay_type::TRANSPORT_DELAY)
+);
 auto const TYPE = kw("type");
 auto const UNAFFECTED = as_type<ast::keyword_token>(
     kw("unaffected") >> x3::attr(ast::keyword_token::UNAFFECTED)
@@ -752,7 +756,7 @@ typedef x3::rule<context_clause_class> context_clause_type;
 typedef x3::rule<context_item_class> context_item_type;
 typedef x3::rule<decimal_literal_class, ast::decimal_literal> decimal_literal_type;
 typedef x3::rule<declaration_class> declaration_type;
-typedef x3::rule<delay_mechanism_class> delay_mechanism_type;
+typedef x3::rule<delay_mechanism_class, ast::delay_mechanism> delay_mechanism_type;
 typedef x3::rule<design_file_class> design_file_type;
 typedef x3::rule<design_unit_class> design_unit_type;
 typedef x3::rule<designator_class> designator_type;
@@ -2062,15 +2066,17 @@ auto const declaration_def =
         ;
 #endif
 
-#if 0
-// delay_mechanism ::=
-// transport
+
+// delay_mechanism ::=                                                   [§ 8.4]
+//       transport
 //     | [ reject time_expression ] inertial
 auto const delay_mechanism_def =
-        TRANSPORT
-        | -( REJECT time_expression ) INERTIAL
-        ;
-#endif
+       TRANSPORT
+    | (   -( REJECT > time_expression )
+       >> INERTIAL
+      )
+    ;
+
 
 #if 0
 // design_file ::=
@@ -3995,7 +4001,7 @@ BOOST_SPIRIT_DEFINE(
         //    context_item,
         decimal_literal,
         //    declaration,
-        //    delay_mechanism,
+        delay_mechanism,
         //    design_file,
         //    design_unit,
         //    designator,
