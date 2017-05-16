@@ -23,6 +23,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::attribute_name,
     prefix, signature, attribute_designator, expression
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::attribute_specification,
+    attribute_designator, entity_specification, expression
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::based_literal,
     base, number, exponent
 )
@@ -45,6 +49,14 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::condition_clause,
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::decimal_literal,
     literal, hint
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::entity_designator,
+    entity_tag, signature
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::entity_specification,
+    entity_name_list, entity_class
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::enumeration_type_definition,

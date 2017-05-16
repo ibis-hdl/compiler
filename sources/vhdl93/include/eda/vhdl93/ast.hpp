@@ -28,7 +28,7 @@
 //#include <eda/vhdl93/ast/association_list.hpp>
 #include <eda/vhdl93/ast/attribute_declaration.hpp>
 #include <eda/vhdl93/ast/attribute_name.hpp>
-//#include <eda/vhdl93/ast/attribute_specification.hpp>
+#include <eda/vhdl93/ast/attribute_specification.hpp>
 //#include <eda/vhdl93/ast/base.hpp>
 //#include <eda/vhdl93/ast/base_specifier.hpp>
 //#include <eda/vhdl93/ast/base_unit_declaration.hpp>

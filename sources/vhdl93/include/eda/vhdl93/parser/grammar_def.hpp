@@ -707,7 +707,7 @@ typedef x3::rule<association_list_class> association_list_type;
 typedef x3::rule<attribute_declaration_class, ast::attribute_declaration> attribute_declaration_type;
 typedef x3::rule<attribute_designator_class, ast::simple_name> attribute_designator_type;
 typedef x3::rule<attribute_name_class, ast::attribute_name> attribute_name_type;
-typedef x3::rule<attribute_specification_class> attribute_specification_type;
+typedef x3::rule<attribute_specification_class, ast::attribute_specification> attribute_specification_type;
 typedef x3::rule<base_unit_declaration_class> base_unit_declaration_type;
 typedef x3::rule<based_integer_class, std::string_view> based_integer_type;
 typedef x3::rule<based_literal_class, ast::based_literal> based_literal_type;
@@ -763,19 +763,19 @@ typedef x3::rule<element_association_class> element_association_type;
 typedef x3::rule<element_declaration_class> element_declaration_type;
 typedef x3::rule<element_subtype_definition_class> element_subtype_definition_type;
 typedef x3::rule<entity_aspect_class> entity_aspect_type;
-typedef x3::rule<entity_class_class> entity_class_type;
+typedef x3::rule<entity_class_class, ast::keyword_token> entity_class_type;
 typedef x3::rule<entity_class_entry_class> entity_class_entry_type;
 typedef x3::rule<entity_class_entry_list_class> entity_class_entry_list_type;
 typedef x3::rule<entity_declaration_class> entity_declaration_type;
 typedef x3::rule<entity_declarative_item_class> entity_declarative_item_type;
 typedef x3::rule<entity_declarative_part_class> entity_declarative_part_type;
-typedef x3::rule<entity_designator_class> entity_designator_type;
+typedef x3::rule<entity_designator_class, ast::entity_designator> entity_designator_type;
 typedef x3::rule<entity_header_class> entity_header_type;
-typedef x3::rule<entity_name_list_class> entity_name_list_type;
-typedef x3::rule<entity_specification_class> entity_specification_type;
+typedef x3::rule<entity_name_list_class, ast::entity_name_list> entity_name_list_type;
+typedef x3::rule<entity_specification_class, ast::entity_specification> entity_specification_type;
 typedef x3::rule<entity_statement_class> entity_statement_type;
 typedef x3::rule<entity_statement_part_class> entity_statement_part_type;
-typedef x3::rule<entity_tag_class> entity_tag_type;
+typedef x3::rule<entity_tag_class, ast::entity_tag> entity_tag_type;
 typedef x3::rule<enumeration_literal_class, ast::enumeration_literal> enumeration_literal_type;
 typedef x3::rule<enumeration_type_definition_class, ast::enumeration_type_definition> enumeration_type_definition_type;
 typedef x3::rule<exit_statement_class> exit_statement_type;
@@ -1452,13 +1452,19 @@ auto const attribute_name_def =
     ;
 
 
-#if 0
-// attribute_specification ::=
-// attribute attribute_designator of entity_specification is expression ;
+
+// attribute_specification ::=                                           [§ 5.1]
+//     attribute attribute_designator of entity_specification is expression ;
 auto const attribute_specification_def =
-        ATTRIBUTE attribute_designator OF entity_specification IS expression > ';'
+       ATTRIBUTE
+    >> attribute_designator
+    >> OF
+    >> entity_specification
+    >> IS
+    >> expression
+    > ';'
 ;
-#endif
+
 
 #if 0 /* Note: UNUSED, embedded directly into based_literal rule */
 // base ::=                                                           [§ 13.4.2]
@@ -2151,8 +2157,8 @@ auto const entity_aspect_def =
 ;
 #endif
 
-#if 0
-// entity_class ::=
+
+// entity_class ::=                                                      [§ 5.1]
 //       entity        | architecture  | configuration
 //     | procedure     | function      | package
 //     | type          | subtype       | constant
@@ -2160,14 +2166,14 @@ auto const entity_aspect_def =
 //     | label         | literal       | units
 //     | group         | file
 auto const entity_class_def =
-        ENTITY         | ARCHITECTURE  | CONFIGURATION
-        | PROCEDURE  | FUNCTION         | PACKAGE
-        | TYPE         | SUBTYPE         | CONSTANT
-        | SIGNAL     | VARIABLE         | COMPONENT
-        | LABEL         | LITERAL         | UNITS
-        | GROUP         | FILE
-        ;
-#endif
+       ENTITY        | ARCHITECTURE  | CONFIGURATION
+     | PROCEDURE     | FUNCTION      | PACKAGE
+     | TYPE          | SUBTYPE       | CONSTANT
+     | SIGNAL        | VARIABLE      | COMPONENT
+     | LABEL         | LITERAL       | UNITS
+     | GROUP         | FILE
+     ;
+
 
 #if 0
 // entity_class_entry ::=
@@ -2247,13 +2253,14 @@ auto const entity_declarative_part_def =
 ;
 #endif
 
-#if 0
-// entity_designator ::=
-// entity_tag [ signature ]
+
+// entity_designator ::=                                                 [§ 5.1]
+//     entity_tag [ signature ]
 auto const entity_designator_def =
-        entity_tag -( signature )
-        ;
-#endif
+       entity_tag
+    >> -signature
+    ;
+
 
 #if 0
 // entity_header ::=
@@ -2265,25 +2272,27 @@ auto const entity_header_def =
         ;
 #endif
 
-#if 0
-// entity_name_list ::=
-// entity_designator { , entity_designator }
+
+// entity_name_list ::=                                                  [§ 5.1]
+//       entity_designator { , entity_designator }
 //     | others
 //     | all
 auto const entity_name_list_def =
-        entity_designator >> ( entity_designator % ',' )
-        | OTHERS
-        | ALL
-        ;
-#endif
+      ( entity_designator % ',' )
+    | OTHERS
+    | ALL
+    ;
 
-#if 0
-// entity_specification ::=
-// entity_name_list : entity_class
+
+
+// entity_specification ::=                                              [§ 5.1]
+//     entity_name_list : entity_class
 auto const entity_specification_def =
-        entity_name_list > ':' entity_class
-        ;
-#endif
+      entity_name_list
+    > ':'
+    > entity_class
+    ;
+
 
 #if 0
 // entity_statement ::=
@@ -2305,13 +2314,15 @@ auto const entity_statement_part_def =
 ;
 #endif
 
-#if 0
-// entity_tag ::=
+
+// entity_tag ::=                                                        [§ 5.1]
 // simple_name | character_literal | operator_symbol
 auto const entity_tag_def =
-        simple_name | character_literal | operator_symbol
-        ;
-#endif
+      simple_name
+    | character_literal
+    | operator_symbol
+    ;
+
 
 
 // enumeration_literal ::=                                             [§ 3.1.1]
@@ -3937,7 +3948,7 @@ BOOST_SPIRIT_DEFINE(
         attribute_declaration,
         attribute_designator,
         attribute_name,
-        //    attribute_specification,
+        attribute_specification,
         //base,
         //    base_unit_declaration,
         based_integer,
@@ -3995,19 +4006,19 @@ BOOST_SPIRIT_DEFINE(
         //    element_declaration,
         //    element_subtype_definition,
         //    entity_aspect,
-        //    entity_class,
+        entity_class,
         //    entity_class_entry,
         //    entity_class_entry_list,
         //    entity_declaration,
         //    entity_declarative_item,
         //    entity_declarative_part,
-        //    entity_designator,
+        entity_designator,
         //    entity_header,
-        //    entity_name_list,
-        //    entity_specification,
+        entity_name_list,
+        entity_specification,
         //    entity_statement,
         //    entity_statement_part,
-        //    entity_tag,
+        entity_tag,
         enumeration_literal,
         enumeration_type_definition,
         //    exit_statement,
