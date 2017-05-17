@@ -14,16 +14,16 @@
 
 #include <eda/vhdl93/ast/entity_tag.hpp>
 #include <eda/vhdl93/ast/signature.hpp>
+#include <boost/optional.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-
 struct entity_designator : position_tagged
 {
     ast::entity_tag                 entity_tag;
-    ast::signature                  signature;
+    boost::optional<ast::signature> signature;
 };
 
 

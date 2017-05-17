@@ -87,7 +87,7 @@ auto visit_in_place(TVariant&& variant, TVisitors&&... visitors)
 }
 
 
-} } // namespace hana.util
+} } // namespace eda.util
 
 
 #endif /* SOURCES_COMMON_INCLUDE_EDA_SUPPORT_BOOST_HANA_OVERLOAD_HPP_ */

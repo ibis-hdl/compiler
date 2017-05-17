@@ -1,0 +1,60 @@
+(attribute_specification
+  (simple_name
+    LOCATION
+  )
+  (entity_specification
+    (entity_name_list<v>
+      (keyword
+        OTHERS
+      )
+    )
+    (keyword
+      LABEL
+    )
+  )
+  (expression
+    (relation
+      (shift_expression
+        (simple_expression
+          term: (term
+            (primary<v>
+              (expression
+                (relation
+                  (shift_expression
+                    (simple_expression
+                      term: (term
+                        (primary<v>
+                          (literal<v>
+                            (numeric_literal<v>
+                              (abstract_literal<v>
+                                (decimal_literal
+                                  literal: 25, hint: int
+                                )
+                              )
+                            )
+                          )
+                        ),
+                        operator: MUL,
+                        (primary<v>
+                          (literal<v>
+                            (numeric_literal<v>
+                              (abstract_literal<v>
+                                (decimal_literal
+                                  literal: 77, hint: int
+                                )
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

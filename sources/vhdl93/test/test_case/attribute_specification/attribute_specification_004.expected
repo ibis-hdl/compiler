@@ -1,0 +1,39 @@
+(attribute_specification
+  (simple_name
+    CAPACITANCE
+  )
+  (entity_specification
+    (entity_name_list<v>
+      (keyword
+        ALL
+      )
+    )
+    (keyword
+      SIGNAL
+    )
+  )
+  (expression
+    (relation
+      (shift_expression
+        (simple_expression
+          term: (term
+            (primary<v>
+              (literal<v>
+                (numeric_literal<v>
+                  (physical_literal
+                    literal: (abstract_literal<v>
+                      (decimal_literal
+                        literal: 15, hint: int
+                      )
+                    ),
+                    unit: pF
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

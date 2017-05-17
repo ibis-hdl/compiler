@@ -269,9 +269,14 @@ void printer::operator()(attribute_name const &node)
 
 void printer::operator()(attribute_specification const &node)
 {
-    static char const symbol[]{ "XXX attribute_specification" };
+    static char const symbol[]{ "attribute_specification" };
     symbol_scope<attribute_specification> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.attribute_designator);
+    os << "\n";
+    (*this)(node.entity_specification);
+    os << "\n";
+    (*this)(node.expression);
 }
 
 
@@ -787,9 +792,14 @@ void printer::operator()(entity_declarative_part const &node)
 
 void printer::operator()(entity_designator const &node)
 {
-    static char const symbol[]{ "XXX entity_designator" };
+    static char const symbol[]{ "entity_designator" };
     symbol_scope<entity_designator> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.entity_tag);
+    if(node.signature) {
+        os << "\n";
+        (*this)(node.signature.get());
+    }
 }
 
 
@@ -803,17 +813,39 @@ void printer::operator()(entity_header const &node)
 
 void printer::operator()(entity_name_list const &node)
 {
-    static char const symbol[]{ "XXX entity_name_list" };
+    static char const symbol[]{ "entity_name_list" };
     symbol_scope<entity_name_list> _(*this, symbol);
-    //visit(node);
+
+    util::visit_in_place(
+        node,
+        [this](ast::entity_designator_list const& entity_designator_list) {
+            auto const N = entity_designator_list.size() - 1;
+            unsigned i = 0;
+            for(auto const& entity_designator : entity_designator_list) {
+                (*this)(entity_designator);
+                if(i++ != N) {
+                    os << ",\n";
+                }
+            }
+        },
+        [this](ast::keyword_token token) {
+            (*this)(token); // OTHERS | ALL
+        },
+        [this](ast::nullary const& nullary) {
+            (*this)(nullary);
+        }
+    );
 }
 
 
 void printer::operator()(entity_specification const &node)
 {
-    static char const symbol[]{ "XXX entity_specification" };
+    static char const symbol[]{ "entity_specification" };
     symbol_scope<entity_specification> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.entity_name_list);
+    os << "\n";
+    (*this)(node.entity_class);
 }
 
 
@@ -835,9 +867,9 @@ void printer::operator()(entity_statement_part const &node)
 
 void printer::operator()(entity_tag const &node)
 {
-    static char const symbol[]{ "XXX entity_tag" };
+    static char const symbol[]{ "entity_tag" };
     symbol_scope<entity_tag> _(*this, symbol);
-    //visit(node);
+    boost::apply_visitor(*this, node);
 }
 
 

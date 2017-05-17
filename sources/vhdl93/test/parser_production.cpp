@@ -243,6 +243,42 @@ BOOST_DATA_TEST_CASE( attribute_name,
 
 
 /*
+ * attribute_specification
+ */
+struct attribute_specification_dataset : public ::x3_test::dataset_loader
+{
+    attribute_specification_dataset()
+    : dataset_loader{ "test_case/attribute_specification" }
+    { }
+} const attribute_specification_dataset;
+
+
+BOOST_DATA_TEST_CASE( attribute_specification,
+      attribute_specification_dataset.input()
+    ^ attribute_specification_dataset.expect()
+    ^ attribute_specification_dataset.test_file_name(),
+    input, expect, file)
+{
+    using x3_test::testing_parser;
+
+    typedef ast::attribute_specification attribute_type;
+
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
+
+    bool parse_ok{ false };
+    std::string parse_result {};
+
+    testing_parser<attribute_type> parse;
+    std::tie(parse_ok, parse_result) = parse(input, parser::attribute_specification);
+
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expect, btt::per_element());
+}
+
+
+/*
  * XXXX
  */
 struct xxx_dataset : public ::x3_test::dataset_loader
@@ -276,7 +312,6 @@ BOOST_DATA_TEST_CASE( xxx,
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
-
 
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -1,0 +1,43 @@
+(attribute_specification
+  (simple_name
+    RISING_DELAY
+  )
+  (entity_specification
+    (entity_name_list<v>
+      (entity_designator
+        (entity_tag<v>
+          (simple_name
+            C2Q
+          )
+        )
+      )
+    )
+    (keyword
+      GROUP
+    )
+  )
+  (expression
+    (relation
+      (shift_expression
+        (simple_expression
+          term: (term
+            (primary<v>
+              (literal<v>
+                (numeric_literal<v>
+                  (physical_literal
+                    literal: (abstract_literal<v>
+                      (decimal_literal
+                        literal: 7.2, hint: double
+                      )
+                    ),
+                    unit: ns
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

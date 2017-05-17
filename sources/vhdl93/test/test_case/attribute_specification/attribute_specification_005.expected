@@ -1,0 +1,36 @@
+(attribute_specification
+  (simple_name
+    IMPLEMENTATION
+  )
+  (entity_specification
+    (entity_name_list<v>
+      (entity_designator
+        (entity_tag<v>
+          (simple_name
+            G1
+          )
+        )
+      )
+    )
+    (keyword
+      GROUP
+    )
+  )
+  (expression
+    (relation
+      (shift_expression
+        (simple_expression
+          term: (term
+            (primary<v>
+              (literal<v>
+                (string_literal
+                  74LS152
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

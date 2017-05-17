@@ -1,0 +1,40 @@
+(attribute_specification
+  (simple_name
+    PIN_NO
+  )
+  (entity_specification
+    (entity_name_list<v>
+      (entity_designator
+        (entity_tag<v>
+          (simple_name
+            CIN
+          )
+        )
+      )
+    )
+    (keyword
+      SIGNAL
+    )
+  )
+  (expression
+    (relation
+      (shift_expression
+        (simple_expression
+          term: (term
+            (primary<v>
+              (literal<v>
+                (numeric_literal<v>
+                  (abstract_literal<v>
+                    (decimal_literal
+                      literal: 10, hint: int
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

@@ -428,10 +428,10 @@ auto const keyword = x3::rule<struct _> { "keyword" } =
 
 
 /*
- * Symbols for mode
+ * Symbols for mode                                                    [§ 4.3.2]
  */
 struct mode_symbols : x3::symbols<ast::keyword_token> {
-    //IN | OUT | INOUT | BUFFER | LINKAGE
+    // IN | OUT | INOUT | BUFFER | LINKAGE
     mode_symbols() {
 
         name("mode");
@@ -449,6 +449,45 @@ auto const mode = x3::rule<struct _> { "mode" } =
     kw( mode_symbols )
     ;
 
+
+/*
+ * Symbols for entity_class                                              [§ 5.1]
+ */
+struct entity_class_symbols : x3::symbols<ast::keyword_token> {
+    //    ENTITY        | ARCHITECTURE  | CONFIGURATION
+    //  | PROCEDURE     | FUNCTION      | PACKAGE
+    //  | TYPE          | SUBTYPE       | CONSTANT
+    //  | SIGNAL        | VARIABLE      | COMPONENT
+    //  | LABEL         | LITERAL       | UNITS
+    //  | GROUP         | FILE
+    entity_class_symbols() {
+
+        name("entity_class");
+
+        add("entity"        , ast::keyword_token::ENTITY)
+           ("architecture"  , ast::keyword_token::ARCHITECTURE)
+           ("configuration" , ast::keyword_token::CONFIGURATION)
+           ("procedure"     , ast::keyword_token::PROCEDURE)
+           ("function"      , ast::keyword_token::FUNCTION)
+           ("package"       , ast::keyword_token::PACKAGE)
+           ("type"          , ast::keyword_token::TYPE)
+           ("subtype"       , ast::keyword_token::SUBTYPE)
+           ("constant"      , ast::keyword_token::CONSTANT)
+           ("signal"        , ast::keyword_token::SIGNAL)
+           ("variable"      , ast::keyword_token::VARIABLE)
+           ("component"     , ast::keyword_token::COMPONENT)
+           ("label"         , ast::keyword_token::LABEL)
+           ("literal"       , ast::keyword_token::LITERAL)
+           ("units"         , ast::keyword_token::UNITS)
+           ("group"         , ast::keyword_token::GROUP)
+           ("file"          , ast::keyword_token::FILE)
+           ;
+    }
+} const entity_class_symbols;
+
+//auto const entity_class = x3::rule<struct _, ast::keyword_token> { "entity_class" } =
+//    kw( entity_class_symbols )
+//    ;
 
 } } } } // namespace eda.vhdl93.parser.keywords
 
@@ -2172,12 +2211,7 @@ auto const entity_aspect_def =
 //     | label         | literal       | units
 //     | group         | file
 auto const entity_class_def =
-       ENTITY        | ARCHITECTURE  | CONFIGURATION
-     | PROCEDURE     | FUNCTION      | PACKAGE
-     | TYPE          | SUBTYPE       | CONSTANT
-     | SIGNAL        | VARIABLE      | COMPONENT
-     | LABEL         | LITERAL       | UNITS
-     | GROUP         | FILE
+     kw( entity_class_symbols )
      ;
 
 
