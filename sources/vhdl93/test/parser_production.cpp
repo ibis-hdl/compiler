@@ -297,7 +297,7 @@ BOOST_DATA_TEST_CASE( xxx,
 {
     using x3_test::testing_parser;
 
-    typedef ast::attribute_specification attribute_type;
+    typedef ast::delay_mechanism attribute_type;
 
     // avoid warning, used in case of error for error message by boost.test
     boost::ignore_unused(file);
@@ -306,7 +306,7 @@ BOOST_DATA_TEST_CASE( xxx,
     std::string parse_result {};
 
     testing_parser<attribute_type> parse;
-    std::tie(parse_ok, parse_result) = parse(input, parser::attribute_specification);
+    std::tie(parse_ok, parse_result) = parse(input, parser::delay_mechanism);
 
     BOOST_TEST(parse_ok);
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");

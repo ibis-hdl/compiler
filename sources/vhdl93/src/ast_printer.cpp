@@ -664,9 +664,31 @@ void printer::operator()(declaration const &node)
 
 void printer::operator()(delay_mechanism const &node)
 {
-    static char const symbol[]{ "XXX delay_mechanism" };
+    static char const symbol[]{ "delay_mechanism" };
     symbol_scope<delay_mechanism> _(*this, symbol);
-    //visit(node);
+/*
+    enum class delay_type { TRANSPORT_DELAY, INERTIAL_DELAY };
+
+    boost::optional<ast::expression>    time_expression; // [REJECT ...]
+    delay_mechanism::delay_type         type;
+ */
+    switch(node.type) {
+    case delay_mechanism::delay_type::INERTIAL_DELAY: {
+        os << "INERTIAL_DELAY";
+        break;
+    }
+    case delay_mechanism::delay_type::TRANSPORT_DELAY: {
+        os << "TRANSPORT_DELAY";
+        break;
+    }
+    default:
+        os << "INVALID";
+    }
+
+    if(node.time_expression) {
+        os << "\n";
+        (*this)(node.time_expression.get());
+    }
 }
 
 

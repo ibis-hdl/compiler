@@ -3964,6 +3964,7 @@ auto const waveform_element_def =
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
+
 BOOST_SPIRIT_DEFINE(  // -- A --
   abstract_literal
 //, access_type_definition
