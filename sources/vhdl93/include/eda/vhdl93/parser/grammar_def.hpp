@@ -445,9 +445,6 @@ struct mode_symbols : x3::symbols<ast::keyword_token> {
     }
 } const mode_symbols;
 
-auto const mode = x3::rule<struct _> { "mode" } =
-    kw( mode_symbols )
-    ;
 
 
 /*
@@ -485,9 +482,6 @@ struct entity_class_symbols : x3::symbols<ast::keyword_token> {
     }
 } const entity_class_symbols;
 
-//auto const entity_class = x3::rule<struct _, ast::keyword_token> { "entity_class" } =
-//    kw( entity_class_symbols )
-//    ;
 
 } } } } // namespace eda.vhdl93.parser.keywords
 
@@ -647,6 +641,7 @@ struct literal_class;
 struct logical_name_class;
 struct logical_name_list_class;
 struct loop_statement_class;
+struct mode_class;
 struct name_class;
 struct next_statement_class;
 struct null_statement_class;
@@ -875,6 +870,7 @@ typedef x3::rule<literal_class, ast::literal> literal_type;
 //typedef x3::rule<logical_name_class> logical_name_type;
 //typedef x3::rule<logical_name_list_class> logical_name_list_type;
 typedef x3::rule<loop_statement_class> loop_statement_type;
+typedef x3::rule<mode_class, ast::keyword_token> mode_type;
 typedef x3::rule<name_class, ast::name> name_type;
 typedef x3::rule<next_statement_class> next_statement_type;
 typedef x3::rule<null_statement_class> null_statement_type;
@@ -1103,6 +1099,7 @@ literal_type const literal { "literal" };
 //logical_name_type const logical_name { "logical_name" };
 //logical_name_list_type const logical_name_list { "logical_name_list" };
 loop_statement_type const loop_statement { "loop_statement" };
+mode_type const mode { "mode" };
 name_type const name { "name" };
 next_statement_type const next_statement { "next_statement" };
 null_statement_type const null_statement { "null_statement" };
@@ -2944,13 +2941,13 @@ auto const loop_statement_def =
 ;
 #endif
 
-#if 0 /* Note: UNUSED, using x3::symbols with keyword_token */
+
 // mode ::=                                                            [§ 4.3.2]
-// in | out | inout | buffer | linkage
+//     in | out | inout | buffer | linkage
 auto const mode_def =
-        IN | OUT | INOUT | BUFFER | LINKAGE
-        ;
-#endif
+    kw( mode_symbols )
+    ;
+
 
 
 // name ::=                                                              [§ 6.1]
@@ -3967,6 +3964,274 @@ auto const waveform_element_def =
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
+#if 1
+BOOST_SPIRIT_DEFINE(  // -- A --
+  abstract_literal
+//, access_type_definition
+//, actual_designator
+//, actual_parameter_part
+//, actual_part
+//, aggregate
+//, alias_declaration
+, alias_designator
+//, allocator
+//, architecture_body
+//, architecture_declarative_part
+//, architecture_statement_part
+//, array_type_definition
+//, assertion
+//, assertion_statement
+//, association_element
+//, association_list
+, attribute_declaration
+, attribute_designator
+, attribute_name
+, attribute_specification
+)
+BOOST_SPIRIT_DEFINE(  // -- B --
+//  base
+//, base_unit_declaration
+  based_integer
+, based_literal
+//, basic_character
+, basic_graphic_character
+, basic_identifier
+//, binding_indication
+, bit_string_literal
+//, block_configuration
+//, block_declarative_item
+//, block_declarative_part
+//, block_header
+//, block_specification
+//, block_statement
+//, block_statement_part
+)
+BOOST_SPIRIT_DEFINE(  // -- C --
+//  case_statement
+//, case_statement_alternative
+  character_literal
+//, choice
+//, choices
+//, component_configuration
+//, component_declaration
+//, component_instantiation_statement
+//, component_specification
+//, composite_type_definition
+//, concurrent_assertion_statement
+//, concurrent_procedure_call_statement
+//, concurrent_signal_assignment_statement
+//, concurrent_statement
+, condition
+, condition_clause
+//, conditional_signal_assignment
+//, conditional_waveforms
+//, configuration_declaration
+//, configuration_declarative_item
+//, configuration_declarative_part
+//, configuration_item
+//, configuration_specification
+//, constant_declaration
+//, constrained_array_definition
+//, constraint
+//, context_clause
+//, context_item
+)
+BOOST_SPIRIT_DEFINE(  // -- D --
+  decimal_literal
+//, declaration
+ , delay_mechanism
+//, design_file
+//, design_unit
+//, designator
+, direction
+//, disconnection_specification
+//, discrete_range
+)
+BOOST_SPIRIT_DEFINE(  // -- E --
+//  element_association
+//, element_declaration
+//, element_subtype_definition
+//, entity_aspect
+  entity_class
+//, entity_class_entry
+//, entity_class_entry_list
+//, entity_declaration
+//, entity_declarative_item
+//, entity_declarative_part
+, entity_designator
+//, entity_header
+, entity_name_list
+, entity_specification
+//, entity_statement
+//, entity_statement_part
+, entity_tag
+, enumeration_literal
+, enumeration_type_definition
+//, exit_statement
+, exponent
+, expression
+, extended_identifier
+)
+BOOST_SPIRIT_DEFINE(  // -- F --
+  factor
+//, file_declaration
+//, file_logical_name
+//, file_open_information
+//, file_type_definition
+//, formal_designator
+//, formal_parameter_list
+//, formal_part
+//, full_type_declaration
+, function_call
+)
+BOOST_SPIRIT_DEFINE(  // -- G --
+//  generate_statement
+//, generation_scheme
+//, generic_clause
+//, generic_list
+//, generic_map_aspect
+  graphic_character
+//, group_constituent
+//, group_constituent_list
+//, group_template_declaration
+//, group_declaration
+//, guarded_signal_specification
+)
+BOOST_SPIRIT_DEFINE(  // -- I --
+  identifier
+, identifier_list
+//, if_statement
+//, incomplete_type_declaration
+//, index_constraint
+//, index_specification
+//, index_subtype_definition
+, indexed_name
+//, instantiated_unit
+//, instantiation_list
+, integer
+//, integer_type_definition
+//, interface_constant_declaration
+//, interface_declaration
+//, interface_element
+//, interface_file_declaration
+//, interface_list
+//, interface_signal_declaration
+//, interface_variable_declaration
+//, iteration_scheme
+)
+BOOST_SPIRIT_DEFINE(  // -- L --
+  label
+, letter
+, letter_or_digit
+, library_clause
+//, library_unit
+, literal
+//, loop_statement
+)
+//BOOST_SPIRIT_DEFINE(  // -- M --
+////  mode
+//)
+BOOST_SPIRIT_DEFINE(  // -- N --
+  name
+//, next_statement
+//, null_statement
+, numeric_literal
+)
+BOOST_SPIRIT_DEFINE(  // -- O --
+//  object_declaration
+  operator_symbol
+//, options
+)
+BOOST_SPIRIT_DEFINE(  // -- P --
+//  package_body
+//, package_body_declarative_item
+//, package_body_declarative_part
+//, package_declaration
+//, package_declarative_item
+//, package_declarative_part
+//, parameter_specification
+  physical_literal
+//, physical_type_definition
+//, port_clause
+//, port_list
+//, port_map_aspect
+, prefix
+, primary
+//, primary_unit
+//, procedure_call
+//, procedure_call_statement
+//, process_declarative_item
+//, process_declarative_part
+//, process_statement
+//, process_statement_part
+)
+//BOOST_SPIRIT_DEFINE(  // -- Q --
+////  qualified_expression
+//)
+BOOST_SPIRIT_DEFINE(  // -- R --
+//  range
+//, range_constraint
+//, record_type_definition
+  relation
+//, report_statement
+//, return_statement
+)
+BOOST_SPIRIT_DEFINE(  // -- S --
+//  scalar_type_definition
+//, secondary_unit
+//, secondary_unit_declaration
+  selected_name
+//, selected_signal_assignment
+//, selected_waveforms
+, sensitivity_clause
+, sensitivity_list
+//, sequence_of_statements
+//, sequential_statement
+, shift_expression
+//, sign
+//, signal_assignment_statement
+//, signal_declaration
+, signal_kind
+, signal_list
+, signature
+, simple_expression
+, simple_name
+//, slice_name
+, string_literal
+//, subprogram_body
+//, subprogram_declaration
+//, subprogram_declarative_item
+//, subprogram_declarative_part
+//, subprogram_kind
+//, subprogram_specification
+//, subprogram_statement_part
+//, subtype_declaration
+//, subtype_indication
+, suffix
+)
+BOOST_SPIRIT_DEFINE(  // -- T --
+//  target
+  term
+, timeout_clause
+//, type_conversion
+//, type_declaration
+//, type_definition
+, type_mark
+)
+BOOST_SPIRIT_DEFINE(  // -- U --
+//  unconstrained_array_definition
+  use_clause
+)
+//BOOST_SPIRIT_DEFINE(  // -- V --
+////  variable_assignment_statement
+////, variable_declaration
+//)
+BOOST_SPIRIT_DEFINE(  // -- W --
+  wait_statement
+, waveform
+, waveform_element
+)
+#else
 BOOST_SPIRIT_DEFINE(
         abstract_literal,
         //    access_type_definition,
@@ -4035,7 +4300,7 @@ BOOST_SPIRIT_DEFINE(
         //    context_item,
         decimal_literal,
         //    declaration,
-        delay_mechanism,
+        //delay_mechanism,
         //    design_file,
         //    design_unit,
         //    designator,
@@ -4113,7 +4378,7 @@ BOOST_SPIRIT_DEFINE(
         //    library_unit,
         literal,
         //    loop_statement,
-        //    mode,
+        //mode,
         name,
         //    next_statement,
         //    null_statement,
@@ -4195,6 +4460,7 @@ BOOST_SPIRIT_DEFINE(
         waveform,
         waveform_element
 );
+#endif
 
 #pragma GCC diagnostic pop
 
