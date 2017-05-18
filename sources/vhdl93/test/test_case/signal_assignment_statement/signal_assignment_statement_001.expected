@@ -1,0 +1,54 @@
+(signal_assignment_statement
+  (target<v>
+    (name<v>
+      (simple_name
+        Output_pin
+      )
+    )
+  )
+  (waveform<v>
+    (waveform_element
+      (expression
+        (relation
+          (shift_expression
+            (simple_expression
+              term: (term
+                (primary<v>
+                  (name<v>
+                    (simple_name
+                      Input_pin
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+      (expression
+        (relation
+          (shift_expression
+            (simple_expression
+              term: (term
+                (primary<v>
+                  (literal<v>
+                    (numeric_literal<v>
+                      (physical_literal
+                        literal: (abstract_literal<v>
+                          (decimal_literal
+                            literal: 10, hint: int
+                          )
+                        ),
+                        unit: ns
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

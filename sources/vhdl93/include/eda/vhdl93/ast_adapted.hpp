@@ -108,6 +108,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::library_clause,
 //    literal
 //)
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::options,
+    guarded, delay_mechanism
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::physical_literal,
     literal, unit_name
 )
@@ -134,6 +138,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::shift_expression::chunk,
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::shift_expression,
     simple_expression, rest
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::signal_assignment_statement,
+    label, target, delay_mechanism, waveform
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::signature,

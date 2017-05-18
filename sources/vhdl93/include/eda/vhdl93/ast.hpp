@@ -77,7 +77,7 @@
 //#include <eda/vhdl93/ast/context_item.hpp>
 //XXX#include <eda/vhdl93/ast/decimal_literal.hpp>
 //#include <eda/vhdl93/ast/declaration.hpp>
-#include <eda/vhdl93/ast/delay_mechanism.hpp>
+//XXX#include <eda/vhdl93/ast/delay_mechanism.hpp>
 //#include <eda/vhdl93/ast/design_file.hpp>
 //#include <eda/vhdl93/ast/design_unit.hpp>
 //#include <eda/vhdl93/ast/designator.hpp>
@@ -159,7 +159,7 @@
 //#include <eda/vhdl93/ast/object_declaration.hpp>
 //XXX#include <eda/vhdl93/ast/operator_token.hpp>
 //XXX#include <eda/vhdl93/ast/operator_symbol.hpp>
-//#include <eda/vhdl93/ast/options.hpp>
+#include <eda/vhdl93/ast/options.hpp>
 //#include <eda/vhdl93/ast/package_body.hpp>
 //#include <eda/vhdl93/ast/package_body_declarative_item.hpp>
 //#include <eda/vhdl93/ast/package_body_declarative_part.hpp>
@@ -198,7 +198,7 @@
 //#include <eda/vhdl93/ast/sequence_of_statements.hpp>
 //#include <eda/vhdl93/ast/sequential_statement.hpp>
 //XXX#include <eda/vhdl93/ast/shift_expression.hpp>
-//#include <eda/vhdl93/ast/signal_assignment_statement.hpp>
+#include <eda/vhdl93/ast/signal_assignment_statement.hpp>
 //#include <eda/vhdl93/ast/signal_declaration.hpp>
 #include <eda/vhdl93/ast/signal_list.hpp>
 //XXX#include <eda/vhdl93/ast/signature.hpp>
@@ -216,7 +216,7 @@
 //#include <eda/vhdl93/ast/subtype_declaration.hpp>
 //#include <eda/vhdl93/ast/subtype_indication.hpp>
 //XXX#include <eda/vhdl93/ast/suffix.hpp>
-//#include <eda/vhdl93/ast/target.hpp>
+//XXX#include <eda/vhdl93/ast/target.hpp>
 //XXX#include <eda/vhdl93/ast/term.hpp>
 //#include <eda/vhdl93/ast/timeout_clause.hpp>
 //#include <eda/vhdl93/ast/type_conversion.hpp>
@@ -227,7 +227,7 @@
 //#include <eda/vhdl93/ast/variable_assignment_statement.hpp>
 //#include <eda/vhdl93/ast/variable_declaration.hpp>
 #include <eda/vhdl93/ast/wait_statement.hpp>
-#include <eda/vhdl93/ast/waveform.hpp>
+//XXX#include <eda/vhdl93/ast/waveform.hpp>
 //XXX#include <eda/vhdl93/ast/waveform_element.hpp>
 
 

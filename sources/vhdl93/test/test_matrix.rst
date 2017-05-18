@@ -3131,6 +3131,983 @@ shift_expression
 |                            |                   |                                        |
 +----------------------------+-------------------+----------------------------------------+
 
+===========================
+signal_assignment_statement
+===========================
+
++---------------------------------+----------------------------------------------------------------+-------------------------------------------------------+
+| File                            | Input                                                          | Expected                                              |
++---------------------------------+----------------------------------------------------------------+-------------------------------------------------------+
+| signal_assignment_statement_001 | Output_pin <= Input_pin after 10 ns;                           | (signal_assignment_statement                          |
+|                                 |                                                                |   (target<v>                                          |
+|                                 |                                                                |     (name<v>                                          |
+|                                 |                                                                |       (simple_name                                    |
+|                                 |                                                                |         Output_pin                                    |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                |   (waveform<v>                                        |
+|                                 |                                                                |     (waveform_element                                 |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (name<v>                            |
+|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                       Input_pin                       |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (literal<v>                         |
+|                                 |                                                                |                     (numeric_literal<v>               |
+|                                 |                                                                |                       (physical_literal               |
+|                                 |                                                                |                         literal: (abstract_literal<v> |
+|                                 |                                                                |                           (decimal_literal            |
+|                                 |                                                                |                             literal: 10, hint: int    |
+|                                 |                                                                |                           )                           |
+|                                 |                                                                |                         ),                            |
+|                                 |                                                                |                         unit: ns                      |
+|                                 |                                                                |                       )                               |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                | )                                                     |
+|                                 |                                                                |                                                       |
++---------------------------------+----------------------------------------------------------------+-------------------------------------------------------+
+| signal_assignment_statement_002 | Output_pin <= inertial Input_pin after 10 ns;                  | (signal_assignment_statement                          |
+|                                 |                                                                |   (target<v>                                          |
+|                                 |                                                                |     (name<v>                                          |
+|                                 |                                                                |       (simple_name                                    |
+|                                 |                                                                |         Output_pin                                    |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                |   (delay_mechanism                                    |
+|                                 |                                                                |     INERTIAL_DELAY                                    |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                |   (waveform<v>                                        |
+|                                 |                                                                |     (waveform_element                                 |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (name<v>                            |
+|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                       Input_pin                       |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (literal<v>                         |
+|                                 |                                                                |                     (numeric_literal<v>               |
+|                                 |                                                                |                       (physical_literal               |
+|                                 |                                                                |                         literal: (abstract_literal<v> |
+|                                 |                                                                |                           (decimal_literal            |
+|                                 |                                                                |                             literal: 10, hint: int    |
+|                                 |                                                                |                           )                           |
+|                                 |                                                                |                         ),                            |
+|                                 |                                                                |                         unit: ns                      |
+|                                 |                                                                |                       )                               |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                | )                                                     |
+|                                 |                                                                |                                                       |
++---------------------------------+----------------------------------------------------------------+-------------------------------------------------------+
+| signal_assignment_statement_003 | Output_pin <= reject 10 ns inertial Input_pin after 10 ns;     | (signal_assignment_statement                          |
+|                                 |                                                                |   (target<v>                                          |
+|                                 |                                                                |     (name<v>                                          |
+|                                 |                                                                |       (simple_name                                    |
+|                                 |                                                                |         Output_pin                                    |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                |   (delay_mechanism                                    |
+|                                 |                                                                |     INERTIAL_DELAY                                    |
+|                                 |                                                                |     (expression                                       |
+|                                 |                                                                |       (relation                                       |
+|                                 |                                                                |         (shift_expression                             |
+|                                 |                                                                |           (simple_expression                          |
+|                                 |                                                                |             term: (term                               |
+|                                 |                                                                |               (primary<v>                             |
+|                                 |                                                                |                 (literal<v>                           |
+|                                 |                                                                |                   (numeric_literal<v>                 |
+|                                 |                                                                |                     (physical_literal                 |
+|                                 |                                                                |                       literal: (abstract_literal<v>   |
+|                                 |                                                                |                         (decimal_literal              |
+|                                 |                                                                |                           literal: 10, hint: int      |
+|                                 |                                                                |                         )                             |
+|                                 |                                                                |                       ),                              |
+|                                 |                                                                |                       unit: ns                        |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                |   (waveform<v>                                        |
+|                                 |                                                                |     (waveform_element                                 |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (name<v>                            |
+|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                       Input_pin                       |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (literal<v>                         |
+|                                 |                                                                |                     (numeric_literal<v>               |
+|                                 |                                                                |                       (physical_literal               |
+|                                 |                                                                |                         literal: (abstract_literal<v> |
+|                                 |                                                                |                           (decimal_literal            |
+|                                 |                                                                |                             literal: 10, hint: int    |
+|                                 |                                                                |                           )                           |
+|                                 |                                                                |                         ),                            |
+|                                 |                                                                |                         unit: ns                      |
+|                                 |                                                                |                       )                               |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                | )                                                     |
+|                                 |                                                                |                                                       |
++---------------------------------+----------------------------------------------------------------+-------------------------------------------------------+
+| signal_assignment_statement_004 | Output_pin <= reject 5 ns inertial Input_pin after 10 ns;      | (signal_assignment_statement                          |
+|                                 |                                                                |   (target<v>                                          |
+|                                 |                                                                |     (name<v>                                          |
+|                                 |                                                                |       (simple_name                                    |
+|                                 |                                                                |         Output_pin                                    |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                |   (delay_mechanism                                    |
+|                                 |                                                                |     INERTIAL_DELAY                                    |
+|                                 |                                                                |     (expression                                       |
+|                                 |                                                                |       (relation                                       |
+|                                 |                                                                |         (shift_expression                             |
+|                                 |                                                                |           (simple_expression                          |
+|                                 |                                                                |             term: (term                               |
+|                                 |                                                                |               (primary<v>                             |
+|                                 |                                                                |                 (literal<v>                           |
+|                                 |                                                                |                   (numeric_literal<v>                 |
+|                                 |                                                                |                     (physical_literal                 |
+|                                 |                                                                |                       literal: (abstract_literal<v>   |
+|                                 |                                                                |                         (decimal_literal              |
+|                                 |                                                                |                           literal: 5, hint: int       |
+|                                 |                                                                |                         )                             |
+|                                 |                                                                |                       ),                              |
+|                                 |                                                                |                       unit: ns                        |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                |   (waveform<v>                                        |
+|                                 |                                                                |     (waveform_element                                 |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (name<v>                            |
+|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                       Input_pin                       |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (literal<v>                         |
+|                                 |                                                                |                     (numeric_literal<v>               |
+|                                 |                                                                |                       (physical_literal               |
+|                                 |                                                                |                         literal: (abstract_literal<v> |
+|                                 |                                                                |                           (decimal_literal            |
+|                                 |                                                                |                             literal: 10, hint: int    |
+|                                 |                                                                |                           )                           |
+|                                 |                                                                |                         ),                            |
+|                                 |                                                                |                         unit: ns                      |
+|                                 |                                                                |                       )                               |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                | )                                                     |
+|                                 |                                                                |                                                       |
++---------------------------------+----------------------------------------------------------------+-------------------------------------------------------+
+| signal_assignment_statement_005 | Output_pin <= reject 5 ns inertial Input_pin after 10 ns,      | (signal_assignment_statement                          |
+|                                 |                                not Input_pin after 20 ns;      |   (target<v>                                          |
+|                                 |                                                                |     (name<v>                                          |
+|                                 |                                                                |       (simple_name                                    |
+|                                 |                                                                |         Output_pin                                    |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                |   (delay_mechanism                                    |
+|                                 |                                                                |     INERTIAL_DELAY                                    |
+|                                 |                                                                |     (expression                                       |
+|                                 |                                                                |       (relation                                       |
+|                                 |                                                                |         (shift_expression                             |
+|                                 |                                                                |           (simple_expression                          |
+|                                 |                                                                |             term: (term                               |
+|                                 |                                                                |               (primary<v>                             |
+|                                 |                                                                |                 (literal<v>                           |
+|                                 |                                                                |                   (numeric_literal<v>                 |
+|                                 |                                                                |                     (physical_literal                 |
+|                                 |                                                                |                       literal: (abstract_literal<v>   |
+|                                 |                                                                |                         (decimal_literal              |
+|                                 |                                                                |                           literal: 5, hint: int       |
+|                                 |                                                                |                         )                             |
+|                                 |                                                                |                       ),                              |
+|                                 |                                                                |                       unit: ns                        |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                |   (waveform<v>                                        |
+|                                 |                                                                |     (waveform_element                                 |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (name<v>                            |
+|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                       Input_pin                       |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (literal<v>                         |
+|                                 |                                                                |                     (numeric_literal<v>               |
+|                                 |                                                                |                       (physical_literal               |
+|                                 |                                                                |                         literal: (abstract_literal<v> |
+|                                 |                                                                |                           (decimal_literal            |
+|                                 |                                                                |                             literal: 10, hint: int    |
+|                                 |                                                                |                           )                           |
+|                                 |                                                                |                         ),                            |
+|                                 |                                                                |                         unit: ns                      |
+|                                 |                                                                |                       )                               |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     ),                                                |
+|                                 |                                                                |     (waveform_element                                 |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (factor_unary_operation               |
+|                                 |                                                                |                   operator: NOT,                      |
+|                                 |                                                                |                   primary: (name<v>                   |
+|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                       Input_pin                       |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (literal<v>                         |
+|                                 |                                                                |                     (numeric_literal<v>               |
+|                                 |                                                                |                       (physical_literal               |
+|                                 |                                                                |                         literal: (abstract_literal<v> |
+|                                 |                                                                |                           (decimal_literal            |
+|                                 |                                                                |                             literal: 20, hint: int    |
+|                                 |                                                                |                           )                           |
+|                                 |                                                                |                         ),                            |
+|                                 |                                                                |                         unit: ns                      |
+|                                 |                                                                |                       )                               |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                | )                                                     |
+|                                 |                                                                |                                                       |
++---------------------------------+----------------------------------------------------------------+-------------------------------------------------------+
+| signal_assignment_statement_006 | Output_pin <= transport Input_pin after 10 ns;                 | (signal_assignment_statement                          |
+|                                 |                                                                |   (target<v>                                          |
+|                                 |                                                                |     (name<v>                                          |
+|                                 |                                                                |       (simple_name                                    |
+|                                 |                                                                |         Output_pin                                    |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                |   (delay_mechanism                                    |
+|                                 |                                                                |     TRANSPORT_DELAY                                   |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                |   (waveform<v>                                        |
+|                                 |                                                                |     (waveform_element                                 |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (name<v>                            |
+|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                       Input_pin                       |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (literal<v>                         |
+|                                 |                                                                |                     (numeric_literal<v>               |
+|                                 |                                                                |                       (physical_literal               |
+|                                 |                                                                |                         literal: (abstract_literal<v> |
+|                                 |                                                                |                           (decimal_literal            |
+|                                 |                                                                |                             literal: 10, hint: int    |
+|                                 |                                                                |                           )                           |
+|                                 |                                                                |                         ),                            |
+|                                 |                                                                |                         unit: ns                      |
+|                                 |                                                                |                       )                               |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                | )                                                     |
+|                                 |                                                                |                                                       |
++---------------------------------+----------------------------------------------------------------+-------------------------------------------------------+
+| signal_assignment_statement_007 | Output_pin <= transport Input_pin after 10 ns,                 | (signal_assignment_statement                          |
+|                                 |                     not Input_pin after 20 ns;                 |   (target<v>                                          |
+|                                 |                                                                |     (name<v>                                          |
+|                                 |                                                                |       (simple_name                                    |
+|                                 |                                                                |         Output_pin                                    |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                |   (delay_mechanism                                    |
+|                                 |                                                                |     TRANSPORT_DELAY                                   |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                |   (waveform<v>                                        |
+|                                 |                                                                |     (waveform_element                                 |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (name<v>                            |
+|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                       Input_pin                       |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (literal<v>                         |
+|                                 |                                                                |                     (numeric_literal<v>               |
+|                                 |                                                                |                       (physical_literal               |
+|                                 |                                                                |                         literal: (abstract_literal<v> |
+|                                 |                                                                |                           (decimal_literal            |
+|                                 |                                                                |                             literal: 10, hint: int    |
+|                                 |                                                                |                           )                           |
+|                                 |                                                                |                         ),                            |
+|                                 |                                                                |                         unit: ns                      |
+|                                 |                                                                |                       )                               |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     ),                                                |
+|                                 |                                                                |     (waveform_element                                 |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (factor_unary_operation               |
+|                                 |                                                                |                   operator: NOT,                      |
+|                                 |                                                                |                   primary: (name<v>                   |
+|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                       Input_pin                       |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (literal<v>                         |
+|                                 |                                                                |                     (numeric_literal<v>               |
+|                                 |                                                                |                       (physical_literal               |
+|                                 |                                                                |                         literal: (abstract_literal<v> |
+|                                 |                                                                |                           (decimal_literal            |
+|                                 |                                                                |                             literal: 20, hint: int    |
+|                                 |                                                                |                           )                           |
+|                                 |                                                                |                         ),                            |
+|                                 |                                                                |                         unit: ns                      |
+|                                 |                                                                |                       )                               |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                | )                                                     |
+|                                 |                                                                |                                                       |
++---------------------------------+----------------------------------------------------------------+-------------------------------------------------------+
+| signal_assignment_statement_008 | Output_pin <= reject 0 ns inertial Input_pin after 10 ns;      | (signal_assignment_statement                          |
+|                                 |                                                                |   (target<v>                                          |
+|                                 |                                                                |     (name<v>                                          |
+|                                 |                                                                |       (simple_name                                    |
+|                                 |                                                                |         Output_pin                                    |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                |   (delay_mechanism                                    |
+|                                 |                                                                |     INERTIAL_DELAY                                    |
+|                                 |                                                                |     (expression                                       |
+|                                 |                                                                |       (relation                                       |
+|                                 |                                                                |         (shift_expression                             |
+|                                 |                                                                |           (simple_expression                          |
+|                                 |                                                                |             term: (term                               |
+|                                 |                                                                |               (primary<v>                             |
+|                                 |                                                                |                 (literal<v>                           |
+|                                 |                                                                |                   (numeric_literal<v>                 |
+|                                 |                                                                |                     (physical_literal                 |
+|                                 |                                                                |                       literal: (abstract_literal<v>   |
+|                                 |                                                                |                         (decimal_literal              |
+|                                 |                                                                |                           literal: 0, hint: int       |
+|                                 |                                                                |                         )                             |
+|                                 |                                                                |                       ),                              |
+|                                 |                                                                |                       unit: ns                        |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                |   (waveform<v>                                        |
+|                                 |                                                                |     (waveform_element                                 |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (name<v>                            |
+|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                       Input_pin                       |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (literal<v>                         |
+|                                 |                                                                |                     (numeric_literal<v>               |
+|                                 |                                                                |                       (physical_literal               |
+|                                 |                                                                |                         literal: (abstract_literal<v> |
+|                                 |                                                                |                           (decimal_literal            |
+|                                 |                                                                |                             literal: 10, hint: int    |
+|                                 |                                                                |                           )                           |
+|                                 |                                                                |                         ),                            |
+|                                 |                                                                |                         unit: ns                      |
+|                                 |                                                                |                       )                               |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                | )                                                     |
+|                                 |                                                                |                                                       |
++---------------------------------+----------------------------------------------------------------+-------------------------------------------------------+
+| signal_assignment_statement_009 | Output_pin <= reject 0 ns inertial Input_pin after 10 ns,      | (signal_assignment_statement                          |
+|                                 |                                not Input_pin after 10 ns;      |   (target<v>                                          |
+|                                 |                                                                |     (name<v>                                          |
+|                                 |                                                                |       (simple_name                                    |
+|                                 |                                                                |         Output_pin                                    |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                |   (delay_mechanism                                    |
+|                                 |                                                                |     INERTIAL_DELAY                                    |
+|                                 |                                                                |     (expression                                       |
+|                                 |                                                                |       (relation                                       |
+|                                 |                                                                |         (shift_expression                             |
+|                                 |                                                                |           (simple_expression                          |
+|                                 |                                                                |             term: (term                               |
+|                                 |                                                                |               (primary<v>                             |
+|                                 |                                                                |                 (literal<v>                           |
+|                                 |                                                                |                   (numeric_literal<v>                 |
+|                                 |                                                                |                     (physical_literal                 |
+|                                 |                                                                |                       literal: (abstract_literal<v>   |
+|                                 |                                                                |                         (decimal_literal              |
+|                                 |                                                                |                           literal: 0, hint: int       |
+|                                 |                                                                |                         )                             |
+|                                 |                                                                |                       ),                              |
+|                                 |                                                                |                       unit: ns                        |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                |   (waveform<v>                                        |
+|                                 |                                                                |     (waveform_element                                 |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (name<v>                            |
+|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                       Input_pin                       |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (literal<v>                         |
+|                                 |                                                                |                     (numeric_literal<v>               |
+|                                 |                                                                |                       (physical_literal               |
+|                                 |                                                                |                         literal: (abstract_literal<v> |
+|                                 |                                                                |                           (decimal_literal            |
+|                                 |                                                                |                             literal: 10, hint: int    |
+|                                 |                                                                |                           )                           |
+|                                 |                                                                |                         ),                            |
+|                                 |                                                                |                         unit: ns                      |
+|                                 |                                                                |                       )                               |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     ),                                                |
+|                                 |                                                                |     (waveform_element                                 |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (factor_unary_operation               |
+|                                 |                                                                |                   operator: NOT,                      |
+|                                 |                                                                |                   primary: (name<v>                   |
+|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                       Input_pin                       |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (literal<v>                         |
+|                                 |                                                                |                     (numeric_literal<v>               |
+|                                 |                                                                |                       (physical_literal               |
+|                                 |                                                                |                         literal: (abstract_literal<v> |
+|                                 |                                                                |                           (decimal_literal            |
+|                                 |                                                                |                             literal: 10, hint: int    |
+|                                 |                                                                |                           )                           |
+|                                 |                                                                |                         ),                            |
+|                                 |                                                                |                         unit: ns                      |
+|                                 |                                                                |                       )                               |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                | )                                                     |
+|                                 |                                                                |                                                       |
++---------------------------------+----------------------------------------------------------------+-------------------------------------------------------+
+| signal_assignment_statement_010 | my_label:                                                      | (signal_assignment_statement                          |
+|                                 |     Output_pin <= Input_pin after 10 ns;                       |   (label                                              |
+|                                 |                                                                |     my_label                                          |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                |   (target<v>                                          |
+|                                 |                                                                |     (name<v>                                          |
+|                                 |                                                                |       (simple_name                                    |
+|                                 |                                                                |         Output_pin                                    |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                |   (waveform<v>                                        |
+|                                 |                                                                |     (waveform_element                                 |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (name<v>                            |
+|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                       Input_pin                       |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (literal<v>                         |
+|                                 |                                                                |                     (numeric_literal<v>               |
+|                                 |                                                                |                       (physical_literal               |
+|                                 |                                                                |                         literal: (abstract_literal<v> |
+|                                 |                                                                |                           (decimal_literal            |
+|                                 |                                                                |                             literal: 10, hint: int    |
+|                                 |                                                                |                           )                           |
+|                                 |                                                                |                         ),                            |
+|                                 |                                                                |                         unit: ns                      |
+|                                 |                                                                |                       )                               |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                | )                                                     |
+|                                 |                                                                |                                                       |
++---------------------------------+----------------------------------------------------------------+-------------------------------------------------------+
+| signal_assignment_statement_011 | my_assign:                                                     | (signal_assignment_statement                          |
+|                                 |     Output_pin <= reject 5 ns inertial Input_pin after 10 ns,  |   (label                                              |
+|                                 |                   not Input_pin after 20 ns;                   |     my_assign                                         |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                |   (target<v>                                          |
+|                                 |                                                                |     (name<v>                                          |
+|                                 |                                                                |       (simple_name                                    |
+|                                 |                                                                |         Output_pin                                    |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                |   (delay_mechanism                                    |
+|                                 |                                                                |     INERTIAL_DELAY                                    |
+|                                 |                                                                |     (expression                                       |
+|                                 |                                                                |       (relation                                       |
+|                                 |                                                                |         (shift_expression                             |
+|                                 |                                                                |           (simple_expression                          |
+|                                 |                                                                |             term: (term                               |
+|                                 |                                                                |               (primary<v>                             |
+|                                 |                                                                |                 (literal<v>                           |
+|                                 |                                                                |                   (numeric_literal<v>                 |
+|                                 |                                                                |                     (physical_literal                 |
+|                                 |                                                                |                       literal: (abstract_literal<v>   |
+|                                 |                                                                |                         (decimal_literal              |
+|                                 |                                                                |                           literal: 5, hint: int       |
+|                                 |                                                                |                         )                             |
+|                                 |                                                                |                       ),                              |
+|                                 |                                                                |                       unit: ns                        |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                |   (waveform<v>                                        |
+|                                 |                                                                |     (waveform_element                                 |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (name<v>                            |
+|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                       Input_pin                       |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (literal<v>                         |
+|                                 |                                                                |                     (numeric_literal<v>               |
+|                                 |                                                                |                       (physical_literal               |
+|                                 |                                                                |                         literal: (abstract_literal<v> |
+|                                 |                                                                |                           (decimal_literal            |
+|                                 |                                                                |                             literal: 10, hint: int    |
+|                                 |                                                                |                           )                           |
+|                                 |                                                                |                         ),                            |
+|                                 |                                                                |                         unit: ns                      |
+|                                 |                                                                |                       )                               |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     ),                                                |
+|                                 |                                                                |     (waveform_element                                 |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (factor_unary_operation               |
+|                                 |                                                                |                   operator: NOT,                      |
+|                                 |                                                                |                   primary: (name<v>                   |
+|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                       Input_pin                       |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (literal<v>                         |
+|                                 |                                                                |                     (numeric_literal<v>               |
+|                                 |                                                                |                       (physical_literal               |
+|                                 |                                                                |                         literal: (abstract_literal<v> |
+|                                 |                                                                |                           (decimal_literal            |
+|                                 |                                                                |                             literal: 20, hint: int    |
+|                                 |                                                                |                           )                           |
+|                                 |                                                                |                         ),                            |
+|                                 |                                                                |                         unit: ns                      |
+|                                 |                                                                |                       )                               |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                | )                                                     |
+|                                 |                                                                |                                                       |
++---------------------------------+----------------------------------------------------------------+-------------------------------------------------------+
+
 ===========
 signal_list
 ===========

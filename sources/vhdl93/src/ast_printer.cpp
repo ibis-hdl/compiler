@@ -1425,9 +1425,16 @@ void printer::operator()(operator_symbol const &node)
 
 void printer::operator()(options const &node)
 {
-    static char const symbol[]{ "XXX options" };
+    static char const symbol[]{ "options" };
     symbol_scope<options> _(*this, symbol);
-    //os << node;
+
+    if(node.guarded) {
+        (*this)(node.guarded.get());  // keyword GUARDED
+    }
+    if(node.delay_mechanism) {
+        if(node.guarded) { os << "\n"; }
+        (*this)(node.delay_mechanism.get());
+    }
 }
 
 
@@ -1777,9 +1784,23 @@ void printer::operator()(shift_expression const &node)
 
 void printer::operator()(signal_assignment_statement const &node)
 {
-    static char const symbol[]{ "XXX signal_assignment_statement" };
+    static char const symbol[]{ "signal_assignment_statement" };
     symbol_scope<signal_assignment_statement> _(*this, symbol);
-    //os << node;
+
+    if(node.label) {
+        (*this)(node.label.get());
+        os << "\n";
+    }
+
+    (*this)(node.target);
+    os << "\n";
+
+    if(node.delay_mechanism) {
+        (*this)(node.delay_mechanism.get());
+        os << "\n";
+    }
+
+    (*this)(node.waveform);
 }
 
 
@@ -1981,9 +2002,10 @@ void printer::operator()(suffix const &node)
 
 void printer::operator()(target const &node)
 {
-    static char const symbol[]{ "XXX target" };
+    static char const symbol[]{ "target" };
     symbol_scope<target> _(*this, symbol);
-    //visit(node);
+
+    boost::apply_visitor(*this, node);
 }
 
 

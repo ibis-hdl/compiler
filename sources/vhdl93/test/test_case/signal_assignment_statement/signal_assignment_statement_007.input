@@ -1,0 +1,3 @@
+Output_pin <= transport Input_pin after 10 ns, 
+                    not Input_pin after 20 ns;
+
