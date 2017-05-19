@@ -116,9 +116,14 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::physical_literal,
     literal, unit_name
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::range_expression, // part of range
+    lhs, direction, rhs
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::relation::chunk,
     operator_, shift_expression
 )
+
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::relation,
     shift_expression, rest

@@ -1619,17 +1619,22 @@ void printer::operator()(qualified_expression const &node)
 
 void printer::operator()(range const &node)
 {
-    static char const symbol[]{ "XXX range" };
+    static char const symbol[]{ "range" };
     symbol_scope<range> _(*this, symbol);
-    //visit(node);
-}
 
-
-void printer::operator()(range_constraint const &node)
-{
-    static char const symbol[]{ "XXX range_constraint" };
-    symbol_scope<range_constraint> _(*this, symbol);
-    //os << node;
+    util::visit_in_place(
+        node,
+        [this](range_attribute_name const &name) {
+            (*this)(name);
+        },
+        [this](range_expression const &expr) {
+            (*this)(expr.lhs);
+            os << "\n";
+            (*this)(expr.direction);
+            os << "\n";
+            (*this)(expr.rhs);
+        }
+    );
 }
 
 

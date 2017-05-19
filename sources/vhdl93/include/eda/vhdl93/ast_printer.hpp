@@ -175,7 +175,6 @@ struct process_statement;
 struct process_statement_part;
 struct qualified_expression;
 struct range;
-struct range_constraint;
 struct record_type_definition;
 struct relation;
 struct report_statement;
@@ -426,7 +425,6 @@ public:
     void operator()(process_statement_part const& node);
     void operator()(qualified_expression const& node);
     void operator()(range const& node);
-    void operator()(range_constraint const& node);
     void operator()(record_type_definition const& node);
     void operator()(relation const& node);
     void operator()(report_statement const& node);

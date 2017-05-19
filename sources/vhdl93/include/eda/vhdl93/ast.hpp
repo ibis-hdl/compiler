@@ -182,8 +182,7 @@
 //#include <eda/vhdl93/ast/process_statement.hpp>
 //#include <eda/vhdl93/ast/process_statement_part.hpp>
 //#include <eda/vhdl93/ast/qualified_expression.hpp>
-//#include <eda/vhdl93/ast/range.hpp>
-//#include <eda/vhdl93/ast/range_constraint.hpp>
+#include <eda/vhdl93/ast/range.hpp>
 //#include <eda/vhdl93/ast/record_type_definition.hpp>
 //XXX#include <eda/vhdl93/ast/relation.hpp>
 //#include <eda/vhdl93/ast/report_statement.hpp>

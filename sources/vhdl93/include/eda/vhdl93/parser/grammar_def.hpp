@@ -902,8 +902,8 @@ typedef x3::rule<process_declarative_part_class> process_declarative_part_type;
 typedef x3::rule<process_statement_class> process_statement_type;
 typedef x3::rule<process_statement_part_class> process_statement_part_type;
 typedef x3::rule<qualified_expression_class> qualified_expression_type;
-typedef x3::rule<range_class> range_type;
-typedef x3::rule<range_constraint_class> range_constraint_type;
+typedef x3::rule<range_class, ast::range> range_type;
+typedef x3::rule<range_constraint_class, ast::range> range_constraint_type;
 typedef x3::rule<record_type_definition_class> record_type_definition_type;
 typedef x3::rule<relation_class, ast::relation> relation_type;
 typedef x3::rule<report_statement_class> report_statement_type;
@@ -1288,9 +1288,16 @@ auto const value_expression = x3::rule<expression_class, ast::expression> { "val
     expression;
 
 
+// Convenience rule for 'label :'
+auto const label_spec = x3::rule<struct signal_name_class, ast::identifier> { "label" } =
+    identifier > ':'
+    ;
+
+
 auto const signal_name = x3::rule<struct signal_name_class, ast::name> { "signal_name" } =
     name
     ;
+
 
 
 /*
@@ -3332,23 +3339,33 @@ auto const qualified_expression_def =
         ;
 #endif
 
-#if 0
-// range ::=
-// range_attribute_name
-//     | simple_expression direction simple_expression
-auto const range_def =
-        range_attribute_name
-        | simple_expression direction simple_expression
-        ;
-#endif
 
-#if 0
-// range_constraint ::=
-// range range
-auto const range_constraint_def =
-        RANGE RANGE
+// range ::=                                                             [§ 3.1]
+//       range_attribute_name
+//     | simple_expression direction simple_expression
+namespace range_detail {
+    auto const range_expression = x3::rule<range_class, ast::range_expression> { "range_expression" } =
+           simple_expression
+        >> direction
+        >> simple_expression
         ;
-#endif
+    auto const range_attribute_name = x3::rule<range_class, ast::name> { "range_attribute_name" } =
+        name
+        ;
+}
+auto const range_def =
+      range_detail::range_attribute_name
+    | range_detail::range_expression
+    ;
+
+
+
+// range_constraint ::=                                                  [§ 3.1]
+//     range range
+auto const range_constraint_def =
+    RANGE >> range
+    ;
+
 
 #if 0
 // record_type_definition ::=
@@ -4184,10 +4201,10 @@ BOOST_SPIRIT_DEFINE(  // -- P --
 ////  qualified_expression
 //)
 BOOST_SPIRIT_DEFINE(  // -- R --
-    //  range
-    //, range_constraint
+      range
+    , range_constraint
     //, record_type_definition
-      relation
+    , relation
     //, report_statement
     //, return_statement
 )
