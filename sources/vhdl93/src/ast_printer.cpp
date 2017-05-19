@@ -2143,8 +2143,8 @@ void printer::operator()(waveform const &node)
     static char const symbol[]{ "waveform" };
     symbol_scope<waveform> _(*this, symbol);
 
-    auto waveform_visitor = util::overload
-    (
+    util::visit_in_place(
+        node,
         [this](ast::waveform_element_list const& list) {
             auto const N = list.size() - 1;
             unsigned i = 0;
@@ -2159,8 +2159,6 @@ void printer::operator()(waveform const &node)
             (*this)(token);
         }
     );
-
-    boost::apply_visitor(waveform_visitor, node);
 }
 
 
@@ -2169,8 +2167,8 @@ void printer::operator()(waveform_element const &node)
     static char const symbol[]{ "waveform_element" };
     symbol_scope<waveform_element> _(*this, symbol);
 
-    auto form_visitor = util::overload
-    (
+    util::visit_in_place(
+        node.form,
         [this](ast::expression const& expr) {
             (*this)(expr);
             os << "\n";
@@ -2179,8 +2177,6 @@ void printer::operator()(waveform_element const &node)
             (*this)(token);
         }
     );
-
-    boost::apply_visitor(form_visitor, node.form);
 
     if(node.time_expression) {
         (*this)(node.time_expression.value());
