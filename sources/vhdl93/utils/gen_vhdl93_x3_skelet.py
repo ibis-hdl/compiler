@@ -1508,6 +1508,8 @@ class AstPrinter:
     bnf = None
     rule_blacklist = [ # these has no own ast nodes
         'base_specifier',
+        'basic_character',
+        'basic_graphic_character',
         'basic_identifier',
         'bit_value',
         'digit',
@@ -1680,6 +1682,108 @@ struct printer::symbol_scope<
     //boost::apply_visitor(*this, node);
 }}
 """.format(result_type, name)
+        return text
+
+
+################################################################################
+class CommonVisitor:
+    bnf = None
+    rule_blacklist = [ # these has no own ast nodes
+        'base_specifier',
+        'basic_character',
+        'basic_graphic_character',
+        'basic_identifier',
+        'bit_value',
+        'digit',
+        'extended_digit',
+        'extended_identifier',
+        'format_effector',
+        'letter',
+        'letter_or_digit',
+        'lower_case_letter',
+        'other_special_character',
+        'space_character',
+        'special_character',
+        'underline',
+        'upper_case_letter',
+        ]
+    ns = []
+
+    def __init__(self, NS,  is_const = False):
+        self.bnf = Vhdl93Bnf()
+        self.ns = NS
+        if is_const:    self.const = 'const'
+        else:           self.const = ''
+
+    def all(self, result_type = 'bool'):
+        """
+        Create the ast visitor structure
+        """
+        variant_list = []
+        node_list = []
+        for r in sorted(self.bnf.rules()):
+            name = r.name
+            rule = r.rule.replace('\n', '')
+            if name in self.rule_blacklist:
+                continue
+            if self.bnf.is_variant(r):
+                variant_list.append(
+                    self.visit_variant_def(name, result_type)
+                )
+            else:
+                node_list.append(
+                    self.visit_node_def(name, result_type)
+                )
+
+        text = """
+struct common_visitor: public boost::static_visitor<{result_type}>
+{{
+    common_visitor() {{ }}
+
+    template <typename... T>
+    {result_type} visit(boost::variant<T...> const& variant) {{
+        return boost::apply_visitor(*this, variant);
+    }}
+
+
+    /*
+     * Variant Dispatch
+     */
+
+    {variants}
+
+
+    /*
+     * Node Visitations
+     */
+
+    {nodes}
+}};
+""".format(result_type=result_type,
+           variants="\n".join(variant_list),
+           nodes="\n".join(node_list)
+           )
+        text_v  = embrace_ns(text, self.ns)
+        return text_v
+
+    def visit_node_def(self, name, result_type):
+        text = """
+{result_type} operator()({ns}::{arg_name} const &node) {const}
+{{
+    static char const symbol[]{{ "{arg_name}" }};
+
+    return false;
+}}
+""".format(
+        result_type=result_type, arg_name=name, const=self.const, ns=self.ns[-1])
+        return text
+
+    def visit_variant_def(self, name, result_type):
+        text = """
+{result_type} operator()({ns}::{arg_name} const &variant_node) {const} {{
+    return visit(variant_node);
+}}
+""".format(result_type=result_type, arg_name=name, const=self.const, ns=self.ns[-1])
         return text
 
 
@@ -2071,6 +2175,9 @@ if __name__ == "__main__":
     x3 = X3(ns)
     print(x3.definition())
     print(x3.error_handler())
+
+    visitor = CommonVisitor(ns + ['ast'])
+    print(visitor.all())
 
     # disabled, far away from praxis
     #print(x3.api_declaration())
