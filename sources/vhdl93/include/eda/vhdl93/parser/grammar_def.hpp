@@ -3530,12 +3530,12 @@ auto const shift_expression_def =
     ;
 
 
-#if 0 /* Note: UNUSED, directly used by rule simple_expression */
+#if 0 /* Note: UNUSED, implemented as x3.symbol lookup */
 // sign ::=                                                              [§ 7.2]
-// + | -
+//     + | -
 auto const sign_def =
-        + | -
-        ;
+    + | -
+    ;
 #endif
 
 
