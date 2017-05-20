@@ -31,17 +31,4 @@ struct delay_mechanism : position_tagged
 } } } // namespace eda.vhdl93.ast
 
 
-namespace boost { namespace spirit { namespace x3 { namespace traits {
-
-using delay_mechanism = eda::vhdl93::ast::delay_mechanism;
-
-inline void
-move_to(delay_mechanism::delay_type type, delay_mechanism& dest)
-{
-    dest.type = type;
-}
-
-} } } } // boost.spirit.x3.traits
-
-
 #endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_DELAY_MECHANISM_HPP_ */

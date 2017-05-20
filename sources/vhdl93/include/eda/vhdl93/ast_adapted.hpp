@@ -199,4 +199,7 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::waveform_element,
 )
 
 
+#include <eda/vhdl93/ast/traits/move_to.hpp>
+
+
 #endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_ADAPTED_HPP_ */
