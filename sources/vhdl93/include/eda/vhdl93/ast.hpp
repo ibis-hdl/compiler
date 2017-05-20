@@ -72,7 +72,7 @@
 //#include <eda/vhdl93/ast/configuration_specification.hpp>
 //#include <eda/vhdl93/ast/constant_declaration.hpp>
 //#include <eda/vhdl93/ast/constrained_array_definition.hpp>
-//#include <eda/vhdl93/ast/constraint.hpp>
+#include <eda/vhdl93/ast/constraint.hpp>
 //#include <eda/vhdl93/ast/context_clause.hpp>
 //#include <eda/vhdl93/ast/context_item.hpp>
 //XXX#include <eda/vhdl93/ast/decimal_literal.hpp>
@@ -182,7 +182,7 @@
 //#include <eda/vhdl93/ast/process_statement.hpp>
 //#include <eda/vhdl93/ast/process_statement_part.hpp>
 //#include <eda/vhdl93/ast/qualified_expression.hpp>
-#include <eda/vhdl93/ast/range.hpp>
+//XXX#include <eda/vhdl93/ast/range.hpp>
 //#include <eda/vhdl93/ast/record_type_definition.hpp>
 //XXX#include <eda/vhdl93/ast/relation.hpp>
 //#include <eda/vhdl93/ast/report_statement.hpp>
