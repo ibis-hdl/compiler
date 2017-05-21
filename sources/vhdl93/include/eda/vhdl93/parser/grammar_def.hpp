@@ -798,7 +798,7 @@ typedef x3::rule<design_unit_class> design_unit_type;
 typedef x3::rule<designator_class> designator_type;
 typedef x3::rule<direction_class, ast::keyword_token> direction_type;
 typedef x3::rule<disconnection_specification_class> disconnection_specification_type;
-typedef x3::rule<discrete_range_class/*, ast::discrete_range*/> discrete_range_type;
+typedef x3::rule<discrete_range_class, ast::discrete_range> discrete_range_type;
 typedef x3::rule<element_association_class> element_association_type;
 typedef x3::rule<element_declaration_class> element_declaration_type;
 typedef x3::rule<element_subtype_definition_class> element_subtype_definition_type;
@@ -847,7 +847,7 @@ typedef x3::rule<identifier_class, ast::identifier> identifier_type;
 typedef x3::rule<identifier_list_class, ast::identifier_list> identifier_list_type;
 typedef x3::rule<if_statement_class> if_statement_type;
 typedef x3::rule<incomplete_type_declaration_class> incomplete_type_declaration_type;
-typedef x3::rule<index_constraint_class/*, ast::index_constraint*/> index_constraint_type;
+typedef x3::rule<index_constraint_class, ast::index_constraint> index_constraint_type;
 typedef x3::rule<index_specification_class> index_specification_type;
 typedef x3::rule<index_subtype_definition_class> index_subtype_definition_type;
 typedef x3::rule<indexed_name_class, ast::indexed_name> indexed_name_type;
@@ -3795,6 +3795,7 @@ namespace subtype_indication_detail {
      * is ambiguous. Nevertheless, syntactically resolution_function_name and
      * type_mark are names, semantically only a subset. Maybe here is another
      * approach. */
+    /* FixMe: find a better way, as constraints are full implemented, e.g.: -name >> type_mark */
     auto const unspecified_name_list = x3::rule<struct _, std::deque<ast::name>> { "subtype_indication" } =
         x3::repeat(1 ,2)[
             name

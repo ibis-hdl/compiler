@@ -14,12 +14,15 @@
 
 #include <eda/vhdl93/ast/name.hpp>
 #include <eda/vhdl93/ast/type_mark.hpp>
-#include <eda/vhdl93/ast/constraint.hpp>
+//#include <eda/vhdl93/ast/constraint.hpp>
 #include <boost/optional.hpp>
 #include <deque>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
+
+
+struct constraint;
 
 
 /* Note:
@@ -34,8 +37,8 @@ namespace eda { namespace vhdl93 { namespace ast {
 struct subtype_indication : position_tagged
 {
     // parse API
-    std::deque<ast::name>               unspecified_name_list;
-    boost::optional<ast::constraint>    constraint;
+    std::deque<ast::name>                               unspecified_name_list;
+    boost::optional<x3::forward_ast<ast::constraint>>   constraint;
 
 
     boost::optional<ast::name const&> resolution_function_name() const {

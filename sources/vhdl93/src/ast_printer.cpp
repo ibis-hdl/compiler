@@ -730,18 +730,18 @@ void printer::operator()(discrete_range const &node)
     static char const symbol[]{ "discrete_range" };
     symbol_scope<discrete_range> _(*this, symbol);
 
-//    util::visit_in_place(
-//        node,
-//        [this](ast::discrete_subtype_indication const& subtype_indication) {
-//            (*this)(subtype_indication);
-//        },
-//        [this](ast::range const& range) {
-//            (*this)(range);
-//        },
-//        [this](ast::nullary const& nullary) {
-//            (*this)(nullary);
-//        }
-//    );
+    util::visit_in_place(
+        node,
+        [this](ast::discrete_subtype_indication const& subtype_indication) {
+            (*this)(subtype_indication);
+        },
+        [this](ast::range const& range) {
+            (*this)(range);
+        },
+        [this](ast::nullary const& nullary) {
+            (*this)(nullary);
+        }
+    );
 }
 
 
@@ -1203,9 +1203,17 @@ void printer::operator()(incomplete_type_declaration const &node)
 
 void printer::operator()(index_constraint const &node)
 {
-    static char const symbol[]{ "XXX index_constraint" };
+    static char const symbol[]{ "index_constraint" };
     symbol_scope<index_constraint> _(*this, symbol);
-    //os << node;
+
+    auto const N = node.size() - 1;
+    unsigned i = 0;
+    for(auto const& discrete_range : node) {
+        (*this)(discrete_range);
+        if(i++ != N) {
+            os << ",\n";
+        }
+    }
 }
 
 
@@ -1630,7 +1638,7 @@ void printer::operator()(qualified_expression const &node)
 }
 
 
-void printer::operator()(range const &node)
+void printer::operator()(range const &node) // aka range_constraint
 {
     static char const symbol[]{ "range" };
     symbol_scope<range> _(*this, symbol);
