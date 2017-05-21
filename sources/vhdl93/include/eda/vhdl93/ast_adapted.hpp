@@ -170,6 +170,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::string_literal,
     literal
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::subtype_indication,
+    unspecified_name_list, constraint
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::term::chunk,
     operator_, factor
 )

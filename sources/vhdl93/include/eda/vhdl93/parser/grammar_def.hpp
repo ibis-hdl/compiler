@@ -787,7 +787,7 @@ typedef x3::rule<configuration_item_class> configuration_item_type;
 typedef x3::rule<configuration_specification_class> configuration_specification_type;
 typedef x3::rule<constant_declaration_class> constant_declaration_type;
 typedef x3::rule<constrained_array_definition_class> constrained_array_definition_type;
-typedef x3::rule<constraint_class> constraint_type;
+typedef x3::rule<constraint_class, ast::constraint> constraint_type;
 typedef x3::rule<context_clause_class> context_clause_type;
 typedef x3::rule<context_item_class> context_item_type;
 typedef x3::rule<decimal_literal_class, ast::decimal_literal> decimal_literal_type;
@@ -936,7 +936,7 @@ typedef x3::rule<subprogram_kind_class> subprogram_kind_type;
 typedef x3::rule<subprogram_specification_class> subprogram_specification_type;
 typedef x3::rule<subprogram_statement_part_class> subprogram_statement_part_type;
 typedef x3::rule<subtype_declaration_class> subtype_declaration_type;
-typedef x3::rule<subtype_indication_class> subtype_indication_type;
+typedef x3::rule<subtype_indication_class, ast::subtype_indication> subtype_indication_type;
 typedef x3::rule<suffix_class, ast::suffix> suffix_type;
 typedef x3::rule<target_class, ast::target> target_type;
 typedef x3::rule<term_class, ast::term> term_type;
@@ -2029,15 +2029,15 @@ auto const constrained_array_definition_def =
         ;
 #endif
 
-#if 0
-// constraint ::=
-// range_constraint
+
+// constraint ::=                                                        [§ 4.2]
+//       range_constraint
 //     | index_constraint
 auto const constraint_def =
-        range_constraint
-        | index_constraint
-        ;
-#endif
+      range_constraint
+//    | index_constraint // FXIME
+    ;
+
 
 #if 0
 // context_clause ::=
@@ -3777,13 +3777,28 @@ auto const subtype_declaration_def =
 ;
 #endif
 
-#if 0
-// subtype_indication ::=
-// [ resolution_function_name ] type_mark [ constraint ]
-auto const subtype_indication_def =
-        -( resolution_function_name ) type_mark -( constraint )
+
+// subtype_indication ::=                                                [§ 4.2]
+//     [ resolution_function_name ] type_mark [ constraint ]
+namespace subtype_indication_detail {
+
+    /* parse a list of unspecified names, since
+     *      resolution_function_name ::= name
+     *      type_mark ::= type_name | subtype_name
+     * is ambiguous. Nevertheless, syntactically resolution_function_name and
+     * type_mark are names, semantically only a subset. Maybe here is another
+     * approach. */
+    auto const unspecified_name_list = x3::rule<struct _, std::deque<ast::name>> { "subtype_indication" } =
+        x3::repeat(1 ,2)[
+            name
+        ]
         ;
-#endif
+}
+auto const subtype_indication_def =
+       subtype_indication_detail::unspecified_name_list
+    >> -constraint
+    ;
+
 
 
 // suffix ::=                                                            [§ 6.3]
@@ -3870,11 +3885,10 @@ auto const type_definition_def =
 //       type_name
 //     | subtype_name
 /* Note, there is no way to distinguish between type_name and subtype_name at
- * parser level. It's used as simple string parser for symantic sugar at parser
- * level exposing a std::string_view attribute. Further read
+ * parser level. Further read
  * [Question about type_mark bnf](https://groups.google.com/forum/#!topic/comp.lang.vhdl/exUhoMrFavU) */
 auto const type_mark_def =
-    identifier
+    name
     ;
 
 
@@ -4064,7 +4078,7 @@ BOOST_SPIRIT_DEFINE(  // -- C --
     //, configuration_specification
     //, constant_declaration
     //, constrained_array_definition
-    //, constraint
+    , constraint
     //, context_clause
     //, context_item
 )
@@ -4238,7 +4252,7 @@ BOOST_SPIRIT_DEFINE(  // -- S --
     //, subprogram_specification
     //, subprogram_statement_part
     //, subtype_declaration
-    //, subtype_indication
+    , subtype_indication
     , suffix
 )
 BOOST_SPIRIT_DEFINE(  // -- T --

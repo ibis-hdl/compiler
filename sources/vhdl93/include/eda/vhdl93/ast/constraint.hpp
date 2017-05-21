@@ -36,5 +36,4 @@ struct constraint : x3::variant<
 } } } // namespace eda.vhdl93.ast
 
 
-
 #endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_CONSTRAINT_HPP_ */

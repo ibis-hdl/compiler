@@ -1,0 +1,12 @@
+(subtype_indication
+  (name<v>
+    (simple_name
+      resolution_function_name
+    )
+  )
+  (type_mark *FIXME *<v>
+    (simple_name
+      type_mark
+    )
+  )
+)

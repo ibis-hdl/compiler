@@ -1,0 +1,7 @@
+(subtype_indication
+  (type_mark *FIXME *<v>
+    (simple_name
+      type_mark
+    )
+  )
+)

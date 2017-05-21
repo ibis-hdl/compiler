@@ -315,5 +315,42 @@ BOOST_DATA_TEST_CASE( signal_assignment_statement,
 
 
 
+/*
+ * subtype_indication
+ */
+struct subtype_indication_dataset : public ::x3_test::dataset_loader
+{
+    subtype_indication_dataset()
+    : dataset_loader{ "test_case/subtype_indication" }
+    { }
+} const subtype_indication_dataset;
+
+
+BOOST_DATA_TEST_CASE( subtype_indication,
+      subtype_indication_dataset.input()
+    ^ subtype_indication_dataset.expect()
+    ^ subtype_indication_dataset.test_file_name(),
+    input, expect, file)
+{
+    using x3_test::testing_parser;
+
+    typedef ast::subtype_indication attribute_type;
+
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
+
+    bool parse_ok{ false };
+    std::string parse_result {};
+
+    testing_parser<attribute_type> parse;
+    std::tie(parse_ok, parse_result) = parse(input, parser::subtype_indication);
+
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expect, btt::per_element());
+}
+
+
+
 BOOST_AUTO_TEST_SUITE_END()
 

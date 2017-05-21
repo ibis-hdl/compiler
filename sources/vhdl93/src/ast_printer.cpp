@@ -614,9 +614,10 @@ void printer::operator()(constrained_array_definition const &node)
 
 void printer::operator()(constraint const &node)
 {
-    static char const symbol[]{ "XXX constraint" };
+    static char const symbol[]{ "constraint" };
     symbol_scope<constraint> _(*this, symbol);
-    //visit(node);
+
+    visit(node);
 }
 
 
@@ -1991,9 +1992,43 @@ void printer::operator()(subtype_declaration const &node)
 
 void printer::operator()(subtype_indication const &node)
 {
-    static char const symbol[]{ "XXX subtype_indication" };
+    static char const symbol[]{ "subtype_indication" };
     symbol_scope<subtype_indication> _(*this, symbol);
-    //os << node;
+
+    /* FixMe: get type_mark derived from ast::name to implement visitor API */
+#if 0
+    if(node.resolution_function_name()) {
+        (*this)(node.resolution_function_name().get());
+        os << "\n";
+    }
+    (*this)(node.type_mark);
+#else
+    if(node.unspecified_name_list.size() == 2) {
+        ast::name const& resolution_function_name = node.unspecified_name_list.front();
+        (*this)(resolution_function_name);
+        os << "\n";
+        ast::name const& type_mark = node.unspecified_name_list.back();
+        {
+            static char const symbol[]{ "type_mark *FIXME *" };
+            symbol_scope<ast::name> _(*this, symbol);
+            visit(type_mark);
+        }
+    }
+    else if(node.unspecified_name_list.size() == 1)  {
+        static char const symbol[]{ "type_mark *FIXME *" };
+        symbol_scope<ast::name> _(*this, symbol);
+        ast::name const& type_mark = node.unspecified_name_list.back();
+        visit(type_mark);
+    }
+    else {
+        os << "\nINVALID [resolution_function_name, type_mark] list\n";
+    }
+#endif
+
+    if(node.constraint) {
+        os << "\n";
+        (*this)(node.constraint.get());
+    }
 }
 
 
@@ -2075,7 +2110,7 @@ void printer::operator()(type_mark const &node)
 {
     static char const symbol[]{ "type_mark" };
     symbol_scope<type_mark> _(*this, symbol);
-    os << node.name;
+    visit(node);
 }
 
 

@@ -213,7 +213,7 @@
 //#include <eda/vhdl93/ast/subprogram_specification.hpp>
 //#include <eda/vhdl93/ast/subprogram_statement_part.hpp>
 //#include <eda/vhdl93/ast/subtype_declaration.hpp>
-//#include <eda/vhdl93/ast/subtype_indication.hpp>
+#include <eda/vhdl93/ast/subtype_indication.hpp>
 //XXX#include <eda/vhdl93/ast/suffix.hpp>
 //XXX#include <eda/vhdl93/ast/target.hpp>
 //XXX#include <eda/vhdl93/ast/term.hpp>
