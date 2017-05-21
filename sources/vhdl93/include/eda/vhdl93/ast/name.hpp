@@ -53,6 +53,9 @@ struct name : x3::variant<
 {
     using base_type::base_type;
     using base_type::operator=;
+
+    name(name const& other) = default;
+    name& operator=(name const& other) = default;
 };
 #endif
 

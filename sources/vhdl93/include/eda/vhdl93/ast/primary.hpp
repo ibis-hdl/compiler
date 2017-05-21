@@ -14,7 +14,7 @@
 
 
 #include <eda/vhdl93/ast/nullary.hpp>
-#include <eda/vhdl93/ast/name.hpp>
+//#include <eda/vhdl93/ast/name.hpp>
 #include <eda/vhdl93/ast/literal.hpp>
 #include <eda/vhdl93/ast/function_call.hpp>
 //#include <eda/vhdl93/ast/expression.hpp>
@@ -25,6 +25,7 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
+struct name;
 struct expression;
 
 // primary ::=
@@ -51,7 +52,7 @@ using primary = x3::variant<
 #else
 struct primary : x3::variant<
     nullary,
-    name,
+    x3::forward_ast<name>,
     literal,
     // aggregate,
     function_call,

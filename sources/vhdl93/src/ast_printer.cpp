@@ -2004,21 +2004,18 @@ void printer::operator()(subtype_indication const &node)
     (*this)(node.type_mark);
 #else
     if(node.unspecified_name_list.size() == 2) {
+
         ast::name const& resolution_function_name = node.unspecified_name_list.front();
         (*this)(resolution_function_name);
+
         os << "\n";
-        ast::name const& type_mark = node.unspecified_name_list.back();
-        {
-            static char const symbol[]{ "type_mark *FIXME *" };
-            symbol_scope<ast::name> _(*this, symbol);
-            visit(type_mark);
-        }
+
+        ast::type_mark const& type_mark = static_cast<ast::type_mark const&>(node.unspecified_name_list.back());
+        (*this)(type_mark);
     }
     else if(node.unspecified_name_list.size() == 1)  {
-        static char const symbol[]{ "type_mark *FIXME *" };
-        symbol_scope<ast::name> _(*this, symbol);
-        ast::name const& type_mark = node.unspecified_name_list.back();
-        visit(type_mark);
+        ast::type_mark const& type_mark = static_cast<ast::type_mark const&>(node.unspecified_name_list.front());
+        (*this)(type_mark);
     }
     else {
         os << "\nINVALID [resolution_function_name, type_mark] list\n";

@@ -4,7 +4,7 @@
       resolution_function_name
     )
   )
-  (type_mark *FIXME *<v>
+  (type_mark<v>
     (simple_name
       type_mark
     )
