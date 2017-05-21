@@ -4403,7 +4403,7 @@ subtype_indication
 |                        |                                                        |       resolution_function_name |
 |                        |                                                        |     )                          |
 |                        |                                                        |   )                            |
-|                        |                                                        |   (type_mark *FIXME *<v>       |
+|                        |                                                        |   (type_mark<v>                |
 |                        |                                                        |     (simple_name               |
 |                        |                                                        |       type_mark                |
 |                        |                                                        |     )                          |
@@ -4426,7 +4426,7 @@ subtype_indication
 |                        |                                                        |       resolution_function_name |
 |                        |                                                        |     )                          |
 |                        |                                                        |   )                            |
-|                        |                                                        |   (type_mark *FIXME *<v>       |
+|                        |                                                        |   (type_mark<v>                |
 |                        |                                                        |     (simple_name               |
 |                        |                                                        |       type_mark                |
 |                        |                                                        |     )                          |
@@ -4435,7 +4435,7 @@ subtype_indication
 |                        |                                                        |                                |
 +------------------------+--------------------------------------------------------+--------------------------------+
 | subtype_indication_003 |   type_mark  RANGE constraint                          | (subtype_indication            |
-|                        |                                                        |   (type_mark *FIXME *<v>       |
+|                        |                                                        |   (type_mark<v>                |
 |                        |                                                        |     (simple_name               |
 |                        |                                                        |       type_mark                |
 |                        |                                                        |     )                          |
@@ -4453,7 +4453,7 @@ subtype_indication
 |                        |                                                        |                                |
 +------------------------+--------------------------------------------------------+--------------------------------+
 | subtype_indication_004 | type_mark                                              | (subtype_indication            |
-|                        |                                                        |   (type_mark *FIXME *<v>       |
+|                        |                                                        |   (type_mark<v>                |
 |                        |                                                        |     (simple_name               |
 |                        |                                                        |       type_mark                |
 |                        |                                                        |     )                          |
