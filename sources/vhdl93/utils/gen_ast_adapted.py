@@ -29,6 +29,7 @@ class AstFusionAdapter:
         include_paths = []
         for include in modules:
             include_paths.append(os.path.abspath(pathname + '/' + include))
+        # fake headers doesn't work as expected here ...
         fake_paths = [os.path.abspath(pathname + '/' + 'fake_header')]
         print('using include_paths = ' + ", ".join(include_paths))
         print('using fake include_paths = ' + ", ".join(fake_paths))
