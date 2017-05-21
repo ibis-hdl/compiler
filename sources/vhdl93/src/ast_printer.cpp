@@ -727,9 +727,21 @@ void printer::operator()(disconnection_specification const &node)
 
 void printer::operator()(discrete_range const &node)
 {
-    static char const symbol[]{ "XXX discrete_range" };
+    static char const symbol[]{ "discrete_range" };
     symbol_scope<discrete_range> _(*this, symbol);
-    //visit(node);
+
+//    util::visit_in_place(
+//        node,
+//        [this](ast::discrete_subtype_indication const& subtype_indication) {
+//            (*this)(subtype_indication);
+//        },
+//        [this](ast::range const& range) {
+//            (*this)(range);
+//        },
+//        [this](ast::nullary const& nullary) {
+//            (*this)(nullary);
+//        }
+//    );
 }
 
 

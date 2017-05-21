@@ -72,7 +72,7 @@
 //#include <eda/vhdl93/ast/configuration_specification.hpp>
 //#include <eda/vhdl93/ast/constant_declaration.hpp>
 //#include <eda/vhdl93/ast/constrained_array_definition.hpp>
-#include <eda/vhdl93/ast/constraint.hpp>
+//#include <eda/vhdl93/ast/constraint.hpp>
 //#include <eda/vhdl93/ast/context_clause.hpp>
 //#include <eda/vhdl93/ast/context_item.hpp>
 //XXX#include <eda/vhdl93/ast/decimal_literal.hpp>
@@ -131,7 +131,7 @@
 #include <eda/vhdl93/ast/identifier_list.hpp>
 //#include <eda/vhdl93/ast/if_statement.hpp>
 //#include <eda/vhdl93/ast/incomplete_type_declaration.hpp>
-//#include <eda/vhdl93/ast/index_constraint.hpp>
+//XXX#include <eda/vhdl93/ast/index_constraint.hpp>
 //#include <eda/vhdl93/ast/index_specification.hpp>
 //#include <eda/vhdl93/ast/index_subtype_definition.hpp>
 #include <eda/vhdl93/ast/indexed_name.hpp>

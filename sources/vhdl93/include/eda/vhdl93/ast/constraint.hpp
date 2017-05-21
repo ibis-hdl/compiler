@@ -12,8 +12,8 @@
 #include <eda/vhdl93/ast/namespace_alias.hpp>
 
 #include <eda/vhdl93/ast/nullary.hpp>
-#include <eda/vhdl93/ast/range_constraint.hpp>
 //#include <eda/vhdl93/ast/index_constraint.hpp>
+#include <eda/vhdl93/ast/range_constraint.hpp>
 
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
 

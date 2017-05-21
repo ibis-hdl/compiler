@@ -798,7 +798,7 @@ typedef x3::rule<design_unit_class> design_unit_type;
 typedef x3::rule<designator_class> designator_type;
 typedef x3::rule<direction_class, ast::keyword_token> direction_type;
 typedef x3::rule<disconnection_specification_class> disconnection_specification_type;
-typedef x3::rule<discrete_range_class> discrete_range_type;
+typedef x3::rule<discrete_range_class/*, ast::discrete_range*/> discrete_range_type;
 typedef x3::rule<element_association_class> element_association_type;
 typedef x3::rule<element_declaration_class> element_declaration_type;
 typedef x3::rule<element_subtype_definition_class> element_subtype_definition_type;
@@ -847,7 +847,7 @@ typedef x3::rule<identifier_class, ast::identifier> identifier_type;
 typedef x3::rule<identifier_list_class, ast::identifier_list> identifier_list_type;
 typedef x3::rule<if_statement_class> if_statement_type;
 typedef x3::rule<incomplete_type_declaration_class> incomplete_type_declaration_type;
-typedef x3::rule<index_constraint_class> index_constraint_type;
+typedef x3::rule<index_constraint_class/*, ast::index_constraint*/> index_constraint_type;
 typedef x3::rule<index_specification_class> index_specification_type;
 typedef x3::rule<index_subtype_definition_class> index_subtype_definition_type;
 typedef x3::rule<indexed_name_class, ast::indexed_name> indexed_name_type;
@@ -2035,7 +2035,7 @@ auto const constrained_array_definition_def =
 //     | index_constraint
 auto const constraint_def =
       range_constraint
-//    | index_constraint // FXIME
+    | index_constraint
     ;
 
 
@@ -2164,13 +2164,18 @@ auto const disconnection_specification_def =
 ;
 #endif
 
-#if 0
-// discrete_range ::=
-// discrete_subtype_indication | range
+
+// discrete_range ::=                                                  [§ 3.2.1]
+//     discrete_subtype_indication | range
+namespace discrete_range_detail {
+    auto const discrete_subtype_indication = x3::rule<subtype_indication_class, ast::subtype_indication> { "discrete_subtype_indication" } =
+        subtype_indication;
+}
 auto const discrete_range_def =
-        discrete_subtype_indication | RANGE
-        ;
-#endif
+      discrete_range_detail::discrete_subtype_indication
+    | RANGE
+    ;
+
 
 #if 0
 // element_association ::=
@@ -2719,13 +2724,15 @@ auto const incomplete_type_declaration_def =
 ;
 #endif
 
-#if 0
-// index_constraint ::=
-// ( discrete_range { , discrete_range } )
+
+// index_constraint ::=                                                [§ 3.2.1]
+//     ( discrete_range { , discrete_range } )
 auto const index_constraint_def =
-        ( discrete_range >> ( discrete_range % ',' ) )
-        ;
-#endif
+        '('
+     >> ( discrete_range % ',' )
+     >> ')'
+     ;
+
 
 #if 0
 // index_specification ::=
@@ -4091,7 +4098,7 @@ BOOST_SPIRIT_DEFINE(  // -- D --
     //, designator
     , direction
     //, disconnection_specification
-    //, discrete_range
+    , discrete_range
 )
 BOOST_SPIRIT_DEFINE(  // -- E --
     //  element_association
@@ -4148,7 +4155,7 @@ BOOST_SPIRIT_DEFINE(  // -- I --
     , identifier_list
     //, if_statement
     //, incomplete_type_declaration
-    //, index_constraint
+    , index_constraint
     //, index_specification
     //, index_subtype_definition
     , indexed_name
