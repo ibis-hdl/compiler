@@ -47,17 +47,14 @@ struct subtype_indication : position_tagged
         }
     };
 
-    /* FixMe: Derive type_mark from ast::name to get the semantic meaning back */
-#if 0
     ast::type_mark const& type_mark() const {
         if(unspecified_name_list.size() == 1) {
-            return unspecified_name_list.front();
+            return static_cast<ast::type_mark const&>(unspecified_name_list.front());
         }
         else { // 2nd element
-            return unspecified_name_list.back();
+            return static_cast<ast::type_mark const&>(unspecified_name_list.back());
         }
     }
-#endif
 };
 
 

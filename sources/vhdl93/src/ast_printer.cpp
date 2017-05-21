@@ -1995,32 +1995,14 @@ void printer::operator()(subtype_indication const &node)
     static char const symbol[]{ "subtype_indication" };
     symbol_scope<subtype_indication> _(*this, symbol);
 
-    /* FixMe: get type_mark derived from ast::name to implement visitor API */
-#if 0
+    /* note the use of subtype_indication's visitor API due to the way how
+     * the parser parses here; see notes at the rules self.  */
     if(node.resolution_function_name()) {
         (*this)(node.resolution_function_name().get());
         os << "\n";
     }
-    (*this)(node.type_mark);
-#else
-    if(node.unspecified_name_list.size() == 2) {
 
-        ast::name const& resolution_function_name = node.unspecified_name_list.front();
-        (*this)(resolution_function_name);
-
-        os << "\n";
-
-        ast::type_mark const& type_mark = static_cast<ast::type_mark const&>(node.unspecified_name_list.back());
-        (*this)(type_mark);
-    }
-    else if(node.unspecified_name_list.size() == 1)  {
-        ast::type_mark const& type_mark = static_cast<ast::type_mark const&>(node.unspecified_name_list.front());
-        (*this)(type_mark);
-    }
-    else {
-        os << "\nINVALID [resolution_function_name, type_mark] list\n";
-    }
-#endif
+    (*this)(node.type_mark());
 
     if(node.constraint) {
         os << "\n";
