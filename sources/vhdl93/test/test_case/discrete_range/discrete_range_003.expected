@@ -1,0 +1,18 @@
+(discrete_range<v>
+  (subtype_indication
+    (type_mark<v>
+      (simple_name
+        type_mark
+      )
+    )
+    (constraint<v>
+      (range<v>
+        (name<v>
+          (simple_name
+            constraint
+          )
+        )
+      )
+    )
+  )
+)
