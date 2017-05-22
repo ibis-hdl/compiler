@@ -316,7 +316,7 @@ BOOST_DATA_TEST_CASE( signal_assignment_statement,
 
 
 /*
- * range
+ * range aka range_constraint
  */
 struct range_dataset : public ::x3_test::dataset_loader
 {
@@ -381,6 +381,43 @@ BOOST_DATA_TEST_CASE( discrete_range,
 
     testing_parser<attribute_type> parse;
     std::tie(parse_ok, parse_result) = parse(input, parser::discrete_range);
+
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expect, btt::per_element());
+}
+
+
+
+/*
+ * index_constraint
+ */
+struct index_constraint_dataset : public ::x3_test::dataset_loader
+{
+    index_constraint_dataset()
+    : dataset_loader{ "test_case/index_constraint" }
+    { }
+} const index_constraint_dataset;
+
+
+BOOST_DATA_TEST_CASE( index_constraint,
+      index_constraint_dataset.input()
+    ^ index_constraint_dataset.expect()
+    ^ index_constraint_dataset.test_file_name(),
+    input, expect, file)
+{
+    using x3_test::testing_parser;
+
+    typedef ast::index_constraint attribute_type;
+
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
+
+    bool parse_ok{ false };
+    std::string parse_result {};
+
+    testing_parser<attribute_type> parse;
+    std::tie(parse_ok, parse_result) = parse(input, parser::index_constraint);
 
     BOOST_TEST(parse_ok);
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");

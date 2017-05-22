@@ -1,0 +1,3 @@
+-- list of discrete subtype indications with constrains
+(foo RANGE 42 downto 0, bar RANGE 69 to 99)
+
