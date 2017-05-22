@@ -316,6 +316,43 @@ BOOST_DATA_TEST_CASE( signal_assignment_statement,
 
 
 /*
+ * range
+ */
+struct range_dataset : public ::x3_test::dataset_loader
+{
+    range_dataset()
+    : dataset_loader{ "test_case/range" }
+    { }
+} const range_dataset;
+
+
+BOOST_DATA_TEST_CASE( range,
+      range_dataset.input()
+    ^ range_dataset.expect()
+    ^ range_dataset.test_file_name(),
+    input, expect, file)
+{
+    using x3_test::testing_parser;
+
+    typedef ast::range attribute_type;
+
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
+
+    bool parse_ok{ false };
+    std::string parse_result {};
+
+    testing_parser<attribute_type> parse;
+    std::tie(parse_ok, parse_result) = parse(input, parser::range);
+
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expect, btt::per_element());
+}
+
+
+
+/*
  * subtype_indication
  */
 struct subtype_indication_dataset : public ::x3_test::dataset_loader

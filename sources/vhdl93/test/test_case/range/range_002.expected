@@ -1,0 +1,27 @@
+(range<v>
+  (simple_expression
+    term: (term
+      (primary<v>
+        (name<v>
+          (simple_name
+            lhs
+          )
+        )
+      )
+    )
+  )
+  (keyword
+    TO
+  )
+  (simple_expression
+    term: (term
+      (primary<v>
+        (name<v>
+          (simple_name
+            rhs
+          )
+        )
+      )
+    )
+  )
+)
