@@ -5,8 +5,8 @@ project(test_vhdl93_parser LANGUAGES CXX)
 
 set(BIN_SOURCES
     data_set.cpp
-    parser_literals.cpp
-    parser_expression.cpp
+    #parser_literals.cpp
+    #parser_expression.cpp
     parser_production.cpp
     parser_xxx.cpp
     test_vhdl93_parser.cpp
@@ -24,6 +24,15 @@ target_compile_options(${PROJECT_NAME} PRIVATE -ftemplate-backtrace-limit=1)
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     target_compile_options(${PROJECT_NAME}
         PRIVATE -ftemplate-depth=1024)
+endif()
+
+
+## X3 Parser DEBUG
+#  show warnings about dereferencing type-punned pointer will break strict-aliasing
+#  rules [-Wstrict-aliasing] (spirit.x3 1.64 e.g.)
+if("${EDA_VHDL93_PARSER_DEBUG}")
+    target_compile_definitions(${PROJECT_NAME}
+        PRIVATE BOOST_SPIRIT_X3_DEBUG=1)
 endif()
 
 

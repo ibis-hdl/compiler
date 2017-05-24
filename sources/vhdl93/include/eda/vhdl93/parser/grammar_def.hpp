@@ -22,6 +22,10 @@
 
 #include <eda/vhdl93/parser/spirit_x3.hpp>
 
+#if defined(BOOST_SPIRIT_X3_DEBUG)
+#include <eda/vhdl93/ast_debug_out.hpp>
+#endif
+
 
 /*
  * Parser helper
@@ -2173,7 +2177,7 @@ namespace discrete_range_detail {
 }
 auto const discrete_range_def =
       discrete_range_detail::discrete_subtype_indication
-    | RANGE
+    | range
     ;
 
 
@@ -3356,13 +3360,15 @@ namespace range_detail {
         >> direction
         >> simple_expression
         ;
-    auto const range_attribute_name = x3::rule<range_class, ast::name> { "range_attribute_name" } =
-        name
+    auto const range_attribute_name = x3::rule<range_class, ast::attribute_name> { "range_attribute_name" } =
+        attribute_name
         ;
 }
+/* Note, the order is changed to get the longest match, since simple_expression
+ * can also be a name as of range_attribute_name */
 auto const range_def =
-      range_detail::range_attribute_name
-    | range_detail::range_expression
+      range_detail::range_expression
+    | range_detail::range_attribute_name
     ;
 
 

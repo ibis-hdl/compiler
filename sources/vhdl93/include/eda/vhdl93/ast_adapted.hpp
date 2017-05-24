@@ -12,7 +12,6 @@
 #include <eda/vhdl93/ast.hpp>
 
 #include <boost/fusion/include/adapt_struct.hpp>
-#include <boost/fusion/include/io.hpp>
 
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::attribute_declaration,

@@ -43,6 +43,18 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
         PRIVATE -ftemplate-depth=1024)
 endif()
 
+
+## X3 Parser DEBUG
+#  show warnings about dereferencing type-punned pointer will break strict-aliasing
+#  rules [-Wstrict-aliasing] (spirit.x3 1.64 e.g.)
+set(EDA_VHDL93_PARSER_DEBUG OFF CACHE BOOL "debug printer of spirit.x3 parser tree")
+
+if("${EDA_VHDL93_PARSER_DEBUG}")
+    target_compile_definitions(${PROJECT_NAME}
+        PRIVATE BOOST_SPIRIT_X3_DEBUG=1)
+endif()
+
+
 ## Depencies
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
