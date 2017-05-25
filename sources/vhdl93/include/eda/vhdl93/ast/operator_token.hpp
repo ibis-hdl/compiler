@@ -31,7 +31,9 @@ enum class operator_token {
     // relational_operator
     EQUAL, NOT_EQUALS, LESS, LESS_EQUALS, GREATER, GREATER_EQUALS,
     // logical_operator
-    AND, OR, NAND, NOR, XOR, XNOR
+    AND, OR, NAND, NOR, XOR, XNOR,
+    // expressions (non-BNF)
+    EXPR_BGN, EXPR_END
 };
 
 

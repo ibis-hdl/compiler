@@ -21,18 +21,19 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
+
 // http://www.vhdl.renerta.com/mobile/source/vhd00029.htm
 struct expression_visitor: public boost::static_visitor<bool>
 {
     std::ostream& os;
     ast::printer print;
 
-    std::stack<operator_token>      operator_stack;
+    std::stack<operator_token>          operator_stack;
 
     using output_type = boost::variant<
         operator_token, int32_t
     >;
-    std::vector<output_type>        output_queue;
+    std::vector<output_type>            output_queue;
 
     unsigned expr_count{0};
 
@@ -87,6 +88,40 @@ struct expression_visitor: public boost::static_visitor<bool>
     result_type operator()(nullary const&);
 
     void eval_precedence(operator_token operator_);
+
+    static inline bool is_expression(ast::primary const &primary) {
+
+        return util::visit_in_place(
+            primary,
+            [](ast::nullary const&)             { return false; },
+            [](ast::name const&)                { return false; },
+            [](ast::literal const&)             { return false; },
+            [](ast::aggregate const&)           { return false; },
+            [](ast::function_call const&)       { return false; },
+            [](ast::qualified_expression const&) { return false; },
+            [](ast::type_conversion const&)     { return false; },
+            [](ast::allocator const&)           { return false; },
+            [](ast::expression const&)          { return true; }
+        );
+    };
+
+    void output(operator_token token) {
+        /* avoid pushing expressions braces onto output queue */
+        switch(token) {
+            case operator_token::EXPR_BGN:
+                [[fallthrough]];
+            case operator_token::EXPR_END: {
+                break;
+                }
+            default:
+                output_queue.emplace_back(token);
+        }
+    }
+
+    template<typename Type>
+    void output(Type const& object) {
+        output_queue.emplace_back(object);
+    }
 };
 
 
@@ -162,18 +197,13 @@ expression_visitor::result_type expression_visitor::operator()(factor const& nod
     util::visit_in_place(
         node,
         [this](ast::primary const &primary) {
-        bool is_expression = false;
-            try {
-                auto const expr = boost::get<x3::forward_ast<ast::expression>>(primary);
-                os << "Call of factor::expression\n";
-                is_expression = true;
-            }
-            catch(boost::bad_get const& e) {
-                ;
-            }
-            if(is_expression) { eval_precedence(operator_token::EXPR_BGN); }
+
+            bool const nested_expression = is_expression(primary);
+            if(nested_expression) { os << "Call of factor::expression\n"; }
+
+            if(nested_expression) { eval_precedence(operator_token::EXPR_BGN); }
             (*this).operator()(primary);
-            if(is_expression) { eval_precedence(operator_token::EXPR_END);}
+            if(nested_expression) { eval_precedence(operator_token::EXPR_END);}
         },
         [this](factor_unary_operation const &unary_function) {
 
@@ -209,7 +239,7 @@ expression_visitor::result_type expression_visitor::operator()(identifier const&
 
 expression_visitor::result_type expression_visitor::operator()(decimal_literal const& node)
 {
-    output_queue.emplace_back(get<int32_t>(node));
+    output(get<int32_t>(node));
     os << "push " << output_queue.back() << " output\n";
     return true;
 }
@@ -324,7 +354,7 @@ void expression_visitor::eval_precedence(operator_token operator_)
             operator_stack.pop();
 
             os << "push " << op << " output\n";
-            output_queue.emplace_back(op);
+            output(op);
 
             os << "push " << operator_ << " operator_stack\n";
             operator_stack.emplace(operator_);
@@ -370,16 +400,16 @@ int main()
         ast::expression_visitor eval{std::cout};
         eval(expr);
 
+        // empty operator stack
+        while(!eval.operator_stack.empty()) {
+            eval.output(eval.operator_stack.top());
+            eval.operator_stack.pop();
+        }
         std::cout << "RPN Stack:\n";
         for(auto const& e : eval.output_queue) {
             std::cout << e << " ";
         }
         std::cout << "\n";
-        std::cout << "RPN Operator Stack:\n";
-        for(unsigned i = 0; i != eval.operator_stack.size(); ++i) {
-            std::cout << eval.operator_stack.top() << "\n";
-            eval.operator_stack.pop();
-        }
       } else {
         std::cout << std::boolalpha
                   << "parse: " << parse_ok << "\n"

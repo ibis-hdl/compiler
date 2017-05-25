@@ -69,6 +69,10 @@ std::ostream& operator<<(std::ostream& os, operator_token token)
         case operator_token::XOR:             os << "XOR";           break;
         case operator_token::XNOR:            os << "XNOR";          break;
 
+        // expression related, non-BNF
+        case operator_token::EXPR_BGN:        os << "EXPR_BGN";      break;
+        case operator_token::EXPR_END:        os << "EXPR_END";      break;
+
         default:                              os << "FAILURE";
     }
 
@@ -95,6 +99,11 @@ std::ostream& operator<<(std::ostream& os, operator_token token)
 unsigned precedence(operator_token token)
 {
     switch(token) {
+        // expression related, non-BNF
+        case operator_token::EXPR_BGN:
+            FALLTHROUGH;
+        case operator_token::EXPR_END: { return 7; }
+
         // miscellaneous_operator
         case operator_token::EXPONENT:
             FALLTHROUGH;
