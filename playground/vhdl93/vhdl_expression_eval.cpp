@@ -13,6 +13,9 @@
 
 #include <eda/support/boost/hana_overload.hpp>
 
+#include <boost/variant.hpp>
+#include <stack>
+#include <vector>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -24,9 +27,18 @@ struct expression_visitor: public boost::static_visitor<bool>
     std::ostream& os;
     ast::printer print;
 
+    std::stack<operator_token>      operator_stack;
+
+    using output_type = boost::variant<
+        operator_token, int32_t
+    >;
+    std::vector<output_type>        output_queue;
+
+    unsigned expr_count{0};
+
     expression_visitor(std::ostream& os_) : os{os_}, print{os_} {
         print.verbose_symbol = true;
-//        print.verbose_variant = true;
+        print.verbose_variant = true;
     }
 
     template<typename... T>
@@ -73,15 +85,17 @@ struct expression_visitor: public boost::static_visitor<bool>
 
     result_type operator()(keyword_token token);
     result_type operator()(nullary const&);
+
+    void eval_precedence(operator_token operator_);
 };
 
 
-expression_visitor::result_type expression_visitor::operator()(expression const& node) {
-
+expression_visitor::result_type expression_visitor::operator()(expression const& node)
+{
     (*this)(node.relation);
 
     for(auto const& chunk : node.rest_list) {
-        os << ",\n" << "operator: " << chunk.operator_ << ",\n";
+        os << " " << chunk.operator_ << " ";
         (*this)(chunk.relation);
     }
 
@@ -95,7 +109,7 @@ expression_visitor::result_type expression_visitor::operator()(relation const& n
 
     if(node.rest.is_initialized()) {
         auto const& chunk = node.rest.get();
-        os << ",\n" << "operator: " << chunk.operator_ << ",\n";
+        os << " " << chunk.operator_ << " ";
         (*this)(chunk.shift_expression);
     }
     return true;
@@ -107,7 +121,7 @@ expression_visitor::result_type expression_visitor::operator()(shift_expression 
 
     if(node.rest.is_initialized()) {
         auto const& chunk = node.rest.get();
-        os << ",\n" << "operator: " << chunk.operator_ << ",\n";
+        os << " " << chunk.operator_ << " ";
         (*this)(chunk.simple_expression);
     }
     return true;
@@ -116,14 +130,14 @@ expression_visitor::result_type expression_visitor::operator()(shift_expression 
 expression_visitor::result_type expression_visitor::operator()(simple_expression const& node)
 {
     if(node.sign.is_initialized()) { // optional
-        os << "sign: " << node.sign.get() << ",\n";
+        eval_precedence(node.sign.get());
     }
 
     (*this)(node.term);
 
     if(!node.rest_list.empty()) {
         for(auto const& chunk : node.rest_list) {
-            os << ",\n" << "operator: " << chunk.operator_ << ",\n";
+            eval_precedence(chunk.operator_);
             (*this)(chunk.term);
         }
     }
@@ -135,9 +149,9 @@ expression_visitor::result_type expression_visitor::operator()(term const& node)
     (*this)(node.factor);
 
     if(!node.rest_list.empty()) {
-        for(auto const& term_chunk: node.rest_list) {
-            os << "operator: " << term_chunk.operator_ << ",\n";
-            (*this)(term_chunk.factor);
+        for(auto const& chunk: node.rest_list) {
+            eval_precedence(chunk.operator_);
+            (*this)(chunk.factor);
         }
     }
     return true;
@@ -148,15 +162,30 @@ expression_visitor::result_type expression_visitor::operator()(factor const& nod
     util::visit_in_place(
         node,
         [this](ast::primary const &primary) {
+        bool is_expression = false;
+            try {
+                auto const expr = boost::get<x3::forward_ast<ast::expression>>(primary);
+                os << "Call of factor::expression\n";
+                is_expression = true;
+            }
+            catch(boost::bad_get const& e) {
+                ;
+            }
+            if(is_expression) { eval_precedence(operator_token::EXPR_BGN); }
             (*this).operator()(primary);
+            if(is_expression) { eval_precedence(operator_token::EXPR_END);}
         },
         [this](factor_unary_operation const &unary_function) {
-            os << "operator: " << unary_function.operator_ << ",\n";
+
+            eval_precedence(unary_function.operator_);
+
             (*this)(unary_function.primary);
         },
         [this](factor_binary_operation const &binary_function) {
-            os << "\n" << "operator: " << binary_function.operator_ << ",\n";
             (*this)(binary_function.primary_lhs);
+
+            eval_precedence(binary_function.operator_);
+
             (*this)(binary_function.primary_rhs);
         },
         [this](nullary const& null) {
@@ -180,7 +209,8 @@ expression_visitor::result_type expression_visitor::operator()(identifier const&
 
 expression_visitor::result_type expression_visitor::operator()(decimal_literal const& node)
 {
-    os << node.literal;
+    output_queue.emplace_back(get<int32_t>(node));
+    os << "push " << output_queue.back() << " output\n";
     return true;
 }
 
@@ -267,7 +297,7 @@ expression_visitor::result_type expression_visitor::operator()(function_call con
 
 /*----------------------------------------------------------------------------*/
 expression_visitor::result_type expression_visitor::operator()(keyword_token token) {
-    print(token);
+    os << token;
     return true;
 }
 
@@ -276,6 +306,36 @@ expression_visitor::result_type expression_visitor::operator()(nullary const&) {
     return false;
 }
 
+/*----------------------------------------------------------------------------*/
+//  Stack-based evaluation of expressions using Dijkstra Shunting-yard-Algorithm
+void expression_visitor::eval_precedence(operator_token operator_)
+{
+    if(operator_stack.empty()) {
+        os << "push " << operator_ << " operator_stack\n";
+        operator_stack.emplace(operator_);
+    }
+    else {
+        os << "precedence: (" << operator_stack.top() << " >= " << operator_ << ") = ";
+        if(precedence(operator_stack.top()) >= precedence(operator_)) {
+            os << "true\n";
+
+            operator_token const op = operator_stack.top();
+            os << "pop  " << op << " operator_stack\n";
+            operator_stack.pop();
+
+            os << "push " << op << " output\n";
+            output_queue.emplace_back(op);
+
+            os << "push " << operator_ << " operator_stack\n";
+            operator_stack.emplace(operator_);
+        }
+        else {
+            os << "false\n";
+            os << "pop  " << operator_ << " operator_stack\n";
+            operator_stack.emplace(operator_);
+        }
+    }
+}
 
 } } }  // namespace eda.vhdl93.ast
 
@@ -289,7 +349,7 @@ int main()
 {
 
     for(std::string const str: {
-           "5 + 3"
+           "4**2 * 3 - 3 + 8 / 4 / ( 1 + 1 )"
     }) {
       parser::iterator_type iter = str.begin(), end = str.end();
       ast::expression expr;
@@ -309,6 +369,17 @@ int main()
         std::cout << "succeeded:\n";
         ast::expression_visitor eval{std::cout};
         eval(expr);
+
+        std::cout << "RPN Stack:\n";
+        for(auto const& e : eval.output_queue) {
+            std::cout << e << " ";
+        }
+        std::cout << "\n";
+        std::cout << "RPN Operator Stack:\n";
+        for(unsigned i = 0; i != eval.operator_stack.size(); ++i) {
+            std::cout << eval.operator_stack.top() << "\n";
+            eval.operator_stack.pop();
+        }
       } else {
         std::cout << std::boolalpha
                   << "parse: " << parse_ok << "\n"
