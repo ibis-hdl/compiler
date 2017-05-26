@@ -8,14 +8,14 @@
 #include <eda/vhdl93/ast.hpp>
 #include <eda/vhdl93/ast_printer.hpp>
 
-#include <eda/vhdl93/parser/parser_config.hpp>
-#include <eda/vhdl93/parser/grammar_def.hpp>
+#include <eda/vhdl93/parser/expression_parse.hpp>
 
 #include <eda/support/boost/hana_overload.hpp>
 
 #include <boost/variant.hpp>
 #include <stack>
 #include <vector>
+#include <cmath>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -625,28 +625,12 @@ int main()
            "(5 + 5) * 2",
            "-3 * 2"
     }) {
-      parser::iterator_type iter = str.begin(), end = str.end();
       ast::expression expr;
 
-      parser::error_handler_type error_handler(iter, end, std::cout);
-
-      auto const expr_parser =
-          x3::with<x3::error_handler_tag>(std::ref(error_handler))
-          [
-           parser::expression
-          ];
-
-      bool parse_ok = false;
-
-      try {
-          parse_ok = x3::phrase_parse(iter, end, expr_parser, parser::skipper, expr);
-      }
-      catch(x3::expectation_failure<parser::iterator_type> const& e) {
-          error_handler(e.where(), "Error! Expecting " + e.which() + " here: ");
-      }
+      bool parse_ok = parser::parse(str, expr);
 
       std::cout << "parse '" << str << "': ";
-      if (parse_ok && iter == end) {
+      if (parse_ok) {
         std::cout << "succeeded:\n";
         ast::expression_visitor visit{std::cout};
         visit(expr);
@@ -656,9 +640,6 @@ int main()
 
         std::cout << "\nresult = " << result << "\n";
       } else {
-        std::cout << std::boolalpha
-                  << "parse: " << parse_ok << "\n"
-                  << "full:  " << (iter == end) << "\n";
         std::cout << "*** failed ***\n";
       }
     }

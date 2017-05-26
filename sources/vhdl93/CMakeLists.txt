@@ -16,6 +16,8 @@ set(LIB_SOURCES
     src/ast/operator_token.cpp
     src/error_handler.cpp
     src/ast_printer.cpp
+
+    src/expression_parse.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC ${LIB_SOURCES})
