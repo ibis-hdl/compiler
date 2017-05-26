@@ -154,7 +154,9 @@ struct expression_visitor: public boost::static_visitor<bool>
 
 expression_visitor::result_type expression_visitor::operator()(expression const& node)
 {
+    eval_precedence(operator_token::EXPR_BGN);
     (*this)(node.relation);
+    eval_precedence(operator_token::EXPR_END);
 
     for(auto const& chunk : node.rest_list) {
 
@@ -254,7 +256,7 @@ expression_visitor::result_type expression_visitor::operator()(factor const& nod
              * queue later. */
             if(nested_expression) { eval_precedence(operator_token::EXPR_BGN); }
             (*this).operator()(primary);
-            if(nested_expression) { eval_precedence(operator_token::EXPR_END);}
+            if(nested_expression) { eval_precedence(operator_token::EXPR_END); }
         },
         [this](factor_unary_operation const &unary_function) {
 
@@ -587,13 +589,13 @@ void expression_evaluator::unary_function(operator_token token)
     switch(token) {
         case operator_token::SIGN_POS: {
             auto result = operand;
-            os << " +" << operand << " = " << result << "\n";
+            os << " +1 * " << operand << " = " << result << "\n";
             m_stack.emplace(result);
             break;
         }
         case operator_token::SIGN_NEG: {
             auto result = -operand;
-            os << " -" << operand << " = " << result << "\n";
+            os << " -1 * " << operand << " = " << result << "\n";
             m_stack.emplace(result);
             break;
         }
@@ -618,7 +620,10 @@ int main()
 {
 
     for(std::string const str: {
-           "4**2 * 3 - 3 + 8 / 4 / ( 1 + 1 )"
+           "4**2 * 3 - 3 + 8 / 4 / ( 1 + 1 )",
+           "2 * (5 + 5)",
+           "(5 + 5) * 2",
+           "-3 * 2"
     }) {
       parser::iterator_type iter = str.begin(), end = str.end();
       ast::expression expr;
@@ -631,7 +636,14 @@ int main()
            parser::expression
           ];
 
-      bool parse_ok = x3::phrase_parse(iter, end, expr_parser, parser::skipper, expr);
+      bool parse_ok = false;
+
+      try {
+          parse_ok = x3::phrase_parse(iter, end, expr_parser, parser::skipper, expr);
+      }
+      catch(x3::expectation_failure<parser::iterator_type> const& e) {
+          error_handler(e.where(), "Error! Expecting " + e.which() + " here: ");
+      }
 
       std::cout << "parse '" << str << "': ";
       if (parse_ok && iter == end) {
