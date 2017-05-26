@@ -3360,8 +3360,8 @@ namespace range_detail {
         >> direction
         >> simple_expression
         ;
-    auto const range_attribute_name = x3::rule<range_class, ast::attribute_name> { "range_attribute_name" } =
-        attribute_name
+    auto const range_attribute_name = x3::rule<range_class, ast::name> { "range_attribute_name" } =
+        name // XXXX FixMe: Must be attribute_name, test_case will fail XXXX
         ;
 }
 /* Note, the order is changed to get the longest match, since simple_expression
