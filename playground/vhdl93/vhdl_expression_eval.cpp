@@ -28,14 +28,17 @@ struct expression_visitor: public boost::static_visitor<bool>
     std::ostream& os;
     ast::printer print;
 
-    std::stack<operator_token>          operator_stack;
+    std::stack<operator_token>          m_operator_stack;
 
     using output_type = boost::variant<
         operator_token, int32_t
     >;
-    std::vector<output_type>            output_queue;
 
-    unsigned expr_count{0};
+    using output_queue_type = std::vector<output_type>;
+
+    output_queue_type                   m_output_queue;
+
+    int_fast32_t m_subexpr_count{0};
 
     expression_visitor(std::ostream& os_) : os{os_}, print{os_} {
         print.verbose_symbol = true;
@@ -87,6 +90,21 @@ struct expression_visitor: public boost::static_visitor<bool>
     result_type operator()(keyword_token token);
     result_type operator()(nullary const&);
 
+    output_queue_type const& output_queue() {
+
+        // empty operator stack
+        while(!m_operator_stack.empty()) {
+            output_queue(m_operator_stack.top());
+            m_operator_stack.pop();
+        }
+
+        if(m_subexpr_count != 0) {
+            std::cerr << "\n*** WARNING: nested expression parenthesis mismatch ***\n";
+        }
+
+        return m_output_queue;
+    }
+
     void eval_precedence(operator_token operator_);
 
     static inline bool is_expression(ast::primary const &primary) {
@@ -105,22 +123,31 @@ struct expression_visitor: public boost::static_visitor<bool>
         );
     };
 
-    void output(operator_token token) {
-        /* avoid pushing expressions braces onto output queue */
+
+    void output_queue(operator_token token) {
+        /* avoid pushing expressions parentheses onto output queue. Further the
+         * nested expressions (resp. the opening and closing parenthesis) are
+         * counted for cross check with parser's AST for correctness. It's cheap
+         * here and ensure sane pre-conditions on evaluation. */
         switch(token) {
-            case operator_token::EXPR_BGN:
-                [[fallthrough]];
-            case operator_token::EXPR_END: {
+            case operator_token::EXPR_BGN: {
+                ++m_subexpr_count;
                 break;
-                }
+            }
+            case operator_token::EXPR_END: {
+                --m_subexpr_count;
+                break;
+            }
             default:
-                output_queue.emplace_back(token);
+                m_output_queue.emplace_back(token);
         }
     }
 
+
+
     template<typename Type>
-    void output(Type const& object) {
-        output_queue.emplace_back(object);
+    void output_queue(Type const& object) {
+        m_output_queue.emplace_back(object);
     }
 };
 
@@ -130,7 +157,10 @@ expression_visitor::result_type expression_visitor::operator()(expression const&
     (*this)(node.relation);
 
     for(auto const& chunk : node.rest_list) {
-        os << " " << chunk.operator_ << " ";
+
+        // logical_operator ::= AND | OR | NAND | NOR | XOR | XNOR
+        eval_precedence(chunk.operator_);
+
         (*this)(chunk.relation);
     }
 
@@ -143,8 +173,12 @@ expression_visitor::result_type expression_visitor::operator()(relation const& n
     (*this)(node.shift_expression);
 
     if(node.rest.is_initialized()) {
+
         auto const& chunk = node.rest.get();
-        os << " " << chunk.operator_ << " ";
+
+        // relational_operator ::=    = | /= | < | <= | > | >=
+        eval_precedence(chunk.operator_);
+
         (*this)(chunk.shift_expression);
     }
     return true;
@@ -155,8 +189,12 @@ expression_visitor::result_type expression_visitor::operator()(shift_expression 
     (*this)(node.simple_expression);
 
     if(node.rest.is_initialized()) {
+
         auto const& chunk = node.rest.get();
-        os << " " << chunk.operator_ << " ";
+
+        // shift_operator ::= SLL | SRL | SLA | SRA | ROL | ROR
+        eval_precedence(chunk.operator_);
+
         (*this)(chunk.simple_expression);
     }
     return true;
@@ -165,6 +203,7 @@ expression_visitor::result_type expression_visitor::operator()(shift_expression 
 expression_visitor::result_type expression_visitor::operator()(simple_expression const& node)
 {
     if(node.sign.is_initialized()) { // optional
+        // sign ::= + | -
         eval_precedence(node.sign.get());
     }
 
@@ -172,7 +211,10 @@ expression_visitor::result_type expression_visitor::operator()(simple_expression
 
     if(!node.rest_list.empty()) {
         for(auto const& chunk : node.rest_list) {
+
+            // adding_operator ::= + | - | &
             eval_precedence(chunk.operator_);
+
             (*this)(chunk.term);
         }
     }
@@ -185,7 +227,10 @@ expression_visitor::result_type expression_visitor::operator()(term const& node)
 
     if(!node.rest_list.empty()) {
         for(auto const& chunk: node.rest_list) {
+
+            // multiplying_operator ::= * | / | MOD | REM
             eval_precedence(chunk.operator_);
+
             (*this)(chunk.factor);
         }
     }
@@ -201,12 +246,19 @@ expression_visitor::result_type expression_visitor::operator()(factor const& nod
             bool const nested_expression = is_expression(primary);
             if(nested_expression) { os << "Call of factor::expression\n"; }
 
+            /* During parsing the information about the parentheses are
+             * transformed into nested expressions (stored in factor's variant).
+             * But this influences the precedence of operators. Hence, artificial
+             * expression markers (aka parentheses) are injected. These are
+             * filtered out by the Shunting Yard algorithm from the output
+             * queue later. */
             if(nested_expression) { eval_precedence(operator_token::EXPR_BGN); }
             (*this).operator()(primary);
             if(nested_expression) { eval_precedence(operator_token::EXPR_END);}
         },
         [this](factor_unary_operation const &unary_function) {
 
+            // x ** y aka x^y
             eval_precedence(unary_function.operator_);
 
             (*this)(unary_function.primary);
@@ -214,6 +266,7 @@ expression_visitor::result_type expression_visitor::operator()(factor const& nod
         [this](factor_binary_operation const &binary_function) {
             (*this)(binary_function.primary_lhs);
 
+            // ABS | NOT
             eval_precedence(binary_function.operator_);
 
             (*this)(binary_function.primary_rhs);
@@ -239,8 +292,8 @@ expression_visitor::result_type expression_visitor::operator()(identifier const&
 
 expression_visitor::result_type expression_visitor::operator()(decimal_literal const& node)
 {
-    output(get<int32_t>(node));
-    os << "push " << output_queue.back() << " output\n";
+    output_queue(get<int32_t>(node));
+    os << "push " << m_output_queue.back() << " output\n";
     return true;
 }
 
@@ -337,33 +390,58 @@ expression_visitor::result_type expression_visitor::operator()(nullary const&) {
 }
 
 /*----------------------------------------------------------------------------*/
-//  Stack-based evaluation of expressions using Dijkstra Shunting-yard-Algorithm
+/*  Stack-based evaluation of expressions using Dijkstra Shunting-yard-Algorithm
+ * base on [Infix to Postfix Notation](https://www.youtube.com/watch?v=rA0x7b4YiMI)
+ * and evaluation:
+ * [Evaluation of Postfix Expression](https://youtu.be/uh7fD8WiT28)
+ */
 void expression_visitor::eval_precedence(operator_token operator_)
 {
-    if(operator_stack.empty()) {
+    if(m_operator_stack.empty()) {
         os << "push " << operator_ << " operator_stack\n";
-        operator_stack.emplace(operator_);
+        m_operator_stack.emplace(operator_);
     }
     else {
-        os << "precedence: (" << operator_stack.top() << " >= " << operator_ << ") = ";
-        if(precedence(operator_stack.top()) >= precedence(operator_)) {
+        os << "precedence: (" << m_operator_stack.top() << " >= " << operator_ << ") = ";
+#if 1
+        if(precedence(m_operator_stack.top()) < precedence(operator_)) {
+            os << "false\n";
+            os << "pop  " << operator_ << " operator_stack\n";
+            m_operator_stack.emplace(operator_);
+        }
+        else {
             os << "true\n";
 
-            operator_token const op = operator_stack.top();
+            operator_token const op = m_operator_stack.top();
             os << "pop  " << op << " operator_stack\n";
-            operator_stack.pop();
+            m_operator_stack.pop();
 
             os << "push " << op << " output\n";
-            output(op);
+            output_queue(op);
 
             os << "push " << operator_ << " operator_stack\n";
-            operator_stack.emplace(operator_);
+            m_operator_stack.emplace(operator_);
+        }
+#else
+        if(precedence(m_operator_stack.top()) >= precedence(operator_)) {
+            os << "true\n";
+
+            operator_token const op = m_operator_stack.top();
+            os << "pop  " << op << " operator_stack\n";
+            m_operator_stack.pop();
+
+            os << "push " << op << " output\n";
+            output_queue(op);
+
+            os << "push " << operator_ << " operator_stack\n";
+            m_operator_stack.emplace(operator_);
         }
         else {
             os << "false\n";
             os << "pop  " << operator_ << " operator_stack\n";
-            operator_stack.emplace(operator_);
+            m_operator_stack.emplace(operator_);
         }
+#endif
     }
 }
 
@@ -400,13 +478,8 @@ int main()
         ast::expression_visitor eval{std::cout};
         eval(expr);
 
-        // empty operator stack
-        while(!eval.operator_stack.empty()) {
-            eval.output(eval.operator_stack.top());
-            eval.operator_stack.pop();
-        }
         std::cout << "RPN Stack:\n";
-        for(auto const& e : eval.output_queue) {
+        for(auto const& e : eval.output_queue()) {
             std::cout << e << " ";
         }
         std::cout << "\n";
@@ -417,4 +490,6 @@ int main()
         std::cout << "*** failed ***\n";
       }
     }
+
+    return 0;
 }
