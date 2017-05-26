@@ -13,6 +13,8 @@
 #include <eda/support/boost/hana_overload.hpp>
 
 #include <boost/variant.hpp>
+
+#include <iostream>
 #include <stack>
 #include <vector>
 #include <cmath>

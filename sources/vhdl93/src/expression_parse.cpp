@@ -11,6 +11,8 @@
 #include <eda/vhdl93/parser/parser_config.hpp>
 #include <eda/vhdl93/parser/grammar_def.hpp>
 
+#include <iostream>
+
 
 namespace eda { namespace vhdl93 { namespace parser {
 

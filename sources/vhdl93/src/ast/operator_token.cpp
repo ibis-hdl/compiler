@@ -6,21 +6,9 @@
  */
 
 
-// check on C++17 compiler features
-#if defined(__has_cpp_attribute)
-#if     __has_cpp_attribute(fallthrough)
-#define     FALLTHROUGH [[fallthrough]]
-#elif     __has_cpp_attribute(clang::fallthrough)
-#define     FALLTHROUGH [[clang::fallthrough]]
-#else
-#define FALLTHROUGH        // [[fallthrough]]
-#endif
-#else
-#define FALLTHROUGH        // [[fallthrough]]
-#endif
-
-
 #include <eda/vhdl93/ast/operator_token.hpp>
+
+#include <eda/utils/cxx_bug_fatal.hpp>
 
 #include <iostream>
 

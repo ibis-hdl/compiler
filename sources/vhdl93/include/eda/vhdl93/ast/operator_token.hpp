@@ -9,7 +9,7 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_OPERATOR_TOKEN_HPP_
 
 
-#include <eda/utils/cxx_bug_fatal.hpp>
+#include <eda/utils/compiler_support.hpp>
 
 #include <iosfwd>
 
@@ -43,11 +43,11 @@ unsigned arity(operator_token token)
 {
     switch(token) {
         case ast::operator_token::ABS:
-            [[ falltrough]]
+            FALLTHROUGH;
         case ast::operator_token::NOT:
-            [[ falltrough]]
+            FALLTHROUGH;
         case ast::operator_token::SIGN_NEG:
-            [[ falltrough]]
+            FALLTHROUGH;
         case ast::operator_token::SIGN_POS: {
             return 1;
         }
@@ -56,7 +56,7 @@ unsigned arity(operator_token token)
         }
     }
 
-    // shouldn't never be here
+    // can't never be here
     return 0;
 }
 
