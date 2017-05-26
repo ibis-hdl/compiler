@@ -244,7 +244,7 @@ expression_visitor::result_type expression_visitor::operator()(factor const& nod
         [this](ast::primary const &primary) {
 
             bool const nested_expression = is_expression(primary);
-            if(nested_expression) { os << "Call of factor::expression\n"; }
+            //if(nested_expression) { os << "Call of factor::expression\n"; }
 
             /* During parsing the information about the parentheses are
              * transformed into nested expressions (stored in factor's variant).
@@ -293,7 +293,7 @@ expression_visitor::result_type expression_visitor::operator()(identifier const&
 expression_visitor::result_type expression_visitor::operator()(decimal_literal const& node)
 {
     output_queue(get<int32_t>(node));
-    os << "push " << m_output_queue.back() << " output\n";
+    //os << "push " << m_output_queue.back() << " output\n";
     return true;
 }
 
@@ -398,31 +398,21 @@ expression_visitor::result_type expression_visitor::operator()(nullary const&) {
 void expression_visitor::eval_precedence(operator_token operator_)
 {
     if(m_operator_stack.empty()) {
-        os << "push " << operator_ << " operator_stack\n";
+        //os << "push " << operator_ << " operator_stack\n";
         m_operator_stack.emplace(operator_);
     }
     else {
-        os << "precedence: (" << m_operator_stack.top() << " >= " << operator_ << ") = ";
 #if 1
         if(precedence(m_operator_stack.top()) < precedence(operator_)) {
-            os << "false\n";
-            os << "pop  " << operator_ << " operator_stack\n";
             m_operator_stack.emplace(operator_);
         }
         else {
-            os << "true\n";
-
-            operator_token const op = m_operator_stack.top();
-            os << "pop  " << op << " operator_stack\n";
+            output_queue(m_operator_stack.top());
             m_operator_stack.pop();
-
-            os << "push " << op << " output\n";
-            output_queue(op);
-
-            os << "push " << operator_ << " operator_stack\n";
             m_operator_stack.emplace(operator_);
         }
 #else
+        os << "precedence: (" << m_operator_stack.top() << " >= " << operator_ << ") = ";
         if(precedence(m_operator_stack.top()) >= precedence(operator_)) {
             os << "true\n";
 
@@ -446,6 +436,177 @@ void expression_visitor::eval_precedence(operator_token operator_)
 }
 
 } } }  // namespace eda.vhdl93.ast
+
+
+
+namespace eda { namespace vhdl93 { namespace ast {
+
+
+struct expression_evaluator
+{
+
+    std::ostream& os;
+
+    using rpn_type = boost::variant<
+        operator_token, int32_t
+    >;
+
+    using result_type = int32_t;
+
+    using stack_type = std::stack<result_type>;
+
+    stack_type m_stack;
+
+
+    expression_evaluator(std::ostream& os_) : os{os_}
+    { }
+
+
+    result_type operator()(std::vector<rpn_type> const& rpn_queue);
+
+    void binary_function(operator_token token);
+    void unary_function(operator_token token);
+};
+
+
+expression_evaluator::result_type expression_evaluator::operator()(std::vector<rpn_type> const& rpn_queue)
+{
+    for(auto const& e : rpn_queue) {
+        os << e << " ";
+    }
+    os << "\n";
+
+    for(auto const& v : rpn_queue) {
+        util::visit_in_place(
+            v,
+            [this](int value) {
+                m_stack.emplace(value);
+            },
+            [this](operator_token token) {
+                // get arity
+                unsigned arity = 0;
+                switch(token) {
+                    case ast::operator_token::SIGN_NEG:
+                        [[ falltrough]]
+                    case ast::operator_token::SIGN_POS: {
+                        arity = 1;
+                        break;
+                    }
+                    default: {
+                        arity = 2;
+                    }
+                }
+                switch(arity) {
+                case 2:
+                    binary_function(token);
+                    break;
+                case 1:
+                    unary_function(token);
+                    break;
+                default:
+                    os << "\n*** ERROR: Unknown/wrong arity for operator " << token << " ***\n";
+                }
+            }
+        );
+    }
+
+    if(m_stack.size() != 1) {
+        os << "\n*** ERROR: result stack size != 1 ***\n";
+        return 0;
+    }
+
+    return m_stack.top();
+}
+
+void expression_evaluator::binary_function(operator_token token)
+{
+    if( !(m_stack.size() >= 2) ) {
+        os << "\n*** Wrong count of arguments on stack for binary function " << token << " ***\n";
+        return;
+    }
+
+    auto rhs = m_stack.top();   m_stack.pop();
+    auto lhs = m_stack.top();   m_stack.pop();
+
+    using ast::operator_token;
+
+    switch(token) {
+
+        // miscellaneous_operator
+        case operator_token::EXPONENT: {
+            auto result = std::pow(lhs,  rhs);
+            os << lhs << " ** " << rhs << " = " << result << "\n";
+            m_stack.emplace(result);
+            break;
+        }
+
+        // multiplying_operator
+        case operator_token::MUL: {
+            auto result = lhs * rhs;
+            os << lhs << " * " << rhs << " = " << result << "\n";
+            m_stack.emplace(result);
+            break;
+        }
+        case operator_token::DIV: {
+            auto result = lhs / rhs;
+            os << lhs << " / " << rhs << " = " << result << "\n";
+            m_stack.emplace(result);
+            break;
+        }
+
+        // adding_operator
+        case operator_token::ADD: {
+            auto result = lhs + rhs;
+            os << lhs << " + " << rhs << " = " << result << "\n";
+            m_stack.emplace(result);
+            break;
+        }
+        case operator_token::SUB: {
+            auto result = lhs - rhs;
+            os << lhs << " - " << rhs << " = " << result << "\n";
+            m_stack.emplace(result);
+            break;
+        }
+        default: {
+            os << "\n*** binary function " << token << " not implemented ***\n";
+        }
+    }
+}
+
+void expression_evaluator::unary_function(operator_token token)
+{
+    if( !(m_stack.size() >= 1) ) {
+        os << "\n*** Wrong count of arguments on stack for unary function " << token << " ***\n";
+        return;
+    }
+
+    auto operand = m_stack.top();   m_stack.pop();
+
+    using ast::operator_token;
+
+    switch(token) {
+        case operator_token::SIGN_POS: {
+            auto result = operand;
+            os << " +" << operand << " = " << result << "\n";
+            m_stack.emplace(result);
+            break;
+        }
+        case operator_token::SIGN_NEG: {
+            auto result = -operand;
+            os << " -" << operand << " = " << result << "\n";
+            m_stack.emplace(result);
+            break;
+        }
+        default: {
+            os << "\n*** binary function " << token << " not implemented ***\n";
+        }
+    }
+}
+
+
+
+} } }  // namespace eda.vhdl93.ast
+
 
 
 namespace x3 = boost::spirit::x3;
@@ -475,14 +636,13 @@ int main()
       std::cout << "parse '" << str << "': ";
       if (parse_ok && iter == end) {
         std::cout << "succeeded:\n";
-        ast::expression_visitor eval{std::cout};
-        eval(expr);
+        ast::expression_visitor visit{std::cout};
+        visit(expr);
 
-        std::cout << "RPN Stack:\n";
-        for(auto const& e : eval.output_queue()) {
-            std::cout << e << " ";
-        }
-        std::cout << "\n";
+        ast::expression_evaluator eval{std::cout};
+        auto result = eval(visit.output_queue());
+
+        std::cout << "\nresult = " << result << "\n";
       } else {
         std::cout << std::boolalpha
                   << "parse: " << parse_ok << "\n"
