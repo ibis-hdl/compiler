@@ -31,13 +31,34 @@ enum class operator_token {
     // relational_operator
     EQUAL, NOT_EQUALS, LESS, LESS_EQUALS, GREATER, GREATER_EQUALS,
     // logical_operator
-    AND, OR, NAND, NOR, XOR, XNOR,
-    // expressions (non-BNF)
-    EXPR_BGN, EXPR_END
+    AND, OR, NAND, NOR, XOR, XNOR
 };
 
 
-std::ostream& operator<<(std::ostream& os, operator_token op_token);
+std::ostream& operator<<(std::ostream& os, operator_token token);
+
+
+static inline
+unsigned arity(operator_token token)
+{
+    switch(token) {
+        case ast::operator_token::ABS:
+            [[ falltrough]]
+        case ast::operator_token::NOT:
+            [[ falltrough]]
+        case ast::operator_token::SIGN_NEG:
+            [[ falltrough]]
+        case ast::operator_token::SIGN_POS: {
+            return 1;
+        }
+        default: {
+            return 2;
+        }
+    }
+
+    // shouldn't never be here
+    return 0;
+}
 
 
 unsigned precedence(operator_token token);
