@@ -24,7 +24,7 @@ struct shift_expression : position_tagged
 {
     struct chunk
     {
-        operator_token              operator_;
+        operator_token              shift_operator;
         ast::simple_expression      simple_expression;
     };
 

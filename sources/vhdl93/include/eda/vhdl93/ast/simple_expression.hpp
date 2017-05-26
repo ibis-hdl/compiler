@@ -24,7 +24,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 struct simple_expression : position_tagged
 {
     struct chunk {
-        operator_token                  operator_;
+        operator_token                  adding_operator;
         ast::term                       term;
     };
 

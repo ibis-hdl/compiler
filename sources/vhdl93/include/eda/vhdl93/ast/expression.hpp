@@ -24,7 +24,7 @@ struct expression : position_tagged
 {
     struct chunk
     {
-        operator_token              operator_;
+        operator_token              logical_operator;
         ast::relation               relation;
     };
 

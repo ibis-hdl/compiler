@@ -24,7 +24,7 @@ struct relation : position_tagged
 {
     struct chunk
     {
-        operator_token              operator_;
+        operator_token              relational_operator;
         ast::shift_expression       shift_expression;
     };
 

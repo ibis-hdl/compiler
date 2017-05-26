@@ -23,7 +23,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 struct term : position_tagged
 {
     struct chunk {
-        operator_token          operator_;
+        operator_token          multiplying_operator;
         ast::factor             factor;
     };
 

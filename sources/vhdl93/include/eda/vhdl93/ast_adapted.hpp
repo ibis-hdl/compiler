@@ -66,12 +66,12 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::enumeration_type_definition,
     list
 )
 
-BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::expression::chunk,
-    operator_, relation
-)
-
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::expression,
     relation, rest_list
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::expression::chunk,
+    logical_operator, relation
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::factor_binary_operation,
@@ -119,13 +119,12 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::range_expression, // part of range
     lhs, direction, rhs
 )
 
-BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::relation::chunk,
-    operator_, shift_expression
-)
-
-
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::relation,
     shift_expression, rest
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::relation::chunk,
+    relational_operator, shift_expression
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::selected_name,
@@ -136,12 +135,12 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::sensitivity_clause,
     sensitivity_list
 )
 
-BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::shift_expression::chunk,
-    operator_, simple_expression
-)
-
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::shift_expression,
     simple_expression, rest
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::shift_expression::chunk,
+    shift_operator, simple_expression
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::signal_assignment_statement,
@@ -152,12 +151,12 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::signature,
     parameter_type_list, return_type
 )
 
-BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::simple_expression::chunk,
-    operator_, term
-)
-
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::simple_expression,
     sign, term, rest_list
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::simple_expression::chunk,
+    adding_operator, term
 )
 
 // base class: identifier
@@ -173,12 +172,12 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::subtype_indication,
     unspecified_name_list, constraint
 )
 
-BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::term::chunk,
-    operator_, factor
-)
-
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::term,
     factor, rest_list
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::term::chunk,
+    multiplying_operator, factor
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::timeout_clause,

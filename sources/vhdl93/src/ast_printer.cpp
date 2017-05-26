@@ -954,7 +954,7 @@ void printer::operator()(expression const &node)
     auto const N = node.rest_list.size() - 1;
     unsigned i = 0;
     for(auto const& chunk : node.rest_list) {
-        os << ",\n" << "operator: " << chunk.operator_ << ",\n";
+        os << ",\n" << "operator: " << chunk.logical_operator << ",\n";
         (*this)(chunk.relation);
         if(i++ != N) {
             os << ",\n";
@@ -1679,7 +1679,7 @@ void printer::operator()(relation const &node)
     }
 
     auto const& chunk = node.rest.get();
-    os << ",\n" << "operator: " << chunk.operator_ << ",\n";
+    os << ",\n" << "operator: " << chunk.relational_operator << ",\n";
     (*this)(chunk.shift_expression);
 }
 
@@ -1803,7 +1803,7 @@ void printer::operator()(shift_expression const &node)
     }
 
     auto const& chunk = node.rest.get();
-    os << ",\n" << "operator: " << chunk.operator_ << ",\n";
+    os << ",\n" << "operator: " << chunk.shift_operator << ",\n";
     (*this)(chunk.simple_expression);
 }
 
@@ -1911,7 +1911,7 @@ void printer::operator()(simple_expression const &node)
     auto const N = node.rest_list.size()- 1;
     unsigned i= 0;
     for(auto const& chunk : node.rest_list) {
-        os << ",\n" << "operator: " << chunk.operator_ << ",\n";
+        os << ",\n" << "operator: " << chunk.adding_operator << ",\n";
         (*this)(chunk.term);
         if(i++ != N) {
             os << ",\n";
@@ -2064,7 +2064,7 @@ void printer::operator()(term const &node)
     auto const N = node.rest_list.size() - 1;
     unsigned i = 0;
     for(auto const& term_chunk: node.rest_list) {
-        os << "operator: " << term_chunk.operator_ << ",\n";
+        os << "operator: " << term_chunk.multiplying_operator << ",\n";
         visit(term_chunk.factor);
         if(i++ != N) {
             os << ",\n";

@@ -159,7 +159,7 @@ expression_visitor::result_type expression_visitor::operator()(expression const&
     for(auto const& chunk : node.rest_list) {
 
         // logical_operator ::= AND | OR | NAND | NOR | XOR | XNOR
-        eval_precedence(chunk.operator_);
+        eval_precedence(chunk.logical_operator);
 
         (*this)(chunk.relation);
     }
@@ -177,7 +177,7 @@ expression_visitor::result_type expression_visitor::operator()(relation const& n
         auto const& chunk = node.rest.get();
 
         // relational_operator ::=    = | /= | < | <= | > | >=
-        eval_precedence(chunk.operator_);
+        eval_precedence(chunk.relational_operator);
 
         (*this)(chunk.shift_expression);
     }
@@ -193,7 +193,7 @@ expression_visitor::result_type expression_visitor::operator()(shift_expression 
         auto const& chunk = node.rest.get();
 
         // shift_operator ::= SLL | SRL | SLA | SRA | ROL | ROR
-        eval_precedence(chunk.operator_);
+        eval_precedence(chunk.shift_operator);
 
         (*this)(chunk.simple_expression);
     }
@@ -213,7 +213,7 @@ expression_visitor::result_type expression_visitor::operator()(simple_expression
         for(auto const& chunk : node.rest_list) {
 
             // adding_operator ::= + | - | &
-            eval_precedence(chunk.operator_);
+            eval_precedence(chunk.adding_operator);
 
             (*this)(chunk.term);
         }
@@ -229,7 +229,7 @@ expression_visitor::result_type expression_visitor::operator()(term const& node)
         for(auto const& chunk: node.rest_list) {
 
             // multiplying_operator ::= * | / | MOD | REM
-            eval_precedence(chunk.operator_);
+            eval_precedence(chunk.multiplying_operator);
 
             (*this)(chunk.factor);
         }
@@ -412,8 +412,8 @@ void expression_visitor::eval_precedence(operator_token operator_)
             m_operator_stack.emplace(operator_);
         }
 #else
-        os << "precedence: (" << m_operator_stack.top() << " >= " << operator_ << ") = ";
-        if(precedence(m_operator_stack.top()) >= precedence(operator_)) {
+        os << "precedence: (" << m_operator_stack.top() << " >= " << logical_operator << ") = ";
+        if(precedence(m_operator_stack.top()) >= precedence(logical_operator)) {
             os << "true\n";
 
             operator_token const op = m_operator_stack.top();
@@ -423,13 +423,13 @@ void expression_visitor::eval_precedence(operator_token operator_)
             os << "push " << op << " output\n";
             output_queue(op);
 
-            os << "push " << operator_ << " operator_stack\n";
-            m_operator_stack.emplace(operator_);
+            os << "push " << logical_operator << " operator_stack\n";
+            m_operator_stack.emplace(logical_operator);
         }
         else {
             os << "false\n";
-            os << "pop  " << operator_ << " operator_stack\n";
-            m_operator_stack.emplace(operator_);
+            os << "pop  " << logical_operator << " operator_stack\n";
+            m_operator_stack.emplace(logical_operator);
         }
 #endif
     }
