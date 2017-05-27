@@ -12,7 +12,7 @@
 #include <eda/vhdl93/ast/namespace_alias.hpp>
 #include <eda/vhdl93/ast/position_tagged.hpp>
 
-#include <eda/support/boost/spirit_x3/string_view.hpp>
+#include <string_view>
 
 
 namespace eda { namespace vhdl93 { namespace ast {

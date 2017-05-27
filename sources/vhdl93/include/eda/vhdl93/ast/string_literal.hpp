@@ -12,7 +12,7 @@
 #include <eda/vhdl93/ast/namespace_alias.hpp>
 #include <eda/vhdl93/ast/position_tagged.hpp>
 
-#include <eda/support/boost/spirit_x3/string_view.hpp>
+#include <string_view>
 #include <string>
 
 
@@ -22,7 +22,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 struct string_literal : position_tagged
 {
     std::string                     literal;
-//    std::string_view                literal;
+//    std::string_view                literal; // FixMe: use string_view
 };
 
 

@@ -4,6 +4,7 @@
 
 project(vhdl_playground)
 
+set(CMAKE_CXX_STANDARD 17)
 
 add_executable(x3_string_literal_minimal     EXCLUDE_FROM_ALL x3_string_literal_minimal.cpp)
 add_executable(x3_string_literal_attr        EXCLUDE_FROM_ALL x3_string_literal_attr.cpp)

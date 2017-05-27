@@ -14,7 +14,7 @@
 
 #include <eda/vhdl93/ast/abstract_literal.hpp>
 
-#include <eda/support/boost/spirit_x3/string_view.hpp>
+#include <string_view>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
