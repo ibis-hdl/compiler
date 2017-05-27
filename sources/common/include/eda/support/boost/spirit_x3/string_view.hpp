@@ -20,20 +20,4 @@ namespace std {
 }
 
 
-namespace boost { namespace spirit { namespace x3 { namespace traits {
-
-
-template <typename It>
-void move_to(It b, It e, std::string_view& v)
-{
-    /* see [parsing from std::string into a boost::string_view using boost::spirit::x3]
-     * (https://stackoverflow.com/questions/39225502/parsing-from-stdstring-into-a-booststring-view-using-boostspiritx3)
-     * Note storage is contiguous, use concept check for input range */
-    v = std::string_view(&*b, std::size_t(e - b));
-}
-
-
-} } } } // namespace boost.spirit.x3.traits
-
-
 #endif /* SOURCES_COMMON_INCLUDE_EDA_SUPPORT_BOOST_SPIRIT_X3_STRING_VIEW_HPP_ */

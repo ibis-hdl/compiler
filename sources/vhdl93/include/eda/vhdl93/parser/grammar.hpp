@@ -9,7 +9,7 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_PARSER_GRAMMAR_HPP_
 
 
-#include <eda/vhdl93/parser/spirit_x3.hpp>
+//#include <eda/vhdl93/parser/spirit_x3.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace parser {

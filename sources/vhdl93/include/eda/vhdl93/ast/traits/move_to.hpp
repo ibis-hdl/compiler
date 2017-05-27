@@ -19,16 +19,15 @@
 namespace boost { namespace spirit { namespace x3 { namespace traits {
 
 
-#if 0
-template <typename It>
-void move_to(It b, It e, std::string_view& v)
+template <typename Iterator>
+inline
+void move_to(Iterator first, Iterator last, std::string_view& str_v)
 {
     /* see [parsing from std::string into a boost::string_view using boost::spirit::x3]
      * (https://stackoverflow.com/questions/39225502/parsing-from-stdstring-into-a-booststring-view-using-boostspiritx3)
      * Note storage is contiguous, use concept check for input range */
-    v = std::string_view(&*b, std::size_t(e - b));
+    str_v = std::string_view(&*first, std::size_t(last - first));
 }
-#endif
 
 
 using delay_mechanism = eda::vhdl93::ast::delay_mechanism;

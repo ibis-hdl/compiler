@@ -8,8 +8,8 @@
 
 #include <eda/vhdl93/parser/expression_parse.hpp>
 
-#include <eda/vhdl93/parser/parser_config.hpp>
 #include <eda/vhdl93/parser/grammar_def.hpp>
+#include <eda/vhdl93/parser/parser_config.hpp>
 
 #include <iostream>
 

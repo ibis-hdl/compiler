@@ -32,8 +32,10 @@
  */
 namespace eda { namespace vhdl93 { namespace parser {
 
+
 template<typename T>
 auto as_type = [](auto p) { return x3::rule<struct _, T>{ "as" } = x3::as_parser(p); };
+
 
 } } } // namespace eda.vhdl93.parser
 
