@@ -6,9 +6,10 @@ SCRIPT_PATH="${BASH_SOURCE%/*}"
 # this script is in the same directory
 EDA_SRC_DIR=${SCRIPT_PATH}
 
+CMAKE_BIN=/usr/local/gcc-7.1.0/bin/cmake
 CPU_COUNT=$(grep ^processor /proc/cpuinfo | wc -l)
 
-cmake ${EDA_SRC_DIR} \
+${CMAKE_BIN} ${EDA_SRC_DIR} \
 		-G "Eclipse CDT4 - Unix Makefiles" \
         -DCMAKE_ECLIPSE_GENERATE_SOURCE_PROJECT=TRUE \
         -DCMAKE_ECLIPSE_VERSION=4.6 \
