@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.8)
 
 ## EDA/VHDL93 project
 project(eda_vhdl93_parser LANGUAGES CXX)
