@@ -28,7 +28,13 @@ namespace eda { namespace vhdl93 { namespace ast {
 struct expression_visitor: public boost::static_visitor<bool>
 {
     std::ostream& os;
-    ast::printer print;
+
+    typedef std::function<
+        void(x3::position_tagged,
+        std::string const& /* message */)
+    >                                   error_handler_type;
+
+    error_handler_type                  m_error_handler;
 
     using output_type = boost::variant<
         operator_token, int32_t
@@ -38,12 +44,14 @@ struct expression_visitor: public boost::static_visitor<bool>
 
     output_queue_type                   m_output_queue;
 
-    int_fast32_t m_subexpr_count{0};
-
-    expression_visitor(std::ostream& os_) : os{os_}, print{os_} {
-        print.verbose_symbol = true;
-        print.verbose_variant = true;
-    }
+    template <typename ErrorHandler>
+    expression_visitor(ErrorHandler const& error_handler)
+    : os{ std::cout }
+    , m_error_handler(
+            [&](x3::position_tagged pos, std::string const& msg)
+            { error_handler(pos, msg); }
+      )
+    { }
 
     template<typename... T>
     result_type operator()(x3::variant<T...> const& variant) {
@@ -107,11 +115,15 @@ struct expression_visitor: public boost::static_visitor<bool>
 
 expression_visitor::result_type expression_visitor::operator()(expression const& node)
 {
-    (*this)(node.relation);
+    if(!(*this)(node.relation)) {
+        return false;
+    }
 
     for(auto const& chunk : node.rest_list) {
 
-        (*this)(chunk.relation);
+        if(!(*this)(chunk.relation)) {
+            return false;
+        }
 
         // logical_operator ::= AND | OR | NAND | NOR | XOR | XNOR
         output_queue(chunk.logical_operator);
@@ -123,13 +135,17 @@ expression_visitor::result_type expression_visitor::operator()(expression const&
 
 expression_visitor::result_type expression_visitor::operator()(relation const& node)
 {
-    (*this)(node.shift_expression);
+    if(!(*this)(node.shift_expression)) {
+        return false;
+    }
 
     if(node.rest.is_initialized()) {
 
         auto const& chunk = node.rest.get();
 
-        (*this)(chunk.shift_expression);
+        if(!(*this)(chunk.shift_expression)) {
+            return false;
+        }
         output_queue(chunk.relational_operator);
     }
     return true;
@@ -137,13 +153,17 @@ expression_visitor::result_type expression_visitor::operator()(relation const& n
 
 expression_visitor::result_type expression_visitor::operator()(shift_expression const& node)
 {
-    (*this)(node.simple_expression);
+    if(!(*this)(node.simple_expression)) {
+        return false;
+    }
 
     if(node.rest.is_initialized()) {
 
         auto const& chunk = node.rest.get();
 
-        (*this)(chunk.simple_expression);
+        if(!(*this)(chunk.simple_expression)) {
+            return false;
+        }
         output_queue(chunk.shift_operator);
     }
     return true;
@@ -151,7 +171,9 @@ expression_visitor::result_type expression_visitor::operator()(shift_expression 
 
 expression_visitor::result_type expression_visitor::operator()(simple_expression const& node)
 {
-    (*this)(node.term);
+    if(!(*this)(node.term)) {
+        return false;
+    }
 
     if(node.sign.is_initialized()) { // optional
 
@@ -168,7 +190,9 @@ expression_visitor::result_type expression_visitor::operator()(simple_expression
     if(!node.rest_list.empty()) {
         for(auto const& chunk : node.rest_list) {
 
-            (*this)(chunk.term);
+            if(!(*this)(chunk.term)) {
+                return false;
+            }
 
             output_queue(chunk.adding_operator);
         }
@@ -178,12 +202,16 @@ expression_visitor::result_type expression_visitor::operator()(simple_expression
 
 expression_visitor::result_type expression_visitor::operator()(term const& node)
 {
-    (*this)(node.factor);
+    if(!(*this)(node.factor)) {
+        return false;
+    }
 
     if(!node.rest_list.empty()) {
         for(auto const& chunk: node.rest_list) {
 
-            (*this)(chunk.factor);
+            if(!(*this)(chunk.factor)) {
+                return false;
+            }
 
             output_queue(chunk.multiplying_operator);
         }
@@ -196,23 +224,33 @@ expression_visitor::result_type expression_visitor::operator()(factor const& nod
     util::visit_in_place(
         node,
         [this](ast::primary const &primary) {
-            (*this).operator()(primary);
+            if(!(*this).operator()(primary)) {
+                return false;
+            }
         },
         [this](factor_unary_operation const &unary_function) {
 
-            (*this)(unary_function.primary);
+            if(!(*this)(unary_function.primary)) {
+                return false;
+            }
 
             output_queue(unary_function.operator_);     // x ** y aka x^y
         },
         [this](factor_binary_operation const &binary_function) {
 
-            (*this)(binary_function.primary_lhs);
-            (*this)(binary_function.primary_rhs);
+            if(!(*this)(binary_function.primary_lhs)) {
+                return false;
+            }
+            if(!(*this)(binary_function.primary_rhs)) {
+                return false;
+            }
 
             output_queue(binary_function.operator_);    // ABS | NOT
         },
         [this](nullary const& null) {
-            (*this).operator()(null);
+            if(!(*this).operator()(null)) {
+                return false;
+            }
         }
     );
     return true;
@@ -496,6 +534,24 @@ namespace ast = eda::vhdl93::ast;
 namespace parser = eda::vhdl93::parser;
 
 
+/* to avoid compile errors due to move_to traits of string_view, a mockup of
+ * error handler is used. */
+struct error_handler_mock
+{
+    std::ostream& os;
+
+    error_handler_mock(std::ostream& os)
+    : os{ os }
+    { }
+
+    void operator()(x3::position_tagged, std::string const& message) const
+    {
+        os << "Error at <unspecified>:\n";
+        os << message << "\n";
+    }
+};
+
+
 int main()
 {
 
@@ -513,10 +569,15 @@ int main()
       std::cout << "parse '" << str << "': ";
       if (parse_ok) {
         std::cout << "succeeded:\n";
-        ast::expression_visitor visit{std::cout};
-        visit(expr);
 
-        ast::expression_evaluator eval{std::cout};
+        error_handler_mock parser_error_handler{ std::cout };
+        ast::expression_visitor visit{ parser_error_handler };
+        if(!visit(expr)) {
+            std::cout << "ERROR visiting expression!\nEnd.\n";
+            return -1;
+        }
+
+        ast::expression_evaluator eval{ std::cout };
         auto result = eval(visit.output_queue());
 
         std::cout << "\nresult = " << result << "\n";
