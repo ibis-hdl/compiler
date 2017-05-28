@@ -28,15 +28,16 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     $<INSTALL_INTERFACE:include>
     PRIVATE src)
 
-target_compile_definitions(${PROJECT_NAME}
-    PRIVATE FOO)
 
 target_compile_options(${PROJECT_NAME}
     PRIVATE -Wall -Wextra)
 
-# limit gcc template error depth printing
-target_compile_options(${PROJECT_NAME}
-    PRIVATE -ftemplate-backtrace-limit=1)
+
+# limit gcc template error depth printing, aslo other options
+target_compile_options(${PROJECT_NAME} PRIVATE
+    -ftemplate-backtrace-limit=1
+)
+
 
 # increase limit for clang recursive template instantiation
 # otherwise exceedes maximum depth of 256
@@ -44,6 +45,7 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     target_compile_options(${PROJECT_NAME}
         PRIVATE -ftemplate-depth=1024)
 endif()
+
 
 
 ## X3 Parser DEBUG

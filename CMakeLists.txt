@@ -12,15 +12,11 @@ set(LIBRARY_OUTPUT_PATH         ${CMAKE_BINARY_DIR})
 
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
-#include(external-gsl)
-#include(external-spirit-x3)
 
 
-## IDE support
-# Parsing Errors more efficiently in eclipse
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "(GNU|Clang)")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fmessage-length=0")
-endif()
+# set the build root dir for sub projects
+set(EDA_BINARY_ROOT_DIR ${PROJECT_BINARY_DIR})
+
 
 ## Sub Projects
 enable_testing()

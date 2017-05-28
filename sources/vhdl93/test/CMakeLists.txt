@@ -16,8 +16,13 @@ add_executable(${PROJECT_NAME} ${BIN_SOURCES})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD_REQUIRED ON)
-target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra)
-target_compile_options(${PROJECT_NAME} PRIVATE -ftemplate-backtrace-limit=1)
+target_compile_options(${PROJECT_NAME} PRIVATE
+    -Wall
+    -Wextra
+)
+target_compile_options(${PROJECT_NAME} PRIVATE
+    -ftemplate-backtrace-limit=1
+)
 
 # increase limit for clang recursive template instantiation
 # otherwise exceedes maximum depth of 256
