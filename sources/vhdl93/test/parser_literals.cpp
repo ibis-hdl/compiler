@@ -47,11 +47,8 @@ BOOST_DATA_TEST_CASE( string_literal,
     // avoid warning, used in case of error for error message by boost.test
     boost::ignore_unused(file);
 
-    bool parse_ok{ false };
-    std::string parse_result {};
-
     testing_parser<attribute_type> parse;
-    std::tie(parse_ok, parse_result) =  parse(input, parser::string_literal);
+    auto [parse_ok, parse_result] =  parse(input, parser::string_literal);
 
     BOOST_TEST(parse_ok);
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
@@ -83,11 +80,8 @@ BOOST_DATA_TEST_CASE( character_literal,
     // avoid warning, used in case of error for error message by boost.test
     boost::ignore_unused(file);
 
-    bool parse_ok{ false };
-    std::string parse_result {};
-
     testing_parser<attribute_type> parse;
-    std::tie(parse_ok, parse_result) =  parse(input, parser::character_literal);
+    auto [parse_ok, parse_result] =  parse(input, parser::character_literal);
 
     BOOST_TEST(parse_ok);
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
@@ -120,11 +114,8 @@ BOOST_DATA_TEST_CASE( integer,
     // avoid warning, used in case of error for error message by boost.test
     boost::ignore_unused(file);
 
-    bool parse_ok{ false };
-    std::string parse_result {};
-
     testing_parser<attribute_type> parse;
-    std::tie(parse_ok, parse_result) =  parse(input, parser::integer);
+    auto [parse_ok, parse_result] =  parse(input, parser::integer);
 
     BOOST_TEST(parse_ok);
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
@@ -157,11 +148,8 @@ BOOST_DATA_TEST_CASE( integer_failure,
     // avoid warning, used in case of error for error message by boost.test
     boost::ignore_unused(file);
 
-    bool parse_ok{ false };
-    std::string parse_result {};
-
     testing_parser<attribute_type> parse;
-    std::tie(parse_ok, parse_result) = parse(input, parser::integer);
+    auto [parse_ok, parse_result] = parse(input, parser::integer);
 
     BOOST_TEST(!parse_ok);
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
@@ -193,11 +181,8 @@ BOOST_DATA_TEST_CASE( identifier,
     // avoid warning, used in case of error for error message by boost.test
     boost::ignore_unused(file);
 
-    bool parse_ok{ false };
-    std::string parse_result {};
-
     testing_parser<attribute_type> parse;
-    std::tie(parse_ok, parse_result) = parse(input, parser::identifier);
+    auto [parse_ok, parse_result] = parse(input, parser::identifier);
 
     BOOST_TEST(parse_ok);
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
@@ -229,11 +214,8 @@ BOOST_DATA_TEST_CASE( identifier_fail,
     // avoid warning, used in case of error for error message by boost.test
     boost::ignore_unused(file);
 
-    bool parse_ok{ false };
-    std::string parse_result {};
-
     testing_parser<attribute_type> parse;
-    std::tie(parse_ok, parse_result) = parse(input, parser::identifier);
+    auto [parse_ok, parse_result] = parse(input, parser::identifier);
 
     BOOST_TEST(!parse_ok);
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
@@ -265,11 +247,8 @@ BOOST_DATA_TEST_CASE( identifier_list,
     // avoid warning, used in case of error for error message by boost.test
     boost::ignore_unused(file);
 
-    bool parse_ok{ false };
-    std::string parse_result {};
-
     testing_parser<attribute_type> parse;
-    std::tie(parse_ok, parse_result) = parse(input, parser::identifier_list);
+    auto [parse_ok, parse_result] = parse(input, parser::identifier_list);
 
     BOOST_TEST(parse_ok);
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
@@ -301,11 +280,8 @@ BOOST_DATA_TEST_CASE( based_literal,
     // avoid warning, used in case of error for error message by boost.test
     boost::ignore_unused(file);
 
-    bool parse_ok{ false };
-    std::string parse_result {};
-
     testing_parser<attribute_type> parse;
-    std::tie(parse_ok, parse_result) = parse(input, parser::based_literal);
+    auto [parse_ok, parse_result] = parse(input, parser::based_literal);
 
     BOOST_TEST(parse_ok);
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
@@ -337,11 +313,8 @@ BOOST_DATA_TEST_CASE( decimal_literal,
     // avoid warning, used in case of error for error message by boost.test
     boost::ignore_unused(file);
 
-    bool parse_ok{ false };
-    std::string parse_result {};
-
     testing_parser<attribute_type> parse;
-    std::tie(parse_ok, parse_result) = parse(input, parser::decimal_literal);
+    auto [parse_ok, parse_result] = parse(input, parser::decimal_literal);
 
     BOOST_TEST(parse_ok);
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
@@ -373,11 +346,8 @@ BOOST_DATA_TEST_CASE( bit_string_literal,
     // avoid warning, used in case of error for error message by boost.test
     boost::ignore_unused(file);
 
-    bool parse_ok{ false };
-    std::string parse_result {};
-
     testing_parser<attribute_type> parse;
-    std::tie(parse_ok, parse_result) =  parse(input, parser::bit_string_literal);
+    auto [parse_ok, parse_result] =  parse(input, parser::bit_string_literal);
 
     BOOST_TEST(parse_ok);
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
@@ -409,11 +379,8 @@ BOOST_DATA_TEST_CASE( abstract_literal,
     // avoid warning, used in case of error for error message by boost.test
     boost::ignore_unused(file);
 
-    bool parse_ok{ false };
-    std::string parse_result {};
-
     testing_parser<attribute_type> parse;
-    std::tie(parse_ok, parse_result) =  parse(input, parser::abstract_literal);
+    auto [parse_ok, parse_result] =  parse(input, parser::abstract_literal);
 
     BOOST_TEST(parse_ok);
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
@@ -445,11 +412,8 @@ BOOST_DATA_TEST_CASE( physical_literal,
     // avoid warning, used in case of error for error message by boost.test
     boost::ignore_unused(file);
 
-    bool parse_ok{ false };
-    std::string parse_result {};
-
     testing_parser<attribute_type> parse;
-    std::tie(parse_ok, parse_result) =  parse(input, parser::physical_literal);
+    auto [parse_ok, parse_result] =  parse(input, parser::physical_literal);
 
     BOOST_TEST(parse_ok);
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
@@ -481,11 +445,8 @@ BOOST_DATA_TEST_CASE( physical_literal_fail,
     // avoid warning, used in case of error for error message by boost.test
     boost::ignore_unused(file);
 
-    bool parse_ok{ false };
-    std::string parse_result {};
-
     testing_parser<attribute_type> parse;
-    std::tie(parse_ok, parse_result) =  parse(input, parser::physical_literal);
+    auto [parse_ok, parse_result] =  parse(input, parser::physical_literal);
 
     BOOST_TEST(!parse_ok);
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
@@ -517,11 +478,8 @@ BOOST_DATA_TEST_CASE(numeric_literal,
     // avoid warning, used in case of error for error message by boost.test
     boost::ignore_unused(file);
 
-    bool parse_ok{ false };
-    std::string parse_result {};
-
     testing_parser<attribute_type> parse;
-    std::tie(parse_ok, parse_result) =  parse(input, parser::numeric_literal);
+    auto [parse_ok, parse_result] =  parse(input, parser::numeric_literal);
 
     BOOST_TEST(parse_ok);
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
@@ -553,11 +511,8 @@ BOOST_DATA_TEST_CASE(literal,
     // avoid warning, used in case of error for error message by boost.test
     boost::ignore_unused(file);
 
-    bool parse_ok{ false };
-    std::string parse_result {};
-
     testing_parser<attribute_type> parse;
-    std::tie(parse_ok, parse_result) =  parse(input, parser::literal);
+    auto [parse_ok, parse_result] =  parse(input, parser::literal);
 
     BOOST_TEST(parse_ok);
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
@@ -591,11 +546,8 @@ BOOST_DATA_TEST_CASE(simple_name,
     // avoid warning, used in case of error for error message by boost.test
     boost::ignore_unused(file);
 
-    bool parse_ok{ false };
-    std::string parse_result {};
-
     testing_parser<attribute_type> parse;
-    std::tie(parse_ok, parse_result) =  parse(input, parser::simple_name);
+    auto [parse_ok, parse_result] =  parse(input, parser::simple_name);
 
     BOOST_TEST(parse_ok);
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");

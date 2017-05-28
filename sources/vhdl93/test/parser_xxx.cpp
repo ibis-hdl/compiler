@@ -51,11 +51,8 @@ BOOST_DATA_TEST_CASE( xxx,
     // avoid warning, used in case of error for error message by boost.test
     boost::ignore_unused(file);
 
-    bool parse_ok{ false };
-    std::string parse_result {};
-
     testing_parser<attribute_type> parse;
-    std::tie(parse_ok, parse_result) = parse(input, parser::subtype_indication);
+    auto [parse_ok, parse_result] = parse(input, parser::subtype_indication);
 
     BOOST_TEST(parse_ok);
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");

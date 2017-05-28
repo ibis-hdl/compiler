@@ -96,7 +96,6 @@ struct testing_parser
 #endif
         }
 
-        // FixMe: C++17 Structured Bindings
         return std::make_tuple(
             success && (!full_match || (iter == end)),
             output.str()

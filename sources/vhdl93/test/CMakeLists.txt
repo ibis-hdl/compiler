@@ -5,8 +5,8 @@ project(test_vhdl93_parser LANGUAGES CXX)
 
 set(BIN_SOURCES
     data_set.cpp
-    #parser_literals.cpp
-    #parser_expression.cpp
+    parser_literals.cpp
+    parser_expression.cpp
     parser_production.cpp
     parser_xxx.cpp
     test_vhdl93_parser.cpp
