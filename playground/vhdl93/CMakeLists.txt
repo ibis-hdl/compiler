@@ -26,6 +26,7 @@ add_executable(ellipsis_compress             EXCLUDE_FROM_ALL ellipsis_compress.
 
 add_executable(cxx_variant_print_visitor_concept EXCLUDE_FROM_ALL cxx_variant_print_visitor_concept.cpp)
 add_executable(cxx_indent_ostreambuf         EXCLUDE_FROM_ALL cxx_indent_ostreambuf.cpp)
+add_executable(cxx_pow_constexpr             EXCLUDE_FROM_ALL cxx_pow_constexpr.cpp)
 
 add_executable(vhdl_based_literal            EXCLUDE_FROM_ALL vhdl_based_literal.cpp)
 
