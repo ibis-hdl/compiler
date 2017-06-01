@@ -84,9 +84,10 @@ namespace parser {
 
     struct ir1045_tag {};
 
-    auto const preceding_token = [](auto& ctx) {
-        std::cout << "attr " << x3::_attr(ctx) << "\n";
-        x3::get<ir1045_tag>(ctx) = x3::_attr(ctx);
+    auto preceding_token = [](auto& ctx) {
+        std::cout << "attr " << (unsigned)x3::_attr(ctx) << "\n";
+        ast::token& ir1045 = x3::get<ir1045_tag>(ctx);
+        ir1045 = x3::_attr(ctx);
     };
 
     auto const is_character_literal = [](auto& ctx) {
@@ -104,17 +105,29 @@ namespace parser {
             case ast::token::kw_all:
                 [[falltrough]]
             case ast::token::identifier: {
-                std::cout << "is_character_literal = false\n";
                 pass = false;
+                ir1045_token = ast::token::unspecified; // clear
+                std::cout << "is_character_literal = false\n";
                 break;
             }
             default: {
                 // must be a character literal
-                std::cout << "is_character_literal = true\n";
                 pass = true;
+                ir1045_token = ast::token::unspecified; // clear
+                std::cout << "is_character_literal = true\n";
             }
         }
     };
+
+    auto const r_bracket = x3::rule<struct _> { "]" } =
+        ']' >> x3::attr(ast::token::r_bracket)[preceding_token];
+
+    auto const r_brace = x3::rule<struct _> { ")" } =
+        ')' >> x3::attr(ast::token::r_brace)[preceding_token];
+
+    auto const ALL = x3::rule<struct _> { "ALL" } =
+        "ALL" >> x3::attr(ast::token::kw_all)[preceding_token];
+
 
 
     auto const identifier = x3::rule<struct _, ast::identifier> { "identifier" } =
@@ -134,7 +147,7 @@ namespace parser {
         identifier | character_literal;
 
     auto const enumeration_type_definition = x3::rule<struct _, ast::enumeration_type_definition> { "enumeration_type_definition" } =
-        '(' >> (enumeration_literal % ',') >> ')';
+        '(' >> (enumeration_literal % ',') >> r_brace;
 
 
 
@@ -176,7 +189,8 @@ int main()
     namespace x3 = boost::spirit::x3;
 
     for(std::string const str: {
-        "Id'('A', 'B')"
+        "Id'('A', 'B')",
+        "('Id')'foo"
     }) {
       auto iter = str.begin(), end = str.end();
 
@@ -189,8 +203,9 @@ int main()
 
       std::cout << "parse '" << str << "': ";
       bool r = x3::phrase_parse(iter, end,
-                      x3::with<parser::ir1045_tag>(std::ref(ir1045_token))[parser::attribute_name],
-                    x3::space, attr);
+                  x3::with<parser::ir1045_tag>(std::ref(ir1045_token))[parser::attribute_name],
+                  x3::space, attr
+              );
 
       if (r && iter == end) {
         std::cout << "succeeded:\n";
