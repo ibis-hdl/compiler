@@ -20,6 +20,11 @@ add_executable(x3_expression                 EXCLUDE_FROM_ALL x3_expression.cpp)
 add_executable(x3_simple_expr                EXCLUDE_FROM_ALL x3_simple_expr.cpp)
 add_executable(x3_list_chunk                 EXCLUDE_FROM_ALL x3_list_chunk.cpp)
 
+add_executable(x3_ir1045                     EXCLUDE_FROM_ALL x3_ir1045.cpp)
+target_include_directories(x3_ir1045 PRIVATE # requires > 1.64
+    ${EDA_BINARY_ROOT_DIR}/external/src/boost-spirit-x3/include
+)
+
 add_executable(x3_variant_inheritance        EXCLUDE_FROM_ALL x3_variant_inheritance.cpp)
 
 add_executable(ellipsis_compress             EXCLUDE_FROM_ALL ellipsis_compress.cpp)
