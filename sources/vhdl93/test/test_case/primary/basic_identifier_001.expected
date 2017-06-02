@@ -1,6 +1,6 @@
 (primary<v>
   (name<v>
-    (simple_name
+    (identifier
       FooBar
     )
   )

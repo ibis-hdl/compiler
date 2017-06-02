@@ -1,31 +1,31 @@
 (use_clause
   (name<v>
-    (simple_name
+    (identifier
       IEEE
     )
   ).
   (name<v>
-    (simple_name
+    (identifier
       Std_Logic_1164
     )
   ).
   (suffix<v>
-    (simple_name
+    (identifier
       Std_ulogic
     )
   ),
   (name<v>
-    (simple_name
+    (identifier
       IEEE
     )
   ).
   (name<v>
-    (simple_name
+    (identifier
       Std_Logic_1164
     )
   ).
   (suffix<v>
-    (simple_name
+    (identifier
       Rising_edge
     )
   )

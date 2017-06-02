@@ -1,16 +1,16 @@
 (use_clause
   (name<v>
-    (simple_name
+    (identifier
       ieee
     )
   ).
   (name<v>
-    (simple_name
+    (identifier
       math_real
     )
   ).
   (suffix<v>
-    (simple_name
+    (identifier
       MATH_PI
     )
   )

@@ -1,13 +1,13 @@
 (attribute_name
   (prefix<v>
     (name<v>
-      (simple_name
+      (identifier
         CLK
       )
     )
   )
   (attribute_designator
-    (simple_name
+    (identifier
       DELAYED
     )
   )

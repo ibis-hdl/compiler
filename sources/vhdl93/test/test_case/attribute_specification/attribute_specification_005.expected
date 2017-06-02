@@ -1,12 +1,12 @@
 (attribute_specification
-  (simple_name
+  (identifier
     IMPLEMENTATION
   )
   (entity_specification
     (entity_name_list<v>
       (entity_designator
         (entity_tag<v>
-          (simple_name
+          (identifier
             G1
           )
         )

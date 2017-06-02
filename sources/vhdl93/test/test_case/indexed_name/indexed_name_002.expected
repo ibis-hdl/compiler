@@ -1,7 +1,7 @@
 (indexed_name
   (prefix<v>
     (name<v>
-      (simple_name
+      (identifier
         MEMORY_CELL
       )
     )

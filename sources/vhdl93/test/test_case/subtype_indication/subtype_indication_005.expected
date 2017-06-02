@@ -1,11 +1,11 @@
 (subtype_indication
   (name<v>
-    (simple_name
+    (identifier
       resolution_function_name
     )
   )
   (type_mark<v>
-    (simple_name
+    (identifier
       type_mark
     )
   )
@@ -14,7 +14,7 @@
       (discrete_range<v>
         (subtype_indication
           (type_mark<v>
-            (simple_name
+            (identifier
               range_attribute_name
             )
           )

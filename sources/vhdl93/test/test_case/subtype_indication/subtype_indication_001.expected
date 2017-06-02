@@ -1,18 +1,18 @@
 (subtype_indication
   (name<v>
-    (simple_name
+    (identifier
       resolution_function_name
     )
   )
   (type_mark<v>
-    (simple_name
+    (identifier
       type_mark
     )
   )
   (constraint<v>
     (range<v>
       (name<v>
-        (simple_name
+        (identifier
           constraint
         )
       )

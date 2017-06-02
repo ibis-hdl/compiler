@@ -1,5 +1,5 @@
 (attribute_specification
-  (simple_name
+  (identifier
     LOCATION
   )
   (entity_specification

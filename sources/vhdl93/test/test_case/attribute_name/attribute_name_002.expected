@@ -1,13 +1,13 @@
 (attribute_name
   (prefix<v>
     (name<v>
-      (simple_name
+      (identifier
         INPUT_PIN
       )
     )
   )
   (attribute_designator
-    (simple_name
+    (identifier
       PATH_NAME
     )
   )

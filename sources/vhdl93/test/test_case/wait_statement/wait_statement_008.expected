@@ -2,7 +2,7 @@
   (sensitivity_clause
     (sensitivity_list
       (name<v>
-        (simple_name
+        (identifier
           EN
         )
       )
@@ -16,7 +16,7 @@
               term: (term
                 (primary<v>
                   (name<v>
-                    (simple_name
+                    (identifier
                       EN
                     )
                   )

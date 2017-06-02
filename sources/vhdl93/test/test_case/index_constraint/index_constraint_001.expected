@@ -2,7 +2,7 @@
   (discrete_range<v>
     (subtype_indication
       (type_mark<v>
-        (simple_name
+        (identifier
           lhs
         )
       )
@@ -11,7 +11,7 @@
   (discrete_range<v>
     (subtype_indication
       (type_mark<v>
-        (simple_name
+        (identifier
           rhs
         )
       )

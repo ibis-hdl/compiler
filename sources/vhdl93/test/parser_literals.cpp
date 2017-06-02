@@ -520,40 +520,5 @@ BOOST_DATA_TEST_CASE(literal,
 }
 
 
-/*
- * simple_name
- *
- * Note, simple_name is same as identifier
- */
-struct simple_name_dataset : public ::x3_test::dataset_loader
-{
-    simple_name_dataset()
-    : dataset_loader{ "test_case/simple_name" }
-    { }
-} const simple_name_dataset;
-
-
-BOOST_DATA_TEST_CASE(simple_name,
-      simple_name_dataset.input()
-    ^ simple_name_dataset.expect()
-    ^ simple_name_dataset.test_file_name(),
-    input, expected, file)
-{
-    using x3_test::testing_parser;
-
-    typedef ast::simple_name attribute_type;
-
-    // avoid warning, used in case of error for error message by boost.test
-    boost::ignore_unused(file);
-
-    testing_parser<attribute_type> parse;
-    auto [parse_ok, parse_result] =  parse(input, parser::simple_name);
-
-    BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
-    BOOST_TEST(parse_result == expected, btt::per_element());
-}
-
-
 BOOST_AUTO_TEST_SUITE_END()
 

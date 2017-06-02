@@ -1,7 +1,7 @@
 (attribute_name
   (prefix<v>
     (name<v>
-      (simple_name
+      (identifier
         Foo
       )
     )
@@ -9,26 +9,26 @@
   (signature
     (signature.parameter_type(s)
       (type_mark<v>
-        (simple_name
+        (identifier
           A
         )
       ),
       (type_mark<v>
-        (simple_name
+        (identifier
           B
         )
       )
     )
     (signature.return_type
       (type_mark<v>
-        (simple_name
+        (identifier
           C
         )
       )
     )
   )
   (attribute_designator
-    (simple_name
+    (identifier
       Buzz
     )
   )

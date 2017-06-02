@@ -4,7 +4,7 @@
   )
   (target<v>
     (name<v>
-      (simple_name
+      (identifier
         Output_pin
       )
     )
@@ -45,7 +45,7 @@
               term: (term
                 (primary<v>
                   (name<v>
-                    (simple_name
+                    (identifier
                       Input_pin
                     )
                   )
@@ -89,7 +89,7 @@
                 (factor_unary_operation
                   operator: NOT,
                   primary: (name<v>
-                    (simple_name
+                    (identifier
                       Input_pin
                     )
                   )

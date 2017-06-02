@@ -1,11 +1,11 @@
 (use_clause
   (name<v>
-    (simple_name
+    (identifier
       ieee
     )
   ).
   (name<v>
-    (simple_name
+    (identifier
       std_logic_1164
     )
   ).

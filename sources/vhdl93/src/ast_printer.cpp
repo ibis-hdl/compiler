@@ -242,14 +242,6 @@ void printer::operator()(attribute_declaration const &node)
 }
 
 
-void printer::operator()(attribute_designator const &node) // UNUSED
-{
-    static char const symbol[]{ "XXX attribute_designator" };
-    symbol_scope<attribute_designator> _(*this, symbol);
-    //os << node.name;
-}
-
-
 void printer::operator()(attribute_name const &node)
 {
     static char const symbol[]{ "attribute_name" };
@@ -1919,15 +1911,6 @@ void printer::operator()(simple_expression const &node)
             os << ",\n";
         }
     }
-}
-
-
-void printer::operator()(simple_name const &node)
-{
-    static char const symbol[]{ "simple_name" };
-    symbol_scope<simple_name> _(*this, symbol);
-
-    os << node.name;
 }
 
 

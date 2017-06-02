@@ -4,17 +4,17 @@
   )(sensitivity_clause
     (sensitivity_list
       (name<v>
-        (simple_name
+        (identifier
           X
         )
       ),
       (name<v>
-        (simple_name
+        (identifier
           Y
         )
       ),
       (name<v>
-        (simple_name
+        (identifier
           Z
         )
       )

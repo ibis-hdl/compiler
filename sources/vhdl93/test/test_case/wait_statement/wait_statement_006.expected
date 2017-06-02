@@ -2,12 +2,12 @@
   (sensitivity_clause
     (sensitivity_list
       (name<v>
-        (simple_name
+        (identifier
           A
         )
       ),
       (name<v>
-        (simple_name
+        (identifier
           B
         )
       )
@@ -21,7 +21,7 @@
               term: (term
                 (primary<v>
                   (name<v>
-                    (simple_name
+                    (identifier
                       CLK
                     )
                   )

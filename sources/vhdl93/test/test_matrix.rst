@@ -66,13 +66,13 @@ attribute_name
 | attribute_name_001 | --  The leftmost index bound of array REG.            | (attribute_name                                   |
 |                    | REG'LEFT(1)                                           |   (prefix<v>                                      |
 |                    |                                                       |     (name<v>                                      |
-|                    |                                                       |       (simple_name                                |
+|                    |                                                       |       (identifier                                 |
 |                    |                                                       |         REG                                       |
 |                    |                                                       |       )                                           |
 |                    |                                                       |     )                                             |
 |                    |                                                       |   )                                               |
 |                    |                                                       |   (attribute_designator                           |
-|                    |                                                       |     (simple_name                                  |
+|                    |                                                       |     (identifier                                   |
 |                    |                                                       |       LEFT                                        |
 |                    |                                                       |     )                                             |
 |                    |                                                       |   )                                               |
@@ -103,13 +103,13 @@ attribute_name
 | attribute_name_002 | --  The hierarchical path name of the port INPUT_PIN. | (attribute_name                                   |
 |                    | INPUT_PIN'PATH_NAME                                   |   (prefix<v>                                      |
 |                    |                                                       |     (name<v>                                      |
-|                    |                                                       |       (simple_name                                |
+|                    |                                                       |       (identifier                                 |
 |                    |                                                       |         INPUT_PIN                                 |
 |                    |                                                       |       )                                           |
 |                    |                                                       |     )                                             |
 |                    |                                                       |   )                                               |
 |                    |                                                       |   (attribute_designator                           |
-|                    |                                                       |     (simple_name                                  |
+|                    |                                                       |     (identifier                                   |
 |                    |                                                       |       PATH_NAME                                   |
 |                    |                                                       |     )                                             |
 |                    |                                                       |   )                                               |
@@ -119,13 +119,13 @@ attribute_name
 | attribute_name_003 | --  The signal CLK delayed by 5 ns.                   | (attribute_name                                   |
 |                    | CLK'DELAYED(5 ns)                                     |   (prefix<v>                                      |
 |                    |                                                       |     (name<v>                                      |
-|                    |                                                       |       (simple_name                                |
+|                    |                                                       |       (identifier                                 |
 |                    |                                                       |         CLK                                       |
 |                    |                                                       |       )                                           |
 |                    |                                                       |     )                                             |
 |                    |                                                       |   )                                               |
 |                    |                                                       |   (attribute_designator                           |
-|                    |                                                       |     (simple_name                                  |
+|                    |                                                       |     (identifier                                   |
 |                    |                                                       |       DELAYED                                     |
 |                    |                                                       |     )                                             |
 |                    |                                                       |   )                                               |
@@ -159,7 +159,7 @@ attribute_name
 | attribute_name_004 | -- test for signature parser check                    | (attribute_name                                   |
 |                    | Foo [A, B return C]'Buzz(42)                          |   (prefix<v>                                      |
 |                    |                                                       |     (name<v>                                      |
-|                    |                                                       |       (simple_name                                |
+|                    |                                                       |       (identifier                                 |
 |                    |                                                       |         Foo                                       |
 |                    |                                                       |       )                                           |
 |                    |                                                       |     )                                             |
@@ -167,26 +167,26 @@ attribute_name
 |                    |                                                       |   (signature                                      |
 |                    |                                                       |     (signature.parameter_type(s)                  |
 |                    |                                                       |       (type_mark<v>                               |
-|                    |                                                       |         (simple_name                              |
+|                    |                                                       |         (identifier                               |
 |                    |                                                       |           A                                       |
 |                    |                                                       |         )                                         |
 |                    |                                                       |       ),                                          |
 |                    |                                                       |       (type_mark<v>                               |
-|                    |                                                       |         (simple_name                              |
+|                    |                                                       |         (identifier                               |
 |                    |                                                       |           B                                       |
 |                    |                                                       |         )                                         |
 |                    |                                                       |       )                                           |
 |                    |                                                       |     )                                             |
 |                    |                                                       |     (signature.return_type                        |
 |                    |                                                       |       (type_mark<v>                               |
-|                    |                                                       |         (simple_name                              |
+|                    |                                                       |         (identifier                               |
 |                    |                                                       |           C                                       |
 |                    |                                                       |         )                                         |
 |                    |                                                       |       )                                           |
 |                    |                                                       |     )                                             |
 |                    |                                                       |   )                                               |
 |                    |                                                       |   (attribute_designator                           |
-|                    |                                                       |     (simple_name                                  |
+|                    |                                                       |     (identifier                                   |
 |                    |                                                       |       Buzz                                        |
 |                    |                                                       |     )                                             |
 |                    |                                                       |   )                                               |
@@ -223,14 +223,14 @@ attribute_specification
 | File                        | Input                                               | Expected                                                 |
 +-----------------------------+-----------------------------------------------------+----------------------------------------------------------+
 | attribute_specification_001 | attribute PIN_NO of CIN: signal is 10;              | (attribute_specification                                 |
-|                             |                                                     |   (simple_name                                           |
+|                             |                                                     |   (identifier                                            |
 |                             |                                                     |     PIN_NO                                               |
 |                             |                                                     |   )                                                      |
 |                             |                                                     |   (entity_specification                                  |
 |                             |                                                     |     (entity_name_list<v>                                 |
 |                             |                                                     |       (entity_designator                                 |
 |                             |                                                     |         (entity_tag<v>                                   |
-|                             |                                                     |           (simple_name                                   |
+|                             |                                                     |           (identifier                                    |
 |                             |                                                     |             CIN                                          |
 |                             |                                                     |           )                                              |
 |                             |                                                     |         )                                                |
@@ -265,14 +265,14 @@ attribute_specification
 |                             |                                                     |                                                          |
 +-----------------------------+-----------------------------------------------------+----------------------------------------------------------+
 | attribute_specification_002 | -- even on LRM, this isn't a avalid expression:     | (attribute_specification                                 |
-|                             | -- attribute LOCATION of ADDER1: label is (10,15);  |   (simple_name                                           |
+|                             | -- attribute LOCATION of ADDER1: label is (10,15);  |   (identifier                                            |
 |                             | -- hence fixed to an expression:                    |     LOCATION                                             |
 |                             | attribute LOCATION of ADDER1: label is (10 + 15);   |   )                                                      |
 |                             |                                                     |   (entity_specification                                  |
 |                             |                                                     |     (entity_name_list<v>                                 |
 |                             |                                                     |       (entity_designator                                 |
 |                             |                                                     |         (entity_tag<v>                                   |
-|                             |                                                     |           (simple_name                                   |
+|                             |                                                     |           (identifier                                    |
 |                             |                                                     |             ADDER1                                       |
 |                             |                                                     |           )                                              |
 |                             |                                                     |         )                                                |
@@ -333,7 +333,7 @@ attribute_specification
 |                             |                                                     |                                                          |
 +-----------------------------+-----------------------------------------------------+----------------------------------------------------------+
 | attribute_specification_003 | -- even on LRM, this isn't a avalid expression:     | (attribute_specification                                 |
-|                             | -- attribute LOCATION of others: label is (25,77);  |   (simple_name                                           |
+|                             | -- attribute LOCATION of others: label is (25,77);  |   (identifier                                            |
 |                             | -- hence fixed to an expression:                    |     LOCATION                                             |
 |                             | attribute LOCATION of others: label is (25 * 77);   |   )                                                      |
 |                             |                                                     |   (entity_specification                                  |
@@ -395,7 +395,7 @@ attribute_specification
 |                             |                                                     |                                                          |
 +-----------------------------+-----------------------------------------------------+----------------------------------------------------------+
 | attribute_specification_004 |  attribute CAPACITANCE of all: signal is 15 pF;     | (attribute_specification                                 |
-|                             |                                                     |   (simple_name                                           |
+|                             |                                                     |   (identifier                                            |
 |                             |                                                     |     CAPACITANCE                                          |
 |                             |                                                     |   )                                                      |
 |                             |                                                     |   (entity_specification                                  |
@@ -436,14 +436,14 @@ attribute_specification
 |                             |                                                     |                                                          |
 +-----------------------------+-----------------------------------------------------+----------------------------------------------------------+
 | attribute_specification_005 | attribute IMPLEMENTATION of G1: group is "74LS152"; | (attribute_specification                                 |
-|                             |                                                     |   (simple_name                                           |
+|                             |                                                     |   (identifier                                            |
 |                             |                                                     |     IMPLEMENTATION                                       |
 |                             |                                                     |   )                                                      |
 |                             |                                                     |   (entity_specification                                  |
 |                             |                                                     |     (entity_name_list<v>                                 |
 |                             |                                                     |       (entity_designator                                 |
 |                             |                                                     |         (entity_tag<v>                                   |
-|                             |                                                     |           (simple_name                                   |
+|                             |                                                     |           (identifier                                    |
 |                             |                                                     |             G1                                           |
 |                             |                                                     |           )                                              |
 |                             |                                                     |         )                                                |
@@ -474,14 +474,14 @@ attribute_specification
 |                             |                                                     |                                                          |
 +-----------------------------+-----------------------------------------------------+----------------------------------------------------------+
 | attribute_specification_006 | attribute RISING_DELAY of C2Q: group is 7.2 ns;     | (attribute_specification                                 |
-|                             |                                                     |   (simple_name                                           |
+|                             |                                                     |   (identifier                                            |
 |                             |                                                     |     RISING_DELAY                                         |
 |                             |                                                     |   )                                                      |
 |                             |                                                     |   (entity_specification                                  |
 |                             |                                                     |     (entity_name_list<v>                                 |
 |                             |                                                     |       (entity_designator                                 |
 |                             |                                                     |         (entity_tag<v>                                   |
-|                             |                                                     |           (simple_name                                   |
+|                             |                                                     |           (identifier                                    |
 |                             |                                                     |             C2Q                                          |
 |                             |                                                     |           )                                              |
 |                             |                                                     |         )                                                |
@@ -625,7 +625,7 @@ constraint
 |                      |                            |     (discrete_range<v>                   |
 |                      |                            |       (subtype_indication                |
 |                      |                            |         (type_mark<v>                    |
-|                      |                            |           (simple_name                   |
+|                      |                            |           (identifier                    |
 |                      |                            |             lhs                          |
 |                      |                            |           )                              |
 |                      |                            |         )                                |
@@ -634,7 +634,7 @@ constraint
 |                      |                            |     (discrete_range<v>                   |
 |                      |                            |       (subtype_indication                |
 |                      |                            |         (type_mark<v>                    |
-|                      |                            |           (simple_name                   |
+|                      |                            |           (identifier                    |
 |                      |                            |             rhs                          |
 |                      |                            |           )                              |
 |                      |                            |         )                                |
@@ -796,19 +796,19 @@ discrete_range
 | discrete_range_002 | -- subtype_indication (with range constraint)       | (discrete_range<v>                       |
 |                    | resolution_function_name type_mark RANGE constraint |   (subtype_indication                    |
 |                    |                                                     |     (name<v>                             |
-|                    |                                                     |       (simple_name                       |
+|                    |                                                     |       (identifier                        |
 |                    |                                                     |         resolution_function_name         |
 |                    |                                                     |       )                                  |
 |                    |                                                     |     )                                    |
 |                    |                                                     |     (type_mark<v>                        |
-|                    |                                                     |       (simple_name                       |
+|                    |                                                     |       (identifier                        |
 |                    |                                                     |         type_mark                        |
 |                    |                                                     |       )                                  |
 |                    |                                                     |     )                                    |
 |                    |                                                     |     (constraint<v>                       |
 |                    |                                                     |       (range<v>                          |
 |                    |                                                     |         (name<v>                         |
-|                    |                                                     |           (simple_name                   |
+|                    |                                                     |           (identifier                    |
 |                    |                                                     |             constraint                   |
 |                    |                                                     |           )                              |
 |                    |                                                     |         )                                |
@@ -821,14 +821,14 @@ discrete_range
 | discrete_range_003 | -- subtype_indication (with range_constraint)       | (discrete_range<v>                       |
 |                    | type_mark RANGE constraint                          |   (subtype_indication                    |
 |                    |                                                     |     (type_mark<v>                        |
-|                    |                                                     |       (simple_name                       |
+|                    |                                                     |       (identifier                        |
 |                    |                                                     |         type_mark                        |
 |                    |                                                     |       )                                  |
 |                    |                                                     |     )                                    |
 |                    |                                                     |     (constraint<v>                       |
 |                    |                                                     |       (range<v>                          |
 |                    |                                                     |         (name<v>                         |
-|                    |                                                     |           (simple_name                   |
+|                    |                                                     |           (identifier                    |
 |                    |                                                     |             constraint                   |
 |                    |                                                     |           )                              |
 |                    |                                                     |         )                                |
@@ -2262,7 +2262,7 @@ factor
 | basic_identifier_001    | FooBar              | (factor<v>                         |
 |                         |                     |   (primary<v>                      |
 |                         |                     |     (name<v>                       |
-|                         |                     |       (simple_name                 |
+|                         |                     |       (identifier                  |
 |                         |                     |         FooBar                     |
 |                         |                     |       )                            |
 |                         |                     |     )                              |
@@ -2290,7 +2290,7 @@ factor
 | extended_identifier_001 | \BUS\               | (factor<v>                         |
 |                         |                     |   (primary<v>                      |
 |                         |                     |     (name<v>                       |
-|                         |                     |       (simple_name                 |
+|                         |                     |       (identifier                  |
 |                         |                     |         \BUS\                      |
 |                         |                     |       )                            |
 |                         |                     |     )                              |
@@ -2489,7 +2489,7 @@ index_constraint
 |                      | (lhs, rhs)                                              |   (discrete_range<v>                           |
 |                      |                                                         |     (subtype_indication                        |
 |                      |                                                         |       (type_mark<v>                            |
-|                      |                                                         |         (simple_name                           |
+|                      |                                                         |         (identifier                            |
 |                      |                                                         |           lhs                                  |
 |                      |                                                         |         )                                      |
 |                      |                                                         |       )                                        |
@@ -2498,7 +2498,7 @@ index_constraint
 |                      |                                                         |   (discrete_range<v>                           |
 |                      |                                                         |     (subtype_indication                        |
 |                      |                                                         |       (type_mark<v>                            |
-|                      |                                                         |         (simple_name                           |
+|                      |                                                         |         (identifier                            |
 |                      |                                                         |           rhs                                  |
 |                      |                                                         |         )                                      |
 |                      |                                                         |       )                                        |
@@ -2511,7 +2511,7 @@ index_constraint
 |                      | (type_mark, other_type_mark)                            |   (discrete_range<v>                           |
 |                      |                                                         |     (subtype_indication                        |
 |                      |                                                         |       (type_mark<v>                            |
-|                      |                                                         |         (simple_name                           |
+|                      |                                                         |         (identifier                            |
 |                      |                                                         |           type_mark                            |
 |                      |                                                         |         )                                      |
 |                      |                                                         |       )                                        |
@@ -2520,7 +2520,7 @@ index_constraint
 |                      |                                                         |   (discrete_range<v>                           |
 |                      |                                                         |     (subtype_indication                        |
 |                      |                                                         |       (type_mark<v>                            |
-|                      |                                                         |         (simple_name                           |
+|                      |                                                         |         (identifier                            |
 |                      |                                                         |           other_type_mark                      |
 |                      |                                                         |         )                                      |
 |                      |                                                         |       )                                        |
@@ -2533,7 +2533,7 @@ index_constraint
 |                      | (foo RANGE 42 downto 0, bar RANGE 69 to 99)             |   (discrete_range<v>                           |
 |                      |                                                         |     (subtype_indication                        |
 |                      |                                                         |       (type_mark<v>                            |
-|                      |                                                         |         (simple_name                           |
+|                      |                                                         |         (identifier                            |
 |                      |                                                         |           foo                                  |
 |                      |                                                         |         )                                      |
 |                      |                                                         |       )                                        |
@@ -2579,7 +2579,7 @@ index_constraint
 |                      |                                                         |   (discrete_range<v>                           |
 |                      |                                                         |     (subtype_indication                        |
 |                      |                                                         |       (type_mark<v>                            |
-|                      |                                                         |         (simple_name                           |
+|                      |                                                         |         (identifier                            |
 |                      |                                                         |           bar                                  |
 |                      |                                                         |         )                                      |
 |                      |                                                         |       )                                        |
@@ -2636,7 +2636,7 @@ indexed_name
 | indexed_name_001 | --  An element of a one-dimensional array. | (indexed_name                                  |
 |                  | REGISTER_ARRAY(5)                          |   (prefix<v>                                   |
 |                  |                                            |     (name<v>                                   |
-|                  |                                            |       (simple_name                             |
+|                  |                                            |       (identifier                              |
 |                  |                                            |         REGISTER_ARRAY                         |
 |                  |                                            |       )                                        |
 |                  |                                            |     )                                          |
@@ -2668,7 +2668,7 @@ indexed_name
 | indexed_name_002 | --  An element of a two-dimensional array. | (indexed_name                                  |
 |                  | MEMORY_CELL(1024,7)                        |   (prefix<v>                                   |
 |                  |                                            |     (name<v>                                   |
-|                  |                                            |       (simple_name                             |
+|                  |                                            |       (identifier                              |
 |                  |                                            |         MEMORY_CELL                            |
 |                  |                                            |       )                                        |
 |                  |                                            |     )                                          |
@@ -2963,23 +2963,23 @@ literal
 name
 ====
 
-+-------------------------+--------+----------------+
-| File                    | Input  | Expected       |
-+-------------------------+--------+----------------+
-| basic_identifier_001    | FooBar | (name<v>       |
-|                         |        |   (simple_name |
-|                         |        |     FooBar     |
-|                         |        |   )            |
-|                         |        | )              |
-|                         |        |                |
-+-------------------------+--------+----------------+
-| extended_identifier_001 | \BUS\  | (name<v>       |
-|                         |        |   (simple_name |
-|                         |        |     \BUS\      |
-|                         |        |   )            |
-|                         |        | )              |
-|                         |        |                |
-+-------------------------+--------+----------------+
++-------------------------+--------+---------------+
+| File                    | Input  | Expected      |
++-------------------------+--------+---------------+
+| basic_identifier_001    | FooBar | (name<v>      |
+|                         |        |   (identifier |
+|                         |        |     FooBar    |
+|                         |        |   )           |
+|                         |        | )             |
+|                         |        |               |
++-------------------------+--------+---------------+
+| extended_identifier_001 | \BUS\  | (name<v>      |
+|                         |        |   (identifier |
+|                         |        |     \BUS\     |
+|                         |        |   )           |
+|                         |        | )             |
+|                         |        |               |
++-------------------------+--------+---------------+
 
 ===============
 numeric_literal
@@ -3190,7 +3190,7 @@ primary
 +-------------------------+----------+----------------------------------+
 | basic_identifier_001    | FooBar   | (primary<v>                      |
 |                         |          |   (name<v>                       |
-|                         |          |     (simple_name                 |
+|                         |          |     (identifier                  |
 |                         |          |       FooBar                     |
 |                         |          |     )                            |
 |                         |          |   )                              |
@@ -3232,7 +3232,7 @@ primary
 +-------------------------+----------+----------------------------------+
 | extended_identifier_001 | \BUS\    | (primary<v>                      |
 |                         |          |   (name<v>                       |
-|                         |          |     (simple_name                 |
+|                         |          |     (identifier                  |
 |                         |          |       \BUS\                      |
 |                         |          |     )                            |
 |                         |          |   )                              |
@@ -3267,7 +3267,7 @@ range
 +-----------+----------------------+----------------------------------------+
 | range_001 | range_attribute_name | (range<v>                              |
 |           |                      |   (name<v>                             |
-|           |                      |     (simple_name                       |
+|           |                      |     (identifier                        |
 |           |                      |       range_attribute_name             |
 |           |                      |     )                                  |
 |           |                      |   )                                    |
@@ -3279,7 +3279,7 @@ range
 |           |                      |     term: (term                        |
 |           |                      |       (primary<v>                      |
 |           |                      |         (name<v>                       |
-|           |                      |           (simple_name                 |
+|           |                      |           (identifier                  |
 |           |                      |             lhs                        |
 |           |                      |           )                            |
 |           |                      |         )                              |
@@ -3293,7 +3293,7 @@ range
 |           |                      |     term: (term                        |
 |           |                      |       (primary<v>                      |
 |           |                      |         (name<v>                       |
-|           |                      |           (simple_name                 |
+|           |                      |           (identifier                  |
 |           |                      |             rhs                        |
 |           |                      |           )                            |
 |           |                      |         )                              |
@@ -3399,7 +3399,7 @@ relation
 |              |                       |       term: (term                        |
 |              |                       |         (primary<v>                      |
 |              |                       |           (name<v>                       |
-|              |                       |             (simple_name                 |
+|              |                       |             (identifier                  |
 |              |                       |               a                          |
 |              |                       |             )                            |
 |              |                       |           )                              |
@@ -3409,7 +3409,7 @@ relation
 |              |                       |       (term                              |
 |              |                       |         (primary<v>                      |
 |              |                       |           (name<v>                       |
-|              |                       |             (simple_name                 |
+|              |                       |             (identifier                  |
 |              |                       |               b                          |
 |              |                       |             )                            |
 |              |                       |           )                              |
@@ -3423,7 +3423,7 @@ relation
 |              |                       |       term: (term                        |
 |              |                       |         (primary<v>                      |
 |              |                       |           (name<v>                       |
-|              |                       |             (simple_name                 |
+|              |                       |             (identifier                  |
 |              |                       |               c                          |
 |              |                       |             )                            |
 |              |                       |           )                              |
@@ -3541,7 +3541,7 @@ signal_assignment_statement
 | signal_assignment_statement_001 | Output_pin <= Input_pin after 10 ns;                           | (signal_assignment_statement                          |
 |                                 |                                                                |   (target<v>                                          |
 |                                 |                                                                |     (name<v>                                          |
-|                                 |                                                                |       (simple_name                                    |
+|                                 |                                                                |       (identifier                                     |
 |                                 |                                                                |         Output_pin                                    |
 |                                 |                                                                |       )                                               |
 |                                 |                                                                |     )                                                 |
@@ -3555,7 +3555,7 @@ signal_assignment_statement
 |                                 |                                                                |               term: (term                             |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (name<v>                            |
-|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                     (identifier                       |
 |                                 |                                                                |                       Input_pin                       |
 |                                 |                                                                |                     )                                 |
 |                                 |                                                                |                   )                                   |
@@ -3597,7 +3597,7 @@ signal_assignment_statement
 | signal_assignment_statement_002 | Output_pin <= inertial Input_pin after 10 ns;                  | (signal_assignment_statement                          |
 |                                 |                                                                |   (target<v>                                          |
 |                                 |                                                                |     (name<v>                                          |
-|                                 |                                                                |       (simple_name                                    |
+|                                 |                                                                |       (identifier                                     |
 |                                 |                                                                |         Output_pin                                    |
 |                                 |                                                                |       )                                               |
 |                                 |                                                                |     )                                                 |
@@ -3614,7 +3614,7 @@ signal_assignment_statement
 |                                 |                                                                |               term: (term                             |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (name<v>                            |
-|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                     (identifier                       |
 |                                 |                                                                |                       Input_pin                       |
 |                                 |                                                                |                     )                                 |
 |                                 |                                                                |                   )                                   |
@@ -3656,7 +3656,7 @@ signal_assignment_statement
 | signal_assignment_statement_003 | Output_pin <= reject 10 ns inertial Input_pin after 10 ns;     | (signal_assignment_statement                          |
 |                                 |                                                                |   (target<v>                                          |
 |                                 |                                                                |     (name<v>                                          |
-|                                 |                                                                |       (simple_name                                    |
+|                                 |                                                                |       (identifier                                     |
 |                                 |                                                                |         Output_pin                                    |
 |                                 |                                                                |       )                                               |
 |                                 |                                                                |     )                                                 |
@@ -3697,7 +3697,7 @@ signal_assignment_statement
 |                                 |                                                                |               term: (term                             |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (name<v>                            |
-|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                     (identifier                       |
 |                                 |                                                                |                       Input_pin                       |
 |                                 |                                                                |                     )                                 |
 |                                 |                                                                |                   )                                   |
@@ -3739,7 +3739,7 @@ signal_assignment_statement
 | signal_assignment_statement_004 | Output_pin <= reject 5 ns inertial Input_pin after 10 ns;      | (signal_assignment_statement                          |
 |                                 |                                                                |   (target<v>                                          |
 |                                 |                                                                |     (name<v>                                          |
-|                                 |                                                                |       (simple_name                                    |
+|                                 |                                                                |       (identifier                                     |
 |                                 |                                                                |         Output_pin                                    |
 |                                 |                                                                |       )                                               |
 |                                 |                                                                |     )                                                 |
@@ -3780,7 +3780,7 @@ signal_assignment_statement
 |                                 |                                                                |               term: (term                             |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (name<v>                            |
-|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                     (identifier                       |
 |                                 |                                                                |                       Input_pin                       |
 |                                 |                                                                |                     )                                 |
 |                                 |                                                                |                   )                                   |
@@ -3822,7 +3822,7 @@ signal_assignment_statement
 | signal_assignment_statement_005 | Output_pin <= reject 5 ns inertial Input_pin after 10 ns,      | (signal_assignment_statement                          |
 |                                 |                                not Input_pin after 20 ns;      |   (target<v>                                          |
 |                                 |                                                                |     (name<v>                                          |
-|                                 |                                                                |       (simple_name                                    |
+|                                 |                                                                |       (identifier                                     |
 |                                 |                                                                |         Output_pin                                    |
 |                                 |                                                                |       )                                               |
 |                                 |                                                                |     )                                                 |
@@ -3863,7 +3863,7 @@ signal_assignment_statement
 |                                 |                                                                |               term: (term                             |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (name<v>                            |
-|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                     (identifier                       |
 |                                 |                                                                |                       Input_pin                       |
 |                                 |                                                                |                     )                                 |
 |                                 |                                                                |                   )                                   |
@@ -3907,7 +3907,7 @@ signal_assignment_statement
 |                                 |                                                                |                 (factor_unary_operation               |
 |                                 |                                                                |                   operator: NOT,                      |
 |                                 |                                                                |                   primary: (name<v>                   |
-|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                     (identifier                       |
 |                                 |                                                                |                       Input_pin                       |
 |                                 |                                                                |                     )                                 |
 |                                 |                                                                |                   )                                   |
@@ -3949,7 +3949,7 @@ signal_assignment_statement
 | signal_assignment_statement_006 | Output_pin <= transport Input_pin after 10 ns;                 | (signal_assignment_statement                          |
 |                                 |                                                                |   (target<v>                                          |
 |                                 |                                                                |     (name<v>                                          |
-|                                 |                                                                |       (simple_name                                    |
+|                                 |                                                                |       (identifier                                     |
 |                                 |                                                                |         Output_pin                                    |
 |                                 |                                                                |       )                                               |
 |                                 |                                                                |     )                                                 |
@@ -3966,7 +3966,7 @@ signal_assignment_statement
 |                                 |                                                                |               term: (term                             |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (name<v>                            |
-|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                     (identifier                       |
 |                                 |                                                                |                       Input_pin                       |
 |                                 |                                                                |                     )                                 |
 |                                 |                                                                |                   )                                   |
@@ -4008,7 +4008,7 @@ signal_assignment_statement
 | signal_assignment_statement_007 | Output_pin <= transport Input_pin after 10 ns,                 | (signal_assignment_statement                          |
 |                                 |                     not Input_pin after 20 ns;                 |   (target<v>                                          |
 |                                 |                                                                |     (name<v>                                          |
-|                                 |                                                                |       (simple_name                                    |
+|                                 |                                                                |       (identifier                                     |
 |                                 |                                                                |         Output_pin                                    |
 |                                 |                                                                |       )                                               |
 |                                 |                                                                |     )                                                 |
@@ -4025,7 +4025,7 @@ signal_assignment_statement
 |                                 |                                                                |               term: (term                             |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (name<v>                            |
-|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                     (identifier                       |
 |                                 |                                                                |                       Input_pin                       |
 |                                 |                                                                |                     )                                 |
 |                                 |                                                                |                   )                                   |
@@ -4069,7 +4069,7 @@ signal_assignment_statement
 |                                 |                                                                |                 (factor_unary_operation               |
 |                                 |                                                                |                   operator: NOT,                      |
 |                                 |                                                                |                   primary: (name<v>                   |
-|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                     (identifier                       |
 |                                 |                                                                |                       Input_pin                       |
 |                                 |                                                                |                     )                                 |
 |                                 |                                                                |                   )                                   |
@@ -4111,7 +4111,7 @@ signal_assignment_statement
 | signal_assignment_statement_008 | Output_pin <= reject 0 ns inertial Input_pin after 10 ns;      | (signal_assignment_statement                          |
 |                                 |                                                                |   (target<v>                                          |
 |                                 |                                                                |     (name<v>                                          |
-|                                 |                                                                |       (simple_name                                    |
+|                                 |                                                                |       (identifier                                     |
 |                                 |                                                                |         Output_pin                                    |
 |                                 |                                                                |       )                                               |
 |                                 |                                                                |     )                                                 |
@@ -4152,7 +4152,7 @@ signal_assignment_statement
 |                                 |                                                                |               term: (term                             |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (name<v>                            |
-|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                     (identifier                       |
 |                                 |                                                                |                       Input_pin                       |
 |                                 |                                                                |                     )                                 |
 |                                 |                                                                |                   )                                   |
@@ -4194,7 +4194,7 @@ signal_assignment_statement
 | signal_assignment_statement_009 | Output_pin <= reject 0 ns inertial Input_pin after 10 ns,      | (signal_assignment_statement                          |
 |                                 |                                not Input_pin after 10 ns;      |   (target<v>                                          |
 |                                 |                                                                |     (name<v>                                          |
-|                                 |                                                                |       (simple_name                                    |
+|                                 |                                                                |       (identifier                                     |
 |                                 |                                                                |         Output_pin                                    |
 |                                 |                                                                |       )                                               |
 |                                 |                                                                |     )                                                 |
@@ -4235,7 +4235,7 @@ signal_assignment_statement
 |                                 |                                                                |               term: (term                             |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (name<v>                            |
-|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                     (identifier                       |
 |                                 |                                                                |                       Input_pin                       |
 |                                 |                                                                |                     )                                 |
 |                                 |                                                                |                   )                                   |
@@ -4279,7 +4279,7 @@ signal_assignment_statement
 |                                 |                                                                |                 (factor_unary_operation               |
 |                                 |                                                                |                   operator: NOT,                      |
 |                                 |                                                                |                   primary: (name<v>                   |
-|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                     (identifier                       |
 |                                 |                                                                |                       Input_pin                       |
 |                                 |                                                                |                     )                                 |
 |                                 |                                                                |                   )                                   |
@@ -4324,7 +4324,7 @@ signal_assignment_statement
 |                                 |                                                                |   )                                                   |
 |                                 |                                                                |   (target<v>                                          |
 |                                 |                                                                |     (name<v>                                          |
-|                                 |                                                                |       (simple_name                                    |
+|                                 |                                                                |       (identifier                                     |
 |                                 |                                                                |         Output_pin                                    |
 |                                 |                                                                |       )                                               |
 |                                 |                                                                |     )                                                 |
@@ -4338,7 +4338,7 @@ signal_assignment_statement
 |                                 |                                                                |               term: (term                             |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (name<v>                            |
-|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                     (identifier                       |
 |                                 |                                                                |                       Input_pin                       |
 |                                 |                                                                |                     )                                 |
 |                                 |                                                                |                   )                                   |
@@ -4383,7 +4383,7 @@ signal_assignment_statement
 |                                 |                                                                |   )                                                   |
 |                                 |                                                                |   (target<v>                                          |
 |                                 |                                                                |     (name<v>                                          |
-|                                 |                                                                |       (simple_name                                    |
+|                                 |                                                                |       (identifier                                     |
 |                                 |                                                                |         Output_pin                                    |
 |                                 |                                                                |       )                                               |
 |                                 |                                                                |     )                                                 |
@@ -4424,7 +4424,7 @@ signal_assignment_statement
 |                                 |                                                                |               term: (term                             |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (name<v>                            |
-|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                     (identifier                       |
 |                                 |                                                                |                       Input_pin                       |
 |                                 |                                                                |                     )                                 |
 |                                 |                                                                |                   )                                   |
@@ -4468,7 +4468,7 @@ signal_assignment_statement
 |                                 |                                                                |                 (factor_unary_operation               |
 |                                 |                                                                |                   operator: NOT,                      |
 |                                 |                                                                |                   primary: (name<v>                   |
-|                                 |                                                                |                     (simple_name                      |
+|                                 |                                                                |                     (identifier                       |
 |                                 |                                                                |                       Input_pin                       |
 |                                 |                                                                |                     )                                 |
 |                                 |                                                                |                   )                                   |
@@ -4531,7 +4531,7 @@ signal_list
 +------------------+-----------------+----------------------+
 | signal_names_001 | FooBar          | (signal_list<v>      |
 |                  |                 |   (signal_list.names |
-|                  |                 |     (simple_name     |
+|                  |                 |     (identifier      |
 |                  |                 |       FooBar         |
 |                  |                 |     )                |
 |                  |                 |   )                  |
@@ -4540,13 +4540,13 @@ signal_list
 +------------------+-----------------+----------------------+
 | signal_names_002 | Foo, Bar, \BUS\ | (signal_list<v>      |
 |                  |                 |   (signal_list.names |
-|                  |                 |     (simple_name     |
+|                  |                 |     (identifier      |
 |                  |                 |       Foo            |
 |                  |                 |     ),               |
-|                  |                 |     (simple_name     |
+|                  |                 |     (identifier      |
 |                  |                 |       Bar            |
 |                  |                 |     ),               |
-|                  |                 |     (simple_name     |
+|                  |                 |     (identifier      |
 |                  |                 |       \BUS\          |
 |                  |                 |     )                |
 |                  |                 |   )                  |
@@ -4673,59 +4673,6 @@ simple_expression
 |                       |                   |                                      |
 +-----------------------+-------------------+--------------------------------------+
 
-===========
-simple_name
-===========
-
-+-------------------------+-----------------+-------------------+
-| File                    | Input           | Expected          |
-+-------------------------+-----------------+-------------------+
-| basic_identifier_001    | X               | (simple_name      |
-|                         |                 |   X               |
-|                         |                 | )                 |
-|                         |                 |                   |
-+-------------------------+-----------------+-------------------+
-| basic_identifier_002    | X1              | (simple_name      |
-|                         |                 |   X1              |
-|                         |                 | )                 |
-|                         |                 |                   |
-+-------------------------+-----------------+-------------------+
-| basic_identifier_003    | COUNT           | (simple_name      |
-|                         |                 |   COUNT           |
-|                         |                 | )                 |
-|                         |                 |                   |
-+-------------------------+-----------------+-------------------+
-| basic_identifier_004    | STORE_NEXT_ITEM | (simple_name      |
-|                         |                 |   STORE_NEXT_ITEM |
-|                         |                 | )                 |
-|                         |                 |                   |
-+-------------------------+-----------------+-------------------+
-| basic_identifier_005    | c_out           | (simple_name      |
-|                         |                 |   c_out           |
-|                         |                 | )                 |
-|                         |                 |                   |
-+-------------------------+-----------------+-------------------+
-| extended_identifier_001 | \Bus\           | (simple_name      |
-|                         |                 |   \Bus\           |
-|                         |                 | )                 |
-|                         |                 |                   |
-+-------------------------+-----------------+-------------------+
-| extended_identifier_002 | \Foo\\Bar\      | (simple_name      |
-|                         |                 |   \Foo\\Bar\      |
-|                         |                 | )                 |
-|                         |                 |                   |
-+-------------------------+-----------------+-------------------+
-| extended_identifier_003 | \Foo\\Bar\\Baz\ | (simple_name      |
-|                         |                 |   \Foo\\Bar\\Baz\ |
-|                         |                 | )                 |
-|                         |                 |                   |
-+-------------------------+-----------------+-------------------+
-| extended_identifier_004 | \a\\b\          | (simple_name      |
-|                         |                 |   \a\\b\          |
-|                         |                 | )                 |
-|                         |                 |                   |
-+-------------------------+-----------------+-------------------+
-
 ==============
 string_literal
 ==============
@@ -4793,19 +4740,19 @@ subtype_indication
 +------------------------+----------------------------------------------------------------------+------------------------------------+
 | subtype_indication_001 | resolution_function_name  type_mark  RANGE constraint                | (subtype_indication                |
 |                        |                                                                      |   (name<v>                         |
-|                        |                                                                      |     (simple_name                   |
+|                        |                                                                      |     (identifier                    |
 |                        |                                                                      |       resolution_function_name     |
 |                        |                                                                      |     )                              |
 |                        |                                                                      |   )                                |
 |                        |                                                                      |   (type_mark<v>                    |
-|                        |                                                                      |     (simple_name                   |
+|                        |                                                                      |     (identifier                    |
 |                        |                                                                      |       type_mark                    |
 |                        |                                                                      |     )                              |
 |                        |                                                                      |   )                                |
 |                        |                                                                      |   (constraint<v>                   |
 |                        |                                                                      |     (range<v>                      |
 |                        |                                                                      |       (name<v>                     |
-|                        |                                                                      |         (simple_name               |
+|                        |                                                                      |         (identifier                |
 |                        |                                                                      |           constraint               |
 |                        |                                                                      |         )                          |
 |                        |                                                                      |       )                            |
@@ -4816,12 +4763,12 @@ subtype_indication
 +------------------------+----------------------------------------------------------------------+------------------------------------+
 | subtype_indication_002 | resolution_function_name  type_mark                                  | (subtype_indication                |
 |                        |                                                                      |   (name<v>                         |
-|                        |                                                                      |     (simple_name                   |
+|                        |                                                                      |     (identifier                    |
 |                        |                                                                      |       resolution_function_name     |
 |                        |                                                                      |     )                              |
 |                        |                                                                      |   )                                |
 |                        |                                                                      |   (type_mark<v>                    |
-|                        |                                                                      |     (simple_name                   |
+|                        |                                                                      |     (identifier                    |
 |                        |                                                                      |       type_mark                    |
 |                        |                                                                      |     )                              |
 |                        |                                                                      |   )                                |
@@ -4830,14 +4777,14 @@ subtype_indication
 +------------------------+----------------------------------------------------------------------+------------------------------------+
 | subtype_indication_003 |   type_mark  RANGE constraint                                        | (subtype_indication                |
 |                        |                                                                      |   (type_mark<v>                    |
-|                        |                                                                      |     (simple_name                   |
+|                        |                                                                      |     (identifier                    |
 |                        |                                                                      |       type_mark                    |
 |                        |                                                                      |     )                              |
 |                        |                                                                      |   )                                |
 |                        |                                                                      |   (constraint<v>                   |
 |                        |                                                                      |     (range<v>                      |
 |                        |                                                                      |       (name<v>                     |
-|                        |                                                                      |         (simple_name               |
+|                        |                                                                      |         (identifier                |
 |                        |                                                                      |           constraint               |
 |                        |                                                                      |         )                          |
 |                        |                                                                      |       )                            |
@@ -4848,7 +4795,7 @@ subtype_indication
 +------------------------+----------------------------------------------------------------------+------------------------------------+
 | subtype_indication_004 | type_mark                                                            | (subtype_indication                |
 |                        |                                                                      |   (type_mark<v>                    |
-|                        |                                                                      |     (simple_name                   |
+|                        |                                                                      |     (identifier                    |
 |                        |                                                                      |       type_mark                    |
 |                        |                                                                      |     )                              |
 |                        |                                                                      |   )                                |
@@ -4857,12 +4804,12 @@ subtype_indication
 +------------------------+----------------------------------------------------------------------+------------------------------------+
 | subtype_indication_005 | resolution_function_name  type_mark  ( range_attribute_name  )       | (subtype_indication                |
 |                        |                                                                      |   (name<v>                         |
-|                        |                                                                      |     (simple_name                   |
+|                        |                                                                      |     (identifier                    |
 |                        |                                                                      |       resolution_function_name     |
 |                        |                                                                      |     )                              |
 |                        |                                                                      |   )                                |
 |                        |                                                                      |   (type_mark<v>                    |
-|                        |                                                                      |     (simple_name                   |
+|                        |                                                                      |     (identifier                    |
 |                        |                                                                      |       type_mark                    |
 |                        |                                                                      |     )                              |
 |                        |                                                                      |   )                                |
@@ -4871,7 +4818,7 @@ subtype_indication
 |                        |                                                                      |       (discrete_range<v>           |
 |                        |                                                                      |         (subtype_indication        |
 |                        |                                                                      |           (type_mark<v>            |
-|                        |                                                                      |             (simple_name           |
+|                        |                                                                      |             (identifier            |
 |                        |                                                                      |               range_attribute_name |
 |                        |                                                                      |             )                      |
 |                        |                                                                      |           )                        |
@@ -4884,12 +4831,12 @@ subtype_indication
 +------------------------+----------------------------------------------------------------------+------------------------------------+
 | subtype_indication_006 | resolution_function_name  type_mark  ( range_1_name, range_2_name  ) | (subtype_indication                |
 |                        |                                                                      |   (name<v>                         |
-|                        |                                                                      |     (simple_name                   |
+|                        |                                                                      |     (identifier                    |
 |                        |                                                                      |       resolution_function_name     |
 |                        |                                                                      |     )                              |
 |                        |                                                                      |   )                                |
 |                        |                                                                      |   (type_mark<v>                    |
-|                        |                                                                      |     (simple_name                   |
+|                        |                                                                      |     (identifier                    |
 |                        |                                                                      |       type_mark                    |
 |                        |                                                                      |     )                              |
 |                        |                                                                      |   )                                |
@@ -4898,7 +4845,7 @@ subtype_indication
 |                        |                                                                      |       (discrete_range<v>           |
 |                        |                                                                      |         (subtype_indication        |
 |                        |                                                                      |           (type_mark<v>            |
-|                        |                                                                      |             (simple_name           |
+|                        |                                                                      |             (identifier            |
 |                        |                                                                      |               range_1_name         |
 |                        |                                                                      |             )                      |
 |                        |                                                                      |           )                        |
@@ -4907,7 +4854,7 @@ subtype_indication
 |                        |                                                                      |       (discrete_range<v>           |
 |                        |                                                                      |         (subtype_indication        |
 |                        |                                                                      |           (type_mark<v>            |
-|                        |                                                                      |             (simple_name           |
+|                        |                                                                      |             (identifier            |
 |                        |                                                                      |               range_2_name         |
 |                        |                                                                      |             )                      |
 |                        |                                                                      |           )                        |
@@ -5055,22 +5002,22 @@ use_clause
 +----------------+----------------------------------------------------------------------+----------------------+
 | use_clause_001 | use MKS.MEASUREMENTS, STD.STANDARD;                                  | (use_clause          |
 |                |                                                                      |   (name<v>           |
-|                |                                                                      |     (simple_name     |
+|                |                                                                      |     (identifier      |
 |                |                                                                      |       MKS            |
 |                |                                                                      |     )                |
 |                |                                                                      |   ).                 |
 |                |                                                                      |   (suffix<v>         |
-|                |                                                                      |     (simple_name     |
+|                |                                                                      |     (identifier      |
 |                |                                                                      |       MEASUREMENTS   |
 |                |                                                                      |     )                |
 |                |                                                                      |   ),                 |
 |                |                                                                      |   (name<v>           |
-|                |                                                                      |     (simple_name     |
+|                |                                                                      |     (identifier      |
 |                |                                                                      |       STD            |
 |                |                                                                      |     )                |
 |                |                                                                      |   ).                 |
 |                |                                                                      |   (suffix<v>         |
-|                |                                                                      |     (simple_name     |
+|                |                                                                      |     (identifier      |
 |                |                                                                      |       STANDARD       |
 |                |                                                                      |     )                |
 |                |                                                                      |   )                  |
@@ -5079,12 +5026,12 @@ use_clause
 +----------------+----------------------------------------------------------------------+----------------------+
 | use_clause_002 | use ieee.std_logic_1164.all;                                         | (use_clause          |
 |                |                                                                      |   (name<v>           |
-|                |                                                                      |     (simple_name     |
+|                |                                                                      |     (identifier      |
 |                |                                                                      |       ieee           |
 |                |                                                                      |     )                |
 |                |                                                                      |   ).                 |
 |                |                                                                      |   (name<v>           |
-|                |                                                                      |     (simple_name     |
+|                |                                                                      |     (identifier      |
 |                |                                                                      |       std_logic_1164 |
 |                |                                                                      |     )                |
 |                |                                                                      |   ).                 |
@@ -5098,17 +5045,17 @@ use_clause
 +----------------+----------------------------------------------------------------------+----------------------+
 | use_clause_003 | USE ieee.math_real.MATH_PI;                                          | (use_clause          |
 |                |                                                                      |   (name<v>           |
-|                |                                                                      |     (simple_name     |
+|                |                                                                      |     (identifier      |
 |                |                                                                      |       ieee           |
 |                |                                                                      |     )                |
 |                |                                                                      |   ).                 |
 |                |                                                                      |   (name<v>           |
-|                |                                                                      |     (simple_name     |
+|                |                                                                      |     (identifier      |
 |                |                                                                      |       math_real      |
 |                |                                                                      |     )                |
 |                |                                                                      |   ).                 |
 |                |                                                                      |   (suffix<v>         |
-|                |                                                                      |     (simple_name     |
+|                |                                                                      |     (identifier      |
 |                |                                                                      |       MATH_PI        |
 |                |                                                                      |     )                |
 |                |                                                                      |   )                  |
@@ -5117,32 +5064,32 @@ use_clause
 +----------------+----------------------------------------------------------------------+----------------------+
 | use_clause_004 | use IEEE.Std_Logic_1164.Std_ulogic, IEEE.Std_Logic_1164.Rising_edge; | (use_clause          |
 |                |                                                                      |   (name<v>           |
-|                |                                                                      |     (simple_name     |
+|                |                                                                      |     (identifier      |
 |                |                                                                      |       IEEE           |
 |                |                                                                      |     )                |
 |                |                                                                      |   ).                 |
 |                |                                                                      |   (name<v>           |
-|                |                                                                      |     (simple_name     |
+|                |                                                                      |     (identifier      |
 |                |                                                                      |       Std_Logic_1164 |
 |                |                                                                      |     )                |
 |                |                                                                      |   ).                 |
 |                |                                                                      |   (suffix<v>         |
-|                |                                                                      |     (simple_name     |
+|                |                                                                      |     (identifier      |
 |                |                                                                      |       Std_ulogic     |
 |                |                                                                      |     )                |
 |                |                                                                      |   ),                 |
 |                |                                                                      |   (name<v>           |
-|                |                                                                      |     (simple_name     |
+|                |                                                                      |     (identifier      |
 |                |                                                                      |       IEEE           |
 |                |                                                                      |     )                |
 |                |                                                                      |   ).                 |
 |                |                                                                      |   (name<v>           |
-|                |                                                                      |     (simple_name     |
+|                |                                                                      |     (identifier      |
 |                |                                                                      |       Std_Logic_1164 |
 |                |                                                                      |     )                |
 |                |                                                                      |   ).                 |
 |                |                                                                      |   (suffix<v>         |
-|                |                                                                      |     (simple_name     |
+|                |                                                                      |     (identifier      |
 |                |                                                                      |       Rising_edge    |
 |                |                                                                      |     )                |
 |                |                                                                      |   )                  |
@@ -5173,12 +5120,12 @@ wait_statement
 |                    |                                  |   (sensitivity_clause                               |
 |                    |                                  |     (sensitivity_list                               |
 |                    |                                  |       (name<v>                                      |
-|                    |                                  |         (simple_name                                |
+|                    |                                  |         (identifier                                 |
 |                    |                                  |           A                                         |
 |                    |                                  |         )                                           |
 |                    |                                  |       ),                                            |
 |                    |                                  |       (name<v>                                      |
-|                    |                                  |         (simple_name                                |
+|                    |                                  |         (identifier                                 |
 |                    |                                  |           B                                         |
 |                    |                                  |         )                                           |
 |                    |                                  |       )                                             |
@@ -5193,17 +5140,17 @@ wait_statement
 |                    |                                  |   )(sensitivity_clause                              |
 |                    |                                  |     (sensitivity_list                               |
 |                    |                                  |       (name<v>                                      |
-|                    |                                  |         (simple_name                                |
+|                    |                                  |         (identifier                                 |
 |                    |                                  |           X                                         |
 |                    |                                  |         )                                           |
 |                    |                                  |       ),                                            |
 |                    |                                  |       (name<v>                                      |
-|                    |                                  |         (simple_name                                |
+|                    |                                  |         (identifier                                 |
 |                    |                                  |           Y                                         |
 |                    |                                  |         )                                           |
 |                    |                                  |       ),                                            |
 |                    |                                  |       (name<v>                                      |
-|                    |                                  |         (simple_name                                |
+|                    |                                  |         (identifier                                 |
 |                    |                                  |           Z                                         |
 |                    |                                  |         )                                           |
 |                    |                                  |       )                                             |
@@ -5222,7 +5169,7 @@ wait_statement
 |                    |                                  |               term: (term                           |
 |                    |                                  |                 (primary<v>                         |
 |                    |                                  |                   (name<v>                          |
-|                    |                                  |                     (simple_name                    |
+|                    |                                  |                     (identifier                     |
 |                    |                                  |                       CLK                           |
 |                    |                                  |                     )                               |
 |                    |                                  |                   )                                 |
@@ -5257,12 +5204,12 @@ wait_statement
 |                    |                                  |   (sensitivity_clause                               |
 |                    |                                  |     (sensitivity_list                               |
 |                    |                                  |       (name<v>                                      |
-|                    |                                  |         (simple_name                                |
+|                    |                                  |         (identifier                                 |
 |                    |                                  |           A                                         |
 |                    |                                  |         )                                           |
 |                    |                                  |       ),                                            |
 |                    |                                  |       (name<v>                                      |
-|                    |                                  |         (simple_name                                |
+|                    |                                  |         (identifier                                 |
 |                    |                                  |           B                                         |
 |                    |                                  |         )                                           |
 |                    |                                  |       )                                             |
@@ -5276,7 +5223,7 @@ wait_statement
 |                    |                                  |               term: (term                           |
 |                    |                                  |                 (primary<v>                         |
 |                    |                                  |                   (name<v>                          |
-|                    |                                  |                     (simple_name                    |
+|                    |                                  |                     (identifier                     |
 |                    |                                  |                       CLK                           |
 |                    |                                  |                     )                               |
 |                    |                                  |                   )                                 |
@@ -5341,7 +5288,7 @@ wait_statement
 |                    |                                  |   (sensitivity_clause                               |
 |                    |                                  |     (sensitivity_list                               |
 |                    |                                  |       (name<v>                                      |
-|                    |                                  |         (simple_name                                |
+|                    |                                  |         (identifier                                 |
 |                    |                                  |           EN                                        |
 |                    |                                  |         )                                           |
 |                    |                                  |       )                                             |
@@ -5355,7 +5302,7 @@ wait_statement
 |                    |                                  |               term: (term                           |
 |                    |                                  |                 (primary<v>                         |
 |                    |                                  |                   (name<v>                          |
-|                    |                                  |                     (simple_name                    |
+|                    |                                  |                     (identifier                     |
 |                    |                                  |                       EN                            |
 |                    |                                  |                     )                               |
 |                    |                                  |                   )                                 |

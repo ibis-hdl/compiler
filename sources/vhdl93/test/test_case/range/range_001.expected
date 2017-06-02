@@ -1,6 +1,6 @@
 (range<v>
   (name<v>
-    (simple_name
+    (identifier
       range_attribute_name
     )
   )

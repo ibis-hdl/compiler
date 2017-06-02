@@ -1,6 +1,6 @@
 (subtype_indication
   (type_mark<v>
-    (simple_name
+    (identifier
       type_mark
     )
   )

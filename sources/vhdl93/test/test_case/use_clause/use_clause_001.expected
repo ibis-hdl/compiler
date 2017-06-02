@@ -1,21 +1,21 @@
 (use_clause
   (name<v>
-    (simple_name
+    (identifier
       MKS
     )
   ).
   (suffix<v>
-    (simple_name
+    (identifier
       MEASUREMENTS
     )
   ),
   (name<v>
-    (simple_name
+    (identifier
       STD
     )
   ).
   (suffix<v>
-    (simple_name
+    (identifier
       STANDARD
     )
   )

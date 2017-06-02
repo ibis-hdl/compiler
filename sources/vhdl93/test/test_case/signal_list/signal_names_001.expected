@@ -1,6 +1,6 @@
 (signal_list<v>
   (signal_list.names
-    (simple_name
+    (identifier
       FooBar
     )
   )
