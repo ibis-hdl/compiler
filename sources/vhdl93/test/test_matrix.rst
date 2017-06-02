@@ -2317,14 +2317,19 @@ factor
 function_call
 =============
 
-+-------------------+---------------------------------------------+-----------------------------------------------+
-| File              | Input                                       | Expected                                      |
-+-------------------+---------------------------------------------+-----------------------------------------------+
-| function_call_001 | the_function_name ( actual_parameter_part ) | (function_call                                |
-|                   |                                             |   the_function_name ( actual_parameter_part ) |
-|                   |                                             | )                                             |
-|                   |                                             |                                               |
-+-------------------+---------------------------------------------+-----------------------------------------------+
++-------------------+---------------------------------------------+-----------------------------+
+| File              | Input                                       | Expected                    |
++-------------------+---------------------------------------------+-----------------------------+
+| function_call_001 | the_function_name ( actual_parameter_part ) | (function_call              |
+|                   |                                             |   (name<v>                  |
+|                   |                                             |     (identifier             |
+|                   |                                             |       the_function_name     |
+|                   |                                             |     )                       |
+|                   |                                             |   )                         |
+|                   |                                             |   ( actual_parameter_part ) |
+|                   |                                             | )                           |
+|                   |                                             |                             |
++-------------------+---------------------------------------------+-----------------------------+
 
 ==========
 identifier
@@ -4319,7 +4324,7 @@ signal_assignment_statement
 |                                 |                                                                |                                                       |
 +---------------------------------+----------------------------------------------------------------+-------------------------------------------------------+
 | signal_assignment_statement_010 | my_label:                                                      | (signal_assignment_statement                          |
-|                                 |     Output_pin <= Input_pin after 10 ns;                       |   (label                                              |
+|                                 |     Output_pin <= Input_pin after 10 ns;                       |   (identifier                                         |
 |                                 |                                                                |     my_label                                          |
 |                                 |                                                                |   )                                                   |
 |                                 |                                                                |   (target<v>                                          |
@@ -4378,7 +4383,7 @@ signal_assignment_statement
 |                                 |                                                                |                                                       |
 +---------------------------------+----------------------------------------------------------------+-------------------------------------------------------+
 | signal_assignment_statement_011 | my_assign:                                                     | (signal_assignment_statement                          |
-|                                 |     Output_pin <= reject 5 ns inertial Input_pin after 10 ns,  |   (label                                              |
+|                                 |     Output_pin <= reject 5 ns inertial Input_pin after 10 ns,  |   (identifier                                         |
 |                                 |                   not Input_pin after 20 ns;                   |     my_assign                                         |
 |                                 |                                                                |   )                                                   |
 |                                 |                                                                |   (target<v>                                          |
@@ -5110,7 +5115,7 @@ wait_statement
 |                    |                                  |                                                     |
 +--------------------+----------------------------------+-----------------------------------------------------+
 | wait_statement_002 | wait_label: WAIT;                | (wait_statement                                     |
-|                    |                                  |   (label                                            |
+|                    |                                  |   (identifier                                       |
 |                    |                                  |     wait_label                                      |
 |                    |                                  |   )                                                 |
 |                    |                                  | )                                                   |
@@ -5135,7 +5140,7 @@ wait_statement
 |                    |                                  |                                                     |
 +--------------------+----------------------------------+-----------------------------------------------------+
 | wait_statement_004 | dummy: WAIT on X,Y,Z;            | (wait_statement                                     |
-|                    |                                  |   (label                                            |
+|                    |                                  |   (identifier                                       |
 |                    |                                  |     dummy                                           |
 |                    |                                  |   )(sensitivity_clause                              |
 |                    |                                  |     (sensitivity_list                               |

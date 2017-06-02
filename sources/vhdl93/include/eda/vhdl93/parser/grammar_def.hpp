@@ -872,7 +872,7 @@ typedef x3::rule<iteration_scheme_class> iteration_scheme_type;
 typedef x3::rule<label_class, ast::label> label_type;
 typedef x3::rule<letter_class, char> letter_type;
 typedef x3::rule<letter_or_digit_class, char> letter_or_digit_type;
-typedef x3::rule<library_clause_class> library_clause_type;
+typedef x3::rule<library_clause_class, ast::library_clause> library_clause_type;
 typedef x3::rule<library_unit_class> library_unit_type;
 typedef x3::rule<literal_class, ast::literal> literal_type;
 //typedef x3::rule<logical_name_class> logical_name_type;
@@ -2894,7 +2894,7 @@ auto const label_def =
 //     library logical_name_list ;
 namespace library_clause_detail {
 
-    auto const logical_name = x3::rule<logical_name_class, ast::library_clause::logical_name> { "logical_name" } =
+    auto const logical_name = x3::rule<logical_name_class, ast::logical_name> { "logical_name" } =
         identifier
         ;
 }

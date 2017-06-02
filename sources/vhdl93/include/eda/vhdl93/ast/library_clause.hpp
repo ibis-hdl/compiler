@@ -15,20 +15,15 @@
 #include <eda/vhdl93/ast/selected_name.hpp>
 #include <vector>
 
+
 namespace eda { namespace vhdl93 { namespace ast {
+
+
+using logical_name = ast::identifier;
 
 
 struct library_clause : position_tagged
 {
-    struct logical_name  : ast::identifier
-    {
-        logical_name& operator=(std::string_view&& sv)
-        {
-            name = std::move(sv);
-            return *this;
-        }
-    };
-
     std::vector<logical_name>       logical_name_list;
 };
 
