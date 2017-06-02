@@ -83,7 +83,7 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::factor_unary_operation,
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::function_call,
-    name, actual_parameter_part
+    function_name, actual_parameter_part
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::identifier,

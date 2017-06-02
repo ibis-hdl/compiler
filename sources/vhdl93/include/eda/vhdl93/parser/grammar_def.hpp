@@ -2572,14 +2572,12 @@ auto const full_type_declaration_def =
 //     function_name [ ( actual_parameter_part ) ]
 namespace function_call_detail {
 
-    auto const function_name = x3::rule<struct _, ast::function_name>{ "function_name" } =
-        identifier;
-
+    auto const function_name = x3::rule<struct _, ast::name>{ "function_name" } =
+        name;
 
     auto const actual_parameter_part = x3::rule<struct _, std::string>{ "actual_parameter_part" } =
         +(char_ - char_(')'))
         ;
-
 }
 /* FixMe: actual_parameter_part -> parameter_association_list; also string_view mess */
 auto const function_call_def =

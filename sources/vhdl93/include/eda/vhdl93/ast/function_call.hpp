@@ -12,26 +12,20 @@
 #include <eda/vhdl93/ast/namespace_alias.hpp>
 #include <eda/vhdl93/ast/position_tagged.hpp>
 
-#include <eda/vhdl93/ast/identifier.hpp>
+//#include <eda/vhdl93/ast/name.hpp>
+#include <string>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-struct function_name : ast::identifier
-{
-    function_name& operator=(std::string_view&& sv)
-    {
-        name = std::move(sv);
-        return *this;
-    }
-};
+struct name;
 
 
 struct function_call : position_tagged
 {
-    function_name           name;
-    std::string             actual_parameter_part;
+    x3::forward_ast<ast::name>  function_name;
+    std::string                 actual_parameter_part;
 };
 
 
