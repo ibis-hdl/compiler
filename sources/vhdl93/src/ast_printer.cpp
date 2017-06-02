@@ -1176,9 +1176,9 @@ void printer::operator()(identifier_list const &node)
     static char const symbol[]{ "identifier_list" };
     symbol_scope<identifier_list> _(*this, symbol);
 
-    auto const N = node.list.size() - 1;
+    auto const N = node.size() - 1;
     unsigned i = 0;
-    for(auto const& identifier : node.list) {
+    for(auto const& identifier : node) {
         (*this)(identifier);
         if(i++ != N) {
             os << ",\n";
