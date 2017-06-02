@@ -264,12 +264,18 @@ dataset_loader::datasets_type& dataset_loader::test_cases()
 import os
 
 if __name__ == "__main__":
+    blacklist = [
+         'integer'
+    ]
     for root, dirs, files in sorted(os.walk(os.getcwd() + '/' + 'test_case')):
         #print("root=" + str(root))
         subject = os.path.basename(root)
         if subject == 'test_case':
             continue
         subject_base = subject.replace('_failure', '')
+        if subject_base in blacklist:
+            # don't rewrite, e.g. integer is a simple string_view
+            continue
         ast = "ast::" + subject_base
         parser = "parser::" + subject_base
         test_case = "test_case/" + subject
@@ -298,6 +304,16 @@ int main()
     }
 
     {
+        gold_writer<parser::attribute_name_type, ast::attribute_name> goldy("test_case/attribute_name");
+        goldy.write();
+    }
+
+    {
+        gold_writer<parser::attribute_specification_type, ast::attribute_specification> goldy("test_case/attribute_specification");
+        goldy.write();
+    }
+
+    {
         gold_writer<parser::based_literal_type, ast::based_literal> goldy("test_case/based_literal");
         goldy.write();
     }
@@ -313,7 +329,17 @@ int main()
     }
 
     {
+        gold_writer<parser::constraint_type, ast::constraint> goldy("test_case/constraint");
+        goldy.write();
+    }
+
+    {
         gold_writer<parser::decimal_literal_type, ast::decimal_literal> goldy("test_case/decimal_literal");
+        goldy.write();
+    }
+
+    {
+        gold_writer<parser::discrete_range_type, ast::discrete_range> goldy("test_case/discrete_range");
         goldy.write();
     }
 
@@ -338,6 +364,11 @@ int main()
     }
 
     {
+        gold_writer<parser::function_call_type, ast::function_call> goldy("test_case/function_call");
+        goldy.write();
+    }
+
+    {
         gold_writer<parser::identifier_type, ast::identifier> goldy("test_case/identifier");
         goldy.write();
     }
@@ -353,12 +384,12 @@ int main()
     }
 
     {
-        gold_writer<parser::integer_type, std::string_view> goldy("test_case/integer");
+        gold_writer<parser::index_constraint_type, ast::index_constraint> goldy("test_case/index_constraint");
         goldy.write();
     }
 
     {
-        gold_writer<parser::integer_type, std::string_view> goldy("test_case/integer_failure");
+        gold_writer<parser::indexed_name_type, ast::indexed_name> goldy("test_case/indexed_name");
         goldy.write();
     }
 
@@ -393,12 +424,22 @@ int main()
     }
 
     {
+        gold_writer<parser::range_type, ast::range> goldy("test_case/range");
+        goldy.write();
+    }
+
+    {
         gold_writer<parser::relation_type, ast::relation> goldy("test_case/relation");
         goldy.write();
     }
 
     {
         gold_writer<parser::shift_expression_type, ast::shift_expression> goldy("test_case/shift_expression");
+        goldy.write();
+    }
+
+    {
+        gold_writer<parser::signal_assignment_statement_type, ast::signal_assignment_statement> goldy("test_case/signal_assignment_statement");
         goldy.write();
     }
 
@@ -413,12 +454,12 @@ int main()
     }
 
     {
-        gold_writer<parser::simple_name_type, ast::simple_name> goldy("test_case/simple_name");
+        gold_writer<parser::string_literal_type, ast::string_literal> goldy("test_case/string_literal");
         goldy.write();
     }
 
     {
-        gold_writer<parser::string_literal_type, ast::string_literal> goldy("test_case/string_literal");
+        gold_writer<parser::subtype_indication_type, ast::subtype_indication> goldy("test_case/subtype_indication");
         goldy.write();
     }
 
@@ -426,4 +467,20 @@ int main()
         gold_writer<parser::term_type, ast::term> goldy("test_case/term");
         goldy.write();
     }
+
+    {
+        gold_writer<parser::use_clause_type, ast::use_clause> goldy("test_case/use_clause");
+        goldy.write();
+    }
+
+    {
+        gold_writer<parser::wait_statement_type, ast::wait_statement> goldy("test_case/wait_statement");
+        goldy.write();
+    }
+
+    {
+        gold_writer<parser::waveform_type, ast::waveform> goldy("test_case/waveform");
+        goldy.write();
+    }
+
 }

@@ -107,7 +107,7 @@ set_source_files_properties(
 
 
 add_executable(make_gold EXCLUDE_FROM_ALL make_gold.cpp)
-set_target_properties(make_gold PROPERTIES CXX_STANDARD 14)
+set_target_properties(make_gold PROPERTIES CXX_STANDARD 17)
 set_target_properties(make_gold PROPERTIES CXX_STANDARD_REQUIRED ON)
 target_include_directories(make_gold PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>)
