@@ -18,14 +18,7 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-struct label : ast::identifier
-{
-    label& operator=(std::string_view&& sv)
-    {
-        name = std::move(sv);
-        return *this;
-    }
-};
+using label = ast::identifier;
 
 
 } } } // namespace eda.vhdl93.ast

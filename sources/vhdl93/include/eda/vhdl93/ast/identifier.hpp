@@ -20,6 +20,17 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 struct identifier : position_tagged
 {
+    identifier() = default;
+
+    identifier(std::string_view&& sv) : name{ std::move(sv) }
+    { }
+
+    identifier& operator=(std::string_view&& sv)
+    {
+        name = std::move(sv);
+        return *this;
+    }
+
     std::string_view            name;
 };
 

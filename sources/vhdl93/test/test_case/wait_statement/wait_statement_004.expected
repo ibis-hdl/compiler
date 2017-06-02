@@ -1,5 +1,5 @@
 (wait_statement
-  (label
+  (identifier
     dummy
   )(sensitivity_clause
     (sensitivity_list

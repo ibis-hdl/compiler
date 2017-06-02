@@ -1350,14 +1350,6 @@ void printer::operator()(iteration_scheme const &node)
 }
 
 
-void printer::operator()(label const &node)
-{
-    static char const symbol[]{ "label" };
-    symbol_scope<label> _(*this, symbol);
-    os << node.name;
-}
-
-
 void printer::operator()(library_clause const &node)
 {
     static char const symbol[]{ "library_clause" };

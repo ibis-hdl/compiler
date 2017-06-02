@@ -1,3 +1,8 @@
 (function_call
-  the_function_name ( actual_parameter_part )
+  (name<v>
+    (identifier
+      the_function_name
+    )
+  )
+  ( actual_parameter_part )
 )

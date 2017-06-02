@@ -390,7 +390,6 @@ public:
     void operator()(interface_signal_declaration const& node);
     void operator()(interface_variable_declaration const& node);
     void operator()(iteration_scheme const& node);
-    void operator()(label const& node);
     void operator()(library_clause const& node);
     void operator()(library_unit const& node);
     void operator()(literal const& node);

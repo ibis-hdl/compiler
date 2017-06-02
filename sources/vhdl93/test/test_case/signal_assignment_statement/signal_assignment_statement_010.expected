@@ -1,5 +1,5 @@
 (signal_assignment_statement
-  (label
+  (identifier
     my_label
   )
   (target<v>
