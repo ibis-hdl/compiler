@@ -1,7 +1,7 @@
 (relation
   (shift_expression
     (simple_expression
-      term: (term
+      (term
         (primary<v>
           (name<v>
             (identifier
@@ -25,7 +25,7 @@
   operator: GREATER,
   (shift_expression
     (simple_expression
-      term: (term
+      (term
         (primary<v>
           (name<v>
             (identifier
@@ -38,7 +38,7 @@
       (term
         (factor_unary_operation
           operator: NOT,
-          primary: (literal<v>
+          (literal<v>
             (string_literal
               101
             )

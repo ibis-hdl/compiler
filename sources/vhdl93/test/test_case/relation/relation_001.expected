@@ -1,7 +1,7 @@
 (relation
   (shift_expression
     (simple_expression
-      term: (term
+      (term
         (primary<v>
           (literal<v>
             (string_literal
@@ -27,7 +27,7 @@
   operator: LESS,
   (shift_expression
     (simple_expression
-      term: (term
+      (term
         (primary<v>
           (literal<v>
             (enumeration_literal<v>

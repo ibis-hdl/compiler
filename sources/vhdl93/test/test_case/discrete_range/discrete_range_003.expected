@@ -1,6 +1,6 @@
 (discrete_range<v>
   (subtype_indication
-    (type_mark<v>
+    (name<v>
       (identifier
         type_mark
       )

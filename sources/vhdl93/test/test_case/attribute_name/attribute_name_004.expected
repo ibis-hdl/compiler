@@ -8,19 +8,19 @@
   )
   (signature
     (signature.parameter_type(s)
-      (type_mark<v>
+      (name<v>
         (identifier
           A
         )
       ),
-      (type_mark<v>
+      (name<v>
         (identifier
           B
         )
       )
     )
     (signature.return_type
-      (type_mark<v>
+      (name<v>
         (identifier
           C
         )
@@ -36,7 +36,7 @@
     (relation
       (shift_expression
         (simple_expression
-          term: (term
+          (term
             (primary<v>
               (literal<v>
                 (numeric_literal<v>

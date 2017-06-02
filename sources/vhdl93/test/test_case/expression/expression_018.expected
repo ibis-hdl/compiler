@@ -2,13 +2,13 @@
   (relation
     (shift_expression
       (simple_expression
-        term: (term
+        (term
           (primary<v>
             (expression
               (relation
                 (shift_expression
                   (simple_expression
-                    term: (term
+                    (term
                       (primary<v>
                         (literal<v>
                           (numeric_literal<v>
@@ -32,7 +32,7 @@
               (relation
                 (shift_expression
                   (simple_expression
-                    term: (term
+                    (term
                       (primary<v>
                         (literal<v>
                           (numeric_literal<v>
@@ -58,13 +58,13 @@
               (relation
                 (shift_expression
                   (simple_expression
-                    term: (term
+                    (term
                       (primary<v>
                         (expression
                           (relation
                             (shift_expression
                               (simple_expression
-                                term: (term
+                                (term
                                   (primary<v>
                                     (literal<v>
                                       (numeric_literal<v>
@@ -102,7 +102,7 @@
                           (relation
                             (shift_expression
                               (simple_expression
-                                term: (term
+                                (term
                                   (primary<v>
                                     (literal<v>
                                       (numeric_literal<v>

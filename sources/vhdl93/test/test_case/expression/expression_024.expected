@@ -2,14 +2,14 @@
   (relation
     (shift_expression
       (simple_expression
-        term: (term
+        (term
           (factor_binary_operation
-            primary_lhs: (expression
+            (expression
               (relation
                 (shift_expression
                   (simple_expression
                     sign: SIGN_NEG,
-                    term: (term
+                    (term
                       (primary<v>
                         (literal<v>
                           (numeric_literal<v>
@@ -27,7 +27,7 @@
               )
             )
             operator: EXPONENT,
-            primary_rhs: (literal<v>
+            (literal<v>
               (numeric_literal<v>
                 (abstract_literal<v>
                   (decimal_literal

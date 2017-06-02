@@ -5,7 +5,7 @@
         (relation
           (shift_expression
             (simple_expression
-              term: (term
+              (term
                 (primary<v>
                   (name<v>
                     (identifier
@@ -19,7 +19,7 @@
           operator: EQUAL,
           (shift_expression
             (simple_expression
-              term: (term
+              (term
                 (primary<v>
                   (literal<v>
                     (enumeration_literal<v>

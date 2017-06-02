@@ -1,8 +1,8 @@
 (simple_expression
-  term: (term
+  (term
     (factor_unary_operation
       operator: NOT,
-      primary: (literal<v>
+      (literal<v>
         (enumeration_literal<v>
           (character_literal
             '1'

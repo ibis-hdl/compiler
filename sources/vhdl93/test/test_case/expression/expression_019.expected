@@ -3,7 +3,7 @@
     (shift_expression
       (simple_expression
         sign: SIGN_NEG,
-        term: (term
+        (term
           (primary<v>
             (literal<v>
               (numeric_literal<v>
@@ -22,7 +22,7 @@
                 (shift_expression
                   (simple_expression
                     sign: SIGN_NEG,
-                    term: (term
+                    (term
                       (primary<v>
                         (literal<v>
                           (numeric_literal<v>

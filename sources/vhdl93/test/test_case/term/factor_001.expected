@@ -1,7 +1,7 @@
 (term
   (factor_unary_operation
     operator: ABS,
-    primary: (literal<v>
+    (literal<v>
       (numeric_literal<v>
         (abstract_literal<v>
           (decimal_literal

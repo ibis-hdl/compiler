@@ -15,11 +15,7 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-struct type_mark : ast::name
-{
-    using name::base_type;
-    using name::operator=;
-};
+using type_mark = ast::name;
 
 
 } } } // namespace eda.vhdl93.ast

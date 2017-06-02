@@ -3,9 +3,9 @@
     (shift_expression
       (simple_expression
         sign: SIGN_NEG,
-        term: (term
+        (term
           (factor_binary_operation
-            primary_lhs: (literal<v>
+            (literal<v>
               (numeric_literal<v>
                 (abstract_literal<v>
                   (decimal_literal
@@ -15,7 +15,7 @@
               )
             )
             operator: EXPONENT,
-            primary_rhs: (literal<v>
+            (literal<v>
               (numeric_literal<v>
                 (abstract_literal<v>
                   (decimal_literal

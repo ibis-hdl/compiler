@@ -1,7 +1,7 @@
 (index_constraint
   (discrete_range<v>
     (subtype_indication
-      (type_mark<v>
+      (name<v>
         (identifier
           foo
         )
@@ -9,7 +9,7 @@
       (constraint<v>
         (range<v>
           (simple_expression
-            term: (term
+            (term
               (primary<v>
                 (literal<v>
                   (numeric_literal<v>
@@ -27,7 +27,7 @@
             DOWNTO
           )
           (simple_expression
-            term: (term
+            (term
               (primary<v>
                 (literal<v>
                   (numeric_literal<v>
@@ -47,7 +47,7 @@
   ),
   (discrete_range<v>
     (subtype_indication
-      (type_mark<v>
+      (name<v>
         (identifier
           bar
         )
@@ -55,7 +55,7 @@
       (constraint<v>
         (range<v>
           (simple_expression
-            term: (term
+            (term
               (primary<v>
                 (literal<v>
                   (numeric_literal<v>
@@ -73,7 +73,7 @@
             TO
           )
           (simple_expression
-            term: (term
+            (term
               (primary<v>
                 (literal<v>
                   (numeric_literal<v>

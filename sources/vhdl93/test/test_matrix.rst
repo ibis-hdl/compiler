@@ -80,7 +80,7 @@ attribute_name
 |                    |                                                       |     (relation                                     |
 |                    |                                                       |       (shift_expression                           |
 |                    |                                                       |         (simple_expression                        |
-|                    |                                                       |           term: (term                             |
+|                    |                                                       |           (term                                   |
 |                    |                                                       |             (primary<v>                           |
 |                    |                                                       |               (literal<v>                         |
 |                    |                                                       |                 (numeric_literal<v>               |
@@ -133,7 +133,7 @@ attribute_name
 |                    |                                                       |     (relation                                     |
 |                    |                                                       |       (shift_expression                           |
 |                    |                                                       |         (simple_expression                        |
-|                    |                                                       |           term: (term                             |
+|                    |                                                       |           (term                                   |
 |                    |                                                       |             (primary<v>                           |
 |                    |                                                       |               (literal<v>                         |
 |                    |                                                       |                 (numeric_literal<v>               |
@@ -166,19 +166,19 @@ attribute_name
 |                    |                                                       |   )                                               |
 |                    |                                                       |   (signature                                      |
 |                    |                                                       |     (signature.parameter_type(s)                  |
-|                    |                                                       |       (type_mark<v>                               |
+|                    |                                                       |       (name<v>                                    |
 |                    |                                                       |         (identifier                               |
 |                    |                                                       |           A                                       |
 |                    |                                                       |         )                                         |
 |                    |                                                       |       ),                                          |
-|                    |                                                       |       (type_mark<v>                               |
+|                    |                                                       |       (name<v>                                    |
 |                    |                                                       |         (identifier                               |
 |                    |                                                       |           B                                       |
 |                    |                                                       |         )                                         |
 |                    |                                                       |       )                                           |
 |                    |                                                       |     )                                             |
 |                    |                                                       |     (signature.return_type                        |
-|                    |                                                       |       (type_mark<v>                               |
+|                    |                                                       |       (name<v>                                    |
 |                    |                                                       |         (identifier                               |
 |                    |                                                       |           C                                       |
 |                    |                                                       |         )                                         |
@@ -194,7 +194,7 @@ attribute_name
 |                    |                                                       |     (relation                                     |
 |                    |                                                       |       (shift_expression                           |
 |                    |                                                       |         (simple_expression                        |
-|                    |                                                       |           term: (term                             |
+|                    |                                                       |           (term                                   |
 |                    |                                                       |             (primary<v>                           |
 |                    |                                                       |               (literal<v>                         |
 |                    |                                                       |                 (numeric_literal<v>               |
@@ -244,7 +244,7 @@ attribute_specification
 |                             |                                                     |     (relation                                            |
 |                             |                                                     |       (shift_expression                                  |
 |                             |                                                     |         (simple_expression                               |
-|                             |                                                     |           term: (term                                    |
+|                             |                                                     |           (term                                          |
 |                             |                                                     |             (primary<v>                                  |
 |                             |                                                     |               (literal<v>                                |
 |                             |                                                     |                 (numeric_literal<v>                      |
@@ -286,13 +286,13 @@ attribute_specification
 |                             |                                                     |     (relation                                            |
 |                             |                                                     |       (shift_expression                                  |
 |                             |                                                     |         (simple_expression                               |
-|                             |                                                     |           term: (term                                    |
+|                             |                                                     |           (term                                          |
 |                             |                                                     |             (primary<v>                                  |
 |                             |                                                     |               (expression                                |
 |                             |                                                     |                 (relation                                |
 |                             |                                                     |                   (shift_expression                      |
 |                             |                                                     |                     (simple_expression                   |
-|                             |                                                     |                       term: (term                        |
+|                             |                                                     |                       (term                              |
 |                             |                                                     |                         (primary<v>                      |
 |                             |                                                     |                           (literal<v>                    |
 |                             |                                                     |                             (numeric_literal<v>          |
@@ -350,13 +350,13 @@ attribute_specification
 |                             |                                                     |     (relation                                            |
 |                             |                                                     |       (shift_expression                                  |
 |                             |                                                     |         (simple_expression                               |
-|                             |                                                     |           term: (term                                    |
+|                             |                                                     |           (term                                          |
 |                             |                                                     |             (primary<v>                                  |
 |                             |                                                     |               (expression                                |
 |                             |                                                     |                 (relation                                |
 |                             |                                                     |                   (shift_expression                      |
 |                             |                                                     |                     (simple_expression                   |
-|                             |                                                     |                       term: (term                        |
+|                             |                                                     |                       (term                              |
 |                             |                                                     |                         (primary<v>                      |
 |                             |                                                     |                           (literal<v>                    |
 |                             |                                                     |                             (numeric_literal<v>          |
@@ -412,7 +412,7 @@ attribute_specification
 |                             |                                                     |     (relation                                            |
 |                             |                                                     |       (shift_expression                                  |
 |                             |                                                     |         (simple_expression                               |
-|                             |                                                     |           term: (term                                    |
+|                             |                                                     |           (term                                          |
 |                             |                                                     |             (primary<v>                                  |
 |                             |                                                     |               (literal<v>                                |
 |                             |                                                     |                 (numeric_literal<v>                      |
@@ -457,7 +457,7 @@ attribute_specification
 |                             |                                                     |     (relation                                            |
 |                             |                                                     |       (shift_expression                                  |
 |                             |                                                     |         (simple_expression                               |
-|                             |                                                     |           term: (term                                    |
+|                             |                                                     |           (term                                          |
 |                             |                                                     |             (primary<v>                                  |
 |                             |                                                     |               (literal<v>                                |
 |                             |                                                     |                 (string_literal                          |
@@ -495,7 +495,7 @@ attribute_specification
 |                             |                                                     |     (relation                                            |
 |                             |                                                     |       (shift_expression                                  |
 |                             |                                                     |         (simple_expression                               |
-|                             |                                                     |           term: (term                                    |
+|                             |                                                     |           (term                                          |
 |                             |                                                     |             (primary<v>                                  |
 |                             |                                                     |               (literal<v>                                |
 |                             |                                                     |                 (numeric_literal<v>                      |
@@ -624,7 +624,7 @@ constraint
 |                      | (lhs, rhs)                 |   (index_constraint                      |
 |                      |                            |     (discrete_range<v>                   |
 |                      |                            |       (subtype_indication                |
-|                      |                            |         (type_mark<v>                    |
+|                      |                            |         (name<v>                         |
 |                      |                            |           (identifier                    |
 |                      |                            |             lhs                          |
 |                      |                            |           )                              |
@@ -633,7 +633,7 @@ constraint
 |                      |                            |     ),                                   |
 |                      |                            |     (discrete_range<v>                   |
 |                      |                            |       (subtype_indication                |
-|                      |                            |         (type_mark<v>                    |
+|                      |                            |         (name<v>                         |
 |                      |                            |           (identifier                    |
 |                      |                            |             rhs                          |
 |                      |                            |           )                              |
@@ -647,7 +647,7 @@ constraint
 | range_constraint_001 | RANGE 42 downto 0          | (constraint<v>                           |
 |                      |                            |   (range<v>                              |
 |                      |                            |     (simple_expression                   |
-|                      |                            |       term: (term                        |
+|                      |                            |       (term                              |
 |                      |                            |         (primary<v>                      |
 |                      |                            |           (literal<v>                    |
 |                      |                            |             (numeric_literal<v>          |
@@ -665,7 +665,7 @@ constraint
 |                      |                            |       DOWNTO                             |
 |                      |                            |     )                                    |
 |                      |                            |     (simple_expression                   |
-|                      |                            |       term: (term                        |
+|                      |                            |       (term                              |
 |                      |                            |         (primary<v>                      |
 |                      |                            |           (literal<v>                    |
 |                      |                            |             (numeric_literal<v>          |
@@ -757,7 +757,7 @@ discrete_range
 | discrete_range_001 | -- range                                            | (discrete_range<v>                       |
 |                    | 42 downto 0                                         |   (range<v>                              |
 |                    |                                                     |     (simple_expression                   |
-|                    |                                                     |       term: (term                        |
+|                    |                                                     |       (term                              |
 |                    |                                                     |         (primary<v>                      |
 |                    |                                                     |           (literal<v>                    |
 |                    |                                                     |             (numeric_literal<v>          |
@@ -775,7 +775,7 @@ discrete_range
 |                    |                                                     |       DOWNTO                             |
 |                    |                                                     |     )                                    |
 |                    |                                                     |     (simple_expression                   |
-|                    |                                                     |       term: (term                        |
+|                    |                                                     |       (term                              |
 |                    |                                                     |         (primary<v>                      |
 |                    |                                                     |           (literal<v>                    |
 |                    |                                                     |             (numeric_literal<v>          |
@@ -800,7 +800,7 @@ discrete_range
 |                    |                                                     |         resolution_function_name         |
 |                    |                                                     |       )                                  |
 |                    |                                                     |     )                                    |
-|                    |                                                     |     (type_mark<v>                        |
+|                    |                                                     |     (name<v>                             |
 |                    |                                                     |       (identifier                        |
 |                    |                                                     |         type_mark                        |
 |                    |                                                     |       )                                  |
@@ -820,7 +820,7 @@ discrete_range
 +--------------------+-----------------------------------------------------+------------------------------------------+
 | discrete_range_003 | -- subtype_indication (with range_constraint)       | (discrete_range<v>                       |
 |                    | type_mark RANGE constraint                          |   (subtype_indication                    |
-|                    |                                                     |     (type_mark<v>                        |
+|                    |                                                     |     (name<v>                             |
 |                    |                                                     |       (identifier                        |
 |                    |                                                     |         type_mark                        |
 |                    |                                                     |       )                                  |
@@ -906,7 +906,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -922,7 +922,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -939,7 +939,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -958,7 +958,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -974,7 +974,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -991,7 +991,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1010,7 +1010,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1026,7 +1026,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1043,7 +1043,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1062,7 +1062,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1078,7 +1078,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1095,7 +1095,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1114,7 +1114,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1130,7 +1130,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1149,7 +1149,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1165,7 +1165,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1184,7 +1184,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1198,7 +1198,7 @@ expression
 |                |                                 |     operator: LESS_EQUALS,                                         |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1214,7 +1214,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1233,7 +1233,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1249,7 +1249,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1263,7 +1263,7 @@ expression
 |                |                                 |     operator: GREATER_EQUALS,                                      |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1282,7 +1282,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1294,7 +1294,7 @@ expression
 |                |                                 |       ),                                                           |
 |                |                                 |       operator: SRL,                                               |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1310,7 +1310,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1329,7 +1329,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1345,7 +1345,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1357,7 +1357,7 @@ expression
 |                |                                 |       ),                                                           |
 |                |                                 |       operator: SRL,                                               |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1376,7 +1376,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1390,7 +1390,7 @@ expression
 |                |                                 |     operator: LESS_EQUALS,                                         |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1419,7 +1419,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1443,7 +1443,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (string_literal                                      |
@@ -1463,7 +1463,7 @@ expression
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
 |                |                                 |         sign: SIGN_NEG,                                            |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (numeric_literal<v>                                  |
@@ -1483,7 +1483,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (numeric_literal<v>                                  |
@@ -1504,7 +1504,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (numeric_literal<v>                                  |
@@ -1527,9 +1527,9 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (factor_binary_operation                                 |
-|                |                                 |             primary_lhs: (literal<v>                               |
+|                |                                 |             (literal<v>                                            |
 |                |                                 |               (numeric_literal<v>                                  |
 |                |                                 |                 (abstract_literal<v>                               |
 |                |                                 |                   (decimal_literal                                 |
@@ -1539,7 +1539,7 @@ expression
 |                |                                 |               )                                                    |
 |                |                                 |             )                                                      |
 |                |                                 |             operator: EXPONENT,                                    |
-|                |                                 |             primary_rhs: (literal<v>                               |
+|                |                                 |             (literal<v>                                            |
 |                |                                 |               (numeric_literal<v>                                  |
 |                |                                 |                 (abstract_literal<v>                               |
 |                |                                 |                   (decimal_literal                                 |
@@ -1557,7 +1557,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (numeric_literal<v>                                  |
@@ -1580,7 +1580,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (numeric_literal<v>                                  |
@@ -1629,7 +1629,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (numeric_literal<v>                                  |
@@ -1649,7 +1649,7 @@ expression
 |                |                                 |               (relation                                            |
 |                |                                 |                 (shift_expression                                  |
 |                |                                 |                   (simple_expression                               |
-|                |                                 |                     term: (term                                    |
+|                |                                 |                     (term                                          |
 |                |                                 |                       (primary<v>                                  |
 |                |                                 |                         (literal<v>                                |
 |                |                                 |                           (numeric_literal<v>                      |
@@ -1690,7 +1690,7 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (numeric_literal<v>                                  |
@@ -1721,7 +1721,7 @@ expression
 |                |                                 |         operator: SUB,                                             |
 |                |                                 |         (term                                                      |
 |                |                                 |           (factor_binary_operation                                 |
-|                |                                 |             primary_lhs: (literal<v>                               |
+|                |                                 |             (literal<v>                                            |
 |                |                                 |               (numeric_literal<v>                                  |
 |                |                                 |                 (abstract_literal<v>                               |
 |                |                                 |                   (decimal_literal                                 |
@@ -1731,7 +1731,7 @@ expression
 |                |                                 |               )                                                    |
 |                |                                 |             )                                                      |
 |                |                                 |             operator: EXPONENT,                                    |
-|                |                                 |             primary_rhs: (literal<v>                               |
+|                |                                 |             (literal<v>                                            |
 |                |                                 |               (numeric_literal<v>                                  |
 |                |                                 |                 (abstract_literal<v>                               |
 |                |                                 |                   (decimal_literal                                 |
@@ -1752,13 +1752,13 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (expression                                            |
 |                |                                 |               (relation                                            |
 |                |                                 |                 (shift_expression                                  |
 |                |                                 |                   (simple_expression                               |
-|                |                                 |                     term: (term                                    |
+|                |                                 |                     (term                                          |
 |                |                                 |                       (primary<v>                                  |
 |                |                                 |                         (literal<v>                                |
 |                |                                 |                           (numeric_literal<v>                      |
@@ -1782,7 +1782,7 @@ expression
 |                |                                 |               (relation                                            |
 |                |                                 |                 (shift_expression                                  |
 |                |                                 |                   (simple_expression                               |
-|                |                                 |                     term: (term                                    |
+|                |                                 |                     (term                                          |
 |                |                                 |                       (primary<v>                                  |
 |                |                                 |                         (literal<v>                                |
 |                |                                 |                           (numeric_literal<v>                      |
@@ -1808,13 +1808,13 @@ expression
 |                |                                 |               (relation                                            |
 |                |                                 |                 (shift_expression                                  |
 |                |                                 |                   (simple_expression                               |
-|                |                                 |                     term: (term                                    |
+|                |                                 |                     (term                                          |
 |                |                                 |                       (primary<v>                                  |
 |                |                                 |                         (expression                                |
 |                |                                 |                           (relation                                |
 |                |                                 |                             (shift_expression                      |
 |                |                                 |                               (simple_expression                   |
-|                |                                 |                                 term: (term                        |
+|                |                                 |                                 (term                              |
 |                |                                 |                                   (primary<v>                      |
 |                |                                 |                                     (literal<v>                    |
 |                |                                 |                                       (numeric_literal<v>          |
@@ -1852,7 +1852,7 @@ expression
 |                |                                 |                           (relation                                |
 |                |                                 |                             (shift_expression                      |
 |                |                                 |                               (simple_expression                   |
-|                |                                 |                                 term: (term                        |
+|                |                                 |                                 (term                              |
 |                |                                 |                                   (primary<v>                      |
 |                |                                 |                                     (literal<v>                    |
 |                |                                 |                                       (numeric_literal<v>          |
@@ -1902,7 +1902,7 @@ expression
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
 |                |                                 |         sign: SIGN_NEG,                                            |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (literal<v>                                            |
 |                |                                 |               (numeric_literal<v>                                  |
@@ -1921,7 +1921,7 @@ expression
 |                |                                 |                 (shift_expression                                  |
 |                |                                 |                   (simple_expression                               |
 |                |                                 |                     sign: SIGN_NEG,                                |
-|                |                                 |                     term: (term                                    |
+|                |                                 |                     (term                                          |
 |                |                                 |                       (primary<v>                                  |
 |                |                                 |                         (literal<v>                                |
 |                |                                 |                           (numeric_literal<v>                      |
@@ -1951,13 +1951,13 @@ expression
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
 |                |                                 |         sign: SIGN_NEG,                                            |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (expression                                            |
 |                |                                 |               (relation                                            |
 |                |                                 |                 (shift_expression                                  |
 |                |                                 |                   (simple_expression                               |
-|                |                                 |                     term: (term                                    |
+|                |                                 |                     (term                                          |
 |                |                                 |                       (primary<v>                                  |
 |                |                                 |                         (literal<v>                                |
 |                |                                 |                           (numeric_literal<v>                      |
@@ -1976,7 +1976,7 @@ expression
 |                |                                 |                             (shift_expression                      |
 |                |                                 |                               (simple_expression                   |
 |                |                                 |                                 sign: SIGN_NEG,                    |
-|                |                                 |                                 term: (term                        |
+|                |                                 |                                 (term                              |
 |                |                                 |                                   (primary<v>                      |
 |                |                                 |                                     (literal<v>                    |
 |                |                                 |                                       (numeric_literal<v>          |
@@ -2011,14 +2011,14 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (expression                                            |
 |                |                                 |               (relation                                            |
 |                |                                 |                 (shift_expression                                  |
 |                |                                 |                   (simple_expression                               |
 |                |                                 |                     sign: SIGN_NEG,                                |
-|                |                                 |                     term: (term                                    |
+|                |                                 |                     (term                                          |
 |                |                                 |                       (primary<v>                                  |
 |                |                                 |                         (literal<v>                                |
 |                |                                 |                           (numeric_literal<v>                      |
@@ -2043,7 +2043,7 @@ expression
 |                |                                 |                 (shift_expression                                  |
 |                |                                 |                   (simple_expression                               |
 |                |                                 |                     sign: SIGN_NEG,                                |
-|                |                                 |                     term: (term                                    |
+|                |                                 |                     (term                                          |
 |                |                                 |                       (primary<v>                                  |
 |                |                                 |                         (literal<v>                                |
 |                |                                 |                           (numeric_literal<v>                      |
@@ -2073,9 +2073,9 @@ expression
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
 |                |                                 |         sign: SIGN_NEG,                                            |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (factor_binary_operation                                 |
-|                |                                 |             primary_lhs: (literal<v>                               |
+|                |                                 |             (literal<v>                                            |
 |                |                                 |               (numeric_literal<v>                                  |
 |                |                                 |                 (abstract_literal<v>                               |
 |                |                                 |                   (decimal_literal                                 |
@@ -2085,7 +2085,7 @@ expression
 |                |                                 |               )                                                    |
 |                |                                 |             )                                                      |
 |                |                                 |             operator: EXPONENT,                                    |
-|                |                                 |             primary_rhs: (literal<v>                               |
+|                |                                 |             (literal<v>                                            |
 |                |                                 |               (numeric_literal<v>                                  |
 |                |                                 |                 (abstract_literal<v>                               |
 |                |                                 |                   (decimal_literal                                 |
@@ -2107,15 +2107,15 @@ expression
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
 |                |                                 |         sign: SIGN_NEG,                                            |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (primary<v>                                              |
 |                |                                 |             (expression                                            |
 |                |                                 |               (relation                                            |
 |                |                                 |                 (shift_expression                                  |
 |                |                                 |                   (simple_expression                               |
-|                |                                 |                     term: (term                                    |
+|                |                                 |                     (term                                          |
 |                |                                 |                       (factor_binary_operation                     |
-|                |                                 |                         primary_lhs: (literal<v>                   |
+|                |                                 |                         (literal<v>                                |
 |                |                                 |                           (numeric_literal<v>                      |
 |                |                                 |                             (abstract_literal<v>                   |
 |                |                                 |                               (decimal_literal                     |
@@ -2125,7 +2125,7 @@ expression
 |                |                                 |                           )                                        |
 |                |                                 |                         )                                          |
 |                |                                 |                         operator: EXPONENT,                        |
-|                |                                 |                         primary_rhs: (literal<v>                   |
+|                |                                 |                         (literal<v>                                |
 |                |                                 |                           (numeric_literal<v>                      |
 |                |                                 |                             (abstract_literal<v>                   |
 |                |                                 |                               (decimal_literal                     |
@@ -2152,14 +2152,14 @@ expression
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
 |                |                                 |       (simple_expression                                           |
-|                |                                 |         term: (term                                                |
+|                |                                 |         (term                                                      |
 |                |                                 |           (factor_binary_operation                                 |
-|                |                                 |             primary_lhs: (expression                               |
+|                |                                 |             (expression                                            |
 |                |                                 |               (relation                                            |
 |                |                                 |                 (shift_expression                                  |
 |                |                                 |                   (simple_expression                               |
 |                |                                 |                     sign: SIGN_NEG,                                |
-|                |                                 |                     term: (term                                    |
+|                |                                 |                     (term                                          |
 |                |                                 |                       (primary<v>                                  |
 |                |                                 |                         (literal<v>                                |
 |                |                                 |                           (numeric_literal<v>                      |
@@ -2177,7 +2177,7 @@ expression
 |                |                                 |               )                                                    |
 |                |                                 |             )                                                      |
 |                |                                 |             operator: EXPONENT,                                    |
-|                |                                 |             primary_rhs: (literal<v>                               |
+|                |                                 |             (literal<v>                                            |
 |                |                                 |               (numeric_literal<v>                                  |
 |                |                                 |                 (abstract_literal<v>                               |
 |                |                                 |                   (decimal_literal                                 |
@@ -2231,7 +2231,7 @@ factor
 | abs_001                 | abs 42              | (factor<v>                         |
 |                         |                     |   (factor_unary_operation          |
 |                         |                     |     operator: ABS,                 |
-|                         |                     |     primary: (literal<v>           |
+|                         |                     |     (literal<v>                    |
 |                         |                     |       (numeric_literal<v>          |
 |                         |                     |         (abstract_literal<v>       |
 |                         |                     |           (decimal_literal         |
@@ -2272,13 +2272,13 @@ factor
 +-------------------------+---------------------+------------------------------------+
 | exponentiation_001      | X"42_FF" ** B"0111" | (factor<v>                         |
 |                         |                     |   (factor_binary_operation         |
-|                         |                     |     primary_lhs: (literal<v>       |
+|                         |                     |     (literal<v>                    |
 |                         |                     |       (bit_string_literal          |
 |                         |                     |         base: HEX, literal: 42_FF  |
 |                         |                     |       )                            |
 |                         |                     |     )                              |
 |                         |                     |     operator: EXPONENT,            |
-|                         |                     |     primary_rhs: (literal<v>       |
+|                         |                     |     (literal<v>                    |
 |                         |                     |       (bit_string_literal          |
 |                         |                     |         base: BIN, literal: 0111   |
 |                         |                     |       )                            |
@@ -2301,7 +2301,7 @@ factor
 | not_001                 | not '0'             | (factor<v>                         |
 |                         |                     |   (factor_unary_operation          |
 |                         |                     |     operator: NOT,                 |
-|                         |                     |     primary: (literal<v>           |
+|                         |                     |     (literal<v>                    |
 |                         |                     |       (enumeration_literal<v>      |
 |                         |                     |         (character_literal         |
 |                         |                     |           '0'                      |
@@ -2488,7 +2488,7 @@ index_constraint
 | index_constraint_001 | -- list of discrete ranges                              | (index_constraint                              |
 |                      | (lhs, rhs)                                              |   (discrete_range<v>                           |
 |                      |                                                         |     (subtype_indication                        |
-|                      |                                                         |       (type_mark<v>                            |
+|                      |                                                         |       (name<v>                                 |
 |                      |                                                         |         (identifier                            |
 |                      |                                                         |           lhs                                  |
 |                      |                                                         |         )                                      |
@@ -2497,7 +2497,7 @@ index_constraint
 |                      |                                                         |   ),                                           |
 |                      |                                                         |   (discrete_range<v>                           |
 |                      |                                                         |     (subtype_indication                        |
-|                      |                                                         |       (type_mark<v>                            |
+|                      |                                                         |       (name<v>                                 |
 |                      |                                                         |         (identifier                            |
 |                      |                                                         |           rhs                                  |
 |                      |                                                         |         )                                      |
@@ -2510,7 +2510,7 @@ index_constraint
 | index_constraint_002 | -- list of discrete subtype indications                 | (index_constraint                              |
 |                      | (type_mark, other_type_mark)                            |   (discrete_range<v>                           |
 |                      |                                                         |     (subtype_indication                        |
-|                      |                                                         |       (type_mark<v>                            |
+|                      |                                                         |       (name<v>                                 |
 |                      |                                                         |         (identifier                            |
 |                      |                                                         |           type_mark                            |
 |                      |                                                         |         )                                      |
@@ -2519,7 +2519,7 @@ index_constraint
 |                      |                                                         |   ),                                           |
 |                      |                                                         |   (discrete_range<v>                           |
 |                      |                                                         |     (subtype_indication                        |
-|                      |                                                         |       (type_mark<v>                            |
+|                      |                                                         |       (name<v>                                 |
 |                      |                                                         |         (identifier                            |
 |                      |                                                         |           other_type_mark                      |
 |                      |                                                         |         )                                      |
@@ -2532,7 +2532,7 @@ index_constraint
 | index_constraint_003 | -- list of discrete subtype indications with constrains | (index_constraint                              |
 |                      | (foo RANGE 42 downto 0, bar RANGE 69 to 99)             |   (discrete_range<v>                           |
 |                      |                                                         |     (subtype_indication                        |
-|                      |                                                         |       (type_mark<v>                            |
+|                      |                                                         |       (name<v>                                 |
 |                      |                                                         |         (identifier                            |
 |                      |                                                         |           foo                                  |
 |                      |                                                         |         )                                      |
@@ -2540,7 +2540,7 @@ index_constraint
 |                      |                                                         |       (constraint<v>                           |
 |                      |                                                         |         (range<v>                              |
 |                      |                                                         |           (simple_expression                   |
-|                      |                                                         |             term: (term                        |
+|                      |                                                         |             (term                              |
 |                      |                                                         |               (primary<v>                      |
 |                      |                                                         |                 (literal<v>                    |
 |                      |                                                         |                   (numeric_literal<v>          |
@@ -2558,7 +2558,7 @@ index_constraint
 |                      |                                                         |             DOWNTO                             |
 |                      |                                                         |           )                                    |
 |                      |                                                         |           (simple_expression                   |
-|                      |                                                         |             term: (term                        |
+|                      |                                                         |             (term                              |
 |                      |                                                         |               (primary<v>                      |
 |                      |                                                         |                 (literal<v>                    |
 |                      |                                                         |                   (numeric_literal<v>          |
@@ -2578,7 +2578,7 @@ index_constraint
 |                      |                                                         |   ),                                           |
 |                      |                                                         |   (discrete_range<v>                           |
 |                      |                                                         |     (subtype_indication                        |
-|                      |                                                         |       (type_mark<v>                            |
+|                      |                                                         |       (name<v>                                 |
 |                      |                                                         |         (identifier                            |
 |                      |                                                         |           bar                                  |
 |                      |                                                         |         )                                      |
@@ -2586,7 +2586,7 @@ index_constraint
 |                      |                                                         |       (constraint<v>                           |
 |                      |                                                         |         (range<v>                              |
 |                      |                                                         |           (simple_expression                   |
-|                      |                                                         |             term: (term                        |
+|                      |                                                         |             (term                              |
 |                      |                                                         |               (primary<v>                      |
 |                      |                                                         |                 (literal<v>                    |
 |                      |                                                         |                   (numeric_literal<v>          |
@@ -2604,7 +2604,7 @@ index_constraint
 |                      |                                                         |             TO                                 |
 |                      |                                                         |           )                                    |
 |                      |                                                         |           (simple_expression                   |
-|                      |                                                         |             term: (term                        |
+|                      |                                                         |             (term                              |
 |                      |                                                         |               (primary<v>                      |
 |                      |                                                         |                 (literal<v>                    |
 |                      |                                                         |                   (numeric_literal<v>          |
@@ -2645,7 +2645,7 @@ indexed_name
 |                  |                                            |     (relation                                  |
 |                  |                                            |       (shift_expression                        |
 |                  |                                            |         (simple_expression                     |
-|                  |                                            |           term: (term                          |
+|                  |                                            |           (term                                |
 |                  |                                            |             (primary<v>                        |
 |                  |                                            |               (literal<v>                      |
 |                  |                                            |                 (numeric_literal<v>            |
@@ -2677,7 +2677,7 @@ indexed_name
 |                  |                                            |     (relation                                  |
 |                  |                                            |       (shift_expression                        |
 |                  |                                            |         (simple_expression                     |
-|                  |                                            |           term: (term                          |
+|                  |                                            |           (term                                |
 |                  |                                            |             (primary<v>                        |
 |                  |                                            |               (literal<v>                      |
 |                  |                                            |                 (numeric_literal<v>            |
@@ -2698,7 +2698,7 @@ indexed_name
 |                  |                                            |     (relation                                  |
 |                  |                                            |       (shift_expression                        |
 |                  |                                            |         (simple_expression                     |
-|                  |                                            |           term: (term                          |
+|                  |                                            |           (term                                |
 |                  |                                            |             (primary<v>                        |
 |                  |                                            |               (literal<v>                      |
 |                  |                                            |                 (numeric_literal<v>            |
@@ -3276,7 +3276,7 @@ range
 +-----------+----------------------+----------------------------------------+
 | range_002 | lhs To rhs           | (range<v>                              |
 |           |                      |   (simple_expression                   |
-|           |                      |     term: (term                        |
+|           |                      |     (term                              |
 |           |                      |       (primary<v>                      |
 |           |                      |         (name<v>                       |
 |           |                      |           (identifier                  |
@@ -3290,7 +3290,7 @@ range
 |           |                      |     TO                                 |
 |           |                      |   )                                    |
 |           |                      |   (simple_expression                   |
-|           |                      |     term: (term                        |
+|           |                      |     (term                              |
 |           |                      |       (primary<v>                      |
 |           |                      |         (name<v>                       |
 |           |                      |           (identifier                  |
@@ -3305,7 +3305,7 @@ range
 +-----------+----------------------+----------------------------------------+
 | range_003 | 31 downto 0          | (range<v>                              |
 |           |                      |   (simple_expression                   |
-|           |                      |     term: (term                        |
+|           |                      |     (term                              |
 |           |                      |       (primary<v>                      |
 |           |                      |         (literal<v>                    |
 |           |                      |           (numeric_literal<v>          |
@@ -3323,7 +3323,7 @@ range
 |           |                      |     DOWNTO                             |
 |           |                      |   )                                    |
 |           |                      |   (simple_expression                   |
-|           |                      |     term: (term                        |
+|           |                      |     (term                              |
 |           |                      |       (primary<v>                      |
 |           |                      |         (literal<v>                    |
 |           |                      |           (numeric_literal<v>          |
@@ -3351,7 +3351,7 @@ relation
 | relation_001 | "0111" * 42 < '1'     | (relation                                |
 |              |                       |   (shift_expression                      |
 |              |                       |     (simple_expression                   |
-|              |                       |       term: (term                        |
+|              |                       |       (term                              |
 |              |                       |         (primary<v>                      |
 |              |                       |           (literal<v>                    |
 |              |                       |             (string_literal              |
@@ -3377,7 +3377,7 @@ relation
 |              |                       |   operator: LESS,                        |
 |              |                       |   (shift_expression                      |
 |              |                       |     (simple_expression                   |
-|              |                       |       term: (term                        |
+|              |                       |       (term                              |
 |              |                       |         (primary<v>                      |
 |              |                       |           (literal<v>                    |
 |              |                       |             (enumeration_literal<v>      |
@@ -3396,7 +3396,7 @@ relation
 | relation_002 | a + b > c - not "101" | (relation                                |
 |              |                       |   (shift_expression                      |
 |              |                       |     (simple_expression                   |
-|              |                       |       term: (term                        |
+|              |                       |       (term                              |
 |              |                       |         (primary<v>                      |
 |              |                       |           (name<v>                       |
 |              |                       |             (identifier                  |
@@ -3420,7 +3420,7 @@ relation
 |              |                       |   operator: GREATER,                     |
 |              |                       |   (shift_expression                      |
 |              |                       |     (simple_expression                   |
-|              |                       |       term: (term                        |
+|              |                       |       (term                              |
 |              |                       |         (primary<v>                      |
 |              |                       |           (name<v>                       |
 |              |                       |             (identifier                  |
@@ -3433,7 +3433,7 @@ relation
 |              |                       |       (term                              |
 |              |                       |         (factor_unary_operation          |
 |              |                       |           operator: NOT,                 |
-|              |                       |           primary: (literal<v>           |
+|              |                       |           (literal<v>                    |
 |              |                       |             (string_literal              |
 |              |                       |               101                        |
 |              |                       |             )                            |
@@ -3455,7 +3455,7 @@ shift_expression
 +----------------------------+-------------------+----------------------------------------+
 | shift_expression_names_001 | "1110_1110" sll 1 | (shift_expression                      |
 |                            |                   |   (simple_expression                   |
-|                            |                   |     term: (term                        |
+|                            |                   |     (term                              |
 |                            |                   |       (primary<v>                      |
 |                            |                   |         (literal<v>                    |
 |                            |                   |           (string_literal              |
@@ -3467,7 +3467,7 @@ shift_expression
 |                            |                   |   ),                                   |
 |                            |                   |   operator: SLL,                       |
 |                            |                   |   (simple_expression                   |
-|                            |                   |     term: (term                        |
+|                            |                   |     (term                              |
 |                            |                   |       (primary<v>                      |
 |                            |                   |         (literal<v>                    |
 |                            |                   |           (numeric_literal<v>          |
@@ -3486,9 +3486,9 @@ shift_expression
 +----------------------------+-------------------+----------------------------------------+
 | shift_expression_names_002 | 66**42 ror abs 66 | (shift_expression                      |
 |                            |                   |   (simple_expression                   |
-|                            |                   |     term: (term                        |
+|                            |                   |     (term                              |
 |                            |                   |       (factor_binary_operation         |
-|                            |                   |         primary_lhs: (literal<v>       |
+|                            |                   |         (literal<v>                    |
 |                            |                   |           (numeric_literal<v>          |
 |                            |                   |             (abstract_literal<v>       |
 |                            |                   |               (decimal_literal         |
@@ -3498,7 +3498,7 @@ shift_expression
 |                            |                   |           )                            |
 |                            |                   |         )                              |
 |                            |                   |         operator: EXPONENT,            |
-|                            |                   |         primary_rhs: (literal<v>       |
+|                            |                   |         (literal<v>                    |
 |                            |                   |           (numeric_literal<v>          |
 |                            |                   |             (abstract_literal<v>       |
 |                            |                   |               (decimal_literal         |
@@ -3512,10 +3512,10 @@ shift_expression
 |                            |                   |   ),                                   |
 |                            |                   |   operator: ROR,                       |
 |                            |                   |   (simple_expression                   |
-|                            |                   |     term: (term                        |
+|                            |                   |     (term                              |
 |                            |                   |       (factor_unary_operation          |
 |                            |                   |         operator: ABS,                 |
-|                            |                   |         primary: (literal<v>           |
+|                            |                   |         (literal<v>                    |
 |                            |                   |           (numeric_literal<v>          |
 |                            |                   |             (abstract_literal<v>       |
 |                            |                   |               (decimal_literal         |
@@ -3552,7 +3552,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (name<v>                            |
 |                                 |                                                                |                     (identifier                       |
@@ -3569,7 +3569,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (literal<v>                         |
 |                                 |                                                                |                     (numeric_literal<v>               |
@@ -3611,7 +3611,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (name<v>                            |
 |                                 |                                                                |                     (identifier                       |
@@ -3628,7 +3628,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (literal<v>                         |
 |                                 |                                                                |                     (numeric_literal<v>               |
@@ -3667,7 +3667,7 @@ signal_assignment_statement
 |                                 |                                                                |       (relation                                       |
 |                                 |                                                                |         (shift_expression                             |
 |                                 |                                                                |           (simple_expression                          |
-|                                 |                                                                |             term: (term                               |
+|                                 |                                                                |             (term                                     |
 |                                 |                                                                |               (primary<v>                             |
 |                                 |                                                                |                 (literal<v>                           |
 |                                 |                                                                |                   (numeric_literal<v>                 |
@@ -3694,7 +3694,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (name<v>                            |
 |                                 |                                                                |                     (identifier                       |
@@ -3711,7 +3711,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (literal<v>                         |
 |                                 |                                                                |                     (numeric_literal<v>               |
@@ -3750,7 +3750,7 @@ signal_assignment_statement
 |                                 |                                                                |       (relation                                       |
 |                                 |                                                                |         (shift_expression                             |
 |                                 |                                                                |           (simple_expression                          |
-|                                 |                                                                |             term: (term                               |
+|                                 |                                                                |             (term                                     |
 |                                 |                                                                |               (primary<v>                             |
 |                                 |                                                                |                 (literal<v>                           |
 |                                 |                                                                |                   (numeric_literal<v>                 |
@@ -3777,7 +3777,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (name<v>                            |
 |                                 |                                                                |                     (identifier                       |
@@ -3794,7 +3794,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (literal<v>                         |
 |                                 |                                                                |                     (numeric_literal<v>               |
@@ -3833,7 +3833,7 @@ signal_assignment_statement
 |                                 |                                                                |       (relation                                       |
 |                                 |                                                                |         (shift_expression                             |
 |                                 |                                                                |           (simple_expression                          |
-|                                 |                                                                |             term: (term                               |
+|                                 |                                                                |             (term                                     |
 |                                 |                                                                |               (primary<v>                             |
 |                                 |                                                                |                 (literal<v>                           |
 |                                 |                                                                |                   (numeric_literal<v>                 |
@@ -3860,7 +3860,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (name<v>                            |
 |                                 |                                                                |                     (identifier                       |
@@ -3877,7 +3877,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (literal<v>                         |
 |                                 |                                                                |                     (numeric_literal<v>               |
@@ -3903,10 +3903,10 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (factor_unary_operation               |
 |                                 |                                                                |                   operator: NOT,                      |
-|                                 |                                                                |                   primary: (name<v>                   |
+|                                 |                                                                |                   (name<v>                            |
 |                                 |                                                                |                     (identifier                       |
 |                                 |                                                                |                       Input_pin                       |
 |                                 |                                                                |                     )                                 |
@@ -3921,7 +3921,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (literal<v>                         |
 |                                 |                                                                |                     (numeric_literal<v>               |
@@ -3963,7 +3963,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (name<v>                            |
 |                                 |                                                                |                     (identifier                       |
@@ -3980,7 +3980,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (literal<v>                         |
 |                                 |                                                                |                     (numeric_literal<v>               |
@@ -4022,7 +4022,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (name<v>                            |
 |                                 |                                                                |                     (identifier                       |
@@ -4039,7 +4039,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (literal<v>                         |
 |                                 |                                                                |                     (numeric_literal<v>               |
@@ -4065,10 +4065,10 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (factor_unary_operation               |
 |                                 |                                                                |                   operator: NOT,                      |
-|                                 |                                                                |                   primary: (name<v>                   |
+|                                 |                                                                |                   (name<v>                            |
 |                                 |                                                                |                     (identifier                       |
 |                                 |                                                                |                       Input_pin                       |
 |                                 |                                                                |                     )                                 |
@@ -4083,7 +4083,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (literal<v>                         |
 |                                 |                                                                |                     (numeric_literal<v>               |
@@ -4122,7 +4122,7 @@ signal_assignment_statement
 |                                 |                                                                |       (relation                                       |
 |                                 |                                                                |         (shift_expression                             |
 |                                 |                                                                |           (simple_expression                          |
-|                                 |                                                                |             term: (term                               |
+|                                 |                                                                |             (term                                     |
 |                                 |                                                                |               (primary<v>                             |
 |                                 |                                                                |                 (literal<v>                           |
 |                                 |                                                                |                   (numeric_literal<v>                 |
@@ -4149,7 +4149,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (name<v>                            |
 |                                 |                                                                |                     (identifier                       |
@@ -4166,7 +4166,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (literal<v>                         |
 |                                 |                                                                |                     (numeric_literal<v>               |
@@ -4205,7 +4205,7 @@ signal_assignment_statement
 |                                 |                                                                |       (relation                                       |
 |                                 |                                                                |         (shift_expression                             |
 |                                 |                                                                |           (simple_expression                          |
-|                                 |                                                                |             term: (term                               |
+|                                 |                                                                |             (term                                     |
 |                                 |                                                                |               (primary<v>                             |
 |                                 |                                                                |                 (literal<v>                           |
 |                                 |                                                                |                   (numeric_literal<v>                 |
@@ -4232,7 +4232,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (name<v>                            |
 |                                 |                                                                |                     (identifier                       |
@@ -4249,7 +4249,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (literal<v>                         |
 |                                 |                                                                |                     (numeric_literal<v>               |
@@ -4275,10 +4275,10 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (factor_unary_operation               |
 |                                 |                                                                |                   operator: NOT,                      |
-|                                 |                                                                |                   primary: (name<v>                   |
+|                                 |                                                                |                   (name<v>                            |
 |                                 |                                                                |                     (identifier                       |
 |                                 |                                                                |                       Input_pin                       |
 |                                 |                                                                |                     )                                 |
@@ -4293,7 +4293,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (literal<v>                         |
 |                                 |                                                                |                     (numeric_literal<v>               |
@@ -4335,7 +4335,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (name<v>                            |
 |                                 |                                                                |                     (identifier                       |
@@ -4352,7 +4352,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (literal<v>                         |
 |                                 |                                                                |                     (numeric_literal<v>               |
@@ -4394,7 +4394,7 @@ signal_assignment_statement
 |                                 |                                                                |       (relation                                       |
 |                                 |                                                                |         (shift_expression                             |
 |                                 |                                                                |           (simple_expression                          |
-|                                 |                                                                |             term: (term                               |
+|                                 |                                                                |             (term                                     |
 |                                 |                                                                |               (primary<v>                             |
 |                                 |                                                                |                 (literal<v>                           |
 |                                 |                                                                |                   (numeric_literal<v>                 |
@@ -4421,7 +4421,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (name<v>                            |
 |                                 |                                                                |                     (identifier                       |
@@ -4438,7 +4438,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (literal<v>                         |
 |                                 |                                                                |                     (numeric_literal<v>               |
@@ -4464,10 +4464,10 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (factor_unary_operation               |
 |                                 |                                                                |                   operator: NOT,                      |
-|                                 |                                                                |                   primary: (name<v>                   |
+|                                 |                                                                |                   (name<v>                            |
 |                                 |                                                                |                     (identifier                       |
 |                                 |                                                                |                       Input_pin                       |
 |                                 |                                                                |                     )                                 |
@@ -4482,7 +4482,7 @@ signal_assignment_statement
 |                                 |                                                                |         (relation                                     |
 |                                 |                                                                |           (shift_expression                           |
 |                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               term: (term                             |
+|                                 |                                                                |               (term                                   |
 |                                 |                                                                |                 (primary<v>                           |
 |                                 |                                                                |                   (literal<v>                         |
 |                                 |                                                                |                     (numeric_literal<v>               |
@@ -4562,10 +4562,10 @@ simple_expression
 | File                  | Input             | Expected                             |
 +-----------------------+-------------------+--------------------------------------+
 | simple_expression_001 | not '1'           | (simple_expression                   |
-|                       |                   |   term: (term                        |
+|                       |                   |   (term                              |
 |                       |                   |     (factor_unary_operation          |
 |                       |                   |       operator: NOT,                 |
-|                       |                   |       primary: (literal<v>           |
+|                       |                   |       (literal<v>                    |
 |                       |                   |         (enumeration_literal<v>      |
 |                       |                   |           (character_literal         |
 |                       |                   |             '1'                      |
@@ -4578,9 +4578,9 @@ simple_expression
 |                       |                   |                                      |
 +-----------------------+-------------------+--------------------------------------+
 | simple_expression_002 | 66**42 * 16#AFFE# | (simple_expression                   |
-|                       |                   |   term: (term                        |
+|                       |                   |   (term                              |
 |                       |                   |     (factor_binary_operation         |
-|                       |                   |       primary_lhs: (literal<v>       |
+|                       |                   |       (literal<v>                    |
 |                       |                   |         (numeric_literal<v>          |
 |                       |                   |           (abstract_literal<v>       |
 |                       |                   |             (decimal_literal         |
@@ -4590,7 +4590,7 @@ simple_expression
 |                       |                   |         )                            |
 |                       |                   |       )                              |
 |                       |                   |       operator: EXPONENT,            |
-|                       |                   |       primary_rhs: (literal<v>       |
+|                       |                   |       (literal<v>                    |
 |                       |                   |         (numeric_literal<v>          |
 |                       |                   |           (abstract_literal<v>       |
 |                       |                   |             (decimal_literal         |
@@ -4618,7 +4618,7 @@ simple_expression
 +-----------------------+-------------------+--------------------------------------+
 | simple_expression_003 | -42 * 66          | (simple_expression                   |
 |                       | +18 * 88          |   sign: SIGN_NEG,                    |
-|                       |                   |   term: (term                        |
+|                       |                   |   (term                              |
 |                       |                   |     (primary<v>                      |
 |                       |                   |       (literal<v>                    |
 |                       |                   |         (numeric_literal<v>          |
@@ -4744,7 +4744,7 @@ subtype_indication
 |                        |                                                                      |       resolution_function_name     |
 |                        |                                                                      |     )                              |
 |                        |                                                                      |   )                                |
-|                        |                                                                      |   (type_mark<v>                    |
+|                        |                                                                      |   (name<v>                         |
 |                        |                                                                      |     (identifier                    |
 |                        |                                                                      |       type_mark                    |
 |                        |                                                                      |     )                              |
@@ -4767,7 +4767,7 @@ subtype_indication
 |                        |                                                                      |       resolution_function_name     |
 |                        |                                                                      |     )                              |
 |                        |                                                                      |   )                                |
-|                        |                                                                      |   (type_mark<v>                    |
+|                        |                                                                      |   (name<v>                         |
 |                        |                                                                      |     (identifier                    |
 |                        |                                                                      |       type_mark                    |
 |                        |                                                                      |     )                              |
@@ -4776,7 +4776,7 @@ subtype_indication
 |                        |                                                                      |                                    |
 +------------------------+----------------------------------------------------------------------+------------------------------------+
 | subtype_indication_003 |   type_mark  RANGE constraint                                        | (subtype_indication                |
-|                        |                                                                      |   (type_mark<v>                    |
+|                        |                                                                      |   (name<v>                         |
 |                        |                                                                      |     (identifier                    |
 |                        |                                                                      |       type_mark                    |
 |                        |                                                                      |     )                              |
@@ -4794,7 +4794,7 @@ subtype_indication
 |                        |                                                                      |                                    |
 +------------------------+----------------------------------------------------------------------+------------------------------------+
 | subtype_indication_004 | type_mark                                                            | (subtype_indication                |
-|                        |                                                                      |   (type_mark<v>                    |
+|                        |                                                                      |   (name<v>                         |
 |                        |                                                                      |     (identifier                    |
 |                        |                                                                      |       type_mark                    |
 |                        |                                                                      |     )                              |
@@ -4808,7 +4808,7 @@ subtype_indication
 |                        |                                                                      |       resolution_function_name     |
 |                        |                                                                      |     )                              |
 |                        |                                                                      |   )                                |
-|                        |                                                                      |   (type_mark<v>                    |
+|                        |                                                                      |   (name<v>                         |
 |                        |                                                                      |     (identifier                    |
 |                        |                                                                      |       type_mark                    |
 |                        |                                                                      |     )                              |
@@ -4817,7 +4817,7 @@ subtype_indication
 |                        |                                                                      |     (index_constraint              |
 |                        |                                                                      |       (discrete_range<v>           |
 |                        |                                                                      |         (subtype_indication        |
-|                        |                                                                      |           (type_mark<v>            |
+|                        |                                                                      |           (name<v>                 |
 |                        |                                                                      |             (identifier            |
 |                        |                                                                      |               range_attribute_name |
 |                        |                                                                      |             )                      |
@@ -4835,7 +4835,7 @@ subtype_indication
 |                        |                                                                      |       resolution_function_name     |
 |                        |                                                                      |     )                              |
 |                        |                                                                      |   )                                |
-|                        |                                                                      |   (type_mark<v>                    |
+|                        |                                                                      |   (name<v>                         |
 |                        |                                                                      |     (identifier                    |
 |                        |                                                                      |       type_mark                    |
 |                        |                                                                      |     )                              |
@@ -4844,7 +4844,7 @@ subtype_indication
 |                        |                                                                      |     (index_constraint              |
 |                        |                                                                      |       (discrete_range<v>           |
 |                        |                                                                      |         (subtype_indication        |
-|                        |                                                                      |           (type_mark<v>            |
+|                        |                                                                      |           (name<v>                 |
 |                        |                                                                      |             (identifier            |
 |                        |                                                                      |               range_1_name         |
 |                        |                                                                      |             )                      |
@@ -4853,7 +4853,7 @@ subtype_indication
 |                        |                                                                      |       ),                           |
 |                        |                                                                      |       (discrete_range<v>           |
 |                        |                                                                      |         (subtype_indication        |
-|                        |                                                                      |           (type_mark<v>            |
+|                        |                                                                      |           (name<v>                 |
 |                        |                                                                      |             (identifier            |
 |                        |                                                                      |               range_2_name         |
 |                        |                                                                      |             )                      |
@@ -4876,7 +4876,7 @@ term
 | factor_001 | abs 42            | (term                              |
 |            |                   |   (factor_unary_operation          |
 |            |                   |     operator: ABS,                 |
-|            |                   |     primary: (literal<v>           |
+|            |                   |     (literal<v>                    |
 |            |                   |       (numeric_literal<v>          |
 |            |                   |         (abstract_literal<v>       |
 |            |                   |           (decimal_literal         |
@@ -4957,7 +4957,7 @@ term
 +------------+-------------------+------------------------------------+
 | term_003   | 66**42 * 16#AFFE# | (term                              |
 |            |                   |   (factor_binary_operation         |
-|            |                   |     primary_lhs: (literal<v>       |
+|            |                   |     (literal<v>                    |
 |            |                   |       (numeric_literal<v>          |
 |            |                   |         (abstract_literal<v>       |
 |            |                   |           (decimal_literal         |
@@ -4967,7 +4967,7 @@ term
 |            |                   |       )                            |
 |            |                   |     )                              |
 |            |                   |     operator: EXPONENT,            |
-|            |                   |     primary_rhs: (literal<v>       |
+|            |                   |     (literal<v>                    |
 |            |                   |       (numeric_literal<v>          |
 |            |                   |         (abstract_literal<v>       |
 |            |                   |           (decimal_literal         |
@@ -5166,7 +5166,7 @@ wait_statement
 |                    |                                  |         (relation                                   |
 |                    |                                  |           (shift_expression                         |
 |                    |                                  |             (simple_expression                      |
-|                    |                                  |               term: (term                           |
+|                    |                                  |               (term                                 |
 |                    |                                  |                 (primary<v>                         |
 |                    |                                  |                   (name<v>                          |
 |                    |                                  |                     (identifier                     |
@@ -5180,7 +5180,7 @@ wait_statement
 |                    |                                  |           operator: EQUAL,                          |
 |                    |                                  |           (shift_expression                         |
 |                    |                                  |             (simple_expression                      |
-|                    |                                  |               term: (term                           |
+|                    |                                  |               (term                                 |
 |                    |                                  |                 (primary<v>                         |
 |                    |                                  |                   (literal<v>                       |
 |                    |                                  |                     (enumeration_literal<v>         |
@@ -5220,7 +5220,7 @@ wait_statement
 |                    |                                  |         (relation                                   |
 |                    |                                  |           (shift_expression                         |
 |                    |                                  |             (simple_expression                      |
-|                    |                                  |               term: (term                           |
+|                    |                                  |               (term                                 |
 |                    |                                  |                 (primary<v>                         |
 |                    |                                  |                   (name<v>                          |
 |                    |                                  |                     (identifier                     |
@@ -5234,7 +5234,7 @@ wait_statement
 |                    |                                  |           operator: EQUAL,                          |
 |                    |                                  |           (shift_expression                         |
 |                    |                                  |             (simple_expression                      |
-|                    |                                  |               term: (term                           |
+|                    |                                  |               (term                                 |
 |                    |                                  |                 (primary<v>                         |
 |                    |                                  |                   (literal<v>                       |
 |                    |                                  |                     (enumeration_literal<v>         |
@@ -5260,7 +5260,7 @@ wait_statement
 |                    |                                  |       (relation                                     |
 |                    |                                  |         (shift_expression                           |
 |                    |                                  |           (simple_expression                        |
-|                    |                                  |             term: (term                             |
+|                    |                                  |             (term                                   |
 |                    |                                  |               (primary<v>                           |
 |                    |                                  |                 (literal<v>                         |
 |                    |                                  |                   (numeric_literal<v>               |
@@ -5299,7 +5299,7 @@ wait_statement
 |                    |                                  |         (relation                                   |
 |                    |                                  |           (shift_expression                         |
 |                    |                                  |             (simple_expression                      |
-|                    |                                  |               term: (term                           |
+|                    |                                  |               (term                                 |
 |                    |                                  |                 (primary<v>                         |
 |                    |                                  |                   (name<v>                          |
 |                    |                                  |                     (identifier                     |
@@ -5313,7 +5313,7 @@ wait_statement
 |                    |                                  |           operator: EQUAL,                          |
 |                    |                                  |           (shift_expression                         |
 |                    |                                  |             (simple_expression                      |
-|                    |                                  |               term: (term                           |
+|                    |                                  |               (term                                 |
 |                    |                                  |                 (primary<v>                         |
 |                    |                                  |                   (literal<v>                       |
 |                    |                                  |                     (enumeration_literal<v>         |
@@ -5334,7 +5334,7 @@ wait_statement
 |                    |                                  |       (relation                                     |
 |                    |                                  |         (shift_expression                           |
 |                    |                                  |           (simple_expression                        |
-|                    |                                  |             term: (term                             |
+|                    |                                  |             (term                                   |
 |                    |                                  |               (primary<v>                           |
 |                    |                                  |                 (literal<v>                         |
 |                    |                                  |                   (numeric_literal<v>               |
@@ -5372,7 +5372,7 @@ waveform
 |              |                                       |       (relation                                     |
 |              |                                       |         (shift_expression                           |
 |              |                                       |           (simple_expression                        |
-|              |                                       |             term: (term                             |
+|              |                                       |             (term                                   |
 |              |                                       |               (primary<v>                           |
 |              |                                       |                 (literal<v>                         |
 |              |                                       |                   (keyword                          |
@@ -5389,7 +5389,7 @@ waveform
 |              |                                       |       (relation                                     |
 |              |                                       |         (shift_expression                           |
 |              |                                       |           (simple_expression                        |
-|              |                                       |             term: (term                             |
+|              |                                       |             (term                                   |
 |              |                                       |               (primary<v>                           |
 |              |                                       |                 (literal<v>                         |
 |              |                                       |                   (numeric_literal<v>               |
@@ -5419,7 +5419,7 @@ waveform
 |              |                                       |       (relation                                     |
 |              |                                       |         (shift_expression                           |
 |              |                                       |           (simple_expression                        |
-|              |                                       |             term: (term                             |
+|              |                                       |             (term                                   |
 |              |                                       |               (primary<v>                           |
 |              |                                       |                 (literal<v>                         |
 |              |                                       |                   (string_literal                   |
@@ -5436,7 +5436,7 @@ waveform
 |              |                                       |       (relation                                     |
 |              |                                       |         (shift_expression                           |
 |              |                                       |           (simple_expression                        |
-|              |                                       |             term: (term                             |
+|              |                                       |             (term                                   |
 |              |                                       |               (primary<v>                           |
 |              |                                       |                 (literal<v>                         |
 |              |                                       |                   (numeric_literal<v>               |
@@ -5462,7 +5462,7 @@ waveform
 |              |                                       |       (relation                                     |
 |              |                                       |         (shift_expression                           |
 |              |                                       |           (simple_expression                        |
-|              |                                       |             term: (term                             |
+|              |                                       |             (term                                   |
 |              |                                       |               (primary<v>                           |
 |              |                                       |                 (literal<v>                         |
 |              |                                       |                   (string_literal                   |
@@ -5479,7 +5479,7 @@ waveform
 |              |                                       |       (relation                                     |
 |              |                                       |         (shift_expression                           |
 |              |                                       |           (simple_expression                        |
-|              |                                       |             term: (term                             |
+|              |                                       |             (term                                   |
 |              |                                       |               (primary<v>                           |
 |              |                                       |                 (literal<v>                         |
 |              |                                       |                   (numeric_literal<v>               |

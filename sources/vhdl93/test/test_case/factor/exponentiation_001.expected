@@ -1,12 +1,12 @@
 (factor<v>
   (factor_binary_operation
-    primary_lhs: (literal<v>
+    (literal<v>
       (bit_string_literal
         base: HEX, literal: 42_FF
       )
     )
     operator: EXPONENT,
-    primary_rhs: (literal<v>
+    (literal<v>
       (bit_string_literal
         base: BIN, literal: 0111
       )

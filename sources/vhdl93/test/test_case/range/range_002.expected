@@ -1,6 +1,6 @@
 (range<v>
   (simple_expression
-    term: (term
+    (term
       (primary<v>
         (name<v>
           (identifier
@@ -14,7 +14,7 @@
     TO
   )
   (simple_expression
-    term: (term
+    (term
       (primary<v>
         (name<v>
           (identifier

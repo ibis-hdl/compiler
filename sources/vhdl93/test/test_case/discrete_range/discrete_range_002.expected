@@ -5,7 +5,7 @@
         resolution_function_name
       )
     )
-    (type_mark<v>
+    (name<v>
       (identifier
         type_mark
       )

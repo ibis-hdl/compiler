@@ -970,12 +970,10 @@ void printer::operator()(factor_binary_operation const& node)
     static char const symbol[]{ "factor_binary_operation" };
     symbol_scope<factor_binary_operation> _(*this, symbol);
 
-    os << "primary_lhs: ";
     visit(node.primary_lhs);
 
     os << "\n" << "operator: " << node.operator_ << ",\n";
 
-    os << "primary_rhs: ";
     visit(node.primary_rhs);
 }
 
@@ -986,7 +984,6 @@ void printer::operator()(factor_unary_operation const& node)
     symbol_scope<factor_unary_operation> _(*this, symbol);
 
     os << "operator: " << node.operator_ << ",\n";
-    os << "primary: ";
     visit(node.primary);
 }
 
@@ -1895,7 +1892,6 @@ void printer::operator()(simple_expression const &node)
         os << "sign: " << node.sign.get() << ",\n";
     }
 
-    os << "term: ";
     (*this)(node.term);
 
     if(node.rest_list.empty()) {
@@ -2087,14 +2083,6 @@ void printer::operator()(type_definition const &node)
     static char const symbol[]{ "XXX type_definition" };
     symbol_scope<type_definition> _(*this, symbol);
     //visit(node);
-}
-
-
-void printer::operator()(type_mark const &node)
-{
-    static char const symbol[]{ "type_mark" };
-    symbol_scope<type_mark> _(*this, symbol);
-    visit(node);
 }
 
 

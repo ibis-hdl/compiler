@@ -1,6 +1,6 @@
 (shift_expression
   (simple_expression
-    term: (term
+    (term
       (primary<v>
         (literal<v>
           (string_literal
@@ -12,7 +12,7 @@
   ),
   operator: SLL,
   (simple_expression
-    term: (term
+    (term
       (primary<v>
         (literal<v>
           (numeric_literal<v>

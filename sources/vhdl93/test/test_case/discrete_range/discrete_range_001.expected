@@ -1,7 +1,7 @@
 (discrete_range<v>
   (range<v>
     (simple_expression
-      term: (term
+      (term
         (primary<v>
           (literal<v>
             (numeric_literal<v>
@@ -19,7 +19,7 @@
       DOWNTO
     )
     (simple_expression
-      term: (term
+      (term
         (primary<v>
           (literal<v>
             (numeric_literal<v>

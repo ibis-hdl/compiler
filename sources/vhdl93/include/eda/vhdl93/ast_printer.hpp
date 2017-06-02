@@ -463,7 +463,6 @@ public:
     void operator()(type_conversion const& node);
     void operator()(type_declaration const& node);
     void operator()(type_definition const& node);
-    void operator()(type_mark const& node);
     void operator()(unconstrained_array_definition const& node);
     void operator()(use_clause const& node);
     void operator()(variable_assignment_statement const& node);

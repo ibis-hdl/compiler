@@ -1,7 +1,7 @@
 (index_constraint
   (discrete_range<v>
     (subtype_indication
-      (type_mark<v>
+      (name<v>
         (identifier
           lhs
         )
@@ -10,7 +10,7 @@
   ),
   (discrete_range<v>
     (subtype_indication
-      (type_mark<v>
+      (name<v>
         (identifier
           rhs
         )

@@ -2,7 +2,7 @@
   (relation
     (shift_expression
       (simple_expression
-        term: (term
+        (term
           (primary<v>
             (literal<v>
               (string_literal
@@ -18,7 +18,7 @@
   (relation
     (shift_expression
       (simple_expression
-        term: (term
+        (term
           (primary<v>
             (literal<v>
               (string_literal
@@ -35,7 +35,7 @@
   (relation
     (shift_expression
       (simple_expression
-        term: (term
+        (term
           (primary<v>
             (literal<v>
               (string_literal

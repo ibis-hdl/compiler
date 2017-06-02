@@ -4,7 +4,7 @@
       resolution_function_name
     )
   )
-  (type_mark<v>
+  (name<v>
     (identifier
       type_mark
     )
@@ -13,7 +13,7 @@
     (index_constraint
       (discrete_range<v>
         (subtype_indication
-          (type_mark<v>
+          (name<v>
             (identifier
               range_1_name
             )
@@ -22,7 +22,7 @@
       ),
       (discrete_range<v>
         (subtype_indication
-          (type_mark<v>
+          (name<v>
             (identifier
               range_2_name
             )

@@ -15,7 +15,7 @@
       (relation
         (shift_expression
           (simple_expression
-            term: (term
+            (term
               (primary<v>
                 (literal<v>
                   (numeric_literal<v>
@@ -42,7 +42,7 @@
         (relation
           (shift_expression
             (simple_expression
-              term: (term
+              (term
                 (primary<v>
                   (name<v>
                     (identifier
@@ -59,7 +59,7 @@
         (relation
           (shift_expression
             (simple_expression
-              term: (term
+              (term
                 (primary<v>
                   (literal<v>
                     (numeric_literal<v>
@@ -85,10 +85,10 @@
         (relation
           (shift_expression
             (simple_expression
-              term: (term
+              (term
                 (factor_unary_operation
                   operator: NOT,
-                  primary: (name<v>
+                  (name<v>
                     (identifier
                       Input_pin
                     )
@@ -103,7 +103,7 @@
         (relation
           (shift_expression
             (simple_expression
-              term: (term
+              (term
                 (primary<v>
                   (literal<v>
                     (numeric_literal<v>
