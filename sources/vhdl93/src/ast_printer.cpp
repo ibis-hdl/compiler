@@ -236,9 +236,12 @@ void printer::operator()(association_list const &node)
 
 void printer::operator()(attribute_declaration const &node)
 {
-    static char const symbol[]{ "XXX attribute_declaration" };
+    static char const symbol[]{ "attribute_declaration" };
     symbol_scope<attribute_declaration> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.identifier);
+    os << "\n";
+    (*this)(node.type_mark);
 }
 
 
