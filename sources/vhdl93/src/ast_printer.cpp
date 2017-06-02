@@ -12,6 +12,8 @@
 
 #include <eda/support/boost/hana_overload.hpp>
 
+#include <map>
+
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -80,6 +82,14 @@ struct printer::symbol_scope<
     : scope_printer(root.os, name, root.verbose_variant, "v")
     { }
 };
+
+
+template<typename T>
+void printer::ast_alias(T const &node, const char* alias_name)
+{
+    symbol_scope<T> _(*this, alias_name);
+    (*this).operator()(node);
+}
 
 
 } } } // namespace eda.vhdl93.ast
@@ -1436,14 +1446,6 @@ void printer::operator()(object_declaration const &node)
 }
 
 
-void printer::operator()(operator_symbol const &node)
-{
-    static char const symbol[]{ "operator_symbol" };
-    symbol_scope<operator_symbol> _(*this, symbol);
-    os << node.literal;
-}
-
-
 void printer::operator()(options const &node)
 {
     static char const symbol[]{ "options" };
@@ -2250,6 +2252,9 @@ void printer::operator()(nullary const& node)
     os << "\n*    SHALL NEVER BE HERE    *";
     os << "\n*****************************\n";
 }
+
+
+
 
 
 } } } // namespace eda.vhdl93.ast

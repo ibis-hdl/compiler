@@ -152,7 +152,6 @@ struct mode;
 struct next_statement;
 struct null_statement;
 struct object_declaration;
-struct operator_symbol;
 struct options;
 struct package_body;
 struct package_body_declarative_item;
@@ -236,6 +235,10 @@ class printer
 
     template<typename NodeT>
     void visit(NodeT const& node) { boost::apply_visitor(*this, node); }
+
+
+    template<typename T>
+    void ast_alias(T const &node, const char* alias_name);
 
 public:
     bool verbose_symbol{ false };
@@ -400,7 +403,6 @@ public:
     void operator()(null_statement const& node);
     void operator()(numeric_literal const& node);
     void operator()(object_declaration const& node);
-    void operator()(operator_symbol const& node);
     void operator()(options const& node);
     void operator()(package_body const& node);
     void operator()(package_body_declarative_item const& node);

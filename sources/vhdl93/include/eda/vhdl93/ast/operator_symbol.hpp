@@ -15,14 +15,7 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-struct operator_symbol : ast::string_literal
-{
-    operator_symbol& operator=(std::string&& sv)
-    {
-        literal = std::move(sv);
-        return *this;
-    }
-};
+using operator_symbol = ast::string_literal;
 
 
 } } } // namespace eda.vhdl93.ast
