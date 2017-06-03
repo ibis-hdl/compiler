@@ -24,8 +24,8 @@
 //#include <eda/vhdl93/ast/array_type_definition.hpp>
 //#include <eda/vhdl93/ast/assertion.hpp>
 //#include <eda/vhdl93/ast/assertion_statement.hpp>
-#include <eda/vhdl93/ast/association_element.hpp>
-//#include <eda/vhdl93/ast/association_list.hpp>
+//DISABLED #include <eda/vhdl93/ast/association_element.hpp>
+#include <eda/vhdl93/ast/association_list.hpp>
 #include <eda/vhdl93/ast/attribute_declaration.hpp>
 #include <eda/vhdl93/ast/attribute_name.hpp>
 #include <eda/vhdl93/ast/attribute_specification.hpp>

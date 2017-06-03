@@ -1,0 +1,34 @@
+(association_list
+  (association_element
+    (actual_part<v>
+      (name<v>
+        (identifier
+          function_name
+        )
+      )
+      (actual_designator<v>
+        (name<v>
+          (identifier
+            actual_designator
+          )
+        )
+      )
+    )
+  ),
+  (association_element
+    (actual_part<v>
+      (name<v>
+        (identifier
+          cool_function
+        )
+      )
+      (actual_designator<v>
+        (name<v>
+          (identifier
+            signal_name
+          )
+        )
+      )
+    )
+  )
+)

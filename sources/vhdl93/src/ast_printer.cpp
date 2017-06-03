@@ -244,9 +244,18 @@ void printer::operator()(association_element const &node)
 
 void printer::operator()(association_list const &node)
 {
-    static char const symbol[]{ "XXX association_list" };
+    static char const symbol[]{ "association_list" };
     symbol_scope<association_list> _(*this, symbol);
-    //os << node;
+
+    auto const N = node.size() - 1;
+    unsigned i = 0;
+    for(auto const& association_element : node) {
+        (*this)(association_element);
+        if(i++ != N) {
+            os << ",\n";
+        }
+    }
+
 }
 
 
@@ -1056,7 +1065,7 @@ void printer::operator()(formal_parameter_list const &node)
 
 void printer::operator()(formal_part const &node)
 {
-    static char const symbol[]{ "XXX formal_part" };
+    static char const symbol[]{ "formal_part" };
     symbol_scope<formal_part> _(*this, symbol);
 
     util::visit_in_place(

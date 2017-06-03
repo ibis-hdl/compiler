@@ -751,7 +751,7 @@ typedef x3::rule<array_type_definition_class> array_type_definition_type;
 typedef x3::rule<assertion_class> assertion_type;
 typedef x3::rule<assertion_statement_class> assertion_statement_type;
 typedef x3::rule<association_element_class, ast::association_element> association_element_type;
-typedef x3::rule<association_list_class> association_list_type;
+typedef x3::rule<association_list_class, ast::association_list> association_list_type;
 typedef x3::rule<attribute_declaration_class, ast::attribute_declaration> attribute_declaration_type;
 typedef x3::rule<attribute_designator_class, ast::simple_name> attribute_designator_type;
 typedef x3::rule<attribute_name_class, ast::attribute_name> attribute_name_type;
@@ -1461,19 +1461,24 @@ auto const assertion_statement_def =
 
 // association_element ::=                                           [§ 4.3.2.2]
 //     [ formal_part => ] actual_part
+namespace association_element_detail {
+    auto const formal_part = x3::rule<formal_part_class, ast::formal_part> { "formal_part" } =
+        ( parser::formal_part >> "=>" )
+        ;
+}
 auto const association_element_def =
-       -( formal_part >> "=>" )
+       -association_element_detail::formal_part
     >> actual_part
     ;
 
 
-#if 0
-// association_list ::=
-// association_element { , association_element }
+
+// association_list ::=                                              [§ 4.3.2.2]
+//     association_element { , association_element }
 auto const association_list_def =
-        association_element >> ( association_element % ',' )
-        ;
-#endif
+    association_element % ','
+    ;
+
 
 
 // attribute_declaration ::=                                             [§ 4.4]
@@ -4042,7 +4047,7 @@ BOOST_SPIRIT_DEFINE(  // -- A --
     //, assertion
     //, assertion_statement
     , association_element
-    //, association_list
+    , association_list
     , attribute_declaration
     , attribute_designator
     , attribute_name

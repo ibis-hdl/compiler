@@ -26,7 +26,6 @@ struct architecture_statement_part;
 struct array_type_definition;
 struct assertion;
 struct assertion_statement;
-struct association_list;
 struct attribute_declaration;
 struct attribute_name;
 struct attribute_specification;
