@@ -34,5 +34,4 @@ struct attribute_name : position_tagged
 } } } // namespace eda.vhdl93.ast
 
 
-
 #endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_ATTRIBUTE_NAME_HPP_ */
