@@ -46,11 +46,11 @@ namespace eda { namespace vhdl93 { namespace ast {
 struct use_clause : position_tagged
 {
    struct selected_name  : position_tagged {
-        std::list<ast::name>        prefix_list;
+        std::vector<ast::name>      prefix_list;
         ast::suffix                 suffix;
     };
 
-    std::list<selected_name>        list;
+    std::vector<selected_name>      list;
 };
 
 

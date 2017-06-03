@@ -3929,10 +3929,10 @@ namespace use_clause_detail {
      * For the use clause hence an specialized version is required. See Notes
      * at the AST node ast::use_clause. */
 
-    auto const lib_prefix = x3::rule<prefix_class, std::list<ast::name>> { "prefix" } =
+    auto const lib_prefix = x3::rule<prefix_class, std::vector<ast::name>> { "prefix" } =
         name >> '.' >> name;
 
-    auto const pkg_prefix = x3::rule<prefix_class, std::list<ast::name>> { "prefix" } =
+    auto const pkg_prefix = x3::rule<prefix_class, std::vector<ast::name>> { "prefix" } =
         x3::repeat(1)[ // enforce artificial vector to unify ast node
             name
         ];

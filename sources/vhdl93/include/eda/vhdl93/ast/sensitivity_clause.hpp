@@ -27,10 +27,9 @@ struct sensitivity_clause : position_tagged
     * shipped with boost 1.64.0, maybe tightened by the optional used at
     * wait_clause rule. */
    sensitivity_clause() = default;
-   sensitivity_clause(ast::sensitivity_list&& sensitivity_list_)
-   {
-       sensitivity_list = std::move(sensitivity_list_);
-   }
+   sensitivity_clause(ast::sensitivity_list&& sensitivity_list)
+   : sensitivity_list{ std::move(sensitivity_list) }
+   { }
 };
 
 

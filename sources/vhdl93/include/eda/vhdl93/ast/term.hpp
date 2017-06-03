@@ -14,7 +14,7 @@
 
 #include <eda/vhdl93/ast/operator_token.hpp>
 #include <eda/vhdl93/ast/factor.hpp>
-#include <list>
+#include <vector>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -28,7 +28,7 @@ struct term : position_tagged
     };
 
     ast::factor                 factor;
-    std::list<chunk>            rest_list;
+    std::vector<chunk>          rest_list;
 };
 
 

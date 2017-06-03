@@ -21,17 +21,16 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 struct condition_clause : position_tagged
 {
-   ast::condition           condition;
+   ast::condition               condition;
 
    /* FixMe: single-element sequence adaptation bug
     * The single-element sequence adaptation bug still exist in X3, at least
     * shipped with boost 1.64.0, maybe tightened by the optional used at
     * wait_clause rule. */
    condition_clause() = default;
-   condition_clause(ast::condition&& condition_)
-   {
-       condition = std::move(condition_);
-   }
+   condition_clause(ast::condition&& condition)
+   : condition{ std::move(condition) }
+   { }
 };
 
 
