@@ -74,10 +74,6 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::entity_specification,
     entity_name_list, entity_class
 )
 
-BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::enumeration_type_definition,
-    list
-)
-
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::expression,
     relation, rest_list
 )

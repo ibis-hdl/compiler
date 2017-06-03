@@ -96,7 +96,6 @@ struct entity_specification;
 struct entity_statement;
 struct entity_statement_part;
 struct entity_tag;
-struct enumeration_type_definition;
 struct exit_statement;
 struct expression;
 struct factor_binary_operation;

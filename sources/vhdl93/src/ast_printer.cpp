@@ -951,9 +951,9 @@ void printer::operator()(enumeration_type_definition const &node)
     static char const symbol[]{ "enumeration_type_definition" };
     symbol_scope<enumeration_type_definition> _(*this, symbol);
 
-    auto const N = node.list.size() - 1;
+    auto const N = node.size() - 1;
     unsigned i = 0;
-    for(auto const& enumeration_literal : node.list) {
+    for(auto const& enumeration_literal : node) {
         (*this)(enumeration_literal);
         if(i++ != N) {
             os << ",\n";

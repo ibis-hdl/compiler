@@ -19,10 +19,7 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-struct enumeration_type_definition : position_tagged
-{
-    std::vector<enumeration_literal>    list;
-};
+struct enumeration_type_definition : std::vector<enumeration_literal> { };
 
 
 } } } // namespace eda.vhdl93.ast
