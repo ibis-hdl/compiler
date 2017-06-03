@@ -132,9 +132,20 @@ void printer::operator()(actual_parameter_part const &node)
 
 void printer::operator()(actual_part const &node)
 {
-    static char const symbol[]{ "XXX actual_part" };
+    static char const symbol[]{ "actual_part" };
     symbol_scope<actual_part> _(*this, symbol);
-    //visit(node);
+
+    util::visit_in_place(
+        node,
+        [this](ast::actual_part_chunk const& chunk) {
+            (*this)(chunk.context_tied_name);
+            os << "\n";
+            (*this)(chunk.actual_designator);
+        },
+        [this](ast::actual_designator node) {
+            (*this)(node);
+        }
+    );
 }
 
 
@@ -1030,14 +1041,6 @@ void printer::operator()(file_type_definition const &node)
 }
 
 
-void printer::operator()(formal_designator const &node)
-{
-    static char const symbol[]{ "XXX formal_designator" };
-    symbol_scope<formal_designator> _(*this, symbol);
-    //visit(node);
-}
-
-
 void printer::operator()(formal_parameter_list const &node)
 {
     static char const symbol[]{ "XXX formal_parameter_list" };
@@ -1050,7 +1053,18 @@ void printer::operator()(formal_part const &node)
 {
     static char const symbol[]{ "XXX formal_part" };
     symbol_scope<formal_part> _(*this, symbol);
-    //visit(node);
+
+    util::visit_in_place(
+        node,
+        [this](ast::formal_part_chunk const& chunk) {
+            (*this)(chunk.context_tied_name);
+            os << "\n";
+            (*this)(chunk.formal_designator);
+        },
+        [this](ast::formal_designator node) {
+            (*this)(node);
+        }
+    );
 }
 
 

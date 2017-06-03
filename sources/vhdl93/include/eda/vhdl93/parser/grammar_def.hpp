@@ -739,7 +739,7 @@ typedef x3::rule<abstract_literal_class, ast::abstract_literal> abstract_literal
 typedef x3::rule<access_type_definition_class, ast::access_type_definition> access_type_definition_type;
 typedef x3::rule<actual_designator_class, ast::actual_designator> actual_designator_type;
 typedef x3::rule<actual_parameter_part_class> actual_parameter_part_type;
-typedef x3::rule<actual_part_class> actual_part_type;
+typedef x3::rule<actual_part_class, ast::actual_part> actual_part_type;
 typedef x3::rule<aggregate_class> aggregate_type;
 typedef x3::rule<alias_declaration_class> alias_declaration_type;
 typedef x3::rule<alias_designator_class, ast::alias_designator> alias_designator_type;
@@ -835,9 +835,9 @@ typedef x3::rule<file_declaration_class> file_declaration_type;
 typedef x3::rule<file_logical_name_class> file_logical_name_type;
 typedef x3::rule<file_open_information_class> file_open_information_type;
 typedef x3::rule<file_type_definition_class> file_type_definition_type;
-typedef x3::rule<formal_designator_class> formal_designator_type;
+typedef x3::rule<formal_designator_class, ast::formal_designator> formal_designator_type;
 typedef x3::rule<formal_parameter_list_class> formal_parameter_list_type;
-typedef x3::rule<formal_part_class> formal_part_type;
+typedef x3::rule<formal_part_class, ast::formal_part> formal_part_type;
 typedef x3::rule<full_type_declaration_class> full_type_declaration_type;
 typedef x3::rule<function_call_class, ast::function_call> function_call_type;
 typedef x3::rule<generate_statement_class> generate_statement_type;
@@ -1351,16 +1351,16 @@ parameter_association_list
 ;
 #endif
 
-#if 0
-// actual_part ::=
-// actual_designator
+
+// actual_part ::=                                                   [§ 4.3.2.2]
+//       actual_designator
 //     | function_name ( actual_designator )
 //     | type_mark ( actual_designator )
 auto const actual_part_def =
-actual_designator
-| function_name '(' actual_designator ')'     | type_mark '(' actual_designator )
-;
-#endif
+      name >> '(' >> actual_designator >> ')' //  function_name | type_mark(name)
+    | actual_designator
+    ;
+
 
 #if 0
 // aggregate ::=
@@ -2529,17 +2529,15 @@ auto const file_declaration_def =
                 ;
 #endif
 
-#if 0
-        // formal_designator ::=
-        // generic_name
-        //     | port_name
-        //     | parameter_name
-        auto const formal_designator_def =
-                generic_name
-                | port_name
-                | parameter_name
-                ;
-#endif
+
+// formal_designator ::=                                             [§ 4.3.2.2]
+//       generic_name
+//     | port_name
+//     | parameter_name
+auto const formal_designator_def =
+    name    // aka {generic, port, parameter}_name
+    ;
+
 
 #if 0
         // formal_parameter_list ::=
@@ -2549,16 +2547,16 @@ auto const file_declaration_def =
                 ;
 #endif
 
-#if 0
-        // formal_part ::=
-        // formal_designator
-        //     | function_name ( formal_designator )
-        //     | type_mark ( formal_designator )
-        auto const formal_part_def =
-                formal_designator
-                | function_name '(' formal_designator ')'     | type_mark '(' formal_designator )
-;
-#endif
+
+// formal_part ::=                                                   [§ 4.3.2.2]
+//       formal_designator
+//     | function_name ( formal_designator )
+//     | type_mark ( formal_designator )
+auto const formal_part_def =
+      name >> '(' >> formal_designator >> ')' //  function_name | type_mark(name)
+    | formal_designator
+    ;
+
 
 #if 0
 // full_type_declaration ::=
@@ -4031,7 +4029,7 @@ BOOST_SPIRIT_DEFINE(  // -- A --
     , access_type_definition
     , actual_designator
     //, actual_parameter_part
-    //, actual_part
+    , actual_part
     //, aggregate
     //, alias_declaration
     , alias_designator
@@ -4139,9 +4137,9 @@ BOOST_SPIRIT_DEFINE(  // -- F --
     //, file_logical_name
     //, file_open_information
     //, file_type_definition
-    //, formal_designator
+    , formal_designator
     //, formal_parameter_list
-    //, formal_part
+    , formal_part
     //, full_type_declaration
     , function_call
 )

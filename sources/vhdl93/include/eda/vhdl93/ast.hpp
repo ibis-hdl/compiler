@@ -11,9 +11,9 @@
 
 //DISABLED #include <eda/vhdl93/ast/abstract_literal.hpp>
 #include <eda/vhdl93/ast/access_type_definition.hpp>
-#include <eda/vhdl93/ast/actual_designator.hpp>
+//DISABLED #include <eda/vhdl93/ast/actual_designator.hpp>
 //#include <eda/vhdl93/ast/actual_parameter_part.hpp>
-//#include <eda/vhdl93/ast/actual_part.hpp>
+#include <eda/vhdl93/ast/actual_part.hpp>
 //#include <eda/vhdl93/ast/aggregate.hpp>
 //#include <eda/vhdl93/ast/alias_declaration.hpp>
 #include <eda/vhdl93/ast/alias_designator.hpp>
@@ -111,9 +111,9 @@
 //#include <eda/vhdl93/ast/file_logical_name.hpp>
 //#include <eda/vhdl93/ast/file_open_information.hpp>
 //#include <eda/vhdl93/ast/file_type_definition.hpp>
-//#include <eda/vhdl93/ast/formal_designator.hpp>
+//DISABLED #include <eda/vhdl93/ast/formal_designator.hpp>
 //#include <eda/vhdl93/ast/formal_parameter_list.hpp>
-//#include <eda/vhdl93/ast/formal_part.hpp>
+#include <eda/vhdl93/ast/formal_part.hpp>
 //#include <eda/vhdl93/ast/full_type_declaration.hpp>
 //DISABLED #include <eda/vhdl93/ast/function_call.hpp>
 //#include <eda/vhdl93/ast/generate_statement.hpp>

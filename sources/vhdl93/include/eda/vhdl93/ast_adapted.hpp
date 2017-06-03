@@ -18,6 +18,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::access_type_definition,
     subtype_indication
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::actual_part_chunk,
+    context_tied_name, actual_designator
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::attribute_declaration,
     identifier, type_mark
 )
@@ -84,6 +88,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::factor_binary_operation,
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::factor_unary_operation,
     operator_, primary
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::formal_part_chunk,
+    context_tied_name, formal_designator
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::function_call,

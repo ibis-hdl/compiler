@@ -16,9 +16,7 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-struct actual_designator;
 struct actual_parameter_part;
-struct actual_part;
 struct aggregate;
 struct alias_declaration;
 struct allocator;
@@ -109,9 +107,7 @@ struct file_declaration;
 struct file_logical_name;
 struct file_open_information;
 struct file_type_definition;
-struct formal_designator;
 struct formal_parameter_list;
-struct formal_part;
 struct full_type_declaration;
 struct function_call;
 struct generate_statement;
@@ -354,7 +350,6 @@ public:
     void operator()(file_logical_name const& node);
     void operator()(file_open_information const& node);
     void operator()(file_type_definition const& node);
-    void operator()(formal_designator const& node);
     void operator()(formal_parameter_list const& node);
     void operator()(formal_part const& node);
     void operator()(full_type_declaration const& node);
