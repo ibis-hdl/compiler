@@ -1296,7 +1296,7 @@ auto const value_expression = x3::rule<expression_class, ast::expression> { "val
 
 // Convenience rule for 'label :'
 auto const label_spec = x3::rule<struct signal_name_class, ast::identifier> { "label" } =
-    identifier > ':'
+    label > ':'
     ;
 
 
