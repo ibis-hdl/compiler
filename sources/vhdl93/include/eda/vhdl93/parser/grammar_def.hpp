@@ -738,7 +738,7 @@ struct waveform_element_class;
 typedef x3::rule<abstract_literal_class, ast::abstract_literal> abstract_literal_type;
 typedef x3::rule<access_type_definition_class, ast::access_type_definition> access_type_definition_type;
 typedef x3::rule<actual_designator_class, ast::actual_designator> actual_designator_type;
-typedef x3::rule<actual_parameter_part_class> actual_parameter_part_type;
+typedef x3::rule<actual_parameter_part_class, ast::actual_parameter_part> actual_parameter_part_type;
 typedef x3::rule<actual_part_class, ast::actual_part> actual_part_type;
 typedef x3::rule<aggregate_class> aggregate_type;
 typedef x3::rule<alias_declaration_class> alias_declaration_type;
@@ -1343,13 +1343,13 @@ auto const actual_designator_def =
     ;
 
 
-#if 0
-// actual_parameter_part ::=
-// parameter_association_list
+
+// actual_parameter_part ::=                                           [§ 7.3.3]
+//     parameter_association_list
 auto const actual_parameter_part_def =
-parameter_association_list
-;
-#endif
+    association_list
+    ;
+
 
 
 // actual_part ::=                                                   [§ 4.3.2.2]
@@ -4034,7 +4034,7 @@ BOOST_SPIRIT_DEFINE(  // -- A --
       abstract_literal
     , access_type_definition
     , actual_designator
-    //, actual_parameter_part
+    , actual_parameter_part
     , actual_part
     //, aggregate
     //, alias_declaration

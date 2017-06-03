@@ -122,14 +122,6 @@ void printer::operator()(actual_designator const &node)
 }
 
 
-void printer::operator()(actual_parameter_part const &node)
-{
-    static char const symbol[]{ "XXX actual_parameter_part" };
-    symbol_scope<actual_parameter_part> _(*this, symbol);
-    //os << node;
-}
-
-
 void printer::operator()(actual_part const &node)
 {
     static char const symbol[]{ "actual_part" };

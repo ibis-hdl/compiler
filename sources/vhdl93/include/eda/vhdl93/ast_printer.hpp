@@ -16,7 +16,6 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-struct actual_parameter_part;
 struct aggregate;
 struct alias_declaration;
 struct allocator;
@@ -252,7 +251,6 @@ public:
     void operator()(abstract_literal const& node);
     void operator()(access_type_definition const& node);
     void operator()(actual_designator const& node);
-    void operator()(actual_parameter_part const& node);
     void operator()(actual_part const& node);
     void operator()(aggregate const& node);
     void operator()(alias_declaration const& node);
