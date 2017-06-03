@@ -356,7 +356,9 @@ auto const NULL = as_type<ast::keyword_token>(
 );
 auto const OF = kw("of");
 auto const ON = kw("on");
-auto const OPEN = kw("open");
+auto const OPEN = as_type<ast::keyword_token>(
+    kw("open") >> x3::attr(ast::keyword_token::OPEN)
+);
 auto const OTHERS = as_type<ast::keyword_token>(
     kw("others") >> x3::attr(ast::keyword_token::OTHERS)
 );
@@ -734,8 +736,8 @@ struct waveform_element_class;
  * Rule Types
  */
 typedef x3::rule<abstract_literal_class, ast::abstract_literal> abstract_literal_type;
-typedef x3::rule<access_type_definition_class> access_type_definition_type;
-typedef x3::rule<actual_designator_class> actual_designator_type;
+typedef x3::rule<access_type_definition_class, ast::access_type_definition> access_type_definition_type;
+typedef x3::rule<actual_designator_class, ast::actual_designator> actual_designator_type;
 typedef x3::rule<actual_parameter_part_class> actual_parameter_part_type;
 typedef x3::rule<actual_part_class> actual_part_type;
 typedef x3::rule<aggregate_class> aggregate_type;
@@ -1327,21 +1329,19 @@ auto const access_type_definition_def =
     ;
 
 
-#if 0
-// actual_designator ::=
-// expression
+
+// actual_designator ::=                                             [§ 4.3.2.2]
+//       expression
 //     | signal_name
 //     | variable_name
 //     | file_name
 //     | open
 auto const actual_designator_def =
-expression
-| signal_name
-| variable_name
-| file_name
-| OPEN
-;
-#endif
+      name          // aka {signal, variable, file}_name
+    | expression    // breaks down to name too! but allows concat
+    | OPEN
+    ;
+
 
 #if 0
 // actual_parameter_part ::=
@@ -4029,7 +4029,7 @@ auto const waveform_element_def =
 BOOST_SPIRIT_DEFINE(  // -- A --
       abstract_literal
     , access_type_definition
-    //, actual_designator
+    , actual_designator
     //, actual_parameter_part
     //, actual_part
     //, aggregate

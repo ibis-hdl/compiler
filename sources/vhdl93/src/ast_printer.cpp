@@ -116,9 +116,9 @@ void printer::operator()(access_type_definition const &node)
 
 void printer::operator()(actual_designator const &node)
 {
-    static char const symbol[]{ "XXX actual_designator" };
+    static char const symbol[]{ "actual_designator" };
     symbol_scope<actual_designator> _(*this, symbol);
-    //visit(node);
+    visit(node);
 }
 
 
