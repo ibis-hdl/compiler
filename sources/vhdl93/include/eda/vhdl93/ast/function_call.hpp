@@ -15,6 +15,8 @@
 //#include <eda/vhdl93/ast/name.hpp>
 #include <string>
 
+#include <boost/spirit/home/x3/support/ast/variant.hpp>
+
 
 namespace eda { namespace vhdl93 { namespace ast {
 

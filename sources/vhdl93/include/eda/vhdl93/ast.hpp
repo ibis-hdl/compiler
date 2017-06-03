@@ -10,7 +10,7 @@
 
 
 //DISABLED #include <eda/vhdl93/ast/abstract_literal.hpp>
-//#include <eda/vhdl93/ast/access_type_definition.hpp>
+#include <eda/vhdl93/ast/access_type_definition.hpp>
 //#include <eda/vhdl93/ast/actual_designator.hpp>
 //#include <eda/vhdl93/ast/actual_parameter_part.hpp>
 //#include <eda/vhdl93/ast/actual_part.hpp>

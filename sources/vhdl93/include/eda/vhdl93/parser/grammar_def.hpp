@@ -1318,13 +1318,14 @@ auto const abstract_literal_def = /* Note, order changed since matters */
     ;
 
 
-#if 0
-// access_type_definition ::=
-// access subtype_indication
+
+// access_type_definition ::=                                            [§ 3.3]
+//     access subtype_indication
 auto const access_type_definition_def =
-ACCESS subtype_indication
-;
-#endif
+       ACCESS
+    >> subtype_indication
+    ;
+
 
 #if 0
 // actual_designator ::=
@@ -4027,7 +4028,7 @@ auto const waveform_element_def =
 
 BOOST_SPIRIT_DEFINE(  // -- A --
       abstract_literal
-    //, access_type_definition
+    , access_type_definition
     //, actual_designator
     //, actual_parameter_part
     //, actual_part

@@ -15,7 +15,7 @@
 
 namespace eda { namespace vhdl93 { namespace ast {
 
-struct access_type_definition;
+
 struct actual_designator;
 struct actual_parameter_part;
 struct actual_part;

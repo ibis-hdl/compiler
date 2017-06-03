@@ -108,9 +108,9 @@ void printer::operator()(abstract_literal const &node)
 
 void printer::operator()(access_type_definition const &node)
 {
-    static char const symbol[]{ "XXX access_type_definition" };
+    static char const symbol[]{ "access_type_definition" };
     symbol_scope<access_type_definition> _(*this, symbol);
-    //os << node;
+    (*this)(node.subtype_indication);
 }
 
 

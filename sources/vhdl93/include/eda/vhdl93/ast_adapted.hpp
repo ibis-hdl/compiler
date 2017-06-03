@@ -14,6 +14,10 @@
 #include <boost/fusion/include/adapt_struct.hpp>
 
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::access_type_definition,
+    subtype_indication
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::attribute_declaration,
     identifier, type_mark
 )
