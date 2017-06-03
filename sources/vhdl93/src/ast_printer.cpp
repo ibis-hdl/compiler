@@ -231,9 +231,14 @@ void printer::operator()(assertion_statement const &node)
 
 void printer::operator()(association_element const &node)
 {
-    static char const symbol[]{ "XXX association_element" };
+    static char const symbol[]{ "association_element" };
     symbol_scope<association_element> _(*this, symbol);
-    //os << node;
+
+    if(node.formal_part) {
+        (*this)(node.formal_part.get());
+        os << "\n";
+    }
+    (*this)(node.actual_part);
 }
 
 

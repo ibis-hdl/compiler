@@ -22,6 +22,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::actual_part_chunk,
     context_tied_name, actual_designator
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::association_element,
+    formal_part, actual_part
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::attribute_declaration,
     identifier, type_mark
 )

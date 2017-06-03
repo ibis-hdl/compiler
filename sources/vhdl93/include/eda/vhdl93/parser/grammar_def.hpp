@@ -750,7 +750,7 @@ typedef x3::rule<architecture_statement_part_class> architecture_statement_part_
 typedef x3::rule<array_type_definition_class> array_type_definition_type;
 typedef x3::rule<assertion_class> assertion_type;
 typedef x3::rule<assertion_statement_class> assertion_statement_type;
-typedef x3::rule<association_element_class> association_element_type;
+typedef x3::rule<association_element_class, ast::association_element> association_element_type;
 typedef x3::rule<association_list_class> association_list_type;
 typedef x3::rule<attribute_declaration_class, ast::attribute_declaration> attribute_declaration_type;
 typedef x3::rule<attribute_designator_class, ast::simple_name> attribute_designator_type;
@@ -1458,13 +1458,14 @@ auto const assertion_statement_def =
 ;
 #endif
 
-#if 0
-// association_element ::=
-// [ formal_part => ] actual_part
+
+// association_element ::=                                           [§ 4.3.2.2]
+//     [ formal_part => ] actual_part
 auto const association_element_def =
-        -( formal_part => ) actual_part
-        ;
-#endif
+       -( formal_part >> "=>" )
+    >> actual_part
+    ;
+
 
 #if 0
 // association_list ::=
@@ -4040,7 +4041,7 @@ BOOST_SPIRIT_DEFINE(  // -- A --
     //, array_type_definition
     //, assertion
     //, assertion_statement
-    //, association_element
+    , association_element
     //, association_list
     , attribute_declaration
     , attribute_designator
