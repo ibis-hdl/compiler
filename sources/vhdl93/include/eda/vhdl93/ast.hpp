@@ -50,8 +50,8 @@
 //#include <eda/vhdl93/ast/case_statement.hpp>
 //#include <eda/vhdl93/ast/case_statement_alternative.hpp>
 //DISABLED #include <eda/vhdl93/ast/character_literal.hpp>
-//#include <eda/vhdl93/ast/choice.hpp>
-//#include <eda/vhdl93/ast/choices.hpp>
+//DISABLED #include <eda/vhdl93/ast/choice.hpp>
+#include <eda/vhdl93/ast/choices.hpp>
 //#include <eda/vhdl93/ast/component_configuration.hpp>
 //#include <eda/vhdl93/ast/component_declaration.hpp>
 //#include <eda/vhdl93/ast/component_instantiation_statement.hpp>

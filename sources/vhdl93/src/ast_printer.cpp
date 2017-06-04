@@ -460,17 +460,25 @@ void printer::operator()(character_literal const &node)
 
 void printer::operator()(choice const &node)
 {
-    static char const symbol[]{ "XXX choice" };
+    static char const symbol[]{ "choice" };
     symbol_scope<choice> _(*this, symbol);
-    //visit(node);
+    visit(node);
 }
 
 
 void printer::operator()(choices const &node)
 {
-    static char const symbol[]{ "XXX choices" };
+    static char const symbol[]{ "choices" };
     symbol_scope<choices> _(*this, symbol);
-    //visit(node);
+
+    auto const N = node.size() - 1;
+    unsigned i = 0;
+    for(auto const& choise : node) {
+        (*this)(choise);
+        if(i++ != N) {
+            os << "|\n";
+        }
+    }
 }
 
 

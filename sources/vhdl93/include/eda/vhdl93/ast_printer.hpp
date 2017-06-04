@@ -45,7 +45,6 @@ struct block_statement_part;
 struct case_statement;
 struct case_statement_alternative;
 struct character_literal;
-struct choice;
 struct choices;
 struct component_configuration;
 struct component_declaration;
@@ -121,7 +120,6 @@ struct identifier;
 struct identifier_list;
 struct if_statement;
 struct incomplete_type_declaration;
-struct index_constraint;
 struct index_specification;
 struct index_subtype_definition;
 struct instantiated_unit;
@@ -234,7 +232,7 @@ public:
     bool verbose_variant{ false };
 
 public:
-    /* FixMe: ugly hack to get visitors printing for BNF ast varaint members.
+    /* FixMe: ugly hack to get visitors printing for BNF ast variant members.
      * This can be avoided using lambda visitors as described at
      * [visiting variants using lambdas](https://vittorioromeo.info/index/blog/variants_lambdas_part_1.html)
      * but requires boost.hanna and C++17. */

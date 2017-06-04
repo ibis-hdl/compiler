@@ -773,8 +773,8 @@ typedef x3::rule<block_statement_part_class> block_statement_part_type;
 typedef x3::rule<case_statement_class> case_statement_type;
 typedef x3::rule<case_statement_alternative_class> case_statement_alternative_type;
 typedef x3::rule<character_literal_class, ast::character_literal> character_literal_type;
-typedef x3::rule<choice_class> choice_type;
-typedef x3::rule<choices_class> choices_type;
+typedef x3::rule<choice_class, ast::choice> choice_type;
+typedef x3::rule<choices_class, ast::choices> choices_type;
 typedef x3::rule<component_configuration_class> component_configuration_type;
 typedef x3::rule<component_declaration_class> component_declaration_type;
 typedef x3::rule<component_instantiation_statement_class> component_instantiation_statement_type;
@@ -1813,27 +1813,27 @@ auto const character_literal_def =
     ;
 
 
-#if 0
-// choice ::=
-// simple_expression
+
+// choice ::=                                                          [§ 7.3.2]
+//       simple_expression
 //     | discrete_range
 //     | element_simple_name
 //     | others
 auto const choice_def =
-        simple_expression
-        | discrete_range
-        | element_simple_name
-        | OTHERS
-        ;
-#endif
+      simple_expression
+    | discrete_range
+    | simple_name
+    | OTHERS
+    ;
 
-#if 0
-// choices ::=
-// choice { | choice }
+
+
+// choices ::=                                                         [§ 7.3.2]
+//     choice { | choice }
 auto const choices_def =
-        choice { | choice }
-;
-#endif
+    choice % '|'
+    ;
+
 
 #if 0
 // component_configuration ::=
@@ -4086,8 +4086,8 @@ BOOST_SPIRIT_DEFINE(  // -- C --
     //  case_statement
     //, case_statement_alternative
       character_literal
-    //, choice
-    //, choices
+    , choice
+    , choices
     //, component_configuration
     //, component_declaration
     //, component_instantiation_statement
