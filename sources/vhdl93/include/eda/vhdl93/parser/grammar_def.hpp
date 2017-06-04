@@ -921,7 +921,7 @@ typedef x3::rule<secondary_unit_class> secondary_unit_type;
 typedef x3::rule<secondary_unit_declaration_class> secondary_unit_declaration_type;
 typedef x3::rule<selected_name_class, ast::selected_name> selected_name_type;
 typedef x3::rule<selected_signal_assignment_class> selected_signal_assignment_type;
-typedef x3::rule<selected_waveforms_class> selected_waveforms_type;
+typedef x3::rule<selected_waveforms_class, ast::selected_waveforms> selected_waveforms_type;
 typedef x3::rule<sensitivity_clause_class, ast::sensitivity_clause> sensitivity_clause_type;
 typedef x3::rule<sensitivity_list_class, ast::sensitivity_list> sensitivity_list_type;
 typedef x3::rule<sequence_of_statements_class> sequence_of_statements_type;
@@ -3495,15 +3495,18 @@ auto const selected_signal_assignment_def =
 ;
 #endif
 
-#if 0
+
 // selected_waveforms ::=
-// { waveform when choices , }
+//     { waveform when choices , }
 //     waveform when choices
 auto const selected_waveforms_def =
-{ waveform WHEN choices , }
-waveform WHEN choices
-;
-#endif
+    (      waveform
+        >> WHEN
+        >> choices
+    )
+    % ','
+    ;
+
 
 
 // sensitivity_clause ::=                                                [§ 8.1]
@@ -4258,7 +4261,7 @@ BOOST_SPIRIT_DEFINE(  // -- S --
     //, secondary_unit_declaration
       selected_name
     //, selected_signal_assignment
-    //, selected_waveforms
+    , selected_waveforms
     , sensitivity_clause
     , sensitivity_list
     //, sequence_of_statements

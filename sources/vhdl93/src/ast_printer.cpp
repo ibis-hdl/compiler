@@ -1766,9 +1766,18 @@ void printer::operator()(selected_signal_assignment const &node)
 
 void printer::operator()(selected_waveforms const &node)
 {
-    static char const symbol[]{ "XXX selected_waveforms" };
+    static char const symbol[]{ "selected_waveforms" };
     symbol_scope<selected_waveforms> _(*this, symbol);
-    //os << node;
+
+    auto const N = node.size() - 1;
+    unsigned i = 0;
+    for(auto const& selected_waveform : node) {
+        (*this)(selected_waveform.waveform);
+        (*this)(selected_waveform.choices);
+        if(i++ != N) {
+            os << ",\n";
+        }
+    }
 }
 
 

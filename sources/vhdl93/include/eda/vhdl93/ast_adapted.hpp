@@ -147,6 +147,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::selected_name,
     prefix, suffix
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::selected_waveform,
+    waveform, choices
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::sensitivity_clause,
     sensitivity_list
 )

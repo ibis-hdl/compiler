@@ -170,7 +170,6 @@ struct scalar_type_definition;
 struct secondary_unit;
 struct secondary_unit_declaration;
 struct selected_signal_assignment;
-struct selected_waveforms;
 struct sequence_of_statements;
 struct sequential_statement;
 struct shift_expression;

@@ -192,7 +192,7 @@
 //#include <eda/vhdl93/ast/secondary_unit_declaration.hpp>
 //DISABLED #include <eda/vhdl93/ast/selected_name.hpp>
 //#include <eda/vhdl93/ast/selected_signal_assignment.hpp>
-//#include <eda/vhdl93/ast/selected_waveforms.hpp>
+#include <eda/vhdl93/ast/selected_waveforms.hpp>
 #include <eda/vhdl93/ast/sensitivity_clause.hpp>
 //#include <eda/vhdl93/ast/sequence_of_statements.hpp>
 //#include <eda/vhdl93/ast/sequential_statement.hpp>
