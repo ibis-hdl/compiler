@@ -4212,9 +4212,9 @@ BOOST_SPIRIT_DEFINE(  // -- L --
     , literal
     //, loop_statement
 )
-//BOOST_SPIRIT_DEFINE(  // -- M --
-////  mode
-//)
+BOOST_SPIRIT_DEFINE(  // -- M --
+    mode
+)
 BOOST_SPIRIT_DEFINE(  // -- N --
       name
     //, next_statement
