@@ -1,0 +1,7 @@
+(sequential_statement<v>
+  (null_statement
+    (identifier
+      foo
+    )
+  )
+)

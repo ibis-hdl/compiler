@@ -195,7 +195,7 @@
 #include <eda/vhdl93/ast/selected_waveforms.hpp>
 #include <eda/vhdl93/ast/sensitivity_clause.hpp>
 //#include <eda/vhdl93/ast/sequence_of_statements.hpp>
-//#include <eda/vhdl93/ast/sequential_statement.hpp>
+#include <eda/vhdl93/ast/sequential_statement.hpp>
 //DISABLED #include <eda/vhdl93/ast/shift_expression.hpp>
 #include <eda/vhdl93/ast/signal_assignment_statement.hpp>
 //#include <eda/vhdl93/ast/signal_declaration.hpp>

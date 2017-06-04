@@ -10,8 +10,10 @@
 
 
 #include <eda/vhdl93/ast/namespace_alias.hpp>
+#include <eda/vhdl93/ast/position_tagged.hpp>
 
 #include <eda/vhdl93/ast/label.hpp>
+#include <boost/optional.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {

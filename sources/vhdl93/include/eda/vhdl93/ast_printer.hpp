@@ -170,7 +170,6 @@ struct secondary_unit;
 struct secondary_unit_declaration;
 struct selected_signal_assignment;
 struct sequence_of_statements;
-struct sequential_statement;
 struct shift_expression;
 struct signal_assignment_statement;
 struct signal_declaration;

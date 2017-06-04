@@ -925,7 +925,7 @@ typedef x3::rule<selected_waveforms_class, ast::selected_waveforms> selected_wav
 typedef x3::rule<sensitivity_clause_class, ast::sensitivity_clause> sensitivity_clause_type;
 typedef x3::rule<sensitivity_list_class, ast::sensitivity_list> sensitivity_list_type;
 typedef x3::rule<sequence_of_statements_class> sequence_of_statements_type;
-typedef x3::rule<sequential_statement_class> sequential_statement_type;
+typedef x3::rule<sequential_statement_class, ast::sequential_statement> sequential_statement_type;
 typedef x3::rule<shift_expression_class, ast::shift_expression> shift_expression_type;
 typedef x3::rule<signal_assignment_statement_class, ast::signal_assignment_statement> signal_assignment_statement_type;
 typedef x3::rule<signal_declaration_class> signal_declaration_type;
@@ -3004,7 +3004,7 @@ auto const next_statement_def =
 //      [ label : ] null ;
 auto const null_statement_def =
        -label_colon
-    >> NULL
+    >> x3::omit[ NULL ] // non interest in attribute inside 'null_statement'
     > ';'
     ;
 
@@ -3534,9 +3534,9 @@ auto const sequence_of_statements_def =
 ;
 #endif
 
-#if 0
-// sequential_statement ::=
-// wait_statement
+
+// sequential_statement ::=                                                [§ 8]
+//       wait_statement
 //     | assertion_statement
 //     | report_statement
 //     | signal_assignment_statement
@@ -3550,21 +3550,21 @@ auto const sequence_of_statements_def =
 //     | return_statement
 //     | null_statement
 auto const sequential_statement_def =
-        wait_statement
-        | assertion_statement
-        | report_statement
-        | signal_assignment_statement
-        | variable_assignment_statement
-        | procedure_call_statement
-        | if_statement
-        | case_statement
-        | loop_statement
-        | next_statement
-        | exit_statement
-        | return_statement
-        | null_statement
-        ;
-#endif
+      wait_statement
+//    | assertion_statement
+//    | report_statement
+//    | signal_assignment_statement
+//    | variable_assignment_statement
+//    | procedure_call_statement
+//    | if_statement
+//    | case_statement
+//    | loop_statement
+//    | next_statement
+//    | exit_statement
+//    | return_statement
+    | null_statement
+    ;
+
 
 
 // shift_expression ::=                                                  [§ 7.1]
@@ -4267,7 +4267,7 @@ BOOST_SPIRIT_DEFINE(  // -- S --
     , sensitivity_clause
     , sensitivity_list
     //, sequence_of_statements
-    //, sequential_statement
+    , sequential_statement
     , shift_expression
     //, sign
     , signal_assignment_statement

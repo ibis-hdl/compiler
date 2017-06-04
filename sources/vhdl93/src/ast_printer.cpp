@@ -1810,9 +1810,9 @@ void printer::operator()(sequence_of_statements const &node)
 
 void printer::operator()(sequential_statement const &node)
 {
-    static char const symbol[]{ "XXX sequential_statement" };
+    static char const symbol[]{ "sequential_statement" };
     symbol_scope<sequential_statement> _(*this, symbol);
-    //visit(node);
+    visit(node);
 }
 
 
