@@ -1436,9 +1436,12 @@ void printer::operator()(next_statement const &node)
 
 void printer::operator()(null_statement const &node)
 {
-    static char const symbol[]{ "XXX null_statement" };
+    static char const symbol[]{ "null_statement" };
     symbol_scope<null_statement> _(*this, symbol);
-    //os << node;
+
+    if(node.label) {
+        (*this)(node.label.get());
+    }
 }
 
 

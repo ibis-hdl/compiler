@@ -883,7 +883,7 @@ typedef x3::rule<loop_statement_class> loop_statement_type;
 typedef x3::rule<mode_class, ast::keyword_token> mode_type;
 typedef x3::rule<name_class, ast::name> name_type;
 typedef x3::rule<next_statement_class> next_statement_type;
-typedef x3::rule<null_statement_class> null_statement_type;
+typedef x3::rule<null_statement_class, ast::null_statement> null_statement_type;
 typedef x3::rule<numeric_literal_class, ast::numeric_literal> numeric_literal_type;
 typedef x3::rule<object_declaration_class> object_declaration_type;
 typedef x3::rule<operator_symbol_class, ast::operator_symbol> operator_symbol_type;
@@ -2999,13 +2999,15 @@ auto const next_statement_def =
 ;
 #endif
 
-#if 0
-// null_statement ::=
-// [ label : ] null ;
+
+// null_statement ::=                                                   [§ 8.13]
+//      [ label : ] null ;
 auto const null_statement_def =
-        -( LABEL > ':' ) NULL > ';'
-;
-#endif
+       -label_colon
+    >> NULL
+    > ';'
+    ;
+
 
 
 // numeric_literal ::=                                                 [§ 7.3.1]
@@ -4213,7 +4215,7 @@ BOOST_SPIRIT_DEFINE(  // -- L --
 BOOST_SPIRIT_DEFINE(  // -- N --
       name
     //, next_statement
-    //, null_statement
+    , null_statement
     , numeric_literal
 )
 BOOST_SPIRIT_DEFINE(  // -- O --

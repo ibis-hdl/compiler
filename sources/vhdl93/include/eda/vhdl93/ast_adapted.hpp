@@ -110,13 +110,12 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::library_clause,
     logical_name_list
 )
 
-// base class: string_literal
-//BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::operator_symbol,
-//    literal
-//)
-
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::options,
     guarded, delay_mechanism
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::null_statement,
+    label
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::physical_literal,
@@ -178,11 +177,6 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::simple_expression,
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::simple_expression::chunk,
     adding_operator, term
 )
-
-// base class: identifier
-//BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::simple_name,
-//    name
-//)
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::string_literal,
     literal

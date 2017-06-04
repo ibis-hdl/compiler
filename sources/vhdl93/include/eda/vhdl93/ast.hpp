@@ -154,7 +154,7 @@
 //#include <eda/vhdl93/ast/loop_statement.hpp>
 //DISABLED #include <eda/vhdl93/ast/name.hpp>
 //#include <eda/vhdl93/ast/next_statement.hpp>
-//#include <eda/vhdl93/ast/null_statement.hpp>
+#include <eda/vhdl93/ast/null_statement.hpp>
 //DISABLED #include <eda/vhdl93/ast/numeric_literal.hpp>
 //#include <eda/vhdl93/ast/object_declaration.hpp>
 //DISABLED #include <eda/vhdl93/ast/operator_token.hpp>

@@ -139,7 +139,6 @@ struct library_unit;
 struct loop_statement;
 struct mode;
 struct next_statement;
-struct null_statement;
 struct object_declaration;
 struct options;
 struct package_body;
