@@ -146,6 +146,11 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::relation,
     shift_expression, rest
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::report_statement,
+    label, report, severity
+)
+
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::relation::chunk,
     relational_operator, shift_expression
 )

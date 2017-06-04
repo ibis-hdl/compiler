@@ -162,7 +162,6 @@ struct qualified_expression;
 struct range;
 struct record_type_definition;
 struct relation;
-struct report_statement;
 struct return_statement;
 struct scalar_type_definition;
 struct secondary_unit;

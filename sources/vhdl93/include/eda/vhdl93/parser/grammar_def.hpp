@@ -914,7 +914,7 @@ typedef x3::rule<range_class, ast::range> range_type;
 typedef x3::rule<range_constraint_class, ast::range> range_constraint_type;
 typedef x3::rule<record_type_definition_class> record_type_definition_type;
 typedef x3::rule<relation_class, ast::relation> relation_type;
-typedef x3::rule<report_statement_class> report_statement_type;
+typedef x3::rule<report_statement_class, ast::report_statement> report_statement_type;
 typedef x3::rule<return_statement_class> return_statement_type;
 typedef x3::rule<scalar_type_definition_class> scalar_type_definition_type;
 typedef x3::rule<secondary_unit_class> secondary_unit_type;
@@ -1444,9 +1444,9 @@ auto const array_type_definition_def =
 //     [ report expression ]
 //     [ severity expression ]
 auto const assertion_def =
-       (  ASSERT   >> condition)
-    >> -( REPORT   >> expression )
-    >> -( SEVERITY >> expression )
+       (  ASSERT   > condition)
+    >> -( REPORT   > expression )
+    >> -( SEVERITY > expression )
     ;
 
 
@@ -3429,17 +3429,18 @@ auto const relation_def =
     ;
 
 
-#if 0
-// report_statement ::=
-// [ label : ]
+
+// report_statement ::=                                                  [§ 8.3]
+//     [ label : ]
 //     report expression
 //     [ severity expression ] ;
 auto const report_statement_def =
-        -( LABEL > ':' )
-        REPORT expression
-        -( SEVERITY expression ) > ';'
-;
-#endif
+       -label_colon
+    >>  ( REPORT   > expression )
+    >> -( SEVERITY > expression )
+    >  ';'
+    ;
+
 
 #if 0
 // return_statement ::=
@@ -3554,7 +3555,7 @@ auto const sequence_of_statements_def =
 auto const sequential_statement_def =
       wait_statement
     | assertion_statement
-//    | report_statement
+    | report_statement
 //    | signal_assignment_statement
 //    | variable_assignment_statement
 //    | procedure_call_statement
@@ -4256,7 +4257,7 @@ BOOST_SPIRIT_DEFINE(  // -- R --
     , range_constraint
     //, record_type_definition
     , relation
-    //, report_statement
+    , report_statement
     //, return_statement
 )
 BOOST_SPIRIT_DEFINE(  // -- S --

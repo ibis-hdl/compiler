@@ -1721,9 +1721,20 @@ void printer::operator()(relation const &node)
 
 void printer::operator()(report_statement const &node)
 {
-    static char const symbol[]{ "XXX report_statement" };
+    static char const symbol[]{ "report_statement" };
     symbol_scope<report_statement> _(*this, symbol);
-    //os << node;
+
+    if(node.label) {
+        (*this)(node.label.get());
+        os << "\n";
+    }
+
+    (*this)(node.report);
+
+    if(node.severity) {
+        os << "\n";
+        (*this)(node.severity.get());
+    }
 }
 
 
