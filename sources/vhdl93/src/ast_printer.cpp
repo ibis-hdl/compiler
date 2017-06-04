@@ -476,7 +476,7 @@ void printer::operator()(choices const &node)
     for(auto const& choise : node) {
         (*this)(choise);
         if(i++ != N) {
-            os << "|\n";
+            os << ",\n";
         }
     }
 }
