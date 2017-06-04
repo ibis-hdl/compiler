@@ -84,14 +84,6 @@ struct printer::symbol_scope<
 };
 
 
-template<typename T>
-void printer::ast_alias(T const &node, const char* alias_name)
-{
-    symbol_scope<T> _(*this, alias_name);
-    (*this).operator()(node);
-}
-
-
 } } } // namespace eda.vhdl93.ast
 
 

@@ -221,10 +221,6 @@ class printer
     template<typename NodeT>
     void visit(NodeT const& node) { boost::apply_visitor(*this, node); }
 
-
-    template<typename T>
-    void ast_alias(T const &node, const char* alias_name);
-
 public:
     bool verbose_symbol{ false };
     bool verbose_variant{ false };
