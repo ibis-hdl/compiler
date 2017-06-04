@@ -2584,7 +2584,9 @@ namespace function_call_detail {
         +(char_ - char_(')'))
         ;
 }
-/* FixMe: actual_parameter_part -> parameter_association_list; also string_view mess */
+/* FixMe: actual_parameter_part -> parameter_association_list, but this results
+ * into big circular dependency compiler error mess due to multiple use of
+ * ast::name.*/
 auto const function_call_def =
         function_call_detail::function_name
     >> -(  '('
