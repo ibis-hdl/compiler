@@ -22,8 +22,8 @@
 //#include <eda/vhdl93/ast/architecture_declarative_part.hpp>
 //#include <eda/vhdl93/ast/architecture_statement_part.hpp>
 //#include <eda/vhdl93/ast/array_type_definition.hpp>
-//#include <eda/vhdl93/ast/assertion.hpp>
-//#include <eda/vhdl93/ast/assertion_statement.hpp>
+//DISABLED #include <eda/vhdl93/ast/assertion.hpp>
+#include <eda/vhdl93/ast/assertion_statement.hpp>
 //DISABLED #include <eda/vhdl93/ast/association_element.hpp>
 #include <eda/vhdl93/ast/association_list.hpp>
 #include <eda/vhdl93/ast/attribute_declaration.hpp>
@@ -154,7 +154,7 @@
 //#include <eda/vhdl93/ast/loop_statement.hpp>
 //DISABLED #include <eda/vhdl93/ast/name.hpp>
 //#include <eda/vhdl93/ast/next_statement.hpp>
-#include <eda/vhdl93/ast/null_statement.hpp>
+//DISABELD #include <eda/vhdl93/ast/null_statement.hpp>
 //DISABLED #include <eda/vhdl93/ast/numeric_literal.hpp>
 //#include <eda/vhdl93/ast/object_declaration.hpp>
 //DISABLED #include <eda/vhdl93/ast/operator_token.hpp>

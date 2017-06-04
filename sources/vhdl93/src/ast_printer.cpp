@@ -199,17 +199,36 @@ void printer::operator()(array_type_definition const &node)
 
 void printer::operator()(assertion const &node)
 {
-    static char const symbol[]{ "XXX assertion" };
+    static char const symbol[]{ "assertion" };
     symbol_scope<assertion> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.condition);
+
+    if(node.report) {
+        static char const symbol[]{ "assertion.report" };
+        os << "\n";
+        symbol_scope<assertion> _(*this, symbol);
+        (*this)(node.report.get());
+    }
+    if(node.severity) {
+        static char const symbol[]{ "assertion.severity" };
+        os << "\n";
+        symbol_scope<assertion> _(*this, symbol);
+        (*this)(node.severity.get());
+    }
 }
 
 
 void printer::operator()(assertion_statement const &node)
 {
-    static char const symbol[]{ "XXX assertion_statement" };
+    static char const symbol[]{ "assertion_statement" };
     symbol_scope<assertion_statement> _(*this, symbol);
-    //os << node;
+
+    if(node.label) {
+        (*this)(node.label.get());
+        os << "\n";
+    }
+    (*this)(node.assertion);
 }
 
 

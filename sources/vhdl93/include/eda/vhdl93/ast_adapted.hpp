@@ -22,6 +22,14 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::actual_part_chunk,
     context_tied_name, actual_designator
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::assertion,
+    condition, report, severity
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::assertion_statement,
+    label, assertion
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::association_element,
     formal_part, actual_part
 )

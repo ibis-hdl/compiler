@@ -748,8 +748,8 @@ typedef x3::rule<architecture_body_class> architecture_body_type;
 typedef x3::rule<architecture_declarative_part_class> architecture_declarative_part_type;
 typedef x3::rule<architecture_statement_part_class> architecture_statement_part_type;
 typedef x3::rule<array_type_definition_class> array_type_definition_type;
-typedef x3::rule<assertion_class> assertion_type;
-typedef x3::rule<assertion_statement_class> assertion_statement_type;
+typedef x3::rule<assertion_class, ast::assertion> assertion_type;
+typedef x3::rule<assertion_statement_class, ast::assertion_statement> assertion_statement_type;
 typedef x3::rule<association_element_class, ast::association_element> association_element_type;
 typedef x3::rule<association_list_class, ast::association_list> association_list_type;
 typedef x3::rule<attribute_declaration_class, ast::attribute_declaration> attribute_declaration_type;
@@ -1438,25 +1438,27 @@ auto const array_type_definition_def =
         ;
 #endif
 
-#if 0
-// assertion ::=
-// assert condition
+
+// assertion ::=                                                         [§ 8.2]
+//     assert condition
 //     [ report expression ]
 //     [ severity expression ]
 auto const assertion_def =
-        ASSERT condition
-        -( REPORT expression )
-        -( SEVERITY expression )
-        ;
-#endif
+       (  ASSERT   >> condition)
+    >> -( REPORT   >> expression )
+    >> -( SEVERITY >> expression )
+    ;
 
-#if 0
-// assertion_statement ::=
-// [ label : ] assertion ;
+
+
+// assertion_statement ::=                                               [§ 8.2]
+//     [ label : ] assertion ;
 auto const assertion_statement_def =
-        -( LABEL > ':' ) assertion > ';'
-;
-#endif
+       -label_colon
+    >> assertion
+    > ';'
+    ;
+
 
 
 // association_element ::=                                           [§ 4.3.2.2]
@@ -3551,7 +3553,7 @@ auto const sequence_of_statements_def =
 //     | null_statement
 auto const sequential_statement_def =
       wait_statement
-//    | assertion_statement
+    | assertion_statement
 //    | report_statement
 //    | signal_assignment_statement
 //    | variable_assignment_statement
@@ -4060,8 +4062,8 @@ BOOST_SPIRIT_DEFINE(  // -- A --
     //, architecture_declarative_part
     //, architecture_statement_part
     //, array_type_definition
-    //, assertion
-    //, assertion_statement
+    , assertion
+    , assertion_statement
     , association_element
     , association_list
     , attribute_declaration

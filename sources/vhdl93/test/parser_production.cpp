@@ -527,6 +527,39 @@ BOOST_DATA_TEST_CASE( choices,
 
 
 /*
+ * assertion
+ */
+struct assertion_dataset : public ::x3_test::dataset_loader
+{
+    assertion_dataset()
+    : dataset_loader{ "test_case/assertion" }
+    { }
+} const assertion_dataset;
+
+
+BOOST_DATA_TEST_CASE( assertion,
+      assertion_dataset.input()
+    ^ assertion_dataset.expect()
+    ^ assertion_dataset.test_file_name(),
+    input, expect, file)
+{
+    using x3_test::testing_parser;
+
+    typedef ast::assertion attribute_type;
+
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
+
+    testing_parser<attribute_type> parse;
+    auto [parse_ok, parse_result] = parse(input, parser::assertion);
+
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expect, btt::per_element());
+}
+
+
+/*
  * sequential_statement
  */
 struct sequential_statement_dataset : public ::x3_test::dataset_loader
@@ -557,5 +590,6 @@ BOOST_DATA_TEST_CASE( sequential_statement,
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
+
 
 BOOST_AUTO_TEST_SUITE_END()

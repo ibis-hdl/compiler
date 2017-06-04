@@ -1,0 +1,35 @@
+(assertion
+  (condition
+    (expression
+      (relation
+        (shift_expression
+          (simple_expression
+            (term
+              (primary<v>
+                (name<v>
+                  (identifier
+                    A
+                  )
+                )
+              )
+            )
+          )
+        ),
+        operator: NOT_EQUALS,
+        (shift_expression
+          (simple_expression
+            (term
+              (primary<v>
+                (name<v>
+                  (identifier
+                    B
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
