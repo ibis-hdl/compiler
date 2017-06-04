@@ -1590,17 +1590,24 @@ void printer::operator()(primary_unit const &node)
 
 void printer::operator()(procedure_call const &node)
 {
-    static char const symbol[]{ "XXX procedure_call" };
+    static char const symbol[]{ "procedure_call" };
     symbol_scope<procedure_call> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.procedure_name);
+    os << "\n( " << node.actual_parameter_part << " )";
 }
 
 
 void printer::operator()(procedure_call_statement const &node)
 {
-    static char const symbol[]{ "XXX procedure_call_statement" };
+    static char const symbol[]{ "procedure_call_statement" };
     symbol_scope<procedure_call_statement> _(*this, symbol);
-    //os << node;
+
+    if(node.label) {
+        (*this)(node.label.get());
+        os << "\n";
+    }
+    (*this)(node.procedure_call);
 }
 
 

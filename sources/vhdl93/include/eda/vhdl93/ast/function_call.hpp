@@ -13,7 +13,7 @@
 #include <eda/vhdl93/ast/position_tagged.hpp>
 
 //#include <eda/vhdl93/ast/name.hpp>
-#include <string>
+#include <string_view>
 
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
 
@@ -27,7 +27,7 @@ struct name;
 struct function_call : position_tagged
 {
     x3::forward_ast<ast::name>  function_name;
-    std::string                 actual_parameter_part;
+    std::string_view            actual_parameter_part;
 };
 
 

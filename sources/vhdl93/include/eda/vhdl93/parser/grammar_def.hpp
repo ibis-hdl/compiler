@@ -903,8 +903,8 @@ typedef x3::rule<port_map_aspect_class> port_map_aspect_type;
 typedef x3::rule<prefix_class, ast::prefix> prefix_type;
 typedef x3::rule<primary_class, ast::primary> primary_type;
 typedef x3::rule<primary_unit_class> primary_unit_type;
-typedef x3::rule<procedure_call_class> procedure_call_type;
-typedef x3::rule<procedure_call_statement_class> procedure_call_statement_type;
+typedef x3::rule<procedure_call_class, ast::procedure_call> procedure_call_type;
+typedef x3::rule<procedure_call_statement_class, ast::procedure_call> procedure_call_statement_type;
 typedef x3::rule<process_declarative_item_class> process_declarative_item_type;
 typedef x3::rule<process_declarative_part_class> process_declarative_part_type;
 typedef x3::rule<process_statement_class> process_statement_type;
@@ -1297,7 +1297,7 @@ auto const value_expression = x3::rule<expression_class, ast::expression> { "val
 
 
 // Convenience rule for 'label :'
-auto const label_spec = x3::rule<struct signal_name_class, ast::identifier> { "label" } =
+auto const label_colon = x3::rule<struct signal_name_class, ast::identifier> { "label" } =
     label > ':'
     ;
 
@@ -2577,18 +2577,15 @@ auto const full_type_declaration_def =
 //     function_name [ ( actual_parameter_part ) ]
 namespace function_call_detail {
 
-    auto const function_name = x3::rule<struct _, ast::name>{ "function_name" } =
-        name;
-
-    auto const actual_parameter_part = x3::rule<struct _, std::string>{ "actual_parameter_part" } =
-        +(char_ - char_(')'))
+    auto const actual_parameter_part = x3::rule<struct _, std::string_view>{ "actual_parameter_part" } =
+        x3::raw[ +(char_ - char_(')')) ]
         ;
 }
 /* FixMe: actual_parameter_part -> parameter_association_list, but this results
  * into big circular dependency compiler error mess due to multiple use of
  * ast::name.*/
 auto const function_call_def =
-        function_call_detail::function_name
+        name
     >> -(  '('
         >> function_call_detail::actual_parameter_part
         >> ')'
@@ -3165,8 +3162,8 @@ auto const parameter_specification_def =
 
 
 // physical_literal ::=                                                [§ 3.1.3]
-// [ abstract_literal ] unit_name
-namespace abstract_literal_detail {
+//     [ abstract_literal ] unit_name
+namespace physical_literal_detail {
 
     /* Note, the LRM doesn't specify the allowed characters, hence it's assumed
      * that it follows the natural conventions. */
@@ -3178,7 +3175,7 @@ namespace abstract_literal_detail {
 }
 
 auto const physical_literal_def =
-    -abstract_literal >> (abstract_literal_detail::unit_name - keyword)
+    -abstract_literal >> (physical_literal_detail::unit_name - keyword)
     ;
 
 
@@ -3266,21 +3263,32 @@ auto const primary_unit_def =
         ;
 #endif
 
-#if 0
-// procedure_call ::=
-// procedure_name [ ( actual_parameter_part ) ]
-auto const procedure_call_def =
-        procedure_name -( '(' actual_parameter_part ')' )
-        ;
-#endif
 
-#if 0
-// procedure_call_statement ::=
-// [ label : ] procedure_call ;
+// procedure_call ::=                                                    [§ 8.6]
+//     procedure_name [ ( actual_parameter_part ) ]
+namespace procedure_call_detail {
+
+    auto const actual_parameter_part = x3::rule<struct _, std::string_view>{ "actual_parameter_part" } =
+        x3::raw[ +(char_ - char_(')')) ]
+        ;
+}
+/* FixMe: actual_parameter_part -> parameter_association_list, same problem as
+ * with function_call and ast::name. */
+auto const procedure_call_def =
+       name
+    >> -( '(' >> procedure_call_detail::actual_parameter_part >> ')' )
+    ;
+
+
+
+// procedure_call_statement ::=                                          [§ 8.6]
+//     [ label : ] procedure_call ;
 auto const procedure_call_statement_def =
-        -( LABEL > ':' ) procedure_call > ';'
-;
-#endif
+       -label_colon
+    >> procedure_call
+    > ';'
+    ;
+
 
 #if 0
 // process_declarative_item ::=
@@ -4225,8 +4233,8 @@ BOOST_SPIRIT_DEFINE(  // -- P --
     , prefix
     , primary
     //, primary_unit
-    //, procedure_call
-    //, procedure_call_statement
+    , procedure_call
+    , procedure_call_statement
     //, process_declarative_item
     //, process_declarative_part
     //, process_statement

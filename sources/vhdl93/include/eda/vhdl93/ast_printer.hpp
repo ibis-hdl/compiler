@@ -158,7 +158,6 @@ struct port_list;
 struct port_map_aspect;
 struct primary_unit;
 struct procedure_call;
-struct procedure_call_statement;
 struct process_declarative_item;
 struct process_declarative_part;
 struct process_statement;

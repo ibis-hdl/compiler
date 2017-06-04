@@ -175,8 +175,8 @@
 //DISABLED #include <eda/vhdl93/ast/prefix.hpp>
 //DISABLED #include <eda/vhdl93/ast/primary.hpp>
 //#include <eda/vhdl93/ast/primary_unit.hpp>
-//#include <eda/vhdl93/ast/procedure_call.hpp>
-//#include <eda/vhdl93/ast/procedure_call_statement.hpp>
+//DISABLED #include <eda/vhdl93/ast/procedure_call.hpp>
+#include <eda/vhdl93/ast/procedure_call_statement.hpp>
 //#include <eda/vhdl93/ast/process_declarative_item.hpp>
 //#include <eda/vhdl93/ast/process_declarative_part.hpp>
 //#include <eda/vhdl93/ast/process_statement.hpp>

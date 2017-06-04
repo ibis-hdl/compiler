@@ -123,6 +123,14 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::physical_literal,
     literal, unit_name
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::procedure_call,
+    procedure_name, actual_parameter_part
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::procedure_call_statement,
+    label, procedure_call
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::range_expression, // part of range
     lhs, direction, rhs
 )
