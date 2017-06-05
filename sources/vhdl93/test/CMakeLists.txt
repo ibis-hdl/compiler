@@ -8,7 +8,8 @@ set(BIN_SOURCES
     parser_literals.cpp
     parser_expression.cpp
     parser_production.cpp
-    parser_xxx.cpp
+    parser_statement.cpp
+    #parser_xxx.cpp
     test_vhdl93_parser.cpp
 )
 
