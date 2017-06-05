@@ -15,6 +15,7 @@
 #include <eda/vhdl93/ast/wait_statement.hpp>
 #include <eda/vhdl93/ast/assertion_statement.hpp>
 #include <eda/vhdl93/ast/report_statement.hpp>
+#include <eda/vhdl93/ast/return_statement.hpp>
 #include <eda/vhdl93/ast/null_statement.hpp>
 
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
@@ -50,7 +51,7 @@ struct sequential_statement : x3::variant<
 //    loop_statement,
 //    next_statement,
 //    exit_statement,
-//    return_statement,
+    return_statement,
     null_statement
 >
 {

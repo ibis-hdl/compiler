@@ -186,7 +186,7 @@
 //#include <eda/vhdl93/ast/record_type_definition.hpp>
 //DISABLED #include <eda/vhdl93/ast/relation.hpp>
 //DISABLED #include <eda/vhdl93/ast/report_statement.hpp>
-//#include <eda/vhdl93/ast/return_statement.hpp>
+//DISABLED #include <eda/vhdl93/ast/return_statement.hpp>
 //#include <eda/vhdl93/ast/scalar_type_definition.hpp>
 //#include <eda/vhdl93/ast/secondary_unit.hpp>
 //#include <eda/vhdl93/ast/secondary_unit_declaration.hpp>

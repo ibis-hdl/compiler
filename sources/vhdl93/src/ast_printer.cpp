@@ -1740,9 +1740,18 @@ void printer::operator()(report_statement const &node)
 
 void printer::operator()(return_statement const &node)
 {
-    static char const symbol[]{ "XXX return_statement" };
-    symbol_scope<return_statement> _(*this, symbol);
-    //os << node;
+    static char const symbol[]{ "return_statement" };
+    symbol_scope<report_statement> _(*this, symbol);
+
+    if(node.label) {
+        (*this)(node.label.get());
+        os << "\n";
+    }
+
+    if(node.expression) {
+        os << "\n";
+        (*this)(node.expression.get());
+    }
 }
 
 

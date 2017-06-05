@@ -915,7 +915,7 @@ typedef x3::rule<range_constraint_class, ast::range> range_constraint_type;
 typedef x3::rule<record_type_definition_class> record_type_definition_type;
 typedef x3::rule<relation_class, ast::relation> relation_type;
 typedef x3::rule<report_statement_class, ast::report_statement> report_statement_type;
-typedef x3::rule<return_statement_class> return_statement_type;
+typedef x3::rule<return_statement_class, ast::return_statement> return_statement_type;
 typedef x3::rule<scalar_type_definition_class> scalar_type_definition_type;
 typedef x3::rule<secondary_unit_class> secondary_unit_type;
 typedef x3::rule<secondary_unit_declaration_class> secondary_unit_declaration_type;
@@ -1900,7 +1900,7 @@ auto const composite_type_definition_def =
 // concurrent_assertion_statement ::=
 // [ label : ] [ postponed ] assertion ;
 auto const concurrent_assertion_statement_def =
-        -( LABEL > ':' ) -( POSTPONED ) assertion > ';'
+        -label_colon -( POSTPONED ) assertion > ';'
 ;
 #endif
 
@@ -1908,7 +1908,7 @@ auto const concurrent_assertion_statement_def =
 // concurrent_procedure_call_statement ::=
 // [ label : ] [ postponed ] procedure_call ;
 auto const concurrent_procedure_call_statement_def =
-        -( LABEL > ':' ) -( POSTPONED ) procedure_call > ';'
+        -label_colon -( POSTPONED ) procedure_call > ';'
 ;
 #endif
 
@@ -1917,8 +1917,8 @@ auto const concurrent_procedure_call_statement_def =
 // [ label : ] [ postponed ] conditional_signal_assignment
 //     | [ label : ] [ postponed ] selected_signal_assignment
 auto const concurrent_signal_assignment_statement_def =
-        -( LABEL > ':' ) -( POSTPONED ) conditional_signal_assignment
-        | -( LABEL > ':' ) -( POSTPONED ) selected_signal_assignment
+        -label_colon -( POSTPONED ) conditional_signal_assignment
+        | -label_colon -( POSTPONED ) selected_signal_assignment
         ;
 #endif
 
@@ -2411,7 +2411,7 @@ auto const enumeration_type_definition_def =
 // exit_statement ::=
 // [ label : ] exit [ loop_label ] [ when condition ] ;
 auto const exit_statement_def =
-        -( LABEL > ':' ) EXIT -( loop_label ) -( WHEN condition ) > ';'
+        -label_colon EXIT -( loop_label ) -( WHEN condition ) > ';'
 ;
 #endif
 
@@ -2997,7 +2997,7 @@ auto const name_def =
 // next_statement ::=
 // [ label : ] next [ loop_label ] [ when condition ] ;
 auto const next_statement_def =
-        -( LABEL > ':' ) NEXT -( loop_label ) -( WHEN condition ) > ';'
+        -label_colon NEXT -( loop_label ) -( WHEN condition ) > ';'
 ;
 #endif
 
@@ -3442,13 +3442,16 @@ auto const report_statement_def =
     ;
 
 
-#if 0
-// return_statement ::=
-// [ label : ] return [ expression ] ;
+
+// return_statement ::=                                                 [§ 8.12]
+//     [ label : ] return [ expression ] ;
 auto const return_statement_def =
-        -( LABEL > ':' ) RETURN -( expression ) > ';'
+       -label_colon
+    >> RETURN
+    >> -expression
+     > ';'
 ;
-#endif
+
 
 #if 0
 // scalar_type_definition ::=
@@ -3564,7 +3567,7 @@ auto const sequential_statement_def =
 //    | loop_statement
 //    | next_statement
 //    | exit_statement
-//    | return_statement
+    | return_statement
     | null_statement
     ;
 
@@ -3993,7 +3996,7 @@ auto const use_clause_def =
 // variable_assignment_statement ::=
 // [ label : ] target  := expression ;
 auto const variable_assignment_statement_def =
-        -( LABEL > ':' ) target   ":=" >  expression > ';'
+        -label_colon target   ":=" >  expression > ';'
 ;
 #endif
 
@@ -4258,7 +4261,7 @@ BOOST_SPIRIT_DEFINE(  // -- R --
     //, record_type_definition
     , relation
     , report_statement
-    //, return_statement
+    , return_statement
 )
 BOOST_SPIRIT_DEFINE(  // -- S --
     //  scalar_type_definition
