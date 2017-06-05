@@ -7,33 +7,32 @@
         )
       )
     )
-  )(condition_clause
-    (condition
-      (expression
-        (relation
-          (shift_expression
-            (simple_expression
-              (term
-                (primary<v>
-                  (name<v>
-                    (identifier
-                      EN
-                    )
+  )
+  (condition_clause
+    (expression
+      (relation
+        (shift_expression
+          (simple_expression
+            (term
+              (primary<v>
+                (name<v>
+                  (identifier
+                    EN
                   )
                 )
               )
             )
-          ),
-          operator: EQUAL,
-          (shift_expression
-            (simple_expression
-              (term
-                (primary<v>
-                  (literal<v>
-                    (enumeration_literal<v>
-                      (character_literal
-                        '1'
-                      )
+          )
+        ),
+        operator: EQUAL,
+        (shift_expression
+          (simple_expression
+            (term
+              (primary<v>
+                (literal<v>
+                  (enumeration_literal<v>
+                    (character_literal
+                      '1'
                     )
                   )
                 )
@@ -43,7 +42,8 @@
         )
       )
     )
-  )(timeout_clause
+  )
+  (timeout_clause
     (expression
       (relation
         (shift_expression

@@ -18,10 +18,7 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-struct condition : position_tagged
-{
-   ast::expression          boolean_expression;
-};
+using condition = ast::expression;
 
 
 } } } // namespace eda.vhdl93.ast

@@ -1,7 +1,8 @@
 (wait_statement
   (identifier
     dummy
-  )(sensitivity_clause
+  )
+  (sensitivity_clause
     (sensitivity_list
       (name<v>
         (identifier

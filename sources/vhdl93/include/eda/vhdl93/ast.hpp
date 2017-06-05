@@ -61,7 +61,7 @@
 //#include <eda/vhdl93/ast/concurrent_procedure_call_statement.hpp>
 //#include <eda/vhdl93/ast/concurrent_signal_assignment_statement.hpp>
 //#include <eda/vhdl93/ast/concurrent_statement.hpp>
-//#include <eda/vhdl93/ast/condition.hpp>
+//DISABLED #include <eda/vhdl93/ast/condition.hpp>
 //#include <eda/vhdl93/ast/condition_clause.hpp>
 //#include <eda/vhdl93/ast/conditional_signal_assignment.hpp>
 //#include <eda/vhdl93/ast/conditional_waveforms.hpp>

@@ -565,14 +565,6 @@ void printer::operator()(concurrent_statement const &node)
 }
 
 
-void printer::operator()(condition const &node)
-{
-    static char const symbol[]{ "condition" };
-    symbol_scope<condition> _(*this, symbol);
-    (*this)(node.boolean_expression);
-}
-
-
 void printer::operator()(condition_clause const &node)
 {
     static char const symbol[]{ "condition_clause" };
@@ -2226,12 +2218,15 @@ void printer::operator()(wait_statement const &node)
         (*this)(node.label.value());
     }
     if(node.sensitivity_clause) {
+        if(node.label) { os << "\n"; }
         (*this)(node.sensitivity_clause.value());
     }
     if(node.condition_clause) {
+        if(node.label || node.sensitivity_clause) { os << "\n"; }
         (*this)(node.condition_clause.value());
     }
     if(node.timeout_clause) {
+        if(node.label || node.sensitivity_clause || node.condition_clause) { os << "\n"; }
         (*this)(node.timeout_clause.value());
     }
 }

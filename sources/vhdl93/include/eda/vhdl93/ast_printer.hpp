@@ -54,7 +54,6 @@ struct concurrent_assertion_statement;
 struct concurrent_procedure_call_statement;
 struct concurrent_signal_assignment_statement;
 struct concurrent_statement;
-struct condition;
 struct condition_clause;
 struct conditional_signal_assignment;
 struct conditional_waveforms;
@@ -281,7 +280,6 @@ public:
     void operator()(concurrent_procedure_call_statement const& node);
     void operator()(concurrent_signal_assignment_statement const& node);
     void operator()(concurrent_statement const& node);
-    void operator()(condition const& node);
     void operator()(condition_clause const& node);
     void operator()(conditional_signal_assignment const& node);
     void operator()(conditional_waveforms const& node);

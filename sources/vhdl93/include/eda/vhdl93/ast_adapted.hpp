@@ -58,10 +58,6 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::character_literal,
     literal
 )
 
-BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::condition,
-   boolean_expression
-)
-
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::condition_clause,
     condition
 )
