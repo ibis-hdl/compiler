@@ -93,7 +93,6 @@ struct entity_specification;
 struct entity_statement;
 struct entity_statement_part;
 struct entity_tag;
-struct exit_statement;
 struct expression;
 struct factor_binary_operation;
 struct factor_unary_operation;

@@ -102,7 +102,7 @@
 //#include <eda/vhdl93/ast/entity_tag.hpp>
 //DISABLED #include <eda/vhdl93/ast/enumeration_literal.hpp>
 #include <eda/vhdl93/ast/enumeration_type_definition.hpp>
-//#include <eda/vhdl93/ast/exit_statement.hpp>
+//DISABLED #include <eda/vhdl93/ast/exit_statement.hpp>
 //DISABLED #include <eda/vhdl93/ast/expression.hpp>
 //#include <eda/vhdl93/ast/extended_digit.hpp>
 //#include <eda/vhdl93/ast/extended_identifier.hpp>

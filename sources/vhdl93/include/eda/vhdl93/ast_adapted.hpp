@@ -82,6 +82,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::entity_specification,
     entity_name_list, entity_class
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::exit_statement,
+    label, loop_label, condition
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::expression,
     relation, rest_list
 )

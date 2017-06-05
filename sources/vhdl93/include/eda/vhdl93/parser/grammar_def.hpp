@@ -826,7 +826,7 @@ typedef x3::rule<entity_statement_part_class> entity_statement_part_type;
 typedef x3::rule<entity_tag_class, ast::entity_tag> entity_tag_type;
 typedef x3::rule<enumeration_literal_class, ast::enumeration_literal> enumeration_literal_type;
 typedef x3::rule<enumeration_type_definition_class, ast::enumeration_type_definition> enumeration_type_definition_type;
-typedef x3::rule<exit_statement_class> exit_statement_type;
+typedef x3::rule<exit_statement_class, ast::exit_statement> exit_statement_type;
 typedef x3::rule<exponent_class, std::string_view> exponent_type;
 typedef x3::rule<expression_class, ast::expression> expression_type;
 typedef x3::rule<extended_identifier_class, std::string_view> extended_identifier_type;
@@ -2407,13 +2407,17 @@ auto const enumeration_type_definition_def =
     ;
 
 
-#if 0
-// exit_statement ::=
-// [ label : ] exit [ loop_label ] [ when condition ] ;
+
+// exit_statement ::=                                                   [§ 8.11]
+//     [ label : ] exit [ loop_label ] [ when condition ] ;
 auto const exit_statement_def =
-        -label_colon EXIT -( loop_label ) -( WHEN condition ) > ';'
-;
-#endif
+    -label_colon
+    >> EXIT
+    >> -label
+    >> -( WHEN > condition )
+    > ';'
+    ;
+
 
 
 // exponent ::=                                                       [§ 13.4.1]
@@ -4154,7 +4158,7 @@ BOOST_SPIRIT_DEFINE(  // -- E --
     , entity_tag
     , enumeration_literal
     , enumeration_type_definition
-    //, exit_statement
+    , exit_statement
     , exponent
     , expression
     , extended_identifier

@@ -975,9 +975,24 @@ void printer::operator()(enumeration_type_definition const &node)
 
 void printer::operator()(exit_statement const &node)
 {
-    static char const symbol[]{ "XXX exit_statement" };
+    static char const symbol[]{ "exit_statement" };
     symbol_scope<exit_statement> _(*this, symbol);
-    //os << node;
+
+    if(node.label) {
+        (*this)(node.label.get());
+    }
+
+    if(node.loop_label) {
+        if(node.label) { os << "\n"; }
+        (*this)(node.loop_label.get());
+    }
+
+    if(node.condition) {
+        if(node.label || node.loop_label) { os << "\n"; }
+        os << "\n";
+        (*this)(node.condition.get());
+    }
+
 }
 
 

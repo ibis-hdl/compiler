@@ -15,6 +15,7 @@
 #include <eda/vhdl93/ast/wait_statement.hpp>
 #include <eda/vhdl93/ast/assertion_statement.hpp>
 #include <eda/vhdl93/ast/report_statement.hpp>
+#include <eda/vhdl93/ast/exit_statement.hpp>
 #include <eda/vhdl93/ast/return_statement.hpp>
 #include <eda/vhdl93/ast/null_statement.hpp>
 
