@@ -882,7 +882,7 @@ typedef x3::rule<literal_class, ast::literal> literal_type;
 typedef x3::rule<loop_statement_class> loop_statement_type;
 typedef x3::rule<mode_class, ast::keyword_token> mode_type;
 typedef x3::rule<name_class, ast::name> name_type;
-typedef x3::rule<next_statement_class> next_statement_type;
+typedef x3::rule<next_statement_class, ast::next_statement> next_statement_type;
 typedef x3::rule<null_statement_class, ast::null_statement> null_statement_type;
 typedef x3::rule<numeric_literal_class, ast::numeric_literal> numeric_literal_type;
 typedef x3::rule<object_declaration_class> object_declaration_type;
@@ -2411,7 +2411,7 @@ auto const enumeration_type_definition_def =
 // exit_statement ::=                                                   [§ 8.11]
 //     [ label : ] exit [ loop_label ] [ when condition ] ;
 auto const exit_statement_def =
-    -label_colon
+       -label_colon
     >> EXIT
     >> -label
     >> -( WHEN > condition )
@@ -2997,13 +2997,17 @@ auto const name_def =
     ;
 
 
-#if 0
-// next_statement ::=
-// [ label : ] next [ loop_label ] [ when condition ] ;
+
+// next_statement ::=                                                   [§ 8.10]
+//     [ label : ] next [ loop_label ] [ when condition ] ;
 auto const next_statement_def =
-        -label_colon NEXT -( loop_label ) -( WHEN condition ) > ';'
+       -label_colon
+    >> NEXT
+    >> -label
+    >> -( WHEN >> condition )
+    > ';'
 ;
-#endif
+
 
 
 // null_statement ::=                                                   [§ 8.13]
@@ -3569,8 +3573,8 @@ auto const sequential_statement_def =
 //    | if_statement
 //    | case_statement
 //    | loop_statement
-//    | next_statement
-//    | exit_statement
+    | next_statement
+    | exit_statement
     | return_statement
     | null_statement
     ;
@@ -4224,7 +4228,7 @@ BOOST_SPIRIT_DEFINE(  // -- M --
 )
 BOOST_SPIRIT_DEFINE(  // -- N --
       name
-    //, next_statement
+    , next_statement
     , null_statement
     , numeric_literal
 )

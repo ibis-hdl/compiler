@@ -153,7 +153,7 @@
 //DISABLED #include <eda/vhdl93/ast/literal.hpp>
 //#include <eda/vhdl93/ast/loop_statement.hpp>
 //DISABLED #include <eda/vhdl93/ast/name.hpp>
-//#include <eda/vhdl93/ast/next_statement.hpp>
+//DISABLED #include <eda/vhdl93/ast/next_statement.hpp>
 //DISABELD #include <eda/vhdl93/ast/null_statement.hpp>
 //DISABLED #include <eda/vhdl93/ast/numeric_literal.hpp>
 //#include <eda/vhdl93/ast/object_declaration.hpp>

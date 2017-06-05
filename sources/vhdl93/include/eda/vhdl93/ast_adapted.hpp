@@ -122,6 +122,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::options,
     guarded, delay_mechanism
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::next_statement,
+    label, loop_label, condition
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::null_statement,
     label
 )

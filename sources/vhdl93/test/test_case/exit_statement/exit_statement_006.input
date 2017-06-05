@@ -1,0 +1,3 @@
+exit_:
+   EXIT loop_exit WHEN index <= 0;
+

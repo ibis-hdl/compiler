@@ -1,0 +1,2 @@
+EXIT cool_loop WHEN index = 0;
+

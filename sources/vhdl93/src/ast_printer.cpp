@@ -972,19 +972,17 @@ void printer::operator()(exit_statement const &node)
 
     if(node.label) {
         (*this)(node.label.get());
+        if(node.loop_label || node.condition) { os << "\n"; }
     }
 
     if(node.loop_label) {
-        if(node.label) { os << "\n"; }
         (*this)(node.loop_label.get());
+        if(node.condition) { os << "\n"; }
     }
 
     if(node.condition) {
-        if(node.label || node.loop_label) { os << "\n"; }
-        os << "\n";
         (*this)(node.condition.get());
     }
-
 }
 
 
@@ -1446,9 +1444,22 @@ void printer::operator()(name const &node)
 
 void printer::operator()(next_statement const &node)
 {
-    static char const symbol[]{ "XXX next_statement" };
+    static char const symbol[]{ "next_statement" };
     symbol_scope<next_statement> _(*this, symbol);
-    //os << node;
+
+    if(node.label) {
+        (*this)(node.label.get());
+        if(node.loop_label || node.condition) { os << "\n"; }
+    }
+
+    if(node.loop_label) {
+        (*this)(node.loop_label.get());
+        if(node.condition) { os << "\n"; }
+    }
+
+    if(node.condition) {
+        (*this)(node.condition.get());
+    }
 }
 
 

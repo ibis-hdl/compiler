@@ -1,0 +1,43 @@
+(next_statement
+  (identifier
+    next_
+  )
+  (identifier
+    loop_exit
+  )
+  (expression
+    (relation
+      (shift_expression
+        (simple_expression
+          (term
+            (primary<v>
+              (name<v>
+                (identifier
+                  index
+                )
+              )
+            )
+          )
+        )
+      ),
+      operator: LESS_EQUALS,
+      (shift_expression
+        (simple_expression
+          (term
+            (primary<v>
+              (literal<v>
+                (numeric_literal<v>
+                  (abstract_literal<v>
+                    (decimal_literal
+                      literal: 0, hint: int
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

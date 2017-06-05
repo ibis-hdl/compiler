@@ -134,8 +134,6 @@ struct iteration_scheme;
 struct library_clause;
 struct library_unit;
 struct loop_statement;
-struct mode;
-struct next_statement;
 struct object_declaration;
 struct options;
 struct package_body;
