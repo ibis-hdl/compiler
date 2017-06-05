@@ -46,13 +46,13 @@ BOOST_DATA_TEST_CASE( xxx,
 {
     using x3_test::testing_parser;
 
-    typedef ast::assertion_statement attribute_type;
+    typedef ast::case_statement attribute_type;
 
     // avoid warning, used in case of error for error message by boost.test
     boost::ignore_unused(file);
 
     testing_parser<attribute_type> parse;
-    auto [parse_ok, parse_result] = parse(input, parser::assertion_statement);
+    auto [parse_ok, parse_result] = parse(input, parser::case_statement);
 
     BOOST_TEST(parse_ok);
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");

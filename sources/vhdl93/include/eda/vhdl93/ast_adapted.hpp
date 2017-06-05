@@ -54,6 +54,14 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::bit_string_literal,
     literal, hint
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::case_statement,
+    label, expression, alternatives, end_label
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::case_statement_alternative,
+    choices, sequence_of_statements
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::character_literal,
     literal
 )

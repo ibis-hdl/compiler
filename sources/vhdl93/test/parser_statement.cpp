@@ -26,6 +26,39 @@ namespace ast    = eda::vhdl93::ast;
 
 
 /*
+ * case_statement
+ */
+struct case_statement_dataset : public ::x3_test::dataset_loader
+{
+    case_statement_dataset()
+    : dataset_loader{ "test_case/case_statement" }
+    { }
+} const case_statement_dataset;
+
+
+BOOST_DATA_TEST_CASE( case_statement,
+      case_statement_dataset.input()
+    ^ case_statement_dataset.expect()
+    ^ case_statement_dataset.test_file_name(),
+    input, expect, file)
+{
+    using x3_test::testing_parser;
+
+    typedef ast::case_statement attribute_type;
+
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
+
+    testing_parser<attribute_type> parse;
+    auto [parse_ok, parse_result] = parse(input, parser::case_statement);
+
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expect, btt::per_element());
+}
+
+
+/*
  * exit_statement
  */
 struct exit_statement_dataset : public ::x3_test::dataset_loader

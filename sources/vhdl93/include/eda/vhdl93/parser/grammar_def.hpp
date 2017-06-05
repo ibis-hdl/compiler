@@ -770,8 +770,8 @@ typedef x3::rule<block_header_class> block_header_type;
 typedef x3::rule<block_specification_class> block_specification_type;
 typedef x3::rule<block_statement_class> block_statement_type;
 typedef x3::rule<block_statement_part_class> block_statement_part_type;
-typedef x3::rule<case_statement_class> case_statement_type;
-typedef x3::rule<case_statement_alternative_class> case_statement_alternative_type;
+typedef x3::rule<case_statement_class, ast::case_statement> case_statement_type;
+typedef x3::rule<case_statement_alternative_class, ast::case_statement_alternative> case_statement_alternative_type;
 typedef x3::rule<character_literal_class, ast::character_literal> character_literal_type;
 typedef x3::rule<choice_class, ast::choice> choice_type;
 typedef x3::rule<choices_class, ast::choices> choices_type;
@@ -924,7 +924,7 @@ typedef x3::rule<selected_signal_assignment_class> selected_signal_assignment_ty
 typedef x3::rule<selected_waveforms_class, ast::selected_waveforms> selected_waveforms_type;
 typedef x3::rule<sensitivity_clause_class, ast::sensitivity_clause> sensitivity_clause_type;
 typedef x3::rule<sensitivity_list_class, ast::sensitivity_list> sensitivity_list_type;
-typedef x3::rule<sequence_of_statements_class> sequence_of_statements_type;
+typedef x3::rule<sequence_of_statements_class, ast::sequence_of_statements> sequence_of_statements_type;
 typedef x3::rule<sequential_statement_class, ast::sequential_statement> sequential_statement_type;
 typedef x3::rule<shift_expression_class, ast::shift_expression> shift_expression_type;
 typedef x3::rule<signal_assignment_statement_class, ast::signal_assignment_statement> signal_assignment_statement_type;
@@ -1775,31 +1775,36 @@ auto const block_statement_part_def =
 ;
 #endif
 
-#if 0
-// case_statement ::=
-// [ case_label : ]
-//     case expression is
-//     case_statement_alternative
-//     { case_statement_alternative }
-//     end case [ case_label ] ;
-auto const case_statement_def =
-        -( case_label > ':' )
-        CASE expression IS
-        case_statement_alternative
-        { case_statement_alternative }
-END CASE -( case_label ) > ';'
-;
-#endif
 
-#if 0
-// case_statement_alternative ::=
-// when choices =>
-//     sequence_of_statements
+// case_statement ::=                                                    [§ 8.8]
+//     [ case_label : ]
+//         case expression is
+//             case_statement_alternative
+//             { case_statement_alternative }
+//         end case [ case_label ] ;
+auto const case_statement_def =
+       -label_colon
+    >> CASE
+    >> expression
+    >> IS
+    >> +case_statement_alternative
+    >> END >> CASE
+    >> -label
+    > ';'
+    ;
+
+
+
+// case_statement_alternative ::=                                        [§ 8.8]
+//     when choices =>
+//         sequence_of_statements
 auto const case_statement_alternative_def =
-        WHEN choices =>
-sequence_of_statements
-;
-#endif
+       WHEN     // FixMe: x3 expectation points
+    >> choices
+    >> "=>"
+    >> sequence_of_statements
+    ;
+
 
 
 // character_literal ::=                                                [§ 13.5]
@@ -3540,13 +3545,13 @@ auto const sensitivity_list_def =
     ;
 
 
-#if 0
-// sequence_of_statements ::=
-// { sequential_statement }
+
+// sequence_of_statements ::=                                              [§ 8]
+//     { sequential_statement }
 auto const sequence_of_statements_def =
-{ sequential_statement }
-;
-#endif
+    *sequential_statement
+    ;
+
 
 
 // sequential_statement ::=                                                [§ 8]
@@ -3571,7 +3576,7 @@ auto const sequential_statement_def =
 //    | variable_assignment_statement
 //    | procedure_call_statement
 //    | if_statement
-//    | case_statement
+    | case_statement
 //    | loop_statement
     | next_statement
     | exit_statement
@@ -4102,9 +4107,9 @@ BOOST_SPIRIT_DEFINE(  // -- B --
     //, block_statement_part
 )
 BOOST_SPIRIT_DEFINE(  // -- C --
-    //  case_statement
-    //, case_statement_alternative
-      character_literal
+      case_statement
+    , case_statement_alternative
+    , character_literal
     , choice
     , choices
     //, component_configuration
@@ -4280,7 +4285,7 @@ BOOST_SPIRIT_DEFINE(  // -- S --
     , selected_waveforms
     , sensitivity_clause
     , sensitivity_list
-    //, sequence_of_statements
+    , sequence_of_statements
     , sequential_statement
     , shift_expression
     //, sign

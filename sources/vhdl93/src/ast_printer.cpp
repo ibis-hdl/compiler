@@ -446,17 +446,41 @@ void printer::operator()(block_statement_part const &node)
 
 void printer::operator()(case_statement const &node)
 {
-    static char const symbol[]{ "XXX case_statement" };
+    static char const symbol[]{ "case_statement" };
     symbol_scope<case_statement> _(*this, symbol);
-    //os << node;
+
+    if(node.label) {
+        (*this)(node.label.get());
+        os << "\n";
+    }
+
+    (*this)(node.expression);
+    os << "\n";
+
+    auto const N = node.alternatives.size() - 1;
+    unsigned i = 0;
+    for(auto const& case_statement_alternative : node.alternatives) {
+        (*this)(case_statement_alternative);
+        if(i++ != N) {
+            os << ",\n";
+        }
+    }
+
+    if(node.end_label) {
+        os << "\n";
+        (*this)(node.end_label.get());
+    }
 }
 
 
 void printer::operator()(case_statement_alternative const &node)
 {
-    static char const symbol[]{ "XXX case_statement_alternative" };
+    static char const symbol[]{ "case_statement_alternative" };
     symbol_scope<case_statement_alternative> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.choices);
+    os << "\n";
+    (*this)(node.sequence_of_statements);
 }
 
 
@@ -484,8 +508,8 @@ void printer::operator()(choices const &node)
 
     auto const N = node.size() - 1;
     unsigned i = 0;
-    for(auto const& choise : node) {
-        (*this)(choise);
+    for(auto const& choice : node) {
+        (*this)(choice);
         if(i++ != N) {
             os << ",\n";
         }
@@ -1858,9 +1882,17 @@ void printer::operator()(sensitivity_list const& node)
 
 void printer::operator()(sequence_of_statements const &node)
 {
-    static char const symbol[]{ "XXX sequence_of_statements" };
+    static char const symbol[]{ "sequence_of_statements" };
     symbol_scope<sequence_of_statements> _(*this, symbol);
-    //os << node;
+
+    auto const N = node.size() - 1;
+    unsigned i = 0;
+    for(auto const& sequential_statement : node) {
+        (*this)(sequential_statement);
+        if(i++ != N) {
+            os << ",\n";
+        }
+    }
 }
 
 

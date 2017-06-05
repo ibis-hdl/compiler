@@ -48,7 +48,7 @@
 //#include <eda/vhdl93/ast/block_statement.hpp>
 //#include <eda/vhdl93/ast/block_statement_part.hpp>
 //#include <eda/vhdl93/ast/case_statement.hpp>
-//#include <eda/vhdl93/ast/case_statement_alternative.hpp>
+#include <eda/vhdl93/ast/case_statement_alternative.hpp>
 //DISABLED #include <eda/vhdl93/ast/character_literal.hpp>
 //DISABLED #include <eda/vhdl93/ast/choice.hpp>
 #include <eda/vhdl93/ast/choices.hpp>
