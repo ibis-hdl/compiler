@@ -1,0 +1,32 @@
+(return_statement
+  (identifier
+    foo
+  )
+  (expression
+    (relation
+      (shift_expression
+        (simple_expression
+          (term
+            (primary<v>
+              (name<v>
+                (identifier
+                  a
+                )
+              )
+            )
+          ),
+          operator: ADD,
+          (term
+            (primary<v>
+              (name<v>
+                (identifier
+                  b
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

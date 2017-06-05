@@ -1745,7 +1745,6 @@ void printer::operator()(return_statement const &node)
 
     if(node.label) {
         (*this)(node.label.get());
-        os << "\n";
     }
 
     if(node.expression) {
