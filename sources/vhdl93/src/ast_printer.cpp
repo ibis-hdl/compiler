@@ -1699,14 +1699,6 @@ void printer::operator()(process_statement const &node)
 }
 
 
-void printer::operator()(process_statement_part const &node)
-{
-    static char const symbol[]{ "XXX process_statement_part" };
-    symbol_scope<process_statement_part> _(*this, symbol);
-    //os << node;
-}
-
-
 void printer::operator()(qualified_expression const &node)
 {
     static char const symbol[]{ "XXX qualified_expression" };
@@ -2094,14 +2086,6 @@ void printer::operator()(subprogram_specification const &node)
     static char const symbol[]{ "XXX subprogram_specification" };
     symbol_scope<subprogram_specification> _(*this, symbol);
     //visit(node);
-}
-
-
-void printer::operator()(subprogram_statement_part const &node)
-{
-    static char const symbol[]{ "XXX subprogram_statement_part" };
-    symbol_scope<subprogram_statement_part> _(*this, symbol);
-    //os << node;
 }
 
 

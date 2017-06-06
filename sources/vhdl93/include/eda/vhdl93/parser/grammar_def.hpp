@@ -908,7 +908,7 @@ typedef x3::rule<procedure_call_statement_class, ast::procedure_call> procedure_
 typedef x3::rule<process_declarative_item_class> process_declarative_item_type;
 typedef x3::rule<process_declarative_part_class> process_declarative_part_type;
 typedef x3::rule<process_statement_class> process_statement_type;
-typedef x3::rule<process_statement_part_class> process_statement_part_type;
+typedef x3::rule<process_statement_part_class, ast::process_statement_part> process_statement_part_type;
 typedef x3::rule<qualified_expression_class> qualified_expression_type;
 typedef x3::rule<range_class, ast::range> range_type;
 typedef x3::rule<range_constraint_class, ast::range> range_constraint_type;
@@ -942,7 +942,7 @@ typedef x3::rule<subprogram_declarative_item_class> subprogram_declarative_item_
 typedef x3::rule<subprogram_declarative_part_class> subprogram_declarative_part_type;
 typedef x3::rule<subprogram_kind_class> subprogram_kind_type;
 typedef x3::rule<subprogram_specification_class> subprogram_specification_type;
-typedef x3::rule<subprogram_statement_part_class> subprogram_statement_part_type;
+typedef x3::rule<subprogram_statement_part_class, ast::subprogram_statement_part> subprogram_statement_part_type;
 typedef x3::rule<subtype_declaration_class> subtype_declaration_type;
 typedef x3::rule<subtype_indication_class, ast::subtype_indication> subtype_indication_type;
 typedef x3::rule<suffix_class, ast::suffix> suffix_type;
@@ -3367,13 +3367,13 @@ auto const process_statement_def =
 ;
 #endif
 
-#if 0
-// process_statement_part ::=
-// { sequential_statement }
+
+// process_statement_part ::=                                            [§ 9.2]
+//     { sequential_statement }
 auto const process_statement_part_def =
-{ sequential_statement }
-;
-#endif
+    sequence_of_statements
+    ;
+
 
 #if 0
 // qualified_expression ::=
@@ -3808,13 +3808,13 @@ auto const subprogram_specification_def =
         ;
 #endif
 
-#if 0
-// subprogram_statement_part ::=
-// { sequential_statement }
+
+// subprogram_statement_part ::=                                         [§ 2.2]
+//     { sequential_statement }
 auto const subprogram_statement_part_def =
-{ sequential_statement }
-;
-#endif
+    sequence_of_statements
+    ;
+
 
 #if 0
 // subtype_declaration ::=
@@ -4261,7 +4261,7 @@ BOOST_SPIRIT_DEFINE(  // -- P --
     //, process_declarative_item
     //, process_declarative_part
     //, process_statement
-    //, process_statement_part
+    , process_statement_part
 )
 //BOOST_SPIRIT_DEFINE(  // -- Q --
 ////  qualified_expression
@@ -4302,7 +4302,7 @@ BOOST_SPIRIT_DEFINE(  // -- S --
     //, subprogram_declarative_part
     //, subprogram_kind
     //, subprogram_specification
-    //, subprogram_statement_part
+    , subprogram_statement_part
     //, subtype_declaration
     , subtype_indication
     , suffix

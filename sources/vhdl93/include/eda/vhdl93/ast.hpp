@@ -180,7 +180,7 @@
 //#include <eda/vhdl93/ast/process_declarative_item.hpp>
 //#include <eda/vhdl93/ast/process_declarative_part.hpp>
 //#include <eda/vhdl93/ast/process_statement.hpp>
-//#include <eda/vhdl93/ast/process_statement_part.hpp>
+#include <eda/vhdl93/ast/process_statement_part.hpp>
 //#include <eda/vhdl93/ast/qualified_expression.hpp>
 //DISABLED #include <eda/vhdl93/ast/range.hpp>
 //#include <eda/vhdl93/ast/record_type_definition.hpp>
@@ -211,7 +211,7 @@
 //#include <eda/vhdl93/ast/subprogram_declarative_part.hpp>
 //#include <eda/vhdl93/ast/subprogram_kind.hpp>
 //#include <eda/vhdl93/ast/subprogram_specification.hpp>
-//#include <eda/vhdl93/ast/subprogram_statement_part.hpp>
+#include <eda/vhdl93/ast/subprogram_statement_part.hpp>
 //#include <eda/vhdl93/ast/subtype_declaration.hpp>
 //#include <eda/vhdl93/ast/subtype_indication.hpp>
 //DISABLED #include <eda/vhdl93/ast/suffix.hpp>
