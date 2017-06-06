@@ -834,7 +834,7 @@ typedef x3::rule<factor_class, ast::factor> factor_type;
 typedef x3::rule<file_declaration_class> file_declaration_type;
 typedef x3::rule<file_logical_name_class> file_logical_name_type;
 typedef x3::rule<file_open_information_class> file_open_information_type;
-typedef x3::rule<file_type_definition_class> file_type_definition_type;
+typedef x3::rule<file_type_definition_class, ast::file_type_definition> file_type_definition_type;
 typedef x3::rule<formal_designator_class, ast::formal_designator> formal_designator_type;
 typedef x3::rule<formal_parameter_list_class> formal_parameter_list_type;
 typedef x3::rule<formal_part_class, ast::formal_part> formal_part_type;
@@ -2537,15 +2537,15 @@ auto const file_declaration_def =
                 ;
 #endif
 
-#if 0
-        // file_type_definition ::=
-        // file  of type_mark
-        //     floating_type_definition  :=  range_constraint
-        auto const file_type_definition_def =
-                FILE  OF type_mark
-                floating_type_definition   ":=" >   range_constraint
-                ;
-#endif
+
+// file_type_definition ::=                                              [§ 3.4]
+//     file  of type_mark
+auto const file_type_definition_def =
+       FILE
+    >> OF
+    >> type_mark
+    ;
+
 
 
 // formal_designator ::=                                             [§ 4.3.2.2]
@@ -4175,7 +4175,7 @@ BOOST_SPIRIT_DEFINE(  // -- F --
     //, file_declaration
     //, file_logical_name
     //, file_open_information
-    //, file_type_definition
+    , file_type_definition
     , formal_designator
     //, formal_parameter_list
     , formal_part

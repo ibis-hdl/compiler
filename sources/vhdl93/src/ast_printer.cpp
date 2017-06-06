@@ -1087,14 +1087,6 @@ void printer::operator()(file_open_information const &node)
 }
 
 
-void printer::operator()(file_type_definition const &node)
-{
-    static char const symbol[]{ "XXX file_type_definition" };
-    symbol_scope<file_type_definition> _(*this, symbol);
-    //os << node;
-}
-
-
 void printer::operator()(formal_parameter_list const &node)
 {
     static char const symbol[]{ "XXX formal_parameter_list" };

@@ -110,7 +110,7 @@
 //#include <eda/vhdl93/ast/file_declaration.hpp>
 //#include <eda/vhdl93/ast/file_logical_name.hpp>
 //#include <eda/vhdl93/ast/file_open_information.hpp>
-//#include <eda/vhdl93/ast/file_type_definition.hpp>
+#include <eda/vhdl93/ast/file_type_definition.hpp>
 //DISABLED #include <eda/vhdl93/ast/formal_designator.hpp>
 //#include <eda/vhdl93/ast/formal_parameter_list.hpp>
 //DISABLED #include <eda/vhdl93/ast/formal_part.hpp>
