@@ -3612,15 +3612,8 @@ auto const sign_def =
 
 // signal_assignment_statement ::=                                       [§ 8.4]
 //     [ label : ] target <= [ delay_mechanism ] waveform ;
-namespace signal_assignment_statement_detail {
-    auto const label = x3::rule<struct _, ast::label> { "label" } =
-        parser::label
-        >> !char_('<') // prevent parse of target
-        >> ':'
-        ;
-}
 auto const signal_assignment_statement_def =
-       -signal_assignment_statement_detail::label
+       -label_colon
     >> target
     >> "<="
     >> -delay_mechanism
