@@ -234,6 +234,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::use_clause,
     list
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::variable_assignment_statement,
+    label, target, expression
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::wait_statement,
     label, sensitivity_clause, condition_clause, timeout_clause
 )

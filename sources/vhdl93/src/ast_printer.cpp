@@ -2238,9 +2238,16 @@ void printer::operator()(use_clause const &node)
 
 void printer::operator()(variable_assignment_statement const &node)
 {
-    static char const symbol[]{ "XXX variable_assignment_statement" };
+    static char const symbol[]{ "variable_assignment_statement" };
     symbol_scope<variable_assignment_statement> _(*this, symbol);
-    //os << node;
+
+    if(node.label) {
+        (*this)(node.label.get());
+        os << "\n";
+    }
+    (*this)(node.target);
+    os << "\n";
+    (*this)(node.expression);
 }
 
 

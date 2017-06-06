@@ -955,7 +955,7 @@ typedef x3::rule<type_definition_class> type_definition_type;
 typedef x3::rule<type_mark_class, ast::type_mark> type_mark_type;
 typedef x3::rule<unconstrained_array_definition_class> unconstrained_array_definition_type;
 typedef x3::rule<use_clause_class, ast::use_clause> use_clause_type;
-typedef x3::rule<variable_assignment_statement_class> variable_assignment_statement_type;
+typedef x3::rule<variable_assignment_statement_class, ast::variable_assignment_statement> variable_assignment_statement_type;
 typedef x3::rule<variable_declaration_class> variable_declaration_type;
 typedef x3::rule<wait_statement_class, ast::wait_statement> wait_statement_type;
 typedef x3::rule<waveform_class, ast::waveform> waveform_type;
@@ -1298,7 +1298,8 @@ auto const value_expression = x3::rule<expression_class, ast::expression> { "val
 
 // Convenience rule for 'label :'
 auto const label_colon = x3::rule<struct signal_name_class, ast::identifier> { "label" } =
-    label >> ':'
+       label >> ':'
+    >> !char_('=')  // exclude ":=" variable assignment
     ;
 
 
@@ -3573,7 +3574,7 @@ auto const sequential_statement_def =
     | assertion_statement
     | report_statement
     | signal_assignment_statement
-//    | variable_assignment_statement
+    | variable_assignment_statement
 //    | procedure_call_statement
 //    | if_statement
     | case_statement
@@ -4005,13 +4006,17 @@ auto const use_clause_def =
     ;
 
 
-#if 0
-// variable_assignment_statement ::=
-// [ label : ] target  := expression ;
+
+// variable_assignment_statement ::=                                     [§ 8.5]
+//     [ label : ] target  := expression ;
 auto const variable_assignment_statement_def =
-        -label_colon target   ":=" >  expression > ';'
-;
-#endif
+       -label_colon
+    >> target
+    >> ":="
+    >> expression
+    > ';'
+    ;
+
 
 #if 0
 // variable_declaration ::=
@@ -4322,10 +4327,10 @@ BOOST_SPIRIT_DEFINE(  // -- U --
     //  unconstrained_array_definition
       use_clause
 )
-//BOOST_SPIRIT_DEFINE(  // -- V --
-////  variable_assignment_statement
+BOOST_SPIRIT_DEFINE(  // -- V --
+      variable_assignment_statement
 ////, variable_declaration
-//)
+)
 BOOST_SPIRIT_DEFINE(  // -- W --
       wait_statement
     , waveform

@@ -1,0 +1,26 @@
+(variable_assignment_statement
+  (target<v>
+    (name<v>
+      (identifier
+        target
+      )
+    )
+  )
+  (expression
+    (relation
+      (shift_expression
+        (simple_expression
+          (term
+            (primary<v>
+              (name<v>
+                (identifier
+                  expression
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

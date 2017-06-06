@@ -1000,135 +1000,555 @@ bit_string_literal
 case_statement
 ==============
 
-+--------------------+-----------------------------+---------------------------------+
-| File               | Input                       | Expected                        |
-+--------------------+-----------------------------+---------------------------------+
-| case_statement_001 | case expression is          | (case_statement                 |
-|                    |     when "choices" => exit; |   (expression                   |
-|                    | end case;                   |     (relation                   |
-|                    |                             |       (shift_expression         |
-|                    |                             |         (simple_expression      |
-|                    |                             |           (term                 |
-|                    |                             |             (primary<v>         |
-|                    |                             |               (name<v>          |
-|                    |                             |                 (identifier     |
-|                    |                             |                   expression    |
-|                    |                             |                 )               |
-|                    |                             |               )                 |
-|                    |                             |             )                   |
-|                    |                             |           )                     |
-|                    |                             |         )                       |
-|                    |                             |       )                         |
-|                    |                             |     )                           |
-|                    |                             |   )                             |
-|                    |                             |   (case_statement_alternative   |
-|                    |                             |     (choices                    |
-|                    |                             |       (choice<v>                |
-|                    |                             |         (simple_expression      |
-|                    |                             |           (term                 |
-|                    |                             |             (primary<v>         |
-|                    |                             |               (literal<v>       |
-|                    |                             |                 (string_literal |
-|                    |                             |                   choices       |
-|                    |                             |                 )               |
-|                    |                             |               )                 |
-|                    |                             |             )                   |
-|                    |                             |           )                     |
-|                    |                             |         )                       |
-|                    |                             |       )                         |
-|                    |                             |     )                           |
-|                    |                             |     (sequence_of_statements     |
-|                    |                             |       (sequential_statement<v>  |
-|                    |                             |         (exit_statement         |
-|                    |                             |                                 |
-|                    |                             |         )                       |
-|                    |                             |       )                         |
-|                    |                             |     )                           |
-|                    |                             |   )                             |
-|                    |                             | )                               |
-|                    |                             |                                 |
-+--------------------+-----------------------------+---------------------------------+
-| case_statement_002 | case_label:                 | (case_statement                 |
-|                    | case expression is          |   (identifier                   |
-|                    |     when "choices" => exit; |     case_label                  |
-|                    |     when "foo"     => null; |   )                             |
-|                    | end case case_label;        |   (expression                   |
-|                    |                             |     (relation                   |
-|                    |                             |       (shift_expression         |
-|                    |                             |         (simple_expression      |
-|                    |                             |           (term                 |
-|                    |                             |             (primary<v>         |
-|                    |                             |               (name<v>          |
-|                    |                             |                 (identifier     |
-|                    |                             |                   expression    |
-|                    |                             |                 )               |
-|                    |                             |               )                 |
-|                    |                             |             )                   |
-|                    |                             |           )                     |
-|                    |                             |         )                       |
-|                    |                             |       )                         |
-|                    |                             |     )                           |
-|                    |                             |   )                             |
-|                    |                             |   (case_statement_alternative   |
-|                    |                             |     (choices                    |
-|                    |                             |       (choice<v>                |
-|                    |                             |         (simple_expression      |
-|                    |                             |           (term                 |
-|                    |                             |             (primary<v>         |
-|                    |                             |               (literal<v>       |
-|                    |                             |                 (string_literal |
-|                    |                             |                   choices       |
-|                    |                             |                 )               |
-|                    |                             |               )                 |
-|                    |                             |             )                   |
-|                    |                             |           )                     |
-|                    |                             |         )                       |
-|                    |                             |       )                         |
-|                    |                             |     )                           |
-|                    |                             |     (sequence_of_statements     |
-|                    |                             |       (sequential_statement<v>  |
-|                    |                             |         (exit_statement         |
-|                    |                             |                                 |
-|                    |                             |         )                       |
-|                    |                             |       )                         |
-|                    |                             |     )                           |
-|                    |                             |   ),                            |
-|                    |                             |   (case_statement_alternative   |
-|                    |                             |     (choices                    |
-|                    |                             |       (choice<v>                |
-|                    |                             |         (simple_expression      |
-|                    |                             |           (term                 |
-|                    |                             |             (primary<v>         |
-|                    |                             |               (literal<v>       |
-|                    |                             |                 (string_literal |
-|                    |                             |                   foo           |
-|                    |                             |                 )               |
-|                    |                             |               )                 |
-|                    |                             |             )                   |
-|                    |                             |           )                     |
-|                    |                             |         )                       |
-|                    |                             |       )                         |
-|                    |                             |     )                           |
-|                    |                             |     (sequence_of_statements     |
-|                    |                             |       (sequential_statement<v>  |
-|                    |                             |         (null_statement         |
-|                    |                             |                                 |
-|                    |                             |         )                       |
-|                    |                             |       )                         |
-|                    |                             |     )                           |
-|                    |                             |   )                             |
-|                    |                             |   (identifier                   |
-|                    |                             |     case_label                  |
-|                    |                             |   )                             |
-|                    |                             | )                               |
-|                    |                             |                                 |
-+--------------------+-----------------------------+---------------------------------+
-| case_statement_003 | case expression is          |                                 |
-|                    |     when "choices" => foo;  |                                 |
-|                    | end case;                   |                                 |
-|                    |                             |                                 |
-|                    |                             |                                 |
-+--------------------+-----------------------------+---------------------------------+
++--------------------+-------------------------------------+-----------------------------------------------------+
+| File               | Input                               | Expected                                            |
++--------------------+-------------------------------------+-----------------------------------------------------+
+| case_statement_001 | case expression is                  | (case_statement                                     |
+|                    |     when "choices" => exit;         |   (expression                                       |
+|                    | end case;                           |     (relation                                       |
+|                    |                                     |       (shift_expression                             |
+|                    |                                     |         (simple_expression                          |
+|                    |                                     |           (term                                     |
+|                    |                                     |             (primary<v>                             |
+|                    |                                     |               (name<v>                              |
+|                    |                                     |                 (identifier                         |
+|                    |                                     |                   expression                        |
+|                    |                                     |                 )                                   |
+|                    |                                     |               )                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |         )                                           |
+|                    |                                     |       )                                             |
+|                    |                                     |     )                                               |
+|                    |                                     |   )                                                 |
+|                    |                                     |   (case_statement_alternative                       |
+|                    |                                     |     (choices                                        |
+|                    |                                     |       (choice<v>                                    |
+|                    |                                     |         (simple_expression                          |
+|                    |                                     |           (term                                     |
+|                    |                                     |             (primary<v>                             |
+|                    |                                     |               (literal<v>                           |
+|                    |                                     |                 (string_literal                     |
+|                    |                                     |                   choices                           |
+|                    |                                     |                 )                                   |
+|                    |                                     |               )                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |         )                                           |
+|                    |                                     |       )                                             |
+|                    |                                     |     )                                               |
+|                    |                                     |     (sequence_of_statements                         |
+|                    |                                     |       (sequential_statement<v>                      |
+|                    |                                     |         (exit_statement                             |
+|                    |                                     |                                                     |
+|                    |                                     |         )                                           |
+|                    |                                     |       )                                             |
+|                    |                                     |     )                                               |
+|                    |                                     |   )                                                 |
+|                    |                                     | )                                                   |
+|                    |                                     |                                                     |
++--------------------+-------------------------------------+-----------------------------------------------------+
+| case_statement_002 | case_label:                         | (case_statement                                     |
+|                    | case expression is                  |   (identifier                                       |
+|                    |     when "choices" => exit;         |     case_label                                      |
+|                    |     when "foo"     => null;         |   )                                                 |
+|                    | end case case_label;                |   (expression                                       |
+|                    |                                     |     (relation                                       |
+|                    |                                     |       (shift_expression                             |
+|                    |                                     |         (simple_expression                          |
+|                    |                                     |           (term                                     |
+|                    |                                     |             (primary<v>                             |
+|                    |                                     |               (name<v>                              |
+|                    |                                     |                 (identifier                         |
+|                    |                                     |                   expression                        |
+|                    |                                     |                 )                                   |
+|                    |                                     |               )                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |         )                                           |
+|                    |                                     |       )                                             |
+|                    |                                     |     )                                               |
+|                    |                                     |   )                                                 |
+|                    |                                     |   (case_statement_alternative                       |
+|                    |                                     |     (choices                                        |
+|                    |                                     |       (choice<v>                                    |
+|                    |                                     |         (simple_expression                          |
+|                    |                                     |           (term                                     |
+|                    |                                     |             (primary<v>                             |
+|                    |                                     |               (literal<v>                           |
+|                    |                                     |                 (string_literal                     |
+|                    |                                     |                   choices                           |
+|                    |                                     |                 )                                   |
+|                    |                                     |               )                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |         )                                           |
+|                    |                                     |       )                                             |
+|                    |                                     |     )                                               |
+|                    |                                     |     (sequence_of_statements                         |
+|                    |                                     |       (sequential_statement<v>                      |
+|                    |                                     |         (exit_statement                             |
+|                    |                                     |                                                     |
+|                    |                                     |         )                                           |
+|                    |                                     |       )                                             |
+|                    |                                     |     )                                               |
+|                    |                                     |   ),                                                |
+|                    |                                     |   (case_statement_alternative                       |
+|                    |                                     |     (choices                                        |
+|                    |                                     |       (choice<v>                                    |
+|                    |                                     |         (simple_expression                          |
+|                    |                                     |           (term                                     |
+|                    |                                     |             (primary<v>                             |
+|                    |                                     |               (literal<v>                           |
+|                    |                                     |                 (string_literal                     |
+|                    |                                     |                   foo                               |
+|                    |                                     |                 )                                   |
+|                    |                                     |               )                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |         )                                           |
+|                    |                                     |       )                                             |
+|                    |                                     |     )                                               |
+|                    |                                     |     (sequence_of_statements                         |
+|                    |                                     |       (sequential_statement<v>                      |
+|                    |                                     |         (null_statement                             |
+|                    |                                     |                                                     |
+|                    |                                     |         )                                           |
+|                    |                                     |       )                                             |
+|                    |                                     |     )                                               |
+|                    |                                     |   )                                                 |
+|                    |                                     |   (identifier                                       |
+|                    |                                     |     case_label                                      |
+|                    |                                     |   )                                                 |
+|                    |                                     | )                                                   |
+|                    |                                     |                                                     |
++--------------------+-------------------------------------+-----------------------------------------------------+
+| case_statement_003 | CASE input_A IS                     | (case_statement                                     |
+|                    |     when "10"   => output0 <= '1';  |   (expression                                       |
+|                    |     when "01"   => output1 <= '1';  |     (relation                                       |
+|                    |     when OTHERS => output0 <= 'X';  |       (shift_expression                             |
+|                    |                    output1 <= 'X';  |         (simple_expression                          |
+|                    | END CASE;                           |           (term                                     |
+|                    |                                     |             (primary<v>                             |
+|                    |                                     |               (name<v>                              |
+|                    |                                     |                 (identifier                         |
+|                    |                                     |                   input_A                           |
+|                    |                                     |                 )                                   |
+|                    |                                     |               )                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |         )                                           |
+|                    |                                     |       )                                             |
+|                    |                                     |     )                                               |
+|                    |                                     |   )                                                 |
+|                    |                                     |   (case_statement_alternative                       |
+|                    |                                     |     (choices                                        |
+|                    |                                     |       (choice<v>                                    |
+|                    |                                     |         (simple_expression                          |
+|                    |                                     |           (term                                     |
+|                    |                                     |             (primary<v>                             |
+|                    |                                     |               (literal<v>                           |
+|                    |                                     |                 (string_literal                     |
+|                    |                                     |                   10                                |
+|                    |                                     |                 )                                   |
+|                    |                                     |               )                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |         )                                           |
+|                    |                                     |       )                                             |
+|                    |                                     |     )                                               |
+|                    |                                     |     (sequence_of_statements                         |
+|                    |                                     |       (sequential_statement<v>                      |
+|                    |                                     |         (signal_assignment_statement                |
+|                    |                                     |           (target<v>                                |
+|                    |                                     |             (name<v>                                |
+|                    |                                     |               (identifier                           |
+|                    |                                     |                 output0                             |
+|                    |                                     |               )                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |           (waveform<v>                              |
+|                    |                                     |             (waveform_element                       |
+|                    |                                     |               (expression                           |
+|                    |                                     |                 (relation                           |
+|                    |                                     |                   (shift_expression                 |
+|                    |                                     |                     (simple_expression              |
+|                    |                                     |                       (term                         |
+|                    |                                     |                         (primary<v>                 |
+|                    |                                     |                           (literal<v>               |
+|                    |                                     |                             (enumeration_literal<v> |
+|                    |                                     |                               (character_literal    |
+|                    |                                     |                                 '1'                 |
+|                    |                                     |                               )                     |
+|                    |                                     |                             )                       |
+|                    |                                     |                           )                         |
+|                    |                                     |                         )                           |
+|                    |                                     |                       )                             |
+|                    |                                     |                     )                               |
+|                    |                                     |                   )                                 |
+|                    |                                     |                 )                                   |
+|                    |                                     |               )                                     |
+|                    |                                     |                                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |         )                                           |
+|                    |                                     |       )                                             |
+|                    |                                     |     )                                               |
+|                    |                                     |   ),                                                |
+|                    |                                     |   (case_statement_alternative                       |
+|                    |                                     |     (choices                                        |
+|                    |                                     |       (choice<v>                                    |
+|                    |                                     |         (simple_expression                          |
+|                    |                                     |           (term                                     |
+|                    |                                     |             (primary<v>                             |
+|                    |                                     |               (literal<v>                           |
+|                    |                                     |                 (string_literal                     |
+|                    |                                     |                   01                                |
+|                    |                                     |                 )                                   |
+|                    |                                     |               )                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |         )                                           |
+|                    |                                     |       )                                             |
+|                    |                                     |     )                                               |
+|                    |                                     |     (sequence_of_statements                         |
+|                    |                                     |       (sequential_statement<v>                      |
+|                    |                                     |         (signal_assignment_statement                |
+|                    |                                     |           (target<v>                                |
+|                    |                                     |             (name<v>                                |
+|                    |                                     |               (identifier                           |
+|                    |                                     |                 output1                             |
+|                    |                                     |               )                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |           (waveform<v>                              |
+|                    |                                     |             (waveform_element                       |
+|                    |                                     |               (expression                           |
+|                    |                                     |                 (relation                           |
+|                    |                                     |                   (shift_expression                 |
+|                    |                                     |                     (simple_expression              |
+|                    |                                     |                       (term                         |
+|                    |                                     |                         (primary<v>                 |
+|                    |                                     |                           (literal<v>               |
+|                    |                                     |                             (enumeration_literal<v> |
+|                    |                                     |                               (character_literal    |
+|                    |                                     |                                 '1'                 |
+|                    |                                     |                               )                     |
+|                    |                                     |                             )                       |
+|                    |                                     |                           )                         |
+|                    |                                     |                         )                           |
+|                    |                                     |                       )                             |
+|                    |                                     |                     )                               |
+|                    |                                     |                   )                                 |
+|                    |                                     |                 )                                   |
+|                    |                                     |               )                                     |
+|                    |                                     |                                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |         )                                           |
+|                    |                                     |       )                                             |
+|                    |                                     |     )                                               |
+|                    |                                     |   ),                                                |
+|                    |                                     |   (case_statement_alternative                       |
+|                    |                                     |     (choices                                        |
+|                    |                                     |       (choice<v>                                    |
+|                    |                                     |         (keyword                                    |
+|                    |                                     |           OTHERS                                    |
+|                    |                                     |         )                                           |
+|                    |                                     |       )                                             |
+|                    |                                     |     )                                               |
+|                    |                                     |     (sequence_of_statements                         |
+|                    |                                     |       (sequential_statement<v>                      |
+|                    |                                     |         (signal_assignment_statement                |
+|                    |                                     |           (target<v>                                |
+|                    |                                     |             (name<v>                                |
+|                    |                                     |               (identifier                           |
+|                    |                                     |                 output0                             |
+|                    |                                     |               )                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |           (waveform<v>                              |
+|                    |                                     |             (waveform_element                       |
+|                    |                                     |               (expression                           |
+|                    |                                     |                 (relation                           |
+|                    |                                     |                   (shift_expression                 |
+|                    |                                     |                     (simple_expression              |
+|                    |                                     |                       (term                         |
+|                    |                                     |                         (primary<v>                 |
+|                    |                                     |                           (literal<v>               |
+|                    |                                     |                             (enumeration_literal<v> |
+|                    |                                     |                               (character_literal    |
+|                    |                                     |                                 'X'                 |
+|                    |                                     |                               )                     |
+|                    |                                     |                             )                       |
+|                    |                                     |                           )                         |
+|                    |                                     |                         )                           |
+|                    |                                     |                       )                             |
+|                    |                                     |                     )                               |
+|                    |                                     |                   )                                 |
+|                    |                                     |                 )                                   |
+|                    |                                     |               )                                     |
+|                    |                                     |                                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |         )                                           |
+|                    |                                     |       ),                                            |
+|                    |                                     |       (sequential_statement<v>                      |
+|                    |                                     |         (signal_assignment_statement                |
+|                    |                                     |           (target<v>                                |
+|                    |                                     |             (name<v>                                |
+|                    |                                     |               (identifier                           |
+|                    |                                     |                 output1                             |
+|                    |                                     |               )                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |           (waveform<v>                              |
+|                    |                                     |             (waveform_element                       |
+|                    |                                     |               (expression                           |
+|                    |                                     |                 (relation                           |
+|                    |                                     |                   (shift_expression                 |
+|                    |                                     |                     (simple_expression              |
+|                    |                                     |                       (term                         |
+|                    |                                     |                         (primary<v>                 |
+|                    |                                     |                           (literal<v>               |
+|                    |                                     |                             (enumeration_literal<v> |
+|                    |                                     |                               (character_literal    |
+|                    |                                     |                                 'X'                 |
+|                    |                                     |                               )                     |
+|                    |                                     |                             )                       |
+|                    |                                     |                           )                         |
+|                    |                                     |                         )                           |
+|                    |                                     |                       )                             |
+|                    |                                     |                     )                               |
+|                    |                                     |                   )                                 |
+|                    |                                     |                 )                                   |
+|                    |                                     |               )                                     |
+|                    |                                     |                                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |         )                                           |
+|                    |                                     |       )                                             |
+|                    |                                     |     )                                               |
+|                    |                                     |   )                                                 |
+|                    |                                     | )                                                   |
+|                    |                                     |                                                     |
++--------------------+-------------------------------------+-----------------------------------------------------+
+| case_statement_004 | switcher: case input_A is           | (case_statement                                     |
+|                    |     when "10"   => output0 <= '1';  |   (identifier                                       |
+|                    |     when "01"   => output1 <= '1';  |     switcher                                        |
+|                    |     when OTHERS => output0 <= 'X';  |   )                                                 |
+|                    |                    output1 <= 'X';  |   (expression                                       |
+|                    | end case switcher;                  |     (relation                                       |
+|                    |                                     |       (shift_expression                             |
+|                    |                                     |         (simple_expression                          |
+|                    |                                     |           (term                                     |
+|                    |                                     |             (primary<v>                             |
+|                    |                                     |               (name<v>                              |
+|                    |                                     |                 (identifier                         |
+|                    |                                     |                   input_A                           |
+|                    |                                     |                 )                                   |
+|                    |                                     |               )                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |         )                                           |
+|                    |                                     |       )                                             |
+|                    |                                     |     )                                               |
+|                    |                                     |   )                                                 |
+|                    |                                     |   (case_statement_alternative                       |
+|                    |                                     |     (choices                                        |
+|                    |                                     |       (choice<v>                                    |
+|                    |                                     |         (simple_expression                          |
+|                    |                                     |           (term                                     |
+|                    |                                     |             (primary<v>                             |
+|                    |                                     |               (literal<v>                           |
+|                    |                                     |                 (string_literal                     |
+|                    |                                     |                   10                                |
+|                    |                                     |                 )                                   |
+|                    |                                     |               )                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |         )                                           |
+|                    |                                     |       )                                             |
+|                    |                                     |     )                                               |
+|                    |                                     |     (sequence_of_statements                         |
+|                    |                                     |       (sequential_statement<v>                      |
+|                    |                                     |         (signal_assignment_statement                |
+|                    |                                     |           (target<v>                                |
+|                    |                                     |             (name<v>                                |
+|                    |                                     |               (identifier                           |
+|                    |                                     |                 output0                             |
+|                    |                                     |               )                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |           (waveform<v>                              |
+|                    |                                     |             (waveform_element                       |
+|                    |                                     |               (expression                           |
+|                    |                                     |                 (relation                           |
+|                    |                                     |                   (shift_expression                 |
+|                    |                                     |                     (simple_expression              |
+|                    |                                     |                       (term                         |
+|                    |                                     |                         (primary<v>                 |
+|                    |                                     |                           (literal<v>               |
+|                    |                                     |                             (enumeration_literal<v> |
+|                    |                                     |                               (character_literal    |
+|                    |                                     |                                 '1'                 |
+|                    |                                     |                               )                     |
+|                    |                                     |                             )                       |
+|                    |                                     |                           )                         |
+|                    |                                     |                         )                           |
+|                    |                                     |                       )                             |
+|                    |                                     |                     )                               |
+|                    |                                     |                   )                                 |
+|                    |                                     |                 )                                   |
+|                    |                                     |               )                                     |
+|                    |                                     |                                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |         )                                           |
+|                    |                                     |       )                                             |
+|                    |                                     |     )                                               |
+|                    |                                     |   ),                                                |
+|                    |                                     |   (case_statement_alternative                       |
+|                    |                                     |     (choices                                        |
+|                    |                                     |       (choice<v>                                    |
+|                    |                                     |         (simple_expression                          |
+|                    |                                     |           (term                                     |
+|                    |                                     |             (primary<v>                             |
+|                    |                                     |               (literal<v>                           |
+|                    |                                     |                 (string_literal                     |
+|                    |                                     |                   01                                |
+|                    |                                     |                 )                                   |
+|                    |                                     |               )                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |         )                                           |
+|                    |                                     |       )                                             |
+|                    |                                     |     )                                               |
+|                    |                                     |     (sequence_of_statements                         |
+|                    |                                     |       (sequential_statement<v>                      |
+|                    |                                     |         (signal_assignment_statement                |
+|                    |                                     |           (target<v>                                |
+|                    |                                     |             (name<v>                                |
+|                    |                                     |               (identifier                           |
+|                    |                                     |                 output1                             |
+|                    |                                     |               )                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |           (waveform<v>                              |
+|                    |                                     |             (waveform_element                       |
+|                    |                                     |               (expression                           |
+|                    |                                     |                 (relation                           |
+|                    |                                     |                   (shift_expression                 |
+|                    |                                     |                     (simple_expression              |
+|                    |                                     |                       (term                         |
+|                    |                                     |                         (primary<v>                 |
+|                    |                                     |                           (literal<v>               |
+|                    |                                     |                             (enumeration_literal<v> |
+|                    |                                     |                               (character_literal    |
+|                    |                                     |                                 '1'                 |
+|                    |                                     |                               )                     |
+|                    |                                     |                             )                       |
+|                    |                                     |                           )                         |
+|                    |                                     |                         )                           |
+|                    |                                     |                       )                             |
+|                    |                                     |                     )                               |
+|                    |                                     |                   )                                 |
+|                    |                                     |                 )                                   |
+|                    |                                     |               )                                     |
+|                    |                                     |                                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |         )                                           |
+|                    |                                     |       )                                             |
+|                    |                                     |     )                                               |
+|                    |                                     |   ),                                                |
+|                    |                                     |   (case_statement_alternative                       |
+|                    |                                     |     (choices                                        |
+|                    |                                     |       (choice<v>                                    |
+|                    |                                     |         (keyword                                    |
+|                    |                                     |           OTHERS                                    |
+|                    |                                     |         )                                           |
+|                    |                                     |       )                                             |
+|                    |                                     |     )                                               |
+|                    |                                     |     (sequence_of_statements                         |
+|                    |                                     |       (sequential_statement<v>                      |
+|                    |                                     |         (signal_assignment_statement                |
+|                    |                                     |           (target<v>                                |
+|                    |                                     |             (name<v>                                |
+|                    |                                     |               (identifier                           |
+|                    |                                     |                 output0                             |
+|                    |                                     |               )                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |           (waveform<v>                              |
+|                    |                                     |             (waveform_element                       |
+|                    |                                     |               (expression                           |
+|                    |                                     |                 (relation                           |
+|                    |                                     |                   (shift_expression                 |
+|                    |                                     |                     (simple_expression              |
+|                    |                                     |                       (term                         |
+|                    |                                     |                         (primary<v>                 |
+|                    |                                     |                           (literal<v>               |
+|                    |                                     |                             (enumeration_literal<v> |
+|                    |                                     |                               (character_literal    |
+|                    |                                     |                                 'X'                 |
+|                    |                                     |                               )                     |
+|                    |                                     |                             )                       |
+|                    |                                     |                           )                         |
+|                    |                                     |                         )                           |
+|                    |                                     |                       )                             |
+|                    |                                     |                     )                               |
+|                    |                                     |                   )                                 |
+|                    |                                     |                 )                                   |
+|                    |                                     |               )                                     |
+|                    |                                     |                                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |         )                                           |
+|                    |                                     |       ),                                            |
+|                    |                                     |       (sequential_statement<v>                      |
+|                    |                                     |         (signal_assignment_statement                |
+|                    |                                     |           (target<v>                                |
+|                    |                                     |             (name<v>                                |
+|                    |                                     |               (identifier                           |
+|                    |                                     |                 output1                             |
+|                    |                                     |               )                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |           (waveform<v>                              |
+|                    |                                     |             (waveform_element                       |
+|                    |                                     |               (expression                           |
+|                    |                                     |                 (relation                           |
+|                    |                                     |                   (shift_expression                 |
+|                    |                                     |                     (simple_expression              |
+|                    |                                     |                       (term                         |
+|                    |                                     |                         (primary<v>                 |
+|                    |                                     |                           (literal<v>               |
+|                    |                                     |                             (enumeration_literal<v> |
+|                    |                                     |                               (character_literal    |
+|                    |                                     |                                 'X'                 |
+|                    |                                     |                               )                     |
+|                    |                                     |                             )                       |
+|                    |                                     |                           )                         |
+|                    |                                     |                         )                           |
+|                    |                                     |                       )                             |
+|                    |                                     |                     )                               |
+|                    |                                     |                   )                                 |
+|                    |                                     |                 )                                   |
+|                    |                                     |               )                                     |
+|                    |                                     |                                                     |
+|                    |                                     |             )                                       |
+|                    |                                     |           )                                         |
+|                    |                                     |         )                                           |
+|                    |                                     |       )                                             |
+|                    |                                     |     )                                               |
+|                    |                                     |   )                                                 |
+|                    |                                     |   (identifier                                       |
+|                    |                                     |     switcher                                        |
+|                    |                                     |   )                                                 |
+|                    |                                     | )                                                   |
+|                    |                                     |                                                     |
++--------------------+-------------------------------------+-----------------------------------------------------+
 
 =================
 character_literal
@@ -4443,214 +4863,279 @@ return_statement
 sequential_statement
 ====================
 
-+---------------------+-------------------------------------------------------------+------------------------------------------------------------------------+
-| File                | Input                                                       | Expected                                                               |
-+---------------------+-------------------------------------------------------------+------------------------------------------------------------------------+
-| assertion_statement | my_label:                                                   | (sequential_statement<v>                                               |
-|                     |     assert 0 = 1                                            |   (assertion_statement                                                 |
-|                     |         report "Damn - can't be"                            |     (identifier                                                        |
-|                     |         severity Dont_Care_About                            |       my_label                                                         |
-|                     |         ;                                                   |     )                                                                  |
-|                     |                                                             |     (assertion                                                         |
-|                     |                                                             |       (expression                                                      |
-|                     |                                                             |         (relation                                                      |
-|                     |                                                             |           (shift_expression                                            |
-|                     |                                                             |             (simple_expression                                         |
-|                     |                                                             |               (term                                                    |
-|                     |                                                             |                 (primary<v>                                            |
-|                     |                                                             |                   (literal<v>                                          |
-|                     |                                                             |                     (numeric_literal<v>                                |
-|                     |                                                             |                       (abstract_literal<v>                             |
-|                     |                                                             |                         (decimal_literal                               |
-|                     |                                                             |                           literal: 0, hint: int                        |
-|                     |                                                             |                         )                                              |
-|                     |                                                             |                       )                                                |
-|                     |                                                             |                     )                                                  |
-|                     |                                                             |                   )                                                    |
-|                     |                                                             |                 )                                                      |
-|                     |                                                             |               )                                                        |
-|                     |                                                             |             )                                                          |
-|                     |                                                             |           ),                                                           |
-|                     |                                                             |           operator: EQUAL,                                             |
-|                     |                                                             |           (shift_expression                                            |
-|                     |                                                             |             (simple_expression                                         |
-|                     |                                                             |               (term                                                    |
-|                     |                                                             |                 (primary<v>                                            |
-|                     |                                                             |                   (literal<v>                                          |
-|                     |                                                             |                     (numeric_literal<v>                                |
-|                     |                                                             |                       (abstract_literal<v>                             |
-|                     |                                                             |                         (decimal_literal                               |
-|                     |                                                             |                           literal: 1, hint: int                        |
-|                     |                                                             |                         )                                              |
-|                     |                                                             |                       )                                                |
-|                     |                                                             |                     )                                                  |
-|                     |                                                             |                   )                                                    |
-|                     |                                                             |                 )                                                      |
-|                     |                                                             |               )                                                        |
-|                     |                                                             |             )                                                          |
-|                     |                                                             |           )                                                            |
-|                     |                                                             |         )                                                              |
-|                     |                                                             |       )                                                                |
-|                     |                                                             |       (assertion.report                                                |
-|                     |                                                             |         (expression                                                    |
-|                     |                                                             |           (relation                                                    |
-|                     |                                                             |             (shift_expression                                          |
-|                     |                                                             |               (simple_expression                                       |
-|                     |                                                             |                 (term                                                  |
-|                     |                                                             |                   (primary<v>                                          |
-|                     |                                                             |                     (literal<v>                                        |
-|                     |                                                             |                       (string_literal                                  |
-|                     |                                                             |                         Damn - can't be                                |
-|                     |                                                             |                       )                                                |
-|                     |                                                             |                     )                                                  |
-|                     |                                                             |                   )                                                    |
-|                     |                                                             |                 )                                                      |
-|                     |                                                             |               )                                                        |
-|                     |                                                             |             )                                                          |
-|                     |                                                             |           )                                                            |
-|                     |                                                             |         )                                                              |
-|                     |                                                             |       )                                                                |
-|                     |                                                             |       (assertion.severity                                              |
-|                     |                                                             |         (expression                                                    |
-|                     |                                                             |           (relation                                                    |
-|                     |                                                             |             (shift_expression                                          |
-|                     |                                                             |               (simple_expression                                       |
-|                     |                                                             |                 (term                                                  |
-|                     |                                                             |                   (primary<v>                                          |
-|                     |                                                             |                     (name<v>                                           |
-|                     |                                                             |                       (identifier                                      |
-|                     |                                                             |                         Dont_Care_About                                |
-|                     |                                                             |                       )                                                |
-|                     |                                                             |                     )                                                  |
-|                     |                                                             |                   )                                                    |
-|                     |                                                             |                 )                                                      |
-|                     |                                                             |               )                                                        |
-|                     |                                                             |             )                                                          |
-|                     |                                                             |           )                                                            |
-|                     |                                                             |         )                                                              |
-|                     |                                                             |       )                                                                |
-|                     |                                                             |     )                                                                  |
-|                     |                                                             |   )                                                                    |
-|                     |                                                             | )                                                                      |
-|                     |                                                             |                                                                        |
-+---------------------+-------------------------------------------------------------+------------------------------------------------------------------------+
-| case_statement      | case expression is                                          | (sequential_statement<v>                                               |
-|                     |     when "choices" => exit;                                 |   (case_statement                                                      |
-|                     | end case;                                                   |     (expression                                                        |
-|                     |                                                             |       (relation                                                        |
-|                     |                                                             |         (shift_expression                                              |
-|                     |                                                             |           (simple_expression                                           |
-|                     |                                                             |             (term                                                      |
-|                     |                                                             |               (primary<v>                                              |
-|                     |                                                             |                 (name<v>                                               |
-|                     |                                                             |                   (identifier                                          |
-|                     |                                                             |                     expression                                         |
-|                     |                                                             |                   )                                                    |
-|                     |                                                             |                 )                                                      |
-|                     |                                                             |               )                                                        |
-|                     |                                                             |             )                                                          |
-|                     |                                                             |           )                                                            |
-|                     |                                                             |         )                                                              |
-|                     |                                                             |       )                                                                |
-|                     |                                                             |     )                                                                  |
-|                     |                                                             |     (case_statement_alternative                                        |
-|                     |                                                             |       (choices                                                         |
-|                     |                                                             |         (choice<v>                                                     |
-|                     |                                                             |           (simple_expression                                           |
-|                     |                                                             |             (term                                                      |
-|                     |                                                             |               (primary<v>                                              |
-|                     |                                                             |                 (literal<v>                                            |
-|                     |                                                             |                   (string_literal                                      |
-|                     |                                                             |                     choices                                            |
-|                     |                                                             |                   )                                                    |
-|                     |                                                             |                 )                                                      |
-|                     |                                                             |               )                                                        |
-|                     |                                                             |             )                                                          |
-|                     |                                                             |           )                                                            |
-|                     |                                                             |         )                                                              |
-|                     |                                                             |       )                                                                |
-|                     |                                                             |       (sequence_of_statements                                          |
-|                     |                                                             |         (sequential_statement<v>                                       |
-|                     |                                                             |           (exit_statement                                              |
-|                     |                                                             |                                                                        |
-|                     |                                                             |           )                                                            |
-|                     |                                                             |         )                                                              |
-|                     |                                                             |       )                                                                |
-|                     |                                                             |     )                                                                  |
-|                     |                                                             |   )                                                                    |
-|                     |                                                             | )                                                                      |
-|                     |                                                             |                                                                        |
-+---------------------+-------------------------------------------------------------+------------------------------------------------------------------------+
-| exit_statement      | exit;                                                       | (sequential_statement<v>                                               |
-|                     |                                                             |   (exit_statement                                                      |
-|                     |                                                             |                                                                        |
-|                     |                                                             |   )                                                                    |
-|                     |                                                             | )                                                                      |
-|                     |                                                             |                                                                        |
-+---------------------+-------------------------------------------------------------+------------------------------------------------------------------------+
-| next_statement      | next;                                                       | (sequential_statement<v>                                               |
-|                     |                                                             |   (next_statement                                                      |
-|                     |                                                             |                                                                        |
-|                     |                                                             |   )                                                                    |
-|                     |                                                             | )                                                                      |
-|                     |                                                             |                                                                        |
-+---------------------+-------------------------------------------------------------+------------------------------------------------------------------------+
-| null_statement      | foo: Null;                                                  | (sequential_statement<v>                                               |
-|                     |                                                             |   (null_statement                                                      |
-|                     |                                                             |     (identifier                                                        |
-|                     |                                                             |       foo                                                              |
-|                     |                                                             |     )                                                                  |
-|                     |                                                             |   )                                                                    |
-|                     |                                                             | )                                                                      |
-|                     |                                                             |                                                                        |
-+---------------------+-------------------------------------------------------------+------------------------------------------------------------------------+
-| report_statement    | report "42 the answer to life, the universe and everything" | (sequential_statement<v>                                               |
-|                     |     severity TRUTH                                          |   (report_statement                                                    |
-|                     |     ;                                                       |     (expression                                                        |
-|                     |                                                             |       (relation                                                        |
-|                     |                                                             |         (shift_expression                                              |
-|                     |                                                             |           (simple_expression                                           |
-|                     |                                                             |             (term                                                      |
-|                     |                                                             |               (primary<v>                                              |
-|                     |                                                             |                 (literal<v>                                            |
-|                     |                                                             |                   (string_literal                                      |
-|                     |                                                             |                     42 the answer to life, the universe and everything |
-|                     |                                                             |                   )                                                    |
-|                     |                                                             |                 )                                                      |
-|                     |                                                             |               )                                                        |
-|                     |                                                             |             )                                                          |
-|                     |                                                             |           )                                                            |
-|                     |                                                             |         )                                                              |
-|                     |                                                             |       )                                                                |
-|                     |                                                             |     )                                                                  |
-|                     |                                                             |     (expression                                                        |
-|                     |                                                             |       (relation                                                        |
-|                     |                                                             |         (shift_expression                                              |
-|                     |                                                             |           (simple_expression                                           |
-|                     |                                                             |             (term                                                      |
-|                     |                                                             |               (primary<v>                                              |
-|                     |                                                             |                 (name<v>                                               |
-|                     |                                                             |                   (identifier                                          |
-|                     |                                                             |                     TRUTH                                              |
-|                     |                                                             |                   )                                                    |
-|                     |                                                             |                 )                                                      |
-|                     |                                                             |               )                                                        |
-|                     |                                                             |             )                                                          |
-|                     |                                                             |           )                                                            |
-|                     |                                                             |         )                                                              |
-|                     |                                                             |       )                                                                |
-|                     |                                                             |     )                                                                  |
-|                     |                                                             |   )                                                                    |
-|                     |                                                             | )                                                                      |
-|                     |                                                             |                                                                        |
-+---------------------+-------------------------------------------------------------+------------------------------------------------------------------------+
-| return_statement    | return;                                                     | (sequential_statement<v>                                               |
-|                     |                                                             |   (return_statement                                                    |
-|                     |                                                             |                                                                        |
-|                     |                                                             |   )                                                                    |
-|                     |                                                             | )                                                                      |
-|                     |                                                             |                                                                        |
-+---------------------+-------------------------------------------------------------+------------------------------------------------------------------------+
++-------------------------------+-------------------------------------------------------------+------------------------------------------------------------------------+
+| File                          | Input                                                       | Expected                                                               |
++-------------------------------+-------------------------------------------------------------+------------------------------------------------------------------------+
+| assertion_statement           | my_label:                                                   | (sequential_statement<v>                                               |
+|                               |     assert 0 = 1                                            |   (assertion_statement                                                 |
+|                               |         report "Damn - can't be"                            |     (identifier                                                        |
+|                               |         severity Dont_Care_About                            |       my_label                                                         |
+|                               |         ;                                                   |     )                                                                  |
+|                               |                                                             |     (assertion                                                         |
+|                               |                                                             |       (expression                                                      |
+|                               |                                                             |         (relation                                                      |
+|                               |                                                             |           (shift_expression                                            |
+|                               |                                                             |             (simple_expression                                         |
+|                               |                                                             |               (term                                                    |
+|                               |                                                             |                 (primary<v>                                            |
+|                               |                                                             |                   (literal<v>                                          |
+|                               |                                                             |                     (numeric_literal<v>                                |
+|                               |                                                             |                       (abstract_literal<v>                             |
+|                               |                                                             |                         (decimal_literal                               |
+|                               |                                                             |                           literal: 0, hint: int                        |
+|                               |                                                             |                         )                                              |
+|                               |                                                             |                       )                                                |
+|                               |                                                             |                     )                                                  |
+|                               |                                                             |                   )                                                    |
+|                               |                                                             |                 )                                                      |
+|                               |                                                             |               )                                                        |
+|                               |                                                             |             )                                                          |
+|                               |                                                             |           ),                                                           |
+|                               |                                                             |           operator: EQUAL,                                             |
+|                               |                                                             |           (shift_expression                                            |
+|                               |                                                             |             (simple_expression                                         |
+|                               |                                                             |               (term                                                    |
+|                               |                                                             |                 (primary<v>                                            |
+|                               |                                                             |                   (literal<v>                                          |
+|                               |                                                             |                     (numeric_literal<v>                                |
+|                               |                                                             |                       (abstract_literal<v>                             |
+|                               |                                                             |                         (decimal_literal                               |
+|                               |                                                             |                           literal: 1, hint: int                        |
+|                               |                                                             |                         )                                              |
+|                               |                                                             |                       )                                                |
+|                               |                                                             |                     )                                                  |
+|                               |                                                             |                   )                                                    |
+|                               |                                                             |                 )                                                      |
+|                               |                                                             |               )                                                        |
+|                               |                                                             |             )                                                          |
+|                               |                                                             |           )                                                            |
+|                               |                                                             |         )                                                              |
+|                               |                                                             |       )                                                                |
+|                               |                                                             |       (assertion.report                                                |
+|                               |                                                             |         (expression                                                    |
+|                               |                                                             |           (relation                                                    |
+|                               |                                                             |             (shift_expression                                          |
+|                               |                                                             |               (simple_expression                                       |
+|                               |                                                             |                 (term                                                  |
+|                               |                                                             |                   (primary<v>                                          |
+|                               |                                                             |                     (literal<v>                                        |
+|                               |                                                             |                       (string_literal                                  |
+|                               |                                                             |                         Damn - can't be                                |
+|                               |                                                             |                       )                                                |
+|                               |                                                             |                     )                                                  |
+|                               |                                                             |                   )                                                    |
+|                               |                                                             |                 )                                                      |
+|                               |                                                             |               )                                                        |
+|                               |                                                             |             )                                                          |
+|                               |                                                             |           )                                                            |
+|                               |                                                             |         )                                                              |
+|                               |                                                             |       )                                                                |
+|                               |                                                             |       (assertion.severity                                              |
+|                               |                                                             |         (expression                                                    |
+|                               |                                                             |           (relation                                                    |
+|                               |                                                             |             (shift_expression                                          |
+|                               |                                                             |               (simple_expression                                       |
+|                               |                                                             |                 (term                                                  |
+|                               |                                                             |                   (primary<v>                                          |
+|                               |                                                             |                     (name<v>                                           |
+|                               |                                                             |                       (identifier                                      |
+|                               |                                                             |                         Dont_Care_About                                |
+|                               |                                                             |                       )                                                |
+|                               |                                                             |                     )                                                  |
+|                               |                                                             |                   )                                                    |
+|                               |                                                             |                 )                                                      |
+|                               |                                                             |               )                                                        |
+|                               |                                                             |             )                                                          |
+|                               |                                                             |           )                                                            |
+|                               |                                                             |         )                                                              |
+|                               |                                                             |       )                                                                |
+|                               |                                                             |     )                                                                  |
+|                               |                                                             |   )                                                                    |
+|                               |                                                             | )                                                                      |
+|                               |                                                             |                                                                        |
++-------------------------------+-------------------------------------------------------------+------------------------------------------------------------------------+
+| case_statement                | case expression is                                          | (sequential_statement<v>                                               |
+|                               |     when "choices" => exit;                                 |   (case_statement                                                      |
+|                               | end case;                                                   |     (expression                                                        |
+|                               |                                                             |       (relation                                                        |
+|                               |                                                             |         (shift_expression                                              |
+|                               |                                                             |           (simple_expression                                           |
+|                               |                                                             |             (term                                                      |
+|                               |                                                             |               (primary<v>                                              |
+|                               |                                                             |                 (name<v>                                               |
+|                               |                                                             |                   (identifier                                          |
+|                               |                                                             |                     expression                                         |
+|                               |                                                             |                   )                                                    |
+|                               |                                                             |                 )                                                      |
+|                               |                                                             |               )                                                        |
+|                               |                                                             |             )                                                          |
+|                               |                                                             |           )                                                            |
+|                               |                                                             |         )                                                              |
+|                               |                                                             |       )                                                                |
+|                               |                                                             |     )                                                                  |
+|                               |                                                             |     (case_statement_alternative                                        |
+|                               |                                                             |       (choices                                                         |
+|                               |                                                             |         (choice<v>                                                     |
+|                               |                                                             |           (simple_expression                                           |
+|                               |                                                             |             (term                                                      |
+|                               |                                                             |               (primary<v>                                              |
+|                               |                                                             |                 (literal<v>                                            |
+|                               |                                                             |                   (string_literal                                      |
+|                               |                                                             |                     choices                                            |
+|                               |                                                             |                   )                                                    |
+|                               |                                                             |                 )                                                      |
+|                               |                                                             |               )                                                        |
+|                               |                                                             |             )                                                          |
+|                               |                                                             |           )                                                            |
+|                               |                                                             |         )                                                              |
+|                               |                                                             |       )                                                                |
+|                               |                                                             |       (sequence_of_statements                                          |
+|                               |                                                             |         (sequential_statement<v>                                       |
+|                               |                                                             |           (exit_statement                                              |
+|                               |                                                             |                                                                        |
+|                               |                                                             |           )                                                            |
+|                               |                                                             |         )                                                              |
+|                               |                                                             |       )                                                                |
+|                               |                                                             |     )                                                                  |
+|                               |                                                             |   )                                                                    |
+|                               |                                                             | )                                                                      |
+|                               |                                                             |                                                                        |
++-------------------------------+-------------------------------------------------------------+------------------------------------------------------------------------+
+| exit_statement                | exit;                                                       | (sequential_statement<v>                                               |
+|                               |                                                             |   (exit_statement                                                      |
+|                               |                                                             |                                                                        |
+|                               |                                                             |   )                                                                    |
+|                               |                                                             | )                                                                      |
+|                               |                                                             |                                                                        |
++-------------------------------+-------------------------------------------------------------+------------------------------------------------------------------------+
+| next_statement                | next;                                                       | (sequential_statement<v>                                               |
+|                               |                                                             |   (next_statement                                                      |
+|                               |                                                             |                                                                        |
+|                               |                                                             |   )                                                                    |
+|                               |                                                             | )                                                                      |
+|                               |                                                             |                                                                        |
++-------------------------------+-------------------------------------------------------------+------------------------------------------------------------------------+
+| null_statement                | foo: Null;                                                  | (sequential_statement<v>                                               |
+|                               |                                                             |   (null_statement                                                      |
+|                               |                                                             |     (identifier                                                        |
+|                               |                                                             |       foo                                                              |
+|                               |                                                             |     )                                                                  |
+|                               |                                                             |   )                                                                    |
+|                               |                                                             | )                                                                      |
+|                               |                                                             |                                                                        |
++-------------------------------+-------------------------------------------------------------+------------------------------------------------------------------------+
+| report_statement              | report "42 the answer to life, the universe and everything" | (sequential_statement<v>                                               |
+|                               |     severity TRUTH                                          |   (report_statement                                                    |
+|                               |     ;                                                       |     (expression                                                        |
+|                               |                                                             |       (relation                                                        |
+|                               |                                                             |         (shift_expression                                              |
+|                               |                                                             |           (simple_expression                                           |
+|                               |                                                             |             (term                                                      |
+|                               |                                                             |               (primary<v>                                              |
+|                               |                                                             |                 (literal<v>                                            |
+|                               |                                                             |                   (string_literal                                      |
+|                               |                                                             |                     42 the answer to life, the universe and everything |
+|                               |                                                             |                   )                                                    |
+|                               |                                                             |                 )                                                      |
+|                               |                                                             |               )                                                        |
+|                               |                                                             |             )                                                          |
+|                               |                                                             |           )                                                            |
+|                               |                                                             |         )                                                              |
+|                               |                                                             |       )                                                                |
+|                               |                                                             |     )                                                                  |
+|                               |                                                             |     (expression                                                        |
+|                               |                                                             |       (relation                                                        |
+|                               |                                                             |         (shift_expression                                              |
+|                               |                                                             |           (simple_expression                                           |
+|                               |                                                             |             (term                                                      |
+|                               |                                                             |               (primary<v>                                              |
+|                               |                                                             |                 (name<v>                                               |
+|                               |                                                             |                   (identifier                                          |
+|                               |                                                             |                     TRUTH                                              |
+|                               |                                                             |                   )                                                    |
+|                               |                                                             |                 )                                                      |
+|                               |                                                             |               )                                                        |
+|                               |                                                             |             )                                                          |
+|                               |                                                             |           )                                                            |
+|                               |                                                             |         )                                                              |
+|                               |                                                             |       )                                                                |
+|                               |                                                             |     )                                                                  |
+|                               |                                                             |   )                                                                    |
+|                               |                                                             | )                                                                      |
+|                               |                                                             |                                                                        |
++-------------------------------+-------------------------------------------------------------+------------------------------------------------------------------------+
+| return_statement              | return;                                                     | (sequential_statement<v>                                               |
+|                               |                                                             |   (return_statement                                                    |
+|                               |                                                             |                                                                        |
+|                               |                                                             |   )                                                                    |
+|                               |                                                             | )                                                                      |
+|                               |                                                             |                                                                        |
++-------------------------------+-------------------------------------------------------------+------------------------------------------------------------------------+
+| signal_assignment_statement   | output0 <= input42;                                         | (sequential_statement<v>                                               |
+|                               |                                                             |   (signal_assignment_statement                                         |
+|                               |                                                             |     (target<v>                                                         |
+|                               |                                                             |       (name<v>                                                         |
+|                               |                                                             |         (identifier                                                    |
+|                               |                                                             |           output0                                                      |
+|                               |                                                             |         )                                                              |
+|                               |                                                             |       )                                                                |
+|                               |                                                             |     )                                                                  |
+|                               |                                                             |     (waveform<v>                                                       |
+|                               |                                                             |       (waveform_element                                                |
+|                               |                                                             |         (expression                                                    |
+|                               |                                                             |           (relation                                                    |
+|                               |                                                             |             (shift_expression                                          |
+|                               |                                                             |               (simple_expression                                       |
+|                               |                                                             |                 (term                                                  |
+|                               |                                                             |                   (primary<v>                                          |
+|                               |                                                             |                     (name<v>                                           |
+|                               |                                                             |                       (identifier                                      |
+|                               |                                                             |                         input42                                        |
+|                               |                                                             |                       )                                                |
+|                               |                                                             |                     )                                                  |
+|                               |                                                             |                   )                                                    |
+|                               |                                                             |                 )                                                      |
+|                               |                                                             |               )                                                        |
+|                               |                                                             |             )                                                          |
+|                               |                                                             |           )                                                            |
+|                               |                                                             |         )                                                              |
+|                               |                                                             |                                                                        |
+|                               |                                                             |       )                                                                |
+|                               |                                                             |     )                                                                  |
+|                               |                                                             |   )                                                                    |
+|                               |                                                             | )                                                                      |
+|                               |                                                             |                                                                        |
++-------------------------------+-------------------------------------------------------------+------------------------------------------------------------------------+
+| variable_assignment_statement | var := foo;                                                 | (sequential_statement<v>                                               |
+|                               |                                                             |   (variable_assignment_statement                                       |
+|                               |                                                             |     (target<v>                                                         |
+|                               |                                                             |       (name<v>                                                         |
+|                               |                                                             |         (identifier                                                    |
+|                               |                                                             |           var                                                          |
+|                               |                                                             |         )                                                              |
+|                               |                                                             |       )                                                                |
+|                               |                                                             |     )                                                                  |
+|                               |                                                             |     (expression                                                        |
+|                               |                                                             |       (relation                                                        |
+|                               |                                                             |         (shift_expression                                              |
+|                               |                                                             |           (simple_expression                                           |
+|                               |                                                             |             (term                                                      |
+|                               |                                                             |               (primary<v>                                              |
+|                               |                                                             |                 (name<v>                                               |
+|                               |                                                             |                   (identifier                                          |
+|                               |                                                             |                     foo                                                |
+|                               |                                                             |                   )                                                    |
+|                               |                                                             |                 )                                                      |
+|                               |                                                             |               )                                                        |
+|                               |                                                             |             )                                                          |
+|                               |                                                             |           )                                                            |
+|                               |                                                             |         )                                                              |
+|                               |                                                             |       )                                                                |
+|                               |                                                             |     )                                                                  |
+|                               |                                                             |   )                                                                    |
+|                               |                                                             | )                                                                      |
+|                               |                                                             |                                                                        |
++-------------------------------+-------------------------------------------------------------+------------------------------------------------------------------------+
 
 ================
 shift_expression
@@ -6302,6 +6787,73 @@ use_clause
 |                |                                                                      | )                    |
 |                |                                                                      |                      |
 +----------------+----------------------------------------------------------------------+----------------------+
+
+=============================
+variable_assignment_statement
+=============================
+
++-----------------------------------+-------------------------------+--------------------------------+
+| File                              | Input                         | Expected                       |
++-----------------------------------+-------------------------------+--------------------------------+
+| variable_assignment_statement_001 | target := expression;         | (variable_assignment_statement |
+|                                   |                               |   (target<v>                   |
+|                                   |                               |     (name<v>                   |
+|                                   |                               |       (identifier              |
+|                                   |                               |         target                 |
+|                                   |                               |       )                        |
+|                                   |                               |     )                          |
+|                                   |                               |   )                            |
+|                                   |                               |   (expression                  |
+|                                   |                               |     (relation                  |
+|                                   |                               |       (shift_expression        |
+|                                   |                               |         (simple_expression     |
+|                                   |                               |           (term                |
+|                                   |                               |             (primary<v>        |
+|                                   |                               |               (name<v>         |
+|                                   |                               |                 (identifier    |
+|                                   |                               |                   expression   |
+|                                   |                               |                 )              |
+|                                   |                               |               )                |
+|                                   |                               |             )                  |
+|                                   |                               |           )                    |
+|                                   |                               |         )                      |
+|                                   |                               |       )                        |
+|                                   |                               |     )                          |
+|                                   |                               |   )                            |
+|                                   |                               | )                              |
+|                                   |                               |                                |
++-----------------------------------+-------------------------------+--------------------------------+
+| variable_assignment_statement_002 | label_: target := expression; | (variable_assignment_statement |
+|                                   |                               |   (identifier                  |
+|                                   |                               |     label_                     |
+|                                   |                               |   )                            |
+|                                   |                               |   (target<v>                   |
+|                                   |                               |     (name<v>                   |
+|                                   |                               |       (identifier              |
+|                                   |                               |         target                 |
+|                                   |                               |       )                        |
+|                                   |                               |     )                          |
+|                                   |                               |   )                            |
+|                                   |                               |   (expression                  |
+|                                   |                               |     (relation                  |
+|                                   |                               |       (shift_expression        |
+|                                   |                               |         (simple_expression     |
+|                                   |                               |           (term                |
+|                                   |                               |             (primary<v>        |
+|                                   |                               |               (name<v>         |
+|                                   |                               |                 (identifier    |
+|                                   |                               |                   expression   |
+|                                   |                               |                 )              |
+|                                   |                               |               )                |
+|                                   |                               |             )                  |
+|                                   |                               |           )                    |
+|                                   |                               |         )                      |
+|                                   |                               |       )                        |
+|                                   |                               |     )                          |
+|                                   |                               |   )                            |
+|                                   |                               | )                              |
+|                                   |                               |                                |
++-----------------------------------+-------------------------------+--------------------------------+
 
 ==============
 wait_statement

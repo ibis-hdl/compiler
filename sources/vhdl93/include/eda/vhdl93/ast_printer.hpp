@@ -181,8 +181,6 @@ struct type_conversion;
 struct type_declaration;
 struct type_definition;
 struct unconstrained_array_definition;
-struct use_clause;
-struct variable_assignment_statement;
 struct variable_declaration;
 struct wait_statement;
 struct waveform;

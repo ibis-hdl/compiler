@@ -16,6 +16,7 @@
 #include <eda/vhdl93/ast/assertion_statement.hpp>
 #include <eda/vhdl93/ast/report_statement.hpp>
 #include <eda/vhdl93/ast/signal_assignment_statement.hpp>
+#include <eda/vhdl93/ast/variable_assignment_statement.hpp>
 #include <eda/vhdl93/ast/case_statement.hpp>
 #include <eda/vhdl93/ast/next_statement.hpp>
 #include <eda/vhdl93/ast/exit_statement.hpp>
@@ -48,7 +49,7 @@ struct sequential_statement : x3::variant<
     assertion_statement,
     report_statement,
     signal_assignment_statement,
-//    variable_assignment_statement,
+    variable_assignment_statement,
 //    procedure_call_statement,
 //    if_statement,
     case_statement,

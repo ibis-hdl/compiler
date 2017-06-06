@@ -1,0 +1,33 @@
+(sequential_statement<v>
+  (signal_assignment_statement
+    (target<v>
+      (name<v>
+        (identifier
+          output0
+        )
+      )
+    )
+    (waveform<v>
+      (waveform_element
+        (expression
+          (relation
+            (shift_expression
+              (simple_expression
+                (term
+                  (primary<v>
+                    (name<v>
+                      (identifier
+                        input42
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+        
+      )
+    )
+  )
+)
