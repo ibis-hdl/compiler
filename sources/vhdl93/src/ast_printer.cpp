@@ -2315,7 +2315,6 @@ void printer::operator()(waveform_element const &node)
         node.form,
         [this](ast::expression const& expr) {
             (*this)(expr);
-            os << "\n";
         },
         [this](ast::keyword_token token) {
             (*this)(token);
@@ -2323,6 +2322,7 @@ void printer::operator()(waveform_element const &node)
     );
 
     if(node.time_expression) {
+        os << "\n";
         (*this)(node.time_expression.value());
     }
 }
