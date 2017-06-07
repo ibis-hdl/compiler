@@ -107,9 +107,9 @@
 //#include <eda/vhdl93/ast/extended_digit.hpp>
 //#include <eda/vhdl93/ast/extended_identifier.hpp>
 //DISABLED  #include <eda/vhdl93/ast/factor.hpp>
-//#include <eda/vhdl93/ast/file_declaration.hpp>
-//#include <eda/vhdl93/ast/file_logical_name.hpp>
-//#include <eda/vhdl93/ast/file_open_information.hpp>
+#include <eda/vhdl93/ast/file_declaration.hpp>
+//DISABLED #include <eda/vhdl93/ast/file_logical_name.hpp>
+//DISABLED #include <eda/vhdl93/ast/file_open_information.hpp>
 #include <eda/vhdl93/ast/file_type_definition.hpp>
 //DISABLED #include <eda/vhdl93/ast/formal_designator.hpp>
 //#include <eda/vhdl93/ast/formal_parameter_list.hpp>
@@ -138,13 +138,13 @@
 //#include <eda/vhdl93/ast/instantiated_unit.hpp>
 //#include <eda/vhdl93/ast/instantiation_list.hpp>
 //#include <eda/vhdl93/ast/integer_type_definition.hpp>
-//#include <eda/vhdl93/ast/interface_constant_declaration.hpp>
-//#include <eda/vhdl93/ast/interface_declaration.hpp>
-//#include <eda/vhdl93/ast/interface_element.hpp>
-//#include <eda/vhdl93/ast/interface_file_declaration.hpp>
-//#include <eda/vhdl93/ast/interface_list.hpp>
-//#include <eda/vhdl93/ast/interface_signal_declaration.hpp>
-//#include <eda/vhdl93/ast/interface_variable_declaration.hpp>
+//DISABLED #include <eda/vhdl93/ast/interface_constant_declaration.hpp>
+#include <eda/vhdl93/ast/interface_declaration.hpp>
+//DISABLED #include <eda/vhdl93/ast/interface_element.hpp>
+//DISABLED #include <eda/vhdl93/ast/interface_file_declaration.hpp>
+#include <eda/vhdl93/ast/interface_list.hpp>
+//DISABLED #include <eda/vhdl93/ast/interface_signal_declaration.hpp>
+//DISABLED #include <eda/vhdl93/ast/interface_variable_declaration.hpp>
 //#include <eda/vhdl93/ast/iteration_scheme.hpp>
 #include <eda/vhdl93/ast/keyword_token.hpp>
 //#include <eda/vhdl93/ast/label.hpp>

@@ -1065,25 +1065,37 @@ void printer::operator()(factor const &node)
 
 void printer::operator()(file_declaration const &node)
 {
-    static char const symbol[]{ "XXX file_declaration" };
+    static char const symbol[]{ "file_declaration" };
     symbol_scope<file_declaration> _(*this, symbol);
-    //os << node;
-}
 
+    (*this)(node.identifier_list);
+    os << "\n";
 
-void printer::operator()(file_logical_name const &node)
-{
-    static char const symbol[]{ "XXX file_logical_name" };
-    symbol_scope<file_logical_name> _(*this, symbol);
-    //os << node;
+    (*this)(node.subtype_indication);
+
+    if(node.file_open_information) {
+        os << "\n";
+        (*this)(node.file_open_information.get());
+    }
 }
 
 
 void printer::operator()(file_open_information const &node)
 {
-    static char const symbol[]{ "XXX file_open_information" };
+    static char const symbol[]{ "file_open_information" };
     symbol_scope<file_open_information> _(*this, symbol);
-    //os << node;
+
+    if(node.file_open_kind_expression) {
+        static char const symbol[]{ "file_open_kind_expression" };
+        symbol_scope<ast::expression> _(*this, symbol);
+        (*this)(node.file_open_kind_expression.get());
+        os << "\n";
+    }
+    {
+        static char const symbol[]{ "file_logical_name" };
+        symbol_scope<file_logical_name> _(*this, symbol);
+        (*this)(node.file_logical_name);
+    }
 }
 
 
@@ -1348,57 +1360,104 @@ void printer::operator()(integer_type_definition const &node)
 
 void printer::operator()(interface_constant_declaration const &node)
 {
-    static char const symbol[]{ "XXX interface_constant_declaration" };
+    static char const symbol[]{ "interface_constant_declaration" };
     symbol_scope<interface_constant_declaration> _(*this, symbol);
-    //os << node;
+
+    if(node.CONSTANT) { os << "CONSTANT\n"; }
+
+    (*this)(node.identifier_list);
+    os << "\n";
+
+    if(node.IN) { os << "IN\n";  }
+
+    (*this)(node.subtype_indication);
+
+    if(node.static_expression) {
+        os << "\n";
+        (*this)(node.static_expression.get());
+    }
 }
 
 
 void printer::operator()(interface_declaration const &node)
 {
-    static char const symbol[]{ "XXX interface_declaration" };
+    static char const symbol[]{ "interface_declaration" };
     symbol_scope<interface_declaration> _(*this, symbol);
-    //visit(node);
-}
-
-
-void printer::operator()(interface_element const &node)
-{
-    static char const symbol[]{ "XXX interface_element" };
-    symbol_scope<interface_element> _(*this, symbol);
-    //os << node;
+    visit(node);
 }
 
 
 void printer::operator()(interface_file_declaration const &node)
 {
-    static char const symbol[]{ "XXX interface_file_declaration" };
+    static char const symbol[]{ "interface_file_declaration" };
     symbol_scope<interface_file_declaration> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.identifier_list);
+    (*this)(node.subtype_indication);
 }
 
 
 void printer::operator()(interface_list const &node)
 {
-    static char const symbol[]{ "XXX interface_list" };
+    static char const symbol[]{ "interface_list" };
     symbol_scope<interface_list> _(*this, symbol);
-    //os << node;
+
+    auto const N = node.size() - 1;
+    unsigned i = 0;
+    for(auto const& interface_element : node) {
+        (*this)(interface_element);
+        if(i++ != N) {
+            os << ",\n";
+        }
+    }
 }
 
 
 void printer::operator()(interface_signal_declaration const &node)
 {
-    static char const symbol[]{ "XXX interface_signal_declaration" };
+    static char const symbol[]{ "interface_signal_declaration" };
     symbol_scope<interface_signal_declaration> _(*this, symbol);
-    //os << node;
+
+    if(node.SIGNAL) { os << "SIGNAL\n"; }
+
+    (*this)(node.identifier_list);
+
+    if(node.mode) {
+        (*this)(node.mode.get());
+        os << "\n";
+    }
+
+    (*this)(node.subtype_indication);
+    os << "\n";
+
+    if(node.BUS) { os << "BUS\n"; }
+
+    if(node.static_expression) {
+        (*this)(node.static_expression.get());
+    }
 }
 
 
 void printer::operator()(interface_variable_declaration const &node)
 {
-    static char const symbol[]{ "XXX interface_variable_declaration" };
+    static char const symbol[]{ "interface_variable_declaration" };
     symbol_scope<interface_variable_declaration> _(*this, symbol);
-    //os << node;
+
+    if(node.VARIABLE) { os << "VARIABLE\n"; }
+
+    (*this)(node.identifier_list);
+
+    if(node.mode) {
+        (*this)(node.mode.get());
+        os << "\n";
+    }
+
+    (*this)(node.subtype_indication);
+    os << "\n";
+
+    if(node.static_expression) {
+        (*this)(node.static_expression.get());
+    }
 }
 
 

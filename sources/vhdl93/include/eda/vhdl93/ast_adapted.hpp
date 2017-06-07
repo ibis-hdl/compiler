@@ -106,6 +106,14 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::factor_unary_operation,
     operator_, primary
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::file_declaration,
+    identifier_list, subtype_indication, file_open_information
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::file_open_information,
+        file_open_kind_expression, file_logical_name
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::formal_part_chunk,
     context_tied_name, formal_designator
 )
@@ -120,6 +128,22 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::identifier,
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::indexed_name,
     prefix, expression_list
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::interface_constant_declaration,
+    CONSTANT, identifier_list, IN, subtype_indication, static_expression
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::interface_signal_declaration,
+    SIGNAL, identifier_list, mode, subtype_indication, BUS, static_expression
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::interface_variable_declaration,
+    VARIABLE, identifier_list, mode, subtype_indication, static_expression
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::interface_file_declaration,
+    identifier_list, subtype_indication
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::library_clause,

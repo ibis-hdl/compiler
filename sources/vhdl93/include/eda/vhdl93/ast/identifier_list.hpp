@@ -19,7 +19,7 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-struct identifier_list : std::vector<identifier> { };
+struct identifier_list : std::vector<ast::identifier> { };
 
 
 } } } // namespace eda.vhdl93.ast
