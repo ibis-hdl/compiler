@@ -1086,16 +1086,10 @@ void printer::operator()(file_open_information const &node)
     symbol_scope<file_open_information> _(*this, symbol);
 
     if(node.file_open_kind_expression) {
-        static char const symbol[]{ "file_open_kind_expression" };
-        symbol_scope<ast::expression> _(*this, symbol);
         (*this)(node.file_open_kind_expression.get());
         os << "\n";
     }
-    {
-        static char const symbol[]{ "file_logical_name" };
-        symbol_scope<file_logical_name> _(*this, symbol);
-        (*this)(node.file_logical_name);
-    }
+    (*this)(node.file_logical_name);
 }
 
 

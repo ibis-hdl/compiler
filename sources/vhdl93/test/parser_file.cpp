@@ -26,7 +26,6 @@ namespace parser = eda::vhdl93::parser;
 namespace ast    = eda::vhdl93::ast;
 
 
-#if 0
 /*
  * file_declaration
  */
@@ -58,9 +57,8 @@ BOOST_DATA_TEST_CASE( file_declaration,
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
-#endif
 
-#if 0
+
 /*
  * file_open_information
  */
@@ -92,7 +90,7 @@ BOOST_DATA_TEST_CASE( file_open_information,
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
-#endif
+
 
 BOOST_AUTO_TEST_SUITE_END()
 

@@ -831,9 +831,9 @@ typedef x3::rule<exponent_class, std::string_view> exponent_type;
 typedef x3::rule<expression_class, ast::expression> expression_type;
 typedef x3::rule<extended_identifier_class, std::string_view> extended_identifier_type;
 typedef x3::rule<factor_class, ast::factor> factor_type;
-typedef x3::rule<file_declaration_class> file_declaration_type;
-typedef x3::rule<file_logical_name_class> file_logical_name_type;
-typedef x3::rule<file_open_information_class> file_open_information_type;
+typedef x3::rule<file_declaration_class, ast::file_declaration> file_declaration_type;
+typedef x3::rule<file_logical_name_class, ast::file_logical_name> file_logical_name_type;
+typedef x3::rule<file_open_information_class, ast::file_open_information> file_open_information_type;
 typedef x3::rule<file_type_definition_class, ast::file_type_definition> file_type_definition_type;
 typedef x3::rule<formal_designator_class, ast::formal_designator> formal_designator_type;
 typedef x3::rule<formal_parameter_list_class> formal_parameter_list_type;
@@ -1198,6 +1198,7 @@ using iso8859_1::char_;
 using iso8859_1::lit;
 using x3::lexeme;
 using x3::raw;
+using x3::omit;
 
 
 /*
@@ -2513,29 +2514,46 @@ auto const factor_def =    // Note, order and others changed
     ;
 
 
-#if 0
-// file_declaration ::=
-// file identifier_list : subtype_indication file_open_information ] ;
+
+// file_declaration ::=                                              [§ 4.3.1.4]
+//     file identifier_list : subtype_indication [ file_open_information ] ;
 auto const file_declaration_def =
-        FILE identifier_list > ':' subtype_indication file_open_information ) > ';'
-        ;
-#endif
+       FILE
+    >> identifier_list
+    >> ':'
+    >> subtype_indication
+    >> -file_open_information
+    > ';'
+    ;
 
-#if 0
-        // file_logical_name ::=
-        // string_expression
-        auto const file_logical_name_def =
-                string_expression
-                ;
-#endif
 
-#if 0
-        // file_open_information ::=
-        // [ open file_open_kind_expression ] is file_logical_name
-        auto const file_open_information_def =
-                -( OPEN file_open_kind_expression ) IS file_logical_name
-                ;
-#endif
+
+// file_logical_name ::=                                             [§ 4.3.1.4]
+//     string_expression
+auto const file_logical_name_def =
+    expression
+    ;
+
+
+
+// file_open_information ::=                                         [§ 4.3.1.4]
+//     [ open file_open_kind_expression ] is file_logical_name
+namespace file_open_information_detail {
+
+    auto const file_open_kind_expression = x3::rule<struct _, ast::expression> { "file_open_kind_expression" } =
+        expression;
+
+    auto const file_logical_name = x3::rule<struct _, ast::expression> { "file_logical_name" } =
+        expression;
+}
+auto const file_open_information_def =
+    -(    omit[ OPEN ]
+       >> file_open_information_detail::file_open_kind_expression
+     )
+    >> IS
+    >> file_open_information_detail::file_logical_name
+    ;
+
 
 
 // file_type_definition ::=                                              [§ 3.4]
@@ -3020,7 +3038,7 @@ auto const next_statement_def =
 //      [ label : ] null ;
 auto const null_statement_def =
        -label_colon
-    >> x3::omit[ NULL ] // non interest in attribute inside 'null_statement'
+    >> omit[ NULL ]
     > ';'
     ;
 
@@ -4172,9 +4190,9 @@ BOOST_SPIRIT_DEFINE(  // -- E --
 )
 BOOST_SPIRIT_DEFINE(  // -- F --
       factor
-    //, file_declaration
-    //, file_logical_name
-    //, file_open_information
+    , file_declaration
+    , file_logical_name
+    , file_open_information
     , file_type_definition
     , formal_designator
     //, formal_parameter_list

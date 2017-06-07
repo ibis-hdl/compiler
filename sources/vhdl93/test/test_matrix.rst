@@ -3510,6 +3510,172 @@ factor
 |                         |                     |                                    |
 +-------------------------+---------------------+------------------------------------+
 
+================
+file_declaration
+================
+
++----------------------+-----------------------------------------------------+-----------------------------------+
+| File                 | Input                                               | Expected                          |
++----------------------+-----------------------------------------------------+-----------------------------------+
+| file_declaration_001 | file F1: IntegerFile;                               |                                   |
+|                      |                                                     |                                   |
+|                      |                                                     |                                   |
++----------------------+-----------------------------------------------------+-----------------------------------+
+| file_declaration_002 | file F2: IntegerFile is "test.dat";                 | (file_declaration                 |
+|                      |                                                     |   (identifier_list                |
+|                      |                                                     |     (identifier                   |
+|                      |                                                     |       F2                          |
+|                      |                                                     |     )                             |
+|                      |                                                     |   )                               |
+|                      |                                                     |   (subtype_indication             |
+|                      |                                                     |     (name<v>                      |
+|                      |                                                     |       (identifier                 |
+|                      |                                                     |         IntegerFile               |
+|                      |                                                     |       )                           |
+|                      |                                                     |     )                             |
+|                      |                                                     |   )                               |
+|                      |                                                     |   (file_open_information          |
+|                      |                                                     |     (expression                   |
+|                      |                                                     |       (relation                   |
+|                      |                                                     |         (shift_expression         |
+|                      |                                                     |           (simple_expression      |
+|                      |                                                     |             (term                 |
+|                      |                                                     |               (primary<v>         |
+|                      |                                                     |                 (literal<v>       |
+|                      |                                                     |                   (string_literal |
+|                      |                                                     |                     test.dat      |
+|                      |                                                     |                   )               |
+|                      |                                                     |                 )                 |
+|                      |                                                     |               )                   |
+|                      |                                                     |             )                     |
+|                      |                                                     |           )                       |
+|                      |                                                     |         )                         |
+|                      |                                                     |       )                           |
+|                      |                                                     |     )                             |
+|                      |                                                     |   )                               |
+|                      |                                                     | )                                 |
+|                      |                                                     |                                   |
++----------------------+-----------------------------------------------------+-----------------------------------+
+| file_declaration_003 | file F3: IntegerFile open WRITE_MODE is "test.dat"; | (file_declaration                 |
+|                      |                                                     |   (identifier_list                |
+|                      |                                                     |     (identifier                   |
+|                      |                                                     |       F3                          |
+|                      |                                                     |     )                             |
+|                      |                                                     |   )                               |
+|                      |                                                     |   (subtype_indication             |
+|                      |                                                     |     (name<v>                      |
+|                      |                                                     |       (identifier                 |
+|                      |                                                     |         IntegerFile               |
+|                      |                                                     |       )                           |
+|                      |                                                     |     )                             |
+|                      |                                                     |   )                               |
+|                      |                                                     |   (file_open_information          |
+|                      |                                                     |     (expression                   |
+|                      |                                                     |       (relation                   |
+|                      |                                                     |         (shift_expression         |
+|                      |                                                     |           (simple_expression      |
+|                      |                                                     |             (term                 |
+|                      |                                                     |               (primary<v>         |
+|                      |                                                     |                 (name<v>          |
+|                      |                                                     |                   (identifier     |
+|                      |                                                     |                     WRITE_MODE    |
+|                      |                                                     |                   )               |
+|                      |                                                     |                 )                 |
+|                      |                                                     |               )                   |
+|                      |                                                     |             )                     |
+|                      |                                                     |           )                       |
+|                      |                                                     |         )                         |
+|                      |                                                     |       )                           |
+|                      |                                                     |     )                             |
+|                      |                                                     |     (expression                   |
+|                      |                                                     |       (relation                   |
+|                      |                                                     |         (shift_expression         |
+|                      |                                                     |           (simple_expression      |
+|                      |                                                     |             (term                 |
+|                      |                                                     |               (primary<v>         |
+|                      |                                                     |                 (literal<v>       |
+|                      |                                                     |                   (string_literal |
+|                      |                                                     |                     test.dat      |
+|                      |                                                     |                   )               |
+|                      |                                                     |                 )                 |
+|                      |                                                     |               )                   |
+|                      |                                                     |             )                     |
+|                      |                                                     |           )                       |
+|                      |                                                     |         )                         |
+|                      |                                                     |       )                           |
+|                      |                                                     |     )                             |
+|                      |                                                     |   )                               |
+|                      |                                                     | )                                 |
+|                      |                                                     |                                   |
++----------------------+-----------------------------------------------------+-----------------------------------+
+
+=====================
+file_open_information
+=====================
+
++---------------------------+--------------------------------------------+-------------------------------------+
+| File                      | Input                                      | Expected                            |
++---------------------------+--------------------------------------------+-------------------------------------+
+| file_open_information_001 | OPEN file_open_kind IS "file_logical_name" | (file_open_information              |
+|                           |                                            |   (expression                       |
+|                           |                                            |     (relation                       |
+|                           |                                            |       (shift_expression             |
+|                           |                                            |         (simple_expression          |
+|                           |                                            |           (term                     |
+|                           |                                            |             (primary<v>             |
+|                           |                                            |               (name<v>              |
+|                           |                                            |                 (identifier         |
+|                           |                                            |                   file_open_kind    |
+|                           |                                            |                 )                   |
+|                           |                                            |               )                     |
+|                           |                                            |             )                       |
+|                           |                                            |           )                         |
+|                           |                                            |         )                           |
+|                           |                                            |       )                             |
+|                           |                                            |     )                               |
+|                           |                                            |   )                                 |
+|                           |                                            |   (expression                       |
+|                           |                                            |     (relation                       |
+|                           |                                            |       (shift_expression             |
+|                           |                                            |         (simple_expression          |
+|                           |                                            |           (term                     |
+|                           |                                            |             (primary<v>             |
+|                           |                                            |               (literal<v>           |
+|                           |                                            |                 (string_literal     |
+|                           |                                            |                   file_logical_name |
+|                           |                                            |                 )                   |
+|                           |                                            |               )                     |
+|                           |                                            |             )                       |
+|                           |                                            |           )                         |
+|                           |                                            |         )                           |
+|                           |                                            |       )                             |
+|                           |                                            |     )                               |
+|                           |                                            |   )                                 |
+|                           |                                            | )                                   |
+|                           |                                            |                                     |
++---------------------------+--------------------------------------------+-------------------------------------+
+| file_open_information_002 | IS file_logical_name                       | (file_open_information              |
+|                           |                                            |   (expression                       |
+|                           |                                            |     (relation                       |
+|                           |                                            |       (shift_expression             |
+|                           |                                            |         (simple_expression          |
+|                           |                                            |           (term                     |
+|                           |                                            |             (primary<v>             |
+|                           |                                            |               (name<v>              |
+|                           |                                            |                 (identifier         |
+|                           |                                            |                   file_logical_name |
+|                           |                                            |                 )                   |
+|                           |                                            |               )                     |
+|                           |                                            |             )                       |
+|                           |                                            |           )                         |
+|                           |                                            |         )                           |
+|                           |                                            |       )                             |
+|                           |                                            |     )                               |
+|                           |                                            |   )                                 |
+|                           |                                            | )                                   |
+|                           |                                            |                                     |
++---------------------------+--------------------------------------------+-------------------------------------+
+
 =============
 function_call
 =============
