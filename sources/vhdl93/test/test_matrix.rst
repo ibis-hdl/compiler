@@ -3517,8 +3517,20 @@ file_declaration
 +----------------------+-----------------------------------------------------+-----------------------------------+
 | File                 | Input                                               | Expected                          |
 +----------------------+-----------------------------------------------------+-----------------------------------+
-| file_declaration_001 | file F1: IntegerFile;                               |                                   |
-|                      |                                                     |                                   |
+| file_declaration_001 | file F1: IntegerFile;                               | (file_declaration                 |
+|                      |                                                     |   (identifier_list                |
+|                      |                                                     |     (identifier                   |
+|                      |                                                     |       F1                          |
+|                      |                                                     |     )                             |
+|                      |                                                     |   )                               |
+|                      |                                                     |   (subtype_indication             |
+|                      |                                                     |     (name<v>                      |
+|                      |                                                     |       (identifier                 |
+|                      |                                                     |         IntegerFile               |
+|                      |                                                     |       )                           |
+|                      |                                                     |     )                             |
+|                      |                                                     |   )                               |
+|                      |                                                     | )                                 |
 |                      |                                                     |                                   |
 +----------------------+-----------------------------------------------------+-----------------------------------+
 | file_declaration_002 | file F2: IntegerFile is "test.dat";                 | (file_declaration                 |

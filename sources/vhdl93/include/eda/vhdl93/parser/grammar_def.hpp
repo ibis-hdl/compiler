@@ -3854,7 +3854,7 @@ namespace subtype_indication_detail {
      * type_mark are names, semantically only a subset. Maybe here is another
      * approach. */
     /* FixMe: find a better way, as constraints are full implemented, e.g.: -name >> type_mark */
-    auto const unspecified_name_list = x3::rule<struct _, std::deque<ast::name>> { "subtype_indication" } =
+    auto const unspecified_name_list = x3::rule<struct _, std::vector<ast::name>> { "subtype_indication" } =
         x3::repeat(1 ,2)[
             name
         ]

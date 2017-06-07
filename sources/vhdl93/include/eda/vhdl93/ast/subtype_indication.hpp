@@ -16,7 +16,7 @@
 #include <eda/vhdl93/ast/type_mark.hpp>
 //#include <eda/vhdl93/ast/constraint.hpp>
 #include <boost/optional.hpp>
-#include <deque>
+#include <vector>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -37,11 +37,12 @@ struct constraint;
 struct subtype_indication : position_tagged
 {
     // parse API
-    std::deque<ast::name>                               unspecified_name_list;
+    std::vector<ast::name>                              unspecified_name_list;
     boost::optional<x3::forward_ast<ast::constraint>>   constraint;
 
 
     boost::optional<ast::name const&> resolution_function_name() const {
+        // FixMe: assert( unspecified_name_list.size() < 3, "internal parser logic error")
         if(unspecified_name_list.size() == 2) {
             return boost::optional<ast::name const&>{unspecified_name_list.front()};
         }
@@ -51,6 +52,7 @@ struct subtype_indication : position_tagged
     };
 
     ast::type_mark const& type_mark() const {
+        // FixMe: assert( unspecified_name_list.size() < 3, "internal parser logic error")
         if(unspecified_name_list.size() == 1) {
             return static_cast<ast::type_mark const&>(unspecified_name_list.front());
         }
