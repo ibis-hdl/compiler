@@ -37,6 +37,17 @@ template<typename T>
 auto as_type = [](auto p) { return x3::rule<struct _, T>{ "as" } = x3::as_parser(p); };
 
 
+/* A helper to allow to write rules with optional, boolean attributes as
+ *
+ * rule = ... -KEYWORD ...
+ *
+ * ignorierung the real attribute. This is a workarround until move_to works
+ * as expected for keywords.
+ */
+auto bool_attr = [](auto p) {
+    return x3::omit[ p ] >> x3::attr(true) | x3::attr(false);
+};
+
 } } } // namespace eda.vhdl93.parser
 
 
@@ -317,7 +328,9 @@ auto const BUS = as_type<ast::keyword_token>(
 auto const CASE = kw("case");
 auto const COMPONENT = kw("component");
 auto const CONFIGURATION = kw("configuration");
-auto const CONSTANT = kw("constant");
+auto const CONSTANT = as_type<ast::keyword_token>(
+    kw("constant") >> x3::attr(ast::keyword_token::CONSTANT)
+);
 auto const DISCONNECT = kw("disconnect");
 auto const DOWNTO = as_type<ast::keyword_token>(
     kw("downto") >> x3::attr(ast::keyword_token::DOWNTO)
@@ -338,6 +351,9 @@ auto const GUARDED = as_type<ast::keyword_token>(
 );
 auto const IF = kw("if");
 auto const IMPURE = kw("impure");
+auto const IN = as_type<ast::keyword_token>(
+    kw("in") >> x3::attr(ast::keyword_token::IN)
+);
 auto const INERTIAL = as_type<ast::delay_mechanism::delay_type>(
     kw("inertial") >> x3::attr(ast::delay_mechanism::delay_type::INERTIAL_DELAY)
 );
@@ -378,7 +394,9 @@ auto const REPORT = kw("report");
 auto const RETURN = kw("return");
 auto const SELECT = kw("select");
 auto const SEVERITY = kw("severity");
-auto const SIGNAL = kw("signal");
+auto const SIGNAL = as_type<ast::keyword_token>(
+    kw("signal") >> x3::attr(ast::keyword_token::SIGNAL)
+);
 auto const SHARED = kw("shared");
 auto const SUBTYPE = kw("subtype");
 auto const THEN = kw("then");
@@ -395,7 +413,9 @@ auto const UNAFFECTED = as_type<ast::keyword_token>(
 auto const UNITS = kw("units");
 auto const UNTIL = kw("until");
 auto const USE = kw("use");
-auto const VARIABLE = kw("variable");
+auto const VARIABLE = as_type<ast::keyword_token>(
+    kw("variable") >> x3::attr(ast::keyword_token::VARIABLE)
+);
 auto const WAIT = kw("wait");
 auto const WHEN = kw("when");
 auto const WHILE = kw("while");
@@ -863,13 +883,13 @@ typedef x3::rule<instantiated_unit_class> instantiated_unit_type;
 typedef x3::rule<instantiation_list_class> instantiation_list_type;
 typedef x3::rule<integer_class, std::string_view> integer_type;
 typedef x3::rule<integer_type_definition_class> integer_type_definition_type;
-typedef x3::rule<interface_constant_declaration_class> interface_constant_declaration_type;
+typedef x3::rule<interface_constant_declaration_class, ast::interface_constant_declaration> interface_constant_declaration_type;
 typedef x3::rule<interface_declaration_class> interface_declaration_type;
-typedef x3::rule<interface_element_class> interface_element_type;
-typedef x3::rule<interface_file_declaration_class> interface_file_declaration_type;
-typedef x3::rule<interface_list_class> interface_list_type;
-typedef x3::rule<interface_signal_declaration_class> interface_signal_declaration_type;
-typedef x3::rule<interface_variable_declaration_class> interface_variable_declaration_type;
+typedef x3::rule<interface_element_class, ast::interface_declaration> interface_element_type;
+typedef x3::rule<interface_file_declaration_class, ast::interface_file_declaration> interface_file_declaration_type;
+typedef x3::rule<interface_list_class, ast::interface_list> interface_list_type;
+typedef x3::rule<interface_signal_declaration_class, ast::interface_signal_declaration> interface_signal_declaration_type;
+typedef x3::rule<interface_variable_declaration_class, ast::interface_variable_declaration> interface_variable_declaration_type;
 typedef x3::rule<iteration_scheme_class> iteration_scheme_type;
 typedef x3::rule<label_class, ast::label> label_type;
 typedef x3::rule<letter_class, char> letter_type;
@@ -1291,6 +1311,9 @@ auto const boolean_expression = x3::rule<expression_class, ast::expression> { "b
     expression;
 
 auto const time_expression = x3::rule<expression_class, ast::expression> { "time_expression" } =
+    expression;
+
+auto const static_expression = x3::rule<expression_class, ast::expression> { "static_expression" } =
     expression;
 
 auto const value_expression = x3::rule<expression_class, ast::expression> { "value_expression" } =
@@ -2843,67 +2866,86 @@ auto const integer_type_definition_def =
         ;
 #endif
 
-#if 0
-// interface_constant_declaration ::=
-// [ constant ] identifier_list : [ in ] subtype_indication [ := static_expression ]
-auto const interface_constant_declaration_def =
-        -( CONSTANT ) identifier_list > ':' -( IN ) subtype_indication -(  ":=" >  static_expression )
-        ;
-#endif
 
-#if 0
-// interface_declaration ::=
-// interface_constant_declaration
+// interface_constant_declaration ::=                                  [§ 4.3.2]
+//     [ constant ] identifier_list : [ in ] subtype_indication [ := static_expression ]
+auto const interface_constant_declaration_def =
+       bool_attr(CONSTANT)
+    >> identifier_list
+    >> ':'
+    >> bool_attr(IN)
+    >> subtype_indication
+    >> -( ":=" >> static_expression )
+    ;
+
+
+
+// interface_declaration ::=                                           [§ 4.3.2]
+//       interface_constant_declaration
 //     | interface_signal_declaration
 //     | interface_variable_declaration
 //     | interface_file_declaration
 auto const interface_declaration_def =
-        interface_constant_declaration
-        | interface_signal_declaration
-        | interface_variable_declaration
-        | interface_file_declaration
-        ;
-#endif
+      interface_constant_declaration
+    | interface_signal_declaration
+    | interface_variable_declaration
+    | interface_file_declaration
+    ;
 
-#if 0
-// interface_element ::=
-// interface_declaration
+
+
+// interface_element ::=                                             [§ 4.3.2.1]
+//      interface_declaration
 auto const interface_element_def =
-        interface_declaration
-        ;
-#endif
+    interface_declaration
+    ;
 
-#if 0
-// interface_file_declaration ::=
-// file identifier_list : subtype_indication
+
+
+// interface_file_declaration ::=                                      [§ 4.3.2]
+//     file identifier_list : subtype_indication
 auto const interface_file_declaration_def =
-        FILE identifier_list > ':' subtype_indication
-        ;
-#endif
+       FILE
+    >> identifier_list
+    >> ':'
+    >> subtype_indication
+    ;
 
-#if 0
-// interface_list ::=
-// interface_element { ; interface_element }
+
+
+// interface_list ::=                                                [§ 4.3.2.1]
+//     interface_element { ; interface_element }
 auto const interface_list_def =
-        interface_element { > ';' interface_element }
-;
-#endif
+    interface_element % ';'
+    ;
 
-#if 0
-// interface_signal_declaration ::=
-// [signal] identifier_list : [ mode ] subtype_indication [ bus ] [ := static_expression ]
+
+
+// interface_signal_declaration ::=                                    [§ 4.3.2]
+//     [signal] identifier_list : [ mode ] subtype_indication [ bus ] [ := static_expression ]
 auto const interface_signal_declaration_def =
-        -(SIGNAL) identifier_list > ':' -( mode ) subtype_indication -( BUS ) -(  ":=" >  static_expression )
-        ;
-#endif
+       bool_attr(SIGNAL)
+    >> identifier_list
+    >> ':'
+    >> -mode
+    >> subtype_indication
+    >> bool_attr(BUS)
+    >> -( ":=" >>  static_expression )
+    ;
 
-#if 0
-// interface_variable_declaration ::=
-// [variable] identifier_list : [ mode ] subtype_indication [ := static_expression ]
+
+
+// interface_variable_declaration ::=                                  [§ 4.3.2]
+//     [variable] identifier_list : [ mode ] subtype_indication [ := static_expression ]
 auto const interface_variable_declaration_def =
-        -(VARIABLE) identifier_list > ':' -( mode ) subtype_indication -(  ":=" >  static_expression )
-        ;
-#endif
+       bool_attr(VARIABLE)
+    >> identifier_list
+    >> ':'
+    >> -mode
+    >> subtype_indication
+    >> -( ":=" >  static_expression )
+    ;
+
 
 #if 0
 // iteration_scheme ::=
@@ -4226,13 +4268,13 @@ BOOST_SPIRIT_DEFINE(  // -- I --
     //, instantiation_list
     , integer
     //, integer_type_definition
-    //, interface_constant_declaration
-    //, interface_declaration
-    //, interface_element
-    //, interface_file_declaration
-    //, interface_list
-    //, interface_signal_declaration
-    //, interface_variable_declaration
+    , interface_constant_declaration
+    , interface_declaration
+    , interface_element
+    , interface_file_declaration
+    , interface_list
+    , interface_signal_declaration
+    , interface_variable_declaration
     //, iteration_scheme
 )
 BOOST_SPIRIT_DEFINE(  // -- L --

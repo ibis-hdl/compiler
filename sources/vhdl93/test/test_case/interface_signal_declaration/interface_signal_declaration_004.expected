@@ -1,0 +1,20 @@
+(interface_signal_declaration
+  (identifier_list
+    (identifier
+      input0
+    ),
+    (identifier
+      input1
+    )
+  )
+  (keyword
+    IN
+  )
+  (subtype_indication
+    (name<v>
+      (identifier
+        my_type
+      )
+    )
+  )
+)

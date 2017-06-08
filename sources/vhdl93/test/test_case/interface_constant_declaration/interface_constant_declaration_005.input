@@ -1,0 +1,2 @@
+constant PERIOD : time := 10 ns
+

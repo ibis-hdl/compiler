@@ -25,7 +25,41 @@ namespace btt = boost::test_tools;
 namespace parser = eda::vhdl93::parser;
 namespace ast    = eda::vhdl93::ast;
 
-#if 0
+
+/*
+ * interface_file_declaration
+ */
+struct interface_file_declaration_dataset : public ::x3_test::dataset_loader
+{
+    interface_file_declaration_dataset()
+    : dataset_loader{ "test_case/interface_file_declaration" }
+    { }
+} const interface_file_declaration_dataset;
+
+
+BOOST_DATA_TEST_CASE( interface_file_declaration,
+      interface_file_declaration_dataset.input()
+    ^ interface_file_declaration_dataset.expect()
+    ^ interface_file_declaration_dataset.test_file_name(),
+    input, expect, file)
+{
+    using x3_test::testing_parser;
+
+    typedef ast::interface_file_declaration attribute_type;
+
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
+
+    testing_parser<attribute_type> parse;
+    auto [parse_ok, parse_result] = parse(input, parser::interface_file_declaration);
+
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expect, btt::per_element());
+}
+
+
+
 /*
  * interface_constant_declaration
  */
@@ -57,9 +91,9 @@ BOOST_DATA_TEST_CASE( interface_constant_declaration,
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
-#endif
 
-#if 0
+
+
 /*
  * interface_signal_declaration
  */
@@ -91,9 +125,9 @@ BOOST_DATA_TEST_CASE( interface_signal_declaration,
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
-#endif
 
-#if 0
+
+
 /*
  * interface_variable_declaration
  */
@@ -125,7 +159,7 @@ BOOST_DATA_TEST_CASE( interface_variable_declaration,
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
-#endif
+
 
 
 BOOST_AUTO_TEST_SUITE_END()

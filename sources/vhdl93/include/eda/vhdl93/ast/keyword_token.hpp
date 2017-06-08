@@ -22,6 +22,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 enum class keyword_token
 {
+    UNSPECIFIED, // used as default constructible marker
     ABS, ACCESS, AFTER, ALIAS, ALL, AND, ARCHITECTURE, ARRAY,
     ASSERT, ATTRIBUTE, BEGIN, BLOCK, BODY, BUFFER, BUS, CASE,
     COMPONENT, CONFIGURATION, CONSTANT, DISCONNECT, DOWNTO,

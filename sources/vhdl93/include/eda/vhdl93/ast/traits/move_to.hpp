@@ -19,6 +19,11 @@
 namespace boost { namespace spirit { namespace x3 { namespace traits {
 
 
+template <typename Source, typename Dest>
+inline void move_to(Source&& src, Dest& dest);
+
+
+
 template <typename Iterator>
 inline
 void move_to(Iterator first, Iterator last, std::string_view& str_v)
@@ -36,6 +41,17 @@ inline void
 move_to(delay_mechanism::delay_type type, delay_mechanism& dest)
 {
     dest.type = type;
+}
+
+
+
+using keyword_token = ::eda::vhdl93::ast::keyword_token;
+//FixMe: Doesn't work as expected, always true??
+template <>
+inline void
+move_to(keyword_token&& src, bool& dest)
+{
+    dest = static_cast<bool>(src);
 }
 
 

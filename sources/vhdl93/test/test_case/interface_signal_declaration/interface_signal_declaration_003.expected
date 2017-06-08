@@ -1,0 +1,16 @@
+(interface_signal_declaration
+  (SIGNAL)
+  (identifier_list
+    (identifier
+      bar
+    )
+  )
+  (subtype_indication
+    (name<v>
+      (identifier
+        word
+      )
+    )
+  )
+  (BUS)
+)

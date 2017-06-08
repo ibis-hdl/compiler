@@ -1,0 +1,15 @@
+(interface_constant_declaration
+  (CONSTANT)
+  (identifier_list
+    (identifier
+      BUS_WIDTH
+    )
+  )
+  (subtype_indication
+    (name<v>
+      (identifier
+        integer
+      )
+    )
+  )
+)

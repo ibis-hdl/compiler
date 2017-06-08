@@ -1357,12 +1357,12 @@ void printer::operator()(interface_constant_declaration const &node)
     static char const symbol[]{ "interface_constant_declaration" };
     symbol_scope<interface_constant_declaration> _(*this, symbol);
 
-    if(node.CONSTANT) { os << "CONSTANT\n"; }
+    if(node.CONSTANT) { os << "(CONSTANT)\n"; }
 
     (*this)(node.identifier_list);
     os << "\n";
 
-    if(node.IN) { os << "IN\n";  }
+    if(node.IN) { os << "(IN)\n";  }
 
     (*this)(node.subtype_indication);
 
@@ -1387,6 +1387,7 @@ void printer::operator()(interface_file_declaration const &node)
     symbol_scope<interface_file_declaration> _(*this, symbol);
 
     (*this)(node.identifier_list);
+    os << "\n";
     (*this)(node.subtype_indication);
 }
 
@@ -1412,9 +1413,10 @@ void printer::operator()(interface_signal_declaration const &node)
     static char const symbol[]{ "interface_signal_declaration" };
     symbol_scope<interface_signal_declaration> _(*this, symbol);
 
-    if(node.SIGNAL) { os << "SIGNAL\n"; }
+    if(node.SIGNAL) { os << "(SIGNAL)\n"; }
 
     (*this)(node.identifier_list);
+    os << "\n";
 
     if(node.mode) {
         (*this)(node.mode.get());
@@ -1422,11 +1424,11 @@ void printer::operator()(interface_signal_declaration const &node)
     }
 
     (*this)(node.subtype_indication);
-    os << "\n";
 
-    if(node.BUS) { os << "BUS\n"; }
+    if(node.BUS) { os << "\n(BUS)"; }
 
     if(node.static_expression) {
+        os << "\n";
         (*this)(node.static_expression.get());
     }
 }
@@ -1437,9 +1439,10 @@ void printer::operator()(interface_variable_declaration const &node)
     static char const symbol[]{ "interface_variable_declaration" };
     symbol_scope<interface_variable_declaration> _(*this, symbol);
 
-    if(node.VARIABLE) { os << "VARIABLE\n"; }
+    if(node.VARIABLE) { os << "(VARIABLE)\n"; }
 
     (*this)(node.identifier_list);
+    os << "\n";
 
     if(node.mode) {
         (*this)(node.mode.get());
@@ -1447,9 +1450,9 @@ void printer::operator()(interface_variable_declaration const &node)
     }
 
     (*this)(node.subtype_indication);
-    os << "\n";
 
     if(node.static_expression) {
+        os << "\n";
         (*this)(node.static_expression.get());
     }
 }

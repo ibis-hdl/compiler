@@ -1,0 +1,34 @@
+(interface_signal_declaration
+  (SIGNAL)
+  (identifier_list
+    (identifier
+      a_bit
+    )
+  )
+  (subtype_indication
+    (name<v>
+      (identifier
+        bit
+      )
+    )
+  )
+  (expression
+    (relation
+      (shift_expression
+        (simple_expression
+          (term
+            (primary<v>
+              (literal<v>
+                (enumeration_literal<v>
+                  (character_literal
+                    '0'
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

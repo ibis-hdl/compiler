@@ -1,0 +1,18 @@
+(interface_constant_declaration
+  (identifier_list
+    (identifier
+      input0
+    ),
+    (identifier
+      input1
+    )
+  )
+  (IN)
+  (subtype_indication
+    (name<v>
+      (identifier
+        funny_type
+      )
+    )
+  )
+)

@@ -1,0 +1,14 @@
+(interface_constant_declaration
+  (identifier_list
+    (identifier
+      WIDTH
+    )
+  )
+  (subtype_indication
+    (name<v>
+      (identifier
+        integer
+      )
+    )
+  )
+)

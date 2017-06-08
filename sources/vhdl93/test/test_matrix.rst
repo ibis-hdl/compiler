@@ -4160,6 +4160,411 @@ integer_failure
 |                     |       |                                      |
 +---------------------+-------+--------------------------------------+
 
+==============================
+interface_constant_declaration
+==============================
+
++------------------------------------+---------------------------------+------------------------------------------------------+
+| File                               | Input                           | Expected                                             |
++------------------------------------+---------------------------------+------------------------------------------------------+
+| interface_constant_declaration_001 | WIDTH : integer                 | (interface_constant_declaration                      |
+|                                    |                                 |   (identifier_list                                   |
+|                                    |                                 |     (identifier                                      |
+|                                    |                                 |       WIDTH                                          |
+|                                    |                                 |     )                                                |
+|                                    |                                 |   )                                                  |
+|                                    |                                 |   (subtype_indication                                |
+|                                    |                                 |     (name<v>                                         |
+|                                    |                                 |       (identifier                                    |
+|                                    |                                 |         integer                                      |
+|                                    |                                 |       )                                              |
+|                                    |                                 |     )                                                |
+|                                    |                                 |   )                                                  |
+|                                    |                                 | )                                                    |
+|                                    |                                 |                                                      |
++------------------------------------+---------------------------------+------------------------------------------------------+
+| interface_constant_declaration_002 | constant BUS_WIDTH : integer    | (interface_constant_declaration                      |
+|                                    |                                 |   (CONSTANT)                                         |
+|                                    |                                 |   (identifier_list                                   |
+|                                    |                                 |     (identifier                                      |
+|                                    |                                 |       BUS_WIDTH                                      |
+|                                    |                                 |     )                                                |
+|                                    |                                 |   )                                                  |
+|                                    |                                 |   (subtype_indication                                |
+|                                    |                                 |     (name<v>                                         |
+|                                    |                                 |       (identifier                                    |
+|                                    |                                 |         integer                                      |
+|                                    |                                 |       )                                              |
+|                                    |                                 |     )                                                |
+|                                    |                                 |   )                                                  |
+|                                    |                                 | )                                                    |
+|                                    |                                 |                                                      |
++------------------------------------+---------------------------------+------------------------------------------------------+
+| interface_constant_declaration_003 | constant N, N5 : integer := 5   | (interface_constant_declaration                      |
+|                                    |                                 |   (CONSTANT)                                         |
+|                                    |                                 |   (identifier_list                                   |
+|                                    |                                 |     (identifier                                      |
+|                                    |                                 |       N                                              |
+|                                    |                                 |     ),                                               |
+|                                    |                                 |     (identifier                                      |
+|                                    |                                 |       N5                                             |
+|                                    |                                 |     )                                                |
+|                                    |                                 |   )                                                  |
+|                                    |                                 |   (subtype_indication                                |
+|                                    |                                 |     (name<v>                                         |
+|                                    |                                 |       (identifier                                    |
+|                                    |                                 |         integer                                      |
+|                                    |                                 |       )                                              |
+|                                    |                                 |     )                                                |
+|                                    |                                 |   )                                                  |
+|                                    |                                 |   (expression                                        |
+|                                    |                                 |     (relation                                        |
+|                                    |                                 |       (shift_expression                              |
+|                                    |                                 |         (simple_expression                           |
+|                                    |                                 |           (term                                      |
+|                                    |                                 |             (primary<v>                              |
+|                                    |                                 |               (literal<v>                            |
+|                                    |                                 |                 (numeric_literal<v>                  |
+|                                    |                                 |                   (abstract_literal<v>               |
+|                                    |                                 |                     (decimal_literal                 |
+|                                    |                                 |                       literal: 5, hint: int          |
+|                                    |                                 |                     )                                |
+|                                    |                                 |                   )                                  |
+|                                    |                                 |                 )                                    |
+|                                    |                                 |               )                                      |
+|                                    |                                 |             )                                        |
+|                                    |                                 |           )                                          |
+|                                    |                                 |         )                                            |
+|                                    |                                 |       )                                              |
+|                                    |                                 |     )                                                |
+|                                    |                                 |   )                                                  |
+|                                    |                                 | )                                                    |
+|                                    |                                 |                                                      |
++------------------------------------+---------------------------------+------------------------------------------------------+
+| interface_constant_declaration_004 | constant Pi : real := 3.14159   | (interface_constant_declaration                      |
+|                                    |                                 |   (CONSTANT)                                         |
+|                                    |                                 |   (identifier_list                                   |
+|                                    |                                 |     (identifier                                      |
+|                                    |                                 |       Pi                                             |
+|                                    |                                 |     )                                                |
+|                                    |                                 |   )                                                  |
+|                                    |                                 |   (subtype_indication                                |
+|                                    |                                 |     (name<v>                                         |
+|                                    |                                 |       (identifier                                    |
+|                                    |                                 |         real                                         |
+|                                    |                                 |       )                                              |
+|                                    |                                 |     )                                                |
+|                                    |                                 |   )                                                  |
+|                                    |                                 |   (expression                                        |
+|                                    |                                 |     (relation                                        |
+|                                    |                                 |       (shift_expression                              |
+|                                    |                                 |         (simple_expression                           |
+|                                    |                                 |           (term                                      |
+|                                    |                                 |             (primary<v>                              |
+|                                    |                                 |               (literal<v>                            |
+|                                    |                                 |                 (numeric_literal<v>                  |
+|                                    |                                 |                   (abstract_literal<v>               |
+|                                    |                                 |                     (decimal_literal                 |
+|                                    |                                 |                       literal: 3.14159, hint: double |
+|                                    |                                 |                     )                                |
+|                                    |                                 |                   )                                  |
+|                                    |                                 |                 )                                    |
+|                                    |                                 |               )                                      |
+|                                    |                                 |             )                                        |
+|                                    |                                 |           )                                          |
+|                                    |                                 |         )                                            |
+|                                    |                                 |       )                                              |
+|                                    |                                 |     )                                                |
+|                                    |                                 |   )                                                  |
+|                                    |                                 | )                                                    |
+|                                    |                                 |                                                      |
++------------------------------------+---------------------------------+------------------------------------------------------+
+| interface_constant_declaration_005 | constant PERIOD : time := 10 ns | (interface_constant_declaration                      |
+|                                    |                                 |   (CONSTANT)                                         |
+|                                    |                                 |   (identifier_list                                   |
+|                                    |                                 |     (identifier                                      |
+|                                    |                                 |       PERIOD                                         |
+|                                    |                                 |     )                                                |
+|                                    |                                 |   )                                                  |
+|                                    |                                 |   (subtype_indication                                |
+|                                    |                                 |     (name<v>                                         |
+|                                    |                                 |       (identifier                                    |
+|                                    |                                 |         time                                         |
+|                                    |                                 |       )                                              |
+|                                    |                                 |     )                                                |
+|                                    |                                 |   )                                                  |
+|                                    |                                 |   (expression                                        |
+|                                    |                                 |     (relation                                        |
+|                                    |                                 |       (shift_expression                              |
+|                                    |                                 |         (simple_expression                           |
+|                                    |                                 |           (term                                      |
+|                                    |                                 |             (primary<v>                              |
+|                                    |                                 |               (literal<v>                            |
+|                                    |                                 |                 (numeric_literal<v>                  |
+|                                    |                                 |                   (physical_literal                  |
+|                                    |                                 |                     literal: (abstract_literal<v>    |
+|                                    |                                 |                       (decimal_literal               |
+|                                    |                                 |                         literal: 10, hint: int       |
+|                                    |                                 |                       )                              |
+|                                    |                                 |                     ),                               |
+|                                    |                                 |                     unit: ns                         |
+|                                    |                                 |                   )                                  |
+|                                    |                                 |                 )                                    |
+|                                    |                                 |               )                                      |
+|                                    |                                 |             )                                        |
+|                                    |                                 |           )                                          |
+|                                    |                                 |         )                                            |
+|                                    |                                 |       )                                              |
+|                                    |                                 |     )                                                |
+|                                    |                                 |   )                                                  |
+|                                    |                                 | )                                                    |
+|                                    |                                 |                                                      |
++------------------------------------+---------------------------------+------------------------------------------------------+
+| interface_constant_declaration_006 | input0, input1 : IN funny_type  | (interface_constant_declaration                      |
+|                                    |                                 |   (identifier_list                                   |
+|                                    |                                 |     (identifier                                      |
+|                                    |                                 |       input0                                         |
+|                                    |                                 |     ),                                               |
+|                                    |                                 |     (identifier                                      |
+|                                    |                                 |       input1                                         |
+|                                    |                                 |     )                                                |
+|                                    |                                 |   )                                                  |
+|                                    |                                 |   (IN)                                               |
+|                                    |                                 |   (subtype_indication                                |
+|                                    |                                 |     (name<v>                                         |
+|                                    |                                 |       (identifier                                    |
+|                                    |                                 |         funny_type                                   |
+|                                    |                                 |       )                                              |
+|                                    |                                 |     )                                                |
+|                                    |                                 |   )                                                  |
+|                                    |                                 | )                                                    |
+|                                    |                                 |                                                      |
++------------------------------------+---------------------------------+------------------------------------------------------+
+
+==========================
+interface_file_declaration
+==========================
+
++--------------------------------+-----------------------+-----------------------------+
+| File                           | Input                 | Expected                    |
++--------------------------------+-----------------------+-----------------------------+
+| interface_file_declaration_001 | file output : my_text | (interface_file_declaration |
+|                                |                       |   (identifier_list          |
+|                                |                       |     (identifier             |
+|                                |                       |       output                |
+|                                |                       |     )                       |
+|                                |                       |   )                         |
+|                                |                       |   (subtype_indication       |
+|                                |                       |     (name<v>                |
+|                                |                       |       (identifier           |
+|                                |                       |         my_text             |
+|                                |                       |       )                     |
+|                                |                       |     )                       |
+|                                |                       |   )                         |
+|                                |                       | )                           |
+|                                |                       |                             |
+|                                |                       |                             |
++--------------------------------+-----------------------+-----------------------------+
+
+============================
+interface_signal_declaration
+============================
+
++----------------------------------+-----------------------------+-----------------------------------------+
+| File                             | Input                       | Expected                                |
++----------------------------------+-----------------------------+-----------------------------------------+
+| interface_signal_declaration_001 | foo : integer               | (interface_signal_declaration           |
+|                                  |                             |   (identifier_list                      |
+|                                  |                             |     (identifier                         |
+|                                  |                             |       foo                               |
+|                                  |                             |     )                                   |
+|                                  |                             |   )                                     |
+|                                  |                             |   (subtype_indication                   |
+|                                  |                             |     (name<v>                            |
+|                                  |                             |       (identifier                       |
+|                                  |                             |         integer                         |
+|                                  |                             |       )                                 |
+|                                  |                             |     )                                   |
+|                                  |                             |   )                                     |
+|                                  |                             | )                                       |
+|                                  |                             |                                         |
++----------------------------------+-----------------------------+-----------------------------------------+
+| interface_signal_declaration_002 | signal a_bit : bit := '0'   | (interface_signal_declaration           |
+|                                  |                             |   (SIGNAL)                              |
+|                                  |                             |   (identifier_list                      |
+|                                  |                             |     (identifier                         |
+|                                  |                             |       a_bit                             |
+|                                  |                             |     )                                   |
+|                                  |                             |   )                                     |
+|                                  |                             |   (subtype_indication                   |
+|                                  |                             |     (name<v>                            |
+|                                  |                             |       (identifier                       |
+|                                  |                             |         bit                             |
+|                                  |                             |       )                                 |
+|                                  |                             |     )                                   |
+|                                  |                             |   )                                     |
+|                                  |                             |   (expression                           |
+|                                  |                             |     (relation                           |
+|                                  |                             |       (shift_expression                 |
+|                                  |                             |         (simple_expression              |
+|                                  |                             |           (term                         |
+|                                  |                             |             (primary<v>                 |
+|                                  |                             |               (literal<v>               |
+|                                  |                             |                 (enumeration_literal<v> |
+|                                  |                             |                   (character_literal    |
+|                                  |                             |                     '0'                 |
+|                                  |                             |                   )                     |
+|                                  |                             |                 )                       |
+|                                  |                             |               )                         |
+|                                  |                             |             )                           |
+|                                  |                             |           )                             |
+|                                  |                             |         )                               |
+|                                  |                             |       )                                 |
+|                                  |                             |     )                                   |
+|                                  |                             |   )                                     |
+|                                  |                             | )                                       |
+|                                  |                             |                                         |
++----------------------------------+-----------------------------+-----------------------------------------+
+| interface_signal_declaration_003 | signal bar : word bus       | (interface_signal_declaration           |
+|                                  |                             |   (SIGNAL)                              |
+|                                  |                             |   (identifier_list                      |
+|                                  |                             |     (identifier                         |
+|                                  |                             |       bar                               |
+|                                  |                             |     )                                   |
+|                                  |                             |   )                                     |
+|                                  |                             |   (subtype_indication                   |
+|                                  |                             |     (name<v>                            |
+|                                  |                             |       (identifier                       |
+|                                  |                             |         word                            |
+|                                  |                             |       )                                 |
+|                                  |                             |     )                                   |
+|                                  |                             |   )                                     |
+|                                  |                             |   (BUS)                                 |
+|                                  |                             | )                                       |
+|                                  |                             |                                         |
++----------------------------------+-----------------------------+-----------------------------------------+
+| interface_signal_declaration_004 | input0, input1 : IN my_type | (interface_signal_declaration           |
+|                                  |                             |   (identifier_list                      |
+|                                  |                             |     (identifier                         |
+|                                  |                             |       input0                            |
+|                                  |                             |     ),                                  |
+|                                  |                             |     (identifier                         |
+|                                  |                             |       input1                            |
+|                                  |                             |     )                                   |
+|                                  |                             |   )                                     |
+|                                  |                             |   (keyword                              |
+|                                  |                             |     IN                                  |
+|                                  |                             |   )                                     |
+|                                  |                             |   (subtype_indication                   |
+|                                  |                             |     (name<v>                            |
+|                                  |                             |       (identifier                       |
+|                                  |                             |         my_type                         |
+|                                  |                             |       )                                 |
+|                                  |                             |     )                                   |
+|                                  |                             |   )                                     |
+|                                  |                             | )                                       |
+|                                  |                             |                                         |
++----------------------------------+-----------------------------+-----------------------------------------+
+
+==============================
+interface_variable_declaration
+==============================
+
++------------------------------------+-----------------------------+-----------------------------------------+
+| File                               | Input                       | Expected                                |
++------------------------------------+-----------------------------+-----------------------------------------+
+| interface_variable_declaration_001 | foo : integer               | (interface_variable_declaration         |
+|                                    |                             |   (identifier_list                      |
+|                                    |                             |     (identifier                         |
+|                                    |                             |       foo                               |
+|                                    |                             |     )                                   |
+|                                    |                             |   )                                     |
+|                                    |                             |   (subtype_indication                   |
+|                                    |                             |     (name<v>                            |
+|                                    |                             |       (identifier                       |
+|                                    |                             |         integer                         |
+|                                    |                             |       )                                 |
+|                                    |                             |     )                                   |
+|                                    |                             |   )                                     |
+|                                    |                             | )                                       |
+|                                    |                             |                                         |
++------------------------------------+-----------------------------+-----------------------------------------+
+| interface_variable_declaration_002 | variable a_bit : bit := '0' | (interface_variable_declaration         |
+|                                    |                             |   (VARIABLE)                            |
+|                                    |                             |   (identifier_list                      |
+|                                    |                             |     (identifier                         |
+|                                    |                             |       a_bit                             |
+|                                    |                             |     )                                   |
+|                                    |                             |   )                                     |
+|                                    |                             |   (subtype_indication                   |
+|                                    |                             |     (name<v>                            |
+|                                    |                             |       (identifier                       |
+|                                    |                             |         bit                             |
+|                                    |                             |       )                                 |
+|                                    |                             |     )                                   |
+|                                    |                             |   )                                     |
+|                                    |                             |   (expression                           |
+|                                    |                             |     (relation                           |
+|                                    |                             |       (shift_expression                 |
+|                                    |                             |         (simple_expression              |
+|                                    |                             |           (term                         |
+|                                    |                             |             (primary<v>                 |
+|                                    |                             |               (literal<v>               |
+|                                    |                             |                 (enumeration_literal<v> |
+|                                    |                             |                   (character_literal    |
+|                                    |                             |                     '0'                 |
+|                                    |                             |                   )                     |
+|                                    |                             |                 )                       |
+|                                    |                             |               )                         |
+|                                    |                             |             )                           |
+|                                    |                             |           )                             |
+|                                    |                             |         )                               |
+|                                    |                             |       )                                 |
+|                                    |                             |     )                                   |
+|                                    |                             |   )                                     |
+|                                    |                             | )                                       |
+|                                    |                             |                                         |
++------------------------------------+-----------------------------+-----------------------------------------+
+| interface_variable_declaration_003 | variable bar : word         | (interface_variable_declaration         |
+|                                    |                             |   (VARIABLE)                            |
+|                                    |                             |   (identifier_list                      |
+|                                    |                             |     (identifier                         |
+|                                    |                             |       bar                               |
+|                                    |                             |     )                                   |
+|                                    |                             |   )                                     |
+|                                    |                             |   (subtype_indication                   |
+|                                    |                             |     (name<v>                            |
+|                                    |                             |       (identifier                       |
+|                                    |                             |         word                            |
+|                                    |                             |       )                                 |
+|                                    |                             |     )                                   |
+|                                    |                             |   )                                     |
+|                                    |                             | )                                       |
+|                                    |                             |                                         |
++------------------------------------+-----------------------------+-----------------------------------------+
+| interface_variable_declaration_004 | input0, input1 : IN integer | (interface_variable_declaration         |
+|                                    |                             |   (identifier_list                      |
+|                                    |                             |     (identifier                         |
+|                                    |                             |       input0                            |
+|                                    |                             |     ),                                  |
+|                                    |                             |     (identifier                         |
+|                                    |                             |       input1                            |
+|                                    |                             |     )                                   |
+|                                    |                             |   )                                     |
+|                                    |                             |   (keyword                              |
+|                                    |                             |     IN                                  |
+|                                    |                             |   )                                     |
+|                                    |                             |   (subtype_indication                   |
+|                                    |                             |     (name<v>                            |
+|                                    |                             |       (identifier                       |
+|                                    |                             |         integer                         |
+|                                    |                             |       )                                 |
+|                                    |                             |     )                                   |
+|                                    |                             |   )                                     |
+|                                    |                             | )                                       |
+|                                    |                             |                                         |
++------------------------------------+-----------------------------+-----------------------------------------+
+
 =======
 literal
 =======

@@ -1,0 +1,15 @@
+(interface_variable_declaration
+  (VARIABLE)
+  (identifier_list
+    (identifier
+      bar
+    )
+  )
+  (subtype_indication
+    (name<v>
+      (identifier
+        word
+      )
+    )
+  )
+)
