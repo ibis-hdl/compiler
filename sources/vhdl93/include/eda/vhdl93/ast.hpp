@@ -112,14 +112,14 @@
 //DISABLED #include <eda/vhdl93/ast/file_open_information.hpp>
 #include <eda/vhdl93/ast/file_type_definition.hpp>
 //DISABLED #include <eda/vhdl93/ast/formal_designator.hpp>
-//#include <eda/vhdl93/ast/formal_parameter_list.hpp>
+#include <eda/vhdl93/ast/formal_parameter_list.hpp>
 //DISABLED #include <eda/vhdl93/ast/formal_part.hpp>
 //#include <eda/vhdl93/ast/full_type_declaration.hpp>
 //DISABLED #include <eda/vhdl93/ast/function_call.hpp>
 //#include <eda/vhdl93/ast/generate_statement.hpp>
 //#include <eda/vhdl93/ast/generation_scheme.hpp>
 //#include <eda/vhdl93/ast/generic_clause.hpp>
-//#include <eda/vhdl93/ast/generic_list.hpp>
+#include <eda/vhdl93/ast/generic_list.hpp>
 //#include <eda/vhdl93/ast/generic_map_aspect.hpp>
 //#include <eda/vhdl93/ast/graphic_character.hpp>
 //#include <eda/vhdl93/ast/group_constituent.hpp>
@@ -170,7 +170,7 @@
 //DISABLED #include <eda/vhdl93/ast/physical_literal.hpp>
 //#include <eda/vhdl93/ast/physical_type_definition.hpp>
 //#include <eda/vhdl93/ast/port_clause.hpp>
-//#include <eda/vhdl93/ast/port_list.hpp>
+#include <eda/vhdl93/ast/port_list.hpp>
 //#include <eda/vhdl93/ast/port_map_aspect.hpp>
 //DISABLED #include <eda/vhdl93/ast/prefix.hpp>
 //DISABLED #include <eda/vhdl93/ast/primary.hpp>

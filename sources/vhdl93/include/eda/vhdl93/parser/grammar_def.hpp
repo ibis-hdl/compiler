@@ -856,14 +856,14 @@ typedef x3::rule<file_logical_name_class, ast::file_logical_name> file_logical_n
 typedef x3::rule<file_open_information_class, ast::file_open_information> file_open_information_type;
 typedef x3::rule<file_type_definition_class, ast::file_type_definition> file_type_definition_type;
 typedef x3::rule<formal_designator_class, ast::formal_designator> formal_designator_type;
-typedef x3::rule<formal_parameter_list_class> formal_parameter_list_type;
+typedef x3::rule<formal_parameter_list_class, ast::formal_parameter_list> formal_parameter_list_type;
 typedef x3::rule<formal_part_class, ast::formal_part> formal_part_type;
 typedef x3::rule<full_type_declaration_class> full_type_declaration_type;
 typedef x3::rule<function_call_class, ast::function_call> function_call_type;
 typedef x3::rule<generate_statement_class> generate_statement_type;
 typedef x3::rule<generation_scheme_class> generation_scheme_type;
 typedef x3::rule<generic_clause_class> generic_clause_type;
-typedef x3::rule<generic_list_class> generic_list_type;
+typedef x3::rule<generic_list_class, ast::generic_list> generic_list_type;
 typedef x3::rule<generic_map_aspect_class> generic_map_aspect_type;
 typedef x3::rule<graphic_character_class, char> graphic_character_type;
 typedef x3::rule<group_constituent_class> group_constituent_type;
@@ -918,7 +918,7 @@ typedef x3::rule<parameter_specification_class> parameter_specification_type;
 typedef x3::rule<physical_literal_class, ast::physical_literal> physical_literal_type;
 typedef x3::rule<physical_type_definition_class> physical_type_definition_type;
 typedef x3::rule<port_clause_class> port_clause_type;
-typedef x3::rule<port_list_class> port_list_type;
+typedef x3::rule<port_list_class, ast::port_list> port_list_type;
 typedef x3::rule<port_map_aspect_class> port_map_aspect_type;
 typedef x3::rule<prefix_class, ast::prefix> prefix_type;
 typedef x3::rule<primary_class, ast::primary> primary_type;
@@ -2598,13 +2598,13 @@ auto const formal_designator_def =
     ;
 
 
-#if 0
-        // formal_parameter_list ::=
-        // parameter_interface_list
-        auto const formal_parameter_list_def =
-                parameter_interface_list
-                ;
-#endif
+
+// formal_parameter_list ::=                                           [§ 2.1.1]
+//     parameter_interface_list
+auto const formal_parameter_list_def =
+    interface_list
+    ;
+
 
 
 // formal_part ::=                                                   [§ 4.3.2.2]
@@ -2681,13 +2681,13 @@ auto const generic_clause_def =
 ;
 #endif
 
-#if 0
-// generic_list ::=
-// generic_interface_list
+
+// generic_list ::=                                                  [§ 1.1.1.1]
+//     generic_interface_list
 auto const generic_list_def =
-        generic_interface_list
-        ;
-#endif
+    interface_list
+    ;
+
 
 #if 0
 // generic_map_aspect ::=
@@ -3274,20 +3274,20 @@ END UNITS -( physical_type_simple_name )
 #endif
 
 #if 0
-// port_clause ::=
+// port_clause ::=[§ 1.1.1]
 // port ( port_list ) ;
 auto const port_clause_def =
         PORT '(' port_list ')' > ';'
 ;
 #endif
 
-#if 0
-// port_list ::=
-// port_interface_list
+
+// port_list ::=                                                     [§ 1.1.1.2]
+//     port_interface_list
 auto const port_list_def =
-        port_interface_list
-        ;
-#endif
+    interface_list
+    ;
+
 
 #if 0
 // port_map_aspect ::=
@@ -4237,7 +4237,7 @@ BOOST_SPIRIT_DEFINE(  // -- F --
     , file_open_information
     , file_type_definition
     , formal_designator
-    //, formal_parameter_list
+    , formal_parameter_list
     , formal_part
     //, full_type_declaration
     , function_call
@@ -4246,9 +4246,9 @@ BOOST_SPIRIT_DEFINE(  // -- G --
     //  generate_statement
     //, generation_scheme
     //, generic_clause
-    //, generic_list
+      generic_list
     //, generic_map_aspect
-      graphic_character
+    , graphic_character
     //, group_constituent
     //, group_constituent_list
     //, group_template_declaration
@@ -4311,7 +4311,7 @@ BOOST_SPIRIT_DEFINE(  // -- P --
       physical_literal
     //, physical_type_definition
     //, port_clause
-    //, port_list
+    , port_list
     //, port_map_aspect
     , prefix
     , primary

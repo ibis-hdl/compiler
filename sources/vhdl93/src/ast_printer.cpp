@@ -1093,14 +1093,6 @@ void printer::operator()(file_open_information const &node)
 }
 
 
-void printer::operator()(formal_parameter_list const &node)
-{
-    static char const symbol[]{ "XXX formal_parameter_list" };
-    symbol_scope<formal_parameter_list> _(*this, symbol);
-    //os << node;
-}
-
-
 void printer::operator()(formal_part const &node)
 {
     static char const symbol[]{ "formal_part" };
@@ -1158,14 +1150,6 @@ void printer::operator()(generic_clause const &node)
 {
     static char const symbol[]{ "XXX generic_clause" };
     symbol_scope<generic_clause> _(*this, symbol);
-    //os << node;
-}
-
-
-void printer::operator()(generic_list const &node)
-{
-    static char const symbol[]{ "XXX generic_list" };
-    symbol_scope<generic_list> _(*this, symbol);
     //os << node;
 }
 
@@ -1660,14 +1644,6 @@ void printer::operator()(port_clause const &node)
 }
 
 
-void printer::operator()(port_list const &node)
-{
-    static char const symbol[]{ "XXX port_list" };
-    symbol_scope<port_list> _(*this, symbol);
-    //os << node;
-}
-
-
 void printer::operator()(port_map_aspect const &node)
 {
     static char const symbol[]{ "XXX port_map_aspect" };
@@ -1866,7 +1842,7 @@ void printer::operator()(selected_name const &node)
     symbol_scope<selected_name> _(*this, symbol);
 
     (*this)(node.prefix);
-    os << ".\n";
+    os << "\n";
     (*this)(node.suffix);
 }
 
