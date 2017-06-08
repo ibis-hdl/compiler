@@ -3,6 +3,11 @@ cmake_minimum_required(VERSION 3.8)
 ## EDA/VHDL93 project TestBench
 project(test_vhdl93_parser LANGUAGES CXX)
 
+
+## Cotire (compile time reducer) https://github.com/sakra/cotire
+include(cotire)
+
+
 set(BIN_SOURCES
     data_set.cpp
     parser_expression.cpp
@@ -82,6 +87,10 @@ target_link_libraries(${PROJECT_NAME}
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}
 )
+
+
+#cotire(${PROJECT_NAME})
+
 
 add_test(NAME test_vhdl93_parser
     COMMAND ${PROJECT_NAME} -- ${CMAKE_CURRENT_SOURCE_DIR}

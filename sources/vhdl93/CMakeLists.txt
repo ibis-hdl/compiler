@@ -3,6 +3,11 @@ cmake_minimum_required(VERSION 3.8)
 ## EDA/VHDL93 project
 project(eda_vhdl93_parser LANGUAGES CXX)
 
+
+## Cotire (compile time reducer) https://github.com/sakra/cotire
+include(cotire)
+
+
 ## C++ Standards
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -76,6 +81,9 @@ add_dependencies(${PROJECT_NAME} boost-spirit-x3)
 #add_dependencies(${PROJECT_NAME} gsl)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX "_d")
+
+
+#cotire(${PROJECT_NAME})
 
 
 ## doc, test suite, etc.
