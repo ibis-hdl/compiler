@@ -22,7 +22,7 @@ set(LIB_SOURCES
     src/error_handler.cpp
     src/ast_printer.cpp
 
-    src/expression_parse.cpp
+    #src/expression_parse.cpp # hot fix for playground vhdl_expression_eval
 )
 
 add_library(${PROJECT_NAME} STATIC ${LIB_SOURCES})

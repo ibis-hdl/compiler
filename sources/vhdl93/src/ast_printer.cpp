@@ -1156,9 +1156,9 @@ void printer::operator()(generic_clause const &node)
 
 void printer::operator()(generic_map_aspect const &node)
 {
-    static char const symbol[]{ "XXX generic_map_aspect" };
+    static char const symbol[]{ "generic_map_aspect" };
     symbol_scope<generic_map_aspect> _(*this, symbol);
-    //os << node;
+    (*this)(node.association_list);
 }
 
 
@@ -1646,9 +1646,9 @@ void printer::operator()(port_clause const &node)
 
 void printer::operator()(port_map_aspect const &node)
 {
-    static char const symbol[]{ "XXX port_map_aspect" };
+    static char const symbol[]{ "port_map_aspect" };
     symbol_scope<port_map_aspect> _(*this, symbol);
-    //os << node;
+    (*this)(node.association_list);
 }
 
 

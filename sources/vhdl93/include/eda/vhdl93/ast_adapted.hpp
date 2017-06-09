@@ -126,6 +126,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::generic_clause,
     generic_list
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::generic_map_aspect,
+    association_list
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::identifier,
     name
 )
@@ -172,6 +176,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::physical_literal,
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::port_clause,
     port_list
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::port_map_aspect,
+    association_list
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::procedure_call,

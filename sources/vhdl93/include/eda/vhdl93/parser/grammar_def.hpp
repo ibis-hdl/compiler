@@ -853,7 +853,7 @@ typedef x3::rule<generate_statement_class> generate_statement_type;
 typedef x3::rule<generation_scheme_class> generation_scheme_type;
 typedef x3::rule<generic_clause_class, ast::generic_clause> generic_clause_type;
 //typedef x3::rule<generic_list_class, ast::generic_list> generic_list_type;
-typedef x3::rule<generic_map_aspect_class> generic_map_aspect_type;
+typedef x3::rule<generic_map_aspect_class, ast::generic_map_aspect> generic_map_aspect_type;
 typedef x3::rule<graphic_character_class, char> graphic_character_type;
 typedef x3::rule<group_constituent_class> group_constituent_type;
 typedef x3::rule<group_constituent_list_class> group_constituent_list_type;
@@ -2682,13 +2682,17 @@ auto const generic_list_def =
     ;
 #endif
 
-#if 0
-// generic_map_aspect ::=
-// generic map ( generic_association_list )
+
+// generic_map_aspect ::=                                            [§ 5.2.1.2]
+//     generic map ( generic_association_list )
 auto const generic_map_aspect_def =
-        GENERIC MAP '(' generic_association_list )
-;
-#endif
+       GENERIC
+    >> MAP
+    >> '('
+    >> association_list
+    >> ')'
+    ;
+
 
 
 #if 0
@@ -3286,13 +3290,17 @@ auto const port_list_def =
     ;
 #endif
 
-#if 0
-// port_map_aspect ::=
-// port map ( port_association_list )
+
+// port_map_aspect ::=                                               [§ 5.2.1.2]
+//     port map ( port_association_list )
 auto const port_map_aspect_def =
-        PORT MAP '(' port_association_list )
-;
-#endif
+       PORT
+    >> MAP
+    >> '('
+    >> association_list
+    >> ')'
+    ;
+
 
 
 // prefix ::=                                                            [§ 6.1]
@@ -4243,7 +4251,7 @@ BOOST_SPIRIT_DEFINE(  // -- G --
     //  generate_statement
     //, generation_scheme
     generic_clause
-    //, generic_map_aspect
+    , generic_map_aspect
     , graphic_character
     //, group_constituent
     //, group_constituent_list
@@ -4307,7 +4315,7 @@ BOOST_SPIRIT_DEFINE(  // -- P --
       physical_literal
     //, physical_type_definition
     , port_clause
-    //, port_map_aspect
+    , port_map_aspect
     , prefix
     , primary
     //, primary_unit

@@ -114,6 +114,7 @@
 //DISABLED #include <eda/vhdl93/ast/formal_designator.hpp>
 #include <eda/vhdl93/ast/formal_parameter_list.hpp>
 #include <eda/vhdl93/ast/generic_clause.hpp>
+#include <eda/vhdl93/ast/generic_map_aspect.hpp>
 //DISABLED #include <eda/vhdl93/ast/formal_part.hpp>
 //#include <eda/vhdl93/ast/full_type_declaration.hpp>
 //DISABLED #include <eda/vhdl93/ast/function_call.hpp>
@@ -144,6 +145,7 @@
 //DISABLED #include <eda/vhdl93/ast/operator_symbol.hpp>
 #include <eda/vhdl93/ast/options.hpp>
 #include <eda/vhdl93/ast/port_clause.hpp>
+#include <eda/vhdl93/ast/port_map_aspect.hpp>
 //#include <eda/vhdl93/ast/package_body.hpp>
 //#include <eda/vhdl93/ast/package_body_declarative_item.hpp>
 //#include <eda/vhdl93/ast/package_body_declarative_part.hpp>
