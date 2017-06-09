@@ -30,6 +30,10 @@ struct interface_signal_declaration : position_tagged
     ast::subtype_indication             subtype_indication;
     bool                                BUS;
     boost::optional<ast::expression>    static_expression;
+
+    interface_signal_declaration()
+    : SIGNAL{}, BUS{}
+    { }
 };
 
 

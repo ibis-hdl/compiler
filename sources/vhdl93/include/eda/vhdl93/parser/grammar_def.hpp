@@ -37,17 +37,6 @@ template<typename T>
 auto as_type = [](auto p) { return x3::rule<struct _, T>{ "as" } = x3::as_parser(p); };
 
 
-/* A helper to allow to write rules with optional, boolean attributes as
- *
- * rule = ... -KEYWORD ...
- *
- * ignorierung the real attribute. This is a workarround until move_to works
- * as expected for keywords.
- */
-auto bool_attr = [](auto p) {
-    return x3::omit[ p ] >> x3::attr(true) | x3::attr(false);
-};
-
 } } } // namespace eda.vhdl93.parser
 
 
@@ -2870,10 +2859,10 @@ auto const integer_type_definition_def =
 // interface_constant_declaration ::=                                  [§ 4.3.2]
 //     [ constant ] identifier_list : [ in ] subtype_indication [ := static_expression ]
 auto const interface_constant_declaration_def =
-       bool_attr(CONSTANT)
+       -CONSTANT
     >> identifier_list
     >> ':'
-    >> bool_attr(IN)
+    >> -IN
     >> subtype_indication
     >> -( ":=" >> static_expression )
     ;
@@ -2924,12 +2913,12 @@ auto const interface_list_def =
 // interface_signal_declaration ::=                                    [§ 4.3.2]
 //     [signal] identifier_list : [ mode ] subtype_indication [ bus ] [ := static_expression ]
 auto const interface_signal_declaration_def =
-       bool_attr(SIGNAL)
+       -SIGNAL
     >> identifier_list
     >> ':'
     >> -mode
     >> subtype_indication
-    >> bool_attr(BUS)
+    >> -BUS
     >> -( ":=" >>  static_expression )
     ;
 
@@ -2938,7 +2927,7 @@ auto const interface_signal_declaration_def =
 // interface_variable_declaration ::=                                  [§ 4.3.2]
 //     [variable] identifier_list : [ mode ] subtype_indication [ := static_expression ]
 auto const interface_variable_declaration_def =
-       bool_attr(VARIABLE)
+       -VARIABLE
     >> identifier_list
     >> ':'
     >> -mode

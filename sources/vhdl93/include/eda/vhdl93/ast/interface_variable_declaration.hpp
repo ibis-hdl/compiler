@@ -29,6 +29,10 @@ struct interface_variable_declaration : position_tagged
     boost::optional<ast::keyword_token> mode;
     ast::subtype_indication             subtype_indication;
     boost::optional<ast::expression>    static_expression;
+
+    interface_variable_declaration()
+    : VARIABLE{}
+    { }
 };
 
 

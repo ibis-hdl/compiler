@@ -28,6 +28,10 @@ struct interface_constant_declaration : position_tagged
     bool                                IN;
     ast::subtype_indication             subtype_indication;
     boost::optional<ast::expression>    static_expression;
+
+    interface_constant_declaration()
+    : CONSTANT{}, IN{}
+    { }
 };
 
 
