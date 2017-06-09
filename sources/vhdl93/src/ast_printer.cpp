@@ -191,9 +191,9 @@ void printer::operator()(architecture_statement_part const &node)
 
 void printer::operator()(array_type_definition const &node)
 {
-    static char const symbol[]{ "XXX array_type_definition" };
+    static char const symbol[]{ "array_type_definition" };
     symbol_scope<array_type_definition> _(*this, symbol);
-    //visit(node);
+    visit(node);
 }
 
 
@@ -310,14 +310,6 @@ void printer::operator()(attribute_specification const &node)
     (*this)(node.entity_specification);
     os << "\n";
     (*this)(node.expression);
-}
-
-
-void printer::operator()(base_unit_declaration const &node)
-{
-    static char const symbol[]{ "XXX base_unit_declaration" };
-    symbol_scope<base_unit_declaration> _(*this, symbol);
-    //os << node;
 }
 
 
@@ -551,9 +543,9 @@ void printer::operator()(component_specification const &node)
 
 void printer::operator()(composite_type_definition const &node)
 {
-    static char const symbol[]{ "XXX composite_type_definition" };
+    static char const symbol[]{ "composite_type_definition" };
     symbol_scope<composite_type_definition> _(*this, symbol);
-    //visit(node);
+    visit(node);
 }
 
 
@@ -663,9 +655,12 @@ void printer::operator()(constant_declaration const &node)
 
 void printer::operator()(constrained_array_definition const &node)
 {
-    static char const symbol[]{ "XXX constrained_array_definition" };
+    static char const symbol[]{ "constrained_array_definition" };
     symbol_scope<constrained_array_definition> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.index_constraint);
+    os << "\n";
+    (*this)(node.element_subtype_indication);
 }
 
 
@@ -812,17 +807,12 @@ void printer::operator()(element_association const &node)
 
 void printer::operator()(element_declaration const &node)
 {
-    static char const symbol[]{ "XXX element_declaration" };
+    static char const symbol[]{ "element_declaration" };
     symbol_scope<element_declaration> _(*this, symbol);
-    //os << node;
-}
 
-
-void printer::operator()(element_subtype_definition const &node)
-{
-    static char const symbol[]{ "XXX element_subtype_definition" };
-    symbol_scope<element_subtype_definition> _(*this, symbol);
-    //os << node;
+    (*this)(node.identifier_list);
+    os << "\n";
+    (*this)(node.element_subtype_definition);
 }
 
 
@@ -1114,9 +1104,12 @@ void printer::operator()(formal_part const &node)
 
 void printer::operator()(full_type_declaration const &node)
 {
-    static char const symbol[]{ "XXX full_type_declaration" };
+    static char const symbol[]{ "full_type_declaration" };
     symbol_scope<full_type_declaration> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.identifier);
+    os << "\n";
+    (*this)(node.type_definition);
 }
 
 
@@ -1245,14 +1238,6 @@ void printer::operator()(if_statement const &node)
 }
 
 
-void printer::operator()(incomplete_type_declaration const &node)
-{
-    static char const symbol[]{ "XXX incomplete_type_declaration" };
-    symbol_scope<incomplete_type_declaration> _(*this, symbol);
-    //os << node;
-}
-
-
 void printer::operator()(index_constraint const &node)
 {
     static char const symbol[]{ "index_constraint" };
@@ -1279,9 +1264,12 @@ void printer::operator()(index_specification const &node)
 
 void printer::operator()(index_subtype_definition const &node)
 {
-    static char const symbol[]{ "XXX index_subtype_definition" };
+    static char const symbol[]{ "index_subtype_definition" };
     symbol_scope<index_subtype_definition> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.type_mark);
+    os << "\n";
+    (*this)(node.range);
 }
 
 
@@ -1324,14 +1312,6 @@ void printer::operator()(integer const &node)
 {
     static char const symbol[]{ "XXX integer" };
     symbol_scope<integer> _(*this, symbol);
-    //os << node;
-}
-
-
-void printer::operator()(integer_type_definition const &node)
-{
-    static char const symbol[]{ "XXX integer_type_definition" };
-    symbol_scope<integer_type_definition> _(*this, symbol);
     //os << node;
 }
 
@@ -1630,9 +1610,27 @@ void printer::operator()(physical_literal const &node)
 
 void printer::operator()(physical_type_definition const &node)
 {
-    static char const symbol[]{ "XXX physical_type_definition" };
+    static char const symbol[]{ "physical_type_definition" };
     symbol_scope<physical_type_definition> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.range_constraint);
+    os << "\n";
+    (*this)(node.base_unit_declaration);
+
+    auto const N = node.secondary_unit_declarations.size() - 1;
+    unsigned i = 0;
+    if(N != 0) { os << "\n"; }
+    for(auto const& secondary_unit_declaration : node.secondary_unit_declarations) {
+        (*this)(secondary_unit_declaration);
+        if(i++ != N) {
+            os << ",\n";
+        }
+    }
+
+    if(node.physical_type_simple_name) {
+        os << "\n";
+        (*this)(node.physical_type_simple_name.get());
+    }
 }
 
 
@@ -1754,9 +1752,12 @@ void printer::operator()(range const &node) // aka range_constraint
 
 void printer::operator()(record_type_definition const &node)
 {
-    static char const symbol[]{ "XXX record_type_definition" };
+    static char const symbol[]{ "record_type_definition" };
     symbol_scope<record_type_definition> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.element_declaration);
+    os << "\n";
+    (*this)(node.simple_name);
 }
 
 
@@ -1814,9 +1815,9 @@ void printer::operator()(return_statement const &node)
 
 void printer::operator()(scalar_type_definition const &node)
 {
-    static char const symbol[]{ "XXX scalar_type_definition" };
+    static char const symbol[]{ "scalar_type_definition" };
     symbol_scope<scalar_type_definition> _(*this, symbol);
-    //visit(node);
+    visit(node);
 }
 
 
@@ -1830,9 +1831,12 @@ void printer::operator()(secondary_unit const &node)
 
 void printer::operator()(secondary_unit_declaration const &node)
 {
-    static char const symbol[]{ "XXX secondary_unit_declaration" };
+    static char const symbol[]{ "secondary_unit_declaration" };
     symbol_scope<secondary_unit_declaration> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.identifier);
+    os << "\n";
+    (*this)(node.physical_literal);
 }
 
 
@@ -2223,25 +2227,30 @@ void printer::operator()(type_conversion const &node)
 
 void printer::operator()(type_declaration const &node)
 {
-    static char const symbol[]{ "XXX type_declaration" };
+    static char const symbol[]{ "type_declaration" };
     symbol_scope<type_declaration> _(*this, symbol);
-    //visit(node);
+    visit(node);
 }
 
 
 void printer::operator()(type_definition const &node)
 {
-    static char const symbol[]{ "XXX type_definition" };
+    static char const symbol[]{ "type_declaration" };
     symbol_scope<type_definition> _(*this, symbol);
-    //visit(node);
+    visit(node);
 }
 
 
 void printer::operator()(unconstrained_array_definition const &node)
 {
-    static char const symbol[]{ "XXX unconstrained_array_definition" };
+    static char const symbol[]{ "unconstrained_array_definition" };
     symbol_scope<unconstrained_array_definition> _(*this, symbol);
-    //os << node;
+
+    for(auto const& index_subtype_definition : node.index_subtype_definitions) {
+        (*this)(index_subtype_definition);
+        os << "\n";
+    }
+    (*this)(node.element_subtype_indication);
 }
 
 

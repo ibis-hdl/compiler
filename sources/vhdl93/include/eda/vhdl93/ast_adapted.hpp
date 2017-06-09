@@ -70,12 +70,20 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::condition_clause,
     condition
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::constrained_array_definition,
+    index_constraint, element_subtype_indication
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::decimal_literal,
     literal, hint
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::delay_mechanism,
     time_expression, type
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::element_declaration,
+    identifier_list, element_subtype_definition
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::entity_designator,
@@ -118,6 +126,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::formal_part_chunk,
     context_tied_name, formal_designator
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::full_type_declaration,
+    identifier, type_definition
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::function_call,
     function_name, actual_parameter_part
 )
@@ -136,6 +148,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::identifier,
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::indexed_name,
     prefix, expression_list
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::index_subtype_definition,
+    type_mark, range
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::interface_constant_declaration,
@@ -174,6 +190,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::physical_literal,
     literal, unit_name
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::physical_type_definition,
+    range_constraint, base_unit_declaration, secondary_unit_declarations, physical_type_simple_name
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::port_clause,
     port_list
 )
@@ -194,6 +214,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::range_expression, // part of range
     lhs, direction, rhs
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::record_type_definition,
+    element_declaration, simple_name
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::relation,
     shift_expression, rest
 )
@@ -208,6 +232,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::report_statement,
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::return_statement,
     label, expression
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::secondary_unit_declaration,
+    identifier, physical_literal
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::selected_name,
@@ -272,6 +300,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::term::chunk,
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::timeout_clause,
     time_expression
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::unconstrained_array_definition,
+    index_subtype_definitions, element_subtype_indication
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::use_clause::selected_name,
