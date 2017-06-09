@@ -86,6 +86,14 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::element_declaration,
     identifier_list, element_subtype_definition
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::entity_aspect_entity,
+    name, architecture_identifier
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::entity_aspect_configuration,
+    name
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::entity_designator,
     entity_tag, signature
 )

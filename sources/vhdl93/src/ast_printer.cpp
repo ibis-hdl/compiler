@@ -818,9 +818,29 @@ void printer::operator()(element_declaration const &node)
 
 void printer::operator()(entity_aspect const &node)
 {
-    static char const symbol[]{ "XXX entity_aspect" };
+    static char const symbol[]{ "entity_aspect" };
     symbol_scope<entity_aspect> _(*this, symbol);
-    //visit(node);
+
+    util::visit_in_place(
+        node,
+        [this](ast::entity_aspect_entity const& entity) {
+            (*this)(entity.name);
+            if(entity.architecture_identifier) {
+                os << "\n";
+                (*this)(entity.architecture_identifier.get());
+            }
+        },
+        [this](ast::entity_aspect_configuration const& configuration) {
+            (*this)(configuration.name);
+        },
+        [this](ast::keyword_token token) {
+            (*this)(token);
+        },
+        [this](ast::nullary const& nullary) {
+            (*this)(nullary);
+        }
+    );
+
 }
 
 

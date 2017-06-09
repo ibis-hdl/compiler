@@ -86,7 +86,7 @@
 //#include <eda/vhdl93/ast/element_association.hpp>
 //#include <eda/vhdl93/ast/element_declaration.hpp>
 //#include <eda/vhdl93/ast/element_subtype_definition.hpp>
-//#include <eda/vhdl93/ast/entity_aspect.hpp>
+#include <eda/vhdl93/ast/entity_aspect.hpp>
 //#include <eda/vhdl93/ast/entity_class.hpp>
 //#include <eda/vhdl93/ast/entity_class_entry.hpp>
 //#include <eda/vhdl93/ast/entity_class_entry_list.hpp>

@@ -67,7 +67,6 @@ struct design_unit;
 struct disconnection_specification;
 struct discrete_range;
 struct element_association;
-struct entity_aspect;
 struct entity_class;
 struct entity_class_entry;
 struct entity_class_entry_list;

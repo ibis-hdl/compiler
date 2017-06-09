@@ -93,5 +93,38 @@ BOOST_DATA_TEST_CASE( port_map_aspect,
 }
 
 
+/*
+ * entity_aspect
+ */
+struct entity_aspect_dataset : public ::x3_test::dataset_loader
+{
+    entity_aspect_dataset()
+    : dataset_loader{ "test_case/entity_aspect" }
+    { }
+} const entity_aspect_dataset;
+
+
+BOOST_DATA_TEST_CASE( entity_aspect,
+      entity_aspect_dataset.input()
+    ^ entity_aspect_dataset.expect()
+    ^ entity_aspect_dataset.test_file_name(),
+    input, expect, file)
+{
+    using x3_test::testing_parser;
+
+    typedef ast::entity_aspect attribute_type;
+
+    // avoid warning, used in case of error for error message by boost.test
+    boost::ignore_unused(file);
+
+    testing_parser<attribute_type> parse;
+    auto [parse_ok, parse_result] = parse(input, parser::entity_aspect);
+
+    BOOST_TEST(parse_ok);
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
+    BOOST_TEST(parse_result == expect, btt::per_element());
+}
+
+
 
 BOOST_AUTO_TEST_SUITE_END()

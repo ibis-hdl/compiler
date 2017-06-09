@@ -835,7 +835,7 @@ typedef x3::rule<discrete_range_class, ast::discrete_range> discrete_range_type;
 typedef x3::rule<element_association_class> element_association_type;
 typedef x3::rule<element_declaration_class> element_declaration_type;
 typedef x3::rule<element_subtype_definition_class> element_subtype_definition_type;
-typedef x3::rule<entity_aspect_class> entity_aspect_type;
+typedef x3::rule<entity_aspect_class, ast::entity_aspect> entity_aspect_type;
 typedef x3::rule<entity_class_class, ast::keyword_token> entity_class_type;
 typedef x3::rule<entity_class_entry_class> entity_class_entry_type;
 typedef x3::rule<entity_class_entry_list_class> entity_class_entry_list_type;
@@ -2252,17 +2252,33 @@ auto const element_subtype_definition_def =
         ;
 #endif
 
-#if 0
-// entity_aspect ::=
-// entity entity_name [ ( architecture_identifier) ]
+
+// entity_aspect ::=                                                 [§ 5.2.1.1]
+//       entity entity_name [ ( architecture_identifier) ]
 //     | configuration configuration_name
 //     | open
+namespace entity_aspect_detail {
+
+    auto const entity = x3::rule<entity_aspect_class, ast::entity_aspect_entity> { "entity_aspect.entity" } =
+           ENTITY
+        >> name
+        >> -(      '('
+                >> identifier
+                >> ')'
+            )
+        ;
+
+    auto const configuration = x3::rule<entity_aspect_class, ast::entity_aspect_configuration> { "entity_aspect.configuration" } =
+           CONFIGURATION
+        >> name
+        ;
+}
 auto const entity_aspect_def =
-        ENTITY entity_name -( '(' architecture_identifier) )
-| CONFIGURATION configuration_name
-| OPEN
-;
-#endif
+      entity_aspect_detail::entity
+    | entity_aspect_detail::configuration
+    | OPEN
+    ;
+
 
 
 // entity_class ::=                                                      [§ 5.1]
@@ -4256,8 +4272,8 @@ BOOST_SPIRIT_DEFINE(  // -- E --
     //  element_association
     //, element_declaration
     //, element_subtype_definition
-    //, entity_aspect
-      entity_class
+    entity_aspect
+    ,  entity_class
     //, entity_class_entry
     //, entity_class_entry_list
     //, entity_declaration
