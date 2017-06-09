@@ -2699,11 +2699,11 @@ auto const generation_scheme_def =
 // generic_clause ::=                                                  [§ 1.1.1]
 //     generic ( generic_list ) ;
 auto const generic_clause_def =
-    GENERIC
+       GENERIC
     >> '('
     >> interface_list
     >> ')'
-    > ';'
+    >  ';'
     ;
 
 
@@ -3086,7 +3086,7 @@ auto const mode_def =
 auto const name_def =
        simple_name
 //      | operator_symbol // FixMe: disabled, conflicts with primary.literal.string_literal
-//    | selected_name // FixMe: Crash in  "parser_expression/primary": memory access violation
+//    | selected_name // FixMe: Crash in  "parser_expression/primary": memory access violation -> left recursion
 //    | indexed_name
 //    | slice_name
 //    | attribute_name
@@ -3307,7 +3307,7 @@ END UNITS -( physical_type_simple_name )
 // port_clause ::=                                                     [§ 1.1.1]
 //     port ( port_list ) ;
 auto const port_clause_def =
-    PORT
+       PORT
     >> '('
     >> interface_list
     >> ')'
@@ -3548,7 +3548,7 @@ auto const relation_def =
 //     [ severity expression ] ;
 auto const report_statement_def =
        -label_colon
-    >>  ( REPORT   > expression )
+    >> ( REPORT   > expression )
     >> -( SEVERITY > expression )
     >  ';'
     ;
@@ -3561,7 +3561,7 @@ auto const return_statement_def =
        -label_colon
     >> RETURN
     >> -expression
-     > ';'
+    >  ';'
 ;
 
 
@@ -3911,7 +3911,7 @@ namespace subprogram_specification_detail {
         ;
 
     auto const PURE_IMPURE = x3::rule<struct _, ast::keyword_token> { "pure_impure" } =
-        kw(pure_impure_symbols);
+        kw( pure_impure_symbols );
 
     auto const function = x3::rule<struct _, ast::subprogram_specification_function> { "subprogram_specification.function" } =
            -PURE_IMPURE
@@ -4160,7 +4160,7 @@ auto const wait_statement_def =
 //       waveform_element { , waveform_element }
 //     | unaffected
 auto const waveform_def =
-    ( waveform_element % ',' )
+      ( waveform_element % ',' )
     | UNAFFECTED
     ;
 
@@ -4175,7 +4175,7 @@ namespace waveform_element_detail {
         ;
 }
 auto const waveform_element_def =
-    ( value_expression | NULL )
+       ( value_expression | NULL )
     >> waveform_element_detail::time_expression
     ;
 
