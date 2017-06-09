@@ -339,7 +339,6 @@ auto const GUARDED = as_type<ast::keyword_token>(
     kw("guarded") >> x3::attr(ast::keyword_token::GUARDED)
 );
 auto const IF = kw("if");
-auto const IMPURE = kw("impure");
 auto const IN = as_type<ast::keyword_token>(
     kw("in") >> x3::attr(ast::keyword_token::IN)
 );
@@ -372,7 +371,6 @@ auto const PORT = kw("port");
 auto const POSTPONED = kw("postponed");
 auto const PROCEDURE = kw("procedure");
 auto const PROCESS = kw("process");
-auto const PURE = kw("pure");
 auto const RANGE = kw("range");
 auto const RECORD = kw("record");
 auto const REGISTER = as_type<ast::keyword_token>(
