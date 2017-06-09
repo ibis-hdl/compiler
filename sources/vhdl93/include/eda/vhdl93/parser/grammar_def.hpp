@@ -851,8 +851,8 @@ typedef x3::rule<full_type_declaration_class> full_type_declaration_type;
 typedef x3::rule<function_call_class, ast::function_call> function_call_type;
 typedef x3::rule<generate_statement_class> generate_statement_type;
 typedef x3::rule<generation_scheme_class> generation_scheme_type;
-typedef x3::rule<generic_clause_class> generic_clause_type;
-typedef x3::rule<generic_list_class, ast::generic_list> generic_list_type;
+typedef x3::rule<generic_clause_class, ast::generic_clause> generic_clause_type;
+//typedef x3::rule<generic_list_class, ast::generic_list> generic_list_type;
 typedef x3::rule<generic_map_aspect_class> generic_map_aspect_type;
 typedef x3::rule<graphic_character_class, char> graphic_character_type;
 typedef x3::rule<group_constituent_class> group_constituent_type;
@@ -907,7 +907,7 @@ typedef x3::rule<parameter_specification_class> parameter_specification_type;
 typedef x3::rule<physical_literal_class, ast::physical_literal> physical_literal_type;
 typedef x3::rule<physical_type_definition_class> physical_type_definition_type;
 typedef x3::rule<port_clause_class> port_clause_type;
-typedef x3::rule<port_list_class, ast::port_list> port_list_type;
+//typedef x3::rule<port_list_class, ast::port_list> port_list_type;
 typedef x3::rule<port_map_aspect_class> port_map_aspect_type;
 typedef x3::rule<prefix_class, ast::prefix> prefix_type;
 typedef x3::rule<primary_class, ast::primary> primary_type;
@@ -1081,7 +1081,7 @@ function_call_type const function_call { "function_call" };
 generate_statement_type const generate_statement { "generate_statement" };
 generation_scheme_type const generation_scheme { "generation_scheme" };
 generic_clause_type const generic_clause { "generic_clause" };
-generic_list_type const generic_list { "generic_list" };
+//generic_list_type const generic_list { "generic_list" };
 generic_map_aspect_type const generic_map_aspect { "generic_map_aspect" };
 graphic_character_type const graphic_character { "graphic_character" };
 group_constituent_type const group_constituent { "group_constituent" };
@@ -1136,7 +1136,7 @@ parameter_specification_type const parameter_specification { "parameter_specific
 physical_literal_type const physical_literal { "physical_literal" };
 physical_type_definition_type const physical_type_definition { "physical_type_definition" };
 port_clause_type const port_clause { "port_clause" };
-port_list_type const port_list { "port_list" };
+//port_list_type const port_list { "port_list" };
 port_map_aspect_type const port_map_aspect { "port_map_aspect" };
 prefix_type const prefix { "prefix" };
 primary_type const primary { "primary" };
@@ -2662,21 +2662,25 @@ auto const generation_scheme_def =
         ;
 #endif
 
-#if 0
-// generic_clause ::=
-// generic ( generic_list ) ;
+
+// generic_clause ::=                                                  [§ 1.1.1]
+//     generic ( generic_list ) ;
 auto const generic_clause_def =
-        GENERIC '(' generic_list ')' > ';'
-;
-#endif
+    GENERIC
+    >> '('
+    >> interface_list
+    >> ')'
+    > ';'
+    ;
 
 
+#if 0 // DISABLED; embedded into generic_clause
 // generic_list ::=                                                  [§ 1.1.1.1]
 //     generic_interface_list
 auto const generic_list_def =
     interface_list
     ;
-
+#endif
 
 #if 0
 // generic_map_aspect ::=
@@ -3262,21 +3266,25 @@ END UNITS -( physical_type_simple_name )
     ;
 #endif
 
-#if 0
-// port_clause ::=[§ 1.1.1]
-// port ( port_list ) ;
+
+// port_clause ::=                                                     [§ 1.1.1]
+//     port ( port_list ) ;
 auto const port_clause_def =
-        PORT '(' port_list ')' > ';'
-;
-#endif
+    PORT
+    >> '('
+    >> interface_list
+    >> ')'
+    > ';'
+    ;
 
 
+#if 0 // DISABLED; embedded into port_clause
 // port_list ::=                                                     [§ 1.1.1.2]
 //     port_interface_list
 auto const port_list_def =
     interface_list
     ;
-
+#endif
 
 #if 0
 // port_map_aspect ::=
@@ -4234,8 +4242,7 @@ BOOST_SPIRIT_DEFINE(  // -- F --
 BOOST_SPIRIT_DEFINE(  // -- G --
     //  generate_statement
     //, generation_scheme
-    //, generic_clause
-      generic_list
+    generic_clause
     //, generic_map_aspect
     , graphic_character
     //, group_constituent
@@ -4299,8 +4306,7 @@ BOOST_SPIRIT_DEFINE(  // -- P --
     //, parameter_specification
       physical_literal
     //, physical_type_definition
-    //, port_clause
-    , port_list
+    , port_clause
     //, port_map_aspect
     , prefix
     , primary

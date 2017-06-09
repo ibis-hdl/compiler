@@ -128,7 +128,6 @@ struct package_declarative_part;
 struct parameter_specification;
 struct physical_literal;
 struct physical_type_definition;
-struct port_clause;
 struct port_map_aspect;
 struct primary_unit;
 struct procedure_call;

@@ -113,30 +113,13 @@
 #include <eda/vhdl93/ast/file_type_definition.hpp>
 //DISABLED #include <eda/vhdl93/ast/formal_designator.hpp>
 #include <eda/vhdl93/ast/formal_parameter_list.hpp>
+#include <eda/vhdl93/ast/generic_clause.hpp>
 //DISABLED #include <eda/vhdl93/ast/formal_part.hpp>
 //#include <eda/vhdl93/ast/full_type_declaration.hpp>
 //DISABLED #include <eda/vhdl93/ast/function_call.hpp>
 //#include <eda/vhdl93/ast/generate_statement.hpp>
 //#include <eda/vhdl93/ast/generation_scheme.hpp>
-//#include <eda/vhdl93/ast/generic_clause.hpp>
-#include <eda/vhdl93/ast/generic_list.hpp>
-//#include <eda/vhdl93/ast/generic_map_aspect.hpp>
-//#include <eda/vhdl93/ast/graphic_character.hpp>
-//#include <eda/vhdl93/ast/group_constituent.hpp>
-//#include <eda/vhdl93/ast/group_constituent_list.hpp>
-//#include <eda/vhdl93/ast/group_declaration.hpp>
-//#include <eda/vhdl93/ast/group_template_declaration.hpp>
-//#include <eda/vhdl93/ast/guarded_signal_specification.hpp>
-//DISABLED #include <eda/vhdl93/ast/identifier.hpp>
-#include <eda/vhdl93/ast/identifier_list.hpp>
-//#include <eda/vhdl93/ast/if_statement.hpp>
-//#include <eda/vhdl93/ast/incomplete_type_declaration.hpp>
-//DISABLED #include <eda/vhdl93/ast/index_constraint.hpp>
-//#include <eda/vhdl93/ast/index_specification.hpp>
-//#include <eda/vhdl93/ast/index_subtype_definition.hpp>
-#include <eda/vhdl93/ast/indexed_name.hpp>
-//#include <eda/vhdl93/ast/instantiated_unit.hpp>
-//#include <eda/vhdl93/ast/instantiation_list.hpp>
+///vhdl93/ast/instantiation_list.hpp>
 //#include <eda/vhdl93/ast/integer_type_definition.hpp>
 //DISABLED #include <eda/vhdl93/ast/interface_constant_declaration.hpp>
 #include <eda/vhdl93/ast/interface_declaration.hpp>
@@ -160,6 +143,7 @@
 //DISABLED #include <eda/vhdl93/ast/operator_token.hpp>
 //DISABLED #include <eda/vhdl93/ast/operator_symbol.hpp>
 #include <eda/vhdl93/ast/options.hpp>
+#include <eda/vhdl93/ast/port_clause.hpp>
 //#include <eda/vhdl93/ast/package_body.hpp>
 //#include <eda/vhdl93/ast/package_body_declarative_item.hpp>
 //#include <eda/vhdl93/ast/package_body_declarative_part.hpp>
@@ -170,12 +154,6 @@
 //DISABLED #include <eda/vhdl93/ast/physical_literal.hpp>
 //#include <eda/vhdl93/ast/physical_type_definition.hpp>
 //#include <eda/vhdl93/ast/port_clause.hpp>
-#include <eda/vhdl93/ast/port_list.hpp>
-//#include <eda/vhdl93/ast/port_map_aspect.hpp>
-//DISABLED #include <eda/vhdl93/ast/prefix.hpp>
-//DISABLED #include <eda/vhdl93/ast/primary.hpp>
-//#include <eda/vhdl93/ast/primary_unit.hpp>
-//DISABLED #include <eda/vhdl93/ast/procedure_call.hpp>
 #include <eda/vhdl93/ast/procedure_call_statement.hpp>
 //#include <eda/vhdl93/ast/process_declarative_item.hpp>
 //#include <eda/vhdl93/ast/process_declarative_part.hpp>

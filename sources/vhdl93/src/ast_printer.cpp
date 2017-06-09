@@ -1148,9 +1148,9 @@ void printer::operator()(generation_scheme const &node)
 
 void printer::operator()(generic_clause const &node)
 {
-    static char const symbol[]{ "XXX generic_clause" };
+    static char const symbol[]{ "generic_clause" };
     symbol_scope<generic_clause> _(*this, symbol);
-    //os << node;
+    (*this)(node.generic_list);
 }
 
 
@@ -1638,9 +1638,9 @@ void printer::operator()(physical_type_definition const &node)
 
 void printer::operator()(port_clause const &node)
 {
-    static char const symbol[]{ "XXX port_clause" };
+    static char const symbol[]{ "port_clause" };
     symbol_scope<port_clause> _(*this, symbol);
-    //os << node;
+    (*this)(node.port_list);
 }
 
 
