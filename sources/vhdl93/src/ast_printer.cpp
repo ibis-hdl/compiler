@@ -768,9 +768,9 @@ void printer::operator()(design_unit const &node)
 
 void printer::operator()(designator const &node)
 {
-    static char const symbol[]{ "XXX designator" };
+    static char const symbol[]{ "designator" };
     symbol_scope<designator> _(*this, symbol);
-    //visit(node);
+    visit(node);
 }
 
 
@@ -2107,9 +2107,30 @@ void printer::operator()(subprogram_kind const &node)
 
 void printer::operator()(subprogram_specification const &node)
 {
-    static char const symbol[]{ "XXX subprogram_specification" };
+    static char const symbol[]{ "subprogram_specification" };
     symbol_scope<subprogram_specification> _(*this, symbol);
-    //visit(node);
+
+    util::visit_in_place(
+        node,
+        [this](ast::subprogram_specification_procedure const& procedure) {
+            (*this)(procedure.designator);
+            if(procedure.formal_parameter_list) {
+                os << "\n";
+                (*this)(procedure.formal_parameter_list.get());
+            }
+        },
+        [this](ast::subprogram_specification_function const& function) {
+            if(function.impure) { os << "IMPURE\n"; }
+            else {                os << "PURE\n"; }
+            (*this)(function.designator);
+            if(function.formal_parameter_list) {
+                os << "\n";
+                (*this)(function.formal_parameter_list.get());
+            }
+            os << "\n";
+            (*this)(function.return_type_mark);
+        }
+    );
 }
 
 

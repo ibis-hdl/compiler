@@ -68,7 +68,6 @@ struct declaration;
 struct delay_mechanism;
 struct design_file;
 struct design_unit;
-struct designator;
 struct disconnection_specification;
 struct discrete_range;
 struct element_association;
@@ -151,7 +150,6 @@ struct subprogram_declaration;
 struct subprogram_declarative_item;
 struct subprogram_declarative_part;
 struct subprogram_kind;
-struct subprogram_specification;
 struct subtype_declaration;
 struct subtype_indication;
 struct target;
@@ -412,6 +410,9 @@ public:
     void operator()(keyword_token token);
 
     void operator()(nullary const& node);
+
+//    template<typename T>
+//    void operator()(T const& node);
 };
 
 

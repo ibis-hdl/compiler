@@ -250,6 +250,14 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::string_literal,
     literal
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::subprogram_specification_procedure,
+    designator, formal_parameter_list
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::subprogram_specification_function,
+    impure, designator, formal_parameter_list, return_type_mark
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::subtype_indication,
     unspecified_name_list, constraint
 )

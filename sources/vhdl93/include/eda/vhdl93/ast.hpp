@@ -190,7 +190,7 @@
 //#include <eda/vhdl93/ast/subprogram_declarative_item.hpp>
 //#include <eda/vhdl93/ast/subprogram_declarative_part.hpp>
 //#include <eda/vhdl93/ast/subprogram_kind.hpp>
-//#include <eda/vhdl93/ast/subprogram_specification.hpp>
+#include <eda/vhdl93/ast/subprogram_specification.hpp>
 #include <eda/vhdl93/ast/subprogram_statement_part.hpp>
 //#include <eda/vhdl93/ast/subtype_declaration.hpp>
 //#include <eda/vhdl93/ast/subtype_indication.hpp>

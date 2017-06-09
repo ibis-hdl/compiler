@@ -502,6 +502,22 @@ struct entity_class_symbols : x3::symbols<ast::keyword_token> {
 } const entity_class_symbols;
 
 
+/*
+ * Symbols for pure/impure function subprogram_specification             [§ 2.1]
+ */
+struct pure_impure_symbols : x3::symbols<ast::keyword_token> {
+
+    pure_impure_symbols() {
+
+        name("pure_impure_symbols");
+
+        add("pure"      , ast::keyword_token::PURE)
+           ("impure"    , ast::keyword_token::IMPURE)
+           ;
+    }
+} const pure_impure_symbols;
+
+
 } } } } // namespace eda.vhdl93.parser.keywords
 
 
@@ -812,7 +828,7 @@ typedef x3::rule<declaration_class> declaration_type;
 typedef x3::rule<delay_mechanism_class, ast::delay_mechanism> delay_mechanism_type;
 typedef x3::rule<design_file_class> design_file_type;
 typedef x3::rule<design_unit_class> design_unit_type;
-typedef x3::rule<designator_class> designator_type;
+typedef x3::rule<designator_class, ast::designator> designator_type;
 typedef x3::rule<direction_class, ast::keyword_token> direction_type;
 typedef x3::rule<disconnection_specification_class> disconnection_specification_type;
 typedef x3::rule<discrete_range_class, ast::discrete_range> discrete_range_type;
@@ -950,7 +966,7 @@ typedef x3::rule<subprogram_declaration_class> subprogram_declaration_type;
 typedef x3::rule<subprogram_declarative_item_class> subprogram_declarative_item_type;
 typedef x3::rule<subprogram_declarative_part_class> subprogram_declarative_part_type;
 typedef x3::rule<subprogram_kind_class> subprogram_kind_type;
-typedef x3::rule<subprogram_specification_class> subprogram_specification_type;
+typedef x3::rule<subprogram_specification_class, ast::subprogram_specification> subprogram_specification_type;
 typedef x3::rule<subprogram_statement_part_class, ast::subprogram_statement_part> subprogram_statement_part_type;
 typedef x3::rule<subtype_declaration_class> subtype_declaration_type;
 typedef x3::rule<subtype_indication_class, ast::subtype_indication> subtype_indication_type;
@@ -2173,13 +2189,14 @@ auto const design_unit_def =
         ;
 #endif
 
-#if 0
-// designator ::=
-// identifier  |  operator_symbol
+
+// designator ::=                                                        [§ 2.1]
+//     identifier  |  operator_symbol
 auto const designator_def =
-        identifier  |  operator_symbol
-        ;
-#endif
+      identifier
+    | operator_symbol
+    ;
+
 
 
 // direction ::=                                                         [§ 3.1]
@@ -3861,17 +3878,42 @@ auto const subprogram_kind_def =
         ;
 #endif
 
-#if 0
-// subprogram_specification ::=
-// procedure designator [ ( formal_parameter_list ) ]
+
+// subprogram_specification ::=                                          [§ 2.1]
+//       procedure designator [ ( formal_parameter_list ) ]
 //     | [ pure | impure ]  function designator [ ( formal_parameter_list ) ]
-//     return type_mark
-auto const subprogram_specification_def =
-        PROCEDURE designator -( '(' formal_parameter_list ')' )
-        | -( PURE | IMPURE )  FUNCTION designator -( '(' formal_parameter_list ')' )
-        RETURN type_mark
+//       return type_mark
+namespace subprogram_specification_detail {
+
+    auto const procedure = x3::rule<struct _, ast::subprogram_specification_procedure> { "subprogram_specification.procedure" } =
+           PROCEDURE
+        >> designator
+        >> -(      '('
+                >> formal_parameter_list
+                >> ')'
+            )
         ;
-#endif
+
+    auto const PURE_IMPURE = x3::rule<struct _, ast::keyword_token> { "pure_impure" } =
+        kw(pure_impure_symbols);
+
+    auto const function = x3::rule<struct _, ast::subprogram_specification_function> { "subprogram_specification.function" } =
+           -PURE_IMPURE
+        >> FUNCTION
+        >> designator
+        >> -(      '('
+                >> formal_parameter_list
+                >> ')'
+            )
+        >> RETURN
+        >> type_mark
+        ;
+}
+auto const subprogram_specification_def =
+      subprogram_specification_detail::procedure
+    | subprogram_specification_detail::function
+    ;
+
 
 
 // subprogram_statement_part ::=                                         [§ 2.2]
@@ -4205,7 +4247,7 @@ BOOST_SPIRIT_DEFINE(  // -- D --
      , delay_mechanism
     //, design_file
     //, design_unit
-    //, designator
+    , designator
     , direction
     //, disconnection_specification
     , discrete_range
@@ -4364,7 +4406,7 @@ BOOST_SPIRIT_DEFINE(  // -- S --
     //, subprogram_declarative_item
     //, subprogram_declarative_part
     //, subprogram_kind
-    //, subprogram_specification
+    , subprogram_specification
     , subprogram_statement_part
     //, subtype_declaration
     , subtype_indication

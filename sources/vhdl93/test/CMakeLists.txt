@@ -11,13 +11,14 @@ include(cotire)
 set(BIN_SOURCES
     data_set.cpp
     parser_aspect.cpp
-    #parser_clause.cpp
-    #parser_expression.cpp
-    #parser_file.cpp
-    #parser_interface.cpp
-    #parser_literals.cpp
-    #parser_production.cpp
-    #parser_statement.cpp
+    parser_clause.cpp
+    parser_expression.cpp
+    parser_file.cpp
+    parser_interface.cpp
+    parser_literals.cpp
+    parser_production.cpp
+    parser_statement.cpp
+    parser_subprogram.cpp
     #parser_xxx.cpp
     test_vhdl93_parser.cpp
 )

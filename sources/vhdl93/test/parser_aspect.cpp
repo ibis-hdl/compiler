@@ -95,9 +95,3 @@ BOOST_DATA_TEST_CASE( port_map_aspect,
 
 
 BOOST_AUTO_TEST_SUITE_END()
-
-
-
-
-
-
