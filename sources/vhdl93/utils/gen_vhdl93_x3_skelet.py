@@ -519,7 +519,7 @@ factor ::=
     | not primary
 
 file_declaration ::=
-    file identifier_list : subtype_indication file_open_information ] ;
+    file identifier_list : subtype_indication [ file_open_information ] ;
 
 file_logical_name ::= string_expression
 
