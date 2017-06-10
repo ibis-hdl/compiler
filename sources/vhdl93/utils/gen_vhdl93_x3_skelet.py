@@ -3,6 +3,8 @@
 
 # copy&paste reserved keywords
 # https://www.csee.umbc.edu/portal/help/VHDL/reserved.html
+# fixed:
+# base_unit_declaration -> primary_unit_declaration
 vhdl93_words = """
 abs           operator, absolute value of right operand. No () needed.
 access        used to define an access type, pointer
@@ -186,7 +188,7 @@ base ::= integer
 
 base_specifier ::=  B | O | X
 
-base_unit_declaration ::= identifier ;
+primary_unit_declaration ::= identifier ;
 
 based_integer ::=
     extended_digit { [ underline ] extended_digit }
@@ -769,7 +771,7 @@ physical_literal ::= [ abstract_literal ] unit_name
 physical_type_definition ::=
     range_constraint
         units
-            base_unit_declaration
+            primary_unit_declaration
             { secondary_unit_declaration }
         end units [ physical_type_simple_name ]
 

@@ -159,7 +159,7 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::indexed_name,
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::index_subtype_definition,
-    type_mark, range
+    type_mark
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::interface_constant_declaration,
@@ -199,7 +199,7 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::physical_literal,
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::physical_type_definition,
-    range_constraint, base_unit_declaration, secondary_unit_declarations, physical_type_simple_name
+    range_constraint, primary_unit_declaration, secondary_unit_declarations, physical_type_simple_name
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::port_clause,
@@ -223,7 +223,7 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::range_expression, // part of range
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::record_type_definition,
-    element_declaration, simple_name
+    element_declarations, name
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::relation,

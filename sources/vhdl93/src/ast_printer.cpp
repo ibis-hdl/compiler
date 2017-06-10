@@ -1288,8 +1288,6 @@ void printer::operator()(index_subtype_definition const &node)
     symbol_scope<index_subtype_definition> _(*this, symbol);
 
     (*this)(node.type_mark);
-    os << "\n";
-    (*this)(node.range);
 }
 
 
@@ -1635,7 +1633,7 @@ void printer::operator()(physical_type_definition const &node)
 
     (*this)(node.range_constraint);
     os << "\n";
-    (*this)(node.base_unit_declaration);
+    (*this)(node.primary_unit_declaration);
 
     auto const N = node.secondary_unit_declarations.size() - 1;
     unsigned i = 0;
@@ -1775,9 +1773,18 @@ void printer::operator()(record_type_definition const &node)
     static char const symbol[]{ "record_type_definition" };
     symbol_scope<record_type_definition> _(*this, symbol);
 
-    (*this)(node.element_declaration);
-    os << "\n";
-    (*this)(node.simple_name);
+    auto const N = node.element_declarations.size() - 1;
+    unsigned i = 0;
+    for(auto const& element_declaration : node.element_declarations) {
+        (*this)(element_declaration);
+        if(i++ != N) {
+            os << ",\n";
+        }
+    }
+    if(node.name) {
+        os << "\n";
+        (*this)(node.name.get());
+    }
 }
 
 

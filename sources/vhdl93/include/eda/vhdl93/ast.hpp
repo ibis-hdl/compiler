@@ -31,7 +31,6 @@
 #include <eda/vhdl93/ast/attribute_specification.hpp>
 //#include <eda/vhdl93/ast/base.hpp>
 //#include <eda/vhdl93/ast/base_specifier.hpp>
-//#include <eda/vhdl93/ast/base_unit_declaration.hpp>
 //#include <eda/vhdl93/ast/based_integer.hpp>
 //DISABLED #include <eda/vhdl93/ast/based_literal.hpp>
 //#include <eda/vhdl93/ast/basic_character.hpp>

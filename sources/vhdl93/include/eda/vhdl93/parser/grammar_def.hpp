@@ -550,7 +550,6 @@ struct attribute_declaration_class;
 struct attribute_designator_class;
 struct attribute_name_class;
 struct attribute_specification_class;
-struct base_unit_declaration_class;
 struct based_integer_class;
 struct based_literal_class;
 struct basic_graphic_character_class;
@@ -629,6 +628,7 @@ struct file_declaration_class;
 struct file_logical_name_class;
 struct file_open_information_class;
 struct file_type_definition_class;
+struct floating_type_definition_class;
 struct formal_designator_class;
 struct formal_parameter_list_class;
 struct formal_part_class;
@@ -697,6 +697,7 @@ struct port_map_aspect_class;
 struct prefix_class;
 struct primary_class;
 struct primary_unit_class;
+struct primary_unit_declaration_class;
 struct procedure_call_class;
 struct procedure_call_statement_class;
 struct process_declarative_item_class;
@@ -770,7 +771,7 @@ typedef x3::rule<allocator_class> allocator_type;
 typedef x3::rule<architecture_body_class> architecture_body_type;
 typedef x3::rule<architecture_declarative_part_class> architecture_declarative_part_type;
 typedef x3::rule<architecture_statement_part_class> architecture_statement_part_type;
-typedef x3::rule<array_type_definition_class> array_type_definition_type;
+typedef x3::rule<array_type_definition_class, ast::array_type_definition> array_type_definition_type;
 typedef x3::rule<assertion_class, ast::assertion> assertion_type;
 typedef x3::rule<assertion_statement_class, ast::assertion_statement> assertion_statement_type;
 typedef x3::rule<association_element_class, ast::association_element> association_element_type;
@@ -779,7 +780,6 @@ typedef x3::rule<attribute_declaration_class, ast::attribute_declaration> attrib
 typedef x3::rule<attribute_designator_class, ast::simple_name> attribute_designator_type;
 typedef x3::rule<attribute_name_class, ast::attribute_name> attribute_name_type;
 typedef x3::rule<attribute_specification_class, ast::attribute_specification> attribute_specification_type;
-typedef x3::rule<base_unit_declaration_class> base_unit_declaration_type;
 typedef x3::rule<based_integer_class, std::string_view> based_integer_type;
 typedef x3::rule<based_literal_class, ast::based_literal> based_literal_type;
 typedef x3::rule<basic_graphic_character_class, char> basic_graphic_character_type;
@@ -802,7 +802,7 @@ typedef x3::rule<component_configuration_class> component_configuration_type;
 typedef x3::rule<component_declaration_class> component_declaration_type;
 typedef x3::rule<component_instantiation_statement_class> component_instantiation_statement_type;
 typedef x3::rule<component_specification_class> component_specification_type;
-typedef x3::rule<composite_type_definition_class> composite_type_definition_type;
+typedef x3::rule<composite_type_definition_class, ast::composite_type_definition> composite_type_definition_type;
 typedef x3::rule<concurrent_assertion_statement_class> concurrent_assertion_statement_type;
 typedef x3::rule<concurrent_procedure_call_statement_class> concurrent_procedure_call_statement_type;
 typedef x3::rule<concurrent_signal_assignment_statement_class> concurrent_signal_assignment_statement_type;
@@ -817,7 +817,7 @@ typedef x3::rule<configuration_declarative_part_class> configuration_declarative
 typedef x3::rule<configuration_item_class> configuration_item_type;
 typedef x3::rule<configuration_specification_class> configuration_specification_type;
 typedef x3::rule<constant_declaration_class> constant_declaration_type;
-typedef x3::rule<constrained_array_definition_class> constrained_array_definition_type;
+typedef x3::rule<constrained_array_definition_class, ast::constrained_array_definition> constrained_array_definition_type;
 typedef x3::rule<constraint_class, ast::constraint> constraint_type;
 typedef x3::rule<context_clause_class> context_clause_type;
 typedef x3::rule<context_item_class> context_item_type;
@@ -831,7 +831,7 @@ typedef x3::rule<direction_class, ast::keyword_token> direction_type;
 typedef x3::rule<disconnection_specification_class> disconnection_specification_type;
 typedef x3::rule<discrete_range_class, ast::discrete_range> discrete_range_type;
 typedef x3::rule<element_association_class> element_association_type;
-typedef x3::rule<element_declaration_class> element_declaration_type;
+typedef x3::rule<element_declaration_class, ast::element_declaration> element_declaration_type;
 typedef x3::rule<element_subtype_definition_class> element_subtype_definition_type;
 typedef x3::rule<entity_aspect_class, ast::entity_aspect> entity_aspect_type;
 typedef x3::rule<entity_class_class, ast::keyword_token> entity_class_type;
@@ -858,10 +858,11 @@ typedef x3::rule<file_declaration_class, ast::file_declaration> file_declaration
 typedef x3::rule<file_logical_name_class, ast::file_logical_name> file_logical_name_type;
 typedef x3::rule<file_open_information_class, ast::file_open_information> file_open_information_type;
 typedef x3::rule<file_type_definition_class, ast::file_type_definition> file_type_definition_type;
+typedef x3::rule<floating_type_definition_class, ast::floating_type_definition> floating_type_definition_type;
 typedef x3::rule<formal_designator_class, ast::formal_designator> formal_designator_type;
 typedef x3::rule<formal_parameter_list_class, ast::formal_parameter_list> formal_parameter_list_type;
 typedef x3::rule<formal_part_class, ast::formal_part> formal_part_type;
-typedef x3::rule<full_type_declaration_class> full_type_declaration_type;
+typedef x3::rule<full_type_declaration_class, ast::full_type_declaration> full_type_declaration_type;
 typedef x3::rule<function_call_class, ast::function_call> function_call_type;
 typedef x3::rule<generate_statement_class> generate_statement_type;
 typedef x3::rule<generation_scheme_class> generation_scheme_type;
@@ -877,15 +878,15 @@ typedef x3::rule<guarded_signal_specification_class> guarded_signal_specificatio
 typedef x3::rule<identifier_class, ast::identifier> identifier_type;
 typedef x3::rule<identifier_list_class, ast::identifier_list> identifier_list_type;
 typedef x3::rule<if_statement_class> if_statement_type;
-typedef x3::rule<incomplete_type_declaration_class> incomplete_type_declaration_type;
+typedef x3::rule<incomplete_type_declaration_class, ast::incomplete_type_declaration> incomplete_type_declaration_type;
 typedef x3::rule<index_constraint_class, ast::index_constraint> index_constraint_type;
 typedef x3::rule<index_specification_class> index_specification_type;
-typedef x3::rule<index_subtype_definition_class> index_subtype_definition_type;
+typedef x3::rule<index_subtype_definition_class, ast::index_subtype_definition> index_subtype_definition_type;
 typedef x3::rule<indexed_name_class, ast::indexed_name> indexed_name_type;
 typedef x3::rule<instantiated_unit_class> instantiated_unit_type;
 typedef x3::rule<instantiation_list_class> instantiation_list_type;
 typedef x3::rule<integer_class, std::string_view> integer_type;
-typedef x3::rule<integer_type_definition_class> integer_type_definition_type;
+typedef x3::rule<integer_type_definition_class, ast::integer_type_definition> integer_type_definition_type;
 typedef x3::rule<interface_constant_declaration_class, ast::interface_constant_declaration> interface_constant_declaration_type;
 typedef x3::rule<interface_declaration_class> interface_declaration_type;
 typedef x3::rule<interface_element_class, ast::interface_declaration> interface_element_type;
@@ -919,13 +920,14 @@ typedef x3::rule<package_declarative_item_class> package_declarative_item_type;
 typedef x3::rule<package_declarative_part_class> package_declarative_part_type;
 typedef x3::rule<parameter_specification_class> parameter_specification_type;
 typedef x3::rule<physical_literal_class, ast::physical_literal> physical_literal_type;
-typedef x3::rule<physical_type_definition_class> physical_type_definition_type;
+typedef x3::rule<physical_type_definition_class, ast::physical_type_definition> physical_type_definition_type;
 typedef x3::rule<port_clause_class> port_clause_type;
 //typedef x3::rule<port_list_class, ast::port_list> port_list_type;
 typedef x3::rule<port_map_aspect_class> port_map_aspect_type;
 typedef x3::rule<prefix_class, ast::prefix> prefix_type;
 typedef x3::rule<primary_class, ast::primary> primary_type;
 typedef x3::rule<primary_unit_class> primary_unit_type;
+typedef x3::rule<primary_unit_declaration_class, ast::primary_unit_declaration> primary_unit_declaration_type;
 typedef x3::rule<procedure_call_class, ast::procedure_call> procedure_call_type;
 typedef x3::rule<procedure_call_statement_class, ast::procedure_call> procedure_call_statement_type;
 typedef x3::rule<process_declarative_item_class> process_declarative_item_type;
@@ -935,13 +937,13 @@ typedef x3::rule<process_statement_part_class, ast::process_statement_part> proc
 typedef x3::rule<qualified_expression_class> qualified_expression_type;
 typedef x3::rule<range_class, ast::range> range_type;
 typedef x3::rule<range_constraint_class, ast::range> range_constraint_type;
-typedef x3::rule<record_type_definition_class> record_type_definition_type;
+typedef x3::rule<record_type_definition_class, ast::record_type_definition> record_type_definition_type;
 typedef x3::rule<relation_class, ast::relation> relation_type;
 typedef x3::rule<report_statement_class, ast::report_statement> report_statement_type;
 typedef x3::rule<return_statement_class, ast::return_statement> return_statement_type;
-typedef x3::rule<scalar_type_definition_class> scalar_type_definition_type;
+typedef x3::rule<scalar_type_definition_class, ast::scalar_type_definition> scalar_type_definition_type;
 typedef x3::rule<secondary_unit_class> secondary_unit_type;
-typedef x3::rule<secondary_unit_declaration_class> secondary_unit_declaration_type;
+typedef x3::rule<secondary_unit_declaration_class, ast::secondary_unit_declaration> secondary_unit_declaration_type;
 typedef x3::rule<selected_name_class, ast::selected_name> selected_name_type;
 typedef x3::rule<selected_signal_assignment_class> selected_signal_assignment_type;
 typedef x3::rule<selected_waveforms_class, ast::selected_waveforms> selected_waveforms_type;
@@ -973,10 +975,10 @@ typedef x3::rule<target_class, ast::target> target_type;
 typedef x3::rule<term_class, ast::term> term_type;
 typedef x3::rule<timeout_clause_class, ast::timeout_clause> timeout_clause_type;
 typedef x3::rule<type_conversion_class> type_conversion_type;
-typedef x3::rule<type_declaration_class> type_declaration_type;
-typedef x3::rule<type_definition_class> type_definition_type;
+typedef x3::rule<type_declaration_class, ast::type_declaration> type_declaration_type;
+typedef x3::rule<type_definition_class, ast::type_definition> type_definition_type;
 typedef x3::rule<type_mark_class, ast::type_mark> type_mark_type;
-typedef x3::rule<unconstrained_array_definition_class> unconstrained_array_definition_type;
+typedef x3::rule<unconstrained_array_definition_class, ast::unconstrained_array_definition> unconstrained_array_definition_type;
 typedef x3::rule<use_clause_class, ast::use_clause> use_clause_type;
 typedef x3::rule<variable_assignment_statement_class, ast::variable_assignment_statement> variable_assignment_statement_type;
 typedef x3::rule<variable_declaration_class> variable_declaration_type;
@@ -1008,7 +1010,6 @@ attribute_declaration_type const attribute_declaration { "attribute_declaration"
 attribute_designator_type const attribute_designator { "attribute_designator" };
 attribute_name_type const attribute_name { "attribute_name" };
 attribute_specification_type const attribute_specification { "attribute_specification" };
-base_unit_declaration_type const base_unit_declaration { "base_unit_declaration" };
 based_integer_type const based_integer { "based_integer" };
 based_literal_type const based_literal { "based_literal" };
 basic_graphic_character_type const basic_graphic_character { "basic_graphic_character" };
@@ -1087,6 +1088,7 @@ file_declaration_type const file_declaration { "file_declaration" };
 file_logical_name_type const file_logical_name { "file_logical_name" };
 file_open_information_type const file_open_information { "file_open_information" };
 file_type_definition_type const file_type_definition { "file_type_definition" };
+floating_type_definition_type const floating_type_definition { "floating_type_definition" };
 formal_designator_type const formal_designator { "formal_designator" };
 formal_parameter_list_type const formal_parameter_list { "formal_parameter_list" };
 formal_part_type const formal_part { "formal_part" };
@@ -1155,6 +1157,7 @@ port_map_aspect_type const port_map_aspect { "port_map_aspect" };
 prefix_type const prefix { "prefix" };
 primary_type const primary { "primary" };
 primary_unit_type const primary_unit { "primary_unit" };
+primary_unit_declaration_type const primary_unit_declaration { "primary_unit_declaration" };
 procedure_call_type const procedure_call { "procedure_call" };
 procedure_call_statement_type const procedure_call_statement { "procedure_call_statement" };
 process_declarative_item_type const process_declarative_item { "process_declarative_item" };
@@ -1458,13 +1461,14 @@ auto const architecture_statement_part_def =
 ;
 #endif
 
-#if 0
-// array_type_definition ::=
-// unconstrained_array_definition    |   constrained_array_definition
+
+// array_type_definition ::=                                             [§ 8.2]
+//     unconstrained_array_definition | constrained_array_definition
 auto const array_type_definition_def =
-        unconstrained_array_definition    |   constrained_array_definition
-        ;
-#endif
+      unconstrained_array_definition
+    | constrained_array_definition
+    ;
+
 
 
 // assertion ::=                                                         [§ 8.2]
@@ -1573,15 +1577,6 @@ auto const base_specifier_def =
     'B' | 'O' | 'X'
     ;
 #endif
-
-#if 0
-// base_unit_declaration ::=
-// identifier ;
-auto const base_unit_declaration_def =
-        identifier > ';'
-;
-#endif
-
 
 // based_integer ::=                                                  [§ 13.4.2]
 //     extended_digit { [ underline ] extended_digit }
@@ -1919,15 +1914,15 @@ auto const component_specification_def =
         ;
 #endif
 
-#if 0
-// composite_type_definition ::=
-// array_type_definition
+
+// composite_type_definition ::=                                         [§ 3.2]
+//       array_type_definition
 //     | record_type_definition
 auto const composite_type_definition_def =
-        array_type_definition
-        | record_type_definition
-        ;
-#endif
+      array_type_definition
+    | record_type_definition
+    ;
+
 
 #if 0
 // concurrent_assertion_statement ::=
@@ -2069,13 +2064,16 @@ auto const constant_declaration_def =
 ;
 #endif
 
-#if 0
-// constrained_array_definition ::=
-// array index_constraint of element_subtype_indication
+
+// constrained_array_definition ::=                                    [§ 3.2.1]
+//     array index_constraint of element_subtype_indication
 auto const constrained_array_definition_def =
-        ARRAY index_constraint OF element_subtype_indication
-        ;
-#endif
+       ARRAY
+    >> index_constraint
+    >> OF
+    >> subtype_indication
+    ;
+
 
 
 // constraint ::=                                                        [§ 4.2]
@@ -2234,13 +2232,16 @@ auto const element_association_def =
         ;
 #endif
 
-#if 0
-// element_declaration ::=
-// identifier_list : element_subtype_definition ;
+
+// element_declaration ::=                                             [§ 3.2.2]
+//     identifier_list : element_subtype_definition ;
 auto const element_declaration_def =
-        identifier_list > ':' element_subtype_definition > ';'
-;
-#endif
+       identifier_list
+    >> ':'
+    >> subtype_indication // aka subtype_definition
+    >  ';'
+    ;
+
 
 #if 0
 // element_subtype_definition ::=
@@ -2609,6 +2610,13 @@ auto const file_type_definition_def =
 
 
 
+// floating_type_definition ::=                                        [§ 3.1.4]
+//     range_constraint
+auto const floating_type_definition_def =
+    range_constraint
+    ;
+
+
 // formal_designator ::=                                             [§ 4.3.2.2]
 //       generic_name
 //     | port_name
@@ -2637,13 +2645,17 @@ auto const formal_part_def =
     ;
 
 
-#if 0
-// full_type_declaration ::=
-// type identifier is type_definition ;
+
+// full_type_declaration ::=                                             [§ 4.1]
+//     type identifier is type_definition ;
 auto const full_type_declaration_def =
-        TYPE identifier IS type_definition > ';'
-;
-#endif
+       TYPE
+    >> identifier
+    >> IS
+    >> type_definition
+    >  ';'
+    ;
+
 
 
 // function_call ::=                                                   [§ 7.3.3]
@@ -2805,13 +2817,15 @@ auto const if_statement_def =
 ;
 #endif
 
-#if 0
-// incomplete_type_declaration ::=
-// type identifier ;
+
+// incomplete_type_declaration ::=                                     [§ 3.3.1]
+//     type identifier ;
 auto const incomplete_type_declaration_def =
-        TYPE identifier > ';'
-;
-#endif
+       TYPE
+    >> identifier
+    >  ';'
+    ;
+
 
 
 // index_constraint ::=                                                [§ 3.2.1]
@@ -2833,13 +2847,15 @@ auto const index_specification_def =
         ;
 #endif
 
-#if 0
-// index_subtype_definition ::=
-// type_mark range <>
+
+// index_subtype_definition ::=                                        [§ 3.2.1]
+//     type_mark range <>
 auto const index_subtype_definition_def =
-        type_mark RANGE <>
-;
-#endif
+       type_mark
+    >> RANGE
+    >> "<>"
+    ;
+
 
 
 // indexed_name ::=                                                      [§ 6.4]
@@ -2886,13 +2902,13 @@ auto const integer_def =
     ;
 
 
-#if 0
-// integer_type_definition ::=
-// range_constraint
+
+// integer_type_definition ::=                                         [§ 3.1.2]
+//     range_constraint
 auto const integer_type_definition_def =
-        range_constraint
-        ;
-#endif
+    range_constraint
+    ;
+
 
 
 // interface_constant_declaration ::=                                  [§ 4.3.2]
@@ -3285,21 +3301,22 @@ auto const physical_literal_def =
     ;
 
 
-#if 0
-// physical_type_definition ::=
-// range_constraint
-//     units
-//     base_unit_declaration
-//     { secondary_unit_declaration }
-//     end units [ physical_type_simple_name ]
+
+// physical_type_definition ::=                                        [§ 3.1.3]
+//     range_constraint
+//         units
+//             primary_unit_declaration
+//             { secondary_unit_declaration }
+//         end units [ physical_type_simple_name ]
 auto const physical_type_definition_def =
-        range_constraint
-        UNITS
-        base_unit_declaration
-        { secondary_unit_declaration }
-END UNITS -( physical_type_simple_name )
+       range_constraint
+    >> UNITS
+    >> primary_unit_declaration
+    >> *secondary_unit_declaration
+    >> END >> UNITS
+    >> -simple_name
     ;
-#endif
+
 
 
 // port_clause ::=                                                     [§ 1.1.1]
@@ -3376,6 +3393,16 @@ auto const primary_unit_def =
         | package_declaration
         ;
 #endif
+
+
+
+// primary_unit_declaration ::=
+//     identifier ;
+auto const primary_unit_declaration_def =
+      identifier
+    > ';'
+    ;
+
 
 
 // procedure_call ::=                                                    [§ 8.6]
@@ -3510,19 +3537,19 @@ auto const range_constraint_def =
     ;
 
 
-#if 0
-// record_type_definition ::=
-// record
-//     element_declaration
-//     { element_declaration }
+
+// record_type_definition ::=                                          [§ 3.2.2]
+//     record
+//         element_declaration
+//         { element_declaration }
 //     end record [ record_type_simple_name ]
 auto const record_type_definition_def =
-        RECORD
-        element_declaration
-        { element_declaration }
-END RECORD -( record_type_simple_name )
+       RECORD
+    >> x3::repeat(1, x3::inf)[ element_declaration ]
+    >> END >> RECORD
+    >> -simple_name
     ;
-#endif
+
 
 
 // relation ::=                                                          [§ 7.1]
@@ -3563,15 +3590,17 @@ auto const return_statement_def =
 ;
 
 
-#if 0
-// scalar_type_definition ::=
-// enumeration_type_definition   | integer_type_definition
+
+// scalar_type_definition ::=                                            [§ 3.1]
+//       enumeration_type_definition   | integer_type_definition
 //     | floating_type_definition      | physical_type_definition
 auto const scalar_type_definition_def =
-        enumeration_type_definition   | integer_type_definition
-        | floating_type_definition      | physical_type_definition
-        ;
-#endif
+      enumeration_type_definition
+    | integer_type_definition
+    | floating_type_definition
+    | physical_type_definition
+    ;
+
 
 #if 0
 // secondary_unit ::=
@@ -3583,13 +3612,16 @@ auto const secondary_unit_def =
         ;
 #endif
 
-#if 0
-// secondary_unit_declaration ::=
-// identifier = physical_literal ;
+
+// secondary_unit_declaration ::=                                      [§ 3.1.3]
+//     identifier = physical_literal ;
 auto const secondary_unit_declaration_def =
-        identifier = physical_literal > ';'
-;
-#endif
+       identifier
+    >> "="
+    >> physical_literal
+    >  ';'
+    ;
+
 
 
 // selected_name ::=                                                     [§ 6.3]
@@ -4025,29 +4057,29 @@ auto const type_conversion_def =
 ;
 #endif
 
-#if 0
-// type_declaration ::=
-// full_type_declaration
+
+// type_declaration ::=                                                  [§ 4.1]
+//       full_type_declaration
 //     | incomplete_type_declaration
 auto const type_declaration_def =
-        full_type_declaration
-        | incomplete_type_declaration
-        ;
-#endif
+      full_type_declaration
+    | incomplete_type_declaration
+    ;
 
-#if 0
-// type_definition ::=
-// scalar_type_definition
+
+
+// type_definition ::=                                                   [§ 4.1]
+//       scalar_type_definition
 //     | composite_type_definition
 //     | access_type_definition
 //     | file_type_definition
 auto const type_definition_def =
-        scalar_type_definition
-        | composite_type_definition
-        | access_type_definition
-        | file_type_definition
-        ;
-#endif
+      scalar_type_definition
+    | composite_type_definition
+    | access_type_definition
+    | file_type_definition
+    ;
+
 
 
 // type_mark ::=
@@ -4061,14 +4093,17 @@ auto const type_mark_def =
     ;
 
 
-#if 0
-// unconstrained_array_definition ::=
-// array ( index_subtype_definition { , index_subtype_definition } )
-//     of element_subtype_indication
+
+// unconstrained_array_definition ::=                                  [§ 3.2.1]
+//     array ( index_subtype_definition { , index_subtype_definition } )
+//         of element_subtype_indication
 auto const unconstrained_array_definition_def =
-        ARRAY '(' index_subtype_definition >> ( index_subtype_definition % ',' ) ')'     OF element_subtype_indication
-        ;
-#endif
+       ARRAY
+    >> '(' >> (index_subtype_definition % ',') >>  ')'
+    >> OF
+    >> subtype_indication
+    ;
+
 
 
 // use_clause ::=                                                       [§ 10.4]
@@ -4197,7 +4232,7 @@ BOOST_SPIRIT_DEFINE(  // -- A --
     //, architecture_body
     //, architecture_declarative_part
     //, architecture_statement_part
-    //, array_type_definition
+    , array_type_definition
     , assertion
     , assertion_statement
     , association_element
@@ -4209,7 +4244,6 @@ BOOST_SPIRIT_DEFINE(  // -- A --
 )
 BOOST_SPIRIT_DEFINE(  // -- B --
     //  base
-    //, base_unit_declaration
       based_integer
     , based_literal
     //, basic_character
@@ -4235,7 +4269,7 @@ BOOST_SPIRIT_DEFINE(  // -- C --
     //, component_declaration
     //, component_instantiation_statement
     //, component_specification
-    //, composite_type_definition
+    , composite_type_definition
     //, concurrent_assertion_statement
     //, concurrent_procedure_call_statement
     //, concurrent_signal_assignment_statement
@@ -4250,7 +4284,7 @@ BOOST_SPIRIT_DEFINE(  // -- C --
     //, configuration_item
     //, configuration_specification
     //, constant_declaration
-    //, constrained_array_definition
+    , constrained_array_definition
     , constraint
     //, context_clause
     //, context_item
@@ -4268,10 +4302,10 @@ BOOST_SPIRIT_DEFINE(  // -- D --
 )
 BOOST_SPIRIT_DEFINE(  // -- E --
     //  element_association
-    //, element_declaration
+     element_declaration
     //, element_subtype_definition
-    entity_aspect
-    ,  entity_class
+    , entity_aspect
+    , entity_class
     //, entity_class_entry
     //, entity_class_entry_list
     //, entity_declaration
@@ -4297,10 +4331,11 @@ BOOST_SPIRIT_DEFINE(  // -- F --
     , file_logical_name
     , file_open_information
     , file_type_definition
+    , floating_type_definition
     , formal_designator
     , formal_parameter_list
     , formal_part
-    //, full_type_declaration
+    , full_type_declaration
     , function_call
 )
 BOOST_SPIRIT_DEFINE(  // -- G --
@@ -4319,15 +4354,15 @@ BOOST_SPIRIT_DEFINE(  // -- I --
       identifier
     , identifier_list
     //, if_statement
-    //, incomplete_type_declaration
+    , incomplete_type_declaration
     , index_constraint
     //, index_specification
-    //, index_subtype_definition
+    , index_subtype_definition
     , indexed_name
     //, instantiated_unit
     //, instantiation_list
     , integer
-    //, integer_type_definition
+    , integer_type_definition
     , interface_constant_declaration
     , interface_declaration
     , interface_element
@@ -4369,12 +4404,13 @@ BOOST_SPIRIT_DEFINE(  // -- P --
     //, package_declarative_part
     //, parameter_specification
       physical_literal
-    //, physical_type_definition
+    , physical_type_definition
     , port_clause
     , port_map_aspect
     , prefix
     , primary
     //, primary_unit
+    , primary_unit_declaration
     , procedure_call
     , procedure_call_statement
     //, process_declarative_item
@@ -4388,16 +4424,16 @@ BOOST_SPIRIT_DEFINE(  // -- P --
 BOOST_SPIRIT_DEFINE(  // -- R --
       range
     , range_constraint
-    //, record_type_definition
+    , record_type_definition
     , relation
     , report_statement
     , return_statement
 )
 BOOST_SPIRIT_DEFINE(  // -- S --
-    //  scalar_type_definition
+      scalar_type_definition
     //, secondary_unit
-    //, secondary_unit_declaration
-      selected_name
+    , secondary_unit_declaration
+    , selected_name
     //, selected_signal_assignment
     , selected_waveforms
     , sensitivity_clause
@@ -4431,13 +4467,13 @@ BOOST_SPIRIT_DEFINE(  // -- T --
     , term
     , timeout_clause
     //, type_conversion
-    //, type_declaration
-    //, type_definition
+    , type_declaration
+    , type_definition
     , type_mark
 )
 BOOST_SPIRIT_DEFINE(  // -- U --
-    //  unconstrained_array_definition
-      use_clause
+      unconstrained_array_definition
+    , use_clause
 )
 BOOST_SPIRIT_DEFINE(  // -- V --
       variable_assignment_statement

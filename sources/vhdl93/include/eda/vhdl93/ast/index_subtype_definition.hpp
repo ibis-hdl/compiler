@@ -12,7 +12,6 @@
 #include <eda/vhdl93/ast/namespace_alias.hpp>
 
 #include <eda/vhdl93/ast/type_mark.hpp>
-#include <eda/vhdl93/ast/range.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -21,7 +20,6 @@ namespace eda { namespace vhdl93 { namespace ast {
 struct index_subtype_definition : position_tagged
 {
     ast::type_mark          type_mark;
-    ast::range              range;
 };
 
 

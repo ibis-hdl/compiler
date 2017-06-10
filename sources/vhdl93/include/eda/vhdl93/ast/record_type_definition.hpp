@@ -13,6 +13,8 @@
 
 #include <eda/vhdl93/ast/element_declaration.hpp>
 #include <eda/vhdl93/ast/simple_name.hpp>
+#include <vector>
+#include <optional>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -20,8 +22,8 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 struct record_type_definition : position_tagged
 {
-    ast::element_declaration        element_declaration;
-    ast::simple_name                simple_name;
+    std::vector<ast::element_declaration>   element_declarations;
+    boost::optional<ast::simple_name>       name;
 };
 
 
