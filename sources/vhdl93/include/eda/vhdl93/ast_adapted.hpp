@@ -294,6 +294,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::subprogram_specification_function,
     impure, designator, formal_parameter_list, return_type_mark
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::subtype_declaration,
+    identifier, subtype_indication
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::subtype_indication,
     unspecified_name_list, constraint
 )

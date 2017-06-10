@@ -968,7 +968,7 @@ typedef x3::rule<subprogram_declarative_part_class> subprogram_declarative_part_
 typedef x3::rule<subprogram_kind_class> subprogram_kind_type;
 typedef x3::rule<subprogram_specification_class, ast::subprogram_specification> subprogram_specification_type;
 typedef x3::rule<subprogram_statement_part_class, ast::subprogram_statement_part> subprogram_statement_part_type;
-typedef x3::rule<subtype_declaration_class> subtype_declaration_type;
+typedef x3::rule<subtype_declaration_class, ast::subtype_declaration> subtype_declaration_type;
 typedef x3::rule<subtype_indication_class, ast::subtype_indication> subtype_indication_type;
 typedef x3::rule<suffix_class, ast::suffix> suffix_type;
 typedef x3::rule<target_class, ast::target> target_type;
@@ -3969,13 +3969,17 @@ auto const subprogram_statement_part_def =
     ;
 
 
-#if 0
+
 // subtype_declaration ::=
-// subtype identifier is subtype_indication ;
+//     subtype identifier is subtype_indication ;
 auto const subtype_declaration_def =
-        SUBTYPE identifier IS subtype_indication > ';'
-;
-#endif
+       SUBTYPE
+    >> identifier
+    >> IS
+    >> subtype_indication
+    >  ';'
+    ;
+
 
 
 // subtype_indication ::=                                                [§ 4.2]
@@ -4458,7 +4462,7 @@ BOOST_SPIRIT_DEFINE(  // -- S --
     //, subprogram_kind
     , subprogram_specification
     , subprogram_statement_part
-    //, subtype_declaration
+    , subtype_declaration
     , subtype_indication
     , suffix
 )

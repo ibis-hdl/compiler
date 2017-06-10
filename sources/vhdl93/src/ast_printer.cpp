@@ -2167,9 +2167,11 @@ void printer::operator()(subprogram_specification const &node)
 
 void printer::operator()(subtype_declaration const &node)
 {
-    static char const symbol[]{ "XXX subtype_declaration" };
+    static char const symbol[]{ "subtype_declaration" };
     symbol_scope<subtype_declaration> _(*this, symbol);
-    //os << node;
+    (*this)(node.identifier);
+    os << "\n";
+    (*this)(node.subtype_indication);
 }
 
 

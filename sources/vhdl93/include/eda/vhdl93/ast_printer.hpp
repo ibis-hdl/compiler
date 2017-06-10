@@ -135,8 +135,6 @@ struct subprogram_declaration;
 struct subprogram_declarative_item;
 struct subprogram_declarative_part;
 struct subprogram_kind;
-struct subtype_declaration;
-struct subtype_indication;
 struct target;
 struct term;
 struct timeout_clause;

@@ -191,7 +191,7 @@
 //#include <eda/vhdl93/ast/subprogram_kind.hpp>
 #include <eda/vhdl93/ast/subprogram_specification.hpp>
 #include <eda/vhdl93/ast/subprogram_statement_part.hpp>
-//#include <eda/vhdl93/ast/subtype_declaration.hpp>
+#include <eda/vhdl93/ast/subtype_declaration.hpp>
 //#include <eda/vhdl93/ast/subtype_indication.hpp>
 //DISABLED #include <eda/vhdl93/ast/suffix.hpp>
 //DISABLED #include <eda/vhdl93/ast/target.hpp>

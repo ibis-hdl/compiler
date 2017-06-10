@@ -55,6 +55,7 @@ GENERATE_DATASET_TEST_CASE(full_type_declaration)
 GENERATE_DATASET_TEST_CASE(incomplete_type_declaration)
 GENERATE_DATASET_TEST_CASE(type_definition)
 
+GENERATE_DATASET_TEST_CASE(subtype_declaration)
 
 BOOST_AUTO_TEST_SUITE_END()
 
