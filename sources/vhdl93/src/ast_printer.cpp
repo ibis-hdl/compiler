@@ -2248,9 +2248,11 @@ void printer::operator()(timeout_clause const &node)
 
 void printer::operator()(type_conversion const &node)
 {
-    static char const symbol[]{ "XXX type_conversion" };
+    static char const symbol[]{ "type_conversion" };
     symbol_scope<type_conversion> _(*this, symbol);
-    //os << node;
+    (*this)(node.type_mark);
+    os << "\n";
+    (*this)(node.expression);
 }
 
 

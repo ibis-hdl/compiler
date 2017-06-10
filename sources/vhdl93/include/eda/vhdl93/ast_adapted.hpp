@@ -314,6 +314,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::timeout_clause,
     time_expression
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::type_conversion,
+    type_mark, expression
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::unconstrained_array_definition,
     index_subtype_definitions, element_subtype_indication
 )

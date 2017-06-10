@@ -974,7 +974,7 @@ typedef x3::rule<suffix_class, ast::suffix> suffix_type;
 typedef x3::rule<target_class, ast::target> target_type;
 typedef x3::rule<term_class, ast::term> term_type;
 typedef x3::rule<timeout_clause_class, ast::timeout_clause> timeout_clause_type;
-typedef x3::rule<type_conversion_class> type_conversion_type;
+typedef x3::rule<type_conversion_class, ast::type_conversion> type_conversion_type;
 typedef x3::rule<type_declaration_class, ast::type_declaration> type_declaration_type;
 typedef x3::rule<type_definition_class, ast::type_definition> type_definition_type;
 typedef x3::rule<type_mark_class, ast::type_mark> type_mark_type;
@@ -4053,13 +4053,14 @@ auto const timeout_clause_def =
     ;
 
 
-#if 0
-// type_conversion ::=
-// type_mark ( expression )
+
+// type_conversion ::=                                                 [§ 7.3.5]
+//     type_mark ( expression )
 auto const type_conversion_def =
-        type_mark '(' expression )
-;
-#endif
+       type_mark
+    >> '(' >> expression >> ')';
+    ;
+
 
 
 // type_declaration ::=                                                  [§ 4.1]
@@ -4470,7 +4471,7 @@ BOOST_SPIRIT_DEFINE(  // -- T --
       target
     , term
     , timeout_clause
-    //, type_conversion
+    , type_conversion
     , type_declaration
     , type_definition
     , type_mark

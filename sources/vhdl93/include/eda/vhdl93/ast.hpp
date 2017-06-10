@@ -197,7 +197,7 @@
 //DISABLED #include <eda/vhdl93/ast/target.hpp>
 //DISABLED #include <eda/vhdl93/ast/term.hpp>
 //#include <eda/vhdl93/ast/timeout_clause.hpp>
-//#include <eda/vhdl93/ast/type_conversion.hpp>
+#include <eda/vhdl93/ast/type_conversion.hpp>
 #include <eda/vhdl93/ast/type_declaration.hpp>
 //#include <eda/vhdl93/ast/type_definition.hpp>
 //#include <eda/vhdl93/ast/unconstrained_array_definition.hpp>

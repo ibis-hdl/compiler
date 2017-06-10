@@ -138,7 +138,6 @@ struct subprogram_kind;
 struct target;
 struct term;
 struct timeout_clause;
-struct type_conversion;
 struct variable_declaration;
 struct wait_statement;
 struct waveform;
