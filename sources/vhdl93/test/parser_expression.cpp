@@ -26,39 +26,6 @@ namespace ast    = eda::vhdl93::ast;
 
 
 /*
- * enumeration_type_definition
- */
-struct enumeration_type_definition_dataset : public ::x3_test::dataset_loader
-{
-    enumeration_type_definition_dataset()
-    : dataset_loader{ "test_case/enumeration_type_definition" }
-    { }
-} const enumeration_type_definition_dataset;
-
-
-BOOST_DATA_TEST_CASE( enumeration_type_definition,
-      enumeration_type_definition_dataset.input()
-    ^ enumeration_type_definition_dataset.expect()
-    ^ enumeration_type_definition_dataset.test_file_name(),
-    input, expect, file)
-{
-    using x3_test::testing_parser;
-
-    typedef ast::enumeration_type_definition attribute_type;
-
-    // avoid warning, used in case of error for error message by boost.test
-    boost::ignore_unused(file);
-
-    testing_parser<attribute_type> parse;
-    auto [parse_ok, parse_result] = parse(input, parser::enumeration_type_definition);
-
-    BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
-    BOOST_TEST(parse_result == expect, btt::per_element());
-}
-
-
-/*
  * names
  */
 struct name_definition_dataset : public ::x3_test::dataset_loader
