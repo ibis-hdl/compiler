@@ -12,6 +12,7 @@ set(BIN_SOURCES
     data_set.cpp
     parser_aspect.cpp
     parser_clause.cpp
+    parser_declaration.cpp
     parser_expression.cpp
     parser_file.cpp
     parser_interface.cpp

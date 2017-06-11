@@ -765,7 +765,7 @@ typedef x3::rule<actual_designator_class, ast::actual_designator> actual_designa
 typedef x3::rule<actual_parameter_part_class, ast::actual_parameter_part> actual_parameter_part_type;
 typedef x3::rule<actual_part_class, ast::actual_part> actual_part_type;
 typedef x3::rule<aggregate_class, ast::aggregate> aggregate_type;
-typedef x3::rule<alias_declaration_class> alias_declaration_type;
+typedef x3::rule<alias_declaration_class, ast::alias_declaration> alias_declaration_type;
 typedef x3::rule<alias_designator_class, ast::alias_designator> alias_designator_type;
 typedef x3::rule<allocator_class> allocator_type;
 typedef x3::rule<architecture_body_class> architecture_body_type;
@@ -1403,13 +1403,19 @@ auto const aggregate_def =
     ;
 
 
-#if 0
-// alias_declaration ::=
-// alias alias_designator [ : subtype_indication ] is name [ signature ] ;
+
+// alias_declaration ::=                                               [§ 4.3.3]
+//     alias alias_designator [ : subtype_indication ] is name [ signature ] ;
 auto const alias_declaration_def =
-        ALIAS alias_designator -( > ':' subtype_indication ) IS name -( signature ) > ';'
-;
-#endif
+    ALIAS
+    >> alias_designator
+    >> -( ':' >> subtype_indication )
+    >> IS
+    >> name
+    >> -signature
+    >  ';'
+    ;
+
 
 
 // alias_designator ::=                                                [§ 4.3.3]
@@ -4234,7 +4240,7 @@ BOOST_SPIRIT_DEFINE(  // -- A --
     , actual_parameter_part
     , actual_part
     , aggregate
-    //, alias_declaration
+    , alias_declaration
     , alias_designator
     //, allocator
     //, architecture_body

@@ -17,7 +17,6 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 
 struct aggregate;
-struct alias_declaration;
 struct allocator;
 struct architecture_body;
 struct architecture_declarative_part;

@@ -47,5 +47,9 @@ GENERATE_DATASET_TEST_CASE(subtype_declaration)
 GENERATE_DATASET_TEST_CASE(type_conversion)
 
 
+// alias
+GENERATE_DATASET_TEST_CASE(alias_declaration)
+
+
 BOOST_AUTO_TEST_SUITE_END()
 

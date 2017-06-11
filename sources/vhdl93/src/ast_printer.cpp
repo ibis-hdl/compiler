@@ -151,9 +151,23 @@ void printer::operator()(aggregate const &node)
 
 void printer::operator()(alias_declaration const &node)
 {
-    static char const symbol[]{ "XXX alias_declaration" };
+    static char const symbol[]{ "alias_declaration" };
     symbol_scope<alias_declaration> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.alias_designator);
+    os << "\n";
+
+    if(node.subtype_indication) {
+        (*this)(node.subtype_indication.get());
+        os << "\n";
+    }
+
+    (*this)(node.name);
+
+    if(node.signature) {
+        os << "\n";
+        (*this)(node.signature.get());
+    }
 }
 
 

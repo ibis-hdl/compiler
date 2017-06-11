@@ -22,6 +22,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::actual_part_chunk,
     context_tied_name, actual_designator
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::alias_declaration,
+    alias_designator, subtype_indication, name, signature
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::assertion,
     condition, report, severity
 )
