@@ -14,7 +14,7 @@
 //DISABLED #include <eda/vhdl93/ast/actual_designator.hpp>
 #include <eda/vhdl93/ast/actual_parameter_part.hpp>
 //DISABLED #include <eda/vhdl93/ast/actual_part.hpp>
-//#include <eda/vhdl93/ast/aggregate.hpp>
+#include <eda/vhdl93/ast/aggregate.hpp>
 //#include <eda/vhdl93/ast/alias_declaration.hpp>
 #include <eda/vhdl93/ast/alias_designator.hpp>
 //#include <eda/vhdl93/ast/allocator.hpp>
@@ -82,7 +82,7 @@
 //#include <eda/vhdl93/ast/designator.hpp>
 //#include <eda/vhdl93/ast/disconnection_specification.hpp>
 //#include <eda/vhdl93/ast/discrete_range.hpp>
-//#include <eda/vhdl93/ast/element_association.hpp>
+//DISABLED#include <eda/vhdl93/ast/element_association.hpp>
 //#include <eda/vhdl93/ast/element_declaration.hpp>
 //#include <eda/vhdl93/ast/element_subtype_definition.hpp>
 #include <eda/vhdl93/ast/entity_aspect.hpp>

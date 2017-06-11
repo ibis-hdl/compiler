@@ -82,6 +82,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::delay_mechanism,
     time_expression, type
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::element_association,
+    choices, expression
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::element_declaration,
     identifier_list, element_subtype_definition
 )

@@ -135,9 +135,17 @@ void printer::operator()(actual_part const &node)
 
 void printer::operator()(aggregate const &node)
 {
-    static char const symbol[]{ "XXX aggregate" };
+    static char const symbol[]{ "aggregate" };
     symbol_scope<aggregate> _(*this, symbol);
-    //os << node;
+
+    auto const N = node.size() - 1;
+    unsigned i = 0;
+    for(auto const& element_association : node) {
+        (*this)(element_association);
+        if(i++ != N) {
+            os << ",\n";
+        }
+    }
 }
 
 
@@ -799,9 +807,12 @@ void printer::operator()(discrete_range const &node)
 
 void printer::operator()(element_association const &node)
 {
-    static char const symbol[]{ "XXX element_association" };
+    static char const symbol[]{ "element_association" };
     symbol_scope<element_association> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.choices);
+    os << "\n";
+    (*this)(node.expression);
 }
 
 

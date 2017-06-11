@@ -14,6 +14,8 @@
 #include "data_set.hpp"
 #include "testing_parser.hpp"
 
+#include "generate_data_test_case.hpp"
+
 
 BOOST_AUTO_TEST_SUITE( parser_expression )
 
@@ -23,6 +25,10 @@ namespace btt = boost::test_tools;
 
 namespace parser = eda::vhdl93::parser;
 namespace ast    = eda::vhdl93::ast;
+
+
+
+GENERATE_DATASET_TEST_CASE(aggregate)
 
 
 /*

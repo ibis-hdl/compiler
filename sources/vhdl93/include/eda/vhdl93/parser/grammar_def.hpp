@@ -764,7 +764,7 @@ typedef x3::rule<access_type_definition_class, ast::access_type_definition> acce
 typedef x3::rule<actual_designator_class, ast::actual_designator> actual_designator_type;
 typedef x3::rule<actual_parameter_part_class, ast::actual_parameter_part> actual_parameter_part_type;
 typedef x3::rule<actual_part_class, ast::actual_part> actual_part_type;
-typedef x3::rule<aggregate_class> aggregate_type;
+typedef x3::rule<aggregate_class, ast::aggregate> aggregate_type;
 typedef x3::rule<alias_declaration_class> alias_declaration_type;
 typedef x3::rule<alias_designator_class, ast::alias_designator> alias_designator_type;
 typedef x3::rule<allocator_class> allocator_type;
@@ -830,7 +830,7 @@ typedef x3::rule<designator_class, ast::designator> designator_type;
 typedef x3::rule<direction_class, ast::keyword_token> direction_type;
 typedef x3::rule<disconnection_specification_class> disconnection_specification_type;
 typedef x3::rule<discrete_range_class, ast::discrete_range> discrete_range_type;
-typedef x3::rule<element_association_class> element_association_type;
+typedef x3::rule<element_association_class, ast::element_association> element_association_type;
 typedef x3::rule<element_declaration_class, ast::element_declaration> element_declaration_type;
 typedef x3::rule<element_subtype_definition_class> element_subtype_definition_type;
 typedef x3::rule<entity_aspect_class, ast::entity_aspect> entity_aspect_type;
@@ -1393,13 +1393,15 @@ auto const actual_part_def =
     ;
 
 
-#if 0
-// aggregate ::=
-// ( element_association { , element_association } )
+
+// aggregate ::=                                                       [§ 7.3.2]
+//     ( element_association { , element_association } )
 auto const aggregate_def =
-        ( element_association >> ( element_association % ',' ) )
-        ;
-#endif
+       '('
+    >> ( element_association % ',' )
+    >> ')'
+    ;
+
 
 #if 0
 // alias_declaration ::=
@@ -2224,13 +2226,14 @@ auto const discrete_range_def =
     ;
 
 
-#if 0
-// element_association ::=
-// [ choices => ] expression
+
+// element_association ::=                                             [§ 7.3.2]
+//     [ choices => ] expression
 auto const element_association_def =
-        -( choices => ) expression
-        ;
-#endif
+       -( choices >> "=>" )
+    >> expression
+    ;
+
 
 
 // element_declaration ::=                                             [§ 3.2.2]
@@ -4230,7 +4233,7 @@ BOOST_SPIRIT_DEFINE(  // -- A --
     , actual_designator
     , actual_parameter_part
     , actual_part
-    //, aggregate
+    , aggregate
     //, alias_declaration
     , alias_designator
     //, allocator
@@ -4306,8 +4309,8 @@ BOOST_SPIRIT_DEFINE(  // -- D --
     , discrete_range
 )
 BOOST_SPIRIT_DEFINE(  // -- E --
-    //  element_association
-     element_declaration
+      element_association
+    , element_declaration
     //, element_subtype_definition
     , entity_aspect
     , entity_class
