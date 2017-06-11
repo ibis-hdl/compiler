@@ -15,7 +15,7 @@
 #include <eda/vhdl93/ast/identifier_list.hpp>
 #include <eda/vhdl93/ast/subtype_indication.hpp>
 #include <eda/vhdl93/ast/expression.hpp>
-#include <boost/optional.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -27,7 +27,7 @@ struct interface_constant_declaration : position_tagged
     ast::identifier_list                identifier_list;
     bool                                IN;
     ast::subtype_indication             subtype_indication;
-    boost::optional<ast::expression>    static_expression;
+    optional<ast::expression>           static_expression;
 
     interface_constant_declaration()
     : CONSTANT{}, IN{}

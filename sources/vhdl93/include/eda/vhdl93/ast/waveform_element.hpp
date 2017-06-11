@@ -14,7 +14,7 @@
 
 #include <eda/vhdl93/ast/expression.hpp>
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
-#include <boost/optional.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -34,7 +34,7 @@ struct waveform_element : position_tagged
 {
 
     waveform_element_form               form;
-    boost::optional<ast::expression>    time_expression;
+    optional<ast::expression>           time_expression;
 
 };
 

@@ -29,7 +29,7 @@ struct factor_stuff : position_tagged
 
     };
     ast::primary                    primary;
-    boost::optional<chunk>          rest;
+    optional<chunk>                 rest;
 };
 #endif
 

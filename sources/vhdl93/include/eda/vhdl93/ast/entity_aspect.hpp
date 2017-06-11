@@ -15,7 +15,7 @@
 #include <eda/vhdl93/ast/name.hpp>
 #include <eda/vhdl93/ast/subtype_indication.hpp>
 #include <eda/vhdl93/ast/keyword_token.hpp>
-#include <boost/optional.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
 
@@ -26,7 +26,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 struct entity_aspect_entity : position_tagged
 {
     ast::name                           name;
-    boost::optional<ast::identifier>    architecture_identifier;
+    optional<ast::identifier>           architecture_identifier;
 };
 
 

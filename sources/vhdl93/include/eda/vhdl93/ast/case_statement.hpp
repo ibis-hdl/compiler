@@ -14,7 +14,7 @@
 
 #include <eda/vhdl93/ast/label.hpp>
 //#include <eda/vhdl93/ast/case_statement_alternative.hpp>
-#include <boost/optional.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 #include <vector>
 
 
@@ -25,10 +25,10 @@ struct case_statement_alternative;
 
 struct case_statement : position_tagged
 {
-    boost::optional<ast::label>                     label;
+    optional<ast::label>                            label;
     ast::expression                                 expression;
     std::vector<ast::case_statement_alternative>    alternatives;
-    boost::optional<ast::label>                     end_label;
+    optional<ast::label>                            end_label;
 };
 
 

@@ -16,7 +16,7 @@
 #include <eda/vhdl93/ast/signature.hpp>
 #include <eda/vhdl93/ast/simple_name.hpp>
 #include <eda/vhdl93/ast/expression.hpp>
-#include <boost/optional.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -25,9 +25,9 @@ namespace eda { namespace vhdl93 { namespace ast {
 struct attribute_name : position_tagged
 {
     ast::prefix                         prefix;
-    boost::optional<ast::signature>     signature;
+    optional<ast::signature>            signature;
     ast::simple_name                    attribute_designator;
-    boost::optional<ast::expression>    expression;
+    optional<ast::expression>           expression;
 };
 
 

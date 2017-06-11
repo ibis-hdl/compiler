@@ -16,7 +16,7 @@
 #include <eda/vhdl93/ast/target.hpp>
 #include <eda/vhdl93/ast/delay_mechanism.hpp>
 #include <eda/vhdl93/ast/waveform.hpp>
-#include <boost/optional.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -24,9 +24,9 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 struct signal_assignment_statement : position_tagged
 {
-    boost::optional<ast::label>             label;
+    optional<ast::label>                    label;
     ast::target                             target;
-    boost::optional<ast::delay_mechanism>   delay_mechanism;
+    optional<ast::delay_mechanism>          delay_mechanism;
     ast::waveform                           waveform;
 };
 

@@ -14,7 +14,7 @@
 
 #include <eda/vhdl93/ast/operator_token.hpp>
 #include <eda/vhdl93/ast/term.hpp>
-#include <boost/optional.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 #include <vector>
 
 
@@ -28,7 +28,7 @@ struct simple_expression : position_tagged
         ast::term                       term;
     };
 
-    boost::optional<operator_token>     sign;
+    optional<operator_token>            sign;
     ast::term                           term;
     std::vector<chunk>                  rest_list;
 };

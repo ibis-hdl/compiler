@@ -14,7 +14,7 @@
 
 #include <eda/vhdl93/ast/entity_tag.hpp>
 #include <eda/vhdl93/ast/signature.hpp>
-#include <boost/optional.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -23,7 +23,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 struct entity_designator : position_tagged
 {
     ast::entity_tag                 entity_tag;
-    boost::optional<ast::signature> signature;
+    optional<ast::signature>        signature;
 };
 
 

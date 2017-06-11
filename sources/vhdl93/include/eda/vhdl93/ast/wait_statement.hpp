@@ -16,7 +16,7 @@
 #include <eda/vhdl93/ast/sensitivity_clause.hpp>
 #include <eda/vhdl93/ast/condition_clause.hpp>
 #include <eda/vhdl93/ast/timeout_clause.hpp>
-#include <boost/optional.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -24,10 +24,10 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 struct wait_statement : position_tagged
 {
-   boost::optional<ast::label>              label;
-   boost::optional<ast::sensitivity_clause> sensitivity_clause;
-   boost::optional<ast::condition_clause>   condition_clause;
-   boost::optional<ast::timeout_clause>     timeout_clause;
+   optional<ast::label>                     label;
+   optional<ast::sensitivity_clause>        sensitivity_clause;
+   optional<ast::condition_clause>          condition_clause;
+   optional<ast::timeout_clause>            timeout_clause;
 };
 
 

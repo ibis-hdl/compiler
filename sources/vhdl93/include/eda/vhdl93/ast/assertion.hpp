@@ -14,7 +14,7 @@
 
 #include <eda/vhdl93/ast/condition.hpp>
 #include <eda/vhdl93/ast/expression.hpp>
-#include <boost/optional.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -23,8 +23,8 @@ namespace eda { namespace vhdl93 { namespace ast {
 struct assertion : position_tagged
 {
     ast::condition                      condition;
-    boost::optional<ast::expression>    report;
-    boost::optional<ast::expression>    severity;
+    optional<ast::expression>           report;
+    optional<ast::expression>           severity;
 };
 
 

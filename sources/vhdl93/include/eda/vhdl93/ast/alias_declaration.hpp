@@ -16,7 +16,7 @@
 #include <eda/vhdl93/ast/subtype_indication.hpp>
 #include <eda/vhdl93/ast/name.hpp>
 #include <eda/vhdl93/ast/signature.hpp>
-#include <boost/optional.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -25,9 +25,9 @@ namespace eda { namespace vhdl93 { namespace ast {
 struct alias_declaration : position_tagged
 {
     ast::alias_designator                       alias_designator;
-    boost::optional<ast::subtype_indication>    subtype_indication;
+    optional<ast::subtype_indication>           subtype_indication;
     ast::name                                   name;
-    boost::optional<ast::signature>             signature;
+    optional<ast::signature>                    signature;
 };
 
 

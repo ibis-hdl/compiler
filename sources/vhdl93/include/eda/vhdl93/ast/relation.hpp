@@ -14,7 +14,7 @@
 
 #include <eda/vhdl93/ast/operator_token.hpp>
 #include <eda/vhdl93/ast/shift_expression.hpp>
-#include <boost/optional.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -29,7 +29,7 @@ struct relation : position_tagged
     };
 
     ast::shift_expression           shift_expression;
-    boost::optional<chunk>          rest;
+    optional<chunk>                 rest;
 };
 
 

@@ -16,8 +16,8 @@
 #include <eda/vhdl93/ast/primary_unit_declaration.hpp>
 #include <eda/vhdl93/ast/secondary_unit_declaration.hpp>
 #include <eda/vhdl93/ast/simple_name.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 #include <vector>
-#include <boost/optional.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -28,7 +28,7 @@ struct physical_type_definition : position_tagged
     ast::range_constraint                           range_constraint;
     ast::primary_unit_declaration                   primary_unit_declaration;
     std::vector<ast::secondary_unit_declaration>    secondary_unit_declarations;
-    boost::optional<ast::simple_name>               physical_type_simple_name;
+    optional<ast::simple_name>                      physical_type_simple_name;
 };
 
 

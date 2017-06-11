@@ -14,7 +14,7 @@
 #include <eda/vhdl93/ast/name.hpp>
 #include <eda/vhdl93/ast/actual_part.hpp>
 #include <eda/vhdl93/ast/formal_part.hpp>
-#include <boost/optional.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
 
@@ -24,7 +24,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 struct association_element : position_tagged
 {
-    boost::optional<ast::formal_part>   formal_part;
+    optional<ast::formal_part>          formal_part;
     ast::actual_part                    actual_part;
 };
 

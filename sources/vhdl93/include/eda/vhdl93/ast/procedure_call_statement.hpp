@@ -14,8 +14,7 @@
 
 #include <eda/vhdl93/ast/label.hpp>
 #include <eda/vhdl93/ast/procedure_call.hpp>
-
-#include <boost/optional.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -23,7 +22,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 struct procedure_call_statement : position_tagged
 {
-    boost::optional<ast::label>     label;
+    optional<ast::label>            label;
     ast::procedure_call             procedure_call;
 };
 

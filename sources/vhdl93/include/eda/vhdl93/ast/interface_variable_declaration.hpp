@@ -16,7 +16,7 @@
 #include <eda/vhdl93/ast/keyword_token.hpp>
 #include <eda/vhdl93/ast/subtype_indication.hpp>
 #include <eda/vhdl93/ast/expression.hpp>
-#include <boost/optional.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -26,9 +26,9 @@ struct interface_variable_declaration : position_tagged
 {
     bool                                VARIABLE;
     ast::identifier_list                identifier_list;
-    boost::optional<ast::keyword_token> mode;
+    optional<ast::keyword_token>        mode;
     ast::subtype_indication             subtype_indication;
-    boost::optional<ast::expression>    static_expression;
+    optional<ast::expression>           static_expression;
 
     interface_variable_declaration()
     : VARIABLE{}

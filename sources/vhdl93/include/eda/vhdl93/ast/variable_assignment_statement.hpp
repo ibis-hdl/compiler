@@ -15,7 +15,7 @@
 #include <eda/vhdl93/ast/label.hpp>
 #include <eda/vhdl93/ast/target.hpp>
 #include <eda/vhdl93/ast/expression.hpp>
-#include <boost/optional.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -23,7 +23,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 struct variable_assignment_statement : position_tagged
 {
-    boost::optional<ast::label>             label;
+    optional<ast::label>                    label;
     ast::target                             target;
     ast::expression                         expression;
 };

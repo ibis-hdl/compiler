@@ -15,7 +15,7 @@
 #include <eda/vhdl93/ast/identifier_list.hpp>
 #include <eda/vhdl93/ast/subtype_indication.hpp>
 #include <eda/vhdl93/ast/file_open_information.hpp>
-#include <boost/optional.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -25,7 +25,7 @@ struct file_declaration : position_tagged
 {
     ast::identifier_list                        identifier_list;
     ast::subtype_indication                     subtype_indication;
-    boost::optional<ast::file_open_information> file_open_information;
+    optional<ast::file_open_information>        file_open_information;
 };
 
 

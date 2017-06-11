@@ -14,7 +14,7 @@
 
 #include <eda/vhdl93/ast/label.hpp>
 #include <eda/vhdl93/ast/condition.hpp>
-#include <boost/optional.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -22,9 +22,9 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 struct exit_statement : position_tagged
 {
-    boost::optional<ast::label>         label;
-    boost::optional<ast::label>         loop_label;
-    boost::optional<ast::condition>     condition;
+    optional<ast::label>                label;
+    optional<ast::label>                loop_label;
+    optional<ast::condition>            condition;
 };
 
 

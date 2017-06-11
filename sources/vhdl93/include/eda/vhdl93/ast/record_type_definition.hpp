@@ -23,7 +23,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 struct record_type_definition : position_tagged
 {
     std::vector<ast::element_declaration>   element_declarations;
-    boost::optional<ast::simple_name>       name;
+    optional<ast::simple_name>              name;
 };
 
 

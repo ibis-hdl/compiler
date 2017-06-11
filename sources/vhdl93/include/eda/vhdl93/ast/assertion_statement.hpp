@@ -14,7 +14,7 @@
 
 #include <eda/vhdl93/ast/label.hpp>
 #include <eda/vhdl93/ast/assertion.hpp>
-#include <boost/optional.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -22,7 +22,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 struct assertion_statement : position_tagged
 {
-    boost::optional<ast::label>     label;
+    optional<ast::label>            label;
     ast::assertion                  assertion;
 };
 

@@ -13,7 +13,7 @@
 #include <eda/vhdl93/ast/position_tagged.hpp>
 
 #include <eda/vhdl93/ast/expression.hpp>
-#include <boost/optional.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -23,7 +23,7 @@ struct delay_mechanism : position_tagged
 {
     enum class delay_type { TRANSPORT_DELAY, INERTIAL_DELAY };
 
-    boost::optional<ast::expression>    time_expression; // [REJECT ...]
+    optional<ast::expression>           time_expression; // [REJECT ...]
     delay_mechanism::delay_type         type;
 };
 

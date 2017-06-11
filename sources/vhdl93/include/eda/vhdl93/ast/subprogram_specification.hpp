@@ -15,7 +15,7 @@
 #include <eda/vhdl93/ast/formal_parameter_list.hpp>
 #include <eda/vhdl93/ast/keyword_token.hpp>
 #include <eda/vhdl93/ast/type_mark.hpp>
-#include <boost/optional.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
 
@@ -26,7 +26,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 struct subprogram_specification_procedure : position_tagged
 {
     ast::designator                             designator;
-    boost::optional<ast::formal_parameter_list> formal_parameter_list;
+    optional<ast::formal_parameter_list>        formal_parameter_list;
 };
 
 
@@ -37,7 +37,7 @@ struct subprogram_specification_function : position_tagged
      * reserved word IMPURE; otherwise it is said to be pure. */
     bool                                        impure;
     ast::designator                             designator;
-    boost::optional<ast::formal_parameter_list> formal_parameter_list;
+    optional<ast::formal_parameter_list>        formal_parameter_list;
     ast::type_mark                              return_type_mark;
 
     subprogram_specification_function()

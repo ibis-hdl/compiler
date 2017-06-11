@@ -15,7 +15,7 @@
 #include <eda/vhdl93/ast/name.hpp>
 #include <eda/vhdl93/ast/type_mark.hpp>
 //#include <eda/vhdl93/ast/constraint.hpp>
-#include <boost/optional.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 #include <vector>
 
 
@@ -38,16 +38,16 @@ struct subtype_indication : position_tagged
 {
     // parse API
     std::vector<ast::name>                              unspecified_name_list;
-    boost::optional<x3::forward_ast<ast::constraint>>   constraint;
+    optional<x3::forward_ast<ast::constraint>>          constraint;
 
 
-    boost::optional<ast::name const&> resolution_function_name() const {
+    optional<ast::name const&>        resolution_function_name() const {
         // FixMe: assert( unspecified_name_list.size() < 3, "internal parser logic error")
         if(unspecified_name_list.size() == 2) {
-            return boost::optional<ast::name const&>{unspecified_name_list.front()};
+            return optional<ast::name const&>       {unspecified_name_list.front()};
         }
         else {
-            return boost::optional<ast::name const&>{/* empty */};
+            return optional<ast::name const&>       {/* empty */};
         }
     };
 

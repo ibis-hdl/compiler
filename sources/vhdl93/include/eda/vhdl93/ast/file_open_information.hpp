@@ -14,7 +14,7 @@
 
 #include <eda/vhdl93/ast/expression.hpp>
 #include <eda/vhdl93/ast/file_logical_name.hpp>
-#include <boost/optional.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 #include <vector>
 
 
@@ -23,7 +23,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 struct file_open_information : position_tagged
 {
-    boost::optional<ast::expression>    file_open_kind_expression;
+    optional<ast::expression>           file_open_kind_expression;
     ast::file_logical_name              file_logical_name; // type: string_expression
 };
 

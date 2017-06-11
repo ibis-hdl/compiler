@@ -14,7 +14,7 @@
 
 #include <eda/vhdl93/ast/keyword_token.hpp>
 #include <eda/vhdl93/ast/delay_mechanism.hpp>
-#include <boost/optional.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -22,8 +22,8 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 struct options : position_tagged
 {
-    boost::optional<ast::keyword_token>     guarded; // GUARDED
-    boost::optional<ast::delay_mechanism>   delay_mechanism;
+    optional<ast::keyword_token>            guarded; // GUARDED
+    optional<ast::delay_mechanism>          delay_mechanism;
 };
 
 
