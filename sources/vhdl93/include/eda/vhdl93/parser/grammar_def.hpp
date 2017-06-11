@@ -3381,7 +3381,7 @@ auto const primary_def =
     //     | qualified_expression
     //     | type_conversion
     //     | allocator
-    | ( '(' > expression > ')' )
+    | ( '(' >> expression >> ')' )
     ;
 
 
@@ -3560,7 +3560,7 @@ auto const record_type_definition_def =
 namespace relation_detail {
 
     auto const chunk = x3::rule<struct _, ast::relation::chunk> { "relation" } =
-        relational_operator > shift_expression
+        relational_operator >> shift_expression
         ;
 }
 auto const relation_def =

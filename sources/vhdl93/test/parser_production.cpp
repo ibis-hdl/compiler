@@ -192,39 +192,6 @@ BOOST_DATA_TEST_CASE( attribute_specification,
 
 
 /*
- * signal_assignment_statement
- */
-struct signal_assignment_statement_dataset : public ::x3_test::dataset_loader
-{
-    signal_assignment_statement_dataset()
-    : dataset_loader{ "test_case/signal_assignment_statement" }
-    { }
-} const signal_assignment_statement_dataset;
-
-
-BOOST_DATA_TEST_CASE( signal_assignment_statement,
-      signal_assignment_statement_dataset.input()
-    ^ signal_assignment_statement_dataset.expect()
-    ^ signal_assignment_statement_dataset.test_file_name(),
-    input, expect, file)
-{
-    using x3_test::testing_parser;
-
-    typedef ast::signal_assignment_statement attribute_type;
-
-    // avoid warning, used in case of error for error message by boost.test
-    boost::ignore_unused(file);
-
-    testing_parser<attribute_type> parse;
-    auto [parse_ok, parse_result] = parse(input, parser::signal_assignment_statement);
-
-    BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
-    BOOST_TEST(parse_result == expect, btt::per_element());
-}
-
-
-/*
  * range aka range_constraint
  */
 struct range_dataset : public ::x3_test::dataset_loader
