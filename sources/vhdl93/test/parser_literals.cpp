@@ -26,9 +26,10 @@ BOOST_AUTO_TEST_SUITE( parser_literals )
 
 GENERATE_DATASET_TEST_CASE(string_literal)
 GENERATE_DATASET_TEST_CASE(character_literal)
-#if 0
-GENERATE_DATASET_TEST_CASE(integer) // compile error
-#else
+
+/*
+ *  integer rule are special since isn't an AST member !
+ */
 struct integer_dataset : public ::x3_test::dataset_loader
 {
     integer_dataset()
@@ -58,7 +59,6 @@ BOOST_DATA_TEST_CASE( integer,
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expected, btt::per_element());
 }
-#endif
 
 /*
  * integer (failure)
