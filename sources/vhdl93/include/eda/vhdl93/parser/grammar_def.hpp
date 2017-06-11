@@ -4028,7 +4028,7 @@ auto const suffix_def =
 //     | aggregate
 auto const target_def =
       name
-    //| aggregate // FixMe: add it
+    | aggregate
     ;
 
 

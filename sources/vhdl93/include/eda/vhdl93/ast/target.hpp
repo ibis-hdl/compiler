@@ -13,7 +13,7 @@
 
 #include <eda/vhdl93/ast/nullary.hpp>
 #include <eda/vhdl93/ast/name.hpp>
-//#include <eda/vhdl93/ast/aggregate.hpp>
+#include <eda/vhdl93/ast/aggregate.hpp>
 
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
 
@@ -23,14 +23,14 @@ namespace eda { namespace vhdl93 { namespace ast {
 #if 0
 using target = x3::variant<
     nullary,
-    name
-    //aggregate
+    name,
+    aggregate
 >;
 #else
 struct target : x3::variant<
     nullary,
-    name
-    //aggregate
+    name,
+    aggregate
 >
 {
     using base_type::base_type;
