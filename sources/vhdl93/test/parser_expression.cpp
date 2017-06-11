@@ -35,6 +35,9 @@ GENERATE_DATASET_TEST_CASE(shift_expression)
 GENERATE_DATASET_TEST_CASE(relation)
 GENERATE_DATASET_TEST_CASE(expression)
 
+#if 0
+GENERATE_FAILURE_DATASET_TEST_CASE(expression)
+#else
 /*
  * expression failure
  */
@@ -66,9 +69,9 @@ BOOST_DATA_TEST_CASE( expression_failure,
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
     BOOST_TEST(parse_result == expect, btt::per_element());
 }
+#endif
 
 GENERATE_DATASET_TEST_CASE(signal_list)
-
 
 BOOST_AUTO_TEST_SUITE_END()
 
