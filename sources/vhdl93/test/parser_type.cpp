@@ -15,23 +15,10 @@
 #include <eda/vhdl93/ast.hpp>
 #include "data_set.hpp"
 #include "testing_parser.hpp"
-
 #include "generate_data_test_case.hpp"
 
 
 BOOST_AUTO_TEST_SUITE( parser_type )
-
-
-namespace x3 = boost::spirit::x3;
-namespace btt = boost::test_tools;
-
-namespace parser = eda::vhdl93::parser;
-namespace ast    = eda::vhdl93::ast;
-
-
-/*
- * test cases for type_declaration
- */
 
 // array_type_definition
 GENERATE_DATASET_TEST_CASE(constrained_array_definition)
@@ -58,6 +45,7 @@ GENERATE_DATASET_TEST_CASE(type_definition)
 GENERATE_DATASET_TEST_CASE(subtype_declaration)
 
 GENERATE_DATASET_TEST_CASE(type_conversion)
+
 
 BOOST_AUTO_TEST_SUITE_END()
 

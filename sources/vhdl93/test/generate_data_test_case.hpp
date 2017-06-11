@@ -63,9 +63,9 @@
 // path to all test cases
 #define DATASET_PREFIX_PATH     test_case
 // namespace of the ast nodes
-#define AST_NAMESPACE           ast::
+#define AST_NAMESPACE           eda::vhdl93::ast::
 // namespace of the parser
-#define PARSER_NAMESPACE        parser::
+#define PARSER_NAMESPACE        eda::vhdl93::parser::
 
 
 
@@ -112,6 +112,7 @@ BOOST_DATA_TEST_CASE( test_case,                                               \
 // generate the BOOST_DATA_TEST_CASE body part with the dataset
 #define GENERATE_DATASET_TEST_CASE_BODY(test_case)                             \
 {                                                                              \
+    using btt_per_element = boost::test_tools::per_element;                    \
     using x3_test::testing_parser;                                             \
     typedef ATTRIBUTE_TYPE(test_case) attribute_type;                          \
     boost::ignore_unused(file);                                                \
@@ -119,7 +120,7 @@ BOOST_DATA_TEST_CASE( test_case,                                               \
     auto [parse_ok, parse_result] = parse(input, RULE_NAME(test_case));        \
     BOOST_TEST(parse_ok);                                                      \
     BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");                 \
-    BOOST_TEST(parse_result == expect, btt::per_element());                    \
+    BOOST_TEST(parse_result == expect, btt_per_element());                     \
 }                                                                              \
 /* --- */
 

@@ -19,6 +19,7 @@ set(BIN_SOURCES
     parser_production.cpp
     parser_statement.cpp
     parser_subprogram.cpp
+    parser_type.cpp
     #parser_xxx.cpp
     test_vhdl93_parser.cpp
 )
