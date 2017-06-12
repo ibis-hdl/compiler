@@ -1662,7 +1662,7 @@ void printer::operator()(physical_type_definition const &node)
 
     auto const N = node.secondary_unit_declarations.size() - 1;
     unsigned i = 0;
-    if(N != 0) { os << "\n"; }
+    if(node.secondary_unit_declarations.size() != 0) { os << "\n"; }
     for(auto const& secondary_unit_declaration : node.secondary_unit_declarations) {
         (*this)(secondary_unit_declaration);
         if(i++ != N) {

@@ -1,0 +1,36 @@
+(full_type_declaration
+  (identifier
+    MULTI_LEVEL_LOGIC
+  )
+  (type_declaration<v>
+    (scalar_type_definition<v>
+      (enumeration_type_definition
+        (enumeration_literal<v>
+          (identifier
+            LOW
+          )
+        ),
+        (enumeration_literal<v>
+          (identifier
+            HIGH
+          )
+        ),
+        (enumeration_literal<v>
+          (identifier
+            RISING
+          )
+        ),
+        (enumeration_literal<v>
+          (identifier
+            FALLING
+          )
+        ),
+        (enumeration_literal<v>
+          (identifier
+            AMBIGUOUS
+          )
+        )
+      )
+    )
+  )
+)

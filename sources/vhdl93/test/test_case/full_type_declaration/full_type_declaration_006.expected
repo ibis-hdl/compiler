@@ -1,0 +1,45 @@
+(full_type_declaration
+  (identifier
+    Int_64K
+  )
+  (type_declaration<v>
+    (scalar_type_definition<v>
+      (range<v>
+        (simple_expression
+          sign: SIGN_NEG,
+          (term
+            (primary<v>
+              (literal<v>
+                (numeric_literal<v>
+                  (abstract_literal<v>
+                    (decimal_literal
+                      literal: 65536.00, hint: double
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+        (keyword
+          TO
+        )
+        (simple_expression
+          (term
+            (primary<v>
+              (literal<v>
+                (numeric_literal<v>
+                  (abstract_literal<v>
+                    (decimal_literal
+                      literal: 65535.00, hint: double
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

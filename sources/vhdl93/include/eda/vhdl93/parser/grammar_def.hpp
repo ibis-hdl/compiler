@@ -1397,9 +1397,7 @@ auto const actual_part_def =
 // aggregate ::=                                                       [§ 7.3.2]
 //     ( element_association { , element_association } )
 auto const aggregate_def =
-       '('
-    >> ( element_association % ',' )
-    >> ')'
+    '(' >> (element_association % ',') >> ')'
     ;
 
 
@@ -2404,7 +2402,7 @@ auto const entity_header_def =
 //     | others
 //     | all
 auto const entity_name_list_def =
-      ( entity_designator % ',' )
+      (entity_designator % ',')
     | OTHERS
     | ALL
     ;
@@ -2463,7 +2461,7 @@ auto const enumeration_literal_def =
 // enumeration_type_definition ::=
 //     ( enumeration_literal { , enumeration_literal } )
 auto const enumeration_type_definition_def =
-    enumeration_literal % ','
+    '(' >> (enumeration_literal % ',') >> ')'
     ;
 
 
@@ -2560,7 +2558,7 @@ namespace factor_detail {
         unary_miscellaneous_operator >> primary // ABS | NOT
         ;
 }
-auto const factor_def =    // Note, order and others changed
+auto const factor_def =    /* Note, order and others changed */
       factor_detail::binary_expr
     | factor_detail::unary_expr
     | primary
@@ -2840,9 +2838,7 @@ auto const incomplete_type_declaration_def =
 // index_constraint ::=                                                [§ 3.2.1]
 //     ( discrete_range { , discrete_range } )
 auto const index_constraint_def =
-        '('
-     >> ( discrete_range % ',' )
-     >> ')'
+     '(' >> (discrete_range % ',') >> ')'
      ;
 
 
@@ -2871,9 +2867,7 @@ auto const index_subtype_definition_def =
 //     prefix ( expression { , expression } )
 auto const indexed_name_def =
        prefix
-    >> '('
-    >> ( expression % ',' )
-    >> ')'
+    >> '(' >> (expression % ',') >> ')'
     ;
 
 
@@ -3603,11 +3597,11 @@ auto const return_statement_def =
 // scalar_type_definition ::=                                            [§ 3.1]
 //       enumeration_type_definition   | integer_type_definition
 //     | floating_type_definition      | physical_type_definition
-auto const scalar_type_definition_def =
-      enumeration_type_definition
-    | integer_type_definition
+auto const scalar_type_definition_def = /* Note, order changed since matters */
+      physical_type_definition
+    | enumeration_type_definition
+    | integer_type_definition   // FixMe: {integer|float} -> range_constraint
     | floating_type_definition
-    | physical_type_definition
     ;
 
 
@@ -3793,8 +3787,8 @@ auto const signal_list_def =
 //     [ [ type_mark { , type_mark } ] [ return type_mark ] ]
 namespace signature_detail {
     auto const parameter_list = x3::rule<struct parameter_class, ast::signature_parameter_type_list> { "signature_type_mark_list" } =
-        ( type_mark % ',' )
-    ;
+        (type_mark % ',')
+        ;
 }
 auto const signature_def =
        '['
@@ -4164,7 +4158,7 @@ namespace use_clause_detail {
 }
 auto const use_clause_def =
        USE
-    >> ( use_clause_detail::selected_name % ',' )
+    >> (use_clause_detail::selected_name % ',')
     >  ';'
     ;
 
@@ -4207,7 +4201,7 @@ auto const wait_statement_def =
 //       waveform_element { , waveform_element }
 //     | unaffected
 auto const waveform_def =
-      ( waveform_element % ',' )
+      (waveform_element % ',')
     | UNAFFECTED
     ;
 

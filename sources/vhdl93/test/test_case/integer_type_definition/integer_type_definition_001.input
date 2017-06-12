@@ -1,0 +1,2 @@
+-- type Voltage_Level is 
+range 0 to 5

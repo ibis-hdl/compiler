@@ -1,0 +1,4 @@
+-- variable Data_Calc, Param_Calc : integer;
+-- Data_Calc := 
+    Integer(74.94 * real(Param_Calc));
+

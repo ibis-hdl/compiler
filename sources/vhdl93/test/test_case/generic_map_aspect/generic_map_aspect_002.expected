@@ -1,0 +1,78 @@
+(generic_map_aspect
+  (association_list
+    (association_element
+      (formal_part<v>
+        (name<v>
+          (identifier
+            tpLH
+          )
+        )
+      )
+      (actual_part<v>
+        (actual_designator<v>
+          (expression
+            (relation
+              (shift_expression
+                (simple_expression
+                  (term
+                    (primary<v>
+                      (literal<v>
+                        (numeric_literal<v>
+                          (physical_literal
+                            literal: (abstract_literal<v>
+                              (decimal_literal
+                                literal: 2, hint: int
+                              )
+                            ),
+                            unit: ns
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    ),
+    (association_element
+      (formal_part<v>
+        (name<v>
+          (identifier
+            tpHL
+          )
+        )
+      )
+      (actual_part<v>
+        (actual_designator<v>
+          (expression
+            (relation
+              (shift_expression
+                (simple_expression
+                  (term
+                    (primary<v>
+                      (literal<v>
+                        (numeric_literal<v>
+                          (physical_literal
+                            literal: (abstract_literal<v>
+                              (decimal_literal
+                                literal: 3, hint: int
+                              )
+                            ),
+                            unit: ns
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

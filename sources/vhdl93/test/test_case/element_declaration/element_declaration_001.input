@@ -1,0 +1,1 @@
+DAY    : INTEGER range 1 to 31;

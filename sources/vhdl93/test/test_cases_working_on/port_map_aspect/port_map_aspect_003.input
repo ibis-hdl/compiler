@@ -1,0 +1,4 @@
+port map (
+    a   => x, 
+    b   => y,  
+    out => z)

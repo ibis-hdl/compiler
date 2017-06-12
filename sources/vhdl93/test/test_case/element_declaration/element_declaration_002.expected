@@ -1,0 +1,14 @@
+(element_declaration
+  (identifier_list
+    (identifier
+      MONTH
+    )
+  )
+  (subtype_indication
+    (name<v>
+      (identifier
+        MONTH_NAME
+      )
+    )
+  )
+)

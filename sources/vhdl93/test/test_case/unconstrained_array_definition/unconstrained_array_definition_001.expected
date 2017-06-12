@@ -1,0 +1,16 @@
+(unconstrained_array_definition
+  (index_subtype_definition
+    (name<v>
+      (identifier
+        POSITIVE
+      )
+    )
+  )
+  (subtype_indication
+    (name<v>
+      (identifier
+        Real
+      )
+    )
+  )
+)

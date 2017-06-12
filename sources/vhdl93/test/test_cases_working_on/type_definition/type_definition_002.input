@@ -1,0 +1,1 @@
+type WORD is range 31 downto 0;

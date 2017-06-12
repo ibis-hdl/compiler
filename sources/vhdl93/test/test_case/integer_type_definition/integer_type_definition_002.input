@@ -1,0 +1,3 @@
+-- type Int_64K is 
+range -65536 to 65535
+

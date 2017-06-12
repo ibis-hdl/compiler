@@ -1,0 +1,45 @@
+(full_type_declaration
+  (identifier
+    TWOS_COMPLEMENT_INTEGER
+  )
+  (type_declaration<v>
+    (scalar_type_definition<v>
+      (range<v>
+        (simple_expression
+          sign: SIGN_NEG,
+          (term
+            (primary<v>
+              (literal<v>
+                (numeric_literal<v>
+                  (abstract_literal<v>
+                    (decimal_literal
+                      literal: 32768, hint: int
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+        (keyword
+          TO
+        )
+        (simple_expression
+          (term
+            (primary<v>
+              (literal<v>
+                (numeric_literal<v>
+                  (abstract_literal<v>
+                    (decimal_literal
+                      literal: 32767, hint: int
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

@@ -1,0 +1,44 @@
+(full_type_declaration
+  (identifier
+    WORD_INDEX
+  )
+  (type_declaration<v>
+    (scalar_type_definition<v>
+      (range<v>
+        (simple_expression
+          (term
+            (primary<v>
+              (literal<v>
+                (numeric_literal<v>
+                  (abstract_literal<v>
+                    (decimal_literal
+                      literal: 31, hint: int
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+        (keyword
+          DOWNTO
+        )
+        (simple_expression
+          (term
+            (primary<v>
+              (literal<v>
+                (numeric_literal<v>
+                  (abstract_literal<v>
+                    (decimal_literal
+                      literal: 0, hint: int
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

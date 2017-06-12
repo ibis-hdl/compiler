@@ -1,0 +1,21 @@
+(full_type_declaration
+  (identifier
+    BIT
+  )
+  (type_declaration<v>
+    (scalar_type_definition<v>
+      (enumeration_type_definition
+        (enumeration_literal<v>
+          (character_literal
+            '0'
+          )
+        ),
+        (enumeration_literal<v>
+          (character_literal
+            '1'
+          )
+        )
+      )
+    )
+  )
+)

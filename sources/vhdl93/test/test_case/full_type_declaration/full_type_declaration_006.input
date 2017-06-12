@@ -1,0 +1,1 @@
+type Int_64K is range - 65536.00 to 65535.00;

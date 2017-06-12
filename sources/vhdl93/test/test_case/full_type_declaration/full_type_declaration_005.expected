@@ -1,0 +1,63 @@
+(full_type_declaration
+  (identifier
+    DURATION
+  )
+  (type_declaration<v>
+    (scalar_type_definition<v>
+      (physical_type_definition
+        (range<v>
+          (simple_expression
+            sign: SIGN_NEG,
+            (term
+              (primary<v>
+                (literal<v>
+                  (numeric_literal<v>
+                    (abstract_literal<v>
+                      (decimal_literal
+                        literal: 1E18, hint: int
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+          (keyword
+            TO
+          )
+          (simple_expression
+            (term
+              (primary<v>
+                (literal<v>
+                  (numeric_literal<v>
+                    (abstract_literal<v>
+                      (decimal_literal
+                        literal: 1E18, hint: int
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+        (identifier
+          fs
+        )
+        (secondary_unit_declaration
+          (identifier
+            ps
+          )
+          (physical_literal
+            literal: (abstract_literal<v>
+              (decimal_literal
+                literal: 1000, hint: int
+              )
+            ),
+            unit: fs
+          )
+        )
+      )
+    )
+  )
+)
