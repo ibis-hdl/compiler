@@ -158,7 +158,7 @@ void printer::operator()(alias_declaration const &node)
     os << "\n";
 
     if(node.subtype_indication) {
-        (*this)(node.subtype_indication.get());
+        (*this)(*node.subtype_indication);
         os << "\n";
     }
 
@@ -166,7 +166,7 @@ void printer::operator()(alias_declaration const &node)
 
     if(node.signature) {
         os << "\n";
-        (*this)(node.signature.get());
+        (*this)(*node.signature);
     }
 }
 
@@ -230,13 +230,13 @@ void printer::operator()(assertion const &node)
         static char const symbol[]{ "assertion.report" };
         os << "\n";
         symbol_scope<assertion> _(*this, symbol);
-        (*this)(node.report.get());
+        (*this)(*node.report);
     }
     if(node.severity) {
         static char const symbol[]{ "assertion.severity" };
         os << "\n";
         symbol_scope<assertion> _(*this, symbol);
-        (*this)(node.severity.get());
+        (*this)(*node.severity);
     }
 }
 
@@ -247,7 +247,7 @@ void printer::operator()(assertion_statement const &node)
     symbol_scope<assertion_statement> _(*this, symbol);
 
     if(node.label) {
-        (*this)(node.label.get());
+        (*this)(*node.label);
         os << "\n";
     }
     (*this)(node.assertion);
@@ -260,7 +260,7 @@ void printer::operator()(association_element const &node)
     symbol_scope<association_element> _(*this, symbol);
 
     if(node.formal_part) {
-        (*this)(node.formal_part.get());
+        (*this)(*node.formal_part);
         os << "\n";
     }
     (*this)(node.actual_part);
@@ -304,7 +304,7 @@ void printer::operator()(attribute_name const &node)
 
     if(node.signature) {
         os << "\n";
-        (*this)(node.signature.get());
+        (*this)(*node.signature);
     }
 
     os << "\n";
@@ -317,7 +317,7 @@ void printer::operator()(attribute_name const &node)
 
     if(node.expression) {
         os << "\n";
-        (*this)(node.expression.get());
+        (*this)(*node.expression);
     }
 }
 
@@ -464,7 +464,7 @@ void printer::operator()(case_statement const &node)
     symbol_scope<case_statement> _(*this, symbol);
 
     if(node.label) {
-        (*this)(node.label.get());
+        (*this)(*node.label);
         os << "\n";
     }
 
@@ -482,7 +482,7 @@ void printer::operator()(case_statement const &node)
 
     if(node.end_label) {
         os << "\n";
-        (*this)(node.end_label.get());
+        (*this)(*node.end_label);
     }
 }
 
@@ -762,7 +762,7 @@ void printer::operator()(delay_mechanism const &node)
 
     if(node.time_expression) {
         os << "\n";
-        (*this)(node.time_expression.get());
+        (*this)(*node.time_expression);
     }
 }
 
@@ -852,7 +852,7 @@ void printer::operator()(entity_aspect const &node)
             (*this)(entity.name);
             if(entity.architecture_identifier) {
                 os << "\n";
-                (*this)(entity.architecture_identifier.get());
+                (*this)(*entity.architecture_identifier);
             }
         },
         [this](ast::entity_aspect_configuration const& configuration) {
@@ -925,7 +925,7 @@ void printer::operator()(entity_designator const &node)
     (*this)(node.entity_tag);
     if(node.signature) {
         os << "\n";
-        (*this)(node.signature.get());
+        (*this)(*node.signature);
     }
 }
 
@@ -1030,17 +1030,17 @@ void printer::operator()(exit_statement const &node)
     symbol_scope<exit_statement> _(*this, symbol);
 
     if(node.label) {
-        (*this)(node.label.get());
+        (*this)(*node.label);
         if(node.loop_label || node.condition) { os << "\n"; }
     }
 
     if(node.loop_label) {
-        (*this)(node.loop_label.get());
+        (*this)(*node.loop_label);
         if(node.condition) { os << "\n"; }
     }
 
     if(node.condition) {
-        (*this)(node.condition.get());
+        (*this)(*node.condition);
     }
 }
 
@@ -1110,7 +1110,7 @@ void printer::operator()(file_declaration const &node)
 
     if(node.file_open_information) {
         os << "\n";
-        (*this)(node.file_open_information.get());
+        (*this)(*node.file_open_information);
     }
 }
 
@@ -1121,7 +1121,7 @@ void printer::operator()(file_open_information const &node)
     symbol_scope<file_open_information> _(*this, symbol);
 
     if(node.file_open_kind_expression) {
-        (*this)(node.file_open_kind_expression.get());
+        (*this)(*node.file_open_kind_expression);
         os << "\n";
     }
     (*this)(node.file_logical_name);
@@ -1375,7 +1375,7 @@ void printer::operator()(interface_constant_declaration const &node)
 
     if(node.static_expression) {
         os << "\n";
-        (*this)(node.static_expression.get());
+        (*this)(*node.static_expression);
     }
 }
 
@@ -1426,7 +1426,7 @@ void printer::operator()(interface_signal_declaration const &node)
     os << "\n";
 
     if(node.mode) {
-        (*this)(node.mode.get());
+        (*this)(*node.mode);
         os << "\n";
     }
 
@@ -1436,7 +1436,7 @@ void printer::operator()(interface_signal_declaration const &node)
 
     if(node.static_expression) {
         os << "\n";
-        (*this)(node.static_expression.get());
+        (*this)(*node.static_expression);
     }
 }
 
@@ -1452,7 +1452,7 @@ void printer::operator()(interface_variable_declaration const &node)
     os << "\n";
 
     if(node.mode) {
-        (*this)(node.mode.get());
+        (*this)(*node.mode);
         os << "\n";
     }
 
@@ -1460,7 +1460,7 @@ void printer::operator()(interface_variable_declaration const &node)
 
     if(node.static_expression) {
         os << "\n";
-        (*this)(node.static_expression.get());
+        (*this)(*node.static_expression);
     }
 }
 
@@ -1527,17 +1527,17 @@ void printer::operator()(next_statement const &node)
     symbol_scope<next_statement> _(*this, symbol);
 
     if(node.label) {
-        (*this)(node.label.get());
+        (*this)(*node.label);
         if(node.loop_label || node.condition) { os << "\n"; }
     }
 
     if(node.loop_label) {
-        (*this)(node.loop_label.get());
+        (*this)(*node.loop_label);
         if(node.condition) { os << "\n"; }
     }
 
     if(node.condition) {
-        (*this)(node.condition.get());
+        (*this)(*node.condition);
     }
 }
 
@@ -1548,7 +1548,7 @@ void printer::operator()(null_statement const &node)
     symbol_scope<null_statement> _(*this, symbol);
 
     if(node.label) {
-        (*this)(node.label.get());
+        (*this)(*node.label);
     }
 }
 
@@ -1575,11 +1575,11 @@ void printer::operator()(options const &node)
     symbol_scope<options> _(*this, symbol);
 
     if(node.guarded) {
-        (*this)(node.guarded.get());  // keyword GUARDED
+        (*this)(*node.guarded);  // keyword GUARDED
     }
     if(node.delay_mechanism) {
         if(node.guarded) { os << "\n"; }
-        (*this)(node.delay_mechanism.get());
+        (*this)(*node.delay_mechanism);
     }
 }
 
@@ -1672,7 +1672,7 @@ void printer::operator()(physical_type_definition const &node)
 
     if(node.physical_type_simple_name) {
         os << "\n";
-        (*this)(node.physical_type_simple_name.get());
+        (*this)(*node.physical_type_simple_name);
     }
 }
 
@@ -1733,7 +1733,7 @@ void printer::operator()(procedure_call_statement const &node)
     symbol_scope<procedure_call_statement> _(*this, symbol);
 
     if(node.label) {
-        (*this)(node.label.get());
+        (*this)(*node.label);
         os << "\n";
     }
     (*this)(node.procedure_call);
@@ -1808,7 +1808,7 @@ void printer::operator()(record_type_definition const &node)
     }
     if(node.name) {
         os << "\n";
-        (*this)(node.name.get());
+        (*this)(*node.name);
     }
 }
 
@@ -1820,11 +1820,11 @@ void printer::operator()(relation const &node)
 
     (*this)(node.shift_expression);
 
-    if(!node.rest.is_initialized()) {
+    if(!node.rest) {
         return;
     }
 
-    auto const& chunk = node.rest.get();
+    auto const& chunk = *node.rest;
     os << ",\n" << "operator: " << chunk.relational_operator << ",\n";
     (*this)(chunk.shift_expression);
 }
@@ -1836,7 +1836,7 @@ void printer::operator()(report_statement const &node)
     symbol_scope<report_statement> _(*this, symbol);
 
     if(node.label) {
-        (*this)(node.label.get());
+        (*this)(*node.label);
         os << "\n";
     }
 
@@ -1844,7 +1844,7 @@ void printer::operator()(report_statement const &node)
 
     if(node.severity) {
         os << "\n";
-        (*this)(node.severity.get());
+        (*this)(*node.severity);
     }
 }
 
@@ -1855,12 +1855,12 @@ void printer::operator()(return_statement const &node)
     symbol_scope<report_statement> _(*this, symbol);
 
     if(node.label) {
-        (*this)(node.label.get());
+        (*this)(*node.label);
     }
 
     if(node.expression) {
         os << "\n";
-        (*this)(node.expression.get());
+        (*this)(*node.expression);
     }
 }
 
@@ -1983,11 +1983,11 @@ void printer::operator()(shift_expression const &node)
 
     (*this)(node.simple_expression);
 
-    if(!node.rest.is_initialized()) {
+    if(!node.rest) {
         return;
     }
 
-    auto const& chunk = node.rest.get();
+    auto const& chunk = *node.rest;
     os << ",\n" << "operator: " << chunk.shift_operator << ",\n";
     (*this)(chunk.simple_expression);
 }
@@ -1999,7 +1999,7 @@ void printer::operator()(signal_assignment_statement const &node)
     symbol_scope<signal_assignment_statement> _(*this, symbol);
 
     if(node.label) {
-        (*this)(node.label.get());
+        (*this)(*node.label);
         os << "\n";
     }
 
@@ -2007,7 +2007,7 @@ void printer::operator()(signal_assignment_statement const &node)
     os << "\n";
 
     if(node.delay_mechanism) {
-        (*this)(node.delay_mechanism.get());
+        (*this)(*node.delay_mechanism);
         os << "\n";
     }
 
@@ -2057,9 +2057,9 @@ void printer::operator()(signature const &node)
         static char const symbol[]{ "signature.parameter_type(s)" };
         symbol_scope<signature> _(*this, symbol);
 
-        auto const N = node.parameter_type_list.get().size() - 1;
+        auto const N = (*node.parameter_type_list).size() - 1;
         unsigned i = 0;
-        for(auto const& type_mark : node.parameter_type_list.get()) {
+        for(auto const& type_mark : *node.parameter_type_list) {
             (*this)(type_mark);
             if(i++ != N) {
                 os << ",\n";
@@ -2073,7 +2073,7 @@ void printer::operator()(signature const &node)
         static char const symbol[]{ "signature.return_type" };
         symbol_scope<signature> _(*this, symbol);
 
-        (*this)(node.return_type.get());
+        (*this)(*node.return_type);
     }
 }
 
@@ -2082,8 +2082,8 @@ void printer::operator()(simple_expression const &node)
     static char const symbol[]{ "simple_expression" };
     symbol_scope<simple_expression> _(*this, symbol);
 
-    if(node.sign.is_initialized()) { // optional
-        os << "sign: " << node.sign.get() << ",\n";
+    if(node.sign) { // optional
+        os << "sign: " << *node.sign << ",\n";
     }
 
     (*this)(node.term);
@@ -2172,7 +2172,7 @@ void printer::operator()(subprogram_specification const &node)
             (*this)(procedure.designator);
             if(procedure.formal_parameter_list) {
                 os << "\n";
-                (*this)(procedure.formal_parameter_list.get());
+                (*this)(*procedure.formal_parameter_list);
             }
         },
         [this](ast::subprogram_specification_function const& function) {
@@ -2181,7 +2181,7 @@ void printer::operator()(subprogram_specification const &node)
             (*this)(function.designator);
             if(function.formal_parameter_list) {
                 os << "\n";
-                (*this)(function.formal_parameter_list.get());
+                (*this)(*function.formal_parameter_list);
             }
             os << "\n";
             (*this)(function.return_type_mark);
@@ -2208,7 +2208,7 @@ void printer::operator()(subtype_indication const &node)
     /* note the use of subtype_indication's visitor API due to the way how
      * the parser parses here; see notes at the rules self.  */
     if(node.resolution_function_name()) {
-        (*this)(node.resolution_function_name().get());
+        (*this)(*node.resolution_function_name());
         os << "\n";
     }
 
@@ -2216,7 +2216,7 @@ void printer::operator()(subtype_indication const &node)
 
     if(node.constraint) {
         os << "\n";
-        (*this)(node.constraint.get());
+        (*this)(*node.constraint);
     }
 }
 
@@ -2336,7 +2336,7 @@ void printer::operator()(variable_assignment_statement const &node)
     symbol_scope<variable_assignment_statement> _(*this, symbol);
 
     if(node.label) {
-        (*this)(node.label.get());
+        (*this)(*node.label);
         os << "\n";
     }
     (*this)(node.target);
@@ -2359,19 +2359,19 @@ void printer::operator()(wait_statement const &node)
     symbol_scope<wait_statement> _(*this, symbol);
 
     if(node.label) {
-        (*this)(node.label.value());
+        (*this)(*node.label);
     }
     if(node.sensitivity_clause) {
         if(node.label) { os << "\n"; }
-        (*this)(node.sensitivity_clause.value());
+        (*this)(*node.sensitivity_clause);
     }
     if(node.condition_clause) {
         if(node.label || node.sensitivity_clause) { os << "\n"; }
-        (*this)(node.condition_clause.value());
+        (*this)(*node.condition_clause);
     }
     if(node.timeout_clause) {
         if(node.label || node.sensitivity_clause || node.condition_clause) { os << "\n"; }
-        (*this)(node.timeout_clause.value());
+        (*this)(*node.timeout_clause);
     }
 }
 
@@ -2417,7 +2417,7 @@ void printer::operator()(waveform_element const &node)
 
     if(node.time_expression) {
         os << "\n";
-        (*this)(node.time_expression.value());
+        (*this)(*node.time_expression);
     }
 }
 

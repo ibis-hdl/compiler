@@ -41,13 +41,13 @@ struct subtype_indication : position_tagged
     optional<x3::forward_ast<ast::constraint>>          constraint;
 
 
-    optional<ast::name const&>        resolution_function_name() const {
+    optional<ast::name const&> resolution_function_name() const {
         // FixMe: assert( unspecified_name_list.size() < 3, "internal parser logic error")
         if(unspecified_name_list.size() == 2) {
-            return optional<ast::name const&>       {unspecified_name_list.front()};
+            return optional<ast::name const&> { unspecified_name_list.front() };
         }
         else {
-            return optional<ast::name const&>       {/* empty */};
+            return optional<ast::name const&> { /* empty */ };
         }
     };
 
