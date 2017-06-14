@@ -901,8 +901,8 @@ typedef x3::rule<letter_or_digit_class, char> letter_or_digit_type;
 typedef x3::rule<library_clause_class, ast::library_clause> library_clause_type;
 typedef x3::rule<library_unit_class> library_unit_type;
 typedef x3::rule<literal_class, ast::literal> literal_type;
-//typedef x3::rule<logical_name_class> logical_name_type;
-//typedef x3::rule<logical_name_list_class> logical_name_list_type;
+typedef x3::rule<logical_name_class, ast::logical_name> logical_name_type;
+typedef x3::rule<logical_name_list_class, std::vector<ast::logical_name>> logical_name_list_type;
 typedef x3::rule<loop_statement_class> loop_statement_type;
 typedef x3::rule<mode_class, ast::keyword_token> mode_type;
 typedef x3::rule<name_class, ast::name> name_type;
@@ -1131,8 +1131,8 @@ letter_or_digit_type const letter_or_digit { "letter_or_digit" };
 library_clause_type const library_clause { "library_clause" };
 library_unit_type const library_unit { "library_unit" };
 literal_type const literal { "literal" };
-//logical_name_type const logical_name { "logical_name" };
-//logical_name_list_type const logical_name_list { "logical_name_list" };
+logical_name_type const logical_name { "logical_name" };
+logical_name_list_type const logical_name_list { "logical_name_list" };
 loop_statement_type const loop_statement { "loop_statement" };
 mode_type const mode { "mode" };
 name_type const name { "name" };
@@ -2220,12 +2220,8 @@ auto const disconnection_specification_def =
 
 // discrete_range ::=                                                  [§ 3.2.1]
 //     discrete_subtype_indication | range
-namespace discrete_range_detail {
-    auto const discrete_subtype_indication = x3::rule<subtype_indication_class, ast::subtype_indication> { "discrete_subtype_indication" } =
-        subtype_indication;
-}
 auto const discrete_range_def =
-      discrete_range_detail::discrete_subtype_indication
+      subtype_indication
     | range
     ;
 
@@ -3016,15 +3012,9 @@ auto const label_def =
 
 // library_clause ::=                                                   [§ 11.2]
 //     library logical_name_list ;
-namespace library_clause_detail {
-
-    auto const logical_name = x3::rule<logical_name_class, ast::logical_name> { "logical_name" } =
-        identifier
-        ;
-}
 auto const library_clause_def =
        LIBRARY
-    >> (library_clause_detail::logical_name % ',')
+    >> logical_name_list
     > ';'
     ;
 
@@ -3055,21 +3045,21 @@ auto const literal_def = /* Note, order changed since matters */
     ;
 
 
-#if 0 /* UNUSED; embedded into library_clause rule */
+
 // logical_name ::=                                                     [§ 11.2]
-// identifier
+//     identifier
 auto const logical_name_def =
     identifier
     ;
-#endif
 
-#if 0 /* UNUSED; embedded into library_clause rule */
+
+
 // logical_name_list ::=                                                [§ 11.2]
-// logical_name { , logical_name }
+//     logical_name { , logical_name }
 auto const logical_name_list_def =
     logical_name % ','
     ;
-#endif
+
 
 #if 0
 // loop_statement ::=                                                    [§ 8.9]
@@ -4382,6 +4372,8 @@ BOOST_SPIRIT_DEFINE(  // -- L --
     , library_clause
     //, library_unit
     , literal
+    , logical_name
+    , logical_name_list
     //, loop_statement
 )
 BOOST_SPIRIT_DEFINE(  // -- M --
