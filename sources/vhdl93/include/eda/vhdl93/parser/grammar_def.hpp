@@ -965,7 +965,7 @@ typedef x3::rule<subprogram_body_class> subprogram_body_type;
 typedef x3::rule<subprogram_declaration_class> subprogram_declaration_type;
 typedef x3::rule<subprogram_declarative_item_class> subprogram_declarative_item_type;
 typedef x3::rule<subprogram_declarative_part_class> subprogram_declarative_part_type;
-typedef x3::rule<subprogram_kind_class> subprogram_kind_type;
+typedef x3::rule<subprogram_kind_class, ast::keyword_token> subprogram_kind_type;
 typedef x3::rule<subprogram_specification_class, ast::subprogram_specification> subprogram_specification_type;
 typedef x3::rule<subprogram_statement_part_class, ast::subprogram_statement_part> subprogram_statement_part_type;
 typedef x3::rule<subtype_declaration_class, ast::subtype_declaration> subtype_declaration_type;
@@ -1343,7 +1343,7 @@ auto const signal_name = x3::rule<struct signal_name_class, ast::name> { "signal
  * Parser Rule Definition
  */
 
-// abstract_literal ::=
+// abstract_literal ::=                                                 [§ 13.4]
 //     decimal_literal | based_literal
 auto const abstract_literal_def = /* Note, order changed since matters */
       based_literal
@@ -1426,8 +1426,8 @@ auto const alias_designator_def =
 
 
 #if 0
-// allocator ::=
-// new subtype_indication
+// allocator ::=                                                       [§ 7.3.6]
+//       new subtype_indication
 //     | new qualified_expression
 auto const allocator_def =
         NEW subtype_indication
@@ -1436,11 +1436,11 @@ auto const allocator_def =
 #endif
 
 #if 0
-// architecture_body ::=
-// architecture identifier of entity_name is
-//     architecture_declarative_part
+// architecture_body ::=                                                 [§ 1.2]
+//     architecture identifier of entity_name is
+//         architecture_declarative_part
 //     begin
-//     architecture_statement_part
+//         architecture_statement_part
 //     end [ architecture ] [ architecture_simple_name ] ;
 auto const architecture_body_def =
         ARCHITECTURE identifier OF entity_name IS
@@ -1452,16 +1452,16 @@ auto const architecture_body_def =
 #endif
 
 #if 0
-// architecture_declarative_part ::=
-// { block_declarative_item }
+// architecture_declarative_part ::=                                     [§ 1.2]
+//     { block_declarative_item }
 auto const architecture_declarative_part_def =
 { block_declarative_item }
 ;
 #endif
 
 #if 0
-// architecture_statement_part ::=
-// { concurrent_statement }
+// architecture_statement_part ::=                                     [§ 1.2.2]
+//     { concurrent_statement }
 auto const architecture_statement_part_def =
 { concurrent_statement }
 ;
@@ -1635,8 +1635,8 @@ auto const basic_identifier_def =
 
 
 #if 0
-// binding_indication ::=
-// [ use entity_aspect ]
+// binding_indication ::=                                              [§ 5.2.1]
+//     [ use entity_aspect ]
 //     [ generic_map_aspect ]
 //     [ port_map_aspect ]
 auto const binding_indication_def =
@@ -1683,17 +1683,17 @@ auto const bit_string_literal_def =
 
 #if 0 /* Note: UNUSED, embedded directly into bit_string_literal */
 // bit_value ::=
-// extended_digit { [ underline ] extended_digit }
+//     extended_digit { [ underline ] extended_digit }
 auto const bit_value_def =
-        extended_digit { -( underline ) extended_digit }
-;
+    extended_digit { -( underline ) extended_digit }
+    ;
 #endif
 
 #if 0
-// block_configuration ::=
-// for block_specification
-//     { use_clause }
-//     { configuration_item }
+// block_configuration ::                                              [§ 1.3.1]
+//     for block_specification
+//         { use_clause }
+//         { configuration_item }
 //     end for ;
 auto const block_configuration_def =
         FOR block_specification
@@ -1704,8 +1704,8 @@ END FOR > ';'
 #endif
 
 #if 0
-// block_declarative_item ::=
-// subprogram_declaration
+// block_declarative_item ::=                                          [§ 1.2.1]
+//       subprogram_declaration
 //     | subprogram_body
 //     | type_declaration
 //     | subtype_declaration
@@ -1723,37 +1723,37 @@ END FOR > ';'
 //     | group_template_declaration
 //     | group_declaration
 auto const block_declarative_item_def =
-        subprogram_declaration
-        | subprogram_body
-        | type_declaration
-        | subtype_declaration
-        | constant_declaration
-        | signal_declaration
-        | shared_variable_declaration
-        | file_declaration
-        | alias_declaration
-        | component_declaration
-        | attribute_declaration
-        | attribute_specification
-        | configuration_specification
-        | disconnection_specification
-        | use_clause
-        | group_template_declaration
-        | group_declaration
-        ;
+      subprogram_declaration
+    | subprogram_body
+    | type_declaration
+    | subtype_declaration
+    | constant_declaration
+    | signal_declaration
+    | shared_variable_declaration
+    | file_declaration
+    | alias_declaration
+    | component_declaration
+    | attribute_declaration
+    | attribute_specification
+    | configuration_specification
+    | disconnection_specification
+    | use_clause
+    | group_template_declaration
+    | group_declaration
+    ;
 #endif
 
 #if 0
-// block_declarative_part ::=
-// { block_declarative_item }
+// block_declarative_part ::=                                            [§ 9.1]
+//     { block_declarative_item }
 auto const block_declarative_part_def =
-{ block_declarative_item }
-;
+    { block_declarative_item }
+    ;
 #endif
 
 #if 0
-// block_header ::=
-// [ generic_clause
+// block_header ::=                                                      [§ 9.1]
+//     [ generic_clause
 //     [ generic_map_aspect ; ] ]
 //     [ port_clause
 //     [ port_map_aspect ; ] ]
@@ -1766,26 +1766,26 @@ auto const block_header_def =
 #endif
 
 #if 0
-// block_specification ::=
-// architecture_name
+// block_specification ::=                                             [§ 1.3.1]
+//       architecture_name
 //     | block_statement_label
 //     | generate_statement_label [ ( index_specification ) ]
 auto const block_specification_def =
         architecture_name
-        | block_statement_label
-        | generate_statement_label -( '(' index_specification ')' )
-        ;
+    | block_statement_label
+    | generate_statement_label -( '(' index_specification ')' )
+    ;
 #endif
 
 #if 0
-// block_statement ::=
-// block_label :
-//     block [ ( guard_expression ) ] [ is ]
-//     block_header
-//     block_declarative_part
-//     begin
-//     block_statement_part
-//     end block [ block_label ] ;
+// block_statement ::=                                                   [§ 9.1]
+//     block_label :
+//         block [ ( guard_expression ) ] [ is ]
+//             block_header
+//             block_declarative_part
+//         begin
+//             block_statement_part
+//         end block [ block_label ] ;
 auto const block_statement_def =
         block_label > ':'     BLOCK -( '(' guard_expression ')' ) -( IS )
         block_header
@@ -1797,8 +1797,8 @@ auto const block_statement_def =
 #endif
 
 #if 0
-// block_statement_part ::=
-// { concurrent_statement }
+// block_statement_part ::=                                              [§ 9.1]
+//     { concurrent_statement }
 auto const block_statement_part_def =
 { concurrent_statement }
 ;
@@ -1872,10 +1872,10 @@ auto const choices_def =
 
 
 #if 0
-// component_configuration ::=
-// for component_specification
-//     [ binding_indication ; ]
-//     [ block_configuration ]
+// component_configuration ::=                                         [§ 1.3.2]
+//     for component_specification
+//         [ binding_indication ; ]
+//         [ block_configuration ]
 //     end for ;
 auto const component_configuration_def =
         FOR component_specification
@@ -1886,10 +1886,10 @@ auto const component_configuration_def =
 #endif
 
 #if 0
-// component_declaration ::=
-// component identifier [ is ]
-//     [ local_generic_clause ]
-//     [ local_port_clause ]
+// component_declaration ::=                                             [§ 4.5]
+//     component identifier [ is ]
+//         [ local_generic_clause ]
+//         [ local_port_clause ]
 //     end component [ component_simple_name ] ;
 auto const component_declaration_def =
         COMPONENT identifier -( IS )
@@ -1900,11 +1900,11 @@ auto const component_declaration_def =
 #endif
 
 #if 0
-// component_instantiation_statement ::=
-// instantiation_label :
-//     instantiated_unit
-//     [ generic_map_aspect ]
-//     [ port_map_aspect ] ;
+// component_instantiation_statement ::=                                 [§ 9.6]
+//     instantiation_label :
+//         instantiated_unit
+//             [ generic_map_aspect ]
+//             [ port_map_aspect ] ;
 auto const component_instantiation_statement_def =
         instantiation_label > ':'     instantiated_unit
         -( generic_map_aspect )
@@ -1913,8 +1913,8 @@ auto const component_instantiation_statement_def =
 #endif
 
 #if 0
-// component_specification ::=
-// instantiation_list : component_name
+// component_specification ::=                                           [§ 5.2]
+//     instantiation_list : component_name
 auto const component_specification_def =
         instantiation_list > ':' component_name
         ;
@@ -1931,7 +1931,7 @@ auto const composite_type_definition_def =
 
 
 #if 0
-// concurrent_assertion_statement ::=
+// concurrent_assertion_statement ::=                                    [§ 9.4]
 // [ label : ] [ postponed ] assertion ;
 auto const concurrent_assertion_statement_def =
         -label_colon -( POSTPONED ) assertion > ';'
@@ -1939,7 +1939,7 @@ auto const concurrent_assertion_statement_def =
 #endif
 
 #if 0
-// concurrent_procedure_call_statement ::=
+// concurrent_procedure_call_statement ::=                               [§ 9.3]
 // [ label : ] [ postponed ] procedure_call ;
 auto const concurrent_procedure_call_statement_def =
         -label_colon -( POSTPONED ) procedure_call > ';'
@@ -1947,8 +1947,8 @@ auto const concurrent_procedure_call_statement_def =
 #endif
 
 #if 0
-// concurrent_signal_assignment_statement ::=
-// [ label : ] [ postponed ] conditional_signal_assignment
+// concurrent_signal_assignment_statement ::=                            [§ 9.5]
+//       [ label : ] [ postponed ] conditional_signal_assignment
 //     | [ label : ] [ postponed ] selected_signal_assignment
 auto const concurrent_signal_assignment_statement_def =
         -label_colon -( POSTPONED ) conditional_signal_assignment
@@ -1957,8 +1957,8 @@ auto const concurrent_signal_assignment_statement_def =
 #endif
 
 #if 0
-// concurrent_statement ::=
-// block_statement
+// concurrent_statement ::=                                                [§ 9]
+//       block_statement
 //     | process_statement
 //     | concurrent_procedure_call_statement
 //     | concurrent_assertion_statement
@@ -1966,14 +1966,14 @@ auto const concurrent_signal_assignment_statement_def =
 //     | component_instantiation_statement
 //     | generate_statement
 auto const concurrent_statement_def =
-        block_statement
-        | process_statement
-        | concurrent_procedure_call_statement
-        | concurrent_assertion_statement
-        | concurrent_signal_assignment_statement
-        | component_instantiation_statement
-        | generate_statement
-        ;
+      block_statement
+    | process_statement
+    | concurrent_procedure_call_statement
+    | concurrent_assertion_statement
+    | concurrent_signal_assignment_statement
+    | component_instantiation_statement
+    | generate_statement
+    ;
 #endif
 
 
@@ -1993,17 +1993,17 @@ auto const condition_clause_def =
 
 
 #if 0
-// conditional_signal_assignment ::=
-// target    <= options conditional_waveforms ;
+// conditional_signal_assignment ::=                                   [§ 9.5.1]
+//     target    <= options conditional_waveforms ;
 auto const conditional_signal_assignment_def =
         target    <= options conditional_waveforms > ';'
 ;
 #endif
 
 #if 0
-// conditional_waveforms ::=
-// { waveform when condition else }
-//     waveform [ when condition ]
+// conditional_waveforms ::=                                           [§ 9.5.1]
+//     { waveform when condition else }
+//       waveform [ when condition ]
 auto const conditional_waveforms_def =
 { waveform WHEN condition ELSE }
 waveform -( WHEN condition )
@@ -2011,10 +2011,10 @@ waveform -( WHEN condition )
 #endif
 
 #if 0
-// configuration_declaration ::=
-// configuration identifier of entity_name is
-//     configuration_declarative_part
-//     block_configuration
+// configuration_declaration ::=                                         [§ 1.3]
+//     configuration identifier of entity_name is
+//         configuration_declarative_part
+//         block_configuration
 //     end [ configuration ] [ configuration_simple_name ] ;
 auto const configuration_declaration_def =
         CONFIGURATION identifier OF entity_name IS
@@ -2025,8 +2025,8 @@ auto const configuration_declaration_def =
 #endif
 
 #if 0
-// configuration_declarative_item ::=
-// use_clause
+// configuration_declarative_item ::=                                    [§ 1.3]
+//       use_clause
 //     | attribute_specification
 //     | group_declaration
 auto const configuration_declarative_item_def =
@@ -2037,34 +2037,34 @@ auto const configuration_declarative_item_def =
 #endif
 
 #if 0
-// configuration_declarative_part ::=
-// { configuration_declarative_item }
+// configuration_declarative_part ::=                                    [§ 1.3]
+//     { configuration_declarative_item }
 auto const configuration_declarative_part_def =
 { configuration_declarative_item }
 ;
 #endif
 
 #if 0
-// configuration_item ::=
-// block_configuration
+// configuration_item ::=                                              [§ 1.3.1]
+//       block_configuration
 //     | component_configuration
 auto const configuration_item_def =
-        block_configuration
-        | component_configuration
-        ;
+         block_configuration
+     | component_configuration
+    ;
 #endif
 
 #if 0
-// configuration_specification ::=
-// for component_specification binding_indication ;
+// configuration_specification ::=                                       [§ 5.2]
+//     for component_specification binding_indication ;
 auto const configuration_specification_def =
         FOR component_specification binding_indication > ';'
 ;
 #endif
 
 #if 0
-// constant_declaration ::=
-// constant identifier_list : subtype_indication [ := expression ] ;
+// constant_declaration ::=                                          [§ 4.3.1.1]
+//     constant identifier_list : subtype_indication [ := expression ] ;
 auto const constant_declaration_def =
         CONSTANT identifier_list > ':' subtype_indication -(  ":=" >  expression ) > ';'
 ;
@@ -2092,16 +2092,16 @@ auto const constraint_def =
 
 
 #if 0
-// context_clause ::=
-// { context_item }
+// context_clause ::=                                                   [§ 11.3]
+//     { context_item }
 auto const context_clause_def =
 { context_item }
 ;
 #endif
 
 #if 0
-// context_item ::=
-// library_clause
+// context_item ::=                                                     [§ 11.3]
+//       library_clause
 //     | use_clause
 auto const context_item_def =
         library_clause
@@ -2132,8 +2132,8 @@ auto const decimal_literal_def =
 
 
 #if 0
-// declaration ::=
-// type_declaration
+// declaration ::=                                                         [§ 4]
+//       type_declaration
 //     | subtype_declaration
 //     | object_declaration
 //     | interface_declaration
@@ -2148,19 +2148,19 @@ auto const decimal_literal_def =
 //     | package_declaration
 auto const declaration_def =
         type_declaration
-        | subtype_declaration
-        | object_declaration
-        | interface_declaration
-        | alias_declaration
-        | attribute_declaration
-        | component_declaration
-        | group_template_declaration
-        | group_declaration
-        | entity_declaration
-        | configuration_declaration
-        | subprogram_declaration
-        | package_declaration
-        ;
+    | subtype_declaration
+    | object_declaration
+    | interface_declaration
+    | alias_declaration
+    | attribute_declaration
+    | component_declaration
+    | group_template_declaration
+    | group_declaration
+    | entity_declaration
+    | configuration_declaration
+    | subprogram_declaration
+    | package_declaration
+    ;
 #endif
 
 
@@ -2176,16 +2176,16 @@ auto const delay_mechanism_def =
 
 
 #if 0
-// design_file ::=
-// design_unit { design_unit }
+// design_file ::=                                                      [§ 11.1]
+//     design_unit { design_unit }
 auto const design_file_def =
         design_unit { design_unit }
 ;
 #endif
 
 #if 0
-// design_unit ::=
-// context_clause library_unit
+// design_unit ::=                                                      [§ 11.1]
+//     context_clause library_unit
 auto const design_unit_def =
         context_clause library_unit
         ;
@@ -2210,8 +2210,8 @@ auto const direction_def =
 
 
 #if 0
-// disconnection_specification ::=
-// disconnect guarded_signal_specification after time_expression ;
+// disconnection_specification ::=                                       [§ 5.3]
+//     disconnect guarded_signal_specification after time_expression ;
 auto const disconnection_specification_def =
         DISCONNECT guarded_signal_specification AFTER time_expression > ';'
 ;
@@ -2251,11 +2251,11 @@ auto const element_declaration_def =
 
 
 #if 0
-// element_subtype_definition ::=
-// subtype_indication
+// element_subtype_definition ::=                                      [§ 3.2.2]
+//     subtype_indication
 auto const element_subtype_definition_def =
-        subtype_indication
-        ;
+    subtype_indication
+    ;
 #endif
 
 
@@ -2300,28 +2300,28 @@ auto const entity_class_def =
 
 
 #if 0
-// entity_class_entry ::=
-// entity_class [ <> ]
+// entity_class_entry ::=                                                [§ 4.6]
+//     entity_class [ <> ]
 auto const entity_class_entry_def =
         entity_class -( <> )
         ;
 #endif
 
 #if 0
-// entity_class_entry_list ::=
-// entity_class_entry { , entity_class_entry }
+// entity_class_entry_list ::=                                           [§ 4.6]
+//     entity_class_entry { , entity_class_entry }
 auto const entity_class_entry_list_def =
         entity_class_entry >> ( entity_class_entry % ',' )
         ;
 #endif
 
 #if 0
-// entity_declaration ::=
-// entity identifier is
-//     entity_header
-//     entity_declarative_part
-//     [ begin
-//     entity_statement_part ]
+// entity_declaration ::=                                                [§ 1.1]
+//     entity identifier is
+//         entity_header
+//         entity_declarative_part
+//   [ begin
+//         entity_statement_part ]
 //     end [ entity ] [ entity_simple_name ] ;
 auto const entity_declaration_def =
         ENTITY identifier IS
@@ -2334,8 +2334,8 @@ auto const entity_declaration_def =
 #endif
 
 #if 0
-// entity_declarative_item ::=
-// subprogram_declaration
+// entity_declarative_item ::=                                         [§ 1.1.2]
+//       subprogram_declaration
 //     | subprogram_body
 //     | type_declaration
 //     | subtype_declaration
@@ -2351,27 +2351,27 @@ auto const entity_declaration_def =
 //     | group_template_declaration
 //     | group_declaration
 auto const entity_declarative_item_def =
-        subprogram_declaration
-        | subprogram_body
-        | type_declaration
-        | subtype_declaration
-        | constant_declaration
-        | signal_declaration
-        | shared_variable_declaration
-        | file_declaration
-        | alias_declaration
-        | attribute_declaration
-        | attribute_specification
-        | disconnection_specification
-        | use_clause
-        | group_template_declaration
-        | group_declaration
-        ;
+      subprogram_declaration
+    | subprogram_body
+    | type_declaration
+    | subtype_declaration
+    | constant_declaration
+    | signal_declaration
+    | shared_variable_declaration
+    | file_declaration
+    | alias_declaration
+    | attribute_declaration
+    | attribute_specification
+    | disconnection_specification
+    | use_clause
+    | group_template_declaration
+    | group_declaration
+    ;
 #endif
 
 #if 0
-// entity_declarative_part ::=
-// { entity_declarative_item }
+// entity_declarative_part ::=                                         [§ 1.1.2]
+//     { entity_declarative_item }
 auto const entity_declarative_part_def =
 { entity_declarative_item }
 ;
@@ -2387,8 +2387,8 @@ auto const entity_designator_def =
 
 
 #if 0
-// entity_header ::=
-// [ formal_generic_clause ]
+// entity_header ::=                                                   [§ 1.1.1]
+//     [ formal_generic_clause ]
 //     [ formal_port_clause ]
 auto const entity_header_def =
         -( formal_generic_clause )
@@ -2419,20 +2419,20 @@ auto const entity_specification_def =
 
 
 #if 0
-// entity_statement ::=
-// concurrent_assertion_statement
+// entity_statement ::=                                                [§ 1.1.3]
+//       concurrent_assertion_statement
 //     | passive_concurrent_procedure_call_statement
 //     | passive_process_statement
 auto const entity_statement_def =
-        concurrent_assertion_statement
-        | passive_concurrent_procedure_call_statement
-        | passive_process_statement
-        ;
+      concurrent_assertion_statement
+	| passive_concurrent_procedure_call_statement
+	| passive_process_statement
+	;
 #endif
 
 #if 0
-// entity_statement_part ::=
-// { entity_statement }
+// entity_statement_part ::=                                           [§ 1.1.3]
+//     { entity_statement }
 auto const entity_statement_part_def =
 { entity_statement }
 ;
@@ -2458,7 +2458,7 @@ auto const enumeration_literal_def =
 
 
 
-// enumeration_type_definition ::=
+// enumeration_type_definition ::=                                     [§ 3.1.1]
 //     ( enumeration_literal { , enumeration_literal } )
 auto const enumeration_type_definition_def =
     '(' >> (enumeration_literal % ',') >> ')'
@@ -2686,13 +2686,13 @@ auto const function_call_def =
 
 
 #if 0
-// generate_statement ::=
-// generate_label :
-//     generation_scheme generate
-//     [ { block_declarative_item }
-//     begin ]
-//     { concurrent_statement }
-//     end generate [ generate_label ] ;
+// generate_statement ::=                                                [§ 9.7]
+//     generate_label :
+//         generation_scheme generate
+//             [ { block_declarative_item }
+//         begin ]
+//             { concurrent_statement }
+//         end generate [ generate_label ] ;
 auto const generate_statement_def =
         generate_label > ':'     generation_scheme GENERATE
         -( { block_declarative_item }
@@ -2703,8 +2703,8 @@ END GENERATE -( generate_label ) > ';'
 #endif
 
 #if 0
-// generation_scheme ::=
-// for generate_parameter_specification
+// generation_scheme ::=                                                 [§ 9.7]
+//       for generate_parameter_specification
 //     | if condition
 auto const generation_scheme_def =
         FOR generate_parameter_specification
@@ -2746,40 +2746,40 @@ auto const generic_map_aspect_def =
 
 
 #if 0
-// group_constituent ::=
-// name | character_literal
+// group_constituent ::                                                  [§ 4.7]
+//     name | character_literal
 auto const group_constituent_def =
-        name | character_literal
-        ;
+    name | character_literal
+    ;
 #endif
 
 #if 0
-// group_constituent_list ::=
-// group_constituent { , group_constituent }
+// group_constituent_list ::=                                            [§ 4.7]
+//     group_constituent { , group_constituent }
 auto const group_constituent_list_def =
         group_constituent >> ( group_constituent % ',' )
         ;
 #endif
 
 #if 0
-// group_template_declaration ::=
-// group identifier is ( entity_class_entry_list ) ;
+// group_template_declaration ::=                                        [§ 4.6]
+//     group identifier is ( entity_class_entry_list ) ;
 auto const group_template_declaration_def =
         GROUP identifier IS '(' entity_class_entry_list ')' > ';'
 ;
 #endif
 
 #if 0
-// group_declaration ::=
-// group identifier : group_template_name ( group_constituent_list ) ;
+// group_declaration ::=                                                 [§ 4.7]
+//     group identifier : group_template_name ( group_constituent_list ) ;
 auto const group_declaration_def =
         GROUP identifier > ':' group_template_name '(' group_constituent_list ')' > ';'
 ;
 #endif
 
 #if 0
-// guarded_signal_specification ::=
-// guarded_signal_list : type_mark
+// guarded_signal_specification ::=                                      [§ 5.3]
+//     guarded_signal_list : type_mark
 auto const guarded_signal_specification_def =
         guarded_signal_list > ':' type_mark
         ;
@@ -2803,15 +2803,15 @@ auto const identifier_list_def =
 
 
 #if 0
-// if_statement ::=
-// [ if_label : ]
-//     if condition then
-//     sequence_of_statements
-//     { elsif condition then
-//     sequence_of_statements }
-//     [ else
-//     sequence_of_statements ]
-//     end if [ if_label ] ;
+// if_statement ::=                                                      [§ 8.7]
+//     [ if_label : ]
+//         if condition then
+//             sequence_of_statements
+//       { elsif condition then
+//             sequence_of_statements }
+//       [ else
+//             sequence_of_statements ]
+//         end if [ if_label ] ;
 auto const if_statement_def =
         -( if_label > ':' )
         IF condition THEN
@@ -2843,13 +2843,13 @@ auto const index_constraint_def =
 
 
 #if 0
-// index_specification ::=
-// discrete_range
+// index_specification ::=                                             [§ 1.3.1]
+//       discrete_range
 //     | static_expression
 auto const index_specification_def =
-        discrete_range
-        | static_expression
-        ;
+      discrete_range
+    | static_expression
+    ;
 #endif
 
 
@@ -2872,8 +2872,8 @@ auto const indexed_name_def =
 
 
 #if 0
-// instantiated_unit ::=
-// [ component ] component_name
+// instantiated_unit ::=                                                 [§ 9.6]
+//       [ component ] component_name
 //     | entity entity_name [ ( architecture_identifier ) ]
 //     | configuration configuration_name
 auto const instantiated_unit_def =
@@ -2884,8 +2884,8 @@ auto const instantiated_unit_def =
 #endif
 
 #if 0
-// instantiation_list ::=
-// instantiation_label { , instantiation_label }
+// instantiation_list ::=                                                [§ 5.2]
+//       instantiation_label { , instantiation_label }
 //     | others
 //     | all
 auto const instantiation_list_def =
@@ -2995,13 +2995,13 @@ auto const interface_variable_declaration_def =
 
 
 #if 0
-// iteration_scheme ::=
-// while condition
+// iteration_scheme ::=                                                  [§ 8.9]
+//       while condition
 //     | for loop_parameter_specification
 auto const iteration_scheme_def =
-        WHILE condition
-        | FOR loop_parameter_specification
-        ;
+      WHILE condition
+    | FOR loop_parameter_specification
+    ;
 #endif
 
 
@@ -3029,13 +3029,13 @@ auto const library_clause_def =
 
 
 #if 0
-// library_unit ::=
-// primary_unit
+// library_unit ::=                                                     [§ 11.1]
+//       primary_unit
 //     | secondary_unit
 auto const library_unit_def =
-        primary_unit
-        | secondary_unit
-        ;
+      primary_unit
+    | secondary_unit
+    ;
 #endif
 
 
@@ -3071,11 +3071,11 @@ auto const logical_name_list_def =
 #endif
 
 #if 0
-// loop_statement ::=
-// [ loop_label : ]
-//     [ iteration_scheme ] loop
-//     sequence_of_statements
-//     end loop [ loop_label ] ;
+// loop_statement ::=                                                    [§ 8.9]
+//     [ loop_label : ]
+//         [ iteration_scheme ] loop
+//             sequence_of_statements
+//         end loop [ loop_label ] ;
 auto const loop_statement_def =
         -( loop_label > ':' )
         -( iteration_scheme ) LOOP
@@ -3143,17 +3143,17 @@ auto const numeric_literal_def = /* Note, order changed since matters */
 
 
 #if 0
-// object_declaration ::=
-// constant_declaration
+// object_declaration ::=                                              [§ 4.3.1]
+//       constant_declaration
 //     | signal_declaration
 //     | variable_declaration
 //     | file_declaration
 auto const object_declaration_def =
-        constant_declaration
-        | signal_declaration
-        | variable_declaration
-        | file_declaration
-        ;
+      constant_declaration
+    | signal_declaration
+    | variable_declaration
+    | file_declaration
+    ;
 #endif
 
 
@@ -3174,9 +3174,9 @@ auto const options_def =
 
 
 #if 0
-// package_body ::=
-// package body package_simple_name is
-//     package_body_declarative_part
+// package_body ::=                                                      [§ 2.6]
+//     package body package_simple_name is
+//         package_body_declarative_part
 //     end [ package body ] [ package_simple_name ] ;
 auto const package_body_def =
         PACKAGE BODY package_simple_name IS
@@ -3186,8 +3186,8 @@ auto const package_body_def =
 #endif
 
 #if 0
-// package_body_declarative_item ::=
-// subprogram_declaration
+// package_body_declarative_item ::=                                     [§ 2.6]
+//       subprogram_declaration
 //     | subprogram_body
 //     | type_declaration
 //     | subtype_declaration
@@ -3199,32 +3199,32 @@ auto const package_body_def =
 //     | group_template_declaration
 //     | group_declaration
 auto const package_body_declarative_item_def =
-        subprogram_declaration
-        | subprogram_body
-        | type_declaration
-        | subtype_declaration
-        | constant_declaration
-        | shared_variable_declaration
-        | file_declaration
-        | alias_declaration
-        | use_clause
-        | group_template_declaration
-        | group_declaration
-        ;
+      subprogram_declaration
+    | subprogram_body
+    | type_declaration
+    | subtype_declaration
+    | constant_declaration
+    | shared_variable_declaration
+    | file_declaration
+    | alias_declaration
+    | use_clause
+    | group_template_declaration
+    | group_declaration
+    ;
 #endif
 
 #if 0
-// package_body_declarative_part ::=
-// { package_body_declarative_item }
+// package_body_declarative_part ::=                                     [§ 2.6]
+//     { package_body_declarative_item }
 auto const package_body_declarative_part_def =
 { package_body_declarative_item }
 ;
 #endif
 
 #if 0
-// package_declaration ::=
-// package identifier is
-//     package_declarative_part
+// package_declaration ::=                                               [§ 2.5]
+//     package identifier is
+//         package_declarative_part
 //     end [ package ] [ package_simple_name ] ;
 auto const package_declaration_def =
         PACKAGE identifier IS
@@ -3234,8 +3234,8 @@ auto const package_declaration_def =
 #endif
 
 #if 0
-// package_declarative_item ::=
-// subprogram_declaration
+// package_declarative_item ::=                                          [§ 2.5]
+//       subprogram_declaration
 //     | type_declaration
 //     | subtype_declaration
 //     | constant_declaration
@@ -3251,35 +3251,35 @@ auto const package_declaration_def =
 //     | group_template_declaration
 //     | group_declaration
 auto const package_declarative_item_def =
-        subprogram_declaration
-        | type_declaration
-        | subtype_declaration
-        | constant_declaration
-        | signal_declaration
-        | shared_variable_declaration
-        | file_declaration
-        | alias_declaration
-        | component_declaration
-        | attribute_declaration
-        | attribute_specification
-        | disconnection_specification
-        | use_clause
-        | group_template_declaration
-        | group_declaration
-        ;
+      subprogram_declaration
+    | type_declaration
+    | subtype_declaration
+    | constant_declaration
+    | signal_declaration
+    | shared_variable_declaration
+    | file_declaration
+    | alias_declaration
+    | component_declaration
+    | attribute_declaration
+    | attribute_specification
+    | disconnection_specification
+    | use_clause
+    | group_template_declaration
+    | group_declaration
+    ;
 #endif
 
 #if 0
-// package_declarative_part ::=
-// { package_declarative_item }
+// package_declarative_part ::=                                          [§ 2.5]
+//     { package_declarative_item }
 auto const package_declarative_part_def =
 { package_declarative_item }
 ;
 #endif
 
 #if 0
-// parameter_specification ::=
-// identifier in discrete_range
+// parameter_specification ::=                                           [§ 8.9]
+//     identifier in discrete_range
 auto const parameter_specification_def =
         identifier IN discrete_range
         ;
@@ -3386,15 +3386,15 @@ auto const primary_def =
 
 
 #if 0
-// primary_unit ::=
-// entity_declaration
+// primary_unit ::=                                                     [§ 11.1]
+//       entity_declaration
 //     | configuration_declaration
 //     | package_declaration
 auto const primary_unit_def =
-        entity_declaration
-        | configuration_declaration
-        | package_declaration
-        ;
+      entity_declaration
+    | configuration_declaration
+    | package_declaration
+    ;
 #endif
 
 
@@ -3436,8 +3436,8 @@ auto const procedure_call_statement_def =
 
 
 #if 0
-// process_declarative_item ::=
-// subprogram_declaration
+// process_declarative_item ::=                                          [§ 9.2]
+//       subprogram_declaration
 //     | subprogram_body
 //     | type_declaration
 //     | subtype_declaration
@@ -3451,38 +3451,38 @@ auto const procedure_call_statement_def =
 //     | group_template_declaration
 //     | group_declaration
 auto const process_declarative_item_def =
-        subprogram_declaration
-        | subprogram_body
-        | type_declaration
-        | subtype_declaration
-        | constant_declaration
-        | variable_declaration
-        | file_declaration
-        | alias_declaration
-        | attribute_declaration
-        | attribute_specification
-        | use_clause
-        | group_template_declaration
-        | group_declaration
-        ;
+      subprogram_declaration
+    | subprogram_body
+    | type_declaration
+    | subtype_declaration
+    | constant_declaration
+    | variable_declaration
+    | file_declaration
+    | alias_declaration
+    | attribute_declaration
+    | attribute_specification
+    | use_clause
+    | group_template_declaration
+    | group_declaration
+    ;
 #endif
 
 #if 0
-// process_declarative_part ::=
-// { process_declarative_item }
+// process_declarative_part ::=                                          [§ 9.2]
+//     { process_declarative_item }
 auto const process_declarative_part_def =
 { process_declarative_item }
 ;
 #endif
 
 #if 0
-// process_statement ::=
-// [ process_label : ]
-//     [ postponed ] process [ ( sensitivity_list ) ] [ is ]
-//     process_declarative_part
-//     begin
-//     process_statement_part
-//     end [ postponed ] process [ process_label ] ;
+// process_statement ::=                                                 [§ 9.2]
+//     [ process_label : ]
+//         [ postponed ] process [ ( sensitivity_list ) ] [ is ]
+//             process_declarative_part
+//         begin
+//             process_statement_part
+//         end [ postponed ] process [ process_label ] ;
 auto const process_statement_def =
         -( process_label > ':' )
         -( POSTPONED ) PROCESS -( '(' sensitivity_list ')' ) -( IS )
@@ -3502,7 +3502,7 @@ auto const process_statement_part_def =
 
 
 #if 0
-// qualified_expression ::=
+// qualified_expression ::=                                            [§ 7.3.4]
 // type_mark ' ( expression )
 //     | type_mark ' aggregate
 auto const qualified_expression_def =
@@ -3606,13 +3606,13 @@ auto const scalar_type_definition_def = /* Note, order changed since matters */
 
 
 #if 0
-// secondary_unit ::=
-// architecture_body
+// secondary_unit ::=                                                   [§ 11.1]
+//       architecture_body
 //     | package_body
 auto const secondary_unit_def =
-        architecture_body
-        | package_body
-        ;
+      architecture_body
+    | package_body
+    ;
 #endif
 
 
@@ -3639,9 +3639,9 @@ auto const selected_name_def =
 
 
 #if 0
-// selected_signal_assignment ::=
-// with expression select
-//     target    <= options selected_waveforms ;
+// selected_signal_assignment ::=                                      [§ 9.5.2]
+//     with expression select
+//         target    <= options selected_waveforms ;
 auto const selected_signal_assignment_def =
         WITH expression SELECT
         target    <= options selected_waveforms > ';'
@@ -3792,7 +3792,7 @@ namespace signature_detail {
 }
 auto const signature_def =
        '['
-    >> -signature_detail::parameter_list
+    >> -signature_detail::parameter_list // FixMe: to complicated with optional<vector<>>
     >> -(
           RETURN
        >> type_mark
@@ -3820,8 +3820,8 @@ auto const simple_name_def =
 
 
 #if 0
-// slice_name ::=
-// prefix ( discrete_range )
+// slice_name ::=                                                        [§ 6.5]
+//     prefix ( discrete_range )
 auto const slice_name_def =
         prefix '(' discrete_range )
 ;
@@ -3856,11 +3856,11 @@ auto const string_literal_def =
 
 
 #if 0
-// subprogram_body ::=
-// subprogram_specification is
-//     subprogram_declarative_part
+// subprogram_body ::=                                                   [§ 2.2]
+//     subprogram_specification is
+//         subprogram_declarative_part
 //     begin
-//     subprogram_statement_part
+//         subprogram_statement_part
 //     end [ subprogram_kind ] [ designator ] ;
 auto const subprogram_body_def =
         subprogram_specification IS
@@ -3872,16 +3872,16 @@ auto const subprogram_body_def =
 #endif
 
 #if 0
-// subprogram_declaration ::=
-// subprogram_specification ;
+// subprogram_declaration ::=                                            [§ 2.1]
+//     subprogram_specification ;
 auto const subprogram_declaration_def =
         subprogram_specification > ';'
 ;
 #endif
 
 #if 0
-// subprogram_declarative_item ::=
-// subprogram_declaration
+// subprogram_declarative_item ::=                                       [§ 2.2]
+//       subprogram_declaration
 //     | subprogram_body
 //     | type_declaration
 //     | subtype_declaration
@@ -3895,36 +3895,36 @@ auto const subprogram_declaration_def =
 //     | group_template_declaration
 //     | group_declaration
 auto const subprogram_declarative_item_def =
-        subprogram_declaration
-        | subprogram_body
-        | type_declaration
-        | subtype_declaration
-        | constant_declaration
-        | variable_declaration
-        | file_declaration
-        | alias_declaration
-        | attribute_declaration
-        | attribute_specification
-        | use_clause
-        | group_template_declaration
-        | group_declaration
-        ;
+      subprogram_declaration
+    | subprogram_body
+    | type_declaration
+    | subtype_declaration
+    | constant_declaration
+    | variable_declaration
+    | file_declaration
+    | alias_declaration
+    | attribute_declaration
+    | attribute_specification
+    | use_clause
+    | group_template_declaration
+    | group_declaration
+    ;
 #endif
 
 #if 0
-// subprogram_declarative_part ::=
-// { subprogram_declarative_item }
+// subprogram_declarative_part ::=                                       [§ 2.2]
+//     { subprogram_declarative_item }
 auto const subprogram_declarative_part_def =
 { subprogram_declarative_item }
 ;
 #endif
 
 #if 0
-// subprogram_kind ::=
-// procedure | function
+// subprogram_kind ::=                                                   [§ 2.2]
+//     procedure | function
 auto const subprogram_kind_def =
-        PROCEDURE | FUNCTION
-        ;
+    PROCEDURE | FUNCTION  
+    ;
 #endif
 
 
@@ -4176,8 +4176,8 @@ auto const variable_assignment_statement_def =
 
 
 #if 0
-// variable_declaration ::=
-// [ shared ] variable identifier_list : subtype_indication [ := expression ] ;
+// variable_declaration ::=                                          [§ 4.3.1.3]
+//     [ shared ] variable identifier_list : subtype_indication [ := expression ] ;
 auto const variable_declaration_def =
         -( SHARED ) VARIABLE identifier_list > ':' subtype_indication -(  ":=" >  expression ) > ';'
 ;
