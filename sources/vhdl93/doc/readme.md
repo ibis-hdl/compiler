@@ -47,3 +47,8 @@ which it refers. Sometimes there arises some funny problems like
 - [Question about type_mark bnf](https://groups.google.com/forum/#!topic/comp.lang.vhdl/exUhoMrFavU)
   from comp.lang.vhdl
 - unfortunately, the other I din't find any more - from standard committee talk?
+
+Future
+-------
+- [GHDL: a complete VHDL parser](https://github.com/tgingold/ghdl/issues/111)
+
