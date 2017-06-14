@@ -923,7 +923,7 @@ typedef x3::rule<physical_literal_class, ast::physical_literal> physical_literal
 typedef x3::rule<physical_type_definition_class, ast::physical_type_definition> physical_type_definition_type;
 typedef x3::rule<port_clause_class> port_clause_type;
 //typedef x3::rule<port_list_class, ast::port_list> port_list_type;
-typedef x3::rule<port_map_aspect_class> port_map_aspect_type;
+typedef x3::rule<port_map_aspect_class, ast::port_map_aspect> port_map_aspect_type;
 typedef x3::rule<prefix_class, ast::prefix> prefix_type;
 typedef x3::rule<primary_class, ast::primary> primary_type;
 typedef x3::rule<primary_unit_class> primary_unit_type;

@@ -842,16 +842,14 @@ attribute_name
 |                    |                                                       |     )                                             |
 |                    |                                                       |   )                                               |
 |                    |                                                       |   (signature                                      |
-|                    |                                                       |     (signature.parameter_type(s)                  |
-|                    |                                                       |       (name<v>                                    |
-|                    |                                                       |         (identifier                               |
-|                    |                                                       |           A                                       |
-|                    |                                                       |         )                                         |
-|                    |                                                       |       ),                                          |
-|                    |                                                       |       (name<v>                                    |
-|                    |                                                       |         (identifier                               |
-|                    |                                                       |           B                                       |
-|                    |                                                       |         )                                         |
+|                    |                                                       |     (name<v>                                      |
+|                    |                                                       |       (identifier                                 |
+|                    |                                                       |         A                                         |
+|                    |                                                       |       )                                           |
+|                    |                                                       |     ),                                            |
+|                    |                                                       |     (name<v>                                      |
+|                    |                                                       |       (identifier                                 |
+|                    |                                                       |         B                                         |
 |                    |                                                       |       )                                           |
 |                    |                                                       |     )                                             |
 |                    |                                                       |     (signature.return_type                        |
@@ -896,305 +894,175 @@ attribute_name
 attribute_specification
 =======================
 
-+-----------------------------+-----------------------------------------------------+----------------------------------------------------------+
-| File                        | Input                                               | Expected                                                 |
-+-----------------------------+-----------------------------------------------------+----------------------------------------------------------+
-| attribute_specification_001 | attribute PIN_NO of CIN: signal is 10;              | (attribute_specification                                 |
-|                             |                                                     |   (identifier                                            |
-|                             |                                                     |     PIN_NO                                               |
-|                             |                                                     |   )                                                      |
-|                             |                                                     |   (entity_specification                                  |
-|                             |                                                     |     (entity_name_list<v>                                 |
-|                             |                                                     |       (entity_designator                                 |
-|                             |                                                     |         (entity_tag<v>                                   |
-|                             |                                                     |           (identifier                                    |
-|                             |                                                     |             CIN                                          |
-|                             |                                                     |           )                                              |
-|                             |                                                     |         )                                                |
-|                             |                                                     |       )                                                  |
-|                             |                                                     |     )                                                    |
-|                             |                                                     |     (keyword                                             |
-|                             |                                                     |       SIGNAL                                             |
-|                             |                                                     |     )                                                    |
-|                             |                                                     |   )                                                      |
-|                             |                                                     |   (expression                                            |
-|                             |                                                     |     (relation                                            |
-|                             |                                                     |       (shift_expression                                  |
-|                             |                                                     |         (simple_expression                               |
-|                             |                                                     |           (term                                          |
-|                             |                                                     |             (primary<v>                                  |
-|                             |                                                     |               (literal<v>                                |
-|                             |                                                     |                 (numeric_literal<v>                      |
-|                             |                                                     |                   (abstract_literal<v>                   |
-|                             |                                                     |                     (decimal_literal                     |
-|                             |                                                     |                       literal: 10, hint: int             |
-|                             |                                                     |                     )                                    |
-|                             |                                                     |                   )                                      |
-|                             |                                                     |                 )                                        |
-|                             |                                                     |               )                                          |
-|                             |                                                     |             )                                            |
-|                             |                                                     |           )                                              |
-|                             |                                                     |         )                                                |
-|                             |                                                     |       )                                                  |
-|                             |                                                     |     )                                                    |
-|                             |                                                     |   )                                                      |
-|                             |                                                     | )                                                        |
-|                             |                                                     |                                                          |
-+-----------------------------+-----------------------------------------------------+----------------------------------------------------------+
-| attribute_specification_002 | -- even on LRM, this isn't a avalid expression:     | (attribute_specification                                 |
-|                             | -- attribute LOCATION of ADDER1: label is (10,15);  |   (identifier                                            |
-|                             | -- hence fixed to an expression:                    |     LOCATION                                             |
-|                             | attribute LOCATION of ADDER1: label is (10 + 15);   |   )                                                      |
-|                             |                                                     |   (entity_specification                                  |
-|                             |                                                     |     (entity_name_list<v>                                 |
-|                             |                                                     |       (entity_designator                                 |
-|                             |                                                     |         (entity_tag<v>                                   |
-|                             |                                                     |           (identifier                                    |
-|                             |                                                     |             ADDER1                                       |
-|                             |                                                     |           )                                              |
-|                             |                                                     |         )                                                |
-|                             |                                                     |       )                                                  |
-|                             |                                                     |     )                                                    |
-|                             |                                                     |     (keyword                                             |
-|                             |                                                     |       LABEL                                              |
-|                             |                                                     |     )                                                    |
-|                             |                                                     |   )                                                      |
-|                             |                                                     |   (expression                                            |
-|                             |                                                     |     (relation                                            |
-|                             |                                                     |       (shift_expression                                  |
-|                             |                                                     |         (simple_expression                               |
-|                             |                                                     |           (term                                          |
-|                             |                                                     |             (primary<v>                                  |
-|                             |                                                     |               (expression                                |
-|                             |                                                     |                 (relation                                |
-|                             |                                                     |                   (shift_expression                      |
-|                             |                                                     |                     (simple_expression                   |
-|                             |                                                     |                       (term                              |
-|                             |                                                     |                         (primary<v>                      |
-|                             |                                                     |                           (literal<v>                    |
-|                             |                                                     |                             (numeric_literal<v>          |
-|                             |                                                     |                               (abstract_literal<v>       |
-|                             |                                                     |                                 (decimal_literal         |
-|                             |                                                     |                                   literal: 10, hint: int |
-|                             |                                                     |                                 )                        |
-|                             |                                                     |                               )                          |
-|                             |                                                     |                             )                            |
-|                             |                                                     |                           )                              |
-|                             |                                                     |                         )                                |
-|                             |                                                     |                       ),                                 |
-|                             |                                                     |                       operator: ADD,                     |
-|                             |                                                     |                       (term                              |
-|                             |                                                     |                         (primary<v>                      |
-|                             |                                                     |                           (literal<v>                    |
-|                             |                                                     |                             (numeric_literal<v>          |
-|                             |                                                     |                               (abstract_literal<v>       |
-|                             |                                                     |                                 (decimal_literal         |
-|                             |                                                     |                                   literal: 15, hint: int |
-|                             |                                                     |                                 )                        |
-|                             |                                                     |                               )                          |
-|                             |                                                     |                             )                            |
-|                             |                                                     |                           )                              |
-|                             |                                                     |                         )                                |
-|                             |                                                     |                       )                                  |
-|                             |                                                     |                     )                                    |
-|                             |                                                     |                   )                                      |
-|                             |                                                     |                 )                                        |
-|                             |                                                     |               )                                          |
-|                             |                                                     |             )                                            |
-|                             |                                                     |           )                                              |
-|                             |                                                     |         )                                                |
-|                             |                                                     |       )                                                  |
-|                             |                                                     |     )                                                    |
-|                             |                                                     |   )                                                      |
-|                             |                                                     | )                                                        |
-|                             |                                                     |                                                          |
-+-----------------------------+-----------------------------------------------------+----------------------------------------------------------+
-| attribute_specification_003 | -- even on LRM, this isn't a avalid expression:     | (attribute_specification                                 |
-|                             | -- attribute LOCATION of others: label is (25,77);  |   (identifier                                            |
-|                             | -- hence fixed to an expression:                    |     LOCATION                                             |
-|                             | attribute LOCATION of others: label is (25 * 77);   |   )                                                      |
-|                             |                                                     |   (entity_specification                                  |
-|                             |                                                     |     (entity_name_list<v>                                 |
-|                             |                                                     |       (keyword                                           |
-|                             |                                                     |         OTHERS                                           |
-|                             |                                                     |       )                                                  |
-|                             |                                                     |     )                                                    |
-|                             |                                                     |     (keyword                                             |
-|                             |                                                     |       LABEL                                              |
-|                             |                                                     |     )                                                    |
-|                             |                                                     |   )                                                      |
-|                             |                                                     |   (expression                                            |
-|                             |                                                     |     (relation                                            |
-|                             |                                                     |       (shift_expression                                  |
-|                             |                                                     |         (simple_expression                               |
-|                             |                                                     |           (term                                          |
-|                             |                                                     |             (primary<v>                                  |
-|                             |                                                     |               (expression                                |
-|                             |                                                     |                 (relation                                |
-|                             |                                                     |                   (shift_expression                      |
-|                             |                                                     |                     (simple_expression                   |
-|                             |                                                     |                       (term                              |
-|                             |                                                     |                         (primary<v>                      |
-|                             |                                                     |                           (literal<v>                    |
-|                             |                                                     |                             (numeric_literal<v>          |
-|                             |                                                     |                               (abstract_literal<v>       |
-|                             |                                                     |                                 (decimal_literal         |
-|                             |                                                     |                                   literal: 25, hint: int |
-|                             |                                                     |                                 )                        |
-|                             |                                                     |                               )                          |
-|                             |                                                     |                             )                            |
-|                             |                                                     |                           )                              |
-|                             |                                                     |                         ),                               |
-|                             |                                                     |                         operator: MUL,                   |
-|                             |                                                     |                         (primary<v>                      |
-|                             |                                                     |                           (literal<v>                    |
-|                             |                                                     |                             (numeric_literal<v>          |
-|                             |                                                     |                               (abstract_literal<v>       |
-|                             |                                                     |                                 (decimal_literal         |
-|                             |                                                     |                                   literal: 77, hint: int |
-|                             |                                                     |                                 )                        |
-|                             |                                                     |                               )                          |
-|                             |                                                     |                             )                            |
-|                             |                                                     |                           )                              |
-|                             |                                                     |                         )                                |
-|                             |                                                     |                       )                                  |
-|                             |                                                     |                     )                                    |
-|                             |                                                     |                   )                                      |
-|                             |                                                     |                 )                                        |
-|                             |                                                     |               )                                          |
-|                             |                                                     |             )                                            |
-|                             |                                                     |           )                                              |
-|                             |                                                     |         )                                                |
-|                             |                                                     |       )                                                  |
-|                             |                                                     |     )                                                    |
-|                             |                                                     |   )                                                      |
-|                             |                                                     | )                                                        |
-|                             |                                                     |                                                          |
-+-----------------------------+-----------------------------------------------------+----------------------------------------------------------+
-| attribute_specification_004 |  attribute CAPACITANCE of all: signal is 15 pF;     | (attribute_specification                                 |
-|                             |                                                     |   (identifier                                            |
-|                             |                                                     |     CAPACITANCE                                          |
-|                             |                                                     |   )                                                      |
-|                             |                                                     |   (entity_specification                                  |
-|                             |                                                     |     (entity_name_list<v>                                 |
-|                             |                                                     |       (keyword                                           |
-|                             |                                                     |         ALL                                              |
-|                             |                                                     |       )                                                  |
-|                             |                                                     |     )                                                    |
-|                             |                                                     |     (keyword                                             |
-|                             |                                                     |       SIGNAL                                             |
-|                             |                                                     |     )                                                    |
-|                             |                                                     |   )                                                      |
-|                             |                                                     |   (expression                                            |
-|                             |                                                     |     (relation                                            |
-|                             |                                                     |       (shift_expression                                  |
-|                             |                                                     |         (simple_expression                               |
-|                             |                                                     |           (term                                          |
-|                             |                                                     |             (primary<v>                                  |
-|                             |                                                     |               (literal<v>                                |
-|                             |                                                     |                 (numeric_literal<v>                      |
-|                             |                                                     |                   (physical_literal                      |
-|                             |                                                     |                     literal: (abstract_literal<v>        |
-|                             |                                                     |                       (decimal_literal                   |
-|                             |                                                     |                         literal: 15, hint: int           |
-|                             |                                                     |                       )                                  |
-|                             |                                                     |                     ),                                   |
-|                             |                                                     |                     unit: pF                             |
-|                             |                                                     |                   )                                      |
-|                             |                                                     |                 )                                        |
-|                             |                                                     |               )                                          |
-|                             |                                                     |             )                                            |
-|                             |                                                     |           )                                              |
-|                             |                                                     |         )                                                |
-|                             |                                                     |       )                                                  |
-|                             |                                                     |     )                                                    |
-|                             |                                                     |   )                                                      |
-|                             |                                                     | )                                                        |
-|                             |                                                     |                                                          |
-+-----------------------------+-----------------------------------------------------+----------------------------------------------------------+
-| attribute_specification_005 | attribute IMPLEMENTATION of G1: group is "74LS152"; | (attribute_specification                                 |
-|                             |                                                     |   (identifier                                            |
-|                             |                                                     |     IMPLEMENTATION                                       |
-|                             |                                                     |   )                                                      |
-|                             |                                                     |   (entity_specification                                  |
-|                             |                                                     |     (entity_name_list<v>                                 |
-|                             |                                                     |       (entity_designator                                 |
-|                             |                                                     |         (entity_tag<v>                                   |
-|                             |                                                     |           (identifier                                    |
-|                             |                                                     |             G1                                           |
-|                             |                                                     |           )                                              |
-|                             |                                                     |         )                                                |
-|                             |                                                     |       )                                                  |
-|                             |                                                     |     )                                                    |
-|                             |                                                     |     (keyword                                             |
-|                             |                                                     |       GROUP                                              |
-|                             |                                                     |     )                                                    |
-|                             |                                                     |   )                                                      |
-|                             |                                                     |   (expression                                            |
-|                             |                                                     |     (relation                                            |
-|                             |                                                     |       (shift_expression                                  |
-|                             |                                                     |         (simple_expression                               |
-|                             |                                                     |           (term                                          |
-|                             |                                                     |             (primary<v>                                  |
-|                             |                                                     |               (literal<v>                                |
-|                             |                                                     |                 (string_literal                          |
-|                             |                                                     |                   74LS152                                |
-|                             |                                                     |                 )                                        |
-|                             |                                                     |               )                                          |
-|                             |                                                     |             )                                            |
-|                             |                                                     |           )                                              |
-|                             |                                                     |         )                                                |
-|                             |                                                     |       )                                                  |
-|                             |                                                     |     )                                                    |
-|                             |                                                     |   )                                                      |
-|                             |                                                     | )                                                        |
-|                             |                                                     |                                                          |
-+-----------------------------+-----------------------------------------------------+----------------------------------------------------------+
-| attribute_specification_006 | attribute RISING_DELAY of C2Q: group is 7.2 ns;     | (attribute_specification                                 |
-|                             |                                                     |   (identifier                                            |
-|                             |                                                     |     RISING_DELAY                                         |
-|                             |                                                     |   )                                                      |
-|                             |                                                     |   (entity_specification                                  |
-|                             |                                                     |     (entity_name_list<v>                                 |
-|                             |                                                     |       (entity_designator                                 |
-|                             |                                                     |         (entity_tag<v>                                   |
-|                             |                                                     |           (identifier                                    |
-|                             |                                                     |             C2Q                                          |
-|                             |                                                     |           )                                              |
-|                             |                                                     |         )                                                |
-|                             |                                                     |       )                                                  |
-|                             |                                                     |     )                                                    |
-|                             |                                                     |     (keyword                                             |
-|                             |                                                     |       GROUP                                              |
-|                             |                                                     |     )                                                    |
-|                             |                                                     |   )                                                      |
-|                             |                                                     |   (expression                                            |
-|                             |                                                     |     (relation                                            |
-|                             |                                                     |       (shift_expression                                  |
-|                             |                                                     |         (simple_expression                               |
-|                             |                                                     |           (term                                          |
-|                             |                                                     |             (primary<v>                                  |
-|                             |                                                     |               (literal<v>                                |
-|                             |                                                     |                 (numeric_literal<v>                      |
-|                             |                                                     |                   (physical_literal                      |
-|                             |                                                     |                     literal: (abstract_literal<v>        |
-|                             |                                                     |                       (decimal_literal                   |
-|                             |                                                     |                         literal: 7.2, hint: double       |
-|                             |                                                     |                       )                                  |
-|                             |                                                     |                     ),                                   |
-|                             |                                                     |                     unit: ns                             |
-|                             |                                                     |                   )                                      |
-|                             |                                                     |                 )                                        |
-|                             |                                                     |               )                                          |
-|                             |                                                     |             )                                            |
-|                             |                                                     |           )                                              |
-|                             |                                                     |         )                                                |
-|                             |                                                     |       )                                                  |
-|                             |                                                     |     )                                                    |
-|                             |                                                     |   )                                                      |
-|                             |                                                     | )                                                        |
-|                             |                                                     |                                                          |
-+-----------------------------+-----------------------------------------------------+----------------------------------------------------------+
++-----------------------------+-----------------------------------------------------+----------------------------------------------------+
+| File                        | Input                                               | Expected                                           |
++-----------------------------+-----------------------------------------------------+----------------------------------------------------+
+| attribute_specification_001 | attribute PIN_NO of CIN: signal is 10;              | (attribute_specification                           |
+|                             |                                                     |   (identifier                                      |
+|                             |                                                     |     PIN_NO                                         |
+|                             |                                                     |   )                                                |
+|                             |                                                     |   (entity_specification                            |
+|                             |                                                     |     (entity_name_list<v>                           |
+|                             |                                                     |       (entity_designator                           |
+|                             |                                                     |         (entity_tag<v>                             |
+|                             |                                                     |           (identifier                              |
+|                             |                                                     |             CIN                                    |
+|                             |                                                     |           )                                        |
+|                             |                                                     |         )                                          |
+|                             |                                                     |       )                                            |
+|                             |                                                     |     )                                              |
+|                             |                                                     |     (keyword                                       |
+|                             |                                                     |       SIGNAL                                       |
+|                             |                                                     |     )                                              |
+|                             |                                                     |   )                                                |
+|                             |                                                     |   (expression                                      |
+|                             |                                                     |     (relation                                      |
+|                             |                                                     |       (shift_expression                            |
+|                             |                                                     |         (simple_expression                         |
+|                             |                                                     |           (term                                    |
+|                             |                                                     |             (primary<v>                            |
+|                             |                                                     |               (literal<v>                          |
+|                             |                                                     |                 (numeric_literal<v>                |
+|                             |                                                     |                   (abstract_literal<v>             |
+|                             |                                                     |                     (decimal_literal               |
+|                             |                                                     |                       literal: 10, hint: int       |
+|                             |                                                     |                     )                              |
+|                             |                                                     |                   )                                |
+|                             |                                                     |                 )                                  |
+|                             |                                                     |               )                                    |
+|                             |                                                     |             )                                      |
+|                             |                                                     |           )                                        |
+|                             |                                                     |         )                                          |
+|                             |                                                     |       )                                            |
+|                             |                                                     |     )                                              |
+|                             |                                                     |   )                                                |
+|                             |                                                     | )                                                  |
+|                             |                                                     |                                                    |
++-----------------------------+-----------------------------------------------------+----------------------------------------------------+
+| attribute_specification_004 |  attribute CAPACITANCE of all: signal is 15 pF;     | (attribute_specification                           |
+|                             |                                                     |   (identifier                                      |
+|                             |                                                     |     CAPACITANCE                                    |
+|                             |                                                     |   )                                                |
+|                             |                                                     |   (entity_specification                            |
+|                             |                                                     |     (entity_name_list<v>                           |
+|                             |                                                     |       (keyword                                     |
+|                             |                                                     |         ALL                                        |
+|                             |                                                     |       )                                            |
+|                             |                                                     |     )                                              |
+|                             |                                                     |     (keyword                                       |
+|                             |                                                     |       SIGNAL                                       |
+|                             |                                                     |     )                                              |
+|                             |                                                     |   )                                                |
+|                             |                                                     |   (expression                                      |
+|                             |                                                     |     (relation                                      |
+|                             |                                                     |       (shift_expression                            |
+|                             |                                                     |         (simple_expression                         |
+|                             |                                                     |           (term                                    |
+|                             |                                                     |             (primary<v>                            |
+|                             |                                                     |               (literal<v>                          |
+|                             |                                                     |                 (numeric_literal<v>                |
+|                             |                                                     |                   (physical_literal                |
+|                             |                                                     |                     literal: (abstract_literal<v>  |
+|                             |                                                     |                       (decimal_literal             |
+|                             |                                                     |                         literal: 15, hint: int     |
+|                             |                                                     |                       )                            |
+|                             |                                                     |                     ),                             |
+|                             |                                                     |                     unit: pF                       |
+|                             |                                                     |                   )                                |
+|                             |                                                     |                 )                                  |
+|                             |                                                     |               )                                    |
+|                             |                                                     |             )                                      |
+|                             |                                                     |           )                                        |
+|                             |                                                     |         )                                          |
+|                             |                                                     |       )                                            |
+|                             |                                                     |     )                                              |
+|                             |                                                     |   )                                                |
+|                             |                                                     | )                                                  |
+|                             |                                                     |                                                    |
++-----------------------------+-----------------------------------------------------+----------------------------------------------------+
+| attribute_specification_005 | attribute IMPLEMENTATION of G1: group is "74LS152"; | (attribute_specification                           |
+|                             |                                                     |   (identifier                                      |
+|                             |                                                     |     IMPLEMENTATION                                 |
+|                             |                                                     |   )                                                |
+|                             |                                                     |   (entity_specification                            |
+|                             |                                                     |     (entity_name_list<v>                           |
+|                             |                                                     |       (entity_designator                           |
+|                             |                                                     |         (entity_tag<v>                             |
+|                             |                                                     |           (identifier                              |
+|                             |                                                     |             G1                                     |
+|                             |                                                     |           )                                        |
+|                             |                                                     |         )                                          |
+|                             |                                                     |       )                                            |
+|                             |                                                     |     )                                              |
+|                             |                                                     |     (keyword                                       |
+|                             |                                                     |       GROUP                                        |
+|                             |                                                     |     )                                              |
+|                             |                                                     |   )                                                |
+|                             |                                                     |   (expression                                      |
+|                             |                                                     |     (relation                                      |
+|                             |                                                     |       (shift_expression                            |
+|                             |                                                     |         (simple_expression                         |
+|                             |                                                     |           (term                                    |
+|                             |                                                     |             (primary<v>                            |
+|                             |                                                     |               (literal<v>                          |
+|                             |                                                     |                 (string_literal                    |
+|                             |                                                     |                   74LS152                          |
+|                             |                                                     |                 )                                  |
+|                             |                                                     |               )                                    |
+|                             |                                                     |             )                                      |
+|                             |                                                     |           )                                        |
+|                             |                                                     |         )                                          |
+|                             |                                                     |       )                                            |
+|                             |                                                     |     )                                              |
+|                             |                                                     |   )                                                |
+|                             |                                                     | )                                                  |
+|                             |                                                     |                                                    |
++-----------------------------+-----------------------------------------------------+----------------------------------------------------+
+| attribute_specification_006 | attribute RISING_DELAY of C2Q: group is 7.2 ns;     | (attribute_specification                           |
+|                             |                                                     |   (identifier                                      |
+|                             |                                                     |     RISING_DELAY                                   |
+|                             |                                                     |   )                                                |
+|                             |                                                     |   (entity_specification                            |
+|                             |                                                     |     (entity_name_list<v>                           |
+|                             |                                                     |       (entity_designator                           |
+|                             |                                                     |         (entity_tag<v>                             |
+|                             |                                                     |           (identifier                              |
+|                             |                                                     |             C2Q                                    |
+|                             |                                                     |           )                                        |
+|                             |                                                     |         )                                          |
+|                             |                                                     |       )                                            |
+|                             |                                                     |     )                                              |
+|                             |                                                     |     (keyword                                       |
+|                             |                                                     |       GROUP                                        |
+|                             |                                                     |     )                                              |
+|                             |                                                     |   )                                                |
+|                             |                                                     |   (expression                                      |
+|                             |                                                     |     (relation                                      |
+|                             |                                                     |       (shift_expression                            |
+|                             |                                                     |         (simple_expression                         |
+|                             |                                                     |           (term                                    |
+|                             |                                                     |             (primary<v>                            |
+|                             |                                                     |               (literal<v>                          |
+|                             |                                                     |                 (numeric_literal<v>                |
+|                             |                                                     |                   (physical_literal                |
+|                             |                                                     |                     literal: (abstract_literal<v>  |
+|                             |                                                     |                       (decimal_literal             |
+|                             |                                                     |                         literal: 7.2, hint: double |
+|                             |                                                     |                       )                            |
+|                             |                                                     |                     ),                             |
+|                             |                                                     |                     unit: ns                       |
+|                             |                                                     |                   )                                |
+|                             |                                                     |                 )                                  |
+|                             |                                                     |               )                                    |
+|                             |                                                     |             )                                      |
+|                             |                                                     |           )                                        |
+|                             |                                                     |         )                                          |
+|                             |                                                     |       )                                            |
+|                             |                                                     |     )                                              |
+|                             |                                                     |   )                                                |
+|                             |                                                     | )                                                  |
+|                             |                                                     |                                                    |
++-----------------------------+-----------------------------------------------------+----------------------------------------------------+
 
 =============
 based_literal
@@ -2504,6 +2372,51 @@ element_declaration
 |                         |                                   | )                                              |
 |                         |                                   |                                                |
 +-------------------------+-----------------------------------+------------------------------------------------+
+
+=============
+entity_aspect
+=============
+
++-------------------+------------------------------------------------+-----------------------------+
+| File              | Input                                          | Expected                    |
++-------------------+------------------------------------------------+-----------------------------+
+| entity_aspect_001 | entity COUNTER                                 | (entity_aspect<v>           |
+|                   |                                                |   (name<v>                  |
+|                   |                                                |     (identifier             |
+|                   |                                                |       COUNTER               |
+|                   |                                                |     )                       |
+|                   |                                                |   )                         |
+|                   |                                                | )                           |
+|                   |                                                |                             |
++-------------------+------------------------------------------------+-----------------------------+
+| entity_aspect_002 | entity entity_name ( architecture_identifier ) | (entity_aspect<v>           |
+|                   |                                                |   (name<v>                  |
+|                   |                                                |     (identifier             |
+|                   |                                                |       entity_name           |
+|                   |                                                |     )                       |
+|                   |                                                |   )                         |
+|                   |                                                |   (identifier               |
+|                   |                                                |     architecture_identifier |
+|                   |                                                |   )                         |
+|                   |                                                | )                           |
+|                   |                                                |                             |
++-------------------+------------------------------------------------+-----------------------------+
+| entity_aspect_004 | configuration configuration_name               | (entity_aspect<v>           |
+|                   |                                                |   (name<v>                  |
+|                   |                                                |     (identifier             |
+|                   |                                                |       configuration_name    |
+|                   |                                                |     )                       |
+|                   |                                                |   )                         |
+|                   |                                                | )                           |
+|                   |                                                |                             |
++-------------------+------------------------------------------------+-----------------------------+
+| entity_aspect_005 | OPEN                                           | (entity_aspect<v>           |
+|                   |                                                |   (keyword                  |
+|                   |                                                |     OPEN                    |
+|                   |                                                |   )                         |
+|                   |                                                | )                           |
+|                   |                                                |                             |
++-------------------+------------------------------------------------+-----------------------------+
 
 ===========================
 enumeration_type_definition
@@ -4862,7 +4775,7 @@ full_type_declaration_failure
 +---------------------------+-------------------------------------------------------------------------+----------+
 | File                      | Input                                                                   | Expected |
 +---------------------------+-------------------------------------------------------------------------+----------+
-| full_type_declaration_003 | -- this parses successfully to range of physical_literal '32 down' TO 0 |          |
+| full_type_declaration_001 | -- this parses successfully to range of physical_literal '32 down' TO 0 |          |
 |                           | type WORD_INDEX is range 31 down to 0;                                  |          |
 |                           |                                                                         |          |
 +---------------------------+-------------------------------------------------------------------------+----------+
@@ -6694,6 +6607,178 @@ physical_type_definition
 |                              |                                                    | )                                         |
 |                              |                                                    |                                           |
 +------------------------------+----------------------------------------------------+-------------------------------------------+
+
+===============
+port_map_aspect
+===============
+
++---------------------+--------------------+-------------------------------+
+| File                | Input              | Expected                      |
++---------------------+--------------------+-------------------------------+
+| port_map_aspect_001 | port map (A, B)    | (port_map_aspect              |
+|                     |                    |   (association_list           |
+|                     |                    |     (association_element      |
+|                     |                    |       (actual_part<v>         |
+|                     |                    |         (actual_designator<v> |
+|                     |                    |           (name<v>            |
+|                     |                    |             (identifier       |
+|                     |                    |               A               |
+|                     |                    |             )                 |
+|                     |                    |           )                   |
+|                     |                    |         )                     |
+|                     |                    |       )                       |
+|                     |                    |     ),                        |
+|                     |                    |     (association_element      |
+|                     |                    |       (actual_part<v>         |
+|                     |                    |         (actual_designator<v> |
+|                     |                    |           (name<v>            |
+|                     |                    |             (identifier       |
+|                     |                    |               B               |
+|                     |                    |             )                 |
+|                     |                    |           )                   |
+|                     |                    |         )                     |
+|                     |                    |       )                       |
+|                     |                    |     )                         |
+|                     |                    |   )                           |
+|                     |                    | )                             |
+|                     |                    |                               |
++---------------------+--------------------+-------------------------------+
+| port_map_aspect_002 | port map (         | (port_map_aspect              |
+|                     |     B => Y,        |   (association_list           |
+|                     |     A => X,        |     (association_element      |
+|                     |     SUM => S,      |       (formal_part<v>         |
+|                     |     CARRY => open) |         (name<v>              |
+|                     |                    |           (identifier         |
+|                     |                    |             B                 |
+|                     |                    |           )                   |
+|                     |                    |         )                     |
+|                     |                    |       )                       |
+|                     |                    |       (actual_part<v>         |
+|                     |                    |         (actual_designator<v> |
+|                     |                    |           (name<v>            |
+|                     |                    |             (identifier       |
+|                     |                    |               Y               |
+|                     |                    |             )                 |
+|                     |                    |           )                   |
+|                     |                    |         )                     |
+|                     |                    |       )                       |
+|                     |                    |     ),                        |
+|                     |                    |     (association_element      |
+|                     |                    |       (formal_part<v>         |
+|                     |                    |         (name<v>              |
+|                     |                    |           (identifier         |
+|                     |                    |             A                 |
+|                     |                    |           )                   |
+|                     |                    |         )                     |
+|                     |                    |       )                       |
+|                     |                    |       (actual_part<v>         |
+|                     |                    |         (actual_designator<v> |
+|                     |                    |           (name<v>            |
+|                     |                    |             (identifier       |
+|                     |                    |               X               |
+|                     |                    |             )                 |
+|                     |                    |           )                   |
+|                     |                    |         )                     |
+|                     |                    |       )                       |
+|                     |                    |     ),                        |
+|                     |                    |     (association_element      |
+|                     |                    |       (formal_part<v>         |
+|                     |                    |         (name<v>              |
+|                     |                    |           (identifier         |
+|                     |                    |             SUM               |
+|                     |                    |           )                   |
+|                     |                    |         )                     |
+|                     |                    |       )                       |
+|                     |                    |       (actual_part<v>         |
+|                     |                    |         (actual_designator<v> |
+|                     |                    |           (name<v>            |
+|                     |                    |             (identifier       |
+|                     |                    |               S               |
+|                     |                    |             )                 |
+|                     |                    |           )                   |
+|                     |                    |         )                     |
+|                     |                    |       )                       |
+|                     |                    |     ),                        |
+|                     |                    |     (association_element      |
+|                     |                    |       (formal_part<v>         |
+|                     |                    |         (name<v>              |
+|                     |                    |           (identifier         |
+|                     |                    |             CARRY             |
+|                     |                    |           )                   |
+|                     |                    |         )                     |
+|                     |                    |       )                       |
+|                     |                    |       (actual_part<v>         |
+|                     |                    |         (actual_designator<v> |
+|                     |                    |           (keyword            |
+|                     |                    |             OPEN              |
+|                     |                    |           )                   |
+|                     |                    |         )                     |
+|                     |                    |       )                       |
+|                     |                    |     )                         |
+|                     |                    |   )                           |
+|                     |                    | )                             |
+|                     |                    |                               |
++---------------------+--------------------+-------------------------------+
+| port_map_aspect_003 | port map (         | (port_map_aspect              |
+|                     |     a    => x,     |   (association_list           |
+|                     |     b    => y,     |     (association_element      |
+|                     |     out_ => z)     |       (formal_part<v>         |
+|                     |                    |         (name<v>              |
+|                     |                    |           (identifier         |
+|                     |                    |             a                 |
+|                     |                    |           )                   |
+|                     |                    |         )                     |
+|                     |                    |       )                       |
+|                     |                    |       (actual_part<v>         |
+|                     |                    |         (actual_designator<v> |
+|                     |                    |           (name<v>            |
+|                     |                    |             (identifier       |
+|                     |                    |               x               |
+|                     |                    |             )                 |
+|                     |                    |           )                   |
+|                     |                    |         )                     |
+|                     |                    |       )                       |
+|                     |                    |     ),                        |
+|                     |                    |     (association_element      |
+|                     |                    |       (formal_part<v>         |
+|                     |                    |         (name<v>              |
+|                     |                    |           (identifier         |
+|                     |                    |             b                 |
+|                     |                    |           )                   |
+|                     |                    |         )                     |
+|                     |                    |       )                       |
+|                     |                    |       (actual_part<v>         |
+|                     |                    |         (actual_designator<v> |
+|                     |                    |           (name<v>            |
+|                     |                    |             (identifier       |
+|                     |                    |               y               |
+|                     |                    |             )                 |
+|                     |                    |           )                   |
+|                     |                    |         )                     |
+|                     |                    |       )                       |
+|                     |                    |     ),                        |
+|                     |                    |     (association_element      |
+|                     |                    |       (formal_part<v>         |
+|                     |                    |         (name<v>              |
+|                     |                    |           (identifier         |
+|                     |                    |             out_              |
+|                     |                    |           )                   |
+|                     |                    |         )                     |
+|                     |                    |       )                       |
+|                     |                    |       (actual_part<v>         |
+|                     |                    |         (actual_designator<v> |
+|                     |                    |           (name<v>            |
+|                     |                    |             (identifier       |
+|                     |                    |               z               |
+|                     |                    |             )                 |
+|                     |                    |           )                   |
+|                     |                    |         )                     |
+|                     |                    |       )                       |
+|                     |                    |     )                         |
+|                     |                    |   )                           |
+|                     |                    | )                             |
+|                     |                    |                               |
++---------------------+--------------------+-------------------------------+
 
 =======
 primary
