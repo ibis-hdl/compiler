@@ -20,13 +20,10 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-struct signature_parameter_type_list : std::vector<ast::type_mark> { };
-
-
 struct signature : position_tagged
 {
-    optional<signature_parameter_type_list>         parameter_type_list;
-    optional<ast::type_mark>                        return_type;
+    std::vector<ast::type_mark>         parameter_type_list;
+    optional<ast::type_mark>            return_type;
 };
 
 

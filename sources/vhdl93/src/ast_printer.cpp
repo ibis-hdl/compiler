@@ -2053,22 +2053,17 @@ void printer::operator()(signature const &node)
     static char const symbol[]{ "signature" };
     symbol_scope<signature> _(*this, symbol);
 
-    if(node.parameter_type_list) {
-        static char const symbol[]{ "signature.parameter_type(s)" };
-        symbol_scope<signature> _(*this, symbol);
-
-        auto const N = (*node.parameter_type_list).size() - 1;
-        unsigned i = 0;
-        for(auto const& type_mark : *node.parameter_type_list) {
-            (*this)(type_mark);
-            if(i++ != N) {
-                os << ",\n";
-            }
+    auto const N = node.parameter_type_list.size() - 1;
+    unsigned i = 0;
+    for(auto const& type_mark : node.parameter_type_list) {
+        (*this)(type_mark);
+        if(i++ != N) {
+            os << ",\n";
         }
     }
 
     if(node.return_type) {
-        if(node.parameter_type_list) { os << "\n"; }
+        if(node.parameter_type_list.size() != 0) { os << "\n"; }
 
         static char const symbol[]{ "signature.return_type" };
         symbol_scope<signature> _(*this, symbol);

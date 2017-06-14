@@ -7,16 +7,14 @@
     )
   )
   (signature
-    (signature.parameter_type(s)
-      (name<v>
-        (identifier
-          A
-        )
-      ),
-      (name<v>
-        (identifier
-          B
-        )
+    (name<v>
+      (identifier
+        A
+      )
+    ),
+    (name<v>
+      (identifier
+        B
       )
     )
     (signature.return_type

@@ -2425,9 +2425,9 @@ auto const entity_specification_def =
 //     | passive_process_statement
 auto const entity_statement_def =
       concurrent_assertion_statement
-	| passive_concurrent_procedure_call_statement
-	| passive_process_statement
-	;
+    | passive_concurrent_procedure_call_statement
+    | passive_process_statement
+    ;
 #endif
 
 #if 0
@@ -3785,14 +3785,9 @@ auto const signal_list_def =
 
 // signature ::=                                                       [§ 2.3.2]
 //     [ [ type_mark { , type_mark } ] [ return type_mark ] ]
-namespace signature_detail {
-    auto const parameter_list = x3::rule<struct parameter_class, ast::signature_parameter_type_list> { "signature_type_mark_list" } =
-        (type_mark % ',')
-        ;
-}
 auto const signature_def =
        '['
-    >> -signature_detail::parameter_list // FixMe: to complicated with optional<vector<>>
+    >> -(type_mark % ',')
     >> -(
           RETURN
        >> type_mark
@@ -3923,7 +3918,7 @@ auto const subprogram_declarative_part_def =
 // subprogram_kind ::=                                                   [§ 2.2]
 //     procedure | function
 auto const subprogram_kind_def =
-    PROCEDURE | FUNCTION  
+    PROCEDURE | FUNCTION
     ;
 #endif
 
