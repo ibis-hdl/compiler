@@ -1,0 +1,7 @@
+(type_declaration<v>
+  (name<v>
+    (identifier
+      STRING
+    )
+  )
+)

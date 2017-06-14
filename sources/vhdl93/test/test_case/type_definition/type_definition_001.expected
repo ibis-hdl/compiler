@@ -1,0 +1,16 @@
+(type_declaration<v>
+  (scalar_type_definition<v>
+    (enumeration_type_definition
+      (enumeration_literal<v>
+        (identifier
+          L
+        )
+      ),
+      (enumeration_literal<v>
+        (identifier
+          H
+        )
+      )
+    )
+  )
+)

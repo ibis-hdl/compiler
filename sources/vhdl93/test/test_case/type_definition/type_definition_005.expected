@@ -1,0 +1,22 @@
+(type_declaration<v>
+  (composite_type_definition<v>
+    (array_type_definition<v>
+      (unconstrained_array_definition
+        (index_subtype_definition
+          (name<v>
+            (identifier
+              POSITIVE
+            )
+          )
+        )
+        (subtype_indication
+          (name<v>
+            (identifier
+              Real
+            )
+          )
+        )
+      )
+    )
+  )
+)

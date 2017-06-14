@@ -9571,6 +9571,284 @@ term
 |            |                   |                                    |
 +------------+-------------------+------------------------------------+
 
+===============
+type_conversion
+===============
+
++---------------------+-------------------+----------------------------------------------------+
+| File                | Input             | Expected                                           |
++---------------------+-------------------+----------------------------------------------------+
+| type_conversion_001 | Integer ( 74.94 ) | (type_conversion                                   |
+|                     |                   |   (name<v>                                         |
+|                     |                   |     (identifier                                    |
+|                     |                   |       Integer                                      |
+|                     |                   |     )                                              |
+|                     |                   |   )                                                |
+|                     |                   |   (expression                                      |
+|                     |                   |     (relation                                      |
+|                     |                   |       (shift_expression                            |
+|                     |                   |         (simple_expression                         |
+|                     |                   |           (term                                    |
+|                     |                   |             (primary<v>                            |
+|                     |                   |               (literal<v>                          |
+|                     |                   |                 (numeric_literal<v>                |
+|                     |                   |                   (abstract_literal<v>             |
+|                     |                   |                     (decimal_literal               |
+|                     |                   |                       literal: 74.94, hint: double |
+|                     |                   |                     )                              |
+|                     |                   |                   )                                |
+|                     |                   |                 )                                  |
+|                     |                   |               )                                    |
+|                     |                   |             )                                      |
+|                     |                   |           )                                        |
+|                     |                   |         )                                          |
+|                     |                   |       )                                            |
+|                     |                   |     )                                              |
+|                     |                   |   )                                                |
+|                     |                   | )                                                  |
+|                     |                   |                                                    |
++---------------------+-------------------+----------------------------------------------------+
+
+===============
+type_definition
+===============
+
++---------------------+-----------------------------------+------------------------------------------------+
+| File                | Input                             | Expected                                       |
++---------------------+-----------------------------------+------------------------------------------------+
+| type_definition_001 | -- type MyBit is                  | (type_declaration<v>                           |
+|                     | (L, H)                            |   (scalar_type_definition<v>                   |
+|                     |                                   |     (enumeration_type_definition               |
+|                     |                                   |       (enumeration_literal<v>                  |
+|                     |                                   |         (identifier                            |
+|                     |                                   |           L                                    |
+|                     |                                   |         )                                      |
+|                     |                                   |       ),                                       |
+|                     |                                   |       (enumeration_literal<v>                  |
+|                     |                                   |         (identifier                            |
+|                     |                                   |           H                                    |
+|                     |                                   |         )                                      |
+|                     |                                   |       )                                        |
+|                     |                                   |     )                                          |
+|                     |                                   |   )                                            |
+|                     |                                   | )                                              |
+|                     |                                   |                                                |
++---------------------+-----------------------------------+------------------------------------------------+
+| type_definition_002 | -- type WORD is                   | (type_declaration<v>                           |
+|                     | range 31 downto 0                 |   (scalar_type_definition<v>                   |
+|                     |                                   |     (range<v>                                  |
+|                     |                                   |       (simple_expression                       |
+|                     |                                   |         (term                                  |
+|                     |                                   |           (primary<v>                          |
+|                     |                                   |             (literal<v>                        |
+|                     |                                   |               (numeric_literal<v>              |
+|                     |                                   |                 (abstract_literal<v>           |
+|                     |                                   |                   (decimal_literal             |
+|                     |                                   |                     literal: 31, hint: int     |
+|                     |                                   |                   )                            |
+|                     |                                   |                 )                              |
+|                     |                                   |               )                                |
+|                     |                                   |             )                                  |
+|                     |                                   |           )                                    |
+|                     |                                   |         )                                      |
+|                     |                                   |       )                                        |
+|                     |                                   |       (keyword                                 |
+|                     |                                   |         DOWNTO                                 |
+|                     |                                   |       )                                        |
+|                     |                                   |       (simple_expression                       |
+|                     |                                   |         (term                                  |
+|                     |                                   |           (primary<v>                          |
+|                     |                                   |             (literal<v>                        |
+|                     |                                   |               (numeric_literal<v>              |
+|                     |                                   |                 (abstract_literal<v>           |
+|                     |                                   |                   (decimal_literal             |
+|                     |                                   |                     literal: 0, hint: int      |
+|                     |                                   |                   )                            |
+|                     |                                   |                 )                              |
+|                     |                                   |               )                                |
+|                     |                                   |             )                                  |
+|                     |                                   |           )                                    |
+|                     |                                   |         )                                      |
+|                     |                                   |       )                                        |
+|                     |                                   |     )                                          |
+|                     |                                   |   )                                            |
+|                     |                                   | )                                              |
+|                     |                                   |                                                |
++---------------------+-----------------------------------+------------------------------------------------+
+| type_definition_003 | -- type Voltage_Level is          | (type_declaration<v>                           |
+|                     | range -5.5 to +5.5                |   (scalar_type_definition<v>                   |
+|                     |                                   |     (range<v>                                  |
+|                     |                                   |       (simple_expression                       |
+|                     |                                   |         sign: SIGN_NEG,                        |
+|                     |                                   |         (term                                  |
+|                     |                                   |           (primary<v>                          |
+|                     |                                   |             (literal<v>                        |
+|                     |                                   |               (numeric_literal<v>              |
+|                     |                                   |                 (abstract_literal<v>           |
+|                     |                                   |                   (decimal_literal             |
+|                     |                                   |                     literal: 5.5, hint: double |
+|                     |                                   |                   )                            |
+|                     |                                   |                 )                              |
+|                     |                                   |               )                                |
+|                     |                                   |             )                                  |
+|                     |                                   |           )                                    |
+|                     |                                   |         )                                      |
+|                     |                                   |       )                                        |
+|                     |                                   |       (keyword                                 |
+|                     |                                   |         TO                                     |
+|                     |                                   |       )                                        |
+|                     |                                   |       (simple_expression                       |
+|                     |                                   |         sign: SIGN_POS,                        |
+|                     |                                   |         (term                                  |
+|                     |                                   |           (primary<v>                          |
+|                     |                                   |             (literal<v>                        |
+|                     |                                   |               (numeric_literal<v>              |
+|                     |                                   |                 (abstract_literal<v>           |
+|                     |                                   |                   (decimal_literal             |
+|                     |                                   |                     literal: 5.5, hint: double |
+|                     |                                   |                   )                            |
+|                     |                                   |                 )                              |
+|                     |                                   |               )                                |
+|                     |                                   |             )                                  |
+|                     |                                   |           )                                    |
+|                     |                                   |         )                                      |
+|                     |                                   |       )                                        |
+|                     |                                   |     )                                          |
+|                     |                                   |   )                                            |
+|                     |                                   | )                                              |
+|                     |                                   |                                                |
++---------------------+-----------------------------------+------------------------------------------------+
+| type_definition_004 | -- type CAPACITY is               | (type_declaration<v>                           |
+|                     | range 0 to 1E5                    |   (scalar_type_definition<v>                   |
+|                     | units                             |     (physical_type_definition                  |
+|                     |     pF;                           |       (range<v>                                |
+|                     |     nF = 1000 pF;                 |         (simple_expression                     |
+|                     |     -- ...                        |           (term                                |
+|                     | end units CAPACITY                |             (primary<v>                        |
+|                     |                                   |               (literal<v>                      |
+|                     |                                   |                 (numeric_literal<v>            |
+|                     |                                   |                   (abstract_literal<v>         |
+|                     |                                   |                     (decimal_literal           |
+|                     |                                   |                       literal: 0, hint: int    |
+|                     |                                   |                     )                          |
+|                     |                                   |                   )                            |
+|                     |                                   |                 )                              |
+|                     |                                   |               )                                |
+|                     |                                   |             )                                  |
+|                     |                                   |           )                                    |
+|                     |                                   |         )                                      |
+|                     |                                   |         (keyword                               |
+|                     |                                   |           TO                                   |
+|                     |                                   |         )                                      |
+|                     |                                   |         (simple_expression                     |
+|                     |                                   |           (term                                |
+|                     |                                   |             (primary<v>                        |
+|                     |                                   |               (literal<v>                      |
+|                     |                                   |                 (numeric_literal<v>            |
+|                     |                                   |                   (abstract_literal<v>         |
+|                     |                                   |                     (decimal_literal           |
+|                     |                                   |                       literal: 1E5, hint: int  |
+|                     |                                   |                     )                          |
+|                     |                                   |                   )                            |
+|                     |                                   |                 )                              |
+|                     |                                   |               )                                |
+|                     |                                   |             )                                  |
+|                     |                                   |           )                                    |
+|                     |                                   |         )                                      |
+|                     |                                   |       )                                        |
+|                     |                                   |       (identifier                              |
+|                     |                                   |         pF                                     |
+|                     |                                   |       )                                        |
+|                     |                                   |       (secondary_unit_declaration              |
+|                     |                                   |         (identifier                            |
+|                     |                                   |           nF                                   |
+|                     |                                   |         )                                      |
+|                     |                                   |         (physical_literal                      |
+|                     |                                   |           literal: (abstract_literal<v>        |
+|                     |                                   |             (decimal_literal                   |
+|                     |                                   |               literal: 1000, hint: int         |
+|                     |                                   |             )                                  |
+|                     |                                   |           ),                                   |
+|                     |                                   |           unit: pF                             |
+|                     |                                   |         )                                      |
+|                     |                                   |       )                                        |
+|                     |                                   |       (identifier                              |
+|                     |                                   |         CAPACITY                               |
+|                     |                                   |       )                                        |
+|                     |                                   |     )                                          |
+|                     |                                   |   )                                            |
+|                     |                                   | )                                              |
+|                     |                                   |                                                |
++---------------------+-----------------------------------+------------------------------------------------+
+| type_definition_005 | array (POSITIVE range <>) of Real | (type_declaration<v>                           |
+|                     |                                   |   (composite_type_definition<v>                |
+|                     |                                   |     (array_type_definition<v>                  |
+|                     |                                   |       (unconstrained_array_definition          |
+|                     |                                   |         (index_subtype_definition              |
+|                     |                                   |           (name<v>                             |
+|                     |                                   |             (identifier                        |
+|                     |                                   |               POSITIVE                         |
+|                     |                                   |             )                                  |
+|                     |                                   |           )                                    |
+|                     |                                   |         )                                      |
+|                     |                                   |         (subtype_indication                    |
+|                     |                                   |           (name<v>                             |
+|                     |                                   |             (identifier                        |
+|                     |                                   |               Real                             |
+|                     |                                   |             )                                  |
+|                     |                                   |           )                                    |
+|                     |                                   |         )                                      |
+|                     |                                   |       )                                        |
+|                     |                                   |     )                                          |
+|                     |                                   |   )                                            |
+|                     |                                   | )                                              |
+|                     |                                   |                                                |
++---------------------+-----------------------------------+------------------------------------------------+
+| type_definition_006 | record                            | (type_declaration<v>                           |
+|                     |     dummy : string;               |   (composite_type_definition<v>                |
+|                     | end record                        |     (record_type_definition                    |
+|                     |                                   |       (element_declaration                     |
+|                     |                                   |         (identifier_list                       |
+|                     |                                   |           (identifier                          |
+|                     |                                   |             dummy                              |
+|                     |                                   |           )                                    |
+|                     |                                   |         )                                      |
+|                     |                                   |         (subtype_indication                    |
+|                     |                                   |           (name<v>                             |
+|                     |                                   |             (identifier                        |
+|                     |                                   |               string                           |
+|                     |                                   |             )                                  |
+|                     |                                   |           )                                    |
+|                     |                                   |         )                                      |
+|                     |                                   |       )                                        |
+|                     |                                   |     )                                          |
+|                     |                                   |   )                                            |
+|                     |                                   | )                                              |
+|                     |                                   |                                                |
++---------------------+-----------------------------------+------------------------------------------------+
+| type_definition_007 | access foo                        | (type_declaration<v>                           |
+|                     |                                   |   (access_type_definition                      |
+|                     |                                   |     (subtype_indication                        |
+|                     |                                   |       (name<v>                                 |
+|                     |                                   |         (identifier                            |
+|                     |                                   |           foo                                  |
+|                     |                                   |         )                                      |
+|                     |                                   |       )                                        |
+|                     |                                   |     )                                          |
+|                     |                                   |   )                                            |
+|                     |                                   | )                                              |
+|                     |                                   |                                                |
++---------------------+-----------------------------------+------------------------------------------------+
+| type_definition_008 | -- type STRING_FILE is            | (type_declaration<v>                           |
+|                     | file of STRING                    |   (name<v>                                     |
+|                     |                                   |     (identifier                                |
+|                     |                                   |       STRING                                   |
+|                     |                                   |     )                                          |
+|                     |                                   |   )                                            |
+|                     |                                   | )                                              |
+|                     |                                   |                                                |
++---------------------+-----------------------------------+------------------------------------------------+
+
 ==============================
 unconstrained_array_definition
 ==============================

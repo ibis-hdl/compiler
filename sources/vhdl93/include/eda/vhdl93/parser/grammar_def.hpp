@@ -628,7 +628,7 @@ struct file_declaration_class;
 struct file_logical_name_class;
 struct file_open_information_class;
 struct file_type_definition_class;
-struct floating_type_definition_class;
+//struct floating_type_definition_class;
 struct formal_designator_class;
 struct formal_parameter_list_class;
 struct formal_part_class;
@@ -656,7 +656,7 @@ struct indexed_name_class;
 struct instantiated_unit_class;
 struct instantiation_list_class;
 struct integer_class;
-struct integer_type_definition_class;
+//struct integer_type_definition_class;
 struct interface_constant_declaration_class;
 struct interface_declaration_class;
 struct interface_element_class;
@@ -858,7 +858,7 @@ typedef x3::rule<file_declaration_class, ast::file_declaration> file_declaration
 typedef x3::rule<file_logical_name_class, ast::file_logical_name> file_logical_name_type;
 typedef x3::rule<file_open_information_class, ast::file_open_information> file_open_information_type;
 typedef x3::rule<file_type_definition_class, ast::file_type_definition> file_type_definition_type;
-typedef x3::rule<floating_type_definition_class, ast::floating_type_definition> floating_type_definition_type;
+//typedef x3::rule<floating_type_definition_class, ast::floating_type_definition> floating_type_definition_type;
 typedef x3::rule<formal_designator_class, ast::formal_designator> formal_designator_type;
 typedef x3::rule<formal_parameter_list_class, ast::formal_parameter_list> formal_parameter_list_type;
 typedef x3::rule<formal_part_class, ast::formal_part> formal_part_type;
@@ -886,7 +886,7 @@ typedef x3::rule<indexed_name_class, ast::indexed_name> indexed_name_type;
 typedef x3::rule<instantiated_unit_class> instantiated_unit_type;
 typedef x3::rule<instantiation_list_class> instantiation_list_type;
 typedef x3::rule<integer_class, std::string_view> integer_type;
-typedef x3::rule<integer_type_definition_class, ast::integer_type_definition> integer_type_definition_type;
+//typedef x3::rule<integer_type_definition_class, ast::integer_type_definition> integer_type_definition_type;
 typedef x3::rule<interface_constant_declaration_class, ast::interface_constant_declaration> interface_constant_declaration_type;
 typedef x3::rule<interface_declaration_class, ast::interface_declaration> interface_declaration_type;
 typedef x3::rule<interface_element_class, ast::interface_declaration> interface_element_type;
@@ -1088,7 +1088,7 @@ file_declaration_type const file_declaration { "file_declaration" };
 file_logical_name_type const file_logical_name { "file_logical_name" };
 file_open_information_type const file_open_information { "file_open_information" };
 file_type_definition_type const file_type_definition { "file_type_definition" };
-floating_type_definition_type const floating_type_definition { "floating_type_definition" };
+//floating_type_definition_type const floating_type_definition { "floating_type_definition" };
 formal_designator_type const formal_designator { "formal_designator" };
 formal_parameter_list_type const formal_parameter_list { "formal_parameter_list" };
 formal_part_type const formal_part { "formal_part" };
@@ -1116,7 +1116,7 @@ indexed_name_type const indexed_name { "indexed_name" };
 instantiated_unit_type const instantiated_unit { "instantiated_unit" };
 instantiation_list_type const instantiation_list { "instantiation_list" };
 integer_type const integer { "integer" };
-integer_type_definition_type const integer_type_definition { "integer_type_definition" };
+//integer_type_definition_type const integer_type_definition { "integer_type_definition" };
 interface_constant_declaration_type const interface_constant_declaration { "interface_constant_declaration" };
 interface_declaration_type const interface_declaration { "interface_declaration" };
 interface_element_type const interface_element { "interface_element" };
@@ -2616,12 +2616,13 @@ auto const file_type_definition_def =
     ;
 
 
-
+#if 0 // DISABLED; embedded into scalar_type_definition
 // floating_type_definition ::=                                        [§ 3.1.4]
 //     range_constraint
 auto const floating_type_definition_def =
     range_constraint
     ;
+#endif
 
 
 // formal_designator ::=                                             [§ 4.3.2.2]
@@ -2905,13 +2906,13 @@ auto const integer_def =
     ;
 
 
-
+#if 0 // DISABLED, embedded into scalar_type_definition
 // integer_type_definition ::=                                         [§ 3.1.2]
 //     range_constraint
 auto const integer_type_definition_def =
     range_constraint
     ;
-
+#endif
 
 
 // interface_constant_declaration ::=                                  [§ 4.3.2]
@@ -3600,8 +3601,7 @@ auto const return_statement_def =
 auto const scalar_type_definition_def = /* Note, order changed since matters */
       physical_type_definition
     | enumeration_type_definition
-    | integer_type_definition   // FixMe: {integer|float} -> range_constraint
-    | floating_type_definition
+    | range_constraint              // {integer,floating}_type_definition
     ;
 
 
@@ -4334,7 +4334,7 @@ BOOST_SPIRIT_DEFINE(  // -- F --
     , file_logical_name
     , file_open_information
     , file_type_definition
-    , floating_type_definition
+    //EMBEDDED, floating_type_definition
     , formal_designator
     , formal_parameter_list
     , formal_part
@@ -4365,7 +4365,7 @@ BOOST_SPIRIT_DEFINE(  // -- I --
     //, instantiated_unit
     //, instantiation_list
     , integer
-    , integer_type_definition
+    // EMBEDDED, integer_type_definition
     , interface_constant_declaration
     , interface_declaration
     , interface_element

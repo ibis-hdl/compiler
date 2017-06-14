@@ -17,6 +17,14 @@
 #include "testing_parser.hpp"
 #include "generate_data_test_case.hpp"
 
+namespace eda { namespace vhdl93 { namespace ast {
+
+    using integer_type_definition = ast::range_constraint;
+    using floating_type_definition = ast::range_constraint;
+
+} } } // namespace eda.vhdl93.ast
+
+
 
 BOOST_AUTO_TEST_SUITE( parser_type )
 
@@ -31,8 +39,8 @@ GENERATE_DATASET_TEST_CASE(record_type_definition)
 
 // scalar_type_definition
 GENERATE_DATASET_TEST_CASE(enumeration_type_definition)
-GENERATE_DATASET_TEST_CASE(integer_type_definition)
-GENERATE_DATASET_TEST_CASE(floating_type_definition)
+GENERATE_DATASET_TEST_CASE_RULE(integer_type_definition, range_constraint)
+GENERATE_DATASET_TEST_CASE_RULE(floating_type_definition, range_constraint)
 GENERATE_DATASET_TEST_CASE(primary_unit_declaration)    // physical_type_definition
 GENERATE_DATASET_TEST_CASE(secondary_unit_declaration)  // physical_type_definition
 GENERATE_DATASET_TEST_CASE(physical_type_definition)

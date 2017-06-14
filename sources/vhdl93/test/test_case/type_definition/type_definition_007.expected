@@ -1,0 +1,11 @@
+(type_declaration<v>
+  (access_type_definition
+    (subtype_indication
+      (name<v>
+        (identifier
+          foo
+        )
+      )
+    )
+  )
+)

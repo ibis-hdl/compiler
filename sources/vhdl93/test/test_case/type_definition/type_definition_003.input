@@ -1,0 +1,2 @@
+-- type Voltage_Level is 
+range -5.5 to +5.5

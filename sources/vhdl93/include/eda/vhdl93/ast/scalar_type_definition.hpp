@@ -13,8 +13,7 @@
 
 #include <eda/vhdl93/ast/nullary.hpp>
 #include <eda/vhdl93/ast/enumeration_type_definition.hpp>
-#include <eda/vhdl93/ast/integer_type_definition.hpp>
-#include <eda/vhdl93/ast/floating_type_definition.hpp>
+#include <eda/vhdl93/ast/range_constraint.hpp>
 #include <eda/vhdl93/ast/physical_type_definition.hpp>
 
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
@@ -23,11 +22,14 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
+//using integer_type_definition = ast::range_constraint;
+//using floating_type_definition = ast::range_constraint;
+
+
 using scalar_type_definition = x3::variant<
     ast::nullary,
     ast::enumeration_type_definition,
-    ast::integer_type_definition,
-    ast::floating_type_definition,
+    ast::range_constraint, // {integer,floating}_type_definition
     ast::physical_type_definition
 >;
 

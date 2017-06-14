@@ -144,11 +144,35 @@ BOOST_DATA_TEST_CASE( GENERATE_DATASET_TEST_CASE_NAME(test_case),              \
 /* --- */
 
 
+// generate the BOOST_DATA_TEST_CASE body part with the dataset
+#define GENERATE_DATASET_TEST_CASE_BODY_RULE(test_case, parser_rule)           \
+{                                                                              \
+    using btt_per_element = boost::test_tools::per_element;                    \
+    using x3_test::testing_parser;                                             \
+    typedef ATTRIBUTE_TYPE(test_case) attribute_type;                          \
+    boost::ignore_unused(file);                                                \
+    testing_parser<attribute_type> parse;                                      \
+    auto [parse_ok, parse_result] = parse(input, RULE_NAME(parser_rule));      \
+    BOOST_TEST(parse_ok);                                                      \
+    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");                 \
+    BOOST_TEST(parse_result == expect, btt_per_element());                     \
+}                                                                              \
+/* --- */
+
+
 // the final macro to generate the boilerplate
 #define GENERATE_DATASET_TEST_CASE(test_case)                                  \
 GENERATE_DATASET(test_case)                                                    \
 GENERATE_DATASET_TEST_CASE_HEADER(test_case)                                   \
 GENERATE_DATASET_TEST_CASE_BODY(test_case)                                     \
+/* --- */
+
+
+// the final macro to generate the boilerplate
+#define GENERATE_DATASET_TEST_CASE_RULE(test_case, parser_rule)                \
+GENERATE_DATASET(test_case)                                                    \
+GENERATE_DATASET_TEST_CASE_HEADER(test_case)                                   \
+GENERATE_DATASET_TEST_CASE_BODY_RULE(test_case, parser_rule)                   \
 /* --- */
 
 
