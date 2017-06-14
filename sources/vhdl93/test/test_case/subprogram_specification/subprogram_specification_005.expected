@@ -1,0 +1,37 @@
+(subprogram_specification<v>
+  PURE FUNCTION
+  (designator<v>
+    (identifier
+      Func_1
+    )
+  )
+  (interface_list
+    (interface_declaration<v>
+      (interface_constant_declaration
+        (identifier_list
+          (identifier
+            A
+          ),
+          (identifier
+            B
+          ),
+          (identifier
+            X
+          )
+        )
+        (subtype_indication
+          (name<v>
+            (identifier
+              REAL
+            )
+          )
+        )
+      )
+    )
+  )
+  (name<v>
+    (identifier
+      REAL
+    )
+  )
+)

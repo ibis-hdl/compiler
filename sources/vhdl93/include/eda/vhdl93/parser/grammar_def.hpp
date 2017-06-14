@@ -888,7 +888,7 @@ typedef x3::rule<instantiation_list_class> instantiation_list_type;
 typedef x3::rule<integer_class, std::string_view> integer_type;
 typedef x3::rule<integer_type_definition_class, ast::integer_type_definition> integer_type_definition_type;
 typedef x3::rule<interface_constant_declaration_class, ast::interface_constant_declaration> interface_constant_declaration_type;
-typedef x3::rule<interface_declaration_class> interface_declaration_type;
+typedef x3::rule<interface_declaration_class, ast::interface_declaration> interface_declaration_type;
 typedef x3::rule<interface_element_class, ast::interface_declaration> interface_element_type;
 typedef x3::rule<interface_file_declaration_class, ast::interface_file_declaration> interface_file_declaration_type;
 typedef x3::rule<interface_list_class, ast::interface_list> interface_list_type;

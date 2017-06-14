@@ -1,0 +1,31 @@
+(subprogram_specification<v>
+  IMPURE FUNCTION
+  (designator<v>
+    (identifier
+      End_Of_File
+    )
+  )
+  (interface_list
+    (interface_declaration<v>
+      (interface_file_declaration
+        (identifier_list
+          (identifier
+            File_name
+          )
+        )
+        (subtype_indication
+          (name<v>
+            (identifier
+              Int_Data
+            )
+          )
+        )
+      )
+    )
+  )
+  (name<v>
+    (identifier
+      BOOLEAN
+    )
+  )
+)

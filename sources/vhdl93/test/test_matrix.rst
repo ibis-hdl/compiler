@@ -8982,6 +8982,255 @@ string_literal
 |                    |                                                                  |                                                                  |
 +--------------------+------------------------------------------------------------------+------------------------------------------------------------------+
 
+========================
+subprogram_specification
+========================
+
++------------------------------+-----------------------------------------------------------------------+-------------------------------------------------------+
+| File                         | Input                                                                 | Expected                                              |
++------------------------------+-----------------------------------------------------------------------+-------------------------------------------------------+
+| subprogram_specification_001 | procedure designator                                                  | (subprogram_specification<v>                          |
+|                              |                                                                       |   PROCEDURE                                           |
+|                              |                                                                       |   (designator<v>                                      |
+|                              |                                                                       |     (identifier                                       |
+|                              |                                                                       |       designator                                      |
+|                              |                                                                       |     )                                                 |
+|                              |                                                                       |   )                                                   |
+|                              |                                                                       | )                                                     |
+|                              |                                                                       |                                                       |
++------------------------------+-----------------------------------------------------------------------+-------------------------------------------------------+
+| subprogram_specification_002 | procedure Procedure_1 (variable X, Y: inout Real)                     | (subprogram_specification<v>                          |
+|                              |                                                                       |   PROCEDURE                                           |
+|                              |                                                                       |   (designator<v>                                      |
+|                              |                                                                       |     (identifier                                       |
+|                              |                                                                       |       Procedure_1                                     |
+|                              |                                                                       |     )                                                 |
+|                              |                                                                       |   )                                                   |
+|                              |                                                                       |   (interface_list                                     |
+|                              |                                                                       |     (interface_declaration<v>                         |
+|                              |                                                                       |       (interface_variable_declaration                 |
+|                              |                                                                       |         (VARIABLE)                                    |
+|                              |                                                                       |         (identifier_list                              |
+|                              |                                                                       |           (identifier                                 |
+|                              |                                                                       |             X                                         |
+|                              |                                                                       |           ),                                          |
+|                              |                                                                       |           (identifier                                 |
+|                              |                                                                       |             Y                                         |
+|                              |                                                                       |           )                                           |
+|                              |                                                                       |         )                                             |
+|                              |                                                                       |         (keyword                                      |
+|                              |                                                                       |           INOUT                                       |
+|                              |                                                                       |         )                                             |
+|                              |                                                                       |         (subtype_indication                           |
+|                              |                                                                       |           (name<v>                                    |
+|                              |                                                                       |             (identifier                               |
+|                              |                                                                       |               Real                                    |
+|                              |                                                                       |             )                                         |
+|                              |                                                                       |           )                                           |
+|                              |                                                                       |         )                                             |
+|                              |                                                                       |       )                                               |
+|                              |                                                                       |     )                                                 |
+|                              |                                                                       |   )                                                   |
+|                              |                                                                       | )                                                     |
+|                              |                                                                       |                                                       |
++------------------------------+-----------------------------------------------------------------------+-------------------------------------------------------+
+| subprogram_specification_003 | procedure Transcoder_1 (variable Value: inout bit_vector (0 to 7))    | (subprogram_specification<v>                          |
+|                              |                                                                       |   PROCEDURE                                           |
+|                              |                                                                       |   (designator<v>                                      |
+|                              |                                                                       |     (identifier                                       |
+|                              |                                                                       |       Transcoder_1                                    |
+|                              |                                                                       |     )                                                 |
+|                              |                                                                       |   )                                                   |
+|                              |                                                                       |   (interface_list                                     |
+|                              |                                                                       |     (interface_declaration<v>                         |
+|                              |                                                                       |       (interface_variable_declaration                 |
+|                              |                                                                       |         (VARIABLE)                                    |
+|                              |                                                                       |         (identifier_list                              |
+|                              |                                                                       |           (identifier                                 |
+|                              |                                                                       |             Value                                     |
+|                              |                                                                       |           )                                           |
+|                              |                                                                       |         )                                             |
+|                              |                                                                       |         (keyword                                      |
+|                              |                                                                       |           INOUT                                       |
+|                              |                                                                       |         )                                             |
+|                              |                                                                       |         (subtype_indication                           |
+|                              |                                                                       |           (name<v>                                    |
+|                              |                                                                       |             (identifier                               |
+|                              |                                                                       |               bit_vector                              |
+|                              |                                                                       |             )                                         |
+|                              |                                                                       |           )                                           |
+|                              |                                                                       |           (constraint<v>                              |
+|                              |                                                                       |             (index_constraint                         |
+|                              |                                                                       |               (discrete_range<v>                      |
+|                              |                                                                       |                 (range<v>                             |
+|                              |                                                                       |                   (simple_expression                  |
+|                              |                                                                       |                     (term                             |
+|                              |                                                                       |                       (primary<v>                     |
+|                              |                                                                       |                         (literal<v>                   |
+|                              |                                                                       |                           (numeric_literal<v>         |
+|                              |                                                                       |                             (abstract_literal<v>      |
+|                              |                                                                       |                               (decimal_literal        |
+|                              |                                                                       |                                 literal: 0, hint: int |
+|                              |                                                                       |                               )                       |
+|                              |                                                                       |                             )                         |
+|                              |                                                                       |                           )                           |
+|                              |                                                                       |                         )                             |
+|                              |                                                                       |                       )                               |
+|                              |                                                                       |                     )                                 |
+|                              |                                                                       |                   )                                   |
+|                              |                                                                       |                   (keyword                            |
+|                              |                                                                       |                     TO                                |
+|                              |                                                                       |                   )                                   |
+|                              |                                                                       |                   (simple_expression                  |
+|                              |                                                                       |                     (term                             |
+|                              |                                                                       |                       (primary<v>                     |
+|                              |                                                                       |                         (literal<v>                   |
+|                              |                                                                       |                           (numeric_literal<v>         |
+|                              |                                                                       |                             (abstract_literal<v>      |
+|                              |                                                                       |                               (decimal_literal        |
+|                              |                                                                       |                                 literal: 7, hint: int |
+|                              |                                                                       |                               )                       |
+|                              |                                                                       |                             )                         |
+|                              |                                                                       |                           )                           |
+|                              |                                                                       |                         )                             |
+|                              |                                                                       |                       )                               |
+|                              |                                                                       |                     )                                 |
+|                              |                                                                       |                   )                                   |
+|                              |                                                                       |                 )                                     |
+|                              |                                                                       |               )                                       |
+|                              |                                                                       |             )                                         |
+|                              |                                                                       |           )                                           |
+|                              |                                                                       |         )                                             |
+|                              |                                                                       |       )                                               |
+|                              |                                                                       |     )                                                 |
+|                              |                                                                       |   )                                                   |
+|                              |                                                                       | )                                                     |
+|                              |                                                                       |                                                       |
++------------------------------+-----------------------------------------------------------------------+-------------------------------------------------------+
+| subprogram_specification_004 | function designator return type_mark                                  | (subprogram_specification<v>                          |
+|                              |                                                                       |   PURE FUNCTION                                       |
+|                              |                                                                       |   (designator<v>                                      |
+|                              |                                                                       |     (identifier                                       |
+|                              |                                                                       |       designator                                      |
+|                              |                                                                       |     )                                                 |
+|                              |                                                                       |   )                                                   |
+|                              |                                                                       |   (name<v>                                            |
+|                              |                                                                       |     (identifier                                       |
+|                              |                                                                       |       type_mark                                       |
+|                              |                                                                       |     )                                                 |
+|                              |                                                                       |   )                                                   |
+|                              |                                                                       | )                                                     |
+|                              |                                                                       |                                                       |
++------------------------------+-----------------------------------------------------------------------+-------------------------------------------------------+
+| subprogram_specification_005 | function Func_1 (A,B,X: REAL) return REAL                             | (subprogram_specification<v>                          |
+|                              |                                                                       |   PURE FUNCTION                                       |
+|                              |                                                                       |   (designator<v>                                      |
+|                              |                                                                       |     (identifier                                       |
+|                              |                                                                       |       Func_1                                          |
+|                              |                                                                       |     )                                                 |
+|                              |                                                                       |   )                                                   |
+|                              |                                                                       |   (interface_list                                     |
+|                              |                                                                       |     (interface_declaration<v>                         |
+|                              |                                                                       |       (interface_constant_declaration                 |
+|                              |                                                                       |         (identifier_list                              |
+|                              |                                                                       |           (identifier                                 |
+|                              |                                                                       |             A                                         |
+|                              |                                                                       |           ),                                          |
+|                              |                                                                       |           (identifier                                 |
+|                              |                                                                       |             B                                         |
+|                              |                                                                       |           ),                                          |
+|                              |                                                                       |           (identifier                                 |
+|                              |                                                                       |             X                                         |
+|                              |                                                                       |           )                                           |
+|                              |                                                                       |         )                                             |
+|                              |                                                                       |         (subtype_indication                           |
+|                              |                                                                       |           (name<v>                                    |
+|                              |                                                                       |             (identifier                               |
+|                              |                                                                       |               REAL                                    |
+|                              |                                                                       |             )                                         |
+|                              |                                                                       |           )                                           |
+|                              |                                                                       |         )                                             |
+|                              |                                                                       |       )                                               |
+|                              |                                                                       |     )                                                 |
+|                              |                                                                       |   )                                                   |
+|                              |                                                                       |   (name<v>                                            |
+|                              |                                                                       |     (identifier                                       |
+|                              |                                                                       |       REAL                                            |
+|                              |                                                                       |     )                                                 |
+|                              |                                                                       |   )                                                   |
+|                              |                                                                       | )                                                     |
+|                              |                                                                       |                                                       |
++------------------------------+-----------------------------------------------------------------------+-------------------------------------------------------+
+| subprogram_specification_006 | function "*" (a,b: Integer_new) return Integer_new                    | (subprogram_specification<v>                          |
+|                              |                                                                       |   PURE FUNCTION                                       |
+|                              |                                                                       |   (designator<v>                                      |
+|                              |                                                                       |     (string_literal                                   |
+|                              |                                                                       |       *                                               |
+|                              |                                                                       |     )                                                 |
+|                              |                                                                       |   )                                                   |
+|                              |                                                                       |   (interface_list                                     |
+|                              |                                                                       |     (interface_declaration<v>                         |
+|                              |                                                                       |       (interface_constant_declaration                 |
+|                              |                                                                       |         (identifier_list                              |
+|                              |                                                                       |           (identifier                                 |
+|                              |                                                                       |             a                                         |
+|                              |                                                                       |           ),                                          |
+|                              |                                                                       |           (identifier                                 |
+|                              |                                                                       |             b                                         |
+|                              |                                                                       |           )                                           |
+|                              |                                                                       |         )                                             |
+|                              |                                                                       |         (subtype_indication                           |
+|                              |                                                                       |           (name<v>                                    |
+|                              |                                                                       |             (identifier                               |
+|                              |                                                                       |               Integer_new                             |
+|                              |                                                                       |             )                                         |
+|                              |                                                                       |           )                                           |
+|                              |                                                                       |         )                                             |
+|                              |                                                                       |       )                                               |
+|                              |                                                                       |     )                                                 |
+|                              |                                                                       |   )                                                   |
+|                              |                                                                       |   (name<v>                                            |
+|                              |                                                                       |     (identifier                                       |
+|                              |                                                                       |       Integer_new                                     |
+|                              |                                                                       |     )                                                 |
+|                              |                                                                       |   )                                                   |
+|                              |                                                                       | )                                                     |
+|                              |                                                                       |                                                       |
++------------------------------+-----------------------------------------------------------------------+-------------------------------------------------------+
+| subprogram_specification_007 | IMPURE function End_Of_File (file File_name: Int_Data) return BOOLEAN | (subprogram_specification<v>                          |
+|                              |                                                                       |   IMPURE FUNCTION                                     |
+|                              |                                                                       |   (designator<v>                                      |
+|                              |                                                                       |     (identifier                                       |
+|                              |                                                                       |       End_Of_File                                     |
+|                              |                                                                       |     )                                                 |
+|                              |                                                                       |   )                                                   |
+|                              |                                                                       |   (interface_list                                     |
+|                              |                                                                       |     (interface_declaration<v>                         |
+|                              |                                                                       |       (interface_file_declaration                     |
+|                              |                                                                       |         (identifier_list                              |
+|                              |                                                                       |           (identifier                                 |
+|                              |                                                                       |             File_name                                 |
+|                              |                                                                       |           )                                           |
+|                              |                                                                       |         )                                             |
+|                              |                                                                       |         (subtype_indication                           |
+|                              |                                                                       |           (name<v>                                    |
+|                              |                                                                       |             (identifier                               |
+|                              |                                                                       |               Int_Data                                |
+|                              |                                                                       |             )                                         |
+|                              |                                                                       |           )                                           |
+|                              |                                                                       |         )                                             |
+|                              |                                                                       |       )                                               |
+|                              |                                                                       |     )                                                 |
+|                              |                                                                       |   )                                                   |
+|                              |                                                                       |   (name<v>                                            |
+|                              |                                                                       |     (identifier                                       |
+|                              |                                                                       |       BOOLEAN                                         |
+|                              |                                                                       |     )                                                 |
+|                              |                                                                       |   )                                                   |
+|                              |                                                                       | )                                                     |
+|                              |                                                                       |                                                       |
++------------------------------+-----------------------------------------------------------------------+-------------------------------------------------------+
+
 ===================
 subtype_declaration
 ===================

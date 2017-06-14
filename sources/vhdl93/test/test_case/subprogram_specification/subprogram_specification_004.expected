@@ -1,0 +1,13 @@
+(subprogram_specification<v>
+  PURE FUNCTION
+  (designator<v>
+    (identifier
+      designator
+    )
+  )
+  (name<v>
+    (identifier
+      type_mark
+    )
+  )
+)

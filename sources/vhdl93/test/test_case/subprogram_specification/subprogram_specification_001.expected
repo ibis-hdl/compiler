@@ -1,0 +1,8 @@
+(subprogram_specification<v>
+  PROCEDURE
+  (designator<v>
+    (identifier
+      designator
+    )
+  )
+)

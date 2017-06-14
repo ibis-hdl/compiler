@@ -2164,6 +2164,7 @@ void printer::operator()(subprogram_specification const &node)
     util::visit_in_place(
         node,
         [this](ast::subprogram_specification_procedure const& procedure) {
+            os << "PROCEDURE\n";
             (*this)(procedure.designator);
             if(procedure.formal_parameter_list) {
                 os << "\n";
@@ -2171,8 +2172,8 @@ void printer::operator()(subprogram_specification const &node)
             }
         },
         [this](ast::subprogram_specification_function const& function) {
-            if(function.impure) { os << "IMPURE\n"; }
-            else {                os << "PURE\n"; }
+            if(function.impure) { os << "IMPURE FUNCTION\n"; }
+            else {                os << "PURE FUNCTION\n"; }
             (*this)(function.designator);
             if(function.formal_parameter_list) {
                 os << "\n";
