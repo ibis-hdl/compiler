@@ -1,0 +1,28 @@
+(type_conversion
+  (name<v>
+    (identifier
+      Integer
+    )
+  )
+  (expression
+    (relation
+      (shift_expression
+        (simple_expression
+          (term
+            (primary<v>
+              (literal<v>
+                (numeric_literal<v>
+                  (abstract_literal<v>
+                    (decimal_literal
+                      literal: 74.94, hint: double
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

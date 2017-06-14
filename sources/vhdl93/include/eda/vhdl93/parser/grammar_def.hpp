@@ -4056,7 +4056,7 @@ auto const timeout_clause_def =
 //     type_mark ( expression )
 auto const type_conversion_def =
        type_mark
-    >> '(' >> expression >> ')';
+    >> '(' >> expression >> ')'
     ;
 
 
