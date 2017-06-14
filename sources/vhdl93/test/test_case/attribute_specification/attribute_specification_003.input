@@ -1,5 +1,0 @@
--- even on LRM, this isn't a avalid expression:
--- attribute LOCATION of others: label is (25,77);
--- hence fixed to an expression:
-attribute LOCATION of others: label is (25 * 77);
-
