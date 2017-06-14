@@ -1,5 +1,6 @@
 ToDo:
 - attribute_specification/attribute_specification_00{2,3}
+- entity_aspect/entity_aspect_004.input
 - full_type_declaration_failure/*
 - interface_constant_declaration/interface_constant_declaration_007.input
 - wait_statement/wait_statement_00x.input

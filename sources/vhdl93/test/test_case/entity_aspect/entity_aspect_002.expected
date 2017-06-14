@@ -1,0 +1,10 @@
+(entity_aspect<v>
+  (name<v>
+    (identifier
+      entity_name
+    )
+  )
+  (identifier
+    architecture_identifier
+  )
+)

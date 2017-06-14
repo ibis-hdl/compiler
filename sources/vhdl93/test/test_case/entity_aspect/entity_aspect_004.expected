@@ -1,0 +1,7 @@
+(entity_aspect<v>
+  (name<v>
+    (identifier
+      configuration_name
+    )
+  )
+)
