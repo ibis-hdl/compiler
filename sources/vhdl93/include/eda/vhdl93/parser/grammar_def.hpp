@@ -3539,7 +3539,7 @@ auto const range_constraint_def =
 //     end record [ record_type_simple_name ]
 auto const record_type_definition_def =
        RECORD
-    >> x3::repeat(1, x3::inf)[ element_declaration ]
+    >> +element_declaration
     >> END >> RECORD
     >> -simple_name
     ;
@@ -3550,6 +3550,7 @@ auto const record_type_definition_def =
 //     shift_expression [ relational_operator shift_expression ]
 namespace relation_detail {
 
+    // required to compile
     auto const chunk = x3::rule<struct _, ast::relation::chunk> { "relation" } =
         relational_operator >> shift_expression
         ;
