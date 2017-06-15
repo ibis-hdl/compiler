@@ -1,0 +1,41 @@
+(generic_clause
+  (interface_list
+    (interface_declaration<v>
+      (interface_constant_declaration
+        (identifier_list
+          (identifier
+            N
+          )
+        )
+        (subtype_indication
+          (name<v>
+            (identifier
+              Natural
+            )
+          )
+        )
+        (expression
+          (relation
+            (shift_expression
+              (simple_expression
+                (term
+                  (primary<v>
+                    (literal<v>
+                      (numeric_literal<v>
+                        (abstract_literal<v>
+                          (decimal_literal
+                            literal: 2, hint: int
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)
