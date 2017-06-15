@@ -1,4 +1,4 @@
-(type_declaration<v>
+(type_definition<v>
   (composite_type_definition<v>
     (record_type_definition
       (element_declaration

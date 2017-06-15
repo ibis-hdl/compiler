@@ -1,4 +1,4 @@
-(type_declaration<v>
+(type_definition<v>
   (access_type_definition
     (subtype_indication
       (name<v>

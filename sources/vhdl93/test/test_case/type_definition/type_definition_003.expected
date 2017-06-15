@@ -1,4 +1,4 @@
-(type_declaration<v>
+(type_definition<v>
   (scalar_type_definition<v>
     (range<v>
       (simple_expression

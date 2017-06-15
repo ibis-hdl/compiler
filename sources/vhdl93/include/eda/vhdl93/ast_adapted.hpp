@@ -142,10 +142,6 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::formal_part_chunk,
     context_tied_name, formal_designator
 )
 
-BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::full_type_declaration,
-    identifier, type_definition
-)
-
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::function_call,
     function_name, actual_parameter_part
 )
@@ -320,6 +316,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::term::chunk,
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::timeout_clause,
     time_expression
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::type_declaration,
+    identifier, type_definition
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::type_conversion,

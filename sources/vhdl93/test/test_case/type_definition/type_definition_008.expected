@@ -1,4 +1,4 @@
-(type_declaration<v>
+(type_definition<v>
   (name<v>
     (identifier
       STRING

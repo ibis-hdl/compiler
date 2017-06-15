@@ -1,18 +1,19 @@
-(full_type_declaration
+(type_declaration
   (identifier
-    WORD_INDEX
+    Int_64K
   )
-  (type_declaration<v>
+  (type_definition<v>
     (scalar_type_definition<v>
       (range<v>
         (simple_expression
+          sign: SIGN_NEG,
           (term
             (primary<v>
               (literal<v>
                 (numeric_literal<v>
                   (abstract_literal<v>
                     (decimal_literal
-                      literal: 31, hint: int
+                      literal: 65536.00, hint: double
                     )
                   )
                 )
@@ -21,7 +22,7 @@
           )
         )
         (keyword
-          DOWNTO
+          TO
         )
         (simple_expression
           (term
@@ -30,7 +31,7 @@
                 (numeric_literal<v>
                   (abstract_literal<v>
                     (decimal_literal
-                      literal: 0, hint: int
+                      literal: 65535.00, hint: double
                     )
                   )
                 )

@@ -1,8 +1,8 @@
-(full_type_declaration
+(type_declaration
   (identifier
     DURATION
   )
-  (type_declaration<v>
+  (type_definition<v>
     (scalar_type_definition<v>
       (physical_type_definition
         (range<v>

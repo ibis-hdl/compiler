@@ -1,8 +1,8 @@
-(full_type_declaration
+(type_declaration
   (identifier
-    Int_64K
+    TWOS_COMPLEMENT_INTEGER
   )
-  (type_declaration<v>
+  (type_definition<v>
     (scalar_type_definition<v>
       (range<v>
         (simple_expression
@@ -13,7 +13,7 @@
                 (numeric_literal<v>
                   (abstract_literal<v>
                     (decimal_literal
-                      literal: 65536.00, hint: double
+                      literal: 32768, hint: int
                     )
                   )
                 )
@@ -31,7 +31,7 @@
                 (numeric_literal<v>
                   (abstract_literal<v>
                     (decimal_literal
-                      literal: 65535.00, hint: double
+                      literal: 32767, hint: int
                     )
                   )
                 )

@@ -45,9 +45,7 @@ GENERATE_DATASET_TEST_CASE(primary_unit_declaration)    // physical_type_definit
 GENERATE_DATASET_TEST_CASE(secondary_unit_declaration)  // physical_type_definition
 GENERATE_DATASET_TEST_CASE(physical_type_definition)
 
-// type_definition
-GENERATE_DATASET_TEST_CASE(full_type_declaration)
-GENERATE_DATASET_TEST_CASE(incomplete_type_declaration)
+GENERATE_DATASET_TEST_CASE(type_declaration)
 GENERATE_DATASET_TEST_CASE(type_definition)
 
 GENERATE_DATASET_TEST_CASE(subtype_declaration)

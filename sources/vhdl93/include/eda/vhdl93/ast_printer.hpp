@@ -273,7 +273,6 @@ public:
     void operator()(file_declaration const& node);
     void operator()(file_open_information const& node);
     void operator()(formal_part const& node);
-    void operator()(full_type_declaration const& node);
     void operator()(function_call const& node);
     void operator()(generate_statement const& node);
     void operator()(generation_scheme const& node);

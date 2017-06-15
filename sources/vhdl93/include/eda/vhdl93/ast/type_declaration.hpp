@@ -10,22 +10,21 @@
 
 
 #include <eda/vhdl93/ast/namespace_alias.hpp>
+#include <eda/vhdl93/ast/position_tagged.hpp>
 
-#include <eda/vhdl93/ast/nullary.hpp>
-#include <eda/vhdl93/ast/full_type_declaration.hpp>
-#include <eda/vhdl93/ast/incomplete_type_declaration.hpp>
-
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
+#include <eda/vhdl93/ast/identifier.hpp>
+#include <eda/vhdl93/ast/type_definition.hpp>
+#include <eda/vhdl93/ast/optional.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-using type_declaration = x3::variant<
-    ast::nullary,
-    ast::full_type_declaration,
-    ast::incomplete_type_declaration
->;
+struct type_declaration : position_tagged
+{
+    ast::identifier                     identifier;
+    optional<ast::type_definition>      type_definition;
+};
 
 
 } } } // namespace eda.vhdl93.ast

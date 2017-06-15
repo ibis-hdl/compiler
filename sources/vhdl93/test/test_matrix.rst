@@ -4494,292 +4494,6 @@ floating_type_definition
 |                              |                                     |                                                               |
 +------------------------------+-------------------------------------+---------------------------------------------------------------+
 
-=====================
-full_type_declaration
-=====================
-
-+---------------------------+--------------------------------------------------------------------+-------------------------------------------------------+
-| File                      | Input                                                              | Expected                                              |
-+---------------------------+--------------------------------------------------------------------+-------------------------------------------------------+
-| full_type_declaration_001 | type MULTI_LEVEL_LOGIC is (LOW, HIGH, RISING, FALLING, AMBIGUOUS); | (full_type_declaration                                |
-|                           |                                                                    |   (identifier                                         |
-|                           |                                                                    |     MULTI_LEVEL_LOGIC                                 |
-|                           |                                                                    |   )                                                   |
-|                           |                                                                    |   (type_declaration<v>                                |
-|                           |                                                                    |     (scalar_type_definition<v>                        |
-|                           |                                                                    |       (enumeration_type_definition                    |
-|                           |                                                                    |         (enumeration_literal<v>                       |
-|                           |                                                                    |           (identifier                                 |
-|                           |                                                                    |             LOW                                       |
-|                           |                                                                    |           )                                           |
-|                           |                                                                    |         ),                                            |
-|                           |                                                                    |         (enumeration_literal<v>                       |
-|                           |                                                                    |           (identifier                                 |
-|                           |                                                                    |             HIGH                                      |
-|                           |                                                                    |           )                                           |
-|                           |                                                                    |         ),                                            |
-|                           |                                                                    |         (enumeration_literal<v>                       |
-|                           |                                                                    |           (identifier                                 |
-|                           |                                                                    |             RISING                                    |
-|                           |                                                                    |           )                                           |
-|                           |                                                                    |         ),                                            |
-|                           |                                                                    |         (enumeration_literal<v>                       |
-|                           |                                                                    |           (identifier                                 |
-|                           |                                                                    |             FALLING                                   |
-|                           |                                                                    |           )                                           |
-|                           |                                                                    |         ),                                            |
-|                           |                                                                    |         (enumeration_literal<v>                       |
-|                           |                                                                    |           (identifier                                 |
-|                           |                                                                    |             AMBIGUOUS                                 |
-|                           |                                                                    |           )                                           |
-|                           |                                                                    |         )                                             |
-|                           |                                                                    |       )                                               |
-|                           |                                                                    |     )                                                 |
-|                           |                                                                    |   )                                                   |
-|                           |                                                                    | )                                                     |
-|                           |                                                                    |                                                       |
-+---------------------------+--------------------------------------------------------------------+-------------------------------------------------------+
-| full_type_declaration_002 | type BIT is ('0','1');                                             | (full_type_declaration                                |
-|                           |                                                                    |   (identifier                                         |
-|                           |                                                                    |     BIT                                               |
-|                           |                                                                    |   )                                                   |
-|                           |                                                                    |   (type_declaration<v>                                |
-|                           |                                                                    |     (scalar_type_definition<v>                        |
-|                           |                                                                    |       (enumeration_type_definition                    |
-|                           |                                                                    |         (enumeration_literal<v>                       |
-|                           |                                                                    |           (character_literal                          |
-|                           |                                                                    |             '0'                                       |
-|                           |                                                                    |           )                                           |
-|                           |                                                                    |         ),                                            |
-|                           |                                                                    |         (enumeration_literal<v>                       |
-|                           |                                                                    |           (character_literal                          |
-|                           |                                                                    |             '1'                                       |
-|                           |                                                                    |           )                                           |
-|                           |                                                                    |         )                                             |
-|                           |                                                                    |       )                                               |
-|                           |                                                                    |     )                                                 |
-|                           |                                                                    |   )                                                   |
-|                           |                                                                    | )                                                     |
-|                           |                                                                    |                                                       |
-+---------------------------+--------------------------------------------------------------------+-------------------------------------------------------+
-| full_type_declaration_003 | type WORD_INDEX is range 31 downto 0;                              | (full_type_declaration                                |
-|                           |                                                                    |   (identifier                                         |
-|                           |                                                                    |     WORD_INDEX                                        |
-|                           |                                                                    |   )                                                   |
-|                           |                                                                    |   (type_declaration<v>                                |
-|                           |                                                                    |     (scalar_type_definition<v>                        |
-|                           |                                                                    |       (range<v>                                       |
-|                           |                                                                    |         (simple_expression                            |
-|                           |                                                                    |           (term                                       |
-|                           |                                                                    |             (primary<v>                               |
-|                           |                                                                    |               (literal<v>                             |
-|                           |                                                                    |                 (numeric_literal<v>                   |
-|                           |                                                                    |                   (abstract_literal<v>                |
-|                           |                                                                    |                     (decimal_literal                  |
-|                           |                                                                    |                       literal: 31, hint: int          |
-|                           |                                                                    |                     )                                 |
-|                           |                                                                    |                   )                                   |
-|                           |                                                                    |                 )                                     |
-|                           |                                                                    |               )                                       |
-|                           |                                                                    |             )                                         |
-|                           |                                                                    |           )                                           |
-|                           |                                                                    |         )                                             |
-|                           |                                                                    |         (keyword                                      |
-|                           |                                                                    |           DOWNTO                                      |
-|                           |                                                                    |         )                                             |
-|                           |                                                                    |         (simple_expression                            |
-|                           |                                                                    |           (term                                       |
-|                           |                                                                    |             (primary<v>                               |
-|                           |                                                                    |               (literal<v>                             |
-|                           |                                                                    |                 (numeric_literal<v>                   |
-|                           |                                                                    |                   (abstract_literal<v>                |
-|                           |                                                                    |                     (decimal_literal                  |
-|                           |                                                                    |                       literal: 0, hint: int           |
-|                           |                                                                    |                     )                                 |
-|                           |                                                                    |                   )                                   |
-|                           |                                                                    |                 )                                     |
-|                           |                                                                    |               )                                       |
-|                           |                                                                    |             )                                         |
-|                           |                                                                    |           )                                           |
-|                           |                                                                    |         )                                             |
-|                           |                                                                    |       )                                               |
-|                           |                                                                    |     )                                                 |
-|                           |                                                                    |   )                                                   |
-|                           |                                                                    | )                                                     |
-|                           |                                                                    |                                                       |
-+---------------------------+--------------------------------------------------------------------+-------------------------------------------------------+
-| full_type_declaration_004 | type TWOS_COMPLEMENT_INTEGER is range -32768 to 32767;             | (full_type_declaration                                |
-|                           |                                                                    |   (identifier                                         |
-|                           |                                                                    |     TWOS_COMPLEMENT_INTEGER                           |
-|                           |                                                                    |   )                                                   |
-|                           |                                                                    |   (type_declaration<v>                                |
-|                           |                                                                    |     (scalar_type_definition<v>                        |
-|                           |                                                                    |       (range<v>                                       |
-|                           |                                                                    |         (simple_expression                            |
-|                           |                                                                    |           sign: SIGN_NEG,                             |
-|                           |                                                                    |           (term                                       |
-|                           |                                                                    |             (primary<v>                               |
-|                           |                                                                    |               (literal<v>                             |
-|                           |                                                                    |                 (numeric_literal<v>                   |
-|                           |                                                                    |                   (abstract_literal<v>                |
-|                           |                                                                    |                     (decimal_literal                  |
-|                           |                                                                    |                       literal: 32768, hint: int       |
-|                           |                                                                    |                     )                                 |
-|                           |                                                                    |                   )                                   |
-|                           |                                                                    |                 )                                     |
-|                           |                                                                    |               )                                       |
-|                           |                                                                    |             )                                         |
-|                           |                                                                    |           )                                           |
-|                           |                                                                    |         )                                             |
-|                           |                                                                    |         (keyword                                      |
-|                           |                                                                    |           TO                                          |
-|                           |                                                                    |         )                                             |
-|                           |                                                                    |         (simple_expression                            |
-|                           |                                                                    |           (term                                       |
-|                           |                                                                    |             (primary<v>                               |
-|                           |                                                                    |               (literal<v>                             |
-|                           |                                                                    |                 (numeric_literal<v>                   |
-|                           |                                                                    |                   (abstract_literal<v>                |
-|                           |                                                                    |                     (decimal_literal                  |
-|                           |                                                                    |                       literal: 32767, hint: int       |
-|                           |                                                                    |                     )                                 |
-|                           |                                                                    |                   )                                   |
-|                           |                                                                    |                 )                                     |
-|                           |                                                                    |               )                                       |
-|                           |                                                                    |             )                                         |
-|                           |                                                                    |           )                                           |
-|                           |                                                                    |         )                                             |
-|                           |                                                                    |       )                                               |
-|                           |                                                                    |     )                                                 |
-|                           |                                                                    |   )                                                   |
-|                           |                                                                    | )                                                     |
-|                           |                                                                    |                                                       |
-+---------------------------+--------------------------------------------------------------------+-------------------------------------------------------+
-| full_type_declaration_005 | type DURATION is range -1E18 to 1E18                               | (full_type_declaration                                |
-|                           | units                                                              |   (identifier                                         |
-|                           |     fs;                                                            |     DURATION                                          |
-|                           |     ps   =  1000 fs;                                               |   )                                                   |
-|                           |     -- ...                                                         |   (type_declaration<v>                                |
-|                           | end units;                                                         |     (scalar_type_definition<v>                        |
-|                           |                                                                    |       (physical_type_definition                       |
-|                           |                                                                    |         (range<v>                                     |
-|                           |                                                                    |           (simple_expression                          |
-|                           |                                                                    |             sign: SIGN_NEG,                           |
-|                           |                                                                    |             (term                                     |
-|                           |                                                                    |               (primary<v>                             |
-|                           |                                                                    |                 (literal<v>                           |
-|                           |                                                                    |                   (numeric_literal<v>                 |
-|                           |                                                                    |                     (abstract_literal<v>              |
-|                           |                                                                    |                       (decimal_literal                |
-|                           |                                                                    |                         literal: 1E18, hint: int      |
-|                           |                                                                    |                       )                               |
-|                           |                                                                    |                     )                                 |
-|                           |                                                                    |                   )                                   |
-|                           |                                                                    |                 )                                     |
-|                           |                                                                    |               )                                       |
-|                           |                                                                    |             )                                         |
-|                           |                                                                    |           )                                           |
-|                           |                                                                    |           (keyword                                    |
-|                           |                                                                    |             TO                                        |
-|                           |                                                                    |           )                                           |
-|                           |                                                                    |           (simple_expression                          |
-|                           |                                                                    |             (term                                     |
-|                           |                                                                    |               (primary<v>                             |
-|                           |                                                                    |                 (literal<v>                           |
-|                           |                                                                    |                   (numeric_literal<v>                 |
-|                           |                                                                    |                     (abstract_literal<v>              |
-|                           |                                                                    |                       (decimal_literal                |
-|                           |                                                                    |                         literal: 1E18, hint: int      |
-|                           |                                                                    |                       )                               |
-|                           |                                                                    |                     )                                 |
-|                           |                                                                    |                   )                                   |
-|                           |                                                                    |                 )                                     |
-|                           |                                                                    |               )                                       |
-|                           |                                                                    |             )                                         |
-|                           |                                                                    |           )                                           |
-|                           |                                                                    |         )                                             |
-|                           |                                                                    |         (identifier                                   |
-|                           |                                                                    |           fs                                          |
-|                           |                                                                    |         )                                             |
-|                           |                                                                    |         (secondary_unit_declaration                   |
-|                           |                                                                    |           (identifier                                 |
-|                           |                                                                    |             ps                                        |
-|                           |                                                                    |           )                                           |
-|                           |                                                                    |           (physical_literal                           |
-|                           |                                                                    |             literal: (abstract_literal<v>             |
-|                           |                                                                    |               (decimal_literal                        |
-|                           |                                                                    |                 literal: 1000, hint: int              |
-|                           |                                                                    |               )                                       |
-|                           |                                                                    |             ),                                        |
-|                           |                                                                    |             unit: fs                                  |
-|                           |                                                                    |           )                                           |
-|                           |                                                                    |         )                                             |
-|                           |                                                                    |       )                                               |
-|                           |                                                                    |     )                                                 |
-|                           |                                                                    |   )                                                   |
-|                           |                                                                    | )                                                     |
-|                           |                                                                    |                                                       |
-+---------------------------+--------------------------------------------------------------------+-------------------------------------------------------+
-| full_type_declaration_006 | type Int_64K is range - 65536.00 to 65535.00;                      | (full_type_declaration                                |
-|                           |                                                                    |   (identifier                                         |
-|                           |                                                                    |     Int_64K                                           |
-|                           |                                                                    |   )                                                   |
-|                           |                                                                    |   (type_declaration<v>                                |
-|                           |                                                                    |     (scalar_type_definition<v>                        |
-|                           |                                                                    |       (range<v>                                       |
-|                           |                                                                    |         (simple_expression                            |
-|                           |                                                                    |           sign: SIGN_NEG,                             |
-|                           |                                                                    |           (term                                       |
-|                           |                                                                    |             (primary<v>                               |
-|                           |                                                                    |               (literal<v>                             |
-|                           |                                                                    |                 (numeric_literal<v>                   |
-|                           |                                                                    |                   (abstract_literal<v>                |
-|                           |                                                                    |                     (decimal_literal                  |
-|                           |                                                                    |                       literal: 65536.00, hint: double |
-|                           |                                                                    |                     )                                 |
-|                           |                                                                    |                   )                                   |
-|                           |                                                                    |                 )                                     |
-|                           |                                                                    |               )                                       |
-|                           |                                                                    |             )                                         |
-|                           |                                                                    |           )                                           |
-|                           |                                                                    |         )                                             |
-|                           |                                                                    |         (keyword                                      |
-|                           |                                                                    |           TO                                          |
-|                           |                                                                    |         )                                             |
-|                           |                                                                    |         (simple_expression                            |
-|                           |                                                                    |           (term                                       |
-|                           |                                                                    |             (primary<v>                               |
-|                           |                                                                    |               (literal<v>                             |
-|                           |                                                                    |                 (numeric_literal<v>                   |
-|                           |                                                                    |                   (abstract_literal<v>                |
-|                           |                                                                    |                     (decimal_literal                  |
-|                           |                                                                    |                       literal: 65535.00, hint: double |
-|                           |                                                                    |                     )                                 |
-|                           |                                                                    |                   )                                   |
-|                           |                                                                    |                 )                                     |
-|                           |                                                                    |               )                                       |
-|                           |                                                                    |             )                                         |
-|                           |                                                                    |           )                                           |
-|                           |                                                                    |         )                                             |
-|                           |                                                                    |       )                                               |
-|                           |                                                                    |     )                                                 |
-|                           |                                                                    |   )                                                   |
-|                           |                                                                    | )                                                     |
-|                           |                                                                    |                                                       |
-+---------------------------+--------------------------------------------------------------------+-------------------------------------------------------+
-
-=============================
-full_type_declaration_failure
-=============================
-
-+---------------------------+-------------------------------------------------------------------------+----------+
-| File                      | Input                                                                   | Expected |
-+---------------------------+-------------------------------------------------------------------------+----------+
-| full_type_declaration_001 | -- this parses successfully to range of physical_literal '32 down' TO 0 |          |
-|                           | type WORD_INDEX is range 31 down to 0;                                  |          |
-|                           |                                                                         |          |
-+---------------------------+-------------------------------------------------------------------------+----------+
-
 =============
 function_call
 =============
@@ -5077,19 +4791,6 @@ identifier_list
 |                     |                                       | )                   |
 |                     |                                       |                     |
 +---------------------+---------------------------------------+---------------------+
-
-===========================
-incomplete_type_declaration
-===========================
-
-+---------------------------------+---------------+-------------+
-| File                            | Input         | Expected    |
-+---------------------------------+---------------+-------------+
-| incomplete_type_declaration_001 | type integer; | (identifier |
-|                                 |               |   integer   |
-|                                 |               | )           |
-|                                 |               |             |
-+---------------------------------+---------------+-------------+
 
 ================
 index_constraint
@@ -9609,6 +9310,299 @@ type_conversion
 |                     |                   |                                                    |
 +---------------------+-------------------+----------------------------------------------------+
 
+================
+type_declaration
+================
+
++---------------------------------+--------------------------------------------------------------------+-------------------------------------------------------+
+| File                            | Input                                                              | Expected                                              |
++---------------------------------+--------------------------------------------------------------------+-------------------------------------------------------+
+| full_type_declaration_001       | type MULTI_LEVEL_LOGIC is (LOW, HIGH, RISING, FALLING, AMBIGUOUS); | (type_declaration                                     |
+|                                 |                                                                    |   (identifier                                         |
+|                                 |                                                                    |     MULTI_LEVEL_LOGIC                                 |
+|                                 |                                                                    |   )                                                   |
+|                                 |                                                                    |   (type_definition<v>                                 |
+|                                 |                                                                    |     (scalar_type_definition<v>                        |
+|                                 |                                                                    |       (enumeration_type_definition                    |
+|                                 |                                                                    |         (enumeration_literal<v>                       |
+|                                 |                                                                    |           (identifier                                 |
+|                                 |                                                                    |             LOW                                       |
+|                                 |                                                                    |           )                                           |
+|                                 |                                                                    |         ),                                            |
+|                                 |                                                                    |         (enumeration_literal<v>                       |
+|                                 |                                                                    |           (identifier                                 |
+|                                 |                                                                    |             HIGH                                      |
+|                                 |                                                                    |           )                                           |
+|                                 |                                                                    |         ),                                            |
+|                                 |                                                                    |         (enumeration_literal<v>                       |
+|                                 |                                                                    |           (identifier                                 |
+|                                 |                                                                    |             RISING                                    |
+|                                 |                                                                    |           )                                           |
+|                                 |                                                                    |         ),                                            |
+|                                 |                                                                    |         (enumeration_literal<v>                       |
+|                                 |                                                                    |           (identifier                                 |
+|                                 |                                                                    |             FALLING                                   |
+|                                 |                                                                    |           )                                           |
+|                                 |                                                                    |         ),                                            |
+|                                 |                                                                    |         (enumeration_literal<v>                       |
+|                                 |                                                                    |           (identifier                                 |
+|                                 |                                                                    |             AMBIGUOUS                                 |
+|                                 |                                                                    |           )                                           |
+|                                 |                                                                    |         )                                             |
+|                                 |                                                                    |       )                                               |
+|                                 |                                                                    |     )                                                 |
+|                                 |                                                                    |   )                                                   |
+|                                 |                                                                    | )                                                     |
+|                                 |                                                                    |                                                       |
++---------------------------------+--------------------------------------------------------------------+-------------------------------------------------------+
+| full_type_declaration_002       | type BIT is ('0','1');                                             | (type_declaration                                     |
+|                                 |                                                                    |   (identifier                                         |
+|                                 |                                                                    |     BIT                                               |
+|                                 |                                                                    |   )                                                   |
+|                                 |                                                                    |   (type_definition<v>                                 |
+|                                 |                                                                    |     (scalar_type_definition<v>                        |
+|                                 |                                                                    |       (enumeration_type_definition                    |
+|                                 |                                                                    |         (enumeration_literal<v>                       |
+|                                 |                                                                    |           (character_literal                          |
+|                                 |                                                                    |             '0'                                       |
+|                                 |                                                                    |           )                                           |
+|                                 |                                                                    |         ),                                            |
+|                                 |                                                                    |         (enumeration_literal<v>                       |
+|                                 |                                                                    |           (character_literal                          |
+|                                 |                                                                    |             '1'                                       |
+|                                 |                                                                    |           )                                           |
+|                                 |                                                                    |         )                                             |
+|                                 |                                                                    |       )                                               |
+|                                 |                                                                    |     )                                                 |
+|                                 |                                                                    |   )                                                   |
+|                                 |                                                                    | )                                                     |
+|                                 |                                                                    |                                                       |
++---------------------------------+--------------------------------------------------------------------+-------------------------------------------------------+
+| full_type_declaration_003       | type WORD_INDEX is range 31 downto 0;                              | (type_declaration                                     |
+|                                 |                                                                    |   (identifier                                         |
+|                                 |                                                                    |     WORD_INDEX                                        |
+|                                 |                                                                    |   )                                                   |
+|                                 |                                                                    |   (type_definition<v>                                 |
+|                                 |                                                                    |     (scalar_type_definition<v>                        |
+|                                 |                                                                    |       (range<v>                                       |
+|                                 |                                                                    |         (simple_expression                            |
+|                                 |                                                                    |           (term                                       |
+|                                 |                                                                    |             (primary<v>                               |
+|                                 |                                                                    |               (literal<v>                             |
+|                                 |                                                                    |                 (numeric_literal<v>                   |
+|                                 |                                                                    |                   (abstract_literal<v>                |
+|                                 |                                                                    |                     (decimal_literal                  |
+|                                 |                                                                    |                       literal: 31, hint: int          |
+|                                 |                                                                    |                     )                                 |
+|                                 |                                                                    |                   )                                   |
+|                                 |                                                                    |                 )                                     |
+|                                 |                                                                    |               )                                       |
+|                                 |                                                                    |             )                                         |
+|                                 |                                                                    |           )                                           |
+|                                 |                                                                    |         )                                             |
+|                                 |                                                                    |         (keyword                                      |
+|                                 |                                                                    |           DOWNTO                                      |
+|                                 |                                                                    |         )                                             |
+|                                 |                                                                    |         (simple_expression                            |
+|                                 |                                                                    |           (term                                       |
+|                                 |                                                                    |             (primary<v>                               |
+|                                 |                                                                    |               (literal<v>                             |
+|                                 |                                                                    |                 (numeric_literal<v>                   |
+|                                 |                                                                    |                   (abstract_literal<v>                |
+|                                 |                                                                    |                     (decimal_literal                  |
+|                                 |                                                                    |                       literal: 0, hint: int           |
+|                                 |                                                                    |                     )                                 |
+|                                 |                                                                    |                   )                                   |
+|                                 |                                                                    |                 )                                     |
+|                                 |                                                                    |               )                                       |
+|                                 |                                                                    |             )                                         |
+|                                 |                                                                    |           )                                           |
+|                                 |                                                                    |         )                                             |
+|                                 |                                                                    |       )                                               |
+|                                 |                                                                    |     )                                                 |
+|                                 |                                                                    |   )                                                   |
+|                                 |                                                                    | )                                                     |
+|                                 |                                                                    |                                                       |
++---------------------------------+--------------------------------------------------------------------+-------------------------------------------------------+
+| full_type_declaration_004       | type TWOS_COMPLEMENT_INTEGER is range -32768 to 32767;             | (type_declaration                                     |
+|                                 |                                                                    |   (identifier                                         |
+|                                 |                                                                    |     TWOS_COMPLEMENT_INTEGER                           |
+|                                 |                                                                    |   )                                                   |
+|                                 |                                                                    |   (type_definition<v>                                 |
+|                                 |                                                                    |     (scalar_type_definition<v>                        |
+|                                 |                                                                    |       (range<v>                                       |
+|                                 |                                                                    |         (simple_expression                            |
+|                                 |                                                                    |           sign: SIGN_NEG,                             |
+|                                 |                                                                    |           (term                                       |
+|                                 |                                                                    |             (primary<v>                               |
+|                                 |                                                                    |               (literal<v>                             |
+|                                 |                                                                    |                 (numeric_literal<v>                   |
+|                                 |                                                                    |                   (abstract_literal<v>                |
+|                                 |                                                                    |                     (decimal_literal                  |
+|                                 |                                                                    |                       literal: 32768, hint: int       |
+|                                 |                                                                    |                     )                                 |
+|                                 |                                                                    |                   )                                   |
+|                                 |                                                                    |                 )                                     |
+|                                 |                                                                    |               )                                       |
+|                                 |                                                                    |             )                                         |
+|                                 |                                                                    |           )                                           |
+|                                 |                                                                    |         )                                             |
+|                                 |                                                                    |         (keyword                                      |
+|                                 |                                                                    |           TO                                          |
+|                                 |                                                                    |         )                                             |
+|                                 |                                                                    |         (simple_expression                            |
+|                                 |                                                                    |           (term                                       |
+|                                 |                                                                    |             (primary<v>                               |
+|                                 |                                                                    |               (literal<v>                             |
+|                                 |                                                                    |                 (numeric_literal<v>                   |
+|                                 |                                                                    |                   (abstract_literal<v>                |
+|                                 |                                                                    |                     (decimal_literal                  |
+|                                 |                                                                    |                       literal: 32767, hint: int       |
+|                                 |                                                                    |                     )                                 |
+|                                 |                                                                    |                   )                                   |
+|                                 |                                                                    |                 )                                     |
+|                                 |                                                                    |               )                                       |
+|                                 |                                                                    |             )                                         |
+|                                 |                                                                    |           )                                           |
+|                                 |                                                                    |         )                                             |
+|                                 |                                                                    |       )                                               |
+|                                 |                                                                    |     )                                                 |
+|                                 |                                                                    |   )                                                   |
+|                                 |                                                                    | )                                                     |
+|                                 |                                                                    |                                                       |
++---------------------------------+--------------------------------------------------------------------+-------------------------------------------------------+
+| full_type_declaration_005       | type DURATION is range -1E18 to 1E18                               | (type_declaration                                     |
+|                                 | units                                                              |   (identifier                                         |
+|                                 |     fs;                                                            |     DURATION                                          |
+|                                 |     ps   =  1000 fs;                                               |   )                                                   |
+|                                 |     -- ...                                                         |   (type_definition<v>                                 |
+|                                 | end units;                                                         |     (scalar_type_definition<v>                        |
+|                                 |                                                                    |       (physical_type_definition                       |
+|                                 |                                                                    |         (range<v>                                     |
+|                                 |                                                                    |           (simple_expression                          |
+|                                 |                                                                    |             sign: SIGN_NEG,                           |
+|                                 |                                                                    |             (term                                     |
+|                                 |                                                                    |               (primary<v>                             |
+|                                 |                                                                    |                 (literal<v>                           |
+|                                 |                                                                    |                   (numeric_literal<v>                 |
+|                                 |                                                                    |                     (abstract_literal<v>              |
+|                                 |                                                                    |                       (decimal_literal                |
+|                                 |                                                                    |                         literal: 1E18, hint: int      |
+|                                 |                                                                    |                       )                               |
+|                                 |                                                                    |                     )                                 |
+|                                 |                                                                    |                   )                                   |
+|                                 |                                                                    |                 )                                     |
+|                                 |                                                                    |               )                                       |
+|                                 |                                                                    |             )                                         |
+|                                 |                                                                    |           )                                           |
+|                                 |                                                                    |           (keyword                                    |
+|                                 |                                                                    |             TO                                        |
+|                                 |                                                                    |           )                                           |
+|                                 |                                                                    |           (simple_expression                          |
+|                                 |                                                                    |             (term                                     |
+|                                 |                                                                    |               (primary<v>                             |
+|                                 |                                                                    |                 (literal<v>                           |
+|                                 |                                                                    |                   (numeric_literal<v>                 |
+|                                 |                                                                    |                     (abstract_literal<v>              |
+|                                 |                                                                    |                       (decimal_literal                |
+|                                 |                                                                    |                         literal: 1E18, hint: int      |
+|                                 |                                                                    |                       )                               |
+|                                 |                                                                    |                     )                                 |
+|                                 |                                                                    |                   )                                   |
+|                                 |                                                                    |                 )                                     |
+|                                 |                                                                    |               )                                       |
+|                                 |                                                                    |             )                                         |
+|                                 |                                                                    |           )                                           |
+|                                 |                                                                    |         )                                             |
+|                                 |                                                                    |         (identifier                                   |
+|                                 |                                                                    |           fs                                          |
+|                                 |                                                                    |         )                                             |
+|                                 |                                                                    |         (secondary_unit_declaration                   |
+|                                 |                                                                    |           (identifier                                 |
+|                                 |                                                                    |             ps                                        |
+|                                 |                                                                    |           )                                           |
+|                                 |                                                                    |           (physical_literal                           |
+|                                 |                                                                    |             literal: (abstract_literal<v>             |
+|                                 |                                                                    |               (decimal_literal                        |
+|                                 |                                                                    |                 literal: 1000, hint: int              |
+|                                 |                                                                    |               )                                       |
+|                                 |                                                                    |             ),                                        |
+|                                 |                                                                    |             unit: fs                                  |
+|                                 |                                                                    |           )                                           |
+|                                 |                                                                    |         )                                             |
+|                                 |                                                                    |       )                                               |
+|                                 |                                                                    |     )                                                 |
+|                                 |                                                                    |   )                                                   |
+|                                 |                                                                    | )                                                     |
+|                                 |                                                                    |                                                       |
++---------------------------------+--------------------------------------------------------------------+-------------------------------------------------------+
+| full_type_declaration_006       | type Int_64K is range - 65536.00 to 65535.00;                      | (type_declaration                                     |
+|                                 |                                                                    |   (identifier                                         |
+|                                 |                                                                    |     Int_64K                                           |
+|                                 |                                                                    |   )                                                   |
+|                                 |                                                                    |   (type_definition<v>                                 |
+|                                 |                                                                    |     (scalar_type_definition<v>                        |
+|                                 |                                                                    |       (range<v>                                       |
+|                                 |                                                                    |         (simple_expression                            |
+|                                 |                                                                    |           sign: SIGN_NEG,                             |
+|                                 |                                                                    |           (term                                       |
+|                                 |                                                                    |             (primary<v>                               |
+|                                 |                                                                    |               (literal<v>                             |
+|                                 |                                                                    |                 (numeric_literal<v>                   |
+|                                 |                                                                    |                   (abstract_literal<v>                |
+|                                 |                                                                    |                     (decimal_literal                  |
+|                                 |                                                                    |                       literal: 65536.00, hint: double |
+|                                 |                                                                    |                     )                                 |
+|                                 |                                                                    |                   )                                   |
+|                                 |                                                                    |                 )                                     |
+|                                 |                                                                    |               )                                       |
+|                                 |                                                                    |             )                                         |
+|                                 |                                                                    |           )                                           |
+|                                 |                                                                    |         )                                             |
+|                                 |                                                                    |         (keyword                                      |
+|                                 |                                                                    |           TO                                          |
+|                                 |                                                                    |         )                                             |
+|                                 |                                                                    |         (simple_expression                            |
+|                                 |                                                                    |           (term                                       |
+|                                 |                                                                    |             (primary<v>                               |
+|                                 |                                                                    |               (literal<v>                             |
+|                                 |                                                                    |                 (numeric_literal<v>                   |
+|                                 |                                                                    |                   (abstract_literal<v>                |
+|                                 |                                                                    |                     (decimal_literal                  |
+|                                 |                                                                    |                       literal: 65535.00, hint: double |
+|                                 |                                                                    |                     )                                 |
+|                                 |                                                                    |                   )                                   |
+|                                 |                                                                    |                 )                                     |
+|                                 |                                                                    |               )                                       |
+|                                 |                                                                    |             )                                         |
+|                                 |                                                                    |           )                                           |
+|                                 |                                                                    |         )                                             |
+|                                 |                                                                    |       )                                               |
+|                                 |                                                                    |     )                                                 |
+|                                 |                                                                    |   )                                                   |
+|                                 |                                                                    | )                                                     |
+|                                 |                                                                    |                                                       |
++---------------------------------+--------------------------------------------------------------------+-------------------------------------------------------+
+| incomplete_type_declaration_001 | type integer;                                                      | (type_declaration                                     |
+|                                 |                                                                    |   (identifier                                         |
+|                                 |                                                                    |     integer                                           |
+|                                 |                                                                    |   )                                                   |
+|                                 |                                                                    | )                                                     |
+|                                 |                                                                    |                                                       |
++---------------------------------+--------------------------------------------------------------------+-------------------------------------------------------+
+
+========================
+type_declaration_failure
+========================
+
++---------------------------+-------------------------------------------------------------------------+----------+
+| File                      | Input                                                                   | Expected |
++---------------------------+-------------------------------------------------------------------------+----------+
+| full_type_declaration_001 | -- this parses successfully to range of physical_literal '32 down' TO 0 |          |
+|                           | type WORD_INDEX is range 31 down to 0;                                  |          |
+|                           |                                                                         |          |
++---------------------------+-------------------------------------------------------------------------+----------+
+
 ===============
 type_definition
 ===============
@@ -9616,7 +9610,7 @@ type_definition
 +---------------------+-----------------------------------+------------------------------------------------+
 | File                | Input                             | Expected                                       |
 +---------------------+-----------------------------------+------------------------------------------------+
-| type_definition_001 | -- type MyBit is                  | (type_declaration<v>                           |
+| type_definition_001 | -- type MyBit is                  | (type_definition<v>                            |
 |                     | (L, H)                            |   (scalar_type_definition<v>                   |
 |                     |                                   |     (enumeration_type_definition               |
 |                     |                                   |       (enumeration_literal<v>                  |
@@ -9634,7 +9628,7 @@ type_definition
 |                     |                                   | )                                              |
 |                     |                                   |                                                |
 +---------------------+-----------------------------------+------------------------------------------------+
-| type_definition_002 | -- type WORD is                   | (type_declaration<v>                           |
+| type_definition_002 | -- type WORD is                   | (type_definition<v>                            |
 |                     | range 31 downto 0                 |   (scalar_type_definition<v>                   |
 |                     |                                   |     (range<v>                                  |
 |                     |                                   |       (simple_expression                       |
@@ -9675,7 +9669,7 @@ type_definition
 |                     |                                   | )                                              |
 |                     |                                   |                                                |
 +---------------------+-----------------------------------+------------------------------------------------+
-| type_definition_003 | -- type Voltage_Level is          | (type_declaration<v>                           |
+| type_definition_003 | -- type Voltage_Level is          | (type_definition<v>                            |
 |                     | range -5.5 to +5.5                |   (scalar_type_definition<v>                   |
 |                     |                                   |     (range<v>                                  |
 |                     |                                   |       (simple_expression                       |
@@ -9718,7 +9712,7 @@ type_definition
 |                     |                                   | )                                              |
 |                     |                                   |                                                |
 +---------------------+-----------------------------------+------------------------------------------------+
-| type_definition_004 | -- type CAPACITY is               | (type_declaration<v>                           |
+| type_definition_004 | -- type CAPACITY is               | (type_definition<v>                            |
 |                     | range 0 to 1E5                    |   (scalar_type_definition<v>                   |
 |                     | units                             |     (physical_type_definition                  |
 |                     |     pF;                           |       (range<v>                                |
@@ -9780,7 +9774,7 @@ type_definition
 |                     |                                   | )                                              |
 |                     |                                   |                                                |
 +---------------------+-----------------------------------+------------------------------------------------+
-| type_definition_005 | array (POSITIVE range <>) of Real | (type_declaration<v>                           |
+| type_definition_005 | array (POSITIVE range <>) of Real | (type_definition<v>                            |
 |                     |                                   |   (composite_type_definition<v>                |
 |                     |                                   |     (array_type_definition<v>                  |
 |                     |                                   |       (unconstrained_array_definition          |
@@ -9804,7 +9798,7 @@ type_definition
 |                     |                                   | )                                              |
 |                     |                                   |                                                |
 +---------------------+-----------------------------------+------------------------------------------------+
-| type_definition_006 | record                            | (type_declaration<v>                           |
+| type_definition_006 | record                            | (type_definition<v>                            |
 |                     |     dummy : string;               |   (composite_type_definition<v>                |
 |                     | end record                        |     (record_type_definition                    |
 |                     |                                   |       (element_declaration                     |
@@ -9826,7 +9820,7 @@ type_definition
 |                     |                                   | )                                              |
 |                     |                                   |                                                |
 +---------------------+-----------------------------------+------------------------------------------------+
-| type_definition_007 | access foo                        | (type_declaration<v>                           |
+| type_definition_007 | access foo                        | (type_definition<v>                            |
 |                     |                                   |   (access_type_definition                      |
 |                     |                                   |     (subtype_indication                        |
 |                     |                                   |       (name<v>                                 |
@@ -9839,7 +9833,7 @@ type_definition
 |                     |                                   | )                                              |
 |                     |                                   |                                                |
 +---------------------+-----------------------------------+------------------------------------------------+
-| type_definition_008 | -- type STRING_FILE is            | (type_declaration<v>                           |
+| type_definition_008 | -- type STRING_FILE is            | (type_definition<v>                            |
 |                     | file of STRING                    |   (name<v>                                     |
 |                     |                                   |     (identifier                                |
 |                     |                                   |       STRING                                   |

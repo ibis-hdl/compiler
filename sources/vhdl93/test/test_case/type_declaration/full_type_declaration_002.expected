@@ -1,8 +1,8 @@
-(full_type_declaration
+(type_declaration
   (identifier
     BIT
   )
-  (type_declaration<v>
+  (type_definition<v>
     (scalar_type_definition<v>
       (enumeration_type_definition
         (enumeration_literal<v>

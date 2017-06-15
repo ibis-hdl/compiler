@@ -1,4 +1,4 @@
-(type_declaration<v>
+(type_definition<v>
   (composite_type_definition<v>
     (array_type_definition<v>
       (unconstrained_array_definition

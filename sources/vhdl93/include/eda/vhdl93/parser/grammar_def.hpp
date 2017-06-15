@@ -632,7 +632,7 @@ struct file_type_definition_class;
 struct formal_designator_class;
 struct formal_parameter_list_class;
 struct formal_part_class;
-struct full_type_declaration_class;
+//struct full_type_declaration_class;
 struct function_call_class;
 struct generate_statement_class;
 struct generation_scheme_class;
@@ -648,7 +648,7 @@ struct guarded_signal_specification_class;
 struct identifier_class;
 struct identifier_list_class;
 struct if_statement_class;
-struct incomplete_type_declaration_class;
+//struct incomplete_type_declaration_class;
 struct index_constraint_class;
 struct index_specification_class;
 struct index_subtype_definition_class;
@@ -862,7 +862,7 @@ typedef x3::rule<file_type_definition_class, ast::file_type_definition> file_typ
 typedef x3::rule<formal_designator_class, ast::formal_designator> formal_designator_type;
 typedef x3::rule<formal_parameter_list_class, ast::formal_parameter_list> formal_parameter_list_type;
 typedef x3::rule<formal_part_class, ast::formal_part> formal_part_type;
-typedef x3::rule<full_type_declaration_class, ast::full_type_declaration> full_type_declaration_type;
+//typedef x3::rule<full_type_declaration_class, ast::full_type_declaration> full_type_declaration_type;
 typedef x3::rule<function_call_class, ast::function_call> function_call_type;
 typedef x3::rule<generate_statement_class> generate_statement_type;
 typedef x3::rule<generation_scheme_class> generation_scheme_type;
@@ -878,7 +878,7 @@ typedef x3::rule<guarded_signal_specification_class> guarded_signal_specificatio
 typedef x3::rule<identifier_class, ast::identifier> identifier_type;
 typedef x3::rule<identifier_list_class, ast::identifier_list> identifier_list_type;
 typedef x3::rule<if_statement_class> if_statement_type;
-typedef x3::rule<incomplete_type_declaration_class, ast::incomplete_type_declaration> incomplete_type_declaration_type;
+//typedef x3::rule<incomplete_type_declaration_class, ast::incomplete_type_declaration> incomplete_type_declaration_type;
 typedef x3::rule<index_constraint_class, ast::index_constraint> index_constraint_type;
 typedef x3::rule<index_specification_class> index_specification_type;
 typedef x3::rule<index_subtype_definition_class, ast::index_subtype_definition> index_subtype_definition_type;
@@ -1092,7 +1092,7 @@ file_type_definition_type const file_type_definition { "file_type_definition" };
 formal_designator_type const formal_designator { "formal_designator" };
 formal_parameter_list_type const formal_parameter_list { "formal_parameter_list" };
 formal_part_type const formal_part { "formal_part" };
-full_type_declaration_type const full_type_declaration { "full_type_declaration" };
+//full_type_declaration_type const full_type_declaration { "full_type_declaration" };
 function_call_type const function_call { "function_call" };
 generate_statement_type const generate_statement { "generate_statement" };
 generation_scheme_type const generation_scheme { "generation_scheme" };
@@ -1108,7 +1108,7 @@ guarded_signal_specification_type const guarded_signal_specification { "guarded_
 identifier_type const identifier { "identifier" };
 identifier_list_type const identifier_list { "identifier_list" };
 if_statement_type const if_statement { "if_statement" };
-incomplete_type_declaration_type const incomplete_type_declaration { "incomplete_type_declaration" };
+//incomplete_type_declaration_type const incomplete_type_declaration { "incomplete_type_declaration" };
 index_constraint_type const index_constraint { "index_constraint" };
 index_specification_type const index_specification { "index_specification" };
 index_subtype_definition_type const index_subtype_definition { "index_subtype_definition" };
@@ -2649,7 +2649,7 @@ auto const formal_part_def =
     ;
 
 
-
+#if 0 // UNUSED; embedded into type_declaration
 // full_type_declaration ::=                                             [§ 4.1]
 //     type identifier is type_definition ;
 auto const full_type_declaration_def =
@@ -2659,7 +2659,7 @@ auto const full_type_declaration_def =
     >> type_definition
     >  ';'
     ;
-
+#endif
 
 
 // function_call ::=                                                   [§ 7.3.3]
@@ -2821,7 +2821,7 @@ auto const if_statement_def =
 ;
 #endif
 
-
+#if 0 // UNUSED; embedded into type_declaration
 // incomplete_type_declaration ::=                                     [§ 3.3.1]
 //     type identifier ;
 auto const incomplete_type_declaration_def =
@@ -2829,7 +2829,7 @@ auto const incomplete_type_declaration_def =
     >> identifier
     >  ';'
     ;
-
+#endif
 
 
 // index_constraint ::=                                                [§ 3.2.1]
@@ -4055,9 +4055,11 @@ auto const type_conversion_def =
 // type_declaration ::=                                                  [§ 4.1]
 //       full_type_declaration
 //     | incomplete_type_declaration
-auto const type_declaration_def =
-      full_type_declaration
-    | incomplete_type_declaration
+auto const type_declaration_def = // Note; re-typed as node!
+       TYPE
+    >> identifier
+    >> -( IS >> type_definition )
+    >  ';'
     ;
 
 
@@ -4329,7 +4331,7 @@ BOOST_SPIRIT_DEFINE(  // -- F --
     , formal_designator
     , formal_parameter_list
     , formal_part
-    , full_type_declaration
+    //EMBEDDED, full_type_declaration
     , function_call
 )
 BOOST_SPIRIT_DEFINE(  // -- G --
@@ -4348,7 +4350,7 @@ BOOST_SPIRIT_DEFINE(  // -- I --
       identifier
     , identifier_list
     //, if_statement
-    , incomplete_type_declaration
+    //EMBEDDED, incomplete_type_declaration
     , index_constraint
     //, index_specification
     , index_subtype_definition

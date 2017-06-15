@@ -1147,17 +1147,6 @@ void printer::operator()(formal_part const &node)
 }
 
 
-void printer::operator()(full_type_declaration const &node)
-{
-    static char const symbol[]{ "full_type_declaration" };
-    symbol_scope<full_type_declaration> _(*this, symbol);
-
-    (*this)(node.identifier);
-    os << "\n";
-    (*this)(node.type_definition);
-}
-
-
 void printer::operator()(function_call const &node)
 {
     static char const symbol[]{ "function_call" };
@@ -2279,15 +2268,21 @@ void printer::operator()(type_conversion const &node)
 
 void printer::operator()(type_declaration const &node)
 {
+    // {full, incomplete}_type_declaration
     static char const symbol[]{ "type_declaration" };
     symbol_scope<type_declaration> _(*this, symbol);
-    visit(node);
+    (*this)(node.identifier);
+
+    if(node.type_definition) {
+        os << "\n";
+        (*this)(*node.type_definition);
+    }
 }
 
 
 void printer::operator()(type_definition const &node)
 {
-    static char const symbol[]{ "type_declaration" };
+    static char const symbol[]{ "type_definition" };
     symbol_scope<type_definition> _(*this, symbol);
     visit(node);
 }
