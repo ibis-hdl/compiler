@@ -921,7 +921,7 @@ typedef x3::rule<package_declarative_part_class> package_declarative_part_type;
 typedef x3::rule<parameter_specification_class> parameter_specification_type;
 typedef x3::rule<physical_literal_class, ast::physical_literal> physical_literal_type;
 typedef x3::rule<physical_type_definition_class, ast::physical_type_definition> physical_type_definition_type;
-typedef x3::rule<port_clause_class> port_clause_type;
+typedef x3::rule<port_clause_class, ast::port_clause> port_clause_type;
 //typedef x3::rule<port_list_class, ast::port_list> port_list_type;
 typedef x3::rule<port_map_aspect_class, ast::port_map_aspect> port_map_aspect_type;
 typedef x3::rule<prefix_class, ast::prefix> prefix_type;

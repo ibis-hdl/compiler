@@ -1,1 +1,0 @@
-port (X, Y, Cin: in Bit; Cout, Sum: out Bit)
