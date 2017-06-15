@@ -9,7 +9,7 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_ACTUAL_PART_HPP_
 
 
-#include <eda/vhdl93/ast/namespace_alias.hpp>
+#include <eda/vhdl93/ast/util/namespace_alias.hpp>
 
 #include <eda/vhdl93/ast/name.hpp>
 #include <eda/vhdl93/ast/actual_designator.hpp>

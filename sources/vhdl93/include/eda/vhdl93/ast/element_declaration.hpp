@@ -9,7 +9,7 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_ELEMENT_DECLARATION_HPP_
 
 
-#include <eda/vhdl93/ast/namespace_alias.hpp>
+#include <eda/vhdl93/ast/util/namespace_alias.hpp>
 
 #include <eda/vhdl93/ast/identifier_list.hpp>
 #include <eda/vhdl93/ast/element_subtype_definition.hpp>

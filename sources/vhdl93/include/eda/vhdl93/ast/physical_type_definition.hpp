@@ -9,14 +9,14 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_PHYSICAL_TYPE_DEFINITION_HPP_
 
 
-#include <eda/vhdl93/ast/namespace_alias.hpp>
+#include <eda/vhdl93/ast/util/namespace_alias.hpp>
 #include <eda/vhdl93/ast/position_tagged.hpp>
 
 #include <eda/vhdl93/ast/range_constraint.hpp>
 #include <eda/vhdl93/ast/primary_unit_declaration.hpp>
 #include <eda/vhdl93/ast/secondary_unit_declaration.hpp>
 #include <eda/vhdl93/ast/simple_name.hpp>
-#include <eda/vhdl93/ast/optional.hpp>
+#include <eda/vhdl93/ast/util/optional.hpp>
 #include <vector>
 
 

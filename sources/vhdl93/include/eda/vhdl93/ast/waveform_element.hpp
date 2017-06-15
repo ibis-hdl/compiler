@@ -9,12 +9,12 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_WAVEFORM_ELEMENT_HPP_
 
 
-#include <eda/vhdl93/ast/namespace_alias.hpp>
+#include <eda/vhdl93/ast/util/namespace_alias.hpp>
 #include <eda/vhdl93/ast/position_tagged.hpp>
 
 #include <eda/vhdl93/ast/expression.hpp>
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
-#include <eda/vhdl93/ast/optional.hpp>
+#include <eda/vhdl93/ast/util/optional.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {

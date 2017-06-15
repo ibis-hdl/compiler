@@ -9,9 +9,9 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_INTERFACE_DECLARATION_HPP_
 
 
-#include <eda/vhdl93/ast/namespace_alias.hpp>
+#include <eda/vhdl93/ast/util/namespace_alias.hpp>
 
-#include <eda/vhdl93/ast/nullary.hpp>
+#include <eda/vhdl93/ast/util/nullary.hpp>
 #include <eda/vhdl93/ast/interface_constant_declaration.hpp>
 #include <eda/vhdl93/ast/interface_signal_declaration.hpp>
 #include <eda/vhdl93/ast/interface_variable_declaration.hpp>

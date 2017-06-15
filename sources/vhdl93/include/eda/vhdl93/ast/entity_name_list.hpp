@@ -9,10 +9,10 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_ENTITY_NAME_LIST_HPP_
 
 
-#include <eda/vhdl93/ast/namespace_alias.hpp>
+#include <eda/vhdl93/ast/util/namespace_alias.hpp>
 
 #include <eda/vhdl93/ast/entity_designator.hpp>
-#include <eda/vhdl93/ast/nullary.hpp>
+#include <eda/vhdl93/ast/util/nullary.hpp>
 #include <eda/vhdl93/ast/keyword_token.hpp>
 
 #include <boost/spirit/home/x3/support/ast/variant.hpp>

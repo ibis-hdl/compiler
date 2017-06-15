@@ -9,7 +9,7 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_UNCONSTRAINED_ARRAY_DEFINITION_HPP_
 
 
-#include <eda/vhdl93/ast/namespace_alias.hpp>
+#include <eda/vhdl93/ast/util/namespace_alias.hpp>
 
 #include <eda/vhdl93/ast/index_subtype_definition.hpp>
 #include <eda/vhdl93/ast/subtype_indication.hpp>

@@ -9,11 +9,11 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_NULL_STATEMENT_HPP_
 
 
-#include <eda/vhdl93/ast/namespace_alias.hpp>
+#include <eda/vhdl93/ast/util/namespace_alias.hpp>
 #include <eda/vhdl93/ast/position_tagged.hpp>
 
 #include <eda/vhdl93/ast/label.hpp>
-#include <eda/vhdl93/ast/optional.hpp>
+#include <eda/vhdl93/ast/util/optional.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {

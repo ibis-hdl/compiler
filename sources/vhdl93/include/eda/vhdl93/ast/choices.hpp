@@ -9,9 +9,9 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_CHOICES_HPP_
 
 
-#include <eda/vhdl93/ast/namespace_alias.hpp>
+#include <eda/vhdl93/ast/util/namespace_alias.hpp>
 
-#include <eda/vhdl93/ast/nullary.hpp>
+#include <eda/vhdl93/ast/util/nullary.hpp>
 #include <eda/vhdl93/ast/simple_name.hpp>
 #include <eda/vhdl93/ast/discrete_range.hpp>
 #include <eda/vhdl93/ast/simple_expression.hpp>

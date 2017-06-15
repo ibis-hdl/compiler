@@ -5,8 +5,8 @@
  *      Author: olaf
  */
 
-#ifndef SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_NULLARY_HPP_
-#define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_NULLARY_HPP_
+#ifndef SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_UTIL_NULLARY_HPP_
+#define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_UTIL_NULLARY_HPP_
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -22,4 +22,4 @@ struct nullary { };
 } } } // namespace eda.vhdl93.ast
 
 
-#endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_NULLARY_HPP_ */
+#endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_UTIL_NULLARY_HPP_ */

@@ -9,9 +9,9 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_SCALAR_TYPE_DEFINITION_HPP_
 
 
-#include <eda/vhdl93/ast/namespace_alias.hpp>
+#include <eda/vhdl93/ast/util/namespace_alias.hpp>
 
-#include <eda/vhdl93/ast/nullary.hpp>
+#include <eda/vhdl93/ast/util/nullary.hpp>
 #include <eda/vhdl93/ast/enumeration_type_definition.hpp>
 #include <eda/vhdl93/ast/range_constraint.hpp>
 #include <eda/vhdl93/ast/physical_type_definition.hpp>

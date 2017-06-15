@@ -9,13 +9,13 @@
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_SUBTYPE_INDICATION_HPP_
 
 
-#include <eda/vhdl93/ast/namespace_alias.hpp>
+#include <eda/vhdl93/ast/util/namespace_alias.hpp>
 #include <eda/vhdl93/ast/position_tagged.hpp>
 
 #include <eda/vhdl93/ast/name.hpp>
 #include <eda/vhdl93/ast/type_mark.hpp>
 //#include <eda/vhdl93/ast/constraint.hpp>
-#include <eda/vhdl93/ast/optional.hpp>
+#include <eda/vhdl93/ast/util/optional.hpp>
 #include <vector>
 
 
