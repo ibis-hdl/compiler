@@ -186,16 +186,16 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::library_clause,
     logical_name_list
 )
 
-BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::options,
-    guarded, delay_mechanism
-)
-
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::next_statement,
     label, loop_label, condition
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::null_statement,
     label
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::options,
+    guarded, delay_mechanism
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::physical_literal,
@@ -220,6 +220,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::procedure_call,
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::procedure_call_statement,
     label, procedure_call
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::qualified_expression,
+    type_mark, aggregate_or_expression
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::range_expression, // part of range

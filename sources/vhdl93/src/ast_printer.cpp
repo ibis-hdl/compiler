@@ -181,9 +181,9 @@ void printer::operator()(alias_designator const &node)
 
 void printer::operator()(allocator const &node)
 {
-    static char const symbol[]{ "XXX allocator" };
+    static char const symbol[]{ "allocator" };
     symbol_scope<allocator> _(*this, symbol);
-    //visit(node);
+    visit(node);
 }
 
 
@@ -1755,9 +1755,24 @@ void printer::operator()(process_statement const &node)
 
 void printer::operator()(qualified_expression const &node)
 {
-    static char const symbol[]{ "XXX qualified_expression" };
+    static char const symbol[]{ "qualified_expression" };
     symbol_scope<qualified_expression> _(*this, symbol);
-    //visit(node);
+
+    (*this)(node.type_mark);
+    os << "\n";
+
+    util::visit_in_place(
+        node.aggregate_or_expression,
+        [this](ast::expression const& expr) {
+            (*this)(expr);
+        },
+        [this](ast::aggregate const& aggregate) {
+            (*this)(aggregate);
+        },
+        [this](ast::nullary nullary) {
+            (*this)(nullary);
+        }
+    );
 }
 
 
