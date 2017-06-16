@@ -376,9 +376,20 @@ void printer::operator()(basic_graphic_character const &node)
 
 void printer::operator()(binding_indication const &node)
 {
-    static char const symbol[]{ "XXX binding_indication" };
+    static char const symbol[]{ "binding_indication" };
     symbol_scope<binding_indication> _(*this, symbol);
-    //os << node;
+
+    if(node.entity_aspect) {
+        (*this)(*node.entity_aspect);
+    }
+    if(node.generic_map_aspect) {
+        if(node.entity_aspect) { os << "\n"; }
+        (*this)(*node.generic_map_aspect);
+    }
+    if(node.port_map_aspect) {
+        if(node.entity_aspect || node.generic_map_aspect) { os << "\n"; }
+        (*this)(*node.port_map_aspect);
+    }
 }
 
 
@@ -428,9 +439,26 @@ void printer::operator()(block_declarative_part const &node)
 
 void printer::operator()(block_header const &node)
 {
-    static char const symbol[]{ "XXX block_header" };
+    static char const symbol[]{ "block_header" };
     symbol_scope<block_header> _(*this, symbol);
-    //os << node;
+
+    if(node.generic_part) {
+        auto const& generic_part = *node.generic_part;
+        (*this)(generic_part.generic_clause);
+        if(generic_part.generic_map_aspect) {
+            os << "\n";
+            (*this)(*generic_part.generic_map_aspect);
+        }
+    }
+    if(node.port_part) {
+        auto const& port_part = *node.port_part;
+        if(node.generic_part) { os << "\n"; }
+        (*this)(port_part.port_clause);
+        if(port_part.port_map_aspect) {
+            os << "\n";
+            (*this)(*port_part.port_map_aspect);
+        }
+    }
 }
 
 
@@ -541,9 +569,25 @@ void printer::operator()(component_configuration const &node)
 
 void printer::operator()(component_declaration const &node)
 {
-    static char const symbol[]{ "XXX component_declaration" };
+    static char const symbol[]{ "component_declaration" };
     symbol_scope<component_declaration> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.identifier);
+
+    if(node.local_generic_clause) {
+        os << "\n";
+        (*this)(*node.local_generic_clause);
+    }
+
+    if(node.local_port_clause) {
+        os << "\n";
+        (*this)(*node.local_port_clause);
+    }
+
+    if(node.name) {
+        os << "\n";
+        (*this)(*node.name);
+    }
 }
 
 
@@ -613,17 +657,42 @@ void printer::operator()(condition_clause const &node)
 
 void printer::operator()(conditional_signal_assignment const &node)
 {
-    static char const symbol[]{ "XXX conditional_signal_assignment" };
+    static char const symbol[]{ "conditional_signal_assignment" };
     symbol_scope<conditional_signal_assignment> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.target);
+    os << "\n";
+    (*this)(node.options);
+    os << "\n";
+    (*this)(node.conditional_waveforms);
 }
 
 
 void printer::operator()(conditional_waveforms const &node)
 {
-    static char const symbol[]{ "XXX conditional_waveforms" };
+    static char const symbol[]{ "conditional_waveforms" };
     symbol_scope<conditional_waveforms> _(*this, symbol);
-    //os << node;
+
+    if(node.chunks.size() > 0) {
+        auto const N = node.chunks.size() - 1;
+        unsigned i = 0;
+        for(auto const& chunk : node.chunks) {
+            (*this)(chunk.waveform);
+            os << ",\n";
+            (*this)(chunk.condition);
+            if(i++ != N) {
+                os << ",\n";
+            }
+        }
+        os << "\n";
+    }
+
+    (*this)(node.waveform);
+
+    if(node.condition) {
+        os << "\n";
+        (*this)(*node.condition);
+    }
 }
 
 
@@ -669,9 +738,18 @@ void printer::operator()(configuration_specification const &node)
 
 void printer::operator()(constant_declaration const &node)
 {
-    static char const symbol[]{ "XXX constant_declaration" };
+    static char const symbol[]{ "constant_declaration" };
     symbol_scope<constant_declaration> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.identifier_list);
+    os << "\n";
+
+    (*this)(node.subtype_indication);
+
+    if(node.expression) {
+        os << "\n";
+        (*this)(*node.expression);
+    }
 }
 
 
@@ -1564,7 +1642,7 @@ void printer::operator()(options const &node)
     symbol_scope<options> _(*this, symbol);
 
     if(node.guarded) {
-        (*this)(*node.guarded);  // keyword GUARDED
+        os << "GUARDED";
     }
     if(node.delay_mechanism) {
         if(node.guarded) { os << "\n"; }

@@ -54,8 +54,24 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::based_literal,
     base, number, exponent
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::binding_indication,
+        entity_aspect, generic_map_aspect, port_map_aspect
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::bit_string_literal,
     literal, hint
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::block_header::generic_part_chunk,
+    generic_clause, generic_map_aspect
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::block_header::port_part_chunk,
+    port_clause, port_map_aspect
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::block_header,
+    generic_part, port_part
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::case_statement,
@@ -70,8 +86,28 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::character_literal,
     literal
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::component_declaration,
+    identifier, local_generic_clause, local_port_clause, name
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::conditional_signal_assignment,
+    target, options, conditional_waveforms
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::conditional_waveforms::chunk,
+    waveform, condition
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::conditional_waveforms,
+    chunks, waveform, condition
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::condition_clause,
     condition
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::constant_declaration,
+    identifier_list, subtype_indication, expression
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::constrained_array_definition,

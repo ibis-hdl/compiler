@@ -22,8 +22,11 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 struct options : position_tagged
 {
-    optional<ast::keyword_token>            guarded; // GUARDED
+    bool                                    guarded;
     optional<ast::delay_mechanism>          delay_mechanism;
+
+    options() : guarded{}
+    { }
 };
 
 

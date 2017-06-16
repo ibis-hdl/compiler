@@ -36,13 +36,13 @@
 //#include <eda/vhdl93/ast/basic_character.hpp>
 //#include <eda/vhdl93/ast/basic_graphic_character.hpp>
 //#include <eda/vhdl93/ast/basic_identifier.hpp>
-//#include <eda/vhdl93/ast/binding_indication.hpp>
+#include <eda/vhdl93/ast/binding_indication.hpp>
 //DISABLED #include <eda/vhdl93/ast/bit_string_literal.hpp>
 //#include <eda/vhdl93/ast/bit_value.hpp>
 //#include <eda/vhdl93/ast/block_configuration.hpp>
 //#include <eda/vhdl93/ast/block_declarative_item.hpp>
 //#include <eda/vhdl93/ast/block_declarative_part.hpp>
-//#include <eda/vhdl93/ast/block_header.hpp>
+#include <eda/vhdl93/ast/block_header.hpp>
 //#include <eda/vhdl93/ast/block_specification.hpp>
 //#include <eda/vhdl93/ast/block_statement.hpp>
 //#include <eda/vhdl93/ast/block_statement_part.hpp>
@@ -52,7 +52,7 @@
 //DISABLED #include <eda/vhdl93/ast/choice.hpp>
 #include <eda/vhdl93/ast/choices.hpp>
 //#include <eda/vhdl93/ast/component_configuration.hpp>
-//#include <eda/vhdl93/ast/component_declaration.hpp>
+#include <eda/vhdl93/ast/component_declaration.hpp>
 //#include <eda/vhdl93/ast/component_instantiation_statement.hpp>
 //#include <eda/vhdl93/ast/component_specification.hpp>
 //#include <eda/vhdl93/ast/composite_type_definition.hpp>
@@ -62,14 +62,14 @@
 //#include <eda/vhdl93/ast/concurrent_statement.hpp>
 //DISABLED #include <eda/vhdl93/ast/condition.hpp>
 //#include <eda/vhdl93/ast/condition_clause.hpp>
-//#include <eda/vhdl93/ast/conditional_signal_assignment.hpp>
-//#include <eda/vhdl93/ast/conditional_waveforms.hpp>
+#include <eda/vhdl93/ast/conditional_signal_assignment.hpp>
+//DISABLED#include <eda/vhdl93/ast/conditional_waveforms.hpp>
 //#include <eda/vhdl93/ast/configuration_declaration.hpp>
 //#include <eda/vhdl93/ast/configuration_declarative_item.hpp>
 //#include <eda/vhdl93/ast/configuration_declarative_part.hpp>
 //#include <eda/vhdl93/ast/configuration_item.hpp>
 //#include <eda/vhdl93/ast/configuration_specification.hpp>
-//#include <eda/vhdl93/ast/constant_declaration.hpp>
+#include <eda/vhdl93/ast/constant_declaration.hpp>
 //#include <eda/vhdl93/ast/constrained_array_definition.hpp>
 #include <eda/vhdl93/ast/constraint.hpp>
 //#include <eda/vhdl93/ast/context_clause.hpp>
