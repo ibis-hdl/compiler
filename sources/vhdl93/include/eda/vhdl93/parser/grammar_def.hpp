@@ -3982,7 +3982,7 @@ auto const subtype_declaration_def =
  * context. */
 auto const subtype_indication_def =
        x3::repeat(1 ,2)[
-           name         // -resolution_function_name> >> type_mark
+           name         // -resolution_function_name >> type_mark
        ]
     >> -constraint
     ;
