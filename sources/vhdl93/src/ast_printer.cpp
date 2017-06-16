@@ -2205,14 +2205,19 @@ void printer::operator()(subtype_indication const &node)
     static char const symbol[]{ "subtype_indication" };
     symbol_scope<subtype_indication> _(*this, symbol);
 
-    /* note the use of subtype_indication's visitor API due to the way how
-     * the parser parses here; see notes at the rules self.  */
-    if(node.resolution_function_name()) {
-        (*this)(*node.resolution_function_name());
-        os << "\n";
-    }
+    if(node.unspecified_name_list.size() == 2) {
 
-    (*this)(node.type_mark());
+        auto const& resolution_function_name = node.unspecified_name_list.front();
+        (*this)(resolution_function_name);
+        os << "\n";
+
+        auto const& type_mark = node.unspecified_name_list.back();
+        (*this)(type_mark);
+
+    } else {
+        auto const& type_mark = node.unspecified_name_list.front();
+        (*this)(type_mark);
+    }
 
     if(node.constraint) {
         os << "\n";

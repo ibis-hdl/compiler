@@ -3973,23 +3973,17 @@ auto const subtype_declaration_def =
 
 // subtype_indication ::=                                                [§ 4.2]
 //     [ resolution_function_name ] type_mark [ constraint ]
-namespace subtype_indication_detail {
-
-    /* parse a list of unspecified names, since
-     *      resolution_function_name ::= name
-     *      type_mark ::= type_name | subtype_name
-     * is ambiguous. Nevertheless, syntactically resolution_function_name and
-     * type_mark are names, semantically only a subset. Maybe here is another
-     * approach. */
-    /* FixMe: find a better way, as constraints are full implemented, e.g.: -name >> type_mark */
-    auto const unspecified_name_list = x3::rule<struct _, std::vector<ast::name>> { "subtype_indication" } =
-        x3::repeat(1 ,2)[
-            name
-        ]
-        ;
-}
+/*
+ * parse a list of unspecified names, since
+ *      resolution_function_name ::= name
+ *      type_mark                ::= type_name | subtype_name
+ * is ambiguous, even with optional. Nevertheless, syntactically
+ * resolution_function_name and type_mark are names, semantically matters on
+ * context. */
 auto const subtype_indication_def =
-       subtype_indication_detail::unspecified_name_list
+       x3::repeat(1 ,2)[
+           name         // -resolution_function_name> >> type_mark
+       ]
     >> -constraint
     ;
 
