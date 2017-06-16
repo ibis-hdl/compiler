@@ -10,7 +10,7 @@
 
 
 #include <eda/vhdl93/ast/util/namespace_alias.hpp>
-#include <eda/vhdl93/ast/position_tagged.hpp>
+#include <eda/vhdl93/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl93/ast/condition.hpp>
 #include <eda/vhdl93/ast/expression.hpp>

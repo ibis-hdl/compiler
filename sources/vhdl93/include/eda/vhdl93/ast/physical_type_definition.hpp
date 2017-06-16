@@ -10,7 +10,7 @@
 
 
 #include <eda/vhdl93/ast/util/namespace_alias.hpp>
-#include <eda/vhdl93/ast/position_tagged.hpp>
+#include <eda/vhdl93/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl93/ast/range_constraint.hpp>
 #include <eda/vhdl93/ast/primary_unit_declaration.hpp>
