@@ -54,12 +54,12 @@
 //#include <eda/vhdl93/ast/component_configuration.hpp>
 #include <eda/vhdl93/ast/component_declaration.hpp>
 //#include <eda/vhdl93/ast/component_instantiation_statement.hpp>
-//#include <eda/vhdl93/ast/component_specification.hpp>
+#include <eda/vhdl93/ast/component_specification.hpp>
 //#include <eda/vhdl93/ast/composite_type_definition.hpp>
-//#include <eda/vhdl93/ast/concurrent_assertion_statement.hpp>
-//#include <eda/vhdl93/ast/concurrent_procedure_call_statement.hpp>
-//#include <eda/vhdl93/ast/concurrent_signal_assignment_statement.hpp>
-//#include <eda/vhdl93/ast/concurrent_statement.hpp>
+//DISABLED#include <eda/vhdl93/ast/concurrent_assertion_statement.hpp>
+//DISABLED#include <eda/vhdl93/ast/concurrent_procedure_call_statement.hpp>
+//DISABLED#include <eda/vhdl93/ast/concurrent_signal_assignment_statement.hpp>
+#include <eda/vhdl93/ast/concurrent_statement.hpp>
 //DISABLED #include <eda/vhdl93/ast/condition.hpp>
 //#include <eda/vhdl93/ast/condition_clause.hpp>
 #include <eda/vhdl93/ast/conditional_signal_assignment.hpp>
@@ -72,15 +72,15 @@
 #include <eda/vhdl93/ast/constant_declaration.hpp>
 //#include <eda/vhdl93/ast/constrained_array_definition.hpp>
 #include <eda/vhdl93/ast/constraint.hpp>
-//#include <eda/vhdl93/ast/context_clause.hpp>
-//#include <eda/vhdl93/ast/context_item.hpp>
+#include <eda/vhdl93/ast/context_clause.hpp>
+//DISABLED//#include <eda/vhdl93/ast/context_item.hpp>
 //DISABLED #include <eda/vhdl93/ast/decimal_literal.hpp>
-//#include <eda/vhdl93/ast/declaration.hpp>
+#include <eda/vhdl93/ast/declaration.hpp>
 //DISABLED #include <eda/vhdl93/ast/delay_mechanism.hpp>
 //#include <eda/vhdl93/ast/design_file.hpp>
 //#include <eda/vhdl93/ast/design_unit.hpp>
 //#include <eda/vhdl93/ast/designator.hpp>
-//#include <eda/vhdl93/ast/disconnection_specification.hpp>
+#include <eda/vhdl93/ast/disconnection_specification.hpp>
 //#include <eda/vhdl93/ast/discrete_range.hpp>
 //DISABLED#include <eda/vhdl93/ast/element_association.hpp>
 //#include <eda/vhdl93/ast/element_declaration.hpp>
@@ -88,12 +88,13 @@
 #include <eda/vhdl93/ast/entity_aspect.hpp>
 //#include <eda/vhdl93/ast/entity_class.hpp>
 //#include <eda/vhdl93/ast/entity_class_entry.hpp>
-//#include <eda/vhdl93/ast/entity_class_entry_list.hpp>
+#include <eda/vhdl93/ast/entity_class_entry_list.hpp>
 //#include <eda/vhdl93/ast/entity_declaration.hpp>
-//#include <eda/vhdl93/ast/entity_declarative_item.hpp>
-//#include <eda/vhdl93/ast/entity_declarative_part.hpp>
+//DISABLED#include <eda/vhdl93/ast/entity_declarative_item.hpp>
+#include <eda/vhdl93/ast/entity_declarative_part.hpp>
 //#include <eda/vhdl93/ast/entity_designator.hpp>
-//#include <eda/vhdl93/ast/entity_header.hpp>
+//DISABLED#include <eda/vhdl93/ast/guarded_signal_specification.hpp>
+#include <eda/vhdl93/ast/entity_header.hpp>
 //#include <eda/vhdl93/ast/entity_name_list.hpp>
 //#include <eda/vhdl93/ast/entity_specification.hpp>
 //#include <eda/vhdl93/ast/entity_statement.hpp>
@@ -119,7 +120,7 @@
 //DISABLED #include <eda/vhdl93/ast/function_call.hpp>
 //#include <eda/vhdl93/ast/generate_statement.hpp>
 //#include <eda/vhdl93/ast/generation_scheme.hpp>
-///vhdl93/ast/instantiation_list.hpp>
+//DISABLED#include <eda/vhdl93/ast/instantiation_list.hpp>
 //#include <eda/vhdl93/ast/integer_type_definition.hpp>
 //DISABLED #include <eda/vhdl93/ast/interface_constant_declaration.hpp>
 #include <eda/vhdl93/ast/interface_declaration.hpp>
@@ -156,9 +157,9 @@
 //#include <eda/vhdl93/ast/physical_type_definition.hpp>
 //#include <eda/vhdl93/ast/port_clause.hpp>
 #include <eda/vhdl93/ast/procedure_call_statement.hpp>
-//#include <eda/vhdl93/ast/process_declarative_item.hpp>
-//#include <eda/vhdl93/ast/process_declarative_part.hpp>
-//#include <eda/vhdl93/ast/process_statement.hpp>
+//DISABLED#include <eda/vhdl93/ast/process_declarative_item.hpp>
+#include <eda/vhdl93/ast/process_declarative_part.hpp>
+#include <eda/vhdl93/ast/process_statement.hpp>
 #include <eda/vhdl93/ast/process_statement_part.hpp>
 //#include <eda/vhdl93/ast/qualified_expression.hpp>
 //DISABLED #include <eda/vhdl93/ast/range.hpp>
@@ -170,7 +171,7 @@
 //#include <eda/vhdl93/ast/secondary_unit.hpp>
 //#include <eda/vhdl93/ast/secondary_unit_declaration.hpp>
 //DISABLED #include <eda/vhdl93/ast/selected_name.hpp>
-//#include <eda/vhdl93/ast/selected_signal_assignment.hpp>
+#include <eda/vhdl93/ast/selected_signal_assignment.hpp>
 #include <eda/vhdl93/ast/selected_waveforms.hpp>
 #include <eda/vhdl93/ast/sensitivity_clause.hpp>
 //#include <eda/vhdl93/ast/sequence_of_statements.hpp>
@@ -203,7 +204,7 @@
 //#include <eda/vhdl93/ast/unconstrained_array_definition.hpp>
 #include <eda/vhdl93/ast/use_clause.hpp>
 //#include <eda/vhdl93/ast/variable_assignment_statement.hpp>
-//#include <eda/vhdl93/ast/variable_declaration.hpp>
+#include <eda/vhdl93/ast/variable_declaration.hpp>
 #include <eda/vhdl93/ast/wait_statement.hpp>
 //DISABLED #include <eda/vhdl93/ast/waveform.hpp>
 //DISABLED #include <eda/vhdl93/ast/waveform_element.hpp>

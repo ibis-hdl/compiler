@@ -90,6 +90,22 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::component_declaration,
     identifier, local_generic_clause, local_port_clause, name
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::component_specification,
+    instantiation_list, component_name
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::concurrent_assertion_statement,
+    label, postponed, assertion
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::concurrent_procedure_call_statement,
+    label, postponed, procedure_call
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::concurrent_signal_assignment_statement,
+    label, postponed, signal_assignment
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::conditional_signal_assignment,
     target, options, conditional_waveforms
 )
@@ -120,6 +136,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::decimal_literal,
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::delay_mechanism,
     time_expression, type
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::disconnection_specification,
+    guarded_signal_specification, time_expression
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::element_association,
@@ -190,6 +210,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::generic_map_aspect,
     association_list
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::guarded_signal_specification,
+    guarded_signal_list, type_mark
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::identifier,
     name
 )
@@ -258,6 +282,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::procedure_call_statement,
     label, procedure_call
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::process_statement,
+    label, postponed, sensitivity_list, declarative_part, statement_part, exit_postponed, exit_label
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::qualified_expression,
     type_mark, aggregate_or_expression
 )
@@ -292,6 +320,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::secondary_unit_declaration,
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::selected_name,
     prefix, suffix
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::selected_signal_assignment,
+    expression, options, selected_waveforms
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::selected_waveform,
@@ -380,6 +412,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::use_clause,
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::variable_assignment_statement,
     label, target, expression
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::variable_declaration,
+    shared, identifier_list, subtype_indication, expression
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::wait_statement,
