@@ -140,7 +140,7 @@
 //DISABLED #include <eda/vhdl93/ast/next_statement.hpp>
 //DISABELD #include <eda/vhdl93/ast/null_statement.hpp>
 //DISABLED #include <eda/vhdl93/ast/numeric_literal.hpp>
-//#include <eda/vhdl93/ast/object_declaration.hpp>
+//UNSUED_IN_BNF//#include <eda/vhdl93/ast/object_declaration.hpp>
 //DISABLED #include <eda/vhdl93/ast/operator_token.hpp>
 //DISABLED #include <eda/vhdl93/ast/operator_symbol.hpp>
 #include <eda/vhdl93/ast/options.hpp>

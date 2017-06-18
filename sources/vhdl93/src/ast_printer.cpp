@@ -1708,14 +1708,6 @@ void printer::operator()(numeric_literal const &node)
 }
 
 
-void printer::operator()(object_declaration const &node)
-{
-    static char const symbol[]{ "XXX object_declaration" };
-    symbol_scope<object_declaration> _(*this, symbol);
-    //visit(node);
-}
-
-
 void printer::operator()(options const &node)
 {
     static char const symbol[]{ "options" };

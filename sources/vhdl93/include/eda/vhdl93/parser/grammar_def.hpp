@@ -678,7 +678,6 @@ struct name_class;
 struct next_statement_class;
 struct null_statement_class;
 struct numeric_literal_class;
-struct object_declaration_class;
 struct operator_symbol_class;
 struct options_class;
 struct package_body_class;
@@ -907,7 +906,6 @@ typedef x3::rule<name_class, ast::name> name_type;
 typedef x3::rule<next_statement_class, ast::next_statement> next_statement_type;
 typedef x3::rule<null_statement_class, ast::null_statement> null_statement_type;
 typedef x3::rule<numeric_literal_class, ast::numeric_literal> numeric_literal_type;
-typedef x3::rule<object_declaration_class> object_declaration_type;
 typedef x3::rule<operator_symbol_class, ast::operator_symbol> operator_symbol_type;
 typedef x3::rule<options_class, ast::options> options_type;
 typedef x3::rule<package_body_class> package_body_type;
@@ -1136,7 +1134,6 @@ name_type const name { "name" };
 next_statement_type const next_statement { "next_statement" };
 null_statement_type const null_statement { "null_statement" };
 numeric_literal_type const numeric_literal { "numeric_literal" };
-object_declaration_type const object_declaration { "object_declaration" };
 operator_symbol_type const operator_symbol { "operator_symbol" };
 options_type const options { "options" };
 package_body_type const package_body { "package_body" };
@@ -3130,7 +3127,7 @@ auto const numeric_literal_def = /* Note, order changed since matters */
     ;
 
 
-#if 0
+#if 0 // UNUSED, no refererer in BNF (even unused declaration)
 // object_declaration ::=                                              [§ 4.3.1]
 //       constant_declaration
 //     | signal_declaration
@@ -4379,7 +4376,6 @@ BOOST_SPIRIT_DEFINE(  // -- N --
     , numeric_literal
 )
 BOOST_SPIRIT_DEFINE(  // -- O --
-    //  object_declaration
       operator_symbol
     , options
 )

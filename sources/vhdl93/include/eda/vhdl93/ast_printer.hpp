@@ -101,7 +101,6 @@ struct iteration_scheme;
 struct library_clause;
 struct library_unit;
 struct loop_statement;
-struct object_declaration;
 struct options;
 struct package_body;
 struct package_body_declarative_item;
@@ -307,7 +306,6 @@ public:
     void operator()(next_statement const& node);
     void operator()(null_statement const& node);
     void operator()(numeric_literal const& node);
-    void operator()(object_declaration const& node);
     void operator()(options const& node);
     void operator()(package_body const& node);
     void operator()(package_body_declarative_item const& node);
