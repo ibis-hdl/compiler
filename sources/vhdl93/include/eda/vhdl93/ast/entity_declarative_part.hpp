@@ -21,7 +21,7 @@
 //#include <eda/vhdl93/ast/group_declaration.hpp>
 //#include <eda/vhdl93/ast/group_template_declaration.hpp>
 #include <eda/vhdl93/ast/variable_declaration.hpp>
-//#include <eda/vhdl93/ast/signal_declaration.hpp>
+#include <eda/vhdl93/ast/signal_declaration.hpp>
 //#include <eda/vhdl93/ast/subprogram_body.hpp>
 //#include <eda/vhdl93/ast/subprogram_declaration.hpp>
 #include <eda/vhdl93/ast/subtype_declaration.hpp>
@@ -46,7 +46,7 @@ struct entity_declarative_item : x3::variant<
 //    group_declaration,
 //    group_template_declaration,
     variable_declaration,   // shared_variable_declaration
-//    signal_declaration,
+    signal_declaration,
 //    subprogram_body,
 //    subprogram_declaration,
 //    subtype_declaration,

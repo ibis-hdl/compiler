@@ -346,6 +346,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::signal_assignment_statement,
     label, target, delay_mechanism, waveform
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::signal_declaration,
+    identifier_list, subtype_indication, signal_kind, expression
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::signature,
     parameter_type_list, return_type
 )

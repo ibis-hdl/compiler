@@ -2223,9 +2223,23 @@ void printer::operator()(signal_assignment_statement const &node)
 
 void printer::operator()(signal_declaration const &node)
 {
-    static char const symbol[]{ "XXX signal_declaration" };
+    static char const symbol[]{ "signal_declaration" };
     symbol_scope<signal_declaration> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.identifier_list);
+    os << "\n";
+
+    (*this)(node.subtype_indication);
+
+    if(node.signal_kind) {
+        os << "\n";
+        (*this)(*node.signal_kind);
+    }
+
+    if(node.expression) {
+        os << "\n";
+        (*this)(*node.expression);
+    }
 }
 
 
