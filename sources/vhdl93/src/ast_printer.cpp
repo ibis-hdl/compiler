@@ -853,14 +853,6 @@ void printer::operator()(decimal_literal const &node)
 }
 
 
-void printer::operator()(declaration const &node)
-{
-    static char const symbol[]{ "declaration" };
-    symbol_scope<declaration> _(*this, symbol);
-    visit(node);
-}
-
-
 void printer::operator()(delay_mechanism const &node)
 {
     static char const symbol[]{ "delay_mechanism" };

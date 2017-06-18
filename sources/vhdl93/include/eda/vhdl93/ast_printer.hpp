@@ -59,7 +59,6 @@ struct constraint;
 struct context_clause;
 struct context_item;
 struct decimal_literal;
-struct declaration;
 struct delay_mechanism;
 struct design_file;
 struct design_unit;
@@ -240,7 +239,6 @@ public:
     void operator()(context_clause const& node);
     void operator()(context_item const& node);
     void operator()(decimal_literal const& node);
-    void operator()(declaration const& node);
     void operator()(delay_mechanism const& node);
     void operator()(design_file const& node);
     void operator()(design_unit const& node);

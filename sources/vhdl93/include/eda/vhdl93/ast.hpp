@@ -75,7 +75,7 @@
 #include <eda/vhdl93/ast/context_clause.hpp>
 //DISABLED//#include <eda/vhdl93/ast/context_item.hpp>
 //DISABLED #include <eda/vhdl93/ast/decimal_literal.hpp>
-#include <eda/vhdl93/ast/declaration.hpp>
+//UNUSED_IN_BNF#include <eda/vhdl93/ast/declaration.hpp>
 //DISABLED #include <eda/vhdl93/ast/delay_mechanism.hpp>
 //#include <eda/vhdl93/ast/design_file.hpp>
 //#include <eda/vhdl93/ast/design_unit.hpp>

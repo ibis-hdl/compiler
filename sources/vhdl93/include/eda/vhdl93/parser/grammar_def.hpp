@@ -592,7 +592,6 @@ struct constraint_class;
 struct context_clause_class;
 struct context_item_class;
 struct decimal_literal_class;
-struct declaration_class;
 struct delay_mechanism_class;
 struct design_file_class;
 struct design_unit_class;
@@ -822,7 +821,6 @@ typedef x3::rule<constraint_class, ast::constraint> constraint_type;
 typedef x3::rule<context_clause_class> context_clause_type;
 typedef x3::rule<context_item_class> context_item_type;
 typedef x3::rule<decimal_literal_class, ast::decimal_literal> decimal_literal_type;
-typedef x3::rule<declaration_class> declaration_type;
 typedef x3::rule<delay_mechanism_class, ast::delay_mechanism> delay_mechanism_type;
 typedef x3::rule<design_file_class> design_file_type;
 typedef x3::rule<design_unit_class> design_unit_type;
@@ -1052,7 +1050,6 @@ constraint_type const constraint { "constraint" };
 context_clause_type const context_clause { "context_clause" };
 context_item_type const context_item { "context_item" };
 decimal_literal_type const decimal_literal { "decimal_literal" };
-declaration_type const declaration { "declaration" };
 delay_mechanism_type const delay_mechanism { "delay_mechanism" };
 design_file_type const design_file { "design_file" };
 design_unit_type const design_unit { "design_unit" };
@@ -2131,7 +2128,7 @@ auto const decimal_literal_def =
     ;
 
 
-#if 0
+#if 0 // UNUSED in the BNF
 // declaration ::=                                                         [§ 4]
 //       type_declaration
 //     | subtype_declaration
@@ -4281,7 +4278,6 @@ BOOST_SPIRIT_DEFINE(  // -- C --
 )
 BOOST_SPIRIT_DEFINE(  // -- D --
       decimal_literal
-    //, declaration
      , delay_mechanism
     //, design_file
     //, design_unit
