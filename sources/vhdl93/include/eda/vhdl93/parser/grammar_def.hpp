@@ -3089,8 +3089,8 @@ auto const mode_def =
 //     | slice_name
 //     | attribute_name
 auto const name_def =
-       simple_name
-//      | operator_symbol // FixMe: disabled, conflicts with primary.literal.string_literal
+        simple_name
+      | operator_symbol
 //    | selected_name // FixMe: Crash in  "parser_expression/primary": memory access violation -> left recursion
 //    | indexed_name
 //    | slice_name
@@ -3353,7 +3353,7 @@ auto const prefix_def =
 
 
 // primary ::=                                                           [§ 7.1]
-// name
+//       name
 //     | literal
 //     | aggregate
 //     | function_call
@@ -3362,7 +3362,7 @@ auto const prefix_def =
 //     | allocator
 //     | ( expression )
 auto const primary_def =
-      name
+      !char_('"') >> name // ignore string_literals which follow below
     | literal
     //     | aggregate
     | function_call
