@@ -318,7 +318,7 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::procedure_call_statement,
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::process_statement,
-    label, postponed, sensitivity_list, declarative_part, statement_part, exit_postponed, exit_label
+    label, postponed, sensitivity_list, declarative_part, statement_part, end_postponed, end_label
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::qualified_expression,
