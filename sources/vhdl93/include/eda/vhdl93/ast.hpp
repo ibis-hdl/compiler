@@ -39,14 +39,14 @@
 #include <eda/vhdl93/ast/binding_indication.hpp>
 //DISABLED #include <eda/vhdl93/ast/bit_string_literal.hpp>
 //#include <eda/vhdl93/ast/bit_value.hpp>
-//#include <eda/vhdl93/ast/block_configuration.hpp>
+#include <eda/vhdl93/ast/block_configuration.hpp>
 //#include <eda/vhdl93/ast/block_declarative_item.hpp>
-//#include <eda/vhdl93/ast/block_declarative_part.hpp>
+#include <eda/vhdl93/ast/block_declarative_part.hpp>
 #include <eda/vhdl93/ast/block_header.hpp>
-//#include <eda/vhdl93/ast/block_specification.hpp>
-//#include <eda/vhdl93/ast/block_statement.hpp>
+#include <eda/vhdl93/ast/block_specification.hpp>
+#include <eda/vhdl93/ast/block_statement.hpp>
 //#include <eda/vhdl93/ast/block_statement_part.hpp>
-//#include <eda/vhdl93/ast/case_statement.hpp>
+#include <eda/vhdl93/ast/case_statement.hpp>
 #include <eda/vhdl93/ast/case_statement_alternative.hpp>
 //DISABLED #include <eda/vhdl93/ast/character_literal.hpp>
 //DISABLED #include <eda/vhdl93/ast/choice.hpp>
@@ -89,7 +89,7 @@
 //#include <eda/vhdl93/ast/entity_class.hpp>
 //#include <eda/vhdl93/ast/entity_class_entry.hpp>
 #include <eda/vhdl93/ast/entity_class_entry_list.hpp>
-//#include <eda/vhdl93/ast/entity_declaration.hpp>
+#include <eda/vhdl93/ast/entity_declaration.hpp>
 //DISABLED#include <eda/vhdl93/ast/entity_declarative_item.hpp>
 #include <eda/vhdl93/ast/entity_declarative_part.hpp>
 //#include <eda/vhdl93/ast/entity_designator.hpp>
@@ -121,6 +121,7 @@
 //#include <eda/vhdl93/ast/generate_statement.hpp>
 //#include <eda/vhdl93/ast/generation_scheme.hpp>
 //DISABLED#include <eda/vhdl93/ast/instantiation_list.hpp>
+#include <eda/vhdl93/ast/instantiated_unit.hpp>
 //#include <eda/vhdl93/ast/integer_type_definition.hpp>
 //DISABLED #include <eda/vhdl93/ast/interface_constant_declaration.hpp>
 #include <eda/vhdl93/ast/interface_declaration.hpp>
@@ -135,7 +136,7 @@
 #include <eda/vhdl93/ast/library_clause.hpp>
 //#include <eda/vhdl93/ast/library_unit.hpp>
 //DISABLED #include <eda/vhdl93/ast/literal.hpp>
-//#include <eda/vhdl93/ast/loop_statement.hpp>
+#include <eda/vhdl93/ast/loop_statement.hpp>
 //DISABLED #include <eda/vhdl93/ast/name.hpp>
 //DISABLED #include <eda/vhdl93/ast/next_statement.hpp>
 //DISABELD #include <eda/vhdl93/ast/null_statement.hpp>
@@ -160,7 +161,7 @@
 //DISABLED#include <eda/vhdl93/ast/process_declarative_item.hpp>
 #include <eda/vhdl93/ast/process_declarative_part.hpp>
 #include <eda/vhdl93/ast/process_statement.hpp>
-#include <eda/vhdl93/ast/process_statement_part.hpp>
+//#include <eda/vhdl93/ast/process_statement_part.hpp>
 //#include <eda/vhdl93/ast/qualified_expression.hpp>
 //DISABLED #include <eda/vhdl93/ast/range.hpp>
 //#include <eda/vhdl93/ast/record_type_definition.hpp>

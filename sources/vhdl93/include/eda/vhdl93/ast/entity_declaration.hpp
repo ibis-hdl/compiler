@@ -15,8 +15,9 @@
 #include <eda/vhdl93/ast/identifier.hpp>
 #include <eda/vhdl93/ast/entity_header.hpp>
 #include <eda/vhdl93/ast/entity_declarative_part.hpp>
-#include <eda/vhdl93/ast/entity_statement_part.hpp> // FixMe / ToDo
+#include <eda/vhdl93/ast/entity_statement_part.hpp>
 #include <eda/vhdl93/ast/simple_name.hpp>
+#include <eda/vhdl93/ast/util/optional.hpp>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
@@ -24,11 +25,11 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 struct entity_declaration : position_tagged
 {
-    ast::identifier                 identifier;
-    ast::entity_header              entity_header;
-    ast::entity_declarative_part    entity_declarative_part;
-    ast::entity_statement_part      entity_statement_part;
-    ast::simple_name                name;
+    ast::identifier                         identifier;
+    ast::entity_header                      header;
+    ast::entity_declarative_part            declarative_part;
+    optional<ast::entity_statement_part>    statement_part;
+    optional<ast::simple_name>              name;
 };
 
 

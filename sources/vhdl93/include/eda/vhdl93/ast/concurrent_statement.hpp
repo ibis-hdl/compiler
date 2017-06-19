@@ -27,14 +27,14 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 
 struct concurrent_statement : x3::variant<
-    nullary,
-    //block_statement,
-    //process_statement,
-    concurrent_procedure_call_statement,
-    concurrent_assertion_statement,
-    concurrent_signal_assignment_statement
-    //component_instantiation_statement,
-    //generate_statement
+    ast::nullary,
+    //ast::block_statement,
+    //ast::process_statement,
+    ast::concurrent_procedure_call_statement,
+    ast::concurrent_assertion_statement,
+    ast::concurrent_signal_assignment_statement
+    //ast::component_instantiation_statement,
+    //ast::generate_statement
 >
 {
     using base_type::base_type;

@@ -62,6 +62,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::bit_string_literal,
     literal, hint
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::block_configuration,
+    block_specification, use_clause_list, configuration_item_list
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::block_header::generic_part_chunk,
     generic_clause, generic_map_aspect
 )
@@ -74,6 +78,14 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::block_header,
     generic_part, port_part
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::block_specification_chunk,
+    label, index_specification
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::block_statement,
+    label, guard_expression, header, declarative_part, statement_part, end_label
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::case_statement,
     label, expression, alternatives, end_label
 )
@@ -84,6 +96,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::case_statement_alternative,
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::character_literal,
     literal
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::component_configuration,
+    component_specification, binding_indication, block_configuration
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::component_declaration,
@@ -122,6 +138,9 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::condition_clause,
     condition
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::configuration_specification,
+    component_specification, binding_indication
+)
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::constant_declaration,
     identifier_list, subtype_indication, expression
 )
@@ -156,6 +175,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::entity_aspect_entity,
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::entity_aspect_configuration,
     name
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::entity_declaration,
+    identifier, header, declarative_part, statement_part, name
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::entity_designator,
@@ -226,6 +249,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::index_subtype_definition,
     type_mark
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::instantiated_unit_chunk,
+    entity_name, architecture_identifier
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::interface_constant_declaration,
     CONSTANT, identifier_list, IN, subtype_indication, static_expression
 )
@@ -246,6 +273,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::library_clause,
     logical_name_list
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::loop_statement,
+    label, iteration_scheme, sequence_of_statements, end_label
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::next_statement,
     label, loop_label, condition
 )
@@ -256,6 +287,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::null_statement,
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::options,
     guarded, delay_mechanism
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::parameter_specification,
+    identifier, discrete_range
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::physical_literal,
