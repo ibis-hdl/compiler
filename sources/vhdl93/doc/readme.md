@@ -23,6 +23,11 @@ and a BNF for the
 [IEEE Std 1076-2002](https://guest.iis.ee.ethz.ch/~zimmi/download/vhdl02_syntax.html)
 standard at the ETH Zürich.
 
+A good syntax reference in option is the 
+[VHDL Online Help](http://www.vhdl.renerta.com/mobile/index.html)
+where also some examples are given related to the BNF. Some of the parser test
+inputs are from there. 
+
 
 The VHDL93 Boost.Spirit X3 grammar refers to the former
 [grammar]( http://rti.etf.bg.ac.rs/rti/ri5rvl/tutorial/TUTORIAL/IEEE/HTML/1076_AXA.HTM)
@@ -48,7 +53,4 @@ which it refers. Sometimes there arises some funny problems like
   from comp.lang.vhdl
 - unfortunately, the other I din't find any more - from standard committee talk?
 
-Future
--------
-- [GHDL: a complete VHDL parser](https://github.com/tgingold/ghdl/issues/111)
 
