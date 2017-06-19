@@ -106,6 +106,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::component_declaration,
     identifier, local_generic_clause, local_port_clause, name
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::component_instantiation_statement,
+    label, instantiated_unit, generic_map_aspect, port_map_aspect
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::component_specification,
     instantiation_list, component_name
 )
@@ -225,6 +229,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::function_call,
     function_name, actual_parameter_part
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::generate_statement,
+    label, generation_scheme, block_declarative_parts, concurrent_statements, end_label
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::generic_clause,
     generic_list
 )
@@ -233,8 +241,24 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::generic_map_aspect,
     association_list
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::group_declaration,
+    identifier, group_template_name, group_constituent_list
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::group_template_declaration,
+    identifier, entity_class_entry_list
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::guarded_signal_specification,
     guarded_signal_list, type_mark
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::if_statement,
+    label, if_condition, then_sequence_of_statements, elseif_chunks, else_sequence_of_statements, end_label
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::if_statement::elsif_chunk,
+    condition, sequence_of_statements
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::identifier,
@@ -318,7 +342,7 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::procedure_call_statement,
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::process_statement,
-    label, postponed, sensitivity_list, declarative_part, statement_part, exit_postponed, exit_label
+    label, postponed, sensitivity_list, declarative_part, statement_part, end_postponed, end_label
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::qualified_expression,
@@ -399,6 +423,9 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::simple_expression::chunk,
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::string_literal,
     literal
+)
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::subprogram_body,
+    specification, declarative_part, statement_part, kind, designator
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::subprogram_specification_procedure,

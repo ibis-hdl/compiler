@@ -33,10 +33,10 @@ struct process_statement : position_tagged
     ast::sensitivity_list           sensitivity_list;
     ast::process_declarative_part   declarative_part;
     ast::process_statement_part     statement_part;
-    bool                            exit_postponed;
-    optional<ast::label>            exit_label;
+    bool                            end_postponed;
+    optional<ast::label>            end_label;
 
-    process_statement() : postponed{}, exit_postponed{}
+    process_statement() : postponed{}, end_postponed{}
     { }
 };
 

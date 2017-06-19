@@ -17,7 +17,7 @@
 #include <eda/vhdl93/ast/concurrent_procedure_call_statement.hpp>
 #include <eda/vhdl93/ast/concurrent_assertion_statement.hpp>
 #include <eda/vhdl93/ast/concurrent_signal_assignment_statement.hpp>
-//#include <eda/vhdl93/ast/component_instantiation_statement.hpp>
+#include <eda/vhdl93/ast/component_instantiation_statement.hpp>
 //#include <eda/vhdl93/ast/generate_statement.hpp>
 
 #include <boost/spirit/home/x3/support/ast/variant.hpp>

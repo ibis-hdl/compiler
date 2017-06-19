@@ -115,11 +115,13 @@
 #include <eda/vhdl93/ast/formal_parameter_list.hpp>
 #include <eda/vhdl93/ast/generic_clause.hpp>
 #include <eda/vhdl93/ast/generic_map_aspect.hpp>
+//DISABLED#include <eda/vhdl93/ast/group_declaration.hpp>
 //DISABLED #include <eda/vhdl93/ast/formal_part.hpp>
 //#include <eda/vhdl93/ast/full_type_declaration.hpp>
 //DISABLED #include <eda/vhdl93/ast/function_call.hpp>
-//#include <eda/vhdl93/ast/generate_statement.hpp>
+#include <eda/vhdl93/ast/generate_statement.hpp>
 //#include <eda/vhdl93/ast/generation_scheme.hpp>
+#include <eda/vhdl93/ast/if_statement.hpp>
 //DISABLED#include <eda/vhdl93/ast/instantiation_list.hpp>
 #include <eda/vhdl93/ast/instantiated_unit.hpp>
 //#include <eda/vhdl93/ast/integer_type_definition.hpp>
@@ -189,7 +191,7 @@
 //#include <eda/vhdl93/ast/subprogram_body.hpp>
 //#include <eda/vhdl93/ast/subprogram_declaration.hpp>
 //#include <eda/vhdl93/ast/subprogram_declarative_item.hpp>
-//#include <eda/vhdl93/ast/subprogram_declarative_part.hpp>
+#include <eda/vhdl93/ast/subprogram_declarative_part.hpp>
 //#include <eda/vhdl93/ast/subprogram_kind.hpp>
 #include <eda/vhdl93/ast/subprogram_specification.hpp>
 #include <eda/vhdl93/ast/subprogram_statement_part.hpp>

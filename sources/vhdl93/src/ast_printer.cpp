@@ -681,9 +681,25 @@ void printer::operator()(component_declaration const &node)
 
 void printer::operator()(component_instantiation_statement const &node)
 {
-    static char const symbol[]{ "XXX component_instantiation_statement" };
+    static char const symbol[]{ "component_instantiation_statement" };
     symbol_scope<component_instantiation_statement> _(*this, symbol);
-    //os << node;
+
+    if(node.label) {
+        (*this)(*node.label);
+        os << "\n";
+    }
+
+    (*this)(node.instantiated_unit);
+
+    if(node.generic_map_aspect) {
+        os << "\n";
+        (*this)(*node.generic_map_aspect);
+    }
+
+    if(node.port_map_aspect) {
+        os << "\n";
+        (*this)(*node.port_map_aspect);
+    }
 }
 
 
@@ -1410,17 +1426,44 @@ void printer::operator()(function_call const &node)
 
 void printer::operator()(generate_statement const &node)
 {
-    static char const symbol[]{ "XXX generate_statement" };
+    static char const symbol[]{ "generate_statement" };
     symbol_scope<generate_statement> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.label);
+    os << "\n";
+
+    (*this)(node.generation_scheme);
+    os << "\n";
+
+
+    if(node.block_declarative_parts.size() > 0) {
+        (*this)(node.block_declarative_parts);
+        os << "\n";
+    }
+
+    if(node.concurrent_statements.size() > 0) {
+        auto const N = node.concurrent_statements.size() - 1;
+        unsigned i = 0;
+        for(auto const& concurrent_statement : node.concurrent_statements) {
+            (*this)(concurrent_statement);
+            if(i++ != N) {
+                os << ",\n";
+            }
+        }
+    }
+
+    if(node.end_label) {
+        os << "\n";
+        (*this)(*node.end_label);
+    }
 }
 
 
 void printer::operator()(generation_scheme const &node)
 {
-    static char const symbol[]{ "XXX generation_scheme" };
+    static char const symbol[]{ "generation_scheme" };
     symbol_scope<generation_scheme> _(*this, symbol);
-    //visit(node);
+    visit(node);
 }
 
 
@@ -1450,33 +1493,49 @@ void printer::operator()(graphic_character const &node)
 
 void printer::operator()(group_constituent const &node)
 {
-    static char const symbol[]{ "XXX group_constituent" };
+    static char const symbol[]{ "group_constituent" };
     symbol_scope<group_constituent> _(*this, symbol);
-    //visit(node);
+    visit(node);
 }
 
 
 void printer::operator()(group_constituent_list const &node)
 {
-    static char const symbol[]{ "XXX group_constituent_list" };
+    static char const symbol[]{ "group_constituent_list" };
     symbol_scope<group_constituent_list> _(*this, symbol);
-    //os << node;
+
+    auto const N = node.size() - 1;
+    unsigned i = 0;
+    for(auto const& group_constituent : node) {
+        (*this)(group_constituent);
+        if(i++ != N) {
+            os << ",\n";
+        }
+    }
 }
 
 
 void printer::operator()(group_declaration const &node)
 {
-    static char const symbol[]{ "XXX group_declaration" };
+    static char const symbol[]{ "group_declaration" };
     symbol_scope<group_declaration> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.identifier);
+    os << "\n";
+    (*this)(node.group_template_name);
+    os << "\n";
+    (*this)(node.group_constituent_list);
 }
 
 
 void printer::operator()(group_template_declaration const &node)
 {
-    static char const symbol[]{ "XXX group_template_declaration" };
+    static char const symbol[]{ "group_template_declaration" };
     symbol_scope<group_template_declaration> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.identifier);
+    os << "\n";
+    (*this)(node.entity_class_entry_list);
 }
 
 
@@ -1520,9 +1579,42 @@ void printer::operator()(identifier_list const &node)
 
 void printer::operator()(if_statement const &node)
 {
-    static char const symbol[]{ "XXX if_statement" };
+    static char const symbol[]{ "if_statement" };
     symbol_scope<if_statement> _(*this, symbol);
-    //os << node;
+
+    if(node.label) {
+        (*this)(*node.label);
+        os << "\n";
+    }
+
+    (*this)(node.if_condition);
+
+    if(node.then_sequence_of_statements.size() > 0) {
+        (*this)(node.then_sequence_of_statements);
+        os << "\n";
+    }
+
+    if(node.elseif_chunks.size() > 0) {
+        auto const N = node.elseif_chunks.size() - 1;
+        unsigned i = 0;
+        for(auto const& elsif_chunk : node.elseif_chunks) {
+            (*this)(elsif_chunk.condition);
+            os << ":\n";
+            (*this)(elsif_chunk.sequence_of_statements);
+            if(i++ != N) {
+                os << ",\n";
+            }
+        }
+    }
+
+    if(node.else_sequence_of_statements.size() > 0) {
+        (*this)(node.else_sequence_of_statements);
+    }
+
+    if(node.end_label) {
+        os << "\n";
+        (*this)(*node.end_label);
+    }
 }
 
 
@@ -2471,33 +2563,50 @@ void printer::operator()(string_literal const &node)
 
 void printer::operator()(subprogram_body const &node)
 {
-    static char const symbol[]{ "XXX subprogram_body" };
+    static char const symbol[]{ "subprogram_body" };
     symbol_scope<subprogram_body> _(*this, symbol);
-    //os << node;
-}
 
+    (*this)(node.specification);
+    os << "\n";
 
-void printer::operator()(subprogram_declaration const &node)
-{
-    static char const symbol[]{ "XXX subprogram_declaration" };
-    symbol_scope<subprogram_declaration> _(*this, symbol);
-    //os << node;
+    (*this)(node.declarative_part);
+    os << "\n";
+
+    (*this)(node.statement_part);
+
+    if(node.kind) {
+        os << "\n";
+        (*this)(*node.kind);
+    }
+
+    if(node.designator) {
+        os << "\n";
+        (*this)(*node.designator);
+    }
 }
 
 
 void printer::operator()(subprogram_declarative_item const &node)
 {
-    static char const symbol[]{ "XXX subprogram_declarative_item" };
+    static char const symbol[]{ "subprogram_declarative_item" };
     symbol_scope<subprogram_declarative_item> _(*this, symbol);
-    //visit(node);
+    visit(node);
 }
 
 
 void printer::operator()(subprogram_declarative_part const &node)
 {
-    static char const symbol[]{ "XXX subprogram_declarative_part" };
+    static char const symbol[]{ "subprogram_declarative_part" };
     symbol_scope<subprogram_declarative_part> _(*this, symbol);
-    //os << node;
+
+    auto const N = node.size() - 1;
+    unsigned i = 0;
+    for(auto const& subprogram_declarative_item : node) {
+        (*this)(subprogram_declarative_item);
+        if(i++ != N) {
+            os << ",\n";
+        }
+    }
 }
 
 

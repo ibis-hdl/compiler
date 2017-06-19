@@ -128,7 +128,6 @@ struct simple_expression;
 struct slice_name;
 struct string_literal;
 struct subprogram_body;
-struct subprogram_declaration;
 struct subprogram_declarative_item;
 struct subprogram_declarative_part;
 struct subprogram_kind;
@@ -352,7 +351,6 @@ public:
     void operator()(slice_name const& node);
     void operator()(string_literal const& node);
     void operator()(subprogram_body const& node);
-    void operator()(subprogram_declaration const& node);
     void operator()(subprogram_declarative_item const& node);
     void operator()(subprogram_declarative_part const& node);
     void operator()(subprogram_kind const& node);

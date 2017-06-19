@@ -20,12 +20,12 @@
 #include <eda/vhdl93/ast/constant_declaration.hpp>
 #include <eda/vhdl93/ast/disconnection_specification.hpp>
 #include <eda/vhdl93/ast/file_declaration.hpp>
-//#include <eda/vhdl93/ast/group_declaration.hpp>
-//#include <eda/vhdl93/ast/group_template_declaration.hpp>
+#include <eda/vhdl93/ast/group_declaration.hpp>
+#include <eda/vhdl93/ast/group_template_declaration.hpp>
 #include <eda/vhdl93/ast/variable_declaration.hpp>
 #include <eda/vhdl93/ast/signal_declaration.hpp>
-//#include <eda/vhdl93/ast/subprogram_body.hpp>
-//#include <eda/vhdl93/ast/subprogram_declaration.hpp>
+#include <eda/vhdl93/ast/subprogram_body.hpp>
+#include <eda/vhdl93/ast/subprogram_declaration.hpp>
 #include <eda/vhdl93/ast/subtype_declaration.hpp>
 #include <eda/vhdl93/ast/type_declaration.hpp>
 #include <eda/vhdl93/ast/use_clause.hpp>
@@ -47,12 +47,12 @@ struct block_declarative_item : x3::variant<
     ast::constant_declaration,
     ast::disconnection_specification,
     ast::file_declaration,
-//    ast::group_declaration,
-//    ast::group_template_declaration,
+    ast::group_declaration,
+    ast::group_template_declaration,
     ast::variable_declaration,   // shared_variable_declaration
     ast::signal_declaration,
-//    ast::subprogram_body,
-//    ast::subprogram_declaration,
+    ast::subprogram_body,
+    ast::subprogram_declaration,
     ast::subtype_declaration,
     ast::type_declaration,
     ast::use_clause
