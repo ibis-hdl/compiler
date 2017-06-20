@@ -1,0 +1,4 @@
+if condition then
+    foo <= bar;
+end if;
+

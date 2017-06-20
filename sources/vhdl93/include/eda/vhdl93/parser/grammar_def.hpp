@@ -3692,7 +3692,7 @@ auto const sequential_statement_def =
     | signal_assignment_statement
     | variable_assignment_statement
 //    | procedure_call_statement
-//    | if_statement
+    | if_statement
     | case_statement
 //    | loop_statement
     | next_statement

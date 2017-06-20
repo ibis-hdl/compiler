@@ -8270,6 +8270,64 @@ sequential_statement
 |                               |                                                             | )                                                                      |
 |                               |                                                             |                                                                        |
 +-------------------------------+-------------------------------------------------------------+------------------------------------------------------------------------+
+| if_statement_001              | if condition then                                           | (sequential_statement<v>                                               |
+|                               |     foo <= bar;                                             |   (if_statement                                                        |
+|                               | end if;                                                     |     (expression                                                        |
+|                               |                                                             |       (relation                                                        |
+|                               |                                                             |         (shift_expression                                              |
+|                               |                                                             |           (simple_expression                                           |
+|                               |                                                             |             (term                                                      |
+|                               |                                                             |               (primary<v>                                              |
+|                               |                                                             |                 (name<v>                                               |
+|                               |                                                             |                   (identifier                                          |
+|                               |                                                             |                     condition                                          |
+|                               |                                                             |                   )                                                    |
+|                               |                                                             |                 )                                                      |
+|                               |                                                             |               )                                                        |
+|                               |                                                             |             )                                                          |
+|                               |                                                             |           )                                                            |
+|                               |                                                             |         )                                                              |
+|                               |                                                             |       )                                                                |
+|                               |                                                             |     )                                                                  |
+|                               |                                                             |     THAN:                                                              |
+|                               |                                                             |     (sequence_of_statements                                            |
+|                               |                                                             |       (sequential_statement<v>                                         |
+|                               |                                                             |         (signal_assignment_statement                                   |
+|                               |                                                             |           (target<v>                                                   |
+|                               |                                                             |             (name<v>                                                   |
+|                               |                                                             |               (identifier                                              |
+|                               |                                                             |                 foo                                                    |
+|                               |                                                             |               )                                                        |
+|                               |                                                             |             )                                                          |
+|                               |                                                             |           )                                                            |
+|                               |                                                             |           (waveform<v>                                                 |
+|                               |                                                             |             (waveform_element                                          |
+|                               |                                                             |               (expression                                              |
+|                               |                                                             |                 (relation                                              |
+|                               |                                                             |                   (shift_expression                                    |
+|                               |                                                             |                     (simple_expression                                 |
+|                               |                                                             |                       (term                                            |
+|                               |                                                             |                         (primary<v>                                    |
+|                               |                                                             |                           (name<v>                                     |
+|                               |                                                             |                             (identifier                                |
+|                               |                                                             |                               bar                                      |
+|                               |                                                             |                             )                                          |
+|                               |                                                             |                           )                                            |
+|                               |                                                             |                         )                                              |
+|                               |                                                             |                       )                                                |
+|                               |                                                             |                     )                                                  |
+|                               |                                                             |                   )                                                    |
+|                               |                                                             |                 )                                                      |
+|                               |                                                             |               )                                                        |
+|                               |                                                             |             )                                                          |
+|                               |                                                             |           )                                                            |
+|                               |                                                             |         )                                                              |
+|                               |                                                             |       )                                                                |
+|                               |                                                             |     )                                                                  |
+|                               |                                                             |   )                                                                    |
+|                               |                                                             | )                                                                      |
+|                               |                                                             |                                                                        |
++-------------------------------+-------------------------------------------------------------+------------------------------------------------------------------------+
 | next_statement                | next;                                                       | (sequential_statement<v>                                               |
 |                               |                                                             |   (next_statement                                                      |
 |                               |                                                             |                                                                        |
