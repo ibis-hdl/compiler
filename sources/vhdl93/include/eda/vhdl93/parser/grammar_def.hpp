@@ -874,7 +874,7 @@ typedef x3::rule<group_declaration_class> group_declaration_type;
 typedef x3::rule<guarded_signal_specification_class> guarded_signal_specification_type;
 typedef x3::rule<identifier_class, ast::identifier> identifier_type;
 typedef x3::rule<identifier_list_class, ast::identifier_list> identifier_list_type;
-typedef x3::rule<if_statement_class> if_statement_type;
+typedef x3::rule<if_statement_class, ast::if_statement> if_statement_type;
 //typedef x3::rule<incomplete_type_declaration_class, ast::incomplete_type_declaration> incomplete_type_declaration_type;
 typedef x3::rule<index_constraint_class, ast::index_constraint> index_constraint_type;
 typedef x3::rule<index_specification_class> index_specification_type;
@@ -2793,7 +2793,7 @@ auto const identifier_list_def =
     ;
 
 
-#if 0
+
 // if_statement ::=                                                      [§ 8.7]
 //     [ if_label : ]
 //         if condition then
@@ -2804,16 +2804,16 @@ auto const identifier_list_def =
 //             sequence_of_statements ]
 //         end if [ if_label ] ;
 auto const if_statement_def =
-        -( if_label > ':' )
-        IF condition THEN
-        sequence_of_statements
-        { ELSIF condition THEN
-    sequence_of_statements }
--( ELSE
-        sequence_of_statements )
-    END IF -( if_label ) > ';'
+       -label_colon
+    >> IF >> condition >> THEN
+    >> sequence_of_statements
+    >> *( ELSIF >> condition >> THEN >> sequence_of_statements )
+    >> -( ELSE >> sequence_of_statements )
+    >> END >> IF
+    >> -label
+    > ';'
 ;
-#endif
+
 
 #if 0 // UNUSED; embedded into type_declaration
 // incomplete_type_declaration ::=                                     [§ 3.3.1]
@@ -4336,7 +4336,7 @@ BOOST_SPIRIT_DEFINE(  // -- G --
 BOOST_SPIRIT_DEFINE(  // -- I --
       identifier
     , identifier_list
-    //, if_statement
+    , if_statement
     //EMBEDDED, incomplete_type_declaration
     , index_constraint
     //, index_specification

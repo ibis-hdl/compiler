@@ -1588,26 +1588,30 @@ void printer::operator()(if_statement const &node)
     }
 
     (*this)(node.if_condition);
+    os << "\nTHAN:\n";
 
-    if(node.then_sequence_of_statements.size() > 0) {
-        (*this)(node.then_sequence_of_statements);
-        os << "\n";
-    }
+    //assert(node.then_sequence_of_statements.size() > 0);
+
+    (*this)(node.then_sequence_of_statements);
 
     if(node.elseif_chunks.size() > 0) {
+        os << "\n";
         auto const N = node.elseif_chunks.size() - 1;
         unsigned i = 0;
         for(auto const& elsif_chunk : node.elseif_chunks) {
+            os << "ELSIF:\n";
             (*this)(elsif_chunk.condition);
-            os << ":\n";
+            os << "\nTHAN:\n";
             (*this)(elsif_chunk.sequence_of_statements);
             if(i++ != N) {
-                os << ",\n";
+                os << "\n";
             }
         }
     }
 
     if(node.else_sequence_of_statements.size() > 0) {
+        os << "\nELSE:\n";
+        //assert(node.then_sequence_of_statements.size() == 1);
         (*this)(node.else_sequence_of_statements);
     }
 
