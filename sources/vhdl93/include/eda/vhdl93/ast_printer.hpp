@@ -19,7 +19,6 @@ namespace eda { namespace vhdl93 { namespace ast {
 struct aggregate;
 struct allocator;
 struct architecture_body;
-struct architecture_declarative_part;
 struct architecture_statement_part;
 struct assertion_statement;
 struct attribute_declaration;
@@ -176,7 +175,6 @@ public:
     void operator()(alias_designator const& node);
     void operator()(allocator const& node);
     void operator()(architecture_body const& node);
-    void operator()(architecture_declarative_part const& node);
     void operator()(architecture_statement_part const& node);
     void operator()(array_type_definition const& node);
     void operator()(assertion const& node);

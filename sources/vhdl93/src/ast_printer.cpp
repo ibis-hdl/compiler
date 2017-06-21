@@ -189,25 +189,40 @@ void printer::operator()(allocator const &node)
 
 void printer::operator()(architecture_body const &node)
 {
-    static char const symbol[]{ "XXX architecture_body" };
+    static char const symbol[]{ "architecture_body" };
     symbol_scope<architecture_body> _(*this, symbol);
-    //os << node;
-}
 
+    (*this)(node.identifier);
+    os << "\n";
 
-void printer::operator()(architecture_declarative_part const &node)
-{
-    static char const symbol[]{ "XXX architecture_declarative_part" };
-    symbol_scope<architecture_declarative_part> _(*this, symbol);
-    //os << node;
+    (*this)(node.entity_name);
+    os << "\n";
+
+    (*this)(node.declarative_part);
+    os << "\n";
+
+    (*this)(node.statement_part);
+
+    if(node.end_name) {
+        os << "\n";
+        (*this)(*node.end_name);
+    }
 }
 
 
 void printer::operator()(architecture_statement_part const &node)
 {
-    static char const symbol[]{ "XXX architecture_statement_part" };
+    static char const symbol[]{ "architecture_statement_part" };
     symbol_scope<architecture_statement_part> _(*this, symbol);
-    //os << node;
+
+    auto const N = node.size() - 1;
+    unsigned i = 0;
+    for(auto const& concurrent_statement : node) {
+        (*this)(concurrent_statement);
+        if(i++ != N) {
+            os << ",\n";
+        }
+    }
 }
 
 
@@ -840,25 +855,48 @@ void printer::operator()(conditional_waveforms const &node)
 
 void printer::operator()(configuration_declaration const &node)
 {
-    static char const symbol[]{ "XXX configuration_declaration" };
+    static char const symbol[]{ "configuration_declaration" };
     symbol_scope<configuration_declaration> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.identifier);
+    os << "\n";
+
+    (*this)(node.entity_name);
+    os << "\n";
+
+    (*this)(node.declarative_part);
+    os << "\n";
+
+    (*this)(node.block_configuration);
+
+    if(node.end_label) {
+        os << "\n";
+        (*this)(*node.end_label);
+    }
 }
 
 
 void printer::operator()(configuration_declarative_item const &node)
 {
-    static char const symbol[]{ "XXX configuration_declarative_item" };
+    static char const symbol[]{ "configuration_declarative_item" };
     symbol_scope<configuration_declarative_item> _(*this, symbol);
-    //visit(node);
+    visit(node);
 }
 
 
 void printer::operator()(configuration_declarative_part const &node)
 {
-    static char const symbol[]{ "XXX configuration_declarative_part" };
+    static char const symbol[]{ "configuration_declarative_part" };
     symbol_scope<configuration_declarative_part> _(*this, symbol);
-    //os << node;
+
+    auto const N = node.size() - 1;
+    unsigned i = 0;
+    for(auto const& configuration_declarative_item : node) {
+        (*this)(configuration_declarative_item);
+        if(i++ != N) {
+            os << ",\n";
+        }
+    }
 }
 
 
@@ -992,17 +1030,29 @@ void printer::operator()(delay_mechanism const &node)
 
 void printer::operator()(design_file const &node)
 {
-    static char const symbol[]{ "XXX design_file" };
+    static char const symbol[]{ "design_file" };
     symbol_scope<design_file> _(*this, symbol);
-    //os << node;
+
+    auto const N = node.size() - 1;
+    unsigned i = 0;
+    for(auto const& design_unit : node) {
+        (*this)(design_unit);
+        if(i++ != N) {
+            os << ",\n";
+        }
+    }
 }
 
 
 void printer::operator()(design_unit const &node)
 {
-    static char const symbol[]{ "XXX design_unit" };
+    static char const symbol[]{ "design_unit" };
     symbol_scope<design_unit> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.context_clause);
+    os << "\n";
+
+    (*this)(node.library_unit);
 }
 
 
@@ -1866,9 +1916,9 @@ void printer::operator()(library_clause const &node)
 
 void printer::operator()(library_unit const &node)
 {
-    static char const symbol[]{ "XXX library_unit" };
+    static char const symbol[]{ "library_unit" };
     symbol_scope<library_unit> _(*this, symbol);
-    //visit(node);
+    visit(node);
 }
 
 
@@ -1969,49 +2019,83 @@ void printer::operator()(options const &node)
 
 void printer::operator()(package_body const &node)
 {
-    static char const symbol[]{ "XXX package_body" };
+    static char const symbol[]{ "package_body" };
     symbol_scope<package_body> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.name);
+    os << "\n";
+
+    (*this)(node.declarative_part);
+
+    if(node.end_name) {
+        os << "\n";
+        (*this)(*node.end_name);
+    }
 }
 
 
 void printer::operator()(package_body_declarative_item const &node)
 {
-    static char const symbol[]{ "XXX package_body_declarative_item" };
+    static char const symbol[]{ "package_body_declarative_item" };
     symbol_scope<package_body_declarative_item> _(*this, symbol);
-    //visit(node);
+    visit(node);
 }
 
 
 void printer::operator()(package_body_declarative_part const &node)
 {
-    static char const symbol[]{ "XXX package_body_declarative_part" };
+    static char const symbol[]{ "package_body_declarative_part" };
     symbol_scope<package_body_declarative_part> _(*this, symbol);
-    //os << node;
+
+    auto const N = node.size() - 1;
+    unsigned i = 0;
+    for(auto const& package_body_declarative_item : node) {
+        (*this)(package_body_declarative_item);
+        if(i++ != N) {
+            os << ",\n";
+        }
+    }
 }
 
 
 void printer::operator()(package_declaration const &node)
 {
-    static char const symbol[]{ "XXX package_declaration" };
+    static char const symbol[]{ "package_declaration" };
     symbol_scope<package_declaration> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.identifier);
+    os << "\n";
+
+    (*this)(node.declarative_part);
+
+    if(node.end_label) {
+        os << "\n";
+        (*this)(*node.end_label);
+    }
 }
 
 
 void printer::operator()(package_declarative_item const &node)
 {
-    static char const symbol[]{ "XXX package_declarative_item" };
+    static char const symbol[]{ "package_declarative_item" };
     symbol_scope<package_declarative_item> _(*this, symbol);
-    //visit(node);
+    visit(node);
 }
 
 
 void printer::operator()(package_declarative_part const &node)
 {
-    static char const symbol[]{ "XXX package_declarative_part" };
+    static char const symbol[]{ "package_declarative_part" };
     symbol_scope<package_declarative_part> _(*this, symbol);
-    //os << node;
+
+    auto const N = node.size() - 1;
+    unsigned i = 0;
+    for(auto const& package_declarative_item : node) {
+        (*this)(package_declarative_item);
+        if(i++ != N) {
+            os << ",\n";
+        }
+    }
 }
 
 
@@ -2097,9 +2181,9 @@ void printer::operator()(primary const &node)
 
 void printer::operator()(primary_unit const &node)
 {
-    static char const symbol[]{ "XXX primary_unit" };
+    static char const symbol[]{ "primary_unit" };
     symbol_scope<primary_unit> _(*this, symbol);
-    //visit(node);
+    visit(node);
 }
 
 
@@ -2305,9 +2389,9 @@ void printer::operator()(scalar_type_definition const &node)
 
 void printer::operator()(secondary_unit const &node)
 {
-    static char const symbol[]{ "XXX secondary_unit" };
+    static char const symbol[]{ "secondary_unit" };
     symbol_scope<secondary_unit> _(*this, symbol);
-    //visit(node);
+    visit(node);
 }
 
 

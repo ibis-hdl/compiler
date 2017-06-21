@@ -18,9 +18,8 @@
 #include <eda/vhdl93/ast/alias_declaration.hpp>
 #include <eda/vhdl93/ast/alias_designator.hpp>
 #include <eda/vhdl93/ast/allocator.hpp>
-//#include <eda/vhdl93/ast/architecture_body.hpp>
-//#include <eda/vhdl93/ast/architecture_declarative_part.hpp>
-//#include <eda/vhdl93/ast/architecture_statement_part.hpp>
+#include <eda/vhdl93/ast/architecture_body.hpp>
+#include <eda/vhdl93/ast/architecture_statement_part.hpp>
 //#include <eda/vhdl93/ast/array_type_definition.hpp>
 //DISABLED #include <eda/vhdl93/ast/assertion.hpp>
 #include <eda/vhdl93/ast/assertion_statement.hpp>
@@ -64,7 +63,7 @@
 //#include <eda/vhdl93/ast/condition_clause.hpp>
 #include <eda/vhdl93/ast/conditional_signal_assignment.hpp>
 //DISABLED#include <eda/vhdl93/ast/conditional_waveforms.hpp>
-//#include <eda/vhdl93/ast/configuration_declaration.hpp>
+#include <eda/vhdl93/ast/configuration_declaration.hpp>
 //#include <eda/vhdl93/ast/configuration_declarative_item.hpp>
 //#include <eda/vhdl93/ast/configuration_declarative_part.hpp>
 //#include <eda/vhdl93/ast/configuration_item.hpp>
@@ -77,7 +76,7 @@
 //DISABLED #include <eda/vhdl93/ast/decimal_literal.hpp>
 //UNUSED_IN_BNF#include <eda/vhdl93/ast/declaration.hpp>
 //DISABLED #include <eda/vhdl93/ast/delay_mechanism.hpp>
-//#include <eda/vhdl93/ast/design_file.hpp>
+#include <eda/vhdl93/ast/design_file.hpp>
 //#include <eda/vhdl93/ast/design_unit.hpp>
 //#include <eda/vhdl93/ast/designator.hpp>
 #include <eda/vhdl93/ast/disconnection_specification.hpp>
@@ -149,10 +148,10 @@
 #include <eda/vhdl93/ast/options.hpp>
 #include <eda/vhdl93/ast/port_clause.hpp>
 #include <eda/vhdl93/ast/port_map_aspect.hpp>
-//#include <eda/vhdl93/ast/package_body.hpp>
+#include <eda/vhdl93/ast/package_body.hpp>
 //#include <eda/vhdl93/ast/package_body_declarative_item.hpp>
 //#include <eda/vhdl93/ast/package_body_declarative_part.hpp>
-//#include <eda/vhdl93/ast/package_declaration.hpp>
+#include <eda/vhdl93/ast/package_declaration.hpp>
 //#include <eda/vhdl93/ast/package_declarative_item.hpp>
 //#include <eda/vhdl93/ast/package_declarative_part.hpp>
 //#include <eda/vhdl93/ast/parameter_specification.hpp>

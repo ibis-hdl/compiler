@@ -26,6 +26,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::alias_declaration,
     alias_designator, subtype_indication, name, signature
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::architecture_body,
+    identifier, entity_name, declarative_part, statement_part, end_name
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::assertion,
     condition, report, severity
 )
@@ -142,6 +146,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::condition_clause,
     condition
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::configuration_declaration,
+    identifier, entity_name, declarative_part, block_configuration, end_label
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::configuration_specification,
     component_specification, binding_indication
 )
@@ -159,6 +167,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::decimal_literal,
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::delay_mechanism,
     time_expression, type
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::design_unit,
+    context_clause, library_unit
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::disconnection_specification,
@@ -311,6 +323,14 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::null_statement,
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::options,
     guarded, delay_mechanism
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::package_body,
+    name, declarative_part, end_name
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::package_declaration,
+    identifier, declarative_part, end_label
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::parameter_specification,
