@@ -1,0 +1,28 @@
+(loop_statement
+  (iteration_scheme<v>
+    (expression
+      (relation
+        (shift_expression
+          (simple_expression
+            (term
+              (primary<v>
+                (name<v>
+                  (identifier
+                    condition
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (sequence_of_statements
+    (sequential_statement<v>
+      (null_statement
+        
+      )
+    )
+  )
+)

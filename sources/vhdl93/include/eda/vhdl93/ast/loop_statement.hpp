@@ -24,7 +24,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 struct loop_statement : position_tagged
 {
     optional<ast::label>            label;
-    ast::iteration_scheme           iteration_scheme;
+    optional<ast::iteration_scheme> iteration_scheme;
     ast::sequence_of_statements     sequence_of_statements;
     optional<ast::label>            end_label;
 };

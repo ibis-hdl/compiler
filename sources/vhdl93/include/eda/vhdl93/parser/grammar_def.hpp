@@ -891,7 +891,7 @@ typedef x3::rule<interface_file_declaration_class, ast::interface_file_declarati
 typedef x3::rule<interface_list_class, ast::interface_list> interface_list_type;
 typedef x3::rule<interface_signal_declaration_class, ast::interface_signal_declaration> interface_signal_declaration_type;
 typedef x3::rule<interface_variable_declaration_class, ast::interface_variable_declaration> interface_variable_declaration_type;
-typedef x3::rule<iteration_scheme_class> iteration_scheme_type;
+typedef x3::rule<iteration_scheme_class, ast::iteration_scheme> iteration_scheme_type;
 typedef x3::rule<label_class, ast::label> label_type;
 typedef x3::rule<letter_class, char> letter_type;
 typedef x3::rule<letter_or_digit_class, char> letter_or_digit_type;
@@ -900,7 +900,7 @@ typedef x3::rule<library_unit_class> library_unit_type;
 typedef x3::rule<literal_class, ast::literal> literal_type;
 typedef x3::rule<logical_name_class, ast::logical_name> logical_name_type;
 typedef x3::rule<logical_name_list_class, std::vector<ast::logical_name>> logical_name_list_type;
-typedef x3::rule<loop_statement_class> loop_statement_type;
+typedef x3::rule<loop_statement_class, ast::loop_statement> loop_statement_type;
 typedef x3::rule<mode_class, ast::keyword_token> mode_type;
 typedef x3::rule<name_class, ast::name> name_type;
 typedef x3::rule<next_statement_class, ast::next_statement> next_statement_type;
@@ -914,7 +914,7 @@ typedef x3::rule<package_body_declarative_part_class> package_body_declarative_p
 typedef x3::rule<package_declaration_class> package_declaration_type;
 typedef x3::rule<package_declarative_item_class> package_declarative_item_type;
 typedef x3::rule<package_declarative_part_class> package_declarative_part_type;
-typedef x3::rule<parameter_specification_class> parameter_specification_type;
+typedef x3::rule<parameter_specification_class, ast::parameter_specification> parameter_specification_type;
 typedef x3::rule<physical_literal_class, ast::physical_literal> physical_literal_type;
 typedef x3::rule<physical_type_definition_class, ast::physical_type_definition> physical_type_definition_type;
 typedef x3::rule<port_clause_class, ast::port_clause> port_clause_type;
@@ -2985,15 +2985,15 @@ auto const interface_variable_declaration_def =
     ;
 
 
-#if 0
+
 // iteration_scheme ::=                                                  [§ 8.9]
 //       while condition
 //     | for loop_parameter_specification
 auto const iteration_scheme_def =
-      WHILE condition
-    | FOR loop_parameter_specification
+      (WHILE >> condition)
+    | (FOR >> parameter_specification)
     ;
-#endif
+
 
 
 // label ::=                                                             [§ 9.7]
@@ -3055,19 +3055,22 @@ auto const logical_name_list_def =
     ;
 
 
-#if 0
+
 // loop_statement ::=                                                    [§ 8.9]
 //     [ loop_label : ]
 //         [ iteration_scheme ] loop
 //             sequence_of_statements
 //         end loop [ loop_label ] ;
 auto const loop_statement_def =
-        -( loop_label > ':' )
-        -( iteration_scheme ) LOOP
-        sequence_of_statements
-        END LOOP -( loop_label ) > ';'
-;
-#endif
+      -label_colon
+    >> -iteration_scheme
+    >> LOOP
+    >> sequence_of_statements
+    >> END >> LOOP
+    >> -label
+    >  ';'
+    ;
+
 
 
 // mode ::=                                                            [§ 4.3.2]
@@ -3262,13 +3265,15 @@ auto const package_declarative_part_def =
 ;
 #endif
 
-#if 0
+
 // parameter_specification ::=                                           [§ 8.9]
 //     identifier in discrete_range
 auto const parameter_specification_def =
-        identifier IN discrete_range
-        ;
-#endif
+       identifier
+    >> omit[ IN ]
+    >> discrete_range
+    ;
+
 
 
 // physical_literal ::=                                                [§ 3.1.3]
@@ -3281,7 +3286,6 @@ namespace physical_literal_detail {
         raw[ lexeme[
             +(lower_case_letter | upper_case_letter)
         ]]);
-
 }
 
 auto const physical_literal_def =
@@ -3694,7 +3698,7 @@ auto const sequential_statement_def =
 //    | procedure_call_statement
     | if_statement
     | case_statement
-//    | loop_statement
+    | loop_statement
     | next_statement
     | exit_statement
     | return_statement
@@ -4353,7 +4357,7 @@ BOOST_SPIRIT_DEFINE(  // -- I --
     , interface_list
     , interface_signal_declaration
     , interface_variable_declaration
-    //, iteration_scheme
+    , iteration_scheme
 )
 BOOST_SPIRIT_DEFINE(  // -- L --
       label
@@ -4364,7 +4368,7 @@ BOOST_SPIRIT_DEFINE(  // -- L --
     , literal
     , logical_name
     , logical_name_list
-    //, loop_statement
+    , loop_statement
 )
 BOOST_SPIRIT_DEFINE(  // -- M --
     mode
@@ -4386,8 +4390,8 @@ BOOST_SPIRIT_DEFINE(  // -- P --
     //, package_declaration
     //, package_declarative_item
     //, package_declarative_part
-    //, parameter_specification
-      physical_literal
+      parameter_specification
+    , physical_literal
     , physical_type_definition
     , port_clause
     , port_map_aspect

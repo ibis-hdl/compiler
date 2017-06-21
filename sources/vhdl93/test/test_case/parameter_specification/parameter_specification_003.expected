@@ -1,0 +1,56 @@
+(parameter_specification
+  (identifier
+    identiifer
+  )
+  (discrete_range<v>
+    (subtype_indication
+      (name<v>
+        (identifier
+          resolution_function_name
+        )
+      )
+      (name<v>
+        (identifier
+          type_mark
+        )
+      )
+      (constraint<v>
+        (range<v>
+          (simple_expression
+            (term
+              (primary<v>
+                (literal<v>
+                  (numeric_literal<v>
+                    (abstract_literal<v>
+                      (decimal_literal
+                        literal: 42, hint: int
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+          (keyword
+            DOWNTO
+          )
+          (simple_expression
+            (term
+              (primary<v>
+                (literal<v>
+                  (numeric_literal<v>
+                    (abstract_literal<v>
+                      (decimal_literal
+                        literal: 0, hint: int
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

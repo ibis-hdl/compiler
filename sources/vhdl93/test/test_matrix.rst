@@ -6741,6 +6741,131 @@ literal
 |                         |               |                                            |
 +-------------------------+---------------+--------------------------------------------+
 
+==============
+loop_statement
+==============
+
++--------------------+-----------------------+---------------------------------------+
+| File               | Input                 | Expected                              |
++--------------------+-----------------------+---------------------------------------+
+| loop_statement_001 | loop                  | (loop_statement                       |
+|                    |     a <= b;           |   (sequence_of_statements             |
+|                    | end loop;             |     (sequential_statement<v>          |
+|                    |                       |       (signal_assignment_statement    |
+|                    |                       |         (target<v>                    |
+|                    |                       |           (name<v>                    |
+|                    |                       |             (identifier               |
+|                    |                       |               a                       |
+|                    |                       |             )                         |
+|                    |                       |           )                           |
+|                    |                       |         )                             |
+|                    |                       |         (waveform<v>                  |
+|                    |                       |           (waveform_element           |
+|                    |                       |             (expression               |
+|                    |                       |               (relation               |
+|                    |                       |                 (shift_expression     |
+|                    |                       |                   (simple_expression  |
+|                    |                       |                     (term             |
+|                    |                       |                       (primary<v>     |
+|                    |                       |                         (name<v>      |
+|                    |                       |                           (identifier |
+|                    |                       |                             b         |
+|                    |                       |                           )           |
+|                    |                       |                         )             |
+|                    |                       |                       )               |
+|                    |                       |                     )                 |
+|                    |                       |                   )                   |
+|                    |                       |                 )                     |
+|                    |                       |               )                       |
+|                    |                       |             )                         |
+|                    |                       |           )                           |
+|                    |                       |         )                             |
+|                    |                       |       )                               |
+|                    |                       |     )                                 |
+|                    |                       |   )                                   |
+|                    |                       | )                                     |
+|                    |                       |                                       |
++--------------------+-----------------------+---------------------------------------+
+| loop_statement_002 | my_label: loop        | (loop_statement                       |
+|                    |     a <= b;           |   (identifier                         |
+|                    | end loop my_loop;     |     my_label                          |
+|                    |                       |   )                                   |
+|                    |                       |   (sequence_of_statements             |
+|                    |                       |     (sequential_statement<v>          |
+|                    |                       |       (signal_assignment_statement    |
+|                    |                       |         (target<v>                    |
+|                    |                       |           (name<v>                    |
+|                    |                       |             (identifier               |
+|                    |                       |               a                       |
+|                    |                       |             )                         |
+|                    |                       |           )                           |
+|                    |                       |         )                             |
+|                    |                       |         (waveform<v>                  |
+|                    |                       |           (waveform_element           |
+|                    |                       |             (expression               |
+|                    |                       |               (relation               |
+|                    |                       |                 (shift_expression     |
+|                    |                       |                   (simple_expression  |
+|                    |                       |                     (term             |
+|                    |                       |                       (primary<v>     |
+|                    |                       |                         (name<v>      |
+|                    |                       |                           (identifier |
+|                    |                       |                             b         |
+|                    |                       |                           )           |
+|                    |                       |                         )             |
+|                    |                       |                       )               |
+|                    |                       |                     )                 |
+|                    |                       |                   )                   |
+|                    |                       |                 )                     |
+|                    |                       |               )                       |
+|                    |                       |             )                         |
+|                    |                       |           )                           |
+|                    |                       |         )                             |
+|                    |                       |       )                               |
+|                    |                       |     )                                 |
+|                    |                       |   )                                   |
+|                    |                       |   (identifier                         |
+|                    |                       |     my_loop                           |
+|                    |                       |   )                                   |
+|                    |                       | )                                     |
+|                    |                       |                                       |
++--------------------+-----------------------+---------------------------------------+
+| loop_statement_003 | while condition loop  | (loop_statement                       |
+|                    |     null;             |   (iteration_scheme<v>                |
+|                    | end loop;             |     (expression                       |
+|                    |                       |       (relation                       |
+|                    |                       |         (shift_expression             |
+|                    |                       |           (simple_expression          |
+|                    |                       |             (term                     |
+|                    |                       |               (primary<v>             |
+|                    |                       |                 (name<v>              |
+|                    |                       |                   (identifier         |
+|                    |                       |                     condition         |
+|                    |                       |                   )                   |
+|                    |                       |                 )                     |
+|                    |                       |               )                       |
+|                    |                       |             )                         |
+|                    |                       |           )                           |
+|                    |                       |         )                             |
+|                    |                       |       )                               |
+|                    |                       |     )                                 |
+|                    |                       |   )                                   |
+|                    |                       |   (sequence_of_statements             |
+|                    |                       |     (sequential_statement<v>          |
+|                    |                       |       (null_statement                 |
+|                    |                       |                                       |
+|                    |                       |       )                               |
+|                    |                       |     )                                 |
+|                    |                       |   )                                   |
+|                    |                       | )                                     |
+|                    |                       |                                       |
++--------------------+-----------------------+---------------------------------------+
+| loop_statement_004 | FOR i IN 0 to 42 LOOP |                                       |
+|                    |     NULL;             |                                       |
+|                    | END LOOP;             |                                       |
+|                    |                       |                                       |
++--------------------+-----------------------+---------------------------------------+
+
 ====
 name
 ====
@@ -7027,6 +7152,132 @@ numeric_literal
 |                      |                 | )                                        |
 |                      |                 |                                          |
 +----------------------+-----------------+------------------------------------------+
+
+=======================
+parameter_specification
+=======================
+
++-----------------------------+---------------------------------------------------------------------+------------------------------------------------+
+| File                        | Input                                                               | Expected                                       |
++-----------------------------+---------------------------------------------------------------------+------------------------------------------------+
+| parameter_specification_001 | identifier in range_attribute_name                                  | (parameter_specification                       |
+|                             |                                                                     |   (identifier                                  |
+|                             |                                                                     |     identifier                                 |
+|                             |                                                                     |   )                                            |
+|                             |                                                                     |   (discrete_range<v>                           |
+|                             |                                                                     |     (subtype_indication                        |
+|                             |                                                                     |       (name<v>                                 |
+|                             |                                                                     |         (identifier                            |
+|                             |                                                                     |           range_attribute_name                 |
+|                             |                                                                     |         )                                      |
+|                             |                                                                     |       )                                        |
+|                             |                                                                     |     )                                          |
+|                             |                                                                     |   )                                            |
+|                             |                                                                     | )                                              |
+|                             |                                                                     |                                                |
++-----------------------------+---------------------------------------------------------------------+------------------------------------------------+
+| parameter_specification_002 | identifier IN 0 to 42                                               | (parameter_specification                       |
+|                             |                                                                     |   (identifier                                  |
+|                             |                                                                     |     identifier                                 |
+|                             |                                                                     |   )                                            |
+|                             |                                                                     |   (discrete_range<v>                           |
+|                             |                                                                     |     (range<v>                                  |
+|                             |                                                                     |       (simple_expression                       |
+|                             |                                                                     |         (term                                  |
+|                             |                                                                     |           (primary<v>                          |
+|                             |                                                                     |             (literal<v>                        |
+|                             |                                                                     |               (numeric_literal<v>              |
+|                             |                                                                     |                 (abstract_literal<v>           |
+|                             |                                                                     |                   (decimal_literal             |
+|                             |                                                                     |                     literal: 0, hint: int      |
+|                             |                                                                     |                   )                            |
+|                             |                                                                     |                 )                              |
+|                             |                                                                     |               )                                |
+|                             |                                                                     |             )                                  |
+|                             |                                                                     |           )                                    |
+|                             |                                                                     |         )                                      |
+|                             |                                                                     |       )                                        |
+|                             |                                                                     |       (keyword                                 |
+|                             |                                                                     |         TO                                     |
+|                             |                                                                     |       )                                        |
+|                             |                                                                     |       (simple_expression                       |
+|                             |                                                                     |         (term                                  |
+|                             |                                                                     |           (primary<v>                          |
+|                             |                                                                     |             (literal<v>                        |
+|                             |                                                                     |               (numeric_literal<v>              |
+|                             |                                                                     |                 (abstract_literal<v>           |
+|                             |                                                                     |                   (decimal_literal             |
+|                             |                                                                     |                     literal: 42, hint: int     |
+|                             |                                                                     |                   )                            |
+|                             |                                                                     |                 )                              |
+|                             |                                                                     |               )                                |
+|                             |                                                                     |             )                                  |
+|                             |                                                                     |           )                                    |
+|                             |                                                                     |         )                                      |
+|                             |                                                                     |       )                                        |
+|                             |                                                                     |     )                                          |
+|                             |                                                                     |   )                                            |
+|                             |                                                                     | )                                              |
+|                             |                                                                     |                                                |
++-----------------------------+---------------------------------------------------------------------+------------------------------------------------+
+| parameter_specification_003 | identiifer IN resolution_function_name type_mark range 42 downto 0  | (parameter_specification                       |
+|                             |                                                                     |   (identifier                                  |
+|                             |                                                                     |     identiifer                                 |
+|                             |                                                                     |   )                                            |
+|                             |                                                                     |   (discrete_range<v>                           |
+|                             |                                                                     |     (subtype_indication                        |
+|                             |                                                                     |       (name<v>                                 |
+|                             |                                                                     |         (identifier                            |
+|                             |                                                                     |           resolution_function_name             |
+|                             |                                                                     |         )                                      |
+|                             |                                                                     |       )                                        |
+|                             |                                                                     |       (name<v>                                 |
+|                             |                                                                     |         (identifier                            |
+|                             |                                                                     |           type_mark                            |
+|                             |                                                                     |         )                                      |
+|                             |                                                                     |       )                                        |
+|                             |                                                                     |       (constraint<v>                           |
+|                             |                                                                     |         (range<v>                              |
+|                             |                                                                     |           (simple_expression                   |
+|                             |                                                                     |             (term                              |
+|                             |                                                                     |               (primary<v>                      |
+|                             |                                                                     |                 (literal<v>                    |
+|                             |                                                                     |                   (numeric_literal<v>          |
+|                             |                                                                     |                     (abstract_literal<v>       |
+|                             |                                                                     |                       (decimal_literal         |
+|                             |                                                                     |                         literal: 42, hint: int |
+|                             |                                                                     |                       )                        |
+|                             |                                                                     |                     )                          |
+|                             |                                                                     |                   )                            |
+|                             |                                                                     |                 )                              |
+|                             |                                                                     |               )                                |
+|                             |                                                                     |             )                                  |
+|                             |                                                                     |           )                                    |
+|                             |                                                                     |           (keyword                             |
+|                             |                                                                     |             DOWNTO                             |
+|                             |                                                                     |           )                                    |
+|                             |                                                                     |           (simple_expression                   |
+|                             |                                                                     |             (term                              |
+|                             |                                                                     |               (primary<v>                      |
+|                             |                                                                     |                 (literal<v>                    |
+|                             |                                                                     |                   (numeric_literal<v>          |
+|                             |                                                                     |                     (abstract_literal<v>       |
+|                             |                                                                     |                       (decimal_literal         |
+|                             |                                                                     |                         literal: 0, hint: int  |
+|                             |                                                                     |                       )                        |
+|                             |                                                                     |                     )                          |
+|                             |                                                                     |                   )                            |
+|                             |                                                                     |                 )                              |
+|                             |                                                                     |               )                                |
+|                             |                                                                     |             )                                  |
+|                             |                                                                     |           )                                    |
+|                             |                                                                     |         )                                      |
+|                             |                                                                     |       )                                        |
+|                             |                                                                     |     )                                          |
+|                             |                                                                     |   )                                            |
+|                             |                                                                     | )                                              |
+|                             |                                                                     |                                                |
++-----------------------------+---------------------------------------------------------------------+------------------------------------------------+
 
 ================
 physical_literal

@@ -33,6 +33,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 
 struct if_statement;
+struct loop_statement;
 
 
 // sequential_statement ::=                                                [§ 8]
@@ -59,7 +60,7 @@ struct sequential_statement : x3::variant<
 //    procedure_call_statement,
     x3::forward_ast<if_statement>,
     case_statement,
-//    loop_statement,
+    x3::forward_ast<loop_statement>,
     next_statement,
     exit_statement,
     return_statement,

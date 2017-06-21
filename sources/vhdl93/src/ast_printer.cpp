@@ -1890,8 +1890,10 @@ void printer::operator()(loop_statement const &node)
         os << "\n";
     }
 
-    (*this)(node.iteration_scheme);
-    os << "\n";
+    if(node.iteration_scheme) {
+        (*this)(*node.iteration_scheme);
+        os << "\n";
+    }
 
     (*this)(node.sequence_of_statements);
 

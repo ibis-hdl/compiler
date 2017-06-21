@@ -1,0 +1,53 @@
+(loop_statement
+  (iteration_scheme<v>
+    (parameter_specification
+      (identifier
+        i
+      )
+      (discrete_range<v>
+        (range<v>
+          (simple_expression
+            (term
+              (primary<v>
+                (literal<v>
+                  (numeric_literal<v>
+                    (abstract_literal<v>
+                      (decimal_literal
+                        literal: 0, hint: int
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+          (keyword
+            TO
+          )
+          (simple_expression
+            (term
+              (primary<v>
+                (literal<v>
+                  (numeric_literal<v>
+                    (abstract_literal<v>
+                      (decimal_literal
+                        literal: 42, hint: int
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (sequence_of_statements
+    (sequential_statement<v>
+      (null_statement
+        
+      )
+    )
+  )
+)
