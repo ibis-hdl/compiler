@@ -8,7 +8,7 @@
 #ifndef SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_AST_HPP_
 #define SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_AST_HPP_
 
-
+#if 1
 //DISABLED #include <eda/vhdl93/ast/abstract_literal.hpp>
 #include <eda/vhdl93/ast/access_type_definition.hpp>
 //DISABLED #include <eda/vhdl93/ast/actual_designator.hpp>
@@ -210,6 +210,9 @@
 #include <eda/vhdl93/ast/wait_statement.hpp>
 //DISABLED #include <eda/vhdl93/ast/waveform.hpp>
 //DISABLED #include <eda/vhdl93/ast/waveform_element.hpp>
+#else
+#include <eda/vhdl93/ast/design_file.hpp>
+#endif
 
 
 #endif /* SOURCES_VHDL93_INCLUDE_EDA_VHDL93_AST_AST_HPP_ */

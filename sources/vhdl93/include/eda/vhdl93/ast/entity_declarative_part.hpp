@@ -18,12 +18,12 @@
 #include <eda/vhdl93/ast/constant_declaration.hpp>
 #include <eda/vhdl93/ast/disconnection_specification.hpp>
 #include <eda/vhdl93/ast/file_declaration.hpp>
-//#include <eda/vhdl93/ast/group_declaration.hpp>
-//#include <eda/vhdl93/ast/group_template_declaration.hpp>
+#include <eda/vhdl93/ast/group_declaration.hpp>
+#include <eda/vhdl93/ast/group_template_declaration.hpp>
 #include <eda/vhdl93/ast/variable_declaration.hpp>
 #include <eda/vhdl93/ast/signal_declaration.hpp>
-//#include <eda/vhdl93/ast/subprogram_body.hpp>
-//#include <eda/vhdl93/ast/subprogram_declaration.hpp>
+#include <eda/vhdl93/ast/subprogram_body.hpp>
+#include <eda/vhdl93/ast/subprogram_declaration.hpp>
 #include <eda/vhdl93/ast/subtype_declaration.hpp>
 #include <eda/vhdl93/ast/type_declaration.hpp>
 #include <eda/vhdl93/ast/use_clause.hpp>
@@ -43,13 +43,13 @@ struct entity_declarative_item : x3::variant<
     constant_declaration,
     disconnection_specification,
     file_declaration,
-//    group_declaration,
-//    group_template_declaration,
+    group_declaration,
+    group_template_declaration,
     variable_declaration,   // shared_variable_declaration
     signal_declaration,
-//    subprogram_body,
-//    subprogram_declaration,
-//    subtype_declaration,
+    subprogram_body,
+    subprogram_declaration,
+    subtype_declaration,
     type_declaration,
     use_clause
 >

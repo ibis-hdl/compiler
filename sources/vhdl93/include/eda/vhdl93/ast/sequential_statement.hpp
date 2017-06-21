@@ -17,10 +17,10 @@
 #include <eda/vhdl93/ast/report_statement.hpp>
 #include <eda/vhdl93/ast/signal_assignment_statement.hpp>
 #include <eda/vhdl93/ast/variable_assignment_statement.hpp>
-//#include <eda/vhdl93/ast/procedure_call_statement.hpp>
-//#include <eda/vhdl93/ast/if_statement.hpp>
+#include <eda/vhdl93/ast/procedure_call_statement.hpp>
+//FORWARDED #include <eda/vhdl93/ast/if_statement.hpp>
 #include <eda/vhdl93/ast/case_statement.hpp>
-//#include <eda/vhdl93/ast/loop_statement.hpp>
+//FORWARDED #include <eda/vhdl93/ast/loop_statement.hpp>
 #include <eda/vhdl93/ast/next_statement.hpp>
 #include <eda/vhdl93/ast/exit_statement.hpp>
 #include <eda/vhdl93/ast/return_statement.hpp>
@@ -57,7 +57,7 @@ struct sequential_statement : x3::variant<
     report_statement,
     signal_assignment_statement,
     variable_assignment_statement,
-//    procedure_call_statement,
+    procedure_call_statement,
     x3::forward_ast<if_statement>,
     case_statement,
     x3::forward_ast<loop_statement>,

@@ -13,7 +13,7 @@
 #include <eda/vhdl93/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl93/ast/label.hpp>
-//#include <eda/vhdl93/ast/case_statement_alternative.hpp>
+//FORWARDED #include <eda/vhdl93/ast/case_statement_alternative.hpp>
 #include <eda/vhdl93/ast/util/optional.hpp>
 #include <vector>
 
@@ -22,6 +22,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 
 struct case_statement_alternative;
+
 
 struct case_statement : position_tagged
 {

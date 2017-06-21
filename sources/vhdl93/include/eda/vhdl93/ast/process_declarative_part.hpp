@@ -17,10 +17,10 @@
 #include <eda/vhdl93/ast/attribute_specification.hpp>
 #include <eda/vhdl93/ast/constant_declaration.hpp>
 #include <eda/vhdl93/ast/file_declaration.hpp>
-//#include <eda/vhdl93/ast/group_declaration.hpp>
-//#include <eda/vhdl93/ast/group_template_declaration.hpp>
-//#include <eda/vhdl93/ast/subprogram_body.hpp>
-//#include <eda/vhdl93/ast/subprogram_declaration.hpp>
+#include <eda/vhdl93/ast/group_declaration.hpp>
+#include <eda/vhdl93/ast/group_template_declaration.hpp>
+#include <eda/vhdl93/ast/subprogram_body.hpp>
+#include <eda/vhdl93/ast/subprogram_declaration.hpp>
 #include <eda/vhdl93/ast/subtype_declaration.hpp>
 #include <eda/vhdl93/ast/type_declaration.hpp>
 #include <eda/vhdl93/ast/use_clause.hpp>
@@ -40,10 +40,10 @@ struct process_declarative_item : x3::variant<
     attribute_specification,
     constant_declaration,
     file_declaration,
-//    group_declaration,
-//    group_template_declaration,
-//    subprogram_body,
-//    subprogram_declaration,
+    group_declaration,
+    group_template_declaration,
+    subprogram_body,
+    subprogram_declaration,
     subtype_declaration,
     type_declaration,
     use_clause,
