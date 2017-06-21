@@ -16,134 +16,6 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-struct aggregate;
-struct allocator;
-struct architecture_body;
-struct architecture_statement_part;
-struct assertion_statement;
-struct attribute_declaration;
-struct attribute_name;
-struct attribute_specification;
-struct based_integer;
-struct based_literal;
-struct basic_character;
-struct basic_graphic_character;
-struct binding_indication;
-struct bit_string_literal;
-struct block_configuration;
-struct block_declarative_item;
-struct block_declarative_part;
-struct block_header;
-struct block_specification;
-struct block_statement;
-struct block_statement_part;
-struct component_configuration;
-struct component_declaration;
-struct component_instantiation_statement;
-struct component_specification;
-struct concurrent_assertion_statement;
-struct concurrent_procedure_call_statement;
-struct concurrent_signal_assignment_statement;
-struct concurrent_statement;
-struct condition_clause;
-struct conditional_signal_assignment;
-struct conditional_waveforms;
-struct configuration_declaration;
-struct configuration_declarative_item;
-struct configuration_declarative_part;
-struct configuration_item;
-struct configuration_specification;
-struct constant_declaration;
-struct constraint;
-struct context_clause;
-struct context_item;
-struct decimal_literal;
-struct delay_mechanism;
-struct design_file;
-struct design_unit;
-struct disconnection_specification;
-struct discrete_range;
-struct element_association;
-struct entity_class;
-struct entity_class_entry;
-struct entity_class_entry_list;
-struct entity_declaration;
-struct entity_declarative_item;
-struct entity_declarative_part;
-struct entity_designator;
-struct entity_header;
-struct entity_name_list;
-struct entity_specification;
-struct entity_statement;
-struct entity_statement_part;
-struct entity_tag;
-struct expression;
-struct factor_binary_operation;
-struct factor_unary_operation;
-struct function_call;
-struct generate_statement;
-struct generation_scheme;
-struct graphic_character;
-struct group_constituent;
-struct group_constituent_list;
-struct group_declaration;
-struct group_template_declaration;
-struct guarded_signal_specification;
-struct identifier;
-struct identifier_list;
-struct if_statement;
-struct index_specification;
-struct instantiated_unit;
-struct instantiation_list;
-struct integer;
-struct iteration_scheme;
-struct library_clause;
-struct library_unit;
-struct loop_statement;
-struct options;
-struct package_body;
-struct package_body_declarative_item;
-struct package_body_declarative_part;
-struct package_declaration;
-struct package_declarative_item;
-struct package_declarative_part;
-struct parameter_specification;
-struct physical_literal;
-struct primary_unit;
-struct procedure_call;
-struct process_declarative_item;
-struct process_declarative_part;
-struct process_statement;
-struct qualified_expression;
-struct range;
-struct relation;
-struct secondary_unit;
-struct selected_signal_assignment;
-struct shift_expression;
-struct signal_assignment_statement;
-struct signal_declaration;
-struct signature;
-struct simple_expression;
-struct slice_name;
-struct string_literal;
-struct subprogram_body;
-struct subprogram_declarative_item;
-struct subprogram_declarative_part;
-struct subprogram_kind;
-struct target;
-struct term;
-struct timeout_clause;
-struct variable_declaration;
-struct wait_statement;
-struct waveform;
-
-
-} } } // namespace eda.vhdl93.ast
-
-
-namespace eda { namespace vhdl93 { namespace ast {
-
-
 class printer
 {
     using ostream = ::eda::utils::indent_ostream;
@@ -184,10 +56,7 @@ public:
     void operator()(attribute_declaration const& node);
     void operator()(attribute_name const& node);
     void operator()(attribute_specification const& node);
-    void operator()(based_integer const& node);
     void operator()(based_literal const& node);
-    void operator()(basic_character const& node);
-    void operator()(basic_graphic_character const& node);
     void operator()(binding_indication const& node);
     void operator()(bit_string_literal const& node);
     void operator()(block_configuration const& node);
@@ -234,8 +103,6 @@ public:
     void operator()(element_association const& node);
     void operator()(element_declaration const& node);
     void operator()(entity_aspect const& node);
-    void operator()(entity_class const& node);
-    void operator()(entity_class_entry const& node);
     void operator()(entity_class_entry_list const& node);
     void operator()(entity_declaration const& node);
     void operator()(entity_declarative_item const& node);
@@ -262,7 +129,6 @@ public:
     void operator()(generation_scheme const& node);
     void operator()(generic_clause const& node);
     void operator()(generic_map_aspect const& node);
-    void operator()(graphic_character const& node);
     void operator()(group_constituent const& node);
     void operator()(group_constituent_list const& node);
     void operator()(group_declaration const& node);
@@ -277,7 +143,6 @@ public:
     void operator()(indexed_name const& node);
     void operator()(instantiated_unit const& node);
     void operator()(instantiation_list const& node);
-    void operator()(integer const& node);
     void operator()(interface_constant_declaration const& node);
     void operator()(interface_declaration const& node);
     void operator()(interface_file_declaration const& node);
@@ -341,7 +206,6 @@ public:
     void operator()(subprogram_body const& node);
     void operator()(subprogram_declarative_item const& node);
     void operator()(subprogram_declarative_part const& node);
-    void operator()(subprogram_kind const& node);
     void operator()(subprogram_specification const& node);
     void operator()(subtype_declaration const& node);
     void operator()(subtype_indication const& node);

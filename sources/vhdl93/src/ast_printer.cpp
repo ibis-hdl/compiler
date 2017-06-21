@@ -350,14 +350,6 @@ void printer::operator()(attribute_specification const &node)
 }
 
 
-void printer::operator()(based_integer const &node)
-{
-    static char const symbol[]{ "XXX based_integer" };
-    symbol_scope<based_integer> _(*this, symbol);
-    //os << node;
-}
-
-
 void printer::operator()(based_literal const &node)
 {
     static char const symbol[]{ "based_literal" };
@@ -370,22 +362,6 @@ void printer::operator()(based_literal const &node)
     if(!node.exponent.empty()) {
         os << ", exp: " << node.exponent;
     }
-}
-
-
-void printer::operator()(basic_character const &node)
-{
-    static char const symbol[]{ "XXX basic_character" };
-    symbol_scope<basic_character> _(*this, symbol);
-    //visit(node);
-}
-
-
-void printer::operator()(basic_graphic_character const &node)
-{
-    static char const symbol[]{ "XXX basic_graphic_character" };
-    symbol_scope<basic_graphic_character> _(*this, symbol);
-    //visit(node);
 }
 
 
@@ -1145,22 +1121,6 @@ void printer::operator()(entity_aspect const &node)
 }
 
 
-void printer::operator()(entity_class const &node)
-{
-    static char const symbol[]{ "XXX entity_class" };
-    symbol_scope<entity_class> _(*this, symbol);
-    //visit(node);
-}
-
-
-void printer::operator()(entity_class_entry const &node)
-{
-    static char const symbol[]{ "XXX entity_class_entry" };
-    symbol_scope<entity_class_entry> _(*this, symbol);
-    //os << node;
-}
-
-
 void printer::operator()(entity_class_entry_list const &node)
 {
     static char const symbol[]{ "entity_class_entry_list" };
@@ -1533,14 +1493,6 @@ void printer::operator()(generic_map_aspect const &node)
 }
 
 
-void printer::operator()(graphic_character const &node)
-{
-    static char const symbol[]{ "XXX graphic_character" };
-    symbol_scope<graphic_character> _(*this, symbol);
-    //visit(node);
-}
-
-
 void printer::operator()(group_constituent const &node)
 {
     static char const symbol[]{ "group_constituent" };
@@ -1773,14 +1725,6 @@ void printer::operator()(instantiation_list const &node)
         }
 
     );
-}
-
-
-void printer::operator()(integer const &node)
-{
-    static char const symbol[]{ "XXX integer" };
-    symbol_scope<integer> _(*this, symbol);
-    //os << node;
 }
 
 
@@ -2636,9 +2580,13 @@ void printer::operator()(simple_expression const &node)
 
 void printer::operator()(slice_name const &node)
 {
-    static char const symbol[]{ "XXX slice_name" };
+    static char const symbol[]{ "slice_name" };
     symbol_scope<slice_name> _(*this, symbol);
-    //os << node;
+
+    (*this)(node.prefix);
+    os << "\n";
+
+    (*this)(node.discrete_range);
 }
 
 
@@ -2697,14 +2645,6 @@ void printer::operator()(subprogram_declarative_part const &node)
             os << ",\n";
         }
     }
-}
-
-
-void printer::operator()(subprogram_kind const &node)
-{
-    static char const symbol[]{ "XXX subprogram_kind" };
-    symbol_scope<subprogram_kind> _(*this, symbol);
-    //visit(node);
 }
 
 

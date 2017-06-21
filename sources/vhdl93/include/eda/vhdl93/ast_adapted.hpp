@@ -441,6 +441,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::simple_expression::chunk,
     adding_operator, term
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::slice_name,
+    prefix, discrete_range
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl93::ast::string_literal,
     literal
 )

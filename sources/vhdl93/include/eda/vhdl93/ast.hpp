@@ -185,7 +185,7 @@
 //DISABLED #include <eda/vhdl93/ast/signature.hpp>
 //DISABLED #include <eda/vhdl93/ast/simple_expression.hpp>
 //DISABLED #include <eda/vhdl93/ast/simple_name.hpp>
-//#include <eda/vhdl93/ast/slice_name.hpp>
+#include <eda/vhdl93/ast/slice_name.hpp>
 //DISABLED #include <eda/vhdl93/ast/string_literal.hpp>
 //#include <eda/vhdl93/ast/subprogram_body.hpp>
 //#include <eda/vhdl93/ast/subprogram_declaration.hpp>
