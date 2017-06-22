@@ -18,9 +18,9 @@
 #include <eda/vhdl93/ast/signal_assignment_statement.hpp>
 #include <eda/vhdl93/ast/variable_assignment_statement.hpp>
 #include <eda/vhdl93/ast/procedure_call_statement.hpp>
-//FORWARDED #include <eda/vhdl93/ast/if_statement.hpp>
+//FORWARD #include <eda/vhdl93/ast/if_statement.hpp>
 #include <eda/vhdl93/ast/case_statement.hpp>
-//FORWARDED #include <eda/vhdl93/ast/loop_statement.hpp>
+//FORWARD #include <eda/vhdl93/ast/loop_statement.hpp>
 #include <eda/vhdl93/ast/next_statement.hpp>
 #include <eda/vhdl93/ast/exit_statement.hpp>
 #include <eda/vhdl93/ast/return_statement.hpp>
@@ -36,20 +36,25 @@ struct if_statement;
 struct loop_statement;
 
 
-// sequential_statement ::=                                                [§ 8]
-//       wait_statement
-//     | assertion_statement
-//     | report_statement
-//     | signal_assignment_statement
-//     | variable_assignment_statement
-//     | procedure_call_statement
-//     | if_statement
-//     | case_statement
-//     | loop_statement
-//     | next_statement
-//     | exit_statement
-//     | return_statement
-//     | null_statement
+/**
+ * Ast node cyclic dependency as:
+ *
+ * \dot
+ *  digraph if_statement  {
+ *   sequential_statement -> if_statement;
+ *   if_statement -> sequence_of_statements -> sequential_statement;
+ * }
+ * \enddot
+ *
+ * and
+ *
+ * \dot
+ *  digraph loop_statement  {
+ *   sequential_statement -> loop_statement;
+ *   loop_statement -> sequence_of_statements -> sequential_statement;
+ * }
+ * \enddot
+ */
 struct sequential_statement : x3::variant<
     nullary,
     wait_statement,

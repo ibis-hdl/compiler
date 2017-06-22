@@ -15,7 +15,7 @@
 #include <eda/vhdl93/ast/label.hpp>
 #include <eda/vhdl93/ast/generation_scheme.hpp>
 #include <eda/vhdl93/ast/block_declarative_part.hpp>
-#include <eda/vhdl93/ast/concurrent_statement.hpp>
+//FORWARD #include <eda/vhdl93/ast/concurrent_statement.hpp>
 #include <eda/vhdl93/ast/util/optional.hpp>
 #include <vector>
 
@@ -23,6 +23,19 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
+struct concurrent_statement;
+
+
+/**
+ * Ast node cyclic dependency as:
+ *
+ * \dot
+ *  digraph generate_statement  {
+ *   concurrent_statement -> generate_statement;
+ *   generate_statement -> concurrent_statement;
+ * }
+ * \enddot
+ */
 struct generate_statement : position_tagged
 {
     ast::label                              label;

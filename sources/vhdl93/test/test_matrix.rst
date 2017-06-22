@@ -6745,126 +6745,176 @@ literal
 loop_statement
 ==============
 
-+--------------------+-----------------------+---------------------------------------+
-| File               | Input                 | Expected                              |
-+--------------------+-----------------------+---------------------------------------+
-| loop_statement_001 | loop                  | (loop_statement                       |
-|                    |     a <= b;           |   (sequence_of_statements             |
-|                    | end loop;             |     (sequential_statement<v>          |
-|                    |                       |       (signal_assignment_statement    |
-|                    |                       |         (target<v>                    |
-|                    |                       |           (name<v>                    |
-|                    |                       |             (identifier               |
-|                    |                       |               a                       |
-|                    |                       |             )                         |
-|                    |                       |           )                           |
-|                    |                       |         )                             |
-|                    |                       |         (waveform<v>                  |
-|                    |                       |           (waveform_element           |
-|                    |                       |             (expression               |
-|                    |                       |               (relation               |
-|                    |                       |                 (shift_expression     |
-|                    |                       |                   (simple_expression  |
-|                    |                       |                     (term             |
-|                    |                       |                       (primary<v>     |
-|                    |                       |                         (name<v>      |
-|                    |                       |                           (identifier |
-|                    |                       |                             b         |
-|                    |                       |                           )           |
-|                    |                       |                         )             |
-|                    |                       |                       )               |
-|                    |                       |                     )                 |
-|                    |                       |                   )                   |
-|                    |                       |                 )                     |
-|                    |                       |               )                       |
-|                    |                       |             )                         |
-|                    |                       |           )                           |
-|                    |                       |         )                             |
-|                    |                       |       )                               |
-|                    |                       |     )                                 |
-|                    |                       |   )                                   |
-|                    |                       | )                                     |
-|                    |                       |                                       |
-+--------------------+-----------------------+---------------------------------------+
-| loop_statement_002 | my_label: loop        | (loop_statement                       |
-|                    |     a <= b;           |   (identifier                         |
-|                    | end loop my_loop;     |     my_label                          |
-|                    |                       |   )                                   |
-|                    |                       |   (sequence_of_statements             |
-|                    |                       |     (sequential_statement<v>          |
-|                    |                       |       (signal_assignment_statement    |
-|                    |                       |         (target<v>                    |
-|                    |                       |           (name<v>                    |
-|                    |                       |             (identifier               |
-|                    |                       |               a                       |
-|                    |                       |             )                         |
-|                    |                       |           )                           |
-|                    |                       |         )                             |
-|                    |                       |         (waveform<v>                  |
-|                    |                       |           (waveform_element           |
-|                    |                       |             (expression               |
-|                    |                       |               (relation               |
-|                    |                       |                 (shift_expression     |
-|                    |                       |                   (simple_expression  |
-|                    |                       |                     (term             |
-|                    |                       |                       (primary<v>     |
-|                    |                       |                         (name<v>      |
-|                    |                       |                           (identifier |
-|                    |                       |                             b         |
-|                    |                       |                           )           |
-|                    |                       |                         )             |
-|                    |                       |                       )               |
-|                    |                       |                     )                 |
-|                    |                       |                   )                   |
-|                    |                       |                 )                     |
-|                    |                       |               )                       |
-|                    |                       |             )                         |
-|                    |                       |           )                           |
-|                    |                       |         )                             |
-|                    |                       |       )                               |
-|                    |                       |     )                                 |
-|                    |                       |   )                                   |
-|                    |                       |   (identifier                         |
-|                    |                       |     my_loop                           |
-|                    |                       |   )                                   |
-|                    |                       | )                                     |
-|                    |                       |                                       |
-+--------------------+-----------------------+---------------------------------------+
-| loop_statement_003 | while condition loop  | (loop_statement                       |
-|                    |     null;             |   (iteration_scheme<v>                |
-|                    | end loop;             |     (expression                       |
-|                    |                       |       (relation                       |
-|                    |                       |         (shift_expression             |
-|                    |                       |           (simple_expression          |
-|                    |                       |             (term                     |
-|                    |                       |               (primary<v>             |
-|                    |                       |                 (name<v>              |
-|                    |                       |                   (identifier         |
-|                    |                       |                     condition         |
-|                    |                       |                   )                   |
-|                    |                       |                 )                     |
-|                    |                       |               )                       |
-|                    |                       |             )                         |
-|                    |                       |           )                           |
-|                    |                       |         )                             |
-|                    |                       |       )                               |
-|                    |                       |     )                                 |
-|                    |                       |   )                                   |
-|                    |                       |   (sequence_of_statements             |
-|                    |                       |     (sequential_statement<v>          |
-|                    |                       |       (null_statement                 |
-|                    |                       |                                       |
-|                    |                       |       )                               |
-|                    |                       |     )                                 |
-|                    |                       |   )                                   |
-|                    |                       | )                                     |
-|                    |                       |                                       |
-+--------------------+-----------------------+---------------------------------------+
-| loop_statement_004 | FOR i IN 0 to 42 LOOP |                                       |
-|                    |     NULL;             |                                       |
-|                    | END LOOP;             |                                       |
-|                    |                       |                                       |
-+--------------------+-----------------------+---------------------------------------+
++--------------------+-----------------------+------------------------------------------------+
+| File               | Input                 | Expected                                       |
++--------------------+-----------------------+------------------------------------------------+
+| loop_statement_001 | loop                  | (loop_statement                                |
+|                    |     a <= b;           |   (sequence_of_statements                      |
+|                    | end loop;             |     (sequential_statement<v>                   |
+|                    |                       |       (signal_assignment_statement             |
+|                    |                       |         (target<v>                             |
+|                    |                       |           (name<v>                             |
+|                    |                       |             (identifier                        |
+|                    |                       |               a                                |
+|                    |                       |             )                                  |
+|                    |                       |           )                                    |
+|                    |                       |         )                                      |
+|                    |                       |         (waveform<v>                           |
+|                    |                       |           (waveform_element                    |
+|                    |                       |             (expression                        |
+|                    |                       |               (relation                        |
+|                    |                       |                 (shift_expression              |
+|                    |                       |                   (simple_expression           |
+|                    |                       |                     (term                      |
+|                    |                       |                       (primary<v>              |
+|                    |                       |                         (name<v>               |
+|                    |                       |                           (identifier          |
+|                    |                       |                             b                  |
+|                    |                       |                           )                    |
+|                    |                       |                         )                      |
+|                    |                       |                       )                        |
+|                    |                       |                     )                          |
+|                    |                       |                   )                            |
+|                    |                       |                 )                              |
+|                    |                       |               )                                |
+|                    |                       |             )                                  |
+|                    |                       |           )                                    |
+|                    |                       |         )                                      |
+|                    |                       |       )                                        |
+|                    |                       |     )                                          |
+|                    |                       |   )                                            |
+|                    |                       | )                                              |
+|                    |                       |                                                |
++--------------------+-----------------------+------------------------------------------------+
+| loop_statement_002 | my_label: loop        | (loop_statement                                |
+|                    |     a <= b;           |   (identifier                                  |
+|                    | end loop my_loop;     |     my_label                                   |
+|                    |                       |   )                                            |
+|                    |                       |   (sequence_of_statements                      |
+|                    |                       |     (sequential_statement<v>                   |
+|                    |                       |       (signal_assignment_statement             |
+|                    |                       |         (target<v>                             |
+|                    |                       |           (name<v>                             |
+|                    |                       |             (identifier                        |
+|                    |                       |               a                                |
+|                    |                       |             )                                  |
+|                    |                       |           )                                    |
+|                    |                       |         )                                      |
+|                    |                       |         (waveform<v>                           |
+|                    |                       |           (waveform_element                    |
+|                    |                       |             (expression                        |
+|                    |                       |               (relation                        |
+|                    |                       |                 (shift_expression              |
+|                    |                       |                   (simple_expression           |
+|                    |                       |                     (term                      |
+|                    |                       |                       (primary<v>              |
+|                    |                       |                         (name<v>               |
+|                    |                       |                           (identifier          |
+|                    |                       |                             b                  |
+|                    |                       |                           )                    |
+|                    |                       |                         )                      |
+|                    |                       |                       )                        |
+|                    |                       |                     )                          |
+|                    |                       |                   )                            |
+|                    |                       |                 )                              |
+|                    |                       |               )                                |
+|                    |                       |             )                                  |
+|                    |                       |           )                                    |
+|                    |                       |         )                                      |
+|                    |                       |       )                                        |
+|                    |                       |     )                                          |
+|                    |                       |   )                                            |
+|                    |                       |   (identifier                                  |
+|                    |                       |     my_loop                                    |
+|                    |                       |   )                                            |
+|                    |                       | )                                              |
+|                    |                       |                                                |
++--------------------+-----------------------+------------------------------------------------+
+| loop_statement_003 | while condition loop  | (loop_statement                                |
+|                    |     null;             |   (iteration_scheme<v>                         |
+|                    | end loop;             |     (expression                                |
+|                    |                       |       (relation                                |
+|                    |                       |         (shift_expression                      |
+|                    |                       |           (simple_expression                   |
+|                    |                       |             (term                              |
+|                    |                       |               (primary<v>                      |
+|                    |                       |                 (name<v>                       |
+|                    |                       |                   (identifier                  |
+|                    |                       |                     condition                  |
+|                    |                       |                   )                            |
+|                    |                       |                 )                              |
+|                    |                       |               )                                |
+|                    |                       |             )                                  |
+|                    |                       |           )                                    |
+|                    |                       |         )                                      |
+|                    |                       |       )                                        |
+|                    |                       |     )                                          |
+|                    |                       |   )                                            |
+|                    |                       |   (sequence_of_statements                      |
+|                    |                       |     (sequential_statement<v>                   |
+|                    |                       |       (null_statement                          |
+|                    |                       |                                                |
+|                    |                       |       )                                        |
+|                    |                       |     )                                          |
+|                    |                       |   )                                            |
+|                    |                       | )                                              |
+|                    |                       |                                                |
++--------------------+-----------------------+------------------------------------------------+
+| loop_statement_004 | for i in 0 to 42 loop | (loop_statement                                |
+|                    |     null;             |   (iteration_scheme<v>                         |
+|                    | end loop;             |     (parameter_specification                   |
+|                    |                       |       (identifier                              |
+|                    |                       |         i                                      |
+|                    |                       |       )                                        |
+|                    |                       |       (discrete_range<v>                       |
+|                    |                       |         (range<v>                              |
+|                    |                       |           (simple_expression                   |
+|                    |                       |             (term                              |
+|                    |                       |               (primary<v>                      |
+|                    |                       |                 (literal<v>                    |
+|                    |                       |                   (numeric_literal<v>          |
+|                    |                       |                     (abstract_literal<v>       |
+|                    |                       |                       (decimal_literal         |
+|                    |                       |                         literal: 0, hint: int  |
+|                    |                       |                       )                        |
+|                    |                       |                     )                          |
+|                    |                       |                   )                            |
+|                    |                       |                 )                              |
+|                    |                       |               )                                |
+|                    |                       |             )                                  |
+|                    |                       |           )                                    |
+|                    |                       |           (keyword                             |
+|                    |                       |             TO                                 |
+|                    |                       |           )                                    |
+|                    |                       |           (simple_expression                   |
+|                    |                       |             (term                              |
+|                    |                       |               (primary<v>                      |
+|                    |                       |                 (literal<v>                    |
+|                    |                       |                   (numeric_literal<v>          |
+|                    |                       |                     (abstract_literal<v>       |
+|                    |                       |                       (decimal_literal         |
+|                    |                       |                         literal: 42, hint: int |
+|                    |                       |                       )                        |
+|                    |                       |                     )                          |
+|                    |                       |                   )                            |
+|                    |                       |                 )                              |
+|                    |                       |               )                                |
+|                    |                       |             )                                  |
+|                    |                       |           )                                    |
+|                    |                       |         )                                      |
+|                    |                       |       )                                        |
+|                    |                       |     )                                          |
+|                    |                       |   )                                            |
+|                    |                       |   (sequence_of_statements                      |
+|                    |                       |     (sequential_statement<v>                   |
+|                    |                       |       (null_statement                          |
+|                    |                       |                                                |
+|                    |                       |       )                                        |
+|                    |                       |     )                                          |
+|                    |                       |   )                                            |
+|                    |                       | )                                              |
+|                    |                       |                                                |
++--------------------+-----------------------+------------------------------------------------+
 
 ====
 name

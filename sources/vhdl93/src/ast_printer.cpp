@@ -1058,8 +1058,8 @@ void printer::operator()(discrete_range const &node)
 
     util::visit_in_place(
         node,
-        [this](ast::discrete_subtype_indication const& subtype_indication) {
-            (*this)(subtype_indication);
+        [this](ast::subtype_indication const& discrete_subtype_indication) {
+            (*this)(discrete_subtype_indication);
         },
         [this](ast::range const& range) {
             (*this)(range);

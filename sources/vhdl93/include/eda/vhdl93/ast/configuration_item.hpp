@@ -12,7 +12,7 @@
 #include <eda/vhdl93/ast/util/namespace_alias.hpp>
 
 #include <eda/vhdl93/ast/util/nullary.hpp>
-//#include <eda/vhdl93/ast/block_configuration.hpp>
+//FORWARD #include <eda/vhdl93/ast/block_configuration.hpp>
 #include <eda/vhdl93/ast/component_configuration.hpp>
 #include <vector>
 
@@ -22,6 +22,21 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
+struct block_configuration;
+
+
+/**
+ * Ast node cyclic dependency as:
+ *
+ * \dot
+ * digraph component_configuration  {
+ *   component_configuration -> block_configuration;
+ *   block_configuration -> configuration_item;
+ *   configuration_item -> component_configuration;
+ *   configuration_item -> block_configuration;
+ * }
+ * \enddot
+ */
 struct configuration_item : x3::variant<
     ast::nullary,
     x3::forward_ast<ast::block_configuration>,

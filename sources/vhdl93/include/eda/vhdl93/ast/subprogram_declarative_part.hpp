@@ -13,7 +13,7 @@
 
 #include <eda/vhdl93/ast/util/nullary.hpp>
 #include <eda/vhdl93/ast/subprogram_declaration.hpp>
-//#include <eda/vhdl93/ast/subprogram_body.hpp>
+//FORWARD #include <eda/vhdl93/ast/subprogram_body.hpp>
 #include <eda/vhdl93/ast/type_declaration.hpp>
 #include <eda/vhdl93/ast/subtype_declaration.hpp>
 #include <eda/vhdl93/ast/constant_declaration.hpp>
@@ -33,10 +33,23 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
+struct subprogram_body;
+
+
+/**
+ * Ast node cyclic dependency as:
+ *
+ * \dot
+ *  digraph subprogram_declarative_item  {
+ *     subprogram_body -> subprogram_declarative_part;
+ *      subprogram_declarative_part -> subprogram_declarative_item -> subprogram_body;
+ * }
+ * \enddot
+ */
 struct subprogram_declarative_item : x3::variant<
     ast::nullary,
     ast::subprogram_declaration,
-    //ast::subprogram_body,
+    x3::forward_ast<ast::subprogram_body>,
     ast::type_declaration,
     ast::subtype_declaration,
     ast::constant_declaration,

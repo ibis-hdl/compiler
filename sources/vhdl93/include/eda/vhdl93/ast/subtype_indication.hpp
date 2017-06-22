@@ -14,7 +14,7 @@
 
 #include <eda/vhdl93/ast/name.hpp>
 #include <eda/vhdl93/ast/type_mark.hpp>
-//#include <eda/vhdl93/ast/constraint.hpp>
+#include <eda/vhdl93/ast/constraint.hpp>
 #include <eda/vhdl93/ast/util/optional.hpp>
 #include <vector>
 
@@ -27,8 +27,8 @@ struct constraint;
 
 struct subtype_indication : position_tagged
 {
-    std::vector<ast::name>                          unspecified_name_list;
-    optional<x3::forward_ast<ast::constraint>>      constraint;
+    std::vector<ast::name>          unspecified_name_list;
+    optional<ast::constraint>       constraint;
 };
 
 

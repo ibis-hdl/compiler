@@ -13,7 +13,7 @@
 #include <eda/vhdl93/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl93/ast/label.hpp>
-//FORWARDED #include <eda/vhdl93/ast/case_statement_alternative.hpp>
+//FORWARD #include <eda/vhdl93/ast/case_statement_alternative.hpp>
 #include <eda/vhdl93/ast/util/optional.hpp>
 #include <vector>
 

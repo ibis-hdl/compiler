@@ -13,7 +13,7 @@
 
 #include <eda/vhdl93/ast/util/nullary.hpp>
 #include <eda/vhdl93/ast/range.hpp>
-#include <eda/vhdl93/ast/subtype_indication.hpp>
+//FORWARD #include <eda/vhdl93/ast/subtype_indication.hpp>
 
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
 
@@ -21,12 +21,24 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-using discrete_subtype_indication = ast::subtype_indication;
+struct subtype_indication;
 
 
+/**
+ * Ast node cyclic dependency as:
+ *
+ * \dot
+ * digraph concurrent_statement  {
+ *   subtype_indication -> constraint;
+ *   constraint -> index_constraint -> discrete_range;
+ *   discrete_range -> subtype_indication;
+ * }
+ * \enddot
+ */
 struct discrete_range : x3::variant<
-    discrete_subtype_indication,
-    range
+    ast::nullary,
+    x3::forward_ast<ast::subtype_indication>,   // discrete_subtype_indication
+    ast::range
 >
 {
     using base_type::base_type;
