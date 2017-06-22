@@ -32,7 +32,7 @@ struct concurrent_statement;
  * \dot
  *  digraph generate_statement  {
  *   concurrent_statement -> generate_statement;
- *   generate_statement -> concurrent_statement;
+ *   generate_statement -> concurrent_statement [ label="forward"];
  * }
  * \enddot
  */

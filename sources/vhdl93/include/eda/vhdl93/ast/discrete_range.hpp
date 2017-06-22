@@ -31,7 +31,7 @@ struct subtype_indication;
  * digraph concurrent_statement  {
  *   subtype_indication -> constraint;
  *   constraint -> index_constraint -> discrete_range;
- *   discrete_range -> subtype_indication;
+ *   discrete_range -> subtype_indication [ label="forward"];
  * }
  * \enddot
  */

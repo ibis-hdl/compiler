@@ -41,7 +41,7 @@ struct loop_statement;
  *
  * \dot
  *  digraph if_statement  {
- *   sequential_statement -> if_statement;
+ *   sequential_statement -> if_statement [ label="forward"];
  *   if_statement -> sequence_of_statements -> sequential_statement;
  * }
  * \enddot
@@ -50,7 +50,7 @@ struct loop_statement;
  *
  * \dot
  *  digraph loop_statement  {
- *   sequential_statement -> loop_statement;
+ *   sequential_statement -> loop_statement [ label="forward"];
  *   loop_statement -> sequence_of_statements -> sequential_statement;
  * }
  * \enddot
