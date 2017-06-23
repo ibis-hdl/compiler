@@ -19,15 +19,15 @@
 BOOST_AUTO_TEST_SUITE( productions )
 
 
-//GENERATE_DATASET_TEST_CASE(case_statement)
-//GENERATE_DATASET_TEST_CASE(exit_statement)
-//GENERATE_DATASET_TEST_CASE(next_statement)
-//GENERATE_DATASET_TEST_CASE(return_statement)
-//GENERATE_DATASET_TEST_CASE(signal_assignment_statement)
-//GENERATE_DATASET_TEST_CASE(variable_assignment_statement)
-//GENERATE_DATASET_TEST_CASE(wait_statement)
-//GENERATE_DATASET_TEST_CASE(sequential_statement)
-//GENERATE_DATASET_TEST_CASE(if_statement)
+GENERATE_DATASET_TEST_CASE(case_statement)
+GENERATE_DATASET_TEST_CASE(exit_statement)
+GENERATE_DATASET_TEST_CASE(next_statement)
+GENERATE_DATASET_TEST_CASE(return_statement)
+GENERATE_DATASET_TEST_CASE(signal_assignment_statement)
+GENERATE_DATASET_TEST_CASE(variable_assignment_statement)
+GENERATE_DATASET_TEST_CASE(wait_statement)
+GENERATE_DATASET_TEST_CASE(sequential_statement)
+GENERATE_DATASET_TEST_CASE(if_statement)
 GENERATE_DATASET_TEST_CASE(loop_statement)
 
 
