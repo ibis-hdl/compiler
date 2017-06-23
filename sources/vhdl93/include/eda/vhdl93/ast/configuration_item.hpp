@@ -13,7 +13,7 @@
 
 #include <eda/vhdl93/ast/util/nullary.hpp>
 //FORWARD #include <eda/vhdl93/ast/block_configuration.hpp>
-#include <eda/vhdl93/ast/component_configuration.hpp>
+//FORWARD #include <eda/vhdl93/ast/component_configuration.hpp>
 #include <vector>
 
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
@@ -23,6 +23,7 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 
 struct block_configuration;
+struct component_configuration;
 
 
 /**
@@ -40,7 +41,7 @@ struct block_configuration;
 struct configuration_item : x3::variant<
     ast::nullary,
     x3::forward_ast<ast::block_configuration>,
-    ast::component_configuration
+    x3::forward_ast<ast::component_configuration>
 >
 {
     using base_type::base_type;

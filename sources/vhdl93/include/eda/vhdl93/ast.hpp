@@ -38,7 +38,7 @@
 #include <eda/vhdl93/ast/binding_indication.hpp>
 //DISABLED #include <eda/vhdl93/ast/bit_string_literal.hpp>
 //#include <eda/vhdl93/ast/bit_value.hpp>
-#include <eda/vhdl93/ast/block_configuration.hpp>
+//#include <eda/vhdl93/ast/block_configuration.hpp>
 //#include <eda/vhdl93/ast/block_declarative_item.hpp>
 #include <eda/vhdl93/ast/block_declarative_part.hpp>
 #include <eda/vhdl93/ast/block_header.hpp>
@@ -50,7 +50,10 @@
 //DISABLED #include <eda/vhdl93/ast/character_literal.hpp>
 //DISABLED #include <eda/vhdl93/ast/choice.hpp>
 #include <eda/vhdl93/ast/choices.hpp>
-//#include <eda/vhdl93/ast/component_configuration.hpp>
+
+// required due to forwarding
+#include <eda/vhdl93/ast/component_configuration.hpp>
+
 #include <eda/vhdl93/ast/component_declaration.hpp>
 //#include <eda/vhdl93/ast/component_instantiation_statement.hpp>
 #include <eda/vhdl93/ast/component_specification.hpp>

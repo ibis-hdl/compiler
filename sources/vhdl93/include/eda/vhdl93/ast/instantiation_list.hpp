@@ -13,6 +13,7 @@
 
 #include <eda/vhdl93/ast/util/nullary.hpp>
 #include <eda/vhdl93/ast/label.hpp>
+#include <eda/vhdl93/ast/keyword_token.hpp>
 #include <vector>
 
 #include <boost/spirit/home/x3/support/ast/variant.hpp>

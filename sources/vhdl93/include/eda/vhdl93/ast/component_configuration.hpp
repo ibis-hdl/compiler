@@ -14,7 +14,7 @@
 
 #include <eda/vhdl93/ast/component_specification.hpp>
 #include <eda/vhdl93/ast/binding_indication.hpp>
-//#include <eda/vhdl93/ast/block_configuration.hpp>
+#include <eda/vhdl93/ast/block_configuration.hpp>
 #include <eda/vhdl93/ast/util/optional.hpp>
 
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
@@ -23,14 +23,11 @@
 namespace eda { namespace vhdl93 { namespace ast {
 
 
-struct block_configuration;
-
-
 struct component_configuration : position_tagged
 {
-    ast::component_specification                        component_specification;
-    optional<ast::binding_indication>                   binding_indication;
-    optional<x3::forward_ast<ast::block_configuration>> block_configuration;
+    ast::component_specification                component_specification;
+    optional<ast::binding_indication>           binding_indication;
+    optional<ast::block_configuration>          block_configuration;
 };
 
 
