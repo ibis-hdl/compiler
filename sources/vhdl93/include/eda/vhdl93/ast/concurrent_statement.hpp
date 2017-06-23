@@ -13,7 +13,7 @@
 
 #include <eda/vhdl93/ast/util/nullary.hpp>
 //#include <eda/vhdl93/ast/block_statement.hpp>
-//#include <eda/vhdl93/ast/process_statement.hpp>
+#include <eda/vhdl93/ast/process_statement.hpp>
 #include <eda/vhdl93/ast/concurrent_procedure_call_statement.hpp>
 #include <eda/vhdl93/ast/concurrent_assertion_statement.hpp>
 #include <eda/vhdl93/ast/concurrent_signal_assignment_statement.hpp>
@@ -33,7 +33,7 @@ struct concurrent_statement : x3::variant<
     ast::concurrent_procedure_call_statement,
     ast::concurrent_assertion_statement,
     ast::concurrent_signal_assignment_statement,
-    //ast::component_instantiation_statement,
+    ast::component_instantiation_statement,
     ast::generate_statement
 >
 {
