@@ -12,7 +12,7 @@
 #include <eda/vhdl93/ast/util/namespace_alias.hpp>
 
 #include <eda/vhdl93/ast/util/nullary.hpp>
-//#include <eda/vhdl93/ast/block_statement.hpp>
+#include <eda/vhdl93/ast/block_statement.hpp>
 #include <eda/vhdl93/ast/process_statement.hpp>
 #include <eda/vhdl93/ast/concurrent_procedure_call_statement.hpp>
 #include <eda/vhdl93/ast/concurrent_assertion_statement.hpp>
@@ -28,8 +28,8 @@ namespace eda { namespace vhdl93 { namespace ast {
 
 struct concurrent_statement : x3::variant<
     ast::nullary,
-    //ast::block_statement,
-    //ast::process_statement,
+    ast::block_statement,
+    ast::process_statement,
     ast::concurrent_procedure_call_statement,
     ast::concurrent_assertion_statement,
     ast::concurrent_signal_assignment_statement,

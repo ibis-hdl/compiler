@@ -11,13 +11,27 @@
 
 #include <eda/vhdl93/ast/util/namespace_alias.hpp>
 
-#include <eda/vhdl93/ast/concurrent_statement.hpp>
+//FORWARD #include <eda/vhdl93/ast/concurrent_statement.hpp>
 #include <vector>
 
 
 namespace eda { namespace vhdl93 { namespace ast {
 
 
+struct concurrent_statement;
+
+
+/**
+ * Ast node cyclic dependency as:
+ *
+ * \dot
+ * digraph concurrent_statement  {
+ *   concurrent_statement -> block_statement;
+ *   block_statement -> block_statement_part;
+ *   block_statement_part -> concurrent_statement [label="forward"];
+ * }
+ * \enddot
+ */
 struct block_statement_part : std::vector<ast::concurrent_statement> { };
 
 
