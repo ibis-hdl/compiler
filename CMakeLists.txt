@@ -21,7 +21,7 @@ set(EDA_BINARY_ROOT_DIR ${PROJECT_BINARY_DIR})
 ## Sub Projects
 enable_testing()
 add_subdirectory(sources/common)
-add_subdirectory(sources/vhdl93)
+add_subdirectory(sources/vhdl)
 
 # other playground projects, not build by default
 add_subdirectory(playground/vhdl93)

@@ -1,0 +1,42 @@
+/*
+ * group_constituent_list.hpp
+ *
+ *  Created on: 20.06.2017
+ *      Author: olaf
+ */
+
+#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_GROUP_CONSTITUENT_LIST_HPP_
+#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_GROUP_CONSTITUENT_LIST_HPP_
+
+
+#include <eda/vhdl/ast/util/namespace_alias.hpp>
+
+#include <eda/vhdl/ast/util/nullary.hpp>
+#include <eda/vhdl/ast/name.hpp>
+#include <eda/vhdl/ast/character_literal.hpp>
+#include <vector>
+
+#include <boost/spirit/home/x3/support/ast/variant.hpp>
+
+
+namespace eda { namespace vhdl { namespace ast {
+
+
+struct group_constituent : x3::variant<
+    ast::nullary,
+    ast::name,
+    ast::character_literal
+>
+{
+    using base_type::base_type;
+    using base_type::operator=;
+};
+
+
+struct group_constituent_list : std::vector<ast::group_constituent> { };
+
+
+} } } // namespace eda.vhdl.ast
+
+
+#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_GROUP_CONSTITUENT_LIST_HPP_ */

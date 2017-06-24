@@ -41,7 +41,7 @@ find_package(Boost REQUIRED COMPONENTS filesystem system)
 add_executable(vhdl_expression_eval          EXCLUDE_FROM_ALL vhdl_expression_eval.cpp)
 target_link_libraries(vhdl_expression_eval
     PRIVATE
-    eda::vhdl93_parser
+    eda::vhdl_parser
     eda::common # FixMe: shouldn't this depency propagated by eda::vhdl93_grammar?
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}
