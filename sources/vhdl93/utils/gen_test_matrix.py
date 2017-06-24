@@ -41,6 +41,7 @@ class TestMatrixGenerator:
 
     def __init__(self):
         self.testcase_path = sys.argv[1]
+        self.testcase_count = 0
 
     def contents(self):
         for root, dirs, files in sorted(os.walk(self.testcase_path + '/' + 'test_case')):
@@ -53,6 +54,7 @@ class TestMatrixGenerator:
                     if ext == '.input':
                         input    = self.read_content(os.path.join(root, base + '.input'))
                         expected = None
+                        self.testcase_count += 1
                         try:
                             expected = self.read_content(os.path.join(root, base + '.expected'))
                         except Exception as e:
@@ -64,6 +66,7 @@ class TestMatrixGenerator:
                 print(self.rst.title_header(subject, 1))
                 headers = ("File", "Input", "Expected")
                 self.rst.simple_table(headers, subject_list)
+        print("\n\nTotal Tests: " + str(self.testcase_count))
 
 
     def read_content(self, file):
