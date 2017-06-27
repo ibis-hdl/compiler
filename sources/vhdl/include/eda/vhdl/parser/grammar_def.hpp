@@ -973,7 +973,7 @@ typedef x3::rule<timeout_clause_class, ast::timeout_clause> timeout_clause_type;
 typedef x3::rule<type_conversion_class, ast::type_conversion> type_conversion_type;
 typedef x3::rule<type_declaration_class, ast::type_declaration> type_declaration_type;
 typedef x3::rule<type_definition_class, ast::type_definition> type_definition_type;
-typedef x3::rule<type_mark_class, ast::type_mark> type_mark_type;
+typedef x3::rule<type_mark_class, ast::name> type_mark_type;
 typedef x3::rule<unconstrained_array_definition_class, ast::unconstrained_array_definition> unconstrained_array_definition_type;
 typedef x3::rule<use_clause_class, ast::use_clause> use_clause_type;
 typedef x3::rule<variable_assignment_statement_class, ast::variable_assignment_statement> variable_assignment_statement_type;

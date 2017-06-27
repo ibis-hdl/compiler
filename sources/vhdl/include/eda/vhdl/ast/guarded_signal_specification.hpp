@@ -13,7 +13,7 @@
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/ast/signal_list.hpp>
-#include <eda/vhdl/ast/type_mark.hpp>
+#include <eda/vhdl/ast/name.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
@@ -22,7 +22,7 @@ namespace eda { namespace vhdl { namespace ast {
 struct guarded_signal_specification : position_tagged
 {
     ast::signal_list            guarded_signal_list;
-    ast::type_mark              type_mark;
+    ast::name                   type_mark;
 };
 
 

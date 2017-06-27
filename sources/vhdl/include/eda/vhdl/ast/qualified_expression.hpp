@@ -12,7 +12,7 @@
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
 #include <eda/vhdl/ast/aggregate.hpp>
 #include <eda/vhdl/ast/expression.hpp>
-#include <eda/vhdl/ast/type_mark.hpp>
+#include <eda/vhdl/ast/name.hpp>
 #include <eda/vhdl/ast/util/namespace_alias.hpp>
 #include <eda/vhdl/ast/util/nullary.hpp>
 
@@ -22,7 +22,7 @@ namespace eda { namespace vhdl { namespace ast {
 
 struct qualified_expression : position_tagged
 {
-    ast::type_mark          type_mark;
+    ast::name               type_mark;
     x3::variant<
         ast::nullary,
         ast::expression,

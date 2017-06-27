@@ -14,7 +14,7 @@
 #include <eda/vhdl/ast/designator.hpp>
 #include <eda/vhdl/ast/formal_parameter_list.hpp>
 #include <eda/vhdl/ast/keyword_token.hpp>
-#include <eda/vhdl/ast/type_mark.hpp>
+#include <eda/vhdl/ast/name.hpp>
 #include <eda/vhdl/ast/util/optional.hpp>
 
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
@@ -38,7 +38,7 @@ struct subprogram_specification_function : position_tagged
     bool                                        impure;
     ast::designator                             designator;
     optional<ast::formal_parameter_list>        formal_parameter_list;
-    ast::type_mark                              return_type_mark;
+    ast::name                                   return_type_mark;
 
     subprogram_specification_function()
     : impure{}

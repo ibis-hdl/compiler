@@ -13,7 +13,7 @@
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/ast/identifier.hpp>
-#include <eda/vhdl/ast/type_mark.hpp>
+#include <eda/vhdl/ast/name.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
@@ -22,7 +22,7 @@ namespace eda { namespace vhdl { namespace ast {
 struct attribute_declaration : position_tagged
 {
     ast::identifier             identifier;
-    ast::type_mark              type_mark;
+    ast::name                   type_mark;
 };
 
 

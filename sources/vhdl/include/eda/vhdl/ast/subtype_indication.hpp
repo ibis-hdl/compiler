@@ -13,7 +13,6 @@
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/ast/name.hpp>
-#include <eda/vhdl/ast/type_mark.hpp>
 #include <eda/vhdl/ast/constraint.hpp>
 #include <eda/vhdl/ast/util/optional.hpp>
 #include <vector>

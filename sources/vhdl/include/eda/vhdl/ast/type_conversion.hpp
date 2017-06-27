@@ -12,7 +12,7 @@
 #include <eda/vhdl/ast/util/namespace_alias.hpp>
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
-#include <eda/vhdl/ast/type_mark.hpp>
+#include <eda/vhdl/ast/name.hpp>
 #include <eda/vhdl/ast/expression.hpp>
 
 #include <string_view>
@@ -23,7 +23,7 @@ namespace eda { namespace vhdl { namespace ast {
 
 struct type_conversion : position_tagged
 {
-    ast::type_mark          type_mark;
+    ast::name               type_mark;
     ast::expression         expression;
 };
 

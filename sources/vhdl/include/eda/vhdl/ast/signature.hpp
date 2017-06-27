@@ -9,7 +9,7 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_SIGNATURE_HPP_
 
 
-#include <eda/vhdl/ast/type_mark.hpp>
+#include <eda/vhdl/ast/name.hpp>
 #include <eda/vhdl/ast/util/namespace_alias.hpp>
 #include <eda/vhdl/ast/util/optional.hpp>
 #include <eda/vhdl/ast/util/position_tagged.hpp>
@@ -21,8 +21,8 @@ namespace eda { namespace vhdl { namespace ast {
 
 struct signature : position_tagged
 {
-    std::vector<ast::type_mark>         parameter_type_list;
-    optional<ast::type_mark>            return_type;
+    std::vector<ast::name>              parameter_type_list;    // type_mark
+    optional<ast::name>                 return_type;            // type_mark
 };
 
 

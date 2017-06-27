@@ -9,7 +9,7 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_INDEX_SUBTYPE_DEFINITION_HPP_
 
 
-#include <eda/vhdl/ast/type_mark.hpp>
+#include <eda/vhdl/ast/name.hpp>
 #include <eda/vhdl/ast/util/namespace_alias.hpp>
 
 
@@ -18,7 +18,7 @@ namespace eda { namespace vhdl { namespace ast {
 
 struct index_subtype_definition : position_tagged
 {
-    ast::type_mark          type_mark;
+    ast::name               type_mark;
 };
 
 
