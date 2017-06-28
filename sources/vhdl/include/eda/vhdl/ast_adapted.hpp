@@ -401,7 +401,7 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::selected_name,
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::selected_signal_assignment,
-    expression, options, selected_waveforms
+    expression, target, options, selected_waveforms
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::selected_waveform,

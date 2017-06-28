@@ -29,6 +29,7 @@ GENERATE_DATASET_TEST_CASE(wait_statement)
 GENERATE_DATASET_TEST_CASE(sequential_statement)
 GENERATE_DATASET_TEST_CASE(if_statement)
 GENERATE_DATASET_TEST_CASE(loop_statement)
+GENERATE_DATASET_TEST_CASE(selected_signal_assignment)
 
 
 BOOST_AUTO_TEST_SUITE_END()

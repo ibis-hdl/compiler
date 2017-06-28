@@ -8422,6 +8422,357 @@ secondary_unit_declaration
 |                                |               |                                   |
 +--------------------------------+---------------+-----------------------------------+
 
+==========================
+selected_signal_assignment
+==========================
+
++--------------------------------+----------------------------------------------+-----------------------------------------------+
+| File                           | Input                                        | Expected                                      |
++--------------------------------+----------------------------------------------+-----------------------------------------------+
+| selected_signal_assignment_001 | with a select b <=                           | (selected_signal_assignment                   |
+|                                |     "1000" when "00",                        |   (expression                                 |
+|                                |     -- ... omitted                           |     (relation                                 |
+|                                |     "0001" when "11";                        |       (shift_expression                       |
+|                                |                                              |         (simple_expression                    |
+|                                |                                              |           (term                               |
+|                                |                                              |             (primary<v>                       |
+|                                |                                              |               (name<v>                        |
+|                                |                                              |                 (identifier                   |
+|                                |                                              |                   a                           |
+|                                |                                              |                 )                             |
+|                                |                                              |               )                               |
+|                                |                                              |             )                                 |
+|                                |                                              |           )                                   |
+|                                |                                              |         )                                     |
+|                                |                                              |       )                                       |
+|                                |                                              |     )                                         |
+|                                |                                              |   )                                           |
+|                                |                                              |   (target<v>                                  |
+|                                |                                              |     (name<v>                                  |
+|                                |                                              |       (identifier                             |
+|                                |                                              |         b                                     |
+|                                |                                              |       )                                       |
+|                                |                                              |     )                                         |
+|                                |                                              |   )                                           |
+|                                |                                              |   (options                                    |
+|                                |                                              |                                               |
+|                                |                                              |   )                                           |
+|                                |                                              |   (selected_waveforms                         |
+|                                |                                              |     (waveform<v>                              |
+|                                |                                              |       (waveform_element                       |
+|                                |                                              |         (expression                           |
+|                                |                                              |           (relation                           |
+|                                |                                              |             (shift_expression                 |
+|                                |                                              |               (simple_expression              |
+|                                |                                              |                 (term                         |
+|                                |                                              |                   (primary<v>                 |
+|                                |                                              |                     (literal<v>               |
+|                                |                                              |                       (string_literal         |
+|                                |                                              |                         1000                  |
+|                                |                                              |                       )                       |
+|                                |                                              |                     )                         |
+|                                |                                              |                   )                           |
+|                                |                                              |                 )                             |
+|                                |                                              |               )                               |
+|                                |                                              |             )                                 |
+|                                |                                              |           )                                   |
+|                                |                                              |         )                                     |
+|                                |                                              |       )                                       |
+|                                |                                              |     )                                         |
+|                                |                                              |     (choices                                  |
+|                                |                                              |       (choice<v>                              |
+|                                |                                              |         (simple_expression                    |
+|                                |                                              |           (term                               |
+|                                |                                              |             (primary<v>                       |
+|                                |                                              |               (literal<v>                     |
+|                                |                                              |                 (string_literal               |
+|                                |                                              |                   00                          |
+|                                |                                              |                 )                             |
+|                                |                                              |               )                               |
+|                                |                                              |             )                                 |
+|                                |                                              |           )                                   |
+|                                |                                              |         )                                     |
+|                                |                                              |       )                                       |
+|                                |                                              |     ),                                        |
+|                                |                                              |     (waveform<v>                              |
+|                                |                                              |       (waveform_element                       |
+|                                |                                              |         (expression                           |
+|                                |                                              |           (relation                           |
+|                                |                                              |             (shift_expression                 |
+|                                |                                              |               (simple_expression              |
+|                                |                                              |                 (term                         |
+|                                |                                              |                   (primary<v>                 |
+|                                |                                              |                     (literal<v>               |
+|                                |                                              |                       (string_literal         |
+|                                |                                              |                         0001                  |
+|                                |                                              |                       )                       |
+|                                |                                              |                     )                         |
+|                                |                                              |                   )                           |
+|                                |                                              |                 )                             |
+|                                |                                              |               )                               |
+|                                |                                              |             )                                 |
+|                                |                                              |           )                                   |
+|                                |                                              |         )                                     |
+|                                |                                              |       )                                       |
+|                                |                                              |     )                                         |
+|                                |                                              |     (choices                                  |
+|                                |                                              |       (choice<v>                              |
+|                                |                                              |         (simple_expression                    |
+|                                |                                              |           (term                               |
+|                                |                                              |             (primary<v>                       |
+|                                |                                              |               (literal<v>                     |
+|                                |                                              |                 (string_literal               |
+|                                |                                              |                   11                          |
+|                                |                                              |                 )                             |
+|                                |                                              |               )                               |
+|                                |                                              |             )                                 |
+|                                |                                              |           )                                   |
+|                                |                                              |         )                                     |
+|                                |                                              |       )                                       |
+|                                |                                              |     )                                         |
+|                                |                                              |   )                                           |
+|                                |                                              | )                                             |
+|                                |                                              |                                               |
++--------------------------------+----------------------------------------------+-----------------------------------------------+
+| selected_signal_assignment_002 | with Command select                          | (selected_signal_assignment                   |
+|                                |      DataOut <= InA and InB when "000",      |   (expression                                 |
+|                                |                 -- ... omitted               |     (relation                                 |
+|                                |                 'Z' when others;             |       (shift_expression                       |
+|                                |                                              |         (simple_expression                    |
+|                                |                                              |           (term                               |
+|                                |                                              |             (primary<v>                       |
+|                                |                                              |               (name<v>                        |
+|                                |                                              |                 (identifier                   |
+|                                |                                              |                   Command                     |
+|                                |                                              |                 )                             |
+|                                |                                              |               )                               |
+|                                |                                              |             )                                 |
+|                                |                                              |           )                                   |
+|                                |                                              |         )                                     |
+|                                |                                              |       )                                       |
+|                                |                                              |     )                                         |
+|                                |                                              |   )                                           |
+|                                |                                              |   (target<v>                                  |
+|                                |                                              |     (name<v>                                  |
+|                                |                                              |       (identifier                             |
+|                                |                                              |         DataOut                               |
+|                                |                                              |       )                                       |
+|                                |                                              |     )                                         |
+|                                |                                              |   )                                           |
+|                                |                                              |   (options                                    |
+|                                |                                              |                                               |
+|                                |                                              |   )                                           |
+|                                |                                              |   (selected_waveforms                         |
+|                                |                                              |     (waveform<v>                              |
+|                                |                                              |       (waveform_element                       |
+|                                |                                              |         (expression                           |
+|                                |                                              |           (relation                           |
+|                                |                                              |             (shift_expression                 |
+|                                |                                              |               (simple_expression              |
+|                                |                                              |                 (term                         |
+|                                |                                              |                   (primary<v>                 |
+|                                |                                              |                     (name<v>                  |
+|                                |                                              |                       (identifier             |
+|                                |                                              |                         InA                   |
+|                                |                                              |                       )                       |
+|                                |                                              |                     )                         |
+|                                |                                              |                   )                           |
+|                                |                                              |                 )                             |
+|                                |                                              |               )                               |
+|                                |                                              |             )                                 |
+|                                |                                              |           ),                                  |
+|                                |                                              |           operator: AND,                      |
+|                                |                                              |           (relation                           |
+|                                |                                              |             (shift_expression                 |
+|                                |                                              |               (simple_expression              |
+|                                |                                              |                 (term                         |
+|                                |                                              |                   (primary<v>                 |
+|                                |                                              |                     (name<v>                  |
+|                                |                                              |                       (identifier             |
+|                                |                                              |                         InB                   |
+|                                |                                              |                       )                       |
+|                                |                                              |                     )                         |
+|                                |                                              |                   )                           |
+|                                |                                              |                 )                             |
+|                                |                                              |               )                               |
+|                                |                                              |             )                                 |
+|                                |                                              |           )                                   |
+|                                |                                              |         )                                     |
+|                                |                                              |       )                                       |
+|                                |                                              |     )                                         |
+|                                |                                              |     (choices                                  |
+|                                |                                              |       (choice<v>                              |
+|                                |                                              |         (simple_expression                    |
+|                                |                                              |           (term                               |
+|                                |                                              |             (primary<v>                       |
+|                                |                                              |               (literal<v>                     |
+|                                |                                              |                 (string_literal               |
+|                                |                                              |                   000                         |
+|                                |                                              |                 )                             |
+|                                |                                              |               )                               |
+|                                |                                              |             )                                 |
+|                                |                                              |           )                                   |
+|                                |                                              |         )                                     |
+|                                |                                              |       )                                       |
+|                                |                                              |     ),                                        |
+|                                |                                              |     (waveform<v>                              |
+|                                |                                              |       (waveform_element                       |
+|                                |                                              |         (expression                           |
+|                                |                                              |           (relation                           |
+|                                |                                              |             (shift_expression                 |
+|                                |                                              |               (simple_expression              |
+|                                |                                              |                 (term                         |
+|                                |                                              |                   (primary<v>                 |
+|                                |                                              |                     (literal<v>               |
+|                                |                                              |                       (enumeration_literal<v> |
+|                                |                                              |                         (character_literal    |
+|                                |                                              |                           'Z'                 |
+|                                |                                              |                         )                     |
+|                                |                                              |                       )                       |
+|                                |                                              |                     )                         |
+|                                |                                              |                   )                           |
+|                                |                                              |                 )                             |
+|                                |                                              |               )                               |
+|                                |                                              |             )                                 |
+|                                |                                              |           )                                   |
+|                                |                                              |         )                                     |
+|                                |                                              |       )                                       |
+|                                |                                              |     )                                         |
+|                                |                                              |     (choices                                  |
+|                                |                                              |       (choice<v>                              |
+|                                |                                              |         (keyword                              |
+|                                |                                              |           OTHERS                              |
+|                                |                                              |         )                                     |
+|                                |                                              |       )                                       |
+|                                |                                              |     )                                         |
+|                                |                                              |   )                                           |
+|                                |                                              | )                                             |
+|                                |                                              |                                               |
++--------------------------------+----------------------------------------------+-----------------------------------------------+
+| selected_signal_assignment_003 | with IntCommand select                       | (selected_signal_assignment                   |
+|                                |   MuxOut <= guarded INERTIAL InA when 0 | 1, |   (expression                                 |
+|                                |             -- ... omitted                   |     (relation                                 |
+|                                |             'Z' when others;                 |       (shift_expression                       |
+|                                |                                              |         (simple_expression                    |
+|                                |                                              |           (term                               |
+|                                |                                              |             (primary<v>                       |
+|                                |                                              |               (name<v>                        |
+|                                |                                              |                 (identifier                   |
+|                                |                                              |                   IntCommand                  |
+|                                |                                              |                 )                             |
+|                                |                                              |               )                               |
+|                                |                                              |             )                                 |
+|                                |                                              |           )                                   |
+|                                |                                              |         )                                     |
+|                                |                                              |       )                                       |
+|                                |                                              |     )                                         |
+|                                |                                              |   )                                           |
+|                                |                                              |   (target<v>                                  |
+|                                |                                              |     (name<v>                                  |
+|                                |                                              |       (identifier                             |
+|                                |                                              |         MuxOut                                |
+|                                |                                              |       )                                       |
+|                                |                                              |     )                                         |
+|                                |                                              |   )                                           |
+|                                |                                              |   (options                                    |
+|                                |                                              |     GUARDED                                   |
+|                                |                                              |     (delay_mechanism                          |
+|                                |                                              |       INERTIAL_DELAY                          |
+|                                |                                              |     )                                         |
+|                                |                                              |   )                                           |
+|                                |                                              |   (selected_waveforms                         |
+|                                |                                              |     (waveform<v>                              |
+|                                |                                              |       (waveform_element                       |
+|                                |                                              |         (expression                           |
+|                                |                                              |           (relation                           |
+|                                |                                              |             (shift_expression                 |
+|                                |                                              |               (simple_expression              |
+|                                |                                              |                 (term                         |
+|                                |                                              |                   (primary<v>                 |
+|                                |                                              |                     (name<v>                  |
+|                                |                                              |                       (identifier             |
+|                                |                                              |                         InA                   |
+|                                |                                              |                       )                       |
+|                                |                                              |                     )                         |
+|                                |                                              |                   )                           |
+|                                |                                              |                 )                             |
+|                                |                                              |               )                               |
+|                                |                                              |             )                                 |
+|                                |                                              |           )                                   |
+|                                |                                              |         )                                     |
+|                                |                                              |       )                                       |
+|                                |                                              |     )                                         |
+|                                |                                              |     (choices                                  |
+|                                |                                              |       (choice<v>                              |
+|                                |                                              |         (simple_expression                    |
+|                                |                                              |           (term                               |
+|                                |                                              |             (primary<v>                       |
+|                                |                                              |               (literal<v>                     |
+|                                |                                              |                 (numeric_literal<v>           |
+|                                |                                              |                   (abstract_literal<v>        |
+|                                |                                              |                     (decimal_literal          |
+|                                |                                              |                       literal: 0, hint: int   |
+|                                |                                              |                     )                         |
+|                                |                                              |                   )                           |
+|                                |                                              |                 )                             |
+|                                |                                              |               )                               |
+|                                |                                              |             )                                 |
+|                                |                                              |           )                                   |
+|                                |                                              |         )                                     |
+|                                |                                              |       ),                                      |
+|                                |                                              |       (choice<v>                              |
+|                                |                                              |         (simple_expression                    |
+|                                |                                              |           (term                               |
+|                                |                                              |             (primary<v>                       |
+|                                |                                              |               (literal<v>                     |
+|                                |                                              |                 (numeric_literal<v>           |
+|                                |                                              |                   (abstract_literal<v>        |
+|                                |                                              |                     (decimal_literal          |
+|                                |                                              |                       literal: 1, hint: int   |
+|                                |                                              |                     )                         |
+|                                |                                              |                   )                           |
+|                                |                                              |                 )                             |
+|                                |                                              |               )                               |
+|                                |                                              |             )                                 |
+|                                |                                              |           )                                   |
+|                                |                                              |         )                                     |
+|                                |                                              |       )                                       |
+|                                |                                              |     ),                                        |
+|                                |                                              |     (waveform<v>                              |
+|                                |                                              |       (waveform_element                       |
+|                                |                                              |         (expression                           |
+|                                |                                              |           (relation                           |
+|                                |                                              |             (shift_expression                 |
+|                                |                                              |               (simple_expression              |
+|                                |                                              |                 (term                         |
+|                                |                                              |                   (primary<v>                 |
+|                                |                                              |                     (literal<v>               |
+|                                |                                              |                       (enumeration_literal<v> |
+|                                |                                              |                         (character_literal    |
+|                                |                                              |                           'Z'                 |
+|                                |                                              |                         )                     |
+|                                |                                              |                       )                       |
+|                                |                                              |                     )                         |
+|                                |                                              |                   )                           |
+|                                |                                              |                 )                             |
+|                                |                                              |               )                               |
+|                                |                                              |             )                                 |
+|                                |                                              |           )                                   |
+|                                |                                              |         )                                     |
+|                                |                                              |       )                                       |
+|                                |                                              |     )                                         |
+|                                |                                              |     (choices                                  |
+|                                |                                              |       (choice<v>                              |
+|                                |                                              |         (keyword                              |
+|                                |                                              |           OTHERS                              |
+|                                |                                              |         )                                     |
+|                                |                                              |       )                                       |
+|                                |                                              |     )                                         |
+|                                |                                              |   )                                           |
+|                                |                                              | )                                             |
+|                                |                                              |                                               |
++--------------------------------+----------------------------------------------+-----------------------------------------------+
+
 ====================
 sequential_statement
 ====================
@@ -9818,6 +10169,125 @@ signal_assignment_statement
 |                                 |                                                                | )                                                     |
 |                                 |                                                                |                                                       |
 +---------------------------------+----------------------------------------------------------------+-------------------------------------------------------+
+
+==================
+signal_declaration
+==================
+
++------------------------+-------------------------------------------+------------------------------------------------+
+| File                   | Input                                     | Expected                                       |
++------------------------+-------------------------------------------+------------------------------------------------+
+| signal_declaration_001 | signal a_bit, other_bit : bit := '0';     | (signal_declaration                            |
+|                        |                                           |   (identifier_list                             |
+|                        |                                           |     (identifier                                |
+|                        |                                           |       a_bit                                    |
+|                        |                                           |     ),                                         |
+|                        |                                           |     (identifier                                |
+|                        |                                           |       other_bit                                |
+|                        |                                           |     )                                          |
+|                        |                                           |   )                                            |
+|                        |                                           |   (subtype_indication                          |
+|                        |                                           |     (name<v>                                   |
+|                        |                                           |       (identifier                              |
+|                        |                                           |         bit                                    |
+|                        |                                           |       )                                        |
+|                        |                                           |     )                                          |
+|                        |                                           |   )                                            |
+|                        |                                           |   (expression                                  |
+|                        |                                           |     (relation                                  |
+|                        |                                           |       (shift_expression                        |
+|                        |                                           |         (simple_expression                     |
+|                        |                                           |           (term                                |
+|                        |                                           |             (primary<v>                        |
+|                        |                                           |               (literal<v>                      |
+|                        |                                           |                 (enumeration_literal<v>        |
+|                        |                                           |                   (character_literal           |
+|                        |                                           |                     '0'                        |
+|                        |                                           |                   )                            |
+|                        |                                           |                 )                              |
+|                        |                                           |               )                                |
+|                        |                                           |             )                                  |
+|                        |                                           |           )                                    |
+|                        |                                           |         )                                      |
+|                        |                                           |       )                                        |
+|                        |                                           |     )                                          |
+|                        |                                           |   )                                            |
+|                        |                                           | )                                              |
+|                        |                                           |                                                |
++------------------------+-------------------------------------------+------------------------------------------------+
+| signal_declaration_002 | signal my_word : word := X"01234567";     | (signal_declaration                            |
+|                        |                                           |   (identifier_list                             |
+|                        |                                           |     (identifier                                |
+|                        |                                           |       my_word                                  |
+|                        |                                           |     )                                          |
+|                        |                                           |   )                                            |
+|                        |                                           |   (subtype_indication                          |
+|                        |                                           |     (name<v>                                   |
+|                        |                                           |       (identifier                              |
+|                        |                                           |         word                                   |
+|                        |                                           |       )                                        |
+|                        |                                           |     )                                          |
+|                        |                                           |   )                                            |
+|                        |                                           |   (expression                                  |
+|                        |                                           |     (relation                                  |
+|                        |                                           |       (shift_expression                        |
+|                        |                                           |         (simple_expression                     |
+|                        |                                           |           (term                                |
+|                        |                                           |             (primary<v>                        |
+|                        |                                           |               (literal<v>                      |
+|                        |                                           |                 (bit_string_literal            |
+|                        |                                           |                   base: HEX, literal: 01234567 |
+|                        |                                           |                 )                              |
+|                        |                                           |               )                                |
+|                        |                                           |             )                                  |
+|                        |                                           |           )                                    |
+|                        |                                           |         )                                      |
+|                        |                                           |       )                                        |
+|                        |                                           |     )                                          |
+|                        |                                           |   )                                            |
+|                        |                                           | )                                              |
+|                        |                                           |                                                |
++------------------------+-------------------------------------------+------------------------------------------------+
+| signal_declaration_003 | -- guarded signal                         | (signal_declaration                            |
+|                        | signal foo : word register;               |   (identifier_list                             |
+|                        |                                           |     (identifier                                |
+|                        |                                           |       foo                                      |
+|                        |                                           |     )                                          |
+|                        |                                           |   )                                            |
+|                        |                                           |   (subtype_indication                          |
+|                        |                                           |     (name<v>                                   |
+|                        |                                           |       (identifier                              |
+|                        |                                           |         word                                   |
+|                        |                                           |       )                                        |
+|                        |                                           |     )                                          |
+|                        |                                           |   )                                            |
+|                        |                                           |   (keyword                                     |
+|                        |                                           |     REGISTER                                   |
+|                        |                                           |   )                                            |
+|                        |                                           | )                                              |
+|                        |                                           |                                                |
++------------------------+-------------------------------------------+------------------------------------------------+
+| signal_declaration_004 | -- wired_or must be a resolution function | (signal_declaration                            |
+|                        | signal join : word  wired_or;             |   (identifier_list                             |
+|                        |                                           |     (identifier                                |
+|                        |                                           |       join                                     |
+|                        |                                           |     )                                          |
+|                        |                                           |   )                                            |
+|                        |                                           |   (subtype_indication                          |
+|                        |                                           |     (name<v>                                   |
+|                        |                                           |       (identifier                              |
+|                        |                                           |         word                                   |
+|                        |                                           |       )                                        |
+|                        |                                           |     )                                          |
+|                        |                                           |     (name<v>                                   |
+|                        |                                           |       (identifier                              |
+|                        |                                           |         wired_or                               |
+|                        |                                           |       )                                        |
+|                        |                                           |     )                                          |
+|                        |                                           |   )                                            |
+|                        |                                           | )                                              |
+|                        |                                           |                                                |
++------------------------+-------------------------------------------+------------------------------------------------+
 
 ===========
 signal_list
@@ -12070,4 +12540,4 @@ xxx_signature
 +---------+-----------------------+----------+
 
 
-Total Tests: 361
+Total Tests: 368

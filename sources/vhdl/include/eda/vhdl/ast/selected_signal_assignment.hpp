@@ -13,6 +13,7 @@
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/ast/expression.hpp>
+#include <eda/vhdl/ast/target.hpp>
 #include <eda/vhdl/ast/options.hpp>
 #include <eda/vhdl/ast/selected_waveforms.hpp>
 
@@ -23,6 +24,7 @@ namespace eda { namespace vhdl { namespace ast {
 struct selected_signal_assignment : position_tagged
 {
     ast::expression             expression;
+    ast::target                 target;
     ast::options                options;
     ast::selected_waveforms     selected_waveforms;
 };

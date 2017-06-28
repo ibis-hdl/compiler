@@ -3645,15 +3645,21 @@ auto const selected_name_def =
     ;
 
 
-#if 0
+
 // selected_signal_assignment ::=                                      [§ 9.5.2]
 //     with expression select
 //         target    <= options selected_waveforms ;
 auto const selected_signal_assignment_def =
-        WITH expression SELECT
-        target    <= options selected_waveforms > ';'
-;
-#endif
+        WITH
+     >> expression
+     >> SELECT
+     >> target
+     >> "<="
+     >> options
+     >> selected_waveforms
+     > ';'
+    ;
+
 
 
 // selected_waveforms ::=
@@ -4452,7 +4458,7 @@ BOOST_SPIRIT_DEFINE(  // -- S --
     //, secondary_unit
     , secondary_unit_declaration
     , selected_name
-    //, selected_signal_assignment
+    , selected_signal_assignment
     , selected_waveforms
     , sensitivity_clause
     , sensitivity_list

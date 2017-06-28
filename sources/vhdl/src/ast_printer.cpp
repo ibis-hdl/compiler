@@ -978,12 +978,7 @@ void printer::operator()(delay_mechanism const &node)
 {
     static char const symbol[]{ "delay_mechanism" };
     symbol_scope<delay_mechanism> _(*this, symbol);
-/*
-    enum class delay_type { TRANSPORT_DELAY, INERTIAL_DELAY };
 
-    boost::optional<ast::expression>    time_expression; // [REJECT ...]
-    delay_mechanism::delay_type         type;
- */
     switch(node.type) {
     case delay_mechanism::delay_type::INERTIAL_DELAY: {
         os << "INERTIAL_DELAY";
@@ -2366,13 +2361,16 @@ void printer::operator()(selected_signal_assignment const &node)
     static char const symbol[]{ "selected_signal_assignment" };
     symbol_scope<selected_signal_assignment> _(*this, symbol);
 
-       (*this)(node.expression);
-       os << "\n";
+    (*this)(node.expression);
+    os << "\n";
 
-       (*this)(node.options);
-       os << "\n";
+    (*this)(node.target);
+    os << "\n";
 
-       (*this)(node.selected_waveforms);
+    (*this)(node.options);
+    os << "\n";
+
+    (*this)(node.selected_waveforms);
 }
 
 
@@ -2385,6 +2383,7 @@ void printer::operator()(selected_waveforms const &node)
     unsigned i = 0;
     for(auto const& selected_waveform : node) {
         (*this)(selected_waveform.waveform);
+        os << "\n";
         (*this)(selected_waveform.choices);
         if(i++ != N) {
             os << ",\n";
