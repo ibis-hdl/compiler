@@ -2004,23 +2004,28 @@ auto const condition_clause_def =
     ;
 
 
-#if 0
+
 // conditional_signal_assignment ::=                                   [§ 9.5.1]
 //     target    <= options conditional_waveforms ;
 auto const conditional_signal_assignment_def =
-        target    <= options conditional_waveforms > ';'
-;
-#endif
+       target
+    >> "<="
+    >> options
+    >> conditional_waveforms
+    > ';'
+    ;
 
-#if 0
+
+
 // conditional_waveforms ::=                                           [§ 9.5.1]
 //     { waveform when condition else }
 //       waveform [ when condition ]
 auto const conditional_waveforms_def =
-{ waveform WHEN condition ELSE }
-waveform -( WHEN condition )
+       *( waveform >> WHEN >> condition >> ELSE )
+    >> waveform
+    >> -( WHEN >> condition )
     ;
-#endif
+
 
 #if 0
 // configuration_declaration ::=                                         [§ 1.3]
@@ -4300,8 +4305,8 @@ BOOST_SPIRIT_DEFINE(  // -- C --
     //, concurrent_statement
     , condition
     , condition_clause
-    //, conditional_signal_assignment
-    //, conditional_waveforms
+    , conditional_signal_assignment
+    , conditional_waveforms
     //, configuration_declaration
     //, configuration_declarative_item
     //, configuration_declarative_part
