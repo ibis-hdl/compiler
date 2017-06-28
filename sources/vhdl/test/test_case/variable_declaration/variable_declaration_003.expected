@@ -1,0 +1,55 @@
+(variable_declaration
+  (identifier_list
+    (identifier
+      IN_STRING
+    )
+  )
+  (subtype_indication
+    (name<v>
+      (identifier
+        string
+      )
+    )
+    (constraint<v>
+      (index_constraint
+        (discrete_range<v>
+          (range<v>
+            (simple_expression
+              (term
+                (primary<v>
+                  (literal<v>
+                    (numeric_literal<v>
+                      (abstract_literal<v>
+                        (decimal_literal
+                          literal: 1, hint: int
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+            (keyword
+              TO
+            )
+            (simple_expression
+              (term
+                (primary<v>
+                  (literal<v>
+                    (numeric_literal<v>
+                      (abstract_literal<v>
+                        (decimal_literal
+                          literal: 80, hint: int
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

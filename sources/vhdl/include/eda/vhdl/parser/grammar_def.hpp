@@ -384,7 +384,9 @@ auto const SEVERITY = kw("severity");
 auto const SIGNAL = as_type<ast::keyword_token>(
     kw("signal") >> x3::attr(ast::keyword_token::SIGNAL)
 );
-auto const SHARED = kw("shared");
+auto const SHARED = as_type<ast::keyword_token>(
+    kw("shared") >> x3::attr(ast::keyword_token::SHARED)
+);
 auto const SUBTYPE = kw("subtype");
 auto const THEN = kw("then");
 auto const TO = as_type<ast::keyword_token>(
@@ -1559,7 +1561,7 @@ auto const attribute_specification_def =
     >> IS
     >> expression
     > ';'
-;
+    ;
 
 
 #if 0 /* Note: UNUSED, embedded directly into based_literal rule */
@@ -4155,13 +4157,19 @@ auto const variable_assignment_statement_def =
     ;
 
 
-#if 0
+
 // variable_declaration ::=                                          [§ 4.3.1.3]
 //     [ shared ] variable identifier_list : subtype_indication [ := expression ] ;
 auto const variable_declaration_def =
-        -( SHARED ) VARIABLE identifier_list > ':' subtype_indication -(  ":=" >  expression ) > ';'
-;
-#endif
+      -SHARED
+    >> omit[ VARIABLE ]
+    >> identifier_list
+    >> ':'
+    >> subtype_indication
+    >> -(  ":=" >  expression )
+    > ';'
+    ;
+
 
 
 // wait_statement ::=                                                    [§ 8.1]
@@ -4465,7 +4473,7 @@ BOOST_SPIRIT_DEFINE(  // -- U --
 )
 BOOST_SPIRIT_DEFINE(  // -- V --
       variable_assignment_statement
-////, variable_declaration
+    , variable_declaration
 )
 BOOST_SPIRIT_DEFINE(  // -- W --
       wait_statement

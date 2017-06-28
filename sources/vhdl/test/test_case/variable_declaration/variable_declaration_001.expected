@@ -1,0 +1,14 @@
+(variable_declaration
+  (identifier_list
+    (identifier
+      HEIGHT
+    )
+  )
+  (subtype_indication
+    (name<v>
+      (identifier
+        integer
+      )
+    )
+  )
+)

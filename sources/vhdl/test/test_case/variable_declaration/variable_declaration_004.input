@@ -1,0 +1,2 @@
+variable M,N : bit := '1';
+

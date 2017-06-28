@@ -27,6 +27,9 @@ struct variable_declaration : position_tagged
     ast::identifier_list            identifier_list;
     ast::subtype_indication         subtype_indication;
     optional<ast::expression>       expression;
+
+    variable_declaration() : shared{}
+    { }
 };
 
 

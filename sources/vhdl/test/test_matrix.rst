@@ -11424,6 +11424,228 @@ variable_assignment_statement
 |                                   |                               |                                |
 +-----------------------------------+-------------------------------+--------------------------------+
 
+====================
+variable_declaration
+====================
+
++--------------------------+---------------------------------------+--------------------------------------------------+
+| File                     | Input                                 | Expected                                         |
++--------------------------+---------------------------------------+--------------------------------------------------+
+| variable_declaration_001 | variable HEIGHT : integer;            | (variable_declaration                            |
+|                          |                                       |   (identifier_list                               |
+|                          |                                       |     (identifier                                  |
+|                          |                                       |       HEIGHT                                     |
+|                          |                                       |     )                                            |
+|                          |                                       |   )                                              |
+|                          |                                       |   (subtype_indication                            |
+|                          |                                       |     (name<v>                                     |
+|                          |                                       |       (identifier                                |
+|                          |                                       |         integer                                  |
+|                          |                                       |       )                                          |
+|                          |                                       |     )                                            |
+|                          |                                       |   )                                              |
+|                          |                                       | )                                                |
+|                          |                                       |                                                  |
++--------------------------+---------------------------------------+--------------------------------------------------+
+| variable_declaration_002 | variable COND : boolean := true;      | (variable_declaration                            |
+|                          |                                       |   (identifier_list                               |
+|                          |                                       |     (identifier                                  |
+|                          |                                       |       COND                                       |
+|                          |                                       |     )                                            |
+|                          |                                       |   )                                              |
+|                          |                                       |   (subtype_indication                            |
+|                          |                                       |     (name<v>                                     |
+|                          |                                       |       (identifier                                |
+|                          |                                       |         boolean                                  |
+|                          |                                       |       )                                          |
+|                          |                                       |     )                                            |
+|                          |                                       |   )                                              |
+|                          |                                       |   (expression                                    |
+|                          |                                       |     (relation                                    |
+|                          |                                       |       (shift_expression                          |
+|                          |                                       |         (simple_expression                       |
+|                          |                                       |           (term                                  |
+|                          |                                       |             (primary<v>                          |
+|                          |                                       |               (name<v>                           |
+|                          |                                       |                 (identifier                      |
+|                          |                                       |                   true                           |
+|                          |                                       |                 )                                |
+|                          |                                       |               )                                  |
+|                          |                                       |             )                                    |
+|                          |                                       |           )                                      |
+|                          |                                       |         )                                        |
+|                          |                                       |       )                                          |
+|                          |                                       |     )                                            |
+|                          |                                       |   )                                              |
+|                          |                                       | )                                                |
+|                          |                                       |                                                  |
++--------------------------+---------------------------------------+--------------------------------------------------+
+| variable_declaration_003 | variable IN_STRING : string(1 to 80); | (variable_declaration                            |
+|                          |                                       |   (identifier_list                               |
+|                          |                                       |     (identifier                                  |
+|                          |                                       |       IN_STRING                                  |
+|                          |                                       |     )                                            |
+|                          |                                       |   )                                              |
+|                          |                                       |   (subtype_indication                            |
+|                          |                                       |     (name<v>                                     |
+|                          |                                       |       (identifier                                |
+|                          |                                       |         string                                   |
+|                          |                                       |       )                                          |
+|                          |                                       |     )                                            |
+|                          |                                       |     (constraint<v>                               |
+|                          |                                       |       (index_constraint                          |
+|                          |                                       |         (discrete_range<v>                       |
+|                          |                                       |           (range<v>                              |
+|                          |                                       |             (simple_expression                   |
+|                          |                                       |               (term                              |
+|                          |                                       |                 (primary<v>                      |
+|                          |                                       |                   (literal<v>                    |
+|                          |                                       |                     (numeric_literal<v>          |
+|                          |                                       |                       (abstract_literal<v>       |
+|                          |                                       |                         (decimal_literal         |
+|                          |                                       |                           literal: 1, hint: int  |
+|                          |                                       |                         )                        |
+|                          |                                       |                       )                          |
+|                          |                                       |                     )                            |
+|                          |                                       |                   )                              |
+|                          |                                       |                 )                                |
+|                          |                                       |               )                                  |
+|                          |                                       |             )                                    |
+|                          |                                       |             (keyword                             |
+|                          |                                       |               TO                                 |
+|                          |                                       |             )                                    |
+|                          |                                       |             (simple_expression                   |
+|                          |                                       |               (term                              |
+|                          |                                       |                 (primary<v>                      |
+|                          |                                       |                   (literal<v>                    |
+|                          |                                       |                     (numeric_literal<v>          |
+|                          |                                       |                       (abstract_literal<v>       |
+|                          |                                       |                         (decimal_literal         |
+|                          |                                       |                           literal: 80, hint: int |
+|                          |                                       |                         )                        |
+|                          |                                       |                       )                          |
+|                          |                                       |                     )                            |
+|                          |                                       |                   )                              |
+|                          |                                       |                 )                                |
+|                          |                                       |               )                                  |
+|                          |                                       |             )                                    |
+|                          |                                       |           )                                      |
+|                          |                                       |         )                                        |
+|                          |                                       |       )                                          |
+|                          |                                       |     )                                            |
+|                          |                                       |   )                                              |
+|                          |                                       | )                                                |
+|                          |                                       |                                                  |
++--------------------------+---------------------------------------+--------------------------------------------------+
+| variable_declaration_004 | variable M,N : bit := '1';            | (variable_declaration                            |
+|                          |                                       |   (identifier_list                               |
+|                          |                                       |     (identifier                                  |
+|                          |                                       |       M                                          |
+|                          |                                       |     ),                                           |
+|                          |                                       |     (identifier                                  |
+|                          |                                       |       N                                          |
+|                          |                                       |     )                                            |
+|                          |                                       |   )                                              |
+|                          |                                       |   (subtype_indication                            |
+|                          |                                       |     (name<v>                                     |
+|                          |                                       |       (identifier                                |
+|                          |                                       |         bit                                      |
+|                          |                                       |       )                                          |
+|                          |                                       |     )                                            |
+|                          |                                       |   )                                              |
+|                          |                                       |   (expression                                    |
+|                          |                                       |     (relation                                    |
+|                          |                                       |       (shift_expression                          |
+|                          |                                       |         (simple_expression                       |
+|                          |                                       |           (term                                  |
+|                          |                                       |             (primary<v>                          |
+|                          |                                       |               (literal<v>                        |
+|                          |                                       |                 (enumeration_literal<v>          |
+|                          |                                       |                   (character_literal             |
+|                          |                                       |                     '1'                          |
+|                          |                                       |                   )                              |
+|                          |                                       |                 )                                |
+|                          |                                       |               )                                  |
+|                          |                                       |             )                                    |
+|                          |                                       |           )                                      |
+|                          |                                       |         )                                        |
+|                          |                                       |       )                                          |
+|                          |                                       |     )                                            |
+|                          |                                       |   )                                              |
+|                          |                                       | )                                                |
+|                          |                                       |                                                  |
++--------------------------+---------------------------------------+--------------------------------------------------+
+| variable_declaration_005 | variable I : integer range 0 to 3;    | (variable_declaration                            |
+|                          |                                       |   (identifier_list                               |
+|                          |                                       |     (identifier                                  |
+|                          |                                       |       I                                          |
+|                          |                                       |     )                                            |
+|                          |                                       |   )                                              |
+|                          |                                       |   (subtype_indication                            |
+|                          |                                       |     (name<v>                                     |
+|                          |                                       |       (identifier                                |
+|                          |                                       |         integer                                  |
+|                          |                                       |       )                                          |
+|                          |                                       |     )                                            |
+|                          |                                       |     (constraint<v>                               |
+|                          |                                       |       (range<v>                                  |
+|                          |                                       |         (simple_expression                       |
+|                          |                                       |           (term                                  |
+|                          |                                       |             (primary<v>                          |
+|                          |                                       |               (literal<v>                        |
+|                          |                                       |                 (numeric_literal<v>              |
+|                          |                                       |                   (abstract_literal<v>           |
+|                          |                                       |                     (decimal_literal             |
+|                          |                                       |                       literal: 0, hint: int      |
+|                          |                                       |                     )                            |
+|                          |                                       |                   )                              |
+|                          |                                       |                 )                                |
+|                          |                                       |               )                                  |
+|                          |                                       |             )                                    |
+|                          |                                       |           )                                      |
+|                          |                                       |         )                                        |
+|                          |                                       |         (keyword                                 |
+|                          |                                       |           TO                                     |
+|                          |                                       |         )                                        |
+|                          |                                       |         (simple_expression                       |
+|                          |                                       |           (term                                  |
+|                          |                                       |             (primary<v>                          |
+|                          |                                       |               (literal<v>                        |
+|                          |                                       |                 (numeric_literal<v>              |
+|                          |                                       |                   (abstract_literal<v>           |
+|                          |                                       |                     (decimal_literal             |
+|                          |                                       |                       literal: 3, hint: int      |
+|                          |                                       |                     )                            |
+|                          |                                       |                   )                              |
+|                          |                                       |                 )                                |
+|                          |                                       |               )                                  |
+|                          |                                       |             )                                    |
+|                          |                                       |           )                                      |
+|                          |                                       |         )                                        |
+|                          |                                       |       )                                          |
+|                          |                                       |     )                                            |
+|                          |                                       |   )                                              |
+|                          |                                       | )                                                |
+|                          |                                       |                                                  |
++--------------------------+---------------------------------------+--------------------------------------------------+
+| variable_declaration_006 | shared variable X : std_ulogic;       | (variable_declaration                            |
+|                          |                                       |   SHARED                                         |
+|                          |                                       |   (identifier_list                               |
+|                          |                                       |     (identifier                                  |
+|                          |                                       |       X                                          |
+|                          |                                       |     )                                            |
+|                          |                                       |   )                                              |
+|                          |                                       |   (subtype_indication                            |
+|                          |                                       |     (name<v>                                     |
+|                          |                                       |       (identifier                                |
+|                          |                                       |         std_ulogic                               |
+|                          |                                       |       )                                          |
+|                          |                                       |     )                                            |
+|                          |                                       |   )                                              |
+|                          |                                       | )                                                |
+|                          |                                       |                                                  |
++--------------------------+---------------------------------------+--------------------------------------------------+
+
 ==============
 wait_statement
 ==============
@@ -11848,4 +12070,4 @@ xxx_signature
 +---------+-----------------------+----------+
 
 
-Total Tests: 355
+Total Tests: 361

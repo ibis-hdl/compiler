@@ -1,0 +1,2 @@
+variable IN_STRING : string(1 to 80);
+

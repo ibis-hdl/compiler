@@ -1,0 +1,15 @@
+(variable_declaration
+  SHARED
+  (identifier_list
+    (identifier
+      X
+    )
+  )
+  (subtype_indication
+    (name<v>
+      (identifier
+        std_ulogic
+      )
+    )
+  )
+)
