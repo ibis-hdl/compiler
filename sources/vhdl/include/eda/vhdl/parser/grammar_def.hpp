@@ -1840,7 +1840,7 @@ auto const case_statement_def =
 //     when choices =>
 //         sequence_of_statements
 auto const case_statement_alternative_def =
-       WHEN     // FixMe: x3 expectation points
+       WHEN
     >> choices
     >> "=>"
     >> sequence_of_statements
