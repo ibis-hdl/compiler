@@ -2851,15 +2851,15 @@ auto const index_constraint_def =
      ;
 
 
-#if 0
+
 // index_specification ::=                                             [§ 1.3.1]
 //       discrete_range
 //     | static_expression
 auto const index_specification_def =
       discrete_range
-    | static_expression
+    | expression
     ;
-#endif
+
 
 
 // index_subtype_definition ::=                                        [§ 3.2.1]
@@ -4379,7 +4379,7 @@ BOOST_SPIRIT_DEFINE(  // -- I --
     , if_statement
     //EMBEDDED, incomplete_type_declaration
     , index_constraint
-    //, index_specification
+    , index_specification
     , index_subtype_definition
     , indexed_name
     //, instantiated_unit
