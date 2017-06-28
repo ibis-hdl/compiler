@@ -518,6 +518,22 @@ struct pure_impure_symbols : x3::symbols<ast::keyword_token> {
 } const pure_impure_symbols;
 
 
+/*
+ * Symbols for subprogram_body's subprogram_kind
+ */
+struct subprogram_kind_symbols : x3::symbols<ast::keyword_token> {
+
+    subprogram_kind_symbols() {
+
+        name("subprogram_kind_symbols");
+
+        add("procedure" , ast::keyword_token::PROCEDURE)
+           ("function"  , ast::keyword_token::FUNCTION)
+           ;
+    }
+} const subprogram_kind_symbols;
+
+
 } } } } // namespace eda.vhdl.parser.keywords
 
 
@@ -3905,13 +3921,13 @@ auto const subprogram_declarative_part_def =
 ;
 #endif
 
-#if 0
+
 // subprogram_kind ::=                                                   [§ 2.2]
 //     procedure | function
 auto const subprogram_kind_def =
-    PROCEDURE | FUNCTION
+    kw( subprogram_kind_symbols )
     ;
-#endif
+
 
 
 // subprogram_specification ::=                                          [§ 2.1]
@@ -4451,7 +4467,7 @@ BOOST_SPIRIT_DEFINE(  // -- S --
     //, subprogram_declaration
     //, subprogram_declarative_item
     //, subprogram_declarative_part
-    //, subprogram_kind
+    , subprogram_kind
     , subprogram_specification
     , subprogram_statement_part
     , subtype_declaration
