@@ -1,0 +1,2 @@
+signal a_bit, other_bit : bit := '0';
+

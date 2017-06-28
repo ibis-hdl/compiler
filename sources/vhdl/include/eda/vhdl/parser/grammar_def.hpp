@@ -3760,13 +3760,19 @@ auto const signal_assignment_statement_def =
     ;
 
 
-#if 0
-// signal_declaration ::=
-// signal identifier_list : subtype_indication [ signal_kind ] [ := expression ] ;
+
+// signal_declaration ::=                                            [§ 4.3.1.2]
+//     signal identifier_list : subtype_indication [ signal_kind ] [ := expression ] ;
 auto const signal_declaration_def =
-        SIGNAL identifier_list > ':' subtype_indication -( signal_kind ) -(  ":=" >  expression ) > ';'
-;
-#endif
+       omit[ SIGNAL ]
+    >> identifier_list
+    >> ':'
+    >> subtype_indication
+    >> -signal_kind
+    >> -( ":=" >  expression )
+    > ';'
+    ;
+
 
 
 // signal_kind ::=                                                   [§ 4.3.1.2]
@@ -4455,7 +4461,7 @@ BOOST_SPIRIT_DEFINE(  // -- S --
     , shift_expression
     //, sign
     , signal_assignment_statement
-    //, signal_declaration
+    , signal_declaration
     , signal_kind
     , signal_list
     , signature
