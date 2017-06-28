@@ -12,7 +12,7 @@
 #include <eda/vhdl/ast/util/namespace_alias.hpp>
 
 #include <eda/vhdl/ast/identifier_list.hpp>
-#include <eda/vhdl/ast/element_subtype_definition.hpp>
+#include <eda/vhdl/ast/subtype_indication.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
@@ -21,7 +21,7 @@ namespace eda { namespace vhdl { namespace ast {
 struct element_declaration : position_tagged
 {
     ast::identifier_list            identifier_list;
-    ast::element_subtype_definition element_subtype_definition;
+    ast::subtype_indication         element_subtype_definition;
 };
 
 

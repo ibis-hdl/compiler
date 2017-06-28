@@ -847,7 +847,7 @@ typedef x3::rule<disconnection_specification_class, ast::disconnection_specifica
 typedef x3::rule<discrete_range_class, ast::discrete_range> discrete_range_type;
 typedef x3::rule<element_association_class, ast::element_association> element_association_type;
 typedef x3::rule<element_declaration_class, ast::element_declaration> element_declaration_type;
-typedef x3::rule<element_subtype_definition_class, ast::element_subtype_definition> element_subtype_definition_type;
+typedef x3::rule<element_subtype_definition_class, ast::subtype_indication> element_subtype_definition_type;
 typedef x3::rule<entity_aspect_class, ast::entity_aspect> entity_aspect_type;
 typedef x3::rule<entity_class_class, ast::keyword_token> entity_class_type;
 typedef x3::rule<entity_class_entry_class, ast::keyword_token> entity_class_entry_type;
@@ -2253,18 +2253,18 @@ auto const element_association_def =
 auto const element_declaration_def =
        identifier_list
     >> ':'
-    >> subtype_indication // aka subtype_definition
+    >> element_subtype_definition
     >  ';'
     ;
 
 
-#if 0
+
 // element_subtype_definition ::=                                      [§ 3.2.2]
 //     subtype_indication
 auto const element_subtype_definition_def =
     subtype_indication
     ;
-#endif
+
 
 
 // entity_aspect ::=                                                 [§ 5.2.1.1]
@@ -4326,7 +4326,7 @@ BOOST_SPIRIT_DEFINE(  // -- D --
 BOOST_SPIRIT_DEFINE(  // -- E --
       element_association
     , element_declaration
-    //, element_subtype_definition
+    , element_subtype_definition
     , entity_aspect
     , entity_class
     //, entity_class_entry
