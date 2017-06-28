@@ -3662,7 +3662,7 @@ auto const selected_signal_assignment_def =
 
 
 
-// selected_waveforms ::=
+// selected_waveforms ::=                                              [§ 9.5.2]
 //     { waveform when choices , }
 //     waveform when choices
 auto const selected_waveforms_def =
