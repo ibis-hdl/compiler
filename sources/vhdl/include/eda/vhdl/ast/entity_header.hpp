@@ -10,25 +10,20 @@
 
 
 #include <eda/vhdl/ast/util/namespace_alias.hpp>
+#include <eda/vhdl/ast/util/position_tagged.hpp>
 
-#include <eda/vhdl/ast/util/nullary.hpp>
 #include <eda/vhdl/ast/generic_clause.hpp>
 #include <eda/vhdl/ast/port_clause.hpp>
-
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
+#include <eda/vhdl/ast/util/optional.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct entity_header : x3::variant<
-    ast::nullary,
-    ast::generic_clause,    // formal_generic_clause
-    ast::port_clause        // formal_port_clause
->
+struct entity_header : position_tagged
 {
-    using base_type::base_type;
-    using base_type::operator=;
+    optional<ast::generic_clause>   formal_generic_clause;
+    optional<ast::port_clause>      formal_port_clause;
 };
 
 

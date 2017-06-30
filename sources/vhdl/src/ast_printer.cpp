@@ -1198,7 +1198,15 @@ void printer::operator()(entity_header const &node)
 {
     static char const symbol[]{ "entity_header" };
     symbol_scope<entity_header> _(*this, symbol);
-    visit(node);
+
+    if(node.formal_generic_clause) {
+        (*this)(*node.formal_generic_clause);
+    }
+
+    if(node.formal_port_clause) {
+        if(node.formal_generic_clause) { os << "\n"; }
+        (*this)(*node.formal_port_clause);
+    }
 }
 
 

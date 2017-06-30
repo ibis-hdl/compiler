@@ -2663,6 +2663,136 @@ decimal_literal
 |                     |                                 |                                     |
 +---------------------+---------------------------------+-------------------------------------+
 
+===========================
+disconnection_specification
+===========================
+
++---------------------------------+-----------------------------------+---------------------------------------------------+
+| File                            | Input                             | Expected                                          |
++---------------------------------+-----------------------------------+---------------------------------------------------+
+| disconnection_specification_001 | disconnect S: T after 10ns;       | (disconnection_specification                      |
+|                                 |                                   |   (guarded_signal_specification                   |
+|                                 |                                   |     (signal_list<v>                               |
+|                                 |                                   |       (signal_list.names                          |
+|                                 |                                   |         (identifier                               |
+|                                 |                                   |           S                                       |
+|                                 |                                   |         )                                         |
+|                                 |                                   |       )                                           |
+|                                 |                                   |     )                                             |
+|                                 |                                   |     (name<v>                                      |
+|                                 |                                   |       (identifier                                 |
+|                                 |                                   |         T                                         |
+|                                 |                                   |       )                                           |
+|                                 |                                   |     )                                             |
+|                                 |                                   |   )                                               |
+|                                 |                                   |   (expression                                     |
+|                                 |                                   |     (relation                                     |
+|                                 |                                   |       (shift_expression                           |
+|                                 |                                   |         (simple_expression                        |
+|                                 |                                   |           (term                                   |
+|                                 |                                   |             (primary<v>                           |
+|                                 |                                   |               (literal<v>                         |
+|                                 |                                   |                 (numeric_literal<v>               |
+|                                 |                                   |                   (physical_literal               |
+|                                 |                                   |                     literal: (abstract_literal<v> |
+|                                 |                                   |                       (decimal_literal            |
+|                                 |                                   |                         literal: 10, hint: int    |
+|                                 |                                   |                       )                           |
+|                                 |                                   |                     ),                            |
+|                                 |                                   |                     unit: ns                      |
+|                                 |                                   |                   )                               |
+|                                 |                                   |                 )                                 |
+|                                 |                                   |               )                                   |
+|                                 |                                   |             )                                     |
+|                                 |                                   |           )                                       |
+|                                 |                                   |         )                                         |
+|                                 |                                   |       )                                           |
+|                                 |                                   |     )                                             |
+|                                 |                                   |   )                                               |
+|                                 |                                   | )                                                 |
+|                                 |                                   |                                                   |
++---------------------------------+-----------------------------------+---------------------------------------------------+
+| disconnection_specification_002 | disconnect others: T after 42 ms; | (disconnection_specification                      |
+|                                 |                                   |   (guarded_signal_specification                   |
+|                                 |                                   |     (signal_list<v>                               |
+|                                 |                                   |       (keyword                                    |
+|                                 |                                   |         OTHERS                                    |
+|                                 |                                   |       )                                           |
+|                                 |                                   |     )                                             |
+|                                 |                                   |     (name<v>                                      |
+|                                 |                                   |       (identifier                                 |
+|                                 |                                   |         T                                         |
+|                                 |                                   |       )                                           |
+|                                 |                                   |     )                                             |
+|                                 |                                   |   )                                               |
+|                                 |                                   |   (expression                                     |
+|                                 |                                   |     (relation                                     |
+|                                 |                                   |       (shift_expression                           |
+|                                 |                                   |         (simple_expression                        |
+|                                 |                                   |           (term                                   |
+|                                 |                                   |             (primary<v>                           |
+|                                 |                                   |               (literal<v>                         |
+|                                 |                                   |                 (numeric_literal<v>               |
+|                                 |                                   |                   (physical_literal               |
+|                                 |                                   |                     literal: (abstract_literal<v> |
+|                                 |                                   |                       (decimal_literal            |
+|                                 |                                   |                         literal: 42, hint: int    |
+|                                 |                                   |                       )                           |
+|                                 |                                   |                     ),                            |
+|                                 |                                   |                     unit: ms                      |
+|                                 |                                   |                   )                               |
+|                                 |                                   |                 )                                 |
+|                                 |                                   |               )                                   |
+|                                 |                                   |             )                                     |
+|                                 |                                   |           )                                       |
+|                                 |                                   |         )                                         |
+|                                 |                                   |       )                                           |
+|                                 |                                   |     )                                             |
+|                                 |                                   |   )                                               |
+|                                 |                                   | )                                                 |
+|                                 |                                   |                                                   |
++---------------------------------+-----------------------------------+---------------------------------------------------+
+| disconnection_specification_003 | disconnect all: T after 0 ns;     | (disconnection_specification                      |
+|                                 |                                   |   (guarded_signal_specification                   |
+|                                 |                                   |     (signal_list<v>                               |
+|                                 |                                   |       (keyword                                    |
+|                                 |                                   |         ALL                                       |
+|                                 |                                   |       )                                           |
+|                                 |                                   |     )                                             |
+|                                 |                                   |     (name<v>                                      |
+|                                 |                                   |       (identifier                                 |
+|                                 |                                   |         T                                         |
+|                                 |                                   |       )                                           |
+|                                 |                                   |     )                                             |
+|                                 |                                   |   )                                               |
+|                                 |                                   |   (expression                                     |
+|                                 |                                   |     (relation                                     |
+|                                 |                                   |       (shift_expression                           |
+|                                 |                                   |         (simple_expression                        |
+|                                 |                                   |           (term                                   |
+|                                 |                                   |             (primary<v>                           |
+|                                 |                                   |               (literal<v>                         |
+|                                 |                                   |                 (numeric_literal<v>               |
+|                                 |                                   |                   (physical_literal               |
+|                                 |                                   |                     literal: (abstract_literal<v> |
+|                                 |                                   |                       (decimal_literal            |
+|                                 |                                   |                         literal: 0, hint: int     |
+|                                 |                                   |                       )                           |
+|                                 |                                   |                     ),                            |
+|                                 |                                   |                     unit: ns                      |
+|                                 |                                   |                   )                               |
+|                                 |                                   |                 )                                 |
+|                                 |                                   |               )                                   |
+|                                 |                                   |             )                                     |
+|                                 |                                   |           )                                       |
+|                                 |                                   |         )                                         |
+|                                 |                                   |       )                                           |
+|                                 |                                   |     )                                             |
+|                                 |                                   |   )                                               |
+|                                 |                                   | )                                                 |
+|                                 |                                   |                                                   |
++---------------------------------+-----------------------------------+---------------------------------------------------+
+
 ==============
 discrete_range
 ==============
@@ -13198,4 +13328,4 @@ xxx_signature
 +---------+-----------------------+----------+
 
 
-Total Tests: 377
+Total Tests: 380

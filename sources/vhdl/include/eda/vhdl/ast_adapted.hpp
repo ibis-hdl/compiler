@@ -200,6 +200,10 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::entity_designator,
     entity_tag, signature
 )
 
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::entity_header,
+    formal_generic_clause, formal_port_clause
+)
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::entity_specification,
     entity_name_list, entity_class
 )

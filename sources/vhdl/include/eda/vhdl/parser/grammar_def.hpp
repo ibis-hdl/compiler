@@ -2342,13 +2342,19 @@ auto const entity_class_entry_list_def =
 //         entity_statement_part ]
 //     end [ entity ] [ entity_simple_name ] ;
 auto const entity_declaration_def =
-        ENTITY identifier IS
-        entity_header
-        entity_declarative_part
-        -( BEGIN
-                entity_statement_part )
-                END -( ENTITY ) -( entity_simple_name ) > ';'
-;
+    ENTITY
+    >> identifier
+    >> IS
+    >> entity_header
+    >> entity_declarative_part
+    >> -(      BEGIN
+            >> entity_statement_part
+        )
+    >> END
+    >> -ENTITY
+    >> -simple_name
+    >  ';'
+    ;
 #endif
 
 #if 0
@@ -2375,7 +2381,7 @@ auto const entity_declarative_item_def =
     | subtype_declaration
     | constant_declaration
     | signal_declaration
-    | shared_variable_declaration
+    | variable_declaration
     | file_declaration
     | alias_declaration
     | attribute_declaration
@@ -2391,8 +2397,8 @@ auto const entity_declarative_item_def =
 // entity_declarative_part ::=                                         [§ 1.1.2]
 //     { entity_declarative_item }
 auto const entity_declarative_part_def =
-{ entity_declarative_item }
-;
+    *entity_declarative_item
+    ;
 #endif
 
 
@@ -2404,15 +2410,15 @@ auto const entity_designator_def =
     ;
 
 
-#if 0
+
 // entity_header ::=                                                   [§ 1.1.1]
 //     [ formal_generic_clause ]
 //     [ formal_port_clause ]
 auto const entity_header_def =
-        -( formal_generic_clause )
-        -( formal_port_clause )
-        ;
-#endif
+       -generic_clause
+    >> -port_clause
+    ;
+
 
 
 // entity_name_list ::=                                                  [§ 5.1]
@@ -2436,25 +2442,25 @@ auto const entity_specification_def =
     ;
 
 
-#if 0
+
 // entity_statement ::=                                                [§ 1.1.3]
 //       concurrent_assertion_statement
 //     | passive_concurrent_procedure_call_statement
 //     | passive_process_statement
 auto const entity_statement_def =
       concurrent_assertion_statement
-    | passive_concurrent_procedure_call_statement
-    | passive_process_statement
+    | concurrent_procedure_call_statement
+    | process_statement
     ;
-#endif
 
-#if 0
+
+
 // entity_statement_part ::=                                           [§ 1.1.3]
 //     { entity_statement }
 auto const entity_statement_part_def =
-{ entity_statement }
-;
-#endif
+    *entity_statement
+    ;
+
 
 
 // entity_tag ::=                                                        [§ 5.1]
@@ -4356,15 +4362,15 @@ BOOST_SPIRIT_DEFINE(  // -- E --
     , entity_class
     , entity_class_entry
     , entity_class_entry_list
-    //, entity_declaration
-    //, entity_declarative_item
-    //, entity_declarative_part
+//    , entity_declaration
+//    , entity_declarative_item
+//    , entity_declarative_part
     , entity_designator
-    //, entity_header
+    , entity_header
     , entity_name_list
     , entity_specification
-    //, entity_statement
-    //, entity_statement_part
+//    , entity_statement
+//    , entity_statement_part
     , entity_tag
     , enumeration_literal
     , enumeration_type_definition
