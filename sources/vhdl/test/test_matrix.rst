@@ -5228,6 +5228,105 @@ generic_map_aspect
 |                        |                                        |                                                           |
 +------------------------+----------------------------------------+-----------------------------------------------------------+
 
+=================
+group_declaration
+=================
+
++-----------------------+------------------------------------------+---------------------------+
+| File                  | Input                                    | Expected                  |
++-----------------------+------------------------------------------+---------------------------+
+| group_declaration_001 | --  A group of two labels.               | (group_declaration        |
+|                       | group G1: RESOURCE (L1, L2);             |   (identifier             |
+|                       |                                          |     G1                    |
+|                       |                                          |   )                       |
+|                       |                                          |   (name<v>                |
+|                       |                                          |     (identifier           |
+|                       |                                          |       RESOURCE            |
+|                       |                                          |     )                     |
+|                       |                                          |   )                       |
+|                       |                                          |   (group_constituent_list |
+|                       |                                          |     (group_constituent<v> |
+|                       |                                          |       (name<v>            |
+|                       |                                          |         (identifier       |
+|                       |                                          |           L1              |
+|                       |                                          |         )                 |
+|                       |                                          |       )                   |
+|                       |                                          |     ),                    |
+|                       |                                          |     (group_constituent<v> |
+|                       |                                          |       (name<v>            |
+|                       |                                          |         (identifier       |
+|                       |                                          |           L2              |
+|                       |                                          |         )                 |
+|                       |                                          |       )                   |
+|                       |                                          |     )                     |
+|                       |                                          |   )                       |
+|                       |                                          | )                         |
+|                       |                                          |                           |
++-----------------------+------------------------------------------+---------------------------+
+| group_declaration_002 | --  A group  of three labels.            | (group_declaration        |
+|                       | group G2: RESOURCE (L3, L4, L5);         |   (identifier             |
+|                       |                                          |     G2                    |
+|                       |                                          |   )                       |
+|                       |                                          |   (name<v>                |
+|                       |                                          |     (identifier           |
+|                       |                                          |       RESOURCE            |
+|                       |                                          |     )                     |
+|                       |                                          |   )                       |
+|                       |                                          |   (group_constituent_list |
+|                       |                                          |     (group_constituent<v> |
+|                       |                                          |       (name<v>            |
+|                       |                                          |         (identifier       |
+|                       |                                          |           L3              |
+|                       |                                          |         )                 |
+|                       |                                          |       )                   |
+|                       |                                          |     ),                    |
+|                       |                                          |     (group_constituent<v> |
+|                       |                                          |       (name<v>            |
+|                       |                                          |         (identifier       |
+|                       |                                          |           L4              |
+|                       |                                          |         )                 |
+|                       |                                          |       )                   |
+|                       |                                          |     ),                    |
+|                       |                                          |     (group_constituent<v> |
+|                       |                                          |       (name<v>            |
+|                       |                                          |         (identifier       |
+|                       |                                          |           L5              |
+|                       |                                          |         )                 |
+|                       |                                          |       )                   |
+|                       |                                          |     )                     |
+|                       |                                          |   )                       |
+|                       |                                          | )                         |
+|                       |                                          |                           |
++-----------------------+------------------------------------------+---------------------------+
+| group_declaration_004 | --  A group of groups.                   | (group_declaration        |
+|                       | group CONSTRAINT1: DIFF_CYCLES (G1, G3); |   (identifier             |
+|                       |                                          |     CONSTRAINT1           |
+|                       |                                          |   )                       |
+|                       |                                          |   (name<v>                |
+|                       |                                          |     (identifier           |
+|                       |                                          |       DIFF_CYCLES         |
+|                       |                                          |     )                     |
+|                       |                                          |   )                       |
+|                       |                                          |   (group_constituent_list |
+|                       |                                          |     (group_constituent<v> |
+|                       |                                          |       (name<v>            |
+|                       |                                          |         (identifier       |
+|                       |                                          |           G1              |
+|                       |                                          |         )                 |
+|                       |                                          |       )                   |
+|                       |                                          |     ),                    |
+|                       |                                          |     (group_constituent<v> |
+|                       |                                          |       (name<v>            |
+|                       |                                          |         (identifier       |
+|                       |                                          |           G3              |
+|                       |                                          |         )                 |
+|                       |                                          |       )                   |
+|                       |                                          |     )                     |
+|                       |                                          |   )                       |
+|                       |                                          | )                         |
+|                       |                                          |                           |
++-----------------------+------------------------------------------+---------------------------+
+
 ==========================
 group_template_declaration
 ==========================
@@ -13099,4 +13198,4 @@ xxx_signature
 +---------+-----------------------+----------+
 
 
-Total Tests: 374
+Total Tests: 377

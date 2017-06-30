@@ -2790,13 +2790,20 @@ auto const group_template_declaration_def =
     ;
 
 
-#if 0
+
 // group_declaration ::=                                                 [§ 4.7]
 //     group identifier : group_template_name ( group_constituent_list ) ;
 auto const group_declaration_def =
-        GROUP identifier > ':' group_template_name '(' group_constituent_list ')' > ';'
-;
-#endif
+       GROUP
+    >> identifier
+    >> ':'
+    >> name
+    >> '('
+    >> group_constituent_list
+    >> ')'
+    >  ';'
+    ;
+
 
 #if 0
 // guarded_signal_specification ::=                                      [§ 5.3]
@@ -4382,7 +4389,7 @@ BOOST_SPIRIT_DEFINE(  // -- G --
     , group_constituent
     , group_constituent_list
     , group_template_declaration
-    //, group_declaration
+    , group_declaration
     //, guarded_signal_specification
 )
 BOOST_SPIRIT_DEFINE(  // -- I --

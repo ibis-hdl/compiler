@@ -5,4 +5,5 @@ ToDo:
 - interface_constant_declaration/interface_constant_declaration_007.input
 - type_conversion/type_conversion_002.input
 - wait_statement/wait_statement_00x.input
+- group_declaration/group_declaration_003.input
 
