@@ -2226,13 +2226,17 @@ auto const direction_def =
     ;
 
 
-#if 0
+
 // disconnection_specification ::=                                       [§ 5.3]
 //     disconnect guarded_signal_specification after time_expression ;
 auto const disconnection_specification_def =
-        DISCONNECT guarded_signal_specification AFTER time_expression > ';'
-;
-#endif
+       DISCONNECT
+    >> guarded_signal_specification
+    >> AFTER
+    >> time_expression
+    >  ';'
+    ;
+
 
 
 // discrete_range ::=                                                  [§ 3.2.1]
@@ -2805,13 +2809,15 @@ auto const group_declaration_def =
     ;
 
 
-#if 0
+
 // guarded_signal_specification ::=                                      [§ 5.3]
 //     guarded_signal_list : type_mark
 auto const guarded_signal_specification_def =
-        guarded_signal_list > ':' type_mark
-        ;
-#endif
+       signal_list
+    >> ':'
+    >> type_mark
+    ;
+
 
 
 // identifier ::=                                                       [§ 13.3]
@@ -4339,7 +4345,7 @@ BOOST_SPIRIT_DEFINE(  // -- D --
     //, design_unit
     , designator
     , direction
-    //, disconnection_specification
+    , disconnection_specification
     , discrete_range
 )
 BOOST_SPIRIT_DEFINE(  // -- E --
@@ -4390,7 +4396,7 @@ BOOST_SPIRIT_DEFINE(  // -- G --
     , group_constituent_list
     , group_template_declaration
     , group_declaration
-    //, guarded_signal_specification
+    , guarded_signal_specification
 )
 BOOST_SPIRIT_DEFINE(  // -- I --
       identifier

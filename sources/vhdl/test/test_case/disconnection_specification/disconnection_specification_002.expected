@@ -1,0 +1,38 @@
+(disconnection_specification
+  (guarded_signal_specification
+    (signal_list<v>
+      (keyword
+        OTHERS
+      )
+    )
+    (name<v>
+      (identifier
+        T
+      )
+    )
+  )
+  (expression
+    (relation
+      (shift_expression
+        (simple_expression
+          (term
+            (primary<v>
+              (literal<v>
+                (numeric_literal<v>
+                  (physical_literal
+                    literal: (abstract_literal<v>
+                      (decimal_literal
+                        literal: 42, hint: int
+                      )
+                    ),
+                    unit: ms
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

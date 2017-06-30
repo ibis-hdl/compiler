@@ -18,6 +18,7 @@ set(BIN_SOURCES
     parser_interface.cpp
     parser_literals.cpp
     parser_production.cpp
+    parser_specifications.cpp
     parser_statement.cpp
     parser_subprogram.cpp
     parser_type.cpp
