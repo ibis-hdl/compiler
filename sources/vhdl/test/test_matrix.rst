@@ -5228,6 +5228,53 @@ generic_map_aspect
 |                        |                                        |                                                           |
 +------------------------+----------------------------------------+-----------------------------------------------------------+
 
+==========================
+group_template_declaration
+==========================
+
++--------------------------------+----------------------------------------------------------+-----------------------------+
+| File                           | Input                                                    | Expected                    |
++--------------------------------+----------------------------------------------------------+-----------------------------+
+| group_template_declaration_001 | --  Groups of this type consist of two signals.          | (group_template_declaration |
+|                                | group PIN2PIN is (signal, signal);                       |   (identifier               |
+|                                |                                                          |     PIN2PIN                 |
+|                                |                                                          |   )                         |
+|                                |                                                          |   (entity_class_entry_list  |
+|                                |                                                          |     (keyword                |
+|                                |                                                          |       SIGNAL                |
+|                                |                                                          |     ),                      |
+|                                |                                                          |     (keyword                |
+|                                |                                                          |       SIGNAL                |
+|                                |                                                          |     )                       |
+|                                |                                                          |   )                         |
+|                                |                                                          | )                           |
+|                                |                                                          |                             |
++--------------------------------+----------------------------------------------------------+-----------------------------+
+| group_template_declaration_002 | --  Groups of this type consist of any number of labels. | (group_template_declaration |
+|                                | group RESOURCE is (label <>);                            |   (identifier               |
+|                                |                                                          |     RESOURCE                |
+|                                |                                                          |   )                         |
+|                                |                                                          |   (entity_class_entry_list  |
+|                                |                                                          |     (keyword                |
+|                                |                                                          |       LABEL                 |
+|                                |                                                          |     )                       |
+|                                |                                                          |   )                         |
+|                                |                                                          | )                           |
+|                                |                                                          |                             |
++--------------------------------+----------------------------------------------------------+-----------------------------+
+| group_template_declaration_003 | --  A group of groups.                                   | (group_template_declaration |
+|                                | group DIFF_CYCLES is (group <>);                         |   (identifier               |
+|                                |                                                          |     DIFF_CYCLES             |
+|                                |                                                          |   )                         |
+|                                |                                                          |   (entity_class_entry_list  |
+|                                |                                                          |     (keyword                |
+|                                |                                                          |       GROUP                 |
+|                                |                                                          |     )                       |
+|                                |                                                          |   )                         |
+|                                |                                                          | )                           |
+|                                |                                                          |                             |
++--------------------------------+----------------------------------------------------------+-----------------------------+
+
 ==========
 identifier
 ==========
@@ -13052,4 +13099,4 @@ xxx_signature
 +---------+-----------------------+----------+
 
 
-Total Tests: 371
+Total Tests: 374

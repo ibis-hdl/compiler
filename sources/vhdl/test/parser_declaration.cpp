@@ -24,6 +24,7 @@ BOOST_AUTO_TEST_SUITE( parser_declaration )
 GENERATE_DATASET_TEST_CASE(alias_declaration)
 GENERATE_DATASET_TEST_CASE(signal_declaration)
 GENERATE_DATASET_TEST_CASE(variable_declaration)
+GENERATE_DATASET_TEST_CASE(group_template_declaration)
 
 
 BOOST_AUTO_TEST_SUITE_END()

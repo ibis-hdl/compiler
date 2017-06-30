@@ -1,0 +1,3 @@
+--  A group of groups.
+group DIFF_CYCLES is (group <>);
+

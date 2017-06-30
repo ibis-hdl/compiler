@@ -2312,21 +2312,22 @@ auto const entity_class_def =
      ;
 
 
-#if 0
+
 // entity_class_entry ::=                                                [§ 4.6]
 //     entity_class [ <> ]
 auto const entity_class_entry_def =
-        entity_class -( <> )
-        ;
-#endif
+    entity_class
+    >> -lit("<>")
+    ;
 
-#if 0
+
+
 // entity_class_entry_list ::=                                           [§ 4.6]
 //     entity_class_entry { , entity_class_entry }
 auto const entity_class_entry_list_def =
-        entity_class_entry >> ( entity_class_entry % ',' )
-        ;
-#endif
+    entity_class_entry % ','
+    ;
+
 
 #if 0
 // entity_declaration ::=                                                [§ 1.1]
@@ -2759,29 +2760,35 @@ auto const generic_map_aspect_def =
 
 
 
-#if 0
+
 // group_constituent ::                                                  [§ 4.7]
 //     name | character_literal
 auto const group_constituent_def =
     name | character_literal
     ;
-#endif
 
-#if 0
+
+
 // group_constituent_list ::=                                            [§ 4.7]
 //     group_constituent { , group_constituent }
 auto const group_constituent_list_def =
-        group_constituent >> ( group_constituent % ',' )
-        ;
-#endif
+    group_constituent % ','
+    ;
 
-#if 0
+
+
 // group_template_declaration ::=                                        [§ 4.6]
 //     group identifier is ( entity_class_entry_list ) ;
 auto const group_template_declaration_def =
-        GROUP identifier IS '(' entity_class_entry_list ')' > ';'
-;
-#endif
+       GROUP
+    >> identifier
+    >> IS
+    >> '('
+    >> entity_class_entry_list
+    >> ')'
+    > ';'
+    ;
+
 
 #if 0
 // group_declaration ::=                                                 [§ 4.7]
@@ -4334,8 +4341,8 @@ BOOST_SPIRIT_DEFINE(  // -- E --
     , element_subtype_definition
     , entity_aspect
     , entity_class
-    //, entity_class_entry
-    //, entity_class_entry_list
+    , entity_class_entry
+    , entity_class_entry_list
     //, entity_declaration
     //, entity_declarative_item
     //, entity_declarative_part
@@ -4372,9 +4379,9 @@ BOOST_SPIRIT_DEFINE(  // -- G --
     generic_clause
     , generic_map_aspect
     , graphic_character
-    //, group_constituent
-    //, group_constituent_list
-    //, group_template_declaration
+    , group_constituent
+    , group_constituent_list
+    , group_template_declaration
     //, group_declaration
     //, guarded_signal_specification
 )

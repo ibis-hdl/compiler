@@ -1,0 +1,10 @@
+(group_template_declaration
+  (identifier
+    RESOURCE
+  )
+  (entity_class_entry_list
+    (keyword
+      LABEL
+    )
+  )
+)

@@ -1,0 +1,10 @@
+(group_template_declaration
+  (identifier
+    DIFF_CYCLES
+  )
+  (entity_class_entry_list
+    (keyword
+      GROUP
+    )
+  )
+)
