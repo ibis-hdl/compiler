@@ -3900,7 +3900,7 @@ auto const string_literal_def =
     ;
 
 
-#if 0
+
 // subprogram_body ::=                                                   [§ 2.2]
 //     subprogram_specification is
 //         subprogram_declarative_part
@@ -3908,23 +3908,28 @@ auto const string_literal_def =
 //         subprogram_statement_part
 //     end [ subprogram_kind ] [ designator ] ;
 auto const subprogram_body_def =
-        subprogram_specification IS
-        subprogram_declarative_part
-        BEGIN
-        subprogram_statement_part
-        END -( subprogram_kind ) -( designator ) > ';'
-;
-#endif
+       subprogram_specification
+    >> IS
+    >> subprogram_declarative_part
+    >> BEGIN
+    >> subprogram_statement_part
+    >> END
+    >> -subprogram_kind
+    >> -designator
+    >  ';'
+    ;
 
-#if 0
+
+
 // subprogram_declaration ::=                                            [§ 2.1]
 //     subprogram_specification ;
 auto const subprogram_declaration_def =
-        subprogram_specification > ';'
-;
-#endif
+      subprogram_specification
+    > ';'
+    ;
 
-#if 0
+
+
 // subprogram_declarative_item ::=                                       [§ 2.2]
 //       subprogram_declaration
 //     | subprogram_body
@@ -3941,10 +3946,10 @@ auto const subprogram_declaration_def =
 //     | group_declaration
 auto const subprogram_declarative_item_def =
       subprogram_declaration
-    | subprogram_body
+    //| subprogram_body
     | type_declaration
     | subtype_declaration
-    | constant_declaration
+    //| constant_declaration
     | variable_declaration
     | file_declaration
     | alias_declaration
@@ -3954,15 +3959,15 @@ auto const subprogram_declarative_item_def =
     | group_template_declaration
     | group_declaration
     ;
-#endif
 
-#if 0
+
+
 // subprogram_declarative_part ::=                                       [§ 2.2]
 //     { subprogram_declarative_item }
 auto const subprogram_declarative_part_def =
-{ subprogram_declarative_item }
-;
-#endif
+    *subprogram_declarative_item
+    ;
+
 
 
 // subprogram_kind ::=                                                   [§ 2.2]
@@ -4506,10 +4511,10 @@ BOOST_SPIRIT_DEFINE(  // -- S --
     , simple_name
     //, slice_name
     , string_literal
-    //, subprogram_body
-    //, subprogram_declaration
-    //, subprogram_declarative_item
-    //, subprogram_declarative_part
+    , subprogram_body
+    , subprogram_declaration
+    , subprogram_declarative_item
+    , subprogram_declarative_part
     , subprogram_kind
     , subprogram_specification
     , subprogram_statement_part
