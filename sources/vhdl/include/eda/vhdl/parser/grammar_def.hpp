@@ -2079,13 +2079,18 @@ auto const configuration_specification_def =
 ;
 #endif
 
-#if 0
+
 // constant_declaration ::=                                          [§ 4.3.1.1]
 //     constant identifier_list : subtype_indication [ := expression ] ;
 auto const constant_declaration_def =
-        CONSTANT identifier_list > ':' subtype_indication -(  ":=" >  expression ) > ';'
+       omit[ CONSTANT ]
+    >> identifier_list
+    >> ':'
+    >> subtype_indication
+    >> -( ":=" >>  expression )
+    > ';'
 ;
-#endif
+
 
 
 // constrained_array_definition ::=                                    [§ 3.2.1]
@@ -4343,7 +4348,7 @@ BOOST_SPIRIT_DEFINE(  // -- C --
     //, configuration_declarative_part
     //, configuration_item
     //, configuration_specification
-    //, constant_declaration
+    , constant_declaration
     , constrained_array_definition
     , constraint
     //, context_clause
