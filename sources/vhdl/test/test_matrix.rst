@@ -2307,6 +2307,150 @@ conditional_signal_assignment
 |                                   |                                              |                                                       |
 +-----------------------------------+----------------------------------------------+-------------------------------------------------------+
 
+====================
+constant_declaration
+====================
+
++--------------------------+---------------------------------------------------+-------------------------------------------------------+
+| File                     | Input                                             | Expected                                              |
++--------------------------+---------------------------------------------------+-------------------------------------------------------+
+| constant_declaration_001 | constant TOLERANCE : DISTANCE := 1.5 nm;          | (constant_declaration                                 |
+|                          |                                                   |   (identifier_list                                    |
+|                          |                                                   |     (identifier                                       |
+|                          |                                                   |       TOLERANCE                                       |
+|                          |                                                   |     )                                                 |
+|                          |                                                   |   )                                                   |
+|                          |                                                   |   (subtype_indication                                 |
+|                          |                                                   |     (name<v>                                          |
+|                          |                                                   |       (identifier                                     |
+|                          |                                                   |         DISTANCE                                      |
+|                          |                                                   |       )                                               |
+|                          |                                                   |     )                                                 |
+|                          |                                                   |   )                                                   |
+|                          |                                                   |   (expression                                         |
+|                          |                                                   |     (relation                                         |
+|                          |                                                   |       (shift_expression                               |
+|                          |                                                   |         (simple_expression                            |
+|                          |                                                   |           (term                                       |
+|                          |                                                   |             (primary<v>                               |
+|                          |                                                   |               (literal<v>                             |
+|                          |                                                   |                 (numeric_literal<v>                   |
+|                          |                                                   |                   (physical_literal                   |
+|                          |                                                   |                     literal: (abstract_literal<v>     |
+|                          |                                                   |                       (decimal_literal                |
+|                          |                                                   |                         literal: 1.5, hint: double    |
+|                          |                                                   |                       )                               |
+|                          |                                                   |                     ),                                |
+|                          |                                                   |                     unit: nm                          |
+|                          |                                                   |                   )                                   |
+|                          |                                                   |                 )                                     |
+|                          |                                                   |               )                                       |
+|                          |                                                   |             )                                         |
+|                          |                                                   |           )                                           |
+|                          |                                                   |         )                                             |
+|                          |                                                   |       )                                               |
+|                          |                                                   |     )                                                 |
+|                          |                                                   |   )                                                   |
+|                          |                                                   | )                                                     |
+|                          |                                                   |                                                       |
++--------------------------+---------------------------------------------------+-------------------------------------------------------+
+| constant_declaration_002 | constant PI : REAL := 3.141592;                   | (constant_declaration                                 |
+|                          |                                                   |   (identifier_list                                    |
+|                          |                                                   |     (identifier                                       |
+|                          |                                                   |       PI                                              |
+|                          |                                                   |     )                                                 |
+|                          |                                                   |   )                                                   |
+|                          |                                                   |   (subtype_indication                                 |
+|                          |                                                   |     (name<v>                                          |
+|                          |                                                   |       (identifier                                     |
+|                          |                                                   |         REAL                                          |
+|                          |                                                   |       )                                               |
+|                          |                                                   |     )                                                 |
+|                          |                                                   |   )                                                   |
+|                          |                                                   |   (expression                                         |
+|                          |                                                   |     (relation                                         |
+|                          |                                                   |       (shift_expression                               |
+|                          |                                                   |         (simple_expression                            |
+|                          |                                                   |           (term                                       |
+|                          |                                                   |             (primary<v>                               |
+|                          |                                                   |               (literal<v>                             |
+|                          |                                                   |                 (numeric_literal<v>                   |
+|                          |                                                   |                   (abstract_literal<v>                |
+|                          |                                                   |                     (decimal_literal                  |
+|                          |                                                   |                       literal: 3.141592, hint: double |
+|                          |                                                   |                     )                                 |
+|                          |                                                   |                   )                                   |
+|                          |                                                   |                 )                                     |
+|                          |                                                   |               )                                       |
+|                          |                                                   |             )                                         |
+|                          |                                                   |           )                                           |
+|                          |                                                   |         )                                             |
+|                          |                                                   |       )                                               |
+|                          |                                                   |     )                                                 |
+|                          |                                                   |   )                                                   |
+|                          |                                                   | )                                                     |
+|                          |                                                   |                                                       |
++--------------------------+---------------------------------------------------+-------------------------------------------------------+
+| constant_declaration_003 | constant CYCLE_TIME, RESET_TIME : TIME := 100 ns; | (constant_declaration                                 |
+|                          |                                                   |   (identifier_list                                    |
+|                          |                                                   |     (identifier                                       |
+|                          |                                                   |       CYCLE_TIME                                      |
+|                          |                                                   |     ),                                                |
+|                          |                                                   |     (identifier                                       |
+|                          |                                                   |       RESET_TIME                                      |
+|                          |                                                   |     )                                                 |
+|                          |                                                   |   )                                                   |
+|                          |                                                   |   (subtype_indication                                 |
+|                          |                                                   |     (name<v>                                          |
+|                          |                                                   |       (identifier                                     |
+|                          |                                                   |         TIME                                          |
+|                          |                                                   |       )                                               |
+|                          |                                                   |     )                                                 |
+|                          |                                                   |   )                                                   |
+|                          |                                                   |   (expression                                         |
+|                          |                                                   |     (relation                                         |
+|                          |                                                   |       (shift_expression                               |
+|                          |                                                   |         (simple_expression                            |
+|                          |                                                   |           (term                                       |
+|                          |                                                   |             (primary<v>                               |
+|                          |                                                   |               (literal<v>                             |
+|                          |                                                   |                 (numeric_literal<v>                   |
+|                          |                                                   |                   (physical_literal                   |
+|                          |                                                   |                     literal: (abstract_literal<v>     |
+|                          |                                                   |                       (decimal_literal                |
+|                          |                                                   |                         literal: 100, hint: int       |
+|                          |                                                   |                       )                               |
+|                          |                                                   |                     ),                                |
+|                          |                                                   |                     unit: ns                          |
+|                          |                                                   |                   )                                   |
+|                          |                                                   |                 )                                     |
+|                          |                                                   |               )                                       |
+|                          |                                                   |             )                                         |
+|                          |                                                   |           )                                           |
+|                          |                                                   |         )                                             |
+|                          |                                                   |       )                                               |
+|                          |                                                   |     )                                                 |
+|                          |                                                   |   )                                                   |
+|                          |                                                   | )                                                     |
+|                          |                                                   |                                                       |
++--------------------------+---------------------------------------------------+-------------------------------------------------------+
+| constant_declaration_004 | -- a deferred constant                            | (constant_declaration                                 |
+|                          | constant Propagation_Delay : DELAY_LENGTH;        |   (identifier_list                                    |
+|                          |                                                   |     (identifier                                       |
+|                          |                                                   |       Propagation_Delay                               |
+|                          |                                                   |     )                                                 |
+|                          |                                                   |   )                                                   |
+|                          |                                                   |   (subtype_indication                                 |
+|                          |                                                   |     (name<v>                                          |
+|                          |                                                   |       (identifier                                     |
+|                          |                                                   |         DELAY_LENGTH                                  |
+|                          |                                                   |       )                                               |
+|                          |                                                   |     )                                                 |
+|                          |                                                   |   )                                                   |
+|                          |                                                   | )                                                     |
+|                          |                                                   |                                                       |
++--------------------------+---------------------------------------------------+-------------------------------------------------------+
+
 ============================
 constrained_array_definition
 ============================
@@ -11300,6 +11444,49 @@ string_literal
 |                    |                                                                  |                                                                  |
 +--------------------+------------------------------------------------------------------+------------------------------------------------------------------+
 
+===============
+subprogram_body
+===============
+
++---------------------+----------------------------------------------------+----------+
+| File                | Input                                              | Expected |
++---------------------+----------------------------------------------------+----------+
+| subprogram_body_001 | procedure designator is                            |          |
+|                     |     CONSTANT identifier_list : subtype_indication; |          |
+|                     | begin                                              |          |
+|                     |     report "All Went good";                        |          |
+|                     | end;                                               |          |
+|                     |                                                    |          |
++---------------------+----------------------------------------------------+----------+
+| subprogram_body_002 | procedure Dump(F: inout Text; Value: Integer) is   |          |
+|                     |     CONSTANT identifier_list : subtype_indication; |          |
+|                     | begin                                              |          |
+|                     |     NULL;                                          |          |
+|                     | end;                                               |          |
+|                     |                                                    |          |
++---------------------+----------------------------------------------------+----------+
+| subprogram_body_003 | function generator (din : std_ulogic_vector)       |          |
+|                     |     return std_ulogic                              |          |
+|                     | is                                                 |          |
+|                     |     variable t : std_ulogic := '0';                |          |
+|                     | begin                                              |          |
+|                     |     return '0';                                    |          |
+|                     | end parity_generator;                              |          |
+|                     |                                                    |          |
++---------------------+----------------------------------------------------+----------+
+| subprogram_body_004 |                                                    |          |
++---------------------+----------------------------------------------------+----------+
+| subprogram_body_005 |                                                    |          |
++---------------------+----------------------------------------------------+----------+
+| subprogram_body_006 |                                                    |          |
++---------------------+----------------------------------------------------+----------+
+| subprogram_body_007 |                                                    |          |
++---------------------+----------------------------------------------------+----------+
+| subprogram_body_008 |                                                    |          |
++---------------------+----------------------------------------------------+----------+
+| subprogram_body_009 |                                                    |          |
++---------------------+----------------------------------------------------+----------+
+
 ========================
 subprogram_specification
 ========================
@@ -13328,4 +13515,4 @@ xxx_signature
 +---------+-----------------------+----------+
 
 
-Total Tests: 380
+Total Tests: 393

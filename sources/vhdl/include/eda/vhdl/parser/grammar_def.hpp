@@ -3951,10 +3951,10 @@ auto const subprogram_declaration_def =
 //     | group_declaration
 auto const subprogram_declarative_item_def =
       subprogram_declaration
-    //| subprogram_body
+    | subprogram_body
     | type_declaration
     | subtype_declaration
-    //| constant_declaration
+    | constant_declaration
     | variable_declaration
     | file_declaration
     | alias_declaration

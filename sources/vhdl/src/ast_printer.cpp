@@ -2320,7 +2320,7 @@ void printer::operator()(return_statement const &node)
     }
 
     if(node.expression) {
-        os << "\n";
+        if(node.label) { os << "\n"; }
         (*this)(*node.expression);
     }
 }

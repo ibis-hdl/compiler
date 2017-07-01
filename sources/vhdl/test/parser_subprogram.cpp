@@ -17,10 +17,11 @@
 #include "generate_data_test_case.hpp"
 
 
-BOOST_AUTO_TEST_SUITE( subprogram )
+BOOST_AUTO_TEST_SUITE( parser_subprogram )
 
 
 GENERATE_DATASET_TEST_CASE(subprogram_specification)
+GENERATE_DATASET_TEST_CASE(subprogram_body)
 
 
 BOOST_AUTO_TEST_SUITE_END()
