@@ -11386,6 +11386,62 @@ simple_expression
 |                       |                   |                                      |
 +-----------------------+-------------------+--------------------------------------+
 
+==========
+slice_name
+==========
+
++----------------+--------------------------+--------------------------------------------+
+| File           | Input                    | Expected                                   |
++----------------+--------------------------+--------------------------------------------+
+| slice_name_001 | BIT_VECTOR (31 downto 0) | (slice_name                                |
+|                |                          |   (prefix<v>                               |
+|                |                          |     (name<v>                               |
+|                |                          |       (identifier                          |
+|                |                          |         BIT_VECTOR                         |
+|                |                          |       )                                    |
+|                |                          |     )                                      |
+|                |                          |   )                                        |
+|                |                          |   (discrete_range<v>                       |
+|                |                          |     (range<v>                              |
+|                |                          |       (simple_expression                   |
+|                |                          |         (term                              |
+|                |                          |           (primary<v>                      |
+|                |                          |             (literal<v>                    |
+|                |                          |               (numeric_literal<v>          |
+|                |                          |                 (abstract_literal<v>       |
+|                |                          |                   (decimal_literal         |
+|                |                          |                     literal: 31, hint: int |
+|                |                          |                   )                        |
+|                |                          |                 )                          |
+|                |                          |               )                            |
+|                |                          |             )                              |
+|                |                          |           )                                |
+|                |                          |         )                                  |
+|                |                          |       )                                    |
+|                |                          |       (keyword                             |
+|                |                          |         DOWNTO                             |
+|                |                          |       )                                    |
+|                |                          |       (simple_expression                   |
+|                |                          |         (term                              |
+|                |                          |           (primary<v>                      |
+|                |                          |             (literal<v>                    |
+|                |                          |               (numeric_literal<v>          |
+|                |                          |                 (abstract_literal<v>       |
+|                |                          |                   (decimal_literal         |
+|                |                          |                     literal: 0, hint: int  |
+|                |                          |                   )                        |
+|                |                          |                 )                          |
+|                |                          |               )                            |
+|                |                          |             )                              |
+|                |                          |           )                                |
+|                |                          |         )                                  |
+|                |                          |       )                                    |
+|                |                          |     )                                      |
+|                |                          |   )                                        |
+|                |                          | )                                          |
+|                |                          |                                            |
++----------------+--------------------------+--------------------------------------------+
+
 ==============
 string_literal
 ==============
@@ -11448,44 +11504,238 @@ string_literal
 subprogram_body
 ===============
 
-+---------------------+----------------------------------------------------+----------+
-| File                | Input                                              | Expected |
-+---------------------+----------------------------------------------------+----------+
-| subprogram_body_001 | procedure designator is                            |          |
-|                     |     CONSTANT identifier_list : subtype_indication; |          |
-|                     | begin                                              |          |
-|                     |     report "All Went good";                        |          |
-|                     | end;                                               |          |
-|                     |                                                    |          |
-+---------------------+----------------------------------------------------+----------+
-| subprogram_body_002 | procedure Dump(F: inout Text; Value: Integer) is   |          |
-|                     |     CONSTANT identifier_list : subtype_indication; |          |
-|                     | begin                                              |          |
-|                     |     NULL;                                          |          |
-|                     | end;                                               |          |
-|                     |                                                    |          |
-+---------------------+----------------------------------------------------+----------+
-| subprogram_body_003 | function generator (din : std_ulogic_vector)       |          |
-|                     |     return std_ulogic                              |          |
-|                     | is                                                 |          |
-|                     |     variable t : std_ulogic := '0';                |          |
-|                     | begin                                              |          |
-|                     |     return '0';                                    |          |
-|                     | end parity_generator;                              |          |
-|                     |                                                    |          |
-+---------------------+----------------------------------------------------+----------+
-| subprogram_body_004 |                                                    |          |
-+---------------------+----------------------------------------------------+----------+
-| subprogram_body_005 |                                                    |          |
-+---------------------+----------------------------------------------------+----------+
-| subprogram_body_006 |                                                    |          |
-+---------------------+----------------------------------------------------+----------+
-| subprogram_body_007 |                                                    |          |
-+---------------------+----------------------------------------------------+----------+
-| subprogram_body_008 |                                                    |          |
-+---------------------+----------------------------------------------------+----------+
-| subprogram_body_009 |                                                    |          |
-+---------------------+----------------------------------------------------+----------+
++---------------------+----------------------------------------------------+-----------------------------------------------+
+| File                | Input                                              | Expected                                      |
++---------------------+----------------------------------------------------+-----------------------------------------------+
+| subprogram_body_001 | procedure designator is                            | (subprogram_body                              |
+|                     |     CONSTANT identifier_list : subtype_indication; |   (subprogram_specification<v>                |
+|                     | begin                                              |     PROCEDURE                                 |
+|                     |     report "All Went good";                        |     (designator<v>                            |
+|                     | end;                                               |       (identifier                             |
+|                     |                                                    |         designator                            |
+|                     |                                                    |       )                                       |
+|                     |                                                    |     )                                         |
+|                     |                                                    |   )                                           |
+|                     |                                                    |   (subprogram_declarative_part                |
+|                     |                                                    |     (subprogram_declarative_item<v>           |
+|                     |                                                    |       (constant_declaration                   |
+|                     |                                                    |         (identifier_list                      |
+|                     |                                                    |           (identifier                         |
+|                     |                                                    |             identifier_list                   |
+|                     |                                                    |           )                                   |
+|                     |                                                    |         )                                     |
+|                     |                                                    |         (subtype_indication                   |
+|                     |                                                    |           (name<v>                            |
+|                     |                                                    |             (identifier                       |
+|                     |                                                    |               subtype_indication              |
+|                     |                                                    |             )                                 |
+|                     |                                                    |           )                                   |
+|                     |                                                    |         )                                     |
+|                     |                                                    |       )                                       |
+|                     |                                                    |     )                                         |
+|                     |                                                    |   )                                           |
+|                     |                                                    |   (sequence_of_statements                     |
+|                     |                                                    |     (sequential_statement<v>                  |
+|                     |                                                    |       (report_statement                       |
+|                     |                                                    |         (expression                           |
+|                     |                                                    |           (relation                           |
+|                     |                                                    |             (shift_expression                 |
+|                     |                                                    |               (simple_expression              |
+|                     |                                                    |                 (term                         |
+|                     |                                                    |                   (primary<v>                 |
+|                     |                                                    |                     (literal<v>               |
+|                     |                                                    |                       (string_literal         |
+|                     |                                                    |                         All Went good         |
+|                     |                                                    |                       )                       |
+|                     |                                                    |                     )                         |
+|                     |                                                    |                   )                           |
+|                     |                                                    |                 )                             |
+|                     |                                                    |               )                               |
+|                     |                                                    |             )                                 |
+|                     |                                                    |           )                                   |
+|                     |                                                    |         )                                     |
+|                     |                                                    |       )                                       |
+|                     |                                                    |     )                                         |
+|                     |                                                    |   )                                           |
+|                     |                                                    | )                                             |
+|                     |                                                    |                                               |
++---------------------+----------------------------------------------------+-----------------------------------------------+
+| subprogram_body_002 | procedure Dump(F: inout Text; Value: Integer) is   | (subprogram_body                              |
+|                     |     CONSTANT identifier_list : subtype_indication; |   (subprogram_specification<v>                |
+|                     | begin                                              |     PROCEDURE                                 |
+|                     |     NULL;                                          |     (designator<v>                            |
+|                     | end;                                               |       (identifier                             |
+|                     |                                                    |         Dump                                  |
+|                     |                                                    |       )                                       |
+|                     |                                                    |     )                                         |
+|                     |                                                    |     (interface_list                           |
+|                     |                                                    |       (interface_declaration<v>               |
+|                     |                                                    |         (interface_signal_declaration         |
+|                     |                                                    |           (identifier_list                    |
+|                     |                                                    |             (identifier                       |
+|                     |                                                    |               F                               |
+|                     |                                                    |             )                                 |
+|                     |                                                    |           )                                   |
+|                     |                                                    |           (keyword                            |
+|                     |                                                    |             INOUT                             |
+|                     |                                                    |           )                                   |
+|                     |                                                    |           (subtype_indication                 |
+|                     |                                                    |             (name<v>                          |
+|                     |                                                    |               (identifier                     |
+|                     |                                                    |                 Text                          |
+|                     |                                                    |               )                               |
+|                     |                                                    |             )                                 |
+|                     |                                                    |           )                                   |
+|                     |                                                    |         )                                     |
+|                     |                                                    |       ),                                      |
+|                     |                                                    |       (interface_declaration<v>               |
+|                     |                                                    |         (interface_constant_declaration       |
+|                     |                                                    |           (identifier_list                    |
+|                     |                                                    |             (identifier                       |
+|                     |                                                    |               Value                           |
+|                     |                                                    |             )                                 |
+|                     |                                                    |           )                                   |
+|                     |                                                    |           (subtype_indication                 |
+|                     |                                                    |             (name<v>                          |
+|                     |                                                    |               (identifier                     |
+|                     |                                                    |                 Integer                       |
+|                     |                                                    |               )                               |
+|                     |                                                    |             )                                 |
+|                     |                                                    |           )                                   |
+|                     |                                                    |         )                                     |
+|                     |                                                    |       )                                       |
+|                     |                                                    |     )                                         |
+|                     |                                                    |   )                                           |
+|                     |                                                    |   (subprogram_declarative_part                |
+|                     |                                                    |     (subprogram_declarative_item<v>           |
+|                     |                                                    |       (constant_declaration                   |
+|                     |                                                    |         (identifier_list                      |
+|                     |                                                    |           (identifier                         |
+|                     |                                                    |             identifier_list                   |
+|                     |                                                    |           )                                   |
+|                     |                                                    |         )                                     |
+|                     |                                                    |         (subtype_indication                   |
+|                     |                                                    |           (name<v>                            |
+|                     |                                                    |             (identifier                       |
+|                     |                                                    |               subtype_indication              |
+|                     |                                                    |             )                                 |
+|                     |                                                    |           )                                   |
+|                     |                                                    |         )                                     |
+|                     |                                                    |       )                                       |
+|                     |                                                    |     )                                         |
+|                     |                                                    |   )                                           |
+|                     |                                                    |   (sequence_of_statements                     |
+|                     |                                                    |     (sequential_statement<v>                  |
+|                     |                                                    |       (null_statement                         |
+|                     |                                                    |                                               |
+|                     |                                                    |       )                                       |
+|                     |                                                    |     )                                         |
+|                     |                                                    |   )                                           |
+|                     |                                                    | )                                             |
+|                     |                                                    |                                               |
++---------------------+----------------------------------------------------+-----------------------------------------------+
+| subprogram_body_003 | function generator (din : std_ulogic_vector)       | (subprogram_body                              |
+|                     |     return std_ulogic                              |   (subprogram_specification<v>                |
+|                     | is                                                 |     PURE FUNCTION                             |
+|                     |     variable t : std_ulogic := '0';                |     (designator<v>                            |
+|                     | begin                                              |       (identifier                             |
+|                     |     return '0';                                    |         generator                             |
+|                     | end parity_generator;                              |       )                                       |
+|                     |                                                    |     )                                         |
+|                     |                                                    |     (interface_list                           |
+|                     |                                                    |       (interface_declaration<v>               |
+|                     |                                                    |         (interface_constant_declaration       |
+|                     |                                                    |           (identifier_list                    |
+|                     |                                                    |             (identifier                       |
+|                     |                                                    |               din                             |
+|                     |                                                    |             )                                 |
+|                     |                                                    |           )                                   |
+|                     |                                                    |           (subtype_indication                 |
+|                     |                                                    |             (name<v>                          |
+|                     |                                                    |               (identifier                     |
+|                     |                                                    |                 std_ulogic_vector             |
+|                     |                                                    |               )                               |
+|                     |                                                    |             )                                 |
+|                     |                                                    |           )                                   |
+|                     |                                                    |         )                                     |
+|                     |                                                    |       )                                       |
+|                     |                                                    |     )                                         |
+|                     |                                                    |     (name<v>                                  |
+|                     |                                                    |       (identifier                             |
+|                     |                                                    |         std_ulogic                            |
+|                     |                                                    |       )                                       |
+|                     |                                                    |     )                                         |
+|                     |                                                    |   )                                           |
+|                     |                                                    |   (subprogram_declarative_part                |
+|                     |                                                    |     (subprogram_declarative_item<v>           |
+|                     |                                                    |       (variable_declaration                   |
+|                     |                                                    |         (identifier_list                      |
+|                     |                                                    |           (identifier                         |
+|                     |                                                    |             t                                 |
+|                     |                                                    |           )                                   |
+|                     |                                                    |         )                                     |
+|                     |                                                    |         (subtype_indication                   |
+|                     |                                                    |           (name<v>                            |
+|                     |                                                    |             (identifier                       |
+|                     |                                                    |               std_ulogic                      |
+|                     |                                                    |             )                                 |
+|                     |                                                    |           )                                   |
+|                     |                                                    |         )                                     |
+|                     |                                                    |         (expression                           |
+|                     |                                                    |           (relation                           |
+|                     |                                                    |             (shift_expression                 |
+|                     |                                                    |               (simple_expression              |
+|                     |                                                    |                 (term                         |
+|                     |                                                    |                   (primary<v>                 |
+|                     |                                                    |                     (literal<v>               |
+|                     |                                                    |                       (enumeration_literal<v> |
+|                     |                                                    |                         (character_literal    |
+|                     |                                                    |                           '0'                 |
+|                     |                                                    |                         )                     |
+|                     |                                                    |                       )                       |
+|                     |                                                    |                     )                         |
+|                     |                                                    |                   )                           |
+|                     |                                                    |                 )                             |
+|                     |                                                    |               )                               |
+|                     |                                                    |             )                                 |
+|                     |                                                    |           )                                   |
+|                     |                                                    |         )                                     |
+|                     |                                                    |       )                                       |
+|                     |                                                    |     )                                         |
+|                     |                                                    |   )                                           |
+|                     |                                                    |   (sequence_of_statements                     |
+|                     |                                                    |     (sequential_statement<v>                  |
+|                     |                                                    |       (return_statement                       |
+|                     |                                                    |         (expression                           |
+|                     |                                                    |           (relation                           |
+|                     |                                                    |             (shift_expression                 |
+|                     |                                                    |               (simple_expression              |
+|                     |                                                    |                 (term                         |
+|                     |                                                    |                   (primary<v>                 |
+|                     |                                                    |                     (literal<v>               |
+|                     |                                                    |                       (enumeration_literal<v> |
+|                     |                                                    |                         (character_literal    |
+|                     |                                                    |                           '0'                 |
+|                     |                                                    |                         )                     |
+|                     |                                                    |                       )                       |
+|                     |                                                    |                     )                         |
+|                     |                                                    |                   )                           |
+|                     |                                                    |                 )                             |
+|                     |                                                    |               )                               |
+|                     |                                                    |             )                                 |
+|                     |                                                    |           )                                   |
+|                     |                                                    |         )                                     |
+|                     |                                                    |       )                                       |
+|                     |                                                    |     )                                         |
+|                     |                                                    |   )                                           |
+|                     |                                                    |   (designator<v>                              |
+|                     |                                                    |     (identifier                               |
+|                     |                                                    |       parity_generator                        |
+|                     |                                                    |     )                                         |
+|                     |                                                    |   )                                           |
+|                     |                                                    | )                                             |
+|                     |                                                    |                                               |
++---------------------+----------------------------------------------------+-----------------------------------------------+
 
 ========================
 subprogram_specification
@@ -13515,4 +13765,4 @@ xxx_signature
 +---------+-----------------------+----------+
 
 
-Total Tests: 393
+Total Tests: 388

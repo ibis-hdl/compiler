@@ -368,7 +368,9 @@ auto const OTHERS = as_type<ast::keyword_token>(
 );
 auto const PACKAGE = kw("package");
 auto const PORT = kw("port");
-auto const POSTPONED = kw("postponed");
+auto const POSTPONED = as_type<ast::keyword_token>(
+    kw("postponed")>> x3::attr(ast::keyword_token::POSTPONED)
+);
 auto const PROCEDURE = kw("procedure");
 auto const PROCESS = kw("process");
 auto const RANGE = kw("range");
@@ -1942,21 +1944,27 @@ auto const composite_type_definition_def =
     ;
 
 
-#if 0
+
 // concurrent_assertion_statement ::=                                    [§ 9.4]
 // [ label : ] [ postponed ] assertion ;
 auto const concurrent_assertion_statement_def =
-        -label_colon -( POSTPONED ) assertion > ';'
-;
-#endif
+       -label_colon
+    >> -POSTPONED
+    >> assertion
+    > ';'
+    ;
 
-#if 0
+
+
 // concurrent_procedure_call_statement ::=                               [§ 9.3]
 // [ label : ] [ postponed ] procedure_call ;
 auto const concurrent_procedure_call_statement_def =
-        -label_colon -( POSTPONED ) procedure_call > ';'
-;
-#endif
+       -label_colon
+    >> -POSTPONED
+    >> procedure_call
+    > ';'
+    ;
+
 
 #if 0
 // concurrent_signal_assignment_statement ::=                            [§ 9.5]
@@ -2362,7 +2370,7 @@ auto const entity_declaration_def =
     ;
 #endif
 
-#if 0
+
 // entity_declarative_item ::=                                         [§ 1.1.2]
 //       subprogram_declaration
 //     | subprogram_body
@@ -2396,15 +2404,15 @@ auto const entity_declarative_item_def =
     | group_template_declaration
     | group_declaration
     ;
-#endif
 
-#if 0
+
+
 // entity_declarative_part ::=                                         [§ 1.1.2]
 //     { entity_declarative_item }
 auto const entity_declarative_part_def =
     *entity_declarative_item
     ;
-#endif
+
 
 
 // entity_designator ::=                                                 [§ 5.1]
@@ -2455,7 +2463,7 @@ auto const entity_specification_def =
 auto const entity_statement_def =
       concurrent_assertion_statement
     | concurrent_procedure_call_statement
-    | process_statement
+//    | process_statement
     ;
 
 
@@ -4338,8 +4346,8 @@ BOOST_SPIRIT_DEFINE(  // -- C --
     //, component_instantiation_statement
     //, component_specification
     , composite_type_definition
-    //, concurrent_assertion_statement
-    //, concurrent_procedure_call_statement
+    , concurrent_assertion_statement
+    , concurrent_procedure_call_statement
     //, concurrent_signal_assignment_statement
     //, concurrent_statement
     , condition
@@ -4375,15 +4383,15 @@ BOOST_SPIRIT_DEFINE(  // -- E --
     , entity_class
     , entity_class_entry
     , entity_class_entry_list
-//    , entity_declaration
-//    , entity_declarative_item
-//    , entity_declarative_part
+    //, entity_declaration
+    , entity_declarative_item
+    , entity_declarative_part
     , entity_designator
     , entity_header
     , entity_name_list
     , entity_specification
-//    , entity_statement
-//    , entity_statement_part
+    , entity_statement
+    , entity_statement_part
     , entity_tag
     , enumeration_literal
     , enumeration_type_definition

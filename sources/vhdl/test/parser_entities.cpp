@@ -21,7 +21,9 @@ BOOST_AUTO_TEST_SUITE( parser_entities )
 
 
 //GENERATE_DATASET_TEST_CASE(entity_declarative_part)
-
+//GENERATE_DATASET_TEST_CASE(entity_specification)
+//GENERATE_DATASET_TEST_CASE(entity_statement_part)
+//GENERATE_DATASET_TEST_CASE(entity_declaration)
 
 BOOST_AUTO_TEST_SUITE_END()
 
