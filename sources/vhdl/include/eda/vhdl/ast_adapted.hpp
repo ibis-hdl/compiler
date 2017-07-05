@@ -58,7 +58,7 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::based_literal,
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::binding_indication,
-        entity_aspect, generic_map_aspect, port_map_aspect
+    entity_aspect, generic_map_aspect, port_map_aspect
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::bit_string_literal,
