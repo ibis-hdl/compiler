@@ -22,6 +22,7 @@ BOOST_AUTO_TEST_SUITE( parser_specifications )
 
 
 GENERATE_DATASET_TEST_CASE(disconnection_specification)
+//GENERATE_DATASET_TEST_CASE(binding_indication)
 
 
 BOOST_AUTO_TEST_SUITE_END()

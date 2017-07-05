@@ -1654,10 +1654,10 @@ auto const basic_identifier_def =
 //     [ generic_map_aspect ]
 //     [ port_map_aspect ]
 auto const binding_indication_def =
-        -( USE entity_aspect )
-        -( generic_map_aspect )
-        -( port_map_aspect )
-        ;
+       -( USE >> entity_aspect )
+    >> -generic_map_aspect
+    >> port_map_aspect  // optional by association_list vector<>
+    ;
 #endif
 
 
