@@ -3869,13 +3869,16 @@ auto const simple_name_def =
     ;
 
 
-#if 0
+
 // slice_name ::=                                                        [§ 6.5]
 //     prefix ( discrete_range )
 auto const slice_name_def =
-        prefix '(' discrete_range )
-;
-#endif
+       prefix
+    >> '('
+    >> discrete_range
+    >> ')'
+    ;
+
 
 
 // string_literal ::=                                                   [§ 13.6]
@@ -4514,7 +4517,7 @@ BOOST_SPIRIT_DEFINE(  // -- S --
     , signature
     , simple_expression
     , simple_name
-    //, slice_name
+    , slice_name
     , string_literal
     , subprogram_body
     , subprogram_declaration
