@@ -2121,23 +2121,23 @@ auto const constraint_def =
     ;
 
 
-#if 0
+
 // context_clause ::=                                                   [§ 11.3]
 //     { context_item }
 auto const context_clause_def =
-{ context_item }
-;
-#endif
+    *context_item
+    ;
 
-#if 0
+
+
 // context_item ::=                                                     [§ 11.3]
 //       library_clause
 //     | use_clause
 auto const context_item_def =
-        library_clause
-        | use_clause
-        ;
-#endif
+      library_clause
+    | use_clause
+    ;
+
 
 
 // decimal_literal ::=                                                [§ 13.4.1]
@@ -4362,8 +4362,8 @@ BOOST_SPIRIT_DEFINE(  // -- C --
     , constant_declaration
     , constrained_array_definition
     , constraint
-    //, context_clause
-    //, context_item
+    , context_clause
+    , context_item
 )
 BOOST_SPIRIT_DEFINE(  // -- D --
       decimal_literal

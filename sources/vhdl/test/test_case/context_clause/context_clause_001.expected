@@ -1,0 +1,31 @@
+(context_clause
+  (context_item<v>
+    (library_clause
+      (identifier
+        STD
+      ),
+      (identifier
+        WORK
+      )
+    )
+  ),
+  (context_item<v>
+    (use_clause
+      (name<v>
+        (identifier
+          STD
+        )
+      ).
+      (name<v>
+        (identifier
+          STANDARD
+        )
+      ).
+      (suffix<v>
+        (keyword
+          ALL
+        )
+      )
+    )
+  )
+)
