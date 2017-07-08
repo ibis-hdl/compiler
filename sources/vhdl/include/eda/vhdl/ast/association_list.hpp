@@ -18,7 +18,7 @@
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct association_list : std::vector<association_element> { };
+struct association_list : std::vector<ast::association_element> { };
 
 
 } } } // namespace eda.vhdl.ast

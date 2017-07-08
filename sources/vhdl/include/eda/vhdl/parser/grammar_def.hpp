@@ -1648,17 +1648,17 @@ auto const basic_identifier_def =
     ;
 
 
-#if 0
+
 // binding_indication ::=                                              [§ 5.2.1]
 //     [ use entity_aspect ]
 //     [ generic_map_aspect ]
 //     [ port_map_aspect ]
 auto const binding_indication_def =
        -( USE >> entity_aspect )
-    >> -generic_map_aspect
-    >> port_map_aspect  // optional by association_list vector<>
+    >> generic_map_aspect   // optional by association_list vector<>
+    >> port_map_aspect      // optional by association_list vector<>
     ;
-#endif
+
 
 
 // bit_string_literal ::=                                               [§ 13.7]
@@ -4325,7 +4325,7 @@ BOOST_SPIRIT_DEFINE(  // -- B --
     //, basic_character
     , basic_graphic_character
     , basic_identifier
-    //, binding_indication
+    , binding_indication
     , bit_string_literal
     //, block_configuration
     //, block_declarative_item

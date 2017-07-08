@@ -22,8 +22,8 @@ namespace eda { namespace vhdl { namespace ast {
 struct binding_indication : position_tagged
 {
     optional<ast::entity_aspect>        entity_aspect;
-    optional<ast::generic_map_aspect>   generic_map_aspect;
-    optional<ast::port_map_aspect>      port_map_aspect;
+    ast::generic_map_aspect             generic_map_aspect;
+    ast::port_map_aspect                port_map_aspect;
 };
 
 

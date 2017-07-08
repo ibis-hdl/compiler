@@ -6,4 +6,5 @@ ToDo:
 - type_conversion/type_conversion_002.input
 - wait_statement/wait_statement_00x.input
 - group_declaration/group_declaration_003.input
+- binding_indication/binding_indication_00{1,2}.input entity name rule (is work.foo -> name)
 

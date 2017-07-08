@@ -370,16 +370,34 @@ void printer::operator()(binding_indication const &node)
     static char const symbol[]{ "binding_indication" };
     symbol_scope<binding_indication> _(*this, symbol);
 
+
+    auto const print_assoc = [this](ast::association_list const& list) {
+        auto const N = list.size() - 1;
+        unsigned i = 0;
+        for(auto const& association_element : list) {
+            (*this)(association_element);
+            if(i++ != N) {
+                os << ",\n";
+            }
+        }
+    };
+
     if(node.entity_aspect) {
         (*this)(*node.entity_aspect);
     }
-    if(node.generic_map_aspect) {
+
+    bool generic_map_association = false;
+    if(node.generic_map_aspect.association_list.size() > 0) {
+        generic_map_association = true;
         if(node.entity_aspect) { os << "\n"; }
-        (*this)(*node.generic_map_aspect);
+        os << "GENERIC MAP_ASPECT\n";
+        print_assoc(node.generic_map_aspect.association_list);
     }
-    if(node.port_map_aspect) {
-        if(node.entity_aspect || node.generic_map_aspect) { os << "\n"; }
-        (*this)(*node.port_map_aspect);
+
+    if(node.port_map_aspect.association_list.size() > 0) {
+        if(node.entity_aspect || generic_map_association) { os << "\n"; }
+        os << "PORT MAP_ASPECT\n";
+        print_assoc(node.port_map_aspect.association_list);
     }
 }
 

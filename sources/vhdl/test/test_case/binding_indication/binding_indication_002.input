@@ -1,0 +1,5 @@
+-- for UUT: Buf
+-- FixMe: Work.Buf(DataFlow)
+use entity Buf(DataFlow)
+    generic map (Buf_Delay => Comp_Buf_Delay)
+    port map (Input_pin => Comp_I, Output_pin=> Comp_O)
