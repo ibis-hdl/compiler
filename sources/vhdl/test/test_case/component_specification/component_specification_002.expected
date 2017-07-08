@@ -1,0 +1,12 @@
+(component_specification
+  (instantiation_list<v>
+    (keyword
+      ALL
+    )
+  )
+  (name<v>
+    (identifier
+      OR_GATE
+    )
+  )
+)

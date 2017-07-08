@@ -1926,13 +1926,15 @@ auto const component_instantiation_statement_def =
 ;
 #endif
 
-#if 0
+
 // component_specification ::=                                           [§ 5.2]
 //     instantiation_list : component_name
 auto const component_specification_def =
-        instantiation_list > ':' component_name
-        ;
-#endif
+       instantiation_list
+    >> ':'
+    >> name
+    ;
+
 
 
 // composite_type_definition ::=                                         [§ 3.2]
@@ -2936,17 +2938,17 @@ auto const instantiated_unit_def =
         ;
 #endif
 
-#if 0
+
 // instantiation_list ::=                                                [§ 5.2]
 //       instantiation_label { , instantiation_label }
 //     | others
 //     | all
 auto const instantiation_list_def =
-        instantiation_label >> ( instantiation_label % ',' )
-        | OTHERS
-        | ALL
-        ;
-#endif
+      (label % ',')
+    | OTHERS
+    | ALL
+    ;
+
 
 
 // integer ::=                                                         § 13.4.1]
@@ -4344,7 +4346,7 @@ BOOST_SPIRIT_DEFINE(  // -- C --
     //, component_configuration
     //, component_declaration
     //, component_instantiation_statement
-    //, component_specification
+    , component_specification
     , composite_type_definition
     , concurrent_assertion_statement
     , concurrent_procedure_call_statement
@@ -4435,7 +4437,7 @@ BOOST_SPIRIT_DEFINE(  // -- I --
     , index_subtype_definition
     , indexed_name
     //, instantiated_unit
-    //, instantiation_list
+    , instantiation_list
     , integer
     // EMBEDDED, integer_type_definition
     , interface_constant_declaration
