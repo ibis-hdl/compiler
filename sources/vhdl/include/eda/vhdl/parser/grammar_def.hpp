@@ -1968,15 +1968,18 @@ auto const concurrent_procedure_call_statement_def =
     ;
 
 
-#if 0
+
 // concurrent_signal_assignment_statement ::=                            [§ 9.5]
 //       [ label : ] [ postponed ] conditional_signal_assignment
 //     | [ label : ] [ postponed ] selected_signal_assignment
 auto const concurrent_signal_assignment_statement_def =
-        -label_colon -( POSTPONED ) conditional_signal_assignment
-        | -label_colon -( POSTPONED ) selected_signal_assignment
-        ;
-#endif
+       -label_colon
+    >> -POSTPONED
+    >> (  conditional_signal_assignment
+       | selected_signal_assignment
+       )
+    ;
+
 
 #if 0
 // concurrent_statement ::=                                                [§ 9]
@@ -4350,7 +4353,7 @@ BOOST_SPIRIT_DEFINE(  // -- C --
     , composite_type_definition
     , concurrent_assertion_statement
     , concurrent_procedure_call_statement
-    //, concurrent_signal_assignment_statement
+    , concurrent_signal_assignment_statement
     //, concurrent_statement
     , condition
     , condition_clause

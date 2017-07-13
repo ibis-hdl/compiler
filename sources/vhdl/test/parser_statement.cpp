@@ -32,9 +32,6 @@ GENERATE_DATASET_TEST_CASE(loop_statement)
 GENERATE_DATASET_TEST_CASE(selected_signal_assignment)
 GENERATE_DATASET_TEST_CASE(conditional_signal_assignment)
 
-GENERATE_DATASET_TEST_CASE(concurrent_assertion_statement)
-GENERATE_DATASET_TEST_CASE(concurrent_procedure_call_statement)
-
 
 BOOST_AUTO_TEST_SUITE_END()
 
