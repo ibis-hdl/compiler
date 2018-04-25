@@ -16,6 +16,7 @@
 #include <boost/filesystem.hpp>
 
 #include <vector>
+#include <iostream>
 
 
 namespace x3_test {
@@ -28,7 +29,10 @@ namespace fs = boost::filesystem;
 class dataset_loader
 {
 public:
-    typedef std::vector<std::string>                    dataset_type;
+    typedef fs::path::string_type                       string_type;
+    typedef fs::path::string_type::value_type           char_type;
+
+    typedef std::vector<string_type>                    dataset_type;
 
 public:
     class data_set;
@@ -42,12 +46,20 @@ public:
 
 private:
     int read_files(fs::path const& path);
-    std::string read_file(fs::path const& file_path);
+    string_type read_file(fs::path const& file_path);
 
 private:
     dataset_type     m_file_path;
     dataset_type     m_input;
     dataset_type     m_expected;
+
+#if defined(_WIN32) || defined(_WIN64)
+    static constexpr std::wostream& cerr{ std::wcerr };
+    static constexpr std::wostream& cout{ std::wcout };
+#else
+    static constexpr std::ostream& cerr{ std::cerr };
+    static constexpr std::ostream& cout{ std::cout };
+#endif
 };
 
 } // namespace x3_test

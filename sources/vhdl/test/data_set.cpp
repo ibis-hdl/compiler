@@ -32,7 +32,7 @@ int dataset_loader::read_files(fs::path const& path)
     try {
         if(fs::exists(path) && fs::is_directory(path)) {
 
-           std::vector<fs::path> dir_list { };
+            std::vector<fs::path> dir_list { };
             std::copy(
                 fs::directory_iterator(path),
                 fs::directory_iterator(),
@@ -46,7 +46,7 @@ int dataset_loader::read_files(fs::path const& path)
                 if (fs::extension(file) == ".input") {
 
                     m_file_path.emplace_back(file.native().c_str());
-                    //std::cerr << "INFO: read '" << m_file_path.back() << "'\n";
+                    //cerr << "INFO: read '" << m_file_path.back() << "'\n";
 
                     auto const input_path  = file;
                     auto expect_path = file;
@@ -58,26 +58,26 @@ int dataset_loader::read_files(fs::path const& path)
             }
         }
         else {
-            std::cerr << "*** Directory: '" << fs::absolute(path)
+            cerr << "*** Directory: '" << fs::absolute(path)
                       << "' does not exist. ***\n";
             return 1;
         }
     }
     catch(std::exception const& e) {
-        std::cerr << "*** Caught \"" << e.what() << "\" exception\n";
+        cerr << "*** Caught \"" << e.what() << "\" exception\n";
         /* try to recover from error and continue; probably no {file}.expected
          * was found. */
         if(   m_file_path.size() == m_input.size()
            && m_input.size()     == m_expected.size() + 1
           ) {
-            std::cerr << "*** Remove file '" << m_file_path.back()
+            cerr << "*** Remove file '" << m_file_path.back()
                       << "' from data set\n";
             m_file_path.pop_back();
             m_input.pop_back();
         }
     }
     catch(...) {
-        std::cerr << "*** Caught unexpected exception !!!\n";
+        cerr << "*** Caught unexpected exception !!!\n";
         return 1;
 
     }
@@ -85,20 +85,20 @@ int dataset_loader::read_files(fs::path const& path)
 }
 
 
-std::string dataset_loader::read_file(fs::path const& file_path)
+dataset_loader::string_type dataset_loader::read_file(fs::path const& file_path)
 {
     fs::ifstream file{ file_path };
 
     if(!file) {
-        std::cerr << "ERROR: unable to open '" << file_path.native() << "'\n";
+        cerr << "ERROR: unable to open '" << file_path.native() << "'\n";
         throw std::ios_base::failure{ "file open error" };
     }
 
-    std::ostringstream ss{};
+    std::basic_ostringstream<dataset_loader::char_type> ss{};
     ss << file.rdbuf();
 
     if(file.fail() && !file.eof()) {
-        std::cerr << "ERROR: unable to open '" << file_path.native() << "'\n";
+        cerr << "ERROR: unable to open '" << file_path.native() << "'\n";
         throw std::ios_base::failure{ "rdbuf() read error" };
     }
 
