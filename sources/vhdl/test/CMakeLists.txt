@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.8)
 
 ## EDA/VHDL project TestBench
-project(test_vhdl93_parser LANGUAGES CXX)
+project(testrunner_vhdl93_parser LANGUAGES CXX)
 
 
 ## Cotire (compile time reducer) https://github.com/sakra/cotire
@@ -12,12 +12,15 @@ set(BIN_SOURCES
     data_set.cpp
     parser_aspect.cpp
     parser_clause.cpp
+    ##parser_concurrent_statements.cpp
     parser_declaration.cpp
+    parser_design_unit.cpp
     parser_entities.cpp
     parser_expression.cpp
     parser_file.cpp
     parser_interface.cpp
     parser_literals.cpp
+    parser_names.cpp
     parser_production.cpp
     parser_specifications.cpp
     parser_statement.cpp
