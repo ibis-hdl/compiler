@@ -52,10 +52,15 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 endif()
 
 
+## Boost.Org 
+# Spirit X3 is required for the parser - we are working on developer branch. 
+# Nevertheless Spirit self depends on other headers, e..g boost.range
+find_package(Boost)
 
-## X3 Parser DEBUG
-#  show warnings about dereferencing type-punned pointer will break strict-aliasing
-#  rules [-Wstrict-aliasing] (spirit.x3 1.64 e.g.)
+
+# Spirit.X3 Parser debugging: show warnings about dereferencing type-punned 
+# pointer will break strict-aliasing
+# rules [-Wstrict-aliasing] (spirit.x3 1.64 e.g.)
 set(EDA_VHDL_PARSER_DEBUG OFF CACHE BOOL "debug printer of spirit.x3 parser tree")
 
 if("${EDA_VHDL_PARSER_DEBUG}")
@@ -74,6 +79,7 @@ include(external-spirit-x3)
 
 ## Project Depend Includes
 include_directories(${SPIRIT_X3_INCLUDE_DIR})
+include_directories(${Boost_INCLUDE_DIRS})
 #include_directories(${GSL_INCLUDE_DIR})
 
 add_dependencies(${PROJECT_NAME} boost-spirit-x3)
