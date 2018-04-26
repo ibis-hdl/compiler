@@ -14,7 +14,8 @@ add_library(${PROJECT_NAME} INTERFACE)
 add_library(eda::common ALIAS ${PROJECT_NAME})
 
 target_include_directories(eda_common INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
     $<INSTALL_INTERFACE:include>
     )
 
@@ -41,17 +42,18 @@ int main() {
     return 0;
 }" EDA_HAVE_BUILTIN_EXPECT)
 
-if(EDA_HAVE_BUILTIN_UNREACHABLE)
-    target_compile_definitions(eda_common
-        INTERFACE EDA_HAVE_BUILTIN_UNREACHABLE
-    )
-endif()
+# MinGW doesn't seems to have C++11 std::quick_exit()
+check_cxx_source_compiles("
+#include <cstdlib>
+int main() {
+	std::quick_exit(EXIT_FAILURE);
+    return 0;
+}" EDA_HAVE_STD_QUICK_EXIT)
 
-if(EDA_HAVE_BUILTIN_EXPECT)
-    target_compile_definitions(eda_common
-        INTERFACE EDA_HAVE_BUILTIN_EXPECT
-    )
-endif()
+configure_file(
+  "${PROJECT_SOURCE_DIR}/include/eda/utils/compiler_support.hpp.in"
+  "${PROJECT_BINARY_DIR}/include//eda/utils/compiler_support.hpp"
+)
 
 
 ## Install targets

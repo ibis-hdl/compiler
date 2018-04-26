@@ -14,6 +14,8 @@
 #include <boost/exception/exception.hpp>
 #include <boost/exception/error_info.hpp>
 
+#include <eda/utils/compiler_support.hpp>
+
 
 namespace eda {
 
@@ -32,7 +34,12 @@ struct assert_failure : public boost::exception, public std::logic_error
     : std::logic_error(message)
     {
         std::cerr << "Assertion failure: %s\n";
+
+#if defined(EDA_HAVE_STD_QUICK_EXIT)
         std::quick_exit(EXIT_FAILURE);
+#else
+        std::exit(EXIT_FAILURE);
+#endif
     }
 };
 

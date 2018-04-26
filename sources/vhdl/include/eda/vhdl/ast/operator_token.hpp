@@ -10,7 +10,6 @@
 
 
 #include <eda/utils/compiler_support.hpp>
-
 #include <iosfwd>
 
 

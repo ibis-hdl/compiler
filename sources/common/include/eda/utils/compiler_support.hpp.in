@@ -2,12 +2,32 @@
  * compiler_support.hpp
  *
  *  Created on: 02.04.2017
- *      Author: olaf
+ *      Author: cmake build
  */
 
-#ifndef SOURCES_COMMON_INCLUDE_EDA_UTILS_COMPILER_SUPPORT_HPP_
-#define SOURCES_COMMON_INCLUDE_EDA_UTILS_COMPILER_SUPPORT_HPP_
+#ifndef SOURCES_COMMON_INCLUDE_EDA_UTILS_COMPILER_SUPPORT_HPP_IN_
+#define SOURCES_COMMON_INCLUDE_EDA_UTILS_COMPILER_SUPPORT_HPP_IN_
 
+
+/* cmake platform check results start */
+
+/* Define to 1 if the compiler supports __builtin_unreachable. */
+#cmakedefine EDA_HAVE_BUILTIN_UNREACHABLE 1
+
+
+/* Define to 1 if the compiler supports __builtin_expect. */
+#cmakedefine EDA_HAVE_BUILTIN_EXPECT 1
+
+
+/* Define to 1 if the compiler supports C++11 quick_exit.  */
+#cmakedefine EDA_HAVE_STD_QUICK_EXIT 1
+
+/* cmake platform check results end */
+
+
+/*
+ * Handling of cmake's platform check results
+ */
 
 // use __builtin_expect to provide the compiler with branch prediction information
 #if defined(EDA_HAVE_BUILTIN_EXPECT)
@@ -40,4 +60,4 @@
 #endif
 
 
-#endif /* SOURCES_COMMON_INCLUDE_EDA_UTILS_COMPILER_SUPPORT_HPP_ */
+#endif /* SOURCES_COMMON_INCLUDE_EDA_UTILS_COMPILER_SUPPORT_HPP_IN_ */

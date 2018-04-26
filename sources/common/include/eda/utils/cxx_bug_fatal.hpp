@@ -9,10 +9,10 @@
 #define INCLUDE_EDA_UTILS_CXX_BUG_FATAL_HPP_
 
 
-#include <eda/utils/compiler_support.hpp>
-
 #include <cstdlib>
 #include <iostream>
+
+#include <eda/utils/compiler_support.hpp>
 
 
 namespace eda { namespace utils { namespace detail {
@@ -27,7 +27,12 @@ void assertion_failed_msg(const CharT* expr, const char* msg, const char* functi
         << "assertion (" << expr << ") failed in "
         << function << ":\n"
         << file << '(' << line << "): " << msg << std::endl;
+
+#if defined(EDA_HAVE_STD_QUICK_EXIT)
     std::quick_exit(EXIT_FAILURE);
+#else
+    std::exit(EXIT_FAILURE);
+#endif
 }
 
 } } } // namespace eda.utils.detail
