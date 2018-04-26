@@ -27,6 +27,6 @@ ExternalProject_Get_Property(boost-spirit-x3 PREFIX)
 ExternalProject_Add_Step(
   boost-spirit-x3
   tag_no_backup
-  COMMAND              touch ${PREFIX}/.no_backup
+  COMMAND              echo > ${PREFIX}/.no_backup
 )
 
