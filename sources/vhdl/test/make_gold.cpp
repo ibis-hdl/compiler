@@ -177,7 +177,7 @@ private:
  */
 dataset_loader::dataset_loader(fs::path const& path)
 {
-    fs::path source_dir{ TEST_CASE_PATH };
+    fs::path source_dir{ CTEST_TEST_CASE_PATH };
 
     std::cout << "dataset_loader load test files from " << path;
     read_files(source_dir / path);

@@ -8,7 +8,8 @@
 #define SOURCES_VHDL_TEST_TEST_CASE_PATH_HPP_IN_
 
 
-#define TEST_CASE_PATH R"(@CMAKE_CURRENT_SOURCE_DIR@)"
+/** prefix for the Boost.Test cases root directory. */
+#define BT_TEST_CASE_PATH R"(@CMAKE_CURRENT_SOURCE_DIR@)"
 
 
 #endif /* SOURCES_VHDL_TEST_TEST_CASE_PATH_HPP_IN_ */
