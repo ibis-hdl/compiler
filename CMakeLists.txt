@@ -25,5 +25,6 @@ add_subdirectory(sources/vhdl)
 
 # other playground projects, not build by default
 add_subdirectory(playground/vhdl93)
+add_subdirectory(playground/cxx)
 add_subdirectory(playground/boost_test)
 
