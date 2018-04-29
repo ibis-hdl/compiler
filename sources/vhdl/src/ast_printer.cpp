@@ -33,8 +33,6 @@ printer::printer(std::ostream& os, uint16_t start_indent)
 
 struct printer::scope_printer
 {
-
-
     ostream& os;
     const char* const name{ nullptr };
     bool const verbose;
@@ -295,7 +293,6 @@ void printer::operator()(association_list const &node)
             os << ",\n";
         }
     }
-
 }
 
 
@@ -492,6 +489,7 @@ void printer::operator()(block_header const &node)
             (*this)(*generic_part.generic_map_aspect);
         }
     }
+
     if(node.port_part) {
         auto const& port_part = *node.port_part;
         if(node.generic_part) { os << "\n"; }
@@ -998,16 +996,16 @@ void printer::operator()(delay_mechanism const &node)
     symbol_scope<delay_mechanism> _(*this, symbol);
 
     switch(node.type) {
-    case delay_mechanism::delay_type::INERTIAL_DELAY: {
-        os << "INERTIAL_DELAY";
-        break;
-    }
-    case delay_mechanism::delay_type::TRANSPORT_DELAY: {
-        os << "TRANSPORT_DELAY";
-        break;
-    }
-    default:
-        os << "INVALID";
+        case delay_mechanism::delay_type::INERTIAL_DELAY: {
+            os << "INERTIAL_DELAY";
+            break;
+        }
+        case delay_mechanism::delay_type::TRANSPORT_DELAY: {
+            os << "TRANSPORT_DELAY";
+            break;
+        }
+        default:
+            os << "INVALID";
     }
 
     if(node.time_expression) {
@@ -1130,7 +1128,6 @@ void printer::operator()(entity_aspect const &node)
             (*this)(nullary);
         }
     );
-
 }
 
 
@@ -1613,8 +1610,6 @@ void printer::operator()(if_statement const &node)
     (*this)(node.if_condition);
     os << "\nTHAN:\n";
 
-    //assert(node.then_sequence_of_statements.size() > 0);
-
     (*this)(node.then_sequence_of_statements);
 
     if(node.elseif_chunks.size() > 0) {
@@ -1634,7 +1629,6 @@ void printer::operator()(if_statement const &node)
 
     if(node.else_sequence_of_statements.size() > 0) {
         os << "\nELSE:\n";
-        //assert(node.then_sequence_of_statements.size() == 1);
         (*this)(node.else_sequence_of_statements);
     }
 
