@@ -9,11 +9,11 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_CONFIGURATION_ITEM_HPP_
 
 
-#include <vector>
+#include <eda/vhdl/ast/util/variant.hpp>
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
+
 #include <eda/vhdl/ast/util/nullary.hpp>
+#include <vector>
 
 
 namespace eda { namespace vhdl { namespace ast {
@@ -29,16 +29,16 @@ struct component_configuration;
  * \dot
  * digraph component_configuration  {
  *   component_configuration -> block_configuration;
- *   block_configuration -> configuration_item;
- *   configuration_item -> component_configuration;
- *   configuration_item -> block_configuration [ label="forward"];
+ *   block_configuration     -> configuration_item;
+ *   configuration_item      -> component_configuration;
+ *   configuration_item      -> block_configuration [ label="forward"];
  * }
  * \enddot
  */
-struct configuration_item : x3::variant<
+struct configuration_item : variant<
     ast::nullary,
-    x3::forward_ast<ast::block_configuration>,
-    x3::forward_ast<ast::component_configuration>
+    forward_ast<ast::block_configuration>,
+    forward_ast<ast::component_configuration>
 >
 {
     using base_type::base_type;

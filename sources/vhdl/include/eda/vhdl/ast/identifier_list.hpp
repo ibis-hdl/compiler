@@ -9,9 +9,6 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_IDENTIFIER_LIST_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
-#include <eda/vhdl/ast/util/position_tagged.hpp>
-
 #include <eda/vhdl/ast/identifier.hpp>
 #include <vector>
 

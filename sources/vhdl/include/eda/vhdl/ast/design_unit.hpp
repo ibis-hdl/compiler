@@ -9,10 +9,10 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_DESIGN_UNIT_HPP_
 
 
+#include <eda/vhdl/ast/util/position_tagged.hpp>
+
 #include <eda/vhdl/ast/context_clause.hpp>
 #include <eda/vhdl/ast/library_unit.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
-#include <eda/vhdl/ast/util/position_tagged.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {

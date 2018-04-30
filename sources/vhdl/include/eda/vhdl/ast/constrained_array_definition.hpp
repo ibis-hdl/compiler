@@ -9,9 +9,10 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_CONSTRAINED_ARRAY_DEFINITION_HPP_
 
 
+#include <eda/vhdl/ast/util/position_tagged.hpp>
+
 #include <eda/vhdl/ast/index_constraint.hpp>
 #include <eda/vhdl/ast/subtype_indication.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {

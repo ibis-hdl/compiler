@@ -9,7 +9,6 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_BIT_STRING_LITERAL_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <string_view>
@@ -18,7 +17,7 @@
 namespace eda { namespace vhdl { namespace ast {
 
 
-// FixMe: change to {Base, Literal}
+// FixMe: change to {Base, Literal} as improvement
 struct bit_string_literal : position_tagged
 {
     enum class tag { bin, oct, hex };

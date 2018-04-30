@@ -9,7 +9,9 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_SEQUENTIAL_STATEMENT_HPP_
 
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
+#include <eda/vhdl/ast/util/variant.hpp>
+
+#include <eda/vhdl/ast/util/nullary.hpp>
 #include <eda/vhdl/ast/assertion_statement.hpp>
 #include <eda/vhdl/ast/exit_statement.hpp>
 #include <eda/vhdl/ast/next_statement.hpp>
@@ -18,8 +20,6 @@
 #include <eda/vhdl/ast/report_statement.hpp>
 #include <eda/vhdl/ast/return_statement.hpp>
 #include <eda/vhdl/ast/signal_assignment_statement.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
-#include <eda/vhdl/ast/util/nullary.hpp>
 #include <eda/vhdl/ast/variable_assignment_statement.hpp>
 #include <eda/vhdl/ast/wait_statement.hpp>
 
@@ -38,19 +38,19 @@ struct loop_statement;
  * \dot
  * digraph sequential_statement  {
  *   sequential_statement -> if_statement [ label="forward"];
- *   if_statement -> sequence_of_statements;
+ *   if_statement         -> sequence_of_statements;
  *
  *   sequential_statement -> case_statement [ label="forward"];
- *   case_statement -> sequence_of_statements;
+ *   case_statement       -> sequence_of_statements;
  *
  *   sequential_statement -> loop_statement [ label="forward"];
- *   loop_statement -> sequence_of_statements;
+ *   loop_statement       -> sequence_of_statements;
  *
  *   sequence_of_statements -> sequential_statement
  * }
  * \enddot
  */
-struct sequential_statement : x3::variant<
+struct sequential_statement : variant<
     nullary,
     wait_statement,
     assertion_statement,
@@ -58,9 +58,9 @@ struct sequential_statement : x3::variant<
     signal_assignment_statement,
     variable_assignment_statement,
     procedure_call_statement,
-    x3::forward_ast<if_statement>,
-    x3::forward_ast<case_statement>,
-    x3::forward_ast<loop_statement>,
+    forward_ast<if_statement>,
+    forward_ast<case_statement>,
+    forward_ast<loop_statement>,
     next_statement,
     exit_statement,
     return_statement,

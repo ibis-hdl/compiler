@@ -9,7 +9,7 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_PORT_CLAUSE_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
+#include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/ast/interface_list.hpp>
 #include <vector>

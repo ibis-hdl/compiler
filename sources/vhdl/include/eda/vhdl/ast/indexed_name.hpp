@@ -9,7 +9,6 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_INDEXED_NAME_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/ast/prefix.hpp>
@@ -20,7 +19,7 @@
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct expression;
+struct expression;      // forward due to cyclic dependency; FixMe: for convince??
 
 
 struct indexed_name : position_tagged

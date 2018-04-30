@@ -9,8 +9,9 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_INDEX_SUBTYPE_DEFINITION_HPP_
 
 
+#include <eda/vhdl/ast/util/position_tagged.hpp>
+
 #include <eda/vhdl/ast/name.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {

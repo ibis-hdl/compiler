@@ -9,8 +9,8 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_RANGE_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 #include <eda/vhdl/ast/util/position_tagged.hpp>
+#include <eda/vhdl/ast/util/variant.hpp>
 
 #include <eda/vhdl/ast/name.hpp>
 #include <eda/vhdl/ast/simple_expression.hpp>
@@ -31,7 +31,7 @@ struct range_expression : position_tagged
 };
 
 
-struct range : x3::variant<
+struct range : variant<
     range_attribute_name,
     range_expression
 >

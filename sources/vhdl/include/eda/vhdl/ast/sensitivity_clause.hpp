@@ -9,7 +9,6 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_SENSITIVITY_CLAUSE_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/ast/sensitivity_list.hpp>
@@ -27,6 +26,7 @@ struct sensitivity_clause : position_tagged
     * shipped with boost 1.64.0, maybe tightened by the optional used at
     * wait_clause rule. */
    sensitivity_clause() = default;
+
    sensitivity_clause(ast::sensitivity_list&& sensitivity_list)
    : sensitivity_list{ std::move(sensitivity_list) }
    { }

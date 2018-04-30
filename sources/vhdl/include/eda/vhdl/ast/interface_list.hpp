@@ -9,8 +9,6 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_INTERFACE_LIST_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
-
 #include <eda/vhdl/ast/interface_declaration.hpp>
 #include <vector>
 

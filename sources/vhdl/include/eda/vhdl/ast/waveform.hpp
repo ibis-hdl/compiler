@@ -9,12 +9,10 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_WAVEFORM_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
-#include <eda/vhdl/ast/util/position_tagged.hpp>
+#include <eda/vhdl/ast/util/variant.hpp>
 
 #include <eda/vhdl/ast/waveform_element.hpp>
 #include <vector>
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
@@ -23,7 +21,7 @@ namespace eda { namespace vhdl { namespace ast {
 struct waveform_element_list : std::vector<waveform_element> { };
 
 
-struct waveform : x3::variant<
+struct waveform : variant<
     waveform_element_list,
     ast::keyword_token  // UNAFFECTED
 >

@@ -9,22 +9,24 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_ACTUAL_PART_HPP_
 
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
+#include <eda/vhdl/ast/util/variant.hpp>
+
 #include <eda/vhdl/ast/actual_designator.hpp>
 #include <eda/vhdl/ast/name.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct actual_part_chunk { // helper class
+/* Note, the actual_part is ambiguous here, see BNF, hence using a chunk
+ * here to elaborate the context later on. */
+struct actual_part_chunk {
     ast::name               context_tied_name; // function_name | type_mark(name)
     ast::actual_designator  actual_designator;
 };
 
 
-struct actual_part : x3::variant<
+struct actual_part : variant<
     actual_designator,
     actual_part_chunk
 >

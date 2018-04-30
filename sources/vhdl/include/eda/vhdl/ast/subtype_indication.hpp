@@ -9,7 +9,6 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_SUBTYPE_INDICATION_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/ast/name.hpp>
@@ -19,9 +18,6 @@
 
 
 namespace eda { namespace vhdl { namespace ast {
-
-
-struct constraint;
 
 
 struct subtype_indication : position_tagged

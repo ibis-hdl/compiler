@@ -10,8 +10,6 @@
 
 
 #include <eda/vhdl/ast/name.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
-#include <eda/vhdl/ast/util/position_tagged.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {

@@ -9,11 +9,10 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_ASSOCIATION_ELEMENT_HPP_
 
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
+#include <eda/vhdl/ast/util/variant.hpp>
+
 #include <eda/vhdl/ast/actual_part.hpp>
 #include <eda/vhdl/ast/formal_part.hpp>
-#include <eda/vhdl/ast/name.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 #include <eda/vhdl/ast/util/optional.hpp>
 
 

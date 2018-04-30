@@ -9,13 +9,12 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_INSTANTIATION_LIST_HPP_
 
 
-#include <vector>
+#include <eda/vhdl/ast/util/variant.hpp>
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
+#include <eda/vhdl/ast/util/nullary.hpp>
 #include <eda/vhdl/ast/keyword_token.hpp>
 #include <eda/vhdl/ast/label.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
-#include <eda/vhdl/ast/util/nullary.hpp>
+#include <vector>
 
 
 namespace eda { namespace vhdl { namespace ast {
@@ -24,7 +23,7 @@ namespace eda { namespace vhdl { namespace ast {
 using instantiation_label_list = std::vector<ast::label>;
 
 
-struct instantiation_list : x3::variant<
+struct instantiation_list : variant<
     nullary,
     instantiation_label_list,
     keyword_token               // OTHERS | ALL

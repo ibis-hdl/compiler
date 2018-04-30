@@ -9,7 +9,7 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_PACKAGE_BODY_DECLARATIVE_PART_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
+#include <eda/vhdl/ast/util/variant.hpp>
 
 #include <eda/vhdl/ast/util/nullary.hpp>
 #include <eda/vhdl/ast/subprogram_declaration.hpp>
@@ -25,13 +25,11 @@
 #include <eda/vhdl/ast/group_declaration.hpp>
 #include <vector>
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
-
 
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct package_body_declarative_item : x3::variant<
+struct package_body_declarative_item : variant<
     ast::nullary,
     ast::subprogram_declaration,
     ast::subprogram_body,

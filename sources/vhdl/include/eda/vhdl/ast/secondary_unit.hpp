@@ -9,19 +9,17 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_SECONDARY_UNIT_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
+#include <eda/vhdl/ast/util/variant.hpp>
 
 #include <eda/vhdl/ast/util/nullary.hpp>
 #include <eda/vhdl/ast/architecture_body.hpp>
 #include <eda/vhdl/ast/package_body.hpp>
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
-
 
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct secondary_unit : x3::variant<
+struct secondary_unit : variant<
     ast::nullary,
     ast::architecture_body,
     ast::package_body

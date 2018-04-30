@@ -9,13 +9,13 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_WAIT_STATEMENT_HPP_
 
 
+#include <eda/vhdl/ast/util/position_tagged.hpp>
+
 #include <eda/vhdl/ast/condition_clause.hpp>
 #include <eda/vhdl/ast/label.hpp>
 #include <eda/vhdl/ast/sensitivity_clause.hpp>
 #include <eda/vhdl/ast/timeout_clause.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 #include <eda/vhdl/ast/util/optional.hpp>
-#include <eda/vhdl/ast/util/position_tagged.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {

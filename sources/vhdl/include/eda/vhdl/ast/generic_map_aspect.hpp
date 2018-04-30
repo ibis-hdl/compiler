@@ -9,10 +9,9 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_GENERIC_MAP_ASPECT_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
+#include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/ast/association_list.hpp>
-#include <vector>
 
 
 namespace eda { namespace vhdl { namespace ast {

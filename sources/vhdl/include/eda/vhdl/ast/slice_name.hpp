@@ -9,10 +9,10 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_SLICE_NAME_HPP_
 
 
+#include <eda/vhdl/ast/util/position_tagged.hpp>
+
 #include <eda/vhdl/ast/discrete_range.hpp>
 #include <eda/vhdl/ast/prefix.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
-#include <eda/vhdl/ast/util/position_tagged.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {

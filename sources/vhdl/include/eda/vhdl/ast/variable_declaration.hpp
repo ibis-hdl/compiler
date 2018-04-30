@@ -9,7 +9,6 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_VARIABLE_DECLARATION_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/ast/identifier_list.hpp>
@@ -28,7 +27,8 @@ struct variable_declaration : position_tagged
     ast::subtype_indication         subtype_indication;
     optional<ast::expression>       expression;
 
-    variable_declaration() : shared{}
+    variable_declaration()
+    : shared{}
     { }
 };
 

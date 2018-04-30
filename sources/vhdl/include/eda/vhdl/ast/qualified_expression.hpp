@@ -9,12 +9,13 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_QUALIFIED_EXPRESSION_HPP_
 
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
+#include <eda/vhdl/ast/util/position_tagged.hpp>
+#include <eda/vhdl/ast/util/variant.hpp>
+
+#include <eda/vhdl/ast/util/nullary.hpp>
 #include <eda/vhdl/ast/aggregate.hpp>
 #include <eda/vhdl/ast/expression.hpp>
 #include <eda/vhdl/ast/name.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
-#include <eda/vhdl/ast/util/nullary.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
@@ -23,7 +24,7 @@ namespace eda { namespace vhdl { namespace ast {
 struct qualified_expression : position_tagged
 {
     ast::name               type_mark;
-    x3::variant<
+    variant<
         ast::nullary,
         ast::expression,
         ast::aggregate

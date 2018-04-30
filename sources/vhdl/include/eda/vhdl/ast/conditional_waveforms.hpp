@@ -9,14 +9,12 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_CONDITIONAL_WAVEFORMS_HPP_
 
 
-#include <vector>
-
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
-#include <eda/vhdl/ast/expression.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
-#include <eda/vhdl/ast/util/optional.hpp>
 #include <eda/vhdl/ast/util/position_tagged.hpp>
+
+#include <eda/vhdl/ast/expression.hpp>
+#include <eda/vhdl/ast/util/optional.hpp>
 #include <eda/vhdl/ast/waveform.hpp>
+#include <vector>
 
 
 namespace eda { namespace vhdl { namespace ast {

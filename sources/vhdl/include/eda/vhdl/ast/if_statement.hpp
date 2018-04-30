@@ -9,13 +9,13 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_IF_STATEMENT_HPP_
 
 
+#include <eda/vhdl/ast/util/position_tagged.hpp>
+
 #include <eda/vhdl/ast/concurrent_statement.hpp>
 #include <eda/vhdl/ast/condition.hpp>
 #include <eda/vhdl/ast/label.hpp>
 #include <eda/vhdl/ast/sequence_of_statements.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 #include <eda/vhdl/ast/util/optional.hpp>
-#include <eda/vhdl/ast/util/position_tagged.hpp>
 #include <vector>
 
 

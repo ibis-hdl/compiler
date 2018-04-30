@@ -9,8 +9,6 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_ARCHITECTURE_STATEMENT_PART_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
-
 #include <eda/vhdl/ast/concurrent_statement.hpp>
 #include <vector>
 

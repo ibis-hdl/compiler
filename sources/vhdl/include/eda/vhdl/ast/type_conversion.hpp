@@ -9,13 +9,10 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_TYPE_CONVERSION_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/ast/name.hpp>
 #include <eda/vhdl/ast/expression.hpp>
-
-#include <string_view>
 
 
 namespace eda { namespace vhdl { namespace ast {

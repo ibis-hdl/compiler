@@ -9,15 +9,12 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_COMPONENT_CONFIGURATION_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/ast/component_specification.hpp>
 #include <eda/vhdl/ast/binding_indication.hpp>
 #include <eda/vhdl/ast/block_configuration.hpp>
 #include <eda/vhdl/ast/util/optional.hpp>
-
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {

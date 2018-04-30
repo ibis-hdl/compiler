@@ -9,21 +9,25 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_NUMERIC_LITERAL_HPP_
 
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
+#include <eda/vhdl/ast/util/variant.hpp>
+
+#include <eda/vhdl/ast/util/nullary.hpp>
 #include <eda/vhdl/ast/abstract_literal.hpp>
 #include <eda/vhdl/ast/physical_literal.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
-#include <eda/vhdl/ast/util/nullary.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
 
 
-using numeric_literal = x3::variant<
-	nullary,
-	abstract_literal,
-	physical_literal
->;
+struct numeric_literal : variant<
+    nullary,
+    abstract_literal,
+    physical_literal
+>
+{
+    using base_type::base_type;
+    using base_type::operator=;
+};
 
 
 } } } // namespace eda.vhdl.ast

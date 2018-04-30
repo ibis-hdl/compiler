@@ -9,11 +9,11 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_OPTIONS_HPP_
 
 
+#include <eda/vhdl/ast/util/position_tagged.hpp>
+
 #include <eda/vhdl/ast/delay_mechanism.hpp>
 #include <eda/vhdl/ast/keyword_token.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 #include <eda/vhdl/ast/util/optional.hpp>
-#include <eda/vhdl/ast/util/position_tagged.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {

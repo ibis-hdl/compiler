@@ -9,15 +9,13 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_SUBPROGRAM_SPECIFICATION_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
+#include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/ast/designator.hpp>
 #include <eda/vhdl/ast/formal_parameter_list.hpp>
 #include <eda/vhdl/ast/keyword_token.hpp>
 #include <eda/vhdl/ast/name.hpp>
 #include <eda/vhdl/ast/util/optional.hpp>
-
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
@@ -46,7 +44,7 @@ struct subprogram_specification_function : position_tagged
 };
 
 
-struct subprogram_specification : x3::variant<
+struct subprogram_specification : variant<
     ast::subprogram_specification_procedure,
     ast::subprogram_specification_function
 >

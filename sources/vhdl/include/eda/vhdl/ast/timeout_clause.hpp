@@ -9,7 +9,6 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_TIMEOUT_CLAUSE_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/ast/expression.hpp>
@@ -27,6 +26,7 @@ struct timeout_clause : position_tagged
     * shipped with boost 1.64.0, maybe tightened by the optional used at
     * wait_clause rule. */
    timeout_clause() = default;
+
    timeout_clause(ast::expression&& time_expression)
    : time_expression{ std::move(time_expression) }
    { }

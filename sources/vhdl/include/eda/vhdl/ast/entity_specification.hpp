@@ -9,7 +9,6 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_ENTITY_SPECIFICATION_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/ast/entity_name_list.hpp>
@@ -17,7 +16,6 @@
 
 
 namespace eda { namespace vhdl { namespace ast {
-
 
 
 struct entity_specification : position_tagged

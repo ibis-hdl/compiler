@@ -9,19 +9,19 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_GENERATE_STATEMENT_HPP_
 
 
+#include <eda/vhdl/ast/util/position_tagged.hpp>
+
 #include <eda/vhdl/ast/block_declarative_part.hpp>
 #include <eda/vhdl/ast/generation_scheme.hpp>
 #include <eda/vhdl/ast/label.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 #include <eda/vhdl/ast/util/optional.hpp>
-#include <eda/vhdl/ast/util/position_tagged.hpp>
 #include <vector>
 
 
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct concurrent_statement;
+struct concurrent_statement;    // forward due to cyclic dependency
 
 
 /**
@@ -30,7 +30,7 @@ struct concurrent_statement;
  * \dot
  *  digraph generate_statement  {
  *   concurrent_statement -> generate_statement;
- *   generate_statement -> concurrent_statement [ label="forward"];
+ *   generate_statement   -> concurrent_statement [ label="forward"];
  * }
  * \enddot
  */

@@ -9,12 +9,12 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_ACTUAL_DESIGNATOR_HPP_
 
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
+#include <eda/vhdl/ast/util/variant.hpp>
+
+#include <eda/vhdl/ast/util/nullary.hpp>
 #include <eda/vhdl/ast/expression.hpp>
 #include <eda/vhdl/ast/keyword_token.hpp>
 #include <eda/vhdl/ast/name.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
-#include <eda/vhdl/ast/util/nullary.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
@@ -29,7 +29,7 @@ namespace eda { namespace vhdl { namespace ast {
 
 /* See notes at rule definition */
 
-struct actual_designator : x3::variant<
+struct actual_designator : variant<
     nullary,
     name,
     expression,

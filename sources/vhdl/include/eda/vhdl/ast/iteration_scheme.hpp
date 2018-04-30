@@ -9,7 +9,6 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_ITERATION_SCHEME_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/ast/util/nullary.hpp>
@@ -20,7 +19,7 @@
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct iteration_scheme : x3::variant<
+struct iteration_scheme : variant<
     ast::nullary,
     ast::condition,
     ast::parameter_specification

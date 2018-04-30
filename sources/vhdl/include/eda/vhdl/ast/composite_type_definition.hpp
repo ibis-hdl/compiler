@@ -9,17 +9,17 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_COMPOSITE_TYPE_DEFINITION_HPP_
 
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
+#include <eda/vhdl/ast/util/variant.hpp>
+
+#include <eda/vhdl/ast/util/nullary.hpp>
 #include <eda/vhdl/ast/array_type_definition.hpp>
 #include <eda/vhdl/ast/record_type_definition.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
-#include <eda/vhdl/ast/util/nullary.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct composite_type_definition : x3::variant<
+struct composite_type_definition : variant<
     nullary,
     array_type_definition,
     record_type_definition

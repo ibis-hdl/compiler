@@ -9,10 +9,7 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_FORMAL_PARAMETER_LIST_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
-
 #include <eda/vhdl/ast/interface_list.hpp>
-#include <vector>
 
 
 namespace eda { namespace vhdl { namespace ast {

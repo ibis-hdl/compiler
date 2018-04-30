@@ -9,10 +9,10 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_TERM_HPP_
 
 
+#include <eda/vhdl/ast/util/position_tagged.hpp>
+
 #include <eda/vhdl/ast/factor.hpp>
 #include <eda/vhdl/ast/operator_token.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
-#include <eda/vhdl/ast/util/position_tagged.hpp>
 #include <vector>
 
 

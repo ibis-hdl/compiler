@@ -9,20 +9,18 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_GROUP_CONSTITUENT_LIST_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
+#include <eda/vhdl/ast/util/variant.hpp>
 
 #include <eda/vhdl/ast/util/nullary.hpp>
 #include <eda/vhdl/ast/name.hpp>
 #include <eda/vhdl/ast/character_literal.hpp>
 #include <vector>
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
-
 
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct group_constituent : x3::variant<
+struct group_constituent : variant<
     ast::nullary,
     ast::name,
     ast::character_literal

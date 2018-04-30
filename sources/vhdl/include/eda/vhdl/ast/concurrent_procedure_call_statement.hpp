@@ -9,7 +9,6 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_CONCURRENT_PROCEDURE_CALL_STATEMENT_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/ast/label.hpp>
@@ -26,7 +25,8 @@ struct concurrent_procedure_call_statement : position_tagged
     bool                            postponed;
     ast::procedure_call             procedure_call;
 
-    concurrent_procedure_call_statement() : postponed{}
+    concurrent_procedure_call_statement()
+    : postponed{}
     { }
 };
 

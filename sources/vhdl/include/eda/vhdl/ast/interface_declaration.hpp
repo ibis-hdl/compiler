@@ -9,19 +9,19 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_INTERFACE_DECLARATION_HPP_
 
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
+#include <eda/vhdl/ast/util/variant.hpp>
+
+#include <eda/vhdl/ast/util/nullary.hpp>
 #include <eda/vhdl/ast/interface_constant_declaration.hpp>
 #include <eda/vhdl/ast/interface_file_declaration.hpp>
 #include <eda/vhdl/ast/interface_signal_declaration.hpp>
 #include <eda/vhdl/ast/interface_variable_declaration.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
-#include <eda/vhdl/ast/util/nullary.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct interface_declaration : x3::variant<
+struct interface_declaration : variant<
     nullary,
     interface_constant_declaration,
     interface_signal_declaration,

@@ -9,7 +9,6 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_CONCURRENT_ASSERTION_STATEMENT_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/ast/label.hpp>
@@ -26,7 +25,8 @@ struct concurrent_assertion_statement : position_tagged
     bool                                postponed;
     ast::assertion                      assertion;
 
-    concurrent_assertion_statement() : postponed{}
+    concurrent_assertion_statement()
+    : postponed{}
     { }
 };
 

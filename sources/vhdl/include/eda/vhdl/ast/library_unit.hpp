@@ -9,17 +9,17 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_LIBRARY_UNIT_HPP_
 
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
+#include <eda/vhdl/ast/util/variant.hpp>
+
+#include <eda/vhdl/ast/util/nullary.hpp>
 #include <eda/vhdl/ast/primary_unit.hpp>
 #include <eda/vhdl/ast/secondary_unit.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
-#include <eda/vhdl/ast/util/nullary.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct library_unit : x3::variant<
+struct library_unit : variant<
     ast::nullary,
     ast::primary_unit,
     ast::secondary_unit

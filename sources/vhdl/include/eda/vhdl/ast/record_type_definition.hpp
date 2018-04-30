@@ -9,12 +9,12 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_RECORD_TYPE_DEFINITION_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
+#include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/ast/element_declaration.hpp>
 #include <eda/vhdl/ast/simple_name.hpp>
+#include <eda/vhdl/ast/util/optional.hpp>
 #include <vector>
-#include <optional>
 
 
 namespace eda { namespace vhdl { namespace ast {

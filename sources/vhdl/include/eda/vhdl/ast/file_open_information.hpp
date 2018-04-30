@@ -9,11 +9,11 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_FILE_OPEN_INFORMATION_HPP_
 
 
+#include <eda/vhdl/ast/util/position_tagged.hpp>
+
 #include <eda/vhdl/ast/expression.hpp>
 #include <eda/vhdl/ast/file_logical_name.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 #include <eda/vhdl/ast/util/optional.hpp>
-#include <eda/vhdl/ast/util/position_tagged.hpp>
 #include <vector>
 
 

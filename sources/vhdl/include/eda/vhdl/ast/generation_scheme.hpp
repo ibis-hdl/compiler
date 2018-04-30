@@ -9,20 +9,17 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_GENERATION_SCHEME_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
-#include <eda/vhdl/ast/util/position_tagged.hpp>
+#include <eda/vhdl/ast/util/variant.hpp>
 
 #include <eda/vhdl/ast/util/nullary.hpp>
 #include <eda/vhdl/ast/parameter_specification.hpp>
 #include <eda/vhdl/ast/condition.hpp>
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
-
 
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct generation_scheme : x3::variant<
+struct generation_scheme : variant<
     ast::nullary,
     ast::parameter_specification,
     ast::condition

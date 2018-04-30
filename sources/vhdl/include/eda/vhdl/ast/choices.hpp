@@ -9,7 +9,7 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_CHOICES_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
+#include <eda/vhdl/ast/util/variant.hpp>
 
 #include <eda/vhdl/ast/util/nullary.hpp>
 #include <eda/vhdl/ast/simple_name.hpp>
@@ -18,14 +18,11 @@
 #include <eda/vhdl/ast/keyword_token.hpp>
 #include <vector>
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
-
 
 namespace eda { namespace vhdl { namespace ast {
 
 
-// only use by choices, hence no own header
-struct choice : x3::variant<
+struct choice : variant<
     nullary,
     simple_name,
     discrete_range,

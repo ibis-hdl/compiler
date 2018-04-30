@@ -9,12 +9,13 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_BINDING_INDICATION_HPP_
 
 
+#include <eda/vhdl/ast/util/position_tagged.hpp>
+
 #include <eda/vhdl/ast/entity_aspect.hpp>
 #include <eda/vhdl/ast/generic_map_aspect.hpp>
 #include <eda/vhdl/ast/port_map_aspect.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 #include <eda/vhdl/ast/util/optional.hpp>
-#include <eda/vhdl/ast/util/position_tagged.hpp>
+
 
 namespace eda { namespace vhdl { namespace ast {
 

@@ -9,7 +9,7 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_CONCURRENT_STATEMENT_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
+#include <eda/vhdl/ast/util/variant.hpp>
 
 #include <eda/vhdl/ast/util/nullary.hpp>
 #include <eda/vhdl/ast/block_statement.hpp>
@@ -20,13 +20,11 @@
 #include <eda/vhdl/ast/component_instantiation_statement.hpp>
 #include <eda/vhdl/ast/generate_statement.hpp>
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
-
 
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct concurrent_statement : x3::variant<
+struct concurrent_statement : variant<
     ast::nullary,
     ast::block_statement,
     ast::process_statement,

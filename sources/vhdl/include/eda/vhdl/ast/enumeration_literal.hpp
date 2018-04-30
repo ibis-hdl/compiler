@@ -9,21 +9,25 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_ENUMERATION_LITERAL_HPP_
 
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
+#include <eda/vhdl/ast/util/variant.hpp>
+
+#include <eda/vhdl/ast/util/nullary.hpp>
 #include <eda/vhdl/ast/character_literal.hpp>
 #include <eda/vhdl/ast/identifier.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
-#include <eda/vhdl/ast/util/nullary.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
 
 
-using enumeration_literal = x3::variant<
-	nullary,
-	identifier,
-	character_literal
->;
+struct enumeration_literal : variant<
+    nullary,
+    identifier,
+    character_literal
+>
+{
+    using base_type::base_type;
+    using base_type::operator=;
+};
 
 
 } } } // namespace eda.vhdl.ast

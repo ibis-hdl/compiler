@@ -9,14 +9,11 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_CONDITIONAL_SIGNAL_ASSIGNMENT_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/ast/target.hpp>
 #include <eda/vhdl/ast/options.hpp>
 #include <eda/vhdl/ast/conditional_waveforms.hpp>
-
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {

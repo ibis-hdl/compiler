@@ -9,9 +9,9 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_ENTITY_DECLARATIVE_PART_HPP_
 
 
-#include <vector>
+#include <eda/vhdl/ast/util/variant.hpp>
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
+#include <eda/vhdl/ast/util/nullary.hpp>
 #include <eda/vhdl/ast/alias_declaration.hpp>
 #include <eda/vhdl/ast/attribute_declaration.hpp>
 #include <eda/vhdl/ast/attribute_specification.hpp>
@@ -26,15 +26,14 @@
 #include <eda/vhdl/ast/subtype_declaration.hpp>
 #include <eda/vhdl/ast/type_declaration.hpp>
 #include <eda/vhdl/ast/use_clause.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
-#include <eda/vhdl/ast/util/nullary.hpp>
 #include <eda/vhdl/ast/variable_declaration.hpp>
+#include <vector>
 
 
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct entity_declarative_item : x3::variant<
+struct entity_declarative_item : variant<
     nullary,
     alias_declaration,
     attribute_declaration,

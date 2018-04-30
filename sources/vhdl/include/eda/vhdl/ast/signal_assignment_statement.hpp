@@ -9,12 +9,12 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_SIGNAL_ASSIGNMENT_STATEMENT_HPP_
 
 
+#include <eda/vhdl/ast/util/position_tagged.hpp>
+
 #include <eda/vhdl/ast/delay_mechanism.hpp>
 #include <eda/vhdl/ast/label.hpp>
 #include <eda/vhdl/ast/target.hpp>
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 #include <eda/vhdl/ast/util/optional.hpp>
-#include <eda/vhdl/ast/util/position_tagged.hpp>
 #include <eda/vhdl/ast/waveform.hpp>
 
 
