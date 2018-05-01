@@ -735,12 +735,12 @@ void printer::operator()(concurrent_assertion_statement const &node)
     symbol_scope<concurrent_assertion_statement> _(*this, symbol);
 
     if(node.label) {
-        os << "\n";
         (*this)(*node.label);
     }
 
-    if(node.postponed) { os << "\nPOSTPONED\n"; }
+    if(node.postponed) { os << "\nPOSTPONED,"; }
 
+    if(node.label || node.postponed) { os << "\n"; }
     (*this)(node.assertion);
 }
 
@@ -751,11 +751,10 @@ void printer::operator()(concurrent_procedure_call_statement const &node)
     symbol_scope<concurrent_procedure_call_statement> _(*this, symbol);
 
     if(node.label) {
-        os << "\n";
         (*this)(*node.label);
     }
 
-    if(node.postponed) { os << "\nPOSTPONED"; }
+    if(node.postponed) { os << "\nPOSTPONED,"; }
 
     if(node.label || node.postponed) { os << "\n"; }
     (*this)(node.procedure_call);
@@ -768,14 +767,12 @@ void printer::operator()(concurrent_signal_assignment_statement const &node)
     symbol_scope<concurrent_signal_assignment_statement> _(*this, symbol);
 
     if(node.label) {
-        os << "\n";
         (*this)(*node.label);
     }
 
-    if(node.postponed) { os << "\nPOSTPONED"; }
+    if(node.postponed) { os << "\nPOSTPONED,"; }
 
     if(node.label || node.postponed) { os << "\n"; }
-
     util::visit_in_place(
         node.signal_assignment,
         [this](ast::conditional_signal_assignment const& signal_assignment) {

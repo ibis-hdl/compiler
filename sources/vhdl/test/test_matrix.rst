@@ -2039,6 +2039,170 @@ component_specification
 |                             |               |                          |
 +-----------------------------+---------------+--------------------------+
 
+==============================
+concurrent_assertion_statement
+==============================
+
++------------------------------------+--------------------------------------------------+------------------------------------------------------------+
+| File                               | Input                                            | Expected                                                   |
++------------------------------------+--------------------------------------------------+------------------------------------------------------------+
+| concurrent_assertion_statement_001 | -- common assertation statement                  | (concurrent_assertion_statement                            |
+|                                    | assert (42 > 0) severity FAILURE;                |   (assertion                                               |
+|                                    |                                                  |     (expression                                            |
+|                                    |                                                  |       (relation                                            |
+|                                    |                                                  |         (shift_expression                                  |
+|                                    |                                                  |           (simple_expression                               |
+|                                    |                                                  |             (term                                          |
+|                                    |                                                  |               (primary<v>                                  |
+|                                    |                                                  |                 (expression                                |
+|                                    |                                                  |                   (relation                                |
+|                                    |                                                  |                     (shift_expression                      |
+|                                    |                                                  |                       (simple_expression                   |
+|                                    |                                                  |                         (term                              |
+|                                    |                                                  |                           (primary<v>                      |
+|                                    |                                                  |                             (literal<v>                    |
+|                                    |                                                  |                               (numeric_literal<v>          |
+|                                    |                                                  |                                 (abstract_literal<v>       |
+|                                    |                                                  |                                   (decimal_literal         |
+|                                    |                                                  |                                     literal: 42, hint: int |
+|                                    |                                                  |                                   )                        |
+|                                    |                                                  |                                 )                          |
+|                                    |                                                  |                               )                            |
+|                                    |                                                  |                             )                              |
+|                                    |                                                  |                           )                                |
+|                                    |                                                  |                         )                                  |
+|                                    |                                                  |                       )                                    |
+|                                    |                                                  |                     ),                                     |
+|                                    |                                                  |                     operator: GREATER,                     |
+|                                    |                                                  |                     (shift_expression                      |
+|                                    |                                                  |                       (simple_expression                   |
+|                                    |                                                  |                         (term                              |
+|                                    |                                                  |                           (primary<v>                      |
+|                                    |                                                  |                             (literal<v>                    |
+|                                    |                                                  |                               (numeric_literal<v>          |
+|                                    |                                                  |                                 (abstract_literal<v>       |
+|                                    |                                                  |                                   (decimal_literal         |
+|                                    |                                                  |                                     literal: 0, hint: int  |
+|                                    |                                                  |                                   )                        |
+|                                    |                                                  |                                 )                          |
+|                                    |                                                  |                               )                            |
+|                                    |                                                  |                             )                              |
+|                                    |                                                  |                           )                                |
+|                                    |                                                  |                         )                                  |
+|                                    |                                                  |                       )                                    |
+|                                    |                                                  |                     )                                      |
+|                                    |                                                  |                   )                                        |
+|                                    |                                                  |                 )                                          |
+|                                    |                                                  |               )                                            |
+|                                    |                                                  |             )                                              |
+|                                    |                                                  |           )                                                |
+|                                    |                                                  |         )                                                  |
+|                                    |                                                  |       )                                                    |
+|                                    |                                                  |     )                                                      |
+|                                    |                                                  |     (assertion.severity                                    |
+|                                    |                                                  |       (expression                                          |
+|                                    |                                                  |         (relation                                          |
+|                                    |                                                  |           (shift_expression                                |
+|                                    |                                                  |             (simple_expression                             |
+|                                    |                                                  |               (term                                        |
+|                                    |                                                  |                 (primary<v>                                |
+|                                    |                                                  |                   (name<v>                                 |
+|                                    |                                                  |                     (identifier                            |
+|                                    |                                                  |                       FAILURE                              |
+|                                    |                                                  |                     )                                      |
+|                                    |                                                  |                   )                                        |
+|                                    |                                                  |                 )                                          |
+|                                    |                                                  |               )                                            |
+|                                    |                                                  |             )                                              |
+|                                    |                                                  |           )                                                |
+|                                    |                                                  |         )                                                  |
+|                                    |                                                  |       )                                                    |
+|                                    |                                                  |     )                                                      |
+|                                    |                                                  |   )                                                        |
+|                                    |                                                  | )                                                          |
+|                                    |                                                  |                                                            |
++------------------------------------+--------------------------------------------------+------------------------------------------------------------+
+| concurrent_assertion_statement_002 | concurrent_assert:                               | (concurrent_assertion_statement                            |
+|                                    |   postponed ASSERT (42 > 0) report "The Answer"; |   (identifier                                              |
+|                                    |                                                  |     concurrent_assert                                      |
+|                                    |                                                  |   )                                                        |
+|                                    |                                                  |   POSTPONED,                                               |
+|                                    |                                                  |   (assertion                                               |
+|                                    |                                                  |     (expression                                            |
+|                                    |                                                  |       (relation                                            |
+|                                    |                                                  |         (shift_expression                                  |
+|                                    |                                                  |           (simple_expression                               |
+|                                    |                                                  |             (term                                          |
+|                                    |                                                  |               (primary<v>                                  |
+|                                    |                                                  |                 (expression                                |
+|                                    |                                                  |                   (relation                                |
+|                                    |                                                  |                     (shift_expression                      |
+|                                    |                                                  |                       (simple_expression                   |
+|                                    |                                                  |                         (term                              |
+|                                    |                                                  |                           (primary<v>                      |
+|                                    |                                                  |                             (literal<v>                    |
+|                                    |                                                  |                               (numeric_literal<v>          |
+|                                    |                                                  |                                 (abstract_literal<v>       |
+|                                    |                                                  |                                   (decimal_literal         |
+|                                    |                                                  |                                     literal: 42, hint: int |
+|                                    |                                                  |                                   )                        |
+|                                    |                                                  |                                 )                          |
+|                                    |                                                  |                               )                            |
+|                                    |                                                  |                             )                              |
+|                                    |                                                  |                           )                                |
+|                                    |                                                  |                         )                                  |
+|                                    |                                                  |                       )                                    |
+|                                    |                                                  |                     ),                                     |
+|                                    |                                                  |                     operator: GREATER,                     |
+|                                    |                                                  |                     (shift_expression                      |
+|                                    |                                                  |                       (simple_expression                   |
+|                                    |                                                  |                         (term                              |
+|                                    |                                                  |                           (primary<v>                      |
+|                                    |                                                  |                             (literal<v>                    |
+|                                    |                                                  |                               (numeric_literal<v>          |
+|                                    |                                                  |                                 (abstract_literal<v>       |
+|                                    |                                                  |                                   (decimal_literal         |
+|                                    |                                                  |                                     literal: 0, hint: int  |
+|                                    |                                                  |                                   )                        |
+|                                    |                                                  |                                 )                          |
+|                                    |                                                  |                               )                            |
+|                                    |                                                  |                             )                              |
+|                                    |                                                  |                           )                                |
+|                                    |                                                  |                         )                                  |
+|                                    |                                                  |                       )                                    |
+|                                    |                                                  |                     )                                      |
+|                                    |                                                  |                   )                                        |
+|                                    |                                                  |                 )                                          |
+|                                    |                                                  |               )                                            |
+|                                    |                                                  |             )                                              |
+|                                    |                                                  |           )                                                |
+|                                    |                                                  |         )                                                  |
+|                                    |                                                  |       )                                                    |
+|                                    |                                                  |     )                                                      |
+|                                    |                                                  |     (assertion.report                                      |
+|                                    |                                                  |       (expression                                          |
+|                                    |                                                  |         (relation                                          |
+|                                    |                                                  |           (shift_expression                                |
+|                                    |                                                  |             (simple_expression                             |
+|                                    |                                                  |               (term                                        |
+|                                    |                                                  |                 (primary<v>                                |
+|                                    |                                                  |                   (literal<v>                              |
+|                                    |                                                  |                     (string_literal                        |
+|                                    |                                                  |                       The Answer                           |
+|                                    |                                                  |                     )                                      |
+|                                    |                                                  |                   )                                        |
+|                                    |                                                  |                 )                                          |
+|                                    |                                                  |               )                                            |
+|                                    |                                                  |             )                                              |
+|                                    |                                                  |           )                                                |
+|                                    |                                                  |         )                                                  |
+|                                    |                                                  |       )                                                    |
+|                                    |                                                  |     )                                                      |
+|                                    |                                                  |   )                                                        |
+|                                    |                                                  | )                                                          |
+|                                    |                                                  |                                                            |
++------------------------------------+--------------------------------------------------+------------------------------------------------------------+
+
 =============================
 conditional_signal_assignment
 =============================
@@ -14068,4 +14232,4 @@ xxx_signature
 +---------+-----------------------+----------+
 
 
-Total Tests: 394
+Total Tests: 396

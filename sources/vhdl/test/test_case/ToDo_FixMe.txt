@@ -8,3 +8,9 @@ ToDo:
 - group_declaration/group_declaration_003.input
 - binding_indication/binding_indication_00{1,2}.input entity name rule (is work.foo -> name)
 
+Renewal 2018:
+- Missing tests:
+  - concurrent_procedure_call_statement
+  - concurrent_signal_assignment_statement
+  - alias_declaration
+  

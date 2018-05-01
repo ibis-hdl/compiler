@@ -57,7 +57,7 @@ void dataset_loader::read_files(fs::path const& path)
 
                     fs::path const base_file = fs::change_extension(file, "");
                     m_basefile.emplace_back(pretty_filepath(base_file));
-                    cerr << "INFO: read " << base_file << "\n";
+                    //cerr << "INFO: read " << base_file << "\n";
 
                     fs::path const input_file  = file;
                     fs::path const expect_file = fs::change_extension(file, ".expected");

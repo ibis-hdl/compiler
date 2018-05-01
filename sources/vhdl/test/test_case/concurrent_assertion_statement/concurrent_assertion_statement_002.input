@@ -1,0 +1,3 @@
+concurrent_assert:
+  postponed ASSERT (42 > 0) report "The Answer";
+

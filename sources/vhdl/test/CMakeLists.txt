@@ -13,7 +13,7 @@ set(BIN_SOURCES
     #parser_xxx.cpp
     parser_aspect.cpp
     parser_clause.cpp
-    #parser_concurrent_statements.cpp
+    parser_concurrent_statements.cpp
     parser_declaration.cpp
     parser_design_unit.cpp
     parser_entities.cpp
