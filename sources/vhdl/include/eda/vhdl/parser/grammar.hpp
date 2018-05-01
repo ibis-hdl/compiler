@@ -9,12 +9,10 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_HPP_
 
 
-//#include <eda/vhdl/parser/spirit_x3.hpp>
-
-
 namespace eda { namespace vhdl { namespace parser {
 
-namespace x3 = boost::spirit::x3;
+
+// empty yet
 
 
 } } } // namespace eda.vhdl.parser

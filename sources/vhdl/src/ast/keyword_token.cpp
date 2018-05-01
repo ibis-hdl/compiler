@@ -6,7 +6,6 @@
  */
 
 #include <eda/vhdl/ast/keyword_token.hpp>
-
 #include <iostream>
 
 

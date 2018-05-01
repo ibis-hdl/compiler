@@ -20,6 +20,7 @@
 
 namespace eda { namespace vhdl { namespace parser {
 
+
     // Error Handler Utility
     template <typename Iterator>
     using error_handler = x3::error_handler<Iterator>;
@@ -39,6 +40,7 @@ namespace eda { namespace vhdl { namespace parser {
 
         std::map<std::string, std::string> const m_ruleid_map;
     };
+
 
 }}} // namespace eda.vhdl.parser
 
@@ -62,7 +64,7 @@ error_handler_base::on_error(
         which = iter->second;
 
     std::string const message{
-        "Error! Expecting the VHDL-BNF rule: '" + which + "' here:"
+        "Parser Error: Expecting the VHDL-BNF rule: '" + which + "' here:"
     };
 
     auto& error_handler = x3::get<error_handler_tag>(context).get();
@@ -73,8 +75,6 @@ error_handler_base::on_error(
 
 
 }}} // namespace eda.vhdl.parser
-
-
 
 
 #endif /* INCLUDE_EDA_VHDL_ERROR_HANDLER_HPP_ */

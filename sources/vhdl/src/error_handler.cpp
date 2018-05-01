@@ -12,9 +12,6 @@
 namespace eda { namespace vhdl { namespace parser {
 
 
-namespace x3 = boost::spirit::x3;
-
-
 error_handler_base::error_handler_base()
 : m_ruleid_map {
     { "abstract_literal" , "Abstract Literal" },

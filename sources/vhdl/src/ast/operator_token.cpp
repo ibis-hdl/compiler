@@ -7,9 +7,7 @@
 
 
 #include <eda/vhdl/ast/operator_token.hpp>
-
 #include <eda/utils/cxx_bug_fatal.hpp>
-
 #include <iostream>
 
 

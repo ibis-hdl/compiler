@@ -10,6 +10,8 @@
 #include <eda/exception/exception.hpp>
 #include <eda/vhdl/utils/literal_ellipsis.hpp>
 
+#include <eda/vhdl/ast/util/namespace_alias.hpp>
+
 #include <boost/spirit/home/x3.hpp>
 #include <boost/exception/all.hpp>
 
@@ -17,9 +19,6 @@
 
 
 namespace eda { namespace vhdl { namespace ast {
-
-
-namespace x3 = boost::spirit::x3;
 
 
 template<>
