@@ -55,38 +55,39 @@ void dataset_loader::read_files(fs::path const& path)
 
                 if (fs::extension(file) == ".input") {
 
-                    auto const input_path  = file;
-                    auto expect_path = file;
-                    expect_path.replace_extension(".expected");
+                    fs::path const base_file = fs::change_extension(file, "");
+                    m_basefile.emplace_back(pretty_filepath(base_file));
+                    cerr << "INFO: read " << base_file << "\n";
 
-                    m_input.emplace_back(   read_file(input_path ));
-                    m_expected.emplace_back(read_file(expect_path));
+                    fs::path const input_file  = file;
+                    fs::path const expect_file = fs::change_extension(file, ".expected");
 
-                    m_file_path.emplace_back(pretty_filepath(expect_path));
-                    cerr << "INFO: read " << m_file_path.back() << "\n";
+                    m_input.emplace_back(   read_file(input_file ));
+                    m_expected.emplace_back(read_file(expect_file));
                 }
             }
         }
         else {
-            cerr << "*** Directory: " << fs::absolute(path)
-                      << " does not exist. ***\n";
+            cerr << "ERROR: Directory: " << fs::absolute(path)
+                 << " does not exist!\n";
         }
     }
     catch(std::exception const& e) {
-        cerr << "*** Caught \"" << e.what() << "\" exception\n";
+        cerr << "ERROR: Caught \"" << e.what() << "\" exception!\n";
         /* try to recover from error and continue; probably no {file}.expected
          * was found. */
-        if(   m_file_path.size() == m_input.size()
-           && m_input.size()     == m_expected.size() + 1
+        if(   m_basefile.size() == m_input.size()
+           && m_input.size()    == m_expected.size() + 1
           ) {
-            cerr << "*** Remove file " << pretty_filepath(m_file_path.back())
+            cerr << "WARNING: Remove test files at "
+                 << pretty_filepath(m_basefile.back())
                  << " from data set\n";
-            m_file_path.pop_back();
+            m_basefile.pop_back();
             m_input.pop_back();
         }
     }
     catch(...) {
-        cerr << "*** Caught unexpected exception !!!\n";
+        cerr << "ERROR: Caught unexpected exception!!!\n";
 
     }
 }
@@ -97,7 +98,7 @@ std::string dataset_loader::read_file(fs::path const& file_path)
     fs::ifstream file{ file_path };
 
     if(!file) {
-        cerr << "ERROR: unable to open " << pretty_filepath(file_path) << "\n";
+        cerr << "ERROR: unable to open " << pretty_filepath(file_path) << "!\n";
         throw std::ios_base::failure{ "file open error" };
     }
 
