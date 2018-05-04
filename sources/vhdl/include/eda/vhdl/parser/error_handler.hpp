@@ -8,7 +8,7 @@
 #ifndef INCLUDE_EDA_VHDL_ERROR_HANDLER_HPP_
 #define INCLUDE_EDA_VHDL_ERROR_HANDLER_HPP_
 
-#include <eda/vhdl/parser/spirit_x3.hpp>
+#include <eda/support/boost/spirit_x3.hpp>
 #include <boost/spirit/home/x3/support/utility/error_reporting.hpp>
 #include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
 #include <boost/spirit/home/x3/auxiliary/guard.hpp> // error_handler_result

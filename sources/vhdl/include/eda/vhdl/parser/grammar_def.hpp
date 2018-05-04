@@ -20,24 +20,12 @@
 //#include <eda/vhdl/parser/error_handler.hpp>
 //#include <boost/spirit/home/x3/support/utility/annotate_on_success.hpp>
 
-#include <eda/vhdl/parser/spirit_x3.hpp>
+#include <eda/support/boost/spirit_x3.hpp>
+#include <eda/support/boost/spirit_x3_utils.hpp>
 
 #if defined(BOOST_SPIRIT_X3_DEBUG)
 #include <eda/vhdl/ast_debug_out.hpp>
 #endif
-
-
-/*
- * Parser helper
- */
-namespace eda { namespace vhdl { namespace parser {
-
-
-template<typename T>
-auto as_type = [](auto p) { return x3::rule<struct _, T>{ "as" } = x3::as_parser(p); };
-
-
-} } } // namespace eda.vhdl.parser
 
 
 /*
@@ -301,9 +289,9 @@ auto kw = [](auto xx) {
 auto const ACCESS = kw("access");
 auto const AFTER = kw("after");
 auto const ALIAS = kw("alias");
-auto const ALL = as_type<ast::keyword_token>(
+auto const ALL = x3::as<ast::keyword_token>[
     kw("all") >> x3::attr(ast::keyword_token::ALL)
-);
+];
 auto const ARCHITECTURE = kw("architecture");
 auto const ARRAY = kw("array");
 auto const ASSERT = kw("assert");
@@ -311,19 +299,19 @@ auto const ATTRIBUTE = kw("attribute");
 auto const BEGIN = kw("begin");
 auto const BLOCK = kw("block");
 auto const BODY = kw("body");
-auto const BUS = as_type<ast::keyword_token>(
+auto const BUS = x3::as<ast::keyword_token>[
     kw("bus") >> x3::attr(ast::keyword_token::BUS)
-);
+];
 auto const CASE = kw("case");
 auto const COMPONENT = kw("component");
 auto const CONFIGURATION = kw("configuration");
-auto const CONSTANT = as_type<ast::keyword_token>(
+auto const CONSTANT = x3::as<ast::keyword_token>[
     kw("constant") >> x3::attr(ast::keyword_token::CONSTANT)
-);
+];
 auto const DISCONNECT = kw("disconnect");
-auto const DOWNTO = as_type<ast::keyword_token>(
+auto const DOWNTO = x3::as<ast::keyword_token>[
     kw("downto") >> x3::attr(ast::keyword_token::DOWNTO)
-);
+];
 auto const ELSE = kw("else");
 auto const ELSIF = kw("elsif");
 auto const END = kw("end");
@@ -335,78 +323,78 @@ auto const FUNCTION = kw("function");
 auto const GENERATE = kw("generate");
 auto const GENERIC = kw("generic");
 auto const GROUP = kw("group");
-auto const GUARDED = as_type<ast::keyword_token>(
+auto const GUARDED = x3::as<ast::keyword_token>[
     kw("guarded") >> x3::attr(ast::keyword_token::GUARDED)
-);
+];
 auto const IF = kw("if");
-auto const IN = as_type<ast::keyword_token>(
+auto const IN = x3::as<ast::keyword_token>[
     kw("in") >> x3::attr(ast::keyword_token::IN)
-);
-auto const INERTIAL = as_type<ast::delay_mechanism::delay_type>(
+];
+auto const INERTIAL = x3::as<ast::delay_mechanism::delay_type>[
     kw("inertial") >> x3::attr(ast::delay_mechanism::delay_type::INERTIAL_DELAY)
-);
+];
 auto const IS = kw("is");
 auto const LABEL = kw("label");
 auto const LIBRARY = kw("library");
-auto const LITERAL = as_type<ast::keyword_token>(
+auto const LITERAL = x3::as<ast::keyword_token>[
     kw("literal") >> x3::attr(ast::keyword_token::LITERAL)
-);
+];
 auto const LOOP = kw("loop");
 auto const MAP = kw("map");
 auto const NEW = kw("new");
 auto const NEXT = kw("next");
-auto const NULL = as_type<ast::keyword_token>(
+auto const NULL = x3::as<ast::keyword_token>[
     kw("null") >> x3::attr(ast::keyword_token::NULL)
-);
+];
 auto const OF = kw("of");
 auto const ON = kw("on");
-auto const OPEN = as_type<ast::keyword_token>(
+auto const OPEN = x3::as<ast::keyword_token>[
     kw("open") >> x3::attr(ast::keyword_token::OPEN)
-);
-auto const OTHERS = as_type<ast::keyword_token>(
+];
+auto const OTHERS = x3::as<ast::keyword_token>[
     kw("others") >> x3::attr(ast::keyword_token::OTHERS)
-);
+];
 auto const PACKAGE = kw("package");
 auto const PORT = kw("port");
-auto const POSTPONED = as_type<ast::keyword_token>(
+auto const POSTPONED = x3::as<ast::keyword_token>[
     kw("postponed")>> x3::attr(ast::keyword_token::POSTPONED)
-);
+];
 auto const PROCEDURE = kw("procedure");
 auto const PROCESS = kw("process");
 auto const RANGE = kw("range");
 auto const RECORD = kw("record");
-auto const REGISTER = as_type<ast::keyword_token>(
+auto const REGISTER = x3::as<ast::keyword_token>[
     kw("register") >> x3::attr(ast::keyword_token::REGISTER)
-);
+];
 auto const REJECT = kw("reject");
 auto const REPORT = kw("report");
 auto const RETURN = kw("return");
 auto const SELECT = kw("select");
 auto const SEVERITY = kw("severity");
-auto const SIGNAL = as_type<ast::keyword_token>(
+auto const SIGNAL = x3::as<ast::keyword_token>[
     kw("signal") >> x3::attr(ast::keyword_token::SIGNAL)
-);
-auto const SHARED = as_type<ast::keyword_token>(
+];
+auto const SHARED = x3::as<ast::keyword_token>[
     kw("shared") >> x3::attr(ast::keyword_token::SHARED)
-);
+];
 auto const SUBTYPE = kw("subtype");
 auto const THEN = kw("then");
-auto const TO = as_type<ast::keyword_token>(
+auto const TO = x3::as<ast::keyword_token>[
     kw("to") >> x3::attr(ast::keyword_token::TO)
-);
-auto const TRANSPORT = as_type<ast::delay_mechanism::delay_type>(
+];
+auto const TRANSPORT = x3::as<ast::delay_mechanism::delay_type>[
     kw("transport")  >> x3::attr(ast::delay_mechanism::delay_type::TRANSPORT_DELAY)
-);
+];
 auto const TYPE = kw("type");
-auto const UNAFFECTED = as_type<ast::keyword_token>(
+auto const UNAFFECTED = x3::as<ast::keyword_token>[
     kw("unaffected") >> x3::attr(ast::keyword_token::UNAFFECTED)
-);
+];
 auto const UNITS = kw("units");
 auto const UNTIL = kw("until");
 auto const USE = kw("use");
-auto const VARIABLE = as_type<ast::keyword_token>(
+auto const VARIABLE = x3::as<ast::keyword_token>[
     kw("variable") >> x3::attr(ast::keyword_token::VARIABLE)
-);
+];
 auto const WAIT = kw("wait");
 auto const WHEN = kw("when");
 auto const WHILE = kw("while");
@@ -1612,13 +1600,15 @@ auto const based_integer_def =
 //     base # based_integer [ . based_integer ] # [ exponent ]
 namespace based_literal_detail {
 
-    auto const base = as_type<std::string_view>(
-        raw[ lexeme[ integer ]]);
+    auto const base = x3::as<std::string_view>[
+        raw[ lexeme[ integer ]]
+    ];
 
-    auto const number = as_type<std::string_view>(
+    auto const number = x3::as<std::string_view>[
         raw[ lexeme[
             based_integer >> -(char_('.') >> based_integer)
-        ]]);
+        ]]
+    ];
 }
 
 auto const based_literal_def =
@@ -2149,15 +2139,17 @@ auto const context_item_def =
 //     integer [ . integer ] [ exponent ]
 namespace decimal_literal_detail {
 
-    auto const real = as_type<std::string_view>(
+    auto const real = x3::as<std::string_view>[
         raw[ lexeme[
             (integer >> char_('.') >> integer >> -exponent)
-        ]]);
+        ]]
+    ];
 
-    auto const integer = as_type<std::string_view>(
+    auto const integer = x3::as<std::string_view>[
         raw[ lexeme[
              (parser::integer >> -exponent)
-        ]]);
+        ]]
+    ];
 }
 
 auto const decimal_literal_def =
@@ -3349,10 +3341,11 @@ namespace physical_literal_detail {
 
     /* Note, the LRM doesn't specify the allowed characters, hence it's assumed
      * that it follows the natural conventions. */
-    auto const unit_name = as_type<std::string_view>(
+    auto const unit_name = x3::as<std::string_view>[
         raw[ lexeme[
             +(lower_case_letter | upper_case_letter)
-        ]]);
+        ]]
+    ];
 }
 
 auto const physical_literal_def =
