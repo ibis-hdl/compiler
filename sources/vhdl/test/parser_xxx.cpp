@@ -20,7 +20,6 @@ BOOST_AUTO_TEST_SUITE( productions )
 
 
 namespace btt = boost::test_tools;
-namespace butd = boost::unit_test::data;
 
 namespace parser = eda::vhdl::parser;
 namespace ast    = eda::vhdl::ast;
@@ -36,9 +35,9 @@ struct xxx_dataset : public ::x3_test::dataset_loader
 
 
 BOOST_DATA_TEST_CASE( xxx,
-      butd::make(xxx_dataset.input())
-    ^ butd::make(xxx_dataset.expect())
-    ^ butd::make(xxx_dataset.test_file_name()),
+      xxx_dataset.input()
+    ^ xxx_dataset.expect()
+    ^ xxx_dataset.test_file_name(),
     VHDL_input, expect_AST, file)
 {
     using attribute_type = ast::case_statement;
