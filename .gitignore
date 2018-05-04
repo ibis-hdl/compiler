@@ -1,5 +1,8 @@
 # -*- mode: gitignore; -*-
 
+# git self
+*.patch
+
 # emacs
 *~
 \#*\#
