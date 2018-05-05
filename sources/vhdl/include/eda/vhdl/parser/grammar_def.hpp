@@ -327,6 +327,9 @@ auto const GUARDED = x3::as<ast::keyword_token>[
     kw("guarded") >> x3::attr(ast::keyword_token::GUARDED)
 ];
 auto const IF = kw("if");
+auto const IMPURE = x3::as<ast::keyword_token>[
+    kw("impure")>> x3::attr(ast::keyword_token::IMPURE)
+];
 auto const IN = x3::as<ast::keyword_token>[
     kw("in") >> x3::attr(ast::keyword_token::IN)
 ];
@@ -361,6 +364,9 @@ auto const POSTPONED = x3::as<ast::keyword_token>[
 ];
 auto const PROCEDURE = kw("procedure");
 auto const PROCESS = kw("process");
+auto const PURE = x3::as<ast::keyword_token>[
+    kw("pure")>> x3::attr(ast::keyword_token::PURE)
+];
 auto const RANGE = kw("range");
 auto const RECORD = kw("record");
 auto const REGISTER = x3::as<ast::keyword_token>[
@@ -493,22 +499,6 @@ struct entity_class_symbols : x3::symbols<ast::keyword_token> {
 
 
 /*
- * Symbols for pure/impure function subprogram_specification             [§ 2.1]
- */
-struct pure_impure_symbols : x3::symbols<ast::keyword_token> {
-
-    pure_impure_symbols() {
-
-        name("pure_impure_symbols");
-
-        add("pure"      , ast::keyword_token::PURE)
-           ("impure"    , ast::keyword_token::IMPURE)
-           ;
-    }
-} const pure_impure_symbols;
-
-
-/*
  * Symbols for subprogram_body's subprogram_kind
  */
 struct subprogram_kind_symbols : x3::symbols<ast::keyword_token> {
@@ -558,6 +548,7 @@ struct attribute_declaration_class;
 struct attribute_designator_class;
 struct attribute_name_class;
 struct attribute_specification_class;
+struct base_class;
 struct based_integer_class;
 struct based_literal_class;
 struct basic_graphic_character_class;
@@ -786,6 +777,7 @@ typedef x3::rule<attribute_declaration_class, ast::attribute_declaration> attrib
 typedef x3::rule<attribute_designator_class, ast::simple_name> attribute_designator_type;
 typedef x3::rule<attribute_name_class, ast::attribute_name> attribute_name_type;
 typedef x3::rule<attribute_specification_class, ast::attribute_specification> attribute_specification_type;
+typedef x3::rule<base_class, std::string_view> base_type;
 typedef x3::rule<based_integer_class, std::string_view> based_integer_type;
 typedef x3::rule<based_literal_class, ast::based_literal> based_literal_type;
 typedef x3::rule<basic_graphic_character_class, char> basic_graphic_character_type;
@@ -1014,6 +1006,7 @@ attribute_declaration_type const attribute_declaration { "attribute_declaration"
 attribute_designator_type const attribute_designator { "attribute_designator" };
 attribute_name_type const attribute_name { "attribute_name" };
 attribute_specification_type const attribute_specification { "attribute_specification" };
+base_type const base { "base" };
 based_integer_type const based_integer { "based_integer" };
 based_literal_type const based_literal { "based_literal" };
 basic_graphic_character_type const basic_graphic_character { "basic_graphic_character" };
@@ -1281,7 +1274,7 @@ auto const basic_graphic_character_def =
 // extended_digit ::=                                                 [§ 13.4.2]
 // digit | letter
 auto const extended_digit =
-    x3::rule<struct extended_digit_class, char> { "extended_digit" } =
+    x3::rule<struct _, char> { "extended_digit" } =
         char_("0-9a-fA-F");
 
 
@@ -1315,35 +1308,28 @@ auto const letter_or_digit_def =
  * Common aliases used in BNF
  */
 
-auto const boolean_expression = x3::rule<expression_class, ast::expression> { "boolean_expression" } =
-    expression;
-
-auto const time_expression = x3::rule<expression_class, ast::expression> { "time_expression" } =
-    expression;
-
-auto const static_expression = x3::rule<expression_class, ast::expression> { "static_expression" } =
-    expression;
-
-auto const value_expression = x3::rule<expression_class, ast::expression> { "value_expression" } =
-    expression;
-
-
 // Convenience rule for 'label :'
-auto const label_colon = x3::rule<struct signal_name_class, ast::identifier> { "label" } =
+auto const label_colon = x3::rule<struct _, ast::identifier> { "label" } =
        label >> ':'
     >> !char_('=')  // exclude ":=" variable assignment
     ;
 
 
-auto const signal_name = x3::rule<struct signal_name_class, ast::name> { "signal_name" } =
-    name
-    ;
-
-
-
 /*
  * Parser Rule Definition
+ *
+ * WARNING: Here are some 'anonymous' helper rules (to break down the complexity)
+ *          used in detail namespace which has as tag only an underscore, e.g.:
+ *          \code{.cpp}
+ *          auto const rule = x3::rule<struct _, ...> { "..." } = ...
+ *          \endcode
+ *          It would be naturally to use the parent's tag which belongs the
+ *          detail helper. But, unfortunately the memory consumption increases
+ *          dramatically (8+8)GB RAM/SWAP isn't enough). The tags problem must
+ *          be addressed by future improvements by coding the expectation points
+ *          I assume.
  */
+
 
 // abstract_literal ::=                                                 [§ 13.4]
 //     decimal_literal | based_literal
@@ -1503,13 +1489,10 @@ auto const assertion_statement_def =
 
 // association_element ::=                                           [§ 4.3.2.2]
 //     [ formal_part => ] actual_part
-namespace association_element_detail {
-    auto const formal_part = x3::rule<formal_part_class, ast::formal_part> { "formal_part" } =
-        ( parser::formal_part >> "=>" )
-        ;
-}
 auto const association_element_def =
-       -association_element_detail::formal_part
+       -x3::as<ast::formal_part>[
+           formal_part >> "=>"
+       ]
     >> actual_part
     ;
 
@@ -1570,13 +1553,12 @@ auto const attribute_specification_def =
     ;
 
 
-#if 0 /* Note: UNUSED, embedded directly into based_literal rule */
 // base ::=                                                           [§ 13.4.2]
 // integer
 auto const base_def =
     integer
     ;
-#endif
+
 
 #if 0 /* Note: UNUSED, embedded directly into bit_string_literal rule */
 // base_specifier ::=                                                   [§ 13.7]
@@ -1600,22 +1582,18 @@ auto const based_integer_def =
 //     base # based_integer [ . based_integer ] # [ exponent ]
 namespace based_literal_detail {
 
-    auto const base = x3::as<std::string_view>[
-        raw[ lexeme[ integer ]]
-    ];
-
-    auto const number = x3::as<std::string_view>[
-        raw[ lexeme[
-            based_integer >> -(char_('.') >> based_integer)
-        ]]
-    ];
-}
+auto const numeric_value = x3::as<std::string_view>[
+    raw[ lexeme[
+        based_integer >> -(char_('.') >> based_integer)
+    ]]
+];
+} // end detail
 
 auto const based_literal_def =
     lexeme [
-           based_literal_detail::base
+           base
         >> '#'
-        >> based_literal_detail::number
+        >> based_literal_detail::numeric_value
         >> '#'
         >> -exponent
     ]
@@ -1625,14 +1603,16 @@ auto const based_literal_def =
 // basic_identifier ::=                                                 [§ 13.3]
 //     letter { [ underline ] letter_or_digit }
 namespace basic_identifier_detail {
-    auto const feasible = x3::rule<struct _, std::string_view> { "basic_identifier" } =
-        raw[ lexeme [
-               letter
-            >> !char_('"') // reject bit_string_literal
-            >> *( letter_or_digit | char_("_") )
-        ]]
-        ;
-}
+
+auto const feasible = x3::rule<struct _, std::string_view> { "basic_identifier" } =
+    raw[ lexeme [
+           letter
+        >> !char_('"') // reject bit_string_literal
+        >> *( letter_or_digit | char_("_") )
+    ]]
+    ;
+} // end detail
+
 auto const basic_identifier_def =
     basic_identifier_detail::feasible - keyword
     ;
@@ -1655,33 +1635,52 @@ auto const binding_indication_def =
 //     base_specifier " bit_value "
 namespace bit_string_literal_detail {
 
-    /* Note: The BNF rule captures too wide for a specific base. §13.7 explains the
-     *       valid characters depending on it.
-     *       Here it's clever to get an parse error if the rules are violated by
-     *      splitting it into several sub rules. */
+/* Note: The BNF rule captures too wide for a specific base. §13.7 explains the
+ *       valid characters depending on it.
+ *       Here it's clever to get an parse error if the rules are violated by
+ *      splitting it into several sub rules. */
+auto const bin = x3::rule<struct _, ast::bit_string_literal> { "bit_string_literal<bin>" } =
+    lexeme[
+       lit("B")
+    >> lit('"')
+    >> x3::as<std::string_view>[ raw[
+          char_("01") >> *( -lit("_") >> char_("01") )
+       ]]
+    >> lit('"')
+    >> x3::attr(ast::bit_string_literal::tag::bin)
+    ]
+    ;
 
-    auto const bit_value_bin = x3::rule<struct _, std::string_view> { "bit_value" } =
-        raw[ lexeme[
-            char_("01") >> *( -lit("_") >> char_("01") )
-        ]];
+auto const oct = x3::rule<struct _, ast::bit_string_literal> { "bit_string_literal<oct>" } =
+    lexeme[
+        lit("O")
+     >> lit('"')
+     >> x3::as<std::string_view>[ raw[
+           char_("0-7") >> *( -lit("_") >> char_("0-7") )
+        ]]
+     >> lit('"')
+     >> x3::attr(ast::bit_string_literal::tag::oct)
+     ]
+     ;
 
-    auto const bit_value_oct = x3::rule<struct _, std::string_view> { "bit_value" } =
-        raw[ lexeme[
-            char_("0-7") >> *( -lit("_") >> char_("0-7") )
-        ]];
-
-    auto const bit_value_hex = x3::rule<struct _, std::string_view> { "bit_value" } =
-        raw[ lexeme[
-            char_("0-9A-Fa-f") >> *( -lit("_") >> char_("0-9A-Fa-f") )
-        ]];
-}
+auto const hex = x3::rule<struct _, ast::bit_string_literal> { "bit_string_literal<hex>" } =
+    lexeme[
+        lit("X")
+     >> lit('"')
+     >> x3::as<std::string_view>[ raw[
+            extended_digit >> *( -lit("_") >> extended_digit )
+        ]]
+     >> lit('"')
+     >> x3::attr(ast::bit_string_literal::tag::hex)
+    ]
+    ;
+} // end detail
 
 auto const bit_string_literal_def =
-    lexeme[
-          (lit("B") >> lit('"') >> bit_string_literal_detail::bit_value_bin >> lit('"')) >> x3::attr(ast::bit_string_literal::tag::bin)
-        | (lit("X") >> lit('"') >> bit_string_literal_detail::bit_value_hex >> lit('"')) >> x3::attr(ast::bit_string_literal::tag::hex)
-        | (lit("O") >> lit('"') >> bit_string_literal_detail::bit_value_oct >> lit('"')) >> x3::attr(ast::bit_string_literal::tag::oct)
-    ];
+      bit_string_literal_detail::bin
+    | bit_string_literal_detail::hex
+    | bit_string_literal_detail::oct
+    ;
 
 
 
@@ -1995,7 +1994,7 @@ auto const concurrent_statement_def =
 // condition ::=                                                         [§ 8.1]
 //     boolean_expression
 auto const condition_def =
-    boolean_expression
+    expression
     ;
 
 
@@ -2139,22 +2138,26 @@ auto const context_item_def =
 //     integer [ . integer ] [ exponent ]
 namespace decimal_literal_detail {
 
-    auto const real = x3::as<std::string_view>[
+auto const real = x3::rule<struct _, ast::decimal_literal> { "decimal_literal<real>" } =
+    x3::as<std::string_view>[
         raw[ lexeme[
-            (integer >> char_('.') >> integer >> -exponent)
-        ]]
-    ];
+            integer >> char_('.') >> integer >> -exponent
+        ]]]
+    >> x3::attr(ast::decimal_literal::tag::real)
+    ;
 
-    auto const integer = x3::as<std::string_view>[
+auto const int_ = x3::rule<struct _, ast::decimal_literal> { "decimal_literal<int>" } =
+    x3::as<std::string_view>[
         raw[ lexeme[
-             (parser::integer >> -exponent)
-        ]]
-    ];
-}
+            integer >> -exponent
+        ]]]
+    >> x3::attr(ast::decimal_literal::tag::integer)
+    ;
+} // end detail
 
 auto const decimal_literal_def =
-      decimal_literal_detail::real     >> x3::attr(ast::decimal_literal::tag::real)
-    | decimal_literal_detail::integer  >> x3::attr(ast::decimal_literal::tag::integer)
+      decimal_literal_detail::real
+    | decimal_literal_detail::int_
     ;
 
 
@@ -2196,7 +2199,7 @@ auto const declaration_def =
 //     | [ reject time_expression ] inertial
 auto const delay_mechanism_def =
        TRANSPORT
-    | (   -( REJECT > time_expression )
+    | (   -( REJECT > expression )
        >> INERTIAL
       )
     ;
@@ -2231,8 +2234,7 @@ auto const designator_def =
 // direction ::=                                                         [§ 3.1]
 //     to | downto
 auto const direction_def =
-      TO
-    | DOWNTO
+    TO | DOWNTO
     ;
 
 
@@ -2243,7 +2245,7 @@ auto const disconnection_specification_def =
        DISCONNECT
     >> guarded_signal_specification
     >> AFTER
-    >> time_expression
+    >> expression
     >  ';'
     ;
 
@@ -2292,20 +2294,21 @@ auto const element_subtype_definition_def =
 //     | open
 namespace entity_aspect_detail {
 
-    auto const entity = x3::rule<entity_aspect_class, ast::entity_aspect_entity> { "entity_aspect.entity" } =
-           ENTITY
-        >> name
-        >> -(      '('
-                >> identifier
-                >> ')'
-            )
-        ;
+auto const entity = x3::rule<struct _, ast::entity_aspect_entity> { "entity_aspect.entity" } =
+       ENTITY
+    >> name
+    >> -(      '('
+            >> identifier
+            >> ')'
+        )
+    ;
 
-    auto const configuration = x3::rule<entity_aspect_class, ast::entity_aspect_configuration> { "entity_aspect.configuration" } =
-           CONFIGURATION
-        >> name
-        ;
-}
+auto const configuration = x3::rule<struct _, ast::entity_aspect_configuration> { "entity_aspect.configuration" } =
+       CONFIGURATION
+    >> name
+    ;
+} // end detail
+
 auto const entity_aspect_def =
       entity_aspect_detail::entity
     | entity_aspect_detail::configuration
@@ -2531,15 +2534,16 @@ auto const exponent_def =
 //     | relation { xnor relation }
 namespace expression_detail {
 
-    auto const chunks_1 = x3::rule<struct _, std::vector<ast::expression::chunk>> { "expression" } =
-        *(logical_operator > relation)
-        ;
+auto const chunks_1 = x3::rule<struct _, std::vector<ast::expression::chunk>> { "expression" } =
+    *(logical_operator > relation)
+    ;
 
-    auto const chunk_2 = x3::rule<struct _, std::vector<ast::expression::chunk>> { "expression" } =
-        x3::repeat(1)[ // enforce artificial vector to unify ast node
-            logical_operator_option > relation
-        ];
-}
+auto const chunk_2 = x3::rule<struct _, std::vector<ast::expression::chunk>> { "expression" } =
+    x3::repeat(1)[ // enforce artificial vector to unify ast node
+        logical_operator_option > relation
+    ];
+} // end detail
+
 auto const expression_def =
        relation
     >> ( expression_detail::chunk_2    // NAND, NOR
@@ -2553,18 +2557,18 @@ auto const expression_def =
 //     \ graphic_character { graphic_character } \                             .
 namespace extended_identifier_detail {
 
-    auto const charset = x3::rule<struct _, std::string_view> { "extended_identifier" } =
-         +( graphic_character - char_('\\') )
-         ;
+auto const charset = x3::rule<struct _, std::string_view> { "extended_identifier" } =
+     +( graphic_character - char_('\\') )
+     ;
 
-    auto const atom = x3::rule<struct _, std::string_view> { "extended_identifier" } =
-        raw[ lexeme [
-               char_('\\')
-            >> charset
-            >> char_('\\')
-        ]]
-        ;
-}
+auto const atom = x3::rule<struct _, std::string_view> { "extended_identifier" } =
+    raw[ lexeme [
+           char_('\\')
+        >> charset
+        >> char_('\\')
+    ]]
+    ;
+} // end detail
 
 auto const extended_identifier_def =
     raw[ lexeme [
@@ -2581,17 +2585,17 @@ auto const extended_identifier_def =
 //     | not primary
 namespace factor_detail {
 
-    auto const binary_expr = x3::rule<struct _, ast::factor_binary_operation> { "factor" } =
-           primary
-        >> binary_miscellaneous_operator // ** (exponent)
-        >> primary
-        ;
+auto const binary_expr = x3::rule<struct _, ast::factor_binary_operation> { "factor" } =
+       primary
+    >> binary_miscellaneous_operator // ** (exponent)
+    >> primary
+    ;
 
-    // ABS >> primary | NOT >> primary
-    auto const unary_expr = x3::rule<struct _, ast::factor_unary_operation> { "factor" } =
-        unary_miscellaneous_operator >> primary // ABS | NOT
-        ;
-}
+auto const unary_expr = x3::rule<struct _, ast::factor_unary_operation> { "factor" } =
+    unary_miscellaneous_operator >> primary // ABS | NOT
+    ;
+} // end detail
+
 auto const factor_def =    /* Note, order and others changed */
       factor_detail::binary_expr
     | factor_detail::unary_expr
@@ -2623,20 +2627,12 @@ auto const file_logical_name_def =
 
 // file_open_information ::=                                         [§ 4.3.1.4]
 //     [ open file_open_kind_expression ] is file_logical_name
-namespace file_open_information_detail {
-
-    auto const file_open_kind_expression = x3::rule<struct _, ast::expression> { "file_open_kind_expression" } =
-        expression;
-
-    auto const file_logical_name = x3::rule<struct _, ast::expression> { "file_logical_name" } =
-        expression;
-}
 auto const file_open_information_def =
     -(    omit[ OPEN ]
-       >> file_open_information_detail::file_open_kind_expression
+       >> expression
      )
     >> IS
-    >> file_open_information_detail::file_logical_name
+    >> file_logical_name
     ;
 
 
@@ -2704,10 +2700,11 @@ auto const full_type_declaration_def =
 //     function_name [ ( actual_parameter_part ) ]
 namespace function_call_detail {
 
-    auto const actual_parameter_part = x3::rule<struct _, std::string_view>{ "actual_parameter_part" } =
-        x3::raw[ +(char_ - char_(')')) ]
-        ;
-}
+auto const actual_parameter_part = x3::rule<struct _, std::string_view>{ "actual_parameter_part" } =
+    x3::raw[ +(char_ - char_(')')) ]
+    ;
+} // end detail
+
 /* FixMe: actual_parameter_part -> parameter_association_list, but this results
  * into big circular dependency compiler error mess due to multiple use of
  * ast::name.*/
@@ -2950,7 +2947,7 @@ auto const instantiation_list_def =
 //     digit { [ underline ] digit }
 auto const integer_def =
     raw[ lexeme [
-        char_("0-9") >> *( -lit("_") >> char_("0-9") )
+        digit >> *( -lit("_") >> digit )
     ]]
     ;
 
@@ -2972,7 +2969,7 @@ auto const interface_constant_declaration_def =
     >> ':'
     >> -IN
     >> subtype_indication
-    >> -( ":=" >> static_expression )
+    >> -( ":=" >> expression )
     ;
 
 
@@ -3027,7 +3024,7 @@ auto const interface_signal_declaration_def =
     >> -mode
     >> subtype_indication
     >> -BUS
-    >> -( ":=" >>  static_expression )
+    >> -( ":=" >>  expression )
     ;
 
 
@@ -3040,7 +3037,7 @@ auto const interface_variable_declaration_def =
     >> ':'
     >> -mode
     >> subtype_indication
-    >> -( ":=" >  static_expression )
+    >> -( ":=" >  expression )
     ;
 
 
@@ -3183,7 +3180,8 @@ auto const null_statement_def =
 // numeric_literal ::=                                                 [§ 7.3.1]
 //       abstract_literal
 //     | physical_literal
-auto const numeric_literal_def = /* Note, order changed since matters */
+auto const numeric_literal_def =
+    /* order changed since matters */
       physical_literal
     | abstract_literal
     ;
@@ -3339,14 +3337,14 @@ auto const parameter_specification_def =
 //     [ abstract_literal ] unit_name
 namespace physical_literal_detail {
 
-    /* Note, the LRM doesn't specify the allowed characters, hence it's assumed
-     * that it follows the natural conventions. */
-    auto const unit_name = x3::as<std::string_view>[
-        raw[ lexeme[
-            +(lower_case_letter | upper_case_letter)
-        ]]
-    ];
-}
+/* Note, the LRM doesn't specify the allowed characters, hence it's assumed
+ * that it follows the natural conventions. */
+auto const unit_name = x3::as<std::string_view>[
+    raw[ lexeme[
+        +(lower_case_letter | upper_case_letter)
+    ]]
+];
+} // end detail
 
 auto const physical_literal_def =
     -abstract_literal >> (physical_literal_detail::unit_name - keyword)
@@ -3461,10 +3459,11 @@ auto const primary_unit_declaration_def =
 //     procedure_name [ ( actual_parameter_part ) ]
 namespace procedure_call_detail {
 
-    auto const actual_parameter_part = x3::rule<struct _, std::string_view>{ "actual_parameter_part" } =
-        x3::raw[ +(char_ - char_(')')) ]
-        ;
-}
+auto const actual_parameter_part = x3::rule<struct _, std::string_view>{ "actual_parameter_part" } =
+    x3::raw[ +(char_ - char_(')')) ]
+    ;
+} // end detail
+
 /* FixMe: actual_parameter_part -> parameter_association_list, same problem as
  * with function_call and ast::name. */
 auto const procedure_call_def =
@@ -3564,18 +3563,20 @@ auto const qualified_expression_def =
 //       range_attribute_name
 //     | simple_expression direction simple_expression
 namespace range_detail {
-    auto const range_expression = x3::rule<range_class, ast::range_expression> { "range_expression" } =
-           simple_expression
-        >> direction
-        >> simple_expression
-        ;
-    auto const range_attribute_name = x3::rule<range_class, ast::name> { "range_attribute_name" } =
-        name // XXXX FixMe: Must be attribute_name, test_case will fail XXXX
-        ;
-}
-/* Note, the order is changed to get the longest match, since simple_expression
- * can also be a name as of range_attribute_name */
+
+auto const range_expression = x3::rule<struct _, ast::range_expression> { "range_expression" } =
+       simple_expression
+    >> direction
+    >> simple_expression
+    ;
+auto const range_attribute_name = x3::rule<struct _, ast::name> { "range_attribute_name" } =
+    name // XXXX FixMe: Must be attribute_name, test_case will fail XXXX
+    ;
+} // end detail
+
 auto const range_def =
+    /* The order is changed to get the longest match, since simple_expression
+     * can also be a name as of range_attribute_name */
       range_detail::range_expression
     | range_detail::range_attribute_name
     ;
@@ -3608,11 +3609,11 @@ auto const record_type_definition_def =
 //     shift_expression [ relational_operator shift_expression ]
 namespace relation_detail {
 
-    // required to compile
-    auto const chunk = x3::rule<struct _, ast::relation::chunk> { "relation" } =
-        relational_operator >> shift_expression
-        ;
-}
+auto const chunk = x3::rule<struct _, ast::relation::chunk> { "relation" } =
+    relational_operator >> shift_expression
+    ;
+} // end detail
+
 auto const relation_def =
        shift_expression
     >> -relation_detail::chunk
@@ -3728,7 +3729,7 @@ auto const sensitivity_clause_def =
 // sensitivity_list ::=                                                  [§ 8.1]
 //     signal_name { , signal_name }
 auto const sensitivity_list_def =
-    signal_name % ','
+    name % ','
     ;
 
 
@@ -3777,10 +3778,11 @@ auto const sequential_statement_def =
 //     simple_expression [ shift_operator simple_expression ]
 namespace shift_expression_detail {
 
-    auto const chunk = x3::rule<struct _, ast::shift_expression::chunk> { "shift_expression" } =
-        shift_operator > simple_expression
-        ;
-}
+auto const chunk = x3::rule<struct _, ast::shift_expression::chunk> { "shift_expression" } =
+    shift_operator > simple_expression
+    ;
+} // end detail
+
 auto const shift_expression_def =
        simple_expression
     >> -shift_expression_detail::chunk
@@ -3837,7 +3839,7 @@ auto const signal_kind_def =
 //     | others
 //     | all
 auto const signal_list_def =
-      (signal_name % ',')
+      (name % ',')
     | OTHERS
     | ALL
     ;
@@ -3890,27 +3892,25 @@ auto const slice_name_def =
 // string_literal ::=                                                   [§ 13.6]
 //     " { graphic_character } "
 namespace string_literal_detail {
-    auto const string_literal_1 = x3::rule<struct _, std::string> { "string_literal" } =
-       *( ( graphic_character - '"'  )
-        | ( char_('"') >> char_('"') )
-        )
-        ;
 
-    auto const string_literal_2 = x3::rule<struct _, std::string> { "string_literal" } =
-       *( ( graphic_character - '%'  )
-        | ( char_('%') >> char_('%') )
-        )
-        ;
+auto const string_literal_1 = x3::rule<struct _, std::string> { "string_literal" } =
+   *( ( graphic_character - '"'  )
+    | ( char_('"') >> char_('"') )
+    )
+    ;
 
-    auto const literal = x3::rule<struct _, std::string> { "string_literal" } =
-        lexeme [
-              ('"' >> string_literal_1 >> '"')
-            | ('%' >> string_literal_2 >> '%')
-        ]
-        ;
-}
+auto const string_literal_2 = x3::rule<struct _, std::string> { "string_literal" } =
+   *( ( graphic_character - '%'  )
+    | ( char_('%') >> char_('%') )
+    )
+    ;
+} // end detail
+
 auto const string_literal_def =
-        string_literal_detail::literal
+    lexeme [
+          ('"' >> string_literal_detail::string_literal_1 >> '"')
+        | ('%' >> string_literal_detail::string_literal_2 >> '%')
+    ]
     ;
 
 
@@ -3998,30 +3998,28 @@ auto const subprogram_kind_def =
 //       return type_mark
 namespace subprogram_specification_detail {
 
-    auto const procedure = x3::rule<struct _, ast::subprogram_specification_procedure> { "subprogram_specification.procedure" } =
-           PROCEDURE
-        >> designator
-        >> -(      '('
-                >> formal_parameter_list
-                >> ')'
-            )
-        ;
+auto const procedure = x3::rule<struct _, ast::subprogram_specification_procedure> { "subprogram_specification.procedure" } =
+       PROCEDURE
+    >> designator
+    >> -(      '('
+            >> formal_parameter_list
+            >> ')'
+        )
+    ;
 
-    auto const PURE_IMPURE = x3::rule<struct _, ast::keyword_token> { "pure_impure" } =
-        kw( pure_impure_symbols );
+auto const function = x3::rule<struct _, ast::subprogram_specification_function> { "subprogram_specification.function" } =
+       -(IMPURE | PURE)
+    >> FUNCTION
+    >> designator
+    >> -(      '('
+            >> formal_parameter_list
+            >> ')'
+        )
+    >> RETURN
+    >> type_mark
+    ;
+} // end detail
 
-    auto const function = x3::rule<struct _, ast::subprogram_specification_function> { "subprogram_specification.function" } =
-           -PURE_IMPURE
-        >> FUNCTION
-        >> designator
-        >> -(      '('
-                >> formal_parameter_list
-                >> ')'
-            )
-        >> RETURN
-        >> type_mark
-        ;
-}
 auto const subprogram_specification_def =
       subprogram_specification_detail::procedure
     | subprogram_specification_detail::function
@@ -4051,16 +4049,15 @@ auto const subtype_declaration_def =
 
 // subtype_indication ::=                                                [§ 4.2]
 //     [ resolution_function_name ] type_mark [ constraint ]
-/*
- * parse a list of unspecified names, since
- *      resolution_function_name ::= name
- *      type_mark                ::= type_name | subtype_name
- * is ambiguous, even with optional. Nevertheless, syntactically
- * resolution_function_name and type_mark are names, semantically matters on
- * context. */
 auto const subtype_indication_def =
+    /* parse a list of unspecified names, since
+     *      resolution_function_name ::= name
+     *      type_mark                ::= type_name | subtype_name
+     * is ambiguous, even with optional. Nevertheless, syntactically
+     * resolution_function_name and type_mark are names, semantically matters on
+     * context as of VHDL. */
        x3::repeat(1 ,2)[
-           name         // -resolution_function_name >> type_mark
+           name
        ]
     >> -constraint
     ;
@@ -4093,15 +4090,15 @@ auto const target_def =
 
 // term ::=                                                              [§ 7.1]
 //     factor { multiplying_operator factor }
-/* Note: There is no expectation point: Consider the case of '-5 mod -3', where
- *       mod is a multiplying operator with an higher operator precedence as the
- *       sign operator. This is no valid VHDL and would in case of use of an
- *       expectation point result into expectation_failure. See
- *       'test_case/expression_failure/expression_failure_003', or even the
- *       Blog at Sigasi_ .
- *       .. _Sigasi: http://insights.sigasi.com/tech/be-careful-vhdl-operator-precedence.html
- */
 auto const term_def =
+    /* There is no expectation point: Consider the case of '-5 mod -3', where
+     * mod is a multiplying operator with an higher operator precedence as the
+     * sign operator. This is no valid VHDL and would in case of use of an
+     * expectation point result into expectation_failure. See
+     * 'test_case/expression_failure/expression_failure_003', or even the
+     * [Sigasi: Be careful with VHDL operator precedence](
+     * http://insights.sigasi.com/tech/be-careful-vhdl-operator-precedence.html)
+     */
     factor >> *( multiplying_operator >> factor )
     ;
 
@@ -4110,7 +4107,7 @@ auto const term_def =
 // timeout_clause ::=                                                    [§ 8.1]
 //     for time_expression
 auto const timeout_clause_def =
-    FOR >> time_expression
+    FOR >> expression
     ;
 
 
@@ -4153,10 +4150,11 @@ auto const type_definition_def =
 // type_mark ::=
 //       type_name
 //     | subtype_name
-/* Note, there is no way to distinguish between type_name and subtype_name at
- * parser level. Further read
- * [Question about type_mark bnf](https://groups.google.com/forum/#!topic/comp.lang.vhdl/exUhoMrFavU) */
 auto const type_mark_def =
+    /* There is no way to distinguish between type_name and subtype_name at
+     * parser level. Further read
+     * [Question about type_mark bnf](
+     * https://groups.google.com/forum/#!topic/comp.lang.vhdl/exUhoMrFavU) */
     name
     ;
 
@@ -4178,44 +4176,45 @@ auto const unconstrained_array_definition_def =
 //     use selected_name { , selected_name } ;
 namespace use_clause_detail {
 
-    /* LRM93 [§6.3] defined a concept of an expanded name: A selected name (in
-     * the syntactic sense) that denotes one or all of the primary units in a
-     * library or any named entity within a primary unit.
-     * [...]
-     * The prefix of an expanded name may not be a function call.
-     *
-     * For the use clause hence an specialized version is required. See Notes
-     * at the AST node ast::use_clause. */
+/* LRM93 [§6.3] defined a concept of an expanded name: A selected name (in
+ * the syntactic sense) that denotes one or all of the primary units in a
+ * library or any named entity within a primary unit.
+ * [...]
+ * The prefix of an expanded name may not be a function call.
+ *
+ * For the use clause hence an specialized version is required. See Notes
+ * at the AST node ast::use_clause. */
 
-    auto const lib_prefix = x3::rule<prefix_class, std::vector<ast::name>> { "prefix" } =
-        name >> '.' >> name;
+auto const lib_prefix = x3::rule<struct _, std::vector<ast::name>> { "prefix" } =
+    name >> '.' >> name;
 
-    auto const pkg_prefix = x3::rule<prefix_class, std::vector<ast::name>> { "prefix" } =
-        x3::repeat(1)[ // enforce artificial vector to unify ast node
-            name
-        ];
+auto const pkg_prefix = x3::rule<struct _, std::vector<ast::name>> { "prefix" } =
+    x3::repeat(1)[ // enforce artificial vector to unify ast node
+        name
+    ];
 
-    auto const lib_selected_name = x3::rule<selected_name_class, ast::use_clause::selected_name> { "selected_name" } =
-        x3::lexeme[
-               lib_prefix
-            >> '.'
-            >> suffix
-        ]
-        ;
+auto const lib_selected_name = x3::rule<struct _, ast::use_clause::selected_name> { "selected_name" } =
+    x3::lexeme[
+           lib_prefix
+        >> '.'
+        >> suffix
+    ]
+    ;
 
-    auto const pkg_selected_name = x3::rule<selected_name_class, ast::use_clause::selected_name> { "selected_name" } =
-        x3::lexeme[
-               pkg_prefix
-            >> '.'
-            >> suffix
-        ]
-        ;
+auto const pkg_selected_name = x3::rule<struct _, ast::use_clause::selected_name> { "selected_name" } =
+    x3::lexeme[
+           pkg_prefix
+        >> '.'
+        >> suffix
+    ]
+    ;
 
-    auto const selected_name = x3::rule<selected_name_class, ast::use_clause::selected_name> { "selected_name" } =
-          lib_selected_name
-        | pkg_selected_name
-        ;
-}
+auto const selected_name = x3::rule<struct _, ast::use_clause::selected_name> { "selected_name" } =
+      lib_selected_name
+    | pkg_selected_name
+    ;
+} // end detail
+
 auto const use_clause_def =
        USE
     >> (use_clause_detail::selected_name % ',')
@@ -4276,14 +4275,9 @@ auto const waveform_def =
 // waveform_element ::=                                                [§ 8.4.1]
 //       value_expression [ after time_expression ]
 //     | null [ after time_expression ]
-namespace waveform_element_detail {
-    auto const time_expression = x3::rule<expression_class, boost::optional<ast::expression>> { "time_expression" } =
-        -( AFTER >> expression )
-        ;
-}
 auto const waveform_element_def =
-       ( value_expression | NULL )
-    >> waveform_element_detail::time_expression
+       ( expression | NULL )
+    >>  -( AFTER >> expression )
     ;
 
 
@@ -4317,8 +4311,8 @@ BOOST_SPIRIT_DEFINE(  // -- A --
     , attribute_specification
 )
 BOOST_SPIRIT_DEFINE(  // -- B --
-    //  base
-      based_integer
+      base
+    , based_integer
     , based_literal
     //, basic_character
     , basic_graphic_character
