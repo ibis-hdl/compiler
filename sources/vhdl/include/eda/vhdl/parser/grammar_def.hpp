@@ -29,251 +29,6 @@
 
 
 /*
- * Operators
- */
-namespace eda { namespace vhdl { namespace parser { namespace operators {
-
-/*
- * Rule IDs
- */
-struct logical_operator_class;
-struct logical_operator_option_class;
-struct logical_operator_option_class;
-struct unary_miscellaneous_operator_class;
-struct multiplying_operator_class;
-struct shift_operator_class;
-
-
-/*
- * Rule Types
- */
-typedef x3::rule<logical_operator_class, ast::operator_token> logical_operator_type;
-typedef x3::rule<logical_operator_option_class, ast::operator_token> logical_operator_option_type;
-typedef x3::rule<unary_miscellaneous_operator_class, ast::operator_token> unary_miscellaneous_operator_type;
-typedef x3::rule<multiplying_operator_class, ast::operator_token> multiplying_operator_type;
-typedef x3::rule<shift_operator_class, ast::operator_token> shift_operator_type;
-typedef x3::symbols<ast::operator_token> relational_operator_type;
-typedef x3::symbols<ast::operator_token> binary_miscellaneous_operator_type;
-typedef x3::symbols<ast::operator_token> adding_operator_type;
-typedef x3::symbols<ast::operator_token> sign_operator_type;
-
-
-/*
- * Rule Instances
- */
-logical_operator_type const logical_operator{ "logical_operator" };
-logical_operator_option_type const logical_operator_option{ "logical_operator" };
-unary_miscellaneous_operator_type const unary_miscellaneous_operator{ "miscellaneous_operator" };
-multiplying_operator_type const multiplying_operator{ "multiplying_operator" };
-shift_operator_type const shift_operator{ "shift_operator" };
-
-
-/*
- * Rule Declarations
- */
-BOOST_SPIRIT_DECLARE(logical_operator_type);
-BOOST_SPIRIT_DECLARE(logical_operator_option_type);
-BOOST_SPIRIT_DECLARE(relational_operator_type);
-BOOST_SPIRIT_DECLARE(unary_miscellaneous_operator_type);
-BOOST_SPIRIT_DECLARE(binary_miscellaneous_operator_type);
-BOOST_SPIRIT_DECLARE(adding_operator_type);
-BOOST_SPIRIT_DECLARE(multiplying_operator_type);
-BOOST_SPIRIT_DECLARE(shift_operator_type);
-BOOST_SPIRIT_DECLARE(sign_operator_type);
-
-
-/*
- * Rule Definitions
- */
-
-// logical_operator ::=  and | or | nand | nor | xor | xnor              [§ 7.2]
-struct logical_operator_symbols : x3::symbols<ast::operator_token> {
-
-    logical_operator_symbols() {
-
-        name("logical_operator");
-
-        add("and",  ast::operator_token::AND)
-           ("or",   ast::operator_token::OR)
-           ("xor",  ast::operator_token::XOR)
-           ("xnor", ast::operator_token::XNOR)
-           ;
-    }
-} const logical_operator_symbols;
-
-struct logical_operator_option_symbols : x3::symbols<ast::operator_token> {
-
-    logical_operator_option_symbols() {
-
-        name("logical_operator");
-
-        add("nand", ast::operator_token::NAND)
-           ("nor",  ast::operator_token::NOR)
-           ;
-    }
-} const logical_operator_option_symbols;
-
-
-auto const logical_operator_def =
-    x3::no_case[
-        logical_operator_symbols
-    ]
-    ;
-
-auto const logical_operator_option_def =
-    x3::no_case[
-        logical_operator_option_symbols
-    ]
-    ;
-
-
-// relational_operator ::=   =  |  /=  |  <  |  <=  |  >  |  >=          [§ 7.2]
-struct relational_operator_symbols : x3::symbols<ast::operator_token> {
-
-    relational_operator_symbols() {
-
-        name("relational_operator");
-
-        add("=",  ast::operator_token::EQUAL)
-           ("/=", ast::operator_token::NOT_EQUALS)
-           ("<",  ast::operator_token::LESS)
-           ("<=", ast::operator_token::LESS_EQUALS)
-           (">",  ast::operator_token::GREATER)
-           (">=", ast::operator_token::GREATER_EQUALS)
-           ;
-    }
-} const relational_operator;
-
-
-// miscellaneous_operator ::=  ** | abs | not                            [§ 7.2]
-struct unary_miscellaneous_operator_symbols : x3::symbols<ast::operator_token> {
-
-    unary_miscellaneous_operator_symbols() {
-
-        name("miscellaneous_operator");
-
-        add("abs", ast::operator_token::ABS)
-           ("not", ast::operator_token::NOT)
-           ;
-    }
-} const unary_miscellaneous_operator_symbols;
-
-
-auto const unary_miscellaneous_operator_def =
-    x3::no_case[
-        unary_miscellaneous_operator_symbols
-    ]
-    ;
-
-
-struct binary_miscellaneous_operator_symbols : x3::symbols<ast::operator_token> {
-
-    binary_miscellaneous_operator_symbols() {
-
-        name("miscellaneous_operator");
-
-        add("**", ast::operator_token::EXPONENT)
-           ;
-    }
-} const binary_miscellaneous_operator;
-
-
-// adding_operator ::=  + | -  | &                                       [§ 7.2]
-struct adding_operator_symbols : x3::symbols<ast::operator_token> {
-
-    adding_operator_symbols() {
-
-        name("adding_operator");
-
-        add("+", ast::operator_token::ADD)
-           ("-", ast::operator_token::SUB)
-           ("&", ast::operator_token::CONCAT)
-           ;
-    }
-} const adding_operator;
-
-
-// multiplying_operator ::=  * | / | mod | rem                           [§ 7.2]
-struct multiplying_operator_symbols : x3::symbols<ast::operator_token> {
-
-    multiplying_operator_symbols() {
-
-        name("multiplying_operator");
-
-        add("*",   ast::operator_token::MUL)
-           ("/",   ast::operator_token::DIV)
-           ("mod", ast::operator_token::MOD)
-           ("rem", ast::operator_token::REM)
-           ;
-    }
-} const multiplying_operator_symbols;
-
-
-auto const multiplying_operator_def =
-    x3::no_case[
-        multiplying_operator_symbols
-    ]
-    ;
-
-
-// shift_operator ::=  sll | srl | sla | sra | rol | ror                 [§ 7.2]
-struct shift_operator_symbols : x3::symbols<ast::operator_token> {
-
-    shift_operator_symbols() {
-
-        name("shift_operator");
-
-        add("sll", ast::operator_token::SLL)
-           ("srl", ast::operator_token::SRL)
-           ("sla", ast::operator_token::SLA)
-           ("sra", ast::operator_token::SRA)
-           ("rol", ast::operator_token::ROL)
-           ("ror", ast::operator_token::ROR)
-           ;
-    }
-} const shift_operator_symbols;
-
-
-auto const shift_operator_def =
-    x3::no_case[
-        shift_operator_symbols
-    ]
-    ;
-
-
-// sign ::=  + | -                                                       [§ 7.2]
-struct sign_operator_symbols : x3::symbols<ast::operator_token> {
-
-    sign_operator_symbols() {
-
-        name("sign_operator");
-
-        add("+", ast::operator_token::SIGN_POS)
-           ("-", ast::operator_token::SIGN_NEG)
-           ;
-    }
-} const sign;
-
-
-/* get rid off the annoying unused parameter warnings from x3 */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-
-BOOST_SPIRIT_DEFINE(
-    logical_operator,
-    logical_operator_option,
-    unary_miscellaneous_operator,
-    multiplying_operator,
-    shift_operator
-)
-
-#pragma GCC diagnostic pop
-
-
-} } } } // namespace eda.vhdl.parser.operators
-
-
-/*
  * Keywords
  */
 namespace eda { namespace vhdl { namespace parser { namespace keywords {
@@ -517,6 +272,207 @@ struct subprogram_kind_symbols : x3::symbols<ast::keyword_token> {
 } } } } // namespace eda.vhdl.parser.keywords
 
 
+/*
+ * Operators
+ */
+namespace eda { namespace vhdl { namespace parser { namespace operators {
+
+/*
+ * Rule IDs
+ */
+struct binary_logical_operator_class;
+struct unary_logical_operator_class;
+struct binary_miscellaneous_operator_class;
+struct unary_miscellaneous_operator_class;
+struct multiplying_operator_class;
+struct shift_operator_class;
+
+
+/*
+ * Rule Types
+ */
+typedef x3::rule<binary_logical_operator_class, ast::operator_token> binary_logical_operator_type;
+typedef x3::rule<unary_logical_operator_class, ast::operator_token> unary_logical_operator_type;
+typedef x3::rule<binary_miscellaneous_operator_class, ast::operator_token> binary_miscellaneous_operator_type;
+typedef x3::rule<unary_miscellaneous_operator_class, ast::operator_token> unary_miscellaneous_operator_type;
+typedef x3::rule<multiplying_operator_class, ast::operator_token> multiplying_operator_type;
+typedef x3::rule<shift_operator_class, ast::operator_token> shift_operator_type;
+typedef x3::symbols<ast::operator_token> relational_operator_type;
+typedef x3::symbols<ast::operator_token> adding_operator_type;
+
+
+/*
+ * Rule Instances
+ */
+binary_logical_operator_type const binary_logical_operator{ "logical_operator" };
+unary_logical_operator_type const unary_logical_operator{ "logical_operator" };
+binary_miscellaneous_operator_type const binary_miscellaneous_operator{ "miscellaneous_operator" };
+unary_miscellaneous_operator_type const unary_miscellaneous_operator{ "miscellaneous_operator" };
+multiplying_operator_type const multiplying_operator{ "multiplying_operator" };
+shift_operator_type const shift_operator{ "shift_operator" };
+
+
+/*
+ * Rule Definitions
+ */
+
+using keywords::kw;
+
+// miscellaneous_operator ::=  ** | abs | not                            [§ 7.2]
+
+auto const EXPONENT = x3::as<ast::operator_token>[
+    "**" >> x3::attr(ast::operator_token::EXPONENT)
+];
+auto const binary_miscellaneous_operator_def =
+    EXPONENT
+    ;
+
+auto const ABS = x3::as<ast::operator_token>[
+    kw("abs") >> x3::attr(ast::operator_token::ABS)
+];
+auto const NOT = x3::as<ast::operator_token>[
+    kw("not") >> x3::attr(ast::operator_token::NOT)
+];
+auto const unary_miscellaneous_operator_def =
+    ABS | NOT
+    ;
+
+
+// logical_operator ::=  and | or | nand | nor | xor | xnor              [§ 7.2]
+struct binary_logical_operator_symbols : x3::symbols<ast::operator_token> {
+
+    binary_logical_operator_symbols() {
+
+        name("logical_operator");
+
+        add("and",  ast::operator_token::AND)
+           ("or",   ast::operator_token::OR)
+           ("xor",  ast::operator_token::XOR)
+           ("xnor", ast::operator_token::XNOR)
+           ;
+    }
+} const binary_logical_operator_symbols;
+
+auto const binary_logical_operator_def =
+    kw(binary_logical_operator_symbols)
+    ;
+
+struct unary_logical_operator_symbols : x3::symbols<ast::operator_token> {
+
+    unary_logical_operator_symbols() {
+
+        name("logical_operator");
+
+        add("nand", ast::operator_token::NAND)
+           ("nor",  ast::operator_token::NOR)
+           ;
+    }
+} const unary_logical_operator_symbols;
+
+
+auto const unary_logical_operator_def =
+    kw(unary_logical_operator_symbols)
+    ;
+
+
+// relational_operator ::=   =  |  /=  |  <  |  <=  |  >  |  >=          [§ 7.2]
+struct relational_operator_symbols : x3::symbols<ast::operator_token> {
+
+    relational_operator_symbols() {
+
+        name("relational_operator");
+
+        add("=",  ast::operator_token::EQUAL)
+           ("/=", ast::operator_token::NOT_EQUALS)
+           ("<",  ast::operator_token::LESS)
+           ("<=", ast::operator_token::LESS_EQUALS)
+           (">",  ast::operator_token::GREATER)
+           (">=", ast::operator_token::GREATER_EQUALS)
+           ;
+    }
+} const relational_operator;
+
+
+// adding_operator ::=  + | -  | &                                       [§ 7.2]
+struct adding_operator_symbols : x3::symbols<ast::operator_token> {
+
+    adding_operator_symbols() {
+
+        name("adding_operator");
+
+        add("+", ast::operator_token::ADD)
+           ("-", ast::operator_token::SUB)
+           ("&", ast::operator_token::CONCAT)
+           ;
+    }
+} const adding_operator;
+
+
+// multiplying_operator ::=  * | / | mod | rem                           [§ 7.2]
+
+auto const MUL = x3::as<ast::operator_token>[
+    "*" >> x3::attr(ast::operator_token::MUL)
+];
+auto const DIV = x3::as<ast::operator_token>[
+    "/" >> x3::attr(ast::operator_token::DIV)
+];
+auto const MOD = x3::as<ast::operator_token>[
+    kw("mod") >> x3::attr(ast::operator_token::MOD)
+];
+auto const REM = x3::as<ast::operator_token>[
+    kw("rem") >> x3::attr(ast::operator_token::REM)
+];
+
+auto const multiplying_operator_def =
+     MUL | DIV | MOD | REM
+    ;
+
+
+// shift_operator ::=  sll | srl | sla | sra | rol | ror                 [§ 7.2]
+struct shift_operator_symbols : x3::symbols<ast::operator_token> {
+
+    shift_operator_symbols() {
+
+        name("shift_operator");
+
+        add("sll", ast::operator_token::SLL)
+           ("srl", ast::operator_token::SRL)
+           ("sla", ast::operator_token::SLA)
+           ("sra", ast::operator_token::SRA)
+           ("rol", ast::operator_token::ROL)
+           ("ror", ast::operator_token::ROR)
+           ;
+    }
+} const shift_operator_symbols;
+
+
+auto const shift_operator_def =
+    kw(shift_operator_symbols)
+    ;
+
+
+
+/* get rid off the annoying unused parameter warnings from x3 */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+
+BOOST_SPIRIT_DEFINE(
+    binary_logical_operator,
+    unary_logical_operator,
+    binary_miscellaneous_operator,
+    unary_miscellaneous_operator,
+    multiplying_operator,
+    shift_operator
+)
+
+#pragma GCC diagnostic pop
+
+
+} } } } // namespace eda.vhdl.parser.operators
+
+
+
+
 
 /*
  * Main Rules
@@ -719,6 +675,7 @@ struct sensitivity_list_class;
 struct sequence_of_statements_class;
 struct sequential_statement_class;
 struct shift_expression_class;
+struct sign_class;
 struct signal_assignment_statement_class;
 struct signal_declaration_class;
 struct signal_kind_class;
@@ -948,6 +905,7 @@ typedef x3::rule<sensitivity_list_class, ast::sensitivity_list> sensitivity_list
 typedef x3::rule<sequence_of_statements_class, ast::sequence_of_statements> sequence_of_statements_type;
 typedef x3::rule<sequential_statement_class, ast::sequential_statement> sequential_statement_type;
 typedef x3::rule<shift_expression_class, ast::shift_expression> shift_expression_type;
+typedef x3::rule<sign_class, ast::operator_token> sign_type;
 typedef x3::rule<signal_assignment_statement_class, ast::signal_assignment_statement> signal_assignment_statement_type;
 typedef x3::rule<signal_declaration_class, ast::signal_declaration> signal_declaration_type;
 typedef x3::rule<signal_kind_class, ast::keyword_token> signal_kind_type;
@@ -1177,6 +1135,7 @@ sensitivity_list_type const sensitivity_list { "sensitivity_list" };
 sequence_of_statements_type const sequence_of_statements { "sequence_of_statements" };
 sequential_statement_type const sequential_statement { "sequential_statement" };
 shift_expression_type const shift_expression { "shift_expression" };
+sign_type const sign { "sign" };
 signal_assignment_statement_type const signal_assignment_statement { "signal_assignment_statement" };
 signal_declaration_type const signal_declaration { "signal_declaration" };
 signal_kind_type const signal_kind { "signal_kind" };
@@ -1333,7 +1292,7 @@ auto const label_colon = x3::rule<struct _, ast::identifier> { "label" } =
 
 // abstract_literal ::=                                                 [§ 13.4]
 //     decimal_literal | based_literal
-auto const abstract_literal_def = /* Note, order changed since matters */
+auto const abstract_literal_def = /* order matters */
       based_literal
     | decimal_literal
     ;
@@ -1554,7 +1513,7 @@ auto const attribute_specification_def =
 
 
 // base ::=                                                           [§ 13.4.2]
-// integer
+//     integer
 auto const base_def =
     integer
     ;
@@ -2535,12 +2494,12 @@ auto const exponent_def =
 namespace expression_detail {
 
 auto const chunks_1 = x3::rule<struct _, std::vector<ast::expression::chunk>> { "expression" } =
-    *(logical_operator > relation)
+    *(binary_logical_operator > relation)
     ;
 
 auto const chunk_2 = x3::rule<struct _, std::vector<ast::expression::chunk>> { "expression" } =
     x3::repeat(1)[ // enforce artificial vector to unify ast node
-        logical_operator_option > relation
+        unary_logical_operator > relation
     ];
 } // end detail
 
@@ -2596,7 +2555,7 @@ auto const unary_expr = x3::rule<struct _, ast::factor_unary_operation> { "facto
     ;
 } // end detail
 
-auto const factor_def =    /* Note, order and others changed */
+auto const factor_def =    /* order matters */
       factor_detail::binary_expr
     | factor_detail::unary_expr
     | primary
@@ -3086,7 +3045,7 @@ auto const library_unit_def =
 //     | string_literal
 //     | bit_string_literal
 //     | null
-auto const literal_def = /* Note, order changed since matters */
+auto const literal_def = /* order matters */
       enumeration_literal
     | string_literal
     | bit_string_literal
@@ -3180,8 +3139,7 @@ auto const null_statement_def =
 // numeric_literal ::=                                                 [§ 7.3.1]
 //       abstract_literal
 //     | physical_literal
-auto const numeric_literal_def =
-    /* order changed since matters */
+auto const numeric_literal_def =  /* order matters */
       physical_literal
     | abstract_literal
     ;
@@ -3648,7 +3606,7 @@ auto const return_statement_def =
 // scalar_type_definition ::=                                            [§ 3.1]
 //       enumeration_type_definition   | integer_type_definition
 //     | floating_type_definition      | physical_type_definition
-auto const scalar_type_definition_def = /* Note, order changed since matters */
+auto const scalar_type_definition_def = /* order matters */
       physical_type_definition
     | enumeration_type_definition
     | range_constraint              // {integer,floating}_type_definition
@@ -3789,13 +3747,14 @@ auto const shift_expression_def =
     ;
 
 
-#if 0 /* UNUSED, implemented as x3.symbol lookup */
+
 // sign ::=                                                              [§ 7.2]
 //     + | -
 auto const sign_def =
-    + | -
+      ("-" >> x3::attr(ast::operator_token::SIGN_NEG))
+    | ("+" >> x3::attr(ast::operator_token::SIGN_POS))
     ;
-#endif
+
 
 
 // signal_assignment_statement ::=                                       [§ 8.4]
@@ -4509,7 +4468,7 @@ BOOST_SPIRIT_DEFINE(  // -- S --
     , sequence_of_statements
     , sequential_statement
     , shift_expression
-    //, sign
+    , sign
     , signal_assignment_statement
     , signal_declaration
     , signal_kind
