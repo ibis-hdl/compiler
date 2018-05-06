@@ -89,6 +89,7 @@ add_dependencies(${PROJECT_NAME} boost-spirit-x3)
 #set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX "_d")
 
 
+# FAILED with Boost.PP
 #cotire(${PROJECT_NAME})
 
 

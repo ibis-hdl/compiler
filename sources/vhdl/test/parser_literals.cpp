@@ -12,6 +12,7 @@
 
 #include "data_set.hpp"
 #include "testing_parser.hpp"
+#include "testing_parser_def.hpp"
 #include "generate_data_test_case.hpp"
 
 

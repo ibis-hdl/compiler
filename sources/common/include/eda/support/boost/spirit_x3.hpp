@@ -5,8 +5,8 @@
  *      Author: olaf
  */
 
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_SPIRIT_X3_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_SPIRIT_X3_HPP_
+#ifndef SOURCES_COMMON_INCLUDE_EDA_SUPPORT_BOOST_SPIRIT_X3_HPP_
+#define SOURCES_COMMON_INCLUDE_EDA_SUPPORT_BOOST_SPIRIT_X3_HPP_
 
 
 /* special boost.spirit.x3 header to get rid off the annoying unused parameter
@@ -19,4 +19,4 @@
 #pragma GCC diagnostic pop
 
 
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_SPIRIT_X3_HPP_ */
+#endif /* SOURCES_COMMON_INCLUDE_EDA_SUPPORT_BOOST_SPIRIT_X3_HPP_ */

@@ -1,12 +1,12 @@
 /*
- * x3_unit.hpp
+ * spirit_x3_utils.hpp
  *
  *  Created on: 01.05.2018
  *      Author: olaf
  */
 
-#ifndef SOURCES_COMMON_INCLUDE_EDA_SUPPORT_BOOST_X3_UTILS_HPP_
-#define SOURCES_COMMON_INCLUDE_EDA_SUPPORT_BOOST_X3_UTILS_HPP_
+#ifndef SOURCES_COMMON_INCLUDE_EDA_SUPPORT_BOOST_SPIRIT_X3_UTILS_HPP_
+#define SOURCES_COMMON_INCLUDE_EDA_SUPPORT_BOOST_SPIRIT_X3_UTILS_HPP_
 
 
 namespace boost { namespace spirit { namespace x3
@@ -75,4 +75,4 @@ struct attribute_of<x3::protect_directive<Subject>, Context>
 }}}}
 
 
-#endif /* SOURCES_COMMON_INCLUDE_EDA_SUPPORT_BOOST_X3_UTILS_HPP_ */
+#endif /* SOURCES_COMMON_INCLUDE_EDA_SUPPORT_BOOST_SPIRIT_X3_UTILS_HPP_ */

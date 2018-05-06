@@ -144,12 +144,13 @@ BOOST_DATA_TEST_CASE( GENERATE_DATASET_TEST_CASE_NAME(test_case),              \
 /* --- */
 
 
-// generate the BOOST_DATA_TEST_CASE body part with the dataset
+// generate the BOOST_DATA_TEST_CASE body part with the dataset where
+// test_case name is different from grammar/rule
 #define GENERATE_DATASET_TEST_CASE_BODY_RULE(test_case, parser_rule)           \
 {                                                                              \
     using per_element = boost::test_tools::per_element;                        \
     using attribute_type = ATTRIBUTE_TYPE(test_case);                          \
-    auto const grammar = RULE_NAME(test_case);                                 \
+    auto const grammar = RULE_NAME(parser_rule);                               \
     boost::ignore_unused(file);                                                \
     x3_test::testing_parser<attribute_type> parse;                             \
     auto const [parse_ok, parse_result] = parse(input, grammar);               \
