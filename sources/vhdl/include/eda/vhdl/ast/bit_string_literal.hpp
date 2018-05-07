@@ -17,13 +17,12 @@
 namespace eda { namespace vhdl { namespace ast {
 
 
-// FixMe: change to {Base, Literal} as improvement
 struct bit_string_literal : position_tagged
 {
-    enum class tag { bin, oct, hex };
+    enum class base { bin, oct, hex };
 
-    std::string_view                literal;
-    tag                             hint;
+    std::string_view                bit_literal;
+    base                            base_specifier;
 };
 
 
@@ -32,7 +31,7 @@ struct bit_string_literal : position_tagged
  * the provided specializations. On overflow it will throw an exception.
  */
 template<typename T>
-T get(bit_string_literal const& literal);
+T get(bit_string_literal const& bit_literal);
 
 
 } } } // namespace eda.vhdl.ast

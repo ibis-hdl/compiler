@@ -404,18 +404,18 @@ void printer::operator()(bit_string_literal const &node)
     static char const symbol[]{ "bit_string_literal" };
     symbol_scope<bit_string_literal> _(*this, symbol);
 
-    using tag = bit_string_literal::tag;
+    using base_specifier = bit_string_literal::base;
 
     os << "base: ";
 
-    switch(node.hint) {
-        case tag::bin: os << "BIN"; break;
-        case tag::oct: os << "OCT"; break;
-        case tag::hex: os << "HEX"; break;
+    switch(node.base_specifier) {
+        case base_specifier::bin: os << "BIN"; break;
+        case base_specifier::oct: os << "OCT"; break;
+        case base_specifier::hex: os << "HEX"; break;
         default:       os << "INVALID";
     }
 
-    os << ", literal: " << node.literal;
+    os << ", literal: " << node.bit_literal;
 }
 
 

@@ -62,7 +62,7 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::binding_indication,
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::bit_string_literal,
-    literal, hint
+    bit_literal, base_specifier
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::block_configuration,

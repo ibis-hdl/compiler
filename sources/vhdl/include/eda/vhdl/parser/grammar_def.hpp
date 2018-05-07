@@ -1597,7 +1597,7 @@ namespace bit_string_literal_detail {
 /* Note: The BNF rule captures too wide for a specific base. §13.7 explains the
  *       valid characters depending on it.
  *       Here it's clever to get an parse error if the rules are violated by
- *      splitting it into several sub rules. */
+ *       splitting it into several sub rules. */
 auto const bin = x3::rule<struct _, ast::bit_string_literal> { "bit_string_literal<bin>" } =
     lexeme[
        lit("B")
@@ -1606,7 +1606,7 @@ auto const bin = x3::rule<struct _, ast::bit_string_literal> { "bit_string_liter
           char_("01") >> *( -lit("_") >> char_("01") )
        ]]
     >> lit('"')
-    >> x3::attr(ast::bit_string_literal::tag::bin)
+    >> x3::attr(ast::bit_string_literal::base::bin)
     ]
     ;
 
@@ -1618,7 +1618,7 @@ auto const oct = x3::rule<struct _, ast::bit_string_literal> { "bit_string_liter
            char_("0-7") >> *( -lit("_") >> char_("0-7") )
         ]]
      >> lit('"')
-     >> x3::attr(ast::bit_string_literal::tag::oct)
+     >> x3::attr(ast::bit_string_literal::base::oct)
      ]
      ;
 
@@ -1630,7 +1630,7 @@ auto const hex = x3::rule<struct _, ast::bit_string_literal> { "bit_string_liter
             extended_digit >> *( -lit("_") >> extended_digit )
         ]]
      >> lit('"')
-     >> x3::attr(ast::bit_string_literal::tag::hex)
+     >> x3::attr(ast::bit_string_literal::base::hex)
     ]
     ;
 } // end detail

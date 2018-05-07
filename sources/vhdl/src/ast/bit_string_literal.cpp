@@ -24,26 +24,26 @@ namespace eda { namespace vhdl { namespace ast {
 template<>
 int get<int32_t>(bit_string_literal const& node)
 {
-    auto iter { std::begin(node.literal) };
-    auto cend { std::cend(node.literal)  };
+    auto iter { std::begin(node.bit_literal) };
+    auto cend { std::cend(node.bit_literal)  };
 
     int32_t attr { 0 };
     bool ok { false };
 
-    using tag = bit_string_literal::tag;
+    using base_specifier = bit_string_literal::base;
 
-    switch(node.hint) {
-    case tag::bin:
-        ok  = x3::parse(iter, cend, x3::bin, attr);
-        break;
-    case tag::oct:
-        ok  = x3::parse(iter, cend, x3::oct, attr);
-        break;
-    case tag::hex:
-        ok  = x3::parse(iter, cend, x3::hex, attr);
-        break;
-    default:
-        cxx_bug_fatal("Invalid bit_string_literal::tag");
+    switch(node.base_specifier) {
+        case base_specifier::bin:
+            ok  = x3::parse(iter, cend, x3::bin, attr);
+            break;
+        case base_specifier::oct:
+            ok  = x3::parse(iter, cend, x3::oct, attr);
+            break;
+        case base_specifier::hex:
+            ok  = x3::parse(iter, cend, x3::hex, attr);
+            break;
+        default:
+            cxx_bug_fatal("Invalid bit_string_literal::tag");
     }
 
     if(ok && iter == cend) {
@@ -60,7 +60,7 @@ int get<int32_t>(bit_string_literal const& node)
         BOOST_THROW_EXCEPTION(
             eda::range_error(
                 "VHDL Bit String Literal='"
-                + literal_ellipsis(std::string(node.literal), length[static_cast<unsigned>(node.hint)])
+                + literal_ellipsis(std::string(node.bit_literal), length[static_cast<unsigned>(node.base_specifier)])
                 + "' <int32> Range Error")
         );
     }
