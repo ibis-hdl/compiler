@@ -1,13 +1,12 @@
 /*
  * conditional_signal_assignment_parsertest.cpp
  *
- *  Created on: 6.5.2018
+ *  Created on: 7.5.2018
  *      Author: olaf
  */
 
 
 #include <boost/test/unit_test.hpp>
-#include <boost/core/ignore_unused.hpp>
 
 #include <iostream>
 

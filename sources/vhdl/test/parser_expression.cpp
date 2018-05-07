@@ -52,16 +52,12 @@ struct expression_failure_dataset : public ::x3_test::dataset_loader
 
 BOOST_DATA_TEST_CASE( expression_failure,
       expression_failure_dataset.input()
-    ^ expression_failure_dataset.expect()
-    ^ expression_failure_dataset.test_file_name(),
-    input, expect, file)
+    ^ expression_failure_dataset.expect(),
+    input, expect)
 {
     using x3_test::testing_parser;
 
     typedef ast::expression attribute_type;
-
-    // avoid warning, used in case of error for error message by boost.test
-    boost::ignore_unused(file);
 
     testing_parser<attribute_type> parse;
     auto [parse_ok, parse_result] = parse(input, parser::expression);

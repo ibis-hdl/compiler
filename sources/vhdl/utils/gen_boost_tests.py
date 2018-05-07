@@ -84,7 +84,6 @@ class BoostTestGenerator:
         """
         return """
 #include <boost/test/unit_test.hpp>
-#include <boost/core/ignore_unused.hpp>
 
 #include <iostream>
 
@@ -159,14 +158,11 @@ GENERATE_DATASET_TEST_CASE( {test_case} )
             return """
 BOOST_DATA_TEST_CASE( {test_case},
       {test_case}_dataset.input()
-    ^ {test_case}_dataset.expect()
-    ^ {test_case}_dataset.test_file_name(),
-    VHDL_input, expect_AST, file)
+    ^ {test_case}_dataset.expect(),
+    VHDL_input, expect_AST)
 {{
     using attribute_type = ast::{attr_name};
     auto const parser = parser::{parser_name};
-
-    boost::ignore_unused(file);
 
     x3_test::testing_parser<attribute_type> parse;
     auto [parse_ok, parsed_AST] = parse(VHDL_input, parser);

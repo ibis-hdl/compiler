@@ -31,16 +31,12 @@
  *
  * BOOST_DATA_TEST_CASE( ${TEST_CASE${SPECIAL}},
  *       ${TEST_CASE${SPECIAL}}_dataset.input()
- *     ^ ${TEST_CASE${SPECIAL}}_dataset.expect()
- *     ^ ${TEST_CASE${SPECIAL}}_dataset.test_file_name(),
- *     input, expect, file)
+ *     ^ ${TEST_CASE${SPECIAL}}_dataset.expect(),
+ *     input, expect)
  * {
  *     using x3_test::testing_parser;
  *
  *     typedef ast::${TEST_CASE} attribute_type;
- *
- *     // avoid warning, used in case of error for error message by boost.test
- *     boost::ignore_unused(file);
  *
  *     testing_parser<attribute_type> parse;
  *     auto [parse_ok, parse_result] = parse(input, parser::${TEST_CASE});
@@ -122,9 +118,8 @@ test_case                                                                      \
 #define GENERATE_DATASET_TEST_CASE_HEADER(test_case)                           \
 BOOST_DATA_TEST_CASE( GENERATE_DATASET_TEST_CASE_NAME(test_case),              \
      GENERATE_DATASET_NAME(test_case).input()                                  \
-    ^GENERATE_DATASET_NAME(test_case).expect()                                 \
-    ^GENERATE_DATASET_NAME(test_case).test_file_name(),                        \
-    input, expect, file)                                                       \
+    ^GENERATE_DATASET_NAME(test_case).expect(),                                \
+    input, expect)                                                             \
 /* --- */
 
 
@@ -134,24 +129,6 @@ BOOST_DATA_TEST_CASE( GENERATE_DATASET_TEST_CASE_NAME(test_case),              \
     using per_element = boost::test_tools::per_element;                        \
     using attribute_type = ATTRIBUTE_TYPE(test_case);                          \
     auto const grammar = RULE_NAME(test_case);                                 \
-    boost::ignore_unused(file);                                                \
-    x3_test::testing_parser<attribute_type> parse;                             \
-    auto const [parse_ok, parse_result] = parse(input, grammar);               \
-    BOOST_TEST(parse_ok);                                                      \
-    BOOST_TEST_INFO("PARSE RESULT = '" << parse_result << "'");                \
-    BOOST_TEST(parse_result == expect, per_element());                         \
-}                                                                              \
-/* --- */
-
-
-// generate the BOOST_DATA_TEST_CASE body part with the dataset where
-// test_case name is different from grammar/rule
-#define GENERATE_DATASET_TEST_CASE_BODY_RULE(test_case, parser_rule)           \
-{                                                                              \
-    using per_element = boost::test_tools::per_element;                        \
-    using attribute_type = ATTRIBUTE_TYPE(test_case);                          \
-    auto const grammar = RULE_NAME(parser_rule);                               \
-    boost::ignore_unused(file);                                                \
     x3_test::testing_parser<attribute_type> parse;                             \
     auto const [parse_ok, parse_result] = parse(input, grammar);               \
     BOOST_TEST(parse_ok);                                                      \
@@ -167,16 +144,6 @@ GENERATE_DATASET(test_case)                                                    \
 GENERATE_DATASET_TEST_CASE_HEADER(test_case)                                   \
 GENERATE_DATASET_TEST_CASE_BODY(test_case)                                     \
 /* --- */
-
-
-// the final macro to generate the boilerplate
-#define GENERATE_DATASET_TEST_CASE_RULE(test_case, parser_rule)                \
-GENERATE_DATASET(test_case)                                                    \
-GENERATE_DATASET_TEST_CASE_HEADER(test_case)                                   \
-GENERATE_DATASET_TEST_CASE_BODY_RULE(test_case, parser_rule)                   \
-/* --- */
-
-
 
 
 

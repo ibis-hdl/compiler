@@ -13,6 +13,7 @@
 #include "data_set.hpp"
 #include "testing_parser.hpp"
 #include "testing_parser_def.hpp"
+#include "testing_parser_grammar_hack.hpp"
 #include "generate_data_test_case.hpp"
 
 
@@ -27,39 +28,7 @@ BOOST_AUTO_TEST_SUITE( parser_literals )
 
 GENERATE_DATASET_TEST_CASE(string_literal)
 GENERATE_DATASET_TEST_CASE(character_literal)
-
-/*
- *  integer rule are special since isn't an AST member !
- */
-struct integer_dataset : public ::x3_test::dataset_loader
-{
-    integer_dataset()
-    : dataset_loader{ "test_case/integer" }
-    { }
-} const integer_dataset;
-
-
-BOOST_DATA_TEST_CASE( integer,
-      integer_dataset.input()
-    ^ integer_dataset.expect()
-    ^ integer_dataset.test_file_name(),
-    input, expected, file )
-{
-    using x3_test::testing_parser;
-
-    // Note, integer isn't an AST member
-    typedef std::string attribute_type;
-
-    // avoid warning, used in case of error for error message by boost.test
-    boost::ignore_unused(file);
-
-    testing_parser<attribute_type> parse;
-    auto [parse_ok, parse_result] =  parse(input, parser::integer);
-
-    BOOST_TEST(parse_ok);
-    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
-    BOOST_TEST(parse_result == expected, btt::per_element());
-}
+GENERATE_DATASET_TEST_CASE(integer)
 
 /*
  * integer (failure)
@@ -74,17 +43,13 @@ struct integer_failure_dataset : public ::x3_test::dataset_loader
 
 BOOST_DATA_TEST_CASE( integer_failure,
       integer_failure_dataset.input()
-    ^ integer_failure_dataset.expect()
-    ^ integer_failure_dataset.test_file_name(),
-    input, expected, file )
+    ^ integer_failure_dataset.expect(),
+    input, expected)
 {
     using x3_test::testing_parser;
 
     // Note, integer isn't an AST member
-    typedef std::string attribute_type;
-
-    // avoid warning, used in case of error for error message by boost.test
-    boost::ignore_unused(file);
+    typedef ast::integer attribute_type;
 
     testing_parser<attribute_type> parse;
     auto [parse_ok, parse_result] = parse(input, parser::integer);
@@ -109,16 +74,12 @@ struct identifier_failure_dataset : public ::x3_test::dataset_loader
 
 BOOST_DATA_TEST_CASE( identifier_fail,
       identifier_failure_dataset.input()
-    ^ identifier_failure_dataset.expect()
-    ^ identifier_failure_dataset.test_file_name(),
-    input, expected, file )
+    ^ identifier_failure_dataset.expect(),
+    input, expected)
 {
     using x3_test::testing_parser;
 
     typedef ast::identifier attribute_type;
-
-    // avoid warning, used in case of error for error message by boost.test
-    boost::ignore_unused(file);
 
     testing_parser<attribute_type> parse;
     auto [parse_ok, parse_result] = parse(input, parser::identifier);

@@ -1,13 +1,12 @@
 /*
  * expression_failure_parsertest.cpp
  *
- *  Created on: 6.5.2018
+ *  Created on: 7.5.2018
  *      Author: olaf
  */
 
 
 #include <boost/test/unit_test.hpp>
-#include <boost/core/ignore_unused.hpp>
 
 #include <iostream>
 
@@ -33,14 +32,11 @@ struct expression_failure_dataset : public ::x3_test::dataset_loader
 
 BOOST_DATA_TEST_CASE( expression_failure,
       expression_failure_dataset.input()
-    ^ expression_failure_dataset.expect()
-    ^ expression_failure_dataset.test_file_name(),
-    VHDL_input, expect_AST, file)
+    ^ expression_failure_dataset.expect(),
+    VHDL_input, expect_AST)
 {
     using attribute_type = ast::expression;
     auto const parser = parser::expression;
-
-    boost::ignore_unused(file);
 
     x3_test::testing_parser<attribute_type> parse;
     auto [parse_ok, parsed_AST] = parse(VHDL_input, parser);
