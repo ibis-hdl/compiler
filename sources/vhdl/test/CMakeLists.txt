@@ -197,12 +197,20 @@ target_link_libraries(${PROJECT_NAME}
 
 ##
 # COTIRE
+
+# disable PCH date-time check, Boost.Spirit uses __DATE__ and __TIME__ 
+# [Can cotire be made to work properly with Boost?](
+#  https://stackoverflow.com/questions/44350219/can-cotire-be-made-to-work-properly-with-boost)
+target_compile_options(${PROJECT_NAME} PRIVATE
+    -Wno-pch-date-time
+)
+
 # FixMe: FAILED with Boost.PP
 set_target_properties(${PROJECT_NAME} PROPERTIES
     COTIRE_ADDITIONAL_PREFIX_HEADER_IGNORE_PATH "${Boost_INCLUDE_DIRS}/preprocessor"
     #COTIRE_PREFIX_HEADER_INCLUDE_PATH eda::vhdl_parser
 )
-    
+
 #cotire(${PROJECT_NAME})
 
 
