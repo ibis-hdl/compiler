@@ -118,8 +118,9 @@ test_case                                                                      \
 #define GENERATE_DATASET_TEST_CASE_HEADER(test_case)                           \
 BOOST_DATA_TEST_CASE( GENERATE_DATASET_TEST_CASE_NAME(test_case),              \
      GENERATE_DATASET_NAME(test_case).input()                                  \
-    ^GENERATE_DATASET_NAME(test_case).expect(),                                \
-    input, expect)                                                             \
+    ^GENERATE_DATASET_NAME(test_case).expect()                                 \
+    ^GENERATE_DATASET_NAME(test_case).test_case_name(),                        \
+    VHDL_code, expect_AST, test_case)                                          \
 /* --- */
 
 
@@ -128,12 +129,16 @@ BOOST_DATA_TEST_CASE( GENERATE_DATASET_TEST_CASE_NAME(test_case),              \
 {                                                                              \
     using per_element = boost::test_tools::per_element;                        \
     using attribute_type = ATTRIBUTE_TYPE(test_case);                          \
-    auto const grammar = RULE_NAME(test_case);                                 \
+    auto const parser = RULE_NAME(test_case);                                  \
+    boost::ignore_unused(test_case);                                           \
     x3_test::testing_parser<attribute_type> parse;                             \
-    auto const [parse_ok, parse_result] = parse(input, grammar);               \
+    auto [parse_ok, parsed_AST] = parse(VHDL_code, parser);                    \
     BOOST_TEST(parse_ok);                                                      \
-    BOOST_TEST_INFO("PARSE RESULT = '" << parse_result << "'");                \
-    BOOST_TEST(parse_result == expect, per_element());                         \
+    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),                     \
+                          "\n    PARSED AST = '\n" << parsed_AST << "'");      \
+    BOOST_TEST(parsed_AST == expect_AST, per_element());                       \
+    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),                     \
+                          "\n    PARSED AST = '\n" << parsed_AST << "'");      \
 }                                                                              \
 /* --- */
 

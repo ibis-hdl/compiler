@@ -84,6 +84,7 @@ class BoostTestGenerator:
         """
         return """
 #include <boost/test/unit_test.hpp>
+#include <boost/core/ignore_unused.hpp>
 
 #include <iostream>
 
@@ -92,6 +93,7 @@ class BoostTestGenerator:
 #include "testing_parser.hpp"
 #include "testing_parser_grammar_hack.hpp"
 #include "generate_data_test_case.hpp"
+#include "testing_util.hpp"
 """
         
     def cxxNamespaceAliases(self, macro):
@@ -158,18 +160,25 @@ GENERATE_DATASET_TEST_CASE( {test_case} )
             return """
 BOOST_DATA_TEST_CASE( {test_case},
       {test_case}_dataset.input()
-    ^ {test_case}_dataset.expect(),
-    VHDL_input, expect_AST)
+    ^ {test_case}_dataset.expect()
+    ^ {test_case}_dataset.test_case_name(),
+    VHDL_code, expect_AST, test_case)
 {{
     using attribute_type = ast::{attr_name};
     auto const parser = parser::{parser_name};
 
+    boost::ignore_unused(test_case);
+
     x3_test::testing_parser<attribute_type> parse;
-    auto [parse_ok, parsed_AST] = parse(VHDL_input, parser);
+    auto [parse_ok, parsed_AST] = parse(VHDL_code, parser);
 
     BOOST_TEST({F}parse_ok);
-    BOOST_TEST_INFO("PARSED AST = '" << parsed_AST << "'");
+    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),
+                          "\\n    PARSED AST = '\\n" << parsed_AST << "'");
+
     BOOST_TEST(parsed_AST == expect_AST, btt::per_element());
+    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),
+                          "\\n    PARSED AST = '\\n" << parsed_AST << "'");
 }}
 """.format(
         test_case=name,

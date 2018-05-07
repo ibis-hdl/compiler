@@ -18,6 +18,7 @@
 #include "testing_parser_def.hpp"
 #include "testing_parser_grammar_hack.hpp"
 #include "generate_data_test_case.hpp"
+#include "testing_util.hpp"
 
 
 BOOST_AUTO_TEST_SUITE( parser_type )

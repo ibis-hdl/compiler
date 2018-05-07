@@ -15,6 +15,7 @@
 #include "testing_parser.hpp"
 #include "testing_parser_def.hpp"
 #include "generate_data_test_case.hpp"
+#include "testing_util.hpp"
 
 
 namespace x3 = boost::spirit::x3;
@@ -36,9 +37,7 @@ GENERATE_DATASET_TEST_CASE(shift_expression)
 GENERATE_DATASET_TEST_CASE(relation)
 GENERATE_DATASET_TEST_CASE(expression)
 
-#if 0
-GENERATE_FAILURE_DATASET_TEST_CASE(expression)
-#else
+
 /*
  * expression failure
  */
@@ -52,21 +51,27 @@ struct expression_failure_dataset : public ::x3_test::dataset_loader
 
 BOOST_DATA_TEST_CASE( expression_failure,
       expression_failure_dataset.input()
-    ^ expression_failure_dataset.expect(),
-    input, expect)
+    ^ expression_failure_dataset.expect()
+    ^ expression_failure_dataset.test_case_name(),
+    VHDL_code, expect_AST, test_case)
 {
-    using x3_test::testing_parser;
+    using attribute_type = ast::expression;
+    auto const parser = parser::expression;
 
-    typedef ast::expression attribute_type;
+    boost::ignore_unused(test_case);
 
-    testing_parser<attribute_type> parse;
-    auto [parse_ok, parse_result] = parse(input, parser::expression);
+    x3_test::testing_parser<attribute_type> parse;
+    auto [parse_ok, parsed_AST] = parse(VHDL_code, parser);
 
     BOOST_TEST(!parse_ok);
-    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
-    BOOST_TEST(parse_result == expect, btt::per_element());
+    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),
+                          "\n    PARSED AST = '\n" << parsed_AST << "'");
+
+    BOOST_TEST(parsed_AST == expect_AST, btt::per_element());
+    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),
+                          "\n    PARSED AST = '\n" << parsed_AST << "'");
 }
-#endif
+
 
 GENERATE_DATASET_TEST_CASE(signal_list)
 

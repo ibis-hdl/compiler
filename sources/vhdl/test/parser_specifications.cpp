@@ -17,6 +17,7 @@
 #include "testing_parser.hpp"
 #include "testing_parser_def.hpp"
 #include "generate_data_test_case.hpp"
+#include "testing_util.hpp"
 
 
 BOOST_AUTO_TEST_SUITE( parser_specifications )

@@ -31,7 +31,7 @@ public:
     typedef std::vector<std::string>                    data_type;
 
 public:
-    pathname_type const& test_file_name() const { return m_basefile; }
+    pathname_type const& test_case_name() const { return m_test_case; }
     data_type const& input() const { return m_input; }
     data_type const& expect() const { return m_expected; }
 
@@ -43,7 +43,8 @@ private:
     std::string read_file(fs::path const& file_path);
 
 private:
-    pathname_type                                       m_basefile;
+    fs::path                                            m_source_dir;
+    pathname_type                                       m_test_case;
     data_type                                           m_input;
     data_type                                           m_expected;
 

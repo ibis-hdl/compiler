@@ -15,6 +15,7 @@
 #include "testing_parser_def.hpp"
 #include "testing_parser_grammar_hack.hpp"
 #include "generate_data_test_case.hpp"
+#include "testing_util.hpp"
 
 
 namespace x3 = boost::spirit::x3;
@@ -43,20 +44,25 @@ struct integer_failure_dataset : public ::x3_test::dataset_loader
 
 BOOST_DATA_TEST_CASE( integer_failure,
       integer_failure_dataset.input()
-    ^ integer_failure_dataset.expect(),
-    input, expected)
+    ^ integer_failure_dataset.expect()
+    ^ integer_failure_dataset.test_case_name(),
+    VHDL_code, expect_AST, test_case)
 {
-    using x3_test::testing_parser;
+    using attribute_type = ast::integer;
+    auto const parser = parser::integer;
 
-    // Note, integer isn't an AST member
-    typedef ast::integer attribute_type;
+    boost::ignore_unused(test_case);
 
-    testing_parser<attribute_type> parse;
-    auto [parse_ok, parse_result] = parse(input, parser::integer);
+    x3_test::testing_parser<attribute_type> parse;
+    auto [parse_ok, parsed_AST] = parse(VHDL_code, parser);
 
     BOOST_TEST(!parse_ok);
-    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
-    BOOST_TEST(parse_result == expected, btt::per_element());
+    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),
+                          "\n    PARSED AST = '\n" << parsed_AST << "'");
+
+    BOOST_TEST(parsed_AST == expect_AST, btt::per_element());
+    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),
+                          "\n    PARSED AST = '\n" << parsed_AST << "'");
 }
 
 GENERATE_DATASET_TEST_CASE(identifier)
@@ -72,21 +78,27 @@ struct identifier_failure_dataset : public ::x3_test::dataset_loader
 } const identifier_failure_dataset;
 
 
-BOOST_DATA_TEST_CASE( identifier_fail,
+BOOST_DATA_TEST_CASE( identifier_failure,
       identifier_failure_dataset.input()
-    ^ identifier_failure_dataset.expect(),
-    input, expected)
+    ^ identifier_failure_dataset.expect()
+    ^ identifier_failure_dataset.test_case_name(),
+    VHDL_code, expect_AST, test_case)
 {
-    using x3_test::testing_parser;
+    using attribute_type = ast::identifier;
+    auto const parser = parser::identifier;
 
-    typedef ast::identifier attribute_type;
+    boost::ignore_unused(test_case);
 
-    testing_parser<attribute_type> parse;
-    auto [parse_ok, parse_result] = parse(input, parser::identifier);
+    x3_test::testing_parser<attribute_type> parse;
+    auto [parse_ok, parsed_AST] = parse(VHDL_code, parser);
 
     BOOST_TEST(!parse_ok);
-    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
-    BOOST_TEST(parse_result == expected, btt::per_element());
+    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),
+                          "\n    PARSED AST = '\n" << parsed_AST << "'");
+
+    BOOST_TEST(parsed_AST == expect_AST, btt::per_element());
+    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),
+                          "\n    PARSED AST = '\n" << parsed_AST << "'");
 }
 
 
@@ -96,6 +108,7 @@ GENERATE_DATASET_TEST_CASE(decimal_literal)
 GENERATE_DATASET_TEST_CASE(bit_string_literal)
 GENERATE_DATASET_TEST_CASE(abstract_literal)
 GENERATE_DATASET_TEST_CASE(physical_literal)
+
 
 /*
  * physical_literal_failure
@@ -108,25 +121,27 @@ struct physical_literal_failure_dataset : public ::x3_test::dataset_loader
 } const physical_literal_failure_dataset;
 
 
-BOOST_DATA_TEST_CASE( physical_literal_fail,
+BOOST_DATA_TEST_CASE( physical_literal_failure,
       physical_literal_failure_dataset.input()
     ^ physical_literal_failure_dataset.expect()
-    ^ physical_literal_failure_dataset.test_file_name(),
-    input, expected, file)
+    ^ physical_literal_failure_dataset.test_case_name(),
+    VHDL_code, expect_AST, test_case)
 {
-    using x3_test::testing_parser;
+    using attribute_type = ast::physical_literal;
+    auto const parser = parser::physical_literal;
 
-    typedef ast::physical_literal attribute_type;
+    boost::ignore_unused(test_case);
 
-    // avoid warning, used in case of error for error message by boost.test
-    boost::ignore_unused(file);
-
-    testing_parser<attribute_type> parse;
-    auto [parse_ok, parse_result] =  parse(input, parser::physical_literal);
+    x3_test::testing_parser<attribute_type> parse;
+    auto [parse_ok, parsed_AST] = parse(VHDL_code, parser);
 
     BOOST_TEST(!parse_ok);
-    BOOST_TEST_INFO("ATTR_RESULT = '" << parse_result << "'");
-    BOOST_TEST(parse_result == expected, btt::per_element());
+    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),
+                          "\n    PARSED AST = '\n" << parsed_AST << "'");
+
+    BOOST_TEST(parsed_AST == expect_AST, btt::per_element());
+    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),
+                          "\n    PARSED AST = '\n" << parsed_AST << "'");
 }
 
 

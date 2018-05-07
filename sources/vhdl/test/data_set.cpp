@@ -26,20 +26,21 @@ fs::path pretty_filepath(fs::path file_path) {
 
 
 dataset_loader::dataset_loader(fs::path const& path)
+/* The prefix for the test case root directory structure is (unfortunately)
+ * hard coded. I didn't found a way to give these as command line argument
+ * to the boost.test runner. */
+: m_source_dir{ BT_TEST_CASE_PATH }
 {
-    /* The prefix for the test case root directory structure is (unfortunately)
-     * hard coded. I didn't found a way to give these as command line argument
-     * to the boost.test runner. */
-    fs::path source_dir{ BT_TEST_CASE_PATH };
-
     BOOST_TEST_INFO("dataset_loader load test files from " << path);
-    read_files(source_dir / path);
+    read_files(m_source_dir / path);
 }
 
 
 void dataset_loader::read_files(fs::path const& path)
 {
     try {
+        fs::path const test_case =  m_source_dir.filename();
+
         if(fs::exists(path) && fs::is_directory(path)) {
 
             std::vector<fs::path> dir_list { };
@@ -55,9 +56,8 @@ void dataset_loader::read_files(fs::path const& path)
 
                 if (fs::extension(file) == ".input") {
 
-                    fs::path const base_file = fs::change_extension(file, "");
-                    m_basefile.emplace_back(pretty_filepath(base_file));
-                    //cerr << "INFO: read " << base_file << "\n";
+                    m_test_case.emplace_back(test_case / file.stem());
+                    //cerr << "INFO: read " << m_test_case.back() << "\n";
 
                     fs::path const input_file  = file;
                     fs::path const expect_file = fs::change_extension(file, ".expected");
@@ -76,13 +76,13 @@ void dataset_loader::read_files(fs::path const& path)
         cerr << "ERROR: Caught \"" << e.what() << "\" exception!\n";
         /* try to recover from error and continue; probably no {file}.expected
          * was found. */
-        if(   m_basefile.size() == m_input.size()
+        if(   m_test_case.size() == m_input.size()
            && m_input.size()    == m_expected.size() + 1
           ) {
             cerr << "WARNING: Remove test files at "
-                 << pretty_filepath(m_basefile.back())
+                 << pretty_filepath(m_test_case.back())
                  << " from data set\n";
-            m_basefile.pop_back();
+            m_test_case.pop_back();
             m_input.pop_back();
         }
     }
