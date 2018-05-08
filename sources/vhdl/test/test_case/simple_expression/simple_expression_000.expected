@@ -1,0 +1,14 @@
+(simple_expression
+  (term
+    (factor_unary_operation
+      operator: NOT,
+      (literal<v>
+        (enumeration_literal<v>
+          (character_literal
+            '1'
+          )
+        )
+      )
+    )
+  )
+)

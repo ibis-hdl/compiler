@@ -1,4 +1,0 @@
--- return expression
-foo:
-    return a + b;
-

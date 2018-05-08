@@ -1,3 +1,4 @@
--- association_element with formal and actual_part
-generic_name => actual_part, parameter_name => variable_name
+-- mixed formal and actual parts of different kinds
+function_name ( formal_designator ) => signal_name,
+type_mark ( formal_designator )     => type_mark ( actual_designator )
 

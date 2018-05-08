@@ -1,0 +1,3 @@
+-- VHDL test case input
+attribute PIN_NO of CIN: signal is 10;
+

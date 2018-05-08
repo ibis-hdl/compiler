@@ -1,1 +1,3 @@
-signal my_word : word := X"01234567";
+-- guarded signal
+signal foo : word register; 
+

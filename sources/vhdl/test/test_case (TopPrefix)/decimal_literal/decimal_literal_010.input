@@ -1,0 +1,4 @@
+-- VHDL test case input
+-- Real literals with exponents
+1.0E+6
+

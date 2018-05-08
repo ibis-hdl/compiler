@@ -1,0 +1,4 @@
+-- VHDL test case input
+-- list of discrete subtype indications
+(type_mark, other_type_mark)
+

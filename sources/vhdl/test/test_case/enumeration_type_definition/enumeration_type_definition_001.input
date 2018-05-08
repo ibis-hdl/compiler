@@ -1,2 +1,2 @@
-(LOW, HIGH, RISING, FALLING, AMBIGUOUS)
+('0','1','X')
 

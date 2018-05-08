@@ -1,0 +1,4 @@
+-- VHDL test case input
+Output_pin <= reject 5 ns inertial Input_pin after 10 ns, 
+                               not Input_pin after 20 ns;
+

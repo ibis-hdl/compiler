@@ -1,0 +1,2 @@
+attribute LOCATION of ADDER1: label is (10, 15);
+

@@ -1,0 +1,9 @@
+-- VHDL test case input
+if_label:
+    if condition then
+        a <= b;
+        c := d;
+    else
+        a <= '0';
+        c := 0;
+    end if;

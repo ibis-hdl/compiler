@@ -1,0 +1,3 @@
+(decimal_literal
+  literal: 1.0E+6, hint: double
+)

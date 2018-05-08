@@ -1,0 +1,2 @@
+-- VHDL test case input
+type TWOS_COMPLEMENT_INTEGER is range -32768 to 32767;

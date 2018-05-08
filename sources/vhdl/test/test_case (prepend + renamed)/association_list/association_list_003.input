@@ -1,0 +1,5 @@
+-- VHDL test case input
+-- mixed formal and actual parts of different kinds
+function_name ( formal_designator ) => signal_name,
+type_mark ( formal_designator )     => type_mark ( actual_designator )
+

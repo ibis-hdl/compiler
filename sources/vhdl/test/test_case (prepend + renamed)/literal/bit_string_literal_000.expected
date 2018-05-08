@@ -1,0 +1,5 @@
+(literal<v>
+  (bit_string_literal
+    base: BIN, literal: 1111
+  )
+)

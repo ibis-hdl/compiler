@@ -1,0 +1,3 @@
+-- VHDL test case input
+(LOW, HIGH, RISING, FALLING, AMBIGUOUS)
+

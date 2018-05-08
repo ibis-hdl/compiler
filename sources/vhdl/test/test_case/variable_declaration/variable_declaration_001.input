@@ -1,1 +1,2 @@
-variable HEIGHT : integer;
+variable COND : boolean := true;
+

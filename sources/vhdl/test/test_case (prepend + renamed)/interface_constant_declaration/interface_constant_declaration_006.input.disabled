@@ -1,0 +1,6 @@
+-- VHDL test case input
+constant TWELVE_O_CLOCK :
+     T_CLOCK_TIME 
+-- FixMe: Can't parse aggregate yet
+-- := (1,2,0,0) 
+

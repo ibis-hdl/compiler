@@ -1,5 +1,4 @@
 port map (
-    B => Y, 
-    A => X, 
-    SUM => S, 
-    CARRY => open)
+    a    => x, 
+    b    => y,  
+    out_ => z)

@@ -1,2 +1,2 @@
-Output_pin <= reject 10 ns inertial Input_pin after 10 ns;
+Output_pin <= reject 5 ns inertial Input_pin after 10 ns;
 

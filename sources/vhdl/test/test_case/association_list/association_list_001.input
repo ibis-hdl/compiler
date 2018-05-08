@@ -1,3 +1,2 @@
 -- list of actual_part only
-signal_name, variable_name
-
+function_name ( actual_designator ), cool_function ( signal_name )

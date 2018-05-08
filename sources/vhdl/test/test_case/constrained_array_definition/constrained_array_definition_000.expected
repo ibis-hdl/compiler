@@ -1,0 +1,48 @@
+(constrained_array_definition
+  (index_constraint
+    (discrete_range<v>
+      (range<v>
+        (simple_expression
+          (term
+            (primary<v>
+              (literal<v>
+                (numeric_literal<v>
+                  (abstract_literal<v>
+                    (decimal_literal
+                      literal: 1, hint: int
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+        (keyword
+          TO
+        )
+        (simple_expression
+          (term
+            (primary<v>
+              (literal<v>
+                (numeric_literal<v>
+                  (abstract_literal<v>
+                    (decimal_literal
+                      literal: 10, hint: int
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (subtype_indication
+    (name<v>
+      (identifier
+        REAL
+      )
+    )
+  )
+)

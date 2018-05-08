@@ -1,1 +1,2 @@
-wait on A,B; 
+dummy: WAIT on X,Y,Z;
+

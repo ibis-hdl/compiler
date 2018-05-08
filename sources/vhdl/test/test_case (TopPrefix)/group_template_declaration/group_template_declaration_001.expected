@@ -1,0 +1,13 @@
+(group_template_declaration
+  (identifier
+    PIN2PIN
+  )
+  (entity_class_entry_list
+    (keyword
+      SIGNAL
+    ),
+    (keyword
+      SIGNAL
+    )
+  )
+)

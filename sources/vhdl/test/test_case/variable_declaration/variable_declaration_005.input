@@ -1,2 +1,1 @@
-variable I : integer range 0 to 3;
-
+shared variable X : std_ulogic;

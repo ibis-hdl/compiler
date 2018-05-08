@@ -1,1 +1,1 @@
-generic (G1, G2:    INTEGER);
+generic (N: Natural := 2);

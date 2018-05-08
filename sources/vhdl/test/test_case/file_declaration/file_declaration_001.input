@@ -1,2 +1,2 @@
-file F1: IntegerFile;
+file F2: IntegerFile is "test.dat";
 

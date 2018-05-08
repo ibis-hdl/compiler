@@ -1,0 +1,3 @@
+-- VHDL test case input
+assert (42 > 0) severity FAILURE
+

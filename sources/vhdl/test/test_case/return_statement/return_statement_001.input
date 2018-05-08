@@ -1,3 +1,4 @@
--- simple
-return;
+-- with label
+exit_:
+    return;
 

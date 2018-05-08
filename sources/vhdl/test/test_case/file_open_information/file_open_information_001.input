@@ -1,2 +1,2 @@
-OPEN file_open_kind IS "file_logical_name"
+IS file_logical_name
 

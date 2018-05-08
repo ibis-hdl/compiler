@@ -1,3 +1,4 @@
-my_label: loop
-    a <= b;
-end loop my_loop;
+while condition loop
+    null;
+end loop;
+

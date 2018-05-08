@@ -1,1 +1,1 @@
-target := expression;
+label_: target := expression;

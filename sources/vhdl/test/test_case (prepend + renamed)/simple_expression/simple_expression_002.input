@@ -1,0 +1,5 @@
+-- VHDL test case input
+-42 * 66 
++18 * 88
+
+

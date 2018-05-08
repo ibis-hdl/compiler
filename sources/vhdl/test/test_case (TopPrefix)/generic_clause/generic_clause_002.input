@@ -1,0 +1,2 @@
+-- VHDL test case input
+generic (N: Natural := 2);

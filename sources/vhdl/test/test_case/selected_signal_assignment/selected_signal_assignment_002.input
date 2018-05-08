@@ -1,4 +1,5 @@
-with Command select
-     DataOut <= InA and InB when "000",
-                -- ... omitted
-                'Z' when others;
+with IntCommand select
+  MuxOut <= guarded INERTIAL InA when 0 | 1,
+            -- ... omitted
+            'Z' when others;
+

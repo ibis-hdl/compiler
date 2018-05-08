@@ -1,0 +1,3 @@
+-- VHDL test case input
+--  An element of a two-dimensional array.
+MEMORY_CELL(1024,7)

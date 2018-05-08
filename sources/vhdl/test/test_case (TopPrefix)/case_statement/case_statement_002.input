@@ -1,0 +1,7 @@
+-- VHDL test case input
+case_label:
+case expression is
+    when "choices" => exit;
+    when "foo"     => null;
+end case case_label;
+

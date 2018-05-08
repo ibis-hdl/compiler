@@ -1,0 +1,2 @@
+-- VHDL test case input
+generic map (tpLH => 2ns, tpHL => 3ns)

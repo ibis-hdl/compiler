@@ -1,1 +1,5 @@
-port map (A, B)
+port map (
+    B => Y, 
+    A => X, 
+    SUM => S, 
+    CARRY => open)

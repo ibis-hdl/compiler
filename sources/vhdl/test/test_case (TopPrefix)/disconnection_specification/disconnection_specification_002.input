@@ -1,0 +1,3 @@
+-- VHDL test case input
+disconnect others: T after 42 ms;
+

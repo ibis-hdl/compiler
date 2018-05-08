@@ -1,0 +1,3 @@
+-- VHDL test case input
+(ex1 => 2, ex3 | OTHERS => 5)
+

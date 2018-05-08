@@ -1,1 +1,2 @@
-access foo
+-- type STRING_FILE is 
+file of STRING

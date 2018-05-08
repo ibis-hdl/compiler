@@ -1,2 +1,2 @@
- attribute CAPACITANCE of all: signal is 15 pF;
+attribute IMPLEMENTATION of G1: group is "74LS152";
 

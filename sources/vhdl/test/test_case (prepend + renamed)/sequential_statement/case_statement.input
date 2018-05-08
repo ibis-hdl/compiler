@@ -1,0 +1,4 @@
+case expression is
+    when "choices" => exit;
+end case;
+

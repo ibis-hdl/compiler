@@ -1,0 +1,43 @@
+(relation
+  (shift_expression
+    (simple_expression
+      (term
+        (primary<v>
+          (literal<v>
+            (string_literal
+              0111
+            )
+          )
+        ),
+        operator: MUL,
+        (primary<v>
+          (literal<v>
+            (numeric_literal<v>
+              (abstract_literal<v>
+                (decimal_literal
+                  literal: 42, hint: int
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  ),
+  operator: LESS,
+  (shift_expression
+    (simple_expression
+      (term
+        (primary<v>
+          (literal<v>
+            (enumeration_literal<v>
+              (character_literal
+                '1'
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

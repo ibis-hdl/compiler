@@ -1,0 +1,5 @@
+procedure designator is
+    CONSTANT identifier_list : subtype_indication;
+begin
+    report "All Went good";
+end;

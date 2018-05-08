@@ -1,0 +1,3 @@
+-- VHDL test case input
+constant Pi : real := 3.14159
+

@@ -1,4 +1,4 @@
 In line 2:
 Error! Expecting end of input here: 
-"0011" nand "0010" nand "1000"
-___________________^_
+"0011" nor "0010" nor "1000"
+__________________^_

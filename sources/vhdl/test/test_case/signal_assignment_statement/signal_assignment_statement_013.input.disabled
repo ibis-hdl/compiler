@@ -1,1 +1,0 @@
-exa <= (ex1 => 2, ex3 | OTHERS => 5);

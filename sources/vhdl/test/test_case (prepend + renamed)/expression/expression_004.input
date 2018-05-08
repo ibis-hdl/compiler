@@ -1,0 +1,2 @@
+-- VHDL test case input
+"0011" nand "0010"

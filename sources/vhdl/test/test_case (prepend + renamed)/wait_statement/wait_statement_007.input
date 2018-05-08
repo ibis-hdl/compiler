@@ -1,0 +1,3 @@
+-- VHDL test case input
+Wait on EN until EN='1' for 1ms;
+

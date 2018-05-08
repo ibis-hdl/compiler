@@ -1,0 +1,36 @@
+(file_open_information
+  (expression
+    (relation
+      (shift_expression
+        (simple_expression
+          (term
+            (primary<v>
+              (name<v>
+                (identifier
+                  file_open_kind
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (expression
+    (relation
+      (shift_expression
+        (simple_expression
+          (term
+            (primary<v>
+              (literal<v>
+                (string_literal
+                  file_logical_name
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

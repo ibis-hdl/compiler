@@ -1,2 +1,2 @@
-foo : integer
+signal a_bit : bit := '0'
 

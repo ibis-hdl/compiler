@@ -1,2 +1,2 @@
-variable a_bit : bit := '0'
+variable bar : word
 

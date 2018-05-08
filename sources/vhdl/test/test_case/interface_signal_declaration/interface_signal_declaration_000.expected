@@ -1,0 +1,14 @@
+(interface_signal_declaration
+  (identifier_list
+    (identifier
+      foo
+    )
+  )
+  (subtype_indication
+    (name<v>
+      (identifier
+        integer
+      )
+    )
+  )
+)

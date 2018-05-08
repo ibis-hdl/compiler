@@ -1,0 +1,6 @@
+-- VHDL test case input
+q <= reject 3ns INERTIAL
+    3 WHEN high = '1' ELSE
+    2 WHEN mid  = '1' ELSE
+    1 WHEN low  = '1' ELSE
+    0; 

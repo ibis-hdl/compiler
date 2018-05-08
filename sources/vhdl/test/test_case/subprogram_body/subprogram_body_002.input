@@ -1,5 +1,7 @@
-procedure Dump(F: inout Text; Value: Integer) is
-    CONSTANT identifier_list : subtype_indication;
+function generator (din : std_ulogic_vector)
+    return std_ulogic 
+is
+    variable t : std_ulogic := '0';
 begin
-    NULL;
-end;
+    return '0';
+end parity_generator;

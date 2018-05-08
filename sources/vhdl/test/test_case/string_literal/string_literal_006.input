@@ -1,2 +1,2 @@
-%Quotation: %%REPORT...%% is also allowed%
-
+-- empty string literal
+""

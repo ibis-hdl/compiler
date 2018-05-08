@@ -1,0 +1,29 @@
+(shift_expression
+  (simple_expression
+    (term
+      (primary<v>
+        (literal<v>
+          (string_literal
+            1110_1110
+          )
+        )
+      )
+    )
+  ),
+  operator: SLL,
+  (simple_expression
+    (term
+      (primary<v>
+        (literal<v>
+          (numeric_literal<v>
+            (abstract_literal<v>
+              (decimal_literal
+                literal: 1, hint: int
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

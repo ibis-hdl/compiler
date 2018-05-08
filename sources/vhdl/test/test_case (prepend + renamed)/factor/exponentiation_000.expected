@@ -1,0 +1,15 @@
+(factor<v>
+  (factor_binary_operation
+    (literal<v>
+      (bit_string_literal
+        base: HEX, literal: 42_FF
+      )
+    )
+    operator: EXPONENT,
+    (literal<v>
+      (bit_string_literal
+        base: BIN, literal: 0111
+      )
+    )
+  )
+)

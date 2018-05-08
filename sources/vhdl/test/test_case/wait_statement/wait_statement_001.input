@@ -1,1 +1,2 @@
-WAIT;
+wait_label: WAIT;
+

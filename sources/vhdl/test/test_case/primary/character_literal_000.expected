@@ -1,0 +1,9 @@
+(primary<v>
+  (literal<v>
+    (enumeration_literal<v>
+      (character_literal
+        'A'
+      )
+    )
+  )
+)

@@ -1,0 +1,3 @@
+-- VHDL test case input
+file F3: IntegerFile open WRITE_MODE is "test.dat";
+

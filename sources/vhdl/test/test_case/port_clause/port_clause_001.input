@@ -1,1 +1,4 @@
-port (X, Y, Cin: in Bit; Cout, Sum: out Bit);
+port 
+    (Inputs: in       Bit_Vector (1 to N);
+     Result: out      Bit)
+    ;

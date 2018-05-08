@@ -1,1 +1,1 @@
-DAY    : INTEGER range 1 to 31;
+MONTH  : MONTH_NAME;

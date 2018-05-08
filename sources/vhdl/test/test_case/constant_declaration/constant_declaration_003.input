@@ -1,2 +1,3 @@
-constant CYCLE_TIME, RESET_TIME : TIME := 100 ns;
+-- a deferred constant
+constant Propagation_Delay : DELAY_LENGTH;  
 

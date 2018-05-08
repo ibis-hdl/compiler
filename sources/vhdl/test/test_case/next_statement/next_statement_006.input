@@ -1,3 +1,0 @@
-next_:
-   NEXT loop_exit WHEN index <= 0;
-

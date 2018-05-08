@@ -1,0 +1,2 @@
+-- VHDL test case input
+wait on A,B; 

@@ -1,1 +1,1 @@
-type BIT is ('0','1');
+type WORD_INDEX is range 31 downto 0;

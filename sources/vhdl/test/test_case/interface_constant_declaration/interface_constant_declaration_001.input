@@ -1,2 +1,2 @@
-WIDTH : integer
+constant BUS_WIDTH : integer
 

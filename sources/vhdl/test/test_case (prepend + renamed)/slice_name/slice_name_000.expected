@@ -1,0 +1,46 @@
+(slice_name
+  (prefix<v>
+    (name<v>
+      (identifier
+        BIT_VECTOR
+      )
+    )
+  )
+  (discrete_range<v>
+    (range<v>
+      (simple_expression
+        (term
+          (primary<v>
+            (literal<v>
+              (numeric_literal<v>
+                (abstract_literal<v>
+                  (decimal_literal
+                    literal: 31, hint: int
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+      (keyword
+        DOWNTO
+      )
+      (simple_expression
+        (term
+          (primary<v>
+            (literal<v>
+              (numeric_literal<v>
+                (abstract_literal<v>
+                  (decimal_literal
+                    literal: 0, hint: int
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

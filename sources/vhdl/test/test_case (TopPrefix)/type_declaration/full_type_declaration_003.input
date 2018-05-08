@@ -1,0 +1,2 @@
+-- VHDL test case input
+type WORD_INDEX is range 31 downto 0;

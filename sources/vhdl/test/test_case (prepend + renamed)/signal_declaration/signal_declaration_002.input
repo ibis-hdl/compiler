@@ -1,0 +1,4 @@
+-- VHDL test case input
+-- guarded signal
+signal foo : word register; 
+

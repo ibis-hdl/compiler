@@ -37,21 +37,6 @@ class TestCaseEnumerationFixer:
         else:           return None
         
         
-    def prepend(self, root, filename, contents, dry_run):
-        """Add additional contents on top of the given file.
-        
-        This is useful to get clear diagnostic using Boost.Test
-        """
-        n=self.get_integer(filename)
-        if not n: return # not a test case file by convention
-        print(filename + ' <= ' + contents)
-        if not dry_run:
-            with open(os.path.join(root, filename), 'r') as original:
-                 data = original.read()
-            with open(os.path.join(root, filename), 'w') as modified:
-                 modified.write(contents + '\n' + data)
-
-
     def rename(self, root, origin, dry_run):
         """Rename the origin name to the new enumeration scheme
         
@@ -62,13 +47,11 @@ class TestCaseEnumerationFixer:
         n=self.get_integer(origin)
         if not n: return # not a test case file by convention
         assert n > 0     # multiple runs? Prevent negative file numbers
-        new_name=origin.replace(str(n), str(n-1))
-        print(origin + ' => ' + new_name)
+        src=os.path.join(root, origin)
+        dst=os.path.join(root, origin.replace(str(n), str(n-1)))
+        print(src + ' => ' + dst)
         if not dry_run:
-            os.rename(
-                os.path.join(root, origin),
-                os.path.join(root, new_name)
-            )
+            os.rename(src, dst)
 
 
     def iterate_dir(self, prefix_path, dry_run):
@@ -76,13 +59,9 @@ class TestCaseEnumerationFixer:
         files.
         """
         
-        prepend_txt="-- VHDL test case input code --"
-        
         for root, dirs, files in sorted(os.walk(prefix_path + '/' + 'test_case')):
             #print("root=" + str(root) + ", dirs=" + str(dirs) + ", files=" + str(files))
-            for origin in files:
-                if origin.endswith('.input'):
-                    self.prepend(root, origin, prepend_txt, dry_run)
+            for origin in sorted(files):
                 self.rename(root, origin, dry_run)
                         
     

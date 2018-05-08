@@ -1,0 +1,4 @@
+-- VHDL test case input
+-- Integer literal of value 224
+16#E#E1
+

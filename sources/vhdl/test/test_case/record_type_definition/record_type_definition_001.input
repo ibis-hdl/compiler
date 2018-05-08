@@ -1,7 +1,7 @@
--- type DATE is
+-- type Operation is
 record
-    DAY    : INTEGER range 1 to 31;
-    MONTH  : MONTH_NAME;
-    YEAR   : INTEGER range 0 to 4000;
-end record
+    Mnemonic : String (1 to 10);
+    OpCode : Bit_Vector(3 downto 0);
+    Op1, Op2, Res : RegName;
+end record Operation
 

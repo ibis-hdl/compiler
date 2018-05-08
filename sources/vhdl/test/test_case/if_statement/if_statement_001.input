@@ -1,5 +1,8 @@
-if condition then
-    foo <= bar;
-end if;
-
-
+if_label:
+    if condition then
+        a <= b;
+        c := d;
+    else
+        a <= '0';
+        c := 0;
+    end if;

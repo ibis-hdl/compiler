@@ -1,0 +1,7 @@
+(signal_list<v>
+  (signal_list.names
+    (identifier
+      FooBar
+    )
+  )
+)

@@ -1,0 +1,37 @@
+(range<v>
+  (simple_expression
+    sign: SIGN_NEG,
+    (term
+      (primary<v>
+        (literal<v>
+          (numeric_literal<v>
+            (abstract_literal<v>
+              (decimal_literal
+                literal: 5.5, hint: double
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (keyword
+    TO
+  )
+  (simple_expression
+    sign: SIGN_POS,
+    (term
+      (primary<v>
+        (literal<v>
+          (numeric_literal<v>
+            (abstract_literal<v>
+              (decimal_literal
+                literal: 5.5, hint: double
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

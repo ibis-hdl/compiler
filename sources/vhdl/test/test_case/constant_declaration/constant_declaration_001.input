@@ -1,2 +1,2 @@
-constant TOLERANCE : DISTANCE := 1.5 nm;
+constant PI : REAL := 3.141592;
 

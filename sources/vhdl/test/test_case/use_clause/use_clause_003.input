@@ -1,2 +1,1 @@
-USE ieee.math_real.MATH_PI;
-
+use IEEE.Std_Logic_1164.Std_ulogic, IEEE.Std_Logic_1164.Rising_edge;

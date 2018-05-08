@@ -1,0 +1,38 @@
+(sequential_statement<v>
+  (report_statement
+    (expression
+      (relation
+        (shift_expression
+          (simple_expression
+            (term
+              (primary<v>
+                (literal<v>
+                  (string_literal
+                    42 the answer to life, the universe and everything
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+    (expression
+      (relation
+        (shift_expression
+          (simple_expression
+            (term
+              (primary<v>
+                (name<v>
+                  (identifier
+                    TRUTH
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

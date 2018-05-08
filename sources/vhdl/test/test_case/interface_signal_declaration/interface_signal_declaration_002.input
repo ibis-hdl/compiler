@@ -1,2 +1,2 @@
-signal a_bit : bit := '0'
+signal bar : word bus
 

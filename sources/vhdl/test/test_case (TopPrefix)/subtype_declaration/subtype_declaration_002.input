@@ -1,0 +1,4 @@
+-- VHDL test case input
+--function RESOLVE_VALUE (anonymous: BIT_VECTOR) return BIT;
+subtype BIT_NEW is RESOLVE_VALUE BIT;
+

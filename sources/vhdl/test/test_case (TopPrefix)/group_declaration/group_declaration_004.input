@@ -1,0 +1,4 @@
+-- VHDL test case input
+--  A group of groups.
+group CONSTRAINT1: DIFF_CYCLES (G1, G3);
+

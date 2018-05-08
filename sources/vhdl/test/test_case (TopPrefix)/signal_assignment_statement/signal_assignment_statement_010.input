@@ -1,0 +1,4 @@
+-- VHDL test case input
+my_label: 
+    Output_pin <= Input_pin after 10 ns;
+

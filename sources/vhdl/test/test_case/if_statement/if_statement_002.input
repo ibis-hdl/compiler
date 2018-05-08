@@ -1,8 +1,12 @@
-if_label:
+my_label:
     if condition then
         a <= b;
         c := d;
+    elsif other_condition then
+        a <= c;
+        c := 0;
     else
         a <= '0';
         c := 0;
-    end if;
+    end if my_label;
+

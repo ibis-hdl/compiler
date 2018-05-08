@@ -1,1 +1,1 @@
-function Func_1 (A,B,X: REAL) return REAL
+function "*" (a,b: Integer_new) return Integer_new

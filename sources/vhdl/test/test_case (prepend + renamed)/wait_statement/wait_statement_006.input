@@ -1,0 +1,3 @@
+-- VHDL test case input
+wait for 100 ns;
+

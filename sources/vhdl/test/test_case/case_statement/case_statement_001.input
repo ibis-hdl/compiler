@@ -1,4 +1,6 @@
+case_label:
 case expression is
     when "choices" => exit;
-end case;
+    when "foo"     => null;
+end case case_label;
 

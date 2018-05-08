@@ -1,7 +1,5 @@
---  for L1: XOR_GATE 
-    use
-    -- FixMe: must be WORK.XOR_GATE(Behavior)
-    entity XOR_GATE(Behavior)
-    generic map (3 ns, 3 ns) 
-    port map (I1 => I1, I2 => I2, O => O)
-
+-- for UUT: Buf
+-- FixMe: Work.Buf(DataFlow)
+use entity Buf(DataFlow)
+    generic map (Buf_Delay => Comp_Buf_Delay)
+    port map (Input_pin => Comp_I, Output_pin=> Comp_O)

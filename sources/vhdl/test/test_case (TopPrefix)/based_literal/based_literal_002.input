@@ -1,0 +1,4 @@
+-- VHDL test case input
+-- Integer literal of value 255
+16#FF#
+

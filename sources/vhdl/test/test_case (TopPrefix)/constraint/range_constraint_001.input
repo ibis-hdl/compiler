@@ -1,0 +1,3 @@
+-- VHDL test case input
+RANGE 42 downto 0
+

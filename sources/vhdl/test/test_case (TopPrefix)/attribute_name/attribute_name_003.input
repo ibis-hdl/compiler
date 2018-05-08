@@ -1,0 +1,4 @@
+-- VHDL test case input
+--  The signal CLK delayed by 5 ns.
+CLK'DELAYED(5 ns)
+

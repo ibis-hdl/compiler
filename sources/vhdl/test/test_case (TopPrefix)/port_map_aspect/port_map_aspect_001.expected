@@ -1,0 +1,26 @@
+(port_map_aspect
+  (association_list
+    (association_element
+      (actual_part<v>
+        (actual_designator<v>
+          (name<v>
+            (identifier
+              A
+            )
+          )
+        )
+      )
+    ),
+    (association_element
+      (actual_part<v>
+        (actual_designator<v>
+          (name<v>
+            (identifier
+              B
+            )
+          )
+        )
+      )
+    )
+  )
+)

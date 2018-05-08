@@ -1,0 +1,2 @@
+-- VHDL test case input
+disconnect S: T after 10ns;

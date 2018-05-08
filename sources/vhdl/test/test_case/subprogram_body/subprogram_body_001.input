@@ -1,5 +1,5 @@
-procedure designator is
+procedure Dump(F: inout Text; Value: Integer) is
     CONSTANT identifier_list : subtype_indication;
 begin
-    report "All Went good";
+    NULL;
 end;

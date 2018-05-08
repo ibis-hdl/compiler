@@ -1,0 +1,5 @@
+(literal<v>
+  (string_literal
+    FooBar
+  )
+)

@@ -1,2 +1,2 @@
-next when A /= B;
+NEXT cool_loop WHEN index = 0;
 

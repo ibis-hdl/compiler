@@ -1,0 +1,14 @@
+(file_declaration
+  (identifier_list
+    (identifier
+      F1
+    )
+  )
+  (subtype_indication
+    (name<v>
+      (identifier
+        IntegerFile
+      )
+    )
+  )
+)

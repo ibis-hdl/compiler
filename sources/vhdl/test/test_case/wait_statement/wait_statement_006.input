@@ -1,1 +1,2 @@
-wait on A, B until CLK = '1';
+wait for 100 ns;
+

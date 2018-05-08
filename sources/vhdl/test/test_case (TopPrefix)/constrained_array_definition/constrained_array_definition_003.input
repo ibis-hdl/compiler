@@ -1,0 +1,2 @@
+-- VHDL test case input
+array (0 to 7, X) of BIT

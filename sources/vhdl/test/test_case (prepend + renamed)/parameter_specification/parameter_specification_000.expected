@@ -1,0 +1,14 @@
+(parameter_specification
+  (identifier
+    identifier
+  )
+  (discrete_range<v>
+    (subtype_indication
+      (name<v>
+        (identifier
+          range_attribute_name
+        )
+      )
+    )
+  )
+)

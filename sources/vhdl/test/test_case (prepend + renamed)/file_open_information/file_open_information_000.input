@@ -1,0 +1,3 @@
+-- VHDL test case input
+OPEN file_open_kind IS "file_logical_name"
+

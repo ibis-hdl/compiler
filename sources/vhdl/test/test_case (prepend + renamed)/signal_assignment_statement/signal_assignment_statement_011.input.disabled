@@ -1,0 +1,3 @@
+-- VHDL test case input
+exa <= (ex1 => 2, ex3 => 5);
+

@@ -1,0 +1,4 @@
+-- VHDL test case input
+exit_:
+   EXIT loop_exit WHEN index <= 0;
+

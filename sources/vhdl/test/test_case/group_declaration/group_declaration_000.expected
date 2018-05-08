@@ -1,0 +1,26 @@
+(group_declaration
+  (identifier
+    G1
+  )
+  (name<v>
+    (identifier
+      RESOURCE
+    )
+  )
+  (group_constituent_list
+    (group_constituent<v>
+      (name<v>
+        (identifier
+          L1
+        )
+      )
+    ),
+    (group_constituent<v>
+      (name<v>
+        (identifier
+          L2
+        )
+      )
+    )
+  )
+)

@@ -1,0 +1,2 @@
+-- VHDL test case input
+"0011" xnor "0010" xnor "1000"

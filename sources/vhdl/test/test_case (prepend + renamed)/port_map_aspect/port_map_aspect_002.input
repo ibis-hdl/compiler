@@ -1,0 +1,5 @@
+-- VHDL test case input
+port map (
+    a    => x, 
+    b    => y,  
+    out_ => z)

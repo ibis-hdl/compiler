@@ -1,2 +1,2 @@
-use MKS.MEASUREMENTS, STD.STANDARD;
+use ieee.std_logic_1164.all;
 

@@ -1,0 +1,4 @@
+-- VHDL test case input
+-- association_element with formal and actual_part
+generic_name => actual_part, parameter_name => variable_name
+

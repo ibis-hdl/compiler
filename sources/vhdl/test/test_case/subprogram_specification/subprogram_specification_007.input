@@ -1,1 +1,0 @@
-IMPURE function End_Of_File (file File_name: Int_Data) return BOOLEAN

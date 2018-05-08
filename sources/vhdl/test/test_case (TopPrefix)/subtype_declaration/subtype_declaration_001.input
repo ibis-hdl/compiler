@@ -1,0 +1,2 @@
+-- VHDL test case input
+subtype DIGITS is INTEGER range 0 to 9;

@@ -1,0 +1,2 @@
+-- VHDL test case input
+procedure Transcoder_1 (variable Value: inout bit_vector (0 to 7))

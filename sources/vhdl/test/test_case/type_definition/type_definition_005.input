@@ -1,1 +1,3 @@
-array (POSITIVE range <>) of Real
+record 
+    dummy : string; 
+end record

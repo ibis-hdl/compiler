@@ -1,2 +1,1 @@
-dummy: WAIT on X,Y,Z;
-
+wait until CLK='1';

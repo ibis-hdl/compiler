@@ -1,0 +1,3 @@
+-- VHDL test case input
+file F2: IntegerFile is "test.dat";
+

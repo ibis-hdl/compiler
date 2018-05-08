@@ -1,0 +1,3 @@
+-- VHDL test case input
+input0, input1 : IN funny_type
+

@@ -1,0 +1,2 @@
+-- VHDL test case input
+DAY    : INTEGER range 1 to 31;

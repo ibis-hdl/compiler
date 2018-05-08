@@ -1,5 +1,2 @@
-assert 0 = 1
-    report "Damn - can't be"
-    severity Dont_Care_About
-
+assert (42 > 0) severity FAILURE
 

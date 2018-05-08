@@ -1,2 +1,2 @@
-wait for 100 ns;
+Wait on EN until EN='1' for 1ms;
 

@@ -1,2 +1,3 @@
-NEXT cool_loop WHEN index = 0;
+next_:
+   NEXT loop_exit WHEN index <= 0;
 

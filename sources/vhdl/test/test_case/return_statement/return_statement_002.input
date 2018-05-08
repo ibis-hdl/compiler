@@ -1,4 +1,4 @@
--- with label
-exit_:
-    return;
+-- return expression
+foo:
+    return a + b;
 

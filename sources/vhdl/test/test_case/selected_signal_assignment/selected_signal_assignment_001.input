@@ -1,5 +1,4 @@
-with a select b <=
-    "1000" when "00",
-    -- ... omitted
-    "0001" when "11";
-
+with Command select
+     DataOut <= InA and InB when "000",
+                -- ... omitted
+                'Z' when others;

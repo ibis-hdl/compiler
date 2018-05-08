@@ -1,2 +1,2 @@
-signal bar : word bus
+input0, input1 : IN my_type
 

@@ -1,0 +1,21 @@
+(subtype_indication
+  (name<v>
+    (identifier
+      resolution_function_name
+    )
+  )
+  (name<v>
+    (identifier
+      type_mark
+    )
+  )
+  (constraint<v>
+    (range<v>
+      (name<v>
+        (identifier
+          constraint
+        )
+      )
+    )
+  )
+)

@@ -1,5 +1,0 @@
-with IntCommand select
-  MuxOut <= guarded INERTIAL InA when 0 | 1,
-            -- ... omitted
-            'Z' when others;
-

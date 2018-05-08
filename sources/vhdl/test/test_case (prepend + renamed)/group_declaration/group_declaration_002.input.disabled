@@ -1,0 +1,6 @@
+-- VHDL test case input
+--  Groups may associate named 
+-- entities in different declarative
+--  parts (and regions).
+group C2Q: PIN2PIN (PROJECT.GLOBALS.CK, Q);
+

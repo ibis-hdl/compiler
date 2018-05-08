@@ -1,0 +1,4 @@
+In line 3:
+Error! Expecting end of input here: 
+"0011" nand "0010" nand "1000"
+___________________^_

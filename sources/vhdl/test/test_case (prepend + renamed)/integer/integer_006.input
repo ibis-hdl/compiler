@@ -1,0 +1,3 @@
+-- VHDL test case input
+-- overflows int32
+2_147_483_647

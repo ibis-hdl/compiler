@@ -1,0 +1,2 @@
+-- VHDL test case input
+target := expression;

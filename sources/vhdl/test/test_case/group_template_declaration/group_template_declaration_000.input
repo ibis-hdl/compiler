@@ -1,0 +1,3 @@
+--  Groups of this type consist of two signals.
+group PIN2PIN is (signal, signal);
+

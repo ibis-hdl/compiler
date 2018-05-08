@@ -1,2 +1,2 @@
-constant Pi : real := 3.14159
+constant PERIOD : time := 10 ns
 

@@ -1,2 +1,2 @@
-constant BUS_WIDTH : integer
+constant N, N5 : integer := 5
 

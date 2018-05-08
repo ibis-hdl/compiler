@@ -1,2 +1,2 @@
-attribute IMPLEMENTATION of G1: group is "74LS152";
+attribute RISING_DELAY of C2Q: group is 7.2 ns;
 

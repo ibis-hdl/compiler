@@ -1,0 +1,14 @@
+(interface_file_declaration
+  (identifier_list
+    (identifier
+      output
+    )
+  )
+  (subtype_indication
+    (name<v>
+      (identifier
+        my_text
+      )
+    )
+  )
+)

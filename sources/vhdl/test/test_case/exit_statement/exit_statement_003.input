@@ -1,2 +1,2 @@
-exit theLoop;
+exit when A /= B;
 

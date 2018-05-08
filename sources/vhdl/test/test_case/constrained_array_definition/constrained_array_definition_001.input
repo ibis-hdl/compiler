@@ -1,1 +1,1 @@
-array (1 to 10) of REAL
+array (POSITIVE range 1 to 8, POSITIVE range 1 to 2) of Log_4

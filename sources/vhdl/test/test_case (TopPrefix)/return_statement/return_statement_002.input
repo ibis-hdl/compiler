@@ -1,0 +1,5 @@
+-- VHDL test case input
+-- with label
+exit_:
+    return;
+

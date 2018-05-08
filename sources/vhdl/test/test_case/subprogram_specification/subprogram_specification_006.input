@@ -1,1 +1,1 @@
-function "*" (a,b: Integer_new) return Integer_new
+IMPURE function End_Of_File (file File_name: Int_Data) return BOOLEAN

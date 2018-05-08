@@ -1,2 +1,1 @@
-disconnect others: T after 42 ms;
-
+disconnect all: T after 0 ns;

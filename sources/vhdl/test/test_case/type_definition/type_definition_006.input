@@ -1,3 +1,1 @@
-record 
-    dummy : string; 
-end record
+access foo
