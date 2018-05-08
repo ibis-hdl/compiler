@@ -27,34 +27,72 @@ class TestCaseEnumerationFixer:
         
     
     def get_integer(self, name):
+        """Return the integer value of the strring \a name
+        """
+          
         number=re.findall(self.int_pattern, name)
         if len(number) > 1:
             print('WARNING: found more than 1 integer in ' + str(name))
         if len(number): return int(number[0])
         else:           return None
         
-    
-    def iterate_dir(self, prefix_path):
+        
+    def prepend(self, root, filename, contents, dry_run):
+        """Add additional contents on top of the given file.
+        
+        This is useful to get clear diagnostic using Boost.Test
+        """
+        n=self.get_integer(filename)
+        if not n: return # not a test case file by convention
+        print(filename + ' <= ' + contents)
+        if not dry_run:
+            with open(os.path.join(root, filename), 'r') as original:
+                 data = original.read()
+            with open(os.path.join(root, filename), 'w') as modified:
+                 modified.write(contents + '\n' + data)
+
+
+    def rename(self, root, origin, dry_run):
+        """Rename the origin name to the new enumeration scheme
+        
+        If there is no integer in the file name encoding, the file is skipped. 
+        This is for common files, e.g. readme.txt
+        """
+        
+        n=self.get_integer(origin)
+        if not n: return # not a test case file by convention
+        assert n > 0     # multiple runs? Prevent negative file numbers
+        new_name=origin.replace(str(n), str(n-1))
+        print(origin + ' => ' + new_name)
+        if not dry_run:
+            os.rename(
+                os.path.join(root, origin),
+                os.path.join(root, new_name)
+            )
+
+
+    def iterate_dir(self, prefix_path, dry_run):
+        """Iterate of the given path and renames the approbiate test case
+        files.
+        """
+        
+        prepend_txt="-- VHDL test case input code --"
+        
         for root, dirs, files in sorted(os.walk(prefix_path + '/' + 'test_case')):
             #print("root=" + str(root) + ", dirs=" + str(dirs) + ", files=" + str(files))
             for origin in files:
-                n=self.get_integer(origin)
-                if not n: continue
-                assert n > 0 # multiple runs? Prevent negative file numbers
-                new_name=origin.replace(str(n), str(n-1))
-                print(origin + ' => ' + new_name)
-                os.rename(
-                    os.path.join(root, origin),
-                    os.path.join(root, new_name)
-                )
+                if origin.endswith('.input'):
+                    self.prepend(root, origin, prepend_txt, dry_run)
+                self.rename(root, origin, dry_run)
                         
     
-    def fix(self):
-        self.iterate_dir(self.testcase_path)
+    def fix(self, dry_run=False):
+        self.iterate_dir(self.testcase_path, dry_run)
+
+
 
 if __name__ == "__main__":
     util = TestCaseEnumerationFixer()
     util.fix()
-    #n=util.get_integer('foo_.bar')
-    #print(n)
+
     
