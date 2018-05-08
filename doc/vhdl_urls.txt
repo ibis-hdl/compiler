@@ -1,5 +1,9 @@
-- ADA search @github
-https://github.com/search?l=C%2B%2B&q=ada+compiler&type=Repositories&utf8=%E2%9C%93
+[ADA search @github](
+	https://github.com/search?l=C%2B%2B&q=ada+compiler&type=Repositories&utf8=%E2%9C%93)
+[Yet Another VHDL tool](
+	https://github.com/rqou/yavhdl)
+[yosys – Yosys Open SYnthesis Suite](
+	https://github.com/YosysHQ/yosys)
 
 Symbols Scope
 - [badac/src/scoped_symbol_table.hpp](https://github.com/harrishancock/badac/blob/master/src/scoped_symbol_table.hpp)
