@@ -120,7 +120,7 @@ BOOST_DATA_TEST_CASE( GENERATE_DATASET_TEST_CASE_NAME(test_case),              \
      GENERATE_DATASET_NAME(test_case).input()                                  \
     ^GENERATE_DATASET_NAME(test_case).expect()                                 \
     ^GENERATE_DATASET_NAME(test_case).test_case_name(),                        \
-    VHDL_code, expect_AST, test_case)                                          \
+    VHDL_code, expect_AST, test_case_name)                                     \
 /* --- */
 
 
@@ -130,7 +130,7 @@ BOOST_DATA_TEST_CASE( GENERATE_DATASET_TEST_CASE_NAME(test_case),              \
     using per_element = boost::test_tools::per_element;                        \
     using attribute_type = ATTRIBUTE_TYPE(test_case);                          \
     auto const parser = RULE_NAME(test_case);                                  \
-    boost::ignore_unused(test_case);                                           \
+    boost::ignore_unused(test_case_name);                                      \
     x3_test::testing_parser<attribute_type> parse;                             \
     auto [parse_ok, parsed_AST] = parse(VHDL_code, parser);                    \
     BOOST_TEST(parse_ok);                                                      \

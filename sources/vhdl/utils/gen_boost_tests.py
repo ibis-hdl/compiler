@@ -162,12 +162,12 @@ BOOST_DATA_TEST_CASE( {test_case},
       {test_case}_dataset.input()
     ^ {test_case}_dataset.expect()
     ^ {test_case}_dataset.test_case_name(),
-    VHDL_code, expect_AST, test_case)
+    VHDL_code, expect_AST, test_case_name)
 {{
     using attribute_type = ast::{attr_name};
     auto const parser = parser::{parser_name};
 
-    boost::ignore_unused(test_case);
+    boost::ignore_unused(test_case_name);
 
     x3_test::testing_parser<attribute_type> parse;
     auto [parse_ok, parsed_AST] = parse(VHDL_code, parser);
