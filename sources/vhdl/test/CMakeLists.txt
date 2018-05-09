@@ -205,9 +205,10 @@ target_compile_options(${PROJECT_NAME} PRIVATE
     -Wno-pch-date-time
 )
 
-# FixMe: FAILED with Boost.PP
+# FixMe: FAILED with Boost.PP and others
 set_target_properties(${PROJECT_NAME} PROPERTIES
-    COTIRE_ADDITIONAL_PREFIX_HEADER_IGNORE_PATH "${Boost_INCLUDE_DIRS}/preprocessor"
+    COTIRE_PREFIX_HEADER_IGNORE_PATH "${Boost_INCLUDE_DIRS}/boost;${SPIRIT_X3_INCLUDE_DIR}"
+    #COTIRE_PREFIX_HEADER_IGNORE_PATH "${Boost_INCLUDE_DIRS}/boost"
     #COTIRE_PREFIX_HEADER_INCLUDE_PATH eda::vhdl_parser
 )
 
