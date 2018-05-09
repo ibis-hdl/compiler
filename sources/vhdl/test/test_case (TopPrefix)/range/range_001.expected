@@ -1,7 +1,0 @@
-(range<v>
-  (name<v>
-    (identifier
-      range_attribute_name
-    )
-  )
-)

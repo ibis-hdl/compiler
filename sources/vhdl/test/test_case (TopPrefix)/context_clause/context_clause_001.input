@@ -1,3 +1,0 @@
--- VHDL test case input
- library STD, WORK ; use STD.STANDARD.all ;
-

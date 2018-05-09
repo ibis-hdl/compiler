@@ -37,6 +37,21 @@ class TestCaseEnumerationFixer:
         else:           return None
         
         
+    def prepend(self, root, filename, contents, dry_run):
+        """Add additional contents on top of the given file.
+        
+        This is useful to get clear diagnostic using Boost.Test
+        """
+        n=self.get_integer(filename)
+        if not n: return # not a test case file by convention
+        print(filename + ' <= ' + contents)
+        if not dry_run:
+            with open(os.path.join(root, filename), 'r') as original:
+                 data = original.read()
+            with open(os.path.join(root, filename), 'w') as modified:
+                 modified.write(contents + '\n' + data)
+
+
     def rename(self, root, origin, dry_run):
         """Rename the origin name to the new enumeration scheme
         
@@ -48,8 +63,17 @@ class TestCaseEnumerationFixer:
         if not n: return # not a test case file by convention
         assert n > 0     # multiple runs? Prevent negative file numbers
         src=os.path.join(root, origin)
+        ## FIXME: use format string, e.g. '{num:03d}'.format(num=i) here,
+        ##        otherwise you get a 'wide' problem on width changes in the
+        ##        file name, e.g. file_010 => file_09 !
+        ##        Actually 3 cases are concerned, fix by hand.
         dst=os.path.join(root, origin.replace(str(n), str(n-1)))
-        print(src + ' => ' + dst)
+        if os.name == 'nt':
+            print('ren ' + src + ' ' + dst)
+        elif os.name == 'posix':
+            print('mv ' + src + ' ' + dst)
+        else:
+            print('# rename ' + src + ' => ' + dst)
         if not dry_run:
             os.rename(src, dst)
 
@@ -59,9 +83,16 @@ class TestCaseEnumerationFixer:
         files.
         """
         
-        for root, dirs, files in sorted(os.walk(prefix_path + '/' + 'test_case')):
+        prepend_txt="-- VHDL test case input code --"
+        
+        # walk before renaming
+        dir_walk=sorted(os.walk(prefix_path + '/' + 'test_case'))
+        
+        for root, dirs, files in dir_walk:
             #print("root=" + str(root) + ", dirs=" + str(dirs) + ", files=" + str(files))
-            for origin in sorted(files):
+            for origin in files:
+#                 if origin.endswith('.input'):
+#                     self.prepend(root, origin, prepend_txt, dry_run)
                 self.rename(root, origin, dry_run)
                         
     

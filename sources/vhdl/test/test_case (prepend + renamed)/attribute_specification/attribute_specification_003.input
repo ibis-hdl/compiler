@@ -1,3 +1,0 @@
--- VHDL test case input
- attribute CAPACITANCE of all: signal is 15 pF;
-

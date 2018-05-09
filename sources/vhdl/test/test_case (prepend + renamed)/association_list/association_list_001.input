@@ -1,3 +1,0 @@
--- VHDL test case input
--- list of actual_part only
-function_name ( actual_designator ), cool_function ( signal_name )

@@ -1,2 +1,0 @@
--- VHDL test case input
-"0011" xor "0010" xor "1000"

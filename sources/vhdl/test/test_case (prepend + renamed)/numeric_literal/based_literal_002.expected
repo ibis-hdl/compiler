@@ -1,7 +1,0 @@
-(numeric_literal<v>
-  (abstract_literal<v>
-    (based_literal
-      base: 16, number: 00_FF
-    )
-  )
-)

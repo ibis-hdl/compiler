@@ -1,2 +1,0 @@
--- VHDL test case input
-"0011" <= "0010" + "1000"

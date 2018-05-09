@@ -1,12 +1,12 @@
 ToDo:
-- attribute_specification/attribute_specification_00{2,3}
-- entity_aspect/entity_aspect_003.input
+- attribute_specification/attribute_specification_00{1,2}
+- entity_aspect/entity_aspect_002.input
 - type_declaration_failure/*
-- interface_constant_declaration/interface_constant_declaration_007.input
-- type_conversion/type_conversion_002.input
+- interface_constant_declaration/interface_constant_declaration_006.input
+- type_conversion/type_conversion_001.input
 - wait_statement/wait_statement_00x.input
-- group_declaration/group_declaration_003.input
-- binding_indication/binding_indication_00{1,2}.input entity name rule (is work.foo -> name)
+- group_declaration/group_declaration_002.input
+- binding_indication/binding_indication_00{0,1}.input entity name rule (is work.foo -> name)
 
 Renewal 2018:
 - Missing tests:

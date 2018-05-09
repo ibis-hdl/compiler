@@ -1,7 +1,0 @@
-This is an interesting test; obviously the integer value equals implicit to
-1 (one), even if the ast's integer part empty. To be investigated later.
-Anyway, this results into an invalid tag.
-
-input = 'ps'
-result= '(physical_literal={l=(v:abstract_literal=(decimal_literal={l=, tag=INVALID})), u=ps})'
-

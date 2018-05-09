@@ -1,4 +1,0 @@
--- VHDL test case input
---  A group  of three labels.
-group G2: RESOURCE (L3, L4, L5);
-

@@ -1,4 +1,0 @@
--- VHDL test case input
-function_open ( formal_designator ) => open, -- keyword
-function_close (parameter_name ) => signal_name
-

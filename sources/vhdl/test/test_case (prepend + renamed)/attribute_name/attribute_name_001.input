@@ -1,4 +1,0 @@
--- VHDL test case input
---  The hierarchical path name of the port INPUT_PIN.
-INPUT_PIN'PATH_NAME
-

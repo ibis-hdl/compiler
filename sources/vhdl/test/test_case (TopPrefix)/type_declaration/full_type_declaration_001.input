@@ -1,2 +1,0 @@
--- VHDL test case input
-type MULTI_LEVEL_LOGIC is (LOW, HIGH, RISING, FALLING, AMBIGUOUS);

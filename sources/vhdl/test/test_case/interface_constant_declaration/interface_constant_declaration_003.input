@@ -1,2 +1,2 @@
-constant N, N5 : integer := 5
+constant Pi : real := 3.14159
 

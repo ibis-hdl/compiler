@@ -1,3 +1,0 @@
--- VHDL test case input
--- not valid VHDL
-"0011" nand "0010" nand "1000"

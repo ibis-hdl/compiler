@@ -1,6 +1,0 @@
--- VHDL test case input
-procedure Dump(F: inout Text; Value: Integer) is
-    CONSTANT identifier_list : subtype_indication;
-begin
-    NULL;
-end;

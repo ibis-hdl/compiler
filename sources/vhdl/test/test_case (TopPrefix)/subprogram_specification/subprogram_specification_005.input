@@ -1,2 +1,0 @@
--- VHDL test case input
-function Func_1 (A,B,X: REAL) return REAL

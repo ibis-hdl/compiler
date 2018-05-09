@@ -1,6 +1,0 @@
--- VHDL test case input
-with a select b <=
-    "1000" when "00",
-    -- ... omitted
-    "0001" when "11";
-

@@ -1,2 +1,0 @@
--- VHDL test case input
-array (NATURAL range <>, POSITIVE range <>) of Log_4

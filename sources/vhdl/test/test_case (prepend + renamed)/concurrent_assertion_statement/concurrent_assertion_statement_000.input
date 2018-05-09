@@ -1,4 +1,0 @@
--- VHDL test case input
--- common assertation statement
-assert (42 > 0) severity FAILURE;
-

@@ -1,4 +1,0 @@
--- VHDL test case input
--- this parses successfully to range of physical_literal '32 down' TO 0
--- FixMe: down to is wrong parsered
-type WORD_INDEX is range 31 down to 0;

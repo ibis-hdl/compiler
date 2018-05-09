@@ -1,5 +1,0 @@
-(abstract_literal<v>
-  (decimal_literal
-    literal: 42.42e42, hint: double
-  )
-)

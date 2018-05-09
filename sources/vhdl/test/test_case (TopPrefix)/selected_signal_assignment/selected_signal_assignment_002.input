@@ -1,5 +1,0 @@
--- VHDL test case input
-with Command select
-     DataOut <= InA and InB when "000",
-                -- ... omitted
-                'Z' when others;

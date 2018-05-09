@@ -1,8 +1,0 @@
-(physical_literal
-  literal: (abstract_literal<v>
-    (based_literal
-      base: 16, number: FF
-    )
-  ),
-  unit: ns
-)

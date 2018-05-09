@@ -1,7 +1,0 @@
-(literal<v>
-  (enumeration_literal<v>
-    (identifier
-      \Foo\
-    )
-  )
-)

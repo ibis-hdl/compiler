@@ -1,3 +1,0 @@
--- VHDL test case input
-EXIT cool_loop WHEN index = 0;
-

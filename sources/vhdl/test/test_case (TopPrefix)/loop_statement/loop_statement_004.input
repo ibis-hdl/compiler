@@ -1,4 +1,0 @@
--- VHDL test case input
-for i in 0 to 42 loop
-    null;
-end loop;

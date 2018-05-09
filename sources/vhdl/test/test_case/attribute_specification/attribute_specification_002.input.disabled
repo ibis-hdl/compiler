@@ -1,2 +1,2 @@
-attribute LOCATION of ADDER1: label is (10, 15);
+attribute LOCATION of others: label is (25, 77);
 

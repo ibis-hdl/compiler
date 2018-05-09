@@ -1,3 +1,0 @@
--- VHDL test case input
-attribute RISING_DELAY of C2Q: group is 7.2 ns;
-

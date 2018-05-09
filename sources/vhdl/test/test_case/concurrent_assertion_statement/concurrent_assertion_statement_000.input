@@ -1,3 +1,0 @@
--- common assertation statement
-assert (42 > 0) severity FAILURE;
-

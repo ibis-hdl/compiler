@@ -1,2 +1,0 @@
--- VHDL test case input
-output <= input0 WHEN sel = '0' ELSE input1;

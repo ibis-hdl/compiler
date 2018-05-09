@@ -1,6 +1,0 @@
--- VHDL test case input
-port map (
-    B => Y, 
-    A => X, 
-    SUM => S, 
-    CARRY => open)

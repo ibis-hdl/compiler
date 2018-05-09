@@ -1,2 +1,0 @@
--- VHDL test case input
-function "*" (a,b: Integer_new) return Integer_new

@@ -1,4 +1,0 @@
--- VHDL test case input
--- wired_or must be a resolution function
-signal join : word  wired_or;
-

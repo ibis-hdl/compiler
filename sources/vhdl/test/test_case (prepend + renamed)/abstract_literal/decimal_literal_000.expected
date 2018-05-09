@@ -1,5 +1,0 @@
-(abstract_literal<v>
-  (decimal_literal
-    literal: 1, hint: int
-  )
-)

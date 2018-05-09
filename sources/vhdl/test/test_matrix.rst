@@ -3245,13 +3245,13 @@ decimal_literal
 |                     |                                 | )                                   |
 |                     |                                 |                                     |
 +---------------------+---------------------------------+-------------------------------------+
-| decimal_literal_010 | -- Real literals with exponents | (decimal_literal                    |
-|                     | 6.023E+24                       |   literal: 6.023E+24, hint: double  |
+| decimal_literal_009 | -- Real literals with exponents | (decimal_literal                    |
+|                     | 1.0E+6                          |   literal: 1.0E+6, hint: double     |
 |                     |                                 | )                                   |
 |                     |                                 |                                     |
 +---------------------+---------------------------------+-------------------------------------+
-| decimal_literal_09  | -- Real literals with exponents | (decimal_literal                    |
-|                     | 1.0E+6                          |   literal: 1.0E+6, hint: double     |
+| decimal_literal_010 | -- Real literals with exponents | (decimal_literal                    |
+|                     | 6.023E+24                       |   literal: 6.023E+24, hint: double  |
 |                     |                                 | )                                   |
 |                     |                                 |                                     |
 +---------------------+---------------------------------+-------------------------------------+
@@ -4288,6 +4288,53 @@ expression
 |                |                                 | )                                                                  |
 |                |                                 |                                                                    |
 +----------------+---------------------------------+--------------------------------------------------------------------+
+| expression_009 | "0011" and "0010" SRL "1000"    | (expression                                                        |
+|                |                                 |   (relation                                                        |
+|                |                                 |     (shift_expression                                              |
+|                |                                 |       (simple_expression                                           |
+|                |                                 |         (term                                                      |
+|                |                                 |           (primary<v>                                              |
+|                |                                 |             (literal<v>                                            |
+|                |                                 |               (string_literal                                      |
+|                |                                 |                 0011                                               |
+|                |                                 |               )                                                    |
+|                |                                 |             )                                                      |
+|                |                                 |           )                                                        |
+|                |                                 |         )                                                          |
+|                |                                 |       )                                                            |
+|                |                                 |     )                                                              |
+|                |                                 |   ),                                                               |
+|                |                                 |   operator: AND,                                                   |
+|                |                                 |   (relation                                                        |
+|                |                                 |     (shift_expression                                              |
+|                |                                 |       (simple_expression                                           |
+|                |                                 |         (term                                                      |
+|                |                                 |           (primary<v>                                              |
+|                |                                 |             (literal<v>                                            |
+|                |                                 |               (string_literal                                      |
+|                |                                 |                 0010                                               |
+|                |                                 |               )                                                    |
+|                |                                 |             )                                                      |
+|                |                                 |           )                                                        |
+|                |                                 |         )                                                          |
+|                |                                 |       ),                                                           |
+|                |                                 |       operator: SRL,                                               |
+|                |                                 |       (simple_expression                                           |
+|                |                                 |         (term                                                      |
+|                |                                 |           (primary<v>                                              |
+|                |                                 |             (literal<v>                                            |
+|                |                                 |               (string_literal                                      |
+|                |                                 |                 1000                                               |
+|                |                                 |               )                                                    |
+|                |                                 |             )                                                      |
+|                |                                 |           )                                                        |
+|                |                                 |         )                                                          |
+|                |                                 |       )                                                            |
+|                |                                 |     )                                                              |
+|                |                                 |   )                                                                |
+|                |                                 | )                                                                  |
+|                |                                 |                                                                    |
++----------------+---------------------------------+--------------------------------------------------------------------+
 | expression_010 | "0011" <= "0010" + "1000"       | (expression                                                        |
 |                |                                 |   (relation                                                        |
 |                |                                 |     (shift_expression                                              |
@@ -5100,53 +5147,6 @@ expression
 |                |                                 |                     literal: 2, hint: int                          |
 |                |                                 |                   )                                                |
 |                |                                 |                 )                                                  |
-|                |                                 |               )                                                    |
-|                |                                 |             )                                                      |
-|                |                                 |           )                                                        |
-|                |                                 |         )                                                          |
-|                |                                 |       )                                                            |
-|                |                                 |     )                                                              |
-|                |                                 |   )                                                                |
-|                |                                 | )                                                                  |
-|                |                                 |                                                                    |
-+----------------+---------------------------------+--------------------------------------------------------------------+
-| expression_09  | "0011" and "0010" SRL "1000"    | (expression                                                        |
-|                |                                 |   (relation                                                        |
-|                |                                 |     (shift_expression                                              |
-|                |                                 |       (simple_expression                                           |
-|                |                                 |         (term                                                      |
-|                |                                 |           (primary<v>                                              |
-|                |                                 |             (literal<v>                                            |
-|                |                                 |               (string_literal                                      |
-|                |                                 |                 0011                                               |
-|                |                                 |               )                                                    |
-|                |                                 |             )                                                      |
-|                |                                 |           )                                                        |
-|                |                                 |         )                                                          |
-|                |                                 |       )                                                            |
-|                |                                 |     )                                                              |
-|                |                                 |   ),                                                               |
-|                |                                 |   operator: AND,                                                   |
-|                |                                 |   (relation                                                        |
-|                |                                 |     (shift_expression                                              |
-|                |                                 |       (simple_expression                                           |
-|                |                                 |         (term                                                      |
-|                |                                 |           (primary<v>                                              |
-|                |                                 |             (literal<v>                                            |
-|                |                                 |               (string_literal                                      |
-|                |                                 |                 0010                                               |
-|                |                                 |               )                                                    |
-|                |                                 |             )                                                      |
-|                |                                 |           )                                                        |
-|                |                                 |         )                                                          |
-|                |                                 |       ),                                                           |
-|                |                                 |       operator: SRL,                                               |
-|                |                                 |       (simple_expression                                           |
-|                |                                 |         (term                                                      |
-|                |                                 |           (primary<v>                                              |
-|                |                                 |             (literal<v>                                            |
-|                |                                 |               (string_literal                                      |
-|                |                                 |                 1000                                               |
 |                |                                 |               )                                                    |
 |                |                                 |             )                                                      |
 |                |                                 |           )                                                        |
@@ -11379,6 +11379,65 @@ signal_assignment_statement
 |                                 |                                                                | )                                                     |
 |                                 |                                                                |                                                       |
 +---------------------------------+----------------------------------------------------------------+-------------------------------------------------------+
+| signal_assignment_statement_009 | my_label:                                                      | (signal_assignment_statement                          |
+|                                 |     Output_pin <= Input_pin after 10 ns;                       |   (identifier                                         |
+|                                 |                                                                |     my_label                                          |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                |   (target<v>                                          |
+|                                 |                                                                |     (name<v>                                          |
+|                                 |                                                                |       (identifier                                     |
+|                                 |                                                                |         Output_pin                                    |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                |   (waveform<v>                                        |
+|                                 |                                                                |     (waveform_element                                 |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               (term                                   |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (name<v>                            |
+|                                 |                                                                |                     (identifier                       |
+|                                 |                                                                |                       Input_pin                       |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |       (expression                                     |
+|                                 |                                                                |         (relation                                     |
+|                                 |                                                                |           (shift_expression                           |
+|                                 |                                                                |             (simple_expression                        |
+|                                 |                                                                |               (term                                   |
+|                                 |                                                                |                 (primary<v>                           |
+|                                 |                                                                |                   (literal<v>                         |
+|                                 |                                                                |                     (numeric_literal<v>               |
+|                                 |                                                                |                       (physical_literal               |
+|                                 |                                                                |                         literal: (abstract_literal<v> |
+|                                 |                                                                |                           (decimal_literal            |
+|                                 |                                                                |                             literal: 10, hint: int    |
+|                                 |                                                                |                           )                           |
+|                                 |                                                                |                         ),                            |
+|                                 |                                                                |                         unit: ns                      |
+|                                 |                                                                |                       )                               |
+|                                 |                                                                |                     )                                 |
+|                                 |                                                                |                   )                                   |
+|                                 |                                                                |                 )                                     |
+|                                 |                                                                |               )                                       |
+|                                 |                                                                |             )                                         |
+|                                 |                                                                |           )                                           |
+|                                 |                                                                |         )                                             |
+|                                 |                                                                |       )                                               |
+|                                 |                                                                |     )                                                 |
+|                                 |                                                                |   )                                                   |
+|                                 |                                                                | )                                                     |
+|                                 |                                                                |                                                       |
++---------------------------------+----------------------------------------------------------------+-------------------------------------------------------+
 | signal_assignment_statement_010 | my_assign:                                                     | (signal_assignment_statement                          |
 |                                 |     Output_pin <= reject 5 ns inertial Input_pin after 10 ns,  |   (identifier                                         |
 |                                 |                   not Input_pin after 20 ns;                   |     my_assign                                         |
@@ -11492,65 +11551,6 @@ signal_assignment_statement
 |                                 |                                                                |                         literal: (abstract_literal<v> |
 |                                 |                                                                |                           (decimal_literal            |
 |                                 |                                                                |                             literal: 20, hint: int    |
-|                                 |                                                                |                           )                           |
-|                                 |                                                                |                         ),                            |
-|                                 |                                                                |                         unit: ns                      |
-|                                 |                                                                |                       )                               |
-|                                 |                                                                |                     )                                 |
-|                                 |                                                                |                   )                                   |
-|                                 |                                                                |                 )                                     |
-|                                 |                                                                |               )                                       |
-|                                 |                                                                |             )                                         |
-|                                 |                                                                |           )                                           |
-|                                 |                                                                |         )                                             |
-|                                 |                                                                |       )                                               |
-|                                 |                                                                |     )                                                 |
-|                                 |                                                                |   )                                                   |
-|                                 |                                                                | )                                                     |
-|                                 |                                                                |                                                       |
-+---------------------------------+----------------------------------------------------------------+-------------------------------------------------------+
-| signal_assignment_statement_09  | my_label:                                                      | (signal_assignment_statement                          |
-|                                 |     Output_pin <= Input_pin after 10 ns;                       |   (identifier                                         |
-|                                 |                                                                |     my_label                                          |
-|                                 |                                                                |   )                                                   |
-|                                 |                                                                |   (target<v>                                          |
-|                                 |                                                                |     (name<v>                                          |
-|                                 |                                                                |       (identifier                                     |
-|                                 |                                                                |         Output_pin                                    |
-|                                 |                                                                |       )                                               |
-|                                 |                                                                |     )                                                 |
-|                                 |                                                                |   )                                                   |
-|                                 |                                                                |   (waveform<v>                                        |
-|                                 |                                                                |     (waveform_element                                 |
-|                                 |                                                                |       (expression                                     |
-|                                 |                                                                |         (relation                                     |
-|                                 |                                                                |           (shift_expression                           |
-|                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               (term                                   |
-|                                 |                                                                |                 (primary<v>                           |
-|                                 |                                                                |                   (name<v>                            |
-|                                 |                                                                |                     (identifier                       |
-|                                 |                                                                |                       Input_pin                       |
-|                                 |                                                                |                     )                                 |
-|                                 |                                                                |                   )                                   |
-|                                 |                                                                |                 )                                     |
-|                                 |                                                                |               )                                       |
-|                                 |                                                                |             )                                         |
-|                                 |                                                                |           )                                           |
-|                                 |                                                                |         )                                             |
-|                                 |                                                                |       )                                               |
-|                                 |                                                                |       (expression                                     |
-|                                 |                                                                |         (relation                                     |
-|                                 |                                                                |           (shift_expression                           |
-|                                 |                                                                |             (simple_expression                        |
-|                                 |                                                                |               (term                                   |
-|                                 |                                                                |                 (primary<v>                           |
-|                                 |                                                                |                   (literal<v>                         |
-|                                 |                                                                |                     (numeric_literal<v>               |
-|                                 |                                                                |                       (physical_literal               |
-|                                 |                                                                |                         literal: (abstract_literal<v> |
-|                                 |                                                                |                           (decimal_literal            |
-|                                 |                                                                |                             literal: 10, hint: int    |
 |                                 |                                                                |                           )                           |
 |                                 |                                                                |                         ),                            |
 |                                 |                                                                |                         unit: ns                      |

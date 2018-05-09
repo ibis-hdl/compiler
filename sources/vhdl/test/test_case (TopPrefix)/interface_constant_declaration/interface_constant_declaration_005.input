@@ -1,3 +1,0 @@
--- VHDL test case input
-constant PERIOD : time := 10 ns
-

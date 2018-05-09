@@ -1,5 +1,0 @@
--- VHDL test case input
--- return expression
-foo:
-    return a + b;
-

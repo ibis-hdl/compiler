@@ -1,2 +1,0 @@
--- VHDL test case input
-port map (A, B)

@@ -1,3 +1,0 @@
--- VHDL test case input
-constant CYCLE_TIME, RESET_TIME : TIME := 100 ns;
-

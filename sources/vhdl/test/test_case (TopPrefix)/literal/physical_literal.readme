@@ -1,3 +1,0 @@
-ATTENTION: There is a special case for 'literal' since it can't be
-distinct from basic_identifier without context !! e.g. 'ps' without
-leading integer (which is valid).

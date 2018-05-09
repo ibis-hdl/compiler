@@ -1,5 +1,0 @@
-(wait_statement
-  (identifier
-    wait_label
-  )
-)

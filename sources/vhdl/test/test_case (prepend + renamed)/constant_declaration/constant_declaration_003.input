@@ -1,4 +1,0 @@
--- VHDL test case input
--- a deferred constant
-constant Propagation_Delay : DELAY_LENGTH;  
-

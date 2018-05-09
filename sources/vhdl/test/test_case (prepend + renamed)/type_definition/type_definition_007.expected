@@ -1,7 +1,0 @@
-(type_definition<v>
-  (name<v>
-    (identifier
-      STRING
-    )
-  )
-)

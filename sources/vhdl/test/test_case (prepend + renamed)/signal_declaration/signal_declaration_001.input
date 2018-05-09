@@ -1,2 +1,0 @@
--- VHDL test case input
-signal my_word : word := X"01234567";

@@ -1,3 +1,0 @@
--- VHDL test case input
--- type WORD is 
-range 31 downto 0

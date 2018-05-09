@@ -1,3 +1,0 @@
--- VHDL test case input
-variable a_bit : bit := '0'
-

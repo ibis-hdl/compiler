@@ -1,5 +1,0 @@
--- VHDL test case input
-if condition then
-    foo <= bar;
-end if;
-

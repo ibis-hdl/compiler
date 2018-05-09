@@ -1,2 +1,0 @@
--- VHDL test case input
-port (X, Y, Cin: in Bit; Cout, Sum: out Bit);

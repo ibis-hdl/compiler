@@ -1,5 +1,0 @@
--- VHDL test case input
-case expression is
-    when "choices" => exit;
-end case;
-

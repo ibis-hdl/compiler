@@ -1,8 +1,0 @@
-(function_call
-  (name<v>
-    (identifier
-      the_function_name
-    )
-  )
-  ( actual_parameter_part )
-)

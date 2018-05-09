@@ -1,4 +1,0 @@
--- VHDL test case input
---  Groups of this type consist of any number of labels.
-group RESOURCE is (label <>);
-

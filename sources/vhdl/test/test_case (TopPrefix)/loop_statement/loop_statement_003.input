@@ -1,5 +1,0 @@
--- VHDL test case input
-while condition loop
-    null;
-end loop;
-

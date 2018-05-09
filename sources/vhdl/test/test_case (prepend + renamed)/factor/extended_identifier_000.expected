@@ -1,9 +1,0 @@
-(factor<v>
-  (primary<v>
-    (name<v>
-      (identifier
-        \BUS\
-      )
-    )
-  )
-)

@@ -1,8 +1,0 @@
-(physical_literal
-  literal: (abstract_literal<v>
-    (based_literal
-      base: 016, number: AFFE.42, exp: E+69
-    )
-  ),
-  unit: h
-)

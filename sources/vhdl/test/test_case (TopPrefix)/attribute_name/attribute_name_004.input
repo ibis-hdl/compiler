@@ -1,4 +1,0 @@
--- VHDL test case input
--- test for signature parser check
-Foo [A, B return C]'Buzz(42)
-

@@ -1,8 +1,0 @@
--- VHDL test case input
-type DURATION is range -1E18 to 1E18
-units
-    fs;
-    ps   =  1000 fs;
-    -- ...
-end units;
-

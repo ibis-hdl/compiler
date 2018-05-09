@@ -1,3 +1,0 @@
--- VHDL test case input
-variable COND : boolean := true;
-

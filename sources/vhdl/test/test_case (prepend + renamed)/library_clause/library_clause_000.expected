@@ -1,8 +1,0 @@
-(library_clause
-  (identifier
-    STD
-  ),
-  (identifier
-    WORK
-  )
-)

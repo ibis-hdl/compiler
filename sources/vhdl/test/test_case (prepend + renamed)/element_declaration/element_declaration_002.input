@@ -1,2 +1,0 @@
--- VHDL test case input
-YEAR   : INTEGER range 0 to 4000;

@@ -1,2 +1,0 @@
--- VHDL test case input
-generic (G1, G2:    INTEGER);

@@ -1,5 +1,0 @@
-(abstract_literal<v>
-  (based_literal
-    base: 016, number: 00_FF, exp: e-42
-  )
-)

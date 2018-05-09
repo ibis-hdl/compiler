@@ -1,2 +1,0 @@
--- VHDL test case input
-wait on A, B until CLK = '1';

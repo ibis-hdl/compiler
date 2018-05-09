@@ -1,3 +1,0 @@
--- VHDL test case input
-attribute LOCATION of others: label is (25, 77);
-

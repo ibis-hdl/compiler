@@ -1,3 +1,0 @@
--- VHDL test case input
-constant N, N5 : integer := 5
-
