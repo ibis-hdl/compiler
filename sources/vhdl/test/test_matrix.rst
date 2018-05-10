@@ -3390,93 +3390,123 @@ disconnection_specification
 discrete_range
 ==============
 
-+--------------------+-----------------------------------------------------+------------------------------------------+
-| File               | Input                                               | Expected                                 |
-+--------------------+-----------------------------------------------------+------------------------------------------+
-| discrete_range_000 | -- range                                            | (discrete_range<v>                       |
-|                    | 42 downto 0                                         |   (range<v>                              |
-|                    |                                                     |     (simple_expression                   |
-|                    |                                                     |       (term                              |
-|                    |                                                     |         (primary<v>                      |
-|                    |                                                     |           (literal<v>                    |
-|                    |                                                     |             (numeric_literal<v>          |
-|                    |                                                     |               (abstract_literal<v>       |
-|                    |                                                     |                 (decimal_literal         |
-|                    |                                                     |                   literal: 42, hint: int |
-|                    |                                                     |                 )                        |
-|                    |                                                     |               )                          |
-|                    |                                                     |             )                            |
-|                    |                                                     |           )                              |
-|                    |                                                     |         )                                |
-|                    |                                                     |       )                                  |
-|                    |                                                     |     )                                    |
-|                    |                                                     |     (keyword                             |
-|                    |                                                     |       DOWNTO                             |
-|                    |                                                     |     )                                    |
-|                    |                                                     |     (simple_expression                   |
-|                    |                                                     |       (term                              |
-|                    |                                                     |         (primary<v>                      |
-|                    |                                                     |           (literal<v>                    |
-|                    |                                                     |             (numeric_literal<v>          |
-|                    |                                                     |               (abstract_literal<v>       |
-|                    |                                                     |                 (decimal_literal         |
-|                    |                                                     |                   literal: 0, hint: int  |
-|                    |                                                     |                 )                        |
-|                    |                                                     |               )                          |
-|                    |                                                     |             )                            |
-|                    |                                                     |           )                              |
-|                    |                                                     |         )                                |
-|                    |                                                     |       )                                  |
-|                    |                                                     |     )                                    |
-|                    |                                                     |   )                                      |
-|                    |                                                     | )                                        |
-|                    |                                                     |                                          |
-+--------------------+-----------------------------------------------------+------------------------------------------+
-| discrete_range_001 | -- subtype_indication (with range constraint)       | (discrete_range<v>                       |
-|                    | resolution_function_name type_mark RANGE constraint |   (subtype_indication                    |
-|                    |                                                     |     (name<v>                             |
-|                    |                                                     |       (identifier                        |
-|                    |                                                     |         resolution_function_name         |
-|                    |                                                     |       )                                  |
-|                    |                                                     |     )                                    |
-|                    |                                                     |     (name<v>                             |
-|                    |                                                     |       (identifier                        |
-|                    |                                                     |         type_mark                        |
-|                    |                                                     |       )                                  |
-|                    |                                                     |     )                                    |
-|                    |                                                     |     (constraint<v>                       |
-|                    |                                                     |       (range<v>                          |
-|                    |                                                     |         (name<v>                         |
-|                    |                                                     |           (identifier                    |
-|                    |                                                     |             constraint                   |
-|                    |                                                     |           )                              |
-|                    |                                                     |         )                                |
-|                    |                                                     |       )                                  |
-|                    |                                                     |     )                                    |
-|                    |                                                     |   )                                      |
-|                    |                                                     | )                                        |
-|                    |                                                     |                                          |
-+--------------------+-----------------------------------------------------+------------------------------------------+
-| discrete_range_002 | -- subtype_indication (with range_constraint)       | (discrete_range<v>                       |
-|                    | type_mark RANGE constraint                          |   (subtype_indication                    |
-|                    |                                                     |     (name<v>                             |
-|                    |                                                     |       (identifier                        |
-|                    |                                                     |         type_mark                        |
-|                    |                                                     |       )                                  |
-|                    |                                                     |     )                                    |
-|                    |                                                     |     (constraint<v>                       |
-|                    |                                                     |       (range<v>                          |
-|                    |                                                     |         (name<v>                         |
-|                    |                                                     |           (identifier                    |
-|                    |                                                     |             constraint                   |
-|                    |                                                     |           )                              |
-|                    |                                                     |         )                                |
-|                    |                                                     |       )                                  |
-|                    |                                                     |     )                                    |
-|                    |                                                     |   )                                      |
-|                    |                                                     | )                                        |
-|                    |                                                     |                                          |
-+--------------------+-----------------------------------------------------+------------------------------------------+
++--------------------+----------------------------------------------------------------------------+------------------------------------------+
+| File               | Input                                                                      | Expected                                 |
++--------------------+----------------------------------------------------------------------------+------------------------------------------+
+| discrete_range_000 | -- discrete_subtype_indication (with typemark)                             | (discrete_range<v>                       |
+|                    | -- syntacially equivalent to range with range_attribute_name               |   (subtype_indication                    |
+|                    | typemark_or_range_attribute_name                                           |     (name<v>                             |
+|                    |                                                                            |       (identifier                        |
+|                    |                                                                            |         typemark_or_range_attribute_name |
+|                    |                                                                            |       )                                  |
+|                    |                                                                            |     )                                    |
+|                    |                                                                            |   )                                      |
+|                    |                                                                            | )                                        |
+|                    |                                                                            |                                          |
++--------------------+----------------------------------------------------------------------------+------------------------------------------+
+| discrete_range_001 | -- discrete_subtype_indication (with range constraint)                     | (discrete_range<v>                       |
+|                    | resolution_function_name type_mark RANGE range_prefix'attribute_designator |   (subtype_indication                    |
+|                    |                                                                            |     (name<v>                             |
+|                    |                                                                            |       (identifier                        |
+|                    |                                                                            |         resolution_function_name         |
+|                    |                                                                            |       )                                  |
+|                    |                                                                            |     )                                    |
+|                    |                                                                            |     (name<v>                             |
+|                    |                                                                            |       (identifier                        |
+|                    |                                                                            |         type_mark                        |
+|                    |                                                                            |       )                                  |
+|                    |                                                                            |     )                                    |
+|                    |                                                                            |     (constraint<v>                       |
+|                    |                                                                            |       (range<v>                          |
+|                    |                                                                            |         (attribute_name                  |
+|                    |                                                                            |           (prefix<v>                     |
+|                    |                                                                            |             (name<v>                     |
+|                    |                                                                            |               (identifier                |
+|                    |                                                                            |                 range_prefix             |
+|                    |                                                                            |               )                          |
+|                    |                                                                            |             )                            |
+|                    |                                                                            |           )                              |
+|                    |                                                                            |           (attribute_designator          |
+|                    |                                                                            |             (identifier                  |
+|                    |                                                                            |               attribute_designator       |
+|                    |                                                                            |             )                            |
+|                    |                                                                            |           )                              |
+|                    |                                                                            |         )                                |
+|                    |                                                                            |       )                                  |
+|                    |                                                                            |     )                                    |
+|                    |                                                                            |   )                                      |
+|                    |                                                                            | )                                        |
+|                    |                                                                            |                                          |
++--------------------+----------------------------------------------------------------------------+------------------------------------------+
+| discrete_range_002 | -- discrete_subtype_indication (with index_constraint)                     | (discrete_range<v>                       |
+|                    | resolution_fcn type_mark ( lhs, rhs )                                      |   (subtype_indication                    |
+|                    |                                                                            |     (name<v>                             |
+|                    |                                                                            |       (identifier                        |
+|                    |                                                                            |         resolution_fcn                   |
+|                    |                                                                            |       )                                  |
+|                    |                                                                            |     )                                    |
+|                    |                                                                            |     (name<v>                             |
+|                    |                                                                            |       (identifier                        |
+|                    |                                                                            |         type_mark                        |
+|                    |                                                                            |       )                                  |
+|                    |                                                                            |     )                                    |
+|                    |                                                                            |     (constraint<v>                       |
+|                    |                                                                            |       (index_constraint                  |
+|                    |                                                                            |         (discrete_range<v>               |
+|                    |                                                                            |           (subtype_indication            |
+|                    |                                                                            |             (name<v>                     |
+|                    |                                                                            |               (identifier                |
+|                    |                                                                            |                 lhs                      |
+|                    |                                                                            |               )                          |
+|                    |                                                                            |             )                            |
+|                    |                                                                            |           )                              |
+|                    |                                                                            |         ),                               |
+|                    |                                                                            |         (discrete_range<v>               |
+|                    |                                                                            |           (subtype_indication            |
+|                    |                                                                            |             (name<v>                     |
+|                    |                                                                            |               (identifier                |
+|                    |                                                                            |                 rhs                      |
+|                    |                                                                            |               )                          |
+|                    |                                                                            |             )                            |
+|                    |                                                                            |           )                              |
+|                    |                                                                            |         )                                |
+|                    |                                                                            |       )                                  |
+|                    |                                                                            |     )                                    |
+|                    |                                                                            |   )                                      |
+|                    |                                                                            | )                                        |
+|                    |                                                                            |                                          |
++--------------------+----------------------------------------------------------------------------+------------------------------------------+
+| discrete_range_003 | -- discrete_range as range with expression                                 | (discrete_range<v>                       |
+|                    | Left to Right                                                              |   (range<v>                              |
+|                    |                                                                            |     (simple_expression                   |
+|                    |                                                                            |       (term                              |
+|                    |                                                                            |         (primary<v>                      |
+|                    |                                                                            |           (name<v>                       |
+|                    |                                                                            |             (identifier                  |
+|                    |                                                                            |               Left                       |
+|                    |                                                                            |             )                            |
+|                    |                                                                            |           )                              |
+|                    |                                                                            |         )                                |
+|                    |                                                                            |       )                                  |
+|                    |                                                                            |     )                                    |
+|                    |                                                                            |     (keyword                             |
+|                    |                                                                            |       TO                                 |
+|                    |                                                                            |     )                                    |
+|                    |                                                                            |     (simple_expression                   |
+|                    |                                                                            |       (term                              |
+|                    |                                                                            |         (primary<v>                      |
+|                    |                                                                            |           (name<v>                       |
+|                    |                                                                            |             (identifier                  |
+|                    |                                                                            |               Right                      |
+|                    |                                                                            |             )                            |
+|                    |                                                                            |           )                              |
+|                    |                                                                            |         )                                |
+|                    |                                                                            |       )                                  |
+|                    |                                                                            |     )                                    |
+|                    |                                                                            |   )                                      |
+|                    |                                                                            | )                                        |
+|                    |                                                                            |                                          |
++--------------------+----------------------------------------------------------------------------+------------------------------------------+
 
 ===================
 element_declaration
@@ -9291,88 +9321,97 @@ primary_unit_declaration
 |                              |       |             |
 +------------------------------+-------+-------------+
 
-=====
-range
-=====
+================
+range_constraint
+================
 
-+-----------+----------------------+----------------------------------------+
-| File      | Input                | Expected                               |
-+-----------+----------------------+----------------------------------------+
-| range_000 | range_attribute_name | (range<v>                              |
-|           |                      |   (name<v>                             |
-|           |                      |     (identifier                        |
-|           |                      |       range_attribute_name             |
-|           |                      |     )                                  |
-|           |                      |   )                                    |
-|           |                      | )                                      |
-|           |                      |                                        |
-+-----------+----------------------+----------------------------------------+
-| range_001 | lhs To rhs           | (range<v>                              |
-|           |                      |   (simple_expression                   |
-|           |                      |     (term                              |
-|           |                      |       (primary<v>                      |
-|           |                      |         (name<v>                       |
-|           |                      |           (identifier                  |
-|           |                      |             lhs                        |
-|           |                      |           )                            |
-|           |                      |         )                              |
-|           |                      |       )                                |
-|           |                      |     )                                  |
-|           |                      |   )                                    |
-|           |                      |   (keyword                             |
-|           |                      |     TO                                 |
-|           |                      |   )                                    |
-|           |                      |   (simple_expression                   |
-|           |                      |     (term                              |
-|           |                      |       (primary<v>                      |
-|           |                      |         (name<v>                       |
-|           |                      |           (identifier                  |
-|           |                      |             rhs                        |
-|           |                      |           )                            |
-|           |                      |         )                              |
-|           |                      |       )                                |
-|           |                      |     )                                  |
-|           |                      |   )                                    |
-|           |                      | )                                      |
-|           |                      |                                        |
-+-----------+----------------------+----------------------------------------+
-| range_002 | 31 downto 0          | (range<v>                              |
-|           |                      |   (simple_expression                   |
-|           |                      |     (term                              |
-|           |                      |       (primary<v>                      |
-|           |                      |         (literal<v>                    |
-|           |                      |           (numeric_literal<v>          |
-|           |                      |             (abstract_literal<v>       |
-|           |                      |               (decimal_literal         |
-|           |                      |                 literal: 31, hint: int |
-|           |                      |               )                        |
-|           |                      |             )                          |
-|           |                      |           )                            |
-|           |                      |         )                              |
-|           |                      |       )                                |
-|           |                      |     )                                  |
-|           |                      |   )                                    |
-|           |                      |   (keyword                             |
-|           |                      |     DOWNTO                             |
-|           |                      |   )                                    |
-|           |                      |   (simple_expression                   |
-|           |                      |     (term                              |
-|           |                      |       (primary<v>                      |
-|           |                      |         (literal<v>                    |
-|           |                      |           (numeric_literal<v>          |
-|           |                      |             (abstract_literal<v>       |
-|           |                      |               (decimal_literal         |
-|           |                      |                 literal: 0, hint: int  |
-|           |                      |               )                        |
-|           |                      |             )                          |
-|           |                      |           )                            |
-|           |                      |         )                              |
-|           |                      |       )                                |
-|           |                      |     )                                  |
-|           |                      |   )                                    |
-|           |                      | )                                      |
-|           |                      |                                        |
-+-----------+----------------------+----------------------------------------+
++----------------------+--------------------------------------+----------------------------------------+
+| File                 | Input                                | Expected                               |
++----------------------+--------------------------------------+----------------------------------------+
+| range_constraint_000 | -- RANGE simple range_attribute_name | (range<v>                              |
+|                      | RANGE prefix'designator              |   (attribute_name                      |
+|                      |                                      |     (prefix<v>                         |
+|                      |                                      |       (name<v>                         |
+|                      |                                      |         (identifier                    |
+|                      |                                      |           prefix                       |
+|                      |                                      |         )                              |
+|                      |                                      |       )                                |
+|                      |                                      |     )                                  |
+|                      |                                      |     (attribute_designator              |
+|                      |                                      |       (identifier                      |
+|                      |                                      |         designator                     |
+|                      |                                      |       )                                |
+|                      |                                      |     )                                  |
+|                      |                                      |   )                                    |
+|                      |                                      | )                                      |
+|                      |                                      |                                        |
++----------------------+--------------------------------------+----------------------------------------+
+| range_constraint_001 | -- range with (simple)expression     | (range<v>                              |
+|                      | RANGE lhs To rhs                     |   (simple_expression                   |
+|                      |                                      |     (term                              |
+|                      |                                      |       (primary<v>                      |
+|                      |                                      |         (name<v>                       |
+|                      |                                      |           (identifier                  |
+|                      |                                      |             lhs                        |
+|                      |                                      |           )                            |
+|                      |                                      |         )                              |
+|                      |                                      |       )                                |
+|                      |                                      |     )                                  |
+|                      |                                      |   )                                    |
+|                      |                                      |   (keyword                             |
+|                      |                                      |     TO                                 |
+|                      |                                      |   )                                    |
+|                      |                                      |   (simple_expression                   |
+|                      |                                      |     (term                              |
+|                      |                                      |       (primary<v>                      |
+|                      |                                      |         (name<v>                       |
+|                      |                                      |           (identifier                  |
+|                      |                                      |             rhs                        |
+|                      |                                      |           )                            |
+|                      |                                      |         )                              |
+|                      |                                      |       )                                |
+|                      |                                      |     )                                  |
+|                      |                                      |   )                                    |
+|                      |                                      | )                                      |
+|                      |                                      |                                        |
++----------------------+--------------------------------------+----------------------------------------+
+| range_constraint_002 | -- range wirh (simple)expression     | (range<v>                              |
+|                      | RANGE 31 downto 0                    |   (simple_expression                   |
+|                      |                                      |     (term                              |
+|                      |                                      |       (primary<v>                      |
+|                      |                                      |         (literal<v>                    |
+|                      |                                      |           (numeric_literal<v>          |
+|                      |                                      |             (abstract_literal<v>       |
+|                      |                                      |               (decimal_literal         |
+|                      |                                      |                 literal: 31, hint: int |
+|                      |                                      |               )                        |
+|                      |                                      |             )                          |
+|                      |                                      |           )                            |
+|                      |                                      |         )                              |
+|                      |                                      |       )                                |
+|                      |                                      |     )                                  |
+|                      |                                      |   )                                    |
+|                      |                                      |   (keyword                             |
+|                      |                                      |     DOWNTO                             |
+|                      |                                      |   )                                    |
+|                      |                                      |   (simple_expression                   |
+|                      |                                      |     (term                              |
+|                      |                                      |       (primary<v>                      |
+|                      |                                      |         (literal<v>                    |
+|                      |                                      |           (numeric_literal<v>          |
+|                      |                                      |             (abstract_literal<v>       |
+|                      |                                      |               (decimal_literal         |
+|                      |                                      |                 literal: 0, hint: int  |
+|                      |                                      |               )                        |
+|                      |                                      |             )                          |
+|                      |                                      |           )                            |
+|                      |                                      |         )                              |
+|                      |                                      |       )                                |
+|                      |                                      |     )                                  |
+|                      |                                      |   )                                    |
+|                      |                                      | )                                      |
+|                      |                                      |                                        |
++----------------------+--------------------------------------+----------------------------------------+
 
 ======================
 record_type_definition
@@ -12535,136 +12574,168 @@ subtype_declaration
 subtype_indication
 ==================
 
-+------------------------+----------------------------------------------------------------------+------------------------------------+
-| File                   | Input                                                                | Expected                           |
-+------------------------+----------------------------------------------------------------------+------------------------------------+
-| subtype_indication_000 | resolution_function_name  type_mark  RANGE constraint                | (subtype_indication                |
-|                        |                                                                      |   (name<v>                         |
-|                        |                                                                      |     (identifier                    |
-|                        |                                                                      |       resolution_function_name     |
-|                        |                                                                      |     )                              |
-|                        |                                                                      |   )                                |
-|                        |                                                                      |   (name<v>                         |
-|                        |                                                                      |     (identifier                    |
-|                        |                                                                      |       type_mark                    |
-|                        |                                                                      |     )                              |
-|                        |                                                                      |   )                                |
-|                        |                                                                      |   (constraint<v>                   |
-|                        |                                                                      |     (range<v>                      |
-|                        |                                                                      |       (name<v>                     |
-|                        |                                                                      |         (identifier                |
-|                        |                                                                      |           constraint               |
-|                        |                                                                      |         )                          |
-|                        |                                                                      |       )                            |
-|                        |                                                                      |     )                              |
-|                        |                                                                      |   )                                |
-|                        |                                                                      | )                                  |
-|                        |                                                                      |                                    |
-+------------------------+----------------------------------------------------------------------+------------------------------------+
-| subtype_indication_001 | resolution_function_name  type_mark                                  | (subtype_indication                |
-|                        |                                                                      |   (name<v>                         |
-|                        |                                                                      |     (identifier                    |
-|                        |                                                                      |       resolution_function_name     |
-|                        |                                                                      |     )                              |
-|                        |                                                                      |   )                                |
-|                        |                                                                      |   (name<v>                         |
-|                        |                                                                      |     (identifier                    |
-|                        |                                                                      |       type_mark                    |
-|                        |                                                                      |     )                              |
-|                        |                                                                      |   )                                |
-|                        |                                                                      | )                                  |
-|                        |                                                                      |                                    |
-+------------------------+----------------------------------------------------------------------+------------------------------------+
-| subtype_indication_002 |   type_mark  RANGE constraint                                        | (subtype_indication                |
-|                        |                                                                      |   (name<v>                         |
-|                        |                                                                      |     (identifier                    |
-|                        |                                                                      |       type_mark                    |
-|                        |                                                                      |     )                              |
-|                        |                                                                      |   )                                |
-|                        |                                                                      |   (constraint<v>                   |
-|                        |                                                                      |     (range<v>                      |
-|                        |                                                                      |       (name<v>                     |
-|                        |                                                                      |         (identifier                |
-|                        |                                                                      |           constraint               |
-|                        |                                                                      |         )                          |
-|                        |                                                                      |       )                            |
-|                        |                                                                      |     )                              |
-|                        |                                                                      |   )                                |
-|                        |                                                                      | )                                  |
-|                        |                                                                      |                                    |
-+------------------------+----------------------------------------------------------------------+------------------------------------+
-| subtype_indication_003 | type_mark                                                            | (subtype_indication                |
-|                        |                                                                      |   (name<v>                         |
-|                        |                                                                      |     (identifier                    |
-|                        |                                                                      |       type_mark                    |
-|                        |                                                                      |     )                              |
-|                        |                                                                      |   )                                |
-|                        |                                                                      | )                                  |
-|                        |                                                                      |                                    |
-+------------------------+----------------------------------------------------------------------+------------------------------------+
-| subtype_indication_004 | resolution_function_name  type_mark  ( range_attribute_name  )       | (subtype_indication                |
-|                        |                                                                      |   (name<v>                         |
-|                        |                                                                      |     (identifier                    |
-|                        |                                                                      |       resolution_function_name     |
-|                        |                                                                      |     )                              |
-|                        |                                                                      |   )                                |
-|                        |                                                                      |   (name<v>                         |
-|                        |                                                                      |     (identifier                    |
-|                        |                                                                      |       type_mark                    |
-|                        |                                                                      |     )                              |
-|                        |                                                                      |   )                                |
-|                        |                                                                      |   (constraint<v>                   |
-|                        |                                                                      |     (index_constraint              |
-|                        |                                                                      |       (discrete_range<v>           |
-|                        |                                                                      |         (subtype_indication        |
-|                        |                                                                      |           (name<v>                 |
-|                        |                                                                      |             (identifier            |
-|                        |                                                                      |               range_attribute_name |
-|                        |                                                                      |             )                      |
-|                        |                                                                      |           )                        |
-|                        |                                                                      |         )                          |
-|                        |                                                                      |       )                            |
-|                        |                                                                      |     )                              |
-|                        |                                                                      |   )                                |
-|                        |                                                                      | )                                  |
-|                        |                                                                      |                                    |
-+------------------------+----------------------------------------------------------------------+------------------------------------+
-| subtype_indication_005 | resolution_function_name  type_mark  ( range_1_name, range_2_name  ) | (subtype_indication                |
-|                        |                                                                      |   (name<v>                         |
-|                        |                                                                      |     (identifier                    |
-|                        |                                                                      |       resolution_function_name     |
-|                        |                                                                      |     )                              |
-|                        |                                                                      |   )                                |
-|                        |                                                                      |   (name<v>                         |
-|                        |                                                                      |     (identifier                    |
-|                        |                                                                      |       type_mark                    |
-|                        |                                                                      |     )                              |
-|                        |                                                                      |   )                                |
-|                        |                                                                      |   (constraint<v>                   |
-|                        |                                                                      |     (index_constraint              |
-|                        |                                                                      |       (discrete_range<v>           |
-|                        |                                                                      |         (subtype_indication        |
-|                        |                                                                      |           (name<v>                 |
-|                        |                                                                      |             (identifier            |
-|                        |                                                                      |               range_1_name         |
-|                        |                                                                      |             )                      |
-|                        |                                                                      |           )                        |
-|                        |                                                                      |         )                          |
-|                        |                                                                      |       ),                           |
-|                        |                                                                      |       (discrete_range<v>           |
-|                        |                                                                      |         (subtype_indication        |
-|                        |                                                                      |           (name<v>                 |
-|                        |                                                                      |             (identifier            |
-|                        |                                                                      |               range_2_name         |
-|                        |                                                                      |             )                      |
-|                        |                                                                      |           )                        |
-|                        |                                                                      |         )                          |
-|                        |                                                                      |       )                            |
-|                        |                                                                      |     )                              |
-|                        |                                                                      |   )                                |
-|                        |                                                                      | )                                  |
-|                        |                                                                      |                                    |
-+------------------------+----------------------------------------------------------------------+------------------------------------+
++------------------------+----------------------------------------------------------------------+--------------------------------------------+
+| File                   | Input                                                                | Expected                                   |
++------------------------+----------------------------------------------------------------------+--------------------------------------------+
+| subtype_indication_000 | -- type_mark only                                                    | (subtype_indication                        |
+|                        | type_mark                                                            |   (name<v>                                 |
+|                        |                                                                      |     (identifier                            |
+|                        |                                                                      |       type_mark                            |
+|                        |                                                                      |     )                                      |
+|                        |                                                                      |   )                                        |
+|                        |                                                                      | )                                          |
+|                        |                                                                      |                                            |
++------------------------+----------------------------------------------------------------------+--------------------------------------------+
+| subtype_indication_001 | -- with optional resolution_function_name                            | (subtype_indication                        |
+|                        | resolution_function_name type_mark                                   |   (name<v>                                 |
+|                        |                                                                      |     (identifier                            |
+|                        |                                                                      |       resolution_function_name             |
+|                        |                                                                      |     )                                      |
+|                        |                                                                      |   )                                        |
+|                        |                                                                      |   (name<v>                                 |
+|                        |                                                                      |     (identifier                            |
+|                        |                                                                      |       type_mark                            |
+|                        |                                                                      |     )                                      |
+|                        |                                                                      |   )                                        |
+|                        |                                                                      | )                                          |
+|                        |                                                                      |                                            |
++------------------------+----------------------------------------------------------------------+--------------------------------------------+
+| subtype_indication_002 | -- type_mark with a constraint of range_constraint                   | (subtype_indication                        |
+|                        | type_mark RANGE prefix'designator                                    |   (name<v>                                 |
+|                        |                                                                      |     (identifier                            |
+|                        |                                                                      |       type_mark                            |
+|                        |                                                                      |     )                                      |
+|                        |                                                                      |   )                                        |
+|                        |                                                                      |   (constraint<v>                           |
+|                        |                                                                      |     (range<v>                              |
+|                        |                                                                      |       (attribute_name                      |
+|                        |                                                                      |         (prefix<v>                         |
+|                        |                                                                      |           (name<v>                         |
+|                        |                                                                      |             (identifier                    |
+|                        |                                                                      |               prefix                       |
+|                        |                                                                      |             )                              |
+|                        |                                                                      |           )                                |
+|                        |                                                                      |         )                                  |
+|                        |                                                                      |         (attribute_designator              |
+|                        |                                                                      |           (identifier                      |
+|                        |                                                                      |             designator                     |
+|                        |                                                                      |           )                                |
+|                        |                                                                      |         )                                  |
+|                        |                                                                      |       )                                    |
+|                        |                                                                      |     )                                      |
+|                        |                                                                      |   )                                        |
+|                        |                                                                      | )                                          |
+|                        |                                                                      |                                            |
++------------------------+----------------------------------------------------------------------+--------------------------------------------+
+| subtype_indication_003 | -- subtype_indication with range expression                          | (subtype_indication                        |
+|                        | type_mark RANGE 0 to 42                                              |   (name<v>                                 |
+|                        |                                                                      |     (identifier                            |
+|                        |                                                                      |       type_mark                            |
+|                        |                                                                      |     )                                      |
+|                        |                                                                      |   )                                        |
+|                        |                                                                      |   (constraint<v>                           |
+|                        |                                                                      |     (range<v>                              |
+|                        |                                                                      |       (simple_expression                   |
+|                        |                                                                      |         (term                              |
+|                        |                                                                      |           (primary<v>                      |
+|                        |                                                                      |             (literal<v>                    |
+|                        |                                                                      |               (numeric_literal<v>          |
+|                        |                                                                      |                 (abstract_literal<v>       |
+|                        |                                                                      |                   (decimal_literal         |
+|                        |                                                                      |                     literal: 0, hint: int  |
+|                        |                                                                      |                   )                        |
+|                        |                                                                      |                 )                          |
+|                        |                                                                      |               )                            |
+|                        |                                                                      |             )                              |
+|                        |                                                                      |           )                                |
+|                        |                                                                      |         )                                  |
+|                        |                                                                      |       )                                    |
+|                        |                                                                      |       (keyword                             |
+|                        |                                                                      |         TO                                 |
+|                        |                                                                      |       )                                    |
+|                        |                                                                      |       (simple_expression                   |
+|                        |                                                                      |         (term                              |
+|                        |                                                                      |           (primary<v>                      |
+|                        |                                                                      |             (literal<v>                    |
+|                        |                                                                      |               (numeric_literal<v>          |
+|                        |                                                                      |                 (abstract_literal<v>       |
+|                        |                                                                      |                   (decimal_literal         |
+|                        |                                                                      |                     literal: 42, hint: int |
+|                        |                                                                      |                   )                        |
+|                        |                                                                      |                 )                          |
+|                        |                                                                      |               )                            |
+|                        |                                                                      |             )                              |
+|                        |                                                                      |           )                                |
+|                        |                                                                      |         )                                  |
+|                        |                                                                      |       )                                    |
+|                        |                                                                      |     )                                      |
+|                        |                                                                      |   )                                        |
+|                        |                                                                      | )                                          |
+|                        |                                                                      |                                            |
++------------------------+----------------------------------------------------------------------+--------------------------------------------+
+| subtype_indication_004 | -- with index_constraint                                             | (subtype_indication                        |
+|                        | resolution_function_name  type_mark  ( range_attribute_name  )       |   (name<v>                                 |
+|                        |                                                                      |     (identifier                            |
+|                        |                                                                      |       resolution_function_name             |
+|                        |                                                                      |     )                                      |
+|                        |                                                                      |   )                                        |
+|                        |                                                                      |   (name<v>                                 |
+|                        |                                                                      |     (identifier                            |
+|                        |                                                                      |       type_mark                            |
+|                        |                                                                      |     )                                      |
+|                        |                                                                      |   )                                        |
+|                        |                                                                      |   (constraint<v>                           |
+|                        |                                                                      |     (index_constraint                      |
+|                        |                                                                      |       (discrete_range<v>                   |
+|                        |                                                                      |         (subtype_indication                |
+|                        |                                                                      |           (name<v>                         |
+|                        |                                                                      |             (identifier                    |
+|                        |                                                                      |               range_attribute_name         |
+|                        |                                                                      |             )                              |
+|                        |                                                                      |           )                                |
+|                        |                                                                      |         )                                  |
+|                        |                                                                      |       )                                    |
+|                        |                                                                      |     )                                      |
+|                        |                                                                      |   )                                        |
+|                        |                                                                      | )                                          |
+|                        |                                                                      |                                            |
++------------------------+----------------------------------------------------------------------+--------------------------------------------+
+| subtype_indication_005 | resolution_function_name  type_mark  ( range_1_name, range_2_name  ) | (subtype_indication                        |
+|                        |                                                                      |   (name<v>                                 |
+|                        |                                                                      |     (identifier                            |
+|                        |                                                                      |       resolution_function_name             |
+|                        |                                                                      |     )                                      |
+|                        |                                                                      |   )                                        |
+|                        |                                                                      |   (name<v>                                 |
+|                        |                                                                      |     (identifier                            |
+|                        |                                                                      |       type_mark                            |
+|                        |                                                                      |     )                                      |
+|                        |                                                                      |   )                                        |
+|                        |                                                                      |   (constraint<v>                           |
+|                        |                                                                      |     (index_constraint                      |
+|                        |                                                                      |       (discrete_range<v>                   |
+|                        |                                                                      |         (subtype_indication                |
+|                        |                                                                      |           (name<v>                         |
+|                        |                                                                      |             (identifier                    |
+|                        |                                                                      |               range_1_name                 |
+|                        |                                                                      |             )                              |
+|                        |                                                                      |           )                                |
+|                        |                                                                      |         )                                  |
+|                        |                                                                      |       ),                                   |
+|                        |                                                                      |       (discrete_range<v>                   |
+|                        |                                                                      |         (subtype_indication                |
+|                        |                                                                      |           (name<v>                         |
+|                        |                                                                      |             (identifier                    |
+|                        |                                                                      |               range_2_name                 |
+|                        |                                                                      |             )                              |
+|                        |                                                                      |           )                                |
+|                        |                                                                      |         )                                  |
+|                        |                                                                      |       )                                    |
+|                        |                                                                      |     )                                      |
+|                        |                                                                      |   )                                        |
+|                        |                                                                      | )                                          |
+|                        |                                                                      |                                            |
++------------------------+----------------------------------------------------------------------+--------------------------------------------+
 
 ====
 term
@@ -14228,4 +14299,4 @@ xxx_signature
 +---------+-----------------------+----------+
 
 
-Total Tests: 395
+Total Tests: 396

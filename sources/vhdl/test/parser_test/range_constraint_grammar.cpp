@@ -1,5 +1,5 @@
 /*
- * range_grammar.cpp
+ * range_constraint_grammar.cpp
  *
  *  Created on: 7.5.2018
  *      Author: olaf
@@ -12,8 +12,8 @@
 
 namespace x3_test {
 
-    using attribute_type = ast::range;
-    using parser_type = parser::range_type;
+    using attribute_type = ast::range_constraint;
+    using parser_type = parser::range_constraint_type;
 
     // Explicit Template Instantiation
     template

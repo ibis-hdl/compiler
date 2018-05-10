@@ -1394,7 +1394,7 @@ auto const architecture_body_def =
         architecture_declarative_part
         BEGIN
         architecture_statement_part
-        END -( ARCHITECTURE ) -( architecture_simple_name ) > ';'
+        END -( ARCHITECTURE ) -( architecture_simple_name ) >  ';'
 ;
 #endif
 
@@ -1441,7 +1441,7 @@ auto const assertion_def =
 auto const assertion_statement_def =
        -label_colon
     >> assertion
-    > ';'
+    >  ';'
     ;
 
 
@@ -1472,7 +1472,7 @@ auto const attribute_declaration_def =
     > identifier
     > ':'
     > type_mark
-    > ';'
+   >  ';'
     ;
 
 
@@ -1508,7 +1508,7 @@ auto const attribute_specification_def =
     >> entity_specification
     >> IS
     >> expression
-    > ';'
+    >  ';'
     ;
 
 
@@ -1661,7 +1661,7 @@ auto const block_configuration_def =
         FOR block_specification
         { use_clause }
 { configuration_item }
-END FOR > ';'
+END FOR >  ';'
 ;
 #endif
 
@@ -1781,7 +1781,7 @@ auto const case_statement_def =
     >> +case_statement_alternative
     >> END >> CASE
     >> -label
-    > ';'
+    >  ';'
     ;
 
 
@@ -1901,7 +1901,7 @@ auto const concurrent_assertion_statement_def =
        -label_colon
     >> -POSTPONED
     >> assertion
-    > ';'
+    >  ';'
     ;
 
 
@@ -1912,7 +1912,7 @@ auto const concurrent_procedure_call_statement_def =
        -label_colon
     >> -POSTPONED
     >> procedure_call
-    > ';'
+    >  ';'
     ;
 
 
@@ -1973,7 +1973,7 @@ auto const conditional_signal_assignment_def =
     >> "<="
     >> options
     >> conditional_waveforms
-    > ';'
+    >  ';'
     ;
 
 
@@ -2049,7 +2049,7 @@ auto const constant_declaration_def =
     >> ':'
     >> subtype_indication
     >> -( ":=" >>  expression )
-    > ';'
+    >  ';'
 ;
 
 
@@ -2212,9 +2212,9 @@ auto const disconnection_specification_def =
 
 // discrete_range ::=                                                  [§ 3.2.1]
 //     discrete_subtype_indication | range
-auto const discrete_range_def =
-      subtype_indication
-    | range
+auto const discrete_range_def = /* order matters */
+      range
+    | subtype_indication
     ;
 
 
@@ -2409,8 +2409,8 @@ auto const entity_name_list_def =
 //     entity_name_list : entity_class
 auto const entity_specification_def =
       entity_name_list
-    > ':'
-    > entity_class
+    >> ':'
+    >  entity_class
     ;
 
 
@@ -2469,7 +2469,7 @@ auto const exit_statement_def =
     >> EXIT
     >> -label
     >> -( WHEN > condition )
-    > ';'
+    >  ';'
     ;
 
 
@@ -2571,7 +2571,7 @@ auto const file_declaration_def =
     >> ':'
     >> subtype_indication
     >> -file_open_information
-    > ';'
+    >  ';'
     ;
 
 
@@ -2762,7 +2762,7 @@ auto const group_template_declaration_def =
     >> '('
     >> entity_class_entry_list
     >> ')'
-    > ';'
+    >  ';'
     ;
 
 
@@ -2826,7 +2826,7 @@ auto const if_statement_def =
     >> -( ELSE >> sequence_of_statements )
     >> END >> IF
     >> -label
-    > ';'
+    >  ';'
 ;
 
 
@@ -3024,7 +3024,7 @@ auto const label_def =
 auto const library_clause_def =
        LIBRARY
     >> logical_name_list
-    > ';'
+    >  ';'
     ;
 
 
@@ -3121,7 +3121,7 @@ auto const next_statement_def =
     >> NEXT
     >> -label
     >> -( WHEN >> condition )
-    > ';'
+    >  ';'
 ;
 
 
@@ -3131,7 +3131,7 @@ auto const next_statement_def =
 auto const null_statement_def =
        -label_colon
     >> omit[ NULL ]
-    > ';'
+    >  ';'
     ;
 
 
@@ -3184,7 +3184,7 @@ auto const options_def =
 auto const package_body_def =
         PACKAGE BODY package_simple_name IS
         package_body_declarative_part
-        END -( PACKAGE BODY ) -( package_simple_name ) > ';'
+        END -( PACKAGE BODY ) -( package_simple_name ) >  ';'
 ;
 #endif
 
@@ -3334,7 +3334,7 @@ auto const port_clause_def =
     >> '('
     >> interface_list
     >> ')'
-    > ';'
+    >  ';'
     ;
 
 
@@ -3407,8 +3407,8 @@ auto const primary_unit_def =
 // primary_unit_declaration ::=
 //     identifier ;
 auto const primary_unit_declaration_def =
-      identifier
-    > ';'
+       identifier
+    >  ';'
     ;
 
 
@@ -3437,7 +3437,7 @@ auto const procedure_call_def =
 auto const procedure_call_statement_def =
        -label_colon
     >> procedure_call
-    > ';'
+    >  ';'
     ;
 
 
@@ -3527,16 +3527,13 @@ auto const range_expression = x3::rule<struct _, ast::range_expression> { "range
     >> direction
     >> simple_expression
     ;
-auto const range_attribute_name = x3::rule<struct _, ast::name> { "range_attribute_name" } =
-    name // XXXX FixMe: Must be attribute_name, test_case will fail XXXX
-    ;
 } // end detail
 
 auto const range_def =
     /* The order is changed to get the longest match, since simple_expression
      * can also be a name as of range_attribute_name */
       range_detail::range_expression
-    | range_detail::range_attribute_name
+    | attribute_name
     ;
 
 
@@ -3658,7 +3655,7 @@ auto const selected_signal_assignment_def =
      >> "<="
      >> options
      >> selected_waveforms
-     > ';'
+     >  ';'
     ;
 
 
@@ -3765,7 +3762,7 @@ auto const signal_assignment_statement_def =
     >> "<="
     >> -delay_mechanism
     >> waveform
-    > ';'
+    >  ';'
     ;
 
 
@@ -3779,7 +3776,7 @@ auto const signal_declaration_def =
     >> subtype_indication
     >> -signal_kind
     >> -( ":=" >  expression )
-    > ';'
+    >  ';'
     ;
 
 
@@ -3898,7 +3895,7 @@ auto const subprogram_body_def =
 //     subprogram_specification ;
 auto const subprogram_declaration_def =
       subprogram_specification
-    > ';'
+    >  ';'
     ;
 
 
@@ -4014,11 +4011,22 @@ auto const subtype_indication_def =
      *      type_mark                ::= type_name | subtype_name
      * is ambiguous, even with optional. Nevertheless, syntactically
      * resolution_function_name and type_mark are names, semantically matters on
-     * context as of VHDL. */
+     * context as of VHDL.
+     * Further more, 2nd name can be a keyword (which can't be a name), hence
+     * the alternative parse branch. */
+    (
        x3::repeat(1 ,2)[
-           name
+          name          // range as keyword can follow; name forbids keywords!
        ]
-    >> -constraint
+       >> -constraint
+    )
+    |
+    (
+       x3::repeat(1)[
+          name          // mandatory type_mark ...
+       ]
+       >> -constraint   // followed by keyword RANGE ...
+    )
     ;
 
 
@@ -4189,7 +4197,7 @@ auto const variable_assignment_statement_def =
     >> target
     >> ":="
     >> expression
-    > ';'
+    >  ';'
     ;
 
 
@@ -4203,7 +4211,7 @@ auto const variable_declaration_def =
     >> ':'
     >> subtype_indication
     >> -(  ":=" >  expression )
-    > ';'
+    >  ';'
     ;
 
 
@@ -4216,7 +4224,7 @@ auto const wait_statement_def =
     >> -sensitivity_clause
     >> -condition_clause
     >> -timeout_clause
-    > ';'
+    >  ';'
     ;
 
 

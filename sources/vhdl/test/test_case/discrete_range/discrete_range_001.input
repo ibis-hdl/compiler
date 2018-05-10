@@ -1,3 +1,3 @@
--- subtype_indication (with range constraint)
-resolution_function_name type_mark RANGE constraint
+-- discrete_subtype_indication (with range constraint)
+resolution_function_name type_mark RANGE range_prefix'attribute_designator
 

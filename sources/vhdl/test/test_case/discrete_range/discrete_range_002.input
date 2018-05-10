@@ -1,3 +1,4 @@
--- subtype_indication (with range_constraint)
-type_mark RANGE constraint
+-- discrete_subtype_indication (with index_constraint)
+resolution_fcn type_mark ( lhs, rhs )
+
 

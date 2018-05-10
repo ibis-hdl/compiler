@@ -1,2 +1,4 @@
-  type_mark  RANGE constraint
+-- type_mark with a constraint of range_constraint
+type_mark RANGE prefix'designator
+
 

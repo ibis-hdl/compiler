@@ -1,2 +1,3 @@
-resolution_function_name  type_mark 
+-- with optional resolution_function_name
+resolution_function_name type_mark 
 

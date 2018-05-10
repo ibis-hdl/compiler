@@ -1,0 +1,29 @@
+(discrete_range<v>
+  (range<v>
+    (simple_expression
+      (term
+        (primary<v>
+          (name<v>
+            (identifier
+              Left
+            )
+          )
+        )
+      )
+    )
+    (keyword
+      TO
+    )
+    (simple_expression
+      (term
+        (primary<v>
+          (name<v>
+            (identifier
+              Right
+            )
+          )
+        )
+      )
+    )
+  )
+)

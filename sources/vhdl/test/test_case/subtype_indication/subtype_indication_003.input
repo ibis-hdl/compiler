@@ -1,3 +1,2 @@
-type_mark
-
-
+-- subtype_indication with range expression
+type_mark RANGE 0 to 42

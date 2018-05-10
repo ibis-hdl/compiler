@@ -1,5 +1,5 @@
 /*
- * range_parsertest.cpp
+ * range_constraint_parsertest.cpp
  *
  *  Created on: 7.5.2018
  *      Author: olaf
@@ -18,7 +18,7 @@
 #include "generate_data_test_case.hpp"
 #include "testing_util.hpp"
 
-BOOST_AUTO_TEST_SUITE( range )
+BOOST_AUTO_TEST_SUITE( range_constraint )
 
 
 

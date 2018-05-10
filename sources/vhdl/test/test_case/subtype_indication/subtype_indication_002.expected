@@ -6,9 +6,18 @@
   )
   (constraint<v>
     (range<v>
-      (name<v>
-        (identifier
-          constraint
+      (attribute_name
+        (prefix<v>
+          (name<v>
+            (identifier
+              prefix
+            )
+          )
+        )
+        (attribute_designator
+          (identifier
+            designator
+          )
         )
       )
     )

@@ -12,7 +12,7 @@
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 #include <eda/vhdl/ast/util/variant.hpp>
 
-#include <eda/vhdl/ast/name.hpp>
+#include <eda/vhdl/ast/attribute_name.hpp>
 #include <eda/vhdl/ast/simple_expression.hpp>
 #include <eda/vhdl/ast/keyword_token.hpp>
 
@@ -20,7 +20,7 @@
 namespace eda { namespace vhdl { namespace ast {
 
 
-using range_attribute_name = ast::name;
+using range_attribute_name = ast::attribute_name;
 
 
 struct range_expression : position_tagged
