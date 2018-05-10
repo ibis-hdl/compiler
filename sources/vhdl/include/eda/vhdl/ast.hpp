@@ -58,14 +58,14 @@
 //#include <eda/vhdl/ast/component_instantiation_statement.hpp>
 #include <eda/vhdl/ast/component_specification.hpp>
 //#include <eda/vhdl/ast/composite_type_definition.hpp>
-//DISABLED#include <eda/vhdl/ast/concurrent_assertion_statement.hpp>
-//DISABLED#include <eda/vhdl/ast/concurrent_procedure_call_statement.hpp>
-//DISABLED#include <eda/vhdl/ast/concurrent_signal_assignment_statement.hpp>
+//DISABLED #include <eda/vhdl/ast/concurrent_assertion_statement.hpp>
+//DISABLED #include <eda/vhdl/ast/concurrent_procedure_call_statement.hpp>
+//DISABLED #include <eda/vhdl/ast/concurrent_signal_assignment_statement.hpp>
 #include <eda/vhdl/ast/concurrent_statement.hpp>
 //DISABLED #include <eda/vhdl/ast/condition.hpp>
 //#include <eda/vhdl/ast/condition_clause.hpp>
 #include <eda/vhdl/ast/conditional_signal_assignment.hpp>
-//DISABLED#include <eda/vhdl/ast/conditional_waveforms.hpp>
+//DISABLED #include <eda/vhdl/ast/conditional_waveforms.hpp>
 #include <eda/vhdl/ast/configuration_declaration.hpp>
 //#include <eda/vhdl/ast/configuration_declarative_item.hpp>
 //#include <eda/vhdl/ast/configuration_declarative_part.hpp>
@@ -75,7 +75,7 @@
 //#include <eda/vhdl/ast/constrained_array_definition.hpp>
 #include <eda/vhdl/ast/constraint.hpp>
 #include <eda/vhdl/ast/context_clause.hpp>
-//DISABLED//#include <eda/vhdl/ast/context_item.hpp>
+//DISABLED #include <eda/vhdl/ast/context_item.hpp>
 //DISABLED #include <eda/vhdl/ast/decimal_literal.hpp>
 //UNUSED_IN_BNF#include <eda/vhdl/ast/declaration.hpp>
 //DISABLED #include <eda/vhdl/ast/delay_mechanism.hpp>
@@ -92,10 +92,10 @@
 //#include <eda/vhdl/ast/entity_class_entry.hpp>
 #include <eda/vhdl/ast/entity_class_entry_list.hpp>
 #include <eda/vhdl/ast/entity_declaration.hpp>
-//DISABLED#include <eda/vhdl/ast/entity_declarative_item.hpp>
+//DISABLED #include <eda/vhdl/ast/entity_declarative_item.hpp>
 #include <eda/vhdl/ast/entity_declarative_part.hpp>
 //#include <eda/vhdl/ast/entity_designator.hpp>
-//DISABLED#include <eda/vhdl/ast/guarded_signal_specification.hpp>
+//DISABLED #include <eda/vhdl/ast/guarded_signal_specification.hpp>
 #include <eda/vhdl/ast/entity_header.hpp>
 //#include <eda/vhdl/ast/entity_name_list.hpp>
 //#include <eda/vhdl/ast/entity_specification.hpp>
@@ -117,7 +117,7 @@
 #include <eda/vhdl/ast/formal_parameter_list.hpp>
 #include <eda/vhdl/ast/generic_clause.hpp>
 #include <eda/vhdl/ast/generic_map_aspect.hpp>
-//DISABLED#include <eda/vhdl/ast/group_declaration.hpp>
+//DISABLED #include <eda/vhdl/ast/group_declaration.hpp>
 //DISABLED #include <eda/vhdl/ast/formal_part.hpp>
 //#include <eda/vhdl/ast/full_type_declaration.hpp>
 //DISABLED #include <eda/vhdl/ast/function_call.hpp>
