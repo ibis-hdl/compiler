@@ -9222,91 +9222,355 @@ port_map_aspect
 primary
 =======
 
-+-------------------------+----------+----------------------------------+
-| File                    | Input    | Expected                         |
-+-------------------------+----------+----------------------------------+
-| based_literal_000       | 8#42#    | (primary<v>                      |
-|                         |          |   (literal<v>                    |
-|                         |          |     (numeric_literal<v>          |
-|                         |          |       (abstract_literal<v>       |
-|                         |          |         (based_literal           |
-|                         |          |           base: 8, number: 42    |
-|                         |          |         )                        |
-|                         |          |       )                          |
-|                         |          |     )                            |
-|                         |          |   )                              |
-|                         |          | )                                |
-|                         |          |                                  |
-+-------------------------+----------+----------------------------------+
-| basic_identifier_000    | FooBar   | (primary<v>                      |
-|                         |          |   (name<v>                       |
-|                         |          |     (identifier                  |
-|                         |          |       FooBar                     |
-|                         |          |     )                            |
-|                         |          |   )                              |
-|                         |          | )                                |
-|                         |          |                                  |
-+-------------------------+----------+----------------------------------+
-| bit_string_literal_000  | B"1111"  | (primary<v>                      |
-|                         |          |   (literal<v>                    |
-|                         |          |     (bit_string_literal          |
-|                         |          |       base: BIN, literal: 1111   |
-|                         |          |     )                            |
-|                         |          |   )                              |
-|                         |          | )                                |
-|                         |          |                                  |
-+-------------------------+----------+----------------------------------+
-| character_literal_000   | 'A'      | (primary<v>                      |
-|                         |          |   (literal<v>                    |
-|                         |          |     (enumeration_literal<v>      |
-|                         |          |       (character_literal         |
-|                         |          |         'A'                      |
-|                         |          |       )                          |
-|                         |          |     )                            |
-|                         |          |   )                              |
-|                         |          | )                                |
-|                         |          |                                  |
-+-------------------------+----------+----------------------------------+
-| decimal_literal_000     | 42       | (primary<v>                      |
-|                         |          |   (literal<v>                    |
-|                         |          |     (numeric_literal<v>          |
-|                         |          |       (abstract_literal<v>       |
-|                         |          |         (decimal_literal         |
-|                         |          |           literal: 42, hint: int |
-|                         |          |         )                        |
-|                         |          |       )                          |
-|                         |          |     )                            |
-|                         |          |   )                              |
-|                         |          | )                                |
-|                         |          |                                  |
-+-------------------------+----------+----------------------------------+
-| extended_identifier_000 | \BUS\    | (primary<v>                      |
-|                         |          |   (name<v>                       |
-|                         |          |     (identifier                  |
-|                         |          |       \BUS\                      |
-|                         |          |     )                            |
-|                         |          |   )                              |
-|                         |          | )                                |
-|                         |          |                                  |
-+-------------------------+----------+----------------------------------+
-| keyword_null            | NULL     | (primary<v>                      |
-|                         |          |   (literal<v>                    |
-|                         |          |     (keyword                     |
-|                         |          |       NULL                       |
-|                         |          |     )                            |
-|                         |          |   )                              |
-|                         |          | )                                |
-|                         |          |                                  |
-+-------------------------+----------+----------------------------------+
-| string_literal_000      | "FooBar" | (primary<v>                      |
-|                         |          |   (literal<v>                    |
-|                         |          |     (string_literal              |
-|                         |          |       FooBar                     |
-|                         |          |     )                            |
-|                         |          |   )                              |
-|                         |          | )                                |
-|                         |          |                                  |
-+-------------------------+----------+----------------------------------+
++-------------------------+-------------------------------+-------------------------------------------------+
+| File                    | Input                         | Expected                                        |
++-------------------------+-------------------------------+-------------------------------------------------+
+| aggregate_000           | (ex1 => 2, ex3 => 5)          | (primary<v>                                     |
+|                         |                               |   (aggregate                                    |
+|                         |                               |     (element_association                        |
+|                         |                               |       (choices                                  |
+|                         |                               |         (choice<v>                              |
+|                         |                               |           (simple_expression                    |
+|                         |                               |             (term                               |
+|                         |                               |               (primary<v>                       |
+|                         |                               |                 (name<v>                        |
+|                         |                               |                   (identifier                   |
+|                         |                               |                     ex1                         |
+|                         |                               |                   )                             |
+|                         |                               |                 )                               |
+|                         |                               |               )                                 |
+|                         |                               |             )                                   |
+|                         |                               |           )                                     |
+|                         |                               |         )                                       |
+|                         |                               |       )                                         |
+|                         |                               |       (expression                               |
+|                         |                               |         (relation                               |
+|                         |                               |           (shift_expression                     |
+|                         |                               |             (simple_expression                  |
+|                         |                               |               (term                             |
+|                         |                               |                 (primary<v>                     |
+|                         |                               |                   (literal<v>                   |
+|                         |                               |                     (numeric_literal<v>         |
+|                         |                               |                       (abstract_literal<v>      |
+|                         |                               |                         (decimal_literal        |
+|                         |                               |                           literal: 2, hint: int |
+|                         |                               |                         )                       |
+|                         |                               |                       )                         |
+|                         |                               |                     )                           |
+|                         |                               |                   )                             |
+|                         |                               |                 )                               |
+|                         |                               |               )                                 |
+|                         |                               |             )                                   |
+|                         |                               |           )                                     |
+|                         |                               |         )                                       |
+|                         |                               |       )                                         |
+|                         |                               |     ),                                          |
+|                         |                               |     (element_association                        |
+|                         |                               |       (choices                                  |
+|                         |                               |         (choice<v>                              |
+|                         |                               |           (simple_expression                    |
+|                         |                               |             (term                               |
+|                         |                               |               (primary<v>                       |
+|                         |                               |                 (name<v>                        |
+|                         |                               |                   (identifier                   |
+|                         |                               |                     ex3                         |
+|                         |                               |                   )                             |
+|                         |                               |                 )                               |
+|                         |                               |               )                                 |
+|                         |                               |             )                                   |
+|                         |                               |           )                                     |
+|                         |                               |         )                                       |
+|                         |                               |       )                                         |
+|                         |                               |       (expression                               |
+|                         |                               |         (relation                               |
+|                         |                               |           (shift_expression                     |
+|                         |                               |             (simple_expression                  |
+|                         |                               |               (term                             |
+|                         |                               |                 (primary<v>                     |
+|                         |                               |                   (literal<v>                   |
+|                         |                               |                     (numeric_literal<v>         |
+|                         |                               |                       (abstract_literal<v>      |
+|                         |                               |                         (decimal_literal        |
+|                         |                               |                           literal: 5, hint: int |
+|                         |                               |                         )                       |
+|                         |                               |                       )                         |
+|                         |                               |                     )                           |
+|                         |                               |                   )                             |
+|                         |                               |                 )                               |
+|                         |                               |               )                                 |
+|                         |                               |             )                                   |
+|                         |                               |           )                                     |
+|                         |                               |         )                                       |
+|                         |                               |       )                                         |
+|                         |                               |     )                                           |
+|                         |                               |   )                                             |
+|                         |                               | )                                               |
+|                         |                               |                                                 |
++-------------------------+-------------------------------+-------------------------------------------------+
+| aggregate_001           | (ex1 => 2, ex2 | ex3 => 5)    | (primary<v>                                     |
+|                         |                               |   (aggregate                                    |
+|                         |                               |     (element_association                        |
+|                         |                               |       (choices                                  |
+|                         |                               |         (choice<v>                              |
+|                         |                               |           (simple_expression                    |
+|                         |                               |             (term                               |
+|                         |                               |               (primary<v>                       |
+|                         |                               |                 (name<v>                        |
+|                         |                               |                   (identifier                   |
+|                         |                               |                     ex1                         |
+|                         |                               |                   )                             |
+|                         |                               |                 )                               |
+|                         |                               |               )                                 |
+|                         |                               |             )                                   |
+|                         |                               |           )                                     |
+|                         |                               |         )                                       |
+|                         |                               |       )                                         |
+|                         |                               |       (expression                               |
+|                         |                               |         (relation                               |
+|                         |                               |           (shift_expression                     |
+|                         |                               |             (simple_expression                  |
+|                         |                               |               (term                             |
+|                         |                               |                 (primary<v>                     |
+|                         |                               |                   (literal<v>                   |
+|                         |                               |                     (numeric_literal<v>         |
+|                         |                               |                       (abstract_literal<v>      |
+|                         |                               |                         (decimal_literal        |
+|                         |                               |                           literal: 2, hint: int |
+|                         |                               |                         )                       |
+|                         |                               |                       )                         |
+|                         |                               |                     )                           |
+|                         |                               |                   )                             |
+|                         |                               |                 )                               |
+|                         |                               |               )                                 |
+|                         |                               |             )                                   |
+|                         |                               |           )                                     |
+|                         |                               |         )                                       |
+|                         |                               |       )                                         |
+|                         |                               |     ),                                          |
+|                         |                               |     (element_association                        |
+|                         |                               |       (choices                                  |
+|                         |                               |         (choice<v>                              |
+|                         |                               |           (simple_expression                    |
+|                         |                               |             (term                               |
+|                         |                               |               (primary<v>                       |
+|                         |                               |                 (name<v>                        |
+|                         |                               |                   (identifier                   |
+|                         |                               |                     ex2                         |
+|                         |                               |                   )                             |
+|                         |                               |                 )                               |
+|                         |                               |               )                                 |
+|                         |                               |             )                                   |
+|                         |                               |           )                                     |
+|                         |                               |         ),                                      |
+|                         |                               |         (choice<v>                              |
+|                         |                               |           (simple_expression                    |
+|                         |                               |             (term                               |
+|                         |                               |               (primary<v>                       |
+|                         |                               |                 (name<v>                        |
+|                         |                               |                   (identifier                   |
+|                         |                               |                     ex3                         |
+|                         |                               |                   )                             |
+|                         |                               |                 )                               |
+|                         |                               |               )                                 |
+|                         |                               |             )                                   |
+|                         |                               |           )                                     |
+|                         |                               |         )                                       |
+|                         |                               |       )                                         |
+|                         |                               |       (expression                               |
+|                         |                               |         (relation                               |
+|                         |                               |           (shift_expression                     |
+|                         |                               |             (simple_expression                  |
+|                         |                               |               (term                             |
+|                         |                               |                 (primary<v>                     |
+|                         |                               |                   (literal<v>                   |
+|                         |                               |                     (numeric_literal<v>         |
+|                         |                               |                       (abstract_literal<v>      |
+|                         |                               |                         (decimal_literal        |
+|                         |                               |                           literal: 5, hint: int |
+|                         |                               |                         )                       |
+|                         |                               |                       )                         |
+|                         |                               |                     )                           |
+|                         |                               |                   )                             |
+|                         |                               |                 )                               |
+|                         |                               |               )                                 |
+|                         |                               |             )                                   |
+|                         |                               |           )                                     |
+|                         |                               |         )                                       |
+|                         |                               |       )                                         |
+|                         |                               |     )                                           |
+|                         |                               |   )                                             |
+|                         |                               | )                                               |
+|                         |                               |                                                 |
++-------------------------+-------------------------------+-------------------------------------------------+
+| aggregate_002           | (ex1 => 2, ex3 | OTHERS => 5) | (primary<v>                                     |
+|                         |                               |   (aggregate                                    |
+|                         |                               |     (element_association                        |
+|                         |                               |       (choices                                  |
+|                         |                               |         (choice<v>                              |
+|                         |                               |           (simple_expression                    |
+|                         |                               |             (term                               |
+|                         |                               |               (primary<v>                       |
+|                         |                               |                 (name<v>                        |
+|                         |                               |                   (identifier                   |
+|                         |                               |                     ex1                         |
+|                         |                               |                   )                             |
+|                         |                               |                 )                               |
+|                         |                               |               )                                 |
+|                         |                               |             )                                   |
+|                         |                               |           )                                     |
+|                         |                               |         )                                       |
+|                         |                               |       )                                         |
+|                         |                               |       (expression                               |
+|                         |                               |         (relation                               |
+|                         |                               |           (shift_expression                     |
+|                         |                               |             (simple_expression                  |
+|                         |                               |               (term                             |
+|                         |                               |                 (primary<v>                     |
+|                         |                               |                   (literal<v>                   |
+|                         |                               |                     (numeric_literal<v>         |
+|                         |                               |                       (abstract_literal<v>      |
+|                         |                               |                         (decimal_literal        |
+|                         |                               |                           literal: 2, hint: int |
+|                         |                               |                         )                       |
+|                         |                               |                       )                         |
+|                         |                               |                     )                           |
+|                         |                               |                   )                             |
+|                         |                               |                 )                               |
+|                         |                               |               )                                 |
+|                         |                               |             )                                   |
+|                         |                               |           )                                     |
+|                         |                               |         )                                       |
+|                         |                               |       )                                         |
+|                         |                               |     ),                                          |
+|                         |                               |     (element_association                        |
+|                         |                               |       (choices                                  |
+|                         |                               |         (choice<v>                              |
+|                         |                               |           (simple_expression                    |
+|                         |                               |             (term                               |
+|                         |                               |               (primary<v>                       |
+|                         |                               |                 (name<v>                        |
+|                         |                               |                   (identifier                   |
+|                         |                               |                     ex3                         |
+|                         |                               |                   )                             |
+|                         |                               |                 )                               |
+|                         |                               |               )                                 |
+|                         |                               |             )                                   |
+|                         |                               |           )                                     |
+|                         |                               |         ),                                      |
+|                         |                               |         (choice<v>                              |
+|                         |                               |           (keyword                              |
+|                         |                               |             OTHERS                              |
+|                         |                               |           )                                     |
+|                         |                               |         )                                       |
+|                         |                               |       )                                         |
+|                         |                               |       (expression                               |
+|                         |                               |         (relation                               |
+|                         |                               |           (shift_expression                     |
+|                         |                               |             (simple_expression                  |
+|                         |                               |               (term                             |
+|                         |                               |                 (primary<v>                     |
+|                         |                               |                   (literal<v>                   |
+|                         |                               |                     (numeric_literal<v>         |
+|                         |                               |                       (abstract_literal<v>      |
+|                         |                               |                         (decimal_literal        |
+|                         |                               |                           literal: 5, hint: int |
+|                         |                               |                         )                       |
+|                         |                               |                       )                         |
+|                         |                               |                     )                           |
+|                         |                               |                   )                             |
+|                         |                               |                 )                               |
+|                         |                               |               )                                 |
+|                         |                               |             )                                   |
+|                         |                               |           )                                     |
+|                         |                               |         )                                       |
+|                         |                               |       )                                         |
+|                         |                               |     )                                           |
+|                         |                               |   )                                             |
+|                         |                               | )                                               |
+|                         |                               |                                                 |
++-------------------------+-------------------------------+-------------------------------------------------+
+| based_literal_000       | 8#42#                         | (primary<v>                                     |
+|                         |                               |   (literal<v>                                   |
+|                         |                               |     (numeric_literal<v>                         |
+|                         |                               |       (abstract_literal<v>                      |
+|                         |                               |         (based_literal                          |
+|                         |                               |           base: 8, number: 42                   |
+|                         |                               |         )                                       |
+|                         |                               |       )                                         |
+|                         |                               |     )                                           |
+|                         |                               |   )                                             |
+|                         |                               | )                                               |
+|                         |                               |                                                 |
++-------------------------+-------------------------------+-------------------------------------------------+
+| basic_identifier_000    | FooBar                        | (primary<v>                                     |
+|                         |                               |   (name<v>                                      |
+|                         |                               |     (identifier                                 |
+|                         |                               |       FooBar                                    |
+|                         |                               |     )                                           |
+|                         |                               |   )                                             |
+|                         |                               | )                                               |
+|                         |                               |                                                 |
++-------------------------+-------------------------------+-------------------------------------------------+
+| bit_string_literal_000  | B"1111"                       | (primary<v>                                     |
+|                         |                               |   (literal<v>                                   |
+|                         |                               |     (bit_string_literal                         |
+|                         |                               |       base: BIN, literal: 1111                  |
+|                         |                               |     )                                           |
+|                         |                               |   )                                             |
+|                         |                               | )                                               |
+|                         |                               |                                                 |
++-------------------------+-------------------------------+-------------------------------------------------+
+| character_literal_000   | 'A'                           | (primary<v>                                     |
+|                         |                               |   (literal<v>                                   |
+|                         |                               |     (enumeration_literal<v>                     |
+|                         |                               |       (character_literal                        |
+|                         |                               |         'A'                                     |
+|                         |                               |       )                                         |
+|                         |                               |     )                                           |
+|                         |                               |   )                                             |
+|                         |                               | )                                               |
+|                         |                               |                                                 |
++-------------------------+-------------------------------+-------------------------------------------------+
+| decimal_literal_000     | 42                            | (primary<v>                                     |
+|                         |                               |   (literal<v>                                   |
+|                         |                               |     (numeric_literal<v>                         |
+|                         |                               |       (abstract_literal<v>                      |
+|                         |                               |         (decimal_literal                        |
+|                         |                               |           literal: 42, hint: int                |
+|                         |                               |         )                                       |
+|                         |                               |       )                                         |
+|                         |                               |     )                                           |
+|                         |                               |   )                                             |
+|                         |                               | )                                               |
+|                         |                               |                                                 |
++-------------------------+-------------------------------+-------------------------------------------------+
+| extended_identifier_000 | \BUS\                         | (primary<v>                                     |
+|                         |                               |   (name<v>                                      |
+|                         |                               |     (identifier                                 |
+|                         |                               |       \BUS\                                     |
+|                         |                               |     )                                           |
+|                         |                               |   )                                             |
+|                         |                               | )                                               |
+|                         |                               |                                                 |
++-------------------------+-------------------------------+-------------------------------------------------+
+| keyword_null            | NULL                          | (primary<v>                                     |
+|                         |                               |   (literal<v>                                   |
+|                         |                               |     (keyword                                    |
+|                         |                               |       NULL                                      |
+|                         |                               |     )                                           |
+|                         |                               |   )                                             |
+|                         |                               | )                                               |
+|                         |                               |                                                 |
++-------------------------+-------------------------------+-------------------------------------------------+
+| string_literal_000      | "FooBar"                      | (primary<v>                                     |
+|                         |                               |   (literal<v>                                   |
+|                         |                               |     (string_literal                             |
+|                         |                               |       FooBar                                    |
+|                         |                               |     )                                           |
+|                         |                               |   )                                             |
+|                         |                               | )                                               |
+|                         |                               |                                                 |
++-------------------------+-------------------------------+-------------------------------------------------+
 
 ========================
 primary_unit_declaration
@@ -14299,4 +14563,4 @@ xxx_signature
 +---------+-----------------------+----------+
 
 
-Total Tests: 396
+Total Tests: 399

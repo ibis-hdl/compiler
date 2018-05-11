@@ -1818,9 +1818,10 @@ auto const character_literal_def =
 //     | element_simple_name
 //     | others
 auto const choice_def =
+/* Note, (element)_simple_name get never been parsed, since:
+ * simple_expression -> term -> factor -> primary -> name -> simple_name */
       simple_expression
     | discrete_range
-    | simple_name
     | OTHERS
     ;
 
@@ -3379,14 +3380,17 @@ auto const prefix_def =
 //     | allocator
 //     | ( expression )
 auto const primary_def =
+    /* Order matters; if aggreagate is prior expression as of the BNF, a
+     * backtracing problem occurred at:
+     * aggregate -> element_association -> choices  */
       !char_('"') >> name // ignore string_literals which follow below
     | literal
-    //     | aggregate
     | function_call
     //     | qualified_expression
     //     | type_conversion
     //     | allocator
     | ( '(' >> expression >> ')' )
+    | aggregate
     ;
 
 
@@ -3512,6 +3516,7 @@ auto const process_statement_part_def =
 // type_mark ' ( expression )
 //     | type_mark ' aggregate
 auto const qualified_expression_def =
+        /* Note: see iverilog/vhdlpp/parse.y */
         type_mark ' '(' expression ')'     | type_mark ' aggregate
         ;
 #endif
