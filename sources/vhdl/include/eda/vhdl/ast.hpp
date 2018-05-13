@@ -14,7 +14,7 @@
 //DISABLED #include <eda/vhdl/ast/actual_designator.hpp>
 #include <eda/vhdl/ast/actual_parameter_part.hpp>
 //DISABLED #include <eda/vhdl/ast/actual_part.hpp>
-#include <eda/vhdl/ast/aggregate.hpp>
+//DISABLED #include <eda/vhdl/ast/aggregate.hpp>
 #include <eda/vhdl/ast/alias_declaration.hpp>
 #include <eda/vhdl/ast/alias_designator.hpp>
 #include <eda/vhdl/ast/allocator.hpp>

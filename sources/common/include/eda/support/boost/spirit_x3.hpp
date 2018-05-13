@@ -10,7 +10,7 @@
 
 
 /* special boost.spirit.x3 header to get rid off the annoying unused parameter
- * warnings from x3 introduced later on boost libs 1.60 */
+ * warnings from x3 */
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 

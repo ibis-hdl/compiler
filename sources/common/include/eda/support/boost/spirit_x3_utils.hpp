@@ -15,9 +15,8 @@ namespace boost { namespace spirit { namespace x3
 /**
  * Spirit X3.Parser utility for attribute handling
  *
- * \see <a href="https://github.com/boostorg/spirit/issues/352#issuecomment-368354726">
- *      X3: Missing `as` directive #352
- *      </a>
+ * \see [X3: Missing `as` directive #352](
+ *       https://github.com/boostorg/spirit/issues/352#issuecomment-368354726)
  */
 template <typename Subject>
 struct protect_directive : Subject
@@ -44,9 +43,8 @@ auto const protect = protect_gen{};
 /**
  * Spirit X3.Parser utility for attribute handling
  *
- * \see <a href="https://stackoverflow.com/questions/33816662/understanding-the-list-operator-in-boost-spirit/33817135#33817135">
- *      Understanding the List Operator (%) in Boost.Spirit
- *      </a>
+ * \see [Understanding the List Operator (%) in Boost.Spirit](
+ *       https://stackoverflow.com/questions/33816662/understanding-the-list-operator-in-boost-spirit/33817135#33817135)
  */
 template<typename T>
 struct as_type {

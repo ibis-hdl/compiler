@@ -13,6 +13,7 @@
 
 #include <eda/vhdl/ast/util/nullary.hpp>
 #include <eda/vhdl/ast/literal.hpp>
+//#include <eda/vhdl/ast/aggregate.hpp>
 #include <eda/vhdl/ast/function_call.hpp>
 
 
