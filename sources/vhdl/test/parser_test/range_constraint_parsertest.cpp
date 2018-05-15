@@ -22,6 +22,6 @@ BOOST_AUTO_TEST_SUITE( range_constraint )
 
 
 
-GENERATE_DATASET_TEST_CASE( range )            
+GENERATE_DATASET_TEST_CASE( range_constraint )            
 
 BOOST_AUTO_TEST_SUITE_END()

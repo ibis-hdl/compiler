@@ -98,7 +98,7 @@ set(PARSERTEST_SOURCES
     parser_test/port_map_aspect_parsertest.cpp parser_test/port_map_aspect_grammar.cpp
     parser_test/primary_parsertest.cpp parser_test/primary_grammar.cpp
     parser_test/primary_unit_declaration_parsertest.cpp parser_test/primary_unit_declaration_grammar.cpp
-    parser_test/range_parsertest.cpp parser_test/range_grammar.cpp
+    parser_test/range_constraint_parsertest.cpp parser_test/range_constraint_grammar.cpp
     parser_test/record_type_definition_parsertest.cpp parser_test/record_type_definition_grammar.cpp
     parser_test/relation_parsertest.cpp parser_test/relation_grammar.cpp
     parser_test/return_statement_parsertest.cpp parser_test/return_statement_grammar.cpp
