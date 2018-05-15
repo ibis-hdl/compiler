@@ -12,7 +12,8 @@
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/ast/abstract_literal.hpp>
-#include <string_view>
+#include <eda/vhdl/parser/common_types.hpp>
+#include <boost/range/iterator_range.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
@@ -20,8 +21,8 @@ namespace eda { namespace vhdl { namespace ast {
 
 struct physical_literal : position_tagged
 {
-    abstract_literal                literal;
-    std::string_view                unit_name;
+    abstract_literal                                literal;
+    boost::iterator_range<parser::iterator_type>    unit_name;
 };
 
 

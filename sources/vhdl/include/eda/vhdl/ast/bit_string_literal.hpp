@@ -11,7 +11,8 @@
 
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
-#include <string_view>
+#include <eda/vhdl/parser/common_types.hpp>
+#include <boost/range/iterator_range.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
@@ -21,8 +22,8 @@ struct bit_string_literal : position_tagged
 {
     enum class base { bin, oct, hex };
 
-    std::string_view                bit_literal;
-    base                            base_specifier;
+    boost::iterator_range<parser::iterator_type>    bit_literal;
+    base                                            base_specifier;
 };
 
 

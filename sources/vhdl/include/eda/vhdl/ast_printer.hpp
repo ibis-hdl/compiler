@@ -225,7 +225,7 @@ public:
     void operator()(waveform_element const& node);
 
     // keywords and miscellaneous
-    void operator()(std::string_view const& node);
+    void operator()(boost::iterator_range<parser::iterator_type> const& node);
     void operator()(keyword_token token);
 
     void operator()(nullary const& node);

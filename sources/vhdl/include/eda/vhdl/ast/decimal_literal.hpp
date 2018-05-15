@@ -11,7 +11,8 @@
 
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
-#include <string_view>
+#include <eda/vhdl/parser/common_types.hpp>
+#include <boost/range/iterator_range.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
@@ -21,8 +22,8 @@ struct decimal_literal : position_tagged
 {
     enum class tag { integer, real };
 
-    std::string_view                literal;
-    tag                             hint;
+    boost::iterator_range<parser::iterator_type>    literal;
+    tag                                             hint;
 };
 
 

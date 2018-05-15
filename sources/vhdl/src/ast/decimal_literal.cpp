@@ -56,7 +56,7 @@ double get<double>(decimal_literal const& node)
         BOOST_THROW_EXCEPTION(
             eda::range_error(
                 "VHDL Decimal Literal='"
-                + literal_ellipsis(std::string(node.literal), 15)
+                + literal_ellipsis(node.literal, 15)
                 + "' <double> Range Error")
         );
     }
@@ -82,7 +82,7 @@ int get<int>(decimal_literal const& node)
         BOOST_THROW_EXCEPTION(
             eda::range_error(
                 "VHDL Decimal Literal='"
-                + literal_ellipsis(std::string(node.literal), 15)
+                + literal_ellipsis(node.literal, 15)
                 + "' <integer> Range Error")
         );
     }

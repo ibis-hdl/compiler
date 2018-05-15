@@ -22,10 +22,16 @@ namespace eda { namespace vhdl {
  * process. If the length exceeds the length \c len the given string \c str is
  * in the middle filled with ellipsis '...' to fit the given length \c len.
  */
+template<typename RangeType>
 static inline
-std::string literal_ellipsis(std::string const& str, std::size_t len)
+std::string literal_ellipsis(RangeType const& range, std::size_t len)
 {
     static std::string const ellipsis = "...";
+
+    std::string const str{
+        std::addressof(*range.begin()),
+        std::addressof(*range.end())
+    };
 
     if(str.size() < len + 1)
         return str;

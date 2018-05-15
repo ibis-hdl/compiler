@@ -2950,8 +2950,9 @@ void printer::operator()(waveform_element const &node)
 /*
  * Non AST members, used e.g. for unit tests (namely ast::integer)
  */
-void printer::operator()(std::string_view const &node)
+void printer::operator()(boost::iterator_range<parser::iterator_type> const &node)
 {
+    // even boost::iterator_range is used, the symbol is string_view
     static char const symbol[]{ "std::string_view" };
     symbol_scope<std::string> _(*this, symbol);
 

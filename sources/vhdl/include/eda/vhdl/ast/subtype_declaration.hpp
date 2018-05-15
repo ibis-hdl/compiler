@@ -14,7 +14,7 @@
 #include <eda/vhdl/ast/identifier.hpp>
 #include <eda/vhdl/ast/subtype_indication.hpp>
 
-#include <string_view>
+#include <boost/range/iterator_range.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {

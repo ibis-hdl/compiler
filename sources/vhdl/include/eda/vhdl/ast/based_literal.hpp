@@ -11,7 +11,8 @@
 
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
-#include <string_view>
+#include <eda/vhdl/parser/common_types.hpp>
+#include <boost/range/iterator_range.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
@@ -19,9 +20,9 @@ namespace eda { namespace vhdl { namespace ast {
 
 struct based_literal : position_tagged
 {
-    std::string_view                base;
-    std::string_view                number;
-    std::string_view                exponent;
+    boost::iterator_range<parser::iterator_type>    base;
+    boost::iterator_range<parser::iterator_type>    number;
+    boost::iterator_range<parser::iterator_type>    exponent;
 };
 
 

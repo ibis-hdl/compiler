@@ -12,7 +12,8 @@
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 #include <eda/vhdl/ast/util/variant.hpp> // forward_ast
 
-#include <string_view>
+#include <eda/vhdl/parser/common_types.hpp>
+#include <boost/range/iterator_range.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
@@ -23,14 +24,8 @@ struct name;
 
 struct procedure_call : position_tagged
 {
-    forward_ast<ast::name>  procedure_name;
-    std::string_view            actual_parameter_part;
-
-    /* XXX: Fix for actual_parameter_part's ast::name problem */
-    procedure_call& operator=(std::string_view const&& str_v) {
-        actual_parameter_part = std::move(str_v);
-        return *this;
-    }
+    forward_ast<ast::name>                          procedure_name;
+    boost::iterator_range<parser::iterator_type>    actual_parameter_part;
 };
 
 

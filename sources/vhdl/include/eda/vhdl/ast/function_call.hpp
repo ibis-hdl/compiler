@@ -12,7 +12,8 @@
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 #include <eda/vhdl/ast/util/variant.hpp> // forward_ast
 
-#include <string_view>
+#include <eda/vhdl/parser/common_types.hpp>
+#include <boost/range/iterator_range.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
@@ -23,8 +24,8 @@ struct name;
 
 struct function_call : position_tagged
 {
-    forward_ast<ast::name>  function_name;
-    std::string_view            actual_parameter_part;
+    forward_ast<ast::name>                          function_name;
+    boost::iterator_range<parser::iterator_type>    actual_parameter_part;
 };
 
 

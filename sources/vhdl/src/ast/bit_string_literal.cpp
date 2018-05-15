@@ -60,7 +60,7 @@ int get<int32_t>(bit_string_literal const& node)
         BOOST_THROW_EXCEPTION(
             eda::range_error(
                 "VHDL Bit String Literal='"
-                + literal_ellipsis(std::string(node.bit_literal), length[static_cast<unsigned>(node.base_specifier)])
+                + literal_ellipsis(node.bit_literal, length[static_cast<unsigned>(node.base_specifier)])
                 + "' <int32> Range Error")
         );
     }

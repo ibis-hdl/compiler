@@ -8,7 +8,7 @@ project(testrunner_vhdl93_parser LANGUAGES CXX)
 include(cotire)
 
 
-set(PARSERTEST_SOURCES_OLD
+set(PARSERTEST_SOURCES
     test_vhdl93_parser.cpp
     data_set.cpp
     #parser_xxx.cpp parser_xxx_inst.cpp
@@ -30,7 +30,7 @@ set(PARSERTEST_SOURCES_OLD
     parser_type.cpp
 )
 
-set(PARSERTEST_SOURCES
+set(PARSERTEST_SOURCES_N
     test_vhdl93_parser.cpp
     data_set.cpp
     parser_test/abstract_literal_parsertest.cpp parser_test/abstract_literal_grammar.cpp
@@ -197,22 +197,23 @@ target_link_libraries(${PROJECT_NAME}
 
 ##
 # COTIRE
-
-# disable PCH date-time check, Boost.Spirit uses __DATE__ and __TIME__ 
-# [Can cotire be made to work properly with Boost?](
-#  https://stackoverflow.com/questions/44350219/can-cotire-be-made-to-work-properly-with-boost)
-target_compile_options(${PROJECT_NAME} PRIVATE
-    -Wno-pch-date-time
-)
-
-# FixMe: FAILED with Boost.PP and others
 set_target_properties(${PROJECT_NAME} PROPERTIES
     COTIRE_PREFIX_HEADER_IGNORE_PATH "${Boost_INCLUDE_DIRS}/boost;${SPIRIT_X3_INCLUDE_DIR}"
     #COTIRE_PREFIX_HEADER_IGNORE_PATH "${Boost_INCLUDE_DIRS}/boost"
     #COTIRE_PREFIX_HEADER_INCLUDE_PATH eda::vhdl_parser
 )
 
+# FixMe: FAILED with Boost.PP and others
 #cotire(${PROJECT_NAME})
+
+# disable PCH date-time check, Boost.Spirit uses __DATE__ and __TIME__ 
+# [Can cotire be made to work properly with Boost?](
+#  https://stackoverflow.com/questions/44350219/can-cotire-be-made-to-work-properly-with-boost)
+if(_cotireTargetName)
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        -Wno-pch-date-time
+    )
+endif()
 
 
 ## 
