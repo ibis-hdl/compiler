@@ -11,10 +11,12 @@
   )
   GENERIC MAP_ASPECT
   (association_element
-    (formal_part<v>
-      (name<v>
-        (identifier
-          Buf_Delay
+    (formal_part
+      (formal_designator
+        (name<v>
+          (identifier
+            Buf_Delay
+          )
         )
       )
     )
@@ -30,10 +32,12 @@
   )
   PORT MAP_ASPECT
   (association_element
-    (formal_part<v>
-      (name<v>
-        (identifier
-          Input_pin
+    (formal_part
+      (formal_designator
+        (name<v>
+          (identifier
+            Input_pin
+          )
         )
       )
     )
@@ -48,10 +52,12 @@
     )
   ),
   (association_element
-    (formal_part<v>
-      (name<v>
-        (identifier
-          Output_pin
+    (formal_part
+      (formal_designator
+        (name<v>
+          (identifier
+            Output_pin
+          )
         )
       )
     )

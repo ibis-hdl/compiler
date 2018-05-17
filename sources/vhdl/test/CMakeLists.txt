@@ -30,6 +30,13 @@ set(PARSERTEST_SOURCES
     parser_type.cpp
 )
 
+set(PARSERTEST_SOURCES_DEV
+    test_vhdl93_parser.cpp
+    data_set.cpp
+    parser_test/formal_part_parsertest.cpp
+    #parser_test/xxx_signature_parsertest.cpp
+)
+
 set(PARSERTEST_SOURCES
     test_vhdl93_parser.cpp
     data_set.cpp
@@ -64,7 +71,8 @@ set(PARSERTEST_SOURCES
     parser_test/file_declaration_parsertest.cpp
     parser_test/file_open_information_parsertest.cpp
     parser_test/floating_type_definition_parsertest.cpp
-    parser_test/function_call_parsertest.cpp
+    parser_test/formal_part_parsertest.cpp
+	parser_test/function_call_parsertest.cpp
     parser_test/generic_clause_parsertest.cpp
     parser_test/generic_map_aspect_parsertest.cpp
     parser_test/group_declaration_parsertest.cpp
@@ -122,7 +130,6 @@ set(PARSERTEST_SOURCES
     parser_test/variable_declaration_parsertest.cpp
     parser_test/wait_statement_parsertest.cpp
     parser_test/waveform_parsertest.cpp
-    #parser_test/xxx_signature_parsertest.cpp
 )
 
 add_executable(${PROJECT_NAME} ${PARSERTEST_SOURCES})

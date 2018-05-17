@@ -826,7 +826,7 @@ typedef x3::rule<file_logical_name_class, ast::file_logical_name> file_logical_n
 typedef x3::rule<file_open_information_class, ast::file_open_information> file_open_information_type;
 typedef x3::rule<file_type_definition_class, ast::file_type_definition> file_type_definition_type;
 //typedef x3::rule<floating_type_definition_class, ast::floating_type_definition> floating_type_definition_type;
-typedef x3::rule<formal_designator_class, ast::formal_designator> formal_designator_type;
+typedef x3::rule<formal_designator_class, ast::name> formal_designator_type;
 typedef x3::rule<formal_parameter_list_class, ast::formal_parameter_list> formal_parameter_list_type;
 typedef x3::rule<formal_part_class, ast::formal_part> formal_part_type;
 //typedef x3::rule<full_type_declaration_class, ast::full_type_declaration> full_type_declaration_type;
@@ -2666,8 +2666,15 @@ auto const formal_parameter_list_def =
 //     | function_name ( formal_designator )
 //     | type_mark ( formal_designator )
 auto const formal_part_def =
-      name >> '(' >> formal_designator >> ')' //  function_name | type_mark(name)
-    | formal_designator
+    x3::as<std::vector<ast::name>>[
+        /* formal_designator is a context tied name ({generic, port, parameter}_name)
+         * where function_name and type_mark are also a name. Hence parse a list
+         * of names.  */
+           name
+        >> -(
+                '(' >> formal_designator >> ')'
+            )
+    ]
     ;
 
 

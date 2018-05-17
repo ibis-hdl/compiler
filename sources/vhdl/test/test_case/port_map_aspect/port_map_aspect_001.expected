@@ -1,10 +1,12 @@
 (port_map_aspect
   (association_list
     (association_element
-      (formal_part<v>
-        (name<v>
-          (identifier
-            B
+      (formal_part
+        (formal_designator
+          (name<v>
+            (identifier
+              B
+            )
           )
         )
       )
@@ -19,10 +21,12 @@
       )
     ),
     (association_element
-      (formal_part<v>
-        (name<v>
-          (identifier
-            A
+      (formal_part
+        (formal_designator
+          (name<v>
+            (identifier
+              A
+            )
           )
         )
       )
@@ -37,10 +41,12 @@
       )
     ),
     (association_element
-      (formal_part<v>
-        (name<v>
-          (identifier
-            SUM
+      (formal_part
+        (formal_designator
+          (name<v>
+            (identifier
+              SUM
+            )
           )
         )
       )
@@ -55,10 +61,12 @@
       )
     ),
     (association_element
-      (formal_part<v>
-        (name<v>
-          (identifier
-            CARRY
+      (formal_part
+        (formal_designator
+          (name<v>
+            (identifier
+              CARRY
+            )
           )
         )
       )

@@ -1,14 +1,16 @@
 (association_list
   (association_element
-    (formal_part<v>
-      (name<v>
-        (identifier
-          function_name
-        )
-      )
-      (name<v>
-        (identifier
-          formal_designator
+    (formal_part
+      ({function_name|type_mark} formal_designator
+        (name<v>
+          (identifier
+            function_name
+          )
+        ),
+        (name<v>
+          (identifier
+            formal_designator
+          )
         )
       )
     )
@@ -23,15 +25,17 @@
     )
   ),
   (association_element
-    (formal_part<v>
-      (name<v>
-        (identifier
-          type_mark
-        )
-      )
-      (name<v>
-        (identifier
-          formal_designator
+    (formal_part
+      ({function_name|type_mark} formal_designator
+        (name<v>
+          (identifier
+            type_mark
+          )
+        ),
+        (name<v>
+          (identifier
+            formal_designator
+          )
         )
       )
     )

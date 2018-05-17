@@ -113,7 +113,6 @@
 //DISABLED #include <eda/vhdl/ast/file_logical_name.hpp>
 //DISABLED #include <eda/vhdl/ast/file_open_information.hpp>
 #include <eda/vhdl/ast/file_type_definition.hpp>
-//DISABLED #include <eda/vhdl/ast/formal_designator.hpp>
 #include <eda/vhdl/ast/formal_parameter_list.hpp>
 #include <eda/vhdl/ast/generic_clause.hpp>
 #include <eda/vhdl/ast/generic_map_aspect.hpp>

@@ -1,0 +1,14 @@
+(formal_part
+  ({function_name|type_mark} formal_designator
+    (name<v>
+      (identifier
+        function_name_or_type_mark
+      )
+    ),
+    (name<v>
+      (identifier
+        formal_designator
+      )
+    )
+  )
+)

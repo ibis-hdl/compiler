@@ -1,9 +1,11 @@
 (association_list
   (association_element
-    (formal_part<v>
-      (name<v>
-        (identifier
-          generic_name
+    (formal_part
+      (formal_designator
+        (name<v>
+          (identifier
+            generic_name
+          )
         )
       )
     )
@@ -18,10 +20,12 @@
     )
   ),
   (association_element
-    (formal_part<v>
-      (name<v>
-        (identifier
-          parameter_name
+    (formal_part
+      (formal_designator
+        (name<v>
+          (identifier
+            parameter_name
+          )
         )
       )
     )

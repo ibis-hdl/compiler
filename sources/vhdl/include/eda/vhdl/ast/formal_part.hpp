@@ -9,29 +9,20 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_FORMAL_PART_HPP_
 
 
-#include <eda/vhdl/ast/util/variant.hpp>
+#include <eda/vhdl/ast/util/position_tagged.hpp>
 
-#include <eda/vhdl/ast/formal_designator.hpp>
-#include <eda/vhdl/ast/name.hpp>
-
+#include <vector>
 
 
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct formal_part_chunk {
-    ast::name               context_tied_name; // function_name | type_mark(name)
-    ast::formal_designator  formal_designator;
-};
+struct name;
 
 
-struct formal_part : variant<
-    formal_designator,
-    formal_part_chunk
->
+struct formal_part : position_tagged
 {
-    using base_type::base_type;
-    using base_type::operator=;
+    std::vector<ast::name>  context_tied_names;
 };
 
 

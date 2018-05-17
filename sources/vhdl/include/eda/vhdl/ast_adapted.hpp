@@ -236,8 +236,8 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::file_open_information,
         file_open_kind_expression, file_logical_name
 )
 
-BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::formal_part_chunk,
-    context_tied_name, formal_designator
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::formal_part,
+    context_tied_names
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::function_call,

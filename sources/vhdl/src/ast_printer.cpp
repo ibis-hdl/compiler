@@ -1425,17 +1425,33 @@ void printer::operator()(formal_part const &node)
     static char const symbol[]{ "formal_part" };
     symbol_scope<formal_part> _(*this, symbol);
 
-    util::visit_in_place(
-        node,
-        [this](ast::formal_part_chunk const& chunk) {
-            (*this)(chunk.context_tied_name);
-            os << "\n";
-            (*this)(chunk.formal_designator);
-        },
-        [this](ast::formal_designator node) {
-            (*this)(node);
+    switch(node.context_tied_names.size()) {
+
+        case 1: {
+            // BNF: formal_designator
+            static char const symbol[]{ "formal_designator" };
+            symbol_scope<formal_part> _(*this, symbol);
+            (*this)(node.context_tied_names[0]);
+
+            break;
         }
-    );
+
+        case 2: {
+            // BNF: {function_name|type_mark} ( formal_designator )
+            static char const symbol[]{ "{function_name|type_mark} formal_designator" };
+            symbol_scope<formal_part> _(*this, symbol);
+            (*this)(node.context_tied_names[0]);
+            os << ",\n";
+            (*this)(node.context_tied_names[1]);
+
+            break;
+        }
+
+        default: {
+            /* something went wrong */
+            cxx_bug_fatal("formal_part has only two (name) components");
+        }
+    }
 }
 
 

@@ -1,10 +1,12 @@
 (generic_map_aspect
   (association_list
     (association_element
-      (formal_part<v>
-        (name<v>
-          (identifier
-            tpLH
+      (formal_part
+        (formal_designator
+          (name<v>
+            (identifier
+              tpLH
+            )
           )
         )
       )
@@ -38,10 +40,12 @@
       )
     ),
     (association_element
-      (formal_part<v>
-        (name<v>
-          (identifier
-            tpHL
+      (formal_part
+        (formal_designator
+          (name<v>
+            (identifier
+              tpHL
+            )
           )
         )
       )
