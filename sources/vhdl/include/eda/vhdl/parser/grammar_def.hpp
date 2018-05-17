@@ -1347,8 +1347,9 @@ auto const actual_parameter_part_def =
 //       actual_designator
 //     | function_name ( actual_designator )
 //     | type_mark ( actual_designator )
-auto const actual_part_def =
-      name >> '(' >> actual_designator >> ')' //  function_name | type_mark(name)
+auto const actual_part_def = /* order matters */
+    /* Note, actual_designator is as of expression and {signal, ...}_name ! */
+      name >> '(' >> actual_designator >> ')' //  function_name | type_mark
     | actual_designator
     ;
 

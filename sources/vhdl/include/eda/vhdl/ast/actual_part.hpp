@@ -11,15 +11,15 @@
 
 #include <eda/vhdl/ast/util/variant.hpp>
 
-#include <eda/vhdl/ast/actual_designator.hpp>
 #include <eda/vhdl/ast/name.hpp>
+#include <eda/vhdl/ast/actual_designator.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
 
 
-/* Note, the actual_part is ambiguous here, see BNF, hence using a chunk
- * here to elaborate the context later on. */
+struct name;
+
 struct actual_part_chunk {
     ast::name               context_tied_name; // function_name | type_mark(name)
     ast::actual_designator  actual_designator;

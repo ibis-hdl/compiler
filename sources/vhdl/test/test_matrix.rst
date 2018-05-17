@@ -56,6 +56,41 @@ abstract_literal
 |                     |                |                                         |
 +---------------------+----------------+-----------------------------------------+
 
+===========
+actual_part
+===========
+
++-----------------+--------------------------------------------------+----------------------------------+
+| File            | Input                                            | Expected                         |
++-----------------+--------------------------------------------------+----------------------------------+
+| actual_part_000 | -- actual_part is simply actual_designator       | (actual_part<v>                  |
+|                 | actual_designator                                |   (actual_designator<v>          |
+|                 |                                                  |     (name<v>                     |
+|                 |                                                  |       (identifier                |
+|                 |                                                  |         actual_designator        |
+|                 |                                                  |       )                          |
+|                 |                                                  |     )                            |
+|                 |                                                  |   )                              |
+|                 |                                                  | )                                |
+|                 |                                                  |                                  |
++-----------------+--------------------------------------------------+----------------------------------+
+| actual_part_001 | -- actual_part with function name                | (actual_part<v>                  |
+|                 | function_name_or_type_mark ( actual_designator ) |   (name<v>                       |
+|                 |                                                  |     (identifier                  |
+|                 |                                                  |       function_name_or_type_mark |
+|                 |                                                  |     )                            |
+|                 |                                                  |   )                              |
+|                 |                                                  |   (actual_designator<v>          |
+|                 |                                                  |     (name<v>                     |
+|                 |                                                  |       (identifier                |
+|                 |                                                  |         actual_designator        |
+|                 |                                                  |       )                          |
+|                 |                                                  |     )                            |
+|                 |                                                  |   )                              |
+|                 |                                                  | )                                |
+|                 |                                                  |                                  |
++-----------------+--------------------------------------------------+----------------------------------+
+
 =========
 aggregate
 =========
@@ -14642,4 +14677,4 @@ xxx_signature
 +---------+-----------------------+----------+
 
 
-Total Tests: 401
+Total Tests: 403

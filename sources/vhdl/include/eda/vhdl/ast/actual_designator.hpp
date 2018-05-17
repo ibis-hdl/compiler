@@ -14,11 +14,12 @@
 #include <eda/vhdl/ast/util/nullary.hpp>
 #include <eda/vhdl/ast/expression.hpp>
 #include <eda/vhdl/ast/keyword_token.hpp>
-#include <eda/vhdl/ast/name.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
 
+
+struct name;
 
 // actual_designator ::=                                             [§ 4.3.2.2]
 //       expression
@@ -27,11 +28,9 @@ namespace eda { namespace vhdl { namespace ast {
 //     | file_name
 //     | open
 
-/* See notes at rule definition */
-
 struct actual_designator : variant<
     nullary,
-    name,
+    forward_ast<name>,
     expression,
     ast::keyword_token      // OPEN
 >
