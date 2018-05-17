@@ -30,7 +30,7 @@ struct concurrent_statement;    // forward due to cyclic dependency
  * \dot
  *  digraph generate_statement  {
  *   concurrent_statement -> generate_statement;
- *   generate_statement   -> concurrent_statement [ label="forward"];
+ *   generate_statement   -> concurrent_statement [ label=<<i>forward</i>>];
  * }
  * \enddot
  */

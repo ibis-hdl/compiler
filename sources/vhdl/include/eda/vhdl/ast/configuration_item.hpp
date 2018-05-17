@@ -31,7 +31,7 @@ struct component_configuration;
  *   component_configuration -> block_configuration;
  *   block_configuration     -> configuration_item;
  *   configuration_item      -> component_configuration;
- *   configuration_item      -> block_configuration [ label="forward"];
+ *   configuration_item      -> block_configuration [ label=<<i>forward</i>>];
  * }
  * \enddot
  */

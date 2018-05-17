@@ -37,13 +37,13 @@ struct loop_statement;
  *
  * \dot
  * digraph sequential_statement  {
- *   sequential_statement -> if_statement [ label="forward"];
+ *   sequential_statement -> if_statement [ label=<<i>forward</i>>];
  *   if_statement         -> sequence_of_statements;
  *
- *   sequential_statement -> case_statement [ label="forward"];
+ *   sequential_statement -> case_statement [ label=<<i>forward</i>>];
  *   case_statement       -> sequence_of_statements;
  *
- *   sequential_statement -> loop_statement [ label="forward"];
+ *   sequential_statement -> loop_statement [ label=<<i>forward</i>>];
  *   loop_statement       -> sequence_of_statements;
  *
  *   sequence_of_statements -> sequential_statement

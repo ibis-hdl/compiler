@@ -25,7 +25,7 @@ struct concurrent_statement;    // forward due to cyclic dependency
  * digraph concurrent_statement  {
  *   concurrent_statement -> block_statement;
  *   block_statement      -> block_statement_part;
- *   block_statement_part -> concurrent_statement [label="forward"];
+ *   block_statement_part -> concurrent_statement [label=<<i>forward</i>>];
  * }
  * \enddot
  */

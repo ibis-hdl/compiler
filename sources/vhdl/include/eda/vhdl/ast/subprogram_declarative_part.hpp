@@ -41,7 +41,7 @@ struct subprogram_body;
  * digraph subprogram_declarative_item  {
  *   subprogram_body             -> subprogram_declarative_part;
  *   subprogram_declarative_part -> subprogram_declarative_item;
- *   subprogram_declarative_item -> subprogram_body [ label="forward"];
+ *   subprogram_declarative_item -> subprogram_body [ label=<<i>forward</i>>];
  * }
  * \enddot
  */
