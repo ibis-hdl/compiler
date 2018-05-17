@@ -39,8 +39,6 @@ dataset_loader::dataset_loader(fs::path const& path)
 void dataset_loader::read_files(fs::path const& path)
 {
     try {
-        fs::path const test_case =  m_source_dir.filename();
-
         if(fs::exists(path) && fs::is_directory(path)) {
 
             std::vector<fs::path> dir_list { };
@@ -56,7 +54,9 @@ void dataset_loader::read_files(fs::path const& path)
 
                 if (fs::extension(file) == ".input") {
 
-                    m_test_case.emplace_back(test_case / file.stem());
+                    m_test_case.emplace_back(
+                        file.parent_path().filename() / file.stem()
+                    );
                     //cerr << "INFO: read " << m_test_case.back() << "\n";
 
                     fs::path const input_file  = file;
