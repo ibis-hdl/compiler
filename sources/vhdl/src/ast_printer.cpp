@@ -2725,18 +2725,32 @@ void printer::operator()(subtype_indication const &node)
     static char const symbol[]{ "subtype_indication" };
     symbol_scope<subtype_indication> _(*this, symbol);
 
-    if(node.unspecified_name_list.size() == 2) {
+    /* parsed as (name) list with trailing constraint
+     * subtype_indication ::=
+     *     [ resolution_function_name ] type_mark [ constraint ] */
+    switch(node.unspecified_name_list.size()) {
 
-        auto const& resolution_function_name = node.unspecified_name_list.front();
-        (*this)(resolution_function_name);
-        os << "\n";
+        case 1: {
+            auto const& type_mark = node.unspecified_name_list[0];
+            (*this)(type_mark);
 
-        auto const& type_mark = node.unspecified_name_list.back();
-        (*this)(type_mark);
+            break;
+        }
 
-    } else {
-        auto const& type_mark = node.unspecified_name_list.front();
-        (*this)(type_mark);
+        case 2: {
+            auto const& resolution_function_name = node.unspecified_name_list[0];
+            (*this)(resolution_function_name);
+            os << "\n";
+
+            auto const& type_mark = node.unspecified_name_list[1];
+            (*this)(type_mark);
+
+            break;
+        }
+
+        default:
+            /* something went wrong */
+            cxx_bug_fatal("formal_part has only two (name) components");
     }
 
     if(node.constraint) {
