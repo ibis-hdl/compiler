@@ -2173,7 +2173,16 @@ void printer::operator()(procedure_call const &node)
     symbol_scope<procedure_call> _(*this, symbol);
 
     (*this)(node.procedure_name);
-    os << "\n( " << node.actual_parameter_part << " )";
+
+    if(node.actual_parameter_part) {
+        os << "\n";
+        {
+            static char const symbol[]{ "actual_parameter_part" };
+            symbol_scope<function_call> _(*this, symbol);
+
+            (*this)(*node.actual_parameter_part);
+        }
+    }
 }
 
 

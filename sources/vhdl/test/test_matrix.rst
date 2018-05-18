@@ -9757,6 +9757,82 @@ primary_unit_declaration
 |                              |       |             |
 +------------------------------+-------+-------------+
 
+==============
+procedure_call
+==============
+
++--------------------+--------------------------------------------------------------------------+---------------------------------------+
+| File               | Input                                                                    | Expected                              |
++--------------------+--------------------------------------------------------------------------+---------------------------------------+
+| procedure_call_000 | -- procedure call without actual_parameter_part                          | (procedure_call                       |
+|                    | the_procedure_name                                                       |   (name<v>                            |
+|                    |                                                                          |     (identifier                       |
+|                    |                                                                          |       the_procedure_name              |
+|                    |                                                                          |     )                                 |
+|                    |                                                                          |   )                                   |
+|                    |                                                                          | )                                     |
+|                    |                                                                          |                                       |
++--------------------+--------------------------------------------------------------------------+---------------------------------------+
+| procedure_call_001 | -- procedure call with actual_parameter_part                             | (procedure_call                       |
+|                    | the_procedure_name ( actual_parameter_part )                             |   (name<v>                            |
+|                    |                                                                          |     (identifier                       |
+|                    |                                                                          |       the_procedure_name              |
+|                    |                                                                          |     )                                 |
+|                    |                                                                          |   )                                   |
+|                    |                                                                          |   (actual_parameter_part              |
+|                    |                                                                          |     (association_list                 |
+|                    |                                                                          |       (association_element            |
+|                    |                                                                          |         (actual_part<v>               |
+|                    |                                                                          |           (actual_designator<v>       |
+|                    |                                                                          |             (name<v>                  |
+|                    |                                                                          |               (identifier             |
+|                    |                                                                          |                 actual_parameter_part |
+|                    |                                                                          |               )                       |
+|                    |                                                                          |             )                         |
+|                    |                                                                          |           )                           |
+|                    |                                                                          |         )                             |
+|                    |                                                                          |       )                               |
+|                    |                                                                          |     )                                 |
+|                    |                                                                          |   )                                   |
+|                    |                                                                          | )                                     |
+|                    |                                                                          |                                       |
++--------------------+--------------------------------------------------------------------------+---------------------------------------+
+| procedure_call_002 | -- procedure call with association_element list as actual_parameter_part | (procedure_call                       |
+|                    | the_procedure_name ( actual_parameter_1,  actual_parameter_1)            |   (name<v>                            |
+|                    |                                                                          |     (identifier                       |
+|                    |                                                                          |       the_procedure_name              |
+|                    |                                                                          |     )                                 |
+|                    |                                                                          |   )                                   |
+|                    |                                                                          |   (actual_parameter_part              |
+|                    |                                                                          |     (association_list                 |
+|                    |                                                                          |       (association_element            |
+|                    |                                                                          |         (actual_part<v>               |
+|                    |                                                                          |           (actual_designator<v>       |
+|                    |                                                                          |             (name<v>                  |
+|                    |                                                                          |               (identifier             |
+|                    |                                                                          |                 actual_parameter_1    |
+|                    |                                                                          |               )                       |
+|                    |                                                                          |             )                         |
+|                    |                                                                          |           )                           |
+|                    |                                                                          |         )                             |
+|                    |                                                                          |       ),                              |
+|                    |                                                                          |       (association_element            |
+|                    |                                                                          |         (actual_part<v>               |
+|                    |                                                                          |           (actual_designator<v>       |
+|                    |                                                                          |             (name<v>                  |
+|                    |                                                                          |               (identifier             |
+|                    |                                                                          |                 actual_parameter_1    |
+|                    |                                                                          |               )                       |
+|                    |                                                                          |             )                         |
+|                    |                                                                          |           )                           |
+|                    |                                                                          |         )                             |
+|                    |                                                                          |       )                               |
+|                    |                                                                          |     )                                 |
+|                    |                                                                          |   )                                   |
+|                    |                                                                          | )                                     |
+|                    |                                                                          |                                       |
++--------------------+--------------------------------------------------------------------------+---------------------------------------+
+
 ================
 range_constraint
 ================
@@ -14735,4 +14811,4 @@ xxx_signature
 +---------+-----------------------+----------+
 
 
-Total Tests: 405
+Total Tests: 408
