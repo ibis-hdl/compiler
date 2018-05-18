@@ -3454,20 +3454,11 @@ auto const primary_unit_declaration_def =
 
 // procedure_call ::=                                                    [§ 8.6]
 //     procedure_name [ ( actual_parameter_part ) ]
-namespace procedure_call_detail {
-
-auto const actual_parameter_part = x3::rule<struct _, string_view_attribute>{ "actual_parameter_part" } =
-    x3::raw[
-        +(char_ - char_(')'))
-    ]
-    ;
-} // end detail
-
-/* FixMe: actual_parameter_part -> parameter_association_list, same problem as
- * with function_call and ast::name. */
 auto const procedure_call_def =
        name
-    >> -( '(' >> procedure_call_detail::actual_parameter_part >> ')' )
+    >> -(
+            '(' >> actual_parameter_part >> ')'
+        )
     ;
 
 

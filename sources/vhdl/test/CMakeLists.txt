@@ -30,14 +30,14 @@ set(PARSERTEST_SOURCES
     parser_type.cpp
 )
 
-set(PARSERTEST_SOURCES #_DEV
+set(PARSERTEST_SOURCES_DEV
     test_vhdl93_parser.cpp
     data_set.cpp
-    parser_test/actual_part_parsertest.cpp
+    parser_test/procedure_call_parsertest.cpp
     #parser_test/xxx_signature_parsertest.cpp
 )
 
-set(PARSERTEST_SOURCES_
+set(PARSERTEST_SOURCES
     test_vhdl93_parser.cpp
     data_set.cpp
     parser_test/abstract_literal_parsertest.cpp
@@ -103,6 +103,7 @@ set(PARSERTEST_SOURCES_
     parser_test/port_map_aspect_parsertest.cpp
     parser_test/primary_parsertest.cpp
     parser_test/primary_unit_declaration_parsertest.cpp
+    parser_test/procedure_call_parsertest.cpp
     parser_test/range_constraint_parsertest.cpp
     parser_test/record_type_definition_parsertest.cpp
     parser_test/relation_parsertest.cpp
