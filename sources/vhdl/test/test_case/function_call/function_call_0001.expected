@@ -1,0 +1,22 @@
+(function_call
+  (name<v>
+    (identifier
+      the_function_name
+    )
+  )
+  (actual_parameter_part
+    (association_list
+      (association_element
+        (actual_part<v>
+          (actual_designator<v>
+            (name<v>
+              (identifier
+                actual_parameter_part
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

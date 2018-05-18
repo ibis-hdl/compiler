@@ -1448,8 +1448,7 @@ void printer::operator()(formal_part const &node)
         }
 
         default: {
-            /* something went wrong */
-            cxx_bug_fatal("formal_part has only two (name) components");
+            cxx_bug_fatal("VHDL BNF rules violation, parser rule failed!");
         }
     }
 }
@@ -1461,7 +1460,16 @@ void printer::operator()(function_call const &node)
     symbol_scope<function_call> _(*this, symbol);
 
     (*this)(node.function_name);
-    os << "\n( " << node.actual_parameter_part << " )";
+
+    if(node.actual_parameter_part) {
+        os << "\n";
+        {
+            static char const symbol[]{ "actual_parameter_part" };
+            symbol_scope<function_call> _(*this, symbol);
+
+            (*this)(*node.actual_parameter_part);
+        }
+    }
 }
 
 
@@ -2731,6 +2739,7 @@ void printer::operator()(subtype_indication const &node)
     switch(node.unspecified_name_list.size()) {
 
         case 1: {
+            // BNF: type_mark .... [ constraint ]
             auto const& type_mark = node.unspecified_name_list[0];
             (*this)(type_mark);
 
@@ -2738,6 +2747,7 @@ void printer::operator()(subtype_indication const &node)
         }
 
         case 2: {
+            // BNF: [ resolution_function_name ] type_mark ... [ constraint ]
             auto const& resolution_function_name = node.unspecified_name_list[0];
             (*this)(resolution_function_name);
             os << "\n";
@@ -2749,8 +2759,7 @@ void printer::operator()(subtype_indication const &node)
         }
 
         default:
-            /* something went wrong */
-            cxx_bug_fatal("formal_part has only two (name) components");
+            cxx_bug_fatal("VHDL BNF rules violation, parser rule failed!");
     }
 
     if(node.constraint) {

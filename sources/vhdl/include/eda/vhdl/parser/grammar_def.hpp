@@ -1347,9 +1347,17 @@ auto const actual_parameter_part_def =
 //       actual_designator
 //     | function_name ( actual_designator )
 //     | type_mark ( actual_designator )
+namespace actual_part_detail {
+
+auto const chunk = x3::rule<struct _, ast::actual_part_chunk>{ "actual_part" } =
+       name //  function_name | type_mark
+    >> '(' >> actual_designator >> ')'
+    ;
+} // end detail
+
 auto const actual_part_def = /* order matters */
     /* Note, actual_designator is as of expression and {signal, ...}_name ! */
-      name >> '(' >> actual_designator >> ')' //  function_name | type_mark
+      actual_part_detail::chunk
     | actual_designator
     ;
 
@@ -2694,23 +2702,10 @@ auto const full_type_declaration_def =
 
 // function_call ::=                                                   [§ 7.3.3]
 //     function_name [ ( actual_parameter_part ) ]
-namespace function_call_detail {
-
-auto const actual_parameter_part = x3::rule<struct _, string_view_attribute>{ "actual_parameter_part" } =
-    x3::raw[
-        +(char_ - char_(')'))
-    ]
-    ;
-} // end detail
-
-/* FixMe: actual_parameter_part -> parameter_association_list, but this results
- * into big circular dependency compiler error mess due to multiple use of
- * ast::name.*/
 auto const function_call_def =
-        name
-    >> -(  '('
-        >> function_call_detail::actual_parameter_part
-        >> ')'
+       name
+    >> -(
+            '(' >> actual_parameter_part >> ')'
         )
     ;
 

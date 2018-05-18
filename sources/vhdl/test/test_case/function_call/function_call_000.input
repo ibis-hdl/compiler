@@ -1,2 +1,4 @@
-the_function_name ( actual_parameter_part )
+-- function call without actual_parameter_part
+the_function_name
+
 

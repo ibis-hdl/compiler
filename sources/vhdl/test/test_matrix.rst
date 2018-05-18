@@ -5857,19 +5857,77 @@ formal_part
 function_call
 =============
 
-+-------------------+---------------------------------------------+-----------------------------+
-| File              | Input                                       | Expected                    |
-+-------------------+---------------------------------------------+-----------------------------+
-| function_call_000 | the_function_name ( actual_parameter_part ) | (function_call              |
-|                   |                                             |   (name<v>                  |
-|                   |                                             |     (identifier             |
-|                   |                                             |       the_function_name     |
-|                   |                                             |     )                       |
-|                   |                                             |   )                         |
-|                   |                                             |   ( actual_parameter_part ) |
-|                   |                                             | )                           |
-|                   |                                             |                             |
-+-------------------+---------------------------------------------+-----------------------------+
++--------------------+-------------------------------------------------------------------------+---------------------------------------+
+| File               | Input                                                                   | Expected                              |
++--------------------+-------------------------------------------------------------------------+---------------------------------------+
+| function_call_000  | -- function call without actual_parameter_part                          | (function_call                        |
+|                    | the_function_name                                                       |   (name<v>                            |
+|                    |                                                                         |     (identifier                       |
+|                    |                                                                         |       the_function_name               |
+|                    |                                                                         |     )                                 |
+|                    |                                                                         |   )                                   |
+|                    |                                                                         | )                                     |
+|                    |                                                                         |                                       |
++--------------------+-------------------------------------------------------------------------+---------------------------------------+
+| function_call_0001 | -- function call with actual_parameter_part                             | (function_call                        |
+|                    | the_function_name ( actual_parameter_part )                             |   (name<v>                            |
+|                    |                                                                         |     (identifier                       |
+|                    |                                                                         |       the_function_name               |
+|                    |                                                                         |     )                                 |
+|                    |                                                                         |   )                                   |
+|                    |                                                                         |   (actual_parameter_part              |
+|                    |                                                                         |     (association_list                 |
+|                    |                                                                         |       (association_element            |
+|                    |                                                                         |         (actual_part<v>               |
+|                    |                                                                         |           (actual_designator<v>       |
+|                    |                                                                         |             (name<v>                  |
+|                    |                                                                         |               (identifier             |
+|                    |                                                                         |                 actual_parameter_part |
+|                    |                                                                         |               )                       |
+|                    |                                                                         |             )                         |
+|                    |                                                                         |           )                           |
+|                    |                                                                         |         )                             |
+|                    |                                                                         |       )                               |
+|                    |                                                                         |     )                                 |
+|                    |                                                                         |   )                                   |
+|                    |                                                                         | )                                     |
+|                    |                                                                         |                                       |
++--------------------+-------------------------------------------------------------------------+---------------------------------------+
+| function_call_0002 | -- function call with association_element list as actual_parameter_part | (function_call                        |
+|                    | the_function_name ( actual_parameter_1,  actual_parameter_1)            |   (name<v>                            |
+|                    |                                                                         |     (identifier                       |
+|                    |                                                                         |       the_function_name               |
+|                    |                                                                         |     )                                 |
+|                    |                                                                         |   )                                   |
+|                    |                                                                         |   (actual_parameter_part              |
+|                    |                                                                         |     (association_list                 |
+|                    |                                                                         |       (association_element            |
+|                    |                                                                         |         (actual_part<v>               |
+|                    |                                                                         |           (actual_designator<v>       |
+|                    |                                                                         |             (name<v>                  |
+|                    |                                                                         |               (identifier             |
+|                    |                                                                         |                 actual_parameter_1    |
+|                    |                                                                         |               )                       |
+|                    |                                                                         |             )                         |
+|                    |                                                                         |           )                           |
+|                    |                                                                         |         )                             |
+|                    |                                                                         |       ),                              |
+|                    |                                                                         |       (association_element            |
+|                    |                                                                         |         (actual_part<v>               |
+|                    |                                                                         |           (actual_designator<v>       |
+|                    |                                                                         |             (name<v>                  |
+|                    |                                                                         |               (identifier             |
+|                    |                                                                         |                 actual_parameter_1    |
+|                    |                                                                         |               )                       |
+|                    |                                                                         |             )                         |
+|                    |                                                                         |           )                           |
+|                    |                                                                         |         )                             |
+|                    |                                                                         |       )                               |
+|                    |                                                                         |     )                                 |
+|                    |                                                                         |   )                                   |
+|                    |                                                                         | )                                     |
+|                    |                                                                         |                                       |
++--------------------+-------------------------------------------------------------------------+---------------------------------------+
 
 ==============
 generic_clause
@@ -14677,4 +14735,4 @@ xxx_signature
 +---------+-----------------------+----------+
 
 
-Total Tests: 403
+Total Tests: 405

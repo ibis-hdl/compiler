@@ -13,7 +13,8 @@
 #include <eda/vhdl/ast/util/variant.hpp> // forward_ast
 
 #include <eda/vhdl/parser/common_types.hpp>
-#include <boost/range/iterator_range.hpp>
+#include <eda/vhdl/ast/actual_parameter_part.hpp>
+#include <eda/vhdl/ast/util/optional.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
@@ -25,7 +26,7 @@ struct name;
 struct function_call : position_tagged
 {
     forward_ast<ast::name>                          function_name;
-    boost::iterator_range<parser::iterator_type>    actual_parameter_part;
+    boost::optional<ast::actual_parameter_part>     actual_parameter_part;
 };
 
 

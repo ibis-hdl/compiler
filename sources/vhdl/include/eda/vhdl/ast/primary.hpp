@@ -13,8 +13,6 @@
 
 #include <eda/vhdl/ast/util/nullary.hpp>
 #include <eda/vhdl/ast/literal.hpp>
-//#include <eda/vhdl/ast/aggregate.hpp>
-#include <eda/vhdl/ast/function_call.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
@@ -23,6 +21,7 @@ namespace eda { namespace vhdl { namespace ast {
 struct name;
 struct aggregate;
 struct expression;
+struct function_call;
 
 
 // primary ::=
@@ -39,7 +38,7 @@ struct primary : variant<
     forward_ast<name>,
     literal,
     forward_ast<aggregate>,
-    function_call,
+    forward_ast<function_call>,
     // qualified_expression,
     // type_conversion,
     // allocator,
