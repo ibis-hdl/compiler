@@ -1373,13 +1373,14 @@ auto const aggregate_def =
 
 // alias_declaration ::=                                               [§ 4.3.3]
 //     alias alias_designator [ : subtype_indication ] is name [ signature ] ;
-auto const alias_declaration_def =
+auto const alias_declaration_def = ( // operator precedence
     ALIAS
     >> alias_designator
     >> -( ':' >> subtype_indication )
     >> IS
     >> name
     >> -signature
+    )
     >  ';'
     ;
 
@@ -1460,9 +1461,10 @@ auto const assertion_def =
 
 // assertion_statement ::=                                               [§ 8.2]
 //     [ label : ] assertion ;
-auto const assertion_statement_def =
+auto const assertion_statement_def = ( // operator precedence
        -label_colon
     >> assertion
+    )
     >  ';'
     ;
 
@@ -1494,7 +1496,7 @@ auto const attribute_declaration_def =
     > identifier
     > ':'
     > type_mark
-   >  ';'
+    >  ';'
     ;
 
 
@@ -1523,13 +1525,14 @@ auto const attribute_name_def =
 
 // attribute_specification ::=                                           [§ 5.1]
 //     attribute attribute_designator of entity_specification is expression ;
-auto const attribute_specification_def =
+auto const attribute_specification_def = ( // operator precedence
        ATTRIBUTE
     >> attribute_designator
     >> OF
     >> entity_specification
     >> IS
     >> expression
+    )
     >  ';'
     ;
 
@@ -1804,7 +1807,7 @@ auto const block_statement_part_def =
 //             case_statement_alternative
 //             { case_statement_alternative }
 //         end case [ case_label ] ;
-auto const case_statement_def =
+auto const case_statement_def = ( // operator precedence
        -label_colon
     >> CASE
     >> expression
@@ -1812,6 +1815,7 @@ auto const case_statement_def =
     >> +case_statement_alternative
     >> END >> CASE
     >> -label
+    )
     >  ';'
     ;
 
@@ -1929,10 +1933,11 @@ auto const composite_type_definition_def =
 
 // concurrent_assertion_statement ::=                                    [§ 9.4]
 // [ label : ] [ postponed ] assertion ;
-auto const concurrent_assertion_statement_def =
+auto const concurrent_assertion_statement_def = ( // operator precedence
        -label_colon
     >> -POSTPONED
     >> assertion
+    )
     >  ';'
     ;
 
@@ -1940,10 +1945,11 @@ auto const concurrent_assertion_statement_def =
 
 // concurrent_procedure_call_statement ::=                               [§ 9.3]
 // [ label : ] [ postponed ] procedure_call ;
-auto const concurrent_procedure_call_statement_def =
+auto const concurrent_procedure_call_statement_def = ( // operator precedence
        -label_colon
     >> -POSTPONED
     >> procedure_call
+    )
     >  ';'
     ;
 
@@ -2000,11 +2006,12 @@ auto const condition_clause_def =
 
 // conditional_signal_assignment ::=                                   [§ 9.5.1]
 //     target    <= options conditional_waveforms ;
-auto const conditional_signal_assignment_def =
+auto const conditional_signal_assignment_def = ( // operator precedence
        target
     >> "<="
     >> options
     >> conditional_waveforms
+    )
     >  ';'
     ;
 
@@ -2075,12 +2082,13 @@ auto const configuration_specification_def =
 
 // constant_declaration ::=                                          [§ 4.3.1.1]
 //     constant identifier_list : subtype_indication [ := expression ] ;
-auto const constant_declaration_def =
+auto const constant_declaration_def = ( // operator precedence
        omit[ CONSTANT ]
     >> identifier_list
     >> ':'
     >> subtype_indication
     >> -( ":=" >>  expression )
+    )
     >  ';'
 ;
 
@@ -2234,11 +2242,12 @@ auto const direction_def =
 
 // disconnection_specification ::=                                       [§ 5.3]
 //     disconnect guarded_signal_specification after time_expression ;
-auto const disconnection_specification_def =
+auto const disconnection_specification_def = ( // operator precedence
        DISCONNECT
     >> guarded_signal_specification
     >> AFTER
     >> expression
+    )
     >  ';'
     ;
 
@@ -2264,10 +2273,11 @@ auto const element_association_def =
 
 // element_declaration ::=                                             [§ 3.2.2]
 //     identifier_list : element_subtype_definition ;
-auto const element_declaration_def =
+auto const element_declaration_def = ( // operator precedence
        identifier_list
     >> ':'
     >> element_subtype_definition
+    )
     >  ';'
     ;
 
@@ -2347,7 +2357,7 @@ auto const entity_class_entry_list_def =
 //   [ begin
 //         entity_statement_part ]
 //     end [ entity ] [ entity_simple_name ] ;
-auto const entity_declaration_def =
+auto const entity_declaration_def = ( // operator precedence
     ENTITY
     >> identifier
     >> IS
@@ -2359,6 +2369,7 @@ auto const entity_declaration_def =
     >> END
     >> -ENTITY
     >> -simple_name
+    )
     >  ';'
     ;
 #endif
@@ -2441,9 +2452,10 @@ auto const entity_name_list_def =
 
 // entity_specification ::=                                              [§ 5.1]
 //     entity_name_list : entity_class
-auto const entity_specification_def =
+auto const entity_specification_def = ( // operator precedence
       entity_name_list
     >> ':'
+    )
     >  entity_class
     ;
 
@@ -2498,11 +2510,12 @@ auto const enumeration_type_definition_def =
 
 // exit_statement ::=                                                   [§ 8.11]
 //     [ label : ] exit [ loop_label ] [ when condition ] ;
-auto const exit_statement_def =
+auto const exit_statement_def = ( // operator precedence
        -label_colon
     >> EXIT
     >> -label
     >> -( WHEN > condition )
+    )
     >  ';'
     ;
 
@@ -2603,12 +2616,13 @@ auto const factor_def =    /* order matters */
 
 // file_declaration ::=                                              [§ 4.3.1.4]
 //     file identifier_list : subtype_indication [ file_open_information ] ;
-auto const file_declaration_def =
+auto const file_declaration_def = ( // operator precedence
        FILE
     >> identifier_list
     >> ':'
     >> subtype_indication
     >> -file_open_information
+    )
     >  ';'
     ;
 
@@ -2690,11 +2704,12 @@ auto const formal_part_def =
 #if 0 // UNUSED; embedded into type_declaration
 // full_type_declaration ::=                                             [§ 4.1]
 //     type identifier is type_definition ;
-auto const full_type_declaration_def =
+auto const full_type_declaration_def = ( // operator precedence
        TYPE
     >> identifier
     >> IS
     >> type_definition
+    )
     >  ';'
     ;
 #endif
@@ -2740,11 +2755,12 @@ auto const generation_scheme_def =
 
 // generic_clause ::=                                                  [§ 1.1.1]
 //     generic ( generic_list ) ;
-auto const generic_clause_def =
+auto const generic_clause_def = ( // operator precedence
        GENERIC
     >> '('
     >> interface_list
     >> ')'
+    )
     >  ';'
     ;
 
@@ -2789,13 +2805,14 @@ auto const group_constituent_list_def =
 
 // group_template_declaration ::=                                        [§ 4.6]
 //     group identifier is ( entity_class_entry_list ) ;
-auto const group_template_declaration_def =
+auto const group_template_declaration_def = ( // operator precedence
        GROUP
     >> identifier
     >> IS
     >> '('
     >> entity_class_entry_list
     >> ')'
+    )
     >  ';'
     ;
 
@@ -2803,7 +2820,7 @@ auto const group_template_declaration_def =
 
 // group_declaration ::=                                                 [§ 4.7]
 //     group identifier : group_template_name ( group_constituent_list ) ;
-auto const group_declaration_def =
+auto const group_declaration_def = ( // operator precedence
        GROUP
     >> identifier
     >> ':'
@@ -2811,6 +2828,7 @@ auto const group_declaration_def =
     >> '('
     >> group_constituent_list
     >> ')'
+    )
     >  ';'
     ;
 
@@ -2852,7 +2870,7 @@ auto const identifier_list_def =
 //       [ else
 //             sequence_of_statements ]
 //         end if [ if_label ] ;
-auto const if_statement_def =
+auto const if_statement_def = ( // operator precedence
        -label_colon
     >> IF >> condition >> THEN
     >> sequence_of_statements
@@ -2860,6 +2878,7 @@ auto const if_statement_def =
     >> -( ELSE >> sequence_of_statements )
     >> END >> IF
     >> -label
+    )
     >  ';'
 ;
 
@@ -2867,9 +2886,10 @@ auto const if_statement_def =
 #if 0 // UNUSED; embedded into type_declaration
 // incomplete_type_declaration ::=                                     [§ 3.3.1]
 //     type identifier ;
-auto const incomplete_type_declaration_def =
+auto const incomplete_type_declaration_def = ( // operator precedence
        TYPE
     >> identifier
+    )
     >  ';'
     ;
 #endif
@@ -3057,9 +3077,10 @@ auto const label_def =
 
 // library_clause ::=                                                   [§ 11.2]
 //     library logical_name_list ;
-auto const library_clause_def =
+auto const library_clause_def = ( // operator precedence
        LIBRARY
     >> logical_name_list
+    )
     >  ';'
     ;
 
@@ -3112,13 +3133,14 @@ auto const logical_name_list_def =
 //         [ iteration_scheme ] loop
 //             sequence_of_statements
 //         end loop [ loop_label ] ;
-auto const loop_statement_def =
+auto const loop_statement_def = ( // operator precedence
       -label_colon
     >> -iteration_scheme
     >> LOOP
     >> sequence_of_statements
     >> END >> LOOP
     >> -label
+    )
     >  ';'
     ;
 
@@ -3152,11 +3174,12 @@ auto const name_def =
 
 // next_statement ::=                                                   [§ 8.10]
 //     [ label : ] next [ loop_label ] [ when condition ] ;
-auto const next_statement_def =
+auto const next_statement_def = ( // operator precedence
        -label_colon
     >> NEXT
     >> -label
     >> -( WHEN >> condition )
+    )
     >  ';'
 ;
 
@@ -3164,9 +3187,10 @@ auto const next_statement_def =
 
 // null_statement ::=                                                   [§ 8.13]
 //      [ label : ] null ;
-auto const null_statement_def =
+auto const null_statement_def = ( // operator precedence
        -label_colon
     >> omit[ NULL ]
+    )
     >  ';'
     ;
 
@@ -3365,11 +3389,12 @@ auto const physical_type_definition_def =
 
 // port_clause ::=                                                     [§ 1.1.1]
 //     port ( port_list ) ;
-auto const port_clause_def =
+auto const port_clause_def = ( // operator precedence
        PORT
     >> '('
     >> interface_list
     >> ')'
+    )
     >  ';'
     ;
 
@@ -3466,9 +3491,10 @@ auto const procedure_call_def =
 // procedure_call_statement ::=                                          [§ 8.6]
 //     [ label : ] procedure_call ;
 /* FixMe: doesn't compile due optional and forward_ast of name? problem */
-auto const procedure_call_statement_def =
+auto const procedure_call_statement_def = ( // operator precedence
        -label_colon
     >> procedure_call
+    )
     >  ';'
     ;
 
@@ -3613,10 +3639,11 @@ auto const relation_def =
 //     [ label : ]
 //     report expression
 //     [ severity expression ] ;
-auto const report_statement_def =
+auto const report_statement_def = ( // operator precedence
        -label_colon
     >> ( REPORT   > expression )
     >> -( SEVERITY > expression )
+    )
     >  ';'
     ;
 
@@ -3624,10 +3651,11 @@ auto const report_statement_def =
 
 // return_statement ::=                                                 [§ 8.12]
 //     [ label : ] return [ expression ] ;
-auto const return_statement_def =
+auto const return_statement_def = ( // operator precedence
        -label_colon
     >> RETURN
     >> -expression
+    )
     >  ';'
 ;
 
@@ -3656,10 +3684,11 @@ auto const secondary_unit_def =
 
 // secondary_unit_declaration ::=                                      [§ 3.1.3]
 //     identifier = physical_literal ;
-auto const secondary_unit_declaration_def =
+auto const secondary_unit_declaration_def = ( // operator precedence
        identifier
     >> "="
     >> physical_literal
+    )
     >  ';'
     ;
 
@@ -3680,7 +3709,7 @@ auto const selected_name_def =
 // selected_signal_assignment ::=                                      [§ 9.5.2]
 //     with expression select
 //         target    <= options selected_waveforms ;
-auto const selected_signal_assignment_def =
+auto const selected_signal_assignment_def = ( // operator precedence
         WITH
      >> expression
      >> SELECT
@@ -3688,6 +3717,7 @@ auto const selected_signal_assignment_def =
      >> "<="
      >> options
      >> selected_waveforms
+     )
      >  ';'
     ;
 
@@ -3789,12 +3819,13 @@ auto const sign_def =
 
 // signal_assignment_statement ::=                                       [§ 8.4]
 //     [ label : ] target <= [ delay_mechanism ] waveform ;
-auto const signal_assignment_statement_def =
+auto const signal_assignment_statement_def = ( // operator precedence
        -label_colon
     >> target
     >> "<="
     >> -delay_mechanism
     >> waveform
+    )
     >  ';'
     ;
 
@@ -3802,13 +3833,14 @@ auto const signal_assignment_statement_def =
 
 // signal_declaration ::=                                            [§ 4.3.1.2]
 //     signal identifier_list : subtype_indication [ signal_kind ] [ := expression ] ;
-auto const signal_declaration_def =
+auto const signal_declaration_def = ( // operator precedence
        omit[ SIGNAL ]
     >> identifier_list
     >> ':'
     >> subtype_indication
     >> -signal_kind
     >> -( ":=" >  expression )
+    )
     >  ';'
     ;
 
@@ -3910,7 +3942,7 @@ auto const string_literal_def =
 //     begin
 //         subprogram_statement_part
 //     end [ subprogram_kind ] [ designator ] ;
-auto const subprogram_body_def =
+auto const subprogram_body_def = ( // operator precedence
        subprogram_specification
     >> IS
     >> subprogram_declarative_part
@@ -3919,6 +3951,7 @@ auto const subprogram_body_def =
     >> END
     >> -subprogram_kind
     >> -designator
+    )
     >  ';'
     ;
 
@@ -4026,11 +4059,12 @@ auto const subprogram_statement_part_def =
 
 // subtype_declaration ::=
 //     subtype identifier is subtype_indication ;
-auto const subtype_declaration_def =
+auto const subtype_declaration_def = ( // operator precedence
        SUBTYPE
     >> identifier
     >> IS
     >> subtype_indication
+    )
     >  ';'
     ;
 
@@ -4124,10 +4158,12 @@ auto const type_conversion_def =
 // type_declaration ::=                                                  [§ 4.1]
 //       full_type_declaration
 //     | incomplete_type_declaration
-auto const type_declaration_def = // Note; re-typed as node!
+auto const type_declaration_def = ( // operator precedence
+       // FixMe: What about this 'Note'? Note; re-typed as node!
        TYPE
     >> identifier
     >> -( IS >> type_definition )
+    )
     >  ';'
     ;
 
@@ -4215,9 +4251,10 @@ auto const selected_name = x3::rule<struct _, ast::use_clause::selected_name> { 
     ;
 } // end detail
 
-auto const use_clause_def =
+auto const use_clause_def = ( // operator precedence
        USE
     >> (use_clause_detail::selected_name % ',')
+    )
     >  ';'
     ;
 
@@ -4225,11 +4262,12 @@ auto const use_clause_def =
 
 // variable_assignment_statement ::=                                     [§ 8.5]
 //     [ label : ] target  := expression ;
-auto const variable_assignment_statement_def =
+auto const variable_assignment_statement_def = ( // operator precedence
        -label_colon
     >> target
     >> ":="
     >> expression
+    )
     >  ';'
     ;
 
@@ -4237,13 +4275,14 @@ auto const variable_assignment_statement_def =
 
 // variable_declaration ::=                                          [§ 4.3.1.3]
 //     [ shared ] variable identifier_list : subtype_indication [ := expression ] ;
-auto const variable_declaration_def =
+auto const variable_declaration_def = ( // operator precedence
       -SHARED
     >> omit[ VARIABLE ]
     >> identifier_list
     >> ':'
     >> subtype_indication
     >> -(  ":=" >  expression )
+    )
     >  ';'
     ;
 
@@ -4251,12 +4290,13 @@ auto const variable_declaration_def =
 
 // wait_statement ::=                                                    [§ 8.1]
 //     [ label : ] wait [ sensitivity_clause ] [ condition_clause ] [ timeout_clause ] ;
-auto const wait_statement_def =
+auto const wait_statement_def = ( // operator precedence
        -( label >> ':' )
     >> WAIT
     >> -sensitivity_clause
     >> -condition_clause
     >> -timeout_clause
+    )
     >  ';'
     ;
 

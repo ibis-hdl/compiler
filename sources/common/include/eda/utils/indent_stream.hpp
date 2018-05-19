@@ -18,21 +18,19 @@ namespace eda { namespace utils {
 
 class indent_sbuf : public std::streambuf
 {
-    std::streambuf*     m_sbuf;
-    std::string         m_indent_str;
-    bool                m_start_of_line;
-    static const int    TAB_WIDTH = 2;
+    std::streambuf*                 m_sbuf;
+    std::string                     m_indent_str;
+    static const std::size_t        TAB_WIDTH = 2;
 
 public:
     explicit indent_sbuf(std::streambuf* sbuf, size_t start_indent = 0)
         : m_sbuf{ sbuf }
         , m_indent_str(start_indent, ' ')
-        , m_start_of_line{ false }
     { }
 
     ~indent_sbuf()
     {
-        // further write to ostream start at column 0 again
+        // start at column 0 again
         overflow('\n');
     }
 
@@ -56,7 +54,6 @@ public:
 private:
     int_type overflow(int_type chr) override
     {
-#if 1
         int_type const put_ret{ m_sbuf->sputc(chr) };
         if(chr == '\n') {
             /* Note: On success the number of characters written is returned
@@ -64,14 +61,6 @@ private:
             m_sbuf->sputn( m_indent_str.data(), m_indent_str.size() );
         }
         return put_ret;
-#else
-        // this code does wrong indent
-        if (m_start_of_line && chr != '\n') {
-            m_sbuf->sputn( m_indent_str.data(), m_indent_str.size() );
-        }
-        m_start_of_line = (chr == '\n');
-        return m_sbuf->sputc( chr );
-#endif
     }
 };
 

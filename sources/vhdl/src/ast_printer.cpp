@@ -173,7 +173,7 @@ void printer::operator()(alias_designator const &node)
 {
     static char const symbol[]{ "alias_designator" };
     symbol_scope<alias_designator> _(*this, symbol);
-    (*this)(node);
+    visit(node);
 }
 
 

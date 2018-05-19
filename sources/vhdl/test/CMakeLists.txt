@@ -157,11 +157,11 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 #add_dependencies(${PROJECT_NAME} gsl)
 
 
-# increase limit for clang recursive template instantiation
-# otherwise exceedes maximum depth of 256
+# increase limit especially for clang recursive template instantiation,
+# otherwise exceedes maximum depth of 512
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     target_compile_options(${PROJECT_NAME}
-        PRIVATE -ftemplate-depth=512)
+        PRIVATE -ftemplate-depth=1024)
 endif()
 
 

@@ -51,11 +51,11 @@ int get<int32_t>(bit_string_literal const& node)
     }
     else if(ok && iter != cend) {
 
-        static std::array<unsigned, 3> const length {
+        static std::array<unsigned, 3> const length {{
                 8*sizeof(int32_t), // bin
                 4*sizeof(int32_t), // oct
                 2*sizeof(int32_t)  // hex
-        };
+        }};
 
         BOOST_THROW_EXCEPTION(
             eda::range_error(
