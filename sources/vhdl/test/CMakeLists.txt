@@ -30,19 +30,22 @@ set(PARSERTEST_SOURCES
     parser_type.cpp
 )
 
-set(PARSERTEST_SOURCES_DEV
+set(PARSERTEST_SOURCES #_DEV
     test_vhdl93_parser.cpp
     data_set.cpp
-    parser_test/procedure_call_parsertest.cpp
+    testing_util.cpp    
+    parser_test/alias_declaration_parsertest.cpp
     #parser_test/xxx_signature_parsertest.cpp
 )
 
-set(PARSERTEST_SOURCES
+set(PARSERTEST_SOURCES_
     test_vhdl93_parser.cpp
     data_set.cpp
+    testing_util.cpp
     parser_test/abstract_literal_parsertest.cpp
     parser_test/actual_part_parsertest.cpp
     parser_test/aggregate_parsertest.cpp
+    parser_test/alias_declaration_parsertest.cpp
     parser_test/assertion_parsertest.cpp
     parser_test/association_list_parsertest.cpp
     parser_test/attribute_name_parsertest.cpp
@@ -262,17 +265,17 @@ set_source_files_properties(
 
 
 ## 
-# Misc
-add_executable(make_gold EXCLUDE_FROM_ALL make_gold.cpp)
-set_target_properties(make_gold PROPERTIES CXX_STANDARD 17)
-set_target_properties(make_gold PROPERTIES CXX_STANDARD_REQUIRED ON)
-target_include_directories(make_gold PRIVATE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>)
-target_link_libraries(make_gold
-    PRIVATE
-    eda::vhdl_parser
-    eda::common # FixMe: shouldn't this depency propagated by eda::vhdl_grammar?
-    ${Boost_FILESYSTEM_LIBRARY}
-    ${Boost_SYSTEM_LIBRARY}
-)
+# Misc (former make_gold target, act as template now
+#add_executable(make_gold EXCLUDE_FROM_ALL make_gold.cpp)
+#set_target_properties(make_gold PROPERTIES CXX_STANDARD 17)
+#set_target_properties(make_gold PROPERTIES CXX_STANDARD_REQUIRED ON)
+#target_include_directories(make_gold PRIVATE
+#    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>)
+#target_link_libraries(make_gold
+#    PRIVATE
+#    eda::vhdl_parser
+#    eda::common # FixMe: shouldn't this depency propagated by eda::vhdl_grammar?
+#    ${Boost_FILESYSTEM_LIBRARY}
+#    ${Boost_SYSTEM_LIBRARY}
+#)
 

@@ -15,9 +15,6 @@
 namespace x3_test {
 
 
-namespace fs = boost::filesystem;
-
-
 /** Helper function to format all file path related messages unified. */
 static inline
 fs::path pretty_filepath(fs::path file_path) {
@@ -29,7 +26,7 @@ dataset_loader::dataset_loader(fs::path const& path)
 /* The prefix for the test case root directory structure is (unfortunately)
  * hard coded. I didn't found a way to give these as command line argument
  * to the boost.test runner. */
-: m_source_dir{ BT_TEST_CASE_PATH }
+: m_source_dir{ BT_TEST_CASE_READ_PATH }
 {
     BOOST_TEST_INFO("dataset_loader load test files from " << path);
     read_files(m_source_dir / path);
