@@ -1,12 +1,16 @@
 (subtype_indication
-  (name<v>
-    (identifier
-      resolution_function_name
+  (resolution_function_name<v>
+    (name<v>
+      (identifier
+        resolution_function_name
+      )
     )
   )
-  (name<v>
-    (identifier
-      type_mark
+  (type_mark<v>
+    (name<v>
+      (identifier
+        type_mark
+      )
     )
   )
 )

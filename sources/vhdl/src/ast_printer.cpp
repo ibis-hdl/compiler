@@ -1425,24 +1425,36 @@ void printer::operator()(formal_part const &node)
     static char const symbol[]{ "formal_part" };
     symbol_scope<formal_part> _(*this, symbol);
 
+    auto const visit_name = [this](auto const& ctx_name) {
+        static char const symbol[]{ "{function_name|type_mark}" };
+        symbol_scope<name> _(*this, symbol);
+        (*this)(ctx_name);
+    };
+
+    auto const visit_formal_designator = [this](auto const& ctx_name) {
+        static char const symbol[]{ "formal_designator" };
+        symbol_scope<name> _(*this, symbol);
+        (*this)(ctx_name);
+    };
+
+    /* parsed as (name) list
+     * formal_designator ::=
+     *    | function_name ( formal_designator )
+     *    | type_mark ( formal_designator ) */
     switch(node.context_tied_names.size()) {
 
         case 1: {
             // BNF: formal_designator
-            static char const symbol[]{ "formal_designator" };
-            symbol_scope<formal_part> _(*this, symbol);
-            (*this)(node.context_tied_names[0]);
+            visit_formal_designator(node.context_tied_names[0]);
 
             break;
         }
 
         case 2: {
             // BNF: {function_name|type_mark} ( formal_designator )
-            static char const symbol[]{ "{function_name|type_mark} formal_designator" };
-            symbol_scope<formal_part> _(*this, symbol);
-            (*this)(node.context_tied_names[0]);
+            visit_name(node.context_tied_names[0]);
             os << ",\n";
-            (*this)(node.context_tied_names[1]);
+            visit_formal_designator(node.context_tied_names[1]);
 
             break;
         }
@@ -2742,6 +2754,18 @@ void printer::operator()(subtype_indication const &node)
     static char const symbol[]{ "subtype_indication" };
     symbol_scope<subtype_indication> _(*this, symbol);
 
+    auto const visit_type_mark = [this](auto const& type_mark) {
+        static char const symbol[]{ "type_mark" };
+        symbol_scope<name> _(*this, symbol);
+        (*this)(type_mark);
+    };
+
+    auto const visit_resolution_function_name = [this](auto const& resolution_function_name) {
+        static char const symbol[]{ "resolution_function_name" };
+        symbol_scope<name> _(*this, symbol);
+        (*this)(resolution_function_name);
+    };
+
     /* parsed as (name) list with trailing constraint
      * subtype_indication ::=
      *     [ resolution_function_name ] type_mark [ constraint ] */
@@ -2749,21 +2773,15 @@ void printer::operator()(subtype_indication const &node)
 
         case 1: {
             // BNF: type_mark .... [ constraint ]
-            auto const& type_mark = node.unspecified_name_list[0];
-            (*this)(type_mark);
-
+            visit_type_mark(node.unspecified_name_list[0]);
             break;
         }
 
         case 2: {
             // BNF: [ resolution_function_name ] type_mark ... [ constraint ]
-            auto const& resolution_function_name = node.unspecified_name_list[0];
-            (*this)(resolution_function_name);
+            visit_resolution_function_name(node.unspecified_name_list[0]);
             os << "\n";
-
-            auto const& type_mark = node.unspecified_name_list[1];
-            (*this)(type_mark);
-
+            visit_type_mark(node.unspecified_name_list[1]);
             break;
         }
 

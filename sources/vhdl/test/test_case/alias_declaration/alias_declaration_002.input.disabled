@@ -1,0 +1,5 @@
+-- alias with subtype_indication and signature
+-- FixMe: [alias declarations](
+-- https://www.csee.umbc.edu/portal/help/VHDL/declare.html#alias)
+alias mantissa : std_logic_vector(23 downto 0) is my_real(8 to 31);
+

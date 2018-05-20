@@ -1,9 +1,11 @@
 (type_definition<v>
   (access_type_definition
     (subtype_indication
-      (name<v>
-        (identifier
-          foo
+      (type_mark<v>
+        (name<v>
+          (identifier
+            foo
+          )
         )
       )
     )

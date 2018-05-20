@@ -3,14 +3,18 @@
     BIT_NEW
   )
   (subtype_indication
-    (name<v>
-      (identifier
-        RESOLVE_VALUE
+    (resolution_function_name<v>
+      (name<v>
+        (identifier
+          RESOLVE_VALUE
+        )
       )
     )
-    (name<v>
-      (identifier
-        BIT
+    (type_mark<v>
+      (name<v>
+        (identifier
+          BIT
+        )
       )
     )
   )

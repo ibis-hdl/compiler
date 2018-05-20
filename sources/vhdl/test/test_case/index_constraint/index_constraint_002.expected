@@ -1,9 +1,11 @@
 (index_constraint
   (discrete_range<v>
     (subtype_indication
-      (name<v>
-        (identifier
-          foo
+      (type_mark<v>
+        (name<v>
+          (identifier
+            foo
+          )
         )
       )
       (constraint<v>
@@ -47,9 +49,11 @@
   ),
   (discrete_range<v>
     (subtype_indication
-      (name<v>
-        (identifier
-          bar
+      (type_mark<v>
+        (name<v>
+          (identifier
+            bar
+          )
         )
       )
       (constraint<v>

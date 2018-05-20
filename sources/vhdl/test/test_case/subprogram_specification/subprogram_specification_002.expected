@@ -18,9 +18,11 @@
           INOUT
         )
         (subtype_indication
-          (name<v>
-            (identifier
-              bit_vector
+          (type_mark<v>
+            (name<v>
+              (identifier
+                bit_vector
+              )
             )
           )
           (constraint<v>

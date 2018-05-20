@@ -1,12 +1,14 @@
 (association_list
   (association_element
     (formal_part
-      ({function_name|type_mark} formal_designator
+      ({function_name|type_mark}<v>
         (name<v>
           (identifier
             function_open
           )
-        ),
+        )
+      ),
+      (formal_designator<v>
         (name<v>
           (identifier
             formal_designator
@@ -24,12 +26,14 @@
   ),
   (association_element
     (formal_part
-      ({function_name|type_mark} formal_designator
+      ({function_name|type_mark}<v>
         (name<v>
           (identifier
             function_close
           )
-        ),
+        )
+      ),
+      (formal_designator<v>
         (name<v>
           (identifier
             parameter_name

@@ -1,0 +1,63 @@
+--
+-- alias_declaration ::=
+--      ALIAS alias_designator [ : subtype_indication ] IS name [ signature ];
+--
+-- alias_designator ::= 
+--      identifier | character_literal | operator_symbol
+--
+-- subtype_indication ::=
+--      [ resolution_function_name ] type_mark [ constraint ]
+--
+-- constraint ::=
+--        range_constraint
+--      | index_constraint
+--
+-- range_constraint ::= RANGE range
+--
+-- range ::=
+--        range_attribute_name
+--      | simple_expression direction simple_expression
+-- 
+-- index_constraint ::= ( discrete_range { , discrete_range } )
+--
+-- discrete_range ::= discrete_subtype_indication | range
+
+-------------------------------------------------------------------------------
+-- 000 classic alias
+-- ALIAS alias_designator is name;
+
+-- 001 alias with signature
+-- FixMe: [alias declarations](
+-- https://www.csee.umbc.edu/portal/help/VHDL/declare.html#alias)
+--ALIAS exponent is my_real(0 to 7);
+
+-- 002 alias with subtype_indication and signature
+-- FixMe: [alias declarations](
+-- https://www.csee.umbc.edu/portal/help/VHDL/declare.html#alias)
+--ALIAS mantissa : std_logic_vector(23 downto 0) is my_real(8 to 31);
+
+-- 003 alias with subtype_indication and signature
+-- FixMe: [alias declarations](
+-- https://www.csee.umbc.edu/portal/help/VHDL/declare.html#alias)
+--ALIAS "<" is my_compare [ my_type, my_type, return boolean ];
+
+-- 004 alias with subtype_indication and signature
+-- FixMe: [alias declarations](
+-- https://www.csee.umbc.edu/portal/help/VHDL/declare.html#alias)
+--ALIAS 'H' is STD.standard.bit.'1' [ return bit ] ;
+
+-- 005 CHECKER
+-- subtype_indication is only a type_mark
+ALIAS alias_designator 
+   : resolution_function_name type_mark   -- subtype_indication
+     RANGE lhs TO Rhs                     -- ~'s range_constraint
+   ;
+
+
+-- working, if x3 rules disabled 'IS >> name >> -signature'
+ALIAS alias_designator 
+   : resolution_function_name type_mark   -- subtype_indication
+   ;
+
+
+

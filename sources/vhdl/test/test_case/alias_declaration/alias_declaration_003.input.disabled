@@ -1,0 +1,5 @@
+-- alias with subtype_indication and signature
+-- FixMe: [alias declarations](
+-- https://www.csee.umbc.edu/portal/help/VHDL/declare.html#alias)
+alias "<" is my_compare [ my_type, my_type, return boolean ];
+

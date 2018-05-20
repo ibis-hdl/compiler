@@ -6,9 +6,11 @@
       )
     )
     (subtype_indication
-      (name<v>
-        (identifier
-          INTEGER
+      (type_mark<v>
+        (name<v>
+          (identifier
+            INTEGER
+          )
         )
       )
       (constraint<v>
@@ -57,9 +59,11 @@
       )
     )
     (subtype_indication
-      (name<v>
-        (identifier
-          MONTH_NAME
+      (type_mark<v>
+        (name<v>
+          (identifier
+            MONTH_NAME
+          )
         )
       )
     )
@@ -71,9 +75,11 @@
       )
     )
     (subtype_indication
-      (name<v>
-        (identifier
-          INTEGER
+      (type_mark<v>
+        (name<v>
+          (identifier
+            INTEGER
+          )
         )
       )
       (constraint<v>

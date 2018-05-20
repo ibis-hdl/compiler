@@ -5,14 +5,18 @@
     )
   )
   (subtype_indication
-    (name<v>
-      (identifier
-        word
+    (resolution_function_name<v>
+      (name<v>
+        (identifier
+          word
+        )
       )
     )
-    (name<v>
-      (identifier
-        wired_or
+    (type_mark<v>
+      (name<v>
+        (identifier
+          wired_or
+        )
       )
     )
   )

@@ -1,0 +1,4 @@
+-- alias with subtype_indication and signature
+-- FixMe: [alias declarations](
+-- https://www.csee.umbc.edu/portal/help/VHDL/declare.html#alias)
+alias 'H' is STD.standard.bit.'1' [ return bit ] ;

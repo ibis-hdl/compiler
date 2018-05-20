@@ -1,4 +1,5 @@
 ToDo:
+- alias_declaration_00{1...5}
 - attribute_specification/attribute_specification_00{1,2}
 - entity_aspect/entity_aspect_002.input
 - type_declaration_failure/*
@@ -12,5 +13,5 @@ Renewal 2018:
 - Missing tests:
   - concurrent_procedure_call_statement
   - concurrent_signal_assignment_statement
-  - alias_declaration
+
   

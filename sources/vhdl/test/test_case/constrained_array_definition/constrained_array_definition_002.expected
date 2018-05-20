@@ -39,18 +39,22 @@
     ),
     (discrete_range<v>
       (subtype_indication
-        (name<v>
-          (identifier
-            X
+        (type_mark<v>
+          (name<v>
+            (identifier
+              X
+            )
           )
         )
       )
     )
   )
   (subtype_indication
-    (name<v>
-      (identifier
-        BIT
+    (type_mark<v>
+      (name<v>
+        (identifier
+          BIT
+        )
       )
     )
   )

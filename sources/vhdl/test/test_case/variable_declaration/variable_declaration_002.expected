@@ -5,9 +5,11 @@
     )
   )
   (subtype_indication
-    (name<v>
-      (identifier
-        string
+    (type_mark<v>
+      (name<v>
+        (identifier
+          string
+        )
       )
     )
     (constraint<v>

@@ -15,9 +15,11 @@
         )
         (IN)
         (subtype_indication
-          (name<v>
-            (identifier
-              Bit
+          (type_mark<v>
+            (name<v>
+              (identifier
+                Bit
+              )
             )
           )
         )
@@ -37,9 +39,11 @@
           OUT
         )
         (subtype_indication
-          (name<v>
-            (identifier
-              Bit
+          (type_mark<v>
+            (name<v>
+              (identifier
+                Bit
+              )
             )
           )
         )

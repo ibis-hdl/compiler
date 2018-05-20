@@ -9,9 +9,11 @@
         )
         (IN)
         (subtype_indication
-          (name<v>
-            (identifier
-              Bit_Vector
+          (type_mark<v>
+            (name<v>
+              (identifier
+                Bit_Vector
+              )
             )
           )
           (constraint<v>
@@ -65,9 +67,11 @@
           OUT
         )
         (subtype_indication
-          (name<v>
-            (identifier
-              Bit
+          (type_mark<v>
+            (name<v>
+              (identifier
+                Bit
+              )
             )
           )
         )

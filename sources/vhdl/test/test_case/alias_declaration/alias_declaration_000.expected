@@ -1,0 +1,12 @@
+(alias_declaration
+  (alias_designator<v>
+    (identifier
+      alias_designator
+    )
+  )
+  (name<v>
+    (identifier
+      name
+    )
+  )
+)

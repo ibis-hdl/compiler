@@ -10,9 +10,11 @@
           )
         )
         (subtype_indication
-          (name<v>
-            (identifier
-              Real
+          (type_mark<v>
+            (name<v>
+              (identifier
+                Real
+              )
             )
           )
         )

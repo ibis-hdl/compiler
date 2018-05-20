@@ -2,9 +2,11 @@
   (index_constraint
     (discrete_range<v>
       (subtype_indication
-        (name<v>
-          (identifier
-            POSITIVE
+        (type_mark<v>
+          (name<v>
+            (identifier
+              POSITIVE
+            )
           )
         )
         (constraint<v>
@@ -48,9 +50,11 @@
     ),
     (discrete_range<v>
       (subtype_indication
-        (name<v>
-          (identifier
-            POSITIVE
+        (type_mark<v>
+          (name<v>
+            (identifier
+              POSITIVE
+            )
           )
         )
         (constraint<v>
@@ -94,9 +98,11 @@
     )
   )
   (subtype_indication
-    (name<v>
-      (identifier
-        Log_4
+    (type_mark<v>
+      (name<v>
+        (identifier
+          Log_4
+        )
       )
     )
   )

@@ -5,9 +5,11 @@
     )
   )
   (subtype_indication
-    (name<v>
-      (identifier
-        word
+    (type_mark<v>
+      (name<v>
+        (identifier
+          word
+        )
       )
     )
   )

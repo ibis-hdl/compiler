@@ -5,9 +5,11 @@
     )
   )
   (subtype_indication
-    (name<v>
-      (identifier
-        DELAY_LENGTH
+    (type_mark<v>
+      (name<v>
+        (identifier
+          DELAY_LENGTH
+        )
       )
     )
   )

@@ -73,7 +73,7 @@
   PORT MAP_ASPECT
   (association_element
     (formal_part
-      (formal_designator
+      (formal_designator<v>
         (name<v>
           (identifier
             I1
@@ -93,7 +93,7 @@
   ),
   (association_element
     (formal_part
-      (formal_designator
+      (formal_designator<v>
         (name<v>
           (identifier
             I2
@@ -113,7 +113,7 @@
   ),
   (association_element
     (formal_part
-      (formal_designator
+      (formal_designator<v>
         (name<v>
           (identifier
             O

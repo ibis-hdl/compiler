@@ -1,31 +1,39 @@
 (discrete_range<v>
   (subtype_indication
-    (name<v>
-      (identifier
-        resolution_fcn
+    (resolution_function_name<v>
+      (name<v>
+        (identifier
+          resolution_fcn
+        )
       )
     )
-    (name<v>
-      (identifier
-        type_mark
+    (type_mark<v>
+      (name<v>
+        (identifier
+          type_mark
+        )
       )
     )
     (constraint<v>
       (index_constraint
         (discrete_range<v>
           (subtype_indication
-            (name<v>
-              (identifier
-                lhs
+            (type_mark<v>
+              (name<v>
+                (identifier
+                  lhs
+                )
               )
             )
           )
         ),
         (discrete_range<v>
           (subtype_indication
-            (name<v>
-              (identifier
-                rhs
+            (type_mark<v>
+              (name<v>
+                (identifier
+                  rhs
+                )
               )
             )
           )

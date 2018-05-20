@@ -16,9 +16,11 @@
           )
         )
         (subtype_indication
-          (name<v>
-            (identifier
-              subtype_indication
+          (type_mark<v>
+            (name<v>
+              (identifier
+                subtype_indication
+              )
             )
           )
         )

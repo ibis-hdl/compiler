@@ -30,7 +30,7 @@ set(PARSERTEST_SOURCES
     parser_type.cpp
 )
 
-set(PARSERTEST_SOURCES #_DEV
+set(PARSERTEST_SOURCES_DEV
     test_vhdl93_parser.cpp
     data_set.cpp
     testing_util.cpp    
@@ -38,7 +38,7 @@ set(PARSERTEST_SOURCES #_DEV
     #parser_test/xxx_signature_parsertest.cpp
 )
 
-set(PARSERTEST_SOURCES_
+set(PARSERTEST_SOURCES
     test_vhdl93_parser.cpp
     data_set.cpp
     testing_util.cpp

@@ -8,10 +8,61 @@
 #include "testing_util.hpp"
 #include "test_case_path.hpp"
 
+#include <boost/test/unit_test.hpp>
+#include <boost/test/results_collector.hpp>
+
+#include <boost/algorithm/string.hpp>
+
 
 namespace x3_test {
 
 
+/**
+ * [Detect if boost test case failed](
+ *  https://stackoverflow.com/questions/18466857/detect-if-boost-test-case-failed?answertab=active#tab-top)
+ */
+bool current_test_passing()
+{
+  using namespace boost::unit_test;
+  auto const id = framework::current_test_case().p_id;
+  auto const test_results = results_collector.results(id);
+  return test_results.passed();
+}
+
+
+/**
+ * report_diagnostic
+ */
+std::string report_diagnostic(
+    fs::path const& test_case_name,
+    std::string const& input,
+    std::string const& result
+)
+{
+    std::size_t const width{ 80 };
+    std::string const title{ " PARSER INPUT/OUTPUT " };
+    std::size_t const w{ (width - title.size()) / 2 };
+    std::stringstream ss;
+
+    ss << "\n" << std::string(w, '-') << title << std::string(w, '-') << "\n"
+       << boost::trim_right_copy(input)
+       << '\n' << std::string(width, '-') << '\n'
+       << result
+       << '\n' << std::string(width, '-') << '\n';
+
+    // only write in case of failed test
+    if(!x3_test::current_test_passing()) {
+        test_case_result_writer result_writer(test_case_name);
+        result_writer.write(result);
+    }
+
+    return ss.str();
+}
+
+
+/**
+ * test_case_result_writer definition
+ */
 test_case_result_writer::test_case_result_writer(fs::path const& test_case)
 /* The prefix for the test case output root directory structure is (unfortunately)
  * hard coded. I didn't found a way to give these as command line argument
@@ -46,7 +97,7 @@ bool test_case_result_writer::create_directory(fs::path const& write_path)
 
 bool test_case_result_writer::write_file(fs::path const& filename, std::string const& contents)
 {
-    cout << "Write to " << filename << "\n";
+    cout << "Write result to " << filename << "\n";
 
     try {
         if(fs::exists(filename)) {
@@ -84,11 +135,17 @@ void test_case_result_writer::write(std::string const& parse_result)
     fs::path const full_pathname = m_dest_dir / "test_case" / m_test_case;
     fs::path const write_path = full_pathname.parent_path();
 
+#if 1
+    std::string const ext{ ".parsed" };
+#else // for 'easy' GOLD expected file generation
+    std::string const ext{ ".expected" };
+#endif
+
     if(!create_directory(write_path)) {
         return;
     }
 
-    fs::path const filename = full_pathname.filename().replace_extension(".parsed");
+    fs::path const filename = full_pathname.filename().replace_extension(ext);
 
     write_file(write_path / filename, parse_result);
 }

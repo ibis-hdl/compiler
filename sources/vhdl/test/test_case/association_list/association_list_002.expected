@@ -1,7 +1,7 @@
 (association_list
   (association_element
     (formal_part
-      (formal_designator
+      (formal_designator<v>
         (name<v>
           (identifier
             generic_name
@@ -21,7 +21,7 @@
   ),
   (association_element
     (formal_part
-      (formal_designator
+      (formal_designator<v>
         (name<v>
           (identifier
             parameter_name

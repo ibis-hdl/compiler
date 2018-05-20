@@ -1,0 +1,5 @@
+-- alias with signature
+-- FixMe: [alias declarations](
+-- https://www.csee.umbc.edu/portal/help/VHDL/declare.html#alias)
+alias exponent is my_real(0 to 7);
+

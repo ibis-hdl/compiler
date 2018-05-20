@@ -1,5 +1,5 @@
 (formal_part
-  (formal_designator
+  (formal_designator<v>
     (name<v>
       (identifier
         formal_designator

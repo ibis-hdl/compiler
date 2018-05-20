@@ -11,9 +11,11 @@
           )
         )
         (subtype_indication
-          (name<v>
-            (identifier
-              INTEGER
+          (type_mark<v>
+            (name<v>
+              (identifier
+                INTEGER
+              )
             )
           )
         )

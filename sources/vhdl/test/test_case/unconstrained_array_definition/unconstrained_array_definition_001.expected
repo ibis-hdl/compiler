@@ -14,9 +14,11 @@
     )
   )
   (subtype_indication
-    (name<v>
-      (identifier
-        Log_4
+    (type_mark<v>
+      (name<v>
+        (identifier
+          Log_4
+        )
       )
     )
   )

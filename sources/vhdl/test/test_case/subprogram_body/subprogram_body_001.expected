@@ -18,9 +18,11 @@
             INOUT
           )
           (subtype_indication
-            (name<v>
-              (identifier
-                Text
+            (type_mark<v>
+              (name<v>
+                (identifier
+                  Text
+                )
               )
             )
           )
@@ -34,9 +36,11 @@
             )
           )
           (subtype_indication
-            (name<v>
-              (identifier
-                Integer
+            (type_mark<v>
+              (name<v>
+                (identifier
+                  Integer
+                )
               )
             )
           )
@@ -53,9 +57,11 @@
           )
         )
         (subtype_indication
-          (name<v>
-            (identifier
-              subtype_indication
+          (type_mark<v>
+            (name<v>
+              (identifier
+                subtype_indication
+              )
             )
           )
         )

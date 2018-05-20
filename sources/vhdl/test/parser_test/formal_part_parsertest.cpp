@@ -1,7 +1,7 @@
 /*
  * formal_part_parsertest.cpp
  *
- *  Created on: 17.5.2018
+ *  Created on: 16.5.2018
  *      Author: olaf
  */
 
@@ -42,7 +42,7 @@ BOOST_DATA_TEST_CASE( formal_part,
       formal_part_dataset.input()
     ^ formal_part_dataset.expect()
     ^ formal_part_dataset.test_case_name(),
-    VHDL_code, expect_AST, test_case_name)
+    input, expected, test_case_name)
 {
     using attribute_type = ast::formal_part;
     auto const parser = parser::formal_part;
@@ -50,15 +50,17 @@ BOOST_DATA_TEST_CASE( formal_part,
     boost::ignore_unused(test_case_name);
 
     x3_test::testing_parser<attribute_type> parse;
-    auto [parse_ok, parsed_AST] = parse(VHDL_code, parser);
+    auto [parse_ok, parse_result] = parse(input, parser);
 
     BOOST_TEST(parse_ok);
-    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),
-                          "\n    PARSED AST = '\n" << parsed_AST << "'");
+    BOOST_REQUIRE_MESSAGE(parse_ok,
+        x3_test::report_diagnostic(test_case_name, input, parse_result)
+    );
 
-    BOOST_TEST(parsed_AST == expect_AST, btt::per_element());
+    BOOST_TEST(parse_result == expected, btt::per_element());
     BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),
-                          "\n    PARSED AST = '\n" << parsed_AST << "'");
+        x3_test::report_diagnostic(test_case_name, input, parse_result)
+    );
 }
 
 

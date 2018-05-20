@@ -9,9 +9,11 @@
   )
   (IN)
   (subtype_indication
-    (name<v>
-      (identifier
-        funny_type
+    (type_mark<v>
+      (name<v>
+        (identifier
+          funny_type
+        )
       )
     )
   )

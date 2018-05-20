@@ -50,7 +50,7 @@ BOOST_DATA_TEST_CASE( type_declaration,
       type_declaration_dataset.input()
     ^ type_declaration_dataset.expect()
     ^ type_declaration_dataset.test_case_name(),
-    VHDL_code, expect_AST, test_case_name)
+    input, expected, test_case_name)
 {
     using attribute_type = ast::type_declaration;
     auto const parser = parser::type_declaration;
@@ -58,15 +58,17 @@ BOOST_DATA_TEST_CASE( type_declaration,
     boost::ignore_unused(test_case_name);
 
     x3_test::testing_parser<attribute_type> parse;
-    auto [parse_ok, parsed_AST] = parse(VHDL_code, parser);
+    auto [parse_ok, parse_result] = parse(input, parser);
 
     BOOST_TEST(parse_ok);
-    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),
-                          "\n    PARSED AST = '\n" << parsed_AST << "'");
+    BOOST_REQUIRE_MESSAGE(parse_ok,
+        x3_test::report_diagnostic(test_case_name, input, parse_result)
+    );
 
-    BOOST_TEST(parsed_AST == expect_AST, btt::per_element());
+    BOOST_TEST(parse_result == expected, btt::per_element());
     BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),
-                          "\n    PARSED AST = '\n" << parsed_AST << "'");
+        x3_test::report_diagnostic(test_case_name, input, parse_result)
+    );
 }
 
 
@@ -74,7 +76,7 @@ BOOST_DATA_TEST_CASE( type_declaration_failure,
       type_declaration_failure_dataset.input()
     ^ type_declaration_failure_dataset.expect()
     ^ type_declaration_failure_dataset.test_case_name(),
-    VHDL_code, expect_AST, test_case_name)
+    input, expected, test_case_name)
 {
     using attribute_type = ast::type_declaration;
     auto const parser = parser::type_declaration;
@@ -82,15 +84,17 @@ BOOST_DATA_TEST_CASE( type_declaration_failure,
     boost::ignore_unused(test_case_name);
 
     x3_test::testing_parser<attribute_type> parse;
-    auto [parse_ok, parsed_AST] = parse(VHDL_code, parser);
+    auto [parse_ok, parse_result] = parse(input, parser);
 
     BOOST_TEST(!parse_ok);
-    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),
-                          "\n    PARSED AST = '\n" << parsed_AST << "'");
+    BOOST_REQUIRE_MESSAGE(!parse_ok,
+        x3_test::report_diagnostic(test_case_name, input, parse_result)
+    );
 
-    BOOST_TEST(parsed_AST == expect_AST, btt::per_element());
+    BOOST_TEST(parse_result == expected, btt::per_element());
     BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),
-                          "\n    PARSED AST = '\n" << parsed_AST << "'");
+        x3_test::report_diagnostic(test_case_name, input, parse_result)
+    );
 }
 
 

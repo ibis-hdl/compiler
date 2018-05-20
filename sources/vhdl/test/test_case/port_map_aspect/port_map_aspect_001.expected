@@ -2,7 +2,7 @@
   (association_list
     (association_element
       (formal_part
-        (formal_designator
+        (formal_designator<v>
           (name<v>
             (identifier
               B
@@ -22,7 +22,7 @@
     ),
     (association_element
       (formal_part
-        (formal_designator
+        (formal_designator<v>
           (name<v>
             (identifier
               A
@@ -42,7 +42,7 @@
     ),
     (association_element
       (formal_part
-        (formal_designator
+        (formal_designator<v>
           (name<v>
             (identifier
               SUM
@@ -62,7 +62,7 @@
     ),
     (association_element
       (formal_part
-        (formal_designator
+        (formal_designator<v>
           (name<v>
             (identifier
               CARRY
