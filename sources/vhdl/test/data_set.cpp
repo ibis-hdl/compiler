@@ -15,6 +15,15 @@
 namespace x3_test {
 
 
+#if defined(_WIN32) || defined(_WIN64)
+    static constexpr std::wostream& cerr{ std::wcerr };
+    static constexpr std::wostream& cout{ std::wcout };
+#else
+    static constexpr std::ostream& cerr{ std::cerr };
+    static constexpr std::ostream& cout{ std::cout };
+#endif
+
+
 /** Helper function to format all file path related messages unified. */
 static inline
 fs::path pretty_filepath(fs::path file_path) {

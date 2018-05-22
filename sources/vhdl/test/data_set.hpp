@@ -15,7 +15,6 @@
 #include <boost/filesystem.hpp>
 
 #include <vector>
-#include <iostream>
 
 
 namespace x3_test {
@@ -47,14 +46,6 @@ private:
     pathname_type                                       m_test_case;
     data_type                                           m_input;
     data_type                                           m_expected;
-
-#if defined(_WIN32) || defined(_WIN64)
-    static constexpr std::wostream& cerr{ std::wcerr };
-    static constexpr std::wostream& cout{ std::wcout };
-#else
-    static constexpr std::ostream& cerr{ std::cerr };
-    static constexpr std::ostream& cout{ std::cout };
-#endif
 };
 
 

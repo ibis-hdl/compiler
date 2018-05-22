@@ -11,7 +11,6 @@
 #include <boost/filesystem.hpp>
 
 #include <sstream>
-#include <iostream>
 
 
 namespace x3_test {
@@ -55,16 +54,31 @@ private:
 private:
     fs::path                                            m_dest_dir;
     fs::path                                            m_test_case;
-
-#if defined(_WIN32) || defined(_WIN64)
-    static constexpr std::wostream& cerr{ std::wcerr };
-    static constexpr std::wostream& cout{ std::wcout };
-#else
-    static constexpr std::ostream& cerr{ std::cerr };
-    static constexpr std::ostream& cout{ std::cout };
-#endif
 };
 
+
+
+/**
+ * String converting utilities
+ *
+ * Some modules of the boost library uses std::wstring or std::string on Windows
+ * which results into compile errors on Windows/MinGW. Hence, some String convert
+ * utlities are supplied to rule them. See
+ * [UTF conversion functions in C++11](
+ * https://stackoverflow.com/questions/38688417/utf-conversion-functions-in-c11?answertab=active#tab-top)
+ */
+namespace detail {
+
+std::string to_utf8(std::wstring const& s);
+std::wstring to_utf16(std::string const& s);
+
+} // namespace detail
+
+#if defined(_WIN32) || defined(_WIN64)
+#define convert_string(s)   detail::to_utf16(s)
+#else
+#define convert_string(s)   s
+#endif
 
 } // namespace x3_test
 

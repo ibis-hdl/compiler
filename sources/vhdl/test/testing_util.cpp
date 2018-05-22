@@ -12,9 +12,22 @@
 #include <boost/test/results_collector.hpp>
 
 #include <boost/algorithm/string.hpp>
+#include <iostream>
+
+#include <locale>
+#include <codecvt>
 
 
 namespace x3_test {
+
+
+#if defined(_WIN32) || defined(_WIN64)
+    static constexpr std::wostream& cerr{ std::wcerr };
+    static constexpr std::wostream& cout{ std::wcout };
+#else
+    static constexpr std::ostream& cerr{ std::cerr };
+    static constexpr std::ostream& cout{ std::cout };
+#endif
 
 
 /**
@@ -86,8 +99,8 @@ bool test_case_result_writer::create_directory(fs::path const& write_path)
         cerr << "creating directory "
              << write_path
              << " failed with:\n"
-                << e.code().message()
-                << "\n";
+             << convert_string(e.code().message())
+             << "\n";
         return false;
     }
 
@@ -108,7 +121,7 @@ bool test_case_result_writer::write_file(fs::path const& filename, std::string c
         cerr << "remove of older file "
              << filename
              << " failed with:\n"
-             << e.code().message()
+             << convert_string(e.code().message())
              << "\n";
         return false;
     }
@@ -121,7 +134,7 @@ bool test_case_result_writer::write_file(fs::path const& filename, std::string c
         cerr << "writing to "
              << filename
              << " failed with:\n"
-             << e.code().message()
+             << convert_string(e.code().message())
              << "\n";
         return false;
     }
@@ -152,4 +165,24 @@ void test_case_result_writer::write(std::string const& parse_result)
 
 
 } // namespace x3_test
+
+
+/**
+ * String converting utilities
+ */
+namespace detail {
+
+std::string to_utf8(std::wstring const& s)
+{
+    std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> convert;
+    return convert.to_bytes(s);
+}
+
+std::wstring to_utf16(std::string const& s)
+{
+    std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> convert;
+    return convert.from_bytes(s);
+}
+
+} // namespace detail
 
