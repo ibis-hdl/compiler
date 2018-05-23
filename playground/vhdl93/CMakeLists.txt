@@ -21,6 +21,7 @@ add_executable(x3_simple_expr               EXCLUDE_FROM_ALL x3_simple_expr.cpp)
 add_executable(x3_list_chunk                EXCLUDE_FROM_ALL x3_list_chunk.cpp)
 add_executable(x3_integer_solution          EXCLUDE_FROM_ALL x3_integer_solution.cpp)
 add_executable(x3_integer_lambda_solution   EXCLUDE_FROM_ALL x3_integer_lambda_solution.cpp)
+add_executable(vhdl_numeric_literals        EXCLUDE_FROM_ALL vhdl_numeric_literals.cpp)
 
 add_executable(x3_ir1045                    EXCLUDE_FROM_ALL x3_ir1045.cpp)
 target_include_directories(x3_ir1045 PRIVATE # requires > 1.64
