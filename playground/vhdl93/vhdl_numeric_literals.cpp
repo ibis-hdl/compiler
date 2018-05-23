@@ -16,6 +16,7 @@
 #include <boost/spirit/home/x3.hpp>
 
 
+
 namespace x3 = boost::spirit::x3;
 
 
@@ -243,7 +244,7 @@ struct literal_convert
             return literal_parse(literal.base, tag::dec{});
         };
 
-        auto const parse_int = [this](unsigned base, auto const& literal) {
+        auto const parse_integer = [this](unsigned base, auto const& literal) {
             switch(base) {
                 case 2: {
                     return literal_parse(literal, tag::bin{});
@@ -282,7 +283,7 @@ struct literal_convert
         }
 
         // INTEGER PART
-        std::tie(parse_ok, integer_part) = parse_int(base, literal.integer_part);
+        std::tie(parse_ok, integer_part) = parse_integer(base, literal.integer_part);
         std::cout << "integer_part: " << integer_part << " (" << std::boolalpha << parse_ok << ")\n";
 
         if(!parse_ok) {
@@ -294,10 +295,10 @@ struct literal_convert
         // FRACTIONAL PART
         if(!literal.fractional_part.empty()) {
 
-            /* FixMe: Doesn't work that way, see e.g. athttps://planetcalc.com/862/
+            /* FixMe: Doesn't work that way, see e.g. at https://planetcalc.com/862/
              *        or on end on notes at the test case */
 
-            std::tie(parse_ok, fractional_part) = parse_int(base, literal.fractional_part);
+            std::tie(parse_ok, fractional_part) = parse_integer(base, literal.fractional_part);
             std::cout << "fractional_part: 1/" << fractional_part << " (" << std::boolalpha << parse_ok << ")";
 
             if(!parse_ok) {
@@ -419,6 +420,77 @@ int main()
     }
 }
 
+#if 0
+#include <vector>
+#include <string>
+#include <iostream>
+//#include <algorithm>
+#include <numeric>
+#include <limits>
+#include <cmath>
+#include <cassert>
+
+template<unsigned Radix>
+struct frac
+{
+    double pow;
+
+    frac() : pow{Radix} {};
+
+    static unsigned digit(auto ch)
+    {
+        // We trust Spirit.X3 on correct ASCII range and codes
+        switch(ch) {
+            case '0':   return  0;
+            case '1':   return  1;
+            case '2':   return  2;
+            case '3':   return  3;
+            case '4':   return  4;
+            case '5':   return  5;
+            case '6':   return  6;
+            case '7':   return  7;
+            case '8':   return  8;
+            case '9':   return  9;
+            case 'a':   [[fallthrough]];
+            case 'A':   return 10;
+            case 'b':   [[fallthrough]];
+            case 'B':   return 11;
+            case 'c':   [[fallthrough]];
+            case 'C':   return 12;
+            case 'd':   [[fallthrough]];
+            case 'D':   return 13;
+            case 'e':   [[fallthrough]];
+            case 'E':   return 14;
+            case 'f':   [[fallthrough]];
+            case 'F':   return 15;
+            default:    abort();
+        }
+    };
+
+    double operator()(double acc, char ch)
+    {
+        /* Fixme: The algorithm isn't smart to cover the failure cases. */
+        double digit = frac<Radix>::digit(ch);
+        digit /= pow;
+        pow *= Radix;
+        double const result = acc + digit;
+        assert(std::isnormal(result) && "Fractional number isn't a number");
+        return result;
+    }
+
+};
+
+int main() {
+
+    //std::vector<int> v{1,2,3,4,5};
+    std::vector<char> v{'F','F'};
+
+    auto const f = std::accumulate(v.begin(), v.end(), 0.0, frac<16>{});
+
+    std::cout.precision(std::numeric_limits<double>::max_digits10);
+    std::cout << "Result = " << (15 + f)*16*16 << "\n";
+}
+#endif
 
 #if 0 // join ranges
 #include <vector>
