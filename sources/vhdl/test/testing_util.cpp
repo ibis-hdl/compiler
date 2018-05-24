@@ -170,7 +170,8 @@ void test_case_result_writer::write(std::string const& parse_result)
 /**
  * String converting utilities
  */
-namespace detail {
+namespace x3_test { namespace detail {
+
 
 std::string to_utf8(std::wstring const& s)
 {
@@ -184,5 +185,6 @@ std::wstring to_utf16(std::string const& s)
     return convert.from_bytes(s);
 }
 
-} // namespace detail
+
+} } // x3_test.detail
 
