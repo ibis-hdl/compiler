@@ -22,22 +22,25 @@
 namespace x3 = boost::spirit::x3;
 
 
+typedef std::string::const_iterator             iterator_type;
+typedef boost::iterator_range<iterator_type>    string_span;
+
 namespace ast {
 
 
 struct bit_string_literal {
     enum base_specifier { bin, oct, hex };
 
-    std::string     literal;
-    base_specifier  base;
+    string_span         literal;
+    base_specifier      base;
 };
 
 struct decimal_literal
 {
     enum class kind_specifier { integer, real };
 
-    std::string     literal;
-    kind_specifier  kind;
+    string_span         literal;
+    kind_specifier      kind;
 };
 
 struct based_literal
@@ -51,13 +54,13 @@ struct based_literal
     enum class kind_specifier { integer, real };
 
     struct number {
-        std::string     integer_part;
-        std::string     fractional_part;
-        std::string     exponent;
+        string_span     integer_part;
+        string_span     fractional_part;
+        string_span     exponent;
         kind_specifier  kind;
     };
 
-    std::string         base;
+    string_span         base;
     number              literal;
 };
 
@@ -126,22 +129,30 @@ namespace parser {
 
 using x3::char_;
 using x3::lit;
+using x3::raw;
+using x3::lexeme;
 
 template<typename T>
 auto as = [](auto p) { return x3::rule<struct _, T>{} = x3::as_parser(p); };
 
-auto const integer = x3::rule<struct _, std::string> { "integer" } =
-    char_("0-9") >> *( -lit("_") >> char_("0-9") )
+auto const integer = x3::rule<struct _, string_span> { "integer" } =
+    raw[lexeme[
+        char_("0-9") >> *( -lit("_") >> char_("0-9") )
+    ]]
     ;
 
-auto const exponent = x3::rule<struct _, std::string> { "exponent" } =
-    char_("Ee") >> -char_("-+") >> integer
+auto const exponent = x3::rule<struct _, string_span> { "exponent" } =
+    raw[lexeme[
+        char_("Ee") >> -char_("-+") >> integer
+    ]]
     ;
 
 /* Note, specify valid chars for each base in real case. The BNF doesn't specify
  * explicit the valid bit values on given base. */
-auto const bit_value = x3::rule<struct _, std::string> { "bit_value" } =
-    char_("0-9a-fA-F") >> *( -lit('_') >> char_("0-9a-fA-F") )
+auto const bit_value = x3::rule<struct _, string_span> { "bit_value" } =
+    raw[lexeme[
+        char_("0-9a-fA-F") >> *( -lit('_') >> char_("0-9a-fA-F") )
+    ]]
     ;
 
 auto const bit_string_literal = x3::rule<struct _, ast::bit_string_literal> { "bit_string_literal" } =
@@ -150,17 +161,19 @@ auto const bit_string_literal = x3::rule<struct _, ast::bit_string_literal> { "b
     | (x3::omit[char_("Xx")] >> lit('"') >> bit_value >> lit('"') >> x3::attr(ast::bit_string_literal::base_specifier::hex))
     ;
 
-auto const based_integer = x3::rule<struct _, std::string> { "based_integer" } =
-     char_("0-9a-fA-F") >> *( -lit('_') >> char_("0-9a-fA-F") )
-    ;
+auto const based_integer = x3::rule<struct _, string_span> { "based_integer" } =
+     raw[lexeme[
+            char_("0-9a-fA-F") >> *( -lit('_') >> char_("0-9a-fA-F") )
+     ]]
+     ;
 
 auto const decimal_literal_int = x3::rule<struct _, ast::decimal_literal> { "decimal_literal<int>" } =
-       as<std::string>(integer >> -(char_("Ee") >> integer))
+       as<string_span>(raw[lexeme[ integer >> -(char_("Ee") >> integer) ]])
     >> x3::attr(ast::decimal_literal::kind_specifier::integer)
     ;
 
 auto const decimal_literal_real = x3::rule<struct _, ast::decimal_literal> { "decimal_literal<real>" } =
-       as<std::string>(integer >> char_('.') >> integer >> -exponent)
+       as<string_span>(raw[lexeme[ integer >> char_('.') >> integer >> -exponent ]])
     >> x3::attr(ast::decimal_literal::kind_specifier::real)
     ;
 
@@ -170,7 +183,7 @@ auto const decimal_literal = x3::rule<struct _, ast::decimal_literal>{ "decimal_
     ;
 
 auto const based_literal_int = x3::rule<struct _, ast::based_literal::number>{ "based_literal<int>" } =
-       based_integer >> x3::attr(std::string{/* empty fractional part */})
+       based_integer >> x3::attr(string_span{/* empty fractional part */})
     >> '#'
     >> -exponent
     >> x3::attr(ast::based_literal::kind_specifier::integer)
@@ -242,7 +255,7 @@ namespace tag {
 
 struct literal_parser
 {
-    /*
+    /**
      * We trust in the correct VHDL grammar rules which feeds this numeric
      * literal_parser. This allows to use 'sloppy' rules to convert from
      * strings to numeric values.
@@ -250,12 +263,13 @@ struct literal_parser
      * Treat all of x3's attribute type as double for simplification, otherwise
      * one has to handle with different return types using C++ lambdas.
      */
-    typedef std::tuple<bool, double>            return_value;
+    typedef double                              attribute_type;
+    typedef std::tuple<bool, attribute_type>    return_value;
 
     template<typename RangeType>
     return_value operator()(RangeType const& range, tag::bin) const
     {
-        uint32_t attribute{};
+        uint32_t attribute{};   // exact attribute type for x3 parser
 
         bool const parse_ok = parse(range, x3::bin, attribute);
 
@@ -265,7 +279,7 @@ struct literal_parser
     template<typename RangeType>
     return_value operator()(RangeType const& range, tag::oct) const
     {
-        uint32_t attribute{};
+        uint32_t attribute{};   // exact attribute type for x3 parser
 
         bool const parse_ok = parse(range, x3::oct, attribute);
 
@@ -275,7 +289,7 @@ struct literal_parser
     template<typename RangeType>
     return_value operator()(RangeType const& range, tag::dec) const
     {
-        uint32_t attribute{};
+        uint32_t attribute{};   // exact attribute type for x3 parser
 
         bool const parse_ok = parse(range, detail::integer_base10, attribute);
 
@@ -285,7 +299,7 @@ struct literal_parser
     template<typename RangeType>
     return_value operator()(RangeType const& range, tag::hex) const
     {
-        uint32_t attribute{};
+        uint32_t attribute{};   // exact attribute type for x3 parser
 
         bool const parse_ok = parse(range, x3::hex, attribute);
 
@@ -305,7 +319,7 @@ struct literal_parser
     template<typename RangeType>
     return_value operator()(RangeType const& range, tag::exp) const
     {
-        int32_t attribute{};
+        int32_t attribute{};   // exact attribute type for x3 parser
 
         bool const parse_ok = parse(range, detail::exponent, attribute);
 
@@ -330,7 +344,8 @@ struct literal_parser
     }
 
     template<typename RangeType>
-    auto filter_range(RangeType const& range) const
+    static
+    auto filter_range(RangeType const& range)
     {
         struct separator_predicate {
             bool operator()(char x) {
@@ -363,7 +378,8 @@ struct literal_convert
 
         static unsigned digit(char ch)
         {
-            // We trust Spirit.X3 on correct ASCII range and codes
+            /* We trust on Spirit.X3 on correct ASCII range and codes parsed at
+             * 1st pass.  */
             switch(ch) {
                 case '0':   return  0;
                 case '1':   return  1;
@@ -464,7 +480,7 @@ struct literal_convert
     }
 
 
-    /* Note: The natural way would be to use Spirit.X3 arser primitive, e.g.
+    /* Note: The natural way would be to use Spirit.X3 parser primitive, e.g.
      * specialize x3's ureal_policies using a radix template parameter, which
      * compiles so far.
      * Unfortunately, spirit uses a LUT of pow10 - no other radixes are supported
@@ -477,25 +493,6 @@ struct literal_convert
         };
 
         auto const parse_integer_part = [this](unsigned base, auto const& literal) {
-            switch(base) {
-                case 2: {
-                    return literal_parse(literal, tag::bin{});
-                }
-                case 8: {
-                    return literal_parse(literal, tag::oct{});
-                }
-                case 10: {
-                    return literal_parse(literal, tag::dec{});
-                }
-                case 16: {
-                    return literal_parse(literal, tag::hex{});
-                }
-                default:
-                    abort();
-            }
-        };
-
-        auto const parse_fractional_part = [this](unsigned base, auto const& literal) {
             switch(base) {
                 case 2: {
                     return literal_parse(literal, tag::bin{});
@@ -541,16 +538,6 @@ struct literal_convert
 
         // FRACTIONAL PART
         if(!literal.literal.fractional_part.empty()) {
-#if 0
-            uint32_t fractional_part{ 0 };
-
-            std::tie(parse_ok, fractional_part) = parse_fractional_part(base, literal.literal.fractional_part);
-
-            if(!parse_ok) {
-                std::cout << "\n";
-                return std::make_tuple(parse_ok, fractional_part);
-            }
-#endif
             auto const frac_obj = [this](unsigned base) {
                 switch(base) {
                     case  2:  return frac{ 2};
@@ -561,12 +548,13 @@ struct literal_convert
                 }
             };
 
-            auto iter = std::begin(literal.literal.fractional_part);
-            auto const last = std::cend(literal.literal.fractional_part);
-            auto const f = std::accumulate(iter, last, 0.0, frac_obj(base));
+            auto range_f{ literal_parser::filter_range(literal.literal.fractional_part) };
+            auto iter = std::begin(range_f);
+            auto const last = std::cend(range_f);
+            auto const fractional_part = std::accumulate(iter, last, 0.0, frac_obj(base));
 
-            std::cout << "  fractional_part: " << f << "\n";
-            result += f;
+            std::cout << "  fractional_part: " << fractional_part << "\n";
+            result += fractional_part;
         }
 
         // EXPONENT
@@ -604,7 +592,7 @@ int main()
 {
     literal_convert convert{};
 
-    std::cout << "\n--- bit_string_literal ---\n";
+    std::cout << "\n--- bit_string_literal ---\n\n";
     for(std::string const s : {
         R"(B"0")",
         R"(B"1")",
@@ -636,7 +624,7 @@ int main()
     }
 
 
-    std::cout << "\n--- decimal_literal ---\n";
+    std::cout << "\n--- decimal_literal ---\n\n";
     for(std::string const s : {
         "0", "1",
         "100",
@@ -693,7 +681,7 @@ int main()
     * ) * base^2
     *
     */
-    std::cout << "\n--- based_literal ---\n";
+    std::cout << "\n--- based_literal ---\n\n";
     for(std::string const s : {
         // LRM examples
         "2#1111_1111#",             // 16
@@ -707,6 +695,7 @@ int main()
         "2#1.0#",                   // 1.0
         "10#42.0#",
         "10#42.000_1#",
+        "10#42.000_1#e-0_1",
         // other
         "16#FF.FF#E-2",
     }) {
@@ -742,80 +731,6 @@ int main()
 
 }
 
-#if 0
-/*
- * Concept of calculating fractional part
- */
-#include <vector>
-#include <string>
-#include <iostream>
-//#include <algorithm>
-#include <numeric>
-#include <limits>
-#include <cmath>
-#include <cassert>
-
-template<unsigned Radix>
-struct frac
-{
-    double pow;
-
-    frac() : pow{Radix} {};
-
-    static unsigned digit(auto ch)
-    {
-        // We trust Spirit.X3 on correct ASCII range and codes
-        switch(ch) {
-            case '0':   return  0;
-            case '1':   return  1;
-            case '2':   return  2;
-            case '3':   return  3;
-            case '4':   return  4;
-            case '5':   return  5;
-            case '6':   return  6;
-            case '7':   return  7;
-            case '8':   return  8;
-            case '9':   return  9;
-            case 'a':   [[fallthrough]];
-            case 'A':   return 10;
-            case 'b':   [[fallthrough]];
-            case 'B':   return 11;
-            case 'c':   [[fallthrough]];
-            case 'C':   return 12;
-            case 'd':   [[fallthrough]];
-            case 'D':   return 13;
-            case 'e':   [[fallthrough]];
-            case 'E':   return 14;
-            case 'f':   [[fallthrough]];
-            case 'F':   return 15;
-            default:    abort();
-        }
-    };
-
-    double operator()(double acc, char ch)
-    {
-        /* Fixme: The algorithm isn't smart to cover the failure cases. */
-        double digit = frac<Radix>::digit(ch);
-        digit /= pow;
-        pow *= Radix;
-        double const result = acc + digit;
-        assert(std::isnormal(result) && "Fractional number isn't a number");
-        return result;
-    }
-
-};
-
-int main() {
-
-    //std::vector<int> v{1,2,3,4,5};
-    std::vector<char> v{'F','F'};
-
-    auto const f = std::accumulate(v.begin(), v.end(), 0.0, frac<16>{});
-
-    std::cout.precision(std::numeric_limits<double>::max_digits10);
-    std::cout << "Result = " << (15 + f)*16*16 << "\n";
-}
-#endif
 
 #if 0 // join ranges
 #include <vector>
