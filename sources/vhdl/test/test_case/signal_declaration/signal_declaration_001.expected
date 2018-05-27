@@ -21,7 +21,7 @@
             (primary<v>
               (literal<v>
                 (bit_string_literal
-                  base: HEX, literal: 01234567
+                  base: hex, literal: 01234567
                 )
               )
             )

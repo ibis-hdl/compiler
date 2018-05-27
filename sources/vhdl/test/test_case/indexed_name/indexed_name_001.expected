@@ -16,7 +16,7 @@
                 (numeric_literal<v>
                   (abstract_literal<v>
                     (decimal_literal
-                      literal: 1024, hint: int
+                      literal: 1024, type: integer
                     )
                   )
                 )
@@ -37,7 +37,7 @@
                 (numeric_literal<v>
                   (abstract_literal<v>
                     (decimal_literal
-                      literal: 7, hint: int
+                      literal: 7, type: integer
                     )
                   )
                 )

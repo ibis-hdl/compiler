@@ -1,12 +1,12 @@
 (literal<v>
   (numeric_literal<v>
     (physical_literal
-      literal: (abstract_literal<v>
+      (abstract_literal<v>
         (based_literal
-          base: 10, number: 42
+          base: 10, integer: 42, type: integer
         )
       ),
-      unit: ms
+      (unit_name: ms)
     )
   )
 )

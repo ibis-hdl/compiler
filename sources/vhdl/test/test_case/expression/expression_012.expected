@@ -9,7 +9,7 @@
               (numeric_literal<v>
                 (abstract_literal<v>
                   (decimal_literal
-                    literal: 42, hint: int
+                    literal: 42, type: integer
                   )
                 )
               )
@@ -19,7 +19,7 @@
       )
     )
   ),
-  operator: AND,
+  (operator: AND),
   (relation
     (shift_expression
       (simple_expression
@@ -29,7 +29,7 @@
               (numeric_literal<v>
                 (abstract_literal<v>
                   (decimal_literal
-                    literal: 48, hint: int
+                    literal: 48, type: integer
                   )
                 )
               )
@@ -40,7 +40,7 @@
     )
   ),
   ,
-  operator: OR,
+  (operator: OR),
   (relation
     (shift_expression
       (simple_expression
@@ -50,7 +50,7 @@
               (numeric_literal<v>
                 (abstract_literal<v>
                   (decimal_literal
-                    literal: 4711, hint: int
+                    literal: 4711, type: integer
                   )
                 )
               )

@@ -14,7 +14,7 @@
       )
     )
   ),
-  operator: NOR,
+  (operator: NOR),
   (relation
     (shift_expression
       (simple_expression

@@ -10,7 +10,7 @@
           )
         )
       ),
-      operator: ADD,
+      (operator: ADD),
       (term
         (primary<v>
           (name<v>
@@ -22,7 +22,7 @@
       )
     )
   ),
-  operator: GREATER,
+  (operator: GREATER),
   (shift_expression
     (simple_expression
       (term
@@ -34,10 +34,10 @@
           )
         )
       ),
-      operator: SUB,
+      (operator: SUB),
       (term
         (factor_unary_operation
-          operator: NOT,
+          (operator: NOT),
           (literal<v>
             (string_literal
               101

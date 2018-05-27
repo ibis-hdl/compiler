@@ -2,7 +2,7 @@
   (numeric_literal<v>
     (abstract_literal<v>
       (based_literal
-        base: 016, number: 0_FF, exp: e-23
+        base: 016, integer: 0_FF, exp: e-23, type: integer
       )
     )
   )

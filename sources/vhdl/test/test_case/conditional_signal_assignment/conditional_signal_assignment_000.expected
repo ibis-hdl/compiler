@@ -46,7 +46,7 @@
             )
           )
         ),
-        operator: EQUAL,
+        (operator: EQUAL),
         (shift_expression
           (simple_expression
             (term

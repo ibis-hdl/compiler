@@ -3,11 +3,11 @@
     uF
   )
   (physical_literal
-    literal: (abstract_literal<v>
+    (abstract_literal<v>
       (decimal_literal
-        literal: 1000, hint: int
+        literal: 1000, type: integer
       )
     ),
-    unit: nF
+    (unit_name: nF)
   )
 )

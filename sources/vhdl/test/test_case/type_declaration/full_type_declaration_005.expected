@@ -13,7 +13,7 @@
                 (numeric_literal<v>
                   (abstract_literal<v>
                     (decimal_literal
-                      literal: 65536.00, hint: double
+                      literal: 65536.00, type: real
                     )
                   )
                 )
@@ -31,7 +31,7 @@
                 (numeric_literal<v>
                   (abstract_literal<v>
                     (decimal_literal
-                      literal: 65535.00, hint: double
+                      literal: 65535.00, type: real
                     )
                   )
                 )

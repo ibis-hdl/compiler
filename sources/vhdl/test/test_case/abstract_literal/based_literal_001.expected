@@ -1,5 +1,5 @@
 (abstract_literal<v>
   (based_literal
-    base: 016, number: 00_FF, exp: e-42
+    base: 016, integer: 00_FF, exp: e-42, type: integer
   )
 )

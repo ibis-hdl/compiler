@@ -6,7 +6,7 @@
           (numeric_literal<v>
             (abstract_literal<v>
               (decimal_literal
-                literal: 0.0, hint: double
+                literal: 0.0, type: real
               )
             )
           )
@@ -30,12 +30,12 @@
                       (numeric_literal<v>
                         (abstract_literal<v>
                           (decimal_literal
-                            literal: 2.0, hint: double
+                            literal: 2.0, type: real
                           )
                         )
                       )
                     )
-                    operator: EXPONENT,
+                    (operator: EXPONENT),
                     (expression
                       (relation
                         (shift_expression
@@ -49,14 +49,14 @@
                                 )
                               )
                             ),
-                            operator: ADD,
+                            (operator: ADD),
                             (term
                               (primary<v>
                                 (literal<v>
                                   (numeric_literal<v>
                                     (abstract_literal<v>
                                       (decimal_literal
-                                        literal: 1, hint: int
+                                        literal: 1, type: integer
                                       )
                                     )
                                   )
@@ -75,14 +75,14 @@
         )
       )
     ),
-    operator: SUB,
+    (operator: SUB),
     (term
       (primary<v>
         (literal<v>
           (numeric_literal<v>
             (abstract_literal<v>
               (decimal_literal
-                literal: 1.0, hint: double
+                literal: 1.0, type: real
               )
             )
           )

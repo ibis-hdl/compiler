@@ -1,3 +1,3 @@
 (decimal_literal
-  literal: 1234_5678, hint: int
+  literal: 1234_5678, type: integer
 )

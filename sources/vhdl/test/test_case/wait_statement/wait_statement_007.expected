@@ -24,7 +24,7 @@
             )
           )
         ),
-        operator: EQUAL,
+        (operator: EQUAL),
         (shift_expression
           (simple_expression
             (term
@@ -53,12 +53,12 @@
                 (literal<v>
                   (numeric_literal<v>
                     (physical_literal
-                      literal: (abstract_literal<v>
+                      (abstract_literal<v>
                         (decimal_literal
-                          literal: 1, hint: int
+                          literal: 1, type: integer
                         )
                       ),
-                      unit: ms
+                      (unit_name: ms)
                     )
                   )
                 )

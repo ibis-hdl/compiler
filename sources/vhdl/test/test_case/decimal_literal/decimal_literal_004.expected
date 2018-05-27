@@ -1,3 +1,3 @@
 (decimal_literal
-  literal: 12.0, hint: double
+  literal: 12.0, type: real
 )

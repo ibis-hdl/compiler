@@ -1,11 +1,11 @@
 (factor<v>
   (factor_unary_operation
-    operator: ABS,
+    (operator: ABS),
     (literal<v>
       (numeric_literal<v>
         (abstract_literal<v>
           (decimal_literal
-            literal: 42, hint: int
+            literal: 42, type: integer
           )
         )
       )

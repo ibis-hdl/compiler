@@ -1,6 +1,6 @@
 (factor<v>
   (factor_unary_operation
-    operator: NOT,
+    (operator: NOT),
     (literal<v>
       (enumeration_literal<v>
         (character_literal

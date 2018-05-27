@@ -24,7 +24,7 @@
                 (numeric_literal<v>
                   (abstract_literal<v>
                     (decimal_literal
-                      literal: 3.14159, hint: double
+                      literal: 3.14159, type: real
                     )
                   )
                 )

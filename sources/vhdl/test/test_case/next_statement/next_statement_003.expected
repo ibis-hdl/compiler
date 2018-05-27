@@ -14,7 +14,7 @@
           )
         )
       ),
-      operator: NOT_EQUALS,
+      (operator: NOT_EQUALS),
       (shift_expression
         (simple_expression
           (term

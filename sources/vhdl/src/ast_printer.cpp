@@ -353,11 +353,23 @@ void printer::operator()(based_literal const &node)
     symbol_scope<based_literal> _(*this, symbol);
 
     os << "base: " << node.base << ", "
-       << "number: " << node.number
-       ;
+       << "integer: " << node.number.integer_part;
 
-    if(!node.exponent.empty()) {
-        os << ", exp: " << node.exponent;
+    if(!node.number.fractional_part.empty()) {
+        os << ", fraction: " << node.number.fractional_part;
+    }
+
+    if(!node.number.exponent.empty()) {
+        os << ", exp: " << node.number.exponent;
+    }
+
+    using kind_specifier = ast::based_literal::kind_specifier;
+
+    os << ", type: ";
+    switch(node.number.kind_type) {
+        case kind_specifier::integer: { os << "integer"; break; }
+        case kind_specifier::real:    { os << "real";    break; }
+        default:                        os << "INVALID";
     }
 }
 
@@ -366,7 +378,6 @@ void printer::operator()(binding_indication const &node)
 {
     static char const symbol[]{ "binding_indication" };
     symbol_scope<binding_indication> _(*this, symbol);
-
 
     auto const print_assoc = [this](ast::association_list const& list) {
         auto const N = list.size() - 1;
@@ -404,18 +415,18 @@ void printer::operator()(bit_string_literal const &node)
     static char const symbol[]{ "bit_string_literal" };
     symbol_scope<bit_string_literal> _(*this, symbol);
 
-    using base_specifier = bit_string_literal::base;
+    using base_specifier = bit_string_literal::base_specifier;
 
     os << "base: ";
 
-    switch(node.base_specifier) {
-        case base_specifier::bin: os << "BIN"; break;
-        case base_specifier::oct: os << "OCT"; break;
-        case base_specifier::hex: os << "HEX"; break;
-        default:       os << "INVALID";
+    switch(node.base_type) {
+        case base_specifier::bin: os << "bin"; break;
+        case base_specifier::oct: os << "oct"; break;
+        case base_specifier::hex: os << "hex"; break;
+        default:                  os << "INVALID";
     }
 
-    os << ", literal: " << node.bit_literal;
+    os << ", literal: " << node.literal;
 }
 
 
@@ -974,15 +985,15 @@ void printer::operator()(decimal_literal const &node)
     static char const symbol[]{ "decimal_literal" };
     symbol_scope<decimal_literal> _(*this, symbol);
 
-    using tag = decimal_literal::tag;
+    using kind_specifier = decimal_literal::kind_specifier;
 
 
-    os << "literal: " << node.literal << ", hint: ";
+    os << "literal: " << node.literal << ", type: ";
 
-    switch(node.hint) {
-        case tag::integer: os << "int";    break;
-        case tag::real:    os << "double"; break;
-        default:           os << "INVALID";
+    switch(node.kind_type) {
+        case kind_specifier::integer: os << "integer"; break;
+        case kind_specifier::real:    os << "real";    break;
+        default:                      os << "INVALID";
     }
 }
 
@@ -1351,7 +1362,7 @@ void printer::operator()(expression const &node)
     auto const N = node.rest_list.size() - 1;
     unsigned i = 0;
     for(auto const& chunk : node.rest_list) {
-        os << ",\n" << "operator: " << chunk.logical_operator << ",\n";
+        os << ",\n" << "(operator: " << chunk.logical_operator << "),\n";
         (*this)(chunk.relation);
         if(i++ != N) {
             os << ",\n";
@@ -1367,7 +1378,7 @@ void printer::operator()(factor_binary_operation const& node)
 
     visit(node.primary_lhs);
 
-    os << "\n" << "operator: " << node.operator_ << ",\n";
+    os << "\n" << "(operator: " << node.operator_ << "),\n";
 
     visit(node.primary_rhs);
 }
@@ -1378,7 +1389,7 @@ void printer::operator()(factor_unary_operation const& node)
     static char const symbol[]{ "factor_unary_operation" };
     symbol_scope<factor_unary_operation> _(*this, symbol);
 
-    os << "operator: " << node.operator_ << ",\n";
+    os << "(operator: " << node.operator_ << "),\n";
     visit(node.primary);
 }
 
@@ -2107,9 +2118,8 @@ void printer::operator()(physical_literal const &node)
     static char const symbol[]{ "physical_literal" };
     symbol_scope<physical_literal> _(*this, symbol);
 
-    os << "literal: ";
     (*this)(node.literal);
-    os << ",\n" << "unit: " << node.unit_name;
+    os << ",\n" << "(unit_name: " << node.unit_name << ")";
 }
 
 
@@ -2340,7 +2350,7 @@ void printer::operator()(relation const &node)
     }
 
     auto const& chunk = *node.rest;
-    os << ",\n" << "operator: " << chunk.relational_operator << ",\n";
+    os << ",\n" << "(operator: " << chunk.relational_operator << "),\n";
     (*this)(chunk.shift_expression);
 }
 
@@ -2514,7 +2524,7 @@ void printer::operator()(shift_expression const &node)
     }
 
     auto const& chunk = *node.rest;
-    os << ",\n" << "operator: " << chunk.shift_operator << ",\n";
+    os << ",\n" << "(operator: " << chunk.shift_operator << "),\n";
     (*this)(chunk.simple_expression);
 }
 
@@ -2630,7 +2640,7 @@ void printer::operator()(simple_expression const &node)
     auto const N = node.rest_list.size()- 1;
     unsigned i= 0;
     for(auto const& chunk : node.rest_list) {
-        os << ",\n" << "operator: " << chunk.adding_operator << ",\n";
+        os << ",\n" << "(operator: " << chunk.adding_operator << "),\n";
         (*this)(chunk.term);
         if(i++ != N) {
             os << ",\n";
@@ -2829,7 +2839,7 @@ void printer::operator()(term const &node)
     auto const N = node.rest_list.size() - 1;
     unsigned i = 0;
     for(auto const& term_chunk: node.rest_list) {
-        os << "operator: " << term_chunk.multiplying_operator << ",\n";
+        os << "(operator: " << term_chunk.multiplying_operator << "),\n";
         visit(term_chunk.factor);
         if(i++ != N) {
             os << ",\n";

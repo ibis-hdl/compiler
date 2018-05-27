@@ -20,19 +20,11 @@ namespace eda { namespace vhdl { namespace ast {
 
 struct bit_string_literal : position_tagged
 {
-    enum class base { bin, oct, hex };
+    enum class base_specifier { bin, oct, hex };
 
-    boost::iterator_range<parser::iterator_type>    bit_literal;
-    base                                            base_specifier;
+    boost::iterator_range<parser::iterator_type>    literal;
+    base_specifier                                  base_type;
 };
-
-
-/**
- * Convert the literal to the type T. The type T can be <int> or <double> due to
- * the provided specializations. On overflow it will throw an exception.
- */
-template<typename T>
-T get(bit_string_literal const& bit_literal);
 
 
 } } } // namespace eda.vhdl.ast

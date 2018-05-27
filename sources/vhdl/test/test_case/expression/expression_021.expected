@@ -9,17 +9,17 @@
               (numeric_literal<v>
                 (abstract_literal<v>
                   (decimal_literal
-                    literal: 16, hint: int
+                    literal: 16, type: integer
                   )
                 )
               )
             )
-            operator: EXPONENT,
+            (operator: EXPONENT),
             (literal<v>
               (numeric_literal<v>
                 (abstract_literal<v>
                   (decimal_literal
-                    literal: 2, hint: int
+                    literal: 2, type: integer
                   )
                 )
               )

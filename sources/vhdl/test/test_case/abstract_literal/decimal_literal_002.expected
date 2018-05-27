@@ -1,5 +1,5 @@
 (abstract_literal<v>
   (decimal_literal
-    literal: 1e3, hint: int
+    literal: 1e3, type: integer
   )
 )

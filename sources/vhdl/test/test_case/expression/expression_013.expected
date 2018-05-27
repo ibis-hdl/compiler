@@ -8,17 +8,17 @@
               (numeric_literal<v>
                 (abstract_literal<v>
                   (decimal_literal
-                    literal: 7, hint: int
+                    literal: 7, type: integer
                   )
                 )
               )
             )
-            operator: EXPONENT,
+            (operator: EXPONENT),
             (literal<v>
               (numeric_literal<v>
                 (abstract_literal<v>
                   (decimal_literal
-                    literal: 3, hint: int
+                    literal: 3, type: integer
                   )
                 )
               )
@@ -28,7 +28,7 @@
       )
     )
   ),
-  operator: OR,
+  (operator: OR),
   (relation
     (shift_expression
       (simple_expression
@@ -38,7 +38,7 @@
               (numeric_literal<v>
                 (abstract_literal<v>
                   (decimal_literal
-                    literal: 42, hint: int
+                    literal: 42, type: integer
                   )
                 )
               )

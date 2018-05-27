@@ -149,7 +149,7 @@ unsigned precedence(operator_token token)
         case operator_token::XNOR: { return 0; }
 
         default:
-            cxx_bug_fatal("vhdl/ast operator_token out of range");
+            cxx_unreachable_bug_triggered();
     }
 }
 

@@ -15,7 +15,7 @@
               )
             )
           ),
-          operator: ADD,
+          (operator: ADD),
           (term
             (primary<v>
               (name<v>

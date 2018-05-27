@@ -20,19 +20,11 @@ namespace eda { namespace vhdl { namespace ast {
 
 struct decimal_literal : position_tagged
 {
-    enum class tag { integer, real };
+    enum class kind_specifier { integer, real };
 
     boost::iterator_range<parser::iterator_type>    literal;
-    tag                                             hint;
+    kind_specifier                                  kind_type;
 };
-
-
-/**
- * Convert the literal to the type T. The type T can be <int> or <double> due to
- * the provided specializations. On overflow it will throw an exception.
- */
-template<typename T>
-T get(decimal_literal const& literal);
 
 
 } } } // namespace eda.vhdl.ast

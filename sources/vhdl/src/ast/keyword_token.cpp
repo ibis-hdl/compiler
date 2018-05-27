@@ -6,6 +6,7 @@
  */
 
 #include <eda/vhdl/ast/keyword_token.hpp>
+#include <eda/utils/cxx_bug_fatal.hpp>
 #include <iostream>
 
 
@@ -118,7 +119,8 @@ std::ostream& operator<<(std::ostream& os, keyword_token kw_token)
         case keyword_token::XNOR:            os << "XNOR";          break;
         case keyword_token::XOR:             os << "XOR";           break;
 
-        default:                             os << "INVALID";
+        default:
+            cxx_unreachable_bug_triggered();
     }
 
     return os;

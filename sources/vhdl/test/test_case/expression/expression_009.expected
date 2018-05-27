@@ -14,7 +14,7 @@
       )
     )
   ),
-  operator: AND,
+  (operator: AND),
   (relation
     (shift_expression
       (simple_expression
@@ -28,7 +28,7 @@
           )
         )
       ),
-      operator: SRL,
+      (operator: SRL),
       (simple_expression
         (term
           (primary<v>

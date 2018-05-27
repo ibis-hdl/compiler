@@ -1,8 +1,8 @@
 (physical_literal
-  literal: (abstract_literal<v>
+  (abstract_literal<v>
     (based_literal
-      base: 016, number: AFFE.42, exp: E+69
+      base: 016, integer: AFFE, fraction: 42, exp: E+69, type: real
     )
   ),
-  unit: h
+  (unit_name: h)
 )

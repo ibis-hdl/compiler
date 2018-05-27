@@ -9,13 +9,13 @@
             )
           )
         ),
-        operator: MUL,
+        (operator: MUL),
         (primary<v>
           (literal<v>
             (numeric_literal<v>
               (abstract_literal<v>
                 (decimal_literal
-                  literal: 42, hint: int
+                  literal: 42, type: integer
                 )
               )
             )
@@ -24,7 +24,7 @@
       )
     )
   ),
-  operator: LESS,
+  (operator: LESS),
   (shift_expression
     (simple_expression
       (term

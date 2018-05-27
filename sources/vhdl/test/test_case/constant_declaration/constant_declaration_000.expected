@@ -22,12 +22,12 @@
               (literal<v>
                 (numeric_literal<v>
                   (physical_literal
-                    literal: (abstract_literal<v>
+                    (abstract_literal<v>
                       (decimal_literal
-                        literal: 1.5, hint: double
+                        literal: 1.5, type: real
                       )
                     ),
-                    unit: nm
+                    (unit_name: nm)
                   )
                 )
               )

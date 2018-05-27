@@ -148,7 +148,7 @@ void test_case_result_writer::write(std::string const& parse_result)
     fs::path const full_pathname = m_dest_dir / "test_case" / m_test_case;
     fs::path const write_path = full_pathname.parent_path();
 
-#if 1
+#if 0
     std::string const ext{ ".parsed" };
 #else // for 'easy' GOLD expected file generation
     std::string const ext{ ".expected" };

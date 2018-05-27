@@ -6,45 +6,45 @@
         (numeric_literal<v>
           (abstract_literal<v>
             (decimal_literal
-              literal: 42, hint: int
+              literal: 42, type: integer
             )
           )
         )
       )
     ),
-    operator: MUL,
+    (operator: MUL),
     (primary<v>
       (literal<v>
         (numeric_literal<v>
           (abstract_literal<v>
             (decimal_literal
-              literal: 66, hint: int
+              literal: 66, type: integer
             )
           )
         )
       )
     )
   ),
-  operator: ADD,
+  (operator: ADD),
   (term
     (primary<v>
       (literal<v>
         (numeric_literal<v>
           (abstract_literal<v>
             (decimal_literal
-              literal: 18, hint: int
+              literal: 18, type: integer
             )
           )
         )
       )
     ),
-    operator: MUL,
+    (operator: MUL),
     (primary<v>
       (literal<v>
         (numeric_literal<v>
           (abstract_literal<v>
             (decimal_literal
-              literal: 88, hint: int
+              literal: 88, type: integer
             )
           )
         )

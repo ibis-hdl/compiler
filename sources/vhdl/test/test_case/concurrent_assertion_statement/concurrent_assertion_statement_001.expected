@@ -20,7 +20,7 @@
                               (numeric_literal<v>
                                 (abstract_literal<v>
                                   (decimal_literal
-                                    literal: 42, hint: int
+                                    literal: 42, type: integer
                                   )
                                 )
                               )
@@ -29,7 +29,7 @@
                         )
                       )
                     ),
-                    operator: GREATER,
+                    (operator: GREATER),
                     (shift_expression
                       (simple_expression
                         (term
@@ -38,7 +38,7 @@
                               (numeric_literal<v>
                                 (abstract_literal<v>
                                   (decimal_literal
-                                    literal: 0, hint: int
+                                    literal: 0, type: integer
                                   )
                                 )
                               )

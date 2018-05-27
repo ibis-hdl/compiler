@@ -45,7 +45,7 @@
               )
             )
           ),
-          operator: AND,
+          (operator: AND),
           (relation
             (shift_expression
               (simple_expression

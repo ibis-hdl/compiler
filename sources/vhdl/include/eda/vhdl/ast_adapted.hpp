@@ -54,7 +54,11 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::attribute_specification,
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::based_literal,
-    base, number, exponent
+    base, number
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::based_literal::number_chunk,
+    integer_part, fractional_part, exponent, kind_type
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::binding_indication,
@@ -62,7 +66,7 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::binding_indication,
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::bit_string_literal,
-    bit_literal, base_specifier
+    literal, base_type
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::block_configuration,
@@ -161,7 +165,7 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::constrained_array_definition,
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::decimal_literal,
-    literal, hint
+    literal, kind_type
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::delay_mechanism,

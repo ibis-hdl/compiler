@@ -20,9 +20,17 @@ namespace eda { namespace vhdl { namespace ast {
 
 struct based_literal : position_tagged
 {
+    enum class kind_specifier { integer, real };
+
+    struct number_chunk {
+        boost::iterator_range<parser::iterator_type>    integer_part;
+        boost::iterator_range<parser::iterator_type>    fractional_part;
+        boost::iterator_range<parser::iterator_type>    exponent;
+        kind_specifier                                  kind_type;
+    };
+
     boost::iterator_range<parser::iterator_type>    base;
-    boost::iterator_range<parser::iterator_type>    number;
-    boost::iterator_range<parser::iterator_type>    exponent;
+    number_chunk                                    number;
 };
 
 

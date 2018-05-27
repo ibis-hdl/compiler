@@ -37,12 +37,12 @@
                   (literal<v>
                     (numeric_literal<v>
                       (physical_literal
-                        literal: (abstract_literal<v>
+                        (abstract_literal<v>
                           (decimal_literal
-                            literal: 10, hint: int
+                            literal: 10, type: integer
                           )
                         ),
-                        unit: ns
+                        (unit_name: ns)
                       )
                     )
                   )
@@ -60,7 +60,7 @@
             (simple_expression
               (term
                 (factor_unary_operation
-                  operator: NOT,
+                  (operator: NOT),
                   (name<v>
                     (identifier
                       Input_pin
@@ -81,12 +81,12 @@
                   (literal<v>
                     (numeric_literal<v>
                       (physical_literal
-                        literal: (abstract_literal<v>
+                        (abstract_literal<v>
                           (decimal_literal
-                            literal: 20, hint: int
+                            literal: 20, type: integer
                           )
                         ),
-                        unit: ns
+                        (unit_name: ns)
                       )
                     )
                   )

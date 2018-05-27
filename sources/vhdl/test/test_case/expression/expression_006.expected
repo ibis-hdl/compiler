@@ -13,7 +13,7 @@
         )
       )
     ),
-    operator: LESS_EQUALS,
+    (operator: LESS_EQUALS),
     (shift_expression
       (simple_expression
         (term
@@ -28,7 +28,7 @@
       )
     )
   ),
-  operator: AND,
+  (operator: AND),
   (relation
     (shift_expression
       (simple_expression

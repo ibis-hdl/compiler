@@ -22,12 +22,12 @@
                     (literal<v>
                       (numeric_literal<v>
                         (physical_literal
-                          literal: (abstract_literal<v>
+                          (abstract_literal<v>
                             (decimal_literal
-                              literal: 3, hint: int
+                              literal: 3, type: integer
                             )
                           ),
-                          unit: ns
+                          (unit_name: ns)
                         )
                       )
                     )
@@ -52,12 +52,12 @@
                     (literal<v>
                       (numeric_literal<v>
                         (physical_literal
-                          literal: (abstract_literal<v>
+                          (abstract_literal<v>
                             (decimal_literal
-                              literal: 3, hint: int
+                              literal: 3, type: integer
                             )
                           ),
-                          unit: ns
+                          (unit_name: ns)
                         )
                       )
                     )

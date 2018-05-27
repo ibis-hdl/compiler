@@ -14,7 +14,7 @@
                           (numeric_literal<v>
                             (abstract_literal<v>
                               (decimal_literal
-                                literal: 42, hint: int
+                                literal: 42, type: integer
                               )
                             )
                           )
@@ -26,7 +26,7 @@
               )
             )
           ),
-          operator: MUL,
+          (operator: MUL),
           (primary<v>
             (expression
               (relation
@@ -38,7 +38,7 @@
                           (numeric_literal<v>
                             (abstract_literal<v>
                               (decimal_literal
-                                literal: 42, hint: int
+                                literal: 42, type: integer
                               )
                             )
                           )
@@ -51,7 +51,7 @@
             )
           )
         ),
-        operator: ADD,
+        (operator: ADD),
         (term
           (primary<v>
             (expression
@@ -70,21 +70,21 @@
                                       (numeric_literal<v>
                                         (abstract_literal<v>
                                           (decimal_literal
-                                            literal: 12, hint: int
+                                            literal: 12, type: integer
                                           )
                                         )
                                       )
                                     )
                                   )
                                 ),
-                                operator: ADD,
+                                (operator: ADD),
                                 (term
                                   (primary<v>
                                     (literal<v>
                                       (numeric_literal<v>
                                         (abstract_literal<v>
                                           (decimal_literal
-                                            literal: 12, hint: int
+                                            literal: 12, type: integer
                                           )
                                         )
                                       )
@@ -96,7 +96,7 @@
                           )
                         )
                       ),
-                      operator: MUL,
+                      (operator: MUL),
                       (primary<v>
                         (expression
                           (relation
@@ -108,21 +108,21 @@
                                       (numeric_literal<v>
                                         (abstract_literal<v>
                                           (decimal_literal
-                                            literal: 12, hint: int
+                                            literal: 12, type: integer
                                           )
                                         )
                                       )
                                     )
                                   )
                                 ),
-                                operator: SUB,
+                                (operator: SUB),
                                 (term
                                   (primary<v>
                                     (literal<v>
                                       (numeric_literal<v>
                                         (abstract_literal<v>
                                           (decimal_literal
-                                            literal: 12, hint: int
+                                            literal: 12, type: integer
                                           )
                                         )
                                       )

@@ -52,6 +52,10 @@ void assertion_failed_msg(const CharT* expr, const char* msg, const char* functi
     cxx_assert(false, message);  \
     cxx_unreachable(message);
 
+#define cxx_unreachable_bug_triggered() \
+    cxx_assert(false, "unreachable code path triggered");  \
+    cxx_unreachable();
+
 
 
 #endif /* INCLUDE_EDA_UTILS_CXX_BUG_FATAL_HPP_ */

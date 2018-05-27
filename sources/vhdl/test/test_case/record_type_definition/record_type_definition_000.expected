@@ -22,7 +22,7 @@
                   (numeric_literal<v>
                     (abstract_literal<v>
                       (decimal_literal
-                        literal: 1, hint: int
+                        literal: 1, type: integer
                       )
                     )
                   )
@@ -40,7 +40,7 @@
                   (numeric_literal<v>
                     (abstract_literal<v>
                       (decimal_literal
-                        literal: 31, hint: int
+                        literal: 31, type: integer
                       )
                     )
                   )
@@ -91,7 +91,7 @@
                   (numeric_literal<v>
                     (abstract_literal<v>
                       (decimal_literal
-                        literal: 0, hint: int
+                        literal: 0, type: integer
                       )
                     )
                   )
@@ -109,7 +109,7 @@
                   (numeric_literal<v>
                     (abstract_literal<v>
                       (decimal_literal
-                        literal: 4000, hint: int
+                        literal: 4000, type: integer
                       )
                     )
                   )

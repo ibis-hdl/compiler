@@ -1,7 +1,7 @@
 (numeric_literal<v>
   (abstract_literal<v>
     (based_literal
-      base: 8, number: 42
+      base: 8, integer: 42, type: integer
     )
   )
 )

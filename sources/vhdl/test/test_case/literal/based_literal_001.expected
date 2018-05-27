@@ -2,7 +2,7 @@
   (numeric_literal<v>
     (abstract_literal<v>
       (based_literal
-        base: 16, number: 42, exp: E4
+        base: 16, integer: 42, exp: E4, type: integer
       )
     )
   )

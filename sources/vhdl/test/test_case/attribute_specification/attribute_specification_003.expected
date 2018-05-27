@@ -21,12 +21,12 @@
               (literal<v>
                 (numeric_literal<v>
                   (physical_literal
-                    literal: (abstract_literal<v>
+                    (abstract_literal<v>
                       (decimal_literal
-                        literal: 15, hint: int
+                        literal: 15, type: integer
                       )
                     ),
-                    unit: pF
+                    (unit_name: pF)
                   )
                 )
               )

@@ -10,7 +10,7 @@
               )
             )
           ),
-          operator: MUL,
+          (operator: MUL),
           (primary<v>
             (literal<v>
               (string_literal
@@ -22,7 +22,7 @@
       )
     )
   ),
-  operator: AND,
+  (operator: AND),
   (relation
     (shift_expression
       (simple_expression

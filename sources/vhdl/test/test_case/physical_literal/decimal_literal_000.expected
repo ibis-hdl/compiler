@@ -1,8 +1,8 @@
 (physical_literal
-  literal: (abstract_literal<v>
+  (abstract_literal<v>
     (decimal_literal
-      literal: 100, hint: int
+      literal: 100, type: integer
     )
   ),
-  unit: fs
+  (unit_name: fs)
 )

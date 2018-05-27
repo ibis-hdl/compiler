@@ -14,7 +14,7 @@
                   (numeric_literal<v>
                     (abstract_literal<v>
                       (decimal_literal
-                        literal: 1E18, hint: int
+                        literal: 1E18, type: integer
                       )
                     )
                   )
@@ -32,7 +32,7 @@
                   (numeric_literal<v>
                     (abstract_literal<v>
                       (decimal_literal
-                        literal: 1E18, hint: int
+                        literal: 1E18, type: integer
                       )
                     )
                   )
@@ -49,12 +49,12 @@
             ps
           )
           (physical_literal
-            literal: (abstract_literal<v>
+            (abstract_literal<v>
               (decimal_literal
-                literal: 1000, hint: int
+                literal: 1000, type: integer
               )
             ),
-            unit: fs
+            (unit_name: fs)
           )
         )
       )

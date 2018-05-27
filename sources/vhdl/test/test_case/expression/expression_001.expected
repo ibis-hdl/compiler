@@ -14,7 +14,7 @@
       )
     )
   ),
-  operator: OR,
+  (operator: OR),
   (relation
     (shift_expression
       (simple_expression
@@ -31,7 +31,7 @@
     )
   ),
   ,
-  operator: OR,
+  (operator: OR),
   (relation
     (shift_expression
       (simple_expression

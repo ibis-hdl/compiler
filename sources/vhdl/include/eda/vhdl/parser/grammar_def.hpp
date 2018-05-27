@@ -1289,17 +1289,38 @@ auto const label_colon = x3::rule<struct _, ast::identifier> { "label" } =
 
 /*
  * Parser Rule Definition
+ * ======================
  *
- * WARNING: Here are some 'anonymous' helper rules (to break down the complexity)
- *          used in detail namespace which has as tag only an underscore, e.g.:
- *          \code{.cpp}
- *          auto const rule = x3::rule<struct _, ...> { "..." } = ...
- *          \endcode
- *          It would be naturally to use the parent's tag which belongs the
- *          detail helper. But, unfortunately the memory consumption increases
- *          dramatically (8+8)GB RAM/SWAP isn't enough). The tags problem must
- *          be addressed by future improvements by coding the expectation points
- *          I assume.
+ * WARNING
+ * -------
+ * Here are some 'anonymous' helper rules (to break down the complexity and
+ * to enforce the attributes required) used in the specific rule's detail
+ * namespace. The X3 tags the rules, e.g.:
+ *
+ *  \code{.cpp}
+ *  auto const rule = x3::rule<struct _, ...> { "..." } = ...
+ *  \endcode
+ *
+ * It would be naturally to use the parent rules's tag type which belongs the
+ * detail helper. But, unfortunately the memory consumption increases dramatically
+ * (8+8)GB RAM/SWAP isn't enough). Following StackOverflow
+ * [X3: Linker Error (unresolved external symbol “parse_rule”) on nonterminal parser](
+ *  https://stackoverflow.com/questions/50277979/x3-linker-error-unresolved-external-symbol-parse-rule-on-nonterminal-parser?answertab=active#tab-top)
+ * Sehe's notes, re-using the tag type is recipe for disaster. The rule tags are
+ * what dispatches the implementation function in the case of
+ * separated compilation units.
+ *
+ * Some notes about numeric literals
+ * ---------------------------------- xxxx
+ * The correct tagged kind_type of {based, decimal}_literal is elementary on
+ * elaboration time, since after converting to numeric the informations about
+ * the integer/real string are lost, see concrete why it's important e.g.
+ * [vhdl error: integer literal cannot have negative exponent](
+ * https://stackoverflow.com/questions/22113223/vhdl-error-integer-literal-cannot-have-negative-exponent)
+ *
+ * Strong rules here on parser level simplifies simplifies numeric conversion
+ * since more sloppy rules can be used for conversion from literals to concrete
+ * intrinsic types.
  */
 
 
@@ -1568,11 +1589,27 @@ auto const based_integer_def =
 //     base # based_integer [ . based_integer ] # [ exponent ]
 namespace based_literal_detail {
 
-auto const numeric_value = x3::rule<struct _, string_view_attribute>{ "based_literal" } =
-    raw[ lexeme[
-        based_integer >> -(char_('.') >> based_integer)
-    ]]
+auto const integer_type = x3::rule<struct _, ast::based_literal::number_chunk>{ "based_literal<int>" } =
+    /* Note, IEEE1076-93 Ch. 13.4, specifies for deciaml_literal the forbidden
+     * negative sign for the exponent of integer types. No restictions are there
+     * defined for based_literal, assume real type exponent. */
+    lexeme[
+           based_integer >> x3::attr(string_view_attribute{/* empty fractional part */})
+        >> '#'
+        >> -exponent
+    ]
+    >> x3::attr(ast::based_literal::kind_specifier::integer)
     ;
+
+auto const real_type = x3::rule<struct _, ast::based_literal::number_chunk>{ "based_literal<real>" } =
+    lexeme[
+          based_integer >> lit('.') >> based_integer
+        >> '#'
+        >> -exponent
+    ]
+    >> x3::attr(ast::based_literal::kind_specifier::real)
+    ;
+
 
 } // end detail
 
@@ -1580,9 +1617,7 @@ auto const based_literal_def =
     lexeme [
            base
         >> '#'
-        >> based_literal_detail::numeric_value
-        >> '#'
-        >> -exponent
+        >> ( based_literal_detail::real_type | based_literal_detail::integer_type )
     ]
     ;
 
@@ -1622,49 +1657,45 @@ auto const binding_indication_def =
 //     base_specifier " bit_value "
 namespace bit_string_literal_detail {
 
-/* Note: The BNF rule captures too wide for a specific base. §13.7 explains the
- *       valid characters depending on it.
- *       Here it's clever to get an parse error if the rules are violated by
- *       splitting it into several sub rules. */
+auto const bit_value_bit = x3::rule<struct _, string_view_attribute> { "bit_value" } =
+    raw[ lexeme[
+       char_("01") >> *( -lit("_") >> char_("01") )
+    ]]
+    ;
+
+auto const bit_value_oct = x3::rule<struct _, string_view_attribute> { "bit_value" } =
+    raw[ lexeme[
+       char_("0-7") >> *( -lit("_") >> char_("0-7") )
+    ]]
+    ;
+
+auto const bit_value_hex = x3::rule<struct _, string_view_attribute> { "bit_value" } =
+    raw[ lexeme[
+        extended_digit >> *( -lit("_") >> extended_digit)
+    ]]
+    ;
+
 auto const bin = x3::rule<struct _, ast::bit_string_literal> { "bit_string_literal<bin>" } =
     lexeme[
-       lit("B")
-    >> lit('"')
-    >> x3::as<string_view_attribute>[
-          raw[ lexeme[
-             char_("01") >> *( -lit("_") >> char_("01") )
-          ]]
-       ]
-    >> lit('"')
-    >> x3::attr(ast::bit_string_literal::base::bin)
+       x3::omit[char_("Bb")]
+    >> lit('"') >> bit_value_bit >> lit('"')
+    >> x3::attr(ast::bit_string_literal::base_specifier::bin)
     ]
     ;
 
 auto const oct = x3::rule<struct _, ast::bit_string_literal> { "bit_string_literal<oct>" } =
     lexeme[
-        lit("O")
-     >> lit('"')
-     >> x3::as<string_view_attribute>[
-           raw[ lexeme[
-               char_("0-7") >> *( -lit("_") >> char_("0-7") )
-           ]]
-        ]
-     >> lit('"')
-     >> x3::attr(ast::bit_string_literal::base::oct)
+        x3::omit[char_("Oo")]
+     >> lit('"') >> bit_value_oct >> lit('"')
+     >> x3::attr(ast::bit_string_literal::base_specifier::oct)
      ]
      ;
 
 auto const hex = x3::rule<struct _, ast::bit_string_literal> { "bit_string_literal<hex>" } =
     lexeme[
-        lit("X")
-     >> lit('"')
-     >> x3::as<string_view_attribute>[
-            raw[ lexeme[
-                extended_digit >> *( -lit("_") >> extended_digit )
-            ]]
-        ]
-     >> lit('"')
-     >> x3::attr(ast::bit_string_literal::base::hex)
+        x3::omit[char_("Xx")]
+     >> lit('"') >> bit_value_hex >> lit('"')
+     >> x3::attr(ast::bit_string_literal::base_specifier::hex)
     ]
     ;
 } // end detail
@@ -2137,28 +2168,38 @@ auto const context_item_def =
 //     integer [ . integer ] [ exponent ]
 namespace decimal_literal_detail {
 
-auto const real = x3::rule<struct _, ast::decimal_literal> { "decimal_literal<real>" } =
+auto const real_type = x3::rule<struct _, ast::decimal_literal> { "decimal_literal<real>" } =
        x3::as<string_view_attribute>[
            raw[ lexeme[
                integer >> char_('.') >> integer >> -exponent
            ]]
        ]
-    >> x3::attr(ast::decimal_literal::tag::real)
+    >> x3::attr(ast::decimal_literal::kind_specifier::real)
     ;
 
-auto const int_ = x3::rule<struct _, ast::decimal_literal> { "decimal_literal<int>" } =
+auto const integer_exponent = x3::rule<struct _, string_view_attribute> { "exponent" } =
+   /* Note, following IEEE1076-93 Ch. 13.4, the exponent on integer type must 
+    * not have a minus sign. This means implicit (even from NBF) that a positive
+    * (optional) sign is allowed. */
+    raw[ lexeme[
+        char_("Ee") >> -char_("+") >> integer
+    ]]
+    ;
+
+auto const integer_type = x3::rule<struct _, ast::decimal_literal> { "decimal_literal<int>" } =
        x3::as<string_view_attribute>[
            raw[ lexeme[
-               integer >> -exponent
+               // Note, exponent on integer is always without sign!
+               integer >> -integer_exponent
            ]]
        ]
-    >> x3::attr(ast::decimal_literal::tag::integer)
+    >> x3::attr(ast::decimal_literal::kind_specifier::integer)
     ;
 } // end detail
 
 auto const decimal_literal_def =
-      decimal_literal_detail::real
-    | decimal_literal_detail::int_
+      decimal_literal_detail::real_type
+    | decimal_literal_detail::integer_type
     ;
 
 
@@ -2524,6 +2565,8 @@ auto const exit_statement_def = ( // operator precedence
 // exponent ::=                                                       [§ 13.4.1]
 //     E [ + ] integer | E - integer
 auto const exponent_def =
+    /* Note, that exponent rule parses real exponent, for integer types no sign
+     * is allowed, hence embedded into the concrete rule */
     x3::as<string_view_attribute>[
         raw[ lexeme [
              char_("Ee") >> -char_("-+") >> integer
