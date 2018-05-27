@@ -1,12 +1,12 @@
-cmake_minimum_required(VERSION 3.8)
+################################################################################
+## souces/common/CMakeLists.txt
+################################################################################
 
+################################################################################
 ## The EDA/common project
-project(eda_common VERSION 0.0.1 LANGUAGES CXX)
+################################################################################
 
-## C++ Standards
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
+project(eda_common LANGUAGES CXX)
 
 
 ## create a dummy header-only target
@@ -17,7 +17,7 @@ target_include_directories(eda_common INTERFACE
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
     $<INSTALL_INTERFACE:include>
-    )
+)
 
 
 ## Requirements: Boost headers
@@ -52,7 +52,7 @@ int main() {
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/include/eda/utils/compiler_support.hpp.in"
-  "${PROJECT_BINARY_DIR}/include//eda/utils/compiler_support.hpp"
+  "${PROJECT_BINARY_DIR}/include/eda/utils/compiler_support.hpp"
 )
 
 

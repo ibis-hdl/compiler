@@ -22,5 +22,5 @@ ${CMAKE_BIN} ${EDA_SRC_DIR} \
         -DBUILD_SHARED_LIBS:BOOL=OFF 
         
 #cmake --build .
-make -j${CPU_COUNT}
+#nice make -j${CPU_COUNT}
 

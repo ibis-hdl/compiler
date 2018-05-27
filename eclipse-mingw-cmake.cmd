@@ -1,7 +1,9 @@
 @echo off
 setlocal
 
-set SOURCE_PATH=D:\My\IBIS\source
+# [How to get the path of the batch script in Windows?](
+#  https://stackoverflow.com/questions/3827567/how-to-get-the-path-of-the-batch-script-in-windows?answertab=active#tab-top)
+set SOURCE_PATH=%~dp0
 
 cmake -G "Eclipse CDT4 - MinGW Makefiles" ^
         -DCMAKE_ECLIPSE_GENERATE_SOURCE_PROJECT=TRUE ^

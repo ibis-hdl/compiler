@@ -1,46 +1,49 @@
-cmake_minimum_required(VERSION 3.8)
+################################################################################
+## sources/vhdl/CMakeLists.txt
+################################################################################
 
+################################################################################
 ## EDA/VHDL project
+################################################################################
+
 project(eda_vhdl_parser LANGUAGES CXX)
 
 
-## Cotire (compile time reducer) https://github.com/sakra/cotire
-include(cotire)
-
-
-## C++ Standards
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
-
-set(LIB_SOURCES
+set(VHDL_PARSER_SOURCE
     src/ast/keyword_token.cpp
     src/ast/operator_token.cpp
-    src/error_handler.cpp
-    src/ast_printer.cpp
+    src/ast/ast_printer.cpp
     src/ast/numeric_convert.cpp
+    
+    src/parser/error_handler.cpp
 
-    #src/expression_parse.cpp # hot fix for playground vhdl_expression_eval
+    #src/parser/expression_parse.cpp # hot fix for playground vhdl_expression_eval
+    #src/parser/grammar.cpp
 )
 
-add_library(${PROJECT_NAME} STATIC ${LIB_SOURCES})
+add_library(${PROJECT_NAME} STATIC ${VHDL_PARSER_SOURCE})
 add_library(eda::vhdl_parser ALIAS ${PROJECT_NAME})
 
+
+# adjust include path
 target_include_directories(${PROJECT_NAME} PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
     PRIVATE src)
 
 
-target_compile_options(${PROJECT_NAME}
-    PRIVATE -Wall -Wextra)
-
-
-# limit gcc template error depth printing, aslo other options
 target_compile_options(${PROJECT_NAME} PRIVATE
-    -ftemplate-backtrace-limit=1
+    -Wall 
+    -Wextra
 )
+
+
+# limit gcc/clang template error depth printing
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        -ftemplate-backtrace-limit=0
+    )
+endif()
 
 
 # increase limit for clang recursive template instantiation
@@ -56,45 +59,23 @@ endif()
 # Nevertheless Spirit self depends on other headers, e..g boost.range
 find_package(Boost)
 
+# depend on newer Spirit.X3 versions
+add_dependencies(${PROJECT_NAME} boost-spirit-x3)
 
-# Spirit.X3 Parser debugging: show warnings about dereferencing type-punned 
-# pointer will break strict-aliasing
-# rules [-Wstrict-aliasing] (spirit.x3 1.64 e.g.)
-set(EDA_VHDL_PARSER_DEBUG OFF CACHE BOOL "debug printer of spirit.x3 parser tree")
-
-if("${EDA_VHDL_PARSER_DEBUG}")
-    target_compile_definitions(${PROJECT_NAME}
-        PRIVATE BOOST_SPIRIT_X3_DEBUG=1)
-endif()
+# Boost.Org depend includes
+include_directories(${SPIRIT_X3_INCLUDE_DIR})
+include_directories(${Boost_INCLUDE_DIRS})
 
 
-## Depencies
+# Depencies
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
     eda::common
 )
 
-include(external-spirit-x3)
 
-## Project Depend Includes
-include_directories(${SPIRIT_X3_INCLUDE_DIR})
-include_directories(${Boost_INCLUDE_DIRS})
-#include_directories(${GSL_INCLUDE_DIR})
-
-add_dependencies(${PROJECT_NAME} boost-spirit-x3)
-#add_dependencies(${PROJECT_NAME} eda)
-#add_dependencies(${PROJECT_NAME} gsl)
-
-#set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX "_d")
-
-
-# FAILED with Boost.PP
-#cotire(${PROJECT_NAME})
-
-
-## doc, test suite, etc.
+## doc, etc.
 add_subdirectory(doc)
-add_subdirectory(test)
 
 
 ## Install targets
