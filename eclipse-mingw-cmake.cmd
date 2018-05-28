@@ -1,9 +1,14 @@
 @echo off
 setlocal
 
-# [How to get the path of the batch script in Windows?](
-#  https://stackoverflow.com/questions/3827567/how-to-get-the-path-of-the-batch-script-in-windows?answertab=active#tab-top)
+rem [How to get the path of the batch script in Windows?](
+rem  https://stackoverflow.com/questions/3827567/how-to-get-the-path-of-the-batch-script-in-windows?answertab=active#tab-top)
 set SOURCE_PATH=%~dp0
+set WORK_PATH=%cd%
+
+echo ##
+echo ## Configure Build in %WORK_PATH%
+echo ##
 
 cmake -G "Eclipse CDT4 - MinGW Makefiles" ^
         -DCMAKE_ECLIPSE_GENERATE_SOURCE_PROJECT=TRUE ^
@@ -16,4 +21,5 @@ cmake -G "Eclipse CDT4 - MinGW Makefiles" ^
         -DCMAKE_INSTALL_PREFIX=stage ^
         -DBUILD_SHARED_LIBS:BOOL=OFF ^
         %SOURCE_PATH%
-		
+
+rem set /p temp="Hit enter to continue"
