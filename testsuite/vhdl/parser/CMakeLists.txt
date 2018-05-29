@@ -37,13 +37,13 @@ set(PARSERTEST_SOURCES_OLD
     parser_test_old/parser_type.cpp
 )
 
-set(PARSERTEST_SOURCES_DEV
+set(PARSERTEST_SOURCES#_DEV
     ${PARSERTEST_COMMON_SOURCES}
     parser_test/alias_declaration_parsertest.cpp
     #parser_test/xxx_signature_parsertest.cpp
 )
 
-set(PARSERTEST_SOURCES
+set(PARSERTEST_SOURCES_
     ${PARSERTEST_COMMON_SOURCES}
     parser_test/abstract_literal_parsertest.cpp
     parser_test/actual_part_parsertest.cpp

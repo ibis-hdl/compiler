@@ -9,4 +9,5 @@
 project(eda_testsuite)
 
 add_subdirectory(parser)
+add_subdirectory(numeric_convert)
 

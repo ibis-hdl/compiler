@@ -11,20 +11,7 @@
 
 #include <eda/vhdl/ast/bit_string_literal.hpp>
 #include <eda/vhdl/ast/decimal_literal.hpp>
-
 #include <eda/vhdl/ast/based_literal.hpp>
-
-
-namespace eda { namespace vhdl { namespace ast {
-
-
-// forward of type, convertible to intrinsic numeric types
-struct bit_string_literal;
-struct decimal_literal;
-struct based_literal;
-
-
-} } } // namespace eda.vhdl.ast
 
 
 namespace eda { namespace vhdl { namespace ast {
