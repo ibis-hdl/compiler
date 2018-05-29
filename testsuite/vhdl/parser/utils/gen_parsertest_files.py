@@ -226,6 +226,8 @@ namespace eda {{ namespace vhdl {{ namespace parser {{
 
 {decl}
 
+{skip_decl}
+
 }} }} }} // namespace eda.vhdl.parser 
 
 
@@ -235,11 +237,15 @@ namespace vhdl = eda::vhdl::parser;
 
 {fcn}
 
+{skip_fcn}
+
 }} // namespace {ns}
 """.format(
     ns=namespace,
     decl='\n'.join(f"{x}" for x in decl_list),
-    fcn='\n'.join(f"vhdl::{x}" for x in api_list)
+    fcn='\n'.join(f"vhdl::{x}" for x in api_list),
+    skip_decl='BOOST_SPIRIT_DECLARE(skipper_type);',
+    skip_fcn='vhdl::skipper const& skipper();'
 )
 
         return contents
@@ -275,6 +281,8 @@ namespace eda {{ namespace vhdl {{ namespace parser {{
 
 {inst}
 
+{skip_inst}
+
 }} }} }} // namespace eda.vhdl.parser
 
 
@@ -282,11 +290,15 @@ namespace {ns} {{
 
 {fcn}
 
+{skip_fcn}
+
 }} // namespace {ns}
 """.format(
     ns=namespace,
     inst='\n'.join(f"{x}" for x in inst_list),
-    fcn='\n'.join(f"{x}" for x in fcn_list)
+    fcn='\n'.join(f"{x}" for x in fcn_list),
+    skip_inst='BOOST_SPIRIT_INSTANTIATE(skipper_type, iterator_type, context_type);',
+    skip_fcn='vhdl::skipper_type const& skipper() { return eda::vhdl::parser::skipper; }'
 )
         
         return contents 
