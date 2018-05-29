@@ -9,8 +9,8 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_ADAPTED_HPP_
 
 
-#include <boost/fusion/include/adapt_struct.hpp>
 #include <eda/vhdl/ast.hpp>
+#include <boost/fusion/include/adapt_struct.hpp>
 
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::access_type_definition,

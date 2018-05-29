@@ -16,13 +16,29 @@ class BoostTestGenerator:
     Over the time there where changes on the AST printer output format and 
     macros used to generate the stuff, rewriting by hand isn't suitable. 
     """
-    path = None
-
     def __init__(self, root_name):
         self.root_name = root_name
         self.path = os.path.dirname(os.path.realpath(__file__))
+        self.skiplist = ['_failure', 'xxx',
+                         # no parsers, embedded into grammar
+                         'floating_type_definition',
+                         'full_type_declaration',
+                         'incomplete_type_declaration',
+                         'integer_type_definition'
+                         ]
         
     
+    def skip(self, name):
+        """returns true if name is inside the skip list.
+        
+        This is only usefull for the API header/source file generation!
+        """
+        for s in self.skiplist:
+            if s in name:
+                return True
+        return False
+        
+        
     def isFailuretest(self, name):
         """Check if there is a '_failure' into given name.
         
@@ -150,7 +166,7 @@ BOOST_DATA_TEST_CASE( {test_case},
     )
 
     
-    def writeFile(self, path, filename, dataset_loader, datatest_case, testsuite_name='parser'):
+    def writeParserTestFile(self, path, filename, dataset_loader, datatest_case, testsuite_name='parser'):
         contents="""{header}
 {includes}
 
@@ -187,6 +203,107 @@ BOOST_AUTO_TEST_SUITE_END()
         with open(pathname, "w") as f:
             f.write(contents)
         
+     
+    def cxxBnfDecl(self, parser_list, namespace):
+        """ Generate the API to access the BNF parsers
+        
+        """    
+        
+        api_list=list()
+        decl_list=list()
+        
+        for p in parser_list:
+            if self.skip(p):
+                continue
+            
+            api_list.append("{name}_type const& {name}();".format(name=p))
+            decl_list.append("BOOST_SPIRIT_DECLARE({name}_type);".format(name=p))
+        
+        contents="""
+#include <eda/vhdl/parser/parser_types.hpp>
+
+namespace eda {{ namespace vhdl {{ namespace parser {{
+
+{decl}
+
+}} }} }} // namespace eda.vhdl.parser 
+
+
+namespace {ns} {{
+
+namespace vhdl = eda::vhdl::parser;
+
+{fcn}
+
+}} // namespace {ns}
+""".format(
+    ns=namespace,
+    decl='\n'.join(f"{x}" for x in decl_list),
+    fcn='\n'.join(f"vhdl::{x}" for x in api_list)
+)
+
+        return contents
+        
+    
+    def cxxBnfInst(self, parser_list, namespace):
+        """ Generate the API instances to access the BNF parsers
+        
+        """    
+        
+        inst_list=list()
+        fcn_list=list()
+
+        for p in parser_list:
+            if self.skip(p):
+                continue
+            
+            inst_list.append(
+                "BOOST_SPIRIT_INSTANTIATE({name}_type, iterator_type, context_type);"
+                .format(name=p))
+            
+            fcn_list.append(
+                "vhdl::{name}_type const& {name}() {{ return eda::vhdl::parser::{name}; }}"
+                .format(name=p))       
+        
+        contents="""
+#include <testsuite/parser/api.hpp>
+#include <eda/vhdl/parser/grammar_def.hpp>
+#include <eda/vhdl/parser/parser_config.hpp>
+
+
+namespace eda {{ namespace vhdl {{ namespace parser {{
+
+{inst}
+
+}} }} }} // namespace eda.vhdl.parser
+
+
+namespace {ns} {{
+
+{fcn}
+
+}} // namespace {ns}
+""".format(
+    ns=namespace,
+    inst='\n'.join(f"{x}" for x in inst_list),
+    fcn='\n'.join(f"{x}" for x in fcn_list)
+)
+        
+        return contents 
+    
+    
+    def writeBnfFile(self, path, filebase_name, parser_list):
+        
+        pathname=os.path.join(path, filebase_name)
+        namespace='x3_test'
+
+        with open(pathname + '.hpp', "w") as f:
+            f.write(self.cxxBnfDecl(parser_list, namespace))
+        
+        
+        with open(pathname + '.cpp', "w") as f:
+            f.write(self.cxxBnfInst(parser_list, namespace))
+        
         
     
     def generate(self, path):
@@ -213,14 +330,21 @@ BOOST_AUTO_TEST_SUITE_END()
                 
             test_filename = test + '_parsertest.cpp'
 
-            self.writeFile(path, test_filename, dataset_loader, datatest_case) 
+            self.writeParserTestFile(path, test_filename, dataset_loader, datatest_case) 
         
             cmake_sources.append("{cxx}".format(
                     cxx=path + '/' + test_filename))
                     
+        # generate API files
+        self.writeBnfFile(path , 'api', test_cases)
+        
+        
+        # print CMakeFiles
+        print('set(PARSERTEST_SOURCES\n${PARSERTEST_COMMON_SOURCES}')
         for src in cmake_sources:
             print(src)
-                                        
+        print(')')
+
                     
 if __name__ == "__main__":
     generator = BoostTestGenerator('');

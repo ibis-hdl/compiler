@@ -11,26 +11,20 @@
 
 /*
  * Support Spirit.X3's attribute handling.
- * Note, this header is not intended to be included directly.
- */
-
-/*
- * Spirit.X3 Traits
+ * FixMe: What about overloading node's operator=() to avoid x3::move_to?
  */
 namespace boost { namespace spirit { namespace x3 { namespace traits {
 
 
 using delay_mechanism = eda::vhdl::ast::delay_mechanism;
+using keyword_token = eda::vhdl::ast::keyword_token;
+
 
 static inline void
 move_to(delay_mechanism::delay_type type_, delay_mechanism& mechanism)
 {
     mechanism.type = type_;
 }
-
-
-
-using keyword_token = eda::vhdl::ast::keyword_token;
 
 static inline void
 move_to(keyword_token token, bool& dest)
