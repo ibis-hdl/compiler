@@ -45,7 +45,7 @@ std::tuple<bool, AttrType> parse(ParserType const numeric_parser, std::string co
             }
         }
     } catch(x3::expectation_failure<parser::iterator_type> const& e) {
-        error_handler(e.where(), "Error! Expecting " + e.which() + " here: ");
+        error_handler(e.where(), "Catched Error! Expecting " + e.which() + " here: ");
     }
 
     return std::make_tuple(

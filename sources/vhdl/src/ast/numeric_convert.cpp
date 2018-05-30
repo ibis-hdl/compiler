@@ -6,9 +6,9 @@
  */
 
 #include <eda/vhdl/ast/util/numeric_convert.hpp>
-
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
+#include <eda/vhdl/ast/util/literal_printer.hpp>
 #include <eda/support/boost/spirit_x3.hpp>
+#include <eda/vhdl/parser/parser_config.hpp>
 #include <eda/utils/cxx_bug_fatal.hpp>
 
 #include <numeric>  // accumulate
@@ -100,9 +100,9 @@ struct primitive_parser
     {
         uint32_t attribute{};   // exact attribute type for x3 parser
 
-        bool const parse_ok = parse(range, x3::bin, attribute);
+        auto const [parse_ok, full_match] = parse(range, x3::bin, attribute);
 
-        return std::make_tuple(parse_ok, attribute);
+        return std::make_tuple(parse_ok && full_match, attribute);
     }
 
 
@@ -111,9 +111,9 @@ struct primitive_parser
     {
         uint32_t attribute{};   // exact attribute type for x3 parser
 
-        bool const parse_ok = parse(range, x3::oct, attribute);
+        auto const [parse_ok, full_match] = parse(range, x3::oct, attribute);
 
-        return std::make_tuple(parse_ok, attribute);
+        return std::make_tuple(parse_ok && full_match, attribute);
     }
 
 
@@ -122,9 +122,9 @@ struct primitive_parser
     {
         uint32_t attribute{};   // exact attribute type for x3 parser
 
-        bool const parse_ok = parse(range, detail::integer_base10, attribute);
+        auto const [parse_ok, full_match] = parse(range, detail::integer_base10, attribute);
 
-        return std::make_tuple(parse_ok, attribute);
+        return std::make_tuple(parse_ok && full_match, attribute);
     }
 
 
@@ -133,9 +133,9 @@ struct primitive_parser
     {
         uint32_t attribute{};   // exact attribute type for x3 parser
 
-        bool const parse_ok = parse(range, x3::hex, attribute);
+        auto const [parse_ok, full_match] = parse(range, x3::hex, attribute);
 
-        return std::make_tuple(parse_ok, attribute);
+        return std::make_tuple(parse_ok && full_match, attribute);
     }
 
 
@@ -144,9 +144,9 @@ struct primitive_parser
     {
         double attribute{};
 
-        bool const parse_ok = parse(range, detail::real_base10, attribute);
+        auto const [parse_ok, full_match] = parse(range, detail::real_base10, attribute);
 
-        return std::make_tuple(parse_ok, attribute);
+        return std::make_tuple(parse_ok && full_match, attribute);
     }
 
 
@@ -155,29 +155,30 @@ struct primitive_parser
     {
         int32_t attribute{};   // exact attribute type for x3 parser
 
-        bool const parse_ok = parse(range, detail::exponent, attribute);
+        auto const [parse_ok, full_match] = parse(range, detail::exponent, attribute);
 
-        return std::make_tuple(parse_ok, attribute);
+        return std::make_tuple(parse_ok && full_match, attribute);
     }
 
 
-    template<typename RangeType, typename AttributeType, typename ParserType>
-    bool parse(RangeType const& range, ParserType const &parser,
-               AttributeType &attribute) const
+    template<typename RangeType, typename ParserType, typename AttributeType>
+    std::tuple<bool, bool> parse(RangeType const& range, ParserType const &parser,
+                                 AttributeType &attribute) const
     {
         auto range_f{ filter_range(range) };
         auto iter = std::begin(range_f);
-        auto const last = std::cend(range_f);
+        auto const end = std::cend(range_f);
 
-        bool const parse_ok = x3::parse(iter, last, parser, attribute);
+        bool const parse_ok = x3::parse(iter, end, parser, attribute);
+        bool const full_match = (iter == end);
 #if 0
         std::cout << "inside primitive_parser::parse (" << range << ") -> "
                   << "parse_ok = " << std::boolalpha
-                  << ", full_match = " << (iter == last)
+                  << ", full_match = " << full_match
                   << '\n';
 #endif
 
-        return parse_ok && (iter == last);
+        return std::make_tuple(parse_ok, full_match);
     }
 
 
@@ -296,6 +297,22 @@ numeric_convert::return_type numeric_convert::operator()(ast::bit_string_literal
     };
 
     auto const [parse_ok, result] = parse(literal);
+
+    if(!parse_ok) {
+        // assemble literal back since working on AST node
+        auto const as_string = [](ast::bit_string_literal const& literal) {
+            std::stringstream ss;
+            ss <<  "\"" << literal.literal << "\"";
+            return ss.str();
+        };
+
+
+        os << "Conversion of VHDL bit string literal \'"
+           << literal_printer(literal)
+           << "\' failed with numeric overflow (MAX_VALUE = "
+           << std::numeric_limits<uint32_t>::max()
+           << ")\n";
+    }
 
     return std::make_tuple(parse_ok, result);
 }

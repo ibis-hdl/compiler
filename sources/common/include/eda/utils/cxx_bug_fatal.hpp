@@ -24,9 +24,11 @@ void assertion_failed_msg(const CharT* expr, const char* msg, const char* functi
         << "\n****************************************\n"
         <<   "***** Internal Fatal Program Error *****\n"
         <<   "****************************************\n"
-        << "assertion (" << expr << ") failed in "
+        << "assertion:   " << expr << "\n"
+        << "what failed: " << msg << "\n"
+        << "in function:\n"
         << function << ":\n"
-        << file << '(' << line << "): " << msg << std::endl;
+        << file << '(' << line << ")\n";
 
 #if defined(EDA_HAVE_STD_QUICK_EXIT)
     std::quick_exit(EXIT_FAILURE);

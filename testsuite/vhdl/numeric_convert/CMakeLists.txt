@@ -12,7 +12,7 @@ project(testrunner_vhdl_numeric LANGUAGES CXX)
 set(NUMERIC_SOURCES
     test_numeric_convert.cpp
     numeric_parser.cpp
-    bit_string_literal.cpp
+    bit_string_literal_test.cpp
 )
 
 add_executable(${PROJECT_NAME} ${NUMERIC_SOURCES})
@@ -45,19 +45,26 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQ
 endif()
 
 
-## Boost.Org 
-find_package(Boost REQUIRED COMPONENTS system unit_test_framework)
+## Boost.Org's Spirit.X3 newer version is required from local clone
+add_dependencies(${PROJECT_NAME} boost-spirit-x3)
 
-add_library(boost INTERFACE IMPORTED)
-set_property(TARGET boost PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS})
+# Boost.Org depend includes
+include_directories(${SPIRIT_X3_INCLUDE_DIR})
 
-## EDA
-# depends on ...
+
+## 
+# Boost.Org UTF
+# FixMe: numeric_parser.cpp depends for unkown reasons on boost::filesystem's
+#        path::generic_string, path::codecvt, path::convert  
+#        on MinGW
+find_package(Boost REQUIRED COMPONENTS system filesystem unit_test_framework)
+
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
     eda::vhdl_parser
     eda::common # FixMe: shouldn't this depency propagated by eda::vhdl_grammar?
-    ${Boost_SYSTEM_LIBRARY}
+    Boost::system
+    Boost::filesystem
 )
 
 

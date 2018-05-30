@@ -10,6 +10,7 @@ project(eda_vhdl_parser LANGUAGES CXX)
 
 
 set(VHDL_PARSER_SOURCE
+    src/ast/literal_printer.cpp
     src/ast/keyword_token.cpp
     src/ast/operator_token.cpp
     src/ast/ast_printer.cpp
