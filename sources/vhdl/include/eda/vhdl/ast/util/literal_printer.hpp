@@ -11,7 +11,7 @@
 #include <eda/vhdl/ast/based_literal.hpp>
 
 #include <iostream>
-#include <variant>
+#include <boost/variant.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
@@ -27,8 +27,7 @@ public:
     std::ostream& operator()(std::ostream& os) const;
 
 private:
-    std::variant<
-        std::monostate,
+    boost::variant<
         ast::bit_string_literal,
         ast::decimal_literal,
         ast::based_literal

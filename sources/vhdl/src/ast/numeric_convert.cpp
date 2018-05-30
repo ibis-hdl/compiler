@@ -5,6 +5,7 @@
  *      Author: olaf
  */
 
+#include <eda/vhdl/type.hpp>
 #include <eda/vhdl/ast/util/numeric_convert.hpp>
 #include <eda/vhdl/ast/util/literal_printer.hpp>
 #include <eda/support/boost/spirit_x3.hpp>
@@ -25,12 +26,19 @@ namespace eda { namespace vhdl { namespace ast { namespace parser {
 namespace detail {
 
 
-/* VDL decimal literals does allow exponents on integers, to simplify evaluating
+/*
+ * Note:
+ *
+ * VDL decimal literals does allow exponents on integers, to simplify evaluating
  * a x3 real parser with policies is used. The correct 2nd pass parsing and hence
  * correct converting depends on correct parsing of the VHDL grammar, since the
- * exponent of integer doesn't allow a negative sign. */
+ * exponent of integer doesn't allow a negative sign.
+ */
 
 
+/*
+ * real types and their parsers
+ */
 template <typename T>
 struct integer_policies : x3::ureal_policies<T>
 {
@@ -48,18 +56,44 @@ struct real_policies : x3::ureal_policies<T>
     static bool const expect_dot =         false;
 };
 
+using value_type = numeric_convert::value_type; // double
 
-using value_type = numeric_convert::value_type;
-
-x3::real_parser<value_type, detail::integer_policies<uint32_t>> integer_base10;
 x3::real_parser<value_type, detail::real_policies<value_type>> real_base10;
 
 
-auto const exponent = x3::rule<struct _, uint32_t>{} =
+/*
+ * integer types and their parsers
+ */
+using unsigned_integer = eda::vhdl::intrinsic::unsigned_integer_type;
+using signed_integer   = eda::vhdl::intrinsic::unsigned_integer_type;
+
+
+x3::real_parser<value_type, detail::integer_policies<unsigned_integer>> uint_base10;
+
+
+// decimal parser signed/unsigned
+typedef x3::uint_parser<unsigned_integer, 10> uint_parser_type;
+typedef x3::int_parser<signed_integer, 10> int_parser_type;
+
+//uint_parser_type const uint_ = { }; *** not used ***
+int_parser_type const int_ = { };
+
+
+// binary parser bin/oct/hex
+typedef x3::uint_parser<unsigned_integer,  2> bin_parser_type;
+typedef x3::uint_parser<unsigned_integer,  8> oct_parser_type;
+typedef x3::uint_parser<unsigned_integer, 16> hex_parser_type;
+
+bin_parser_type const bin = { };
+oct_parser_type const oct = { };
+hex_parser_type const hex = { };
+
+
+auto const exponent = x3::rule<struct _, unsigned_integer>{} =
         x3::omit[
              x3::char_("Ee")
         ]
-    >> x3::int32 // signed
+    >> int_ // signed
     ;
 
 } // namespace detail
@@ -98,9 +132,9 @@ struct primitive_parser
     template<typename RangeType>
     return_value operator()(RangeType const& range, primitive_parser::bin) const
     {
-        uint32_t attribute{};   // exact attribute type for x3 parser
+        detail::unsigned_integer attribute{};   // exact attribute type for x3 parser
 
-        auto const [parse_ok, full_match] = parse(range, x3::bin, attribute);
+        auto const [parse_ok, full_match] = parse(range, detail::bin, attribute);
 
         return std::make_tuple(parse_ok && full_match, attribute);
     }
@@ -109,9 +143,9 @@ struct primitive_parser
     template<typename RangeType>
     return_value operator()(RangeType const& range, primitive_parser::oct) const
     {
-        uint32_t attribute{};   // exact attribute type for x3 parser
+        detail::unsigned_integer attribute{};   // exact attribute type for x3 parser
 
-        auto const [parse_ok, full_match] = parse(range, x3::oct, attribute);
+        auto const [parse_ok, full_match] = parse(range, detail::oct, attribute);
 
         return std::make_tuple(parse_ok && full_match, attribute);
     }
@@ -120,9 +154,9 @@ struct primitive_parser
     template<typename RangeType>
     return_value operator()(RangeType const& range, primitive_parser::dec) const
     {
-        uint32_t attribute{};   // exact attribute type for x3 parser
+        detail::unsigned_integer attribute{};   // exact attribute type for x3 parser
 
-        auto const [parse_ok, full_match] = parse(range, detail::integer_base10, attribute);
+        auto const [parse_ok, full_match] = parse(range, detail::uint_base10, attribute);
 
         return std::make_tuple(parse_ok && full_match, attribute);
     }
@@ -131,9 +165,9 @@ struct primitive_parser
     template<typename RangeType>
     return_value operator()(RangeType const& range, primitive_parser::hex) const
     {
-        uint32_t attribute{};   // exact attribute type for x3 parser
+        detail::unsigned_integer attribute{};   // exact attribute type for x3 parser
 
-        auto const [parse_ok, full_match] = parse(range, x3::hex, attribute);
+        auto const [parse_ok, full_match] = parse(range, detail::hex, attribute);
 
         return std::make_tuple(parse_ok && full_match, attribute);
     }
@@ -153,7 +187,7 @@ struct primitive_parser
     template<typename RangeType>
     return_value operator()(RangeType const& range, primitive_parser::exp) const
     {
-        int32_t attribute{};   // exact attribute type for x3 parser
+        detail::signed_integer attribute{};   // exact attribute type for x3 parser
 
         auto const [parse_ok, full_match] = parse(range, detail::exponent, attribute);
 
@@ -209,6 +243,12 @@ namespace eda { namespace vhdl { namespace ast {
 
 
 namespace detail {
+
+/*
+ * Integer Types and Parsers
+ */
+using unsigned_integer = eda::vhdl::intrinsic::unsigned_integer_type;
+using signed_integer   = eda::vhdl::intrinsic::unsigned_integer_type;
 
 
 /* Helper class to calculate fractional parts of binary numbers like bin,
@@ -299,18 +339,10 @@ numeric_convert::return_type numeric_convert::operator()(ast::bit_string_literal
     auto const [parse_ok, result] = parse(literal);
 
     if(!parse_ok) {
-        // assemble literal back since working on AST node
-        auto const as_string = [](ast::bit_string_literal const& literal) {
-            std::stringstream ss;
-            ss <<  "\"" << literal.literal << "\"";
-            return ss.str();
-        };
-
-
         os << "Conversion of VHDL bit string literal \'"
            << literal_printer(literal)
-           << "\' failed with numeric overflow (MAX_VALUE = "
-           << std::numeric_limits<uint32_t>::max()
+           << "\' failed due to numeric overflow (MAX_VALUE = "
+           << std::numeric_limits<detail::unsigned_integer>::max()
            << ")\n";
     }
 
@@ -380,7 +412,7 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
         return primitive_parse(literal, primitive_parser::exp{});
     };
 
-    uint32_t base{ 0 };
+    detail::unsigned_integer base{ 0 };
     double result { 0.0 };
 
     bool parse_ok{ false };
@@ -422,7 +454,7 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
     // EXPONENT
     if(!literal.number.exponent.empty()) {
 
-        int32_t exponent{ 0 };
+        detail::signed_integer exponent{ 0 };
 
         std::tie(parse_ok, exponent) = parse_exponent(literal.number.exponent);
 

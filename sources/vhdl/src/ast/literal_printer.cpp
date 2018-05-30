@@ -83,9 +83,7 @@ std::ostream& literal_printer::operator()(std::ostream& os) const
                 os << literal.number.exponent;
             }
 
-        },
-
-        [](std::monostate) { cxx_unreachable_bug_triggered(); }
+        }
     );
 
 
