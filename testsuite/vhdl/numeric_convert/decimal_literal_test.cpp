@@ -16,6 +16,7 @@
 #include <boost/test/output_test_stream.hpp>
 
 #include <boost/type_index.hpp>
+#include <boost/core/ignore_unused.hpp>
 
 #include <iostream>
 #include <sstream>
@@ -112,7 +113,7 @@ std::vector<intrinsic::unsigned_integer_type> dec_int{
 
 
 BOOST_DATA_TEST_CASE(
-    decimal_integer,
+    integer,
     but_data::make(dec_int_lit) ^ dec_int,
     literal,                      N)
 {
@@ -127,6 +128,21 @@ BOOST_DATA_TEST_CASE(
     BOOST_TEST( value == N );
 }
 
+
+BOOST_AUTO_TEST_CASE( integer_uint64max_ovrflw )
+{
+    uint64_t N = std::numeric_limits<uint64_t>::max();
+
+    std::string const literal{ detail::to_decimal_literal(N) + "_0" };
+
+    auto const [parse_ok, ast_node] = x3_test::parse_decimal_literal(literal);
+    BOOST_REQUIRE(parse_ok);    // must parse ...
+
+    auto const [conv_ok, value] = numeric_convert(ast_node);
+    BOOST_TEST(!conv_ok);       // ... but must fail to convert
+
+    boost::ignore_unused(value);
+}
 
 
 /*******************************************************************************
@@ -158,7 +174,7 @@ std::vector<intrinsic::real_type> dec_real{
 
 
 BOOST_DATA_TEST_CASE(
-    decimal_real,
+    real,
     but_data::make(dec_real_lit) ^ dec_real,
     literal,                       N)
 {

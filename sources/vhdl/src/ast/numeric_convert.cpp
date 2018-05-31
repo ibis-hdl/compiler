@@ -19,6 +19,8 @@
 #include <boost/range/iterator_range.hpp>
 #include <boost/iterator/filter_iterator.hpp>
 
+#include <boost/locale.hpp>
+
 
 namespace eda { namespace vhdl { namespace ast { namespace parser {
 
@@ -100,9 +102,9 @@ auto const exponent = x3::rule<struct _, unsigned_integer>{} =
 
 
 /*
- * Utils for debugging
+ * Utility for debugging
  */
-namespace util {
+namespace dbg_util {
 
 template<typename RangeType, typename AttributeType>
 void trace_report(RangeType const& range, bool parse_ok, bool full_match,
@@ -116,10 +118,10 @@ void trace_report(RangeType const& range, bool parse_ok, bool full_match,
               << "  attribute = "  << attribute << "\n";
 }
 
-#define TRACE(range, parse_ok, full_match, attribute)                          \
-    util::trace_report(range, parse_ok, full_match, attribute, __FUNCTION__)
+} // namespace dbg_util
 
-} // namespace util
+#define TRACE(range, parse_ok, full_match, attribute)                          \
+    dbg_util::trace_report(range, parse_ok, full_match, attribute, __FUNCTION__)
 
 
 /**
@@ -180,7 +182,6 @@ struct primitive_parser
         detail::unsigned_integer attribute{};   // exact attribute type for x3 parser
 
         auto const [parse_ok, full_match] = parse(range, detail::uint_base10, attribute);
-        //TRACE(range, parse_ok, full_match, attribute);
 
         return std::make_tuple(parse_ok && full_match, attribute);
     }
@@ -229,12 +230,8 @@ struct primitive_parser
 
         bool const parse_ok = x3::parse(iter, end, parser, attribute);
         bool const full_match = (iter == end);
-#if 0
-        std::cout << "inside primitive_parser::parse (" << range << ") -> "
-                  << "parse_ok = " << std::boolalpha
-                  << ", full_match = " << full_match
-                  << '\n';
-#endif
+
+        //TRACE(range, parse_ok, full_match, attribute);
 
         return std::make_tuple(parse_ok, full_match);
     }
@@ -338,6 +335,55 @@ struct frac
 auto const primitive_parse{ parser::primitive_parser{} };
 
 
+/**
+ * numeric_convert's private error reporting utility to unify error messages
+ */
+struct numeric_convert::report_error
+{
+    std::ostream&                                   os;
+    static constexpr detail::unsigned_integer       MAX_VALUE{
+        std::numeric_limits<detail::unsigned_integer>::max() };
+
+    report_error(std::ostream& os_)
+    : os{ os_ }
+    { }
+
+    template<typename LiteralType>
+    void message(std::string const& type, LiteralType const& literal) const
+    {
+        using boost::locale::format;
+        using boost::locale::translate;
+
+        os << format(translate(
+            "Conversion of VHDL {1} \'{2}\' failed due to numeric overflow "
+            "(MAX_VALUE = {3})\n"
+            ))
+            % type
+            % literal_printer(literal)
+            % MAX_VALUE;
+    }
+
+    void operator()(ast::bit_string_literal const& literal) const
+    {
+        static std::string const type{ "bit string literal" };
+        message(type, literal);
+    }
+
+    void operator()(ast::decimal_literal const& literal) const
+    {
+        static std::string const type{ "decimal literal" };
+        message(type, literal);
+    }
+
+    void operator()(ast::based_literal const& literal) const
+    {
+        static std::string const type{ "based literal" };
+        message(type, literal);
+    }
+
+};
+
+
 numeric_convert::return_type numeric_convert::operator()(ast::bit_string_literal const& literal) const
 {
     using parser::primitive_parser;
@@ -363,11 +409,7 @@ numeric_convert::return_type numeric_convert::operator()(ast::bit_string_literal
     auto const [parse_ok, result] = parse(literal);
 
     if(!parse_ok) {
-        os << "Conversion of VHDL bit string literal \'"
-           << literal_printer(literal)
-           << "\' failed due to numeric overflow (MAX_VALUE = "
-           << std::numeric_limits<detail::unsigned_integer>::max()
-           << ")\n";
+        report_error{os}(literal);
     }
 
     return std::make_tuple(parse_ok, result);
@@ -394,6 +436,10 @@ numeric_convert::return_type numeric_convert::operator()(ast::decimal_literal co
     };
 
     auto const [parse_ok, result] = parse(literal);
+
+    if(!parse_ok) {
+        report_error{os}(literal);
+    }
 
     return std::make_tuple(parse_ok, result);
 }

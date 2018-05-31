@@ -54,11 +54,15 @@ include_directories(${SPIRIT_X3_INCLUDE_DIR})
 
 
 ## 
-# Boost.Org UTF
+# Boost.Org Libraries
+# - Boost.Locale is required by numeric_convert
 # FixMe: numeric_parser.cpp depends for unkown reasons on boost::filesystem's
 #        path::generic_string, path::codecvt, path::convert  
 #        on MinGW
-find_package(Boost REQUIRED COMPONENTS system filesystem unit_test_framework)
+find_package(Boost REQUIRED COMPONENTS system 
+    filesystem unit_test_framework
+    locale
+)
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
@@ -66,6 +70,7 @@ target_link_libraries(${PROJECT_NAME}
     eda::common # FixMe: shouldn't this depency propagated by eda::vhdl_grammar?
     Boost::system
     Boost::filesystem
+    Boost::locale
 )
 
 

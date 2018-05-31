@@ -14,6 +14,7 @@
 #include <boost/test/data/test_case.hpp>
 #include <boost/test/data/monomorphic.hpp>
 #include <boost/test/output_test_stream.hpp>
+
 #include <boost/core/ignore_unused.hpp>
 
 #include <iostream>
@@ -163,7 +164,7 @@ std::vector<eda::vhdl::intrinsic::unsigned_integer_type> bin_dec{
 
 
 BOOST_DATA_TEST_CASE(
-    bit_string_bin,
+    bin,
     but_data::make(bin_lit) ^ bin_dec,
     literal,                  N)
 {
@@ -181,8 +182,6 @@ BOOST_AUTO_TEST_CASE( bin_uint64max_ovrflw )
     uint64_t N = std::numeric_limits<uint64_t>::max();
 
     std::string const literal{ detail::to_bin_literal(N, "_0") };
-
-    //std::cout << N << " = " << literal << " + 1\n";
 
     auto const [parse_ok, ast_node] = x3_test::parse_bit_string_literal(literal);
     BOOST_REQUIRE(parse_ok);    // must parse ...
@@ -220,7 +219,7 @@ std::vector<eda::vhdl::intrinsic::unsigned_integer_type> oct_dec{
 
 
 BOOST_DATA_TEST_CASE(
-    bit_string_oct,
+    oct,
     but_data::make(oct_lit) ^ oct_dec,
     literal,                  N)
 {
@@ -238,8 +237,6 @@ BOOST_AUTO_TEST_CASE( oct_uint64max_ovrflw )
     uint64_t N = std::numeric_limits<uint64_t>::max();
 
     std::string const literal{ detail::to_oct_literal(N, "_0") };
-
-    //std::cout << N << " = " << literal << " + 1\n";
 
     auto const [parse_ok, ast_node] = x3_test::parse_bit_string_literal(literal);
     BOOST_REQUIRE(parse_ok);    // must parse ...
@@ -277,7 +274,7 @@ std::vector<eda::vhdl::intrinsic::unsigned_integer_type> hex_dec{
 
 
 BOOST_DATA_TEST_CASE(
-    bit_string_hex,
+    hex,
     but_data::make(hex_lit) ^ hex_dec,
     literal,                  N)
 {
@@ -295,8 +292,6 @@ BOOST_AUTO_TEST_CASE( hex_uint64max_ovrflw )
     uint64_t N = std::numeric_limits<uint64_t>::max();
 
     std::string const literal{ detail::to_hex_literal(N, "_0") };
-
-    //std::cout << N << " = " << literal << " + 1\n";
 
     auto const [parse_ok, ast_node] = x3_test::parse_bit_string_literal(literal);
     BOOST_REQUIRE(parse_ok);    // must parse ...

@@ -46,6 +46,9 @@ public:
     return_type operator()(ast::based_literal const& literal) const;
 
 private:
+    struct report_error;
+
+private:
     std::ostream&                                   os;
 };
 

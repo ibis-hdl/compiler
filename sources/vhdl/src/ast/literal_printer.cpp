@@ -20,6 +20,16 @@ literal_printer::literal_printer(bit_string_literal const& literal_)
 { }
 
 
+literal_printer::literal_printer(decimal_literal const& literal_)
+: literal{ literal_ }
+{ }
+
+
+literal_printer::literal_printer(based_literal const& literal_)
+: literal{ literal_ }
+{ }
+
+
 std::ostream& literal_printer::operator()(std::ostream& os) const
 {
     util::visit_in_place(
@@ -85,7 +95,6 @@ std::ostream& literal_printer::operator()(std::ostream& os) const
 
         }
     );
-
 
     return os;
 }
