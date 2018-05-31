@@ -13,6 +13,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>
 #include <boost/test/data/monomorphic.hpp>
+#include <boost/test/output_test_stream.hpp>
 #include <boost/core/ignore_unused.hpp>
 
 #include <iostream>
@@ -127,8 +128,12 @@ std::string to_hex_literal(uint64_t n, std::string const& prefix, std::string co
 
 namespace /* anonymous */ {
 
-    // implicit check of state less conversion, otherwise test must fail
-    auto const numeric_convert =  ast::numeric_convert{ std::cerr };
+// discard concrete error messages
+btt::output_test_stream error_log;
+
+// implicit check of state less conversion, otherwise test must fail
+auto const numeric_convert =  ast::numeric_convert{ error_log };
+
 }
 
 

@@ -13,6 +13,8 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>
 #include <boost/test/data/monomorphic.hpp>
+#include <boost/test/output_test_stream.hpp>
+
 #include <boost/type_index.hpp>
 
 #include <iostream>
@@ -73,10 +75,14 @@ to_decimal_literal(T value)
 
 namespace /* anonymous */ {
 
-    // implicit check of state less conversion, otherwise test must fail
-    auto const numeric_convert =  ast::numeric_convert{ std::cerr };
+// discard concrete error messages
+btt::output_test_stream error_log;
+
+// implicit check of state less conversion, otherwise test must fail
+auto const numeric_convert =  ast::numeric_convert{ error_log };
 
 }
+
 
 namespace intrinsic {
     using unsigned_integer_type = eda::vhdl::intrinsic::unsigned_integer_type;
