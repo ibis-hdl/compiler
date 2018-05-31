@@ -13,6 +13,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>
 #include <boost/test/data/monomorphic.hpp>
+#include <boost/core/ignore_unused.hpp>
 
 #include <iostream>
 #include <sstream>
@@ -22,7 +23,7 @@
 #include <vector>
 
 
-BOOST_AUTO_TEST_SUITE( numeric_convert )
+BOOST_AUTO_TEST_SUITE( bit_string_literal )
 
 
 namespace ast = eda::vhdl::ast;
@@ -183,6 +184,8 @@ BOOST_AUTO_TEST_CASE( bin_uint64max_ovrflw )
 
     auto const [conv_ok, value] = numeric_convert(ast_node);
     BOOST_TEST(!conv_ok);       // ... but must fail to convert
+
+    boost::ignore_unused(value);
 }
 
 
@@ -238,6 +241,8 @@ BOOST_AUTO_TEST_CASE( oct_uint64max_ovrflw )
 
     auto const [conv_ok, value] = numeric_convert(ast_node);
     BOOST_TEST(!conv_ok);       // ... but must fail to convert
+
+    boost::ignore_unused(value);
 }
 
 
@@ -293,6 +298,8 @@ BOOST_AUTO_TEST_CASE( hex_uint64max_ovrflw )
 
     auto const [conv_ok, value] = numeric_convert(ast_node);
     BOOST_TEST(!conv_ok);       // ... but must fail to convert
+
+    boost::ignore_unused(value);
 }
 
 

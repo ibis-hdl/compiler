@@ -24,6 +24,7 @@ namespace eda { namespace vhdl { namespace intrinsic {
 
 typedef std::int_fast64_t                               signed_integer_type;
 typedef std::make_unsigned<signed_integer_type>::type   unsigned_integer_type;
+typedef double                                          real_type;
 
 
 } } } // namespace eda.vhdl.intrinsic

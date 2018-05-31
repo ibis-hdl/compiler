@@ -68,7 +68,7 @@ using unsigned_integer = eda::vhdl::intrinsic::unsigned_integer_type;
 using signed_integer   = eda::vhdl::intrinsic::unsigned_integer_type;
 
 
-x3::real_parser<value_type, detail::integer_policies<unsigned_integer>> uint_base10;
+x3::real_parser<unsigned_integer, detail::integer_policies<unsigned_integer>> uint_base10;
 
 
 // decimal parser signed/unsigned
@@ -97,6 +97,29 @@ auto const exponent = x3::rule<struct _, unsigned_integer>{} =
     ;
 
 } // namespace detail
+
+
+/*
+ * Utils for debugging
+ */
+namespace util {
+
+template<typename RangeType, typename AttributeType>
+void trace_report(RangeType const& range, bool parse_ok, bool full_match,
+            AttributeType attribute, std::string const& function)
+{
+    std::cout << "TRACING OF "
+              << function << "(" << range << "): "
+              << std::boolalpha
+              << "parse_ok = "     << parse_ok
+              << ", full_match = " << full_match << "\n"
+              << "  attribute = "  << attribute << "\n";
+}
+
+#define TRACE(range, parse_ok, full_match, attribute)                          \
+    util::trace_report(range, parse_ok, full_match, attribute, __FUNCTION__)
+
+} // namespace util
 
 
 /**
@@ -157,6 +180,7 @@ struct primitive_parser
         detail::unsigned_integer attribute{};   // exact attribute type for x3 parser
 
         auto const [parse_ok, full_match] = parse(range, detail::uint_base10, attribute);
+        //TRACE(range, parse_ok, full_match, attribute);
 
         return std::make_tuple(parse_ok && full_match, attribute);
     }
