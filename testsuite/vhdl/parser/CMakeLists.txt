@@ -170,39 +170,32 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQ
 endif()
 
 
-## Boost.Org 
-# Spirit X3 is required for the parser - we are working on developer branch. 
-# Nevertheless Spirit self depends on other headers, e..g boost.range
-find_package(Boost)
-
-# depend on newer Spirit.X3 versions
+##
+# Boost.Org's Spirit.X3 newer version is required from local clone
 add_dependencies(${PROJECT_NAME} boost-spirit-x3)
 
 # Boost.Org depend includes
 include_directories(${SPIRIT_X3_INCLUDE_DIR})
-include_directories(${Boost_INCLUDE_DIRS})
 
-# Depencies of Boost.Org libs for the VHDL parser testsuite
-find_package(Boost REQUIRED COMPONENTS filesystem system)
 
-add_library(boost INTERFACE IMPORTED)
-set_property(TARGET boost PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS})
-
-add_library(boost-filesystem SHARED IMPORTED)
-set_property(TARGET boost-filesystem PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS})
-set_property(TARGET boost-filesystem PROPERTY IMPORTED_LOCATION ${Boost_FILESYSTEM_LIBRARY})
-
-add_library(boost-system SHARED IMPORTED)
-set_property(TARGET boost-system PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS})
-set_property(TARGET boost-system PROPERTY IMPORTED_LOCATION ${Boost_SYSTEM_LIBRARY})
+##
+# Boost.Org UTF
+find_package(Boost REQUIRED COMPONENTS system filesystem unit_test_framework)
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
     eda::vhdl_parser
     eda::common # FixMe: shouldn't this depency propagated by eda::vhdl_grammar?
-    ${Boost_FILESYSTEM_LIBRARY}
-    ${Boost_SYSTEM_LIBRARY}
+    Boost::system
+    Boost::filesystem
 )
+
+# Since Boost.Test does not expose the argc/argv values outside of the
+# test case we have to provide the path to the test case files manualy
+configure_file(
+    ${PROJECT_SOURCE_DIR}/include/testsuite/vhdl_parser/test_case_path.hpp.in
+    ${PROJECT_BINARY_DIR}/include/testsuite/vhdl_parser/test_case_path.hpp
+    @ONLY)
 
 
 ## 
@@ -212,12 +205,6 @@ add_test(NAME test_vhdl_parser
     COMMAND ${PROJECT_NAME} -- ${PROJECT_SOURCE_DIR}
 )
 
-# Since Boost.Test does not expose the argc/argv values outside of the
-# test case we have to provide the path to the test case files manualy
-configure_file(
-    ${PROJECT_SOURCE_DIR}/include/testsuite/vhdl_parser/test_case_path.hpp.in
-    ${PROJECT_BINARY_DIR}/include/testsuite/vhdl_parser/test_case_path.hpp
-    @ONLY)
 
 
 ##
@@ -244,20 +231,3 @@ set_source_files_properties(
     ${TEST_MATRIX_GENERATOR_TARGET}
     PROPERTIES GENERATED TRUE
 )
-
-
-## 
-# Misc (former make_gold target, act as template now
-#add_executable(make_gold EXCLUDE_FROM_ALL make_gold.cpp)
-#set_target_properties(make_gold PROPERTIES CXX_STANDARD 17)
-#set_target_properties(make_gold PROPERTIES CXX_STANDARD_REQUIRED ON)
-#target_include_directories(make_gold PRIVATE
-#    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>)
-#target_link_libraries(make_gold
-#    PRIVATE
-#    eda::vhdl_parser
-#    eda::common # FixMe: shouldn't this depency propagated by eda::vhdl_grammar?
-#    ${Boost_FILESYSTEM_LIBRARY}
-#    ${Boost_SYSTEM_LIBRARY}
-#)
-
