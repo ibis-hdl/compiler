@@ -10,16 +10,16 @@
 #include <eda/vhdl/ast/util/literal_printer.hpp>
 #include <eda/support/boost/spirit_x3.hpp>
 #include <eda/vhdl/parser/parser_config.hpp>
+#include <eda/support/boost/locale.hpp>
 #include <eda/utils/cxx_bug_fatal.hpp>
 
 #include <numeric>  // accumulate
 #include <iterator>
 #include <cassert>
 #include <iostream>
+#include <string_view>
 #include <boost/range/iterator_range.hpp>
 #include <boost/iterator/filter_iterator.hpp>
-
-#include <boost/locale.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast { namespace parser {
@@ -272,7 +272,8 @@ using unsigned_integer = eda::vhdl::intrinsic::unsigned_integer_type;
 using signed_integer   = eda::vhdl::intrinsic::unsigned_integer_type;
 
 
-/* Helper class to calculate fractional parts of binary numbers like bin,
+/**
+ *  Helper class to calculate fractional parts of binary numbers like bin,
  * oct and hex.  */
 struct frac
 {
@@ -349,12 +350,12 @@ struct numeric_convert::report_error
     { }
 
     template<typename LiteralType>
-    void message(std::string const& type, LiteralType const& literal) const
+    void overflow_message(std::string const& type, LiteralType const& literal) const
     {
         using boost::locale::format;
         using boost::locale::translate;
 
-        os << format(translate(
+        os << format(translate("numeric_convert", // context
             "Conversion of VHDL {1} \'{2}\' failed due to numeric overflow "
             "(MAX_VALUE = {3})\n"
             ))
@@ -363,27 +364,54 @@ struct numeric_convert::report_error
             % MAX_VALUE;
     }
 
-    void operator()(ast::bit_string_literal const& literal) const
+    void overflow(ast::bit_string_literal const& literal) const
     {
         static std::string const type{ "bit string literal" };
-        message(type, literal);
+        overflow_message(type, literal);
     }
 
-    void operator()(ast::decimal_literal const& literal) const
+    void overflow(ast::decimal_literal const& literal) const
     {
         static std::string const type{ "decimal literal" };
-        message(type, literal);
+        overflow_message(type, literal);
     }
 
-    void operator()(ast::based_literal const& literal) const
+    void overflow(ast::based_literal const& literal) const
     {
         static std::string const type{ "based literal" };
-        message(type, literal);
+        overflow_message(type, literal);
     }
 
+    template<typename StringViewT>
+    void unkown_parser_error(StringViewT const& what) const
+    {
+        using boost::locale::format;
+        using boost::locale::translate;
+
+        os << format(translate("numeric_convert", // context
+            "An unknown error occurred during parsing of \'{1}\'.\n"
+            ))
+            % what;
+    }
+
+    template<typename StringViewT>
+    void unsupported_base(StringViewT const& base_literal) const
+    {
+        using boost::locale::format;
+        using boost::locale::translate;
+
+        os << format(translate("numeric_convert", // context
+            "Base specifier \'{1}\' isn't supported. "
+            "Supported are only 2, 8, 10 and 16!\n"
+            ))
+            % base_literal;
+    }
 };
 
 
+/*******************************************************************************
+ * bit_string_literal
+ */
 numeric_convert::return_type numeric_convert::operator()(ast::bit_string_literal const& literal) const
 {
     using parser::primitive_parser;
@@ -409,13 +437,16 @@ numeric_convert::return_type numeric_convert::operator()(ast::bit_string_literal
     auto const [parse_ok, result] = parse(literal);
 
     if(!parse_ok) {
-        report_error{os}(literal);
+        report_error{os}.overflow(literal);
     }
 
     return std::make_tuple(parse_ok, result);
 }
 
 
+/*******************************************************************************
+ * decimal_literal
+ */
 numeric_convert::return_type numeric_convert::operator()(ast::decimal_literal const& literal) const
 {
     using parser::primitive_parser;
@@ -438,14 +469,17 @@ numeric_convert::return_type numeric_convert::operator()(ast::decimal_literal co
     auto const [parse_ok, result] = parse(literal);
 
     if(!parse_ok) {
-        report_error{os}(literal);
+        report_error{os}.overflow(literal);
     }
 
     return std::make_tuple(parse_ok, result);
 }
 
 
-/* Note: The natural way would be to use Spirit.X3 parser primitive, e.g.
+/*******************************************************************************
+ * based_literal
+ *
+ * Note: The natural way would be to use Spirit.X3 parser primitive, e.g.
  * specialize x3's ureal_policies using a radix template parameter, which
  * compiles so far.
  * Unfortunately, spirit uses a LUT of pow10 - no other radixes are supported
@@ -455,92 +489,207 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
 {
     using parser::primitive_parser;
 
+    auto const supported_base = [](unsigned base) {
+        switch(base) {
+            case 2:  [[fallthrough]];
+            case 8:  [[fallthrough]];
+            case 10: [[fallthrough]];
+            case 16: return true;
+            default: return false;
+        }
+    };
+
     auto const parse_base = [](ast::based_literal const& literal) {
         return primitive_parse(literal.base, primitive_parser::dec{});
     };
 
-    auto const parse_integer_part = [](unsigned base, auto const& literal) {
+    auto const parse_integer_part = [](unsigned base, ast::based_literal const& literal) {
         switch(base) {
             case 2: {
-                return primitive_parse(literal, primitive_parser::bin{});
+                return primitive_parse(literal.number.integer_part, primitive_parser::bin{});
             }
             case 8: {
-                return primitive_parse(literal, primitive_parser::oct{});
+                return primitive_parse(literal.number.integer_part, primitive_parser::oct{});
             }
             case 10: {
-                return primitive_parse(literal, primitive_parser::dec{});
+                return primitive_parse(literal.number.integer_part, primitive_parser::dec{});
             }
             case 16: {
-                return primitive_parse(literal, primitive_parser::hex{});
+                return primitive_parse(literal.number.integer_part, primitive_parser::hex{});
             }
             default:
                 cxx_unreachable_bug_triggered();
         }
     };
 
-    auto const parse_exponent = [](auto const& literal) {
-        return primitive_parse(literal, primitive_parser::exp{});
+    auto const parse_exponent = [](ast::based_literal const& literal) {
+        return primitive_parse(literal.number.exponent, primitive_parser::exp{});
     };
 
-    detail::unsigned_integer base{ 0 };
+    unsigned base{ 0 };     // range [0-99], see below
     double result { 0.0 };
-
     bool parse_ok{ false };
 
-    // BASE
+    /* -------------------------------------------------------------------------
+     * base specifier
+     */
     std::tie(parse_ok, base) = parse_base(literal);
 
     if(!parse_ok) {
+        report_error{os}.unsupported_base(literal.base);
         return std::make_tuple(parse_ok, base);
     }
 
-    // INTEGER PART
-    std::tie(parse_ok, result) = parse_integer_part(base, literal.number.integer_part);
-
-    if(!parse_ok) {
-        return std::make_tuple(parse_ok, result);
+    if(!supported_base(base)) {
+        report_error{os}.unsupported_base(literal.base);
+        return std::make_tuple(false, result);
     }
 
-    // FRACTIONAL PART
-    if(!literal.number.fractional_part.empty()) {
-        auto const frac_obj = [](unsigned base) {
-            switch(base) {
-                case  2:  return detail::frac{ 2};
-                case  8:  return detail::frac{ 8};
-                case 10:  return detail::frac{10};
-                case 16:  return detail::frac{16};
-                default:  cxx_unreachable_bug_triggered();
+    /* -------------------------------------------------------------------------
+     * based 10 decimal literals are handle by Spirit.X3 supplied parsers
+     * directly
+     */
+    if(base == 10) {
+
+        using kind_specifier = ast::based_literal::kind_specifier;
+
+        /* Quick & Dirty assemble a string which can be parsed by Spirit.X3 */
+        auto const assemble_copy = [](ast::based_literal const& literal) {
+
+            std::size_t sz{ 0 };
+
+            switch(literal.number.kind_type) {
+                case kind_specifier::integer: {
+                    sz += literal.number.integer_part.size();
+                    sz += literal.number.exponent.size();
+                }
+                [[fallthrough]];
+                case kind_specifier::real: {
+                    sz += 1;    // dot
+                    sz += literal.number.fractional_part.size();
+                }
+                    break;
+                default:
+                    cxx_unreachable_bug_triggered();
             }
+
+            std::string s{};
+            s.reserve(sz);
+            std::stringstream ss{ s };
+
+            switch(literal.number.kind_type) {
+                case kind_specifier::integer: {
+                    ss  << literal.number.integer_part;
+                }
+                break;
+
+                case kind_specifier::real: {
+                    ss << literal.number.integer_part;
+                    ss << ".";
+                    ss << literal.number.fractional_part;
+                }
+                break;
+
+                default:
+                    cxx_unreachable_bug_triggered();
+            }
+
+            ss << literal.number.exponent;
+
+            return ss.str();
         };
 
-        auto range_f{ primitive_parser::filter_range(literal.number.fractional_part) };
-        auto iter = std::begin(range_f);
-        auto const last = std::cend(range_f);
-        auto const fractional_part = std::accumulate(iter, last, 0.0, frac_obj(base));
 
-        result += fractional_part;
-    }
+        switch(literal.number.kind_type) {
 
-    // EXPONENT
-    if(!literal.number.exponent.empty()) {
+            case kind_specifier::integer: {
+                std::string const literal_copy{ assemble_copy(literal) };
+                std::tie(parse_ok, result) = primitive_parse(literal_copy, primitive_parser::dec{});
+            }
+            break;
 
-        detail::signed_integer exponent{ 0 };
+            case kind_specifier::real: {
+                std::string const literal_copy{ assemble_copy(literal) };
+                std::tie(parse_ok, result) = primitive_parse(literal_copy, primitive_parser::real{});
+                break;
+            }
+            break;
 
-        std::tie(parse_ok, exponent) = parse_exponent(literal.number.exponent);
-
-        if(!parse_ok) {
-            return std::make_tuple(parse_ok, exponent);
+            default:
+                cxx_unreachable_bug_triggered();
         }
 
-        double const pow = std::pow(
-            static_cast<double>(base),
-            static_cast<double>(exponent)
-        );
+        if(!parse_ok) {
+            report_error{os}.overflow(literal);
+            return std::make_tuple(parse_ok, result);
+        }
 
-        result *= pow;
+        return std::make_tuple(parse_ok, result);
+    }
+    /* -------------------------------------------------------------------------
+     * other based decimal literals
+     */
+    else {
+
+        /* -------------------------------------------------------------------------
+         * integer part
+         */
+        std::tie(parse_ok, result) = parse_integer_part(base, literal);
+
+        if(!parse_ok) {
+            report_error{os}.overflow(literal);
+            return std::make_tuple(parse_ok, result);
+        }
+
+        /* -------------------------------------------------------------------------
+         * fractional part requires special handling since Spirit.X3 doesn't
+         * handle bases other than 10 not yet.
+         */
+        if(!literal.number.fractional_part.empty()) {
+            auto const frac_obj = [](unsigned base) {
+                switch(base) {
+                    case  2:  return detail::frac{ 2};
+                    case  8:  return detail::frac{ 8};
+                    case 10:  return detail::frac{10};
+                    case 16:  return detail::frac{16};
+                    default:  cxx_unreachable_bug_triggered();
+                }
+            };
+
+            auto range_f{ primitive_parser::filter_range(literal.number.fractional_part) };
+            auto iter = std::begin(range_f);
+            auto const last = std::cend(range_f);
+            auto const fractional_part = std::accumulate(iter, last, 0.0, frac_obj(base));
+
+            result += fractional_part;
+        }
+
+        /* -------------------------------------------------------------------------
+         * exponent
+         */
+        if(!literal.number.exponent.empty()) {
+
+            detail::signed_integer exponent{ 0 };
+
+            std::tie(parse_ok, exponent) = parse_exponent(literal);
+
+            if(!parse_ok) {
+                report_error{os}.overflow(literal);
+                return std::make_tuple(parse_ok, exponent);
+            }
+
+            double const pow = std::pow(
+                static_cast<double>(base),
+                static_cast<double>(exponent)
+            );
+
+            result *= pow;
+        }
+
+        return std::make_tuple(true, result);
     }
 
-    return std::make_tuple(true, result);
+    cxx_unreachable_bug_triggered();
 }
 
 

@@ -76,13 +76,19 @@ to_decimal_literal(T value)
 
 namespace /* anonymous */ {
 
-// discard concrete error messages
-btt::output_test_stream error_log;
+/* The numeric_convert utility writes messages, but concrete error messages
+ * arn't checked. For debugging is useful to see them otherwise. Switch to
+ * ostream sink to hide them or let's write to cerr to see them.
+ * Note, using global numeric_convert object tests  implicit of state less
+ * conversion, otherwise test must fail due to. */
+#if 1
+btt::output_test_stream nil_sink;
+auto const numeric_convert =  ast::numeric_convert{ nil_sink };
+#else
+auto const numeric_convert =  ast::numeric_convert{ std::cerr };
+#endif
 
-// implicit check of state less conversion, otherwise test must fail
-auto const numeric_convert =  ast::numeric_convert{ error_log };
-
-}
+} // anonymous
 
 
 namespace intrinsic {

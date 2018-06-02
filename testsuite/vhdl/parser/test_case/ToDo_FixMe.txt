@@ -15,3 +15,9 @@ Renewal 2018:
   - concurrent_signal_assignment_statement
 
   
+Based Literal Failure Parser TestCases:
+    "2#BAD_CODE#",  // wrong binary digits
+    "8#BAD_CODE#",  // wrong octal digits
+    "16#_42#",        // wrong delimiter
+    "16#42_#",        // wrong delimiter
+

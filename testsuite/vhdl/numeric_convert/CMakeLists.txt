@@ -14,6 +14,7 @@ set(NUMERIC_SOURCES
     numeric_parser.cpp
     bit_string_literal_test.cpp
     decimal_literal_test.cpp
+    based_literal_test.cpp
 )
 
 add_executable(${PROJECT_NAME} ${NUMERIC_SOURCES})
