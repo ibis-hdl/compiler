@@ -355,7 +355,7 @@ struct numeric_convert::report_error
         using boost::locale::format;
         using boost::locale::translate;
 
-        os << format(translate("numeric_convert", // context
+        os << format(translate(
             "Conversion of VHDL {1} \'{2}\' failed due to numeric overflow "
             "(MAX_VALUE = {3})\n"
             ))
@@ -388,7 +388,7 @@ struct numeric_convert::report_error
         using boost::locale::format;
         using boost::locale::translate;
 
-        os << format(translate("numeric_convert", // context
+        os << format(translate(
             "An unknown error occurred during parsing of \'{1}\'.\n"
             ))
             % what;
@@ -400,7 +400,7 @@ struct numeric_convert::report_error
         using boost::locale::format;
         using boost::locale::translate;
 
-        os << format(translate("numeric_convert", // context
+        os << format(translate(
             "Base specifier \'{1}\' isn't supported. "
             "Supported are only 2, 8, 10 and 16!\n"
             ))
