@@ -5,8 +5,6 @@
  *      Author: olaf
  */
 
-#include <testsuite/numeric_convert/numeric_parser.hpp>
-
 #include <eda/vhdl/ast/util/numeric_convert.hpp>
 #include <eda/vhdl/type.hpp>
 
@@ -17,6 +15,7 @@
 
 #include <boost/type_index.hpp>
 #include <boost/core/ignore_unused.hpp>
+#include <testsuite/vhdl_numeric_convert/numeric_parser.hpp>
 
 #include <iostream>
 #include <sstream>
@@ -27,7 +26,7 @@
 #include <vector>
 
 
-BOOST_AUTO_TEST_SUITE( decimal_literal )
+BOOST_AUTO_TEST_SUITE( numeric_convert )
 
 
 namespace ast = eda::vhdl::ast;
@@ -91,11 +90,6 @@ auto const numeric_convert =  ast::numeric_convert{ std::cerr };
 } // anonymous
 
 
-namespace intrinsic {
-    using unsigned_integer_type = eda::vhdl::intrinsic::unsigned_integer_type;
-    using real_type = eda::vhdl::intrinsic::real_type;
-}
-
 /*******************************************************************************
  * integer decimal_literal
  ******************************************************************************/
@@ -108,7 +102,7 @@ std::vector<std::string> const dec_int_lit{
     detail::to_decimal_literal(std::numeric_limits<uint64_t>::max()),
 };
 
-std::vector<intrinsic::unsigned_integer_type> dec_int{
+std::vector<eda::vhdl::intrinsic::unsigned_integer_type> dec_int{
     0,
     1,
     1000,
@@ -119,11 +113,11 @@ std::vector<intrinsic::unsigned_integer_type> dec_int{
 
 
 BOOST_DATA_TEST_CASE(
-    integer,
+    decimal_literal_integer,
     but_data::make(dec_int_lit) ^ dec_int,
     literal,                      N)
 {
-    auto const [parse_ok, ast_node] = x3_test::parse_decimal_literal(literal);
+    auto const [parse_ok, ast_node] = testsuite::parse_decimal_literal(literal);
     BOOST_REQUIRE(parse_ok);
 
     using kind_specifier = eda::vhdl::ast::decimal_literal::kind_specifier;
@@ -135,13 +129,13 @@ BOOST_DATA_TEST_CASE(
 }
 
 
-BOOST_AUTO_TEST_CASE( integer_uint64max_ovrflw )
+BOOST_AUTO_TEST_CASE( decimal_literal_uint64max_ovrflw )
 {
     uint64_t N = std::numeric_limits<uint64_t>::max();
 
     std::string const literal{ detail::to_decimal_literal(N) + "_0" };
 
-    auto const [parse_ok, ast_node] = x3_test::parse_decimal_literal(literal);
+    auto const [parse_ok, ast_node] = testsuite::parse_decimal_literal(literal);
     BOOST_REQUIRE(parse_ok);    // must parse ...
 
     auto const [conv_ok, value] = numeric_convert(ast_node);
@@ -177,7 +171,7 @@ std::vector<std::string> const dec_real_lit{
     "2.0332938517515416e+307",
 };
 
-std::vector<intrinsic::real_type> dec_real{
+std::vector<eda::vhdl::intrinsic::real_type> dec_real{
     0.0,
     1.0,
     1000.0,
@@ -202,11 +196,11 @@ double const REAL_TOLERANCE = []() {
 
 
 BOOST_DATA_TEST_CASE(
-    real,
+    decimal_literal_real,
     but_data::make(dec_real_lit) ^ dec_real,
     literal,                       N)
 {
-    auto const [parse_ok, ast_node] = x3_test::parse_decimal_literal(literal);
+    auto const [parse_ok, ast_node] = testsuite::parse_decimal_literal(literal);
     BOOST_REQUIRE(parse_ok);
 
     using kind_specifier = eda::vhdl::ast::decimal_literal::kind_specifier;
@@ -220,9 +214,4 @@ BOOST_DATA_TEST_CASE(
 
 
 BOOST_AUTO_TEST_SUITE_END()
-
-
-
-
-
 

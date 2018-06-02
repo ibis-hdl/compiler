@@ -5,10 +5,9 @@
  *      Author: olaf
  */
 
-#include <testsuite/numeric_convert/numeric_parser.hpp>
-
 #include <eda/vhdl/parser/grammar_def.hpp>
 #include <eda/vhdl/parser/parser_config.hpp>
+#include <testsuite/vhdl_numeric_convert/numeric_parser.hpp>
 
 #include <iostream>
 
@@ -58,7 +57,7 @@ std::tuple<bool, AttrType> parse(ParserType const numeric_parser, std::string co
 }
 
 
-namespace x3_test {
+namespace testsuite {
 
 
 std::tuple<bool, ast::bit_string_literal>

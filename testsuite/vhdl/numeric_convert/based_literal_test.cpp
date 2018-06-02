@@ -5,9 +5,6 @@
  *      Author: olaf
  */
 
-#include <testsuite/numeric_convert/numeric_parser.hpp>
-#include <testsuite/numeric_convert/binary_string.hpp>
-
 #include <eda/vhdl/ast/util/numeric_convert.hpp>
 #include <eda/vhdl/type.hpp>
 
@@ -18,6 +15,8 @@
 
 #include <boost/type_index.hpp>
 #include <boost/core/ignore_unused.hpp>
+#include <testsuite/vhdl_numeric_convert/binary_string.hpp>
+#include <testsuite/vhdl_numeric_convert/numeric_parser.hpp>
 
 #include <iostream>
 #include <sstream>
@@ -28,7 +27,7 @@
 #include <vector>
 
 
-BOOST_AUTO_TEST_SUITE( based_literal )
+BOOST_AUTO_TEST_SUITE( numeric_convert )
 
 
 namespace ast = eda::vhdl::ast;
@@ -38,36 +37,41 @@ namespace but_data = boost::unit_test::data;
 
 namespace detail {
 
+
 /*******************************************************************************
  * generator helper functions
  ******************************************************************************/
+
 template<class T>
 typename std::enable_if<
     std::is_integral<T>::value, std::string
 >::type
 to_based_literal(unsigned base, T value, std::string const& postfix="")
 {
+    using namespace testsuite::vhdl_numeric_convert::util;
+
     std::stringstream ss;
 
     switch(base) {
     case 2: {
-        ss << base << '#' << ::detail::binary_string(value) << postfix << '#';
+        ss << base << '#' <<      binary_string(value) << postfix << '#';
         break;
     }
     case 8: {
-        ss << base << '#' << std::oct  << value << postfix << '#';
+        ss << base << '#' <<       octal_string(value) << postfix << '#';
         break;
     }
     case 10: {
-        ss  << base << '#'             << value << postfix << '#';
+        ss << base << '#' <<                     value << postfix << '#';
         break;
     }
     case 16: {
-        ss << base << '#' << std::hex  << value << postfix << '#';
+        ss << base << '#' << hexadecimal_string(value) << postfix << '#';
         break;
     }
     default:
-        ss << "INVALID BASE SPECIFIER " << base;
+        // no assert, write marker
+        ss << "INVALID BASE SPECIFIER" << base;
         std::cerr << ">>>>> ERROR in function: " << __FUNCTION__
                   << "(), unexpected base " << base << " <<<<<\n";
     }
@@ -109,6 +113,7 @@ to_based_literal(unsigned base, T value)
     return ss.str();
 }
 #endif
+
 } // namespace detail
 
 
@@ -129,26 +134,23 @@ auto const numeric_convert =  ast::numeric_convert{ std::cerr };
 } // anonymous
 
 
-namespace intrinsic {
-    using unsigned_integer_type = eda::vhdl::intrinsic::unsigned_integer_type;
-    using real_type = eda::vhdl::intrinsic::real_type;
-}
-
-
 /*******************************************************************************
  * integer based_literal of different bases
  ******************************************************************************/
 std::vector<std::string> const integer_lit{
+    // binary
     "2#0#",
     "2#0#E0",
     "2#1#",
     "2#1#E0",
     "2#1#E1",
     "2#1#E2",
+    // octal
     "8#0#",
     "8#1#",
     "8#1#E1",
     "8#42#",
+    // hexadecimal
     "16#1#",
     "16#F#E1",
     /* Examples from
@@ -176,19 +178,21 @@ std::vector<std::string> const integer_lit{
 };
 
 std::vector<eda::vhdl::intrinsic::unsigned_integer_type> integer_dec{
+    // binary
     0,
     0,
     1,
     1,
     2,
     4,
+    // octal
     0,
     1,
     8,
     34,
     1,
     240,
-    // LRM examples
+    // hexadecimal LRM examples
     255,
     255,
     255,
@@ -206,11 +210,11 @@ std::vector<eda::vhdl::intrinsic::unsigned_integer_type> integer_dec{
 };
 
 BOOST_DATA_TEST_CASE(
-    bin_int,
+    based_literal_integer,
     but_data::make(integer_lit) ^ integer_dec,
     literal,                      N)
 {
-    auto const [parse_ok, ast_node] = x3_test::parse_based_literal(literal);
+    auto const [parse_ok, ast_node] = testsuite::parse_based_literal(literal);
     BOOST_REQUIRE(parse_ok);
 
     auto const [conv_ok, value] = numeric_convert(ast_node);
@@ -230,16 +234,17 @@ std::vector<std::string> const integer_lit_uint64_ovflw{
 };
 
 BOOST_DATA_TEST_CASE(
-    bin_int_uint64_ovflw,
+    based_literal_uint64_ovflw,
     but_data::make(integer_lit_uint64_ovflw),
     literal)
 {
-    auto const [parse_ok, ast_node] = x3_test::parse_based_literal(literal);
+    auto const [parse_ok, ast_node] = testsuite::parse_based_literal(literal);
     BOOST_REQUIRE(parse_ok);    // must parse ...
 
     auto const [conv_ok, value] = numeric_convert(ast_node);
     BOOST_REQUIRE(!conv_ok);    // ... but must fail to convert
 }
+
 
 /*******************************************************************************
  * real based_literal of different bases
@@ -274,11 +279,11 @@ std::vector<eda::vhdl::intrinsic::real_type> real_dec{
 };
 
 BOOST_DATA_TEST_CASE(
-    bin_real,
+    based_literal_real,
     but_data::make(real_lit) ^ real_dec,
     literal,                   N)
 {
-    auto const [parse_ok, ast_node] = x3_test::parse_based_literal(literal);
+    auto const [parse_ok, ast_node] = testsuite::parse_based_literal(literal);
     BOOST_REQUIRE(parse_ok);
 
     auto const [conv_ok, value] = numeric_convert(ast_node);
@@ -297,11 +302,11 @@ std::vector<std::string> const lit_failure{
 
 
 BOOST_DATA_TEST_CASE(
-    literal_failure,
+    based_literal_failure,
     but_data::make(lit_failure),
     literal)
 {
-    auto const [parse_ok, ast_node] = x3_test::parse_based_literal(literal);
+    auto const [parse_ok, ast_node] = testsuite::parse_based_literal(literal);
     BOOST_REQUIRE(parse_ok);
 
     auto const [conv_ok, value] = numeric_convert(ast_node);

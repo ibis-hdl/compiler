@@ -8,16 +8,21 @@
 
 project(testrunner_vhdl_numeric LANGUAGES CXX)
 
-
-set(NUMERIC_SOURCES
+# Boost.Test main and testing utilities
+set(TEST_COMMON_SOURCES
     test_numeric_convert.cpp
     numeric_parser.cpp
+    binary_string.cpp
+)
+
+set(TEST_NUMERIC_CONV_SOURCES
+    ${TEST_COMMON_SOURCES}
     bit_string_literal_test.cpp
     decimal_literal_test.cpp
     based_literal_test.cpp
 )
 
-add_executable(${PROJECT_NAME} ${NUMERIC_SOURCES})
+add_executable(${PROJECT_NAME} ${TEST_NUMERIC_CONV_SOURCES})
 
 
 # adjust include path
