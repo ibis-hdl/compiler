@@ -16,7 +16,7 @@ set(TEST_COMMON_SOURCES
 )
 
 # compiles faster than AST related parser rule tests, but not flexible as this.
-set(PARSERTEST_SOURCES#_OLD
+set(PARSERTEST_SOURCES_OLD
     ${TEST_COMMON_SOURCES}
     #parser_xxx.cpp parser_xxx_inst.cpp
     parser_test_old/parser_aspect.cpp
@@ -37,7 +37,7 @@ set(PARSERTEST_SOURCES#_OLD
     parser_test_old/parser_type.cpp
 )
 
-set(PARSERTEST_SOURCES_DEV
+set(PARSERTEST_SOURCES#_DEV
     ${TEST_COMMON_SOURCES}
     parser_test/alias_declaration_test.cpp
     #parser_test/xxx_signature_test.cpp

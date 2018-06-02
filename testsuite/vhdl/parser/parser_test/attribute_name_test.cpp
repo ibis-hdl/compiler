@@ -14,7 +14,7 @@
 #include <eda/vhdl/ast.hpp>
 
 #include <testsuite/vhdl_parser/data_set.hpp>
-#include <testsuite/vhdl_parser/testing_parser_def.hpp>
+#include <testsuite/vhdl_parser/testing_parser.hpp>
 #include <testsuite/vhdl_parser/testing_parser_grammar_hack.hpp>
 #include <testsuite/vhdl_parser/generate_data_test_case.hpp>
 #include <testsuite/vhdl_parser/testing_util.hpp>

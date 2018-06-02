@@ -124,7 +124,7 @@ class BoostTestGenerator:
 #include <eda/vhdl/ast.hpp>
 
 #include <testsuite/vhdl_parser/data_set.hpp>
-#include <testsuite/vhdl_parser/testing_parser_def.hpp>
+#include <testsuite/vhdl_parser/testing_parser.hpp>
 #include <testsuite/vhdl_parser/testing_parser_grammar_hack.hpp>
 #include <testsuite/vhdl_parser/generate_data_test_case.hpp>
 #include <testsuite/vhdl_parser/testing_util.hpp>
@@ -270,7 +270,7 @@ namespace vhdl = eda::vhdl::parser;
     decl='\n'.join(f"{x}" for x in decl_list),
     fcn='\n'.join(f"vhdl::{x}" for x in api_list),
     skip_decl='BOOST_SPIRIT_DECLARE(skipper_type);',
-    skip_fcn='vhdl::skipper const& skipper();',
+    skip_fcn='vhdl::skipper_type const& skipper();',
     namespace_api_end=self.namespace_close(api_namespace)
 )
 
@@ -298,7 +298,7 @@ namespace vhdl = eda::vhdl::parser;
                 .format(name=p))       
         
         contents="""
-#include <testsuite/parser/api.hpp>
+#include <testsuite/vhdl_parser/api.hpp>
 #include <eda/vhdl/parser/grammar_def.hpp>
 #include <eda/vhdl/parser/parser_config.hpp>
 
