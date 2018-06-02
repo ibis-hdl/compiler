@@ -243,6 +243,8 @@ BOOST_DATA_TEST_CASE(
 
     auto const [conv_ok, value] = numeric_convert(ast_node);
     BOOST_REQUIRE(!conv_ok);    // ... but must fail to convert
+
+    boost::ignore_unused(value);
 }
 
 
@@ -311,6 +313,8 @@ BOOST_DATA_TEST_CASE(
 
     auto const [conv_ok, value] = numeric_convert(ast_node);
     BOOST_REQUIRE(!conv_ok);
+
+    boost::ignore_unused(value);
 }
 
 
