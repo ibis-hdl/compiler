@@ -2,7 +2,7 @@
 #include "testing_parser_def.hpp"
 
 
-namespace x3_test {
+namespace testsuite {
 
     using attribute_type = ast::case_statement;
     using parser_type = parser::case_statement_type;

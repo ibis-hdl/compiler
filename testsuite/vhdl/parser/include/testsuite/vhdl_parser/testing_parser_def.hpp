@@ -16,7 +16,7 @@
 
 
 
-namespace x3_test {
+namespace testsuite { namespace vhdl_parser { namespace util {
 
 
 namespace x3 = boost::spirit::x3;
@@ -97,7 +97,8 @@ std::tuple<bool, std::string> testing_parser<AttrType>::operator()(
 }
 
 
-} // namespace x3_test
+
+} } } // namespace testsuite.vhdl_parser.util
 
 
 #endif /* SOURCES_VHDL_TEST_INCLUDE_TESTSUITE_VHDL_PARSER_TESTING_PARSER_DEF_HPP_ */

@@ -18,7 +18,7 @@
 #include <codecvt>
 
 
-namespace x3_test {
+namespace testsuite { namespace vhdl_parser { namespace util {
 
 
 #if defined(_WIN32) || defined(_WIN64)
@@ -64,7 +64,7 @@ std::string report_diagnostic(
        << '\n' << std::string(width, '-') << '\n';
 
     // only write in case of failed test
-    if(!x3_test::current_test_passing()) {
+    if(!current_test_passing()) {
         test_case_result_writer result_writer(test_case_name);
         result_writer.write(result);
     }
@@ -164,14 +164,13 @@ void test_case_result_writer::write(std::string const& parse_result)
 }
 
 
-} // namespace x3_test
 
+
+namespace detail {
 
 /**
  * String converting utilities
  */
-namespace x3_test { namespace detail {
-
 
 std::string to_utf8(std::wstring const& s)
 {
@@ -186,5 +185,9 @@ std::wstring to_utf16(std::string const& s)
 }
 
 
-} } // x3_test.detail
+} // detail
+
+
+} } } // namespace testsuite.vhdl_parser.util
+
 

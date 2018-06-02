@@ -42,7 +42,7 @@ GENERATE_DATASET_TEST_CASE(expression)
 /*
  * expression failure
  */
-struct expression_failure_dataset : public ::x3_test::dataset_loader
+struct expression_failure_dataset : public testsuite::vhdl_parser::util::dataset_loader
 {
     expression_failure_dataset()
     : dataset_loader{ "test_case/expression_failure" }
@@ -61,15 +61,18 @@ BOOST_DATA_TEST_CASE( expression_failure,
 
     boost::ignore_unused(test_case);
 
-    x3_test::testing_parser<attribute_type> parse;
+    using testsuite::vhdl_parser::util::testing_parser;
+    using testsuite::vhdl_parser::util::current_test_passing;
+
+    testing_parser<attribute_type> parse;
     auto [parse_ok, parsed_AST] = parse(VHDL_code, parser);
 
     BOOST_TEST(!parse_ok);
-    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),
+    BOOST_REQUIRE_MESSAGE(current_test_passing(),
                           "\n    PARSED AST = '\n" << parsed_AST << "'");
 
     BOOST_TEST(parsed_AST == expect_AST, btt::per_element());
-    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),
+    BOOST_REQUIRE_MESSAGE(current_test_passing(),
                           "\n    PARSED AST = '\n" << parsed_AST << "'");
 }
 

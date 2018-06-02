@@ -17,7 +17,7 @@
 #include <vector>
 
 
-namespace x3_test {
+namespace testsuite { namespace vhdl_parser { namespace util {
 
 
 namespace fs = boost::filesystem;
@@ -49,9 +49,7 @@ private:
 };
 
 
-} // namespace x3_test
-
-
+} } } // namespace testsuite.vhdl_parser.util
 
 
 #endif /* SOURCES_VHDL_TEST_INCLUDE_TESTSUITE_VHDL_PARSER_DATA_SET_HPP_ */

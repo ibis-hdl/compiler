@@ -14,7 +14,7 @@
 #include <eda/vhdl/parser/parser_config.hpp>
 
 
-namespace x3_test {
+namespace testsuite { namespace vhdl_parser { namespace util {
 
 
 namespace x3 = boost::spirit::x3;
@@ -37,7 +37,8 @@ struct testing_parser
 };
 
 
-} // namespace x3_test
+
+} } } // namespace testsuite.vhdl_parser.util
 
 
 

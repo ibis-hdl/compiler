@@ -9,15 +9,15 @@
 project(testrunner_vhdl_parser LANGUAGES CXX)
 
 
-set(PARSERTEST_COMMON_SOURCES
+set(TEST_COMMON_SOURCES
     test_vhdl_parser.cpp
     data_set.cpp
     testing_util.cpp    
 )
 
 # compiles faster than AST related parser rule tests, but not flexible as this.
-set(PARSERTEST_SOURCES_OLD
-    ${PARSERTEST_COMMON_SOURCES}
+set(PARSERTEST_SOURCES#_OLD
+    ${TEST_COMMON_SOURCES}
     #parser_xxx.cpp parser_xxx_inst.cpp
     parser_test_old/parser_aspect.cpp
     parser_test_old/parser_clause.cpp
@@ -37,107 +37,107 @@ set(PARSERTEST_SOURCES_OLD
     parser_test_old/parser_type.cpp
 )
 
-set(PARSERTEST_SOURCES#_DEV
-    ${PARSERTEST_COMMON_SOURCES}
-    parser_test/alias_declaration_parsertest.cpp
-    #parser_test/xxx_signature_parsertest.cpp
+set(PARSERTEST_SOURCES_DEV
+    ${TEST_COMMON_SOURCES}
+    parser_test/alias_declaration_test.cpp
+    #parser_test/xxx_signature_test.cpp
 )
 
 set(PARSERTEST_SOURCES_
-    ${PARSERTEST_COMMON_SOURCES}
-    parser_test/abstract_literal_parsertest.cpp
-    parser_test/actual_part_parsertest.cpp
-    parser_test/aggregate_parsertest.cpp
-    parser_test/alias_declaration_parsertest.cpp
-    parser_test/assertion_parsertest.cpp
-    parser_test/association_list_parsertest.cpp
-    parser_test/attribute_name_parsertest.cpp
-    parser_test/attribute_specification_parsertest.cpp
-    parser_test/based_literal_parsertest.cpp
-    parser_test/binding_indication_parsertest.cpp
-    parser_test/bit_string_literal_parsertest.cpp
-    parser_test/case_statement_parsertest.cpp
-    parser_test/character_literal_parsertest.cpp
-    parser_test/choices_parsertest.cpp
-    parser_test/component_specification_parsertest.cpp
-    parser_test/concurrent_assertion_statement_parsertest.cpp
-    parser_test/conditional_signal_assignment_parsertest.cpp
-    parser_test/constant_declaration_parsertest.cpp
-    parser_test/constrained_array_definition_parsertest.cpp
-    parser_test/constraint_parsertest.cpp
-    parser_test/context_clause_parsertest.cpp
-    parser_test/decimal_literal_parsertest.cpp
-    parser_test/disconnection_specification_parsertest.cpp
-    parser_test/discrete_range_parsertest.cpp
-    parser_test/element_declaration_parsertest.cpp
-    parser_test/entity_aspect_parsertest.cpp
-    parser_test/enumeration_type_definition_parsertest.cpp
-    parser_test/exit_statement_parsertest.cpp
-    parser_test/expression_parsertest.cpp
-    parser_test/factor_parsertest.cpp
-    parser_test/file_declaration_parsertest.cpp
-    parser_test/file_open_information_parsertest.cpp
-    parser_test/floating_type_definition_parsertest.cpp
-    parser_test/formal_part_parsertest.cpp
-	parser_test/function_call_parsertest.cpp
-    parser_test/generic_clause_parsertest.cpp
-    parser_test/generic_map_aspect_parsertest.cpp
-    parser_test/group_declaration_parsertest.cpp
-    parser_test/group_template_declaration_parsertest.cpp
-    parser_test/identifier_parsertest.cpp
-    parser_test/identifier_list_parsertest.cpp
-    parser_test/if_statement_parsertest.cpp
-    parser_test/index_constraint_parsertest.cpp
-    parser_test/index_subtype_definition_parsertest.cpp
-    parser_test/indexed_name_parsertest.cpp
-    parser_test/integer_parsertest.cpp
-    parser_test/integer_type_definition_parsertest.cpp
-    parser_test/interface_constant_declaration_parsertest.cpp
-    parser_test/interface_file_declaration_parsertest.cpp
-    parser_test/interface_signal_declaration_parsertest.cpp
-    parser_test/interface_variable_declaration_parsertest.cpp
-    parser_test/library_clause_parsertest.cpp
-    parser_test/literal_parsertest.cpp
-    parser_test/loop_statement_parsertest.cpp
-    parser_test/name_parsertest.cpp
-    parser_test/next_statement_parsertest.cpp
-    parser_test/numeric_literal_parsertest.cpp
-    parser_test/parameter_specification_parsertest.cpp
-    parser_test/physical_literal_parsertest.cpp
-    parser_test/physical_type_definition_parsertest.cpp
-    parser_test/port_clause_parsertest.cpp
-    parser_test/port_map_aspect_parsertest.cpp
-    parser_test/primary_parsertest.cpp
-    parser_test/primary_unit_declaration_parsertest.cpp
-    parser_test/procedure_call_parsertest.cpp
-    parser_test/range_constraint_parsertest.cpp
-    parser_test/record_type_definition_parsertest.cpp
-    parser_test/relation_parsertest.cpp
-    parser_test/return_statement_parsertest.cpp
-    parser_test/secondary_unit_declaration_parsertest.cpp
-    parser_test/selected_signal_assignment_parsertest.cpp
-    parser_test/sequential_statement_parsertest.cpp
-    parser_test/shift_expression_parsertest.cpp
-    parser_test/signal_assignment_statement_parsertest.cpp
-    parser_test/signal_declaration_parsertest.cpp
-    parser_test/signal_list_parsertest.cpp
-    parser_test/simple_expression_parsertest.cpp
-    parser_test/slice_name_parsertest.cpp
-    parser_test/string_literal_parsertest.cpp
-    parser_test/subprogram_body_parsertest.cpp
-    parser_test/subprogram_specification_parsertest.cpp
-    parser_test/subtype_declaration_parsertest.cpp
-    parser_test/subtype_indication_parsertest.cpp
-    parser_test/term_parsertest.cpp
-    parser_test/type_conversion_parsertest.cpp
-    parser_test/type_declaration_parsertest.cpp
-    parser_test/type_definition_parsertest.cpp
-    parser_test/unconstrained_array_definition_parsertest.cpp
-    parser_test/use_clause_parsertest.cpp
-    parser_test/variable_assignment_statement_parsertest.cpp
-    parser_test/variable_declaration_parsertest.cpp
-    parser_test/wait_statement_parsertest.cpp
-    parser_test/waveform_parsertest.cpp
+    ${TEST_COMMON_SOURCES}
+    parser_test/abstract_literal_test.cpp
+    parser_test/actual_part_test.cpp
+    parser_test/aggregate_test.cpp
+    parser_test/alias_declaration_test.cpp
+    parser_test/assertion_test.cpp
+    parser_test/association_list_test.cpp
+    parser_test/attribute_name_test.cpp
+    parser_test/attribute_specification_test.cpp
+    parser_test/based_literal_test.cpp
+    parser_test/binding_indication_test.cpp
+    parser_test/bit_string_literal_test.cpp
+    parser_test/case_statement_test.cpp
+    parser_test/character_literal_test.cpp
+    parser_test/choices_test.cpp
+    parser_test/component_specification_test.cpp
+    parser_test/concurrent_assertion_statement_test.cpp
+    parser_test/conditional_signal_assignment_test.cpp
+    parser_test/constant_declaration_test.cpp
+    parser_test/constrained_array_definition_test.cpp
+    parser_test/constraint_test.cpp
+    parser_test/context_clause_test.cpp
+    parser_test/decimal_literal_test.cpp
+    parser_test/disconnection_specification_test.cpp
+    parser_test/discrete_range_test.cpp
+    parser_test/element_declaration_test.cpp
+    parser_test/entity_aspect_test.cpp
+    parser_test/enumeration_type_definition_test.cpp
+    parser_test/exit_statement_test.cpp
+    parser_test/expression_test.cpp
+    parser_test/factor_test.cpp
+    parser_test/file_declaration_test.cpp
+    parser_test/file_open_information_test.cpp
+    parser_test/floating_type_definition_test.cpp
+    parser_test/formal_part_test.cpp
+	parser_test/function_call_test.cpp
+    parser_test/generic_clause_test.cpp
+    parser_test/generic_map_aspect_test.cpp
+    parser_test/group_declaration_test.cpp
+    parser_test/group_template_declaration_test.cpp
+    parser_test/identifier_test.cpp
+    parser_test/identifier_list_test.cpp
+    parser_test/if_statement_test.cpp
+    parser_test/index_constraint_test.cpp
+    parser_test/index_subtype_definition_test.cpp
+    parser_test/indexed_name_test.cpp
+    parser_test/integer_test.cpp
+    parser_test/integer_type_definition_test.cpp
+    parser_test/interface_constant_declaration_test.cpp
+    parser_test/interface_file_declaration_test.cpp
+    parser_test/interface_signal_declaration_test.cpp
+    parser_test/interface_variable_declaration_test.cpp
+    parser_test/library_clause_test.cpp
+    parser_test/literal_test.cpp
+    parser_test/loop_statement_test.cpp
+    parser_test/name_test.cpp
+    parser_test/next_statement_test.cpp
+    parser_test/numeric_literal_test.cpp
+    parser_test/parameter_specification_test.cpp
+    parser_test/physical_literal_test.cpp
+    parser_test/physical_type_definition_test.cpp
+    parser_test/port_clause_test.cpp
+    parser_test/port_map_aspect_test.cpp
+    parser_test/primary_test.cpp
+    parser_test/primary_unit_declaration_test.cpp
+    parser_test/procedure_call_test.cpp
+    parser_test/range_constraint_test.cpp
+    parser_test/record_type_definition_test.cpp
+    parser_test/relation_test.cpp
+    parser_test/return_statement_test.cpp
+    parser_test/secondary_unit_declaration_test.cpp
+    parser_test/selected_signal_assignment_test.cpp
+    parser_test/sequential_statement_test.cpp
+    parser_test/shift_expression_test.cpp
+    parser_test/signal_assignment_statement_test.cpp
+    parser_test/signal_declaration_test.cpp
+    parser_test/signal_list_test.cpp
+    parser_test/simple_expression_test.cpp
+    parser_test/slice_name_test.cpp
+    parser_test/string_literal_test.cpp
+    parser_test/subprogram_body_test.cpp
+    parser_test/subprogram_specification_test.cpp
+    parser_test/subtype_declaration_test.cpp
+    parser_test/subtype_indication_test.cpp
+    parser_test/term_test.cpp
+    parser_test/type_conversion_test.cpp
+    parser_test/type_declaration_test.cpp
+    parser_test/type_definition_test.cpp
+    parser_test/unconstrained_array_definition_test.cpp
+    parser_test/use_clause_test.cpp
+    parser_test/variable_assignment_statement_test.cpp
+    parser_test/variable_declaration_test.cpp
+    parser_test/wait_statement_test.cpp
+    parser_test/waveform_test.cpp
 )
 
 add_executable(${PROJECT_NAME} ${PARSERTEST_SOURCES})

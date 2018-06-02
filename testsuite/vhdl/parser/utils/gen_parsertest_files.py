@@ -19,6 +19,7 @@ class BoostTestGenerator:
     def __init__(self, root_name):
         self.root_name = root_name
         self.path = os.path.dirname(os.path.realpath(__file__))
+        self.testfile_postfix = '_test.cpp'
         self.skiplist = ['_failure', 'xxx',
                          # no parsers, embedded into grammar
                          'floating_type_definition',
@@ -39,6 +40,26 @@ class BoostTestGenerator:
         return False
         
         
+    def namespace_open(self, namespaces):
+        """Helper for opening namespace from namespace list.
+        
+        """
+        
+        txt=' '.join('namespace {name} {{'.format(name=name) for name in namespaces)
+        return txt
+    
+    
+    def namespace_close(self, namespaces):
+        """Helper for closing namespace from namespace list.
+        
+        """
+        
+        braces=' '.join('}' for name in namespaces) 
+        comment='.'.join('{name}'.format(name=name) for name in namespaces)
+        txt=braces + ' // namespace ' + comment
+        return txt
+        
+
     def isFailuretest(self, name):
         """Check if there is a '_failure' into given name.
         
@@ -67,8 +88,8 @@ class BoostTestGenerator:
             for subdirname in dirnames:
                 test_cases.append(subdirname)
         return test_cases
-        
-        
+    
+
     def cxxHeader(self, filename):
         """Create a common C++ header
         
@@ -118,7 +139,7 @@ namespace ast    = eda::vhdl::ast;"""
         
     def cxxDataSetLoader(self, name):
         return """
-struct {name}_dataset : public ::x3_test::dataset_loader
+struct {name}_dataset : public testsuite::vhdl_parser::util::dataset_loader
 {{
     {name}_dataset()
     : dataset_loader{{ "test_case/{name}" }}
@@ -144,18 +165,22 @@ BOOST_DATA_TEST_CASE( {test_case},
     auto const parser = parser::{parser_name};
 
     boost::ignore_unused(test_case_name);
+    
+    using testsuite::vhdl_parser::util::testing_parser;
+    using testsuite::vhdl_parser::util::current_test_passing;
+    using testsuite::vhdl_parser::util::report_diagnostic;
 
-    x3_test::testing_parser<attribute_type> parse;
+    testing_parser<attribute_type> parse;
     auto [parse_ok, parse_result] = parse(input, parser);
 
     BOOST_TEST({F}parse_ok);
     BOOST_REQUIRE_MESSAGE({F}parse_ok,
-        x3_test::report_diagnostic(test_case_name, input, parse_result)
+        report_diagnostic(test_case_name, input, parse_result)
     );
 
     BOOST_TEST(parse_result == expected, btt::per_element());
-    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),
-        x3_test::report_diagnostic(test_case_name, input, parse_result)
+    BOOST_REQUIRE_MESSAGE(current_test_passing(),
+        report_diagnostic(test_case_name, input, parse_result)
     );
 }}
 """.format(
@@ -204,7 +229,7 @@ BOOST_AUTO_TEST_SUITE_END()
             f.write(contents)
         
      
-    def cxxBnfDecl(self, parser_list, namespace):
+    def cxxBnfDecl(self, parser_list, api_namespace):
         """ Generate the API to access the BNF parsers
         
         """    
@@ -231,7 +256,7 @@ namespace eda {{ namespace vhdl {{ namespace parser {{
 }} }} }} // namespace eda.vhdl.parser 
 
 
-namespace {ns} {{
+{namespace_api_bgn}
 
 namespace vhdl = eda::vhdl::parser;
 
@@ -239,19 +264,20 @@ namespace vhdl = eda::vhdl::parser;
 
 {skip_fcn}
 
-}} // namespace {ns}
+{namespace_api_end}
 """.format(
-    ns=namespace,
+    namespace_api_bgn=self.namespace_open(api_namespace),
     decl='\n'.join(f"{x}" for x in decl_list),
     fcn='\n'.join(f"vhdl::{x}" for x in api_list),
     skip_decl='BOOST_SPIRIT_DECLARE(skipper_type);',
-    skip_fcn='vhdl::skipper const& skipper();'
+    skip_fcn='vhdl::skipper const& skipper();',
+    namespace_api_end=self.namespace_close(api_namespace)
 )
 
         return contents
         
     
-    def cxxBnfInst(self, parser_list, namespace):
+    def cxxBnfInst(self, parser_list, api_namespace):
         """ Generate the API instances to access the BNF parsers
         
         """    
@@ -286,19 +312,20 @@ namespace eda {{ namespace vhdl {{ namespace parser {{
 }} }} }} // namespace eda.vhdl.parser
 
 
-namespace {ns} {{
+{namespace_api_bgn}
 
 {fcn}
 
 {skip_fcn}
 
-}} // namespace {ns}
+{namespace_api_end}
 """.format(
-    ns=namespace,
+    namespace_api_bgn=self.namespace_open(api_namespace),
     inst='\n'.join(f"{x}" for x in inst_list),
     fcn='\n'.join(f"{x}" for x in fcn_list),
     skip_inst='BOOST_SPIRIT_INSTANTIATE(skipper_type, iterator_type, context_type);',
-    skip_fcn='vhdl::skipper_type const& skipper() { return eda::vhdl::parser::skipper; }'
+    skip_fcn='vhdl::skipper_type const& skipper() { return eda::vhdl::parser::skipper; }',
+    namespace_api_end=self.namespace_close(api_namespace)
 )
         
         return contents 
@@ -307,14 +334,14 @@ namespace {ns} {{
     def writeBnfFile(self, path, filebase_name, parser_list):
         
         pathname=os.path.join(path, filebase_name)
-        namespace='x3_test'
+        api_namespace=['testsuite', 'vhdl_parser']
 
         with open(pathname + '.hpp', "w") as f:
-            f.write(self.cxxBnfDecl(parser_list, namespace))
+            f.write(self.cxxBnfDecl(parser_list, api_namespace))
         
         
         with open(pathname + '.cpp', "w") as f:
-            f.write(self.cxxBnfInst(parser_list, namespace))
+            f.write(self.cxxBnfInst(parser_list, api_namespace))
         
         
     
@@ -340,7 +367,7 @@ namespace {ns} {{
                 dataset_loader.append(self.cxxDataSetLoader(test_failure))
                 datatest_case.append(self.cxxDataTestCase(test_failure, test))
                 
-            test_filename = test + '_parsertest.cpp'
+            test_filename = test + self.testfile_postfix
 
             self.writeParserTestFile(path, test_filename, dataset_loader, datatest_case) 
         

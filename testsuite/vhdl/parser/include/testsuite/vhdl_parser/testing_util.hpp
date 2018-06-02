@@ -13,7 +13,7 @@
 #include <sstream>
 
 
-namespace x3_test {
+namespace testsuite { namespace vhdl_parser { namespace util {
 
 
 namespace fs = boost::filesystem;
@@ -80,7 +80,8 @@ std::wstring to_utf16(std::string const& s);
 #define convert_string(s)   s
 #endif
 
-} // namespace x3_test
+
+} } } // namespace testsuite.vhdl_parser.util
 
 
 #endif /* SOURCES_VHDL_TEST_INCLUDE_TESTSUITE_VHDL_PARSER_TESTING_UTIL_HPP_ */

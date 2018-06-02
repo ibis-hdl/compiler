@@ -21,7 +21,7 @@
  * The code skelet looks like:
  *
  * \code{.unparsed}
- * struct ${TEST_CASE${SPECIAL}}_dataset : public ::x3_test::dataset_loader
+ * struct ${TEST_CASE${SPECIAL}}_dataset : public testsuite::vhdl_parser::util::dataset_loader
  * {
  *     ${TEST_CASE${SPECIAL}}_dataset()
  *     : dataset_loader{ "test_case/${TEST_CASE${SPECIAL}}" }
@@ -34,7 +34,7 @@
  *     ^ ${TEST_CASE${SPECIAL}}_dataset.expect(),
  *     input, expect)
  * {
- *     using x3_test::testing_parser;
+ *     using testsuite::testing_parser;
  *
  *     typedef ast::${TEST_CASE} attribute_type;
  *
@@ -99,7 +99,8 @@ DATASET_PREFIX_PATH BOOST_PP_STRINGIZE(test_case)                              \
 
 // the dataset class generation
 #define GENERATE_DATASET(test_case)                                            \
-struct GENERATE_DATASET_NAME(test_case) : public ::x3_test::dataset_loader     \
+struct GENERATE_DATASET_NAME(test_case)                                        \
+: public testsuite::vhdl_parser::util::dataset_loader                          \
 {                                                                              \
     GENERATE_DATASET_NAME(test_case)()                                         \
     : dataset_loader{ GENERATE_DATASET_TESTINPUT_PATH(test_case) }             \
@@ -131,13 +132,13 @@ BOOST_DATA_TEST_CASE( GENERATE_DATASET_TEST_CASE_NAME(test_case),              \
     using attribute_type = ATTRIBUTE_TYPE(test_case);                          \
     auto const parser = RULE_NAME(test_case);                                  \
     boost::ignore_unused(test_case_name);                                      \
-    x3_test::testing_parser<attribute_type> parse;                             \
+    testsuite::vhdl_parser::util::testing_parser<attribute_type> parse;        \
     auto [parse_ok, parsed_AST] = parse(VHDL_code, parser);                    \
     BOOST_TEST(parse_ok);                                                      \
-    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),                     \
+    BOOST_REQUIRE_MESSAGE(testsuite::vhdl_parser::util::current_test_passing(),\
                           "\n    PARSED AST = '\n" << parsed_AST << "'");      \
     BOOST_TEST(parsed_AST == expect_AST, per_element());                       \
-    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),                     \
+    BOOST_REQUIRE_MESSAGE(testsuite::vhdl_parser::util::current_test_passing(),\
                           "\n    PARSED AST = '\n" << parsed_AST << "'");      \
 }                                                                              \
 /* --- */

@@ -35,7 +35,7 @@ GENERATE_DATASET_TEST_CASE(integer)
 /*
  * integer (failure)
  */
-struct integer_failure_dataset : public ::x3_test::dataset_loader
+struct integer_failure_dataset : public testsuite::vhdl_parser::util::dataset_loader
 {
     integer_failure_dataset()
     : dataset_loader{ "test_case/integer_failure" }
@@ -54,15 +54,18 @@ BOOST_DATA_TEST_CASE( integer_failure,
 
     boost::ignore_unused(test_case);
 
-    x3_test::testing_parser<attribute_type> parse;
+    using testsuite::vhdl_parser::util::testing_parser;
+    using testsuite::vhdl_parser::util::current_test_passing;
+
+    testing_parser<attribute_type> parse;
     auto [parse_ok, parsed_AST] = parse(VHDL_code, parser);
 
     BOOST_TEST(!parse_ok);
-    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),
+    BOOST_REQUIRE_MESSAGE(current_test_passing(),
                           "\n    PARSED AST = '\n" << parsed_AST << "'");
 
     BOOST_TEST(parsed_AST == expect_AST, btt::per_element());
-    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),
+    BOOST_REQUIRE_MESSAGE(current_test_passing(),
                           "\n    PARSED AST = '\n" << parsed_AST << "'");
 }
 
@@ -71,7 +74,7 @@ GENERATE_DATASET_TEST_CASE(identifier)
 /*
  * identifier (failure)
  */
-struct identifier_failure_dataset : public ::x3_test::dataset_loader
+struct identifier_failure_dataset : public testsuite::vhdl_parser::util::dataset_loader
 {
     identifier_failure_dataset()
     : dataset_loader{ "test_case/identifier_failure" }
@@ -90,15 +93,18 @@ BOOST_DATA_TEST_CASE( identifier_failure,
 
     boost::ignore_unused(test_case);
 
-    x3_test::testing_parser<attribute_type> parse;
+    using testsuite::vhdl_parser::util::testing_parser;
+    using testsuite::vhdl_parser::util::current_test_passing;
+
+    testing_parser<attribute_type> parse;
     auto [parse_ok, parsed_AST] = parse(VHDL_code, parser);
 
     BOOST_TEST(!parse_ok);
-    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),
+    BOOST_REQUIRE_MESSAGE(current_test_passing(),
                           "\n    PARSED AST = '\n" << parsed_AST << "'");
 
     BOOST_TEST(parsed_AST == expect_AST, btt::per_element());
-    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),
+    BOOST_REQUIRE_MESSAGE(current_test_passing(),
                           "\n    PARSED AST = '\n" << parsed_AST << "'");
 }
 
@@ -114,7 +120,7 @@ GENERATE_DATASET_TEST_CASE(physical_literal)
 /*
  * physical_literal_failure
  */
-struct physical_literal_failure_dataset : public ::x3_test::dataset_loader
+struct physical_literal_failure_dataset : public testsuite::vhdl_parser::util::dataset_loader
 {
     physical_literal_failure_dataset()
     : dataset_loader{ "test_case/physical_literal_failure" }
@@ -133,15 +139,18 @@ BOOST_DATA_TEST_CASE( physical_literal_failure,
 
     boost::ignore_unused(test_case);
 
-    x3_test::testing_parser<attribute_type> parse;
+    using testsuite::vhdl_parser::util::testing_parser;
+    using testsuite::vhdl_parser::util::current_test_passing;
+
+    testing_parser<attribute_type> parse;
     auto [parse_ok, parsed_AST] = parse(VHDL_code, parser);
 
     BOOST_TEST(!parse_ok);
-    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),
+    BOOST_REQUIRE_MESSAGE(current_test_passing(),
                           "\n    PARSED AST = '\n" << parsed_AST << "'");
 
     BOOST_TEST(parsed_AST == expect_AST, btt::per_element());
-    BOOST_REQUIRE_MESSAGE(x3_test::current_test_passing(),
+    BOOST_REQUIRE_MESSAGE(current_test_passing(),
                           "\n    PARSED AST = '\n" << parsed_AST << "'");
 }
 

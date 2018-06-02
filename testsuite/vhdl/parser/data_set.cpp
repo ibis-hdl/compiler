@@ -11,7 +11,7 @@
 #include <iostream>
 
 
-namespace x3_test {
+namespace testsuite { namespace vhdl_parser { namespace util {
 
 
 #if defined(_WIN32) || defined(_WIN64)
@@ -117,6 +117,4 @@ std::string dataset_loader::read_file(fs::path const& file_path)
 }
 
 
-} // namespace x3_test
-
-
+} } } // namespace testsuite.vhdl_pasrser.util
