@@ -3,6 +3,12 @@
 # git self
 *.patch
 
+# other dev files
+*.orig
+*.org
+*.bak
+*.rej
+
 # emacs
 *~
 \#*\#
