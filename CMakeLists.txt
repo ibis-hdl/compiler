@@ -58,6 +58,7 @@ add_subdirectory(testsuite/vhdl)
 add_subdirectory(playground/vhdl93)
 add_subdirectory(playground/cxx)
 add_subdirectory(playground/boost_test)
+add_subdirectory(playground/x3/calc9)
 
 
 
