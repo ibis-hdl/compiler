@@ -8,7 +8,7 @@
   (interface_list
     (interface_declaration<v>
       (interface_variable_declaration
-        (VARIABLE)
+        (variable)
         (identifier_list
           (identifier
             X

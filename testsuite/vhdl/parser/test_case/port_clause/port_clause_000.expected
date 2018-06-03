@@ -13,7 +13,7 @@
             Cin
           )
         )
-        (IN)
+        (in)
         (subtype_indication
           (type_mark<v>
             (name<v>

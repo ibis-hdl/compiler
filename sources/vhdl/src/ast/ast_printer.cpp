@@ -1003,12 +1003,12 @@ void printer::operator()(delay_mechanism const &node)
     static char const symbol[]{ "delay_mechanism" };
     symbol_scope<delay_mechanism> _(*this, symbol);
 
-    switch(node.type) {
-        case delay_mechanism::delay_type::INERTIAL_DELAY: {
+    switch(node.delay_type) {
+        case ast::keyword_token::INERTIAL: {
             os << "INERTIAL_DELAY";
             break;
         }
-        case delay_mechanism::delay_type::TRANSPORT_DELAY: {
+        case ast::keyword_token::TRANSPORT: {
             os << "TRANSPORT_DELAY";
             break;
         }
@@ -1792,12 +1792,12 @@ void printer::operator()(interface_constant_declaration const &node)
     static char const symbol[]{ "interface_constant_declaration" };
     symbol_scope<interface_constant_declaration> _(*this, symbol);
 
-    if(node.CONSTANT) { os << "(CONSTANT)\n"; }
+    if(node.constant) { os << "(constant)\n"; }
 
     (*this)(node.identifier_list);
     os << "\n";
 
-    if(node.IN) { os << "(IN)\n";  }
+    if(node.in) { os << "(in)\n";  }
 
     (*this)(node.subtype_indication);
 
@@ -1848,7 +1848,7 @@ void printer::operator()(interface_signal_declaration const &node)
     static char const symbol[]{ "interface_signal_declaration" };
     symbol_scope<interface_signal_declaration> _(*this, symbol);
 
-    if(node.SIGNAL) { os << "(SIGNAL)\n"; }
+    if(node.signal) { os << "(signal)\n"; }
 
     (*this)(node.identifier_list);
     os << "\n";
@@ -1860,7 +1860,7 @@ void printer::operator()(interface_signal_declaration const &node)
 
     (*this)(node.subtype_indication);
 
-    if(node.BUS) { os << "\n(BUS)"; }
+    if(node.bus) { os << "\n(bus)"; }
 
     if(node.static_expression) {
         os << "\n";
@@ -1874,7 +1874,7 @@ void printer::operator()(interface_variable_declaration const &node)
     static char const symbol[]{ "interface_variable_declaration" };
     symbol_scope<interface_variable_declaration> _(*this, symbol);
 
-    if(node.VARIABLE) { os << "(VARIABLE)\n"; }
+    if(node.VARIABLE) { os << "(variable)\n"; }
 
     (*this)(node.identifier_list);
     os << "\n";

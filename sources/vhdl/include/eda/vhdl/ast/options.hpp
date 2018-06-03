@@ -24,7 +24,8 @@ struct options : position_tagged
     bool                                    guarded;
     optional<ast::delay_mechanism>          delay_mechanism;
 
-    options() : guarded{}
+    options()
+    : guarded{}
     { }
 };
 

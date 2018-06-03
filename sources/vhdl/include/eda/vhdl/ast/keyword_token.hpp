@@ -44,4 +44,20 @@ std::ostream& operator<<(std::ostream& os, keyword_token kw_token);
 } } } // namespace eda.vhdl.ast
 
 
+/*
+ * Support Spirit.X3's attribute handling.
+ * Several nodes on AST has an boolean attribute on simply existence of an
+ * keyword, this simplifies evaluating on cosst of spirit's move_to traits.
+ */
+namespace boost { namespace spirit { namespace x3 { namespace traits {
+
+static inline void
+move_to(eda::vhdl::ast::keyword_token token, bool& dest)
+{
+    dest = static_cast<bool>(token);
+}
+
+} } } } // boost.spirit.x3.traits
+
+
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_KEYWORD_TOKEN_HPP_ */

@@ -23,15 +23,15 @@ namespace eda { namespace vhdl { namespace ast {
 
 struct interface_signal_declaration : position_tagged
 {
-    bool                                SIGNAL;
+    bool                                signal;
     ast::identifier_list                identifier_list;
     optional<ast::keyword_token>        mode;
     ast::subtype_indication             subtype_indication;
-    bool                                BUS;
+    bool                                bus;
     optional<ast::expression>           static_expression;
 
     interface_signal_declaration()
-    : SIGNAL{}, BUS{}
+    : signal{}, bus{}
     { }
 };
 

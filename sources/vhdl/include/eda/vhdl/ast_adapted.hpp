@@ -169,7 +169,7 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::decimal_literal,
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::delay_mechanism,
-    time_expression, type
+    time_expression, delay_type
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::design_unit,
@@ -297,11 +297,11 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::instantiated_unit_chunk,
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::interface_constant_declaration,
-    CONSTANT, identifier_list, IN, subtype_indication, static_expression
+    constant, identifier_list, in, subtype_indication, static_expression
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::interface_signal_declaration,
-    SIGNAL, identifier_list, mode, subtype_indication, BUS, static_expression
+    signal, identifier_list, mode, subtype_indication, bus, static_expression
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::interface_variable_declaration,

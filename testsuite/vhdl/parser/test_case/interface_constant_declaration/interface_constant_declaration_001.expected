@@ -1,5 +1,5 @@
 (interface_constant_declaration
-  (CONSTANT)
+  (constant)
   (identifier_list
     (identifier
       BUS_WIDTH

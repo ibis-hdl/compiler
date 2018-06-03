@@ -1,5 +1,5 @@
 (interface_signal_declaration
-  (SIGNAL)
+  (signal)
   (identifier_list
     (identifier
       a_bit

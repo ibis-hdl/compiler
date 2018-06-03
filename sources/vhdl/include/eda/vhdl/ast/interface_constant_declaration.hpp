@@ -22,14 +22,14 @@ namespace eda { namespace vhdl { namespace ast {
 
 struct interface_constant_declaration : position_tagged
 {
-    bool                                CONSTANT;
+    bool                                constant;
     ast::identifier_list                identifier_list;
-    bool                                IN;
+    bool                                in;
     ast::subtype_indication             subtype_indication;
     optional<ast::expression>           static_expression;
 
     interface_constant_declaration()
-    : CONSTANT{}, IN{}
+    : constant{}, in{}
     { }
 };
 

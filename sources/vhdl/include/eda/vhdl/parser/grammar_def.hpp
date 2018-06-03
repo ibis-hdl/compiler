@@ -13,7 +13,6 @@
 #include <eda/vhdl/parser/namespace_alias.hpp>
 #include <eda/vhdl/parser/grammar.hpp>
 #include <eda/vhdl/parser/common_types.hpp>
-#include <eda/vhdl/parser/x3_support.hpp>
 
 /* enable this header at last for tagging the outermost rule (design_file) for
  * handling expectation points. At this point  annotate_on_success comes into
@@ -90,8 +89,8 @@ auto const IMPURE = x3::as<ast::keyword_token>[
 auto const IN = x3::as<ast::keyword_token>[
     kw("in") >> x3::attr(ast::keyword_token::IN)
 ];
-auto const INERTIAL = x3::as<ast::delay_mechanism::delay_type>[
-    kw("inertial") >> x3::attr(ast::delay_mechanism::delay_type::INERTIAL_DELAY)
+auto const INERTIAL = x3::as<ast::keyword_token>[
+    kw("inertial") >> x3::attr(ast::keyword_token::INERTIAL)
 ];
 auto const IS = kw("is");
 auto const LABEL = kw("label");
@@ -145,8 +144,8 @@ auto const THEN = kw("then");
 auto const TO = x3::as<ast::keyword_token>[
     kw("to") >> x3::attr(ast::keyword_token::TO)
 ];
-auto const TRANSPORT = x3::as<ast::delay_mechanism::delay_type>[
-    kw("transport")  >> x3::attr(ast::delay_mechanism::delay_type::TRANSPORT_DELAY)
+auto const TRANSPORT = x3::as<ast::keyword_token>[
+    kw("transport")  >> x3::attr(ast::keyword_token::TRANSPORT)
 ];
 auto const TYPE = kw("type");
 auto const UNAFFECTED = x3::as<ast::keyword_token>[

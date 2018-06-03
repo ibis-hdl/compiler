@@ -35,7 +35,8 @@ struct process_statement : position_tagged
     bool                            end_postponed;
     optional<ast::label>            end_label;
 
-    process_statement() : postponed{}, end_postponed{}
+    process_statement()
+    : postponed{}, end_postponed{}
     { }
 };
 
