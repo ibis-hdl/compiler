@@ -1,6 +1,8 @@
 (attribute_specification
-  (identifier
-    RISING_DELAY
+  (attribute_designator
+    (identifier
+      RISING_DELAY
+    )
   )
   (entity_specification
     (entity_name_list<v>

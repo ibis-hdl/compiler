@@ -1,6 +1,8 @@
 (attribute_specification
-  (identifier
-    PIN_NO
+  (attribute_designator
+    (identifier
+      PIN_NO
+    )
   )
   (entity_specification
     (entity_name_list<v>

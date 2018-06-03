@@ -339,9 +339,15 @@ void printer::operator()(attribute_specification const &node)
     static char const symbol[]{ "attribute_specification" };
     symbol_scope<attribute_specification> _(*this, symbol);
 
-    (*this)(node.attribute_designator);
+    {
+        static char const symbol[]{ "attribute_designator" };
+        symbol_scope<based_literal> _(*this, symbol);
+        (*this)(node.attribute_designator);
+    }
+
     os << "\n";
     (*this)(node.entity_specification);
+
     os << "\n";
     (*this)(node.expression);
 }

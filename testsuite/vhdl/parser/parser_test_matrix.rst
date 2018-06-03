@@ -975,8 +975,10 @@ attribute_specification
 | File                        | Input                                               | Expected                                           |
 +-----------------------------+-----------------------------------------------------+----------------------------------------------------+
 | attribute_specification_000 | attribute PIN_NO of CIN: signal is 10;              | (attribute_specification                           |
-|                             |                                                     |   (identifier                                      |
-|                             |                                                     |     PIN_NO                                         |
+|                             |                                                     |   (attribute_designator                            |
+|                             |                                                     |     (identifier                                    |
+|                             |                                                     |       PIN_NO                                       |
+|                             |                                                     |     )                                              |
 |                             |                                                     |   )                                                |
 |                             |                                                     |   (entity_specification                            |
 |                             |                                                     |     (entity_name_list<v>                           |
@@ -1017,8 +1019,10 @@ attribute_specification
 |                             |                                                     |                                                    |
 +-----------------------------+-----------------------------------------------------+----------------------------------------------------+
 | attribute_specification_003 |  attribute CAPACITANCE of all: signal is 15 pF;     | (attribute_specification                           |
-|                             |                                                     |   (identifier                                      |
-|                             |                                                     |     CAPACITANCE                                    |
+|                             |                                                     |   (attribute_designator                            |
+|                             |                                                     |     (identifier                                    |
+|                             |                                                     |       CAPACITANCE                                  |
+|                             |                                                     |     )                                              |
 |                             |                                                     |   )                                                |
 |                             |                                                     |   (entity_specification                            |
 |                             |                                                     |     (entity_name_list<v>                           |
@@ -1058,8 +1062,10 @@ attribute_specification
 |                             |                                                     |                                                    |
 +-----------------------------+-----------------------------------------------------+----------------------------------------------------+
 | attribute_specification_004 | attribute IMPLEMENTATION of G1: group is "74LS152"; | (attribute_specification                           |
-|                             |                                                     |   (identifier                                      |
-|                             |                                                     |     IMPLEMENTATION                                 |
+|                             |                                                     |   (attribute_designator                            |
+|                             |                                                     |     (identifier                                    |
+|                             |                                                     |       IMPLEMENTATION                               |
+|                             |                                                     |     )                                              |
 |                             |                                                     |   )                                                |
 |                             |                                                     |   (entity_specification                            |
 |                             |                                                     |     (entity_name_list<v>                           |
@@ -1096,8 +1102,10 @@ attribute_specification
 |                             |                                                     |                                                    |
 +-----------------------------+-----------------------------------------------------+----------------------------------------------------+
 | attribute_specification_005 | attribute RISING_DELAY of C2Q: group is 7.2 ns;     | (attribute_specification                           |
-|                             |                                                     |   (identifier                                      |
-|                             |                                                     |     RISING_DELAY                                   |
+|                             |                                                     |   (attribute_designator                            |
+|                             |                                                     |     (identifier                                    |
+|                             |                                                     |       RISING_DELAY                                 |
+|                             |                                                     |     )                                              |
 |                             |                                                     |   )                                                |
 |                             |                                                     |   (entity_specification                            |
 |                             |                                                     |     (entity_name_list<v>                           |
@@ -7851,7 +7859,7 @@ interface_constant_declaration
 |                                    |                                 |                                                    |
 +------------------------------------+---------------------------------+----------------------------------------------------+
 | interface_constant_declaration_001 | constant BUS_WIDTH : integer    | (interface_constant_declaration                    |
-|                                    |                                 |   (CONSTANT)                                       |
+|                                    |                                 |   (constant)                                       |
 |                                    |                                 |   (identifier_list                                 |
 |                                    |                                 |     (identifier                                    |
 |                                    |                                 |       BUS_WIDTH                                    |
@@ -7870,7 +7878,7 @@ interface_constant_declaration
 |                                    |                                 |                                                    |
 +------------------------------------+---------------------------------+----------------------------------------------------+
 | interface_constant_declaration_002 | constant N, N5 : integer := 5   | (interface_constant_declaration                    |
-|                                    |                                 |   (CONSTANT)                                       |
+|                                    |                                 |   (constant)                                       |
 |                                    |                                 |   (identifier_list                                 |
 |                                    |                                 |     (identifier                                    |
 |                                    |                                 |       N                                            |
@@ -7913,7 +7921,7 @@ interface_constant_declaration
 |                                    |                                 |                                                    |
 +------------------------------------+---------------------------------+----------------------------------------------------+
 | interface_constant_declaration_003 | constant Pi : real := 3.14159   | (interface_constant_declaration                    |
-|                                    |                                 |   (CONSTANT)                                       |
+|                                    |                                 |   (constant)                                       |
 |                                    |                                 |   (identifier_list                                 |
 |                                    |                                 |     (identifier                                    |
 |                                    |                                 |       Pi                                           |
@@ -7953,7 +7961,7 @@ interface_constant_declaration
 |                                    |                                 |                                                    |
 +------------------------------------+---------------------------------+----------------------------------------------------+
 | interface_constant_declaration_004 | constant PERIOD : time := 10 ns | (interface_constant_declaration                    |
-|                                    |                                 |   (CONSTANT)                                       |
+|                                    |                                 |   (constant)                                       |
 |                                    |                                 |   (identifier_list                                 |
 |                                    |                                 |     (identifier                                    |
 |                                    |                                 |       PERIOD                                       |
@@ -8004,7 +8012,7 @@ interface_constant_declaration
 |                                    |                                 |       input1                                       |
 |                                    |                                 |     )                                              |
 |                                    |                                 |   )                                                |
-|                                    |                                 |   (IN)                                             |
+|                                    |                                 |   (in)                                             |
 |                                    |                                 |   (subtype_indication                              |
 |                                    |                                 |     (type_mark<v>                                  |
 |                                    |                                 |       (name<v>                                     |
@@ -8070,7 +8078,7 @@ interface_signal_declaration
 |                                  |                             |                                         |
 +----------------------------------+-----------------------------+-----------------------------------------+
 | interface_signal_declaration_001 | signal a_bit : bit := '0'   | (interface_signal_declaration           |
-|                                  |                             |   (SIGNAL)                              |
+|                                  |                             |   (signal)                              |
 |                                  |                             |   (identifier_list                      |
 |                                  |                             |     (identifier                         |
 |                                  |                             |       a_bit                             |
@@ -8108,7 +8116,7 @@ interface_signal_declaration
 |                                  |                             |                                         |
 +----------------------------------+-----------------------------+-----------------------------------------+
 | interface_signal_declaration_002 | signal bar : word bus       | (interface_signal_declaration           |
-|                                  |                             |   (SIGNAL)                              |
+|                                  |                             |   (signal)                              |
 |                                  |                             |   (identifier_list                      |
 |                                  |                             |     (identifier                         |
 |                                  |                             |       bar                               |
@@ -8123,7 +8131,7 @@ interface_signal_declaration
 |                                  |                             |       )                                 |
 |                                  |                             |     )                                   |
 |                                  |                             |   )                                     |
-|                                  |                             |   (BUS)                                 |
+|                                  |                             |   (bus)                                 |
 |                                  |                             | )                                       |
 |                                  |                             |                                         |
 +----------------------------------+-----------------------------+-----------------------------------------+
@@ -8178,7 +8186,7 @@ interface_variable_declaration
 |                                    |                             |                                         |
 +------------------------------------+-----------------------------+-----------------------------------------+
 | interface_variable_declaration_001 | variable a_bit : bit := '0' | (interface_variable_declaration         |
-|                                    |                             |   (VARIABLE)                            |
+|                                    |                             |   (variable)                            |
 |                                    |                             |   (identifier_list                      |
 |                                    |                             |     (identifier                         |
 |                                    |                             |       a_bit                             |
@@ -8216,7 +8224,7 @@ interface_variable_declaration
 |                                    |                             |                                         |
 +------------------------------------+-----------------------------+-----------------------------------------+
 | interface_variable_declaration_002 | variable bar : word         | (interface_variable_declaration         |
-|                                    |                             |   (VARIABLE)                            |
+|                                    |                             |   (variable)                            |
 |                                    |                             |   (identifier_list                      |
 |                                    |                             |     (identifier                         |
 |                                    |                             |       bar                               |
@@ -9222,7 +9230,7 @@ port_clause
 |                 |                                               |             Cin                                           |
 |                 |                                               |           )                                               |
 |                 |                                               |         )                                                 |
-|                 |                                               |         (IN)                                              |
+|                 |                                               |         (in)                                              |
 |                 |                                               |         (subtype_indication                               |
 |                 |                                               |           (type_mark<v>                                   |
 |                 |                                               |             (name<v>                                      |
@@ -9271,7 +9279,7 @@ port_clause
 |                 |                                               |             Inputs                                        |
 |                 |                                               |           )                                               |
 |                 |                                               |         )                                                 |
-|                 |                                               |         (IN)                                              |
+|                 |                                               |         (in)                                              |
 |                 |                                               |         (subtype_indication                               |
 |                 |                                               |           (type_mark<v>                                   |
 |                 |                                               |             (name<v>                                      |
@@ -12958,7 +12966,7 @@ subprogram_specification
 |                              |                                                                       |   (interface_list                                         |
 |                              |                                                                       |     (interface_declaration<v>                             |
 |                              |                                                                       |       (interface_variable_declaration                     |
-|                              |                                                                       |         (VARIABLE)                                        |
+|                              |                                                                       |         (variable)                                        |
 |                              |                                                                       |         (identifier_list                                  |
 |                              |                                                                       |           (identifier                                     |
 |                              |                                                                       |             X                                             |
@@ -12995,7 +13003,7 @@ subprogram_specification
 |                              |                                                                       |   (interface_list                                         |
 |                              |                                                                       |     (interface_declaration<v>                             |
 |                              |                                                                       |       (interface_variable_declaration                     |
-|                              |                                                                       |         (VARIABLE)                                        |
+|                              |                                                                       |         (variable)                                        |
 |                              |                                                                       |         (identifier_list                                  |
 |                              |                                                                       |           (identifier                                     |
 |                              |                                                                       |             Value                                         |

@@ -1,6 +1,8 @@
 (attribute_specification
-  (identifier
-    IMPLEMENTATION
+  (attribute_designator
+    (identifier
+      IMPLEMENTATION
+    )
   )
   (entity_specification
     (entity_name_list<v>
