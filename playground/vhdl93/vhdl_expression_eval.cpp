@@ -20,6 +20,89 @@
 #include <cmath>
 
 
+/**
+ * Readme 2018:
+ *
+ * This was just a Test of future work if the parser will be finished. Over time
+ * things has been changed (and not valid any more) and I'm not sure if this
+ * will compile today.
+ *
+ * Hence, this is here for educational purpose and the dependencies in the
+ * project's source are removed.
+ *
+ * ----8< ----ast/literal.cpp ----8<----
+ *
+ * struct literal : variant<
+ *    nullary,
+ *    numeric_literal,
+ *    enumeration_literal,
+ *    string_literal,
+ *    bit_string_literal,
+ *    keyword_token          // NULL
+ * >
+ * {
+ *    // FixMe: only playground/vhdl_expression_eval requires this!
+ *    literal(literal const&) = default;
+ *    literal& operator=(literal const&) = default;
+ *
+ *    using base_type::base_type;
+ *    using base_type::operator=;
+ * };
+ *
+ * ---->8-------->8-------->8-------->8----
+ *
+ * ----8< ----eda/vhdl/parser/expression_parse.hpp ----8<----
+ *
+ *  #include <eda/vhdl/ast/expression.hpp>
+ *
+ * namespace eda { namespace vhdl { namespace parser {
+ *
+ *     // quick&dirty API for expression parsing and evaluation
+ *     bool parse(const std::string& file, ast::expression& exp);
+ *
+ * } } } // namespace eda.vhdl.parser
+ *
+ *
+ * ---->8-------->8-------->8-------->8----
+ *
+ * ----8< ----vhdl/src/expression_parse.cpp ----8<----
+ *
+ * bool parse(const std::string& input, ast::expression& expression_)
+ * {
+ *     parser::iterator_type iter = input.begin();
+ *     parser::iterator_type const end = input.end();
+ *
+ *     parser::error_handler_type error_handler(iter, end, std::cout);
+ *
+ *     auto const parser =
+ *         x3::with<x3::error_handler_tag>(std::ref(error_handler))
+ *         [
+ *               parser::expression
+ *         ];
+ *
+ *     bool success = false;
+ *
+ *     try {
+ *         success = x3::phrase_parse(iter, end, parser, parser::skipper, expression_);
+ *
+ *         if (success) {
+ *             if (iter != end) {
+ *                 error_handler(iter, "Error! Expecting end of input here: ");
+ *             }
+ *             else {
+ *                 // nothing
+ *             }
+ *         }
+ *     } catch(x3::expectation_failure<parser::iterator_type> const& e) {
+ *         error_handler(e.where(), "Error! Expecting " + e.which() + " here: ");
+ *     }
+ *
+ *     return success;
+ * }
+ *
+ * ---->8-------->8-------->8-------->8----
+ */
+
 namespace eda { namespace vhdl93 { namespace ast {
 
 

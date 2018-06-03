@@ -18,7 +18,6 @@ set(VHDL_PARSER_SOURCE
     
     src/parser/error_handler.cpp
 
-    #src/parser/expression_parse.cpp # hot fix for playground vhdl_expression_eval
     #src/parser/grammar.cpp
 )
 

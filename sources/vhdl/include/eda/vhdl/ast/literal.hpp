@@ -37,10 +37,6 @@ struct literal : variant<
     keyword_token          // NULL
 >
 {
-    // FixMe: only playground/vhdl_expression_eval requires this!
-    literal(literal const&) = default;
-    literal& operator=(literal const&) = default;
-
     using base_type::base_type;
     using base_type::operator=;
 };
