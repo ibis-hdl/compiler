@@ -37,9 +37,7 @@ public:
      * literal can fit the value_type). */
     typedef std::tuple<bool, value_type>            return_type;
 
-    numeric_convert(std::ostream &os_)
-    : os{ os_ }
-    { }
+    numeric_convert(std::ostream &os_);
 
     return_type operator()(ast::bit_string_literal const& literal) const;
     return_type operator()(ast::decimal_literal const& literal) const;

@@ -14,6 +14,7 @@
 #include <eda/utils/cxx_bug_fatal.hpp>
 
 #include <numeric>  // accumulate
+#include <type_traits>
 #include <iterator>
 #include <cassert>
 #include <iostream>
@@ -270,19 +271,21 @@ namespace detail {
  */
 using unsigned_integer = eda::vhdl::intrinsic::unsigned_integer_type;
 using signed_integer   = eda::vhdl::intrinsic::unsigned_integer_type;
+using real = eda::vhdl::intrinsic::real_type;
 
 
 /**
- *  Helper class to calculate fractional parts of binary numbers like bin,
+ * Helper class to calculate fractional parts of binary numbers like bin,
  * oct and hex.  */
 struct frac
 {
-    double const base;
-    double pow;
+    typedef double                                  numeric_type;
+    numeric_type const base;
+    numeric_type pow;
 
-    frac(double base_)
+    frac(numeric_type base_)
     : base{ base_ }, pow{ base_ }
-    { };
+    {  };
 
     static unsigned digit(char ch)
     {
@@ -316,15 +319,15 @@ struct frac
         }
     };
 
-    double operator()(double acc, char ch)
+    numeric_type operator()(numeric_type acc, char ch)
     {
         /* Fixme: The algorithm isn't smart to cover the failure cases like
          * over- and underflow. */
-        double digit = frac::digit(ch);
+        numeric_type digit = frac::digit(ch);
         digit /= pow;
         pow *= base;
-        double const result = acc + digit;
-        assert(std::isnormal(result) && "Fractional number isn't a number");
+        numeric_type const result = acc + digit;
+
         return result;
     }
 
@@ -334,6 +337,23 @@ struct frac
 
 
 auto const primitive_parse{ parser::primitive_parser{} };
+
+
+/**
+ * constructs the numeroc_convert util, errors are reported on os_.
+ */
+numeric_convert::numeric_convert(std::ostream &os_)
+: os{ os_ }
+{
+    // until we got all templates, check for correct types
+    static_assert(std::integral_constant<bool,
+               std::is_same<numeric_convert::value_type,
+                            detail::real>::value
+        >::value,
+        "iterator types must be the same"
+    );
+}
+
 
 
 /**
@@ -488,6 +508,8 @@ numeric_convert::return_type numeric_convert::operator()(ast::decimal_literal co
 numeric_convert::return_type numeric_convert::operator()(ast::based_literal const& literal) const
 {
     using parser::primitive_parser;
+    using boost::locale::format;
+    using boost::locale::translate;
 
     auto const supported_base = [](unsigned base) {
         switch(base) {
@@ -526,8 +548,8 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
         return primitive_parse(literal.number.exponent, primitive_parser::exp{});
     };
 
-    unsigned base{ 0 };     // range [0-99], see below
-    double result { 0.0 };
+    detail::unsigned_integer base{ 0 };
+    numeric_convert::value_type result { 0.0 };
     bool parse_ok{ false };
 
     /* -------------------------------------------------------------------------
@@ -661,6 +683,17 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
             auto const last = std::cend(range_f);
             auto const fractional_part = std::accumulate(iter, last, 0.0, frac_obj(base));
 
+            /* during accumulation using frac_obj a numeric IEEE754 errors may
+             * occur */
+            if(!std::isnormal(fractional_part)) {
+                os << format(translate(
+                    "Numeric error occurred during calculation on based_literal "
+                    "with fractional part of \'{1}\' .\n"
+                    ))
+                    % literal.number.fractional_part;
+                return std::make_tuple(false, result);
+            }
+
             result += fractional_part;
         }
 
@@ -678,7 +711,7 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
                 return std::make_tuple(parse_ok, exponent);
             }
 
-            double const pow = std::pow(
+            numeric_convert::value_type const pow = std::pow(
                 static_cast<double>(base),
                 static_cast<double>(exponent)
             );
