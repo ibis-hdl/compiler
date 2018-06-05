@@ -6,18 +6,10 @@ ToDo:
 - interface_constant_declaration/interface_constant_declaration_006.input
 - type_conversion/type_conversion_001.input
 - wait_statement/wait_statement_00x.input
-- group_declaration/group_declaration_002.input
 - binding_indication/binding_indication_00{0,1}.input entity name rule (is work.foo -> name)
 
 Renewal 2018:
 - Missing tests:
   - concurrent_procedure_call_statement
   - concurrent_signal_assignment_statement
-
-  
-Based Literal Failure Parser TestCases:
-    "2#BAD_CODE#",  // wrong binary digits
-    "8#BAD_CODE#",  // wrong octal digits
-    "16#_42#",        // wrong delimiter
-    "16#42_#",        // wrong delimiter
 
