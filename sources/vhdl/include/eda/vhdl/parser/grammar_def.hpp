@@ -3978,23 +3978,28 @@ auto const slice_name_def =
 //     " { graphic_character } "
 namespace string_literal_detail {
 
-auto const string_literal_1 = x3::rule<struct _, std::string> { "string_literal" } =
-   *( ( graphic_character - '"'  )
-    | ( char_('"') >> char_('"') )
-    )
+auto const string_literal_1 = x3::rule<struct _, string_view_attribute> { "string_literal" } =
+    x3::raw[
+        *( ( graphic_character - '"'  )
+         | ( char_('"')       >> '"' )
+         )
+    ]
     ;
 
-auto const string_literal_2 = x3::rule<struct _, std::string> { "string_literal" } =
-   *( ( graphic_character - '%'  )
-    | ( char_('%') >> char_('%') )
-    )
+auto const string_literal_2 = x3::rule<struct _, string_view_attribute> { "string_literal" } =
+    x3::raw[
+        *( ( graphic_character - '%'  )
+         | ( char_('%')       >> '%' )
+         )
+    ]
     ;
+
 } // end detail
 
 auto const string_literal_def =
     lexeme [
-          ('"' >> string_literal_detail::string_literal_1 >> '"')
-        | ('%' >> string_literal_detail::string_literal_2 >> '%')
+          '"' >> x3::raw[string_literal_detail::string_literal_1] >> '"'
+        | '%' >> x3::raw[string_literal_detail::string_literal_2] >> '%'
     ]
     ;
 

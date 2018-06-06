@@ -2675,6 +2675,9 @@ void printer::operator()(string_literal const &node)
     static char const symbol[]{ "string_literal" };
     symbol_scope<string_literal> _(*this, symbol);
 
+    /* Note, following the LRM, if a quotation sign has to be used in a string
+     * literal, it is denoted by two double quotes side by side. This must
+     * be replaced since string_view is used. */
     os << node.literal;
 }
 
