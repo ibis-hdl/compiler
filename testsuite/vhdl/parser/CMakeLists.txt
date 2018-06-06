@@ -43,7 +43,7 @@ set(PARSERTEST_SOURCES#_DEV
     #parser_test/xxx_signature_test.cpp
 )
 
-set(PARSERTEST_SOURCES_
+set(PARSERTEST_SOURCES
     ${TEST_COMMON_SOURCES}
     parser_test/abstract_literal_test.cpp
     parser_test/actual_part_test.cpp
@@ -110,6 +110,7 @@ set(PARSERTEST_SOURCES_
     parser_test/primary_test.cpp
     parser_test/primary_unit_declaration_test.cpp
     parser_test/procedure_call_test.cpp
+    parser_test/qualified_expression_test.cpp
     parser_test/range_constraint_test.cpp
     parser_test/record_type_definition_test.cpp
     parser_test/relation_test.cpp

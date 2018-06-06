@@ -7,11 +7,9 @@
             (term
               (primary<v>
                 (literal<v>
-                  (numeric_literal<v>
-                    (abstract_literal<v>
-                      (decimal_literal
-                        literal: 1, type: integer
-                      )
+                  (enumeration_literal<v>
+                    (character_literal
+                      '0'
                     )
                   )
                 )
@@ -30,11 +28,9 @@
             (term
               (primary<v>
                 (literal<v>
-                  (numeric_literal<v>
-                    (abstract_literal<v>
-                      (decimal_literal
-                        literal: 2, type: integer
-                      )
+                  (enumeration_literal<v>
+                    (character_literal
+                      '1'
                     )
                   )
                 )
@@ -53,11 +49,9 @@
             (term
               (primary<v>
                 (literal<v>
-                  (numeric_literal<v>
-                    (abstract_literal<v>
-                      (decimal_literal
-                        literal: 3, type: integer
-                      )
+                  (enumeration_literal<v>
+                    (character_literal
+                      '0'
                     )
                   )
                 )
@@ -76,11 +70,9 @@
             (term
               (primary<v>
                 (literal<v>
-                  (numeric_literal<v>
-                    (abstract_literal<v>
-                      (decimal_literal
-                        literal: 4, type: integer
-                      )
+                  (enumeration_literal<v>
+                    (character_literal
+                      '1'
                     )
                   )
                 )

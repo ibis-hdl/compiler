@@ -1,0 +1,30 @@
+(aggregate
+  (element_association
+    (choices
+      (choice<v>
+        (keyword
+          OTHERS
+        )
+      )
+    )
+    (expression
+      (relation
+        (shift_expression
+          (simple_expression
+            (term
+              (primary<v>
+                (literal<v>
+                  (enumeration_literal<v>
+                    (character_literal
+                      'Z'
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

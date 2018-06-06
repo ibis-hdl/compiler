@@ -1,13 +1,19 @@
 (aggregate
   (element_association
-    (choices
-      (choice<v>
-        (simple_expression
-          (term
-            (primary<v>
-              (name<v>
-                (identifier
-                  ex1
+    (expression
+      (relation
+        (shift_expression
+          (simple_expression
+            (term
+              (primary<v>
+                (literal<v>
+                  (numeric_literal<v>
+                    (abstract_literal<v>
+                      (decimal_literal
+                        literal: 1, type: integer
+                      )
+                    )
+                  )
                 )
               )
             )
@@ -15,6 +21,8 @@
         )
       )
     )
+  ),
+  (element_association
     (expression
       (relation
         (shift_expression
@@ -45,16 +53,11 @@
             (primary<v>
               (name<v>
                 (identifier
-                  ex3
+                  D
                 )
               )
             )
           )
-        )
-      ),
-      (choice<v>
-        (keyword
-          OTHERS
         )
       )
     )
@@ -68,7 +71,45 @@
                   (numeric_literal<v>
                     (abstract_literal<v>
                       (decimal_literal
-                        literal: 5, type: integer
+                        literal: 4, type: integer
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  ),
+  (element_association
+    (choices
+      (choice<v>
+        (simple_expression
+          (term
+            (primary<v>
+              (name<v>
+                (identifier
+                  C
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+    (expression
+      (relation
+        (shift_expression
+          (simple_expression
+            (term
+              (primary<v>
+                (literal<v>
+                  (numeric_literal<v>
+                    (abstract_literal<v>
+                      (decimal_literal
+                        literal: 3, type: integer
                       )
                     )
                   )

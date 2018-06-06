@@ -1,0 +1,24 @@
+(qualified_expression
+  (name<v>
+    (identifier
+      bit_vector
+    )
+  )
+  (expression
+    (relation
+      (shift_expression
+        (simple_expression
+          (term
+            (primary<v>
+              (literal<v>
+                (string_literal
+                  00100
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

@@ -2305,7 +2305,22 @@ auto const discrete_range_def = /* order matters */
 // element_association ::=                                             [§ 7.3.2]
 //     [ choices => ] expression
 auto const element_association_def =
-       -( choices >> "=>" )
+    /* Note, parsing element_association is a bit tricky, due to backtracking side
+     * effect. The problem did rise up first time on parsing attribute_specification's
+     * expression:
+     *
+     * attribute_specification ::=
+     *        attribute attribute_designator OF entity_specification IS expression ;
+     *
+     * with descent aggregate's element_association:
+     *
+     * aggregate           ::= ( element_association { , element_association } )
+     * element_association ::= [ choices => ] expression
+     *
+     * If the choices rule fails due to missing "=>" the element_association node
+     * still contains the previous parsed data, hence holding the leaf data twice
+     * using two parse paths. as[] directive solve this. */
+       -x3::as<ast::choices>[choices >> "=>"]
     >> expression
     ;
 
@@ -3482,13 +3497,13 @@ auto const prefix_def =
 //     | allocator
 //     | ( expression )
 auto const primary_def =
-    /* Order matters; if aggreagate is prior expression as of the BNF, a
-     * backtracing problem occurred at:
+    /* Order matters; if aggregate is prior expression as of the BNF, a
+     * backtracking problem occurred at:
      * aggregate -> element_association -> choices  */
       !char_('"') >> name // ignore string_literals which follow below
     | literal
     | function_call
-    //     | qualified_expression
+    | qualified_expression
     //     | type_conversion
     //     | allocator
     | ( '(' >> expression >> ')' )
@@ -3607,15 +3622,22 @@ auto const process_statement_part_def =
     ;
 
 
-#if 0
+
 // qualified_expression ::=                                            [§ 7.3.4]
 // type_mark ' ( expression )
 //     | type_mark ' aggregate
 auto const qualified_expression_def =
-        /* Note: see iverilog/vhdlpp/parse.y */
-        type_mark ' '(' expression ')'     | type_mark ' aggregate
-        ;
-#endif
+    /* Note: This BNF rule is ambiguous, since
+     * aggregate           ::= ( element_association { , element_association } )
+     * element_association ::= [ choices => ] expression
+     * again. AST node takes care on this. */
+       type_mark
+    >> "\'" // FixMe: TickMark -> IR1045 !!!!
+    >> ( "(" >> expression >> ")"
+       |  aggregate
+       )
+    ;
+
 
 
 // range ::=                                                             [§ 3.1]
@@ -4568,9 +4590,9 @@ BOOST_SPIRIT_DEFINE(  // -- P --
     //, process_statement
     , process_statement_part
 )
-//BOOST_SPIRIT_DEFINE(  // -- Q --
-////  qualified_expression
-//)
+BOOST_SPIRIT_DEFINE(  // -- Q --
+      qualified_expression
+)
 BOOST_SPIRIT_DEFINE(  // -- R --
       range
     , range_constraint

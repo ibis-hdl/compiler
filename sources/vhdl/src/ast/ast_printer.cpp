@@ -1101,8 +1101,11 @@ void printer::operator()(element_association const &node)
     static char const symbol[]{ "element_association" };
     symbol_scope<element_association> _(*this, symbol);
 
-    (*this)(node.choices);
-    os << "\n";
+    if(!node.choices.empty()) {
+        (*this)(node.choices);
+        os << "\n";
+    }
+
     (*this)(node.expression);
 }
 

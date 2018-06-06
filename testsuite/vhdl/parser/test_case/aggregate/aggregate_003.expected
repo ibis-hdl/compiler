@@ -46,29 +46,13 @@
     )
   ),
   (element_association
-    (expression
-      (relation
-        (shift_expression
-          (simple_expression
-            (term
-              (primary<v>
-                (literal<v>
-                  (numeric_literal<v>
-                    (abstract_literal<v>
-                      (decimal_literal
-                        literal: 3, type: integer
-                      )
-                    )
-                  )
-                )
-              )
-            )
-          )
+    (choices
+      (choice<v>
+        (keyword
+          OTHERS
         )
       )
     )
-  ),
-  (element_association
     (expression
       (relation
         (shift_expression

@@ -1,0 +1,38 @@
+(attribute_specification
+  (attribute_designator
+    (identifier
+      Enum_encoding
+    )
+  )
+  (entity_specification
+    (entity_name_list<v>
+      (entity_designator
+        (entity_tag<v>
+          (identifier
+            State
+          )
+        )
+      )
+    )
+    (keyword
+      TYPE
+    )
+  )
+  (expression
+    (relation
+      (shift_expression
+        (simple_expression
+          (term
+            (primary<v>
+              (literal<v>
+                (string_literal
+                  11 00 01 10
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

@@ -28,7 +28,7 @@ struct qualified_expression : position_tagged
         ast::nullary,
         ast::expression,
         ast::aggregate
-    >                       aggregate_or_expression;    // Note iverilog/vhdl aggregate_or_primary, case_statement_alternative ff
+    >                       aggregate_or_expression;
 };
 
 

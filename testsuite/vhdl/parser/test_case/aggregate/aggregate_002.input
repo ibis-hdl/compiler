@@ -1,2 +1,2 @@
-(ex1 => 2, ex3 | OTHERS => 5)
-
+-- mixed positional/named association
+(1, 2, D => 4, C => 3)

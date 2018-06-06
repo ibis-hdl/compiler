@@ -1,6 +1,5 @@
 ToDo:
 - alias_declaration_00{1...5}
-- attribute_specification/attribute_specification_00{1,2}
 - entity_aspect/entity_aspect_002.input
 - type_declaration_failure/*
 - interface_constant_declaration/interface_constant_declaration_006.input

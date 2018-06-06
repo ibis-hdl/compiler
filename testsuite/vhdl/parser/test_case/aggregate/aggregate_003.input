@@ -1,0 +1,2 @@
+-- positional association with 'others'
+(1, 2, others => 4)

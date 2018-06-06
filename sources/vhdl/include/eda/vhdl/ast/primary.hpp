@@ -22,6 +22,7 @@ struct name;
 struct aggregate;
 struct expression;
 struct function_call;
+struct qualified_expression;
 
 
 // primary ::=
@@ -39,7 +40,7 @@ struct primary : variant<
     literal,
     forward_ast<aggregate>,
     forward_ast<function_call>,
-    // qualified_expression,
+    forward_ast<qualified_expression>,
     // type_conversion,
     // allocator,
     forward_ast<expression>

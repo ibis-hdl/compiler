@@ -1,19 +1,13 @@
 (aggregate
   (element_association
-    (expression
-      (relation
-        (shift_expression
-          (simple_expression
-            (term
-              (primary<v>
-                (literal<v>
-                  (numeric_literal<v>
-                    (abstract_literal<v>
-                      (decimal_literal
-                        literal: 1, type: integer
-                      )
-                    )
-                  )
+    (choices
+      (choice<v>
+        (simple_expression
+          (term
+            (primary<v>
+              (name<v>
+                (identifier
+                  ex1
                 )
               )
             )
@@ -21,8 +15,6 @@
         )
       )
     )
-  ),
-  (element_association
     (expression
       (relation
         (shift_expression
@@ -46,29 +38,26 @@
     )
   ),
   (element_association
-    (expression
-      (relation
-        (shift_expression
-          (simple_expression
-            (term
-              (primary<v>
-                (literal<v>
-                  (numeric_literal<v>
-                    (abstract_literal<v>
-                      (decimal_literal
-                        literal: 3, type: integer
-                      )
-                    )
-                  )
+    (choices
+      (choice<v>
+        (simple_expression
+          (term
+            (primary<v>
+              (name<v>
+                (identifier
+                  ex3
                 )
               )
             )
           )
         )
+      ),
+      (choice<v>
+        (keyword
+          OTHERS
+        )
       )
     )
-  ),
-  (element_association
     (expression
       (relation
         (shift_expression
@@ -79,7 +68,7 @@
                   (numeric_literal<v>
                     (abstract_literal<v>
                       (decimal_literal
-                        literal: 4, type: integer
+                        literal: 5, type: integer
                       )
                     )
                   )

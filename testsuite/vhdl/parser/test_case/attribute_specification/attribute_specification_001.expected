@@ -24,11 +24,50 @@
         (simple_expression
           (term
             (primary<v>
-              (literal<v>
-                (numeric_literal<v>
-                  (abstract_literal<v>
-                    (decimal_literal
-                      literal: 1, type: integer
+              (aggregate
+                (element_association
+                  (expression
+                    (relation
+                      (shift_expression
+                        (simple_expression
+                          (term
+                            (primary<v>
+                              (literal<v>
+                                (numeric_literal<v>
+                                  (abstract_literal<v>
+                                    (decimal_literal
+                                      literal: 10, type: integer
+                                    )
+                                  )
+                                )
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                ),
+                (element_association
+                  (expression
+                    (relation
+                      (shift_expression
+                        (simple_expression
+                          (term
+                            (primary<v>
+                              (literal<v>
+                                (numeric_literal<v>
+                                  (abstract_literal<v>
+                                    (decimal_literal
+                                      literal: 15, type: integer
+                                    )
+                                  )
+                                )
+                              )
+                            )
+                          )
+                        )
+                      )
                     )
                   )
                 )

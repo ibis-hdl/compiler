@@ -1,0 +1,2 @@
+-- use of 'others' to assign the entire array
+(others => 'Z')
