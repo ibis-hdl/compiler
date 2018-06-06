@@ -199,7 +199,7 @@ auto const keyword = x3::rule<struct _> { "keyword" } =
 
 
 /*
- * Symbols for mode                                                    [§ 4.3.2]
+ * Symbols for mode                                               [LRM93 §4.3.2]
  */
 struct mode_symbols : x3::symbols<ast::keyword_token> {
     // IN | OUT | INOUT | BUFFER | LINKAGE
@@ -219,7 +219,7 @@ struct mode_symbols : x3::symbols<ast::keyword_token> {
 
 
 /*
- * Symbols for entity_class                                              [§ 5.1]
+ * Symbols for entity_class                                         [LRM93 §5.1]
  */
 struct entity_class_symbols : x3::symbols<ast::keyword_token> {
     //    ENTITY        | ARCHITECTURE  | CONFIGURATION
@@ -319,7 +319,7 @@ shift_operator_type const shift_operator{ "shift_operator" };
 
 using keywords::kw;
 
-// miscellaneous_operator ::=  ** | abs | not                            [§ 7.2]
+// miscellaneous_operator ::=  ** | abs | not                       [LRM93 §7.2]
 
 auto const EXPONENT = x3::as<ast::operator_token>[
     "**" >> x3::attr(ast::operator_token::EXPONENT)
@@ -339,7 +339,7 @@ auto const unary_miscellaneous_operator_def =
     ;
 
 
-// logical_operator ::=  and | or | nand | nor | xor | xnor              [§ 7.2]
+// logical_operator ::=  and | or | nand | nor | xor | xnor         [LRM93 §7.2]
 struct binary_logical_operator_symbols : x3::symbols<ast::operator_token> {
 
     binary_logical_operator_symbols() {
@@ -376,7 +376,7 @@ auto const unary_logical_operator_def =
     ;
 
 
-// relational_operator ::=   =  |  /=  |  <  |  <=  |  >  |  >=          [§ 7.2]
+// relational_operator ::=   =  |  /=  |  <  |  <=  |  >  |  >=     [LRM93 §7.2]
 struct relational_operator_symbols : x3::symbols<ast::operator_token> {
 
     relational_operator_symbols() {
@@ -394,7 +394,7 @@ struct relational_operator_symbols : x3::symbols<ast::operator_token> {
 } const relational_operator;
 
 
-// adding_operator ::=  + | -  | &                                       [§ 7.2]
+// adding_operator ::=  + | -  | &                                  [LRM93 §7.2]
 struct adding_operator_symbols : x3::symbols<ast::operator_token> {
 
     adding_operator_symbols() {
@@ -409,7 +409,7 @@ struct adding_operator_symbols : x3::symbols<ast::operator_token> {
 } const adding_operator;
 
 
-// multiplying_operator ::=  * | / | mod | rem                           [§ 7.2]
+// multiplying_operator ::=  * | / | mod | rem                      [LRM93 §7.2]
 
 auto const MUL = x3::as<ast::operator_token>[
     "*" >> x3::attr(ast::operator_token::MUL)
@@ -429,7 +429,7 @@ auto const multiplying_operator_def =
     ;
 
 
-// shift_operator ::=  sll | srl | sla | sra | rol | ror                 [§ 7.2]
+// shift_operator ::=  sll | srl | sla | sra | rol | ror            [LRM93 §7.2]
 struct shift_operator_symbols : x3::symbols<ast::operator_token> {
 
     shift_operator_symbols() {
@@ -1194,7 +1194,7 @@ using x3::omit;
 
 
 /*
- * Character Sets                                                       [§ 13.1]
+ * Character Sets                                                  [LRM93 §13.1]
  */
 auto const upper_case_letter =
     x3::rule<struct upper_case_letter_class, char> { "upper_case_letter" } =
@@ -1232,7 +1232,7 @@ auto const basic_character_def =
 #endif
 
 
-// basic_graphic_character ::=                                          [§ 13.1]
+// basic_graphic_character ::=                                     [LRM93 §13.1]
 // upper_case_letter | digit | special_character| space_character
 auto const basic_graphic_character_def =
         upper_case_letter
@@ -1242,14 +1242,14 @@ auto const basic_graphic_character_def =
       ;
 
 
-// extended_digit ::=                                                 [§ 13.4.2]
+// extended_digit ::=                                            [LRM93 §13.4.2]
 // digit | letter
 auto const extended_digit =
     x3::rule<struct _, char> { "extended_digit" } =
         char_("0-9a-fA-F");
 
 
-// graphic_character ::=                                                [§ 13.1]
+// graphic_character ::=                                           [LRM93 §13.1]
 // basic_graphic_character | lower_case_letter | other_special_character
 auto const graphic_character_def =
       basic_graphic_character
@@ -1258,7 +1258,7 @@ auto const graphic_character_def =
     ;
 
 
-// letter ::=                                                         [§ 13.3.1]
+// letter ::=                                                    [LRM93 §13.3.1]
 // upper_case_letter | lower_case_letter
 auto const letter_def =
     upper_case_letter | lower_case_letter
@@ -1266,7 +1266,7 @@ auto const letter_def =
 
 
 
-// letter_or_digit ::=                                                [§ 13.3.1]
+// letter_or_digit ::=                                           [LRM93 §13.3.1]
 // letter | digit
 auto const letter_or_digit_def =
     letter | digit
@@ -1323,7 +1323,7 @@ auto const label_colon = x3::rule<struct _, ast::identifier> { "label" } =
  */
 
 
-// abstract_literal ::=                                                 [§ 13.4]
+// abstract_literal ::=                                            [LRM93 §13.4]
 //     decimal_literal | based_literal
 auto const abstract_literal_def = /* order matters */
       based_literal
@@ -1332,7 +1332,7 @@ auto const abstract_literal_def = /* order matters */
 
 
 
-// access_type_definition ::=                                            [§ 3.3]
+// access_type_definition ::=                                       [LRM93 §3.3]
 //     access subtype_indication
 auto const access_type_definition_def =
        ACCESS
@@ -1341,7 +1341,7 @@ auto const access_type_definition_def =
 
 
 
-// actual_designator ::=                                             [§ 4.3.2.2]
+// actual_designator ::=                                        [LRM93 §4.3.2.2]
 //       expression
 //     | signal_name
 //     | variable_name
@@ -1355,7 +1355,7 @@ auto const actual_designator_def =
 
 
 
-// actual_parameter_part ::=                                           [§ 7.3.3]
+// actual_parameter_part ::=                                      [LRM93 §7.3.3]
 //     parameter_association_list
 auto const actual_parameter_part_def =
     association_list
@@ -1363,7 +1363,7 @@ auto const actual_parameter_part_def =
 
 
 
-// actual_part ::=                                                   [§ 4.3.2.2]
+// actual_part ::=                                              [LRM93 §4.3.2.2]
 //       actual_designator
 //     | function_name ( actual_designator )
 //     | type_mark ( actual_designator )
@@ -1383,7 +1383,7 @@ auto const actual_part_def = /* order matters */
 
 
 
-// aggregate ::=                                                       [§ 7.3.2]
+// aggregate ::=                                                  [LRM93 §7.3.2]
 //     ( element_association { , element_association } )
 auto const aggregate_def =
     '(' >> (element_association % ',') >> ')'
@@ -1391,7 +1391,7 @@ auto const aggregate_def =
 
 
 
-// alias_declaration ::=                                               [§ 4.3.3]
+// alias_declaration ::=                                          [LRM93 §4.3.3]
 //     alias alias_designator [ : subtype_indication ] is name [ signature ] ;
 auto const alias_declaration_def = ( // operator precedence
     ALIAS
@@ -1406,7 +1406,7 @@ auto const alias_declaration_def = ( // operator precedence
 
 
 
-// alias_designator ::=                                                [§ 4.3.3]
+// alias_designator ::=                                           [LRM93 §4.3.3]
 //     identifier | character_literal | operator_symbol
 auto const alias_designator_def =
       identifier
@@ -1416,7 +1416,7 @@ auto const alias_designator_def =
 
 
 #if 0
-// allocator ::=                                                       [§ 7.3.6]
+// allocator ::=                                                  [LRM93 §7.3.6]
 //       new subtype_indication
 //     | new qualified_expression
 auto const allocator_def =
@@ -1426,7 +1426,7 @@ auto const allocator_def =
 #endif
 
 #if 0
-// architecture_body ::=                                                 [§ 1.2]
+// architecture_body ::=                                            [LRM93 §1.2]
 //     architecture identifier of entity_name is
 //         architecture_declarative_part
 //     begin
@@ -1442,7 +1442,7 @@ auto const architecture_body_def =
 #endif
 
 #if 0
-// architecture_declarative_part ::=                                     [§ 1.2]
+// architecture_declarative_part ::=                                [LRM93 §1.2]
 //     { block_declarative_item }
 auto const architecture_declarative_part_def =
 { block_declarative_item }
@@ -1450,7 +1450,7 @@ auto const architecture_declarative_part_def =
 #endif
 
 #if 0
-// architecture_statement_part ::=                                     [§ 1.2.2]
+// architecture_statement_part ::=                                [LRM93 §1.2.2]
 //     { concurrent_statement }
 auto const architecture_statement_part_def =
 { concurrent_statement }
@@ -1458,7 +1458,7 @@ auto const architecture_statement_part_def =
 #endif
 
 
-// array_type_definition ::=                                             [§ 8.2]
+// array_type_definition ::=                                        [LRM93 §8.2]
 //     unconstrained_array_definition | constrained_array_definition
 auto const array_type_definition_def =
       unconstrained_array_definition
@@ -1467,19 +1467,19 @@ auto const array_type_definition_def =
 
 
 
-// assertion ::=                                                         [§ 8.2]
+// assertion ::=                                                    [LRM93 §8.2]
 //     assert condition
 //     [ report expression ]
 //     [ severity expression ]
 auto const assertion_def =
-       (  ASSERT   > condition)
-    >> -( REPORT   > expression )
-    >> -( SEVERITY > expression )
+       (  ASSERT   >> condition)
+    >> -( REPORT   >> expression )
+    >> -( SEVERITY >> expression )
     ;
 
 
 
-// assertion_statement ::=                                               [§ 8.2]
+// assertion_statement ::=                                          [LRM93 §8.2]
 //     [ label : ] assertion ;
 auto const assertion_statement_def = ( // operator precedence
        -label_colon
@@ -1490,7 +1490,7 @@ auto const assertion_statement_def = ( // operator precedence
 
 
 
-// association_element ::=                                           [§ 4.3.2.2]
+// association_element ::=                                      [LRM93 §4.3.2.2]
 //     [ formal_part => ] actual_part
 auto const association_element_def =
        -x3::as<ast::formal_part>[
@@ -1501,7 +1501,7 @@ auto const association_element_def =
 
 
 
-// association_list ::=                                              [§ 4.3.2.2]
+// association_list ::=                                         [LRM93 §4.3.2.2]
 //     association_element { , association_element }
 auto const association_list_def =
     association_element % ','
@@ -1509,19 +1509,20 @@ auto const association_list_def =
 
 
 
-// attribute_declaration ::=                                             [§ 4.4]
+// attribute_declaration ::=                                        [LRM93 §4.4]
 //     attribute identifier : type_mark ;
-auto const attribute_declaration_def =
+auto const attribute_declaration_def = ( // operator precedence
       ATTRIBUTE
-    > identifier
-    > ':'
-    > type_mark
+    >> identifier
+    >> ':'
+    >> type_mark
+    )
     >  ';'
     ;
 
 
 
-// attribute_designator ::=                                              [§ 6.6]
+// attribute_designator ::=                                         [LRM93 §6.6]
 //     attribute_simple_name
 auto const attribute_designator_def =
     simple_name
@@ -1529,7 +1530,7 @@ auto const attribute_designator_def =
 
 
 
-// attribute_name ::=                                                    [§ 6.6]
+// attribute_name ::=                                               [LRM93 §6.6]
 //     prefix [ signature ] ' attribute_designator [ ( expression ) ]
 auto const attribute_name_def =
        prefix
@@ -1543,7 +1544,7 @@ auto const attribute_name_def =
 
 
 
-// attribute_specification ::=                                           [§ 5.1]
+// attribute_specification ::=                                      [LRM93 §5.1]
 //     attribute attribute_designator of entity_specification is expression ;
 auto const attribute_specification_def = ( // operator precedence
        ATTRIBUTE
@@ -1557,7 +1558,7 @@ auto const attribute_specification_def = ( // operator precedence
     ;
 
 
-// base ::=                                                           [§ 13.4.2]
+// base ::=                                                      [LRM93 §13.4.2]
 //     integer
 auto const base_def =
     integer
@@ -1565,14 +1566,14 @@ auto const base_def =
 
 
 #if 0 /* Note: UNUSED, embedded directly into bit_string_literal rule */
-// base_specifier ::=                                                   [§ 13.7]
+// base_specifier ::=                                              [LRM93 §13.7]
 // B | O | X
 auto const base_specifier_def =
     'B' | 'O' | 'X'
     ;
 #endif
 
-// based_integer ::=                                                  [§ 13.4.2]
+// based_integer ::=                                             [LRM93 §13.4.2]
 //     extended_digit { [ underline ] extended_digit }
 auto const based_integer_def =
     x3::as<string_view_attribute>[
@@ -1584,7 +1585,7 @@ auto const based_integer_def =
 
 
 
-// based_literal ::=                                                  [§ 13.4.2]
+// based_literal ::=                                             [LRM93 §13.4.2]
 //     base # based_integer [ . based_integer ] # [ exponent ]
 namespace based_literal_detail {
 
@@ -1621,7 +1622,7 @@ auto const based_literal_def =
     ;
 
 
-// basic_identifier ::=                                                 [§ 13.3]
+// basic_identifier ::=                                            [LRM93 §13.3]
 //     letter { [ underline ] letter_or_digit }
 namespace basic_identifier_detail {
 
@@ -1640,7 +1641,7 @@ auto const basic_identifier_def =
 
 
 
-// binding_indication ::=                                              [§ 5.2.1]
+// binding_indication ::=                                         [LRM93 §5.2.1]
 //     [ use entity_aspect ]
 //     [ generic_map_aspect ]
 //     [ port_map_aspect ]
@@ -1652,7 +1653,7 @@ auto const binding_indication_def =
 
 
 
-// bit_string_literal ::=                                               [§ 13.7]
+// bit_string_literal ::=                                          [LRM93 §13.7]
 //     base_specifier " bit_value "
 namespace bit_string_literal_detail {
 
@@ -1716,7 +1717,7 @@ auto const bit_value_def =
 #endif
 
 #if 0
-// block_configuration ::                                              [§ 1.3.1]
+// block_configuration ::                                         [LRM93 §1.3.1]
 //     for block_specification
 //         { use_clause }
 //         { configuration_item }
@@ -1725,12 +1726,12 @@ auto const block_configuration_def =
         FOR block_specification
         { use_clause }
 { configuration_item }
-END FOR >  ';'
+END FOR >>  ';'
 ;
 #endif
 
 #if 0
-// block_declarative_item ::=                                          [§ 1.2.1]
+// block_declarative_item ::=                                     [LRM93 §1.2.1]
 //       subprogram_declaration
 //     | subprogram_body
 //     | type_declaration
@@ -1770,7 +1771,7 @@ auto const block_declarative_item_def =
 #endif
 
 #if 0
-// block_declarative_part ::=                                            [§ 9.1]
+// block_declarative_part ::=                                       [LRM93 §9.1]
 //     { block_declarative_item }
 auto const block_declarative_part_def =
     { block_declarative_item }
@@ -1778,7 +1779,7 @@ auto const block_declarative_part_def =
 #endif
 
 #if 0
-// block_header ::=                                                      [§ 9.1]
+// block_header ::=                                                 [LRM93 §9.1]
 //     [ generic_clause
 //     [ generic_map_aspect ; ] ]
 //     [ port_clause
@@ -1792,7 +1793,7 @@ auto const block_header_def =
 #endif
 
 #if 0
-// block_specification ::=                                             [§ 1.3.1]
+// block_specification ::=                                        [LRM93 §1.3.1]
 //       architecture_name
 //     | block_statement_label
 //     | generate_statement_label [ ( index_specification ) ]
@@ -1804,7 +1805,7 @@ auto const block_specification_def =
 #endif
 
 #if 0
-// block_statement ::=                                                   [§ 9.1]
+// block_statement ::=                                              [LRM93 §9.1]
 //     block_label :
 //         block [ ( guard_expression ) ] [ is ]
 //             block_header
@@ -1813,7 +1814,7 @@ auto const block_specification_def =
 //             block_statement_part
 //         end block [ block_label ] ;
 auto const block_statement_def =
-        block_label > ':'     BLOCK -( '(' guard_expression ')' ) -( IS )
+        block_label >> ':'     BLOCK -( '(' guard_expression ')' ) -( IS )
         block_header
         block_declarative_part
         BEGIN
@@ -1823,7 +1824,7 @@ auto const block_statement_def =
 #endif
 
 #if 0
-// block_statement_part ::=                                              [§ 9.1]
+// block_statement_part ::=                                         [LRM93 §9.1]
 //     { concurrent_statement }
 auto const block_statement_part_def =
 { concurrent_statement }
@@ -1831,7 +1832,7 @@ auto const block_statement_part_def =
 #endif
 
 
-// case_statement ::=                                                    [§ 8.8]
+// case_statement ::=                                               [LRM93 §8.8]
 //     [ case_label : ]
 //         case expression is
 //             case_statement_alternative
@@ -1851,7 +1852,7 @@ auto const case_statement_def = ( // operator precedence
 
 
 
-// case_statement_alternative ::=                                        [§ 8.8]
+// case_statement_alternative ::=                                   [LRM93 §8.8]
 //     when choices =>
 //         sequence_of_statements
 auto const case_statement_alternative_def =
@@ -1863,7 +1864,7 @@ auto const case_statement_alternative_def =
 
 
 
-// character_literal ::=                                                [§ 13.5]
+// character_literal ::=                                           [LRM93 §13.5]
 //     ' graphic_character '
 auto const character_literal_def =
     x3::lexeme [
@@ -1877,7 +1878,7 @@ auto const character_literal_def =
 
 
 
-// choice ::=                                                          [§ 7.3.2]
+// choice ::=                                                     [LRM93 §7.3.2]
 //       simple_expression
 //     | discrete_range
 //     | element_simple_name
@@ -1892,7 +1893,7 @@ auto const choice_def =
 
 
 
-// choices ::=                                                         [§ 7.3.2]
+// choices ::=                                                    [LRM93 §7.3.2]
 //     choice { | choice }
 auto const choices_def =
     choice % '|'
@@ -1900,7 +1901,7 @@ auto const choices_def =
 
 
 #if 0
-// component_configuration ::=                                         [§ 1.3.2]
+// component_configuration ::=                                    [LRM93 §1.3.2]
 //     for component_specification
 //         [ binding_indication ; ]
 //         [ block_configuration ]
@@ -1914,7 +1915,7 @@ auto const component_configuration_def =
 #endif
 
 #if 0
-// component_declaration ::=                                             [§ 4.5]
+// component_declaration ::=                                        [LRM93 §4.5]
 //     component identifier [ is ]
 //         [ local_generic_clause ]
 //         [ local_port_clause ]
@@ -1928,20 +1929,20 @@ auto const component_declaration_def =
 #endif
 
 #if 0
-// component_instantiation_statement ::=                                 [§ 9.6]
+// component_instantiation_statement ::=                            [LRM93 §9.6]
 //     instantiation_label :
 //         instantiated_unit
 //             [ generic_map_aspect ]
 //             [ port_map_aspect ] ;
 auto const component_instantiation_statement_def =
-        instantiation_label > ':'     instantiated_unit
+        instantiation_label >> ':'     instantiated_unit
         -( generic_map_aspect )
         -( port_map_aspect ) > ';'
 ;
 #endif
 
 
-// component_specification ::=                                           [§ 5.2]
+// component_specification ::=                                      [LRM93 §5.2]
 //     instantiation_list : component_name
 auto const component_specification_def =
        instantiation_list
@@ -1951,7 +1952,7 @@ auto const component_specification_def =
 
 
 
-// composite_type_definition ::=                                         [§ 3.2]
+// composite_type_definition ::=                                    [LRM93 §3.2]
 //       array_type_definition
 //     | record_type_definition
 auto const composite_type_definition_def =
@@ -1961,7 +1962,7 @@ auto const composite_type_definition_def =
 
 
 
-// concurrent_assertion_statement ::=                                    [§ 9.4]
+// concurrent_assertion_statement ::=                               [LRM93 §9.4]
 // [ label : ] [ postponed ] assertion ;
 auto const concurrent_assertion_statement_def = ( // operator precedence
        -label_colon
@@ -1973,7 +1974,7 @@ auto const concurrent_assertion_statement_def = ( // operator precedence
 
 
 
-// concurrent_procedure_call_statement ::=                               [§ 9.3]
+// concurrent_procedure_call_statement ::=                          [LRM93 §9.3]
 // [ label : ] [ postponed ] procedure_call ;
 auto const concurrent_procedure_call_statement_def = ( // operator precedence
        -label_colon
@@ -1985,7 +1986,7 @@ auto const concurrent_procedure_call_statement_def = ( // operator precedence
 
 
 
-// concurrent_signal_assignment_statement ::=                            [§ 9.5]
+// concurrent_signal_assignment_statement ::=                       [LRM93 §9.5]
 //       [ label : ] [ postponed ] conditional_signal_assignment
 //     | [ label : ] [ postponed ] selected_signal_assignment
 auto const concurrent_signal_assignment_statement_def =
@@ -1998,7 +1999,7 @@ auto const concurrent_signal_assignment_statement_def =
 
 
 #if 0
-// concurrent_statement ::=                                                [§ 9]
+// concurrent_statement ::=                                           [LRM93 §9]
 //       block_statement
 //     | process_statement
 //     | concurrent_procedure_call_statement
@@ -2018,7 +2019,7 @@ auto const concurrent_statement_def =
 #endif
 
 
-// condition ::=                                                         [§ 8.1]
+// condition ::=                                                    [LRM93 §8.1]
 //     boolean_expression
 auto const condition_def =
     expression
@@ -2026,7 +2027,7 @@ auto const condition_def =
 
 
 
-// condition_clause ::=                                                  [§ 8.1]
+// condition_clause ::=                                             [LRM93 §8.1]
 //     until condition
 auto const condition_clause_def =
     UNTIL >> condition
@@ -2034,7 +2035,7 @@ auto const condition_clause_def =
 
 
 
-// conditional_signal_assignment ::=                                   [§ 9.5.1]
+// conditional_signal_assignment ::=                              [LRM93 §9.5.1]
 //     target    <= options conditional_waveforms ;
 auto const conditional_signal_assignment_def = ( // operator precedence
        target
@@ -2047,7 +2048,7 @@ auto const conditional_signal_assignment_def = ( // operator precedence
 
 
 
-// conditional_waveforms ::=                                           [§ 9.5.1]
+// conditional_waveforms ::=                                      [LRM93 §9.5.1]
 //     { waveform when condition else }
 //       waveform [ when condition ]
 auto const conditional_waveforms_def =
@@ -2058,7 +2059,7 @@ auto const conditional_waveforms_def =
 
 
 #if 0
-// configuration_declaration ::=                                         [§ 1.3]
+// configuration_declaration ::=                                    [LRM93 §1.3]
 //     configuration identifier of entity_name is
 //         configuration_declarative_part
 //         block_configuration
@@ -2072,7 +2073,7 @@ auto const configuration_declaration_def =
 #endif
 
 #if 0
-// configuration_declarative_item ::=                                    [§ 1.3]
+// configuration_declarative_item ::=                               [LRM93 §1.3]
 //       use_clause
 //     | attribute_specification
 //     | group_declaration
@@ -2084,7 +2085,7 @@ auto const configuration_declarative_item_def =
 #endif
 
 #if 0
-// configuration_declarative_part ::=                                    [§ 1.3]
+// configuration_declarative_part ::=                               [LRM93 §1.3]
 //     { configuration_declarative_item }
 auto const configuration_declarative_part_def =
 { configuration_declarative_item }
@@ -2092,7 +2093,7 @@ auto const configuration_declarative_part_def =
 #endif
 
 #if 0
-// configuration_item ::=                                              [§ 1.3.1]
+// configuration_item ::=                                         [LRM93 §1.3.1]
 //       block_configuration
 //     | component_configuration
 auto const configuration_item_def =
@@ -2102,7 +2103,7 @@ auto const configuration_item_def =
 #endif
 
 #if 0
-// configuration_specification ::=                                       [§ 5.2]
+// configuration_specification ::=                                  [LRM93 §5.2]
 //     for component_specification binding_indication ;
 auto const configuration_specification_def =
         FOR component_specification binding_indication > ';'
@@ -2110,7 +2111,7 @@ auto const configuration_specification_def =
 #endif
 
 
-// constant_declaration ::=                                          [§ 4.3.1.1]
+// constant_declaration ::=                                     [LRM93 §4.3.1.1]
 //     constant identifier_list : subtype_indication [ := expression ] ;
 auto const constant_declaration_def = ( // operator precedence
        omit[ CONSTANT ]
@@ -2124,7 +2125,7 @@ auto const constant_declaration_def = ( // operator precedence
 
 
 
-// constrained_array_definition ::=                                    [§ 3.2.1]
+// constrained_array_definition ::=                               [LRM93 §3.2.1]
 //     array index_constraint of element_subtype_indication
 auto const constrained_array_definition_def =
        ARRAY
@@ -2135,7 +2136,7 @@ auto const constrained_array_definition_def =
 
 
 
-// constraint ::=                                                        [§ 4.2]
+// constraint ::=                                                   [LRM93 §4.2]
 //       range_constraint
 //     | index_constraint
 auto const constraint_def =
@@ -2145,7 +2146,7 @@ auto const constraint_def =
 
 
 
-// context_clause ::=                                                   [§ 11.3]
+// context_clause ::=                                              [LRM93 §11.3]
 //     { context_item }
 auto const context_clause_def =
     *context_item
@@ -2153,7 +2154,7 @@ auto const context_clause_def =
 
 
 
-// context_item ::=                                                     [§ 11.3]
+// context_item ::=                                                [LRM93 §11.3]
 //       library_clause
 //     | use_clause
 auto const context_item_def =
@@ -2163,7 +2164,7 @@ auto const context_item_def =
 
 
 
-// decimal_literal ::=                                                [§ 13.4.1]
+// decimal_literal ::=                                           [LRM93 §13.4.1]
 //     integer [ . integer ] [ exponent ]
 namespace decimal_literal_detail {
 
@@ -2203,7 +2204,7 @@ auto const decimal_literal_def =
 
 
 #if 0 // UNUSED in the BNF
-// declaration ::=                                                         [§ 4]
+// declaration ::=                                                    [LRM93 §4]
 //       type_declaration
 //     | subtype_declaration
 //     | object_declaration
@@ -2235,19 +2236,19 @@ auto const declaration_def =
 #endif
 
 
-// delay_mechanism ::=                                                   [§ 8.4]
+// delay_mechanism ::=                                              [LRM93 §8.4]
 //       transport
 //     | [ reject time_expression ] inertial
 auto const delay_mechanism_def =
        TRANSPORT
-    | (   -( REJECT > expression )
+    | (   -( REJECT >> expression )
        >> INERTIAL
       )
     ;
 
 
 #if 0
-// design_file ::=                                                      [§ 11.1]
+// design_file ::=                                                 [LRM93 §11.1]
 //     design_unit { design_unit }
 auto const design_file_def =
         design_unit { design_unit }
@@ -2255,7 +2256,7 @@ auto const design_file_def =
 #endif
 
 #if 0
-// design_unit ::=                                                      [§ 11.1]
+// design_unit ::=                                                 [LRM93 §11.1]
 //     context_clause library_unit
 auto const design_unit_def =
         context_clause library_unit
@@ -2263,7 +2264,7 @@ auto const design_unit_def =
 #endif
 
 
-// designator ::=                                                        [§ 2.1]
+// designator ::=                                                   [LRM93 §2.1]
 //     identifier  |  operator_symbol
 auto const designator_def =
       identifier
@@ -2272,7 +2273,7 @@ auto const designator_def =
 
 
 
-// direction ::=                                                         [§ 3.1]
+// direction ::=                                                    [LRM93 §3.1]
 //     to | downto
 auto const direction_def =
     TO | DOWNTO
@@ -2280,7 +2281,7 @@ auto const direction_def =
 
 
 
-// disconnection_specification ::=                                       [§ 5.3]
+// disconnection_specification ::=                                  [LRM93 §5.3]
 //     disconnect guarded_signal_specification after time_expression ;
 auto const disconnection_specification_def = ( // operator precedence
        DISCONNECT
@@ -2293,7 +2294,7 @@ auto const disconnection_specification_def = ( // operator precedence
 
 
 
-// discrete_range ::=                                                  [§ 3.2.1]
+// discrete_range ::=                                             [LRM93 §3.2.1]
 //     discrete_subtype_indication | range
 auto const discrete_range_def = /* order matters */
       range
@@ -2302,7 +2303,7 @@ auto const discrete_range_def = /* order matters */
 
 
 
-// element_association ::=                                             [§ 7.3.2]
+// element_association ::=                                        [LRM93 §7.3.2]
 //     [ choices => ] expression
 auto const element_association_def =
     /* Note, parsing element_association is a bit tricky, due to backtracking side
@@ -2326,7 +2327,7 @@ auto const element_association_def =
 
 
 
-// element_declaration ::=                                             [§ 3.2.2]
+// element_declaration ::=                                        [LRM93 §3.2.2]
 //     identifier_list : element_subtype_definition ;
 auto const element_declaration_def = ( // operator precedence
        identifier_list
@@ -2338,7 +2339,7 @@ auto const element_declaration_def = ( // operator precedence
 
 
 
-// element_subtype_definition ::=                                      [§ 3.2.2]
+// element_subtype_definition ::=                                 [LRM93 §3.2.2]
 //     subtype_indication
 auto const element_subtype_definition_def =
     subtype_indication
@@ -2346,7 +2347,7 @@ auto const element_subtype_definition_def =
 
 
 
-// entity_aspect ::=                                                 [§ 5.2.1.1]
+// entity_aspect ::=                                            [LRM93 §5.2.1.1]
 //       entity entity_name [ ( architecture_identifier) ]
 //     | configuration configuration_name
 //     | open
@@ -2375,7 +2376,7 @@ auto const entity_aspect_def =
 
 
 
-// entity_class ::=                                                      [§ 5.1]
+// entity_class ::=                                                 [LRM93 §5.1]
 //       entity        | architecture  | configuration
 //     | procedure     | function      | package
 //     | type          | subtype       | constant
@@ -2388,7 +2389,7 @@ auto const entity_class_def =
 
 
 
-// entity_class_entry ::=                                                [§ 4.6]
+// entity_class_entry ::=                                           [LRM93 §4.6]
 //     entity_class [ <> ]
 auto const entity_class_entry_def =
     entity_class
@@ -2397,7 +2398,7 @@ auto const entity_class_entry_def =
 
 
 
-// entity_class_entry_list ::=                                           [§ 4.6]
+// entity_class_entry_list ::=                                      [LRM93 §4.6]
 //     entity_class_entry { , entity_class_entry }
 auto const entity_class_entry_list_def =
     entity_class_entry % ','
@@ -2405,7 +2406,7 @@ auto const entity_class_entry_list_def =
 
 
 #if 0
-// entity_declaration ::=                                                [§ 1.1]
+// entity_declaration ::=                                           [LRM93 §1.1]
 //     entity identifier is
 //         entity_header
 //         entity_declarative_part
@@ -2430,7 +2431,7 @@ auto const entity_declaration_def = ( // operator precedence
 #endif
 
 
-// entity_declarative_item ::=                                         [§ 1.1.2]
+// entity_declarative_item ::=                                    [LRM93 §1.1.2]
 //       subprogram_declaration
 //     | subprogram_body
 //     | type_declaration
@@ -2466,7 +2467,7 @@ auto const entity_declarative_item_def =
 
 
 
-// entity_declarative_part ::=                                         [§ 1.1.2]
+// entity_declarative_part ::=                                    [LRM93 §1.1.2]
 //     { entity_declarative_item }
 auto const entity_declarative_part_def =
     *entity_declarative_item
@@ -2474,7 +2475,7 @@ auto const entity_declarative_part_def =
 
 
 
-// entity_designator ::=                                                 [§ 5.1]
+// entity_designator ::=                                            [LRM93 §5.1]
 //     entity_tag [ signature ]
 auto const entity_designator_def =
        entity_tag
@@ -2483,7 +2484,7 @@ auto const entity_designator_def =
 
 
 
-// entity_header ::=                                                   [§ 1.1.1]
+// entity_header ::=                                              [LRM93 §1.1.1]
 //     [ formal_generic_clause ]
 //     [ formal_port_clause ]
 auto const entity_header_def =
@@ -2493,7 +2494,7 @@ auto const entity_header_def =
 
 
 
-// entity_name_list ::=                                                  [§ 5.1]
+// entity_name_list ::=                                             [LRM93 §5.1]
 //       entity_designator { , entity_designator }
 //     | others
 //     | all
@@ -2505,18 +2506,17 @@ auto const entity_name_list_def =
 
 
 
-// entity_specification ::=                                              [§ 5.1]
+// entity_specification ::=                                         [LRM93 §5.1]
 //     entity_name_list : entity_class
-auto const entity_specification_def = ( // operator precedence
+auto const entity_specification_def =
       entity_name_list
     >> ':'
-    )
-    >  entity_class
+    >> entity_class
     ;
 
 
 
-// entity_statement ::=                                                [§ 1.1.3]
+// entity_statement ::=                                           [LRM93 §1.1.3]
 //       concurrent_assertion_statement
 //     | passive_concurrent_procedure_call_statement
 //     | passive_process_statement
@@ -2528,7 +2528,7 @@ auto const entity_statement_def =
 
 
 
-// entity_statement_part ::=                                           [§ 1.1.3]
+// entity_statement_part ::=                                      [LRM93 §1.1.3]
 //     { entity_statement }
 auto const entity_statement_part_def =
     *entity_statement
@@ -2536,7 +2536,7 @@ auto const entity_statement_part_def =
 
 
 
-// entity_tag ::=                                                        [§ 5.1]
+// entity_tag ::=                                                   [LRM93 §5.1]
 // simple_name | character_literal | operator_symbol
 auto const entity_tag_def =
       simple_name
@@ -2546,7 +2546,7 @@ auto const entity_tag_def =
 
 
 
-// enumeration_literal ::=                                             [§ 3.1.1]
+// enumeration_literal ::=                                        [LRM93 §3.1.1]
 //     identifier | character_literal
 auto const enumeration_literal_def =
       identifier
@@ -2555,7 +2555,7 @@ auto const enumeration_literal_def =
 
 
 
-// enumeration_type_definition ::=                                     [§ 3.1.1]
+// enumeration_type_definition ::=                                [LRM93 §3.1.1]
 //     ( enumeration_literal { , enumeration_literal } )
 auto const enumeration_type_definition_def =
     '(' >> (enumeration_literal % ',') >> ')'
@@ -2563,20 +2563,20 @@ auto const enumeration_type_definition_def =
 
 
 
-// exit_statement ::=                                                   [§ 8.11]
+// exit_statement ::=                                              [LRM93 §8.11]
 //     [ label : ] exit [ loop_label ] [ when condition ] ;
 auto const exit_statement_def = ( // operator precedence
        -label_colon
     >> EXIT
     >> -label
-    >> -( WHEN > condition )
+    >> -( WHEN >> condition )
     )
     >  ';'
     ;
 
 
 
-// exponent ::=                                                       [§ 13.4.1]
+// exponent ::=                                                  [LRM93 §13.4.1]
 //     E [ + ] integer | E - integer
 auto const exponent_def =
     /* Note, that exponent rule parses real exponent, for integer types no sign
@@ -2590,7 +2590,7 @@ auto const exponent_def =
 
 
 
-// expression ::=                                                        [§ 7.1]
+// expression ::=                                                   [LRM93 §7.1]
 //       relation { and relation }
 //     | relation { or relation }
 //     | relation { xor relation }
@@ -2600,12 +2600,12 @@ auto const exponent_def =
 namespace expression_detail {
 
 auto const chunks_1 = x3::rule<struct _, std::vector<ast::expression::chunk>> { "expression" } =
-    *(binary_logical_operator > relation)
+    *(binary_logical_operator >> relation)
     ;
 
 auto const chunk_2 = x3::rule<struct _, std::vector<ast::expression::chunk>> { "expression" } =
     x3::repeat(1)[ // enforce artificial vector to unify ast node
-        unary_logical_operator > relation
+        unary_logical_operator >> relation
     ];
 } // end detail
 
@@ -2618,7 +2618,7 @@ auto const expression_def =
 
 
 
-// extended_identifier ::=                                            [§ 13.3.2]
+// extended_identifier ::=                                       [LRM93 §13.3.2]
 //     \ graphic_character { graphic_character } \                             .
 namespace extended_identifier_detail {
 
@@ -2646,7 +2646,7 @@ auto const extended_identifier_def =
 
 
 
-// factor ::=                                                            [§ 7.1]
+// factor ::=                                                       [LRM93 §7.1]
 //       primary [ ** primary ]
 //     | abs primary
 //     | not primary
@@ -2671,7 +2671,7 @@ auto const factor_def =    /* order matters */
 
 
 
-// file_declaration ::=                                              [§ 4.3.1.4]
+// file_declaration ::=                                         [LRM93 §4.3.1.4]
 //     file identifier_list : subtype_indication [ file_open_information ] ;
 auto const file_declaration_def = ( // operator precedence
        FILE
@@ -2685,7 +2685,7 @@ auto const file_declaration_def = ( // operator precedence
 
 
 
-// file_logical_name ::=                                             [§ 4.3.1.4]
+// file_logical_name ::=                                        [LRM93 §4.3.1.4]
 //     string_expression
 auto const file_logical_name_def =
     expression
@@ -2693,7 +2693,7 @@ auto const file_logical_name_def =
 
 
 
-// file_open_information ::=                                         [§ 4.3.1.4]
+// file_open_information ::=                                    [LRM93 §4.3.1.4]
 //     [ open file_open_kind_expression ] is file_logical_name
 auto const file_open_information_def =
     -(    omit[ OPEN ]
@@ -2705,7 +2705,7 @@ auto const file_open_information_def =
 
 
 
-// file_type_definition ::=                                              [§ 3.4]
+// file_type_definition ::=                                         [LRM93 §3.4]
 //     file  of type_mark
 auto const file_type_definition_def =
        FILE
@@ -2715,7 +2715,7 @@ auto const file_type_definition_def =
 
 
 #if 0 // UNUSED; embedded into scalar_type_definition
-// floating_type_definition ::=                                        [§ 3.1.4]
+// floating_type_definition ::=                                   [LRM93 §3.1.4]
 //     range_constraint
 auto const floating_type_definition_def =
     range_constraint
@@ -2723,7 +2723,7 @@ auto const floating_type_definition_def =
 #endif
 
 
-// formal_designator ::=                                             [§ 4.3.2.2]
+// formal_designator ::=                                        [LRM93 §4.3.2.2]
 //       generic_name
 //     | port_name
 //     | parameter_name
@@ -2733,7 +2733,7 @@ auto const formal_designator_def =
 
 
 
-// formal_parameter_list ::=                                           [§ 2.1.1]
+// formal_parameter_list ::=                                      [LRM93 §2.1.1]
 //     parameter_interface_list
 auto const formal_parameter_list_def =
     interface_list
@@ -2741,7 +2741,7 @@ auto const formal_parameter_list_def =
 
 
 
-// formal_part ::=                                                   [§ 4.3.2.2]
+// formal_part ::=                                              [LRM93 §4.3.2.2]
 //       formal_designator
 //     | function_name ( formal_designator )
 //     | type_mark ( formal_designator )
@@ -2759,7 +2759,7 @@ auto const formal_part_def =
 
 
 #if 0 // UNUSED; embedded into type_declaration
-// full_type_declaration ::=                                             [§ 4.1]
+// full_type_declaration ::=                                        [LRM93 §4.1]
 //     type identifier is type_definition ;
 auto const full_type_declaration_def = ( // operator precedence
        TYPE
@@ -2772,7 +2772,7 @@ auto const full_type_declaration_def = ( // operator precedence
 #endif
 
 
-// function_call ::=                                                   [§ 7.3.3]
+// function_call ::=                                              [LRM93 §7.3.3]
 //     function_name [ ( actual_parameter_part ) ]
 auto const function_call_def =
        name
@@ -2783,7 +2783,7 @@ auto const function_call_def =
 
 
 #if 0
-// generate_statement ::=                                                [§ 9.7]
+// generate_statement ::=                                           [LRM93 §9.7]
 //     generate_label :
 //         generation_scheme generate
 //             [ { block_declarative_item }
@@ -2791,7 +2791,7 @@ auto const function_call_def =
 //             { concurrent_statement }
 //         end generate [ generate_label ] ;
 auto const generate_statement_def =
-        generate_label > ':'     generation_scheme GENERATE
+        generate_label >> ':'     generation_scheme GENERATE
         -( { block_declarative_item }
 BEGIN )
 { concurrent_statement }
@@ -2800,7 +2800,7 @@ END GENERATE -( generate_label ) > ';'
 #endif
 
 #if 0
-// generation_scheme ::=                                                 [§ 9.7]
+// generation_scheme ::=                                            [LRM93 §9.7]
 //       for generate_parameter_specification
 //     | if condition
 auto const generation_scheme_def =
@@ -2810,7 +2810,7 @@ auto const generation_scheme_def =
 #endif
 
 
-// generic_clause ::=                                                  [§ 1.1.1]
+// generic_clause ::=                                             [LRM93 §1.1.1]
 //     generic ( generic_list ) ;
 auto const generic_clause_def = ( // operator precedence
        GENERIC
@@ -2823,7 +2823,7 @@ auto const generic_clause_def = ( // operator precedence
 
 
 #if 0 // DISABLED; embedded into generic_clause
-// generic_list ::=                                                  [§ 1.1.1.1]
+// generic_list ::=                                             [LRM93 §1.1.1.1]
 //     generic_interface_list
 auto const generic_list_def =
     interface_list
@@ -2831,7 +2831,7 @@ auto const generic_list_def =
 #endif
 
 
-// generic_map_aspect ::=                                            [§ 5.2.1.2]
+// generic_map_aspect ::=                                       [LRM93 §5.2.1.2]
 //     generic map ( generic_association_list )
 auto const generic_map_aspect_def =
        GENERIC
@@ -2844,7 +2844,7 @@ auto const generic_map_aspect_def =
 
 
 
-// group_constituent ::                                                  [§ 4.7]
+// group_constituent ::                                             [LRM93 §4.7]
 //     name | character_literal
 auto const group_constituent_def =
     name | character_literal
@@ -2852,7 +2852,7 @@ auto const group_constituent_def =
 
 
 
-// group_constituent_list ::=                                            [§ 4.7]
+// group_constituent_list ::=                                       [LRM93 §4.7]
 //     group_constituent { , group_constituent }
 auto const group_constituent_list_def =
     group_constituent % ','
@@ -2860,7 +2860,7 @@ auto const group_constituent_list_def =
 
 
 
-// group_template_declaration ::=                                        [§ 4.6]
+// group_template_declaration ::=                                   [LRM93 §4.6]
 //     group identifier is ( entity_class_entry_list ) ;
 auto const group_template_declaration_def = ( // operator precedence
        GROUP
@@ -2875,7 +2875,7 @@ auto const group_template_declaration_def = ( // operator precedence
 
 
 
-// group_declaration ::=                                                 [§ 4.7]
+// group_declaration ::=                                            [LRM93 §4.7]
 //     group identifier : group_template_name ( group_constituent_list ) ;
 auto const group_declaration_def = ( // operator precedence
        GROUP
@@ -2891,7 +2891,7 @@ auto const group_declaration_def = ( // operator precedence
 
 
 
-// guarded_signal_specification ::=                                      [§ 5.3]
+// guarded_signal_specification ::=                                 [LRM93 §5.3]
 //     guarded_signal_list : type_mark
 auto const guarded_signal_specification_def =
        signal_list
@@ -2901,7 +2901,7 @@ auto const guarded_signal_specification_def =
 
 
 
-// identifier ::=                                                       [§ 13.3]
+// identifier ::=                                                  [LRM93 §13.3]
 //     basic_identifier | extended_identifier
 auto const identifier_def =
       basic_identifier
@@ -2910,7 +2910,7 @@ auto const identifier_def =
 
 
 
-// identifier_list ::=                                                 [§ 3.2.2]
+// identifier_list ::=                                            [LRM93 §3.2.2]
 //     identifier { , identifier }
 auto const identifier_list_def =
     identifier % ','
@@ -2918,7 +2918,7 @@ auto const identifier_list_def =
 
 
 
-// if_statement ::=                                                      [§ 8.7]
+// if_statement ::=                                                 [LRM93 §8.7]
 //     [ if_label : ]
 //         if condition then
 //             sequence_of_statements
@@ -2941,7 +2941,7 @@ auto const if_statement_def = ( // operator precedence
 
 
 #if 0 // UNUSED; embedded into type_declaration
-// incomplete_type_declaration ::=                                     [§ 3.3.1]
+// incomplete_type_declaration ::=                                [LRM93 §3.3.1]
 //     type identifier ;
 auto const incomplete_type_declaration_def = ( // operator precedence
        TYPE
@@ -2952,7 +2952,7 @@ auto const incomplete_type_declaration_def = ( // operator precedence
 #endif
 
 
-// index_constraint ::=                                                [§ 3.2.1]
+// index_constraint ::=                                           [LRM93 §3.2.1]
 //     ( discrete_range { , discrete_range } )
 auto const index_constraint_def =
      '(' >> (discrete_range % ',') >> ')'
@@ -2960,7 +2960,7 @@ auto const index_constraint_def =
 
 
 
-// index_specification ::=                                             [§ 1.3.1]
+// index_specification ::=                                        [LRM93 §1.3.1]
 //       discrete_range
 //     | static_expression
 auto const index_specification_def =
@@ -2970,7 +2970,7 @@ auto const index_specification_def =
 
 
 
-// index_subtype_definition ::=                                        [§ 3.2.1]
+// index_subtype_definition ::=                                   [LRM93 §3.2.1]
 //     type_mark range <>
 auto const index_subtype_definition_def =
        type_mark
@@ -2980,7 +2980,7 @@ auto const index_subtype_definition_def =
 
 
 
-// indexed_name ::=                                                      [§ 6.4]
+// indexed_name ::=                                                 [LRM93 §6.4]
 //     prefix ( expression { , expression } )
 auto const indexed_name_def =
        prefix
@@ -2989,7 +2989,7 @@ auto const indexed_name_def =
 
 
 #if 0
-// instantiated_unit ::=                                                 [§ 9.6]
+// instantiated_unit ::=                                            [LRM93 §9.6]
 //       [ component ] component_name
 //     | entity entity_name [ ( architecture_identifier ) ]
 //     | configuration configuration_name
@@ -3001,7 +3001,7 @@ auto const instantiated_unit_def =
 #endif
 
 
-// instantiation_list ::=                                                [§ 5.2]
+// instantiation_list ::=                                           [LRM93 §5.2]
 //       instantiation_label { , instantiation_label }
 //     | others
 //     | all
@@ -3025,7 +3025,7 @@ auto const integer_def =
 
 
 #if 0 // DISABLED, embedded into scalar_type_definition
-// integer_type_definition ::=                                         [§ 3.1.2]
+// integer_type_definition ::=                                    [LRM93 §3.1.2]
 //     range_constraint
 auto const integer_type_definition_def =
     range_constraint
@@ -3033,7 +3033,7 @@ auto const integer_type_definition_def =
 #endif
 
 
-// interface_constant_declaration ::=                                  [§ 4.3.2]
+// interface_constant_declaration ::=                             [LRM93 §4.3.2]
 //     [ constant ] identifier_list : [ in ] subtype_indication [ := static_expression ]
 auto const interface_constant_declaration_def =
        -CONSTANT
@@ -3046,7 +3046,7 @@ auto const interface_constant_declaration_def =
 
 
 
-// interface_declaration ::=                                           [§ 4.3.2]
+// interface_declaration ::=                                      [LRM93 §4.3.2]
 //       interface_constant_declaration
 //     | interface_signal_declaration
 //     | interface_variable_declaration
@@ -3060,7 +3060,7 @@ auto const interface_declaration_def =
 
 
 
-// interface_element ::=                                             [§ 4.3.2.1]
+// interface_element ::=                                        [LRM93 §4.3.2.1]
 //      interface_declaration
 auto const interface_element_def =
     interface_declaration
@@ -3068,7 +3068,7 @@ auto const interface_element_def =
 
 
 
-// interface_file_declaration ::=                                      [§ 4.3.2]
+// interface_file_declaration ::=                                 [LRM93 §4.3.2]
 //     file identifier_list : subtype_indication
 auto const interface_file_declaration_def =
        FILE
@@ -3079,7 +3079,7 @@ auto const interface_file_declaration_def =
 
 
 
-// interface_list ::=                                                [§ 4.3.2.1]
+// interface_list ::=                                           [LRM93 §4.3.2.1]
 //     interface_element { ; interface_element }
 auto const interface_list_def =
     interface_element % ';'
@@ -3087,7 +3087,7 @@ auto const interface_list_def =
 
 
 
-// interface_signal_declaration ::=                                    [§ 4.3.2]
+// interface_signal_declaration ::=                               [LRM93 §4.3.2]
 //     [signal] identifier_list : [ mode ] subtype_indication [ bus ] [ := static_expression ]
 auto const interface_signal_declaration_def =
        -SIGNAL
@@ -3101,7 +3101,7 @@ auto const interface_signal_declaration_def =
 
 
 
-// interface_variable_declaration ::=                                  [§ 4.3.2]
+// interface_variable_declaration ::=                             [LRM93 §4.3.2]
 //     [variable] identifier_list : [ mode ] subtype_indication [ := static_expression ]
 auto const interface_variable_declaration_def =
        -VARIABLE
@@ -3109,12 +3109,12 @@ auto const interface_variable_declaration_def =
     >> ':'
     >> -mode
     >> subtype_indication
-    >> -( ":=" >  expression )
+    >> -( ":=" >>  expression )
     ;
 
 
 
-// iteration_scheme ::=                                                  [§ 8.9]
+// iteration_scheme ::=                                             [LRM93 §8.9]
 //       while condition
 //     | for loop_parameter_specification
 auto const iteration_scheme_def =
@@ -3124,7 +3124,7 @@ auto const iteration_scheme_def =
 
 
 
-// label ::=                                                             [§ 9.7]
+// label ::=                                                        [LRM93 §9.7]
 //     identifier
 auto const label_def =
     identifier
@@ -3132,7 +3132,7 @@ auto const label_def =
 
 
 
-// library_clause ::=                                                   [§ 11.2]
+// library_clause ::=                                              [LRM93 §11.2]
 //     library logical_name_list ;
 auto const library_clause_def = ( // operator precedence
        LIBRARY
@@ -3143,7 +3143,7 @@ auto const library_clause_def = ( // operator precedence
 
 
 #if 0
-// library_unit ::=                                                     [§ 11.1]
+// library_unit ::=                                                [LRM93 §11.1]
 //       primary_unit
 //     | secondary_unit
 auto const library_unit_def =
@@ -3153,7 +3153,7 @@ auto const library_unit_def =
 #endif
 
 
-// literal ::=                                                         [§ 7.3.1]
+// literal ::=                                                    [LRM93 §7.3.1]
 //       numeric_literal
 //     | enumeration_literal
 //     | string_literal
@@ -3169,7 +3169,7 @@ auto const literal_def = /* order matters */
 
 
 
-// logical_name ::=                                                     [§ 11.2]
+// logical_name ::=                                                [LRM93 §11.2]
 //     identifier
 auto const logical_name_def =
     identifier
@@ -3177,7 +3177,7 @@ auto const logical_name_def =
 
 
 
-// logical_name_list ::=                                                [§ 11.2]
+// logical_name_list ::=                                           [LRM93 §11.2]
 //     logical_name { , logical_name }
 auto const logical_name_list_def =
     logical_name % ','
@@ -3185,7 +3185,7 @@ auto const logical_name_list_def =
 
 
 
-// loop_statement ::=                                                    [§ 8.9]
+// loop_statement ::=                                               [LRM93 §8.9]
 //     [ loop_label : ]
 //         [ iteration_scheme ] loop
 //             sequence_of_statements
@@ -3203,7 +3203,7 @@ auto const loop_statement_def = ( // operator precedence
 
 
 
-// mode ::=                                                            [§ 4.3.2]
+// mode ::=                                                       [LRM93 §4.3.2]
 //     in | out | inout | buffer | linkage
 auto const mode_def =
     kw( mode_symbols )
@@ -3211,7 +3211,7 @@ auto const mode_def =
 
 
 
-// name ::=                                                              [§ 6.1]
+// name ::=                                                         [LRM93 §6.1]
 //       simple_name
 //     | operator_symbol
 //     | selected_name
@@ -3229,7 +3229,7 @@ auto const name_def =
 
 
 
-// next_statement ::=                                                   [§ 8.10]
+// next_statement ::=                                              [LRM93 §8.10]
 //     [ label : ] next [ loop_label ] [ when condition ] ;
 auto const next_statement_def = ( // operator precedence
        -label_colon
@@ -3242,7 +3242,7 @@ auto const next_statement_def = ( // operator precedence
 
 
 
-// null_statement ::=                                                   [§ 8.13]
+// null_statement ::=                                              [LRM93 §8.13]
 //      [ label : ] null ;
 auto const null_statement_def = ( // operator precedence
        -label_colon
@@ -3253,7 +3253,7 @@ auto const null_statement_def = ( // operator precedence
 
 
 
-// numeric_literal ::=                                                 [§ 7.3.1]
+// numeric_literal ::=                                            [LRM93 §7.3.1]
 //       abstract_literal
 //     | physical_literal
 auto const numeric_literal_def =  /* order matters */
@@ -3263,7 +3263,7 @@ auto const numeric_literal_def =  /* order matters */
 
 
 #if 0 // UNUSED, no refererer in BNF (even unused declaration)
-// object_declaration ::=                                              [§ 4.3.1]
+// object_declaration ::=                                         [LRM93 §4.3.1]
 //       constant_declaration
 //     | signal_declaration
 //     | variable_declaration
@@ -3277,7 +3277,7 @@ auto const object_declaration_def =
 #endif
 
 
-// operator_symbol ::=                                                   [§ 2.1]
+// operator_symbol ::=                                              [LRM93 §2.1]
 //     string_literal
 auto const operator_symbol_def =
     string_literal
@@ -3285,7 +3285,7 @@ auto const operator_symbol_def =
 
 
 
-// options ::=                                                           [§ 9.5]
+// options ::=                                                      [LRM93 §9.5]
 //     [ guarded ] [ delay_mechanism ]
 auto const options_def =
        -GUARDED
@@ -3294,7 +3294,7 @@ auto const options_def =
 
 
 #if 0
-// package_body ::=                                                      [§ 2.6]
+// package_body ::=                                                 [LRM93 §2.6]
 //     package body package_simple_name is
 //         package_body_declarative_part
 //     end [ package body ] [ package_simple_name ] ;
@@ -3306,7 +3306,7 @@ auto const package_body_def =
 #endif
 
 #if 0
-// package_body_declarative_item ::=                                     [§ 2.6]
+// package_body_declarative_item ::=                                [LRM93 §2.6]
 //       subprogram_declaration
 //     | subprogram_body
 //     | type_declaration
@@ -3334,7 +3334,7 @@ auto const package_body_declarative_item_def =
 #endif
 
 #if 0
-// package_body_declarative_part ::=                                     [§ 2.6]
+// package_body_declarative_part ::=                                [LRM93 §2.6]
 //     { package_body_declarative_item }
 auto const package_body_declarative_part_def =
 { package_body_declarative_item }
@@ -3342,7 +3342,7 @@ auto const package_body_declarative_part_def =
 #endif
 
 #if 0
-// package_declaration ::=                                               [§ 2.5]
+// package_declaration ::=                                          [LRM93 §2.5]
 //     package identifier is
 //         package_declarative_part
 //     end [ package ] [ package_simple_name ] ;
@@ -3354,7 +3354,7 @@ auto const package_declaration_def =
 #endif
 
 #if 0
-// package_declarative_item ::=                                          [§ 2.5]
+// package_declarative_item ::=                                     [LRM93 §2.5]
 //       subprogram_declaration
 //     | type_declaration
 //     | subtype_declaration
@@ -3390,7 +3390,7 @@ auto const package_declarative_item_def =
 #endif
 
 #if 0
-// package_declarative_part ::=                                          [§ 2.5]
+// package_declarative_part ::=                                     [LRM93 §2.5]
 //     { package_declarative_item }
 auto const package_declarative_part_def =
 { package_declarative_item }
@@ -3398,7 +3398,7 @@ auto const package_declarative_part_def =
 #endif
 
 
-// parameter_specification ::=                                           [§ 8.9]
+// parameter_specification ::=                                      [LRM93 §8.9]
 //     identifier in discrete_range
 auto const parameter_specification_def =
        identifier
@@ -3408,7 +3408,7 @@ auto const parameter_specification_def =
 
 
 
-// physical_literal ::=                                                [§ 3.1.3]
+// physical_literal ::=                                           [LRM93 §3.1.3]
 //     [ abstract_literal ] unit_name
 namespace physical_literal_detail {
 
@@ -3427,7 +3427,7 @@ auto const physical_literal_def =
 
 
 
-// physical_type_definition ::=                                        [§ 3.1.3]
+// physical_type_definition ::=                                   [LRM93 §3.1.3]
 //     range_constraint
 //         units
 //             primary_unit_declaration
@@ -3444,7 +3444,7 @@ auto const physical_type_definition_def =
 
 
 
-// port_clause ::=                                                     [§ 1.1.1]
+// port_clause ::=                                                [LRM93 §1.1.1]
 //     port ( port_list ) ;
 auto const port_clause_def = ( // operator precedence
        PORT
@@ -3457,7 +3457,7 @@ auto const port_clause_def = ( // operator precedence
 
 
 #if 0 // DISABLED; embedded into port_clause
-// port_list ::=                                                     [§ 1.1.1.2]
+// port_list ::=                                                [LRM93 §1.1.1.2]
 //     port_interface_list
 auto const port_list_def =
     interface_list
@@ -3465,7 +3465,7 @@ auto const port_list_def =
 #endif
 
 
-// port_map_aspect ::=                                               [§ 5.2.1.2]
+// port_map_aspect ::=                                          [LRM93 §5.2.1.2]
 //     port map ( port_association_list )
 auto const port_map_aspect_def =
        PORT
@@ -3477,7 +3477,7 @@ auto const port_map_aspect_def =
 
 
 
-// prefix ::=                                                            [§ 6.1]
+// prefix ::=                                                       [LRM93 §6.1]
 //       name
 //     | function_call
 auto const prefix_def =
@@ -3487,7 +3487,7 @@ auto const prefix_def =
 
 
 
-// primary ::=                                                           [§ 7.1]
+// primary ::=                                                      [LRM93 §7.1]
 //       name
 //     | literal
 //     | aggregate
@@ -3512,7 +3512,7 @@ auto const primary_def =
 
 
 #if 0
-// primary_unit ::=                                                     [§ 11.1]
+// primary_unit ::=                                                [LRM93 §11.1]
 //       entity_declaration
 //     | configuration_declaration
 //     | package_declaration
@@ -3534,7 +3534,7 @@ auto const primary_unit_declaration_def =
 
 
 
-// procedure_call ::=                                                    [§ 8.6]
+// procedure_call ::=                                               [LRM93 §8.6]
 //     procedure_name [ ( actual_parameter_part ) ]
 auto const procedure_call_def =
        name
@@ -3545,7 +3545,7 @@ auto const procedure_call_def =
 
 
 
-// procedure_call_statement ::=                                          [§ 8.6]
+// procedure_call_statement ::=                                     [LRM93 §8.6]
 //     [ label : ] procedure_call ;
 /* FixMe: doesn't compile due optional and forward_ast of name? problem */
 auto const procedure_call_statement_def = ( // operator precedence
@@ -3557,7 +3557,7 @@ auto const procedure_call_statement_def = ( // operator precedence
 
 
 #if 0
-// process_declarative_item ::=                                          [§ 9.2]
+// process_declarative_item ::=                                     [LRM93 §9.2]
 //       subprogram_declaration
 //     | subprogram_body
 //     | type_declaration
@@ -3589,7 +3589,7 @@ auto const process_declarative_item_def =
 #endif
 
 #if 0
-// process_declarative_part ::=                                          [§ 9.2]
+// process_declarative_part ::=                                     [LRM93 §9.2]
 //     { process_declarative_item }
 auto const process_declarative_part_def =
 { process_declarative_item }
@@ -3597,7 +3597,7 @@ auto const process_declarative_part_def =
 #endif
 
 #if 0
-// process_statement ::=                                                 [§ 9.2]
+// process_statement ::=                                            [LRM93 §9.2]
 //     [ process_label : ]
 //         [ postponed ] process [ ( sensitivity_list ) ] [ is ]
 //             process_declarative_part
@@ -3605,7 +3605,7 @@ auto const process_declarative_part_def =
 //             process_statement_part
 //         end [ postponed ] process [ process_label ] ;
 auto const process_statement_def =
-        -( process_label > ':' )
+        -( process_label >> ':' )
         -( POSTPONED ) PROCESS -( '(' sensitivity_list ')' ) -( IS )
         process_declarative_part
         BEGIN
@@ -3615,7 +3615,7 @@ auto const process_statement_def =
 #endif
 
 
-// process_statement_part ::=                                            [§ 9.2]
+// process_statement_part ::=                                       [LRM93 §9.2]
 //     { sequential_statement }
 auto const process_statement_part_def =
     sequence_of_statements
@@ -3623,7 +3623,7 @@ auto const process_statement_part_def =
 
 
 
-// qualified_expression ::=                                            [§ 7.3.4]
+// qualified_expression ::=                                       [LRM93 §7.3.4]
 // type_mark ' ( expression )
 //     | type_mark ' aggregate
 auto const qualified_expression_def =
@@ -3640,7 +3640,7 @@ auto const qualified_expression_def =
 
 
 
-// range ::=                                                             [§ 3.1]
+// range ::=                                                        [LRM93 §3.1]
 //       range_attribute_name
 //     | simple_expression direction simple_expression
 namespace range_detail {
@@ -3661,7 +3661,7 @@ auto const range_def =
 
 
 
-// range_constraint ::=                                                  [§ 3.1]
+// range_constraint ::=                                             [LRM93 §3.1]
 //     range range
 auto const range_constraint_def =
     RANGE >> range
@@ -3669,7 +3669,7 @@ auto const range_constraint_def =
 
 
 
-// record_type_definition ::=                                          [§ 3.2.2]
+// record_type_definition ::=                                     [LRM93 §3.2.2]
 //     record
 //         element_declaration
 //         { element_declaration }
@@ -3683,7 +3683,7 @@ auto const record_type_definition_def =
 
 
 
-// relation ::=                                                          [§ 7.1]
+// relation ::=                                                     [LRM93 §7.1]
 //     shift_expression [ relational_operator shift_expression ]
 namespace relation_detail {
 
@@ -3699,21 +3699,21 @@ auto const relation_def =
 
 
 
-// report_statement ::=                                                  [§ 8.3]
+// report_statement ::=                                             [LRM93 §8.3]
 //     [ label : ]
 //     report expression
 //     [ severity expression ] ;
 auto const report_statement_def = ( // operator precedence
        -label_colon
-    >> ( REPORT   > expression )
-    >> -( SEVERITY > expression )
+    >> ( REPORT   >> expression )
+    >> -( SEVERITY >> expression )
     )
     >  ';'
     ;
 
 
 
-// return_statement ::=                                                 [§ 8.12]
+// return_statement ::=                                            [LRM93 §8.12]
 //     [ label : ] return [ expression ] ;
 auto const return_statement_def = ( // operator precedence
        -label_colon
@@ -3725,7 +3725,7 @@ auto const return_statement_def = ( // operator precedence
 
 
 
-// scalar_type_definition ::=                                            [§ 3.1]
+// scalar_type_definition ::=                                       [LRM93 §3.1]
 //       enumeration_type_definition   | integer_type_definition
 //     | floating_type_definition      | physical_type_definition
 auto const scalar_type_definition_def = /* order matters */
@@ -3736,7 +3736,7 @@ auto const scalar_type_definition_def = /* order matters */
 
 
 #if 0
-// secondary_unit ::=                                                   [§ 11.1]
+// secondary_unit ::=                                              [LRM93 §11.1]
 //       architecture_body
 //     | package_body
 auto const secondary_unit_def =
@@ -3746,7 +3746,7 @@ auto const secondary_unit_def =
 #endif
 
 
-// secondary_unit_declaration ::=                                      [§ 3.1.3]
+// secondary_unit_declaration ::=                                 [LRM93 §3.1.3]
 //     identifier = physical_literal ;
 auto const secondary_unit_declaration_def = ( // operator precedence
        identifier
@@ -3758,7 +3758,7 @@ auto const secondary_unit_declaration_def = ( // operator precedence
 
 
 
-// selected_name ::=                                                     [§ 6.3]
+// selected_name ::=                                                [LRM93 §6.3]
 //     prefix . suffix
 auto const selected_name_def =
     x3::lexeme[
@@ -3770,7 +3770,7 @@ auto const selected_name_def =
 
 
 
-// selected_signal_assignment ::=                                      [§ 9.5.2]
+// selected_signal_assignment ::=                                 [LRM93 §9.5.2]
 //     with expression select
 //         target    <= options selected_waveforms ;
 auto const selected_signal_assignment_def = ( // operator precedence
@@ -3787,7 +3787,7 @@ auto const selected_signal_assignment_def = ( // operator precedence
 
 
 
-// selected_waveforms ::=                                              [§ 9.5.2]
+// selected_waveforms ::=                                         [LRM93 §9.5.2]
 //     { waveform when choices , }
 //     waveform when choices
 auto const selected_waveforms_def =
@@ -3800,7 +3800,7 @@ auto const selected_waveforms_def =
 
 
 
-// sensitivity_clause ::=                                                [§ 8.1]
+// sensitivity_clause ::=                                           [LRM93 §8.1]
 //     on sensitivity_list
 auto const sensitivity_clause_def =
     ON >> sensitivity_list
@@ -3808,7 +3808,7 @@ auto const sensitivity_clause_def =
 
 
 
-// sensitivity_list ::=                                                  [§ 8.1]
+// sensitivity_list ::=                                             [LRM93 §8.1]
 //     signal_name { , signal_name }
 auto const sensitivity_list_def =
     name % ','
@@ -3816,7 +3816,7 @@ auto const sensitivity_list_def =
 
 
 
-// sequence_of_statements ::=                                              [§ 8]
+// sequence_of_statements ::=                                         [LRM93 §8]
 //     { sequential_statement }
 auto const sequence_of_statements_def =
     *sequential_statement
@@ -3824,7 +3824,7 @@ auto const sequence_of_statements_def =
 
 
 
-// sequential_statement ::=                                                [§ 8]
+// sequential_statement ::=                                           [LRM93 §8]
 //       wait_statement
 //     | assertion_statement
 //     | report_statement
@@ -3856,12 +3856,12 @@ auto const sequential_statement_def =
 
 
 
-// shift_expression ::=                                                  [§ 7.1]
+// shift_expression ::=                                             [LRM93 §7.1]
 //     simple_expression [ shift_operator simple_expression ]
 namespace shift_expression_detail {
 
 auto const chunk = x3::rule<struct _, ast::shift_expression::chunk> { "shift_expression" } =
-    shift_operator > simple_expression
+    shift_operator >> simple_expression
     ;
 } // end detail
 
@@ -3872,7 +3872,7 @@ auto const shift_expression_def =
 
 
 
-// sign ::=                                                              [§ 7.2]
+// sign ::=                                                         [LRM93 §7.2]
 //     + | -
 auto const sign_def =
       ("-" >> x3::attr(ast::operator_token::SIGN_NEG))
@@ -3881,7 +3881,7 @@ auto const sign_def =
 
 
 
-// signal_assignment_statement ::=                                       [§ 8.4]
+// signal_assignment_statement ::=                                  [LRM93 §8.4]
 //     [ label : ] target <= [ delay_mechanism ] waveform ;
 auto const signal_assignment_statement_def = ( // operator precedence
        -label_colon
@@ -3895,7 +3895,7 @@ auto const signal_assignment_statement_def = ( // operator precedence
 
 
 
-// signal_declaration ::=                                            [§ 4.3.1.2]
+// signal_declaration ::=                                       [LRM93 §4.3.1.2]
 //     signal identifier_list : subtype_indication [ signal_kind ] [ := expression ] ;
 auto const signal_declaration_def = ( // operator precedence
        omit[ SIGNAL ]
@@ -3903,14 +3903,14 @@ auto const signal_declaration_def = ( // operator precedence
     >> ':'
     >> subtype_indication
     >> -signal_kind
-    >> -( ":=" >  expression )
+    >> -( ":=" >>  expression )
     )
     >  ';'
     ;
 
 
 
-// signal_kind ::=                                                   [§ 4.3.1.2]
+// signal_kind ::=                                              [LRM93 §4.3.1.2]
 //     register  |  bus
 auto const signal_kind_def =
       REGISTER
@@ -3919,7 +3919,7 @@ auto const signal_kind_def =
 
 
 
-// signal_list ::=                                                       [§ 5.3]
+// signal_list ::=                                                  [LRM93 §5.3]
 //       signal_name { , signal_name }
 //     | others
 //     | all
@@ -3931,7 +3931,7 @@ auto const signal_list_def =
 
 
 
-// signature ::=                                                       [§ 2.3.2]
+// signature ::=                                                  [LRM93 §2.3.2]
 //     [ [ type_mark { , type_mark } ] [ return type_mark ] ]
 auto const signature_def =
        '['
@@ -3950,12 +3950,12 @@ auto const signature_def =
 auto const simple_expression_def =
        -sign
     >> term
-    >> *(adding_operator > term)
+    >> *(adding_operator >> term)
     ;
 
 
 
-// simple_name ::=                                                       [§ 6.2]
+// simple_name ::=                                                  [LRM93 §6.2]
 //     identifier
 auto const simple_name_def =
     identifier
@@ -3963,7 +3963,7 @@ auto const simple_name_def =
 
 
 
-// slice_name ::=                                                        [§ 6.5]
+// slice_name ::=                                                   [LRM93 §6.5]
 //     prefix ( discrete_range )
 auto const slice_name_def =
        prefix
@@ -3974,7 +3974,7 @@ auto const slice_name_def =
 
 
 
-// string_literal ::=                                                   [§ 13.6]
+// string_literal ::=                                              [LRM93 §13.6]
 //     " { graphic_character } "
 namespace string_literal_detail {
 
@@ -4005,7 +4005,7 @@ auto const string_literal_def =
 
 
 
-// subprogram_body ::=                                                   [§ 2.2]
+// subprogram_body ::=                                              [LRM93 §2.2]
 //     subprogram_specification is
 //         subprogram_declarative_part
 //     begin
@@ -4026,7 +4026,7 @@ auto const subprogram_body_def = ( // operator precedence
 
 
 
-// subprogram_declaration ::=                                            [§ 2.1]
+// subprogram_declaration ::=                                       [LRM93 §2.1]
 //     subprogram_specification ;
 auto const subprogram_declaration_def =
       subprogram_specification
@@ -4035,7 +4035,7 @@ auto const subprogram_declaration_def =
 
 
 
-// subprogram_declarative_item ::=                                       [§ 2.2]
+// subprogram_declarative_item ::=                                  [LRM93 §2.2]
 //       subprogram_declaration
 //     | subprogram_body
 //     | type_declaration
@@ -4067,7 +4067,7 @@ auto const subprogram_declarative_item_def =
 
 
 
-// subprogram_declarative_part ::=                                       [§ 2.2]
+// subprogram_declarative_part ::=                                  [LRM93 §2.2]
 //     { subprogram_declarative_item }
 auto const subprogram_declarative_part_def =
     *subprogram_declarative_item
@@ -4075,7 +4075,7 @@ auto const subprogram_declarative_part_def =
 
 
 
-// subprogram_kind ::=                                                   [§ 2.2]
+// subprogram_kind ::=                                              [LRM93 §2.2]
 //     procedure | function
 auto const subprogram_kind_def =
     kw( subprogram_kind_symbols )
@@ -4083,7 +4083,7 @@ auto const subprogram_kind_def =
 
 
 
-// subprogram_specification ::=                                          [§ 2.1]
+// subprogram_specification ::=                                     [LRM93 §2.1]
 //       procedure designator [ ( formal_parameter_list ) ]
 //     | [ pure | impure ]  function designator [ ( formal_parameter_list ) ]
 //       return type_mark
@@ -4118,7 +4118,7 @@ auto const subprogram_specification_def =
 
 
 
-// subprogram_statement_part ::=                                         [§ 2.2]
+// subprogram_statement_part ::=                                    [LRM93 §2.2]
 //     { sequential_statement }
 auto const subprogram_statement_part_def =
     sequence_of_statements
@@ -4139,7 +4139,7 @@ auto const subtype_declaration_def = ( // operator precedence
 
 
 
-// subtype_indication ::=                                                [§ 4.2]
+// subtype_indication ::=                                           [LRM93 §4.2]
 //     [ resolution_function_name ] type_mark [ constraint ]
 auto const subtype_indication_def =
     /* parse a list of unspecified names, since
@@ -4167,7 +4167,7 @@ auto const subtype_indication_def =
 
 
 
-// suffix ::=                                                            [§ 6.3]
+// suffix ::=                                                       [LRM93 §6.3]
 //       simple_name
 //     | character_literal
 //     | operator_symbol
@@ -4181,7 +4181,7 @@ auto const suffix_def =
 
 
 
-// target ::=                                                            [§ 8.4]
+// target ::=                                                       [LRM93 §8.4]
 //       name
 //     | aggregate
 auto const target_def =
@@ -4191,7 +4191,7 @@ auto const target_def =
 
 
 
-// term ::=                                                              [§ 7.1]
+// term ::=                                                         [LRM93 §7.1]
 //     factor { multiplying_operator factor }
 auto const term_def =
     /* There is no expectation point: Consider the case of '-5 mod -3', where
@@ -4207,7 +4207,7 @@ auto const term_def =
 
 
 
-// timeout_clause ::=                                                    [§ 8.1]
+// timeout_clause ::=                                               [LRM93 §8.1]
 //     for time_expression
 auto const timeout_clause_def =
     FOR >> expression
@@ -4215,7 +4215,7 @@ auto const timeout_clause_def =
 
 
 
-// type_conversion ::=                                                 [§ 7.3.5]
+// type_conversion ::=                                            [LRM93 §7.3.5]
 //     type_mark ( expression )
 auto const type_conversion_def =
        type_mark
@@ -4224,11 +4224,14 @@ auto const type_conversion_def =
 
 
 
-// type_declaration ::=                                                  [§ 4.1]
+// type_declaration ::=                                             [LRM93 §4.1]
 //       full_type_declaration
 //     | incomplete_type_declaration
 auto const type_declaration_def = ( // operator precedence
-       // FixMe: What about this 'Note'? Note; re-typed as node!
+       /* Note, this node covers both alternatives from BNF:
+        * full_type_declaration       ::= TYPE identifier IS type_definition ;
+        * incomplete_type_declaration ::= TYPE identifier ;
+        */
        TYPE
     >> identifier
     >> -( IS >> type_definition )
@@ -4238,7 +4241,7 @@ auto const type_declaration_def = ( // operator precedence
 
 
 
-// type_definition ::=                                                   [§ 4.1]
+// type_definition ::=                                              [LRM93 §4.1]
 //       scalar_type_definition
 //     | composite_type_definition
 //     | access_type_definition
@@ -4265,7 +4268,7 @@ auto const type_mark_def =
 
 
 
-// unconstrained_array_definition ::=                                  [§ 3.2.1]
+// unconstrained_array_definition ::=                             [LRM93 §3.2.1]
 //     array ( index_subtype_definition { , index_subtype_definition } )
 //         of element_subtype_indication
 auto const unconstrained_array_definition_def =
@@ -4277,7 +4280,7 @@ auto const unconstrained_array_definition_def =
 
 
 
-// use_clause ::=                                                       [§ 10.4]
+// use_clause ::=                                                  [LRM93 §10.4]
 //     use selected_name { , selected_name } ;
 namespace use_clause_detail {
 
@@ -4329,7 +4332,7 @@ auto const use_clause_def = ( // operator precedence
 
 
 
-// variable_assignment_statement ::=                                     [§ 8.5]
+// variable_assignment_statement ::=                                [LRM93 §8.5]
 //     [ label : ] target  := expression ;
 auto const variable_assignment_statement_def = ( // operator precedence
        -label_colon
@@ -4342,7 +4345,7 @@ auto const variable_assignment_statement_def = ( // operator precedence
 
 
 
-// variable_declaration ::=                                          [§ 4.3.1.3]
+// variable_declaration ::=                                     [LRM93 §4.3.1.3]
 //     [ shared ] variable identifier_list : subtype_indication [ := expression ] ;
 auto const variable_declaration_def = ( // operator precedence
       -SHARED
@@ -4350,14 +4353,14 @@ auto const variable_declaration_def = ( // operator precedence
     >> identifier_list
     >> ':'
     >> subtype_indication
-    >> -(  ":=" >  expression )
+    >> -(  ":=" >>  expression )
     )
     >  ';'
     ;
 
 
 
-// wait_statement ::=                                                    [§ 8.1]
+// wait_statement ::=                                               [LRM93 §8.1]
 //     [ label : ] wait [ sensitivity_clause ] [ condition_clause ] [ timeout_clause ] ;
 auto const wait_statement_def = ( // operator precedence
        -( label >> ':' )
@@ -4371,7 +4374,7 @@ auto const wait_statement_def = ( // operator precedence
 
 
 
-// waveform ::=                                                          [§ 8.4]
+// waveform ::=                                                     [LRM93 §8.4]
 //       waveform_element { , waveform_element }
 //     | unaffected
 auto const waveform_def =
@@ -4381,7 +4384,7 @@ auto const waveform_def =
 
 
 
-// waveform_element ::=                                                [§ 8.4.1]
+// waveform_element ::=                                           [LRM93 §8.4.1]
 //       value_expression [ after time_expression ]
 //     | null [ after time_expression ]
 auto const waveform_element_def =

@@ -1,0 +1,4 @@
+-- don't interpret a comment '--' as 
+-- signum on expression
+(a * b  -- comment
+ + c)
