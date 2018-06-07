@@ -22,7 +22,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 
-
+##
+# Plattform and compiler checks
+include(build_config_hpp)
 
 
 ##
@@ -30,7 +32,7 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 # EDA project parser depends on newer Spirit.X3 versions as commonly shiped
 # by the linux distributions. Create an own up-to-date clone of Boost.Spirit's
 # project. This is used by the depending sub projects
-include(external-spirit-x3)
+include(external_spirit_x3)
 
 # parser with Spirit.X3 DEBUG
 set(EDA_VHDL_PARSER_DEBUG OFF CACHE BOOL "debug printer of spirit.x3 parser tree")

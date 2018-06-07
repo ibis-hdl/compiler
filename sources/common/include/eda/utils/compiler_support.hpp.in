@@ -11,6 +11,7 @@
 
 /* cmake platform check results start */
 
+
 /* Define to 1 if the compiler supports __builtin_unreachable. */
 #cmakedefine EDA_HAVE_BUILTIN_UNREACHABLE 1
 
@@ -22,10 +23,12 @@
 /* Define to 1 if the compiler supports C++11 quick_exit.  */
 #cmakedefine EDA_HAVE_STD_QUICK_EXIT 1
 
+
 /* cmake platform check results end */
 
 
-/*
+
+/* -----------------------------------------------------------------------------
  * Handling of cmake's platform check results
  */
 
@@ -46,17 +49,12 @@
 #endif
 
 
-// check on C++17 compiler features
-#if defined(__has_cpp_attribute)
-#if     __has_cpp_attribute(fallthrough)
-#define     FALLTHROUGH [[fallthrough]]
-#elif     __has_cpp_attribute(clang::fallthrough)
-#define     FALLTHROUGH [[clang::fallthrough]]
+#if defined(EDA_HAVE_STD_QUICK_EXIT)
+#define std_quick_exit(EXIT_CODE)  \
+std::quick_exit(EXIT_CODE)
 #else
-#define FALLTHROUGH        // [[fallthrough]]
-#endif
-#else
-#define FALLTHROUGH        // [[fallthrough]]
+#define std_quick_exit(EXIT_CODE)  \
+std::exit(EXIT_CODE);
 #endif
 
 

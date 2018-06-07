@@ -30,11 +30,7 @@ void assertion_failed_msg(const CharT* expr, const char* msg, const char* functi
         << function << ":\n"
         << file << '(' << line << ")\n";
 
-#if defined(EDA_HAVE_STD_QUICK_EXIT)
-    std::quick_exit(EXIT_FAILURE);
-#else
-    std::exit(EXIT_FAILURE);
-#endif
+    std_quick_exit(EXIT_FAILURE);
 }
 
 } } } // namespace eda.utils.detail

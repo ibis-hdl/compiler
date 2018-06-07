@@ -77,17 +77,3 @@ target_link_libraries(${PROJECT_NAME}
 ## doc, etc.
 add_subdirectory(doc)
 
-
-## Install targets
-install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Config
-    ARCHIVE  DESTINATION ${PROJECT_NAME}
-    LIBRARY  DESTINATION ${PROJECT_NAME}
-    RUNTIME  DESTINATION ${PROJECT_NAME})  # This is for Windows
-install(DIRECTORY include/ DESTINATION include)
-
-install(EXPORT ${PROJECT_NAME}Config
-    DESTINATION share/cmake/${PROJECT_NAME}Config)
-
-export(TARGETS ${PROJECT_NAME} FILE ${PROJECT_NAME}Config.cmake)
-
-

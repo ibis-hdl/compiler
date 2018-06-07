@@ -63,7 +63,28 @@ std::ostream& operator<<(std::ostream& os, operator_token token)
 
 
 /**
+ * VHDL operator arity helper
+ *
+ * FixMe: unused and not required since BNCF takes care on it.
+ */
+unsigned arity(operator_token token)
+{
+    switch(token) {
+        case ast::operator_token::ABS:      [[fallthrough]];
+        case ast::operator_token::NOT:      [[fallthrough]];
+        case ast::operator_token::SIGN_NEG: [[fallthrough]];
+        case ast::operator_token::SIGN_POS: return 1;
+        default:                            return 2;
+    }
+
+    cxx_unreachable_bug_triggered();
+}
+
+
+/**
  * VHDL operator precedence helper
+ *
+ * FixMe: unused and not required since BNCF takes care on it.
  *
  * ==== =======================     =================================
  * Prio      operator group                     operator
@@ -82,71 +103,48 @@ unsigned precedence(operator_token token)
 {
     switch(token) {
         // miscellaneous_operator
-        case operator_token::EXPONENT:
-            FALLTHROUGH;
-        case operator_token::ABS:
-            FALLTHROUGH;
-        case operator_token::NOT: { return 6; }
+        case operator_token::EXPONENT:      [[fallthrough]];
+        case operator_token::ABS:           [[fallthrough]];
+        case operator_token::NOT:           { return 6; }
 
         // multiplying_operator
-        case operator_token::MUL:
-            FALLTHROUGH;
-        case operator_token::DIV:
-            FALLTHROUGH;
-        case operator_token::MOD:
-            FALLTHROUGH;
-        case operator_token::REM: { return 5; }
+        case operator_token::MUL:           [[fallthrough]];
+        case operator_token::DIV:           [[fallthrough]];
+        case operator_token::MOD:           [[fallthrough]];
+        case operator_token::REM:           { return 5; }
 
         // unary
-        case operator_token::SIGN_NEG:
-            FALLTHROUGH;
-        case operator_token::SIGN_POS: { return 4; }
+        case operator_token::SIGN_NEG:      [[fallthrough]];
+        case operator_token::SIGN_POS:      { return 4; }
 
         // adding_operator
-        case operator_token::ADD:
-            FALLTHROUGH;
-        case operator_token::SUB:
-            FALLTHROUGH;
-        case operator_token::CONCAT: { return 3; }
+        case operator_token::ADD:           [[fallthrough]];
+        case operator_token::SUB:           [[fallthrough]];
+        case operator_token::CONCAT:        { return 3; }
 
         // shift_operator
-        case operator_token::SLL:
-            FALLTHROUGH;
-        case operator_token::SRL:
-            FALLTHROUGH;
-        case operator_token::SLA:
-            FALLTHROUGH;
-        case operator_token::SRA:
-            FALLTHROUGH;
-        case operator_token::ROL:
-            FALLTHROUGH;
-        case operator_token::ROR: { return 2; }
+        case operator_token::SLL:           [[fallthrough]];
+        case operator_token::SRL:           [[fallthrough]];
+        case operator_token::SLA:           [[fallthrough]];
+        case operator_token::SRA:           [[fallthrough]];
+        case operator_token::ROL:           [[fallthrough]];
+        case operator_token::ROR:           { return 2; }
 
         // relational_operator
-        case operator_token::EQUAL:
-            FALLTHROUGH;
-        case operator_token::NOT_EQUALS:
-            FALLTHROUGH;
-        case operator_token::LESS:
-            FALLTHROUGH;
-        case operator_token::LESS_EQUALS:
-            FALLTHROUGH;
-        case operator_token::GREATER:
-            FALLTHROUGH;
+        case operator_token::EQUAL:         [[fallthrough]];
+        case operator_token::NOT_EQUALS:    [[fallthrough]];
+        case operator_token::LESS:          [[fallthrough]];
+        case operator_token::LESS_EQUALS:   [[fallthrough]];
+        case operator_token::GREATER:       [[fallthrough]];
         case operator_token::GREATER_EQUALS: { return 1; }
 
         // logical_operator
-        case operator_token::AND:
-            FALLTHROUGH;
-        case operator_token::OR:
-            FALLTHROUGH;
-        case operator_token::NAND:
-            FALLTHROUGH;
-        case operator_token::NOR:
-            FALLTHROUGH;
-        case operator_token::XOR:
-            FALLTHROUGH;
-        case operator_token::XNOR: { return 0; }
+        case operator_token::AND:           [[fallthrough]];
+        case operator_token::OR:            [[fallthrough]];
+        case operator_token::NAND:          [[fallthrough]];
+        case operator_token::NOR:           [[fallthrough]];
+        case operator_token::XOR:           [[fallthrough]];
+        case operator_token::XNOR:          { return 0; }
 
         default:
             cxx_unreachable_bug_triggered();

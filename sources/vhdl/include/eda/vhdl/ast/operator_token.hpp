@@ -37,29 +37,7 @@ enum class operator_token {
 std::ostream& operator<<(std::ostream& os, operator_token token);
 
 
-static inline
-unsigned arity(operator_token token)
-{
-    switch(token) {
-        case ast::operator_token::ABS:
-            FALLTHROUGH;
-        case ast::operator_token::NOT:
-            FALLTHROUGH;
-        case ast::operator_token::SIGN_NEG:
-            FALLTHROUGH;
-        case ast::operator_token::SIGN_POS: {
-            return 1;
-        }
-        default: {
-            return 2;
-        }
-    }
-
-    // can't never be here
-    return 0;
-}
-
-
+unsigned arity(operator_token token);
 unsigned precedence(operator_token token);
 
 
