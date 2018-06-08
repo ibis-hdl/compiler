@@ -3,6 +3,16 @@
  *
  *  Created on: 08.06.2018
  *      Author: olaf
+ *
+ *  see:
+ *  - [Annotations - Decorating the ASTs](
+ *     https://www.boost.org/doc/libs/develop/libs/spirit/doc/x3/html/spirit_x3/tutorials/annotation.html)
+ *  - [Error Handling](
+ *     https://www.boost.org/doc/libs/develop/libs/spirit/doc/x3/html/spirit_x3/tutorials/error_handling.html)
+ *
+ *  also useful with 'diagnostic' approach (even if shown using Qi)
+ *  - [Dispatching on Expectation Point Failures](
+ *     http://boost-spirit.com/home/2011/02/28/dispatching-on-expectation-point-failures/)
  */
 
 #include <boost/config/warning_disable.hpp>
@@ -13,11 +23,11 @@
 #include <boost/fusion/include/adapt_struct.hpp>
 #include <boost/fusion/include/io.hpp>
 
-#include <boost/type_index.hpp>
-
 #include <iostream>
 #include <string>
 #include <map>
+
+#include <boost/type_index.hpp>
 
 
 namespace client { namespace ast
@@ -67,14 +77,46 @@ namespace client
 
             struct tag;
 
-            struct foo {
+            struct foo
+            {
+                /* Since the parser rule names and lookup map are written by
+                 * own it shouldn't necessary to case insensitive compare on
+                 * keys, anyway see
+                 * [Making map::find operation case insensitive](
+                 *  https://stackoverflow.com/questions/1801892/making-mapfind-operation-case-insensitive)
+                 * recommended in Meyers, Effective STL when internationalization
+                 * and embedded NULLs aren't an issue. */
+                struct icase_strcmp {
+                    bool operator()(std::string const& lhs, std::string const& rhs) const {
+                            return ::strcasecmp(lhs.c_str(), rhs.c_str()) < 0;
+                        }
+                };
+
+                std::map<std::string, std::string, icase_strcmp> id_map;
+
                 unsigned error_count;
                 unsigned warning_count;
 
                 foo()
                 : error_count{ 0 }
                 , warning_count{ 0 }
-                { }
+                {
+                    id_map["quoted_string"] = "Quoted String";
+                    id_map["person"]        = "Person";
+                    id_map["employee"]      = "Employee";
+                }
+
+                std::string const& name(std::string const& name_)
+                {
+                    auto const iter = id_map.find(name_);
+
+                    if(iter != id_map.end()) {
+                        return iter->second;
+                    }
+                    else {
+                        return name_;
+                    }
+                }
             };
 
         }
@@ -84,7 +126,7 @@ namespace client
 
         ///////////////////////////////////////////////////////////////////////
         // Our error handler
-        // Note, error_handler's context is of type:
+        // Note, error_handler's context is only of type:
         //
         // x3::context<
         //    x3::error_handler_tag,
@@ -98,32 +140,20 @@ namespace client
         //        x3::unused_type>
         //    >
         // >
+        //
+        // while the parser rule context contains all of them!
         ///////////////////////////////////////////////////////////////////////
         struct error_handler_base
         {
-            std::map<std::string, std::string> id_map;
-
-            error_handler_base()
-            {
-                id_map["quoted_string"] = "Quoted String";
-                id_map["person"]        = "Person";
-                id_map["employee"]      = "Employee";
-            }
-
             template <typename Iterator, typename Exception, typename Context>
             x3::error_handler_result
             on_error(Iterator& first, Iterator const& last,
                      Exception const& x, Context const& context)
             {
-                std::string which = x.which();
-                auto iter = id_map.find(which);
-
-                if (iter != id_map.end()) {
-                    which = iter->second;
-                }
+                auto& foo = x3::get<client::parser::context::tag>(context).get();
 
                 std::string message{
-                    "Oops! Expecting: " + which + " here:"};
+                    "Oops! Expecting: " + foo.name(x.which()) + " here:"};
 
                 auto& x3_error_handler = x3::get<x3::error_handler_tag>(context).get();
                 x3_error_handler(x.where(), message);
@@ -132,21 +162,22 @@ namespace client
             }
         };
 
-        struct empolyee_error_handler
+        struct employee_error_handler
         {
             template <typename Iterator, typename Exception, typename Context>
             x3::error_handler_result
             on_error(Iterator& first, Iterator const& last,
                      Exception const& x, Context const& context)
             {
+                auto& foo = x3::get<client::parser::context::tag>(context).get();
+
                 std::string message{
-                    "Employee Error: expecting: " + x.which() + " here:"};
+                    "Employee Error: expecting: " + foo.name(x.which()) + " here:"};
+
+                foo.error_count++;
 
                 auto& x3_error_handler = x3::get<x3::error_handler_tag>(context).get();
                 x3_error_handler(x.where(), message);
-
-                auto& foo = x3::get<client::parser::context::tag>(context).get();
-                foo.error_count++;
 
                 // no way to force/clear the attribute, see note on top
                 //std::cout << boost::typeindex::type_id<Context>().pretty_name() << "\n";
@@ -178,6 +209,10 @@ namespace client
         x3::rule<employee_class, ast::employee> const employee = "employee";
         x3::rule<employees_class, ast::employees> const employees = "employees";
 
+        auto const show_ctx = [](auto const& ctx) {
+            std::cout << boost::typeindex::type_id<decltype(ctx)>().pretty_name() << "\n";
+        };
+
         auto const quoted_string_def = lexeme['"' >> +(char_ - '"') >> '"'];
         auto const person_def = quoted_string > ',' > quoted_string;
 
@@ -195,7 +230,7 @@ namespace client
 
         struct quoted_string_class : x3::annotate_on_success {};
         struct person_class : x3::annotate_on_success {};
-        struct employee_class : x3::annotate_on_success, empolyee_error_handler {};
+        struct employee_class : x3::annotate_on_success, employee_error_handler {};
         struct employees_class : x3::annotate_on_success, error_handler_base {};
     }
 }
