@@ -3295,19 +3295,26 @@ auto const options_def =
     ;
 
 
-#if 0
+
 // package_body ::=                                                 [LRM93 §2.6]
 //     package body package_simple_name is
 //         package_body_declarative_part
 //     end [ package body ] [ package_simple_name ] ;
-auto const package_body_def =
-        PACKAGE BODY package_simple_name IS
-        package_body_declarative_part
-        END -( PACKAGE BODY ) -( package_simple_name ) >  ';'
-;
-#endif
+auto const package_body_def = ( // operator precedence
+       PACKAGE
+    >> BODY
+    >> simple_name
+    >> IS
+    >> package_body_declarative_part
+    >> END
+    >> -(PACKAGE >> BODY)
+    >> -simple_name
+    )
+    >  ';'
+    ;
 
-#if 0
+
+
 // package_body_declarative_item ::=                                [LRM93 §2.6]
 //       subprogram_declaration
 //     | subprogram_body
@@ -3326,22 +3333,22 @@ auto const package_body_declarative_item_def =
     | type_declaration
     | subtype_declaration
     | constant_declaration
-    | shared_variable_declaration
+    | variable_declaration  // shared_variable_declaration
     | file_declaration
     | alias_declaration
     | use_clause
     | group_template_declaration
     | group_declaration
     ;
-#endif
 
-#if 0
+
+
 // package_body_declarative_part ::=                                [LRM93 §2.6]
 //     { package_body_declarative_item }
 auto const package_body_declarative_part_def =
-{ package_body_declarative_item }
-;
-#endif
+    *package_body_declarative_item
+    ;
+
 
 
 // package_declaration ::=                                          [LRM93 §2.5]
@@ -4584,10 +4591,10 @@ BOOST_SPIRIT_DEFINE(  // -- O --
     , options
 )
 BOOST_SPIRIT_DEFINE(  // -- P --
-    //  package_body
-    //, package_body_declarative_item
-    //, package_body_declarative_part
-      package_declaration
+      package_body
+    , package_body_declarative_item
+    , package_body_declarative_part
+    , package_declaration
     , package_declarative_item
     , package_declarative_part
     , parameter_specification

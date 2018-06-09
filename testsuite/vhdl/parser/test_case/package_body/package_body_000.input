@@ -1,0 +1,5 @@
+-- minimal package body
+package body P is
+  constant C : integer := 200;
+end P;
+

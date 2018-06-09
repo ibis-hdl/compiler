@@ -1,0 +1,4 @@
+package body AUXILIARY is
+   constant Deferred_Con : Integer := 177;
+end package body AUXILIARY;
+

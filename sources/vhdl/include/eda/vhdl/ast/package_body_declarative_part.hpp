@@ -49,7 +49,7 @@ struct package_body_declarative_item : variant<
 };
 
 
-struct package_body_declarative_part : std::vector<ast::configuration_declarative_item> { };
+struct package_body_declarative_part : std::vector<ast::package_body_declarative_item> { };
 
 
 } } } // namespace eda.vhdl.ast

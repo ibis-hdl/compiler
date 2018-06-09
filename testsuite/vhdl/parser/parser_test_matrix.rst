@@ -9474,6 +9474,116 @@ numeric_literal
 |                      |                 |                                                          |
 +----------------------+-----------------+----------------------------------------------------------+
 
+============
+package_body
+============
+
++------------------+--------------------------------------------+---------------------------------------------------------+
+| File             | Input                                      | Expected                                                |
++------------------+--------------------------------------------+---------------------------------------------------------+
+| package_body_000 | -- minimal package body                    | (package_body                                           |
+|                  | package body P is                          |   (identifier                                           |
+|                  |   constant C : integer := 200;             |     P                                                   |
+|                  | end P;                                     |   )                                                     |
+|                  |                                            |   (package_body_declarative_part                        |
+|                  |                                            |     (package_body_declarative_item<v>                   |
+|                  |                                            |       (constant_declaration                             |
+|                  |                                            |         (identifier_list                                |
+|                  |                                            |           (identifier                                   |
+|                  |                                            |             C                                           |
+|                  |                                            |           )                                             |
+|                  |                                            |         )                                               |
+|                  |                                            |         (subtype_indication                             |
+|                  |                                            |           (type_mark<v>                                 |
+|                  |                                            |             (name<v>                                    |
+|                  |                                            |               (identifier                               |
+|                  |                                            |                 integer                                 |
+|                  |                                            |               )                                         |
+|                  |                                            |             )                                           |
+|                  |                                            |           )                                             |
+|                  |                                            |         )                                               |
+|                  |                                            |         (expression                                     |
+|                  |                                            |           (relation                                     |
+|                  |                                            |             (shift_expression                           |
+|                  |                                            |               (simple_expression                        |
+|                  |                                            |                 (term                                   |
+|                  |                                            |                   (primary<v>                           |
+|                  |                                            |                     (literal<v>                         |
+|                  |                                            |                       (numeric_literal<v>               |
+|                  |                                            |                         (abstract_literal<v>            |
+|                  |                                            |                           (decimal_literal              |
+|                  |                                            |                             literal: 200, type: integer |
+|                  |                                            |                           )                             |
+|                  |                                            |                         )                               |
+|                  |                                            |                       )                                 |
+|                  |                                            |                     )                                   |
+|                  |                                            |                   )                                     |
+|                  |                                            |                 )                                       |
+|                  |                                            |               )                                         |
+|                  |                                            |             )                                           |
+|                  |                                            |           )                                             |
+|                  |                                            |         )                                               |
+|                  |                                            |       )                                                 |
+|                  |                                            |     )                                                   |
+|                  |                                            |   )                                                     |
+|                  |                                            |   (identifier                                           |
+|                  |                                            |     P                                                   |
+|                  |                                            |   )                                                     |
+|                  |                                            | )                                                       |
+|                  |                                            |                                                         |
++------------------+--------------------------------------------+---------------------------------------------------------+
+| package_body_001 | package body AUXILIARY is                  | (package_body                                           |
+|                  |    constant Deferred_Con : Integer := 177; |   (identifier                                           |
+|                  | end package body AUXILIARY;                |     AUXILIARY                                           |
+|                  |                                            |   )                                                     |
+|                  |                                            |   (package_body_declarative_part                        |
+|                  |                                            |     (package_body_declarative_item<v>                   |
+|                  |                                            |       (constant_declaration                             |
+|                  |                                            |         (identifier_list                                |
+|                  |                                            |           (identifier                                   |
+|                  |                                            |             Deferred_Con                                |
+|                  |                                            |           )                                             |
+|                  |                                            |         )                                               |
+|                  |                                            |         (subtype_indication                             |
+|                  |                                            |           (type_mark<v>                                 |
+|                  |                                            |             (name<v>                                    |
+|                  |                                            |               (identifier                               |
+|                  |                                            |                 Integer                                 |
+|                  |                                            |               )                                         |
+|                  |                                            |             )                                           |
+|                  |                                            |           )                                             |
+|                  |                                            |         )                                               |
+|                  |                                            |         (expression                                     |
+|                  |                                            |           (relation                                     |
+|                  |                                            |             (shift_expression                           |
+|                  |                                            |               (simple_expression                        |
+|                  |                                            |                 (term                                   |
+|                  |                                            |                   (primary<v>                           |
+|                  |                                            |                     (literal<v>                         |
+|                  |                                            |                       (numeric_literal<v>               |
+|                  |                                            |                         (abstract_literal<v>            |
+|                  |                                            |                           (decimal_literal              |
+|                  |                                            |                             literal: 177, type: integer |
+|                  |                                            |                           )                             |
+|                  |                                            |                         )                               |
+|                  |                                            |                       )                                 |
+|                  |                                            |                     )                                   |
+|                  |                                            |                   )                                     |
+|                  |                                            |                 )                                       |
+|                  |                                            |               )                                         |
+|                  |                                            |             )                                           |
+|                  |                                            |           )                                             |
+|                  |                                            |         )                                               |
+|                  |                                            |       )                                                 |
+|                  |                                            |     )                                                   |
+|                  |                                            |   )                                                     |
+|                  |                                            |   (identifier                                           |
+|                  |                                            |     AUXILIARY                                           |
+|                  |                                            |   )                                                     |
+|                  |                                            | )                                                       |
+|                  |                                            |                                                         |
++------------------+--------------------------------------------+---------------------------------------------------------+
+
 ===================
 package_declaration
 ===================
@@ -15752,4 +15862,4 @@ xxx_signature
 +---------+-----------------------+----------+
 
 
-Total Tests: 421
+Total Tests: 423
