@@ -6,6 +6,7 @@ ToDo:
 - type_conversion/type_conversion_001.input
 - wait_statement/wait_statement_00x.input
 - binding_indication/binding_indication_00{0,1}.input entity name rule (is work.foo -> name)
+- allocator_003 (http://vhdl.renerta.com/source/vhd00004.htm) 
 
 Renewal 2018:
 - Missing tests:

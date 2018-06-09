@@ -1,0 +1,3 @@
+-- allocation with aggregate
+new test_record'(30 ns, B"1100")
+

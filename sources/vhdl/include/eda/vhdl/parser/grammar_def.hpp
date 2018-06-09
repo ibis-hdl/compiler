@@ -1415,15 +1415,17 @@ auto const alias_designator_def =
     ;
 
 
-#if 0
+
 // allocator ::=                                                  [LRM93 §7.3.6]
 //       new subtype_indication
 //     | new qualified_expression
 auto const allocator_def =
-        NEW subtype_indication
-        | NEW qualified_expression
-        ;
-#endif
+       NEW
+    >> ( subtype_indication
+       | qualified_expression
+       )
+    ;
+
 
 #if 0
 // architecture_body ::=                                            [LRM93 §1.2]
@@ -3505,7 +3507,7 @@ auto const primary_def =
     | function_call
     | qualified_expression
     //     | type_conversion
-    //     | allocator
+    | allocator
     | ( '(' >> expression >> ')' )
     | aggregate
     ;
@@ -4408,7 +4410,7 @@ BOOST_SPIRIT_DEFINE(  // -- A --
     , aggregate
     , alias_declaration
     , alias_designator
-    //, allocator
+    , allocator
     //, architecture_body
     //, architecture_declarative_part
     //, architecture_statement_part

@@ -709,6 +709,135 @@ alias_declaration
 +-----------------------+---------------------------------+------------------------+
 
 =========
+allocator
+=========
+
++---------------+----------------------------+-----------------------------------------------------+
+| File          | Input                      | Expected                                            |
++---------------+----------------------------+-----------------------------------------------------+
+| allocator_001 | new Table                  | (allocator<v>                                       |
+|               |                            |   (subtype_indication                               |
+|               |                            |     (type_mark<v>                                   |
+|               |                            |       (name<v>                                      |
+|               |                            |         (identifier                                 |
+|               |                            |           Table                                     |
+|               |                            |         )                                           |
+|               |                            |       )                                             |
+|               |                            |     )                                               |
+|               |                            |   )                                                 |
+|               |                            | )                                                   |
+|               |                            |                                                     |
++---------------+----------------------------+-----------------------------------------------------+
+| allocator_002 | -- subtype indication      | (allocator<v>                                       |
+|               | new BIT_VECTOR(1 to 3)     |   (subtype_indication                               |
+|               |                            |     (type_mark<v>                                   |
+|               |                            |       (name<v>                                      |
+|               |                            |         (identifier                                 |
+|               |                            |           BIT_VECTOR                                |
+|               |                            |         )                                           |
+|               |                            |       )                                             |
+|               |                            |     )                                               |
+|               |                            |     (constraint<v>                                  |
+|               |                            |       (index_constraint                             |
+|               |                            |         (discrete_range<v>                          |
+|               |                            |           (range<v>                                 |
+|               |                            |             (simple_expression                      |
+|               |                            |               (term                                 |
+|               |                            |                 (primary<v>                         |
+|               |                            |                   (literal<v>                       |
+|               |                            |                     (numeric_literal<v>             |
+|               |                            |                       (abstract_literal<v>          |
+|               |                            |                         (decimal_literal            |
+|               |                            |                           literal: 1, type: integer |
+|               |                            |                         )                           |
+|               |                            |                       )                             |
+|               |                            |                     )                               |
+|               |                            |                   )                                 |
+|               |                            |                 )                                   |
+|               |                            |               )                                     |
+|               |                            |             )                                       |
+|               |                            |             (keyword                                |
+|               |                            |               TO                                    |
+|               |                            |             )                                       |
+|               |                            |             (simple_expression                      |
+|               |                            |               (term                                 |
+|               |                            |                 (primary<v>                         |
+|               |                            |                   (literal<v>                       |
+|               |                            |                     (numeric_literal<v>             |
+|               |                            |                       (abstract_literal<v>          |
+|               |                            |                         (decimal_literal            |
+|               |                            |                           literal: 3, type: integer |
+|               |                            |                         )                           |
+|               |                            |                       )                             |
+|               |                            |                     )                               |
+|               |                            |                   )                                 |
+|               |                            |                 )                                   |
+|               |                            |               )                                     |
+|               |                            |             )                                       |
+|               |                            |           )                                         |
+|               |                            |         )                                           |
+|               |                            |       )                                             |
+|               |                            |     )                                               |
+|               |                            |   )                                                 |
+|               |                            | )                                                   |
+|               |                            |                                                     |
++---------------+----------------------------+-----------------------------------------------------+
+| allocator_004 | -- subtype                 | (allocator<v>                                       |
+|               | new Bit_Vector(7 downto 0) |   (subtype_indication                               |
+|               |                            |     (type_mark<v>                                   |
+|               |                            |       (name<v>                                      |
+|               |                            |         (identifier                                 |
+|               |                            |           Bit_Vector                                |
+|               |                            |         )                                           |
+|               |                            |       )                                             |
+|               |                            |     )                                               |
+|               |                            |     (constraint<v>                                  |
+|               |                            |       (index_constraint                             |
+|               |                            |         (discrete_range<v>                          |
+|               |                            |           (range<v>                                 |
+|               |                            |             (simple_expression                      |
+|               |                            |               (term                                 |
+|               |                            |                 (primary<v>                         |
+|               |                            |                   (literal<v>                       |
+|               |                            |                     (numeric_literal<v>             |
+|               |                            |                       (abstract_literal<v>          |
+|               |                            |                         (decimal_literal            |
+|               |                            |                           literal: 7, type: integer |
+|               |                            |                         )                           |
+|               |                            |                       )                             |
+|               |                            |                     )                               |
+|               |                            |                   )                                 |
+|               |                            |                 )                                   |
+|               |                            |               )                                     |
+|               |                            |             )                                       |
+|               |                            |             (keyword                                |
+|               |                            |               DOWNTO                                |
+|               |                            |             )                                       |
+|               |                            |             (simple_expression                      |
+|               |                            |               (term                                 |
+|               |                            |                 (primary<v>                         |
+|               |                            |                   (literal<v>                       |
+|               |                            |                     (numeric_literal<v>             |
+|               |                            |                       (abstract_literal<v>          |
+|               |                            |                         (decimal_literal            |
+|               |                            |                           literal: 0, type: integer |
+|               |                            |                         )                           |
+|               |                            |                       )                             |
+|               |                            |                     )                               |
+|               |                            |                   )                                 |
+|               |                            |                 )                                   |
+|               |                            |               )                                     |
+|               |                            |             )                                       |
+|               |                            |           )                                         |
+|               |                            |         )                                           |
+|               |                            |       )                                             |
+|               |                            |     )                                               |
+|               |                            |   )                                                 |
+|               |                            | )                                                   |
+|               |                            |                                                     |
++---------------+----------------------------+-----------------------------------------------------+
+
+=========
 assertion
 =========
 
@@ -15510,4 +15639,4 @@ xxx_signature
 +---------+-----------------------+----------+
 
 
-Total Tests: 416
+Total Tests: 419

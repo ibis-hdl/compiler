@@ -1,0 +1,3 @@
+-- subtype indication 
+new BIT_VECTOR(1 to 3)
+

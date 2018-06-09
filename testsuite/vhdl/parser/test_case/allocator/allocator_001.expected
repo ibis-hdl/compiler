@@ -1,0 +1,11 @@
+(allocator<v>
+  (subtype_indication
+    (type_mark<v>
+      (name<v>
+        (identifier
+          Table
+        )
+      )
+    )
+  )
+)

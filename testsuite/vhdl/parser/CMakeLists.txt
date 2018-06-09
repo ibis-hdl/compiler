@@ -39,7 +39,8 @@ set(PARSERTEST_SOURCES_OLD
 
 set(PARSERTEST_SOURCES#_DEV
     ${TEST_COMMON_SOURCES}
-    parser_test/alias_declaration_test.cpp
+    parser_test/allocator_test.cpp
+    #parser_test/alias_declaration_test.cpp
     #parser_test/xxx_signature_test.cpp
 )
 
@@ -49,6 +50,7 @@ set(PARSERTEST_SOURCES
     parser_test/actual_part_test.cpp
     parser_test/aggregate_test.cpp
     parser_test/alias_declaration_test.cpp
+    parser_test/allocator_test.cpp
     parser_test/assertion_test.cpp
     parser_test/association_list_test.cpp
     parser_test/attribute_name_test.cpp

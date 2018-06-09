@@ -1,0 +1,3 @@
+-- subtype
+new Bit_Vector(7 downto 0)
+
