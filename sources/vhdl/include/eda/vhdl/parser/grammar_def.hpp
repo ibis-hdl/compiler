@@ -3343,19 +3343,25 @@ auto const package_body_declarative_part_def =
 ;
 #endif
 
-#if 0
+
 // package_declaration ::=                                          [LRM93 §2.5]
 //     package identifier is
 //         package_declarative_part
 //     end [ package ] [ package_simple_name ] ;
-auto const package_declaration_def =
-        PACKAGE identifier IS
-        package_declarative_part
-        END -( PACKAGE ) -( package_simple_name ) > ';'
-;
-#endif
+auto const package_declaration_def = ( // operator precedence
+       PACKAGE
+    >> identifier
+    >> IS
+    >> package_declarative_part
+    >> END
+    >> -PACKAGE
+    >> -simple_name   // package_simple_name, aka identifier
+    )
+    > ';'
+    ;
 
-#if 0
+
+
 // package_declarative_item ::=                                     [LRM93 §2.5]
 //       subprogram_declaration
 //     | type_declaration
@@ -3378,10 +3384,10 @@ auto const package_declarative_item_def =
     | subtype_declaration
     | constant_declaration
     | signal_declaration
-    | shared_variable_declaration
+    | variable_declaration  // shared_variable_declaration
     | file_declaration
     | alias_declaration
-    | component_declaration
+//  | component_declaration // not yet ready
     | attribute_declaration
     | attribute_specification
     | disconnection_specification
@@ -3389,15 +3395,15 @@ auto const package_declarative_item_def =
     | group_template_declaration
     | group_declaration
     ;
-#endif
 
-#if 0
+
+
 // package_declarative_part ::=                                     [LRM93 §2.5]
 //     { package_declarative_item }
 auto const package_declarative_part_def =
-{ package_declarative_item }
-;
-#endif
+    *package_declarative_item
+    ;
+
 
 
 // parameter_specification ::=                                      [LRM93 §8.9]
@@ -4581,10 +4587,10 @@ BOOST_SPIRIT_DEFINE(  // -- P --
     //  package_body
     //, package_body_declarative_item
     //, package_body_declarative_part
-    //, package_declaration
-    //, package_declarative_item
-    //, package_declarative_part
-      parameter_specification
+      package_declaration
+    , package_declarative_item
+    , package_declarative_part
+    , parameter_specification
     , physical_literal
     , physical_type_definition
     , port_clause

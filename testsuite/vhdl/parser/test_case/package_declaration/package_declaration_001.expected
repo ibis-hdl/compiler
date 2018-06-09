@@ -1,0 +1,28 @@
+(package_declaration
+  (identifier
+    package_name
+  )
+  (package_declarative_part
+    (package_declarative_item<v>
+      (variable_declaration
+        (identifier_list
+          (identifier
+            xor_taps
+          )
+        )
+        (subtype_indication
+          (type_mark<v>
+            (name<v>
+              (identifier
+                std_logic
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+  (identifier
+    package_name
+  )
+)

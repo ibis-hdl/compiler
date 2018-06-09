@@ -3,7 +3,48 @@
     (type_mark<v>
       (name<v>
         (identifier
-          Table
+          BIT_VECTOR
+        )
+      )
+    )
+    (constraint<v>
+      (index_constraint
+        (discrete_range<v>
+          (range<v>
+            (simple_expression
+              (term
+                (primary<v>
+                  (literal<v>
+                    (numeric_literal<v>
+                      (abstract_literal<v>
+                        (decimal_literal
+                          literal: 1, type: integer
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+            (keyword
+              TO
+            )
+            (simple_expression
+              (term
+                (primary<v>
+                  (literal<v>
+                    (numeric_literal<v>
+                      (abstract_literal<v>
+                        (decimal_literal
+                          literal: 3, type: integer
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
         )
       )
     )

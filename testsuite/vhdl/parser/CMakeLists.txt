@@ -39,9 +39,7 @@ set(PARSERTEST_SOURCES_OLD
 
 set(PARSERTEST_SOURCES#_DEV
     ${TEST_COMMON_SOURCES}
-    parser_test/allocator_test.cpp
-    #parser_test/alias_declaration_test.cpp
-    #parser_test/xxx_signature_test.cpp
+    parser_test/package_declaration_test.cpp
 )
 
 set(PARSERTEST_SOURCES
@@ -104,6 +102,7 @@ set(PARSERTEST_SOURCES
     parser_test/name_test.cpp
     parser_test/next_statement_test.cpp
     parser_test/numeric_literal_test.cpp
+    parser_test/package_declaration_test.cpp
     parser_test/parameter_specification_test.cpp
     parser_test/physical_literal_test.cpp
     parser_test/physical_type_definition_test.cpp

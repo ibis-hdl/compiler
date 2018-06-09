@@ -1,0 +1,5 @@
+-- minimal package declaration
+package package_name is
+  variable xor_taps : std_logic;
+end package_name;
+

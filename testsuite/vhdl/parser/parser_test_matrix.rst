@@ -715,7 +715,7 @@ allocator
 +---------------+----------------------------+-----------------------------------------------------+
 | File          | Input                      | Expected                                            |
 +---------------+----------------------------+-----------------------------------------------------+
-| allocator_001 | new Table                  | (allocator<v>                                       |
+| allocator_000 | new Table                  | (allocator<v>                                       |
 |               |                            |   (subtype_indication                               |
 |               |                            |     (type_mark<v>                                   |
 |               |                            |       (name<v>                                      |
@@ -728,7 +728,7 @@ allocator
 |               |                            | )                                                   |
 |               |                            |                                                     |
 +---------------+----------------------------+-----------------------------------------------------+
-| allocator_002 | -- subtype indication      | (allocator<v>                                       |
+| allocator_001 | -- subtype indication      | (allocator<v>                                       |
 |               | new BIT_VECTOR(1 to 3)     |   (subtype_indication                               |
 |               |                            |     (type_mark<v>                                   |
 |               |                            |       (name<v>                                      |
@@ -782,7 +782,7 @@ allocator
 |               |                            | )                                                   |
 |               |                            |                                                     |
 +---------------+----------------------------+-----------------------------------------------------+
-| allocator_004 | -- subtype                 | (allocator<v>                                       |
+| allocator_003 | -- subtype                 | (allocator<v>                                       |
 |               | new Bit_Vector(7 downto 0) |   (subtype_indication                               |
 |               |                            |     (type_mark<v>                                   |
 |               |                            |       (name<v>                                      |
@@ -9474,6 +9474,119 @@ numeric_literal
 |                      |                 |                                                          |
 +----------------------+-----------------+----------------------------------------------------------+
 
+===================
+package_declaration
+===================
+
++-------------------------+--------------------------------------------------+------------------------------------------+
+| File                    | Input                                            | Expected                                 |
++-------------------------+--------------------------------------------------+------------------------------------------+
+| package_declaration_000 | -- package declaration                           | (package_declaration                     |
+|                         | package package_name is                          |   (identifier                            |
+|                         |   constant SOME_FLAG : bit_vector := "11111111"; |     package_name                         |
+|                         |   type STATE is (RESET,IDLE,ACKA);               |   )                                      |
+|                         | end package package_name;                        |   (package_declarative_part              |
+|                         |                                                  |     (package_declarative_item<v>         |
+|                         |                                                  |       (constant_declaration              |
+|                         |                                                  |         (identifier_list                 |
+|                         |                                                  |           (identifier                    |
+|                         |                                                  |             SOME_FLAG                    |
+|                         |                                                  |           )                              |
+|                         |                                                  |         )                                |
+|                         |                                                  |         (subtype_indication              |
+|                         |                                                  |           (type_mark<v>                  |
+|                         |                                                  |             (name<v>                     |
+|                         |                                                  |               (identifier                |
+|                         |                                                  |                 bit_vector               |
+|                         |                                                  |               )                          |
+|                         |                                                  |             )                            |
+|                         |                                                  |           )                              |
+|                         |                                                  |         )                                |
+|                         |                                                  |         (expression                      |
+|                         |                                                  |           (relation                      |
+|                         |                                                  |             (shift_expression            |
+|                         |                                                  |               (simple_expression         |
+|                         |                                                  |                 (term                    |
+|                         |                                                  |                   (primary<v>            |
+|                         |                                                  |                     (literal<v>          |
+|                         |                                                  |                       (string_literal    |
+|                         |                                                  |                         11111111         |
+|                         |                                                  |                       )                  |
+|                         |                                                  |                     )                    |
+|                         |                                                  |                   )                      |
+|                         |                                                  |                 )                        |
+|                         |                                                  |               )                          |
+|                         |                                                  |             )                            |
+|                         |                                                  |           )                              |
+|                         |                                                  |         )                                |
+|                         |                                                  |       )                                  |
+|                         |                                                  |     ),                                   |
+|                         |                                                  |     (package_declarative_item<v>         |
+|                         |                                                  |       (type_declaration                  |
+|                         |                                                  |         (identifier                      |
+|                         |                                                  |           STATE                          |
+|                         |                                                  |         )                                |
+|                         |                                                  |         (type_definition<v>              |
+|                         |                                                  |           (scalar_type_definition<v>     |
+|                         |                                                  |             (enumeration_type_definition |
+|                         |                                                  |               (enumeration_literal<v>    |
+|                         |                                                  |                 (identifier              |
+|                         |                                                  |                   RESET                  |
+|                         |                                                  |                 )                        |
+|                         |                                                  |               ),                         |
+|                         |                                                  |               (enumeration_literal<v>    |
+|                         |                                                  |                 (identifier              |
+|                         |                                                  |                   IDLE                   |
+|                         |                                                  |                 )                        |
+|                         |                                                  |               ),                         |
+|                         |                                                  |               (enumeration_literal<v>    |
+|                         |                                                  |                 (identifier              |
+|                         |                                                  |                   ACKA                   |
+|                         |                                                  |                 )                        |
+|                         |                                                  |               )                          |
+|                         |                                                  |             )                            |
+|                         |                                                  |           )                              |
+|                         |                                                  |         )                                |
+|                         |                                                  |       )                                  |
+|                         |                                                  |     )                                    |
+|                         |                                                  |   )                                      |
+|                         |                                                  |   (identifier                            |
+|                         |                                                  |     package_name                         |
+|                         |                                                  |   )                                      |
+|                         |                                                  | )                                        |
+|                         |                                                  |                                          |
++-------------------------+--------------------------------------------------+------------------------------------------+
+| package_declaration_001 | -- minimal package declaration                   | (package_declaration                     |
+|                         | package package_name is                          |   (identifier                            |
+|                         |   variable xor_taps : std_logic;                 |     package_name                         |
+|                         | end package_name;                                |   )                                      |
+|                         |                                                  |   (package_declarative_part              |
+|                         |                                                  |     (package_declarative_item<v>         |
+|                         |                                                  |       (variable_declaration              |
+|                         |                                                  |         (identifier_list                 |
+|                         |                                                  |           (identifier                    |
+|                         |                                                  |             xor_taps                     |
+|                         |                                                  |           )                              |
+|                         |                                                  |         )                                |
+|                         |                                                  |         (subtype_indication              |
+|                         |                                                  |           (type_mark<v>                  |
+|                         |                                                  |             (name<v>                     |
+|                         |                                                  |               (identifier                |
+|                         |                                                  |                 std_logic                |
+|                         |                                                  |               )                          |
+|                         |                                                  |             )                            |
+|                         |                                                  |           )                              |
+|                         |                                                  |         )                                |
+|                         |                                                  |       )                                  |
+|                         |                                                  |     )                                    |
+|                         |                                                  |   )                                      |
+|                         |                                                  |   (identifier                            |
+|                         |                                                  |     package_name                         |
+|                         |                                                  |   )                                      |
+|                         |                                                  | )                                        |
+|                         |                                                  |                                          |
++-------------------------+--------------------------------------------------+------------------------------------------+
+
 =======================
 parameter_specification
 =======================
@@ -15639,4 +15752,4 @@ xxx_signature
 +---------+-----------------------+----------+
 
 
-Total Tests: 419
+Total Tests: 421

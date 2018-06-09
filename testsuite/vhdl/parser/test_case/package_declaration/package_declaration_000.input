@@ -1,0 +1,6 @@
+-- package declaration
+package package_name is
+  constant SOME_FLAG : bit_vector := "11111111";
+  type STATE is (RESET,IDLE,ACKA);
+end package package_name;
+
