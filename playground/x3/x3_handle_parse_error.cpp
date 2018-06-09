@@ -267,7 +267,7 @@ parse(std::string const& input, fs::path source_path)
         x3::with<client::parser::context::tag>(std::ref(foo))[
             x3::with<x3::error_handler_tag>(std::ref(error_handler))
             [
-                 employees
+                 employees >> x3::eoi
             ]
         ];
 
@@ -275,38 +275,27 @@ parse(std::string const& input, fs::path source_path)
 
     bool parse_ok = phrase_parse(iter, end, parser, space, ast);
 
-    if (parse_ok)
+    if (parse_ok && !foo.error_count)
     {
         std::cout << boost::fusion::tuple_open('[');
         std::cout << boost::fusion::tuple_close(']');
         std::cout << boost::fusion::tuple_delimiter(", ");
 
         std::cout << "-------------------------\n";
-        std::cout << "Parsing succeeded";
-        if(foo.error_count > 0) {
-            std::cout << " with "<< foo.error_count << " error(s)";
-        }
-        std::cout << "\n";
+        std::cout << "Parsing succeeded:\n";
 
-        for (auto const& emp : ast)
-        {
+        for (auto const& emp : ast) {
             std::cout << "got: " << emp << std::endl;
         }
         std::cout << "\n-------------------------\n";
-
-        if(iter != end) {
-            std::cout << "-------------------------\n";
-            std::cout << "But some input has been left:\n";
-            std::cout << std::string(iter, end) << "\n";
-            std::cout << "-------------------------\n";
-        }
-
     }
     else
     {
         std::cout << "-------------------------\n";
-        std::cout << "Parsing failed completely\n";
-        std::cout << "-------------------------\n";
+        std::cout << "Parsing failed ";
+        if(foo.error_count > 0) {
+            std::cout << " with "<< foo.error_count << " error(s)\n";
+        }
         ast.clear();
     }
     return ast;
@@ -393,7 +382,7 @@ int main()
     parse(good_input, "string@good_input");
 
    // Bad input
-    std::cout << "Now we have some errors" << std::endl;
+    std::cout << "Now we have some errors\n\n";
     parse(bad_input, "string@bad_input");
     return 0;
 }
