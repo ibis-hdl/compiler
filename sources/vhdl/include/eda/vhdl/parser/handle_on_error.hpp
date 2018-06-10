@@ -34,8 +34,9 @@ namespace boost { namespace spirit { namespace x3 {
  *        'boost::spirit::x3::error_handler_tag'
  * char data[ sizeof(T) ];
  *            ^~~~~~~~~
+ *
  * The problem began to rise up by using annotate_on_success() and
- * handle_on_error().
+ * handle_on_error(). Maybe a dismiss as ADL inflicted.
  */
 struct error_handler_tag {};
 
