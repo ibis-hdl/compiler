@@ -35,7 +35,7 @@ struct testing_parser
 
     template <typename ParserType>
     std::tuple<bool, std::string>
-    operator()(std::string const &input,  ParserType &parser_rule,
+    operator()(std::string const &input, ParserType const &parser_rule,
                bool full_match = true)
     {
         attribute_type  attr;
@@ -57,21 +57,20 @@ struct testing_parser
         parser::error_handler_type error_handler(iter, end, output);
 
         auto const parser =
-            x3::with<x3::error_handler_tag>(std::ref(error_handler))
-            [
+            x3::with<x3::error_handler_tag>(std::ref(error_handler)) [
                   parser_rule
             ];
 
-        bool success = false;
+        bool parse_ok = false;
 
         try {
-            auto const& skipper = parser::skipper;
+            parse_ok = x3::phrase_parse(iter, end, parser, parser::skipper, attr);
 
-            success = x3::phrase_parse(iter, end, parser, skipper, attr);
-
-            if (success) {
+            if (parse_ok) {
                 if (iter != end) {
-                    error_handler(iter, "Error! Expecting end of input here: ");
+                    error_handler(iter, "Test Suite Full Match Error! "
+                                        "unparsed input left:\n"
+                                        + std::string(iter, end));
                 }
                 else {
                     ast::printer print(output);
@@ -99,15 +98,15 @@ struct testing_parser
              * (or alternative 'Error! Expecting factor at ' -3') if enabled
              */
 #if 1
-            output << "Error! Expecting " << e.which()
-                   << " at '" << std::string(e.where(), input.end()) << "'\n";
+            output << "Caught expectation_failure! Expecting " << e.which()
+                   << " here '" << std::string(e.where(), input.end()) << "'\n";
 #else
             error_handler(e.where(), "Error! Expecting " + e.which() + " here: ");
 #endif
         }
 
         return std::make_tuple(
-            success && (!full_match || (iter == end)),
+            parse_ok && (!full_match || (iter == end)),
             output.str()
         );
     }

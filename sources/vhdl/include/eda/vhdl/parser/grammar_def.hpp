@@ -18,8 +18,8 @@
  * handling expectation points. At this point  annotate_on_success comes into
  * play to get the handler an hint. Otherwise this increase the compile time
  * a bit. */
-//#include <eda/vhdl/parser/error_handler.hpp>
-//#include <boost/spirit/home/x3/support/utility/annotate_on_success.hpp>
+#include <eda/vhdl/parser/handle_on_error.hpp>
+#include <eda/vhdl/parser/annotate_on_success.hpp>
 
 #include <eda/support/boost/spirit_x3.hpp>
 #include <eda/support/boost/spirit_x3_utils.hpp>
@@ -1434,29 +1434,37 @@ auto const allocator_def =
 //     begin
 //         architecture_statement_part
 //     end [ architecture ] [ architecture_simple_name ] ;
-auto const architecture_body_def =
-        ARCHITECTURE identifier OF entity_name IS
-        architecture_declarative_part
-        BEGIN
-        architecture_statement_part
-        END -( ARCHITECTURE ) -( architecture_simple_name ) >  ';'
-;
+auto const architecture_body_def = ( // operator precedence
+       ARCHITECTURE
+    >> identifier
+    >> OF
+    >> entity_name
+    >> IS
+    >> architecture_declarative_part
+    >> BEGIN
+    >> architecture_statement_part
+    >> END
+    >> -ARCHITECTURE
+    >> -simple_name
+    )
+    >  ';'
+    ;
 #endif
 
 #if 0
 // architecture_declarative_part ::=                                [LRM93 §1.2]
 //     { block_declarative_item }
 auto const architecture_declarative_part_def =
-{ block_declarative_item }
-;
+    *block_declarative_item
+    ;
 #endif
 
 #if 0
 // architecture_statement_part ::=                                [LRM93 §1.2.2]
 //     { concurrent_statement }
 auto const architecture_statement_part_def =
-{ concurrent_statement }
-;
+    *concurrent_statement
+    ;
 #endif
 
 
@@ -1514,7 +1522,7 @@ auto const association_list_def =
 // attribute_declaration ::=                                        [LRM93 §4.4]
 //     attribute identifier : type_mark ;
 auto const attribute_declaration_def = ( // operator precedence
-      ATTRIBUTE
+       ATTRIBUTE
     >> identifier
     >> ':'
     >> type_mark
@@ -1592,8 +1600,8 @@ auto const based_integer_def =
 namespace based_literal_detail {
 
 auto const integer_type = x3::rule<struct _, ast::based_literal::number_chunk>{ "based_literal<int>" } =
-    /* Note, IEEE1076-93 Ch. 13.4, specifies for deciaml_literal the forbidden
-     * negative sign for the exponent of integer types. No restictions are there
+    /* Note, IEEE1076-93 Ch. 13.4, specifies for decimal_literal the forbidden
+     * negative sign for the exponent of integer types. No restrictions are there
      * defined for based_literal, assume real type exponent. */
     lexeme[
            based_integer >> x3::attr(string_view_attribute{/* empty fractional part */})
@@ -1724,12 +1732,15 @@ auto const bit_value_def =
 //         { use_clause }
 //         { configuration_item }
 //     end for ;
-auto const block_configuration_def =
-        FOR block_specification
-        { use_clause }
-{ configuration_item }
-END FOR >>  ';'
-;
+auto const block_configuration_def = ( // operator precedence
+       FOR
+    >> block_specification
+    >> *use_clause
+    >> *configuration_item
+    >> END >> FOR
+    )
+    >  ';'
+    ;
 #endif
 
 #if 0
@@ -1758,7 +1769,7 @@ auto const block_declarative_item_def =
     | subtype_declaration
     | constant_declaration
     | signal_declaration
-    | shared_variable_declaration
+    | variable_declaration  // shared_variable_declaration
     | file_declaration
     | alias_declaration
     | component_declaration
@@ -1776,7 +1787,7 @@ auto const block_declarative_item_def =
 // block_declarative_part ::=                                       [LRM93 §9.1]
 //     { block_declarative_item }
 auto const block_declarative_part_def =
-    { block_declarative_item }
+    *block_declarative_item
     ;
 #endif
 
@@ -1786,12 +1797,23 @@ auto const block_declarative_part_def =
 //     [ generic_map_aspect ; ] ]
 //     [ port_clause
 //     [ port_map_aspect ; ] ]
-auto const block_header_def =
-        -( generic_clause
-                -( generic_map_aspect > ';' ) )
-                -( port_clause
-                        -( port_map_aspect > ';' ) )
-                        ;
+namespace block_header_detail {
+
+auto const generic_part = x3::rule<struct _, ast::block_header::generic_part_chunk> { "block_header.generic_part" } =
+       generic_clause
+    >> -(generic_map_aspect > ';' )
+    ;
+
+auto const port_part = x3::rule<struct _, ast::block_header::port_part_chunk> { "block_header.port_part" } =
+       port_clause
+    >> -( port_map_aspect > ';')
+    ;
+} // end detail
+
+auto const block_header_def = // Fixme: Order matters really? Using X3's operator|| ??
+       -block_header_detail::generic_part
+    >> -block_header_detail::port_part
+    ;
 #endif
 
 #if 0
@@ -1799,10 +1821,9 @@ auto const block_header_def =
 //       architecture_name
 //     | block_statement_label
 //     | generate_statement_label [ ( index_specification ) ]
-auto const block_specification_def =
-        architecture_name
-    | block_statement_label
-    | generate_statement_label -( '(' index_specification ')' )
+auto const block_specification_def = /* order matters */
+      label >> -( '(' >> index_specification >> ')' )
+    | name
     ;
 #endif
 
@@ -1815,22 +1836,28 @@ auto const block_specification_def =
 //         begin
 //             block_statement_part
 //         end block [ block_label ] ;
-auto const block_statement_def =
-        block_label >> ':'     BLOCK -( '(' guard_expression ')' ) -( IS )
-        block_header
-        block_declarative_part
-        BEGIN
-        block_statement_part
-        END BLOCK -( block_label ) > ';'
-;
+auto const block_statement_def = ( // operator precedence
+       label_colon
+    >> BLOCK
+    >> -( '(' >> expression >> ')' )
+    >> -IS
+    >> block_header
+    >> block_declarative_part
+    >> BEGIN
+    >> block_statement_part
+    >> END >> BLOCK
+    >> -label
+    )
+    > ';'
+    ;
 #endif
 
 #if 0
 // block_statement_part ::=                                         [LRM93 §9.1]
 //     { concurrent_statement }
 auto const block_statement_part_def =
-{ concurrent_statement }
-;
+    *concurrent_statement
+    ;
 #endif
 
 
@@ -1908,12 +1935,15 @@ auto const choices_def =
 //         [ binding_indication ; ]
 //         [ block_configuration ]
 //     end for ;
-auto const component_configuration_def =
-        FOR component_specification
-        -( binding_indication > ';' )
-        -( block_configuration )
-        END FOR > ';'
-;
+auto const component_configuration_def = ( // operator precedence
+       FOR
+    >> component_specification
+    >> -( binding_indication > ';' )
+    >> -block_configuration
+    >> END >> FOR
+    > ';'
+    )
+    ;
 #endif
 
 #if 0
@@ -1922,12 +1952,17 @@ auto const component_configuration_def =
 //         [ local_generic_clause ]
 //         [ local_port_clause ]
 //     end component [ component_simple_name ] ;
-auto const component_declaration_def =
-        COMPONENT identifier -( IS )
-        -( local_generic_clause )
-        -( local_port_clause )
-        END COMPONENT -( component_simple_name ) > ';'
-;
+auto const component_declaration_def = ( // operator precedence
+       COMPONENT
+    >> identifier
+    >> -IS
+    >> -generic_clause
+    >> -port_clause
+    >> END >> COMPONENT
+    >> -simple_name
+    )
+    > ';'
+    ;
 #endif
 
 #if 0
@@ -1936,11 +1971,14 @@ auto const component_declaration_def =
 //         instantiated_unit
 //             [ generic_map_aspect ]
 //             [ port_map_aspect ] ;
-auto const component_instantiation_statement_def =
-        instantiation_label >> ':'     instantiated_unit
-        -( generic_map_aspect )
-        -( port_map_aspect ) > ';'
-;
+auto const component_instantiation_statement_def = ( // operator precedence
+       label_colon
+    >> instantiated_unit
+    >> -generic_map_aspect
+    >> -port_map_aspect
+    )
+    > ';'
+    ;
 #endif
 
 
@@ -2066,12 +2104,19 @@ auto const conditional_waveforms_def =
 //         configuration_declarative_part
 //         block_configuration
 //     end [ configuration ] [ configuration_simple_name ] ;
-auto const configuration_declaration_def =
-        CONFIGURATION identifier OF entity_name IS
-        configuration_declarative_part
-        block_configuration
-        END -( CONFIGURATION ) -( configuration_simple_name ) > ';'
-;
+auto const configuration_declaration_def = // operator precedence
+       CONFIGURATION
+    >> identifier
+    >> OF
+    >> name
+    >> IS
+    >> configuration_declarative_part
+    >> block_configuration
+    >> END >> -CONFIGURATION
+    >> -simple_name
+    )
+    > ';'
+    ;
 #endif
 
 #if 0
@@ -2080,18 +2125,18 @@ auto const configuration_declaration_def =
 //     | attribute_specification
 //     | group_declaration
 auto const configuration_declarative_item_def =
-        use_clause
-        | attribute_specification
-        | group_declaration
-        ;
+      use_clause
+    | attribute_specification
+    | group_declaration
+    ;
 #endif
 
 #if 0
 // configuration_declarative_part ::=                               [LRM93 §1.3]
 //     { configuration_declarative_item }
 auto const configuration_declarative_part_def =
-{ configuration_declarative_item }
-;
+    *configuration_declarative_item
+    ;
 #endif
 
 #if 0
@@ -2099,18 +2144,21 @@ auto const configuration_declarative_part_def =
 //       block_configuration
 //     | component_configuration
 auto const configuration_item_def =
-         block_configuration
-     | component_configuration
+      block_configuration
+    | component_configuration
     ;
 #endif
 
-#if 0
+
 // configuration_specification ::=                                  [LRM93 §5.2]
 //     for component_specification binding_indication ;
-auto const configuration_specification_def =
-        FOR component_specification binding_indication > ';'
-;
-#endif
+auto const configuration_specification_def = ( // operator precedence
+       FOR
+    >> component_specification
+    >> binding_indication
+    )
+    > ';'
+    ;
 
 
 // constant_declaration ::=                                     [LRM93 §4.3.1.1]
@@ -2253,16 +2301,17 @@ auto const delay_mechanism_def =
 // design_file ::=                                                 [LRM93 §11.1]
 //     design_unit { design_unit }
 auto const design_file_def =
-        design_unit { design_unit }
-;
+    +design_unit
+    ;
 #endif
 
 #if 0
 // design_unit ::=                                                 [LRM93 §11.1]
 //     context_clause library_unit
 auto const design_unit_def =
-        context_clause library_unit
-        ;
+       context_clause
+    >> library_unit
+    ;
 #endif
 
 
@@ -2456,7 +2505,7 @@ auto const entity_declarative_item_def =
     | subtype_declaration
     | constant_declaration
     | signal_declaration
-    | variable_declaration
+    | variable_declaration  // shared_variable_declaration
     | file_declaration
     | alias_declaration
     | attribute_declaration
@@ -4477,7 +4526,7 @@ BOOST_SPIRIT_DEFINE(  // -- C --
     //, configuration_declarative_item
     //, configuration_declarative_part
     //, configuration_item
-    //, configuration_specification
+    , configuration_specification
     , constant_declaration
     , constrained_array_definition
     , constraint
@@ -4485,7 +4534,7 @@ BOOST_SPIRIT_DEFINE(  // -- C --
     , context_item
 )
 BOOST_SPIRIT_DEFINE(  // -- D --
-      decimal_literal
+       decimal_literal
      , delay_mechanism
     //, design_file
     //, design_unit
@@ -4578,7 +4627,7 @@ BOOST_SPIRIT_DEFINE(  // -- L --
     , loop_statement
 )
 BOOST_SPIRIT_DEFINE(  // -- M --
-    mode
+      mode
 )
 BOOST_SPIRIT_DEFINE(  // -- N --
       name
@@ -4685,12 +4734,238 @@ BOOST_SPIRIT_DEFINE(  // -- W --
 
 /*
  * Annotation and Error handling
+ *
+ * Note, the AST odes are tagged with ast::position_tagged which is of type
+ * x3::position_tagged. The intension was to extend this approach to tag
+ * also the file (id) where the node belongs to as show by Baptiste Wicht's
+ * [Compiler of the EDDI programming language](
+ * https://github.com/wichtounet/eddic).
+ * For convenience (and since this approach isn't realized yet), Spirit.X3's
+ * ID are derived from annotate_on_success (obviously must be changed in
+ * the future).
  */
-//struct bit_string_literal_class : x3::annotate_on_success {};
-//struct primary_class : x3::annotate_on_success {}; // works on x3::variant too
-
-//struct expression_class : x3::annotate_on_success, error_handler_base {};
-//struct design_file_class : x3::annotate_on_success, error_handler_base {};
+struct abstract_literal_class : annotate_on_success {};
+struct access_type_definition_class : annotate_on_success {};
+struct actual_designator_class : annotate_on_success {};
+struct actual_parameter_part_class : annotate_on_success {};
+struct actual_part_class : annotate_on_success {};
+struct aggregate_class : annotate_on_success {};
+struct alias_declaration_class : annotate_on_success {};
+struct alias_designator_class : annotate_on_success {};
+struct allocator_class : annotate_on_success {};
+struct architecture_body_class : annotate_on_success {};
+struct architecture_declarative_part_class : annotate_on_success {};
+struct architecture_statement_part_class : annotate_on_success {};
+struct array_type_definition_class : annotate_on_success {};
+struct assertion_class : annotate_on_success {};
+struct assertion_statement_class : annotate_on_success {};
+struct association_element_class : annotate_on_success {};
+struct association_list_class : annotate_on_success {};
+struct attribute_declaration_class : annotate_on_success {};
+struct attribute_designator_class : annotate_on_success {};
+struct attribute_name_class : annotate_on_success {};
+struct attribute_specification_class : annotate_on_success {};
+struct base_class : annotate_on_success {};
+struct based_integer_class : annotate_on_success {};
+struct based_literal_class : annotate_on_success {};
+//struct basic_graphic_character_class : annotate_on_success {};    // char isn't tagable
+struct basic_identifier_class : annotate_on_success {};
+struct binding_indication_class : annotate_on_success {};
+struct bit_string_literal_class : annotate_on_success {};
+struct block_configuration_class : annotate_on_success {};
+struct block_declarative_item_class : annotate_on_success {};
+struct block_declarative_part_class : annotate_on_success {};
+struct block_header_class : annotate_on_success {};
+struct block_specification_class : annotate_on_success {};
+struct block_statement_class : annotate_on_success {};
+struct block_statement_part_class : annotate_on_success {};
+struct case_statement_class : annotate_on_success {};
+struct case_statement_alternative_class : annotate_on_success {};
+struct character_literal_class : annotate_on_success {};
+struct choice_class : annotate_on_success {};
+struct choices_class : annotate_on_success {};
+struct component_configuration_class : annotate_on_success {};
+struct component_declaration_class : annotate_on_success {};
+struct component_instantiation_statement_class : annotate_on_success {};
+struct component_specification_class : annotate_on_success {};
+struct composite_type_definition_class : annotate_on_success {};
+struct concurrent_assertion_statement_class : annotate_on_success {};
+struct concurrent_procedure_call_statement_class : annotate_on_success {};
+struct concurrent_signal_assignment_statement_class : annotate_on_success {};
+struct concurrent_statement_class : annotate_on_success {};
+struct condition_class : annotate_on_success {};
+struct condition_clause_class : annotate_on_success {};
+struct conditional_signal_assignment_class : annotate_on_success {};
+struct conditional_waveforms_class : annotate_on_success {};
+struct configuration_declaration_class : annotate_on_success {};
+struct configuration_declarative_item_class : annotate_on_success {};
+struct configuration_declarative_part_class : annotate_on_success {};
+struct configuration_item_class : annotate_on_success {};
+struct configuration_specification_class : annotate_on_success, handle_on_error {};
+struct constant_declaration_class : annotate_on_success {};
+struct constrained_array_definition_class : annotate_on_success {};
+struct constraint_class : annotate_on_success {};
+struct context_clause_class : annotate_on_success {};
+struct context_item_class : annotate_on_success {};
+struct decimal_literal_class : annotate_on_success {};
+struct delay_mechanism_class : annotate_on_success {};
+struct design_file_class : annotate_on_success, handle_on_error {}; // our start rule
+struct design_unit_class : annotate_on_success {};
+struct designator_class : annotate_on_success {};
+struct direction_class : annotate_on_success {};
+struct disconnection_specification_class : annotate_on_success {};
+struct discrete_range_class : annotate_on_success {};
+struct element_association_class : annotate_on_success {};
+struct element_declaration_class : annotate_on_success {};
+struct element_subtype_definition_class : annotate_on_success {};
+struct entity_aspect_class : annotate_on_success {};
+struct entity_class_class : annotate_on_success {};
+struct entity_class_entry_class : annotate_on_success {};
+struct entity_class_entry_list_class : annotate_on_success {};
+struct entity_declaration_class : annotate_on_success {};
+struct entity_declarative_item_class : annotate_on_success {};
+struct entity_declarative_part_class : annotate_on_success {};
+struct entity_designator_class : annotate_on_success {};
+struct entity_header_class : annotate_on_success {};
+struct entity_name_list_class : annotate_on_success {};
+struct entity_specification_class : annotate_on_success {};
+struct entity_statement_class : annotate_on_success {};
+struct entity_statement_part_class : annotate_on_success {};
+struct entity_tag_class : annotate_on_success {};
+struct enumeration_literal_class : annotate_on_success {};
+struct enumeration_type_definition_class : annotate_on_success {};
+struct exit_statement_class : annotate_on_success {};
+struct exponent_class : annotate_on_success {};
+struct expression_class : annotate_on_success {};
+struct extended_identifier_class : annotate_on_success {};
+struct factor_class : annotate_on_success {};
+struct file_declaration_class : annotate_on_success {};
+struct file_logical_name_class : annotate_on_success {};
+struct file_open_information_class : annotate_on_success {};
+struct file_type_definition_class : annotate_on_success {};
+struct formal_designator_class : annotate_on_success {};
+struct formal_parameter_list_class : annotate_on_success {};
+struct formal_part_class : annotate_on_success {};
+struct function_call_class : annotate_on_success {};
+struct generate_statement_class : annotate_on_success {};
+struct generation_scheme_class : annotate_on_success {};
+struct generic_clause_class : annotate_on_success {};
+struct generic_list_class : annotate_on_success {};
+struct generic_map_aspect_class : annotate_on_success {};
+//struct graphic_character_class : annotate_on_success {};     // char isn't tagable
+struct group_constituent_class : annotate_on_success {};
+struct group_constituent_list_class : annotate_on_success {};
+struct group_template_declaration_class : annotate_on_success {};
+struct group_declaration_class : annotate_on_success {};
+struct guarded_signal_specification_class : annotate_on_success {};
+struct identifier_class : annotate_on_success {};
+struct identifier_list_class : annotate_on_success {};
+struct if_statement_class : annotate_on_success {};
+struct index_constraint_class : annotate_on_success {};
+struct index_specification_class : annotate_on_success {};
+struct index_subtype_definition_class : annotate_on_success {};
+struct indexed_name_class : annotate_on_success {};
+struct instantiated_unit_class : annotate_on_success {};
+struct instantiation_list_class : annotate_on_success {};
+struct integer_class : annotate_on_success {};
+struct interface_constant_declaration_class : annotate_on_success {};
+struct interface_declaration_class : annotate_on_success {};
+struct interface_element_class : annotate_on_success {};
+struct interface_file_declaration_class : annotate_on_success {};
+struct interface_list_class : annotate_on_success {};
+struct interface_signal_declaration_class : annotate_on_success {};
+struct interface_variable_declaration_class : annotate_on_success {};
+struct iteration_scheme_class : annotate_on_success {};
+struct label_class : annotate_on_success {};
+struct letter_class : annotate_on_success {};
+struct letter_or_digit_class : annotate_on_success {};
+struct library_clause_class : annotate_on_success {};
+struct library_unit_class : annotate_on_success {};
+struct literal_class : annotate_on_success {};
+struct logical_name_class : annotate_on_success {};
+struct logical_name_list_class : annotate_on_success {};
+struct loop_statement_class : annotate_on_success {};
+struct mode_class : annotate_on_success {};
+struct name_class : annotate_on_success {};
+struct next_statement_class : annotate_on_success {};
+struct null_statement_class : annotate_on_success {};
+struct numeric_literal_class : annotate_on_success {};
+struct operator_symbol_class : annotate_on_success {};
+struct options_class : annotate_on_success {};
+struct package_body_class : annotate_on_success {};
+struct package_body_declarative_item_class : annotate_on_success {};
+struct package_body_declarative_part_class : annotate_on_success {};
+struct package_declaration_class : annotate_on_success {};
+struct package_declarative_item_class : annotate_on_success {};
+struct package_declarative_part_class : annotate_on_success {};
+struct parameter_specification_class : annotate_on_success {};
+struct physical_literal_class : annotate_on_success {};
+struct physical_type_definition_class : annotate_on_success {};
+struct port_clause_class : annotate_on_success {};
+struct port_list_class : annotate_on_success {};
+struct port_map_aspect_class : annotate_on_success {};
+struct prefix_class : annotate_on_success {};
+struct primary_class : annotate_on_success {};
+struct primary_unit_class : annotate_on_success {};
+struct primary_unit_declaration_class : annotate_on_success {};
+struct procedure_call_class : annotate_on_success {};
+struct procedure_call_statement_class : annotate_on_success {};
+struct process_declarative_item_class : annotate_on_success {};
+struct process_declarative_part_class : annotate_on_success {};
+struct process_statement_class : annotate_on_success {};
+struct process_statement_part_class : annotate_on_success {};
+struct qualified_expression_class : annotate_on_success {};
+struct range_class : annotate_on_success {};
+struct range_constraint_class : annotate_on_success {};
+struct record_type_definition_class : annotate_on_success {};
+struct relation_class : annotate_on_success {};
+struct report_statement_class : annotate_on_success {};
+struct return_statement_class : annotate_on_success {};
+struct scalar_type_definition_class : annotate_on_success {};
+struct secondary_unit_class : annotate_on_success {};
+struct secondary_unit_declaration_class : annotate_on_success {};
+struct selected_name_class : annotate_on_success {};
+struct selected_signal_assignment_class : annotate_on_success {};
+struct selected_waveforms_class : annotate_on_success {};
+struct sensitivity_clause_class : annotate_on_success {};
+struct sensitivity_list_class : annotate_on_success {};
+struct sequence_of_statements_class : annotate_on_success {};
+struct sequential_statement_class : annotate_on_success {};
+struct shift_expression_class : annotate_on_success {};
+struct sign_class : annotate_on_success {};
+struct signal_assignment_statement_class : annotate_on_success {};
+struct signal_declaration_class : annotate_on_success {};
+struct signal_kind_class : annotate_on_success {};
+struct signal_list_class : annotate_on_success {};
+struct signature_class : annotate_on_success {};
+struct simple_expression_class : annotate_on_success {};
+struct simple_name_class : annotate_on_success {};
+struct slice_name_class : annotate_on_success {};
+struct string_literal_class : annotate_on_success {};
+struct subprogram_body_class : annotate_on_success {};
+struct subprogram_declaration_class : annotate_on_success {};
+struct subprogram_declarative_item_class : annotate_on_success {};
+struct subprogram_declarative_part_class : annotate_on_success {};
+struct subprogram_kind_class : annotate_on_success {};
+struct subprogram_specification_class : annotate_on_success {};
+struct subprogram_statement_part_class : annotate_on_success {};
+struct subtype_declaration_class : annotate_on_success {};
+struct subtype_indication_class : annotate_on_success {};
+struct suffix_class : annotate_on_success {};
+struct target_class : annotate_on_success {};
+struct term_class : annotate_on_success {};
+struct timeout_clause_class : annotate_on_success {};
+struct type_conversion_class : annotate_on_success {};
+struct type_declaration_class : annotate_on_success {};
+struct type_definition_class : annotate_on_success {};
+struct type_mark_class : annotate_on_success {};
+struct unconstrained_array_definition_class : annotate_on_success {};
+struct use_clause_class : annotate_on_success {};
+struct variable_assignment_statement_class : annotate_on_success {};
+struct variable_declaration_class : annotate_on_success {};
+struct wait_statement_class : annotate_on_success {};
+struct waveform_class : annotate_on_success {};
+struct waveform_element_class : annotate_on_success {};
 
 
 } } } // namespace eda.vhdl.parser

@@ -1,27 +1,27 @@
 /*
- * position_tagged.hpp
+ * annotate_on_success.hpp
  *
- *  Created on: 23.04.2017
+ *  Created on: 10.06.2018
  *      Author: olaf
  */
 
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_POSITION_TAGGED_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_POSITION_TAGGED_HPP_
+#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ANNOTATE_ON_SUCCESS_HPP_
+#define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ANNOTATE_ON_SUCCESS_HPP_
 
-
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
 
 /* special boost.spirit.x3 header to get rid off the annoying unused parameter
  * warnings from x3 */
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
-#include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
+#include <boost/spirit/home/x3/support/utility/annotate_on_success.hpp>
 
 #pragma GCC diagnostic pop
 
+#include <eda/vhdl/parser/namespace_alias.hpp>
 
-namespace eda { namespace vhdl { namespace ast {
+
+namespace eda { namespace vhdl { namespace parser {
 
 
 /*
@@ -36,10 +36,11 @@ namespace eda { namespace vhdl { namespace ast {
  * ID are derived from x3::annotate_on_success (obviously must be changed in
  * the future).
  */
-using position_tagged = x3::position_tagged;
+using annotate_on_success = x3::annotate_on_success;
 
 
-} } } // namespace eda.vhdl.ast
+}}} // namespace eda.vhdl.parser
 
 
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_POSITION_TAGGED_HPP_ */
+
+#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ANNOTATE_ON_SUCCESS_HPP_ */

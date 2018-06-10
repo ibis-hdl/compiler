@@ -16,7 +16,7 @@ set(VHDL_PARSER_SOURCE
     src/ast/ast_printer.cpp
     src/ast/numeric_convert.cpp
     
-    src/parser/error_handler.cpp
+    src/parser/handle_on_error.cpp
 
     #src/parser/grammar.cpp
 )

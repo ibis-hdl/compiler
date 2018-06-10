@@ -10,6 +10,7 @@
 
 
 #include <eda/vhdl/ast/util/variant.hpp>
+#include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/ast/util/nullary.hpp>
 #include <eda/vhdl/ast/label.hpp>
@@ -22,7 +23,7 @@
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct block_specification_chunk
+struct block_specification_chunk : position_tagged
 {
     ast::label                          label;  // {block_statement, generate_statement}_label
     optional<ast::index_specification>  index_specification;
@@ -32,7 +33,7 @@ struct block_specification_chunk
 struct block_specification : variant<
     ast::nullary,
     ast::name,
-    ast::block_specification_chunk  // generate_statement....
+    ast::block_specification_chunk
 >
 {
     using base_type::base_type;

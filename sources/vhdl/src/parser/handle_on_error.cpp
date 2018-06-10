@@ -5,14 +5,14 @@
  *      Author: olaf
  */
 
-#include <eda/vhdl/parser/error_handler.hpp>
+#include <eda/vhdl/parser/handle_on_error.hpp>
 
 
 
 namespace eda { namespace vhdl { namespace parser {
 
 
-error_handler_base::error_handler_base()
+handle_on_error::handle_on_error()
 : m_ruleid_map {
     { "abstract_literal" , "Abstract Literal" },
     { "access_type_definition" , "Access Type Definition" },
