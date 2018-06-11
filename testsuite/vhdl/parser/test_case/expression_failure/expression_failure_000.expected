@@ -1,4 +1,5 @@
 In line 2:
-Error! Expecting end of input here: 
+Test Suite Full Match Error! unparsed input left:
+nand "1000"
 "0011" nand "0010" nand "1000"
 ___________________^_

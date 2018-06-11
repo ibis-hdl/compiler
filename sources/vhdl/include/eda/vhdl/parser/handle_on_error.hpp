@@ -55,6 +55,8 @@ struct handle_on_error
         Iterator& first, Iterator const& last
       , Exception const& x, Context const& context);
 
+    std::string assemble_message(std::string which);
+
     std::map<std::string, std::string> const m_ruleid_map;
 };
 
@@ -74,15 +76,7 @@ handle_on_error::on_error(
       Iterator& /* first */, Iterator const& /* last */
     , Exception const& x, Context const& context)
 {
-    std::string which{ x.which() };
-    auto iter = m_ruleid_map.find(which);
-
-    if (iter != m_ruleid_map.end())
-        which = iter->second;
-
-    std::string const message{
-        "Parser Error: Expecting the VHDL-BNF rule: '" + which + "' here:"
-    };
+    std::string const message{ assemble_message(x.which()) };
 
     auto& error_handler = x3::get<x3::error_handler_tag>(context).get();
     error_handler(x.where(), message);

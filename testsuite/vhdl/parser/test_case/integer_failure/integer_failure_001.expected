@@ -1,4 +1,7 @@
 In line 1:
-Error! Expecting end of input here: 
+Test Suite Full Match Error! unparsed input left:
+_
+
+
 42_
 __^_

@@ -1,4 +1,5 @@
 In line 2:
-Error! Expecting end of input here: 
+Test Suite Full Match Error! unparsed input left:
+nor "1000"
 "0011" nor "0010" nor "1000"
 __________________^_

@@ -1,4 +1,5 @@
 In line 2:
-Error! Expecting end of input here: 
+Test Suite Full Match Error! unparsed input left:
+mod -3
 -5 mod -3
 ___^_
