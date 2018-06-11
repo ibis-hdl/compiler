@@ -1,0 +1,18 @@
+(component_specification
+  (instantiation_list<v>
+    (identifier
+      a
+    ),
+    (identifier
+      b
+    ),
+    (identifier
+      c
+    )
+  )
+  (name<v>
+    (identifier
+      foo
+    )
+  )
+)
