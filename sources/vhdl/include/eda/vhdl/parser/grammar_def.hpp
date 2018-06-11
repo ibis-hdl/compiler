@@ -13,20 +13,15 @@
 #include <eda/vhdl/parser/namespace_alias.hpp>
 #include <eda/vhdl/parser/grammar.hpp>
 #include <eda/vhdl/parser/common_types.hpp>
-
-/* enable this header at last for tagging the outermost rule (design_file) for
- * handling expectation points. At this point  annotate_on_success comes into
- * play to get the handler an hint. Otherwise this increase the compile time
- * a bit. */
 #include <eda/vhdl/parser/handle_on_error.hpp>
 #include <eda/vhdl/parser/annotate_on_success.hpp>
-
-#include <eda/support/boost/spirit_x3.hpp>
-#include <eda/support/boost/spirit_x3_utils.hpp>
 
 #if defined(BOOST_SPIRIT_X3_DEBUG)
 #include <eda/vhdl/ast_debug_out.hpp>
 #endif
+
+#include <eda/support/boost/spirit_x3.hpp>
+#include <eda/support/boost/spirit_x3_utils.hpp>
 
 
 /*

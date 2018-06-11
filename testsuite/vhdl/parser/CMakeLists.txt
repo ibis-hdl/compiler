@@ -181,6 +181,13 @@ add_dependencies(${PROJECT_NAME} boost-spirit-x3)
 # Boost.Org depend includes
 include_directories(${SPIRIT_X3_INCLUDE_DIR})
 
+# parser with Spirit.X3 DEBUG
+set(EDA_VHDL_PARSER_DEBUG OFF CACHE BOOL "debug printer of spirit.x3 parser tree")
+if("${EDA_VHDL_PARSER_DEBUG}")
+    target_compile_definitions(${PROJECT_NAME}
+        PRIVATE BOOST_SPIRIT_X3_DEBUG=1)
+endif()
+
 
 ##
 # Boost.Org UTF

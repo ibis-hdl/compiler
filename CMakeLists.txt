@@ -34,13 +34,6 @@ include(build_config_hpp)
 # project. This is used by the depending sub projects
 include(external_spirit_x3)
 
-# parser with Spirit.X3 DEBUG
-set(EDA_VHDL_PARSER_DEBUG OFF CACHE BOOL "debug printer of spirit.x3 parser tree")
-if("${EDA_VHDL_PARSER_DEBUG}")
-    target_compile_definitions(${PROJECT_NAME}
-        PRIVATE BOOST_SPIRIT_X3_DEBUG=1)
-endif()
-
 
 ## 
 # Common build options: set the output folder where programs will be created
