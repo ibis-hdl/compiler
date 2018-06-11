@@ -1,7 +1,7 @@
 /*
  * conditional_signal_assignment_test.cpp
  *
- *  Created on: 2.6.2018
+ *  Created on: 11.6.2018
  *      Author: olaf
  */
 
@@ -48,14 +48,12 @@ BOOST_DATA_TEST_CASE( conditional_signal_assignment,
     using attribute_type = ast::conditional_signal_assignment;
     auto const parser = parser::conditional_signal_assignment;
 
-    boost::ignore_unused(test_case_name);
-    
     using testsuite::vhdl_parser::util::testing_parser;
     using testsuite::vhdl_parser::util::current_test_passing;
     using testsuite::vhdl_parser::util::report_diagnostic;
 
     testing_parser<attribute_type> parse;
-    auto [parse_ok, parse_result] = parse(input, parser);
+    auto [parse_ok, parse_result] = parse(input, parser, test_case_name);
 
     BOOST_TEST(parse_ok);
     BOOST_REQUIRE_MESSAGE(parse_ok,

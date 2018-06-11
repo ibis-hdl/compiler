@@ -1,5 +1,5 @@
-In line 2:
-Test Suite Full Match Error! unparsed input left:
+In file expression_failure/expression_failure_001.input, line 2:
+Test Suite Full Match Error! Unparsed input left:
 nor "1000"
 "0011" nor "0010" nor "1000"
 __________________^_

@@ -21,6 +21,7 @@ namespace testsuite { namespace vhdl_parser { namespace util {
 
 namespace x3 = boost::spirit::x3;
 namespace btt = boost::test_tools;
+namespace fs  = boost::filesystem;
 
 namespace parser = eda::vhdl::parser;
 namespace ast    = eda::vhdl::ast;
@@ -36,7 +37,7 @@ struct testing_parser
     template <typename ParserType>
     std::tuple<bool, std::string>
     operator()(std::string const &input, ParserType const &parser_rule,
-               bool full_match = true)
+               fs::path const &filename = "", bool full_match = true)
     {
         attribute_type  attr;
         btt::output_test_stream output;
@@ -54,7 +55,8 @@ struct testing_parser
             "iterator types must be the same"
         );
 
-        parser::error_handler_type error_handler(iter, end, output);
+        parser::error_handler_type error_handler(iter, end, output,
+                                                 filename.string() + ".input");
 
         auto const parser =
             x3::with<x3::error_handler_tag>(std::ref(error_handler)) [
@@ -69,7 +71,7 @@ struct testing_parser
             if (parse_ok) {
                 if (iter != end) {
                     error_handler(iter, "Test Suite Full Match Error! "
-                                        "unparsed input left:\n"
+                                        "Unparsed input left:\n"
                                         + std::string(iter, end));
                 }
                 else {
@@ -80,29 +82,10 @@ struct testing_parser
                 }
             }
         } catch(x3::expectation_failure<parser::iterator_type> const& e) {
-            /* ToDo: Some investigating is required here - BNF and X3. Both
-             * message creations differs in the point of concrete failure. My
-             * guess is the first approach of error printing is correct, but
-             * BNF must be studied carefully. A testing use case for this is
-             * 'expression_failure/expression_failure_003' with enabled expectation
-             * point at term rule (term_def):
-             * 'In line 2:
-             * Error! Expecting end of input here:
-             * -5 mod -3
-             * ___^_
-             * vs.
-             * 'In line 2:
-             * Error! Expecting factor here:
-             * -5 mod -3
-             * _______^_
-             * (or alternative 'Error! Expecting factor at ' -3') if enabled
-             */
-#if 1
-            output << "Caught expectation_failure! Expecting " << e.which()
-                   << " here '" << std::string(e.where(), input.end()) << "'\n";
-#else
-            error_handler(e.where(), "Error! Expecting " + e.which() + " here: ");
-#endif
+            error_handler(e.where(), "Test Suite caught expectation_failure! Expecting "
+                          + e.which() + " here: '"
+                          + std::string(e.where(), input.end()) + "'\n"
+                          );
         }
 
         return std::make_tuple(
