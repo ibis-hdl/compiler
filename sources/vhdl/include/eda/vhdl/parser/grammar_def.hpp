@@ -1843,7 +1843,7 @@ auto const block_statement_def = ( // operator precedence
     >> END >> BLOCK
     >> -label
     )
-    > ';'
+    >  ';'
     ;
 #endif
 
@@ -1936,7 +1936,7 @@ auto const component_configuration_def = ( // operator precedence
     >> -( binding_indication > ';' )
     >> -block_configuration
     >> END >> FOR
-    > ';'
+    >  ';'
     )
     ;
 #endif
@@ -1956,7 +1956,7 @@ auto const component_declaration_def = ( // operator precedence
     >> END >> COMPONENT
     >> -simple_name
     )
-    > ';'
+    >  ';'
     ;
 #endif
 
@@ -1972,7 +1972,7 @@ auto const component_instantiation_statement_def = ( // operator precedence
     >> -generic_map_aspect
     >> -port_map_aspect
     )
-    > ';'
+    >  ';'
     ;
 #endif
 
@@ -2110,7 +2110,7 @@ auto const configuration_declaration_def = // operator precedence
     >> END >> -CONFIGURATION
     >> -simple_name
     )
-    > ';'
+    >  ';'
     ;
 #endif
 
@@ -2152,7 +2152,7 @@ auto const configuration_specification_def = ( // operator precedence
     >> component_specification
     >> binding_indication
     )
-    > ';'
+    >  ';'
     ;
 
 
@@ -2836,13 +2836,19 @@ auto const function_call_def =
 //         begin ]
 //             { concurrent_statement }
 //         end generate [ generate_label ] ;
-auto const generate_statement_def =
-        generate_label >> ':'     generation_scheme GENERATE
-        -( { block_declarative_item }
-BEGIN )
-{ concurrent_statement }
-END GENERATE -( generate_label ) > ';'
-;
+auto const generate_statement_def = ( // operator precedence
+       label
+    >> ':'
+    >> generation_scheme
+    >> GENERATE
+    >> *block_declarative_item
+    >> -BEGIN
+    >> *concurrent_statement
+    >> END >> GENERATE
+    >> -label
+    )
+    >  ';'
+    ;
 #endif
 
 #if 0
@@ -2850,9 +2856,9 @@ END GENERATE -( generate_label ) > ';'
 //       for generate_parameter_specification
 //     | if condition
 auto const generation_scheme_def =
-        FOR generate_parameter_specification
-        | IF condition
-        ;
+      (FOR >> parameter_specification)
+    | (IF  >> condition)
+    ;
 #endif
 
 
@@ -3040,10 +3046,10 @@ auto const indexed_name_def =
 //     | entity entity_name [ ( architecture_identifier ) ]
 //     | configuration configuration_name
 auto const instantiated_unit_def =
-        -( COMPONENT ) component_name
-        | ENTITY entity_name -( '(' architecture_identifier ')' )
-        | CONFIGURATION configuration_name
-        ;
+      -(COMPONENT >> name)
+    | (ENTITY >> name -( '(' >> architecture_identifier >> ')' ))
+    | (CONFIGURATION >> name)
+    ;
 #endif
 
 
@@ -3408,7 +3414,7 @@ auto const package_declaration_def = ( // operator precedence
     >> -PACKAGE
     >> -simple_name   // package_simple_name, aka identifier
     )
-    > ';'
+    >  ';'
     ;
 
 
@@ -3663,14 +3669,22 @@ auto const process_declarative_part_def =
 //         begin
 //             process_statement_part
 //         end [ postponed ] process [ process_label ] ;
-auto const process_statement_def =
-        -( process_label >> ':' )
-        -( POSTPONED ) PROCESS -( '(' sensitivity_list ')' ) -( IS )
-        process_declarative_part
-        BEGIN
-        process_statement_part
-        END -( POSTPONED ) PROCESS -( process_label ) > ';'
-;
+auto const process_statement_def = ( // operator precedence
+       -label_colon
+    >> -POSTPONED
+    >> PROCESS
+    >> -( '(' >> sensitivity_list >> ')' )
+    >> -IS
+    >> process_declarative_part
+    >> BEGIN
+    >> process_statement_part
+    >> END
+    >> -POSTPONED
+    >> PROCESS
+    >> -label
+    )
+    >  ';'
+    ;
 #endif
 
 
