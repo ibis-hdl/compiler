@@ -1,0 +1,47 @@
+(expression
+  (relation
+    (shift_expression
+      (simple_expression
+        (term
+          (primary<v>
+            (expression
+              (relation
+                (shift_expression
+                  (simple_expression
+                    (term
+                      (primary<v>
+                        (name<v>
+                          (identifier
+                            a
+                          )
+                        )
+                      ),
+                      (operator: MUL),
+                      (primary<v>
+                        (name<v>
+                          (identifier
+                            b
+                          )
+                        )
+                      )
+                    ),
+                    (operator: SUB),
+                    (term
+                      (primary<v>
+                        (name<v>
+                          (identifier
+                            c
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

@@ -1,0 +1,3 @@
+-- don't interpret a comment '--' as neg. sign
+(a * b - -- comment
+ c)
