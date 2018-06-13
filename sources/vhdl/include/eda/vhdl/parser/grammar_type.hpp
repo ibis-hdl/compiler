@@ -9,7 +9,7 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_TYPE_HPP_
 
 
-#include <eda/vhdl/ast_adapted.hpp>
+#include <eda/vhdl/ast.hpp>
 #include <eda/vhdl/parser/namespace_alias.hpp>
 #include <eda/vhdl/parser/grammar_id.hpp>
 #include <eda/vhdl/parser/common_types.hpp> // iterator_type

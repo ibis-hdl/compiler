@@ -16,6 +16,7 @@
 #include <eda/vhdl/parser/common_types.hpp>
 #include <eda/vhdl/parser/handle_on_error.hpp>
 #include <eda/vhdl/parser/annotate_on_success.hpp>
+#include <eda/vhdl/ast_adapted.hpp>
 
 #if defined(BOOST_SPIRIT_X3_DEBUG)
 #include <eda/vhdl/ast_debug_out.hpp>

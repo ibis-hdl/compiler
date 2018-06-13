@@ -233,26 +233,15 @@ BOOST_AUTO_TEST_SUITE_END()
         """    
         
         api_list=list()
-        decl_list=list()
         
         for p in parser_list:
             if self.skip(p):
                 continue
             
             api_list.append("{name}_type const& {name}();".format(name=p))
-            decl_list.append("BOOST_SPIRIT_DECLARE({name}_type);".format(name=p))
         
         contents="""
-#include <eda/vhdl/parser/grammar_type.hpp>
-
-namespace eda {{ namespace vhdl {{ namespace parser {{
-
-{decl}
-
-{skip_decl}
-
-}} }} }} // namespace eda.vhdl.parser 
-
+#include <eda/vhdl/parser/grammar_decl.hpp>
 
 {namespace_api_bgn}
 
@@ -265,9 +254,7 @@ namespace vhdl = eda::vhdl::parser;
 {namespace_api_end}
 """.format(
     namespace_api_bgn=self.namespace_open(api_namespace),
-    decl='\n'.join(f"{x}" for x in decl_list),
     fcn='\n'.join(f"vhdl::{x}" for x in api_list),
-    skip_decl='BOOST_SPIRIT_DECLARE(skipper_type);',
     skip_fcn='vhdl::skipper_type const& skipper();',
     namespace_api_end=self.namespace_close(api_namespace)
 )
