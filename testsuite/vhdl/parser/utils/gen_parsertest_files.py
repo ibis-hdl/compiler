@@ -243,7 +243,7 @@ BOOST_AUTO_TEST_SUITE_END()
             decl_list.append("BOOST_SPIRIT_DECLARE({name}_type);".format(name=p))
         
         contents="""
-#include <eda/vhdl/parser/parser_types.hpp>
+#include <eda/vhdl/parser/grammar_type.hpp>
 
 namespace eda {{ namespace vhdl {{ namespace parser {{
 
