@@ -10,7 +10,8 @@
 
 #include <boost/test/output_test_stream.hpp>
 
-#include <eda/vhdl/parser/grammar_def.hpp>
+#include <eda/vhdl/parser/skipper.hpp>
+#include <eda/vhdl/parser/grammar_decl.hpp>
 #include <eda/vhdl/parser/parser_config.hpp>
 
 #include <eda/vhdl/ast_printer.hpp>
@@ -48,11 +49,9 @@ struct testing_parser
         /* using different iterator_types causes linker errors, see e.g.
          * [linking errors while separate parser using boost spirit x3](
          *  https://stackoverflow.com/questions/40496357/linking-errors-while-separate-parser-using-boost-spirit-x3) */
-        static_assert(std::integral_constant<bool,
-                   std::is_same<decltype(iter), parser::iterator_type>::value
-                && std::is_same<decltype(end),  parser::iterator_type>::value
-            >::value,
-            "iterator types must be the same"
+        static_assert(std::is_same<decltype(iter), parser::iterator_type>::value
+                   && std::is_same<decltype(end),  parser::iterator_type>::value,
+                      "iterator types must be the same"
         );
 
         parser::error_handler_type error_handler(iter, end, output,

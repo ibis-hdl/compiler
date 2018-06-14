@@ -262,12 +262,6 @@ typedef x3::rule<waveform_class, ast::waveform> waveform_type;
 typedef x3::rule<waveform_element_class, ast::waveform_element> waveform_element_type;
 
 
-/*
- * Skipper
- */
-typedef x3::rule<skipper_class> skipper_type;
-
-
 } } } // namespace eda.vhdl.parser
 
 

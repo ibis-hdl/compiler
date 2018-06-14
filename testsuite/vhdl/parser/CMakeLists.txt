@@ -10,31 +10,10 @@ project(testrunner_vhdl_parser LANGUAGES CXX)
 
 
 set(TEST_COMMON_SOURCES
-    test_vhdl_parser.cpp
+    rules.cpp
     data_set.cpp
-    testing_util.cpp    
-)
-
-# compiles faster than AST related parser rule tests, but not flexible as this.
-set(PARSERTEST_SOURCES_OLD
-    ${TEST_COMMON_SOURCES}
-    #parser_xxx.cpp parser_xxx_inst.cpp
-    parser_test_old/parser_aspect.cpp
-    parser_test_old/parser_clause.cpp
-    parser_test_old/parser_concurrent_statements.cpp
-    parser_test_old/parser_declaration.cpp
-    parser_test_old/parser_design_unit.cpp
-    parser_test_old/parser_entities.cpp
-    parser_test_old/parser_expression.cpp
-    parser_test_old/parser_file.cpp
-    parser_test_old/parser_interface.cpp
-    parser_test_old/parser_literals.cpp
-    parser_test_old/parser_names.cpp
-    parser_test_old/parser_production.cpp
-    parser_test_old/parser_specifications.cpp
-    parser_test_old/parser_statement.cpp
-    parser_test_old/parser_subprogram.cpp
-    parser_test_old/parser_type.cpp
+    test_vhdl_parser.cpp
+    testing_util.cpp
 )
 
 set(PARSERTEST_SOURCES#_DEV
@@ -42,7 +21,7 @@ set(PARSERTEST_SOURCES#_DEV
     parser_test/configuration_specification_test.cpp
 )
 
-set(PARSERTEST_SOURCES_
+set(PARSERTEST_SOURCES
     ${TEST_COMMON_SOURCES}
     parser_test/abstract_literal_test.cpp
     parser_test/actual_part_test.cpp
@@ -78,9 +57,8 @@ set(PARSERTEST_SOURCES_
     parser_test/factor_test.cpp
     parser_test/file_declaration_test.cpp
     parser_test/file_open_information_test.cpp
-    parser_test/floating_type_definition_test.cpp
     parser_test/formal_part_test.cpp
-	parser_test/function_call_test.cpp
+    parser_test/function_call_test.cpp
     parser_test/generic_clause_test.cpp
     parser_test/generic_map_aspect_test.cpp
     parser_test/group_declaration_test.cpp
@@ -88,11 +66,10 @@ set(PARSERTEST_SOURCES_
     parser_test/identifier_test.cpp
     parser_test/identifier_list_test.cpp
     parser_test/if_statement_test.cpp
-    parser_test/index_constraint_test.cpp
+    #parser_test/index_constraint_test.cpp  ###  FixMe: COMPILE ERROR
     parser_test/index_subtype_definition_test.cpp
     parser_test/indexed_name_test.cpp
-    parser_test/integer_test.cpp
-    parser_test/integer_type_definition_test.cpp
+    #parser_test/integer_test.cpp   ### FixMe: AST node and linker error
     parser_test/interface_constant_declaration_test.cpp
     parser_test/interface_file_declaration_test.cpp
     parser_test/interface_signal_declaration_test.cpp

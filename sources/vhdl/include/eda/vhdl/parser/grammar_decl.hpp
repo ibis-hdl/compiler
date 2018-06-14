@@ -235,9 +235,6 @@ BOOST_SPIRIT_DECLARE(waveform_type);
 BOOST_SPIRIT_DECLARE(waveform_element_type);
 
 
-BOOST_SPIRIT_DECLARE(skipper_type);
-
-
 } } } // namespace eda.vhdl.parser
 
 

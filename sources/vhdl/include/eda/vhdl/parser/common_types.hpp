@@ -9,6 +9,9 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_COMMON_TYPES_HPP_
 
 
+#include <string>
+
+
 namespace eda { namespace vhdl { namespace parser {
 
 

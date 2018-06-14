@@ -124,10 +124,11 @@ class BoostTestGenerator:
 #include <eda/vhdl/ast.hpp>
 
 #include <testsuite/vhdl_parser/data_set.hpp>
+#include <testsuite/vhdl_parser/rules.hpp>
 #include <testsuite/vhdl_parser/testing_parser.hpp>
-#include <testsuite/vhdl_parser/testing_parser_grammar_hack.hpp>
 #include <testsuite/vhdl_parser/generate_data_test_case.hpp>
 #include <testsuite/vhdl_parser/testing_util.hpp>
+//#include <testsuite/vhdl_parser/testing_parser_grammar_hack.hpp>
 """
         
     def cxxNamespaceAliases(self):
@@ -162,7 +163,7 @@ BOOST_DATA_TEST_CASE( {test_case},
     input, expected, test_case_name)
 {{
     using attribute_type = ast::{attr_name};
-    auto const parser = parser::{parser_name};
+    auto const& parser = testsuite::vhdl_parser::{parser_name}();
 
     using testsuite::vhdl_parser::util::testing_parser;
     using testsuite::vhdl_parser::util::current_test_passing;
@@ -245,17 +246,14 @@ BOOST_AUTO_TEST_SUITE_END()
 
 {namespace_api_bgn}
 
-namespace vhdl = eda::vhdl::parser;
+namespace parser = eda::vhdl::parser;
 
 {fcn}
-
-{skip_fcn}
 
 {namespace_api_end}
 """.format(
     namespace_api_bgn=self.namespace_open(api_namespace),
-    fcn='\n'.join(f"vhdl::{x}" for x in api_list),
-    skip_fcn='vhdl::skipper_type const& skipper();',
+    fcn='\n'.join(f"parser::{x}" for x in api_list),
     namespace_api_end=self.namespace_close(api_namespace)
 )
 
@@ -279,11 +277,14 @@ namespace vhdl = eda::vhdl::parser;
                 .format(name=p))
             
             fcn_list.append(
-                "vhdl::{name}_type const& {name}() {{ return eda::vhdl::parser::{name}; }}"
+                """parser::{name}_type const& {name}() {{
+    return eda::vhdl::parser::{name}; 
+}}
+"""
                 .format(name=p))       
         
         contents="""
-#include <testsuite/vhdl_parser/api.hpp>
+#include <testsuite/vhdl_parser/rules.hpp>
 #include <eda/vhdl/parser/grammar_def.hpp>
 #include <eda/vhdl/parser/parser_config.hpp>
 
@@ -292,8 +293,6 @@ namespace eda {{ namespace vhdl {{ namespace parser {{
 
 {inst}
 
-{skip_inst}
-
 }} }} }} // namespace eda.vhdl.parser
 
 
@@ -301,15 +300,11 @@ namespace eda {{ namespace vhdl {{ namespace parser {{
 
 {fcn}
 
-{skip_fcn}
-
 {namespace_api_end}
 """.format(
     namespace_api_bgn=self.namespace_open(api_namespace),
     inst='\n'.join(f"{x}" for x in inst_list),
     fcn='\n'.join(f"{x}" for x in fcn_list),
-    skip_inst='BOOST_SPIRIT_INSTANTIATE(skipper_type, iterator_type, context_type);',
-    skip_fcn='vhdl::skipper_type const& skipper() { return eda::vhdl::parser::skipper; }',
     namespace_api_end=self.namespace_close(api_namespace)
 )
         
@@ -359,8 +354,8 @@ namespace eda {{ namespace vhdl {{ namespace parser {{
             cmake_sources.append("{cxx}".format(
                     cxx=path + '/' + test_filename))
                     
-        # generate API files
-        self.writeBnfFile(path , 'api', test_cases)
+        # generate parser rule access API files, leading '0' for dir-sort on top
+        self.writeBnfFile(path , '0_rules', test_cases)
         
         
         # print CMakeFiles

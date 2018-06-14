@@ -1,7 +1,7 @@
 /*
  * group_declaration_test.cpp
  *
- *  Created on: 11.6.2018
+ *  Created on: 14.6.2018
  *      Author: olaf
  */
 
@@ -14,8 +14,8 @@
 #include <eda/vhdl/ast.hpp>
 
 #include <testsuite/vhdl_parser/data_set.hpp>
+#include <testsuite/vhdl_parser/rules.hpp>
 #include <testsuite/vhdl_parser/testing_parser.hpp>
-#include <testsuite/vhdl_parser/testing_parser_grammar_hack.hpp>
 #include <testsuite/vhdl_parser/generate_data_test_case.hpp>
 #include <testsuite/vhdl_parser/testing_util.hpp>
 
@@ -46,7 +46,7 @@ BOOST_DATA_TEST_CASE( group_declaration,
     input, expected, test_case_name)
 {
     using attribute_type = ast::group_declaration;
-    auto const parser = parser::group_declaration;
+    auto const& parser = testsuite::vhdl_parser::group_declaration();
 
     using testsuite::vhdl_parser::util::testing_parser;
     using testsuite::vhdl_parser::util::current_test_passing;

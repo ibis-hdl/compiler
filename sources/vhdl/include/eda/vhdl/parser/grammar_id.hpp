@@ -243,12 +243,6 @@ struct waveform_class;
 struct waveform_element_class;
 
 
-/*
- * Skipper
- */
-struct skipper_class;
-
-
 } } } // namespace eda.vhdl.parser
 
 
