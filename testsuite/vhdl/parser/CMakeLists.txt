@@ -19,7 +19,6 @@ set(TEST_COMMON_SOURCES
 set(PARSERTEST_SOURCES#_DEV
     ${TEST_COMMON_SOURCES}
     parser_test/configuration_specification_test.cpp
-    #parser_test/integer_test.cpp
 )
 
 set(PARSERTEST_SOURCES
@@ -67,7 +66,7 @@ set(PARSERTEST_SOURCES
     parser_test/identifier_test.cpp
     parser_test/identifier_list_test.cpp
     parser_test/if_statement_test.cpp
-    #parser_test/index_constraint_test.cpp  ###  FixMe: CLang COMPILE ERROR
+    parser_test/index_constraint_test.cpp
     parser_test/index_subtype_definition_test.cpp
     parser_test/indexed_name_test.cpp
     parser_test/integer_test.cpp

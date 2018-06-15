@@ -131,6 +131,7 @@ BOOST_SPIRIT_DECLARE(guarded_signal_specification_type);
 BOOST_SPIRIT_DECLARE(identifier_type);
 BOOST_SPIRIT_DECLARE(identifier_list_type);
 BOOST_SPIRIT_DECLARE(if_statement_type);
+BOOST_SPIRIT_DECLARE(index_constraint_type);
 BOOST_SPIRIT_DECLARE(index_specification_type);
 BOOST_SPIRIT_DECLARE(index_subtype_definition_type);
 BOOST_SPIRIT_DECLARE(indexed_name_type);
