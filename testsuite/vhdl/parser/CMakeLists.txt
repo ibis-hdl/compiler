@@ -19,6 +19,7 @@ set(TEST_COMMON_SOURCES
 set(PARSERTEST_SOURCES#_DEV
     ${TEST_COMMON_SOURCES}
     parser_test/configuration_specification_test.cpp
+    #parser_test/integer_test.cpp
 )
 
 set(PARSERTEST_SOURCES
@@ -66,10 +67,10 @@ set(PARSERTEST_SOURCES
     parser_test/identifier_test.cpp
     parser_test/identifier_list_test.cpp
     parser_test/if_statement_test.cpp
-    #parser_test/index_constraint_test.cpp  ###  FixMe: COMPILE ERROR
+    #parser_test/index_constraint_test.cpp  ###  FixMe: CLang COMPILE ERROR
     parser_test/index_subtype_definition_test.cpp
     parser_test/indexed_name_test.cpp
-    #parser_test/integer_test.cpp   ### FixMe: AST node and linker error
+    parser_test/integer_test.cpp
     parser_test/interface_constant_declaration_test.cpp
     parser_test/interface_file_declaration_test.cpp
     parser_test/interface_signal_declaration_test.cpp
@@ -150,6 +151,14 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQ
         -ftemplate-depth=1024)
 endif()
 
+
+# G++-7.3 has problems with some AST nodes, while CLang-5 hasn't. This problem
+# rises up at BOOST_SPIRIT_INSTANTIATE. As (temporary) solution exclude G++
+# from linking to grammar rules instances
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    target_compile_definitions(${PROJECT_NAME}
+        PRIVATE NO_BOOST_SPIRIT_INSTANCES=1)
+endif()
 
 ##
 # Boost.Org's Spirit.X3 newer version is required from local clone

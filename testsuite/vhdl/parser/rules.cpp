@@ -14,6 +14,7 @@
 
 namespace eda { namespace vhdl { namespace parser {
 
+#if !defined(NO_BOOST_SPIRIT_INSTANCES)
 BOOST_SPIRIT_INSTANTIATE(abstract_literal_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(actual_part_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(aggregate_type, iterator_type, context_type);
@@ -110,6 +111,7 @@ BOOST_SPIRIT_INSTANTIATE(variable_assignment_statement_type, iterator_type, cont
 BOOST_SPIRIT_INSTANTIATE(variable_declaration_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(wait_statement_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(waveform_type, iterator_type, context_type);
+#endif // !defined(NO_BOOST_SPIRIT_INSTANCES)
 
 } } } // namespace eda.vhdl.parser
 
