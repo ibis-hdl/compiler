@@ -26,7 +26,11 @@ target_include_directories(x3_calc9 PRIVATE
     ${Boost_INCLUDE_DIR}
 )
 
+set(CALC9_TARGET_LINK_LIBRARIES Boost::system)
+if(WIN32)
+    list(APPEND CALC9_TARGET_LINK_LIBRARIES Boost::filesystem)
+endif()    
+
 target_link_libraries(x3_calc9
-    PRIVATE
-    ${Boost_SYSTEM_LIBRARY}
+    PRIVATE ${CALC9_TARGET_LINK_LIBRARIES}
 )
