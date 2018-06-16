@@ -168,32 +168,25 @@ auto const WITH = distinct("with");
 /*
  * Symbols of all keyword to them distinguish from identifier by rule
  */
-struct keyword_symbols : x3::symbols<> {
-
-    keyword_symbols() {
-
-        name("keyword");
-
-        add("abs") ("access") ("after") ("alias") ("all") ("and")
-           ("architecture") ("array") ("assert") ("attribute") ("begin")
-           ("block") ("body") ("buffer") ("bus") ("case") ("component")
-           ("configuration") ("constant") ("disconnect") ("downto") ("else")
-           ("elsif") ("end") ("entity") ("exit") ("file") ("for")
-           ("function") ("generate") ("generic") ("group") ("guarded")
-           ("if") ("impure") ("in") ("inertial") ("inout") ("is") ("label")
-           ("library") ("linkage") ("literal") ("loop") ("map") ("mod")
-           ("nand") ("new") ("next") ("nor") ("not") ("null") ("of") ("on")
-           ("open") ("or") ("others") ("out") ("package") ("port")
-           ("postponed") ("procedure") ("process") ("pure") ("range")
-           ("record") ("register") ("reject") ("rem") ("report") ("return")
-           ("rol") ("ror") ("select") ("severity") ("signal") ("shared")
-           ("sla") ("sll") ("sra") ("srl") ("subtype") ("then") ("to")
-           ("transport") ("type") ("unaffected") ("units") ("until") ("use")
-           ("variable") ("wait") ("when") ("while") ("with") ("xnor")
-           ("xor")
-           ;
-    }
-} const keywords;
+x3::symbols<> const keywords(
+    {
+        "abs", "access", "after", "alias", "all", "and", "architecture",
+        "array", "assert", "attribute", "begin", "block", "body", "buffer",
+        "bus", "case", "component", "configuration", "constant", "disconnect",
+        "downto", "else", "elsif", "end", "entity", "exit", "file", "for",
+        "function", "generate", "generic", "group", "guarded", "if", "impure",
+        "in", "inertial", "inout", "is", "label",  "library", "linkage",
+        "literal", "loop", "map", "mod", "nand", "new", "next", "nor", "not",
+        "null", "of", "on",  "open", "or", "others", "out", "package", "port",
+        "postponed", "procedure", "process", "pure", "range", "record",
+        "register", "reject", "rem", "report", "return", "rol", "ror",
+        "select", "severity", "signal", "shared", "sla", "sll", "sra", "srl",
+        "subtype", "then", "to", "transport", "type", "unaffected", "units",
+        "until", "use", "variable", "wait", "when", "while", "with", "xnor",
+        "xor"
+    },
+    "keyword"
+);
 
 auto const keyword = x3::rule<struct _> { "keyword" } =
         distinct(keywords)
@@ -266,19 +259,15 @@ auto const unary_miscellaneous_operator_def =
 
 
 // logical_operator ::=  and | or | nand | nor | xor | xnor         [LRM93 §7.2]
-struct binary_logical_operator_symbols : x3::symbols<ast::operator_token> {
-
-    binary_logical_operator_symbols() {
-
-        name("logical_operator");
-
-        add("and",  ast::operator_token::AND)
-           ("or",   ast::operator_token::OR)
-           ("xor",  ast::operator_token::XOR)
-           ("xnor", ast::operator_token::XNOR)
-           ;
-    }
-} const binary_logical_operator_symbols;
+x3::symbols<ast::operator_token>  const binary_logical_operator_symbols(
+    {
+        {"and",  ast::operator_token::AND},
+        {"or",   ast::operator_token::OR},
+        {"xor",  ast::operator_token::XOR},
+        {"xnor", ast::operator_token::XNOR}
+    },
+    "logical_operator"
+);
 
 auto const binary_logical_operator_def =
     distinct(binary_logical_operator_symbols)
@@ -293,37 +282,28 @@ auto const unary_logical_operator_def =
 
 
 // relational_operator ::=   =  |  /=  |  <  |  <=  |  >  |  >=     [LRM93 §7.2]
-struct relational_operator_symbols : x3::symbols<ast::operator_token> {
-
-    relational_operator_symbols() {
-
-        name("relational_operator");
-
-        add("=",  ast::operator_token::EQUAL)
-           ("/=", ast::operator_token::NOT_EQUALS)
-           ("<",  ast::operator_token::LESS)
-           ("<=", ast::operator_token::LESS_EQUALS)
-           (">",  ast::operator_token::GREATER)
-           (">=", ast::operator_token::GREATER_EQUALS)
-           ;
-    }
-} const relational_operator;
+x3::symbols<ast::operator_token> const relational_operator(
+    {
+        {"=",  ast::operator_token::EQUAL},
+        {"/=", ast::operator_token::NOT_EQUALS},
+        {"<",  ast::operator_token::LESS},
+        {"<=", ast::operator_token::LESS_EQUALS},
+        {">",  ast::operator_token::GREATER},
+        {">=", ast::operator_token::GREATER_EQUALS}
+    },
+    "relational_operator"
+);
 
 
 // adding_operator ::=  + | -  | &                                  [LRM93 §7.2]
-struct adding_operator_symbols : x3::symbols<ast::operator_token> {
-
-    adding_operator_symbols() {
-
-        name("adding_operator");
-
-        add("+", ast::operator_token::ADD)
-           ("-", ast::operator_token::SUB)
-           ("&", ast::operator_token::CONCAT)
-           ;
-    }
-} const adding_operator;
-
+x3::symbols<ast::operator_token> const adding_operator(
+    {
+        {"+", ast::operator_token::ADD},
+        {"-", ast::operator_token::SUB},
+        {"&", ast::operator_token::CONCAT}
+    },
+    "adding_operator"
+);
 
 // multiplying_operator ::=  * | / | mod | rem                      [LRM93 §7.2]
 
@@ -338,22 +318,17 @@ auto const multiplying_operator_def =
 
 
 // shift_operator ::=  sll | srl | sla | sra | rol | ror            [LRM93 §7.2]
-struct shift_operator_symbols : x3::symbols<ast::operator_token> {
-
-    shift_operator_symbols() {
-
-        name("shift_operator");
-
-        add("sll", ast::operator_token::SLL)
-           ("srl", ast::operator_token::SRL)
-           ("sla", ast::operator_token::SLA)
-           ("sra", ast::operator_token::SRA)
-           ("rol", ast::operator_token::ROL)
-           ("ror", ast::operator_token::ROR)
-           ;
-    }
-} const shift_operator_symbols;
-
+x3::symbols<ast::operator_token> const shift_operator_symbols(
+    {
+        {"sll", ast::operator_token::SLL},
+        {"srl", ast::operator_token::SRL},
+        {"sla", ast::operator_token::SLA},
+        {"sra", ast::operator_token::SRA},
+        {"rol", ast::operator_token::ROL},
+        {"ror", ast::operator_token::ROR}
+    },
+    "shift_operator"
+);
 
 auto const shift_operator_def =
     distinct(shift_operator_symbols)
@@ -1867,32 +1842,28 @@ auto const entity_aspect_def =
 //     | group         | file
 namespace detail {
 
-struct entity_class_symbols : x3::symbols<ast::keyword_token> {
-
-    entity_class_symbols() {
-
-        name("entity_class");
-
-        add("entity"        , ast::keyword_token::ENTITY)
-           ("architecture"  , ast::keyword_token::ARCHITECTURE)
-           ("configuration" , ast::keyword_token::CONFIGURATION)
-           ("procedure"     , ast::keyword_token::PROCEDURE)
-           ("function"      , ast::keyword_token::FUNCTION)
-           ("package"       , ast::keyword_token::PACKAGE)
-           ("type"          , ast::keyword_token::TYPE)
-           ("subtype"       , ast::keyword_token::SUBTYPE)
-           ("constant"      , ast::keyword_token::CONSTANT)
-           ("signal"        , ast::keyword_token::SIGNAL)
-           ("variable"      , ast::keyword_token::VARIABLE)
-           ("component"     , ast::keyword_token::COMPONENT)
-           ("label"         , ast::keyword_token::LABEL)
-           ("literal"       , ast::keyword_token::LITERAL)
-           ("units"         , ast::keyword_token::UNITS)
-           ("group"         , ast::keyword_token::GROUP)
-           ("file"          , ast::keyword_token::FILE)
-           ;
-    }
-} const entity_class_symbols;
+x3::symbols<ast::keyword_token> const entity_class_symbols(
+    {
+        {"entity"        , ast::keyword_token::ENTITY},
+        {"architecture"  , ast::keyword_token::ARCHITECTURE},
+        {"configuration" , ast::keyword_token::CONFIGURATION},
+        {"procedure"     , ast::keyword_token::PROCEDURE},
+        {"function"      , ast::keyword_token::FUNCTION},
+        {"package"       , ast::keyword_token::PACKAGE},
+        {"type"          , ast::keyword_token::TYPE},
+        {"subtype"       , ast::keyword_token::SUBTYPE},
+        {"constant"      , ast::keyword_token::CONSTANT},
+        {"signal"        , ast::keyword_token::SIGNAL},
+        {"variable"      , ast::keyword_token::VARIABLE},
+        {"component"     , ast::keyword_token::COMPONENT},
+        {"label"         , ast::keyword_token::LABEL},
+        {"literal"       , ast::keyword_token::LITERAL},
+        {"units"         , ast::keyword_token::UNITS},
+        {"group"         , ast::keyword_token::GROUP},
+        {"file"          , ast::keyword_token::FILE}
+    },
+    "entity_class"
+);
 
 } // namespace detail
 
@@ -2726,20 +2697,16 @@ auto const loop_statement_def = ( // operator precedence
 //     in | out | inout | buffer | linkage
 namespace detail {
 
-struct mode_symbols : x3::symbols<ast::keyword_token> {
-
-    mode_symbols() {
-
-        name("mode");
-
-        add("in"     , ast::keyword_token::IN)
-           ("out"    , ast::keyword_token::OUT)
-           ("inout"  , ast::keyword_token::INOUT)
-           ("buffer" , ast::keyword_token::BUFFER)
-           ("linkage", ast::keyword_token::LINKAGE)
-           ;
-    }
-} const mode_symbols;
+x3::symbols<ast::keyword_token> const mode_symbols(
+    {
+        {"in"     , ast::keyword_token::IN},
+        {"out"    , ast::keyword_token::OUT},
+        {"inout"  , ast::keyword_token::INOUT},
+        {"buffer" , ast::keyword_token::BUFFER},
+        {"linkage", ast::keyword_token::LINKAGE}
+    },
+    "mode"
+);
 
 }// namespace detail
 
