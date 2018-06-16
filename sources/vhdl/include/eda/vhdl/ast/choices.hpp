@@ -22,21 +22,16 @@
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct choice : variant<
+using choice = variant<
     nullary,
     simple_name,
     discrete_range,
     simple_expression,
     keyword_token       // OTHERS
->
-{
-    using base_type::base_type;
-    using base_type::operator=;
-};
+>;
 
 
-struct choices : std::vector<choice> { };
-
+using choices = std::vector<choice>;
 
 } } } // namespace eda.vhdl.ast
 

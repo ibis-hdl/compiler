@@ -29,7 +29,7 @@
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct package_body_declarative_item : variant<
+using package_body_declarative_item = variant<
     ast::nullary,
     ast::subprogram_declaration,
     ast::subprogram_body,
@@ -42,14 +42,9 @@ struct package_body_declarative_item : variant<
     ast::use_clause,
     ast::group_template_declaration,
     ast::group_declaration
->
-{
-    using base_type::base_type;
-    using base_type::operator=;
-};
+>;
 
-
-struct package_body_declarative_part : std::vector<ast::package_body_declarative_item> { };
+using package_body_declarative_part = std::vector<ast::package_body_declarative_item>;
 
 
 } } } // namespace eda.vhdl.ast

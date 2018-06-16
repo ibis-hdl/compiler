@@ -45,7 +45,7 @@ struct subprogram_body;
  * }
  * \enddot
  */
-struct subprogram_declarative_item : variant<
+using subprogram_declarative_item = variant<
     ast::nullary,
     ast::subprogram_declaration,
     forward_ast<ast::subprogram_body>,
@@ -60,14 +60,10 @@ struct subprogram_declarative_item : variant<
     ast::use_clause,
     ast::group_template_declaration,
     ast::group_declaration
->
-{
-    using base_type::base_type;
-    using base_type::operator=;
-};
+>;
 
 
-struct subprogram_declarative_part : std::vector<ast::subprogram_declarative_item> { };
+using subprogram_declarative_part = std::vector<ast::subprogram_declarative_item>;
 
 
 } } } // namespace eda.vhdl.ast

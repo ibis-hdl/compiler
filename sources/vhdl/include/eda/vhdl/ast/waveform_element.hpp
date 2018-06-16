@@ -19,14 +19,10 @@
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct waveform_element_form : variant<
+using waveform_element_form = variant<
     ast::expression,
     ast::keyword_token  // NULL
->
-{
-    using base_type::base_type;
-    using base_type::operator=;
-};
+>;
 
 
 struct waveform_element : position_tagged

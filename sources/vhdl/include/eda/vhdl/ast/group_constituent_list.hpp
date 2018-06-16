@@ -20,18 +20,14 @@
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct group_constituent : variant<
+using group_constituent = variant<
     ast::nullary,
     ast::name,
     ast::character_literal
->
-{
-    using base_type::base_type;
-    using base_type::operator=;
-};
+>;
 
 
-struct group_constituent_list : std::vector<ast::group_constituent> { };
+using group_constituent_list = std::vector<ast::group_constituent>;
 
 
 } } } // namespace eda.vhdl.ast

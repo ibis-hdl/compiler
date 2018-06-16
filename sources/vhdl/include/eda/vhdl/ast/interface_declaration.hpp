@@ -21,17 +21,13 @@
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct interface_declaration : variant<
+using interface_declaration = variant<
     nullary,
     interface_constant_declaration,
     interface_signal_declaration,
     interface_variable_declaration,
     interface_file_declaration
->
-{
-    using base_type::base_type;
-    using base_type::operator=;
-};
+>;
 
 
 } } } // namespace eda.vhdl.ast

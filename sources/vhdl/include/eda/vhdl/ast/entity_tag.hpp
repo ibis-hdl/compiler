@@ -20,16 +20,12 @@
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct entity_tag : variant<
+using entity_tag = variant<
     nullary,
     simple_name,
     character_literal,
     operator_symbol
->
-{
-    using base_type::base_type;
-    using base_type::operator=;
-};
+>;
 
 
 } } } // namespace eda.vhdl.ast
