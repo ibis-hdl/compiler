@@ -21,6 +21,7 @@
 #include <string_view>
 #include <boost/range/iterator_range.hpp>
 #include <boost/iterator/filter_iterator.hpp>
+#include <boost/range/join.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast { namespace parser {
@@ -573,67 +574,63 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
      */
     if(base == 10) {
 
+        /* Note, a dumb join of over all numeric literal components doesn't work
+         * here since some (empty) number literal components results into an
+         * empty iterator_range  where the parser crash with
+         * memory access violation at address: 0x00000000
+         * Also take care about [boost::range::join for multiple ranges](
+         * https://stackoverflow.com/questions/14366576/boostrangejoin-for-multiple-ranges?answertab=active#tab-top) */
+
+        /* '.' symbol for assembling a 'to-parse-string' for Spirit.X3 parsers
+         * since the dot it's not an AST member by design. */
+        static std::string const dot{ "." };
+
         using kind_specifier = ast::based_literal::kind_specifier;
-
-        /* Quick & Dirty assemble a string which can be parsed by Spirit.X3 */
-        auto const assemble_copy = [](ast::based_literal const& literal) {
-
-            std::size_t sz{ 0 };
-
-            switch(literal.number.kind_type) {
-                case kind_specifier::integer: {
-                    sz += literal.number.integer_part.size();
-                    sz += literal.number.exponent.size();
-                }
-                [[fallthrough]];
-                case kind_specifier::real: {
-                    sz += 1;    // dot
-                    sz += literal.number.fractional_part.size();
-                }
-                    break;
-                default:
-                    cxx_unreachable_bug_triggered();
-            }
-
-            std::string s{};
-            s.reserve(sz);
-            std::stringstream ss{ s };
-
-            switch(literal.number.kind_type) {
-                case kind_specifier::integer: {
-                    ss  << literal.number.integer_part;
-                }
-                break;
-
-                case kind_specifier::real: {
-                    ss << literal.number.integer_part;
-                    ss << ".";
-                    ss << literal.number.fractional_part;
-                }
-                break;
-
-                default:
-                    cxx_unreachable_bug_triggered();
-            }
-
-            ss << literal.number.exponent;
-
-            return ss.str();
-        };
-
 
         switch(literal.number.kind_type) {
 
             case kind_specifier::integer: {
-                std::string const literal_copy{ assemble_copy(literal) };
-                std::tie(parse_ok, result) = primitive_parse(literal_copy, primitive_parser::dec{});
+                if(literal.number.exponent.empty()) {
+                    std::tie(parse_ok, result) = primitive_parse(
+                        literal.number.integer_part, primitive_parser::dec{});
+                }
+                else {
+                    std::tie(parse_ok, result) = primitive_parse(
+                        boost::join(
+                            literal.number.integer_part,
+                            literal.number.exponent
+                        ),
+                        primitive_parser::dec{});
+                }
             }
             break;
 
             case kind_specifier::real: {
-                std::string const literal_copy{ assemble_copy(literal) };
-                std::tie(parse_ok, result) = primitive_parse(literal_copy, primitive_parser::real{});
-                break;
+                if(literal.number.exponent.empty()) { // 'integer . fractional'
+                    std::tie(parse_ok, result) = primitive_parse(
+                        boost::join(
+                            boost::join(
+                                literal.number.integer_part,
+                                dot
+                            ),
+                            literal.number.fractional_part
+                        ),
+                        primitive_parser::real{});
+                }
+                else { // 'integer . fractional exponent'
+                    std::tie(parse_ok, result) = primitive_parse(
+                        boost::join(
+                            boost::join(
+                                boost::join(
+                                    literal.number.integer_part,
+                                    dot
+                                ),
+                                literal.number.fractional_part
+                            ),
+                            literal.number.exponent
+                        ),
+                        primitive_parser::real{});
+                }
             }
             break;
 

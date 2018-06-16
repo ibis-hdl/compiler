@@ -254,6 +254,7 @@ BOOST_DATA_TEST_CASE(
 std::vector<std::string> const real_lit{
     "10#0.0#",
     "10#1.0#",
+    "10#42.66#e-1",
     /* Examples from
      * - IEEE_VHDL_1076-1993: Chapter 13.4.2 Based literals
      *
@@ -276,6 +277,7 @@ std::vector<std::string> const real_lit{
 std::vector<eda::vhdl::intrinsic::real_type> real_dec{
     0,
     1,
+    4.266,
     4095.0,
     4095.0,
 };
