@@ -151,14 +151,6 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQ
 endif()
 
 
-# G++-7.3 has problems with some AST nodes, while CLang-5 hasn't. This problem
-# rises up at BOOST_SPIRIT_INSTANTIATE. As (temporary) solution exclude G++
-# from linking to grammar rules instances
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    target_compile_definitions(${PROJECT_NAME}
-        PRIVATE NO_BOOST_SPIRIT_INSTANCES=1)
-endif()
-
 ##
 # Boost.Org's Spirit.X3 newer version is required from local clone
 add_dependencies(${PROJECT_NAME} boost-spirit-x3)

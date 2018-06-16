@@ -129,10 +129,6 @@ class BoostTestGenerator:
 #include <testsuite/vhdl_parser/generate_data_test_case.hpp>
 #include <testsuite/vhdl_parser/testing_util.hpp>
 #include <testsuite/vhdl_parser/testing_parser_grammar_hack.hpp>
-
-#if defined(NO_BOOST_SPIRIT_INSTANCES)
-#include <eda/vhdl/parser/grammar_def.hpp>
-#endif
 """
         
     def cxxNamespaceAliases(self):
@@ -166,12 +162,9 @@ BOOST_DATA_TEST_CASE( {test_case},
     ^ {test_case}_dataset.test_case_name(),
     input, expected, test_case_name)
 {{
-    using attribute_type = ast::{attr_name};
-#if defined(NO_BOOST_SPIRIT_INSTANCES)
-    auto const parser = parser::{parser_name};
-#else    
+    using attribute_type = ast::{attr_name}; 
     auto const& parser = testsuite::vhdl_parser::{parser_name}();
-#endif
+
     using testsuite::vhdl_parser::util::testing_parser;
     using testsuite::vhdl_parser::util::current_test_passing;
     using testsuite::vhdl_parser::util::report_diagnostic;
@@ -298,9 +291,7 @@ namespace parser = eda::vhdl::parser;
 
 namespace eda {{ namespace vhdl {{ namespace parser {{
 
-#if !defined(NO_BOOST_SPIRIT_INSTANCES)
 {inst}
-#endif // !defined(NO_BOOST_SPIRIT_INSTANCES)
 
 }} }} }} // namespace eda.vhdl.parser
 

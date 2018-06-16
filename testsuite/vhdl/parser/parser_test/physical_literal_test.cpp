@@ -1,7 +1,7 @@
 /*
  * physical_literal_test.cpp
  *
- *  Created on: 15.6.2018
+ *  Created on: 16.6.2018
  *      Author: olaf
  */
 
@@ -19,10 +19,6 @@
 #include <testsuite/vhdl_parser/generate_data_test_case.hpp>
 #include <testsuite/vhdl_parser/testing_util.hpp>
 #include <testsuite/vhdl_parser/testing_parser_grammar_hack.hpp>
-
-#if defined(NO_BOOST_SPIRIT_INSTANCES)
-#include <eda/vhdl/parser/grammar_def.hpp>
-#endif
 
 
 BOOST_AUTO_TEST_SUITE( parser )
@@ -58,12 +54,9 @@ BOOST_DATA_TEST_CASE( physical_literal,
     ^ physical_literal_dataset.test_case_name(),
     input, expected, test_case_name)
 {
-    using attribute_type = ast::physical_literal;
-#if defined(NO_BOOST_SPIRIT_INSTANCES)
-    auto const parser = parser::physical_literal;
-#else    
+    using attribute_type = ast::physical_literal; 
     auto const& parser = testsuite::vhdl_parser::physical_literal();
-#endif
+
     using testsuite::vhdl_parser::util::testing_parser;
     using testsuite::vhdl_parser::util::current_test_passing;
     using testsuite::vhdl_parser::util::report_diagnostic;
@@ -89,12 +82,9 @@ BOOST_DATA_TEST_CASE( physical_literal_failure,
     ^ physical_literal_failure_dataset.test_case_name(),
     input, expected, test_case_name)
 {
-    using attribute_type = ast::physical_literal;
-#if defined(NO_BOOST_SPIRIT_INSTANCES)
-    auto const parser = parser::physical_literal;
-#else    
+    using attribute_type = ast::physical_literal; 
     auto const& parser = testsuite::vhdl_parser::physical_literal();
-#endif
+
     using testsuite::vhdl_parser::util::testing_parser;
     using testsuite::vhdl_parser::util::current_test_passing;
     using testsuite::vhdl_parser::util::report_diagnostic;
