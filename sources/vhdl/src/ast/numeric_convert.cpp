@@ -109,21 +109,20 @@ auto const exponent = x3::rule<struct _, unsigned_integer>{} =
 namespace dbg_util {
 
 template<typename RangeType, typename AttributeType>
-void trace_report(RangeType const& range, bool parse_ok, bool full_match,
+void trace_report(RangeType const& range, bool parse_ok,
             AttributeType attribute, std::string const& function)
 {
-    std::cout << "TRACING OF "
-              << function << "(" << range << "): "
+    std::cout << __FILE__ << " "
+              << function << "('" << range << "') --> "
               << std::boolalpha
               << "parse_ok = "     << parse_ok
-              << ", full_match = " << full_match << "\n"
-              << "  attribute = "  << attribute << "\n";
+              << ", attribute = "  << attribute << "\n";
 }
 
 } // namespace dbg_util
 
-#define TRACE(range, parse_ok, full_match, attribute)                          \
-    dbg_util::trace_report(range, parse_ok, full_match, attribute, __FUNCTION__)
+#define TRACE(range, parse_ok, attribute)                                       \
+    dbg_util::trace_report(range, parse_ok, attribute, __FUNCTION__)
 
 
 /**
@@ -159,44 +158,44 @@ struct primitive_parser
     template<typename RangeType>
     return_value operator()(RangeType const& range, primitive_parser::bin) const
     {
-        detail::unsigned_integer attribute{};   // exact attribute type for x3 parser
+        detail::unsigned_integer attribute{};
 
-        auto const [parse_ok, full_match] = parse(range, detail::bin, attribute);
+        bool const parse_ok = parse(range, detail::bin, attribute);
 
-        return std::make_tuple(parse_ok && full_match, attribute);
+        return std::make_tuple(parse_ok, attribute);
     }
 
 
     template<typename RangeType>
     return_value operator()(RangeType const& range, primitive_parser::oct) const
     {
-        detail::unsigned_integer attribute{};   // exact attribute type for x3 parser
+        detail::unsigned_integer attribute{};
 
-        auto const [parse_ok, full_match] = parse(range, detail::oct, attribute);
+        bool const parse_ok = parse(range, detail::oct, attribute);
 
-        return std::make_tuple(parse_ok && full_match, attribute);
+        return std::make_tuple(parse_ok, attribute);
     }
 
 
     template<typename RangeType>
     return_value operator()(RangeType const& range, primitive_parser::dec) const
     {
-        detail::unsigned_integer attribute{};   // exact attribute type for x3 parser
+        detail::unsigned_integer attribute{};
 
-        auto const [parse_ok, full_match] = parse(range, detail::uint_base10, attribute);
+        bool const parse_ok = parse(range, detail::uint_base10, attribute);
 
-        return std::make_tuple(parse_ok && full_match, attribute);
+        return std::make_tuple(parse_ok, attribute);
     }
 
 
     template<typename RangeType>
     return_value operator()(RangeType const& range, primitive_parser::hex) const
     {
-        detail::unsigned_integer attribute{};   // exact attribute type for x3 parser
+        detail::unsigned_integer attribute{};
 
-        auto const [parse_ok, full_match] = parse(range, detail::hex, attribute);
+        bool const parse_ok = parse(range, detail::hex, attribute);
 
-        return std::make_tuple(parse_ok && full_match, attribute);
+        return std::make_tuple(parse_ok, attribute);
     }
 
 
@@ -205,37 +204,52 @@ struct primitive_parser
     {
         double attribute{};
 
-        auto const [parse_ok, full_match] = parse(range, detail::real_base10, attribute);
+        bool const parse_ok = parse(range, detail::real_base10, attribute);
 
-        return std::make_tuple(parse_ok && full_match, attribute);
+        return std::make_tuple(parse_ok, attribute);
     }
 
 
     template<typename RangeType>
     return_value operator()(RangeType const& range, primitive_parser::exp) const
     {
-        detail::signed_integer attribute{};   // exact attribute type for x3 parser
+        detail::signed_integer attribute{};
 
-        auto const [parse_ok, full_match] = parse(range, detail::exponent, attribute);
+        bool const parse_ok = parse(range, detail::exponent, attribute);
 
-        return std::make_tuple(parse_ok && full_match, attribute);
+        return std::make_tuple(parse_ok, attribute);
     }
 
 
     template<typename RangeType, typename ParserType, typename AttributeType>
-    std::tuple<bool, bool> parse(RangeType const& range, ParserType const &parser,
-                                 AttributeType &attribute) const
+    bool parse(RangeType const& range, ParserType const &parser,
+               AttributeType &attribute) const
     {
-        auto range_f{ filter_range(range) };
+        /* Note, simply using an approach like
+         * \code{.cpp}
+         * auto const skipper = x3::rule<...> {} = x3::char_('_');
+         * x3::phrase_parse(..., skipper, attribute);
+         * \endcode
+         * doesn't work since the skipper is used the build lexeme (tokenize)
+         * the input. Hence, the input must be filtered before parsed.
+         * Alternative solution shown at
+         * [Using boost::spirit::qi to parse numbers with separators](
+         * https://stackoverflow.com/questions/29132809/using-boostspiritqi-to-parse-numbers-with-separators?answertab=active#tab-top)
+         * looks even more complicated. */
+        auto const range_f{ filter_range(range) };
         auto iter = std::begin(range_f);
         auto const end = std::cend(range_f);
 
-        bool const parse_ok = x3::parse(iter, end, parser, attribute);
-        bool const full_match = (iter == end);
+        /* Note, parser matches the end of input (eoi) - trust in Spirit.X3
+         * numeric parsers and top level VHDL parser. If it fails it's probably
+         * due to numeric overflow. The same information we would be gathered by
+         * evaluation of an 'full_match' boolean flag as shown by Spirit's
+         * test_parser() tests - something has been left unparsed. */
+        bool const parse_ok = x3::parse(iter, end, parser >> x3::eoi, attribute);
 
-        //TRACE(range, parse_ok, full_match, attribute);
+        //TRACE(range, parse_ok, attribute);
 
-        return std::make_tuple(parse_ok, full_match);
+        return parse_ok;
     }
 
 
