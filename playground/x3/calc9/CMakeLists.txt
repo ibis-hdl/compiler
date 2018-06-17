@@ -30,7 +30,14 @@ target_include_directories(x3_calc9 PRIVATE
     ${EDA_BINARY_ROOT_DIR}/external/src/boost-spirit-x3/include
     ${Boost_INCLUDE_DIR}
 )
+    
+set(CALC9_PARSER_DEBUG OFF CACHE BOOL "debug printer of spirit.x3 parser tree")
+if("${CALC9_PARSER_DEBUG}")
+    target_compile_definitions(${PROJECT_NAME}
+        PRIVATE BOOST_SPIRIT_X3_DEBUG=1)
+endif()
 
+        
 set(CALC9_TARGET_LINK_LIBRARIES Boost::system)
 if(WIN32)
     list(APPEND CALC9_TARGET_LINK_LIBRARIES Boost::filesystem)

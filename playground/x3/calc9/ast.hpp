@@ -10,6 +10,9 @@
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
 #include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
 #include <boost/fusion/include/io.hpp>
+#if defined(BOOST_SPIRIT_X3_DEBUG)
+#include <boost/optional/optional_io.hpp>
+#endif
 #include <boost/optional.hpp>
 #include <list>
 
