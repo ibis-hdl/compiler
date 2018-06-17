@@ -8,6 +8,9 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_DEF_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_DEF_HPP_
 
+#if defined(BOOST_SPIRIT_X3_DEBUG)
+#include <eda/vhdl/parser/grammar_debug.hpp>
+#endif
 
 #include <eda/vhdl/parser/namespace_alias.hpp>
 #include <eda/vhdl/parser/grammar.hpp>
@@ -17,10 +20,6 @@
 #include <eda/vhdl/parser/handle_on_error.hpp>
 #include <eda/vhdl/parser/annotate_on_success.hpp>
 #include <eda/vhdl/ast_adapted.hpp>
-
-#if defined(BOOST_SPIRIT_X3_DEBUG)
-#include <eda/vhdl/ast_debug_out.hpp>
-#endif
 
 #include <eda/support/boost/spirit_x3.hpp>
 #include <eda/support/boost/spirit_x3_utils.hpp>
