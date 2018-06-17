@@ -156,6 +156,7 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::configuration_declaration,
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::configuration_specification,
     component_specification, binding_indication
 )
+
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::constant_declaration,
     identifier_list, subtype_indication, expression
 )
