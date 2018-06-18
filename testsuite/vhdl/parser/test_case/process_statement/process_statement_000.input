@@ -1,0 +1,5 @@
+compute_xor: process (b,c)
+begin
+    a <= b xor c;
+end process;
+

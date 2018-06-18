@@ -1,0 +1,6 @@
+count: process (x)
+    variable cnt : integer := -1;
+begin
+    cnt := cnt + 1;
+end process;
+

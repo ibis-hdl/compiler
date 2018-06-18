@@ -83,6 +83,7 @@ BOOST_SPIRIT_INSTANTIATE(port_map_aspect_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(primary_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(primary_unit_declaration_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(procedure_call_type, iterator_type, context_type);
+BOOST_SPIRIT_INSTANTIATE(process_statement_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(qualified_expression_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(range_constraint_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(record_type_definition_type, iterator_type, context_type);
@@ -390,6 +391,10 @@ parser::primary_unit_declaration_type const& primary_unit_declaration() {
 
 parser::procedure_call_type const& procedure_call() {
     return eda::vhdl::parser::procedure_call;
+}
+
+parser::process_statement_type const& process_statement() {
+    return eda::vhdl::parser::process_statement;
 }
 
 parser::qualified_expression_type const& qualified_expression() {

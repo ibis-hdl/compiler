@@ -1,0 +1,5 @@
+postponed process
+begin
+  wait for 0 ns;
+end process;
+

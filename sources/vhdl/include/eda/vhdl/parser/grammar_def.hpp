@@ -3074,7 +3074,7 @@ auto const procedure_call_statement_def = ( // operator precedence
     ;
 
 
-#if 0
+
 // process_declarative_item ::=                                     [LRM93 §9.2]
 //       subprogram_declaration
 //     | subprogram_body
@@ -3104,17 +3104,17 @@ auto const process_declarative_item_def =
     | group_template_declaration
     | group_declaration
     ;
-#endif
 
-#if 0
+
+
 // process_declarative_part ::=                                     [LRM93 §9.2]
 //     { process_declarative_item }
 auto const process_declarative_part_def =
-{ process_declarative_item }
-;
-#endif
+    *process_declarative_item
+    ;
 
-#if 0
+
+
 // process_statement ::=                                            [LRM93 §9.2]
 //     [ process_label : ]
 //         [ postponed ] process [ ( sensitivity_list ) ] [ is ]
@@ -3132,13 +3132,13 @@ auto const process_statement_def = ( // operator precedence
     >> BEGIN
     >> process_statement_part
     >> END
-    >> -POSTPONED
+    >> -POSTPONED   // FixMe: Twice the POSTPONED keyword is relevant??
     >> PROCESS
     >> -label
     )
     >  ';'
     ;
-#endif
+
 
 
 // process_statement_part ::=                                       [LRM93 §9.2]
@@ -4119,9 +4119,9 @@ BOOST_SPIRIT_DEFINE(  // -- P --
     , primary_unit_declaration
     , procedure_call
     , procedure_call_statement
-    //, process_declarative_item
-    //, process_declarative_part
-    //, process_statement
+    , process_declarative_item
+    , process_declarative_part
+    , process_statement
     , process_statement_part
 )
 BOOST_SPIRIT_DEFINE(  // -- Q --

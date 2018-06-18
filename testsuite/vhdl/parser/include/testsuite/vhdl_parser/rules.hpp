@@ -85,6 +85,7 @@ parser::port_map_aspect_type const& port_map_aspect();
 parser::primary_type const& primary();
 parser::primary_unit_declaration_type const& primary_unit_declaration();
 parser::procedure_call_type const& procedure_call();
+parser::process_statement_type const& process_statement();
 parser::qualified_expression_type const& qualified_expression();
 parser::range_constraint_type const& range_constraint();
 parser::record_type_definition_type const& record_type_definition();

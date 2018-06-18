@@ -1988,49 +1988,417 @@ bit_string_literal
 block_header
 ============
 
-+------------------+--------------------------------------------------+----------+
-| File             | Input                                            | Expected |
-+------------------+--------------------------------------------------+----------+
-| block_header_000 | -- BNF allows empty block header                 |          |
-|                  |                                                  |          |
-|                  |                                                  |          |
-+------------------+--------------------------------------------------+----------+
-| block_header_001 | -- declaration of generic parameters             |          |
-|                  | generic (GB1, GB2 : Time);                       |          |
-|                  |                                                  |          |
-|                  |                                                  |          |
-+------------------+--------------------------------------------------+----------+
-| block_header_002 | -- declaration of generic parameters             |          |
-|                  | generic (GB1, GB2 : Time);                       |          |
-|                  | -- with binding of generic parameters            |          |
-|                  | generic map (GB1 => LongTime, GB2 => ShortTime); |          |
-|                  |                                                  |          |
-|                  |                                                  |          |
-+------------------+--------------------------------------------------+----------+
-| block_header_003 | -- declaration of ports                          |          |
-|                  | port (PB1: in BIT; PB2 : inout BIT );            |          |
-|                  |                                                  |          |
-|                  |                                                  |          |
-|                  |                                                  |          |
-+------------------+--------------------------------------------------+----------+
-| block_header_004 | -- declaration of ports                          |          |
-|                  | port (PB1: in BIT; PB2 : inout BIT );            |          |
-|                  | -- binding of ports and signals                  |          |
-|                  | port map (PB1 => P1, PB2 => B);                  |          |
-|                  |                                                  |          |
-|                  |                                                  |          |
-+------------------+--------------------------------------------------+----------+
-| block_header_005 | -- declaration of generic parameters             |          |
-|                  | generic (GB1, GB2 : Time);                       |          |
-|                  | -- with binding of generic parameters            |          |
-|                  | generic map (GB1 => LongTime, GB2 => ShortTime); |          |
-|                  | -- declaration of ports                          |          |
-|                  | port (PB1: in BIT; PB2 : inout BIT );            |          |
-|                  | -- binding of ports and signals                  |          |
-|                  | port map (PB1 => P1, PB2 => B);                  |          |
-|                  |                                                  |          |
-|                  |                                                  |          |
-+------------------+--------------------------------------------------+----------+
++------------------+--------------------------------------------------+-----------------------------------------+
+| File             | Input                                            | Expected                                |
++------------------+--------------------------------------------------+-----------------------------------------+
+| block_header_000 | -- BNF allows empty block header                 | (block_header                           |
+|                  |                                                  |                                         |
+|                  |                                                  | )                                       |
+|                  |                                                  |                                         |
++------------------+--------------------------------------------------+-----------------------------------------+
+| block_header_001 | -- declaration of generic parameters             | (block_header                           |
+|                  | generic (GB1, GB2 : Time);                       |   (generic_clause                       |
+|                  |                                                  |     (interface_list                     |
+|                  |                                                  |       (interface_declaration<v>         |
+|                  |                                                  |         (interface_constant_declaration |
+|                  |                                                  |           (identifier_list              |
+|                  |                                                  |             (identifier                 |
+|                  |                                                  |               GB1                       |
+|                  |                                                  |             ),                          |
+|                  |                                                  |             (identifier                 |
+|                  |                                                  |               GB2                       |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |           (subtype_indication           |
+|                  |                                                  |             (type_mark<v>               |
+|                  |                                                  |               (name<v>                  |
+|                  |                                                  |                 (identifier             |
+|                  |                                                  |                   Time                  |
+|                  |                                                  |                 )                       |
+|                  |                                                  |               )                         |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |         )                               |
+|                  |                                                  |       )                                 |
+|                  |                                                  |     )                                   |
+|                  |                                                  |   )                                     |
+|                  |                                                  | )                                       |
+|                  |                                                  |                                         |
++------------------+--------------------------------------------------+-----------------------------------------+
+| block_header_002 | -- declaration of generic parameters             | (block_header                           |
+|                  | generic (GB1, GB2 : Time);                       |   (generic_clause                       |
+|                  | -- with binding of generic parameters            |     (interface_list                     |
+|                  | generic map (GB1 => LongTime, GB2 => ShortTime); |       (interface_declaration<v>         |
+|                  |                                                  |         (interface_constant_declaration |
+|                  |                                                  |           (identifier_list              |
+|                  |                                                  |             (identifier                 |
+|                  |                                                  |               GB1                       |
+|                  |                                                  |             ),                          |
+|                  |                                                  |             (identifier                 |
+|                  |                                                  |               GB2                       |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |           (subtype_indication           |
+|                  |                                                  |             (type_mark<v>               |
+|                  |                                                  |               (name<v>                  |
+|                  |                                                  |                 (identifier             |
+|                  |                                                  |                   Time                  |
+|                  |                                                  |                 )                       |
+|                  |                                                  |               )                         |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |         )                               |
+|                  |                                                  |       )                                 |
+|                  |                                                  |     )                                   |
+|                  |                                                  |   )                                     |
+|                  |                                                  |   (generic_map_aspect                   |
+|                  |                                                  |     (association_list                   |
+|                  |                                                  |       (association_element              |
+|                  |                                                  |         (formal_part                    |
+|                  |                                                  |           (formal_designator<v>         |
+|                  |                                                  |             (name<v>                    |
+|                  |                                                  |               (identifier               |
+|                  |                                                  |                 GB1                     |
+|                  |                                                  |               )                         |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |         )                               |
+|                  |                                                  |         (actual_part<v>                 |
+|                  |                                                  |           (actual_designator<v>         |
+|                  |                                                  |             (name<v>                    |
+|                  |                                                  |               (identifier               |
+|                  |                                                  |                 LongTime                |
+|                  |                                                  |               )                         |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |         )                               |
+|                  |                                                  |       ),                                |
+|                  |                                                  |       (association_element              |
+|                  |                                                  |         (formal_part                    |
+|                  |                                                  |           (formal_designator<v>         |
+|                  |                                                  |             (name<v>                    |
+|                  |                                                  |               (identifier               |
+|                  |                                                  |                 GB2                     |
+|                  |                                                  |               )                         |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |         )                               |
+|                  |                                                  |         (actual_part<v>                 |
+|                  |                                                  |           (actual_designator<v>         |
+|                  |                                                  |             (name<v>                    |
+|                  |                                                  |               (identifier               |
+|                  |                                                  |                 ShortTime               |
+|                  |                                                  |               )                         |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |         )                               |
+|                  |                                                  |       )                                 |
+|                  |                                                  |     )                                   |
+|                  |                                                  |   )                                     |
+|                  |                                                  | )                                       |
+|                  |                                                  |                                         |
++------------------+--------------------------------------------------+-----------------------------------------+
+| block_header_003 | -- declaration of ports                          | (block_header                           |
+|                  | port (PB1: in BIT; PB2 : inout BIT );            |   (port_clause                          |
+|                  |                                                  |     (interface_list                     |
+|                  |                                                  |       (interface_declaration<v>         |
+|                  |                                                  |         (interface_constant_declaration |
+|                  |                                                  |           (identifier_list              |
+|                  |                                                  |             (identifier                 |
+|                  |                                                  |               PB1                       |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |           (in)                          |
+|                  |                                                  |           (subtype_indication           |
+|                  |                                                  |             (type_mark<v>               |
+|                  |                                                  |               (name<v>                  |
+|                  |                                                  |                 (identifier             |
+|                  |                                                  |                   BIT                   |
+|                  |                                                  |                 )                       |
+|                  |                                                  |               )                         |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |         )                               |
+|                  |                                                  |       ),                                |
+|                  |                                                  |       (interface_declaration<v>         |
+|                  |                                                  |         (interface_signal_declaration   |
+|                  |                                                  |           (identifier_list              |
+|                  |                                                  |             (identifier                 |
+|                  |                                                  |               PB2                       |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |           (keyword                      |
+|                  |                                                  |             INOUT                       |
+|                  |                                                  |           )                             |
+|                  |                                                  |           (subtype_indication           |
+|                  |                                                  |             (type_mark<v>               |
+|                  |                                                  |               (name<v>                  |
+|                  |                                                  |                 (identifier             |
+|                  |                                                  |                   BIT                   |
+|                  |                                                  |                 )                       |
+|                  |                                                  |               )                         |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |         )                               |
+|                  |                                                  |       )                                 |
+|                  |                                                  |     )                                   |
+|                  |                                                  |   )                                     |
+|                  |                                                  | )                                       |
+|                  |                                                  |                                         |
++------------------+--------------------------------------------------+-----------------------------------------+
+| block_header_004 | -- declaration of ports                          | (block_header                           |
+|                  | port (PB1: in BIT; PB2 : inout BIT );            |   (port_clause                          |
+|                  | -- binding of ports and signals                  |     (interface_list                     |
+|                  | port map (PB1 => P1, PB2 => B);                  |       (interface_declaration<v>         |
+|                  |                                                  |         (interface_constant_declaration |
+|                  |                                                  |           (identifier_list              |
+|                  |                                                  |             (identifier                 |
+|                  |                                                  |               PB1                       |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |           (in)                          |
+|                  |                                                  |           (subtype_indication           |
+|                  |                                                  |             (type_mark<v>               |
+|                  |                                                  |               (name<v>                  |
+|                  |                                                  |                 (identifier             |
+|                  |                                                  |                   BIT                   |
+|                  |                                                  |                 )                       |
+|                  |                                                  |               )                         |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |         )                               |
+|                  |                                                  |       ),                                |
+|                  |                                                  |       (interface_declaration<v>         |
+|                  |                                                  |         (interface_signal_declaration   |
+|                  |                                                  |           (identifier_list              |
+|                  |                                                  |             (identifier                 |
+|                  |                                                  |               PB2                       |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |           (keyword                      |
+|                  |                                                  |             INOUT                       |
+|                  |                                                  |           )                             |
+|                  |                                                  |           (subtype_indication           |
+|                  |                                                  |             (type_mark<v>               |
+|                  |                                                  |               (name<v>                  |
+|                  |                                                  |                 (identifier             |
+|                  |                                                  |                   BIT                   |
+|                  |                                                  |                 )                       |
+|                  |                                                  |               )                         |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |         )                               |
+|                  |                                                  |       )                                 |
+|                  |                                                  |     )                                   |
+|                  |                                                  |   )                                     |
+|                  |                                                  |   (port_map_aspect                      |
+|                  |                                                  |     (association_list                   |
+|                  |                                                  |       (association_element              |
+|                  |                                                  |         (formal_part                    |
+|                  |                                                  |           (formal_designator<v>         |
+|                  |                                                  |             (name<v>                    |
+|                  |                                                  |               (identifier               |
+|                  |                                                  |                 PB1                     |
+|                  |                                                  |               )                         |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |         )                               |
+|                  |                                                  |         (actual_part<v>                 |
+|                  |                                                  |           (actual_designator<v>         |
+|                  |                                                  |             (name<v>                    |
+|                  |                                                  |               (identifier               |
+|                  |                                                  |                 P1                      |
+|                  |                                                  |               )                         |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |         )                               |
+|                  |                                                  |       ),                                |
+|                  |                                                  |       (association_element              |
+|                  |                                                  |         (formal_part                    |
+|                  |                                                  |           (formal_designator<v>         |
+|                  |                                                  |             (name<v>                    |
+|                  |                                                  |               (identifier               |
+|                  |                                                  |                 PB2                     |
+|                  |                                                  |               )                         |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |         )                               |
+|                  |                                                  |         (actual_part<v>                 |
+|                  |                                                  |           (actual_designator<v>         |
+|                  |                                                  |             (name<v>                    |
+|                  |                                                  |               (identifier               |
+|                  |                                                  |                 B                       |
+|                  |                                                  |               )                         |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |         )                               |
+|                  |                                                  |       )                                 |
+|                  |                                                  |     )                                   |
+|                  |                                                  |   )                                     |
+|                  |                                                  | )                                       |
+|                  |                                                  |                                         |
++------------------+--------------------------------------------------+-----------------------------------------+
+| block_header_005 | -- declaration of generic parameters             | (block_header                           |
+|                  | generic (GB1, GB2 : Time);                       |   (generic_clause                       |
+|                  | -- with binding of generic parameters            |     (interface_list                     |
+|                  | generic map (GB1 => LongTime, GB2 => ShortTime); |       (interface_declaration<v>         |
+|                  | -- declaration of ports                          |         (interface_constant_declaration |
+|                  | port (PB1: in BIT; PB2 : inout BIT );            |           (identifier_list              |
+|                  | -- binding of ports and signals                  |             (identifier                 |
+|                  | port map (PB1 => P1, PB2 => B);                  |               GB1                       |
+|                  |                                                  |             ),                          |
+|                  |                                                  |             (identifier                 |
+|                  |                                                  |               GB2                       |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |           (subtype_indication           |
+|                  |                                                  |             (type_mark<v>               |
+|                  |                                                  |               (name<v>                  |
+|                  |                                                  |                 (identifier             |
+|                  |                                                  |                   Time                  |
+|                  |                                                  |                 )                       |
+|                  |                                                  |               )                         |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |         )                               |
+|                  |                                                  |       )                                 |
+|                  |                                                  |     )                                   |
+|                  |                                                  |   )                                     |
+|                  |                                                  |   (generic_map_aspect                   |
+|                  |                                                  |     (association_list                   |
+|                  |                                                  |       (association_element              |
+|                  |                                                  |         (formal_part                    |
+|                  |                                                  |           (formal_designator<v>         |
+|                  |                                                  |             (name<v>                    |
+|                  |                                                  |               (identifier               |
+|                  |                                                  |                 GB1                     |
+|                  |                                                  |               )                         |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |         )                               |
+|                  |                                                  |         (actual_part<v>                 |
+|                  |                                                  |           (actual_designator<v>         |
+|                  |                                                  |             (name<v>                    |
+|                  |                                                  |               (identifier               |
+|                  |                                                  |                 LongTime                |
+|                  |                                                  |               )                         |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |         )                               |
+|                  |                                                  |       ),                                |
+|                  |                                                  |       (association_element              |
+|                  |                                                  |         (formal_part                    |
+|                  |                                                  |           (formal_designator<v>         |
+|                  |                                                  |             (name<v>                    |
+|                  |                                                  |               (identifier               |
+|                  |                                                  |                 GB2                     |
+|                  |                                                  |               )                         |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |         )                               |
+|                  |                                                  |         (actual_part<v>                 |
+|                  |                                                  |           (actual_designator<v>         |
+|                  |                                                  |             (name<v>                    |
+|                  |                                                  |               (identifier               |
+|                  |                                                  |                 ShortTime               |
+|                  |                                                  |               )                         |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |         )                               |
+|                  |                                                  |       )                                 |
+|                  |                                                  |     )                                   |
+|                  |                                                  |   )                                     |
+|                  |                                                  |   (port_clause                          |
+|                  |                                                  |     (interface_list                     |
+|                  |                                                  |       (interface_declaration<v>         |
+|                  |                                                  |         (interface_constant_declaration |
+|                  |                                                  |           (identifier_list              |
+|                  |                                                  |             (identifier                 |
+|                  |                                                  |               PB1                       |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |           (in)                          |
+|                  |                                                  |           (subtype_indication           |
+|                  |                                                  |             (type_mark<v>               |
+|                  |                                                  |               (name<v>                  |
+|                  |                                                  |                 (identifier             |
+|                  |                                                  |                   BIT                   |
+|                  |                                                  |                 )                       |
+|                  |                                                  |               )                         |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |         )                               |
+|                  |                                                  |       ),                                |
+|                  |                                                  |       (interface_declaration<v>         |
+|                  |                                                  |         (interface_signal_declaration   |
+|                  |                                                  |           (identifier_list              |
+|                  |                                                  |             (identifier                 |
+|                  |                                                  |               PB2                       |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |           (keyword                      |
+|                  |                                                  |             INOUT                       |
+|                  |                                                  |           )                             |
+|                  |                                                  |           (subtype_indication           |
+|                  |                                                  |             (type_mark<v>               |
+|                  |                                                  |               (name<v>                  |
+|                  |                                                  |                 (identifier             |
+|                  |                                                  |                   BIT                   |
+|                  |                                                  |                 )                       |
+|                  |                                                  |               )                         |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |         )                               |
+|                  |                                                  |       )                                 |
+|                  |                                                  |     )                                   |
+|                  |                                                  |   )                                     |
+|                  |                                                  |   (port_map_aspect                      |
+|                  |                                                  |     (association_list                   |
+|                  |                                                  |       (association_element              |
+|                  |                                                  |         (formal_part                    |
+|                  |                                                  |           (formal_designator<v>         |
+|                  |                                                  |             (name<v>                    |
+|                  |                                                  |               (identifier               |
+|                  |                                                  |                 PB1                     |
+|                  |                                                  |               )                         |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |         )                               |
+|                  |                                                  |         (actual_part<v>                 |
+|                  |                                                  |           (actual_designator<v>         |
+|                  |                                                  |             (name<v>                    |
+|                  |                                                  |               (identifier               |
+|                  |                                                  |                 P1                      |
+|                  |                                                  |               )                         |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |         )                               |
+|                  |                                                  |       ),                                |
+|                  |                                                  |       (association_element              |
+|                  |                                                  |         (formal_part                    |
+|                  |                                                  |           (formal_designator<v>         |
+|                  |                                                  |             (name<v>                    |
+|                  |                                                  |               (identifier               |
+|                  |                                                  |                 PB2                     |
+|                  |                                                  |               )                         |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |         )                               |
+|                  |                                                  |         (actual_part<v>                 |
+|                  |                                                  |           (actual_designator<v>         |
+|                  |                                                  |             (name<v>                    |
+|                  |                                                  |               (identifier               |
+|                  |                                                  |                 B                       |
+|                  |                                                  |               )                         |
+|                  |                                                  |             )                           |
+|                  |                                                  |           )                             |
+|                  |                                                  |         )                               |
+|                  |                                                  |       )                                 |
+|                  |                                                  |     )                                   |
+|                  |                                                  |   )                                     |
+|                  |                                                  | )                                       |
+|                  |                                                  |                                         |
++------------------+--------------------------------------------------+-----------------------------------------+
 
 ==============
 case_statement
@@ -10606,6 +10974,226 @@ procedure_call
 |                    |                                                                          |                                       |
 +--------------------+--------------------------------------------------------------------------+---------------------------------------+
 
+=================
+process_statement
+=================
+
++-----------------------+-----------------------------------+-----------------------------------------------------------+
+| File                  | Input                             | Expected                                                  |
++-----------------------+-----------------------------------+-----------------------------------------------------------+
+| process_statement_000 | compute_xor: process (b,c)        | (process_statement                                        |
+|                       | begin                             |   (identifier                                             |
+|                       |     a <= b xor c;                 |     compute_xor                                           |
+|                       | end process;                      |   )                                                       |
+|                       |                                   |   (sensitivity_list                                       |
+|                       |                                   |     (name<v>                                              |
+|                       |                                   |       (identifier                                         |
+|                       |                                   |         b                                                 |
+|                       |                                   |       )                                                   |
+|                       |                                   |     ),                                                    |
+|                       |                                   |     (name<v>                                              |
+|                       |                                   |       (identifier                                         |
+|                       |                                   |         c                                                 |
+|                       |                                   |       )                                                   |
+|                       |                                   |     )                                                     |
+|                       |                                   |   )                                                       |
+|                       |                                   |   (sequence_of_statements                                 |
+|                       |                                   |     (sequential_statement<v>                              |
+|                       |                                   |       (signal_assignment_statement                        |
+|                       |                                   |         (target<v>                                        |
+|                       |                                   |           (name<v>                                        |
+|                       |                                   |             (identifier                                   |
+|                       |                                   |               a                                           |
+|                       |                                   |             )                                             |
+|                       |                                   |           )                                               |
+|                       |                                   |         )                                                 |
+|                       |                                   |         (waveform<v>                                      |
+|                       |                                   |           (waveform_element                               |
+|                       |                                   |             (expression                                   |
+|                       |                                   |               (relation                                   |
+|                       |                                   |                 (shift_expression                         |
+|                       |                                   |                   (simple_expression                      |
+|                       |                                   |                     (term                                 |
+|                       |                                   |                       (primary<v>                         |
+|                       |                                   |                         (name<v>                          |
+|                       |                                   |                           (identifier                     |
+|                       |                                   |                             b                             |
+|                       |                                   |                           )                               |
+|                       |                                   |                         )                                 |
+|                       |                                   |                       )                                   |
+|                       |                                   |                     )                                     |
+|                       |                                   |                   )                                       |
+|                       |                                   |                 )                                         |
+|                       |                                   |               ),                                          |
+|                       |                                   |               (operator: XOR),                            |
+|                       |                                   |               (relation                                   |
+|                       |                                   |                 (shift_expression                         |
+|                       |                                   |                   (simple_expression                      |
+|                       |                                   |                     (term                                 |
+|                       |                                   |                       (primary<v>                         |
+|                       |                                   |                         (name<v>                          |
+|                       |                                   |                           (identifier                     |
+|                       |                                   |                             c                             |
+|                       |                                   |                           )                               |
+|                       |                                   |                         )                                 |
+|                       |                                   |                       )                                   |
+|                       |                                   |                     )                                     |
+|                       |                                   |                   )                                       |
+|                       |                                   |                 )                                         |
+|                       |                                   |               )                                           |
+|                       |                                   |             )                                             |
+|                       |                                   |           )                                               |
+|                       |                                   |         )                                                 |
+|                       |                                   |       )                                                   |
+|                       |                                   |     )                                                     |
+|                       |                                   |   )                                                       |
+|                       |                                   |   (identifier                                             |
+|                       |                                   |     compute_xor                                           |
+|                       |                                   |   )                                                       |
+|                       |                                   | )                                                         |
+|                       |                                   |                                                           |
++-----------------------+-----------------------------------+-----------------------------------------------------------+
+| process_statement_001 | count: process (x)                | (process_statement                                        |
+|                       |     variable cnt : integer := -1; |   (identifier                                             |
+|                       | begin                             |     count                                                 |
+|                       |     cnt := cnt + 1;               |   )                                                       |
+|                       | end process;                      |   (sensitivity_list                                       |
+|                       |                                   |     (name<v>                                              |
+|                       |                                   |       (identifier                                         |
+|                       |                                   |         x                                                 |
+|                       |                                   |       )                                                   |
+|                       |                                   |     )                                                     |
+|                       |                                   |   )                                                       |
+|                       |                                   |   (process_declarative_part                               |
+|                       |                                   |     (process_declarative_item<v>                          |
+|                       |                                   |       (variable_declaration                               |
+|                       |                                   |         (identifier_list                                  |
+|                       |                                   |           (identifier                                     |
+|                       |                                   |             cnt                                           |
+|                       |                                   |           )                                               |
+|                       |                                   |         )                                                 |
+|                       |                                   |         (subtype_indication                               |
+|                       |                                   |           (type_mark<v>                                   |
+|                       |                                   |             (name<v>                                      |
+|                       |                                   |               (identifier                                 |
+|                       |                                   |                 integer                                   |
+|                       |                                   |               )                                           |
+|                       |                                   |             )                                             |
+|                       |                                   |           )                                               |
+|                       |                                   |         )                                                 |
+|                       |                                   |         (expression                                       |
+|                       |                                   |           (relation                                       |
+|                       |                                   |             (shift_expression                             |
+|                       |                                   |               (simple_expression                          |
+|                       |                                   |                 sign: SIGN_NEG,                           |
+|                       |                                   |                 (term                                     |
+|                       |                                   |                   (primary<v>                             |
+|                       |                                   |                     (literal<v>                           |
+|                       |                                   |                       (numeric_literal<v>                 |
+|                       |                                   |                         (abstract_literal<v>              |
+|                       |                                   |                           (decimal_literal                |
+|                       |                                   |                             literal: 1, type: integer     |
+|                       |                                   |                           )                               |
+|                       |                                   |                         )                                 |
+|                       |                                   |                       )                                   |
+|                       |                                   |                     )                                     |
+|                       |                                   |                   )                                       |
+|                       |                                   |                 )                                         |
+|                       |                                   |               )                                           |
+|                       |                                   |             )                                             |
+|                       |                                   |           )                                               |
+|                       |                                   |         )                                                 |
+|                       |                                   |       )                                                   |
+|                       |                                   |     )                                                     |
+|                       |                                   |   )                                                       |
+|                       |                                   |   (sequence_of_statements                                 |
+|                       |                                   |     (sequential_statement<v>                              |
+|                       |                                   |       (variable_assignment_statement                      |
+|                       |                                   |         (target<v>                                        |
+|                       |                                   |           (name<v>                                        |
+|                       |                                   |             (identifier                                   |
+|                       |                                   |               cnt                                         |
+|                       |                                   |             )                                             |
+|                       |                                   |           )                                               |
+|                       |                                   |         )                                                 |
+|                       |                                   |         (expression                                       |
+|                       |                                   |           (relation                                       |
+|                       |                                   |             (shift_expression                             |
+|                       |                                   |               (simple_expression                          |
+|                       |                                   |                 (term                                     |
+|                       |                                   |                   (primary<v>                             |
+|                       |                                   |                     (name<v>                              |
+|                       |                                   |                       (identifier                         |
+|                       |                                   |                         cnt                               |
+|                       |                                   |                       )                                   |
+|                       |                                   |                     )                                     |
+|                       |                                   |                   )                                       |
+|                       |                                   |                 ),                                        |
+|                       |                                   |                 (operator: ADD),                          |
+|                       |                                   |                 (term                                     |
+|                       |                                   |                   (primary<v>                             |
+|                       |                                   |                     (literal<v>                           |
+|                       |                                   |                       (numeric_literal<v>                 |
+|                       |                                   |                         (abstract_literal<v>              |
+|                       |                                   |                           (decimal_literal                |
+|                       |                                   |                             literal: 1, type: integer     |
+|                       |                                   |                           )                               |
+|                       |                                   |                         )                                 |
+|                       |                                   |                       )                                   |
+|                       |                                   |                     )                                     |
+|                       |                                   |                   )                                       |
+|                       |                                   |                 )                                         |
+|                       |                                   |               )                                           |
+|                       |                                   |             )                                             |
+|                       |                                   |           )                                               |
+|                       |                                   |         )                                                 |
+|                       |                                   |       )                                                   |
+|                       |                                   |     )                                                     |
+|                       |                                   |   )                                                       |
+|                       |                                   |   (identifier                                             |
+|                       |                                   |     count                                                 |
+|                       |                                   |   )                                                       |
+|                       |                                   | )                                                         |
+|                       |                                   |                                                           |
++-----------------------+-----------------------------------+-----------------------------------------------------------+
+| process_statement_002 | postponed process                 | (process_statement                                        |
+|                       | begin                             |   POSTPONED                                               |
+|                       |   wait for 0 ns;                  |   (sequence_of_statements                                 |
+|                       | end process;                      |     (sequential_statement<v>                              |
+|                       |                                   |       (wait_statement                                     |
+|                       |                                   |         (timeout_clause                                   |
+|                       |                                   |           (expression                                     |
+|                       |                                   |             (relation                                     |
+|                       |                                   |               (shift_expression                           |
+|                       |                                   |                 (simple_expression                        |
+|                       |                                   |                   (term                                   |
+|                       |                                   |                     (primary<v>                           |
+|                       |                                   |                       (literal<v>                         |
+|                       |                                   |                         (numeric_literal<v>               |
+|                       |                                   |                           (physical_literal               |
+|                       |                                   |                             (abstract_literal<v>          |
+|                       |                                   |                               (decimal_literal            |
+|                       |                                   |                                 literal: 0, type: integer |
+|                       |                                   |                               )                           |
+|                       |                                   |                             ),                            |
+|                       |                                   |                             (unit_name: ns)               |
+|                       |                                   |                           )                               |
+|                       |                                   |                         )                                 |
+|                       |                                   |                       )                                   |
+|                       |                                   |                     )                                     |
+|                       |                                   |                   )                                       |
+|                       |                                   |                 )                                         |
+|                       |                                   |               )                                           |
+|                       |                                   |             )                                             |
+|                       |                                   |           )                                               |
+|                       |                                   |         )                                                 |
+|                       |                                   |       )                                                   |
+|                       |                                   |     )                                                     |
+|                       |                                   |   )                                                       |
+|                       |                                   | )                                                         |
+|                       |                                   |                                                           |
++-----------------------+-----------------------------------+-----------------------------------------------------------+
+
 ====================
 qualified_expression
 ====================
@@ -16133,4 +16721,4 @@ waveform
 +--------------+---------------------------------------+------------------------------------------------------+
 
 
-Total Tests: 434
+Total Tests: 437

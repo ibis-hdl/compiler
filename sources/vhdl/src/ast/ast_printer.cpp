@@ -2276,15 +2276,21 @@ void printer::operator()(process_statement const &node)
 
     if(node.postponed) { os << "POSTPONED\n"; }
 
-    (*this)(node.sensitivity_list);
-    os << "\n";
+    if(!node.sensitivity_list.empty()) {
+        (*this)(node.sensitivity_list);
+        os << "\n";
+    }
 
-    (*this)(node.declarative_part);
-    os << "\n";
+    if(!node.declarative_part.empty()) {
+        (*this)(node.declarative_part);
+        os << "\n";
+    }
 
-    (*this)(node.statement_part);
+    if(!node.statement_part.empty()) {
+        (*this)(node.statement_part);
+    }
 
-    if(node.postponed) { os << "\nPOSTPONED"; }
+    if(node.end_postponed) { os << "\nPOSTPONED"; }
 
     if(node.label) {
         os << "\n";
