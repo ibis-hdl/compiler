@@ -1,7 +1,9 @@
 (entity_aspect<v>
-  (name<v>
-    (identifier
-      configuration_name
+  (entity_aspect::configuration
+    (name<v>
+      (identifier
+        configuration_name
+      )
     )
   )
 )

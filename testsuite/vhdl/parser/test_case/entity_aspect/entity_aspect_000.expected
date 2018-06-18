@@ -1,7 +1,9 @@
 (entity_aspect<v>
-  (name<v>
-    (identifier
-      COUNTER
+  (entity_aspect::entity
+    (name<v>
+      (identifier
+        COUNTER
+      )
     )
   )
 )

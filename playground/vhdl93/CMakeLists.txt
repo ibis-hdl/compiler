@@ -24,22 +24,28 @@ add_executable(x3_simple_expr               EXCLUDE_FROM_ALL x3_simple_expr.cpp)
 add_executable(x3_list_chunk                EXCLUDE_FROM_ALL x3_list_chunk.cpp)
 add_executable(x3_integer_solution          EXCLUDE_FROM_ALL x3_integer_solution.cpp)
 add_executable(x3_integer_lambda_solution   EXCLUDE_FROM_ALL x3_integer_lambda_solution.cpp)
+add_executable(x3_variant_inheritance       EXCLUDE_FROM_ALL x3_variant_inheritance.cpp)
+add_executable(vhdl_based_literal           EXCLUDE_FROM_ALL vhdl_based_literal.cpp)
 
+
+## the follwoing depend on actually Spirit.X3
 add_executable(vhdl_numeric_literals        EXCLUDE_FROM_ALL vhdl_numeric_literals.cpp)
 target_include_directories(vhdl_numeric_literals PRIVATE 
-    ${EDA_BINARY_ROOT_DIR}/external/src/boost-spirit-x3/include
+    ${SPIRIT_X3_INCLUDE_DIR}
     ${Boost_INCLUDE_DIR}
 )
 
 add_executable(x3_ir1045                    EXCLUDE_FROM_ALL x3_ir1045.cpp)
-target_include_directories(x3_ir1045 PRIVATE # requires > 1.64
-    ${EDA_BINARY_ROOT_DIR}/external/src/boost-spirit-x3/include
+target_include_directories(x3_ir1045 PRIVATE 
+    ${SPIRIT_X3_INCLUDE_DIR}
+    ${Boost_INCLUDE_DIR}
 )
 
-add_executable(x3_variant_inheritance       EXCLUDE_FROM_ALL x3_variant_inheritance.cpp)
-
-
-add_executable(vhdl_based_literal           EXCLUDE_FROM_ALL vhdl_based_literal.cpp)
+add_executable(x3_configuration_specification  EXCLUDE_FROM_ALL x3_configuration_specification.cpp)
+target_include_directories(x3_configuration_specification PRIVATE 
+    ${SPIRIT_X3_INCLUDE_DIR}
+    ${Boost_INCLUDE_DIR}
+)
 
 
 find_package(Boost REQUIRED COMPONENTS filesystem system)

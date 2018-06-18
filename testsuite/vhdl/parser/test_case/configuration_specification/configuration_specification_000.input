@@ -1,6 +1,7 @@
 for 
     -- component_specification
     Instance : CoolComponent 
-    -- binding_indication
-
+    -- empty binding_indication
+	;
+	
 

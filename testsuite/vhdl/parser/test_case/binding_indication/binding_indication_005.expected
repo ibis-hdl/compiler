@@ -1,0 +1,11 @@
+(binding_indication
+  (entity_aspect<v>
+    (entity_aspect::configuration
+      (name<v>
+        (identifier
+          foo
+        )
+      )
+    )
+  )
+)

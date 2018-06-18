@@ -1,0 +1,2 @@
+-- optional entity aspect with architecture 
+USE ENTITY foo(arch)

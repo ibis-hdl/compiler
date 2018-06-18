@@ -1,71 +1,75 @@
 (binding_indication
   (entity_aspect<v>
-    (name<v>
+    (entity_aspect::entity
+      (name<v>
+        (identifier
+          Buf
+        )
+      )
       (identifier
-        Buf
+        DataFlow
       )
     )
-    (identifier
-      DataFlow
-    )
   )
-  GENERIC MAP_ASPECT
-  (association_element
-    (formal_part
-      (formal_designator<v>
-        (name<v>
-          (identifier
-            Buf_Delay
+  (generic map
+    (association_element
+      (formal_part
+        (formal_designator<v>
+          (name<v>
+            (identifier
+              Buf_Delay
+            )
           )
         )
       )
-    )
-    (actual_part<v>
-      (actual_designator<v>
-        (name<v>
-          (identifier
-            Comp_Buf_Delay
+      (actual_part<v>
+        (actual_designator<v>
+          (name<v>
+            (identifier
+              Comp_Buf_Delay
+            )
           )
         )
       )
     )
   )
-  PORT MAP_ASPECT
-  (association_element
-    (formal_part
-      (formal_designator<v>
-        (name<v>
-          (identifier
-            Input_pin
+  (port map
+    (association_element
+      (formal_part
+        (formal_designator<v>
+          (name<v>
+            (identifier
+              Input_pin
+            )
           )
         )
       )
-    )
-    (actual_part<v>
-      (actual_designator<v>
-        (name<v>
-          (identifier
-            Comp_I
+      (actual_part<v>
+        (actual_designator<v>
+          (name<v>
+            (identifier
+              Comp_I
+            )
           )
         )
       )
-    )
-  ),
-  (association_element
-    (formal_part
-      (formal_designator<v>
-        (name<v>
-          (identifier
-            Output_pin
+    ),
+    (association_element
+      (formal_part
+        (formal_designator<v>
+          (name<v>
+            (identifier
+              Output_pin
+            )
           )
         )
       )
-    )
-    (actual_part<v>
-      (actual_designator<v>
-        (name<v>
-          (identifier
-            Comp_O
+      (actual_part<v>
+        (actual_designator<v>
+          (name<v>
+            (identifier
+              Comp_O
+            )
           )
         )
       )

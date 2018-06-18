@@ -1078,8 +1078,8 @@ auto const basic_identifier_def =
 //     [ port_map_aspect ]
 auto const binding_indication_def =
        -( USE >> entity_aspect )
-    >> generic_map_aspect   // optional by association_list vector<>
-    >> port_map_aspect      // optional by association_list vector<>
+    >> -generic_map_aspect
+    >> -port_map_aspect
     ;
 
 
@@ -4263,7 +4263,7 @@ struct configuration_declaration_class : annotate_on_success {};
 struct configuration_declarative_item_class : annotate_on_success {};
 struct configuration_declarative_part_class : annotate_on_success {};
 struct configuration_item_class : annotate_on_success {};
-struct configuration_specification_class : annotate_on_success, handle_on_error {};
+struct configuration_specification_class : annotate_on_success {};
 struct constant_declaration_class : annotate_on_success {};
 struct constrained_array_definition_class : annotate_on_success {};
 struct constraint_class : annotate_on_success {};

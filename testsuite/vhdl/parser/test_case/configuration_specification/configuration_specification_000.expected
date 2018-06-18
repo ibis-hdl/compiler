@@ -1,0 +1,17 @@
+(configuration_specification
+  (component_specification
+    (instantiation_list<v>
+      (identifier
+        Instance
+      )
+    )
+    (name<v>
+      (identifier
+        CoolComponent
+      )
+    )
+  )
+  (binding_indication
+    
+  )
+)

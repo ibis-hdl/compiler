@@ -1,0 +1,14 @@
+(binding_indication
+  (entity_aspect<v>
+    (entity_aspect::entity
+      (name<v>
+        (identifier
+          foo
+        )
+      )
+      (identifier
+        arch
+      )
+    )
+  )
+)

@@ -402,15 +402,21 @@ void printer::operator()(binding_indication const &node)
 
     bool generic_map_association = false;
     if(node.generic_map_aspect.association_list.size() > 0) {
-        generic_map_association = true;
+        static char const symbol[]{ "generic map" };
+
         if(node.entity_aspect) { os << "\n"; }
-        os << "GENERIC MAP_ASPECT\n";
+        symbol_scope<ast::association_list> _(*this, symbol);
+
         print_assoc(node.generic_map_aspect.association_list);
+        generic_map_association = true;
     }
 
     if(node.port_map_aspect.association_list.size() > 0) {
+        static char const symbol[]{ "port map" };
+
         if(node.entity_aspect || generic_map_association) { os << "\n"; }
-        os << "PORT MAP_ASPECT\n";
+        symbol_scope<ast::association_list> _(*this, symbol);
+
         print_assoc(node.port_map_aspect.association_list);
     }
 }
@@ -1129,6 +1135,8 @@ void printer::operator()(entity_aspect const &node)
     util::visit_in_place(
         node,
         [this](ast::entity_aspect_entity const& entity) {
+            static char const symbol[]{ "entity_aspect::entity" };
+            symbol_scope<entity_aspect_entity> _(*this, symbol);
             (*this)(entity.name);
             if(entity.architecture_identifier) {
                 os << "\n";
@@ -1136,6 +1144,8 @@ void printer::operator()(entity_aspect const &node)
             }
         },
         [this](ast::entity_aspect_configuration const& configuration) {
+            static char const symbol[]{ "entity_aspect::configuration" };
+            symbol_scope<entity_aspect_configuration> _(*this, symbol);
             (*this)(configuration.name);
         },
         [this](ast::keyword_token token) {

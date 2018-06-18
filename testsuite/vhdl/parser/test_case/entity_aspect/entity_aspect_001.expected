@@ -1,10 +1,12 @@
 (entity_aspect<v>
-  (name<v>
-    (identifier
-      entity_name
+  (entity_aspect::entity
+    (name<v>
+      (identifier
+        entity_name
+      )
     )
-  )
-  (identifier
-    architecture_identifier
+    (identifier
+      architecture_identifier
+    )
   )
 )
