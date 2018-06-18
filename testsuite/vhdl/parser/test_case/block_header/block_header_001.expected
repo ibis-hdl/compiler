@@ -1,0 +1,27 @@
+(block_header
+  (generic_clause
+    (interface_list
+      (interface_declaration<v>
+        (interface_constant_declaration
+          (identifier_list
+            (identifier
+              GB1
+            ),
+            (identifier
+              GB2
+            )
+          )
+          (subtype_indication
+            (type_mark<v>
+              (name<v>
+                (identifier
+                  Time
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+)

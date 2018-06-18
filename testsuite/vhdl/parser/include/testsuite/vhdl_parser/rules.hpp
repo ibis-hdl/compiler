@@ -29,6 +29,7 @@ parser::attribute_specification_type const& attribute_specification();
 parser::based_literal_type const& based_literal();
 parser::binding_indication_type const& binding_indication();
 parser::bit_string_literal_type const& bit_string_literal();
+parser::block_header_type const& block_header();
 parser::case_statement_type const& case_statement();
 parser::character_literal_type const& character_literal();
 parser::choices_type const& choices();

@@ -27,6 +27,7 @@ BOOST_SPIRIT_INSTANTIATE(attribute_specification_type, iterator_type, context_ty
 BOOST_SPIRIT_INSTANTIATE(based_literal_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(binding_indication_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(bit_string_literal_type, iterator_type, context_type);
+BOOST_SPIRIT_INSTANTIATE(block_header_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(case_statement_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(character_literal_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(choices_type, iterator_type, context_type);
@@ -165,6 +166,10 @@ parser::binding_indication_type const& binding_indication() {
 
 parser::bit_string_literal_type const& bit_string_literal() {
     return eda::vhdl::parser::bit_string_literal;
+}
+
+parser::block_header_type const& block_header() {
+    return eda::vhdl::parser::block_header;
 }
 
 parser::case_statement_type const& case_statement() {

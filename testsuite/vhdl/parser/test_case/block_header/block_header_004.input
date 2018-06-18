@@ -1,0 +1,5 @@
+-- declaration of ports
+port (PB1: in BIT; PB2 : inout BIT );
+-- binding of ports and signals
+port map (PB1 => P1, PB2 => B);
+

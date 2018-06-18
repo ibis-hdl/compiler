@@ -1,0 +1,9 @@
+-- declaration of generic parameters
+generic (GB1, GB2 : Time);
+-- with binding of generic parameters
+generic map (GB1 => LongTime, GB2 => ShortTime);
+-- declaration of ports
+port (PB1: in BIT; PB2 : inout BIT );
+-- binding of ports and signals
+port map (PB1 => P1, PB2 => B);
+

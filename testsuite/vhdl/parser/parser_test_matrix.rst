@@ -1984,6 +1984,54 @@ bit_string_literal
 |                        |                   |                                      |
 +------------------------+-------------------+--------------------------------------+
 
+============
+block_header
+============
+
++------------------+--------------------------------------------------+----------+
+| File             | Input                                            | Expected |
++------------------+--------------------------------------------------+----------+
+| block_header_000 | -- BNF allows empty block header                 |          |
+|                  |                                                  |          |
+|                  |                                                  |          |
++------------------+--------------------------------------------------+----------+
+| block_header_001 | -- declaration of generic parameters             |          |
+|                  | generic (GB1, GB2 : Time);                       |          |
+|                  |                                                  |          |
+|                  |                                                  |          |
++------------------+--------------------------------------------------+----------+
+| block_header_002 | -- declaration of generic parameters             |          |
+|                  | generic (GB1, GB2 : Time);                       |          |
+|                  | -- with binding of generic parameters            |          |
+|                  | generic map (GB1 => LongTime, GB2 => ShortTime); |          |
+|                  |                                                  |          |
+|                  |                                                  |          |
++------------------+--------------------------------------------------+----------+
+| block_header_003 | -- declaration of ports                          |          |
+|                  | port (PB1: in BIT; PB2 : inout BIT );            |          |
+|                  |                                                  |          |
+|                  |                                                  |          |
+|                  |                                                  |          |
++------------------+--------------------------------------------------+----------+
+| block_header_004 | -- declaration of ports                          |          |
+|                  | port (PB1: in BIT; PB2 : inout BIT );            |          |
+|                  | -- binding of ports and signals                  |          |
+|                  | port map (PB1 => P1, PB2 => B);                  |          |
+|                  |                                                  |          |
+|                  |                                                  |          |
++------------------+--------------------------------------------------+----------+
+| block_header_005 | -- declaration of generic parameters             |          |
+|                  | generic (GB1, GB2 : Time);                       |          |
+|                  | -- with binding of generic parameters            |          |
+|                  | generic map (GB1 => LongTime, GB2 => ShortTime); |          |
+|                  | -- declaration of ports                          |          |
+|                  | port (PB1: in BIT; PB2 : inout BIT );            |          |
+|                  | -- binding of ports and signals                  |          |
+|                  | port map (PB1 => P1, PB2 => B);                  |          |
+|                  |                                                  |          |
+|                  |                                                  |          |
++------------------+--------------------------------------------------+----------+
+
 ==============
 case_statement
 ==============
@@ -4499,9 +4547,6 @@ entity_aspect
 |                   |                                                |     )                           |
 |                   |                                                |   )                             |
 |                   |                                                | )                               |
-|                   |                                                |                                 |
-+-------------------+------------------------------------------------+---------------------------------+
-| entity_aspect_002 | entity work.NAND2( architecture_identifier )   |                                 |
 |                   |                                                |                                 |
 +-------------------+------------------------------------------------+---------------------------------+
 | entity_aspect_003 | configuration configuration_name               | (entity_aspect<v>               |
@@ -16088,4 +16133,4 @@ waveform
 +--------------+---------------------------------------+------------------------------------------------------+
 
 
-Total Tests: 429
+Total Tests: 434

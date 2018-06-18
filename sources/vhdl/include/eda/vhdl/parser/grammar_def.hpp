@@ -1148,7 +1148,7 @@ auto const block_configuration_def = ( // operator precedence
     ;
 #endif
 
-#if 0
+
 // block_declarative_item ::=                                     [LRM93 §1.2.1]
 //       subprogram_declaration
 //     | subprogram_body
@@ -1186,40 +1186,40 @@ auto const block_declarative_item_def =
     | group_template_declaration
     | group_declaration
     ;
-#endif
 
-#if 0
+
+
 // block_declarative_part ::=                                       [LRM93 §9.1]
 //     { block_declarative_item }
 auto const block_declarative_part_def =
     *block_declarative_item
     ;
-#endif
 
-#if 0
+
+
 // block_header ::=                                                 [LRM93 §9.1]
 //     [ generic_clause
 //     [ generic_map_aspect ; ] ]
 //     [ port_clause
 //     [ port_map_aspect ; ] ]
-namespace block_header_detail {
+namespace detail {
 
-auto const generic_part = x3::rule<struct _, ast::block_header::generic_part_chunk> { "block_header.generic_part" } =
+auto const block_header_generic = x3::rule<struct _, ast::block_header::generic_part_chunk> { "block_header.generic" } =
        generic_clause
-    >> -(generic_map_aspect > ';' )
+    >> -( generic_map_aspect > ';' )
     ;
 
-auto const port_part = x3::rule<struct _, ast::block_header::port_part_chunk> { "block_header.port_part" } =
+auto const block_header_port = x3::rule<struct _, ast::block_header::port_part_chunk> { "block_header.port" } =
        port_clause
-    >> -( port_map_aspect > ';')
+    >> -( port_map_aspect > ';' )
     ;
 } // end detail
 
-auto const block_header_def = // Fixme: Order matters really? Using X3's operator|| ??
-       -block_header_detail::generic_part
-    >> -block_header_detail::port_part
+auto const block_header_def =
+       -detail::block_header_generic
+    >> -detail::block_header_port
     ;
-#endif
+
 
 #if 0
 // block_specification ::=                                        [LRM93 §1.3.1]
@@ -3958,9 +3958,9 @@ BOOST_SPIRIT_DEFINE(  // -- B --
     , binding_indication
     , bit_string_literal
     //, block_configuration
-    //, block_declarative_item
-    //, block_declarative_part
-    //, block_header
+    , block_declarative_item
+    , block_declarative_part
+    , block_header
     //, block_specification
     //, block_statement
     //, block_statement_part

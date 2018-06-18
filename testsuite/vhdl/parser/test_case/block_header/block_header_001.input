@@ -1,0 +1,3 @@
+-- declaration of generic parameters
+generic (GB1, GB2 : Time);
+

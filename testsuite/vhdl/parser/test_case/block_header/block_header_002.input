@@ -1,0 +1,5 @@
+-- declaration of generic parameters
+generic (GB1, GB2 : Time);
+-- with binding of generic parameters
+generic map (GB1 => LongTime, GB2 => ShortTime);
+
