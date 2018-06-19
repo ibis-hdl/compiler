@@ -4461,6 +4461,182 @@ conditional_signal_assignment
 |                                   |                                              |                                                       |
 +-----------------------------------+----------------------------------------------+-------------------------------------------------------+
 
+=========================
+configuration_declaration
+=========================
+
++-------------------------------+-------------------------------------------------------------------+---------------------------------------+
+| File                          | Input                                                             | Expected                              |
++-------------------------------+-------------------------------------------------------------------+---------------------------------------+
+| configuration_declaration_000 | configuration MUX2_specified_CFG of MUX2 is                       | (configuration_declaration            |
+|                               |     for STRUCTURE                                                 |   (identifier                         |
+|                               |         for G2 : AOI                                              |     MUX2_specified_CFG                |
+|                               |            -- FixMe: work.AOI                                     |   )                                   |
+|                               |            use entity work_AOI(v1);                               |   (name<v>                            |
+|                               |            -- architecture v1 specified for AOI design entity     |     (identifier                       |
+|                               |         end for;                                                  |       MUX2                            |
+|                               |     end for;                                                      |     )                                 |
+|                               | end MUX2_specified_CFG;                                           |   )                                   |
+|                               |                                                                   |   (block_configuration                |
+|                               |                                                                   |     (block_specification<v>           |
+|                               |                                                                   |       (identifier                     |
+|                               |                                                                   |         STRUCTURE                     |
+|                               |                                                                   |       )                               |
+|                               |                                                                   |     )                                 |
+|                               |                                                                   |     (configuration_item<v>            |
+|                               |                                                                   |       (component_configuration        |
+|                               |                                                                   |         (component_specification      |
+|                               |                                                                   |           (instantiation_list<v>      |
+|                               |                                                                   |             (identifier               |
+|                               |                                                                   |               G2                      |
+|                               |                                                                   |             )                         |
+|                               |                                                                   |           )                           |
+|                               |                                                                   |           (name<v>                    |
+|                               |                                                                   |             (identifier               |
+|                               |                                                                   |               AOI                     |
+|                               |                                                                   |             )                         |
+|                               |                                                                   |           )                           |
+|                               |                                                                   |         )                             |
+|                               |                                                                   |         (binding_indication           |
+|                               |                                                                   |           (entity_aspect<v>           |
+|                               |                                                                   |             (entity_aspect::entity    |
+|                               |                                                                   |               (name<v>                |
+|                               |                                                                   |                 (identifier           |
+|                               |                                                                   |                   work_AOI            |
+|                               |                                                                   |                 )                     |
+|                               |                                                                   |               )                       |
+|                               |                                                                   |               (identifier             |
+|                               |                                                                   |                 v1                    |
+|                               |                                                                   |               )                       |
+|                               |                                                                   |             )                         |
+|                               |                                                                   |           )                           |
+|                               |                                                                   |         )                             |
+|                               |                                                                   |       )                               |
+|                               |                                                                   |     )                                 |
+|                               |                                                                   |   )                                   |
+|                               |                                                                   |   (identifier                         |
+|                               |                                                                   |     MUX2_specified_CFG                |
+|                               |                                                                   |   )                                   |
+|                               |                                                                   | )                                     |
+|                               |                                                                   |                                       |
++-------------------------------+-------------------------------------------------------------------+---------------------------------------+
+| configuration_declaration_001 | configuration CONFIG_TINV of TEST_INV is                          | (configuration_declaration            |
+|                               |    for STRUCT_T -- indicates architecture body of TEST_INV        |   (identifier                         |
+|                               |        -- indicates design entity for LH instantiation statement: |     CONFIG_TINV                       |
+|                               |        for LH : INV_COMP                                          |   )                                   |
+|                               |            -- FixMe: WORK.INVERTER                                |   (name<v>                            |
+|                               |            use entity WORK_INVERTER (STRUCT_I)                    |     (identifier                       |
+|                               |            -- indicates generic and port aspects:                 |       TEST_INV                        |
+|                               |            generic map (PropTime => TimeH)                        |     )                                 |
+|                               |            port map (IN1 => IN_A, OUT1 => OUT_A);                 |   )                                   |
+|                               |        end for;                                                   |   (block_configuration                |
+|                               |    end for ;                                                      |     (block_specification<v>           |
+|                               | end CONFIG_TINV;                                                  |       (identifier                     |
+|                               |                                                                   |         STRUCT_T                      |
+|                               |                                                                   |       )                               |
+|                               |                                                                   |     )                                 |
+|                               |                                                                   |     (configuration_item<v>            |
+|                               |                                                                   |       (component_configuration        |
+|                               |                                                                   |         (component_specification      |
+|                               |                                                                   |           (instantiation_list<v>      |
+|                               |                                                                   |             (identifier               |
+|                               |                                                                   |               LH                      |
+|                               |                                                                   |             )                         |
+|                               |                                                                   |           )                           |
+|                               |                                                                   |           (name<v>                    |
+|                               |                                                                   |             (identifier               |
+|                               |                                                                   |               INV_COMP                |
+|                               |                                                                   |             )                         |
+|                               |                                                                   |           )                           |
+|                               |                                                                   |         )                             |
+|                               |                                                                   |         (binding_indication           |
+|                               |                                                                   |           (entity_aspect<v>           |
+|                               |                                                                   |             (entity_aspect::entity    |
+|                               |                                                                   |               (name<v>                |
+|                               |                                                                   |                 (identifier           |
+|                               |                                                                   |                   WORK_INVERTER       |
+|                               |                                                                   |                 )                     |
+|                               |                                                                   |               )                       |
+|                               |                                                                   |               (identifier             |
+|                               |                                                                   |                 STRUCT_I              |
+|                               |                                                                   |               )                       |
+|                               |                                                                   |             )                         |
+|                               |                                                                   |           )                           |
+|                               |                                                                   |           (generic map                |
+|                               |                                                                   |             (association_element      |
+|                               |                                                                   |               (formal_part            |
+|                               |                                                                   |                 (formal_designator<v> |
+|                               |                                                                   |                   (name<v>            |
+|                               |                                                                   |                     (identifier       |
+|                               |                                                                   |                       PropTime        |
+|                               |                                                                   |                     )                 |
+|                               |                                                                   |                   )                   |
+|                               |                                                                   |                 )                     |
+|                               |                                                                   |               )                       |
+|                               |                                                                   |               (actual_part<v>         |
+|                               |                                                                   |                 (actual_designator<v> |
+|                               |                                                                   |                   (name<v>            |
+|                               |                                                                   |                     (identifier       |
+|                               |                                                                   |                       TimeH           |
+|                               |                                                                   |                     )                 |
+|                               |                                                                   |                   )                   |
+|                               |                                                                   |                 )                     |
+|                               |                                                                   |               )                       |
+|                               |                                                                   |             )                         |
+|                               |                                                                   |           )                           |
+|                               |                                                                   |           (port map                   |
+|                               |                                                                   |             (association_element      |
+|                               |                                                                   |               (formal_part            |
+|                               |                                                                   |                 (formal_designator<v> |
+|                               |                                                                   |                   (name<v>            |
+|                               |                                                                   |                     (identifier       |
+|                               |                                                                   |                       IN1             |
+|                               |                                                                   |                     )                 |
+|                               |                                                                   |                   )                   |
+|                               |                                                                   |                 )                     |
+|                               |                                                                   |               )                       |
+|                               |                                                                   |               (actual_part<v>         |
+|                               |                                                                   |                 (actual_designator<v> |
+|                               |                                                                   |                   (name<v>            |
+|                               |                                                                   |                     (identifier       |
+|                               |                                                                   |                       IN_A            |
+|                               |                                                                   |                     )                 |
+|                               |                                                                   |                   )                   |
+|                               |                                                                   |                 )                     |
+|                               |                                                                   |               )                       |
+|                               |                                                                   |             ),                        |
+|                               |                                                                   |             (association_element      |
+|                               |                                                                   |               (formal_part            |
+|                               |                                                                   |                 (formal_designator<v> |
+|                               |                                                                   |                   (name<v>            |
+|                               |                                                                   |                     (identifier       |
+|                               |                                                                   |                       OUT1            |
+|                               |                                                                   |                     )                 |
+|                               |                                                                   |                   )                   |
+|                               |                                                                   |                 )                     |
+|                               |                                                                   |               )                       |
+|                               |                                                                   |               (actual_part<v>         |
+|                               |                                                                   |                 (actual_designator<v> |
+|                               |                                                                   |                   (name<v>            |
+|                               |                                                                   |                     (identifier       |
+|                               |                                                                   |                       OUT_A           |
+|                               |                                                                   |                     )                 |
+|                               |                                                                   |                   )                   |
+|                               |                                                                   |                 )                     |
+|                               |                                                                   |               )                       |
+|                               |                                                                   |             )                         |
+|                               |                                                                   |           )                           |
+|                               |                                                                   |         )                             |
+|                               |                                                                   |       )                               |
+|                               |                                                                   |     )                                 |
+|                               |                                                                   |   )                                   |
+|                               |                                                                   |   (identifier                         |
+|                               |                                                                   |     CONFIG_TINV                       |
+|                               |                                                                   |   )                                   |
+|                               |                                                                   | )                                     |
+|                               |                                                                   |                                       |
++-------------------------------+-------------------------------------------------------------------+---------------------------------------+
+
 ===========================
 configuration_specification
 ===========================
@@ -5604,16 +5780,343 @@ entity_aspect
 entity_declaration
 ==================
 
-+------------------------+-----------------------+----------+
-| File                   | Input                 | Expected |
-+------------------------+-----------------------+----------+
-| entity_declaration_000 | entity TestBench is   |          |
-|                        | end entity TestBench; |          |
-|                        |                       |          |
-|                        |                       |          |
-+------------------------+-----------------------+----------+
-| entity_declaration_001 |                       |          |
-+------------------------+-----------------------+----------+
++------------------------+--------------------------------------------------------------+---------------------------------------------------------------+
+| File                   | Input                                                        | Expected                                                      |
++------------------------+--------------------------------------------------------------+---------------------------------------------------------------+
+| entity_declaration_000 | entity TestBench is                                          | (entity_declaration                                           |
+|                        | end entity TestBench;                                        |   (identifier                                                 |
+|                        |                                                              |     TestBench                                                 |
+|                        |                                                              |   )                                                           |
+|                        |                                                              |   (identifier                                                 |
+|                        |                                                              |     TestBench                                                 |
+|                        |                                                              |   )                                                           |
+|                        |                                                              | )                                                             |
+|                        |                                                              |                                                               |
++------------------------+--------------------------------------------------------------+---------------------------------------------------------------+
+| entity_declaration_001 | entity BCD_Decoder is                                        | (entity_declaration                                           |
+|                        |     port (                                                   |   (identifier                                                 |
+|                        |        BCD    : in  Bit_Vector (2 downto 0);                 |     BCD_Decoder                                               |
+|                        |        Enable : in  Bit;                                     |   )                                                           |
+|                        |        LED    : out Std_Ulogic_Vector (3 downto 0)           |   (entity_header                                              |
+|                        |     );                                                       |     (port_clause                                              |
+|                        |                                                              |       (interface_list                                         |
+|                        |     constant ZERO : Std_Ulogic_Vector(3 downto 0) := "0000"; |         (interface_declaration<v>                             |
+|                        | begin                                                        |           (interface_constant_declaration                     |
+|                        |     assert (BCD /= "111") report "BCD = 7 " severity note;   |             (identifier_list                                  |
+|                        | end entity BCD_Decoder;                                      |               (identifier                                     |
+|                        |                                                              |                 BCD                                           |
+|                        |                                                              |               )                                               |
+|                        |                                                              |             )                                                 |
+|                        |                                                              |             (in)                                              |
+|                        |                                                              |             (subtype_indication                               |
+|                        |                                                              |               (type_mark<v>                                   |
+|                        |                                                              |                 (name<v>                                      |
+|                        |                                                              |                   (identifier                                 |
+|                        |                                                              |                     Bit_Vector                                |
+|                        |                                                              |                   )                                           |
+|                        |                                                              |                 )                                             |
+|                        |                                                              |               )                                               |
+|                        |                                                              |               (constraint<v>                                  |
+|                        |                                                              |                 (index_constraint                             |
+|                        |                                                              |                   (discrete_range<v>                          |
+|                        |                                                              |                     (range<v>                                 |
+|                        |                                                              |                       (simple_expression                      |
+|                        |                                                              |                         (term                                 |
+|                        |                                                              |                           (primary<v>                         |
+|                        |                                                              |                             (literal<v>                       |
+|                        |                                                              |                               (numeric_literal<v>             |
+|                        |                                                              |                                 (abstract_literal<v>          |
+|                        |                                                              |                                   (decimal_literal            |
+|                        |                                                              |                                     literal: 2, type: integer |
+|                        |                                                              |                                   )                           |
+|                        |                                                              |                                 )                             |
+|                        |                                                              |                               )                               |
+|                        |                                                              |                             )                                 |
+|                        |                                                              |                           )                                   |
+|                        |                                                              |                         )                                     |
+|                        |                                                              |                       )                                       |
+|                        |                                                              |                       (keyword                                |
+|                        |                                                              |                         DOWNTO                                |
+|                        |                                                              |                       )                                       |
+|                        |                                                              |                       (simple_expression                      |
+|                        |                                                              |                         (term                                 |
+|                        |                                                              |                           (primary<v>                         |
+|                        |                                                              |                             (literal<v>                       |
+|                        |                                                              |                               (numeric_literal<v>             |
+|                        |                                                              |                                 (abstract_literal<v>          |
+|                        |                                                              |                                   (decimal_literal            |
+|                        |                                                              |                                     literal: 0, type: integer |
+|                        |                                                              |                                   )                           |
+|                        |                                                              |                                 )                             |
+|                        |                                                              |                               )                               |
+|                        |                                                              |                             )                                 |
+|                        |                                                              |                           )                                   |
+|                        |                                                              |                         )                                     |
+|                        |                                                              |                       )                                       |
+|                        |                                                              |                     )                                         |
+|                        |                                                              |                   )                                           |
+|                        |                                                              |                 )                                             |
+|                        |                                                              |               )                                               |
+|                        |                                                              |             )                                                 |
+|                        |                                                              |           )                                                   |
+|                        |                                                              |         ),                                                    |
+|                        |                                                              |         (interface_declaration<v>                             |
+|                        |                                                              |           (interface_constant_declaration                     |
+|                        |                                                              |             (identifier_list                                  |
+|                        |                                                              |               (identifier                                     |
+|                        |                                                              |                 Enable                                        |
+|                        |                                                              |               )                                               |
+|                        |                                                              |             )                                                 |
+|                        |                                                              |             (in)                                              |
+|                        |                                                              |             (subtype_indication                               |
+|                        |                                                              |               (type_mark<v>                                   |
+|                        |                                                              |                 (name<v>                                      |
+|                        |                                                              |                   (identifier                                 |
+|                        |                                                              |                     Bit                                       |
+|                        |                                                              |                   )                                           |
+|                        |                                                              |                 )                                             |
+|                        |                                                              |               )                                               |
+|                        |                                                              |             )                                                 |
+|                        |                                                              |           )                                                   |
+|                        |                                                              |         ),                                                    |
+|                        |                                                              |         (interface_declaration<v>                             |
+|                        |                                                              |           (interface_signal_declaration                       |
+|                        |                                                              |             (identifier_list                                  |
+|                        |                                                              |               (identifier                                     |
+|                        |                                                              |                 LED                                           |
+|                        |                                                              |               )                                               |
+|                        |                                                              |             )                                                 |
+|                        |                                                              |             (keyword                                          |
+|                        |                                                              |               OUT                                             |
+|                        |                                                              |             )                                                 |
+|                        |                                                              |             (subtype_indication                               |
+|                        |                                                              |               (type_mark<v>                                   |
+|                        |                                                              |                 (name<v>                                      |
+|                        |                                                              |                   (identifier                                 |
+|                        |                                                              |                     Std_Ulogic_Vector                         |
+|                        |                                                              |                   )                                           |
+|                        |                                                              |                 )                                             |
+|                        |                                                              |               )                                               |
+|                        |                                                              |               (constraint<v>                                  |
+|                        |                                                              |                 (index_constraint                             |
+|                        |                                                              |                   (discrete_range<v>                          |
+|                        |                                                              |                     (range<v>                                 |
+|                        |                                                              |                       (simple_expression                      |
+|                        |                                                              |                         (term                                 |
+|                        |                                                              |                           (primary<v>                         |
+|                        |                                                              |                             (literal<v>                       |
+|                        |                                                              |                               (numeric_literal<v>             |
+|                        |                                                              |                                 (abstract_literal<v>          |
+|                        |                                                              |                                   (decimal_literal            |
+|                        |                                                              |                                     literal: 3, type: integer |
+|                        |                                                              |                                   )                           |
+|                        |                                                              |                                 )                             |
+|                        |                                                              |                               )                               |
+|                        |                                                              |                             )                                 |
+|                        |                                                              |                           )                                   |
+|                        |                                                              |                         )                                     |
+|                        |                                                              |                       )                                       |
+|                        |                                                              |                       (keyword                                |
+|                        |                                                              |                         DOWNTO                                |
+|                        |                                                              |                       )                                       |
+|                        |                                                              |                       (simple_expression                      |
+|                        |                                                              |                         (term                                 |
+|                        |                                                              |                           (primary<v>                         |
+|                        |                                                              |                             (literal<v>                       |
+|                        |                                                              |                               (numeric_literal<v>             |
+|                        |                                                              |                                 (abstract_literal<v>          |
+|                        |                                                              |                                   (decimal_literal            |
+|                        |                                                              |                                     literal: 0, type: integer |
+|                        |                                                              |                                   )                           |
+|                        |                                                              |                                 )                             |
+|                        |                                                              |                               )                               |
+|                        |                                                              |                             )                                 |
+|                        |                                                              |                           )                                   |
+|                        |                                                              |                         )                                     |
+|                        |                                                              |                       )                                       |
+|                        |                                                              |                     )                                         |
+|                        |                                                              |                   )                                           |
+|                        |                                                              |                 )                                             |
+|                        |                                                              |               )                                               |
+|                        |                                                              |             )                                                 |
+|                        |                                                              |           )                                                   |
+|                        |                                                              |         )                                                     |
+|                        |                                                              |       )                                                       |
+|                        |                                                              |     )                                                         |
+|                        |                                                              |   )                                                           |
+|                        |                                                              |   (entity_declarative_part                                    |
+|                        |                                                              |     (entity_declarative_item<v>                               |
+|                        |                                                              |       (constant_declaration                                   |
+|                        |                                                              |         (identifier_list                                      |
+|                        |                                                              |           (identifier                                         |
+|                        |                                                              |             ZERO                                              |
+|                        |                                                              |           )                                                   |
+|                        |                                                              |         )                                                     |
+|                        |                                                              |         (subtype_indication                                   |
+|                        |                                                              |           (type_mark<v>                                       |
+|                        |                                                              |             (name<v>                                          |
+|                        |                                                              |               (identifier                                     |
+|                        |                                                              |                 Std_Ulogic_Vector                             |
+|                        |                                                              |               )                                               |
+|                        |                                                              |             )                                                 |
+|                        |                                                              |           )                                                   |
+|                        |                                                              |           (constraint<v>                                      |
+|                        |                                                              |             (index_constraint                                 |
+|                        |                                                              |               (discrete_range<v>                              |
+|                        |                                                              |                 (range<v>                                     |
+|                        |                                                              |                   (simple_expression                          |
+|                        |                                                              |                     (term                                     |
+|                        |                                                              |                       (primary<v>                             |
+|                        |                                                              |                         (literal<v>                           |
+|                        |                                                              |                           (numeric_literal<v>                 |
+|                        |                                                              |                             (abstract_literal<v>              |
+|                        |                                                              |                               (decimal_literal                |
+|                        |                                                              |                                 literal: 3, type: integer     |
+|                        |                                                              |                               )                               |
+|                        |                                                              |                             )                                 |
+|                        |                                                              |                           )                                   |
+|                        |                                                              |                         )                                     |
+|                        |                                                              |                       )                                       |
+|                        |                                                              |                     )                                         |
+|                        |                                                              |                   )                                           |
+|                        |                                                              |                   (keyword                                    |
+|                        |                                                              |                     DOWNTO                                    |
+|                        |                                                              |                   )                                           |
+|                        |                                                              |                   (simple_expression                          |
+|                        |                                                              |                     (term                                     |
+|                        |                                                              |                       (primary<v>                             |
+|                        |                                                              |                         (literal<v>                           |
+|                        |                                                              |                           (numeric_literal<v>                 |
+|                        |                                                              |                             (abstract_literal<v>              |
+|                        |                                                              |                               (decimal_literal                |
+|                        |                                                              |                                 literal: 0, type: integer     |
+|                        |                                                              |                               )                               |
+|                        |                                                              |                             )                                 |
+|                        |                                                              |                           )                                   |
+|                        |                                                              |                         )                                     |
+|                        |                                                              |                       )                                       |
+|                        |                                                              |                     )                                         |
+|                        |                                                              |                   )                                           |
+|                        |                                                              |                 )                                             |
+|                        |                                                              |               )                                               |
+|                        |                                                              |             )                                                 |
+|                        |                                                              |           )                                                   |
+|                        |                                                              |         )                                                     |
+|                        |                                                              |         (expression                                           |
+|                        |                                                              |           (relation                                           |
+|                        |                                                              |             (shift_expression                                 |
+|                        |                                                              |               (simple_expression                              |
+|                        |                                                              |                 (term                                         |
+|                        |                                                              |                   (primary<v>                                 |
+|                        |                                                              |                     (literal<v>                               |
+|                        |                                                              |                       (string_literal                         |
+|                        |                                                              |                         0000                                  |
+|                        |                                                              |                       )                                       |
+|                        |                                                              |                     )                                         |
+|                        |                                                              |                   )                                           |
+|                        |                                                              |                 )                                             |
+|                        |                                                              |               )                                               |
+|                        |                                                              |             )                                                 |
+|                        |                                                              |           )                                                   |
+|                        |                                                              |         )                                                     |
+|                        |                                                              |       )                                                       |
+|                        |                                                              |     )                                                         |
+|                        |                                                              |   )                                                           |
+|                        |                                                              |   (entity_statement_part                                      |
+|                        |                                                              |     (entity_statement<v>                                      |
+|                        |                                                              |       (concurrent_assertion_statement                         |
+|                        |                                                              |         (assertion                                            |
+|                        |                                                              |           (expression                                         |
+|                        |                                                              |             (relation                                         |
+|                        |                                                              |               (shift_expression                               |
+|                        |                                                              |                 (simple_expression                            |
+|                        |                                                              |                   (term                                       |
+|                        |                                                              |                     (primary<v>                               |
+|                        |                                                              |                       (expression                             |
+|                        |                                                              |                         (relation                             |
+|                        |                                                              |                           (shift_expression                   |
+|                        |                                                              |                             (simple_expression                |
+|                        |                                                              |                               (term                           |
+|                        |                                                              |                                 (primary<v>                   |
+|                        |                                                              |                                   (name<v>                    |
+|                        |                                                              |                                     (identifier               |
+|                        |                                                              |                                       BCD                     |
+|                        |                                                              |                                     )                         |
+|                        |                                                              |                                   )                           |
+|                        |                                                              |                                 )                             |
+|                        |                                                              |                               )                               |
+|                        |                                                              |                             )                                 |
+|                        |                                                              |                           ),                                  |
+|                        |                                                              |                           (operator: NOT_EQUALS),             |
+|                        |                                                              |                           (shift_expression                   |
+|                        |                                                              |                             (simple_expression                |
+|                        |                                                              |                               (term                           |
+|                        |                                                              |                                 (primary<v>                   |
+|                        |                                                              |                                   (literal<v>                 |
+|                        |                                                              |                                     (string_literal           |
+|                        |                                                              |                                       111                     |
+|                        |                                                              |                                     )                         |
+|                        |                                                              |                                   )                           |
+|                        |                                                              |                                 )                             |
+|                        |                                                              |                               )                               |
+|                        |                                                              |                             )                                 |
+|                        |                                                              |                           )                                   |
+|                        |                                                              |                         )                                     |
+|                        |                                                              |                       )                                       |
+|                        |                                                              |                     )                                         |
+|                        |                                                              |                   )                                           |
+|                        |                                                              |                 )                                             |
+|                        |                                                              |               )                                               |
+|                        |                                                              |             )                                                 |
+|                        |                                                              |           )                                                   |
+|                        |                                                              |           (assertion.report                                   |
+|                        |                                                              |             (expression                                       |
+|                        |                                                              |               (relation                                       |
+|                        |                                                              |                 (shift_expression                             |
+|                        |                                                              |                   (simple_expression                          |
+|                        |                                                              |                     (term                                     |
+|                        |                                                              |                       (primary<v>                             |
+|                        |                                                              |                         (literal<v>                           |
+|                        |                                                              |                           (string_literal                     |
+|                        |                                                              |                             BCD = 7                           |
+|                        |                                                              |                           )                                   |
+|                        |                                                              |                         )                                     |
+|                        |                                                              |                       )                                       |
+|                        |                                                              |                     )                                         |
+|                        |                                                              |                   )                                           |
+|                        |                                                              |                 )                                             |
+|                        |                                                              |               )                                               |
+|                        |                                                              |             )                                                 |
+|                        |                                                              |           )                                                   |
+|                        |                                                              |           (assertion.severity                                 |
+|                        |                                                              |             (expression                                       |
+|                        |                                                              |               (relation                                       |
+|                        |                                                              |                 (shift_expression                             |
+|                        |                                                              |                   (simple_expression                          |
+|                        |                                                              |                     (term                                     |
+|                        |                                                              |                       (primary<v>                             |
+|                        |                                                              |                         (name<v>                              |
+|                        |                                                              |                           (identifier                         |
+|                        |                                                              |                             note                              |
+|                        |                                                              |                           )                                   |
+|                        |                                                              |                         )                                     |
+|                        |                                                              |                       )                                       |
+|                        |                                                              |                     )                                         |
+|                        |                                                              |                   )                                           |
+|                        |                                                              |                 )                                             |
+|                        |                                                              |               )                                               |
+|                        |                                                              |             )                                                 |
+|                        |                                                              |           )                                                   |
+|                        |                                                              |         )                                                     |
+|                        |                                                              |       )                                                       |
+|                        |                                                              |     )                                                         |
+|                        |                                                              |   )                                                           |
+|                        |                                                              |   (identifier                                                 |
+|                        |                                                              |     BCD_Decoder                                               |
+|                        |                                                              |   )                                                           |
+|                        |                                                              | )                                                             |
+|                        |                                                              |                                                               |
++------------------------+--------------------------------------------------------------+---------------------------------------------------------------+
 
 ===========================
 enumeration_type_definition
@@ -17400,4 +17903,4 @@ waveform
 +--------------+---------------------------------------+------------------------------------------------------+
 
 
-Total Tests: 449
+Total Tests: 451

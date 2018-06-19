@@ -876,8 +876,10 @@ void printer::operator()(configuration_declaration const &node)
     (*this)(node.entity_name);
     os << "\n";
 
-    (*this)(node.declarative_part);
-    os << "\n";
+    if(!node.declarative_part.empty()) {
+        (*this)(node.declarative_part);
+        os << "\n";
+    }
 
     (*this)(node.block_configuration);
 

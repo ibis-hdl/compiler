@@ -38,6 +38,7 @@ BOOST_SPIRIT_INSTANTIATE(component_instantiation_statement_type, iterator_type, 
 BOOST_SPIRIT_INSTANTIATE(component_specification_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(concurrent_assertion_statement_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(conditional_signal_assignment_type, iterator_type, context_type);
+BOOST_SPIRIT_INSTANTIATE(configuration_declaration_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(configuration_specification_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(constant_declaration_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(constrained_array_definition_type, iterator_type, context_type);
@@ -214,6 +215,10 @@ parser::concurrent_assertion_statement_type const& concurrent_assertion_statemen
 
 parser::conditional_signal_assignment_type const& conditional_signal_assignment() {
     return eda::vhdl::parser::conditional_signal_assignment;
+}
+
+parser::configuration_declaration_type const& configuration_declaration() {
+    return eda::vhdl::parser::configuration_declaration;
 }
 
 parser::configuration_specification_type const& configuration_specification() {

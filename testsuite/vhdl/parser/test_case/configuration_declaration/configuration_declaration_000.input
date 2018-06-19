@@ -1,0 +1,10 @@
+configuration MUX2_specified_CFG of MUX2 is
+    for STRUCTURE
+        for G2 : AOI
+           -- FixMe: work.AOI
+           use entity work_AOI(v1);
+           -- architecture v1 specified for AOI design entity
+        end for;
+    end for;
+end MUX2_specified_CFG;
+

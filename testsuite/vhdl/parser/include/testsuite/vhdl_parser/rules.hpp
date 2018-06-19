@@ -40,6 +40,7 @@ parser::component_instantiation_statement_type const& component_instantiation_st
 parser::component_specification_type const& component_specification();
 parser::concurrent_assertion_statement_type const& concurrent_assertion_statement();
 parser::conditional_signal_assignment_type const& conditional_signal_assignment();
+parser::configuration_declaration_type const& configuration_declaration();
 parser::configuration_specification_type const& configuration_specification();
 parser::constant_declaration_type const& constant_declaration();
 parser::constrained_array_definition_type const& constrained_array_definition();

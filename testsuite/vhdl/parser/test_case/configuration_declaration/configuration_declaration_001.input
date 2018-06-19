@@ -1,0 +1,13 @@
+configuration CONFIG_TINV of TEST_INV is
+   for STRUCT_T -- indicates architecture body of TEST_INV
+       -- indicates design entity for LH instantiation statement:
+       for LH : INV_COMP
+           -- FixMe: WORK.INVERTER
+           use entity WORK_INVERTER (STRUCT_I)
+           -- indicates generic and port aspects:
+           generic map (PropTime => TimeH)
+           port map (IN1 => IN_A, OUT1 => OUT_A);
+       end for;
+   end for ;
+end CONFIG_TINV;
+

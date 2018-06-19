@@ -18,8 +18,7 @@ set(TEST_COMMON_SOURCES
 
 set(PARSERTEST_SOURCES#_DEV
     ${TEST_COMMON_SOURCES}
-    parser_test/entity_declaration_test.cpp
-    
+    parser_test/configuration_declaration_test.cpp
 )
 
 set(PARSERTEST_SOURCES
@@ -47,6 +46,7 @@ set(PARSERTEST_SOURCES
     parser_test/component_specification_test.cpp
     parser_test/concurrent_assertion_statement_test.cpp
     parser_test/conditional_signal_assignment_test.cpp
+    parser_test/configuration_declaration_test.cpp
     parser_test/configuration_specification_test.cpp
     parser_test/constant_declaration_test.cpp
     parser_test/constrained_array_definition_test.cpp

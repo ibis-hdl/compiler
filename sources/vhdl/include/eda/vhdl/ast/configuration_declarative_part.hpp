@@ -12,6 +12,7 @@
 #include <eda/vhdl/ast/util/variant.hpp>
 
 #include <eda/vhdl/ast/util/nullary.hpp>
+#include <eda/vhdl/ast/use_clause.hpp>
 #include <eda/vhdl/ast/attribute_specification.hpp>
 #include <eda/vhdl/ast/group_declaration.hpp>
 #include <vector>
@@ -22,6 +23,7 @@ namespace eda { namespace vhdl { namespace ast {
 
 struct configuration_declarative_item : variant<
     ast::nullary,
+    ast::use_clause,
     ast::attribute_specification,
     ast::group_declaration
 >

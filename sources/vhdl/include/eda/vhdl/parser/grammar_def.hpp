@@ -1503,13 +1503,13 @@ auto const conditional_waveforms_def =
     ;
 
 
-#if 0
+
 // configuration_declaration ::=                                    [LRM93 §1.3]
 //     configuration identifier of entity_name is
 //         configuration_declarative_part
 //         block_configuration
 //     end [ configuration ] [ configuration_simple_name ] ;
-auto const configuration_declaration_def = // operator precedence
+auto const configuration_declaration_def = ( // operator precedence
        CONFIGURATION
     >> identifier
     >> OF
@@ -1522,7 +1522,7 @@ auto const configuration_declaration_def = // operator precedence
     )
     >  ';'
     ;
-#endif
+
 
 
 // configuration_declarative_item ::=                               [LRM93 §1.3]
@@ -3986,9 +3986,9 @@ BOOST_SPIRIT_DEFINE(  // -- C --
     , condition_clause
     , conditional_signal_assignment
     , conditional_waveforms
-    //, configuration_declaration
-    //, configuration_declarative_item
-    //, configuration_declarative_part
+    , configuration_declaration
+    , configuration_declarative_item
+    , configuration_declarative_part
     , configuration_item
     , configuration_specification
     , constant_declaration
@@ -4048,7 +4048,7 @@ BOOST_SPIRIT_DEFINE(  // -- F --
 BOOST_SPIRIT_DEFINE(  // -- G --
     //  generate_statement
     //, generation_scheme
-    generic_clause
+      generic_clause
     , generic_map_aspect
     , graphic_character
     , group_constituent
