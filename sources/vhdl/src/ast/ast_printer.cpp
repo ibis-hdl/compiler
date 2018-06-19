@@ -1182,18 +1182,22 @@ void printer::operator()(entity_declaration const &node)
     (*this)(node.identifier);
     os << "\n";
 
-    (*this)(node.header);
-    os << "\n";
+    if(node.header.formal_generic_clause || node.header.formal_port_clause) {
+        (*this)(node.header);
+        os << "\n";
+    }
 
-    (*this)(node.declarative_part);
+    if(!node.declarative_part.empty()) {
+        (*this)(node.declarative_part);
+        os << "\n";
+    }
 
     if(node.statement_part) {
-        os << "\n";
         (*this)(*node.statement_part);
+        os << "\n";
     }
 
     if(node.name) {
-        os << "\n";
         (*this)(*node.name);
     }
 }

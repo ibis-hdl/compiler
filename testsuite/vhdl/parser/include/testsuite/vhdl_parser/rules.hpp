@@ -50,6 +50,7 @@ parser::disconnection_specification_type const& disconnection_specification();
 parser::discrete_range_type const& discrete_range();
 parser::element_declaration_type const& element_declaration();
 parser::entity_aspect_type const& entity_aspect();
+parser::entity_declaration_type const& entity_declaration();
 parser::enumeration_type_definition_type const& enumeration_type_definition();
 parser::exit_statement_type const& exit_statement();
 parser::expression_type const& expression();

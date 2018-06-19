@@ -48,6 +48,7 @@ BOOST_SPIRIT_INSTANTIATE(disconnection_specification_type, iterator_type, contex
 BOOST_SPIRIT_INSTANTIATE(discrete_range_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(element_declaration_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(entity_aspect_type, iterator_type, context_type);
+BOOST_SPIRIT_INSTANTIATE(entity_declaration_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(enumeration_type_definition_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(exit_statement_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(expression_type, iterator_type, context_type);
@@ -253,6 +254,10 @@ parser::element_declaration_type const& element_declaration() {
 
 parser::entity_aspect_type const& entity_aspect() {
     return eda::vhdl::parser::entity_aspect;
+}
+
+parser::entity_declaration_type const& entity_declaration() {
+    return eda::vhdl::parser::entity_declaration;
 }
 
 parser::enumeration_type_definition_type const& enumeration_type_definition() {

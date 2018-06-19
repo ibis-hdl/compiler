@@ -1888,7 +1888,7 @@ auto const entity_class_entry_list_def =
     ;
 
 
-#if 0
+
 // entity_declaration ::=                                           [LRM93 §1.1]
 //     entity identifier is
 //         entity_header
@@ -1897,7 +1897,7 @@ auto const entity_class_entry_list_def =
 //         entity_statement_part ]
 //     end [ entity ] [ entity_simple_name ] ;
 auto const entity_declaration_def = ( // operator precedence
-    ENTITY
+       ENTITY
     >> identifier
     >> IS
     >> entity_header
@@ -1911,7 +1911,7 @@ auto const entity_declaration_def = ( // operator precedence
     )
     >  ';'
     ;
-#endif
+
 
 
 // entity_declarative_item ::=                                    [LRM93 §1.1.2]
@@ -2006,7 +2006,7 @@ auto const entity_specification_def =
 auto const entity_statement_def =
       concurrent_assertion_statement
     | concurrent_procedure_call_statement
-//    | process_statement
+    | process_statement
     ;
 
 
@@ -4015,7 +4015,7 @@ BOOST_SPIRIT_DEFINE(  // -- E --
     , entity_class
     , entity_class_entry
     , entity_class_entry_list
-    //, entity_declaration
+    , entity_declaration
     , entity_declarative_item
     , entity_declarative_part
     , entity_designator
