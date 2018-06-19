@@ -33,6 +33,7 @@ parser::block_header_type const& block_header();
 parser::case_statement_type const& case_statement();
 parser::character_literal_type const& character_literal();
 parser::choices_type const& choices();
+parser::component_declaration_type const& component_declaration();
 parser::component_instantiation_statement_type const& component_instantiation_statement();
 parser::component_specification_type const& component_specification();
 parser::concurrent_assertion_statement_type const& concurrent_assertion_statement();

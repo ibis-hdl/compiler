@@ -1,0 +1,6 @@
+component INV is
+    port (A: in  STD_LOGIC;
+          F: out STD_LOGIC
+    );
+end component;
+

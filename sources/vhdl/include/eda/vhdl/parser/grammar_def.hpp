@@ -1351,7 +1351,7 @@ auto const component_configuration_def = ( // operator precedence
     ;
 #endif
 
-#if 0
+
 // component_declaration ::=                                        [LRM93 §4.5]
 //     component identifier [ is ]
 //         [ local_generic_clause ]
@@ -1368,7 +1368,7 @@ auto const component_declaration_def = ( // operator precedence
     )
     >  ';'
     ;
-#endif
+
 
 
 // component_instantiation_statement ::=                            [LRM93 §9.6]
@@ -2897,7 +2897,7 @@ auto const package_declarative_item_def =
     | variable_declaration  // shared_variable_declaration
     | file_declaration
     | alias_declaration
-//  | component_declaration // not yet ready
+    | component_declaration
     | attribute_declaration
     | attribute_specification
     | disconnection_specification
@@ -3972,7 +3972,7 @@ BOOST_SPIRIT_DEFINE(  // -- C --
     , choice
     , choices
     //, component_configuration
-    //, component_declaration
+    , component_declaration
     , component_instantiation_statement
     , component_specification
     , composite_type_definition
