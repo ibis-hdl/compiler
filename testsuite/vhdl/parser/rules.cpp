@@ -27,10 +27,12 @@ BOOST_SPIRIT_INSTANTIATE(attribute_specification_type, iterator_type, context_ty
 BOOST_SPIRIT_INSTANTIATE(based_literal_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(binding_indication_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(bit_string_literal_type, iterator_type, context_type);
+BOOST_SPIRIT_INSTANTIATE(block_configuration_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(block_header_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(case_statement_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(character_literal_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(choices_type, iterator_type, context_type);
+BOOST_SPIRIT_INSTANTIATE(component_configuration_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(component_declaration_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(component_instantiation_statement_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(component_specification_type, iterator_type, context_type);
@@ -116,12 +118,10 @@ BOOST_SPIRIT_INSTANTIATE(variable_declaration_type, iterator_type, context_type)
 BOOST_SPIRIT_INSTANTIATE(wait_statement_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(waveform_type, iterator_type, context_type);
 
-
 } } } // namespace eda.vhdl.parser
 
 
 namespace testsuite { namespace vhdl_parser {
-
 
 parser::abstract_literal_type const& abstract_literal() {
     return eda::vhdl::parser::abstract_literal;
@@ -171,6 +171,10 @@ parser::bit_string_literal_type const& bit_string_literal() {
     return eda::vhdl::parser::bit_string_literal;
 }
 
+parser::block_configuration_type const& block_configuration() {
+    return eda::vhdl::parser::block_configuration;
+}
+
 parser::block_header_type const& block_header() {
     return eda::vhdl::parser::block_header;
 }
@@ -185,6 +189,10 @@ parser::character_literal_type const& character_literal() {
 
 parser::choices_type const& choices() {
     return eda::vhdl::parser::choices;
+}
+
+parser::component_configuration_type const& component_configuration() {
+    return eda::vhdl::parser::component_configuration;
 }
 
 parser::component_declaration_type const& component_declaration() {

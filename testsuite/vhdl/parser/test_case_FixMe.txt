@@ -7,6 +7,8 @@ ToDo:
 - wait_statement/wait_statement_00x.input
 - binding_indication/binding_indication_00{0,1}.input entity name rule (is work.foo -> name)
 - allocator_003 (http://vhdl.renerta.com/source/vhd00004.htm) 
+- component_configuration_000; reason is related to rule name, where no
+  selected_name is active!!!
 
 Renewal 2018:
 - Missing tests:

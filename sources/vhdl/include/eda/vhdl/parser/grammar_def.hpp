@@ -1131,7 +1131,7 @@ auto const bit_value_def =
     ;
 #endif
 
-#if 0
+
 // block_configuration ::                                         [LRM93 §1.3.1]
 //     for block_specification
 //         { use_clause }
@@ -1146,7 +1146,7 @@ auto const block_configuration_def = ( // operator precedence
     )
     >  ';'
     ;
-#endif
+
 
 
 // block_declarative_item ::=                                     [LRM93 §1.2.1]
@@ -1221,7 +1221,7 @@ auto const block_header_def =
     ;
 
 
-#if 0
+
 // block_specification ::=                                        [LRM93 §1.3.1]
 //       architecture_name
 //     | block_statement_label
@@ -1230,7 +1230,7 @@ auto const block_specification_def = /* order matters */
       label >> -( '(' >> index_specification >> ')' )
     | name
     ;
-#endif
+
 
 #if 0
 // block_statement ::=                                              [LRM93 §9.1]
@@ -1334,7 +1334,7 @@ auto const choices_def =
     ;
 
 
-#if 0
+
 // component_configuration ::=                                    [LRM93 §1.3.2]
 //     for component_specification
 //         [ binding_indication ; ]
@@ -1346,10 +1346,10 @@ auto const component_configuration_def = ( // operator precedence
     >> -( binding_indication > ';' )
     >> -block_configuration
     >> END >> FOR
-    >  ';'
     )
+    >  ';'
     ;
-#endif
+
 
 
 // component_declaration ::=                                        [LRM93 §4.5]
@@ -1524,7 +1524,7 @@ auto const configuration_declaration_def = // operator precedence
     ;
 #endif
 
-#if 0
+
 // configuration_declarative_item ::=                               [LRM93 §1.3]
 //       use_clause
 //     | attribute_specification
@@ -1534,17 +1534,17 @@ auto const configuration_declarative_item_def =
     | attribute_specification
     | group_declaration
     ;
-#endif
 
-#if 0
+
+
 // configuration_declarative_part ::=                               [LRM93 §1.3]
 //     { configuration_declarative_item }
 auto const configuration_declarative_part_def =
     *configuration_declarative_item
     ;
-#endif
 
-#if 0
+
+
 // configuration_item ::=                                         [LRM93 §1.3.1]
 //       block_configuration
 //     | component_configuration
@@ -1552,7 +1552,7 @@ auto const configuration_item_def =
       block_configuration
     | component_configuration
     ;
-#endif
+
 
 
 // configuration_specification ::=                                  [LRM93 §5.2]
@@ -3817,11 +3817,13 @@ namespace use_clause_detail {
  * [...]
  * The prefix of an expanded name may not be a function call.
  *
- * For the use clause hence an specialized version is required. See Notes
+ * For the use clause hence a specialized version is required. See Notes
  * at the AST node ast::use_clause. */
 
 auto const lib_prefix = x3::rule<struct _, std::vector<ast::name>> { "prefix" } =
-    name >> '.' >> name;
+    x3::lexeme[
+        name >> '.' >> name
+    ];
 
 auto const pkg_prefix = x3::rule<struct _, std::vector<ast::name>> { "prefix" } =
     x3::repeat(1)[ // enforce artificial vector to unify ast node
@@ -3957,11 +3959,11 @@ BOOST_SPIRIT_DEFINE(  // -- B --
     , basic_identifier
     , binding_indication
     , bit_string_literal
-    //, block_configuration
+    , block_configuration
     , block_declarative_item
     , block_declarative_part
     , block_header
-    //, block_specification
+    , block_specification
     //, block_statement
     //, block_statement_part
 )
@@ -3971,7 +3973,7 @@ BOOST_SPIRIT_DEFINE(  // -- C --
     , character_literal
     , choice
     , choices
-    //, component_configuration
+    , component_configuration
     , component_declaration
     , component_instantiation_statement
     , component_specification
@@ -3987,7 +3989,7 @@ BOOST_SPIRIT_DEFINE(  // -- C --
     //, configuration_declaration
     //, configuration_declarative_item
     //, configuration_declarative_part
-    //, configuration_item
+    , configuration_item
     , configuration_specification
     , constant_declaration
     , constrained_array_definition

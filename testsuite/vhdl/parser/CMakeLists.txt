@@ -18,7 +18,8 @@ set(TEST_COMMON_SOURCES
 
 set(PARSERTEST_SOURCES#_DEV
     ${TEST_COMMON_SOURCES}
-    parser_test/component_declaration_test.cpp
+    parser_test/component_configuration_test.cpp
+    parser_test/block_configuration_test.cpp
 )
 
 set(PARSERTEST_SOURCES
@@ -35,10 +36,12 @@ set(PARSERTEST_SOURCES
     parser_test/based_literal_test.cpp
     parser_test/binding_indication_test.cpp
     parser_test/bit_string_literal_test.cpp
+    parser_test/block_configuration_test.cpp
     parser_test/block_header_test.cpp
     parser_test/case_statement_test.cpp
     parser_test/character_literal_test.cpp
     parser_test/choices_test.cpp
+    parser_test/component_declaration_test.cpp
     parser_test/component_declaration_test.cpp
     parser_test/component_instantiation_statement_test.cpp
     parser_test/component_specification_test.cpp

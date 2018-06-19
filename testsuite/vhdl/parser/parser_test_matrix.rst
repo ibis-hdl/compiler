@@ -1984,6 +1984,40 @@ bit_string_literal
 |                        |                   |                                      |
 +------------------------+-------------------+--------------------------------------+
 
+===================
+block_configuration
+===================
+
++-------------------------+---------------------------------+-----------------------------+
+| File                    | Input                           | Expected                    |
++-------------------------+---------------------------------+-----------------------------+
+| block_configuration_000 | for                             | (block_configuration        |
+|                         |     -- block_specification      |   (block_specification<v>   |
+|                         |     block_statement_label       |     (identifier             |
+|                         |     -- use_clause               |       block_statement_label |
+|                         |     use work.selected_name.all; |     )                       |
+|                         |     -- configuration_item       |   )                         |
+|                         | end for;                        |   (use_clause               |
+|                         |                                 |     (name<v>                |
+|                         |                                 |       (identifier           |
+|                         |                                 |         work                |
+|                         |                                 |       )                     |
+|                         |                                 |     ).                      |
+|                         |                                 |     (name<v>                |
+|                         |                                 |       (identifier           |
+|                         |                                 |         selected_name       |
+|                         |                                 |       )                     |
+|                         |                                 |     ).                      |
+|                         |                                 |     (suffix<v>              |
+|                         |                                 |       (keyword              |
+|                         |                                 |         ALL                 |
+|                         |                                 |       )                     |
+|                         |                                 |     )                       |
+|                         |                                 |   )                         |
+|                         |                                 | )                           |
+|                         |                                 |                             |
++-------------------------+---------------------------------+-----------------------------+
+
 ============
 block_header
 ============
@@ -3064,6 +3098,437 @@ choices
 |             |                               | )                       |
 |             |                               |                         |
 +-------------+-------------------------------+-------------------------+
+
+=======================
+component_configuration
+=======================
+
++-----------------------------+--------------------------------------------+---------------------------------+
+| File                        | Input                                      | Expected                        |
++-----------------------------+--------------------------------------------+---------------------------------+
+| component_configuration_000 | for LH : INV_COMP                          | (component_configuration        |
+|                             |     -- FixMe: Must be WORK.INVERTER        |   (component_specification      |
+|                             |     use entity WORK_INVERTER (STRUCT_I)    |     (instantiation_list<v>      |
+|                             |     -- indicates generic and port aspects: |       (identifier               |
+|                             |     generic map (PropTime => TimeH)        |         LH                      |
+|                             |     port map (IN1 => IN_A, OUT1 => OUT_A); |       )                         |
+|                             | end for;                                   |     )                           |
+|                             |                                            |     (name<v>                    |
+|                             |                                            |       (identifier               |
+|                             |                                            |         INV_COMP                |
+|                             |                                            |       )                         |
+|                             |                                            |     )                           |
+|                             |                                            |   )                             |
+|                             |                                            |   (binding_indication           |
+|                             |                                            |     (entity_aspect<v>           |
+|                             |                                            |       (entity_aspect::entity    |
+|                             |                                            |         (name<v>                |
+|                             |                                            |           (identifier           |
+|                             |                                            |             WORK_INVERTER       |
+|                             |                                            |           )                     |
+|                             |                                            |         )                       |
+|                             |                                            |         (identifier             |
+|                             |                                            |           STRUCT_I              |
+|                             |                                            |         )                       |
+|                             |                                            |       )                         |
+|                             |                                            |     )                           |
+|                             |                                            |     (generic map                |
+|                             |                                            |       (association_element      |
+|                             |                                            |         (formal_part            |
+|                             |                                            |           (formal_designator<v> |
+|                             |                                            |             (name<v>            |
+|                             |                                            |               (identifier       |
+|                             |                                            |                 PropTime        |
+|                             |                                            |               )                 |
+|                             |                                            |             )                   |
+|                             |                                            |           )                     |
+|                             |                                            |         )                       |
+|                             |                                            |         (actual_part<v>         |
+|                             |                                            |           (actual_designator<v> |
+|                             |                                            |             (name<v>            |
+|                             |                                            |               (identifier       |
+|                             |                                            |                 TimeH           |
+|                             |                                            |               )                 |
+|                             |                                            |             )                   |
+|                             |                                            |           )                     |
+|                             |                                            |         )                       |
+|                             |                                            |       )                         |
+|                             |                                            |     )                           |
+|                             |                                            |     (port map                   |
+|                             |                                            |       (association_element      |
+|                             |                                            |         (formal_part            |
+|                             |                                            |           (formal_designator<v> |
+|                             |                                            |             (name<v>            |
+|                             |                                            |               (identifier       |
+|                             |                                            |                 IN1             |
+|                             |                                            |               )                 |
+|                             |                                            |             )                   |
+|                             |                                            |           )                     |
+|                             |                                            |         )                       |
+|                             |                                            |         (actual_part<v>         |
+|                             |                                            |           (actual_designator<v> |
+|                             |                                            |             (name<v>            |
+|                             |                                            |               (identifier       |
+|                             |                                            |                 IN_A            |
+|                             |                                            |               )                 |
+|                             |                                            |             )                   |
+|                             |                                            |           )                     |
+|                             |                                            |         )                       |
+|                             |                                            |       ),                        |
+|                             |                                            |       (association_element      |
+|                             |                                            |         (formal_part            |
+|                             |                                            |           (formal_designator<v> |
+|                             |                                            |             (name<v>            |
+|                             |                                            |               (identifier       |
+|                             |                                            |                 OUT1            |
+|                             |                                            |               )                 |
+|                             |                                            |             )                   |
+|                             |                                            |           )                     |
+|                             |                                            |         )                       |
+|                             |                                            |         (actual_part<v>         |
+|                             |                                            |           (actual_designator<v> |
+|                             |                                            |             (name<v>            |
+|                             |                                            |               (identifier       |
+|                             |                                            |                 OUT_A           |
+|                             |                                            |               )                 |
+|                             |                                            |             )                   |
+|                             |                                            |           )                     |
+|                             |                                            |         )                       |
+|                             |                                            |       )                         |
+|                             |                                            |     )                           |
+|                             |                                            |   )                             |
+|                             |                                            | )                               |
+|                             |                                            |                                 |
++-----------------------------+--------------------------------------------+---------------------------------+
+
+=====================
+component_declaration
+=====================
+
++---------------------------+--------------------------------------------------------------+-------------------------------------------------------------+
+| File                      | Input                                                        | Expected                                                    |
++---------------------------+--------------------------------------------------------------+-------------------------------------------------------------+
+| component_declaration_000 | component INV                                                | (component_declaration                                      |
+|                           | end component;                                               |   (identifier                                               |
+|                           |                                                              |     INV                                                     |
+|                           |                                                              |   )                                                         |
+|                           |                                                              | )                                                           |
+|                           |                                                              |                                                             |
++---------------------------+--------------------------------------------------------------+-------------------------------------------------------------+
+| component_declaration_001 | component INV is                                             | (component_declaration                                      |
+|                           |     port (A: in  STD_LOGIC;                                  |   (identifier                                               |
+|                           |           F: out STD_LOGIC                                   |     INV                                                     |
+|                           |     );                                                       |   )                                                         |
+|                           | end component;                                               |   (port_clause                                              |
+|                           |                                                              |     (interface_list                                         |
+|                           |                                                              |       (interface_declaration<v>                             |
+|                           |                                                              |         (interface_constant_declaration                     |
+|                           |                                                              |           (identifier_list                                  |
+|                           |                                                              |             (identifier                                     |
+|                           |                                                              |               A                                             |
+|                           |                                                              |             )                                               |
+|                           |                                                              |           )                                                 |
+|                           |                                                              |           (in)                                              |
+|                           |                                                              |           (subtype_indication                               |
+|                           |                                                              |             (type_mark<v>                                   |
+|                           |                                                              |               (name<v>                                      |
+|                           |                                                              |                 (identifier                                 |
+|                           |                                                              |                   STD_LOGIC                                 |
+|                           |                                                              |                 )                                           |
+|                           |                                                              |               )                                             |
+|                           |                                                              |             )                                               |
+|                           |                                                              |           )                                                 |
+|                           |                                                              |         )                                                   |
+|                           |                                                              |       ),                                                    |
+|                           |                                                              |       (interface_declaration<v>                             |
+|                           |                                                              |         (interface_signal_declaration                       |
+|                           |                                                              |           (identifier_list                                  |
+|                           |                                                              |             (identifier                                     |
+|                           |                                                              |               F                                             |
+|                           |                                                              |             )                                               |
+|                           |                                                              |           )                                                 |
+|                           |                                                              |           (keyword                                          |
+|                           |                                                              |             OUT                                             |
+|                           |                                                              |           )                                                 |
+|                           |                                                              |           (subtype_indication                               |
+|                           |                                                              |             (type_mark<v>                                   |
+|                           |                                                              |               (name<v>                                      |
+|                           |                                                              |                 (identifier                                 |
+|                           |                                                              |                   STD_LOGIC                                 |
+|                           |                                                              |                 )                                           |
+|                           |                                                              |               )                                             |
+|                           |                                                              |             )                                               |
+|                           |                                                              |           )                                                 |
+|                           |                                                              |         )                                                   |
+|                           |                                                              |       )                                                     |
+|                           |                                                              |     )                                                       |
+|                           |                                                              |   )                                                         |
+|                           |                                                              | )                                                           |
+|                           |                                                              |                                                             |
++---------------------------+--------------------------------------------------------------+-------------------------------------------------------------+
+| component_declaration_002 | component Counter is                                         | (component_declaration                                      |
+|                           |     generic(N: integer);                                     |   (identifier                                               |
+|                           |     port(Clk, Rst, En: in  std_logic;                        |     Counter                                                 |
+|                           |          Q:            out std_logic_vector(N-1 downto 0));  |   )                                                         |
+|                           | end component;                                               |   (generic_clause                                           |
+|                           |                                                              |     (interface_list                                         |
+|                           |                                                              |       (interface_declaration<v>                             |
+|                           |                                                              |         (interface_constant_declaration                     |
+|                           |                                                              |           (identifier_list                                  |
+|                           |                                                              |             (identifier                                     |
+|                           |                                                              |               N                                             |
+|                           |                                                              |             )                                               |
+|                           |                                                              |           )                                                 |
+|                           |                                                              |           (subtype_indication                               |
+|                           |                                                              |             (type_mark<v>                                   |
+|                           |                                                              |               (name<v>                                      |
+|                           |                                                              |                 (identifier                                 |
+|                           |                                                              |                   integer                                   |
+|                           |                                                              |                 )                                           |
+|                           |                                                              |               )                                             |
+|                           |                                                              |             )                                               |
+|                           |                                                              |           )                                                 |
+|                           |                                                              |         )                                                   |
+|                           |                                                              |       )                                                     |
+|                           |                                                              |     )                                                       |
+|                           |                                                              |   )                                                         |
+|                           |                                                              |   (port_clause                                              |
+|                           |                                                              |     (interface_list                                         |
+|                           |                                                              |       (interface_declaration<v>                             |
+|                           |                                                              |         (interface_constant_declaration                     |
+|                           |                                                              |           (identifier_list                                  |
+|                           |                                                              |             (identifier                                     |
+|                           |                                                              |               Clk                                           |
+|                           |                                                              |             ),                                              |
+|                           |                                                              |             (identifier                                     |
+|                           |                                                              |               Rst                                           |
+|                           |                                                              |             ),                                              |
+|                           |                                                              |             (identifier                                     |
+|                           |                                                              |               En                                            |
+|                           |                                                              |             )                                               |
+|                           |                                                              |           )                                                 |
+|                           |                                                              |           (in)                                              |
+|                           |                                                              |           (subtype_indication                               |
+|                           |                                                              |             (type_mark<v>                                   |
+|                           |                                                              |               (name<v>                                      |
+|                           |                                                              |                 (identifier                                 |
+|                           |                                                              |                   std_logic                                 |
+|                           |                                                              |                 )                                           |
+|                           |                                                              |               )                                             |
+|                           |                                                              |             )                                               |
+|                           |                                                              |           )                                                 |
+|                           |                                                              |         )                                                   |
+|                           |                                                              |       ),                                                    |
+|                           |                                                              |       (interface_declaration<v>                             |
+|                           |                                                              |         (interface_signal_declaration                       |
+|                           |                                                              |           (identifier_list                                  |
+|                           |                                                              |             (identifier                                     |
+|                           |                                                              |               Q                                             |
+|                           |                                                              |             )                                               |
+|                           |                                                              |           )                                                 |
+|                           |                                                              |           (keyword                                          |
+|                           |                                                              |             OUT                                             |
+|                           |                                                              |           )                                                 |
+|                           |                                                              |           (subtype_indication                               |
+|                           |                                                              |             (type_mark<v>                                   |
+|                           |                                                              |               (name<v>                                      |
+|                           |                                                              |                 (identifier                                 |
+|                           |                                                              |                   std_logic_vector                          |
+|                           |                                                              |                 )                                           |
+|                           |                                                              |               )                                             |
+|                           |                                                              |             )                                               |
+|                           |                                                              |             (constraint<v>                                  |
+|                           |                                                              |               (index_constraint                             |
+|                           |                                                              |                 (discrete_range<v>                          |
+|                           |                                                              |                   (range<v>                                 |
+|                           |                                                              |                     (simple_expression                      |
+|                           |                                                              |                       (term                                 |
+|                           |                                                              |                         (primary<v>                         |
+|                           |                                                              |                           (name<v>                          |
+|                           |                                                              |                             (identifier                     |
+|                           |                                                              |                               N                             |
+|                           |                                                              |                             )                               |
+|                           |                                                              |                           )                                 |
+|                           |                                                              |                         )                                   |
+|                           |                                                              |                       ),                                    |
+|                           |                                                              |                       (operator: SUB),                      |
+|                           |                                                              |                       (term                                 |
+|                           |                                                              |                         (primary<v>                         |
+|                           |                                                              |                           (literal<v>                       |
+|                           |                                                              |                             (numeric_literal<v>             |
+|                           |                                                              |                               (abstract_literal<v>          |
+|                           |                                                              |                                 (decimal_literal            |
+|                           |                                                              |                                   literal: 1, type: integer |
+|                           |                                                              |                                 )                           |
+|                           |                                                              |                               )                             |
+|                           |                                                              |                             )                               |
+|                           |                                                              |                           )                                 |
+|                           |                                                              |                         )                                   |
+|                           |                                                              |                       )                                     |
+|                           |                                                              |                     )                                       |
+|                           |                                                              |                     (keyword                                |
+|                           |                                                              |                       DOWNTO                                |
+|                           |                                                              |                     )                                       |
+|                           |                                                              |                     (simple_expression                      |
+|                           |                                                              |                       (term                                 |
+|                           |                                                              |                         (primary<v>                         |
+|                           |                                                              |                           (literal<v>                       |
+|                           |                                                              |                             (numeric_literal<v>             |
+|                           |                                                              |                               (abstract_literal<v>          |
+|                           |                                                              |                                 (decimal_literal            |
+|                           |                                                              |                                   literal: 0, type: integer |
+|                           |                                                              |                                 )                           |
+|                           |                                                              |                               )                             |
+|                           |                                                              |                             )                               |
+|                           |                                                              |                           )                                 |
+|                           |                                                              |                         )                                   |
+|                           |                                                              |                       )                                     |
+|                           |                                                              |                     )                                       |
+|                           |                                                              |                   )                                         |
+|                           |                                                              |                 )                                           |
+|                           |                                                              |               )                                             |
+|                           |                                                              |             )                                               |
+|                           |                                                              |           )                                                 |
+|                           |                                                              |         )                                                   |
+|                           |                                                              |       )                                                     |
+|                           |                                                              |     )                                                       |
+|                           |                                                              |   )                                                         |
+|                           |                                                              | )                                                           |
+|                           |                                                              |                                                             |
++---------------------------+--------------------------------------------------------------+-------------------------------------------------------------+
+| component_declaration_003 | component Counter is                                         | (component_declaration                                      |
+|                           |     generic(N: integer);                                     |   (identifier                                               |
+|                           |     port(Clk, Rst, En: in  std_logic;                        |     Counter                                                 |
+|                           |          Q:            out std_logic_vector(N-1 downto 0));  |   )                                                         |
+|                           | end component counter;                                       |   (generic_clause                                           |
+|                           |                                                              |     (interface_list                                         |
+|                           |                                                              |       (interface_declaration<v>                             |
+|                           |                                                              |         (interface_constant_declaration                     |
+|                           |                                                              |           (identifier_list                                  |
+|                           |                                                              |             (identifier                                     |
+|                           |                                                              |               N                                             |
+|                           |                                                              |             )                                               |
+|                           |                                                              |           )                                                 |
+|                           |                                                              |           (subtype_indication                               |
+|                           |                                                              |             (type_mark<v>                                   |
+|                           |                                                              |               (name<v>                                      |
+|                           |                                                              |                 (identifier                                 |
+|                           |                                                              |                   integer                                   |
+|                           |                                                              |                 )                                           |
+|                           |                                                              |               )                                             |
+|                           |                                                              |             )                                               |
+|                           |                                                              |           )                                                 |
+|                           |                                                              |         )                                                   |
+|                           |                                                              |       )                                                     |
+|                           |                                                              |     )                                                       |
+|                           |                                                              |   )                                                         |
+|                           |                                                              |   (port_clause                                              |
+|                           |                                                              |     (interface_list                                         |
+|                           |                                                              |       (interface_declaration<v>                             |
+|                           |                                                              |         (interface_constant_declaration                     |
+|                           |                                                              |           (identifier_list                                  |
+|                           |                                                              |             (identifier                                     |
+|                           |                                                              |               Clk                                           |
+|                           |                                                              |             ),                                              |
+|                           |                                                              |             (identifier                                     |
+|                           |                                                              |               Rst                                           |
+|                           |                                                              |             ),                                              |
+|                           |                                                              |             (identifier                                     |
+|                           |                                                              |               En                                            |
+|                           |                                                              |             )                                               |
+|                           |                                                              |           )                                                 |
+|                           |                                                              |           (in)                                              |
+|                           |                                                              |           (subtype_indication                               |
+|                           |                                                              |             (type_mark<v>                                   |
+|                           |                                                              |               (name<v>                                      |
+|                           |                                                              |                 (identifier                                 |
+|                           |                                                              |                   std_logic                                 |
+|                           |                                                              |                 )                                           |
+|                           |                                                              |               )                                             |
+|                           |                                                              |             )                                               |
+|                           |                                                              |           )                                                 |
+|                           |                                                              |         )                                                   |
+|                           |                                                              |       ),                                                    |
+|                           |                                                              |       (interface_declaration<v>                             |
+|                           |                                                              |         (interface_signal_declaration                       |
+|                           |                                                              |           (identifier_list                                  |
+|                           |                                                              |             (identifier                                     |
+|                           |                                                              |               Q                                             |
+|                           |                                                              |             )                                               |
+|                           |                                                              |           )                                                 |
+|                           |                                                              |           (keyword                                          |
+|                           |                                                              |             OUT                                             |
+|                           |                                                              |           )                                                 |
+|                           |                                                              |           (subtype_indication                               |
+|                           |                                                              |             (type_mark<v>                                   |
+|                           |                                                              |               (name<v>                                      |
+|                           |                                                              |                 (identifier                                 |
+|                           |                                                              |                   std_logic_vector                          |
+|                           |                                                              |                 )                                           |
+|                           |                                                              |               )                                             |
+|                           |                                                              |             )                                               |
+|                           |                                                              |             (constraint<v>                                  |
+|                           |                                                              |               (index_constraint                             |
+|                           |                                                              |                 (discrete_range<v>                          |
+|                           |                                                              |                   (range<v>                                 |
+|                           |                                                              |                     (simple_expression                      |
+|                           |                                                              |                       (term                                 |
+|                           |                                                              |                         (primary<v>                         |
+|                           |                                                              |                           (name<v>                          |
+|                           |                                                              |                             (identifier                     |
+|                           |                                                              |                               N                             |
+|                           |                                                              |                             )                               |
+|                           |                                                              |                           )                                 |
+|                           |                                                              |                         )                                   |
+|                           |                                                              |                       ),                                    |
+|                           |                                                              |                       (operator: SUB),                      |
+|                           |                                                              |                       (term                                 |
+|                           |                                                              |                         (primary<v>                         |
+|                           |                                                              |                           (literal<v>                       |
+|                           |                                                              |                             (numeric_literal<v>             |
+|                           |                                                              |                               (abstract_literal<v>          |
+|                           |                                                              |                                 (decimal_literal            |
+|                           |                                                              |                                   literal: 1, type: integer |
+|                           |                                                              |                                 )                           |
+|                           |                                                              |                               )                             |
+|                           |                                                              |                             )                               |
+|                           |                                                              |                           )                                 |
+|                           |                                                              |                         )                                   |
+|                           |                                                              |                       )                                     |
+|                           |                                                              |                     )                                       |
+|                           |                                                              |                     (keyword                                |
+|                           |                                                              |                       DOWNTO                                |
+|                           |                                                              |                     )                                       |
+|                           |                                                              |                     (simple_expression                      |
+|                           |                                                              |                       (term                                 |
+|                           |                                                              |                         (primary<v>                         |
+|                           |                                                              |                           (literal<v>                       |
+|                           |                                                              |                             (numeric_literal<v>             |
+|                           |                                                              |                               (abstract_literal<v>          |
+|                           |                                                              |                                 (decimal_literal            |
+|                           |                                                              |                                   literal: 0, type: integer |
+|                           |                                                              |                                 )                           |
+|                           |                                                              |                               )                             |
+|                           |                                                              |                             )                               |
+|                           |                                                              |                           )                                 |
+|                           |                                                              |                         )                                   |
+|                           |                                                              |                       )                                     |
+|                           |                                                              |                     )                                       |
+|                           |                                                              |                   )                                         |
+|                           |                                                              |                 )                                           |
+|                           |                                                              |               )                                             |
+|                           |                                                              |             )                                               |
+|                           |                                                              |           )                                                 |
+|                           |                                                              |         )                                                   |
+|                           |                                                              |       )                                                     |
+|                           |                                                              |     )                                                       |
+|                           |                                                              |   )                                                         |
+|                           |                                                              |   (identifier                                               |
+|                           |                                                              |     counter                                                 |
+|                           |                                                              |   )                                                         |
+|                           |                                                              | )                                                           |
+|                           |                                                              |                                                             |
++---------------------------+--------------------------------------------------------------+-------------------------------------------------------------+
 
 =================================
 component_instantiation_statement
@@ -16920,4 +17385,4 @@ waveform
 +--------------+---------------------------------------+------------------------------------------------------+
 
 
-Total Tests: 441
+Total Tests: 447

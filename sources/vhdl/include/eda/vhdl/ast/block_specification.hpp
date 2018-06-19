@@ -25,14 +25,14 @@ namespace eda { namespace vhdl { namespace ast {
 
 struct block_specification_chunk : position_tagged
 {
-    ast::label                          label;  // {block_statement, generate_statement}_label
+    ast::label                          label;  // {block, generate}_statement_label
     optional<ast::index_specification>  index_specification;
 };
 
 
 struct block_specification : variant<
     ast::nullary,
-    ast::name,
+    ast::name,                          // architecture_name
     ast::block_specification_chunk
 >
 {

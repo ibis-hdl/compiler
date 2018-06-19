@@ -29,10 +29,12 @@ parser::attribute_specification_type const& attribute_specification();
 parser::based_literal_type const& based_literal();
 parser::binding_indication_type const& binding_indication();
 parser::bit_string_literal_type const& bit_string_literal();
+parser::block_configuration_type const& block_configuration();
 parser::block_header_type const& block_header();
 parser::case_statement_type const& case_statement();
 parser::character_literal_type const& character_literal();
 parser::choices_type const& choices();
+parser::component_configuration_type const& component_configuration();
 parser::component_declaration_type const& component_declaration();
 parser::component_instantiation_statement_type const& component_instantiation_statement();
 parser::component_specification_type const& component_specification();
@@ -117,6 +119,7 @@ parser::variable_assignment_statement_type const& variable_assignment_statement(
 parser::variable_declaration_type const& variable_declaration();
 parser::wait_statement_type const& wait_statement();
 parser::waveform_type const& waveform();
+
 
 } } // namespace testsuite.vhdl_parser
 

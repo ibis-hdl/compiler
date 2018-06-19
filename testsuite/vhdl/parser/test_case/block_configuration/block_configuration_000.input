@@ -1,0 +1,8 @@
+for 
+    -- block_specification
+    block_statement_label
+    -- use_clause
+    use work.selected_name.all;
+    -- configuration_item
+end for;
+

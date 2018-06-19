@@ -1,0 +1,8 @@
+for LH : INV_COMP
+    -- FixMe: Must be WORK.INVERTER
+    use entity WORK_INVERTER (STRUCT_I)
+    -- indicates generic and port aspects:
+    generic map (PropTime => TimeH)
+    port map (IN1 => IN_A, OUT1 => OUT_A);
+end for;
+

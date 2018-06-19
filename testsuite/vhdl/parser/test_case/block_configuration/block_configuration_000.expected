@@ -1,0 +1,24 @@
+(block_configuration
+  (block_specification<v>
+    (identifier
+      block_statement_label
+    )
+  )
+  (use_clause
+    (name<v>
+      (identifier
+        work
+      )
+    ).
+    (name<v>
+      (identifier
+        selected_name
+      )
+    ).
+    (suffix<v>
+      (keyword
+        ALL
+      )
+    )
+  )
+)
