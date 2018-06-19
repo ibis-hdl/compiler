@@ -31,7 +31,7 @@
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct process_declarative_item : variant<
+using process_declarative_item = variant<
     nullary,
     alias_declaration,
     attribute_declaration,
@@ -46,11 +46,7 @@ struct process_declarative_item : variant<
     type_declaration,
     use_clause,
     variable_declaration
->
-{
-    using base_type::base_type;
-    using base_type::operator=;
-};
+>;
 
 
 struct process_declarative_part : std::vector<ast::process_declarative_item> { };
