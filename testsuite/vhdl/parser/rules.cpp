@@ -31,6 +31,7 @@ BOOST_SPIRIT_INSTANTIATE(block_header_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(case_statement_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(character_literal_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(choices_type, iterator_type, context_type);
+BOOST_SPIRIT_INSTANTIATE(component_instantiation_statement_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(component_specification_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(concurrent_assertion_statement_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(conditional_signal_assignment_type, iterator_type, context_type);
@@ -183,6 +184,10 @@ parser::character_literal_type const& character_literal() {
 
 parser::choices_type const& choices() {
     return eda::vhdl::parser::choices;
+}
+
+parser::component_instantiation_statement_type const& component_instantiation_statement() {
+    return eda::vhdl::parser::component_instantiation_statement;
 }
 
 parser::component_specification_type const& component_specification() {

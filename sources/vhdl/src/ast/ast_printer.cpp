@@ -1761,15 +1761,24 @@ void printer::operator()(instantiated_unit const &node)
 
     util::visit_in_place(
         node,
-        [this](ast::name const& name) {
-            (*this)(name);
+        [this](ast::instantiated_unit_component const& component) {
+            static char const symbol[]{ "component" };
+            symbol_scope<instantiated_unit_component> _(*this, symbol);
+            (*this)(component.name);
         },
-        [this](ast::instantiated_unit_chunk const& chunk) {
-            (*this)(chunk.entity_name);
-            if(chunk.architecture_identifier) {
+        [this](ast::instantiated_unit_entity const& entity) {
+            static char const symbol[]{ "entity" };
+            symbol_scope<instantiated_unit_entity> _(*this, symbol);
+            (*this)(entity.name);
+            if(entity.architecture_identifier) {
                 os << "\n";
-                (*this)(*chunk.architecture_identifier);
+                (*this)(*entity.architecture_identifier);
             }
+        },
+        [this](ast::instantiated_unit_configuration const& configuration) {
+            static char const symbol[]{ "configuration" };
+            symbol_scope<instantiated_unit_configuration> _(*this, symbol);
+            (*this)(configuration.name);
         },
         [this](ast::nullary const& nullary) {
             (*this)(nullary);

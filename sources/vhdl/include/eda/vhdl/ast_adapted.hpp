@@ -293,8 +293,16 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::index_subtype_definition,
     type_mark
 )
 
-BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::instantiated_unit_chunk,
-    entity_name, architecture_identifier
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::instantiated_unit_component,
+    name
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::instantiated_unit_entity,
+    name, architecture_identifier
+)
+
+BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::instantiated_unit_configuration,
+    name
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::interface_constant_declaration,

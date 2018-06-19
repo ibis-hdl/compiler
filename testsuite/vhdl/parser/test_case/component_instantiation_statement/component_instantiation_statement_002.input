@@ -1,0 +1,9 @@
+U3: ENTITY entity_name(architecture_identifier)
+    -- generic_map_aspect
+	generic map (N => 8)
+    -- port_map_aspect
+    port map(
+        B => Y, 
+        C => open
+    );
+	

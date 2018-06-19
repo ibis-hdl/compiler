@@ -1,0 +1,8 @@
+U2: COMPONENT instantiated_unit 
+    -- generic_map_aspect
+    -- port_map_aspect
+    port map(
+        B => Y, 
+        C => open
+    );
+	

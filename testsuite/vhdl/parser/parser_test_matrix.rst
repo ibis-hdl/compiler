@@ -3065,6 +3065,205 @@ choices
 |             |                               |                         |
 +-------------+-------------------------------+-------------------------+
 
+=================================
+component_instantiation_statement
+=================================
+
++---------------------------------------+-------------------------------------------------+-----------------------------------------------------------+
+| File                                  | Input                                           | Expected                                                  |
++---------------------------------------+-------------------------------------------------+-----------------------------------------------------------+
+| component_instantiation_statement_000 | U1: instantiated_unit                           | (component_instantiation_statement                        |
+|                                       |     -- generic_map_aspect                       |   (identifier                                             |
+|                                       |     -- port_map_aspect                          |     U1                                                    |
+|                                       | 	;                                              |   )                                                       |
+|                                       |                                                 |   (instantiated_unit<v>                                   |
+|                                       |                                                 |     (component                                            |
+|                                       |                                                 |       (name<v>                                            |
+|                                       |                                                 |         (identifier                                       |
+|                                       |                                                 |           instantiated_unit                               |
+|                                       |                                                 |         )                                                 |
+|                                       |                                                 |       )                                                   |
+|                                       |                                                 |     )                                                     |
+|                                       |                                                 |   )                                                       |
+|                                       |                                                 | )                                                         |
+|                                       |                                                 |                                                           |
++---------------------------------------+-------------------------------------------------+-----------------------------------------------------------+
+| component_instantiation_statement_001 | U2: COMPONENT instantiated_unit                 | (component_instantiation_statement                        |
+|                                       |     -- generic_map_aspect                       |   (identifier                                             |
+|                                       |     -- port_map_aspect                          |     U2                                                    |
+|                                       |     port map(                                   |   )                                                       |
+|                                       |         B => Y,                                 |   (instantiated_unit<v>                                   |
+|                                       |         C => open                               |     (component                                            |
+|                                       |     );                                          |       (name<v>                                            |
+|                                       | 	                                               |         (identifier                                       |
+|                                       |                                                 |           instantiated_unit                               |
+|                                       |                                                 |         )                                                 |
+|                                       |                                                 |       )                                                   |
+|                                       |                                                 |     )                                                     |
+|                                       |                                                 |   )                                                       |
+|                                       |                                                 |   (port_map_aspect                                        |
+|                                       |                                                 |     (association_list                                     |
+|                                       |                                                 |       (association_element                                |
+|                                       |                                                 |         (formal_part                                      |
+|                                       |                                                 |           (formal_designator<v>                           |
+|                                       |                                                 |             (name<v>                                      |
+|                                       |                                                 |               (identifier                                 |
+|                                       |                                                 |                 B                                         |
+|                                       |                                                 |               )                                           |
+|                                       |                                                 |             )                                             |
+|                                       |                                                 |           )                                               |
+|                                       |                                                 |         )                                                 |
+|                                       |                                                 |         (actual_part<v>                                   |
+|                                       |                                                 |           (actual_designator<v>                           |
+|                                       |                                                 |             (name<v>                                      |
+|                                       |                                                 |               (identifier                                 |
+|                                       |                                                 |                 Y                                         |
+|                                       |                                                 |               )                                           |
+|                                       |                                                 |             )                                             |
+|                                       |                                                 |           )                                               |
+|                                       |                                                 |         )                                                 |
+|                                       |                                                 |       ),                                                  |
+|                                       |                                                 |       (association_element                                |
+|                                       |                                                 |         (formal_part                                      |
+|                                       |                                                 |           (formal_designator<v>                           |
+|                                       |                                                 |             (name<v>                                      |
+|                                       |                                                 |               (identifier                                 |
+|                                       |                                                 |                 C                                         |
+|                                       |                                                 |               )                                           |
+|                                       |                                                 |             )                                             |
+|                                       |                                                 |           )                                               |
+|                                       |                                                 |         )                                                 |
+|                                       |                                                 |         (actual_part<v>                                   |
+|                                       |                                                 |           (actual_designator<v>                           |
+|                                       |                                                 |             (keyword                                      |
+|                                       |                                                 |               OPEN                                        |
+|                                       |                                                 |             )                                             |
+|                                       |                                                 |           )                                               |
+|                                       |                                                 |         )                                                 |
+|                                       |                                                 |       )                                                   |
+|                                       |                                                 |     )                                                     |
+|                                       |                                                 |   )                                                       |
+|                                       |                                                 | )                                                         |
+|                                       |                                                 |                                                           |
++---------------------------------------+-------------------------------------------------+-----------------------------------------------------------+
+| component_instantiation_statement_002 | U3: ENTITY entity_name(architecture_identifier) | (component_instantiation_statement                        |
+|                                       |     -- generic_map_aspect                       |   (identifier                                             |
+|                                       | 	generic map (N => 8)                           |     U3                                                    |
+|                                       |     -- port_map_aspect                          |   )                                                       |
+|                                       |     port map(                                   |   (instantiated_unit<v>                                   |
+|                                       |         B => Y,                                 |     (entity                                               |
+|                                       |         C => open                               |       (name<v>                                            |
+|                                       |     );                                          |         (identifier                                       |
+|                                       | 	                                               |           entity_name                                     |
+|                                       |                                                 |         )                                                 |
+|                                       |                                                 |       )                                                   |
+|                                       |                                                 |       (identifier                                         |
+|                                       |                                                 |         architecture_identifier                           |
+|                                       |                                                 |       )                                                   |
+|                                       |                                                 |     )                                                     |
+|                                       |                                                 |   )                                                       |
+|                                       |                                                 |   (generic_map_aspect                                     |
+|                                       |                                                 |     (association_list                                     |
+|                                       |                                                 |       (association_element                                |
+|                                       |                                                 |         (formal_part                                      |
+|                                       |                                                 |           (formal_designator<v>                           |
+|                                       |                                                 |             (name<v>                                      |
+|                                       |                                                 |               (identifier                                 |
+|                                       |                                                 |                 N                                         |
+|                                       |                                                 |               )                                           |
+|                                       |                                                 |             )                                             |
+|                                       |                                                 |           )                                               |
+|                                       |                                                 |         )                                                 |
+|                                       |                                                 |         (actual_part<v>                                   |
+|                                       |                                                 |           (actual_designator<v>                           |
+|                                       |                                                 |             (expression                                   |
+|                                       |                                                 |               (relation                                   |
+|                                       |                                                 |                 (shift_expression                         |
+|                                       |                                                 |                   (simple_expression                      |
+|                                       |                                                 |                     (term                                 |
+|                                       |                                                 |                       (primary<v>                         |
+|                                       |                                                 |                         (literal<v>                       |
+|                                       |                                                 |                           (numeric_literal<v>             |
+|                                       |                                                 |                             (abstract_literal<v>          |
+|                                       |                                                 |                               (decimal_literal            |
+|                                       |                                                 |                                 literal: 8, type: integer |
+|                                       |                                                 |                               )                           |
+|                                       |                                                 |                             )                             |
+|                                       |                                                 |                           )                               |
+|                                       |                                                 |                         )                                 |
+|                                       |                                                 |                       )                                   |
+|                                       |                                                 |                     )                                     |
+|                                       |                                                 |                   )                                       |
+|                                       |                                                 |                 )                                         |
+|                                       |                                                 |               )                                           |
+|                                       |                                                 |             )                                             |
+|                                       |                                                 |           )                                               |
+|                                       |                                                 |         )                                                 |
+|                                       |                                                 |       )                                                   |
+|                                       |                                                 |     )                                                     |
+|                                       |                                                 |   )                                                       |
+|                                       |                                                 |   (port_map_aspect                                        |
+|                                       |                                                 |     (association_list                                     |
+|                                       |                                                 |       (association_element                                |
+|                                       |                                                 |         (formal_part                                      |
+|                                       |                                                 |           (formal_designator<v>                           |
+|                                       |                                                 |             (name<v>                                      |
+|                                       |                                                 |               (identifier                                 |
+|                                       |                                                 |                 B                                         |
+|                                       |                                                 |               )                                           |
+|                                       |                                                 |             )                                             |
+|                                       |                                                 |           )                                               |
+|                                       |                                                 |         )                                                 |
+|                                       |                                                 |         (actual_part<v>                                   |
+|                                       |                                                 |           (actual_designator<v>                           |
+|                                       |                                                 |             (name<v>                                      |
+|                                       |                                                 |               (identifier                                 |
+|                                       |                                                 |                 Y                                         |
+|                                       |                                                 |               )                                           |
+|                                       |                                                 |             )                                             |
+|                                       |                                                 |           )                                               |
+|                                       |                                                 |         )                                                 |
+|                                       |                                                 |       ),                                                  |
+|                                       |                                                 |       (association_element                                |
+|                                       |                                                 |         (formal_part                                      |
+|                                       |                                                 |           (formal_designator<v>                           |
+|                                       |                                                 |             (name<v>                                      |
+|                                       |                                                 |               (identifier                                 |
+|                                       |                                                 |                 C                                         |
+|                                       |                                                 |               )                                           |
+|                                       |                                                 |             )                                             |
+|                                       |                                                 |           )                                               |
+|                                       |                                                 |         )                                                 |
+|                                       |                                                 |         (actual_part<v>                                   |
+|                                       |                                                 |           (actual_designator<v>                           |
+|                                       |                                                 |             (keyword                                      |
+|                                       |                                                 |               OPEN                                        |
+|                                       |                                                 |             )                                             |
+|                                       |                                                 |           )                                               |
+|                                       |                                                 |         )                                                 |
+|                                       |                                                 |       )                                                   |
+|                                       |                                                 |     )                                                     |
+|                                       |                                                 |   )                                                       |
+|                                       |                                                 | )                                                         |
+|                                       |                                                 |                                                           |
++---------------------------------------+-------------------------------------------------+-----------------------------------------------------------+
+| component_instantiation_statement_003 | U4: configuration conf;                         | (component_instantiation_statement                        |
+|                                       |                                                 |   (identifier                                             |
+|                                       |                                                 |     U4                                                    |
+|                                       |                                                 |   )                                                       |
+|                                       |                                                 |   (instantiated_unit<v>                                   |
+|                                       |                                                 |     (configuration                                        |
+|                                       |                                                 |       (name<v>                                            |
+|                                       |                                                 |         (identifier                                       |
+|                                       |                                                 |           conf                                            |
+|                                       |                                                 |         )                                                 |
+|                                       |                                                 |       )                                                   |
+|                                       |                                                 |     )                                                     |
+|                                       |                                                 |   )                                                       |
+|                                       |                                                 | )                                                         |
+|                                       |                                                 |                                                           |
++---------------------------------------+-------------------------------------------------+-----------------------------------------------------------+
+
 =======================
 component_specification
 =======================
@@ -16721,4 +16920,4 @@ waveform
 +--------------+---------------------------------------+------------------------------------------------------+
 
 
-Total Tests: 437
+Total Tests: 441

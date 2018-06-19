@@ -1370,7 +1370,7 @@ auto const component_declaration_def = ( // operator precedence
     ;
 #endif
 
-#if 0
+
 // component_instantiation_statement ::=                            [LRM93 §9.6]
 //     instantiation_label :
 //         instantiated_unit
@@ -1384,7 +1384,7 @@ auto const component_instantiation_statement_def = ( // operator precedence
     )
     >  ';'
     ;
-#endif
+
 
 
 // component_specification ::=                                      [LRM93 §5.2]
@@ -2477,17 +2477,17 @@ auto const indexed_name_def =
     ;
 
 
-#if 0
+
 // instantiated_unit ::=                                            [LRM93 §9.6]
 //       [ component ] component_name
 //     | entity entity_name [ ( architecture_identifier ) ]
 //     | configuration configuration_name
 auto const instantiated_unit_def =
-      -(COMPONENT >> name)
-    | (ENTITY >> name -( '(' >> architecture_identifier >> ')' ))
-    | (CONFIGURATION >> name)
+      x3::as<ast::instantiated_unit_component>[-COMPONENT >> name]
+    | x3::as<ast::instantiated_unit_entity>[ENTITY >> name >> -( '(' >> identifier >> ')' )]
+    | x3::as<ast::instantiated_unit_configuration>[CONFIGURATION   >> name]
     ;
-#endif
+
 
 
 // instantiation_list ::=                                           [LRM93 §5.2]
@@ -3973,7 +3973,7 @@ BOOST_SPIRIT_DEFINE(  // -- C --
     , choices
     //, component_configuration
     //, component_declaration
-    //, component_instantiation_statement
+    , component_instantiation_statement
     , component_specification
     , composite_type_definition
     , concurrent_assertion_statement
@@ -4064,7 +4064,7 @@ BOOST_SPIRIT_DEFINE(  // -- I --
     , index_specification
     , index_subtype_definition
     , indexed_name
-    //, instantiated_unit
+    , instantiated_unit
     , instantiation_list
     , integer
     // EMBEDDED, integer_type_definition

@@ -1,0 +1,14 @@
+(component_instantiation_statement
+  (identifier
+    U1
+  )
+  (instantiated_unit<v>
+    (component
+      (name<v>
+        (identifier
+          instantiated_unit
+        )
+      )
+    )
+  )
+)
