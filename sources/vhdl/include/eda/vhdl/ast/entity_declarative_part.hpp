@@ -33,7 +33,7 @@
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct entity_declarative_item : variant<
+using entity_declarative_item = variant<
     nullary,
     alias_declaration,
     attribute_declaration,
@@ -50,11 +50,7 @@ struct entity_declarative_item : variant<
     subtype_declaration,
     type_declaration,
     use_clause
->
-{
-    using base_type::base_type;
-    using base_type::operator=;
-};
+>;
 
 
 struct entity_declarative_part : std::vector<ast::entity_declarative_item> { };

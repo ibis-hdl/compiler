@@ -21,16 +21,12 @@
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct entity_statement : variant<
+using entity_statement = variant<
     ast::nullary,
     ast::concurrent_assertion_statement,
     ast::concurrent_procedure_call_statement,   // passive_concurrent_procedure_call_statement
     ast::process_statement                      // passive_process_statement
->
-{
-    using base_type::base_type;
-    using base_type::operator=;
-};
+>;
 
 
 struct entity_statement_part : std::vector<ast::entity_statement> { };

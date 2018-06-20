@@ -21,16 +21,12 @@
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct configuration_declarative_item : variant<
+using configuration_declarative_item = variant<
     ast::nullary,
     ast::use_clause,
     ast::attribute_specification,
     ast::group_declaration
->
-{
-    using base_type::base_type;
-    using base_type::operator=;
-};
+>;
 
 
 struct configuration_declarative_part : std::vector<ast::configuration_declarative_item> { };

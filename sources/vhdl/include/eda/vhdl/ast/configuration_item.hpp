@@ -35,15 +35,11 @@ struct component_configuration;
  * }
  * \enddot
  */
-struct configuration_item : variant<
+using configuration_item = variant<
     ast::nullary,
     forward_ast<ast::block_configuration>,
     forward_ast<ast::component_configuration>
->
-{
-    using base_type::base_type;
-    using base_type::operator=;
-};
+>;
 
 
 } } } // namespace eda.vhdl.ast
