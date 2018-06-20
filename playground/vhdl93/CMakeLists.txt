@@ -27,6 +27,10 @@ add_executable(x3_integer_lambda_solution   EXCLUDE_FROM_ALL x3_integer_lambda_s
 add_executable(x3_variant_inheritance       EXCLUDE_FROM_ALL x3_variant_inheritance.cpp)
 add_executable(vhdl_based_literal           EXCLUDE_FROM_ALL vhdl_based_literal.cpp)
 
+add_executable(vhdl_string_literal_print    EXCLUDE_FROM_ALL vhdl_string_literal_print.cpp)
+target_include_directories(vhdl_string_literal_print PRIVATE 
+    ${Boost_INCLUDE_DIR}
+)
 
 ## the follwoing depend on actually Spirit.X3
 add_executable(vhdl_numeric_literals        EXCLUDE_FROM_ALL vhdl_numeric_literals.cpp)
