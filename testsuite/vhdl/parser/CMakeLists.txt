@@ -18,10 +18,11 @@ set(TEST_COMMON_SOURCES
 
 set(PARSERTEST_SOURCES#_DEV
     ${TEST_COMMON_SOURCES}
-    parser_test/configuration_declaration_test.cpp
+    parser_test/block_statement_test.cpp
+    parser_test/generate_statement_test.cpp
 )
 
-set(PARSERTEST_SOURCES
+set(PARSERTEST_SOURCES_
     ${TEST_COMMON_SOURCES}
     parser_test/abstract_literal_test.cpp
     parser_test/actual_part_test.cpp
@@ -37,10 +38,11 @@ set(PARSERTEST_SOURCES
     parser_test/bit_string_literal_test.cpp
     parser_test/block_configuration_test.cpp
     parser_test/block_header_test.cpp
+    parser_test/block_statement_test.cpp
     parser_test/case_statement_test.cpp
     parser_test/character_literal_test.cpp
     parser_test/choices_test.cpp
-    parser_test/component_declaration_test.cpp
+    parser_test/component_configuration_test.cpp
     parser_test/component_declaration_test.cpp
     parser_test/component_instantiation_statement_test.cpp
     parser_test/component_specification_test.cpp
@@ -66,6 +68,7 @@ set(PARSERTEST_SOURCES
     parser_test/file_open_information_test.cpp
     parser_test/formal_part_test.cpp
     parser_test/function_call_test.cpp
+    parser_test/generate_statement_test.cpp
     parser_test/generic_clause_test.cpp
     parser_test/generic_map_aspect_test.cpp
     parser_test/group_declaration_test.cpp
@@ -97,7 +100,6 @@ set(PARSERTEST_SOURCES
     parser_test/primary_test.cpp
     parser_test/primary_unit_declaration_test.cpp
     parser_test/procedure_call_test.cpp
-    parser_test/block_header_test.cpp
     parser_test/process_statement_test.cpp
     parser_test/qualified_expression_test.cpp
     parser_test/range_constraint_test.cpp
@@ -128,6 +130,7 @@ set(PARSERTEST_SOURCES
     parser_test/variable_declaration_test.cpp
     parser_test/wait_statement_test.cpp
     parser_test/waveform_test.cpp
+
 )
 
 add_executable(${PROJECT_NAME} ${PARSERTEST_SOURCES})

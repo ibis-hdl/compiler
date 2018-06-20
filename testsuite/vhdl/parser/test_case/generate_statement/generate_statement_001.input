@@ -1,0 +1,7 @@
+G2: if I = 3 generate 
+    L: Blk 
+    port map ( A(I+1), 
+               B(I+2))
+    ; 
+end generate; 
+

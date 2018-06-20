@@ -29,6 +29,7 @@ BOOST_SPIRIT_INSTANTIATE(binding_indication_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(bit_string_literal_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(block_configuration_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(block_header_type, iterator_type, context_type);
+BOOST_SPIRIT_INSTANTIATE(block_statement_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(case_statement_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(character_literal_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(choices_type, iterator_type, context_type);
@@ -58,6 +59,7 @@ BOOST_SPIRIT_INSTANTIATE(file_declaration_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(file_open_information_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(formal_part_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(function_call_type, iterator_type, context_type);
+BOOST_SPIRIT_INSTANTIATE(generate_statement_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(generic_clause_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(generic_map_aspect_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(group_declaration_type, iterator_type, context_type);
@@ -120,10 +122,12 @@ BOOST_SPIRIT_INSTANTIATE(variable_declaration_type, iterator_type, context_type)
 BOOST_SPIRIT_INSTANTIATE(wait_statement_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(waveform_type, iterator_type, context_type);
 
+
 } } } // namespace eda.vhdl.parser
 
 
 namespace testsuite { namespace vhdl_parser {
+
 
 parser::abstract_literal_type const& abstract_literal() {
     return eda::vhdl::parser::abstract_literal;
@@ -179,6 +183,10 @@ parser::block_configuration_type const& block_configuration() {
 
 parser::block_header_type const& block_header() {
     return eda::vhdl::parser::block_header;
+}
+
+parser::block_statement_type const& block_statement() {
+    return eda::vhdl::parser::block_statement;
 }
 
 parser::case_statement_type const& case_statement() {
@@ -295,6 +303,10 @@ parser::formal_part_type const& formal_part() {
 
 parser::function_call_type const& function_call() {
     return eda::vhdl::parser::function_call;
+}
+
+parser::generate_statement_type const& generate_statement() {
+    return eda::vhdl::parser::generate_statement;
 }
 
 parser::generic_clause_type const& generic_clause() {
@@ -543,6 +555,3 @@ parser::waveform_type const& waveform() {
 
 
 } } // namespace testsuite.vhdl_parser
-
-
-

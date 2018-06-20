@@ -188,7 +188,7 @@ x3::symbols<> const keywords(
 );
 
 auto const keyword = x3::rule<struct _> { "keyword" } =
-        distinct(keywords)
+    distinct(keywords)
     ;
 
 } } } } // namespace eda.vhdl.parser.keywords
@@ -1232,7 +1232,7 @@ auto const block_specification_def = /* order matters */
     ;
 
 
-#if 0
+
 // block_statement ::=                                              [LRM93 §9.1]
 //     block_label :
 //         block [ ( guard_expression ) ] [ is ]
@@ -1255,15 +1255,15 @@ auto const block_statement_def = ( // operator precedence
     )
     >  ';'
     ;
-#endif
 
-#if 0
+
+
 // block_statement_part ::=                                         [LRM93 §9.1]
 //     { concurrent_statement }
 auto const block_statement_part_def =
     *concurrent_statement
     ;
-#endif
+
 
 
 // case_statement ::=                                               [LRM93 §8.8]
@@ -1443,7 +1443,7 @@ auto const concurrent_signal_assignment_statement_def =
     ;
 
 
-#if 0
+
 // concurrent_statement ::=                                           [LRM93 §9]
 //       block_statement
 //     | process_statement
@@ -1461,7 +1461,7 @@ auto const concurrent_statement_def =
     | component_instantiation_statement
     | generate_statement
     ;
-#endif
+
 
 
 // condition ::=                                                    [LRM93 §8.1]
@@ -2265,7 +2265,7 @@ auto const function_call_def =
     ;
 
 
-#if 0
+
 // generate_statement ::=                                           [LRM93 §9.7]
 //     generate_label :
 //         generation_scheme generate
@@ -2274,21 +2274,21 @@ auto const function_call_def =
 //             { concurrent_statement }
 //         end generate [ generate_label ] ;
 auto const generate_statement_def = ( // operator precedence
-       label
-    >> ':'
+       label_colon
     >> generation_scheme
     >> GENERATE
-    >> *block_declarative_item
-    >> -BEGIN
+    >> -(*block_declarative_item
+          >> BEGIN
+       )
     >> *concurrent_statement
     >> END >> GENERATE
     >> -label
     )
     >  ';'
     ;
-#endif
 
-#if 0
+
+
 // generation_scheme ::=                                            [LRM93 §9.7]
 //       for generate_parameter_specification
 //     | if condition
@@ -2296,7 +2296,7 @@ auto const generation_scheme_def =
       (FOR >> parameter_specification)
     | (IF  >> condition)
     ;
-#endif
+
 
 
 // generic_clause ::=                                             [LRM93 §1.1.1]
@@ -3964,8 +3964,8 @@ BOOST_SPIRIT_DEFINE(  // -- B --
     , block_declarative_part
     , block_header
     , block_specification
-    //, block_statement
-    //, block_statement_part
+    , block_statement
+    , block_statement_part
 )
 BOOST_SPIRIT_DEFINE(  // -- C --
       case_statement
@@ -3981,7 +3981,7 @@ BOOST_SPIRIT_DEFINE(  // -- C --
     , concurrent_assertion_statement
     , concurrent_procedure_call_statement
     , concurrent_signal_assignment_statement
-    //, concurrent_statement
+    , concurrent_statement
     , condition
     , condition_clause
     , conditional_signal_assignment
@@ -4046,9 +4046,9 @@ BOOST_SPIRIT_DEFINE(  // -- F --
     , function_call
 )
 BOOST_SPIRIT_DEFINE(  // -- G --
-    //  generate_statement
-    //, generation_scheme
-      generic_clause
+      generate_statement
+    , generation_scheme
+    , generic_clause
     , generic_map_aspect
     , graphic_character
     , group_constituent
