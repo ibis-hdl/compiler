@@ -15,8 +15,8 @@
 #include <map>
 
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
+#include <eda/utils/compiler_push.hpp>
+#include <eda/utils/compiler_warning.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
@@ -3088,7 +3088,7 @@ void printer::operator()(keyword_token token)
 }
 
 
-void printer::operator()(nullary const& node)
+void printer::operator()(nullary const&)
 {
     os << "\n*****************************";
     os << "\n*    SHALL NEVER BE HERE    *";
@@ -3102,4 +3102,5 @@ void printer::operator()(nullary const& node)
 } } } // namespace eda.vhdl.ast
 
 
-#pragma GCC diagnostic pop
+#include <eda/utils/compiler_pop.hpp>
+

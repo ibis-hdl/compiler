@@ -9,14 +9,12 @@
 #define SOURCES_COMMON_INCLUDE_EDA_SUPPORT_BOOST_LOCALE_HPP_
 
 
-/* special boost.locale header to get rid off compiler warning:
- *  'template<class> class std::auto_ptr' is deprecated */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-
+/* get rid off compiler warning:
+ * 'template<class> class std::auto_ptr' is deprecated */
+#include <eda/utils/compiler_push.hpp>
+#include <eda/utils/compiler_warning.hpp>
 #include <boost/locale.hpp>
-
-#pragma GCC diagnostic pop
+#include <eda/utils/compiler_pop.hpp>
 
 
 #endif /* SOURCES_COMMON_INCLUDE_EDA_SUPPORT_BOOST_LOCALE_HPP_ */

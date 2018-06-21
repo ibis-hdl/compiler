@@ -331,9 +331,10 @@ auto const shift_operator_def =
 
 
 
-/* get rid off the annoying unused parameter warnings from x3 */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
+/* special boost.spirit.x3 header to get rid off the annoying unused parameter
+ * warnings from x3 */
+#include <eda/utils/compiler_push.hpp>
+#include <eda/utils/compiler_warning.hpp>
 
 BOOST_SPIRIT_DEFINE(
     binary_logical_operator,
@@ -344,7 +345,7 @@ BOOST_SPIRIT_DEFINE(
     shift_operator
 )
 
-#pragma GCC diagnostic pop
+#include <eda/utils/compiler_pop.hpp>
 
 
 } } } } // namespace eda.vhdl.parser.operators
@@ -3919,9 +3920,10 @@ auto const waveform_element_def =
 
 
 
-/* get rid off the annoying unused parameter warnings from x3 */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
+/* special boost.spirit.x3 header to get rid off the annoying unused parameter
+ * warnings from x3 */
+#include <eda/utils/compiler_push.hpp>
+#include <eda/utils/compiler_warning.hpp>
 
 BOOST_SPIRIT_DEFINE(  // -- A --
       abstract_literal
@@ -4189,7 +4191,7 @@ BOOST_SPIRIT_DEFINE(  // -- W --
     , waveform_element
 )
 
-#pragma GCC diagnostic pop
+#include <eda/utils/compiler_pop.hpp>
 
 
 /*
