@@ -13,6 +13,11 @@
  * warnings from x3 */
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+
+#if defined(BOOST_SPIRIT_X3_DEBUG)
+#include <eda/support/boost/spirit_x3_debug.hpp>
+#endif
 
 #include <boost/spirit/home/x3.hpp>
 
