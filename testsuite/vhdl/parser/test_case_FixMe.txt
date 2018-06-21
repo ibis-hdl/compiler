@@ -9,6 +9,10 @@ ToDo:
 - allocator_003 (http://vhdl.renerta.com/source/vhd00004.htm) 
 - component_configuration_000; configuration_declaration_000, reason 
   is related to rule name, where no selected_name is active!!!
+- {block,generate_statement} test fails (and tests are missing) - problem is
+  related to both rules! Seems related to concurrent_statement alternative
+  rule, where concurrent_procedure_call_statement triggers exxpect ';' exception
+  before can test component_instantiation_statement (also has ';')
 
 Renewal 2018:
 - Missing tests:

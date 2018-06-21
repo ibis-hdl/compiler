@@ -1,0 +1,5 @@
+CONTROL_LOGIC: block
+begin
+    U1: CONTROLLER_A
+        port map (CLK,X,Y,Z);
+end block CONTROL_LOGIC;

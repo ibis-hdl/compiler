@@ -35,8 +35,30 @@ struct concurrent_statement : variant<
     ast::generate_statement
 >
 {
-    using base_type::base_type;
-    using base_type::operator=;
+    /* Note, concurrent_statement is forwarded due to cyclic dependency at
+     * block_statement_part. Since x3::variant has move constructor defined,
+     * the copy constructor is implicit deleted, see
+     * [Rule-of-Three becomes Rule-of-Five with C++11?](
+     *  https://stackoverflow.com/questions/4782757/rule-of-three-becomes-rule-of-five-with-c11?answertab=active#tab-top).
+     * Here we bring the compiler generated back and supply specific assign
+     * operator= required to this variant - copy&paste from x3::variant.  */
+    concurrent_statement() = default;
+    concurrent_statement(concurrent_statement const&) = default;
+    concurrent_statement& operator=(concurrent_statement const&) = default;
+
+    template <typename T, class = non_self_t<T>>
+    variant& operator=(T const& rhs) BOOST_NOEXCEPT_IF((std::is_nothrow_assignable<variant_type, T const&>{}))
+    {
+        var = rhs;
+        return *this;
+    }
+
+    template <typename T, class = non_self_t<T>>
+    concurrent_statement& operator=(T&& rhs) BOOST_NOEXCEPT_IF((std::is_nothrow_assignable<variant_type, T&&>::value))  // `::value` is a workaround for the VS2015 bug
+    {
+        var = std::forward<T>(rhs);
+        return *this;
+    }
 };
 
 

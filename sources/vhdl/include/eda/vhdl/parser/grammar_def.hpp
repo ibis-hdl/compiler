@@ -8,10 +8,6 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_DEF_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_DEF_HPP_
 
-#if defined(BOOST_SPIRIT_X3_DEBUG)
-#include <eda/vhdl/parser/grammar_debug.hpp>
-#endif
-
 #include <eda/vhdl/parser/namespace_alias.hpp>
 #include <eda/vhdl/parser/grammar.hpp>
 #include <eda/vhdl/parser/grammar_id.hpp>
@@ -2279,7 +2275,7 @@ auto const generate_statement_def = ( // operator precedence
     >> GENERATE
     >> -(*block_declarative_item
           >> BEGIN
-       )
+       ) // FIXME: rule failed - never get concurrent_statement/component_instantiation_statement
     >> *concurrent_statement
     >> END >> GENERATE
     >> -label
