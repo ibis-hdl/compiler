@@ -80,7 +80,7 @@ struct context_clause_class;
 struct context_item_class;
 struct decimal_literal_class;
 struct delay_mechanism_class;
-struct design_file_class;
+//struct design_file_class;
 struct design_unit_class;
 struct designator_class;
 struct direction_class;

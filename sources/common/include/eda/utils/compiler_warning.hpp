@@ -10,12 +10,12 @@
 
 
 /**
- * Compiler Warning
+ * Compiler Warning disabled for 3rd party sources
  *
  * see [Is using #pragma warning push/pop the right way to temporarily alter warning level?](
  * https://stackoverflow.com/questions/4193476/is-using-pragma-warning-push-pop-the-right-way-to-temporarily-alter-warning-lev)
  */
-#if defined(__GNUC__)
+#if defined(__GNUC__) // also matches CLang++
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif

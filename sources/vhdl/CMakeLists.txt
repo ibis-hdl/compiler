@@ -16,9 +16,9 @@ set(VHDL_PARSER_SOURCE
     src/ast/ast_printer.cpp
     src/ast/numeric_convert.cpp
     
+    src/parser/parse.cpp
     src/parser/handle_on_error.cpp
-
-    #src/parser/grammar.cpp
+    src/parser/grammar.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC ${VHDL_PARSER_SOURCE})

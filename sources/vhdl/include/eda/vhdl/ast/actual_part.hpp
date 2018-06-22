@@ -26,14 +26,10 @@ struct actual_part_chunk {
 };
 
 
-struct actual_part : variant<
+using actual_part = variant<
     actual_designator,
     actual_part_chunk
->
-{
-    using base_type::base_type;
-    using base_type::operator=;
-};
+>;
 
 
 } } } // namespace eda.vhdl.ast

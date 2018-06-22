@@ -50,7 +50,7 @@ struct loop_statement;
  * }
  * \enddot
  */
-struct sequential_statement : variant<
+using sequential_statement = variant<
     nullary,
     wait_statement,
     assertion_statement,
@@ -65,11 +65,7 @@ struct sequential_statement : variant<
     exit_statement,
     return_statement,
     null_statement
->
-{
-    using base_type::base_type;
-    using base_type::operator=;
-};
+>;
 
 
 } } } // namespace eda.vhdl.ast

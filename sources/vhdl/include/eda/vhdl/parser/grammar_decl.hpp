@@ -80,7 +80,7 @@ BOOST_SPIRIT_DECLARE(context_clause_type);
 BOOST_SPIRIT_DECLARE(context_item_type);
 BOOST_SPIRIT_DECLARE(decimal_literal_type);
 BOOST_SPIRIT_DECLARE(delay_mechanism_type);
-BOOST_SPIRIT_DECLARE(design_file_type);
+//BOOST_SPIRIT_DECLARE(design_file_type);
 BOOST_SPIRIT_DECLARE(design_unit_type);
 BOOST_SPIRIT_DECLARE(designator_type);
 BOOST_SPIRIT_DECLARE(direction_type);

@@ -1701,22 +1701,22 @@ auto const delay_mechanism_def =
     ;
 
 
-#if 0
+
 // design_file ::=                                                 [LRM93 §11.1]
 //     design_unit { design_unit }
 auto const design_file_def =
-    +design_unit
+    *design_unit
     ;
-#endif
 
-#if 0
+
+
 // design_unit ::=                                                 [LRM93 §11.1]
 //     context_clause library_unit
 auto const design_unit_def =
        context_clause
     >> library_unit
     ;
-#endif
+
 
 
 // designator ::=                                                   [LRM93 §2.1]
@@ -2630,7 +2630,7 @@ auto const library_clause_def = ( // operator precedence
     ;
 
 
-#if 0
+
 // library_unit ::=                                                [LRM93 §11.1]
 //       primary_unit
 //     | secondary_unit
@@ -2638,7 +2638,7 @@ auto const library_unit_def =
       primary_unit
     | secondary_unit
     ;
-#endif
+
 
 
 // literal ::=                                                    [LRM93 §7.3.1]
@@ -3028,7 +3028,7 @@ auto const primary_def =
     ;
 
 
-#if 0
+
 // primary_unit ::=                                                [LRM93 §11.1]
 //       entity_declaration
 //     | configuration_declaration
@@ -3038,7 +3038,7 @@ auto const primary_unit_def =
     | configuration_declaration
     | package_declaration
     ;
-#endif
+
 
 
 
@@ -3260,7 +3260,7 @@ auto const scalar_type_definition_def = /* order matters */
     ;
 
 
-#if 0
+
 // secondary_unit ::=                                              [LRM93 §11.1]
 //       architecture_body
 //     | package_body
@@ -3268,7 +3268,7 @@ auto const secondary_unit_def =
       architecture_body
     | package_body
     ;
-#endif
+
 
 
 // secondary_unit_declaration ::=                                 [LRM93 §3.1.3]
@@ -4000,8 +4000,8 @@ BOOST_SPIRIT_DEFINE(  // -- C --
 BOOST_SPIRIT_DEFINE(  // -- D --
        decimal_literal
      , delay_mechanism
-    //, design_file
-    //, design_unit
+    , design_file
+    , design_unit
     , designator
     , direction
     , disconnection_specification
@@ -4084,7 +4084,7 @@ BOOST_SPIRIT_DEFINE(  // -- L --
     , letter
     , letter_or_digit
     , library_clause
-    //, library_unit
+    , library_unit
     , literal
     , logical_name
     , logical_name_list
@@ -4117,7 +4117,7 @@ BOOST_SPIRIT_DEFINE(  // -- P --
     , port_map_aspect
     , prefix
     , primary
-    //, primary_unit
+    , primary_unit
     , primary_unit_declaration
     , procedure_call
     , procedure_call_statement
@@ -4139,7 +4139,7 @@ BOOST_SPIRIT_DEFINE(  // -- R --
 )
 BOOST_SPIRIT_DEFINE(  // -- S --
       scalar_type_definition
-    //, secondary_unit
+    , secondary_unit
     , secondary_unit_declaration
     , selected_name
     , selected_signal_assignment

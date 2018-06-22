@@ -8,11 +8,25 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_HPP_
 
+#include <eda/vhdl/ast.hpp>
+#include <eda/vhdl/parser/namespace_alias.hpp>
+
+#include <eda/support/boost/spirit_x3.hpp>
+
+#include <eda/utils/compiler_push.hpp>
+#include <eda/utils/compiler_warning.hpp>
+#include <boost/spirit/home/x3/nonterminal/rule.hpp>
+#include <eda/utils/compiler_pop.hpp>
+
 
 namespace eda { namespace vhdl { namespace parser {
 
 
-// empty yet
+struct design_file_class;
+typedef x3::rule<design_file_class, ast::design_file> design_file_type;
+BOOST_SPIRIT_DECLARE(design_file_type);
+
+parser::design_file_type const& grammar();
 
 
 } } } // namespace eda.vhdl.parser

@@ -21,7 +21,7 @@ set(PARSERTEST_SOURCES#_DEV
     parser_test/architecture_body_test.cpp
 )
 
-set(PARSERTEST_SOURCES_
+set(PARSERTEST_SOURCES
     ${TEST_COMMON_SOURCES}
     parser_test/abstract_literal_test.cpp
     parser_test/actual_part_test.cpp

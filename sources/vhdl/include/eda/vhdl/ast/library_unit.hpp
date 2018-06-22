@@ -19,15 +19,11 @@
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct library_unit : variant<
+using library_unit = variant<
     ast::nullary,
     ast::primary_unit,
     ast::secondary_unit
->
-{
-    using base_type::base_type;
-    using base_type::operator=;
-};
+>;
 
 
 } } } // namespace eda.vhdl.ast

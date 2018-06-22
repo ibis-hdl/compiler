@@ -12,15 +12,14 @@
 #include <eda/support/boost/namespace_fwd.hpp>
 
 
-
 namespace eda { namespace vhdl { namespace parser {
 
 
-// namespace alias
 namespace x3 = boost::spirit::x3;
-
 // VHDL char set is iso8859:1
 namespace iso8859_1 = boost::spirit::x3::iso8859_1;
+
+namespace fs = boost::filesystem;
 
 
 } } } // namespace eda.vhdl.parser

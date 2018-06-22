@@ -99,7 +99,7 @@ typedef x3::rule<context_clause_class, ast::context_clause> context_clause_type;
 typedef x3::rule<context_item_class, ast::context_item> context_item_type;
 typedef x3::rule<decimal_literal_class, ast::decimal_literal> decimal_literal_type;
 typedef x3::rule<delay_mechanism_class, ast::delay_mechanism> delay_mechanism_type;
-typedef x3::rule<design_file_class, ast::design_file> design_file_type;
+//typedef x3::rule<design_file_class, ast::design_file> design_file_type;
 typedef x3::rule<design_unit_class, ast::design_unit> design_unit_type;
 typedef x3::rule<designator_class, ast::designator> designator_type;
 typedef x3::rule<direction_class, ast::keyword_token> direction_type;

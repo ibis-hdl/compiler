@@ -17,6 +17,10 @@ namespace boost {
 
     } }  // namespace spirit.x3
 
+    namespace filesystem {
+
+    } // namespace filesystem
+
 } // namespace boost
 
 
