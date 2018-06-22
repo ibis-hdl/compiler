@@ -11,6 +11,8 @@
 #include <eda/vhdl/parser/grammar.hpp>
 #include <eda/vhdl/parser/parser_config.hpp>
 
+#include <eda/support/boost/locale.hpp>
+
 #include <iostream>
 
 
@@ -46,6 +48,31 @@ bool parse::operator()(std::string const &input, ast::design_file& design_file,
             parser::grammar()
     ];
 
+    auto const make_exception_description = [](fs::path const &filename, auto const& e)
+    {
+        using boost::locale::format;
+        using boost::locale::translate;
+
+        // [IIFE idiom](https://www.bfilipek.com/2016/11/iife-for-complex-initialization.html)
+        std::string const what = [&] {
+            if constexpr(std::is_base_of<decltype(e), std::exception>::value) {
+                return e.what();
+            }
+            else {
+                return translate("ExceptionDescription", "unknown");
+            }
+        }();
+
+        std::string const str{(format(translate("ExceptionDescription",
+            "Caught exception '{1}' during parsing file '{2}'"
+            ))
+            % what
+            % filename.string()
+            ).str()};
+
+        return str;
+    };
+
     try {
         bool const parse_ok = x3::phrase_parse(
             iter, end,
@@ -54,28 +81,32 @@ bool parse::operator()(std::string const &input, ast::design_file& design_file,
         );
 
         if (!parse_ok) {
-            error_handler(iter, "Source file '"
-                    + filename.string()
-                    + "' failed to parse!");
+
+            using boost::locale::format;
+            using boost::locale::translate;
+
+            std::string const message{
+                (format(translate("Source file '{1}' failed to parse!"))
+                 % filename.string()).str()};
+
+            error_handler(iter, message);
         }
 
         return parse_ok;
 
     }
     catch(std::bad_alloc const& e) {
-        // ToDo: Rethrow using C++11 exception_ptr
-        os << "Memory exhausted: '"
-           << e.what()
-           << "'\n"
-        ;
+        /* ToDo: Re-throw using C++11 exception_ptr, see 2nd answer
+         * [How do I make a call to what() on std::exception_ptr](
+         * https://stackoverflow.com/questions/14232814/how-do-i-make-a-call-to-what-on-stdexception-ptr)  */
+        os << make_exception_description(filename, e);
     }
     catch(std::exception const& e) {
-        os << "Caught unexpected exception '"
-                << e.what()
-                << "'\n";
+        os << make_exception_description(filename, e);
     }
     catch(...) {
-        os << "Caught unexpected exception '<unknown>'\n";
+        typedef struct { } unknown;
+        os << make_exception_description(filename, unknown{});
     }
 
     return false;
