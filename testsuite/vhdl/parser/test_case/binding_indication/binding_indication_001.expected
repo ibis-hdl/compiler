@@ -24,9 +24,21 @@
       )
       (actual_part<v>
         (actual_designator<v>
-          (name<v>
-            (identifier
-              Comp_Buf_Delay
+          (expression
+            (relation
+              (shift_expression
+                (simple_expression
+                  (term
+                    (primary<v>
+                      (name<v>
+                        (identifier
+                          Comp_Buf_Delay
+                        )
+                      )
+                    )
+                  )
+                )
+              )
             )
           )
         )
@@ -46,9 +58,21 @@
       )
       (actual_part<v>
         (actual_designator<v>
-          (name<v>
-            (identifier
-              Comp_I
+          (expression
+            (relation
+              (shift_expression
+                (simple_expression
+                  (term
+                    (primary<v>
+                      (name<v>
+                        (identifier
+                          Comp_I
+                        )
+                      )
+                    )
+                  )
+                )
+              )
             )
           )
         )
@@ -66,9 +90,21 @@
       )
       (actual_part<v>
         (actual_designator<v>
-          (name<v>
-            (identifier
-              Comp_O
+          (expression
+            (relation
+              (shift_expression
+                (simple_expression
+                  (term
+                    (primary<v>
+                      (name<v>
+                        (identifier
+                          Comp_O
+                        )
+                      )
+                    )
+                  )
+                )
+              )
             )
           )
         )

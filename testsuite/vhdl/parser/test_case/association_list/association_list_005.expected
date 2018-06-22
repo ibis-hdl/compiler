@@ -3,7 +3,7 @@
     (actual_part<v>
       (name<v>
         (identifier
-          function_name
+          A
         )
       )
       (actual_designator<v>
@@ -15,7 +15,7 @@
                   (primary<v>
                     (name<v>
                       (identifier
-                        actual_designator
+                        I
                       )
                     )
                   )
@@ -31,7 +31,7 @@
     (actual_part<v>
       (name<v>
         (identifier
-          cool_function
+          B
         )
       )
       (actual_designator<v>
@@ -43,7 +43,21 @@
                   (primary<v>
                     (name<v>
                       (identifier
-                        signal_name
+                        I
+                      )
+                    )
+                  )
+                ),
+                (operator: ADD),
+                (term
+                  (primary<v>
+                    (literal<v>
+                      (numeric_literal<v>
+                        (abstract_literal<v>
+                          (decimal_literal
+                            literal: 1, type: integer
+                          )
+                        )
                       )
                     )
                   )

@@ -766,8 +766,8 @@ auto const access_type_definition_def =
 //     | file_name
 //     | open
 auto const actual_designator_def =
-      name          // aka {signal, variable, file}_name
-    | expression    // breaks down to name too! but allows concat
+    // Note, expression also matches {signal,variable,file}_name
+      expression
     | OPEN
     ;
 
@@ -1450,13 +1450,15 @@ auto const concurrent_signal_assignment_statement_def =
 //     | component_instantiation_statement
 //     | generate_statement
 auto const concurrent_statement_def =
-      block_statement
-    | process_statement
+    /* Note, order matters but is fragile; the problem seems to rise from rule
+     * label >> ':', which is same/similar to component_instantiation_statement */
+      component_instantiation_statement
+    | concurrent_signal_assignment_statement
     | concurrent_procedure_call_statement
     | concurrent_assertion_statement
-    | concurrent_signal_assignment_statement
-    | component_instantiation_statement
+    | block_statement
     | generate_statement
+    | process_statement
     ;
 
 

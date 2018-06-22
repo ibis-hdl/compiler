@@ -5,9 +5,21 @@
     )
   )
   (actual_designator<v>
-    (name<v>
-      (identifier
-        actual_designator
+    (expression
+      (relation
+        (shift_expression
+          (simple_expression
+            (term
+              (primary<v>
+                (name<v>
+                  (identifier
+                    actual_designator
+                  )
+                )
+              )
+            )
+          )
+        )
       )
     )
   )

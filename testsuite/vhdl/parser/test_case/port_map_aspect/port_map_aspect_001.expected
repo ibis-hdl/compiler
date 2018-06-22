@@ -12,9 +12,21 @@
       )
       (actual_part<v>
         (actual_designator<v>
-          (name<v>
-            (identifier
-              Y
+          (expression
+            (relation
+              (shift_expression
+                (simple_expression
+                  (term
+                    (primary<v>
+                      (name<v>
+                        (identifier
+                          Y
+                        )
+                      )
+                    )
+                  )
+                )
+              )
             )
           )
         )
@@ -32,9 +44,21 @@
       )
       (actual_part<v>
         (actual_designator<v>
-          (name<v>
-            (identifier
-              X
+          (expression
+            (relation
+              (shift_expression
+                (simple_expression
+                  (term
+                    (primary<v>
+                      (name<v>
+                        (identifier
+                          X
+                        )
+                      )
+                    )
+                  )
+                )
+              )
             )
           )
         )
@@ -52,9 +76,21 @@
       )
       (actual_part<v>
         (actual_designator<v>
-          (name<v>
-            (identifier
-              S
+          (expression
+            (relation
+              (shift_expression
+                (simple_expression
+                  (term
+                    (primary<v>
+                      (name<v>
+                        (identifier
+                          S
+                        )
+                      )
+                    )
+                  )
+                )
+              )
             )
           )
         )

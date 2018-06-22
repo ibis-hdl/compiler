@@ -9,9 +9,21 @@
       (association_element
         (actual_part<v>
           (actual_designator<v>
-            (name<v>
-              (identifier
-                actual_parameter_part
+            (expression
+              (relation
+                (shift_expression
+                  (simple_expression
+                    (term
+                      (primary<v>
+                        (name<v>
+                          (identifier
+                            actual_parameter_part
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
               )
             )
           )

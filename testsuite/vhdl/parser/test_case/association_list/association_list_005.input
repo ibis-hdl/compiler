@@ -1,0 +1,2 @@
+-- used by generate statement
+A(I), B(I+1)

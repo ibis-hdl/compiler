@@ -562,16 +562,22 @@ void printer::operator()(block_statement const &node)
         os << "\n";
     }
 
-    (*this)(node.header);
-    os << "\n";
+    if(node.header.generic_part || node.header.port_part) {
+        (*this)(node.header);
+        os << "\n";
+    }
 
-    (*this)(node.declarative_part);
-    os << "\n";
+    if(!node.declarative_part.empty()) {
+        (*this)(node.declarative_part);
+        os << "\n";
+    }
 
-    (*this)(node.statement_part);
+    if(!node.statement_part.empty()) {
+        (*this)(node.statement_part);
+        os << "\n";
+    }
 
     if(node.end_label) {
-        os << "\n";
         (*this)(*node.end_label);
     }
 }

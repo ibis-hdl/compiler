@@ -18,9 +18,21 @@
     )
     (actual_part<v>
       (actual_designator<v>
-        (name<v>
-          (identifier
-            signal_name
+        (expression
+          (relation
+            (shift_expression
+              (simple_expression
+                (term
+                  (primary<v>
+                    (name<v>
+                      (identifier
+                        signal_name
+                      )
+                    )
+                  )
+                )
+              )
+            )
           )
         )
       )
@@ -50,9 +62,21 @@
         )
       )
       (actual_designator<v>
-        (name<v>
-          (identifier
-            actual_designator
+        (expression
+          (relation
+            (shift_expression
+              (simple_expression
+                (term
+                  (primary<v>
+                    (name<v>
+                      (identifier
+                        actual_designator
+                      )
+                    )
+                  )
+                )
+              )
+            )
           )
         )
       )

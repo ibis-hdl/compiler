@@ -38,9 +38,21 @@
         )
         (actual_part<v>
           (actual_designator<v>
-            (name<v>
-              (identifier
-                LongTime
+            (expression
+              (relation
+                (shift_expression
+                  (simple_expression
+                    (term
+                      (primary<v>
+                        (name<v>
+                          (identifier
+                            LongTime
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
               )
             )
           )
@@ -58,9 +70,21 @@
         )
         (actual_part<v>
           (actual_designator<v>
-            (name<v>
-              (identifier
-                ShortTime
+            (expression
+              (relation
+                (shift_expression
+                  (simple_expression
+                    (term
+                      (primary<v>
+                        (name<v>
+                          (identifier
+                            ShortTime
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
               )
             )
           )

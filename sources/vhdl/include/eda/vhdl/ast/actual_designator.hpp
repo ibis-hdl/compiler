@@ -19,8 +19,6 @@
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct name;
-
 // actual_designator ::=                                             [§ 4.3.2.2]
 //       expression
 //     | signal_name
@@ -30,8 +28,7 @@ struct name;
 
 struct actual_designator : variant<
     nullary,
-    forward_ast<name>,
-    expression,
+    expression,             // also for {signal,variable,file}_name
     ast::keyword_token      // OPEN
 >
 {

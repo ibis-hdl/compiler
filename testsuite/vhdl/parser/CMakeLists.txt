@@ -20,9 +20,10 @@ set(PARSERTEST_SOURCES#_DEV
     ${TEST_COMMON_SOURCES}
     parser_test/block_statement_test.cpp
     parser_test/generate_statement_test.cpp
+    parser_test/association_list_test.cpp
 )
 
-set(PARSERTEST_SOURCES_
+set(PARSERTEST_SOURCES
     ${TEST_COMMON_SOURCES}
     parser_test/abstract_literal_test.cpp
     parser_test/actual_part_test.cpp

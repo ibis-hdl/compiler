@@ -53,9 +53,21 @@
               )
               (actual_part<v>
                 (actual_designator<v>
-                  (name<v>
-                    (identifier
-                      TimeH
+                  (expression
+                    (relation
+                      (shift_expression
+                        (simple_expression
+                          (term
+                            (primary<v>
+                              (name<v>
+                                (identifier
+                                  TimeH
+                                )
+                              )
+                            )
+                          )
+                        )
+                      )
                     )
                   )
                 )
@@ -75,9 +87,21 @@
               )
               (actual_part<v>
                 (actual_designator<v>
-                  (name<v>
-                    (identifier
-                      IN_A
+                  (expression
+                    (relation
+                      (shift_expression
+                        (simple_expression
+                          (term
+                            (primary<v>
+                              (name<v>
+                                (identifier
+                                  IN_A
+                                )
+                              )
+                            )
+                          )
+                        )
+                      )
                     )
                   )
                 )
@@ -95,9 +119,21 @@
               )
               (actual_part<v>
                 (actual_designator<v>
-                  (name<v>
-                    (identifier
-                      OUT_A
+                  (expression
+                    (relation
+                      (shift_expression
+                        (simple_expression
+                          (term
+                            (primary<v>
+                              (name<v>
+                                (identifier
+                                  OUT_A
+                                )
+                              )
+                            )
+                          )
+                        )
+                      )
                     )
                   )
                 )
