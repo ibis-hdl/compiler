@@ -845,7 +845,7 @@ auto const allocator_def =
     ;
 
 
-#if 0
+
 // architecture_body ::=                                            [LRM93 §1.2]
 //     architecture identifier of entity_name is
 //         architecture_declarative_part
@@ -856,7 +856,7 @@ auto const architecture_body_def = ( // operator precedence
        ARCHITECTURE
     >> identifier
     >> OF
-    >> entity_name
+    >> name
     >> IS
     >> architecture_declarative_part
     >> BEGIN
@@ -867,23 +867,23 @@ auto const architecture_body_def = ( // operator precedence
     )
     >  ';'
     ;
-#endif
 
-#if 0
+
+
 // architecture_declarative_part ::=                                [LRM93 §1.2]
 //     { block_declarative_item }
 auto const architecture_declarative_part_def =
     *block_declarative_item
     ;
-#endif
 
-#if 0
+
+
 // architecture_statement_part ::=                                [LRM93 §1.2.2]
 //     { concurrent_statement }
 auto const architecture_statement_part_def =
     *concurrent_statement
     ;
-#endif
+
 
 
 // array_type_definition ::=                                        [LRM93 §8.2]
@@ -3937,9 +3937,9 @@ BOOST_SPIRIT_DEFINE(  // -- A --
     , alias_declaration
     , alias_designator
     , allocator
-    //, architecture_body
-    //, architecture_declarative_part
-    //, architecture_statement_part
+    , architecture_body
+    , architecture_declarative_part
+    , architecture_statement_part
     , array_type_definition
     , assertion
     , assertion_statement

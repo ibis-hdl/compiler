@@ -18,18 +18,17 @@ set(TEST_COMMON_SOURCES
 
 set(PARSERTEST_SOURCES#_DEV
     ${TEST_COMMON_SOURCES}
-    parser_test/block_statement_test.cpp
-    parser_test/generate_statement_test.cpp
-    parser_test/association_list_test.cpp
+    parser_test/architecture_body_test.cpp
 )
 
-set(PARSERTEST_SOURCES
+set(PARSERTEST_SOURCES_
     ${TEST_COMMON_SOURCES}
     parser_test/abstract_literal_test.cpp
     parser_test/actual_part_test.cpp
     parser_test/aggregate_test.cpp
     parser_test/alias_declaration_test.cpp
     parser_test/allocator_test.cpp
+    parser_test/architecture_body_test.cpp
     parser_test/assertion_test.cpp
     parser_test/association_list_test.cpp
     parser_test/attribute_name_test.cpp

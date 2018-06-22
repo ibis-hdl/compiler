@@ -196,13 +196,17 @@ void printer::operator()(architecture_body const &node)
     (*this)(node.entity_name);
     os << "\n";
 
-    (*this)(node.declarative_part);
-    os << "\n";
+    if(!node.declarative_part.empty()) {
+        (*this)(node.declarative_part);
+        os << "\n";
+    }
 
-    (*this)(node.statement_part);
+    if(!node.statement_part.empty()) {
+        (*this)(node.statement_part);
+        os << "\n";
+    }
 
     if(node.end_name) {
-        os << "\n";
         (*this)(*node.end_name);
     }
 }
@@ -837,8 +841,12 @@ void printer::operator()(conditional_signal_assignment const &node)
 
     (*this)(node.target);
     os << "\n";
-    (*this)(node.options);
-    os << "\n";
+
+    if(node.options.delay_mechanism || node.options.guarded) {
+        (*this)(node.options);
+        os << "\n";
+    }
+
     (*this)(node.conditional_waveforms);
 }
 

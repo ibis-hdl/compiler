@@ -22,6 +22,7 @@ parser::actual_part_type const& actual_part();
 parser::aggregate_type const& aggregate();
 parser::alias_declaration_type const& alias_declaration();
 parser::allocator_type const& allocator();
+parser::architecture_body_type const& architecture_body();
 parser::assertion_type const& assertion();
 parser::association_list_type const& association_list();
 parser::attribute_name_type const& attribute_name();

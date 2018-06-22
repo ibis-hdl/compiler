@@ -20,6 +20,7 @@ BOOST_SPIRIT_INSTANTIATE(actual_part_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(aggregate_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(alias_declaration_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(allocator_type, iterator_type, context_type);
+BOOST_SPIRIT_INSTANTIATE(architecture_body_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(assertion_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(association_list_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(attribute_name_type, iterator_type, context_type);
@@ -147,6 +148,10 @@ parser::alias_declaration_type const& alias_declaration() {
 
 parser::allocator_type const& allocator() {
     return eda::vhdl::parser::allocator;
+}
+
+parser::architecture_body_type const& architecture_body() {
+    return eda::vhdl::parser::architecture_body;
 }
 
 parser::assertion_type const& assertion() {
