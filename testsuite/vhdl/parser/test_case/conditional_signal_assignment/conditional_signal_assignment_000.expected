@@ -6,9 +6,6 @@
       )
     )
   )
-  (options
-    
-  )
   (conditional_waveforms
     (waveform<v>
       (waveform_element
