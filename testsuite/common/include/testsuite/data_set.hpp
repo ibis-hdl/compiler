@@ -1,12 +1,12 @@
 /*
  * data_set.hpp
  *
- *  Created on: 28.03.2017
+ *  Created on: 22.06.2018
  *      Author: olaf
  */
 
-#ifndef SOURCES_VHDL_TEST_INCLUDE_TESTSUITE_VHDL_PARSER_DATA_SET_HPP_
-#define SOURCES_VHDL_TEST_INCLUDE_TESTSUITE_VHDL_PARSER_DATA_SET_HPP_
+#ifndef TESTSUITE_COMMON_INCLUDE_TESTSUITE_DATA_SET_HPP_
+#define TESTSUITE_COMMON_INCLUDE_TESTSUITE_DATA_SET_HPP_
 
 
 #include <boost/test/unit_test.hpp>
@@ -17,7 +17,7 @@
 #include <vector>
 
 
-namespace testsuite { namespace vhdl_parser { namespace util {
+namespace testsuite {
 
 
 namespace fs = boost::filesystem;
@@ -35,21 +35,27 @@ public:
     data_type const& expect() const { return m_expected; }
 
 public:
-    dataset_loader(fs::path const& path);
+    dataset_loader(fs::path const& path,
+        // Hack for boost.test missing command line args
+        std::string const& relative_path,   // relative path from common/testsuite to this testsuite
+        std::string const& input_extension  // test case file input file extension
+    );
 
 private:
     void read_files(fs::path const& path);
     std::string read_file(fs::path const& file_path);
 
 private:
-    fs::path                                            m_source_dir;
+    fs::path                                            m_prefix_dir;
     pathname_type                                       m_test_case;
     data_type                                           m_input;
     data_type                                           m_expected;
+    std::string                                         input_extension;
+    std::string                                         expected_extension;
 };
 
 
-} } } // namespace testsuite.vhdl_parser.util
+} // namespace testsuite
 
 
-#endif /* SOURCES_VHDL_TEST_INCLUDE_TESTSUITE_VHDL_PARSER_DATA_SET_HPP_ */
+#endif /* TESTSUITE_COMMON_INCLUDE_TESTSUITE_DATA_SET_HPP_ */

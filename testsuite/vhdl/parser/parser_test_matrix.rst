@@ -5195,9 +5195,6 @@ conditional_signal_assignment
 |                                   |                                              |       )                                               |
 |                                   |                                              |     )                                                 |
 |                                   |                                              |   )                                                   |
-|                                   |                                              |   (options                                            |
-|                                   |                                              |                                                       |
-|                                   |                                              |   )                                                   |
 |                                   |                                              |   (conditional_waveforms                              |
 |                                   |                                              |     (waveform<v>                                      |
 |                                   |                                              |       (waveform_element                               |
@@ -5285,9 +5282,6 @@ conditional_signal_assignment
 |                                   |                                              |         b                                             |
 |                                   |                                              |       )                                               |
 |                                   |                                              |     )                                                 |
-|                                   |                                              |   )                                                   |
-|                                   |                                              |   (options                                            |
-|                                   |                                              |                                                       |
 |                                   |                                              |   )                                                   |
 |                                   |                                              |   (conditional_waveforms                              |
 |                                   |                                              |     (waveform<v>                                      |

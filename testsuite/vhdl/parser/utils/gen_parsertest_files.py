@@ -123,7 +123,7 @@ class BoostTestGenerator:
 
 #include <eda/vhdl/ast.hpp>
 
-#include <testsuite/vhdl_parser/data_set.hpp>
+#include <testsuite/data_set.hpp>
 #include <testsuite/vhdl_parser/rules.hpp>
 #include <testsuite/vhdl_parser/testing_parser.hpp>
 #include <testsuite/vhdl_parser/generate_data_test_case.hpp>
@@ -140,10 +140,13 @@ namespace ast    = eda::vhdl::ast;"""
         
     def cxxDataSetLoader(self, name):
         return """
-struct {name}_dataset : public testsuite::vhdl_parser::util::dataset_loader
+struct {name}_dataset : public testsuite::dataset_loader
 {{
     {name}_dataset()
-    : dataset_loader{{ "test_case/{name}" }}
+    : dataset_loader{{ "test_case/{name}",
+                      // hack for boost.test argc/argv problem
+                      "../vhdl/parser",
+                      ".input" }}
     {{ }}
 }} const {name}_dataset;
 """.format(name=name)

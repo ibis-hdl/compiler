@@ -13,7 +13,7 @@
 
 #include <eda/vhdl/ast.hpp>
 
-#include <testsuite/vhdl_parser/data_set.hpp>
+#include <testsuite/data_set.hpp>
 #include <testsuite/vhdl_parser/rules.hpp>
 #include <testsuite/vhdl_parser/testing_parser.hpp>
 #include <testsuite/vhdl_parser/generate_data_test_case.hpp>
@@ -30,10 +30,13 @@ namespace ast    = eda::vhdl::ast;
 
 
 
-struct architecture_body_dataset : public testsuite::vhdl_parser::util::dataset_loader
+struct architecture_body_dataset : public testsuite::dataset_loader
 {
     architecture_body_dataset()
-    : dataset_loader{ "test_case/architecture_body" }
+    : dataset_loader{ "test_case/architecture_body",
+                      // hack for boost.test argc/argv problem
+                      "../vhdl/parser",
+                      ".input" }
     { }
 } const architecture_body_dataset;
 

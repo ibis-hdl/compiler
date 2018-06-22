@@ -11,7 +11,6 @@ project(testrunner_vhdl_parser LANGUAGES CXX)
 
 set(TEST_COMMON_SOURCES
     rules.cpp
-    data_set.cpp
     test_vhdl_parser.cpp
     testing_util.cpp
 )
@@ -186,6 +185,7 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
     eda::vhdl_parser
     eda::common # FixMe: shouldn't this depency propagated by eda::vhdl_grammar?
+    eda::testsuite_common
     Boost::system
     Boost::filesystem
 )

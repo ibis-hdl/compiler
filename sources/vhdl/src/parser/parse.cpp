@@ -93,7 +93,6 @@ bool parse::operator()(std::string const &input, ast::design_file& design_file,
         }
 
         return parse_ok;
-
     }
     catch(std::bad_alloc const& e) {
         /* ToDo: Re-throw using C++11 exception_ptr, see 2nd answer

@@ -47,6 +47,7 @@ set(LIBRARY_OUTPUT_PATH         ${CMAKE_BINARY_DIR})
 enable_testing()
 add_subdirectory(sources/common)
 add_subdirectory(sources/vhdl)
+add_subdirectory(testsuite/common)
 add_subdirectory(testsuite/vhdl/parser)
 add_subdirectory(testsuite/vhdl/numeric_convert)
 

@@ -1,7 +1,7 @@
 /*
  * expression_test.cpp
  *
- *  Created on: 16.6.2018
+ *  Created on: 22.6.2018
  *      Author: olaf
  */
 
@@ -13,7 +13,7 @@
 
 #include <eda/vhdl/ast.hpp>
 
-#include <testsuite/vhdl_parser/data_set.hpp>
+#include <testsuite/data_set.hpp>
 #include <testsuite/vhdl_parser/rules.hpp>
 #include <testsuite/vhdl_parser/testing_parser.hpp>
 #include <testsuite/vhdl_parser/generate_data_test_case.hpp>
@@ -30,18 +30,24 @@ namespace ast    = eda::vhdl::ast;
 
 
 
-struct expression_dataset : public testsuite::vhdl_parser::util::dataset_loader
+struct expression_dataset : public testsuite::dataset_loader
 {
     expression_dataset()
-    : dataset_loader{ "test_case/expression" }
+    : dataset_loader{ "test_case/expression",
+                      // hack for boost.test argc/argv problem
+                      "../vhdl/parser",
+                      ".input" }
     { }
 } const expression_dataset;
 
 
-struct expression_failure_dataset : public testsuite::vhdl_parser::util::dataset_loader
+struct expression_failure_dataset : public testsuite::dataset_loader
 {
     expression_failure_dataset()
-    : dataset_loader{ "test_case/expression_failure" }
+    : dataset_loader{ "test_case/expression_failure",
+                      // hack for boost.test argc/argv problem
+                      "../vhdl/parser",
+                      ".input" }
     { }
 } const expression_failure_dataset;
 

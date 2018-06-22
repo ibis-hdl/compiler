@@ -1,7 +1,7 @@
 /*
  * group_declaration_test.cpp
  *
- *  Created on: 16.6.2018
+ *  Created on: 22.6.2018
  *      Author: olaf
  */
 
@@ -13,7 +13,7 @@
 
 #include <eda/vhdl/ast.hpp>
 
-#include <testsuite/vhdl_parser/data_set.hpp>
+#include <testsuite/data_set.hpp>
 #include <testsuite/vhdl_parser/rules.hpp>
 #include <testsuite/vhdl_parser/testing_parser.hpp>
 #include <testsuite/vhdl_parser/generate_data_test_case.hpp>
@@ -30,10 +30,13 @@ namespace ast    = eda::vhdl::ast;
 
 
 
-struct group_declaration_dataset : public testsuite::vhdl_parser::util::dataset_loader
+struct group_declaration_dataset : public testsuite::dataset_loader
 {
     group_declaration_dataset()
-    : dataset_loader{ "test_case/group_declaration" }
+    : dataset_loader{ "test_case/group_declaration",
+                      // hack for boost.test argc/argv problem
+                      "../vhdl/parser",
+                      ".input" }
     { }
 } const group_declaration_dataset;
 
