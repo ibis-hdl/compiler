@@ -10,7 +10,7 @@ project(testrunner_vhdl_syntax LANGUAGES CXX)
 
 
 set(SYNTAXTEST_COMMON_SOURCES
-    src/test_vhdl_syntax.cpp
+    src/common/test_vhdl_syntax.cpp
 )
 
 set(SYNTAXTEST_SOURCES

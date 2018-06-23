@@ -1,1 +1,0 @@
-alias swrite is write [line, width];alias OpCode : Bit_Vector(3 downto 0) is Instruction(15 downto 12);

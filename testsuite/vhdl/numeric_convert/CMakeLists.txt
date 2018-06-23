@@ -10,16 +10,16 @@ project(testrunner_vhdl_numeric LANGUAGES CXX)
 
 # Boost.Test main and testing utilities
 set(TEST_COMMON_SOURCES
-    test_numeric_convert.cpp
-    numeric_parser.cpp
-    binary_string.cpp
+    src/common/test_numeric_convert.cpp
+    src/common/numeric_parser.cpp
+    src/common/binary_string.cpp
 )
 
 set(TEST_NUMERIC_CONV_SOURCES
     ${TEST_COMMON_SOURCES}
-    bit_string_literal_test.cpp
-    decimal_literal_test.cpp
-    based_literal_test.cpp
+    src/bit_string_literal_test.cpp
+    src/decimal_literal_test.cpp
+    src/based_literal_test.cpp
 )
 
 add_executable(${PROJECT_NAME} ${TEST_NUMERIC_CONV_SOURCES})

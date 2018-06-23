@@ -126,7 +126,6 @@ class BoostTestGenerator:
 #include <testsuite/data_set.hpp>
 #include <testsuite/vhdl_parser/rules.hpp>
 #include <testsuite/vhdl_parser/testing_parser.hpp>
-#include <testsuite/vhdl_parser/generate_data_test_case.hpp>
 #include <testsuite/vhdl_parser/testing_util.hpp>
 #include <testsuite/vhdl_parser/testing_parser_grammar_hack.hpp>
 """
@@ -355,7 +354,7 @@ namespace eda {{ namespace vhdl {{ namespace parser {{
             self.writeParserTestFile(path, test_filename, dataset_loader, datatest_case) 
         
             cmake_sources.append("{cxx}".format(
-                    cxx=path + '/' + test_filename))
+                    cxx='src/' + test_filename))
                     
         # generate parser rule access API files, leading '0' for dir-sort on top
         self.writeBnfFile(path , '0_rules', test_cases)
