@@ -10,6 +10,7 @@
 
 #include <boost/filesystem/fstream.hpp>
 #include <iostream>
+#include <cassert>
 
 
 namespace testsuite {
@@ -49,6 +50,13 @@ dataset_loader::dataset_loader(fs::path const& path,
     BOOST_TEST_INFO("dataset_loader load test files from " << path);
     fs::path p = m_prefix_dir / fs::path(relative_path) / path;
     read_files(p);
+
+    if(m_input.empty()) {
+        std::cerr << "WARNING: no data in dataset " << path << "\n";
+    }
+
+    assert(m_input.size() == m_expected.size()
+           && "dataset_loader test vector size mismatch");
 }
 
 
@@ -66,14 +74,16 @@ void dataset_loader::read_files(fs::path const& path)
 
             std::sort(dir_list.begin(), dir_list.end());
 
-            for(auto const& file : dir_list) {
+            for(auto const& file_ : dir_list) {
+
+                auto const file = fs::canonical(file_);
 
                 if (fs::extension(file) == input_extension) {
 
                     m_test_case.emplace_back(
                         file.parent_path().filename() / file.stem()
                     );
-                    //cerr << "INFO: read " << m_test_case.back() << "\n";
+                    cerr << "INFO: read " << file << "\n";
 
                     fs::path const input_file  = file;
                     fs::path const expect_file = fs::change_extension(file, expected_extension);

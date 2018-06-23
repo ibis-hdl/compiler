@@ -37,7 +37,7 @@ struct foo_dataset : public testsuite::dataset_loader
 } const foo_dataset;
 
 
-BOOST_DATA_TEST_CASE( foo,
+BOOST_DATA_TEST_CASE( basic_syntax,
       foo_dataset.input()
     ^ foo_dataset.expect()
     ^ foo_dataset.test_case_name(),
@@ -47,6 +47,8 @@ BOOST_DATA_TEST_CASE( foo,
 
     parser::parse  parse{ std::cout };
     bool const parse_ok = parse(input, design_file, test_case_name);
+
+    boost::ignore_unused(expected);
 
     BOOST_TEST(parse_ok);
 }
