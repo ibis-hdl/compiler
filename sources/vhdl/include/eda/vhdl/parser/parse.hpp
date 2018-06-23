@@ -28,9 +28,9 @@ namespace eda { namespace vhdl { namespace parser {
 
 struct parse
 {
-    std::iostream& os;
+    std::ostream& os;
 
-    parse(std::iostream& os_);
+    parse(std::ostream& os_);
 
     bool operator()(std::string const &input, ast::design_file& design_file,
                     fs::path const &filename = "") /* const */;

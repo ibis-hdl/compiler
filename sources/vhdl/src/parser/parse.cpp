@@ -19,7 +19,7 @@
 namespace eda { namespace vhdl { namespace parser {
 
 
-parse::parse(std::iostream& os_)
+parse::parse(std::ostream& os_)
 : os{ os_ }
 { }
 
