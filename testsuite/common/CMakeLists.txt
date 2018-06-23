@@ -29,7 +29,17 @@ target_compile_options(${PROJECT_NAME} PRIVATE
     -Wextra
 )
 
-## Boost.Org 
+##
+# Boost.Org's Boost.UTF to fix issue [access to master_test_suite().{argc, argv}](
+# https://svn.boost.org/trac10/ticket/12953)
+add_dependencies(${PROJECT_NAME} boost-utf)
+
+# Boost.Org depend includes
+include_directories(${BOOST_UTF_INCLUDE_DIR})
+
+
+## 
+# Boost.Org 
 # Spirit X3 is required for the parser - we are working on developer branch. 
 # Nevertheless Spirit self depends on other headers, e..g boost.range
 find_package(Boost)
