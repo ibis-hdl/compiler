@@ -35,7 +35,13 @@ dataset_loader::dataset_loader(fs::path const& path,
 )
 /* The prefix for the test case root directory structure is (unfortunately)
  * hard coded. I didn't found a way to give these as command line argument
- * to the boost.test runner. */
+ * to the boost.test runner.
+ * For more information about this problem look at:
+ * - [[Boost.Test] access to boost::unit_test::framework::master_test_suite().{argc, argv} outside from BOOST_TEST](
+ *    https://groups.google.com/forum/#!topic/boost-developers-archive/wtnY9F2cWNI)
+ * - [access to master_test_suite().{argc, argv}](
+ *    https://svn.boost.org/trac10/ticket/12953)
+ * */
 : m_prefix_dir{ EDA_TESTSUITE_PREFIX_READ_PATH}
 , input_extension{input_extension_}
 , expected_extension{ ".expected" }
