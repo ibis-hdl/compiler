@@ -16,7 +16,13 @@ begin
       wait for 10 NS;
     end loop;
     wait;
-  end process Stim;
+end process Stim;
+
+block_label :
+    BLOCK IS 
+    BEGIN
+    END BLOCK block_label_;
+
 
   D : --entity work.EX_MAX_MIN(A1)
   entity work_EX_MAX_MIN(A1)

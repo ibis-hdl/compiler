@@ -9,215 +9,237 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_ANALYZE_SYNTAX_HPP_
 
 
-#include <eda/vhdl/ast.hpp>
+#include <eda/vhdl/ast_fwd.hpp>
+#include <eda/vhdl/context.hpp>
+#include <eda/vhdl/ast/util/position_tagged.hpp>
 
-#include <boost/type_index.hpp>
+#include <boost/variant/static_visitor.hpp>
+
+#include <functional>
 #include <iostream>
 
 
 namespace eda { namespace vhdl { namespace analyze {
 
 
-class syntax : public boost::static_visitor<bool>
+// FixMe: namespace alias disaster
+namespace x3 = boost::spirit::x3;
+
+
+class syntax : boost::static_visitor<bool>
 {
+    using error_handler_type = std::function<
+        void(x3::position_tagged, std::string const&)>;
+
     std::ostream&                                   os;
+    vhdl::context&                                  context;
+    error_handler_type                              error_handler;
+//    std::size_t                                     error_count;
+//    std::size_t                                     warning_count;
 
 public:
-    syntax(std::ostream& os_)
-    : os{ os_ }
+    template <typename ErrorHandler>
+    syntax(std::ostream& os_,
+           vhdl::context& context_, ErrorHandler const& error_handler)
+      : os{ os_ }
+      , context{context_}
+      , error_handler{
+            [&](x3::position_tagged error_position, std::string const& message)
+            { error_handler(error_position, message); }
+      }
     { }
 
-    bool operator()(abstract_literal const& node);
-    bool operator()(access_type_definition const& node);
-    bool operator()(actual_designator const& node);
-    bool operator()(actual_part const& node);
-    bool operator()(aggregate const& node);
-    bool operator()(alias_declaration const& node);
-    bool operator()(alias_designator const& node);
-    bool operator()(allocator const& node);
-    bool operator()(architecture_body const& node);
-    bool operator()(architecture_statement_part const& node);
-    bool operator()(array_type_definition const& node);
-    bool operator()(assertion const& node);
-    bool operator()(assertion_statement const& node);
-    bool operator()(association_element const& node);
-    bool operator()(association_list const& node);
-    bool operator()(attribute_declaration const& node);
-    bool operator()(attribute_name const& node);
-    bool operator()(attribute_specification const& node);
-    bool operator()(based_literal const& node);
-    bool operator()(binding_indication const& node);
-    bool operator()(bit_string_literal const& node);
-    bool operator()(block_configuration const& node);
-    bool operator()(block_declarative_item const& node);
-    bool operator()(block_declarative_part const& node);
-    bool operator()(block_header const& node);
-    bool operator()(block_specification const& node);
-    bool operator()(block_statement const& node);
-    bool operator()(block_statement_part const& node);
-    bool operator()(case_statement const& node);
-    bool operator()(case_statement_alternative const& node);
-    bool operator()(character_literal const& node);
-    bool operator()(choice const& node);
-    bool operator()(choices const& node);
-    bool operator()(component_configuration const& node);
-    bool operator()(component_declaration const& node);
-    bool operator()(component_instantiation_statement const& node);
-    bool operator()(component_specification const& node);
-    bool operator()(composite_type_definition const& node);
-    bool operator()(concurrent_assertion_statement const& node);
-    bool operator()(concurrent_procedure_call_statement const& node);
-    bool operator()(concurrent_signal_assignment_statement const& node);
-    bool operator()(concurrent_statement const& node);
-    bool operator()(condition_clause const& node);
-    bool operator()(conditional_signal_assignment const& node);
-    bool operator()(conditional_waveforms const& node);
-    bool operator()(configuration_declaration const& node);
-    bool operator()(configuration_declarative_item const& node);
-    bool operator()(configuration_declarative_part const& node);
-    bool operator()(configuration_item const& node);
-    bool operator()(configuration_specification const& node);
-    bool operator()(constant_declaration const& node);
-    bool operator()(constrained_array_definition const& node);
-    bool operator()(constraint const& node);
-    bool operator()(context_clause const& node);
-    bool operator()(context_item const& node);
-    bool operator()(decimal_literal const& node);
-    bool operator()(delay_mechanism const& node);
-    bool operator()(design_file const& node);
-    bool operator()(design_unit const& node);
-    bool operator()(designator const& node);
-    bool operator()(disconnection_specification const& node);
-    bool operator()(discrete_range const& node);
-    bool operator()(element_association const& node);
-    bool operator()(element_declaration const& node);
-    bool operator()(entity_aspect const& node);
-    bool operator()(entity_class_entry_list const& node);
-    bool operator()(entity_declaration const& node);
-    bool operator()(entity_declarative_item const& node);
-    bool operator()(entity_declarative_part const& node);
-    bool operator()(entity_designator const& node);
-    bool operator()(entity_header const& node);
-    bool operator()(entity_name_list const& node);
-    bool operator()(entity_specification const& node);
-    bool operator()(entity_statement const& node);
-    bool operator()(entity_statement_part const& node);
-    bool operator()(entity_tag const& node);
-    bool operator()(enumeration_literal const& node);
-    bool operator()(enumeration_type_definition const& node);
-    bool operator()(exit_statement const& node);
-    bool operator()(expression const& node);
-    bool operator()(factor_binary_operation const& node);
-    bool operator()(factor_unary_operation const& node);
-    bool operator()(factor const& node);
-    bool operator()(file_declaration const& node);
-    bool operator()(file_open_information const& node);
-    bool operator()(formal_part const& node);
-    bool operator()(function_call const& node);
-    bool operator()(generate_statement const& node);
-    bool operator()(generation_scheme const& node);
-    bool operator()(generic_clause const& node);
-    bool operator()(generic_map_aspect const& node);
-    bool operator()(group_constituent const& node);
-    bool operator()(group_constituent_list const& node);
-    bool operator()(group_declaration const& node);
-    bool operator()(group_template_declaration const& node);
-    bool operator()(guarded_signal_specification const& node);
-    bool operator()(identifier const& node);
-    bool operator()(identifier_list const& node);
-    bool operator()(if_statement const& node);
-    bool operator()(index_constraint const& node);
-    bool operator()(index_specification const& node);
-    bool operator()(index_subtype_definition const& node);
-    bool operator()(indexed_name const& node);
-    bool operator()(instantiated_unit const& node);
-    bool operator()(instantiation_list const& node);
-    bool operator()(interface_constant_declaration const& node);
-    bool operator()(interface_declaration const& node);
-    bool operator()(interface_file_declaration const& node);
-    bool operator()(interface_list const& node);
-    bool operator()(interface_signal_declaration const& node);
-    bool operator()(interface_variable_declaration const& node);
-    bool operator()(iteration_scheme const& node);
-    bool operator()(library_clause const& node);
-    bool operator()(library_unit const& node);
-    bool operator()(literal const& node);
-    bool operator()(loop_statement const& node);
-    bool operator()(name const& node);
-    bool operator()(next_statement const& node);
-    bool operator()(null_statement const& node);
-    bool operator()(numeric_literal const& node);
-    bool operator()(options const& node);
-    bool operator()(package_body const& node);
-    bool operator()(package_body_declarative_item const& node);
-    bool operator()(package_body_declarative_part const& node);
-    bool operator()(package_declaration const& node);
-    bool operator()(package_declarative_item const& node);
-    bool operator()(package_declarative_part const& node);
-    bool operator()(parameter_specification const& node);
-    bool operator()(physical_literal const& node);
-    bool operator()(physical_type_definition const& node);
-    bool operator()(port_clause const& node);
-    bool operator()(port_map_aspect const& node);
-    bool operator()(prefix const& node);
-    bool operator()(primary const& node);
-    bool operator()(primary_unit const& node);
-    bool operator()(procedure_call const& node);
-    bool operator()(procedure_call_statement const& node);
-    bool operator()(process_declarative_item const& node);
-    bool operator()(process_declarative_part const& node);
-    bool operator()(process_statement const& node);
-    bool operator()(qualified_expression const& node);
-    bool operator()(range const& node);
-    bool operator()(record_type_definition const& node);
-    bool operator()(relation const& node);
-    bool operator()(report_statement const& node);
-    bool operator()(return_statement const& node);
-    bool operator()(scalar_type_definition const& node);
-    bool operator()(secondary_unit const& node);
-    bool operator()(secondary_unit_declaration const& node);
-    bool operator()(selected_name const& node);
-    bool operator()(selected_signal_assignment const& node);
-    bool operator()(selected_waveforms const& node);
-    bool operator()(sensitivity_clause const& node);
-    bool operator()(sensitivity_list const& node);
-    bool operator()(sequence_of_statements const& node);
-    bool operator()(sequential_statement const& node);
-    bool operator()(shift_expression const& node);
-    bool operator()(signal_assignment_statement const& node);
-    bool operator()(signal_declaration const& node);
-    bool operator()(signal_list_list const& node); // signal_list helper (not in BNF)
-    bool operator()(signal_list const& node);
-    bool operator()(signature const& node);
-    bool operator()(simple_expression const& node);
-    bool operator()(slice_name const& node);
-    bool operator()(string_literal const& node);
-    bool operator()(subprogram_body const& node);
-    bool operator()(subprogram_declarative_item const& node);
-    bool operator()(subprogram_declarative_part const& node);
-    bool operator()(subprogram_specification const& node);
-    bool operator()(subtype_declaration const& node);
-    bool operator()(subtype_indication const& node);
-    bool operator()(suffix const& node);
-    bool operator()(target const& node);
-    bool operator()(term const& node);
-    bool operator()(timeout_clause const& node);
-    bool operator()(type_conversion const& node);
-    bool operator()(type_declaration const& node);
-    bool operator()(type_definition const& node);
-    bool operator()(unconstrained_array_definition const& node);
-    bool operator()(use_clause const& node);
-    bool operator()(variable_assignment_statement const& node);
-    bool operator()(variable_declaration const& node);
-    bool operator()(wait_statement const& node);
-    bool operator()(waveform const& node);
-    bool operator()(waveform_element const& node);
-
-    // keywords and miscellaneous
-    bool operator()(boost::iterator_range<parser::iterator_type> const& node);
-    bool operator()(keyword_token token);
-
-    bool operator()(nullary const& node);
+//    result_type operator()(ast::abstract_literal const& node) const;
+//    result_type operator()(ast::access_type_definition const& node) const;
+//    result_type operator()(ast::actual_designator const& node) const;
+//    result_type operator()(ast::actual_part const& node) const;
+//    result_type operator()(ast::aggregate const& node) const;
+//    result_type operator()(ast::alias_declaration const& node) const;
+//    result_type operator()(ast::alias_designator const& node) const;
+//    result_type operator()(ast::allocator const& node) const;
+//    result_type operator()(ast::architecture_body const& node) const;
+//    result_type operator()(ast::architecture_statement_part const& node) const;
+//    result_type operator()(ast::array_type_definition const& node) const;
+//    result_type operator()(ast::assertion const& node) const;
+//    result_type operator()(ast::assertion_statement const& node) const;
+//    result_type operator()(ast::association_element const& node) const;
+//    result_type operator()(ast::association_list const& node) const;
+//    result_type operator()(ast::attribute_declaration const& node) const;
+//    result_type operator()(ast::attribute_name const& node) const;
+//    result_type operator()(ast::attribute_specification const& node) const;
+//    result_type operator()(ast::based_literal const& node) const;
+//    result_type operator()(ast::binding_indication const& node) const;
+//    result_type operator()(ast::bit_string_literal const& node) const;
+//    result_type operator()(ast::block_configuration const& node) const;
+//    result_type operator()(ast::block_declarative_item const& node) const;
+//    result_type operator()(ast::block_declarative_part const& node) const;
+//    result_type operator()(ast::block_header const& node) const;
+//    result_type operator()(ast::block_specification const& node) const;
+//    result_type operator()(ast::block_statement const& node) const;
+//    result_type operator()(ast::block_statement_part const& node) const;
+//    result_type operator()(ast::case_statement const& node) const;
+//    result_type operator()(ast::case_statement_alternative const& node) const;
+//    result_type operator()(ast::character_literal const& node) const;
+//    result_type operator()(ast::choice const& node) const;
+//    result_type operator()(ast::choices const& node) const;
+//    result_type operator()(ast::component_configuration const& node) const;
+//    result_type operator()(ast::component_declaration const& node) const;
+//    result_type operator()(ast::component_instantiation_statement const& node) const;
+//    result_type operator()(ast::component_specification const& node) const;
+//    result_type operator()(ast::composite_type_definition const& node) const;
+//    result_type operator()(ast::concurrent_assertion_statement const& node) const;
+//    result_type operator()(ast::concurrent_procedure_call_statement const& node) const;
+//    result_type operator()(ast::concurrent_signal_assignment_statement const& node) const;
+//    result_type operator()(ast::concurrent_statement const& node) const;
+//    result_type operator()(ast::condition_clause const& node) const;
+//    result_type operator()(ast::conditional_signal_assignment const& node) const;
+//    result_type operator()(ast::conditional_waveforms const& node) const;
+//    result_type operator()(ast::configuration_declaration const& node) const;
+//    result_type operator()(ast::configuration_declarative_item const& node) const;
+//    result_type operator()(ast::configuration_declarative_part const& node) const;
+//    result_type operator()(ast::configuration_item const& node) const;
+//    result_type operator()(ast::configuration_specification const& node) const;
+//    result_type operator()(ast::constant_declaration const& node) const;
+//    result_type operator()(ast::constrained_array_definition const& node) const;
+//    result_type operator()(ast::constraint const& node) const;
+//    result_type operator()(ast::context_clause const& node) const;
+//    result_type operator()(ast::context_item const& node) const;
+//    result_type operator()(ast::decimal_literal const& node) const;
+//    result_type operator()(ast::delay_mechanism const& node) const;
+    result_type operator()(ast::design_file const& node) const;
+//    result_type operator()(ast::design_unit const& node) const;
+//    result_type operator()(ast::designator const& node) const;
+//    result_type operator()(ast::disconnection_specification const& node) const;
+//    result_type operator()(ast::discrete_range const& node) const;
+//    result_type operator()(ast::element_association const& node) const;
+//    result_type operator()(ast::element_declaration const& node) const;
+//    result_type operator()(ast::entity_aspect const& node) const;
+//    result_type operator()(ast::entity_class_entry_list const& node) const;
+//    result_type operator()(ast::entity_declaration const& node) const;
+//    result_type operator()(ast::entity_declarative_item const& node) const;
+//    result_type operator()(ast::entity_declarative_part const& node) const;
+//    result_type operator()(ast::entity_designator const& node) const;
+//    result_type operator()(ast::entity_header const& node) const;
+//    result_type operator()(ast::entity_name_list const& node) const;
+//    result_type operator()(ast::entity_specification const& node) const;
+//    result_type operator()(ast::entity_statement const& node) const;
+//    result_type operator()(ast::entity_statement_part const& node) const;
+//    result_type operator()(ast::entity_tag const& node) const;
+//    result_type operator()(ast::enumeration_literal const& node) const;
+//    result_type operator()(ast::enumeration_type_definition const& node) const;
+//    result_type operator()(ast::exit_statement const& node) const;
+//    result_type operator()(ast::expression const& node) const;
+//    result_type operator()(ast::factor_binary_operation const& node) const;
+//    result_type operator()(ast::factor_unary_operation const& node) const;
+//    result_type operator()(ast::factor const& node) const;
+//    result_type operator()(ast::file_declaration const& node) const;
+//    result_type operator()(ast::file_open_information const& node) const;
+//    result_type operator()(ast::formal_part const& node) const;
+//    result_type operator()(ast::function_call const& node) const;
+//    result_type operator()(ast::generate_statement const& node) const;
+//    result_type operator()(ast::generation_scheme const& node) const;
+//    result_type operator()(ast::generic_clause const& node) const;
+//    result_type operator()(ast::generic_map_aspect const& node) const;
+//    result_type operator()(ast::group_constituent const& node) const;
+//    result_type operator()(ast::group_constituent_list const& node) const;
+//    result_type operator()(ast::group_declaration const& node) const;
+//    result_type operator()(ast::group_template_declaration const& node) const;
+//    result_type operator()(ast::guarded_signal_specification const& node) const;
+//    result_type operator()(ast::identifier const& node) const;
+//    result_type operator()(ast::identifier_list const& node) const;
+//    result_type operator()(ast::if_statement const& node) const;
+//    result_type operator()(ast::index_constraint const& node) const;
+//    result_type operator()(ast::index_specification const& node) const;
+//    result_type operator()(ast::index_subtype_definition const& node) const;
+//    result_type operator()(ast::indexed_name const& node) const;
+//    result_type operator()(ast::instantiated_unit const& node) const;
+//    result_type operator()(ast::instantiation_list const& node) const;
+//    result_type operator()(ast::interface_constant_declaration const& node) const;
+//    result_type operator()(ast::interface_declaration const& node) const;
+//    result_type operator()(ast::interface_file_declaration const& node) const;
+//    result_type operator()(ast::interface_list const& node) const;
+//    result_type operator()(ast::interface_signal_declaration const& node) const;
+//    result_type operator()(ast::interface_variable_declaration const& node) const;
+//    result_type operator()(ast::iteration_scheme const& node) const;
+//    result_type operator()(ast::library_clause const& node) const;
+//    result_type operator()(ast::library_unit const& node) const;
+//    result_type operator()(ast::literal const& node) const;
+//    result_type operator()(ast::loop_statement const& node) const;
+//    result_type operator()(ast::name const& node) const;
+//    result_type operator()(ast::next_statement const& node) const;
+//    result_type operator()(ast::null_statement const& node) const;
+//    result_type operator()(ast::numeric_literal const& node) const;
+//    result_type operator()(ast::options const& node) const;
+//    result_type operator()(ast::package_body const& node) const;
+//    result_type operator()(ast::package_body_declarative_item const& node) const;
+//    result_type operator()(ast::package_body_declarative_part const& node) const;
+//    result_type operator()(ast::package_declaration const& node) const;
+//    result_type operator()(ast::package_declarative_item const& node) const;
+//    result_type operator()(ast::package_declarative_part const& node) const;
+//    result_type operator()(ast::parameter_specification const& node) const;
+//    result_type operator()(ast::physical_literal const& node) const;
+//    result_type operator()(ast::physical_type_definition const& node) const;
+//    result_type operator()(ast::port_clause const& node) const;
+//    result_type operator()(ast::port_map_aspect const& node) const;
+//    result_type operator()(ast::prefix const& node) const;
+//    result_type operator()(ast::primary const& node) const;
+//    result_type operator()(ast::primary_unit const& node) const;
+//    result_type operator()(ast::procedure_call const& node) const;
+//    result_type operator()(ast::procedure_call_statement const& node) const;
+//    result_type operator()(ast::process_declarative_item const& node) const;
+//    result_type operator()(ast::process_declarative_part const& node) const;
+//    result_type operator()(ast::process_statement const& node) const;
+//    result_type operator()(ast::qualified_expression const& node) const;
+//    result_type operator()(ast::range const& node) const;
+//    result_type operator()(ast::record_type_definition const& node) const;
+//    result_type operator()(ast::relation const& node) const;
+//    result_type operator()(ast::report_statement const& node) const;
+//    result_type operator()(ast::return_statement const& node) const;
+//    result_type operator()(ast::scalar_type_definition const& node) const;
+//    result_type operator()(ast::secondary_unit const& node) const;
+//    result_type operator()(ast::secondary_unit_declaration const& node) const;
+//    result_type operator()(ast::selected_name const& node) const;
+//    result_type operator()(ast::selected_signal_assignment const& node) const;
+//    result_type operator()(ast::selected_waveforms const& node) const;
+//    result_type operator()(ast::sensitivity_clause const& node) const;
+//    result_type operator()(ast::sensitivity_list const& node) const;
+//    result_type operator()(ast::sequence_of_statements const& node) const;
+//    result_type operator()(ast::sequential_statement const& node) const;
+//    result_type operator()(ast::shift_expression const& node) const;
+//    result_type operator()(ast::signal_assignment_statement const& node) const;
+//    result_type operator()(ast::signal_declaration const& node) const;
+//    result_type operator()(ast::signal_list_list const& node) const; // signal_list helper (not in BNF)
+//    result_type operator()(ast::signal_list const& node) const;
+//    result_type operator()(ast::signature const& node) const;
+//    result_type operator()(ast::simple_expression const& node) const;
+//    result_type operator()(ast::slice_name const& node) const;
+//    result_type operator()(ast::string_literal const& node) const;
+//    result_type operator()(ast::subprogram_body const& node) const;
+//    result_type operator()(ast::subprogram_declarative_item const& node) const;
+//    result_type operator()(ast::subprogram_declarative_part const& node) const;
+//    result_type operator()(ast::subprogram_specification const& node) const;
+//    result_type operator()(ast::subtype_declaration const& node) const;
+//    result_type operator()(ast::subtype_indication const& node) const;
+//    result_type operator()(ast::suffix const& node) const;
+//    result_type operator()(ast::target const& node) const;
+//    result_type operator()(ast::term const& node) const;
+//    result_type operator()(ast::timeout_clause const& node) const;
+//    result_type operator()(ast::type_conversion const& node) const;
+//    result_type operator()(ast::type_declaration const& node) const;
+//    result_type operator()(ast::type_definition const& node) const;
+//    result_type operator()(ast::unconstrained_array_definition const& node) const;
+//    result_type operator()(ast::use_clause const& node) const;
+//    result_type operator()(ast::variable_assignment_statement const& node) const;
+//    result_type operator()(ast::variable_declaration const& node) const;
+//    result_type operator()(ast::wait_statement const& node) const;
+//    result_type operator()(ast::waveform const& node) const;
+//    result_type operator()(ast::waveform_element const& node) const;
+//
+//    // keywords and miscellaneous
+//    result_type operator()(ast::boost::iterator_range<parser::iterator_type> const& node) const;
+//    result_type operator()(ast::keyword_token token);
+//
+//    result_type operator()(ast::nullary const& node) const;
 };
 
 

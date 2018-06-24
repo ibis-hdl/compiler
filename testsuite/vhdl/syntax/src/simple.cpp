@@ -15,6 +15,8 @@
 //#include <eda/vhdl/ast/design_file.hpp>
 #include <eda/vhdl/ast.hpp>
 #include <eda/vhdl/parser/parse.hpp>
+#include <eda/vhdl/parser/parser_config.hpp>
+#include <eda/vhdl/analyze/syntax.hpp>
 #include <testsuite/data_set.hpp>
 
 
@@ -26,6 +28,7 @@ namespace btt    = boost::test_tools;
 namespace parser = eda::vhdl::parser;
 namespace analyze = eda::vhdl::analyze;
 namespace ast    = eda::vhdl::ast;
+namespace vhdl = eda::vhdl;
 
 
 struct foo_dataset : public testsuite::dataset_loader
@@ -45,18 +48,28 @@ BOOST_DATA_TEST_CASE( basic_syntax,
     ^ foo_dataset.test_case_name(),
     input, expected, test_case_name)
 {
+    std::ostream& os = std::cout;
+
     ast::design_file design_file;
 
-    parser::parse  parse{ std::cout };
+    // FixMe: make_error_handler(...) ???
+
+    parser::error_handler_type error_handler(input.begin(), input.end(),
+                                             os, test_case_name.string());
+
+
+
+    parser::parse  parse{ os /*, error_handler */};
     bool const parse_ok = parse(input, design_file, test_case_name);
 
     boost::ignore_unused(expected);
 
     BOOST_TEST(parse_ok);
 
-    auto check_label = analyze::check_label_match{std::cout};
-    bool const check_ok = check_label(design_file);
-    std::cout << "check = "  << std::boolalpha << check_ok << "\n";
+    vhdl::context context;
+    vhdl::analyze::syntax syntax_check(std::cout,
+            context, error_handler);
+
 }
 
 
