@@ -26,14 +26,21 @@ struct design_file;
 
 namespace eda { namespace vhdl { namespace parser {
 
-struct parse
+
+class parse
 {
     std::ostream& os;
+public:
 
     parse(std::ostream& os_);
 
     bool operator()(std::string const &input, ast::design_file& design_file,
                     fs::path const &filename = "") /* const */;
+
+private:
+    template <typename ExceptionT>
+    std::string make_exception_description(fs::path const &filename,
+                                           ExceptionT const& exception) const;
 };
 
 

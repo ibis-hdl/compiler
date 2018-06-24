@@ -12,13 +12,14 @@ begin
 --    variable V : UNSIGNED(8 downto 0);
   begin
     for i in 0 to 2**7-1 loop 
-      (MM,A,B) <= STD_LOGIC_VECTOR(TO_UNSIGNED(i,7));
+      --(MM,A,B) <= STD_LOGIC_VECTOR(TO_UNSIGNED(i,7));
       wait for 10 NS;
     end loop;
     wait;
   end process Stim;
 
-  D : entity work.EX_MAX_MIN(A1)
+  D : --entity work.EX_MAX_MIN(A1)
+  entity work_EX_MAX_MIN(A1)
     port map (MM, A, B, C);
 
 end architecture BENCH;

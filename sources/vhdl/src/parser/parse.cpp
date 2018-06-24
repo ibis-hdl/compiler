@@ -32,6 +32,11 @@ bool parse::operator()(std::string const &input, ast::design_file& design_file,
     iterator_type iter = input.begin();
     iterator_type end  = input.end();
 
+    static_assert(std::is_base_of<
+            std::forward_iterator_tag,
+            typename std::iterator_traits<parser::iterator_type>::iterator_category
+        >::value, "iterator type must be of multipass iterator");
+
     /* using different iterator_types causes linker errors, see e.g.
      * [linking errors while separate parser using boost spirit x3](
      *  https://stackoverflow.com/questions/40496357/linking-errors-while-separate-parser-using-boost-spirit-x3) */
@@ -48,30 +53,6 @@ bool parse::operator()(std::string const &input, ast::design_file& design_file,
             parser::grammar()
     ];
 
-    auto const make_exception_description = [](fs::path const &filename, auto const& e)
-    {
-        using boost::locale::format;
-        using boost::locale::translate;
-
-        // [IIFE idiom](https://www.bfilipek.com/2016/11/iife-for-complex-initialization.html)
-        std::string const what = [&] {
-            if constexpr(std::is_base_of<decltype(e), std::exception>::value) {
-                return e.what();
-            }
-            else {
-                return translate("ExceptionDescription", "unknown");
-            }
-        }();
-
-        std::string const str{(format(translate("ExceptionDescription",
-            "Caught exception '{1}' during parsing file '{2}'"
-            ))
-            % what
-            % filename.string()
-            ).str()};
-
-        return str;
-    };
 
     try {
         bool const parse_ok = x3::phrase_parse(
@@ -111,6 +92,31 @@ bool parse::operator()(std::string const &input, ast::design_file& design_file,
     return false;
 }
 
+
+template<typename ExceptionT>
+std::string parse::make_exception_description(fs::path const &filename,
+                                              ExceptionT const& exception) const
+{
+    using boost::locale::format;
+    using boost::locale::translate;
+
+    // [IIFE idiom](https://www.bfilipek.com/2016/11/iife-for-complex-initialization.html)
+    std::string const what = [&] {
+        if constexpr(std::is_base_of<decltype(exception), std::exception>::value) {
+            return exception.what();
+        }
+        else {
+            return translate("ExceptionDescription", "unknown");
+        }
+    }();
+
+    return (format(translate("ExceptionDescription",
+        "Caught exception '{1}' during parsing file '{2}'"
+        ))
+        % what
+        % filename.string()
+        ).str();
+};
 
 } } } // namespace eda.vhdl.parser
 

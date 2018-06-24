@@ -7,13 +7,14 @@
 
 #include <boost/test/unit_test.hpp>
 #include <boost/core/ignore_unused.hpp>
+#include <eda/vhdl/analyze/check/label_match.hpp>
 
 #include <iostream>
+#include <iomanip>
 
 //#include <eda/vhdl/ast/design_file.hpp>
 #include <eda/vhdl/ast.hpp>
 #include <eda/vhdl/parser/parse.hpp>
-
 #include <testsuite/data_set.hpp>
 
 
@@ -23,6 +24,7 @@ BOOST_AUTO_TEST_SUITE( syntax )
 
 namespace btt    = boost::test_tools;
 namespace parser = eda::vhdl::parser;
+namespace analyze = eda::vhdl::analyze;
 namespace ast    = eda::vhdl::ast;
 
 
@@ -51,6 +53,10 @@ BOOST_DATA_TEST_CASE( basic_syntax,
     boost::ignore_unused(expected);
 
     BOOST_TEST(parse_ok);
+
+    auto check_label = analyze::check_label_match{std::cout};
+    bool const check_ok = check_label(design_file);
+    std::cout << "check = "  << std::boolalpha << check_ok << "\n";
 }
 
 

@@ -54,7 +54,7 @@ struct handle_on_error
         Iterator& first, Iterator const& last
       , Exception const& x, Context const& context);
 
-    std::string assemble_message(std::string which);
+    std::string make_error_description(std::string which);
 
     std::map<std::string, std::string> const m_ruleid_map;
 };
@@ -75,7 +75,7 @@ handle_on_error::on_error(
       Iterator& /* first */, Iterator const& /* last */
     , Exception const& x, Context const& context)
 {
-    std::string const message{ assemble_message(x.which()) };
+    std::string const message{ make_error_description(x.which()) };
 
     auto& error_handler = x3::get<x3::error_handler_tag>(context).get();
     error_handler(x.where(), message);

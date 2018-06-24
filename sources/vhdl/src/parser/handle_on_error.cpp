@@ -9,6 +9,8 @@
 
 #include <iostream>
 
+#include <eda/support/boost/locale.hpp>
+
 
 namespace eda { namespace vhdl { namespace parser {
 
@@ -275,24 +277,28 @@ handle_on_error::handle_on_error()
 { }
 
 
-std::string handle_on_error::assemble_message(std::string which)
+std::string handle_on_error::make_error_description(std::string which)
 {
+    using boost::locale::format;
+    using boost::locale::translate;
+
     auto const iter = m_ruleid_map.find(which);
 
     if (iter != m_ruleid_map.end()) {
         which = iter->second;
     }
     else {
-        std::cerr << "Internal WARNING: failed to lookup '" << which
-                  << "' at parser's expectation symbol table\n";
-
+        std::cerr << format(translate(
+            "WARNING: failed to lookup '{1}' at parser's "
+            "expectation symbol table\n"
+            "Note, end Users can ignore the warning\n"
+            ))
+            % which;
     }
 
-    std::string const message{
-        "Syntax Error, expecting " + which + " here:"
-    };
-
-    return message;
+    return (format(translate("Syntax Error, expecting {1} here:"))
+            % which
+            ).str();
 }
 
 
