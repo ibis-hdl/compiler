@@ -8,6 +8,7 @@
 
 
 #include <eda/vhdl/analyze/check/label_match.hpp>
+#include <eda/vhdl/ast.hpp>
 
 #include <boost/range/algorithm/equal.hpp>
 
@@ -16,7 +17,7 @@
 #include <eda/support/boost/locale.hpp>
 
 
-// don't pollute AST namespace with operators required only here
+// don't pollute AST's namespace with operators required only here
 namespace eda { namespace vhdl { namespace ast {
 
 
@@ -36,41 +37,76 @@ check_label_match::check_label_match(std::ostream& os_)
 : os{ os_ }
 { }
 
-bool check_label_match::operator()(ast::block_statement const& node)
+
+template<typename AstNodeT>
+bool check_label_match::test_mandatory_start(AstNodeT const& node)
 {
-    // block_statement start label is mandatory
     if(node.end_label) {
 
         bool const label_ok = (node.label == node.end_label);
 
         if(label_ok) return true;
 
-        using boost::locale::format;
-        using boost::locale::translate;
-
-        make_error_description(symbol_name(node), node);
-
+        // ToDo: increment error count, see notes at make_error_description
+        make_error_description(node);
         return false;
     }
 
     return true;
 }
 
-bool check_label_match::operator()(ast::design_file const& node)
+
+template<typename AstNodeT>
+bool check_label_match::test_optional_start(AstNodeT const& node)
 {
-    os << symbol_name(node) << " here\n";
+    if(node.label && node.end_label) {
+
+        bool const label_ok = (node.label == node.end_label);
+
+        if(label_ok) return true;
+
+        // ToDo: increment error count, see notes at make_error_description
+        make_error_description(node);
+        return false;
+    }
 
     return true;
 }
 
 
-bool check_label_match::operator()(ast::nullary const&)
+bool check_label_match::operator()(ast::block_statement const& node)
 {
-    os << "\n*****************************";
-    os << "\n*    SHALL NEVER BE HERE    *";
-    os << "\n*****************************\n";
+    return test_mandatory_start(node);
+}
 
-    return false;
+
+bool check_label_match::operator()(ast::case_statement const& node)
+{
+    return test_optional_start(node);
+}
+
+
+bool check_label_match::operator()(ast::generate_statement const& node)
+{
+    return test_mandatory_start(node);
+}
+
+
+bool check_label_match::operator()(ast::if_statement const& node)
+{
+    return test_optional_start(node);
+}
+
+
+bool check_label_match::operator()(ast::loop_statement const& node)
+{
+    return test_optional_start(node);
+}
+
+
+bool check_label_match::operator()(ast::process_statement const& node)
+{
+    return test_optional_start(node);
 }
 
 
@@ -84,7 +120,7 @@ std::string check_label_match::symbol_name(T const&)
 
 
 void check_label_match::make_error_description(
-    std::string&& rule_name, ast::position_tagged const& position_tag) const
+    std::string const& rule_name, ast::position_tagged const& position_tag) const
 {
     using boost::locale::format;
     using boost::locale::translate;
@@ -95,7 +131,6 @@ void check_label_match::make_error_description(
         % rule_name;
 
 //        os << std::string(node.id_first) // XXXX how to get the source string back?
-
 }
 
 
