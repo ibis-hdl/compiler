@@ -67,9 +67,15 @@ BOOST_DATA_TEST_CASE( basic_syntax,
     BOOST_TEST(parse_ok);
 
     vhdl::context context;
-    vhdl::analyze::syntax syntax_check(std::cout,
-            context, error_handler);
+    vhdl::analyze::syntax syntax_check(os, context, error_handler);
 
+    bool const syntax_ok = syntax_check(design_file);
+
+    os << "Syntax " << (syntax_ok ? "" : "not") << " ok\n";
+
+    //++context.warning_count;
+
+    os << vhdl::failure_status(context) << "\n";
 }
 
 

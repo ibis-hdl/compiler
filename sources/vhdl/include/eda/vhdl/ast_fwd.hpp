@@ -70,7 +70,7 @@ struct configuration_specification;
 struct constant_declaration;
 struct constrained_array_definition;
 struct constraint;
-struct context_clause;
+//struct context_clause;
 struct decimal_literal;
 struct delay_mechanism;
 struct designator;

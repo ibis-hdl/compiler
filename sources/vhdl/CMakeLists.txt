@@ -22,6 +22,8 @@ set(VHDL_PARSER_SOURCE
     
     src/analyze/check/label_match.cpp
     src/analyze/syntax.cpp
+    
+    src/context.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC ${VHDL_PARSER_SOURCE})

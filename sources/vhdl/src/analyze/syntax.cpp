@@ -8,6 +8,9 @@
 #include <eda/vhdl/analyze/syntax.hpp>
 #include <eda/vhdl/ast.hpp>
 
+#include <boost/type_index.hpp>
+
+
 
 namespace eda { namespace vhdl { namespace analyze {
 
@@ -65,22 +68,59 @@ namespace eda { namespace vhdl { namespace analyze {
 //    syntax::result_type syntax::operator()(ast::constant_declaration const& node) const;
 //    syntax::result_type syntax::operator()(ast::constrained_array_definition const& node) const;
 //    syntax::result_type syntax::operator()(ast::constraint const& node) const;
-//    syntax::result_type syntax::operator()(ast::context_clause const& node) const;
-//    syntax::result_type syntax::operator()(ast::context_item const& node) const;
+//    syntax::result_type syntax::operator()(ast::context_clause const& node) const
+//    syntax::result_type syntax::operator()(ast::context_item const& node) const:
 //    syntax::result_type syntax::operator()(ast::decimal_literal const& node) const;
 //    syntax::result_type syntax::operator()(ast::delay_mechanism const& node) const;
 
+
 syntax::result_type syntax::operator()(ast::design_file const& node) const
 {
+    // [LRM93 §11.1]
+
+    os << "#### design_file\n";
 
     for(auto const& design_unit : node) {
-        //(*this)(design_unit);
+
+        bool const ok = (*this)(design_unit);
+
+        if(!ok) {
+            os << "design_file ++\n";
+            ++context.error_count;
+            return false;
+        }
     }
 
     return true;
 }
 
-//    syntax::result_type syntax::operator()(ast::design_unit const& node) const;
+
+syntax::result_type syntax::operator()(ast::design_unit const& node) const
+{
+    // [LRM93 §11.1]
+
+    os << "#### design_unit\n";
+
+    bool ok = (*this)(node.context_clause);
+
+    if(!ok) {
+        os << "context_clause ++\n";
+        ++context.error_count;
+        return false;
+    }
+
+    ok = (*this)(node.library_unit);
+
+    if(!ok) {
+        os << "library_unit ++\n";
+        ++context.error_count;
+        return false;
+    }
+
+    return ok;
+}
+
+
 //    syntax::result_type syntax::operator()(ast::designator const& node) const;
 //    syntax::result_type syntax::operator()(ast::disconnection_specification const& node) const;
 //    syntax::result_type syntax::operator()(ast::discrete_range const& node) const;
@@ -134,7 +174,17 @@ syntax::result_type syntax::operator()(ast::design_file const& node) const
 //    syntax::result_type syntax::operator()(ast::interface_signal_declaration const& node) const;
 //    syntax::result_type syntax::operator()(ast::interface_variable_declaration const& node) const;
 //    syntax::result_type syntax::operator()(ast::iteration_scheme const& node) const;
-//    syntax::result_type syntax::operator()(ast::library_clause const& node) const;
+
+
+syntax::result_type syntax::operator()(ast::library_clause const& node) const
+{
+    // [LRM93 §11.2]
+
+    os << "#### library_clause\n";
+    return true;
+}
+
+
 //    syntax::result_type syntax::operator()(ast::library_unit const& node) const;
 //    syntax::result_type syntax::operator()(ast::literal const& node) const;
 //    syntax::result_type syntax::operator()(ast::loop_statement const& node) const;
@@ -201,7 +251,17 @@ syntax::result_type syntax::operator()(ast::design_file const& node) const
 //    syntax::result_type syntax::operator()(ast::type_declaration const& node) const;
 //    syntax::result_type syntax::operator()(ast::type_definition const& node) const;
 //    syntax::result_type syntax::operator()(ast::unconstrained_array_definition const& node) const;
-//    syntax::result_type syntax::operator()(ast::use_clause const& node) const;
+
+
+syntax::result_type syntax::operator()(ast::use_clause const& node) const
+{
+    // [LRM93 §10.4]
+
+    os << "#### use_clause\n";
+    return true;
+}
+
+
 //    syntax::result_type syntax::operator()(ast::variable_assignment_statement const& node) const;
 //    syntax::result_type syntax::operator()(ast::variable_declaration const& node) const;
 //    syntax::result_type syntax::operator()(ast::wait_statement const& node) const;
@@ -212,12 +272,34 @@ syntax::result_type syntax::operator()(ast::design_file const& node) const
 //    syntax::result_type syntax::operator()(ast::boost::iterator_range<parser::iterator_type> const& node) const;
 //    syntax::result_type syntax::operator()(ast::keyword_token token);
 //
-//    syntax::result_type syntax::operator()(ast::nullary const& node) const;
 
+
+syntax::result_type syntax::operator()(ast::nullary const&) const
+{
+    os << "\n***********************************************";
+    os << "\n* variant default constructible node detected *";
+    os << "\n***********************************************\n";
+
+    os << "nullary ++\n";
+    ++context.error_count;
+
+    return false;
+}
+
+
+template<typename T>
+syntax::result_type syntax::operator()(T const&) const {
+
+    os << "caught straying node of type "
+       << boost::typeindex::type_id<T>().pretty_name()
+       << "\n";
+
+    os << "straying ++\n";
+    ++context.error_count;
+
+    return false;
+}
 
 
 } } } // namespace eda.vhdl.analyze
-
-
-
 

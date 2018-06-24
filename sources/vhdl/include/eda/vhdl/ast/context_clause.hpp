@@ -16,7 +16,7 @@
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct context_clause : std::vector<ast::context_item> { };
+using context_clause = std::vector<ast::context_item>;
 
 
 } } } // namespace eda.vhdl.ast

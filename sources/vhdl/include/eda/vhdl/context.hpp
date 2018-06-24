@@ -14,6 +14,7 @@
 #include <boost/range/iterator_range.hpp>
 
 #include <unordered_map>
+#include <iosfwd>
 
 
 namespace eda { namespace vhdl { namespace ast {
@@ -48,10 +49,40 @@ struct hash<eda::vhdl::ast::string_span>
 namespace eda { namespace vhdl {
 
 
+/**
+ * The VHDL context used for analyze and elaboration
+ */
 struct context {
 
+    std::size_t                                     error_count;
+    std::size_t                                     warning_count;
+
     std::unordered_map<ast::string_span, int>       dummy;
+
+    context();
 };
+
+
+/**
+ * IO-manipulator to print the context error/warning status on ostream
+ */
+class failure_status
+{
+    context const&                                  ctx;
+
+public:
+    failure_status(context const& ctx_)
+    : ctx{ ctx_ }
+    { }
+
+    std::ostream& operator()(std::ostream& os) const;
+};
+
+
+static inline
+std::ostream& operator<<(std::ostream& os, failure_status const& status) {
+    return status(os);
+}
 
 
 } } // namespace eda.vhdl

@@ -10,13 +10,19 @@
 
 
 #include <eda/vhdl/ast_fwd.hpp>
-#include <eda/vhdl/context.hpp>
+#include <eda/vhdl/ast/util/variant.hpp>
 #include <eda/vhdl/ast/util/position_tagged.hpp>
+#include <eda/vhdl/context.hpp>
 
 #include <boost/variant/static_visitor.hpp>
+#include <boost/variant/apply_visitor.hpp>
 
 #include <functional>
+#include <algorithm>
 #include <iostream>
+
+#include <eda/utils/compiler_push.hpp>
+#include <eda/utils/compiler_warning.hpp>
 
 
 namespace eda { namespace vhdl { namespace analyze {
@@ -34,8 +40,6 @@ class syntax : boost::static_visitor<bool>
     std::ostream&                                   os;
     vhdl::context&                                  context;
     error_handler_type                              error_handler;
-//    std::size_t                                     error_count;
-//    std::size_t                                     warning_count;
 
 public:
     template <typename ErrorHandler>
@@ -107,7 +111,7 @@ public:
 //    result_type operator()(ast::decimal_literal const& node) const;
 //    result_type operator()(ast::delay_mechanism const& node) const;
     result_type operator()(ast::design_file const& node) const;
-//    result_type operator()(ast::design_unit const& node) const;
+    result_type operator()(ast::design_unit const& node) const;
 //    result_type operator()(ast::designator const& node) const;
 //    result_type operator()(ast::disconnection_specification const& node) const;
 //    result_type operator()(ast::discrete_range const& node) const;
@@ -161,7 +165,7 @@ public:
 //    result_type operator()(ast::interface_signal_declaration const& node) const;
 //    result_type operator()(ast::interface_variable_declaration const& node) const;
 //    result_type operator()(ast::iteration_scheme const& node) const;
-//    result_type operator()(ast::library_clause const& node) const;
+    result_type operator()(ast::library_clause const& node) const;
 //    result_type operator()(ast::library_unit const& node) const;
 //    result_type operator()(ast::literal const& node) const;
 //    result_type operator()(ast::loop_statement const& node) const;
@@ -228,7 +232,7 @@ public:
 //    result_type operator()(ast::type_declaration const& node) const;
 //    result_type operator()(ast::type_definition const& node) const;
 //    result_type operator()(ast::unconstrained_array_definition const& node) const;
-//    result_type operator()(ast::use_clause const& node) const;
+    result_type operator()(ast::use_clause const& node) const;
 //    result_type operator()(ast::variable_assignment_statement const& node) const;
 //    result_type operator()(ast::variable_declaration const& node) const;
 //    result_type operator()(ast::wait_statement const& node) const;
@@ -239,11 +243,30 @@ public:
 //    result_type operator()(ast::boost::iterator_range<parser::iterator_type> const& node) const;
 //    result_type operator()(ast::keyword_token token);
 //
-//    result_type operator()(ast::nullary const& node) const;
+    result_type operator()(ast::nullary const& node) const;
+
+public:
+    template<typename ...Types>
+    result_type operator()(ast::variant<Types...> const& node) const {
+        return boost::apply_visitor(*this, node);
+    }
+
+    template<typename T>
+    result_type operator()(std::vector<T> const& node) const {
+        return std::all_of(node.begin(), node.end(),
+                          [&](T const& x){ return (*this)(x); } );
+    }
+
+    template<typename T>
+    result_type operator()(T const& stray_sink) const;
+
 };
 
 
 } } } // namespace eda.vhdl.analyze
+
+
+#include <eda/utils/compiler_pop.hpp>
 
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_ANALYZE_SYNTAX_HPP_ */
