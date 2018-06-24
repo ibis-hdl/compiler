@@ -52,14 +52,14 @@ BOOST_DATA_TEST_CASE( basic_syntax,
 
     ast::design_file design_file;
 
-    // FixMe: make_error_handler(...) ???
+    // FixMe: introduce make_error_handler(range, ...) ???
 
     parser::error_handler_type error_handler(input.begin(), input.end(),
                                              os, test_case_name.string());
 
 
 
-    parser::parse  parse{ os /*, error_handler */};
+    parser::parse  parse{ os, error_handler}; // add. arg -> file_name
     bool const parse_ok = parse(input, design_file, test_case_name);
 
     boost::ignore_unused(expected);

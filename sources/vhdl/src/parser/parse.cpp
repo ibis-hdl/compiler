@@ -40,11 +40,8 @@ bool parse::operator()(std::string const &input, ast::design_file& design_file,
                   "iterator types must be the same"
     );
 
-    parser::error_handler_type local_error_handler(iter, end,
-                                                   os, filename.string());
-
     auto const parser =
-        x3::with<x3::error_handler_tag>(std::ref(local_error_handler)) [
+        x3::with<x3::error_handler_tag>(std::ref(/*local_*/error_handler)) [
             parser::grammar()
     ];
 
@@ -65,8 +62,7 @@ bool parse::operator()(std::string const &input, ast::design_file& design_file,
                 (format(translate("Source file '{1}' failed to parse!"))
                  % filename.string()).str()};
 
-            // see error_handler_type -> signature
-            local_error_handler(iter, message);
+            error_handler(iter, message);
         }
 
         return parse_ok;

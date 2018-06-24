@@ -12,13 +12,12 @@
 
 #include <eda/vhdl/ast_fwd.hpp>
 #include <eda/vhdl/parser/namespace_alias.hpp>
-#include <eda/vhdl/ast/util/position_tagged.hpp>
+#include <eda/vhdl/parser/parser_config.hpp>
 
 #include <boost/filesystem/path.hpp>
 
 #include <string>
 #include <iosfwd>
-#include <functional>
 
 
 namespace eda { namespace vhdl { namespace parser {
@@ -26,22 +25,15 @@ namespace eda { namespace vhdl { namespace parser {
 
 class parse
 {
-   using error_handler_type = std::function< // FixMe: Wrong Signature
-        void(x3::position_tagged, std::string const&)>;
-
    std::ostream& os;
 
-//    error_handler_type                              error_handler;
+   parser::error_handler_type /*const*/&                error_handler;
 
 public:
 
-    //template <typename ErrorHandler>
-    parse(std::ostream& os_/*, ErrorHandler const& error_handler*/)
+    parse(std::ostream& os_, error_handler_type /*const*/& error_handler_)
     : os{ os_ }
-//    , error_handler{
-//          [&](x3::position_tagged error_position, std::string const& message)
-//          { error_handler(error_position, message); }
-//    }
+    , error_handler{ error_handler_ }
     { }
 
     bool operator()(std::string const &input, ast::design_file& design_file,
