@@ -15,6 +15,10 @@
 
 # eclipse
 .project
+.settings
+
+# eclipse Sigasi
+.library_mapping.xml
 
 # cmake
 CMakeCache.txt
