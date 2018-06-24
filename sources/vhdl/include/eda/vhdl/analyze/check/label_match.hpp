@@ -27,12 +27,12 @@ public:
     // check for matching label pairs
     check_label_match(std::ostream& os_);
 
-    bool operator()(ast::block_statement const& node);
-    bool operator()(ast::case_statement const& node);
-    bool operator()(ast::generate_statement const& node);
-    bool operator()(ast::if_statement const& node);
-    bool operator()(ast::loop_statement const& node);
-    bool operator()(ast::process_statement const& node);
+    bool operator()(ast::block_statement const& node) const;
+    bool operator()(ast::case_statement const& node) const;
+    bool operator()(ast::generate_statement const& node) const;
+    bool operator()(ast::if_statement const& node) const;
+    bool operator()(ast::loop_statement const& node) const;
+    bool operator()(ast::process_statement const& node) const;
 
     template<typename T>
     bool operator()(T const&) {
@@ -41,16 +41,16 @@ public:
 
 private:
     template<typename AstNodeT>
-    bool test_mandatory_start(AstNodeT const& node);
+    bool test_mandatory_start(AstNodeT const& node) const;
 
     template<typename AstNodeT>
-    bool test_optional_start(AstNodeT const& node);
+    bool test_optional_start(AstNodeT const& node) const;
 
     template<typename T>
-    std::string symbol_name(T const&);
+    std::string symbol_name(T const&) const;
 
     template<typename AstNodeT>
-    void make_error_description(AstNodeT const& node) {
+    void make_error_description(AstNodeT const& node) const {
         make_error_description(symbol_name(node), node);
     }
 
