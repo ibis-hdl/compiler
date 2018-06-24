@@ -38,7 +38,11 @@ private:
 };
 
 
-std::ostream& operator<<(std::ostream& os, literal_printer const& printer);
+static inline
+std::ostream& operator<<(std::ostream& os, literal_printer const& printer)
+{
+    return printer(os);
+}
 
 
 } } } // namespace eda.vhdl.ast

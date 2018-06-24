@@ -165,12 +165,6 @@ std::ostream& literal_printer::operator()(std::ostream& os) const
 }
 
 
-std::ostream& operator<<(std::ostream& os, literal_printer const& print)
-{
-    return print(os);
-}
-
-
 } } } // namespace eda.vhdl.ast
 
 
