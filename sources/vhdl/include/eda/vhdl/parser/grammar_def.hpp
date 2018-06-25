@@ -699,8 +699,8 @@ auto const letter_or_digit_def =
 
 // Convenience rule for 'label :'
 auto const label_colon = x3::rule<struct _, ast::identifier> { "label" } =
-       label >> ':'
-    >> !char_('=')  // exclude ":=" variable assignment
+       label
+    >> lexeme[ ':' >> !char_('=')]  // exclude ":=" variable assignment
     ;
 
 
