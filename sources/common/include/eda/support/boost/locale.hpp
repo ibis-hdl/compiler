@@ -11,10 +11,9 @@
 
 /* get rid off compiler warning:
  * 'template<class> class std::auto_ptr' is deprecated */
-#include <eda/utils/compiler_push.hpp>
-#include <eda/utils/compiler_warning.hpp>
+#include <eda/utils/compiler_warnings_off.hpp>
 #include <boost/locale.hpp>
-#include <eda/utils/compiler_pop.hpp>
+#include <eda/utils/compiler_warnings_on.hpp>
 
 
 #endif /* SOURCES_COMMON_INCLUDE_EDA_SUPPORT_BOOST_LOCALE_HPP_ */

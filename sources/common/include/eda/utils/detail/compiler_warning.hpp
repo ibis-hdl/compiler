@@ -1,31 +1,27 @@
 /*
- * compiler_push.hpp
+ * compiler_warning.hpp
  *
  *  Created on: 21.06.2018
  *      Author: olaf
  */
 
-#ifndef SOURCES_COMMON_INCLUDE_EDA_UTILS_COMPILER_PUSH_HPP_
-#define SOURCES_COMMON_INCLUDE_EDA_UTILS_COMPILER_PUSH_HPP_
-
-
 /**
- * Push compiler pragma
+ * Compiler Warning disabled for 3rd party sources
  *
  * see [Is using #pragma warning push/pop the right way to temporarily alter warning level?](
  * https://stackoverflow.com/questions/4193476/is-using-pragma-warning-push-pop-the-right-way-to-temporarily-alter-warning-lev)
  */
 #if defined(__clang__)
-#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #endif
 
 #if defined(__GNUC__) && !defined(__clang__)
-#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #endif
 
 #if defined(_MSC_VER)
-#pragma warning(push)
+// ...
 #endif
-
-
-#endif /* SOURCES_COMMON_INCLUDE_EDA_UTILS_COMPILER_PUSH_HPP_ */

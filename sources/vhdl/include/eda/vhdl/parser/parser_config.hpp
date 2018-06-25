@@ -12,7 +12,10 @@
 #include <eda/vhdl/parser/skipper.hpp>
 #include <eda/vhdl/parser/namespace_alias.hpp>
 
+#include <eda/utils/compiler_warnings_off.hpp>
 #include <boost/spirit/home/x3/support/utility/error_reporting.hpp>
+#include <eda/utils/compiler_warnings_on.hpp>
+
 
 
 /* Note about linker errors:

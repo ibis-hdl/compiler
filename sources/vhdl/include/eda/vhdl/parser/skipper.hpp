@@ -39,13 +39,11 @@ auto const skipper_def =
     ;
 
 
-/* get rid off the annoying unused parameter warnings from x3 */
-#include <eda/utils/compiler_push.hpp>
-#include <eda/utils/compiler_warning.hpp>
+#include <eda/utils/compiler_warnings_off.hpp>
 
 BOOST_SPIRIT_DEFINE(skipper);
 
-#include <eda/utils/compiler_pop.hpp>
+#include <eda/utils/compiler_warnings_on.hpp>
 
 
 } } } // namespace eda.vhdl.parser

@@ -14,9 +14,7 @@
 
 #include <map>
 
-
-#include <eda/utils/compiler_push.hpp>
-#include <eda/utils/compiler_warning.hpp>
+//#include <eda/utils/compiler_warnings_off.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
@@ -3116,5 +3114,5 @@ void printer::operator()(nullary const&)
 } } } // namespace eda.vhdl.ast
 
 
-#include <eda/utils/compiler_pop.hpp>
+//#include <eda/utils/compiler_warnings_on.hpp>
 

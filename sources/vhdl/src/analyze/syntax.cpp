@@ -10,6 +10,7 @@
 
 #include <boost/type_index.hpp>
 
+#include <eda/utils/compiler_warnings_off.hpp>
 
 
 namespace eda { namespace vhdl { namespace analyze {
@@ -86,7 +87,6 @@ syntax::result_type syntax::operator()(ast::design_file const& node) const
 
         if(!ok) {
             os << "design_file ++\n";
-            ++context.error_count;
             return false;
         }
     }
@@ -105,7 +105,6 @@ syntax::result_type syntax::operator()(ast::design_unit const& node) const
 
     if(!ok) {
         os << "context_clause ++\n";
-        ++context.error_count;
         return false;
     }
 
@@ -113,7 +112,6 @@ syntax::result_type syntax::operator()(ast::design_unit const& node) const
 
     if(!ok) {
         os << "library_unit ++\n";
-        ++context.error_count;
         return false;
     }
 
@@ -281,7 +279,6 @@ syntax::result_type syntax::operator()(ast::nullary const&) const
     os << "\n***********************************************\n";
 
     os << "nullary ++\n";
-    ++context.error_count;
 
     return false;
 }
@@ -295,6 +292,8 @@ syntax::result_type syntax::operator()(T const&) const {
        << "\n";
 
     os << "straying ++\n";
+
+    // these is a real error
     ++context.error_count;
 
     return false;
@@ -303,3 +302,5 @@ syntax::result_type syntax::operator()(T const&) const {
 
 } } } // namespace eda.vhdl.analyze
 
+
+#include <eda/utils/compiler_warnings_on.hpp>

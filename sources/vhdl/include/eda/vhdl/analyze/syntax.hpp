@@ -21,9 +21,6 @@
 #include <algorithm>
 #include <iostream>
 
-#include <eda/utils/compiler_push.hpp>
-#include <eda/utils/compiler_warning.hpp>
-
 
 namespace eda { namespace vhdl { namespace analyze {
 
@@ -264,9 +261,6 @@ public:
 
 
 } } } // namespace eda.vhdl.analyze
-
-
-#include <eda/utils/compiler_pop.hpp>
 
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_ANALYZE_SYNTAX_HPP_ */

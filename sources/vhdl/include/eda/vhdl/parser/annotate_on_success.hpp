@@ -9,12 +9,9 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ANNOTATE_ON_SUCCESS_HPP_
 
 
-/* special boost.spirit.x3 header to get rid off the annoying unused parameter
- * warnings from x3 */
-#include <eda/utils/compiler_push.hpp>
-#include <eda/utils/compiler_warning.hpp>
+#include <eda/utils/compiler_warnings_off.hpp>
 #include <boost/spirit/home/x3/support/utility/annotate_on_success.hpp>
-#include <eda/utils/compiler_pop.hpp>
+#include <eda/utils/compiler_warnings_on.hpp>
 
 #include <eda/vhdl/parser/namespace_alias.hpp>
 

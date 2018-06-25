@@ -120,7 +120,7 @@ std::string check_label_match::symbol_name(T const&) const
 
 
 void check_label_match::make_error_description(
-    std::string const& rule_name, ast::position_tagged const& position_tag) const
+    std::string const& rule_name, ast::position_tagged const& /* position_tag */) const
 {
     using boost::locale::format;
     using boost::locale::translate;
@@ -130,7 +130,7 @@ void check_label_match::make_error_description(
         ))
         % rule_name;
 
-//        os << std::string(node.id_first) // XXXX how to get the source string back?
+    // FixMe: get the source string back using error_handler?
 }
 
 

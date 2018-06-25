@@ -11,10 +11,9 @@
 
 #include <eda/vhdl/ast/util/namespace_alias.hpp>
 
-#include <eda/utils/compiler_push.hpp>
-#include <eda/utils/compiler_warning.hpp>
+#include <eda/utils/compiler_warnings_off.hpp>
 #include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
-#include <eda/utils/compiler_pop.hpp>
+#include <eda/utils/compiler_warnings_on.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
