@@ -2723,10 +2723,12 @@ auto const mode_def =
 //     | slice_name
 //     | attribute_name
 auto const name_def =
+/* Note, using LRM BNF rule for selected_name results into left recursion, see
+ * selected_name for details. */
         simple_name
       | operator_symbol
-//    | selected_name // FixMe: Crash in  "parser_expression/primary": memory access violation -> left recursion
-//    | indexed_name
+//      | selected_name
+//    | indexed_name // FixMe
 //    | slice_name
 //    | attribute_name
     ;
@@ -3285,9 +3287,56 @@ auto const secondary_unit_declaration_def = ( // operator precedence
 
 // selected_name ::=                                                [LRM93 §6.3]
 //     prefix . suffix
+namespace detail {
+
+/* LRM93 [§6.3] defined a concept of an expanded name: A selected name (in
+ * the syntactic sense) that denotes one or all of the primary units in a
+ * library or any named entity within a primary unit.
+ * [...]
+ * The prefix of an expanded name may not be a function call.
+ *
+ * The BNF rule results into recursive calling of prefix (which is a name).
+ *
+ * selected_name ::= prefix . suffix
+ * prefix        ::= name | function_call
+ * name          ::= ... | selected_name | ...
+ * suffix        ::= simple_name | character_literal | operator_symbol | ALL
+ *
+ * The solution is to mimic the prefix without the name self (limit the name
+ * rules). This allows the name to be selected_name too. No rewrote of the name
+ * rule so far.*/
+
+struct name_class;
+struct prefix_class;
+
+typedef x3::rule<struct name_class, ast::name> name_type;
+typedef x3::rule<struct prefix_class, std::vector<ast::prefix>> prefix_list_type;
+
+name_type const name { "name" };
+prefix_list_type const prefix { "prefix" };
+
+auto const name_def =
+      simple_name
+    | operator_symbol
+//    | indexed_name
+//    | slice_name
+//    | attribute_name
+    ;
+
+// function_call doesn't make sense here
+auto const prefix_def = x3::repeat(1, 2)[
+        name % '.'
+    ]
+    ;
+
+BOOST_SPIRIT_DEFINE(name);
+BOOST_SPIRIT_DEFINE(prefix);
+
+} // namespace detail
+
 auto const selected_name_def =
     x3::lexeme[
-           prefix
+           /*detail::*/prefix
         >> '.'
         >> suffix
     ]
