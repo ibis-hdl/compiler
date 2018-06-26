@@ -9,11 +9,11 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_POSITION_TAGGED_HPP_
 
 
-#include <eda/vhdl/ast/util/namespace_alias.hpp>
-
 #include <eda/utils/compiler_warnings_off.hpp>
 #include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
 #include <eda/utils/compiler_warnings_on.hpp>
+
+#include <eda/namespace_alias.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {

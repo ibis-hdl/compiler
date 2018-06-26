@@ -19,5 +19,7 @@
 
 #include <eda/utils/compiler_warnings_on.hpp>
 
+#include <eda/namespace_alias.hpp>
+
 
 #endif /* SOURCES_COMMON_INCLUDE_EDA_SUPPORT_BOOST_SPIRIT_X3_HPP_ */

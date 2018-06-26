@@ -10,11 +10,10 @@
 
 
 #include <eda/vhdl/ast.hpp>
-#include <eda/vhdl/parser/namespace_alias.hpp>
 #include <eda/vhdl/parser/grammar_id.hpp>
 #include <eda/vhdl/parser/common_types.hpp> // iterator_type
 
-#include <eda/support/boost/spirit_x3.hpp>
+#include <eda/support/boost/spirit_x3.hpp> // FixMe: Full header for x3::rule<> required???
 
 
 namespace eda { namespace vhdl { namespace parser {

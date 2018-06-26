@@ -9,7 +9,6 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_HPP_
 
 #include <eda/vhdl/ast.hpp>
-#include <eda/vhdl/parser/namespace_alias.hpp>
 
 #include <eda/support/boost/spirit_x3.hpp>
 

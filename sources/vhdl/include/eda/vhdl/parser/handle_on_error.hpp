@@ -16,7 +16,6 @@
 #include <boost/spirit/home/x3/auxiliary/guard.hpp> // error_handler_result
 #include <eda/utils/compiler_warnings_on.hpp>
 
-#include <eda/vhdl/parser/namespace_alias.hpp>
 #include <eda/vhdl/parser/parser_config.hpp> // context_type
 
 #include <map>

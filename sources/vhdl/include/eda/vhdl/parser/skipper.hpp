@@ -9,10 +9,11 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_SKIPPER_HPP_
 
 
-#include <eda/vhdl/parser/namespace_alias.hpp>
 #include <eda/vhdl/parser/common_types.hpp>
 
 #include <eda/support/boost/spirit_x3.hpp>
+
+#include <eda/namespace_alias.hpp>
 
 
 /*

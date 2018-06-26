@@ -8,7 +8,6 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_DEF_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_DEF_HPP_
 
-#include <eda/vhdl/parser/namespace_alias.hpp>
 #include <eda/vhdl/parser/grammar.hpp>
 #include <eda/vhdl/parser/grammar_id.hpp>
 #include <eda/vhdl/parser/grammar_type.hpp>

@@ -11,7 +11,6 @@
 
 
 #include <eda/vhdl/ast_fwd.hpp>
-#include <eda/vhdl/parser/namespace_alias.hpp>
 #include <eda/vhdl/parser/parser_config.hpp>
 
 #include <boost/filesystem/path.hpp>

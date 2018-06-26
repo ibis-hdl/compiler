@@ -13,7 +13,7 @@
 #include <boost/spirit/home/x3/support/utility/annotate_on_success.hpp>
 #include <eda/utils/compiler_warnings_on.hpp>
 
-#include <eda/vhdl/parser/namespace_alias.hpp>
+#include <eda/namespace_alias.hpp>
 
 
 namespace eda { namespace vhdl { namespace parser {
