@@ -25,7 +25,8 @@ add_executable(${PROJECT_NAME} ${SYNTAXTEST_SOURCES})
 # adjust include path
 target_include_directories(${PROJECT_NAME} PRIVATE
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>)
+    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
+)
 
 
 target_compile_options(${PROJECT_NAME} PRIVATE

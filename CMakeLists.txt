@@ -34,10 +34,6 @@ include(build_config_hpp)
 # project. This is used by the depending sub projects
 include(external_spirit_x3)
 
-##
-# Boost.UTF 
-# see https://svn.boost.org/trac10/ticket/12953
-include(external_boost_utf)
 
 ## 
 # Common build options: set the output folder where programs will be created
