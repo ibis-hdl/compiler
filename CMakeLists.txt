@@ -49,7 +49,7 @@ add_subdirectory(sources/common)
 add_subdirectory(sources/vhdl)
 add_subdirectory(testsuite/common)
 add_subdirectory(testsuite/vhdl/numeric_convert)
-add_subdirectory(testsuite/vhdl/parser)
+add_subdirectory(testsuite/vhdl/parser_rules)
 add_subdirectory(testsuite/vhdl/syntax)
 
 

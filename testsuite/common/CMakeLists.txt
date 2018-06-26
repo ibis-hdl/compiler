@@ -14,7 +14,7 @@ set(TESTSUITE_COMMON_SOURCE
 )
 
 add_library(${PROJECT_NAME} STATIC ${TESTSUITE_COMMON_SOURCE})
-add_library(eda::testsuite_common ALIAS ${PROJECT_NAME})
+add_library(testsuite::common ALIAS ${PROJECT_NAME})
 
 
 # adjust include path
