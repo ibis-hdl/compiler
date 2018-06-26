@@ -52,6 +52,6 @@ target_link_libraries(bt_issue12953
     Boost::filesystem
 )
 
-add_test(NAME boost_test_issue12953
-    COMMAND bt_issue12953 -- --param1=1 --param2=2
-)
+#add_test(NAME boost_test_issue12953
+#    COMMAND bt_issue12953 -- --param1=1 --param2=2
+#)
