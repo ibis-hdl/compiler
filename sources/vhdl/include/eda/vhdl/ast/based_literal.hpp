@@ -11,8 +11,7 @@
 
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
-#include <eda/vhdl/parser/common_types.hpp>
-#include <boost/range/iterator_range.hpp>
+#include <eda/vhdl/ast/util/string_span.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
@@ -23,13 +22,13 @@ struct based_literal : position_tagged
     enum class kind_specifier { integer, real };
 
     struct number_chunk {
-        boost::iterator_range<parser::iterator_type>    integer_part;
-        boost::iterator_range<parser::iterator_type>    fractional_part;
-        boost::iterator_range<parser::iterator_type>    exponent;
-        kind_specifier                                  kind_type;
+        ast::string_span                            integer_part;
+        ast::string_span                            fractional_part;
+        ast::string_span                            exponent;
+        kind_specifier                              kind_type;
     };
 
-    boost::iterator_range<parser::iterator_type>    base;
+    ast::string_span                                base;
     number_chunk                                    number;
 };
 

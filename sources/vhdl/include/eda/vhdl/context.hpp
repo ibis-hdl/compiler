@@ -9,28 +9,14 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_CONTEXT_HPP_
 
 
-#include <eda/vhdl/parser/common_types.hpp>
-
-#include <boost/range/iterator_range.hpp>
+#include <eda/vhdl/ast/util/string_span.hpp>
 
 #include <unordered_map>
 #include <iosfwd>
 
 
-namespace eda { namespace vhdl { namespace ast {
-
-/* AST nodes holds string_span type as (iterator) references to the
- * file buffer.
- * FixMe: Make these type globally, it's used every where and scattered
- * around in different files, e.g. AST nodes, grammar_type, ... Maybe
- * once a day it can be replaced by std::string_view if Spirit.X3 support
- * it. */
-using string_span = boost::iterator_range<parser::iterator_type>;
-
-}}}
-
-
 namespace std {
+
 
 template<>
 struct hash<eda::vhdl::ast::string_span>
@@ -42,6 +28,7 @@ struct hash<eda::vhdl::ast::string_span>
         return std::hash<std::string>()(std::string(range.begin(), range.end()));
     }
 };
+
 
 } // namespace std
 

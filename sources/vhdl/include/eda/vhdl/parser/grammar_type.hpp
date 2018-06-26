@@ -20,20 +20,6 @@
 namespace eda { namespace vhdl { namespace parser {
 
 
-/*
- * Rule Types
- */
-
-/*
- * Hot Fixes
- *
- * This is required to work with string_view, later version of Spirit.X3
- * as 1.64. Note the hard coded iterator type!!, \see
- * [Spirit.X3 using string_view and member named 'insert' compiler error](
- *  https://stackoverflow.com/questions/50310015/spirit-x3-using-string-view-and-member-named-insert-compiler-error?answertab=active#tab-top) */
-using string_view_attribute = boost::iterator_range<parser::iterator_type>;
-
-
 typedef x3::rule<abstract_literal_class, ast::abstract_literal> abstract_literal_type;
 typedef x3::rule<access_type_definition_class, ast::access_type_definition> access_type_definition_type;
 typedef x3::rule<actual_designator_class, ast::actual_designator> actual_designator_type;
@@ -55,11 +41,11 @@ typedef x3::rule<attribute_declaration_class, ast::attribute_declaration> attrib
 typedef x3::rule<attribute_designator_class, ast::simple_name> attribute_designator_type;
 typedef x3::rule<attribute_name_class, ast::attribute_name> attribute_name_type;
 typedef x3::rule<attribute_specification_class, ast::attribute_specification> attribute_specification_type;
-typedef x3::rule<base_class, string_view_attribute> base_type;
-typedef x3::rule<based_integer_class, string_view_attribute> based_integer_type;
+typedef x3::rule<base_class, ast::string_span> base_type;
+typedef x3::rule<based_integer_class, ast::string_span> based_integer_type;
 typedef x3::rule<based_literal_class, ast::based_literal> based_literal_type;
 typedef x3::rule<basic_graphic_character_class, char> basic_graphic_character_type;
-typedef x3::rule<basic_identifier_class, string_view_attribute> basic_identifier_type;
+typedef x3::rule<basic_identifier_class, ast::string_span> basic_identifier_type;
 typedef x3::rule<binding_indication_class, ast::binding_indication> binding_indication_type;
 typedef x3::rule<bit_string_literal_class, ast::bit_string_literal> bit_string_literal_type;
 typedef x3::rule<block_configuration_class, ast::block_configuration> block_configuration_type;
@@ -125,9 +111,9 @@ typedef x3::rule<entity_tag_class, ast::entity_tag> entity_tag_type;
 typedef x3::rule<enumeration_literal_class, ast::enumeration_literal> enumeration_literal_type;
 typedef x3::rule<enumeration_type_definition_class, ast::enumeration_type_definition> enumeration_type_definition_type;
 typedef x3::rule<exit_statement_class, ast::exit_statement> exit_statement_type;
-typedef x3::rule<exponent_class, string_view_attribute> exponent_type;
+typedef x3::rule<exponent_class, ast::string_span> exponent_type;
 typedef x3::rule<expression_class, ast::expression> expression_type;
-typedef x3::rule<extended_identifier_class, string_view_attribute> extended_identifier_type;
+typedef x3::rule<extended_identifier_class, ast::string_span> extended_identifier_type;
 typedef x3::rule<factor_class, ast::factor> factor_type;
 typedef x3::rule<file_declaration_class, ast::file_declaration> file_declaration_type;
 typedef x3::rule<file_logical_name_class, ast::file_logical_name> file_logical_name_type;
@@ -160,7 +146,7 @@ typedef x3::rule<index_subtype_definition_class, ast::index_subtype_definition> 
 typedef x3::rule<indexed_name_class, ast::indexed_name> indexed_name_type;
 typedef x3::rule<instantiated_unit_class, ast::instantiated_unit> instantiated_unit_type;
 typedef x3::rule<instantiation_list_class, ast::instantiation_list> instantiation_list_type;
-typedef x3::rule<integer_class, string_view_attribute> integer_type;
+typedef x3::rule<integer_class, ast::string_span> integer_type;
 //typedef x3::rule<integer_type_definition_class, ast::integer_type_definition> integer_type_definition_type;
 typedef x3::rule<interface_constant_declaration_class, ast::interface_constant_declaration> interface_constant_declaration_type;
 typedef x3::rule<interface_declaration_class, ast::interface_declaration> interface_declaration_type;

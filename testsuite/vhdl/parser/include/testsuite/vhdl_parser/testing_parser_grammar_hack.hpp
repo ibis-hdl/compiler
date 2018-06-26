@@ -21,7 +21,7 @@
 namespace eda { namespace vhdl { namespace ast {
 
 
-using integer = boost::iterator_range<parser::iterator_type>;
+using integer = ast::string_span;
 
 
 } } } // namespace eda.vhdl.ast

@@ -1002,7 +1002,7 @@ auto const base_specifier_def =
 // based_integer ::=                                             [LRM93 §13.4.2]
 //     extended_digit { [ underline ] extended_digit }
 auto const based_integer_def =
-    x3::as<string_view_attribute>[
+    x3::as<ast::string_span>[
         raw [ lexeme[
             extended_digit >> *( -lit('_') >> extended_digit )
         ]]
@@ -1020,7 +1020,7 @@ auto const integer_type = x3::rule<struct _, ast::based_literal::number_chunk>{ 
      * negative sign for the exponent of integer types. No restrictions are there
      * defined for based_literal, assume real type exponent. */
     lexeme[
-           based_integer >> x3::attr(string_view_attribute{/* empty fractional part */})
+           based_integer >> x3::attr(ast::string_span{/* empty fractional part */})
         >> '#'
         >> -exponent
     ]
@@ -1052,7 +1052,7 @@ auto const based_literal_def =
 //     letter { [ underline ] letter_or_digit }
 namespace basic_identifier_detail {
 
-auto const feasible = x3::rule<struct _, string_view_attribute> { "basic_identifier" } =
+auto const feasible = x3::rule<struct _, ast::string_span> { "basic_identifier" } =
     raw[ lexeme [
            letter
         >> !char_('"') // reject bit_string_literal
@@ -1089,7 +1089,7 @@ auto const bit_string_literal = [](auto&& base, auto&& char_range, auto&& attr)
     using AttrT = decltype(attr);
 
     auto const char_set = [](auto&& char_range) {
-        return x3::rule<struct _, string_view_attribute>{ "char_set" } = x3::as_parser(
+        return x3::rule<struct _, ast::string_span>{ "char_set" } = x3::as_parser(
              raw[
                     char_(std::forward<CharT>(char_range))
                  >> *( -lit("_") >> char_(std::forward<CharT>(char_range) ))
@@ -1621,7 +1621,7 @@ auto const context_item_def =
 namespace decimal_literal_detail {
 
 auto const real_type = x3::rule<struct _, ast::decimal_literal> { "decimal_literal<real>" } =
-       x3::as<string_view_attribute>[
+       x3::as<ast::string_span>[
            raw[ lexeme[
                integer >> char_('.') >> integer >> -exponent
            ]]
@@ -1629,7 +1629,7 @@ auto const real_type = x3::rule<struct _, ast::decimal_literal> { "decimal_liter
     >> x3::attr(ast::decimal_literal::kind_specifier::real)
     ;
 
-auto const integer_exponent = x3::rule<struct _, string_view_attribute> { "exponent" } =
+auto const integer_exponent = x3::rule<struct _, ast::string_span> { "exponent" } =
    /* Note, following IEEE1076-93 Ch. 13.4, the exponent on integer type must
     * not have a minus sign. This means implicit (even from NBF) that a positive
     * (optional) sign is allowed. */
@@ -1639,7 +1639,7 @@ auto const integer_exponent = x3::rule<struct _, string_view_attribute> { "expon
     ;
 
 auto const integer_type = x3::rule<struct _, ast::decimal_literal> { "decimal_literal<int>" } =
-       x3::as<string_view_attribute>[
+       x3::as<ast::string_span>[
            raw[ lexeme[
                // Note, exponent on integer is always without sign!
                integer >> -integer_exponent
@@ -2061,7 +2061,7 @@ auto const exit_statement_def = ( // operator precedence
 auto const exponent_def =
     /* Note, that exponent rule parses real exponent, for integer types no sign
      * is allowed, hence embedded into the concrete rule */
-    x3::as<string_view_attribute>[
+    x3::as<ast::string_span>[
         raw[ lexeme [
              char_("Ee") >> -char_("-+") >> integer
         ]]
@@ -2102,11 +2102,11 @@ auto const expression_def =
 //     \ graphic_character { graphic_character } \                             .
 namespace extended_identifier_detail {
 
-auto const charset = x3::rule<struct _, string_view_attribute> { "extended_identifier" } =
+auto const charset = x3::rule<struct _, ast::string_span> { "extended_identifier" } =
      +( graphic_character - char_('\\') )
      ;
 
-auto const atom = x3::rule<struct _, string_view_attribute> { "extended_identifier" } =
+auto const atom = x3::rule<struct _, ast::string_span> { "extended_identifier" } =
     raw[ lexeme [
            char_('\\')
         >> charset
@@ -2116,7 +2116,7 @@ auto const atom = x3::rule<struct _, string_view_attribute> { "extended_identifi
 } // end detail
 
 auto const extended_identifier_def =
-    x3::as<string_view_attribute>[
+    x3::as<ast::string_span>[
         raw[ lexeme [
                extended_identifier_detail::atom
             >> *(extended_identifier_detail::atom % (char_('\\') >> char_('\\')))
@@ -2502,7 +2502,7 @@ auto const instantiation_list_def =
 // integer ::=                                                         § 13.4.1]
 //     digit { [ underline ] digit }
 auto const integer_def =
-    x3::as<string_view_attribute>[
+    x3::as<ast::string_span>[
         raw[ lexeme [
             digit >> *( -lit("_") >> digit )
         ]]
@@ -2931,7 +2931,7 @@ namespace physical_literal_detail {
 
 /* Note, the LRM doesn't specify the allowed characters, hence it's assumed
  * that it follows the natural conventions. */
-auto const unit_name = x3::as<string_view_attribute>[
+auto const unit_name = x3::as<ast::string_span>[
     raw[ lexeme[
         +(lower_case_letter | upper_case_letter)
     ]]
@@ -3550,7 +3550,7 @@ auto const slice_name_def =
 //     " { graphic_character } "
 namespace string_literal_detail {
 
-auto const string_literal_1 = x3::rule<struct _, string_view_attribute> { "string_literal" } =
+auto const string_literal_1 = x3::rule<struct _, ast::string_span> { "string_literal" } =
     x3::raw[
         *( ( graphic_character - '"'  )
          | ( char_('"')       >> '"' )
@@ -3558,7 +3558,7 @@ auto const string_literal_1 = x3::rule<struct _, string_view_attribute> { "strin
     ]
     ;
 
-auto const string_literal_2 = x3::rule<struct _, string_view_attribute> { "string_literal" } =
+auto const string_literal_2 = x3::rule<struct _, ast::string_span> { "string_literal" } =
     x3::raw[
         *( ( graphic_character - '%'  )
          | ( char_('%')       >> '%' )
