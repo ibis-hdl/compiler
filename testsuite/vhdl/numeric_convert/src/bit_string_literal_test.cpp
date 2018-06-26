@@ -28,11 +28,6 @@
 BOOST_AUTO_TEST_SUITE( numeric_convert )
 
 
-namespace ast = eda::vhdl::ast;
-namespace btt = boost::test_tools;
-namespace but_data = boost::unit_test::data;
-
-
 namespace detail {
 
 
@@ -71,6 +66,8 @@ std::string to_hex_literal(uint64_t n, std::string const& postfix="")
 
 
 namespace /* anonymous */ {
+
+namespace btt = boost::test_tools;
 
 /* The numeric_convert utility writes messages, but concrete error messages
  * arn't checked. For debugging is useful to see them otherwise. Switch to

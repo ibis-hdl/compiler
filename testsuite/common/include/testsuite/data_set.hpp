@@ -16,11 +16,10 @@
 
 #include <vector>
 
+#include <testsuite/namespace_alias.hpp>
+
 
 namespace testsuite {
-
-
-namespace fs = boost::filesystem;
 
 
 class dataset_loader

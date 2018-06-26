@@ -128,14 +128,8 @@ class BoostTestGenerator:
 #include <testsuite/vhdl_parser/testing_parser.hpp>
 #include <testsuite/vhdl_parser/testing_util.hpp>
 #include <testsuite/vhdl_parser/testing_parser_grammar_hack.hpp>
+#include <testsuite/namespace_alias.hpp>
 """
-        
-    def cxxNamespaceAliases(self):
-        return """
-namespace btt    = boost::test_tools;
-namespace parser = eda::vhdl::parser;
-namespace ast    = eda::vhdl::ast;"""
-        
         
     def cxxDataSetLoader(self, name):
         return """
@@ -192,17 +186,13 @@ BOOST_DATA_TEST_CASE( {test_case},
     )
 
     
-    def writeParserTestFile(self, path, filename, dataset_loader, datatest_case, testsuite_name='parser'):
+    def writeParserTestFile(self, path, filename, dataset_loader, datatest_case, testsuite_name='parser_rule'):
         contents="""{header}
 {includes}
 
 BOOST_AUTO_TEST_SUITE( {testsuite_name} )
 
-{namespace_alias}
-
-
 {dataset_loader}
-
 
 {datatest_case}
 
@@ -212,7 +202,6 @@ BOOST_AUTO_TEST_SUITE_END()
     header=self.cxxHeader(filename)[1:],
     includes=self.cxxIncludes(),
     testsuite_name=testsuite_name,
-    namespace_alias=self.cxxNamespaceAliases(),
     dataset_loader='\n'.join(dataset_loader),
     datatest_case='\n'.join(datatest_case)
 )

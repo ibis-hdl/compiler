@@ -74,6 +74,7 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
     eda::vhdl_parser
     eda::common # FixMe: shouldn't this depency propagated by eda::vhdl_grammar?
+    eda::testsuite_common
     Boost::system
     Boost::filesystem
     Boost::locale

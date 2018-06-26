@@ -1,7 +1,7 @@
 /*
  * integer_test.cpp
  *
- *  Created on: 23.6.2018
+ *  Created on: 26.6.2018
  *      Author: olaf
  */
 
@@ -18,15 +18,10 @@
 #include <testsuite/vhdl_parser/testing_parser.hpp>
 #include <testsuite/vhdl_parser/testing_util.hpp>
 #include <testsuite/vhdl_parser/testing_parser_grammar_hack.hpp>
+#include <testsuite/namespace_alias.hpp>
 
 
-BOOST_AUTO_TEST_SUITE( parser )
-
-
-namespace btt    = boost::test_tools;
-namespace parser = eda::vhdl::parser;
-namespace ast    = eda::vhdl::ast;
-
+BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
 struct integer_dataset : public testsuite::dataset_loader
@@ -49,7 +44,6 @@ struct integer_failure_dataset : public testsuite::dataset_loader
                       ".input" }
     { }
 } const integer_failure_dataset;
-
 
 
 

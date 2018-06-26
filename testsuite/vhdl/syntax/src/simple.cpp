@@ -19,16 +19,10 @@
 #include <eda/vhdl/analyze/syntax.hpp>
 #include <testsuite/data_set.hpp>
 
+#include <testsuite/namespace_alias.hpp>
 
 
 BOOST_AUTO_TEST_SUITE( syntax )
-
-
-namespace btt    = boost::test_tools;
-namespace parser = eda::vhdl::parser;
-namespace analyze = eda::vhdl::analyze;
-namespace ast    = eda::vhdl::ast;
-namespace vhdl = eda::vhdl;
 
 
 struct foo_dataset : public testsuite::dataset_loader

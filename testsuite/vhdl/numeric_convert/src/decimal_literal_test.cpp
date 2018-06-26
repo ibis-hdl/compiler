@@ -29,11 +29,6 @@
 BOOST_AUTO_TEST_SUITE( numeric_convert )
 
 
-namespace ast = eda::vhdl::ast;
-namespace btt = boost::test_tools;
-namespace but_data = boost::unit_test::data;
-
-
 namespace detail {
 
 

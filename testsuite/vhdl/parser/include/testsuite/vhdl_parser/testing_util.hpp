@@ -12,11 +12,11 @@
 
 #include <sstream>
 
+#include <testsuite/namespace_alias.hpp>
+
 
 namespace testsuite { namespace vhdl_parser { namespace util {
 
-
-namespace fs = boost::filesystem;
 
 /**
  * [Detect if boost test case failed](

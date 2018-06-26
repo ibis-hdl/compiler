@@ -15,11 +15,10 @@
 
 #include <tuple>
 
+#include <testsuite/namespace_alias.hpp>
+
 
 namespace testsuite {
-
-
-namespace ast = eda::vhdl::ast;
 
 
 std::tuple<bool, ast::bit_string_literal>

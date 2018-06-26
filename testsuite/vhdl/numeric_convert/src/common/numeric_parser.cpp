@@ -13,11 +13,7 @@
 #include <iostream>
 
 
-namespace x3 = boost::spirit::x3;
-
-namespace parser = eda::vhdl::parser;
-namespace ast    = eda::vhdl::ast;
-
+namespace testsuite {
 
 namespace detail {
 
@@ -71,9 +67,6 @@ std::tuple<bool, AttrType> parse(ParserType const &numeric_parser, std::string c
 
 
 } // namespace detail
-
-
-namespace testsuite {
 
 
 std::tuple<bool, ast::bit_string_literal>
