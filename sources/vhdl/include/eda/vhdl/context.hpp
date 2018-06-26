@@ -10,27 +10,10 @@
 
 
 #include <eda/vhdl/ast/util/string_span.hpp>
+#include <eda/vhdl/ast/util/string_span_hash.hpp>
 
 #include <unordered_map>
 #include <iosfwd>
-
-
-namespace std {
-
-
-template<>
-struct hash<eda::vhdl::ast::string_span>
-{
-    size_t operator()(eda::vhdl::ast::string_span const& range) const noexcept {
-        //static_assert(std::string_view::value_type == range::value_type);
-        /* FixMe: This hash calculation isn't performant. The problem behind:
-         * in general, an iterator can't be converted to a pointer. */
-        return std::hash<std::string>()(std::string(range.begin(), range.end()));
-    }
-};
-
-
-} // namespace std
 
 
 namespace eda { namespace vhdl {
