@@ -39,8 +39,9 @@ target_link_libraries(bt_dataset_args
 
 # Issue source
 add_executable(bt_issue12953 EXCLUDE_FROM_ALL
-    dataset_master_test_suite_accessible_test.cpp
     dataset_master_test_suite_accessible_main.cpp
+    dataset_master_test_suite_accessible_test.cpp
+    dataset_master_test_suite_accessible_test_with_arity.cpp
 )
 add_dependencies(bt_issue12953 boost-utf)
 target_include_directories(bt_issue12953 PRIVATE
