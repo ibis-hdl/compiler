@@ -40,7 +40,8 @@ namespace x3 = boost::spirit::x3;
 namespace fs = boost::filesystem;
 
 namespace btt      = boost::test_tools;
-namespace but_data = boost::unit_test::data;
+namespace utf      = boost::unit_test;
+namespace utf_data = boost::unit_test::data;
 
 namespace parser  = eda::vhdl::parser;
 namespace ast     = eda::vhdl::ast;
@@ -51,7 +52,7 @@ namespace analyze = eda::vhdl::analyze;
 
 // global for BOOST_DATA_TEST_CASE()
 namespace btt      = testsuite::btt;
-namespace but_data = testsuite::but_data;
+namespace utf_data = testsuite::utf_data;
 
 namespace parser  = eda::vhdl::parser;
 namespace ast     = eda::vhdl::ast;

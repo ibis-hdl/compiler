@@ -143,7 +143,7 @@ std::vector<eda::vhdl::intrinsic::unsigned_integer_type> bit_decimal {
 
 BOOST_DATA_TEST_CASE(
     bit_string_literal,
-    but_data::make(bit_literal) ^ bit_decimal,
+    utf_data::make(bit_literal) ^ bit_decimal,
     literal,                      N)
 {
     auto const [parse_ok, ast_node] = testsuite::parse_bit_string_literal(literal);
@@ -166,7 +166,7 @@ std::vector<std::string> const literal_ovflw{
 
 BOOST_DATA_TEST_CASE(
     bit_string_literal_uint64_ovflw,
-    but_data::make(literal_ovflw),
+    utf_data::make(literal_ovflw),
     literal)
 {
     auto const [parse_ok, ast_node] = testsuite::parse_bit_string_literal(literal);

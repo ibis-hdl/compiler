@@ -109,7 +109,7 @@ std::vector<eda::vhdl::intrinsic::unsigned_integer_type> dec_int{
 
 BOOST_DATA_TEST_CASE(
     decimal_literal_integer,
-    but_data::make(dec_int_lit) ^ dec_int,
+    utf_data::make(dec_int_lit) ^ dec_int,
     literal,                      N)
 {
     auto const [parse_ok, ast_node] = testsuite::parse_decimal_literal(literal);
@@ -192,7 +192,7 @@ double const REAL_TOLERANCE = []() {
 
 BOOST_DATA_TEST_CASE(
     decimal_literal_real,
-    but_data::make(dec_real_lit) ^ dec_real,
+    utf_data::make(dec_real_lit) ^ dec_real,
     literal,                       N)
 {
     auto const [parse_ok, ast_node] = testsuite::parse_decimal_literal(literal);

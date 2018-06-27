@@ -206,7 +206,7 @@ std::vector<eda::vhdl::intrinsic::unsigned_integer_type> integer_dec{
 
 BOOST_DATA_TEST_CASE(
     based_literal_integer,
-    but_data::make(integer_lit) ^ integer_dec,
+    utf_data::make(integer_lit) ^ integer_dec,
     literal,                      N)
 {
     auto const [parse_ok, ast_node] = testsuite::parse_based_literal(literal);
@@ -230,7 +230,7 @@ std::vector<std::string> const integer_lit_uint64_ovflw{
 
 BOOST_DATA_TEST_CASE(
     based_literal_uint64_ovflw,
-    but_data::make(integer_lit_uint64_ovflw),
+    utf_data::make(integer_lit_uint64_ovflw),
     literal)
 {
     auto const [parse_ok, ast_node] = testsuite::parse_based_literal(literal);
@@ -279,7 +279,7 @@ std::vector<eda::vhdl::intrinsic::real_type> real_dec{
 
 BOOST_DATA_TEST_CASE(
     based_literal_real,
-    but_data::make(real_lit) ^ real_dec,
+    utf_data::make(real_lit) ^ real_dec,
     literal,                   N)
 {
     auto const [parse_ok, ast_node] = testsuite::parse_based_literal(literal);
@@ -302,7 +302,7 @@ std::vector<std::string> const lit_failure{
 
 BOOST_DATA_TEST_CASE(
     based_literal_failure,
-    but_data::make(lit_failure),
+    utf_data::make(lit_failure),
     literal)
 {
     auto const [parse_ok, ast_node] = testsuite::parse_based_literal(literal);
