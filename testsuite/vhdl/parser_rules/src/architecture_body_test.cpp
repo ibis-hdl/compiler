@@ -1,7 +1,7 @@
 /*
  * architecture_body_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct architecture_body_dataset : public testsuite::dataset_loader
-{
-    architecture_body_dataset()
-    : dataset_loader{ "test_case/architecture_body",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const architecture_body_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( architecture_body,
-      architecture_body_dataset.input()
-    ^ architecture_body_dataset.expect()
-    ^ architecture_body_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/architecture_body",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::architecture_body; 

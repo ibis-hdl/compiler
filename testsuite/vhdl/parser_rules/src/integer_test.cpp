@@ -1,7 +1,7 @@
 /*
  * integer_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,33 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct integer_dataset : public testsuite::dataset_loader
-{
-    integer_dataset()
-    : dataset_loader{ "test_case/integer",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const integer_dataset;
-
-
-struct integer_failure_dataset : public testsuite::dataset_loader
-{
-    integer_failure_dataset()
-    : dataset_loader{ "test_case/integer_failure",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const integer_failure_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( integer,
-      integer_dataset.input()
-    ^ integer_dataset.expect()
-    ^ integer_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/integer",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::integer; 
@@ -76,9 +53,9 @@ BOOST_DATA_TEST_CASE( integer,
 
 
 BOOST_DATA_TEST_CASE( integer_failure,
-      integer_failure_dataset.input()
-    ^ integer_failure_dataset.expect()
-    ^ integer_failure_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/integer_failure",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::integer; 

@@ -1,7 +1,7 @@
 /*
  * next_statement_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct next_statement_dataset : public testsuite::dataset_loader
-{
-    next_statement_dataset()
-    : dataset_loader{ "test_case/next_statement",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const next_statement_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( next_statement,
-      next_statement_dataset.input()
-    ^ next_statement_dataset.expect()
-    ^ next_statement_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/next_statement",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::next_statement; 

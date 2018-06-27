@@ -1,7 +1,7 @@
 /*
  * generic_map_aspect_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct generic_map_aspect_dataset : public testsuite::dataset_loader
-{
-    generic_map_aspect_dataset()
-    : dataset_loader{ "test_case/generic_map_aspect",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const generic_map_aspect_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( generic_map_aspect,
-      generic_map_aspect_dataset.input()
-    ^ generic_map_aspect_dataset.expect()
-    ^ generic_map_aspect_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/generic_map_aspect",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::generic_map_aspect; 

@@ -1,7 +1,7 @@
 /*
  * identifier_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,33 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct identifier_dataset : public testsuite::dataset_loader
-{
-    identifier_dataset()
-    : dataset_loader{ "test_case/identifier",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const identifier_dataset;
-
-
-struct identifier_failure_dataset : public testsuite::dataset_loader
-{
-    identifier_failure_dataset()
-    : dataset_loader{ "test_case/identifier_failure",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const identifier_failure_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( identifier,
-      identifier_dataset.input()
-    ^ identifier_dataset.expect()
-    ^ identifier_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/identifier",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::identifier; 
@@ -76,9 +53,9 @@ BOOST_DATA_TEST_CASE( identifier,
 
 
 BOOST_DATA_TEST_CASE( identifier_failure,
-      identifier_failure_dataset.input()
-    ^ identifier_failure_dataset.expect()
-    ^ identifier_failure_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/identifier_failure",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::identifier; 

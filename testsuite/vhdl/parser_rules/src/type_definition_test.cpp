@@ -1,7 +1,7 @@
 /*
  * type_definition_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct type_definition_dataset : public testsuite::dataset_loader
-{
-    type_definition_dataset()
-    : dataset_loader{ "test_case/type_definition",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const type_definition_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( type_definition,
-      type_definition_dataset.input()
-    ^ type_definition_dataset.expect()
-    ^ type_definition_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/type_definition",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::type_definition; 

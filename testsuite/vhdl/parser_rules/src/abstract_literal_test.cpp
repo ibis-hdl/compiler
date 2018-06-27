@@ -1,7 +1,7 @@
 /*
  * abstract_literal_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct abstract_literal_dataset : public testsuite::dataset_loader
-{
-    abstract_literal_dataset()
-    : dataset_loader{ "test_case/abstract_literal",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const abstract_literal_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( abstract_literal,
-      abstract_literal_dataset.input()
-    ^ abstract_literal_dataset.expect()
-    ^ abstract_literal_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/abstract_literal",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::abstract_literal; 

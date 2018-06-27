@@ -1,7 +1,7 @@
 /*
  * function_call_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct function_call_dataset : public testsuite::dataset_loader
-{
-    function_call_dataset()
-    : dataset_loader{ "test_case/function_call",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const function_call_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( function_call,
-      function_call_dataset.input()
-    ^ function_call_dataset.expect()
-    ^ function_call_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/function_call",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::function_call; 

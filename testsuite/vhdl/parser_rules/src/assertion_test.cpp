@@ -1,7 +1,7 @@
 /*
  * assertion_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct assertion_dataset : public testsuite::dataset_loader
-{
-    assertion_dataset()
-    : dataset_loader{ "test_case/assertion",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const assertion_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( assertion,
-      assertion_dataset.input()
-    ^ assertion_dataset.expect()
-    ^ assertion_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/assertion",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::assertion; 

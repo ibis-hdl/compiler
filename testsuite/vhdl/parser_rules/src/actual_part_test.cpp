@@ -1,7 +1,7 @@
 /*
  * actual_part_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct actual_part_dataset : public testsuite::dataset_loader
-{
-    actual_part_dataset()
-    : dataset_loader{ "test_case/actual_part",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const actual_part_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( actual_part,
-      actual_part_dataset.input()
-    ^ actual_part_dataset.expect()
-    ^ actual_part_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/actual_part",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::actual_part; 

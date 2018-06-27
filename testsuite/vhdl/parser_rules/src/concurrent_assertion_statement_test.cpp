@@ -1,7 +1,7 @@
 /*
  * concurrent_assertion_statement_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct concurrent_assertion_statement_dataset : public testsuite::dataset_loader
-{
-    concurrent_assertion_statement_dataset()
-    : dataset_loader{ "test_case/concurrent_assertion_statement",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const concurrent_assertion_statement_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( concurrent_assertion_statement,
-      concurrent_assertion_statement_dataset.input()
-    ^ concurrent_assertion_statement_dataset.expect()
-    ^ concurrent_assertion_statement_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/concurrent_assertion_statement",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::concurrent_assertion_statement; 

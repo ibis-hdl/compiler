@@ -1,7 +1,7 @@
 /*
  * loop_statement_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct loop_statement_dataset : public testsuite::dataset_loader
-{
-    loop_statement_dataset()
-    : dataset_loader{ "test_case/loop_statement",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const loop_statement_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( loop_statement,
-      loop_statement_dataset.input()
-    ^ loop_statement_dataset.expect()
-    ^ loop_statement_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/loop_statement",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::loop_statement; 

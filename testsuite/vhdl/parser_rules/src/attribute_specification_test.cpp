@@ -1,7 +1,7 @@
 /*
  * attribute_specification_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct attribute_specification_dataset : public testsuite::dataset_loader
-{
-    attribute_specification_dataset()
-    : dataset_loader{ "test_case/attribute_specification",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const attribute_specification_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( attribute_specification,
-      attribute_specification_dataset.input()
-    ^ attribute_specification_dataset.expect()
-    ^ attribute_specification_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/attribute_specification",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::attribute_specification; 

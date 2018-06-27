@@ -1,7 +1,7 @@
 /*
  * library_clause_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct library_clause_dataset : public testsuite::dataset_loader
-{
-    library_clause_dataset()
-    : dataset_loader{ "test_case/library_clause",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const library_clause_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( library_clause,
-      library_clause_dataset.input()
-    ^ library_clause_dataset.expect()
-    ^ library_clause_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/library_clause",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::library_clause; 

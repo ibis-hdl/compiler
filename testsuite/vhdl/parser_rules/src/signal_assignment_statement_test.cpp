@@ -1,7 +1,7 @@
 /*
  * signal_assignment_statement_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct signal_assignment_statement_dataset : public testsuite::dataset_loader
-{
-    signal_assignment_statement_dataset()
-    : dataset_loader{ "test_case/signal_assignment_statement",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const signal_assignment_statement_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( signal_assignment_statement,
-      signal_assignment_statement_dataset.input()
-    ^ signal_assignment_statement_dataset.expect()
-    ^ signal_assignment_statement_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/signal_assignment_statement",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::signal_assignment_statement; 

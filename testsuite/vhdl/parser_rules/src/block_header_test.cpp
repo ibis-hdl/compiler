@@ -1,7 +1,7 @@
 /*
  * block_header_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct block_header_dataset : public testsuite::dataset_loader
-{
-    block_header_dataset()
-    : dataset_loader{ "test_case/block_header",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const block_header_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( block_header,
-      block_header_dataset.input()
-    ^ block_header_dataset.expect()
-    ^ block_header_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/block_header",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::block_header; 

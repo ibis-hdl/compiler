@@ -1,7 +1,7 @@
 /*
  * component_specification_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct component_specification_dataset : public testsuite::dataset_loader
-{
-    component_specification_dataset()
-    : dataset_loader{ "test_case/component_specification",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const component_specification_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( component_specification,
-      component_specification_dataset.input()
-    ^ component_specification_dataset.expect()
-    ^ component_specification_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/component_specification",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::component_specification; 

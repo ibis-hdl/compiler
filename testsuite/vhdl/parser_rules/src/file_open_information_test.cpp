@@ -1,7 +1,7 @@
 /*
  * file_open_information_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct file_open_information_dataset : public testsuite::dataset_loader
-{
-    file_open_information_dataset()
-    : dataset_loader{ "test_case/file_open_information",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const file_open_information_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( file_open_information,
-      file_open_information_dataset.input()
-    ^ file_open_information_dataset.expect()
-    ^ file_open_information_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/file_open_information",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::file_open_information; 

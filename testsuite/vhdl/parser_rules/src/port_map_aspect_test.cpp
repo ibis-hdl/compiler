@@ -1,7 +1,7 @@
 /*
  * port_map_aspect_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct port_map_aspect_dataset : public testsuite::dataset_loader
-{
-    port_map_aspect_dataset()
-    : dataset_loader{ "test_case/port_map_aspect",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const port_map_aspect_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( port_map_aspect,
-      port_map_aspect_dataset.input()
-    ^ port_map_aspect_dataset.expect()
-    ^ port_map_aspect_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/port_map_aspect",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::port_map_aspect; 

@@ -1,7 +1,7 @@
 /*
  * identifier_list_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct identifier_list_dataset : public testsuite::dataset_loader
-{
-    identifier_list_dataset()
-    : dataset_loader{ "test_case/identifier_list",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const identifier_list_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( identifier_list,
-      identifier_list_dataset.input()
-    ^ identifier_list_dataset.expect()
-    ^ identifier_list_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/identifier_list",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::identifier_list; 

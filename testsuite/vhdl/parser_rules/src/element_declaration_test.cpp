@@ -1,7 +1,7 @@
 /*
  * element_declaration_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct element_declaration_dataset : public testsuite::dataset_loader
-{
-    element_declaration_dataset()
-    : dataset_loader{ "test_case/element_declaration",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const element_declaration_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( element_declaration,
-      element_declaration_dataset.input()
-    ^ element_declaration_dataset.expect()
-    ^ element_declaration_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/element_declaration",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::element_declaration; 

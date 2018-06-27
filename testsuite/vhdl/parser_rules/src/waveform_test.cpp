@@ -1,7 +1,7 @@
 /*
  * waveform_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct waveform_dataset : public testsuite::dataset_loader
-{
-    waveform_dataset()
-    : dataset_loader{ "test_case/waveform",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const waveform_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( waveform,
-      waveform_dataset.input()
-    ^ waveform_dataset.expect()
-    ^ waveform_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/waveform",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::waveform; 

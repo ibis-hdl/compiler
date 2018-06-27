@@ -1,7 +1,7 @@
 /*
  * factor_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct factor_dataset : public testsuite::dataset_loader
-{
-    factor_dataset()
-    : dataset_loader{ "test_case/factor",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const factor_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( factor,
-      factor_dataset.input()
-    ^ factor_dataset.expect()
-    ^ factor_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/factor",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::factor; 

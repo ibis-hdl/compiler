@@ -1,7 +1,7 @@
 /*
  * association_list_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct association_list_dataset : public testsuite::dataset_loader
-{
-    association_list_dataset()
-    : dataset_loader{ "test_case/association_list",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const association_list_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( association_list,
-      association_list_dataset.input()
-    ^ association_list_dataset.expect()
-    ^ association_list_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/association_list",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::association_list; 

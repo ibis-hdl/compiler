@@ -1,7 +1,7 @@
 /*
  * type_conversion_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct type_conversion_dataset : public testsuite::dataset_loader
-{
-    type_conversion_dataset()
-    : dataset_loader{ "test_case/type_conversion",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const type_conversion_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( type_conversion,
-      type_conversion_dataset.input()
-    ^ type_conversion_dataset.expect()
-    ^ type_conversion_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/type_conversion",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::type_conversion; 

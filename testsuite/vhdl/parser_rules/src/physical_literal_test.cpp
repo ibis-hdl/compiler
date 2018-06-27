@@ -1,7 +1,7 @@
 /*
  * physical_literal_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,33 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct physical_literal_dataset : public testsuite::dataset_loader
-{
-    physical_literal_dataset()
-    : dataset_loader{ "test_case/physical_literal",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const physical_literal_dataset;
-
-
-struct physical_literal_failure_dataset : public testsuite::dataset_loader
-{
-    physical_literal_failure_dataset()
-    : dataset_loader{ "test_case/physical_literal_failure",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const physical_literal_failure_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( physical_literal,
-      physical_literal_dataset.input()
-    ^ physical_literal_dataset.expect()
-    ^ physical_literal_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/physical_literal",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::physical_literal; 
@@ -76,9 +53,9 @@ BOOST_DATA_TEST_CASE( physical_literal,
 
 
 BOOST_DATA_TEST_CASE( physical_literal_failure,
-      physical_literal_failure_dataset.input()
-    ^ physical_literal_failure_dataset.expect()
-    ^ physical_literal_failure_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/physical_literal_failure",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::physical_literal; 

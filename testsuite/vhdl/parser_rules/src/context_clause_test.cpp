@@ -1,7 +1,7 @@
 /*
  * context_clause_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct context_clause_dataset : public testsuite::dataset_loader
-{
-    context_clause_dataset()
-    : dataset_loader{ "test_case/context_clause",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const context_clause_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( context_clause,
-      context_clause_dataset.input()
-    ^ context_clause_dataset.expect()
-    ^ context_clause_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/context_clause",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::context_clause; 

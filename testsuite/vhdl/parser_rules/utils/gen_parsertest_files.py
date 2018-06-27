@@ -131,20 +131,6 @@ class BoostTestGenerator:
 #include <testsuite/namespace_alias.hpp>
 """
         
-    def cxxDataSetLoader(self, name):
-        return """
-struct {name}_dataset : public testsuite::dataset_loader
-{{
-    {name}_dataset()
-    : dataset_loader{{ "test_case/{name}",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }}
-    {{ }}
-}} const {name}_dataset;
-""".format(name=name)
-        
-        
     def cxxDataTestCase(self, test_name, name):
         test_case = test_name
         attribute_name=name
@@ -153,9 +139,9 @@ struct {name}_dataset : public testsuite::dataset_loader
        
         return """
 BOOST_DATA_TEST_CASE( {test_case},
-      {test_case}_dataset.input()
-    ^ {test_case}_dataset.expect()
-    ^ {test_case}_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/{test_case}",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {{
     using attribute_type = ast::{attr_name}; 
@@ -186,13 +172,11 @@ BOOST_DATA_TEST_CASE( {test_case},
     )
 
     
-    def writeParserTestFile(self, path, filename, dataset_loader, datatest_case, testsuite_name='parser_rule'):
+    def writeParserTestFile(self, path, filename, datatest_case, testsuite_name='parser_rule'):
         contents="""{header}
 {includes}
 
 BOOST_AUTO_TEST_SUITE( {testsuite_name} )
-
-{dataset_loader}
 
 {datatest_case}
 
@@ -202,7 +186,6 @@ BOOST_AUTO_TEST_SUITE_END()
     header=self.cxxHeader(filename)[1:],
     includes=self.cxxIncludes(),
     testsuite_name=testsuite_name,
-    dataset_loader='\n'.join(dataset_loader),
     datatest_case='\n'.join(datatest_case)
 )
 
@@ -327,20 +310,16 @@ namespace eda {{ namespace vhdl {{ namespace parser {{
             if failure_test:
                 continue
 
-            dataset_loader = list()
             datatest_case  = list()
-
-            dataset_loader.append(self.cxxDataSetLoader(test))
             datatest_case.append( self.cxxDataTestCase(test, test))
             
             test_failure = test + '_failure'
             if test_failure in test_cases:
-                dataset_loader.append(self.cxxDataSetLoader(test_failure))
                 datatest_case.append(self.cxxDataTestCase(test_failure, test))
                 
             test_filename = test + self.testfile_postfix
 
-            self.writeParserTestFile(path, test_filename, dataset_loader, datatest_case) 
+            self.writeParserTestFile(path, test_filename, datatest_case) 
         
             cmake_sources.append("{cxx}".format(
                     cxx='src/' + test_filename))

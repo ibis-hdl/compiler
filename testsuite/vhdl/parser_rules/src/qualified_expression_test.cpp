@@ -1,7 +1,7 @@
 /*
  * qualified_expression_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct qualified_expression_dataset : public testsuite::dataset_loader
-{
-    qualified_expression_dataset()
-    : dataset_loader{ "test_case/qualified_expression",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const qualified_expression_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( qualified_expression,
-      qualified_expression_dataset.input()
-    ^ qualified_expression_dataset.expect()
-    ^ qualified_expression_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/qualified_expression",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::qualified_expression; 

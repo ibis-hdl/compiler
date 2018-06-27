@@ -25,21 +25,11 @@
 BOOST_AUTO_TEST_SUITE( syntax )
 
 
-struct foo_dataset : public testsuite::dataset_loader
-{
-    foo_dataset()
-    : dataset_loader{ "test_case/foo",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/syntax",
-                      ".vhdl" }
-    { }
-} const foo_dataset;
-
-
 BOOST_DATA_TEST_CASE( basic_syntax,
-      foo_dataset.input()
-    ^ foo_dataset.expect()
-    ^ foo_dataset.test_case_name(),
+    //utf_data::make_delayed<testsuite::dataset_loader>( "test_case/foo" ),
+    testsuite::dataset_loader( "test_case/foo",
+                                "../vhdl/syntax",
+                                ".vhdl"),
     input, expected, test_case_name)
 {
     std::ostream& os = std::cout;
@@ -49,7 +39,7 @@ BOOST_DATA_TEST_CASE( basic_syntax,
     // FixMe: introduce make_error_handler(range, ...) ???
 
     parser::error_handler_type error_handler(input.begin(), input.end(),
-                                             os, test_case_name.string());
+                                             os, test_case_name);
 
 
 

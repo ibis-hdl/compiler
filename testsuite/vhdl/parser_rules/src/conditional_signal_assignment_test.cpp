@@ -1,7 +1,7 @@
 /*
  * conditional_signal_assignment_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct conditional_signal_assignment_dataset : public testsuite::dataset_loader
-{
-    conditional_signal_assignment_dataset()
-    : dataset_loader{ "test_case/conditional_signal_assignment",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const conditional_signal_assignment_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( conditional_signal_assignment,
-      conditional_signal_assignment_dataset.input()
-    ^ conditional_signal_assignment_dataset.expect()
-    ^ conditional_signal_assignment_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/conditional_signal_assignment",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::conditional_signal_assignment; 

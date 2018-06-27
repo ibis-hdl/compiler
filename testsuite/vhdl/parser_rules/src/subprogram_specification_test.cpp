@@ -1,7 +1,7 @@
 /*
  * subprogram_specification_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct subprogram_specification_dataset : public testsuite::dataset_loader
-{
-    subprogram_specification_dataset()
-    : dataset_loader{ "test_case/subprogram_specification",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const subprogram_specification_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( subprogram_specification,
-      subprogram_specification_dataset.input()
-    ^ subprogram_specification_dataset.expect()
-    ^ subprogram_specification_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/subprogram_specification",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::subprogram_specification; 

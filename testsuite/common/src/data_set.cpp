@@ -30,10 +30,6 @@ fs::path pretty_filepath(fs::path file_path) {
 }
 
 
-dataset_loader::dataset_loader(fs::path const& path,
-    std::string const& relative_path,
-    std::string const& input_extension_
-)
 /* The prefix for the test case root directory structure is (unfortunately)
  * hard coded. I didn't found a way to give these as command line argument
  * to the boost.test runner.
@@ -43,19 +39,23 @@ dataset_loader::dataset_loader(fs::path const& path,
  * - [access to master_test_suite().{argc, argv}](
  *    https://svn.boost.org/trac10/ticket/12953)
  * */
-: m_prefix_dir{ EDA_TESTSUITE_PREFIX_READ_PATH}
+dataset_loader::dataset_loader(fs::path const& path,
+    std::string const& relative_path,
+    std::string const& input_extension_
+)
+: m_compiled_prefix_dir{ EDA_TESTSUITE_PREFIX_READ_PATH}
 , input_extension{input_extension_}
 , expected_extension{ ".expected" }
 {
     BOOST_TEST_INFO("dataset_loader load test files from " << path);
-    fs::path p = m_prefix_dir / fs::path(relative_path) / path;
+    fs::path p = m_compiled_prefix_dir / fs::path(relative_path) / path;
     read_files(p);
 
-    if(m_input.empty()) {
+    if(testfile_input.empty()) {
         std::cerr << "WARNING: no data in dataset " << path << "\n";
     }
 
-    assert(m_input.size() == m_expected.size()
+    assert(testfile_input.size() == testfile_expected.size()
            && "dataset_loader test vector size mismatch");
 }
 
@@ -80,16 +80,16 @@ void dataset_loader::read_files(fs::path const& path)
 
                 if (fs::extension(file) == input_extension) {
 
-                    m_test_case.emplace_back(
-                        file.parent_path().filename() / file.stem()
+                    testfile_name.emplace_back(
+                        (file.parent_path().filename() / file.stem()).string()
                     );
                     cerr << "INFO: read " << file << "\n";
 
                     fs::path const input_file  = file;
                     fs::path const expect_file = fs::change_extension(file, expected_extension);
 
-                    m_input.emplace_back(   read_file(input_file ));
-                    m_expected.emplace_back(read_file(expect_file));
+                    testfile_input.emplace_back(   read_file(input_file ));
+                    testfile_expected.emplace_back(read_file(expect_file));
                 }
             }
         }
@@ -102,14 +102,14 @@ void dataset_loader::read_files(fs::path const& path)
         cerr << "ERROR: Caught \"" << e.what() << "\" exception!\n";
         /* try to recover from error and continue; probably no {file}.expected
          * was found. */
-        if(   m_test_case.size() == m_input.size()
-           && m_input.size()    == m_expected.size() + 1
+        if(   testfile_name.size() == testfile_input.size()
+           && testfile_input.size()    == testfile_expected.size() + 1
           ) {
             cerr << "WARNING: Remove test files at "
-                 << pretty_filepath(m_test_case.back())
+                 << pretty_filepath(testfile_name.back())
                  << " from data set\n";
-            m_test_case.pop_back();
-            m_input.pop_back();
+            testfile_name.pop_back();
+            testfile_input.pop_back();
         }
     }
     catch(...) {

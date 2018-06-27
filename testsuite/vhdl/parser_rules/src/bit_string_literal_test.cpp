@@ -1,7 +1,7 @@
 /*
  * bit_string_literal_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct bit_string_literal_dataset : public testsuite::dataset_loader
-{
-    bit_string_literal_dataset()
-    : dataset_loader{ "test_case/bit_string_literal",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const bit_string_literal_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( bit_string_literal,
-      bit_string_literal_dataset.input()
-    ^ bit_string_literal_dataset.expect()
-    ^ bit_string_literal_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/bit_string_literal",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::bit_string_literal; 

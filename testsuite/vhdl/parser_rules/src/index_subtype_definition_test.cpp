@@ -1,7 +1,7 @@
 /*
  * index_subtype_definition_test.cpp
  *
- *  Created on: 26.6.2018
+ *  Created on: 27.6.2018
  *      Author: olaf
  */
 
@@ -24,22 +24,10 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-struct index_subtype_definition_dataset : public testsuite::dataset_loader
-{
-    index_subtype_definition_dataset()
-    : dataset_loader{ "test_case/index_subtype_definition",
-                      // hack for boost.test argc/argv problem
-                      "../vhdl/parser_rules",
-                      ".input" }
-    { }
-} const index_subtype_definition_dataset;
-
-
-
 BOOST_DATA_TEST_CASE( index_subtype_definition,
-      index_subtype_definition_dataset.input()
-    ^ index_subtype_definition_dataset.expect()
-    ^ index_subtype_definition_dataset.test_case_name(),
+    testsuite::dataset_loader( "test_case/index_subtype_definition",
+                                "../vhdl/parser_rules",
+                                ".input"),
     input, expected, test_case_name)
 {
     using attribute_type = ast::index_subtype_definition; 
