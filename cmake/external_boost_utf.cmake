@@ -1,4 +1,4 @@
-message("External project: boost.org Unit Test Framework (UTF)")
+message("External Project: Boost.Org Unit Test Framework (UTF)")
 
 
 include(ExternalProject)
@@ -25,7 +25,6 @@ set(BOOST_UTF_INCLUDE_DIR ${source_dir}/include)
 
 # create a .no_backup file for bacula
 ExternalProject_Get_Property(boost-utf PREFIX)
-
 ExternalProject_Add_Step(
   boost-utf
   tag_no_backup
