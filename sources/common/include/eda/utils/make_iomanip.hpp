@@ -40,7 +40,7 @@ struct A
 {
     T x;
 
-    friend std::ostream& operator<<(std::ostream& os, A a) {
+    friend std::ostream& operator<<(std::ostream& os, A const& a) {
         a.x(os);
         return os;
      }

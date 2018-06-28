@@ -28,7 +28,7 @@ std::ostream& failure_status::operator()(std::ostream& os) const
     using boost::locale::translate;
     using boost::locale::format;
 
-    auto error_message = [](size_t count) {
+    auto const error_message = [](size_t count) {
         return utils::make_iomanip([count](std::ostream& os) {
             if(count) {
                 os << format(translate(
@@ -39,7 +39,7 @@ std::ostream& failure_status::operator()(std::ostream& os) const
         });
     };
 
-    auto warning_message = [](size_t count) {
+    auto const warning_message = [](size_t count) {
         return utils::make_iomanip([count](std::ostream& os) {
             if(count) {
                 os << format(translate(
