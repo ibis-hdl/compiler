@@ -1,7 +1,7 @@
 /*
  * constrained_array_definition_test.cpp
  *
- *  Created on: 27.6.2018
+ *  Created on: 28.6.2018
  *      Author: olaf
  */
 
@@ -25,9 +25,7 @@ BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
 BOOST_DATA_TEST_CASE( constrained_array_definition,
-    testsuite::dataset_loader( "test_case/constrained_array_definition",
-                                "../vhdl/parser_rules",
-                                ".input"),
+    utf_data::make_delayed<testsuite::dataset_loader>( "test_case/constrained_array_definition" ),
     input, expected, test_case_name)
 {
     using attribute_type = ast::constrained_array_definition; 

@@ -26,10 +26,7 @@ BOOST_AUTO_TEST_SUITE( syntax )
 
 
 BOOST_DATA_TEST_CASE( basic_syntax,
-    //utf_data::make_delayed<testsuite::dataset_loader>( "test_case/foo" ),
-    testsuite::dataset_loader( "test_case/foo",
-                                "../vhdl/syntax",
-                                ".vhdl"),
+    utf_data::make_delayed<testsuite::dataset_loader>( "test_case/foo" ),
     input, expected, test_case_name)
 {
     std::ostream& os = std::cout;

@@ -54,8 +54,6 @@ public:
         , m_additional(additional)
         {}
 
-        // bug in joins, see [13380](https://svn.boost.org/trac10/ticket/13380),
-        // can safely be changed to std::string once fixed
         std::tuple<std::string, std::string, std::string> operator*() const {
           return std::tuple<std::string, std::string, std::string>(
              *m_input,

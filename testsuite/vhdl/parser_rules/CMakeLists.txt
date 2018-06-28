@@ -138,7 +138,7 @@ add_executable(${PROJECT_NAME} ${PARSERTEST_SOURCES})
 # adjust include path
 target_include_directories(${PROJECT_NAME} PRIVATE
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>)
+)
 
 
 target_compile_options(${PROJECT_NAME} PRIVATE
@@ -190,19 +190,17 @@ target_link_libraries(${PROJECT_NAME}
     Boost::filesystem
 )
 
-# Since Boost.Test does not expose the argc/argv values outside of the
-# test case we have to provide the path to the test case files manualy
-configure_file(
-    ${PROJECT_SOURCE_DIR}/include/testsuite/vhdl_parser/test_case_path.hpp.in
-    ${PROJECT_BINARY_DIR}/include/testsuite/vhdl_parser/test_case_path.hpp
-    @ONLY)
-
 
 ## 
 # CMake/CTest
 # The argument is the top level directory of the test directories of 'test_case'
 add_test(NAME test_vhdl_parser_rule
-    COMMAND ${PROJECT_NAME} -- ${PROJECT_SOURCE_DIR}
+    COMMAND ${PROJECT_NAME} -- 
+    --source-prefix=${PROJECT_SOURCE_DIR}
+    --destination-prefix=${PROJECT_BINARY_DIR}
+    --input-extension=.input
+    --write-extension=.expected
+    #--write-extension=.parsed
 )
 
 

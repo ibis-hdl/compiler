@@ -6,7 +6,6 @@
  */
 
 #include <testsuite/data_set.hpp>
-#include <testsuite/testsuite_prefix.hpp>
 
 #include <boost/filesystem/fstream.hpp>
 #include <iostream>
@@ -26,7 +25,7 @@ namespace testsuite {
 /** Helper function to format all file path related messages unified. */
 static inline
 fs::path pretty_filepath(fs::path file_path) {
-    return file_path.make_preferred();
+    return fs::canonical(file_path.make_preferred());
 }
 
 
@@ -39,24 +38,26 @@ fs::path pretty_filepath(fs::path file_path) {
  * - [access to master_test_suite().{argc, argv}](
  *    https://svn.boost.org/trac10/ticket/12953)
  * */
-dataset_loader::dataset_loader(fs::path const& path,
-    std::string const& relative_path,
-    std::string const& input_extension_
-)
-: m_compiled_prefix_dir{ EDA_TESTSUITE_PREFIX_READ_PATH}
-, input_extension{input_extension_}
+dataset_loader::dataset_loader(std::string const& path)
+: input_extension{ ".vhdl" }
 , expected_extension{ ".expected" }
 {
+    // FixMe: Doesn't abort() as expected
+    BOOST_TEST_REQUIRE(parse_command_line(),
+                       "--source-prefix= must be given");
+
     BOOST_TEST_INFO("dataset_loader load test files from " << path);
-    fs::path p = m_compiled_prefix_dir / fs::path(relative_path) / path;
+    fs::path p = fs::path(source_dir_prefix) / path;
+    p.make_preferred();
     read_files(p);
 
     if(testfile_input.empty()) {
         std::cerr << "WARNING: no data in dataset " << path << "\n";
     }
 
-    assert(testfile_input.size() == testfile_expected.size()
-           && "dataset_loader test vector size mismatch");
+
+    BOOST_TEST_REQUIRE(testfile_input.size() == testfile_expected.size(),
+                       "dataset_loader test vector size mismatch");
 }
 
 
@@ -94,6 +95,8 @@ void dataset_loader::read_files(fs::path const& path)
             }
         }
         else {
+            /* FixMe: boost.fs throws on canonical(), since path doesn't exist
+             * This behavior isn't with C++17 filesystem */
             cerr << "ERROR: Directory: " << fs::absolute(path)
                  << " does not exist!\n";
         }
@@ -137,6 +140,54 @@ std::string dataset_loader::read_file(fs::path const& file_path)
     }
 
     return ss.str();
+}
+
+
+bool dataset_loader::parse_for(std::string const& arg, std::string const& str, std::string& value)
+{
+    auto const pos = str.find(arg);
+
+    if(pos == std::string::npos) {
+        return false;
+    }
+
+    value = str.substr(pos + arg.size());
+    return true;
+}
+
+
+bool dataset_loader::parse_command_line()
+{
+    unsigned const argc = boost::unit_test::framework::master_test_suite().argc;
+    char** const argv = boost::unit_test::framework::master_test_suite().argv;
+
+    bool source_prefix_arg{ false };
+
+    for(unsigned i = 0; i != argc; i++) {
+        //std::cout << "ArgValue[" << i << "]: " << argv[i] << "\n";
+
+        if(parse_for("--source-prefix=", argv[i], source_dir_prefix)) {
+            std::cout << "--source-prefix = " << source_dir_prefix << "\n";
+            source_prefix_arg = true;
+        }
+
+        if(parse_for("--input-extension=", argv[i], input_extension)) {
+            std::cout << "--input-extension=" << input_extension << "\n";
+        }
+
+        if(parse_for("--expected-extension=", argv[i], expected_extension)) {
+            std::cout << "--expected-extension=" << expected_extension << "\n";
+        }
+
+    }
+
+    if(!source_prefix_arg) {
+        std::cerr << "ERROR(testsuite::dataset_loader) "
+                  << argv[0] << " --source-prefix= must be given\n";
+        return false;
+    }
+
+    return true;
 }
 
 

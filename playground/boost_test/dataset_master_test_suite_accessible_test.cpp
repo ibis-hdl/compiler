@@ -85,6 +85,7 @@ dataset_loader::dataset_loader()
 
     // not taking into account the name of the program (first argument)
     for(unsigned i = 1; i != argc; i++) {
+        std::cout << "ArgValue[" << i << "]: " << argv[i] << "\n";
         m_input_extension.push_back(argv[i]);
     }
 }

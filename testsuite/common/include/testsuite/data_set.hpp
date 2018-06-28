@@ -25,17 +25,15 @@ namespace testsuite {
 class dataset_loader
 {
 public:
-    typedef std::vector<std::string>                    data_type;
+    typedef std::vector<std::string>                data_type;
 
 public:
-    dataset_loader(fs::path const& path,
-        // Hack for boost.test missing command line args
-        std::string const& relative_path,   // relative path from common/testsuite to this testsuite
-        std::string const& input_extension  // test case file input file extension
-    );
+    dataset_loader(std::string const& path);
 
 public: // Boost.UTF API
     enum { arity = 3 };
+
+    typedef std::string                             sample; // utf_data::make_delayed
 
     struct iterator
     {
@@ -77,13 +75,15 @@ public: // Boost.UTF API
     }
 
 private:
-    bool parse_for(std::string const& arg, std::string& value);
-    bool parse_command_line();
     void read_files(fs::path const& path);
     std::string read_file(fs::path const& file_path);
 
 private:
-    fs::path                                        m_compiled_prefix_dir;
+    bool parse_for(std::string const& arg, std::string const& string, std::string& value);
+    bool parse_command_line();
+
+private:
+    std::string                                     source_dir_prefix;
 
     data_type                                       testfile_input;
     data_type                                       testfile_expected;

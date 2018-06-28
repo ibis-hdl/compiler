@@ -1,7 +1,7 @@
 /*
  * interface_file_declaration_test.cpp
  *
- *  Created on: 27.6.2018
+ *  Created on: 28.6.2018
  *      Author: olaf
  */
 
@@ -25,9 +25,7 @@ BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
 BOOST_DATA_TEST_CASE( interface_file_declaration,
-    testsuite::dataset_loader( "test_case/interface_file_declaration",
-                                "../vhdl/parser_rules",
-                                ".input"),
+    utf_data::make_delayed<testsuite::dataset_loader>( "test_case/interface_file_declaration" ),
     input, expected, test_case_name)
 {
     using attribute_type = ast::interface_file_declaration; 

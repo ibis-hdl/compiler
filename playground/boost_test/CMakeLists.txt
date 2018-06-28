@@ -21,8 +21,6 @@ add_executable(bt_dataset                       EXCLUDE_FROM_ALL bt_dataset.cpp)
 #    https://svn.boost.org/trac10/ticket/12953)
 # - [[Boost.Test] access to boost::unit_test::framework::master_test_suite().{argc, argv} outside from BOOST_TEST](
 #    https://groups.google.com/forum/#!topic/boost-developers-archive/wtnY9F2cWNI)
-include(external_boost_utf)
-
 find_package(Boost REQUIRED COMPONENTS system filesystem)
 
 # Concept

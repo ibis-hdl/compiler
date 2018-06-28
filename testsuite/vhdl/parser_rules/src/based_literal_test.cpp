@@ -1,7 +1,7 @@
 /*
  * based_literal_test.cpp
  *
- *  Created on: 27.6.2018
+ *  Created on: 28.6.2018
  *      Author: olaf
  */
 
@@ -25,9 +25,7 @@ BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
 BOOST_DATA_TEST_CASE( based_literal,
-    testsuite::dataset_loader( "test_case/based_literal",
-                                "../vhdl/parser_rules",
-                                ".input"),
+    utf_data::make_delayed<testsuite::dataset_loader>( "test_case/based_literal" ),
     input, expected, test_case_name)
 {
     using attribute_type = ast::based_literal; 

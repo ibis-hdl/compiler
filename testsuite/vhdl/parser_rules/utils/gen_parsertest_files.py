@@ -139,9 +139,7 @@ class BoostTestGenerator:
        
         return """
 BOOST_DATA_TEST_CASE( {test_case},
-    testsuite::dataset_loader( "test_case/{test_case}",
-                                "../vhdl/parser_rules",
-                                ".input"),
+    utf_data::make_delayed<testsuite::dataset_loader>( "test_case/{test_case}" ),
     input, expected, test_case_name)
 {{
     using attribute_type = ast::{attr_name}; 

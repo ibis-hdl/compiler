@@ -35,6 +35,15 @@ include(build_config_hpp)
 include(external_spirit_x3)
 
 
+##
+# Globally Boost.UTF
+# - [access to master_test_suite().{argc, argv}](
+#    https://svn.boost.org/trac10/ticket/12953)
+# - [[Boost.Test] access to boost::unit_test::framework::master_test_suite().{argc, argv} outside from BOOST_TEST](
+#    https://groups.google.com/forum/#!topic/boost-developers-archive/wtnY9F2cWNI)
+include(external_boost_utf)
+
+
 ## 
 # Common build options: set the output folder where programs will be created
 set(CMAKE_BINARY_DIR            ${CMAKE_BINARY_DIR}/bin)

@@ -6,28 +6,25 @@
  */
 
 #include <testsuite/vhdl_parser/testing_util.hpp>
-#include <testsuite/vhdl_parser/test_case_path.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/results_collector.hpp>
 
 #include <boost/algorithm/string.hpp>
-#include <iostream>
 
-#include <locale>
-#include <codecvt>
+#include <boost/filesystem.hpp>
+
+#include <iostream>
 
 
 namespace testsuite { namespace vhdl_parser { namespace util {
 
 
-#if defined(_WIN32) || defined(_WIN64)
-    static constexpr std::wostream& cerr{ std::wcerr };
-    static constexpr std::wostream& cout{ std::wcout };
-#else
-    static constexpr std::ostream& cerr{ std::cerr };
-    static constexpr std::ostream& cout{ std::cout };
-#endif
+/** Helper function to format all file path related messages unified. */
+static inline
+fs::path pretty_filepath(fs::path file_path) {
+    return fs::canonical(file_path.make_preferred());
+}
 
 
 /**
@@ -47,16 +44,17 @@ bool current_test_passing()
  * report_diagnostic
  */
 std::string report_diagnostic(
-    fs::path const& test_case_name,
+    std::string const& test_case_name,
     std::string const& input,
     std::string const& result
 )
 {
     std::size_t const width{ 80 };
-    std::string const title{ " PARSER INPUT/OUTPUT " };
+    std::string const title{ " INPUT/OUTPUT " };
     std::size_t const w{ (width - title.size()) / 2 };
     std::stringstream ss;
 
+    // pretty style header print
     ss << "\n" << std::string(w, '-') << title << std::string(w, '-') << "\n"
        << boost::trim_right_copy(input)
        << '\n' << std::string(width, '-') << '\n'
@@ -76,13 +74,17 @@ std::string report_diagnostic(
 /**
  * test_case_result_writer definition
  */
-test_case_result_writer::test_case_result_writer(fs::path const& test_case)
-/* The prefix for the test case output root directory structure is (unfortunately)
- * hard coded. I didn't found a way to give these as command line argument
- * to the boost.test runner. */
-: m_dest_dir{ BT_TEST_CASE_WRITE_PATH }
-, m_test_case{ test_case }
-{ }
+test_case_result_writer::test_case_result_writer(std::string const& test_case)
+: destination_prefix{ "./testsuite_result" }
+, testcase_name{ test_case }
+, write_extension{ ".result" }
+, name_self { "testsuite::test_case_result_writer" }
+{
+    BOOST_TEST_REQUIRE(parse_command_line(),
+                       "--destination-prefix= must be given");
+
+    // XXX simply warning, print defualt: destination_prefix ???
+}
 
 
 bool test_case_result_writer::create_directory(fs::path const& write_path)
@@ -91,16 +93,17 @@ bool test_case_result_writer::create_directory(fs::path const& write_path)
         if(   !boost::filesystem::exists(write_path)
            || !boost::filesystem::is_directory(write_path)
         ) {
-            cout << "create directories " << write_path << '\n';
+            BOOST_TEST_MESSAGE("create directories " << write_path << '\n');
             return fs::create_directories(write_path);
         }
     }
     catch(fs::filesystem_error const& e) {
-        cerr << "creating directory "
-             << write_path
+        BOOST_TEST_MESSAGE("ERROR(" << name_self << ")"
+             << "creating directory "
+             << pretty_filepath(write_path).string()
              << " failed with:\n"
-             << convert_string(e.code().message())
-             << "\n";
+             << e.code().message()
+        );
         return false;
     }
 
@@ -110,7 +113,7 @@ bool test_case_result_writer::create_directory(fs::path const& write_path)
 
 bool test_case_result_writer::write_file(fs::path const& filename, std::string const& contents)
 {
-    cout << "Write result to " << filename << "\n";
+    BOOST_TEST_MESSAGE("Write result to " << filename << "\n");
 
     try {
         if(fs::exists(filename)) {
@@ -118,11 +121,12 @@ bool test_case_result_writer::write_file(fs::path const& filename, std::string c
         }
     }
     catch(fs::filesystem_error const& e) {
-        cerr << "remove of older file "
-             << filename
+        BOOST_TEST_MESSAGE("ERROR(" << name_self << ")"
+                "remove of older file "
+             << pretty_filepath(filename).string()
              << " failed with:\n"
-             << convert_string(e.code().message())
-             << "\n";
+             << e.code().message()
+        );
         return false;
     }
 
@@ -131,11 +135,12 @@ bool test_case_result_writer::write_file(fs::path const& filename, std::string c
         ofs << contents;
     }
     catch(fs::filesystem_error const& e) {
-        cerr << "writing to "
-             << filename
+        BOOST_TEST_MESSAGE("ERROR(" << name_self << ")"
+                "writing to "
+             << pretty_filepath(filename).string()
              << " failed with:\n"
-             << convert_string(e.code().message())
-             << "\n";
+             << e.code().message()
+        );
         return false;
     }
 
@@ -145,47 +150,63 @@ bool test_case_result_writer::write_file(fs::path const& filename, std::string c
 
 void test_case_result_writer::write(std::string const& parse_result)
 {
-    fs::path const full_pathname = m_dest_dir / "test_case" / m_test_case;
+    fs::path const full_pathname = fs::path(destination_prefix) / "test_case" / testcase_name;
     fs::path const write_path = full_pathname.parent_path();
-
-#if 0
-    std::string const ext{ ".parsed" };
-#else // for 'easy' GOLD expected file generation
-    std::string const ext{ ".expected" };
-#endif
 
     if(!create_directory(write_path)) {
         return;
     }
 
-    fs::path const filename = full_pathname.filename().replace_extension(ext);
+    fs::path const filename = full_pathname.filename().replace_extension(write_extension);
 
     write_file(write_path / filename, parse_result);
 }
 
 
-
-
-namespace detail {
-
-/**
- * String converting utilities
- */
-
-std::string to_utf8(std::wstring const& s)
+bool test_case_result_writer::parse_for(std::string const& arg, std::string const& str, std::string& value)
 {
-    std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> convert;
-    return convert.to_bytes(s);
-}
+    auto const pos = str.find(arg);
 
-std::wstring to_utf16(std::string const& s)
-{
-    std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> convert;
-    return convert.from_bytes(s);
+    if(pos == std::string::npos) {
+        return false;
+    }
+
+    value = str.substr(pos + arg.size());
+    return true;
 }
 
 
-} // detail
+bool test_case_result_writer::parse_command_line()
+{
+    unsigned const argc = boost::unit_test::framework::master_test_suite().argc;
+    char** const argv = boost::unit_test::framework::master_test_suite().argv;
+
+    bool destination_prefix_arg{ false };
+
+    for(unsigned i = 0; i != argc; i++) {
+        //std::cout << "ArgValue[" << i << "]: " << argv[i] << "\n";
+
+        if(parse_for("--destination-prefix=", argv[i], destination_prefix)) {
+            //std::cout << "--destination-prefix = " << destination_prefix << "\n";
+            destination_prefix_arg = true;
+        }
+
+        if(parse_for("--write-extension=", argv[i], write_extension)) {
+            //std::cout << "--write-extension = " << write_extension << "\n";
+        }
+
+    }
+
+    if(!destination_prefix_arg) {
+        std::cerr <<"WARNING(" << name_self << ")"
+                  << argv[0] << " --destination-prefix= must be given\n"
+                  << "fallback to default "
+                  << destination_prefix << "\n";
+        return false;
+    }
+
+    return true;
+}
 
 
 } } } // namespace testsuite.vhdl_parser.util
