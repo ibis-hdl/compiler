@@ -18,9 +18,7 @@ namespace eda { namespace vhdl { namespace ast {
 
 class printer
 {
-    using ostream = ::eda::utils::indent_ostream;
-
-    ostream   os;
+    utils::indent_ostream                           os;
 
     struct scope_printer;
 

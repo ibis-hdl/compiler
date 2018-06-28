@@ -13,6 +13,7 @@
 #include <eda/vhdl/ast/util/variant.hpp>
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 #include <eda/vhdl/context.hpp>
+#include <eda/utils/indent_stream.hpp>
 
 #include <boost/variant/static_visitor.hpp>
 #include <boost/variant/apply_visitor.hpp>
@@ -25,25 +26,25 @@
 namespace eda { namespace vhdl { namespace analyze {
 
 
-// FixMe: namespace alias disaster
-namespace x3 = boost::spirit::x3;
-
-
 class syntax : boost::static_visitor<bool>
 {
     using error_handler_type = std::function<
         void(x3::position_tagged, std::string const&)>;
 
+    utils::indent_ostream mutable                   dbg;
     std::ostream&                                   os;
     vhdl::context&                                  context;
     error_handler_type                              error_handler;
+
+    struct indent_printer;
 
 public:
     template <typename ErrorHandler>
     syntax(std::ostream& os_,
            vhdl::context& context_, ErrorHandler const& error_handler)
-      : os{ os_ }
-      , context{context_}
+      : dbg{ os_, 0 }
+      , os{ os_ }
+      , context{ context_ }
       , error_handler{
             [&](x3::position_tagged error_position, std::string const& message)
             { error_handler(error_position, message); }

@@ -14,8 +14,6 @@
 
 #include <map>
 
-//#include <eda/utils/compiler_warnings_off.hpp>
-
 
 namespace eda { namespace vhdl { namespace ast {
 
@@ -31,11 +29,11 @@ printer::printer(std::ostream& os, uint16_t start_indent)
 
 struct printer::scope_printer
 {
-    ostream& os;
-    const char* const name{ nullptr };
-    bool const verbose;
+    utils::indent_ostream&                          os;
+    const char* const                               name{ nullptr };
+    bool const                                      verbose;
 
-    scope_printer(ostream& os_, char const name[], bool verbose, char const name_pfx[] = nullptr)
+    scope_printer(utils::indent_ostream& os_, char const name[], bool verbose, char const name_pfx[] = nullptr)
     : os{ os_ }
     , name{ name }
     , verbose{ verbose }
@@ -3112,7 +3110,4 @@ void printer::operator()(nullary const&)
 
 
 } } } // namespace eda.vhdl.ast
-
-
-//#include <eda/utils/compiler_warnings_on.hpp>
 

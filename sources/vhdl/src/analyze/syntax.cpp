@@ -10,11 +10,34 @@
 
 #include <boost/type_index.hpp>
 
+#include <eda/support/boost/locale.hpp>
+
 #include <eda/utils/compiler_warnings_off.hpp>
 
 
 namespace eda { namespace vhdl { namespace analyze {
 
+
+struct syntax::indent_printer
+{
+    utils::indent_ostream&                          os;
+
+    indent_printer(syntax const& s)
+    : os{ s.dbg }
+    { os << utils::increase_indent; }
+
+    ~indent_printer()
+    { os << utils::decrease_indent; }
+};
+
+
+} } } // namespace eda.vhdl.analyze
+
+
+namespace eda { namespace vhdl { namespace analyze {
+
+using boost::locale::translate;
+using boost::locale::format;
 
 //    syntax::result_type syntax::operator()(ast::abstract_literal const& node) const;
 //    syntax::result_type syntax::operator()(ast::access_type_definition const& node) const;
@@ -77,16 +100,19 @@ namespace eda { namespace vhdl { namespace analyze {
 
 syntax::result_type syntax::operator()(ast::design_file const& node) const
 {
+    indent_printer _(*this);
+
     // [LRM93 §11.1]
 
-    os << "#### design_file\n";
+
+    dbg << "design_file\n";
 
     for(auto const& design_unit : node) {
 
         bool const ok = (*this)(design_unit);
 
         if(!ok) {
-            os << "design_file ++\n";
+            os << "check failed in design_file\n";
             return false;
         }
     }
@@ -97,21 +123,23 @@ syntax::result_type syntax::operator()(ast::design_file const& node) const
 
 syntax::result_type syntax::operator()(ast::design_unit const& node) const
 {
+    indent_printer _(*this);
+
     // [LRM93 §11.1]
 
-    os << "#### design_unit\n";
+    dbg << "design_unit\n";
 
     bool ok = (*this)(node.context_clause);
 
     if(!ok) {
-        os << "context_clause ++\n";
+        os << "check failed in design_unit.context_clause\n";
         return false;
     }
 
     ok = (*this)(node.library_unit);
 
     if(!ok) {
-        os << "library_unit ++\n";
+        os << "check failed in design_unit.library_unit\n";
         return false;
     }
 
@@ -176,9 +204,11 @@ syntax::result_type syntax::operator()(ast::design_unit const& node) const
 
 syntax::result_type syntax::operator()(ast::library_clause const& node) const
 {
+    indent_printer _(*this);
+
     // [LRM93 §11.2]
 
-    os << "#### library_clause\n";
+    dbg << "library_clause\n";
     return true;
 }
 
@@ -253,9 +283,11 @@ syntax::result_type syntax::operator()(ast::library_clause const& node) const
 
 syntax::result_type syntax::operator()(ast::use_clause const& node) const
 {
+    indent_printer _(*this);
+
     // [LRM93 §10.4]
 
-    os << "#### use_clause\n";
+    dbg << "use_clause\n";
     return true;
 }
 
@@ -274,27 +306,29 @@ syntax::result_type syntax::operator()(ast::use_clause const& node) const
 
 syntax::result_type syntax::operator()(ast::nullary const&) const
 {
+    indent_printer _(*this);
+
     os << "\n***********************************************";
     os << "\n* variant default constructible node detected *";
     os << "\n***********************************************\n";
 
-    os << "nullary ++\n";
+    // these is a real error
+    ++context.error_count;
 
     return false;
 }
 
 
 template<typename T>
-syntax::result_type syntax::operator()(T const&) const {
+syntax::result_type syntax::operator()(T const&) const
+{
+    indent_printer _(*this);
 
-    os << "caught straying node of type "
+    dbg << "### caught straying node of type "
        << boost::typeindex::type_id<T>().pretty_name()
        << "\n";
 
-    os << "straying ++\n";
-
-    // these is a real error
-    ++context.error_count;
+    ++context.warning_count;
 
     return false;
 }

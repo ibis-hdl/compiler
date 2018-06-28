@@ -6,6 +6,7 @@
  */
 
 #include <eda/vhdl/context.hpp>
+#include <eda/utils/make_iomanip.hpp>
 
 #include <iostream>
 
@@ -22,6 +23,54 @@ context::context()
 
 
 
+std::ostream& failure_status::operator()(std::ostream& os) const
+{
+    using boost::locale::translate;
+    using boost::locale::format;
+
+    auto error_message = [](size_t count) {
+        return utils::make_iomanip([count](std::ostream& os) {
+            if(count) {
+                os << format(translate(
+                      "{1} error", "{1} errors", count))
+                      % count
+                      ;
+            }
+        });
+    };
+
+    auto warning_message = [](size_t count) {
+        return utils::make_iomanip([count](std::ostream& os) {
+            if(count) {
+                os << format(translate(
+                      "{1} warning", "{1} warnings", count))
+                      % count
+                      ;
+            }
+        });
+    };
+
+    bool const any_failure = ctx.error_count || ctx.warning_count;
+    bool const all_failure = ctx.error_count && ctx.warning_count;
+
+    // FixMe: complicated for the translator, see https://wandbox.org/permlink/lgU6DK75axnthjWz
+    if(any_failure) {
+        os << error_message(ctx.error_count)
+           << (all_failure ? translate(" and ") : translate("")) // same type req.!
+           << warning_message(ctx.warning_count)
+           << translate(" generated.")
+           ;
+    }
+
+    return os;
+}
+
+
+} } // namespace eda.vhdl
+
+
+
+#if 0
 namespace detail {
 
 struct error_message {
@@ -73,9 +122,7 @@ std::ostream& failure_status::operator()(std::ostream& os) const
     using detail::error_message;
     using boost::locale::translate;
 
-    bool const any_failure = [&] {
-        return ctx.error_count || ctx.warning_count;
-    }();
+    bool const any_failure = ctx.error_count || ctx.warning_count;
 
     // FixMe: complicated for the translator, see https://wandbox.org/permlink/lgU6DK75axnthjWz
     if(any_failure) {
@@ -89,106 +136,4 @@ std::ostream& failure_status::operator()(std::ostream& os) const
     return os;
 }
 
-
-} } // namespace eda.vhdl
-
-
-#if 0
-// <yazmir8azyr>: https://wandbox.org/permlink/wGDqfmxCKwqob5mp
-
-#include <iostream>
-#include <boost/locale.hpp>
-#include <type_traits>
-
-struct context {
-
-    std::size_t                                     error_count;
-    std::size_t                                     warning_count;
-
-    context()
-    : error_count{ 0 }
-    , warning_count{ 0 }
-    { }
-};
-
-
-struct failure_status
-{
-    context const&                                  ctx;
-
-    failure_status(context const& ctx_)
-    : ctx{ ctx_ }
-    { }
-
-    std::ostream& operator()(std::ostream& os) const;
-};
-
-static inline
-std::ostream& operator<<(std::ostream& os, failure_status const& status) {
-    return status(os);
-}
-
-// --- C++ lambda helper ----
-template <typename T>
-struct A {
-    T x;
-    friend std::ostream& operator<<(std::ostream& os, A a) {
-        a.x(os);
-        return os;
-     }
-};
-
-template <typename T>
-A<std::decay_t<T>> make_iomanip_thing(T&& x) { return { std::forward<T>(x) }; }
-// ----------------------------
-
-std::ostream& failure_status::operator()(std::ostream& os) const
-{
-    using boost::locale::format;
-    using boost::locale::translate;
-
-    bool const any_failure = ctx.error_count || ctx.warning_count;
-
-    auto error_message = [](size_t count) {
-        return make_iomanip_thing([count](std::ostream& os) {
-            if(count) {
-                os << format(translate(
-                      "{1} error", "{1} errors", count))
-                      % count
-                      ;
-            }
-        });
-    };
-
-    auto warning_message = [](size_t count) {
-        return make_iomanip_thing([count](std::ostream& os) {
-            if(count) {
-                os << format(translate(
-                      "{1} warning", "{1} warnings", count))
-                      % count
-                      ;
-            }
-        });
-    };
-
-    if(any_failure) {
-        os << error_message(ctx.error_count)
-           << (ctx.warning_count ? translate(" and ") : translate("")) // same type req.!
-           << warning_message(ctx.warning_count)
-           << translate(" generated.")
-           ;
-    }
-
-    return os;
-}
-
-int main()
-{
-    context ctx;
-    ctx.error_count = 1;
-    ctx.warning_count = 42;
-
-    std::cout << failure_status(ctx) << "\n";
-}
 #endif
-

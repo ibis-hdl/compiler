@@ -52,11 +52,8 @@ BOOST_DATA_TEST_CASE( basic_syntax,
 
     bool const syntax_ok = syntax_check(design_file);
 
-    os << "Syntax " << (syntax_ok ? "" : "not") << " ok\n";
-
-    //++context.warning_count;
-
-    os << vhdl::failure_status(context) << "\n";
+    os << "Syntax " << (syntax_ok ? "" : "not") << " ok\n"
+       << vhdl::failure_status(context) << "\n";
 }
 
 
