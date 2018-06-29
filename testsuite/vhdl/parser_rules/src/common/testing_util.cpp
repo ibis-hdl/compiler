@@ -14,6 +14,8 @@
 
 #include <boost/filesystem.hpp>
 
+#include <eda/utils/make_iomanip.hpp>
+
 #include <iostream>
 
 
@@ -50,16 +52,21 @@ std::string report_diagnostic(
 )
 {
     std::size_t const width{ 80 };
-    std::string const title{ " INPUT/OUTPUT " };
-    std::size_t const w{ (width - title.size()) / 2 };
     std::stringstream ss;
 
-    // pretty style header print
-    ss << "\n" << std::string(w, '-') << title << std::string(w, '-') << "\n"
-       << boost::trim_right_copy(input)
-       << '\n' << std::string(width, '-') << '\n'
-       << result
-       << '\n' << std::string(width, '-') << '\n';
+    auto header = [](std::string const& title, std::size_t width) {
+    	using eda::utils::make_iomanip;
+        return make_iomanip([&title, width](std::ostream& os) {
+        	std::size_t const w{ (width - title.size()) / 2 };
+        	os << "\n" << std::string(w, '-') << title << std::string(w, '-') << "\n";
+        });
+    };
+
+    ss << header(" INPUT ", width)
+	   << boost::trim_right_copy(input)
+ 	   << header(" PARSE RESULT (AST) ", width)
+	   << result
+	   << header("", width);
 
     // only write in case of failed test
     if(!current_test_passing()) {
