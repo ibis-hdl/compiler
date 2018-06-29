@@ -19,14 +19,12 @@
 namespace eda { namespace vhdl { namespace analyze {
 
 
+/**
+ * check for matching label pairs
+ */
 class check_label_match
 {
-    std::ostream&                                   os;
-
 public:
-    // check for matching label pairs
-    check_label_match(std::ostream& os_);
-
     bool operator()(ast::block_statement const& node) const;
     bool operator()(ast::case_statement const& node) const;
     bool operator()(ast::generate_statement const& node) const;
@@ -39,6 +37,16 @@ public:
         return true;
     }
 
+public:
+    template<typename AstNodeT>
+    static
+	std::string make_error_description(AstNodeT const& node) {
+        return make_error_description(symbol_name(node));
+    }
+
+    static
+    std::string make_error_description(std::string const& rule_name);
+
 private:
     template<typename AstNodeT>
     bool test_mandatory_start(AstNodeT const& node) const;
@@ -47,14 +55,8 @@ private:
     bool test_optional_start(AstNodeT const& node) const;
 
     template<typename T>
-    std::string symbol_name(T const&) const;
-
-    template<typename AstNodeT>
-    void make_error_description(AstNodeT const& node) const {
-        make_error_description(symbol_name(node), node);
-    }
-
-    void make_error_description(std::string const& rule_name, ast::position_tagged const& position_tag) const;
+    static
+	std::string symbol_name(T const&);
 };
 
 

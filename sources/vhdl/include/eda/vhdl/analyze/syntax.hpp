@@ -77,7 +77,7 @@ public:
 //    result_type operator()(ast::block_declarative_part const& node) const;
 //    result_type operator()(ast::block_header const& node) const;
 //    result_type operator()(ast::block_specification const& node) const;
-//    result_type operator()(ast::block_statement const& node) const;
+    result_type operator()(ast::block_statement const& node) const;
 //    result_type operator()(ast::block_statement_part const& node) const;
 //    result_type operator()(ast::case_statement const& node) const;
 //    result_type operator()(ast::case_statement_alternative const& node) const;

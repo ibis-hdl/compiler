@@ -33,11 +33,6 @@ bool operator==(ast::label const& lhs, ast::label const& rhs) {
 namespace eda { namespace vhdl { namespace analyze {
 
 
-check_label_match::check_label_match(std::ostream& os_)
-: os{ os_ }
-{ }
-
-
 template<typename AstNodeT>
 bool check_label_match::test_mandatory_start(AstNodeT const& node) const
 {
@@ -46,9 +41,6 @@ bool check_label_match::test_mandatory_start(AstNodeT const& node) const
         bool const label_ok = (node.label == node.end_label);
 
         if(label_ok) return true;
-
-        // ToDo: increment error count, see notes at make_error_description
-        make_error_description(node);
         return false;
     }
 
@@ -64,9 +56,6 @@ bool check_label_match::test_optional_start(AstNodeT const& node) const
         bool const label_ok = (node.label == node.end_label);
 
         if(label_ok) return true;
-
-        // ToDo: increment error count, see notes at make_error_description
-        make_error_description(node);
         return false;
     }
 
@@ -111,7 +100,7 @@ bool check_label_match::operator()(ast::process_statement const& node) const
 
 
 template<typename T>
-std::string check_label_match::symbol_name(T const&) const
+std::string check_label_match::symbol_name(T const&)
 {
     std::string name{ boost::typeindex::type_id<T>().pretty_name() };
     std::size_t const npos = name.rfind(':') + 1;
@@ -119,18 +108,17 @@ std::string check_label_match::symbol_name(T const&) const
 }
 
 
-void check_label_match::make_error_description(
-    std::string const& rule_name, ast::position_tagged const& /* position_tag */) const
+std::string check_label_match::make_error_description(std::string const& rule_name)
 {
     using boost::locale::format;
     using boost::locale::translate;
 
-    os << format(translate(
+    return (
+    	format(translate(
         "Syntax error: Label mismatch in {1}\n"
         ))
-        % rule_name;
-
-    // FixMe: get the source string back using error_handler?
+        % rule_name
+    ).str();
 }
 
 
