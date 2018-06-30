@@ -22,7 +22,7 @@ namespace eda { namespace vhdl { namespace analyze {
 /**
  * check for matching label pairs
  */
-class check_label_match
+class label_match
 {
 public:
     bool operator()(ast::block_statement const& node) const;
@@ -59,6 +59,11 @@ private:
 	std::string symbol_name(T const&);
 };
 
+
+template<typename AstNodeT>
+bool check_label_match(AstNodeT&& node) {
+    return label_match{}(std::forward<AstNodeT>(node));
+}
 
 } } } // namespace eda.vhdl.analyze
 

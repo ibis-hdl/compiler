@@ -31,19 +31,18 @@ class syntax : boost::static_visitor<bool>
     using error_handler_type = std::function<
         void(x3::position_tagged, std::string const&)>;
 
-    utils::indent_ostream mutable                   dbg;
-    std::ostream&                                   os;
+    utils::indent_ostream mutable                   os;
     vhdl::context&                                  context;
     error_handler_type                              error_handler;
 
-    struct indent_printer;
+    template<typename T, typename Enable = void>
+    struct indent_logging;
 
 public:
     template <typename ErrorHandler>
     syntax(std::ostream& os_,
            vhdl::context& context_, ErrorHandler const& error_handler)
-      : dbg{ os_, 0 }
-      , os{ os_ }
+      : os{ os_ , 0 }
       , context{ context_ }
       , error_handler{
             [&](x3::position_tagged error_position, std::string const& message)
@@ -245,19 +244,13 @@ public:
 
 public:
     template<typename ...Types>
-    result_type operator()(ast::variant<Types...> const& node) const {
-        return boost::apply_visitor(*this, node);
-    }
+    result_type operator()(ast::variant<Types...> const& node) const;
 
     template<typename T>
-    result_type operator()(std::vector<T> const& node) const {
-        return std::all_of(node.begin(), node.end(),
-                          [&](T const& x){ return (*this)(x); } );
-    }
+    result_type operator()(std::vector<T> const& node) const ;
 
     template<typename T>
-    result_type operator()(T const& stray_sink) const;
-
+    result_type operator()(T const& strayer) const;
 };
 
 

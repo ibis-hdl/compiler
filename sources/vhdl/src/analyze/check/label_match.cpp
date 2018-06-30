@@ -34,7 +34,7 @@ namespace eda { namespace vhdl { namespace analyze {
 
 
 template<typename AstNodeT>
-bool check_label_match::test_mandatory_start(AstNodeT const& node) const
+bool label_match::test_mandatory_start(AstNodeT const& node) const
 {
     if(node.end_label) {
 
@@ -49,7 +49,7 @@ bool check_label_match::test_mandatory_start(AstNodeT const& node) const
 
 
 template<typename AstNodeT>
-bool check_label_match::test_optional_start(AstNodeT const& node) const
+bool label_match::test_optional_start(AstNodeT const& node) const
 {
     if(node.label && node.end_label) {
 
@@ -63,44 +63,44 @@ bool check_label_match::test_optional_start(AstNodeT const& node) const
 }
 
 
-bool check_label_match::operator()(ast::block_statement const& node) const
+bool label_match::operator()(ast::block_statement const& node) const
 {
     return test_mandatory_start(node);
 }
 
 
-bool check_label_match::operator()(ast::case_statement const& node) const
+bool label_match::operator()(ast::case_statement const& node) const
 {
     return test_optional_start(node);
 }
 
 
-bool check_label_match::operator()(ast::generate_statement const& node) const
+bool label_match::operator()(ast::generate_statement const& node) const
 {
     return test_mandatory_start(node);
 }
 
 
-bool check_label_match::operator()(ast::if_statement const& node) const
+bool label_match::operator()(ast::if_statement const& node) const
 {
     return test_optional_start(node);
 }
 
 
-bool check_label_match::operator()(ast::loop_statement const& node) const
+bool label_match::operator()(ast::loop_statement const& node) const
 {
     return test_optional_start(node);
 }
 
 
-bool check_label_match::operator()(ast::process_statement const& node) const
+bool label_match::operator()(ast::process_statement const& node) const
 {
     return test_optional_start(node);
 }
 
 
 template<typename T>
-std::string check_label_match::symbol_name(T const&)
+std::string label_match::symbol_name(T const&)
 {
     std::string name{ boost::typeindex::type_id<T>().pretty_name() };
     std::size_t const npos = name.rfind(':') + 1;
@@ -108,7 +108,7 @@ std::string check_label_match::symbol_name(T const&)
 }
 
 
-std::string check_label_match::make_error_description(std::string const& rule_name)
+std::string label_match::make_error_description(std::string const& rule_name)
 {
     using boost::locale::format;
     using boost::locale::translate;

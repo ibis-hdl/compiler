@@ -13,28 +13,49 @@
 
 #include <eda/support/boost/locale.hpp>
 
+#include <regex>
+
 #include <eda/utils/compiler_warnings_off.hpp>
 
 
 namespace eda { namespace vhdl { namespace analyze {
 
+namespace tag {
+struct enabled { };
+struct disabled { };
+}
+using verbose = tag::enabled;
+
 
 /**
  * Debug Indent printer
- *
- * FixMe: Isn't it better to print the BNF rule as of
- *        ast_printer, it's used in that manner here.
  */
-struct syntax::indent_printer
+template<typename T>
+struct syntax::indent_logging<T, typename std::enable_if<!std::is_same<T, tag::enabled>::value>::type>
+{
+    indent_logging(syntax const&, const char* const)
+    {  }
+};
+
+template<typename T>
+struct syntax::indent_logging<T, typename std::enable_if<std::is_same<T, tag::enabled>::value>::type>
 {
     utils::indent_ostream&                          os;
+    const char* const                               node_name;
 
-    indent_printer(syntax const& s)
-    : os{ s.dbg }
-    { os << utils::increase_indent; }
+    indent_logging(syntax const& s, const char* const node_name_)
+    : os{ s.os }
+    , node_name{ node_name_ }
+    {
+        os << utils::increase_indent
+           << "<" << node_name << ">\n";
+    }
 
-    ~indent_printer()
-    { os << utils::decrease_indent; }
+    ~indent_logging()
+    {
+        os << "</" << node_name << ">\n"
+           << utils::decrease_indent;
+    }
 };
 
 
@@ -43,8 +64,41 @@ struct syntax::indent_printer
 
 namespace eda { namespace vhdl { namespace analyze {
 
+
+namespace detail {
+
+template<typename T>
+struct type_name
+{
+    friend std::ostream& operator<<(std::ostream& os, type_name const&)
+    {
+        static const std::regex pattern{ "::|boost|spirit|x3|eda|vhdl|ast" };
+        std::string name{ boost::typeindex::type_id<T>().pretty_name() };
+        os << std::regex_replace(name, pattern, "");
+        return os;
+    }
+};
+
+}
+
 using boost::locale::translate;
 using boost::locale::format;
+
+
+template<typename ...Types>
+syntax::result_type syntax::operator()(ast::variant<Types...> const& node) const {
+    os << "INFO: dispatch " << detail::type_name<decltype(node)>{} << "\n";
+    return boost::apply_visitor(*this, node);
+}
+
+
+template<typename T>
+syntax::result_type syntax::operator()(std::vector<T> const& node) const {
+    os << "INFO: iterate over vector<" << detail::type_name<T>{} << ", N = " << node.size() << ">\n";
+    return std::all_of(node.begin(), node.end(),
+                      [&](T const& x){ return (*this)(x); } );
+}
+
 
 //syntax::result_type syntax::operator()(ast::abstract_literal const& node) const;
 //syntax::result_type syntax::operator()(ast::access_type_definition const& node) const;
@@ -75,13 +129,12 @@ using boost::locale::format;
 
 syntax::result_type syntax::operator()(ast::block_statement const& node) const
 {
-    indent_printer _(*this);
-
-    dbg << "block_statement\n";
+    static char const node_name[]{ "block_statement" };
+    indent_logging<verbose> _(*this, node_name);
 
     // FixMe: syntax (using a constructor) isn't intuitive
-    if(!check_label_match{}(node)) {
-    	error_handler(node, check_label_match::make_error_description(node));
+    if(!check_label_match(node)) {
+    	error_handler(node, label_match::make_error_description(node));
     	++context.error_count;
     	return false;
     }
@@ -125,12 +178,8 @@ syntax::result_type syntax::operator()(ast::block_statement const& node) const
 
 syntax::result_type syntax::operator()(ast::design_file const& node) const
 {
-    indent_printer _(*this);
-
-    // [LRM93 §11.1]
-
-
-    dbg << "design_file\n";
+    static char const node_name[]{ "design_file" };
+    indent_logging<verbose> _(*this, node_name);
 
     for(auto const& design_unit : node) {
 
@@ -148,27 +197,20 @@ syntax::result_type syntax::operator()(ast::design_file const& node) const
 
 syntax::result_type syntax::operator()(ast::design_unit const& node) const
 {
-    indent_printer _(*this);
+    static char const node_name[]{ "design_unit" };
+    indent_logging<verbose> _(*this, node_name);
 
-    // [LRM93 §11.1]
-
-    dbg << "design_unit\n";
-
-    bool ok = (*this)(node.context_clause);
-
-    if(!ok) {
+    if(!(*this)(node.context_clause)) {
         os << "check failed in design_unit.context_clause\n";
         return false;
     }
 
-    ok = (*this)(node.library_unit);
-
-    if(!ok) {
+    if(!(*this)(node.library_unit)) {
         os << "check failed in design_unit.library_unit\n";
         return false;
     }
 
-    return ok;
+    return true;
 }
 
 
@@ -229,11 +271,9 @@ syntax::result_type syntax::operator()(ast::design_unit const& node) const
 
 syntax::result_type syntax::operator()(ast::library_clause const& node) const
 {
-    indent_printer _(*this);
+    static char const node_name[]{ "library_clause" };
+    indent_logging<verbose> _(*this, node_name);
 
-    // [LRM93 §11.2]
-
-    dbg << "library_clause\n";
     return true;
 }
 
@@ -308,11 +348,9 @@ syntax::result_type syntax::operator()(ast::library_clause const& node) const
 
 syntax::result_type syntax::operator()(ast::use_clause const& node) const
 {
-    indent_printer _(*this);
+    static char const node_name[]{ "use_clause" };
+    indent_logging<verbose> _(*this, node_name);
 
-    // [LRM93 §10.4]
-
-    dbg << "use_clause\n";
     return true;
 }
 
@@ -331,7 +369,8 @@ syntax::result_type syntax::operator()(ast::use_clause const& node) const
 
 syntax::result_type syntax::operator()(ast::nullary const&) const
 {
-    indent_printer _(*this);
+    static char const node_name[]{ "nullary" };
+    indent_logging<verbose> _(*this, node_name);
 
     os << "\n***********************************************";
     os << "\n* variant default constructible node detected *";
@@ -345,12 +384,13 @@ syntax::result_type syntax::operator()(ast::nullary const&) const
 
 
 template<typename T>
-syntax::result_type syntax::operator()(T const&) const
+syntax::result_type syntax::operator()(T const& strayer) const
 {
-    indent_printer _(*this);
+    static char const node_name[]{ "unknown" };
+    indent_logging<verbose> _(*this, node_name);
 
-    dbg << "### caught straying node of type "
-       << boost::typeindex::type_id<T>().pretty_name()
+    os << "### caught straying node of type "
+       << detail::type_name<decltype(strayer)>{}
        << "\n";
 
     ++context.warning_count;
