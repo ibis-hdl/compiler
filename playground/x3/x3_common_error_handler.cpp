@@ -20,6 +20,9 @@
 #include <string>
 #include <map>
 
+//#include <boost/spirit/home/x3/support/context.hpp>
+#include <boost/type_index.hpp>
+
 
 namespace client { namespace ast
 {
@@ -51,6 +54,7 @@ namespace client { namespace ast
 }}
 
 
+#if 1 // eclipse syntax checker sucks here
 BOOST_FUSION_ADAPT_STRUCT(client::ast::person,
     first_name, last_name
 )
@@ -58,13 +62,25 @@ BOOST_FUSION_ADAPT_STRUCT(client::ast::person,
 BOOST_FUSION_ADAPT_STRUCT(client::ast::employee,
     age, who, salary
 )
-
+#endif
 
 namespace client
 {
     namespace parser
     {
         namespace x3 = boost::spirit::x3;
+
+        // the x3 parser context
+        typedef std::string::const_iterator                         iterator_type;
+        typedef x3::error_handler<iterator_type>                    error_handler_type;
+        typedef x3::phrase_parse_context<x3::ascii::space_type>::type phrase_context_type;
+
+        typedef x3::context<
+          x3::error_handler_tag, std::reference_wrapper<error_handler_type> /* const */,
+          phrase_context_type
+        >
+        context_type;
+
 
         ///////////////////////////////////////////////////////////////////////
         //  Our error handler
@@ -85,6 +101,20 @@ namespace client
             on_error(Iterator& first, Iterator const& last,
                      Exception const& x, Context const& context)
             {
+#if 1
+                static_assert(
+                    std::is_same<Context, parser::context_type>::value,
+                    "The Spirit.X3 Context must be equal"
+                );
+
+                //x3::context<
+                //  x3::error_handler_tag, std::reference_wrapper<x3::error_handler<std::string::const_iterator > >,
+                //  x3::context<x3::skipper_tag, x3::char_class<char_encoding::ascii, x3::space_tag> const, x3::unused_type>
+                //>
+                std::cout << "context_type:\n" << boost::typeindex::type_id<context_type>().pretty_name() << "\n";
+                std::cout << "Context Tmpl:\n" << boost::typeindex::type_id<Context>().pretty_name() << "\n";
+#endif
+
                 std::string which = x.which();
                 auto iter = id_map.find(which);
 

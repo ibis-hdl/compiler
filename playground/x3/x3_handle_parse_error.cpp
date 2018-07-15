@@ -60,6 +60,7 @@ namespace client { namespace ast
 }}
 
 
+#if 1 // eclipse syntax checker sucks here
 BOOST_FUSION_ADAPT_STRUCT(client::ast::person,
     first_name, last_name
 )
@@ -67,6 +68,7 @@ BOOST_FUSION_ADAPT_STRUCT(client::ast::person,
 BOOST_FUSION_ADAPT_STRUCT(client::ast::employee,
     age, who, salary
 )
+#endif
 
 
 namespace client
@@ -119,10 +121,26 @@ namespace client
                 }
             };
 
-        }
+        } // namespace context
 
 
         namespace x3 = boost::spirit::x3;
+
+        // the x3 parser context
+        typedef std::string::const_iterator                         iterator_type;
+        typedef x3::error_handler<iterator_type>                    error_handler_type;
+        typedef context::foo                                        foo_type;
+        typedef x3::phrase_parse_context<x3::ascii::space_type>::type phrase_context_type;
+
+        typedef x3::context<
+          x3::error_handler_tag, std::reference_wrapper<error_handler_type> /* const */,
+          x3::context<client::parser::context::tag, std::reference_wrapper<foo_type> /* const */,
+            phrase_context_type
+          >
+        >
+        context_type;
+
+
 
         ///////////////////////////////////////////////////////////////////////
         // Our error handler
@@ -169,6 +187,15 @@ namespace client
             on_error(Iterator& first, Iterator const& last,
                      Exception const& x, Context const& context)
             {
+#if 1
+                static_assert(
+                    std::is_same<Context, parser::context_type>::value,
+                    "The Spirit.X3 Context must be equal"
+                );
+
+                std::cout << "context_type:\n" << boost::typeindex::type_id<context_type>().pretty_name() << "\n";
+                std::cout << "Context Tmpl:\n" << boost::typeindex::type_id<Context>().pretty_name() << "\n";
+#endif
                 auto& foo = x3::get<client::parser::context::tag>(context).get();
 
                 std::string message{
@@ -180,7 +207,7 @@ namespace client
                 x3_error_handler(x.where(), message);
 
                 // no way to force/clear the attribute, see note on top
-                //std::cout << boost::typeindex::type_id<Context>().pretty_name() << "\n";
+                std::cout << boost::typeindex::type_id<Context>().pretty_name() << "\n";
 
                 // advance iterator to the end of employee block
                 x3::parse(first, last, +~x3::char_('}') >> x3::char_('}'));
