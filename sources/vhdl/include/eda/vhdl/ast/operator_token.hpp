@@ -17,6 +17,7 @@ namespace eda { namespace vhdl { namespace ast {
 
 
 enum class operator_token {
+    UNSPECIFIED,
     // miscellaneous_operator
     EXPONENT, ABS, NOT,
     // multiplying_operator

@@ -9,7 +9,9 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_VARIANT_HPP_
 
 
+#include <eda/utils/compiler_warnings_off.hpp>
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
+#include <eda/utils/compiler_warnings_on.hpp>
 
 #include <eda/namespace_alias.hpp>
 

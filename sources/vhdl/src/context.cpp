@@ -22,6 +22,24 @@ context::context()
 { }
 
 
+namespace /* anonymous */ {
+
+// CLang '-Weverything' Diagnostic at format(translate("...", count)):
+// warning: implicit conversion loses integer precision: 'const size_t'
+// (aka 'const unsigned long') to 'int' [-Wshorten-64-to-32]
+// Obviously boost.locale uses an int32 in the [plural form](
+//  https://www.boost.org/doc/libs/1_67_0/libs/locale/doc/html/messages_formatting.html#plural_forms).
+// To avoid further references by '-Weverything' diagnostics a plural form
+// for count is introduced. For plural form the concrete maximum value isn't
+// critical.
+int plural_count(size_t count) {
+    static constexpr int N{ std::numeric_limits<int>::max() };
+    if (count > N) return N;
+    return static_cast<int>(count);
+};
+
+} // anonymous namespace
+
 
 std::ostream& failure_status::operator()(std::ostream& os) const
 {
@@ -29,23 +47,23 @@ std::ostream& failure_status::operator()(std::ostream& os) const
     using boost::locale::format;
 
     auto const error_message = [](size_t count) {
-        return utils::make_iomanip([count](std::ostream& os) {
+        return utils::make_iomanip([count](std::ostream& os_) {
             if(count) {
-                os << format(translate(
-                      "{1} error", "{1} errors", count))
-                      % count
-                      ;
+                os_ << format(translate(
+                       "{1} error", "{1} errors", plural_count(count)))
+                       % count
+                       ;
             }
         });
     };
 
     auto const warning_message = [](size_t count) {
-        return utils::make_iomanip([count](std::ostream& os) {
+        return utils::make_iomanip([count](std::ostream& os_) {
             if(count) {
-                os << format(translate(
-                      "{1} warning", "{1} warnings", count))
-                      % count
-                      ;
+                os_ << format(translate(
+                       "{1} warning", "{1} warnings", plural_count(count)))
+                       % count
+                       ;
             }
         });
     };

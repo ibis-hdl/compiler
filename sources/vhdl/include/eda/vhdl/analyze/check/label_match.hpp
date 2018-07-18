@@ -38,14 +38,14 @@ public:
     }
 
 public:
-    template<typename AstNodeT>
     static
+    std::string make_error_description(std::string const& rule_name);
+
+    template<typename AstNodeT>
+    static inline
 	std::string make_error_description(AstNodeT const& node) {
         return make_error_description(symbol_name(node));
     }
-
-    static
-    std::string make_error_description(std::string const& rule_name);
 
 private:
     template<typename AstNodeT>

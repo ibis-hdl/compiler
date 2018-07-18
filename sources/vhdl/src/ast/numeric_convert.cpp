@@ -300,7 +300,7 @@ struct frac
 
     frac(numeric_type base_)
     : base{ base_ }, pow{ base_ }
-    {  };
+    {  }
 
     static unsigned digit(char ch)
     {
@@ -332,7 +332,7 @@ struct frac
             case 'F':   return 15;
             default:    cxx_unreachable_bug_triggered();
         }
-    };
+    }
 
     numeric_type operator()(numeric_type acc, char ch)
     {
@@ -378,14 +378,15 @@ struct numeric_convert::report_error
 {
     std::ostream&                                   os;
     static constexpr detail::unsigned_integer       MAX_VALUE{
-        std::numeric_limits<detail::unsigned_integer>::max() };
+                            std::numeric_limits<detail::unsigned_integer>::max()
+                                                    };
 
     report_error(std::ostream& os_)
     : os{ os_ }
     { }
 
     template<typename LiteralType>
-    void overflow_message(std::string const& type, LiteralType const& literal) const
+    void overflow_message(std::string type, LiteralType const& literal) const
     {
         using boost::locale::format;
         using boost::locale::translate;
@@ -401,19 +402,19 @@ struct numeric_convert::report_error
 
     void overflow(ast::bit_string_literal const& literal) const
     {
-        static std::string const type{ "bit string literal" };
+        static char const type[]{ "bit string literal" };
         overflow_message(type, literal);
     }
 
     void overflow(ast::decimal_literal const& literal) const
     {
-        static std::string const type{ "decimal literal" };
+        static char const type[]{ "decimal literal" };
         overflow_message(type, literal);
     }
 
     void overflow(ast::based_literal const& literal) const
     {
-        static std::string const type{ "based literal" };
+        static char const type[]{ "based literal" };
         overflow_message(type, literal);
     }
 
@@ -452,17 +453,17 @@ numeric_convert::return_type numeric_convert::operator()(ast::bit_string_literal
     using parser::primitive_parser;
     using base_specifier = ast::bit_string_literal::base_specifier;
 
-    auto const parse = [](ast::bit_string_literal const& literal)
+    auto const parse = [](ast::bit_string_literal const& literal_)
     {
-        switch(literal.base_type) {
+        switch(literal_.base_type) {
             case base_specifier::bin: {
-                return primitive_parse(literal.literal, primitive_parser::bin{});
+                return primitive_parse(literal_.literal, primitive_parser::bin{});
             }
             case base_specifier::oct: {
-                return primitive_parse(literal.literal, primitive_parser::oct{});
+                return primitive_parse(literal_.literal, primitive_parser::oct{});
             }
             case base_specifier::hex: {
-                return primitive_parse(literal.literal, primitive_parser::hex{});
+                return primitive_parse(literal_.literal, primitive_parser::hex{});
             }
             default:
                 cxx_unreachable_bug_triggered();
@@ -487,14 +488,14 @@ numeric_convert::return_type numeric_convert::operator()(ast::decimal_literal co
     using parser::primitive_parser;
     using kind_specifier = ast::decimal_literal::kind_specifier;
 
-    auto const parse = [](ast::decimal_literal const& literal)
+    auto const parse = [](ast::decimal_literal const& literal_)
     {
-        switch(literal.kind_type) {
+        switch(literal_.kind_type) {
             case kind_specifier::integer: {
-                return primitive_parse(literal.literal, primitive_parser::dec{});
+                return primitive_parse(literal_.literal, primitive_parser::dec{});
             }
             case kind_specifier::real: {
-                return primitive_parse(literal.literal, primitive_parser::real{});
+                return primitive_parse(literal_.literal, primitive_parser::real{});
             }
             default:
                 cxx_unreachable_bug_triggered();
@@ -526,8 +527,8 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
     using boost::locale::format;
     using boost::locale::translate;
 
-    auto const supported_base = [](unsigned base) {
-        switch(base) {
+    auto const supported_base = [](unsigned base_) {
+        switch(base_) {
             case 2:  [[fallthrough]];
             case 8:  [[fallthrough]];
             case 10: [[fallthrough]];
@@ -536,34 +537,34 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
         }
     };
 
-    auto const parse_base = [](ast::based_literal const& literal) {
-        return primitive_parse(literal.base, primitive_parser::dec{});
+    auto const parse_base = [](ast::based_literal const& literal_) {
+        return primitive_parse(literal_.base, primitive_parser::dec{});
     };
 
-    auto const parse_integer_part = [](unsigned base, ast::based_literal const& literal) {
+    auto const parse_integer_part = [](unsigned base, ast::based_literal const& literal_) {
         switch(base) {
             case 2: {
-                return primitive_parse(literal.number.integer_part, primitive_parser::bin{});
+                return primitive_parse(literal_.number.integer_part, primitive_parser::bin{});
             }
             case 8: {
-                return primitive_parse(literal.number.integer_part, primitive_parser::oct{});
+                return primitive_parse(literal_.number.integer_part, primitive_parser::oct{});
             }
             case 10: {
-                return primitive_parse(literal.number.integer_part, primitive_parser::dec{});
+                return primitive_parse(literal_.number.integer_part, primitive_parser::dec{});
             }
             case 16: {
-                return primitive_parse(literal.number.integer_part, primitive_parser::hex{});
+                return primitive_parse(literal_.number.integer_part, primitive_parser::hex{});
             }
             default:
                 cxx_unreachable_bug_triggered();
         }
     };
 
-    auto const parse_exponent = [](ast::based_literal const& literal) {
-        return primitive_parse(literal.number.exponent, primitive_parser::exp{});
+    auto const parse_exponent = [](ast::based_literal const& literal_) {
+        return primitive_parse(literal_.number.exponent, primitive_parser::exp{});
     };
 
-    detail::unsigned_integer base{ 0 };
+    unsigned base{ 0 };
     numeric_convert::value_type result { 0.0 };
     bool parse_ok{ false };
 
@@ -571,6 +572,8 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
      * base specifier
      */
     std::tie(parse_ok, base) = parse_base(literal);
+
+    cxx_assert(base < 32, "Numeric literals must be expressed in any base from 2 to 16");
 
     if(!parse_ok) {
         report_error{os}.unsupported_base(literal.base);
@@ -679,8 +682,8 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
          * handle bases other than 10 not yet.
          */
         if(!literal.number.fractional_part.empty()) {
-            auto const frac_obj = [](unsigned base) {
-                switch(base) {
+            auto const frac_obj = [](unsigned base_) {
+                switch(base_) {
                     case  2:  return detail::frac{ 2};
                     case  8:  return detail::frac{ 8};
                     case 10:  return detail::frac{10};

@@ -30,7 +30,6 @@ add_library(${PROJECT_NAME} STATIC ${VHDL_PARSER_SOURCE})
 add_library(eda::vhdl_parser ALIAS ${PROJECT_NAME})
 
 
-# adjust include path
 target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
@@ -41,6 +40,32 @@ target_compile_options(${PROJECT_NAME} PRIVATE
     -Wall 
     -Wextra
 )
+
+
+if(CLANG_WARN_EVERYTHING)
+    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        target_compile_options(${PROJECT_NAME} PRIVATE
+            -Weverything
+            -Wno-c++98-compat -Wno-c++98-compat-pedantic
+            # FixMe: Optimize AST nodes for size
+            -Wno-padded
+        )
+    
+        set_source_files_properties(
+            src/ast/literal_printer.cpp 
+            src/ast/keyword_token.cpp
+            src/ast/operator_token.cpp
+            PROPERTIES COMPILE_FLAGS 
+                -Wno-covered-switch-default
+        )
+        
+        set_source_files_properties(
+            src/parser/grammar.cpp
+            PROPERTIES COMPILE_FLAGS 
+                "-Wno-disabled-macro-expansion -Wno-global-constructors -Wno-exit-time-destructors"
+        )
+    endif()
+endif(CLANG_WARN_EVERYTHING)
 
 
 # limit gcc/clang template error depth printing
