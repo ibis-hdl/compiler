@@ -11,16 +11,19 @@
  * see [Is using #pragma warning push/pop the right way to temporarily alter warning level?](
  * https://stackoverflow.com/questions/4193476/is-using-pragma-warning-push-pop-the-right-way-to-temporarily-alter-warning-lev)
  */
-#if defined(__clang__)
-#pragma clang diagnostic ignored "-Wunused-parameter"
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-#pragma clang diagnostic ignored "-Wimplicit-fallthrough"
-#endif
-
-#if defined(__GNUC__) && !defined(__clang__)
+#if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#endif
+
+// CLang++ only
+#if defined(__clang__)
+#pragma GCC diagnostic ignored "-Weverything"
+#endif
+
+// G++ only
+#if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #endif
 

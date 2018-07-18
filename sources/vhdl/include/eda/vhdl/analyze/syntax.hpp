@@ -41,12 +41,12 @@ class syntax : boost::static_visitor<bool>
 public:
     template <typename ErrorHandler>
     syntax(std::ostream& os_,
-           vhdl::context& context_, ErrorHandler const& error_handler)
+           vhdl::context& context_, ErrorHandler const& error_handler_)
       : os{ os_ , 0 }
       , context{ context_ }
       , error_handler{
             [&](x3::position_tagged error_position, std::string const& message)
-            { error_handler(error_position, message); }
+            { error_handler_(error_position, message); }
       }
     { }
 

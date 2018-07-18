@@ -987,7 +987,7 @@ auto const attribute_specification_def = ( // operator precedence
 // base ::=                                                      [LRM93 §13.4.2]
 //     integer
 auto const base_def =
-    integer
+    integer // FixMe: Limit base integer size to 2 digits (range [2...16/32])
     ;
 
 
@@ -1088,11 +1088,11 @@ auto const bit_string_literal = [](auto&& base, auto&& char_range, auto&& attr)
     using CharT = decltype(char_range);
     using AttrT = decltype(attr);
 
-    auto const char_set = [](auto&& char_range) {
+    auto const char_set = [](auto&& char_range_) {
         return x3::rule<struct _, ast::string_span>{ "char_set" } = x3::as_parser(
              raw[
-                    char_(std::forward<CharT>(char_range))
-                 >> *( -lit("_") >> char_(std::forward<CharT>(char_range) ))
+                    char_(std::forward<CharT>(char_range_))
+                 >> *( -lit("_") >> char_(std::forward<CharT>(char_range_) ))
              ]
         );
     };

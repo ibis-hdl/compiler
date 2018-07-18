@@ -18,9 +18,9 @@
 namespace eda { namespace vhdl { namespace ast {
 
 
-std::ostream& operator<<(std::ostream& os, keyword_token kw_token)
+std::ostream& operator<<(std::ostream& os, keyword_token token)
 {
-    switch(kw_token) {
+    switch(token) {
         case keyword_token::ABS:             os << "ABS";           break;
         case keyword_token::ACCESS:          os << "ACCESS";        break;
         case keyword_token::AFTER:           os << "AFTER";         break;

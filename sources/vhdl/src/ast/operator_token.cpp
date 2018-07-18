@@ -55,13 +55,15 @@ std::ostream& operator<<(std::ostream& os, operator_token token)
         case operator_token::XOR:             os << "XOR";           break;
         case operator_token::XNOR:            os << "XNOR";          break;
 
-        default:                              os << "FAILURE";
+        default:
+            cxx_unreachable_bug_triggered();
     }
 
     return os;
 }
 
 
+#if 0
 /**
  * VHDL operator arity helper
  *
@@ -150,7 +152,7 @@ unsigned precedence(operator_token token)
             cxx_unreachable_bug_triggered();
     }
 }
-
+#endif
 
 } } } // namespace eda.vhdl.ast
 

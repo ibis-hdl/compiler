@@ -29,23 +29,27 @@ std::ostream& failure_status::operator()(std::ostream& os) const
     using boost::locale::format;
 
     auto const error_message = [](size_t count) {
-        return utils::make_iomanip([count](std::ostream& os) {
+        return utils::make_iomanip([count](std::ostream& os_) {
             if(count) {
-                os << format(translate(
-                      "{1} error", "{1} errors", count))
-                      % count
-                      ;
+                os_ << format(translate(
+                        // warning: implicit conversion loses integer precision: 'const size_t'
+                        // (aka 'const unsigned long') to 'int' [-Wshorten-64-to-32]
+                       "{1} error", "{1} errors", static_cast<int>(count)))
+                       % count
+                       ;
             }
         });
     };
 
     auto const warning_message = [](size_t count) {
-        return utils::make_iomanip([count](std::ostream& os) {
+        return utils::make_iomanip([count](std::ostream& os_) {
             if(count) {
-                os << format(translate(
-                      "{1} warning", "{1} warnings", count))
-                      % count
-                      ;
+                os_ << format(translate(
+                        // warning: implicit conversion loses integer precision: 'const size_t'
+                        // (aka 'const unsigned long') to 'int' [-Wshorten-64-to-32]
+                       "{1} warning", "{1} warnings", static_cast<int>(count)))
+                       % count
+                       ;
             }
         });
     };

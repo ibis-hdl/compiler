@@ -25,10 +25,10 @@ struct unquote_predicate {
 
     bool operator()(char chr) {
 
-        auto const check = [this](char chr, char quote)
+        auto const check = [this](char c, char quote)
         {
             if(   (prev_char != quote)
-               || (prev_char != chr)
+               || (prev_char != c)
                ||  dbl_quote_printed
             ) {
                 dbl_quote_printed = false;
@@ -87,30 +87,30 @@ std::ostream& literal_printer::operator()(std::ostream& os) const
     util::visit_in_place(
         this->literal,
 
-        [&os](bit_string_literal const& literal) {
+        [&os](bit_string_literal const& lit) {
             using base_specifier = bit_string_literal::base_specifier;
 
-            switch(literal.base_type) {
+            switch(lit.base_type) {
                 case base_specifier::bin: os << "B"; break;
                 case base_specifier::oct: os << "O"; break;
                 case base_specifier::hex: os << "X"; break;
                 default:                  cxx_unreachable_bug_triggered();
             }
 
-            os << "\"" << literal.literal << "\"";
+            os << "\"" << lit.literal << "\"";
 
         },
 
-        [&os](decimal_literal const& literal) {
+        [&os](decimal_literal const& lit) {
             using kind_specifier = ast::decimal_literal::kind_specifier;
 
-            switch(literal.kind_type) {
+            switch(lit.kind_type) {
                 case kind_specifier::integer: {
-                    os << literal.literal;
+                    os << lit.literal;
                     break;
                 }
                 case kind_specifier::real: {
-                    os << literal.literal;
+                    os << lit.literal;
                     break;
                 }
                 default:
@@ -118,21 +118,21 @@ std::ostream& literal_printer::operator()(std::ostream& os) const
             }
         },
 
-        [&os](based_literal const& literal) {
+        [&os](based_literal const& lit) {
 
             using kind_specifier = ast::based_literal::kind_specifier;
 
-            os << literal.base << '#';
+            os << lit.base << '#';
 
-            switch(literal.number.kind_type) {
+            switch(lit.number.kind_type) {
                 case kind_specifier::integer: {
-                    os << literal.number.integer_part;
+                    os << lit.number.integer_part;
                     break;
                 }
                 case kind_specifier::real: {
-                    os << literal.number.integer_part
+                    os << lit.number.integer_part
                        << '.'
-                       << literal.number.fractional_part;
+                       << lit.number.fractional_part;
                     break;
                 }
                 default:
@@ -141,8 +141,8 @@ std::ostream& literal_printer::operator()(std::ostream& os) const
 
             os << '#';
 
-            if(literal.number.exponent) {
-                os << literal.number.exponent;
+            if(lit.number.exponent) {
+                os << lit.number.exponent;
             }
 
         },

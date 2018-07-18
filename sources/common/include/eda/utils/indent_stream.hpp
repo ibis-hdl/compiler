@@ -28,7 +28,7 @@ public:
         , m_indent_str(start_indent, ' ')
     { }
 
-    ~indent_sbuf()
+    ~indent_sbuf() override
     {
         // start at column 0 again
         overflow('\n');
@@ -54,7 +54,9 @@ public:
 private:
     int_type overflow(int_type chr) override
     {
+        // Note the implicit int_type to char conversion, may not give problems
         int_type const put_ret{ m_sbuf->sputc(chr) };
+
         if(chr == '\n') {
             /* Note: On success the number of characters written is returned
              *       and no check is done here. No fault expected ;-) */

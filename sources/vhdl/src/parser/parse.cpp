@@ -22,7 +22,7 @@ namespace eda { namespace vhdl { namespace parser {
 bool parse::operator()(std::string const &input, ast::design_file& design_file,
                         fs::path const &filename)
 {
-    using iterator_type = vhdl::parser::iterator_type;
+    using vhdl::parser::iterator_type;
 
     iterator_type iter = input.begin();
     iterator_type end  = input.end();

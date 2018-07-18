@@ -7,9 +7,13 @@
 
 #include <eda/utils/cxx_bug_fatal.hpp>
 
+#include <eda/utils/compiler_warnings_off.hpp>
 #include <boost/spirit/home/x3/support/traits/is_variant.hpp>
+#include <eda/utils/compiler_warnings_on.hpp>
 
+#include <eda/utils/compiler_warnings_off.hpp>
 #include <eda/support/boost/hana_overload.hpp>
+#include <eda/utils/compiler_warnings_on.hpp>
 #include <eda/vhdl/ast_printer.hpp>
 
 #include <map>
@@ -21,8 +25,8 @@ namespace eda { namespace vhdl { namespace ast {
 using namespace ::eda::utils;
 
 
-printer::printer(std::ostream& os, uint16_t start_indent)
-    : os{ os, start_indent }
+printer::printer(std::ostream& os_, uint16_t start_indent)
+    : os{ os_, start_indent }
     , verbose_symbol {false}
     , verbose_variant{ false }
     { }
@@ -33,10 +37,10 @@ struct printer::scope_printer
     const char* const                               name{ nullptr };
     bool const                                      verbose;
 
-    scope_printer(utils::indent_ostream& os_, char const name[], bool verbose, char const name_pfx[] = nullptr)
+    scope_printer(utils::indent_ostream& os_, char const name_[], bool verbose_, char const name_pfx[] = nullptr)
     : os{ os_ }
-    , name{ name }
-    , verbose{ verbose }
+    , name{ name_ }
+    , verbose{ verbose_ }
     {
         if(verbose) {
             os << increase_indent << "(";
@@ -120,8 +124,8 @@ void printer::operator()(actual_part const &node)
             os << "\n";
             (*this)(chunk.actual_designator);
         },
-        [this](ast::actual_designator node) {
-            (*this)(node);
+        [this](ast::actual_designator node_) {
+            (*this)(node_);
         }
     );
 }
@@ -1037,7 +1041,7 @@ void printer::operator()(delay_mechanism const &node)
             break;
         }
         default:
-            os << "INVALID";
+            cxx_unreachable_bug_triggered();
     }
 
     if(node.time_expression) {
