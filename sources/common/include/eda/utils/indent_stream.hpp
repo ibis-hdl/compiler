@@ -67,11 +67,10 @@ private:
             // warning: implicit conversion changes signedness:
             // 'std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::size_type'
             // (aka 'unsigned long') to 'std::streamsize' (aka 'long') [-Wsign-conversion]
-            // ... may be a problem on huge indent size, but them others is wrong.
             // Also, on success the number of characters written is returned
             // and no check is done here - no error expected ;-)
             // FixMe: Add some indent_level and assert to avoid non-intentionally
-            //        behavior.
+            //        behavior. There may be a problem on huge indent size.
             m_sbuf->sputn( m_indent_str.data(), m_indent_str.size() );
         }
         return put_ret;
