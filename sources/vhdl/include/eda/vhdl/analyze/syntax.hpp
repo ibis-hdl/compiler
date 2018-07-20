@@ -29,7 +29,7 @@ namespace eda { namespace vhdl { namespace analyze {
 class syntax : boost::static_visitor<bool>
 {
     using error_handler_type = std::function<
-        void(x3::position_tagged, std::string const&)>;
+        void(ast::position_tagged, std::string const&)>;
 
     utils::indent_ostream mutable                   os;
     vhdl::context&                                  context;
@@ -45,7 +45,7 @@ public:
       : os{ os_ , 0 }
       , context{ context_ }
       , error_handler{
-            [&](x3::position_tagged error_position, std::string const& message)
+            [&](ast::position_tagged error_position, std::string const& message)
             { error_handler_(error_position, message); }
       }
     { }

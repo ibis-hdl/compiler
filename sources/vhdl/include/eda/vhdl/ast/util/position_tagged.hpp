@@ -8,33 +8,27 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_POSITION_TAGGED_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_POSITION_TAGGED_HPP_
 
-
-#include <eda/utils/compiler_warnings_off.hpp>
-#include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
-#include <eda/utils/compiler_warnings_on.hpp>
-
-#include <eda/namespace_alias.hpp>
+#include <limits>
 
 
 namespace eda { namespace vhdl { namespace ast {
 
+// ToDo/FixMe: Documentation
+// Use this to annotate an AST with the iterator position.
+// These ids are used as a key to the position_cache (below)
+// and marks the start and end of an AST node.
+struct position_tagged
+{
+    typedef std::size_t                             tag_type;
 
-/*
- * Annotation and Error handling
- *
- * Note, the AST odes are tagged with ast::position_tagged which is of type
- * x3::position_tagged. The intension was to extend this approach to tag
- * also the file (id) where the node belongs to as show by Baptiste Wicht's
- * [Compiler of the EDDI programming language](
- * https://github.com/wichtounet/eddic).
- * For convenience (and since this approach isn't realized yet), Spirit.X3's
- * ID are derived from x3::annotate_on_success (obviously must be changed in
- * the future).
- */
-using position_tagged = x3::position_tagged;
+    static constexpr tag_type MAX_ID = std::numeric_limits<tag_type>::max();
+
+    tag_type pos_id{ MAX_ID };
+};
 
 
-} } } // namespace eda.vhdl.ast
+}}} // namespace eda.vhdl.parser
+
 
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_POSITION_TAGGED_HPP_ */

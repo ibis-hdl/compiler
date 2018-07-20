@@ -50,13 +50,7 @@ std::ostream& failure_status::operator()(std::ostream& os) const
         return utils::make_iomanip([count](std::ostream& os_) {
             if(count) {
                 os_ << format(translate(
-<<<<<<< HEAD
                        "{1} error", "{1} errors", plural_count(count)))
-=======
-                        // warning: implicit conversion loses integer precision: 'const size_t'
-                        // (aka 'const unsigned long') to 'int' [-Wshorten-64-to-32]
-                       "{1} error", "{1} errors", static_cast<int>(count)))
->>>>>>> cf2ee8999adf4ac0b996688d74979d30d36f565f
                        % count
                        ;
             }
@@ -67,13 +61,7 @@ std::ostream& failure_status::operator()(std::ostream& os) const
         return utils::make_iomanip([count](std::ostream& os_) {
             if(count) {
                 os_ << format(translate(
-<<<<<<< HEAD
                        "{1} warning", "{1} warnings", plural_count(count)))
-=======
-                        // warning: implicit conversion loses integer precision: 'const size_t'
-                        // (aka 'const unsigned long') to 'int' [-Wshorten-64-to-32]
-                       "{1} warning", "{1} warnings", static_cast<int>(count)))
->>>>>>> cf2ee8999adf4ac0b996688d74979d30d36f565f
                        % count
                        ;
             }

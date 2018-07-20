@@ -43,6 +43,15 @@ struct testing_parser
         attribute_type  attr;
         btt::output_test_stream output;
 
+        parser::position_cache<parser::iterator_type> position_cache(input);
+        parser::error_handler_type error_handler(std::cerr, position_cache,
+                                                 filename.string() + ".input");
+
+        auto const parser =
+            x3::with<parser::error_handler_tag>(std::ref(error_handler)) [
+                  parser_rule
+            ];
+
         parser::iterator_type iter = input.begin();
         parser::iterator_type end  = input.end();
 
@@ -53,14 +62,6 @@ struct testing_parser
                    && std::is_same<decltype(end),  parser::iterator_type>::value,
                       "iterator types must be the same"
         );
-
-        parser::error_handler_type error_handler(iter, end, output,
-                                                 filename.string() + ".input");
-
-        auto const parser =
-            x3::with<x3::error_handler_tag>(std::ref(error_handler)) [
-                  parser_rule
-            ];
 
         bool parse_ok = false;
 

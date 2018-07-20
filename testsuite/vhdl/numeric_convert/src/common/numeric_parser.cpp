@@ -34,10 +34,11 @@ std::tuple<bool, AttrType> parse(ParserType const &numeric_parser, std::string c
         "iterator types must be the same"
     );
 
-    parser::error_handler_type error_handler(iter, end, std::cerr);
+    parser::position_cache<parser::iterator_type> position_cache(input);
+    parser::error_handler_type error_handler(std::cerr, position_cache);
 
     auto const parser =
-        x3::with<x3::error_handler_tag>(std::ref(error_handler)) [
+        x3::with<parser::error_handler_tag>(std::ref(error_handler)) [
             numeric_parser
         ];
 

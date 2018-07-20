@@ -179,7 +179,7 @@ endif()
 
 ##
 # Boost.Org UTF
-find_package(Boost REQUIRED COMPONENTS system filesystem unit_test_framework)
+find_package(Boost REQUIRED COMPONENTS system filesystem locale unit_test_framework)
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
@@ -188,6 +188,7 @@ target_link_libraries(${PROJECT_NAME}
     testsuite::common
     Boost::system
     Boost::filesystem
+    Boost::locale
 )
 
 

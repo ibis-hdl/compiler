@@ -10,10 +10,7 @@
 
 #include <eda/vhdl/parser/common_types.hpp>     // iterator_type
 #include <eda/vhdl/parser/skipper.hpp>
-
-#include <eda/utils/compiler_warnings_off.hpp>
-#include <boost/spirit/home/x3/support/utility/error_reporting.hpp>
-#include <eda/utils/compiler_warnings_on.hpp>
+#include <eda/vhdl/parser/error_handler.hpp>
 
 #include <eda/namespace_alias.hpp>
 
@@ -73,13 +70,13 @@
 namespace eda { namespace vhdl { namespace parser {
 
 
-typedef x3::error_handler<iterator_type>                error_handler_type;
+typedef parser::error_handler<iterator_type>            error_handler_type;
 
 typedef x3::phrase_parse_context<skipper_type>::type    phrase_context_type;
 
 // used for external linkage
 typedef x3::context<
-      x3::error_handler_tag
+      parser::error_handler_tag
     , std::reference_wrapper<error_handler_type> /* const */
     , phrase_context_type
 >                                                       context_type;

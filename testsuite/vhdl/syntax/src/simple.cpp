@@ -29,18 +29,14 @@ BOOST_DATA_TEST_CASE( basic_syntax,
     utf_data::make_delayed<testsuite::dataset_loader>( "test_case/foo" ),
     input, expected, test_case_name)
 {
-    std::ostream& os = std::cout;
+    std::ostream& os = std::cerr;
 
     ast::design_file design_file;
 
-    // FixMe: introduce make_error_handler(range, ...) ???
+    parser::position_cache<parser::iterator_type> position_cache(input);
+    parser::error_handler_type error_handler(os, position_cache, test_case_name);
 
-    parser::error_handler_type error_handler(input.begin(), input.end(),
-                                             os, test_case_name);
-
-
-
-    parser::parse  parse{ os, error_handler}; // add. arg -> file_name
+    parser::parse  parse{ os, error_handler }; // add. arg -> file_name
     bool const parse_ok = parse(input, design_file, test_case_name);
 
     boost::ignore_unused(expected);

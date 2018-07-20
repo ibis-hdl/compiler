@@ -41,7 +41,7 @@ bool parse::operator()(std::string const &input, ast::design_file& design_file,
     );
 
     auto const parser =
-        x3::with<x3::error_handler_tag>(std::ref(/*local_*/error_handler)) [
+        x3::with<parser::error_handler_tag>(std::ref(error_handler)) [
             parser::grammar()
     ];
 

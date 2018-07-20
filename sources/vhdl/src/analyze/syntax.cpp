@@ -132,7 +132,6 @@ syntax::result_type syntax::operator()(ast::block_statement const& node) const
     static char const node_name[]{ "block_statement" };
     indent_logging<verbose> _(*this, node_name);
 
-    // FixMe: syntax (using a constructor) isn't intuitive
     if(!check_label_match(node)) {
     	error_handler(node, label_match::make_error_description(node));
     	++context.error_count;
@@ -199,6 +198,8 @@ syntax::result_type syntax::operator()(ast::design_unit const& node) const
 {
     static char const node_name[]{ "design_unit" };
     indent_logging<verbose> _(*this, node_name);
+
+    error_handler(node, "testing the tagging and error handler");
 
     if(!(*this)(node.context_clause)) {
         os << "check failed in design_unit.context_clause\n";

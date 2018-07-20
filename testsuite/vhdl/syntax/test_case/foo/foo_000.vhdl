@@ -21,7 +21,7 @@ end process Stim;
 block_label :
     BLOCK IS 
     BEGIN
-    END BLOCK block_label_;
+    END BLOCK block_label_wrong; -- label mismatch
 
 
   D : --entity work.EX_MAX_MIN(A1)
