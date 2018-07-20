@@ -22,15 +22,10 @@
 namespace eda { namespace vhdl { namespace parser {
 
 
-namespace mpl = boost::mpl;
-
 /*
  * Annotation and Error handling
  *
  * ToDo: Documentation
- * ToDO: Use std::is_same_of or std::is_convertible
- * ToDo: Use functor (or similar) for algorithm working on position_cache, so
- *       position_cache doesn't depend on algorithm nor error_handler
  */
 template <typename IteratorT, typename ContainerT = std::vector<boost::iterator_range<IteratorT>>>
 class position_cache
@@ -51,48 +46,41 @@ public:
     { }
 
 public:
-    // This will catch all nodes except those inheriting from position_tagged
     template <typename NodeT>
-    void annotate(NodeT&, iterator_type, iterator_type, mpl::false_)
-    {  }
-
-    // This will catch all nodes inheriting from position_tagged
-    void annotate(ast::position_tagged& node, iterator_type first, iterator_type last, mpl::true_)
+    void annotate(NodeT&& node, iterator_type first, iterator_type last)
     {
-        std::cout << "position_cache::annotate<"
-                  << boost::typeindex::type_id<decltype(node)>().pretty_name()
-                  << "> with ID = "
-                  << positions.size() << "\n";
+        if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
+            std::cout << "position_cache::annotate<"
+                      << boost::typeindex::type_id<decltype(node)>().pretty_name()
+                      << "> with ID = "
+                      << positions.size() << "\n";
 
-        /* ToDo: maybe better throw range_exception since it's an implementation
-         * limitation. */
-        cxx_assert(positions.size() < ast::position_tagged::MAX_ID,
+            /* ToDo: maybe better throw range_exception since it's an implementation
+             * limitation. */
+            assert(positions.size() < ast::position_tagged::MAX_ID &&
                    "Insufficient range of numeric IDs for AST tagging");
-        node.pos_id = positions.size();
-        positions.push_back( {first, last} );
-    }
-
-    template <typename NodeT>
-    void annotate(NodeT& node, iterator_type first, iterator_type last)
-    {
-        annotate(node, first, last, boost::is_base_of<ast::position_tagged, NodeT>{});
+            node.pos_id = positions.size();
+            positions.emplace_back( first, last );
+        }
+        else { /* ignore */ }
     }
 
 public:
-    // This will catch all nodes inheriting from position_tagged
-    range_type position_of(ast::position_tagged const& node) const
-    {
-        std::cout << "position_of(ast::position_tagged const& node) const" << "\n";
-        return positions[node.pos_id];
-    }
-
-    // This will catch all nodes except those inheriting from position_tagged
-    // returns an empty position
     template <typename NodeT>
-    range_type position_of(NodeT const&) const
+    range_type position_of(NodeT const& node) const
     {
-        std::cout << "position_of(NodeT const&) const" << "\n";
-        return range_type{};
+        if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
+            std::cout << "position_of<tagged>("
+                      << boost::typeindex::type_id<decltype(node)>().pretty_name()
+                      << ")\n";
+            return positions[node.pos_id];
+        }
+        else {
+            std::cout << "position_of<**NOT**tagged>("
+                      << boost::typeindex::type_id<decltype(node)>().pretty_name()
+                      << ")\n";
+            return range_type{};
+        }
     }
 
 public:

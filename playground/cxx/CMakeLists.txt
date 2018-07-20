@@ -14,3 +14,4 @@ add_executable(cxx_variant_print_visitor_concept EXCLUDE_FROM_ALL cxx_variant_pr
 add_executable(cxx_indent_ostreambuf         EXCLUDE_FROM_ALL cxx_indent_ostreambuf.cpp)
 add_executable(cxx_pow_constexpr             EXCLUDE_FROM_ALL cxx_pow_constexpr.cpp)
 add_executable(cxx_string_view_range         EXCLUDE_FROM_ALL cxx_string_view_range.cpp)
+add_executable(cxx_annotation_cache          EXCLUDE_FROM_ALL cxx_annotation_cache.cpp)
