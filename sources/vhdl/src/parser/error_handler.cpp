@@ -153,12 +153,12 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
 template <typename Iterator>
 void error_handler<Iterator>::print_file_line(iterator_type const& iter) const
 {
-    auto const line_number = [this](iterator_type const& iter) {
+    auto const line_number = [this](iterator_type const& it) {
 
         std::size_t line_no { 1 };
         typename std::iterator_traits<iterator_type>::value_type prev { 0 };
 
-        for (iterator_type pos = position_cache.first(); pos != iter; ++pos) {
+        for (iterator_type pos = position_cache.first(); pos != it; ++pos) {
             auto chr = *pos;
             switch (chr) {
                 case '\n':
@@ -205,8 +205,7 @@ void error_handler<Iterator>::print_line(iterator_type first, iterator_type cons
         }
     }
 
-    typedef typename std::iterator_traits<Iterator>::value_type char_type;
-    std::basic_string<char_type> line{ first, end };
+    std::basic_string<parser::char_type> line{ first, end };
 
     os << boost::locale::conv::utf_to_utf<char>(line) << std::endl;
 }

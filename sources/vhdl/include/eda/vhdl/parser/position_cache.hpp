@@ -47,7 +47,7 @@ public:
 
 public:
     template <typename NodeT>
-    void annotate(NodeT&& node, iterator_type first, iterator_type last)
+    void annotate(NodeT& node, iterator_type first, iterator_type last)
     {
         if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
             std::cout << "position_cache::annotate<"
@@ -57,8 +57,9 @@ public:
 
             /* ToDo: maybe better throw range_exception since it's an implementation
              * limitation. */
-            assert(positions.size() < ast::position_tagged::MAX_ID &&
-                   "Insufficient range of numeric IDs for AST tagging");
+            cxx_assert(positions.size() < ast::position_tagged::MAX_ID,
+                      "Insufficient range of numeric IDs for AST tagging");
+
             node.pos_id = positions.size();
             positions.emplace_back( first, last );
         }
@@ -66,6 +67,7 @@ public:
     }
 
 public:
+#if 1
     template <typename NodeT>
     range_type position_of(NodeT const& node) const
     {
@@ -82,15 +84,36 @@ public:
             return range_type{};
         }
     }
-
+#else
+    template <typename NodeT>
+    std::optional<std::tuple<iterator_type, iterator_type>>
+    position_of(NodeT const& node) const
+    {
+        if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
+            std::cout << "position_of<tagged>("
+                      << boost::typeindex::type_id<decltype(node)>().pretty_name()
+                      << ")\n";
+            // assert(node.pos_id != ast::position_tagged::MAX_ID)
+            // assert(node.pos_id <= positions.size());
+            auto const& range = positions[node.pos_id];
+            return { range.begin(), range.end()) };
+        }
+        else {
+            std::cout << "position_of<**NOT**tagged>("
+                      << boost::typeindex::type_id<decltype(node)>().pretty_name()
+                      << ")\n";
+            return {};
+        }
+    }
+#endif
 public:
     std::tuple<iterator_type, iterator_type> iterator_range() const
     {
-        return std::tuple{ std::begin(range), std::cend(range) };
+        return std::tuple{ range.begin(), range.end() };
     }
 
-    iterator_type first() const       { return std::begin(range); }
-    iterator_type const& last() const { return std::cend(range); }
+    iterator_type first() const       { return range.begin(); }
+    iterator_type const& last() const { return range.end(); }
 
 private:
     container_type                                  positions;

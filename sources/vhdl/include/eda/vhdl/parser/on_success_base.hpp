@@ -38,24 +38,24 @@ namespace eda { namespace vhdl { namespace parser {
 ///////////////////////////////////////////////////////////////////////////
 struct on_success_base
 {
-    template <typename Iterator, typename Context, typename... Types>
+    template <typename IteratorT, typename ContextT, typename... Types>
     inline
-    void on_success(Iterator const& first, Iterator const& last,
-                    ast::variant<Types...>& node, Context const& context)
+    void on_success(IteratorT const& first, IteratorT const& last,
+                    ast::variant<Types...>& node, ContextT const& context) /* XXX const */
     {
-        node.apply_visitor(x3::make_lambda_visitor<void>([&](auto& node) {
-                this->on_success(first, last, node, context);
+        node.apply_visitor(x3::make_lambda_visitor<void>([&](auto& node_) {
+                this->on_success(first, last, node_, context);
             })
         );
     }
 
-    template <typename NodeT, typename Iterator, typename Context>
+    template <typename NodeT, typename IteratorT, typename ContextT>
     inline
-    void on_success(Iterator const& first, Iterator const& last,
-                    NodeT& node, Context const& context)
+    void on_success(IteratorT const& first, IteratorT const& last,
+                    NodeT& node, ContextT const& context) /* XXX const */
     {
         auto& error_handler = x3::get<parser::error_handler_tag>(context).get();
-        error_handler.tag(node, first, last);
+        error_handler.annotate(node, first, last);
     }
 };
 

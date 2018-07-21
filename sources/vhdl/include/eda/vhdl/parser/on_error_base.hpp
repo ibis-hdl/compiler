@@ -28,7 +28,6 @@ namespace eda { namespace vhdl { namespace parser {
 struct on_error_base
 {
     template<typename IteratorT, typename ExceptionT, typename ContextT>
-    static
     x3::error_handler_result
     on_error(IteratorT& /* first */, IteratorT const& /* last */,
              ExceptionT const& x, ContextT const& context) /* XXX const */

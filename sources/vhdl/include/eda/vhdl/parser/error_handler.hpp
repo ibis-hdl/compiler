@@ -52,11 +52,8 @@ public:
 
 public:
     template <typename NodeT>
-    void tag(NodeT& node, iterator_type first, iterator_type last)
+    void annotate(NodeT& node, iterator_type const& first, iterator_type const& last)
     {
-//        std::cout << "error_handler::tag<"
-//                  << boost::typeindex::type_id<NodeT>().pretty_name()
-//                  << ">\n";
         position_cache.annotate(node, first, last);
     }
 
