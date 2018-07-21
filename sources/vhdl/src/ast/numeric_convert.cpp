@@ -362,10 +362,8 @@ numeric_convert::numeric_convert(std::ostream &os_)
 {
     // until we got all templates, check for correct types
     static_assert(std::integral_constant<bool,
-               std::is_same<numeric_convert::value_type,
-                            detail::real>::value
-        >::value,
-        "iterator types must be the same"
+                  std::is_same_v<numeric_convert::value_type, detail::real>>::value,
+                  "iterator types must be the same"
     );
 }
 

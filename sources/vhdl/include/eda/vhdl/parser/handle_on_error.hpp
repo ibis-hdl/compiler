@@ -79,7 +79,7 @@ handle_on_error::on_error(
 
     // detect upcoming linker errors, see notes at parser_config.hpp about
     static_assert(
-        std::is_same<Context, context_type>::value,
+        std::is_same_v<Context, context_type>,
         "The Spirit.X3 Context must be equal"
     );
 

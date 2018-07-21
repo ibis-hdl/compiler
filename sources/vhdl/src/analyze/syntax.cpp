@@ -29,14 +29,14 @@ using verbose = tag::enabled;
  * Debug Indent printer
  */
 template<typename T>
-struct syntax::indent_logging<T, typename std::enable_if<!std::is_same<T, tag::enabled>::value>::type>
+struct syntax::indent_logging<T, typename std::enable_if_t<std::is_same_v<T, tag::disabled>>>
 {
     indent_logging(syntax const&, const char* const)
     {  }
 };
 
 template<typename T>
-struct syntax::indent_logging<T, typename std::enable_if<std::is_same<T, tag::enabled>::value>::type>
+struct syntax::indent_logging<T, typename std::enable_if_t<std::is_same_v<T, tag::enabled>>>
 {
     utils::indent_ostream&                          os;
     const char* const                               node_name;

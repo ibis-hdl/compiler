@@ -72,7 +72,7 @@ struct printer::symbol_scope
 
 template<typename T>
 struct printer::symbol_scope<
-    T, typename std::enable_if<x3::traits::is_variant<T>::value>::type
+    T, typename std::enable_if_t<x3::traits::is_variant<T>::value>
 >
 : public printer::scope_printer
 {

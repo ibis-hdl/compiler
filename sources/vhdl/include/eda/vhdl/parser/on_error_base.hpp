@@ -36,7 +36,7 @@ struct on_error_base
        * but context_type is required here for statis_assert */
         // detect upcoming linker errors, see notes at parser_config.hpp about
         static_assert(
-            std::is_same<ContextT, context_type>::value,
+            std::is_same_v<ContextT, context_type>,
             "The Spirit.X3 Context must be equal"
         );
 #endif

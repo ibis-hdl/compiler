@@ -27,16 +27,16 @@ bool parse::operator()(std::string const &input, ast::design_file& design_file,
     iterator_type iter = input.begin();
     iterator_type end  = input.end();
 
-    static_assert(std::is_base_of<
+    static_assert(std::is_base_of_v<
             std::forward_iterator_tag,
             typename std::iterator_traits<parser::iterator_type>::iterator_category
-        >::value, "iterator type must be of multipass iterator");
+        >, "iterator type must be of multipass iterator");
 
     /* using different iterator_types causes linker errors, see e.g.
      * [linking errors while separate parser using boost spirit x3](
      *  https://stackoverflow.com/questions/40496357/linking-errors-while-separate-parser-using-boost-spirit-x3) */
-    static_assert(std::is_same<decltype(iter), iterator_type>::value
-               && std::is_same<decltype(end),  iterator_type>::value,
+    static_assert(std::is_same_v<decltype(iter), iterator_type>
+               && std::is_same_v<decltype(end),  iterator_type>,
                   "iterator types must be the same"
     );
 
@@ -94,7 +94,7 @@ std::string parse::make_exception_description(fs::path const &filename,
 
     // [IIFE idiom](https://www.bfilipek.com/2016/11/iife-for-complex-initialization.html)
     std::string const what = [&] {
-        if constexpr(std::is_base_of<decltype(exception), std::exception>::value) {
+        if constexpr(std::is_base_of_v<std::remove_reference_t<ExceptionT>, std::exception>) {
             return exception.what();
         }
         else {
