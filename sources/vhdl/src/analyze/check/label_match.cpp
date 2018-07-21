@@ -12,8 +12,6 @@
 
 #include <boost/range/algorithm/equal.hpp>
 
-#include <boost/type_index.hpp>
-
 #include <eda/support/boost/locale.hpp>
 
 

@@ -19,8 +19,6 @@
 
 #include <eda/namespace_alias.hpp>
 
-#include <boost/type_index.hpp>
-
 
 namespace eda { namespace vhdl { namespace parser {
 

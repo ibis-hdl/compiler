@@ -15,8 +15,9 @@
 #include <vector>
 #include <tuple>
 #include <optional>
-
 #include <type_traits>
+
+#include <eda/utils/pretty_typename.hpp>
 
 
 namespace eda { namespace vhdl { namespace parser {
@@ -51,7 +52,7 @@ public:
     {
         if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
             std::cout << "position_cache::annotate<"
-                      << boost::typeindex::type_id<decltype(node)>().pretty_name()
+                      << utils::pretty_typename<NodeT>{}
                       << "> with ID = "
                       << positions.size() << "\n";
 
@@ -73,13 +74,13 @@ public:
     {
         if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
             std::cout << "position_of<tagged>("
-                      << boost::typeindex::type_id<decltype(node)>().pretty_name()
+                      << utils::pretty_typename<NodeT>{}
                       << ")\n";
             return positions[node.pos_id];
         }
         else {
             std::cout << "position_of<**NOT**tagged>("
-                      << boost::typeindex::type_id<decltype(node)>().pretty_name()
+                      << utils::pretty_typename<NodeT>{}
                       << ")\n";
             return range_type{};
         }
@@ -91,7 +92,7 @@ public:
     {
         if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
             std::cout << "position_of<tagged>("
-                      << boost::typeindex::type_id<decltype(node)>().pretty_name()
+                      << utils::pretty_typename<NodeT>{}
                       << ")\n";
             // assert(node.pos_id != ast::position_tagged::MAX_ID)
             // assert(node.pos_id <= positions.size());
@@ -100,7 +101,7 @@ public:
         }
         else {
             std::cout << "position_of<**NOT**tagged>("
-                      << boost::typeindex::type_id<decltype(node)>().pretty_name()
+                      << utils::pretty_typename<NodeT>{}
                       << ")\n";
             return {};
         }

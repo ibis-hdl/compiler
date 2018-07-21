@@ -9,13 +9,11 @@
 #include <eda/vhdl/analyze/check/label_match.hpp>
 #include <eda/vhdl/ast.hpp>
 
-#include <boost/type_index.hpp>
-
 #include <eda/support/boost/locale.hpp>
 
-#include <regex>
+#include <eda/utils/pretty_typename.hpp>
 
-#include <eda/utils/compiler_warnings_off.hpp>
+#include <eda/utils/compiler_warnings_off.hpp>  // temporary -Wno-unused
 
 
 namespace eda { namespace vhdl { namespace analyze {
@@ -65,36 +63,20 @@ struct syntax::indent_logging<T, typename std::enable_if<std::is_same<T, tag::en
 namespace eda { namespace vhdl { namespace analyze {
 
 
-namespace detail {
-
-template<typename T>
-struct type_name
-{
-    friend std::ostream& operator<<(std::ostream& os, type_name const&)
-    {
-        static const std::regex pattern{ "::|boost|spirit|x3|eda|vhdl|ast" };
-        std::string name{ boost::typeindex::type_id<T>().pretty_name() };
-        os << std::regex_replace(name, pattern, "");
-        return os;
-    }
-};
-
-}
-
 using boost::locale::translate;
 using boost::locale::format;
 
 
 template<typename ...Types>
 syntax::result_type syntax::operator()(ast::variant<Types...> const& node) const {
-    os << "INFO: dispatch " << detail::type_name<decltype(node)>{} << "\n";
+    os << "INFO: dispatch " << utils::pretty_typename<decltype(node)>{} << "\n";
     return boost::apply_visitor(*this, node);
 }
 
 
 template<typename T>
 syntax::result_type syntax::operator()(std::vector<T> const& node) const {
-    os << "INFO: iterate over vector<" << detail::type_name<T>{} << ", N = " << node.size() << ">\n";
+    os << "INFO: iterate over vector<" << utils::pretty_typename<T>{} << ", N = " << node.size() << ">\n";
     return std::all_of(node.begin(), node.end(),
                       [&](T const& x){ return (*this)(x); } );
 }
@@ -385,14 +367,14 @@ syntax::result_type syntax::operator()(ast::nullary const&) const
 
 
 template<typename T>
-syntax::result_type syntax::operator()(T const& strayer) const
+syntax::result_type syntax::operator()(T const&) const
 {
     static char const node_name[]{ "unknown" };
     indent_logging<verbose> _(*this, node_name);
 
-    os << "### caught straying node of type "
-       << detail::type_name<decltype(strayer)>{}
-       << "\n";
+    os << "### caught straying node of type <"
+       << utils::pretty_typename<T>{}
+       << ">\n";
 
     ++context.warning_count;
 
