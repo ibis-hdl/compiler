@@ -21,24 +21,6 @@
 #include <map>
 
 
-namespace boost { namespace spirit { namespace x3 {
-
-/* FixMe: Quick & Dirty Fix; No Idea what happened here, but I get a compiler
- * error from <.../boost/optional/detail/optional_aligned_storage.hpp>
- *
- * error: invalid application of 'sizeof' to an incomplete type
- *        'boost::spirit::x3::error_handler_tag'
- * char data[ sizeof(T) ];
- *            ^~~~~~~~~
- *
- * The problem began to rise up by using annotate_on_success() and
- * handle_on_error(). Maybe a dismiss as ADL inflicted.
- */
-struct error_handler_tag {};
-
-} } }
-
-
 namespace eda { namespace vhdl { namespace parser {
 
 

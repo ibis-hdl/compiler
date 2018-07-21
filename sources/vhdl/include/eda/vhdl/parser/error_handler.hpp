@@ -92,7 +92,7 @@ public:
 #endif
 
 public:
-    std::string const& file_name() const { return filename; }
+    std::string file_name() const;
 
 private:
     // helper functions

@@ -149,6 +149,14 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
 
 #pragma GCC diagnostic pop  // -------------------------------------------------
 
+template <typename Iterator>
+std::string error_handler<Iterator>::file_name() const
+{
+    if (!filename.empty()) return filename;
+
+    return boost::locale::translate("Unknown File Name", "<unknown>");
+}
+
 
 template <typename Iterator>
 void error_handler<Iterator>::print_file_line(iterator_type const& iter) const
@@ -179,10 +187,11 @@ void error_handler<Iterator>::print_file_line(iterator_type const& iter) const
     using boost::locale::format;
     using boost::locale::translate;
 
+
     os << format(translate(
-          "In file {1}, line {2}:"
+          "In file {1}, line {2}: "
           ))
-          % (!file_name().empty() ? file_name() : "<unknown>")
+          % file_name()
           % line_number(iter)
           ;
 }
