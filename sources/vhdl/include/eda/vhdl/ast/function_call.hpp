@@ -12,7 +12,6 @@
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 #include <eda/vhdl/ast/util/variant.hpp> // forward_ast
 
-#include <eda/vhdl/parser/common_types.hpp>
 #include <eda/vhdl/ast/actual_parameter_part.hpp>
 #include <eda/vhdl/ast/util/optional.hpp>
 

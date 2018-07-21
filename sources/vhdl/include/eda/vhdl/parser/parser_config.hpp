@@ -8,9 +8,9 @@
 #ifndef INCLUDE_EDA_VHDL_PARSER_CONFIG_HPP_
 #define INCLUDE_EDA_VHDL_PARSER_CONFIG_HPP_
 
-#include <eda/vhdl/parser/common_types.hpp>     // iterator_type
 #include <eda/vhdl/parser/skipper.hpp>
 #include <eda/vhdl/parser/error_handler.hpp>
+#include <eda/vhdl/parser/iterator_type.hpp>     // iterator_type
 
 #include <eda/namespace_alias.hpp>
 

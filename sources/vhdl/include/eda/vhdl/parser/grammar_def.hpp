@@ -11,7 +11,6 @@
 #include <eda/vhdl/parser/grammar.hpp>
 #include <eda/vhdl/parser/grammar_id.hpp>
 #include <eda/vhdl/parser/grammar_type.hpp>
-#include <eda/vhdl/parser/common_types.hpp>
 #include <eda/vhdl/parser/on_error_base.hpp>
 #include <eda/vhdl/parser/on_success_base.hpp>
 #include <eda/vhdl/ast_adapted.hpp>

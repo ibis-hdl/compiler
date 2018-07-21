@@ -11,8 +11,6 @@
 
 #include <eda/vhdl/ast.hpp>
 #include <eda/vhdl/parser/grammar_id.hpp>
-#include <eda/vhdl/parser/common_types.hpp> // iterator_type
-
 #include <boost/spirit/home/x3/core.hpp>
 #include <boost/spirit/home/x3/nonterminal/rule.hpp> // Note, alone doesn't compile
 

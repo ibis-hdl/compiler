@@ -12,7 +12,7 @@
 #include <eda/utils/compiler_warnings_on.hpp>
 
 #include <eda/vhdl/parser/error_handler.hpp>
-#include <eda/vhdl/parser/common_types.hpp>
+#include <eda/vhdl/parser/iterator_type.hpp>
 
 #include <eda/support/boost/locale.hpp>
 
@@ -180,7 +180,7 @@ void error_handler<Iterator>::print_file_line(iterator_type const& iter) const
     using boost::locale::translate;
 
     os << format(translate(
-          "In file {0}, line {1}:"
+          "In file {1}, line {2}:"
           ))
           % (!file_name().empty() ? file_name() : "<unknown>")
           % line_number(iter)

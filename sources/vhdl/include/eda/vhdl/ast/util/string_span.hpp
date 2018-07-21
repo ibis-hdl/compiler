@@ -9,7 +9,7 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_STRING_SPAN_HPP_
 
 #include <boost/range/iterator_range.hpp>
-#include <eda/vhdl/parser/common_types.hpp>
+#include <eda/vhdl/parser/iterator_type.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {

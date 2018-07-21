@@ -1,12 +1,12 @@
 /*
- * common_types.hpp
+ * iterator_type.hpp
  *
  *  Created on: 13.05.2018
  *      Author: olaf
  */
 
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_COMMON_TYPES_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_COMMON_TYPES_HPP_
+#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ITERATOR_TYPE_HPP_
+#define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ITERATOR_TYPE_HPP_
 
 
 #include <string>
@@ -40,4 +40,4 @@ typedef std::basic_string<
 
 
 
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_COMMON_TYPES_HPP_ */
+#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ITERATOR_TYPE_HPP_ */
