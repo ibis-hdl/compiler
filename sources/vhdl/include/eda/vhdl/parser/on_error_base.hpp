@@ -27,6 +27,8 @@ namespace eda { namespace vhdl { namespace parser {
  */
 struct on_error_base
 {
+    on_error_base();
+
     template<typename IteratorT, typename ExceptionT, typename ContextT>
     x3::error_handler_result
     on_error(IteratorT& /* first */, IteratorT const& /* last */,
@@ -40,11 +42,13 @@ struct on_error_base
             "The Spirit.X3 Context must be equal"
         );
 #endif
-        std::string message = "Error! Expecting: " + x.which() + " here:";
         auto& error_handler = x3::get<parser::error_handler_tag>(context).get();
-        return error_handler(x.where(), message);
+        return error_handler(x.where(), make_error_description(x.which()));
     }
 
+    std::string make_error_description(std::string which);
+
+    std::map<std::string, std::string> const        ruleid_map;
 };
 
 

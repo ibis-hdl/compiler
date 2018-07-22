@@ -1,11 +1,16 @@
 /*
- * error_handler.cpp
+ * on_error_base.cpp
  *
  *  Created on: 17.03.2017
  *      Author: olaf
  */
 
-#include <eda/vhdl/parser/handle_on_error.hpp>
+#include <eda/util/compiler_warnings_off.hpp>
+#include <boost/spirit/home/x3/support/traits/tuple_traits.hpp>
+#include <boost/spirit/home/x3/support/traits/is_variant.hpp>
+#include <eda/util/compiler_warnings_on.hpp>
+
+#include <eda/vhdl/parser/on_error_base.hpp>
 
 #include <iostream>
 
@@ -15,8 +20,8 @@
 namespace eda { namespace vhdl { namespace parser {
 
 
-handle_on_error::handle_on_error()
-: m_ruleid_map {
+on_error_base::on_error_base()
+: ruleid_map {
     /* Spirit.X3's error handling embraces the rule with apostrophes, at last for
      * semicolon.  */
     { "'abstract_literal'", "Abstract Literal" },
@@ -277,14 +282,14 @@ handle_on_error::handle_on_error()
 { }
 
 
-std::string handle_on_error::make_error_description(std::string which)
+std::string on_error_base::make_error_description(std::string which)
 {
     using boost::locale::format;
     using boost::locale::translate;
 
-    auto const iter = m_ruleid_map.find(which);
+    auto const iter = ruleid_map.find(which);
 
-    if (iter != m_ruleid_map.end()) {
+    if (iter != ruleid_map.end()) {
         which = iter->second;
     }
     else {
@@ -296,7 +301,7 @@ std::string handle_on_error::make_error_description(std::string which)
             % which;
     }
 
-    return (format(translate("Syntax Error, expecting {1} here:"))
+    return (format(translate("Error, expecting {1} here:"))
             % which
             ).str();
 }
