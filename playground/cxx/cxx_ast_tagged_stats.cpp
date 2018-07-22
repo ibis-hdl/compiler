@@ -3,6 +3,8 @@
  *
  *  Created on: 21.07.2018
  *      Author: olaf
+ *
+ *  https://wandbox.org/permlink/Wd4Aqz2rBY0qUvXh
  */
 
 #include <iostream>
