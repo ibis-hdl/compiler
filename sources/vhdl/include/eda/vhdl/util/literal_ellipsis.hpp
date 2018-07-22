@@ -5,14 +5,14 @@
  *      Author: olaf
  */
 
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_UTILS_LITERAL_ELLIPSIS_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_UTILS_LITERAL_ELLIPSIS_HPP_
+#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_UTIL_LITERAL_ELLIPSIS_HPP_
+#define SOURCES_VHDL_INCLUDE_EDA_VHDL_UTIL_LITERAL_ELLIPSIS_HPP_
 
 
 #include <utility> // pair
 
 
-namespace eda { namespace vhdl {
+namespace eda { namespace vhdl { namespace util {
 
 
 /**
@@ -51,8 +51,8 @@ std::string literal_ellipsis(RangeType const& range, std::size_t len)
 }
 
 
-} } // namespace eda.vhdl
+} } } // namespace eda.vhdl.util
 
 
 
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_UTILS_LITERAL_ELLIPSIS_HPP_ */
+#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_UTIL_LITERAL_ELLIPSIS_HPP_ */

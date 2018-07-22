@@ -10,9 +10,9 @@
 
 #include <eda/vhdl/parser/position_cache.hpp>
 
-#include <eda/utils/compiler_warnings_off.hpp>
+#include <eda/util/compiler_warnings_off.hpp>
 #include <boost/spirit/home/x3/auxiliary/guard.hpp> // error_handler_result
-#include <eda/utils/compiler_warnings_on.hpp>
+#include <eda/util/compiler_warnings_on.hpp>
 
 #include <iosfwd>
 #include <string>

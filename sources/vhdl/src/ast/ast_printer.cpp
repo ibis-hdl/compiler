@@ -5,15 +5,15 @@
  *      Author: olaf
  */
 
-#include <eda/utils/cxx_bug_fatal.hpp>
+#include <eda/util/cxx_bug_fatal.hpp>
 
-#include <eda/utils/compiler_warnings_off.hpp>
+#include <eda/util/compiler_warnings_off.hpp>
 #include <boost/spirit/home/x3/support/traits/is_variant.hpp>
-#include <eda/utils/compiler_warnings_on.hpp>
+#include <eda/util/compiler_warnings_on.hpp>
 
-#include <eda/utils/compiler_warnings_off.hpp>
+#include <eda/util/compiler_warnings_off.hpp>
 #include <eda/support/boost/hana_overload.hpp>
-#include <eda/utils/compiler_warnings_on.hpp>
+#include <eda/util/compiler_warnings_on.hpp>
 #include <eda/vhdl/ast_printer.hpp>
 
 #include <map>
@@ -22,7 +22,7 @@
 namespace eda { namespace vhdl { namespace ast {
 
 
-using namespace ::eda::utils;
+using namespace ::eda::util;
 
 
 printer::printer(std::ostream& os_, uint16_t start_indent)
@@ -33,11 +33,11 @@ printer::printer(std::ostream& os_, uint16_t start_indent)
 
 struct printer::scope_printer
 {
-    utils::indent_ostream&                          os;
+    util::indent_ostream&                           os;
     const char* const                               name{ nullptr };
     bool const                                      verbose;
 
-    scope_printer(utils::indent_ostream& os_, char const name_[], bool verbose_, char const name_pfx[] = nullptr)
+    scope_printer(util::indent_ostream& os_, char const name_[], bool verbose_, char const name_pfx[] = nullptr)
     : os{ os_ }
     , name{ name_ }
     , verbose{ verbose_ }

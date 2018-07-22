@@ -6,7 +6,7 @@
  */
 
 #include <eda/vhdl/context.hpp>
-#include <eda/utils/make_iomanip.hpp>
+#include <eda/util/make_iomanip.hpp>
 
 #include <iostream>
 
@@ -47,7 +47,7 @@ std::ostream& failure_status::operator()(std::ostream& os) const
     using boost::locale::format;
 
     auto const error_message = [](size_t count) {
-        return utils::make_iomanip([count](std::ostream& os_) {
+        return util::make_iomanip([count](std::ostream& os_) {
             if(count) {
                 os_ << format(translate(
                        "{1} error", "{1} errors", plural_count(count)))
@@ -58,7 +58,7 @@ std::ostream& failure_status::operator()(std::ostream& os) const
     };
 
     auto const warning_message = [](size_t count) {
-        return utils::make_iomanip([count](std::ostream& os_) {
+        return util::make_iomanip([count](std::ostream& os_) {
             if(count) {
                 os_ << format(translate(
                        "{1} warning", "{1} warnings", plural_count(count)))

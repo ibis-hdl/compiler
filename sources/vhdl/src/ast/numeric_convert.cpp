@@ -11,7 +11,7 @@
 #include <eda/support/boost/spirit_x3.hpp>
 #include <eda/vhdl/parser/parser_config.hpp>
 #include <eda/support/boost/locale.hpp>
-#include <eda/utils/cxx_bug_fatal.hpp>
+#include <eda/util/cxx_bug_fatal.hpp>
 
 #include <numeric>  // accumulate
 #include <type_traits>
@@ -747,7 +747,7 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
  * it to shorten the error message in case of range overflow.
  ******************************************************************************
 
-#include <eda/vhdl/utils/literal_ellipsis.hpp>
+#include <eda/vhdl/util/literal_ellipsis.hpp>
 
 ...
 // for bit_string_literal

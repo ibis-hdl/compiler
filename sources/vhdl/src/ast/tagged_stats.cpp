@@ -6,7 +6,7 @@
  */
 
 #include <eda/vhdl/ast/util/tagged_stats.hpp>
-#include <eda/utils/pretty_typename.hpp>
+#include <eda/util/pretty_typename.hpp>
 
 #include <algorithm>
 

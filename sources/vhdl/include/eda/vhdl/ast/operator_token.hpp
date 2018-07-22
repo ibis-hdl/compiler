@@ -9,7 +9,7 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_OPERATOR_TOKEN_HPP_
 
 
-#include <eda/utils/compiler_support.hpp>
+#include <eda/util/compiler_support.hpp>
 #include <iosfwd>
 
 

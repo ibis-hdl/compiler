@@ -14,7 +14,7 @@
 #include <boost/exception/exception.hpp>
 #include <boost/exception/error_info.hpp>
 
-#include <eda/utils/compiler_support.hpp>
+#include <eda/util/compiler_support.hpp>
 
 
 namespace eda {

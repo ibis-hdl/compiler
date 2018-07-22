@@ -13,7 +13,7 @@
 #include <string>
 
 
-namespace eda { namespace utils {
+namespace eda { namespace util {
 
 
 template<typename T>
@@ -47,7 +47,7 @@ std::ostream& operator<<(std::ostream& os, pretty_typename<T> const& printer) {
     return printer.print(os);
 }
 
-} } // namespace eda.utils
+} } // namespace eda.util
 
 
 #endif /* SOURCES_COMMON_INCLUDE_EDA_UTILS_PRETTY_TYPENAME_HPP_ */

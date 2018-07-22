@@ -16,14 +16,14 @@
 #include <eda/vhdl/ast_adapted.hpp>
 
 #include <eda/support/boost/spirit_x3.hpp>
-#include <eda/support/boost/spirit_x3_utils.hpp>
+#include <eda/support/boost/spirit_x3_util.hpp>
 
 
 namespace eda { namespace vhdl { namespace parser { namespace detail {
 
 
 /* distinct parser directive, but too specific (due to VHDL's character set
- * use here) to move it into spirit_x3_utils header. */
+ * use here) to move it into spirit_x3_util header. */
 struct distinct_directive
 {
     template<typename Parser>
@@ -331,7 +331,7 @@ auto const shift_operator_def =
 
 /* special boost.spirit.x3 header to get rid off the annoying unused parameter
  * warnings from x3 */
-#include <eda/utils/compiler_warnings_off.hpp>
+#include <eda/util/compiler_warnings_off.hpp>
 
 BOOST_SPIRIT_DEFINE(
     binary_logical_operator,
@@ -342,7 +342,7 @@ BOOST_SPIRIT_DEFINE(
     shift_operator
 )
 
-#include <eda/utils/compiler_warnings_on.hpp>
+#include <eda/util/compiler_warnings_on.hpp>
 
 
 } } } } // namespace eda.vhdl.parser.operators
@@ -3968,7 +3968,7 @@ auto const waveform_element_def =
 
 
 
-#include <eda/utils/compiler_warnings_off.hpp>
+#include <eda/util/compiler_warnings_off.hpp>
 
 
 BOOST_SPIRIT_DEFINE(  // -- A --
@@ -4237,7 +4237,7 @@ BOOST_SPIRIT_DEFINE(  // -- W --
     , waveform_element
 )
 
-#include <eda/utils/compiler_warnings_on.hpp>
+#include <eda/util/compiler_warnings_on.hpp>
 
 
 /*

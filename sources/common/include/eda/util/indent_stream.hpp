@@ -13,7 +13,7 @@
 #include <ostream>
 
 
-namespace eda { namespace utils {
+namespace eda { namespace util {
 
 
 class indent_sbuf : public std::streambuf
@@ -108,7 +108,7 @@ std::ostream& decrease_indent(std::ostream& os)
 }
 
 
-} } // namespace eda.utils
+} } // namespace eda.util
 
 
 #endif /* SOURCES_COMMON_INCLUDE_EDA_UTILS_INDENT_STREAM_HPP_ */

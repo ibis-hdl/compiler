@@ -9,12 +9,12 @@
 #define INCLUDE_EDA_VHDL_HANDLE_ON_ERROR_HPP_
 
 
-#include <eda/utils/compiler_warnings_off.hpp>
+#include <eda/util/compiler_warnings_off.hpp>
 #include <boost/spirit/home/x3.hpp>
 #include <boost/spirit/home/x3/support/utility/error_reporting.hpp>
 #include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
 #include <boost/spirit/home/x3/auxiliary/guard.hpp> // error_handler_result
-#include <eda/utils/compiler_warnings_on.hpp>
+#include <eda/util/compiler_warnings_on.hpp>
 
 #include <eda/vhdl/parser/parser_config.hpp> // context_type
 

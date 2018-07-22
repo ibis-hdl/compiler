@@ -11,9 +11,9 @@
 
 #include <eda/support/boost/locale.hpp>
 
-#include <eda/utils/pretty_typename.hpp>
+#include <eda/util/pretty_typename.hpp>
 
-#include <eda/utils/compiler_warnings_off.hpp>  // temporary -Wno-unused
+#include <eda/util/compiler_warnings_off.hpp>  // temporary -Wno-unused
 
 
 namespace eda { namespace vhdl { namespace analyze {
@@ -38,21 +38,21 @@ struct syntax::indent_logging<T, typename std::enable_if_t<std::is_same_v<T, tag
 template<typename T>
 struct syntax::indent_logging<T, typename std::enable_if_t<std::is_same_v<T, tag::enabled>>>
 {
-    utils::indent_ostream&                          os;
+    util::indent_ostream&                           os;
     const char* const                               node_name;
 
     indent_logging(syntax const& s, const char* const node_name_)
     : os{ s.os }
     , node_name{ node_name_ }
     {
-        os << utils::increase_indent
+        os << util::increase_indent
            << "<" << node_name << ">\n";
     }
 
     ~indent_logging()
     {
         os << "</" << node_name << ">\n"
-           << utils::decrease_indent;
+           << util::decrease_indent;
     }
 };
 
@@ -69,14 +69,14 @@ using boost::locale::format;
 
 template<typename ...Types>
 syntax::result_type syntax::operator()(ast::variant<Types...> const& node) const {
-    os << "INFO: dispatch " << utils::pretty_typename<decltype(node)>{} << "\n";
+    os << "INFO: dispatch " << util::pretty_typename<decltype(node)>{} << "\n";
     return boost::apply_visitor(*this, node);
 }
 
 
 template<typename T>
 syntax::result_type syntax::operator()(std::vector<T> const& node) const {
-    os << "INFO: iterate over vector<" << utils::pretty_typename<T>{} << ", N = " << node.size() << ">\n";
+    os << "INFO: iterate over vector<" << util::pretty_typename<T>{} << ", N = " << node.size() << ">\n";
     return std::all_of(node.begin(), node.end(),
                       [&](T const& x){ return (*this)(x); } );
 }
@@ -373,7 +373,7 @@ syntax::result_type syntax::operator()(T const&) const
     indent_logging<verbose> _(*this, node_name);
 
     os << "### caught straying node of type <"
-       << utils::pretty_typename<T>{}
+       << util::pretty_typename<T>{}
        << ">\n";
 
     ++context.warning_count;
@@ -385,4 +385,4 @@ syntax::result_type syntax::operator()(T const&) const
 } } } // namespace eda.vhdl.analyze
 
 
-#include <eda/utils/compiler_warnings_on.hpp>
+#include <eda/util/compiler_warnings_on.hpp>

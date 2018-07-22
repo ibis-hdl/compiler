@@ -13,7 +13,7 @@
 #include <iostream>
 
 
-namespace eda { namespace utils {
+namespace eda { namespace util {
 
 
 /**
@@ -53,7 +53,7 @@ A<std::decay_t<T>> make_iomanip(T&& x) {
 }
 
 
-} } // namespace eda.utils
+} } // namespace eda.util
 
 
 #endif /* SOURCES_COMMON_INCLUDE_EDA_UTILS_MAKE_IOMANIP_HPP_ */

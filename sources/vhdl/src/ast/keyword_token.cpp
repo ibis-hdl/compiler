@@ -6,7 +6,7 @@
  */
 
 #include <eda/vhdl/ast/keyword_token.hpp>
-#include <eda/utils/cxx_bug_fatal.hpp>
+#include <eda/util/cxx_bug_fatal.hpp>
 #include <iostream>
 
 

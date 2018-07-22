@@ -14,7 +14,7 @@
 
 #include <boost/filesystem.hpp>
 
-#include <eda/utils/make_iomanip.hpp>
+#include <eda/util/make_iomanip.hpp>
 
 #include <iostream>
 
@@ -55,7 +55,7 @@ std::string report_diagnostic(
     std::stringstream ss;
 
     auto header = [](std::string const& title, std::size_t width) {
-    	using eda::utils::make_iomanip;
+    	using eda::util::make_iomanip;
         return make_iomanip([&title, width](std::ostream& os) {
         	std::size_t const w{ (width - title.size()) / 2 };
         	os << "\n" << std::string(w, '-') << title << std::string(w, '-') << "\n";

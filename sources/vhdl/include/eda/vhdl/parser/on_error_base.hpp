@@ -8,9 +8,9 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ON_ERROR_BASE_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ON_ERROR_BASE_HPP_
 
-#include <eda/utils/compiler_warnings_off.hpp>
+#include <eda/util/compiler_warnings_off.hpp>
 #include <boost/spirit/home/x3/support/context.hpp>
-#include <eda/utils/compiler_warnings_on.hpp>
+#include <eda/util/compiler_warnings_on.hpp>
 
 #include <eda/vhdl/parser/error_handler.hpp>
 //#include <eda/vhdl/parser/parser_config.hpp>

@@ -46,7 +46,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 #include <boost/fusion/algorithm/iteration/for_each.hpp>
 #include <boost/fusion/include/for_each.hpp>
 
-namespace x3_utils {
+namespace x3_util {
 
     namespace x3 = boost::spirit::x3;
     namespace fu = boost::fusion;
@@ -83,7 +83,7 @@ namespace parser {
 
    using x3::char_;
 
-   using x3_utils::x3_info;
+   using x3_util::x3_info;
 
 
 

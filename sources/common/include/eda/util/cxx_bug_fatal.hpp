@@ -12,10 +12,10 @@
 #include <cstdlib>
 #include <iostream>
 
-#include <eda/utils/compiler_support.hpp>
+#include <eda/util/compiler_support.hpp>
 
 
-namespace eda { namespace utils { namespace detail {
+namespace eda { namespace util { namespace detail {
 
 
 template <typename CharT>
@@ -33,7 +33,7 @@ void assertion_failed_msg(const CharT* expr, const char* msg, const char* functi
     std_quick_exit(EXIT_FAILURE);
 }
 
-} } } // namespace eda.utils.detail
+} } } // namespace eda.util.detail
 
 
 
@@ -41,7 +41,7 @@ void assertion_failed_msg(const CharT* expr, const char* msg, const char* functi
 #define cxx_assert(condition, message) \
     (cxx_expect(condition) \
     ? ((void)0)            \
-    : ::eda::utils::detail::assertion_failed_msg(#condition, message, \
+    : ::eda::util::detail::assertion_failed_msg(#condition, message, \
        __PRETTY_FUNCTION__, __FILE__, __LINE__))
 
 

@@ -8,7 +8,7 @@
 
 #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE "VHDL Syntax Test Suite"
-#include <eda/utils/compiler_warnings_off.hpp>
+#include <eda/util/compiler_warnings_off.hpp>
 #include <boost/test/included/unit_test.hpp>
-#include <eda/utils/compiler_warnings_on.hpp>
+#include <eda/util/compiler_warnings_on.hpp>
 

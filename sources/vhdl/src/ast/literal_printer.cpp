@@ -7,7 +7,7 @@
 
 #include <eda/vhdl/ast/util/literal_printer.hpp>
 #include <eda/support/boost/hana_overload.hpp>
-#include <eda/utils/cxx_bug_fatal.hpp>
+#include <eda/util/cxx_bug_fatal.hpp>
 
 #include <boost/iterator/filter_iterator.hpp>
 

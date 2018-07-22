@@ -9,7 +9,7 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_POSITION_CACHE_HPP_
 
 #include <eda/vhdl/ast/util/position_tagged.hpp>
-#include <eda/utils/cxx_bug_fatal.hpp>
+#include <eda/util/cxx_bug_fatal.hpp>
 
 #include <boost/range/iterator_range.hpp>
 #include <vector>
@@ -17,7 +17,7 @@
 #include <optional>
 #include <type_traits>
 
-#include <eda/utils/pretty_typename.hpp>
+#include <eda/util/pretty_typename.hpp>
 
 
 namespace eda { namespace vhdl { namespace parser {
@@ -52,7 +52,7 @@ public:
     {
         if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
             std::cout << "position_cache::annotate<"
-                      << utils::pretty_typename<NodeT>{}
+                      << util::pretty_typename<NodeT>{}
                       << "> with ID = "
                       << positions.size() << "\n";
 
@@ -74,13 +74,13 @@ public:
     {
         if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
             std::cout << "position_of<tagged>("
-                      << utils::pretty_typename<NodeT>{}
+                      << util::pretty_typename<NodeT>{}
                       << ")\n";
             return positions[node.pos_id];
         }
         else {
             std::cout << "position_of<**NOT**tagged>("
-                      << utils::pretty_typename<NodeT>{}
+                      << util::pretty_typename<NodeT>{}
                       << ")\n";
             return range_type{};
         }
@@ -92,7 +92,7 @@ public:
     {
         if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
             std::cout << "position_of<tagged>("
-                      << utils::pretty_typename<NodeT>{}
+                      << util::pretty_typename<NodeT>{}
                       << ")\n";
             // assert(node.pos_id != ast::position_tagged::MAX_ID)
             // assert(node.pos_id <= positions.size());
@@ -101,7 +101,7 @@ public:
         }
         else {
             std::cout << "position_of<**NOT**tagged>("
-                      << utils::pretty_typename<NodeT>{}
+                      << util::pretty_typename<NodeT>{}
                       << ")\n";
             return {};
         }

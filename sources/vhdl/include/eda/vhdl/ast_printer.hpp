@@ -10,7 +10,7 @@
 
 
 #include <eda/vhdl/ast.hpp>
-#include <eda/utils/indent_stream.hpp>
+#include <eda/util/indent_stream.hpp>
 
 
 namespace eda { namespace vhdl { namespace ast {
@@ -18,7 +18,7 @@ namespace eda { namespace vhdl { namespace ast {
 
 class printer
 {
-    utils::indent_ostream                           os;
+    util::indent_ostream                            os;
 
     struct scope_printer;
 
