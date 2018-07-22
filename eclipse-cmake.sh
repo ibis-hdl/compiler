@@ -10,6 +10,9 @@ CMAKE_BIN=cmake
 CPU_COUNT=$(grep ^processor /proc/cpuinfo | wc -l)
 CPU_COUNT=2 # override for my low memory computer
 
+# Debug, Release, RelWithDebInfo, MinSizeRel
+BUILD_TYPE=RelWithDebInfo
+
 ${CMAKE_BIN} ${EDA_SRC_DIR} \
         -G "Eclipse CDT4 - Unix Makefiles" \
         -DCMAKE_ECLIPSE_GENERATE_SOURCE_PROJECT=TRUE \
@@ -17,7 +20,7 @@ ${CMAKE_BIN} ${EDA_SRC_DIR} \
         -DCMAKE_ECLIPSE_MAKE_ARGUMENTS=-j${CPU_COUNT} \
         -DCMAKE_RULE_MESSAGES:BOOL=OFF \
         -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON \
-        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
         -DCMAKE_INSTALL_PREFIX=stage \
         -DBUILD_SHARED_LIBS:BOOL=OFF 
         

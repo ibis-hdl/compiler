@@ -6,6 +6,10 @@ rem  https://stackoverflow.com/questions/3827567/how-to-get-the-path-of-the-batc
 set SOURCE_PATH=%~dp0
 set WORK_PATH=%cd%
 
+rem Debug, Release, RelWithDebInfo, MinSizeRel
+BUILD_TYPE=Release
+
+
 echo ##
 echo ## Configure Build in %WORK_PATH%
 echo ##
@@ -17,7 +21,7 @@ cmake -G "Eclipse CDT4 - MinGW Makefiles" ^
         -DCMAKE_MAKE_PROGRAM=mingw32-make ^
         -DCMAKE_RULE_MESSAGES:BOOL=OFF ^
         -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ^
-        -DCMAKE_BUILD_TYPE=Release ^
+        -DCMAKE_BUILD_TYPE=%BUILD_TYPE% ^
         -DCMAKE_INSTALL_PREFIX=stage ^
         -DBUILD_SHARED_LIBS:BOOL=OFF ^
         %SOURCE_PATH%
