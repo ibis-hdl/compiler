@@ -189,7 +189,7 @@ void error_handler<Iterator>::print_file_line(iterator_type const& iter) const
 
 
     os << format(translate(
-          "In file {1}, line {2}: "
+          "In file {1}, line {2}:\n"
           ))
           % file_name()
           % line_number(iter)

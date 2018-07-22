@@ -33,18 +33,18 @@ template <
 >
 struct testing_parser
 {
-    typedef AttrType                    attribute_type;
+    typedef AttrType                                attribute_type;
 
     template <typename ParserType>
     std::tuple<bool, std::string>
     operator()(std::string const &input, ParserType const &parser_rule,
                fs::path const &filename = "", bool full_match = true)
     {
-        attribute_type  attr;
-        btt::output_test_stream output;
+        attribute_type                              attr;
+        btt::output_test_stream                     output;
 
         parser::position_cache<parser::iterator_type> position_cache(input);
-        parser::error_handler_type error_handler(std::cerr, position_cache,
+        parser::error_handler_type error_handler(output, position_cache,
                                                  filename.string() + ".input");
 
         auto const parser =
