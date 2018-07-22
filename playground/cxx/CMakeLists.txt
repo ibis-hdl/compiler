@@ -16,3 +16,4 @@ add_executable(cxx_pow_constexpr             EXCLUDE_FROM_ALL cxx_pow_constexpr.
 add_executable(cxx_string_view_range         EXCLUDE_FROM_ALL cxx_string_view_range.cpp)
 add_executable(cxx_annotation_cache          EXCLUDE_FROM_ALL cxx_annotation_cache.cpp)
 add_executable(cxx_ast_tagged_stats          EXCLUDE_FROM_ALL cxx_ast_tagged_stats.cpp)
+add_executable(cxx_color_output              EXCLUDE_FROM_ALL cxx_color_output.cpp)
