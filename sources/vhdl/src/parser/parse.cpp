@@ -20,7 +20,7 @@ namespace eda { namespace vhdl { namespace parser {
 
 
 bool parse::operator()(std::string const &input, ast::design_file& design_file,
-                        fs::path const &filename)
+		               std::string const &filename)
 {
     using vhdl::parser::iterator_type;
 
@@ -60,7 +60,7 @@ bool parse::operator()(std::string const &input, ast::design_file& design_file,
 
             std::string const message{
                 (format(translate("Source file '{1}' failed to parse!"))
-                 % filename.string()).str()};
+                 % filename).str()};
 
             error_handler(iter, message);
         }
@@ -86,7 +86,7 @@ bool parse::operator()(std::string const &input, ast::design_file& design_file,
 
 
 template<typename ExceptionT>
-std::string parse::make_exception_description(fs::path const &filename,
+std::string parse::make_exception_description(std::string const &filename,
                                               ExceptionT const& exception) const
 {
     using boost::locale::format;
@@ -106,7 +106,7 @@ std::string parse::make_exception_description(fs::path const &filename,
         "Caught exception '{1}' during parsing file '{2}'"
         ))
         % what
-        % filename.string()
+        % filename
         ).str();
 };
 

@@ -13,8 +13,6 @@
 #include <eda/vhdl/ast_fwd.hpp>
 #include <eda/vhdl/parser/parser_config.hpp>
 
-#include <boost/filesystem/path.hpp>
-
 #include <string>
 #include <iosfwd>
 
@@ -36,11 +34,11 @@ public:
     { }
 
     bool operator()(std::string const &input, ast::design_file& design_file,
-                    fs::path const &filename = "") /* const */;
+                    std::string const &filename = "") /* const */;
 
 private:
     template <typename ExceptionT>
-    std::string make_exception_description(fs::path const &filename,
+    std::string make_exception_description(std::string const &filename,
                                            ExceptionT const& exception) const;
 };
 
