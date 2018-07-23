@@ -111,8 +111,8 @@ struct tagged_stats
 
     void print_map(tag_data::map_type& map) const {
         auto const sorted = data.sort(map);
-        for (auto const& node : sorted) {
-            std::cout << node.first << ": " << node.second << "\n";
+        for (auto const& [node, count] : sorted) {
+            std::cout << node << ": " << count << "\n";
         }
     }
 
