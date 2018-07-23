@@ -24,29 +24,6 @@
 - [Poco](https://pocoproject.org/docs/Poco.ColorConsoleChannel.html)
 #endif
 
-#include <iostream>
-#include <array>
-#include <iterator>
-#include <algorithm>
-#include <cassert>
-
-
-// http://ascii-table.com/ansi-escape-sequences.php
-enum class text {
-    Off, Bold, Underscore, Blink, Reverse, Concealed,
-    COUNT
-};
-
-enum class color_attribute {
-    Black, Red, Green, Yellow, Blue, Magenta, Cyan, White,
-    COUNT
-};
-
-enum class color_target {
-    foreground = 30,
-    background = 40
-};
-
 /*
  * https://groups.google.com/a/isocpp.org/forum/#!topic/std-discussion/xya6RKjgbY4
  * https://ideone.com/s0ciUW
@@ -54,9 +31,50 @@ enum class color_target {
  * Alternative approach from [IRC C++-basic/SlashLife](
  *  https://wandbox.org/permlink/TzgTah6w3KBaVaOj)
  */
+
+#include <iostream>
+#include <array>
+#include <iterator>
+#include <algorithm>
+#include <cassert>
+
+namespace ansii {
+// http://ascii-table.com/ansi-escape-sequences.php
+enum class attribute : uint8_t {
+    // Text attribute
+    Attributes_Off = 0,
+    Text_Bold = 1,
+    Text_Underscore = 4,
+    Text_Blink = 5,
+    Text_Reverse = 7,
+    Text_Concealed = 8,
+    // Foreground colors
+    Foreground_Black = 30,
+    Foreground_Red = 31,
+    Foreground_Green = 32,
+    Foreground_Yellow = 33,
+    Foreground_Blue = 34,
+    Foreground_Magenta = 35,
+    Foreground_Cyan = 36,
+    Foreground_White = 37,
+    // Background colors
+    Background_Black = 40,
+    Background_Red = 41,
+    Background_Green = 42,
+    Background_Yellow = 43,
+    Background_Blue = 44,
+    Background_Magenta = 45,
+    Background_Cyan = 46,
+    Background_White = 47,
+};
+} // namespace ansii
+
+/*
+ * https://groups.google.com/a/isocpp.org/forum/#!topic/std-discussion/xya6RKjgbY4
+ */
 template<typename value_type, std::size_t SIZE>
 class non_aggregate_array
-    : public std::array< value_type, SIZE >
+    : public std::array<value_type, SIZE>
 {
     template<std::size_t ... N>
     non_aggregate_array(std::initializer_list<value_type> il, std::index_sequence<N ...> )
@@ -65,7 +83,7 @@ class non_aggregate_array
     { }
 
 public:
-    non_aggregate_array(std::initializer_list< value_type > il)
+    non_aggregate_array(std::initializer_list<value_type> il)
     : non_aggregate_array(il, std::make_index_sequence<SIZE>{})
     { }
 
@@ -120,9 +138,9 @@ struct basic_printer
        return *this;
     }
 
-    basic_printer& operator|=(code_type code)
+    basic_printer& operator|(ansii::attribute code)
     {
-       push_back(code);
+       push_back(static_cast<code_type>(code));
        return *this;
     }
 
@@ -145,23 +163,58 @@ std::ostream& operator<<(std::ostream& os, basic_printer const& printer) {
 }
 
 
+template<ansii::attribute attribute> // ToDO: variadic with push_back()
+struct
+basic_target
+{
+    basic_target()
+    : printer{ static_cast<basic_printer::code_type>(attribute) }
+    { }
+
+    std::ostream& print(std::ostream& os) const {
+       return printer.print(os);
+    }
+
+    basic_printer                                   printer;
+};
+
+template<ansii::attribute attribute>
+std::ostream& operator<<(std::ostream& os, basic_target<attribute> const& printer) {
+    return printer.print(os);
+}
+
+
+namespace text {
+    static auto const Bold = basic_target<ansii::attribute::Text_Bold> {};
+}
+
+namespace fg {
+    static auto const Red = basic_target<ansii::attribute::Foreground_Red> {};
+}
+
+namespace bg {
+    static auto const Yellow = basic_target<ansii::attribute::Background_Yellow> {};
+}
+
+namespace ansii {
+    static auto const Off = basic_target<ansii::attribute::Attributes_Off> {};
+}
+
+
 int main()
 {
-    basic_printer reset{ 0 };
+    // target test
+    std::cout << fg::Red << "Hello" << bg::Yellow << "World!\n" << ansii::Off;
 
-    basic_printer red_on_white{ 31 };
-    red_on_white.push_back(47);
-    std::cout << "Hello " << red_on_white << "World, " << "Yeah"<< reset << "\n";
+    auto const emphase = basic_target<ansii::attribute::Attributes_Off> { ansii::attribute::Text_Bold, ansii::attribute::Foreground_Red };
+    std::cout << emphase << "Hello World!\n" << ansii::Off;
 
-    basic_printer fg_yellow{ 33 };
-    basic_printer bg_red{ 41 };
+    // How To ???
+    //auto const emphasize  = basic_target { ansii::attribute::Text_Bold, ansii::attribute::Foreground_Red };
+    //std::cout << emphasize  << "Hello World!\n" << ansii::Off;
 
-    std::cout << "Hello " << (fg_yellow | bg_red) << "World, " << "Yeah"<< reset << "\n";
+    // How To ???
+    //auto const highlight = basic_target<ansii::attribute::Text_Bold, ansii::attribute::Foreground_Red> { };
+    //std::cout << highlight << "Hello World!\n" << ansii::Off;
 
-    basic_printer merged{ 1 };
-    merged |= 37;
-    merged |= 40;
-    merged |= 40;
-
-    std::cout << "Hello " << merged << "World, " << "Yeah"<< reset << "\n";
 }
