@@ -7,7 +7,7 @@ set SOURCE_PATH=%~dp0
 set WORK_PATH=%cd%
 
 rem Debug, Release, RelWithDebInfo, MinSizeRel
-BUILD_TYPE=Release
+set BUILD_TYPE=Release
 
 
 echo ##
