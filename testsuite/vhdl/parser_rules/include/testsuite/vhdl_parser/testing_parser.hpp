@@ -16,16 +16,10 @@
 
 #include <eda/vhdl/ast_printer.hpp>
 
+#include <testsuite/namespace_alias.hpp>
+
 
 namespace testsuite { namespace vhdl_parser { namespace util {
-
-
-namespace x3 = boost::spirit::x3;
-namespace btt = boost::test_tools;
-namespace fs  = boost::filesystem;
-
-namespace parser = eda::vhdl::parser;
-namespace ast    = eda::vhdl::ast;
 
 
 template <
