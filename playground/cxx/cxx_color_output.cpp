@@ -39,6 +39,7 @@
 #include <cassert>
 
 namespace ansii {
+
 // http://ascii-table.com/ansi-escape-sequences.php
 enum class attribute : uint8_t {
     // Text attribute
@@ -67,6 +68,7 @@ enum class attribute : uint8_t {
     Background_Cyan = 46,
     Background_White = 47,
 };
+
 } // namespace ansii
 
 /*
@@ -204,10 +206,11 @@ namespace ansii {
 int main()
 {
     // target test
-    std::cout << fg::Red << "Hello" << bg::Yellow << "World!\n" << ansii::Off;
+    std::cout << fg::Red << "Hello" << bg::Yellow << "World!" << ansii::Off << "\n";
 
-    auto const emphase = basic_target<ansii::attribute::Attributes_Off> { ansii::attribute::Text_Bold, ansii::attribute::Foreground_Red };
-    std::cout << emphase << "Hello World!\n" << ansii::Off;
+    // How To ???
+    //auto const emphase = basic_target<ansii::attribute::Attributes_Off> { ansii::attribute::Text_Bold, ansii::attribute::Foreground_Red };
+    //std::cout << emphase << "Hello World!\n" << ansii::Off;
 
     // How To ???
     //auto const emphasize  = basic_target { ansii::attribute::Text_Bold, ansii::attribute::Foreground_Red };
