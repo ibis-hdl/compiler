@@ -13,6 +13,7 @@ set(TEST_COMMON_SOURCES
     src/common/rules.cpp
     src/common/test_vhdl_parser.cpp
     src/common/testing_util.cpp
+    src/common/test_observer_fixture.cpp
 )
 
 set(PARSERTEST_SOURCES#_DEV

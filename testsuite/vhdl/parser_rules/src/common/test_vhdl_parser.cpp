@@ -11,3 +11,9 @@
 #include <boost/test/included/unit_test.hpp>
 #include <eda/util/compiler_warnings_on.hpp>
 
+#include <testsuite/vhdl_parser/test_observer_fixture.hpp>
+
+/* Directly use of 'testsuite::...::test_observer_fixture' doesn't compile */
+using test_observer_fixture = testsuite::vhdl_parser::util::test_observer_fixture;
+
+BOOST_TEST_GLOBAL_FIXTURE(test_observer_fixture);
