@@ -16,6 +16,7 @@
 //#include <eda/vhdl/parser/parser_config.hpp>
 
 #include <type_traits>
+#include <map>
 
 #include <eda/namespace_alias.hpp>
 

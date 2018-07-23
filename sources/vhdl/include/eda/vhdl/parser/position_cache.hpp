@@ -17,7 +17,9 @@
 #include <optional>
 #include <type_traits>
 
-#include <eda/util/pretty_typename.hpp>
+#include <boost/core/ignore_unused.hpp>
+
+//#include <eda/util/pretty_typename.hpp>
 
 
 namespace eda { namespace vhdl { namespace parser {
@@ -51,10 +53,10 @@ public:
     void annotate(NodeT& node, iterator_type first, iterator_type last)
     {
         if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
-            std::cout << "position_cache::annotate<"
-                      << util::pretty_typename<NodeT>{}
-                      << "> with ID = "
-                      << positions.size() << "\n";
+//            std::cout << "position_cache::annotate<"
+//                      << util::pretty_typename<NodeT>{}
+//                      << "> with ID = "
+//                      << positions.size() << "\n";
 
             /* ToDo: maybe better throw range_exception since it's an implementation
              * limitation. */
@@ -64,7 +66,11 @@ public:
             node.pos_id = positions.size();
             positions.emplace_back( first, last );
         }
-        else { /* ignore */ }
+        else { // ignore
+        	// ... but make gcc happy
+        	boost::ignore_unused(first);
+        	boost::ignore_unused(last);
+        }
     }
 
 public:
@@ -73,15 +79,15 @@ public:
     range_type position_of(NodeT const& node) const
     {
         if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
-            std::cout << "position_of<tagged>("
-                      << util::pretty_typename<NodeT>{}
-                      << ")\n";
+//            std::cout << "position_of<tagged>("
+//                      << util::pretty_typename<NodeT>{}
+//                      << ")\n";
             return positions[node.pos_id];
         }
         else {
-            std::cout << "position_of<**NOT**tagged>("
-                      << util::pretty_typename<NodeT>{}
-                      << ")\n";
+//            std::cout << "position_of<**NOT**tagged>("
+//                      << util::pretty_typename<NodeT>{}
+//                      << ")\n";
             return range_type{};
         }
     }
