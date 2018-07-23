@@ -28,8 +28,6 @@ namespace eda { namespace vhdl { namespace parser {
  */
 struct on_error_base
 {
-    on_error_base();
-
     template<typename IteratorT, typename ExceptionT, typename ContextT>
     x3::error_handler_result
     on_error(IteratorT& /* first */, IteratorT const& /* last */,
@@ -49,7 +47,9 @@ struct on_error_base
 
     std::string make_error_description(std::string which);
 
-    std::map<std::string, std::string> const        ruleid_map;
+    typedef std::map<std::string, std::string>		rule_map_type;
+
+    static const rule_map_type						ruleid_map;
 };
 
 

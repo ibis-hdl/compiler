@@ -20,8 +20,7 @@
 namespace eda { namespace vhdl { namespace parser {
 
 
-on_error_base::on_error_base()
-: ruleid_map {
+on_error_base::rule_map_type const on_error_base::ruleid_map {
     /* Spirit.X3's error handling embraces the rule with apostrophes, at last for
      * semicolon.  */
     { "'abstract_literal'", "Abstract Literal" },
@@ -278,8 +277,7 @@ on_error_base::on_error_base()
     { "']", "Closing ']' Square Bracket" },
     { "'(", "Opening '(' Brace/Parentheses" },
     { "'(", "Closing ')' Brace/Parentheses" },
-}
-{ }
+};
 
 
 std::string on_error_base::make_error_description(std::string which)
@@ -296,7 +294,7 @@ std::string on_error_base::make_error_description(std::string which)
         std::cerr << format(translate(
             "WARNING: failed to lookup '{1}' at parser's "
             "expectation symbol table\n"
-            "Note, end Users can ignore the warning\n"
+            "Note, end users can ignore the warning\n"
             ))
             % which;
     }
