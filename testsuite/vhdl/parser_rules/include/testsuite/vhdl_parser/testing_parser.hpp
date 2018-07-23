@@ -45,7 +45,7 @@ struct testing_parser
 
         parser::position_cache<parser::iterator_type> position_cache(input);
         parser::error_handler_type error_handler(output, position_cache,
-                                                 filename.string() + ".input");
+                                                 filename.generic_string() + ".input");
 
         auto const parser =
             x3::with<parser::error_handler_tag>(std::ref(error_handler)) [
