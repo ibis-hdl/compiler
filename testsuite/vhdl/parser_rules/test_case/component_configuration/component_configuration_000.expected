@@ -24,28 +24,30 @@
         )
       )
     )
-    (generic map
-      (association_element
-        (formal_part
-          (formal_designator<v>
-            (name<v>
-              (identifier
-                PropTime
+    (generic_map_aspect
+      (association_list
+        (association_element
+          (formal_part
+            (formal_designator<v>
+              (name<v>
+                (identifier
+                  PropTime
+                )
               )
             )
           )
-        )
-        (actual_part<v>
-          (actual_designator<v>
-            (expression
-              (relation
-                (shift_expression
-                  (simple_expression
-                    (term
-                      (primary<v>
-                        (name<v>
-                          (identifier
-                            TimeH
+          (actual_part<v>
+            (actual_designator<v>
+              (expression
+                (relation
+                  (shift_expression
+                    (simple_expression
+                      (term
+                        (primary<v>
+                          (name<v>
+                            (identifier
+                              TimeH
+                            )
                           )
                         )
                       )
@@ -58,28 +60,30 @@
         )
       )
     )
-    (port map
-      (association_element
-        (formal_part
-          (formal_designator<v>
-            (name<v>
-              (identifier
-                IN1
+    (port_map_aspect
+      (association_list
+        (association_element
+          (formal_part
+            (formal_designator<v>
+              (name<v>
+                (identifier
+                  IN1
+                )
               )
             )
           )
-        )
-        (actual_part<v>
-          (actual_designator<v>
-            (expression
-              (relation
-                (shift_expression
-                  (simple_expression
-                    (term
-                      (primary<v>
-                        (name<v>
-                          (identifier
-                            IN_A
+          (actual_part<v>
+            (actual_designator<v>
+              (expression
+                (relation
+                  (shift_expression
+                    (simple_expression
+                      (term
+                        (primary<v>
+                          (name<v>
+                            (identifier
+                              IN_A
+                            )
                           )
                         )
                       )
@@ -89,29 +93,29 @@
               )
             )
           )
-        )
-      ),
-      (association_element
-        (formal_part
-          (formal_designator<v>
-            (name<v>
-              (identifier
-                OUT1
+        ),
+        (association_element
+          (formal_part
+            (formal_designator<v>
+              (name<v>
+                (identifier
+                  OUT1
+                )
               )
             )
           )
-        )
-        (actual_part<v>
-          (actual_designator<v>
-            (expression
-              (relation
-                (shift_expression
-                  (simple_expression
-                    (term
-                      (primary<v>
-                        (name<v>
-                          (identifier
-                            OUT_A
+          (actual_part<v>
+            (actual_designator<v>
+              (expression
+                (relation
+                  (shift_expression
+                    (simple_expression
+                      (term
+                        (primary<v>
+                          (name<v>
+                            (identifier
+                              OUT_A
+                            )
                           )
                         )
                       )

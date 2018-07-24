@@ -11,25 +11,27 @@
       )
     )
   )
-  (generic map
-    (association_element
-      (actual_part<v>
-        (actual_designator<v>
-          (expression
-            (relation
-              (shift_expression
-                (simple_expression
-                  (term
-                    (primary<v>
-                      (literal<v>
-                        (numeric_literal<v>
-                          (physical_literal
-                            (abstract_literal<v>
-                              (decimal_literal
-                                literal: 3, type: integer
-                              )
-                            ),
-                            (unit_name: ns)
+  (generic_map_aspect
+    (association_list
+      (association_element
+        (actual_part<v>
+          (actual_designator<v>
+            (expression
+              (relation
+                (shift_expression
+                  (simple_expression
+                    (term
+                      (primary<v>
+                        (literal<v>
+                          (numeric_literal<v>
+                            (physical_literal
+                              (abstract_literal<v>
+                                (decimal_literal
+                                  literal: 3, type: integer
+                                )
+                              ),
+                              (unit_name: ns)
+                            )
                           )
                         )
                       )
@@ -40,26 +42,26 @@
             )
           )
         )
-      )
-    ),
-    (association_element
-      (actual_part<v>
-        (actual_designator<v>
-          (expression
-            (relation
-              (shift_expression
-                (simple_expression
-                  (term
-                    (primary<v>
-                      (literal<v>
-                        (numeric_literal<v>
-                          (physical_literal
-                            (abstract_literal<v>
-                              (decimal_literal
-                                literal: 3, type: integer
-                              )
-                            ),
-                            (unit_name: ns)
+      ),
+      (association_element
+        (actual_part<v>
+          (actual_designator<v>
+            (expression
+              (relation
+                (shift_expression
+                  (simple_expression
+                    (term
+                      (primary<v>
+                        (literal<v>
+                          (numeric_literal<v>
+                            (physical_literal
+                              (abstract_literal<v>
+                                (decimal_literal
+                                  literal: 3, type: integer
+                                )
+                              ),
+                              (unit_name: ns)
+                            )
                           )
                         )
                       )
@@ -73,28 +75,30 @@
       )
     )
   )
-  (port map
-    (association_element
-      (formal_part
-        (formal_designator<v>
-          (name<v>
-            (identifier
-              I1
+  (port_map_aspect
+    (association_list
+      (association_element
+        (formal_part
+          (formal_designator<v>
+            (name<v>
+              (identifier
+                I1
+              )
             )
           )
         )
-      )
-      (actual_part<v>
-        (actual_designator<v>
-          (expression
-            (relation
-              (shift_expression
-                (simple_expression
-                  (term
-                    (primary<v>
-                      (name<v>
-                        (identifier
-                          I1
+        (actual_part<v>
+          (actual_designator<v>
+            (expression
+              (relation
+                (shift_expression
+                  (simple_expression
+                    (term
+                      (primary<v>
+                        (name<v>
+                          (identifier
+                            I1
+                          )
                         )
                       )
                     )
@@ -104,29 +108,29 @@
             )
           )
         )
-      )
-    ),
-    (association_element
-      (formal_part
-        (formal_designator<v>
-          (name<v>
-            (identifier
-              I2
+      ),
+      (association_element
+        (formal_part
+          (formal_designator<v>
+            (name<v>
+              (identifier
+                I2
+              )
             )
           )
         )
-      )
-      (actual_part<v>
-        (actual_designator<v>
-          (expression
-            (relation
-              (shift_expression
-                (simple_expression
-                  (term
-                    (primary<v>
-                      (name<v>
-                        (identifier
-                          I2
+        (actual_part<v>
+          (actual_designator<v>
+            (expression
+              (relation
+                (shift_expression
+                  (simple_expression
+                    (term
+                      (primary<v>
+                        (name<v>
+                          (identifier
+                            I2
+                          )
                         )
                       )
                     )
@@ -136,29 +140,29 @@
             )
           )
         )
-      )
-    ),
-    (association_element
-      (formal_part
-        (formal_designator<v>
-          (name<v>
-            (identifier
-              O
+      ),
+      (association_element
+        (formal_part
+          (formal_designator<v>
+            (name<v>
+              (identifier
+                O
+              )
             )
           )
         )
-      )
-      (actual_part<v>
-        (actual_designator<v>
-          (expression
-            (relation
-              (shift_expression
-                (simple_expression
-                  (term
-                    (primary<v>
-                      (name<v>
-                        (identifier
-                          O
+        (actual_part<v>
+          (actual_designator<v>
+            (expression
+              (relation
+                (shift_expression
+                  (simple_expression
+                    (term
+                      (primary<v>
+                        (name<v>
+                          (identifier
+                            O
+                          )
                         )
                       )
                     )

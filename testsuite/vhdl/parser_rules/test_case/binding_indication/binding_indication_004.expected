@@ -11,4 +11,14 @@
       )
     )
   )
+  (generic_map_aspect
+    (association_list
+      ()
+    )
+  )
+  (port_map_aspect
+    (association_list
+      ()
+    )
+  )
 )

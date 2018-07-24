@@ -289,12 +289,17 @@ void printer::operator()(association_list const &node)
     static char const symbol[]{ "association_list" };
     symbol_scope<association_list> _(*this, symbol);
 
-    auto const N = node.size() - 1;
-    unsigned i = 0;
-    for(auto const& association_element : node) {
-        (*this)(association_element);
-        if(i++ != N) {
-            os << ",\n";
+    if(node.empty()) {
+        os << "()";
+    }
+    else {
+        auto const N = node.size() - 1;
+        unsigned i = 0;
+        for(auto const& association_element : node) {
+            (*this)(association_element);
+            if(i++ != N) {
+                os << ",\n";
+            }
         }
     }
 }
@@ -389,40 +394,14 @@ void printer::operator()(binding_indication const &node)
     static char const symbol[]{ "binding_indication" };
     symbol_scope<binding_indication> _(*this, symbol);
 
-    auto const print_assoc = [this](ast::association_list const& list) {
-        auto const N = list.size() - 1;
-        unsigned i = 0;
-        for(auto const& association_element : list) {
-            (*this)(association_element);
-            if(i++ != N) {
-                os << ",\n";
-            }
-        }
-    };
-
     if(node.entity_aspect) {
         (*this)(*node.entity_aspect);
+        os << "\n";
     }
 
-    bool generic_map_association = false;
-    if(node.generic_map_aspect.association_list.size() > 0) {
-        static char const symbol[]{ "generic map" };
-
-        if(node.entity_aspect) { os << "\n"; }
-        symbol_scope<ast::association_list> _(*this, symbol);
-
-        print_assoc(node.generic_map_aspect.association_list);
-        generic_map_association = true;
-    }
-
-    if(node.port_map_aspect.association_list.size() > 0) {
-        static char const symbol[]{ "port map" };
-
-        if(node.entity_aspect || generic_map_association) { os << "\n"; }
-        symbol_scope<ast::association_list> _(*this, symbol);
-
-        print_assoc(node.port_map_aspect.association_list);
-    }
+    (*this)(node.generic_map_aspect);
+    os << "\n";
+    (*this)(node.port_map_aspect);
 }
 
 
