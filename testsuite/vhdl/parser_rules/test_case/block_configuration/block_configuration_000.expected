@@ -4,21 +4,26 @@
       block_statement_label
     )
   )
-  (use_clause
-    (name<v>
-      (identifier
-        work
-      )
-    ).
-    (name<v>
-      (identifier
-        selected_name
-      )
-    ).
-    (suffix<v>
-      (keyword
-        ALL
+  (use_clause*
+    (use_clause
+      (name<v>
+        (identifier
+          work
+        )
+      ).
+      (name<v>
+        (identifier
+          selected_name
+        )
+      ).
+      (suffix<v>
+        (keyword
+          ALL
+        )
       )
     )
+  )
+  (configuration_item*
+    ()
   )
 )

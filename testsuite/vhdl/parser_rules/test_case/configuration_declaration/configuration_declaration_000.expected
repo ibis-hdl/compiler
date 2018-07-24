@@ -13,41 +13,46 @@
         STRUCTURE
       )
     )
-    (configuration_item<v>
-      (component_configuration
-        (component_specification
-          (instantiation_list<v>
-            (identifier
-              G2
+    (use_clause*
+      ()
+    )
+    (configuration_item*
+      (configuration_item<v>
+        (component_configuration
+          (component_specification
+            (instantiation_list<v>
+              (identifier
+                G2
+              )
+            )
+            (name<v>
+              (identifier
+                AOI
+              )
             )
           )
-          (name<v>
-            (identifier
-              AOI
-            )
-          )
-        )
-        (binding_indication
-          (entity_aspect<v>
-            (entity_aspect::entity
-              (name<v>
+          (binding_indication
+            (entity_aspect<v>
+              (entity_aspect::entity
+                (name<v>
+                  (identifier
+                    work_AOI
+                  )
+                )
                 (identifier
-                  work_AOI
+                  v1
                 )
               )
-              (identifier
-                v1
+            )
+            (generic_map_aspect
+              (association_list
+                ()
               )
             )
-          )
-          (generic_map_aspect
-            (association_list
-              ()
-            )
-          )
-          (port_map_aspect
-            (association_list
-              ()
+            (port_map_aspect
+              (association_list
+                ()
+              )
             )
           )
         )

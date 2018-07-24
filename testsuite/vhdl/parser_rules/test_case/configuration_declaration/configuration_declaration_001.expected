@@ -13,56 +13,61 @@
         STRUCT_T
       )
     )
-    (configuration_item<v>
-      (component_configuration
-        (component_specification
-          (instantiation_list<v>
-            (identifier
-              LH
-            )
-          )
-          (name<v>
-            (identifier
-              INV_COMP
-            )
-          )
-        )
-        (binding_indication
-          (entity_aspect<v>
-            (entity_aspect::entity
-              (name<v>
-                (identifier
-                  WORK_INVERTER
-                )
-              )
+    (use_clause*
+      ()
+    )
+    (configuration_item*
+      (configuration_item<v>
+        (component_configuration
+          (component_specification
+            (instantiation_list<v>
               (identifier
-                STRUCT_I
+                LH
+              )
+            )
+            (name<v>
+              (identifier
+                INV_COMP
               )
             )
           )
-          (generic_map_aspect
-            (association_list
-              (association_element
-                (formal_part
-                  (formal_designator<v>
-                    (name<v>
-                      (identifier
-                        PropTime
+          (binding_indication
+            (entity_aspect<v>
+              (entity_aspect::entity
+                (name<v>
+                  (identifier
+                    WORK_INVERTER
+                  )
+                )
+                (identifier
+                  STRUCT_I
+                )
+              )
+            )
+            (generic_map_aspect
+              (association_list
+                (association_element
+                  (formal_part
+                    (formal_designator<v>
+                      (name<v>
+                        (identifier
+                          PropTime
+                        )
                       )
                     )
                   )
-                )
-                (actual_part<v>
-                  (actual_designator<v>
-                    (expression
-                      (relation
-                        (shift_expression
-                          (simple_expression
-                            (term
-                              (primary<v>
-                                (name<v>
-                                  (identifier
-                                    TimeH
+                  (actual_part<v>
+                    (actual_designator<v>
+                      (expression
+                        (relation
+                          (shift_expression
+                            (simple_expression
+                              (term
+                                (primary<v>
+                                  (name<v>
+                                    (identifier
+                                      TimeH
+                                    )
                                   )
                                 )
                               )
@@ -75,30 +80,30 @@
                 )
               )
             )
-          )
-          (port_map_aspect
-            (association_list
-              (association_element
-                (formal_part
-                  (formal_designator<v>
-                    (name<v>
-                      (identifier
-                        IN1
+            (port_map_aspect
+              (association_list
+                (association_element
+                  (formal_part
+                    (formal_designator<v>
+                      (name<v>
+                        (identifier
+                          IN1
+                        )
                       )
                     )
                   )
-                )
-                (actual_part<v>
-                  (actual_designator<v>
-                    (expression
-                      (relation
-                        (shift_expression
-                          (simple_expression
-                            (term
-                              (primary<v>
-                                (name<v>
-                                  (identifier
-                                    IN_A
+                  (actual_part<v>
+                    (actual_designator<v>
+                      (expression
+                        (relation
+                          (shift_expression
+                            (simple_expression
+                              (term
+                                (primary<v>
+                                  (name<v>
+                                    (identifier
+                                      IN_A
+                                    )
                                   )
                                 )
                               )
@@ -108,29 +113,29 @@
                       )
                     )
                   )
-                )
-              ),
-              (association_element
-                (formal_part
-                  (formal_designator<v>
-                    (name<v>
-                      (identifier
-                        OUT1
+                ),
+                (association_element
+                  (formal_part
+                    (formal_designator<v>
+                      (name<v>
+                        (identifier
+                          OUT1
+                        )
                       )
                     )
                   )
-                )
-                (actual_part<v>
-                  (actual_designator<v>
-                    (expression
-                      (relation
-                        (shift_expression
-                          (simple_expression
-                            (term
-                              (primary<v>
-                                (name<v>
-                                  (identifier
-                                    OUT_A
+                  (actual_part<v>
+                    (actual_designator<v>
+                      (expression
+                        (relation
+                          (shift_expression
+                            (simple_expression
+                              (term
+                                (primary<v>
+                                  (name<v>
+                                    (identifier
+                                      OUT_A
+                                    )
                                   )
                                 )
                               )
