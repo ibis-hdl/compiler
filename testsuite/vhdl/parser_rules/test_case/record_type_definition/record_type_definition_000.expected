@@ -1,28 +1,48 @@
 (record_type_definition
-  (element_declaration
-    (identifier_list
-      (identifier
-        DAY
-      )
-    )
-    (subtype_indication
-      (type_mark<v>
-        (name<v>
-          (identifier
-            INTEGER
-          )
+  (element_declaration*
+    (element_declaration
+      (identifier_list
+        (identifier
+          DAY
         )
       )
-      (constraint<v>
-        (range<v>
-          (simple_expression
-            (term
-              (primary<v>
-                (literal<v>
-                  (numeric_literal<v>
-                    (abstract_literal<v>
-                      (decimal_literal
-                        literal: 1, type: integer
+      (subtype_indication
+        (type_mark<v>
+          (name<v>
+            (identifier
+              INTEGER
+            )
+          )
+        )
+        (constraint<v>
+          (range<v>
+            (simple_expression
+              (term
+                (primary<v>
+                  (literal<v>
+                    (numeric_literal<v>
+                      (abstract_literal<v>
+                        (decimal_literal
+                          literal: 1, type: integer
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+            (keyword
+              TO
+            )
+            (simple_expression
+              (term
+                (primary<v>
+                  (literal<v>
+                    (numeric_literal<v>
+                      (abstract_literal<v>
+                        (decimal_literal
+                          literal: 31, type: integer
+                        )
                       )
                     )
                   )
@@ -30,86 +50,68 @@
               )
             )
           )
-          (keyword
-            TO
+        )
+      )
+    ),
+    (element_declaration
+      (identifier_list
+        (identifier
+          MONTH
+        )
+      )
+      (subtype_indication
+        (type_mark<v>
+          (name<v>
+            (identifier
+              MONTH_NAME
+            )
           )
-          (simple_expression
-            (term
-              (primary<v>
-                (literal<v>
-                  (numeric_literal<v>
-                    (abstract_literal<v>
-                      (decimal_literal
-                        literal: 31, type: integer
+        )
+      )
+    ),
+    (element_declaration
+      (identifier_list
+        (identifier
+          YEAR
+        )
+      )
+      (subtype_indication
+        (type_mark<v>
+          (name<v>
+            (identifier
+              INTEGER
+            )
+          )
+        )
+        (constraint<v>
+          (range<v>
+            (simple_expression
+              (term
+                (primary<v>
+                  (literal<v>
+                    (numeric_literal<v>
+                      (abstract_literal<v>
+                        (decimal_literal
+                          literal: 0, type: integer
+                        )
                       )
                     )
                   )
                 )
               )
             )
-          )
-        )
-      )
-    )
-  ),
-  (element_declaration
-    (identifier_list
-      (identifier
-        MONTH
-      )
-    )
-    (subtype_indication
-      (type_mark<v>
-        (name<v>
-          (identifier
-            MONTH_NAME
-          )
-        )
-      )
-    )
-  ),
-  (element_declaration
-    (identifier_list
-      (identifier
-        YEAR
-      )
-    )
-    (subtype_indication
-      (type_mark<v>
-        (name<v>
-          (identifier
-            INTEGER
-          )
-        )
-      )
-      (constraint<v>
-        (range<v>
-          (simple_expression
-            (term
-              (primary<v>
-                (literal<v>
-                  (numeric_literal<v>
-                    (abstract_literal<v>
-                      (decimal_literal
-                        literal: 0, type: integer
-                      )
-                    )
-                  )
-                )
-              )
+            (keyword
+              TO
             )
-          )
-          (keyword
-            TO
-          )
-          (simple_expression
-            (term
-              (primary<v>
-                (literal<v>
-                  (numeric_literal<v>
-                    (abstract_literal<v>
-                      (decimal_literal
-                        literal: 4000, type: integer
+            (simple_expression
+              (term
+                (primary<v>
+                  (literal<v>
+                    (numeric_literal<v>
+                      (abstract_literal<v>
+                        (decimal_literal
+                          literal: 4000, type: integer
+                        )
                       )
                     )
                   )

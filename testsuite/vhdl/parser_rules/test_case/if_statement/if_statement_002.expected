@@ -31,16 +31,18 @@
           )
         )
         (waveform<v>
-          (waveform_element
-            (expression
-              (relation
-                (shift_expression
-                  (simple_expression
-                    (term
-                      (primary<v>
-                        (name<v>
-                          (identifier
-                            b
+          (waveform_element*
+            (waveform_element
+              (expression
+                (relation
+                  (shift_expression
+                    (simple_expression
+                      (term
+                        (primary<v>
+                          (name<v>
+                            (identifier
+                              b
+                            )
                           )
                         )
                       )
@@ -112,16 +114,18 @@
           )
         )
         (waveform<v>
-          (waveform_element
-            (expression
-              (relation
-                (shift_expression
-                  (simple_expression
-                    (term
-                      (primary<v>
-                        (name<v>
-                          (identifier
-                            c
+          (waveform_element*
+            (waveform_element
+              (expression
+                (relation
+                  (shift_expression
+                    (simple_expression
+                      (term
+                        (primary<v>
+                          (name<v>
+                            (identifier
+                              c
+                            )
                           )
                         )
                       )
@@ -179,17 +183,19 @@
           )
         )
         (waveform<v>
-          (waveform_element
-            (expression
-              (relation
-                (shift_expression
-                  (simple_expression
-                    (term
-                      (primary<v>
-                        (literal<v>
-                          (enumeration_literal<v>
-                            (character_literal
-                              '0'
+          (waveform_element*
+            (waveform_element
+              (expression
+                (relation
+                  (shift_expression
+                    (simple_expression
+                      (term
+                        (primary<v>
+                          (literal<v>
+                            (enumeration_literal<v>
+                              (character_literal
+                                '0'
+                              )
                             )
                           )
                         )

@@ -8,16 +8,18 @@
   )
   (conditional_waveforms
     (waveform<v>
-      (waveform_element
-        (expression
-          (relation
-            (shift_expression
-              (simple_expression
-                (term
-                  (primary<v>
-                    (name<v>
-                      (identifier
-                        input0
+      (waveform_element*
+        (waveform_element
+          (expression
+            (relation
+              (shift_expression
+                (simple_expression
+                  (term
+                    (primary<v>
+                      (name<v>
+                        (identifier
+                          input0
+                        )
                       )
                     )
                   )
@@ -62,16 +64,18 @@
       )
     )
     (waveform<v>
-      (waveform_element
-        (expression
-          (relation
-            (shift_expression
-              (simple_expression
-                (term
-                  (primary<v>
-                    (name<v>
-                      (identifier
-                        input1
+      (waveform_element*
+        (waveform_element
+          (expression
+            (relation
+              (shift_expression
+                (simple_expression
+                  (term
+                    (primary<v>
+                      (name<v>
+                        (identifier
+                          input1
+                        )
                       )
                     )
                   )

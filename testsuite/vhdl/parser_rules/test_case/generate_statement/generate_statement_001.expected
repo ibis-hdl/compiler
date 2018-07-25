@@ -39,51 +39,53 @@
       )
     )
   )
-  (concurrent_statement<v>
-    (component_instantiation_statement
-      (identifier
-        L
-      )
-      (instantiated_unit<v>
-        (component
-          (name<v>
-            (identifier
-              Blk
+  (concurrent_statement*
+    (concurrent_statement<v>
+      (component_instantiation_statement
+        (identifier
+          L
+        )
+        (instantiated_unit<v>
+          (component
+            (name<v>
+              (identifier
+                Blk
+              )
             )
           )
         )
-      )
-      (port_map_aspect
-        (association_list
-          (association_element
-            (actual_part<v>
-              (name<v>
-                (identifier
-                  A
+        (port_map_aspect
+          (association_list
+            (association_element
+              (actual_part<v>
+                (name<v>
+                  (identifier
+                    A
+                  )
                 )
-              )
-              (actual_designator<v>
-                (expression
-                  (relation
-                    (shift_expression
-                      (simple_expression
-                        (term
-                          (primary<v>
-                            (name<v>
-                              (identifier
-                                I
+                (actual_designator<v>
+                  (expression
+                    (relation
+                      (shift_expression
+                        (simple_expression
+                          (term
+                            (primary<v>
+                              (name<v>
+                                (identifier
+                                  I
+                                )
                               )
                             )
-                          )
-                        ),
-                        (operator: ADD),
-                        (term
-                          (primary<v>
-                            (literal<v>
-                              (numeric_literal<v>
-                                (abstract_literal<v>
-                                  (decimal_literal
-                                    literal: 1, type: integer
+                          ),
+                          (operator: ADD),
+                          (term
+                            (primary<v>
+                              (literal<v>
+                                (numeric_literal<v>
+                                  (abstract_literal<v>
+                                    (decimal_literal
+                                      literal: 1, type: integer
+                                    )
                                   )
                                 )
                               )
@@ -95,37 +97,37 @@
                   )
                 )
               )
-            )
-          ),
-          (association_element
-            (actual_part<v>
-              (name<v>
-                (identifier
-                  B
+            ),
+            (association_element
+              (actual_part<v>
+                (name<v>
+                  (identifier
+                    B
+                  )
                 )
-              )
-              (actual_designator<v>
-                (expression
-                  (relation
-                    (shift_expression
-                      (simple_expression
-                        (term
-                          (primary<v>
-                            (name<v>
-                              (identifier
-                                I
+                (actual_designator<v>
+                  (expression
+                    (relation
+                      (shift_expression
+                        (simple_expression
+                          (term
+                            (primary<v>
+                              (name<v>
+                                (identifier
+                                  I
+                                )
                               )
                             )
-                          )
-                        ),
-                        (operator: ADD),
-                        (term
-                          (primary<v>
-                            (literal<v>
-                              (numeric_literal<v>
-                                (abstract_literal<v>
-                                  (decimal_literal
-                                    literal: 2, type: integer
+                          ),
+                          (operator: ADD),
+                          (term
+                            (primary<v>
+                              (literal<v>
+                                (numeric_literal<v>
+                                  (abstract_literal<v>
+                                    (decimal_literal
+                                      literal: 2, type: integer
+                                    )
                                   )
                                 )
                               )

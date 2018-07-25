@@ -25,8 +25,11 @@ class printer
     template<typename T, typename Enable = void>
     struct symbol_scope;
 
-    template<typename NodeT>
-    void visit(NodeT const& node) { boost::apply_visitor(*this, node); }
+    template<typename... Ts>
+    void visit(variant<Ts ...> const& node) { boost::apply_visitor(*this, node); }
+
+    template<typename T>
+    void visit(std::vector<T> const& vector);
 
 public:
     bool verbose_symbol{ false };

@@ -8,16 +8,18 @@
       )
     )
     (waveform<v>
-      (waveform_element
-        (expression
-          (relation
-            (shift_expression
-              (simple_expression
-                (term
-                  (primary<v>
-                    (name<v>
-                      (identifier
-                        input42
+      (waveform_element*
+        (waveform_element
+          (expression
+            (relation
+              (shift_expression
+                (simple_expression
+                  (term
+                    (primary<v>
+                      (name<v>
+                        (identifier
+                          input42
+                        )
                       )
                     )
                   )

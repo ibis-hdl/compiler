@@ -496,16 +496,18 @@
           )
           (conditional_waveforms
             (waveform<v>
-              (waveform_element
-                (expression
-                  (relation
-                    (shift_expression
-                      (simple_expression
-                        (term
-                          (primary<v>
-                            (name<v>
-                              (identifier
-                                S3
+              (waveform_element*
+                (waveform_element
+                  (expression
+                    (relation
+                      (shift_expression
+                        (simple_expression
+                          (term
+                            (primary<v>
+                              (name<v>
+                                (identifier
+                                  S3
+                                )
                               )
                             )
                           )

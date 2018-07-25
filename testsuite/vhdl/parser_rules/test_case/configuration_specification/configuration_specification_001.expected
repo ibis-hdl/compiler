@@ -1,8 +1,10 @@
 (configuration_specification
   (component_specification
     (instantiation_list<v>
-      (identifier
-        TheInstance
+      (label*
+        (identifier
+          TheInstance
+        )
       )
     )
     (name<v>

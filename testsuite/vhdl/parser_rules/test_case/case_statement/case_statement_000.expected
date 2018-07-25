@@ -16,26 +16,28 @@
       )
     )
   )
-  (case_statement_alternative
-    (choices
-      (choice<v>
-        (simple_expression
-          (term
-            (primary<v>
-              (literal<v>
-                (string_literal
-                  choices
+  (case_statement_alternative*
+    (case_statement_alternative
+      (choices
+        (choice<v>
+          (simple_expression
+            (term
+              (primary<v>
+                (literal<v>
+                  (string_literal
+                    choices
+                  )
                 )
               )
             )
           )
         )
       )
-    )
-    (sequence_of_statements
-      (sequential_statement<v>
-        (exit_statement
-          
+      (sequence_of_statements
+        (sequential_statement<v>
+          (exit_statement
+            
+          )
         )
       )
     )

@@ -135,15 +135,7 @@ void printer::operator()(aggregate const &node)
 {
     static char const symbol[]{ "aggregate" };
     symbol_scope<aggregate> _(*this, symbol);
-
-    std::size_t const N = node.size() - 1;
-    std::size_t i = 0;
-    for(auto const& element_association : node) {
-        (*this)(element_association);
-        if(i++ != N) {
-            os << ",\n";
-        }
-    }
+    visit(node);
 }
 
 
@@ -216,15 +208,7 @@ void printer::operator()(architecture_statement_part const &node)
 {
     static char const symbol[]{ "architecture_statement_part" };
     symbol_scope<architecture_statement_part> _(*this, symbol);
-
-    std::size_t const N = node.size() - 1;
-    std::size_t i = 0;
-    for(auto const& concurrent_statement : node) {
-        (*this)(concurrent_statement);
-        if(i++ != N) {
-            os << ",\n";
-        }
-    }
+    visit(node);
 }
 
 
@@ -289,19 +273,7 @@ void printer::operator()(association_list const &node)
     static char const symbol[]{ "association_list" };
     symbol_scope<association_list> _(*this, symbol);
 
-    if(node.empty()) {
-        os << "()";
-    }
-    else {
-        std::size_t const N = node.size() - 1;
-        std::size_t i = 0;
-        for(auto const& association_element : node) {
-            (*this)(association_element);
-            if(i++ != N) {
-                os << ",\n";
-            }
-        }
-    }
+    visit(node);
 }
 
 
@@ -436,20 +408,7 @@ void printer::operator()(block_configuration const &node)
     {
         static char const symbol[]{ "use_clause*" };
         symbol_scope<block_configuration> _(*this, symbol);
-
-        if(node.use_clause_list.empty()) {
-            os << "()";
-        }
-        else {
-            std::size_t const N = node.use_clause_list.size() - 1;
-            std::size_t i = 0;
-            for(auto const& use_clause : node.use_clause_list) {
-                (*this)(use_clause);
-                if(i++ != N) {
-                    os << ",\n";
-                }
-            }
-        }
+        visit(node.use_clause_list);
     }
 
     os << "\n";
@@ -457,20 +416,7 @@ void printer::operator()(block_configuration const &node)
     {
         static char const symbol[]{ "configuration_item*" };
         symbol_scope<block_configuration> _(*this, symbol);
-
-        if(node.configuration_item_list.empty()) {
-            os << "()";
-        }
-        else {
-            std::size_t const N = node.configuration_item_list.size() - 1;
-            std::size_t i = 0;
-            for(auto const& configuration_item : node.configuration_item_list) {
-                (*this)(configuration_item);
-                if(i++ != N) {
-                    os << ",\n";
-                }
-            }
-        }
+        visit(node.configuration_item_list);
     }
 }
 
@@ -487,15 +433,7 @@ void printer::operator()(block_declarative_part const &node)
 {
     static char const symbol[]{ "block_declarative_part" };
     symbol_scope<block_declarative_part> _(*this, symbol);
-
-    std::size_t const N = node.size() - 1;
-    std::size_t i = 0;
-    for(auto const& block_declarative_item : node) {
-        (*this)(block_declarative_item);
-        if(i++ != N) {
-            os << ",\n";
-        }
-    }
+    visit(node);
 }
 
 
@@ -587,15 +525,7 @@ void printer::operator()(block_statement_part const &node)
 {
     static char const symbol[]{ "block_statement_part" };
     symbol_scope<block_statement_part> _(*this, symbol);
-
-    std::size_t const N = node.size() - 1;
-    std::size_t i = 0;
-    for(auto const& concurrent_statement : node) {
-        (*this)(concurrent_statement);
-        if(i++ != N) {
-            os << ",\n";
-        }
-    }
+    visit(node);
 }
 
 
@@ -612,13 +542,10 @@ void printer::operator()(case_statement const &node)
     (*this)(node.expression);
     os << "\n";
 
-    std::size_t const N = node.alternatives.size() - 1;
-    std::size_t i = 0;
-    for(auto const& case_statement_alternative : node.alternatives) {
-        (*this)(case_statement_alternative);
-        if(i++ != N) {
-            os << ",\n";
-        }
+    {
+        static char const symbol[]{ "case_statement_alternative*" };
+        symbol_scope<block_statement_part> _(*this, symbol);
+    	visit(node.alternatives);
     }
 
     if(node.end_label) {
@@ -626,7 +553,6 @@ void printer::operator()(case_statement const &node)
         (*this)(*node.end_label);
     }
 }
-
 
 void printer::operator()(case_statement_alternative const &node)
 {
@@ -660,15 +586,7 @@ void printer::operator()(choices const &node)
 {
     static char const symbol[]{ "choices" };
     symbol_scope<choices> _(*this, symbol);
-
-    std::size_t const N = node.size() - 1;
-    std::size_t i = 0;
-    for(auto const& choice : node) {
-        (*this)(choice);
-        if(i++ != N) {
-            os << ",\n";
-        }
-    }
+    visit(node);
 }
 
 
@@ -852,18 +770,19 @@ void printer::operator()(conditional_waveforms const &node)
     static char const symbol[]{ "conditional_waveforms" };
     symbol_scope<conditional_waveforms> _(*this, symbol);
 
-    if(node.chunks.size() > 0) {
-        std::size_t const N = node.chunks.size() - 1;
-        std::size_t i = 0;
-        for(auto const& chunk : node.chunks) {
-            (*this)(chunk.waveform);
-            os << ",\n";
-            (*this)(chunk.condition);
-            if(i++ != N) {
-                os << ",\n";
-            }
-        }
-        os << "\n";
+    // mark empty chunks doesn't make sense here
+    if(!node.chunks.empty()) {
+		std::size_t const N = node.chunks.size() - 1;
+		std::size_t i = 0;
+		for(auto const& chunk : node.chunks) {
+			(*this)(chunk.waveform);
+			os << ",\n";
+			(*this)(chunk.condition);
+			if(i++ != N) {
+				os << ",\n";
+			}
+		}
+		os << "\n";
     }
 
     (*this)(node.waveform);
@@ -912,15 +831,7 @@ void printer::operator()(configuration_declarative_part const &node)
 {
     static char const symbol[]{ "configuration_declarative_part" };
     symbol_scope<configuration_declarative_part> _(*this, symbol);
-
-    std::size_t const N = node.size() - 1;
-    std::size_t i = 0;
-    for(auto const& configuration_declarative_item : node) {
-        (*this)(configuration_declarative_item);
-        if(i++ != N) {
-            os << ",\n";
-        }
-    }
+    visit(node);
 }
 
 
@@ -984,15 +895,7 @@ void printer::operator()(context_clause const &node)
 {
     static char const symbol[]{ "context_clause" };
     symbol_scope<context_clause> _(*this, symbol);
-
-    std::size_t const N = node.size() - 1;
-    std::size_t i = 0;
-    for(auto const& context_item : node) {
-        (*this)(context_item);
-        if(i++ != N) {
-            os << ",\n";
-        }
-    }
+    visit(node);
 }
 
 
@@ -1010,7 +913,6 @@ void printer::operator()(decimal_literal const &node)
     symbol_scope<decimal_literal> _(*this, symbol);
 
     using kind_specifier = decimal_literal::kind_specifier;
-
 
     os << "literal: " << node.literal << ", type: ";
 
@@ -1051,15 +953,7 @@ void printer::operator()(design_file const &node)
 {
     static char const symbol[]{ "design_file" };
     symbol_scope<design_file> _(*this, symbol);
-
-    std::size_t const N = node.size() - 1;
-    std::size_t i = 0;
-    for(auto const& design_unit : node) {
-        (*this)(design_unit);
-        if(i++ != N) {
-            os << ",\n";
-        }
-    }
+    visit(node);
 }
 
 
@@ -1070,7 +964,6 @@ void printer::operator()(design_unit const &node)
 
     (*this)(node.context_clause);
     os << "\n";
-
     (*this)(node.library_unit);
 }
 
@@ -1174,15 +1067,7 @@ void printer::operator()(entity_class_entry_list const &node)
 {
     static char const symbol[]{ "entity_class_entry_list" };
     symbol_scope<entity_class_entry_list> _(*this, symbol);
-
-    std::size_t const N = node.size() - 1;
-    std::size_t i = 0;
-    for(auto const& token : node) {
-        (*this)(token);
-        if(i++ != N) {
-            os << ",\n";
-        }
-    }
+    visit(node);
 }
 
 
@@ -1227,15 +1112,7 @@ void printer::operator()(entity_declarative_part const &node)
 {
     static char const symbol[]{ "entity_declarative_part" };
     symbol_scope<entity_declarative_part> _(*this, symbol);
-
-    std::size_t const N = node.size() - 1;
-    std::size_t i = 0;
-    for(auto const& entity_declarative_item : node) {
-        (*this)(entity_declarative_item);
-        if(i++ != N) {
-            os << ",\n";
-        }
-    }
+    visit(node);
 }
 
 
@@ -1276,14 +1153,9 @@ void printer::operator()(entity_name_list const &node)
     util::visit_in_place(
         node,
         [this](ast::entity_designator_list const& entity_designator_list) {
-            std::size_t const N = entity_designator_list.size() - 1;
-            std::size_t i = 0;
-            for(auto const& entity_designator : entity_designator_list) {
-                (*this)(entity_designator);
-                if(i++ != N) {
-                    os << ",\n";
-                }
-            }
+        	static char const symbol[]{ "entity_designator*" };
+        	symbol_scope<entity_designator> _(*this, symbol);
+        	visit(entity_designator_list);
         },
         [this](ast::keyword_token token) {
             (*this)(token); // OTHERS | ALL
@@ -1318,15 +1190,7 @@ void printer::operator()(entity_statement_part const &node)
 {
     static char const symbol[]{ "entity_statement_part" };
     symbol_scope<entity_statement_part> _(*this, symbol);
-
-    std::size_t const N = node.size() - 1;
-    std::size_t i = 0;
-    for(auto const& entity_statement : node) {
-        (*this)(entity_statement);
-        if(i++ != N) {
-            os << ",\n";
-        }
-    }
+    visit(node);
 }
 
 
@@ -1350,15 +1214,7 @@ void printer::operator()(enumeration_type_definition const &node)
 {
     static char const symbol[]{ "enumeration_type_definition" };
     symbol_scope<enumeration_type_definition> _(*this, symbol);
-
-    std::size_t const N = node.size() - 1;
-    std::size_t i = 0;
-    for(auto const& enumeration_literal : node) {
-        (*this)(enumeration_literal);
-        if(i++ != N) {
-            os << ",\n";
-        }
-    }
+    visit(node);
 }
 
 
@@ -1492,7 +1348,6 @@ void printer::operator()(formal_part const &node)
         case 1: {
             // BNF: formal_designator
             visit_formal_designator(node.context_tied_names[0]);
-
             break;
         }
 
@@ -1501,7 +1356,6 @@ void printer::operator()(formal_part const &node)
             visit_name(node.context_tied_names[0]);
             os << ",\n";
             visit_formal_designator(node.context_tied_names[1]);
-
             break;
         }
 
@@ -1538,25 +1392,21 @@ void printer::operator()(generate_statement const &node)
 
     (*this)(node.label);
     os << "\n";
-
     (*this)(node.generation_scheme);
-    os << "\n";
 
-
-    if(node.block_declarative_parts.size() > 0) {
+    if(!node.block_declarative_parts.empty()) {
+    	os << "\n";
+    	// FixMe: Single Use "Strong Type" of vector<>
         (*this)(node.block_declarative_parts);
-        os << "\n";
+    }
+    else {
+    	os << "\n";
     }
 
-    if(node.concurrent_statements.size() > 0) {
-        std::size_t const N = node.concurrent_statements.size() - 1;
-        std::size_t i = 0;
-        for(auto const& concurrent_statement : node.concurrent_statements) {
-            (*this)(concurrent_statement);
-            if(i++ != N) {
-                os << ",\n";
-            }
-        }
+    if(!node.concurrent_statements.empty()) {
+        static char const symbol[]{ "concurrent_statement*" };
+        symbol_scope<struct _concurrent_statement> _(*this, symbol);
+        visit(node.concurrent_statements);
     }
 
     if(node.end_label) {
@@ -1602,17 +1452,8 @@ void printer::operator()(group_constituent_list const &node)
 {
     static char const symbol[]{ "group_constituent_list" };
     symbol_scope<group_constituent_list> _(*this, symbol);
-
-    std::size_t const N = node.size() - 1;
-    std::size_t i = 0;
-    for(auto const& group_constituent : node) {
-        (*this)(group_constituent);
-        if(i++ != N) {
-            os << ",\n";
-        }
-    }
+    visit(node);
 }
-
 
 void printer::operator()(group_declaration const &node)
 {
@@ -1664,15 +1505,7 @@ void printer::operator()(identifier_list const &node)
 {
     static char const symbol[]{ "identifier_list" };
     symbol_scope<identifier_list> _(*this, symbol);
-
-    std::size_t const N = node.size() - 1;
-    std::size_t i = 0;
-    for(auto const& identifier : node) {
-        (*this)(identifier);
-        if(i++ != N) {
-            os << ",\n";
-        }
-    }
+    visit(node);
 }
 
 
@@ -1691,7 +1524,7 @@ void printer::operator()(if_statement const &node)
 
     (*this)(node.then_sequence_of_statements);
 
-    if(node.elseif_chunks.size() > 0) {
+    if(!node.elseif_chunks.empty()) {
         os << "\n";
         std::size_t const N = node.elseif_chunks.size() - 1;
         std::size_t i = 0;
@@ -1706,7 +1539,7 @@ void printer::operator()(if_statement const &node)
         }
     }
 
-    if(node.else_sequence_of_statements.size() > 0) {
+    if(!node.else_sequence_of_statements.empty()) {
         os << "\nELSE:\n";
         (*this)(node.else_sequence_of_statements);
     }
@@ -1722,15 +1555,7 @@ void printer::operator()(index_constraint const &node)
 {
     static char const symbol[]{ "index_constraint" };
     symbol_scope<index_constraint> _(*this, symbol);
-
-    std::size_t const N = node.size() - 1;
-    std::size_t i = 0;
-    for(auto const& discrete_range : node) {
-        (*this)(discrete_range);
-        if(i++ != N) {
-            os << ",\n";
-        }
-    }
+    visit(node);
 }
 
 
@@ -1746,7 +1571,6 @@ void printer::operator()(index_subtype_definition const &node)
 {
     static char const symbol[]{ "index_subtype_definition" };
     symbol_scope<index_subtype_definition> _(*this, symbol);
-
     (*this)(node.type_mark);
 }
 
@@ -1759,13 +1583,10 @@ void printer::operator()(indexed_name const &node)
     (*this)(node.prefix);
     os << "\n";
 
-    std::size_t const N = node.expression_list.size() - 1;
-    std::size_t i = 0;
-    for(auto const& expression : node.expression_list) {
-        (*this)(expression);
-        if(i++ != N) {
-            os << ",\n";
-        }
+    {
+        static char const symbol[]{ "expression*" };
+        symbol_scope<expression> _(*this, symbol);
+        visit(node.expression_list);
     }
 }
 
@@ -1811,14 +1632,9 @@ void printer::operator()(instantiation_list const &node)
     util::visit_in_place(
         node,
         [this](ast::instantiation_label_list const& instantiation_label_list) {
-            std::size_t const N = instantiation_label_list.size() - 1;
-            std::size_t i = 0;
-            for(auto const& label : instantiation_label_list) {
-                (*this)(label);
-                if(i++ != N) {
-                    os << ",\n";
-                }
-            }
+			static char const symbol[]{ "label*" };
+			symbol_scope<label> _(*this, symbol);
+            visit(instantiation_label_list);
         },
         [this](ast::keyword_token token) {
             (*this)(token);
@@ -1875,15 +1691,7 @@ void printer::operator()(interface_list const &node)
 {
     static char const symbol[]{ "interface_list" };
     symbol_scope<interface_list> _(*this, symbol);
-
-    std::size_t const N = node.size() - 1;
-    std::size_t i = 0;
-    for(auto const& interface_element : node) {
-        (*this)(interface_element);
-        if(i++ != N) {
-            os << ",\n";
-        }
-    }
+    visit(node);
 }
 
 
@@ -1949,15 +1757,7 @@ void printer::operator()(library_clause const &node)
 {
     static char const symbol[]{ "library_clause" };
     symbol_scope<library_clause> _(*this, symbol);
-
-    std::size_t const N = node.logical_name_list.size() - 1;
-    std::size_t i = 0;
-    for(auto const& logical_name : node.logical_name_list) {
-        (*this)(logical_name);
-        if(i++ != N) {
-            os << ",\n";
-        }
-    }
+    visit(node.logical_name_list);
 }
 
 
@@ -2093,15 +1893,7 @@ void printer::operator()(package_body_declarative_part const &node)
 {
     static char const symbol[]{ "package_body_declarative_part" };
     symbol_scope<package_body_declarative_part> _(*this, symbol);
-
-    std::size_t const N = node.size() - 1;
-    std::size_t i = 0;
-    for(auto const& package_body_declarative_item : node) {
-        (*this)(package_body_declarative_item);
-        if(i++ != N) {
-            os << ",\n";
-        }
-    }
+    visit(node);
 }
 
 
@@ -2134,15 +1926,7 @@ void printer::operator()(package_declarative_part const &node)
 {
     static char const symbol[]{ "package_declarative_part" };
     symbol_scope<package_declarative_part> _(*this, symbol);
-
-    std::size_t const N = node.size() - 1;
-    std::size_t i = 0;
-    for(auto const& package_declarative_item : node) {
-        (*this)(package_declarative_item);
-        if(i++ != N) {
-            os << ",\n";
-        }
-    }
+    visit(node);
 }
 
 
@@ -2176,14 +1960,14 @@ void printer::operator()(physical_type_definition const &node)
     os << "\n";
     (*this)(node.primary_unit_declaration);
 
-    std::size_t const N = node.secondary_unit_declarations.size() - 1;
-    std::size_t i = 0;
-    if(node.secondary_unit_declarations.size() != 0) { os << "\n"; }
-    for(auto const& secondary_unit_declaration : node.secondary_unit_declarations) {
-        (*this)(secondary_unit_declaration);
-        if(i++ != N) {
-            os << ",\n";
-        }
+    if (!node.secondary_unit_declarations.empty()) {
+    	os << "\n";
+    }
+
+    {
+        static char const symbol[]{ "secondary_unit_declaration*" };
+        symbol_scope<struct _secondary_unit_declarations> _(*this, symbol);
+        visit(node.secondary_unit_declarations);
     }
 
     if(node.physical_type_simple_name) {
@@ -2245,7 +2029,6 @@ void printer::operator()(procedure_call const &node)
         {
             static char const symbol[]{ "actual_parameter_part" };
             symbol_scope<function_call> _(*this, symbol);
-
             (*this)(*node.actual_parameter_part);
         }
     }
@@ -2277,15 +2060,7 @@ void printer::operator()(process_declarative_part const &node)
 {
     static char const symbol[]{ "process_declarative_part" };
     symbol_scope<process_declarative_part> _(*this, symbol);
-
-    std::size_t const N = node.size() - 1;
-    std::size_t i = 0;
-    for(auto const& process_declarative_item : node) {
-        (*this)(process_declarative_item);
-        if(i++ != N) {
-            os << ",\n";
-        }
-    }
+    visit(node);
 }
 
 
@@ -2373,17 +2148,10 @@ void printer::operator()(record_type_definition const &node)
     static char const symbol[]{ "record_type_definition" };
     symbol_scope<record_type_definition> _(*this, symbol);
 
-    std::size_t const N = node.element_declarations.size() - 1;
-    std::size_t i = 0;
-    for(auto const& element_declaration : node.element_declarations) {
-        (*this)(element_declaration);
-        if(i++ != N) {
-            os << ",\n";
-        }
-    }
-    if(node.name) {
-        os << "\n";
-        (*this)(*node.name);
+    {
+        static char const symbol[]{ "element_declaration*" };
+        symbol_scope<element_declaration> _(*this, symbol);
+        visit(node.element_declarations);
     }
 }
 
@@ -2501,6 +2269,7 @@ void printer::operator()(selected_waveforms const &node)
     static char const symbol[]{ "selected_waveforms" };
     symbol_scope<selected_waveforms> _(*this, symbol);
 
+    // doesn't make sense to unify this
     std::size_t const N = node.size() - 1;
     std::size_t i = 0;
     for(auto const& selected_waveform : node) {
@@ -2526,15 +2295,7 @@ void printer::operator()(sensitivity_list const& node)
 {
     static char const symbol[]{ "sensitivity_list" };
     symbol_scope<sensitivity_list> _(*this, symbol);
-
-    std::size_t const N = node.size() - 1;
-    std::size_t i = 0;
-    for(auto const& signal_name : node) {
-        (*this)(signal_name);
-        if(i++ != N) {
-            os << ",\n";
-        }
-    }
+    visit(node);
 }
 
 
@@ -2542,15 +2303,7 @@ void printer::operator()(sequence_of_statements const &node)
 {
     static char const symbol[]{ "sequence_of_statements" };
     symbol_scope<sequence_of_statements> _(*this, symbol);
-
-    std::size_t const N = node.size() - 1;
-    std::size_t i = 0;
-    for(auto const& sequential_statement : node) {
-        (*this)(sequential_statement);
-        if(i++ != N) {
-            os << ",\n";
-        }
-    }
+    visit(node);
 }
 
 
@@ -2627,15 +2380,7 @@ void printer::operator()(signal_list_list const& node)
 {
     static char const symbol[]{ "signal_list.names" };
     symbol_scope<signal_list_list> _(*this, symbol);
-
-    std::size_t const N = node.size() - 1;
-    std::size_t i = 0;
-    for(auto const& name : node) {
-        visit(name);
-        if(i++ != N) {
-            os << ",\n";
-        }
-    }
+    visit(node);
 }
 
 
@@ -2653,21 +2398,19 @@ void printer::operator()(signature const &node)
     static char const symbol[]{ "signature" };
     symbol_scope<signature> _(*this, symbol);
 
-    std::size_t const N = node.parameter_type_list.size() - 1;
-    std::size_t i = 0;
-    for(auto const& type_mark : node.parameter_type_list) {
-        (*this)(type_mark);
-        if(i++ != N) {
-            os << ",\n";
-        }
+    {
+        static char const symbol[]{ "parameter_type_list" };
+        symbol_scope<signature> _(*this, symbol);
+        visit(node.parameter_type_list);
     }
 
     if(node.return_type) {
-        if(node.parameter_type_list.size() != 0) { os << "\n"; }
+        if(!node.parameter_type_list.empty()) {
+        	os << "\n";
+        }
 
-        static char const symbol[]{ "signature.return_type" };
+        static char const symbol[]{ "return_type" };
         symbol_scope<signature> _(*this, symbol);
-
         (*this)(*node.return_type);
     }
 }
@@ -2760,15 +2503,7 @@ void printer::operator()(subprogram_declarative_part const &node)
 {
     static char const symbol[]{ "subprogram_declarative_part" };
     symbol_scope<subprogram_declarative_part> _(*this, symbol);
-
-    std::size_t const N = node.size() - 1;
-    std::size_t i = 0;
-    for(auto const& subprogram_declarative_item : node) {
-        (*this)(subprogram_declarative_item);
-        if(i++ != N) {
-            os << ",\n";
-        }
-    }
+    visit(node);
 }
 
 
@@ -3038,14 +2773,9 @@ void printer::operator()(waveform const &node)
     util::visit_in_place(
         node,
         [this](ast::waveform_element_list const& list) {
-            std::size_t const N = list.size() - 1;
-            std::size_t i = 0;
-            for(auto const& waveform_element : list) {
-                (*this)(waveform_element);
-                if(i++ != N) {
-                    os << ",\n";
-                }
-            }
+    		static char const symbol[]{ "waveform_element*" };
+    		symbol_scope<waveform_element> _(*this, symbol);
+    		visit(list);
         },
         [this](ast::keyword_token token) {
             (*this)(token);
@@ -3107,6 +2837,23 @@ void printer::operator()(nullary const&)
 
 
 
+template<typename T>
+void printer::visit(std::vector<T> const& vector)
+{
+	if(vector.empty()) {
+		os << "()";
+	}
+	else {
+	    std::size_t const N = vector.size() - 1;
+	    std::size_t i = 0;
+	    for(auto const& e : vector) {
+	        (*this)(e);
+	        if(i++ != N) {
+	            os << ",\n";
+	        }
+	    }
+	}
+}
 
 
 } } } // namespace eda.vhdl.ast

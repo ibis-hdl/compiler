@@ -28,16 +28,18 @@
   )
   (selected_waveforms
     (waveform<v>
-      (waveform_element
-        (expression
-          (relation
-            (shift_expression
-              (simple_expression
-                (term
-                  (primary<v>
-                    (literal<v>
-                      (string_literal
-                        1000
+      (waveform_element*
+        (waveform_element
+          (expression
+            (relation
+              (shift_expression
+                (simple_expression
+                  (term
+                    (primary<v>
+                      (literal<v>
+                        (string_literal
+                          1000
+                        )
                       )
                     )
                   )
@@ -64,16 +66,18 @@
       )
     ),
     (waveform<v>
-      (waveform_element
-        (expression
-          (relation
-            (shift_expression
-              (simple_expression
-                (term
-                  (primary<v>
-                    (literal<v>
-                      (string_literal
-                        0001
+      (waveform_element*
+        (waveform_element
+          (expression
+            (relation
+              (shift_expression
+                (simple_expression
+                  (term
+                    (primary<v>
+                      (literal<v>
+                        (string_literal
+                          0001
+                        )
                       )
                     )
                   )

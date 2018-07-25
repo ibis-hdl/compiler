@@ -10,16 +10,18 @@
     INERTIAL_DELAY
   )
   (waveform<v>
-    (waveform_element
-      (expression
-        (relation
-          (shift_expression
-            (simple_expression
-              (term
-                (primary<v>
-                  (name<v>
-                    (identifier
-                      Input_pin
+    (waveform_element*
+      (waveform_element
+        (expression
+          (relation
+            (shift_expression
+              (simple_expression
+                (term
+                  (primary<v>
+                    (name<v>
+                      (identifier
+                        Input_pin
+                      )
                     )
                   )
                 )
@@ -27,22 +29,22 @@
             )
           )
         )
-      )
-      (expression
-        (relation
-          (shift_expression
-            (simple_expression
-              (term
-                (primary<v>
-                  (literal<v>
-                    (numeric_literal<v>
-                      (physical_literal
-                        (abstract_literal<v>
-                          (decimal_literal
-                            literal: 10, type: integer
-                          )
-                        ),
-                        (unit_name: ns)
+        (expression
+          (relation
+            (shift_expression
+              (simple_expression
+                (term
+                  (primary<v>
+                    (literal<v>
+                      (numeric_literal<v>
+                        (physical_literal
+                          (abstract_literal<v>
+                            (decimal_literal
+                              literal: 10, type: integer
+                            )
+                          ),
+                          (unit_name: ns)
+                        )
                       )
                     )
                   )

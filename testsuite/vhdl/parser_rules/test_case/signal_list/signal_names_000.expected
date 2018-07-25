@@ -1,7 +1,9 @@
 (signal_list<v>
   (signal_list.names
-    (identifier
-      FooBar
+    (name<v>
+      (identifier
+        FooBar
+      )
     )
   )
 )

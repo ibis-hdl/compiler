@@ -1,13 +1,15 @@
 (component_specification
   (instantiation_list<v>
-    (identifier
-      a
-    ),
-    (identifier
-      b
-    ),
-    (identifier
-      c
+    (label*
+      (identifier
+        a
+      ),
+      (identifier
+        b
+      ),
+      (identifier
+        c
+      )
     )
   )
   (name<v>

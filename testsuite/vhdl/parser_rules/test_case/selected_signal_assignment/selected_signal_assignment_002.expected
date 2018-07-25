@@ -31,16 +31,18 @@
   )
   (selected_waveforms
     (waveform<v>
-      (waveform_element
-        (expression
-          (relation
-            (shift_expression
-              (simple_expression
-                (term
-                  (primary<v>
-                    (name<v>
-                      (identifier
-                        InA
+      (waveform_element*
+        (waveform_element
+          (expression
+            (relation
+              (shift_expression
+                (simple_expression
+                  (term
+                    (primary<v>
+                      (name<v>
+                        (identifier
+                          InA
+                        )
                       )
                     )
                   )
@@ -88,17 +90,19 @@
       )
     ),
     (waveform<v>
-      (waveform_element
-        (expression
-          (relation
-            (shift_expression
-              (simple_expression
-                (term
-                  (primary<v>
-                    (literal<v>
-                      (enumeration_literal<v>
-                        (character_literal
-                          'Z'
+      (waveform_element*
+        (waveform_element
+          (expression
+            (relation
+              (shift_expression
+                (simple_expression
+                  (term
+                    (primary<v>
+                      (literal<v>
+                        (enumeration_literal<v>
+                          (character_literal
+                            'Z'
+                          )
                         )
                       )
                     )

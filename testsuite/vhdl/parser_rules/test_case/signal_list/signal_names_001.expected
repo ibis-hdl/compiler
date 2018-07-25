@@ -1,13 +1,19 @@
 (signal_list<v>
   (signal_list.names
-    (identifier
-      Foo
+    (name<v>
+      (identifier
+        Foo
+      )
     ),
-    (identifier
-      Bar
+    (name<v>
+      (identifier
+        Bar
+      )
     ),
-    (identifier
-      \BUS\
+    (name<v>
+      (identifier
+        \BUS\
+      )
     )
   )
 )

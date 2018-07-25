@@ -16,44 +16,48 @@
       )
     )
   )
-  (case_statement_alternative
-    (choices
-      (choice<v>
-        (simple_expression
-          (term
-            (primary<v>
-              (literal<v>
-                (string_literal
-                  10
+  (case_statement_alternative*
+    (case_statement_alternative
+      (choices
+        (choice<v>
+          (simple_expression
+            (term
+              (primary<v>
+                (literal<v>
+                  (string_literal
+                    10
+                  )
                 )
               )
             )
           )
         )
       )
-    )
-    (sequence_of_statements
-      (sequential_statement<v>
-        (signal_assignment_statement
-          (target<v>
-            (name<v>
-              (identifier
-                output0
+      (sequence_of_statements
+        (sequential_statement<v>
+          (signal_assignment_statement
+            (target<v>
+              (name<v>
+                (identifier
+                  output0
+                )
               )
             )
-          )
-          (waveform<v>
-            (waveform_element
-              (expression
-                (relation
-                  (shift_expression
-                    (simple_expression
-                      (term
-                        (primary<v>
-                          (literal<v>
-                            (enumeration_literal<v>
-                              (character_literal
-                                '1'
+            (waveform<v>
+              (waveform_element*
+                (waveform_element
+                  (expression
+                    (relation
+                      (shift_expression
+                        (simple_expression
+                          (term
+                            (primary<v>
+                              (literal<v>
+                                (enumeration_literal<v>
+                                  (character_literal
+                                    '1'
+                                  )
+                                )
                               )
                             )
                           )
@@ -67,46 +71,48 @@
           )
         )
       )
-    )
-  ),
-  (case_statement_alternative
-    (choices
-      (choice<v>
-        (simple_expression
-          (term
-            (primary<v>
-              (literal<v>
-                (string_literal
-                  01
+    ),
+    (case_statement_alternative
+      (choices
+        (choice<v>
+          (simple_expression
+            (term
+              (primary<v>
+                (literal<v>
+                  (string_literal
+                    01
+                  )
                 )
               )
             )
           )
         )
       )
-    )
-    (sequence_of_statements
-      (sequential_statement<v>
-        (signal_assignment_statement
-          (target<v>
-            (name<v>
-              (identifier
-                output1
+      (sequence_of_statements
+        (sequential_statement<v>
+          (signal_assignment_statement
+            (target<v>
+              (name<v>
+                (identifier
+                  output1
+                )
               )
             )
-          )
-          (waveform<v>
-            (waveform_element
-              (expression
-                (relation
-                  (shift_expression
-                    (simple_expression
-                      (term
-                        (primary<v>
-                          (literal<v>
-                            (enumeration_literal<v>
-                              (character_literal
-                                '1'
+            (waveform<v>
+              (waveform_element*
+                (waveform_element
+                  (expression
+                    (relation
+                      (shift_expression
+                        (simple_expression
+                          (term
+                            (primary<v>
+                              (literal<v>
+                                (enumeration_literal<v>
+                                  (character_literal
+                                    '1'
+                                  )
+                                )
                               )
                             )
                           )
@@ -120,38 +126,40 @@
           )
         )
       )
-    )
-  ),
-  (case_statement_alternative
-    (choices
-      (choice<v>
-        (keyword
-          OTHERS
+    ),
+    (case_statement_alternative
+      (choices
+        (choice<v>
+          (keyword
+            OTHERS
+          )
         )
       )
-    )
-    (sequence_of_statements
-      (sequential_statement<v>
-        (signal_assignment_statement
-          (target<v>
-            (name<v>
-              (identifier
-                output0
+      (sequence_of_statements
+        (sequential_statement<v>
+          (signal_assignment_statement
+            (target<v>
+              (name<v>
+                (identifier
+                  output0
+                )
               )
             )
-          )
-          (waveform<v>
-            (waveform_element
-              (expression
-                (relation
-                  (shift_expression
-                    (simple_expression
-                      (term
-                        (primary<v>
-                          (literal<v>
-                            (enumeration_literal<v>
-                              (character_literal
-                                'X'
+            (waveform<v>
+              (waveform_element*
+                (waveform_element
+                  (expression
+                    (relation
+                      (shift_expression
+                        (simple_expression
+                          (term
+                            (primary<v>
+                              (literal<v>
+                                (enumeration_literal<v>
+                                  (character_literal
+                                    'X'
+                                  )
+                                )
                               )
                             )
                           )
@@ -163,29 +171,31 @@
               )
             )
           )
-        )
-      ),
-      (sequential_statement<v>
-        (signal_assignment_statement
-          (target<v>
-            (name<v>
-              (identifier
-                output1
+        ),
+        (sequential_statement<v>
+          (signal_assignment_statement
+            (target<v>
+              (name<v>
+                (identifier
+                  output1
+                )
               )
             )
-          )
-          (waveform<v>
-            (waveform_element
-              (expression
-                (relation
-                  (shift_expression
-                    (simple_expression
-                      (term
-                        (primary<v>
-                          (literal<v>
-                            (enumeration_literal<v>
-                              (character_literal
-                                'X'
+            (waveform<v>
+              (waveform_element*
+                (waveform_element
+                  (expression
+                    (relation
+                      (shift_expression
+                        (simple_expression
+                          (term
+                            (primary<v>
+                              (literal<v>
+                                (enumeration_literal<v>
+                                  (character_literal
+                                    'X'
+                                  )
+                                )
                               )
                             )
                           )

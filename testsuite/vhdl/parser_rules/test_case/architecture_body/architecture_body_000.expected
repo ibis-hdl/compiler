@@ -20,45 +20,47 @@
           )
           (conditional_waveforms
             (waveform<v>
-              (waveform_element
-                (expression
-                  (relation
-                    (shift_expression
-                      (simple_expression
-                        (term
-                          (factor_unary_operation
-                            (operator: NOT),
-                            (expression
-                              (relation
-                                (shift_expression
-                                  (simple_expression
-                                    (term
-                                      (primary<v>
-                                        (expression
-                                          (relation
-                                            (shift_expression
-                                              (simple_expression
-                                                (term
-                                                  (primary<v>
-                                                    (name<v>
-                                                      (identifier
-                                                        A
+              (waveform_element*
+                (waveform_element
+                  (expression
+                    (relation
+                      (shift_expression
+                        (simple_expression
+                          (term
+                            (factor_unary_operation
+                              (operator: NOT),
+                              (expression
+                                (relation
+                                  (shift_expression
+                                    (simple_expression
+                                      (term
+                                        (primary<v>
+                                          (expression
+                                            (relation
+                                              (shift_expression
+                                                (simple_expression
+                                                  (term
+                                                    (primary<v>
+                                                      (name<v>
+                                                        (identifier
+                                                          A
+                                                        )
                                                       )
                                                     )
                                                   )
                                                 )
                                               )
-                                            )
-                                          ),
-                                          (operator: AND),
-                                          (relation
-                                            (shift_expression
-                                              (simple_expression
-                                                (term
-                                                  (primary<v>
-                                                    (name<v>
-                                                      (identifier
-                                                        B
+                                            ),
+                                            (operator: AND),
+                                            (relation
+                                              (shift_expression
+                                                (simple_expression
+                                                  (term
+                                                    (primary<v>
+                                                      (name<v>
+                                                        (identifier
+                                                          B
+                                                        )
                                                       )
                                                     )
                                                   )
@@ -70,39 +72,39 @@
                                       )
                                     )
                                   )
-                                )
-                              ),
-                              (operator: OR),
-                              (relation
-                                (shift_expression
-                                  (simple_expression
-                                    (term
-                                      (primary<v>
-                                        (expression
-                                          (relation
-                                            (shift_expression
-                                              (simple_expression
-                                                (term
-                                                  (primary<v>
-                                                    (name<v>
-                                                      (identifier
-                                                        C
+                                ),
+                                (operator: OR),
+                                (relation
+                                  (shift_expression
+                                    (simple_expression
+                                      (term
+                                        (primary<v>
+                                          (expression
+                                            (relation
+                                              (shift_expression
+                                                (simple_expression
+                                                  (term
+                                                    (primary<v>
+                                                      (name<v>
+                                                        (identifier
+                                                          C
+                                                        )
                                                       )
                                                     )
                                                   )
                                                 )
                                               )
-                                            )
-                                          ),
-                                          (operator: AND),
-                                          (relation
-                                            (shift_expression
-                                              (simple_expression
-                                                (term
-                                                  (primary<v>
-                                                    (name<v>
-                                                      (identifier
-                                                        D
+                                            ),
+                                            (operator: AND),
+                                            (relation
+                                              (shift_expression
+                                                (simple_expression
+                                                  (term
+                                                    (primary<v>
+                                                      (name<v>
+                                                        (identifier
+                                                          D
+                                                        )
                                                       )
                                                     )
                                                   )

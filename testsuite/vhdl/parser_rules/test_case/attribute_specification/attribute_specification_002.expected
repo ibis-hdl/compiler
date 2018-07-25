@@ -6,10 +6,12 @@
   )
   (entity_specification
     (entity_name_list<v>
-      (entity_designator
-        (entity_tag<v>
-          (identifier
-            State
+      (entity_designator*
+        (entity_designator
+          (entity_tag<v>
+            (identifier
+              State
+            )
           )
         )
       )

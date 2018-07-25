@@ -1,17 +1,19 @@
 (type_definition<v>
   (composite_type_definition<v>
     (record_type_definition
-      (element_declaration
-        (identifier_list
-          (identifier
-            dummy
+      (element_declaration*
+        (element_declaration
+          (identifier_list
+            (identifier
+              dummy
+            )
           )
-        )
-        (subtype_indication
-          (type_mark<v>
-            (name<v>
-              (identifier
-                string
+          (subtype_indication
+            (type_mark<v>
+              (name<v>
+                (identifier
+                  string
+                )
               )
             )
           )

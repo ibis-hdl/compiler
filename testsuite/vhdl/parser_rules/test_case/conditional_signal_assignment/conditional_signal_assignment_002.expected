@@ -37,18 +37,20 @@
   )
   (conditional_waveforms
     (waveform<v>
-      (waveform_element
-        (expression
-          (relation
-            (shift_expression
-              (simple_expression
-                (term
-                  (primary<v>
-                    (literal<v>
-                      (numeric_literal<v>
-                        (abstract_literal<v>
-                          (decimal_literal
-                            literal: 3, type: integer
+      (waveform_element*
+        (waveform_element
+          (expression
+            (relation
+              (shift_expression
+                (simple_expression
+                  (term
+                    (primary<v>
+                      (literal<v>
+                        (numeric_literal<v>
+                          (abstract_literal<v>
+                            (decimal_literal
+                              literal: 3, type: integer
+                            )
                           )
                         )
                       )
@@ -95,18 +97,20 @@
       )
     ),
     (waveform<v>
-      (waveform_element
-        (expression
-          (relation
-            (shift_expression
-              (simple_expression
-                (term
-                  (primary<v>
-                    (literal<v>
-                      (numeric_literal<v>
-                        (abstract_literal<v>
-                          (decimal_literal
-                            literal: 2, type: integer
+      (waveform_element*
+        (waveform_element
+          (expression
+            (relation
+              (shift_expression
+                (simple_expression
+                  (term
+                    (primary<v>
+                      (literal<v>
+                        (numeric_literal<v>
+                          (abstract_literal<v>
+                            (decimal_literal
+                              literal: 2, type: integer
+                            )
                           )
                         )
                       )
@@ -153,18 +157,20 @@
       )
     ),
     (waveform<v>
-      (waveform_element
-        (expression
-          (relation
-            (shift_expression
-              (simple_expression
-                (term
-                  (primary<v>
-                    (literal<v>
-                      (numeric_literal<v>
-                        (abstract_literal<v>
-                          (decimal_literal
-                            literal: 1, type: integer
+      (waveform_element*
+        (waveform_element
+          (expression
+            (relation
+              (shift_expression
+                (simple_expression
+                  (term
+                    (primary<v>
+                      (literal<v>
+                        (numeric_literal<v>
+                          (abstract_literal<v>
+                            (decimal_literal
+                              literal: 1, type: integer
+                            )
                           )
                         )
                       )
@@ -211,18 +217,20 @@
       )
     )
     (waveform<v>
-      (waveform_element
-        (expression
-          (relation
-            (shift_expression
-              (simple_expression
-                (term
-                  (primary<v>
-                    (literal<v>
-                      (numeric_literal<v>
-                        (abstract_literal<v>
-                          (decimal_literal
-                            literal: 0, type: integer
+      (waveform_element*
+        (waveform_element
+          (expression
+            (relation
+              (shift_expression
+                (simple_expression
+                  (term
+                    (primary<v>
+                      (literal<v>
+                        (numeric_literal<v>
+                          (abstract_literal<v>
+                            (decimal_literal
+                              literal: 0, type: integer
+                            )
                           )
                         )
                       )

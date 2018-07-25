@@ -2,8 +2,10 @@
   (guarded_signal_specification
     (signal_list<v>
       (signal_list.names
-        (identifier
-          S
+        (name<v>
+          (identifier
+            S
+          )
         )
       )
     )

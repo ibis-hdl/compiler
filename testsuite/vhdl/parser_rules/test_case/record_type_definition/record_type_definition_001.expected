@@ -1,48 +1,50 @@
 (record_type_definition
-  (element_declaration
-    (identifier_list
-      (identifier
-        Mnemonic
-      )
-    )
-    (subtype_indication
-      (type_mark<v>
-        (name<v>
-          (identifier
-            String
-          )
+  (element_declaration*
+    (element_declaration
+      (identifier_list
+        (identifier
+          Mnemonic
         )
       )
-      (constraint<v>
-        (index_constraint
-          (discrete_range<v>
-            (range<v>
-              (simple_expression
-                (term
-                  (primary<v>
-                    (literal<v>
-                      (numeric_literal<v>
-                        (abstract_literal<v>
-                          (decimal_literal
-                            literal: 1, type: integer
+      (subtype_indication
+        (type_mark<v>
+          (name<v>
+            (identifier
+              String
+            )
+          )
+        )
+        (constraint<v>
+          (index_constraint
+            (discrete_range<v>
+              (range<v>
+                (simple_expression
+                  (term
+                    (primary<v>
+                      (literal<v>
+                        (numeric_literal<v>
+                          (abstract_literal<v>
+                            (decimal_literal
+                              literal: 1, type: integer
+                            )
                           )
                         )
                       )
                     )
                   )
                 )
-              )
-              (keyword
-                TO
-              )
-              (simple_expression
-                (term
-                  (primary<v>
-                    (literal<v>
-                      (numeric_literal<v>
-                        (abstract_literal<v>
-                          (decimal_literal
-                            literal: 10, type: integer
+                (keyword
+                  TO
+                )
+                (simple_expression
+                  (term
+                    (primary<v>
+                      (literal<v>
+                        (numeric_literal<v>
+                          (abstract_literal<v>
+                            (decimal_literal
+                              literal: 10, type: integer
+                            )
                           )
                         )
                       )
@@ -54,52 +56,52 @@
           )
         )
       )
-    )
-  ),
-  (element_declaration
-    (identifier_list
-      (identifier
-        OpCode
-      )
-    )
-    (subtype_indication
-      (type_mark<v>
-        (name<v>
-          (identifier
-            Bit_Vector
-          )
+    ),
+    (element_declaration
+      (identifier_list
+        (identifier
+          OpCode
         )
       )
-      (constraint<v>
-        (index_constraint
-          (discrete_range<v>
-            (range<v>
-              (simple_expression
-                (term
-                  (primary<v>
-                    (literal<v>
-                      (numeric_literal<v>
-                        (abstract_literal<v>
-                          (decimal_literal
-                            literal: 3, type: integer
+      (subtype_indication
+        (type_mark<v>
+          (name<v>
+            (identifier
+              Bit_Vector
+            )
+          )
+        )
+        (constraint<v>
+          (index_constraint
+            (discrete_range<v>
+              (range<v>
+                (simple_expression
+                  (term
+                    (primary<v>
+                      (literal<v>
+                        (numeric_literal<v>
+                          (abstract_literal<v>
+                            (decimal_literal
+                              literal: 3, type: integer
+                            )
                           )
                         )
                       )
                     )
                   )
                 )
-              )
-              (keyword
-                DOWNTO
-              )
-              (simple_expression
-                (term
-                  (primary<v>
-                    (literal<v>
-                      (numeric_literal<v>
-                        (abstract_literal<v>
-                          (decimal_literal
-                            literal: 0, type: integer
+                (keyword
+                  DOWNTO
+                )
+                (simple_expression
+                  (term
+                    (primary<v>
+                      (literal<v>
+                        (numeric_literal<v>
+                          (abstract_literal<v>
+                            (decimal_literal
+                              literal: 0, type: integer
+                            )
                           )
                         )
                       )
@@ -111,31 +113,28 @@
           )
         )
       )
-    )
-  ),
-  (element_declaration
-    (identifier_list
-      (identifier
-        Op1
-      ),
-      (identifier
-        Op2
-      ),
-      (identifier
-        Res
+    ),
+    (element_declaration
+      (identifier_list
+        (identifier
+          Op1
+        ),
+        (identifier
+          Op2
+        ),
+        (identifier
+          Res
+        )
       )
-    )
-    (subtype_indication
-      (type_mark<v>
-        (name<v>
-          (identifier
-            RegName
+      (subtype_indication
+        (type_mark<v>
+          (name<v>
+            (identifier
+              RegName
+            )
           )
         )
       )
     )
-  )
-  (identifier
-    Operation
   )
 )

@@ -21,8 +21,10 @@
         (component_configuration
           (component_specification
             (instantiation_list<v>
-              (identifier
-                G2
+              (label*
+                (identifier
+                  G2
+                )
               )
             )
             (name<v>

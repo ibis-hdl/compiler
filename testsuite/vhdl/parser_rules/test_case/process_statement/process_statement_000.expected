@@ -25,32 +25,34 @@
           )
         )
         (waveform<v>
-          (waveform_element
-            (expression
-              (relation
-                (shift_expression
-                  (simple_expression
-                    (term
-                      (primary<v>
-                        (name<v>
-                          (identifier
-                            b
+          (waveform_element*
+            (waveform_element
+              (expression
+                (relation
+                  (shift_expression
+                    (simple_expression
+                      (term
+                        (primary<v>
+                          (name<v>
+                            (identifier
+                              b
+                            )
                           )
                         )
                       )
                     )
                   )
-                )
-              ),
-              (operator: XOR),
-              (relation
-                (shift_expression
-                  (simple_expression
-                    (term
-                      (primary<v>
-                        (name<v>
-                          (identifier
-                            c
+                ),
+                (operator: XOR),
+                (relation
+                  (shift_expression
+                    (simple_expression
+                      (term
+                        (primary<v>
+                          (name<v>
+                            (identifier
+                              c
+                            )
                           )
                         )
                       )

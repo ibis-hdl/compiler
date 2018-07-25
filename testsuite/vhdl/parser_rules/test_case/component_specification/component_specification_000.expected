@@ -1,7 +1,9 @@
 (component_specification
   (instantiation_list<v>
-    (identifier
-      L1
+    (label*
+      (identifier
+        L1
+      )
     )
   )
   (name<v>

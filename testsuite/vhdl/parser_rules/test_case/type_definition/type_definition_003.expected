@@ -39,17 +39,19 @@
       (identifier
         pF
       )
-      (secondary_unit_declaration
-        (identifier
-          nF
-        )
-        (physical_literal
-          (abstract_literal<v>
-            (decimal_literal
-              literal: 1000, type: integer
-            )
-          ),
-          (unit_name: pF)
+      (secondary_unit_declaration*
+        (secondary_unit_declaration
+          (identifier
+            nF
+          )
+          (physical_literal
+            (abstract_literal<v>
+              (decimal_literal
+                literal: 1000, type: integer
+              )
+            ),
+            (unit_name: pF)
+          )
         )
       )
       (identifier

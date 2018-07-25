@@ -1,37 +1,15 @@
 (waveform<v>
-  (waveform_element
-    (expression
-      (relation
-        (shift_expression
-          (simple_expression
-            (term
-              (primary<v>
-                (literal<v>
-                  (string_literal
-                    0000
-                  )
-                )
-              )
-            )
-          )
-        )
-      )
-    )
-    (expression
-      (relation
-        (shift_expression
-          (simple_expression
-            (term
-              (primary<v>
-                (literal<v>
-                  (numeric_literal<v>
-                    (physical_literal
-                      (abstract_literal<v>
-                        (decimal_literal
-                          literal: 2, type: integer
-                        )
-                      ),
-                      (unit_name: ns)
+  (waveform_element*
+    (waveform_element
+      (expression
+        (relation
+          (shift_expression
+            (simple_expression
+              (term
+                (primary<v>
+                  (literal<v>
+                    (string_literal
+                      0000
                     )
                   )
                 )
@@ -40,18 +18,23 @@
           )
         )
       )
-    )
-  ),
-  (waveform_element
-    (expression
-      (relation
-        (shift_expression
-          (simple_expression
-            (term
-              (primary<v>
-                (literal<v>
-                  (string_literal
-                    1111
+      (expression
+        (relation
+          (shift_expression
+            (simple_expression
+              (term
+                (primary<v>
+                  (literal<v>
+                    (numeric_literal<v>
+                      (physical_literal
+                        (abstract_literal<v>
+                          (decimal_literal
+                            literal: 2, type: integer
+                          )
+                        ),
+                        (unit_name: ns)
+                      )
+                    )
                   )
                 )
               )
@@ -59,22 +42,41 @@
           )
         )
       )
-    )
-    (expression
-      (relation
-        (shift_expression
-          (simple_expression
-            (term
-              (primary<v>
-                (literal<v>
-                  (numeric_literal<v>
-                    (physical_literal
-                      (abstract_literal<v>
-                        (decimal_literal
-                          literal: 7, type: integer
-                        )
-                      ),
-                      (unit_name: ns)
+    ),
+    (waveform_element
+      (expression
+        (relation
+          (shift_expression
+            (simple_expression
+              (term
+                (primary<v>
+                  (literal<v>
+                    (string_literal
+                      1111
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      )
+      (expression
+        (relation
+          (shift_expression
+            (simple_expression
+              (term
+                (primary<v>
+                  (literal<v>
+                    (numeric_literal<v>
+                      (physical_literal
+                        (abstract_literal<v>
+                          (decimal_literal
+                            literal: 7, type: integer
+                          )
+                        ),
+                        (unit_name: ns)
+                      )
                     )
                   )
                 )
