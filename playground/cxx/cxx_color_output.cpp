@@ -4,6 +4,11 @@
  *  Created on: 22.07.2018
  *      Author: olaf
  *
+ * Feature Request: https://wandbox.org/permlink/0JD2DwnighGp7zYF
+ *
+ * concept       https://wandbox.org/permlink/lQs7qFfkSPZgbS6x [works]
+ * esc_printer   https://wandbox.org/permlink/0demYYShXIlH0De9
+ *
  */
 
 #if defined(NDEBUG)
@@ -243,6 +248,7 @@ int main()
 #include <array>
 #include <iterator>
 #include <algorithm>
+#include <optional>
 #include <cassert>
 
 #include <unistd.h> // isatty
@@ -282,33 +288,42 @@ enum class attribute : uint8_t {
 
 } // namespace ansii
 
-template<typename value_type, std::size_t SIZE>
+
+
+template<typename enum_type, std::size_t SIZE>
 class esc_printer
-    : public std::array<value_type, SIZE>
+    : public std::array<typename std::underlying_type<enum_type>::type, SIZE>
 {
+public:
+    typedef typename
+        std::underlying_type<enum_type>::type       value_type;
+
+private:
     template<std::size_t ... N>
-    esc_printer(std::initializer_list<value_type> il, std::index_sequence<N ...> )
-    : std::array<value_type, SIZE>{ {il.begin()[N] ...} }
+    esc_printer(std::initializer_list<enum_type> il, std::index_sequence<N ...> )
+    : std::array<value_type, SIZE>{ { static_cast<value_type>(il.begin()[N]) ...} }
     , count{ il.size() }
     {
         assert(il.size() <= SIZE && "range error of initializer_list");
     }
 
 public:
-    esc_printer(std::initializer_list<value_type> il)
+    esc_printer(std::initializer_list<enum_type> il)
     : esc_printer(il, std::make_index_sequence<SIZE>{})
     { }
 
     esc_printer() = default;
+    esc_printer(esc_printer const&) = default;
+    esc_printer& operator=(esc_printer const&) = default;
 
 public:
     std::ostream& print(std::ostream& os) const {
 
     	if (!count) { return os; }
-        if(is_redirected(os)) { return os; }
 
         os << CSI;
         for (size_t N = (count - 1), i = 0; i != count; ++i) {
+            // don't interpret as char_type
             os << static_cast<short>((*this)[i]);
             if (i != N) { os << ";"; }
         }
@@ -317,12 +332,22 @@ public:
         return os;
     }
 
-    void push_back(value_type code) { /// XXX make me variadic
+    void push_back(ansii::attribute code) { /// XXX make me variadic
         assert(count < size && "Code array is full");
-        (*this)[count++] = code;
+        (*this)[count++] = static_cast<value_type>(code);
     }
 
-    esc_printer& operator|(value_type code)
+    esc_printer& operator|=(esc_printer const& other)
+    {
+       assert((count + other.count) <= size && "Merged size to big");
+
+       std::copy_n(other.begin(), other.count, &(*this)[count]);
+       count += other.count;
+
+       return *this;
+    }
+
+    esc_printer& operator|=(ansii::attribute code)
     {
        push_back(code);
        return *this;
@@ -334,56 +359,113 @@ public:
         count = 0;
     }
 
-    // gets complex, move to extra function
-    bool is_redirected(std::ostream& os) const {
-    	// no POSIX way to extract stream handler from the a given
-    	// `std::ostream` object
-		auto const stream = [](std::ostream& os) {
-			if (&os == &std::cout) { return stdout; }
-			if (&os == &std::cerr || &os == &std::clog) { return stderr; }
-			return (FILE*)0;
-		};
-		if (!isatty(fileno(stream(os)))) { return true; }
-		return false;
-    }
-
     std::size_t                                     count = 0;
     static constexpr std::size_t                    size = SIZE;
     /* ANSI Control Sequence Introducer/Initiator */
     static constexpr char                           CSI[] = "\x1B[";
 };
 
-template<typename value_type, std::size_t SIZE>
-std::ostream& operator<<(std::ostream& os, esc_printer<value_type, SIZE> const& printer) {
+
+template<typename enum_type, std::size_t SIZE>
+std::ostream& operator<<(std::ostream& os, esc_printer<enum_type, SIZE> const& printer) {
     return printer.print(os);
 }
 
+template<typename enum_type, std::size_t SIZE>
+esc_printer<enum_type, SIZE> operator|(esc_printer<enum_type, SIZE> lhs, esc_printer<enum_type, SIZE> const& rhs) {
+     lhs |= rhs;
+    return lhs;
+}
 
 namespace text {
-    static esc_printer<ansii::attribute, 1> const Bold{ansii::attribute::Text_Bold};
+    static esc_printer<ansii::attribute, 4> const Bold{ansii::attribute::Text_Bold};
 }
 
 namespace fg {
-    static esc_printer<ansii::attribute, 1> const Red{ansii::attribute::Foreground_Red};
+    static esc_printer<ansii::attribute, 4> const Red{ansii::attribute::Foreground_Red};
 }
 
 namespace bg {
-    static esc_printer<ansii::attribute, 1> const Yellow{ansii::attribute::Background_Yellow};
+    static esc_printer<ansii::attribute, 4> const Yellow{ansii::attribute::Background_Yellow};
 }
 
 namespace ansii {
-    static esc_printer<ansii::attribute, 1> const Off{ansii::attribute::Attributes_Off};
+    static esc_printer<ansii::attribute, 4> const Off{ansii::attribute::Attributes_Off};
 }
 
 namespace attr {
-    static esc_printer<ansii::attribute, 2> const Error{ansii::attribute::Text_Bold, ansii::attribute::Foreground_Red};
+    static esc_printer<ansii::attribute, 4> const Error{ansii::attribute::Text_Bold, ansii::attribute::Foreground_Red};
 }
+
+#if 0
+struct emphase
+{
+    emphase(std::ostream& os_)
+    : os{ os_ }
+    { }
+
+    bool is_redirected(std::ostream& os) const {
+        // no POSIX way to extract stream handler from the a given
+        // `std::ostream` object
+        auto const stream = [](std::ostream& os) {
+            if (&os == &std::cout) { return stdout; }
+            if (&os == &std::cerr || &os == &std::clog) { return stderr; }
+            return (FILE*)0;
+        };
+        if (!isatty(fileno(stream(os)))) { return true; }
+        return false;
+    }
+
+    template<typename Range>
+    void operator()(Range const& range) const {
+
+        // cache
+        if(!no_tty) {
+            *no_tty = is_redirected(os);
+        }
+
+        on_start(os);
+        os << range;
+        on_end(os);
+    }
+
+    esc_printer<ansii::attribute, 4>& operator=(esc_printer<ansii::attribute, 4> pfx)
+    {
+        prefix_ = pfx;
+        return prefix_;
+    }
+
+    void on_start(std::ostream& os) const {
+        if (no_tty) return;
+        os << prefix_;
+    }
+
+    void on_end(std::ostream& os) const {
+        if (no_tty) return;
+        os << ansii::Off;
+    }
+
+    std::ostream&                                   os;
+    std::optional<bool> mutable                     no_tty;
+    bool                                            no_color = false;
+
+    esc_printer<ansii::attribute, 4>                prefix_;
+    esc_printer<ansii::attribute, 1>                postfix_{ ansii::attribute::Attributes_Off};
+};
+#endif
+
 
 int main()
 {
     // target test
     std::cout << fg::Red << "Hello" << bg::Yellow << "World!" << ansii::Off << "\n";
     std::cerr << attr::Error << "Error Test Message" << ansii::Off << "\n";
+
+    esc_printer<ansii::attribute, 4> attr;
+    attr = fg::Red | text::Bold | bg::Yellow;
+
+    //emphase_("Hello World");
+    std::cout << attr << "Welcome at C++" << ansii::Off << "\n";
 }
 
 #endif
