@@ -14,12 +14,11 @@
 
 - [iostream maniputor via xalloc/iword or via derived class?](https://stackoverflow.com/questions/23933655/iostream-maniputor-via-xalloc-iword-or-via-derived-class)
 - [Dr. Dobbs: The Standard Librarian: Defining a Facet](http://www.drdobbs.com/the-standard-librarian-defining-a-facet/184403785#4=)
-- [Why the RedirectStandardOutput does not have the necessary ANSI codes?](https://stackoverflow.com/questions/1963954/why-the-redirectstandardoutput-does-not-have-the-necessary-ansi-codes)
 - [Colorize special words in a string](https://stackoverflow.com/questions/14453543/colorize-special-words-in-a-string)
 - [Color console in ANSI C?](https://stackoverflow.com/questions/3274824/color-console-in-ansi-c)
-- [Baltasarq/cscrutil](http://github.com/Baltasarq/cscrutil/)
+- [Baltasarq/cscrutil](https://github.com/Baltasarq/cscrutil)
 - [ikalnytskyi/termcolor](https://github.com/ikalnytskyi/termcolor)
-- [jpcanepa/ansiterm](https://github.com/jpcanepa/ansiterm)
+- [done][jpcanepa/ansiterm](https://github.com/jpcanepa/ansiterm)
 - [adoxa/ansicon](https://github.com/adoxa/ansicon)
 - [Poco](https://pocoproject.org/docs/Poco.ColorConsoleChannel.html)
 #endif
@@ -32,11 +31,17 @@
  *  https://wandbox.org/permlink/TzgTah6w3KBaVaOj)
  */
 
+#if 0 // original approach
+
 #include <iostream>
 #include <array>
 #include <iterator>
 #include <algorithm>
 #include <cassert>
+
+#include <unistd.h> // isatty
+#include <cstdio>   // fileno
+
 
 namespace ansii {
 
@@ -108,6 +113,7 @@ struct basic_printer
     std::ostream& print(std::ostream& os) const {
 
         if (!n) { return os; }
+        if(is_redirected(os)) { return os; }
 
         os << CSI;
         //os << "CSI(" << n << ")[";
@@ -150,6 +156,13 @@ struct basic_printer
     {
         codes.fill(0);
         n = 0;
+    }
+
+    bool is_redirected(std::ostream& os) const {
+       if (!isatty(fileno(stdout))){
+           return true;
+       }
+       return false;
     }
 
     /* ANSI Control Sequence Introducer/Initiator */
@@ -221,3 +234,156 @@ int main()
     //std::cout << highlight << "Hello World!\n" << ansii::Off;
 
 }
+
+#else
+
+
+// https://wandbox.org/permlink/jrervHCM4JmExBJW
+#include <iostream>
+#include <array>
+#include <iterator>
+#include <algorithm>
+#include <cassert>
+
+#include <unistd.h> // isatty
+#include <cstdio>   // fileno
+
+
+namespace ansii {
+
+// http://ascii-table.com/ansi-escape-sequences.php
+enum class attribute : uint8_t {
+    // Text attribute
+    Attributes_Off = 0,
+    Text_Bold = 1,
+    Text_Underscore = 4,
+    Text_Blink = 5,
+    Text_Reverse = 7,
+    Text_Concealed = 8,
+    // Foreground colors
+    Foreground_Black = 30,
+    Foreground_Red = 31,
+    Foreground_Green = 32,
+    Foreground_Yellow = 33,
+    Foreground_Blue = 34,
+    Foreground_Magenta = 35,
+    Foreground_Cyan = 36,
+    Foreground_White = 37,
+    // Background colors
+    Background_Black = 40,
+    Background_Red = 41,
+    Background_Green = 42,
+    Background_Yellow = 43,
+    Background_Blue = 44,
+    Background_Magenta = 45,
+    Background_Cyan = 46,
+    Background_White = 47,
+};
+
+} // namespace ansii
+
+template<typename value_type, std::size_t SIZE>
+class esc_printer
+    : public std::array<value_type, SIZE>
+{
+    template<std::size_t ... N>
+    esc_printer(std::initializer_list<value_type> il, std::index_sequence<N ...> )
+    : std::array<value_type, SIZE>{ {il.begin()[N] ...} }
+    , count{ il.size() }
+    {
+        assert(il.size() <= SIZE && "range error of initializer_list");
+    }
+
+public:
+    esc_printer(std::initializer_list<value_type> il)
+    : esc_printer(il, std::make_index_sequence<SIZE>{})
+    { }
+
+    esc_printer() = default;
+
+public:
+    std::ostream& print(std::ostream& os) const {
+
+    	if (!count) { return os; }
+        if(is_redirected(os)) { return os; }
+
+        os << CSI;
+        for (size_t N = (count - 1), i = 0; i != count; ++i) {
+            os << static_cast<short>((*this)[i]);
+            if (i != N) { os << ";"; }
+        }
+        os << "m";
+
+        return os;
+    }
+
+    void push_back(value_type code) { /// XXX make me variadic
+        assert(count < size && "Code array is full");
+        (*this)[count++] = code;
+    }
+
+    esc_printer& operator|(value_type code)
+    {
+       push_back(code);
+       return *this;
+    }
+
+    void reset()
+    {
+        (*this).fill(0);
+        count = 0;
+    }
+
+    // gets complex, move to extra function
+    bool is_redirected(std::ostream& os) const {
+    	// no POSIX way to extract stream handler from the a given
+    	// `std::ostream` object
+		auto const stream = [](std::ostream& os) {
+			if (&os == &std::cout) { return stdout; }
+			if (&os == &std::cerr || &os == &std::clog) { return stderr; }
+			return (FILE*)0;
+		};
+		if (!isatty(fileno(stream(os)))) { return true; }
+		return false;
+    }
+
+    std::size_t                                     count = 0;
+    static constexpr std::size_t                    size = SIZE;
+    /* ANSI Control Sequence Introducer/Initiator */
+    static constexpr char                           CSI[] = "\x1B[";
+};
+
+template<typename value_type, std::size_t SIZE>
+std::ostream& operator<<(std::ostream& os, esc_printer<value_type, SIZE> const& printer) {
+    return printer.print(os);
+}
+
+
+namespace text {
+    static esc_printer<ansii::attribute, 1> const Bold{ansii::attribute::Text_Bold};
+}
+
+namespace fg {
+    static esc_printer<ansii::attribute, 1> const Red{ansii::attribute::Foreground_Red};
+}
+
+namespace bg {
+    static esc_printer<ansii::attribute, 1> const Yellow{ansii::attribute::Background_Yellow};
+}
+
+namespace ansii {
+    static esc_printer<ansii::attribute, 1> const Off{ansii::attribute::Attributes_Off};
+}
+
+namespace attr {
+    static esc_printer<ansii::attribute, 2> const Error{ansii::attribute::Text_Bold, ansii::attribute::Foreground_Red};
+}
+
+int main()
+{
+    // target test
+    std::cout << fg::Red << "Hello" << bg::Yellow << "World!" << ansii::Off << "\n";
+    std::cerr << attr::Error << "Error Test Message" << ansii::Off << "\n";
+}
+
+#endif
