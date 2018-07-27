@@ -61,6 +61,7 @@ template <typename IteratorT>
 struct print_line
 {
     typedef IteratorT                   iterator_type;
+    typedef typename IteratorT::value_type char_type;
 
     print_line(iterator_type const& first_, iterator_type const& last_)
     : first{ first_ }
@@ -83,7 +84,8 @@ struct print_line
             }
         }
 
-        os << std::string{ first, end };
+        std::copy(first, end, std::ostream_iterator<char_type>(os));
+
         return os;
     }
 
@@ -99,44 +101,44 @@ std::ostream& operator<<(std::ostream& os, print_line<IteratorT> const& print_li
 
 
 ////////////////////////////////////////////////////////////////////
+// modifies error_pos
 template <class Iterator>
-Iterator get_line_start(Iterator first, Iterator const& pos)
+Iterator get_line_start(Iterator const& first, Iterator const& last, Iterator& error_pos)
 {
+    // make sure err_pos does not point to white space
+    auto const skip_whitespace = [](auto& err_pos, auto const& last_) {
+
+        while (err_pos != last_) {
+
+            char const ch = *err_pos;
+            // Note: The behavior is undefined if the value of ch is not
+            // representable as unsigned char and is not equal to EOF.
+            // [std::isspace](https://en.cppreference.com/w/cpp/string/byte/isspace)
+            if (std::isspace(static_cast<unsigned char>(ch))) {
+                ++err_pos;
+            }
+            else {
+                break;
+            }
+        }
+    };
+
+    skip_whitespace(error_pos, last);
+
     Iterator latest{ first };
 
-    for (Iterator i = first; i != pos; ++i) {
+    for (Iterator i = first; i != error_pos; ++i) {
         if (*i == '\r' || *i == '\n') {
             latest = i;
         }
     }
 
-    if (latest != pos) {
+    if (latest != error_pos) {
         // skip over line break
         ++latest;
     }
 
     return latest;
-}
-
-////////////////////////////////////////////////////////////////////
-// make sure err_pos does not point to white space
-// modifies err_pos
-template <typename Iterator>
-void skip_whitespace(Iterator& err_pos, Iterator const& last)
-{
-    while (err_pos != last) {
-
-        char const ch = *err_pos;
-        // Note: The behavior is undefined if the value of ch is not
-        // representable as unsigned char and is not equal to EOF.
-        // [std::isspace](https://en.cppreference.com/w/cpp/string/byte/isspace)
-        if (std::isspace(static_cast<unsigned char>(ch))) {
-            ++err_pos;
-        }
-        else {
-            break;
-        }
-    }
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -172,12 +174,11 @@ void error_handler(Iterator const& first, Iterator const& last,
     unsigned const tab_size = 4;
     std::string filename{"TestInput"};
 
-    skip_whitespace(error_pos, last);
+    auto const start = get_line_start(first, last, error_pos);
 
-    auto start = get_line_start(first, error_pos);
 
     std::cout << "[Error]"
-              << " in " << filename << ", line " << line_number(first, error_pos) << ": "
+              << " in " << filename << ", line " << line_number(first, error_pos) << ":\n"
               << message << "\n";
 
     std::cout << print_line(start, last) << "\n";
@@ -195,19 +196,18 @@ void error_handler(Iterator const& first, Iterator const& last,
     unsigned const tab_size = 4;
     std::string filename{"TestInput"};
 
-    skip_whitespace(error_first, last);
-
-    auto start = get_line_start(first, error_first);
+    auto const start = get_line_start(first, last, error_first);
 
     std::cout << "[Error]"
-              << " in " << filename << ", line " << line_number(first, error_first) << ": "
+              << " in " << filename << ", line " << line_number(first, error_first) << ":\n"
               << message << "\n";
 
     std::cout << print_line(start, last) << "\n";
 
     std::cout << indicator(error_first, error_last, tab_size, ' ')
-              << indicator(start, error_last, tab_size, '~')
-              << " <<< Here\n"
+              << "^"
+              << indicator(start, error_last - 1, tab_size, '~')
+              << "\n"
               ;
 }
 
@@ -233,9 +233,9 @@ int main()
     }();
 
 
-    error_handler(first, last, error_first, error_last, "Shit happens");
+    error_handler(first, last, error_first, error_last, "Shit happens (tagged)");
     std::cout << "--------------------------------------------------\n";
-    error_handler(first, last, error_first, "Shit happens");
+    error_handler(first, last, error_first, "Shit happens (x3)");
     std::cout << "\n";
 }
 
