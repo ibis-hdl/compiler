@@ -174,7 +174,11 @@ void error_handler(Iterator const& first, Iterator const& last,
     unsigned const tab_size = 4;
     std::string filename{"TestInput"};
 
+<<<<<<< HEAD
     auto const start = get_line_start(first, last, error_pos);
+=======
+    auto start = get_line_start(first, last, error_pos);
+>>>>>>> e104ed0b18533d030a31afbbb186869ab92a2ddc
 
 
     std::cout << "[Error]"
@@ -196,7 +200,11 @@ void error_handler(Iterator const& first, Iterator const& last,
     unsigned const tab_size = 4;
     std::string filename{"TestInput"};
 
+<<<<<<< HEAD
     auto const start = get_line_start(first, last, error_first);
+=======
+    auto start = get_line_start(first, last, error_first);
+>>>>>>> e104ed0b18533d030a31afbbb186869ab92a2ddc
 
     std::cout << "[Error]"
               << " in " << filename << ", line " << line_number(first, error_first) << ":\n"
