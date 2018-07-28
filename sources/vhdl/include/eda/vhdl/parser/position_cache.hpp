@@ -26,7 +26,7 @@ namespace eda { namespace vhdl { namespace parser {
 
 
 /*
- * Annotation and Error handling
+ * Annotation
  *
  * ToDo: Documentation
  */
@@ -40,12 +40,9 @@ public:
     typedef typename container_type::value_type     range_type;
 
 public:
-    position_cache(std::string const& range_)
-    : range{ std::begin(range_), std::end(range_) }
-    { }
-
-    position_cache(iterator_type first, iterator_type last)
-    : range{ std::move(first), std::move(last) }
+    position_cache(std::string const& range)
+    : begin{ std::move(range.begin()) }
+    , end{ std::move(range.end()) }
     { }
 
 public:
@@ -64,7 +61,7 @@ public:
                       "Insufficient range of numeric IDs for AST tagging");
 
             node.pos_id = positions.size();
-            positions.emplace_back( first, last );
+            positions.emplace_back(first, last);
         }
         else { // ignore
         	// ... but make gcc happy
@@ -114,17 +111,14 @@ public:
     }
 #endif
 public:
-    std::tuple<iterator_type, iterator_type> iterator_range() const
-    {
-        return std::tuple{ range.begin(), range.end() };
+    std::tuple<iterator_type, iterator_type> range() const {
+        return std::tuple(begin, end);
     }
-
-    iterator_type first() const       { return range.begin(); }
-    iterator_type const& last() const { return range.end(); }
 
 private:
     container_type                                  positions;
-    range_type                                      range;
+    iterator_type const                             begin;
+    iterator_type const                             end;
 };
 
 

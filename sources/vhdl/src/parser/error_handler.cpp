@@ -18,93 +18,49 @@
 
 #include <iostream>
 
+#include <eda/util/cxx_bug_fatal.hpp>
+
 
 namespace eda { namespace vhdl { namespace parser {
 
 
-#pragma GCC diagnostic push // -------------------------------------------------
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-
-#if 0
-template <typename Iterator>
-typename error_handler<Iterator>::result_type error_handler<Iterator>::operator()(
-    ast::position_tagged const& where_tag, std::string const& message) const
-{
-    auto const where = position_cache.position_of(where_tag);
-    return (*this)(where, message);
-}
-
-
-template <typename Iterator>
-typename error_handler<Iterator>::result_type error_handler<Iterator>::operator()(
-    ast::position_tagged const& where_tag, std::string const& which_rule,
-    std::string const& message) const
-{
-    auto const where = position_cache.position_of(where_tag);
-    return (*this)(where, which_rule, message);
-}
-
-
-template <typename Iterator>
-typename error_handler<Iterator>::result_type error_handler<Iterator>::operator()(
-    range_type const& where, std::string const& which_rule,
-    std::string const& error_message) const
-{
-    auto [first, last] = position_cache.iterator_range();
-    auto err_first = std::begin(where);
-
-
-    return x3::error_handler_result::fail;
-}
-
-
-template <typename Iterator>
-typename error_handler<Iterator>::result_type error_handler<Iterator>::operator()(
-    range_type const& where, std::string const& error_message) const
-{
-//    auto [first, last] = position_cache.iterator_pair();
-//    auto err_first = std::begin(where);
-
-    return x3::error_handler_result::fail;
-}
-#else
 // AST/parse related error handler (original signature)
 template <typename Iterator>
 typename error_handler<Iterator>::result_type error_handler<Iterator>::operator()(
     iterator_type error_pos, std::string const& error_message) const
 {
+    using boost::locale::format;
     using boost::locale::translate;
 
-    auto [first, last] = position_cache.iterator_range();
+    auto const [first, last] = position_cache.range();
 
-    // make sure err_pos does not point to white space
-    skip_whitespace(error_pos, last);
-    print_file_line(error_pos);
+    // location + message
+    os << format(translate(
+          "In file {1}, line {2}:\n"
+          "{3}\n"
+          ))
+          % file_name()
+          % line_number(error_pos)
+          % (!error_message.empty() ? error_message : translate("Unspecified Error, Sorry").str())
+          ;
 
-    if (!error_message.empty()) {
-        os << error_message << std::endl;
-    }
-    else {
-        os << translate("Sorry, no concrete error description") << std::endl;
-    }
-
-    iterator_type start = get_line_start(first, error_pos);
-
-    if (start != first)
-        ++start;
-
+    // erroneous source snippet
+    iterator_type start = get_line_start(error_pos);
     print_line(start, last);
 
+    // error indicator
     print_indicator(start, error_pos, '_');
     os << "^_" << std::endl;
 
     return x3::error_handler_result::fail;
 }
 
+// error handler for tagged nodes
 template <typename Iterator>
 typename error_handler<Iterator>::result_type error_handler<Iterator>::operator()(
     ast::position_tagged const& where_tag, std::string const& error_message) const
 {
+    using boost::locale::format;
     using boost::locale::translate;
 
     auto const error_iterators = [this](ast::position_tagged const& tagged_node) {
@@ -117,37 +73,31 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
         );
     };
 
+    auto const [first, last] = position_cache.range();
     auto [error_first, error_last] = error_iterators(where_tag);
-    auto [first, last] = position_cache.iterator_range();
 
+    // location + message
+    os << format(translate(
+          "In file {1}, line {2}:\n"
+          "{3}\n"
+          ))
+          % file_name()
+          % line_number(error_first)
+          % (!error_message.empty() ? error_message : translate("Unspecified Error, Sorry").str())
+          ;
 
-    // make sure error_pos does not point to white space
-    skip_whitespace(error_first, last);
-    print_file_line(error_first);
-
-    if (!error_message.empty()) {
-        os << error_message << std::endl;
-    }
-    else {
-        os << translate("Sorry, no concrete error description") << std::endl;
-    }
-
-    iterator_type start = get_line_start(first, error_first);
-
-    if (start != first)
-        ++start;
-
+    // erroneous source snippet
+    iterator_type start = get_line_start(error_first);
     print_line(start, last);
 
+    // error indicator
     print_indicator(start, error_first, ' ');
     print_indicator(start, error_last,  '~');
     os << translate(" <<-- Here") << std::endl;
 
     return x3::error_handler_result::fail;
 }
-#endif
 
-#pragma GCC diagnostic pop  // -------------------------------------------------
 
 template <typename Iterator>
 std::string error_handler<Iterator>::file_name() const
@@ -159,46 +109,35 @@ std::string error_handler<Iterator>::file_name() const
 
 
 template <typename Iterator>
-void error_handler<Iterator>::print_file_line(iterator_type const& iter) const
+std::size_t error_handler<Iterator>::line_number(iterator_type const& pos) const
 {
-    auto const line_number = [this](iterator_type const& it) {
+    std::size_t line_no { 1 };
+    typename std::iterator_traits<iterator_type>::value_type prev { 0 };
 
-        std::size_t line_no { 1 };
-        typename std::iterator_traits<iterator_type>::value_type prev { 0 };
+    auto const [first, last] = position_cache.range();
+    boost::ignore_unused(last);
 
-        for (iterator_type pos = position_cache.first(); pos != it; ++pos) {
-            auto chr = *pos;
-            switch (chr) {
-                case '\n':
-                    if (prev != '\r') ++line_no;
-                    break;
-                case '\r':
-                    ++line_no;
-                    break;
-                default:
-                    break;
-            }
-            prev = chr;
+    for (iterator_type iter{ first} ; iter != pos; ++iter) {
+        auto chr = *iter;
+        switch (chr) {
+            case '\n':
+                if (prev != '\r') ++line_no;
+                break;
+            case '\r':
+                ++line_no;
+                break;
+            default:
+                break;
         }
+        prev = chr;
+    }
 
-        return line_no;
-    };
-
-    using boost::locale::format;
-    using boost::locale::translate;
-
-
-    os << format(translate(
-          "In file {1}, line {2}:\n"
-          ))
-          % file_name()
-          % line_number(iter)
-          ;
+    return line_no;
 }
 
 
 template <typename Iterator>
-void error_handler<Iterator>::print_line(iterator_type first, iterator_type const& last) const
+void error_handler<Iterator>::print_line(iterator_type const& first, iterator_type const& last) const
 {
     auto end = first;
 
@@ -216,12 +155,12 @@ void error_handler<Iterator>::print_line(iterator_type first, iterator_type cons
 
     std::basic_string<parser::char_type> line{ first, end };
 
-    os << boost::locale::conv::utf_to_utf<char>(line) << std::endl;
+    os << boost::locale::conv::utf_to_utf<char>(line) << "\n";
 }
 
 
 template <typename Iterator>
-void error_handler<Iterator>::print_indicator(iterator_type& first, iterator_type const& last, char indicator) const
+void error_handler<Iterator>::print_indicator(iterator_type& first, iterator_type const& last, char symbol) const
 {
     for ( ; first != last; ++first) {
 
@@ -231,44 +170,55 @@ void error_handler<Iterator>::print_indicator(iterator_type& first, iterator_typ
             break;
         }
         else if (chr == '\t') {
-            for (unsigned i = 0; i != tab_sz; ++i)
-                os << indicator;
+            for (std::size_t i = 0; i != tab_sz; ++i)
+                os << symbol;
         }
         else {
-            os << indicator;
-        }
-    }
-}
-
-
-template <typename Iterator>
-void error_handler<Iterator>::skip_whitespace(iterator_type& err_pos, iterator_type const& last) const
-{
-    // make sure err_pos does not point to white space
-    while (err_pos != last) {
-
-        char c = *err_pos;
-
-        if (std::isspace(c)) {
-            ++err_pos;
-        }
-        else {
-            break;
+            os << symbol;
         }
     }
 }
 
 
 template <class Iterator>
-inline Iterator error_handler<Iterator>::get_line_start(iterator_type first, iterator_type const& pos) const
+Iterator error_handler<Iterator>::get_line_start(iterator_type& pos) const
 {
-    iterator_type latest = first;
+    // make sure err_pos does not point to white space
+    auto const skip_whitespace = [](iterator_type& iter, iterator_type const& last) {
+
+        while (iter != last) {
+
+            char const ch = *iter;
+            // Note: The behavior is undefined if the value of ch is not
+            // representable as unsigned char and is not equal to EOF.
+            // [std::isspace](https://en.cppreference.com/w/cpp/string/byte/isspace)
+            if (std::isspace(static_cast<unsigned char>(ch))) {
+                ++iter;
+            }
+            else {
+                break;
+            }
+        }
+    };
+
+    auto const [first, last] = position_cache.range();
+
+    skip_whitespace(pos, last);
+
+    iterator_type latest{ first };
 
     for (iterator_type i = first; i != pos; ++i) {
         if (*i == '\r' || *i == '\n') {
             latest = i;
         }
     }
+
+    // skip over line breaks
+    if (latest != pos) {
+        ++latest;
+    }
+
+    cxx_assert(latest < last, "iterator range error");
 
     return latest;
 }

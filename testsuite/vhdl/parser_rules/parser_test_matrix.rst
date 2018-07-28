@@ -11617,7 +11617,7 @@ integer_failure
 |                     |       |                                                            |
 |                     |       |                                                            |
 +---------------------+-------+------------------------------------------------------------+
-| integer_failure_001 | 42_   | In file integer_failure/integer_failure_001.input, line 1: |
+| integer_failure_001 |  42_  | In file integer_failure/integer_failure_001.input, line 1: |
 |                     |       | Test Suite Full Match Error! Unparsed input left:          |
 |                     |       | _                                                          |
 |                     |       |                                                            |

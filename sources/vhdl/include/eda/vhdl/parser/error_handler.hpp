@@ -40,7 +40,7 @@ public:
 public:
     error_handler(
         std::ostream& os_, position_cache<iterator_type>& position_cache_,
-        std::string file = "", unsigned tabs = 4
+        std::string file = "", std::size_t tabs = 4
     )
       : os(os_)
       , position_cache(position_cache_)
@@ -55,58 +55,28 @@ public:
         position_cache.annotate(node, first, last);
     }
 
-#if 0
 public:
-    // AST error handler (original signature)
-    result_type operator()(
-        ast::position_tagged const& where_tag, std::string const& message) const;
-
-    // AST error handler
-    result_type operator()(
-        ast::position_tagged const& where_tag, std::string const& which_rule,
-        std::string const& message) const;
-
-public:
-    result_type operator()(
-        range_type  const& where, std::string const& which_rule,
-        std::string const& error_message) const;
-
-    result_type operator()(
-        range_type const& where, std::string const& error_message) const;
-
-    // non-AST error handler
-    result_type operator()(
-        iterator_type const& err_pos, std::string const& error_message) const;
-#else
-public:
-    // AST/parse related error handler (original signature)
     result_type operator()(
         iterator_type err_pos, std::string const& error_message) const;
 
 public:
-    // working on tagged AST
     result_type operator()(
         ast::position_tagged const& where_tag, std::string const& error_message) const;
-
-
-#endif
 
 public:
     std::string file_name() const;
 
 private:
-    // helper functions
-    void print_file_line(iterator_type const& iter) const;
-    void print_line(iterator_type start, iterator_type const& last) const;
-    void print_indicator(iterator_type& first, iterator_type const& last, char indicator) const;
-    void skip_whitespace(iterator_type& err_pos, iterator_type const& last) const;
-    Iterator get_line_start(iterator_type first, iterator_type const& pos) const;
+    std::size_t line_number(iterator_type const& iter) const;
+    Iterator get_line_start(iterator_type& pos_iter) const;
+    void print_line(iterator_type const& start, iterator_type const& last) const;
+    void print_indicator(iterator_type& first, iterator_type const& last, char symbol) const;
 
 private:
     std::ostream&                                   os;
     position_cache<iterator_type>&                  position_cache;
     std::string                                     filename;
-    unsigned                                        tab_sz;
+    std::size_t                                     tab_sz;
 };
 
 
