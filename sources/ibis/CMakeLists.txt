@@ -9,12 +9,6 @@
 project(ibis LANGUAGES CXX)
 
 
-## DocOpt++
-# parsing command line 
-include(external_docopt_cpp)
-include_directories(${DOCOPT_CPP_DIR})
-
-
 set(IBIS_SOURCE
     src/docopt_inst.cpp
     src/parse_cli.cpp
@@ -55,11 +49,25 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQ
 endif()
 
 
+##
+# DocOpt++
+# parsing command line 
+include(external_docopt_cpp)
+include_directories(${DOCOPT_CPP_DIR})
+
+
+## 
+# Boost.Org Libraries
+find_package(Boost REQUIRED COMPONENTS 
+    system locale
+)
 
 
 # Depencies
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
     eda::common
+    Boost::system
+    Boost::locale
 )
 

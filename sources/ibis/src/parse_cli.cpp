@@ -9,10 +9,16 @@
 
 #include <ibis/global_options.hpp>
 
+#include <eda/support/boost/locale.hpp>
+#include <eda/util/cxx_bug_fatal.hpp>
+
 #include <algorithm>
 #include <iterator>
 
 #include <iostream>
+
+
+static const char VERSION_STR[] = "EDA/ibis 0.0.1";
 
 
 static const char USAGE[] =
@@ -29,12 +35,31 @@ R"(EDA/ibis
       --version     Show version.
 )";
 
-static const char VERSION_STR[] = "EDA/ibis 0.0.1";
+
+template<typename ValueT>
+bool set_global_options(std::string const& key, ValueT const& value)
+{
+	auto const match = [](std::string const& key_, const char* primary) {
+		return key_.compare(primary) == 0;
+	};
+
+
+    if (match(key, "<file>")) {
+        for (auto filename : value.asStringList()) {
+            ibis::global_options.source_files.emplace_back(filename);
+        }
+    }
+
+    return true;
+}
 
 
 void parse_cli(int argc, const char* argv[])
 {
     using namespace docopt;
+
+    using boost::locale::format;
+    using boost::locale::translate;
 
     std::vector<std::string> const args{argv + 1, argv + argc};
 
@@ -49,34 +74,33 @@ void parse_cli(int argc, const char* argv[])
         std::map<std::string, value> arg_map = docopt_parse(USAGE, args);
 
         for (auto const& [key, value] : arg_map) {
-
-            std::cout << key << '"' << ": " << value << "\n";
-
-            if (std::string{"file"}.compare(key)) {
-                for (auto const& source : value.asStringList()) {
-                    ibis::global_options.source_files.push_back(source);
-                }
-            }
+            //std::cout << '"' << key << '"' << ": " << value << "\n";
+        	if (!set_global_options(key, value)) {
+                std::cout << USAGE << std::endl;
+                std::exit(EXIT_FAILURE);
+        	}
         }
     }
     catch (DocoptExitHelp const&) {
         std::cout << USAGE << std::endl;
-        std::exit(0);
+        std::exit(EXIT_SUCCESS);
     }
     catch (DocoptExitVersion const&) {
         std::cout << VERSION_STR << std::endl;
-        std::exit(0);
+        std::exit(EXIT_SUCCESS);
     }
     catch (DocoptLanguageError const& error) {
-        std::cerr << "Command line arguments could not be parsed" << std::endl;
-        std::cerr << error.what() << std::endl;
+        std::cerr << format(translate(
+                     "Command line arguments could not be parsed: {1}\n"))
+                      % error.what();
         std::cout << USAGE << std::endl;
-        std::exit(-1);
+        std::exit(EXIT_FAILURE);
     }
     catch (DocoptArgumentError const& error) {
-        std::cerr << error.what();
-        std::cout << std::endl;
+        std::cerr << format(translate(
+                     "DocOpt++ argument error: {1}\n"))
+                      % error.what();
         std::cout << USAGE << std::endl;
-        std::exit(-1);
+        std::exit(EXIT_FAILURE);
     }
 }
