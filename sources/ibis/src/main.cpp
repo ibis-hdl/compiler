@@ -22,7 +22,7 @@ int main(int argc, const char *argv[])
     auto const& sources{ ibis::global_options.source_files };
 
     std::copy(sources.begin(), sources.end(),
-             eda::util::infix_ostream_iterator<std::string>(std::cout, ", "));
+              eda::util::infix_ostream_iterator<std::string>(std::cout, ", "));
     std::cout << "\n";
 
     return 0;

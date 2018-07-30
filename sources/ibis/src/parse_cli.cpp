@@ -25,7 +25,7 @@ static const char USAGE[] =
 R"(EDA/ibis
 
     Usage:
-      ibis <file>...
+      ibis <file> ...
 
       ibis (-h | --help)            # cool
       ibis --version
