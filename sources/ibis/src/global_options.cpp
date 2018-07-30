@@ -7,7 +7,7 @@
 
 #include <ibis/global_options.hpp>
 
-#include <boost/property_tree/ptree.hpp>
+//#include <boost/property_tree/ptree.hpp>
 
 
 namespace ibis {

@@ -34,6 +34,8 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
 
     auto const [first, last] = position_cache.range();
 
+    boost::ignore_unused(first);
+
     // location + message
     os << format(translate(
           "In file {1}, line {2}:\n"
@@ -75,6 +77,8 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
 
     auto const [first, last] = position_cache.range();
     auto [error_first, error_last] = error_iterators(where_tag);
+
+    boost::ignore_unused(first);
 
     // location + message
     os << format(translate(

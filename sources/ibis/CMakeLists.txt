@@ -16,7 +16,7 @@ include_directories(${DOCOPT_CPP_DIR})
 
 
 set(IBIS_SOURCE
-    ${DOCOPT_CPP_DIR}/docopt.cpp
+    src/docopt_inst.cpp
     src/parse_cli.cpp
     src/global_options.cpp
     src/main.cpp
