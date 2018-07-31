@@ -9,7 +9,10 @@
 
 #include <ibis/global_options.hpp>
 
+#include <eda/util/file/file_reader.hpp>
+
 #include <eda/support/boost/locale.hpp>
+
 #include <eda/util/cxx_bug_fatal.hpp>
 
 #include <algorithm>
@@ -43,9 +46,20 @@ bool set_global_options(std::string const& key, ValueT const& value)
 		return key_.compare(primary) == 0;
 	};
 
-
     if (match(key, "<file>")) {
-        for (auto filename : value.asStringList()) {
+
+        std::vector<std::string> const& file_list = value.asStringList();
+
+        using eda::util::file_loader;
+        file_loader file_check{ std::cerr };
+
+        // early check too avoid aborting due to missing/duplicate files later on
+        if (!file_check.unique_files(file_list)) {
+            // immediately exit, no usage info wanted by caller
+            std::exit(EXIT_FAILURE);
+        }
+
+        for (auto filename : file_list) {
             ibis::global_options.source_files.emplace_back(filename);
         }
     }

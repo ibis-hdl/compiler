@@ -7,7 +7,7 @@
 
 #include <ibis/parse_cli.hpp>
 #include <ibis/global_options.hpp>
-#include <eda/util/infix_ostream_iterator.hpp>
+//#include <eda/util/infix_ostream_iterator.hpp>
 #include <eda/util/file/file_reader.hpp>
 
 #include <iostream>
@@ -17,32 +17,33 @@ int main(int argc, const char *argv[])
 {
     parse_cli(argc, argv);
 
+    auto const& sources{ ibis::global_options.source_files };
+
+#if 0
     std::cout << "processing:\n";
-
-    auto const& sources { ibis::global_options.source_files };
-
     std::copy(sources.begin(), sources.end(),
               eda::util::infix_ostream_iterator<std::string>(std::cout, ", "));
     std::cout << "\n";
+#endif
 
-    eda::util::file_loader ld { std::cerr };
-
-    //std::cout << std::boolalpha << ld.exist_files(sources)<< "\n";
-    std::cout << std::boolalpha << ld.unique_files(sources) << "\n";
+    eda::util::file_loader file_reader{ std::cerr };
 
     try {
         for (auto const filename : sources) {
-            auto const contents = ld.read_file(filename);
+            auto const contents = file_reader.read_file(filename);
             std::cout << "\n------------------------------------------------\n";
             std::cout << contents;
             std::cout << "\n------------------------------------------------\n";
-            std::time_t t = ld.timesstamp(filename);
+            std::time_t t = file_reader.timesstamp(filename);
             std::cout << "timestamp: " << t << "\n";
             std::cout << "------------------------------------------------\n";
         }
     }
     catch(std::exception const& e) {
         std::cerr << "Exception caught: " << e.what() << "\n";
+    }
+    catch(...) {
+        std::cerr << "Unexpected exception caught\n";
     }
     return 0;
 }
