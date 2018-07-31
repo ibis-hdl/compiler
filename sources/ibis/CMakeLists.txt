@@ -59,7 +59,8 @@ include_directories(${DOCOPT_CPP_DIR})
 ## 
 # Boost.Org Libraries
 find_package(Boost REQUIRED COMPONENTS 
-    system locale
+    system locale 
+    filesystem
 )
 
 
@@ -69,5 +70,6 @@ target_link_libraries(${PROJECT_NAME}
     eda::common
     Boost::system
     Boost::locale
+    Boost::filesystem
 )
 
