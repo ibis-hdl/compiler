@@ -11,7 +11,7 @@ ExternalProject_Add(
   GIT_TAG               boost-1.67.0
   GIT_PROGRESS          1
 #  GIT_TAG               develop
-  PREFIX                ${PROJECT_BINARY_DIR}/external
+  PREFIX                ${CMAKE_BINARY_DIR}/external
   PATCH_COMMAND         ""
   CONFIGURE_COMMAND     ""
   BUILD_COMMAND         ""

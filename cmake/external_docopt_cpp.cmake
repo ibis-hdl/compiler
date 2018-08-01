@@ -9,7 +9,7 @@ ExternalProject_Add(
   GIT_REPOSITORY        https://github.com/docopt/docopt.cpp.git
   GIT_TAG               master
   GIT_PROGRESS          1
-  PREFIX                ${PROJECT_BINARY_DIR}/external
+  PREFIX                ${CMAKE_BINARY_DIR}/external
   PATCH_COMMAND         ""
   CONFIGURE_COMMAND     ""
   BUILD_COMMAND         ""

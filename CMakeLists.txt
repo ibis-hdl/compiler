@@ -25,11 +25,6 @@ include(options)
 
 
 ##
-# Plattform and compiler checks
-include(build_config_hpp)
-
-
-##
 # Globally Boost.Spirit.X3 clone
 # EDA project parser depends on newer Spirit.X3 versions as commonly shiped
 # by the linux distributions. Create an own up-to-date clone of Boost.Spirit's

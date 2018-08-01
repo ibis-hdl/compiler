@@ -22,7 +22,7 @@ add_executable(${PROJECT_NAME} ${IBIS_SOURCE})
 target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
-    PRIVATE src)
+    PRIVATE ${DOCOPT_CPP_DIR})
 
 
 target_compile_options(${PROJECT_NAME} PRIVATE
