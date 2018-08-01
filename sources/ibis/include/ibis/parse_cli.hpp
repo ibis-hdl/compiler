@@ -12,7 +12,7 @@
 #include <vector>
 
 namespace eda {
-    struct configuration;
+    class configuration;
 }
 
 std::vector<std::string> parse_cli(int argc, const char* argv[], eda::configuration& config);

@@ -23,7 +23,7 @@ void configuration::dump(std::ostream& os) const
 }
 
 
-void option_trigger::update(configuration& config)
+void configuration::option_trigger::update(configuration& config)
 {
     auto const trim = [](std::string const& key) {
         return configuration::trim(key);

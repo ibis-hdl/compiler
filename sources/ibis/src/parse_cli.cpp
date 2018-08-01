@@ -61,7 +61,7 @@ bool set_options(std::string const& key, docopt::value const& value, eda::config
 	auto const set_bool = [&](auto const& key_, auto const& value_) {
     	assert(value_.isBool());
     	if (value_.asBool()) {
-    		config.map[trim(key_)] = "true";
+    		config[trim(key_)] = "true";
     	}
 	};
 
@@ -69,7 +69,7 @@ bool set_options(std::string const& key, docopt::value const& value, eda::config
 	auto const set_string = [&](auto const& key_, auto const& value_) {
     	assert(value_.isString());
     	if (!value_.asString().empty()) {
-    		config.map[trim(key_)] = value_.asString();
+    		config[trim(key_)] = value_.asString();
     	}
 	};
 #endif
@@ -124,7 +124,7 @@ std::vector<std::string> parse_cli(int argc, const char* argv[], eda::configurat
         	}
         }
 
-        eda::option_trigger trigger;
+        eda::configuration::option_trigger trigger;
         trigger.add("--Wall", { "--Wunused", "--Wother" });
         trigger.update(config);
 
