@@ -129,6 +129,7 @@ std::string file_loader::read_file(std::string const& filename) const {
     }
 
     std::ostringstream ss { };
+    file.unsetf(std::ios::skipws);
     ss << file.rdbuf();
 
     if (file.fail() && !file.eof()) {
@@ -156,10 +157,14 @@ std::string file_loader::read_file_alt(std::string const& filename) const {
         };
     }
 
+    file.unsetf(std::ios::skipws);
+
     fs::ifstream::pos_type const size = file.tellg();
     file.seekg(0, std::ios::beg);
+
     std::string contents { };
     contents.resize(size);
+
     file.read(&contents[0], size);
 
     if (file.fail() && !file.eof()) {
