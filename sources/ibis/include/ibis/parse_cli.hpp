@@ -8,8 +8,14 @@
 #ifndef SOURCES_IBIS_INCLUDE_IBIS_PARSE_CLI_HPP_
 #define SOURCES_IBIS_INCLUDE_IBIS_PARSE_CLI_HPP_
 
+#include <string>
+#include <vector>
 
-void parse_cli(int argc, const char* argv[]);
+namespace eda {
+    struct configuration;
+}
+
+std::vector<std::string> parse_cli(int argc, const char* argv[], eda::configuration& config);
 
 
 
