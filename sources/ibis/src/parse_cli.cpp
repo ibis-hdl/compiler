@@ -25,26 +25,31 @@ static const char VERSION_STR[] = "EDA/ibis 0.0.1";
 static const char USAGE[] =
 R"(EDA/ibis
 
-    Usage:
-      ibis [-q|-v] [-a]
-           [--Wall --Wunused --Wother] <file> ...
-      ibis (-h | --help)
-      ibis --version
+Usage:
+  ibis [-q|-v] [-a]
+       [--libpath=<path>]
+       [--Wall --Wunused --Wother] 
+       <file> ...
+  ibis (-h | --help)
+  ibis --version
 
-    Arguments:
-      <file>        One or more file(s).
+Arguments:
+  <file>          One or more file(s).
 
-    Options:
-      -a --analyse  Analyse.
-      -q --quiet    Print less text [default: false].
-      -v --verbose  Print more text [default: false].
-      -h --help     Show this screen.
-      --version     Show version.
+Settings:
+  --libpath=<path>  Path to libraries.
 
-    Warnings:
-      --Wall        Warn all.
-      --Wunused     Warn on unused.
-      --Wother      Warn for others.
+Options:
+  -a --analyse    Analyse.
+  -q --quiet      Print less text [default: false].
+  -v --verbose    Print more text [default: false].
+  -h --help       Show this screen.
+  --version       Show version.
+
+Warnings:
+  --Wall          Warn all.
+  --Wunused       Warn on unused.
+  --Wother        Warn for others.
 )";
 
 
@@ -59,22 +64,21 @@ bool set_options(std::string const& key, docopt::value const& value, eda::config
     };
 
 	auto const set_bool = [&](auto const& key_, auto const& value_) {
-    	assert(value_.isBool());
-    	if (value_.asBool()) {
+    	if (value_) {
+            assert(value_.isBool());
     		config[trim(key_)] = "true";
     	}
 	};
 
-#if 0 // avoid unused warning
 	auto const set_string = [&](auto const& key_, auto const& value_) {
-    	assert(value_.isString());
-    	if (!value_.asString().empty()) {
+    	if (value_) {
+            assert(value_.isString());
+            if (value_.asString().empty()) { return; }
     		config[trim(key_)] = value_.asString();
     	}
 	};
-#endif
 
-	//std::cout << "cli option: " << key << " : " << value << "\n";
+	std::cout << "cli option: " << key << " : " << value << "\n";
 
     if (match(key, "--analyse")) {
     	set_bool(key, value);
@@ -86,6 +90,10 @@ bool set_options(std::string const& key, docopt::value const& value, eda::config
 
     if (match(key, "--verbose")) {
     	set_bool(key, value);
+    }
+
+    if (match(key, "--libpath")) {
+        set_string(key, value);
     }
 
     return true;
@@ -106,9 +114,9 @@ std::vector<std::string> parse_cli(int argc, const char* argv[], eda::configurat
 
 #if 0
     auto const print_args = [](std::ostream& os, std::vector<std::string> const& args) {
-		os << "----------- " << args.size() << " user command line argument(s) ---------\n";
+		os << "----------- " << args.size() << "(user command line argument(s)\n";
 		std::copy(args.begin(), args.end(), std::ostream_iterator<std::string>(std::cout, "\n"));
-        os << "-----------------------------------------------------\n";
+        os << ")\n";
     };
 
     print_args(std::cout, args);

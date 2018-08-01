@@ -11,6 +11,7 @@ project(ibis LANGUAGES CXX)
 
 set(IBIS_SOURCE
     src/docopt_inst.cpp
+    src/parse_env.cpp
     src/parse_cli.cpp
     src/main.cpp
 )

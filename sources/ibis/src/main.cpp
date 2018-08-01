@@ -5,6 +5,7 @@
  *      Author: olaf
  */
 
+#include <ibis/parse_env.hpp>
 #include <ibis/parse_cli.hpp>
 #include <eda/configuration.hpp>
 
@@ -18,6 +19,7 @@ int main(int argc, const char *argv[])
 {
 	eda::configuration config;
 
+	parse_env(config);
 	auto const sources = parse_cli(argc, argv, config);
 
 	if (config["verbose"]) {
