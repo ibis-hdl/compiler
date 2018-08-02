@@ -7,7 +7,7 @@
 
 #include <eda/configuration.hpp>
 
-#include <algorithm>
+#include <eda/util/string/icompare.hpp>
 #include <vector>
 
 #include <iostream>
@@ -26,7 +26,10 @@ void configuration::dump(std::ostream& os) const
 	vector_type vec{};
 	vec.reserve(map.size());
 	vec.insert(vec.begin(), map.begin(), map.end());
-	std::sort(vec.begin(), vec.end());
+
+	std::sort(vec.begin(), vec.end(), [](pair_type const& p1, pair_type const& p2) {
+        return util::icompare_less(p1.first, p2.first);
+        });
 
 	auto const valid = [](auto const& value) {
 		if (!value) return false;
