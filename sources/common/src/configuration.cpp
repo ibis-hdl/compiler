@@ -31,14 +31,9 @@ void configuration::dump(std::ostream& os) const
         return util::icompare_less(p1.first, p2.first);
         });
 
-	auto const valid = [](auto const& value) {
-		if (!value) return false;
-		return true;
-	};
-
     os << "(configuration [N=" << vec.size() << "]\n";
 	for (auto const& [option_name, val] : vec) {
-		if (valid(val)) {
+		if (val) {
 			os << "    (" << option_name << " = " << *val << ")\n";
 		}
 		else {
