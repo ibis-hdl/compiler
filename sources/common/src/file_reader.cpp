@@ -40,21 +40,21 @@ bool file_loader::exist_file(std::string const& filename) const
             }
             else {
                 os << format(translate(
-                      "File \"{1}\" is not a regular file"))
+                      "File {1} is not a regular file"))
                       % file_path.make_preferred();
                 return false;
             }
         }
         else {
             os << format(translate(
-                  "File \"{1}\" does not exists"))
+                  "File {1} does not exists"))
                   % file_path.make_preferred();
             return false;
         }
     }
     catch (fs::filesystem_error const& e) {
         os << format(translate(
-              "Failed existens test for file \"{1}\": caught exception {1}"))
+              "Failed existence test for file {1}: caught exception {1}"))
               % e.what();
         return false;
     }
@@ -99,7 +99,7 @@ bool file_loader::unique_files(std::vector<std::string> const& file_list) const 
 
             if (count > 1) {
                 os << format(translate(
-                      "Duplicate file \"{1}\" specified as: "))
+                      "Duplicate file \"{1}\", specified as: "))
                       % canonical_filename
                       ;
                 print_duplicates(canonical_filename);

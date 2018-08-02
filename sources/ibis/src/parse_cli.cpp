@@ -55,30 +55,28 @@ Warnings:
 
 bool set_options(std::string const& key, docopt::value const& value, eda::configuration& config)
 {
-	auto const match = [](std::string const& key_, const char* primary) {
+	auto const match = [](std::string const& key_, const char* primary) { // XXX use initializer_list
 		return key_.compare(primary) == 0;
 	};
 
-    auto const trim = [](std::string const& key) {
-        return eda::configuration::trim(key);
-    };
-
 	auto const set_bool = [&](auto const& key_, auto const& value_) {
-    	if (value_) {
-            assert(value_.isBool());
-    		config[trim(key_)] = "true";
+    	if (value_ && !value_.asBool()) {
+    		return;
     	}
+    	config[key_] = "true";
 	};
 
 	auto const set_string = [&](auto const& key_, auto const& value_) {
-    	if (value_) {
-            assert(value_.isString());
-            if (value_.asString().empty()) { return; }
-    		config[trim(key_)] = value_.asString();
+		//std::cout << "docopt++ string check for " << key_ << ": ";
+    	if (!value_ || !value_.isString()) {
+    		//std::cout << "failed (" << value_ << ")\n";
+    		return;
     	}
+		//std::cout << "success (" << value_ << ")\n";
+    	config[key_] = value_.asString();
 	};
 
-	std::cout << "cli option: " << key << " : " << value << "\n";
+	//std::cout << "eval docopt++ option: " << key << " : " << value << "\n";
 
     if (match(key, "--analyse")) {
     	set_bool(key, value);
@@ -94,6 +92,10 @@ bool set_options(std::string const& key, docopt::value const& value, eda::config
 
     if (match(key, "--libpath")) {
         set_string(key, value);
+    }
+
+    if (match(key, "--Wall")) {// XXX using initializer_list
+        set_bool(key, value);
     }
 
     return true;
@@ -114,7 +116,7 @@ std::vector<std::string> parse_cli(int argc, const char* argv[], eda::configurat
 
 #if 0
     auto const print_args = [](std::ostream& os, std::vector<std::string> const& args) {
-		os << "----------- " << args.size() << "(user command line argument(s)\n";
+		os << "(command line user argument(s) [N=" << args.size() << "]\n";
 		std::copy(args.begin(), args.end(), std::ostream_iterator<std::string>(std::cout, "\n"));
         os << ")\n";
     };
@@ -132,7 +134,9 @@ std::vector<std::string> parse_cli(int argc, const char* argv[], eda::configurat
         	}
         }
 
+        // set subclass options
         eda::configuration::option_trigger trigger;
+
         trigger.add("--Wall", { "--Wunused", "--Wother" });
         trigger.update(config);
 

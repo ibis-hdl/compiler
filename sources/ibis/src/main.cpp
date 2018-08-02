@@ -22,7 +22,7 @@ int main(int argc, const char *argv[])
 	parse_env(config);
 	auto const sources = parse_cli(argc, argv, config);
 
-	if (config["verbose"]) {
+	if (config("verbose")) {
 		config.dump(std::cout);
 		std::cout << "processing: ";
 		std::copy(sources.begin(), sources.end(),

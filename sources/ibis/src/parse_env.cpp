@@ -20,7 +20,7 @@ void parse_env(eda::configuration& config)
     };
 
     // pure ENV name used for configuration
-    auto const set = [&](std::string const& env_name) {
+    auto const set_option = [&](std::string const& env_name) {
         std::string const env_var{ getenv(env_name) };
         if (!env_var.empty()) {
             config[env_name] = env_var;
@@ -28,13 +28,13 @@ void parse_env(eda::configuration& config)
     };
 
     // key used for configuration to allow overriding them on command line
-    auto const set_key = [&](std::string const& env_name, std::string const& key_name) {
+    auto const set_option_key = [&](std::string const& env_name, std::string const& key_name) {
         std::string const env_var{ getenv(env_name) };
         if (!env_var.empty()) {
             config[key_name] = env_var;
         }
     };
 
-    set("HOME");
-    set_key("EDA_LIBPATH", "libpath");
+    set_option("HOME");
+    set_option_key("EDA_LIBPATH", "libpath");
 }

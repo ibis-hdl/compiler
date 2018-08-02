@@ -14,6 +14,7 @@
 #include <vector>
 #include <iosfwd>
 
+#include <iostream>
 
 namespace eda {
 
@@ -36,7 +37,7 @@ namespace eda {
  '  else  {  std::cout << "" << "false\n";}
  * \endcode
  *
- * \see [Wandbox](https://wandbox.org/permlink/0NrHlKXbw77zAOn0)
+ * \see Concept on [Wandbox](https://wandbox.org/permlink/0NrHlKXbw77zAOn0)
  */
 class configuration
 {
@@ -51,26 +52,59 @@ public:
     configuration const& operator=(configuration const&) = delete;
 
 public:
-    config_value const& operator[](std::string const& option_name) const {
+	/**
+	 * Return the value as std::optional<> of the defined option.
+	 *
+	 * \param  option_name  The name of the option to lookup in the trimmed form.
+	 * \return config_value If the option has been defined before, the value
+	 *                      as reference to optional<string>, otherwise to an
+	 *                      empty optional<>.
+	 */
+    config_value const& operator()(std::string const& option_name) const {
 
-        map_type& map_ = const_cast<map_type&>(this->map);
+    	map_type& map_ = const_cast<map_type&>(this->map);
 
-        if (map.count(option_name) > 0) {
+        if (exist(option_name)) {
             return map_[option_name];
         }
         return none;
     }
 
 
+    /**
+     * Lookup the configuration map for writing, the option_name is trimmed,
+     * means the leading chars '--' are remove to get better hashes. If the
+     * option_name doesn't exist it's inserted, otherwise the a reference
+     * to the stored config_value is returned.
+     * Hence, it behaves as the std::map[].
+     *
+     * \param  option_name  The name of the option to lookup in the trimmed form.
+     * \return config_value The value as reference to optional<string>.
+     */
     config_value& operator[](std::string const& option_name) {
-        return map[option_name];
+
+        return map[trim(option_name)];
     }
 
 
+    /**
+     * Check on existence of the option.
+     *
+     * \param  option_name The name of the option to test.
+     * \return true if the option has been defined, otherwise false.
+     */
+    bool exist(std::string const& option_name) const {
+    	return map.count(option_name) > 0;
+    }
+
+    /**
+     * Dump the configuration stored in sorted form
+     * \param os The ostream to dump.
+     */
     void dump(std::ostream& os) const;
 
-
-    /** Trim leading '--' chars from key to get better hashes. */
+private:
+    /** Trim leading '--' chars from key. */
     static  inline
     std::string trim(std::string const& key) {
 
@@ -91,7 +125,7 @@ private:
 
 class configuration::option_trigger
 {
-    std::unordered_map<std::string, std::vector<std::string>> triggers;
+    std::unordered_map<std::string, std::vector<std::string>> trigger;
 
 public:
     option_trigger() = default;
@@ -99,11 +133,23 @@ public:
     option_trigger const& operator=(option_trigger const&) = delete;
 
 public:
-
+    /**
+     * Simplifies depending configuration options, binds the secondary_options
+     * to the primary_option. Only boolean options are possible.
+     *
+     * \param primary_option    The option which triggers depending options.
+     * \param secondary_options The depending options.
+     */
     void add(std::string const& primary_option, std::vector<std::string> const& secondary_options) {
-        triggers[primary_option] = secondary_options;
+        trigger[primary_option] = secondary_options;
     }
 
+    /**
+     * Update the configuration map, if the primary_option is stored in the
+     * config all depending options are added.
+     *
+     * \param config The configuration map.
+     */
     void update(configuration& config);
 };
 
