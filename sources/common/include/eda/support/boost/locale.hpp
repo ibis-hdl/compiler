@@ -12,7 +12,8 @@
 /* get rid off compiler warning:
  * 'template<class> class std::auto_ptr' is deprecated */
 #include <eda/compiler/warnings_off.hpp>
-#include <boost/locale.hpp>
+#include <boost/locale/format.hpp>
+#include <boost/locale/message.hpp>
 #include <eda/compiler/warnings_on.hpp>
 
 
