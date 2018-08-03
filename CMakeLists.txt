@@ -28,6 +28,25 @@ include(options)
 
 
 ##
+# Ninja Build
+cmake_host_system_information(
+    RESULT localhost_logical_cores
+    QUERY NUMBER_OF_LOGICAL_CORES
+)
+
+math(EXPR half_cores "${localhost_logical_cores}/2")
+
+set_property(GLOBAL PROPERTY JOB_POOLS
+    job_pool_max_cores=${localhost_logical_cores}
+    job_pool_med_cores=${half_cores}
+    job_pool_one_core=1
+)
+set_property(GLOBAL PROPERTY CMAKE_JOB_POOLS
+    cmake_job_pool=1
+)
+
+
+##
 # Globally Boost.Spirit.X3 clone
 # EDA project parser depends on newer Spirit.X3 versions as commonly shiped
 # by the linux distributions. Create an own up-to-date clone of Boost.Spirit's

@@ -30,6 +30,10 @@ set(VHDL_PARSER_SOURCE
 add_library(${PROJECT_NAME} STATIC ${VHDL_PARSER_SOURCE})
 add_library(eda::vhdl_parser ALIAS ${PROJECT_NAME})
 
+# Ninja Build
+set_property(TARGET eda_vhdl_parser PROPERTY JOB_POOL_COMPILE job_pool_max_cores)
+set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
+
 
 target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>

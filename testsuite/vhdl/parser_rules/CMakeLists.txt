@@ -135,6 +135,10 @@ set(PARSERTEST_SOURCES
 
 add_executable(${PROJECT_NAME} ${PARSERTEST_SOURCES})
 
+# Ninja Build
+set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_COMPILE job_pool_one_core)
+set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
+
 
 # adjust include path
 target_include_directories(${PROJECT_NAME} PRIVATE

@@ -18,6 +18,10 @@ set(EDA_COMMON_SOURCE
 add_library(${PROJECT_NAME} STATIC ${EDA_COMMON_SOURCE})
 add_library(eda::common     ALIAS  ${PROJECT_NAME})
 
+# Ninja Build
+set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_COMPILE job_pool_max_cores)
+set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
+
 
 ##
 # Plattform and compiler checks
