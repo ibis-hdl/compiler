@@ -7,10 +7,10 @@
 
 #include <testsuite/vhdl_parser/test_observer_fixture.hpp>
 
-#include <eda/util/compiler_warnings_off.hpp>
+#include <eda/compiler/warnings_off.hpp>
 #include <boost/test/execution_monitor.hpp>
 #include <boost/test/utils/basic_cstring/io.hpp>
-#include <eda/util/compiler_warnings_on.hpp>
+#include <eda/compiler/warnings_on.hpp>
 
 #include <iostream>
 

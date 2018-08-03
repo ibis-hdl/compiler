@@ -12,9 +12,9 @@
 
 #include <eda/support/boost/spirit_x3.hpp>
 
-#include <eda/util/compiler_warnings_off.hpp>
+#include <eda/compiler/warnings_off.hpp>
 #include <boost/spirit/home/x3/nonterminal/rule.hpp>
-#include <eda/util/compiler_warnings_on.hpp>
+#include <eda/compiler/warnings_on.hpp>
 
 
 namespace eda { namespace vhdl { namespace parser {

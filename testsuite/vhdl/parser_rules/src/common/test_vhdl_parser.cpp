@@ -7,9 +7,9 @@
 
 #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE "VHDL Parser Test Suite"
-#include <eda/util/compiler_warnings_off.hpp>
+#include <eda/compiler/warnings_off.hpp>
 #include <boost/test/included/unit_test.hpp>
-#include <eda/util/compiler_warnings_on.hpp>
+#include <eda/compiler/warnings_on.hpp>
 
 #include <testsuite/vhdl_parser/test_observer_fixture.hpp>
 

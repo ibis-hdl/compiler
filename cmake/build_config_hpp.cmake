@@ -30,6 +30,6 @@ int main() {
 
 # The plattform/compiler checks belongs to eda::common
 configure_file(
-  "${PROJECT_SOURCE_DIR}/include/eda/util/compiler_support.hpp.in"
-  "${PROJECT_BINARY_DIR}/include/eda/util/compiler_support.hpp"
+  "${PROJECT_SOURCE_DIR}/include/eda/compiler/compiler_support.hpp.in"
+  "${PROJECT_BINARY_DIR}/include/eda/compiler/compiler_support.hpp"
 )

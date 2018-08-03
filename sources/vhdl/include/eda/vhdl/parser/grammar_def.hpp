@@ -331,7 +331,7 @@ auto const shift_operator_def =
 
 /* special boost.spirit.x3 header to get rid off the annoying unused parameter
  * warnings from x3 */
-#include <eda/util/compiler_warnings_off.hpp>
+#include <eda/compiler/warnings_off.hpp>
 
 BOOST_SPIRIT_DEFINE(
     binary_logical_operator,
@@ -342,7 +342,7 @@ BOOST_SPIRIT_DEFINE(
     shift_operator
 )
 
-#include <eda/util/compiler_warnings_on.hpp>
+#include <eda/compiler/warnings_on.hpp>
 
 
 } } } } // namespace eda.vhdl.parser.operators
@@ -3968,7 +3968,7 @@ auto const waveform_element_def =
 
 
 
-#include <eda/util/compiler_warnings_off.hpp>
+#include <eda/compiler/warnings_off.hpp>
 
 
 BOOST_SPIRIT_DEFINE(  // -- A --
@@ -4237,7 +4237,7 @@ BOOST_SPIRIT_DEFINE(  // -- W --
     , waveform_element
 )
 
-#include <eda/util/compiler_warnings_on.hpp>
+#include <eda/compiler/warnings_on.hpp>
 
 
 /*

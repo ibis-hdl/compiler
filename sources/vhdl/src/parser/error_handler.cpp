@@ -5,11 +5,11 @@
  *      Author: olaf
  */
 
-#include <eda/util/compiler_warnings_off.hpp>
+#include <eda/compiler/warnings_off.hpp>
 #include <boost/spirit/home/x3/support/traits/tuple_traits.hpp>
 #include <boost/spirit/home/x3/support/traits/is_variant.hpp>
 #include <boost/locale/encoding_utf.hpp>
-#include <eda/util/compiler_warnings_on.hpp>
+#include <eda/compiler/warnings_on.hpp>
 
 #include <eda/vhdl/parser/error_handler.hpp>
 #include <eda/vhdl/parser/iterator_type.hpp>

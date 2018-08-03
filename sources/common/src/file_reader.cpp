@@ -7,10 +7,10 @@
 
 #include <eda/util/file/file_reader.hpp>
 
-#include <eda/util/compiler_warnings_off.hpp>
+#include <eda/compiler/warnings_off.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
-#include <eda/util/compiler_warnings_on.hpp>
+#include <eda/compiler/warnings_on.hpp>
 
 #include <eda/support/boost/locale.hpp>
 

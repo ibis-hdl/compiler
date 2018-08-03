@@ -13,7 +13,7 @@
 
 #include <eda/util/pretty_typename.hpp>
 
-#include <eda/util/compiler_warnings_off.hpp>  // temporary -Wno-unused
+#include <eda/compiler/warnings_off.hpp>  // temporary -Wno-unused
 
 
 namespace eda { namespace vhdl { namespace analyze {
@@ -385,4 +385,4 @@ syntax::result_type syntax::operator()(T const&) const
 } } } // namespace eda.vhdl.analyze
 
 
-#include <eda/util/compiler_warnings_on.hpp>
+#include <eda/compiler/warnings_on.hpp>

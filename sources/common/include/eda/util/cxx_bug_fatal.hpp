@@ -12,7 +12,7 @@
 #include <cstdlib>
 #include <iostream>
 
-#include <eda/util/compiler_support.hpp>
+#include <eda/compiler/compiler_support.hpp>
 
 
 namespace eda { namespace util { namespace detail {

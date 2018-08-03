@@ -9,10 +9,10 @@
 #define TESTSUITE_VHDL_PARSER_RULES_INCLUDE_TESTSUITE_VHDL_PARSER_TEST_OBSERVER_FIXTURE_HPP_
 
 
-#include <eda/util/compiler_warnings_off.hpp>
+#include <eda/compiler/warnings_off.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tree/observer.hpp>
-#include <eda/util/compiler_warnings_on.hpp>
+#include <eda/compiler/warnings_on.hpp>
 
 #include <testsuite/namespace_alias.hpp>
 

@@ -8,10 +8,10 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ON_SUCCESS_BASE_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ON_SUCCESS_BASE_HPP_
 
-#include <eda/util/compiler_warnings_off.hpp>
+#include <eda/compiler/warnings_off.hpp>
 #include <boost/spirit/home/x3/support/context.hpp>
 #include <boost/spirit/home/x3/support/utility/lambda_visitor.hpp>
-#include <eda/util/compiler_warnings_on.hpp>
+#include <eda/compiler/warnings_on.hpp>
 
 #include <eda/vhdl/parser/error_handler.hpp>
 #include <eda/vhdl/ast/util/variant.hpp>

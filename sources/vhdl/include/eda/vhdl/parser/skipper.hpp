@@ -38,11 +38,11 @@ auto const skipper_def =
     ;
 
 
-#include <eda/util/compiler_warnings_off.hpp>
+#include <eda/compiler/warnings_off.hpp>
 
 BOOST_SPIRIT_DEFINE(skipper);
 
-#include <eda/util/compiler_warnings_on.hpp>
+#include <eda/compiler/warnings_on.hpp>
 
 
 } } } // namespace eda.vhdl.parser

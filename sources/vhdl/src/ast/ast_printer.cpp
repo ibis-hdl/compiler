@@ -7,13 +7,13 @@
 
 #include <eda/util/cxx_bug_fatal.hpp>
 
-#include <eda/util/compiler_warnings_off.hpp>
+#include <eda/compiler/warnings_off.hpp>
 #include <boost/spirit/home/x3/support/traits/is_variant.hpp>
-#include <eda/util/compiler_warnings_on.hpp>
+#include <eda/compiler/warnings_on.hpp>
 
-#include <eda/util/compiler_warnings_off.hpp>
+#include <eda/compiler/warnings_off.hpp>
 #include <eda/support/boost/hana_overload.hpp>
-#include <eda/util/compiler_warnings_on.hpp>
+#include <eda/compiler/warnings_on.hpp>
 #include <eda/vhdl/ast_printer.hpp>
 
 #include <map>
