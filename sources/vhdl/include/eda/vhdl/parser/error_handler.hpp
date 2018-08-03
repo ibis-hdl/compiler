@@ -74,7 +74,7 @@ private:
 
 private:
     std::ostream&                                   os;
-    position_cache<iterator_type>&                  position_cache;
+    parser::position_cache<iterator_type>&          position_cache;
     std::string                                     filename;
     std::size_t                                     tab_sz;
 };
