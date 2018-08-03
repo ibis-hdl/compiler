@@ -14,3 +14,7 @@
 # ToDo: modern CMake uses add_compile_options()?
 option(CLANG_WARN_EVERYTHING "Use Clang compiler's -Weverything option (to compile parts of the source)" OFF)
 
+
+##
+# Build option: enable testing.
+option(EDA_BUILD_TESTS "Build tests" ON)

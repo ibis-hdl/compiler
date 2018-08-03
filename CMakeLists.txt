@@ -13,13 +13,16 @@ cmake_minimum_required(VERSION 3.11)
 
 project(eda VERSION 0.0.1 LANGUAGES CXX)
 
+message(STATUS "System name: ${CMAKE_SYSTEM_NAME}")
+message(STATUS "EDA version: ${eda_VERSION}")
+
 
 ## global C++ Standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 include(options)
 
@@ -50,15 +53,16 @@ set(LIBRARY_OUTPUT_PATH         ${CMAKE_BINARY_DIR})
 
 ## 
 # Sub projects
-enable_testing()
 add_subdirectory(sources/common)
 add_subdirectory(sources/vhdl)
 add_subdirectory(sources/ibis)
-add_subdirectory(testsuite/common)
-add_subdirectory(testsuite/vhdl/numeric_convert)
-add_subdirectory(testsuite/vhdl/parser_rules)
-add_subdirectory(testsuite/vhdl/syntax)
-
+if (EDA_BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(testsuite/common)
+    add_subdirectory(testsuite/vhdl/numeric_convert)
+    add_subdirectory(testsuite/vhdl/parser_rules)
+    add_subdirectory(testsuite/vhdl/syntax)
+endif()
 
 ##
 # playground projects, not build by default
