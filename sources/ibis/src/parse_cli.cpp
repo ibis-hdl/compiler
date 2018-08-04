@@ -26,7 +26,7 @@ static const char USAGE[] =
 R"(EDA/ibis
 
 Usage:
-  ibis [-q|-v] [-a]
+  ibis [-a] [-q|-v]
        [--libpath=<path>]
        [--Wall --Wunused --Wother] 
        <file> ...
@@ -34,29 +34,30 @@ Usage:
   ibis --version
 
 Arguments:
-  <file>          One or more file(s).
+  <file>                One or more file(s).
 
 Settings:
-  --libpath=<path>  Path to libraries.
+  --libpath=<path>      Path to libraries.
 
 Options:
-  -a --analyse    Analyse.
-  -q --quiet      Print less text [default: false].
-  -v --verbose    Print more text [default: false].
-  -h --help       Show this screen.
-  --version       Show version.
+  -a --analyse          Analyse.
+  -q --quiet            Print less text [default: false].
+  -v --verbose          Print more text [default: false].
+  -h --help             Show this screen.
+  --version             Show version.
 
-Warnings:
-  --Wall          Warn all.
-  --Wunused       Warn on unused.
-  --Wother        Warn for others.
+Warning Options:
+  --Wall                Warn all.
+  --Wunused             Warn on unused.
+  --Wother              Warn for others.
 )";
 
 
 bool set_options(std::string const& key, docopt::value const& value, eda::configuration& config)
 {
-	auto const match = [](std::string const& key_, const char* primary) { // XXX use initializer_list
-		return key_.compare(primary) == 0;
+	auto const match = [](std::string const& key_, std::initializer_list<const char*> primary) {
+		return std::any_of(primary.begin(), primary.end(),
+		                   [&](const char* other){ return key_.compare(other) == 0; });
 	};
 
 	auto const set_bool = [&](auto const& key_, auto const& value_) {
@@ -67,34 +68,27 @@ bool set_options(std::string const& key, docopt::value const& value, eda::config
 	};
 
 	auto const set_string = [&](auto const& key_, auto const& value_) {
-		//std::cout << "docopt++ string check for " << key_ << ": ";
     	if (!value_ || !value_.isString()) {
-    		//std::cout << "failed (" << value_ << ")\n";
     		return;
     	}
-		//std::cout << "success (" << value_ << ")\n";
     	config[key_] = value_.asString();
 	};
 
 	//std::cout << "eval docopt++ option: " << key << " : " << value << "\n";
 
-    if (match(key, "--analyse")) {
+    if (match(key, { "--analyse" })) {
     	set_bool(key, value);
     }
 
-    if (match(key, "--quiet")) {
+    if (match(key, { "--quiet", "--verbose" })) {
     	set_bool(key, value);
     }
 
-    if (match(key, "--verbose")) {
-    	set_bool(key, value);
-    }
-
-    if (match(key, "--libpath")) {
+    if (match(key, { "--libpath" })) {
         set_string(key, value);
     }
 
-    if (match(key, "--Wall")) {// XXX using initializer_list
+    if (match(key, { "--Wall", "--Wunused", "--Wother" })) {
         set_bool(key, value);
     }
 
@@ -134,7 +128,7 @@ std::vector<std::string> parse_cli(int argc, const char* argv[], eda::configurat
         	}
         }
 
-        // set subclass options
+        // set secondary triggered options
         eda::configuration::option_trigger trigger;
 
         trigger.add("--Wall", { "--Wunused", "--Wother" });
@@ -184,7 +178,6 @@ std::vector<std::string> source_files_(std::vector<std::string> const& file_list
 		// immediately exit, no usage info wanted by caller
 		std::exit(EXIT_FAILURE);
 	}
-
 
 	return file_list;
 }
