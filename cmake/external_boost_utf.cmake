@@ -1,4 +1,4 @@
-message("External Project: Boost.Org Unit Test Framework (UTF)")
+message(STATUS "External Project: Boost.Org Unit Test Framework (UTF)")
 
 
 include(ExternalProject)

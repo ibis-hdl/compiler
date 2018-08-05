@@ -1,4 +1,4 @@
-message("External Project: DocOpt++")
+message(STATUS "External Project: DocOpt++")
 
 
 include(ExternalProject)

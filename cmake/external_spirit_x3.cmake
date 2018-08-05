@@ -1,4 +1,4 @@
-message("External Project: Boost.Org Spirit Parser X3 - LL(k) Parser Framework")
+message(STATUS "External Project: Boost.Org Spirit Parser X3 - LL(k) Parser Framework")
 
 
 include(ExternalProject)
