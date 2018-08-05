@@ -16,5 +16,24 @@ option(CLANG_WARN_EVERYTHING "Use Clang compiler's -Weverything option (to compi
 
 
 ##
+# Build Option: Support Boost.stacktrace library
+option(EDA_WITH_BOOST_STACKTRACE "Enable support for the Boost::stacktrace library." OFF)
+
+##
+# Build Option: run EDA under Valgrind.
+option(EDA_RUN_ON_VALGRIND "Configure EDA to be run on Valgrind." OFF)
+mark_as_advanced(PIRANHA_RUN_ON_VALGRIND)
+
+
+
+##
+# Runtime Option: Use GDB to dump the stracktrace
+option(EDA_WITH_GDB_STACKTRACE "Enable support for dumping the stacktrace using GNU/GDB on runtime." ON)
+
+
+
+
+##
 # Build option: enable testing.
 option(EDA_BUILD_TESTS "Build tests" ON)
+

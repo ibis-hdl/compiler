@@ -15,7 +15,7 @@
 #include <iostream>
 
 
-extern bool register_gdb_signal_handler();
+extern bool register_signal_handlers();
 extern void testing_signal_handler();
 
 
@@ -47,7 +47,7 @@ int main(int argc, const char *argv[])
             std::cout << "------------------------------------------------\n";
         }
 
-        if (!register_gdb_signal_handler()) {
+        if (!register_signal_handlers()) {
             std::cout << "Failed to install signal handlers\n";
             return EXIT_FAILURE;
         }

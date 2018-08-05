@@ -9,19 +9,26 @@
 project(ibis LANGUAGES CXX)
 
 
-set(IBIS_SOURCE
+add_executable(${PROJECT_NAME} "")
+
+# Ninja Build
+set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_COMPILE job_pool_max_cores)
+set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
+
+
+target_sources(${PROJECT_NAME} PRIVATE
     src/docopt_inst.cpp
     src/parse_env.cpp
     src/parse_cli.cpp
     src/main.cpp
     src/signal.cpp
+    #$<BOOL:${EDA_WITH_GDB_STACKTRACE}>:src/stacktrace_gdb.cpp>
 )
-
-add_executable(${PROJECT_NAME} ${IBIS_SOURCE})
-
-# Ninja Build
-set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_COMPILE job_pool_max_cores)
-set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
+if(EDA_WITH_GDB_STACKTRACE)
+    target_sources(${PROJECT_NAME} PRIVATE
+        src/stacktrace_gdb.cpp
+    )
+endif()
 
 
 ##
@@ -58,6 +65,16 @@ endif(CLANG_WARN_EVERYTHING)
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     target_compile_options(${PROJECT_NAME} PRIVATE
         -ftemplate-backtrace-limit=0
+    )
+endif()
+
+
+#target_compile_definitions(${PROJECT_NAME} PRIVATE
+#    $<BOOL:${EDA_WITH_GDB_STACKTRACE}>:-DEDA_WITH_GDB_STACKTRACE> 
+#)
+if(EDA_WITH_GDB_STACKTRACE)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE
+        -DEDA_WITH_GDB_STACKTRACE
     )
 endif()
 
