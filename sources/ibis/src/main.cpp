@@ -14,7 +14,10 @@
 
 #include <iostream>
 
+
 extern bool register_gdb_signal_handler();
+extern void testing_signal_handler();
+
 
 int main(int argc, const char *argv[])
 {
@@ -49,12 +52,7 @@ int main(int argc, const char *argv[])
             return EXIT_FAILURE;
         }
 
-        int n = 10;
-        int r = 0;
-        while(true) {
-            std::cout << n << " -> " << r << "\n";
-            r = 100 / n--;
-        }
+        testing_signal_handler(); // just testing
     }
     catch(std::exception const& e) {
         std::cerr << "Exception caught: " << e.what() << "\n";

@@ -67,6 +67,23 @@ static const char *signame(int sig) {
 } // anonymous namespace
 
 
+
+void testing_signal_handler()
+{
+#if 0 // doesn't work ????
+    int sig = SIGFPE;
+    std::cout << "SIGNAL " << signame(sig) << "\n";
+    signal(sig, SIG_DFL);
+#endif
+    int n = 1;
+    int r = 0;
+    while(true) {
+        std::cout << n << " -> " << r << "\n";
+        r = 100 / n--;
+    }
+}
+
+
 void signal_handler(int signum)
 {
     sig_caught = signum;
@@ -103,12 +120,12 @@ std::string getExecutablePath();
 
 bool register_gdb_signal_handler()
 {
-    if (gdb_detected()) {
-        std::cout << "already running under GDB, skip install signal handler\n";
+    if (gdb_detected() || valgrind_detected()) {
+        std::cout << "GDB signal handler already installed, skip.\n";
         return true;
     }
     else {
-        std::cout << "install GDB signal handler\n";
+        std::cout << "install GDB signal handler.\n";
     }
 
     struct sigaction sa;
@@ -132,6 +149,8 @@ bool register_gdb_signal_handler()
 
 void gdb_signal_handler(int sig, siginfo_t *, void *)
 {
+    std::cerr << "gdb stacktrace call for signal #" << sig << " (" << signame(sig) << ")\n";
+
     fs::path gdb_exe = bp::search_path("gdb");
 
     if(gdb_exe.empty()) {
@@ -172,16 +191,16 @@ void gdb_signal_handler(int sig, siginfo_t *, void *)
     );
 
     if(!gdb_proc.valid()) {
+        std::cerr << "unable to fork() GDB\n";
         return;
     }
 
+    // wait for GDB to start before ...
     std::error_code ec;
     auto time = std::chrono::milliseconds(10000);
-    if (gdb_proc.wait_for(time, ec)) {
-        std::cerr << "gdb exited while waiting.\n";
-    }
+    gdb_proc.wait_for(time, ec);
 
-    std::cerr << "gdb signals " << sig << " (" << signame(sig) << ")\n";
+    // ... dropping into the default signal handler
     signal(sig, SIG_DFL);
 }
 
@@ -243,13 +262,7 @@ bool gdb_detected()
 #warning "NO OS SUPPORT FOR DETECTING DEBUGGER"
 #endif
 
-    if (valgrind_detected()) {
-        *result = true;
-        return *result;
-    }
-
     *result = false;
-
     return *result;
 }
 
@@ -260,11 +273,18 @@ bool valgrind_detected()
     return true;
 #endif
 
+    static std::optional<bool> result{};
+
+    if (result) {
+        return *result;
+    }
+
     /* [How can I detect if a program is running from within valgrind?](
      * https://stackoverflow.com/questions/365458/how-can-i-detect-if-a-program-is-running-from-within-valgrind)  */
     const char* val = std::getenv("RUNNING_ON_VALGRIND");
     if (val != nullptr) {
-        return true;
+        *result = true;
+        return *result;
     }
 
 #if defined(BOOST_OS_LINUX)
@@ -272,11 +292,13 @@ bool valgrind_detected()
      * https://stackoverflow.com/questions/24745120/how-to-set-dynamic-link-library-path-and-environment-variable-for-a-process-in-v)
      * ... not very sophisticated implemented  */
     if (token_in_procfs("vgpreload", "/proc/self/maps")) {
-        return true;
+        *result = true;
+        return *result;
     }
 #endif
 
-    return false;
+    *result = false;
+    return *result;
 }
 
 /*
