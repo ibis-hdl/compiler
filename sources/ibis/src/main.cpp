@@ -14,6 +14,7 @@
 
 #include <iostream>
 
+extern bool register_gdb_signal_handler();
 
 int main(int argc, const char *argv[])
 {
@@ -42,6 +43,18 @@ int main(int argc, const char *argv[])
             std::cout << "timestamp: " << t << "\n";
             std::cout << "------------------------------------------------\n";
         }
+
+        if (!register_gdb_signal_handler()) {
+            std::cout << "Failed to install signal handlers\n";
+            return EXIT_FAILURE;
+        }
+
+        int n = 10;
+        int r = 0;
+        while(true) {
+            std::cout << n << " -> " << r << "\n";
+            r = 100 / n--;
+        }
     }
     catch(std::exception const& e) {
         std::cerr << "Exception caught: " << e.what() << "\n";
@@ -49,6 +62,7 @@ int main(int argc, const char *argv[])
     catch(...) {
         std::cerr << "Unexpected exception caught\n";
     }
-    return 0;
+
+    return EXIT_SUCCESS;
 }
 

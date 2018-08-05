@@ -15,7 +15,7 @@
 void parse_env(eda::configuration& config)
 {
     auto const getenv = [](std::string const& key) {
-        char * val = std::getenv( key.c_str() );
+        char const* val = std::getenv( key.c_str() );
         return val == NULL ? std::string{} : std::string(val);
     };
 

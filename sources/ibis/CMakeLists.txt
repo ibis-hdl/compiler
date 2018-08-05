@@ -14,6 +14,7 @@ set(IBIS_SOURCE
     src/parse_env.cpp
     src/parse_cli.cpp
     src/main.cpp
+    src/signal.cpp
 )
 
 add_executable(${PROJECT_NAME} ${IBIS_SOURCE})
