@@ -23,7 +23,8 @@ target_sources(${PROJECT_NAME} PRIVATE
     src/parse_cli.cpp
     src/main.cpp
     src/signal.cpp
-    $<$<BOOL:${EDA_WITH_GDB_STACKTRACE}>:src/stacktrace_gdb.cpp> 
+    $<$<BOOL:${EDA_WITH_GDB_STACKTRACE}>:src/stacktrace_gdb.cpp>
+    $<$<BOOL:${EDA_WITH_BOOST_STACKTRACE}>:src/stacktrace_boost.cpp>  
 )
 
 
@@ -42,7 +43,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
-    $<$<BOOL:${EDA_WITH_GDB_STACKTRACE}>:EDA_WITH_GDB_STACKTRACE> 
+    $<$<BOOL:${EDA_WITH_GDB_STACKTRACE}>:EDA_WITH_GDB_STACKTRACE>
+    $<$<BOOL:${EDA_WITH_BOOST_STACKTRACE}>:EDA_WITH_BOOST_STACKTRACE>  
 )
 
 
@@ -82,6 +84,35 @@ find_package(Boost REQUIRED COMPONENTS
     system locale 
     filesystem
 )
+
+
+##
+# Boost stacktrace
+# [Configuration and Build](
+#  https://www.boost.org/doc/libs/1_67_0/doc/html/stacktrace/configuration_and_build.html)
+if(EDA_WITH_BOOST_STACKTRACE)
+    if(WIN32)
+        find_package(WinDbg REQUIRED)
+        message(STATUS "WinDbg library found.")
+        message(STATUS "WinDbg library is: ${DbgEng_LIBRARY}")
+        target_compile_definitions(BOOST_STACKTRACE_USE_WINDBG)
+        target_include_directories(${PROJECT_NAME} PUBLIC foooo)
+        target_link_libraries(${PROJECT_NAME} INTERFACE WinDbg::WinDbg)
+    else()
+        find_package(Backtrace REQUIRED)
+        message(STATUS "### backtrace library found.")
+        message(STATUS "### backtrace include dir is: ${Backtrace_INCLUDE_DIR}")
+        message(STATUS "### backtrace library is: ${Backtrace_LIBRARY}")
+        target_compile_definitions(${PROJECT_NAME} PRIVATE BOOST_STACKTRACE_USE_BACKTRACE)
+        target_include_directories(${PROJECT_NAME} PUBLIC ${Backtrace_INCLUDE_DIR})
+        target_link_libraries(${PROJECT_NAME} INTERFACE ${Backtrace_LIBRARY})
+        if(UNIX AND NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+            # [Where is libdl.so on Mac OS X?](
+            #  https://stackoverflow.com/questions/20169660/where-is-libdl-so-on-mac-os-x)
+            target_link_libraries(${PROJECT_NAME} INTERFACE ${CMAKE_DL_LIBS})
+        endif()
+    endif()
+endif()
 
 
 # Depencies
