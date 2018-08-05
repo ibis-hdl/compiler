@@ -37,3 +37,10 @@ option(EDA_WITH_GDB_STACKTRACE "Enable support for dumping the stacktrace using 
 # Build option: enable testing.
 option(EDA_BUILD_TESTS "Build tests" ON)
 
+
+
+##
+# Sanity Checks
+if(EDA_WITH_BOOST_STACKTRACE AND EDA_WITH_GDB_STACKTRACE)
+    message(FATAL_ERROR "Only one stacktrace option is useful and hence allowed.")
+endif()

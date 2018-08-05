@@ -370,6 +370,3 @@ std::string get_executable_path()
 
     return std::string(exePath);
 }
-
-
-
