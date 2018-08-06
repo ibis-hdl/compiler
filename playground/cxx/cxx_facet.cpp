@@ -77,7 +77,6 @@ public:
     			os << ", but forced";
     			*enable = true;
     		}
-
     		os << "\n";
     	}
 
@@ -96,10 +95,12 @@ private:
         auto const stream = [](std::ostream& os) {
             if (&os == &std::cout)                      { return stdout; }
             if (&os == &std::cerr || &os == &std::clog) { return stderr; }
-            return (FILE*)0;
+            return static_cast<FILE*>(0);
         };
 
-        if (::isatty(::fileno(stream(os)))) { return true; }
+        auto const handle = stream(os);
+        // Note, ::fileno(NULL) crashes
+        if (handle && ::isatty(::fileno(handle))) { return true; }
         return false;
     }
 
