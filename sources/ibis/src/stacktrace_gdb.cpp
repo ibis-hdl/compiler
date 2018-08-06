@@ -26,6 +26,8 @@
 #include <atomic>
 #include <system_error>
 
+#include <eda/color/message.hpp>
+
 /*
  * OS specific system headers
  */
@@ -113,7 +115,10 @@ void gdb_signal_handler(int sig, siginfo_t *, void *)
 {
     sig_caught = sig;
 
-    std::cerr << "gdb stacktrace call for signal #" << sig << " (" << signame(sig) << ")\n";
+    using failure = eda::color::message::failure;
+
+    std::cerr << failure("FAILURE")
+              << " gdb stacktrace call for signal #" << sig << " (" << signame(sig) << ")\n";
 
     fs::path gdb_exe = bp::search_path("gdb");
 

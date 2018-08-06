@@ -12,7 +12,10 @@
 #include <eda/util/infix_ostream_iterator.hpp>
 #include <eda/util/file/file_reader.hpp>
 
+#include <eda/color/message.hpp>
+
 #include <iostream>
+#include <memory>
 
 
 extern bool register_signal_handlers();
@@ -37,6 +40,18 @@ int main(int argc, const char *argv[])
     eda::util::file_loader file_reader{ std::cerr };
 
     try {
+        bool want_decoration = true;
+
+        if (want_decoration) {
+            using failure_facet = eda::color::message::failure_facet;
+
+            std::unique_ptr<failure_facet> facet = std::make_unique<failure_facet>("[", "]");
+            // configure the object ...
+
+            std::locale locale(std::locale(), facet.release());
+            std::cerr.imbue(locale);
+        }
+
         for (auto const filename : sources) {
             auto const contents = file_reader.read_file(filename);
             std::cout << "------------------------------------------------\n";
