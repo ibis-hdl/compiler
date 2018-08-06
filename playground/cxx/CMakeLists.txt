@@ -20,3 +20,4 @@ add_executable(cxx_color_output              EXCLUDE_FROM_ALL cxx_color_output.c
 add_executable(cxx_color_output_win          EXCLUDE_FROM_ALL cxx_color_output_win.cpp)
 add_executable(cxx_error_handler             EXCLUDE_FROM_ALL cxx_error_handler.cpp)
 add_executable(cxx_tagged_pack               EXCLUDE_FROM_ALL cxx_tagged_pack.cpp)
+add_executable(cxx_facet                     EXCLUDE_FROM_ALL cxx_facet.cpp)
