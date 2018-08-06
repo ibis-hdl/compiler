@@ -28,6 +28,13 @@
 #include <memory>
 
 
+namespace tag {
+	struct foo;
+	struct bar;
+};
+
+
+template<typename Tag>
 class embrace_decorator
 {
 public:
@@ -46,32 +53,33 @@ private:
 
 
 
+template<typename Tag>
 class embrace_facet : public std::locale::facet
 {
 public:
     static std::locale::id                          id;
 
 public:
-    embrace_facet(std::string const& prefix_, std::string const& postfix_, bool force_deco_ = false)
+    embrace_facet(std::string prefix_, std::string postfix_, bool force_deco_ = false)
     : facet{ 0 }
-    , prefix{ prefix_ }
-    , postfix{ postfix_ }
+    , prefix{ std::move(prefix_) }
+    , postfix{ std::move(postfix_) }
     , force_decoration{ force_deco_ }
     { }
 
 public:
-    std::ostream& print(std::ostream& os, embrace_decorator const& decorator) const
+    std::ostream& print(std::ostream& os, embrace_decorator<Tag> const& decorator) const
     {
-        if (!enable) {
-            *enable = is_tty(os);
-            os << (*enable ? "is TTY" : "redirected");
-            if (force_decoration) {
-                os << ", but forced";
-                *enable = true;
-            }
+    	if (!enable) {
+    		*enable = is_tty(os);
+    		os << (*enable ? "is TTY" : "redirected");
+    		if (force_decoration) {
+    			os << ", but forced";
+    			*enable = true;
+    		}
 
-            os << "\n";
-        }
+    		os << "\n";
+    	}
 
         if (*enable) { os << prefix; }
         decorator.print(os);
@@ -97,65 +105,84 @@ private:
 
 private:
     std::optional<bool> mutable                     enable;
-    std::string const                               prefix;
-    std::string const                               postfix;
-    bool                                            force_decoration;
+    std::string const								prefix;
+    std::string const								postfix;
+    bool 											force_decoration;
 };
 
-std::locale::id embrace_facet::id;
+template<typename Tag>
+std::locale::id embrace_facet<Tag>::id;
 
 
 
-std::ostream& operator<<(std::ostream& os, embrace_decorator const& decorator)
+template<typename Tag>
+std::ostream& operator<<(std::ostream& os, embrace_decorator<Tag> const& decorator)
 {
     std::locale locale = os.getloc();
 
-    if (std::has_facet<embrace_facet>(locale)) {
-        return std::use_facet<embrace_facet>(locale).print(os, decorator);
+    if (std::has_facet<embrace_facet<Tag>>(locale)) {
+    	return std::use_facet<embrace_facet<Tag>>(locale).print(os, decorator);
     }
     else {
-        return decorator.print(os);
+    	return decorator.print(os);
     }
 }
 
 
+using foo_decorator = embrace_decorator<tag::foo>;
+using bar_decorator = embrace_decorator<tag::bar>;
+
+using foo_facet = embrace_facet<tag::foo>;
+using bar_facet = embrace_facet<tag::bar>;
+
+
 int main()
 {
-    {
-        std::locale locale(std::locale(), new embrace_facet { "[", "]" });
-        std::cout.imbue(locale);
+	{
+		std::cout << "--- Setup foo facet for std::cout ---\n";
+		std::locale locale(std::locale(), new foo_facet{ "[", "]" });
+		std::cout.imbue(locale);
 
-        std::cout << embrace_decorator("(cout (Hello World))") << std::endl;
+		std::cout << foo_decorator("(foo (cout (Hello World)))") << std::endl;
+		std::cout << bar_decorator("(bar (cout (Hello World)))") << std::endl;
+		std::cout << "-------------------------------------\n";
+	}
+	{
+		std::cout << "--- Setup bar facet for std::cout ---\n";
+		bool want_decoration = true;
 
-    }
-    {
-        bool want_decoration = true;
+		if (want_decoration) {
+			std::locale locale(std::locale(), new bar_facet{ "<", ">" });
+			std::cerr.imbue(locale);
+		}
 
-        if (want_decoration) {
-            std::locale locale(std::locale(), new embrace_facet { "<", ">" });
-            std::cerr.imbue(locale);
-        }
+		std::cout << foo_decorator("(foo (cerr (Hello World)))") << std::endl;
+		std::cout << bar_decorator("(bar (cerr (Hello World)))") << std::endl;
+		std::cout << "-------------------------------------\n";
+	}
+	{
+		std::cout << "--- Setup foo facet for std::stringstream ---\n";
+		std::stringstream ss;
 
-        std::cerr << embrace_decorator("(cerr (Hello World))") << std::endl;
-    }
-#if 0 // Segmentation fault
-    {
-        std::stringstream ss;
+		std::locale locale(std::locale(), new foo_facet{ "*", "*", true });
+		ss.imbue(locale);
 
-        std::locale locale(std::locale(), new embrace_facet { "*", "*", true });
-        ss.imbue(locale);
+		ss << foo_decorator("(foo (stringstream (Hello World)))") << "\n"
+		   << bar_decorator("(bar (stringstream (Hello World)))") << std::endl;
+		std::cout << ss.str();
+		std::cout << "---------------------------------------------\n";
+	}
+	{
+		std::cout << "--- using foo facet with smart_ptr ---\n";
+		/* [Calling initializer_list constructor via make_unique/make_shared](
+		 *  https://stackoverflow.com/questions/26379311/calling-initializer-list-constructor-via-make-unique-make-shared)  */
+		std::unique_ptr<bar_facet> facet = std::make_unique<bar_facet>("#", "#");
+		// configure the object ...
 
-        ss <<  embrace_decorator("(stringstream (Hello World))");
-        std::cout << ss.str() << std::endl;
-    }
-#endif
-    {
-        std::unique_ptr<embrace_facet> facet = std::make_unique<embrace_facet>("#", "#");
-        // configure the object ...
+		std::locale locale(std::locale(), facet.release());
+		std::cout.imbue(locale);
 
-        std::locale locale(std::locale(), facet.release());
-        std::cout.imbue(locale);
-
-        std::cout << embrace_decorator("(cout (Hello World))") << std::endl;
-    }
+		std::cout << bar_decorator("(bar (cout (Hello World)))") << std::endl;
+		std::cout << "--------------------------------------\n";
+	}
 }
