@@ -11,7 +11,7 @@ project(eda_common LANGUAGES CXX)
 
 set(EDA_COMMON_SOURCE
     src/file_reader.cpp
-    src/configuration.cpp
+    src/settings.cpp
 )
 
 

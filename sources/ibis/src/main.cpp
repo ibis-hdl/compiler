@@ -6,7 +6,7 @@
  */
 
 #include <ibis/init.hpp>
-#include <eda/configuration.hpp>
+#include <eda/settings.hpp>
 
 //#include <eda/util/infix_ostream_iterator.hpp>
 #include <eda/util/file/file_reader.hpp>
@@ -22,7 +22,7 @@ extern void testing_signal_handler();
 
 int main(int argc, const char *argv[])
 {
-	eda::configuration setting;
+	eda::settings setting;
 
 	ibis::init init(argc, argv, setting);
 

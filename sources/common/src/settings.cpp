@@ -5,7 +5,7 @@
  *      Author: olpetzol
  */
 
-#include <eda/configuration.hpp>
+#include <eda/settings.hpp>
 
 #include <eda/util/string/icompare.hpp>
 #include <vector>
@@ -16,7 +16,7 @@
 namespace eda {
 
 
-void configuration::dump(std::ostream& os) const
+void settings::dump(std::ostream& os) const
 {
 	using key_type = map_type::key_type;
 	using value_type = map_type::mapped_type;
@@ -31,7 +31,7 @@ void configuration::dump(std::ostream& os) const
         return util::icompare_less(p1.first, p2.first);
         });
 
-    os << "(configuration [N=" << vec.size() << "]\n";
+    os << "(settings [N=" << vec.size() << "]\n";
 	for (auto const& [option_name, val] : vec) {
 		if (val) {
 			os << "    (" << option_name << " = " << *val << ")\n";
@@ -44,22 +44,22 @@ void configuration::dump(std::ostream& os) const
 }
 
 
-void configuration::option_trigger::update(configuration& config)
+void settings::option_trigger::update(settings& settings)
 {
     for(auto [primary_option, secondary_options] : trigger) {
 
     	// add to map only if primary_option is given
-    	if (!config(trim(primary_option))) {
+    	if (!settings(trim(primary_option))) {
     		continue;
     	}
 
     	for(auto option : secondary_options) {
-            config[option] = "true";
+    		settings[option] = "true";
         }
     }
 }
 
 
-const configuration::config_value configuration::none;
+const settings::option_value settings::none;
 
 } // namespace eda

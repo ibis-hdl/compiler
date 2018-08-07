@@ -14,7 +14,7 @@
 
 
 namespace eda {
-	class configuration;
+	class settings;
 }
 namespace docopt {
 	struct value;
@@ -27,7 +27,7 @@ namespace ibis {
 class init
 {
 public:
-	init(int argc, const char* argv[], eda::configuration& config);
+	init(int argc, const char* argv[], eda::settings& settings);
 
 	// FixMe: Tribute to not use optional<variant<T,...>>
 	std::vector<std::string> const& file_list() const {
@@ -42,7 +42,7 @@ private:
     void register_signal_handlers();
 
 private:
-	eda::configuration& 							config;
+	eda::settings& 									settings;
 	std::vector<std::string>						sourcefile_list;
 };
 

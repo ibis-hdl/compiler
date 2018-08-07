@@ -1,12 +1,12 @@
 /*
- * configuration.hpp
+ * settings.hpp
  *
  *  Created on: 01.08.2018
- *      Author: olpetzol
+ *      Author: olaf
  */
 
-#ifndef SOURCES_COMMON_INCLUDE_EDA_CONFIGURATION_HPP_
-#define SOURCES_COMMON_INCLUDE_EDA_CONFIGURATION_HPP_
+#ifndef SOURCES_COMMON_INCLUDE_EDA_SETTINGS_HPP_
+#define SOURCES_COMMON_INCLUDE_EDA_SETTINGS_HPP_
 
 #include <unordered_map>
 #include <string>
@@ -20,11 +20,11 @@ namespace eda {
 
 
 /**
- * Runtime configuration options
+ * Runtime setting options
  *
  * Example:
  * \code
- * configuration config;
+ * settings config;
  * option_trigger trigger;
  *
  * trigger.add("-Wall", { "-Wunused", "-Wother" });
@@ -39,17 +39,17 @@ namespace eda {
  *
  * \see Concept on [Wandbox](https://wandbox.org/permlink/0NrHlKXbw77zAOn0)
  */
-class configuration
+class settings
 {
 public:
-    typedef std::optional<std::string> config_value;
+    typedef std::optional<std::string> 				option_value;
 
     class option_trigger;
 
 public:
-    configuration() = default;
-    configuration(configuration const&) = delete;
-    configuration const& operator=(configuration const&) = delete;
+    settings() = default;
+    settings(settings const&) = delete;
+    settings const& operator=(settings const&) = delete;
 
 public:
 	/**
@@ -60,7 +60,7 @@ public:
 	 *                      as reference to optional<string>, otherwise to an
 	 *                      empty optional<>.
 	 */
-    config_value const& operator()(std::string const& option_name) const {
+    option_value const& operator()(std::string const& option_name) const {
 
     	map_type& map_ = const_cast<map_type&>(this->map);
 
@@ -81,7 +81,7 @@ public:
      * \param  option_name  The name of the option to lookup in the trimmed form.
      * \return config_value The value as reference to optional<string>.
      */
-    config_value& operator[](std::string const& option_name) {
+    option_value& operator[](std::string const& option_name) {
 
         return map[trim(option_name)];
     }
@@ -117,13 +117,13 @@ private:
     };
 
 private:
-    typedef std::unordered_map<std::string, config_value> map_type;
+    typedef std::unordered_map<std::string, option_value> map_type;
     map_type                                        map;
-    static const config_value                       none;
+    static const option_value                       none;
 };
 
 
-class configuration::option_trigger
+class settings::option_trigger
 {
     std::unordered_map<std::string, std::vector<std::string>> trigger;
 
@@ -150,11 +150,11 @@ public:
      *
      * \param config The configuration map.
      */
-    void update(configuration& config);
+    void update(settings& config);
 };
 
 
 } // namespace eda
 
 
-#endif /* SOURCES_COMMON_INCLUDE_EDA_CONFIGURATION_HPP_ */
+#endif /* SOURCES_COMMON_INCLUDE_EDA_SETTINGS_HPP_ */

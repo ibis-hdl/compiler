@@ -7,7 +7,7 @@
 
 #include <ibis/init.hpp>
 
-#include <eda/configuration.hpp>
+#include <eda/settings.hpp>
 
 #include <eda/util/file/file_reader.hpp>
 #include <eda/color/message.hpp>
@@ -26,8 +26,8 @@ extern bool register_gdb_signal_handler();
 namespace ibis {
 
 
-init::init(int argc, const char* argv[], eda::configuration& config_)
-: config{ config_ }
+init::init(int argc, const char* argv[], eda::settings& settings_)
+: settings{ settings_ }
 {
 	parse_env();
 	parse_cli(argc, argv);
@@ -48,7 +48,7 @@ void init::parse_env()
     auto const set_option = [&](std::string const& env_name) {
         std::string const env_var{ getenv(env_name) };
         if (!env_var.empty()) {
-            config[env_name] = env_var;
+        	settings[env_name] = env_var;
         }
     };
 
@@ -56,7 +56,7 @@ void init::parse_env()
     auto const set_option_key = [&](std::string const& env_name, std::string const& key_name) {
         std::string const env_var{ getenv(env_name) };
         if (!env_var.empty()) {
-            config[key_name] = env_var;
+        	settings[key_name] = env_var;
         }
     };
 
@@ -134,10 +134,10 @@ void init::parse_cli(int argc, const char* argv[])
         }
 
         // set secondary triggered options
-        eda::configuration::option_trigger trigger;
+        eda::settings::option_trigger trigger;
 
         trigger.add("--Wall", { "--Wunused", "--Wother" });
-        trigger.update(config);
+        trigger.update(settings);
     }
     catch (DocoptExitHelp const&) {
         std::cout << USAGE << std::endl;
@@ -177,14 +177,14 @@ bool init::eval_doccpp_option(std::string const& key, docopt::value const& value
     	if (value_ && !value_.asBool()) {
     		return;
     	}
-    	config[key_] = "true";
+    	settings[key_] = "true";
 	};
 
 	auto const set_string = [&](auto const& key_, auto const& value_) {
     	if (!value_ || !value_.isString()) {
     		return;
     	}
-    	config[key_] = value_.asString();
+    	settings[key_] = value_.asString();
 	};
 
 	// Analyze and set options
@@ -234,11 +234,11 @@ bool init::eval_doccpp_option(std::string const& key, docopt::value const& value
 void init::set_color_messages()
 {
     bool const force_color = [&] {
-        if (config("force-color")) return true;
+        if (settings("force-color")) return true;
         return false;
     }();
 
-    if (config("no-color") && !force_color) {
+    if (settings("no-color") && !force_color) {
         // no color wanted
         return;
     }
