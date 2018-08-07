@@ -26,7 +26,7 @@ int main(int argc, const char *argv[])
 
 	ibis::init init(argc, argv, setting);
 
-	if (setting("verbose")) {
+	if (setting["verbose"]) {
 		setting.dump(std::cout);
 		std::cout << "\n";
 	}
@@ -42,7 +42,7 @@ int main(int argc, const char *argv[])
 
         for (auto const& filename : init.file_list()) {
             auto const contents = file_reader.read_file(filename);
-            if (setting("verbose")) {
+            if (setting["verbose"]) {
             	std::cout << "processing: " << filename << "\n";
             }
             std::cout << "------------------------------------------------\n";

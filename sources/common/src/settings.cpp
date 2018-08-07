@@ -49,12 +49,12 @@ void settings::option_trigger::update(settings& settings)
     for(auto [primary_option, secondary_options] : trigger) {
 
     	// add to map only if primary_option is given
-    	if (!settings(trim(primary_option))) {
+    	if (!settings[trim(primary_option)]) {
     		continue;
     	}
 
     	for(auto option : secondary_options) {
-    		settings[option] = "true";
+    		settings.set(option) = "true";
         }
     }
 }

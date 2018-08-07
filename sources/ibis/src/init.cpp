@@ -48,7 +48,7 @@ void init::parse_env()
     auto const set_option = [&](std::string const& env_name) {
         std::string const env_var{ getenv(env_name) };
         if (!env_var.empty()) {
-        	settings[env_name] = env_var;
+        	settings.set(env_name) = env_var;
         }
     };
 
@@ -56,7 +56,7 @@ void init::parse_env()
     auto const set_option_key = [&](std::string const& env_name, std::string const& key_name) {
         std::string const env_var{ getenv(env_name) };
         if (!env_var.empty()) {
-        	settings[key_name] = env_var;
+        	settings.set(key_name) = env_var;
         }
     };
 
@@ -177,14 +177,14 @@ bool init::eval_doccpp_option(std::string const& key, docopt::value const& value
     	if (value_ && !value_.asBool()) {
     		return;
     	}
-    	settings[key_] = "true";
+    	settings.set(key_) = "true";
 	};
 
 	auto const set_string = [&](auto const& key_, auto const& value_) {
     	if (!value_ || !value_.isString()) {
     		return;
     	}
-    	settings[key_] = value_.asString();
+    	settings.set(key_) = value_.asString();
 	};
 
 	// Analyze and set options
@@ -203,7 +203,7 @@ bool init::eval_doccpp_option(std::string const& key, docopt::value const& value
     	}
 
     	// XXX variant required !!!
-    	// config[key] = file_list;
+    	// config.set(key) = file_list;
     	sourcefile_list = file_list;
     }
 
@@ -234,11 +234,11 @@ bool init::eval_doccpp_option(std::string const& key, docopt::value const& value
 void init::set_color_messages()
 {
     bool const force_color = [&] {
-        if (settings("force-color")) return true;
+        if (settings["force-color"]) return true;
         return false;
     }();
 
-    if (settings("no-color") && !force_color) {
+    if (settings["no-color"] && !force_color) {
         // no color wanted
         return;
     }

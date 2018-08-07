@@ -60,7 +60,7 @@ public:
 	 *                      as reference to optional<string>, otherwise to an
 	 *                      empty optional<>.
 	 */
-    option_value const& operator()(std::string const& option_name) const {
+    option_value const& operator[](std::string const& option_name) const {
 
     	map_type& map_ = const_cast<map_type&>(this->map);
 
@@ -81,7 +81,7 @@ public:
      * \param  option_name  The name of the option to lookup in the trimmed form.
      * \return config_value The value as reference to optional<string>.
      */
-    option_value& operator[](std::string const& option_name) {
+    option_value& set(std::string const& option_name) {
 
         return map[trim(option_name)];
     }
