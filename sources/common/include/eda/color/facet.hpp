@@ -8,6 +8,8 @@
 #ifndef SOURCES_COMMON_INCLUDE_EDA_COLOR_FACET_HPP_
 #define SOURCES_COMMON_INCLUDE_EDA_COLOR_FACET_HPP_
 
+#include <eda/color/detail/ansii_color.hpp>
+
 #include <locale>   // facet
 #include <iostream>
 
@@ -26,24 +28,32 @@ public:
     static std::locale::id                          id;
 
 public:
-    message_facet(std::string prefix_, std::string postfix_, bool force_deco_ = false)
+    message_facet(esc_printer<ansii::attribute, 4> prefix_, esc_printer<ansii::attribute, 4> postfix_, bool force_deco_ = false)
     : facet{ 0 }
     , prefix{ std::move(prefix_) }
     , postfix{ std::move(postfix_) }
     , force_decoration{ force_deco_ }
     { }
 
+    message_facet(bool force_deco_ = false)
+    : facet{ 0 }
+    , force_decoration{ force_deco_ }
+    { }
+
+//    message_facet(message_facet const&) = delete;
+//    message_facet& operator=(message_facet const&) = delete;
+
 public:
     std::ostream& print(std::ostream& os, message_decorator<Tag> const& decorator) const
     {
         if (!enable) {
             *enable = is_tty(os);
-            os << (*enable ? "is TTY" : "redirected");
+            //os << (*enable ? "is TTY" : "redirected");
             if (force_decoration) {
-                os << ", but forced";
+                //os << ", but forced";
                 *enable = true;
             }
-            os << "\n";
+            //os << "\n";
         }
 
         if (*enable) { os << prefix; }
@@ -52,6 +62,10 @@ public:
 
         return os;
     }
+
+public:
+    esc_printer<ansii::attribute, 4>                prefix;
+    esc_printer<ansii::attribute, 4>                postfix;
 
 private:
     bool is_tty(std::ostream& os) const
@@ -65,16 +79,14 @@ private:
         };
 
         auto const handle = stream(os);
-        // Note, ::fileno(NULL) crashes
+        // Note, ::fileno(NULL) can crash (bug there?)
         if (handle && ::isatty(::fileno(handle))) { return true; }
         return false;
     }
 
 private:
-    std::optional<bool> mutable                     enable;
-    std::string const                               prefix;
-    std::string const                               postfix;
     bool                                            force_decoration;
+    std::optional<bool> mutable                     enable;
 };
 
 

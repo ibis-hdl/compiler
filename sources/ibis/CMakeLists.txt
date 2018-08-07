@@ -19,10 +19,9 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
 
 target_sources(${PROJECT_NAME} PRIVATE
     src/docopt_inst.cpp
-    src/parse_env.cpp
-    src/parse_cli.cpp
     src/main.cpp
     src/signal.cpp
+    src/init.cpp
     $<$<BOOL:${EDA_WITH_GDB_STACKTRACE}>:src/stacktrace_gdb.cpp>
     $<$<BOOL:${EDA_WITH_BOOST_STACKTRACE}>:src/stacktrace_boost.cpp>  
 )

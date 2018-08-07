@@ -8,6 +8,8 @@
 #ifndef SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_ANSII_COLOR_HPP_
 #define SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_ANSII_COLOR_HPP_
 
+#include <iosfwd>
+#include <algorithm>
 #include <cassert>
 
 
@@ -139,6 +141,10 @@ esc_printer<enum_type, SIZE> operator|(esc_printer<enum_type, SIZE> lhs, esc_pri
 }
 
 } // namespace detail
+
+
+template<typename enum_type, std::size_t SIZE>
+using esc_printer = detail::esc_printer<enum_type, SIZE>;
 
 
 namespace text {

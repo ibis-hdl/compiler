@@ -10,9 +10,6 @@
 #include <csignal>
 
 
-extern bool register_gdb_signal_handler();
-
-
 void testing_signal_handler()
 {
 #if 0 // doesn't work ????
@@ -20,21 +17,12 @@ void testing_signal_handler()
     std::cout << "SIGNAL " << signame(sig) << "\n";
     signal(sig, SIG_DFL);
 #endif
-    int n = 1;
+    int n = 3;
     int r = 0;
+    std::cout << "testing signal handler with SIGFPE\n";
     while(true) {
-        std::cout << n << " -> " << r << "\n";
-        r = 100 / n--;
+        r = 100 / n;
+        std::cout << "100 / " << n-- << " = " << r << "\n";
     }
-}
-
-
-bool register_signal_handlers()
-{
-#if defined(EDA_WITH_GDB_STACKTRACE)
-    return register_gdb_signal_handler();
-#else
-    return true;
-#endif
 }
 
