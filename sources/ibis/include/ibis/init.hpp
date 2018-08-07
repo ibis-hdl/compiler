@@ -2,7 +2,7 @@
  * init.hpp
  *
  *  Created on: 07.08.2018
- *      Author: olpetzol
+ *      Author: olaf
  */
 
 #ifndef SOURCES_IBIS_INCLUDE_IBIS_INIT_HPP_
