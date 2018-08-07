@@ -31,9 +31,9 @@
 /*
  * OS specific system headers
  */
-#include <boost/predef/os.h>
+#include <eda/predef.hpp>
 
-#if defined(BOOST_OS_LINUX)
+#if (BOOST_OS_LINUX)
 #include <sys/prctl.h>
 #include <sys/ptrace.h>
 #include <sys/types.h>
@@ -189,7 +189,7 @@ bool gdb_detected()
         return *result;
     }
 
-#if defined(BOOST_OS_LINUX)
+#if (BOOST_OS_LINUX)
 
     /* Detect GDB by the mean of /proc/$PID/cmdline for "gdb" */
     {
@@ -238,7 +238,7 @@ bool gdb_detected()
 
 bool valgrind_detected()
 {
-#if defined(RUNNING_ON_VALGRIND)
+#if RUNNING_ON_VALGRIND
     return true;
 #endif
 
@@ -256,7 +256,7 @@ bool valgrind_detected()
         return *result;
     }
 
-#if defined(BOOST_OS_LINUX)
+#if (BOOST_OS_LINUX)
     /* [how to set dynamic link library path and environment variable for a process in valgrind](
      * https://stackoverflow.com/questions/24745120/how-to-set-dynamic-link-library-path-and-environment-variable-for-a-process-in-v)
      * ... not very sophisticated implemented  */
