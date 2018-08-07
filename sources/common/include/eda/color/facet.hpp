@@ -28,20 +28,20 @@ public:
     static std::locale::id                          id;
 
 public:
-    message_facet(esc_printer<ansii::attribute, 4> prefix_, esc_printer<ansii::attribute, 4> postfix_, bool force_deco_ = false)
+    explicit message_facet(esc_printer<ansii::attribute, 4> prefix_, esc_printer<ansii::attribute, 4> postfix_, bool force_deco_ = false)
     : facet{ 0 }
     , prefix{ std::move(prefix_) }
     , postfix{ std::move(postfix_) }
     , force_decoration{ force_deco_ }
     { }
 
-    message_facet(bool force_deco_ = false)
+    explicit message_facet(bool force_deco_ = false)
     : facet{ 0 }
     , force_decoration{ force_deco_ }
     { }
 
-//    message_facet(message_facet const&) = delete;
-//    message_facet& operator=(message_facet const&) = delete;
+    message_facet(message_facet const&) = delete;
+    message_facet& operator=(message_facet const&) = delete;
 
 public:
     std::ostream& print(std::ostream& os, message_decorator<Tag> const& decorator) const
@@ -72,10 +72,10 @@ private:
     {
         // no POSIX way to extract stream handler from the a given
         // `std::ostream` object
-        auto const stream = [](std::ostream& os) {
-            if (&os == &std::cout)                      { return stdout; }
-            if (&os == &std::cerr || &os == &std::clog) { return stderr; }
-            return static_cast<FILE*>(0);
+        auto const stream = [](std::ostream& os_) {
+            if (&os_ == &std::cout)                      { return stdout; }
+            if (&os_ == &std::cerr || &os_ == &std::clog) { return stderr; }
+            return static_cast<FILE*>(nullptr);
         };
 
         auto const handle = stream(os);

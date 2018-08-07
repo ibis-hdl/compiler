@@ -19,7 +19,7 @@ template<typename Tag>
 class message_decorator
 {
 public:
-    message_decorator(std::string const& contents_)
+    explicit message_decorator(std::string const& contents_)
     : contents{ contents_ }
     { }
 

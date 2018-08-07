@@ -38,7 +38,7 @@ public:
     typedef x3::error_handler_result                result_type;
 
 public:
-    error_handler(
+    explicit error_handler(
         std::ostream& os_, position_cache<iterator_type>& position_cache_,
         std::string file = "", std::size_t tabs = 4
     )
@@ -47,6 +47,9 @@ public:
       , filename(file)
       , tab_sz(tabs)
     { }
+
+    error_handler(error_handler const&) = delete;
+    error_handler& operator=(error_handler const&) = delete;
 
 public:
     template <typename NodeT>

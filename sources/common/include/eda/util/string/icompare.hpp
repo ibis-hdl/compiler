@@ -21,8 +21,8 @@ namespace eda { namespace util {
 bool icompare_less(std::string const& lhs, std::string const& rhs)
 {
     auto const result = std::mismatch(lhs.cbegin(), lhs.cend(), rhs.cbegin(), rhs.cend(),
-        [](const auto& lhs, const auto& rhs) {
-            return std::tolower(lhs) == std::tolower(rhs);
+        [](const auto& lhs_, const auto& rhs_) {
+            return std::tolower(lhs_) == std::tolower(rhs_);
         });
 
     return    result.second != rhs.cend()

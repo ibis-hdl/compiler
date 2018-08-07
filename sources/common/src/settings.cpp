@@ -1,5 +1,5 @@
 /*
- * options.cpp
+ * settings.cpp
  *
  *  Created on: 01.08.2018
  *      Author: olpetzol

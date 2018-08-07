@@ -114,7 +114,7 @@ private:
             return key.substr(prefix.size());
         }
         return key;
-    };
+    }
 
 private:
     typedef std::unordered_map<std::string, option_value> map_type;

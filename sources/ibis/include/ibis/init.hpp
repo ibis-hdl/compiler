@@ -8,7 +8,6 @@
 #ifndef SOURCES_IBIS_INCLUDE_IBIS_INIT_HPP_
 #define SOURCES_IBIS_INCLUDE_IBIS_INIT_HPP_
 
-
 #include <string>
 #include <vector>
 
@@ -27,7 +26,10 @@ namespace ibis {
 class init
 {
 public:
-	init(int argc, const char* argv[], eda::settings& settings);
+	explicit init(int argc, const char* argv[], eda::settings& settings);
+
+	init(init const&) = delete;
+	init& operator=(init const&) = delete;
 
 	// FixMe: Tribute to not use optional<variant<T,...>>
 	std::vector<std::string> const& file_list() const {

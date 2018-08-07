@@ -14,7 +14,9 @@
 
 #include <eda/support/boost/locale.hpp>
 
+#include <eda/compiler/warnings_off.hpp>
 #include <docopt.h>
+#include <eda/compiler/warnings_on.hpp>
 
 #include <cstdlib>
 #include <memory>
@@ -41,7 +43,7 @@ void init::parse_env()
 {
     auto const getenv = [](std::string const& key) {
         char const* val = std::getenv( key.c_str() );
-        return val == NULL ? std::string{} : std::string(val);
+        return val == nullptr ? std::string{} : std::string(val);
     };
 
     // pure ENV name used for configuration

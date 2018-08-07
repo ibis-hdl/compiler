@@ -40,7 +40,7 @@ class syntax : boost::static_visitor<bool>
 
 public:
     template <typename ErrorHandler>
-    syntax(std::ostream& os_,
+    explicit syntax(std::ostream& os_,
            vhdl::context& context_, ErrorHandler const& error_handler_)
       : os{ os_ , 0 }
       , context{ context_ }

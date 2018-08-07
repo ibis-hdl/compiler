@@ -63,7 +63,7 @@ public:
 
 private:
     template<std::size_t ... N>
-    esc_printer(std::initializer_list<enum_type> il, std::index_sequence<N ...> )
+    explicit esc_printer(std::initializer_list<enum_type> il, std::index_sequence<N ...> )
     : std::array<value_type, SIZE>{ { static_cast<value_type>(il.begin()[N]) ...} }
     , count{ il.size() }
     {
@@ -71,7 +71,7 @@ private:
     }
 
 public:
-    esc_printer(std::initializer_list<enum_type> il)
+    explicit esc_printer(std::initializer_list<enum_type> il)
     : esc_printer(il, std::make_index_sequence<SIZE>{})
     { }
 

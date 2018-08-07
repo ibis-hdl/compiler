@@ -10,6 +10,7 @@
 #include <eda/compiler/warnings_off.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
+#include <boost/numeric/conversion/cast.hpp>
 #include <eda/compiler/warnings_on.hpp>
 
 #include <eda/support/boost/locale.hpp>
@@ -95,7 +96,7 @@ bool file_loader::unique_files(std::vector<std::string> const& file_list) const 
             ++occourence[canonical(filename)];
         }
 
-        for (auto const [canonical_filename, count] : occourence) {
+        for (auto const& [canonical_filename, count] : occourence) {
 
             if (count > 1) {
                 os << format(translate(
@@ -163,8 +164,12 @@ std::string file_loader::read_file_alt(std::string const& filename) const {
     file.seekg(0, std::ios::beg);
 
     std::string contents { };
-    contents.resize(size);
-
+#if 1
+    	contents.reserve(size);
+#else
+    // FixMe: error: call to 'ceil' is ambiguous
+    contents.reserve(boost::numeric_cast<std::size_t>(size));
+#endif
     file.read(&contents[0], size);
 
     if (file.fail() && !file.eof()) {
@@ -176,7 +181,7 @@ std::string file_loader::read_file_alt(std::string const& filename) const {
     return contents;
 }
 
-//< time point of last write occurrence
+/** time point of last write occurrence */
 std::time_t file_loader::timesstamp(std::string const& filename) const {
     return fs::last_write_time(filename);
 }

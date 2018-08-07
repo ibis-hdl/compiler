@@ -23,7 +23,7 @@ namespace eda { namespace util {
 class file_loader
 {
 public:
-    file_loader(std::ostream& os_)
+	explicit file_loader(std::ostream& os_)
     : os { os_ }
     { }
 
@@ -52,7 +52,7 @@ public:
      * https://insanecoding.blogspot.com/2011/11/how-to-read-in-file-in-c.html) */
     std::string read_file_alt(std::string const& filename) const;
 
-    //< time point of last write occurrence
+    /* time point of last write occurrence */
     std::time_t timesstamp(std::string const& filename) const;
 
 private:
