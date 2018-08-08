@@ -58,3 +58,13 @@ find_package(Boost REQUIRED filesystem)
 target_link_libraries(${PROJECT_NAME}
 	Boost::filesystem
 )
+
+##
+# Windows MinGW
+# [How to fix undefined reference to `__imp_WSACleanup' (Boost.Asio) in CLion](
+#  https://stackoverflow.com/questions/38767653/how-to-fix-undefined-reference-to-imp-wsacleanup-boost-asio-in-clion)
+if(MINGW)
+	target_link_libraries(${PROJECT_NAME}
+   		ws2_32
+	)
+endif()

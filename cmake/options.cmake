@@ -41,11 +41,7 @@ option(EDA_BUILD_TESTS "Build tests" ON)
 
 ##
 # Sanity Checks
-if("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows" AND EDA_WITH_GDB_STACKTRACE)
-    message(FATAL_ERROR "GDB stacktrace doesn't compile on WinGW not yet.")
-endif()
-
-
+#
 if(EDA_WITH_BOOST_STACKTRACE AND EDA_WITH_GDB_STACKTRACE)
     message(FATAL_ERROR "Only one stacktrace option is useful and hence allowed.")
 endif()

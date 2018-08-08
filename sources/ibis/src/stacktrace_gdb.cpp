@@ -48,8 +48,9 @@ namespace bp = boost::process;
 
 
 bool register_gdb_signal_handler();
-
+#if (BOOST_OS_LINUX)
 void gdb_signal_handler(int sig, siginfo_t *, void *);
+#endif
 bool gdb_detected();
 bool valgrind_detected();
 
@@ -63,7 +64,7 @@ namespace /* anonymous */
 // or semaphore to notify a waiting thread
 volatile std::sig_atomic_t sig_caught;
 
-
+#if (BOOST_OS_LINUX)
 static const char *signame(int sig) {
 
     switch (sig) {
@@ -76,11 +77,12 @@ static const char *signame(int sig) {
         default:        return "???";
     }
 }
+#endif
 
 } // anonymous namespace
 
 
-
+#if (BOOST_OS_LINUX)
 bool register_gdb_signal_handler()
 {
     if (gdb_detected() || valgrind_detected()) {
@@ -172,7 +174,7 @@ void gdb_signal_handler(int sig, siginfo_t *, void *)
     // ... dropping into the default signal handler
     signal(sig, SIG_DFL);
 }
-
+#endif
 
 /**
  * Several techniques to detect debuggers; no real anti-debugger detection
@@ -331,17 +333,7 @@ bool token_found(std::string const& token, std::string const& procfs_path)
 
 std::string get_executable_path()
 {
-#if (BOOST_OS_WINDOWS)
-    char *exePath;
-    if (_get_pgmptr(&exePath) != 0)
-    exePath = "";
-
-#elif (BOOST_OS_SOLARIS)
-    char exePath[PATH_MAX];
-    if (realpath(getexecname(), exePath) == NULL)
-    exePath[0] = '\0';
-
-#elif (BOOST_OS_LINUX)
+#if (BOOST_OS_LINUX)
     char exePath[PATH_MAX];
     ssize_t len = ::readlink("/proc/self/exe", exePath, sizeof(exePath));
     if (len == -1 || len == sizeof(exePath)) {
@@ -349,29 +341,8 @@ std::string get_executable_path()
         perror("error reading '/proc/self/exe'");
     }
     exePath[len] = '\0';
-
-#elif (BOOST_OS_MACOS)
-    char exePath[PATH_MAX];
-    uint32_t len = sizeof(exePath);
-    if (_NSGetExecutablePath(exePath, &len) != 0) {
-        exePath[0] = '\0'; // buffer too small (!)
-    } else {
-        // resolve symlinks, ., .. if possible
-        char *canonicalPath = realpath(exePath, NULL);
-        if (canonicalPath != NULL) {
-            strncpy(exePath,canonicalPath,len);
-            free(canonicalPath);
-        }
-    }
-
-#elif (BOOST_OS_BSD_FREE)
-    char exePath[2048];
-    int mib[4]; mib[0] = CTL_KERN; mib[1] = KERN_PROC; mib[2] = KERN_PROC_PATHNAME; mib[3] = -1;
-    size_t len = sizeof(exePath);
-    if (sysctl(mib, 4, exePath, &len, NULL, 0) != 0)
-    exePath[0] = '\0';
-
+    return std::string(exePath);
 #endif
 
-    return std::string(exePath);
+    return std::string{};
 }

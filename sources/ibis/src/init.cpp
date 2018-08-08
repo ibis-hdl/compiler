@@ -276,7 +276,7 @@ void init::set_color_messages()
 
 void init::register_signal_handlers()
 {
-#if defined(EDA_WITH_GDB_STACKTRACE)
+#if defined(EDA_WITH_GDB_STACKTRACE) && (BOOST_OS_LINUX)
     using failure = eda::color::message::failure;
 
     if (!register_gdb_signal_handler()) {

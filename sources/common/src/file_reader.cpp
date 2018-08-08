@@ -9,13 +9,13 @@
 
 #include <eda/compiler/warnings_off.hpp>
 #include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
 #include <boost/numeric/conversion/cast.hpp>
 #include <eda/compiler/warnings_on.hpp>
 
 #include <eda/support/boost/locale.hpp>
 
 #include <iterator>
+#include <fstream>
 
 #include <map>
 
@@ -121,7 +121,7 @@ std::string file_loader::read_file(std::string const& filename) const {
     using boost::locale::format;
     using boost::locale::translate;
 
-    fs::ifstream file{ filename, std::ios::in | std::ios::binary };
+    std::ifstream file{ filename, std::ios::in | std::ios::binary };
 
     if (!file) {
         throw std::ios_base::failure{
@@ -150,7 +150,7 @@ std::string file_loader::read_file_alt(std::string const& filename) const {
     using boost::locale::format;
     using boost::locale::translate;
 
-    fs::ifstream file { filename, std::ios::in | std::ios::binary | std::ios::ate };
+    std::ifstream file { filename, std::ios::in | std::ios::binary | std::ios::ate };
 
     if (!file) {
         throw std::ios_base::failure{
@@ -160,7 +160,7 @@ std::string file_loader::read_file_alt(std::string const& filename) const {
 
     file.unsetf(std::ios::skipws);
 
-    fs::ifstream::pos_type const size = file.tellg();
+    std::ifstream::pos_type const size = file.tellg();
     file.seekg(0, std::ios::beg);
 
     std::string contents { };
@@ -168,6 +168,7 @@ std::string file_loader::read_file_alt(std::string const& filename) const {
     	contents.reserve(size);
 #else
     // FixMe: error: call to 'ceil' is ambiguous
+    //        due to fpos<traits_type::state_type>
     contents.reserve(boost::numeric_cast<std::size_t>(size));
 #endif
     file.read(&contents[0], size);
