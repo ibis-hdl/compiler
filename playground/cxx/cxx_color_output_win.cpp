@@ -6,7 +6,7 @@
  *
  *  [Add color to your std::cout](https://www.codeproject.com/Articles/16431/Add-color-to-your-std-cout)
  *  [colors in console for beginners](http://www.cplusplus.com/forum/beginner/5830/)
- *  [Konsolen Farbe ändern](https://www.c-plusplus.net/forum/topic/259410/konsolen-farbe-%C3%A4ndern)
+ *  [Konsolen Farbe ï¿½ndern](https://www.c-plusplus.net/forum/topic/259410/konsolen-farbe-%C3%A4ndern)
  */
 
 
@@ -66,7 +66,7 @@ enum class attribute : uint16_t {
 // https://github.com/Baltasarq/cscrutil/blob/master/src/scrutil.c
 struct win_printer
 {
-	typedef enum { unspecified, active, passiv } state_t;
+	typedef enum { init, active, passiv } state_t;
 
 	win_printer()
 	{
@@ -109,11 +109,14 @@ struct win_printer
             	long		stream_storage;
             } data;
 
+            static_assert(sizeof(long) == 4, "Size of std::ios_base::iword is assumed to be 'long' (4 Bytes)");
+            static_assert(sizeof(WORD) == 1, "Size of Windows Type 'WORD' is assumed to be 4 Byte");
+
             data.stream_storage = os_.iword(win_printer::xindex);
-            state_t next_state = unspecified;
+            state_t next_state = init;
 
             switch (data.my.state) {
-    			case unspecified:
+    			case init:
     				// store default attributes
     				data.my.default_attribute = text_attributes(handle_);
     				[[falltrough]]
@@ -127,7 +130,7 @@ struct win_printer
     				break;
     			default:
     				std::cerr << "INVALID STATE\n";
-    				next_state = unspecified;
+    				next_state = init;
             }
 
             data.my.state = next_state;
