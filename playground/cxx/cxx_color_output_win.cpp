@@ -66,8 +66,6 @@ enum class attribute : uint16_t {
 // https://github.com/Baltasarq/cscrutil/blob/master/src/scrutil.c
 struct win_printer
 {
-	typedef enum { init, active, passiv } state_t;
-
 	win_printer()
 	{
 		using windows::attribute;
@@ -98,43 +96,42 @@ struct win_printer
             return handle;
         };
 
-    	auto const storage_fsm = [&](std::ostream& os_, auto handle_, WORD attr_) {
+    	auto const iword_fsm = [&](std::ostream& os_, auto handle_, WORD attr_) {
+
+    		typedef enum : uint8_t { init, active, passiv } state_t;
 
             union {
             	struct {
-            		WORD	state;
+                    // WORD, see https://docs.microsoft.com/en-us/windows/desktop/winprog/windows-data-types
+            		WORD	state;	// uint16_t
             		WORD	default_attribute;
-            		WORD	padding[2];
-            	} my;
-            	long		stream_storage;
-            } data;
+            	} data;
+            	// std::ios_base::iword, see https://en.cppreference.com/w/cpp/io/ios_base/iword
+            	long		value;
+            } iword;
 
-            static_assert(sizeof(long) == 4, "Size of std::ios_base::iword is assumed to be 'long' (4 Bytes)");
-            static_assert(sizeof(WORD) == 1, "Size of Windows Type 'WORD' is assumed to be 4 Byte");
+            iword.value = os_.iword(win_printer::xindex);
+            state_t next_state{ init };
 
-            data.stream_storage = os_.iword(win_printer::xindex);
-            state_t next_state = init;
-
-            switch (data.my.state) {
+            switch (iword.data.state) {
     			case init:
-    				// store default attributes
-    				data.my.default_attribute = text_attributes(handle_);
+    				iword.data.default_attribute = text_attributes(handle_);
     				[[falltrough]]
     			case active:
     				SetConsoleTextAttribute(handle_, attr_);
     				next_state = passiv;
     				break;
     			case passiv:
-    				SetConsoleTextAttribute(handle_, data.my.default_attribute);
+    				SetConsoleTextAttribute(handle_, iword.data.default_attribute);
     				next_state = active;
     				break;
     			default:
-    				std::cerr << "INVALID STATE\n";
+    				std::cerr << __func__ << ": INVALID STATE\n";
     				next_state = init;
             }
 
-            data.my.state = next_state;
-            os_.iword(win_printer::xindex) = data.stream_storage;
+            iword.data.state = next_state;
+            os_.iword(win_printer::xindex) = iword.value;
     	};
 
         HANDLE const handle = stream(os);
@@ -144,7 +141,7 @@ struct win_printer
         	return os;
         }
 
-        storage_fsm(os, handle, attr);
+        iword_fsm(os, handle, attr);
 
         return os;
     }
