@@ -9,6 +9,8 @@
 #define SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_ANSII_COLOR_HPP_
 
 #include <iosfwd>
+#include <array>
+#include <iterator>
 #include <algorithm>
 #include <cassert>
 
@@ -130,51 +132,55 @@ public:
 
 
 template<typename enum_type, std::size_t SIZE>
+static inline
 std::ostream& operator<<(std::ostream& os, esc_printer<enum_type, SIZE> const& printer) {
     return printer.print(os);
 }
 
+
 template<typename enum_type, std::size_t SIZE>
+static inline
 esc_printer<enum_type, SIZE> operator|(esc_printer<enum_type, SIZE> lhs, esc_printer<enum_type, SIZE> const& rhs) {
      lhs |= rhs;
     return lhs;
 }
 
+
 } // namespace detail
 
 
-template<typename enum_type, std::size_t SIZE>
-using esc_printer = detail::esc_printer<enum_type, SIZE>;
+using printer = detail::esc_printer<ansii::attribute, 4>;
+using attribute = ansii::attribute;
 
 
 namespace text {
-    static detail::esc_printer<ansii::attribute, 4> const bold{ansii::attribute::Text_Bold};
-    static detail::esc_printer<ansii::attribute, 4> const underscore{ansii::attribute::Text_Underscore};
+    color::printer const bold{ attribute::Text_Bold };
+    color::printer const underscore{ attribute::Text_Underscore };
 }
 
 namespace fg {
-    static detail::esc_printer<ansii::attribute, 4> const black{ansii::attribute::Foreground_Black};
-    static detail::esc_printer<ansii::attribute, 4> const red{ansii::attribute::Foreground_Red};
-    static detail::esc_printer<ansii::attribute, 4> const green{ansii::attribute::Foreground_Green};
-    static detail::esc_printer<ansii::attribute, 4> const yellow{ansii::attribute::Foreground_Yellow};
-    static detail::esc_printer<ansii::attribute, 4> const blue{ansii::attribute::Foreground_Blue};
-    static detail::esc_printer<ansii::attribute, 4> const magenta{ansii::attribute::Foreground_Magenta};
-    static detail::esc_printer<ansii::attribute, 4> const cyan{ansii::attribute::Foreground_Cyan};
-    static detail::esc_printer<ansii::attribute, 4> const white{ansii::attribute::Foreground_White};
+    color::printer const black{ attribute::Foreground_Black };
+    color::printer const red{ attribute::Foreground_Red };
+    color::printer const green{ attribute::Foreground_Green };
+    color::printer const yellow{ attribute::Foreground_Yellow };
+    color::printer const blue{ attribute::Foreground_Blue };
+    color::printer const magenta{ attribute::Foreground_Magenta };
+    color::printer const cyan{ attribute::Foreground_Cyan };
+    color::printer const white{ attribute::Foreground_White };
 }
 
 namespace bg {
-    static detail::esc_printer<ansii::attribute, 4> const black{ansii::attribute::Background_Black};
-    static detail::esc_printer<ansii::attribute, 4> const red{ansii::attribute::Background_Red};
-    static detail::esc_printer<ansii::attribute, 4> const green{ansii::attribute::Background_Green};
-    static detail::esc_printer<ansii::attribute, 4> const yellow{ansii::attribute::Background_Yellow};
-    static detail::esc_printer<ansii::attribute, 4> const blue{ansii::attribute::Background_Blue};
-    static detail::esc_printer<ansii::attribute, 4> const magenta{ansii::attribute::Background_Magenta};
-    static detail::esc_printer<ansii::attribute, 4> const cyan{ansii::attribute::Background_Cyan};
-    static detail::esc_printer<ansii::attribute, 4> const white{ansii::attribute::Background_White};
+    color::printer const black{ attribute::Background_Black };
+    color::printer const red{ attribute::Background_Red };
+    color::printer const green{ attribute::Background_Green };
+    color::printer const yellow{ attribute::Background_Yellow };
+    color::printer const blue{ attribute::Background_Blue };
+    color::printer const magenta{ attribute::Background_Magenta };
+    color::printer const cyan{ attribute::Background_Cyan };
+    color::printer const white{ attribute::Background_White };
 }
 
-static detail::esc_printer<ansii::attribute, 4> const color_off{ansii::attribute::Attributes_Off};
+color::printer const color_off{ attribute::Attributes_Off };
 
 
 } } // namespace eda.color

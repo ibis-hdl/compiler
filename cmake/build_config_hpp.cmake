@@ -33,3 +33,9 @@ configure_file(
   "${PROJECT_SOURCE_DIR}/include/eda/compiler/compiler_support.hpp.in"
   "${PROJECT_BINARY_DIR}/include/eda/compiler/compiler_support.hpp"
 )
+
+# ... also the user configuration 
+configure_file(
+  "${PROJECT_SOURCE_DIR}/include/eda/configuration.hpp.in"
+  "${PROJECT_BINARY_DIR}/include/eda/configuration.hpp"
+)

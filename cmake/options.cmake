@@ -12,15 +12,28 @@
 # by using -Weverything
 #
 # ToDo: modern CMake uses add_compile_options()?
-option(CLANG_WARN_EVERYTHING "Use Clang compiler's -Weverything option (to compile parts of the source)" OFF)
+
+
+##
+# Build Option: ANSI Color or Windows  Console I/O
+if(WIN32)
+    option(EDA_ON_WINDOWS_USE_ANSII_COLOR "Ignore Window's High-Level Console I/O API and use ANSII color codes." ON)
+endif()
 
 
 ##
 # Build Option: Support Boost.stacktrace library
 option(EDA_WITH_BOOST_STACKTRACE "Enable support for the Boost::stacktrace library." OFF)
 
+
 ##
-# Build Option: run EDA under Valgrind.
+# Developer Build Option: Use Clang's -Weverything (Clang only)
+option(CLANG_WARN_EVERYTHING "Use Clang compiler's -Weverything option (to compile parts of the source)" OFF)
+mark_as_advanced(CLANG_WARN_EVERYTHING)
+
+
+##
+# Developer Build Option: run EDA under Valgrind.
 option(EDA_RUN_ON_VALGRIND "Configure EDA to be run on Valgrind." OFF)
 mark_as_advanced(EDA_RUN_ON_VALGRIND)
 

@@ -8,7 +8,7 @@
 #ifndef SOURCES_COMMON_INCLUDE_EDA_COLOR_FACET_HPP_
 #define SOURCES_COMMON_INCLUDE_EDA_COLOR_FACET_HPP_
 
-#include <eda/color/detail/ansii_color.hpp>
+#include <eda/color/detail/color.hpp>
 
 #include <locale>   // facet
 #include <iostream>
@@ -28,7 +28,7 @@ public:
     static std::locale::id                          id;
 
 public:
-    explicit message_facet(esc_printer<ansii::attribute, 4> prefix_, esc_printer<ansii::attribute, 4> postfix_, bool force_deco_ = false)
+    explicit message_facet(color::printer prefix_, color::printer postfix_, bool force_deco_ = false)
     : facet{ 0 }
     , prefix{ std::move(prefix_) }
     , postfix{ std::move(postfix_) }
@@ -64,8 +64,8 @@ public:
     }
 
 public:
-    esc_printer<ansii::attribute, 4>                prefix;
-    esc_printer<ansii::attribute, 4>                postfix;
+    color::printer                					prefix;
+    color::printer                					postfix;
 
 private:
     bool is_tty(std::ostream& os) const

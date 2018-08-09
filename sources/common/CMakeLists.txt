@@ -12,6 +12,7 @@ project(eda_common LANGUAGES CXX)
 set(EDA_COMMON_SOURCE
     src/file_reader.cpp
     src/settings.cpp
+    src/winapi_color.cpp
 )
 
 

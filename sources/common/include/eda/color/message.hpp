@@ -8,7 +8,7 @@
 #ifndef SOURCES_COMMON_INCLUDE_EDA_COLOR_MESSAGE_HPP_
 #define SOURCES_COMMON_INCLUDE_EDA_COLOR_MESSAGE_HPP_
 
-#include <eda/color/detail/ansii_color.hpp>
+#include <eda/color/detail/color.hpp>
 
 #include <eda/color/decorator.hpp>
 #include <eda/color/facet.hpp>

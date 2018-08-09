@@ -8,6 +8,7 @@
 #include <ibis/init.hpp>
 
 #include <eda/settings.hpp>
+#include <eda/configuration.hpp>
 
 #include <eda/util/file/file_reader.hpp>
 #include <eda/color/message.hpp>
@@ -88,16 +89,21 @@ Settings:
 
 Options:
   -a --analyse          Analyse.
-  -q --quiet            Print less text [default: false].
-  -v --verbose          Print more text [default: false].
   -h --help             Show this screen.
   --version             Show version.
 
-Color Options:
+Message Options:
+  -q --quiet            Print less text.
+                        [default: false]
+  -v --verbose          Print more text.
+                        [default: false]
   --no-color            Don't render messages using colors. On output 
                         redirection no colors are used.
-  --force-color         Even on redirected output enforce the rendering 
-                        of messages using colors.
+                        [default: false]
+  --force-color         Even on redirected output enforce the rendering of 
+                        messages using colors. On Windows, ANSII support must 
+                        be compiled into.
+                        [default: false]
 
 Warning Options:
   --Wall                Warn all.
@@ -221,9 +227,26 @@ bool init::eval_doccpp_option(std::string const& key, docopt::value const& value
         set_string(key, value);
     }
 
-    if (match(key, { "--no-color", "--force-color" })) {
+    if (match(key, { "--no-color" })) {
     	set_bool(key, value);
     }
+
+    if (match(key, { "--force-color" })) {
+#if BOOST_OS_WINDOWS && !EDA_ON_WINDOWS_USE_ANSII_COLOR
+    	if (!value.asBool()) {
+    		return true;
+    	}
+
+    	using eda::color::message::warning;
+    	std::cerr << warning("Warning: Using Window's Console I/O prevents "
+    			             "redirection of colored messages")
+    			  << "; ignore '--force-color'"
+				  << "\n";
+#else
+    	set_bool(key, value);
+#endif
+    }
+
 
     if (match(key, { "--Wall", "--Wunused", "--Wother" })) {
         set_bool(key, value);
