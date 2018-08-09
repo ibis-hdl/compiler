@@ -23,15 +23,16 @@
 namespace windows {
 
 /* [Using the High-Level Input and Output Functions](
- * https://docs.microsoft.com/en-us/windows/console/using-the-high-level-input-and-output-functions) */
-enum class attribute : uint16_t {
-    // FixMe: Text attribute - unsupported, how to ???
-    Attributes_Off 		= 0x100,
-    Text_Bold 			= 0x101,
-    Text_Underscore 	= 0x102,
-    Text_Blink 			= 0x103,
-    Text_Reverse 		= 0x104,
-    Text_Concealed 		= 0x105,
+ * https://docs.microsoft.com/en-us/windows/console/using-the-high-level-input-and-output-functions)
+ * Note: fore-, background and intensity using 8 bits. */
+enum class attribute : WORD {
+    // FixMe: support Text attribute
+    Attributes_Off      = 0x000,
+    Text_Bold           = 0x100,
+    Text_Underscore     = 0x200,
+    Text_Blink          = 0x400,
+    Text_Reverse        = 0x800,
+    //Text_Concealed    = ????,
     // Foreground colors
     Foreground_Black    = 0,
     Foreground_Red      = FOREGROUND_RED,
@@ -66,101 +67,116 @@ enum class attribute : uint16_t {
 // https://github.com/Baltasarq/cscrutil/blob/master/src/scrutil.c
 struct win_printer
 {
-	win_printer()
-	{
-		using windows::attribute;
-		attr = (WORD)attribute::Foreground_Red | (WORD)attribute::Background_Yellow;
-	}
+    win_printer(windows::attribute attr_)
+    : attr{ static_cast<WORD>(attr_) }
+    { }
 
-	win_printer(int)
-	{
-		using windows::attribute;
-		attr = (WORD)attribute::Foreground_Green | (WORD)attribute::Background_White;
-	}
+    win_printer() = default;
 
-	win_printer(win_printer const&) = default;
-	win_printer& operator=(win_printer const&) = default;
+    win_printer(win_printer const&) = default;
+    win_printer& operator=(win_printer const&) = default;
 
     std::ostream& print(std::ostream& os) const
     {
         // no POSIX way to extract stream handler from the a given
         // `std::ostream` object
-    	auto stream = [](std::ostream& os) {
-    		HANDLE handle = INVALID_HANDLE_VALUE;
+        auto stream = [](std::ostream& os) {
+            HANDLE handle = INVALID_HANDLE_VALUE;
             if (&os == &std::cout)                      {
-            	handle = GetStdHandle(STD_OUTPUT_HANDLE);
+                handle = GetStdHandle(STD_OUTPUT_HANDLE);
             }
             if (&os == &std::cerr || &os == &std::clog) {
-            	handle = GetStdHandle(STD_ERROR_HANDLE);
+                handle = GetStdHandle(STD_ERROR_HANDLE);
             }
             return handle;
         };
 
-    	auto const iword_fsm = [&](std::ostream& os_, auto handle_, WORD attr_) {
+        auto const iword_fsm = [&](std::ostream& os_, auto handle_, WORD attr_) {
 
-    		typedef enum : uint8_t { init, active, passiv } state_t;
+            typedef enum : WORD { init, active, passiv } state_t;
 
             union {
-            	struct {
-                    // WORD, see https://docs.microsoft.com/en-us/windows/desktop/winprog/windows-data-types
-            		WORD	state;	// uint16_t
-            		WORD	default_attribute;
-            	} data;
-            	// std::ios_base::iword, see https://en.cppreference.com/w/cpp/io/ios_base/iword
-            	long		value;
+                struct {
+                    WORD 	state;
+                    WORD   	default_attribute;
+                } data;
+                // std::ios_base::iword, see https://en.cppreference.com/w/cpp/io/ios_base/iword
+                long        value;
             } iword;
 
             iword.value = os_.iword(win_printer::xindex);
             state_t next_state{ init };
 
             switch (iword.data.state) {
-    			case init:
-    				iword.data.default_attribute = text_attributes(handle_);
-    				[[falltrough]]
-    			case active:
-    				SetConsoleTextAttribute(handle_, attr_);
-    				next_state = passiv;
-    				break;
-    			case passiv:
-    				SetConsoleTextAttribute(handle_, iword.data.default_attribute);
-    				next_state = active;
-    				break;
-    			default:
-    				std::cerr << __func__ << ": INVALID STATE\n";
-    				next_state = init;
+                case init:
+                    iword.data.default_attribute = text_attributes(handle_);
+                    [[falltrough]]
+                case active: {
+                        // check on unsupported text-only attribute
+                        if ((attr_ & 0xFF) == 0) {
+                            // attr = 0 means no visibility
+                            attr_ = iword.data.default_attribute;
+                        }
+                         // set only color relevant (lower) byte
+                        WORD const upper = (iword.data.default_attribute >> 8) & 0xFF;
+                        attr_ = (upper << 8 ) | (attr_ & 0xFF);
+                        SetConsoleTextAttribute(handle_, attr_);
+                        next_state = passiv;
+                    }
+                    break;
+                case passiv: {
+                        SetConsoleTextAttribute(handle_, iword.data.default_attribute);
+                        next_state = active;
+                    }
+                    break;
+                default:
+                    std::cerr << __func__ << ": INVALID STATE\n";
+                    next_state = init;
             }
 
             iword.data.state = next_state;
             os_.iword(win_printer::xindex) = iword.value;
-    	};
+        };
 
         HANDLE const handle = stream(os);
 
         // redirected - no way to write colors this (windows) way
         if (handle == INVALID_HANDLE_VALUE) {
-        	return os;
+            return os;
         }
 
+        //os << "[" << std::hex << attr << "]";
         iword_fsm(os, handle, attr);
 
         return os;
     }
 
+    win_printer& operator|=(win_printer const& other)
+    {
+    	return *this |= static_cast<windows::attribute>(other.attr);
+    }
+
+    win_printer& operator|=(windows::attribute other_attr)
+    {
+        attr |= static_cast<WORD>(other_attr);
+
+        return *this;
+    }
+
     WORD text_attributes(HANDLE handle) const {
 
         if (handle == INVALID_HANDLE_VALUE) {
-        	return 0;
+            return 0;
         }
 
-		CONSOLE_SCREEN_BUFFER_INFO csbi{};
-		if (!GetConsoleScreenBufferInfo(handle, &csbi))
-			return 0;
-		return csbi.wAttributes;
+        CONSOLE_SCREEN_BUFFER_INFO csbi{};
+        if (!GetConsoleScreenBufferInfo(handle, &csbi))
+            return 0;
+        return csbi.wAttributes;
     }
 
-	WORD											attr = -1;
-
-	static const int 								xindex;
+    WORD                                            attr = 0;
+    static const int                                xindex;
 };
 
 
@@ -169,16 +185,62 @@ const int win_printer::xindex = std::ios_base::xalloc();
 
 
 std::ostream& operator<<(std::ostream& os, win_printer const& printer) {
-	return printer.print(os);
+    return printer.print(os);
 }
 
 
+namespace text {
+    win_printer const Bold = win_printer(windows::attribute::Text_Bold);
+}
+
+namespace fg {
+    win_printer const Red = win_printer(windows::attribute::Foreground_Red);
+}
+
+namespace bg {
+    win_printer const Blue = win_printer(windows::attribute::Background_Blue);
+    win_printer const Red = win_printer(windows::attribute::Background_Red);
+    win_printer const Yellow = win_printer(windows::attribute::Background_Yellow);
+}
+
+win_printer const OFF = win_printer(windows::attribute::Attributes_Off);
+
+
+#if 1
 int main()
 {
-	win_printer p;
-	win_printer o(42);
+    win_printer attr = win_printer(windows::attribute::Background_Red);
+    attr |= text::Bold;
 
-	std::cerr << p << "(cerr (Hello World))"   << p << ", works" << "\n";
-	std::cout << o << "(stdout (Hello World))" << o << ", works also." << "\n";
-	std::cout << "Juhu\n";
+    // syntax looks strange ....
+    std::cout << fg::Red << "(cout (Hello World))"  << OFF << ", works" << "\n";
+    std::cout << text::Bold << "(bold (Hello World))"  <<OFF << ", works" << "\n";
+    std::cout << bg::Red << "(cout (Hello World))"  << OFF << ", works" << "\n";
+    std::cout << attr << "(cout (Hello World))" << OFF << ", works" << "\n";
+
+    std::cout << "Juhu\n";
 }
+#else
+/*
+ * Windows Console Bullshit: "Hello" get's as usually, setting the background
+ * also changes the text color to it's inverse.
+ */
+int main()
+{
+    std::cout << "Hello ";
+
+    // save attributes
+    CONSOLE_SCREEN_BUFFER_INFO attr_orig{};
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &attr_orig);
+
+    // set background only
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BACKGROUND_RED);
+    std::cout << "World\n";
+
+    // restore attributes
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), attr_orig.wAttributes);
+
+    return 0;
+}
+
+#endif
