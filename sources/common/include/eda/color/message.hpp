@@ -20,12 +20,12 @@ namespace eda { namespace color {
 namespace message {
 
 
-struct severity {   // VHDL severities
+typedef struct {   // VHDL severities
     struct note;
     struct warning;
     struct error;
     struct failure;
-};
+} severity;
 
 
 using note = message_decorator<severity::note>;
@@ -39,7 +39,7 @@ using error_facet = message_facet<severity::error>;
 using failure_facet = message_facet<severity::failure>;
 
 
-}
+} // namespace message
 
 
 } } // namespace eda.color

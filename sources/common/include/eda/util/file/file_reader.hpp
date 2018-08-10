@@ -11,10 +11,20 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <optional>
 
 #include <ctime>
 
 #include <iosfwd>
+
+
+namespace boost { namespace filesystem {
+	struct path;
+} }
+
+namespace eda {
+	class settings;
+}
 
 
 namespace eda { namespace util {
@@ -23,9 +33,7 @@ namespace eda { namespace util {
 class file_loader
 {
 public:
-	explicit file_loader(std::ostream& os_)
-    : os { os_ }
-    { }
+	explicit file_loader(std::ostream& os_, eda::settings const& setting);
 
     file_loader(file_loader const&) = delete;
     file_loader const& operator=(file_loader const&) = delete;
@@ -45,18 +53,25 @@ public:
     /* file read method using rdbuf()
      * \see[How to read in a file in C++](
      * https://insanecoding.blogspot.com/2011/11/how-to-read-in-file-in-c.html) */
-    std::string read_file(std::string const& filename) const;
+    std::optional<std::string> read_file(std::string const& filename) const;
+
+    /* file read method using rdbuf()
+     * \see[How to read in a file in C++](
+     * https://insanecoding.blogspot.com/2011/11/how-to-read-in-file-in-c.html) */
+    std::optional<std::string> read_file(boost::filesystem::path const& filename) const;
 
     /* alternative read method using seek
      * \see[How to read in a file in C++](
      * https://insanecoding.blogspot.com/2011/11/how-to-read-in-file-in-c.html) */
-    std::string read_file_alt(std::string const& filename) const;
+    std::optional<std::string> read_file_alt(std::string const& filename) const;
 
-    /* time point of last write occurrence */
+    /* time point of last write occurrence. If the time cannot be determined,
+     *  returns (std::time_t)(-1). */
     std::time_t timesstamp(std::string const& filename) const;
 
 private:
-    std::ostream& os;
+    std::ostream& 									os;
+    bool const										quiet;
 };
 
 

@@ -86,12 +86,10 @@ static const char *signame(int sig) {
 bool register_gdb_signal_handler()
 {
     if (gdb_detected() || valgrind_detected()) {
-        std::cout << "GDB signal handler already installed, skip.\n";
+    	std::cerr << "Note: GDB signal handler already installed, skip.\n";
         return true;
     }
-    else {
-        std::cout << "install GDB signal handler.\n";
-    }
+    else { /* nothing */ }
 
     struct sigaction sa;
     memset(&sa, 0, sizeof(sa));

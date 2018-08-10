@@ -19,8 +19,26 @@
 #include <docopt.h>
 #include <eda/compiler/warnings_on.hpp>
 
+#include <eda/util/file/user_home.hpp>
+#include <eda/util/file/file_reader.hpp>
+#include <eda/util/string/icompare.hpp>
+#include <rapidjson/document.h>
+#include <rapidjson/pointer.h>
+#include <rapidjson/prettywriter.h>
+#include <rapidjson/error/en.h>
+#include <eda/support/RapidJSON/merge.hpp>
+
+#include <boost/filesystem/path.hpp>
+
 #include <cstdlib>
 #include <memory>
+#include <optional>
+#include <string_view>
+#include <algorithm>
+
+#include <eda/util/cxx_bug_fatal.hpp>
+
+#include <eda/namespace_alias.hpp>
 
 
 extern bool register_gdb_signal_handler();
@@ -29,14 +47,15 @@ extern bool register_gdb_signal_handler();
 namespace ibis {
 
 
-init::init(int argc, const char* argv[], eda::settings& settings_)
-: settings{ settings_ }
+init::init(int argc, const char* argv[], eda::settings& setting_)
+: setting{ setting_ }
 {
+	register_signal_handlers();
+
 	parse_env();
 	parse_cli(argc, argv);
 
-	set_color_messages();
-	register_signal_handlers();
+	user_config_message_color();
 }
 
 
@@ -51,7 +70,7 @@ void init::parse_env()
     auto const set_option = [&](std::string const& env_name) {
         std::string const env_var{ getenv(env_name) };
         if (!env_var.empty()) {
-        	settings.set(env_name) = env_var;
+        	setting.set(env_name) = env_var;
         }
     };
 
@@ -59,12 +78,12 @@ void init::parse_env()
     auto const set_option_key = [&](std::string const& env_name, std::string const& key_name) {
         std::string const env_var{ getenv(env_name) };
         if (!env_var.empty()) {
-        	settings.set(key_name) = env_var;
+        	setting.set(key_name) = env_var;
         }
     };
 
     set_option("HOME");
-    set_option_key("EDA_LIBPATH", "libpath");
+    set_option_key("EDA_LIBPATH", "libpath");	// overridable by cmd line
 }
 
 
@@ -145,7 +164,7 @@ void init::parse_cli(int argc, const char* argv[])
         eda::settings::option_trigger trigger;
 
         trigger.add("--Wall", { "--Wunused", "--Wother" });
-        trigger.update(settings);
+        trigger.update(setting);
     }
     catch (DocoptExitHelp const&) {
         std::cout << USAGE << std::endl;
@@ -185,14 +204,14 @@ bool init::eval_doccpp_option(std::string const& key, docopt::value const& value
     	if (value_ && !value_.asBool()) {
     		return;
     	}
-    	settings.set(key_) = "true";
+    	setting.set(key_) = "true";
 	};
 
 	auto const set_string = [&](auto const& key_, auto const& value_) {
     	if (!value_ || !value_.isString()) {
     		return;
     	}
-    	settings.set(key_) = value_.asString();
+    	setting.set(key_) = value_.asString();
 	};
 
 	// Analyze and set options
@@ -202,9 +221,9 @@ bool init::eval_doccpp_option(std::string const& key, docopt::value const& value
     	std::vector<std::string> const& file_list = value.asStringList();
 
     	using eda::util::file_loader;
-    	file_loader file_check{ std::cerr };
+    	file_loader file_check{ std::cerr, setting };
 
-    	// early check too avoid aborting due to missing/duplicate files later on
+    	// early check to avoid aborting due to missing/duplicate files later on
     	if (!file_check.unique_files(file_list)) {
     		// immediately exit, no usage info wanted by caller
     		std::exit(EXIT_FAILURE);
@@ -247,7 +266,6 @@ bool init::eval_doccpp_option(std::string const& key, docopt::value const& value
 #endif
     }
 
-
     if (match(key, { "--Wall", "--Wunused", "--Wother" })) {
         set_bool(key, value);
     }
@@ -255,47 +273,6 @@ bool init::eval_doccpp_option(std::string const& key, docopt::value const& value
     return true;
 }
 
-
-void init::set_color_messages()
-{
-    bool const force_color = [&] {
-        if (settings["force-color"]) return true;
-        return false;
-    }();
-
-    if (settings["no-color"] && !force_color) {
-        // no color wanted
-        return;
-    }
-
-    auto const imbue = [](auto& stream, auto&& facet_ptr) {
-        std::locale locale(std::locale(), facet_ptr.release());
-        stream.imbue(locale);
-    };
-
-    using namespace eda::color;
-    using namespace eda::color::message;
-
-    /* black, red, green, yellow, blue, magenta,_cyan, white */
-    // prototypes
-    auto const note_format    = fg::green;
-    auto const warning_format = fg::yellow;
-    auto const error_format   = fg::magenta | text::bold;
-    auto const failure_format = fg::red     | text::bold | bg::white;
-
-    imbue(std::cerr, std::make_unique<note_facet>(
-        note_format, color_off, force_color)
-    );
-    imbue(std::cerr, std::make_unique<warning_facet>(
-        warning_format, color_off, force_color)
-    );
-    imbue(std::cerr, std::make_unique<error_facet>(
-        error_format, color_off, force_color)
-    );
-    imbue(std::cerr, std::make_unique<failure_facet>(
-        failure_format, color_off, force_color)
-    );
-}
 
 void init::register_signal_handlers()
 {
@@ -307,6 +284,184 @@ void init::register_signal_handlers()
         std::exit(EXIT_FAILURE);
     }
 #endif
+}
+
+
+/*
+ * FixMe: - change path to .eda/config/message.json to prevent "mega" JSON files
+ *        - setup message colors
+ */
+void init::user_config_message_color()
+{
+    bool const force_color = [&] {
+        if (setting["force-color"]) return true;
+        return false;
+    }();
+
+    if (setting["no-color"] && !force_color) {
+        // no color wanted - skip further proceeding
+        return;
+    }
+
+    bool const quiet = [&] {
+        if (setting["quiet"]) return true;
+        return false;
+    }();
+
+    bool const verbose = [&] {
+        if (setting["verbose"]) return true;
+        return false;
+    }();
+
+
+	static const char default_cfg_json[] = R"({
+  "message": {
+    "failure": {
+      "style": {
+        "foreground": "red",
+        "background": "white",
+        "text"      : "bold"
+      }
+    },
+    "error": {
+      "style": {
+        "foreground": "red",
+        "text"      : "bold"
+      }
+    },
+    "warning": {
+      "style": {
+        "foreground": "yellow"
+      }
+    },
+    "note": {
+      "style": {
+        "foreground": "green"
+      }
+    }
+  }
+})";
+
+	using namespace eda;
+	namespace rjson = rapidjson;
+
+	auto const parse_json = [&quiet](char const* json) { // maybe throw to get path printed??
+		rjson::Document document;
+	    if (document.Parse(json).HasParseError()) {
+	    	if (!quiet) {
+				std::cerr << eda::color::message::error("Error:")
+						  << " parsing JSON configuration file: "
+						  << rjson::GetParseError_En(document.GetParseError())
+						  << "(offset " << document.GetErrorOffset() << ")\n";
+	    	}
+	    }
+	    return document;
+	};
+
+	rjson::Document config = parse_json(default_cfg_json);
+
+	// load user settings if exists and merge them into defaults
+
+	fs::path json_path = util::user_home({".eda"}) / "config.json";
+
+	util::file_loader file_reader{ std::cerr, setting };
+	auto const json_txt = file_reader.read_file(json_path);
+
+	if (json_txt) {
+		rjson::Document user_config = parse_json((*json_txt).c_str());
+		merge(config, user_config);
+	}
+	else{ /* nothing */ }
+
+	if (verbose) {
+		std::cerr << eda::color::message::note("Note:")
+				  << " Using message color defaults:\n";
+		auto const print_json = [](auto const& doc) {
+			rjson::StringBuffer str_buff;
+			rjson::PrettyWriter<rjson::StringBuffer> writer(str_buff);
+			doc.Accept(writer);
+			::puts(str_buff.GetString());
+		};
+		print_json(config);
+	}
+
+    auto const get_formatter = [&](char const json_ptr[]) {
+
+    	using namespace eda::color::message;
+		eda::color::printer format;
+
+		if (rjson::Value* style = rjson::GetValueByPointer(config, rjson::Pointer(json_ptr))) {
+			for (auto const& object : style->GetObject()) {
+				auto const name = object.name.GetString();
+				auto const attr_name = object.value.GetString();
+
+				auto const update_format = [&](char const attr_name[], auto const attribute_getter) {
+					auto const attr{ attribute_getter(attr_name) };
+					if (attr) {
+						format |= *attr;
+						if (verbose) {
+							std::cerr << note("NOTE:") << " using "
+									   << json_ptr << "/" << name << " = " << attr_name << "\n";
+						}
+					}
+					else{
+						if (!quiet) {
+							std::cerr << warning("WARNING:") << " Ignore invalid "
+									  << json_ptr << "/" << name << " = " << attr_name << "\n";
+						}
+					}
+				};
+
+				if (util::icompare(name, "text")) {
+					update_format(attr_name, &color::text_attr);
+					continue;
+				}
+				if (util::icompare(name, "foreground")) {
+					update_format(attr_name, &color::foreground_attr);
+					continue;
+				}
+				if (util::icompare(name, "background")) {
+					update_format(attr_name, &color::background_attr);
+					continue;
+				}
+			}
+		}
+		return format;
+    };
+
+
+    auto const imbue = [](auto& stream, auto&& facet_ptr) {
+        std::locale locale(stream.getloc(), facet_ptr.release());
+        stream.imbue(locale);
+    };
+
+    auto const failure_format = get_formatter("/message/failure/style");
+    imbue(std::cerr, std::make_unique<color::message::failure_facet>(
+    	failure_format,
+		color::color_off,
+		force_color)
+    );
+
+    auto const error_format = get_formatter("/message/error/style");
+    imbue(std::cerr, std::make_unique<color::message::error_facet>(
+    	error_format,
+		color::color_off,
+		force_color)
+    );
+
+    auto const warning_format = get_formatter("/message/warning/style");
+    imbue(std::cerr, std::make_unique<color::message::warning_facet>(
+    	warning_format,
+		color::color_off,
+		force_color)
+    );
+
+    auto const note_format = get_formatter("/message/note/style");
+    imbue(std::cerr, std::make_unique<color::message::note_facet>(
+    	note_format,
+		color::color_off,
+		force_color)
+    );
 }
 
 

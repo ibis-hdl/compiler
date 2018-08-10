@@ -34,6 +34,15 @@ include(external_docopt_cpp)
 include_directories(${DOCOPT_CPP_DIR})
 
 
+##
+# RapidJSON
+include(external_json)
+add_dependencies(${PROJECT_NAME} RapidJSON)
+include_directories(${PROJECT_NAME} PRIVATE
+    ${RapidJSON_INCLUDE_DIR}
+)
+
+
 target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>

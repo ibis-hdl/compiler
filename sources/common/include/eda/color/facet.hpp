@@ -73,7 +73,7 @@ private:
         // no POSIX way to extract stream handler from the a given
         // `std::ostream` object
         auto const stream = [](std::ostream& os_) {
-            if (&os_ == &std::cout)                      { return stdout; }
+            if (&os_ == &std::cout)                       { return stdout; }
             if (&os_ == &std::cerr || &os_ == &std::clog) { return stderr; }
             return static_cast<FILE*>(nullptr);
         };

@@ -26,12 +26,12 @@ namespace ibis {
 class init
 {
 public:
-	explicit init(int argc, const char* argv[], eda::settings& settings);
+	explicit init(int argc, const char* argv[], eda::settings& setting);
 
 	init(init const&) = delete;
 	init& operator=(init const&) = delete;
 
-	// FixMe: Tribute to not use optional<variant<T,...>>
+	// FixMe: Tribute to not use optional<variant<T,...>> as option type
 	std::vector<std::string> const& file_list() const {
 		return sourcefile_list;
 	}
@@ -40,11 +40,11 @@ private:
 	void parse_env();
 	void parse_cli(int argc, const char* argv[]);
 	bool eval_doccpp_option(std::string const& key, docopt::value const& value);
-	void set_color_messages();
     void register_signal_handlers();
+    void user_config_message_color();
 
 private:
-	eda::settings& 									settings;
+	eda::settings& 									setting;
 	std::vector<std::string>						sourcefile_list;
 };
 
