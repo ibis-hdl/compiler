@@ -10,6 +10,10 @@
 
 #include <eda/vhdl/ast_fwd.hpp>
 
+#include <eda/compiler/warnings_off.hpp>
+#include <eda/support/boost/hana_overload.hpp>
+#include <eda/compiler/warnings_on.hpp>
+
 #include <boost/variant/apply_visitor.hpp>
 
 
@@ -64,15 +68,16 @@ public:
         static char const symbol[]{ "actual_part" };
         worker(node, symbol);
 
-        visit(node);
-    }
-
-    void operator()(ast::actual_part_chunk const &chunk) const {
-        static char const symbol[]{ "actual_part.chunk" };
-        worker(node, symbol);
-
-        (*this)(chunk.context_tied_name);
-        (*this)(chunk.actual_designator);
+        util::visit_in_place(
+            node,
+            [this](ast::actual_part_chunk const& chunk) {
+                (*this)(chunk.context_tied_name);
+                (*this)(chunk.actual_designator);
+            },
+            [this](ast::actual_designator node_) {
+                (*this)(node_);
+            }
+        );
     }
 
     void operator()(ast::aggregate const& node) const {
@@ -268,15 +273,34 @@ public:
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////
     void operator()(ast::block_declarative_part const& node) const {
         static char const symbol[]{ "block_declarative_part" };
         worker(node, symbol);
     }
+
     void operator()(ast::block_header const& node) const {
         static char const symbol[]{ "block_header" };
         worker(node, symbol);
+
+        if(node.generic_part) {
+            auto const& generic_part = *node.generic_part;
+            (*this)(generic_part.generic_clause);
+
+            if(generic_part.generic_map_aspect) {
+            	(*this)(*generic_part.generic_map_aspect);
+            }
+        }
+
+        if(node.port_part) {
+            auto const& port_part = *node.port_part;
+            (*this)(port_part.port_clause);
+
+            if(port_part.port_map_aspect) {
+            	(*this)(*port_part.port_map_aspect);
+            }
+        }
     }
+////////////////////////////////////////////////////////////////////////////////
     void operator()(ast::block_specification const& node) const {
         static char const symbol[]{ "block_specification" };
         worker(node, symbol);
