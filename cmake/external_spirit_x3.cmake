@@ -8,9 +8,8 @@ include(ExternalProject)
 ExternalProject_Add(
   boost-spirit-x3
   GIT_REPOSITORY        https://github.com/boostorg/spirit.git
-  GIT_TAG               boost-1.67.0
+  GIT_TAG               boost-1.68.0
   GIT_PROGRESS          1
-#  GIT_TAG               develop
   PREFIX                ${CMAKE_BINARY_DIR}/external
   PATCH_COMMAND         ""
   CONFIGURE_COMMAND     ""

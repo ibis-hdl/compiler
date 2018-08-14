@@ -9,8 +9,7 @@ include(ExternalProject)
 ExternalProject_Add(
   boost-utf
   GIT_REPOSITORY        https://github.com/boostorg/test.git
-  GIT_TAG               topic/12953-access-master_test_suite-in-datatest-cases
-  #GIT_TAG               boost-1.67.0
+  GIT_TAG               boost-1.68.0
   GIT_PROGRESS          1
   PREFIX                ${CMAKE_BINARY_DIR}/external
   PATCH_COMMAND         ""
