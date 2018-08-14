@@ -106,14 +106,14 @@ std::string label_match::symbol_name(T const&)
 }
 
 
-std::string label_match::make_error_description(std::string const& rule_name)
+std::string label_match::make_error_description(std::string_view const& rule_name)
 {
     using boost::locale::format;
     using boost::locale::translate;
 
     return (
     	format(translate(
-        "Syntax error: Label mismatch in {1}\n"
+        "Syntax error: Label mismatch in {1}"
         ))
         % rule_name
     ).str();

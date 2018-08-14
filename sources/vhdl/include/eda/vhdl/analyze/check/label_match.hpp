@@ -13,8 +13,8 @@
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <string>
+#include <string_view>
 #include <iosfwd>
-
 
 namespace eda { namespace vhdl { namespace analyze {
 
@@ -33,13 +33,13 @@ public:
     bool operator()(ast::process_statement const& node) const;
 
     template<typename T>
-    bool operator()(T const&) {
+    bool operator()(T const&) const {
         return true;
     }
 
 public:
     static
-    std::string make_error_description(std::string const& rule_name);
+    std::string make_error_description(std::string_view const& rule_name);
 
     template<typename AstNodeT>
     static inline

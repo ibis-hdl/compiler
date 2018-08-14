@@ -7,12 +7,11 @@
 
 #include <boost/test/unit_test.hpp>
 #include <boost/core/ignore_unused.hpp>
-#include <eda/vhdl/analyze/check/label_match.hpp>
 
 #include <iostream>
+#include <string_view>
 #include <iomanip>
 
-//#include <eda/vhdl/ast/design_file.hpp>
 #include <eda/vhdl/ast.hpp>
 #include <eda/vhdl/parser/parse.hpp>
 #include <eda/vhdl/parser/parser_config.hpp>
@@ -43,6 +42,7 @@ BOOST_DATA_TEST_CASE( basic_syntax,
 
     BOOST_TEST(parse_ok);
 
+#if 0
     vhdl::context context;
     vhdl::analyze::syntax syntax_check(os, context, error_handler);
 
@@ -50,6 +50,11 @@ BOOST_DATA_TEST_CASE( basic_syntax,
 
     os << "Syntax " << (syntax_ok ? "" : "not") << " ok\n"
        << vhdl::failure_status(context) << "\n";
+#else
+    vhdl::context context;
+    vhdl::analyze::syntax_checker syntax_check{ os, context, error_handler };
+    syntax_check(design_file);
+#endif
 }
 
 

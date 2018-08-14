@@ -209,6 +209,11 @@ Iterator error_handler<Iterator>::get_line_start(iterator_type& pos) const
 
     skip_whitespace(pos, last);
 
+#if defined(__clang__) && (__clang_major__ == 5) && (__clang_minor__ == 0)
+    /* XXX clang's optimizer seems to be too eager, the indicator get wrong. */
+    std::string volatile dummy{ pos, last };
+#endif
+
     iterator_type latest{ first };
 
     for (iterator_type i = first; i != pos; ++i) {

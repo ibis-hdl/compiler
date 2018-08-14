@@ -129,7 +129,6 @@ struct library_clause;
 struct literal;
 struct loop_statement;
 struct name;
-struct name;
 struct next_statement;
 struct null_statement;
 struct numeric_literal;
