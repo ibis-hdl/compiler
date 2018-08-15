@@ -38,14 +38,7 @@ public:
     }
 
 public:
-    static
     std::string make_error_description(std::string_view const& rule_name);
-
-    template<typename AstNodeT>
-    static inline
-	std::string make_error_description(AstNodeT const& node) {
-        return make_error_description(symbol_name(node));
-    }
 
 private:
     template<typename AstNodeT>
@@ -53,17 +46,8 @@ private:
 
     template<typename AstNodeT>
     bool test_optional_start(AstNodeT const& node) const;
-
-    template<typename T>
-    static
-	std::string symbol_name(T const&);
 };
 
-
-template<typename AstNodeT>
-bool check_label_match(AstNodeT&& node) {
-    return label_match{}(std::forward<AstNodeT>(node));
-}
 
 } } } // namespace eda.vhdl.analyze
 

@@ -97,15 +97,6 @@ bool label_match::operator()(ast::process_statement const& node) const
 }
 
 
-template<typename T>
-std::string label_match::symbol_name(T const&)
-{
-    std::string name{ boost::typeindex::type_id<T>().pretty_name() };
-    std::size_t const npos = name.rfind(':') + 1;
-    return name.erase(0, npos);
-}
-
-
 std::string label_match::make_error_description(std::string_view const& rule_name)
 {
     using boost::locale::format;

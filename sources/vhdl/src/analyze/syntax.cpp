@@ -15,37 +15,42 @@
 namespace eda { namespace vhdl { namespace analyze {
 
 
+template<typename NodeT>
+bool syntax_worker::label_matches(NodeT const& node, std::string_view const& node_name) const
+{
+	label_match check_label{};
+
+	if (!check_label(node)) {
+    	//os << "label error\n";
+    	error_handler(node, check_label.make_error_description(node_name));
+    	++context.error_count;
+
+    	return false;
+    }
+
+	return true;
+}
+
+
 void syntax_worker::operator()(ast::block_statement const& node, std::string_view const& node_name) const {
 
 	//os << node_name << "\n";
 
-	if (!check_label_match(node)) {
-    	//os << "label error\n";
-    	error_handler(node, label_match::make_error_description(node_name));
-    	++context.error_count;
-    }
+	label_matches(node, node_name);
 }
 
 void syntax_worker::operator()(ast::case_statement const& node, std::string_view const& node_name) const {
 
 	//os << node_name << "\n";
 
-	if (!check_label_match(node)) {
-    	//os << "label error\n";
-    	error_handler(node, label_match::make_error_description(node_name));
-    	++context.error_count;
-    }
+	label_matches(node, node_name);
 }
 
 void syntax_worker::operator()(ast::generate_statement const& node, std::string_view const& node_name) const {
 
 	//os << node_name << "\n";
 
-	if (!check_label_match(node)) {
-    	//os << "label error\n";
-    	error_handler(node, label_match::make_error_description(node_name));
-    	++context.error_count;
-    }
+	label_matches(node, node_name);
 }
 
 
@@ -53,33 +58,21 @@ void syntax_worker::operator()(ast::if_statement const& node, std::string_view c
 
 	//os << node_name << "\n";
 
-	if (!check_label_match(node)) {
-    	//os << "label error\n";
-    	error_handler(node, label_match::make_error_description(node_name));
-    	++context.error_count;
-    }
+	label_matches(node, node_name);
 }
 
 void syntax_worker::operator()(ast::loop_statement const& node, std::string_view const& node_name) const {
 
 	//os << node_name << "\n";
 
-	if (!check_label_match(node)) {
-    	//os << "label error\n";
-    	error_handler(node, label_match::make_error_description(node_name));
-    	++context.error_count;
-    }
+	label_matches(node, node_name);
 }
 
 void syntax_worker::operator()(ast::process_statement const& node, std::string_view const& node_name) const {
 
 	//os << node_name << "\n";
 
-	if (!check_label_match(node)) {
-    	//os << "label error\n";
-    	error_handler(node, label_match::make_error_description(node_name));
-    	++context.error_count;
-    }
+	label_matches(node, node_name);
 }
 
 

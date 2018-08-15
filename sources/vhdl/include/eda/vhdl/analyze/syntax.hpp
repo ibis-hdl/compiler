@@ -51,6 +51,10 @@ public:
     void operator()(NodeT const&, std::string_view const&) const { }
 
 private:
+    template<typename NodeT>
+    bool label_matches(NodeT const& node, std::string_view const& node_name) const;
+
+private:
     std::ostream&									os;
     vhdl::context&                                  context;
     error_handler_type                              error_handler;
