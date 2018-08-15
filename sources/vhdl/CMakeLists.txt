@@ -14,6 +14,7 @@ set(VHDL_PARSER_SOURCE
     src/ast/keyword_token.cpp
     src/ast/operator_token.cpp
     src/ast/ast_printer.cpp
+    src/ast/ast_stats.cpp
     src/ast/numeric_convert.cpp
     
     src/parser/error_handler.cpp

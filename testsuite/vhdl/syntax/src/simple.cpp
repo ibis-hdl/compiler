@@ -16,6 +16,7 @@
 #include <eda/vhdl/parser/parse.hpp>
 #include <eda/vhdl/parser/parser_config.hpp>
 #include <eda/vhdl/analyze/syntax.hpp>
+#include <eda/vhdl/ast_stats.hpp>
 #include <testsuite/data_set.hpp>
 
 #include <testsuite/namespace_alias.hpp>
@@ -55,6 +56,9 @@ BOOST_DATA_TEST_CASE( basic_syntax,
     vhdl::analyze::syntax_checker syntax_check{ os, context, error_handler };
     syntax_check(design_file);
 #endif
+
+	ast::ast_stats stats(design_file);
+	std::cout << stats << "\n";
 }
 
 

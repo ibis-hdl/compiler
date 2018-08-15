@@ -16,7 +16,6 @@ set(SYNTAXTEST_COMMON_SOURCES
 set(SYNTAXTEST_SOURCES
     ${SYNTAXTEST_COMMON_SOURCES}
     src/simple.cpp
-    #src/ast_walk_node_count.cpp -> strange error
 )
 
 
