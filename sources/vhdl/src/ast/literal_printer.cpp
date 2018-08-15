@@ -5,7 +5,7 @@
  *      Author: olaf
  */
 
-#include <eda/vhdl/ast/util/literal_printer.hpp>
+#include <eda/vhdl/ast/literal_printer.hpp>
 #include <eda/support/boost/hana_overload.hpp>
 #include <eda/util/cxx_bug_fatal.hpp>
 

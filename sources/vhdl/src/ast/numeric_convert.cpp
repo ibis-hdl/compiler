@@ -6,8 +6,8 @@
  */
 
 #include <eda/vhdl/type.hpp>
-#include <eda/vhdl/ast/util/numeric_convert.hpp>
-#include <eda/vhdl/ast/util/literal_printer.hpp>
+#include <eda/vhdl/ast/numeric_convert.hpp>
+#include <eda/vhdl/ast/literal_printer.hpp>
 #include <eda/support/boost/spirit_x3.hpp>
 #include <eda/vhdl/parser/parser_config.hpp>
 #include <eda/support/boost/locale.hpp>

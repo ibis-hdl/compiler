@@ -5,7 +5,7 @@
  *      Author: olaf
  */
 
-#include <eda/vhdl/ast/util/numeric_convert.hpp>
+#include <eda/vhdl/ast/numeric_convert.hpp>
 #include <eda/vhdl/type.hpp>
 
 #include <boost/test/unit_test.hpp>
