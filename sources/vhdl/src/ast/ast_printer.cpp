@@ -14,7 +14,7 @@
 #include <eda/compiler/warnings_off.hpp>
 #include <eda/support/boost/hana_overload.hpp>
 #include <eda/compiler/warnings_on.hpp>
-#include <eda/vhdl/ast_printer.hpp>
+#include <eda/vhdl/ast/ast_printer.hpp>
 
 #include <map>
 

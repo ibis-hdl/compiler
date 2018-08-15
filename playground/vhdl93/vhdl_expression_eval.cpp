@@ -53,7 +53,7 @@
  *
  * ----8< ----eda/vhdl/parser/expression_parse.hpp ----8<----
  *
- *  #include <eda/vhdl/ast/expression.hpp>
+ *  #include <eda/vhdl/ast/node/expression.hpp>
  *
  * namespace eda { namespace vhdl { namespace parser {
  *

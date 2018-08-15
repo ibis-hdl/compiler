@@ -14,7 +14,7 @@
 #include <eda/vhdl/parser/grammar_decl.hpp>
 #include <eda/vhdl/parser/parser_config.hpp>
 
-#include <eda/vhdl/ast_printer.hpp>
+#include <eda/vhdl/ast/ast_printer.hpp>
 
 #include <testsuite/namespace_alias.hpp>
 

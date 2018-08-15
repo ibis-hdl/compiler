@@ -16,7 +16,7 @@
 #include <eda/vhdl/parser/parse.hpp>
 #include <eda/vhdl/parser/parser_config.hpp>
 #include <eda/vhdl/analyze/syntax.hpp>
-#include <eda/vhdl/ast_stats.hpp>
+#include <eda/vhdl/ast/ast_stats.hpp>
 #include <testsuite/data_set.hpp>
 
 #include <testsuite/namespace_alias.hpp>

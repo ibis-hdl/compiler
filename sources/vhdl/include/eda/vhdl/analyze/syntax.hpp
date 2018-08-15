@@ -10,7 +10,7 @@
 
 #include <eda/vhdl/ast.hpp>	// XXX forward
 
-#include <eda/vhdl/basic_ast_walker.hpp>
+#include <eda/vhdl/ast/basic_ast_walker.hpp>
 #include <eda/vhdl/context.hpp>
 
 #include <iosfwd>

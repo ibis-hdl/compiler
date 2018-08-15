@@ -5,9 +5,9 @@
  *      Author: olaf
  */
 
-#include <eda/vhdl/ast_stats.hpp>
+#include <eda/vhdl/ast/ast_stats.hpp>
 
-#include <eda/vhdl/basic_ast_walker.hpp>
+#include <eda/vhdl/ast/basic_ast_walker.hpp>
 
 #include <algorithm>
 #include <vector>

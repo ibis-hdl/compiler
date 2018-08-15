@@ -6,7 +6,7 @@
  */
 
 
-#include <eda/vhdl/ast/operator_token.hpp>
+#include <eda/vhdl/ast/node/operator_token.hpp>
 #include <eda/util/cxx_bug_fatal.hpp>
 #include <iostream>
 

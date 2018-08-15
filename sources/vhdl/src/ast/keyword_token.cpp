@@ -5,7 +5,7 @@
  *      Author: olaf
  */
 
-#include <eda/vhdl/ast/keyword_token.hpp>
+#include <eda/vhdl/ast/node/keyword_token.hpp>
 #include <eda/util/cxx_bug_fatal.hpp>
 #include <iostream>
 

@@ -9,9 +9,9 @@
 #define TESTSUITE_VHDL_NUMERIC_CONVERT_INCLUDE_TESTSUITE_VHDL_NUMERIC_CONVERT_NUMERIC_PARSER_HPP_
 
 
-#include <eda/vhdl/ast/bit_string_literal.hpp>
-#include <eda/vhdl/ast/decimal_literal.hpp>
-#include <eda/vhdl/ast/based_literal.hpp>
+#include <eda/vhdl/ast/node/bit_string_literal.hpp>
+#include <eda/vhdl/ast/node/decimal_literal.hpp>
+#include <eda/vhdl/ast/node/based_literal.hpp>
 
 #include <tuple>
 

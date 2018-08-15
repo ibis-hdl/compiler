@@ -13,7 +13,7 @@
 #include <eda/vhdl/parser/grammar_type.hpp>
 #include <eda/vhdl/parser/on_error_base.hpp>
 #include <eda/vhdl/parser/on_success_base.hpp>
-#include <eda/vhdl/ast_adapted.hpp>
+#include <eda/vhdl/ast/ast_adapted.hpp>
 
 #include <eda/support/boost/spirit_x3.hpp>
 #include <eda/support/boost/spirit_x3_util.hpp>
