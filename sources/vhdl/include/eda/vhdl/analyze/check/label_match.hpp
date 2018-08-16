@@ -20,19 +20,20 @@ namespace eda { namespace vhdl { namespace analyze {
  */
 class label_match
 {
-	enum class result {
+public:
+    enum class result {
 		OK,
 		MISMATCH,
 		ILLFORMED
-	};
+    };
 
 public:
-	result operator()(ast::block_statement const& node) const;
-	result operator()(ast::case_statement const& node) const;
-	result operator()(ast::generate_statement const& node) const;
-	result operator()(ast::if_statement const& node) const;
-	result operator()(ast::loop_statement const& node) const;
-	result operator()(ast::process_statement const& node) const;
+    result operator()(ast::block_statement const& node) const;
+    result operator()(ast::case_statement const& node) const;
+    result operator()(ast::generate_statement const& node) const;
+    result operator()(ast::if_statement const& node) const;
+    result operator()(ast::loop_statement const& node) const;
+    result operator()(ast::process_statement const& node) const;
 
     template<typename T>
     result operator()(T const&) const {

@@ -12,6 +12,7 @@
 #include <eda/compiler/warnings_on.hpp>
 
 #include <eda/vhdl/parser/error_handler.hpp>
+#include <eda/vhdl/parser/position_cache_def.hpp>
 #include <eda/vhdl/parser/iterator_type.hpp>
 
 #include <eda/support/boost/locale.hpp>
@@ -34,10 +35,6 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
     using boost::locale::format;
     using boost::locale::translate;
 
-    auto const [first, last] = position_cache.range();
-
-    boost::ignore_unused(first);
-
     os << color::message::error(translate("ERROR")) << " ";
 
     // location + message
@@ -52,7 +49,9 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
 
     // erroneous source snippet
     iterator_type start = get_line_start(error_pos);
-    print_line(start, last);
+    //print_line(start, last);
+    auto const line = current_line(start);
+    os << line << "\n";
 
     // error indicator
     print_indicator(start, error_pos, '_');
@@ -79,10 +78,7 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
         );
     };
 
-    auto const [first, last] = position_cache.range();
     auto [error_first, error_last] = error_iterators(where_tag);
-
-    boost::ignore_unused(first);
 
     os << color::message::error(translate("ERROR")) << " ";
 
@@ -98,7 +94,8 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
 
     // erroneous source snippet
     iterator_type start = get_line_start(error_first);
-    print_line(start, last);
+    auto const line = current_line(start);
+    os << line << "\n";
 
     // error indicator
     print_indicator(start, error_first, ' ');
@@ -115,57 +112,6 @@ std::string error_handler<Iterator>::file_name() const
     if (!filename.empty()) return filename;
 
     return boost::locale::translate("Unknown File Name", "<unknown>");
-}
-
-
-template <typename Iterator>
-std::size_t error_handler<Iterator>::line_number(iterator_type const& pos) const
-{
-    std::size_t line_no { 1 };
-    typename std::iterator_traits<iterator_type>::value_type prev { 0 };
-
-    auto const [first, last] = position_cache.range();
-    boost::ignore_unused(last);
-
-    for (iterator_type iter{ first} ; iter != pos; ++iter) {
-        auto chr = *iter;
-        switch (chr) {
-            case '\n':
-                if (prev != '\r') ++line_no;
-                break;
-            case '\r':
-                ++line_no;
-                break;
-            default:
-                break;
-        }
-        prev = chr;
-    }
-
-    return line_no;
-}
-
-
-template <typename Iterator>
-void error_handler<Iterator>::print_line(iterator_type const& first, iterator_type const& last) const
-{
-    auto end = first;
-
-    while (end != last) {
-
-        auto const chr = *end;
-
-        if (chr == '\r' || chr == '\n') {
-            break;
-        }
-        else {
-            ++end;
-        }
-    }
-
-    std::basic_string<parser::char_type> line{ first, end };
-
-    os << boost::locale::conv::utf_to_utf<char>(line) << "\n";
 }
 
 
@@ -190,62 +136,15 @@ void error_handler<Iterator>::print_indicator(iterator_type& first, iterator_typ
 }
 
 
-template <class Iterator>
-Iterator error_handler<Iterator>::get_line_start(iterator_type& pos) const
-{
-    // make sure err_pos does not point to white space
-    auto const skip_whitespace = [](iterator_type& iter, iterator_type const& last) {
-
-        while (iter != last) {
-
-            char const ch = *iter;
-            // Note: The behavior is undefined if the value of ch is not
-            // representable as unsigned char and is not equal to EOF.
-            // [std::isspace](https://en.cppreference.com/w/cpp/string/byte/isspace)
-            if (std::isspace(static_cast<unsigned char>(ch))) {
-                ++iter;
-            }
-            else {
-                break;
-            }
-        }
-    };
-
-    auto const [first, last] = position_cache.range();
-
-    skip_whitespace(pos, last);
-
-#if defined(__clang__) && (__clang_major__ == 5) && (__clang_minor__ == 0)
-    /* XXX clang's optimizer seems to be too eager, the indicator get wrong. */
-    std::string volatile dummy{ pos, last };
-#endif
-
-    iterator_type latest{ first };
-
-    for (iterator_type i = first; i != pos; ++i) {
-        if (*i == '\r' || *i == '\n') {
-            latest = i;
-        }
-    }
-
-    // skip over line breaks
-    if (latest != pos) {
-        ++latest;
-    }
-
-    cxx_assert(latest < last, "iterator range error");
-
-    return latest;
-}
-
-
 }}} // namespace eda.vhdl.parser
 
 
 namespace eda { namespace vhdl { namespace parser {
 
+
 // Explicit template instantiation
 template class error_handler<parser::iterator_type>;
+
 
 }}} // namespace eda.vhdl.parser
 

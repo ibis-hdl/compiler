@@ -25,10 +25,8 @@
 namespace eda { namespace vhdl { namespace parser {
 
 
-/*
- * Annotation
- *
- * ToDo: Documentation
+/**
+ * AST annotation/position cache
  */
 template <typename IteratorT, typename ContainerT = std::vector<boost::iterator_range<IteratorT>>>
 class position_cache
@@ -50,11 +48,6 @@ public:
     void annotate(NodeT& node, iterator_type first, iterator_type last)
     {
         if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
-//            std::cout << "position_cache::annotate<"
-//                      << util::pretty_typename<NodeT>{}
-//                      << "> with ID = "
-//                      << positions.size() << "\n";
-
             /* ToDo: maybe better throw range_exception since it's an implementation
              * limitation. */
             cxx_assert(positions.size() < ast::position_tagged::MAX_ID,
@@ -71,49 +64,32 @@ public:
     }
 
 public:
-#if 1
     template <typename NodeT>
+    // XXX make optional<range_type> ???
     range_type position_of(NodeT const& node) const
     {
         if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
-//            std::cout << "position_of<tagged>("
-//                      << util::pretty_typename<NodeT>{}
-//                      << ")\n";
             return positions[node.pos_id];
         }
         else {
-//            std::cout << "position_of<**NOT**tagged>("
-//                      << util::pretty_typename<NodeT>{}
-//                      << ")\n";
             return range_type{};
         }
     }
-#else
-    template <typename NodeT>
-    std::optional<std::tuple<iterator_type, iterator_type>>
-    position_of(NodeT const& node) const
-    {
-        if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
-            std::cout << "position_of<tagged>("
-                      << util::pretty_typename<NodeT>{}
-                      << ")\n";
-            // assert(node.pos_id != ast::position_tagged::MAX_ID)
-            // assert(node.pos_id <= positions.size());
-            auto const& range = positions[node.pos_id];
-            return { range.begin(), range.end()) };
-        }
-        else {
-            std::cout << "position_of<**NOT**tagged>("
-                      << util::pretty_typename<NodeT>{}
-                      << ")\n";
-            return {};
-        }
-    }
-#endif
 public:
-    std::tuple<iterator_type, iterator_type> range() const {
-        return std::tuple(begin, end);
-    }
+    /**
+     * Return the line number of a given iterator position. The position must
+     * be within the position cache range.  */
+    std::size_t line_number(iterator_type const& pos) const;
+
+    /**
+     * Return an iterator to the begin of the line. White spaces are skipped.
+     * For this, the ´pos_iter´ is modified.
+     * The position must be within the position cache range. */
+    iterator_type get_line_start(iterator_type& pos_iter) const;
+
+    /**
+     * Print the line where the iterator points to until end-of-line. */
+    std::string current_line(iterator_type const& start) const;
 
 private:
     container_type                                  positions;

@@ -70,9 +70,18 @@ public:
     std::string file_name() const;
 
 private:
-    std::size_t line_number(iterator_type const& iter) const;
-    Iterator get_line_start(iterator_type& pos_iter) const;
-    void print_line(iterator_type const& start, iterator_type const& last) const;
+    std::size_t line_number(iterator_type const& iter) const {
+    	return position_cache.line_number(iter);
+    }
+
+    iterator_type get_line_start(iterator_type& iter) const {
+        return position_cache.get_line_start(iter);
+    }
+
+    std::string current_line(iterator_type const& start) const {
+    	return position_cache.current_line(start);
+    }
+
     void print_indicator(iterator_type& first, iterator_type const& last, char symbol) const;
 
 private:
