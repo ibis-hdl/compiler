@@ -19,6 +19,11 @@
 namespace eda { namespace vhdl { namespace analyze {
 
 
+bool syntax_worker::has_errors() const {
+	return context.error_count != 0;
+}
+
+
 template<typename NodeT>
 bool syntax_worker::label_matches(NodeT const& node, std::string_view const& node_name) const
 {

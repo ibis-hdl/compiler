@@ -40,6 +40,9 @@ public:
 	{ }
 
 public:
+	bool has_errors() const;
+
+public:
     void operator()(ast::block_statement const& node, std::string_view const& node_name) const;
     void operator()(ast::case_statement const& node, std::string_view const& node_name) const;
     void operator()(ast::generate_statement const& node, std::string_view const& node_name) const;

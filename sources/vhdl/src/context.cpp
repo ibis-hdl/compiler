@@ -17,21 +17,22 @@ namespace eda { namespace vhdl {
 
 
 context::context()
-: error_count{ 0 }
-, warning_count{ 0 }
+: error_count{ 20 }
+, warning_count{ /* default limit */ }
 { }
 
 
 namespace /* anonymous */ {
 
-// CLang '-Weverything' Diagnostic at format(translate("...", count)):
-// warning: implicit conversion loses integer precision: 'const size_t'
-// (aka 'const unsigned long') to 'int' [-Wshorten-64-to-32]
+// Fix for Clang '-Weverything' Diagnostic at format(translate("...", count)):
+//     warning: implicit conversion loses integer precision: 'const size_t'
+//     (aka 'const unsigned long') to 'int' [-Wshorten-64-to-32]
+//
 // Obviously boost.locale uses an int32 in the [plural form](
 //  https://www.boost.org/doc/libs/1_67_0/libs/locale/doc/html/messages_formatting.html#plural_forms).
 // To avoid further references by '-Weverything' diagnostics a plural form
 // for count is introduced. For plural form the concrete maximum value isn't
-// critical.
+// critical in human language.
 int plural_count(size_t count) {
     static constexpr int N{ std::numeric_limits<int>::max() };
     if (count > N) return N;

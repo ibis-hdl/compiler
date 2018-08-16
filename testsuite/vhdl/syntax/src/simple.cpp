@@ -56,9 +56,22 @@ BOOST_DATA_TEST_CASE( basic_syntax,
        << vhdl::failure_status(context) << "\n";
 #else
     vhdl::context context;
-    analyze::error_handler<parser::iterator_type> syntax_error_handler(os, position_cache, test_case_name);
-    vhdl::analyze::syntax_checker syntax_check{ os, context, syntax_error_handler };
-    syntax_check(design_file);
+    context.error_count.limit() = 20;
+
+    try {
+    	analyze::error_handler<parser::iterator_type> syntax_error_handler(os, position_cache, test_case_name);
+    	vhdl::analyze::syntax_checker syntax_check{ os, context, syntax_error_handler };
+    	syntax_check(design_file);
+
+    	bool const syntax_errors = syntax_check.has_errors();
+
+        os << "Syntax" << (syntax_errors ? " not" : "") << " ok\n"
+           << vhdl::failure_status(context) << "\n";
+    }
+    catch(vhdl::context::error_counter::overflow const&) {
+    	os << "fatal: to many errors emitted, stopping now\n";
+    	os << context.error_count << "errors generated\n";
+    }
 #endif
 
 //	ast::ast_stats stats(design_file);

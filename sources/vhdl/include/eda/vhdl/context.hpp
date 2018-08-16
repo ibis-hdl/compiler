@@ -13,10 +13,77 @@
 #include <eda/vhdl/ast/util/string_span_hash.hpp>
 
 #include <unordered_map>
+#include <stdexcept>
+#include <limits>
 #include <iosfwd>
 
 
 namespace eda { namespace vhdl {
+
+
+namespace detail {
+
+/**
+ * Tagged Counter
+ *
+ * Simply increments events and throw basic_counter::overflow if a configurable
+ * limit has been reached.
+ *
+ * \see [Wandbox](https://wandbox.org/permlink/7o4pPgrmHDQUJj1x)
+ */
+template<typename Tag>
+class basic_counter
+{
+public:
+	struct overflow: public std::exception { };
+
+public:
+	typedef std::size_t value_type;
+
+public:
+	basic_counter(value_type limit_ = std::numeric_limits<value_type>::max())
+    : treshold { limit_ }
+	, value{ 0 }
+	{ }
+
+	basic_counter& operator++() {    // prefix ++
+		++value;
+		if (value == treshold) {
+			throw overflow{};
+		}
+		return *this;
+	}
+
+	basic_counter operator++(int) {  // postfix ++
+		basic_counter result(*this);
+		++(*this);
+		return result;
+	}
+
+    operator value_type() const {	// user-defined conversion
+    	return value;
+    }
+
+	value_type& limit() { return treshold; }
+	value_type limit() const { return treshold; }
+
+	std::ostream& print(std::ostream& os) const {
+		os << value;
+		return os;
+	}
+
+private:
+	value_type  									treshold;
+	value_type 										value;
+};
+
+
+template <typename Tag>
+std::ostream& operator<<(std::ostream& os, basic_counter<Tag> const& counter) {
+    return counter.print(os);
+}
+
+} // namespace detail
 
 
 /**
@@ -24,8 +91,11 @@ namespace eda { namespace vhdl {
  */
 struct context {
 
-    std::size_t                                     error_count;
-    std::size_t                                     warning_count;
+	using error_counter = detail::basic_counter<struct error_tag>;
+	using warning_counter = detail::basic_counter<struct warning_tag>;
+
+	error_counter                                   error_count;
+	warning_counter                                 warning_count;
 
     std::unordered_map<ast::string_span, int>       dummy;
 
