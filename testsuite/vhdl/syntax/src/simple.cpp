@@ -57,8 +57,8 @@ BOOST_DATA_TEST_CASE( basic_syntax,
     syntax_check(design_file);
 #endif
 
-	ast::ast_stats stats(design_file);
-	std::cout << stats << "\n";
+//	ast::ast_stats stats(design_file);
+//	std::cout << stats << "\n";
 }
 
 

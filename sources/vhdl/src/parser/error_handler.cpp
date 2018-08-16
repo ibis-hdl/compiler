@@ -16,6 +16,8 @@
 
 #include <eda/support/boost/locale.hpp>
 
+#include <eda/color/message.hpp>
+
 #include <iostream>
 
 #include <eda/util/cxx_bug_fatal.hpp>
@@ -36,9 +38,11 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
 
     boost::ignore_unused(first);
 
+    os << color::message::error(translate("ERROR")) << " ";
+
     // location + message
     os << format(translate(
-          "In file {1}, line {2}:\n"
+          "in file {1}, line {2}:\n"
           "{3}\n"
           ))
           % file_name()
@@ -80,9 +84,11 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
 
     boost::ignore_unused(first);
 
+    os << color::message::error(translate("ERROR")) << " ";
+
     // location + message
     os << format(translate(
-          "In file {1}, line {2}:\n"
+          "in file {1}, line {2}:\n"
           "{3}\n"
           ))
           % file_name()

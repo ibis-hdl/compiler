@@ -10,9 +10,7 @@
 #include <eda/vhdl/analyze/check/label_match.hpp>
 #include <eda/vhdl/ast.hpp>
 
-#include <boost/range/algorithm/equal.hpp>
-
-#include <eda/support/boost/locale.hpp>
+#include <eda/util/string/icompare.hpp>
 
 
 // don't pollute AST's namespace with operators required only here
@@ -20,8 +18,13 @@ namespace eda { namespace vhdl { namespace ast {
 
 
 static inline
-bool operator==(ast::label const& lhs, ast::label const& rhs) {
-    return boost::range::equal(lhs.name, rhs.name);
+bool operator==(ast::identifier const& lhs, ast::identifier const& rhs) {
+
+	auto const as_string_view = [](ast::identifier const& identifier) {
+		return std::string_view{ &identifier.name.front(), identifier.name.size() };
+	};
+
+    return util::icompare(as_string_view(lhs), as_string_view(rhs));
 }
 
 
@@ -31,83 +34,71 @@ bool operator==(ast::label const& lhs, ast::label const& rhs) {
 namespace eda { namespace vhdl { namespace analyze {
 
 
-template<typename AstNodeT>
-bool label_match::test_mandatory_start(AstNodeT const& node) const
+label_match::result label_match::compare(ast::identifier const& start_label, ast::optional<ast::identifier> const& end_label) const
 {
-    if(node.end_label) {
+    if (end_label) {
 
-        bool const label_ok = (node.label == node.end_label);
+        bool const label_equal{ start_label == end_label };
 
-        if(label_ok) return true;
-        return false;
+        if(label_equal) return result::OK;
+        return result::MISMATCH;
     }
 
-    return true;
+    return result::OK;
 }
 
-
-template<typename AstNodeT>
-bool label_match::test_optional_start(AstNodeT const& node) const
+label_match::result label_match::compare(ast::optional<ast::identifier> const& start_label, ast::optional<ast::identifier> const& end_label) const
 {
-    if(node.label && node.end_label) {
+	if (end_label   && !start_label) {
+		return result::ILLFORMED;
+	}
 
-        bool const label_ok = (node.label == node.end_label);
+    if (start_label && end_label) {
 
-        if(label_ok) return true;
-        return false;
+        bool const label_equal{ start_label == end_label };
+
+        if(label_equal) return result::OK;
+        return result::MISMATCH;
     }
 
-    return true;
+    return result::OK;
 }
 
 
-bool label_match::operator()(ast::block_statement const& node) const
+label_match::result label_match::operator()(ast::block_statement const& node) const
 {
-    return test_mandatory_start(node);
+	// block_label mandatory
+    return compare(node.label, node.end_label);
 }
 
 
-bool label_match::operator()(ast::case_statement const& node) const
+label_match::result label_match::operator()(ast::case_statement const& node) const
 {
-    return test_optional_start(node);
+    return compare(node.label, node.end_label);
 }
 
 
-bool label_match::operator()(ast::generate_statement const& node) const
+label_match::result label_match::operator()(ast::generate_statement const& node) const
 {
-    return test_mandatory_start(node);
+    return compare(node.label, node.end_label);
 }
 
 
-bool label_match::operator()(ast::if_statement const& node) const
+label_match::result label_match::operator()(ast::if_statement const& node) const
 {
-    return test_optional_start(node);
+    return compare(node.label, node.end_label);
 }
 
 
-bool label_match::operator()(ast::loop_statement const& node) const
+label_match::result label_match::operator()(ast::loop_statement const& node) const
 {
-    return test_optional_start(node);
+    return compare(node.label, node.end_label);
 }
 
 
-bool label_match::operator()(ast::process_statement const& node) const
+label_match::result label_match::operator()(ast::process_statement const& node) const
 {
-    return test_optional_start(node);
-}
-
-
-std::string label_match::make_error_description(std::string_view const& rule_name)
-{
-    using boost::locale::format;
-    using boost::locale::translate;
-
-    return (
-    	format(translate(
-        "Syntax error: Label mismatch in {1}"
-        ))
-        % rule_name
-    ).str();
+	return compare(node.label, node.end_label);
 }
 
 

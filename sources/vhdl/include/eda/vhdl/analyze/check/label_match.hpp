@@ -8,13 +8,9 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_ANALYZE_CHECK_LABEL_MATCH_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_ANALYZE_CHECK_LABEL_MATCH_HPP_
 
-
 #include <eda/vhdl/ast_fwd.hpp>
-#include <eda/vhdl/ast/util/position_tagged.hpp>
+#include <eda/vhdl/ast/util/optional.hpp>
 
-#include <string>
-#include <string_view>
-#include <iosfwd>
 
 namespace eda { namespace vhdl { namespace analyze {
 
@@ -24,28 +20,28 @@ namespace eda { namespace vhdl { namespace analyze {
  */
 class label_match
 {
+	enum class result {
+		OK,
+		MISMATCH,
+		ILLFORMED
+	};
+
 public:
-    bool operator()(ast::block_statement const& node) const;
-    bool operator()(ast::case_statement const& node) const;
-    bool operator()(ast::generate_statement const& node) const;
-    bool operator()(ast::if_statement const& node) const;
-    bool operator()(ast::loop_statement const& node) const;
-    bool operator()(ast::process_statement const& node) const;
+	result operator()(ast::block_statement const& node) const;
+	result operator()(ast::case_statement const& node) const;
+	result operator()(ast::generate_statement const& node) const;
+	result operator()(ast::if_statement const& node) const;
+	result operator()(ast::loop_statement const& node) const;
+	result operator()(ast::process_statement const& node) const;
 
     template<typename T>
-    bool operator()(T const&) const {
-        return true;
+    result operator()(T const&) const {
+        return result::OK;
     }
 
-public:
-    std::string make_error_description(std::string_view const& rule_name);
-
 private:
-    template<typename AstNodeT>
-    bool test_mandatory_start(AstNodeT const& node) const;
-
-    template<typename AstNodeT>
-    bool test_optional_start(AstNodeT const& node) const;
+    result compare(ast::identifier const& entry, ast::optional<ast::identifier> const& exit) const;
+    result compare(ast::optional<ast::identifier> const& entry, ast::optional<ast::identifier> const& exit) const;
 };
 
 

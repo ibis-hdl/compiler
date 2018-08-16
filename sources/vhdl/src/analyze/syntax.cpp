@@ -9,6 +9,10 @@
 
 #include <eda/vhdl/analyze/check/label_match.hpp>
 
+#include <eda/support/boost/locale.hpp>
+
+#include <eda/util/cxx_bug_fatal.hpp>
+
 #include <iostream>
 
 
@@ -20,15 +24,38 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view const& nod
 {
 	label_match check_label{};
 
-	if (!check_label(node)) {
-    	//os << "label error\n";
-    	error_handler(node, check_label.make_error_description(node_name));
-    	++context.error_count;
+    using boost::locale::format;
+    using boost::locale::translate;
 
-    	return false;
-    }
+    switch(check_label(node)) {
+		case label_match::result::OK:
+			return true;
 
-	return true;
+		case label_match::result::MISMATCH:
+			error_handler(node,
+				(format(translate(
+					"Label mismatch in {1}"
+					))
+					% node_name // XXX lookup for pretty name (on_error_base::ruleid_map)
+				).str()
+			);
+			++context.error_count;
+			return false;
+
+		case label_match::result::ILLFORMED:
+			error_handler(node,
+				(format(translate(
+					"Label ill-formed in {1}"
+					))
+					% node_name // XXX lookup for pretty name (on_error_base::ruleid_map)
+				).str()
+			);
+			++context.error_count;
+			return false;
+		default:
+			cxx_unreachable_bug_triggered();
+	}
+	cxx_unreachable_bug_triggered();
 }
 
 
