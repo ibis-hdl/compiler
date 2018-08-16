@@ -16,11 +16,14 @@
 #include <eda/vhdl/parser/parse.hpp>
 #include <eda/vhdl/parser/parser_config.hpp>
 #include <eda/vhdl/analyze/syntax.hpp>
+#include <eda/vhdl/analyze/error_handler.hpp>
 #include <eda/vhdl/ast/ast_stats.hpp>
 #include <testsuite/data_set.hpp>
 
 #include <testsuite/namespace_alias.hpp>
 
+
+namespace analyze = eda::vhdl::analyze;
 
 BOOST_AUTO_TEST_SUITE( syntax )
 
@@ -53,7 +56,8 @@ BOOST_DATA_TEST_CASE( basic_syntax,
        << vhdl::failure_status(context) << "\n";
 #else
     vhdl::context context;
-    vhdl::analyze::syntax_checker syntax_check{ os, context, error_handler };
+    analyze::error_handler<parser::iterator_type> syntax_error_handler(os, position_cache, test_case_name);
+    vhdl::analyze::syntax_checker syntax_check{ os, context, syntax_error_handler };
     syntax_check(design_file);
 #endif
 

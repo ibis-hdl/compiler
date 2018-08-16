@@ -1,16 +1,11 @@
 /*
  * error_handler.cpp
  *
- *  Created on: 19.07.2018
+ *  Created on: 16.08.2018
  *      Author: olaf
  */
 
-#include <eda/compiler/warnings_off.hpp>
-#include <boost/spirit/home/x3/support/traits/tuple_traits.hpp>
-#include <boost/spirit/home/x3/support/traits/is_variant.hpp>
-#include <eda/compiler/warnings_on.hpp>
-
-#include <eda/vhdl/parser/error_handler.hpp>
+#include <eda/vhdl/analyze/error_handler.hpp>
 #include <eda/vhdl/parser/position_cache_def.hpp>
 #include <eda/vhdl/parser/iterator_type.hpp>
 
@@ -23,45 +18,12 @@
 #include <eda/util/cxx_bug_fatal.hpp>
 
 
-namespace eda { namespace vhdl { namespace parser {
+namespace eda { namespace vhdl { namespace analyze {
 
-
-// AST/parse related error handler (original signature)
-template <typename Iterator>
-typename error_handler<Iterator>::result_type error_handler<Iterator>::operator()(
-    iterator_type error_pos, std::string const& error_message) const
-{
-    using boost::locale::format;
-    using boost::locale::translate;
-
-    os << color::message::error(translate("ERROR")) << " ";
-
-    // location + message
-    os << format(translate(
-          "in file {1}, line {2}:\n"
-          "{3}\n"
-          ))
-          % file_name()
-          % line_number(error_pos)
-          % (!error_message.empty() ? error_message : translate("Unspecified Error, Sorry").str())
-          ;
-
-    // erroneous source snippet
-    iterator_type start = get_line_start(error_pos);
-    //print_line(start, last);
-    auto const line = current_line(start);
-    os << line << "\n";
-
-    // error indicator
-    print_indicator(start, error_pos, '_');
-    os << "^_" << std::endl;
-
-    return x3::error_handler_result::fail;
-}
 
 // error handler for tagged nodes
 template <typename Iterator>
-typename error_handler<Iterator>::result_type error_handler<Iterator>::operator()(
+void error_handler<Iterator>::operator()(
     ast::position_tagged const& where_tag, std::string const& error_message) const
 {
     using boost::locale::format;
@@ -79,7 +41,7 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
 
     auto [error_first, error_last] = error_iterators(where_tag);
 
-    os << color::message::error(translate("ERROR")) << " ";
+    os << color::message::error(translate("Syntax ERROR")) << " ";
 
     // location + message
     os << format(translate(
@@ -100,8 +62,6 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
     print_indicator(start, error_first, ' ');
     print_indicator(start, error_last,  '~');
     os << translate(" <<-- Here") << std::endl;
-
-    return x3::error_handler_result::fail;
 }
 
 
@@ -135,15 +95,15 @@ void error_handler<Iterator>::print_indicator(iterator_type& first, iterator_typ
 }
 
 
-}}} // namespace eda.vhdl.parser
+}}} // namespace eda.vhdl.analyze
 
 
-namespace eda { namespace vhdl { namespace parser {
+
+namespace eda { namespace vhdl { namespace analyze {
 
 
 // Explicit template instantiation
 template class error_handler<parser::iterator_type>;
 
 
-}}} // namespace eda.vhdl.parser
-
+}}} // namespace eda.vhdl.analyze

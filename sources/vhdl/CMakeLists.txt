@@ -22,6 +22,7 @@ set(VHDL_PARSER_SOURCE
     src/parser/grammar.cpp
     src/parser/parse.cpp
     
+    src/analyze/error_handler.cpp
     src/analyze/check/label_match.cpp
     src/analyze/syntax.cpp
     
