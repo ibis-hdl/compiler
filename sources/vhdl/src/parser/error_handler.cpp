@@ -17,6 +17,7 @@
 #include <eda/support/boost/locale.hpp>
 
 #include <eda/color/message.hpp>
+#include <eda/util/string/position_indicator.hpp>
 
 #include <iostream>
 
@@ -53,8 +54,11 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
     os << line << "\n";
 
     // error indicator
-    print_indicator(start, error_pos, '_');
-    os << "^_" << std::endl;
+    using eda::util::position_indicator;
+    os << position_indicator(start, error_pos, tab_sz, '_')
+	   << "^_"
+	   << std::endl;
+
 
     return x3::error_handler_result::fail;
 }
@@ -66,27 +70,6 @@ std::string error_handler<Iterator>::file_name() const
     if (!filename.empty()) return filename;
 
     return boost::locale::translate("Unknown File Name", "<unknown>");
-}
-
-
-template <typename Iterator>
-void error_handler<Iterator>::print_indicator(iterator_type& first, iterator_type const& last, char symbol) const
-{
-    for ( ; first != last; ++first) {
-
-        auto const chr = *first;
-
-        if (chr == '\r' || chr == '\n') {
-            break;
-        }
-        else if (chr == '\t') {
-            for (std::size_t i = 0; i != tab_sz; ++i)
-                os << symbol;
-        }
-        else {
-            os << symbol;
-        }
-    }
 }
 
 

@@ -12,6 +12,7 @@
 #include <eda/support/boost/locale.hpp>
 
 #include <eda/color/message.hpp>
+#include <eda/util/string/position_indicator.hpp>
 
 #include <iostream>
 
@@ -59,9 +60,11 @@ void error_handler<Iterator>::operator()(
     os << line << "\n";
 
     // error indicator
-    print_indicator(start, error_first, ' ');
-    print_indicator(start, error_last,  '~');
-    os << translate(" <<-- Here") << std::endl;
+    using eda::util::position_indicator;
+    os << position_indicator(start, error_first, tab_sz, ' ')
+       << position_indicator(start, error_last,  tab_sz, '~')
+	   << translate(" <<-- Here")
+	   << std::endl;
 }
 
 
@@ -73,26 +76,6 @@ std::string error_handler<Iterator>::file_name() const
     return boost::locale::translate("Unknown File Name", "<unknown>");
 }
 
-
-template <typename Iterator>
-void error_handler<Iterator>::print_indicator(iterator_type& first, iterator_type const& last, char symbol) const
-{
-    for ( ; first != last; ++first) {
-
-        auto const chr = *first;
-
-        if (chr == '\r' || chr == '\n') {
-            break;
-        }
-        else if (chr == '\t') {
-            for (std::size_t i = 0; i != tab_sz; ++i)
-                os << symbol;
-        }
-        else {
-            os << symbol;
-        }
-    }
-}
 
 
 }}} // namespace eda.vhdl.analyze

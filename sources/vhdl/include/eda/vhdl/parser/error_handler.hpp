@@ -74,8 +74,6 @@ private:
     	return position_cache.current_line(start);
     }
 
-    void print_indicator(iterator_type& first, iterator_type const& last, char symbol) const;
-
 private:
     std::ostream&                                   os;
     ast::position_cache<iterator_type>&          	position_cache;
