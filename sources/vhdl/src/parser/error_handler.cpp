@@ -12,7 +12,7 @@
 
 #include <eda/vhdl/parser/error_handler.hpp>
 #include <eda/vhdl/ast/position_cache_def.hpp>
-#include <eda/vhdl/parser/iterator_type.hpp>
+#include <eda/vhdl/parser/iterator_type.hpp> // for explicit template instantiation
 
 #include <eda/support/boost/locale.hpp>
 
@@ -26,7 +26,7 @@
 namespace eda { namespace vhdl { namespace parser {
 
 
-// AST/parse related error handler (original signature)
+// AST/parse related error handler
 template <typename Iterator>
 typename error_handler<Iterator>::result_type error_handler<Iterator>::operator()(
     iterator_type error_pos, std::string const& error_message) const
@@ -55,51 +55,6 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
     // error indicator
     print_indicator(start, error_pos, '_');
     os << "^_" << std::endl;
-
-    return x3::error_handler_result::fail;
-}
-
-// error handler for tagged nodes
-template <typename Iterator>
-typename error_handler<Iterator>::result_type error_handler<Iterator>::operator()(
-    ast::position_tagged const& where_tag, std::string const& error_message) const
-{
-    using boost::locale::format;
-    using boost::locale::translate;
-
-    auto const error_iterators = [this](ast::position_tagged const& tagged_node) {
-        if (tagged_node.pos_id == ast::position_tagged::MAX_ID) {
-            std::cerr << "### WARNING: Node not tagged\n";
-        }
-        auto range = position_cache.position_of(tagged_node);
-        return std::tuple<iterator_type, iterator_type const&>(
-            { range.begin(), range.end() }
-        );
-    };
-
-    auto [error_first, error_last] = error_iterators(where_tag);
-
-    os << color::message::error(translate("ERROR")) << " ";
-
-    // location + message
-    os << format(translate(
-          "in file {1}, line {2}:\n"
-          "{3}\n"
-          ))
-          % file_name()
-          % line_number(error_first)
-          % (!error_message.empty() ? error_message : translate("Unspecified Error, Sorry").str())
-          ;
-
-    // erroneous source snippet
-    iterator_type start = get_line_start(error_first);
-    auto const line = current_line(start);
-    os << line << "\n";
-
-    // error indicator
-    print_indicator(start, error_first, ' ');
-    print_indicator(start, error_last,  '~');
-    os << translate(" <<-- Here") << std::endl;
 
     return x3::error_handler_result::fail;
 }

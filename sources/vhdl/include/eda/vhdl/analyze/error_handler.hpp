@@ -24,9 +24,7 @@ template <typename Iterator>
 class error_handler
 {
 public:
-
     typedef Iterator                                iterator_type;
-    typedef boost::iterator_range<iterator_type>    range_type;
 
 public:
     explicit error_handler(
@@ -43,8 +41,7 @@ public:
     error_handler& operator=(error_handler const&) = delete;
 
 public:
-    void operator()(
-        ast::position_tagged const& where_tag, std::string const& error_message) const;
+    void operator()(ast::position_tagged const& where_tag, std::string const& error_message) const;
 
 public:
     std::string file_name() const;

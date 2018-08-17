@@ -31,10 +31,7 @@ template <typename Iterator>
 class error_handler
 {
 public:
-
     typedef Iterator                                iterator_type;
-    typedef boost::iterator_range<iterator_type>    range_type;
-
     typedef x3::error_handler_result                result_type;
 
 public:
@@ -59,12 +56,7 @@ public:
     }
 
 public:
-    result_type operator()(
-        iterator_type err_pos, std::string const& error_message) const;
-
-public:
-    result_type operator()(
-        ast::position_tagged const& where_tag, std::string const& error_message) const;
+    result_type operator()(iterator_type err_pos, std::string const& error_message) const;
 
 public:
     std::string file_name() const;
