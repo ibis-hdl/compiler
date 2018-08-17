@@ -34,7 +34,7 @@ std::tuple<bool, AttrType> parse(ParserType const &numeric_parser, std::string c
         "iterator types must be the same"
     );
 
-    parser::position_cache<parser::iterator_type> position_cache(input);
+    ast::position_cache<parser::iterator_type> position_cache(input);
     parser::error_handler_type error_handler(std::cerr, position_cache);
 
     auto const parser =

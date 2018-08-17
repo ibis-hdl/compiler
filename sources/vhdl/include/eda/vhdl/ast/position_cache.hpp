@@ -5,8 +5,8 @@
  *      Author: olaf
  */
 
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_POSITION_CACHE_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_POSITION_CACHE_HPP_
+#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_POSITION_CACHE_HPP_
+#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_POSITION_CACHE_HPP_
 
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 #include <eda/util/cxx_bug_fatal.hpp>
@@ -22,7 +22,7 @@
 //#include <eda/util/pretty_typename.hpp>
 
 
-namespace eda { namespace vhdl { namespace parser {
+namespace eda { namespace vhdl { namespace ast {
 
 
 /**
@@ -98,7 +98,7 @@ private:
 };
 
 
-}}} // namespace eda.vhdl.parser
+}}} // namespace eda.vhdl.ast
 
 
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_POSITION_CACHE_HPP_ */
+#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_POSITION_CACHE_HPP_ */

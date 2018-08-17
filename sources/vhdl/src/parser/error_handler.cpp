@@ -11,7 +11,7 @@
 #include <eda/compiler/warnings_on.hpp>
 
 #include <eda/vhdl/parser/error_handler.hpp>
-#include <eda/vhdl/parser/position_cache_def.hpp>
+#include <eda/vhdl/ast/position_cache_def.hpp>
 #include <eda/vhdl/parser/iterator_type.hpp>
 
 #include <eda/support/boost/locale.hpp>

@@ -2,14 +2,14 @@
  * position_cache_def.hpp
  *
  *  Created on: 16.08.2018
- *      Author: olpetzol
+ *      Author: olaf
  */
 
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_POSITION_CACHE_DEF_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_POSITION_CACHE_DEF_HPP_
+#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_POSITION_CACHE_DEF_HPP_
+#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_POSITION_CACHE_DEF_HPP_
 
 
-#include <eda/vhdl/parser/position_cache.hpp>
+#include <eda/vhdl/ast/position_cache.hpp>
 
 #include <boost/locale/encoding_utf.hpp>
 
@@ -18,7 +18,7 @@
 #include <eda/util/cxx_bug_fatal.hpp>
 
 
-namespace eda { namespace vhdl { namespace parser {
+namespace eda { namespace vhdl { namespace ast {
 
 
 template <typename IteratorT, typename ContainerT>
@@ -121,7 +121,7 @@ IteratorT position_cache<IteratorT, ContainerT>::get_line_start(iterator_type& p
 }
 
 
-}}} // namespace eda.vhdl.parser
+}}} // namespace eda.vhdl.ast
 
 
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_POSITION_CACHE_DEF_HPP_ */
+#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_POSITION_CACHE_DEF_HPP_ */

@@ -8,7 +8,7 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ERROR_HANDLER_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ERROR_HANDLER_HPP_
 
-#include <eda/vhdl/parser/position_cache.hpp>
+#include <eda/vhdl/ast/position_cache.hpp>
 
 #include <eda/compiler/warnings_off.hpp>
 #include <boost/spirit/home/x3/auxiliary/guard.hpp> // error_handler_result
@@ -39,7 +39,7 @@ public:
 
 public:
     explicit error_handler(
-        std::ostream& os_, position_cache<iterator_type>& position_cache_,
+        std::ostream& os_, ast::position_cache<iterator_type>& position_cache_,
         std::string file = "", std::size_t tabs = 4
     )
       : os(os_)
@@ -86,7 +86,7 @@ private:
 
 private:
     std::ostream&                                   os;
-    parser::position_cache<iterator_type>&          position_cache;
+    ast::position_cache<iterator_type>&          	position_cache;
     std::string                                     filename;
     std::size_t                                     tab_sz;
 };

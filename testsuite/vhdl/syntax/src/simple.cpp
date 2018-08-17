@@ -34,7 +34,7 @@ BOOST_DATA_TEST_CASE( basic_syntax,
 
     ast::design_file design_file;
 
-    parser::position_cache<parser::iterator_type> position_cache(input);
+    ast::position_cache<parser::iterator_type> position_cache(input);
     parser::error_handler_type error_handler(os, position_cache, test_case_name);
 
     parser::parse  parse{ os, error_handler }; // add. arg -> file_name
