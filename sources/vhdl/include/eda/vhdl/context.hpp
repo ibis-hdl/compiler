@@ -38,7 +38,7 @@ public:
 	struct overflow: public std::exception { };
 
 public:
-	typedef std::size_t value_type;
+	typedef std::size_t 							value_type;
 
 public:
 	basic_counter(value_type limit_ = std::numeric_limits<value_type>::max())
@@ -46,9 +46,10 @@ public:
 	, value{ 0 }
 	{ }
 
+public:
 	basic_counter& operator++() {    // prefix ++
 		++value;
-		if (value == treshold) {
+		if (value > treshold) {
 			throw overflow{};
 		}
 		return *this;

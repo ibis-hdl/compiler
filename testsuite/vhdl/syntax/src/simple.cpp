@@ -46,15 +46,6 @@ BOOST_DATA_TEST_CASE( basic_syntax,
 
     BOOST_TEST(parse_ok);
 
-#if 0
-    vhdl::context context;
-    vhdl::analyze::syntax syntax_check(os, context, error_handler);
-
-    bool const syntax_ok = syntax_check(design_file);
-
-    os << "Syntax " << (syntax_ok ? "" : "not") << " ok\n"
-       << vhdl::failure_status(context) << "\n";
-#else
     vhdl::context context;
     context.error_count.limit() = 20;
 
@@ -63,16 +54,19 @@ BOOST_DATA_TEST_CASE( basic_syntax,
     	vhdl::analyze::syntax_checker syntax_check{ os, context, syntax_error_handler };
     	syntax_check(design_file);
 
-    	bool const syntax_errors = syntax_check.has_errors();
+    	bool const syntax_ok = syntax_check.get_worker().success();
 
-        os << "Syntax" << (syntax_errors ? " not" : "") << " ok\n"
+        os << "Syntax " << (syntax_ok ? "" : "not") << " ok\n"
            << vhdl::failure_status(context) << "\n";
     }
     catch(vhdl::context::error_counter::overflow const&) {
     	os << "fatal: to many errors emitted, stopping now\n";
-    	os << context.error_count << "errors generated\n";
+    	os << context.error_count << " errors generated\n";
     }
-#endif
+    catch(vhdl::context::warning_counter::overflow const&) {
+    	os << "fatal: to many warning emitted, stopping now\n";
+    	os << context.warning_count << " warnings generated\n";
+    }
 
 //	ast::ast_stats stats(design_file);
 //	std::cout << stats << "\n";

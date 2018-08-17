@@ -54,6 +54,9 @@ public:
     basic_ast_walker const& operator=(basic_ast_walker const&) = delete;
 
 public:
+    WorkerT const& get_worker() const { return worker; }
+
+public:
     void operator()(ast::abstract_literal const &node)
     {
         static char const node_typename[]{ "abstract_literal" };

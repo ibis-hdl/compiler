@@ -19,8 +19,8 @@
 namespace eda { namespace vhdl { namespace analyze {
 
 
-bool syntax_worker::has_errors() const {
-	return context.error_count != 0;
+bool syntax_worker::success() const {
+	return context.error_count == 0;
 }
 
 

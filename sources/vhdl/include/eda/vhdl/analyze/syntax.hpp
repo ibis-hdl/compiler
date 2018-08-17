@@ -40,7 +40,11 @@ public:
 	{ }
 
 public:
-	bool has_errors() const;
+	bool success() const;
+
+	bool failures() const {
+		return !success();
+	}
 
 public:
     void operator()(ast::block_statement const& node, std::string_view const& node_name) const;
