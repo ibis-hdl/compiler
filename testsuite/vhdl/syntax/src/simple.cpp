@@ -23,8 +23,6 @@
 #include <testsuite/namespace_alias.hpp>
 
 
-namespace analyze = eda::vhdl::analyze;
-
 BOOST_AUTO_TEST_SUITE( syntax )
 
 
@@ -50,6 +48,8 @@ BOOST_DATA_TEST_CASE( basic_syntax,
     context.error_count.limit() = 20;
 
     try {
+    	namespace analyze = eda::vhdl::analyze;
+
     	analyze::error_handler<parser::iterator_type> syntax_error_handler(os, position_cache, test_case_name);
     	vhdl::analyze::syntax_checker syntax_check{ os, context, syntax_error_handler };
     	syntax_check(design_file);
