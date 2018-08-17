@@ -36,8 +36,9 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view const& nod
 		case label_match::result::OK:
 			return true;
 
-		case label_match::result::MISMATCH:
-			error_handler(node,
+		case label_match::result::MISMATCH: {
+			auto [start_label, end_label] = labels_of(node);
+			error_handler(node, start_label, end_label,
 				(format(translate(
 					"Label mismatch in {1}"
 					))
@@ -46,9 +47,11 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view const& nod
 			);
 			++context.error_count;
 			return false;
+		}
 
-		case label_match::result::ILLFORMED:
-			error_handler(node,
+		case label_match::result::ILLFORMED: {
+			auto [start_label, end_label] = labels_of(node);
+			error_handler(node, start_label, end_label,
 				(format(translate(
 					"Label ill-formed in {1}"
 					))
@@ -57,6 +60,8 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view const& nod
 			);
 			++context.error_count;
 			return false;
+		}
+
 		default:
 			cxx_unreachable_bug_triggered();
 	}

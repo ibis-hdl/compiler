@@ -1,5 +1,5 @@
-ERROR in file integer_failure/integer_failure_001.input, line 1:
-Test Suite Full Match Error! Unparsed input left:
+in file integer_failure/integer_failure_001.input, line 1:
+Parse ERROR: Test Suite Full Match Error! Unparsed input left:
 _
 
 

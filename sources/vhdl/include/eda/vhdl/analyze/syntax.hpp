@@ -12,6 +12,7 @@
 
 #include <eda/vhdl/ast/basic_ast_walker.hpp>
 #include <eda/vhdl/context.hpp>
+#include <eda/vhdl/analyze/error_handler.hpp>
 
 #include <iosfwd>
 #include <string_view>
@@ -23,20 +24,12 @@ namespace eda { namespace vhdl { namespace analyze {
 class syntax_worker
 {
 public:
-	using error_handler_type = std::function<
-        void(ast::position_tagged, std::string const&)>;
-
-public:
-    template <typename ErrorHandler>
 	syntax_worker(std::ostream& os_,
                   vhdl::context& context_,
-		          ErrorHandler const& error_handler_)
+				  analyze::error_handler_type& error_handler_)
 	: os{ os_ }
     , context{ context_ }
-    , error_handler{
-          [&](ast::position_tagged error_position, std::string const& message)
-              { error_handler_(error_position, message); }
-          }
+    , error_handler{ error_handler_ }
 	{ }
 
 public:
@@ -64,7 +57,7 @@ private:
 private:
     std::ostream&									os;
     vhdl::context&                                  context;
-    error_handler_type                              error_handler;
+    analyze::error_handler_type&                    error_handler;
 };
 
 

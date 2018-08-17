@@ -11,6 +11,10 @@
 #include <eda/vhdl/ast_fwd.hpp>
 #include <eda/vhdl/ast/util/optional.hpp>
 
+#include <eda/vhdl/ast/node/label.hpp>
+
+#include <type_traits>
+
 
 namespace eda { namespace vhdl { namespace analyze {
 
@@ -41,9 +45,30 @@ public:
     }
 
 private:
-    result compare(ast::identifier const& entry, ast::optional<ast::identifier> const& exit) const;
-    result compare(ast::optional<ast::identifier> const& entry, ast::optional<ast::identifier> const& exit) const;
+    result compare(ast::identifier const& start_label, ast::optional<ast::identifier> const& end_label) const;
+    result compare(ast::optional<ast::identifier> const& start_label, ast::optional<ast::identifier> const& end_label) const;
 };
+
+
+/**
+ * Helper functions to extract {start, end}_label of nodes for use with the error
+ * handler
+ */
+template<typename NodeT>
+std::tuple<ast::identifier const&, ast::identifier const&>
+labels_of(NodeT const& node)
+{
+	using tuple_type = std::tuple<ast::identifier const&, ast::identifier const&>;
+
+	if constexpr (std::is_same_v<std::decay_t<decltype(node.label)>, ast::optional<ast::identifier>>) {
+		return tuple_type(*node.label, *node.end_label);
+	}
+	else {
+		// mandatory start label
+		return tuple_type(node.label, *node.end_label);
+	}
+
+}
 
 
 } } } // namespace eda.vhdl.analyze

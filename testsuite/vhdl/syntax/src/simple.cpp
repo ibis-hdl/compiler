@@ -56,7 +56,7 @@ BOOST_DATA_TEST_CASE( basic_syntax,
 
     	bool const syntax_ok = syntax_check.get_worker().success();
 
-        os << "Syntax " << (syntax_ok ? "" : "not") << " ok\n"
+        os << "Syntax" << (syntax_ok ? "" : " not") << " ok\n"
            << vhdl::failure_status(context) << "\n";
     }
     catch(vhdl::context::error_counter::overflow const&) {

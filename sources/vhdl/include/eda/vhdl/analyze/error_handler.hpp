@@ -10,6 +10,7 @@
 
 
 #include <eda/vhdl/ast/position_cache.hpp>
+#include <eda/vhdl/parser/iterator_type.hpp>     // iterator_type
 
 #include <iosfwd>
 #include <string>
@@ -43,6 +44,10 @@ public:
 public:
     void operator()(ast::position_tagged const& where_tag, std::string const& error_message) const;
 
+    void operator()(ast::position_tagged const& where_tag,
+    			   ast::position_tagged const& start_label, ast::position_tagged const& end_label,
+				   std::string const& error_message) const;
+
 public:
     std::string file_name() const;
 
@@ -65,6 +70,9 @@ private:
     std::string                                     filename;
     std::size_t                                     tab_sz;
 };
+
+
+typedef error_handler<parser::iterator_type>		error_handler_type;
 
 
 }}} // namespace eda.vhdl.analyze
