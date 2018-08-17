@@ -56,8 +56,8 @@ void error_handler<Iterator>::operator()(
 
     // erroneous source snippet
     iterator_type start = get_line_start(error_first);
-    auto const line = current_line(start);
-    os << line << "\n";
+    os << current_line(start);
+    os << std::endl;
 
     // error indicator
     using eda::util::position_indicator;

@@ -49,9 +49,8 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
 
     // erroneous source snippet
     iterator_type start = get_line_start(error_pos);
-    //print_line(start, last);
-    auto const line = current_line(start);
-    os << line << "\n";
+    os << current_line(start);
+    os << std::endl;
 
     // error indicator
     using eda::util::position_indicator;

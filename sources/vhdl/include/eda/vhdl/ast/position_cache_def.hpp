@@ -67,9 +67,9 @@ std::string position_cache<IteratorT, ContainerT>::current_line(iterator_type co
 
     using char_type = typename std::iterator_traits<iterator_type>::value_type;
 
-    std::basic_string<char_type> line{ first, line_end };
-
-    return boost::locale::conv::utf_to_utf<std::string::value_type>(line);
+    return boost::locale::conv::utf_to_utf<std::string::value_type>(
+    	std::basic_string<char_type>{ first, line_end }
+	);
 }
 
 
