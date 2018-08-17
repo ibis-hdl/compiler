@@ -20,11 +20,7 @@ namespace eda { namespace vhdl { namespace ast {
 static inline
 bool operator==(ast::identifier const& lhs, ast::identifier const& rhs) {
 
-	auto const as_string_view = [](ast::identifier const& identifier) {
-		return std::string_view{ &identifier.name.front(), identifier.name.size() };
-	};
-
-    return util::icompare(as_string_view(lhs), as_string_view(rhs));
+    return util::icompare(as_string_view(lhs.name), as_string_view(rhs.name));
 }
 
 

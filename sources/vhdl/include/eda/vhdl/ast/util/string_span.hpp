@@ -11,6 +11,8 @@
 #include <boost/range/iterator_range.hpp>
 #include <eda/vhdl/parser/iterator_type.hpp>
 
+#include <string_view>
+
 
 namespace eda { namespace vhdl { namespace ast {
 
@@ -25,8 +27,18 @@ namespace eda { namespace vhdl { namespace ast {
 using string_span = boost::iterator_range<parser::iterator_type>;
 
 
-} } } // namespace eda.vhdl.ast
 
+/*
+ * Helper function to handle string_span node elements into an C++ standard
+ * conformance way.
+ */
+static inline
+std::string_view as_string_view(ast::string_span const& string_span) {
+	return std::string_view{ &string_span.front(), string_span.size() };
+};
+
+
+} } } // namespace eda.vhdl.ast
 
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_STRING_SPAN_HPP_ */
