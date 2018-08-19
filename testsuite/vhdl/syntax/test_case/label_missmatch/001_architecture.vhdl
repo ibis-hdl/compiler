@@ -8,25 +8,14 @@ architecture BENCH of testbench is
   signal MM : STD_LOGIC;
   signal A, B, C : STD_LOGIC_VECTOR(2 downto 0);
 begin
-  Stim: process
---    variable V : UNSIGNED(8 downto 0);
+  Stimulus: process
   begin
     for i in 0 to 2**7-1 loop 
       --(MM,A,B) <= STD_LOGIC_VECTOR(TO_UNSIGNED(i,7));
       wait for 10 NS;
     end loop;
     wait;
-end process Stim;
+end process Stimulus;
 
-block_label :
-    BLOCK IS 
-    BEGIN
-    END BLOCK block_label_wrong; -- label mismatch
-
-
-  D : --entity work.EX_MAX_MIN(A1)
-  entity work_EX_MAX_MIN(A1)
-    port map (MM, A, B, C);
-
-end architecture BENCH;
+end architecture TEST_BENCH; -- BENCH vs. TEST_BENCH
 

@@ -15,7 +15,7 @@ set(SYNTAXTEST_COMMON_SOURCES
 
 set(SYNTAXTEST_SOURCES
     ${SYNTAXTEST_COMMON_SOURCES}
-    src/simple.cpp
+    src/label_check.cpp
 )
 
 
@@ -59,4 +59,8 @@ target_link_libraries(${PROJECT_NAME}
 add_test(NAME test_vhdl_syntax
     COMMAND ${PROJECT_NAME} -- 
     --source-prefix=${PROJECT_SOURCE_DIR}
+    --destination-prefix=${PROJECT_BINARY_DIR}
+    --input-extension=.vhdl
+    --write-extension=.result    
+#    --write-extension=.expected    
 )

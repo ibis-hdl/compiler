@@ -11,4 +11,3 @@
 #include <eda/compiler/warnings_off.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <eda/compiler/warnings_on.hpp>
-

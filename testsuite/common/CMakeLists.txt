@@ -11,6 +11,8 @@ project(testsuite_common LANGUAGES CXX)
 
 set(TESTSUITE_COMMON_SOURCE
     src/data_set.cpp
+    src/failure_diagnostic_fixture.cpp
+    src/test_observer_fixture.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC ${TESTSUITE_COMMON_SOURCE})
@@ -22,6 +24,12 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
 
 
 add_dependencies(${PROJECT_NAME} boost-utf)
+
+target_link_libraries(${PROJECT_NAME}
+    PUBLIC
+    eda::common
+)
+
 find_package(Boost REQUIRED)
 
 
