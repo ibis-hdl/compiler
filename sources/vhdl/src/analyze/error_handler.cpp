@@ -33,7 +33,7 @@ void error_handler<Iterator>::operator()(
     using boost::locale::format;
     using boost::locale::translate;
 
-    cxx_assert(where_tag.pos_id != ast::position_tagged::MAX_ID, "Node not tagged");
+    cxx_assert(where_tag.is_tagged(), "Node not tagged");
 
     auto const iterators_of = [this](ast::position_tagged const& tagged_node) {
         auto range = position_cache.position_of(tagged_node);
@@ -88,9 +88,9 @@ void error_handler<Iterator>::operator()(
     using boost::locale::format;
     using boost::locale::translate;
 
-    cxx_assert(where_tag.pos_id   != ast::position_tagged::MAX_ID, "Node not tagged");
-    cxx_assert(start_label.pos_id != ast::position_tagged::MAX_ID, "Node/StartLabel not tagged");
-    cxx_assert(end_label.pos_id   != ast::position_tagged::MAX_ID, "Node/EndLabel not tagged");
+    cxx_assert(where_tag.is_tagged(), "Node not tagged");
+    cxx_assert(start_label.is_tagged(), "Node/StartLabel not tagged");
+    cxx_assert(end_label.is_tagged(), "Node/EndLabel not tagged");
 
     /* at ill-formed label pairs (e.g. end, but no start label given) nodes
      * arn't tagged appropriate. */

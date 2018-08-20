@@ -23,11 +23,16 @@ struct position_tagged
 
     static constexpr tag_type MAX_ID = std::numeric_limits<tag_type>::max();
 
-    tag_type pos_id{ MAX_ID };
+    bool is_tagged() const {
+    	return pos_id < MAX_ID;
+    }
+
+
+    tag_type 										pos_id{ MAX_ID };
 };
 
 
-}}} // namespace eda.vhdl.parser
+}}} // namespace eda.vhdl.ast
 
 
 

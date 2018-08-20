@@ -5,7 +5,6 @@
  *      Author: olaf
  */
 
-// https://wandbox.org/permlink/VxTEckWGUmuzLzLW
 
 //#if defined(NDEBUG)
 //#undef NDEBUG
@@ -20,6 +19,7 @@
 #include <boost/io/ios_state.hpp>
 
 
+// https://wandbox.org/permlink/VxTEckWGUmuzLzLW
 struct tagged
 {
     // packet layout (little endian)
@@ -78,9 +78,24 @@ struct tagged
 };
 
 
-std::ostream& operator<<(std::ostream& os, tagged const& tag)
-{
-    boost::io::ios_flags_saver  iosfs{os};
+// debugging printer utility for position_tagged as I/O manipulator
+struct tag_properties {
+
+	explicit tag_properties(tagged const& position_tagged_)
+	: position_tagged{ position_tagged_ }
+	{ }
+
+	tag_properties(tag_properties const&) = delete;
+	tag_properties& operator=(tag_properties const&) = delete;
+
+	std::ostream& print(std::ostream& os) const;
+
+	tagged											position_tagged;
+};
+
+std::ostream& tag_properties::print(std::ostream& os) const {
+
+	boost::io::ios_flags_saver  iosfs{os};
 
     os << "size:        " << tagged::size() << " bytes\n"
        << "N_BITS:      " << tagged::N_BITS << "\n"
@@ -97,12 +112,18 @@ std::ostream& operator<<(std::ostream& os, tagged const& tag)
     os << "ID<"
        << "pack:     "                            // 2 nibble = 1 byte!
        << "0x" << std:: setfill('0') << std::setw(2*tagged::size()) << std::hex
-       << tag.id_pack << ", "
+       << position_tagged.id_pack << ", "
        << std::dec
-       << "file: " << tag.file_id() << ", "
-       << "node: " << tag.node_id()
+       << "file: " << position_tagged.file_id() << ", "
+       << "node: " << position_tagged.node_id()
        << ">\n";
     return os;
+}
+
+
+std::ostream& operator<<(std::ostream& os, tag_properties const& tag)
+{
+	return tag.print(os);
 }
 
 
@@ -110,31 +131,30 @@ int main()
 {
     tagged t;
 
-    std::cout << t << "\n";
+    std::cout << tag_properties(t) << "\n";
 
     t.set_node(1);
     t.set_file(2);
-    std::cout << t << "\n";
+    std::cout << tag_properties(t) << "\n";
 
     t.set_file(1);
     t.set_node(2);
-    std::cout << t << "\n";
+    std::cout << tag_properties(t) << "\n";
 
     t.set(0, 0);
-    std::cout << t << "\n";
+    std::cout << tag_properties(t) << "\n";
 
     t.set(0, 1);
-    std::cout << t << "\n";
+    std::cout << tag_properties(t) << "\n";
 
     t.set(1, 0);
-    std::cout << t << "\n";
+    std::cout << tag_properties(t) << "\n";
 
     t.set(0, tagged::MAX_NODE_ID); // without NDEBGUG will abort()
-
-    std::cout << t << "\n";
+    std::cout << tag_properties(t) << "\n";
 
     t.set(tagged::MAX_FILE_ID, 0); // without NDEBGUG will abort()
-    std::cout << t << "\n";
+    std::cout << tag_properties(t) << "\n";
 }
 
 
