@@ -83,7 +83,7 @@ private:
     bool parse_command_line();
 
 private:
-    std::string                                     source_dir_prefix;
+    std::string                                     source_dir;
 
     data_type                                       testfile_input;
     data_type                                       testfile_expected;

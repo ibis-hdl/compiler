@@ -16,6 +16,8 @@
 
 #include <eda/vhdl/ast/ast_printer.hpp>
 
+#include <boost/filesystem.hpp>
+
 #include <testsuite/namespace_alias.hpp>
 
 

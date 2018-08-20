@@ -12,7 +12,6 @@ project(testrunner_vhdl_parser_rule LANGUAGES CXX)
 set(TEST_COMMON_SOURCES
     src/common/rules.cpp
     src/common/test_vhdl_parser.cpp
-    src/common/testing_util.cpp
 )
 
 set(PARSERTEST_SOURCES#_DEV
@@ -201,8 +200,8 @@ target_link_libraries(${PROJECT_NAME}
 # The argument is the top level directory of the test directories of 'test_case'
 add_test(NAME test_vhdl_parser_rule
     COMMAND ${PROJECT_NAME} -- 
-    --source-prefix=${PROJECT_SOURCE_DIR}
-    --destination-prefix=${PROJECT_BINARY_DIR}
+    --source-dir=${PROJECT_SOURCE_DIR}
+    --destination-dir=${PROJECT_BINARY_DIR}
     --input-extension=.input
     --write-extension=.expected
     #--write-extension=.parsed

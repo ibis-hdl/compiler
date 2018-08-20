@@ -43,7 +43,7 @@ private:
     bool parse_command_line();
 
 private:
-    std::string                                     destination_prefix;
+    std::string                                     destination_dir;
     std::string                                     testcase_name;
     std::string                                     write_extension;
     std::string const                               name_self;
@@ -136,7 +136,7 @@ fs::path pretty_filepath(fs::path file_path) {
  * failure_diagnostic_fixture::writer definition
  */
 failure_diagnostic_fixture::writer::writer(std::string const& test_case)
-: destination_prefix{ "./testsuite_result" }
+: destination_dir{ "./testsuite_result" }
 , testcase_name{ test_case }
 , write_extension{ ".result" }
 , name_self { "testsuite::failure_diagnostic_fixture::writer" }
@@ -210,7 +210,7 @@ bool failure_diagnostic_fixture::writer::write_file(fs::path const& filename, st
 
 void failure_diagnostic_fixture::writer::write(std::string const& parse_result)
 {
-    fs::path const full_pathname = fs::path(destination_prefix) / "test_case" / testcase_name;
+    fs::path const full_pathname = fs::path(destination_dir) / "test_case" / testcase_name;
     fs::path const write_path = full_pathname.parent_path();
 
     if(!create_directory(write_path)) {
@@ -242,14 +242,14 @@ bool failure_diagnostic_fixture::writer::parse_command_line()
     unsigned const argc = boost::unit_test::framework::master_test_suite().argc;
     char** const argv = boost::unit_test::framework::master_test_suite().argv;
 
-    bool destination_prefix_arg{ false };
+    bool destination_dir_arg{ false };
 
     for(unsigned i = 0; i != argc; i++) {
         //std::cout << "ArgValue[" << i << "]: " << argv[i] << "\n";
 
-        if(parse_for("--destination-prefix=", argv[i], destination_prefix)) {
-           //std::cout << "--destination-prefix = " << destination_prefix << "\n";
-            destination_prefix_arg = true;
+        if(parse_for("--destination-dir=", argv[i], destination_dir)) {
+           //std::cout << "--destination-dir = " << destination_prefix << "\n";
+            destination_dir_arg = true;
         }
 
         if(parse_for("--write-extension=", argv[i], write_extension)) {
@@ -258,11 +258,11 @@ bool failure_diagnostic_fixture::writer::parse_command_line()
 
     }
 
-    if(!destination_prefix_arg) {
+    if(!destination_dir_arg) {
         std::cerr <<"WARNING(" << name_self << ") "
-                  << argv[0] << " --destination-prefix= must be given\n"
+                  << argv[0] << " --destination-dir= must be given\n"
                   << "fallback to default "
-                  << destination_prefix << "\n";
+                  << destination_dir << "\n";
         return false;
     }
 

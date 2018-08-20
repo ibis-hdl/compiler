@@ -12,7 +12,6 @@ project(testsuite_common LANGUAGES CXX)
 set(TESTSUITE_COMMON_SOURCE
     src/data_set.cpp
     src/failure_diagnostic_fixture.cpp
-    src/test_observer_fixture.cpp
 )
 
 add_library(${PROJECT_NAME} STATIC ${TESTSUITE_COMMON_SOURCE})

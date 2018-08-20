@@ -123,11 +123,13 @@ class BoostTestGenerator:
 
 #include <eda/vhdl/ast.hpp>
 
-#include <testsuite/data_set.hpp>
 #include <testsuite/vhdl_parser/rules.hpp>
 #include <testsuite/vhdl_parser/testing_parser.hpp>
-#include <testsuite/vhdl_parser/testing_util.hpp>
 #include <testsuite/vhdl_parser/testing_parser_grammar_hack.hpp>
+
+#include <testsuite/data_set.hpp>
+#include <testsuite/failure_diagnostic_fixture.hpp>
+
 #include <testsuite/namespace_alias.hpp>
 """
         
@@ -138,7 +140,8 @@ class BoostTestGenerator:
         [failure_test, _] = self.isFailuretest(test_name)
        
         return """
-BOOST_DATA_TEST_CASE( {test_case},
+BOOST_DATA_TEST_CASE_F( testsuite::failure_diagnostic_fixture,
+    {test_case},
     utf_data::make_delayed<testsuite::dataset_loader>( "test_case/{test_case}" ),
     input, expected, test_case_name)
 {{
@@ -146,21 +149,18 @@ BOOST_DATA_TEST_CASE( {test_case},
     auto const& parser = testsuite::vhdl_parser::{parser_name}();
 
     using testsuite::vhdl_parser::util::testing_parser;
-    using testsuite::vhdl_parser::util::current_test_passing;
-    using testsuite::vhdl_parser::util::report_diagnostic;
 
     testing_parser<attribute_type> parse;
     auto [parse_ok, parse_result] = parse(input, parser, test_case_name);
 
     BOOST_TEST({F}parse_ok);
-    BOOST_REQUIRE_MESSAGE({F}parse_ok,
-        report_diagnostic(test_case_name, input, parse_result)
-    );
+    if (!current_test_passing()) {{
+        failure_closure(test_case_name, input, parse_result);
+        return;
+    }}
 
     BOOST_TEST(parse_result == expected, btt::per_element());
-    BOOST_REQUIRE_MESSAGE(current_test_passing(),
-        report_diagnostic(test_case_name, input, parse_result)
-    );
+    failure_closure(test_case_name, input, parse_result);
 }}
 """.format(
         test_case=test_case,

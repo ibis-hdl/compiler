@@ -10,10 +10,3 @@
 #include <eda/compiler/warnings_off.hpp>
 #include <boost/test/included/unit_test.hpp>
 #include <eda/compiler/warnings_on.hpp>
-
-#include <testsuite/test_observer_fixture.hpp>
-
-/* Directly use of 'testsuite::...::test_observer_fixture' doesn't compile */
-using test_observer_fixture = testsuite::test_observer_fixture;
-
-BOOST_TEST_GLOBAL_FIXTURE(test_observer_fixture);

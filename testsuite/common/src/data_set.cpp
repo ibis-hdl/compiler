@@ -29,25 +29,22 @@ fs::path pretty_filepath(fs::path file_path) {
 }
 
 
-/* The prefix for the test case root directory structure is (unfortunately)
- * hard coded. I didn't found a way to give these as command line argument
- * to the boost.test runner.
- * For more information about this problem look at:
+/* The prefix for the test case root directory structure is runtime configureable.
+ * For more information look at:
  * - [[Boost.Test] access to boost::unit_test::framework::master_test_suite().{argc, argv} outside from BOOST_TEST](
  *    https://groups.google.com/forum/#!topic/boost-developers-archive/wtnY9F2cWNI)
  * - [access to master_test_suite().{argc, argv}](
- *    https://svn.boost.org/trac10/ticket/12953)
- * */
+ *    https://svn.boost.org/trac10/ticket/12953) */
 dataset_loader::dataset_loader(std::string const& path)
 : input_extension{ ".vhdl" }
 , expected_extension{ ".expected" }
 {
     // FixMe: Doesn't abort() as expected
     BOOST_TEST_REQUIRE(parse_command_line(),
-                       "--source-prefix= must be given");
+                       "--source-dir= must be given");
 
     BOOST_TEST_INFO("dataset_loader load test files from " << path);
-    fs::path p = fs::path(source_dir_prefix) / path;
+    fs::path p = fs::path(source_dir) / path;
     p.make_preferred();
     read_files(p);
 
@@ -166,24 +163,24 @@ bool dataset_loader::parse_command_line()
     for(unsigned i = 0; i != argc; i++) {
         //std::cout << "ArgValue[" << i << "]: " << argv[i] << "\n";
 
-        if(parse_for("--source-prefix=", argv[i], source_dir_prefix)) {
-            std::cout << "--source-prefix = " << source_dir_prefix << "\n";
+        if(parse_for("--source-dir=", argv[i], source_dir)) {
+            //std::cout << "--source-dir = " << source_dir << "\n";
             source_prefix_arg = true;
         }
 
         if(parse_for("--input-extension=", argv[i], input_extension)) {
-            std::cout << "--input-extension=" << input_extension << "\n";
+            //std::cout << "--input-extension=" << input_extension << "\n";
         }
 
         if(parse_for("--expected-extension=", argv[i], expected_extension)) {
-            std::cout << "--expected-extension=" << expected_extension << "\n";
+            //std::cout << "--expected-extension=" << expected_extension << "\n";
         }
 
     }
 
     if(!source_prefix_arg) {
         std::cerr << "ERROR(testsuite::dataset_loader) "
-                  << argv[0] << " --source-prefix= must be given\n";
+                  << argv[0] << " --source-dir= must be given\n";
         return false;
     }
 

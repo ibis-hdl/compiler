@@ -58,8 +58,8 @@ target_link_libraries(${PROJECT_NAME}
 # The argument is the top level directory of the test directories of 'test_case'
 add_test(NAME test_vhdl_syntax
     COMMAND ${PROJECT_NAME} -- 
-    --source-prefix=${PROJECT_SOURCE_DIR}
-    --destination-prefix=${PROJECT_BINARY_DIR}
+    --source-dir=${PROJECT_SOURCE_DIR}
+    --destination-dir=${PROJECT_BINARY_DIR}
     --input-extension=.vhdl
     --write-extension=.result    
 #    --write-extension=.expected    

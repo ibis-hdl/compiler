@@ -1,7 +1,7 @@
 /*
  * concurrent_assertion_statement_test.cpp
  *
- *  Created on: 28.6.2018
+ *  Created on: 20.8.2018
  *      Author: olaf
  */
 
@@ -13,18 +13,21 @@
 
 #include <eda/vhdl/ast.hpp>
 
-#include <testsuite/data_set.hpp>
 #include <testsuite/vhdl_parser/rules.hpp>
 #include <testsuite/vhdl_parser/testing_parser.hpp>
-#include <testsuite/vhdl_parser/testing_util.hpp>
 #include <testsuite/vhdl_parser/testing_parser_grammar_hack.hpp>
+
+#include <testsuite/data_set.hpp>
+#include <testsuite/failure_diagnostic_fixture.hpp>
+
 #include <testsuite/namespace_alias.hpp>
 
 
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-BOOST_DATA_TEST_CASE( concurrent_assertion_statement,
+BOOST_DATA_TEST_CASE_F( testsuite::failure_diagnostic_fixture,
+    concurrent_assertion_statement,
     utf_data::make_delayed<testsuite::dataset_loader>( "test_case/concurrent_assertion_statement" ),
     input, expected, test_case_name)
 {
@@ -32,21 +35,18 @@ BOOST_DATA_TEST_CASE( concurrent_assertion_statement,
     auto const& parser = testsuite::vhdl_parser::concurrent_assertion_statement();
 
     using testsuite::vhdl_parser::util::testing_parser;
-    using testsuite::vhdl_parser::util::current_test_passing;
-    using testsuite::vhdl_parser::util::report_diagnostic;
 
     testing_parser<attribute_type> parse;
     auto [parse_ok, parse_result] = parse(input, parser, test_case_name);
 
     BOOST_TEST(parse_ok);
-    BOOST_REQUIRE_MESSAGE(parse_ok,
-        report_diagnostic(test_case_name, input, parse_result)
-    );
+    if (!current_test_passing()) {
+        failure_closure(test_case_name, input, parse_result);
+        return;
+    }
 
     BOOST_TEST(parse_result == expected, btt::per_element());
-    BOOST_REQUIRE_MESSAGE(current_test_passing(),
-        report_diagnostic(test_case_name, input, parse_result)
-    );
+    failure_closure(test_case_name, input, parse_result);
 }
 
 
