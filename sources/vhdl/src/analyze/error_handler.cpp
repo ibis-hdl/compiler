@@ -51,6 +51,8 @@ void error_handler<Iterator>::operator()(
 
     auto [error_first, error_last, valid] = iterators_of(where_tag);
 
+    boost::ignore_unused(valid);
+
     os << format(translate("in file {1}, line {2}:\n"))
           % file_name()
           % line_number(error_first)
@@ -111,7 +113,11 @@ void error_handler<Iterator>::operator()(
     	return util::make_iomanip([&](std::ostream& os) {
 			auto [first, last, valid] = iterators_of(tagged_node);
 			if (valid) {
-				iterator_type line_start = get_line_start(first);
+				/* FixMe: g++ (GCC) 7.3.0 on Windows triggers:
+				 * internal compiler error: in finish_member_declaration, at cp/semantics.c:2984
+				 * by use of ... = get_line_start(first), the simple below fixes
+				 * this  */
+				iterator_type line_start = position_cache.get_line_start(first);
 				os << current_line(line_start) << "\n"
 				   << indicator(line_start, first, last)
 				   << annotation;
@@ -121,6 +127,9 @@ void error_handler<Iterator>::operator()(
 
 
     auto [error_first, error_last, valid] = iterators_of(where_tag);
+
+    boost::ignore_unused(error_last);
+    boost::ignore_unused(valid);
 
     os << format(translate("in file {1}, line {2}:\n"))
           % file_name()
