@@ -198,8 +198,8 @@ void printer::operator()(architecture_body const &node)
         os << "\n";
     }
 
-    if(node.end_name) {
-        (*this)(*node.end_name);
+    if(node.end_identifier) {
+        (*this)(*node.end_identifier);
     }
 }
 
@@ -812,9 +812,9 @@ void printer::operator()(configuration_declaration const &node)
 
     (*this)(node.block_configuration);
 
-    if(node.end_label) {
+    if(node.end_identifier) {
         os << "\n";
-        (*this)(*node.end_label);
+        (*this)(*node.end_identifier);
     }
 }
 
@@ -1094,8 +1094,8 @@ void printer::operator()(entity_declaration const &node)
         os << "\n";
     }
 
-    if(node.name) {
-        (*this)(*node.name);
+    if(node.end_identifier) {
+        (*this)(*node.end_identifier);
     }
 }
 
@@ -1869,14 +1869,14 @@ void printer::operator()(package_body const &node)
     static char const symbol[]{ "package_body" };
     symbol_scope<package_body> _(*this, symbol);
 
-    (*this)(node.name);
+    (*this)(node.identifier);
     os << "\n";
 
     (*this)(node.declarative_part);
 
-    if(node.end_name) {
+    if(node.end_identifier) {
         os << "\n";
-        (*this)(*node.end_name);
+        (*this)(*node.end_identifier);
     }
 }
 
@@ -1907,9 +1907,9 @@ void printer::operator()(package_declaration const &node)
 
     (*this)(node.declarative_part);
 
-    if(node.end_label) {
+    if(node.end_identifier) {
         os << "\n";
-        (*this)(*node.end_label);
+        (*this)(*node.end_identifier);
     }
 }
 

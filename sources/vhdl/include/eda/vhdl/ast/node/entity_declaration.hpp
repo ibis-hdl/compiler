@@ -27,7 +27,7 @@ struct entity_declaration : position_tagged
     ast::entity_header                      header;
     ast::entity_declarative_part            declarative_part;
     optional<ast::entity_statement_part>    statement_part;
-    optional<ast::simple_name>              name;
+    optional<ast::simple_name>              end_identifier;
 };
 
 

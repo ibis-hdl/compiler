@@ -37,7 +37,7 @@ void error_handler<Iterator>::operator()(
 
     auto const iterators_of = [this](ast::position_tagged const& tagged_node) {
         auto range = position_cache.position_of(tagged_node);
-        return std::make_tuple(range.begin(), range.end(), true /* valid */);
+        return std::make_tuple((*range).begin(), (*range).end());
     };
 
     auto const indicator = [&](auto& start, auto& first, auto& last) {
@@ -49,9 +49,7 @@ void error_handler<Iterator>::operator()(
     };
 
 
-    auto [error_first, error_last, valid] = iterators_of(where_tag);
-
-    boost::ignore_unused(valid);
+    auto [error_first, error_last] = iterators_of(where_tag);
 
     os << format(translate("in file {1}, line {2}:\n"))
           % file_name()
@@ -94,11 +92,16 @@ void error_handler<Iterator>::operator()(
     cxx_assert(start_label.pos_id != ast::position_tagged::MAX_ID, "Node/StartLabel not tagged");
     cxx_assert(end_label.pos_id   != ast::position_tagged::MAX_ID, "Node/EndLabel not tagged");
 
-    // XXX handle label_match::result::ILLFORMED correct -> crash at this state
-
+    /* at ill-formed label pairs (e.g. end, but no start label given) nodes
+     * arn't tagged appropriate. */
     auto const iterators_of = [this](ast::position_tagged const& tagged_node) {
         auto range = position_cache.position_of(tagged_node);
-        return std::make_tuple(range.begin(), range.end(), true /* valid */);
+        if (range) {
+        	return std::make_tuple((*range).begin(), (*range).end(), true /* valid */);
+        }
+        else {
+        	return std::make_tuple(iterator_type{}, iterator_type{}, false /* not-valid */);
+        }
     };
 
     auto const indicator = [&](auto& start, auto& first, auto& last) {

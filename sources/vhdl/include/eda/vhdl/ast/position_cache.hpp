@@ -65,14 +65,13 @@ public:
 
 public:
     template <typename NodeT>
-    // XXX make optional<range_type> ???
-    range_type position_of(NodeT const& node) const
+    std::optional<range_type> position_of(NodeT const& node) const
     {
         if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
             return positions[node.pos_id];
         }
         else {
-            return range_type{};
+            return {};
         }
     }
 public:

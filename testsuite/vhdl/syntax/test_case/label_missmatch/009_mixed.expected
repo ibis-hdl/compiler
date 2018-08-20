@@ -1,0 +1,21 @@
+in file label_missmatch/009_mixed, line 4:
+Syntax ERROR: Label mismatch in entity_declaration
+entity testbench is
+       ~~~~~~~~~ <<-- here
+...
+end entity test_bench; -- testbench vs. test_bench
+           ~~~~~~~~~~ <<-- and here
+in file label_missmatch/009_mixed, line 7:
+Syntax ERROR: Label mismatch in architecture_body
+architecture BENCH of testbench is
+             ~~~~~ <<-- here
+...
+end architecture bench_test; -- BENCH vs. bench_test
+                 ~~~~~~~~~~ <<-- and here
+in file label_missmatch/009_mixed, line 11:
+Syntax ERROR: Label mismatch in process_statement
+  Stimuli: process
+  ~~~~~~~ <<-- here
+...
+end process Stim; -- Stimuli vs. Stim
+            ~~~~ <<-- and here

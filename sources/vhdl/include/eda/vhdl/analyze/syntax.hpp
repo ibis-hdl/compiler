@@ -40,11 +40,16 @@ public:
 	}
 
 public:
+    void operator()(ast::architecture_body const& node, std::string_view const& node_name) const;
     void operator()(ast::block_statement const& node, std::string_view const& node_name) const;
     void operator()(ast::case_statement const& node, std::string_view const& node_name) const;
+    void operator()(ast::configuration_declaration const& node, std::string_view const& node_name) const;
+    void operator()(ast::entity_declaration const& node, std::string_view const& node_name) const;
     void operator()(ast::generate_statement const& node, std::string_view const& node_name) const;
     void operator()(ast::if_statement const& node, std::string_view const& node_name) const;
     void operator()(ast::loop_statement const& node, std::string_view const& node_name) const;
+    void operator()(ast::package_body const& node, std::string_view const& node_name) const;
+    void operator()(ast::package_declaration const& node, std::string_view const& node_name) const;
     void operator()(ast::process_statement const& node, std::string_view const& node_name) const;
 
     template<typename NodeT>

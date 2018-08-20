@@ -26,7 +26,7 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::alias_declaration,
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::architecture_body,
-    identifier, entity_name, declarative_part, statement_part, end_name
+    identifier, entity_name, declarative_part, statement_part, end_identifier
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::assertion,
@@ -150,7 +150,7 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::condition_clause,
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::configuration_declaration,
-    identifier, entity_name, declarative_part, block_configuration, end_label
+    identifier, entity_name, declarative_part, block_configuration, end_identifier
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::configuration_specification,
@@ -198,7 +198,7 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::entity_aspect_configuration,
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::entity_declaration,
-    identifier, header, declarative_part, statement_part, name
+    identifier, header, declarative_part, statement_part, end_identifier
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::entity_designator,
@@ -342,11 +342,11 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::options,
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::package_body,
-    name, declarative_part, end_name
+    identifier, declarative_part, end_identifier
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::package_declaration,
-    identifier, declarative_part, end_label
+    identifier, declarative_part, end_identifier
 )
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::parameter_specification,

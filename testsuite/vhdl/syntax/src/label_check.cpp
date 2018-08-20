@@ -37,7 +37,8 @@ BOOST_AUTO_TEST_SUITE( syntax_labels )
 /*
  * SUCCESS test case
  */
-BOOST_DATA_TEST_CASE_F( testsuite::failure_diagnostic_fixture, labels_ok,
+BOOST_DATA_TEST_CASE_F( testsuite::failure_diagnostic_fixture,
+	labels_ok,
     utf_data::make_delayed<testsuite::dataset_loader>( "test_case/labels_ok" ),
     input, expected, test_case_name)
 {
@@ -74,7 +75,8 @@ BOOST_DATA_TEST_CASE_F( testsuite::failure_diagnostic_fixture, labels_ok,
 /*
  * FAILURE test case
  */
-BOOST_DATA_TEST_CASE_F( testsuite::failure_diagnostic_fixture, label_missmatch,
+BOOST_DATA_TEST_CASE_F( testsuite::failure_diagnostic_fixture,
+	label_missmatch,
     utf_data::make_delayed<testsuite::dataset_loader>( "test_case/label_missmatch" ),
     input, expected, test_case_name)
 {

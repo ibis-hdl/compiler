@@ -27,7 +27,7 @@ struct configuration_declaration : position_tagged
     ast::name                           entity_name;
     ast::configuration_declarative_part declarative_part;
     ast::block_configuration            block_configuration;
-    optional<ast::identifier>           end_label;
+    optional<ast::identifier>           end_identifier;
 };
 
 

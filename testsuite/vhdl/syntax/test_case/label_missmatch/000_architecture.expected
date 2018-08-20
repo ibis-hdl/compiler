@@ -1,0 +1,7 @@
+in file label_missmatch/000_architecture, line 7:
+Syntax ERROR: Label mismatch in architecture_body
+architecture BENCH of testbench is
+             ~~~~~ <<-- here
+...
+end architecture TEST_BENCH; -- BENCH vs. TEST_BENCH
+                 ~~~~~~~~~~ <<-- and here

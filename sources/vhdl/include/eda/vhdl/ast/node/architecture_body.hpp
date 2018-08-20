@@ -27,7 +27,7 @@ struct architecture_body : position_tagged
     ast::name                           entity_name;
     ast::architecture_declarative_part  declarative_part;
     ast::architecture_statement_part    statement_part;
-    optional<ast::identifier>           end_name;
+    optional<ast::identifier>           end_identifier;
 };
 
 

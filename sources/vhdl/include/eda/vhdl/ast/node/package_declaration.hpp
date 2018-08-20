@@ -25,7 +25,7 @@ struct package_declaration : position_tagged
 {
     ast::identifier                     identifier;
     ast::package_declarative_part       declarative_part;
-    optional<ast::identifier>           end_label;
+    optional<ast::identifier>           end_identifier;
 };
 
 

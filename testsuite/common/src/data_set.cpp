@@ -82,7 +82,7 @@ void dataset_loader::read_files(fs::path const& path)
                 if (fs::extension(file) == input_extension) {
 
                     testfile_name.emplace_back(
-                        (file.parent_path().filename() / file.stem()).string()
+                        (file.parent_path().filename() / file.stem()).generic_string()
                     );
                     cerr << "INFO: read " << file << "\n";
 

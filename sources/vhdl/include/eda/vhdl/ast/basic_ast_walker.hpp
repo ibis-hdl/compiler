@@ -164,8 +164,8 @@ public:
             (*this)(node.statement_part);
         }
 
-        if(node.end_name) {
-            (*this)(*node.end_name);
+        if(node.end_identifier) {
+            (*this)(*node.end_identifier);
         }
     }
 
@@ -677,7 +677,7 @@ public:
         static char const node_typename[]{ "configuration_declaration" };
         worker(node, node_typename);
 
-        (*this)(node.identifier);	// XXX HAS LABEL PAIR !!!
+        (*this)(node.identifier);
         (*this)(node.entity_name);
 
         if(!node.declarative_part.empty()) {
@@ -686,8 +686,8 @@ public:
 
         (*this)(node.block_configuration);
 
-        if(node.end_label) {
-            (*this)(*node.end_label);
+        if(node.end_identifier) {
+            (*this)(*node.end_identifier);
         }
     }
 
@@ -919,7 +919,7 @@ public:
         static char const node_typename[]{ "entity_declaration" };
         worker(node, node_typename);
 
-        (*this)(node.identifier); // XXX LABEL PAIR
+        (*this)(node.identifier);
 
         if(node.header.formal_generic_clause || node.header.formal_port_clause) {
             (*this)(node.header);
@@ -933,8 +933,8 @@ public:
             (*this)(*node.statement_part);
         }
 
-        if(node.name) {
-            (*this)(*node.name);
+        if(node.end_identifier) {
+            (*this)(*node.end_identifier);
         }
     }
 
@@ -1639,11 +1639,11 @@ public:
         static char const node_typename[]{ "package_body" };
         worker(node, node_typename);
 
-        (*this)(node.name);
+        (*this)(node.identifier);
         (*this)(node.declarative_part);
 
-        if(node.end_name) {
-            (*this)(*node.end_name);
+        if(node.end_identifier) {
+            (*this)(*node.end_identifier);
         }
     }
 
@@ -1675,8 +1675,8 @@ public:
 
         (*this)(node.declarative_part);
 
-        if(node.end_label) {
-            (*this)(*node.end_label);
+        if(node.end_identifier) {
+            (*this)(*node.end_identifier);
         }
     }
 

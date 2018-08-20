@@ -1,4 +1,4 @@
-in file label_missmatch/000_process, line 11:
+in file label_missmatch/003_process, line 11:
 Syntax ERROR: Label mismatch in process_statement
   Stimulus: process
   ~~~~~~~~ <<-- here

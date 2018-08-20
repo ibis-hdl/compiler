@@ -21,9 +21,9 @@ namespace eda { namespace vhdl { namespace ast {
 
 struct package_body : position_tagged
 {
-    ast::identifier                     name;
+    ast::identifier                     identifier;
     ast::package_body_declarative_part  declarative_part;
-    optional<ast::identifier>           end_name;
+    optional<ast::identifier>           end_identifier;
 };
 
 
