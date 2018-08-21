@@ -13,6 +13,11 @@
 #include <iostream>
 
 
+//https://en.cppreference.com/w/cpp/utility/variant/visit
+template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
+template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
+
+
 namespace eda {
 
 
@@ -23,43 +28,33 @@ void settings::dump(std::ostream& os) const
 	using pair_type = std::pair<key_type, value_type>;
 	using vector_type = std::vector<pair_type>;
 
-	vector_type vec{};
-	vec.reserve(map.size());
-	vec.insert(vec.begin(), map.begin(), map.end());
+	vector_type vec{map.begin(), map.end()};
 
 	std::sort(vec.begin(), vec.end(), [](pair_type const& p1, pair_type const& p2) {
         return util::icompare_less(p1.first, p2.first);
         });
 
     os << "(settings [N=" << vec.size() << "]\n";
-	for (auto const& [option_name, val] : vec) {
-		if (val) {
-			os << "    (" << option_name << " = " << *val << ")\n";
-		}
-		else {
-			os << "    (" << option_name << " = " << "Invalid Value" << ")\n";
-		}
-	}
+    for (auto const& [option_name, val] : vec) {
+        os << "    " << option_name << ": ";
+		std::visit(overloaded {
+			[&os](std::monostate) { os << "N/A"; },
+			[&os](bool v) { os << std::boolalpha << v; },
+			[&os](long v) { os << v; },
+			[&os](std::string const& v) { os <<v; },
+			[&os](std::vector<std::string> const& v) {
+				for (auto const& e : v) {
+					os << e << ", ";
+				}
+			},
+		}, val);
+        os << "\n";
+    }
     os << ")\n";
 }
 
 
-void settings::option_trigger::update(settings& settings)
-{
-    for(auto [primary_option, secondary_options] : trigger) {
-
-    	// add to map only if primary_option is given
-    	if (!settings[trim(primary_option)]) {
-    		continue;
-    	}
-
-    	for(auto option : secondary_options) {
-    		settings.set(option) = "true";
-        }
-    }
-}
-
-
 const settings::option_value settings::none;
+
 
 } // namespace eda

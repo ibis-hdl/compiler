@@ -9,12 +9,13 @@
 #define SOURCES_COMMON_INCLUDE_EDA_SETTINGS_HPP_
 
 #include <unordered_map>
+#include <variant>
 #include <string>
-#include <optional>
+#include <string_view>
 #include <vector>
+
 #include <iosfwd>
 
-#include <iostream>
 
 namespace eda {
 
@@ -24,27 +25,67 @@ namespace eda {
  *
  * Example:
  * \code
- * settings config;
- * option_trigger trigger;
+ * setting config;
  *
- * trigger.add("-Wall", { "-Wunused", "-Wother" });
+ * config.set("-Fbool", true);
+ * config.set("-Fstrg", std::string{"string"});
+ * config.set("-Fvec", std::vector<std::string>{"foo", "bar"});
+ *
+ * setting::option_trigger trigger;
+ * trigger.add("-Fbool", {"-fFoo", "-Fbar"});
  * trigger.update(config);
+ *
  * config.dump(std::cout);
  *
- *  auto const o = config("-Wall");
- *  std::cout << Warning All: ";
- *  if (o) { std::cout << "<< *o << "\n"; }
- '  else  {  std::cout << "" << "false\n";}
+ * if (config["-Fbool"]) {
+ *     std::cout << "Yeah, -Fbool is active\n";
+ * }
+ *
+ * if (config.exist("-Fstrg")) {
+ *     std::cout << "-Fstring: " << config["-Fstrg"].get<std::string>() << "\n";
+ * }
  * \endcode
  *
- * \see Concept on [Wandbox](https://wandbox.org/permlink/0NrHlKXbw77zAOn0)
+ * \see Concept on [Wandbox](https://wandbox.org/permlink/4rfFaViNE5tGZg4v)
  */
 class settings
 {
 public:
-    typedef std::optional<std::string> 				option_value;
+    typedef std::variant<
+        std::monostate,
+        bool,
+        long,
+        std::string,
+        std::vector<std::string>
+    >                               				option_value;
 
     class option_trigger;
+
+	struct option_value_proxy
+	{
+		option_value_proxy(settings::option_value const& option_value_)
+		: option_value{ option_value_ }
+		{}
+
+		option_value_proxy() = delete;
+		option_value_proxy(option_value_proxy const&) = delete;
+		option_value_proxy& operator=(option_value_proxy const&) = delete;
+
+		operator bool() const {
+			if (std::holds_alternative<bool>(option_value)) {
+				return std::get<bool>(option_value);
+			}
+			return false;
+		}
+
+		template<typename T>
+		T const& get() const {
+            // bad_variant_access thrown on invalid accesses to the value
+			return std::get<T>(option_value);
+		}
+
+		settings::option_value const&            	option_value;
+	};
 
 public:
     settings() = default;
@@ -56,18 +97,18 @@ public:
 	 * Return the value as std::optional<> of the defined option.
 	 *
 	 * \param  option_name  The name of the option to lookup in the trimmed form.
-	 * \return config_value If the option has been defined before, the value
+	 * \return proxy        If the option has been defined before, the value
 	 *                      as reference to optional<string>, otherwise to an
 	 *                      empty optional<>.
 	 */
-    option_value const& operator[](std::string const& option_name) const {
-
-    	map_type& map_ = const_cast<map_type&>(this->map);
-
+    option_value_proxy operator[](std::string const& option_name) const {
+        map_type& map_ = const_cast<map_type&>(this->map);
         if (exist(option_name)) {
-            return map_[option_name];
+            return option_value_proxy{ map_[option_name] };
         }
-        return none;
+        else {
+            return option_value_proxy{ none };
+        }
     }
 
 
@@ -81,9 +122,10 @@ public:
      * \param  option_name  The name of the option to lookup in the trimmed form.
      * \return config_value The value as reference to optional<string>.
      */
-    option_value& set(std::string const& option_name) {
-
-        return map[trim(option_name)];
+    template<typename T>
+    void set(std::string const& option_name, T&& value) {
+        //map[trim(option_name)].emplace<T>(std::forward<T>(value));
+    	map[trim(option_name)] = std::forward<T>(value);
     }
 
 
@@ -97,6 +139,7 @@ public:
     	return map.count(option_name) > 0;
     }
 
+
     /**
      * Dump the configuration stored in sorted form
      * \param os The ostream to dump.
@@ -106,20 +149,20 @@ public:
 private:
     /** Trim leading '--' chars from key. */
     static  inline
-    std::string trim(std::string const& key) {
+    std::string trim(std::string_view key) {
 
         // FixMe: C++20 starts_with()
-        std::string const prefix{ "--" };
+        std::string_view const prefix{ "--" };
         if(key.substr(0, prefix.size()) == prefix) {
-            return key.substr(prefix.size());
+            return std::string{ key.substr(prefix.size()) };
         }
-        return key;
+        return std::string{ key };
     }
 
 private:
     typedef std::unordered_map<std::string, option_value> map_type;
-    map_type                                        map;
-    static const option_value                       none;
+    map_type                        				map;
+    static const option_value       				none;
 };
 
 
@@ -150,7 +193,16 @@ public:
      *
      * \param config The configuration map.
      */
-    void update(settings& config);
+    void update(settings& config) const {
+        for (auto const& [primary_option, secondary_options] : trigger) {
+			if (!config.exist(trim(primary_option))) {
+				continue;
+			}
+			for(auto const& option : secondary_options) {
+				config.set(option, true);
+			}
+        }
+    }
 };
 
 

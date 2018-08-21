@@ -68,17 +68,17 @@ void init::parse_env()
 
     // pure ENV name used for configuration
     auto const set_option = [&](std::string const& env_name) {
-        std::string const env_var{ getenv(env_name) };
+        std::string env_var{ getenv(env_name) };
         if (!env_var.empty()) {
-        	setting.set(env_name) = env_var;
+        	setting.set(env_name, std::string{env_var});
         }
     };
 
     // key used for configuration to allow overriding them on command line
     auto const set_option_key = [&](std::string const& env_name, std::string const& key_name) {
-        std::string const env_var{ getenv(env_name) };
+        std::string env_var{ getenv(env_name) };
         if (!env_var.empty()) {
-        	setting.set(key_name) = env_var;
+        	setting.set(key_name, std::string{env_var});
         }
     };
 
@@ -204,14 +204,14 @@ bool init::eval_doccpp_option(std::string const& key, docopt::value const& value
     	if (value_ && !value_.asBool()) {
     		return;
     	}
-    	setting.set(key_) = "true";
+    	setting.set(key_, true);
 	};
 
 	auto const set_string = [&](auto const& key_, auto const& value_) {
     	if (!value_ || !value_.isString()) {
     		return;
     	}
-    	setting.set(key_) = value_.asString();
+    	setting.set(key_, std::string{value_.asString()});
 	};
 
 	// Analyze and set options

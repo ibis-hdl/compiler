@@ -28,7 +28,7 @@ namespace eda { namespace util {
 
 file_loader::file_loader(std::ostream& os_, eda::settings const& setting)
 : os { os_ }
-, quiet{   [&]{ if (setting["quiet"])   return true; else return false; }() }
+, quiet{   [&]{ if (setting["quiet"]) return true; else return false; }() }
 { }
 
 
