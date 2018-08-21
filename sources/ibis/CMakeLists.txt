@@ -18,7 +18,6 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
 
 
 target_sources(${PROJECT_NAME} PRIVATE
-    src/docopt_inst.cpp
     src/main.cpp
     src/signal.cpp
     src/init.cpp
@@ -28,17 +27,11 @@ target_sources(${PROJECT_NAME} PRIVATE
 
 
 ##
-# DocOpt++
-# parsing command line 
-include(external_docopt_cpp)
-include_directories(${DOCOPT_CPP_DIR})
-
-
-##
 # RapidJSON
 include(external_json)
 add_dependencies(${PROJECT_NAME} RapidJSON)
 include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_SOURCE_DIR}/external/CLI
     ${RapidJSON_INCLUDE_DIR}
 )
 
@@ -46,7 +39,6 @@ include_directories(${PROJECT_NAME} PRIVATE
 target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
-    PRIVATE ${DOCOPT_CPP_DIR}
 )
 
 
@@ -79,11 +71,6 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQ
     )
 endif()
 
-
-
-##
-# DocOpt++
-add_dependencies(${PROJECT_NAME} docopt_cpp)
 
 
 ## 

@@ -43,7 +43,7 @@ int main(int argc, const char *argv[])
         std::cerr << color::message::note("NOTE") <<  " Format Test\n";
 #endif
 
-        for (auto const& filename : init.file_list()) {
+        for (auto const& filename : setting["files"].get<std::vector<std::string>>()) {
             auto const contents = file_reader.read_file(filename);
             if (!setting["quiet"]) {
             	std::cerr << color::message::note("processing:") << " " << filename << "\n";

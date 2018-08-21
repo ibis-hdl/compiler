@@ -124,8 +124,9 @@ public:
      */
     template<typename T>
     void set(std::string const& option_name, T&& value) {
-        //map[trim(option_name)].emplace<T>(std::forward<T>(value));
-    	map[trim(option_name)] = std::forward<T>(value);
+    	using type = std::remove_reference_t<T>;
+    	map[trim(option_name)].emplace<type>(std::move(value));
+    	//map[trim(option_name)] = std::forward<type>(value);
     }
 
 

@@ -15,9 +15,7 @@
 
 #include <eda/support/boost/locale.hpp>
 
-#include <eda/compiler/warnings_off.hpp>
-#include <docopt.h>
-#include <eda/compiler/warnings_on.hpp>
+#include <CLI/CLI11.hpp>
 
 #include <eda/util/file/user_home.hpp>
 #include <eda/util/file/file_reader.hpp>
@@ -47,89 +45,22 @@ extern bool register_gdb_signal_handler();
 namespace ibis {
 
 
+static const char VERSION_STR[] = "EDA/ibis 0.0.1";
+static const char EDA_URL[] = "https://github.com/eda/ibis";
+
+
 init::init(int argc, const char* argv[], eda::settings& setting_)
 : setting{ setting_ }
 {
-	register_signal_handlers();
+    register_signal_handlers();
 
-	parse_env();
-	parse_cli(argc, argv);
+    parse_cli(argc, argv);
 
-	user_config_message_color();
+    user_config_message_color();
 }
 
+struct Formatter : public CLI::Formatter { };
 
-void init::parse_env()
-{
-    auto const getenv = [](std::string const& key) {
-        char const* val = std::getenv( key.c_str() );
-        return val == nullptr ? std::string{} : std::string(val);
-    };
-
-    // pure ENV name used for configuration
-    auto const set_option = [&](std::string const& env_name) {
-        std::string env_var{ getenv(env_name) };
-        if (!env_var.empty()) {
-        	setting.set(env_name, std::string{env_var});
-        }
-    };
-
-    // key used for configuration to allow overriding them on command line
-    auto const set_option_key = [&](std::string const& env_name, std::string const& key_name) {
-        std::string env_var{ getenv(env_name) };
-        if (!env_var.empty()) {
-        	setting.set(key_name, std::string{env_var});
-        }
-    };
-
-    set_option("HOME");
-    set_option_key("EDA_LIBPATH", "libpath");	// overridable by cmd line
-}
-
-
-static const char VERSION_STR[] = "EDA/ibis 0.0.1";
-static const char USAGE[] =
-R"(EDA/ibis
-
-Usage:
-  ibis [-a] [-q|-v]
-       [--libpath=<path>]
-       [--no-color | --force-color]
-       [--Wall --Wunused --Wother] 
-       <file> ...
-  ibis (-h | --help)
-  ibis --version
-
-Arguments:
-  <file>                One or more file(s).
-
-Settings:
-  --libpath=<path>      Path to libraries.
-
-Options:
-  -a --analyse          Analyse.
-  -h --help             Show this screen.
-  --version             Show version.
-
-Message Options:
-  -q --quiet            Print less text.
-                        [default: false]
-  -v --verbose          Print more text.
-                        [default: false]
-  --no-color            Don't render messages using colors. On output 
-                        redirection no colors are used.
-                        [default: false]
-  --force-color         Even on redirected output enforce the rendering of 
-                        messages using colors. On Windows, ANSII support must 
-                        be compiled into.
-                        [default: false]
-
-Warning Options:
-  --Wall                Warn all.
-  --Wunused             Warn on unused.
-  --Wother              Warn for others.
-)";
-// ------+---------+---------+---------+---------+---------+---------+---------| 80
 
 void init::parse_cli(int argc, const char* argv[])
 {
@@ -138,139 +69,123 @@ void init::parse_cli(int argc, const char* argv[])
     using boost::locale::format;
     using boost::locale::translate;
 
-    std::vector<std::string> const args{argv + 1, argv + argc};
+    CLI::App app{VERSION_STR};
 
-#if 0
-    auto const print_args = [](std::ostream& os, std::vector<std::string> const& args) {
-		os << "(command line user argument(s) [N=" << args.size() << "]\n";
-		std::copy(args.begin(), args.end(), std::ostream_iterator<std::string>(std::cout, "\n"));
-        os << ")\n";
-    };
+    auto fmt = std::make_shared<Formatter>();
+    fmt->column_width(40);
+    app.formatter(fmt);
 
-    print_args(std::cout, args);
-#endif
+    app.footer((format(translate(
+		"\n"
+		"Report bugs to {1}")) % EDA_URL).str());
+
+    // defaults
+	std::vector<std::string> files;
+	std::string lib_path;
+    unsigned tab_size{ 4 };
 
     try {
-        std::map<std::string, value> arg_map = docopt_parse(USAGE, args);
+		// Primary Options
+		app.add_option("files", files,
+			translate("One or more VHDL file(s)."))
+			->required()
+			->check(CLI::ExistingFile);
 
-        for (auto const& [key, value] : arg_map) {
-        	if (!eval_doccpp_option(key, value)) {
-                std::cout << USAGE << std::endl;
-                std::exit(EXIT_FAILURE);
-        	}
+		app.add_flag("--version",
+			translate("Show version."));
+
+		// Working/Processing flags
+		app.add_flag("-a,--analyze",
+			translate("Analyze the design."));
+
+		app.add_option("--lib-path", lib_path,
+			translate("Path to libraries."))
+			->group("Paths")
+			->envname("EDA_LIBPATH")->take_last()
+			->check(CLI::ExistingDirectory);
+
+		// Message Options
+		app.add_flag("-q,--quiet",
+			translate("Print less text."))
+			->group("Message Options");
+		app.add_flag("-v,--verbose",
+			translate("Print more text."))
+			->group("Message Options")
+			->excludes("--quiet");
+		app.add_flag("--no-color",
+			translate("Don\'t render messages using colors. On output redirection "
+					  "no colors are used."))
+			->group("Message Options");
+		app.add_flag("--force-color",
+			translate("Even on redirected output enforce the rendering of messages "
+					  "using colors."))
+			->group("Message Options")
+			->excludes("--no-color");
+		app.add_option("--tab-size", tab_size,
+			translate("Tabulator size, affects printing source snippet on error printing."), true)
+			->group("Message Options")
+			->check(CLI::Range(1, 10));
+
+		// Warning Options
+		app.add_flag("--Wall",
+			translate("Warn all."))
+			->group("Warning Options");
+		app.add_flag("--Wunused",
+			translate("Warn on unused."))
+			->group("Warning Options");
+		app.add_flag("--Wother",
+			translate("Warn for others."))
+			->group("Warning Options");
+    }
+    catch(CLI::Error const& e) {
+    	std::cerr << "Internal CLI source code error\n"; // XXX
+    	std::exit(app.exit(e));
+    }
+
+    // CLI parse
+    try {
+        app.parse(argc, argv);
+    } catch (CLI::ParseError const& e) {
+        std::exit(app.exit(e));
+    }
+
+    if (app.count("--version")) {
+        std::cout << VERSION_STR << "\n";
+        std::exit(EXIT_SUCCESS);
+    }
+
+    // .. and evaluate
+    auto const set_flag = [&](std::string const& flag, bool value = true) {
+        if (app.count(flag)) {
+            setting.set(flag, value);
         }
+    };
 
-        // set secondary triggered options
-        eda::settings::option_trigger trigger;
+    // secondary triggered options
+    eda::settings::option_trigger trigger_flags;
+    trigger_flags.add("--Wall", { "--Wunused", "--Wother" });
 
-        trigger.add("--Wall", { "--Wunused", "--Wother" });
-        trigger.update(setting);
-    }
-    catch (DocoptExitHelp const&) {
-        std::cout << USAGE << std::endl;
-        std::exit(EXIT_SUCCESS);
-    }
-    catch (DocoptExitVersion const&) {
-        std::cout << VERSION_STR << std::endl;
-        std::exit(EXIT_SUCCESS);
-    }
-    catch (DocoptLanguageError const& error) {
-        std::cerr << format(translate(
-                     "Command line arguments could not be parsed: {1}\n"))
-                      % error.what();
-        std::cout << USAGE << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
-    catch (DocoptArgumentError const& error) {
-        std::cerr << format(translate(
-                     "DocOpt++ argument error: {1}\n"))
-                      % error.what();
-        std::cout << USAGE << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
-}
+    // Primary Options
+    setting.set("--files", files);
+    setting.set("--lib-path", lib_path);
 
+    // Working/Processing flags
+    set_flag("--analyze");
 
-bool init::eval_doccpp_option(std::string const& key, docopt::value const& value)
-{
-	//std::cout << "eval docopt++ option: " << key << " : " << value << "\n";
+    // Message Options
+    set_flag("--quiet");
+    set_flag("--verbose");
+    set_flag("--no-color");
+    set_flag("--force-color");
+    setting.set<long>("--tab-size", tab_size);
 
-	auto const match = [](std::string const& key_, std::initializer_list<const char*> primary) {
-		return std::any_of(primary.begin(), primary.end(),
-		                   [&](const char* other){ return key_.compare(other) == 0; });
-	};
+    // Warning Options
+    set_flag("--Wall");
+    set_flag("--Wunused");
+    set_flag("--Wother");
 
-	auto const set_bool = [&](auto const& key_, auto const& value_) {
-    	if (value_ && !value_.asBool()) {
-    		return;
-    	}
-    	setting.set(key_, true);
-	};
-
-	auto const set_string = [&](auto const& key_, auto const& value_) {
-    	if (!value_ || !value_.isString()) {
-    		return;
-    	}
-    	setting.set(key_, std::string{value_.asString()});
-	};
-
-	// Analyze and set options
-
-    if (match(key, { "<file>" })) {
-
-    	std::vector<std::string> const& file_list = value.asStringList();
-
-    	using eda::util::file_loader;
-    	file_loader file_check{ std::cerr, setting };
-
-    	// early check to avoid aborting due to missing/duplicate files later on
-    	if (!file_check.unique_files(file_list)) {
-    		// immediately exit, no usage info wanted by caller
-    		std::exit(EXIT_FAILURE);
-    	}
-
-    	// XXX variant required !!!
-    	// config.set(key) = file_list;
-    	sourcefile_list = file_list;
-    }
-
-    if (match(key, { "--analyse" })) {
-    	set_bool(key, value);
-    }
-
-    if (match(key, { "--quiet", "--verbose" })) {
-    	set_bool(key, value);
-    }
-
-    if (match(key, { "--libpath" })) {
-        set_string(key, value);
-    }
-
-    if (match(key, { "--no-color" })) {
-    	set_bool(key, value);
-    }
-
-    if (match(key, { "--force-color" })) {
-#if BOOST_OS_WINDOWS && !EDA_ON_WINDOWS_USE_ANSII_COLOR
-    	if (!value.asBool()) {
-    		return true;
-    	}
-
-    	using eda::color::message::warning;
-    	std::cerr << warning("Warning: Using Window's Console I/O prevents "
-    			             "redirection of colored messages")
-    			  << "; ignore '--force-color'"
-				  << "\n";
-#else
-    	set_bool(key, value);
-#endif
-    }
-
-    if (match(key, { "--Wall", "--Wunused", "--Wother" })) {
-        set_bool(key, value);
-    }
-
-    return true;
+    // update triggered flags
+    trigger_flags.update(setting);
 }
 
 
@@ -314,7 +229,7 @@ void init::user_config_message_color()
     }();
 
 
-	static const char default_cfg_json[] = R"({
+    static const char default_cfg_json[] = R"({
   "message": {
     "failure": {
       "style": {
@@ -342,91 +257,91 @@ void init::user_config_message_color()
   }
 })";
 
-	using namespace eda;
-	namespace rjson = rapidjson;
+    using namespace eda;
+    namespace rjson = rapidjson;
 
-	auto const parse_json = [&quiet](char const* json) { // maybe throw to get path printed??
-		rjson::Document document;
-	    if (document.Parse(json).HasParseError()) {
-	    	if (!quiet) {
-				std::cerr << eda::color::message::error("Error:")
-						  << " parsing JSON configuration file: "
-						  << rjson::GetParseError_En(document.GetParseError())
-						  << "(offset " << document.GetErrorOffset() << ")\n";
-	    	}
-	    }
-	    return document;
-	};
+    auto const parse_json = [&quiet](char const* json) { // maybe throw to get path printed??
+        rjson::Document document;
+        if (document.Parse(json).HasParseError()) {
+            if (!quiet) {
+                std::cerr << eda::color::message::error("Error:")
+                          << " parsing JSON configuration file: "
+                          << rjson::GetParseError_En(document.GetParseError())
+                          << "(offset " << document.GetErrorOffset() << ")\n";
+            }
+        }
+        return document;
+    };
 
-	rjson::Document config = parse_json(default_cfg_json);
+    rjson::Document config = parse_json(default_cfg_json);
 
-	// load user settings if exists and merge them into defaults
+    // load user settings if exists and merge them into defaults
 
-	fs::path json_path = util::user_home({".eda"}) / "config.json";
+    fs::path json_path = util::user_home({".eda"}) / "config.json";
 
-	util::file_loader file_reader{ std::cerr, setting };
-	auto const json_txt = file_reader.read_file(json_path);
+    util::file_loader file_reader{ std::cerr, setting };
+    auto const json_txt = file_reader.read_file(json_path);
 
-	if (json_txt) {
-		rjson::Document user_config = parse_json((*json_txt).c_str());
-		merge(config, user_config);
-	}
-	else{ /* nothing */ }
+    if (json_txt) {
+        rjson::Document user_config = parse_json((*json_txt).c_str());
+        merge(config, user_config);
+    }
+    else{ /* nothing */ }
 
-	if (verbose) {
-		std::cerr << eda::color::message::note("Note:")
-				  << " Using message color defaults:\n";
-		auto const print_json = [](auto const& doc) {
-			rjson::StringBuffer str_buff;
-			rjson::PrettyWriter<rjson::StringBuffer> writer(str_buff);
-			doc.Accept(writer);
-			::puts(str_buff.GetString());
-		};
-		print_json(config);
-	}
+    if (verbose) {
+        std::cerr << eda::color::message::note("Note:")
+                  << " Using message color defaults:\n";
+        auto const print_json = [](auto const& doc) {
+            rjson::StringBuffer str_buff;
+            rjson::PrettyWriter<rjson::StringBuffer> writer(str_buff);
+            doc.Accept(writer);
+            ::puts(str_buff.GetString());
+        };
+        print_json(config);
+    }
 
     auto const get_formatter = [&](char const json_ptr[]) {
 
-    	using namespace eda::color::message;
-		eda::color::printer format;
+        using namespace eda::color::message;
+        eda::color::printer format;
 
-		if (rjson::Value* style = rjson::GetValueByPointer(config, rjson::Pointer(json_ptr))) {
-			for (auto const& object : style->GetObject()) {
-				auto const name = object.name.GetString();
-				auto const attr_name = object.value.GetString();
+        if (rjson::Value* style = rjson::GetValueByPointer(config, rjson::Pointer(json_ptr))) {
+            for (auto const& object : style->GetObject()) {
+                auto const name = object.name.GetString();
+                auto const attr_name = object.value.GetString();
 
-				auto const update_format = [&](char const attr_name[], auto const attribute_getter) {
-					auto const attr{ attribute_getter(attr_name) };
-					if (attr) {
-						format |= *attr;
-						if (verbose) {
-							std::cerr << note("NOTE:") << " using "
-									   << json_ptr << "/" << name << " = " << attr_name << "\n";
-						}
-					}
-					else{
-						if (!quiet) {
-							std::cerr << warning("WARNING:") << " Ignore invalid "
-									  << json_ptr << "/" << name << " = " << attr_name << "\n";
-						}
-					}
-				};
+                auto const update_format = [&](char const attr_name[], auto const attribute_getter) {
+                    auto const attr{ attribute_getter(attr_name) };
+                    if (attr) {
+                        format |= *attr;
+                        if (verbose) {
+                            std::cerr << note("NOTE:") << " using "
+                                       << json_ptr << "/" << name << " = " << attr_name << "\n";
+                        }
+                    }
+                    else{
+                        if (!quiet) {
+                            std::cerr << warning("WARNING:") << " Ignore invalid "
+                                      << json_ptr << "/" << name << " = " << attr_name << "\n";
+                        }
+                    }
+                };
 
-				if (util::icompare(name, "text")) {
-					update_format(attr_name, &color::text_attr);
-					continue;
-				}
-				if (util::icompare(name, "foreground")) {
-					update_format(attr_name, &color::foreground_attr);
-					continue;
-				}
-				if (util::icompare(name, "background")) {
-					update_format(attr_name, &color::background_attr);
-					continue;
-				}
-			}
-		}
-		return format;
+                if (util::icompare(name, "text")) {
+                    update_format(attr_name, &color::text_attr);
+                    continue;
+                }
+                if (util::icompare(name, "foreground")) {
+                    update_format(attr_name, &color::foreground_attr);
+                    continue;
+                }
+                if (util::icompare(name, "background")) {
+                    update_format(attr_name, &color::background_attr);
+                    continue;
+                }
+            }
+        }
+        return format;
     };
 
 
@@ -437,30 +352,30 @@ void init::user_config_message_color()
 
     auto const failure_format = get_formatter("/message/failure/style");
     imbue(std::cerr, std::make_unique<color::message::failure_facet>(
-    	failure_format,
-		color::color_off,
-		force_color)
+        failure_format,
+        color::color_off,
+        force_color)
     );
 
     auto const error_format = get_formatter("/message/error/style");
     imbue(std::cerr, std::make_unique<color::message::error_facet>(
-    	error_format,
-		color::color_off,
-		force_color)
+        error_format,
+        color::color_off,
+        force_color)
     );
 
     auto const warning_format = get_formatter("/message/warning/style");
     imbue(std::cerr, std::make_unique<color::message::warning_facet>(
-    	warning_format,
-		color::color_off,
-		force_color)
+        warning_format,
+        color::color_off,
+        force_color)
     );
 
     auto const note_format = get_formatter("/message/note/style");
     imbue(std::cerr, std::make_unique<color::message::note_facet>(
-    	note_format,
-		color::color_off,
-		force_color)
+        note_format,
+        color::color_off,
+        force_color)
     );
 }
 

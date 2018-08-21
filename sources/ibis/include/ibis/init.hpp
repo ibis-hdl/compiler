@@ -37,9 +37,7 @@ public:
 	}
 
 private:
-	void parse_env();
 	void parse_cli(int argc, const char* argv[]);
-	bool eval_doccpp_option(std::string const& key, docopt::value const& value);
     void register_signal_handlers();
     void user_config_message_color();
 
