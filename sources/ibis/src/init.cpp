@@ -82,7 +82,15 @@ void init::parse_cli(int argc, const char* argv[])
     // defaults
 	std::vector<std::string> files;
 	std::string lib_path;
-    unsigned tab_size{ 4 };
+
+	struct {
+		unsigned tab_size = 4;
+		unsigned error_limit = 20;
+	} preset;
+
+	// As idea \see
+	// [What do the -f and -m in gcc/clang compiler options stand for](
+    // https://stackoverflow.com/questions/16227501/what-do-the-f-and-m-in-gcc-clang-compiler-options-stand-for)
 
     try {
 		// Primary Options
@@ -96,13 +104,13 @@ void init::parse_cli(int argc, const char* argv[])
 
 		// Working/Processing flags
 		app.add_flag("-a,--analyze",
-			translate("Analyze the design."));
+			translate("Analyze the design.")); // XXX preventive added, unused
 
 		app.add_option("--lib-path", lib_path,
 			translate("Path to libraries."))
 			->group("Paths")
 			->envname("EDA_LIBPATH")->take_last()
-			->check(CLI::ExistingDirectory);
+			->check(CLI::ExistingDirectory); // XXX preventive added, unused
 
 		// Message Options
 		app.add_flag("-q,--quiet",
@@ -121,10 +129,10 @@ void init::parse_cli(int argc, const char* argv[])
 					  "using colors."))
 			->group("Message Options")
 			->excludes("--no-color");
-		app.add_option("--tab-size", tab_size,
+		app.add_option("--tab-size", preset.tab_size,
 			translate("Tabulator size, affects printing source snippet on error printing."), true)
 			->group("Message Options")
-			->check(CLI::Range(1, 10));
+			->check(CLI::Range(1u, 10u)); // XXX unused in misc. error_handler.cpp
 
 		// Warning Options
 		app.add_flag("--Wall",
@@ -136,9 +144,15 @@ void init::parse_cli(int argc, const char* argv[])
 		app.add_flag("--Wother",
 			translate("Warn for others."))
 			->group("Warning Options");
+
+		// Options to Control Error and Warning Messages Flags
+		app.add_option("--ferror-limit", preset.error_limit,
+			translate("Limit emitting diagnostics, can be disabled with --ferror-limit=0."), true)
+			->group("Error/Warning Message Control Options"); // XXX unused in context.cpp
     }
     catch(CLI::Error const& e) {
-    	std::cerr << "Internal CLI source code error\n"; // XXX
+    	std::cerr << translate("Internal CLI11 parser code error. Please fill a bug report")
+    			  << std::endl;
     	std::exit(app.exit(e));
     }
 
@@ -167,7 +181,7 @@ void init::parse_cli(int argc, const char* argv[])
 
     // Primary Options
     setting.set("--files", files);
-    setting.set("--lib-path", lib_path);
+    if (!lib_path.empty()) {  setting.set("--lib-path", lib_path); }
 
     // Working/Processing flags
     set_flag("--analyze");
@@ -177,12 +191,16 @@ void init::parse_cli(int argc, const char* argv[])
     set_flag("--verbose");
     set_flag("--no-color");
     set_flag("--force-color");
-    setting.set<long>("--tab-size", tab_size);
+    setting.set<long>("--tab-size", preset.tab_size);
 
     // Warning Options
     set_flag("--Wall");
     set_flag("--Wunused");
     set_flag("--Wother");
+
+	// Options to Control Error and Warning Messages Flags
+    setting.set<long>("--ferror-limit", preset.error_limit);
+
 
     // update triggered flags
     trigger_flags.update(setting);

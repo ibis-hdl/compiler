@@ -89,6 +89,18 @@ std::ostream& operator<<(std::ostream& os, basic_counter<Tag> const& counter) {
 
 /**
  * The VHDL context used for analyze and elaboration
+ *
+ * The error_count will throw if the limit of errors is reached:
+ * \code
+ * try {
+ *    ... // analyse
+ * }
+ * catch(context::error_counter::overflow const&) {
+ *     std::cerr << "fatal error: too many errors emitted, stopping now "
+ *               << "[-ferror-limit=]"
+ *     // ...
+ * }
+ * \endcode
  */
 struct context {
 
