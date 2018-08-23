@@ -9,7 +9,7 @@
 # new behavior of VERSION variable handled by cmake's PROJECT, see
 # cmake --help-policy CMP0048
 cmake_policy(SET CMP0048 NEW)           
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.12)
 
 project(eda VERSION 0.0.1 LANGUAGES CXX)
 
@@ -75,6 +75,7 @@ set(LIBRARY_OUTPUT_PATH         ${CMAKE_BINARY_DIR})
 add_subdirectory(sources/common)
 add_subdirectory(sources/vhdl)
 add_subdirectory(sources/ibis)
+add_subdirectory(l10n)
 if (EDA_BUILD_TESTS)
     enable_testing()
     add_subdirectory(testsuite/common)

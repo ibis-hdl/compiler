@@ -9,25 +9,29 @@
 project(testsuite_common LANGUAGES CXX)
 
 
-set(TESTSUITE_COMMON_SOURCE
-    src/data_set.cpp
-    src/failure_diagnostic_fixture.cpp
-)
-
-add_library(${PROJECT_NAME} STATIC ${TESTSUITE_COMMON_SOURCE})
+add_library(${PROJECT_NAME} STATIC "")
 add_library(testsuite::common ALIAS ${PROJECT_NAME})
+
 
 # Ninja Build
 set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_COMPILE job_pool_max_cores)
 set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
 
 
+target_sources(${PROJECT_NAME} PRIVATE
+    src/data_set.cpp
+    src/failure_diagnostic_fixture.cpp
+)
+
+
 add_dependencies(${PROJECT_NAME} boost-utf)
+
 
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
     eda::common
 )
+
 
 find_package(Boost REQUIRED)
 

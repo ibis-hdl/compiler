@@ -9,7 +9,16 @@
 project(eda_common LANGUAGES CXX)
 
 
-set(EDA_COMMON_SOURCE
+add_library(${PROJECT_NAME} STATIC "")
+add_library(eda::common     ALIAS  ${PROJECT_NAME})
+
+
+# Ninja Build
+set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_COMPILE job_pool_max_cores)
+set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
+
+
+target_sources(${PROJECT_NAME} PRIVATE
     src/file_reader.cpp
     src/settings.cpp
     src/color.cpp
@@ -17,13 +26,6 @@ set(EDA_COMMON_SOURCE
     src/user_home.cpp
 )
 
-
-add_library(${PROJECT_NAME} STATIC ${EDA_COMMON_SOURCE})
-add_library(eda::common     ALIAS  ${PROJECT_NAME})
-
-# Ninja Build
-set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_COMPILE job_pool_max_cores)
-set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
 
 
 ##
@@ -37,7 +39,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
     $<INSTALL_INTERFACE:include>
-    PRIVATE ${DOCOPT_CPP_DIR}
 )
 
 target_compile_options(${PROJECT_NAME} PRIVATE

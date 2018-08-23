@@ -9,7 +9,16 @@
 project(eda_vhdl_parser LANGUAGES CXX)
 
 
-set(VHDL_PARSER_SOURCE
+add_library(${PROJECT_NAME} STATIC "")
+add_library(eda::vhdl_parser ALIAS ${PROJECT_NAME})
+
+
+# Ninja Build
+set_property(TARGET eda_vhdl_parser PROPERTY JOB_POOL_COMPILE job_pool_max_cores)
+set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
+
+
+target_sources(${PROJECT_NAME} PRIVATE
     src/ast/literal_printer.cpp
     src/ast/keyword_token.cpp
     src/ast/operator_token.cpp
@@ -29,18 +38,12 @@ set(VHDL_PARSER_SOURCE
     src/context.cpp
 )
 
-add_library(${PROJECT_NAME} STATIC ${VHDL_PARSER_SOURCE})
-add_library(eda::vhdl_parser ALIAS ${PROJECT_NAME})
-
-# Ninja Build
-set_property(TARGET eda_vhdl_parser PROPERTY JOB_POOL_COMPILE job_pool_max_cores)
-set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
-
 
 target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
-    PRIVATE src)
+    PRIVATE src
+)
 
 
 target_compile_options(${PROJECT_NAME} PRIVATE

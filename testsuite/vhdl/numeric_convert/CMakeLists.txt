@@ -9,25 +9,27 @@
 project(testrunner_vhdl_numeric LANGUAGES CXX)
 
 
+add_executable(${PROJECT_NAME} "")
+
+
+
+# Ninja Build
+set_property(TARGET testrunner_vhdl_numeric PROPERTY JOB_POOL_COMPILE job_pool_max_cores)
+set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
+
+
 # Boost.Test main and testing utilities
-set(TEST_COMMON_SOURCES
+target_sources(${PROJECT_NAME} PRIVATE
     src/common/test_numeric_convert.cpp
     src/common/numeric_parser.cpp
     src/common/binary_string.cpp
 )
 
-set(TEST_NUMERIC_CONV_SOURCES
-    ${TEST_COMMON_SOURCES}
+target_sources(${PROJECT_NAME} PRIVATE
     src/bit_string_literal_test.cpp
     src/decimal_literal_test.cpp
     src/based_literal_test.cpp
 )
-
-add_executable(${PROJECT_NAME} ${TEST_NUMERIC_CONV_SOURCES})
-
-# Ninja Build
-set_property(TARGET testrunner_vhdl_numeric PROPERTY JOB_POOL_COMPILE job_pool_max_cores)
-set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
 
 
 # adjust include path

@@ -14,6 +14,8 @@
 #include <eda/color/message.hpp>
 
 #include <eda/support/boost/locale.hpp>
+#include <boost/locale/generator.hpp>
+#include <boost/locale/localization_backend.hpp>
 
 #include <CLI/CLI11.hpp>
 
@@ -55,6 +57,8 @@ init::init(int argc, const char* argv[], eda::settings& setting_)
     register_signal_handlers();
 
     parse_cli(argc, argv);
+
+    l10n();
 
     user_config_message_color();
 }
@@ -149,6 +153,10 @@ void init::parse_cli(int argc, const char* argv[])
 		app.add_option("--ferror-limit", preset.error_limit,
 			translate("Limit emitting diagnostics, can be disabled with --ferror-limit=0."), true)
 			->group("Error/Warning Message Control Options"); // XXX unused in context.cpp
+
+		// Locale Options
+
+
     }
     catch(CLI::Error const& e) {
     	std::cerr << translate("Internal CLI11 parser code error. Please fill a bug report")
@@ -397,6 +405,27 @@ void init::user_config_message_color()
     );
 }
 
+
+void init::l10n()
+{
+    // [Using Localization Backends](
+    //  https://www.boost.org/doc/libs/1_56_0/libs/locale/doc/html/using_localization_backends.html)
+    using namespace boost::locale;
+
+    char const LC_PATH[]   = "~/.eda/l10n";
+    char const LC_DOMAIN[] = "eda";
+
+	localization_backend_manager l10n_backend = localization_backend_manager::global();
+    l10n_backend.select("std");
+    generator gen(l10n_backend);
+    localization_backend_manager::global(l10n_backend);
+
+    gen.add_messages_path(LC_PATH);
+    gen.add_messages_domain(LC_DOMAIN);
+    std::locale::global(gen(""));
+    std::cout.imbue(std::locale());
+    std::cerr.imbue(std::locale());
+}
 
 } // namespace ibis
 

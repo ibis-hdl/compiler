@@ -12,6 +12,7 @@ project(ibis LANGUAGES CXX)
 add_executable(${PROJECT_NAME} "")
 
 
+
 # Ninja Build
 set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_COMPILE job_pool_max_cores)
 set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)

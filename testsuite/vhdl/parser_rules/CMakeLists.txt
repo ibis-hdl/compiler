@@ -9,18 +9,21 @@
 project(testrunner_vhdl_parser_rule LANGUAGES CXX)
 
 
-set(TEST_COMMON_SOURCES
+add_executable(${PROJECT_NAME} "")
+
+
+
+# Ninja Build
+set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_COMPILE job_pool_one_core)
+set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
+
+
+target_sources(${PROJECT_NAME} PRIVATE
     src/common/rules.cpp
     src/common/test_vhdl_parser.cpp
 )
 
-set(PARSERTEST_SOURCES#_DEV
-    ${TEST_COMMON_SOURCES}
-    src/architecture_body_test.cpp
-)
-
-set(PARSERTEST_SOURCES
-    ${TEST_COMMON_SOURCES}
+target_sources(${PROJECT_NAME} PRIVATE
     src/abstract_literal_test.cpp
     src/actual_part_test.cpp
     src/aggregate_test.cpp
@@ -130,12 +133,6 @@ set(PARSERTEST_SOURCES
     src/waveform_test.cpp
 
 )
-
-add_executable(${PROJECT_NAME} ${PARSERTEST_SOURCES})
-
-# Ninja Build
-set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_COMPILE job_pool_one_core)
-set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
 
 
 # adjust include path
