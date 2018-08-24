@@ -23,7 +23,7 @@ file(WRITE ${CMAKE_BINARY_DIR}/sources.txt
 )
 
 
-message(STATUS "generating l10n file ${POT_FILE}")
+message(STATUS "generating l10n file ${POT_FILE} using ${GETTEXT_XGETTEXT_EXECUTABLE}")
 
 # config area
 set(l10n_email "https://github.com/eda/ibis/issues")
@@ -34,8 +34,10 @@ set(l10n_email "https://github.com/eda/ibis/issues")
 # Note: running in -P script mode, CMake sets the variables CMAKE_BINARY_DIR etc.
 # to the current working directory (https://cmake.org/cmake/help/latest/variable/CMAKE_CURRENT_SOURCE_DIR.html).
 execute_process(
-    COMMAND xgettext
+    COMMAND xgettext # XXXX ${GETTEXT_XGETTEXT_EXECUTABLE}
         --add-comments=TRANSLATORS
+        --package-name="${PROJECT_NAME}"
+        --package-version="${eda_VERSION_MAJOR}.${eda_VERSION_MINOR}.${eda_VERSION_REVISION}"
         --msgid-bugs-address=${l10n_email}    
         --from-code=UTF-8
         --keyword=translate:1,1t 

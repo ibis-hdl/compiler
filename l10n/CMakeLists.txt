@@ -5,6 +5,8 @@
 project(eda_l10n)
 
 
+set(language_template ${PROJECT_SOURCE_DIR}/eda.pot)
+
 find_package(Gettext)
 find_package(XGettext)
 
@@ -13,44 +15,44 @@ find_package(XGettext)
 # XGetText
 # thanks to ngladitz fron cmake IIRC channel for the help here
 if (XGETTEXT_FOUND)
-message(STATUS "Found XGetText packge")
+message(STATUS "Found XGetText package")
 
 # create a cmake variables script where the sources and directories of the
 # sub projects are  set ...
 set(SUBPROJECT_LIST "eda_common;eda_vhdl_parser;ibis")
-set(MY_CONTENT "")
+set(MY_CONTENT "set(MY_TARGETS \"${SUBPROJECT_LIST}\")\n")
 foreach(project ${SUBPROJECT_LIST})
     string(APPEND MY_CONTENT
         "set(${project}_SOURCES    \"$<TARGET_PROPERTY:${project},SOURCES>\")\n"
         "set(${project}_SOURCE_DIR \"$<TARGET_PROPERTY:${project},SOURCE_DIR>\")\n"
     )
 endforeach()
-string(APPEND MY_CONTENT "set(MY_TARGETS \"${SUBPROJECT_LIST}\")\n")
 
-# ... and write the contents to file
-file(GENERATE OUTPUT ${CMAKE_BINARY_DIR}/l10n/sources.cmake
+# ... and write the contents to a file at generation time
+file(GENERATE OUTPUT ${PROJECT_BINARY_DIR}/sources.cmake
     CONTENT "${MY_CONTENT}"
 )
 
 
-# ... finaly invoke the xgettext script with the path to variables script and
-# template PO file with '-P'
-set(pot_file ${CMAKE_SOURCE_DIR}/l10n/eda.pot)
-
+# ... finaly invoke the run_xgettext cmake script with the path to the 
+# variables script and template PO file using cmake's '-P' parameter at build
+# time.
 add_custom_target(extract-translations 
     COMMAND ${CMAKE_COMMAND} 
-        -DSOURCES=${CMAKE_BINARY_DIR}/l10n/sources.cmake 
-        -DPOT_FILE=${pot_file}
-        -P ${CMAKE_SOURCE_DIR}/l10n/run_xgettext.cmake
-    COMMAND sed -i
-        's/charset=CHARSET/charset=UTF-8/'
-        ${pot_file}                     
-    COMMENT "Extract translatable messages to ${pot_file}"
+        -DSOURCES=${PROJECT_BINARY_DIR}/sources.cmake 
+        -DPOT_FILE=${language_template}
+        -P ${PROJECT_SOURCE_DIR}/run_xgettext.cmake
+# sed not on windows        
+#    COMMAND sed -i
+#        's/charset=CHARSET/charset=UTF-8/'
+#        ${language_template}                     
+    DEPENDS ${PROJECT_BINARY_DIR}/sources.cmake 
+    COMMENT "Extract translatable messages from source"
 )
 
 
 add_custom_target(l10n ALL
-    DEPENDS ${pot_file}
+    DEPENDS extract-translations 
 )
 
 endif(XGETTEXT_FOUND)
@@ -59,16 +61,9 @@ endif(XGETTEXT_FOUND)
 ##
 # GetText
 if (GETTEXT_FOUND)
-message(STATUS "Found GetText packge")
+message(STATUS "Found GetText package")
 
-file(GLOB pofiles RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.po)
-GETTEXT_CREATE_TRANSLATIONS(${GETTEXT_PACKAGE}.pot ALL ${pofiles})
+file(GLOB translations_po ${PROJECT_SOURCE_DIR}/po/*.po)
+GETTEXT_CREATE_TRANSLATIONS(${language_template} ALL ${translations_po})
 
 endif(GETTEXT_FOUND)
-
-
-# https://github.com/flplv/vala-cmake-example/blob/master/po/CMakeLists.txt
-# https://github.com/GenisysPro/CenisysPro/blob/master/po/CMakeLists.txt
-# https://github.com/eiskaltdcpp/eiskaltdcpp/blob/master/cmake/CMakeLists.txt
-# https://github.com/jarro2783/CMake-Gettext/blob/master/GettextTranslate.cmake
-# 

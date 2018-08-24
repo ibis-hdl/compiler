@@ -384,18 +384,20 @@ struct numeric_convert::report_error
     { }
 
     template<typename LiteralType>
-    void overflow_message(std::string type, LiteralType const& literal) const
+    void overflow_message(std::string literal_type, LiteralType const& literal) const
     {
         using boost::locale::format;
         using boost::locale::translate;
 
-        os << format(translate(
+        
+        os << format(translate( // TRANSLATORS: Literal Type and passed Value
             "Conversion of VHDL {1} \'{2}\' failed due to numeric overflow "
-            "(MAX_VALUE = {3})\n"
+            "(MAX_VALUE = {3})"
             ))
-            % type
+            % literal_type
             % literal_printer(literal)
-            % MAX_VALUE;
+            % MAX_VALUE
+		   << "\n";
     }
 
     void overflow(ast::bit_string_literal const& literal) const
@@ -423,9 +425,10 @@ struct numeric_convert::report_error
         using boost::locale::translate;
 
         os << format(translate(
-            "An unknown error occurred during parsing of \'{1}\'.\n"
+            "An unknown error occurred during parsing of \'{1}\'."
             ))
-            % what;
+            % what
+		   << "\n";
     }
 
     template<typename StringViewT>
@@ -436,9 +439,10 @@ struct numeric_convert::report_error
 
         os << format(translate(
             "Base specifier \'{1}\' isn't supported. "
-            "Supported are only 2, 8, 10 and 16!\n"
+            "Supported are only 2, 8, 10 and 16!"
             ))
-            % base_literal;
+            % base_literal
+		   << "\n";
     }
 };
 
@@ -700,9 +704,10 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
             if(!std::isnormal(fractional_part)) {
                 os << format(translate(
                     "Numeric error occurred during calculation on based_literal "
-                    "with fractional part of \'{1}\' .\n"
+                    "with fractional part of \'{1}\'."
                     ))
-                    % literal.number.fractional_part;
+                    % literal.number.fractional_part
+				   << "\n";
                 return std::make_tuple(false, result);
             }
 

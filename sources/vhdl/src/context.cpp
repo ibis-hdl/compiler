@@ -50,21 +50,26 @@ std::ostream& failure_status::operator()(std::ostream& os) const
         return static_cast<int>(count);
     };
 
-
     // concept, see [Wanbox](https://wandbox.org/permlink/VJrqXuEFppw1htY7)
+
+    // TRANSLATORS: singular/plural error(s)
     auto const error_message = (format(translate("{1} error", "{1} errors",
         plural_count(ctx.error_count))) % ctx.error_count).str();
 
+    // TRANSLATORS: singular/plural warning(s)
     auto const warning_message = (format(translate("{1} warning", "{1} warnings",
         plural_count(ctx.warning_count))) % ctx.warning_count).str();
 
     if (ctx.error_count && ctx.warning_count) {
+    	// TRANSLATORS: summary error(s) and warning(s)
         os << format(translate("{1} and {2} generated.")) % error_message % warning_message;
     }
     else if (ctx.error_count) {
+    	// TRANSLATORS: summary error(s) only
         os << format(translate("{1} generated.")) % error_message;
     }
     else if (ctx.warning_count) {
+    	// TRANSLATORS: summary warning(s) only
         os << format(translate("{1} generated.")) % warning_message;
     }
     else {

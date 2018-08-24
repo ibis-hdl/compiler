@@ -38,6 +38,9 @@
 
 #include <eda/util/cxx_bug_fatal.hpp>
 
+
+#include <eda/predef.hpp>
+
 #include <eda/namespace_alias.hpp>
 
 
@@ -84,13 +87,15 @@ void init::parse_cli(int argc, const char* argv[])
 		"Report bugs to {1}")) % EDA_URL).str());
 
     // defaults
-	std::vector<std::string> files;
-	std::string lib_path;
-
 	struct {
+    	std::vector<std::string> files;
+    	std::string lib_path;
+
 		unsigned tab_size = 4;
 		unsigned error_limit = 20;
-	} preset;
+
+		std::string locale_dir;
+	} parameter;
 
 	// As idea \see
 	// [What do the -f and -m in gcc/clang compiler options stand for](
@@ -98,7 +103,7 @@ void init::parse_cli(int argc, const char* argv[])
 
     try {
 		// Primary Options
-		app.add_option("files", files,
+		app.add_option("files", parameter.files,
 			translate("One or more VHDL file(s)."))
 			->required()
 			->check(CLI::ExistingFile);
@@ -110,7 +115,7 @@ void init::parse_cli(int argc, const char* argv[])
 		app.add_flag("-a,--analyze",
 			translate("Analyze the design.")); // XXX preventive added, unused
 
-		app.add_option("--lib-path", lib_path,
+		app.add_option("--lib-path", parameter.lib_path,
 			translate("Path to libraries."))
 			->group("Paths")
 			->envname("EDA_LIBPATH")->take_last()
@@ -133,7 +138,7 @@ void init::parse_cli(int argc, const char* argv[])
 					  "using colors."))
 			->group("Message Options")
 			->excludes("--no-color");
-		app.add_option("--tab-size", preset.tab_size,
+		app.add_option("--tab-size", parameter.tab_size,
 			translate("Tabulator size, affects printing source snippet on error printing."), true)
 			->group("Message Options")
 			->check(CLI::Range(1u, 10u)); // XXX unused in misc. error_handler.cpp
@@ -150,17 +155,20 @@ void init::parse_cli(int argc, const char* argv[])
 			->group("Warning Options");
 
 		// Options to Control Error and Warning Messages Flags
-		app.add_option("--ferror-limit", preset.error_limit,
+		app.add_option("--ferror-limit", parameter.error_limit,
 			translate("Limit emitting diagnostics, can be disabled with --ferror-limit=0."), true)
-			->group("Error/Warning Message Control Options"); // XXX unused in context.cpp
+			->group("Error/Warning Message Control Flags"); // XXX unused in context.cpp
 
 		// Locale Options
-
+		app.add_option("--locale-dir", parameter.locale_dir,
+			translate("localization catalog data"), true)
+			->group("Locale/Environment")
+			->envname("EDA_LOCALE_DIR")
+			->check(CLI::ExistingDirectory);
 
     }
     catch(CLI::Error const& e) {
-    	std::cerr << translate("Internal CLI11 parser code error. Please fill a bug report")
-    			  << std::endl;
+    	std::cerr << "Internal CLI11 parser code error\n";
     	std::exit(app.exit(e));
     }
 
@@ -188,8 +196,10 @@ void init::parse_cli(int argc, const char* argv[])
     trigger_flags.add("--Wall", { "--Wunused", "--Wother" });
 
     // Primary Options
-    setting.set("--files", files);
-    if (!lib_path.empty()) {  setting.set("--lib-path", lib_path); }
+    setting.set("--files", parameter.files);
+    if (app.count("--lib-path")) {
+    	setting.set("--lib-path", parameter.lib_path);
+    }
 
     // Working/Processing flags
     set_flag("--analyze");
@@ -199,7 +209,7 @@ void init::parse_cli(int argc, const char* argv[])
     set_flag("--verbose");
     set_flag("--no-color");
     set_flag("--force-color");
-    setting.set<long>("--tab-size", preset.tab_size);
+    setting.set<long>("--tab-size", parameter.tab_size);
 
     // Warning Options
     set_flag("--Wall");
@@ -207,11 +217,16 @@ void init::parse_cli(int argc, const char* argv[])
     set_flag("--Wother");
 
 	// Options to Control Error and Warning Messages Flags
-    setting.set<long>("--ferror-limit", preset.error_limit);
+    setting.set<long>("--ferror-limit", parameter.error_limit);
 
 
     // update triggered flags
     trigger_flags.update(setting);
+
+	// Locale Options
+    if (app.count("--locale-dir")) {
+    	setting.set("--locale-dir", parameter.locale_dir);
+	}
 }
 
 
@@ -409,22 +424,37 @@ void init::user_config_message_color()
 void init::l10n()
 {
     // [Using Localization Backends](
-    //  https://www.boost.org/doc/libs/1_56_0/libs/locale/doc/html/using_localization_backends.html)
+    //  https://www.boost.org/doc/libs/1_68_0/libs/locale/doc/html/using_localization_backends.html)
     using namespace boost::locale;
 
     char const LC_PATH[]   = "~/.eda/l10n";
     char const LC_DOMAIN[] = "eda";
 
+#if 1 // crash on MinGW?
 	localization_backend_manager l10n_backend = localization_backend_manager::global();
+#if (BOOST_OS_WINDOWS)
+	l10n_backend.select("winapi");
+#else
     l10n_backend.select("std");
-    generator gen(l10n_backend);
+#endif
+    generator gen_(l10n_backend);
     localization_backend_manager::global(l10n_backend);
+    generator gen{};
+#else
+    generator gen{};
+#endif
+    if (setting["locale-dir"]) {
+        gen.add_messages_path(setting["locale-dir"].get<std::string>());
 
-    gen.add_messages_path(LC_PATH);
+    }
+    else {
+        gen.add_messages_path(LC_PATH);
+    }
     gen.add_messages_domain(LC_DOMAIN);
-    std::locale::global(gen(""));
-    std::cout.imbue(std::locale());
-    std::cerr.imbue(std::locale());
+    std::locale locale = gen("");
+    std::locale::global(locale);
+    std::cout.imbue(locale);
+    std::cerr.imbue(locale);
 }
 
 } // namespace ibis

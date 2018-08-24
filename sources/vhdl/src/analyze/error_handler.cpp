@@ -51,15 +51,14 @@ void error_handler<Iterator>::operator()(
 
     auto [error_first, error_last] = iterators_of(where_tag);
 
-    os << format(translate("in file {1}, line {2}:\n"))
+    os << format(translate("in file {1}, line {2}:"))
           % file_name()
           % line_number(error_first)
-          ;
+       << "\n";
 
     os << color::message::error(translate("Syntax ERROR")) << ": "
        << (!error_message.empty() ? error_message : translate("Unspecified Error, Sorry"))
-       << "\n"
-          ;
+       << "\n";
 
     // erroneous source snippet
     iterator_type line_start = get_line_start(error_first);
@@ -134,15 +133,14 @@ void error_handler<Iterator>::operator()(
     boost::ignore_unused(error_last);
     boost::ignore_unused(valid);
 
-    os << format(translate("in file {1}, line {2}:\n"))
+    os << format(translate("in file {1}, line {2}:"))
           % file_name()
           % line_number(error_first)
-          ;
+	   << "\n";
 
     os << color::message::error(translate("Syntax ERROR")) << ": "
        << (!error_message.empty() ? error_message : translate("Unspecified Error, Sorry"))
-       << "\n"
-          ;
+       << "\n";
 
 	os << source_snippet(start_label, translate(" <<-- here")) << "\n"
 	   << "...\n"

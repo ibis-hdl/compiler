@@ -35,15 +35,14 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
     using boost::locale::format;
     using boost::locale::translate;
 
-    os << format(translate("in file {1}, line {2}:\n"))
+    os << format(translate("in file {1}, line {2}:"))
           % file_name()
           % line_number(error_pos)
-          ;
+	   << "\n";
 
     os << color::message::error(translate("Parse ERROR")) << ": "
        << (!error_message.empty() ? error_message : translate("Unspecified Error, Sorry"))
-       << "\n"
-          ;
+       << "\n";
 
     // erroneous source snippet
     iterator_type start = get_line_start(error_pos);

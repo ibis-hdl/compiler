@@ -292,11 +292,12 @@ std::string on_error_base::make_error_description(std::string which)
     }
     else {
         std::cerr << format(translate(
-            "WARNING: failed to lookup '{1}' at parser's "
-            "expectation symbol table\n"
-            "Note, end users can ignore the warning\n"
-            ))
-            % which;
+					"WARNING: failed to lookup '{1}' at parser's "
+					"expectation symbol table\n"
+					"Note, end users can ignore the warning"
+					))
+					% which
+				  << "\n";
     }
 
     return (format(translate("Error, expecting {1} here:"))

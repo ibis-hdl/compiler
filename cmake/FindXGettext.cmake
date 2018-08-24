@@ -1,6 +1,3 @@
-message(STATUS "XGetText")
-
-
 if (GETTEXT_XGETTEXT_EXECUTABLE)
   # Already in cache, be silent
   set (XGETTEXT_FIND_QUIETLY TRUE)
@@ -20,5 +17,17 @@ else (GETTEXT_XGETTEXT_EXECUTABLE)
 endif (GETTEXT_XGETTEXT_EXECUTABLE)
 
 
-# see https://github.com/Valama/valama/blob/master/cmake/Gettext.cmake
-# for how to get version informations
+if(GETTEXT_XGETTEXT_EXECUTABLE)
+  execute_process(
+    COMMAND
+      "${GETTEXT_XGETTEXT_EXECUTABLE}" "--version"
+    OUTPUT_VARIABLE
+      xgettext_version
+    ERROR_QUIET
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  if(xgettext_version MATCHES "^xgettext \\(.*\\) [0-9]")
+    string(REGEX REPLACE "^xgettext \\([^\\)]*\\) ([0-9\\.]+[^ \n]*).*" "\\1" GETTEXT_XGETTEXT_VERSION_STRING "${xgettext_version}")
+  endif()
+  unset(xgettext_version)
+endif()

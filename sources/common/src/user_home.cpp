@@ -2,7 +2,7 @@
  * user_home.cpp
  *
  *  Created on: 10.08.2018
- *      Author: olpetzol
+ *      Author: olaf
  */
 
 #include <eda/util/file/user_home.hpp>

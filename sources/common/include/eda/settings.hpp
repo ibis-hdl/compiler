@@ -75,6 +75,9 @@ public:
 			if (std::holds_alternative<bool>(option_value)) {
 				return std::get<bool>(option_value);
 			}
+			if (std::holds_alternative<std::string>(option_value)) {
+				return !std::get<std::string>(option_value).empty();
+			}
 			return false;
 		}
 
@@ -123,7 +126,7 @@ public:
      * \return config_value The value as reference to optional<string>.
      */
     template<typename T>
-    void set(std::string const& option_name, T&& value) {
+    void set(std::string_view option_name, T&& value) {
     	using type = std::remove_reference_t<T>;
     	map[trim(option_name)].emplace<type>(std::move(value));
     	//map[trim(option_name)] = std::forward<type>(value);

@@ -12,6 +12,7 @@
 #include <eda/util/file/file_reader.hpp>
 
 #include <eda/color/message.hpp>
+#include <eda/support/boost/locale.hpp>
 
 #include <iostream>
 
@@ -22,7 +23,10 @@ extern void testing_signal_handler();
 
 int main(int argc, const char *argv[])
 {
-	eda::settings setting;
+    using boost::locale::format;
+    using boost::locale::translate;
+
+    eda::settings setting;
 
 	ibis::init init(argc, argv, setting);
 
@@ -46,7 +50,7 @@ int main(int argc, const char *argv[])
         for (auto const& filename : setting["files"].get<std::vector<std::string>>()) {
             auto const contents = file_reader.read_file(filename);
             if (!setting["quiet"]) {
-            	std::cerr << color::message::note("processing:") << " " << filename << "\n";
+            	std::cerr << color::message::note(translate("processing:")) << " " << filename << "\n";
             }
             std::cout << "------------------------------------------------\n";
             std::cout << *contents;
@@ -59,10 +63,13 @@ int main(int argc, const char *argv[])
         //testing_signal_handler(); // just testing
     }
     catch(std::exception const& e) {
-        std::cerr << color::message::failure("Exception caught:") << " " << e.what() << "\n";
+        std::cerr << color::message::failure(translate("Exception caught:"))
+                  << " " << e.what()
+				  << "\n";
     }
     catch(...) {
-        std::cerr << color::message::failure("Unexpected exception caught") << "\n";
+        std::cerr << color::message::failure(translate("Unexpected exception caught"))
+                  << "\n";
     }
 
     return EXIT_SUCCESS;

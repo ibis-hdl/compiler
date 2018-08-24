@@ -5,10 +5,7 @@
 ################################################################################
 ## The EDA project
 ################################################################################
-
-# new behavior of VERSION variable handled by cmake's PROJECT, see
-# cmake --help-policy CMP0048
-cmake_policy(SET CMP0048 NEW)           
+  
 cmake_minimum_required(VERSION 3.12)
 
 project(eda VERSION 0.0.1 LANGUAGES CXX)
@@ -93,6 +90,9 @@ add_subdirectory(playground/x3)
 
 
 
+##
+# Install
+include(GNUInstallDirs)
 
 
 ## This is only a reminder, COTIRE doesn't works at last with the VHDL parser
