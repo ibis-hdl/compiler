@@ -27,19 +27,25 @@ target_sources(${PROJECT_NAME} PRIVATE
 )
 
 
+target_include_directories(${PROJECT_NAME} PUBLIC
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+
+
+##
+# CLI11 command line parser
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_SOURCE_DIR}/external/CLI
+)
+
+
 ##
 # RapidJSON
 include(external_json)
 add_dependencies(${PROJECT_NAME} RapidJSON)
-include_directories(${PROJECT_NAME} PRIVATE
-    ${CMAKE_SOURCE_DIR}/external/CLI
+target_include_directories(${PROJECT_NAME} PRIVATE
     ${RapidJSON_INCLUDE_DIR}
-)
-
-
-target_include_directories(${PROJECT_NAME} PUBLIC
-    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
 )
 
 
