@@ -8,14 +8,10 @@
 #include <eda/settings.hpp>
 
 #include <eda/util/string/icompare.hpp>
+#include <eda/support/cxx/overloaded.hpp>
 #include <vector>
 
 #include <iostream>
-
-
-//https://en.cppreference.com/w/cpp/utility/variant/visit
-template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
-template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
 
 
 namespace eda {
@@ -37,7 +33,7 @@ void settings::dump(std::ostream& os) const
     os << "(settings [N=" << vec.size() << "]\n";
     for (auto const& [option_name, val] : vec) {
         os << "    " << option_name << ": ";
-		std::visit(overloaded {
+		std::visit(util::overloaded {
 			[&os](std::monostate) { os << "N/A"; },
 			[&os](bool v) { os << std::boolalpha << v; },
 			[&os](long v) { os << v; },

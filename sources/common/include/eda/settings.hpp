@@ -10,6 +10,7 @@
 
 #include <unordered_map>
 #include <variant>
+#include <eda/support/cxx/overloaded.hpp>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -72,13 +73,13 @@ public:
 		option_value_proxy& operator=(option_value_proxy const&) = delete;
 
 		operator bool() const {
-			if (std::holds_alternative<bool>(option_value)) {
-				return std::get<bool>(option_value);
-			}
-			if (std::holds_alternative<std::string>(option_value)) {
-				return !std::get<std::string>(option_value).empty();
-			}
-			return false;
+			return std::visit(util::overloaded {
+				// <long> is (implicit converted) handled as boolean, as intended
+				[](bool option) { return option; },
+				[](std::string const& option) { return !option.empty(); },
+				[](std::vector<std::string> const& option) { return !option.empty(); },
+				[](std::monostate) { return false; },
+			}, this->option_value);
 		}
 
 		template<typename T>
@@ -104,7 +105,7 @@ public:
 	 *                      as reference to optional<string>, otherwise to an
 	 *                      empty optional<>.
 	 */
-    option_value_proxy operator[](std::string const& option_name) const {
+    option_value_proxy const operator[](std::string const& option_name) const {
         map_type& map_ = const_cast<map_type&>(this->map);
         if (exist(option_name)) {
             return option_value_proxy{ map_[option_name] };
@@ -152,7 +153,7 @@ public:
 
 private:
     /** Trim leading '--' chars from key. */
-    static  inline
+    static inline
     std::string trim(std::string_view key) {
 
         // FixMe: C++20 starts_with()
