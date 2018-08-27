@@ -46,7 +46,9 @@ std::ostream& failure_status::operator()(std::ostream& os) const
     // critical in human language.
     auto const plural_count = [](size_t count) {
         static constexpr int N{ std::numeric_limits<int>::max() };
-        if (count > N) return N;
+        if (count > N) {
+        	return N;
+        }
         return static_cast<int>(count);
     };
 

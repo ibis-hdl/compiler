@@ -298,7 +298,7 @@ struct frac
     numeric_type const base;
     numeric_type pow;
 
-    frac(numeric_type base_)
+    explicit frac(numeric_type base_)
     : base{ base_ }, pow{ base_ }
     {  }
 
@@ -379,12 +379,12 @@ struct numeric_convert::report_error
                             std::numeric_limits<detail::unsigned_integer>::max()
                                                     };
 
-    report_error(std::ostream& os_)
+    explicit report_error(std::ostream& os_)
     : os{ os_ }
     { }
 
     template<typename LiteralType>
-    void overflow_message(std::string literal_type, LiteralType const& literal) const
+    void overflow_message(std::string const& literal_type, LiteralType const& literal) const
     {
         using boost::locale::format;
         using boost::locale::translate;

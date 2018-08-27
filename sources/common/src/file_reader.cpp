@@ -28,7 +28,7 @@ namespace eda { namespace util {
 
 file_loader::file_loader(std::ostream& os_, eda::settings const& setting)
 : os { os_ }
-, quiet{   [&]{ if (setting["quiet"]) return true; else return false; }() }
+, quiet{ setting["quiet"] }
 { }
 
 
@@ -45,14 +45,15 @@ bool file_loader::exist_file(std::string const& filename) const
             if (fs::is_regular_file(file_path)) {
                 return true;
             }
-            else {
-            	if (!quiet) {
-					os << format(translate(
-						  "File {1} is not a regular file"))
-						  % file_path.make_preferred();
-            	}
-                return false;
-            }
+
+			if (!quiet) {
+				os << format(translate(
+					  "File {1} is not a regular file"))
+					  % file_path.make_preferred();
+			}
+
+			return false;
+
         }
         else {
         	if (!quiet) {

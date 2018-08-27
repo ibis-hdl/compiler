@@ -260,12 +260,12 @@ void init::user_config_message_color()
     }
 
     bool const quiet = [&] {
-        if (setting["quiet"]) return true;
+        if (setting["quiet"]) { return true; }
         return false;
     }();
 
     bool const verbose = [&] {
-        if (setting["verbose"]) return true;
+        if (setting["verbose"]) { return true; }
         return false;
     }();
 

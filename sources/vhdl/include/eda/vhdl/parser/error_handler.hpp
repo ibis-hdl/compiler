@@ -56,7 +56,7 @@ public:
     }
 
 public:
-    result_type operator()(iterator_type err_pos, std::string const& error_message) const;
+    result_type operator()(iterator_type error_pos, std::string const& error_message) const;
 
 public:
     std::string file_name() const;

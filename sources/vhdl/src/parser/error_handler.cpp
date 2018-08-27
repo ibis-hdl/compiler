@@ -55,7 +55,6 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
 	   << "^_"
 	   << std::endl;
 
-
     return x3::error_handler_result::fail;
 }
 
@@ -63,7 +62,9 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
 template <typename Iterator>
 std::string error_handler<Iterator>::file_name() const
 {
-    if (!filename.empty()) return filename;
+    if (!filename.empty()) {
+    	return filename;
+    }
 
     return boost::locale::translate("Unknown File Name", "<unknown>");
 }

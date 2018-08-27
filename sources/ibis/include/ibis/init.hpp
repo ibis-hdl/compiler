@@ -26,7 +26,7 @@ namespace ibis {
 class init
 {
 public:
-	explicit init(int argc, const char* argv[], eda::settings& setting);
+	explicit init(int argc, const char* argv[], eda::settings& setting_);
 
 	init(init const&) = delete;
 	init& operator=(init const&) = delete;
