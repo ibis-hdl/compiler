@@ -14,20 +14,21 @@
 
 #include <eda/vhdl/parser/error_handler.hpp>
 //#include <eda/vhdl/parser/parser_config.hpp>
+//#include <type_traits>
 
-#include <type_traits>
-#include <map>
+#include <string>
+#include <string_view>
+#include <unordered_map>
 
 #include <eda/namespace_alias.hpp>
 
 
 namespace eda { namespace vhdl { namespace parser {
 
-/*
- * ToDo: CRTP for parser/semantic error_handler etc. See eclipse/Task
- */
-struct on_error_base
+
+class on_error_base
 {
+public:
     template<typename IteratorT, typename ExceptionT, typename ContextT>
     x3::error_handler_result
     on_error(IteratorT& /* first */, IteratorT const& /* last */,
@@ -45,9 +46,21 @@ struct on_error_base
         return error_handler(x.where(), make_error_description(x.which()));
     }
 
-    std::string make_error_description(std::string which);
+    std::string_view lookup(std::string_view which) const
+    {
+        auto const iter = ruleid_map.find(which);
 
-    typedef std::map<std::string, std::string>		rule_map_type;
+        if (iter != ruleid_map.end()) {
+           	return iter->second;
+        }
+        return which;
+    }
+
+    std::string make_error_description(std::string_view which) const;
+
+private:
+    typedef std::unordered_map<
+    	std::string_view, std::string_view> 		rule_map_type;
 
     static const rule_map_type						ruleid_map;
 };

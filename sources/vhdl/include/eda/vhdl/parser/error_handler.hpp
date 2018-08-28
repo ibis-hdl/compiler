@@ -11,6 +11,8 @@
 #include <eda/vhdl/ast/position_cache.hpp>
 
 #include <eda/compiler/warnings_off.hpp>
+#include <boost/spirit/home/x3/support/traits/tuple_traits.hpp>
+#include <boost/spirit/home/x3/support/traits/is_variant.hpp> // required by guard
 #include <boost/spirit/home/x3/auxiliary/guard.hpp> // error_handler_result
 #include <eda/compiler/warnings_on.hpp>
 
