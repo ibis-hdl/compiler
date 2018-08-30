@@ -31,13 +31,13 @@ namespace eda { namespace vhdl { namespace parser {
  * program is being compiled.
  *
  * The parser's error_handler utility is responsible to do these since he depends
- * informations.
+ * on this informations.
  *
  * \note It may be natural to separate the process of tagging to an own class,
  *       but this results into a further, nested x3::with<>[] directive near by
  *       the error handler self and some parse language aware context data.
  *
- * \note It's based on the original [x3::annotate_on_success](
+ * \note The source is based on the original [x3::annotate_on_success](
  *       https://github.com/boostorg/spirit/blob/master/include/boost/spirit/home/x3/support/utility/annotate_on_success.hpp)
  */
 struct on_success_base

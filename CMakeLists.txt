@@ -89,6 +89,10 @@ add_subdirectory(playground/boost_test)
 add_subdirectory(playground/x3)
 
 
+## 
+# project doc
+add_subdirectory(doc)
+
 
 ##
 # Install

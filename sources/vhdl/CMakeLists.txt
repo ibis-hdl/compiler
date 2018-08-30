@@ -112,8 +112,3 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
     eda::common
 )
-
-
-## doc, etc.
-add_subdirectory(doc)
-

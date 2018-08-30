@@ -29,7 +29,7 @@ namespace eda { namespace vhdl { namespace analyze {
  * Therefore the ast::position_cache is required. Also the API is slightly
  * different.
  *
- * \fixme Get "access" to information of node/rule map at parser::on_error_base
+ * \todo Get "access" to information of node/rule map at parser::on_error_base
  */
 template <typename Iterator>
 class error_handler
