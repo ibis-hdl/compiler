@@ -28,10 +28,6 @@ mark_as_advanced(EDA_RUN_ON_VALGRIND)
 ## -----------------------------------------------------------------------------
 # CMake Tidy
 #
-# get some options with, e.g.
-# $ clang-tidy --list-checks -checks='*' | grep modernize | sed -e's/^[ ]*/-/g' -e 's/$/,\\/g'
-#
-# Unfornately no docs about the format found
 # $ clang-tidy --checks='modernize*,performance*' --header-filter=\*.hpp$ -dump-config 
 # - https://github.com/Sarcasm/notes/blob/master/dev/clang-tidy.rst
 option(EDA_RUN_CLANG_TIDY "Run clang-tidy with the compiler." OFF)
