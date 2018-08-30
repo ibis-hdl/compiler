@@ -1,0 +1,7 @@
+---
+Checks: "-*,\
+modernize-*,\
+"
+HeaderFilterRegex: '*\.(hpp|h)$'
+...
+

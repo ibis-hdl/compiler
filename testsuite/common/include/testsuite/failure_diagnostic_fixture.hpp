@@ -22,10 +22,6 @@ namespace testsuite {
 class failure_diagnostic_fixture
 {
 public:
-	failure_diagnostic_fixture();
-	~failure_diagnostic_fixture();
-
-public:
 	void setup();
 	void teardown();
 

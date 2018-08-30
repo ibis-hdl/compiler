@@ -38,7 +38,7 @@
 #include <sys/ptrace.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <limits.h> // PATH_MAX
+#include <climits> // PATH_MAX
 #endif
 
 

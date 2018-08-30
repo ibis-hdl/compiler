@@ -31,7 +31,7 @@ namespace testsuite {
 class failure_diagnostic_fixture::writer
 {
 public:
-    writer(std::string const& test_case);
+    writer(std::string test_case);
     void write(std::string const& parse_result);
 
 private:
@@ -59,12 +59,6 @@ private:
  */
 namespace testsuite {
 
-
-failure_diagnostic_fixture::failure_diagnostic_fixture()
-{ }
-
-failure_diagnostic_fixture::~failure_diagnostic_fixture()
-{ }
 
 void failure_diagnostic_fixture::setup() { }
 void failure_diagnostic_fixture::teardown() { }
@@ -135,9 +129,9 @@ fs::path pretty_filepath(fs::path file_path) {
 /**
  * failure_diagnostic_fixture::writer definition
  */
-failure_diagnostic_fixture::writer::writer(std::string const& test_case)
+failure_diagnostic_fixture::writer::writer(std::string test_case)
 : destination_dir{ "./testsuite_result" }
-, testcase_name{ test_case }
+, testcase_name{ std::move(test_case) }
 , write_extension{ ".result" }
 , name_self { "testsuite::failure_diagnostic_fixture::writer" }
 {

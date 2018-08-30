@@ -21,8 +21,8 @@ namespace detail {
 
 struct collect_worker
 {
-    typedef std::unordered_map<std::string_view, std::size_t> map_type;
-    typedef std::unordered_set<std::string_view> 	set_type;
+    using map_type = std::unordered_map<std::string_view, std::size_t>;
+    using set_type = std::unordered_set<std::string_view>;
 
     collect_worker(map_type& count_map_, set_type& untagged_node_)
     : count_map{ count_map_ }

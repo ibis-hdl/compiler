@@ -76,17 +76,17 @@ x3::real_parser<unsigned_integer, detail::integer_policies<unsigned_integer>> ui
 
 
 // decimal parser signed/unsigned
-typedef x3::uint_parser<unsigned_integer, 10> uint_parser_type;
-typedef x3::int_parser<signed_integer, 10> int_parser_type;
+using uint_parser_type = x3::uint_parser<unsigned_integer, 10>;
+using int_parser_type  = x3::int_parser<signed_integer, 10>;
 
 //uint_parser_type const uint_ = { }; *** not used ***
 int_parser_type const int_ = { };
 
 
 // binary parser bin/oct/hex
-typedef x3::uint_parser<unsigned_integer,  2> bin_parser_type;
-typedef x3::uint_parser<unsigned_integer,  8> oct_parser_type;
-typedef x3::uint_parser<unsigned_integer, 16> hex_parser_type;
+using bin_parser_type = x3::uint_parser<unsigned_integer,  2>;
+using oct_parser_type = x3::uint_parser<unsigned_integer,  8>;
+using hex_parser_type = x3::uint_parser<unsigned_integer, 16>;
 
 bin_parser_type const bin = { };
 oct_parser_type const oct = { };
@@ -147,12 +147,12 @@ struct primitive_parser
 
     /**
      * The type, to which all literals will be converted. */
-    typedef double                              attribute_type;
+    using attribute_type = double;
 
     /**
      * Return the numeric value of the literal
      */
-    typedef std::tuple<bool, attribute_type>    return_value;
+    using return_value = std::tuple<bool, attribute_type>;
 
 
     template<typename RangeType>
@@ -294,7 +294,8 @@ using real = eda::vhdl::intrinsic::real_type;
  * oct and hex.  */
 struct frac
 {
-    typedef double                                  numeric_type;
+    using numeric_type =  double;
+
     numeric_type const base;
     numeric_type pow;
 

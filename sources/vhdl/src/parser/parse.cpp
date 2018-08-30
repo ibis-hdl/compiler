@@ -78,7 +78,7 @@ bool parse::operator()(std::string const &input, ast::design_file& design_file)
         os << make_exception_description(filename, e);
     }
     catch(...) {
-        typedef struct { } unknown;
+        using unknown = struct { };
         os << make_exception_description(filename, unknown{});
     }
 
