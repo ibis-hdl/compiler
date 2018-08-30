@@ -21,8 +21,17 @@ namespace detail {
 template<typename AttrType, typename ParserType>
 std::tuple<bool, AttrType> parse(ParserType const &numeric_parser, std::string const &input, AttrType &attr)
 {
-    parser::iterator_type iter = std::begin(input);
-    parser::iterator_type end  = std::end(input);
+    ast::position_cache<parser::iterator_type> position_cache;
+    std::size_t const id = position_cache.add_file("<string>", input);
+
+    parser::error_handler_type error_handler{ std::cerr, position_cache.handle(id) };
+
+    auto const parser =
+        x3::with<parser::error_handler_tag>(std::ref(error_handler)) [
+            numeric_parser
+        ];
+
+    auto [iter, end] = position_cache.range(id);
 
     /* using different iterator_types causes linker errors, see e.g.
      * [linking errors while separate parser using boost spirit x3](
@@ -33,14 +42,6 @@ std::tuple<bool, AttrType> parse(ParserType const &numeric_parser, std::string c
         >::value,
         "iterator types must be the same"
     );
-
-    ast::position_cache<parser::iterator_type> position_cache(input);
-    parser::error_handler_type error_handler(std::cerr, position_cache);
-
-    auto const parser =
-        x3::with<parser::error_handler_tag>(std::ref(error_handler)) [
-            numeric_parser
-        ];
 
     bool parse_ok = false;
 

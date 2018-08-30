@@ -36,8 +36,8 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
     using boost::locale::translate;
 
     os << format(translate("in file {1}, line {2}:"))
-          % file_name()
-          % line_number(error_pos)
+          % position_proxy.file_name()
+          % position_proxy.line_number(error_pos)
 	   << "\n";
 
     os << color::message::error(translate("Parse ERROR")) << ": "
@@ -45,8 +45,8 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
        << "\n";
 
     // erroneous source snippet
-    iterator_type start = get_line_start(error_pos);
-    os << current_line(start);
+    iterator_type start = position_proxy.get_line_start(error_pos);
+    os << position_proxy.current_line(start);
     os << std::endl;
 
     // error indicator
@@ -56,17 +56,6 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
 	   << std::endl;
 
     return x3::error_handler_result::fail;
-}
-
-
-template <typename Iterator>
-std::string error_handler<Iterator>::file_name() const
-{
-    if (!filename.empty()) {
-    	return filename;
-    }
-
-    return boost::locale::translate("Unknown File Name", "<unknown>");
 }
 
 

@@ -43,29 +43,38 @@ BOOST_DATA_TEST_CASE_F( testsuite::failure_diagnostic_fixture,
     input, expected, test_case_name)
 {
     btt::output_test_stream                     	os;
-
+    ast::position_cache<parser::iterator_type> 		position_cache;
     ast::design_file 								design_file;
 
-    ast::position_cache<parser::iterator_type> 		position_cache(input);
-    parser::error_handler_type 						error_handler(os, position_cache, test_case_name);
+    {
+		std::size_t const id = position_cache.add_file(test_case_name, input);
 
-    parser::parse  									parse{ os, error_handler };
+		parser::error_handler_type 					error_handler{ os, position_cache.handle(id) };
+		parser::parse  								parse{ os, error_handler };
 
-    bool const parse_ok = parse(input, design_file, test_case_name);
+		bool const parse_ok = parse(position_cache.file_contents(id), design_file);
 
-    boost::ignore_unused(expected);
+		boost::ignore_unused(expected);
 
-    BOOST_TEST_REQUIRE(parse_ok);
+		BOOST_TEST_REQUIRE(parse_ok);
+    }
 
     vhdl::context 									context;
 
-	analyze::error_handler<parser::iterator_type> 	syntax_error_handler(os, position_cache, test_case_name);
-	analyze::syntax_checker 						syntax_check{ os, context, syntax_error_handler };
+    {
+		analyze::error_handler<parser::iterator_type> error_handler{ os, position_cache };
+		analyze::syntax_checker 					syntax_check{ os, context, error_handler };
 
-	syntax_check(design_file);
+		syntax_check(design_file);
 
-	bool const syntax_ok = syntax_check.get_worker().success();
-    BOOST_TEST(syntax_ok);
+		bool const syntax_ok = context.error_free();
+		BOOST_TEST(syntax_ok);
+    }
+
+    if (!current_test_passing()) {
+        failure_closure(test_case_name, input, os.str());
+        return;
+    }
 
     BOOST_TEST(os.str() == expected, btt::per_element());
     failure_closure(test_case_name, input, os.str());
@@ -81,29 +90,33 @@ BOOST_DATA_TEST_CASE_F( testsuite::failure_diagnostic_fixture,
     input, expected, test_case_name)
 {
     btt::output_test_stream                     	os;
-
+    ast::position_cache<parser::iterator_type> 		position_cache;
     ast::design_file 								design_file;
 
-    ast::position_cache<parser::iterator_type> 		position_cache(input);
-    parser::error_handler_type 						error_handler(os, position_cache, test_case_name);
+    {
+		std::size_t const id = position_cache.add_file(test_case_name, input);
 
-    parser::parse  									parse{ os, error_handler };
+		parser::error_handler_type 					error_handler{ os, position_cache.handle(id) };
+		parser::parse  								parse{ os, error_handler };
 
-    bool const parse_ok = parse(input, design_file, test_case_name);
+		bool const parse_ok = parse(position_cache.file_contents(id), design_file);
 
-    boost::ignore_unused(expected);
+		boost::ignore_unused(expected);
 
-    BOOST_TEST_REQUIRE(parse_ok);
+		BOOST_TEST_REQUIRE(parse_ok);
+    }
 
     vhdl::context 									context;
 
-	analyze::error_handler<parser::iterator_type> 	syntax_error_handler(os, position_cache, test_case_name);
-	analyze::syntax_checker 						syntax_check{ os, context, syntax_error_handler };
+    {
+		analyze::error_handler<parser::iterator_type> error_handler{ os, position_cache };
+		analyze::syntax_checker 					syntax_check{ os, context, error_handler };
 
-	syntax_check(design_file);
+		syntax_check(design_file);
 
-	bool const syntax_ok = syntax_check.get_worker().success();
-    BOOST_TEST(!syntax_ok);
+		bool const syntax_ok = context.error_free();
+		BOOST_TEST(!syntax_ok);
+    }
 
     if (!current_test_passing()) {
         failure_closure(test_case_name, input, os.str());

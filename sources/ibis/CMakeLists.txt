@@ -60,13 +60,13 @@ target_compile_options(${PROJECT_NAME} PRIVATE
     -Wextra
 )
 
-target_compile_options(${PROJECT_NAME} PRIVATE
-    -g -fsanitize=address -fno-omit-frame-pointer
-)
-
-set_target_properties(${PROJECT_NAME} PROPERTIES 
-    LINK_FLAGS "-g -fsanitize=address -fno-omit-frame-pointer"
-)
+#target_compile_options(${PROJECT_NAME} PRIVATE
+#    -g -fsanitize=address -fno-omit-frame-pointer
+#)
+#
+#set_target_properties(${PROJECT_NAME} PROPERTIES 
+#    LINK_FLAGS "-g -fsanitize=address -fno-omit-frame-pointer"
+#)
 
 
 if(CLANG_WARN_EVERYTHING)

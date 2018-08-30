@@ -21,15 +21,15 @@
 namespace eda { namespace vhdl { namespace ast {
 
 
-template <typename IteratorT, typename ContainerT>
-std::size_t position_cache<IteratorT, ContainerT>::line_number(iterator_type const& pos) const
+template <typename IteratorT>
+std::size_t position_cache<IteratorT>::line_number(std::size_t file_id, iterator_type const& pos) const
 {
     using char_type = typename std::iterator_traits<iterator_type>::value_type;
 
     std::size_t line_no { 1 };
     char_type prev { 0 };
 
-    for (iterator_type iter{ begin } ; iter != pos; ++iter) {
+    for (iterator_type iter{ file_contents(file_id).begin() } ; iter != pos; ++iter) {
         auto chr = *iter;
         switch (chr) {
             case '\n':
@@ -48,12 +48,12 @@ std::size_t position_cache<IteratorT, ContainerT>::line_number(iterator_type con
 }
 
 
-template <typename IteratorT, typename ContainerT>
-std::string position_cache<IteratorT, ContainerT>::current_line(iterator_type const& first) const
+template <typename IteratorT>
+std::string position_cache<IteratorT>::current_line(std::size_t file_id, iterator_type const& first) const
 {
 	iterator_type line_end = first;
 
-    while (line_end != end) {
+    while (line_end != file_contents(file_id).end()) {
 
         auto const chr = *line_end;
 
@@ -74,8 +74,8 @@ std::string position_cache<IteratorT, ContainerT>::current_line(iterator_type co
 
 
 
-template <typename IteratorT, typename ContainerT>
-IteratorT position_cache<IteratorT, ContainerT>::get_line_start(iterator_type& pos) const
+template <typename IteratorT>
+IteratorT position_cache<IteratorT>::get_line_start(std::size_t file_id, iterator_type& pos) const
 {
     // make sure err_pos does not point to white space
     auto const skip_whitespace = [](iterator_type& iter, iterator_type const& last) {
@@ -94,6 +94,8 @@ IteratorT position_cache<IteratorT, ContainerT>::get_line_start(iterator_type& p
             }
         }
     };
+
+    auto [begin, end] = range(file_id);
 
     skip_whitespace(pos, end);
 

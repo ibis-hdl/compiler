@@ -20,6 +20,9 @@
 
 #include <testsuite/namespace_alias.hpp>
 
+#include <eda/util/pretty_typename.hpp>
+#include <iostream>
+
 
 namespace testsuite { namespace vhdl_parser { namespace util {
 
@@ -36,21 +39,22 @@ struct testing_parser
     operator()(std::string const &input, ParserType const &parser_rule,
                fs::path const &filename = "", bool full_match = true)
     {
-        attribute_type                              attr;
+        ast::position_cache<parser::iterator_type> position_cache;
+        std::size_t const id = position_cache.add_file(filename.generic_string() + ".input", input);
+
         btt::output_test_stream                     output;
 
-        ast::position_cache<parser::iterator_type> position_cache(input);
-        parser::error_handler_type error_handler(output, position_cache,
-                                                 filename.generic_string() + ".input");
+        parser::error_handler_type error_handler{ output, position_cache.handle(id) };
 
         auto const parser =
             x3::with<parser::error_handler_tag>(std::ref(error_handler)) [
                   parser_rule
             ];
 
-        parser::iterator_type iter = input.begin();
-        parser::iterator_type end  = input.end();
+        auto [iter, end] = position_cache.range(id);
 
+#if 1
+#if defined(__clang__) // GCC fails here
         /* using different iterator_types causes linker errors, see e.g.
          * [linking errors while separate parser using boost spirit x3](
          *  https://stackoverflow.com/questions/40496357/linking-errors-while-separate-parser-using-boost-spirit-x3) */
@@ -58,8 +62,14 @@ struct testing_parser
                    && std::is_same<decltype(end),  parser::iterator_type>::value,
                       "iterator types must be the same"
         );
+#endif
+#else
+        std::cerr << "##### get testing_parser<" << eda::util::pretty_typename<decltype(iter)>{} << ">\n";
+        std::cerr << "##### expect testing_parser<" << eda::util::pretty_typename<parser::iterator_type>{} << ">\n";
+#endif
 
         bool parse_ok = false;
+        attribute_type                              attr;
 
         try {
             parse_ok = x3::phrase_parse(iter, end, parser, parser::skipper, attr);

@@ -30,7 +30,7 @@ context::context()
 }
 
 
-std::ostream& failure_status::operator()(std::ostream& os) const
+std::ostream& failure_status::print(std::ostream& os) const
 {
     using boost::locale::translate;
     using boost::locale::format;

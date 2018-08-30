@@ -33,8 +33,7 @@ public:
     , error_handler{ error_handler_ }
     { }
 
-    bool operator()(std::string const &input, ast::design_file& design_file,
-                    std::string const &filename = "") /* const */;
+    bool operator()(std::string const &input, ast::design_file& design_file) /* const */;
 
 private:
     template <typename ExceptionT>

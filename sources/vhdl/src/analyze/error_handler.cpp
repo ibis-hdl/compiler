@@ -35,8 +35,10 @@ void error_handler<Iterator>::operator()(
 
     cxx_assert(where_tag.is_tagged(), "Node not tagged");
 
-    auto const iterators_of = [this](ast::position_tagged const& tagged_node) {
-        auto range = position_cache.position_of(tagged_node);
+    auto current_file = position_cache.handle(where_tag.file_id);
+
+    auto const iterators_of = [&current_file](ast::position_tagged const& tagged_node) {
+        auto range = current_file.position_of(tagged_node);
         return std::make_tuple((*range).begin(), (*range).end());
     };
 
@@ -52,8 +54,8 @@ void error_handler<Iterator>::operator()(
     auto [error_first, error_last] = iterators_of(where_tag);
 
     os << format(translate("in file {1}, line {2}:"))
-          % file_name()
-          % line_number(error_first)
+          % current_file.file_name()
+          % current_file.line_number(error_first)
        << "\n";
 
     os << color::message::error(translate("Syntax ERROR")) << ": "
@@ -61,8 +63,8 @@ void error_handler<Iterator>::operator()(
        << "\n";
 
     // erroneous source snippet
-    iterator_type line_start = get_line_start(error_first);
-    os << current_line(line_start);
+    iterator_type line_start = current_file.get_line_start(error_first);
+    os << current_file.current_line(line_start);
     os << std::endl;
 
     // error indicator
@@ -91,10 +93,12 @@ void error_handler<Iterator>::operator()(
     cxx_assert(start_label.is_tagged(), "Node/StartLabel not tagged");
     cxx_assert(end_label.is_tagged(), "Node/EndLabel not tagged");
 
+    auto current_file = position_cache.handle(where_tag.file_id);
+
     /* at ill-formed label pairs (e.g. end, but no start label given) nodes
      * arn't tagged appropriate. */
-    auto const iterators_of = [this](ast::position_tagged const& tagged_node) {
-        auto range = position_cache.position_of(tagged_node);
+    auto const iterators_of = [&current_file](ast::position_tagged const& tagged_node) {
+        auto range = current_file.position_of(tagged_node);
         if (range) {
         	return std::make_tuple((*range).begin(), (*range).end(), true /* valid */);
         }
@@ -115,12 +119,8 @@ void error_handler<Iterator>::operator()(
     	return util::make_iomanip([&](std::ostream& os) {
 			auto [first, last, valid] = iterators_of(tagged_node);
 			if (valid) {
-				/* FixMe: g++ (GCC) 7.3.0 on Windows triggers:
-				 * internal compiler error: in finish_member_declaration, at cp/semantics.c:2984
-				 * by use of ... = get_line_start(first), the simple below fixes
-				 * this  */
-				iterator_type line_start = position_cache.get_line_start(first);
-				os << current_line(line_start) << "\n"
+				iterator_type line_start = current_file.get_line_start(first);
+				os << current_file.current_line(line_start) << "\n"
 				   << indicator(line_start, first, last)
 				   << annotation;
 			}
@@ -134,8 +134,8 @@ void error_handler<Iterator>::operator()(
     boost::ignore_unused(valid);
 
     os << format(translate("in file {1}, line {2}:"))
-          % file_name()
-          % line_number(error_first)
+          % current_file.file_name()
+          % current_file.line_number(error_first)
 	   << "\n";
 
     os << color::message::error(translate("Syntax ERROR")) << ": "
@@ -149,16 +149,6 @@ void error_handler<Iterator>::operator()(
 
     os << std::endl;
 }
-
-
-template <typename Iterator>
-std::string error_handler<Iterator>::file_name() const
-{
-    if (!filename.empty()) return filename;
-
-    return boost::locale::translate("Unknown File Name", "<unknown>");
-}
-
 
 
 }}} // namespace eda.vhdl.analyze

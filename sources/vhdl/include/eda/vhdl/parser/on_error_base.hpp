@@ -26,13 +26,18 @@
 namespace eda { namespace vhdl { namespace parser {
 
 
+/**
+ * Base class for all AST nodes where the parser error handler can be called.
+ *
+ * This is called directly by spirit.X3 in case of parser error.
+ */
 class on_error_base
 {
 public:
     template<typename IteratorT, typename ExceptionT, typename ContextT>
     x3::error_handler_result
     on_error(IteratorT& /* first */, IteratorT const& /* last */,
-             ExceptionT const& x, ContextT const& context) /* XXX const */
+             ExceptionT const& x, ContextT const& context) const
     {
 #if 0 /* XXX recursive include problem; parser_config requires on_error definition,
        * but context_type is required here for statis_assert */
@@ -46,6 +51,13 @@ public:
         return error_handler(x.where(), make_error_description(x.which()));
     }
 
+    /**
+     * lookup a parser rule name for a useful name used for error message
+     * construction.
+     *
+     * @param which The spirit.x3 BNF rule name.
+     * @return Beautified name of the rule.
+     */
     std::string_view lookup(std::string_view which) const
     {
         auto const iter = ruleid_map.find(which);
@@ -56,6 +68,12 @@ public:
         return which;
     }
 
+    /**
+     * Make a error description based on spirit.x3 BNF rule name.
+     *
+     * @param which The spirit.x3 BNF rule name.
+     * @return An parser error message.
+     */
     std::string make_error_description(std::string_view which) const;
 
 private:

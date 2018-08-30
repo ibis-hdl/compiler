@@ -102,17 +102,25 @@ std::ostream& operator<<(std::ostream& os, basic_counter<Tag> const& counter) {
  * }
  * \endcode
  */
-struct context {
+class context
+{
+public:
+    context();
 
-	using error_counter = detail::basic_counter<struct error_tag>;
+public:
+    using error_counter = detail::basic_counter<struct error_tag>;
 	using warning_counter = detail::basic_counter<struct warning_tag>;
 
 	error_counter                                   error_count;
 	warning_counter                                 warning_count;
 
-    std::unordered_map<ast::string_span, int>       dummy;
+public:
+	bool error_free() const {
+		return error_count == 0;
+	}
 
-    context();
+private:
+    std::unordered_map<ast::string_span, int>       dummy;
 };
 
 
@@ -128,13 +136,13 @@ public:
     : ctx{ ctx_ }
     { }
 
-    std::ostream& operator()(std::ostream& os) const;
+    std::ostream& print(std::ostream& os) const;
 };
 
 
 static inline
 std::ostream& operator<<(std::ostream& os, failure_status const& status) {
-    return status(os);
+    return status.print(os);
 }
 
 

@@ -19,8 +19,7 @@
 namespace eda { namespace vhdl { namespace parser {
 
 
-bool parse::operator()(std::string const &input, ast::design_file& design_file,
-		               std::string const &filename)
+bool parse::operator()(std::string const &input, ast::design_file& design_file)
 {
     using vhdl::parser::iterator_type;
 
@@ -45,6 +44,8 @@ bool parse::operator()(std::string const &input, ast::design_file& design_file,
             parser::grammar()
     ];
 
+
+    auto filename = error_handler.current_file().file_name();
 
     try {
         bool const parse_ok = x3::phrase_parse(
@@ -92,12 +93,13 @@ std::string parse::make_exception_description(std::string const &filename,
     using boost::locale::format;
     using boost::locale::translate;
 
-    // [IIFE idiom](https://www.bfilipek.com/2016/11/iife-for-complex-initialization.html)
     std::string const what = [&] {
         if constexpr(std::is_base_of_v<std::remove_reference_t<ExceptionT>, std::exception>) {
             return exception.what();
         }
         else {
+        	/* An exception was caught which hasn't been derived from
+        	 * std::exception, hence no what() is available - simple unknown. */
             return translate("ExceptionDescription", "unknown");
         }
     }();
