@@ -42,11 +42,11 @@ bool icompare_less(std::string_view const& lhs, std::string_view const& rhs)
 static inline
 bool icompare(std::string_view const& lhs, std::string_view const& rhs) {
 
-	return lhs.size() == rhs.size()
-		   && std::equal(lhs.begin(), lhs.end(), rhs.begin(),
-				        [](unsigned char c1, unsigned char c2) {
-							return std::tolower(c1) == std::tolower(c2);
-	});
+    return lhs.size() == rhs.size()
+           && std::equal(lhs.begin(), lhs.end(), rhs.begin(),
+                        [](unsigned char c1, unsigned char c2) {
+                            return std::tolower(c1) == std::tolower(c2);
+    });
 };
 
 

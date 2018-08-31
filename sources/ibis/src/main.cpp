@@ -28,17 +28,17 @@ int main(int argc, const char *argv[])
 
     eda::settings setting;
 
-	ibis::init init(argc, argv, setting);
+    ibis::init init(argc, argv, setting);
 
-	if (setting["verbose"]) {
-		setting.dump(std::cout);
-		std::cout << "\n";
-	}
+    if (setting["verbose"]) {
+        setting.dump(std::cout);
+        std::cout << '\n';
+    }
 
-	using namespace eda;
+    using namespace eda;
 
     try {
-    	util::file_loader file_reader{ std::cerr, setting };
+        util::file_loader file_reader{ std::cerr, setting };
 
 #if 0
         std::cerr << color::message::failure("FAILURE") <<  " Format Test\n";
@@ -50,13 +50,13 @@ int main(int argc, const char *argv[])
         for (auto const& filename : setting["files"].get<std::vector<std::string>>()) {
             auto const contents = file_reader.read_file(filename);
             if (!setting["quiet"]) {
-            	std::cerr << color::message::note(translate("processing:")) << " " << filename << "\n";
+                std::cerr << color::message::note(translate("processing:")) << " " << filename << '\n';
             }
             std::cout << "------------------------------------------------\n";
             std::cout << *contents;
             std::cout << "\n------------------------------------------------\n";
             std::time_t t = file_reader.timesstamp(filename);
-            std::cout << "timestamp: " << t << "\n";
+            std::cout << "timestamp: " << t << '\n';
             std::cout << "------------------------------------------------\n";
         }
 
@@ -65,11 +65,11 @@ int main(int argc, const char *argv[])
     catch(std::exception const& e) {
         std::cerr << color::message::failure(translate("Exception caught:"))
                   << " " << e.what()
-				  << "\n";
+                  << '\n';
     }
     catch(...) {
         std::cerr << color::message::failure(translate("Unexpected exception caught"))
-                  << "\n";
+                  << '\n';
     }
 
     return EXIT_SUCCESS;

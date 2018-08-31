@@ -35,47 +35,47 @@ template<typename Tag>
 class basic_counter
 {
 public:
-	struct overflow: public std::exception { };
+    struct overflow: public std::exception { };
 
 public:
-	typedef std::size_t 							value_type;
+    typedef std::size_t                             value_type;
 
 public:
-	basic_counter(value_type limit_ = std::numeric_limits<value_type>::max())
+    basic_counter(value_type limit_ = std::numeric_limits<value_type>::max())
     : treshold { limit_ }
-	, value{ 0 }
-	{ }
+    , value{ 0 }
+    { }
 
 public:
-	basic_counter& operator++() {    // prefix ++
-		++value;
-		if (value > treshold) {
-			throw overflow{};
-		}
-		return *this;
-	}
-
-	basic_counter operator++(int) {  // postfix ++
-		basic_counter result(*this);
-		++(*this);
-		return result;
-	}
-
-    operator value_type() const {	// user-defined conversion
-    	return value;
+    basic_counter& operator++() {    // prefix ++
+        ++value;
+        if (value > treshold) {
+            throw overflow{};
+        }
+        return *this;
     }
 
-	value_type& limit() { return treshold; }
-	value_type limit() const { return treshold; }
+    basic_counter operator++(int) {  // postfix ++
+        basic_counter result(*this);
+        ++(*this);
+        return result;
+    }
 
-	std::ostream& print(std::ostream& os) const {
-		os << value;
-		return os;
-	}
+    operator value_type() const {    // user-defined conversion
+        return value;
+    }
+
+    value_type& limit() { return treshold; }
+    value_type limit() const { return treshold; }
+
+    std::ostream& print(std::ostream& os) const {
+        os << value;
+        return os;
+    }
 
 private:
-	value_type  									treshold;
-	value_type 										value;
+    value_type                                      treshold;
+    value_type                                         value;
 };
 
 
@@ -109,15 +109,15 @@ public:
 
 public:
     using error_counter = detail::basic_counter<struct error_tag>;
-	using warning_counter = detail::basic_counter<struct warning_tag>;
+    using warning_counter = detail::basic_counter<struct warning_tag>;
 
-	error_counter                                   error_count;
-	warning_counter                                 warning_count;
+    error_counter                                   error_count;
+    warning_counter                                 warning_count;
 
 public:
-	bool error_free() const {
-		return error_count == 0;
-	}
+    bool error_free() const {
+        return error_count == 0;
+    }
 
 private:
     std::unordered_map<ast::string_span, int>       dummy;

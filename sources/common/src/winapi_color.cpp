@@ -12,7 +12,7 @@
 
 namespace eda { namespace color { namespace detail {
 
-	const int win_printer::xindex = std::ios_base::xalloc();
+    const int win_printer::xindex = std::ios_base::xalloc();
 
 } } }
 

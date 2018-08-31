@@ -62,9 +62,9 @@ label_match::result label_match::compare(ast::identifier const& start_label, ast
 
 label_match::result label_match::compare(ast::optional<ast::identifier> const& start_label, ast::optional<ast::identifier> const& end_label) const
 {
-	if (end_label   && !start_label) {
-		return result::ILLFORMED;
-	}
+    if (end_label   && !start_label) {
+        return result::ILLFORMED;
+    }
 
     if (start_label && end_label) {
 
@@ -84,7 +84,7 @@ label_match::result label_match::operator()(ast::architecture_body const& node) 
 
 
 label_match::result label_match::operator()(ast::block_statement const& node) const {
-	// block_label mandatory
+    // block_label mandatory
     return compare(node.label, node.end_label);
 }
 
@@ -120,17 +120,17 @@ label_match::result label_match::operator()(ast::loop_statement const& node) con
 
 
 label_match::result label_match::operator()(ast::package_body const& node) const {
-	return compare(node.identifier, node.end_identifier);
+    return compare(node.identifier, node.end_identifier);
 }
 
 
 label_match::result label_match::operator()(ast::package_declaration const& node) const {
-	return compare(node.identifier, node.end_identifier);
+    return compare(node.identifier, node.end_identifier);
 }
 
 
 label_match::result label_match::operator()(ast::process_statement const& node) const {
-	return compare(node.label, node.end_label);
+    return compare(node.label, node.end_label);
 }
 
 

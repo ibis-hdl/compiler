@@ -49,7 +49,7 @@ dataset_loader::dataset_loader(std::string const& path)
     read_files(p);
 
     if(testfile_input.empty()) {
-        std::cerr << "WARNING: no data in dataset " << path << "\n";
+        std::cerr << "WARNING: no data in dataset " << path << '\n';
     }
 
 
@@ -81,7 +81,7 @@ void dataset_loader::read_files(fs::path const& path)
                     testfile_name.emplace_back(
                         (file.parent_path().filename() / file.stem()).generic_string()
                     );
-                    cerr << "INFO: read " << file << "\n";
+                    cerr << "INFO: read " << file << '\n';
 
                     fs::path const input_file  = file;
                     fs::path const expect_file = fs::change_extension(file, expected_extension);
@@ -132,7 +132,7 @@ std::string dataset_loader::read_file(fs::path const& file_path)
     ss << file.rdbuf();
 
     if(file.fail() && !file.eof()) {
-        cerr << "ERROR: unable to open " << pretty_filepath(file_path) << "\n";
+        cerr << "ERROR: unable to open " << pretty_filepath(file_path) << '\n';
         throw std::ios_base::failure{ "rdbuf() read error" };
     }
 
@@ -161,19 +161,19 @@ bool dataset_loader::parse_command_line()
     bool source_prefix_arg{ false };
 
     for(unsigned i = 0; i != argc; i++) {
-        //std::cout << "ArgValue[" << i << "]: " << argv[i] << "\n";
+        //std::cout << "ArgValue[" << i << "]: " << argv[i] << '\n';
 
         if(parse_for("--source-dir=", argv[i], source_dir)) {
-            //std::cout << "--source-dir = " << source_dir << "\n";
+            //std::cout << "--source-dir = " << source_dir << '\n';
             source_prefix_arg = true;
         }
 
         if(parse_for("--input-extension=", argv[i], input_extension)) {
-            //std::cout << "--input-extension=" << input_extension << "\n";
+            //std::cout << "--input-extension=" << input_extension << '\n';
         }
 
         if(parse_for("--expected-extension=", argv[i], expected_extension)) {
-            //std::cout << "--expected-extension=" << expected_extension << "\n";
+            //std::cout << "--expected-extension=" << expected_extension << '\n';
         }
 
     }

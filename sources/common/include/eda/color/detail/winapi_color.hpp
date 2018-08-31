@@ -89,8 +89,8 @@ public:
 
             union {
                 struct {
-                    WORD 	state;
-                    WORD   	default_attribute;
+                    WORD     state;
+                    WORD       default_attribute;
                 } data;
                 long        value;
             } iword;
@@ -143,7 +143,7 @@ public:
 
     win_printer& operator|=(win_printer const& other)
     {
-    	return *this |= static_cast<winapi::attribute>(other.attr);
+        return *this |= static_cast<winapi::attribute>(other.attr);
     }
 
     win_printer& operator|=(winapi::attribute other_attr)
@@ -201,25 +201,25 @@ namespace text {
 }
 
 namespace fg {
-	color::printer const black{ attribute::Foreground_Black };
-	color::printer const red{ attribute::Foreground_Red };
-	color::printer const green{ attribute::Foreground_Green };
-	color::printer const yellow{ attribute::Foreground_Yellow };
-	color::printer const blue{ attribute::Foreground_Blue };
-	color::printer const magenta{ attribute::Foreground_Magenta };
-	color::printer const cyan{ attribute::Foreground_Cyan };
-	color::printer const white{ attribute::Foreground_White };
+    color::printer const black{ attribute::Foreground_Black };
+    color::printer const red{ attribute::Foreground_Red };
+    color::printer const green{ attribute::Foreground_Green };
+    color::printer const yellow{ attribute::Foreground_Yellow };
+    color::printer const blue{ attribute::Foreground_Blue };
+    color::printer const magenta{ attribute::Foreground_Magenta };
+    color::printer const cyan{ attribute::Foreground_Cyan };
+    color::printer const white{ attribute::Foreground_White };
 }
 
 namespace bg {
-	color::printer const black{ attribute::Background_Black };
-	color::printer const red{ attribute::Background_Red };
-	color::printer const green{ attribute::Background_Green };
-	color::printer const yellow{ attribute::Background_Yellow };
-	color::printer const blue{ attribute::Background_Blue };
-	color::printer const magenta{ attribute::Background_Magenta };
-	color::printer const cyan{ attribute::Background_Cyan };
-	color::printer const white{ attribute::Background_White };
+    color::printer const black{ attribute::Background_Black };
+    color::printer const red{ attribute::Background_Red };
+    color::printer const green{ attribute::Background_Green };
+    color::printer const yellow{ attribute::Background_Yellow };
+    color::printer const blue{ attribute::Background_Blue };
+    color::printer const magenta{ attribute::Background_Magenta };
+    color::printer const cyan{ attribute::Background_Cyan };
+    color::printer const white{ attribute::Background_White };
 }
 
 color::printer const color_off(attribute::Attributes_Off);

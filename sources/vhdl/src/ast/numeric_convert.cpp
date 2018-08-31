@@ -116,7 +116,7 @@ void trace_report(RangeType const& range, bool parse_ok,
               << function << "('" << range << "') --> "
               << std::boolalpha
               << "parse_ok = "     << parse_ok
-              << ", attribute = "  << attribute << "\n";
+              << ", attribute = "  << attribute << '\n';
 }
 
 } // namespace dbg_util
@@ -398,7 +398,7 @@ struct numeric_convert::report_error
             % literal_type
             % literal_printer(literal)
             % MAX_VALUE
-		   << "\n";
+           << '\n';
     }
 
     void overflow(ast::bit_string_literal const& literal) const
@@ -429,7 +429,7 @@ struct numeric_convert::report_error
             "An unknown error occurred during parsing of \'{1}\'."
             ))
             % what
-		   << "\n";
+           << '\n';
     }
 
     template<typename StringViewT>
@@ -443,7 +443,7 @@ struct numeric_convert::report_error
             "Supported are only 2, 8, 10 and 16!"
             ))
             % base_literal
-		   << "\n";
+           << '\n';
     }
 };
 
@@ -708,7 +708,7 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
                     "with fractional part of \'{1}\'."
                     ))
                     % literal.number.fractional_part
-				   << "\n";
+                   << '\n';
                 return std::make_tuple(false, result);
             }
 

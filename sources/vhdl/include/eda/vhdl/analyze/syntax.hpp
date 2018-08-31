@@ -8,7 +8,7 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_ANALYZE_SYNTAX_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_ANALYZE_SYNTAX_HPP_
 
-#include <eda/vhdl/ast.hpp>	// XXX forward
+#include <eda/vhdl/ast.hpp>    // XXX forward
 
 #include <eda/vhdl/ast/basic_ast_walker.hpp>
 #include <eda/vhdl/context.hpp>
@@ -24,20 +24,20 @@ namespace eda { namespace vhdl { namespace analyze {
 class syntax_worker
 {
 public:
-	syntax_worker(std::ostream& os_,
+    syntax_worker(std::ostream& os_,
                   vhdl::context& context_,
-				  analyze::error_handler_type& error_handler_)
-	: os{ os_ }
+                  analyze::error_handler_type& error_handler_)
+    : os{ os_ }
     , context{ context_ }
     , error_handler{ error_handler_ }
-	{ }
+    { }
 
 public:
-	bool success() const;
+    bool success() const;
 
-	bool failures() const {
-		return !success();
-	}
+    bool failures() const {
+        return !success();
+    }
 
 public:
     void operator()(ast::architecture_body const& node, std::string_view const& node_name) const;
@@ -60,7 +60,7 @@ private:
     bool label_matches(NodeT const& node, std::string_view const& node_name) const;
 
 private:
-    std::ostream&									os;
+    std::ostream&                                    os;
     vhdl::context&                                  context;
     analyze::error_handler_type&                    error_handler;
 };

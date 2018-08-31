@@ -19,11 +19,11 @@
 
 
 namespace boost { namespace filesystem {
-	struct path;
+    struct path;
 } }
 
 namespace eda {
-	class settings;
+    class settings;
 }
 
 
@@ -33,7 +33,7 @@ namespace eda { namespace util {
 class file_loader
 {
 public:
-	explicit file_loader(std::ostream& os_, eda::settings const& setting);
+    explicit file_loader(std::ostream& os_, eda::settings const& setting);
 
     file_loader(file_loader const&) = delete;
     file_loader const& operator=(file_loader const&) = delete;
@@ -70,8 +70,8 @@ public:
     std::time_t timesstamp(std::string const& filename) const;
 
 private:
-    std::ostream& 									os;
-    bool const										quiet;
+    std::ostream&                                     os;
+    bool const                                        quiet;
 };
 
 

@@ -38,15 +38,15 @@ class position_cache
 public:
     typedef IteratorT                               iterator_type;
     typedef std::vector<
-    		boost::iterator_range<iterator_type>>	position_container_type;
+            boost::iterator_range<iterator_type>>    position_container_type;
 
     typedef typename
-    		position_container_type::value_type     range_type;
+            position_container_type::value_type     range_type;
 
 private:
     // <filename, contents>
     using file_pair = std::tuple<std::string, std::string>;
-    typedef std::vector<file_pair>					file_container_type;
+    typedef std::vector<file_pair>                    file_container_type;
 
 public:
     class proxy;
@@ -78,9 +78,9 @@ public:
      *         can be referred later on using the proxy.
      */
     std::size_t add_file(std::string filename, std::string contents = std::string{}) {
-    	std::size_t const file_id = files.size();
-    	files.emplace_back(std::move(filename), std::move(contents));
-    	return file_id;
+        std::size_t const file_id = files.size();
+        files.emplace_back(std::move(filename), std::move(contents));
+        return file_id;
     }
 
 public:
@@ -89,7 +89,7 @@ public:
      *
      * @param file_id ID of actually processed file.
      * @param node    The AST node to tag
-     * @param first	  Begin of iterator position to tag.
+     * @param first      Begin of iterator position to tag.
      * @param last    End  of iterator position to tag.
      */
     template <typename NodeT>
@@ -106,10 +106,10 @@ public:
             positions.emplace_back(first, last);
         }
         else { // ignore
-        	// ... but make gcc quiet
-        	boost::ignore_unused(file_id);
-        	boost::ignore_unused(first);
-        	boost::ignore_unused(last);
+            // ... but make gcc quiet
+            boost::ignore_unused(file_id);
+            boost::ignore_unused(first);
+            boost::ignore_unused(last);
         }
     }
 
@@ -121,7 +121,7 @@ public:
      * @return
      */
     std::string const& file_name(std::size_t file_id) const {
-    	return std::get<0>(files.at(file_id));
+        return std::get<0>(files.at(file_id));
     }
 
     /**
@@ -131,7 +131,7 @@ public:
      * @return A reference to a string representing the file contents.
      */
     std::string const& file_contents(std::size_t file_id) const {
-    	return std::get<1>(files.at(file_id));
+        return std::get<1>(files.at(file_id));
     }
 
     /**
@@ -141,8 +141,8 @@ public:
      * @return A pair of iterators pointing to begin and end of the file contents.
      */
     std::tuple<iterator_type, iterator_type> range(std::size_t file_id) const {
-    	std::string const& contents = file_contents(file_id);
-    	return std::tuple<iterator_type, iterator_type>{ contents.begin(), contents.end() };
+        std::string const& contents = file_contents(file_id);
+        return std::tuple<iterator_type, iterator_type>{ contents.begin(), contents.end() };
     }
 
     /**
@@ -196,7 +196,7 @@ public:
     std::string current_line(std::size_t file_id, iterator_type const& start) const;
 
 private:
-    file_container_type								files;
+    file_container_type                                files;
     position_container_type                         positions;
 };
 
@@ -215,30 +215,30 @@ template <typename IteratorT>
 class position_cache<IteratorT>::proxy
 {
 public:
-	proxy(position_cache<IteratorT>& position_cache_, std::size_t file_id_)
-	: self{ position_cache_ }
-	, file_id{ file_id_ }
-	{ }
+    proxy(position_cache<IteratorT>& position_cache_, std::size_t file_id_)
+    : self{ position_cache_ }
+    , file_id{ file_id_ }
+    { }
 
-	proxy(proxy&&) = default;
+    proxy(proxy&&) = default;
 
-	proxy(proxy const&) = delete;
-	proxy& operator=(proxy const&) = delete;
-	proxy& operator=(proxy&&) = delete;
+    proxy(proxy const&) = delete;
+    proxy& operator=(proxy const&) = delete;
+    proxy& operator=(proxy&&) = delete;
 
 public:
-	std::size_t id() const { return file_id; }
+    std::size_t id() const { return file_id; }
 
 public:
     template <typename NodeT>
     void annotate(NodeT& node, iterator_type first, iterator_type last) {
-    	self.annotate(file_id, node, first, last);
+        self.annotate(file_id, node, first, last);
     }
 
 public:
     template <typename NodeT>
     std::optional<range_type> position_of(NodeT const& node) const {
-    	return self.position_of(node);
+        return self.position_of(node);
     }
 
 public:
@@ -248,26 +248,26 @@ public:
 
 public:
     std::size_t line_number(iterator_type const& pos) const {
-    	return self.line_number(file_id, pos);
+        return self.line_number(file_id, pos);
     }
 
     iterator_type get_line_start(iterator_type& pos_iter) const {
-    	return self.get_line_start(file_id, pos_iter);
+        return self.get_line_start(file_id, pos_iter);
     }
 
     std::string current_line(iterator_type const& start) const {
-    	return self.current_line(file_id, start);
+        return self.current_line(file_id, start);
     }
 
 private:
-	position_cache<IteratorT>& 						self;
-	std::size_t const								file_id;
+    position_cache<IteratorT>&                         self;
+    std::size_t const                                file_id;
 };
 
 
 template <typename IteratorT>
 typename position_cache<IteratorT>::proxy position_cache<IteratorT>::handle(std::size_t file_id) {
-	return proxy{ *this, file_id };
+    return proxy{ *this, file_id };
 }
 
 

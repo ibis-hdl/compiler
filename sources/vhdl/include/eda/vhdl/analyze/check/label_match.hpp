@@ -25,9 +25,9 @@ class label_match
 {
 public:
     enum class result {
-		OK,
-		MISMATCH,
-		ILLFORMED
+        OK,
+        MISMATCH,
+        ILLFORMED
     };
 
 public:
@@ -71,16 +71,16 @@ namespace detail {
 
 template<class Default, class AlwaysVoid, template<class ...> class Op, class... Args>
 struct detector {
-	using value_t = std::false_type;
-	using type = Default;
+    using value_t = std::false_type;
+    using type = Default;
 };
 
 template<class Default, template<class ...> class Op, class... Args>
 struct detector<Default, std::void_t<Op<Args...>>, Op, Args...> {
-	// Note that std::void_t is a C++17 feature
-		using value_t = std::true_type;
-		using type = Op<Args...>;
-	};
+    // Note that std::void_t is a C++17 feature
+        using value_t = std::true_type;
+        using type = Op<Args...>;
+    };
 
 } // namespace detail
 
@@ -119,25 +119,25 @@ std::tuple<ast::identifier const&, ast::identifier const&>
 static inline
 labels_of(NodeT const& node)
 {
-	using tuple_type = std::tuple<ast::identifier const&, ast::identifier const&>;
+    using tuple_type = std::tuple<ast::identifier const&, ast::identifier const&>;
 
-	/* here it's assumed that the identifier follow the convention as they are
-	 * paired as:
-	 * - label - end_label (the classical VHDL labels) or
-	 * - identifier - end_identifier (where identifier is mandatory) */
-	if constexpr (label_util::is_detected<label_util::has_label, NodeT>::value) {
-		if constexpr (std::is_same_v<std::decay_t<decltype(node.label)>, ast::optional<ast::identifier>>) {
-			return tuple_type(*node.label, *node.end_label);
-		}
-		else { // mandatory start label
-			return tuple_type(node.label, *node.end_label);
-		}
-	}
-	else if constexpr (label_util::is_detected<label_util::has_identifier, NodeT>::value) {
-		// always mandatory identifier
-		return tuple_type(node.identifier, *node.end_identifier);
-	}
-	else { /* expect compiler error */ }
+    /* here it's assumed that the identifier follow the convention as they are
+     * paired as:
+     * - label - end_label (the classical VHDL labels) or
+     * - identifier - end_identifier (where identifier is mandatory) */
+    if constexpr (label_util::is_detected<label_util::has_label, NodeT>::value) {
+        if constexpr (std::is_same_v<std::decay_t<decltype(node.label)>, ast::optional<ast::identifier>>) {
+            return tuple_type(*node.label, *node.end_label);
+        }
+        else { // mandatory start label
+            return tuple_type(node.label, *node.end_label);
+        }
+    }
+    else if constexpr (label_util::is_detected<label_util::has_identifier, NodeT>::value) {
+        // always mandatory identifier
+        return tuple_type(node.identifier, *node.end_identifier);
+    }
+    else { /* expect compiler error */ }
 }
 
 

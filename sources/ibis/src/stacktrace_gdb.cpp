@@ -86,7 +86,7 @@ static const char *signame(int sig) {
 bool register_gdb_signal_handler()
 {
     if (gdb_detected() || valgrind_detected()) {
-    	std::cerr << "Note: GDB signal handler already installed, skip.\n";
+        std::cerr << "Note: GDB signal handler already installed, skip.\n";
         return true;
     }
     else { /* nothing */ }
@@ -140,19 +140,19 @@ void gdb_signal_handler(int sig, siginfo_t *, void *)
         },
         bp::extend::on_setup([](auto&) {
             std::cout << "try to launch GDB process from PID = "
-                      << getpid() << "\n";
+                      << getpid() << '\n';
         }),
         bp::extend::on_error([](auto&, std::error_code const& ec) {
             std::cerr << "error occurred while trying to launch the process: "
-                      << ec.message() << "\n";
+                      << ec.message() << '\n';
         }),
         bp::extend::on_fork_error([](auto&, std::error_code const& ec) {
             std::cerr << "error occurred during the call of fork(): "
-                      << ec.message() << "\n";
+                      << ec.message() << '\n';
         }),
         bp::extend::on_exec_error([](auto&, std::error_code const& ec) {
             std::cerr << "call of execve() failed: "
-                      << ec.message() << "\n";
+                      << ec.message() << '\n';
         }),
         bp::extend::on_success([](auto&) {
             std::cout << "GDB process successfully launched.\n";

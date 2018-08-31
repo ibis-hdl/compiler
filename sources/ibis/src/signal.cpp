@@ -14,7 +14,7 @@ void testing_signal_handler()
 {
 #if 0 // doesn't work ????
     int sig = SIGFPE;
-    std::cout << "SIGNAL " << signame(sig) << "\n";
+    std::cout << "SIGNAL " << signame(sig) << '\n';
     signal(sig, SIG_DFL);
 #endif
     int n = 3;
@@ -22,7 +22,7 @@ void testing_signal_handler()
     std::cout << "testing signal handler with SIGFPE\n";
     while(true) {
         r = 100 / n;
-        std::cout << "100 / " << n-- << " = " << r << "\n";
+        std::cout << "100 / " << n-- << " = " << r << '\n';
     }
 }
 

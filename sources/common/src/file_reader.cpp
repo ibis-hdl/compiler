@@ -46,30 +46,30 @@ bool file_loader::exist_file(std::string const& filename) const
                 return true;
             }
 
-			if (!quiet) {
-				os << format(translate(
-					  "File {1} is not a regular file"))
-					  % file_path.make_preferred();
-			}
+            if (!quiet) {
+                os << format(translate(
+                      "File {1} is not a regular file"))
+                      % file_path.make_preferred();
+            }
 
-			return false;
+            return false;
 
         }
         else {
-        	if (!quiet) {
-				os << format(translate(
-					  "File {1} does not exists"))
-					  % file_path.make_preferred();
-        	}
+            if (!quiet) {
+                os << format(translate(
+                      "File {1} does not exists"))
+                      % file_path.make_preferred();
+            }
             return false;
         }
     }
     catch (fs::filesystem_error const& e) {
-    	if (!quiet) {
-			os << format(translate(
-				  "Failed existence test for file {1}: caught exception {1}"))
-				  % e.what();
-    	}
+        if (!quiet) {
+            os << format(translate(
+                  "Failed existence test for file {1}: caught exception {1}"))
+                  % e.what();
+        }
         return false;
     }
 }
@@ -112,14 +112,14 @@ bool file_loader::unique_files(std::vector<std::string> const& file_list) const 
         for (auto const& [canonical_filename, count] : occourence) {
 
             if (count > 1) {
-            	if (!quiet) {
-					os << format(translate(
-						  "Duplicate file \"{1}\", specified as: "))
-						  % canonical_filename
-						  ;
-					print_duplicates(canonical_filename);
-					os << "\n";
-            	}
+                if (!quiet) {
+                    os << format(translate(
+                          "Duplicate file \"{1}\", specified as: "))
+                          % canonical_filename
+                          ;
+                    print_duplicates(canonical_filename);
+                    os << '\n';
+                }
                 return false;
             }
         }
@@ -139,10 +139,10 @@ std::optional<std::string> file_loader::read_file(std::string const& filename) c
     std::ifstream file{ filename, std::ios::in | std::ios::binary };
 
     if (!file) {
-    	if (!quiet) {
-			os << format(translate("Unable to open file \"{1}\"")) % filename
-			   << "\n";
-    	}
+        if (!quiet) {
+            os << format(translate("Unable to open file \"{1}\"")) % filename
+               << '\n';
+        }
         return {};
     }
 
@@ -151,10 +151,10 @@ std::optional<std::string> file_loader::read_file(std::string const& filename) c
     ss << file.rdbuf();
 
     if (file.fail() && !file.eof()) {
-    	if (!quiet) {
-			os << format(translate("Error reading file \"{1}\"")) % filename
-			   << "\n";
-    	}
+        if (!quiet) {
+            os << format(translate("Error reading file \"{1}\"")) % filename
+               << '\n';
+        }
         return {};
     }
 
@@ -195,7 +195,7 @@ std::optional<std::string> file_loader::read_file_alt(std::string const& filenam
 
     std::string contents { };
 #if 1
-    	contents.reserve(size);
+        contents.reserve(size);
 #else
     // FixMe: error: call to 'ceil' is ambiguous
     //        due to fpos<traits_type::state_type>
@@ -216,16 +216,16 @@ std::optional<std::string> file_loader::read_file_alt(std::string const& filenam
  *  returns (std::time_t)(-1). */
 std::time_t file_loader::timesstamp(std::string const& filename) const {
 
-	boost::system::error_code ec;
+    boost::system::error_code ec;
 
     std::time_t const time = fs::last_write_time(filename, ec);
 
     if (ec && !quiet) {
-    	os << "Failed to determine file time of "
-    	   << fs::path{ filename }.make_preferred() << ": "
+        os << "Failed to determine file time of "
+           << fs::path{ filename }.make_preferred() << ": "
            << ec.message() << std::endl;
     }
-	return time;
+    return time;
 }
 
 } } // namespace eda.util

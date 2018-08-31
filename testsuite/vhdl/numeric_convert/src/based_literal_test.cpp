@@ -102,7 +102,7 @@ to_based_literal(unsigned base, T value)
     }
     default:
         std::cerr << "ERROR in function " << __FUNCTION__
-                  << ", unexpected base " << base << "\n";
+                  << ", unexpected base " << base << '\n';
     }
 
     return ss.str();

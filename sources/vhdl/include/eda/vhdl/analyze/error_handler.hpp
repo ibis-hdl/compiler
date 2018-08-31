@@ -78,17 +78,17 @@ public:
      * @param error_message The information error message.
      */
     void operator()(ast::position_tagged const& where_tag,
-    			    ast::position_tagged const& start_label, ast::position_tagged const& end_label,
-				    std::string const& error_message) const;
+                    ast::position_tagged const& start_label, ast::position_tagged const& end_label,
+                    std::string const& error_message) const;
 
 private:
     std::ostream&                                   os;
-    ast::position_cache<iterator_type>&          	position_cache;
+    ast::position_cache<iterator_type>&              position_cache;
     std::size_t                                     tab_sz;
 };
 
 
-typedef error_handler<parser::iterator_type>		error_handler_type;
+typedef error_handler<parser::iterator_type>        error_handler_type;
 
 
 }}} // namespace eda.vhdl.analyze

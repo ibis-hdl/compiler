@@ -38,37 +38,37 @@ BOOST_AUTO_TEST_SUITE( syntax_labels )
  * SUCCESS test case
  */
 BOOST_DATA_TEST_CASE_F( testsuite::failure_diagnostic_fixture,
-	labels_ok,
+    labels_ok,
     utf_data::make_delayed<testsuite::dataset_loader>( "test_case/labels_ok" ),
     input, expected, test_case_name)
 {
-    btt::output_test_stream                     	os;
-    ast::position_cache<parser::iterator_type> 		position_cache;
-    ast::design_file 								design_file;
+    btt::output_test_stream                         os;
+    ast::position_cache<parser::iterator_type>         position_cache;
+    ast::design_file                                 design_file;
 
     {
-		std::size_t const id = position_cache.add_file(test_case_name, input);
+        std::size_t const id = position_cache.add_file(test_case_name, input);
 
-		parser::error_handler_type 					error_handler{ os, position_cache.handle(id) };
-		parser::parse  								parse{ os, error_handler };
+        parser::error_handler_type                     error_handler{ os, position_cache.handle(id) };
+        parser::parse                                  parse{ os, error_handler };
 
-		bool const parse_ok = parse(position_cache.file_contents(id), design_file);
+        bool const parse_ok = parse(position_cache.file_contents(id), design_file);
 
-		boost::ignore_unused(expected);
+        boost::ignore_unused(expected);
 
-		BOOST_TEST_REQUIRE(parse_ok);
+        BOOST_TEST_REQUIRE(parse_ok);
     }
 
-    vhdl::context 									context;
+    vhdl::context                                     context;
 
     {
-		analyze::error_handler<parser::iterator_type> error_handler{ os, position_cache };
-		analyze::syntax_checker 					syntax_check{ os, context, error_handler };
+        analyze::error_handler<parser::iterator_type> error_handler{ os, position_cache };
+        analyze::syntax_checker                     syntax_check{ os, context, error_handler };
 
-		syntax_check(design_file);
+        syntax_check(design_file);
 
-		bool const syntax_ok = context.error_free();
-		BOOST_TEST(syntax_ok);
+        bool const syntax_ok = context.error_free();
+        BOOST_TEST(syntax_ok);
     }
 
     if (!current_test_passing()) {
@@ -85,37 +85,37 @@ BOOST_DATA_TEST_CASE_F( testsuite::failure_diagnostic_fixture,
  * FAILURE test case
  */
 BOOST_DATA_TEST_CASE_F( testsuite::failure_diagnostic_fixture,
-	label_missmatch,
+    label_missmatch,
     utf_data::make_delayed<testsuite::dataset_loader>( "test_case/label_missmatch" ),
     input, expected, test_case_name)
 {
-    btt::output_test_stream                     	os;
-    ast::position_cache<parser::iterator_type> 		position_cache;
-    ast::design_file 								design_file;
+    btt::output_test_stream                         os;
+    ast::position_cache<parser::iterator_type>         position_cache;
+    ast::design_file                                 design_file;
 
     {
-		std::size_t const id = position_cache.add_file(test_case_name, input);
+        std::size_t const id = position_cache.add_file(test_case_name, input);
 
-		parser::error_handler_type 					error_handler{ os, position_cache.handle(id) };
-		parser::parse  								parse{ os, error_handler };
+        parser::error_handler_type                     error_handler{ os, position_cache.handle(id) };
+        parser::parse                                  parse{ os, error_handler };
 
-		bool const parse_ok = parse(position_cache.file_contents(id), design_file);
+        bool const parse_ok = parse(position_cache.file_contents(id), design_file);
 
-		boost::ignore_unused(expected);
+        boost::ignore_unused(expected);
 
-		BOOST_TEST_REQUIRE(parse_ok);
+        BOOST_TEST_REQUIRE(parse_ok);
     }
 
-    vhdl::context 									context;
+    vhdl::context                                     context;
 
     {
-		analyze::error_handler<parser::iterator_type> error_handler{ os, position_cache };
-		analyze::syntax_checker 					syntax_check{ os, context, error_handler };
+        analyze::error_handler<parser::iterator_type> error_handler{ os, position_cache };
+        analyze::syntax_checker                     syntax_check{ os, context, error_handler };
 
-		syntax_check(design_file);
+        syntax_check(design_file);
 
-		bool const syntax_ok = context.error_free();
-		BOOST_TEST(!syntax_ok);
+        bool const syntax_ok = context.error_free();
+        BOOST_TEST(!syntax_ok);
     }
 
     if (!current_test_passing()) {

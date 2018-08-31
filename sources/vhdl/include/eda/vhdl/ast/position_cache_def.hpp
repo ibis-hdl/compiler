@@ -51,7 +51,7 @@ std::size_t position_cache<IteratorT>::line_number(std::size_t file_id, iterator
 template <typename IteratorT>
 std::string position_cache<IteratorT>::current_line(std::size_t file_id, iterator_type const& first) const
 {
-	iterator_type line_end = first;
+    iterator_type line_end = first;
 
     while (line_end != file_contents(file_id).end()) {
 
@@ -68,8 +68,8 @@ std::string position_cache<IteratorT>::current_line(std::size_t file_id, iterato
     using char_type = typename std::iterator_traits<iterator_type>::value_type;
 
     return boost::locale::conv::utf_to_utf<std::string::value_type>(
-    	std::basic_string<char_type>{ first, line_end }
-	);
+        std::basic_string<char_type>{ first, line_end }
+    );
 }
 
 

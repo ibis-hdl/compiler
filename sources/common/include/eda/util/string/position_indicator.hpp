@@ -17,46 +17,46 @@ namespace eda { namespace util {
 template<typename Iterator>
 struct position_indicator
 {
-	typedef Iterator								iterator_type;
+    typedef Iterator                                iterator_type;
 
-	position_indicator(iterator_type& first_, iterator_type const& last_, std::size_t tabs, char symbol_)
-	: first{ first_ }
-	, last{ last_ }
-	, tab_sz{ tabs }
-	, symbol{ symbol_ }
-	{ }
+    position_indicator(iterator_type& first_, iterator_type const& last_, std::size_t tabs, char symbol_)
+    : first{ first_ }
+    , last{ last_ }
+    , tab_sz{ tabs }
+    , symbol{ symbol_ }
+    { }
 
-	std::ostream& print(std::ostream& os) const {
+    std::ostream& print(std::ostream& os) const {
 
-	    for ( ; first != last; ++first) {
+        for ( ; first != last; ++first) {
 
-	        auto const chr = *first;
+            auto const chr = *first;
 
-	        if (chr == '\r' || chr == '\n') {
-	            break;
-	        }
-	        else if (chr == '\t') {
-	            for (std::size_t i = 0; i != tab_sz; ++i)
-	                os << symbol;
-	        }
-	        else {
-	            os << symbol;
-	        }
-	    }
+            if (chr == '\r' || chr == '\n') {
+                break;
+            }
+            else if (chr == '\t') {
+                for (std::size_t i = 0; i != tab_sz; ++i)
+                    os << symbol;
+            }
+            else {
+                os << symbol;
+            }
+        }
 
-	    return os;
-	}
+        return os;
+    }
 
-	iterator_type& 									first;
-	iterator_type const& 							last;
-	std::size_t										tab_sz;
-	char 											symbol;
+    iterator_type&                                     first;
+    iterator_type const&                             last;
+    std::size_t                                        tab_sz;
+    char                                             symbol;
 };
 
 
 template<typename Iterator>
 std::ostream& operator<<(std::ostream& os, position_indicator<Iterator> const indicator) {
-	return indicator.print(os);
+    return indicator.print(os);
 }
 
 

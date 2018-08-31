@@ -83,93 +83,93 @@ void init::parse_cli(int argc, const char* argv[])
     app.formatter(fmt);
 
     app.footer((format(translate(
-		"\n"
-		"Report bugs to {1}")) % EDA_URL).str());
+        "\n"
+        "Report bugs to {1}")) % EDA_URL).str());
 
     // defaults
-	struct {
-    	std::vector<std::string> files;
-    	std::string lib_path;
+    struct {
+        std::vector<std::string> files;
+        std::string lib_path;
 
-		unsigned tab_size = 4;
-		unsigned error_limit = 20;
+        unsigned tab_size = 4;
+        unsigned error_limit = 20;
 
-		std::string locale_dir;
-	} parameter;
+        std::string locale_dir;
+    } parameter;
 
-	// As idea \see
-	// [What do the -f and -m in gcc/clang compiler options stand for](
+    // As idea \see
+    // [What do the -f and -m in gcc/clang compiler options stand for](
     // https://stackoverflow.com/questions/16227501/what-do-the-f-and-m-in-gcc-clang-compiler-options-stand-for)
 
     try {
-		// Primary Options
-		app.add_option("files", parameter.files,
-			translate("One or more VHDL file(s)."))
-			->required()
-			->check(CLI::ExistingFile);
+        // Primary Options
+        app.add_option("files", parameter.files,
+            translate("One or more VHDL file(s)."))
+            ->required()
+            ->check(CLI::ExistingFile);
 
-		app.add_flag("--version",
-			translate("Show version."));
+        app.add_flag("--version",
+            translate("Show version."));
 
-		// Working/Processing flags
-		app.add_flag("-a,--analyze",
-			translate("Analyze the design.")); // XXX preventive added, unused
+        // Working/Processing flags
+        app.add_flag("-a,--analyze",
+            translate("Analyze the design.")); // XXX preventive added, unused
 
-		app.add_option("--lib-path", parameter.lib_path,
-			translate("Path to libraries."))
-			->group("Paths")
-			->envname("EDA_LIBPATH")->take_last()
-			->check(CLI::ExistingDirectory); // XXX preventive added, unused
+        app.add_option("--lib-path", parameter.lib_path,
+            translate("Path to libraries."))
+            ->group("Paths")
+            ->envname("EDA_LIBPATH")->take_last()
+            ->check(CLI::ExistingDirectory); // XXX preventive added, unused
 
-		// Message Options
-		app.add_flag("-q,--quiet",
-			translate("Print less text."))
-			->group("Message Options");
-		app.add_flag("-v,--verbose",
-			translate("Print more text."))
-			->group("Message Options")
-			->excludes("--quiet");
-		app.add_flag("--no-color",
-			translate("Don\'t render messages using colors. On output redirection "
-					  "no colors are used."))
-			->group("Message Options");
-		app.add_flag("--force-color",
-			translate("Even on redirected output enforce the rendering of messages "
-					  "using colors."))
-			->group("Message Options")
-			->excludes("--no-color");
-		app.add_option("--tab-size", parameter.tab_size,
-			translate("Tabulator size, affects printing source snippet on error printing."), true)
-			->group("Message Options")
-			->check(CLI::Range(1u, 10u)); // XXX unused in misc. error_handler.cpp
+        // Message Options
+        app.add_flag("-q,--quiet",
+            translate("Print less text."))
+            ->group("Message Options");
+        app.add_flag("-v,--verbose",
+            translate("Print more text."))
+            ->group("Message Options")
+            ->excludes("--quiet");
+        app.add_flag("--no-color",
+            translate("Don\'t render messages using colors. On output redirection "
+                      "no colors are used."))
+            ->group("Message Options");
+        app.add_flag("--force-color",
+            translate("Even on redirected output enforce the rendering of messages "
+                      "using colors."))
+            ->group("Message Options")
+            ->excludes("--no-color");
+        app.add_option("--tab-size", parameter.tab_size,
+            translate("Tabulator size, affects printing source snippet on error printing."), true)
+            ->group("Message Options")
+            ->check(CLI::Range(1u, 10u)); // XXX unused in misc. error_handler.cpp
 
-		// Warning Options
-		app.add_flag("--Wall",
-			translate("Warn all."))
-			->group("Warning Options");
-		app.add_flag("--Wunused",
-			translate("Warn on unused."))
-			->group("Warning Options");
-		app.add_flag("--Wother",
-			translate("Warn for others."))
-			->group("Warning Options");
+        // Warning Options
+        app.add_flag("--Wall",
+            translate("Warn all."))
+            ->group("Warning Options");
+        app.add_flag("--Wunused",
+            translate("Warn on unused."))
+            ->group("Warning Options");
+        app.add_flag("--Wother",
+            translate("Warn for others."))
+            ->group("Warning Options");
 
-		// Options to Control Error and Warning Messages Flags
-		app.add_option("--ferror-limit", parameter.error_limit,
-			translate("Limit emitting diagnostics, can be disabled with --ferror-limit=0."), true)
-			->group("Error/Warning Message Control Flags"); // XXX unused in context.cpp
+        // Options to Control Error and Warning Messages Flags
+        app.add_option("--ferror-limit", parameter.error_limit,
+            translate("Limit emitting diagnostics, can be disabled with --ferror-limit=0."), true)
+            ->group("Error/Warning Message Control Flags"); // XXX unused in context.cpp
 
-		// Locale Options
-		app.add_option("--locale-dir", parameter.locale_dir,
-			translate("localization catalog data"), true)
-			->group("Locale/Environment")
-			->envname("EDA_LOCALE_DIR")
-			->check(CLI::ExistingDirectory);
+        // Locale Options
+        app.add_option("--locale-dir", parameter.locale_dir,
+            translate("localization catalog data"), true)
+            ->group("Locale/Environment")
+            ->envname("EDA_LOCALE_DIR")
+            ->check(CLI::ExistingDirectory);
 
     }
     catch(CLI::Error const& e) {
-    	std::cerr << "Internal CLI11 parser code error\n";
-    	std::exit(app.exit(e));
+        std::cerr << "Internal CLI11 parser code error\n";
+        std::exit(app.exit(e));
     }
 
     // CLI parse
@@ -180,7 +180,7 @@ void init::parse_cli(int argc, const char* argv[])
     }
 
     if (app.count("--version")) {
-        std::cout << VERSION_STR << "\n";
+        std::cout << VERSION_STR << '\n';
         std::exit(EXIT_SUCCESS);
     }
 
@@ -198,7 +198,7 @@ void init::parse_cli(int argc, const char* argv[])
     // Primary Options
     setting.set("--files", parameter.files);
     if (app.count("--lib-path")) {
-    	setting.set("--lib-path", parameter.lib_path);
+        setting.set("--lib-path", parameter.lib_path);
     }
 
     // Working/Processing flags
@@ -216,17 +216,17 @@ void init::parse_cli(int argc, const char* argv[])
     set_flag("--Wunused");
     set_flag("--Wother");
 
-	// Options to Control Error and Warning Messages Flags
+    // Options to Control Error and Warning Messages Flags
     setting.set<long>("--ferror-limit", parameter.error_limit);
 
 
     // update triggered flags
     trigger_flags.update(setting);
 
-	// Locale Options
+    // Locale Options
     if (app.count("--locale-dir")) {
-    	setting.set("--locale-dir", parameter.locale_dir);
-	}
+        setting.set("--locale-dir", parameter.locale_dir);
+    }
 }
 
 
@@ -236,7 +236,7 @@ void init::register_signal_handlers()
     using failure = eda::color::message::failure;
 
     if (!register_gdb_signal_handler()) {
-        std::cerr << failure("Failed to install signal handlers") << "\n";
+        std::cerr << failure("Failed to install signal handlers") << '\n';
         std::exit(EXIT_FAILURE);
     }
 #endif
@@ -357,13 +357,13 @@ void init::user_config_message_color()
                         format |= *attr;
                         if (verbose) {
                             std::cerr << note("NOTE:") << " using "
-                                       << json_ptr << "/" << name << " = " << attr_name << "\n";
+                                       << json_ptr << "/" << name << " = " << attr_name << '\n';
                         }
                     }
                     else{
                         if (!quiet) {
                             std::cerr << warning("WARNING:") << " Ignore invalid "
-                                      << json_ptr << "/" << name << " = " << attr_name << "\n";
+                                      << json_ptr << "/" << name << " = " << attr_name << '\n';
                         }
                     }
                 };
@@ -431,9 +431,9 @@ void init::l10n()
     char const LC_DOMAIN[] = "eda";
 
 #if 1 // crash on MinGW?
-	localization_backend_manager l10n_backend = localization_backend_manager::global();
+    localization_backend_manager l10n_backend = localization_backend_manager::global();
 #if (BOOST_OS_WINDOWS)
-	l10n_backend.select("winapi");
+    l10n_backend.select("winapi");
 #else
     l10n_backend.select("std");
 #endif

@@ -28,11 +28,11 @@ struct position_tagged
     static constexpr tag_type MAX_ID = std::numeric_limits<tag_type>::max();
 
     bool is_tagged() const {
-    	return pos_id != MAX_ID && file_id != MAX_ID;
+        return pos_id != MAX_ID && file_id != MAX_ID;
     }
 
-    tag_type 										file_id{ MAX_ID };
-    tag_type 										pos_id{ MAX_ID };
+    tag_type                                         file_id{ MAX_ID };
+    tag_type                                         pos_id{ MAX_ID };
 };
 
 

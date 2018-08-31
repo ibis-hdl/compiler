@@ -30,18 +30,18 @@ namespace eda { namespace vhdl { namespace ast {
 template<typename WorkerT>
 class basic_ast_walker : boost::static_visitor<void>
 {
-    WorkerT const                              		worker;
+    WorkerT const                                      worker;
 
 private:
     template<typename... Ts>
     void visit(variant<Ts ...> const& node) {
-    	boost::apply_visitor(*this, node);
+        boost::apply_visitor(*this, node);
     }
 
     template<typename T>
     void visit(std::vector<T> const& vector) {
-    	std::for_each(vector.begin(), vector.end(),
-    			     [this](auto const& e) { (*this)(e); });
+        std::for_each(vector.begin(), vector.end(),
+                     [this](auto const& e) { (*this)(e); });
     }
 
 public:
@@ -451,7 +451,7 @@ public:
             static char const node_typename[]{ "case_statement_alternative*" };
             worker(node.alternatives, node_typename);
             // XXX
-        	visit(node.alternatives);
+            visit(node.alternatives);
         }
 
         if(node.end_label) {
@@ -658,10 +658,10 @@ public:
         worker(node, node_typename);
 
         if(!node.chunks.empty()) {
-    		for(auto const& chunk : node.chunks) {
-    			(*this)(chunk.waveform);
-    			(*this)(chunk.condition);
-    		}
+            for(auto const& chunk : node.chunks) {
+                (*this)(chunk.waveform);
+                (*this)(chunk.condition);
+            }
         }
 
         (*this)(node.waveform);
@@ -992,7 +992,7 @@ public:
         util::visit_in_place(
             node,
             [this](ast::entity_designator_list const& entity_designator_list) {
-            	visit(entity_designator_list);
+                visit(entity_designator_list);
             },
             [this](ast::keyword_token token) {
                 (*this)(token); // OTHERS | ALL
@@ -2449,7 +2449,7 @@ public:
         util::visit_in_place(
             node,
             [this](ast::waveform_element_list const& list) {
-        		visit(list);
+                visit(list);
             },
             [this](ast::keyword_token token) {
                 (*this)(token);
@@ -2492,7 +2492,7 @@ public:
 
     void operator()(ast::keyword_token token)
     {
-    	boost::ignore_unused(token);
+        boost::ignore_unused(token);
 #if 0
         static char const node_typename[]{ "keyword" };
         //XXX worker(node, node_typename);
@@ -2502,7 +2502,7 @@ public:
 
     void operator()(ast::nullary const& node)
     {
-    	boost::ignore_unused(node);
+        boost::ignore_unused(node);
 #if 0
         /******************************/
         /*    SHALL NEVER BE HERE     */

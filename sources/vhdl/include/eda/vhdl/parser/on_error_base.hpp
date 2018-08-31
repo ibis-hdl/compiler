@@ -63,7 +63,7 @@ public:
         auto const iter = ruleid_map.find(which);
 
         if (iter != ruleid_map.end()) {
-           	return iter->second;
+               return iter->second;
         }
         return which;
     }
@@ -78,9 +78,9 @@ public:
 
 private:
     typedef std::unordered_map<
-    	std::string_view, std::string_view> 		rule_map_type;
+        std::string_view, std::string_view>         rule_map_type;
 
-    static const rule_map_type						ruleid_map;
+    static const rule_map_type                        ruleid_map;
 };
 
 

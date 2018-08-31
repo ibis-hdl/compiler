@@ -21,12 +21,12 @@ context::context()
 : error_count{ /* default limit */ }
 , warning_count{ /* default limit */ }
 {
-	auto error_limit = 20; //XXX eda::setting["ferror-limit"];
+    auto error_limit = 20; //XXX eda::setting["ferror-limit"];
 
-	// check if error_limit is not disabled (equals to 0)
-	if (error_limit != 0) {
-		error_count.limit() = error_limit;
-	}
+    // check if error_limit is not disabled (equals to 0)
+    if (error_limit != 0) {
+        error_count.limit() = error_limit;
+    }
 }
 
 
@@ -47,7 +47,7 @@ std::ostream& failure_status::print(std::ostream& os) const
     auto const plural_count = [](size_t count) {
         static constexpr int N{ std::numeric_limits<int>::max() };
         if (count > N) {
-        	return N;
+            return N;
         }
         return static_cast<int>(count);
     };
@@ -63,15 +63,15 @@ std::ostream& failure_status::print(std::ostream& os) const
         plural_count(ctx.warning_count))) % ctx.warning_count).str();
 
     if (ctx.error_count && ctx.warning_count) {
-    	// TRANSLATORS: summary error(s) and warning(s)
+        // TRANSLATORS: summary error(s) and warning(s)
         os << format(translate("{1} and {2} generated.")) % error_message % warning_message;
     }
     else if (ctx.error_count) {
-    	// TRANSLATORS: summary error(s) only
+        // TRANSLATORS: summary error(s) only
         os << format(translate("{1} generated.")) % error_message;
     }
     else if (ctx.warning_count) {
-    	// TRANSLATORS: summary warning(s) only
+        // TRANSLATORS: summary warning(s) only
         os << format(translate("{1} generated.")) % warning_message;
     }
     else {

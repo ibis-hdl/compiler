@@ -24,12 +24,12 @@ void assertion_failed_msg(const CharT* expr, const char* msg, const char* functi
         << "\n****************************************\n"
         <<   "***** Internal Fatal Program Error *****\n"
         <<   "****************************************\n"
-        << "assertion:   " << expr << "\n"
-        << "what failed: " << msg << "\n"
+        << "assertion:   " << expr << '\n'
+        << "what failed: " << msg << '\n'
         << "in function:\n"
         << function << ":\n"
         << file << '(' << line << ")"
-		<< std::endl; // flush
+        << std::endl; // flush
 
     std_quick_exit(EXIT_FAILURE);
 }

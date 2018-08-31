@@ -53,7 +53,7 @@ public:
                 //os << ", but forced";
                 *enable = true;
             }
-            //os << "\n";
+            //os << '\n';
         }
 
         if (*enable) { os << prefix; }
@@ -64,8 +64,8 @@ public:
     }
 
 public:
-    color::printer                					prefix;
-    color::printer                					postfix;
+    color::printer                                    prefix;
+    color::printer                                    postfix;
 
 private:
     bool is_tty(std::ostream& os) const

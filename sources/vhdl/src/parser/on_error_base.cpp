@@ -266,7 +266,7 @@ on_error_base::rule_map_type const on_error_base::ruleid_map {
     /* Typographical */
     { "';'"sv, "Semicolon ';'"sv },
     { "':'"sv, "Colon ':'"sv },
-	{ "','"sv, "Comma ':'"sv },
+    { "','"sv, "Comma ':'"sv },
     { "'{'"sv, "Opening '{' Curly Brace"sv },
     { "'}'"sv, "Closing '}' Curly Brace"sv },
     { "'['"sv, "Opening '[' Square Bracket"sv },

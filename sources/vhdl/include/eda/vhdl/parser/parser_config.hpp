@@ -45,9 +45,9 @@
  *
  * \code{.cpp}
  * std::cout << "\nContext is of Type:\n"
- *           << boost::typeindex::type_id<Context>().pretty_name() << "\n";
+ *           << boost::typeindex::type_id<Context>().pretty_name() << '\n';
  * std::cout << "\nConfgured Context is of Type:\n"
- *           << boost::typeindex::type_id<context_type>().pretty_name() << "\n";
+ *           << boost::typeindex::type_id<context_type>().pretty_name() << '\n';
  * \endcode
  *
  * At this time, the context is of type:

@@ -24,40 +24,40 @@ namespace eda { namespace util {
  */
 fs::path user_home(std::initializer_list<char const*> path_list)
 {
-	const char *HOME_ENV
+    const char *HOME_ENV
 #if BOOST_OS_LINUX
-	= { std::getenv("HOME") };
+    = { std::getenv("HOME") };
 #elif BOOST_OS_WINDOWS
-	= { std::getenv("USERPROFILE") };
+    = { std::getenv("USERPROFILE") };
 #else
 #error "No source for getting HOME directory on your platform"
 #endif
 
-	// XXXX maybe as of init::parse_env???
+    // XXXX maybe as of init::parse_env???
 
-	if (cxx_expect_not( !HOME_ENV )) {
-		throw std::runtime_error("No viable environment variable for user's home.");
-	}
+    if (cxx_expect_not( !HOME_ENV )) {
+        throw std::runtime_error("No viable environment variable for user's home.");
+    }
 
-	fs::path path{ HOME_ENV };
+    fs::path path{ HOME_ENV };
 
-	boost::system::error_code ec;
+    boost::system::error_code ec;
 
-	// The HOME directory must exist and must be a directory
+    // The HOME directory must exist and must be a directory
 
-	if (cxx_expect_not( !fs::exists(path, ec) )) {
-		throw std::runtime_error("Fatal: " + path.make_preferred().string() + ": " + ec.message());
-	}
+    if (cxx_expect_not( !fs::exists(path, ec) )) {
+        throw std::runtime_error("Fatal: " + path.make_preferred().string() + ": " + ec.message());
+    }
 
-	if (cxx_expect_not( !fs::is_directory(path, ec) )){
-		throw std::runtime_error("Fatal: " + path.make_preferred().string() + ": " + ec.message());
-	}
+    if (cxx_expect_not( !fs::is_directory(path, ec) )){
+        throw std::runtime_error("Fatal: " + path.make_preferred().string() + ": " + ec.message());
+    }
 
-	for (auto dir : path_list) {
-		path /= dir;
-	}
+    for (auto dir : path_list) {
+        path /= dir;
+    }
 
-	return path;
+    return path;
 }
 
 

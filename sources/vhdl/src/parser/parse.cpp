@@ -98,8 +98,8 @@ std::string parse::make_exception_description(std::string const &filename,
             return exception.what();
         }
         else {
-        	/* An exception was caught which hasn't been derived from
-        	 * std::exception, hence no what() is available - simple unknown. */
+            /* An exception was caught which hasn't been derived from
+             * std::exception, hence no what() is available - simple unknown. */
             return translate("ExceptionDescription", "unknown");
         }
     }();

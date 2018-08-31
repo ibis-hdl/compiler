@@ -28,21 +28,21 @@ namespace boost {
 // namespace forward and alias
 namespace eda {
 
-	namespace x3 = boost::spirit::x3;
+    namespace x3 = boost::spirit::x3;
 
-	namespace vhdl {
+    namespace vhdl {
 
-		namespace ast { }
+        namespace ast { }
 
-		namespace parser {
-			// VHDL char set is iso8859:1
-			namespace iso8859_1 = boost::spirit::x3::iso8859_1;
-		}
+        namespace parser {
+            // VHDL char set is iso8859:1
+            namespace iso8859_1 = boost::spirit::x3::iso8859_1;
+        }
 
-		namespace analyze { }
-	} // namespace vhdl
+        namespace analyze { }
+    } // namespace vhdl
 
-	namespace fs = boost::filesystem;
+    namespace fs = boost::filesystem;
 
 } // namespace eda
 

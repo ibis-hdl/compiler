@@ -60,9 +60,9 @@ public:
     /**
      * Construct a parser error handler.
      *
-     * @param os_	 Stream to write error and diagnostic messages.
+     * @param os_     Stream to write error and diagnostic messages.
      * @param proxy_ A \ref ast::position_cache::proxy object of \ref ast::position_cache.
-     * @param tabs	 Tabulator size, required for correct rendering of source
+     * @param tabs     Tabulator size, required for correct rendering of source
      *               code snippet.
      */
     explicit error_handler(
@@ -113,7 +113,7 @@ public:
 
 private:
     std::ostream&                                   os;
-    position_proxy_type 							position_proxy;
+    position_proxy_type                             position_proxy;
     std::size_t                                     tab_sz;
 };
 

@@ -22,19 +22,19 @@ namespace eda { namespace vhdl { namespace ast {
 class ast_stats
 {
 public:
-	ast_stats(ast::design_file const& design_file);
+    ast_stats(ast::design_file const& design_file);
 
-	auto sort_by_count(bool ascending = true) const;
+    auto sort_by_count(bool ascending = true) const;
 
     std::ostream& print(std::ostream& os) const;
 
 private:
     typedef std::unordered_map<std::string_view, std::size_t> map_type;
-    typedef std::unordered_set<std::string_view> 	set_type;
+    typedef std::unordered_set<std::string_view>     set_type;
 
 private:
-    map_type 										count_map;
-    set_type 										untagged_nodes;
+    map_type                                         count_map;
+    set_type                                         untagged_nodes;
 };
 
 

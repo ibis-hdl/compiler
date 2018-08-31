@@ -43,7 +43,7 @@ namespace eda {
  * }
  *
  * if (config.exist("-Fstrg")) {
- *     std::cout << "-Fstring: " << config["-Fstrg"].get<std::string>() << "\n";
+ *     std::cout << "-Fstring: " << config["-Fstrg"].get<std::string>() << '\n';
  * }
  * \endcode
  *
@@ -58,38 +58,38 @@ public:
         long,
         std::string,
         std::vector<std::string>
-    >                               				option_value;
+    >                                               option_value;
 
     class option_trigger;
 
-	struct option_value_proxy
-	{
-		option_value_proxy(settings::option_value const& option_value_)
-		: option_value{ option_value_ }
-		{}
+    struct option_value_proxy
+    {
+        option_value_proxy(settings::option_value const& option_value_)
+        : option_value{ option_value_ }
+        {}
 
-		option_value_proxy() = delete;
-		option_value_proxy(option_value_proxy const&) = delete;
-		option_value_proxy& operator=(option_value_proxy const&) = delete;
+        option_value_proxy() = delete;
+        option_value_proxy(option_value_proxy const&) = delete;
+        option_value_proxy& operator=(option_value_proxy const&) = delete;
 
-		operator bool() const {
-			return std::visit(util::overloaded {
-				// <long> is (implicit converted) handled as boolean, as intended
-				[](bool option) { return option; },
-				[](std::string const& option) { return !option.empty(); },
-				[](std::vector<std::string> const& option) { return !option.empty(); },
-				[](std::monostate) { return false; },
-			}, this->option_value);
-		}
+        operator bool() const {
+            return std::visit(util::overloaded {
+                // <long> is (implicit converted) handled as boolean, as intended
+                [](bool option) { return option; },
+                [](std::string const& option) { return !option.empty(); },
+                [](std::vector<std::string> const& option) { return !option.empty(); },
+                [](std::monostate) { return false; },
+            }, this->option_value);
+        }
 
-		template<typename T>
-		T const& get() const {
+        template<typename T>
+        T const& get() const {
             // bad_variant_access thrown on invalid accesses to the value
-			return std::get<T>(option_value);
-		}
+            return std::get<T>(option_value);
+        }
 
-		settings::option_value const&            	option_value;
-	};
+        settings::option_value const&                option_value;
+    };
 
 public:
     settings() = default;
@@ -97,14 +97,14 @@ public:
     settings const& operator=(settings const&) = delete;
 
 public:
-	/**
-	 * Return the value as std::optional<> of the defined option.
-	 *
-	 * \param  option_name  The name of the option to lookup in the trimmed form.
-	 * \return proxy        If the option has been defined before, the value
-	 *                      as reference to optional<string>, otherwise to an
-	 *                      empty optional<>.
-	 */
+    /**
+     * Return the value as std::optional<> of the defined option.
+     *
+     * \param  option_name  The name of the option to lookup in the trimmed form.
+     * \return proxy        If the option has been defined before, the value
+     *                      as reference to optional<string>, otherwise to an
+     *                      empty optional<>.
+     */
     option_value_proxy const operator[](std::string const& option_name) const {
         map_type& map_ = const_cast<map_type&>(this->map);
         if (exist(option_name)) {
@@ -128,9 +128,9 @@ public:
      */
     template<typename T>
     void set(std::string_view option_name, T&& value) {
-    	using type = std::remove_reference_t<T>;
-    	map[trim(option_name)].emplace<type>(std::move(value));
-    	//map[trim(option_name)] = std::forward<type>(value);
+        using type = std::remove_reference_t<T>;
+        map[trim(option_name)].emplace<type>(std::move(value));
+        //map[trim(option_name)] = std::forward<type>(value);
     }
 
 
@@ -141,7 +141,7 @@ public:
      * \return true if the option has been defined, otherwise false.
      */
     bool exist(std::string const& option_name) const {
-    	return map.count(option_name) > 0;
+        return map.count(option_name) > 0;
     }
 
 
@@ -166,8 +166,8 @@ private:
 
 private:
     typedef std::unordered_map<std::string, option_value> map_type;
-    map_type                        				map;
-    static const option_value       				none;
+    map_type                                        map;
+    static const option_value                       none;
 };
 
 
@@ -200,12 +200,12 @@ public:
      */
     void update(settings& config) const {
         for (auto const& [primary_option, secondary_options] : trigger) {
-			if (!config.exist(trim(primary_option))) {
-				continue;
-			}
-			for(auto const& option : secondary_options) {
-				config.set(option, true);
-			}
+            if (!config.exist(trim(primary_option))) {
+                continue;
+            }
+            for(auto const& option : secondary_options) {
+                config.set(option, true);
+            }
         }
     }
 };

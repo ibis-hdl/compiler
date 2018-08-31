@@ -34,7 +34,7 @@ using string_span = boost::iterator_range<parser::iterator_type>;
  */
 static inline
 std::string_view as_string_view(ast::string_span const& string_span) {
-	return std::string_view{ &string_span.front(), string_span.size() };
+    return std::string_view{ &string_span.front(), string_span.size() };
 };
 
 

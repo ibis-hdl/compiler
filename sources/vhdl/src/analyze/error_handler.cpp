@@ -43,11 +43,11 @@ void error_handler<Iterator>::operator()(
     };
 
     auto const indicator = [&](auto& start, auto& first, auto& last) {
-    	return util::make_iomanip([&](std::ostream& os) {
-    	    using eda::util::position_indicator;
-    	    os << position_indicator(start, first, tab_sz, ' ')
-    	       << position_indicator(start, last,  tab_sz, '~');
-    	});
+        return util::make_iomanip([&](std::ostream& os) {
+            using eda::util::position_indicator;
+            os << position_indicator(start, first, tab_sz, ' ')
+               << position_indicator(start, last,  tab_sz, '~');
+        });
     };
 
 
@@ -56,11 +56,11 @@ void error_handler<Iterator>::operator()(
     os << format(translate("in file {1}, line {2}:"))
           % current_file.file_name()
           % current_file.line_number(error_first)
-       << "\n";
+       << '\n';
 
     os << color::message::error(translate("Syntax ERROR")) << ": "
        << (!error_message.empty() ? error_message : translate("Unspecified Error, Sorry"))
-       << "\n";
+       << '\n';
 
     // erroneous source snippet
     iterator_type line_start = current_file.get_line_start(error_first);
@@ -70,8 +70,8 @@ void error_handler<Iterator>::operator()(
     // error indicator
     using eda::util::position_indicator;
     os << indicator(line_start, error_first, error_last)
-	   << translate(" <<-- here")
-	   << std::endl;
+       << translate(" <<-- here")
+       << std::endl;
 }
 
 
@@ -82,9 +82,9 @@ void error_handler<Iterator>::operator()(
  */
 template <typename Iterator>
 void error_handler<Iterator>::operator()(
-		ast::position_tagged const& where_tag,
-		ast::position_tagged const& start_label, ast::position_tagged const& end_label,
-		std::string const& error_message) const
+        ast::position_tagged const& where_tag,
+        ast::position_tagged const& start_label, ast::position_tagged const& end_label,
+        std::string const& error_message) const
 {
     using boost::locale::format;
     using boost::locale::translate;
@@ -100,31 +100,31 @@ void error_handler<Iterator>::operator()(
     auto const iterators_of = [&current_file](ast::position_tagged const& tagged_node) {
         auto range = current_file.position_of(tagged_node);
         if (range) {
-        	return std::make_tuple((*range).begin(), (*range).end(), true /* valid */);
+            return std::make_tuple((*range).begin(), (*range).end(), true /* valid */);
         }
         else {
-        	return std::make_tuple(iterator_type{}, iterator_type{}, false /* not-valid */);
+            return std::make_tuple(iterator_type{}, iterator_type{}, false /* not-valid */);
         }
     };
 
     auto const indicator = [&](auto& start, auto& first, auto& last) {
-    	return util::make_iomanip([&](std::ostream& os) {
-    	    using eda::util::position_indicator;
-    	    os << position_indicator(start, first, tab_sz, ' ')
-    	       << position_indicator(start, last,  tab_sz, '~');
-    	});
+        return util::make_iomanip([&](std::ostream& os) {
+            using eda::util::position_indicator;
+            os << position_indicator(start, first, tab_sz, ' ')
+               << position_indicator(start, last,  tab_sz, '~');
+        });
     };
 
     auto const source_snippet = [&](ast::position_tagged const& tagged_node, auto const& annotation) {
-    	return util::make_iomanip([&](std::ostream& os) {
-			auto [first, last, valid] = iterators_of(tagged_node);
-			if (valid) {
-				iterator_type line_start = current_file.get_line_start(first);
-				os << current_file.current_line(line_start) << "\n"
-				   << indicator(line_start, first, last)
-				   << annotation;
-			}
-    	});
+        return util::make_iomanip([&](std::ostream& os) {
+            auto [first, last, valid] = iterators_of(tagged_node);
+            if (valid) {
+                iterator_type line_start = current_file.get_line_start(first);
+                os << current_file.current_line(line_start) << '\n'
+                   << indicator(line_start, first, last)
+                   << annotation;
+            }
+        });
     };
 
 
@@ -136,16 +136,16 @@ void error_handler<Iterator>::operator()(
     os << format(translate("in file {1}, line {2}:"))
           % current_file.file_name()
           % current_file.line_number(error_first)
-	   << "\n";
+       << '\n';
 
     os << color::message::error(translate("Syntax ERROR")) << ": "
        << (!error_message.empty() ? error_message : translate("Unspecified Error, Sorry"))
-       << "\n";
+       << '\n';
 
-	os << source_snippet(start_label, translate(" <<-- here")) << "\n"
-	   << "...\n"
-	   << source_snippet(end_label, translate(" <<-- and here"))
-		  ;
+    os << source_snippet(start_label, translate(" <<-- here")) << '\n'
+       << "...\n"
+       << source_snippet(end_label, translate(" <<-- and here"))
+          ;
 
     os << std::endl;
 }

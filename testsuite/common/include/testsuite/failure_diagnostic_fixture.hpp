@@ -22,20 +22,20 @@ namespace testsuite {
 class failure_diagnostic_fixture
 {
 public:
-	void setup();
-	void teardown();
+    void setup();
+    void teardown();
 
 public:
-	bool current_test_passing() const;
+    bool current_test_passing() const;
 
-	void failure_closure (
-	    std::string const& test_case_name,
-	    std::string const& input,
-	    std::string const& result
-	) const;
+    void failure_closure (
+        std::string const& test_case_name,
+        std::string const& input,
+        std::string const& result
+    ) const;
 
 private:
-	class writer;
+    class writer;
 };
 
 } // namespace testsuite
