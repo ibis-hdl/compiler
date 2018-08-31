@@ -51,7 +51,19 @@ target_compile_options(${PROJECT_NAME} PRIVATE
     -Wextra
 )
 
+##
+# MSYS2/MinGW64 has problems with spirit.x3 (doesn't help really)
+if(WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    set_source_files_properties(
+        src/parser/grammar.cpp
+        PROPERTIES COMPILE_FLAGS 
+            -Wa,-mbig-obj
+    )
+endif()
+    
 
+##
+# Clang -Weverything
 if(CLANG_WARN_EVERYTHING)
     if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
         target_compile_options(${PROJECT_NAME} PRIVATE
