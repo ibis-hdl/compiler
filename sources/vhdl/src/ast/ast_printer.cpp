@@ -1396,7 +1396,6 @@ void printer::operator()(generate_statement const &node)
 
     if(!node.block_declarative_parts.empty()) {
         os << '\n';
-        // FixMe: Single Use "Strong Type" of vector<>
         (*this)(node.block_declarative_parts);
     }
     else {

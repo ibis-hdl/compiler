@@ -31,11 +31,6 @@ public:
     init(init const&) = delete;
     init& operator=(init const&) = delete;
 
-    // FixMe: Tribute to not use optional<variant<T,...>> as option type
-    std::vector<std::string> const& file_list() const {
-        return sourcefile_list;
-    }
-
 private:
     void parse_cli(int argc, const char* argv[]);
     void l10n();
@@ -43,8 +38,7 @@ private:
     void user_config_message_color();
 
 private:
-    eda::settings&                                     setting;
-    std::vector<std::string>                        sourcefile_list;
+    eda::settings&                                  setting;
 };
 
 

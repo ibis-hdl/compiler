@@ -42,7 +42,6 @@ struct based_literal;
 struct binding_indication;
 struct bit_string_literal;
 struct block_configuration;
-struct block_declarative_part;
 struct block_header;
 struct block_specification;
 struct block_statement;

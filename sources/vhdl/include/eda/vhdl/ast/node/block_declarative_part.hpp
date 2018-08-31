@@ -57,7 +57,7 @@ using block_declarative_item = variant<
 >;
 
 
-struct block_declarative_part : std::vector<ast::block_declarative_item> { };
+using block_declarative_part = std::vector<ast::block_declarative_item>;
 
 
 } } } // namespace eda.vhdl.ast

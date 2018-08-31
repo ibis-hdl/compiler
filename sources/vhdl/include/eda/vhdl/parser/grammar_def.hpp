@@ -3063,7 +3063,6 @@ auto const procedure_call_def =
 
 // procedure_call_statement ::=                                     [LRM93 §8.6]
 //     [ label : ] procedure_call ;
-/* FixMe: doesn't compile due optional and forward_ast of name? problem */
 auto const procedure_call_statement_def = ( // operator precedence
        -label_colon
     >> procedure_call
@@ -3156,7 +3155,7 @@ auto const qualified_expression_def =
      * element_association ::= [ choices => ] expression
      * again. AST node takes care on this. */
        type_mark
-    >> "\'" // FixMe: TickMark -> IR1045 !!!!
+    >> "\'"
     >> ( "(" >> expression >> ")"
        |  aggregate
        )

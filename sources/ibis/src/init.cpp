@@ -243,10 +243,6 @@ void init::register_signal_handlers()
 }
 
 
-/*
- * FixMe: - change path to .eda/config/message.json to prevent "mega" JSON files
- *        - setup message colors
- */
 void init::user_config_message_color()
 {
     bool const force_color = [&] {

@@ -16,11 +16,12 @@
 
 #include <iostream>
 
+
 namespace eda { namespace util {
 
 
 /*
- * XXX ToDo: exception classes
+ * FixMe: small source code, maybe better move to ibis::init() ???
  */
 fs::path user_home(std::initializer_list<char const*> path_list)
 {
@@ -33,8 +34,6 @@ fs::path user_home(std::initializer_list<char const*> path_list)
 #error "No source for getting HOME directory on your platform"
 #endif
 
-    // XXXX maybe as of init::parse_env???
-
     if (cxx_expect_not( !HOME_ENV )) {
         throw std::runtime_error("No viable environment variable for user's home.");
     }
@@ -45,6 +44,9 @@ fs::path user_home(std::initializer_list<char const*> path_list)
 
     // The HOME directory must exist and must be a directory
 
+    /*
+     * XXX ToDo: make own/special exception classes
+     */
     if (cxx_expect_not( !fs::exists(path, ec) )) {
         throw std::runtime_error("Fatal: " + path.make_preferred().string() + ": " + ec.message());
     }

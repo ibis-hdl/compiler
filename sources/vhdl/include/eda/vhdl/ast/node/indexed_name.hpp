@@ -19,9 +19,6 @@
 namespace eda { namespace vhdl { namespace ast {
 
 
-struct expression;      // forward due to cyclic dependency; FixMe: for convince??
-
-
 struct indexed_name : position_tagged
 {
     ast::prefix                     prefix;
