@@ -33,7 +33,9 @@ mark_as_advanced(EDA_RUN_ON_VALGRIND)
 option(EDA_RUN_CLANG_TIDY "Run clang-tidy with the compiler." OFF)
 
 if(EDA_RUN_CLANG_TIDY)
-  find_program(CLANG_TIDY_COMMAND NAMES clang-tidy)
+  find_program(CLANG_TIDY_COMMAND NAMES clang-tidy
+    HINTS /opt/clang/bin
+  )
   if(NOT CLANG_TIDY_COMMAND)
     message(FATAL_ERROR "EDA_RUN_CLANG_TIDY is ON but clang-tidy is not found!")
   endif()
@@ -48,7 +50,6 @@ if(EDA_RUN_CLANG_TIDY)
   file(SHA1 ${CMAKE_SOURCE_DIR}/.clang-tidy clang_tidy_sha1)
   set(CLANG_TIDY_DEFINITIONS "CLANG_TIDY_SHA1=${clang_tidy_sha1}")
   unset(clang_tidy_sha1)
-
 endif()
 
 configure_file(${eda_SOURCE_DIR}/.clang-tidy ${eda_BINARY_DIR}/.clang-tidy COPYONLY)

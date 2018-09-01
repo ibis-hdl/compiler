@@ -22,7 +22,8 @@ ${CMAKE_BIN} ${EDA_SRC_DIR} \
         -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON \
         -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
         -DCMAKE_INSTALL_PREFIX=stage \
-        -DBUILD_SHARED_LIBS:BOOL=OFF 
+        -DBUILD_SHARED_LIBS:BOOL=OFF \
+        -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
         
 #cmake --build .
 #nice make -j${CPU_COUNT}
