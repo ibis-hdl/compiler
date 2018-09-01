@@ -10,16 +10,17 @@
 
 #include <eda/vhdl/ast/position_cache.hpp>
 
-#include <eda/compiler/warnings_off.hpp>
-#include <boost/spirit/home/x3/support/traits/tuple_traits.hpp>
-#include <boost/spirit/home/x3/support/traits/is_variant.hpp> // required by guard
-#include <boost/spirit/home/x3/auxiliary/guard.hpp> // error_handler_result
-#include <eda/compiler/warnings_on.hpp>
+// the following header are required for x3::error_handler_result
+#include <eda/compiler/warnings_off.hpp>            // IWYU pragma: keep
+#include <boost/spirit/home/x3/support/traits/tuple_traits.hpp> // IWYU pragma: keep
+#include <boost/spirit/home/x3/support/traits/is_variant.hpp> // IWYU pragma: keep
+#include <boost/spirit/home/x3/auxiliary/guard.hpp> // IWYU pragma: keep
+#include <eda/compiler/warnings_on.hpp>             // IWYU pragma: keep
 
 #include <iosfwd>
 #include <string>
 
-#include <eda/namespace_alias.hpp>
+#include <eda/namespace_alias.hpp>                  // IWYU pragma: keep
 
 
 namespace eda { namespace vhdl { namespace parser {

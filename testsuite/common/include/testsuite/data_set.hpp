@@ -8,15 +8,16 @@
 #ifndef TESTSUITE_COMMON_INCLUDE_TESTSUITE_DATA_SET_HPP_
 #define TESTSUITE_COMMON_INCLUDE_TESTSUITE_DATA_SET_HPP_
 
-
 #include <boost/test/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>
 
 #include <boost/filesystem.hpp>
 
+#include <string>
+#include <tuple>
 #include <vector>
 
-#include <testsuite/namespace_alias.hpp>
+#include <testsuite/namespace_alias.hpp>            // IWYU pragma: keep
 
 
 namespace testsuite {

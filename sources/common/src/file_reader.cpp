@@ -6,21 +6,34 @@
  */
 
 #include <eda/util/file/file_reader.hpp>
-#include <eda/settings.hpp>
+#include <boost/filesystem/operations.hpp>  // for canonical, exists, is_reg...
+#include <boost/filesystem/path.hpp>        // for path, operator<<
+#include <boost/locale/format.hpp>          // for format, operator<<, basic...
+#include <boost/locale/message.hpp>         // for translate
+#include <boost/system/error_code.hpp>      // for error_code
+#include <eda/settings.hpp>                 // for settings, settings::optio...
+#include <fstream>                          // for operator<<, basic_ostream
+#include <map>                              // for map
+#include <sstream>                          // for basic_ostringstream<>::__...
+#include <utility>                          // for tuple_element<>::type
 
-#include <eda/compiler/warnings_off.hpp>
-#include <boost/filesystem.hpp>
-#include <boost/numeric/conversion/cast.hpp>
-#include <eda/compiler/warnings_on.hpp>
 
-#include <eda/support/boost/locale.hpp>
-
-#include <iterator>
-#include <fstream>
-
-#include <map>
-
-#include <eda/namespace_alias.hpp>
+//#include <eda/util/file/file_reader.hpp>
+//#include <eda/settings.hpp>
+//
+//#include <eda/compiler/warnings_off.hpp>
+//#include <boost/filesystem.hpp>
+//#include <boost/numeric/conversion/cast.hpp>
+//#include <eda/compiler/warnings_on.hpp>
+//
+//#include <eda/support/boost/locale.hpp>
+//
+//#include <iterator>
+//#include <fstream>
+//
+//#include <map>
+//
+//#include <eda/namespace_alias.hpp>
 
 
 namespace eda { namespace util {

@@ -8,17 +8,10 @@
 #ifndef SOURCES_IBIS_INCLUDE_IBIS_INIT_HPP_
 #define SOURCES_IBIS_INCLUDE_IBIS_INIT_HPP_
 
-#include <string>
-#include <vector>
-
 
 namespace eda {
     class settings;
 }
-namespace docopt {
-    struct value;
-}
-
 
 namespace ibis {
 

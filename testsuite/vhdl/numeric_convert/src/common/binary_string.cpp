@@ -6,11 +6,12 @@
  */
 
 #include <testsuite/vhdl_numeric_convert/binary_string.hpp>
-#include <sstream>
-#include <iomanip>
+
 #include <string>
+#include <sstream>
 #include <cmath>
 #include <algorithm>
+#include <iomanip>
 
 
 namespace testsuite { namespace vhdl_numeric_convert { namespace util {

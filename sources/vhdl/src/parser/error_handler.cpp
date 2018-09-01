@@ -5,14 +5,8 @@
  *      Author: olaf
  */
 
-#include <eda/compiler/warnings_off.hpp>
-#include <boost/spirit/home/x3/support/traits/tuple_traits.hpp>
-#include <boost/spirit/home/x3/support/traits/is_variant.hpp>
-#include <eda/compiler/warnings_on.hpp>
-
 #include <eda/vhdl/parser/error_handler.hpp>
 #include <eda/vhdl/ast/position_cache_def.hpp>
-#include <eda/vhdl/parser/iterator_type.hpp> // for explicit template instantiation
 
 #include <eda/support/boost/locale.hpp>
 
@@ -21,7 +15,7 @@
 
 #include <iostream>
 
-#include <eda/util/cxx_bug_fatal.hpp>
+#include <eda/vhdl/parser/iterator_type.hpp> // for explicit template instantiation
 
 
 namespace eda { namespace vhdl { namespace parser {

@@ -5,6 +5,9 @@
  *      Author: olaf
  */
 
+#include <testsuite/vhdl_numeric_convert/binary_string.hpp>
+#include <testsuite/vhdl_numeric_convert/numeric_parser.hpp>
+
 #include <eda/vhdl/ast/numeric_convert.hpp>
 #include <eda/vhdl/type.hpp>
 
@@ -13,10 +16,7 @@
 #include <boost/test/data/monomorphic.hpp>
 #include <boost/test/output_test_stream.hpp>
 
-#include <boost/type_index.hpp>
 #include <boost/core/ignore_unused.hpp>
-#include <testsuite/vhdl_numeric_convert/binary_string.hpp>
-#include <testsuite/vhdl_numeric_convert/numeric_parser.hpp>
 
 #include <iostream>
 #include <sstream>

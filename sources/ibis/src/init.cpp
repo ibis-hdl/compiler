@@ -33,7 +33,9 @@
 #include <cstdlib>
 #include <memory>
 #include <optional>
+#include <string>
 #include <string_view>
+#include <vector>
 #include <algorithm>
 
 #include <eda/util/cxx_bug_fatal.hpp>
@@ -71,8 +73,6 @@ struct Formatter : public CLI::Formatter { };
 
 void init::parse_cli(int argc, const char* argv[])
 {
-    using namespace docopt;
-
     using boost::locale::format;
     using boost::locale::translate;
 

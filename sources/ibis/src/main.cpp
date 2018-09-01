@@ -7,13 +7,13 @@
 
 #include <ibis/init.hpp>
 #include <eda/settings.hpp>
-
-//#include <eda/util/infix_ostream_iterator.hpp>
 #include <eda/util/file/file_reader.hpp>
 
 #include <eda/color/message.hpp>
-#include <eda/support/boost/locale.hpp>
+#include <eda/support/boost/locale.hpp>             // IWYU pragma: keep
 
+#include <cstdlib>
+#include <exception>
 #include <iostream>
 
 

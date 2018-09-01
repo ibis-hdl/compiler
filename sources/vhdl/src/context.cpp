@@ -9,9 +9,9 @@
 #include <eda/util/make_iomanip.hpp>
 #include <eda/settings.hpp>
 
-#include <iostream>
+#include <eda/support/boost/locale.hpp>             // IWYU pragma
 
-#include <eda/support/boost/locale.hpp>
+#include <iostream>
 
 
 namespace eda { namespace vhdl {

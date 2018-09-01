@@ -8,19 +8,17 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ON_ERROR_BASE_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ON_ERROR_BASE_HPP_
 
-#include <eda/compiler/warnings_off.hpp>
-#include <boost/spirit/home/x3/support/context.hpp>
-#include <eda/compiler/warnings_on.hpp>
-
 #include <eda/vhdl/parser/error_handler.hpp>
-//#include <eda/vhdl/parser/parser_config.hpp>
-//#include <type_traits>
+
+#include <eda/compiler/warnings_off.hpp>            // IWYU pragma: keep
+#include <boost/spirit/home/x3/support/context.hpp>
+#include <eda/compiler/warnings_on.hpp>             // IWYU pragma: keep
 
 #include <string>
 #include <string_view>
 #include <unordered_map>
 
-#include <eda/namespace_alias.hpp>
+#include <eda/namespace_alias.hpp>                  // IWYU pragma: keep
 
 
 namespace eda { namespace vhdl { namespace parser {

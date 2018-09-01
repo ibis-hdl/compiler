@@ -8,18 +8,20 @@
 #ifndef SOURCES_COMMON_INCLUDE_EDA_SETTINGS_HPP_
 #define SOURCES_COMMON_INCLUDE_EDA_SETTINGS_HPP_
 
-#include <unordered_map>
-#include <variant>
+// clang-format off
 #include <eda/support/cxx/overloaded.hpp>
-#include <string>
-#include <string_view>
-#include <vector>
 
 #include <iosfwd>
-
+#include <string>
+#include <string_view>
+#include <type_traits>
+#include <unordered_map>
+#include <utility>
+#include <variant>
+#include <vector>
+// clang-format on
 
 namespace eda {
-
 
 /**
  * Runtime setting options
@@ -49,52 +51,57 @@ namespace eda {
  *
  * \see Concept on [Wandbox](https://wandbox.org/permlink/4rfFaViNE5tGZg4v)
  */
-class settings
-{
+class settings {
 public:
-    typedef std::variant<
+    using option_value = std::variant<
         std::monostate,
         bool,
         long,
         std::string,
-        std::vector<std::string>
-    >                                               option_value;
+        std::vector<std::string>>;
 
+public:
+    settings() = default;
+    settings(settings const&) = delete;
+    settings const& operator=(settings const&) = delete;
+
+public:
     class option_trigger;
 
-    struct option_value_proxy
-    {
+    struct option_value_proxy {
         option_value_proxy(settings::option_value const& option_value_)
-        : option_value{ option_value_ }
-        {}
+            : option_value{ option_value_ }
+        {
+        }
 
         option_value_proxy() = delete;
         option_value_proxy(option_value_proxy const&) = delete;
         option_value_proxy& operator=(option_value_proxy const&) = delete;
 
-        operator bool() const {
-            return std::visit(util::overloaded {
+        operator bool() const
+        {
+            // clang-format off
+            return std::visit(util::overloaded{
                 // <long> is (implicit converted) handled as boolean, as intended
                 [](bool option) { return option; },
                 [](std::string const& option) { return !option.empty(); },
                 [](std::vector<std::string> const& option) { return !option.empty(); },
                 [](std::monostate) { return false; },
             }, this->option_value);
+            // clang-format on
         }
 
-        template<typename T>
-        T const& get() const {
+        template <typename T>
+        T const& get() const
+        {
             // bad_variant_access thrown on invalid accesses to the value
             return std::get<T>(option_value);
         }
 
-        settings::option_value const&                option_value;
+        // clang-format off
+        settings::option_value const&               option_value;
+        // clang-format on
     };
-
-public:
-    settings() = default;
-    settings(settings const&) = delete;
-    settings const& operator=(settings const&) = delete;
 
 public:
     /**
@@ -105,16 +112,15 @@ public:
      *                      as reference to optional<string>, otherwise to an
      *                      empty optional<>.
      */
-    option_value_proxy const operator[](std::string const& option_name) const {
+    option_value_proxy const operator[](std::string const& option_name) const
+    {
         map_type& map_ = const_cast<map_type&>(this->map);
         if (exist(option_name)) {
             return option_value_proxy{ map_[option_name] };
-        }
-        else {
+        } else {
             return option_value_proxy{ none };
         }
     }
-
 
     /**
      * Lookup the configuration map for writing, the option_name is trimmed,
@@ -126,13 +132,13 @@ public:
      * \param  option_name  The name of the option to lookup in the trimmed form.
      * \return config_value The value as reference to optional<string>.
      */
-    template<typename T>
-    void set(std::string_view option_name, T&& value) {
+    template <typename T>
+    void set(std::string_view option_name, T&& value)
+    {
         using type = std::remove_reference_t<T>;
         map[trim(option_name)].emplace<type>(std::move(value));
         //map[trim(option_name)] = std::forward<type>(value);
     }
-
 
     /**
      * Check on existence of the option.
@@ -140,10 +146,10 @@ public:
      * \param  option_name The name of the option to test.
      * \return true if the option has been defined, otherwise false.
      */
-    bool exist(std::string const& option_name) const {
+    bool exist(std::string const& option_name) const
+    {
         return map.count(option_name) > 0;
     }
-
 
     /**
      * Dump the configuration stored in sorted form
@@ -153,27 +159,37 @@ public:
 
 private:
     /** Trim leading '--' chars from key. */
-    static inline
-    std::string trim(std::string_view key) {
+    static inline std::string trim(std::string_view key)
+    {
 
         // FixMe: C++20 starts_with()
         std::string_view const prefix{ "--" };
-        if(key.substr(0, prefix.size()) == prefix) {
+        if (key.substr(0, prefix.size()) == prefix) {
             return std::string{ key.substr(prefix.size()) };
         }
         return std::string{ key };
     }
 
 private:
-    typedef std::unordered_map<std::string, option_value> map_type;
+    using map_type = std::unordered_map<std::string, option_value>;
+
+    // clang-format off
     map_type                                        map;
     static const option_value                       none;
+    // clang-format on
 };
 
+/**
+ * Settings option trigger.
+ *
+ * Add (secondary) boolean flags to the settings repository if the primary
+ * option is set.
+ */
+class settings::option_trigger {
+    using trigger_map_type = std::unordered_map<
+        std::string, std::vector<std::string>>;
 
-class settings::option_trigger
-{
-    std::unordered_map<std::string, std::vector<std::string>> trigger;
+    trigger_map_type trigger;
 
 public:
     option_trigger() = default;
@@ -188,7 +204,8 @@ public:
      * \param primary_option    The option which triggers depending options.
      * \param secondary_options The depending options.
      */
-    void add(std::string const& primary_option, std::vector<std::string> const& secondary_options) {
+    void add(std::string const& primary_option, std::vector<std::string> const& secondary_options)
+    {
         trigger[primary_option] = secondary_options;
     }
 
@@ -198,20 +215,19 @@ public:
      *
      * \param config The configuration map.
      */
-    void update(settings& config) const {
-        for (auto const& [primary_option, secondary_options] : trigger) {
+    void update(settings& config) const
+    {
+        for (auto const & [ primary_option, secondary_options ] : trigger) {
             if (!config.exist(trim(primary_option))) {
                 continue;
             }
-            for(auto const& option : secondary_options) {
+            for (auto const& option : secondary_options) {
                 config.set(option, true);
             }
         }
     }
 };
 
-
 } // namespace eda
-
 
 #endif /* SOURCES_COMMON_INCLUDE_EDA_SETTINGS_HPP_ */

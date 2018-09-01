@@ -6,10 +6,10 @@
  */
 
 #include <eda/vhdl/parser/on_error_base.hpp>
+#include <eda/support/boost/locale.hpp>             // IWYU pragma: keep
 
 #include <iostream>
 
-#include <eda/support/boost/locale.hpp>
 
 
 namespace eda { namespace vhdl { namespace parser {

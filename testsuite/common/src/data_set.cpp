@@ -8,8 +8,12 @@
 #include <testsuite/data_set.hpp>
 
 #include <boost/filesystem/fstream.hpp>
-#include <iostream>
+
 #include <cassert>
+#include <algorithm>
+#include <iterator>
+#include <exception>
+#include <iostream>
 
 
 namespace testsuite {

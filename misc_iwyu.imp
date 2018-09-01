@@ -1,0 +1,8 @@
+[
+# clang specific
+{ include: [ "<bits/types/time_t.h>", private, "<ctime>", public ] },
+{ include: [ "<bits/exception.h>", private, "<exception>", public ] },
+# EDA project specific
+]
+
+

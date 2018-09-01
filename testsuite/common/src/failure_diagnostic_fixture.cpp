@@ -7,18 +7,24 @@
 
 #include <testsuite/failure_diagnostic_fixture.hpp>
 
-#include <boost/test/unit_test.hpp>
-#include <boost/test/results_collector.hpp>
+#include <boost/test/framework.hpp>                 // for current_test_case
+#include <boost/test/tree/test_unit.hpp>            // for master_test_suite, test...
+#include <boost/test/unit_test_log.hpp>             // for BOOST_TEST_MESSAGE
+#include <boost/test/utils/lazy_ostream.hpp>        // for lazy_ostream_impl, oper...
+#include <boost/test/results_collector.hpp>         // for results_collector, resu...
 
-#include <boost/filesystem.hpp>
+#include <boost/filesystem/fstream.hpp>             // for ofstream
+#include <boost/filesystem/operations.hpp>          // for filesystem_error, exists
+#include <boost/filesystem/path.hpp>                // for path, operator<<, opera...
+#include <boost/system/error_code.hpp>              // for error_code
 
-#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/trim.hpp>          // for trim_right_copy
+
 #include <eda/util/make_iomanip.hpp>
 
-#include <testsuite/namespace_alias.hpp>
+#include <testsuite/namespace_alias.hpp>            // IWYU pragma: keep'
 
-#include <eda/util/cxx_bug_fatal.hpp>
-
+#include <utility>                                  // for move
 #include <iostream>
 
 

@@ -11,8 +11,16 @@
 #include <eda/vhdl/parser/grammar.hpp>
 #include <eda/vhdl/parser/parser_config.hpp>
 
-#include <eda/support/boost/locale.hpp>
+#include <eda/vhdl/ast/node/design_file.hpp>
+#include <eda/vhdl/ast/position_cache.hpp>
+#include <eda/vhdl/parser/error_handler.hpp>
+#include <eda/vhdl/parser/iterator_type.hpp>
 
+#include <eda/support/boost/locale.hpp>             // IWYU pragma: keep
+
+#include <iterator>
+#include <new>                                      // for bad_alloc
+#include <type_traits>
 #include <iostream>
 
 

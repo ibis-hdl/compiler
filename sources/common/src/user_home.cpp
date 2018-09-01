@@ -6,15 +6,16 @@
  */
 
 #include <eda/util/file/user_home.hpp>
-
-#include <boost/filesystem/path.hpp>
+#include <boost/predef/os/linux.h>
 #include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
+#include <boost/system/error_code.hpp>
+#include <cstdlib>
+#include <stdexcept>
+#include <string>
 
-#include <eda/util/cxx_bug_fatal.hpp>
-
-#include <eda/namespace_alias.hpp>
-
-#include <iostream>
+#include <eda/compiler/compiler_support.hpp>    // IWYU pragma: keep
+#include <eda/namespace_alias.hpp>              // IWYU pragma: keep
 
 
 namespace eda { namespace util {

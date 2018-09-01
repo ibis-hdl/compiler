@@ -9,13 +9,18 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_PARSE_HPP_
 
 
-
-#include <eda/vhdl/ast_fwd.hpp>
 #include <eda/vhdl/parser/parser_config.hpp>
 
 #include <string>
 #include <iosfwd>
 
+namespace eda {
+namespace vhdl {
+namespace ast {
+    struct design_file;
+} // namesapce ast
+} // namespace vhdl
+} // namespace eda
 
 namespace eda { namespace vhdl { namespace parser {
 

@@ -8,9 +8,9 @@
 #ifndef TESTSUITE_VHDL_NUMERIC_CONVERT_INCLUDE_TESTSUITE_VHDL_NUMERIC_CONVERT_BINARY_STRING_HPP_
 #define TESTSUITE_VHDL_NUMERIC_CONVERT_INCLUDE_TESTSUITE_VHDL_NUMERIC_CONVERT_BINARY_STRING_HPP_
 
-
-#include <iosfwd>
+#include <cstdint>
 #include <string>
+#include <iosfwd>
 
 
 namespace testsuite { namespace vhdl_numeric_convert { namespace util {
@@ -24,7 +24,7 @@ namespace testsuite { namespace vhdl_numeric_convert { namespace util {
  */
 struct binary_string
 {
-    uint64_t                                        number;
+    std::uint64_t                                   number;
 
     binary_string(uint64_t n);
 
@@ -37,7 +37,7 @@ struct binary_string
  */
 struct octal_string
 {
-    uint64_t                                        number;
+    std::uint64_t                                   number;
 
     octal_string(uint64_t n);
 
@@ -50,7 +50,7 @@ struct octal_string
  */
 struct hexadecimal_string
 {
-    uint64_t                                        number;
+    std::uint64_t                                   number;
 
     hexadecimal_string(uint64_t n);
 

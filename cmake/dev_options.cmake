@@ -52,3 +52,20 @@ if(EDA_RUN_CLANG_TIDY)
 endif()
 
 configure_file(${eda_SOURCE_DIR}/.clang-tidy ${eda_BINARY_DIR}/.clang-tidy COPYONLY)
+
+
+## -----------------------------------------------------------------------------
+# Include What You Use (IWYU)
+# https://github.com/include-what-you-use/include-what-you-use
+# on Unix/Linux only
+if(UNIX)
+    configure_file(${CMAKE_SOURCE_DIR}/cmake/util/cmake-iwyu.sh.cmake
+                   ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/cmake-iwyu.sh @ONLY
+    )
+    file(COPY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/cmake-iwyu.sh
+         DESTINATION ${CMAKE_BINARY_DIR}
+         FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ
+         GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+    )
+endif()
+

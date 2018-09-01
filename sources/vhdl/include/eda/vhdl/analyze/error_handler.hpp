@@ -82,9 +82,11 @@ public:
                     std::string const& error_message) const;
 
 private:
+    // clang-format off
     std::ostream&                                   os;
-    ast::position_cache<iterator_type>&              position_cache;
+    ast::position_cache<iterator_type>&             position_cache;
     std::size_t                                     tab_sz;
+    // clang-format on
 };
 
 

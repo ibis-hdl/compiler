@@ -8,14 +8,16 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_CONTEXT_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_CONTEXT_HPP_
 
-
+// clang-format off
 #include <eda/vhdl/ast/util/string_span.hpp>
 #include <eda/vhdl/ast/util/string_span_hash.hpp>
 
+#include <cstddef>
 #include <unordered_map>
-#include <stdexcept>
+#include <exception>
 #include <limits>
 #include <iosfwd>
+// clang-format on
 
 
 namespace eda { namespace vhdl {
@@ -38,7 +40,7 @@ public:
     struct overflow: public std::exception { };
 
 public:
-    typedef std::size_t                             value_type;
+    using value_type = std::size_t;
 
 public:
     basic_counter(value_type limit_ = std::numeric_limits<value_type>::max())
@@ -74,8 +76,10 @@ public:
     }
 
 private:
+    // clang-format off
     value_type                                      treshold;
-    value_type                                         value;
+    value_type                                      value;
+    // clang-format on
 };
 
 
@@ -120,7 +124,9 @@ public:
     }
 
 private:
+    // clang-format off
     std::unordered_map<ast::string_span, int>       dummy;
+    // clang-format on
 };
 
 
@@ -129,7 +135,9 @@ private:
  */
 class failure_status
 {
+    // clang-format off
     context const&                                  ctx;
+    // clang-format on
 
 public:
     failure_status(context const& ctx_)
