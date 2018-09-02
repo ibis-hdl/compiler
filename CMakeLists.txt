@@ -13,7 +13,6 @@ project(eda VERSION 0.0.1 LANGUAGES CXX)
 message(STATUS "System name: ${CMAKE_SYSTEM_NAME}")
 message(STATUS "EDA version: ${eda_VERSION}")
 
-
 ## global C++ Standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -21,6 +20,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
+include(prevent_in_source_builds)
 include(options)
 include(dev_options)
 
