@@ -30,7 +30,7 @@ struct collect_worker
     {}
 
     template<typename NodeT>
-    void operator()(NodeT const&, std::string_view const& node_name) const {
+    void operator()(NodeT const& /*unused*/, std::string_view const& node_name) const {
 
         ++count_map[node_name];
 
@@ -63,15 +63,17 @@ auto ast_stats::sort_by_count(bool ascending) const {
 
     auto const ascending_predicate =
             [](pair_type const& lhs, pair_type const& rhs) {
-                if (lhs.second != rhs.second)
+                if (lhs.second != rhs.second) {
                 return lhs.second < rhs.second; // sort-by-value
+}
                 return lhs.first < rhs.first;    // sort-by-key otherwise
             };
 
     auto const descending_predicate =
             [](pair_type const& lhs, pair_type const& rhs) {
-                if (lhs.second != rhs.second)
+                if (lhs.second != rhs.second) {
                 return lhs.second > rhs.second; // sort-by-value
+}
                 return lhs.first < rhs.first;    // sort-by-key otherwise
             };
 

@@ -35,9 +35,10 @@ struct position_indicator
             if (chr == '\r' || chr == '\n') {
                 break;
             }
-            else if (chr == '\t') {
-                for (std::size_t i = 0; i != tab_sz; ++i)
+            if (chr == '\t') {
+                for (std::size_t i = 0; i != tab_sz; ++i) {
                     os << symbol;
+				}
             }
             else {
                 os << symbol;

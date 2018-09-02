@@ -102,8 +102,7 @@ public:
             node.file_id = file_id;
             node.pos_id = positions.size();
             positions.emplace_back(first, last);
-        }
-        else { // ignore
+        } else { // ignore
             // ... but make gcc quiet
             boost::ignore_unused(file_id);
             boost::ignore_unused(first);
@@ -157,9 +156,9 @@ public:
         if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
             return positions[node.pos_id];
         }
-        else {
+        
             return {};
-        }
+        
     }
 
 public:
@@ -182,7 +181,7 @@ public:
      * @param pos_iter Iterator position pointing to a line of interest.
      * @return Iterator position pointing to the begin of line.
      */
-    iterator_type get_line_start(std::size_t file_id, iterator_type& pos_iter) const;
+    iterator_type get_line_start(std::size_t file_id, iterator_type& pos) const;
 
     /**
      * Print the line where the iterator points to until end-of-line.
@@ -191,7 +190,7 @@ public:
      * @param start Iterator position pointing to a line of interest.
      * @return String representing the source line.
      */
-    std::string current_line(std::size_t file_id, iterator_type const& start) const;
+    std::string current_line(std::size_t file_id, iterator_type const& first) const;
 
 private:
     file_container_type                                files;

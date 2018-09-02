@@ -80,7 +80,9 @@ private:
 
         auto const handle = stream(os);
         // Note, ::fileno(NULL) can crash (bug there?)
-        if (handle && ::isatty(::fileno(handle))) { return true; }
+        if (handle) {
+            return static_cast<bool>(::isatty(::fileno(handle)));
+        }
         return false;
     }
 
@@ -102,9 +104,7 @@ std::ostream& operator<<(std::ostream& os, message_decorator<Tag> const& decorat
     if (std::has_facet<message_facet<Tag>>(locale)) {
         return std::use_facet<message_facet<Tag>>(locale).print(os, decorator);
     }
-    else {
-        return decorator.print(os);
-    }
+    return decorator.print(os);
 }
 
 

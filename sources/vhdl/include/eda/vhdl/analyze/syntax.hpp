@@ -53,7 +53,7 @@ public:
     void operator()(ast::process_statement const& node, std::string_view const& node_name) const;
 
     template<typename NodeT>
-    void operator()(NodeT const&, std::string_view const&) const { }
+    void operator()(NodeT const& /*unused*/, std::string_view const& /*unused*/) const { }
 
 private:
     template<typename NodeT>

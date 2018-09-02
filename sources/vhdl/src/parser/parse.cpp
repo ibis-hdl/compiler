@@ -103,16 +103,15 @@ std::string parse::make_exception_description(std::string const &filename,
 
     std::string const what = [&] {
         if constexpr(std::is_base_of_v<std::remove_reference_t<ExceptionT>, std::exception>) {
-            return exception.what();
+            return std::string{ exception.what() };
         }
-        else {
-            // make GGC quiet
-            boost::ignore_unused(exception);
+        
+        // make GGC quiet
+        boost::ignore_unused(exception);
 
-            /* An exception was caught which hasn't been derived from
-             * std::exception, hence no what() is available - simple unknown. */
-            return translate("ExceptionDescription", "unknown");
-        }
+        /* An exception was caught which hasn't been derived from
+         * std::exception, hence no what() is available - simple unknown. */
+         return translate("ExceptionDescription", "unknown").str();
     }();
 
     return (format(translate("ExceptionDescription",

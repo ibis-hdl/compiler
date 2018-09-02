@@ -62,15 +62,15 @@ std::ostream& failure_status::print(std::ostream& os) const
     auto const warning_message = (format(translate("{1} warning", "{1} warnings",
         plural_count(ctx.warning_count))) % ctx.warning_count).str();
 
-    if (ctx.error_count && ctx.warning_count) {
+    if ((ctx.error_count != 0u) && (ctx.warning_count != 0u)) {
         // TRANSLATORS: summary error(s) and warning(s)
         os << format(translate("{1} and {2} generated.")) % error_message % warning_message;
     }
-    else if (ctx.error_count) {
+    else if (ctx.error_count != 0u) {
         // TRANSLATORS: summary error(s) only
         os << format(translate("{1} generated.")) % error_message;
     }
-    else if (ctx.warning_count) {
+    else if (ctx.warning_count != 0u) {
         // TRANSLATORS: summary warning(s) only
         os << format(translate("{1} generated.")) % warning_message;
     }

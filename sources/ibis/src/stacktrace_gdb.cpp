@@ -48,7 +48,7 @@ namespace bp = boost::process;
 
 bool register_gdb_signal_handler();
 #if (BOOST_OS_LINUX)
-void gdb_signal_handler(int sig, siginfo_t *, void *);
+void gdb_signal_handler(int sig, siginfo_t * /*unused*/, void * /*unused*/);
 #endif
 bool gdb_detected();
 bool valgrind_detected();
@@ -88,7 +88,6 @@ bool register_gdb_signal_handler()
         std::cerr << "Note: GDB signal handler already installed, skip.\n";
         return true;
     }
-    else { /* nothing */ }
 
     struct sigaction sa;
     memset(&sa, 0, sizeof(sa));
@@ -110,7 +109,7 @@ bool register_gdb_signal_handler()
 }
 
 
-void gdb_signal_handler(int sig, siginfo_t *, void *)
+void gdb_signal_handler(int sig, siginfo_t * /*unused*/, void * /*unused*/)
 {
     sig_caught = sig;
 

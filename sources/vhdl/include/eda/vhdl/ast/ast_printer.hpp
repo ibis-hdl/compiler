@@ -36,7 +36,7 @@ public:
     bool verbose_variant{ false };
 
 public:
-    printer(std::ostream& out, uint16_t start_indent = 0);
+    printer(std::ostream& os_, uint16_t start_indent = 0);
 
 
     void operator()(abstract_literal const& node);

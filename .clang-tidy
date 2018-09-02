@@ -1,6 +1,7 @@
 ---
 Checks: "-*,\
 modernize-*,\
+readability-*,\
 "
 HeaderFilterRegex: '*\.(hpp|h)$'
 ...

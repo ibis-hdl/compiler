@@ -102,9 +102,7 @@ void error_handler<Iterator>::operator()(
         if (range) {
             return std::make_tuple((*range).begin(), (*range).end(), true /* valid */);
         }
-        else {
-            return std::make_tuple(iterator_type{}, iterator_type{}, false /* not-valid */);
-        }
+        return std::make_tuple(iterator_type{}, iterator_type{}, false /* not-valid */);
     };
 
     auto const indicator = [&](auto& start, auto& first, auto& last) {

@@ -38,7 +38,7 @@ enum class keyword_token
 };
 
 
-std::ostream& operator<<(std::ostream& os, keyword_token kw_token);
+std::ostream& operator<<(std::ostream& os, keyword_token token);
 
 
 } } } // namespace eda.vhdl.ast

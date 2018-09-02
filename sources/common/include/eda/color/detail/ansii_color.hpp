@@ -83,7 +83,7 @@ public:
 public:
     std::ostream& print(std::ostream& os) const {
 
-        if (!count) { return os; }
+        if (count == 0u) { return os; }
 
         os << CSI;
         for (size_t N = (count - 1), i = 0; i != count; ++i) {

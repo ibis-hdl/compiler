@@ -156,7 +156,7 @@ struct primitive_parser
 
 
     template<typename RangeType>
-    return_value operator()(RangeType const& range, primitive_parser::bin) const
+    return_value operator()(RangeType const& range, primitive_parser::bin /*unused*/) const
     {
         detail::unsigned_integer attribute{};
 
@@ -167,7 +167,7 @@ struct primitive_parser
 
 
     template<typename RangeType>
-    return_value operator()(RangeType const& range, primitive_parser::oct) const
+    return_value operator()(RangeType const& range, primitive_parser::oct /*unused*/) const
     {
         detail::unsigned_integer attribute{};
 
@@ -178,7 +178,7 @@ struct primitive_parser
 
 
     template<typename RangeType>
-    return_value operator()(RangeType const& range, primitive_parser::dec) const
+    return_value operator()(RangeType const& range, primitive_parser::dec /*unused*/) const
     {
         detail::unsigned_integer attribute{};
 
@@ -189,7 +189,7 @@ struct primitive_parser
 
 
     template<typename RangeType>
-    return_value operator()(RangeType const& range, primitive_parser::hex) const
+    return_value operator()(RangeType const& range, primitive_parser::hex /*unused*/) const
     {
         detail::unsigned_integer attribute{};
 
@@ -200,7 +200,7 @@ struct primitive_parser
 
 
     template<typename RangeType>
-    return_value operator()(RangeType const& range, primitive_parser::real) const
+    return_value operator()(RangeType const& range, primitive_parser::real /*unused*/) const
     {
         double attribute{};
 
@@ -211,7 +211,7 @@ struct primitive_parser
 
 
     template<typename RangeType>
-    return_value operator()(RangeType const& range, primitive_parser::exp) const
+    return_value operator()(RangeType const& range, primitive_parser::exp /*unused*/) const
     {
         detail::signed_integer attribute{};
 

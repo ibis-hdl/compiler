@@ -33,7 +33,7 @@ std::size_t position_cache<IteratorT>::line_number(std::size_t file_id, iterator
         auto chr = *iter;
         switch (chr) {
             case '\n':
-                if (prev != '\r') ++line_no;
+                if (prev != '\r') { ++line_no; }
                 break;
             case '\r':
                 ++line_no;
@@ -60,9 +60,8 @@ std::string position_cache<IteratorT>::current_line(std::size_t file_id, iterato
         if (chr == '\r' || chr == '\n') {
             break;
         }
-        else {
-            ++line_end;
-        }
+        
+        ++line_end;
     }
 
     using char_type = typename std::iterator_traits<iterator_type>::value_type;
@@ -86,7 +85,7 @@ IteratorT position_cache<IteratorT>::get_line_start(std::size_t file_id, iterato
             // Note: The behavior is undefined if the value of ch is not
             // representable as unsigned char and is not equal to EOF.
             // [std::isspace](https://en.cppreference.com/w/cpp/string/byte/isspace)
-            if (std::isspace(static_cast<unsigned char>(ch))) {
+            if (std::isspace(static_cast<unsigned char>(ch)) != 0) {
                 ++iter;
             }
             else {

@@ -80,7 +80,7 @@ private:
     std::string read_file(fs::path const& file_path);
 
 private:
-    bool parse_for(std::string const& arg, std::string const& string, std::string& value);
+    bool parse_for(std::string const& arg, std::string const& str, std::string& value);
     bool parse_command_line();
 
 private:

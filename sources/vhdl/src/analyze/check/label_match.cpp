@@ -52,7 +52,7 @@ label_match::result label_match::compare(ast::identifier const& start_label, ast
 
         bool const label_equal{ start_label == end_label };
 
-        if(label_equal) return result::OK;
+        if (label_equal) { return result::OK; }
         return result::MISMATCH;
     }
 
@@ -70,7 +70,7 @@ label_match::result label_match::compare(ast::optional<ast::identifier> const& s
 
         bool const label_equal{ start_label == end_label };
 
-        if(label_equal) return result::OK;
+        if (label_equal) { return result::OK; }
         return result::MISMATCH;
     }
 

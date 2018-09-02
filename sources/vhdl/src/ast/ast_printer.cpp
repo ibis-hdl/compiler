@@ -45,7 +45,7 @@ struct printer::scope_printer
         if(verbose) {
             os << increase_indent << "(";
             os << name;
-            if(name_pfx) {
+            if(name_pfx != nullptr) {
                 os << "<" << name_pfx << ">";
             }
             os << '\n';
@@ -2827,7 +2827,7 @@ void printer::operator()(keyword_token token)
 }
 
 
-void printer::operator()(nullary const&)
+void printer::operator()(nullary const& /*unused*/)
 {
     os << "\n*****************************";
     os << "\n*    SHALL NEVER BE HERE    *";

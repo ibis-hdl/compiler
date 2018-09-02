@@ -179,14 +179,14 @@ void init::parse_cli(int argc, const char* argv[])
         std::exit(app.exit(e));
     }
 
-    if (app.count("--version")) {
+    if (app.count("--version") != 0u) {
         std::cout << VERSION_STR << '\n';
         std::exit(EXIT_SUCCESS);
     }
 
     // .. and evaluate
     auto const set_flag = [&](std::string const& flag, bool value = true) {
-        if (app.count(flag)) {
+        if (app.count(flag) != 0u) {
             setting.set(flag, value);
         }
     };
@@ -197,7 +197,7 @@ void init::parse_cli(int argc, const char* argv[])
 
     // Primary Options
     setting.set("--files", parameter.files);
-    if (app.count("--lib-path")) {
+    if (app.count("--lib-path") != 0u) {
         setting.set("--lib-path", parameter.lib_path);
     }
 
@@ -224,7 +224,7 @@ void init::parse_cli(int argc, const char* argv[])
     trigger_flags.update(setting);
 
     // Locale Options
-    if (app.count("--locale-dir")) {
+    if (app.count("--locale-dir") != 0u) {
         setting.set("--locale-dir", parameter.locale_dir);
     }
 }
@@ -246,8 +246,7 @@ void init::register_signal_handlers()
 void init::user_config_message_color()
 {
     bool const force_color = [&] {
-        if (setting["force-color"]) return true;
-        return false;
+        return setting["force-color"];
     }();
 
     if (setting["no-color"] && !force_color) {
@@ -256,13 +255,11 @@ void init::user_config_message_color()
     }
 
     bool const quiet = [&] {
-        if (setting["quiet"]) { return true; }
-        return false;
+        return setting["quiet"];
     }();
 
     bool const verbose = [&] {
-        if (setting["verbose"]) { return true; }
-        return false;
+        return setting["verbose"];
     }();
 
 

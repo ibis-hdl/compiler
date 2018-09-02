@@ -41,11 +41,11 @@ public:
     void write(std::string const& parse_result);
 
 private:
-    bool create_directory(fs::path const& p);
-    bool write_file(fs::path const& p, std::string const& contents);
+    bool create_directory(fs::path const& write_path);
+    bool write_file(fs::path const& filename, std::string const& contents);
 
 private:
-    bool parse_for(std::string const& arg, std::string const& string, std::string& value);
+    bool parse_for(std::string const& arg, std::string const& str, std::string& value);
     bool parse_command_line();
 
 private:

@@ -117,9 +117,9 @@ public:
         auto map_ = const_cast<map_type&>(this->map);
         if (exist(option_name)) {
             return option_value_proxy{ map_[option_name] };
-        } else {
-            return option_value_proxy{ none };
-        }
+        } 
+            
+        return option_value_proxy{ none };
     }
 
     /**

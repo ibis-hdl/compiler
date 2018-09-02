@@ -66,16 +66,14 @@ bool file_loader::exist_file(std::string const& filename) const
             }
 
             return false;
+        }
 
+        if (!quiet) {
+            os << format(translate(
+                  "File {1} does not exists"))
+                  % file_path.make_preferred();
         }
-        else {
-            if (!quiet) {
-                os << format(translate(
-                      "File {1} does not exists"))
-                      % file_path.make_preferred();
-            }
-            return false;
-        }
+        return false;
     }
     catch (fs::filesystem_error const& e) {
         if (!quiet) {
@@ -233,7 +231,7 @@ std::time_t file_loader::timesstamp(std::string const& filename) const {
 
     std::time_t const time = fs::last_write_time(filename, ec);
 
-    if (ec && !quiet) {
+    if ((ec != nullptr) && !quiet) {
         os << "Failed to determine file time of "
            << fs::path{ filename }.make_preferred() << ": "
            << ec.message() << std::endl;

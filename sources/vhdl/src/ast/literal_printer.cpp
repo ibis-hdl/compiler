@@ -33,10 +33,9 @@ struct unquote_predicate {
             ) {
                 dbl_quote_printed = false;
                 return true;
-            } else {
-                dbl_quote_printed = true;
-                return false;
             }
+            dbl_quote_printed = true;
+            return false;
         };
 
         bool flag{ false };
@@ -158,7 +157,6 @@ std::ostream& literal_printer::operator()(std::ostream& os) const
 
             os << "\"" << literal_f << "\"";
         }
-
     );
 
     return os;

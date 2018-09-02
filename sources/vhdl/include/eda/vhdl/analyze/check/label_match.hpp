@@ -127,15 +127,15 @@ labels_of(NodeT const& node)
      * - identifier - end_identifier (where identifier is mandatory) */
     if constexpr (label_util::is_detected<label_util::has_label, NodeT>::value) {
         if constexpr (std::is_same_v<std::decay_t<decltype(node.label)>, ast::optional<ast::identifier>>) {
-            return tuple_type(*node.label, *node.end_label);
+            return tuple_type{ *node.label, *node.end_label };
         }
-        else { // mandatory start label
-            return tuple_type(node.label, *node.end_label);
+        else {
+            // mandatory start label
+            return tuple_type{ node.label, *node.end_label };
         }
-    }
-    else if constexpr (label_util::is_detected<label_util::has_identifier, NodeT>::value) {
+    } else if constexpr (label_util::is_detected<label_util::has_identifier, NodeT>::value) {
         // always mandatory identifier
-        return tuple_type(node.identifier, *node.end_identifier);
+        return tuple_type{ node.identifier, *node.end_identifier };
     }
     else { /* expect compiler error */ }
 }
