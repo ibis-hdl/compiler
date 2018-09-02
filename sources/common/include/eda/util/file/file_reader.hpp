@@ -35,9 +35,13 @@ namespace util {
 class file_loader {
 public:
     explicit file_loader(std::ostream& os_, eda::settings const& setting);
+    ~file_loader() = default;
 
     file_loader(file_loader const&) = delete;
     file_loader const& operator=(file_loader const&) = delete;
+
+    file_loader(file_loader&&) = delete;
+    file_loader const& operator=(file_loader&&) = delete;
 
 public:
     bool exist_file(std::string const& filename) const;

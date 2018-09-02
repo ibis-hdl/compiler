@@ -38,8 +38,7 @@ std::tuple<bool, AttrType> parse(ParserType const &numeric_parser, std::string c
         /* using different iterator_types causes linker errors, see e.g.
          * [linking errors while separate parser using boost spirit x3](
          *  https://stackoverflow.com/questions/40496357/linking-errors-while-separate-parser-using-boost-spirit-x3) */
-        static_assert(std::is_same<decltype(iter), parser::iterator_type>::value
-                   && std::is_same<decltype(end),  parser::iterator_type>::value,
+        static_assert(std::is_same<decltype(iter), parser::iterator_type>::value,
                       "iterator types must be the same"
         );
 #endif

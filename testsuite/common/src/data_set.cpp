@@ -87,10 +87,9 @@ void dataset_loader::read_files(fs::path const& path)
                     );
                     cerr << "INFO: read " << file << '\n';
 
-                    fs::path const input_file  = file;
                     fs::path const expect_file = fs::change_extension(file, expected_extension);
 
-                    testfile_input.emplace_back(   read_file(input_file ));
+                    testfile_input.emplace_back(   read_file(file ));
                     testfile_expected.emplace_back(read_file(expect_file));
                 }
             }

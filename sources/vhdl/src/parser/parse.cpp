@@ -42,8 +42,7 @@ bool parse::operator()(std::string const &input, ast::design_file& design_file)
     /* using different iterator_types causes linker errors, see e.g.
      * [linking errors while separate parser using boost spirit x3](
      *  https://stackoverflow.com/questions/40496357/linking-errors-while-separate-parser-using-boost-spirit-x3) */
-    static_assert(std::is_same_v<decltype(iter), iterator_type>
-               && std::is_same_v<decltype(end),  iterator_type>,
+    static_assert(std::is_same_v<decltype(iter), iterator_type>,
                   "iterator types must be the same"
     );
 
@@ -102,10 +101,12 @@ std::string parse::make_exception_description(std::string const &filename,
     using boost::locale::translate;
 
     std::string const what = [&] {
+#ifndef __clang_analyzer__
         if constexpr(std::is_base_of_v<std::remove_reference_t<ExceptionT>, std::exception>) {
             return std::string{ exception.what() };
         }
-        
+#endif // __clang_analyzer__
+
         // make GGC quiet
         boost::ignore_unused(exception);
 

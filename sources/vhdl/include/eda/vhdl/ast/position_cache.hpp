@@ -51,10 +51,12 @@ public:
 
 public:
     position_cache() = default;
+    ~position_cache() = default;
 
     position_cache(position_cache const&) = delete;
-    position_cache(position_cache&&) = delete;
     position_cache& operator=(position_cache const&) = delete;
+
+    position_cache(position_cache&&) = delete;
     position_cache& operator=(position_cache&&) = delete;
 
 public:
@@ -217,10 +219,12 @@ public:
     , file_id{ file_id_ }
     { }
 
-    proxy(proxy&&) = default;
+    ~proxy() = default;
 
     proxy(proxy const&) = delete;
     proxy& operator=(proxy const&) = delete;
+
+    proxy(proxy&&) noexcept = default;
     proxy& operator=(proxy&&) = delete;
 
 public:

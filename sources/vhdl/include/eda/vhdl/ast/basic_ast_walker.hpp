@@ -16,6 +16,7 @@
 #include <eda/compiler/warnings_on.hpp>
 
 #include <algorithm>
+#include <string_view>
 
 #include <boost/core/ignore_unused.hpp>
 
@@ -59,7 +60,7 @@ public:
 public:
     void operator()(ast::abstract_literal const &node)
     {
-        static char const node_typename[]{ "abstract_literal" };
+        std::string_view const node_typename{ "abstract_literal" };
         worker(node, node_typename);
 
         visit(node);
@@ -68,7 +69,7 @@ public:
 
     void operator()(ast::access_type_definition const &node)
     {
-        static char const node_typename[]{ "access_type_definition" };
+        std::string_view const node_typename{ "access_type_definition" };
         worker(node, node_typename);
 
         (*this)(node.subtype_indication);
@@ -77,7 +78,7 @@ public:
 
     void operator()(ast::actual_designator const &node)
     {
-        static char const node_typename[]{ "actual_designator" };
+        std::string_view const node_typename{ "actual_designator" };
         worker(node, node_typename);
 
         visit(node);
@@ -86,7 +87,7 @@ public:
 
     void operator()(ast::actual_part const &node)
     {
-        static char const node_typename[]{ "actual_part" };
+        std::string_view const node_typename{ "actual_part" };
         worker(node, node_typename);
 
         util::visit_in_place(
@@ -104,7 +105,7 @@ public:
 
     void operator()(ast::aggregate const &node)
     {
-        static char const node_typename[]{ "aggregate" };
+        std::string_view const node_typename{ "aggregate" };
         worker(node, node_typename);
 
         visit(node);
@@ -113,7 +114,7 @@ public:
 
     void operator()(ast::alias_declaration const &node)
     {
-        static char const node_typename[]{ "alias_declaration" };
+        std::string_view const node_typename{ "alias_declaration" };
         worker(node, node_typename);
 
         (*this)(node.alias_designator);
@@ -132,7 +133,7 @@ public:
 
     void operator()(ast::alias_designator const &node)
     {
-        static char const node_typename[]{ "alias_designator" };
+        std::string_view const node_typename{ "alias_designator" };
         worker(node, node_typename);
 
         visit(node);
@@ -141,7 +142,7 @@ public:
 
     void operator()(ast::allocator const &node)
     {
-        static char const node_typename[]{ "allocator" };
+        std::string_view const node_typename{ "allocator" };
         worker(node, node_typename);
 
         visit(node);
@@ -150,7 +151,7 @@ public:
 
     void operator()(ast::architecture_body const &node)
     {
-        static char const node_typename[]{ "architecture_body" };
+        std::string_view const node_typename{ "architecture_body" };
         worker(node, node_typename);
 
         (*this)(node.identifier);
@@ -172,7 +173,7 @@ public:
 
     void operator()(ast::architecture_statement_part const &node)
     {
-        static char const node_typename[]{ "architecture_statement_part" };
+        std::string_view const node_typename{ "architecture_statement_part" };
         worker(node, node_typename);
 
         visit(node);
@@ -181,7 +182,7 @@ public:
 
     void operator()(ast::array_type_definition const &node)
     {
-        static char const node_typename[]{ "array_type_definition" };
+        std::string_view const node_typename{ "array_type_definition" };
         worker(node, node_typename);
 
         visit(node);
@@ -190,20 +191,20 @@ public:
 
     void operator()(ast::assertion const &node)
     {
-        static char const node_typename[]{ "assertion" };
+        std::string_view const node_typename{ "assertion" };
         worker(node, node_typename);
 
         (*this)(node.condition);
 
         if(node.report) {
-            static char const node_typename[]{ "assertion.report" };
+            std::string_view const node_typename{ "assertion.report" };
             worker(node.report, node_typename);
             // XXXX
             (*this)(*node.report);
         }
 
         if(node.severity) {
-            static char const node_typename[]{ "assertion.severity" };
+            std::string_view const node_typename{ "assertion.severity" };
             worker(node.severity, node_typename);
             // XXX
             (*this)(*node.severity);
@@ -213,7 +214,7 @@ public:
 
     void operator()(ast::assertion_statement const &node)
     {
-        static char const node_typename[]{ "assertion_statement" };
+        std::string_view const node_typename{ "assertion_statement" };
         worker(node, node_typename);
 
         if(node.label) {
@@ -226,7 +227,7 @@ public:
 
     void operator()(ast::association_element const &node)
     {
-        static char const node_typename[]{ "association_element" };
+        std::string_view const node_typename{ "association_element" };
         worker(node, node_typename);
 
         if(node.formal_part) {
@@ -239,7 +240,7 @@ public:
 
     void operator()(ast::association_list const &node)
     {
-        static char const node_typename[]{ "association_list" };
+        std::string_view const node_typename{ "association_list" };
         worker(node, node_typename);
 
         visit(node);
@@ -248,7 +249,7 @@ public:
 
     void operator()(ast::attribute_declaration const &node)
     {
-        static char const node_typename[]{ "attribute_declaration" };
+        std::string_view const node_typename{ "attribute_declaration" };
         worker(node, node_typename);
 
         (*this)(node.identifier);
@@ -258,7 +259,7 @@ public:
 
     void operator()(ast::attribute_name const &node)
     {
-        static char const node_typename[]{ "attribute_name" };
+        std::string_view const node_typename{ "attribute_name" };
         worker(node, node_typename);
 
         (*this)(node.prefix);
@@ -275,7 +276,7 @@ public:
 
     void operator()(ast::attribute_specification const &node)
     {
-        static char const node_typename[]{ "attribute_specification" };
+        std::string_view const node_typename{ "attribute_specification" };
         worker(node, node_typename);
 
         (*this)(node.entity_specification);
@@ -285,14 +286,14 @@ public:
 
     void operator()(ast::based_literal const &node)
     {
-        static char const node_typename[]{ "based_literal" };
+        std::string_view const node_typename{ "based_literal" };
         worker(node, node_typename);
     }
 
 
     void operator()(ast::binding_indication const &node)
     {
-        static char const node_typename[]{ "binding_indication" };
+        std::string_view const node_typename{ "binding_indication" };
         worker(node, node_typename);
 
         if(node.entity_aspect) {
@@ -306,27 +307,27 @@ public:
 
     void operator()(ast::bit_string_literal const &node)
     {
-        static char const node_typename[]{ "bit_string_literal" };
+        std::string_view const node_typename{ "bit_string_literal" };
         worker(node, node_typename);
     }
 
 
     void operator()(ast::block_configuration const &node)
     {
-        static char const node_typename[]{ "block_configuration" };
+        std::string_view const node_typename{ "block_configuration" };
         worker(node, node_typename);
 
         (*this)(node.block_specification);
 
         {
-            static char const node_typename[]{ "use_clause*" };
+            std::string_view const node_typename{ "use_clause*" };
             worker(node.use_clause_list, node_typename);
             // XXX
             visit(node.use_clause_list);
         }
 
         {
-            static char const node_typename[]{ "configuration_item*" };
+            std::string_view const node_typename{ "configuration_item*" };
             worker(node.configuration_item_list, node_typename);
             // XXX
             visit(node.configuration_item_list);
@@ -336,7 +337,7 @@ public:
 
     void operator()(ast::block_declarative_item const &node)
     {
-        static char const node_typename[]{ "block_declarative_item" };
+        std::string_view const node_typename{ "block_declarative_item" };
         worker(node, node_typename);
 
         visit(node);
@@ -345,7 +346,7 @@ public:
 
     void operator()(ast::block_declarative_part const &node)
     {
-        static char const node_typename[]{ "block_declarative_part" };
+        std::string_view const node_typename{ "block_declarative_part" };
         worker(node, node_typename);
 
         visit(node);
@@ -354,7 +355,7 @@ public:
 
     void operator()(ast::block_header const &node)
     {
-        static char const node_typename[]{ "block_header" };
+        std::string_view const node_typename{ "block_header" };
         worker(node, node_typename);
 
         if(node.generic_part) {
@@ -377,7 +378,7 @@ public:
 
     void operator()(ast::block_specification const &node)
     {
-        static char const node_typename[]{ "block_specification" };
+        std::string_view const node_typename{ "block_specification" };
         worker(node, node_typename);
 
         util::visit_in_place(
@@ -400,7 +401,7 @@ public:
 
     void operator()(ast::block_statement const &node)
     {
-        static char const node_typename[]{ "block_statement" };
+        std::string_view const node_typename{ "block_statement" };
         worker(node, node_typename);
 
         (*this)(node.label);
@@ -429,7 +430,7 @@ public:
 
     void operator()(ast::block_statement_part const &node)
     {
-        static char const node_typename[]{ "block_statement_part" };
+        std::string_view const node_typename{ "block_statement_part" };
         worker(node, node_typename);
 
         visit(node);
@@ -438,7 +439,7 @@ public:
 
     void operator()(ast::case_statement const &node)
     {
-        static char const node_typename[]{ "case_statement" };
+        std::string_view const node_typename{ "case_statement" };
         worker(node, node_typename);
 
         if(node.label) {
@@ -448,7 +449,7 @@ public:
         (*this)(node.expression);
 
         {
-            static char const node_typename[]{ "case_statement_alternative*" };
+            std::string_view const node_typename{ "case_statement_alternative*" };
             worker(node.alternatives, node_typename);
             // XXX
             visit(node.alternatives);
@@ -461,7 +462,7 @@ public:
 
     void operator()(ast::case_statement_alternative const &node)
     {
-        static char const node_typename[]{ "case_statement_alternative" };
+        std::string_view const node_typename{ "case_statement_alternative" };
         worker(node, node_typename);
 
         (*this)(node.choices);
@@ -471,14 +472,14 @@ public:
 
     void operator()(ast::character_literal const &node)
     {
-        static char const node_typename[]{ "character_literal" };
+        std::string_view const node_typename{ "character_literal" };
         worker(node, node_typename);
     }
 
 
     void operator()(ast::choice const &node)
     {
-        static char const node_typename[]{ "choice" };
+        std::string_view const node_typename{ "choice" };
         worker(node, node_typename);
 
         visit(node);
@@ -487,7 +488,7 @@ public:
 
     void operator()(ast::choices const &node)
     {
-        static char const node_typename[]{ "choices" };
+        std::string_view const node_typename{ "choices" };
         worker(node, node_typename);
 
         visit(node);
@@ -496,7 +497,7 @@ public:
 
     void operator()(ast::component_configuration const &node)
     {
-        static char const node_typename[]{ "component_configuration" };
+        std::string_view const node_typename{ "component_configuration" };
         worker(node, node_typename);
 
         (*this)(node.component_specification);
@@ -513,7 +514,7 @@ public:
 
     void operator()(ast::component_declaration const &node)
     {
-        static char const node_typename[]{ "component_declaration" };
+        std::string_view const node_typename{ "component_declaration" };
         worker(node, node_typename);
 
         (*this)(node.identifier);
@@ -534,7 +535,7 @@ public:
 
     void operator()(ast::component_instantiation_statement const &node)
     {
-        static char const node_typename[]{ "component_instantiation_statement" };
+        std::string_view const node_typename{ "component_instantiation_statement" };
         worker(node, node_typename);
 
         if(node.label) {
@@ -555,7 +556,7 @@ public:
 
     void operator()(ast::component_specification const &node)
     {
-        static char const node_typename[]{ "component_specification" };
+        std::string_view const node_typename{ "component_specification" };
         worker(node, node_typename);
 
         (*this)(node.instantiation_list);
@@ -565,7 +566,7 @@ public:
 
     void operator()(ast::composite_type_definition const &node)
     {
-        static char const node_typename[]{ "composite_type_definition" };
+        std::string_view const node_typename{ "composite_type_definition" };
         worker(node, node_typename);
 
         visit(node);
@@ -574,7 +575,7 @@ public:
 
     void operator()(ast::concurrent_assertion_statement const &node)
     {
-        static char const node_typename[]{ "concurrent_assertion_statement" };
+        std::string_view const node_typename{ "concurrent_assertion_statement" };
         worker(node, node_typename);
 
         if(node.label) {
@@ -587,7 +588,7 @@ public:
 
     void operator()(ast::concurrent_procedure_call_statement const &node)
     {
-        static char const node_typename[]{ "concurrent_procedure_call_statement" };
+        std::string_view const node_typename{ "concurrent_procedure_call_statement" };
         worker(node, node_typename);
 
         if(node.label) {
@@ -600,7 +601,7 @@ public:
 
     void operator()(ast::concurrent_signal_assignment_statement const &node)
     {
-        static char const node_typename[]{ "concurrent_signal_assignment_statement" };
+        std::string_view const node_typename{ "concurrent_signal_assignment_statement" };
         worker(node, node_typename);
 
         if(node.label) {
@@ -621,7 +622,7 @@ public:
 
     void operator()(ast::concurrent_statement const &node)
     {
-        static char const node_typename[]{ "concurrent_statement" };
+        std::string_view const node_typename{ "concurrent_statement" };
         worker(node, node_typename);
 
         visit(node);
@@ -630,7 +631,7 @@ public:
 
     void operator()(ast::condition_clause const &node)
     {
-        static char const node_typename[]{ "condition_clause" };
+        std::string_view const node_typename{ "condition_clause" };
         worker(node, node_typename);
 
         (*this)(node.condition);
@@ -639,7 +640,7 @@ public:
 
     void operator()(ast::conditional_signal_assignment const &node)
     {
-        static char const node_typename[]{ "conditional_signal_assignment" };
+        std::string_view const node_typename{ "conditional_signal_assignment" };
         worker(node, node_typename);
 
         (*this)(node.target);
@@ -654,7 +655,7 @@ public:
 
     void operator()(ast::conditional_waveforms const &node)
     {
-        static char const node_typename[]{ "conditional_waveforms" };
+        std::string_view const node_typename{ "conditional_waveforms" };
         worker(node, node_typename);
 
         if(!node.chunks.empty()) {
@@ -674,7 +675,7 @@ public:
 
     void operator()(ast::configuration_declaration const &node)
     {
-        static char const node_typename[]{ "configuration_declaration" };
+        std::string_view const node_typename{ "configuration_declaration" };
         worker(node, node_typename);
 
         (*this)(node.identifier);
@@ -694,7 +695,7 @@ public:
 
     void operator()(ast::configuration_declarative_item const &node)
     {
-        static char const node_typename[]{ "configuration_declarative_item" };
+        std::string_view const node_typename{ "configuration_declarative_item" };
         worker(node, node_typename);
 
         visit(node);
@@ -703,7 +704,7 @@ public:
 
     void operator()(ast::configuration_declarative_part const &node)
     {
-        static char const node_typename[]{ "configuration_declarative_part" };
+        std::string_view const node_typename{ "configuration_declarative_part" };
         worker(node, node_typename);
 
         visit(node);
@@ -712,7 +713,7 @@ public:
 
     void operator()(ast::configuration_item const &node)
     {
-        static char const node_typename[]{ "configuration_item" };
+        std::string_view const node_typename{ "configuration_item" };
         worker(node, node_typename);
 
         visit(node);
@@ -721,7 +722,7 @@ public:
 
     void operator()(ast::configuration_specification const &node)
     {
-        static char const node_typename[]{ "configuration_specification" };
+        std::string_view const node_typename{ "configuration_specification" };
         worker(node, node_typename);
 
         (*this)(node.component_specification);
@@ -731,7 +732,7 @@ public:
 
     void operator()(ast::constant_declaration const &node)
     {
-        static char const node_typename[]{ "constant_declaration" };
+        std::string_view const node_typename{ "constant_declaration" };
         worker(node, node_typename);
 
         (*this)(node.identifier_list);
@@ -745,7 +746,7 @@ public:
 
     void operator()(ast::constrained_array_definition const &node)
     {
-        static char const node_typename[]{ "constrained_array_definition" };
+        std::string_view const node_typename{ "constrained_array_definition" };
         worker(node, node_typename);
 
         (*this)(node.index_constraint);
@@ -755,7 +756,7 @@ public:
 
     void operator()(ast::constraint const &node)
     {
-        static char const node_typename[]{ "constraint" };
+        std::string_view const node_typename{ "constraint" };
         worker(node, node_typename);
 
         visit(node);
@@ -764,7 +765,7 @@ public:
 
     void operator()(ast::context_clause const &node)
     {
-        static char const node_typename[]{ "context_clause" };
+        std::string_view const node_typename{ "context_clause" };
         worker(node, node_typename);
 
         visit(node);
@@ -773,7 +774,7 @@ public:
 
     void operator()(ast::context_item const &node)
     {
-        static char const node_typename[]{ "context_item" };
+        std::string_view const node_typename{ "context_item" };
         worker(node, node_typename);
 
         visit(node);
@@ -782,14 +783,14 @@ public:
 
     void operator()(ast::decimal_literal const &node)
     {
-        static char const node_typename[]{ "decimal_literal" };
+        std::string_view const node_typename{ "decimal_literal" };
         worker(node, node_typename);
     }
 
 
     void operator()(ast::delay_mechanism const &node)
     {
-        static char const node_typename[]{ "delay_mechanism" };
+        std::string_view const node_typename{ "delay_mechanism" };
         worker(node, node_typename);
 
         if(node.time_expression) {
@@ -800,7 +801,7 @@ public:
 
     void operator()(ast::design_file const &node)
     {
-        static char const node_typename[]{ "design_file" };
+        std::string_view const node_typename{ "design_file" };
         worker(node, node_typename);
 
         visit(node);
@@ -809,7 +810,7 @@ public:
 
     void operator()(ast::design_unit const &node)
     {
-        static char const node_typename[]{ "design_unit" };
+        std::string_view const node_typename{ "design_unit" };
         worker(node, node_typename);
 
         (*this)(node.context_clause);
@@ -819,7 +820,7 @@ public:
 
     void operator()(ast::designator const &node)
     {
-        static char const node_typename[]{ "designator" };
+        std::string_view const node_typename{ "designator" };
         worker(node, node_typename);
 
         visit(node);
@@ -828,7 +829,7 @@ public:
 
     void operator()(ast::disconnection_specification const &node)
     {
-        static char const node_typename[]{ "disconnection_specification" };
+        std::string_view const node_typename{ "disconnection_specification" };
         worker(node, node_typename);
 
         (*this)(node.guarded_signal_specification);
@@ -838,7 +839,7 @@ public:
 
     void operator()(ast::discrete_range const &node)
     {
-        static char const node_typename[]{ "discrete_range" };
+        std::string_view const node_typename{ "discrete_range" };
         worker(node, node_typename);
 
         util::visit_in_place(
@@ -858,7 +859,7 @@ public:
 
     void operator()(ast::element_association const &node)
     {
-        static char const node_typename[]{ "element_association" };
+        std::string_view const node_typename{ "element_association" };
         worker(node, node_typename);
 
         if(!node.choices.empty()) {
@@ -871,7 +872,7 @@ public:
 
     void operator()(ast::element_declaration const &node)
     {
-        static char const node_typename[]{ "element_declaration" };
+        std::string_view const node_typename{ "element_declaration" };
         worker(node, node_typename);
 
         (*this)(node.identifier_list);
@@ -881,7 +882,7 @@ public:
 
     void operator()(ast::entity_aspect const &node)
     {
-        static char const node_typename[]{ "entity_aspect" };
+        std::string_view const node_typename{ "entity_aspect" };
         worker(node, node_typename);
 
         util::visit_in_place(
@@ -907,7 +908,7 @@ public:
 
     void operator()(ast::entity_class_entry_list const &node)
     {
-        static char const node_typename[]{ "entity_class_entry_list" };
+        std::string_view const node_typename{ "entity_class_entry_list" };
         worker(node, node_typename);
 
         visit(node);
@@ -916,7 +917,7 @@ public:
 
     void operator()(ast::entity_declaration const &node)
     {
-        static char const node_typename[]{ "entity_declaration" };
+        std::string_view const node_typename{ "entity_declaration" };
         worker(node, node_typename);
 
         (*this)(node.identifier);
@@ -941,7 +942,7 @@ public:
 
     void operator()(ast::entity_declarative_item const &node)
     {
-        static char const node_typename[]{ "entity_declarative_item" };
+        std::string_view const node_typename{ "entity_declarative_item" };
         worker(node, node_typename);
 
         visit(node);
@@ -950,7 +951,7 @@ public:
 
     void operator()(ast::entity_declarative_part const &node)
     {
-        static char const node_typename[]{ "entity_declarative_part" };
+        std::string_view const node_typename{ "entity_declarative_part" };
         worker(node, node_typename);
 
         visit(node);
@@ -959,7 +960,7 @@ public:
 
     void operator()(ast::entity_designator const &node)
     {
-        static char const node_typename[]{ "entity_designator" };
+        std::string_view const node_typename{ "entity_designator" };
         worker(node, node_typename);
 
         (*this)(node.entity_tag);
@@ -971,7 +972,7 @@ public:
 
     void operator()(ast::entity_header const &node)
     {
-        static char const node_typename[]{ "entity_header" };
+        std::string_view const node_typename{ "entity_header" };
         worker(node, node_typename);
 
         if(node.formal_generic_clause) {
@@ -986,7 +987,7 @@ public:
 
     void operator()(ast::entity_name_list const &node)
     {
-        static char const node_typename[]{ "entity_name_list" };
+        std::string_view const node_typename{ "entity_name_list" };
         worker(node, node_typename);
 
         util::visit_in_place(
@@ -1006,7 +1007,7 @@ public:
 
     void operator()(ast::entity_specification const &node)
     {
-        static char const node_typename[]{ "entity_specification" };
+        std::string_view const node_typename{ "entity_specification" };
         worker(node, node_typename);
 
         (*this)(node.entity_name_list);
@@ -1016,7 +1017,7 @@ public:
 
     void operator()(ast::entity_statement const &node)
     {
-        static char const node_typename[]{ "entity_statement" };
+        std::string_view const node_typename{ "entity_statement" };
         worker(node, node_typename);
 
         visit(node);
@@ -1025,7 +1026,7 @@ public:
 
     void operator()(ast::entity_statement_part const &node)
     {
-        static char const node_typename[]{ "entity_statement_part" };
+        std::string_view const node_typename{ "entity_statement_part" };
         worker(node, node_typename);
 
         visit(node);
@@ -1034,7 +1035,7 @@ public:
 
     void operator()(ast::entity_tag const &node)
     {
-        static char const node_typename[]{ "entity_tag" };
+        std::string_view const node_typename{ "entity_tag" };
         worker(node, node_typename);
 
         visit(node);
@@ -1043,7 +1044,7 @@ public:
 
     void operator()(ast::enumeration_literal const &node)
     {
-        static char const node_typename[]{ "enumeration_literal" };
+        std::string_view const node_typename{ "enumeration_literal" };
         worker(node, node_typename);
 
         visit(node);
@@ -1052,7 +1053,7 @@ public:
 
     void operator()(ast::enumeration_type_definition const &node)
     {
-        static char const node_typename[]{ "enumeration_type_definition" };
+        std::string_view const node_typename{ "enumeration_type_definition" };
         worker(node, node_typename);
 
         visit(node);
@@ -1061,7 +1062,7 @@ public:
 
     void operator()(ast::exit_statement const &node)
     {
-        static char const node_typename[]{ "exit_statement" };
+        std::string_view const node_typename{ "exit_statement" };
         worker(node, node_typename);
 
         if(node.label) {
@@ -1080,7 +1081,7 @@ public:
 
     void operator()(ast::expression const &node)
     {
-        static char const node_typename[]{ "expression" };
+        std::string_view const node_typename{ "expression" };
         worker(node, node_typename);
 
         (*this)(node.relation);
@@ -1097,7 +1098,7 @@ public:
 
     void operator()(ast::factor_binary_operation const& node)
     {
-        static char const node_typename[]{ "factor_binary_operation" };
+        std::string_view const node_typename{ "factor_binary_operation" };
         worker(node, node_typename);
 
         visit(node.primary_lhs);
@@ -1107,7 +1108,7 @@ public:
 
     void operator()(ast::factor_unary_operation const& node)
     {
-        static char const node_typename[]{ "factor_unary_operation" };
+        std::string_view const node_typename{ "factor_unary_operation" };
         worker(node, node_typename);
 
         visit(node.primary);
@@ -1115,7 +1116,7 @@ public:
 
     void operator()(ast::factor const &node)
     {
-        static char const node_typename[]{ "factor" };
+        std::string_view const node_typename{ "factor" };
         worker(node, node_typename);
 
         visit(node);
@@ -1124,7 +1125,7 @@ public:
 
     void operator()(ast::file_declaration const &node)
     {
-        static char const node_typename[]{ "file_declaration" };
+        std::string_view const node_typename{ "file_declaration" };
         worker(node, node_typename);
 
         (*this)(node.identifier_list);
@@ -1138,7 +1139,7 @@ public:
 
     void operator()(ast::file_open_information const &node)
     {
-        static char const node_typename[]{ "file_open_information" };
+        std::string_view const node_typename{ "file_open_information" };
         worker(node, node_typename);
 
         if(node.file_open_kind_expression) {
@@ -1150,7 +1151,7 @@ public:
 
     void operator()(ast::formal_part const &node)
     {
-        static char const node_typename[]{ "formal_part" };
+        std::string_view const node_typename{ "formal_part" };
         worker(node, node_typename);
 
         auto const visit_name = [this](auto const& ctx_name) {
@@ -1189,14 +1190,14 @@ public:
 
     void operator()(ast::function_call const &node)
     {
-        static char const node_typename[]{ "function_call" };
+        std::string_view const node_typename{ "function_call" };
         worker(node, node_typename);
 
         (*this)(node.function_name);
 
         if(node.actual_parameter_part) {
             {
-                static char const node_typename[]{ "actual_parameter_part" };
+                std::string_view const node_typename{ "actual_parameter_part" };
                 worker(node, node_typename);
 
                 (*this)(*node.actual_parameter_part);
@@ -1207,7 +1208,7 @@ public:
 
     void operator()(ast::generate_statement const &node)
     {
-        static char const node_typename[]{ "generate_statement" };
+        std::string_view const node_typename{ "generate_statement" };
         worker(node, node_typename);
 
         (*this)(node.label);
@@ -1218,7 +1219,7 @@ public:
         }
 
         if(!node.concurrent_statements.empty()) {
-            static char const node_typename[]{ "concurrent_statement*" };
+            std::string_view const node_typename{ "concurrent_statement*" };
             worker(node, node_typename);
             visit(node.concurrent_statements);
         }
@@ -1231,7 +1232,7 @@ public:
 
     void operator()(ast::generation_scheme const &node)
     {
-        static char const node_typename[]{ "generation_scheme" };
+        std::string_view const node_typename{ "generation_scheme" };
         worker(node, node_typename);
 
         visit(node);
@@ -1240,7 +1241,7 @@ public:
 
     void operator()(ast::generic_clause const &node)
     {
-        static char const node_typename[]{ "generic_clause" };
+        std::string_view const node_typename{ "generic_clause" };
         worker(node, node_typename);
 
         (*this)(node.generic_list);
@@ -1249,7 +1250,7 @@ public:
 
     void operator()(ast::generic_map_aspect const &node)
     {
-        static char const node_typename[]{ "generic_map_aspect" };
+        std::string_view const node_typename{ "generic_map_aspect" };
         worker(node, node_typename);
 
         (*this)(node.association_list);
@@ -1258,7 +1259,7 @@ public:
 
     void operator()(ast::group_constituent const &node)
     {
-        static char const node_typename[]{ "group_constituent" };
+        std::string_view const node_typename{ "group_constituent" };
         worker(node, node_typename);
         visit(node);
     }
@@ -1266,7 +1267,7 @@ public:
 
     void operator()(ast::group_constituent_list const &node)
     {
-        static char const node_typename[]{ "group_constituent_list" };
+        std::string_view const node_typename{ "group_constituent_list" };
         worker(node, node_typename);
 
         visit(node);
@@ -1274,7 +1275,7 @@ public:
 
     void operator()(ast::group_declaration const &node)
     {
-        static char const node_typename[]{ "group_declaration" };
+        std::string_view const node_typename{ "group_declaration" };
         worker(node, node_typename);
 
         (*this)(node.identifier);
@@ -1285,7 +1286,7 @@ public:
 
     void operator()(ast::group_template_declaration const &node)
     {
-        static char const node_typename[]{ "group_template_declaration" };
+        std::string_view const node_typename{ "group_template_declaration" };
         worker(node, node_typename);
 
         (*this)(node.identifier);
@@ -1295,7 +1296,7 @@ public:
 
     void operator()(ast::guarded_signal_specification const &node)
     {
-        static char const node_typename[]{ "guarded_signal_specification" };
+        std::string_view const node_typename{ "guarded_signal_specification" };
         worker(node, node_typename);
 
         (*this)(node.guarded_signal_list);
@@ -1305,14 +1306,14 @@ public:
 
     void operator()(ast::identifier const &node)
     {
-        static char const node_typename[]{ "identifier" };
+        std::string_view const node_typename{ "identifier" };
         worker(node, node_typename);
     }
 
 
     void operator()(ast::identifier_list const &node)
     {
-        static char const node_typename[]{ "identifier_list" };
+        std::string_view const node_typename{ "identifier_list" };
         worker(node, node_typename);
 
         visit(node);
@@ -1321,7 +1322,7 @@ public:
 
     void operator()(ast::if_statement const &node)
     {
-        static char const node_typename[]{ "if_statement" };
+        std::string_view const node_typename{ "if_statement" };
         worker(node, node_typename);
 
         if(node.label) {
@@ -1351,7 +1352,7 @@ public:
 
     void operator()(ast::index_constraint const &node)
     {
-        static char const node_typename[]{ "index_constraint" };
+        std::string_view const node_typename{ "index_constraint" };
         worker(node, node_typename);
 
         visit(node);
@@ -1360,7 +1361,7 @@ public:
 
     void operator()(ast::index_specification const &node)
     {
-        static char const node_typename[]{ "index_specification" };
+        std::string_view const node_typename{ "index_specification" };
         worker(node, node_typename);
 
         visit(node);
@@ -1369,7 +1370,7 @@ public:
 
     void operator()(ast::index_subtype_definition const &node)
     {
-        static char const node_typename[]{ "index_subtype_definition" };
+        std::string_view const node_typename{ "index_subtype_definition" };
         worker(node, node_typename);
 
         (*this)(node.type_mark);
@@ -1378,13 +1379,13 @@ public:
 
     void operator()(ast::indexed_name const &node)
     {
-        static char const node_typename[]{ "indexed_name" };
+        std::string_view const node_typename{ "indexed_name" };
         worker(node, node_typename);
 
         (*this)(node.prefix);
 
         {
-            static char const node_typename[]{ "expression*" };
+            std::string_view const node_typename{ "expression*" };
             worker(node, node_typename);
             visit(node.expression_list);
         }
@@ -1393,7 +1394,7 @@ public:
 
     void operator()(ast::instantiated_unit const &node)
     {
-        static char const node_typename[]{ "instantiated_unit" };
+        std::string_view const node_typename{ "instantiated_unit" };
         worker(node, node_typename);
 
         util::visit_in_place(
@@ -1419,7 +1420,7 @@ public:
 
     void operator()(ast::instantiation_list const &node)
     {
-        static char const node_typename[]{ "instantiation_list" };
+        std::string_view const node_typename{ "instantiation_list" };
         worker(node, node_typename);
 
         util::visit_in_place(
@@ -1440,7 +1441,7 @@ public:
 
     void operator()(ast::interface_constant_declaration const &node)
     {
-        static char const node_typename[]{ "interface_constant_declaration" };
+        std::string_view const node_typename{ "interface_constant_declaration" };
         worker(node, node_typename);
 
         (*this)(node.identifier_list);
@@ -1455,7 +1456,7 @@ public:
 
     void operator()(ast::interface_declaration const &node)
     {
-        static char const node_typename[]{ "interface_declaration" };
+        std::string_view const node_typename{ "interface_declaration" };
         worker(node, node_typename);
 
         visit(node);
@@ -1464,7 +1465,7 @@ public:
 
     void operator()(ast::interface_file_declaration const &node)
     {
-        static char const node_typename[]{ "interface_file_declaration" };
+        std::string_view const node_typename{ "interface_file_declaration" };
         worker(node, node_typename);
 
         (*this)(node.identifier_list);
@@ -1474,7 +1475,7 @@ public:
 
     void operator()(ast::interface_list const &node)
     {
-        static char const node_typename[]{ "interface_list" };
+        std::string_view const node_typename{ "interface_list" };
         worker(node, node_typename);
         visit(node);
     }
@@ -1482,7 +1483,7 @@ public:
 
     void operator()(ast::interface_signal_declaration const &node)
     {
-        static char const node_typename[]{ "interface_signal_declaration" };
+        std::string_view const node_typename{ "interface_signal_declaration" };
         worker(node, node_typename);
 
         (*this)(node.identifier_list);
@@ -1501,7 +1502,7 @@ public:
 
     void operator()(ast::interface_variable_declaration const &node)
     {
-        static char const node_typename[]{ "interface_variable_declaration" };
+        std::string_view const node_typename{ "interface_variable_declaration" };
         worker(node, node_typename);
 
         (*this)(node.identifier_list);
@@ -1520,7 +1521,7 @@ public:
 
     void operator()(ast::iteration_scheme const &node)
     {
-        static char const node_typename[]{ "iteration_scheme" };
+        std::string_view const node_typename{ "iteration_scheme" };
         worker(node, node_typename);
 
         visit(node);
@@ -1529,7 +1530,7 @@ public:
 
     void operator()(ast::library_clause const &node)
     {
-        static char const node_typename[]{ "library_clause" };
+        std::string_view const node_typename{ "library_clause" };
         worker(node, node_typename);
 
         visit(node.logical_name_list);
@@ -1538,7 +1539,7 @@ public:
 
     void operator()(ast::library_unit const &node)
     {
-        static char const node_typename[]{ "library_unit" };
+        std::string_view const node_typename{ "library_unit" };
         worker(node, node_typename);
 
         visit(node);
@@ -1547,7 +1548,7 @@ public:
 
     void operator()(ast::literal const &node)
     {
-        static char const node_typename[]{ "literal" };
+        std::string_view const node_typename{ "literal" };
         worker(node, node_typename);
 
         visit(node);
@@ -1556,7 +1557,7 @@ public:
 
     void operator()(ast::loop_statement const &node)
     {
-        static char const node_typename[]{ "loop_statement" };
+        std::string_view const node_typename{ "loop_statement" };
         worker(node, node_typename);
 
         if(node.label) {
@@ -1577,7 +1578,7 @@ public:
 
     void operator()(ast::name const &node)
     {
-        static char const node_typename[]{ "name" };
+        std::string_view const node_typename{ "name" };
         worker(node, node_typename);
 
         visit(node);
@@ -1586,7 +1587,7 @@ public:
 
     void operator()(ast::next_statement const &node)
     {
-        static char const node_typename[]{ "next_statement" };
+        std::string_view const node_typename{ "next_statement" };
         worker(node, node_typename);
 
         if(node.label) {
@@ -1605,7 +1606,7 @@ public:
 
     void operator()(ast::null_statement const &node)
     {
-        static char const node_typename[]{ "null_statement" };
+        std::string_view const node_typename{ "null_statement" };
         worker(node, node_typename);
 
         if(node.label) {
@@ -1616,7 +1617,7 @@ public:
 
     void operator()(ast::numeric_literal const &node)
     {
-        static char const node_typename[]{ "numeric_literal" };
+        std::string_view const node_typename{ "numeric_literal" };
         worker(node, node_typename);
 
         visit(node);
@@ -1625,7 +1626,7 @@ public:
 
     void operator()(ast::options const &node)
     {
-        static char const node_typename[]{ "options" };
+        std::string_view const node_typename{ "options" };
         worker(node, node_typename);
 
         if(node.delay_mechanism) {
@@ -1636,7 +1637,7 @@ public:
 
     void operator()(ast::package_body const &node)
     {
-        static char const node_typename[]{ "package_body" };
+        std::string_view const node_typename{ "package_body" };
         worker(node, node_typename);
 
         (*this)(node.identifier);
@@ -1650,7 +1651,7 @@ public:
 
     void operator()(ast::package_body_declarative_item const &node)
     {
-        static char const node_typename[]{ "package_body_declarative_item" };
+        std::string_view const node_typename{ "package_body_declarative_item" };
         worker(node, node_typename);
 
         visit(node);
@@ -1659,7 +1660,7 @@ public:
 
     void operator()(ast::package_body_declarative_part const &node)
     {
-        static char const node_typename[]{ "package_body_declarative_part" };
+        std::string_view const node_typename{ "package_body_declarative_part" };
         worker(node, node_typename);
 
         visit(node);
@@ -1668,7 +1669,7 @@ public:
 
     void operator()(ast::package_declaration const &node)
     {
-        static char const node_typename[]{ "package_declaration" };
+        std::string_view const node_typename{ "package_declaration" };
         worker(node, node_typename);
 
         (*this)(node.identifier);
@@ -1683,7 +1684,7 @@ public:
 
     void operator()(ast::package_declarative_item const &node)
     {
-        static char const node_typename[]{ "package_declarative_item" };
+        std::string_view const node_typename{ "package_declarative_item" };
         worker(node, node_typename);
 
         visit(node);
@@ -1692,7 +1693,7 @@ public:
 
     void operator()(ast::package_declarative_part const &node)
     {
-        static char const node_typename[]{ "package_declarative_part" };
+        std::string_view const node_typename{ "package_declarative_part" };
         worker(node, node_typename);
 
         visit(node);
@@ -1701,7 +1702,7 @@ public:
 
     void operator()(ast::parameter_specification const &node)
     {
-        static char const node_typename[]{ "parameter_specification" };
+        std::string_view const node_typename{ "parameter_specification" };
         worker(node, node_typename);
 
         (*this)(node.identifier);
@@ -1711,7 +1712,7 @@ public:
 
     void operator()(ast::physical_literal const &node)
     {
-        static char const node_typename[]{ "physical_literal" };
+        std::string_view const node_typename{ "physical_literal" };
         worker(node, node_typename);
 
         (*this)(node.literal);
@@ -1720,7 +1721,7 @@ public:
 
     void operator()(ast::physical_type_definition const &node)
     {
-        static char const node_typename[]{ "physical_type_definition" };
+        std::string_view const node_typename{ "physical_type_definition" };
         worker(node, node_typename);
 
         (*this)(node.range_constraint);
@@ -1739,7 +1740,7 @@ public:
 
     void operator()(ast::port_clause const &node)
     {
-        static char const node_typename[]{ "port_clause" };
+        std::string_view const node_typename{ "port_clause" };
         worker(node, node_typename);
 
         (*this)(node.port_list);
@@ -1748,7 +1749,7 @@ public:
 
     void operator()(ast::port_map_aspect const &node)
     {
-        static char const node_typename[]{ "port_map_aspect" };
+        std::string_view const node_typename{ "port_map_aspect" };
         worker(node, node_typename);
 
         (*this)(node.association_list);
@@ -1757,7 +1758,7 @@ public:
 
     void operator()(ast::prefix const &node)
     {
-        static char const node_typename[]{ "prefix" };
+        std::string_view const node_typename{ "prefix" };
         worker(node, node_typename);
 
         visit(node);
@@ -1766,7 +1767,7 @@ public:
 
     void operator()(ast::primary const &node)
     {
-        static char const node_typename[]{ "primary" };
+        std::string_view const node_typename{ "primary" };
         worker(node, node_typename);
 
         visit(node);
@@ -1775,7 +1776,7 @@ public:
 
     void operator()(ast::primary_unit const &node)
     {
-        static char const node_typename[]{ "primary_unit" };
+        std::string_view const node_typename{ "primary_unit" };
         worker(node, node_typename);
 
         visit(node);
@@ -1784,7 +1785,7 @@ public:
 
     void operator()(ast::procedure_call const &node)
     {
-        static char const node_typename[]{ "procedure_call" };
+        std::string_view const node_typename{ "procedure_call" };
         worker(node, node_typename);
 
         (*this)(node.procedure_name);
@@ -1797,7 +1798,7 @@ public:
 
     void operator()(ast::procedure_call_statement const &node)
     {
-        static char const node_typename[]{ "procedure_call_statement" };
+        std::string_view const node_typename{ "procedure_call_statement" };
         worker(node, node_typename);
 
         if(node.label) {
@@ -1810,7 +1811,7 @@ public:
 
     void operator()(ast::process_declarative_item const &node)
     {
-        static char const node_typename[]{ "process_declarative_item" };
+        std::string_view const node_typename{ "process_declarative_item" };
         worker(node, node_typename);
 
         visit(node);
@@ -1819,7 +1820,7 @@ public:
 
     void operator()(ast::process_declarative_part const &node)
     {
-        static char const node_typename[]{ "process_declarative_part" };
+        std::string_view const node_typename{ "process_declarative_part" };
         worker(node, node_typename);
 
         visit(node);
@@ -1828,7 +1829,7 @@ public:
 
     void operator()(ast::process_statement const &node)
     {
-        static char const node_typename[]{ "process_statement" };
+        std::string_view const node_typename{ "process_statement" };
         worker(node, node_typename);
 
         if(node.label) {
@@ -1855,7 +1856,7 @@ public:
 
     void operator()(ast::qualified_expression const &node)
     {
-        static char const node_typename[]{ "qualified_expression" };
+        std::string_view const node_typename{ "qualified_expression" };
         worker(node, node_typename);
 
         (*this)(node.type_mark);
@@ -1877,7 +1878,7 @@ public:
 
     void operator()(ast::range const &node) // aka range_constraint
     {
-        static char const node_typename[]{ "range" };
+        std::string_view const node_typename{ "range" };
         worker(node, node_typename);
 
         util::visit_in_place(
@@ -1896,11 +1897,11 @@ public:
 
     void operator()(ast::record_type_definition const &node)
     {
-        static char const node_typename[]{ "record_type_definition" };
+        std::string_view const node_typename{ "record_type_definition" };
         worker(node, node_typename);
 
         {
-            static char const node_typename[]{ "element_declaration*" };
+            std::string_view const node_typename{ "element_declaration*" };
             worker(node, node_typename);
             visit(node.element_declarations);
         }
@@ -1909,7 +1910,7 @@ public:
 
     void operator()(ast::relation const &node)
     {
-        static char const node_typename[]{ "relation" };
+        std::string_view const node_typename{ "relation" };
         worker(node, node_typename);
 
         (*this)(node.shift_expression);
@@ -1925,7 +1926,7 @@ public:
 
     void operator()(ast::report_statement const &node)
     {
-        static char const node_typename[]{ "report_statement" };
+        std::string_view const node_typename{ "report_statement" };
         worker(node, node_typename);
 
         if(node.label) {
@@ -1942,7 +1943,7 @@ public:
 
     void operator()(ast::return_statement const &node)
     {
-        static char const node_typename[]{ "return_statement" };
+        std::string_view const node_typename{ "return_statement" };
         worker(node, node_typename);
 
         if(node.label) {
@@ -1957,7 +1958,7 @@ public:
 
     void operator()(ast::scalar_type_definition const &node)
     {
-        static char const node_typename[]{ "scalar_type_definition" };
+        std::string_view const node_typename{ "scalar_type_definition" };
         worker(node, node_typename);
 
         visit(node);
@@ -1966,7 +1967,7 @@ public:
 
     void operator()(ast::secondary_unit const &node)
     {
-        static char const node_typename[]{ "secondary_unit" };
+        std::string_view const node_typename{ "secondary_unit" };
         worker(node, node_typename);
 
         visit(node);
@@ -1975,7 +1976,7 @@ public:
 
     void operator()(ast::secondary_unit_declaration const &node)
     {
-        static char const node_typename[]{ "secondary_unit_declaration" };
+        std::string_view const node_typename{ "secondary_unit_declaration" };
         worker(node, node_typename);
 
         (*this)(node.identifier);
@@ -1985,7 +1986,7 @@ public:
 
     void operator()(ast::selected_name const &node)
     {
-        static char const node_typename[]{ "selected_name" };
+        std::string_view const node_typename{ "selected_name" };
         worker(node, node_typename);
 
         (*this)(node.prefix);
@@ -1995,7 +1996,7 @@ public:
 
     void operator()(ast::selected_signal_assignment const &node)
     {
-        static char const node_typename[]{ "selected_signal_assignment" };
+        std::string_view const node_typename{ "selected_signal_assignment" };
         worker(node, node_typename);
 
         (*this)(node.expression);
@@ -2007,7 +2008,7 @@ public:
 
     void operator()(ast::selected_waveforms const &node)
     {
-        static char const node_typename[]{ "selected_waveforms" };
+        std::string_view const node_typename{ "selected_waveforms" };
         worker(node, node_typename);
 
         for(auto const& selected_waveform : node) {
@@ -2019,7 +2020,7 @@ public:
 
     void operator()(ast::sensitivity_clause const &node)
     {
-        static char const node_typename[]{ "sensitivity_clause" };
+        std::string_view const node_typename{ "sensitivity_clause" };
         worker(node, node_typename);
 
         (*this)(node.sensitivity_list);
@@ -2028,7 +2029,7 @@ public:
 
     void operator()(ast::sensitivity_list const& node)
     {
-        static char const node_typename[]{ "sensitivity_list" };
+        std::string_view const node_typename{ "sensitivity_list" };
         worker(node, node_typename);
 
         visit(node);
@@ -2037,7 +2038,7 @@ public:
 
     void operator()(ast::sequence_of_statements const &node)
     {
-        static char const node_typename[]{ "sequence_of_statements" };
+        std::string_view const node_typename{ "sequence_of_statements" };
         worker(node, node_typename);
 
         visit(node);
@@ -2046,7 +2047,7 @@ public:
 
     void operator()(ast::sequential_statement const &node)
     {
-        static char const node_typename[]{ "sequential_statement" };
+        std::string_view const node_typename{ "sequential_statement" };
         worker(node, node_typename);
 
         visit(node);
@@ -2055,7 +2056,7 @@ public:
 
     void operator()(ast::shift_expression const &node)
     {
-        static char const node_typename[]{ "shift_expression" };
+        std::string_view const node_typename{ "shift_expression" };
         worker(node, node_typename);
 
         (*this)(node.simple_expression);
@@ -2071,7 +2072,7 @@ public:
 
     void operator()(ast::signal_assignment_statement const &node)
     {
-        static char const node_typename[]{ "signal_assignment_statement" };
+        std::string_view const node_typename{ "signal_assignment_statement" };
         worker(node, node_typename);
 
         if(node.label) {
@@ -2090,7 +2091,7 @@ public:
 
     void operator()(ast::signal_declaration const &node)
     {
-        static char const node_typename[]{ "signal_declaration" };
+        std::string_view const node_typename{ "signal_declaration" };
         worker(node, node_typename);
 
         (*this)(node.identifier_list);
@@ -2108,7 +2109,7 @@ public:
 
     void operator()(ast::signal_list_list const& node)
     {
-        static char const node_typename[]{ "signal_list.names" };
+        std::string_view const node_typename{ "signal_list.names" };
         worker(node, node_typename);
 
         visit(node);
@@ -2117,7 +2118,7 @@ public:
 
     void operator()(ast::signal_list const &node)
     {
-        static char const node_typename[]{ "signal_list" };
+        std::string_view const node_typename{ "signal_list" };
         worker(node, node_typename);
 
         visit(node);
@@ -2126,17 +2127,17 @@ public:
 
     void operator()(ast::signature const &node)
     {
-        static char const node_typename[]{ "signature" };
+        std::string_view const node_typename{ "signature" };
         worker(node, node_typename);
 
         {
-            static char const node_typename[]{ "parameter_type_list" };
+            std::string_view const node_typename{ "parameter_type_list" };
             worker(node, node_typename);
             visit(node.parameter_type_list);
         }
 
         if(node.return_type) {
-            static char const node_typename[]{ "return_type" };
+            std::string_view const node_typename{ "return_type" };
             worker(node, node_typename);
             (*this)(*node.return_type);
         }
@@ -2144,7 +2145,7 @@ public:
 
     void operator()(ast::simple_expression const &node)
     {
-        static char const node_typename[]{ "simple_expression" };
+        std::string_view const node_typename{ "simple_expression" };
         worker(node, node_typename);
 
         (*this)(node.term);
@@ -2161,7 +2162,7 @@ public:
 
     void operator()(ast::slice_name const &node)
     {
-        static char const node_typename[]{ "slice_name" };
+        std::string_view const node_typename{ "slice_name" };
         worker(node, node_typename);
 
         (*this)(node.prefix);
@@ -2171,14 +2172,14 @@ public:
 
     void operator()(ast::string_literal const &node)
     {
-        static char const node_typename[]{ "string_literal" };
+        std::string_view const node_typename{ "string_literal" };
         worker(node, node_typename);
     }
 
 
     void operator()(ast::subprogram_body const &node)
     {
-        static char const node_typename[]{ "subprogram_body" };
+        std::string_view const node_typename{ "subprogram_body" };
         worker(node, node_typename);
 
         (*this)(node.specification);
@@ -2197,7 +2198,7 @@ public:
 
     void operator()(ast::subprogram_declarative_item const &node)
     {
-        static char const node_typename[]{ "subprogram_declarative_item" };
+        std::string_view const node_typename{ "subprogram_declarative_item" };
         worker(node, node_typename);
 
         visit(node);
@@ -2206,7 +2207,7 @@ public:
 
     void operator()(ast::subprogram_declarative_part const &node)
     {
-        static char const node_typename[]{ "subprogram_declarative_part" };
+        std::string_view const node_typename{ "subprogram_declarative_part" };
         worker(node, node_typename);
 
         visit(node);
@@ -2215,7 +2216,7 @@ public:
 
     void operator()(ast::subprogram_specification const &node)
     {
-        static char const node_typename[]{ "subprogram_specification" };
+        std::string_view const node_typename{ "subprogram_specification" };
         worker(node, node_typename);
 
         util::visit_in_place(
@@ -2239,7 +2240,7 @@ public:
 
     void operator()(ast::subtype_declaration const &node)
     {
-        static char const node_typename[]{ "subtype_declaration" };
+        std::string_view const node_typename{ "subtype_declaration" };
         worker(node, node_typename);
 
         (*this)(node.identifier);
@@ -2249,7 +2250,7 @@ public:
 
     void operator()(ast::subtype_indication const &node)
     {
-        static char const node_typename[]{ "subtype_indication" };
+        std::string_view const node_typename{ "subtype_indication" };
         worker(node, node_typename);
 
         auto const visit_type_mark = [this](auto const& type_mark) {
@@ -2290,7 +2291,7 @@ public:
 
     void operator()(ast::suffix const &node)
     {
-        static char const node_typename[]{ "suffix" };
+        std::string_view const node_typename{ "suffix" };
         worker(node, node_typename);
 
         visit(node);
@@ -2299,7 +2300,7 @@ public:
 
     void operator()(ast::target const &node)
     {
-        static char const node_typename[]{ "target" };
+        std::string_view const node_typename{ "target" };
         worker(node, node_typename);
 
         boost::apply_visitor(*this, node);
@@ -2308,7 +2309,7 @@ public:
 
     void operator()(ast::term const &node)
     {
-        static char const node_typename[]{ "term" };
+        std::string_view const node_typename{ "term" };
         worker(node, node_typename);
 
         visit(node.factor);
@@ -2325,7 +2326,7 @@ public:
 
     void operator()(ast::timeout_clause const &node)
     {
-        static char const node_typename[]{ "timeout_clause" };
+        std::string_view const node_typename{ "timeout_clause" };
         worker(node, node_typename);
 
         (*this)(node.time_expression);
@@ -2334,7 +2335,7 @@ public:
 
     void operator()(ast::type_conversion const &node)
     {
-        static char const node_typename[]{ "type_conversion" };
+        std::string_view const node_typename{ "type_conversion" };
         worker(node, node_typename);
 
         (*this)(node.type_mark);
@@ -2345,7 +2346,7 @@ public:
     void operator()(ast::type_declaration const &node)
     {
         // {full, incomplete}_type_declaration
-        static char const node_typename[]{ "type_declaration" };
+        std::string_view const node_typename{ "type_declaration" };
         worker(node, node_typename);
 
         (*this)(node.identifier);
@@ -2358,7 +2359,7 @@ public:
 
     void operator()(ast::type_definition const &node)
     {
-        static char const node_typename[]{ "type_definition" };
+        std::string_view const node_typename{ "type_definition" };
         worker(node, node_typename);
 
         visit(node);
@@ -2367,7 +2368,7 @@ public:
 
     void operator()(ast::unconstrained_array_definition const &node)
     {
-        static char const node_typename[]{ "unconstrained_array_definition" };
+        std::string_view const node_typename{ "unconstrained_array_definition" };
         worker(node, node_typename);
 
         for(auto const& index_subtype_definition : node.index_subtype_definitions) {
@@ -2380,7 +2381,7 @@ public:
 
     void operator()(ast::use_clause const &node)
     {
-        static char const node_typename[]{ "use_clause" };
+        std::string_view const node_typename{ "use_clause" };
         worker(node, node_typename);
 
         for(auto const& selected_name : node.list) {
@@ -2394,7 +2395,7 @@ public:
 
     void operator()(ast::variable_assignment_statement const &node)
     {
-        static char const node_typename[]{ "variable_assignment_statement" };
+        std::string_view const node_typename{ "variable_assignment_statement" };
         worker(node, node_typename);
 
         if(node.label) {
@@ -2409,7 +2410,7 @@ public:
 
     void operator()(ast::variable_declaration const &node)
     {
-        static char const node_typename[]{ "variable_declaration" };
+        std::string_view const node_typename{ "variable_declaration" };
         worker(node, node_typename);
 
         (*this)(node.identifier_list);
@@ -2423,7 +2424,7 @@ public:
 
     void operator()(ast::wait_statement const &node)
     {
-        static char const node_typename[]{ "wait_statement" };
+        std::string_view const node_typename{ "wait_statement" };
         worker(node, node_typename);
 
         if(node.label) {
@@ -2443,7 +2444,7 @@ public:
 
     void operator()(ast::waveform const &node)
     {
-        static char const node_typename[]{ "waveform" };
+        std::string_view const node_typename{ "waveform" };
         worker(node, node_typename);
 
         util::visit_in_place(
@@ -2460,7 +2461,7 @@ public:
 
     void operator()(ast::waveform_element const &node)
     {
-        static char const node_typename[]{ "waveform_element" };
+        std::string_view const node_typename{ "waveform_element" };
         worker(node, node_typename);
 
         util::visit_in_place(
@@ -2485,7 +2486,7 @@ public:
     void operator()(ast::string_span const &node)
     {
         // even boost::iterator_range is used, the symbol is string_view
-        static char const node_typename[]{ "std::string_view" };
+        std::string_view const node_typename{ "std::string_view const" };
         worker(node, node_typename);
     }
 
@@ -2494,7 +2495,7 @@ public:
     {
         boost::ignore_unused(token);
 #if 0
-        static char const node_typename[]{ "keyword" };
+        std::string_view const node_typename{ "keyword" };
         //XXX worker(node, node_typename);
 #endif
     }
@@ -2507,7 +2508,7 @@ public:
         /******************************/
         /*    SHALL NEVER BE HERE     */
         /******************************/
-        static char const node_typename[]{ "*** nullary ***" };
+        std::string_view const node_typename{ "*** nullary ***" };
         // XXX call worker::fatal_failure() ????
         worker(node, node_typename);
 #endif

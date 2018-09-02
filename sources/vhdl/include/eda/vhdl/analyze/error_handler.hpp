@@ -55,8 +55,13 @@ public:
       , tab_sz{ tabs }
     { }
 
+    ~error_handler() = default;
+
     error_handler(error_handler const&) = delete;
     error_handler& operator=(error_handler const&) = delete;
+
+    error_handler(error_handler&&) = delete;
+    error_handler& operator=(error_handler&&) = delete;
 
 public:
     /**

@@ -62,8 +62,13 @@ public:
 
 public:
     settings() = default;
+    ~settings() = default;
+
     settings(settings const&) = delete;
     settings const& operator=(settings const&) = delete;
+
+    settings(settings&&) = delete;
+    settings const& operator=(settings&&) = delete;
 
 public:
     class option_trigger;
@@ -75,8 +80,13 @@ public:
         }
 
         option_value_proxy() = delete;
+        ~option_value_proxy() = default;
+
         option_value_proxy(option_value_proxy const&) = delete;
         option_value_proxy& operator=(option_value_proxy const&) = delete;
+
+        option_value_proxy(option_value_proxy&&) = delete;
+        option_value_proxy& operator=(option_value_proxy&&) = delete;
 
         operator bool() const
         {
@@ -114,6 +124,8 @@ public:
      */
     option_value_proxy const operator[](std::string const& option_name) const
     {
+        // const_cast<> required to get the intended API behavior (don't insert
+        // a key if not found as the default behavior of std::map)
         auto map_ = const_cast<map_type&>(this->map);
         if (exist(option_name)) {
             return option_value_proxy{ map_[option_name] };
@@ -136,7 +148,7 @@ public:
     void set(std::string_view option_name, T&& value)
     {
         using type = std::remove_reference_t<T>;
-        map[trim(option_name)].emplace<type>(std::move(value));
+        map[trim(option_name)].emplace<type>(std::forward<T>(value));
         //map[trim(option_name)] = std::forward<type>(value);
     }
 
@@ -161,7 +173,6 @@ private:
     /** Trim leading '--' chars from key. */
     static inline std::string trim(std::string_view key)
     {
-
         // FixMe: C++20 starts_with()
         std::string_view const prefix{ "--" };
         if (key.substr(0, prefix.size()) == prefix) {
@@ -193,8 +204,13 @@ class settings::option_trigger {
 
 public:
     option_trigger() = default;
+    ~option_trigger() = default;
+
     option_trigger(option_trigger const&) = delete;
     option_trigger const& operator=(option_trigger const&) = delete;
+
+    option_trigger(option_trigger&&) = delete;
+    option_trigger const& operator=(option_trigger&&) = delete;
 
 public:
     /**

@@ -19,7 +19,7 @@ namespace eda { namespace util { namespace detail {
 
 
 template <typename CharT>
-void assertion_failed_msg(const CharT* expr, const char* msg, const char* function, const char* file, long line) {
+void assertion_failed_msg(const CharT* expr, const char msg[], const char function[], const char file[], long line) {
     std::cerr
         << "\n****************************************\n"
         <<   "***** Internal Fatal Program Error *****\n"
