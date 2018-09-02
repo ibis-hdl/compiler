@@ -57,7 +57,7 @@ public:
         return *this;
     }
 
-    basic_counter operator++(int) {  // postfix ++
+    basic_counter const operator++(int) {  // postfix ++
         basic_counter result(*this);
         ++(*this);
         return result;

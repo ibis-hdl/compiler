@@ -47,7 +47,7 @@ struct concurrent_statement : variant<
     concurrent_statement& operator=(concurrent_statement const&) = default;
 
     template <typename T, class = non_self_t<T>>
-    variant& operator=(T const& rhs) BOOST_NOEXCEPT_IF((std::is_nothrow_assignable<variant_type, T const&>{}))
+    concurrent_statement& operator=(T const& rhs) BOOST_NOEXCEPT_IF((std::is_nothrow_assignable<variant_type, T const&>{}))
     {
         var = rhs;
         return *this;

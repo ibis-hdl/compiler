@@ -17,7 +17,9 @@
 #include <boost/locale/generator.hpp>
 #include <boost/locale/localization_backend.hpp>
 
+#ifndef __clang_analyzer__
 #include <CLI/CLI11.hpp>
+#endif
 
 #include <eda/util/file/user_home.hpp>
 #include <eda/util/file/file_reader.hpp>

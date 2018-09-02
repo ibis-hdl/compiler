@@ -34,9 +34,11 @@ struct collect_worker
 
         ++count_map[node_name];
 
+#ifndef __clang_analyzer__
         if constexpr (!std::is_base_of_v<ast::position_tagged, std::decay_t<NodeT>>) {
             untagged_node.insert(node_name);
         }
+#endif // __clang_analyzer__
     }
 
     map_type&                           count_map;

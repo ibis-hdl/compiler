@@ -28,10 +28,23 @@ public:
     static std::locale::id                          id;
 
 public:
+    /**
+     * Construct a message facte
+     *
+     * @param prefix_     The color before priting the embraced message.
+     * @param postfix_    The color past priting the embraced message, commonly
+     *                    restore the default state.
+     * @param force_deco_ Force the color printing.
+     *
+     * \note Clang-Tidy '[misc-move-const-arg]' message:
+     * std::move of the variable {'prefix_', 'postfix_'} of the
+     * trivially-copyable type 'color::printer' (aka 'esc_printer<ansii::attribute, 4>')
+     * has no effect.
+     */
     explicit message_facet(color::printer prefix_, color::printer postfix_, bool force_deco_ = false)
     : facet{ 0 }
-    , prefix{ std::move(prefix_) }
-    , postfix{ std::move(postfix_) }
+    , prefix{ prefix_ }
+    , postfix{ postfix_ }
     , force_decoration{ force_deco_ }
     { }
 

@@ -217,7 +217,7 @@ public:
     , file_id{ file_id_ }
     { }
 
-    proxy(proxy&&) = default;
+    proxy(proxy&&) noexcept = default;
 
     proxy(proxy const&) = delete;
     proxy& operator=(proxy const&) = delete;

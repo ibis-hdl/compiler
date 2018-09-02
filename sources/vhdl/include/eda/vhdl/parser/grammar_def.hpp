@@ -3302,11 +3302,11 @@ namespace detail {
  * rules). This allows the name to be selected_name too. No rewrote of the name
  * rule so far.*/
 
-struct name_class;
-struct prefix_class;
+struct name_class_;
+struct prefix_class_;
 
-using name_type = x3::rule<struct name_class, ast::name>;
-using prefix_list_type = x3::rule<struct prefix_class, std::vector<ast::prefix>>;
+using name_type = x3::rule<struct name_class_, ast::name>;
+using prefix_list_type = x3::rule<struct prefix_class_, std::vector<ast::prefix>>;
 
 name_type const name { "name" };
 prefix_list_type const prefix { "prefix" };

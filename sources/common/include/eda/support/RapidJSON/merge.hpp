@@ -21,6 +21,7 @@ namespace eda { namespace support { namespace rapidjson {
  * - [How to merge two json file using rapidjson](
  *    https://stackoverflow.com/questions/40013355/how-to-merge-two-json-file-using-rapidjson)
  */
+static inline 
 void merge_object(::rapidjson::Value &dest, ::rapidjson::Value &src, ::rapidjson::Document::AllocatorType &allocator)
 {
     for (auto src_iter = src.MemberBegin(); src_iter != src.MemberEnd(); ++src_iter)  {
@@ -52,6 +53,7 @@ void merge_object(::rapidjson::Value &dest, ::rapidjson::Value &src, ::rapidjson
 };
 
 
+static inline 
 void merge_document(::rapidjson::Document &dest, ::rapidjson::Document &src)
 {
     merge_object(dest, src, src.GetAllocator());
@@ -64,10 +66,12 @@ void merge_document(::rapidjson::Document &dest, ::rapidjson::Document &src)
 
 namespace rapidjson {
 
+    static inline 
     void merge(Value &dest, Value &src, Document::AllocatorType &allocator) {
         ::eda::support::rapidjson::merge_object(dest, src, allocator);
     }
 
+    static inline 
     void merge(Document &dest, Document &src) {
         ::eda::support::rapidjson::merge_document(dest, src);
     }

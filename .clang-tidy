@@ -1,7 +1,14 @@
 ---
 Checks: "-*,\
-modernize-*,\
-readability-*,\
+cert-*,\
+-cert-err58-cpp,\
+clang-analyzer-*,\
+-clang-analyzer-optin.cplusplus.VirtualCall,\
+#cppcoreguidelines-*,\
+misc-*,\
+#modernize-*,\
+#readability-*,\
+#performance-*,\
 "
 HeaderFilterRegex: '*\.(hpp|h)$'
 ...
