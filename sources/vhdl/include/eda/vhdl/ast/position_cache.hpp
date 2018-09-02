@@ -117,7 +117,7 @@ public:
      * Get the file name.
      *
      * @param file_id ID of actually processed file.
-     * @return
+     * @return The filename as std::string.
      */
     std::string const& file_name(std::size_t file_id) const {
         return std::get<0>(files.at(file_id));
@@ -140,8 +140,10 @@ public:
      * @return A pair of iterators pointing to begin and end of the file contents.
      */
     std::tuple<iterator_type, iterator_type> range(std::size_t file_id) const {
-        std::string const& contents = file_contents(file_id);
-        return std::tuple<iterator_type, iterator_type>{ contents.begin(), contents.end() };
+        auto const make_range = [](std::string const& contents) {
+            return std::tuple<iterator_type, iterator_type>{ contents.begin(), contents.end() };
+        };
+        return make_range(file_contents(file_id));
     }
 
     /**
@@ -180,7 +182,7 @@ public:
      * \note For this, the pos_iter is modified.
      *
      * @param file_id ID of actually processed file.
-     * @param pos_iter Iterator position pointing to a line of interest.
+     * @param pos Iterator position pointing to a line of interest.
      * @return Iterator position pointing to the begin of line.
      */
     iterator_type get_line_start(std::size_t file_id, iterator_type& pos) const;
@@ -189,7 +191,7 @@ public:
      * Print the line where the iterator points to until end-of-line.
      *
      * @param file_id ID of actually processed file.
-     * @param start Iterator position pointing to a line of interest.
+     * @param first Iterator position pointing to a line of interest.
      * @return String representing the source line.
      */
     std::string current_line(std::size_t file_id, iterator_type const& first) const;
@@ -207,7 +209,7 @@ private:
  * This gives the same API as position_cache, but with an ID bound to this proxy
  * to simplify AST tagging and error_handling.
  *
- * \Note This class is intended to created by the position_cache's handle()
+ * \note This class is intended to created by the position_cache's handle()
  * function only.
  */
 template <typename IteratorT>
