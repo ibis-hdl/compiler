@@ -21,7 +21,9 @@ namespace eda { namespace vhdl { namespace parser {
 
 
 struct design_file_class;
-typedef x3::rule<design_file_class, ast::design_file> design_file_type;
+
+using design_file_type = x3::rule<design_file_class, ast::design_file>;
+
 BOOST_SPIRIT_DECLARE(design_file_type);
 
 parser::design_file_type const& grammar();

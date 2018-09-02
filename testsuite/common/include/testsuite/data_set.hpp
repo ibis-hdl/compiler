@@ -26,7 +26,7 @@ namespace testsuite {
 class dataset_loader
 {
 public:
-    typedef std::vector<std::string>                data_type;
+    using data_type = std::vector<std::string>;
 
 public:
     dataset_loader(std::string const& path);
@@ -34,7 +34,7 @@ public:
 public: // Boost.UTF API
     enum { arity = 3 };
 
-    typedef std::string                             sample; // utf_data::make_delayed
+    using sample = std::string; // utf_data::make_delayed
 
     struct iterator
     {

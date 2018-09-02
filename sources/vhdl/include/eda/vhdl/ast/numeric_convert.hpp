@@ -27,7 +27,7 @@ class numeric_convert
 public:
     /**
      * The type, to which all literals will be converted. */
-    typedef double                                  value_type;
+    using value_type = double;
 
     /**
      * Return a tuple with the converted value and a boolean flag of
@@ -35,7 +35,7 @@ public:
      * node's literal string may be failed (means the top level VHDL parser
      * wasn't strict enough -> bug), or numeric problems rises (e.g. the numeric
      * literal can fit the value_type). */
-    typedef std::tuple<bool, value_type>            return_type;
+    using return_type = std::tuple<bool, value_type>;
 
     numeric_convert(std::ostream &os_);
 

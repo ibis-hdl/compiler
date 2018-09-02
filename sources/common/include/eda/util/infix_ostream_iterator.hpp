@@ -29,7 +29,10 @@ namespace eda { namespace util {
  *           infix_ostream_iterator<int>(std::cout, ", "));
  * \endcode
  *
- * gives '1, 2, 3, 4'.
+ * gives:
+ * \code{.unparsed}
+ * 1, 2, 3, 4
+ * \endcode
  *
  * \note This may come obsolete with [std::experimental::ostream_joiner](
  *       https://en.cppreference.com/w/cpp/experimental/ostream_joiner)
@@ -38,14 +41,12 @@ template <class T, class CharT = char, class TraitsT = std::char_traits<CharT>>
 class infix_ostream_iterator
 : public std::iterator<std::output_iterator_tag, void, void, void, void>
 {
-    std::basic_ostream<CharT, TraitsT>&              os;
+    std::basic_ostream<CharT, TraitsT>&             os;
     CharT const*                                    actual_delimiter;
     CharT const*                                    delimiter = "";
 
 public:
-    typedef CharT char_type;
-    typedef TraitsT TraitsT_type;
-    typedef std::basic_ostream<CharT, TraitsT> ostream_type;
+    using  ostream_type = std::basic_ostream<CharT, TraitsT>;
 
 public:
     infix_ostream_iterator(ostream_type& os_)

@@ -22,9 +22,9 @@ namespace eda { namespace vhdl { namespace intrinsic {
  * Note: On Linux/Clang 5, the std::int_fast32_t has 64 bit
  */
 
-typedef std::int_fast64_t                               signed_integer_type;
-typedef std::make_unsigned<signed_integer_type>::type   unsigned_integer_type;
-typedef double                                          real_type;
+using signed_integer_type = std::int_fast64_t;
+using unsigned_integer_type = std::make_unsigned<signed_integer_type>::type;
+using real_type = double;
 
 
 } } } // namespace eda.vhdl.intrinsic

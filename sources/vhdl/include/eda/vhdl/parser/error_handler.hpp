@@ -52,8 +52,8 @@ template <typename Iterator>
 class error_handler
 {
 public:
-    typedef Iterator                                iterator_type;
-    typedef x3::error_handler_result                result_type;
+    using iterator_type = Iterator;
+    using result_type = x3::error_handler_result;
 
     using position_proxy_type = typename ast::position_cache<iterator_type>::proxy;
 

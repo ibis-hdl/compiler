@@ -23,7 +23,7 @@ namespace eda { namespace vhdl { namespace ast {
  */
 struct position_tagged
 {
-    typedef std::size_t                             tag_type;
+    using tag_type = std::size_t;
 
     static constexpr tag_type MAX_ID = std::numeric_limits<tag_type>::max();
 

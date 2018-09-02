@@ -36,17 +36,15 @@ template <typename IteratorT>
 class position_cache
 {
 public:
-    typedef IteratorT                               iterator_type;
-    typedef std::vector<
-            boost::iterator_range<iterator_type>>    position_container_type;
+    using iterator_type = IteratorT;
+    using position_container_type = std::vector<boost::iterator_range<iterator_type>>;
 
-    typedef typename
-            position_container_type::value_type     range_type;
+    using range_type = typename position_container_type::value_type;
 
 private:
     // <filename, contents>
     using file_pair = std::tuple<std::string, std::string>;
-    typedef std::vector<file_pair>                    file_container_type;
+    using file_container_type = std::vector<file_pair>;
 
 public:
     class proxy;

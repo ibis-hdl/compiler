@@ -29,12 +29,9 @@ namespace eda { namespace vhdl { namespace parser {
  * [Spirit.X3 using string_view and member named 'insert' compiler error](
  *  https://stackoverflow.com/questions/50310015/spirit-x3-using-string-view-and-member-named-insert-compiler-error?answertab=active#tab-top)
  */
-typedef char                                char_type;
+using char_type = char;
 
-typedef std::basic_string<
-    char_type
->::const_iterator                           iterator_type;
-
+using iterator_type = std::basic_string<char_type>::const_iterator;
 
 }}}  // namespace eda.vhdl.parser
 

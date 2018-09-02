@@ -93,7 +93,7 @@ public:
 static inline
 std::ostream& increase_indent(std::ostream& os)
 {
-    indent_sbuf* buf = static_cast<indent_sbuf*>(os.rdbuf());
+    auto* buf = static_cast<indent_sbuf*>(os.rdbuf());
     buf->increase();
     return os;
 }
@@ -102,7 +102,7 @@ std::ostream& increase_indent(std::ostream& os)
 static inline
 std::ostream& decrease_indent(std::ostream& os)
 {
-    indent_sbuf* buf = static_cast<indent_sbuf*>(os.rdbuf());
+    auto* buf = static_cast<indent_sbuf*>(os.rdbuf());
     buf->decrease();
     return os;
 }

@@ -114,7 +114,7 @@ public:
      */
     option_value_proxy const operator[](std::string const& option_name) const
     {
-        map_type& map_ = const_cast<map_type&>(this->map);
+        auto map_ = const_cast<map_type&>(this->map);
         if (exist(option_name)) {
             return option_value_proxy{ map_[option_name] };
         } else {

@@ -208,14 +208,14 @@ struct shift_operator_class;
 /*
  * Rule Types
  */
-typedef x3::rule<binary_logical_operator_class, ast::operator_token> binary_logical_operator_type;
-typedef x3::rule<unary_logical_operator_class, ast::operator_token> unary_logical_operator_type;
-typedef x3::rule<binary_miscellaneous_operator_class, ast::operator_token> binary_miscellaneous_operator_type;
-typedef x3::rule<unary_miscellaneous_operator_class, ast::operator_token> unary_miscellaneous_operator_type;
-typedef x3::rule<multiplying_operator_class, ast::operator_token> multiplying_operator_type;
-typedef x3::rule<shift_operator_class, ast::operator_token> shift_operator_type;
-typedef x3::symbols<ast::operator_token> relational_operator_type;
-typedef x3::symbols<ast::operator_token> adding_operator_type;
+using binary_logical_operator_type = x3::rule<binary_logical_operator_class, ast::operator_token>;
+using unary_logical_operator_type = x3::rule<unary_logical_operator_class, ast::operator_token>;
+using binary_miscellaneous_operator_type = x3::rule<binary_miscellaneous_operator_class, ast::operator_token>;
+using unary_miscellaneous_operator_type = x3::rule<unary_miscellaneous_operator_class, ast::operator_token>;
+using multiplying_operator_type = x3::rule<multiplying_operator_class, ast::operator_token>;
+using shift_operator_type = x3::rule<shift_operator_class, ast::operator_token>;
+using relational_operator_type = x3::symbols<ast::operator_token>;
+using adding_operator_type = x3::symbols<ast::operator_token>;
 
 
 /*
@@ -3305,8 +3305,8 @@ namespace detail {
 struct name_class;
 struct prefix_class;
 
-typedef x3::rule<struct name_class, ast::name> name_type;
-typedef x3::rule<struct prefix_class, std::vector<ast::prefix>> prefix_list_type;
+using name_type = x3::rule<struct name_class, ast::name>;
+using prefix_list_type = x3::rule<struct prefix_class, std::vector<ast::prefix>>;
 
 name_type const name { "name" };
 prefix_list_type const prefix { "prefix" };

@@ -35,7 +35,7 @@ template <typename Iterator>
 class error_handler
 {
 public:
-    typedef Iterator                                iterator_type;
+    using iterator_type = Iterator;
 
 public:
     /**
@@ -90,7 +90,7 @@ private:
 };
 
 
-typedef error_handler<parser::iterator_type>        error_handler_type;
+using error_handler_type = error_handler<parser::iterator_type>;
 
 
 }}} // namespace eda.vhdl.analyze

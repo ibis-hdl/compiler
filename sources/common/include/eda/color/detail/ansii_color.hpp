@@ -60,8 +60,7 @@ class esc_printer
     : public std::array<typename std::underlying_type<enum_type>::type, SIZE>
 {
 public:
-    typedef typename
-        std::underlying_type<enum_type>::type       value_type;
+    using value_type = typename std::underlying_type<enum_type>::type;
 
 private:
     template<std::size_t ... N>

@@ -75,8 +75,8 @@ public:
     std::string make_error_description(std::string_view which) const;
 
 private:
-    typedef std::unordered_map<
-        std::string_view, std::string_view>         rule_map_type;
+    using rule_map_type = std::unordered_map<
+        std::string_view, std::string_view>;
 
     static const rule_map_type                        ruleid_map;
 };

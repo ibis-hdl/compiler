@@ -21,7 +21,7 @@ namespace boost { namespace spirit { namespace x3
 template <typename Subject>
 struct protect_directive : Subject
 {
-    typedef Subject base_type;
+    using base_type = Subject;
 
     protect_directive(Subject const& subject)
       : base_type(subject) {}

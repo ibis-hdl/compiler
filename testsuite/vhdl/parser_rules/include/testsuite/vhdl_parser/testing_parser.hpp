@@ -32,7 +32,7 @@ template <
 >
 struct testing_parser
 {
-    typedef AttrType                                attribute_type;
+    using attribute_type = AttrType;
 
     template <typename ParserType>
     std::tuple<bool, std::string>

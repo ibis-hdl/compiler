@@ -17,7 +17,7 @@ namespace eda { namespace util {
 template<typename Iterator>
 struct position_indicator
 {
-    typedef Iterator                                iterator_type;
+    using iterator_type = Iterator;
 
     position_indicator(iterator_type& first_, iterator_type const& last_, std::size_t tabs, char symbol_)
     : first{ first_ }
@@ -47,10 +47,10 @@ struct position_indicator
         return os;
     }
 
-    iterator_type&                                     first;
-    iterator_type const&                             last;
-    std::size_t                                        tab_sz;
-    char                                             symbol;
+    iterator_type&                                  first;
+    iterator_type const&                            last;
+    std::size_t                                     tab_sz;
+    char                                            symbol;
 };
 
 

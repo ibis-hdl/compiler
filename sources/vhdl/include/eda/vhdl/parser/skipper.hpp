@@ -21,7 +21,7 @@ namespace eda { namespace vhdl { namespace parser {
 
 
 struct skipper_class;
-typedef x3::rule<skipper_class> skipper_type;
+using skipper_type = x3::rule<skipper_class>;
 BOOST_SPIRIT_DECLARE(skipper_type);
 
 
