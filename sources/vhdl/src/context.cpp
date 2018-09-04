@@ -5,7 +5,6 @@
  *      Author: olaf
  */
 
-
 #include <eda/vhdl/context.hpp>
 
 #include <eda/settings.hpp>

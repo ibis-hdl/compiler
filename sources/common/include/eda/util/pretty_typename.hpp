@@ -15,8 +15,7 @@
 namespace eda {
 namespace util {
 
-template <typename T>
-class pretty_typename {
+template <typename T> class pretty_typename {
 public:
     pretty_typename() = default;
 
@@ -40,8 +39,7 @@ private:
     std::regex pattern{ "::|boost|spirit|x3|eda|vhdl|ast" };
 };
 
-template <typename T>
-std::ostream& operator<<(std::ostream& os, pretty_typename<T> const& printer)
+template <typename T> std::ostream& operator<<(std::ostream& os, pretty_typename<T> const& printer)
 {
     return printer.print(os);
 }

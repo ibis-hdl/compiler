@@ -8,16 +8,17 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_FWD_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_FWD_HPP_
 
-
-namespace eda { namespace vhdl { namespace ast {
+namespace eda {
+namespace vhdl {
+namespace ast {
 
 /**
  * AST nodes forward declared
  *
  * Quick & Dirty created by
  * \code.{.sh}
- * grep struct sources/vhdl/include/eda/vhdl/ast/\*.hpp 
- *  | awk -F':' '{print $2}' | sed -e '/^ /d' -e '/chunk/d' -e 's/ $/;/g' 
+ * grep struct sources/vhdl/include/eda/vhdl/ast/\*.hpp
+ *  | awk -F':' '{print $2}' | sed -e '/^ /d' -e '/chunk/d' -e 's/ $/;/g'
  *  | sort | uniq
  * \endcode
  */
@@ -194,13 +195,10 @@ struct waveform;
 struct waveform_element;
 struct waveform_element_list;
 
-
-
 struct nullary;
 
-
-} } } // namespace eda.vhdl.ast
-
-
+} // namespace ast
+} // namespace vhdl
+} // namespace eda
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_FWD_HPP_ */

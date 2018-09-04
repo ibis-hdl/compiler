@@ -28,13 +28,11 @@ namespace util {
  *
  * Also, \see https://arne-mertz.de/2018/05/overload-build-a-variant-visitor-on-the-fly/
  */
-template <class... Ts>
-struct overloaded : Ts... {
+template <class... Ts> struct overloaded : Ts... {
     using Ts::operator()...;
 };
 
-template <class... Ts>
-overloaded(Ts...)->overloaded<Ts...>;
+template <class... Ts> overloaded(Ts...)->overloaded<Ts...>;
 
 } // namespace util
 } // namespace eda

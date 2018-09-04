@@ -119,8 +119,8 @@ void gdb_signal_handler(int sig, siginfo_t* /*unused*/, void* /*unused*/)
 
     using failure = eda::color::message::failure;
 
-    std::cerr << failure("FAILURE")
-              << " gdb stacktrace call for signal #" << sig << " (" << signame(sig) << ")\n";
+    std::cerr << failure("FAILURE") << " gdb stacktrace call for signal #" << sig << " ("
+              << signame(sig) << ")\n";
 
     fs::path gdb_exe = bp::search_path("gdb");
 
@@ -256,7 +256,8 @@ bool valgrind_detected()
     }
 
     /* [How can I detect if a program is running from within valgrind?](
-     * https://stackoverflow.com/questions/365458/how-can-i-detect-if-a-program-is-running-from-within-valgrind)  */
+     * https://stackoverflow.com/questions/365458/how-can-i-detect-if-a-program-is-running-from-within-valgrind)
+     */
     const char* val = std::getenv("RUNNING_ON_VALGRIND");
     if (val != nullptr) {
         *result = true;
@@ -289,8 +290,10 @@ bool valgrind_detected()
  */
 bool token_found(std::string const& token, std::string const& procfs_path)
 {
-    /* [Reading files line by line in C++ using ifstream: dealing correctly with badbit, failbit, eofbit, and perror()](
-     *  https://gehrcke.de/2011/06/reading-files-in-c-using-ifstream-dealing-correctly-with-badbit-failbit-eofbit-and-perror/)  */
+    /* [Reading files line by line in C++ using ifstream: dealing correctly with badbit, failbit,
+     * eofbit, and perror()](
+     *  https://gehrcke.de/2011/06/reading-files-in-c-using-ifstream-dealing-correctly-with-badbit-failbit-eofbit-and-perror/)
+     */
     std::ifstream procfs{ procfs_path };
 
     if (!procfs.is_open()) {
@@ -313,18 +316,6 @@ bool token_found(std::string const& token, std::string const& procfs_path)
     return false;
 }
 
-    /**
- * Get the name of the running executable.
- *
- * Note, this is terrible platform specific, hence the unconventional way of
- * includes to avoid pollution. Fully supported platform headers are as usually
- * on top.
- *
- * \see
- * [Finding current executable's path without /proc/self/exe](
- *  https://stackoverflow.com/questions/1023306/finding-current-executables-path-without-proc-self-exe)
- */
-
 #if (BOOST_OS_WINDOWS)
 #include <stdlib.h>
 #elif (BOOST_OS_SOLARIS)
@@ -337,6 +328,17 @@ bool token_found(std::string const& token, std::string const& procfs_path)
 #include <sys/types.h>
 #endif
 
+/**
+ * Get the name of the running executable.
+ *
+ * Note, this is terrible platform specific, hence the unconventional way of
+ * includes to avoid pollution. Fully supported platform headers are as usually
+ * on top.
+ *
+ * \see
+ * [Finding current executable's path without /proc/self/exe](
+ *  https://stackoverflow.com/questions/1023306/finding-current-executables-path-without-proc-self-exe)
+ */
 std::string get_executable_path()
 {
 #if (BOOST_OS_LINUX)

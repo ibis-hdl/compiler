@@ -17,9 +17,8 @@
 #include <limits>
 #include <iosfwd>
 
-
-namespace eda { namespace vhdl {
-
+namespace eda {
+namespace vhdl {
 
 namespace detail {
 
@@ -31,20 +30,20 @@ namespace detail {
  *
  * \see [Wandbox](https://wandbox.org/permlink/7o4pPgrmHDQUJj1x)
  */
-template<typename Tag>
-class basic_counter
-{
+template <typename Tag> class basic_counter {
 public:
-    struct overflow: public std::exception { };
+    struct overflow : public std::exception {
+    };
 
 public:
     using value_type = std::size_t;
 
 public:
     basic_counter(value_type limit_ = std::numeric_limits<value_type>::max())
-    : treshold { limit_ }
-    , value{ 0 }
-    { }
+        : treshold{ limit_ }
+        , value{ 0 }
+    {
+    }
 
 public:
     /**
@@ -52,7 +51,8 @@ public:
      *
      * @return incremented value.
      */
-    basic_counter& operator++() {
+    basic_counter& operator++()
+    {
         ++value;
         if (value > treshold) {
             throw overflow{};
@@ -66,7 +66,8 @@ public:
      * @param  dummy
      * @return the value before increment.
      */
-    basic_counter const operator++(int) {
+    basic_counter const operator++(int)
+    {
         basic_counter result(*this);
         ++(*this);
         return result;
@@ -75,9 +76,7 @@ public:
     /**
      * user-defined conversion
      */
-    operator value_type() const {
-        return value;
-    }
+    operator value_type() const { return value; }
 
     /**
      * Threshold at where the overflow exception will be thrown.
@@ -99,7 +98,8 @@ public:
      * @param  std::ostream handle to write
      * @return The written std::ostream handle.
      */
-    std::ostream& print(std::ostream& os) const {
+    std::ostream& print(std::ostream& os) const
+    {
         os << value;
         return os;
     }
@@ -111,14 +111,13 @@ private:
     // clang-format on
 };
 
-
 template <typename Tag>
-std::ostream& operator<<(std::ostream& os, basic_counter<Tag> const& counter) {
+std::ostream& operator<<(std::ostream& os, basic_counter<Tag> const& counter)
+{
     return counter.print(os);
 }
 
 } // namespace detail
-
 
 /**
  * The VHDL context used for analyze and elaboration
@@ -135,8 +134,7 @@ std::ostream& operator<<(std::ostream& os, basic_counter<Tag> const& counter) {
  * }
  * \endcode
  */
-class context
-{
+class context {
 public:
     context();
 
@@ -145,9 +143,7 @@ public:
     using warning_counter = detail::basic_counter<struct warning_tag>;
 
 public:
-    bool error_free() const {
-        return error_count == 0;
-    }
+    bool error_free() const { return error_count == 0; }
 
 public:
     // clang-format off
@@ -161,16 +157,15 @@ private:
     // clang-format on
 };
 
-
 /**
  * IO-manipulator to print the context error/warning status on ostream
  */
-class failure_status
-{
+class failure_status {
 public:
     failure_status(context const& ctx_)
-    : ctx{ ctx_ }
-    { }
+        : ctx{ ctx_ }
+    {
+    }
 
 public:
     std::ostream& print(std::ostream& os) const;
@@ -181,15 +176,12 @@ private:
     // clang-format on
 };
 
-
-static inline
-std::ostream& operator<<(std::ostream& os, failure_status const& status) {
+static inline std::ostream& operator<<(std::ostream& os, failure_status const& status)
+{
     return status.print(os);
 }
 
-
-} } // namespace eda.vhdl
-
-
+} // namespace vhdl
+} // namespace eda
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_CONTEXT_HPP_ */

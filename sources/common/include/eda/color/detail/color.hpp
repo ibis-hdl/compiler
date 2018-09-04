@@ -8,10 +8,10 @@
 #ifndef SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_COLOR_HPP_
 #define SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_COLOR_HPP_
 
-
 #include <eda/configuration.hpp>
 #include <eda/predef.hpp>
 
+// clang-format off
 #if BOOST_OS_WINDOWS && !EDA_ON_WINDOWS_USE_ANSII_COLOR
 // not fully C++17 MinGW g++
 #  include <eda/compiler/detail/compiler_push.hpp>
@@ -25,19 +25,18 @@
 #  include <eda/color/detail/ansii_color.hpp>
 //#  warning "Use ANSII colors"
 #endif
+// clang-format on
 
 #include <optional>
 
-
-namespace eda { namespace color {
-
+namespace eda {
+namespace color {
 
 std::optional<color::attribute> text_attr(std::string_view const& name);
 std::optional<color::attribute> foreground_attr(std::string_view const& name);
 std::optional<color::attribute> background_attr(std::string_view const& name);
 
-
-} } // namespace eda.color
-
+} // namespace color
+} // namespace eda
 
 #endif /* SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_COLOR_HPP_ */

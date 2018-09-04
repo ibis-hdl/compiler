@@ -14,54 +14,51 @@
 #include <windows.h>
 #undef WIN32_LEAN_AND_MEAN
 
-
-namespace eda { namespace color {
-
+namespace eda {
+namespace color {
 
 namespace winapi {
 
-
+// clang-format off
 enum class attribute : WORD {
     // FixMe: support Text attribute
-    Attributes_Off      = 0x000,
-    Text_Bold           = 0x100,
-    Text_Underscore     = 0x200,
-    Text_Blink          = 0x400,
-    Text_Reverse        = 0x800,
-    //Text_Concealed    = ????,
+    Attributes_Off = 0x000,
+    Text_Bold = 0x100,
+    Text_Underscore = 0x200,
+    Text_Blink = 0x400,
+    Text_Reverse = 0x800,
+    // Text_Concealed    = ????,
     // Foreground colors
-    Foreground_Black    = 0,
-    Foreground_Red      = FOREGROUND_RED,
-    Foreground_Green    = FOREGROUND_GREEN,
-    Foreground_Yellow   = FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY,
-    Foreground_Blue     = FOREGROUND_BLUE,
-    Foreground_Magenta  = FOREGROUND_BLUE | FOREGROUND_RED,
-    Foreground_Cyan     = FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY,
-    Foreground_White    = FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED,
+    Foreground_Black = 0,
+    Foreground_Red = FOREGROUND_RED,
+    Foreground_Green = FOREGROUND_GREEN,
+    Foreground_Yellow = FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY,
+    Foreground_Blue = FOREGROUND_BLUE,
+    Foreground_Magenta = FOREGROUND_BLUE | FOREGROUND_RED,
+    Foreground_Cyan = FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY,
+    Foreground_White = FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED,
     // Background colors
-    Background_Black    = 0,
-    Background_Red      = BACKGROUND_RED,
-    Background_Green    = BACKGROUND_GREEN,
-    Background_Yellow   = BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY,
-    Background_Blue     = BACKGROUND_BLUE,
-    Background_Magenta  = BACKGROUND_BLUE | BACKGROUND_RED,
-    Background_Cyan     = BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_INTENSITY,
-    Background_White    = BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED,
+    Background_Black = 0,
+    Background_Red = BACKGROUND_RED,
+    Background_Green = BACKGROUND_GREEN,
+    Background_Yellow = BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY,
+    Background_Blue = BACKGROUND_BLUE,
+    Background_Magenta = BACKGROUND_BLUE | BACKGROUND_RED,
+    Background_Cyan = BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_INTENSITY,
+    Background_White = BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED,
 };
+// clang-format on
 
-} // namespace windows
-
-
+} // namespace winapi
 
 namespace detail {
 
-
-class win_printer
-{
+class win_printer {
 public:
     win_printer(winapi::attribute attr_)
-    : attr{ static_cast<WORD>(attr_) }
-    { }
+        : attr{ static_cast<WORD>(attr_) }
+    {
+    }
 
     win_printer() = default;
 
@@ -74,7 +71,7 @@ public:
         // `std::ostream` object
         auto stream = [](std::ostream& os) {
             HANDLE handle = INVALID_HANDLE_VALUE;
-            if (&os == &std::cout)                      {
+            if (&os == &std::cout) {
                 handle = GetStdHandle(STD_OUTPUT_HANDLE);
             }
             if (&os == &std::cerr || &os == &std::clog) {
@@ -89,41 +86,42 @@ public:
 
             union {
                 struct {
-                    WORD     state;
-                    WORD       default_attribute;
+                    WORD state;
+                    WORD default_attribute;
                 } data;
-                long        value;
+                long value;
             } iword;
 
             iword.value = os_.iword(win_printer::xindex);
             state_t next_state{ init };
 
+            // clang-format off
             switch (iword.data.state) {
                 case init:
                     iword.data.default_attribute = text_attributes(handle_);
-                    [[falltrough]]
-                case active: {
+                    [[falltrough]] case active:
+                    {
                         // check on unsupported text-only attribute
                         if ((attr_ & 0xFF) == 0) {
                             // attr = 0 means no visibility
                             attr_ = iword.data.default_attribute;
                         }
-                         // set only color relevant (lower) byte
+                        // set only color relevant (lower) byte
                         WORD const upper = (iword.data.default_attribute >> 8) & 0xFF;
-                        attr_ = (upper << 8 ) | (attr_ & 0xFF);
+                        attr_ = (upper << 8) | (attr_ & 0xFF);
                         SetConsoleTextAttribute(handle_, attr_);
                         next_state = passiv;
                     }
                     break;
                 case passiv: {
-                        SetConsoleTextAttribute(handle_, iword.data.default_attribute);
-                        next_state = active;
-                    }
-                    break;
+                    SetConsoleTextAttribute(handle_, iword.data.default_attribute);
+                    next_state = active;
+                } break;
                 default:
                     std::cerr << __func__ << ": INVALID STATE\n";
                     next_state = init;
             }
+            // clang-format on
 
             iword.data.state = next_state;
             os_.iword(win_printer::xindex) = iword.value;
@@ -154,7 +152,8 @@ public:
     }
 
 private:
-    WORD text_attributes(HANDLE handle) const {
+    WORD text_attributes(HANDLE handle) const
+    {
 
         if (handle == INVALID_HANDLE_VALUE) {
             return 0;
@@ -167,65 +166,60 @@ private:
     }
 
 private:
-    WORD                                            attr = 0;
-    static const int                                xindex;
+    // clang-format off
+    WORD attr = 0;
+    static const int xindex;
+    // clang-format on
 };
 
+// const int win_printer::xindex = std::ios_base::xalloc();
 
-//const int win_printer::xindex = std::ios_base::xalloc();
-
-
-static inline
-std::ostream& operator<<(std::ostream& os, win_printer const& printer) {
+static inline std::ostream& operator<<(std::ostream& os, win_printer const& printer)
+{
     return printer.print(os);
 }
 
-
-static inline
-win_printer operator|(win_printer lhs, win_printer const& rhs) {
-     lhs |= rhs;
+static inline win_printer operator|(win_printer lhs, win_printer const& rhs)
+{
+    lhs |= rhs;
     return lhs;
 }
 
-
 } // namespace detail
-
 
 using printer = detail::win_printer;
 using attribute = winapi::attribute;
 
-
 namespace text {
-    color::printer const bold{ attribute::Text_Bold };
-    color::printer const underscore{ attribute::Text_Underscore };
-}
+color::printer const bold{ attribute::Text_Bold };
+color::printer const underscore{ attribute::Text_Underscore };
+} // namespace text
 
 namespace fg {
-    color::printer const black{ attribute::Foreground_Black };
-    color::printer const red{ attribute::Foreground_Red };
-    color::printer const green{ attribute::Foreground_Green };
-    color::printer const yellow{ attribute::Foreground_Yellow };
-    color::printer const blue{ attribute::Foreground_Blue };
-    color::printer const magenta{ attribute::Foreground_Magenta };
-    color::printer const cyan{ attribute::Foreground_Cyan };
-    color::printer const white{ attribute::Foreground_White };
-}
+color::printer const black{ attribute::Foreground_Black };
+color::printer const red{ attribute::Foreground_Red };
+color::printer const green{ attribute::Foreground_Green };
+color::printer const yellow{ attribute::Foreground_Yellow };
+color::printer const blue{ attribute::Foreground_Blue };
+color::printer const magenta{ attribute::Foreground_Magenta };
+color::printer const cyan{ attribute::Foreground_Cyan };
+color::printer const white{ attribute::Foreground_White };
+} // namespace fg
 
 namespace bg {
-    color::printer const black{ attribute::Background_Black };
-    color::printer const red{ attribute::Background_Red };
-    color::printer const green{ attribute::Background_Green };
-    color::printer const yellow{ attribute::Background_Yellow };
-    color::printer const blue{ attribute::Background_Blue };
-    color::printer const magenta{ attribute::Background_Magenta };
-    color::printer const cyan{ attribute::Background_Cyan };
-    color::printer const white{ attribute::Background_White };
-}
+color::printer const black{ attribute::Background_Black };
+color::printer const red{ attribute::Background_Red };
+color::printer const green{ attribute::Background_Green };
+color::printer const yellow{ attribute::Background_Yellow };
+color::printer const blue{ attribute::Background_Blue };
+color::printer const magenta{ attribute::Background_Magenta };
+color::printer const cyan{ attribute::Background_Cyan };
+color::printer const white{ attribute::Background_White };
+} // namespace bg
 
 color::printer const color_off(attribute::Attributes_Off);
 
-
-} } // namespace eda.color
-
+} // namespace color
+} // namespace eda
 
 #endif /* SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_WINAPI_COLOR_HPP_ */

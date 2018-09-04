@@ -18,7 +18,8 @@ namespace eda {
 namespace util {
 
 /* \see [Case insensitive sorting of an array of strings](
- *       https://stackoverflow.com/questions/33379846/case-insensitive-sorting-of-an-array-of-strings) */
+ *       https://stackoverflow.com/questions/33379846/case-insensitive-sorting-of-an-array-of-strings)
+ */
 static inline bool icompare_less(std::string_view const& lhs, std::string_view const& rhs)
 {
     // clang-format off

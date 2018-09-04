@@ -26,10 +26,12 @@ static inline std::string literal_ellipsis(RangeType const& range, std::size_t l
 {
     static std::string const ellipsis = "...";
 
+    // clang-format off
     std::string const str{
-        std::addressof(*range.begin()),
-        std::addressof(*range.end())
+        std::addressof(*range.begin()), 
+        std::addressof(*range.end()) 
     };
+    // format-lang on
 
     if (str.size() < len + 1)
         return str;
@@ -41,11 +43,13 @@ static inline std::string literal_ellipsis(RangeType const& range, std::size_t l
     range_t const left{ 0, offset };
     range_t const right{ (str.length() - offset - 1), str.length() };
 
+    // clang-format off
     return std::string{
         str.substr(left.first, left.second)
         + ellipsis
         + str.substr(right.first, right.second)
     };
+    // clang-format on
 }
 
 } // namespace util

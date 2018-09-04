@@ -51,12 +51,14 @@ namespace eda {
  */
 class settings {
 public:
+    // clang-format off
     using option_value = std::variant<
         std::monostate,
         bool,
         long,
         std::string,
         std::vector<std::string>>;
+    // clang-format on
 
 public:
     settings() = default;
@@ -99,8 +101,7 @@ public:
             // clang-format on
         }
 
-        template <typename T>
-        T const& get() const
+        template <typename T> T const& get() const
         {
             // bad_variant_access thrown on invalid accesses to the value
             return std::get<T>(option_value);
@@ -142,12 +143,11 @@ public:
      * \param  option_name  The name of the option to lookup in the trimmed form.
      * \return config_value The value as reference to optional<string>.
      */
-    template <typename T>
-    void set(std::string_view option_name, T&& value)
+    template <typename T> void set(std::string_view option_name, T&& value)
     {
         using type = std::remove_reference_t<T>;
         map[trim(option_name)].emplace<type>(std::forward<T>(value));
-        //map[trim(option_name)] = std::forward<type>(value);
+        // map[trim(option_name)] = std::forward<type>(value);
     }
 
     /**
@@ -156,10 +156,7 @@ public:
      * \param  option_name The name of the option to test.
      * \return true if the option has been defined, otherwise false.
      */
-    bool exist(std::string const& option_name) const
-    {
-        return map.count(option_name) > 0;
-    }
+    bool exist(std::string const& option_name) const { return map.count(option_name) > 0; }
 
     /**
      * Dump the configuration stored in sorted form
@@ -195,8 +192,11 @@ private:
  * option is set.
  */
 class settings::option_trigger {
+    // clang-format off
     using trigger_map_type = std::unordered_map<
-        std::string, std::vector<std::string>>;
+        std::string, std::vector<std::string>
+    >;
+    // clang-format on
 
     trigger_map_type trigger;
 

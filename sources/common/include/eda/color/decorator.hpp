@@ -14,8 +14,7 @@
 namespace eda {
 namespace color {
 
-template <typename Tag>
-class message_decorator {
+template <typename Tag> class message_decorator {
 public:
     explicit message_decorator(std::string const& contents_)
         : contents{ contents_ }

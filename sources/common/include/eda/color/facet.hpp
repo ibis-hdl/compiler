@@ -20,8 +20,7 @@
 namespace eda {
 namespace color {
 
-template <typename Tag>
-class message_facet : public std::locale::facet {
+template <typename Tag> class message_facet : public std::locale::facet {
 public:
     /**
      * Construct a message facte
@@ -36,7 +35,8 @@ public:
      * trivially-copyable type 'color::printer' (aka 'esc_printer<ansii::attribute, 4>')
      * has no effect.
      */
-    explicit message_facet(color::printer prefix_, color::printer postfix_, bool force_deco_ = false)
+    explicit message_facet(
+        color::printer prefix_, color::printer postfix_, bool force_deco_ = false)
         : facet{ 0 }
         , prefix{ prefix_ }
         , postfix{ postfix_ }
@@ -51,7 +51,7 @@ public:
     }
 
     ~message_facet() = default;
-  
+
     message_facet(message_facet const&) = delete;
     message_facet& operator=(message_facet const&) = delete;
 
@@ -63,12 +63,12 @@ public:
     {
         if (!enable) {
             *enable = is_tty(os);
-            //os << (*enable ? "is TTY" : "redirected");
+            // os << (*enable ? "is TTY" : "redirected");
             if (force_decoration) {
-                //os << ", but forced";
+                // os << ", but forced";
                 *enable = true;
             }
-            //os << '\n';
+            // os << '\n';
         }
 
         if (*enable) {

@@ -33,8 +33,7 @@ namespace util {
  * Based on yazmir8azyr from IRC ##c++ channel, see [WandBox.Org](
  * https://wandbox.org/permlink/wGDqfmxCKwqob5mp)
  */
-template <typename T>
-struct A {
+template <typename T> struct A {
     T x;
 
     friend std::ostream& operator<<(std::ostream& os, A const& a)
@@ -44,11 +43,7 @@ struct A {
     }
 };
 
-template <typename T>
-A<std::decay_t<T>> make_iomanip(T&& x)
-{
-    return { std::forward<T>(x) };
-}
+template <typename T> A<std::decay_t<T>> make_iomanip(T&& x) { return { std::forward<T>(x) }; }
 
 } // namespace util
 } // namespace eda

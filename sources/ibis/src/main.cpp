@@ -49,7 +49,8 @@ int main(int argc, const char* argv[])
         for (auto const& filename : setting["files"].get<std::vector<std::string>>()) {
             auto const contents = file_reader.read_file(filename);
             if (!setting["quiet"]) {
-                std::cerr << color::message::note(translate("processing:")) << " " << filename << '\n';
+                std::cerr << color::message::note(translate("processing:")) << " " << filename
+                          << '\n';
             }
             std::cout << "------------------------------------------------\n";
             std::cout << *contents;
@@ -59,14 +60,15 @@ int main(int argc, const char* argv[])
             std::cout << "------------------------------------------------\n";
         }
 
-        //testing_signal_handler(); // just testing
+        // testing_signal_handler(); // just testing
     } catch (std::exception const& e) {
-        std::cerr << color::message::failure(translate("Exception caught:"))
+        // clang-format off
+        std::cerr << color::message::failure(translate("Exception caught:")) 
                   << " " << e.what()
                   << '\n';
+        // clang-format on
     } catch (...) {
-        std::cerr << color::message::failure(translate("Unexpected exception caught"))
-                  << '\n';
+        std::cerr << color::message::failure(translate("Unexpected exception caught")) << '\n';
     }
 
     return EXIT_SUCCESS;

@@ -13,21 +13,19 @@ namespace eda {
 namespace color {
 
 // static std::locale::id for each facet
-template <>
-std::locale::id message_facet<message::severity::failure>::id;
-template <>
-std::locale::id message_facet<message::severity::error>::id;
-template <>
-std::locale::id message_facet<message::severity::warning>::id;
-template <>
-std::locale::id message_facet<message::severity::note>::id;
+template <> std::locale::id message_facet<message::severity::failure>::id;
+template <> std::locale::id message_facet<message::severity::error>::id;
+template <> std::locale::id message_facet<message::severity::warning>::id;
+template <> std::locale::id message_facet<message::severity::note>::id;
 
 std::optional<color::attribute> text_attr(std::string_view const& name)
 {
     using namespace std::literals::string_view_literals;
 
     std::initializer_list<std::pair<std::string_view, color::attribute>> const map{
+        // clang-format off
         { "bold"sv, color::attribute::Text_Bold }
+        // clang-format on
     };
 
     for (auto const & [ color_name, attribute ] : map) {

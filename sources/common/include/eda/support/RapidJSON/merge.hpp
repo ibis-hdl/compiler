@@ -19,7 +19,8 @@ namespace rapidjson {
  * - [How to merge two json file using rapidjson](
  *    https://stackoverflow.com/questions/40013355/how-to-merge-two-json-file-using-rapidjson)
  */
-static inline void merge_object(::rapidjson::Value& dest, ::rapidjson::Value& src, ::rapidjson::Document::AllocatorType& allocator)
+static inline void merge_object(::rapidjson::Value& dest, ::rapidjson::Value& src,
+    ::rapidjson::Document::AllocatorType& allocator)
 {
     for (auto src_iter = src.MemberBegin(); src_iter != src.MemberEnd(); ++src_iter) {
 
@@ -27,12 +28,13 @@ static inline void merge_object(::rapidjson::Value& dest, ::rapidjson::Value& sr
 
         if (dest_iter != dest.MemberEnd()) {
 
-            cxx_assert(src_iter->value.GetType() == dest_iter->value.GetType(),
-                "JSON type mismatch");
+            cxx_assert(
+                src_iter->value.GetType() == dest_iter->value.GetType(), "JSON type mismatch");
 
             if (src_iter->value.IsArray()) {
 
-                for (auto arrayIt = src_iter->value.Begin(); arrayIt != src_iter->value.End(); ++arrayIt) {
+                for (auto arrayIt = src_iter->value.Begin(); arrayIt != src_iter->value.End();
+                     ++arrayIt) {
                     dest_iter->value.PushBack(*arrayIt, allocator);
                 }
             } else if (src_iter->value.IsObject()) {
