@@ -77,8 +77,13 @@ public:
     { }
 
     esc_printer() = default;
+    ~esc_printer() = default;
+
     esc_printer(esc_printer const&) = default;
     esc_printer& operator=(esc_printer const&) = default;
+
+    esc_printer(esc_printer&&) = default;
+    esc_printer& operator=(esc_printer&&) = default;
 
 public:
     std::ostream& print(std::ostream& os) const {

@@ -27,6 +27,8 @@
 
 #include <eda/color/message.hpp>
 
+#include <eda/compiler/compiler_support.hpp>
+
 /*
  * OS specific system headers
  */
@@ -60,7 +62,7 @@ namespace /* anonymous */
 volatile std::sig_atomic_t sig_caught;
 
 #if (BOOST_OS_LINUX)
-static const char* signame(int sig)
+const char* signame(int sig)
 {
 
     switch (sig) {
@@ -122,14 +124,14 @@ void gdb_signal_handler(int sig, siginfo_t* /*unused*/, void* /*unused*/)
 
     fs::path gdb_exe = bp::search_path("gdb");
 
-    if (gdb_exe.empty()) {
+    if (cxx_expect_false(gdb_exe.empty())) {
         std::cerr << "ERROR: gdb not found\n";
         // XXXX
         return;
     }
 
     // clang-format off
-    bp::child gdb_proc(
+    bp::child gdb_proc{
         bp::exe = gdb_exe.string(),
         bp::args = {
             "--quiet",
@@ -158,7 +160,7 @@ void gdb_signal_handler(int sig, siginfo_t* /*unused*/, void* /*unused*/)
         bp::extend::on_success([](auto&) {
             std::cout << "GDB process successfully launched.\n";
         })
-    );
+    };
     // clang-format on
 
     if (!gdb_proc.valid()) {

@@ -59,7 +59,6 @@ struct testing_parser
          * [linking errors while separate parser using boost spirit x3](
          *  https://stackoverflow.com/questions/40496357/linking-errors-while-separate-parser-using-boost-spirit-x3) */
         static_assert(std::is_same<decltype(iter), parser::iterator_type>::value
-                   && std::is_same<decltype(end),  parser::iterator_type>::value,
                       "iterator types must be the same"
         );
 #endif

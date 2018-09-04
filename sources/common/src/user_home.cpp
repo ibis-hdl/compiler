@@ -37,7 +37,7 @@ fs::path user_home(std::initializer_list<char const*> path_list)
 #error "No source for getting HOME directory on your platform"
 #endif
 
-    if (cxx_expect_not(!HOME_ENV)) {
+    if (cxx_expect_false(!HOME_ENV)) {
         throw std::runtime_error("No viable environment variable for user's home.");
     }
 
@@ -50,11 +50,11 @@ fs::path user_home(std::initializer_list<char const*> path_list)
     /*
      * XXX ToDo: make own/special exception classes
      */
-    if (cxx_expect_not(!fs::exists(path, ec))) {
+    if (cxx_expect_false(!fs::exists(path, ec))) {
         throw std::runtime_error("Fatal: " + path.make_preferred().string() + ": " + ec.message());
     }
 
-    if (cxx_expect_not(!fs::is_directory(path, ec))) {
+    if (cxx_expect_false(!fs::is_directory(path, ec))) {
         throw std::runtime_error("Fatal: " + path.make_preferred().string() + ": " + ec.message());
     }
 

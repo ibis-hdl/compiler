@@ -19,13 +19,11 @@ namespace eda {
 namespace vhdl {
 
 context::context()
-    : error_count{ /* default limit */ }
-    , warning_count{ /* default limit */ }
 {
     auto error_limit = 20; // XXX eda::setting["ferror-limit"];
 
     // check if error_limit is not disabled (equals to 0)
-    if (error_limit != 0) {
+    if (error_limit != 0u) {
         error_count.limit() = error_limit;
     }
 }

@@ -50,8 +50,13 @@ public:
     {
     }
 
+    ~message_facet() = default;
+  
     message_facet(message_facet const&) = delete;
     message_facet& operator=(message_facet const&) = delete;
+
+    message_facet(message_facet&&) = delete;
+    message_facet& operator=(message_facet&&) = delete;
 
 public:
     std::ostream& print(std::ostream& os, message_decorator<Tag> const& decorator) const
