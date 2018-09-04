@@ -18,6 +18,9 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_COMPILE job_pool_max_cores
 set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
 
 
+add_dependencies(${PROJECT_NAME} RapidJSON)
+
+
 target_sources(${PROJECT_NAME} PRIVATE
     src/main.cpp
     src/signal.cpp
@@ -27,25 +30,14 @@ target_sources(${PROJECT_NAME} PRIVATE
 )
 
 
-target_include_directories(${PROJECT_NAME} PUBLIC
-    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-)
-
-
-##
-# CLI11 command line parser
-target_include_directories(${PROJECT_NAME} PRIVATE
-    ${CMAKE_SOURCE_DIR}/external/CLI
-)
-
-
-##
-# RapidJSON
-include(external_json)
-add_dependencies(${PROJECT_NAME} RapidJSON)
-target_include_directories(${PROJECT_NAME} PRIVATE
-    ${RapidJSON_INCLUDE_DIR}
+target_include_directories(${PROJECT_NAME} 
+    PRIVATE
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/external/CLI>
+        $<BUILD_INTERFACE:${RapidJSON_INCLUDE_DIR}>
+    PUBLIC
+        $<INSTALL_INTERFACE:include>
 )
 
 
@@ -55,10 +47,17 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 )
 
 
-target_compile_options(${PROJECT_NAME} PRIVATE
-    -Wall 
-    -Wextra
-)
+if(MSVC)
+	target_compile_options(${PROJECT_NAME} PRIVATE
+		/W4
+	)
+else()
+	target_compile_options(${PROJECT_NAME} PRIVATE
+		-Wall 
+		-Wextra
+	)
+endif()
+
 
 #target_compile_options(${PROJECT_NAME} PRIVATE
 #    -g -fsanitize=address -fno-omit-frame-pointer
@@ -85,15 +84,6 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQ
         -ftemplate-backtrace-limit=0
     )
 endif()
-
-
-
-## 
-# Boost.Org Libraries
-find_package(Boost REQUIRED COMPONENTS 
-    system locale 
-    filesystem
-)
 
 
 ##
@@ -133,4 +123,18 @@ target_link_libraries(${PROJECT_NAME}
     Boost::locale
     Boost::filesystem
 )
+
+
+##
+# Install 
+install(TARGETS ${PROJECT_NAME}
+    EXPORT eda-ibis
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+#install(DIRECTORY include/ 
+#    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/eda
+#)
 

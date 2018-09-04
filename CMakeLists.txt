@@ -9,14 +9,15 @@
 cmake_minimum_required(VERSION 3.12)
 
 project(eda VERSION 0.0.1 LANGUAGES CXX)
-
 message(STATUS "System name: ${CMAKE_SYSTEM_NAME}")
 message(STATUS "EDA version: ${eda_VERSION}")
+
 
 ## global C++ Standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
@@ -45,13 +46,18 @@ set_property(GLOBAL PROPERTY CMAKE_JOB_POOLS
 
 
 ##
-# debug
+# Boost.Org
 # [Cmake doesn't find Boost](https://stackoverflow.com/questions/3808775/cmake-doesnt-find-boost)
-#set(Boost_DEBUG 1)
+#set(Boost_DEBUG 1)   
+find_package(Boost REQUIRED COMPONENTS 
+    system 
+    filesystem
+    locale
+)
 
 
 ##
-# Globally Boost.Spirit.X3 clone
+# Globally Boost.Spirit.X3 up-to-date
 # EDA project parser depends on newer Spirit.X3 versions as commonly shiped
 # by the linux distributions. Create an own up-to-date clone of Boost.Spirit's
 # project. This is used by the depending sub projects
@@ -59,12 +65,13 @@ include(external_spirit_x3)
 
 
 ##
-# Globally Boost.UTF
-# - [access to master_test_suite().{argc, argv}](
-#    https://svn.boost.org/trac10/ticket/12953)
-# - [[Boost.Test] access to boost::unit_test::framework::master_test_suite().{argc, argv} outside from BOOST_TEST](
-#    https://groups.google.com/forum/#!topic/boost-developers-archive/wtnY9F2cWNI)
+# Globally Boost.UTF up-to-date
 include(external_boost_utf)
+
+
+##
+# Support for JSON
+include(external_json)
 
 
 ## 

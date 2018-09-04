@@ -9,13 +9,16 @@
 project(testrunner_vhdl_syntax LANGUAGES CXX)
 
 
-add_executable(${PROJECT_NAME} ${SYNTAXTEST_SOURCES})
+add_executable(${PROJECT_NAME} "")
 
 
 
 # Ninja Build
 set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_COMPILE job_pool_max_cores)
 set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
+
+
+add_dependencies(${PROJECT_NAME} boost-utf)
 
 
 target_sources(${PROJECT_NAME} PRIVATE
@@ -27,26 +30,28 @@ target_sources(${PROJECT_NAME} PRIVATE
 )
 
 
-# adjust include path
 target_include_directories(${PROJECT_NAME} PRIVATE
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
+    $<BUILD_INTERFACE:${BOOST_UTF_INCLUDE_DIR}>
+    $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
 )
 
 
-target_compile_options(${PROJECT_NAME} PRIVATE
-    -Wall
-    -Wextra
-)
+if(MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        /W4
+    )
+else()
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        -Wall 
+        -Wextra
+    )
+endif()
 
-##
-# Boost.Org UTF
-find_package(Boost REQUIRED COMPONENTS system filesystem locale unit_test_framework)
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
     eda::vhdl_parser
-    eda::common # FixMe: shouldn't this depency propagated by eda::vhdl_grammar?
     testsuite::common
     Boost::system
     Boost::filesystem

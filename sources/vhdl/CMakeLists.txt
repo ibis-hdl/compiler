@@ -9,13 +9,16 @@
 project(eda_vhdl_parser LANGUAGES CXX)
 
 
-add_library(${PROJECT_NAME} STATIC "")
+add_library(${PROJECT_NAME} "")
 add_library(eda::vhdl_parser ALIAS ${PROJECT_NAME})
 
 
 # Ninja Build
 set_property(TARGET eda_vhdl_parser PROPERTY JOB_POOL_COMPILE job_pool_max_cores)
 set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
+
+
+add_dependencies(${PROJECT_NAME} boost-spirit-x3)
 
 
 target_sources(${PROJECT_NAME} PRIVATE
@@ -41,15 +44,23 @@ target_sources(${PROJECT_NAME} PRIVATE
 
 target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${SPIRIT_X3_INCLUDE_DIR}>
+    $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
     $<INSTALL_INTERFACE:include>
-    PRIVATE src
 )
 
 
-target_compile_options(${PROJECT_NAME} PRIVATE
-    -Wall 
-    -Wextra
-)
+if(MSVC)
+	target_compile_options(${PROJECT_NAME} PRIVATE
+		/W4
+	)
+else()
+	target_compile_options(${PROJECT_NAME} PRIVATE
+		-Wall 
+		-Wextra
+	)
+endif()
+
 
 ##
 # MSYS2/MinGW64 has problems with spirit.x3 (doesn't help really)
@@ -69,7 +80,6 @@ if(CLANG_WARN_EVERYTHING)
         target_compile_options(${PROJECT_NAME} PRIVATE
             -Weverything
             -Wno-c++98-compat -Wno-c++98-compat-pedantic
-            # FixMe: Optimize AST nodes for size
             -Wno-padded
         )
     
@@ -106,20 +116,6 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 endif()
 
 
-## Boost.Org 
-# Spirit X3 is required for the parser - we are working on developer branch. 
-# Nevertheless Spirit self depends on other headers, e..g boost.range
-find_package(Boost)
-
-# depend on newer Spirit.X3 versions
-add_dependencies(${PROJECT_NAME} boost-spirit-x3)
-
-# Boost.Org depend includes
-include_directories(${SPIRIT_X3_INCLUDE_DIR})
-include_directories(${Boost_INCLUDE_DIRS})
-
-
-# Depencies
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
     eda::common

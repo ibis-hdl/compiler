@@ -9,7 +9,7 @@
 project(eda_common LANGUAGES CXX)
 
 
-add_library(${PROJECT_NAME} STATIC "")
+add_library(${PROJECT_NAME} "")
 add_library(eda::common     ALIAS  ${PROJECT_NAME})
 
 
@@ -27,8 +27,6 @@ target_sources(${PROJECT_NAME} PRIVATE
 )
 
 
-
-##
 # Plattform and compiler checks
 include(build_config_hpp)
 
@@ -38,13 +36,21 @@ include(build_config_hpp)
 target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
+    $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
     $<INSTALL_INTERFACE:include>
 )
 
-target_compile_options(${PROJECT_NAME} PRIVATE
-    -Wall 
-    -Wextra
-)
+
+if(MSVC)
+	target_compile_options(${PROJECT_NAME} PRIVATE
+		/W4
+	)
+else()
+	target_compile_options(${PROJECT_NAME} PRIVATE
+		-Wall 
+		-Wextra
+	)
+endif()
 
 
 if(CLANG_WARN_EVERYTHING)
@@ -57,11 +63,10 @@ if(CLANG_WARN_EVERYTHING)
 endif(CLANG_WARN_EVERYTHING)
 
 
-## Requirements: Boost headers
-find_package(Boost REQUIRED filesystem)
 target_link_libraries(${PROJECT_NAME}
 	Boost::filesystem
 )
+
 
 ##
 # Windows MinGW

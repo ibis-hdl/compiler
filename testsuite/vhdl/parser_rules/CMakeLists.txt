@@ -18,6 +18,12 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_COMPILE job_pool_one_core)
 set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
 
 
+##
+# Boost.Org's local git clone(s)
+add_dependencies(${PROJECT_NAME} boost-spirit-x3)
+add_dependencies(${PROJECT_NAME} boost-utf)
+
+
 target_sources(${PROJECT_NAME} PRIVATE
     src/common/rules.cpp
     src/common/test_vhdl_parser.cpp
@@ -135,16 +141,24 @@ target_sources(${PROJECT_NAME} PRIVATE
 )
 
 
-# adjust include path
 target_include_directories(${PROJECT_NAME} PRIVATE
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${BOOST_UTF_INCLUDE_DIR}>
+    $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
 )
 
 
-target_compile_options(${PROJECT_NAME} PRIVATE
-    -Wall
-    -Wextra
-)
+if(MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        /W4
+    )
+else()
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        -Wall 
+        -Wextra
+    )
+endif()
+
 
 # limit gcc/clang template error depth printing
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
@@ -162,13 +176,7 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQ
 endif()
 
 
-##
-# Boost.Org's Spirit.X3 newer version is required from local clone
-add_dependencies(${PROJECT_NAME} boost-spirit-x3)
-
-# Boost.Org depend includes
-include_directories(${SPIRIT_X3_INCLUDE_DIR})
-
+#
 # parser with Spirit.X3 DEBUG
 set(EDA_VHDL_PARSER_DEBUG OFF CACHE BOOL "debug printer of spirit.x3 parser tree")
 if("${EDA_VHDL_PARSER_DEBUG}")
@@ -177,14 +185,9 @@ if("${EDA_VHDL_PARSER_DEBUG}")
 endif()
 
 
-##
-# Boost.Org UTF
-find_package(Boost REQUIRED COMPONENTS system filesystem locale unit_test_framework)
-
-target_link_libraries(${PROJECT_NAME}
-    PRIVATE
+target_link_libraries(${PROJECT_NAME} PRIVATE
     eda::vhdl_parser
-    eda::common # FixMe: shouldn't this depency propagated by eda::vhdl_grammar?
+    #eda::common # FixMe: shouldn't this depency propagated by eda::vhdl_grammar?
     testsuite::common
     Boost::system
     Boost::filesystem

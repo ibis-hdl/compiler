@@ -4,8 +4,6 @@ message(STATUS "External Project: Boost.Org Unit Test Framework (UTF)")
 include(ExternalProject)
 
 
-# see [access to master_test_suite().{argc, argv}](
-# https://svn.boost.org/trac10/ticket/12953)
 ExternalProject_Add(
   boost-utf
   GIT_REPOSITORY        https://github.com/boostorg/test.git

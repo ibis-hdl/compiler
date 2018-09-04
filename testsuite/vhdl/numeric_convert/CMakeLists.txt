@@ -18,7 +18,10 @@ set_property(TARGET testrunner_vhdl_numeric PROPERTY JOB_POOL_COMPILE job_pool_m
 set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
 
 
-# Boost.Test main and testing utilities
+add_dependencies(${PROJECT_NAME} boost-spirit-x3)
+add_dependencies(${PROJECT_NAME} boost-utf)
+
+
 target_sources(${PROJECT_NAME} PRIVATE
     src/common/test_numeric_convert.cpp
     src/common/numeric_parser.cpp
@@ -32,16 +35,27 @@ target_sources(${PROJECT_NAME} PRIVATE
 )
 
 
-# adjust include path
 target_include_directories(${PROJECT_NAME} PRIVATE
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>)
-
-
-target_compile_options(${PROJECT_NAME} PRIVATE
-    -Wall
-    -Wextra
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${SPIRIT_X3_INCLUDE_DIR}>
+    $<BUILD_INTERFACE:${BOOST_UTF_INCLUDE_DIR}>
+    $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
 )
+
+
+
+if(MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        /W4
+    )
+else()
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        -Wall 
+        -Wextra
+    )
+endif()
+
 
 # limit gcc/clang template error depth printing
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
@@ -59,28 +73,9 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQ
 endif()
 
 
-## Boost.Org's Spirit.X3 newer version is required from local clone
-add_dependencies(${PROJECT_NAME} boost-spirit-x3)
-
-# Boost.Org depend includes
-include_directories(${SPIRIT_X3_INCLUDE_DIR})
-
-
-## 
-# Boost.Org Libraries
-# - Boost.Locale is required by numeric_convert
-# FixMe: numeric_parser.cpp depends for unkown reasons on boost::filesystem's
-#        path::generic_string, path::codecvt, path::convert  
-#        on MinGW
-find_package(Boost REQUIRED COMPONENTS system 
-    filesystem unit_test_framework
-    locale
-)
-
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
     eda::vhdl_parser
-    eda::common # FixMe: shouldn't this depency propagated by eda::vhdl_grammar?
     testsuite::common
     Boost::system
     Boost::filesystem
