@@ -56,6 +56,21 @@ configure_file(${eda_SOURCE_DIR}/.clang-tidy ${eda_BINARY_DIR}/.clang-tidy COPYO
 
 
 ## -----------------------------------------------------------------------------
+# Clang-format
+# https://github.com/ttroy50/cmake-examples/tree/master/04-static-analysis/clang-format
+set(CLANG_FORMAT_BIN_NAME clang-format)
+list(APPEND CLANG_FORMAT_EXCLUDE_PATTERNS  
+	"playground/" 
+	"external/"
+	"testsuite/" 
+	"sources/vhdl/include/eda/vhdl/ast/node/"  
+	"build/" 
+	${CMAKE_BINARY_DIR}
+)
+find_package(ClangFormat)
+
+
+## -----------------------------------------------------------------------------
 # Include What You Use (IWYU)
 # https://github.com/include-what-you-use/include-what-you-use
 # on Unix/Linux only
