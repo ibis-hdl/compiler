@@ -13,9 +13,9 @@
 
 #include <string_view>
 
-
-namespace eda { namespace vhdl { namespace ast {
-
+namespace eda {
+namespace vhdl {
+namespace ast {
 
 /*
  * Hot Fix
@@ -23,22 +23,21 @@ namespace eda { namespace vhdl { namespace ast {
  * This is required to work with 'string_view', later version of Spirit.X3
  * as 1.64. Note the hard coded iterator type!!, \see
  * [Spirit.X3 using string_view and member named 'insert' compiler error](
- *  https://stackoverflow.com/questions/50310015/spirit-x3-using-string-view-and-member-named-insert-compiler-error?answertab=active#tab-top) */
+ *  https://stackoverflow.com/questions/50310015/spirit-x3-using-string-view-and-member-named-insert-compiler-error?answertab=active#tab-top)
+ */
 using string_span = boost::iterator_range<parser::iterator_type>;
-
-
 
 /*
  * Helper function to handle string_span node elements into an C++ standard
  * conformance way.
  */
-static inline
-std::string_view as_string_view(ast::string_span const& string_span) {
+static inline std::string_view as_string_view(ast::string_span const& string_span)
+{
     return std::string_view{ &string_span.front(), string_span.size() };
 };
 
-
-} } } // namespace eda.vhdl.ast
-
+} // namespace ast
+} // namespace vhdl
+} // namespace eda
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_STRING_SPAN_HPP_ */

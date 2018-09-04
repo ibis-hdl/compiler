@@ -6,21 +6,22 @@
  */
 
 #include <eda/vhdl/ast/node/keyword_token.hpp>
+
 #include <eda/util/cxx_bug_fatal.hpp>
 #include <iostream>
-
 
 #if defined(NULL)
 #undef NULL
 #endif
 
-
-namespace eda { namespace vhdl { namespace ast {
-
+namespace eda {
+namespace vhdl {
+namespace ast {
 
 std::ostream& operator<<(std::ostream& os, keyword_token token)
 {
-    switch(token) {
+    switch (token) {
+        // clang-format off
         case keyword_token::ABS:             os << "ABS";           break;
         case keyword_token::ACCESS:          os << "ACCESS";        break;
         case keyword_token::AFTER:           os << "AFTER";         break;
@@ -118,6 +119,7 @@ std::ostream& operator<<(std::ostream& os, keyword_token token)
         case keyword_token::WITH:            os << "WITH";          break;
         case keyword_token::XNOR:            os << "XNOR";          break;
         case keyword_token::XOR:             os << "XOR";           break;
+            // clang-format on
 
         default:
             cxx_unreachable_bug_triggered();
@@ -126,4 +128,6 @@ std::ostream& operator<<(std::ostream& os, keyword_token token)
     return os;
 }
 
-} } } // namespace eda.vhdl.ast
+} // namespace ast
+} // namespace vhdl
+} // namespace eda

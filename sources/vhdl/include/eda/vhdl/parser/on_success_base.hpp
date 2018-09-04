@@ -8,19 +8,21 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ON_SUCCESS_BASE_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ON_SUCCESS_BASE_HPP_
 
+// clang-format off
 #include <eda/compiler/warnings_off.hpp>
 #include <boost/spirit/home/x3/support/context.hpp>
 #include <boost/spirit/home/x3/support/utility/lambda_visitor.hpp>
 #include <eda/compiler/warnings_on.hpp>
+// clang-format on
 
 #include <eda/vhdl/parser/error_handler.hpp>
 #include <eda/vhdl/ast/util/variant.hpp>
 
 #include <eda/namespace_alias.hpp>
 
-
-namespace eda { namespace vhdl { namespace parser {
-
+namespace eda {
+namespace vhdl {
+namespace parser {
 
 /**
  * Base class for annotating the AST
@@ -40,31 +42,26 @@ namespace eda { namespace vhdl { namespace parser {
  * \note The source is based on the original [x3::annotate_on_success](
  *       https://github.com/boostorg/spirit/blob/master/include/boost/spirit/home/x3/support/utility/annotate_on_success.hpp)
  */
-struct on_success_base
-{
+struct on_success_base {
     template <typename IteratorT, typename ContextT, typename... Types>
-    inline
-    void on_success(IteratorT const& first, IteratorT const& last,
-                    ast::variant<Types...>& node, ContextT const& context) const
+    inline void on_success(IteratorT const& first, IteratorT const& last,
+        ast::variant<Types...>& node, ContextT const& context) const
     {
-        node.apply_visitor(x3::make_lambda_visitor<void>([&](auto& node_) {
-                this->on_success(first, last, node_, context);
-            })
-        );
+        node.apply_visitor(x3::make_lambda_visitor<void>(
+            [&](auto& node_) { this->on_success(first, last, node_, context); }));
     }
 
     template <typename NodeT, typename IteratorT, typename ContextT>
-    inline
-    void on_success(IteratorT const& first, IteratorT const& last,
-                    NodeT& node, ContextT const& context) const
+    inline void on_success(
+        IteratorT const& first, IteratorT const& last, NodeT& node, ContextT const& context) const
     {
         auto& error_handler = x3::get<parser::error_handler_tag>(context).get();
         error_handler.annotate(node, first, last);
     }
 };
 
-
-}}} // namespace eda.vhdl.parser
-
+} // namespace parser
+} // namespace vhdl
+} // namespace eda
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ON_SUCCESS_BASE_HPP_ */

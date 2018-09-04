@@ -8,7 +8,6 @@
 #ifndef SOURCES_COMMON_INCLUDE_EDA_PREDEF_HPP_
 #define SOURCES_COMMON_INCLUDE_EDA_PREDEF_HPP_
 
-
 // shortcuts for supported platforms, OS etc.
 
 #include <boost/predef/os/linux.h>
@@ -17,6 +16,5 @@
 //#include <boost/predef/os/bsd.h>
 //#include <boost/predef/os/cygwin.h>
 //#include <boost/predef/os/macos.h>
-
 
 #endif /* SOURCES_COMMON_INCLUDE_EDA_PREDEF_HPP_ */

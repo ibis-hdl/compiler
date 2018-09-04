@@ -8,10 +8,11 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_ADAPTED_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_ADAPTED_HPP_
 
-
 #include <eda/vhdl/ast.hpp>
+
 #include <boost/fusion/include/adapt_struct.hpp>
 
+// clang-format off
 
 BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::access_type_definition,
     subtype_indication
@@ -532,5 +533,6 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::waveform_element,
     form, time_expression
 )
 
+// clang-format off
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_ADAPTED_HPP_ */

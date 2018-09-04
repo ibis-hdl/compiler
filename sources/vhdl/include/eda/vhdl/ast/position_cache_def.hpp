@@ -8,7 +8,6 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_POSITION_CACHE_DEF_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_POSITION_CACHE_DEF_HPP_
 
-
 #include <eda/vhdl/ast/position_cache.hpp>
 
 #include <boost/locale/encoding_utf.hpp>
@@ -17,23 +16,26 @@
 
 #include <eda/util/cxx_bug_fatal.hpp>
 
-
-namespace eda { namespace vhdl { namespace ast {
-
+namespace eda {
+namespace vhdl {
+namespace ast {
 
 template <typename IteratorT>
-std::size_t position_cache<IteratorT>::line_number(std::size_t file_id, iterator_type const& pos) const
+std::size_t position_cache<IteratorT>::line_number(
+    std::size_t file_id, iterator_type const& pos) const
 {
     using char_type = typename std::iterator_traits<iterator_type>::value_type;
 
-    std::size_t line_no { 1 };
-    char_type prev { 0 };
+    std::size_t line_no{ 1 };
+    char_type prev{ 0 };
 
-    for (iterator_type iter{ file_contents(file_id).begin() } ; iter != pos; ++iter) {
+    for (iterator_type iter{ file_contents(file_id).begin() }; iter != pos; ++iter) {
         auto chr = *iter;
         switch (chr) {
             case '\n':
-                if (prev != '\r') { ++line_no; }
+                if (prev != '\r') {
+                    ++line_no;
+                }
                 break;
             case '\r':
                 ++line_no;
@@ -47,9 +49,9 @@ std::size_t position_cache<IteratorT>::line_number(std::size_t file_id, iterator
     return line_no;
 }
 
-
 template <typename IteratorT>
-std::string position_cache<IteratorT>::current_line(std::size_t file_id, iterator_type const& first) const
+std::string position_cache<IteratorT>::current_line(
+    std::size_t file_id, iterator_type const& first) const
 {
     iterator_type line_end = first;
 
@@ -60,18 +62,15 @@ std::string position_cache<IteratorT>::current_line(std::size_t file_id, iterato
         if (chr == '\r' || chr == '\n') {
             break;
         }
-        
+
         ++line_end;
     }
 
     using char_type = typename std::iterator_traits<iterator_type>::value_type;
 
     return boost::locale::conv::utf_to_utf<std::string::value_type>(
-        std::basic_string<char_type>{ first, line_end }
-    );
+        std::basic_string<char_type>{ first, line_end });
 }
-
-
 
 template <typename IteratorT>
 IteratorT position_cache<IteratorT>::get_line_start(std::size_t file_id, iterator_type& pos) const
@@ -87,14 +86,13 @@ IteratorT position_cache<IteratorT>::get_line_start(std::size_t file_id, iterato
             // [std::isspace](https://en.cppreference.com/w/cpp/string/byte/isspace)
             if (std::isspace(static_cast<unsigned char>(ch)) != 0) {
                 ++iter;
-            }
-            else {
+            } else {
                 break;
             }
         }
     };
 
-    auto [begin, end] = range(file_id);
+    auto[begin, end] = range(file_id);
 
     skip_whitespace(pos, end);
 
@@ -121,8 +119,8 @@ IteratorT position_cache<IteratorT>::get_line_start(std::size_t file_id, iterato
     return latest;
 }
 
-
-}}} // namespace eda.vhdl.ast
-
+} // namespace ast
+} // namespace vhdl
+} // namespace eda
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_POSITION_CACHE_DEF_HPP_ */

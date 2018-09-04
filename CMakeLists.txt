@@ -45,6 +45,12 @@ set_property(GLOBAL PROPERTY CMAKE_JOB_POOLS
 
 
 ##
+# debug
+# [Cmake doesn't find Boost](https://stackoverflow.com/questions/3808775/cmake-doesnt-find-boost)
+#set(Boost_DEBUG 1)
+
+
+##
 # Globally Boost.Spirit.X3 clone
 # EDA project parser depends on newer Spirit.X3 versions as commonly shiped
 # by the linux distributions. Create an own up-to-date clone of Boost.Spirit's

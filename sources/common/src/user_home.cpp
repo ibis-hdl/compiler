@@ -5,37 +5,39 @@
  *      Author: olaf
  */
 
+// clang-format off
 #include <eda/util/file/user_home.hpp>
-#include <boost/predef/os/linux.h>
+#include <eda/compiler/compiler_support.hpp>        // IWYU pragma: keep
+#include <eda/namespace_alias.hpp>                  // IWYU pragma: keep
+
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
+#include <boost/predef/os/linux.h>
 #include <boost/system/error_code.hpp>
+
 #include <cstdlib>
 #include <stdexcept>
 #include <string>
+// clang-format on
 
-#include <eda/compiler/compiler_support.hpp>    // IWYU pragma: keep
-#include <eda/namespace_alias.hpp>              // IWYU pragma: keep
-
-
-namespace eda { namespace util {
-
+namespace eda {
+namespace util {
 
 /*
  * FixMe: small source code, maybe better move to ibis::init() ???
  */
 fs::path user_home(std::initializer_list<char const*> path_list)
 {
-    const char *HOME_ENV
+    const char* HOME_ENV
 #if BOOST_OS_LINUX
-    = { std::getenv("HOME") };
+        = { std::getenv("HOME") };
 #elif BOOST_OS_WINDOWS
-    = { std::getenv("USERPROFILE") };
+        = { std::getenv("USERPROFILE") };
 #else
 #error "No source for getting HOME directory on your platform"
 #endif
 
-    if (cxx_expect_not( !HOME_ENV )) {
+    if (cxx_expect_not(!HOME_ENV)) {
         throw std::runtime_error("No viable environment variable for user's home.");
     }
 
@@ -48,11 +50,11 @@ fs::path user_home(std::initializer_list<char const*> path_list)
     /*
      * XXX ToDo: make own/special exception classes
      */
-    if (cxx_expect_not( !fs::exists(path, ec) )) {
+    if (cxx_expect_not(!fs::exists(path, ec))) {
         throw std::runtime_error("Fatal: " + path.make_preferred().string() + ": " + ec.message());
     }
 
-    if (cxx_expect_not( !fs::is_directory(path, ec) )){
+    if (cxx_expect_not(!fs::is_directory(path, ec))) {
         throw std::runtime_error("Fatal: " + path.make_preferred().string() + ": " + ec.message());
     }
 
@@ -63,8 +65,5 @@ fs::path user_home(std::initializer_list<char const*> path_list)
     return path;
 }
 
-
-} } // namespace eda.util
-
-
-
+} // namespace util
+} // namespace eda

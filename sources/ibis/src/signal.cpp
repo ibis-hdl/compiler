@@ -9,7 +9,6 @@
 
 #include <csignal>
 
-
 void testing_signal_handler()
 {
 #if 0 // doesn't work ????
@@ -21,10 +20,9 @@ void testing_signal_handler()
     int r = 0;
     std::cout << "testing signal handler with SIGFPE\n";
 #ifndef __clang_analyzer__
-    while(true) {
+    while (true) {
         r = 100 / n;
         std::cout << "100 / " << n-- << " = " << r << '\n';
     }
 #endif // __clang_analyzer__
 }
-

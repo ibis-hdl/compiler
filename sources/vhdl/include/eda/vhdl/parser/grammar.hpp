@@ -12,13 +12,15 @@
 
 #include <eda/support/boost/spirit_x3.hpp>
 
+// clang-format off
 #include <eda/compiler/warnings_off.hpp>
 #include <boost/spirit/home/x3/nonterminal/rule.hpp>
 #include <eda/compiler/warnings_on.hpp>
+// clang-format on
 
-
-namespace eda { namespace vhdl { namespace parser {
-
+namespace eda {
+namespace vhdl {
+namespace parser {
 
 struct design_file_class;
 
@@ -28,8 +30,8 @@ BOOST_SPIRIT_DECLARE(design_file_type);
 
 parser::design_file_type const& grammar();
 
-
-} } } // namespace eda.vhdl.parser
-
+} // namespace parser
+} // namespace vhdl
+} // namespace eda
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_HPP_ */

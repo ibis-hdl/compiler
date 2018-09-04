@@ -8,6 +8,7 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_AST_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_AST_HPP_
 
+// clang-format off
 #if 1
 //DISABLED #include <eda/vhdl/ast/node/abstract_literal.hpp>
 #include <eda/vhdl/ast/node/access_type_definition.hpp>
@@ -215,6 +216,6 @@
 #else
 #include <eda/vhdl/ast/node/design_file.hpp>
 #endif
-
+// clang-format on
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_AST_HPP_ */

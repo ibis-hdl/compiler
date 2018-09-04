@@ -8,25 +8,19 @@
 #ifndef SOURCES_COMMON_INCLUDE_EDA_UTILS_INDENT_STREAM_HPP_
 #define SOURCES_COMMON_INCLUDE_EDA_UTILS_INDENT_STREAM_HPP_
 
-
-#include <streambuf>
 #include <ostream>
+#include <streambuf>
 
+namespace eda {
+namespace util {
 
-namespace eda { namespace util {
-
-
-class indent_sbuf : public std::streambuf
-{
-    std::streambuf*                 m_sbuf;
-    std::string                     m_indent_str;
-    static constexpr std::size_t    TAB_WIDTH = 2;
-
+class indent_sbuf : public std::streambuf {
 public:
     explicit indent_sbuf(std::streambuf* sbuf, size_t start_indent = 0)
         : m_sbuf{ sbuf }
         , m_indent_str(start_indent, ' ')
-    { }
+    {
+    }
 
     ~indent_sbuf() override
     {
@@ -42,10 +36,9 @@ public:
 
     indent_sbuf& decrease()
     {
-        if(m_indent_str.size() > TAB_WIDTH) {
+        if (m_indent_str.size() > TAB_WIDTH) {
             m_indent_str = std::string(m_indent_str.size() - TAB_WIDTH, ' ');
-        }
-        else {
+        } else {
             m_indent_str.clear();
         }
         return *this;
@@ -62,7 +55,7 @@ private:
         // ... may not give problems due to ANSI charset of VHDL
         int_type const put_ret{ m_sbuf->sputc(chr) };
 
-        if(chr == '\n') {
+        if (chr == '\n') {
             // CLang -Weverything Diagnostic:
             // warning: implicit conversion changes signedness:
             // 'std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::size_type'
@@ -71,44 +64,48 @@ private:
             // and no check is done here - no error expected ;-)
             // FixMe: Add some indent_level and assert to avoid non-intentionally
             //        behavior. There may be a problem on huge indent size.
-            m_sbuf->sputn( m_indent_str.data(), m_indent_str.size() );
+            m_sbuf->sputn(m_indent_str.data(), m_indent_str.size());
         }
         return put_ret;
     }
+
+private:
+    // clang-format off
+    std::streambuf*                                 m_sbuf;
+    std::string                                     m_indent_str;
+    static constexpr std::size_t                    TAB_WIDTH = 2;
+    // clang-format on
 };
 
-
-class indent_ostream : public std::ostream
-{
-    indent_sbuf buf;
-
+class indent_ostream : public std::ostream {
 public:
     indent_ostream(std::ostream& os, size_t width)
-        : std::ostream(&buf)
-        , buf(os.rdbuf(), width)
-    { }
+        : std::ostream{ &buf }
+        , buf{ os.rdbuf(), width }
+    {
+    }
+
+private:
+    // clang-format off
+    indent_sbuf                                     buf;
+    // clang-format on
 };
 
-
-static inline
-std::ostream& increase_indent(std::ostream& os)
+static inline std::ostream& increase_indent(std::ostream& os)
 {
     auto* buf = static_cast<indent_sbuf*>(os.rdbuf());
     buf->increase();
     return os;
 }
 
-
-static inline
-std::ostream& decrease_indent(std::ostream& os)
+static inline std::ostream& decrease_indent(std::ostream& os)
 {
     auto* buf = static_cast<indent_sbuf*>(os.rdbuf());
     buf->decrease();
     return os;
 }
 
-
-} } // namespace eda.util
-
+} // namespace util
+} // namespace eda
 
 #endif /* SOURCES_COMMON_INCLUDE_EDA_UTILS_INDENT_STREAM_HPP_ */

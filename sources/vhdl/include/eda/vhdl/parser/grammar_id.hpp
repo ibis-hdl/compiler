@@ -8,9 +8,9 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_ID_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_ID_HPP_
 
-
-namespace eda { namespace vhdl { namespace parser {
-
+namespace eda {
+namespace vhdl {
+namespace parser {
 
 /*
  * Parser Rule IDs
@@ -80,7 +80,7 @@ struct context_clause_class;
 struct context_item_class;
 struct decimal_literal_class;
 struct delay_mechanism_class;
-//struct design_file_class;
+// struct design_file_class;
 struct design_unit_class;
 struct designator_class;
 struct direction_class;
@@ -114,11 +114,11 @@ struct file_declaration_class;
 struct file_logical_name_class;
 struct file_open_information_class;
 struct file_type_definition_class;
-//struct floating_type_definition_class;
+// struct floating_type_definition_class;
 struct formal_designator_class;
 struct formal_parameter_list_class;
 struct formal_part_class;
-//struct full_type_declaration_class;
+// struct full_type_declaration_class;
 struct function_call_class;
 struct generate_statement_class;
 struct generation_scheme_class;
@@ -134,7 +134,7 @@ struct guarded_signal_specification_class;
 struct identifier_class;
 struct identifier_list_class;
 struct if_statement_class;
-//struct incomplete_type_declaration_class;
+// struct incomplete_type_declaration_class;
 struct index_constraint_class;
 struct index_specification_class;
 struct index_subtype_definition_class;
@@ -142,7 +142,7 @@ struct indexed_name_class;
 struct instantiated_unit_class;
 struct instantiation_list_class;
 struct integer_class;
-//struct integer_type_definition_class;
+// struct integer_type_definition_class;
 struct interface_constant_declaration_class;
 struct interface_declaration_class;
 struct interface_element_class;
@@ -242,8 +242,8 @@ struct wait_statement_class;
 struct waveform_class;
 struct waveform_element_class;
 
-
-} } } // namespace eda.vhdl.parser
-
+} // namespace parser
+} // namespace vhdl
+} // namespace eda
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_ID_HPP_ */

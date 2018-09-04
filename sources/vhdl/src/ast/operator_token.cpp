@@ -5,18 +5,19 @@
  *      Author: olaf
  */
 
-
 #include <eda/vhdl/ast/node/operator_token.hpp>
+
 #include <eda/util/cxx_bug_fatal.hpp>
 #include <iostream>
 
-
-namespace eda { namespace vhdl { namespace ast {
-
+namespace eda {
+namespace vhdl {
+namespace ast {
 
 std::ostream& operator<<(std::ostream& os, operator_token token)
 {
-    switch(token) {
+    switch (token) {
+        // clang-format off
         // miscellaneous_operator
         case operator_token::EXPONENT:        os << "EXPONENT";      break;
         case operator_token::ABS:             os << "ABS";           break;
@@ -54,6 +55,7 @@ std::ostream& operator<<(std::ostream& os, operator_token token)
         case operator_token::NOR:             os << "NOR";           break;
         case operator_token::XOR:             os << "XOR";           break;
         case operator_token::XNOR:            os << "XNOR";          break;
+            // clang-format on
 
         default:
             cxx_unreachable_bug_triggered();
@@ -61,7 +63,6 @@ std::ostream& operator<<(std::ostream& os, operator_token token)
 
     return os;
 }
-
 
 #if 0
 /**
@@ -154,8 +155,6 @@ unsigned precedence(operator_token token)
 }
 #endif
 
-} } } // namespace eda.vhdl.ast
-
-
-
-
+} // namespace ast
+} // namespace vhdl
+} // namespace eda

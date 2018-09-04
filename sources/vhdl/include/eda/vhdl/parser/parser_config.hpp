@@ -8,12 +8,11 @@
 #ifndef INCLUDE_EDA_VHDL_PARSER_CONFIG_HPP_
 #define INCLUDE_EDA_VHDL_PARSER_CONFIG_HPP_
 
-#include <eda/vhdl/parser/skipper.hpp>
 #include <eda/vhdl/parser/error_handler.hpp>
-#include <eda/vhdl/parser/iterator_type.hpp>     // iterator_type
+#include <eda/vhdl/parser/iterator_type.hpp> // iterator_type
+#include <eda/vhdl/parser/skipper.hpp>
 
 #include <eda/namespace_alias.hpp>
-
 
 /* Note about linker errors:
  *
@@ -67,23 +66,25 @@
  * \endcode
  */
 
-namespace eda { namespace vhdl { namespace parser {
-
+namespace eda {
+namespace vhdl {
+namespace parser {
 
 using error_handler_type = parser::error_handler<iterator_type>;
 
 using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
 
 // used for external linkage
+// clang-format off
 using context_type = x3::context<
       parser::error_handler_tag
     , std::reference_wrapper<error_handler_type> /* const */
     , phrase_context_type
 >;
+// clang-format on
 
-
-}}}  // namespace eda.vhdl.parser
-
-
+} // namespace parser
+} // namespace vhdl
+} // namespace eda
 
 #endif /* INCLUDE_EDA_VHDL_PARSER_CONFIG_HPP_ */

@@ -9,21 +9,21 @@
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_POSITION_CACHE_HPP_
 
 #include <eda/vhdl/ast/util/position_tagged.hpp>
-#include <eda/util/cxx_bug_fatal.hpp>
-
-#include <boost/range/iterator_range.hpp>
-#include <vector>
-#include <tuple>
-#include <optional>
-#include <type_traits>
-
-#include <boost/core/ignore_unused.hpp>
 
 #include <iosfwd>
+#include <optional>
+#include <tuple>
+#include <type_traits>
+#include <vector>
 
+#include <boost/range/iterator_range.hpp>
+#include <boost/core/ignore_unused.hpp>
 
-namespace eda { namespace vhdl { namespace ast {
+#include <eda/util/cxx_bug_fatal.hpp>
 
+namespace eda {
+namespace vhdl {
+namespace ast {
 
 /**
  * AST annotation/position cache
@@ -32,9 +32,7 @@ namespace eda { namespace vhdl { namespace ast {
  * properties are own, hence it's save to refer to them as long the instance
  * exist.
  */
-template <typename IteratorT>
-class position_cache
-{
+template <typename IteratorT> class position_cache {
 public:
     using iterator_type = IteratorT;
     using position_container_type = std::vector<boost::iterator_range<iterator_type>>;
@@ -77,7 +75,8 @@ public:
      * @return An ID which identifies the pair of 'filename' and 'contents' which
      *         can be referred later on using the proxy.
      */
-    std::size_t add_file(std::string filename, std::string contents = std::string{}) {
+    std::size_t add_file(std::string filename, std::string contents = std::string{})
+    {
         std::size_t const file_id = files.size();
         files.emplace_back(std::move(filename), std::move(contents));
         return file_id;
@@ -99,7 +98,7 @@ public:
             /* ToDo: maybe better throw range_exception since it's an implementation
              * limitation. */
             cxx_assert(positions.size() < ast::position_tagged::MAX_ID,
-                      "Insufficient range of numeric IDs for AST tagging");
+                "Insufficient range of numeric IDs for AST tagging");
 
             node.file_id = file_id;
             node.pos_id = positions.size();
@@ -119,7 +118,8 @@ public:
      * @param file_id ID of actually processed file.
      * @return The filename as std::string.
      */
-    std::string const& file_name(std::size_t file_id) const {
+    std::string const& file_name(std::size_t file_id) const
+    {
         return std::get<0>(files.at(file_id));
     }
 
@@ -129,7 +129,8 @@ public:
      * @param file_id ID of actually processed file.
      * @return A reference to a string representing the file contents.
      */
-    std::string const& file_contents(std::size_t file_id) const {
+    std::string const& file_contents(std::size_t file_id) const
+    {
         return std::get<1>(files.at(file_id));
     }
 
@@ -139,7 +140,8 @@ public:
      * @param file_id ID of actually processed file.
      * @return A pair of iterators pointing to begin and end of the file contents.
      */
-    std::tuple<iterator_type, iterator_type> range(std::size_t file_id) const {
+    std::tuple<iterator_type, iterator_type> range(std::size_t file_id) const
+    {
         auto const make_range = [](std::string const& contents) {
             return std::tuple<iterator_type, iterator_type>{ contents.begin(), contents.end() };
         };
@@ -154,15 +156,13 @@ public:
      *         not tagged an empty iterator_range is return. To distinguish
      *         between they are packed into an optional.
      */
-    template <typename NodeT>
-    std::optional<range_type> position_of(NodeT const& node) const
+    template <typename NodeT> std::optional<range_type> position_of(NodeT const& node) const
     {
         if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
             return positions[node.pos_id];
         }
-        
-            return {};
-        
+
+        return {};
     }
 
 public:
@@ -197,11 +197,11 @@ public:
     std::string current_line(std::size_t file_id, iterator_type const& first) const;
 
 private:
-    file_container_type                                files;
+    // clang-format off
+    file_container_type                             files;
     position_container_type                         positions;
+    // clang-format on
 };
-
-
 
 /**
  * AST annotation/position cache proxy.
@@ -212,14 +212,13 @@ private:
  * \note This class is intended to created by the position_cache's handle()
  * function only.
  */
-template <typename IteratorT>
-class position_cache<IteratorT>::proxy
-{
+template <typename IteratorT> class position_cache<IteratorT>::proxy {
 public:
     proxy(position_cache<IteratorT>& position_cache_, std::size_t file_id_)
-    : self{ position_cache_ }
-    , file_id{ file_id_ }
-    { }
+        : self{ position_cache_ }
+        , file_id{ file_id_ }
+    {
+    }
 
     ~proxy() = default;
 
@@ -233,48 +232,53 @@ public:
     std::size_t id() const { return file_id; }
 
 public:
-    template <typename NodeT>
-    void annotate(NodeT& node, iterator_type first, iterator_type last) {
+    template <typename NodeT> void annotate(NodeT& node, iterator_type first, iterator_type last)
+    {
         self.annotate(file_id, node, first, last);
     }
 
 public:
-    template <typename NodeT>
-    std::optional<range_type> position_of(NodeT const& node) const {
+    template <typename NodeT> std::optional<range_type> position_of(NodeT const& node) const
+    {
         return self.position_of(node);
     }
 
 public:
-    std::string const& file_name() const { return self.file_name(file_id);  }
+    std::string const& file_name() const { return self.file_name(file_id); }
     std::string const& file_contents() const { return self.file_contents(file_id); }
     std::tuple<IteratorT, IteratorT> range() const { return self.range(file_id); }
 
 public:
-    std::size_t line_number(iterator_type const& pos) const {
+    std::size_t line_number(iterator_type const& pos) const
+    {
         return self.line_number(file_id, pos);
     }
 
-    iterator_type get_line_start(iterator_type& pos_iter) const {
+    iterator_type get_line_start(iterator_type& pos_iter) const
+    {
         return self.get_line_start(file_id, pos_iter);
     }
 
-    std::string current_line(iterator_type const& start) const {
+    std::string current_line(iterator_type const& start) const
+    {
         return self.current_line(file_id, start);
     }
 
 private:
-    position_cache<IteratorT>&                         self;
-    std::size_t const                                file_id;
+    // clang-format off
+    position_cache<IteratorT>&                      self;
+    std::size_t const                               file_id;
+    // clang-format on
 };
 
-
 template <typename IteratorT>
-typename position_cache<IteratorT>::proxy position_cache<IteratorT>::handle(std::size_t file_id) {
+typename position_cache<IteratorT>::proxy position_cache<IteratorT>::handle(std::size_t file_id)
+{
     return proxy{ *this, file_id };
 }
 
-
-}}} // namespace eda.vhdl.ast
-
+} // namespace ast
+} // namespace vhdl
+} // namespace eda
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_POSITION_CACHE_HPP_ */

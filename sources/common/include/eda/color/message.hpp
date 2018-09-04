@@ -13,20 +13,17 @@
 #include <eda/color/decorator.hpp>
 #include <eda/color/facet.hpp>
 
-
-namespace eda { namespace color {
-
+namespace eda {
+namespace color {
 
 namespace message {
 
-
-typedef struct {   // VHDL severities
+typedef struct { // VHDL severities
     struct note;
     struct warning;
     struct error;
     struct failure;
 } severity;
-
 
 using note = message_decorator<severity::note>;
 using warning = message_decorator<severity::warning>;
@@ -38,11 +35,9 @@ using warning_facet = message_facet<severity::warning>;
 using error_facet = message_facet<severity::error>;
 using failure_facet = message_facet<severity::failure>;
 
-
 } // namespace message
 
-
-} } // namespace eda.color
-
+} // namespace color
+} // namespace eda
 
 #endif /* SOURSOURCES_COMMON_INCLUDE_EDA_COLOR_MESSAGE_HPP_ */

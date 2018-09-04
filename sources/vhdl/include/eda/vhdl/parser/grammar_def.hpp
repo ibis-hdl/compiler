@@ -11,36 +11,42 @@
 #include <eda/vhdl/parser/grammar.hpp>
 #include <eda/vhdl/parser/grammar_id.hpp>
 #include <eda/vhdl/parser/grammar_type.hpp>
+
 #include <eda/vhdl/parser/on_error_base.hpp>
 #include <eda/vhdl/parser/on_success_base.hpp>
+
 #include <eda/vhdl/ast/ast_adapted.hpp>
 
 #include <eda/support/boost/spirit_x3.hpp>
 #include <eda/support/boost/spirit_x3_util.hpp>
 
-
-namespace eda { namespace vhdl { namespace parser { namespace detail {
-
+namespace eda {
+namespace vhdl {
+namespace parser {
+namespace detail {
 
 /* distinct parser directive, but too specific (due to VHDL's character set
  * use here) to move it into spirit_x3_util header. */
-struct distinct_directive
-{
-    template<typename Parser>
-    constexpr auto operator()(Parser&& parser) const {
-        return
-            x3::lexeme[
+struct distinct_directive {
+    template <typename Parser> constexpr auto operator()(Parser&& parser) const
+    {
+        // clang-format off
+        return x3::lexeme[
                    x3::no_case[ std::forward<Parser>(parser) ]
                 >> !(x3::iso8859_1::alnum | '_')
             ];
+        // clang-format on
     }
 
-    template<typename Parser, typename Attr>
-    constexpr auto operator()(Parser&& parser, Attr&& attr) const {
+    template <typename Parser, typename Attr>
+    constexpr auto operator()(Parser&& parser, Attr&& attr) const
+    {
+        // clang-format off
         return
                operator()(std::forward<Parser>(parser))
             >> x3::attr(std::forward<Attr>(attr))
             ;
+        // clang-format off
     }
 };
 
@@ -54,28 +60,33 @@ struct literal_attribute
 {
     template<typename StrT, typename Attr>
     constexpr auto operator()(StrT&& str, Attr&& attr) const {
+        // clang-format off
         return
                x3::lit(std::forward<StrT>(str))
             >> x3::attr(std::forward<Attr>(attr))
             ;
+        // clang-format on
     }
 };
 
-const literal_attribute literal = { };
+const literal_attribute literal = {};
 
-
-} } } } // namespace eda.vhdl.parser.detail
-
+} // namespace detail
+} // namespace parser
+} // namespace vhdl
+} // namespace eda
 
 /*
  * Keywords
  */
-namespace eda { namespace vhdl { namespace parser { namespace keywords {
+namespace eda {
+namespace vhdl {
+namespace parser {
+namespace keywords {
 
 #if defined(NULL)
 #undef NULL
 #endif
-
 
 using detail::distinct;
 
@@ -108,7 +119,7 @@ auto const FUNCTION = distinct("function");
 auto const GENERATE = distinct("generate");
 auto const GENERIC = distinct("generic");
 auto const GROUP = distinct("group");
-auto const GUARDED =distinct("guarded", ast::keyword_token::GUARDED);
+auto const GUARDED = distinct("guarded", ast::keyword_token::GUARDED);
 auto const IF = distinct("if");
 auto const IMPURE = distinct("impure", ast::keyword_token::IMPURE);
 auto const IN = distinct("in", ast::keyword_token::IN);
@@ -157,11 +168,11 @@ auto const WHEN = distinct("when");
 auto const WHILE = distinct("while");
 auto const WITH = distinct("with");
 
-
 /*
  * Symbols of all keyword to them distinguish from identifier by rule
  */
 x3::symbols<> const keywords(
+    // clang-format off
     {
         "abs", "access", "after", "alias", "all", "and", "architecture",
         "array", "assert", "attribute", "begin", "block", "body", "buffer",
@@ -179,20 +190,22 @@ x3::symbols<> const keywords(
         "xor"
     },
     "keyword"
+    // clang-format on
 );
 
-auto const keyword = x3::rule<struct _> { "keyword" } =
-    distinct(keywords)
-    ;
-
-} } } } // namespace eda.vhdl.parser.keywords
-
+auto const keyword = x3::rule<struct _>{ "keyword" } = distinct(keywords);
+}
+} // namespace parser
+} // namespace vhdl
+} // namespace eda
 
 /*
  * Operators
  */
-namespace eda { namespace vhdl { namespace parser { namespace operators {
-
+namespace eda {
+namespace vhdl {
+namespace parser {
+namespace operators {
 
 /*
  * Operator Rule IDs
@@ -204,10 +217,10 @@ struct unary_miscellaneous_operator_class;
 struct multiplying_operator_class;
 struct shift_operator_class;
 
-
 /*
  * Rule Types
  */
+// clang-format off
 using binary_logical_operator_type = x3::rule<binary_logical_operator_class, ast::operator_token>;
 using unary_logical_operator_type = x3::rule<unary_logical_operator_class, ast::operator_token>;
 using binary_miscellaneous_operator_type = x3::rule<binary_miscellaneous_operator_class, ast::operator_token>;
@@ -216,18 +229,19 @@ using multiplying_operator_type = x3::rule<multiplying_operator_class, ast::oper
 using shift_operator_type = x3::rule<shift_operator_class, ast::operator_token>;
 using relational_operator_type = x3::symbols<ast::operator_token>;
 using adding_operator_type = x3::symbols<ast::operator_token>;
-
+// clang-format on
 
 /*
  * Rule Instances
  */
+// clang-format off
 binary_logical_operator_type const binary_logical_operator{ "logical_operator" };
 unary_logical_operator_type const unary_logical_operator{ "logical_operator" };
 binary_miscellaneous_operator_type const binary_miscellaneous_operator{ "miscellaneous_operator" };
 unary_miscellaneous_operator_type const unary_miscellaneous_operator{ "miscellaneous_operator" };
 multiplying_operator_type const multiplying_operator{ "multiplying_operator" };
 shift_operator_type const shift_operator{ "shift_operator" };
-
+// clang-format on
 
 /*
  * Rule Definitions
@@ -235,24 +249,27 @@ shift_operator_type const shift_operator{ "shift_operator" };
 using detail::distinct;
 using detail::literal;
 
-
 // miscellaneous_operator ::=  ** | abs | not                       [LRM93 §7.2]
 auto const EXPONENT = literal("**", ast::operator_token::EXPONENT);
 
 auto const binary_miscellaneous_operator_def =
+    // clang-format off
     EXPONENT
     ;
+// clang-format on
 
 auto const ABS = distinct("abs", ast::operator_token::ABS);
 auto const NOT = distinct("not", ast::operator_token::NOT);
 
 auto const unary_miscellaneous_operator_def =
+    // clang-format off
     ABS | NOT
     ;
-
+// clang-format on
 
 // logical_operator ::=  and | or | nand | nor | xor | xnor         [LRM93 §7.2]
-x3::symbols<ast::operator_token>  const binary_logical_operator_symbols(
+x3::symbols<ast::operator_token> const binary_logical_operator_symbols(
+    // clang-format off
     {
         {"and",  ast::operator_token::AND},
         {"or",   ast::operator_token::OR},
@@ -260,22 +277,23 @@ x3::symbols<ast::operator_token>  const binary_logical_operator_symbols(
         {"xnor", ast::operator_token::XNOR}
     },
     "logical_operator"
+    // clang-format on
 );
 
-auto const binary_logical_operator_def =
-    distinct(binary_logical_operator_symbols)
-    ;
+auto const binary_logical_operator_def = distinct(binary_logical_operator_symbols);
 
 auto const NAND = distinct("nand", ast::operator_token::NAND);
-auto const NOR =  distinct("nor",  ast::operator_token::NOR);
+auto const NOR = distinct("nor", ast::operator_token::NOR);
 
 auto const unary_logical_operator_def =
+    // clang-format off
     NAND | NOR
     ;
-
+// clang-format on
 
 // relational_operator ::=   =  |  /=  |  <  |  <=  |  >  |  >=     [LRM93 §7.2]
 x3::symbols<ast::operator_token> const relational_operator(
+    // clang-format off
     {
         {"=",  ast::operator_token::EQUAL},
         {"/=", ast::operator_token::NOT_EQUALS},
@@ -285,17 +303,19 @@ x3::symbols<ast::operator_token> const relational_operator(
         {">=", ast::operator_token::GREATER_EQUALS}
     },
     "relational_operator"
+    // clang-format on
 );
-
 
 // adding_operator ::=  + | -  | &                                  [LRM93 §7.2]
 x3::symbols<ast::operator_token> const adding_operator(
+    // clang-format off
     {
         {"+", ast::operator_token::ADD},
         {"-", ast::operator_token::SUB},
         {"&", ast::operator_token::CONCAT}
     },
     "adding_operator"
+    // clang-format on
 );
 
 // multiplying_operator ::=  * | / | mod | rem                      [LRM93 §7.2]
@@ -306,12 +326,14 @@ auto const MOD = distinct("mod", ast::operator_token::MOD);
 auto const REM = distinct("rem", ast::operator_token::REM);
 
 auto const multiplying_operator_def =
-     MUL | DIV | MOD | REM
+    // clang-format off
+    MUL | DIV | MOD | REM
     ;
-
+// clang-format on
 
 // shift_operator ::=  sll | srl | sla | sra | rol | ror            [LRM93 §7.2]
 x3::symbols<ast::operator_token> const shift_operator_symbols(
+    // clang-format off
     {
         {"sll", ast::operator_token::SLL},
         {"srl", ast::operator_token::SRL},
@@ -321,18 +343,16 @@ x3::symbols<ast::operator_token> const shift_operator_symbols(
         {"ror", ast::operator_token::ROR}
     },
     "shift_operator"
+    // clang-format on
 );
 
-auto const shift_operator_def =
-    distinct(shift_operator_symbols)
-    ;
-
-
+auto const shift_operator_def = distinct(shift_operator_symbols);
 
 /* special boost.spirit.x3 header to get rid off the annoying unused parameter
  * warnings from x3 */
 #include <eda/compiler/warnings_off.hpp>
 
+// clang-format off
 BOOST_SPIRIT_DEFINE(
     binary_logical_operator,
     unary_logical_operator,
@@ -341,25 +361,26 @@ BOOST_SPIRIT_DEFINE(
     multiplying_operator,
     shift_operator
 )
+// clang-format on
 
 #include <eda/compiler/warnings_on.hpp>
 
-
-} } } } // namespace eda.vhdl.parser.operators
-
-
-
-
+} // namespace operators
+} // namespace parser
+} // namespace vhdl
+} // namespace eda
 
 /*
  * Main Rules
  */
-namespace eda { namespace vhdl { namespace parser {
-
+namespace eda {
+namespace vhdl {
+namespace parser {
 
 /*
  * Rule Instances
  */
+// clang-format off
 abstract_literal_type const abstract_literal { "abstract_literal" };
 access_type_definition_type const access_type_definition { "access_type_definition" };
 actual_designator_type const actual_designator { "actual_designator" };
@@ -586,27 +607,28 @@ variable_declaration_type const variable_declaration { "variable_declaration" };
 wait_statement_type const wait_statement { "wait_statement" };
 waveform_type const waveform { "waveform" };
 waveform_element_type const waveform_element { "waveform_element" };
-
+// clang-format on
 
 using namespace parser::keywords;
 
-using operators::binary_logical_operator;
-using operators::unary_logical_operator;
-using operators::binary_miscellaneous_operator;
-using operators::unary_miscellaneous_operator;
-using operators::multiplying_operator;
 using operators::adding_operator;
-using operators::shift_operator;
+using operators::binary_logical_operator;
+using operators::binary_miscellaneous_operator;
+using operators::multiplying_operator;
 using operators::relational_operator;
+using operators::shift_operator;
+using operators::unary_logical_operator;
+using operators::unary_miscellaneous_operator;
 
 using iso8859_1::char_;
 using iso8859_1::lit;
 using x3::lexeme;
-using x3::raw;
 using x3::omit;
+using x3::raw;
 
 using detail::distinct;
 
+// clang-format off
 
 /*
  * Character Sets                                                  [LRM93 §13.1]
@@ -4236,8 +4258,9 @@ BOOST_SPIRIT_DEFINE(  // -- W --
     , waveform_element
 )
 
-#include <eda/compiler/warnings_on.hpp>
+// clang-format on
 
+#include <eda/compiler/warnings_on.hpp>
 
 /*
  * Annotation and Error handling
@@ -4251,6 +4274,7 @@ BOOST_SPIRIT_DEFINE(  // -- W --
  * ID are derived from on_success_base (obviously must be changed in
  * the future).
  */
+// clang-format off
 struct abstract_literal_class : on_success_base {};
 struct access_type_definition_class : on_success_base {};
 struct actual_designator_class : on_success_base {};
@@ -4473,10 +4497,10 @@ struct variable_declaration_class : on_success_base {};
 struct wait_statement_class : on_success_base {};
 struct waveform_class : on_success_base {};
 struct waveform_element_class : on_success_base {};
+// clang-format on
 
-
-} } } // namespace eda.vhdl.parser
-
-
+} // namespace parser
+} // namespace vhdl
+} // namespace eda
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_DEF_HPP_ */

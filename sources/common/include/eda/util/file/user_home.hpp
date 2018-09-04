@@ -10,22 +10,20 @@
 
 #include <initializer_list>
 
-
-namespace boost { namespace filesystem {
+namespace boost {
+namespace filesystem {
 
 // forward
-struct path;
+class path;
 
-} }
+} // namespace filesystem
+} // namespace boost
 
-
-namespace eda { namespace util {
-
+namespace eda {
+namespace util {
 
 boost::filesystem::path user_home(std::initializer_list<char const*> path_list);
-
-
-} } // namespace eda.util
-
+}
+} // namespace eda
 
 #endif /* SOURCES_COMMON_INCLUDE_EDA_UTIL_FILE_USER_HOME_HPP_ */

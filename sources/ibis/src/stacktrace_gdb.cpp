@@ -7,23 +7,23 @@
 
 #include <csignal>
 #include <fstream>
-#include <sstream>
 #include <optional>
+#include <sstream>
 
 #include <iostream>
 
-#include <boost/process/search_path.hpp>
-#include <boost/process/child.hpp>
-#include <boost/process/error.hpp>
-#include <boost/process/extend.hpp>
-#include <boost/process/exe.hpp>
-#include <boost/process/args.hpp>
 #include <boost/filesystem/config.hpp>
 #include <boost/filesystem/path.hpp>
+#include <boost/process/args.hpp>
+#include <boost/process/child.hpp>
+#include <boost/process/error.hpp>
+#include <boost/process/exe.hpp>
+#include <boost/process/extend.hpp>
+#include <boost/process/search_path.hpp>
 
-#include <thread>
 #include <atomic>
 #include <system_error>
+#include <thread>
 
 #include <eda/color/message.hpp>
 
@@ -33,29 +33,25 @@
 #include <eda/predef.hpp>
 
 #if (BOOST_OS_LINUX)
+#include <climits> // PATH_MAX
 #include <sys/prctl.h>
 #include <sys/ptrace.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <climits> // PATH_MAX
 #endif
-
 
 namespace fs = boost::filesystem;
 namespace bp = boost::process;
 
-
-
 bool register_gdb_signal_handler();
 #if (BOOST_OS_LINUX)
-void gdb_signal_handler(int sig, siginfo_t * /*unused*/, void * /*unused*/);
+void gdb_signal_handler(int sig, siginfo_t* /*unused*/, void* /*unused*/);
 #endif
 bool gdb_detected();
 bool valgrind_detected();
 
 bool token_found(std::string const& token, std::string const& procfs_path);
 std::string get_executable_path();
-
 
 namespace /* anonymous */
 {
@@ -64,22 +60,29 @@ namespace /* anonymous */
 volatile std::sig_atomic_t sig_caught;
 
 #if (BOOST_OS_LINUX)
-static const char *signame(int sig) {
+static const char* signame(int sig)
+{
 
     switch (sig) {
-        case SIGSEGV:   return "SIGSEGV";
-        case SIGABRT:   return "SIGABRT";
-        case SIGILL:    return "SIGILL";
-        case SIGFPE:    return "SIGFPE";
-        case SIGUSR1:   return "SIGUSR1";
-        case SIGBUS:    return "SIGBUS";
-        default:        return "???";
+        case SIGSEGV:
+            return "SIGSEGV";
+        case SIGABRT:
+            return "SIGABRT";
+        case SIGILL:
+            return "SIGILL";
+        case SIGFPE:
+            return "SIGFPE";
+        case SIGUSR1:
+            return "SIGUSR1";
+        case SIGBUS:
+            return "SIGBUS";
+        default:
+            return "???";
     }
 }
 #endif
 
 } // anonymous namespace
-
 
 #if (BOOST_OS_LINUX)
 bool register_gdb_signal_handler()
@@ -92,7 +95,7 @@ bool register_gdb_signal_handler()
     struct sigaction sa;
     memset(&sa, 0, sizeof(sa));
 
-    using sigaction_fcn_t = void (*)(int, siginfo_t *, void *);
+    using sigaction_fcn_t = void (*)(int, siginfo_t*, void*);
     sa.sa_sigaction = static_cast<sigaction_fcn_t>(gdb_signal_handler);
 
     sigemptyset(&sa.sa_mask);
@@ -100,16 +103,15 @@ bool register_gdb_signal_handler()
 
     sigaction(SIGSEGV, &sa, nullptr);
     sigaction(SIGUSR1, &sa, nullptr);
-    sigaction(SIGFPE,  &sa, nullptr);
-    sigaction(SIGBUS,  &sa, nullptr);
-    sigaction(SIGILL,  &sa, nullptr);
+    sigaction(SIGFPE, &sa, nullptr);
+    sigaction(SIGBUS, &sa, nullptr);
+    sigaction(SIGILL, &sa, nullptr);
     sigaction(SIGABRT, &sa, nullptr);
 
     return true;
 }
 
-
-void gdb_signal_handler(int sig, siginfo_t * /*unused*/, void * /*unused*/)
+void gdb_signal_handler(int sig, siginfo_t* /*unused*/, void* /*unused*/)
 {
     sig_caught = sig;
 
@@ -120,20 +122,21 @@ void gdb_signal_handler(int sig, siginfo_t * /*unused*/, void * /*unused*/)
 
     fs::path gdb_exe = bp::search_path("gdb");
 
-    if(gdb_exe.empty()) {
+    if (gdb_exe.empty()) {
         std::cerr << "ERROR: gdb not found\n";
         // XXXX
         return;
     }
 
+    // clang-format off
     bp::child gdb_proc(
         bp::exe = gdb_exe.string(),
         bp::args = {
             "--quiet",
-            "--nx",                         // ignore commands at ~/.gdbinit
+            "--nx",                 // ignore commands at ~/.gdbinit
             "--batch",
             "-ex", "thread apply all bt full", // execute
-            get_executable_path(),            // required symbol data in the executable
+            get_executable_path(),  // required symbol data in the executable
             std::to_string(getpid())
         },
         bp::extend::on_setup([](auto&) {
@@ -156,8 +159,9 @@ void gdb_signal_handler(int sig, siginfo_t * /*unused*/, void * /*unused*/)
             std::cout << "GDB process successfully launched.\n";
         })
     );
+    // clang-format on
 
-    if(!gdb_proc.valid()) {
+    if (!gdb_proc.valid()) {
         std::cerr << "unable to fork() GDB\n";
         return;
     }
@@ -178,6 +182,8 @@ void gdb_signal_handler(int sig, siginfo_t * /*unused*/, void * /*unused*/)
  * [Leveraging OS to Detect Debugger's Presence](
  *  https://github.com/yellowbyte/reverse-engineering-reference-manual/blob/master/contents/anti-analysis/Anti-Debugging.md)
  * [jvoisin/pangu](https://github.com/jvoisin/pangu)
+ *
+ *  also detection shown: https://gist.github.com/leo-yuriev/06b60804f99d33f11cff
  */
 bool gdb_detected()
 {
@@ -199,8 +205,6 @@ bool gdb_detected()
             return *result;
         }
     }
-
-    // also detection shown: https://gist.github.com/leo-yuriev/06b60804f99d33f11cff
 
 #if 0
     /* Doesn't work as expected, gdb can't atach:
@@ -226,13 +230,16 @@ bool gdb_detected()
 #endif
 
 #else
+#if !defined(_MSC_VER)
 #warning "detecting GNU/GDB incomplete for OS specific build"
+#else
+#pragma message("WARNING: detecting GNU/GDB incomplete for OS specific build")
+#endif
 #endif
 
     *result = false;
     return *result;
 }
-
 
 bool valgrind_detected()
 {
@@ -264,7 +271,11 @@ bool valgrind_detected()
     }
 
 #else
+#if !defined(_MSC_VER)
 #warning "detecting Valgrind incomplete for OS specific build"
+#else
+#pragma message("detecting Valgrind incomplete for OS specific build")
+#endif
 #endif
 
     *result = false;
@@ -281,11 +292,11 @@ bool token_found(std::string const& token, std::string const& procfs_path)
     std::ifstream procfs{ procfs_path };
 
     if (!procfs.is_open()) {
-        perror(("error while opening "  + procfs_path).c_str());
+        perror(("error while opening " + procfs_path).c_str());
         return false;
     }
 
-    for (std::string line; std::getline(procfs, line); ) {
+    for (std::string line; std::getline(procfs, line);) {
 
         if (line.find(token) != std::string::npos) {
             return true;
@@ -293,16 +304,14 @@ bool token_found(std::string const& token, std::string const& procfs_path)
     }
 
     if (procfs.bad()) {
-        perror(("error while reading file "  + procfs_path).c_str());
+        perror(("error while reading file " + procfs_path).c_str());
         return false;
     }
 
     return false;
 }
 
-
-
-/**
+    /**
  * Get the name of the running executable.
  *
  * Note, this is terrible platform specific, hence the unconventional way of
@@ -315,17 +324,16 @@ bool token_found(std::string const& token, std::string const& procfs_path)
  */
 
 #if (BOOST_OS_WINDOWS)
-#  include <stdlib.h>
+#include <stdlib.h>
 #elif (BOOST_OS_SOLARIS)
-#  include <stdlib.h>
-#  include <limits.h>
+#include <limits.h>
+#include <stdlib.h>
 #elif (BOOST_OS_MACOS)
-#  include <mach-o/dyld.h>
+#include <mach-o/dyld.h>
 #elif (BOOST_OS_BSD_FREE)
-#  include <sys/types.h>
-#  include <sys/sysctl.h>
+#include <sys/sysctl.h>
+#include <sys/types.h>
 #endif
-
 
 std::string get_executable_path()
 {

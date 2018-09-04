@@ -8,22 +8,20 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_NUMERIC_CONVERT_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_NUMERIC_CONVERT_HPP_
 
-
+#include <eda/vhdl/ast/node/based_literal.hpp>
 #include <eda/vhdl/ast/node/bit_string_literal.hpp>
 #include <eda/vhdl/ast/node/decimal_literal.hpp>
-#include <eda/vhdl/ast/node/based_literal.hpp>
 
 #include <iosfwd>
 
-
-namespace eda { namespace vhdl { namespace ast {
-
+namespace eda {
+namespace vhdl {
+namespace ast {
 
 /**
  * Convert the numeric literals to numeric types
  */
-class numeric_convert
-{
+class numeric_convert {
 public:
     /**
      * The type, to which all literals will be converted. */
@@ -37,7 +35,7 @@ public:
      * literal can fit the value_type). */
     using return_type = std::tuple<bool, value_type>;
 
-    numeric_convert(std::ostream &os_);
+    numeric_convert(std::ostream& os_);
 
     return_type operator()(ast::bit_string_literal const& literal) const;
     return_type operator()(ast::decimal_literal const& literal) const;
@@ -47,13 +45,13 @@ private:
     struct report_error;
 
 private:
+    // clang-format off
     std::ostream&                                   os;
+    // clang-format on
 };
 
-
-} } } // namespace eda.vhdl.ast
-
-
-
+} // namespace ast
+} // namespace vhdl
+} // namespace eda
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_NUMERIC_CONVERT_HPP_ */

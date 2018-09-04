@@ -7,59 +7,56 @@
 
 #include <ibis/init.hpp>
 
-#include <eda/settings.hpp>
 #include <eda/configuration.hpp>
+#include <eda/settings.hpp>
 
-#include <eda/util/file/file_reader.hpp>
 #include <eda/color/message.hpp>
+#include <eda/util/file/file_reader.hpp>
 
-#include <eda/support/boost/locale.hpp>
 #include <boost/locale/generator.hpp>
 #include <boost/locale/localization_backend.hpp>
+#include <eda/support/boost/locale.hpp>
 
 #ifndef __clang_analyzer__
 #include <CLI/CLI11.hpp>
 #endif
 
-#include <eda/util/file/user_home.hpp>
 #include <eda/util/file/file_reader.hpp>
+#include <eda/util/file/user_home.hpp>
 #include <eda/util/string/icompare.hpp>
+// clang-format off
 #include <rapidjson/document.h>
+#include <rapidjson/error/en.h>
 #include <rapidjson/pointer.h>
 #include <rapidjson/prettywriter.h>
-#include <rapidjson/error/en.h>
 #include <eda/support/RapidJSON/merge.hpp>
+// clang-format on
 
 #include <boost/filesystem/path.hpp>
 
+#include <algorithm>
 #include <cstdlib>
 #include <memory>
 #include <optional>
 #include <string>
 #include <string_view>
 #include <vector>
-#include <algorithm>
 
 #include <eda/util/cxx_bug_fatal.hpp>
-
 
 #include <eda/predef.hpp>
 
 #include <eda/namespace_alias.hpp>
 
-
 extern bool register_gdb_signal_handler();
 
-
 namespace ibis {
-
 
 static const char VERSION_STR[] = "EDA/ibis 0.0.1";
 static const char EDA_URL[] = "https://github.com/eda/ibis";
 
-
 init::init(int argc, const char* argv[], eda::settings& setting_)
-: setting{ setting_ }
+    : setting{ setting_ }
 {
     register_signal_handlers();
 
@@ -70,23 +67,21 @@ init::init(int argc, const char* argv[], eda::settings& setting_)
     user_config_message_color();
 }
 
-struct Formatter : public CLI::Formatter { };
-
+struct Formatter : public CLI::Formatter {
+};
 
 void init::parse_cli(int argc, const char* argv[])
 {
     using boost::locale::format;
     using boost::locale::translate;
 
-    CLI::App app{VERSION_STR};
+    CLI::App app{ VERSION_STR };
 
     auto fmt = std::make_shared<Formatter>();
     fmt->column_width(40);
     app.formatter(fmt);
 
-    app.footer((format(translate(
-        "\n"
-        "Report bugs to {1}")) % EDA_URL).str());
+    app.footer((format(translate("\nReport bugs to {1}")) % EDA_URL).str());
 
     // defaults
     struct {
@@ -106,7 +101,7 @@ void init::parse_cli(int argc, const char* argv[])
     try {
         // Primary Options
         app.add_option("files", parameter.files,
-            translate("One or more VHDL file(s)."))
+               translate("One or more VHDL file(s)."))
             ->required()
             ->check(CLI::ExistingFile);
 
@@ -118,58 +113,58 @@ void init::parse_cli(int argc, const char* argv[])
             translate("Analyze the design.")); // XXX preventive added, unused
 
         app.add_option("--lib-path", parameter.lib_path,
-            translate("Path to libraries."))
+               translate("Path to libraries."))
             ->group("Paths")
-            ->envname("EDA_LIBPATH")->take_last()
+            ->envname("EDA_LIBPATH")
+            ->take_last()
             ->check(CLI::ExistingDirectory); // XXX preventive added, unused
 
         // Message Options
         app.add_flag("-q,--quiet",
-            translate("Print less text."))
+               translate("Print less text."))
             ->group("Message Options");
         app.add_flag("-v,--verbose",
-            translate("Print more text."))
+               translate("Print more text."))
             ->group("Message Options")
             ->excludes("--quiet");
         app.add_flag("--no-color",
-            translate("Don\'t render messages using colors. On output redirection "
-                      "no colors are used."))
+               translate("Don\'t render messages using colors. On output redirection "
+                         "no colors are used."))
             ->group("Message Options");
         app.add_flag("--force-color",
-            translate("Even on redirected output enforce the rendering of messages "
-                      "using colors."))
+               translate("Even on redirected output enforce the rendering of messages "
+                         "using colors."))
             ->group("Message Options")
             ->excludes("--no-color");
         app.add_option("--tab-size", parameter.tab_size,
-            translate("Tabulator size, affects printing source snippet on error printing."), true)
+               translate("Tabulator size, affects printing source snippet on error printing."), true)
             ->group("Message Options")
             ->check(CLI::Range(1u, 10u)); // XXX unused in misc. error_handler.cpp
 
         // Warning Options
         app.add_flag("--Wall",
-            translate("Warn all."))
+               translate("Warn all."))
             ->group("Warning Options");
         app.add_flag("--Wunused",
-            translate("Warn on unused."))
+               translate("Warn on unused."))
             ->group("Warning Options");
         app.add_flag("--Wother",
-            translate("Warn for others."))
+               translate("Warn for others."))
             ->group("Warning Options");
 
         // Options to Control Error and Warning Messages Flags
         app.add_option("--ferror-limit", parameter.error_limit,
-            translate("Limit emitting diagnostics, can be disabled with --ferror-limit=0."), true)
+               translate("Limit emitting diagnostics, can be disabled with --ferror-limit=0."), true)
             ->group("Error/Warning Message Control Flags"); // XXX unused in context.cpp
 
         // Locale Options
         app.add_option("--locale-dir", parameter.locale_dir,
-            translate("localization catalog data"), true)
+               translate("localization catalog data"), true)
             ->group("Locale/Environment")
             ->envname("EDA_LOCALE_DIR")
             ->check(CLI::ExistingDirectory);
 
-    }
-    catch(CLI::Error const& e) {
+    } catch (CLI::Error const& e) {
         std::cerr << "Internal CLI11 parser code error\n";
         std::exit(app.exit(e));
     }
@@ -221,7 +216,6 @@ void init::parse_cli(int argc, const char* argv[])
     // Options to Control Error and Warning Messages Flags
     setting.set<long>("--ferror-limit", parameter.error_limit);
 
-
     // update triggered flags
     trigger_flags.update(setting);
 
@@ -230,7 +224,6 @@ void init::parse_cli(int argc, const char* argv[])
         setting.set("--locale-dir", parameter.locale_dir);
     }
 }
-
 
 void init::register_signal_handlers()
 {
@@ -243,7 +236,6 @@ void init::register_signal_handlers()
     }
 #endif
 }
-
 
 void init::user_config_message_color()
 {
@@ -263,7 +255,6 @@ void init::user_config_message_color()
     bool const verbose = [&] {
         return setting["verbose"];
     }();
-
 
     static const char default_cfg_json[] = R"({
   "message": {
@@ -313,7 +304,7 @@ void init::user_config_message_color()
 
     // load user settings if exists and merge them into defaults
 
-    fs::path json_path = util::user_home({".eda"}) / "config.json";
+    fs::path json_path = util::user_home({ ".eda" }) / "config.json";
 
     util::file_loader file_reader{ std::cerr, setting };
     auto const json_txt = file_reader.read_file(json_path);
@@ -321,8 +312,9 @@ void init::user_config_message_color()
     if (json_txt) {
         rjson::Document user_config = parse_json((*json_txt).c_str());
         merge(config, user_config);
+    } else {
+        /* nothing */
     }
-    else{ /* nothing */ }
 
     if (verbose) {
         std::cerr << eda::color::message::note("Note:")
@@ -352,10 +344,9 @@ void init::user_config_message_color()
                         format |= *attr;
                         if (verbose) {
                             std::cerr << note("NOTE:") << " using "
-                                       << json_ptr << "/" << name << " = " << attr_name << '\n';
+                                      << json_ptr << "/" << name << " = " << attr_name << '\n';
                         }
-                    }
-                    else{
+                    } else {
                         if (!quiet) {
                             std::cerr << warning("WARNING:") << " Ignore invalid "
                                       << json_ptr << "/" << name << " = " << attr_name << '\n';
@@ -380,12 +371,12 @@ void init::user_config_message_color()
         return format;
     };
 
-
     auto const imbue = [](auto& stream, auto&& facet_ptr) {
         std::locale locale(stream.getloc(), facet_ptr.release());
         stream.imbue(locale);
     };
 
+    // clang-format off
     auto const failure_format = get_formatter("/message/failure/style");
     imbue(std::cerr, std::make_unique<color::message::failure_facet>(
         failure_format,
@@ -413,8 +404,8 @@ void init::user_config_message_color()
         color::color_off,
         force_color)
     );
+    // clang-format on
 }
-
 
 void init::l10n()
 {
@@ -422,7 +413,7 @@ void init::l10n()
     //  https://www.boost.org/doc/libs/1_68_0/libs/locale/doc/html/using_localization_backends.html)
     using namespace boost::locale;
 
-    char const LC_PATH[]   = "~/.eda/l10n";
+    char const LC_PATH[] = "~/.eda/l10n";
     char const LC_DOMAIN[] = "eda";
 
 #if 1 // crash on MinGW?
@@ -441,8 +432,7 @@ void init::l10n()
     if (setting["locale-dir"]) {
         gen.add_messages_path(setting["locale-dir"].get<std::string>());
 
-    }
-    else {
+    } else {
         gen.add_messages_path(LC_PATH);
     }
     gen.add_messages_domain(LC_DOMAIN);
@@ -453,4 +443,3 @@ void init::l10n()
 }
 
 } // namespace ibis
-

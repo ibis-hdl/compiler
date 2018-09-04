@@ -8,19 +8,17 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_OPTIONAL_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_OPTIONAL_HPP_
 
-
 #include <boost/optional.hpp>
 
-
-namespace eda { namespace vhdl { namespace ast {
-
+namespace eda {
+namespace vhdl {
+namespace ast {
 
 /** convenience alias */
-template<typename T>
-using optional = boost::optional<T>;
+template <typename T> using optional = boost::optional<T>;
 
-
-} } } // namespace eda.vhdl.ast
-
+} // namespace ast
+} // namespace vhdl
+} // namespace eda
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_OPTIONAL_HPP_ */

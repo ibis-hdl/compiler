@@ -18,9 +18,9 @@
 
 #include <eda/util/cxx_bug_fatal.hpp>
 
-
-namespace eda { namespace vhdl { namespace analyze {
-
+namespace eda {
+namespace vhdl {
+namespace analyze {
 
 /**
  * Display the `error_message` with diagnostics, where only the tagged error
@@ -46,21 +46,24 @@ void error_handler<Iterator>::operator()(
         return util::make_iomanip([&](std::ostream& os) {
             using eda::util::position_indicator;
             os << position_indicator(start, first, tab_sz, ' ')
-               << position_indicator(start, last,  tab_sz, '~');
+               << position_indicator(start, last, tab_sz, '~');
         });
     };
 
+    auto[error_first, error_last] = iterators_of(where_tag);
 
-    auto [error_first, error_last] = iterators_of(where_tag);
-
+    // clang-format off
     os << format(translate("in file {1}, line {2}:"))
-          % current_file.file_name()
-          % current_file.line_number(error_first)
+            % current_file.file_name()
+            % current_file.line_number(error_first)
        << '\n';
+    // clang-format on
 
+    // clang-format off
     os << color::message::error(translate("Syntax ERROR")) << ": "
        << (!error_message.empty() ? error_message : translate("Unspecified Error, Sorry"))
        << '\n';
+    // clang-format on
 
     // erroneous source snippet
     iterator_type line_start = current_file.get_line_start(error_first);
@@ -69,11 +72,12 @@ void error_handler<Iterator>::operator()(
 
     // error indicator
     using eda::util::position_indicator;
+    // clang-format off
     os << indicator(line_start, error_first, error_last)
        << translate(" <<-- here")
        << std::endl;
+    // clang-format on
 }
-
 
 /**
  * Display the `error_message` with diagnostics, where the tagged error
@@ -81,10 +85,9 @@ void error_handler<Iterator>::operator()(
  * given.
  */
 template <typename Iterator>
-void error_handler<Iterator>::operator()(
-        ast::position_tagged const& where_tag,
-        ast::position_tagged const& start_label, ast::position_tagged const& end_label,
-        std::string const& error_message) const
+void error_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
+    ast::position_tagged const& start_label, ast::position_tagged const& end_label,
+    std::string const& error_message) const
 {
     using boost::locale::format;
     using boost::locale::translate;
@@ -109,31 +112,35 @@ void error_handler<Iterator>::operator()(
         return util::make_iomanip([&](std::ostream& os) {
             using eda::util::position_indicator;
             os << position_indicator(start, first, tab_sz, ' ')
-               << position_indicator(start, last,  tab_sz, '~');
+               << position_indicator(start, last, tab_sz, '~');
         });
     };
 
-    auto const source_snippet = [&](ast::position_tagged const& tagged_node, auto const& annotation) {
-        return util::make_iomanip([&](std::ostream& os) {
-            auto [first, last, valid] = iterators_of(tagged_node);
-            if (valid) {
-                iterator_type line_start = current_file.get_line_start(first);
-                os << current_file.current_line(line_start) << '\n'
-                   << indicator(line_start, first, last)
-                   << annotation;
-            }
-        });
-    };
+    auto const source_snippet
+        = [&](ast::position_tagged const& tagged_node, auto const& annotation) {
+              return util::make_iomanip([&](std::ostream& os) {
+                  auto[first, last, valid] = iterators_of(tagged_node);
+                  if (valid) {
+                      iterator_type line_start = current_file.get_line_start(first);
+                      // clang-format off
+                      os << current_file.current_line(line_start)
+                         << '\n'
+                         << indicator(line_start, first, last)
+                         << annotation;
+                      // clang-format on
+                  }
+              });
+          };
 
-
-    auto [error_first, error_last, valid] = iterators_of(where_tag);
+    auto[error_first, error_last, valid] = iterators_of(where_tag);
 
     boost::ignore_unused(error_last);
     boost::ignore_unused(valid);
 
+    // clang-format off
     os << format(translate("in file {1}, line {2}:"))
-          % current_file.file_name()
-          % current_file.line_number(error_first)
+            % current_file.file_name()
+            % current_file.line_number(error_first)
        << '\n';
 
     os << color::message::error(translate("Syntax ERROR")) << ": "
@@ -142,22 +149,23 @@ void error_handler<Iterator>::operator()(
 
     os << source_snippet(start_label, translate(" <<-- here")) << '\n'
        << "...\n"
-       << source_snippet(end_label, translate(" <<-- and here"))
-          ;
+       << source_snippet(end_label, translate(" <<-- and here"));
 
     os << std::endl;
+    // clang-format on
 }
 
+} // namespace analyze
+} // namespace vhdl
+} // namespace eda
 
-}}} // namespace eda.vhdl.analyze
-
-
-
-namespace eda { namespace vhdl { namespace analyze {
-
+namespace eda {
+namespace vhdl {
+namespace analyze {
 
 // Explicit template instantiation
 template class error_handler<parser::iterator_type>;
 
-
-}}} // namespace eda.vhdl.analyze
+} // namespace analyze
+} // namespace vhdl
+} // namespace eda

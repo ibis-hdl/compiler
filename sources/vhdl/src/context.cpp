@@ -5,23 +5,24 @@
  *      Author: olaf
  */
 
-#include <eda/vhdl/context.hpp>
-#include <eda/util/make_iomanip.hpp>
-#include <eda/settings.hpp>
 
-#include <eda/support/boost/locale.hpp>             // IWYU pragma
+#include <eda/vhdl/context.hpp>
+
+#include <eda/settings.hpp>
+#include <eda/util/make_iomanip.hpp>
+
+#include <eda/support/boost/locale.hpp> // IWYU pragma
 
 #include <iostream>
 
-
-namespace eda { namespace vhdl {
-
+namespace eda {
+namespace vhdl {
 
 context::context()
-: error_count{ /* default limit */ }
-, warning_count{ /* default limit */ }
+    : error_count{ /* default limit */ }
+    , warning_count{ /* default limit */ }
 {
-    auto error_limit = 20; //XXX eda::setting["ferror-limit"];
+    auto error_limit = 20; // XXX eda::setting["ferror-limit"];
 
     // check if error_limit is not disabled (equals to 0)
     if (error_limit != 0) {
@@ -29,11 +30,10 @@ context::context()
     }
 }
 
-
 std::ostream& failure_status::print(std::ostream& os) const
 {
-    using boost::locale::translate;
     using boost::locale::format;
+    using boost::locale::translate;
 
     // Fix for Clang '-Weverything' Diagnostic at format(translate("...", count)):
     //     warning: implicit conversion loses integer precision: 'const size_t'
@@ -55,32 +55,32 @@ std::ostream& failure_status::print(std::ostream& os) const
     // concept, see [Wanbox](https://wandbox.org/permlink/VJrqXuEFppw1htY7)
 
     // TRANSLATORS: singular/plural error(s)
-    auto const error_message = (format(translate("{1} error", "{1} errors",
-        plural_count(ctx.error_count))) % ctx.error_count).str();
+    auto const error_message
+        = (format(translate("{1} error", "{1} errors", plural_count(ctx.error_count)))
+            % ctx.error_count)
+              .str();
 
     // TRANSLATORS: singular/plural warning(s)
-    auto const warning_message = (format(translate("{1} warning", "{1} warnings",
-        plural_count(ctx.warning_count))) % ctx.warning_count).str();
+    auto const warning_message
+        = (format(translate("{1} warning", "{1} warnings", plural_count(ctx.warning_count)))
+            % ctx.warning_count)
+              .str();
 
     if ((ctx.error_count != 0u) && (ctx.warning_count != 0u)) {
         // TRANSLATORS: summary error(s) and warning(s)
         os << format(translate("{1} and {2} generated.")) % error_message % warning_message;
-    }
-    else if (ctx.error_count != 0u) {
+    } else if (ctx.error_count != 0u) {
         // TRANSLATORS: summary error(s) only
         os << format(translate("{1} generated.")) % error_message;
-    }
-    else if (ctx.warning_count != 0u) {
+    } else if (ctx.warning_count != 0u) {
         // TRANSLATORS: summary warning(s) only
         os << format(translate("{1} generated.")) % warning_message;
-    }
-    else {
+    } else {
         // all went fine
     }
 
     return os;
 }
 
-
-} } // namespace eda.vhdl
-
+} // namespace vhdl
+} // namespace eda

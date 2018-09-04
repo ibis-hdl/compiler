@@ -5,23 +5,22 @@
  *      Author: olaf
  */
 
+// clang-format off
 #include <ibis/init.hpp>
 #include <eda/settings.hpp>
 #include <eda/util/file/file_reader.hpp>
+// clang-format on
 
 #include <eda/color/message.hpp>
-#include <eda/support/boost/locale.hpp>             // IWYU pragma: keep
+#include <eda/support/boost/locale.hpp> // IWYU pragma: keep
 
 #include <cstdlib>
 #include <exception>
 #include <iostream>
 
-
 extern void testing_signal_handler();
 
-
-
-int main(int argc, const char *argv[])
+int main(int argc, const char* argv[])
 {
     using boost::locale::format;
     using boost::locale::translate;
@@ -61,17 +60,14 @@ int main(int argc, const char *argv[])
         }
 
         //testing_signal_handler(); // just testing
-    }
-    catch(std::exception const& e) {
+    } catch (std::exception const& e) {
         std::cerr << color::message::failure(translate("Exception caught:"))
                   << " " << e.what()
                   << '\n';
-    }
-    catch(...) {
+    } catch (...) {
         std::cerr << color::message::failure(translate("Unexpected exception caught"))
                   << '\n';
     }
 
     return EXIT_SUCCESS;
 }
-

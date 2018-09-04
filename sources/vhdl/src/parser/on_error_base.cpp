@@ -6,18 +6,18 @@
  */
 
 #include <eda/vhdl/parser/on_error_base.hpp>
-#include <eda/support/boost/locale.hpp>             // IWYU pragma: keep
+
+#include <eda/support/boost/locale.hpp> // IWYU pragma: keep
 
 #include <iostream>
 
-
-
-namespace eda { namespace vhdl { namespace parser {
-
+namespace eda {
+namespace vhdl {
+namespace parser {
 
 using namespace std::string_view_literals;
 
-on_error_base::rule_map_type const on_error_base::ruleid_map {
+on_error_base::rule_map_type const on_error_base::ruleid_map{
     { "abstract_literal"sv, "Abstract Literal"sv },
     { "access_type_definition"sv, "Access Type Definition"sv },
     { "actual_designator"sv, "Actual Designator"sv },
@@ -275,17 +275,14 @@ on_error_base::rule_map_type const on_error_base::ruleid_map {
     { "'('"sv, "Closing ')' Brace/Parentheses"sv },
 };
 
-
 std::string on_error_base::make_error_description(std::string_view which) const
 {
     using boost::locale::format;
     using boost::locale::translate;
 
-    return (format(translate("Error, expecting {1} here:"))
-            % lookup(which)
-            ).str();
+    return (format(translate("Error, expecting {1} here:")) % lookup(which)).str();
 }
 
-
-}}} // namespace eda.vhdl.parser
-
+} // namespace parser
+} // namespace vhdl
+} // namespace eda

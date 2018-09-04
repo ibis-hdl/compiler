@@ -12,18 +12,15 @@
 
 #include <boost/range/iterator_range_hash.hpp>
 
-
 namespace std {
 
-template<>
-struct hash<eda::vhdl::ast::string_span>
-{
-    size_t operator()(eda::vhdl::ast::string_span const& range) const noexcept {
+template <> struct hash<eda::vhdl::ast::string_span> {
+    size_t operator()(eda::vhdl::ast::string_span const& range) const noexcept
+    {
         return boost::hash_range(range.begin(), range.end());
     }
 };
 
 } // namespace std
-
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_STRING_SPAN_HASH_HPP_ */

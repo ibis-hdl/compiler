@@ -7,13 +7,15 @@
 
 #include <eda/color/detail/color.hpp>
 
-
 #if BOOST_OS_WINDOWS && !EDA_ON_WINDOWS_USE_ANSII_COLOR
 
-namespace eda { namespace color { namespace detail {
+namespace eda {
+namespace color {
+namespace detail {
 
-    const int win_printer::xindex = std::ios_base::xalloc();
-
-} } }
+const int win_printer::xindex = std::ios_base::xalloc();
+}
+} // namespace color
+} // namespace eda
 
 #endif

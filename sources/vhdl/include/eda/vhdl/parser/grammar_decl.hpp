@@ -8,12 +8,11 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_DECL_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_DECL_HPP_
 
-
 #include <eda/vhdl/parser/grammar_type.hpp>
 
-
-namespace eda { namespace vhdl { namespace parser {
-
+namespace eda {
+namespace vhdl {
+namespace parser {
 
 BOOST_SPIRIT_DECLARE(abstract_literal_type);
 BOOST_SPIRIT_DECLARE(access_type_definition_type);
@@ -80,7 +79,7 @@ BOOST_SPIRIT_DECLARE(context_clause_type);
 BOOST_SPIRIT_DECLARE(context_item_type);
 BOOST_SPIRIT_DECLARE(decimal_literal_type);
 BOOST_SPIRIT_DECLARE(delay_mechanism_type);
-//BOOST_SPIRIT_DECLARE(design_file_type);
+// BOOST_SPIRIT_DECLARE(design_file_type);
 BOOST_SPIRIT_DECLARE(design_unit_type);
 BOOST_SPIRIT_DECLARE(designator_type);
 BOOST_SPIRIT_DECLARE(direction_type);
@@ -235,8 +234,8 @@ BOOST_SPIRIT_DECLARE(wait_statement_type);
 BOOST_SPIRIT_DECLARE(waveform_type);
 BOOST_SPIRIT_DECLARE(waveform_element_type);
 
-
-} } } // namespace eda.vhdl.parser
-
+} // namespace parser
+} // namespace vhdl
+} // namespace eda
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_DECL_HPP_ */

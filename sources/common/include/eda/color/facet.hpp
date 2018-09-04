@@ -10,23 +10,18 @@
 
 #include <eda/color/detail/color.hpp>
 
-#include <locale>   // facet
 #include <iostream>
+#include <locale> // facet
 
+#include <cstdio> // fileno
 #include <optional>
 #include <unistd.h> // isatty
-#include <cstdio>   // fileno
 
+namespace eda {
+namespace color {
 
-namespace eda { namespace color {
-
-
-template<typename Tag>
-class message_facet : public std::locale::facet
-{
-public:
-    static std::locale::id                          id;
-
+template <typename Tag>
+class message_facet : public std::locale::facet {
 public:
     /**
      * Construct a message facte
@@ -42,16 +37,18 @@ public:
      * has no effect.
      */
     explicit message_facet(color::printer prefix_, color::printer postfix_, bool force_deco_ = false)
-    : facet{ 0 }
-    , prefix{ prefix_ }
-    , postfix{ postfix_ }
-    , force_decoration{ force_deco_ }
-    { }
+        : facet{ 0 }
+        , prefix{ prefix_ }
+        , postfix{ postfix_ }
+        , force_decoration{ force_deco_ }
+    {
+    }
 
     explicit message_facet(bool force_deco_ = false)
-    : facet{ 0 }
-    , force_decoration{ force_deco_ }
-    { }
+        : facet{ 0 }
+        , force_decoration{ force_deco_ }
+    {
+    }
 
     message_facet(message_facet const&) = delete;
     message_facet& operator=(message_facet const&) = delete;
@@ -69,16 +66,22 @@ public:
             //os << '\n';
         }
 
-        if (*enable) { os << prefix; }
+        if (*enable) {
+            os << prefix;
+        }
         decorator.print(os);
-        if (*enable) { os << postfix; }
+        if (*enable) {
+            os << postfix;
+        }
 
         return os;
     }
 
 public:
+    // clang-format off
     color::printer                                    prefix;
     color::printer                                    postfix;
+    // clang-format on
 
 private:
     bool is_tty(std::ostream& os) const
@@ -86,8 +89,12 @@ private:
         // no POSIX way to extract stream handler from the a given
         // `std::ostream` object
         auto const stream = [](std::ostream& os_) {
-            if (&os_ == &std::cout)                       { return stdout; }
-            if (&os_ == &std::cerr || &os_ == &std::clog) { return stderr; }
+            if (&os_ == &std::cout) {
+                return stdout;
+            }
+            if (&os_ == &std::cerr || &os_ == &std::clog) {
+                return stderr;
+            }
             return static_cast<FILE*>(nullptr);
         };
 
@@ -99,9 +106,16 @@ private:
         return false;
     }
 
+public:
+    // clang-format off
+    static std::locale::id                          id;
+    // clang-format on
+
 private:
+    // clang-format off
     bool                                            force_decoration;
     std::optional<bool> mutable                     enable;
+    // clang-format off
 };
 
 

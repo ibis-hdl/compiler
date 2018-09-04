@@ -10,34 +10,34 @@
 
 #include <eda/vhdl/parser/error_handler.hpp>
 
-#include <eda/compiler/warnings_off.hpp>            // IWYU pragma: keep
+// clang-format off
+#include <eda/compiler/warnings_off.hpp> // IWYU pragma: keep
 #include <boost/spirit/home/x3/support/context.hpp>
-#include <eda/compiler/warnings_on.hpp>             // IWYU pragma: keep
+#include <eda/compiler/warnings_on.hpp>  // IWYU pragma: keep
+// clang-format on
 
 #include <string>
 #include <string_view>
 #include <unordered_map>
 
-#include <eda/namespace_alias.hpp>                  // IWYU pragma: keep
+#include <eda/namespace_alias.hpp> // IWYU pragma: keep
 
-
-namespace eda { namespace vhdl { namespace parser {
-
+namespace eda {
+namespace vhdl {
+namespace parser {
 
 /**
  * Base class for all AST nodes where the parser error handler can be called.
  *
  * This is called directly by spirit.X3 in case of parser error.
  */
-class on_error_base
-{
+class on_error_base {
 public:
-    template<typename IteratorT, typename ExceptionT, typename ContextT>
-    x3::error_handler_result
-    on_error(IteratorT& /* first */, IteratorT const& /* last */,
-             ExceptionT const& x, ContextT const& context) const
+    template <typename IteratorT, typename ExceptionT, typename ContextT>
+    x3::error_handler_result on_error(IteratorT& /* first */, IteratorT const& /* last */,
+        ExceptionT const& x, ContextT const& context) const
     {
-#if 0 /* XXX recursive include problem; parser_config requires on_error definition,
+#if 0 /* XXX recursive include problem; parser_config requires on_error definition,                \
        * but context_type is required here for statis_assert */
         // detect upcoming linker errors, see notes at parser_config.hpp about
         static_assert(
@@ -61,7 +61,7 @@ public:
         auto const iter = ruleid_map.find(which);
 
         if (iter != ruleid_map.end()) {
-               return iter->second;
+            return iter->second;
         }
         return which;
     }
@@ -75,14 +75,15 @@ public:
     std::string make_error_description(std::string_view which) const;
 
 private:
-    using rule_map_type = std::unordered_map<
-        std::string_view, std::string_view>;
+    using rule_map_type = std::unordered_map<std::string_view, std::string_view>;
 
+    // clang-format off
     static const rule_map_type                        ruleid_map;
+    // clang-format on
 };
 
-
-}}} // namespace eda.vhdl.parser
-
+} // namespace parser
+} // namespace vhdl
+} // namespace eda
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ON_ERROR_BASE_HPP_ */

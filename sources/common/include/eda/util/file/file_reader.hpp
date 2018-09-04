@@ -8,25 +8,27 @@
 #ifndef SOURCES_COMMON_INCLUDE_EDA_UTIL_FILE_FILE_READER_HPP_
 #define SOURCES_COMMON_INCLUDE_EDA_UTIL_FILE_FILE_READER_HPP_
 
-// clang-format off
-#include <eda/namespace_alias.hpp>  // IWYU pragma: keep
+#include <eda/namespace_alias.hpp> // IWYU pragma: keep
 
-#include <ctime>
 #include <algorithm>
+#include <ctime>
 #include <iosfwd>
 #include <optional>
 #include <string>
 #include <vector>
-// clang-format on
 
 namespace boost {
 namespace filesystem {
-struct path;
+
+class path;
+
 } // namespace filesystem
 } // namespace boost
 
 namespace eda {
+
 class settings;
+
 } // namespace eda
 
 namespace eda {

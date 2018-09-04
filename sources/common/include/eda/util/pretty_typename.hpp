@@ -12,19 +12,18 @@
 #include <regex>
 #include <string>
 
+namespace eda {
+namespace util {
 
-namespace eda { namespace util {
-
-
-template<typename T>
-class pretty_typename
-{
+template <typename T>
+class pretty_typename {
 public:
     pretty_typename() = default;
 
     pretty_typename(std::string const& pattern_)
-    : pattern{ pattern_ }
-    { }
+        : pattern{ pattern_ }
+    {
+    }
 
     pretty_typename(pretty_typename const&) = delete;
     pretty_typename const& operator=(pretty_typename const&) = delete;
@@ -38,16 +37,16 @@ public:
     }
 
 private:
-    std::regex                      pattern{ "::|boost|spirit|x3|eda|vhdl|ast" };
+    std::regex pattern{ "::|boost|spirit|x3|eda|vhdl|ast" };
 };
 
-
-template<typename T>
-std::ostream& operator<<(std::ostream& os, pretty_typename<T> const& printer) {
+template <typename T>
+std::ostream& operator<<(std::ostream& os, pretty_typename<T> const& printer)
+{
     return printer.print(os);
 }
 
-} } // namespace eda.util
-
+} // namespace util
+} // namespace eda
 
 #endif /* SOURCES_COMMON_INCLUDE_EDA_UTILS_PRETTY_TYPENAME_HPP_ */

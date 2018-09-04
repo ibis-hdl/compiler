@@ -8,9 +8,8 @@
 #ifndef SOURCES_COMMON_INCLUDE_EDA_SUPPORT_CXX_OVERLOADED_HPP_
 #define SOURCES_COMMON_INCLUDE_EDA_SUPPORT_CXX_OVERLOADED_HPP_
 
-
-namespace eda { namespace util {
-
+namespace eda {
+namespace util {
 
 /**
  * Variant visitor overload for using with C++ lambda.
@@ -29,11 +28,15 @@ namespace eda { namespace util {
  *
  * Also, \see https://arne-mertz.de/2018/05/overload-build-a-variant-visitor-on-the-fly/
  */
-template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
-template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
+template <class... Ts>
+struct overloaded : Ts... {
+    using Ts::operator()...;
+};
 
+template <class... Ts>
+overloaded(Ts...)->overloaded<Ts...>;
 
-} } // namespace eda.util
-
+} // namespace util
+} // namespace eda
 
 #endif /* SOURCES_COMMON_INCLUDE_EDA_SUPPORT_CXX_OVERLOADED_HPP_ */

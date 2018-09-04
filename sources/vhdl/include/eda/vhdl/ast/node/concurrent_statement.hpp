@@ -59,7 +59,7 @@ struct concurrent_statement : variant<
     }
 
     template <typename T, class = non_self_t<T>>
-    concurrent_statement& operator=(T&& rhs) BOOST_NOEXCEPT_IF((std::is_nothrow_assignable<variant_type, T&&>::value))  // `::value` is a workaround for the VS2015 bug
+    concurrent_statement& operator=(T&& rhs) BOOST_NOEXCEPT_IF((std::is_nothrow_assignable<variant_type, T&&>::value))
     {
         var = std::forward<T>(rhs);
         return *this;

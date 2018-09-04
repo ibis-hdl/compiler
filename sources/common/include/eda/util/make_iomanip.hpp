@@ -8,13 +8,11 @@
 #ifndef SOURCES_COMMON_INCLUDE_EDA_UTILS_MAKE_IOMANIP_HPP_
 #define SOURCES_COMMON_INCLUDE_EDA_UTILS_MAKE_IOMANIP_HPP_
 
-
-#include <type_traits>
 #include <iostream>
+#include <type_traits>
 
-
-namespace eda { namespace util {
-
+namespace eda {
+namespace util {
 
 /**
  * Helper to make a 'streamable' C++ lambda function
@@ -36,24 +34,23 @@ namespace eda { namespace util {
  * https://wandbox.org/permlink/wGDqfmxCKwqob5mp)
  */
 template <typename T>
-struct A
-{
+struct A {
     T x;
 
-    friend std::ostream& operator<<(std::ostream& os, A const& a) {
+    friend std::ostream& operator<<(std::ostream& os, A const& a)
+    {
         a.x(os);
         return os;
-     }
+    }
 };
 
-
 template <typename T>
-A<std::decay_t<T>> make_iomanip(T&& x) {
+A<std::decay_t<T>> make_iomanip(T&& x)
+{
     return { std::forward<T>(x) };
 }
 
-
-} } // namespace eda.util
-
+} // namespace util
+} // namespace eda
 
 #endif /* SOURCES_COMMON_INCLUDE_EDA_UTILS_MAKE_IOMANIP_HPP_ */

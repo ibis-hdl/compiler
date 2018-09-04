@@ -10,27 +10,28 @@
 
 #include <eda/vhdl/ast/position_cache.hpp>
 
+// clang-format off
 // the following header are required for x3::error_handler_result
 #include <eda/compiler/warnings_off.hpp>            // IWYU pragma: keep
 #include <boost/spirit/home/x3/support/traits/tuple_traits.hpp> // IWYU pragma: keep
 #include <boost/spirit/home/x3/support/traits/is_variant.hpp> // IWYU pragma: keep
 #include <boost/spirit/home/x3/auxiliary/guard.hpp> // IWYU pragma: keep
 #include <eda/compiler/warnings_on.hpp>             // IWYU pragma: keep
+// clang-format on
 
 #include <iosfwd>
 #include <string>
 
-#include <eda/namespace_alias.hpp>                  // IWYU pragma: keep
+#include <eda/namespace_alias.hpp> // IWYU pragma: keep
 
-
-namespace eda { namespace vhdl { namespace parser {
-
+namespace eda {
+namespace vhdl {
+namespace parser {
 
 /**
  * tag used to get our error handler from the x3::context
  */
 struct error_handler_tag;
-
 
 /**
  * Parser error handler
@@ -48,9 +49,7 @@ struct error_handler_tag;
  *
  * \see ast::position_cache
  */
-template <typename Iterator>
-class error_handler
-{
+template <typename Iterator> class error_handler {
 public:
     using iterator_type = Iterator;
     using result_type = x3::error_handler_result;
@@ -66,14 +65,12 @@ public:
      * @param tabs     Tabulator size, required for correct rendering of source
      *               code snippet.
      */
-    explicit error_handler(
-        std::ostream& os_, position_proxy_type proxy_,
-        std::size_t tabs = 4
-    )
-      : os{ os_ }
-      , position_proxy{ std::move(proxy_) }
-      , tab_sz{ tabs }
-    { }
+    explicit error_handler(std::ostream& os_, position_proxy_type proxy_, std::size_t tabs = 4)
+        : os{ os_ }
+        , position_proxy{ std::move(proxy_) }
+        , tab_sz{ tabs }
+    {
+    }
 
     ~error_handler() = default;
 
@@ -118,13 +115,15 @@ public:
     position_proxy_type const& current_file() const { return position_proxy; }
 
 private:
+    // clang-format off
     std::ostream&                                   os;
     position_proxy_type                             position_proxy;
     std::size_t                                     tab_sz;
+    // clang-format on
 };
 
-
-}}} // namespace eda.vhdl.parser
-
+} // namespace parser
+} // namespace vhdl
+} // namespace eda
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ERROR_HANDLER_HPP_ */

@@ -8,12 +8,11 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ITERATOR_TYPE_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ITERATOR_TYPE_HPP_
 
-
 #include <string>
 
-
-namespace eda { namespace vhdl { namespace parser {
-
+namespace eda {
+namespace vhdl {
+namespace parser {
 
 /**
  * Basic type used by the parser
@@ -33,8 +32,8 @@ using char_type = char;
 
 using iterator_type = std::basic_string<char_type>::const_iterator;
 
-}}}  // namespace eda.vhdl.parser
-
-
+} // namespace parser
+} // namespace vhdl
+} // namespace eda
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ITERATOR_TYPE_HPP_ */

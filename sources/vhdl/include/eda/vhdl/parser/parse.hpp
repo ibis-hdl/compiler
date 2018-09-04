@@ -8,47 +8,49 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_PARSE_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_PARSE_HPP_
 
-
 #include <eda/vhdl/parser/parser_config.hpp>
 
-#include <string>
 #include <iosfwd>
+#include <string>
 
 namespace eda {
 namespace vhdl {
 namespace ast {
-    struct design_file;
-} // namesapce ast
+
+struct design_file;
+
+} // namespace ast
 } // namespace vhdl
 } // namespace eda
 
-namespace eda { namespace vhdl { namespace parser {
+namespace eda {
+namespace vhdl {
+namespace parser {
 
-
-class parse
-{
-   std::ostream& os;
-
-   parser::error_handler_type /*const*/&                error_handler;
-
+class parse {
 public:
-
     parse(std::ostream& os_, error_handler_type /*const*/& error_handler_)
-    : os{ os_ }
-    , error_handler{ error_handler_ }
-    { }
+        : os{ os_ }
+        , error_handler{ error_handler_ }
+    {
+    }
 
-    bool operator()(std::string const &input, ast::design_file& design_file) /* const */;
+    bool operator()(std::string const& input, ast::design_file& design_file) /* const */;
 
 private:
     template <typename ExceptionT>
-    std::string make_exception_description(std::string const &filename,
-                                           ExceptionT const& exception) const;
+    std::string make_exception_description(
+        std::string const& filename, ExceptionT const& exception) const;
+
+private:
+    // clang-format off
+    std::ostream&                                   os;
+    parser::error_handler_type /*const*/&           error_handler;
+    // clang-format on
 };
 
-
-} } } // namespace eda.vhdl.parser
-
-
+} // namespace parser
+} // namespace vhdl
+} // namespace eda
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_PARSE_HPP_ */

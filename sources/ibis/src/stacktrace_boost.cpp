@@ -8,7 +8,3 @@
 #include <boost/stacktrace.hpp>
 
 #include <iostream>
-
-
-
-

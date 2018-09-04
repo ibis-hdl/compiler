@@ -8,28 +8,29 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_PRINTER_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_PRINTER_HPP_
 
-
 #include <eda/vhdl/ast.hpp>
+
 #include <eda/util/indent_stream.hpp>
 
+namespace eda {
+namespace vhdl {
+namespace ast {
 
-namespace eda { namespace vhdl { namespace ast {
-
-
-class printer
-{
+class printer {
+    // clang-format off
     util::indent_ostream                            os;
+    // clang-format on
 
     struct scope_printer;
 
-    template<typename T, typename Enable = void>
-    struct symbol_scope;
+    template <typename T, typename Enable = void> struct symbol_scope;
 
-    template<typename... Ts>
-    void visit(variant<Ts ...> const& node) { boost::apply_visitor(*this, node); }
+    template <typename... Ts> void visit(variant<Ts...> const& node)
+    {
+        boost::apply_visitor(*this, node);
+    }
 
-    template<typename T>
-    void visit(std::vector<T> const& vector);
+    template <typename T> void visit(std::vector<T> const& vector);
 
 public:
     bool verbose_symbol{ false };
@@ -37,7 +38,6 @@ public:
 
 public:
     printer(std::ostream& os_, uint16_t start_indent = 0);
-
 
     void operator()(abstract_literal const& node);
     void operator()(access_type_definition const& node);
@@ -231,13 +231,12 @@ public:
 
     void operator()(nullary const& node);
 
-//    template<typename T>
-//    void operator()(T const& node);
+    //    template<typename T>
+    //    void operator()(T const& node);
 };
 
-
-} } } // namespace eda.vhdl.ast
-
-
+} // namespace ast
+} // namespace vhdl
+} // namespace eda
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_PRINTER_HPP_ */

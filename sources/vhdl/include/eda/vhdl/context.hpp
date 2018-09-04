@@ -8,7 +8,6 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_CONTEXT_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_CONTEXT_HPP_
 
-// clang-format off
 #include <eda/vhdl/ast/util/string_span.hpp>
 #include <eda/vhdl/ast/util/string_span_hash.hpp>
 
@@ -17,7 +16,6 @@
 #include <exception>
 #include <limits>
 #include <iosfwd>
-// clang-format on
 
 
 namespace eda { namespace vhdl {
@@ -28,7 +26,7 @@ namespace detail {
 /**
  * Tagged Counter
  *
- * Simply increments events and throw basic_counter::overflow if a configurable
+ * Simply increments events and throws basic_counter::overflow if a configurable
  * limit has been reached.
  *
  * \see [Wandbox](https://wandbox.org/permlink/7o4pPgrmHDQUJj1x)
@@ -49,7 +47,12 @@ public:
     { }
 
 public:
-    basic_counter& operator++() {    // prefix ++
+    /**
+     * prefix ++ increment
+     *
+     * @return incremented value.
+     */
+    basic_counter& operator++() {
         ++value;
         if (value > treshold) {
             throw overflow{};
@@ -57,19 +60,45 @@ public:
         return *this;
     }
 
-    basic_counter const operator++(int) {  // postfix ++
+    /**
+     * postfix ++ increment
+     *
+     * @param  dummy
+     * @return the value before increment.
+     */
+    basic_counter const operator++(int) {
         basic_counter result(*this);
         ++(*this);
         return result;
     }
 
-    operator value_type() const {    // user-defined conversion
+    /**
+     * user-defined conversion
+     */
+    operator value_type() const {
         return value;
     }
 
+    /**
+     * Threshold at where the overflow exception will be thrown.
+     *
+     * @return Reference to the threshold value.
+     */
     value_type& limit() { return treshold; }
+
+    /**
+     * Threshold at where the overflow exception will be thrown.
+     *
+     * @return Const reference to the threshold value.
+     */
     value_type limit() const { return treshold; }
 
+    /**
+     * Common ostream API
+     *
+     * @param  std::ostream handle to write
+     * @return The written std::ostream handle.
+     */
     std::ostream& print(std::ostream& os) const {
         os << value;
         return os;
@@ -115,13 +144,16 @@ public:
     using error_counter = detail::basic_counter<struct error_tag>;
     using warning_counter = detail::basic_counter<struct warning_tag>;
 
-    error_counter                                   error_count;
-    warning_counter                                 warning_count;
-
 public:
     bool error_free() const {
         return error_count == 0;
     }
+
+public:
+    // clang-format off
+    error_counter                                   error_count;
+    warning_counter                                 warning_count;
+    // clang-format on
 
 private:
     // clang-format off
@@ -135,16 +167,18 @@ private:
  */
 class failure_status
 {
-    // clang-format off
-    context const&                                  ctx;
-    // clang-format on
-
 public:
     failure_status(context const& ctx_)
     : ctx{ ctx_ }
     { }
 
+public:
     std::ostream& print(std::ostream& os) const;
+
+private:
+    // clang-format off
+    context const&                                  ctx;
+    // clang-format on
 };
 
 

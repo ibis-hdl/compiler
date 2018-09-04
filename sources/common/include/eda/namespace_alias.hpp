@@ -8,6 +8,7 @@
 #ifndef SOURCES_COMMON_INCLUDE_EDA_NAMESPACE_ALIAS_HPP_
 #define SOURCES_COMMON_INCLUDE_EDA_NAMESPACE_ALIAS_HPP_
 
+// clang-format off
 
 // forward Boost.Orgs's namespace used
 namespace boost {
@@ -46,6 +47,6 @@ namespace eda {
 
 } // namespace eda
 
-
+// clang-format on
 
 #endif /* SOURCES_COMMON_INCLUDE_EDA_NAMESPACE_ALIAS_HPP_ */

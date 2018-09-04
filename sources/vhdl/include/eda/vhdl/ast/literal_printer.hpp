@@ -5,21 +5,19 @@
  *      Author: olaf
  */
 
-
+#include <eda/vhdl/ast/node/based_literal.hpp>
 #include <eda/vhdl/ast/node/bit_string_literal.hpp>
 #include <eda/vhdl/ast/node/decimal_literal.hpp>
-#include <eda/vhdl/ast/node/based_literal.hpp>
 #include <eda/vhdl/ast/node/string_literal.hpp>
 
-#include <iostream>
 #include <boost/variant.hpp>
+#include <iostream>
 
+namespace eda {
+namespace vhdl {
+namespace ast {
 
-namespace eda { namespace vhdl { namespace ast {
-
-
-class literal_printer
-{
+class literal_printer {
 public:
     literal_printer(ast::bit_string_literal const& literal_);
     literal_printer(ast::decimal_literal const& literal_);
@@ -29,21 +27,25 @@ public:
     std::ostream& operator()(std::ostream& os) const;
 
 private:
-    boost::variant<
+    // clang-format off
+    using literal_variant_type = boost::variant<
         ast::bit_string_literal,
         ast::decimal_literal,
         ast::based_literal,
         ast::string_literal
-    > const                                         literal;
+    >;
+    // clang-format on
+
+    // clang-format off
+    literal_variant_type const                      literal;
+    // clang-format on
 };
 
-
-static inline
-std::ostream& operator<<(std::ostream& os, literal_printer const& printer)
+static inline std::ostream& operator<<(std::ostream& os, literal_printer const& printer)
 {
     return printer(os);
 }
 
-
-} } } // namespace eda.vhdl.ast
-
+} // namespace ast
+} // namespace vhdl
+} // namespace eda

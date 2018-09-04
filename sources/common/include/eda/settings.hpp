@@ -8,7 +8,6 @@
 #ifndef SOURCES_COMMON_INCLUDE_EDA_SETTINGS_HPP_
 #define SOURCES_COMMON_INCLUDE_EDA_SETTINGS_HPP_
 
-// clang-format off
 #include <eda/support/cxx/overloaded.hpp>
 
 #include <iosfwd>
@@ -19,7 +18,6 @@
 #include <utility>
 #include <variant>
 #include <vector>
-// clang-format on
 
 namespace eda {
 
@@ -129,8 +127,8 @@ public:
         auto map_ = const_cast<map_type&>(this->map);
         if (exist(option_name)) {
             return option_value_proxy{ map_[option_name] };
-        } 
-            
+        }
+
         return option_value_proxy{ none };
     }
 
