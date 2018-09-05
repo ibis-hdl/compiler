@@ -6,6 +6,7 @@
  */
 
 #include <ibis/init.hpp>
+#include <ibis/version.hpp>
 
 #include <eda/configuration.hpp>
 #include <eda/settings.hpp>
@@ -52,7 +53,6 @@ extern bool register_gdb_signal_handler();
 
 namespace ibis {
 
-static const char VERSION_STR[] = "EDA/ibis 0.0.1";
 static const char EDA_URL[] = "https://github.com/eda/ibis";
 
 init::init(int argc, const char* argv[], eda::settings& setting_)

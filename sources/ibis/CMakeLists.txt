@@ -21,6 +21,13 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
 add_dependencies(${PROJECT_NAME} RapidJSON)
 
 
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/ibis/version.hpp.in
+    ${CMAKE_CURRENT_BINARY_DIR}/include/ibis/version.hpp
+    @ONLY
+)
+
+
 target_sources(${PROJECT_NAME} PRIVATE
     src/main.cpp
     src/signal.cpp
@@ -33,6 +40,7 @@ target_sources(${PROJECT_NAME} PRIVATE
 target_include_directories(${PROJECT_NAME} 
     PRIVATE
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
         $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/external/CLI>
         $<BUILD_INTERFACE:${RapidJSON_INCLUDE_DIR}>
