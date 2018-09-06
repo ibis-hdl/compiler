@@ -66,6 +66,9 @@ public:
      */
     proxy handle(std::size_t file_id);
 
+    std::size_t file_count() const { return files.size(); }
+    std::size_t position_count() const { return positions.size(); }
+
 public:
     /**
      * Maps a filename to contents.
@@ -127,9 +130,20 @@ public:
      * Get the file contents.
      *
      * @param file_id ID of actually processed file.
-     * @return A reference to a string representing the file contents.
+     * @return A const reference to a string representing the file contents.
      */
     std::string const& file_contents(std::size_t file_id) const
+    {
+        return std::get<1>(files.at(file_id));
+    }
+
+    /**
+     * Get the file contents.
+     *
+     * @param file_id ID of actually processed file.
+     * @return A reference to a string representing the file contents.
+     */
+    std::string& file_contents(std::size_t file_id)
     {
         return std::get<1>(files.at(file_id));
     }
@@ -145,6 +159,7 @@ public:
         auto const make_range = [](std::string const& contents) {
             return std::tuple<iterator_type, iterator_type>{ contents.begin(), contents.end() };
         };
+
         return make_range(file_contents(file_id));
     }
 

@@ -109,11 +109,15 @@ IteratorT position_cache<IteratorT>::get_line_start(std::size_t file_id, iterato
         }
     }
 
+    // pos/latest is on the first line
+    if (latest == begin) {
+        return latest;
+    }
+
     // skip over line breaks
     if (latest != pos) {
         ++latest;
     }
-
     cxx_assert(latest < end, "iterator range error");
 
     return latest;
