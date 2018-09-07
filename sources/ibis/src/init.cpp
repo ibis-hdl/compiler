@@ -7,6 +7,7 @@
 
 #include <ibis/init.hpp>
 #include <ibis/version.hpp>
+#include <ibis/build_info.hpp>
 
 #include <eda/configuration.hpp>
 #include <eda/settings.hpp>
@@ -108,6 +109,9 @@ void init::parse_cli(int argc, const char* argv[])
         app.add_flag("--version",
             translate("Show version."));
 
+        app.add_flag("--build-info",
+            translate("Show build informations."));
+
         // Working/Processing flags
         app.add_flag("-a,--analyze",
             translate("Analyze the design.")); // XXX preventive added, unused
@@ -179,6 +183,10 @@ void init::parse_cli(int argc, const char* argv[])
     if (app.count("--version") != 0u) {
         std::cout << VERSION_STR << '\n';
         std::exit(EXIT_SUCCESS);
+    }
+
+    if (app.count("--build-info") != 0u) {
+        build_info(std::cout);
     }
 
     // .. and evaluate
