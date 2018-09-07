@@ -5,18 +5,20 @@
  *      Author: olaf
  */
 
-// clang-format off
+
 #include <eda/settings.hpp>
-#include <algorithm>                       // for sort
-#include <eda/support/cxx/overloaded.hpp>  // for overloaded
-#include <eda/util/string/icompare.hpp>    // for icompare_less
-#include <iostream>                        // for operator<<, basic_ostream
-#include <vector>                          // for vector<>::iterator, vector
-// clang-format on
+
+#include <algorithm>
+#include <eda/support/cxx/overloaded.hpp>
+#include <eda/util/string/icompare.hpp>
+#include <eda/util/infix_ostream_iterator.hpp>
+#include <iostream>
+#include <vector>
+
 
 namespace eda {
 
-void settings::dump(std::ostream& os) const
+std::ostream& settings::dump(std::ostream& os) const
 {
     using key_type = map_type::key_type;
     using value_type = map_type::mapped_type;
@@ -48,7 +50,47 @@ void settings::dump(std::ostream& os) const
         os << '\n';
     }
     os << ")\n";
+
+    return os;
 }
+
+std::ostream& settings::print(std::ostream& os, settings::option_value const& value)
+{
+    std::visit(util::overloaded{
+        // <long> is (implicit converted) handled as boolean, as intended
+        [&os](bool option) {
+            os << std::boolalpha << option;
+        },
+        [&os](std::string const& option) {
+            os << "\'" << option << "\'";
+        },
+        [&os](std::vector<std::string> const& option) {
+            os << "[ ";
+            std::copy(option.begin(), option.end(),
+                      util::infix_ostream_iterator<std::string>(std::cout, ", "));
+            os << " ]";
+        },
+        [&os](std::monostate) {
+            os << "N/A (std::monostate)";
+        },
+    }, value);
+
+    return os;
+}
+
+void settings::debug_print(std::string const& option_name, settings::option_value const& value) const
+{
+    std::cout << "lookup[" << option_name << "] = "
+              << value
+              << std::endl;
+}
+
+
+std::ostream& operator<<(std::ostream& os, settings::option_value const& value)
+{
+    return settings::print(os, value);
+}
+
 
 const settings::option_value settings::none;
 

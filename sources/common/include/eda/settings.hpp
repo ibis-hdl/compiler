@@ -123,13 +123,20 @@ public:
      */
     option_value_proxy const operator[](std::string const& option_name) const
     {
-        // const_cast<> required to get the intended API behavior (don't insert
-        // a key if not found as the default behavior of std::map)
-        auto map_ = const_cast<map_type&>(this->map);
+        // https://wandbox.org/permlink/SklFbT05oHEGFhqW
+#if 0
+        // const_cast<> required to get the intended API behavior
+        // (the default behavior corresponds to insert key if not found)
         if (exist(option_name)) {
-            return option_value_proxy{ map_[option_name] };
+            return option_value_proxy{ const_cast<map_type&>(this->map)[option_name] };
         }
-
+#else
+        auto iter = map.find(option_name);
+        if (iter != map.end()) {
+            //debug_print(option_name, iter->second);
+            return option_value_proxy{ iter->second };
+        }
+#endif
         return option_value_proxy{ none };
     }
 
@@ -161,8 +168,21 @@ public:
     /**
      * Dump the configuration stored in sorted form
      * \param os The ostream to dump.
+     * @return The stream written.
      */
-    void dump(std::ostream& os) const;
+    std::ostream& dump(std::ostream& os) const;
+
+    /**
+     * Print a settings value
+     *
+     * @param os    The ostream to dump.
+     * @param value The value to render.
+     * @return The stream written.
+     */
+    static std::ostream& print(std::ostream& os, settings::option_value const& value);
+
+private:
+    void debug_print(std::string const& option_name, settings::option_value const& value) const;
 
 private:
     /** Trim leading '--' chars from key. */
@@ -241,6 +261,9 @@ public:
         }
     }
 };
+
+std::ostream& operator<<(std::ostream& os, settings::option_value const& value);
+
 
 } // namespace eda
 
