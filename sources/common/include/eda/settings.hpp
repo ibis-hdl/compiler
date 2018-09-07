@@ -123,7 +123,7 @@ public:
      */
     option_value_proxy const operator[](std::string const& option_name) const
     {
-        // https://wandbox.org/permlink/SklFbT05oHEGFhqW
+    // https://wandbox.org/permlink/SklFbT05oHEGFhqW
 #if 0
         // const_cast<> required to get the intended API behavior
         // (the default behavior corresponds to insert key if not found)
@@ -133,7 +133,7 @@ public:
 #else
         auto iter = map.find(option_name);
         if (iter != map.end()) {
-            //debug_print(option_name, iter->second);
+            // debug_print(option_name, iter->second);
             return option_value_proxy{ iter->second };
         }
 #endif
@@ -263,7 +263,6 @@ public:
 };
 
 std::ostream& operator<<(std::ostream& os, settings::option_value const& value);
-
 
 } // namespace eda
 

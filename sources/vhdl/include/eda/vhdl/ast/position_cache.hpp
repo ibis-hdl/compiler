@@ -145,7 +145,9 @@ public:
      */
     std::string& file_contents(std::size_t file_id)
     {
+        // clang-format off
         return std::get<1>(files.at(file_id));
+        // clang-format on
     }
 
     /**

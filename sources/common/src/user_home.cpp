@@ -7,8 +7,8 @@
 
 #include <eda/util/file/user_home_dir.hpp>
 
-#include <eda/compiler/compiler_support.hpp>        // IWYU pragma: keep
-#include <eda/namespace_alias.hpp>                  // IWYU pragma: keep
+#include <eda/compiler/compiler_support.hpp> // IWYU pragma: keep
+#include <eda/namespace_alias.hpp> // IWYU pragma: keep
 
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>

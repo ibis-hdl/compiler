@@ -5,7 +5,6 @@
  *      Author: olaf
  */
 
-
 #include <eda/settings.hpp>
 
 #include <algorithm>
@@ -14,7 +13,6 @@
 #include <eda/util/infix_ostream_iterator.hpp>
 #include <iostream>
 #include <vector>
-
 
 namespace eda {
 
@@ -56,6 +54,7 @@ std::ostream& settings::dump(std::ostream& os) const
 
 std::ostream& settings::print(std::ostream& os, settings::option_value const& value)
 {
+    // clang-format off
     std::visit(util::overloaded{
         // <long> is (implicit converted) handled as boolean, as intended
         [&os](bool option) {
@@ -74,23 +73,21 @@ std::ostream& settings::print(std::ostream& os, settings::option_value const& va
             os << "N/A (std::monostate)";
         },
     }, value);
+    // clang-format on
 
     return os;
 }
 
-void settings::debug_print(std::string const& option_name, settings::option_value const& value) const
+void settings::debug_print(
+    std::string const& option_name, settings::option_value const& value) const
 {
-    std::cout << "lookup[" << option_name << "] = "
-              << value
-              << std::endl;
+    std::cout << "lookup[" << option_name << "] = " << value << std::endl;
 }
-
 
 std::ostream& operator<<(std::ostream& os, settings::option_value const& value)
 {
     return settings::print(os, value);
 }
-
 
 const settings::option_value settings::none;
 

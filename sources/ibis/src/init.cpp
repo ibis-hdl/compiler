@@ -100,6 +100,7 @@ void init::parse_cli(int argc, const char* argv[])
     // [What do the -f and -m in gcc/clang compiler options stand for](
     // https://stackoverflow.com/questions/16227501/what-do-the-f-and-m-in-gcc-clang-compiler-options-stand-for)
 
+    // clang-format off
     try {
         // Primary Options
         app.add_option("files", parameter.files,
@@ -173,6 +174,7 @@ void init::parse_cli(int argc, const char* argv[])
         std::cerr << "Internal CLI11 parser code error\n";
         std::exit(app.exit(e));
     }
+    // clang-format on
 
     // CLI parse
     try {
@@ -248,22 +250,16 @@ void init::register_signal_handlers()
 
 void init::user_config_message_color()
 {
-    bool const force_color = [&] {
-        return setting["force-color"];
-    }();
+    bool const force_color = [&] { return setting["force-color"]; }();
 
     if (setting["no-color"] && !force_color) {
         // no color wanted - skip further proceeding
         return;
     }
 
-    bool const quiet = [&] {
-        return setting["quiet"];
-    }();
+    bool const quiet = [&] { return setting["quiet"]; }();
 
-    bool const verbose = [&] {
-        return setting["verbose"];
-    }();
+    bool const verbose = [&] { return setting["verbose"]; }();
 
     static const char default_cfg_json[] = R"({
   "message": {
@@ -302,8 +298,8 @@ void init::user_config_message_color()
             if (!quiet) {
                 std::cerr << eda::color::message::error("Error:")
                           << " parsing JSON configuration file: "
-                          << rjson::GetParseError_En(document.GetParseError())
-                          << "(offset " << document.GetErrorOffset() << ")\n";
+                          << rjson::GetParseError_En(document.GetParseError()) << "(offset "
+                          << document.GetErrorOffset() << ")\n";
             }
         }
         return document;
@@ -326,8 +322,7 @@ void init::user_config_message_color()
     }
 
     if (verbose) {
-        std::cerr << eda::color::message::note("Note:")
-                  << " Using message color defaults:\n";
+        std::cerr << eda::color::message::note("Note:") << " Using message color defaults:\n";
         auto const print_json = [](auto const& doc) {
             rjson::StringBuffer str_buff;
             rjson::PrettyWriter<rjson::StringBuffer> writer(str_buff);
@@ -347,6 +342,7 @@ void init::user_config_message_color()
                 auto const name = object.name.GetString();
                 auto const attr_name = object.value.GetString();
 
+                // clang-format off
                 auto const update_format = [&](char const attr_name[], auto const attribute_getter) {
                     auto const attr{ attribute_getter(attr_name) };
                     if (attr) {
@@ -362,6 +358,7 @@ void init::user_config_message_color()
                         }
                     }
                 };
+                // clang-format on
 
                 if (util::icompare(name, "text")) {
                     update_format(attr_name, &color::text_attr);
@@ -439,8 +436,7 @@ void init::l10n()
     auto const l10n_path = [this] {
         if (setting["locale-dir"]) {
             return fs::path{ setting["locale-dir"].get<std::string>() };
-        }
-        else {
+        } else {
             return util::user_home_dir({ ".eda", "l10n" });
         }
     }();
@@ -449,7 +445,7 @@ void init::l10n()
     auto lc_path = fs::canonical(l10n_path, ec);
 
     if (ec) {
-        if  (setting["verbose"]) {
+        if (setting["verbose"]) {
             // clang-format off
             std::cerr << "locale directory "
                       << l10n_path.string()
@@ -460,7 +456,7 @@ void init::l10n()
         return;
     }
 
-    //std::cout << "LC_PATH = " << lc_path.make_preferred().string() << std::endl;
+    // std::cout << "LC_PATH = " << lc_path.make_preferred().string() << std::endl;
 
     gen.add_messages_path(lc_path.make_preferred().string());
     gen.add_messages_domain("eda");
