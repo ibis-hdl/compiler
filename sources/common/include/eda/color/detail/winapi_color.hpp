@@ -8,11 +8,9 @@
 #ifndef SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_WINAPI_COLOR_HPP_
 #define SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_WINAPI_COLOR_HPP_
 
-#include <iostream>
+#include <eda/color/detail/api.hpp>
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#undef WIN32_LEAN_AND_MEAN
+#include <iostream>
 
 namespace eda {
 namespace color {
@@ -22,30 +20,30 @@ namespace winapi {
 // clang-format off
 enum class attribute : WORD {
     // FixMe: support Text attribute
-    Attributes_Off = 0x000,
-    Text_Bold = 0x100,
-    Text_Underscore = 0x200,
-    Text_Blink = 0x400,
-    Text_Reverse = 0x800,
+    Attributes_Off =     0x000,
+    Text_Bold =          0x100,
+    Text_Underscore =    0x200,
+    Text_Blink =         0x400,
+    Text_Reverse =       0x800,
     // Text_Concealed    = ????,
     // Foreground colors
-    Foreground_Black = 0,
-    Foreground_Red = FOREGROUND_RED,
-    Foreground_Green = FOREGROUND_GREEN,
-    Foreground_Yellow = FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY,
-    Foreground_Blue = FOREGROUND_BLUE,
+    Foreground_Black =   0,
+    Foreground_Red =     FOREGROUND_RED,
+    Foreground_Green =   FOREGROUND_GREEN,
+    Foreground_Yellow =  FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY,
+    Foreground_Blue =    FOREGROUND_BLUE,
     Foreground_Magenta = FOREGROUND_BLUE | FOREGROUND_RED,
-    Foreground_Cyan = FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY,
-    Foreground_White = FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED,
+    Foreground_Cyan =    FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY,
+    Foreground_White =   FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED,
     // Background colors
-    Background_Black = 0,
-    Background_Red = BACKGROUND_RED,
-    Background_Green = BACKGROUND_GREEN,
-    Background_Yellow = BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY,
-    Background_Blue = BACKGROUND_BLUE,
+    Background_Black =   0,
+    Background_Red =     BACKGROUND_RED,
+    Background_Green =   BACKGROUND_GREEN,
+    Background_Yellow =  BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY,
+    Background_Blue =    BACKGROUND_BLUE,
     Background_Magenta = BACKGROUND_BLUE | BACKGROUND_RED,
-    Background_Cyan = BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_INTENSITY,
-    Background_White = BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED,
+    Background_Cyan =    BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_INTENSITY,
+    Background_White =   BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED,
 };
 // clang-format on
 
@@ -67,19 +65,6 @@ public:
 
     std::ostream& print(std::ostream& os) const
     {
-        // no POSIX way to extract stream handler from the a given
-        // `std::ostream` object
-        auto stream = [](std::ostream& os) {
-            HANDLE handle = INVALID_HANDLE_VALUE;
-            if (&os == &std::cout) {
-                handle = GetStdHandle(STD_OUTPUT_HANDLE);
-            }
-            if (&os == &std::cerr || &os == &std::clog) {
-                handle = GetStdHandle(STD_ERROR_HANDLE);
-            }
-            return handle;
-        };
-
         auto const iword_fsm = [&](std::ostream& os_, auto handle_, WORD attr_) {
 
             typedef enum : WORD { init, active, passiv } state_t;
@@ -99,8 +84,8 @@ public:
             switch (iword.data.state) {
                 case init:
                     iword.data.default_attribute = text_attributes(handle_);
-                    [[falltrough]] case active:
-                    {
+                    [[falltrough]]
+                case active: {
                         // check on unsupported text-only attribute
                         if ((attr_ & 0xFF) == 0) {
                             // attr = 0 means no visibility
@@ -114,9 +99,10 @@ public:
                     }
                     break;
                 case passiv: {
-                    SetConsoleTextAttribute(handle_, iword.data.default_attribute);
-                    next_state = active;
-                } break;
+                        SetConsoleTextAttribute(handle_, iword.data.default_attribute);
+                        next_state = active;
+                    }
+                    break;
                 default:
                     std::cerr << __func__ << ": INVALID STATE\n";
                     next_state = init;
@@ -127,7 +113,7 @@ public:
             os_.iword(win_printer::xindex) = iword.value;
         };
 
-        HANDLE const handle = stream(os);
+        HANDLE const handle = detail::stream_handle{ os };
 
         // redirected - no way to write colors this (windows) way
         if (handle == INVALID_HANDLE_VALUE) {
@@ -167,8 +153,8 @@ private:
 
 private:
     // clang-format off
-    WORD attr = 0;
-    static const int xindex;
+    WORD                                            attr = 0;
+    static const int                                xindex;
     // clang-format on
 };
 

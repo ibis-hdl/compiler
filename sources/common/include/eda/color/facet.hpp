@@ -10,12 +10,11 @@
 
 #include <eda/color/detail/color.hpp>
 
+#include <eda/color/detail/api.hpp>
+
 #include <iostream>
 #include <locale> // facet
-
-#include <cstdio> // fileno
 #include <optional>
-#include <unistd.h> // isatty
 
 namespace eda {
 namespace color {
@@ -62,7 +61,7 @@ public:
     std::ostream& print(std::ostream& os, message_decorator<Tag> const& decorator) const
     {
         if (!enable) {
-            *enable = is_tty(os);
+            *enable = detail::isatty{ os };
             // os << (*enable ? "is TTY" : "redirected");
             if (force_decoration) {
                 // os << ", but forced";
@@ -74,7 +73,9 @@ public:
         if (*enable) {
             os << prefix;
         }
+
         decorator.print(os);
+
         if (*enable) {
             os << postfix;
         }
@@ -84,32 +85,9 @@ public:
 
 public:
     // clang-format off
-    color::printer                                    prefix;
-    color::printer                                    postfix;
+    color::printer                                  prefix;
+    color::printer                                  postfix;
     // clang-format on
-
-private:
-    bool is_tty(std::ostream& os) const
-    {
-        // no POSIX way to extract stream handler from the a given
-        // `std::ostream` object
-        auto const stream = [](std::ostream& os_) {
-            if (&os_ == &std::cout) {
-                return stdout;
-            }
-            if (&os_ == &std::cerr || &os_ == &std::clog) {
-                return stderr;
-            }
-            return static_cast<FILE*>(nullptr);
-        };
-
-        auto const handle = stream(os);
-        // Note, ::fileno(NULL) can crash (bug there?)
-        if (handle) {
-            return static_cast<bool>(::isatty(::fileno(handle)));
-        }
-        return false;
-    }
 
 public:
     // clang-format off
@@ -136,12 +114,10 @@ std::ostream& operator<<(std::ostream& os, message_decorator<Tag> const& decorat
     if (std::has_facet<message_facet<Tag>>(locale)) {
         return std::use_facet<message_facet<Tag>>(locale).print(os, decorator);
     }
+
     return decorator.print(os);
 }
 
-
 } } // namespace eda.color
-
-
 
 #endif /* SOURCES_COMMON_INCLUDE_EDA_COLOR_FACET_HPP_ */
