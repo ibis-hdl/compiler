@@ -24,7 +24,7 @@
 #endif
 
 #include <eda/util/file/file_reader.hpp>
-#include <eda/util/file/user_home.hpp>
+#include <eda/util/file/user_home_dir.hpp>
 #include <eda/util/string/icompare.hpp>
 // clang-format off
 #include <rapidjson/document.h>
@@ -35,6 +35,7 @@
 // clang-format on
 
 #include <boost/filesystem/path.hpp>
+#include <boost/filesystem.hpp> // canonical
 
 #include <algorithm>
 #include <cstdlib>
@@ -312,7 +313,7 @@ void init::user_config_message_color()
 
     // load user settings if exists and merge them into defaults
 
-    fs::path json_path = util::user_home({ ".eda" }) / "config.json";
+    fs::path json_path = util::user_home_dir({ ".eda" }) / "config.json";
 
     util::file_loader file_reader{ std::cerr, setting };
     auto const json_txt = file_reader.read_file(json_path);
@@ -417,33 +418,53 @@ void init::user_config_message_color()
 
 void init::l10n()
 {
+    using namespace boost::locale;
+    using namespace eda;
+
     // [Using Localization Backends](
     //  https://www.boost.org/doc/libs/1_68_0/libs/locale/doc/html/using_localization_backends.html)
-    using namespace boost::locale;
-
-    char const LC_PATH[] = "~/.eda/l10n";
-    char const LC_DOMAIN[] = "eda";
-
-#if 1 // crash on MinGW?
+#if 1
     localization_backend_manager l10n_backend = localization_backend_manager::global();
 #if (BOOST_OS_WINDOWS)
     l10n_backend.select("winapi");
 #else
     l10n_backend.select("std");
 #endif
-    generator gen_(l10n_backend);
+    generator gen_{ l10n_backend };
     localization_backend_manager::global(l10n_backend);
-    generator gen{};
-#else
-    generator gen{};
 #endif
-    if (setting["locale-dir"]) {
-        gen.add_messages_path(setting["locale-dir"].get<std::string>());
 
-    } else {
-        gen.add_messages_path(LC_PATH);
+    generator gen{};
+
+    auto const l10n_path = [this] {
+        if (setting["locale-dir"]) {
+            return fs::path{ setting["locale-dir"].get<std::string>() };
+        }
+        else {
+            return util::user_home_dir({ ".eda", "l10n" });
+        }
+    }();
+
+    boost::system::error_code ec;
+    auto lc_path = fs::canonical(l10n_path, ec);
+
+    if (ec) {
+        if  (setting["verbose"]) {
+            // clang-format off
+            std::cerr << "locale directory "
+                      << l10n_path.string()
+                      << " failure: " << ec.message()
+                      << std::endl;
+            // clang-format on
+        }
+        return;
     }
-    gen.add_messages_domain(LC_DOMAIN);
+
+    //std::cout << "LC_PATH = " << lc_path.make_preferred().string() << std::endl;
+
+    gen.add_messages_path(lc_path.make_preferred().string());
+    gen.add_messages_domain("eda");
+
     std::locale locale = gen("");
     std::locale::global(locale);
     std::cout.imbue(locale);

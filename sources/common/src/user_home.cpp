@@ -5,8 +5,8 @@
  *      Author: olaf
  */
 
-// clang-format off
-#include <eda/util/file/user_home.hpp>
+#include <eda/util/file/user_home_dir.hpp>
+
 #include <eda/compiler/compiler_support.hpp>        // IWYU pragma: keep
 #include <eda/namespace_alias.hpp>                  // IWYU pragma: keep
 
@@ -18,7 +18,6 @@
 #include <cstdlib>
 #include <stdexcept>
 #include <string>
-// clang-format on
 
 namespace eda {
 namespace util {
@@ -32,7 +31,7 @@ namespace util {
  * https://stackoverflow.com/questions/24124851/getenvironmentvariablea-usage)
  * to avoid warnings from MSVC.
  */
-fs::path user_home(std::initializer_list<char const*> path_list)
+fs::path user_home_dir(std::initializer_list<char const*> path_list)
 {
     const char* HOME_ENV
 #if BOOST_OS_LINUX
@@ -53,9 +52,6 @@ fs::path user_home(std::initializer_list<char const*> path_list)
 
     // The HOME directory must exist and must be a directory
 
-    /*
-     * XXX ToDo: make own/special exception classes
-     */
     if (cxx_expect_false(!fs::exists(path, ec))) {
         throw std::runtime_error("Fatal: " + path.make_preferred().string() + ": " + ec.message());
     }
