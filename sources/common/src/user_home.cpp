@@ -25,6 +25,12 @@ namespace util {
 
 /*
  * FixMe: small source code, maybe better move to ibis::init() ???
+ *
+ * On Windows use [SHGetKnownFolderPath function](
+ * https://docs.microsoft.com/en-us/windows/desktop/api/shlobj_core/nf-shlobj_core-shgetknownfolderpath)
+ * with example given at [SO](
+ * https://stackoverflow.com/questions/24124851/getenvironmentvariablea-usage)
+ * to avoid warnings from MSVC.
  */
 fs::path user_home(std::initializer_list<char const*> path_list)
 {
