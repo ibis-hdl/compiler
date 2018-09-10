@@ -82,6 +82,9 @@ target_link_libraries(${PROJECT_NAME}
     Boost::locale
 )
 
+#set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-v")
+
+
 
 ## 
 # CMake/CTest

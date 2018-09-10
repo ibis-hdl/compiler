@@ -5,10 +5,13 @@
  *      Author: olaf
  */
 
-#include <testsuite/vhdl_numeric_convert/binary_string.hpp>
 #include <testsuite/vhdl_numeric_convert/numeric_parser.hpp>
+#include <testsuite/vhdl_numeric_convert/binary_string.hpp>
 
+#include <eda/vhdl/ast/node/bit_string_literal.hpp>
 #include <eda/vhdl/ast/numeric_convert.hpp>
+#include <eda/vhdl/ast/position_cache.hpp>
+#include <eda/vhdl/parser/iterator_type.hpp>
 #include <eda/vhdl/type.hpp>
 
 #include <boost/test/unit_test.hpp>
@@ -40,7 +43,7 @@ std::string to_bin_literal(uint64_t n, std::string const& postfix="")
 {
     using namespace testsuite::vhdl_numeric_convert::util;
 
-    std::string const s{ "B\"" + binary_string(n)() + postfix + '"'};
+    std::string const s{ "B\"" + binary_string{ n }() + postfix + '"'};
     return s;
 }
 
@@ -49,7 +52,7 @@ std::string to_oct_literal(uint64_t n, std::string const& postfix="")
 {
     using namespace testsuite::vhdl_numeric_convert::util;
 
-    std::string const s{ "O\"" + octal_string(n)() + postfix + '"'};
+    std::string const s{ "O\"" + octal_string{ n }() + postfix + '"'};
     return s;
 }
 
@@ -58,7 +61,7 @@ std::string to_hex_literal(uint64_t n, std::string const& postfix="")
 {
     using namespace testsuite::vhdl_numeric_convert::util;
 
-    std::string const s{ "X\"" + hexadecimal_string(n)() + postfix + '"'};
+    std::string const s{ "X\"" + hexadecimal_string{ n }() + postfix + '"'};
     return s;
 }
 
@@ -147,7 +150,15 @@ BOOST_DATA_TEST_CASE(
     utf_data::make(bit_literal) ^ bit_decimal,
     literal,                      N)
 {
-    auto const [parse_ok, ast_node] = testsuite::parse_bit_string_literal(literal);
+    using iterator_type = parser::iterator_type;
+
+    ast::position_cache<iterator_type> position_cache;
+    std::size_t const id = position_cache.add_file("<bit_string_literal>", literal);
+    auto const position_proxy{ position_cache.handle(id) };
+
+    auto const parse = testsuite::literal_parser<iterator_type>{};
+
+    auto const [parse_ok, ast_node] = parse.bit_string_literal(position_proxy);
     BOOST_REQUIRE(parse_ok);
 
     auto const [conv_ok, value] = numeric_convert(ast_node);
@@ -170,7 +181,15 @@ BOOST_DATA_TEST_CASE(
     utf_data::make(literal_ovflw),
     literal)
 {
-    auto const [parse_ok, ast_node] = testsuite::parse_bit_string_literal(literal);
+    using iterator_type = parser::iterator_type;
+
+    ast::position_cache<iterator_type> position_cache;
+    std::size_t const id = position_cache.add_file("<bit_string_literal>", literal);
+    auto const position_proxy{ position_cache.handle(id) };
+
+    auto const parse = testsuite::literal_parser<iterator_type>{};
+
+    auto const [parse_ok, ast_node] = parse.bit_string_literal(position_proxy);
     BOOST_REQUIRE(parse_ok);    // must parse ...
 
     auto const [conv_ok, value] = numeric_convert(ast_node);

@@ -5,10 +5,13 @@
  *      Author: olaf
  */
 
-#include <testsuite/vhdl_numeric_convert/binary_string.hpp>
 #include <testsuite/vhdl_numeric_convert/numeric_parser.hpp>
+#include <testsuite/vhdl_numeric_convert/binary_string.hpp>
 
+#include <eda/vhdl/ast/node/based_literal.hpp>
 #include <eda/vhdl/ast/numeric_convert.hpp>
+#include <eda/vhdl/ast/position_cache.hpp>
+#include <eda/vhdl/parser/iterator_type.hpp>
 #include <eda/vhdl/type.hpp>
 
 #include <boost/test/unit_test.hpp>
@@ -209,7 +212,15 @@ BOOST_DATA_TEST_CASE(
     utf_data::make(integer_lit) ^ integer_dec,
     literal,                      N)
 {
-    auto const [parse_ok, ast_node] = testsuite::parse_based_literal(literal);
+    using iterator_type = parser::iterator_type;
+
+    ast::position_cache<iterator_type> position_cache;
+    std::size_t const id = position_cache.add_file("<based_literal>", literal);
+    auto const position_proxy{ position_cache.handle(id) };
+
+    auto const parse = testsuite::literal_parser<iterator_type>{};
+
+    auto const [parse_ok, ast_node] = parse.based_literal(position_proxy);
     BOOST_REQUIRE(parse_ok);
 
     auto const [conv_ok, value] = numeric_convert(ast_node);
@@ -233,7 +244,15 @@ BOOST_DATA_TEST_CASE(
     utf_data::make(integer_lit_uint64_ovflw),
     literal)
 {
-    auto const [parse_ok, ast_node] = testsuite::parse_based_literal(literal);
+    using iterator_type = parser::iterator_type;
+
+    ast::position_cache<iterator_type> position_cache;
+    std::size_t const id = position_cache.add_file("<based_literal>", literal);
+    auto const position_proxy{ position_cache.handle(id) };
+
+    auto const parse = testsuite::literal_parser<iterator_type>{};
+
+    auto const [parse_ok, ast_node] = parse.based_literal(position_proxy);
     BOOST_REQUIRE(parse_ok);    // must parse ...
 
     auto const [conv_ok, value] = numeric_convert(ast_node);
@@ -282,7 +301,15 @@ BOOST_DATA_TEST_CASE(
     utf_data::make(real_lit) ^ real_dec,
     literal,                   N)
 {
-    auto const [parse_ok, ast_node] = testsuite::parse_based_literal(literal);
+    using iterator_type = parser::iterator_type;
+
+    ast::position_cache<iterator_type> position_cache;
+    std::size_t const id = position_cache.add_file("<based_literal>", literal);
+    auto const position_proxy{ position_cache.handle(id) };
+
+    auto const parse = testsuite::literal_parser<iterator_type>{};
+
+    auto const [parse_ok, ast_node] = parse.based_literal(position_proxy);
     BOOST_REQUIRE(parse_ok);
 
     auto const [conv_ok, value] = numeric_convert(ast_node);
@@ -305,7 +332,15 @@ BOOST_DATA_TEST_CASE(
     utf_data::make(lit_failure),
     literal)
 {
-    auto const [parse_ok, ast_node] = testsuite::parse_based_literal(literal);
+    using iterator_type = parser::iterator_type;
+
+    ast::position_cache<iterator_type> position_cache;
+    std::size_t const id = position_cache.add_file("<based_literal>", literal);
+    auto const position_proxy{ position_cache.handle(id) };
+
+    auto const parse = testsuite::literal_parser<iterator_type>{};
+
+    auto const [parse_ok, ast_node] = parse.based_literal(position_proxy);
     BOOST_REQUIRE(parse_ok);
 
     auto const [conv_ok, value] = numeric_convert(ast_node);

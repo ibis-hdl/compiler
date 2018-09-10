@@ -9,9 +9,8 @@
 #define TESTSUITE_VHDL_NUMERIC_CONVERT_INCLUDE_TESTSUITE_VHDL_NUMERIC_CONVERT_NUMERIC_PARSER_HPP_
 
 
-#include <eda/vhdl/ast/node/bit_string_literal.hpp>
-#include <eda/vhdl/ast/node/decimal_literal.hpp>
-#include <eda/vhdl/ast/node/based_literal.hpp>
+#include <eda/vhdl/ast_fwd.hpp>
+#include <eda/vhdl/ast/position_cache.hpp>
 
 #include <tuple>
 
@@ -21,19 +20,29 @@
 namespace testsuite {
 
 
-std::tuple<bool, ast::bit_string_literal>
-parse_bit_string_literal(std::string const &input);
+template<typename IteratorT>
+class literal_parser
+{
+public:
+    using position_proxy = typename ast::position_cache<IteratorT>::proxy;
 
-std::tuple<bool, ast::decimal_literal>
-parse_decimal_literal(std::string const &input);
+public:
+    std::tuple<bool, ast::bit_string_literal>
+    bit_string_literal(position_proxy const& cache) const;
 
-std::tuple<bool, ast::based_literal>
-parse_based_literal(std::string const &input);
+    std::tuple<bool, ast::decimal_literal>
+    decimal_literal(position_proxy const& cache) const;
 
+    std::tuple<bool, ast::based_literal>
+    based_literal(position_proxy const& cache) const;
 
+private:
+    template<typename ParserType, typename AttrType>
+    std::tuple<bool, AttrType> parse(ParserType const& numeric_parser, AttrType& attr,
+                                     position_proxy const& cache_proxy) const;
+};
 
 } // namespace testsuite
-
 
 
 #endif /* TESTSUITE_VHDL_NUMERIC_CONVERT_INCLUDE_TESTSUITE_VHDL_NUMERIC_CONVERT_NUMERIC_PARSER_HPP_ */

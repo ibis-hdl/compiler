@@ -7,7 +7,10 @@
 
 #include <testsuite/vhdl_numeric_convert/numeric_parser.hpp>
 
+#include <eda/vhdl/ast/node/decimal_literal.hpp>
 #include <eda/vhdl/ast/numeric_convert.hpp>
+#include <eda/vhdl/ast/position_cache.hpp>
+#include <eda/vhdl/parser/iterator_type.hpp>
 #include <eda/vhdl/type.hpp>
 
 #include <boost/test/unit_test.hpp>
@@ -112,7 +115,15 @@ BOOST_DATA_TEST_CASE(
     utf_data::make(dec_int_lit) ^ dec_int,
     literal,                      N)
 {
-    auto const [parse_ok, ast_node] = testsuite::parse_decimal_literal(literal);
+    using iterator_type = parser::iterator_type;
+
+    ast::position_cache<iterator_type> position_cache;
+    std::size_t const id = position_cache.add_file("<decimal_literal>", literal);
+    auto const position_proxy{ position_cache.handle(id) };
+
+    auto const parse = testsuite::literal_parser<iterator_type>{};
+
+    auto const [parse_ok, ast_node] = parse.decimal_literal(position_proxy);
     BOOST_REQUIRE(parse_ok);
 
     using kind_specifier = eda::vhdl::ast::decimal_literal::kind_specifier;
@@ -130,7 +141,15 @@ BOOST_AUTO_TEST_CASE( decimal_literal_uint64max_ovrflw )
 
     std::string const literal{ detail::to_decimal_literal(N) + "_0" };
 
-    auto const [parse_ok, ast_node] = testsuite::parse_decimal_literal(literal);
+    using iterator_type = parser::iterator_type;
+
+    ast::position_cache<iterator_type> position_cache;
+    std::size_t const id = position_cache.add_file("<decimal_literal>", literal);
+    auto const position_proxy{ position_cache.handle(id) };
+
+    auto const parse = testsuite::literal_parser<iterator_type>{};
+
+    auto const [parse_ok, ast_node] = parse.decimal_literal(position_proxy);
     BOOST_REQUIRE(parse_ok);    // must parse ...
 
     auto const [conv_ok, value] = numeric_convert(ast_node);
@@ -195,7 +214,15 @@ BOOST_DATA_TEST_CASE(
     utf_data::make(dec_real_lit) ^ dec_real,
     literal,                       N)
 {
-    auto const [parse_ok, ast_node] = testsuite::parse_decimal_literal(literal);
+    using iterator_type = parser::iterator_type;
+
+    ast::position_cache<iterator_type> position_cache;
+    std::size_t const id = position_cache.add_file("<decimal_literal>", literal);
+    auto const position_proxy{ position_cache.handle(id) };
+
+    auto const parse = testsuite::literal_parser<iterator_type>{};
+
+    auto const [parse_ok, ast_node] = parse.decimal_literal(position_proxy);
     BOOST_REQUIRE(parse_ok);
 
     using kind_specifier = eda::vhdl::ast::decimal_literal::kind_specifier;

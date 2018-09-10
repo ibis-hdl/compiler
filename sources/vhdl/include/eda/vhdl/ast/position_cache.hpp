@@ -237,14 +237,6 @@ public:
     {
     }
 
-    ~proxy() = default;
-
-    proxy(proxy const&) = delete;
-    proxy& operator=(proxy const&) = delete;
-
-    proxy(proxy&&) noexcept = default;
-    proxy& operator=(proxy&&) = delete;
-
 public:
     std::size_t id() const { return file_id; }
 

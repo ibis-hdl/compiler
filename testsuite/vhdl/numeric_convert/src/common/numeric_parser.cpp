@@ -7,31 +7,61 @@
 
 #include <testsuite/vhdl_numeric_convert/numeric_parser.hpp>
 
-#include <eda/vhdl/parser/grammar_def.hpp>
 #include <eda/vhdl/parser/parser_config.hpp>
+#include <eda/vhdl/parser/grammar_def.hpp>
 
 #include <iostream>
 
 
 namespace testsuite {
 
-namespace detail {
-
-
-template<typename AttrType, typename ParserType>
-std::tuple<bool, AttrType> parse(ParserType const &numeric_parser, std::string const &input, AttrType &attr)
+template<typename IteratorT>
+std::tuple<bool, ast::bit_string_literal>
+literal_parser<IteratorT>::bit_string_literal(position_proxy const& cache) const
 {
-    ast::position_cache<parser::iterator_type> position_cache;
-    std::size_t const id = position_cache.add_file("<string>", input);
+    auto const parser = vhdl::parser::bit_string_literal;
+    ast::bit_string_literal attr;
 
-    parser::error_handler_type error_handler{ std::cerr, position_cache.handle(id) };
+    return parse(parser, attr, cache);
+}
+
+
+template<typename IteratorT>
+std::tuple<bool, ast::decimal_literal>
+literal_parser<IteratorT>::decimal_literal(position_proxy const& cache) const
+{
+    auto const parser = vhdl::parser::decimal_literal;
+    ast::decimal_literal attr;
+
+    return parse(parser, attr, cache);
+}
+
+
+template<typename IteratorT>
+std::tuple<bool, ast::based_literal>
+literal_parser<IteratorT>::based_literal(position_proxy const& cache) const
+{
+    auto const parser = vhdl::parser::based_literal;
+    ast::based_literal attr;
+
+    return parse(parser, attr, cache);
+}
+
+
+template<typename IteratorT>
+template<typename ParserType, typename AttrType>
+std::tuple<bool, AttrType> literal_parser<IteratorT>::parse(
+    ParserType const& numeric_parser, AttrType& attr,
+    position_proxy const& cache_proxy) const
+{
+    parser::error_handler_type error_handler{ std::cerr, cache_proxy };
 
     auto const parser =
         x3::with<parser::error_handler_tag>(std::ref(error_handler)) [
             numeric_parser
         ];
 
-    auto [iter, end] = position_cache.range(id);
+    auto [iter, end] = cache_proxy.range();
 
 #if 1
 #if defined(__clang__) // GCC fails here
@@ -59,7 +89,7 @@ std::tuple<bool, AttrType> parse(ParserType const &numeric_parser, std::string c
     } catch(x3::expectation_failure<parser::iterator_type> const& e) {
         error_handler(e.where(), "Caught expectation_failure! Expecting "
                                  + e.which() + " here: '"
-                                 + std::string(e.where(), input.end()) + "'\n");
+                                 + std::string(e.where(), end) + "'\n");
     }
 
     return std::make_tuple(
@@ -68,40 +98,14 @@ std::tuple<bool, AttrType> parse(ParserType const &numeric_parser, std::string c
     );
 }
 
-
-} // namespace detail
-
-
-std::tuple<bool, ast::bit_string_literal>
-parse_bit_string_literal(std::string const &input)
-{
-    auto const parser = parser::bit_string_literal;
-    ast::bit_string_literal attr;
-
-    return detail::parse(parser, input, attr);
-}
-
-
-std::tuple<bool, ast::decimal_literal>
-parse_decimal_literal(std::string const &input)
-{
-    auto const parser = parser::decimal_literal;
-    ast::decimal_literal attr;
-
-    return detail::parse(parser, input, attr);
-}
-
-
-std::tuple<bool, ast::based_literal>
-parse_based_literal(std::string const &input)
-{
-    auto const parser = parser::based_literal;
-    ast::based_literal attr;
-
-    return detail::parse(parser, input, attr);
-}
-
-
 } // namespace testsuite
 
 
+/*
+ * Explicit template instantiation
+ */
+namespace testsuite {
+
+template class literal_parser<parser::iterator_type>;
+
+} // namespace testsuite
