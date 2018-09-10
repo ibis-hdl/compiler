@@ -6,8 +6,6 @@
  */
 
 #include <eda/vhdl/analyze/error_handler.hpp>
-#include <eda/vhdl/ast/position_cache_def.hpp>
-#include <eda/vhdl/parser/iterator_type.hpp>
 
 #include <eda/support/boost/locale.hpp>
 
@@ -17,6 +15,8 @@
 #include <eda/util/make_iomanip.hpp>
 
 #include <eda/util/cxx_bug_fatal.hpp>
+
+#include <eda/vhdl/parser/iterator_type.hpp>// for explicit template instantiation
 
 namespace eda {
 namespace vhdl {

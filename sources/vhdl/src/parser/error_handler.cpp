@@ -7,8 +7,6 @@
 
 #include <eda/vhdl/parser/error_handler.hpp>
 
-#include <eda/vhdl/ast/position_cache_def.hpp>
-
 #include <eda/support/boost/locale.hpp>
 
 #include <eda/color/message.hpp>

@@ -1,12 +1,11 @@
 /*
- * position_cache_def.hpp
+ * position_cache.cpp
  *
- *  Created on: 16.08.2018
+ *  Created on: 10.09.2018
  *      Author: olaf
  */
 
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_POSITION_CACHE_DEF_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_POSITION_CACHE_DEF_HPP_
+#include <eda/vhdl/parser/iterator_type.hpp> // for explicit template instantiation
 
 #include <eda/vhdl/ast/position_cache.hpp>
 
@@ -96,11 +95,6 @@ IteratorT position_cache<IteratorT>::get_line_start(std::size_t file_id, iterato
 
     skip_whitespace(pos, end);
 
-#if defined(__clang__) && (__clang_major__ == 5) && (__clang_minor__ == 0)
-    /* XXX clang's optimizer seems to be too eager, the indicator get wrong. */
-    std::string volatile dummy{ pos, end };
-#endif
-
     iterator_type latest{ begin };
 
     for (iterator_type i = begin; i != pos; ++i) {
@@ -127,4 +121,14 @@ IteratorT position_cache<IteratorT>::get_line_start(std::size_t file_id, iterato
 } // namespace vhdl
 } // namespace eda
 
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_POSITION_CACHE_DEF_HPP_ */
+namespace eda {
+namespace vhdl {
+namespace ast {
+
+// Explicit template instantiation
+template class position_cache<parser::iterator_type>;
+
+} // namespace ast
+} // namespace vhdl
+} // namespace eda
+

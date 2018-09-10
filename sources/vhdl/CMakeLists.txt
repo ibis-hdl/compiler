@@ -28,6 +28,7 @@ target_sources(${PROJECT_NAME} PRIVATE
     src/ast/ast_printer.cpp
     src/ast/ast_stats.cpp
     src/ast/numeric_convert.cpp
+    src/ast/position_cache.cpp
     
     src/parser/error_handler.cpp
     src/parser/on_error_base.cpp
