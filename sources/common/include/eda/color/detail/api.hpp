@@ -29,6 +29,4 @@ using api_unix::isatty;
 } // namespace color
 } // namespace eda
 
-
-
 #endif /* SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_API_HPP_ */

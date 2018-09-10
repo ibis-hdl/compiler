@@ -131,4 +131,3 @@ template class position_cache<parser::iterator_type>;
 } // namespace ast
 } // namespace vhdl
 } // namespace eda
-

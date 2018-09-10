@@ -16,7 +16,7 @@
 
 #include <eda/util/cxx_bug_fatal.hpp>
 
-#include <eda/vhdl/parser/iterator_type.hpp>// for explicit template instantiation
+#include <eda/vhdl/parser/iterator_type.hpp> // for explicit template instantiation
 
 namespace eda {
 namespace vhdl {

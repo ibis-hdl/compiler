@@ -108,9 +108,8 @@ auto const exponent = x3::rule<struct _, unsigned_integer>{} =
 namespace dbg_util {
 
 template <typename RangeType, typename RangeFiltType, typename AttributeType>
-void trace_report(
-        RangeType const& range, RangeFiltType const& range_f, bool parse_ok,
-        AttributeType attribute, unsigned line, std::string const& function)
+void trace_report(RangeType const& range, RangeFiltType const& range_f, bool parse_ok,
+    AttributeType attribute, unsigned line, std::string const& function)
 {
     // clang-format off
     std::cout << __FILE__ << ":" << line << " "
@@ -124,8 +123,10 @@ void trace_report(
 
 } // namespace dbg_util
 
+// clang-format off
 #define TRACE(range, range_f, parse_ok, attribute)                             \
     dbg_util::trace_report(range, range_f, parse_ok, attribute, __LINE__, __FUNCTION__)
+// clang-format on
 
 /**
  * Parse literal primitives. Mainly the task of this class is to handle the
@@ -364,7 +365,6 @@ numeric_convert::numeric_convert(std::ostream& os_)
                       std::is_same_v<numeric_convert::value_type, detail::real>>::value,
         "iterator types must be the same");
 }
-
 
 /**
  * numeric_convert's private error reporting utility to unify error messages
@@ -669,7 +669,6 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
     /* -------------------------------------------------------------------------
      * other based decimal literals
      * -----------------------------------------------------------------------*/
-
 
     /* -------------------------------------------------------------------------
      * integer part
