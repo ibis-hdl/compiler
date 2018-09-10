@@ -39,9 +39,10 @@ std::ostream& settings::dump(std::ostream& os) const
             [&os](long v) { os << v; },
             [&os](std::string const& v) { os << v; },
             [&os](std::vector<std::string> const& v) {
-               for (auto const& e : v) {
-                   os << e << ", ";
-               }
+                os << "[ ";
+                std::copy(v.begin(), v.end(),
+                          util::infix_ostream_iterator<std::string>(os, ", "));
+                os << " ]";
             },
         }, val);
         // clang-format on
