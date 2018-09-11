@@ -10,10 +10,6 @@
 #include <eda/util/cxx_bug_fatal.hpp>
 #include <iostream>
 
-#if defined(NULL)
-#undef NULL
-#endif
-
 namespace eda {
 namespace vhdl {
 namespace ast {
@@ -73,7 +69,7 @@ std::ostream& operator<<(std::ostream& os, keyword_token token)
         case keyword_token::NEXT:            os << "NEXT";          break;
         case keyword_token::NOR:             os << "NOR";           break;
         case keyword_token::NOT:             os << "NOT";           break;
-        case keyword_token::NULL:            os << "NULL";          break;
+        case keyword_token::NULL_:           os << "NULL";          break;
         case keyword_token::OF:              os << "OF";            break;
         case keyword_token::ON:              os << "ON";            break;
         case keyword_token::OPEN:            os << "OPEN";          break;

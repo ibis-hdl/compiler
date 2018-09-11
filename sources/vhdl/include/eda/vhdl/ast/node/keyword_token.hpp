@@ -8,17 +8,9 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_KEYWORD_TOKEN_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_KEYWORD_TOKEN_HPP_
 
-
 #include <iosfwd>
 
-
 namespace eda { namespace vhdl { namespace ast {
-
-
-#if defined(NULL)
-#undef NULL
-#endif
-
 
 enum class keyword_token
 {
@@ -29,7 +21,7 @@ enum class keyword_token
     ELSE, ELSIF, END, ENTITY, EXIT, FILE, FOR, FUNCTION,
     GENERATE, GENERIC, GROUP, GUARDED, IF, IMPURE, IN, INERTIAL,
     INOUT, IS, LABEL, LIBRARY, LINKAGE, LITERAL, LOOP, MAP, MOD,
-    NAND, NEW, NEXT, NOR, NOT, NULL, OF, ON, OPEN, OR, OTHERS,
+    NAND, NEW, NEXT, NOR, NOT, NULL_, OF, ON, OPEN, OR, OTHERS,
     OUT, PACKAGE, PORT, POSTPONED, PROCEDURE, PROCESS, PURE,
     RANGE, RECORD, REGISTER, REJECT, REM, REPORT, RETURN, ROL,
     ROR, SELECT, SEVERITY, SIGNAL, SHARED, SLA, SLL, SRA, SRL,
@@ -42,7 +34,6 @@ std::ostream& operator<<(std::ostream& os, keyword_token token);
 
 
 } } } // namespace eda.vhdl.ast
-
 
 /*
  * Support Spirit.X3's attribute handling.
@@ -58,6 +49,5 @@ move_to(eda::vhdl::ast::keyword_token token, bool& dest)
 }
 
 } } } } // boost.spirit.x3.traits
-
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_KEYWORD_TOKEN_HPP_ */

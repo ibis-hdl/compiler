@@ -84,10 +84,6 @@ namespace vhdl {
 namespace parser {
 namespace keywords {
 
-#if defined(NULL)
-#undef NULL
-#endif
-
 using detail::distinct;
 
 auto const ACCESS = distinct("access");
@@ -132,7 +128,7 @@ auto const LOOP = distinct("loop");
 auto const MAP = distinct("map");
 auto const NEW = distinct("new");
 auto const NEXT = distinct("next");
-auto const NULL = distinct("null", ast::keyword_token::NULL);
+auto const NULL_ = distinct("null", ast::keyword_token::NULL_);
 auto const OF = distinct("of");
 auto const ON = distinct("on");
 auto const OPEN = distinct("open", ast::keyword_token::OPEN);
@@ -2671,7 +2667,7 @@ auto const literal_def = /* order matters */
     | string_literal
     | bit_string_literal
     | numeric_literal
-    | NULL
+    | NULL_
     ;
 
 
@@ -2771,7 +2767,7 @@ auto const next_statement_def = ( // operator precedence
 //      [ label : ] null ;
 auto const null_statement_def = ( // operator precedence
        -label_colon
-    >> omit[ NULL ]
+    >> omit[ NULL_ ]
     )
     >  ';'
     ;
@@ -3983,7 +3979,7 @@ auto const waveform_def =
 //       value_expression [ after time_expression ]
 //     | null [ after time_expression ]
 auto const waveform_element_def =
-       ( expression | NULL )
+       ( expression | NULL_ )
     >>  -( AFTER >> expression )
     ;
 
