@@ -40,7 +40,7 @@
 #if defined(EDA_HAVE_BUILTIN_EXPECT)
 #define cxx_expect(x)       __builtin_expect(!!(x), 1)
 #define cxx_expect_false(x) __builtin_expect(!!(x), 0)
-elif defined(EDA_HAVE_BUILTIN_ASSUME)
+#elif defined(EDA_HAVE_BUILTIN_ASSUME)
 #define cxx_expect(x)       __assume((x))
 #define cxx_expect_false(x) __assume(!(x))
 #else
