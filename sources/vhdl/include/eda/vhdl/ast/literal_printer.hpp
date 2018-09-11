@@ -24,7 +24,7 @@ public:
     literal_printer(ast::based_literal const& literal_);
     literal_printer(ast::string_literal const& literal_);
 
-    std::ostream& operator()(std::ostream& os) const;
+    std::ostream& print(std::ostream& os) const;
 
 private:
     // clang-format off
@@ -43,7 +43,7 @@ private:
 
 static inline std::ostream& operator<<(std::ostream& os, literal_printer const& printer)
 {
-    return printer(os);
+    return printer.print(os);
 }
 
 } // namespace ast

@@ -25,7 +25,6 @@ struct unquote_predicate {
 
     bool operator()(char chr)
     {
-
         auto const check = [this](char c, char quote) {
             if ((prev_char != c) || (prev_char != quote) || dbl_quote_printed) {
                 dbl_quote_printed = false;
@@ -82,7 +81,7 @@ literal_printer::literal_printer(string_literal const& literal_)
 {
 }
 
-std::ostream& literal_printer::operator()(std::ostream& os) const
+std::ostream& literal_printer::print(std::ostream& os) const
 {
     util::visit_in_place(this->literal,
 
