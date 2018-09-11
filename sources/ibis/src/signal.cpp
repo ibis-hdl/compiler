@@ -19,10 +19,8 @@ void testing_signal_handler()
     int n = 3;
     int r = 0;
     std::cout << "testing signal handler with SIGFPE\n";
-#ifndef __clang_analyzer__
     while (true) {
         r = 100 / n;
         std::cout << "100 / " << n-- << " = " << r << '\n';
     }
-#endif // __clang_analyzer__
 }

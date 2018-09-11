@@ -91,11 +91,9 @@ std::string parse::make_exception_description(
     using boost::locale::translate;
 
     std::string const what = [&] {
-#ifndef __clang_analyzer__
         if constexpr (std::is_base_of_v<std::remove_reference_t<ExceptionT>, std::exception>) {
             return std::string{ exception.what() };
         }
-#endif // __clang_analyzer__
 
         // make GGC quiet
         boost::ignore_unused(exception);

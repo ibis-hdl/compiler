@@ -32,14 +32,11 @@ struct collect_worker {
     template <typename NodeT>
     void operator()(NodeT const& /*unused*/, std::string_view const& node_name) const
     {
-
         ++count_map[node_name];
 
-#ifndef __clang_analyzer__
         if constexpr (!std::is_base_of_v<ast::position_tagged, std::decay_t<NodeT>>) {
             untagged_node.insert(node_name);
         }
-#endif // __clang_analyzer__
     }
 
     // clang-format off
