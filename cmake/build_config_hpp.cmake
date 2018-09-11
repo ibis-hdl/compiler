@@ -1,7 +1,8 @@
 ## Compiler Features required for common/utils
 include(CheckCXXCompilerFlag)
 
-
+##
+# GCC extension
 check_cxx_source_compiles("
 int main() {
     __builtin_unreachable();
@@ -10,12 +11,26 @@ int main() {
 " EDA_HAVE_BUILTIN_UNREACHABLE)
 
 
+##
+# GCC extension
 check_cxx_source_compiles("
 int main() {
     __builtin_expect(1, 0);
     return 0;
 }
 " EDA_HAVE_BUILTIN_EXPECT)
+
+
+##
+# MSVC extension
+check_cxx_source_compiles("
+#include <cstddef>
+int main() {
+    int x = 3;
+    __assume(x == 3);
+    return 0;
+}
+" EDA_HAVE_BUILTIN_ASSUME)
 
 
 # MinGW doesn't seems to have C++11 std::quick_exit()

@@ -50,20 +50,22 @@ public:
 
 public:
     infix_ostream_iterator(ostream_type& os_)
-        : os{ os_ }
+        : os{ &os_ }
         , actual_delimiter{ nullptr }
     {
     }
 
     infix_ostream_iterator(ostream_type& os_, CharT const* delimiter_)
-        : os{ os_ }
+        : os{ &os_ }
         , actual_delimiter{ delimiter_ }
     {
     }
 
+	infix_ostream_iterator<T, CharT, TraitsT>& operator=(infix_ostream_iterator<T, CharT, TraitsT> const& other) = default;
+
     infix_ostream_iterator<T, CharT, TraitsT>& operator=(T const& item)
     {
-        os << delimiter << item;
+        (*os) << delimiter << item;
         delimiter = actual_delimiter;
         return *this;
     }
@@ -74,7 +76,7 @@ public:
 
 private:
     // clang-format off
-    std::basic_ostream<CharT, TraitsT>&             os;
+	ostream_type*									os;
     CharT const*                                    actual_delimiter;
     CharT const*                                    delimiter = "";
     // clang-format on

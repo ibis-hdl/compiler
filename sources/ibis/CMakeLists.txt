@@ -58,7 +58,7 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 
 if(MSVC)
 	target_compile_options(${PROJECT_NAME} PRIVATE
-		/W4
+		/W1
 	)
 else()
 	target_compile_options(${PROJECT_NAME} PRIVATE
@@ -132,18 +132,4 @@ target_link_libraries(${PROJECT_NAME}
     Boost::locale
     Boost::filesystem
 )
-
-
-##
-# Install 
-install(TARGETS ${PROJECT_NAME}
-    EXPORT eda-ibis
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-)
-
-#install(DIRECTORY include/ 
-#    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/eda
-#)
 

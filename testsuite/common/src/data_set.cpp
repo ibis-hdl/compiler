@@ -19,13 +19,6 @@
 namespace testsuite {
 
 
-#if defined(_WIN32) || defined(_WIN64)
-    static constexpr std::wostream& cerr{ std::wcerr };
-#else
-    static constexpr std::ostream& cerr{ std::cerr };
-#endif
-
-
 /** Helper function to format all file path related messages unified. */
 static inline
 fs::path pretty_filepath(fs::path file_path) {
@@ -33,7 +26,7 @@ fs::path pretty_filepath(fs::path file_path) {
 }
 
 
-/* The prefix for the test case root directory structure is runtime configureable.
+/* The prefix for the test case root directory structure is runtime configurable.
  * For more information look at:
  * - [[Boost.Test] access to boost::unit_test::framework::master_test_suite().{argc, argv} outside from BOOST_TEST](
  *    https://groups.google.com/forum/#!topic/boost-developers-archive/wtnY9F2cWNI)
@@ -85,7 +78,7 @@ void dataset_loader::read_files(fs::path const& path)
                     testfile_name.emplace_back(
                         (file.parent_path().filename() / file.stem()).generic_string()
                     );
-                    cerr << "INFO: read " << file << '\n';
+                    std::cerr << "INFO: read " << file << '\n';
 
                     fs::path const expect_file = fs::change_extension(file, expected_extension);
 
@@ -97,26 +90,26 @@ void dataset_loader::read_files(fs::path const& path)
         else {
             /* FixMe: boost.fs throws on canonical(), since path doesn't exist
              * This behavior isn't with C++17 filesystem */
-            cerr << "ERROR: Directory: " << fs::absolute(path)
-                 << " does not exist!\n";
+            std::cerr << "ERROR: Directory: " << fs::absolute(path).string()
+                      << " does not exist!\n";
         }
     }
     catch(std::exception const& e) {
-        cerr << "ERROR: Caught \"" << e.what() << "\" exception!\n";
+        std::cerr << "ERROR: Caught \"" << e.what() << "\" exception!\n";
         /* try to recover from error and continue; probably no {file}.expected
          * was found. */
         if(   testfile_name.size() == testfile_input.size()
            && testfile_input.size()    == testfile_expected.size() + 1
           ) {
-            cerr << "WARNING: Remove test files at "
-                 << pretty_filepath(testfile_name.back())
-                 << " from data set\n";
+            std::cerr << "WARNING: Remove test files at "
+                      << pretty_filepath(testfile_name.back()).string()
+                      << " from data set\n";
             testfile_name.pop_back();
             testfile_input.pop_back();
         }
     }
     catch(...) {
-        cerr << "ERROR: Caught unexpected exception!!!\n";
+        std::cerr << "ERROR: Caught unexpected exception!!!\n";
 
     }
 }
@@ -127,7 +120,7 @@ std::string dataset_loader::read_file(fs::path const& file_path)
     fs::ifstream file{ file_path };
 
     if(!file) {
-        cerr << "ERROR: unable to open " << pretty_filepath(file_path) << "!\n";
+        std::cerr << "ERROR: unable to open " << pretty_filepath(file_path).string() << "!\n";
         throw std::ios_base::failure{ "file open error" };
     }
 
@@ -135,7 +128,7 @@ std::string dataset_loader::read_file(fs::path const& file_path)
     ss << file.rdbuf();
 
     if(file.fail() && !file.eof()) {
-        cerr << "ERROR: unable to open " << pretty_filepath(file_path) << '\n';
+        std::cerr << "ERROR: unable to open " << pretty_filepath(file_path).string() << '\n';
         throw std::ios_base::failure{ "rdbuf() read error" };
     }
 

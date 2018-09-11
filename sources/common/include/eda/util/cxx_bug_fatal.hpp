@@ -50,7 +50,7 @@ void assertion_failed_msg(
 
 #define cxx_bug_fatal(message)                                                                     \
     cxx_assert(false, message);                                                                    \
-    cxx_unreachable(message);
+    cxx_unreachable();
 
 #define cxx_unreachable_bug_triggered()                                                            \
     cxx_assert(false, "unreachable code path triggered");                                          \

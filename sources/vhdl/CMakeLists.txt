@@ -53,7 +53,12 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
 if(MSVC)
 	target_compile_options(${PROJECT_NAME} PRIVATE
-		/W4
+		/W1
+	)
+	# [#define NOMINMAX using std::min/max}(
+	#  https://stackoverflow.com/questions/13416418/define-nominmax-using-stdmin-max)
+	target_compile_definitions(${PROJECT_NAME} PUBLIC
+		NOMINMAX
 	)
 else()
 	target_compile_options(${PROJECT_NAME} PRIVATE
