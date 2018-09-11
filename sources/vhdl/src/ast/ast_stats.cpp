@@ -64,22 +64,29 @@ auto ast_stats::sort_by_count(bool ascending) const
 
     using pair_type = std::pair<map_type::key_type, map_type::mapped_type>;
 
-    auto const ascending_predicate = [](pair_type const& lhs, pair_type const& rhs) {
-        if (lhs.second != rhs.second) {
-            return lhs.second < rhs.second; // sort-by-value
-        }
-        return lhs.first < rhs.first; // sort-by-key otherwise
-    };
+    auto const predicate = [](bool ascending_) {
+        auto const ascending_predicate = [](pair_type const& lhs, pair_type const& rhs) {
+            if (lhs.second != rhs.second) {
+                return lhs.second < rhs.second; // sort-by-value
+            }
+            return lhs.first < rhs.first; // sort-by-key otherwise
+        };
 
-    auto const descending_predicate = [](pair_type const& lhs, pair_type const& rhs) {
-        if (lhs.second != rhs.second) {
-            return lhs.second > rhs.second; // sort-by-value
+        auto const descending_predicate = [](pair_type const& lhs, pair_type const& rhs) {
+            if (lhs.second != rhs.second) {
+                return lhs.second > rhs.second; // sort-by-value
+            }
+            return lhs.first < rhs.first; // sort-by-key otherwise
+        };
+
+        if (ascending_) {
+            return std::function<bool (pair_type const&, pair_type const&)>{ ascending_predicate };
+        } else {
+            return std::function<bool (pair_type const&, pair_type const&)>{ descending_predicate };
         }
-        return lhs.first < rhs.first; // sort-by-key otherwise
-    };
+    }(ascending);
 
     std::vector<pair_type> vec{ count_map.begin(), count_map.end() };
-    auto const predicate = ascending ? ascending_predicate : descending_predicate;
     std::sort(vec.begin(), vec.end(), predicate);
 
     return vec;
