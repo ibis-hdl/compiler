@@ -123,38 +123,46 @@ public:
      */
     option_value_proxy const operator[](std::string const& option_name) const
     {
-    // https://wandbox.org/permlink/SklFbT05oHEGFhqW
-#if 0
-        // const_cast<> required to get the intended API behavior
-        // (the default behavior corresponds to insert key if not found)
-        if (exist(option_name)) {
-            return option_value_proxy{ const_cast<map_type&>(this->map)[option_name] };
-        }
-#else
         auto iter = map.find(option_name);
         if (iter != map.end()) {
             // debug_print(option_name, iter->second);
             return option_value_proxy{ iter->second };
         }
-#endif
+
         return option_value_proxy{ none };
     }
 
     /**
      * Lookup the configuration map for writing, the option_name is trimmed,
-     * means the leading chars '--' are remove to get better hashes. If the
+     * means the leading chars '--' are removed to get better names. If the
      * option_name doesn't exist it's inserted, otherwise the a reference
-     * to the stored config_value is returned.
-     * Hence, it behaves as the std::map[].
+     * to the stored config_value is returned; hence, it behaves as the std::map[].
      *
      * \param  option_name  The name of the option to lookup in the trimmed form.
+     * \param  value        The value to be stored.
      * \return config_value The value as reference to optional<string>.
      */
-    template <typename T> void set(std::string_view option_name, T&& value)
+    template <typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+    void set(std::string_view option_name, T value)
+    {
+        map[trim(option_name)].emplace<T>(value);
+    }
+
+    /**
+     * Lookup the configuration map for writing, the option_name is trimmed,
+     * means the leading chars '--' are removed to get better names. If the
+     * option_name doesn't exist it's inserted, otherwise the a reference
+     * to the stored config_value is returned; hence, it behaves as the std::map[].
+     *
+     * \param  option_name  The name of the option to lookup in the trimmed form.
+     * \param  value        The value to be stored.
+     * \return config_value The value as reference to optional<string>.
+     */
+    template <typename T, typename = std::enable_if_t<!std::is_integral_v<std::remove_reference_t<T>>>>
+    void set(std::string_view option_name, T&& value)
     {
         using type = std::remove_reference_t<T>;
         map[trim(option_name)].emplace<type>(std::forward<T>(value));
-        // map[trim(option_name)] = std::forward<type>(value);
     }
 
     /**
