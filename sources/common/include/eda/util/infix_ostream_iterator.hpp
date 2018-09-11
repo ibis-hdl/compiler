@@ -38,8 +38,14 @@ namespace util {
  */
 template <class T, class CharT = char, class TraitsT = std::char_traits<CharT>>
 class infix_ostream_iterator
-    : public std::iterator<std::output_iterator_tag, void, void, void, void> {
+{
 public:
+	using iterator_category = std::output_iterator_tag;
+    using value_type = void;
+    using difference_type = void;
+    using pointer = void;
+    using reference = void;
+
     using ostream_type = std::basic_ostream<CharT, TraitsT>;
 
 public:
