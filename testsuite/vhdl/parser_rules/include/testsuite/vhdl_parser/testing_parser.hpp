@@ -54,7 +54,9 @@ struct testing_parser
         auto [iter, end] = position_cache.range(id);
 
 #if 1
-#if defined(__clang__) // GCC fails here
+        /* GCC 7.3.0 fails here for unknown reasons, \see
+        https://wandbox.org/permlink/xdrhEvwQqvGqh8If */
+#if defined(__clang__)
         /* using different iterator_types causes linker errors, see e.g.
          * [linking errors while separate parser using boost spirit x3](
          *  https://stackoverflow.com/questions/40496357/linking-errors-while-separate-parser-using-boost-spirit-x3) */

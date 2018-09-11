@@ -13,7 +13,7 @@
 
 // clang-format off
 #if BOOST_OS_WINDOWS && !EDA_ON_WINDOWS_USE_ANSII_COLOR
-// not fully C++17 MinGW g++
+// not fully C++17 MinGW g++-7.3.0
 #  include <eda/compiler/detail/compiler_push.hpp>
 #  if defined(__GNUC__) && !defined(__clang__)
 #    pragma GCC diagnostic ignored "-Wimplicit-fallthrough"

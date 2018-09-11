@@ -6,7 +6,7 @@ Required Tools to Build & Configuration
 
 * C++17 compliant compiler, tested with
     - clang++ 5.0, g++7.3.1 on Linux
-    - g++ 7.3 Windows MinGW
+    - g++ 7.3.0 Windows MinGW
 
 * cmake 3.12
     - GNU make
