@@ -73,6 +73,16 @@ if(CLANG_WARN_EVERYTHING)
 endif(CLANG_WARN_EVERYTHING)
 
 
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        -g -fsanitize=address -fno-omit-frame-pointer
+    )    
+    set_target_properties(${PROJECT_NAME} PROPERTIES 
+        LINK_FLAGS "-g -fsanitize=address -fno-omit-frame-pointer"
+    )
+endif()
+
+
 ##
 # Boost stacktrace
 # [Configuration and Build](
