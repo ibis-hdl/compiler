@@ -51,33 +51,48 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 )
 
 
-if(MSVC)
-	target_compile_options(${PROJECT_NAME} PRIVATE
-		/W1
-	)
-	# [#define NOMINMAX using std::min/max}(
-	#  https://stackoverflow.com/questions/13416418/define-nominmax-using-stdmin-max)
-	target_compile_definitions(${PROJECT_NAME} PUBLIC
-		NOMINMAX
-	)
-else()
-	target_compile_options(${PROJECT_NAME} PRIVATE
-		-Wall 
-		-Wextra
-	)
-endif()
+target_compile_options(${PROJECT_NAME} PRIVATE
+    $<$<CXX_COMPILER_ID:MSVC>:      /W1>
+    $<$<CXX_COMPILER_ID:GNU>:       -Wall -Wextra>
+    $<$<CXX_COMPILER_ID:Clang>:     -Wall -Wextra>
+)
 
 
-##
-# MSYS2/MinGW64 has problems with spirit.x3 (doesn't help really)
-if(WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+# handle problems with Spirit.X template depth
+target_compile_options(${PROJECT_NAME} PRIVATE
+    # - limit gcc/clang template error depth printing
+    # - increase limit especially for clang recursive template instantiation,
+    #   otherwise exceedes maximum depth of 512    
+    $<$<CXX_COMPILER_ID:GNU>:  -ftemplate-backtrace-limit=0 -ftemplate-depth=1024>
+    $<$<CXX_COMPILER_ID:Clang>:-ftemplate-backtrace-limit=0 -ftemplate-depth=1024>
+)
+
+
+# MSVC and MSYS2/MinGW64 has problems with spirit.x3
+# increase object size for windows compiler, otherwise will fail
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     set_source_files_properties(
         src/parser/grammar.cpp
-        PROPERTIES COMPILE_FLAGS 
-            -Wa,-mbig-obj
+        PROPERTIES COMPILE_FLAGS /bigobj
+    )
+elseif(WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    set_source_files_properties(
+        src/parser/grammar.cpp
+        PROPERTIES COMPILE_FLAGS -Wa,-mbig-obj
     )
 endif()
     
+
+target_compile_definitions(${PROJECT_NAME} PUBLIC
+    $<$<CXX_COMPILER_ID:MSVC>:
+        # No min/max macros on windows, \see [#define NOMINMAX using std::min/max](
+        #  https://stackoverflow.com/questions/13416418/define-nominmax-using-stdmin-max)
+        NOMINMAX
+        # remove unnecessary warnings about unchecked iterators
+        _SCL_SECURE_NO_WARNINGS        
+    >
+)
+
 
 ##
 # Clang -Weverything
@@ -104,22 +119,6 @@ if(CLANG_WARN_EVERYTHING)
         )
     endif()
 endif(CLANG_WARN_EVERYTHING)
-
-
-# limit gcc/clang template error depth printing
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    target_compile_options(${PROJECT_NAME} PRIVATE
-        -ftemplate-backtrace-limit=0
-    )
-endif()
-
-
-# increase limit for clang recursive template instantiation
-# otherwise exceedes maximum depth of 256
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    target_compile_options(${PROJECT_NAME}
-        PRIVATE -ftemplate-depth=1024)
-endif()
 
 
 target_link_libraries(${PROJECT_NAME}

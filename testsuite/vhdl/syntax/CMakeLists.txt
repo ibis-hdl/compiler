@@ -37,16 +37,17 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 )
 
 
-if(MSVC)
-    target_compile_options(${PROJECT_NAME} PRIVATE
-        /W4
-    )
-else()
-    target_compile_options(${PROJECT_NAME} PRIVATE
-        -Wall 
-        -Wextra
-    )
-endif()
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+    # don't allow automatically select which libraries to link against    
+    $<$<CXX_COMPILER_ID:MSVC>:BOOST_ALL_NO_LIB>
+)
+
+
+target_compile_options(${PROJECT_NAME} PRIVATE
+    $<$<CXX_COMPILER_ID:MSVC>:      /W1>
+    $<$<CXX_COMPILER_ID:GNU>:       -Wall -Wextra>
+    $<$<CXX_COMPILER_ID:Clang>:     -Wall -Wextra>
+)
 
 
 target_link_libraries(${PROJECT_NAME}

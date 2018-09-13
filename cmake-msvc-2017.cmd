@@ -4,11 +4,11 @@ setlocal
 rem https://crascit.com/2016/04/03/scripting-cmake-builds/
 rem https://cmake.org/cmake/help/v3.12/manual/cmake.1.html#command-line-tool-mode
 
-rem [How to get the path of the batch script in Windows?](
-rem  https://stackoverflow.com/questions/3827567/how-to-get-the-path-of-the-batch-script-in-windows?answertab=active#tab-top)
+rem [What is the current directory in a batch file?](
+rem  https://stackoverflow.com/questions/4419868/what-is-the-current-directory-in-a-batch-file)
 set SCRIPT_PATH=%~dp0
 set EDA_SOURCE_DIR=%SCRIPT_PATH%
-set EDA_BUILD_DIR=%EDA_SOURCE_DIR%..\msvc
+set EDA_BUILD_DIR=%cd%
 
 rem [Visual Studio 15 2017](
 rem https://cmake.org/cmake/help/v3.12/generator/Visual%20Studio%2015%202017.html)

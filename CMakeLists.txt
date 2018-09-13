@@ -53,6 +53,7 @@ find_package(Boost REQUIRED COMPONENTS
     system 
     filesystem
     locale
+    unit_test_framework 
 )
 
 
@@ -98,10 +99,10 @@ endif()
 
 ##
 # playground projects, not build by default
-add_subdirectory(playground/vhdl93)
-add_subdirectory(playground/cxx)
-add_subdirectory(playground/boost_test)
-add_subdirectory(playground/x3)
+#add_subdirectory(playground/vhdl93)
+#add_subdirectory(playground/cxx)
+#add_subdirectory(playground/boost_test)
+#add_subdirectory(playground/x3)
 
 
 ## 

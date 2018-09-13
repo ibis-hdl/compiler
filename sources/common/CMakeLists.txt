@@ -41,16 +41,11 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 )
 
 
-if(MSVC)
-	target_compile_options(${PROJECT_NAME} PRIVATE
-		/W1
-	)
-else()
-	target_compile_options(${PROJECT_NAME} PRIVATE
-		-Wall 
-		-Wextra
-	)
-endif()
+target_compile_options(${PROJECT_NAME} PRIVATE
+    $<$<CXX_COMPILER_ID:MSVC>:      /W1>
+    $<$<CXX_COMPILER_ID:GNU>:       -Wall -Wextra>
+    $<$<CXX_COMPILER_ID:Clang>:     -Wall -Wextra>
+)
 
 
 if(CLANG_WARN_EVERYTHING)

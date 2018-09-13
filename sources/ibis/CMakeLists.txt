@@ -56,25 +56,11 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 )
 
 
-if(MSVC)
-	target_compile_options(${PROJECT_NAME} PRIVATE
-		/W1
-	)
-else()
-	target_compile_options(${PROJECT_NAME} PRIVATE
-		-Wall 
-		-Wextra
-	)
-endif()
-
-
-#target_compile_options(${PROJECT_NAME} PRIVATE
-#    -g -fsanitize=address -fno-omit-frame-pointer
-#)
-#
-#set_target_properties(${PROJECT_NAME} PROPERTIES 
-#    LINK_FLAGS "-g -fsanitize=address -fno-omit-frame-pointer"
-#)
+target_compile_options(${PROJECT_NAME} PRIVATE
+    $<$<CXX_COMPILER_ID:MSVC>:      /W1>
+    $<$<CXX_COMPILER_ID:GNU>:       -Wall -Wextra>
+    $<$<CXX_COMPILER_ID:Clang>:     -Wall -Wextra>
+)
 
 
 if(CLANG_WARN_EVERYTHING)
@@ -85,14 +71,6 @@ if(CLANG_WARN_EVERYTHING)
         )
     endif()
 endif(CLANG_WARN_EVERYTHING)
-
-
-# limit gcc/clang template error depth printing
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    target_compile_options(${PROJECT_NAME} PRIVATE
-        -ftemplate-backtrace-limit=0
-    )
-endif()
 
 
 ##

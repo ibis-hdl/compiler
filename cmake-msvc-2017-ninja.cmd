@@ -10,16 +10,15 @@ set SCRIPT_PATH=%~dp0
 set EDA_SOURCE_DIR=%SCRIPT_PATH%
 set EDA_BUILD_DIR=%cd%
 
-rem [Integrate LLVM Clang 4.x.x / 5.x.x / 6.x.x into Visual Studio 2017]
-rem https://stackoverflow.com/questions/43464856/integrate-llvm-clang-4-x-x-5-x-x-6-x-x-into-visual-studio-2017)
 rem [Visual Studio 15 2017](
 rem https://cmake.org/cmake/help/v3.12/generator/Visual%20Studio%2015%202017.html)
-set CMAKE_GENERATOR="Visual Studio 15 2017 Win64"
-set CMAKE_TOOLSET="LLVM-vs2017"
+rem set CMAKE_GENERATOR="Visual Studio 15 2017 Win64"
+set CMAKE_GENERATOR="Ninja"
 
 rem Debug, Release, RelWithDebInfo, MinSizeRel
-set CMAKE_BUILD_TYPE=Release
+set CMAKE_BUILD_TYPE=RelWithDebInfo
 
+set CMAKE_EXTRA="--trace-expand"
 
 echo ##
 echo ## Configure from Source %EDA_SOURCE_DIR%
@@ -31,14 +30,14 @@ cmake -E make_directory %EDA_BUILD_DIR%
 
 cd %EDA_BUILD_DIR%
 
-cmake %EDA_SOURCE_DIR% ^
-    -G %CMAKE_GENERATOR% -T%CMAKE_TOOLSET% ^
-    -DBOOST_ROOT=c:/Boost ^
-    -DBoost_COMPILER=-clang60 ^
-    -DBoost_USE_STATIC_LIBS=TRUE ^
+cmake %CMAKE_EXTRA% %EDA_SOURCE_DIR% ^
+    -G %CMAKE_GENERATOR% ^
+	-DBOOST_ROOT=c:/Boost ^
+	-DBoost_COMPILER=-vc141 ^
+	-DBoost_USE_STATIC_LIBS=TRUE ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE% ^
-    -DCMAKE_INSTALL_PREFIX=stage ^
     -DBUILD_SHARED_LIBS:BOOL=OFF
+    
         
 cmake --build %EDA_BUILD_DIR% --target all --config %CMAKE_BUILD_TYPE%
 

@@ -5,7 +5,6 @@
  *      Author: olaf
  */
 
-#define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE "VHDL Parser Test Suite"
 #include <eda/compiler/warnings_off.hpp>            // IWYU pragma: keep
 #include <boost/test/included/unit_test.hpp>        // IWYU pragma: keep

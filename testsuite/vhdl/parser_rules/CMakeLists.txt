@@ -148,31 +148,41 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 )
 
 
-if(MSVC)
-    target_compile_options(${PROJECT_NAME} PRIVATE
-        /W4
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+    # don't allow automatically select which libraries to link against    
+    $<$<CXX_COMPILER_ID:MSVC>:BOOST_ALL_NO_LIB>
+)
+
+
+target_compile_options(${PROJECT_NAME} PRIVATE
+    $<$<CXX_COMPILER_ID:MSVC>:      /W1>
+    $<$<CXX_COMPILER_ID:GNU>:       -Wall -Wextra>
+    $<$<CXX_COMPILER_ID:Clang>:     -Wall -Wextra>
+)
+
+
+# handle problems with Spirit.X template depth
+target_compile_options(${PROJECT_NAME} PRIVATE
+    # - limit gcc/clang template error depth printing
+    # - increase limit especially for clang recursive template instantiation,
+    #   otherwise exceedes maximum depth of 512    
+    $<$<CXX_COMPILER_ID:GNU>:  -ftemplate-backtrace-limit=0 -ftemplate-depth=1024>
+    $<$<CXX_COMPILER_ID:Clang>:-ftemplate-backtrace-limit=0 -ftemplate-depth=1024>
+)
+
+
+# MSVC and MSYS2/MinGW64 has problems with spirit.x3
+# increase object size for windows compiler, otherwise will fail
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    set_source_files_properties(
+        src/parser/grammar.cpp
+        PROPERTIES COMPILE_FLAGS /bigobj
     )
-else()
-    target_compile_options(${PROJECT_NAME} PRIVATE
-        -Wall 
-        -Wextra
+elseif(WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    set_source_files_properties(
+        src/parser/grammar.cpp
+        PROPERTIES COMPILE_FLAGS -Wa,-mbig-obj
     )
-endif()
-
-
-# limit gcc/clang template error depth printing
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    target_compile_options(${PROJECT_NAME} PRIVATE
-        -ftemplate-backtrace-limit=0
-    )
-endif()
-
-
-# increase limit especially for clang recursive template instantiation,
-# otherwise exceedes maximum depth of 512
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    target_compile_options(${PROJECT_NAME} PRIVATE 
-        -ftemplate-depth=1024)
 endif()
 
 
@@ -181,13 +191,12 @@ endif()
 set(EDA_VHDL_PARSER_DEBUG OFF CACHE BOOL "debug printer of spirit.x3 parser tree")
 if("${EDA_VHDL_PARSER_DEBUG}")
     target_compile_definitions(${PROJECT_NAME}
-        PRIVATE BOOST_SPIRIT_X3_DEBUG=1)
+        PRIVATE BOOST_SPIRIT_X3_DEBUG)
 endif()
 
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
     eda::vhdl_parser
-    #eda::common # FixMe: shouldn't this depency propagated by eda::vhdl_grammar?
     testsuite::common
     Boost::system
     Boost::filesystem
