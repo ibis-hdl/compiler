@@ -124,7 +124,7 @@ void gdb_signal_handler(int sig, siginfo_t* /*unused*/, void* /*unused*/)
 
     fs::path gdb_exe = bp::search_path("gdb");
 
-    if (cxx_expect_false(gdb_exe.empty())) {
+    if (cxx_expect_not(gdb_exe.empty())) {
         std::cerr << "ERROR: gdb not found\n";
         // XXXX
         return;

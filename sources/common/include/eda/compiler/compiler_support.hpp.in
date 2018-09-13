@@ -39,19 +39,16 @@
 // use __builtin_expect to provide the compiler with branch prediction information
 #if defined(EDA_HAVE_BUILTIN_EXPECT)
 #define cxx_expect(x)       __builtin_expect(!!(x), 1)
-#define cxx_expect_false(x) __builtin_expect(!!(x), 0)
-#elif defined(EDA_HAVE_BUILTIN_ASSUME)
-#define cxx_expect(x)       __assume((x))
-#define cxx_expect_false(x) __assume(!(x))
+#define cxx_expect_not(x)   __builtin_expect(!!(x), 0)
 #else
 #define cxx_expect(x)       x
-#define cxx_expect_false(x) x
+#define cxx_expect_not(x)   x
 #endif
 
 
-#if defined (EDA_HAVE_BUILTIN_UNREACHABLE)
+#if defined(EDA_HAVE_BUILTIN_UNREACHABLE)
 #define cxx_unreachable() __builtin_unreachable();
-#elif defined (EDA_HAVE_BUILTIN_ASSUME)
+#elif defined(EDA_HAVE_BUILTIN_ASSUME)
 #define cxx_unreachable() __assume(0);
 #else
 #define cxx_unreachable() ((void)0)
