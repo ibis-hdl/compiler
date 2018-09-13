@@ -36,7 +36,7 @@ bool parse::operator()(std::string const& input, ast::design_file& design_file)
 
     static_assert(std::is_base_of_v<std::forward_iterator_tag,
                       typename std::iterator_traits<parser::iterator_type>::iterator_category>,
-        "iterator type must be of multipass iterator");
+        "iterator type must be of multi-pass iterator");
 
     /* using different iterator_types causes linker errors, see e.g.
      * [linking errors while separate parser using boost spirit x3](
@@ -71,43 +71,41 @@ bool parse::operator()(std::string const& input, ast::design_file& design_file)
          * [How do I make a call to what() on std::exception_ptr](
          * https://stackoverflow.com/questions/14232814/how-do-i-make-a-call-to-what-on-stdexception-ptr)
          */
-        os << make_exception_description(filename, e);
+        os << make_exception_description(e, filename);
     } catch (std::exception const& e) {
-        os << make_exception_description(filename, e);
+        os << make_exception_description(e, filename);
     } catch (...) {
-        using unknown = struct {
-        };
-        os << make_exception_description(filename, unknown{});
+        os << make_exception_description(filename);
     }
 
     return false;
 }
 
-template <typename ExceptionT>
 std::string parse::make_exception_description(
-    std::string const& filename, ExceptionT const& exception) const
+    std::exception const& exception, std::string const& filename) const
 {
     using boost::locale::format;
     using boost::locale::translate;
-
-    std::string const what = [&] {
-        if constexpr (std::is_base_of_v<std::remove_reference_t<ExceptionT>, std::exception>) {
-            return std::string{ exception.what() };
-        }
-
-        // make GGC quiet
-        boost::ignore_unused(exception);
-
-        /* An exception was caught which hasn't been derived from
-         * std::exception, hence no what() is available - simple unknown. */
-        return translate("ExceptionDescription", "unknown").str();
-    }();
 
     // clang-format off
     return (format(translate("ExceptionDescription",
         "Caught exception '{1}' during parsing file '{2}'"
         ))
-        % what
+        % exception.what()
+        % filename
+        ).str();
+    // clang-format on
+};
+
+std::string parse::make_exception_description(std::string const& filename) const
+{
+    using boost::locale::format;
+    using boost::locale::translate;
+
+    // clang-format off
+    return (format(translate("ExceptionDescription",
+        "Caught unexpected exception during parsing file '{1}'"
+        ))
         % filename
         ).str();
     // clang-format on

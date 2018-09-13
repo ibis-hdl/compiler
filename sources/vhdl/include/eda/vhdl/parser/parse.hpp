@@ -12,6 +12,7 @@
 
 #include <iosfwd>
 #include <string>
+#include <exception>
 
 namespace eda {
 namespace vhdl {
@@ -38,9 +39,10 @@ public:
     bool operator()(std::string const& input, ast::design_file& design_file) /* const */;
 
 private:
-    template <typename ExceptionT>
     std::string make_exception_description(
-        std::string const& filename, ExceptionT const& exception) const;
+        std::exception const& exception, std::string const& filename) const;
+
+    std::string make_exception_description(std::string const& filename) const;
 
 private:
     // clang-format off
