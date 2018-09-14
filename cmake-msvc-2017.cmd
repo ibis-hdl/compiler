@@ -12,10 +12,11 @@ set EDA_BUILD_DIR=%cd%
 
 rem [Visual Studio 15 2017](
 rem https://cmake.org/cmake/help/v3.12/generator/Visual%20Studio%2015%202017.html)
-set CMAKE_GENERATOR="Visual Studio 15 2017 Win64"
+rem set CMAKE_GENERATOR="Visual Studio 15 2017 Win64"
+set CMAKE_GENERATOR="Ninja"
 
 rem Debug, Release, RelWithDebInfo, MinSizeRel
-set CMAKE_BUILD_TYPE=RelWithDebInfo
+set CMAKE_BUILD_TYPE=Release
 
 
 echo ##
@@ -30,11 +31,12 @@ cd %EDA_BUILD_DIR%
 
 cmake %EDA_SOURCE_DIR% ^
     -G %CMAKE_GENERATOR% ^
+    -DCMAKE_CXX_COMPILER=cl ^
 	-DBOOST_ROOT=c:/Boost ^
 	-DBoost_USE_STATIC_LIBS=TRUE ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE% ^
     -DBUILD_SHARED_LIBS:BOOL=OFF 
         
-cmake --build %EDA_BUILD_DIR% --target all --config %CMAKE_BUILD_TYPE%
+rem cmake --build %EDA_BUILD_DIR% --target all --config %CMAKE_BUILD_TYPE%
 
 rem set /p temp="Hit enter to continue"

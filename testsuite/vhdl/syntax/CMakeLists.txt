@@ -60,6 +60,13 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+        Boost::unit_test_framework 
+    )
+endif()
+
+
 ## 
 # CMake/CTest
 # The argument is the top level directory of the test directories of 'test_case'

@@ -34,6 +34,6 @@ if(EDA_WITH_BOOST_STACKTRACE AND EDA_WITH_GDB_STACKTRACE)
 endif()
 
 
-if(EDA_WITH_BOOST_STACKTRACE)
+if(EDA_WITH_BOOST_STACKTRACE AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
     message(FATAL_ERROR "Sorry, my Fedora box has only boost 1.64; boost.stacktrace is since 1.65 ...")
 endif()

@@ -67,6 +67,13 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+        Boost::unit_test_framework 
+    )
+endif()
+
+
 #set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-v")
 
 

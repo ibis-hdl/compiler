@@ -14,7 +14,7 @@ add_executable(${PROJECT_NAME} "")
 
 
 # Ninja Build
-set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_COMPILE job_pool_one_core)
+set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_COMPILE job_pool_max_cores)
 set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
 
 
@@ -175,12 +175,12 @@ target_compile_options(${PROJECT_NAME} PRIVATE
 # increase object size for windows compiler, otherwise will fail
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     set_source_files_properties(
-        src/parser/grammar.cpp
+        src/common/rules.cpp
         PROPERTIES COMPILE_FLAGS /bigobj
     )
 elseif(WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     set_source_files_properties(
-        src/parser/grammar.cpp
+        src/common/rules.cpp
         PROPERTIES COMPILE_FLAGS -Wa,-mbig-obj
     )
 endif()
@@ -202,6 +202,13 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Boost::filesystem
     Boost::locale
 )
+
+
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+        Boost::unit_test_framework 
+    )
+endif()
 
 
 ## 
