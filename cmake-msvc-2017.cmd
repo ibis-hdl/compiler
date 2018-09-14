@@ -16,7 +16,7 @@ rem set CMAKE_GENERATOR="Visual Studio 15 2017 Win64"
 set CMAKE_GENERATOR="Ninja"
 
 rem Debug, Release, RelWithDebInfo, MinSizeRel
-set CMAKE_BUILD_TYPE=Release
+set CMAKE_BUILD_TYPE=RelWithDebInfo
 
 
 echo ##

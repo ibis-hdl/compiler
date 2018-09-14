@@ -50,6 +50,7 @@
 #include <eda/namespace_alias.hpp>
 
 extern bool register_gdb_signal_handler();
+extern bool register_stacktrace_signal_handler();
 
 namespace ibis {
 
@@ -236,10 +237,15 @@ void init::parse_cli(int argc, const char* argv[])
 
 void init::register_signal_handlers()
 {
-#if defined(EDA_WITH_GDB_STACKTRACE) && (BOOST_OS_LINUX)
     using failure = eda::color::message::failure;
 
+#if defined(EDA_WITH_GDB_STACKTRACE) && (BOOST_OS_LINUX)
     if (!register_gdb_signal_handler()) {
+        std::cerr << failure("Failed to install signal handlers") << '\n';
+        std::exit(EXIT_FAILURE);
+    }
+#elif defined(EDA_WITH_BOOST_STACKTRACE)
+    if (!register_stacktrace_signal_handler()) {
         std::cerr << failure("Failed to install signal handlers") << '\n';
         std::exit(EXIT_FAILURE);
     }

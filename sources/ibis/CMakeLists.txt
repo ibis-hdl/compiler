@@ -89,12 +89,17 @@ endif()
 #  https://www.boost.org/doc/libs/1_67_0/doc/html/stacktrace/configuration_and_build.html)
 if(EDA_WITH_BOOST_STACKTRACE)
     if(WIN32)
-        find_package(WinDbg REQUIRED)
+        find_package(Boost REQUIRED COMPONENTS stacktrace_windbg)
         message(STATUS "WinDbg library found.")
-        message(STATUS "WinDbg library is: ${DbgEng_LIBRARY}")
-        target_compile_definitions(BOOST_STACKTRACE_USE_WINDBG)
-        target_include_directories(${PROJECT_NAME} PUBLIC foooo)
-        target_link_libraries(${PROJECT_NAME} INTERFACE WinDbg::WinDbg)
+        target_compile_definitions(${PROJECT_NAME} PRIVATE
+            BOOST_STACKTRACE_USE_WINDBG
+        )
+        target_include_directories(${PROJECT_NAME} PRIVATE 
+            ${Boost_INCLUDE_DIRS}
+        )
+        target_link_libraries(${PROJECT_NAME} PRIVATE
+            dbgeng ole32 
+        )
     else()
         find_package(Backtrace REQUIRED)
         message(STATUS "### backtrace library found.")
