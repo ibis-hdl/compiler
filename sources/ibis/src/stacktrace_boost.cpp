@@ -5,37 +5,42 @@
  *      Author: olaf
  */
 
+#include <ibis/signal_handler.hpp>
+
 #include <boost/stacktrace.hpp>
 
 #include <boost/filesystem.hpp>
 
 #include <signal.h>
+#include <atomic>
 #include <iostream>
+
+#include <eda/color/message.hpp>
 
 #include <eda/namespace_alias.hpp>
 
 namespace fs = boost::filesystem;
 
-const char* signame(int sig)
+namespace /* anonymous */
 {
-    switch (sig) {
-        case SIGSEGV:
-            return "SIGSEGV";
-        case SIGABRT:
-            return "SIGABRT";
-        case SIGILL:
-            return "SIGILL";
-        case SIGFPE:
-            return "SIGFPE";
-        default:
-            return "???";
-    }
-}
+
+// or semaphore to notify a waiting thread
+volatile std::sig_atomic_t sig_caught;
+
+} // anonymous namespace
+
+using ibis::signal_name;
 
 void stacktrace_signal_handler(int signum)
 {
-    std::cerr << "Caught Signal '" << signame(signum) << std::endl;
+    sig_caught = signum;
 
+    using failure = eda::color::message::failure;
+
+    std::cerr << failure("FAILURE") << " caught signal #"
+              << signum << " (" << signal_name(signum) << ")\n";
+
+    // dropping into the default signal handler
     ::signal(signum, SIG_DFL);
 
    // write the trace to file and return number of frames written

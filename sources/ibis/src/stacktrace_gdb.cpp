@@ -5,6 +5,8 @@
  *      Author: olaf
  */
 
+#include <ibis/signal_handler.hpp>
+
 #include <csignal>
 #include <fstream>
 #include <optional>
@@ -45,9 +47,8 @@
 namespace fs = boost::filesystem;
 namespace bp = boost::process;
 
-bool register_gdb_signal_handler();
 #if (BOOST_OS_LINUX)
-void gdb_signal_handler(int sig, siginfo_t* /*unused*/, void* /*unused*/);
+void gdb_signal_handler(int signum, siginfo_t* /*unused*/, void* /*unused*/);
 #endif
 bool gdb_detected();
 bool valgrind_detected();
@@ -61,30 +62,10 @@ namespace /* anonymous */
 // or semaphore to notify a waiting thread
 volatile std::sig_atomic_t sig_caught;
 
-#if (BOOST_OS_LINUX)
-const char* signame(int sig)
-{
-
-    switch (sig) {
-        case SIGSEGV:
-            return "SIGSEGV";
-        case SIGABRT:
-            return "SIGABRT";
-        case SIGILL:
-            return "SIGILL";
-        case SIGFPE:
-            return "SIGFPE";
-        case SIGUSR1:
-            return "SIGUSR1";
-        case SIGBUS:
-            return "SIGBUS";
-        default:
-            return "???";
-    }
-}
-#endif
 
 } // anonymous namespace
+
+using ibis::signal_name;
 
 #if (BOOST_OS_LINUX)
 bool register_gdb_signal_handler()
@@ -113,14 +94,14 @@ bool register_gdb_signal_handler()
     return true;
 }
 
-void gdb_signal_handler(int sig, siginfo_t* /*unused*/, void* /*unused*/)
+void gdb_signal_handler(int signum, siginfo_t* /*unused*/, void* /*unused*/)
 {
-    sig_caught = sig;
+    sig_caught = signum;
 
     using failure = eda::color::message::failure;
 
-    std::cerr << failure("FAILURE") << " gdb stacktrace call for signal #" << sig << " ("
-              << signame(sig) << ")\n";
+    std::cerr << failure("FAILURE") << " caught signal #"
+              << signum << " (" << signal_name(signum) << ")\n";
 
     fs::path gdb_exe = bp::search_path("gdb");
 
@@ -174,7 +155,7 @@ void gdb_signal_handler(int sig, siginfo_t* /*unused*/, void* /*unused*/)
     gdb_proc.wait_for(time, ec);
 
     // ... dropping into the default signal handler
-    signal(sig, SIG_DFL);
+    signal(signum, SIG_DFL);
 }
 #endif
 
@@ -209,7 +190,7 @@ bool gdb_detected()
     }
 
 #if 0
-    /* Doesn't work as expected, gdb can't atach:
+    /* Doesn't work as expected, gdb can't attach:
      * warning: process <pid1> is already traced by process <pi2>
      * ptrace: Operation not permitted.
      * More investigating required,

@@ -30,8 +30,8 @@ configure_file(
 
 target_sources(${PROJECT_NAME} PRIVATE
     src/main.cpp
-    src/signal.cpp
     src/init.cpp
+    src/signal_handler.cpp
     $<$<BOOL:${EDA_WITH_GDB_STACKTRACE}>:src/stacktrace_gdb.cpp>
     $<$<BOOL:${EDA_WITH_BOOST_STACKTRACE}>:src/stacktrace_boost.cpp>  
     src/build_info.cpp
