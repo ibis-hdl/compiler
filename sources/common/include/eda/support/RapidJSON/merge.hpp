@@ -50,7 +50,7 @@ static inline void merge_object(::rapidjson::Value& dest, ::rapidjson::Value& sr
 
 static inline void merge_document(::rapidjson::Document& dest, ::rapidjson::Document& src)
 {
-    merge_object(dest, src, src.GetAllocator());
+    merge_object(dest, src, dest.GetAllocator());
 }
 
 } // namespace rapidjson

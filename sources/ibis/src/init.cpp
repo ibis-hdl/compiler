@@ -95,8 +95,10 @@ void init::parse_cli(int argc, const char* argv[])
         std::string locale_dir;
     } parameter;
 
-    // As idea \see
-    // [What do the -f and -m in gcc/clang compiler options stand for](
+    // Nomenclature:
+    // - f: Flag
+    // - m: Mode
+    // \see [What do the -f and -m in gcc/clang compiler options stand for](
     // https://stackoverflow.com/questions/16227501/what-do-the-f-and-m-in-gcc-clang-compiler-options-stand-for)
 
     // clang-format off
@@ -204,6 +206,7 @@ void init::parse_cli(int argc, const char* argv[])
 
     // Primary Options
     setting.set("--files", parameter.files);
+
     if (app.count("--lib-path") != 0u) {
         setting.set("--lib-path", parameter.lib_path);
     }
@@ -262,7 +265,6 @@ void init::user_config_message_color()
     }
 
     bool const quiet = [&] { return setting["quiet"]; }();
-
     bool const verbose = [&] { return setting["verbose"]; }();
 
     static const char default_cfg_json[] = R"({
@@ -294,22 +296,32 @@ void init::user_config_message_color()
 })";
 
     using namespace eda;
+    using namespace eda::color;
     namespace rjson = rapidjson;
 
-    auto const parse_json = [&quiet](char const* json) { // maybe throw to get path printed??
+    auto const parse_json = [&quiet](char const json[]) {
         rjson::Document document;
         if (document.Parse(json).HasParseError()) {
             if (!quiet) {
-                std::cerr << eda::color::message::error("Error:")
+                // clang-format off
+                std::cerr << message::error("Error:")
                           << " parsing JSON configuration file: "
-                          << rjson::GetParseError_En(document.GetParseError()) << "(offset "
-                          << document.GetErrorOffset() << ")\n";
+                          << rjson::GetParseError_En(document.GetParseError())
+                          << "(offset " << document.GetErrorOffset() << ")\n";
+                // clang-format on
             }
         }
         return document;
     };
 
-    rjson::Document config = parse_json(default_cfg_json);
+    auto const print_json = [](rjson::Document const& doc) {
+        rjson::StringBuffer buffer;
+        rjson::PrettyWriter<rjson::StringBuffer> writer(buffer);
+        doc.Accept(writer);
+        std::cerr << buffer.GetString() << std::endl;
+    };
+
+    rjson::Document default_config = parse_json(default_cfg_json);
 
     // load user settings if exists and merge them into defaults
 
@@ -320,28 +332,21 @@ void init::user_config_message_color()
 
     if (json_txt) {
         rjson::Document user_config = parse_json((*json_txt).c_str());
-        merge(config, user_config);
+        merge(default_config, user_config);
     } else {
         /* nothing */
     }
 
     if (verbose) {
-        std::cerr << eda::color::message::note("Note:") << " Using message color defaults:\n";
-        auto const print_json = [](auto const& doc) {
-            rjson::StringBuffer str_buff;
-            rjson::PrettyWriter<rjson::StringBuffer> writer(str_buff);
-            doc.Accept(writer);
-            std::cerr << str_buff.GetString() << std::endl;
-        };
-        print_json(config);
+        std::cerr << message::note("Note:") << " Using message color defaults:\n";
+        print_json(default_config);
     }
 
     auto const get_formatter = [&](char const json_ptr[]) {
 
-        using namespace eda::color::message;
         eda::color::printer format;
 
-        if (rjson::Value* style = rjson::GetValueByPointer(config, rjson::Pointer(json_ptr))) {
+        if (rjson::Value* style = rjson::GetValueByPointer(default_config, rjson::Pointer(json_ptr))) {
             for (auto const& object : style->GetObject()) {
                 auto const name = object.name.GetString();
                 auto const attr_name = object.value.GetString();
@@ -352,12 +357,12 @@ void init::user_config_message_color()
                     if (attr) {
                         format |= *attr;
                         if (verbose) {
-                            std::cerr << note("NOTE:") << " using "
+                            std::cerr << message::note("NOTE:") << " using "
                                       << json_ptr << "/" << name << " = " << attr_name << '\n';
                         }
                     } else {
                         if (!quiet) {
-                            std::cerr << warning("WARNING:") << " Ignore invalid "
+                            std::cerr << message::warning("WARNING:") << " Ignore invalid "
                                       << json_ptr << "/" << name << " = " << attr_name << '\n';
                         }
                     }
@@ -388,28 +393,28 @@ void init::user_config_message_color()
 
     // clang-format off
     auto const failure_format = get_formatter("/message/failure/style");
-    imbue(std::cerr, std::make_unique<color::message::failure_facet>(
+    imbue(std::cerr, std::make_unique<message::failure_facet>(
         failure_format,
         color::color_off,
         force_color)
     );
 
     auto const error_format = get_formatter("/message/error/style");
-    imbue(std::cerr, std::make_unique<color::message::error_facet>(
+    imbue(std::cerr, std::make_unique<message::error_facet>(
         error_format,
         color::color_off,
         force_color)
     );
 
     auto const warning_format = get_formatter("/message/warning/style");
-    imbue(std::cerr, std::make_unique<color::message::warning_facet>(
+    imbue(std::cerr, std::make_unique<message::warning_facet>(
         warning_format,
         color::color_off,
         force_color)
     );
 
     auto const note_format = get_formatter("/message/note/style");
-    imbue(std::cerr, std::make_unique<color::message::note_facet>(
+    imbue(std::cerr, std::make_unique<message::note_facet>(
         note_format,
         color::color_off,
         force_color)
@@ -422,18 +427,18 @@ void init::l10n()
     using namespace boost::locale;
     using namespace eda;
 
+#if (BOOST_OS_WINDOWS)
+    const char backend[] = "winapi";
+#else
+    const char backend[] = "std";
+#endif
+
     // [Using Localization Backends](
     //  https://www.boost.org/doc/libs/1_68_0/libs/locale/doc/html/using_localization_backends.html)
-#if 1
     localization_backend_manager l10n_backend = localization_backend_manager::global();
-#if (BOOST_OS_WINDOWS)
-    l10n_backend.select("winapi");
-#else
-    l10n_backend.select("std");
-#endif
+    l10n_backend.select(backend);
     generator gen_{ l10n_backend };
     localization_backend_manager::global(l10n_backend);
-#endif
 
     generator gen{};
 
