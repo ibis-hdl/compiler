@@ -331,7 +331,7 @@ void init::user_config_message_color()
             rjson::StringBuffer str_buff;
             rjson::PrettyWriter<rjson::StringBuffer> writer(str_buff);
             doc.Accept(writer);
-            ::puts(str_buff.GetString());
+            std::cerr << str_buff.GetString() << std::endl;
         };
         print_json(config);
     }
