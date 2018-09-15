@@ -99,12 +99,17 @@ if (EDA_BUILD_TESTS)
     add_subdirectory(testsuite/vhdl/syntax)
 endif()
 
+
 ##
-# playground projects, not build by default
-#add_subdirectory(playground/vhdl93)
-#add_subdirectory(playground/cxx)
-#add_subdirectory(playground/boost_test)
-#add_subdirectory(playground/x3)
+# playground projects
+# - not build by default
+# - excluded for MSVC
+if (NOT MSVC)
+add_subdirectory(playground/vhdl93)
+add_subdirectory(playground/cxx)
+add_subdirectory(playground/boost_test)
+add_subdirectory(playground/x3)
+endif()
 
 
 ## 
