@@ -59,11 +59,24 @@ private:
     template <typename NodeT>
     bool label_matches(NodeT const& node, std::string_view const& node_name) const;
 
+    bool keyword_matches(ast::process_statement const& node, std::string_view const& node_name) const;
+
+private:
+    /**
+     * Lookup for names of AST and parser's {node/rule}_name to beautify them
+     * to string literals for error reporting to users. The node_name comes from
+     * AST visitors.
+     *
+     * @param node_name AST node name.
+     * @return Beautified name as of parser::on_error_base::lookup()
+     */
+    std::string_view pretty_node_name(std::string_view node_name) const;
+
 private:
     // format-clang off
-    std::ostream& os;
-    vhdl::context& context;
-    analyze::error_handler_type& error_handler;
+    std::ostream&                                   os;
+    vhdl::context&                                  context;
+    analyze::error_handler_type&                    error_handler;
     // format-clang on
 };
 

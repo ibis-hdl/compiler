@@ -45,6 +45,9 @@ public:
     {
     }
 
+    basic_counter(basic_counter const&) = delete;
+    basic_counter& operator=(basic_counter const&) = delete;
+
 public:
     /**
      * prefix ++ increment

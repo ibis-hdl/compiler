@@ -28,11 +28,11 @@ using process_statement_part = ast::sequence_of_statements;
 struct process_statement : position_tagged
 {
     optional<ast::label>            label;
-    bool                            postponed;
+    optional<ast::keyword_token>    postponed;
     ast::sensitivity_list           sensitivity_list;
     ast::process_declarative_part   declarative_part;
     ast::process_statement_part     statement_part;
-    bool                            end_postponed;
+    optional<ast::keyword_token>    end_postponed;
     optional<ast::label>            end_label;
 
     process_statement()

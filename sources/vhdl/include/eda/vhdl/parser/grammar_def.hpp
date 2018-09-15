@@ -76,7 +76,7 @@ const literal_attribute literal = {};
 } // namespace vhdl
 } // namespace eda
 
-/*
+/*******************************************************************************
  * Keywords
  */
 namespace eda {
@@ -190,12 +190,13 @@ x3::symbols<> const keywords(
 );
 
 auto const keyword = x3::rule<struct _>{ "keyword" } = distinct(keywords);
-}
+
+} // namespace keywords
 } // namespace parser
 } // namespace vhdl
 } // namespace eda
 
-/*
+/*******************************************************************************
  * Operators
  */
 namespace eda {
@@ -366,16 +367,13 @@ BOOST_SPIRIT_DEFINE(
 } // namespace vhdl
 } // namespace eda
 
-/*
- * Main Rules
+/*******************************************************************************
+ * Rule Instances
  */
 namespace eda {
 namespace vhdl {
 namespace parser {
 
-/*
- * Rule Instances
- */
 // clang-format off
 abstract_literal_type const abstract_literal { "abstract_literal" };
 access_type_definition_type const access_type_definition { "access_type_definition" };
@@ -605,6 +603,18 @@ waveform_type const waveform { "waveform" };
 waveform_element_type const waveform_element { "waveform_element" };
 // clang-format on
 
+} // namespace parser
+} // namespace vhdl
+} // namespace eda
+
+
+/*******************************************************************************
+ * Spirit.X3 BNF Rules
+ */
+namespace eda {
+namespace vhdl {
+namespace parser {
+
 using namespace parser::keywords;
 
 using operators::adding_operator;
@@ -743,7 +753,7 @@ auto const label_colon = x3::rule<struct _, ast::identifier> { "label" } =
  * separated compilation units.
  *
  * Some notes about numeric literals
- * ---------------------------------- xxxx
+ * ----------------------------------
  * The correct tagged kind_type of {based, decimal}_literal is elementary on
  * elaboration time, since after converting to numeric the informations about
  * the integer/real string are lost, see concrete why it's important e.g.
@@ -781,7 +791,7 @@ auto const access_type_definition_def =
 //     | file_name
 //     | open
 auto const actual_designator_def =
-    // Note, expression also matches {signal,variable,file}_name
+      // Note, expression also matches {signal,variable,file}_name BNF rules
       expression
     | OPEN
     ;
@@ -827,7 +837,7 @@ auto const aggregate_def =
 // alias_declaration ::=                                          [LRM93 §4.3.3]
 //     alias alias_designator [ : subtype_indication ] is name [ signature ] ;
 auto const alias_declaration_def = ( // operator precedence
-    ALIAS
+       ALIAS
     >> alias_designator
     >> -( ':' >> subtype_indication )
     >> IS
@@ -915,7 +925,7 @@ auto const array_type_definition_def =
 //     [ report expression ]
 //     [ severity expression ]
 auto const assertion_def =
-       (  ASSERT   >> condition)
+        ( ASSERT   >> condition)
     >> -( REPORT   >> expression )
     >> -( SEVERITY >> expression )
     ;
@@ -1889,7 +1899,7 @@ auto const entity_class_def =
 // entity_class_entry ::=                                           [LRM93 §4.6]
 //     entity_class [ <> ]
 auto const entity_class_entry_def =
-    entity_class
+       entity_class
     >> -lit("<>")
     ;
 
@@ -3147,7 +3157,7 @@ auto const process_statement_def = ( // operator precedence
     >> BEGIN
     >> process_statement_part
     >> END
-    >> -POSTPONED   // FixMe: Twice the POSTPONED keyword is relevant??
+    >> -POSTPONED
     >> PROCESS
     >> -label
     )
@@ -3984,6 +3994,17 @@ auto const waveform_element_def =
     ;
 
 
+} // namespace parser
+} // namespace vhdl
+} // namespace eda
+
+
+/*******************************************************************************
+ * Spirit.X3 BNF Rule Definitions
+ */
+namespace eda {
+namespace vhdl {
+namespace parser {
 
 #include <eda/compiler/warnings_off.hpp>
 
@@ -4258,7 +4279,13 @@ BOOST_SPIRIT_DEFINE(  // -- W --
 
 #include <eda/compiler/warnings_on.hpp>
 
-/*
+
+} // namespace parser
+} // namespace vhdl
+} // namespace eda
+
+
+/*******************************************************************************
  * Annotation and Error handling
  *
  * Note, the AST odes are tagged with ast::position_tagged which is of type
@@ -4270,6 +4297,10 @@ BOOST_SPIRIT_DEFINE(  // -- W --
  * ID are derived from on_success_base (obviously must be changed in
  * the future).
  */
+namespace eda {
+namespace vhdl {
+namespace parser {
+
 // clang-format off
 struct abstract_literal_class : on_success_base {};
 struct access_type_definition_class : on_success_base {};

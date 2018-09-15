@@ -8,6 +8,7 @@
 #include <eda/vhdl/analyze/syntax.hpp>
 
 #include <eda/vhdl/analyze/check/label_match.hpp>
+#include <eda/vhdl/parser/on_error_base.hpp>
 
 #include <eda/support/boost/locale.hpp>
 
@@ -20,6 +21,10 @@ namespace vhdl {
 namespace analyze {
 
 bool syntax_worker::success() const { return context.error_count == 0; }
+
+std::string_view syntax_worker::pretty_node_name(std::string_view node_name) const {
+    return parser::on_error_base::lookup(node_name);
+}
 
 template <typename NodeT>
 bool syntax_worker::label_matches(NodeT const& node, std::string_view const& node_name) const
@@ -40,7 +45,7 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view const& nod
                 (format(translate(
                     "Label mismatch in {1}"
                     ))
-                    % node_name // XXX lookup for pretty name (like on_error_base::ruleid_map)
+                    % pretty_node_name(node_name)
                 ).str()
                 // clang-format on
             );
@@ -55,7 +60,7 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view const& nod
                 (format(translate(
                     "Label ill-formed in {1}"
                     ))
-                    % node_name // XXX lookup for pretty name (like on_error_base::ruleid_map)
+                    % pretty_node_name(node_name)
                 ).str()
                 // clang-format on
             );
@@ -67,6 +72,34 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view const& nod
             cxx_unreachable_bug_triggered();
     }
     cxx_unreachable_bug_triggered();
+}
+
+bool syntax_worker::keyword_matches(ast::process_statement const& node, std::string_view const& node_name) const {
+
+    // Note: Re-Using label_match here results into misleading error message
+    //       "Label mismatch". Further, the keywords aren't tagged so beauty
+    //       error messages arn't possible this way.
+
+    // FixMe: pretty error rendering
+
+    using boost::locale::format;
+    using boost::locale::translate;
+
+    if (!node.postponed && node.end_postponed) {
+        error_handler(node,
+            // clang-format off
+            (format(translate(
+                "ill-formed statement in {1}; (Hint: single trailing keyword 'postponed')"
+                ))
+                % pretty_node_name(node_name)
+            ).str()
+            // clang-format on
+        );
+        ++context.error_count;
+        return false;
+    }
+
+    return true;
 }
 
 void syntax_worker::operator()(
@@ -133,6 +166,7 @@ void syntax_worker::operator()(
     ast::process_statement const& node, std::string_view const& node_name) const
 {
     label_matches(node, node_name);
+    keyword_matches(node, node_name);   // check postponed
 }
 
 } // namespace analyze

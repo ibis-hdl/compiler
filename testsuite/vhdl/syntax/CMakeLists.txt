@@ -26,7 +26,8 @@ target_sources(${PROJECT_NAME} PRIVATE
 )
 
 target_sources(${PROJECT_NAME} PRIVATE
-    src/label_check.cpp
+    src/label_check_test.cpp
+    src/keyword_match_test.cpp
 )
 
 
@@ -75,6 +76,6 @@ add_test(NAME test_vhdl_syntax
     --source-dir=${PROJECT_SOURCE_DIR}
     --destination-dir=${PROJECT_BINARY_DIR}
     --input-extension=.vhdl
-    --write-extension=.result    
-#    --write-extension=.expected    
+#    --write-extension=.result    
+    --write-extension=.expected    
 )

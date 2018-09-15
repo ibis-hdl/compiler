@@ -56,7 +56,7 @@ public:
      * @param which The spirit.x3 BNF rule name.
      * @return Beautified name of the rule.
      */
-    std::string_view lookup(std::string_view which) const
+    static std::string_view lookup(std::string_view which)
     {
         auto const iter = ruleid_map.find(which);
 
