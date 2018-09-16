@@ -18,6 +18,13 @@
 #include <iosfwd>
 
 namespace eda {
+
+// forward
+class settings;
+
+} // namespace eda
+
+namespace eda {
 namespace vhdl {
 
 namespace detail {
@@ -140,6 +147,7 @@ std::ostream& operator<<(std::ostream& os, basic_counter<Tag> const& counter)
 class context {
 public:
     context();
+    context(eda::settings const& settings);
 
 public:
     using error_counter = detail::basic_counter<struct error_tag>;

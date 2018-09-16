@@ -19,7 +19,17 @@ namespace vhdl {
 
 context::context()
 {
-    auto error_limit = 20; // XXX eda::setting["ferror-limit"];
+    unsigned const  error_limit = 20; // default for testsuite
+
+    // check if error_limit is not disabled (equals to 0)
+    if (error_limit != 0u) {
+        error_count.limit() = error_limit;
+    }
+}
+
+context::context(eda::settings const& settings)
+{
+    unsigned const error_limit = settings["ferror-limit"].get<long>();
 
     // check if error_limit is not disabled (equals to 0)
     if (error_limit != 0u) {
