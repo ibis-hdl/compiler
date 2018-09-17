@@ -30,6 +30,7 @@ target_sources(${PROJECT_NAME} PRIVATE
 target_sources(${PROJECT_NAME} PRIVATE
     src/position_cache_test_1.cpp
     src/position_cache_test_2.cpp
+    src/literal_printer_test.cpp
 )
 
 

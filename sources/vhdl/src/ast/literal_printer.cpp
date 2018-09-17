@@ -102,7 +102,7 @@ std::ostream& literal_printer::print(std::ostream& os) const
                     cxx_unreachable_bug_triggered();
             }
 
-            os << "\"" << lit.literal << "\"";
+            os << lit.literal;
 
         },
 
@@ -161,7 +161,7 @@ std::ostream& literal_printer::print(std::ostream& os) const
             );
             // clang-format on
 
-            os << "\"" << literal_f << "\"";
+            os << literal_f;
         });
 
     return os;
