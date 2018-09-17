@@ -11,6 +11,7 @@
 #include <eda/predef.hpp>
 
 #include <csignal>
+#include <functional>
 #include <iostream>
 
 extern bool register_gdb_signal_handler();
@@ -46,7 +47,7 @@ const char* signal_name(int sig_num)
             return "SIGILL";
         case SIGFPE:
             return "SIGFPE";
-#if defined(BOOST_OS_LINUX)
+#if (BOOST_OS_LINUX)
         case SIGUSR1:
             return "SIGUSR1";
         case SIGBUS:
@@ -62,16 +63,21 @@ void register_signal_handlers()
     using failure = eda::color::message::failure;
 
 #if defined(EDA_WITH_GDB_STACKTRACE) && (BOOST_OS_LINUX)
-    if (!register_gdb_signal_handler()) {
-        std::cerr << failure("Failed to install signal handlers") << '\n';
-        std::exit(EXIT_FAILURE);
-    }
+    std::function<bool(void)> signal_handler { &register_gdb_signal_handler };
 #elif defined(EDA_WITH_BOOST_STACKTRACE)
-    if (!register_stacktrace_signal_handler()) {
+    std::function<bool(void)> signal_handler { &register_stacktrace_signal_handler };
+#else
+    auto const signal_handler = []() {
+        using warning = eda::color::message::warning;
+        std::cout << warning("No signal handler attached") << '\n';
+        return true;
+    };
+#endif
+
+    if (!signal_handler()) {
         std::cerr << failure("Failed to install signal handlers") << '\n';
         std::exit(EXIT_FAILURE);
     }
-#endif
 }
 
 

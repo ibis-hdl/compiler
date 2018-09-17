@@ -11,7 +11,7 @@
 
 #include <boost/filesystem.hpp>
 
-#include <signal.h>
+#include <csignal>
 #include <atomic>
 #include <iostream>
 
@@ -25,7 +25,7 @@ namespace /* anonymous */
 {
 
 // or semaphore to notify a waiting thread
-volatile std::sig_atomic_t sig_caught;
+volatile ::sig_atomic_t sig_caught; // Note, at MSVC not in NS std!
 
 } // anonymous namespace
 
