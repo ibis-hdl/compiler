@@ -97,6 +97,7 @@ if (EDA_BUILD_TESTS)
     add_subdirectory(testsuite/vhdl/ast)
     add_subdirectory(testsuite/vhdl/parser_rules)
     add_subdirectory(testsuite/vhdl/syntax)
+    add_subdirectory(testsuite/ibis)
 endif()
 
 

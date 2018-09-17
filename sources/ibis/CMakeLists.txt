@@ -83,6 +83,15 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 endif()
 
 
+# Depencies
+target_link_libraries(${PROJECT_NAME}
+    PRIVATE
+    eda::common
+    Boost::system
+    Boost::locale
+    Boost::filesystem
+)
+
 ##
 # Boost stacktrace
 # [Configuration and Build](
@@ -116,13 +125,4 @@ if(EDA_WITH_BOOST_STACKTRACE)
     endif()
 endif()
 
-
-# Depencies
-target_link_libraries(${PROJECT_NAME}
-    PRIVATE
-    eda::common
-    Boost::system
-    Boost::locale
-    Boost::filesystem
-)
-
+ 
