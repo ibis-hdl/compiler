@@ -122,7 +122,6 @@ if(CLANG_WARN_EVERYTHING)
 endif(CLANG_WARN_EVERYTHING)
 
 
-target_link_libraries(${PROJECT_NAME}
-    PRIVATE
+target_link_libraries(${PROJECT_NAME} PUBLIC
     eda::common
 )

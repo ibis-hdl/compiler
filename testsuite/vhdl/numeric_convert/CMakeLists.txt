@@ -6,7 +6,7 @@
 ## VHDL C++ TestSuite for converting parsed literals to numeric 
 ################################################################################
 
-project(testrunner_vhdl_numeric LANGUAGES CXX)
+project(testrunner_vhdl_numeric_convert LANGUAGES CXX)
 
 
 add_executable(${PROJECT_NAME} "")

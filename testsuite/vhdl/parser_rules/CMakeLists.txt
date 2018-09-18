@@ -6,7 +6,7 @@
 ## VHDL C++ TestSuite for the parser 
 ################################################################################
 
-project(testrunner_vhdl_parser_rule LANGUAGES CXX)
+project(testrunner_vhdl_parser_rules LANGUAGES CXX)
 
 
 add_executable(${PROJECT_NAME} "")
@@ -25,7 +25,6 @@ add_dependencies(${PROJECT_NAME} boost-utf)
 
 
 target_sources(${PROJECT_NAME} PRIVATE
-    src/common/rules.cpp
     src/common/test_vhdl_parser.cpp
 )
 
@@ -161,43 +160,10 @@ target_compile_options(${PROJECT_NAME} PRIVATE
 )
 
 
-# handle problems with Spirit.X template depth
-target_compile_options(${PROJECT_NAME} PRIVATE
-    # - limit gcc/clang template error depth printing
-    # - increase limit especially for clang recursive template instantiation,
-    #   otherwise exceedes maximum depth of 512    
-    $<$<CXX_COMPILER_ID:GNU>:  -ftemplate-backtrace-limit=0 -ftemplate-depth=1024>
-    $<$<CXX_COMPILER_ID:Clang>:-ftemplate-backtrace-limit=0 -ftemplate-depth=1024>
-)
-
-
-# MSVC and MSYS2/MinGW64 has problems with spirit.x3
-# increase object size for windows compiler, otherwise will fail
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-    set_source_files_properties(
-        src/common/rules.cpp
-        PROPERTIES COMPILE_FLAGS /bigobj
-    )
-elseif(WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    set_source_files_properties(
-        src/common/rules.cpp
-        PROPERTIES COMPILE_FLAGS -Wa,-mbig-obj
-    )
-endif()
-
-
-#
-# parser with Spirit.X3 DEBUG
-set(EDA_VHDL_PARSER_DEBUG OFF CACHE BOOL "debug printer of spirit.x3 parser tree")
-if("${EDA_VHDL_PARSER_DEBUG}")
-    target_compile_definitions(${PROJECT_NAME}
-        PRIVATE BOOST_SPIRIT_X3_DEBUG)
-endif()
-
-
 target_link_libraries(${PROJECT_NAME} PRIVATE
     eda::vhdl_parser
     testsuite::common
+    testsuite::vhdl_rules
     Boost::system
     Boost::filesystem
     Boost::locale
@@ -228,7 +194,7 @@ add_test(NAME test_vhdl_parser_rule
 ##
 # Generate the TestMatrix
 # - python3 is required, also PrettyTable
-find_package( PythonInterp 3 REQUIRED )
+find_package(PythonInterp 3 REQUIRED)
 #find_package(PythonLibs 3 REQUIRED)
 
 set(TEST_MATRIX_GENERATOR        ${PROJECT_SOURCE_DIR}/utils/gen_test_matrix.py)

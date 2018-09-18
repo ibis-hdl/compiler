@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \"\" \"..\"\n"
 "Report-Msgid-Bugs-To: https://github.com/eda/ibis/issues\n"
-"POT-Creation-Date: 2018-08-25 21:22+0200\n"
+"POT-Creation-Date: 2018-09-18 17:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,81 +18,69 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:51
+#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:48
 msgid "File {1} is not a regular file"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:60
+#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:56
 msgid "File {1} does not exists"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:69
+#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:61
 msgid "Failed existence test for file {1}: caught exception {1}"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:116
+#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:107
 msgid "Duplicate file \"{1}\", specified as: "
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:142
+#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:131
 msgid "Unable to open file \"{1}\""
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:154
-#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:207
+#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:142
+#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:192
 msgid "Error reading file \"{1}\""
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:186
+#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:171
 msgid "Error opening file \"{1}\""
 msgstr ""
 
 #. TRANSLATORS: Literal Type and passed Value
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:394
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:391
 msgid "Conversion of VHDL {1} '{2}' failed due to numeric overflow (MAX_VALUE = {3})"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:428
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:426
 msgid "An unknown error occurred during parsing of '{1}'."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:441
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:440
 msgid "Base specifier '{1}' isn't supported. Supported are only 2, 8, 10 and 16!"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:706
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:711
 msgid "Numeric error occurred during calculation on based_literal with fractional part of '{1}'."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/parser/error_handler.cpp:38
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/analyze/error_handler.cpp:54
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/analyze/error_handler.cpp:136
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/parser/error_handler.cpp:32
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/analyze/error_handler.cpp:56
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/analyze/error_handler.cpp:141
 msgid "in file {1}, line {2}:"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/parser/error_handler.cpp:43
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/parser/error_handler.cpp:39
 msgid "Parse ERROR"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/parser/error_handler.cpp:44
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/analyze/error_handler.cpp:60
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/analyze/error_handler.cpp:142
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/parser/error_handler.cpp:40
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/analyze/error_handler.cpp:64
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/analyze/error_handler.cpp:147
 msgid "Unspecified Error, Sorry"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/parser/error_handler.cpp:68
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/analyze/error_handler.cpp:159
-msgctxt "Unknown File Name"
-msgid "<unknown>"
-msgstr ""
-
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/parser/on_error_base.cpp:295
-msgid ""
-"WARNING: failed to lookup '{1}' at parser's expectation symbol table\n"
-"Note, end users can ignore the warning"
-msgstr ""
-
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/parser/on_error_base.cpp:303
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/parser/on_error_base.cpp:283
 msgid "Error, expecting {1} here:"
 msgstr ""
 
@@ -100,27 +88,27 @@ msgstr ""
 msgid "Source file '{1}' failed to parse!"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/parser/parse.cpp:101
-msgctxt "ExceptionDescription"
-msgid "unknown"
-msgstr ""
-
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/parser/parse.cpp:106
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/parser/parse.cpp:92
 msgctxt "ExceptionDescription"
 msgid "Caught exception '{1}' during parsing file '{2}'"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/analyze/error_handler.cpp:59
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/analyze/error_handler.cpp:141
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/parser/parse.cpp:107
+msgctxt "ExceptionDescription"
+msgid "Caught unexpected exception during parsing file '{1}'"
+msgstr ""
+
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/analyze/error_handler.cpp:63
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/analyze/error_handler.cpp:146
 msgid "Syntax ERROR"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/analyze/error_handler.cpp:71
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/analyze/error_handler.cpp:145
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/analyze/error_handler.cpp:77
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/analyze/error_handler.cpp:150
 msgid " <<-- here"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/analyze/error_handler.cpp:147
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/analyze/error_handler.cpp:152
 msgid " <<-- and here"
 msgstr ""
 
@@ -128,37 +116,39 @@ msgstr ""
 msgid "Label mismatch in {1}"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/analyze/syntax.cpp:56
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/analyze/syntax.cpp:58
 msgid "Label ill-formed in {1}"
 msgstr ""
 
-#. TRANSLATORS: singular/plural error(s)
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/context.cpp:56
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/analyze/syntax.cpp:90
+msgid "ill-formed statement in {1}; (Hint: single trailing keyword 'postponed')"
+msgstr ""
+
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/context.cpp:66
 msgid "{1} error"
 msgid_plural "{1} errors"
 msgstr[0] ""
 msgstr[1] ""
 
-#. TRANSLATORS: singular/plural warning(s)
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/context.cpp:60
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/context.cpp:72
 msgid "{1} warning"
 msgid_plural "{1} warnings"
 msgstr[0] ""
 msgstr[1] ""
 
 #. TRANSLATORS: summary error(s) and warning(s)
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/context.cpp:65
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/context.cpp:78
 msgid "{1} and {2} generated."
 msgstr ""
 
 #. TRANSLATORS: summary error(s) only
 #. TRANSLATORS: summary warning(s) only
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/context.cpp:69
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/context.cpp:73
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/context.cpp:81
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/context.cpp:84
 msgid "{1} generated."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/main.cpp:53
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/main.cpp:52
 msgid "processing:"
 msgstr ""
 
@@ -170,7 +160,7 @@ msgstr ""
 msgid "Unexpected exception caught"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:86
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:84
 msgid ""
 "\n"
 "Report bugs to {1}"
@@ -184,50 +174,54 @@ msgstr ""
 msgid "Show version."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:116
-msgid "Analyze the design."
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:115
+msgid "Show build informations."
 msgstr ""
 
 #: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:119
+msgid "Analyze the design."
+msgstr ""
+
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:122
 msgid "Path to libraries."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:126
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:130
 msgid "Print less text."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:129
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:133
 msgid "Print more text."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:133
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:137
 msgid "Don't render messages using colors. On output redirection no colors are used."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:137
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:141
 msgid "Even on redirected output enforce the rendering of messages using colors."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:142
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:146
 msgid "Tabulator size, affects printing source snippet on error printing."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:148
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:152
 msgid "Warn all."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:151
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:155
 msgid "Warn on unused."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:154
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:158
 msgid "Warn for others."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:159
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:163
 msgid "Limit emitting diagnostics, can be disabled with --ferror-limit=0."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:164
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:168
 msgid "localization catalog data"
 msgstr ""

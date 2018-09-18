@@ -6,7 +6,7 @@
 ## VHDL C++ TestSuite related to AST 
 ################################################################################
 
-project(testrunner_ast LANGUAGES CXX)
+project(testrunner_vhdl_ast LANGUAGES CXX)
 
 
 add_executable(${PROJECT_NAME} "")
