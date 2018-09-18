@@ -8,6 +8,9 @@
 #ifndef SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_ANSII_COLOR_HPP_
 #define SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_ANSII_COLOR_HPP_
 
+#include <eda/color/attribute.hpp>
+#include <eda/color/detail/api.hpp>
+
 #include <iosfwd>
 #include <array>
 #include <iterator>
@@ -16,39 +19,6 @@
 
 namespace eda {
 namespace color {
-
-namespace ansii {
-
-// http://ascii-table.com/ansi-escape-sequences.php
-enum class attribute : uint8_t {
-    // Text attribute
-    Attributes_Off = 0,
-    Text_Bold = 1,
-    Text_Underscore = 4,
-    Text_Blink = 5,
-    Text_Reverse = 7,
-    Text_Concealed = 8,
-    // Foreground colors
-    Foreground_Black = 30,
-    Foreground_Red = 31,
-    Foreground_Green = 32,
-    Foreground_Yellow = 33,
-    Foreground_Blue = 34,
-    Foreground_Magenta = 35,
-    Foreground_Cyan = 36,
-    Foreground_White = 37,
-    // Background colors
-    Background_Black = 40,
-    Background_Red = 41,
-    Background_Green = 42,
-    Background_Yellow = 43,
-    Background_Blue = 44,
-    Background_Magenta = 45,
-    Background_Cyan = 46,
-    Background_White = 47,
-};
-
-} // namespace ansii
 
 namespace detail {
 
@@ -84,26 +54,25 @@ public:
 public:
     std::ostream& print(std::ostream& os) const
     {
-
         if (count == 0u) {
             return os;
         }
 
+        char const* delimiter = "";
+
         os << CSI;
-        for (size_t N = (count - 1), i = 0; i != count; ++i) {
+        for (std::size_t i = 0; i != count; ++i) {
             // don't interpret as char_type
-            os << static_cast<short>((*this)[i]);
-            if (i != N) {
-                os << ";";
-            }
+            os << delimiter << static_cast<short>((*this)[i]);
+            delimiter = ";";
         }
         os << "m";
 
         return os;
     }
 
-    void push_back(ansii::attribute code)
-    { /// XXX make me variadic
+    void push_back(color::attribute code)
+    {
         assert(count < size && "Code array is full");
         (*this)[count++] = static_cast<value_type>(code);
     }
@@ -118,7 +87,7 @@ public:
         return *this;
     }
 
-    esc_printer& operator|=(ansii::attribute code)
+    esc_printer& operator|=(color::attribute code)
     {
         push_back(code);
         return *this;
@@ -155,8 +124,7 @@ static inline esc_printer<enum_type, SIZE> operator|(
 
 } // namespace detail
 
-using printer = detail::esc_printer<ansii::attribute, 4>;
-using attribute = ansii::attribute;
+using printer = detail::esc_printer<color::attribute, 4>;
 
 namespace text {
 color::printer const bold{ attribute::Text_Bold };

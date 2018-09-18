@@ -8,6 +8,7 @@
 #ifndef SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_WINAPI_COLOR_HPP_
 #define SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_WINAPI_COLOR_HPP_
 
+#include <eda/color/attribute.hpp>
 #include <eda/color/detail/api.hpp>
 
 #include <iostream>
@@ -15,46 +16,12 @@
 namespace eda {
 namespace color {
 
-namespace winapi {
-
-// clang-format off
-enum class attribute : WORD {
-    // FixMe: support Text attribute
-    Attributes_Off =     0x000,
-    Text_Bold =          0x100,
-    Text_Underscore =    0x200,
-    Text_Blink =         0x400,
-    Text_Reverse =       0x800,
-    // Text_Concealed    = ????,
-    // Foreground colors
-    Foreground_Black =   0,
-    Foreground_Red =     FOREGROUND_RED,
-    Foreground_Green =   FOREGROUND_GREEN,
-    Foreground_Yellow =  FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY,
-    Foreground_Blue =    FOREGROUND_BLUE,
-    Foreground_Magenta = FOREGROUND_BLUE | FOREGROUND_RED,
-    Foreground_Cyan =    FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY,
-    Foreground_White =   FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED,
-    // Background colors
-    Background_Black =   0,
-    Background_Red =     BACKGROUND_RED,
-    Background_Green =   BACKGROUND_GREEN,
-    Background_Yellow =  BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY,
-    Background_Blue =    BACKGROUND_BLUE,
-    Background_Magenta = BACKGROUND_BLUE | BACKGROUND_RED,
-    Background_Cyan =    BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_INTENSITY,
-    Background_White =   BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED,
-};
-// clang-format on
-
-} // namespace winapi
-
 namespace detail {
 
 class win_printer {
 public:
-    win_printer(winapi::attribute attr_)
-        : attr{ static_cast<WORD>(attr_) }
+    win_printer(color::attribute attr_)
+        : attr{ native(attr_) }
     {
     }
 
@@ -127,17 +94,68 @@ public:
 
     win_printer& operator|=(win_printer const& other)
     {
-        return *this |= static_cast<winapi::attribute>(other.attr);
+        attr |= other.attr;
+        return *this;
     }
 
-    win_printer& operator|=(winapi::attribute other_attr)
+    win_printer& operator|=(color::attribute other_attr)
     {
-        attr |= static_cast<WORD>(other_attr);
+        attr |= native(other_attr);
 
         return *this;
     }
 
 private:
+    WORD native(color::attribute attr) {
+
+        switch (attr) {
+        case attribute::Attributes_Off:
+            return 0x000;
+        case attribute::Text_Bold:
+            return 0x100;
+        case attribute::Text_Underscore:
+            return 0x200;
+        case attribute::Text_Blink:
+            return 0x400;
+        case attribute::Text_Reverse:
+            return 0x800;
+        case attribute::Foreground_Black:
+            return 0;
+        case attribute::Foreground_Red:
+            return FOREGROUND_RED;
+        case attribute::Foreground_Green:
+            return FOREGROUND_GREEN;
+        case attribute::Foreground_Yellow:
+            return FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY;
+        case attribute::Foreground_Blue:
+            return FOREGROUND_BLUE;
+        case attribute::Foreground_Magenta:
+            return FOREGROUND_BLUE | FOREGROUND_RED;
+        case attribute::Foreground_Cyan:
+            return FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY;
+        case attribute::Foreground_White:
+            return FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED;
+        case attribute::Background_Black:
+            return 0;
+        case attribute::Background_Red:
+            return BACKGROUND_RED;
+        case attribute::Background_Green:
+            return BACKGROUND_GREEN;
+        case attribute::Background_Yellow:
+            return BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY;
+        case attribute::Background_Blue:
+            return BACKGROUND_BLUE;
+        case attribute::Background_Magenta:
+            return BACKGROUND_BLUE | BACKGROUND_RED;
+        case attribute::Background_Cyan:
+            return BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_INTENSITY;
+        case attribute::Background_White:
+            return BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED;
+        default:
+            return 0;
+        }
+    }
+
     WORD text_attributes(HANDLE handle) const
     {
 
@@ -174,7 +192,6 @@ static inline win_printer operator|(win_printer lhs, win_printer const& rhs)
 } // namespace detail
 
 using printer = detail::win_printer;
-using attribute = winapi::attribute;
 
 namespace text {
 color::printer const bold{ attribute::Text_Bold };

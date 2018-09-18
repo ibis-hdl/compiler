@@ -27,16 +27,4 @@
 #endif
 // clang-format on
 
-#include <optional>
-
-namespace eda {
-namespace color {
-
-std::optional<color::attribute> text_attr(std::string_view const& name);
-std::optional<color::attribute> foreground_attr(std::string_view const& name);
-std::optional<color::attribute> background_attr(std::string_view const& name);
-
-} // namespace color
-} // namespace eda
-
 #endif /* SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_COLOR_HPP_ */

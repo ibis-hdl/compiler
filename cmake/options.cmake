@@ -1,16 +1,22 @@
 ##
-# Global project options
+# Global user configureable project options
 
 ##
 # Build Option: ANSI Color or Windows  Console I/O
 if(WIN32)
-    option(EDA_ON_WINDOWS_USE_ANSII_COLOR "Ignore Window's High-Level Console I/O API and use ANSII color codes." ON)
+    option(EDA_ON_WINDOWS_USE_ANSII_COLOR "Ignore Window's High-Level Console I/O API and use ANSII color codes." OFF)
 endif()
 
 
 ##
 # Build Option: Support Boost.stacktrace library
 option(EDA_WITH_BOOST_STACKTRACE "Enable support for the Boost::stacktrace library." OFF)
+
+# We have boost 1.68 locally here, use it ...
+if(WIN32)
+    set(EDA_WITH_BOOST_STACKTRACE ON)
+endif()
+
 
 
 ##
