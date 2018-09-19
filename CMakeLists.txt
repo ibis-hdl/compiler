@@ -35,10 +35,11 @@ cmake_host_system_information(
     QUERY NUMBER_OF_LOGICAL_CORES
 )
 
-math(EXPR half_cores "${localhost_logical_cores}/2")
+math(EXPR max_cores  "${localhost_logical_cores} - 1")
+math(EXPR half_cores "${localhost_logical_cores} / 2")
 
 set_property(GLOBAL PROPERTY JOB_POOLS
-    job_pool_max_cores=${localhost_logical_cores}
+    job_pool_max_cores=${max_cores}
     job_pool_med_cores=${half_cores}
     job_pool_one_core=1
 )
