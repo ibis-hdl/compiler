@@ -12,12 +12,6 @@ endif()
 # Build Option: Support Boost.stacktrace library
 option(EDA_WITH_BOOST_STACKTRACE "Enable support for the Boost::stacktrace library." OFF)
 
-# We have boost 1.68 locally here, use it ...
-if(WIN32)
-    set(EDA_WITH_BOOST_STACKTRACE ON)
-endif()
-
-
 
 ##
 # Runtime Option: Use GDB to dump the stracktrace
@@ -42,4 +36,10 @@ endif()
 
 if(EDA_WITH_BOOST_STACKTRACE AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
     message(FATAL_ERROR "Sorry, my Fedora box has only boost 1.64; boost.stacktrace is since 1.65 ...")
+endif()
+
+# We have boost 1.68 locally here, use it ...
+if(WIN32)
+    set(EDA_WITH_BOOST_STACKTRACE ON)
+    set(EDA_WITH_GDB_STACKTRACE OFF)
 endif()

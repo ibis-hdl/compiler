@@ -28,12 +28,22 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
 add_dependencies(${PROJECT_NAME} boost-spirit-x3)
 
 
-target_sources(${PROJECT_NAME} PRIVATE
-    src/rules_1.cpp
-    src/rules_2.cpp
-    src/rules_api.cpp
-    #src/rules.cpp -> single file
+# Check on big RAM power stations to compile big files
+cmake_host_system_information(
+    RESULT localhost_RAM_MB
+    QUERY  AVAILABLE_PHYSICAL_MEMORY
 )
+
+if(localhost_RAM_MB GREATER 12000)
+    set(SOURCE_LIST src/rules.cpp)
+else()
+    set(SOURCE_LIST src/rules_1.cpp src/rules_2.cpp src/rules_api.cpp)
+endif()
+
+target_sources(${PROJECT_NAME} PRIVATE
+    ${SOURCE_LIST}
+)
+
 
 target_include_directories(${PROJECT_NAME} 
     PUBLIC
