@@ -59,7 +59,7 @@ std::ostream& failure_status::print(std::ostream& os) const
         return static_cast<int>(count);
     };
 
-    // concept, see [Wanbox](https://wandbox.org/permlink/VJrqXuEFppw1htY7)
+    // concept, see [Wandbox](https://wandbox.org/permlink/VJrqXuEFppw1htY7)
 
     // TRANSLATORS: singular/plural error(s)
     auto const error_message
