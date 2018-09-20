@@ -14,7 +14,8 @@ CPU_COUNT=2 # override for my low memory computer
 BUILD_TYPE=RelWithDebInfo
 
 ${CMAKE_BIN} ${EDA_SRC_DIR} \
-        -G "Eclipse CDT4 - Unix Makefiles" \
+        -G "Eclipse CDT4 - Ninja" \
+        -DCMAKE_CXX_COMPILER=clang++ \
         -DCMAKE_ECLIPSE_GENERATE_SOURCE_PROJECT=TRUE \
         -DCMAKE_ECLIPSE_VERSION=4.6 \
         -DCMAKE_ECLIPSE_MAKE_ARGUMENTS=-j${CPU_COUNT} \
