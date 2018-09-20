@@ -21,7 +21,10 @@ namespace parser {
 
 struct skipper_class;
 using skipper_type = x3::rule<skipper_class>;
+
+#if !defined(DOXYGEN)
 BOOST_SPIRIT_DECLARE(skipper_type);
+#endif
 
 skipper_type const skipper{ "skipper" };
 
@@ -35,10 +38,11 @@ auto const skipper_def =
     ;
     // clang-format off
 
+#if !defined(DOXYGEN)
 #include <eda/compiler/warnings_off.hpp> // IWYU pragma: keep
 BOOST_SPIRIT_DEFINE(skipper);
 #include <eda/compiler/warnings_on.hpp> // IWYU pragma: keep
-
+#endif
 
 } } } // namespace eda.vhdl.parser
 

@@ -166,7 +166,7 @@ void gdb_signal_handler(int signum, siginfo_t* /*unused*/, void* /*unused*/)
  *  https://github.com/yellowbyte/reverse-engineering-reference-manual/blob/master/contents/anti-analysis/Anti-Debugging.md)
  * [jvoisin/pangu](https://github.com/jvoisin/pangu)
  *
- *  also detection shown: https://gist.github.com/leo-yuriev/06b60804f99d33f11cff
+ *  also [detection shown](https://gist.github.com/leo-yuriev/06b60804f99d33f11cff)
  */
 bool gdb_detected()
 {

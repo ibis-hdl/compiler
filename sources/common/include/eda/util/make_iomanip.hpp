@@ -30,7 +30,7 @@ namespace util {
  * std::cout << answer(42) << std::endl;
  * \endcode
  *
- * Based on yazmir8azyr from IRC ##c++ channel, see [WandBox.Org](
+ * Based on yazmir8azyr from IRC \#\#c++ channel, see [WandBox.Org](
  * https://wandbox.org/permlink/wGDqfmxCKwqob5mp)
  */
 template <typename T> struct A {

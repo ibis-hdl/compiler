@@ -57,8 +57,9 @@ public:
 
 public:
     /**
-     * prefix ++ increment
+     * prefix increment
      *
+     * @fn     basic_counter::operator++()
      * @return incremented value.
      */
     basic_counter& operator++()
@@ -71,9 +72,9 @@ public:
     }
 
     /**
-     * postfix ++ increment
+     * postfix increment
      *
-     * @param  dummy
+     * @fn     const basic_counter::operator++(int)
      * @return the value before increment.
      */
     basic_counter const operator++(int)
@@ -105,8 +106,8 @@ public:
     /**
      * Common ostream API
      *
-     * @param  std::ostream handle to write
-     * @return The written std::ostream handle.
+     * @param  os std::ostream handle to write
+     * @return The written ostream handle.
      */
     std::ostream& print(std::ostream& os) const
     {

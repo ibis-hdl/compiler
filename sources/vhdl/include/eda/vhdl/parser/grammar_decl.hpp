@@ -14,6 +14,8 @@ namespace eda {
 namespace vhdl {
 namespace parser {
 
+#if !defined(DOXYGEN)
+
 BOOST_SPIRIT_DECLARE(abstract_literal_type);
 BOOST_SPIRIT_DECLARE(access_type_definition_type);
 BOOST_SPIRIT_DECLARE(actual_designator_type);
@@ -233,6 +235,8 @@ BOOST_SPIRIT_DECLARE(variable_declaration_type);
 BOOST_SPIRIT_DECLARE(wait_statement_type);
 BOOST_SPIRIT_DECLARE(waveform_type);
 BOOST_SPIRIT_DECLARE(waveform_element_type);
+
+#endif // !defined(DOXYGEN)
 
 } // namespace parser
 } // namespace vhdl

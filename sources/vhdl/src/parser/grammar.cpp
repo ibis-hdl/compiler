@@ -13,7 +13,9 @@ namespace eda {
 namespace vhdl {
 namespace parser {
 
+#if !defined(DOXYGEN)
 BOOST_SPIRIT_INSTANTIATE(design_file_type, iterator_type, context_type);
+#endif
 
 parser::design_file_type const& grammar() { return eda::vhdl::parser::design_file; }
 

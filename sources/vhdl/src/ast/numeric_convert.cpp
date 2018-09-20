@@ -37,15 +37,6 @@ namespace parser {
 namespace detail {
 
 /*
- * Note:
- *
- * VDL decimal literals does allow exponents on integers, to simplify evaluating
- * a x3 real parser with policies is used. The correct 2nd pass parsing and hence
- * correct converting depends on correct parsing of the VHDL grammar, since the
- * exponent of integer doesn't allow a negative sign.
- */
-
-/*
  * real types and their parsers
  */
 template <typename T> struct integer_policies : x3::ureal_policies<T> {

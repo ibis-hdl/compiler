@@ -26,7 +26,9 @@ struct design_file_class;
 
 using design_file_type = x3::rule<design_file_class, ast::design_file>;
 
+#if !defined(DOXYGEN)
 BOOST_SPIRIT_DECLARE(design_file_type);
+#endif
 
 parser::design_file_type const& grammar();
 
