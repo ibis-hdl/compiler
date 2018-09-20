@@ -20,6 +20,10 @@
 # eclipse Sigasi
 .library_mapping.xml
 
+# MSVC
+/.vs/*
+CMakeSettings.json
+
 # cmake
 CMakeCache.txt
 CMakeFiles
