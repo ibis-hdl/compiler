@@ -80,8 +80,7 @@ endif()
 
 if(WIN32)
     set_source_files_properties(
-        src/rules_1.cpp
-        src/rules_2.cpp
+        ${SOURCE_LIST}
         PROPERTIES COMPILE_FLAGS "${CXX_FLAGS_BIG_FILE}"
     )
 endif()
