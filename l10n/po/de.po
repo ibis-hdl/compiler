@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \"\" \"..\"\n"
 "Report-Msgid-Bugs-To: https://github.com/eda/ibis/issues\n"
-"POT-Creation-Date: 2018-09-17 20:33+0200\n"
+"POT-Creation-Date: 2018-09-20 16:55+0200\n"
 "PO-Revision-Date: 2018-08-25 17:30+0100\n"
 "Last-Translator: olaf <olaf@home.lan>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -33,7 +33,7 @@ msgstr "<<-- und hier"
 msgid " <<-- here"
 msgstr "<<-- hier"
 
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:426
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:417
 msgid "An unknown error occurred during parsing of '{1}'."
 msgstr "Unbekannter Fehler aufgetreten während des parsens von '{1}'."
 
@@ -41,7 +41,7 @@ msgstr "Unbekannter Fehler aufgetreten während des parsens von '{1}'."
 msgid "Analyze the design."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:440
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:431
 msgid ""
 "Base specifier '{1}' isn't supported. Supported are only 2, 8, 10 and 16!"
 msgstr ""
@@ -60,7 +60,7 @@ msgid "Caught unexpected exception during parsing file '{1}'"
 msgstr "Ausnahme '{1}' gefangen während des parsens der Datei '{2}'"
 
 #. TRANSLATORS: Literal Type and passed Value
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:391
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:382
 msgid ""
 "Conversion of VHDL {1} '{2}' failed due to numeric overflow (MAX_VALUE = {3})"
 msgstr ""
@@ -94,7 +94,7 @@ msgid ""
 "Even on redirected output enforce the rendering of messages using colors."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/main.cpp:66
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/main.cpp:67
 msgid "Exception caught:"
 msgstr ""
 
@@ -122,7 +122,7 @@ msgstr "Label Diskrepanz in {1}"
 msgid "Limit emitting diagnostics, can be disabled with --ferror-limit=0."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:711
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:702
 msgid ""
 "Numeric error occurred during calculation on based_literal with fractional "
 "part of '{1}'."
@@ -212,7 +212,7 @@ msgstr "In Datei {1}, Zeile {2}:"
 msgid "localization catalog data"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/main.cpp:52
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/main.cpp:53
 msgid "processing:"
 msgstr "bearbeite:"
 

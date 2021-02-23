@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \"\" \"..\"\n"
 "Report-Msgid-Bugs-To: https://github.com/eda/ibis/issues\n"
-"POT-Creation-Date: 2018-09-18 17:23+0200\n"
+"POT-Creation-Date: 2018-09-24 19:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,19 +48,19 @@ msgid "Error opening file \"{1}\""
 msgstr ""
 
 #. TRANSLATORS: Literal Type and passed Value
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:391
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:382
 msgid "Conversion of VHDL {1} '{2}' failed due to numeric overflow (MAX_VALUE = {3})"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:426
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:417
 msgid "An unknown error occurred during parsing of '{1}'."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:440
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:431
 msgid "Base specifier '{1}' isn't supported. Supported are only 2, 8, 10 and 16!"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:711
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:702
 msgid "Numeric error occurred during calculation on based_literal with fractional part of '{1}'."
 msgstr ""
 
@@ -148,11 +148,11 @@ msgstr ""
 msgid "{1} generated."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/main.cpp:52
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/main.cpp:53
 msgid "processing:"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/main.cpp:66
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/main.cpp:67
 msgid "Exception caught:"
 msgstr ""
 

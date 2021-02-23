@@ -297,10 +297,10 @@ auto const unary_miscellaneous_operator_def =
 x3::symbols<ast::operator_token> const binary_logical_operator_symbols(
     // clang-format off
     {
-        {"and",  ast::operator_token::AND},
-        {"or",   ast::operator_token::OR},
-        {"xor",  ast::operator_token::XOR},
-        {"xnor", ast::operator_token::XNOR}
+        { "and",  ast::operator_token::AND },
+        { "or",   ast::operator_token::OR },
+        { "xor",  ast::operator_token::XOR },
+        { "xnor", ast::operator_token::XNOR }
     },
     "logical_operator"
     // clang-format on
@@ -321,12 +321,12 @@ auto const unary_logical_operator_def =
 x3::symbols<ast::operator_token> const relational_operator(
     // clang-format off
     {
-        {"=",  ast::operator_token::EQUAL},
-        {"/=", ast::operator_token::NOT_EQUALS},
-        {"<",  ast::operator_token::LESS},
-        {"<=", ast::operator_token::LESS_EQUALS},
-        {">",  ast::operator_token::GREATER},
-        {">=", ast::operator_token::GREATER_EQUALS}
+        { "=",  ast::operator_token::EQUAL },
+        { "/=", ast::operator_token::NOT_EQUALS },
+        { "<",  ast::operator_token::LESS },
+        { "<=", ast::operator_token::LESS_EQUALS },
+        { ">",  ast::operator_token::GREATER },
+        { ">=", ast::operator_token::GREATER_EQUALS }
     },
     "relational_operator"
     // clang-format on
@@ -336,9 +336,9 @@ x3::symbols<ast::operator_token> const relational_operator(
 x3::symbols<ast::operator_token> const adding_operator(
     // clang-format off
     {
-        {"+", ast::operator_token::ADD},
-        {"-", ast::operator_token::SUB},
-        {"&", ast::operator_token::CONCAT}
+        { "+", ast::operator_token::ADD },
+        { "-", ast::operator_token::SUB },
+        { "&", ast::operator_token::CONCAT }
     },
     "adding_operator"
     // clang-format on
@@ -361,12 +361,12 @@ auto const multiplying_operator_def =
 x3::symbols<ast::operator_token> const shift_operator_symbols(
     // clang-format off
     {
-        {"sll", ast::operator_token::SLL},
-        {"srl", ast::operator_token::SRL},
-        {"sla", ast::operator_token::SLA},
-        {"sra", ast::operator_token::SRA},
-        {"rol", ast::operator_token::ROL},
-        {"ror", ast::operator_token::ROR}
+        { "sll", ast::operator_token::SLL },
+        { "srl", ast::operator_token::SRL },
+        { "sla", ast::operator_token::SLA },
+        { "sra", ast::operator_token::SRA },
+        { "rol", ast::operator_token::ROL },
+        { "ror", ast::operator_token::ROR }
     },
     "shift_operator"
     // clang-format on
@@ -638,7 +638,7 @@ waveform_element_type const waveform_element { "waveform_element" };
 
 
 /*******************************************************************************
- * Spirit.X3 BNF Rules
+ * Spirit.X3 BNF Rule Definitions
  */
 namespace eda {
 namespace vhdl {
@@ -758,99 +758,97 @@ auto const label_colon = x3::rule<struct _, ast::identifier> { "label" } =
     ;
 
 
-/**
- * Parser Rule Definition
- * ======================
- *
- * WARNING
- * -------
- * Here are some 'anonymous' helper rules (to break down the complexity and
- * to enforce the attributes required) used in the specific rule's detail
- * namespace. The X3 tags the rules, e.g.:
- *
- *  \code{.cpp}
- *  auto const rule = x3::rule<struct _, ...> { "..." } = ...
- *  \endcode
- *
- * It would be naturally to use the parent rules's tag type which belongs the
- * detail helper. But, unfortunately the memory consumption increases dramatically
- * (8+8)GB RAM/SWAP isn't enough). Following StackOverflow
- * [X3: Linker Error (unresolved external symbol “parse_rule”) on nonterminal parser](
- *  https://stackoverflow.com/questions/50277979/x3-linker-error-unresolved-external-symbol-parse-rule-on-nonterminal-parser?answertab=active#tab-top)
- * Sehe's notes, re-using the tag type is recipe for disaster. The rule tags are
- * what dispatches the implementation function in the case of
- * separated compilation units.
- *
- * Some notes about numeric literals
- * ----------------------------------
- * The correct tagged kind_type of {based, decimal}_literal is elementary on
- * elaboration time, since after converting to numeric the informations about
- * the integer/real string are lost, see concrete why it's important e.g.
- * [vhdl error: integer literal cannot have negative exponent](
- * https://stackoverflow.com/questions/22113223/vhdl-error-integer-literal-cannot-have-negative-exponent)
- *
- * Strong rules here on parser level simplifies simplifies numeric conversion
- * since more sloppy rules can be used for conversion from literals to concrete
- * intrinsic types.
- */
-
-////
-////
-//// abstract_literal ::=                                           [LRM93 §13.4]
-////     decimal_literal | based_literal
+///
+/// abstract_literal [LRM93 §13.4]
+///
+/// \code{.bnf}
+/// abstract_literal ::=
+///     decimal_literal | based_literal
+/// \endcode
 auto const abstract_literal_def = /* order matters */
       based_literal
     | decimal_literal
     ;
 
 
-
-/// access_type_definition ::=                                      [LRM93 §3.3]
+///
+/// access_type_definition [LRM93 §3.3]
+///
+/// \code{.bnf}
+/// access_type_definition ::=
 ///     access subtype_indication
+/// \endcode
 auto const access_type_definition_def =
        ACCESS
     >> subtype_indication
     ;
 
 
-
-/// actual_designator ::=                                       [LRM93 §4.3.2.2]
+///
+/// actual_designator [LRM93 §4.3.2.2]
+///
+/// \note Note, \ref expression also matches the BNF rules:
+///         - \ref signal_name
+///         - \ref variable_name
+///         - \ref file_name
+///
+/// \code{.bnf}
+/// actual_designator ::=
 ///       expression
 ///     | signal_name
 ///     | variable_name
 ///     | file_name
 ///     | open
+/// \endcode
 auto const actual_designator_def =
-      // Note, expression also matches {signal,variable,file}_name BNF rules
       expression
     | OPEN
     ;
 
 
-
-/// actual_parameter_part ::=                                     [LRM93 §7.3.3]
+///
+/// actual_parameter_part [LRM93 §7.3.3]
+///
+/// \code{.bnf}
+/// actual_parameter_part ::=
 ///     parameter_association_list
+/// \endcode
+///
+/// \todo actual_parameter_part is used only for function_call and
+///       procedure_call_statement, but there are parse problem with these
+///       to be solved!
+///       XXX: Maybe use of aggregate (procedure_call_statement) or selected_name (function_call)?
+///         \code{.bnf}
+///         function_call ::= function_name [ ( actual_parameter_part ) ]
+///         procedure_call_statement ::= procedure_name [ ( actual_parameter_part ) ] ;
+///         \endcode
 auto const actual_parameter_part_def =
     association_list
     ;
 
 
-
-/// actual_part ::=                                             [LRM93 §4.3.2.2]
+///
+/// actual_part [LRM93 §4.3.2.2]
+///
+/// \note name covers { function_name | type_mark } rules.
+/// \note actual_designator is as of expression and hence {signal, ...}_name.
+///
+/// \code{.bnf}
+/// actual_part ::=
 ///       actual_designator
 ///     | function_name ( actual_designator )
 ///     | type_mark ( actual_designator )
-namespace actual_part_detail {
+/// \endcode
+namespace detail {
 
-auto const chunk = x3::rule<struct _, ast::actual_part_chunk>{ "actual_part" } =
-       name //  function_name | type_mark
+auto const actual_part_chunk = x3::rule<struct _, ast::actual_part_chunk>{ "actual_part" } =
+       name
     >> '(' >> actual_designator >> ')'
     ;
 } // end detail
 
 auto const actual_part_def = /* order matters */
-    /* Note, actual_designator is as of expression and {signal, ...}_name ! */
-      actual_part_detail::chunk
+      detail::actual_part_chunk
     | actual_designator
     ;
 
@@ -949,11 +947,15 @@ auto const array_type_definition_def =
     ;
 
 
-
-/// assertion ::=                                                   [LRM93 §8.2]
+///
+/// assertion [LRM93 §8.2]
+///
+/// \code{.bnf}
+/// assertion ::=
 ///     assert condition
 ///     [ report expression ]
 ///     [ severity expression ]
+/// \endcode
 auto const assertion_def =
         ( ASSERT   >> condition)
     >> -( REPORT   >> expression )
@@ -961,9 +963,13 @@ auto const assertion_def =
     ;
 
 
-
-/// assertion_statement ::=                                         [LRM93 §8.2]
+///
+/// assertion_statement [LRM93 §8.2]
+///
+/// \code{.bnf}
+/// assertion_statement ::=
 ///     [ label : ] assertion ;
+/// \endcode
 auto const assertion_statement_def = ( // operator precedence
        -label_colon
     >> assertion
@@ -972,9 +978,13 @@ auto const assertion_statement_def = ( // operator precedence
     ;
 
 
-
-/// association_element ::=                                     [LRM93 §4.3.2.2]
+///
+/// association_element [LRM93 §4.3.2.2]
+///
+/// \code{.bnf}
+/// association_element ::=
 ///     [ formal_part => ] actual_part
+/// \endcode
 auto const association_element_def =
        -x3::as<ast::formal_part>[
            formal_part >> "=>"
@@ -983,9 +993,13 @@ auto const association_element_def =
     ;
 
 
-
-/// association_list ::=                                        [LRM93 §4.3.2.2]
+///
+/// association_list [LRM93 §4.3.2.2]
+///
+/// \code{.bnf}
+/// association_list ::=
 ///     association_element { , association_element }
+/// \endcode
 auto const association_list_def =
     association_element % ','
     ;
@@ -1897,23 +1911,23 @@ namespace detail {
 
 x3::symbols<ast::keyword_token> const entity_class_symbols(
     {
-        {"entity"        , ast::keyword_token::ENTITY},
-        {"architecture"  , ast::keyword_token::ARCHITECTURE},
-        {"configuration" , ast::keyword_token::CONFIGURATION},
-        {"procedure"     , ast::keyword_token::PROCEDURE},
-        {"function"      , ast::keyword_token::FUNCTION},
-        {"package"       , ast::keyword_token::PACKAGE},
-        {"type"          , ast::keyword_token::TYPE},
-        {"subtype"       , ast::keyword_token::SUBTYPE},
-        {"constant"      , ast::keyword_token::CONSTANT},
-        {"signal"        , ast::keyword_token::SIGNAL},
-        {"variable"      , ast::keyword_token::VARIABLE},
-        {"component"     , ast::keyword_token::COMPONENT},
-        {"label"         , ast::keyword_token::LABEL},
-        {"literal"       , ast::keyword_token::LITERAL},
-        {"units"         , ast::keyword_token::UNITS},
-        {"group"         , ast::keyword_token::GROUP},
-        {"file"          , ast::keyword_token::FILE}
+        { "entity"        , ast::keyword_token::ENTITY },
+        { "architecture"  , ast::keyword_token::ARCHITECTURE },
+        { "configuration" , ast::keyword_token::CONFIGURATION },
+        { "procedure"     , ast::keyword_token::PROCEDURE },
+        { "function"      , ast::keyword_token::FUNCTION },
+        { "package"       , ast::keyword_token::PACKAGE },
+        { "type"          , ast::keyword_token::TYPE },
+        { "subtype"       , ast::keyword_token::SUBTYPE },
+        { "constant"      , ast::keyword_token::CONSTANT },
+        { "signal"        , ast::keyword_token::SIGNAL },
+        { "variable"      , ast::keyword_token::VARIABLE },
+        { "component"     , ast::keyword_token::COMPONENT },
+        { "label"         , ast::keyword_token::LABEL },
+        { "literal"       , ast::keyword_token::LITERAL },
+        { "units"         , ast::keyword_token::UNITS },
+        { "group"         , ast::keyword_token::GROUP },
+        { "file"          , ast::keyword_token::FILE }
     },
     "entity_class"
 );
@@ -1942,14 +1956,18 @@ auto const entity_class_entry_list_def =
     ;
 
 
-
-/// entity_declaration ::=                                          [LRM93 §1.1]
+///
+/// entity_declaration [LRM93 §1.1]
+///
+/// \code{.bnf}
+/// entity_declaration ::=
 ///     entity identifier is
 ///         entity_header
 ///         entity_declarative_part
 ///   [ begin
 ///         entity_statement_part ]
 ///     end [ entity ] [ entity_simple_name ] ;
+/// \endcode
 auto const entity_declaration_def = ( // operator precedence
        ENTITY
     >> identifier
@@ -1967,8 +1985,11 @@ auto const entity_declaration_def = ( // operator precedence
     ;
 
 
-
-/// entity_declarative_item ::=                                   [LRM93 §1.1.2]
+///
+/// entity_declarative_item [LRM93 §1.1.2]
+///
+/// \code{.bnf}
+/// entity_declarative_item ::=
 ///       subprogram_declaration
 ///     | subprogram_body
 ///     | type_declaration
@@ -1984,6 +2005,7 @@ auto const entity_declaration_def = ( // operator precedence
 ///     | use_clause
 ///     | group_template_declaration
 ///     | group_declaration
+/// \endcode
 auto const entity_declarative_item_def =
       subprogram_declaration
     | subprogram_body
@@ -2003,9 +2025,13 @@ auto const entity_declarative_item_def =
     ;
 
 
-
-/// entity_declarative_part ::=                                   [LRM93 §1.1.2]
+///
+/// entity_declarative_part [LRM93 §1.1.2]
+///
+/// \code{.bnf}
+/// entity_declarative_part ::=
 ///     { entity_declarative_item }
+/// \endcode
 auto const entity_declarative_part_def =
     *entity_declarative_item
     ;
@@ -2052,11 +2078,15 @@ auto const entity_specification_def =
     ;
 
 
-
-/// entity_statement ::=                                          [LRM93 §1.1.3]
+///
+/// entity_statement [LRM93 §1.1.3]
+///
+/// \begin{.bnf}
+/// entity_statement ::=
 ///       concurrent_assertion_statement
 ///     | passive_concurrent_procedure_call_statement
 ///     | passive_process_statement
+/// \endcode
 auto const entity_statement_def =
       concurrent_assertion_statement
     | concurrent_procedure_call_statement
@@ -2064,9 +2094,13 @@ auto const entity_statement_def =
     ;
 
 
-
-/// entity_statement_part ::=                                     [LRM93 §1.1.3]
+///
+/// entity_statement_part [LRM93 §1.1.3]
+///
+/// \code{.bnf}
+/// entity_statement_part ::=
 ///     { entity_statement }
+/// \endcode
 auto const entity_statement_part_def =
     *entity_statement
     ;
@@ -2342,19 +2376,27 @@ auto const generate_statement_def = ( // operator precedence
     ;
 
 
-
-/// generation_scheme ::=                                           [LRM93 §9.7]
+///
+/// generation_scheme [LRM93 §9.7]
+///
+/// \code{.bnf}
+/// generation_scheme ::=
 ///       for generate_parameter_specification
 ///     | if condition
+/// \endcode
 auto const generation_scheme_def =
       (FOR >> parameter_specification)
     | (IF  >> condition)
     ;
 
 
-
-/// generic_clause ::=                                            [LRM93 §1.1.1]
+///
+/// generic_clause [LRM93 §1.1.1]
+///
+/// \code{.bnf}
+/// generic_clause ::=
 ///     generic ( generic_list ) ;
+/// \endcode
 auto const generic_clause_def = ( // operator precedence
        GENERIC
     >> '('
@@ -2752,11 +2794,11 @@ namespace detail {
 
 x3::symbols<ast::keyword_token> const mode_symbols(
     {
-        {"in"     , ast::keyword_token::IN},
-        {"out"    , ast::keyword_token::OUT},
-        {"inout"  , ast::keyword_token::INOUT},
-        {"buffer" , ast::keyword_token::BUFFER},
-        {"linkage", ast::keyword_token::LINKAGE}
+        { "in"     , ast::keyword_token::IN },
+        { "out"    , ast::keyword_token::OUT },
+        { "inout"  , ast::keyword_token::INOUT },
+        { "buffer" , ast::keyword_token::BUFFER },
+        { "linkage", ast::keyword_token::LINKAGE }
     },
     "mode"
 );
@@ -2996,7 +3038,8 @@ auto const unit_name = x3::as<ast::string_span>[
 } // end detail
 
 auto const physical_literal_def =
-    -abstract_literal >> (physical_literal_detail::unit_name - keyword)
+       -abstract_literal
+    >> (physical_literal_detail::unit_name - keyword)
     ;
 
 
@@ -3017,9 +3060,13 @@ auto const physical_type_definition_def =
     ;
 
 
-
-/// port_clause ::=                                               [LRM93 §1.1.1]
+///
+/// port_clause [LRM93 §1.1.1]
+///
+/// \code{.bnf}
+/// port_clause ::=
 ///     port ( port_list ) ;
+/// \endcode
 auto const port_clause_def = ( // operator precedence
        PORT
     >> '('
@@ -3220,11 +3267,18 @@ auto const qualified_expression_def =
     ;
 
 
-
+///
+/// range [LRM93 §3.1]
+///
+/// \note The order is changed to get the longest match, since simple_expression
+///       can also be a name as of range_attribute_name
+///
+/// \code{.bnf}
 /// range ::=                                                       [LRM93 §3.1]
 ///       range_attribute_name
 ///     | simple_expression direction simple_expression
-namespace range_detail {
+/// \endcode
+namespace detail {
 
 auto const range_expression = x3::rule<struct _, ast::range_expression> { "range_expression" } =
        simple_expression
@@ -3233,17 +3287,19 @@ auto const range_expression = x3::rule<struct _, ast::range_expression> { "range
     ;
 } // end detail
 
-auto const range_def =
-    /* The order is changed to get the longest match, since simple_expression
-     * can also be a name as of range_attribute_name */
-      range_detail::range_expression
+auto const range_def = /* order matters */
+      detail::range_expression
     | attribute_name
     ;
 
 
-
-/// range_constraint ::=                                            [LRM93 §3.1]
+///
+/// range_constraint [LRM93 §3.1]
+///
+/// \code{.bnf}
+/// range_constraint ::=
 ///     range range
+/// \endcode
 auto const range_constraint_def =
     RANGE >> range
     ;
@@ -4034,6 +4090,8 @@ auto const waveform_element_def =
 } // namespace eda
 
 
+#if !defined(DOXYGEN)
+
 /*******************************************************************************
  * Spirit.X3 BNF Rule Definitions
  */
@@ -4314,6 +4372,7 @@ BOOST_SPIRIT_DEFINE(  // -- W --
 
 #include <eda/compiler/warnings_on.hpp>
 
+#endif // !defined(DOXYGEN)
 
 } // namespace parser
 } // namespace vhdl
