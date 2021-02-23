@@ -1,9 +1,7 @@
 ################################################################################
-## sources/vhdl/CMakeLists.txt
-################################################################################
-
-################################################################################
-## EDA/VHDL project
+## EDA/vhdl project
+##
+## file: sources/vhdl/CMakeLists.txt
 ################################################################################
 
 project(eda_vhdl_parser LANGUAGES CXX)
@@ -18,7 +16,9 @@ set_property(TARGET eda_vhdl_parser PROPERTY JOB_POOL_COMPILE job_pool_max_cores
 set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
 
 
-add_dependencies(${PROJECT_NAME} boost-spirit-x3)
+if(EDA_EXTERNAL_BOOST_SPIRIT_X3)
+    add_dependencies(${PROJECT_NAME} boost-spirit-x3)
+endif()
 
 
 target_sources(${PROJECT_NAME} PRIVATE
@@ -33,7 +33,7 @@ target_sources(${PROJECT_NAME} PRIVATE
     
     src/parser/error_handler.cpp
     src/parser/on_error_base.cpp
-    #src/parser/grammar.cpp
+    #src/parser/grammar.cpp  ##### memory exhausting @compile time
     src/parser/parse.cpp
     
     src/analyze/error_handler.cpp
@@ -125,3 +125,4 @@ endif(CLANG_WARN_EVERYTHING)
 target_link_libraries(${PROJECT_NAME} PUBLIC
     eda::common
 )
+

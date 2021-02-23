@@ -1,9 +1,7 @@
 ################################################################################
-## souces/common/CMakeLists.txt
-################################################################################
-
-################################################################################
-## The EDA/common project
+## EDA/common project
+##
+## file: sources/common/CMakeLists.txt
 ################################################################################
 
 project(eda_common LANGUAGES CXX)
@@ -59,7 +57,7 @@ endif(CLANG_WARN_EVERYTHING)
 
 
 target_link_libraries(${PROJECT_NAME}
-	Boost::filesystem
+    Boost::filesystem
 )
 
 
@@ -68,7 +66,8 @@ target_link_libraries(${PROJECT_NAME}
 # [How to fix undefined reference to `__imp_WSACleanup' (Boost.Asio) in CLion](
 #  https://stackoverflow.com/questions/38767653/how-to-fix-undefined-reference-to-imp-wsacleanup-boost-asio-in-clion)
 if(MINGW)
-	target_link_libraries(${PROJECT_NAME}
-   		ws2_32
-	)
+    target_link_libraries(${PROJECT_NAME}
+        ws2_32
+    )
 endif()
+

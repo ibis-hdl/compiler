@@ -1,9 +1,7 @@
 ################################################################################
-## testsuite/vhdl/syntax/CMakeLists.txt
-################################################################################
-
-################################################################################
-## VHDL C++ TestSuite for the synatx test for parser 
+## EDA/testsuite VHDL syntax project
+##
+## file: testsuite/vhdl/syntax/CMakeLists.txt
 ################################################################################
 
 project(testrunner_vhdl_syntax LANGUAGES CXX)
@@ -18,7 +16,9 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_COMPILE job_pool_max_cores
 set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
 
 
-add_dependencies(${PROJECT_NAME} boost-utf)
+if(EDA_EXTERNAL_BOOST_UTF)
+    add_dependencies(${PROJECT_NAME} external-boost-utf)
+endif()
 
 
 target_sources(${PROJECT_NAME} PRIVATE

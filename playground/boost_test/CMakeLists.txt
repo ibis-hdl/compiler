@@ -25,7 +25,11 @@ find_package(Boost REQUIRED COMPONENTS system filesystem)
 
 # Concept
 add_executable(bt_dataset_args                  EXCLUDE_FROM_ALL bt_dataset_args.cpp)
-add_dependencies(bt_dataset_args boost-utf)
+
+if(EDA_EXTERNAL_BOOST_UTF)
+    add_dependencies(bt_dataset_args boost-utf)
+endif()
+
 target_include_directories(bt_dataset_args PRIVATE
     $<BUILD_INTERFACE:${BOOST_UTF_INCLUDE_DIR}>
 )
@@ -41,7 +45,9 @@ add_executable(bt_issue12953 EXCLUDE_FROM_ALL
     dataset_master_test_suite_accessible_test.cpp
     dataset_master_test_suite_accessible_test_with_arity.cpp
 )
-add_dependencies(bt_issue12953 boost-utf)
+if(EDA_EXTERNAL_BOOST_UTF)
+    add_dependencies(bt_issue12953 boost-utf)
+endif()
 target_include_directories(bt_issue12953 PRIVATE
     $<BUILD_INTERFACE:${BOOST_UTF_INCLUDE_DIR}>
 )

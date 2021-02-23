@@ -1,9 +1,7 @@
 ################################################################################
-## testsuite/vhdl/ibi/CMakeLists.txt
-################################################################################
-
-################################################################################
-## VHDL C++ TestSuite for EDA/ibis
+## EDA/testsuite ibis project
+##
+## file: testsuite/ibis/CMakeLists.txt
 ################################################################################
 
 #project(testrunner_ibis)
@@ -28,3 +26,4 @@ add_test(NAME test_ibis_cli_locale_env
 set_tests_properties(test_ibis_cli_locale_env PROPERTIES 
     ENVIRONMENT "EDA_LOCALE_DIR=${CMAKE_BINARY_DIR}/l10n"
 )
+

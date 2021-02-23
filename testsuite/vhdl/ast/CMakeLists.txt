@@ -1,9 +1,7 @@
 ################################################################################
-## testsuite/vhdl/ast/CMakeLists.txt
-################################################################################
-
-################################################################################
-## VHDL C++ TestSuite related to AST 
+## EDA/testsuite VHDL AST project
+##
+## file: testsuite/vhdl/ast/CMakeLists.txt
 ################################################################################
 
 project(testrunner_vhdl_ast LANGUAGES CXX)
@@ -18,7 +16,9 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_COMPILE job_pool_max_cores
 set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
 
 
-add_dependencies(${PROJECT_NAME} boost-utf)
+if(EDA_EXTERNAL_BOOST_UTF)
+    add_dependencies(${PROJECT_NAME} external-boost-utf)
+endif()
 
 
 target_sources(${PROJECT_NAME} PRIVATE
@@ -77,3 +77,4 @@ add_test(NAME test_ast
     COMMAND ${PROJECT_NAME} -- 
     --source-dir=${PROJECT_SOURCE_DIR}/test_case
 )
+

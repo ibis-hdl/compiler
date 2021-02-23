@@ -1,14 +1,12 @@
 ################################################################################
-## CMakeLists.txt
+## EDA project
+##
+## file: CMakeLists.txt
 ################################################################################
 
 set (CMAKE_USER_MAKE_RULES_OVERRIDE "${CMAKE_CURRENT_LIST_DIR}/cmake/CompilerOptions.cmake")
 
-################################################################################
-## The EDA project
-################################################################################
-  
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.18)
 
 project(eda VERSION 0.0.1 LANGUAGES CXX)
 message(STATUS "System name: ${CMAKE_SYSTEM_NAME}")
@@ -24,8 +22,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 include(prevent_in_source_builds)
-include(options)
-include(dev_options)
+include(options_build)
+include(options_developer)
 
 
 ##
@@ -52,7 +50,7 @@ set_property(GLOBAL PROPERTY CMAKE_JOB_POOLS
 # Boost.Org
 # [Cmake doesn't find Boost](https://stackoverflow.com/questions/3808775/cmake-doesnt-find-boost)
 #set(Boost_DEBUG 1)   
-find_package(Boost REQUIRED COMPONENTS 
+find_package(Boost 1.73.0 REQUIRED COMPONENTS 
     system 
     filesystem
     locale
@@ -61,29 +59,27 @@ find_package(Boost REQUIRED COMPONENTS
 
 
 ##
-# Globally Boost.Spirit.X3 up-to-date
-# EDA project parser depends on newer Spirit.X3 versions as commonly shiped
-# by the linux distributions. Create an own up-to-date clone of Boost.Spirit's
-# project. This is used by the depending sub projects
-include(external_spirit_x3)
-
-
-##
-# Globally Boost.UTF up-to-date
-include(external_boost_utf)
+# Bleeding Edge external Boost dependencies
+if(EDA_EXTERNAL_BOOST_SPIRIT_X3)
+    include(external_spirit_x3)
+endif()
+if(EDA_EXTERNAL_BOOST_UTF)
+    include(external_boost_utf)
+endif()
 
 
 ##
 # Support for JSON
+# Todo: as of v1.75.0 boost has boost.JSON
 include(external_json)
 
 
 ## 
-# Common build options: set the output folder where programs will be created
-set(CMAKE_BINARY_DIR            ${CMAKE_BINARY_DIR}/bin)
-set(EXECUTABLE_OUTPUT_PATH      ${CMAKE_BINARY_DIR})
-set(LIBRARY_OUTPUT_PATH         ${CMAKE_BINARY_DIR})
-
+# Common build options: set the output folder where programs will be created.
+# [Output Artifacts](https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#output-artifacts)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ## 
 # Sub projects
@@ -125,22 +121,8 @@ add_subdirectory(doc)
 include(GNUInstallDirs)
 
 
-## This is only a reminder, COTIRE doesn't works at last with the VHDL parser
-## and his testsuite 
-#set_target_properties(${PROJECT_NAME} PROPERTIES
-#    COTIRE_PREFIX_HEADER_IGNORE_PATH "${Boost_INCLUDE_DIRS}/boost;${SPIRIT_X3_INCLUDE_DIR}"
-#    #COTIRE_PREFIX_HEADER_IGNORE_PATH "${Boost_INCLUDE_DIRS}/boost"
-#    #COTIRE_PREFIX_HEADER_INCLUDE_PATH eda::vhdl_parser
-#)
-#
-# FAILED with Boost.PP and others
-#cotire(${PROJECT_NAME})
-#
-# disable PCH date-time check, Boost.Spirit uses __DATE__ and __TIME__ 
-# [Can cotire be made to work properly with Boost?](
-#  https://stackoverflow.com/questions/44350219/can-cotire-be-made-to-work-properly-with-boost)
-#if(_cotireTargetName)
-#    target_compile_options(${PROJECT_NAME} PRIVATE
-#        -Wno-pch-date-time
-#    )
-#endif()
+##
+# Ignore build dir by backup apps using some 'magic'; e.g. Bacula/Bareos has
+# "Exclude Dir Containing" directive for filesets
+file(WRITE ${CMAKE_BINARY_DIR}/.no_backup "Don't backup the build dir\n")
+

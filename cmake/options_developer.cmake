@@ -1,5 +1,6 @@
 ##
-# Global developer options
+# developer configureable build options
+##
 
 ## 
 # CLang extra warnings
@@ -23,6 +24,17 @@ mark_as_advanced(CLANG_WARN_EVERYTHING)
 # Developer Build Option: run EDA under Valgrind.
 option(EDA_RUN_ON_VALGRIND "Configure EDA to be run on Valgrind." OFF)
 mark_as_advanced(EDA_RUN_ON_VALGRIND)
+
+##------------------------------------------------------------------------------
+# Boost.Org @BleedingEdge
+# The project may depend on newer Boost.component versions as commonly shipped
+# by linux distributions. That happened in the past. Create an own up-to-date 
+# clone those component project. These are used by the depending sub projects.
+option(EDA_EXTERNAL_BOOST_SPIRIT_X3 "Configure EDA to use external Boost.Org Spirit Parser X3 - LL(k) Parser Framework." OFF)
+mark_as_advanced(EDA_EXTERNAL_BOOST_SPIRIT_X3)
+
+option(EDA_EXTERNAL_BOOST_UTF "Configure EDA to use external Boost.Org Unit Test Framework (UTF)." OFF)
+mark_as_advanced(EDA_EXTERNAL_BOOST_UTF)
 
 
 ## -----------------------------------------------------------------------------

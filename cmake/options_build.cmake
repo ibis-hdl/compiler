@@ -1,5 +1,6 @@
 ##
-# Global user configureable project options
+# user configureable build options
+##
 
 ##
 # Build Option: ANSI Color or Windows  Console I/O
@@ -26,19 +27,14 @@ option(EDA_BUILD_TESTS "Build tests" ON)
 
 
 
-##
+###############################################################################
 # Sanity Checks
 #
 if(EDA_WITH_BOOST_STACKTRACE AND EDA_WITH_GDB_STACKTRACE)
     message(FATAL_ERROR "Only one stacktrace option is useful and hence allowed.")
 endif()
 
-
-if(EDA_WITH_BOOST_STACKTRACE AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    message(FATAL_ERROR "Sorry, my Fedora box has only boost 1.64; boost.stacktrace is since 1.65 ...")
-endif()
-
-# We have boost 1.68 locally here, use it ...
+# Windows user know, they have no choice
 if(WIN32)
     set(EDA_WITH_BOOST_STACKTRACE ON)
     set(EDA_WITH_GDB_STACKTRACE OFF)

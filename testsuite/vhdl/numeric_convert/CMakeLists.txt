@@ -1,9 +1,7 @@
 ################################################################################
-## testsuite/vhdl/numeric_convert/CMakeLists.txt
-################################################################################
-
-################################################################################
-## VHDL C++ TestSuite for converting parsed literals to numeric 
+## EDA/testsuite VHDL numeric convert project
+##
+## file: testsuite/vhdl/numeric_convert/CMakeLists.txt
 ################################################################################
 
 project(testrunner_vhdl_numeric_convert LANGUAGES CXX)
@@ -18,8 +16,12 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_COMPILE job_pool_max_cores
 set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
 
 
-add_dependencies(${PROJECT_NAME} boost-spirit-x3)
-add_dependencies(${PROJECT_NAME} boost-utf)
+if(EDA_EXTERNAL_BOOST_SPIRIT_X3)
+    add_dependencies(${PROJECT_NAME} boost-spirit-x3)
+endif()
+if(EDA_EXTERNAL_BOOST_UTF)
+    add_dependencies(${PROJECT_NAME} boost-utf)
+endif()
 
 
 target_sources(${PROJECT_NAME} PRIVATE
@@ -82,3 +84,4 @@ endif()
 add_test(NAME test_vhdl_numeric_conversion
     COMMAND ${PROJECT_NAME}
 )
+

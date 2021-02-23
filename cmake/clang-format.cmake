@@ -50,11 +50,11 @@ foreach(EXCLUDE_PATTERN ${CLANG_FORMAT_EXCLUDE_PATTERNS})
     list(APPEND EXCLUDE_PATTERN_ARGS "--exclude=${EXCLUDE_PATTERN}")
 endforeach()
 
-# call the script to chech changed files in git
+# call the script to check changed files in git
 add_custom_target(format-check-changed
     COMMENT "Checking changed files in git"
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    COMMAND ${_clangcheckpath}/scripts/clang-format-check-changed.py 
+    COMMAND ${_clangcheckpath}/../scripts/clang-format-check-changed.py 
     --file-extensions \"${CHANGED_FILE_EXTENSIONS}\"
     ${EXCLUDE_PATTERN_ARGS}
     --clang-format-bin ${CLANG_FORMAT_BIN}

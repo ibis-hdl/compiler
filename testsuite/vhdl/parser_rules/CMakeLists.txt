@@ -1,9 +1,7 @@
 ################################################################################
-## testsuite/vhdl/parser/CMakeLists.txt
-################################################################################
-
-################################################################################
-## VHDL C++ TestSuite for the parser 
+## EDA/testsuite VHDL parser project
+##
+## file: testsuite/vhdl/parser/CMakeLists.txt
 ################################################################################
 
 project(testrunner_vhdl_parser_rules LANGUAGES CXX)
@@ -18,10 +16,12 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_COMPILE job_pool_max_cores
 set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
 
 
-##
-# Boost.Org's local git clone(s)
-add_dependencies(${PROJECT_NAME} boost-spirit-x3)
-add_dependencies(${PROJECT_NAME} boost-utf)
+if(EDA_EXTERNAL_BOOST_SPIRIT_X3)
+    add_dependencies(${PROJECT_NAME} boost-spirit-x3)
+endif()
+if(EDA_EXTERNAL_BOOST_UTF)
+    add_dependencies(${PROJECT_NAME} boost-utf)
+endif()
 
 
 target_sources(${PROJECT_NAME} PRIVATE
@@ -215,3 +215,4 @@ set_source_files_properties(
     ${TEST_MATRIX_GENERATOR_TARGET}
     PROPERTIES GENERATED TRUE
 )
+

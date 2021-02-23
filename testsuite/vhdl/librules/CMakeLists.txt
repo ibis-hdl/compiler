@@ -1,13 +1,11 @@
 ################################################################################
-## testsuite/vhdl/librules/CMakeLists.txt
-################################################################################
-
-################################################################################
-## VHDL C++ TestSuite library for rules 
+## EDA/testsuite VHDL rules project
 ##
 ## The purpose of this project is simply to allow this big object to be compile
 ## in parallel with low-memory configurations, e.g. using ninja's pool feature.
 ## On real developer machines set the JOB_POOL_COMPILE to job_pool_max_cores.
+##
+## file: testsuite/vhdl/librules/CMakeLists.txt
 ################################################################################
 
 project(testsuite_vhdl_rules LANGUAGES CXX)
@@ -23,9 +21,9 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_COMPILE job_pool_one_core)
 set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
 
 
-##
-# Boost.Org's local git clone(s)
-add_dependencies(${PROJECT_NAME} boost-spirit-x3)
+if(EDA_EXTERNAL_BOOST_SPIRIT_X3)
+    add_dependencies(${PROJECT_NAME} external-boost-spirit-x3)
+endif()
 
 
 # Check on big RAM power stations to compile big files
@@ -37,7 +35,30 @@ cmake_host_system_information(
 if(localhost_RAM_MB GREATER 12000)
     set(SOURCE_LIST src/rules.cpp)
 else()
-    set(SOURCE_LIST src/rules_1.cpp src/rules_2.cpp src/rules_api.cpp)
+    # FixMe: This is not the best solution to cope with low RAM situations. 
+    # Do conditional compiling the file rules.cpp for {A-Z} rules into multiple 
+    # object files.
+    set(SOURCE_LIST 
+        src/rules_api.cpp
+        src/rules_a.cpp 
+        src/rules_b.cpp 
+        src/rules_c.cpp 
+        src/rules_d.cpp 
+        src/rules_e.cpp 
+        src/rules_f.cpp 
+        src/rules_g.cpp
+        src/rules_i.cpp 
+        src/rules_l.cpp 
+        src/rules_n.cpp 
+        src/rules_p.cpp 
+        src/rules_q.cpp 
+        src/rules_r.cpp 
+        src/rules_s.cpp 
+        src/rules_t.cpp 
+        src/rules_u.cpp 
+        src/rules_v.cpp 
+        src/rules_w.cpp 
+    )
 endif()
 
 target_sources(${PROJECT_NAME} PRIVATE
@@ -98,3 +119,4 @@ endif()
 target_link_libraries(${PROJECT_NAME} PRIVATE
     eda::vhdl_parser
 )
+

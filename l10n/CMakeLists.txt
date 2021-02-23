@@ -1,5 +1,7 @@
 ################################################################################
-## l10n/CMakeLists.txt
+## EDA/l10n project
+##
+## file: l10n/CMakeLists.txt
 ################################################################################
 
 project(eda_l10n)
@@ -55,7 +57,7 @@ add_custom_target(l10n ALL
     DEPENDS extract-translations 
 )
 
-endif(XGETTEXT_FOUND)
+endif()
 
 
 ##
@@ -66,4 +68,5 @@ message(STATUS "Found GetText package")
 file(GLOB translations_po ${PROJECT_SOURCE_DIR}/po/*.po)
 GETTEXT_CREATE_TRANSLATIONS(${language_template} ALL ${translations_po})
 
-endif(GETTEXT_FOUND)
+endif()
+
