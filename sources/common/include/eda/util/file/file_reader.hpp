@@ -55,7 +55,14 @@ public:
             [this](std::string const& f) { return exist_file(f); });
     }
 
-    // concept at https://wandbox.org/permlink/n0WLazXzJ61WNQg9
+    /**
+     * Returns true, if the \p file_list has unique files. Otherwise prints the
+     * duplicates and returns false.
+     *
+     * The implementation concept based on can be found at
+     * \see[Wandbox}(https://wandbox.org/permlink/n0WLazXzJ61WNQg9)
+     *
+     * FixMe: The algorithm is O(n^2); using a hash may prevent this. */
     bool unique_files(std::vector<std::string> const& file_list) const;
 
     /* file read method using rdbuf()
@@ -73,8 +80,9 @@ public:
      * https://insanecoding.blogspot.com/2011/11/how-to-read-in-file-in-c.html) */
     std::optional<std::string> read_file_alt(std::string const& filename) const;
 
-    /* time point of last write occurrence. If the time cannot be determined,
-     *  returns (std::time_t)(-1). */
+    /* Time point of last write occurrence. If the time cannot be determined,
+     * returns (std::time_t)(-1).
+     * This allows to skip files which are compiled before (and cached). */
     std::time_t timesstamp(std::string const& filename) const;
 
 private:

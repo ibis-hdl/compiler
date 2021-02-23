@@ -65,11 +65,6 @@ bool file_loader::exist_file(std::string const& filename) const
     }
 }
 
-/* Returns true, if the file_list has unique files. Otherwise prints the duplicates
- * and returns false.
- *
- * FixMe: The algorithm is O(n^2); using a hash may prevent this.
- */
 bool file_loader::unique_files(std::vector<std::string> const& file_list) const
 {
 
@@ -116,9 +111,6 @@ bool file_loader::unique_files(std::vector<std::string> const& file_list) const
     return true;
 }
 
-/* file read method using rdbuf()
- * \see[How to read in a file in C++](
- * https://insanecoding.blogspot.com/2011/11/how-to-read-in-file-in-c.html) */
 std::optional<std::string> file_loader::read_file(std::string const& filename) const
 {
     using boost::locale::format;
@@ -147,17 +139,11 @@ std::optional<std::string> file_loader::read_file(std::string const& filename) c
     return ss.str();
 }
 
-/* file read method using rdbuf()
- * \see[How to read in a file in C++](
- * https://insanecoding.blogspot.com/2011/11/how-to-read-in-file-in-c.html) */
 std::optional<std::string> file_loader::read_file(boost::filesystem::path const& filename) const
 {
     return read_file(filename.string());
 }
 
-/* alternative read method using seek
- * \see[How to read in a file in C++](
- * https://insanecoding.blogspot.com/2011/11/how-to-read-in-file-in-c.html) */
 std::optional<std::string> file_loader::read_file_alt(std::string const& filename) const
 {
 
@@ -196,11 +182,8 @@ std::optional<std::string> file_loader::read_file_alt(std::string const& filenam
     return contents;
 }
 
-/* time point of last write occurrence. If the time cannot be determined,
- *  returns (std::time_t)(-1). */
 std::time_t file_loader::timesstamp(std::string const& filename) const
 {
-
     boost::system::error_code ec;
 
     std::time_t const time = fs::last_write_time(filename, ec);
@@ -213,6 +196,7 @@ std::time_t file_loader::timesstamp(std::string const& filename) const
            << std::endl;
         // clang-format on
     }
+
     return time;
 }
 

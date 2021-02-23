@@ -53,12 +53,12 @@ int main(int argc, const char* argv[])
                 std::cerr << message::note(translate("processing:")) << " "
                           << filename << '\n';
             }
-            std::cout << "------------------------------------------------\n";
-            std::cout << *contents;
-            std::cout << "\n------------------------------------------------\n";
-            std::time_t t = file_reader.timesstamp(filename);
-            std::cout << "timestamp: " << t << '\n';
-            std::cout << "------------------------------------------------\n";
+
+            // XXX since we aren't functional, simply print the contents
+
+            std::cout << "------------------------------------------------\n"
+            		  << *contents << '\n'
+            		  << "------------------------------------------------\n";
         }
 
         // testing_signal_handler(); // just testing

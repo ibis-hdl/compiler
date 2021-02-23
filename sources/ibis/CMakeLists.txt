@@ -75,10 +75,10 @@ endif(CLANG_WARN_EVERYTHING)
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
     target_compile_options(${PROJECT_NAME} PRIVATE
-        -g -fsanitize=address -fno-omit-frame-pointer
+        -g -fno-omit-frame-pointer
     )    
     set_target_properties(${PROJECT_NAME} PROPERTIES 
-        LINK_FLAGS "-g -fsanitize=address -fno-omit-frame-pointer"
+        LINK_FLAGS "-g -fno-omit-frame-pointer"
     )
 endif()
 
