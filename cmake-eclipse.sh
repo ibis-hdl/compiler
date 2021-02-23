@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+LANG=en_US.UTF-8
+
 # http://mywiki.wooledge.org/BashFAQ/028
 SCRIPT_PATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
@@ -21,19 +23,20 @@ CPU_COUNT=1 # override for low end computer
 
 cat << EOF
 ##
-## Configure from Source ${EDA_SOURCE_DIR}
-## Build in ${EDA_BUILD_DIR} 
-## ${CMAKE_BUILD_TYPE}
+## Configure CMake Eclipse Build
+##
+## Source directory: ${EDA_SOURCE_DIR}
+## Build directoy:   ${EDA_BUILD_DIR} 
+## Build type:       ${CMAKE_BUILD_TYPE}
+## Compiler:         ${CXX_COMPILER}
 ##
 EOF
 
 ${CMAKE_BIN} -E make_directory ${EDA_BUILD_DIR}
 
-LANG=en_US.UTF-8
-
 cd ${EDA_BUILD_DIR}
 
-${CMAKE_BIN} ${EDA_SOURCE_DIR}
+${CMAKE_BIN} ${EDA_SOURCE_DIR} \
         -G "${CMAKE_GENERATOR}" \
         -DCMAKE_ECLIPSE_VERSION=4.6 \
         -DCMAKE_ECLIPSE_GENERATE_SOURCE_PROJECT=TRUE \
@@ -46,4 +49,7 @@ ${CMAKE_BIN} ${EDA_SOURCE_DIR}
         -DBUILD_SHARED_LIBS:BOOL=OFF \
         -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 	 
+# cleanup before the run cmake
+${CMAKE_BIN} --build ${EDA_BUILD_DIR} --target clean
+# make && build
 ${CMAKE_BIN} --build ${EDA_BUILD_DIR} --target all --config ${CMAKE_BUILD_TYPE}
