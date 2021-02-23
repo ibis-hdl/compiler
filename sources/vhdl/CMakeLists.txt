@@ -33,7 +33,7 @@ target_sources(${PROJECT_NAME} PRIVATE
     
     src/parser/error_handler.cpp
     src/parser/on_error_base.cpp
-    src/parser/grammar.cpp
+    #src/parser/grammar.cpp
     src/parser/parse.cpp
     
     src/analyze/error_handler.cpp

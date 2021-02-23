@@ -39,7 +39,7 @@ struct collect_worker
     {}
 
     template<typename NodeT>
-    void operator()(NodeT const&, std::string_view const& node_name) const {
+    void operator()(NodeT const&, std::string_view node_name) const {
         if constexpr (std::is_base_of_v<ast::position_tagged, std::decay_t<NodeT>>) {
             ++tagged_map[node_name];
         }

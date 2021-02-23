@@ -43,9 +43,9 @@ enum class attribute : uint8_t {
     Background_White = 47,
 };
 
-std::optional<color::attribute> text_attr(std::string_view const& name);
-std::optional<color::attribute> foreground_attr(std::string_view const& name);
-std::optional<color::attribute> background_attr(std::string_view const& name);
+std::optional<color::attribute> text_attr(std::string_view name);
+std::optional<color::attribute> foreground_attr(std::string_view name);
+std::optional<color::attribute> background_attr(std::string_view name);
 
 } // namespace color
 } // namespace eda

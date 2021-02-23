@@ -37,29 +37,29 @@ public:
     bool failures() const { return !success(); }
 
 public:
-    void operator()(ast::architecture_body const& node, std::string_view const& node_name) const;
-    void operator()(ast::block_statement const& node, std::string_view const& node_name) const;
-    void operator()(ast::case_statement const& node, std::string_view const& node_name) const;
+    void operator()(ast::architecture_body const& node, std::string_view node_name) const;
+    void operator()(ast::block_statement const& node, std::string_view node_name) const;
+    void operator()(ast::case_statement const& node, std::string_view node_name) const;
     void operator()(
-        ast::configuration_declaration const& node, std::string_view const& node_name) const;
-    void operator()(ast::entity_declaration const& node, std::string_view const& node_name) const;
-    void operator()(ast::generate_statement const& node, std::string_view const& node_name) const;
-    void operator()(ast::if_statement const& node, std::string_view const& node_name) const;
-    void operator()(ast::loop_statement const& node, std::string_view const& node_name) const;
-    void operator()(ast::package_body const& node, std::string_view const& node_name) const;
-    void operator()(ast::package_declaration const& node, std::string_view const& node_name) const;
-    void operator()(ast::process_statement const& node, std::string_view const& node_name) const;
+        ast::configuration_declaration const& node, std::string_view node_name) const;
+    void operator()(ast::entity_declaration const& node, std::string_view node_name) const;
+    void operator()(ast::generate_statement const& node, std::string_view node_name) const;
+    void operator()(ast::if_statement const& node, std::string_view node_name) const;
+    void operator()(ast::loop_statement const& node, std::string_view node_name) const;
+    void operator()(ast::package_body const& node, std::string_view node_name) const;
+    void operator()(ast::package_declaration const& node, std::string_view node_name) const;
+    void operator()(ast::process_statement const& node, std::string_view node_name) const;
 
     template <typename NodeT>
-    void operator()(NodeT const& /*unused*/, std::string_view const& /*unused*/) const
+    void operator()(NodeT const& /*unused*/, std::string_view /*unused*/) const
     {
     }
 
 private:
     template <typename NodeT>
-    bool label_matches(NodeT const& node, std::string_view const& node_name) const;
+    bool label_matches(NodeT const& node, std::string_view node_name) const;
 
-    bool keyword_matches(ast::process_statement const& node, std::string_view const& node_name) const;
+    bool keyword_matches(ast::process_statement const& node, std::string_view node_name) const;
 
 private:
     // format-clang off

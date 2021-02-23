@@ -23,7 +23,7 @@ namespace analyze {
 bool syntax_worker::success() const { return context.error_count == 0; }
 
 template <typename NodeT>
-bool syntax_worker::label_matches(NodeT const& node, std::string_view const& node_name) const
+bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name) const
 {
     label_match check_label{};
 
@@ -71,7 +71,7 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view const& nod
     cxx_unreachable_bug_triggered();
 }
 
-bool syntax_worker::keyword_matches(ast::process_statement const& node, std::string_view const& node_name) const {
+bool syntax_worker::keyword_matches(ast::process_statement const& node, std::string_view node_name) const {
 
     // Note: Re-Using label_match here results into misleading error message
     //       "Label mismatch". Further, the keywords aren't tagged so beauty
@@ -101,67 +101,67 @@ bool syntax_worker::keyword_matches(ast::process_statement const& node, std::str
 }
 
 void syntax_worker::operator()(
-    ast::architecture_body const& node, std::string_view const& node_name) const
+    ast::architecture_body const& node, std::string_view node_name) const
 {
     label_matches(node, node_name);
 }
 
 void syntax_worker::operator()(
-    ast::block_statement const& node, std::string_view const& node_name) const
+    ast::block_statement const& node, std::string_view node_name) const
 {
     label_matches(node, node_name);
 }
 
 void syntax_worker::operator()(
-    ast::case_statement const& node, std::string_view const& node_name) const
+    ast::case_statement const& node, std::string_view node_name) const
 {
     label_matches(node, node_name);
 }
 
 void syntax_worker::operator()(
-    ast::configuration_declaration const& node, std::string_view const& node_name) const
+    ast::configuration_declaration const& node, std::string_view node_name) const
 {
     label_matches(node, node_name);
 }
 
 void syntax_worker::operator()(
-    ast::entity_declaration const& node, std::string_view const& node_name) const
+    ast::entity_declaration const& node, std::string_view node_name) const
 {
     label_matches(node, node_name);
 }
 
 void syntax_worker::operator()(
-    ast::generate_statement const& node, std::string_view const& node_name) const
+    ast::generate_statement const& node, std::string_view node_name) const
 {
     label_matches(node, node_name);
 }
 
 void syntax_worker::operator()(
-    ast::if_statement const& node, std::string_view const& node_name) const
+    ast::if_statement const& node, std::string_view node_name) const
 {
     label_matches(node, node_name);
 }
 
 void syntax_worker::operator()(
-    ast::loop_statement const& node, std::string_view const& node_name) const
+    ast::loop_statement const& node, std::string_view node_name) const
 {
     label_matches(node, node_name);
 }
 
 void syntax_worker::operator()(
-    ast::package_body const& node, std::string_view const& node_name) const
+    ast::package_body const& node, std::string_view node_name) const
 {
     label_matches(node, node_name);
 }
 
 void syntax_worker::operator()(
-    ast::package_declaration const& node, std::string_view const& node_name) const
+    ast::package_declaration const& node, std::string_view node_name) const
 {
     label_matches(node, node_name);
 }
 
 void syntax_worker::operator()(
-    ast::process_statement const& node, std::string_view const& node_name) const
+    ast::process_statement const& node, std::string_view node_name) const
 {
     label_matches(node, node_name);
     keyword_matches(node, node_name);   // check postponed

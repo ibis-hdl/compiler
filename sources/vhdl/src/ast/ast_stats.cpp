@@ -30,7 +30,7 @@ struct collect_worker {
     }
 
     template <typename NodeT>
-    void operator()(NodeT const& /*unused*/, std::string_view const& node_name) const
+    void operator()(NodeT const& /*unused*/, std::string_view node_name) const
     {
         ++count_map[node_name];
 

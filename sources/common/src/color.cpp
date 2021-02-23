@@ -18,7 +18,7 @@ template <> std::locale::id message_facet<message::severity::error>::id;
 template <> std::locale::id message_facet<message::severity::warning>::id;
 template <> std::locale::id message_facet<message::severity::note>::id;
 
-std::optional<color::attribute> text_attr(std::string_view const& name)
+std::optional<color::attribute> text_attr(std::string_view name)
 {
     using namespace std::literals::string_view_literals;
 
@@ -37,7 +37,7 @@ std::optional<color::attribute> text_attr(std::string_view const& name)
     return std::optional<color::attribute>{};
 }
 
-std::optional<color::attribute> foreground_attr(std::string_view const& name)
+std::optional<color::attribute> foreground_attr(std::string_view name)
 {
     using namespace std::literals::string_view_literals;
 
@@ -61,7 +61,7 @@ std::optional<color::attribute> foreground_attr(std::string_view const& name)
     return std::optional<color::attribute>{};
 }
 
-std::optional<color::attribute> background_attr(std::string_view const& name)
+std::optional<color::attribute> background_attr(std::string_view name)
 {
     using namespace std::literals::string_view_literals;
 
