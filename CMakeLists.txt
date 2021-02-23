@@ -69,9 +69,10 @@ endif()
 
 
 ##
-# Support for JSON
+# External dependencies
 # Todo: as of v1.75.0 boost has boost.JSON
 include(external_json)
+include(external_cli11)
 
 
 ## 

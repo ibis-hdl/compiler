@@ -42,6 +42,7 @@ target_include_directories(${PROJECT_NAME}
         $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
         $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/external/CLI>
+        #$<BUILD_INTERFACE:${CLI11_INCLUDE_DIR}>
         $<BUILD_INTERFACE:${RapidJSON_INCLUDE_DIR}>
     PUBLIC
         $<INSTALL_INTERFACE:include>
