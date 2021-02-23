@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \"\" \"..\"\n"
 "Report-Msgid-Bugs-To: https://github.com/eda/ibis/issues\n"
-"POT-Creation-Date: 2018-09-24 19:27+0200\n"
+"POT-Creation-Date: 2021-02-23 12:29+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,20 +30,20 @@ msgstr ""
 msgid "Failed existence test for file {1}: caught exception {1}"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:107
+#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:102
 msgid "Duplicate file \"{1}\", specified as: "
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:131
+#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:123
 msgid "Unable to open file \"{1}\""
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:142
-#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:192
+#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:134
+#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:178
 msgid "Error reading file \"{1}\""
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:171
+#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:157
 msgid "Error opening file \"{1}\""
 msgstr ""
 
@@ -160,68 +160,76 @@ msgstr ""
 msgid "Unexpected exception caught"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:84
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:83
 msgid ""
 "\n"
 "Report bugs to {1}"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:107
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:109
 msgid "One or more VHDL file(s)."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:112
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:114
 msgid "Show version."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:115
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:117
 msgid "Show build informations."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:119
-msgid "Analyze the design."
-msgstr ""
-
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:122
-msgid "Path to libraries."
-msgstr ""
-
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:130
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:123
 msgid "Print less text."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:133
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:126
 msgid "Print more text."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:137
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:130
 msgid "Don't render messages using colors. On output redirection no colors are used."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:141
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:134
 msgid "Even on redirected output enforce the rendering of messages using colors."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:146
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:139
 msgid "Tabulator size, affects printing source snippet on error printing."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:152
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:147
+msgid "localization catalog data"
+msgstr ""
+
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:156
 msgid "Warn all."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:155
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:159
 msgid "Warn on unused."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:158
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:162
 msgid "Warn for others."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:163
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:167
 msgid "Limit emitting diagnostics, can be disabled with --ferror-limit=0."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:168
-msgid "localization catalog data"
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:174
+msgid "Analyze the design."
+msgstr ""
+
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:177
+msgid "Path to libraries."
+msgstr ""
+
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:185
+msgid "Internal command line parser error"
+msgstr ""
+
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:189
+msgid "Unexpected command line parser error"
 msgstr ""

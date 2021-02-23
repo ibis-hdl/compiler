@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \"\" \"..\"\n"
 "Report-Msgid-Bugs-To: https://github.com/eda/ibis/issues\n"
-"POT-Creation-Date: 2018-09-20 16:55+0200\n"
+"POT-Creation-Date: 2021-02-23 12:26+0100\n"
 "PO-Revision-Date: 2018-08-25 17:30+0100\n"
 "Last-Translator: olaf <olaf@home.lan>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 2.0\n"
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:84
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:83
 msgid ""
 "\n"
 "Report bugs to {1}"
@@ -37,7 +37,7 @@ msgstr "<<-- hier"
 msgid "An unknown error occurred during parsing of '{1}'."
 msgstr "Unbekannter Fehler aufgetreten während des parsens von '{1}'."
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:119
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:174
 msgid "Analyze the design."
 msgstr ""
 
@@ -67,21 +67,21 @@ msgstr ""
 "Konvertierung vom VHDL {1} '{2}' fehlgeschlagen aufgrund eines numerischen "
 "Überlaufs (MAX_VALUE={3})"
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:137
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:130
 msgid ""
 "Don't render messages using colors. On output redirection no colors are used."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:107
+#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:102
 msgid "Duplicate file \"{1}\", specified as: "
 msgstr "Doppelte Datei \"{1}\", spezifiziert als:"
 
-#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:171
+#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:157
 msgid "Error opening file \"{1}\""
 msgstr "Fehler beim öffnen der Datei \"{1}\""
 
-#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:142
-#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:192
+#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:134
+#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:178
 msgid "Error reading file \"{1}\""
 msgstr "Fehler beim lesen der Datei \"{1}\""
 
@@ -89,7 +89,7 @@ msgstr "Fehler beim lesen der Datei \"{1}\""
 msgid "Error, expecting {1} here:"
 msgstr "Fehler, erwarte {1} hier:"
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:141
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:134
 msgid ""
 "Even on redirected output enforce the rendering of messages using colors."
 msgstr ""
@@ -110,6 +110,10 @@ msgstr "Datei {1} existiert nicht"
 msgid "File {1} is not a regular file"
 msgstr "Datei {1} ist keine reguläre Datei"
 
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:185
+msgid "Internal command line parser error"
+msgstr ""
+
 #: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/analyze/syntax.cpp:58
 msgid "Label ill-formed in {1}"
 msgstr "Label unvollständig in {1}"
@@ -118,7 +122,7 @@ msgstr "Label unvollständig in {1}"
 msgid "Label mismatch in {1}"
 msgstr "Label Diskrepanz in {1}"
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:163
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:167
 msgid "Limit emitting diagnostics, can be disabled with --ferror-limit=0."
 msgstr ""
 
@@ -130,7 +134,7 @@ msgstr ""
 "Numericher Fehler aufgetreten während der Berechnung des based_literal "
 "gebrochenen Teil von '{1}'."
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:107
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:109
 msgid "One or more VHDL file(s)."
 msgstr ""
 
@@ -138,23 +142,23 @@ msgstr ""
 msgid "Parse ERROR"
 msgstr "Parser FEHLER"
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:122
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:177
 msgid "Path to libraries."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:130
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:123
 msgid "Print less text."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:133
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:126
 msgid "Print more text."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:115
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:117
 msgid "Show build informations."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:112
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:114
 msgid "Show version."
 msgstr ""
 
@@ -167,13 +171,17 @@ msgstr "Parsen der Quell-Datei '{1}'  fehlgeschlagen"
 msgid "Syntax ERROR"
 msgstr "Syntax FEHLER"
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:146
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:139
 msgid "Tabulator size, affects printing source snippet on error printing."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:131
+#: /home/olaf/work/CXX/ibis/source/sources/common/src/file_reader.cpp:123
 msgid "Unable to open file \"{1}\""
 msgstr "Unfähig die Datei {1} zu öffnen"
+
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:189
+msgid "Unexpected command line parser error"
+msgstr ""
 
 #: /home/olaf/work/CXX/ibis/source/sources/ibis/src/main.cpp:71
 msgid "Unexpected exception caught"
@@ -185,15 +193,15 @@ msgstr ""
 msgid "Unspecified Error, Sorry"
 msgstr "Unspezifizierter Fehler, Sorry"
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:152
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:156
 msgid "Warn all."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:158
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:162
 msgid "Warn for others."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:155
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:159
 msgid "Warn on unused."
 msgstr ""
 
@@ -208,7 +216,7 @@ msgstr ""
 msgid "in file {1}, line {2}:"
 msgstr "In Datei {1}, Zeile {2}:"
 
-#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:168
+#: /home/olaf/work/CXX/ibis/source/sources/ibis/src/init.cpp:147
 msgid "localization catalog data"
 msgstr ""
 
