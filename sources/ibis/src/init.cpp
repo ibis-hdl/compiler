@@ -102,10 +102,10 @@ void init::parse_cli(int argc, const char* argv[])
     // clang-format off
     try {
         
-        /* [CLIUtils/CLI11](https://github.com/CLIUtils/CLI11) are using for pure flags
-         * a const string reference argument for the add_flags() member which doesn't
-         * provide boost.locale's translate(). A work arround is to use dummy flag 
-         * variables to enforce an overload which is aprobiate here. */
+        /* [CLIUtils/CLI11](https://github.com/CLIUtils/CLI11) is using for pure flags
+         * a const string reference argument at add_flags() member which boost.locale's 
+         * translate() doesn't provides. A work arround is to use dummy flag 
+         * variable to enforce an overload which is aprobiate here. */
         bool dummy{};
 
         /*
