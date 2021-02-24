@@ -18,5 +18,5 @@ ExternalProject_Add(
 )
 
 ExternalProject_Get_Property(boost-spirit-x3 source_dir)
-set(SPIRIT_X3_INCLUDE_DIR ${source_dir}/include)
+set(EXTERNAL_SPIRIT_X3_INCLUDE_DIR ${source_dir}/include)
 

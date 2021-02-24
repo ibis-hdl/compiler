@@ -329,10 +329,12 @@ R"({
     rjson::Document default_config = parse_json(default_cfg_json);
 
     // load user settings if exists and merge them into defaults
+    using ::eda::util::file_loader;
+    using ::eda::util::user_home_dir;
 
-    fs::path json_path = util::user_home_dir({ ".eda" }) / "config.json";
+    fs::path json_path = user_home_dir({ ".eda" }) / "config.json";
 
-    util::file_loader file_reader{ std::cerr, setting };
+    file_loader file_reader{ std::cerr, setting };
     auto const json_txt = file_reader.read_file(json_path);
 
     if (json_txt) {
@@ -451,7 +453,7 @@ void init::l10n()
         if (setting["locale-dir"]) {
             return fs::path{ setting["locale-dir"].get<std::string>() };
         } else {
-            return util::user_home_dir({ ".eda", "l10n" });
+            return ::eda::util::user_home_dir({ ".eda", "l10n" });
         }
     }();
 

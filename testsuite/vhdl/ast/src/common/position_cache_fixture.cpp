@@ -5,7 +5,7 @@
  *      Author: olaf
  */
 
-#include <testsuite/position_cache_fixture.hpp>
+#include <testsuite/ast/position_cache_fixture.hpp>
 
 #include <boost/test/unit_test.hpp>
 

@@ -10,7 +10,7 @@
 #include <boost/test/included/unit_test.hpp>        // IWYU pragma: keep
 #include <eda/compiler/warnings_on.hpp>             // IWYU pragma: keep
 
-#include <testsuite/position_cache_fixture.hpp>
+#include <testsuite/ast/position_cache_fixture.hpp>
 
 using position_cache_fixture = testsuite::position_cache_fixture;
 

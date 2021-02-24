@@ -22,10 +22,10 @@ set(RapidJSON_INCLUDE_DIR ${source_dir}/include)
 
 
 # create a .no_backup file for bacula
-ExternalProject_Get_Property(RapidJSON PREFIX)
-ExternalProject_Add_Step(
-  RapidJSON
-  tag_no_backup
-  COMMAND              echo > ${PREFIX}/.no_backup
-)
+#ExternalProject_Get_Property(RapidJSON PREFIX)
+#ExternalProject_Add_Step(
+#  RapidJSON
+#  tag_no_backup
+#  COMMAND              echo > ${PREFIX}/.no_backup
+#)
 

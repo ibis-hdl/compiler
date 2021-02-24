@@ -12,7 +12,7 @@
 #include <boost/test/data/monomorphic.hpp>
 #include <boost/test/output_test_stream.hpp>
 
-#include <testsuite/namespace_alias.hpp>
+#include <testsuite/common/namespace_alias.hpp>
 
 
 BOOST_AUTO_TEST_SUITE( literal_print )

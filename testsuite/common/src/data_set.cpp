@@ -5,7 +5,7 @@
  *      Author: olaf
  */
 
-#include <testsuite/data_set.hpp>
+#include <testsuite/common/data_set.hpp>
 
 #include <boost/filesystem/fstream.hpp>
 

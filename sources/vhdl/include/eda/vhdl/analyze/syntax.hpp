@@ -63,7 +63,7 @@ private:
 
 private:
     // format-clang off
-    std::ostream&                                   os;
+    std::ostream&                                   os;  // unused, required later on
     vhdl::context&                                  context;
     analyze::error_handler_type&                    error_handler;
     // format-clang on

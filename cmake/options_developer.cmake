@@ -1,6 +1,19 @@
-##
+## -----------------------------------------------------------------------------
 # developer configureable build options
+## -----------------------------------------------------------------------------
+
+
 ##
+# Developer Build Option: Use PCH
+# Starting with cmake 3.16 projects can use precompiled headers
+# ToDO: Study [Faster builds with PCH suggestions from C++ Build Insights](
+#   https://devblogs.microsoft.com/cppblog/faster-builds-with-pch-suggestions-from-c-build-insights/)
+option(EDA_ENABLE_PCH
+  "Enable precompile headers support. \"
+   This can speed up compilation time."
+  ON)
+mark_as_advanced(EDA_ENABLE_PCH)
+
 
 ## 
 # CLang extra warnings
@@ -16,25 +29,86 @@
 
 ## -----------------------------------------------------------------------------
 # Developer Build Option: Use Clang's -Weverything (Clang only)
-option(CLANG_WARN_EVERYTHING "Use Clang compiler's -Weverything option (to compile parts of the source)" OFF)
-mark_as_advanced(CLANG_WARN_EVERYTHING)
+option(COMPILER_CLANG_WARN_EVERYTHING 
+  "Use Clang compiler's -Weverything option"
+  OFF)
+mark_as_advanced(COMPILER_CLANG_WARN_EVERYTHING)
 
 
 ## -----------------------------------------------------------------------------
 # Developer Build Option: run EDA under Valgrind.
-option(EDA_RUN_ON_VALGRIND "Configure EDA to be run on Valgrind." OFF)
+option(EDA_RUN_ON_VALGRIND 
+  "Configure EDA to be run on Valgrind." 
+  OFF)
 mark_as_advanced(EDA_RUN_ON_VALGRIND)
 
 ##------------------------------------------------------------------------------
-# Boost.Org @BleedingEdge
-# The project may depend on newer Boost.component versions as commonly shipped
-# by linux distributions. That happened in the past. Create an own up-to-date 
-# clone those component project. These are used by the depending sub projects.
-option(EDA_EXTERNAL_BOOST_SPIRIT_X3 "Configure EDA to use external Boost.Org Spirit Parser X3 - LL(k) Parser Framework." OFF)
+# Developer Build Option: Boost.Org @BleedingEdge
+option(EDA_EXTERNAL_BOOST_SPIRIT_X3 
+  "Configure EDA to use external Boost.Org Spirit Parser X3 - LL(k) Parser Framework. \" 
+  This is usefull for developers which has to work on more recent versions \"
+  as the build host/system supplies."
+  OFF)
 mark_as_advanced(EDA_EXTERNAL_BOOST_SPIRIT_X3)
 
-option(EDA_EXTERNAL_BOOST_UTF "Configure EDA to use external Boost.Org Unit Test Framework (UTF)." OFF)
+option(EDA_EXTERNAL_BOOST_UTF 
+  "Configure EDA to use external Boost.Org Unit Test Framework (UTF). \"
+  This is usefull for developers which has to work on more recent versions \"
+  as the build host/system supplies."
+  OFF)
 mark_as_advanced(EDA_EXTERNAL_BOOST_UTF)
+
+
+## -----------------------------------------------------------------------------
+# evaluate options
+## -----------------------------------------------------------------------------
+
+
+## -----------------------------------------------------------------------------
+# Common Compiler Options
+#
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic -Wno-c99-extensions)
+  add_compile_definitions()
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+  add_compile_definitions()
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+  add_compile_definitions()
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+  add_compile_options(/W4)
+  add_compile_definitions()
+endif()
+
+if(COMPILER_CLANG_WARN_EVERYTHING)
+  if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    add_compile_options(
+      -Weverything
+      #-Wno-c++98-compat -Wno-c++98-compat-pedantic
+      #-Wno-padded
+    )
+  endif()
+endif()
+
+
+## -----------------------------------------------------------------------------
+# Bleeding Edge external Boost dependencies
+# FixMe: Won't work any more: ExternalProject.cmake:1679 (get_property):
+#   get_property could not find TARGET boost-utf.  Perhaps it has not yet been
+#   created.
+if(EDA_EXTERNAL_BOOST_SPIRIT_X3)
+    include(external_spirit_x3)
+endif()
+if(EDA_EXTERNAL_BOOST_UTF)
+    include(external_boost_utf)
+endif()
+
+
+
+## -----------------------------------------------------------------------------
+# CMake source code analysis support
+## -----------------------------------------------------------------------------
 
 
 ## -----------------------------------------------------------------------------
@@ -42,7 +116,9 @@ mark_as_advanced(EDA_EXTERNAL_BOOST_UTF)
 #
 # $ clang-tidy --checks='modernize*,performance*' --header-filter=\*.hpp$ -dump-config 
 # - https://github.com/Sarcasm/notes/blob/master/dev/clang-tidy.rst
-option(EDA_RUN_CLANG_TIDY "Run clang-tidy with the compiler." OFF)
+option(EDA_RUN_CLANG_TIDY 
+  "Run clang-tidy with the compiler." 
+  OFF)
 
 if(EDA_RUN_CLANG_TIDY)
   find_program(CLANG_TIDY_COMMAND NAMES clang-tidy

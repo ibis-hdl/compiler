@@ -14,7 +14,7 @@
 
 #include <tuple>
 
-#include <testsuite/namespace_alias.hpp>
+#include <testsuite/common/namespace_alias.hpp>
 
 
 namespace testsuite {

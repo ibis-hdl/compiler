@@ -5,7 +5,7 @@
  *      Author: olaf
  */
 
-#include <testsuite/failure_diagnostic_fixture.hpp>
+#include <testsuite/common/failure_diagnostic_fixture.hpp>
 
 #include <boost/test/framework.hpp>                 // for current_test_case
 #include <boost/test/tree/test_unit.hpp>            // for master_test_suite, test...
@@ -22,7 +22,7 @@
 
 #include <eda/util/make_iomanip.hpp>
 
-#include <testsuite/namespace_alias.hpp>            // IWYU pragma: keep'
+#include <testsuite/common/namespace_alias.hpp>     // IWYU pragma: keep'
 
 #include <utility>                                  // for move
 #include <iostream>

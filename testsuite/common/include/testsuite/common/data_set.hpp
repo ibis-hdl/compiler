@@ -5,8 +5,8 @@
  *      Author: olaf
  */
 
-#ifndef TESTSUITE_COMMON_INCLUDE_TESTSUITE_DATA_SET_HPP_
-#define TESTSUITE_COMMON_INCLUDE_TESTSUITE_DATA_SET_HPP_
+#ifndef TESTSUITE_COMMON_INCLUDE_TESTSUITE_COMMON_DATA_SET_HPP_
+#define TESTSUITE_COMMON_INCLUDE_TESTSUITE_COMMON_DATA_SET_HPP_
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>
@@ -17,7 +17,7 @@
 #include <tuple>
 #include <vector>
 
-#include <testsuite/namespace_alias.hpp>            // IWYU pragma: keep
+#include <testsuite/common/namespace_alias.hpp>            // IWYU pragma: keep
 
 
 namespace testsuite {
@@ -110,4 +110,4 @@ struct is_dataset<testsuite::dataset_loader> : boost::mpl::true_ {};
 } } }
 
 
-#endif /* TESTSUITE_COMMON_INCLUDE_TESTSUITE_DATA_SET_HPP_ */
+#endif /* TESTSUITE_COMMON_INCLUDE_TESTSUITE_COMMON_DATA_SET_HPP_ */

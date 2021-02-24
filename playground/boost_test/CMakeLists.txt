@@ -31,7 +31,7 @@ if(EDA_EXTERNAL_BOOST_UTF)
 endif()
 
 target_include_directories(bt_dataset_args PRIVATE
-    $<BUILD_INTERFACE:${BOOST_UTF_INCLUDE_DIR}>
+    $<BUILD_INTERFACE:${EXTERNAL_BOOST_UTF_INCLUDE_DIR}>
 )
 target_link_libraries(bt_dataset_args
     PRIVATE
@@ -49,7 +49,7 @@ if(EDA_EXTERNAL_BOOST_UTF)
     add_dependencies(bt_issue12953 boost-utf)
 endif()
 target_include_directories(bt_issue12953 PRIVATE
-    $<BUILD_INTERFACE:${BOOST_UTF_INCLUDE_DIR}>
+    $<BUILD_INTERFACE:${EXTERNAL_BOOST_UTF_INCLUDE_DIR}>
 )
 target_link_libraries(bt_issue12953
     PRIVATE

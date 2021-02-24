@@ -35,19 +35,19 @@ target_include_directories(vhdl_string_literal_print PRIVATE
 ## the follwoing depend on actually Spirit.X3
 add_executable(vhdl_numeric_literals        EXCLUDE_FROM_ALL vhdl_numeric_literals.cpp)
 target_include_directories(vhdl_numeric_literals PRIVATE 
-    ${SPIRIT_X3_INCLUDE_DIR}
+    ${EXTERNAL_SPIRIT_X3_INCLUDE_DIR}
     ${Boost_INCLUDE_DIR}
 )
 
 add_executable(x3_ir1045                    EXCLUDE_FROM_ALL x3_ir1045.cpp)
 target_include_directories(x3_ir1045 PRIVATE 
-    ${SPIRIT_X3_INCLUDE_DIR}
+    ${EXTERNAL_SPIRIT_X3_INCLUDE_DIR}
     ${Boost_INCLUDE_DIR}
 )
 
 add_executable(x3_configuration_specification  EXCLUDE_FROM_ALL x3_configuration_specification.cpp)
 target_include_directories(x3_configuration_specification PRIVATE 
-    ${SPIRIT_X3_INCLUDE_DIR}
+    ${EXTERNAL_SPIRIT_X3_INCLUDE_DIR}
     ${Boost_INCLUDE_DIR}
 )
 

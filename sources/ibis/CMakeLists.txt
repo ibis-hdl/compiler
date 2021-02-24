@@ -10,10 +10,14 @@ project(ibis LANGUAGES CXX)
 add_executable(${PROJECT_NAME} "")
 
 
-
-# Ninja Build
-set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_COMPILE job_pool_max_cores)
-set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
+target_link_libraries(${PROJECT_NAME}
+    PRIVATE
+        eda::common
+        Boost::system
+        Boost::locale
+        Boost::filesystem
+        Threads::Threads
+)
 
 
 add_dependencies(${PROJECT_NAME} RapidJSON)
@@ -26,17 +30,29 @@ configure_file(
 )
 
 
-target_sources(${PROJECT_NAME} PRIVATE
-    src/main.cpp
-    src/init.cpp
-    src/signal_handler.cpp
-    $<$<BOOL:${EDA_WITH_GDB_STACKTRACE}>:src/stacktrace_gdb.cpp>
-    $<$<BOOL:${EDA_WITH_BOOST_STACKTRACE}>:src/stacktrace_boost.cpp>  
-    src/build_info.cpp
+target_sources(${PROJECT_NAME} 
+    PRIVATE
+        src/main.cpp
+        src/init.cpp
+        src/signal_handler.cpp
+        $<$<BOOL:${EDA_WITH_GDB_STACKTRACE}>:src/stacktrace_gdb.cpp>
+        $<$<BOOL:${EDA_WITH_BOOST_STACKTRACE}>:src/stacktrace_boost.cpp>  
+        src/build_info.cpp
 )
 
 
+if (EDA_ENABLE_PCH)
+    target_precompile_headers(${PROJECT_NAME} 
+        PRIVATE 
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/ibis/detail/pch.hpp>
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/ibis/detail/pch_prj.hpp>
+    )
+endif()
+
+
 target_include_directories(${PROJECT_NAME} 
+    PUBLIC
+        $<INSTALL_INTERFACE:include>
     PRIVATE
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
@@ -44,52 +60,27 @@ target_include_directories(${PROJECT_NAME}
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/external/CLI>
         #$<BUILD_INTERFACE:${CLI11_INCLUDE_DIR}>
         $<BUILD_INTERFACE:${RapidJSON_INCLUDE_DIR}>
-    PUBLIC
-        $<INSTALL_INTERFACE:include>
 )
 
 
-target_compile_definitions(${PROJECT_NAME} PRIVATE
-    $<$<BOOL:${EDA_WITH_GDB_STACKTRACE}>:EDA_WITH_GDB_STACKTRACE>
-    $<$<BOOL:${EDA_WITH_BOOST_STACKTRACE}>:EDA_WITH_BOOST_STACKTRACE>  
+target_compile_definitions(${PROJECT_NAME} 
+    PRIVATE
+        $<$<BOOL:${EDA_WITH_GDB_STACKTRACE}>:EDA_WITH_GDB_STACKTRACE>
+        $<$<BOOL:${EDA_WITH_BOOST_STACKTRACE}>:EDA_WITH_BOOST_STACKTRACE>  
 )
-
-
-target_compile_options(${PROJECT_NAME} PRIVATE
-    $<$<CXX_COMPILER_ID:MSVC>:      /W1>
-    $<$<CXX_COMPILER_ID:GNU>:       -Wall -Wextra>
-    $<$<CXX_COMPILER_ID:Clang>:     -Wall -Wextra>
-)
-
-
-if(CLANG_WARN_EVERYTHING)
-    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-        target_compile_options(${PROJECT_NAME} PRIVATE
-            -Weverything
-            -Wno-c++98-compat -Wno-c++98-compat-pedantic
-        )
-    endif()
-endif(CLANG_WARN_EVERYTHING)
 
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-    target_compile_options(${PROJECT_NAME} PRIVATE
-        -g -fno-omit-frame-pointer
+    target_compile_options(${PROJECT_NAME} 
+        PRIVATE
+            -g -fno-omit-frame-pointer
     )    
-    set_target_properties(${PROJECT_NAME} PROPERTIES 
-        LINK_FLAGS "-g -fno-omit-frame-pointer"
+    set_target_properties(${PROJECT_NAME} 
+        PROPERTIES 
+            LINK_FLAGS "-g -fno-omit-frame-pointer"
     )
 endif()
 
-
-# Depencies
-target_link_libraries(${PROJECT_NAME}
-    PRIVATE
-    eda::common
-    Boost::system
-    Boost::locale
-    Boost::filesystem
-)
 
 ##
 # Boost stacktrace
@@ -99,14 +90,17 @@ if(EDA_WITH_BOOST_STACKTRACE)
     if(WIN32)
         find_package(Boost REQUIRED COMPONENTS stacktrace_windbg)
         message(STATUS "WinDbg library found.")
-        target_compile_definitions(${PROJECT_NAME} PRIVATE
-            BOOST_STACKTRACE_USE_WINDBG
+        target_compile_definitions(${PROJECT_NAME} 
+            PRIVATE
+                BOOST_STACKTRACE_USE_WINDBG
         )
-        target_include_directories(${PROJECT_NAME} PRIVATE 
-            ${Boost_INCLUDE_DIRS}
+        target_include_directories(${PROJECT_NAME} 
+            PRIVATE 
+                ${Boost_INCLUDE_DIRS}
         )
-        target_link_libraries(${PROJECT_NAME} PRIVATE
-            dbgeng ole32 
+        target_link_libraries(${PROJECT_NAME} 
+            PRIVATE
+                dbgeng ole32 
         )
     else()
         find_package(Backtrace REQUIRED)

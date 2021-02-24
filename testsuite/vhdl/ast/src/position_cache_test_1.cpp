@@ -8,13 +8,13 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/output_test_stream.hpp>
 
-#include <testsuite/position_cache_fixture.hpp>
+#include <testsuite/ast/position_cache_fixture.hpp>
 
 #include <eda/vhdl/parser/iterator_type.hpp>
 #include <eda/vhdl/ast/position_cache.hpp>
 
-#include <testsuite/data_set.hpp>
-#include <testsuite/namespace_alias.hpp>
+#include <testsuite/common/data_set.hpp>
+#include <testsuite/common/namespace_alias.hpp>
 
 #include <eda/util/pretty_typename.hpp>
 

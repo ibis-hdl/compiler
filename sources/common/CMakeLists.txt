@@ -11,17 +11,19 @@ add_library(${PROJECT_NAME} "")
 add_library(eda::common     ALIAS  ${PROJECT_NAME})
 
 
-# Ninja Build
-set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_COMPILE job_pool_max_cores)
-set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
+target_link_libraries(${PROJECT_NAME}
+    PUBLIC
+        Boost::filesystem
+)
 
 
-target_sources(${PROJECT_NAME} PRIVATE
-    src/file_reader.cpp
-    src/settings.cpp
-    src/color.cpp
-    src/winapi_color.cpp
-    src/user_home.cpp
+target_sources(${PROJECT_NAME} 
+    PRIVATE
+        src/file_reader.cpp
+        src/settings.cpp
+        src/color.cpp
+        src/winapi_color.cpp ### FixMe: looks strange on Linux, but is correct so far
+        src/user_home.cpp
 )
 
 
@@ -29,35 +31,21 @@ target_sources(${PROJECT_NAME} PRIVATE
 include(build_config_hpp)
 
 
-# plattform and compiler checks belongs to eda::common, hence the exported 
-# ${PROJECT_BINARY_DIR}, generated on top-level CMake file.
-target_include_directories(${PROJECT_NAME} PUBLIC
-    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
-    $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
-    $<INSTALL_INTERFACE:include>
-)
+if (EDA_ENABLE_PCH)
+    target_precompile_headers(${PROJECT_NAME} 
+        PRIVATE 
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/eda/detail/pch.hpp>
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/eda/detail/pch_prj.hpp>
+    )
+endif()
 
 
-target_compile_options(${PROJECT_NAME} PRIVATE
-    $<$<CXX_COMPILER_ID:MSVC>:      /W1>
-    $<$<CXX_COMPILER_ID:GNU>:       -Wall -Wextra>
-    $<$<CXX_COMPILER_ID:Clang>:     -Wall -Wextra>
-)
-
-
-if(CLANG_WARN_EVERYTHING)
-    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-        target_compile_options(${PROJECT_NAME} PRIVATE
-            -Weverything
-            -Wno-c++98-compat -Wno-c++98-compat-pedantic
-        )
-    endif()
-endif(CLANG_WARN_EVERYTHING)
-
-
-target_link_libraries(${PROJECT_NAME}
-    Boost::filesystem
+target_include_directories(${PROJECT_NAME} 
+    PUBLIC
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
+        $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
+        $<INSTALL_INTERFACE:include>
 )
 
 

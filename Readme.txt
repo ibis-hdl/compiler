@@ -9,9 +9,9 @@ Required Tools to Build & Configuration
     - g++ 7.3.0 Windows MinGW
     - Visual Studio 2017, Version 15.8
 
-* cmake 3.12
+* cmake 3.18
     - GNU make
-    - ninja 1.8.2 (tested)
+    - ninja
     
 * python 3.6 to generate some files
 
@@ -19,7 +19,7 @@ Required Tools to Build & Configuration
 Required 3rd party Libraries
 ----------------------------
 
-* Boost 1.67
+* Boost 1.73
     - filesystem
     - locale
     - spirit X3
@@ -31,3 +31,11 @@ The following libraries are downloaded autmatically into project's external
 directory:
 
 * RapidJSON
+
+
+ToDo on design
+---------------
+- By starting using precompiled headers by cmake, some smaller problems rise.
+  E.g. *reference to 'util' is ambiguous* error since name lookup got 
+  'boost::locale::util' and 'eda::util' for i.e. 'util::user_home_dir'. 
+  This isn't fatal, but even not tidy.

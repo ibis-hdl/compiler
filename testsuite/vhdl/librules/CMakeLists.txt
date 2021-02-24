@@ -15,10 +15,17 @@ add_library(${PROJECT_NAME} "")
 add_library(testsuite::vhdl_rules ALIAS ${PROJECT_NAME})
 
 
-
-# Ninja Build
-set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_COMPILE job_pool_one_core)
-set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
+# Ninja Build override 
+message("FixMe: File property for Ninja Parallel Build")
+# old way:
+#set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_COMPILE job_pool_one_core)
+#set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
+set_source_files_properties(
+    src/rules.cpp 
+        PROPERTIES 
+            JOB_POOL_COMPILE job_pool_one_core
+            JOB_POOL_LINK    job_pool_one_core
+)
 
 
 if(EDA_EXTERNAL_BOOST_SPIRIT_X3)
@@ -66,18 +73,20 @@ target_sources(${PROJECT_NAME} PRIVATE
 )
 
 
+if (EDA_ENABLE_PCH)
+    target_precompile_headers(${PROJECT_NAME} 
+        PRIVATE 
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl/detail/pch.hpp>
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl/detail/pch_prj.hpp>
+    )
+endif()
+
+
 target_include_directories(${PROJECT_NAME} 
     PUBLIC
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     PRIVATE
         $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
-)
-
-
-target_compile_options(${PROJECT_NAME} PRIVATE
-    $<$<CXX_COMPILER_ID:MSVC>:      /W1>
-    $<$<CXX_COMPILER_ID:GNU>:       -Wall -Wextra>
-    $<$<CXX_COMPILER_ID:Clang>:     -Wall -Wextra>
 )
 
 

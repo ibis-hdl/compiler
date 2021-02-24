@@ -5,8 +5,8 @@
  *      Author: olaf
  */
 
-#ifndef TESTSUITE_VHDL_AST_INCLUDE_TESTSUITE_POSITION_CACHE_FIXTURE_HPP_
-#define TESTSUITE_VHDL_AST_INCLUDE_TESTSUITE_POSITION_CACHE_FIXTURE_HPP_
+#ifndef TESTSUITE_VHDL_AST_INCLUDE_TESTSUITE_AST_POSITION_CACHE_FIXTURE_HPP_
+#define TESTSUITE_VHDL_AST_INCLUDE_TESTSUITE_AST_POSITION_CACHE_FIXTURE_HPP_
 
 #include <eda/vhdl/ast/position_cache.hpp>
 #include <eda/vhdl/parser/iterator_type.hpp>
@@ -17,7 +17,7 @@
 #include <vector>
 #include <map>
 
-#include <testsuite/namespace_alias.hpp>
+#include <testsuite/common/namespace_alias.hpp>
 
 namespace testsuite {
 
@@ -75,4 +75,4 @@ private:
 
 
 
-#endif /* TESTSUITE_VHDL_AST_INCLUDE_TESTSUITE_POSITION_CACHE_FIXTURE_HPP_ */
+#endif /* TESTSUITE_VHDL_AST_INCLUDE_TESTSUITE_AST_POSITION_CACHE_FIXTURE_HPP_ */

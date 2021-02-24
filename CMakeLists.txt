@@ -36,14 +36,21 @@ cmake_host_system_information(
 math(EXPR max_cores  "${localhost_logical_cores} - 1")
 math(EXPR half_cores "${localhost_logical_cores} / 2")
 
-set_property(GLOBAL PROPERTY JOB_POOLS
-    job_pool_max_cores=${max_cores}
-    job_pool_med_cores=${half_cores}
-    job_pool_one_core=1
+set_property(GLOBAL 
+    PROPERTY 
+        JOB_POOLS
+            job_pool_max_cores=${max_cores}
+            job_pool_med_cores=${half_cores}
+            job_pool_one_core=1
 )
-set_property(GLOBAL PROPERTY CMAKE_JOB_POOLS
-    cmake_job_pool=1
+set_property(GLOBAL 
+    PROPERTY 
+        CMAKE_JOB_POOLS
+            cmake_job_pool=1
 )
+
+set(CMAKE_JOB_POOL_COMPILE job_pool_max_cores)
+set(CMAKE_JOB_POOL_LINK    job_pool_one_core)
 
 
 ##
@@ -51,21 +58,20 @@ set_property(GLOBAL PROPERTY CMAKE_JOB_POOLS
 # [Cmake doesn't find Boost](https://stackoverflow.com/questions/3808775/cmake-doesnt-find-boost)
 #set(Boost_DEBUG 1)   
 find_package(Boost 1.73.0 REQUIRED COMPONENTS 
-    system 
+    system
     filesystem
     locale
     unit_test_framework 
 )
 
 
-##
-# Bleeding Edge external Boost dependencies
-if(EDA_EXTERNAL_BOOST_SPIRIT_X3)
-    include(external_spirit_x3)
-endif()
-if(EDA_EXTERNAL_BOOST_UTF)
-    include(external_boost_utf)
-endif()
+# This requirement rises by use of cmake's PCH support, otherwise
+# linker errors occour. Probably due to boost.org
+# [How do I force cmake to include “-pthread” option during compilation?](
+#   https://stackoverflow.com/questions/5395309/how-do-i-force-cmake-to-include-pthread-option-during-compilation)
+#set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
+#set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+find_package(Threads REQUIRED)
 
 
 ##

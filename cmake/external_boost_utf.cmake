@@ -17,5 +17,5 @@ ExternalProject_Add(
 )
 
 ExternalProject_Get_Property(boost-utf source_dir)
-set(BOOST_UTF_INCLUDE_DIR ${source_dir}/include)
+set(EXTERNAL_BOOST_UTF_INCLUDE_DIR ${source_dir}/include)
 
