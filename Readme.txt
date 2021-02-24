@@ -39,3 +39,7 @@ ToDo on design
   E.g. *reference to 'util' is ambiguous* error since name lookup got 
   'boost::locale::util' and 'eda::util' for i.e. 'util::user_home_dir'. 
   This isn't fatal, but even not tidy.
+  
+- Upgrade to CLI11 1.9.1, see
+  https://github.com/CLIUtils/CLI11/issues/562
+    
