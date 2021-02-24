@@ -20,7 +20,7 @@
 #include <boost/locale/localization_backend.hpp>
 #include <eda/support/boost/locale.hpp>
 
-#include <CLI/CLI11.hpp>
+#include <CLI/CLI.hpp>
 
 #include <eda/util/file/file_reader.hpp>
 #include <eda/util/file/user_home_dir.hpp>
@@ -101,6 +101,12 @@ void init::parse_cli(int argc, const char* argv[])
 
     // clang-format off
     try {
+        
+        /* [CLIUtils/CLI11](https://github.com/CLIUtils/CLI11) are using for pure flags
+         * a const string reference argument for the add_flags() member which doesn't
+         * provide boost.locale's translate(). A work arround is to use dummy flag 
+         * variables to enforce an overload which is aprobiate here. */
+        bool dummy{};
 
         /*
          * Primary Options
@@ -110,27 +116,27 @@ void init::parse_cli(int argc, const char* argv[])
             ->required()
             ->check(CLI::ExistingFile);
 
-        app.add_flag("--version",
+        app.add_flag("--version", dummy, // FixMe: set_version_flag
             translate("Show version."));
 
-        app.add_flag("--build-info",
+        app.add_flag("--build-info", dummy,
             translate("Show build informations."));
 
         /*
          * Message Options
          */
-        app.add_flag("-q,--quiet",
+        app.add_flag("-q,--quiet", dummy,
                translate("Print less text."))
             ->group("Message Options");
-        app.add_flag("-v,--verbose",
+        app.add_flag("-v,--verbose", dummy,
                translate("Print more text."))
             ->group("Message Options")
             ->excludes("--quiet");
-        app.add_flag("--no-color",
+        app.add_flag("--no-color", dummy,
                translate("Don\'t render messages using colors. On output redirection "
                          "no colors are used."))
             ->group("Message Options");
-        app.add_flag("--force-color",
+        app.add_flag("--force-color", dummy,
                translate("Even on redirected output enforce the rendering of messages "
                          "using colors."))
             ->group("Message Options")
@@ -152,13 +158,13 @@ void init::parse_cli(int argc, const char* argv[])
         /*
          * Warning Options
          */
-        app.add_flag("--Wall",
+        app.add_flag("--Wall", dummy,
                translate("Warn all."))
             ->group("Warning Options"); // unused
-        app.add_flag("--Wunused",
+        app.add_flag("--Wunused", dummy,
                translate("Warn on unused."))
             ->group("Warning Options"); // unused
-        app.add_flag("--Wother",
+        app.add_flag("--Wother", dummy,
                translate("Warn for others."))
             ->group("Warning Options"); // unused
 
@@ -170,7 +176,7 @@ void init::parse_cli(int argc, const char* argv[])
         /*
          * Working/Processing flags
          */
-        app.add_flag("-a,--analyze",
+        app.add_flag("-a,--analyze", dummy,
             translate("Analyze the design.")); // unused
 
         app.add_option("--lib-path", cli_parameter.lib_path,

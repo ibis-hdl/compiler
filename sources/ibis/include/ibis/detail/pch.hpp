@@ -34,7 +34,7 @@
 #include <boost/stacktrace.hpp>
 #include <boost/version.hpp>
 
-#include <CLI/CLI11.hpp>
+#include <CLI/CLI.hpp>
 
 #include <rapidjson/document.h>
 #include <rapidjson/error/en.h>
