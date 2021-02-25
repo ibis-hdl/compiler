@@ -7,7 +7,7 @@
 
 #include <eda/vhdl/ast/literal_printer.hpp>
 
-#include <eda/support/boost/hana_overload.hpp>
+#include <eda/support/cxx/overloaded.hpp>
 #include <eda/util/cxx_bug_fatal.hpp>
 
 #include <boost/iterator/filter_iterator.hpp>
@@ -83,37 +83,32 @@ literal_printer::literal_printer(string_literal const& literal_)
 
 std::ostream& literal_printer::print(std::ostream& os) const
 {
-    util::visit_in_place(this->literal,
-
+    // clang-format off
+    boost::apply_visitor(util::overloaded {
         [&os](bit_string_literal const& lit) {
             using base_specifier = bit_string_literal::base_specifier;
 
             switch (lit.base_type) {
                 case base_specifier::bin:
-                    os << "B";
+                    os << 'B';
                     break;
                 case base_specifier::oct:
-                    os << "O";
+                    os << 'O';
                     break;
                 case base_specifier::hex:
-                    os << "X";
+                    os << 'X';
                     break;
                 default:
                     cxx_unreachable_bug_triggered();
             }
 
             os << lit.literal;
-
         },
-
         [&os](decimal_literal const& lit) {
             using kind_specifier = ast::decimal_literal::kind_specifier;
 
             switch (lit.kind_type) {
-                case kind_specifier::integer: {
-                    os << lit.literal;
-                    break;
-                }
+                case kind_specifier::integer: [[fallthrough]];
                 case kind_specifier::real: {
                     os << lit.literal;
                     break;
@@ -122,9 +117,7 @@ std::ostream& literal_printer::print(std::ostream& os) const
                     cxx_unreachable_bug_triggered();
             }
         },
-
         [&os](based_literal const& lit) {
-
             using kind_specifier = ast::based_literal::kind_specifier;
 
             os << lit.base << '#';
@@ -143,26 +136,23 @@ std::ostream& literal_printer::print(std::ostream& os) const
             }
 
             os << '#';
-
+            
             if (lit.number.exponent) {
                 os << lit.number.exponent;
             }
-
         },
-
         [&os](string_literal const& str) {
-
-            // clang-format off
             auto const literal_f = boost::make_iterator_range(
                 boost::make_filter_iterator(unquote_predicate{},
                         str.literal.begin(), str.literal.end()),
                 boost::make_filter_iterator(unquote_predicate{},
                         str.literal.end())
             );
-            // clang-format on
-
+            
             os << literal_f;
-        });
+        }
+    }, this->literal);
+    // clang-format on
 
     return os;
 }

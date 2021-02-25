@@ -20,7 +20,7 @@ BOOST_AUTO_TEST_SUITE( literal_print )
 using namespace eda::vhdl::ast;
 
 // Check on correct printing of quoted string literals
-std::vector<std::string> const input_literal{
+std::vector<std::string> const input_string_literal{
     R"("""")",
     R"(%%%%)",
     R"(""Hello"")",
@@ -29,7 +29,7 @@ std::vector<std::string> const input_literal{
     R"(%"%"")",
 };
 
-std::vector<std::string> expected_literal{
+std::vector<std::string> expected_string_literal{
     R"("")",
     R"(%%)",
     R"("Hello")",
@@ -40,13 +40,13 @@ std::vector<std::string> expected_literal{
 
 BOOST_DATA_TEST_CASE(
     string_literal,
-    utf_data::make(input_literal) ^ expected_literal,
-    input,                          expected)
+    utf_data::make(input_string_literal) ^ expected_string_literal,
+    input,                                 expected)
 {
     auto const as_strlit = [](std::string const& str) {
-        ast::string_literal sl;
-        sl.literal = boost::make_iterator_range(str);
-        return sl;
+        ast::string_literal l;
+        l.literal = boost::make_iterator_range(str);
+        return l;
     };
 
     using eda::vhdl::ast::literal_printer;
@@ -59,5 +59,9 @@ BOOST_DATA_TEST_CASE(
     BOOST_TEST(os.str() == expected, btt::per_element());
 }
 
+/// Note: Here is stated, that testing of 
+/// ast::{bit_string, decimal, based}_literal
+/// etc. is to simple for testing, but preparing the tests is a big 
+/// effort. Implicit they are checked by parser tests.
 
 BOOST_AUTO_TEST_SUITE_END()

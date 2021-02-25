@@ -15,9 +15,9 @@
 #include <eda/vhdl/parser/parse.hpp>
 #include <eda/vhdl/parser/parser_config.hpp>
 
-#include <testsuite/data_set.hpp>
-#include <testsuite/failure_diagnostic_fixture.hpp>
-#include <testsuite/namespace_alias.hpp>
+#include <testsuite/common/data_set.hpp>
+#include <testsuite/common/failure_diagnostic_fixture.hpp>
+#include <testsuite/common/namespace_alias.hpp>
 
 #endif /* TESTSUITE_SYNTAX_INCLUDE_TESTSUITE_DETAIL_PCH_PRJ_HPP_ */
 

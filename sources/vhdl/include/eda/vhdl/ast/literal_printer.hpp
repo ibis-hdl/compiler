@@ -5,6 +5,9 @@
  *      Author: olaf
  */
 
+#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_LITERAL_PRINTER_HPP_
+#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_LITERAL_PRINTER_HPP_
+
 #include <eda/vhdl/ast/node/based_literal.hpp>
 #include <eda/vhdl/ast/node/bit_string_literal.hpp>
 #include <eda/vhdl/ast/node/decimal_literal.hpp>
@@ -49,3 +52,5 @@ static inline std::ostream& operator<<(std::ostream& os, literal_printer const& 
 } // namespace ast
 } // namespace vhdl
 } // namespace eda
+
+#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_LITERAL_PRINTER_HPP_ */

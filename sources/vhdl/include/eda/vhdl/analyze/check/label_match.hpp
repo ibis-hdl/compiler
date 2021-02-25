@@ -102,7 +102,6 @@ using detected_or = detail::detector<Default, void, Op, Args...>;
 namespace label_util {
 
 template <class T> using has_label = decltype(std::declval<T&>().label);
-
 template <class T> using has_identifier = decltype(std::declval<T&>().identifier);
 
 } // namespace label_util
@@ -125,11 +124,12 @@ std::tuple<ast::identifier const&, ast::identifier const&> static inline labels_
             // mandatory start label
             return tuple_type{ node.label, *node.end_label };
         }
-    } else if constexpr (label_util::is_detected<label_util::has_identifier, NodeT>::value) {
+    } 
+    else if constexpr (label_util::is_detected<label_util::has_identifier, NodeT>::value) {
         // always mandatory identifier
         return tuple_type{ node.identifier, *node.end_identifier };
-    } else { /* expect compiler error */
     }
+    else { /* expect compiler error */  }
 }
 
 } // namespace analyze

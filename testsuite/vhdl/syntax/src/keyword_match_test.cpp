@@ -22,10 +22,9 @@
 #include <eda/vhdl/analyze/error_handler.hpp>
 #include <eda/vhdl/ast/ast_stats.hpp>
 
-#include <testsuite/data_set.hpp>
-#include <testsuite/failure_diagnostic_fixture.hpp>
-
-#include <testsuite/namespace_alias.hpp>
+#include <testsuite/common/data_set.hpp>
+#include <testsuite/common/failure_diagnostic_fixture.hpp>
+#include <testsuite/common/namespace_alias.hpp>
 
 
 namespace analyze = eda::vhdl::analyze;
