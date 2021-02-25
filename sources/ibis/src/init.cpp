@@ -72,7 +72,7 @@ void init::parse_cli(int argc, const char* argv[])
 
     static const char EDA_URL[] = R"(https://github.com/???/ibis)";
 
-    CLI::App app{ VERSION_STR };
+    CLI::App app{ EDA_IBIS_VERSION_STR };
 
     struct Formatter : public CLI::Formatter { };
 
@@ -84,8 +84,10 @@ void init::parse_cli(int argc, const char* argv[])
 
     // defaults
     struct {
-        std::vector<std::string> files;
-        std::string lib_path;
+        std::vector<std::string> hdl_files;
+        std::string hdl_lib_path;
+
+        unsigned verbose = 0;
 
         unsigned tab_size = 4;
         unsigned error_limit = 20;
@@ -109,105 +111,136 @@ void init::parse_cli(int argc, const char* argv[])
         bool dummy{};
 
         /*
-         * Primary Options
+         * Primary Options Group
          */
-        app.add_option("files", cli_parameter.files,
+        app.add_option("files", cli_parameter.hdl_files,
                translate("One or more VHDL file(s)."))
             ->required()
             ->check(CLI::ExistingFile);
 
-        app.add_flag("--version", dummy, // FixMe: set_version_flag
+        app.add_flag("--version", dummy, // FixMe: set_version_flag()
             translate("Show version."));
 
         app.add_flag("--build-info", dummy,
             translate("Show build informations."));
 
         /*
-         * Message Options
+         * Working/Processing flags
          */
+
+        app.add_flag("-a,--analyze", dummy,
+            translate("Analyze the design.")); // unused
+
+        /*
+         * Message Options Group
+         */
+        static const std::string message_group{ translate("Message Options") };
+
         app.add_flag("-q,--quiet", dummy,
-               translate("Print less text."))
-            ->group("Message Options");
-        app.add_flag("-v,--verbose", dummy,
-               translate("Print more text."))
-            ->group("Message Options")
+              translate("Print less text."))
+            ->group(message_group);
+            // FixMe: Allow e.g. '-vv' and '--verbose=2' with range check to enums
+        app.add_flag("-v,--verbose", cli_parameter.verbose,
+              translate("Print more text."))
+            ->group(message_group)
             ->excludes("--quiet");
         app.add_flag("--no-color", dummy,
-               translate("Don\'t render messages using colors. On output redirection "
-                         "no colors are used."))
-            ->group("Message Options");
+              translate("Don\'t render messages using colors. On output redirection "
+                        "no colors are used."))
+            ->group(message_group);
         app.add_flag("--force-color", dummy,
-               translate("Even on redirected output enforce the rendering of messages "
-                         "using colors."))
-            ->group("Message Options")
+              translate("Even on redirected output enforce the rendering of messages "
+                        "using colors."))
+            ->group(message_group)
             ->excludes("--no-color");
         app.add_option("--tab-size", cli_parameter.tab_size,
-               translate("Tabulator size, affects printing source snippet on error printing."), true)
-            ->group("Message Options")
+              translate("Tabulator size, affects printing source snippet on error printing."), true)
+            ->group(message_group)
             ->check(CLI::Range(1u, 10u)); // XXX unused in e.g. error_handler.cpp
 
         /*
-         * Locale Options
+         * Locale Options Group
          */
+        static const std::string locale_group{ translate("Locale/Environment Options") };
+
         app.add_option("--locale-dir", cli_parameter.locale_dir,
-               translate("localization catalog data"), true)
-            ->group("Locale/Environment")
+              translate("localization catalog data"), true)
+            ->group(locale_group)
             ->envname("EDA_LOCALE_DIR")
             ->check(CLI::ExistingDirectory);
 
         /*
-         * Warning Options
+         * Warning Options Group
          */
+        static const std::string warning_group{ translate("Warning Options") };
+
         app.add_flag("--Wall", dummy,
-               translate("Warn all."))
-            ->group("Warning Options"); // unused
+              translate("Warn all."))
+            ->group(warning_group); // unused
         app.add_flag("--Wunused", dummy,
-               translate("Warn on unused."))
-            ->group("Warning Options"); // unused
+              translate("Warn on unused."))
+            ->group(warning_group); // unused
         app.add_flag("--Wother", dummy,
-               translate("Warn for others."))
-            ->group("Warning Options"); // unused
+              translate("Warn for others."))
+            ->group(warning_group); // unused
 
         // Option to Control Error and Warning Messages Flags
         app.add_option("--ferror-limit", cli_parameter.error_limit,
-               translate("Limit emitting diagnostics, can be disabled with --ferror-limit=0."), true)
-            ->group("Error/Warning Message Control Flags"); // XXX unused in context.cpp
+              translate("Limit emitting diagnostics, can be disabled with --ferror-limit=0."), true)
+            ->group(warning_group); // XXX unused in context.cpp
 
         /*
-         * Working/Processing flags
+         * Paths Group
          */
-        app.add_flag("-a,--analyze", dummy,
-            translate("Analyze the design.")); // unused
+        static const std::string path_group{ translate("Paths") };
 
-        app.add_option("--lib-path", cli_parameter.lib_path,
-               translate("Path to libraries."))
-            ->group("Paths")
+        app.add_option("--hdl-lib_path", cli_parameter.hdl_lib_path,
+              translate("Path to libraries."))
+            ->group(path_group)
             ->envname("EDA_LIBPATH")
             ->take_last()
             ->check(CLI::ExistingDirectory); // unused
-
     }
+    // clang-format on
     catch (CLI::Error const& e) {
         std::cerr << translate("Internal command line parser error") << '\n';
+        std::exit(app.exit(e));
+    }
+	catch (...) {
+        std::cerr << translate("Unexpected CLIUtils/CLI11 error") << '\n';
+		std::exit(EXIT_FAILURE);
+	}
+
+    // parse CLI arguments ...
+    try {
+        app.parse(argc, argv);
+    }
+    catch (CLI::ParseError const& e) {
+        // e.g. not fullfilled requirements
         std::exit(app.exit(e));
     }
 	catch (...) {
         std::cerr << translate("Unexpected command line parser error") << '\n';
 		std::exit(EXIT_FAILURE);
 	}
-    // clang-format on
 
-    // parse CLI arguments ...
-    try {
-        app.parse(argc, argv);
-    } catch (CLI::ParseError const& e) {
-        std::exit(app.exit(e));
-    }
 
     // ... and evaluate CLI arguments:
 
+    /* FixMe: The code below is far away to be practical/useable.
+     * The settings class overloaded set() member and hence the C++ 
+     * lambda 'set_option' get into compile error with
+     * 'map[trim(option_name)].emplace<T>(value);', so the exhausting
+     * way is choosen temporary here.  This mix here testing on given
+     * command line arguments, using defaults from cli_parameters etc.
+     * is a mess ....
+     * There is a functor missing for settings flags and options
+     * with suplying their defaults.
+     * Solution: Maybe use boost.property_tree and reuse settings::option_trigger
+     * as option for option dependencies??? */
+
     if (app.count("--version") != 0u) {
-        std::cout << VERSION_STR << '\n';
+        std::cout << EDA_IBIS_VERSION_STR << '\n';
         std::exit(EXIT_SUCCESS);
     }
 
@@ -216,6 +249,7 @@ void init::parse_cli(int argc, const char* argv[])
         std::exit(EXIT_SUCCESS);
     }
 
+    // helper for configure settings from CLI args
     auto const set_flag = [&](std::string const& flag, bool value = true) {
         if (app.count(flag) != 0u) {
             setting.set(flag, value);
@@ -227,18 +261,21 @@ void init::parse_cli(int argc, const char* argv[])
     triggered_flags.add("--Wall", { "--Wunused", "--Wother" });
 
     // Primary Options
-    setting.set("--files", cli_parameter.files);
+    setting.set("--files", cli_parameter.hdl_files);
 
-    if (app.count("--lib-path") != 0u) {
-        setting.set("--lib-path", cli_parameter.lib_path);
+    if (app.count("--hdl-lib_path") != 0u) {
+        setting.set("--hdl-lib_path", cli_parameter.hdl_lib_path);
     }
 
     // Working/Processing flags
     set_flag("--analyze");
 
     // Message Options
+    if (app.count("--verbose") != 0u) {
+        setting.set<long>("--verbose", cli_parameter.verbose);
+    }
+
     set_flag("--quiet");
-    set_flag("--verbose");
     set_flag("--no-color");
     set_flag("--force-color");
     setting.set<long>("--tab-size", cli_parameter.tab_size);
@@ -251,13 +288,13 @@ void init::parse_cli(int argc, const char* argv[])
     // Options to Control Error and Warning Messages Flags
     setting.set<long>("--ferror-limit", cli_parameter.error_limit);
 
-    // update all secondary triggered flags
-    triggered_flags.update(setting);
-
     // Locale Options
     if (app.count("--locale-dir") != 0u) {
         setting.set("--locale-dir", cli_parameter.locale_dir);
     }
+
+    // update all secondary triggered flags
+    triggered_flags.update(setting);
 }
 
 void init::register_signal_handlers()
@@ -441,15 +478,15 @@ void init::l10n()
     using namespace eda;
 
 #if (BOOST_OS_WINDOWS)
-    const char backend[] = "winapi";
+    const char backend_str[] = "winapi";
 #else
-    const char backend[] = "std";
+    const char backend_str[] = "std";
 #endif
 
     // [Using Localization Backends](
     //  https://www.boost.org/doc/libs/1_68_0/libs/locale/doc/html/using_localization_backends.html)
     localization_backend_manager l10n_backend = localization_backend_manager::global();
-    l10n_backend.select(backend);
+    l10n_backend.select(backend_str);
     generator gen_{ l10n_backend };
     localization_backend_manager::global(l10n_backend);
 
@@ -466,19 +503,21 @@ void init::l10n()
     boost::system::error_code ec;
     auto lc_path = fs::canonical(l10n_path, ec);
 
+    long const verbose = [&] { return setting["verbose"].get<long>(); }();
+
     if (ec) {
-        if (setting["verbose"]) {
-            // clang-format off
-            std::cerr << "locale directory "
-                      << l10n_path.string()
-                      << " failure: " << ec.message()
-                      << std::endl;
-            // clang-format on
-        }
+        if (verbose > 1) {
+            // FixMe: notice or warning level for those message
+            std::cerr << R"(locale directory ')" << l10n_path.string()
+                      << R"( failure: )" << ec.message() << std::endl;
+            }
         return;
     }
-    if (setting["verbose"]) {
-        std::cout << "LC_PATH = " << lc_path.make_preferred().string() << std::endl;
+    else {
+        if (verbose > 2) {
+            std::cout << "LC_PATH = " 
+                      << lc_path.make_preferred().string() << std::endl;
+        }
     }
 
     gen.add_messages_path(lc_path.make_preferred().string());
