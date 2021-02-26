@@ -17,10 +17,10 @@
 #include <testsuite/vhdl_parser/testing_parser.hpp>
 #include <testsuite/vhdl_parser/testing_parser_grammar_hack.hpp>
 
-#include <testsuite/data_set.hpp>
-#include <testsuite/failure_diagnostic_fixture.hpp>
+#include <testsuite/common/data_set.hpp>
+#include <testsuite/common/failure_diagnostic_fixture.hpp>
 
-#include <testsuite/namespace_alias.hpp>
+#include <testsuite/common/namespace_alias.hpp>
 
 
 BOOST_AUTO_TEST_SUITE( parser_rule )

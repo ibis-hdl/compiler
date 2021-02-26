@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# [PrettyTable](https://pypi.org/project/prettytable/)
+# required.
 import os
 import sys
 from prettytable import PrettyTable

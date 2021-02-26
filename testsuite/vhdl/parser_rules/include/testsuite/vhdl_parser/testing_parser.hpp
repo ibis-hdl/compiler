@@ -18,7 +18,7 @@
 
 #include <boost/filesystem.hpp>
 
-#include <testsuite/namespace_alias.hpp>
+#include <testsuite/common/namespace_alias.hpp>
 
 #include <eda/util/pretty_typename.hpp>
 #include <iostream>
