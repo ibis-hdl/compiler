@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Use English to make copy&paste of errors easier to 
+# open reports in forums
 LANG=en_US.UTF-8
 
 # http://mywiki.wooledge.org/BashFAQ/028

@@ -90,6 +90,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ## 
 # Sub projects
+add_subdirectory(doc)
 add_subdirectory(sources/common)
 add_subdirectory(sources/vhdl)
 add_subdirectory(sources/ibis)
@@ -104,24 +105,6 @@ if (EDA_BUILD_TESTS)
     add_subdirectory(testsuite/vhdl/syntax)
     add_subdirectory(testsuite/ibis)
 endif()
-
-
-##
-# playground projects
-# - not build by default
-# - excluded for MSVC
-if (NOT MSVC)
-add_subdirectory(playground/vhdl93)
-add_subdirectory(playground/cxx)
-add_subdirectory(playground/boost_test)
-add_subdirectory(playground/x3)
-add_subdirectory(playground/cli11)
-endif()
-
-
-## 
-# project doc
-add_subdirectory(doc)
 
 
 ##
