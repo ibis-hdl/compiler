@@ -18,7 +18,6 @@
 
 #include <string>
 #include <string_view>
-#include <unordered_map>
 
 #include <eda/namespace_alias.hpp> // IWYU pragma: keep
 
@@ -37,7 +36,7 @@ public:
     x3::error_handler_result on_error(IteratorT& /* first */, IteratorT const& /* last */,
         ExceptionT const& x, ContextT const& context) const
     {
-#if 0 /* XXX recursive include problem; parser_config requires on_error definition,                \
+#if 0 /* XXX recursive include problem; parser_config requires on_error definition,
        * but context_type is required here for statis_assert */
         // detect upcoming linker errors, see notes at parser_config.hpp about
         static_assert(
@@ -49,6 +48,7 @@ public:
         return error_handler(x.where(), make_error_description(x.which()));
     }
 
+private:
     /**
      * lookup a parser rule name for a useful name used for error message
      * construction.
@@ -56,15 +56,7 @@ public:
      * @param which The spirit.x3 BNF rule name.
      * @return Beautified name of the rule.
      */
-    static std::string_view lookup(std::string_view which)
-    {
-        auto const iter = ruleid_map.find(which);
-
-        if (iter != ruleid_map.end()) {
-            return iter->second;
-        }
-        return which;
-    }
+    std::string_view lookup(std::string_view which) const;
 
     /**
      * Make a error description based on spirit.x3 BNF rule name.
@@ -73,13 +65,6 @@ public:
      * @return An parser error message.
      */
     std::string make_error_description(std::string_view which) const;
-
-private:
-    using rule_map_type = std::unordered_map<std::string_view, std::string_view>;
-
-    // clang-format off
-    static const rule_map_type                        ruleid_map;
-    // clang-format on
 };
 
 } // namespace parser

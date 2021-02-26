@@ -25,6 +25,8 @@ bool syntax_worker::success() const { return context.error_count == 0; }
 template <typename NodeT>
 bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name) const
 {
+    // FixMe: Generally here, if pretty_node_name lookup failed, give a warning to developer
+
     label_match check_label{};
 
     using boost::locale::format;
@@ -36,38 +38,49 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name)
             return true;
 
         case label_match::result::MISMATCH: {
-            auto[start_label, end_label] = labels_of(node);
+            
+            auto const [start_label, end_label] = labels_of(node);            
+            auto const [found, node_name_sv] = pretty_node_name(node_name);
+            
             error_handler(node, start_label, end_label,
                 // clang-format off
                 (format(translate(
                     "Label mismatch in {1}"
                     ))
-                    % pretty_node_name(node_name)
+                    % node_name_sv
                 ).str()
                 // clang-format on
             );
+            
             ++context.error_count;
+            
             return false;
         }
 
         case label_match::result::ILLFORMED: {
-            auto[start_label, end_label] = labels_of(node);
+            
+            auto const [start_label, end_label] = labels_of(node);
+            auto const [found, node_name_sv] = pretty_node_name(node_name);
+            
             error_handler(node, start_label, end_label,
                 // clang-format off
                 (format(translate(
                     "Label ill-formed in {1}"
                     ))
-                    % pretty_node_name(node_name)
+                    % node_name_sv
                 ).str()
                 // clang-format on
             );
+            
             ++context.error_count;
+
             return false;
         }
 
         default:
             cxx_unreachable_bug_triggered();
     }
+
     cxx_unreachable_bug_triggered();
 }
 
@@ -75,25 +88,31 @@ bool syntax_worker::keyword_matches(ast::process_statement const& node, std::str
 
     // Note: Re-Using label_match here results into misleading error message
     //       "Label mismatch". Further, the keywords aren't tagged so beauty
-    //       error messages arn't possible this way.
-
+    //       error messages aren't possible this way.
     // FixMe: pretty error rendering
+
+    // FixMe: If pretty_node_name lookup failed, give a warning to developer
 
     using boost::locale::format;
     using boost::locale::translate;
     using ast::pretty_node_name;
 
     if (!node.postponed && node.end_postponed) {
+
+        auto const [found, node_name_sv] = pretty_node_name(node_name);
+
         error_handler(node,
             // clang-format off
             (format(translate(
                 "ill-formed statement in {1}; (Hint: single trailing keyword 'postponed')"
                 ))
-                % pretty_node_name(node_name)
+                % node_name_sv
             ).str()
             // clang-format on
         );
+
         ++context.error_count;
+
         return false;
     }
 
