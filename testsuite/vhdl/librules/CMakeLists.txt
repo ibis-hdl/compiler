@@ -15,6 +15,10 @@ add_library(${PROJECT_NAME} "")
 add_library(testsuite::vhdl_rules ALIAS ${PROJECT_NAME})
 
 
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    eda::vhdl_parser
+)
+
 # Ninja Build override 
 message("FixMe: File property for Ninja Parallel Build")
 # old way:
@@ -68,8 +72,9 @@ else()
     )
 endif()
 
-target_sources(${PROJECT_NAME} PRIVATE
-    ${SOURCE_LIST}
+target_sources(${PROJECT_NAME} 
+    PRIVATE
+        ${SOURCE_LIST}
 )
 
 
@@ -91,12 +96,13 @@ target_include_directories(${PROJECT_NAME}
 
 
 # handle problems with Spirit.X template depth
-target_compile_options(${PROJECT_NAME} PRIVATE
-    # - limit gcc/clang template error depth printing
-    # - increase limit especially for clang recursive template instantiation,
-    #   otherwise exceedes maximum depth of 512    
-    $<$<CXX_COMPILER_ID:GNU>:  -ftemplate-backtrace-limit=0 -ftemplate-depth=1024>
-    $<$<CXX_COMPILER_ID:Clang>:-ftemplate-backtrace-limit=0 -ftemplate-depth=1024>
+target_compile_options(${PROJECT_NAME} 
+    PRIVATE
+        # - limit gcc/clang template error depth printing
+        # - increase limit especially for clang recursive template instantiation,
+        #   otherwise exceedes maximum depth of 512    
+        $<$<CXX_COMPILER_ID:GNU>:  -ftemplate-backtrace-limit=0 -ftemplate-depth=1024>
+        $<$<CXX_COMPILER_ID:Clang>:-ftemplate-backtrace-limit=0 -ftemplate-depth=1024>
 )
 
 
@@ -123,9 +129,3 @@ if("${EDA_VHDL_PARSER_DEBUG}")
     target_compile_definitions(${PROJECT_NAME}
         PRIVATE BOOST_SPIRIT_X3_DEBUG)
 endif()
-
-
-target_link_libraries(${PROJECT_NAME} PRIVATE
-    eda::vhdl_parser
-)
-

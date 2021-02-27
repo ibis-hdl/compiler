@@ -7,7 +7,7 @@
 
 #define BOOST_TEST_MODULE "VHDL AST Test Suite"
 #include <eda/compiler/warnings_off.hpp>            // IWYU pragma: keep
-#include <boost/test/included/unit_test.hpp>        // IWYU pragma: keep
+#include <boost/test/unit_test.hpp>                 // IWYU pragma: keep
 #include <eda/compiler/warnings_on.hpp>             // IWYU pragma: keep
 
 #include <testsuite/ast/position_cache_fixture.hpp>

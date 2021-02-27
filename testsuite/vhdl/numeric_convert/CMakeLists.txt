@@ -10,6 +10,12 @@ project(testrunner_vhdl_numeric_convert LANGUAGES CXX)
 add_executable(${PROJECT_NAME} "")
 
 
+add_test(NAME test_vhdl_numeric_conversion
+    COMMAND 
+        ${PROJECT_NAME}
+)
+
+
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         eda::vhdl_parser
@@ -17,14 +23,8 @@ target_link_libraries(${PROJECT_NAME}
         Boost::system
         Boost::filesystem
         Boost::locale
+        Boost::unit_test_framework 
 )
-
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-    target_link_libraries(${PROJECT_NAME} 
-        PRIVATE
-            Boost::unit_test_framework 
-    )
-endif()
 #set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-v")
 
 
@@ -41,9 +41,17 @@ target_sources(${PROJECT_NAME}
         src/common/test_numeric_convert.cpp
         src/common/numeric_parser.cpp
         src/common/binary_string.cpp
+        # concrete test cases
         src/bit_string_literal_test.cpp
         src/decimal_literal_test.cpp
         src/based_literal_test.cpp
+)
+
+
+
+set_source_files_properties(src/common/test_numeric_convert.cpp
+    APPEND PROPERTIES 
+        COMPILE_DEFINITIONS "BOOST_TEST_DYN_LINK" 
 )
 
 
@@ -71,11 +79,3 @@ target_compile_definitions(${PROJECT_NAME}
         # don't allow automatically select which libraries to link against    
         $<$<CXX_COMPILER_ID:MSVC>:BOOST_ALL_NO_LIB>
 )
-
-
-## 
-# CMake/CTest
-add_test(NAME test_vhdl_numeric_conversion
-    COMMAND ${PROJECT_NAME}
-)
-

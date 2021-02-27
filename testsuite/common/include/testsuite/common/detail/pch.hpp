@@ -21,7 +21,8 @@
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/system/error_code.hpp>
-#include <boost/test/included/unit_test.hpp>
+
+#include <boost/test/unit_test.hpp>
 #if 0
 #include <boost/test/data/test_case.hpp>
 #include <boost/test/framework.hpp>

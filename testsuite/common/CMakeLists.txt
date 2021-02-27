@@ -11,6 +11,12 @@ add_library(${PROJECT_NAME} "")
 add_library(testsuite::common ALIAS ${PROJECT_NAME})
 
 
+target_link_libraries(${PROJECT_NAME}
+    PUBLIC
+        eda::common
+)
+
+
 if(EDA_EXTERNAL_BOOST_UTF)
     add_dependencies(${PROJECT_NAME} external-boost-utf)
 endif()
@@ -20,12 +26,6 @@ target_sources(${PROJECT_NAME}
     PRIVATE
         src/data_set.cpp
         src/failure_diagnostic_fixture.cpp
-)
-
-
-target_link_libraries(${PROJECT_NAME}
-    PUBLIC
-        eda::common
 )
 
 

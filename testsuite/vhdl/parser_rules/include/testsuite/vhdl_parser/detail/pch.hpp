@@ -25,10 +25,9 @@
 #include <utility>
 #include <vector>
 
-#include <boost/test/included/unit_test.hpp>
+#include <boost/test/unit_test.hpp>
 #if 0
 #include <boost/test/output_test_stream.hpp>
-#include <boost/test/unit_test.hpp>
 #endif
 
 #endif /* TESTSUITE_PARSER_RULES_INCLUDE_TESTSUITE_DETAIL_PCH_HPP_ */

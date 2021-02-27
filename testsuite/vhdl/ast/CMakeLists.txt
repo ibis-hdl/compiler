@@ -10,6 +10,13 @@ project(testrunner_vhdl_ast LANGUAGES CXX)
 add_executable(${PROJECT_NAME} "")
 
 
+add_test(NAME test_ast
+    COMMAND 
+        ${PROJECT_NAME} -- 
+        --source-dir=${PROJECT_SOURCE_DIR}/test_case
+)
+
+
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         eda::vhdl_parser
@@ -18,6 +25,7 @@ target_link_libraries(${PROJECT_NAME}
         Boost::filesystem
         Boost::unit_test_framework 
 )
+#set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-v")
 
 
 if(EDA_EXTERNAL_BOOST_UTF)
@@ -29,9 +37,16 @@ target_sources(${PROJECT_NAME}
     PRIVATE
         src/common/test_ast.cpp
         src/common/position_cache_fixture.cpp
+        # concrete test cases
         src/position_cache_test_1.cpp
         src/position_cache_test_2.cpp
         src/literal_printer_test.cpp
+)
+
+
+set_source_files_properties(src/common/test_ast.cpp
+    APPEND PROPERTIES 
+        COMPILE_DEFINITIONS "BOOST_TEST_DYN_LINK" 
 )
 
 
@@ -65,12 +80,3 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
             Boost::unit_test_framework 
     )
 endif()
-
-
-## 
-# CMake/CTest
-add_test(NAME test_ast
-    COMMAND ${PROJECT_NAME} -- 
-    --source-dir=${PROJECT_SOURCE_DIR}/test_case
-)
-

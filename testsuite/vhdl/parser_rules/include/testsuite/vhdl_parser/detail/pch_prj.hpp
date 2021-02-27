@@ -27,12 +27,11 @@
 #include <testsuite/common/namespace_alias.hpp>
 #include <testsuite/common/data_set.hpp>
 #include <testsuite/common/failure_diagnostic_fixture.hpp>
-#include <testsuite/common/namespace_alias.hpp>
-#include <testsuite/vhdl_numeric_convert/binary_string.hpp>
-#include <testsuite/vhdl_numeric_convert/numeric_parser.hpp>
+
+#include <testsuite/vhdl/rules.hpp>
+
 #include <testsuite/vhdl_parser/testing_parser_grammar_hack.hpp>
 #include <testsuite/vhdl_parser/testing_parser.hpp>
-#include <testsuite/vhdl/rules.hpp>
 
 #endif /* TESTSUITE_PARSER_RULES_INCLUDE_TESTSUITE_DETAIL_PCH_PRJ_HPP_ */
 
