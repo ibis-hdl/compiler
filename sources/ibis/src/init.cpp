@@ -104,102 +104,107 @@ void init::parse_cli(int argc, const char* argv[])
     // clang-format off
     try {
         
-        /* [CLIUtils/CLI11](https://github.com/CLIUtils/CLI11) is using for pure flags
-         * a const string reference argument at add_flags() member which boost.locale's 
-         * translate() doesn't provides. A work arround is to use dummy flag 
-         * variable to enforce an overload which is aprobiate here. */
-        bool dummy{};
-
         /*
          * Primary Options Group
          */
-        app.add_option("files", cli_parameter.hdl_files,
-               translate("One or more VHDL file(s)."))
+        app.add_option("files", cli_parameter.hdl_files)
+            ->description(translate("One or more VHDL file(s)."))
             ->required()
-            ->check(CLI::ExistingFile);
-
-        app.add_flag("--version", dummy, // FixMe: set_version_flag()
-            translate("Show version."));
-
-        app.add_flag("--build-info", dummy,
-            translate("Show build informations."));
+            ->check(CLI::ExistingFile)
+            ;
+        app.add_flag("--version") // FixMe: set_version_flag() @CLI11 v1.10
+            ->description(translate("Show version."))
+            ;
+        app.add_flag("--build-info")
+            ->description(translate("Show build informations."))
+            ;
 
         /*
          * Working/Processing flags
          */
 
-        app.add_flag("-a,--analyze", dummy,
-            translate("Analyze the design.")); // unused
+        app.add_flag("-a,--analyze") // unused
+            ->description(translate("Analyze the design."));
 
         /*
          * Message Options Group
          */
         static const std::string message_group{ translate("Message Options") };
 
-        app.add_flag("-q,--quiet", dummy,
-              translate("Print less text."))
-            ->group(message_group);
+        app.add_flag("-q,--quiet")
+            ->description(translate("Print less text."))
+            ->group(message_group)
+            ;
             // FixMe: Allow e.g. '-vv' and '--verbose=2' with range check to enums
-        app.add_flag("-v,--verbose", cli_parameter.verbose,
-              translate("Print more text."))
+        app.add_flag("-v,--verbose", cli_parameter.verbose)
+            ->description(translate("Print more text."))
+            ->excludes("--quiet")
             ->group(message_group)
-            ->excludes("--quiet");
-        app.add_flag("--no-color", dummy,
-              translate("Don\'t render messages using colors. On output redirection "
-                        "no colors are used."))
-            ->group(message_group);
-        app.add_flag("--force-color", dummy,
-              translate("Even on redirected output enforce the rendering of messages "
-                        "using colors."))
+            ;
+        app.add_flag("--no-color")
+            ->description(translate("Don\'t render messages using colors. On output redirection "
+                                    "no colors are used."))
             ->group(message_group)
-            ->excludes("--no-color");
-        app.add_option("--tab-size", cli_parameter.tab_size,
-              translate("Tabulator size, affects printing source snippet on error printing."), true)
+            ;
+        app.add_flag("--force-color")
+            ->description(translate("Even on redirected output enforce the rendering of messages "
+                                    "using colors."))
+            ->excludes("--no-color")
             ->group(message_group)
-            ->check(CLI::Range(1u, 10u)); // XXX unused in e.g. error_handler.cpp
+            ;
+        app.add_option("--tab-size", cli_parameter.tab_size) // XXX unused in e.g. error_handler.cpp
+            ->description(translate("Tabulator size, affects printing source snippet on error printing."))
+            ->check(CLI::Range(1u, 10u))
+            ->group(message_group)
+            ;
 
         /*
          * Locale Options Group
          */
         static const std::string locale_group{ translate("Locale/Environment Options") };
 
-        app.add_option("--locale-dir", cli_parameter.locale_dir,
-              translate("localization catalog data"), true)
-            ->group(locale_group)
+        app.add_option("--locale-dir", cli_parameter.locale_dir)
+            ->description(translate("localization catalog data"))
             ->envname("EDA_LOCALE_DIR")
-            ->check(CLI::ExistingDirectory);
+            ->check(CLI::ExistingDirectory)
+            ->group(locale_group)
+            ;
 
         /*
          * Warning Options Group
          */
         static const std::string warning_group{ translate("Warning Options") };
 
-        app.add_flag("--Wall", dummy,
-              translate("Warn all."))
-            ->group(warning_group); // unused
-        app.add_flag("--Wunused", dummy,
-              translate("Warn on unused."))
-            ->group(warning_group); // unused
-        app.add_flag("--Wother", dummy,
-              translate("Warn for others."))
-            ->group(warning_group); // unused
-
+        app.add_flag("--Wall") // unused
+            ->description(translate("Warn all."))
+            ->group(warning_group)
+            ;
+        app.add_flag("--Wunused") // unused
+            ->description(translate("Warn on unused."))
+            ->group(warning_group)
+            ; 
+        app.add_flag("--Wother") // unused
+            ->description(translate("Warn for others."))
+            ->group(warning_group)
+            ;
         // Option to Control Error and Warning Messages Flags
-        app.add_option("--ferror-limit", cli_parameter.error_limit,
-              translate("Limit emitting diagnostics, can be disabled with --ferror-limit=0."), true)
-            ->group(warning_group); // XXX unused in context.cpp
+        app.add_option("--ferror-limit", cli_parameter.error_limit) // XXX unused in context.cpp
+            ->description(translate("Limit emitting diagnostics, can be disabled with --ferror-limit=0."))
+            ->group(warning_group)
+            ;
 
         /*
          * Paths Group
          */
         static const std::string path_group{ translate("Paths") };
 
-        app.add_option("--hdl-lib_path", cli_parameter.hdl_lib_path,
-              translate("Path to libraries."))
-            ->group(path_group)
+        app.add_option("--hdl-lib-path", cli_parameter.hdl_lib_path) // unused
+            ->description(translate("Path to libraries."))
             ->envname("EDA_LIBPATH")
             ->take_last()
-            ->check(CLI::ExistingDirectory); // unused
+            ->check(CLI::ExistingDirectory)
+            ->group(path_group)
+            ;
     }
     // clang-format on
     catch (CLI::Error const& e) {
@@ -263,8 +268,8 @@ void init::parse_cli(int argc, const char* argv[])
     // Primary Options
     setting.set("--files", cli_parameter.hdl_files);
 
-    if (app.count("--hdl-lib_path") != 0u) {
-        setting.set("--hdl-lib_path", cli_parameter.hdl_lib_path);
+    if (app.count("--hdl-lib-path") != 0u) {
+        setting.set("--hdl-lib-path", cli_parameter.hdl_lib_path);
     }
 
     // Working/Processing flags
