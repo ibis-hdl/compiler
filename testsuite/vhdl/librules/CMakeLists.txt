@@ -19,58 +19,57 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     eda::vhdl_parser
 )
 
-# Ninja Build override 
-message("FixMe: File property for Ninja Parallel Build")
-# old way:
-#set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_COMPILE job_pool_one_core)
-#set_property(TARGET ${PROJECT_NAME} PROPERTY JOB_POOL_LINK    job_pool_one_core)
-set_source_files_properties(
-    src/rules.cpp 
-        PROPERTIES 
-            JOB_POOL_COMPILE job_pool_one_core
-            JOB_POOL_LINK    job_pool_one_core
-)
-
-
 if(EDA_EXTERNAL_BOOST_SPIRIT_X3)
     add_dependencies(${PROJECT_NAME} external-boost-spirit-x3)
 endif()
 
 
-# Check on big RAM power stations to compile big files
+# Ninja Build override to cope on low memory situations to compile "big" files
+set(SOURCE_LIST_HIGH_MEM
+    src/rules.cpp
+)
+set(SOURCE_LIST_LOW_MEM
+    src/rules_api.cpp
+    src/rules_a.cpp 
+    src/rules_b.cpp 
+    src/rules_c.cpp 
+    src/rules_d.cpp 
+    src/rules_e.cpp 
+    src/rules_f.cpp 
+    src/rules_g.cpp
+    src/rules_i.cpp 
+    src/rules_l.cpp 
+    src/rules_n.cpp 
+    src/rules_p.cpp 
+    src/rules_q.cpp 
+    src/rules_r.cpp 
+    src/rules_s.cpp 
+    src/rules_t.cpp 
+    src/rules_u.cpp 
+    src/rules_v.cpp 
+    src/rules_w.cpp 
+)
+
 cmake_host_system_information(
-    RESULT localhost_RAM_MB
+    RESULT localhost_RAM_MiB
     QUERY  AVAILABLE_PHYSICAL_MEMORY
 )
 
-if(localhost_RAM_MB GREATER 12000)
-    set(SOURCE_LIST src/rules.cpp)
+if(localhost_RAM_MiB LESS 12000)
+    set(SOURCE_LIST
+        ${SOURCE_LIST_LOW_MEM}
+    )
+    set_source_files_properties(${SOURCE_LIST}
+        PROPERTIES
+            # allow one core to bypass to compile smaller files
+            JOB_POOL_COMPILE NINJA_JOBS_TWO_CPU
+    ) 
 else()
-    # FixMe: This is not the best solution to cope with low RAM situations. 
-    # Do conditional compiling the file rules.cpp for {A-Z} rules into multiple 
-    # object files.
-    set(SOURCE_LIST 
-        src/rules_api.cpp
-        src/rules_a.cpp 
-        src/rules_b.cpp 
-        src/rules_c.cpp 
-        src/rules_d.cpp 
-        src/rules_e.cpp 
-        src/rules_f.cpp 
-        src/rules_g.cpp
-        src/rules_i.cpp 
-        src/rules_l.cpp 
-        src/rules_n.cpp 
-        src/rules_p.cpp 
-        src/rules_q.cpp 
-        src/rules_r.cpp 
-        src/rules_s.cpp 
-        src/rules_t.cpp 
-        src/rules_u.cpp 
-        src/rules_v.cpp 
-        src/rules_w.cpp 
+    set(SOURCE_LIST
+        ${SOURCE_LIST_HIGH_MEM}
     )
 endif()
+
 
 target_sources(${PROJECT_NAME} 
     PRIVATE

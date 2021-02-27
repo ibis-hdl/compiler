@@ -32,25 +32,20 @@ cmake_host_system_information(
     RESULT localhost_logical_cores
     QUERY NUMBER_OF_LOGICAL_CORES
 )
-
-math(EXPR max_cores  "${localhost_logical_cores} - 1")
-math(EXPR half_cores "${localhost_logical_cores} / 2")
+math(EXPR CPU_CORES_100pc "${localhost_logical_cores}")
+math(EXPR CPU_CORES_50pc  "${localhost_logical_cores} / 2")
 
 set_property(GLOBAL 
     PROPERTY 
         JOB_POOLS
-            job_pool_max_cores=${max_cores}
-            job_pool_med_cores=${half_cores}
-            job_pool_one_core=1
-)
-set_property(GLOBAL 
-    PROPERTY 
-        CMAKE_JOB_POOLS
-            cmake_job_pool=1
+            NINJA_JOBS_100pc_CPU=${CPU_CORES_100pc}
+            NINJA_JOBS_50pc_CPU=${CPU_CORES_50pc}
+            NINJA_JOBS_TWO_CPU=2
+            NINJA_JOBS_ONE_CPU=1
 )
 
-set(CMAKE_JOB_POOL_COMPILE job_pool_max_cores)
-set(CMAKE_JOB_POOL_LINK    job_pool_one_core)
+set(CMAKE_JOB_POOL_COMPILE NINJA_JOBS_100pc_CPU)
+set(CMAKE_JOB_POOL_LINK    NINJA_JOBS_100pc_CPU)
 
 
 ##

@@ -46,6 +46,22 @@ target_sources(${PROJECT_NAME}
 )
 
 
+# Ninja Build override to cope on low memory situations to compile "big" files
+cmake_host_system_information(
+    RESULT localhost_RAM_MiB
+    QUERY  AVAILABLE_PHYSICAL_MEMORY
+)
+
+if(localhost_RAM_MiB LESS 12000)
+    # probably to loose on this file, anyway ...
+    set_source_files_properties(src/parser/grammar.cpp
+        PROPERTIES
+            # allow one core to bypass to compile other smaller files
+            JOB_POOL_COMPILE NINJA_JOBS_TWO_CPU
+    ) 
+endif()
+
+
 if (EDA_ENABLE_PCH)
     target_precompile_headers(${PROJECT_NAME} 
         PRIVATE 
