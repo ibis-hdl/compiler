@@ -33,6 +33,7 @@ directory from git repositories:
 * RapidJSON
 * CLI11
 
+
 ToDo with respect to Implementation
 -----------------------------------
 
@@ -61,34 +62,59 @@ from VHDL compiler self. Further internal and debugging messages,
 maybe by use of boost.log.
 
 
+
 ToDo on design
 ---------------
-- [Effective Modern CMake](https://gist.github.com/mbinna/c61dbb39bca0e4fb7d1f73b0d66a4fd1)
-  with [PCH](https://cmake.org/cmake/help/latest/command/target_precompile_headers.html?highlight=pch) 
-  and [reusing them](https://cmake.org/cmake/help/git-stage/command/target_precompile_headers.html) 
-  and [Unity Build Mode](https://cmake.org/cmake/help/latest/prop_tgt/UNITY_BUILD_MODE.html#prop_tgt:UNITY_BUILD_MODE)
-  see also [CMake Discourse](https://discourse.cmake.org/t/one-source-to-create-multiple-objects/2819)
 
-- find a project name, project vhdl is named EDA and the app ibis. Get a logo, e.g. 
-  ibis as mascot with assets sub directories.
+### Project structure
+
+- merge back testsuite librules into parser_rules. The intention was
+  to split out compile/memory intensive compile jobs. This is 
+  confusing from maintenance aspect. The best would be to use ninja
+  specific switches in CMake. Maybe better to complete switch to ninja.
+
+- maybe move the testsuits below there sources, see e.g. llvm source tree
+
+### CMake
+
+- [Effective Modern CMake](https://gist.github.com/mbinna/c61dbb39bca0e4fb7d1f73b0d66a4fd1)
+  and [Modern CMake Examples](https://github.com/pr0g/cmake-examples)
+- [PCH](https://cmake.org/cmake/help/latest/command/target_precompile_headers.html?highlight=pch) 
+  and [reusing them](https://cmake.org/cmake/help/git-stage/command/target_precompile_headers.html) 
+- [Unity Build Mode](https://cmake.org/cmake/help/latest/prop_tgt/UNITY_BUILD_MODE.html#prop_tgt:UNITY_BUILD_MODE)
+  see also [CMake Discourse](https://discourse.cmake.org/t/one-source-to-create-multiple-objects/2819)
+- [C++ dependency management with CMake’s FetchContent](https://medium.com/analytics-vidhya/c-dependency-management-with-cmakes-fetchcontent-4ceca4693a5d)
 
 - By starting using precompiled headers by CMake, some smaller problems rise.
   E.g. *reference to 'util' is ambiguous* error since name lookup got 
   'boost::locale::util' and 'eda::util' for i.e. 'util::user_home_dir'
   at sources/ibis/src/init.cpp - this isn't fatal, but even not tidy.
   
-- make clang-tidy and clang-format working again. By The Way, check clang-format
-  style for enhancements, so that we get rid off the clang-format {off|on}
-  especially on class members.
-  This also affects cmake/FindClangFormat.cmake
+- l10n seems to have a problem with PCH support, warning/error rises:
+  "xgettext: error while opening "../sources/common//..cmake_pch.hxx.cxx"
+  for reading: No such file or directory
+
+- boost.test has also problems with PCH, the main() is missing on linker time even
+  it compiles find without PCH support.
+
+### Sources
 
 - replace C comments by C++ comments, see e.g. [Github](https://github.com/mbitsnbites/c-comments-to-cpp)
   for a python script. In 2021 it fails with inline comments like signatures
   like foo(int /* unused */). 
   CHECK if there can clang-tidy and clang-format can help
 
-- organize convenience scripts into sub dir - or write a doc how use it on command 
-  line for use with copy&paste (best approach IMO).
+- make clang-tidy and clang-format working again. By The Way, check clang-format
+  style for enhancements, so that we get rid off the '// 'clang-format {off|on}'
+  pragmas especially on class members.
+  A good starting point is 
+  [Static checks with CMake/CDash (iwyu, clang-tidy, lwyu, cpplint and cppcheck)](
+  https://blog.kitware.com/static-checks-with-cmake-cdash-iwyu-clang-tidy-lwyu-cpplint-and-cppcheck/)
+  
+  - $ cmake "-DCMAKE_CXX_CLANG_TIDY=clang-tidy" ../path/to/source
+    or simply enable the option DEVELOPER_RUN_CLANG_TIDY
+
+- check git hooks using clang-format
 
 - Replace:
   - boost.filesystem with std::filesystem, check it before for compliance of 
@@ -103,4 +129,11 @@ ToDo on design
     compilation effort: compiling with make -j X and spirit.x3 rules with 
     single core. Starting with CMake 3.16 there is the Unity Build Mode.
 
-- check git hooks using clang-format
+### Others
+
+- find a project name, project vhdl is named EDA and the app ibis. Get a logo, e.g. 
+  ibis as mascot with assets sub directories.
+
+- organize convenience scripts into sub dir - or write a doc how use it on command 
+  line for use with copy&paste (best approach IMO).
+
