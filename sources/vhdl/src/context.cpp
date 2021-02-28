@@ -22,7 +22,7 @@ context::context()
     unsigned const  error_limit = 20; // default for testsuite
 
     // check if error_limit is not disabled (equals to 0)
-    if (error_limit != 0u) {
+    if (error_limit != 0) {
         error_count.limit() = error_limit;
     }
 }
@@ -32,7 +32,7 @@ context::context(eda::settings const& settings)
     unsigned const error_limit = settings["ferror-limit"].get<long>();
 
     // check if error_limit is not disabled (equals to 0)
-    if (error_limit != 0u) {
+    if (error_limit != 0) {
         error_count.limit() = error_limit;
     }
 }
@@ -73,13 +73,13 @@ std::ostream& failure_status::print(std::ostream& os) const
             % ctx.warning_count)
               .str();
 
-    if ((ctx.error_count != 0u) && (ctx.warning_count != 0u)) {
+    if ((ctx.error_count != 0) && (ctx.warning_count != 0)) {
         // TRANSLATORS: summary error(s) and warning(s)
         os << format(translate("{1} and {2} generated.")) % error_message % warning_message;
-    } else if (ctx.error_count != 0u) {
+    } else if (ctx.error_count != 0) {
         // TRANSLATORS: summary error(s) only
         os << format(translate("{1} generated.")) % error_message;
-    } else if (ctx.warning_count != 0u) {
+    } else if (ctx.warning_count != 0) {
         // TRANSLATORS: summary warning(s) only
         os << format(translate("{1} generated.")) % warning_message;
     } else {

@@ -78,24 +78,24 @@ bool file_loader::unique_files(std::vector<std::string> const& file_list) const
     auto const print_duplicates = [&](auto const& canonical_filename) {
         const char* delimiter = "";
         for (std::string const& filename : file_list) {
-            if (canonical_filename.compare(canonical(filename)) == 0) {
+            if (canonical_filename == canonical(filename)) {
                 os << delimiter << '"' << filename << '"';
                 delimiter = ", ";
             }
         }
     };
 
-    std::map<std::string, std::size_t> occourence;
+    std::map<std::string /*canonical_filename*/, std::size_t /*count*/> occurrence;
 
     for (auto const& filename : file_list) {
 
         if (!exist_file(filename)) {
             return false;
         }
-        ++occourence[canonical(filename)];
+        ++occurrence[canonical(filename)];
     }
 
-    for (auto const & [ canonical_filename, count ] : occourence) {
+    for (auto const & [ canonical_filename, count ] : occurrence) { // NOLINT(readability-use-anyofallof) -- disagree
 
         if (count > 1) {
             if (!quiet) {
@@ -144,7 +144,7 @@ std::optional<std::string> file_loader::read_file(boost::filesystem::path const&
     return read_file(filename.string());
 }
 
-std::optional<std::string> file_loader::read_file_alt(std::string const& filename) const
+std::optional<std::string> file_loader::read_file_alt(std::string const& filename)
 {
 
     using boost::locale::format;

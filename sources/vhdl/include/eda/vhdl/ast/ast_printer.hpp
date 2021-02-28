@@ -16,22 +16,8 @@ namespace eda {
 namespace vhdl {
 namespace ast {
 
-class printer {
-    // clang-format off
-    util::indent_ostream                            os;
-    // clang-format on
-
-    struct scope_printer;
-
-    template <typename T, typename Enable = void> struct symbol_scope;
-
-    template <typename... Ts> void visit(variant<Ts...> const& node)
-    {
-        boost::apply_visitor(*this, node);
-    }
-
-    template <typename T> void visit(std::vector<T> const& vector);
-
+class printer 
+{
 public:
     bool verbose_symbol{ false };
     bool verbose_variant{ false };
@@ -233,6 +219,25 @@ public:
 
     //    template<typename T>
     //    void operator()(T const& node);
+
+private:
+    // internal helper
+    class scope_printer;
+
+    // yet another internal helper
+    template <typename T, typename Enable = void> struct symbol_scope;
+
+    template <typename... Ts> void visit(variant<Ts...> const& node)
+    {
+        boost::apply_visitor(*this, node);
+    }
+
+    template <typename T> void visit(std::vector<T> const& vector);
+
+private:
+    // clang-format off
+    util::indent_ostream                            os;
+    // clang-format on
 };
 
 } // namespace ast

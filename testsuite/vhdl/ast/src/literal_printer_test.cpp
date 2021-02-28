@@ -29,7 +29,7 @@ std::vector<std::string> const input_string_literal{
     R"(%"%"")",
 };
 
-std::vector<std::string> expected_string_literal{
+std::vector<std::string> const expected_string_literal{
     R"("")",
     R"(%%)",
     R"("Hello")",

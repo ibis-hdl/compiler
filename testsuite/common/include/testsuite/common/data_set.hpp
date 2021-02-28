@@ -14,6 +14,7 @@
 #include <boost/filesystem.hpp>
 
 #include <string>
+#include <string_view>
 #include <tuple>
 #include <vector>
 
@@ -77,10 +78,10 @@ public: // Boost.UTF API
 
 private:
     void read_files(fs::path const& path);
-    std::string read_file(fs::path const& file_path);
+    static std::string read_file(fs::path const& file_path);
 
 private:
-    bool parse_for(std::string const& arg, std::string const& str, std::string& value);
+    static bool parse_for(std::string_view arg, std::string_view str, std::string& value);
     bool parse_command_line();
 
 private:

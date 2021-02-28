@@ -17,7 +17,7 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 
-if(EDA_EXTERNAL_BOOST_UTF)
+if(DEVELOPER_EXTERNAL_BOOST_UTF)
     add_dependencies(${PROJECT_NAME} external-boost-utf)
 endif()
 

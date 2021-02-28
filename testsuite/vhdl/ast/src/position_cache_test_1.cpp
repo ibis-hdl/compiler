@@ -193,7 +193,7 @@ BOOST_AUTO_TEST_CASE( proxy_lineno_1_txt )
         BOOST_TEST(range.has_value());
 
         std::size_t const line_no = proxy.line_number(range.value().begin());
-        BOOST_TEST(line_no == 2u);
+        BOOST_TEST(line_no == 2U);
     }
 
     {
@@ -202,7 +202,7 @@ BOOST_AUTO_TEST_CASE( proxy_lineno_1_txt )
         BOOST_TEST(range.has_value());
 
         std::size_t const line_no = proxy.line_number(range.value().begin());
-        BOOST_TEST(line_no == 4u);
+        BOOST_TEST(line_no == 4U);
     }
 }
 

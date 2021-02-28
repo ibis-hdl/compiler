@@ -19,35 +19,27 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     eda::vhdl_parser
 )
 
-if(EDA_EXTERNAL_BOOST_SPIRIT_X3)
+if(DEVELOPER_EXTERNAL_BOOST_SPIRIT_X3)
     add_dependencies(${PROJECT_NAME} external-boost-spirit-x3)
 endif()
 
 
 # Ninja Build override to cope on low memory situations to compile "big" files
+# FixMe: Maybe use Unity (Jumbo) Builds to solve maintenance of two equal sources
+# see https://onqtam.com/programming/2019-12-20-pch-unity-cmake-3-16/
+# https://cmake.org/cmake/help/v3.18/prop_tgt/UNITY_BUILD.html
 set(SOURCE_LIST_HIGH_MEM
     src/rules.cpp
 )
 set(SOURCE_LIST_LOW_MEM
     src/rules_api.cpp
-    src/rules_a.cpp 
-    src/rules_b.cpp 
-    src/rules_c.cpp 
-    src/rules_d.cpp 
-    src/rules_e.cpp 
-    src/rules_f.cpp 
-    src/rules_g.cpp
-    src/rules_i.cpp 
-    src/rules_l.cpp 
-    src/rules_n.cpp 
-    src/rules_p.cpp 
-    src/rules_q.cpp 
-    src/rules_r.cpp 
-    src/rules_s.cpp 
-    src/rules_t.cpp 
-    src/rules_u.cpp 
-    src/rules_v.cpp 
-    src/rules_w.cpp 
+    src/rules_a.cpp    src/rules_b.cpp    src/rules_c.cpp 
+    src/rules_d.cpp    src/rules_e.cpp    src/rules_f.cpp 
+    src/rules_g.cpp                       src/rules_i.cpp 
+    src/rules_l.cpp                       src/rules_n.cpp 
+    src/rules_p.cpp    src/rules_q.cpp    src/rules_r.cpp 
+    src/rules_s.cpp    src/rules_t.cpp    src/rules_u.cpp
+    src/rules_v.cpp    src/rules_w.cpp 
 )
 
 cmake_host_system_information(
@@ -59,10 +51,10 @@ if(localhost_RAM_MiB LESS 12000)
     set(SOURCE_LIST
         ${SOURCE_LIST_LOW_MEM}
     )
+    # FixMe: Does it really work??
     set_source_files_properties(${SOURCE_LIST}
         PROPERTIES
-            # allow one core to bypass to compile smaller files
-            JOB_POOL_COMPILE NINJA_JOBS_TWO_CPU
+            JOB_POOL_COMPILE NINJA_JOBS_ONE_CPU
     ) 
 else()
     set(SOURCE_LIST

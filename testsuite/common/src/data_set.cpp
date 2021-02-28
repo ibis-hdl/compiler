@@ -136,7 +136,7 @@ std::string dataset_loader::read_file(fs::path const& file_path)
 }
 
 
-bool dataset_loader::parse_for(std::string const& arg, std::string const& str, std::string& value)
+bool dataset_loader::parse_for(std::string_view arg, std::string_view str, std::string& value)
 {
     auto const pos = str.find(arg);
 
@@ -157,18 +157,21 @@ bool dataset_loader::parse_command_line()
     bool source_prefix_arg{ false };
 
     for(unsigned i = 0; i != argc; i++) {
-        //std::cout << "ArgValue[" << i << "]: " << argv[i] << '\n';
 
-        if(parse_for("--source-dir=", argv[i], source_dir)) {
+        std::string_view const argv_sv{ argv[i] }; // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
+
+        //std::cout << "ArgValue[" << i << "]: " << argv_sv << '\n';
+
+        if(parse_for("--source-dir=", argv_sv, source_dir)) {
             //std::cout << "--source-dir = " << source_dir << '\n';
             source_prefix_arg = true;
         }
 
-        if(parse_for("--input-extension=", argv[i], input_extension)) {
+        if(parse_for("--input-extension=", argv_sv, input_extension)) {
             //std::cout << "--input-extension=" << input_extension << '\n';
         }
 
-        if(parse_for("--expected-extension=", argv[i], expected_extension)) {
+        if(parse_for("--expected-extension=", argv_sv, expected_extension)) {
             //std::cout << "--expected-extension=" << expected_extension << '\n';
         }
 
@@ -176,7 +179,7 @@ bool dataset_loader::parse_command_line()
 
     if(!source_prefix_arg) {
         std::cerr << "ERROR(testsuite::dataset_loader) "
-                  << argv[0] << " --source-dir= must be given\n";
+                  << argv[0] << " --source-dir= must be given\n"; // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
         return false;
     }
 

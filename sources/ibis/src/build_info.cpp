@@ -5,6 +5,8 @@
  *      Author: olaf
  */
 
+#include <ibis/build_info.hpp>
+
 #include <boost/version.hpp>
 #include <boost/config.hpp>
 
@@ -26,3 +28,12 @@ void build_info(std::ostream& os)
 }
 
 } // namespace ibis
+
+/* FixMe: There are also:
+    #cmakedefine BUILD_PLATFORM "@BUILD_PLATFORM@"
+    #cmakedefine BUILD_TYPE "@BUILD_TYPE@"
+    #cmakedefine BUILD_CFLAGS "@BUILD_CFLAGS@"
+    #cmakedefine BUILD_CXXFLAGS "@BUILD_CXXFLAGS@"
+    #cmakedefine BUILD_LINKFLAGS "@BUILD_LINKFLAGS@"
+    #cmakedefine BUILD_SYSTEM "@BUILD_SYSTEM@"
+*/

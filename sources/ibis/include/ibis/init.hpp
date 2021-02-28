@@ -30,7 +30,7 @@ public:
 private:
     void parse_cli(int argc, const char* argv[]);
     void l10n();
-    void register_signal_handlers();
+    static void register_signal_handlers();
     void user_config_message_color();
 
 private:

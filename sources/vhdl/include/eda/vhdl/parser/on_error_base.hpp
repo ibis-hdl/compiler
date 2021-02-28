@@ -56,7 +56,7 @@ private:
      * @param which The spirit.x3 BNF rule name.
      * @return Beautified name of the rule.
      */
-    std::string_view lookup(std::string_view which) const;
+    static std::string_view lookup(std::string_view which);
 
     /**
      * Make a error description based on spirit.x3 BNF rule name.
@@ -64,7 +64,7 @@ private:
      * @param which The spirit.x3 BNF rule name.
      * @return An parser error message.
      */
-    std::string make_error_description(std::string_view which) const;
+    static std::string make_error_description(std::string_view which);
 };
 
 } // namespace parser

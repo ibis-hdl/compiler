@@ -39,10 +39,10 @@ public:
     result operator()(ast::process_statement const& node) const;
 
 private:
-    result compare(
-        ast::identifier const& start_label, ast::optional<ast::identifier> const& end_label) const;
-    result compare(ast::optional<ast::identifier> const& start_label,
-        ast::optional<ast::identifier> const& end_label) const;
+    static result compare(
+        ast::identifier const& start_label, ast::optional<ast::identifier> const& end_label);
+    static result compare(ast::optional<ast::identifier> const& start_label,
+        ast::optional<ast::identifier> const& end_label);
 };
 
 /**

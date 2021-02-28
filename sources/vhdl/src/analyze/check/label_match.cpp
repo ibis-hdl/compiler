@@ -46,7 +46,7 @@ namespace vhdl {
 namespace analyze {
 
 label_match::result label_match::compare(
-    ast::identifier const& start_label, ast::optional<ast::identifier> const& end_label) const
+    ast::identifier const& start_label, ast::optional<ast::identifier> const& end_label)
 {
     if (end_label) {
 
@@ -62,7 +62,7 @@ label_match::result label_match::compare(
 }
 
 label_match::result label_match::compare(ast::optional<ast::identifier> const& start_label,
-    ast::optional<ast::identifier> const& end_label) const
+    ast::optional<ast::identifier> const& end_label)
 {
     if (end_label && !start_label) {
         return result::ILLFORMED;

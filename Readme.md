@@ -112,7 +112,14 @@ ToDo on design
   https://blog.kitware.com/static-checks-with-cmake-cdash-iwyu-clang-tidy-lwyu-cpplint-and-cppcheck/)
   
   - $ cmake "-DCMAKE_CXX_CLANG_TIDY=clang-tidy" ../path/to/source
-    or simply enable the option DEVELOPER_RUN_CLANG_TIDY
+    or simply enable the option DEVELOPER_RUN_CLANG_TIDY or run build
+    tool, e.g. ninja. The projects compiles with clang-tidy in front of-
+  - testsuite is heavy to improve due to heavy use of macros by boost.test
+  - not checked:
+    - RapidJSON parts of init.cpp isn't checked since it may be replaced
+      by boost.json
+    - ibis/src/stacktrace_{boost,gdb}.cpp since they need more effort
+      to check and rewrite/improve
 
 - check git hooks using clang-format
 
@@ -137,3 +144,67 @@ ToDo on design
 - organize convenience scripts into sub dir - or write a doc how use it on command 
   line for use with copy&paste (best approach IMO).
 
+
+C++ Code style
+--------------
+
+### C++ preprocessing
+See [Undefining the C++ Pre-processor](https://cor3ntin.github.io/posts/undef_preprocessor/)
+
+### CLang Tidy
+
+See project's .clang-tidy' and 
+[protozero/.clang-tidy](https://github.com/mapbox/protozero/blob/master/.clang-tidy)
+
+Reworking for Options from 2018:
+        ```
+        ---
+        Checks: "-*,\
+        cert-*,\
+        -cert-err58-cpp,\
+        clang-analyzer-*,\
+        -clang-analyzer-optin.cplusplus.VirtualCall,\
+        cppcoreguidelines-*,\
+        -cppcoreguidelines-pro-bounds-array-to-pointer-decay,\
+        -cppcoreguidelines-pro-type-const-cast,\
+        -cppcoreguidelines-pro-type-member-init,\
+        -cppcoreguidelines-pro-type-vararg,\
+        -cppcoreguidelines-avoid-magic-numbers,\
+        misc-*,\
+        modernize-*,\
+        -modernize-use-trailing-return-type,\
+        -modernize-concat-nested-namespaces,\
+        readability-*,\
+        -readability-magic-numbers,\
+        -readability-redundant-access-specifiers,\
+        performance-*,\
+        "
+        HeaderFilterRegex: '*\.(hpp|h)$'
+        ...
+        ```
+
+#### FixMe
+
+- modernize-concat-nested-namespaces:
+  *ToDo: can be done be clang-format?*
+
+- [cert-err58-cpp](https://clang.llvm.org/extra/clang-tidy/checks/cert-err58-cpp.html):
+  *It's correct, but depend on others libraries.*
+
+- [cppcoreguidelines-pro-bounds-array-to-pointer-decay](https://clang.llvm.org/extra/clang-tidy/checks/cppcoreguidelines-pro-bounds-array-to-pointer-decay.html)
+  *Ignored at this time. With C++20 with get [std::span](https://en.cppreference.com/w/cpp/container/span) 
+   aka gsl::span aka gsl:: gsl::array_view. Also starting with C++20 we has also 
+   [std::source_location](https://en.cppreference.com/w/cpp/utility/source_location) which simplifies assert macros.*
+
+
+#### permanently disabled
+
+- [modernize-use-trailing-return-type](https://clang.llvm.org/extra/clang-tidy/checks/modernize-use-trailing-return-type.html): 
+  *This transformation is purely stylistic. We are not quite that modern.*
+
+- [readability-magic-numbers](https://clang.llvm.org/extra/clang-tidy/checks/readability-magic-numbers.html), cppcoreguidelines-avoid-magic-numbers:
+  *This goes too far to force this everywhere. Also, it's not applicable mostly here.*
+
+- [readability-redundant-access-specifiers](https://clang.llvm.org/extra/clang-tidy/checks/readability-redundant-access-specifiers.html):
+  *It's correct, but serves here for segmentation in their tasks or functions.*
+  

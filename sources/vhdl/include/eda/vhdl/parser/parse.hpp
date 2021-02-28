@@ -12,6 +12,7 @@
 
 #include <iosfwd>
 #include <string>
+#include <string_view>
 #include <exception>
 
 namespace eda {
@@ -39,10 +40,10 @@ public:
     bool operator()(std::string const& input, ast::design_file& design_file) /* const */;
 
 private:
-    std::string make_exception_description(
-        std::exception const& exception, std::string const& filename) const;
+    static std::string make_exception_description(
+        std::exception const& exception, std::string_view filename);
 
-    std::string make_exception_description(std::string const& filename) const;
+    static std::string make_exception_description(std::string_view filename);
 
 private:
     // clang-format off

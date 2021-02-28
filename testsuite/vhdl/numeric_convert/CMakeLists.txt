@@ -28,10 +28,10 @@ target_link_libraries(${PROJECT_NAME}
 #set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-v")
 
 
-if(EDA_EXTERNAL_BOOST_SPIRIT_X3)
+if(DEVELOPER_EXTERNAL_BOOST_SPIRIT_X3)
     add_dependencies(${PROJECT_NAME} boost-spirit-x3)
 endif()
-if(EDA_EXTERNAL_BOOST_UTF)
+if(DEVELOPER_EXTERNAL_BOOST_UTF)
     add_dependencies(${PROJECT_NAME} boost-utf)
 endif()
 

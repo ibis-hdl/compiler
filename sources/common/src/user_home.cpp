@@ -60,7 +60,7 @@ fs::path user_home_dir(std::initializer_list<char const*> path_list)
         throw std::runtime_error("Fatal: " + path.make_preferred().string() + ": " + ec.message());
     }
 
-    for (auto dir : path_list) {
+    for (const auto *const dir : path_list) {
         path /= dir;
     }
 

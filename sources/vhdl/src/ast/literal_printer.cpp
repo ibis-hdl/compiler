@@ -16,12 +16,10 @@
 
 namespace /* anonymous */ {
 
-struct unquote_predicate {
-    unquote_predicate()
-        : prev_char{ 0 }
-        , dbl_quote_printed{ false }
-    {
-    }
+class unquote_predicate 
+{
+public:
+    unquote_predicate() = default;
 
     bool operator()(char chr)
     {
@@ -51,8 +49,9 @@ struct unquote_predicate {
         return flag;
     }
 
-    char prev_char;
-    bool dbl_quote_printed;
+private:
+    char prev_char{ 0 };
+    bool dbl_quote_printed{ false };
 };
 
 } // anonymous namespace
@@ -136,8 +135,8 @@ std::ostream& literal_printer::print(std::ostream& os) const
             }
 
             os << '#';
-            
-            if (lit.number.exponent) {
+
+            if (!lit.number.exponent.empty()) {
                 os << lit.number.exponent;
             }
         },

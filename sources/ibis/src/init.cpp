@@ -53,6 +53,7 @@
 
 namespace ibis {
 
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
 init::init(int argc, const char* argv[], eda::settings& setting_)
     : setting{ setting_ }
 {
@@ -65,12 +66,13 @@ init::init(int argc, const char* argv[], eda::settings& setting_)
     user_config_message_color();
 }
 
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
 void init::parse_cli(int argc, const char* argv[])
 {
     using boost::locale::format;
     using boost::locale::translate;
 
-    static const char EDA_URL[] = R"(https://github.com/???/ibis)";
+    static std::string_view const EDA_URL{ R"(https://github.com/???/ibis)" };
 
     CLI::App app{ EDA_IBIS_VERSION_STR };
 
@@ -154,7 +156,7 @@ void init::parse_cli(int argc, const char* argv[])
             ;
         app.add_option("--tab-size", cli_parameter.tab_size) // XXX unused in e.g. error_handler.cpp
             ->description(translate("Tabulator size, affects printing source snippet on error printing."))
-            ->check(CLI::Range(1u, 10u))
+            ->check(CLI::Range(1, 10))
             ->group(message_group)
             ;
 
@@ -244,19 +246,19 @@ void init::parse_cli(int argc, const char* argv[])
      * Solution: Maybe use boost.property_tree and reuse settings::option_trigger
      * as option for option dependencies??? */
 
-    if (app.count("--version") != 0u) {
+    if (app.count("--version") != 0) {
         std::cout << EDA_IBIS_VERSION_STR << '\n';
         std::exit(EXIT_SUCCESS);
     }
 
-    if (app.count("--build-info") != 0u) {
+    if (app.count("--build-info") != 0) {
         build_info(std::cout);
         std::exit(EXIT_SUCCESS);
     }
 
     // helper for configure settings from CLI args
     auto const set_flag = [&](std::string const& flag, bool value = true) {
-        if (app.count(flag) != 0u) {
+        if (app.count(flag) != 0) {
             setting.set(flag, value);
         }
     };
@@ -268,7 +270,7 @@ void init::parse_cli(int argc, const char* argv[])
     // Primary Options
     setting.set("--files", cli_parameter.hdl_files);
 
-    if (app.count("--hdl-lib-path") != 0u) {
+    if (app.count("--hdl-lib-path") != 0) {
         setting.set("--hdl-lib-path", cli_parameter.hdl_lib_path);
     }
 
@@ -276,7 +278,7 @@ void init::parse_cli(int argc, const char* argv[])
     set_flag("--analyze");
 
     // Message Options
-    if (app.count("--verbose") != 0u) {
+    if (app.count("--verbose") != 0) {
         setting.set<long>("--verbose", cli_parameter.verbose);
     }
 
@@ -294,7 +296,7 @@ void init::parse_cli(int argc, const char* argv[])
     setting.set<long>("--ferror-limit", cli_parameter.error_limit);
 
     // Locale Options
-    if (app.count("--locale-dir") != 0u) {
+    if (app.count("--locale-dir") != 0) {
         setting.set("--locale-dir", cli_parameter.locale_dir);
     }
 
@@ -481,17 +483,18 @@ void init::l10n()
 {
     using namespace boost::locale;
     using namespace eda;
+    using namespace std::literals;
 
 #if (BOOST_OS_WINDOWS)
-    const char backend_str[] = "winapi";
+    static const std::string_view backend_sv{ "winapi" };
 #else
-    const char backend_str[] = "std";
+    static const std::string_view backend_sv{ "std" };
 #endif
 
     // [Using Localization Backends](
     //  https://www.boost.org/doc/libs/1_68_0/libs/locale/doc/html/using_localization_backends.html)
     localization_backend_manager l10n_backend = localization_backend_manager::global();
-    l10n_backend.select(backend_str);
+    l10n_backend.select(static_cast<std::string>(backend_sv));
     generator gen_{ l10n_backend };
     localization_backend_manager::global(l10n_backend);
 
@@ -500,9 +503,8 @@ void init::l10n()
     auto const l10n_path = [this] {
         if (setting["locale-dir"]) {
             return fs::path{ setting["locale-dir"].get<std::string>() };
-        } else {
-            return ::eda::util::user_home_dir({ ".eda", "l10n" });
         }
+        return ::eda::util::user_home_dir({ ".eda", "l10n" });
     }();
 
     boost::system::error_code ec;
@@ -515,14 +517,13 @@ void init::l10n()
             // FixMe: notice or warning level for those message
             std::cerr << R"(locale directory ')" << l10n_path.string()
                       << R"( failure: )" << ec.message() << std::endl;
-            }
+        }
         return;
     }
-    else {
-        if (verbose > 2) {
-            std::cout << "LC_PATH = " 
-                      << lc_path.make_preferred().string() << std::endl;
-        }
+
+    if (verbose > 2) {
+        std::cout << "LC_PATH = " 
+                    << lc_path.make_preferred().string() << std::endl;
     }
 
     gen.add_messages_path(lc_path.make_preferred().string());

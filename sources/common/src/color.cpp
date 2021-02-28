@@ -13,10 +13,10 @@ namespace eda {
 namespace color {
 
 // static std::locale::id for each facet
-template <> std::locale::id message_facet<message::severity::failure>::id;
-template <> std::locale::id message_facet<message::severity::error>::id;
-template <> std::locale::id message_facet<message::severity::warning>::id;
-template <> std::locale::id message_facet<message::severity::note>::id;
+template <> std::locale::id message_facet<message::severity::failure>::id;  // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
+template <> std::locale::id message_facet<message::severity::error>::id;    // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
+template <> std::locale::id message_facet<message::severity::warning>::id;  // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
+template <> std::locale::id message_facet<message::severity::note>::id;     // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 
 std::optional<color::attribute> text_attr(std::string_view name)
 {

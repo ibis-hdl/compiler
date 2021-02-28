@@ -17,7 +17,7 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 
-if(EDA_EXTERNAL_BOOST_SPIRIT_X3)
+if(DEVELOPER_EXTERNAL_BOOST_SPIRIT_X3)
     add_dependencies(${PROJECT_NAME} boost-spirit-x3)
 endif()
 
@@ -35,8 +35,8 @@ target_sources(${PROJECT_NAME}
         
         src/parser/error_handler.cpp
         src/parser/on_error_base.cpp
-        src/parser/grammar.cpp  # ---- memory exhausting @compile time ----
-        src/parser/parse.cpp
+        #src/parser/grammar.cpp  # ---- memory exhausting @compile time ----
+        #src/parser/parse.cpp
         
         src/analyze/error_handler.cpp
         src/analyze/check/label_match.cpp

@@ -91,7 +91,7 @@ bool syntax_worker::keyword_matches(ast::process_statement const& node, std::str
     //       error messages aren't possible this way.
     // FixMe: pretty error rendering
 
-    // FixMe: If pretty_node_name lookup failed, give a warning to developer
+    // FixMe: If pretty_node_name lookup failed, give a warning to user/developer
 
     using boost::locale::format;
     using boost::locale::translate;

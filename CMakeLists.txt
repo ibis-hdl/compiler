@@ -19,7 +19,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 
-list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+list(APPEND 
+    CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake
+    CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/module
+)
 
 include(prevent_in_source_builds)
 include(options_build)
@@ -74,6 +77,8 @@ find_package(Threads REQUIRED)
 # Todo: as of v1.75.0 boost has boost.JSON
 include(external_json)
 include(external_cli11)
+# ToDo: stick at C++17 gsl::string_span, with C++20 std::span [unused]
+include(external_gsl) 
 
 
 ## 

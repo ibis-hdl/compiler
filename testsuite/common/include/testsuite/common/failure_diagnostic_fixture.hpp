@@ -26,13 +26,13 @@ public:
     void teardown();
 
 public:
-    bool current_test_passing() const;
+    static bool current_test_passing();
 
-    void failure_closure (
+    static void failure_closure (
         std::string const& test_case_name,
         std::string const& input,
         std::string const& result
-    ) const;
+    );
 
 private:
     class writer;

@@ -19,6 +19,7 @@ extern bool register_stacktrace_signal_handler();
 
 namespace ibis {
 
+#if 0 // avoid LINT errors
 void testing_signal_handler()
 {
 #if 0 // doesn't work ????
@@ -34,7 +35,7 @@ void testing_signal_handler()
         std::cout << "100 / " << n-- << " = " << r << '\n';
     }
 }
-
+#endif
 
 const char* signal_name(int sig_num)
 {

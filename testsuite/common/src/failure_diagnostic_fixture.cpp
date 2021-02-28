@@ -44,8 +44,7 @@ private:
     bool create_directory(fs::path const& write_path);
     bool write_file(fs::path const& filename, std::string const& contents);
 
-private:
-    bool parse_for(std::string const& arg, std::string const& str, std::string& value);
+    static bool parse_for(std::string_view arg, std::string_view str, std::string& value);
     bool parse_command_line();
 
 private:
@@ -72,7 +71,7 @@ void failure_diagnostic_fixture::teardown() { }
 
 /* [Detect if boost test case failed](
  *  https://stackoverflow.com/questions/18466857/detect-if-boost-test-case-failed?answertab=active#tab-top) */
-bool failure_diagnostic_fixture::current_test_passing() const
+bool failure_diagnostic_fixture::current_test_passing()
 {
     using namespace boost::unit_test;
     auto const id = framework::current_test_case().p_id;
@@ -85,7 +84,7 @@ void failure_diagnostic_fixture::failure_closure(
     std::string const& test_case_name,
     std::string const& input,
     std::string const& result
-) const
+)
 {
     auto const display_closure = [&](std::ostream& os)
     {
@@ -101,7 +100,7 @@ void failure_diagnostic_fixture::failure_closure(
 
         os << header(" INPUT ", width)
            << boost::trim_right_copy(input)
-            << header(" RESULT ", width)
+           << header(" RESULT ", width)
            << result
            << header("", width);
     };
@@ -223,7 +222,7 @@ void failure_diagnostic_fixture::writer::write(std::string const& parse_result)
 }
 
 
-bool failure_diagnostic_fixture::writer::parse_for(std::string const& arg, std::string const& str, std::string& value)
+bool failure_diagnostic_fixture::writer::parse_for(std::string_view arg, std::string_view str, std::string& value)
 {
     auto const pos = str.find(arg);
 
@@ -245,14 +244,17 @@ bool failure_diagnostic_fixture::writer::parse_command_line()
     bool destination_dir_arg{ false };
 
     for(unsigned i = 0; i != argc; i++) {
-        //std::cout << "ArgValue[" << i << "]: " << argv[i] << '\n';
 
-        if(parse_for("--destination-dir=", argv[i], destination_dir)) {
+        std::string_view const argv_sv{ argv[i] }; // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
+
+        //std::cout << "ArgValue[" << i << "]: " << argv_sv << '\n';
+
+        if(parse_for("--destination-dir=", argv_sv, destination_dir)) {
            //std::cout << "--destination-dir = " << destination_prefix << '\n';
             destination_dir_arg = true;
         }
 
-        if(parse_for("--write-extension=", argv[i], write_extension)) {
+        if(parse_for("--write-extension=", argv_sv, write_extension)) {
             //std::cout << "--write-extension = " << write_extension << '\n';
         }
 
@@ -260,7 +262,7 @@ bool failure_diagnostic_fixture::writer::parse_command_line()
 
     if(!destination_dir_arg) {
         std::cerr <<"WARNING(" << name_self << ") "
-                  << argv[0] << " --destination-dir= must be given\n"
+                  << argv[0] << " --destination-dir= must be given\n" // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
                   << "fallback to default "
                   << destination_dir << '\n';
         return false;

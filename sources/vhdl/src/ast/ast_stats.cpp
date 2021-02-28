@@ -19,7 +19,9 @@ namespace ast {
 
 namespace detail {
 
-struct collect_worker {
+class collect_worker 
+{
+public:
     using map_type = std::unordered_map<std::string_view, std::size_t>;
     using set_type = std::unordered_set<std::string_view>;
 
@@ -39,6 +41,7 @@ struct collect_worker {
         }
     }
 
+private:
     // clang-format off
     map_type&                           count_map;
     set_type&                           untagged_node;
@@ -49,7 +52,6 @@ struct collect_worker {
 
 ast_stats::ast_stats(ast::design_file const& design_file)
 {
-
     using worker = ast::basic_ast_walker<detail::collect_worker>;
 
     worker collector{ count_map, untagged_nodes };
@@ -78,9 +80,9 @@ auto ast_stats::sort_by_count(bool ascending) const
 
         if (ascending_) {
             return std::function<bool (pair_type const&, pair_type const&)>{ ascending_predicate };
-        } else {
-            return std::function<bool (pair_type const&, pair_type const&)>{ descending_predicate };
         }
+
+        return std::function<bool (pair_type const&, pair_type const&)>{ descending_predicate };
     }(ascending);
 
     std::vector<pair_type> vec{ count_map.begin(), count_map.end() };

@@ -78,7 +78,7 @@ public:
     /* alternative read method using seek
      * \see[How to read in a file in C++](
      * https://insanecoding.blogspot.com/2011/11/how-to-read-in-file-in-c.html) */
-    std::optional<std::string> read_file_alt(std::string const& filename) const;
+    static std::optional<std::string> read_file_alt(std::string const& filename);
 
     /* Time point of last write occurrence. If the time cannot be determined,
      * returns (std::time_t)(-1).

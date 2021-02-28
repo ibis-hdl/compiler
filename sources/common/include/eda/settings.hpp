@@ -190,7 +190,7 @@ public:
     static std::ostream& print(std::ostream& os, settings::option_value const& value);
 
 private:
-    void debug_print(std::string const& option_name, settings::option_value const& value) const;
+    static void debug_print(std::string const& option_name, settings::option_value const& value);
 
 private:
     /** Trim leading '--' chars from key. */

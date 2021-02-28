@@ -60,7 +60,7 @@ public:
     return_type operator()(ast::based_literal const& literal) const;
 
 private:
-    struct report_error;
+    class report_error;
 
 private:
     // clang-format off

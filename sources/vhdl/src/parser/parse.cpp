@@ -82,7 +82,7 @@ bool parse::operator()(std::string const& input, ast::design_file& design_file)
 }
 
 std::string parse::make_exception_description(
-    std::exception const& exception, std::string const& filename) const
+    std::exception const& exception, std::string_view filename)
 {
     using boost::locale::format;
     using boost::locale::translate;
@@ -97,7 +97,7 @@ std::string parse::make_exception_description(
     // clang-format on
 };
 
-std::string parse::make_exception_description(std::string const& filename) const
+std::string parse::make_exception_description(std::string_view filename)
 {
     using boost::locale::format;
     using boost::locale::translate;

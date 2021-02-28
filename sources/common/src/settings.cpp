@@ -34,10 +34,18 @@ std::ostream& settings::dump(std::ostream& os) const
         os << "    " << option_name << ": ";
         // clang-format off
         std::visit(util::overloaded{
-            [&os](std::monostate) { os << "N/A"; },
-            [&os](bool v) { os << std::boolalpha << v; },
-            [&os](long v) { os << v; },
-            [&os](std::string const& v) { os << v; },
+            [&os](std::monostate /*unused*/) {  // NOLINT(readability-named-parameter)
+                os << "N/A"; 
+            },
+            [&os](bool v) {
+                os << std::boolalpha << v; 
+            },
+            [&os](long v) {
+                os << v;
+            },
+            [&os](std::string const& v) {
+                os << v; 
+            },
             [&os](std::vector<std::string> const& v) {
                 os << "[ ";
                 std::copy(v.begin(), v.end(),
@@ -70,7 +78,7 @@ std::ostream& settings::print(std::ostream& os, settings::option_value const& va
                       util::infix_ostream_iterator<std::string>(std::cout, ", "));
             os << " ]";
         },
-        [&os](std::monostate) {
+        [&os](std::monostate /*unused*/) {  // NOLINT(readability-named-parameter)
             os << "N/A (std::monostate)";
         },
     }, value);
@@ -80,7 +88,7 @@ std::ostream& settings::print(std::ostream& os, settings::option_value const& va
 }
 
 void settings::debug_print(
-    std::string const& option_name, settings::option_value const& value) const
+    std::string const& option_name, settings::option_value const& value)
 {
     std::cout << "lookup[" << option_name << "] = " << value << std::endl;
 }

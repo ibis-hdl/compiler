@@ -57,7 +57,7 @@ template <typename T> struct real_policies : x3::ureal_policies<T> {
 
 using value_type = numeric_convert::value_type; // double
 
-x3::real_parser<value_type, detail::real_policies<value_type>> real_base10;
+x3::real_parser<value_type, detail::real_policies<value_type>> const real_base10;
 
 /*
  * integer types and their parsers
@@ -65,7 +65,7 @@ x3::real_parser<value_type, detail::real_policies<value_type>> real_base10;
 using unsigned_integer = eda::vhdl::intrinsic::unsigned_integer_type;
 using signed_integer = eda::vhdl::intrinsic::unsigned_integer_type;
 
-x3::real_parser<unsigned_integer, detail::integer_policies<unsigned_integer>> uint_base10;
+x3::real_parser<unsigned_integer, detail::integer_policies<unsigned_integer>> const uint_base10;
 
 // decimal parser signed/unsigned
 using uint_parser_type = x3::uint_parser<unsigned_integer, 10>;
@@ -114,10 +114,12 @@ void trace_report(RangeType const& range, RangeFiltType const& range_f, bool par
 
 } // namespace dbg_util
 
-// clang-format off
-#define TRACE(range, range_f, parse_ok, attribute)                             \
+
+// FixMe: warning: function-like macro 'TRACE' used; consider a 'constexpr' template function [cppcoreguidelines-macro-usage]
+// Note: IMO wouldn't work due to use of standard predefined macros __LINE__, __FUNCTION__
+#define TRACE(range, range_f, parse_ok, attribute)  \
     dbg_util::trace_report(range, range_f, parse_ok, attribute, __LINE__, __FUNCTION__)
-// clang-format on
+
 
 /**
  * Parse literal primitives. Mainly the task of this class is to handle the
@@ -130,19 +132,15 @@ void trace_report(RangeType const& range, RangeFiltType const& range_f, bool par
  * Treat all of x3's attribute type as double for simplification, otherwise
  * one has to handle with different return types using C++ lambdas.
  */
-struct primitive_parser {
-    struct bin {
-    };
-    struct oct {
-    };
-    struct dec {
-    };
-    struct hex {
-    };
-    struct real {
-    };
-    struct exp {
-    };
+struct primitive_parser 
+{
+    // tags for overloading
+    struct bin {  };
+    struct oct {  };
+    struct dec {  };
+    struct hex {  };
+    struct real { };
+    struct exp {  };
 
     /**
      * The type, to which all literals will be converted. */
@@ -281,11 +279,10 @@ using real = eda::vhdl::intrinsic::real_type;
 /**
  * Helper class to calculate fractional parts of binary numbers like bin,
  * oct and hex.  */
-struct frac {
+class frac 
+{
+public:
     using numeric_type = double;
-
-    numeric_type const base;
-    numeric_type pow;
 
     explicit frac(numeric_type base_)
         : base{ base_ }
@@ -339,6 +336,10 @@ struct frac {
 
         return result;
     }
+
+    private:
+        numeric_type const base;
+        numeric_type pow;
 };
 
 } // namespace detail
@@ -346,7 +347,7 @@ struct frac {
 auto const primitive_parse{ parser::primitive_parser{} };
 
 /**
- * constructs the numeroc_convert util, errors are reported on os_.
+ * constructs the numeric_convert util, errors are reported on os_.
  */
 numeric_convert::numeric_convert(std::ostream& os_)
     : os{ os_ }
@@ -360,8 +361,9 @@ numeric_convert::numeric_convert(std::ostream& os_)
 /**
  * numeric_convert's private error reporting utility to unify error messages
  */
-struct numeric_convert::report_error {
-    std::ostream& os;
+class numeric_convert::report_error 
+{
+public:
     static constexpr detail::unsigned_integer MAX_VALUE{
         std::numeric_limits<detail::unsigned_integer>::max()
     };
@@ -372,7 +374,7 @@ struct numeric_convert::report_error {
     }
 
     template <typename LiteralType>
-    void overflow_message(std::string const& literal_type, LiteralType const& literal) const
+    void overflow_message(std::string_view literal_type, LiteralType const& literal) const
     {
         using boost::locale::format;
         using boost::locale::translate;
@@ -391,19 +393,19 @@ struct numeric_convert::report_error {
 
     void overflow(ast::bit_string_literal const& literal) const
     {
-        static char const type[]{ "bit string literal" };
+        static std::string_view const type{ "bit string literal" };
         overflow_message(type, literal);
     }
 
     void overflow(ast::decimal_literal const& literal) const
     {
-        static char const type[]{ "decimal literal" };
+        static std::string_view const type{ "decimal literal" };
         overflow_message(type, literal);
     }
 
     void overflow(ast::based_literal const& literal) const
     {
-        static char const type[]{ "based literal" };
+        static std::string_view const type{ "based literal" };
         overflow_message(type, literal);
     }
 
@@ -435,6 +437,8 @@ struct numeric_convert::report_error {
            << '\n';
         // clang-format on
     }
+private:
+    std::ostream& os;
 };
 
 /*******************************************************************************

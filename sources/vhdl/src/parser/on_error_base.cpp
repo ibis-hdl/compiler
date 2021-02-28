@@ -18,7 +18,7 @@ namespace parser {
 
 using namespace std::string_view_literals;
 
-std::string_view on_error_base::lookup(std::string_view which) const
+std::string_view on_error_base::lookup(std::string_view which)
 {
     using rule_map_type = std::unordered_map<std::string_view, std::string_view>;
 
@@ -292,7 +292,7 @@ std::string_view on_error_base::lookup(std::string_view which) const
     return which;
 }
 
-std::string on_error_base::make_error_description(std::string_view which) const
+std::string on_error_base::make_error_description(std::string_view which)
 {
     using boost::locale::format;
     using boost::locale::translate;
