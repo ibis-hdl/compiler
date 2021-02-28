@@ -134,8 +134,12 @@ if(DEVELOPER_RUN_CLANG_TIDY)
   # Don't apply 3rd party libraries, see
   # [What is the correct way of providing header-filter for clang-tidy in Cmake?](
   # https://stackoverflow.com/questions/61001314/what-is-the-correct-way-of-providing-header-filter-for-clang-tidy-in-cmake)
-  set(_filter_re '^((?!/external/|/boost/|/testsuite/).)*$')
-  set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXECUTABLE} -header-filter='${_filter_re}'")
+  set(_filter_re "^((?!/external/|/boost/|/testsuite/).)*$")
+  set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXECUTABLE};-header-filter='${_filter_re}'")
+  # alternative/temporary
+  #set(CLANG_TIDY_CHECKS "-*,modernize-*")
+  #set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXECUTABLE};-checks=${CLANG_TIDY_CHECKS};-header-filter='${_filter_re}'")
+  en
 
   # [How to integrate clang-tidy with CMake](
   #  https://gitlab.kitware.com/cmake/cmake/-/issues/18926)
