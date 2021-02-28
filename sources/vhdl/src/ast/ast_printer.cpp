@@ -131,7 +131,7 @@ void printer::operator()(actual_part const& node)
             os << '\n';
             (*this)(chunk.actual_designator);
         },
-        [this](ast::actual_designator node_) {
+        [this](ast::actual_designator const& node_) {
             (*this)(node_);
         }
     );
@@ -144,7 +144,7 @@ void printer::operator()(actual_part const& node)
             os << '\n';
             (*this)(chunk.actual_designator);
         },
-        [this](ast::actual_designator node_) {
+        [this](ast::actual_designator const& node_) {
             (*this)(node_);
         }
     }, node);
@@ -561,8 +561,6 @@ void printer::operator()(block_statement_part const& node)
 {
     static const std::string_view symbol{ "block_statement_part" };
     symbol_scope<block_statement_part> _(*this, symbol);
-    // FixMe: clang-tidy complains about:
-    // ... which was the starting point of the recursive call chain; there may be other cycles
     visit(node);
 }
 

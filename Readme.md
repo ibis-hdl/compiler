@@ -54,6 +54,20 @@ IIRC the tests passed in 2018. Only problems mentioned in vhdl parser_rules
 
 Other test are fine. Anyway, this is still the main work ground.
 
+Testing hints (verbose flags '-VV'):
+
+  ```
+  # list all test
+  $ ctest -N
+  # run all test and show output on errors
+  $ ctest --output-on-failure 
+  # run specific test <test>
+  $ ctest -R <test>
+  # run specific test <test> and show output on errors
+  $ ctest --output-on-failure -R <test>
+  ```
+
+
 ### App Logging
 
 There are several needs to log to the user. The VHDL assert and 
@@ -196,6 +210,10 @@ Reworking for Options from 2018:
    aka gsl::span aka gsl:: gsl::array_view. Also starting with C++20 we has also 
    [std::source_location](https://en.cppreference.com/w/cpp/utility/source_location) which simplifies assert macros.*
 
+- [-clang-analyzer-optin.cplusplus.VirtualCall](https://clang.llvm.org/extra/clang-tidy/checks/clang-analyzer-optin.cplusplus.VirtualCall.html)
+  *CheckMe*
+
+- [bugprone-*](https://clang.llvm.org/extra/clang-tidy/checks/list.html)
 
 #### permanently disabled
 

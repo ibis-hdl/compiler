@@ -16,6 +16,13 @@ namespace eda {
 namespace vhdl {
 namespace ast {
 
+/// AST printer class
+///
+/// FixMe: clang-tidy got warning: function 'operator()' is within 
+///        a recursive call chain [misc-no-recursion]. The
+///        operator()(block_statement_part const& node) is at least one
+///        origin. Even within testsuite there is no problem, use a
+///        recursion counter to catch it.
 class printer 
 {
 public:

@@ -134,12 +134,13 @@ if(DEVELOPER_RUN_CLANG_TIDY)
   # Don't apply 3rd party libraries, see
   # [What is the correct way of providing header-filter for clang-tidy in Cmake?](
   # https://stackoverflow.com/questions/61001314/what-is-the-correct-way-of-providing-header-filter-for-clang-tidy-in-cmake)
-  set(_filter_re "^((?!/external/|/boost/|/testsuite/).)*$")
-  set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXECUTABLE};-header-filter='${_filter_re}'")
+  # '-header-filter' overrides the 'HeaderFilterRegex' option in .clang-tidy file,
+  # using POSIX RE expression (ERE) syntax (see llvm::Regex Class Reference)
+  set(_cltidy_filter_re "^((?!(/external/|/boost/|/testsuite/)).)*$")
+  set(_cltidy_checks    "-*,modernize-*")
+  set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXECUTABLE};-header-filter='${_cltidy_filter_re}'")
   # alternative/temporary
-  #set(CLANG_TIDY_CHECKS "-*,modernize-*")
-  #set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXECUTABLE};-checks=${CLANG_TIDY_CHECKS};-header-filter='${_filter_re}'")
-  en
+  #set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXECUTABLE};-checks=${_cltidy_checks};-header-filter='${_cltidy_filter_re}'")
 
   # [How to integrate clang-tidy with CMake](
   #  https://gitlab.kitware.com/cmake/cmake/-/issues/18926)

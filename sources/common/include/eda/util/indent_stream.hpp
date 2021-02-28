@@ -25,7 +25,7 @@ public:
     ~indent_sbuf() override
     {
         // start at column 0 again
-        overflow('\n');
+        overflow('\n');  // NOLINT(clang-analyzer-optin.cplusplus.VirtualCall) -- functionally intended
     }
 
     indent_sbuf& increase()
