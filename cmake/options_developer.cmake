@@ -131,7 +131,7 @@ if(DEVELOPER_RUN_CLANG_TIDY)
   endif()
 
   # Run clang-tidy on each of the C++ source file of the project
-  # Don't apply 3rd party libraries, see
+  # Don't apply on 3rd party libraries, see
   # [What is the correct way of providing header-filter for clang-tidy in Cmake?](
   # https://stackoverflow.com/questions/61001314/what-is-the-correct-way-of-providing-header-filter-for-clang-tidy-in-cmake)
   # '-header-filter' overrides the 'HeaderFilterRegex' option in .clang-tidy file,
