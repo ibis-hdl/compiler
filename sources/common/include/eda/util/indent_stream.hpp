@@ -14,7 +14,8 @@
 namespace eda {
 namespace util {
 
-class indent_sbuf : public std::streambuf {
+class indent_sbuf : public std::streambuf 
+{
 public:
     explicit indent_sbuf(std::streambuf* sbuf, size_t start_indent = 0)
         : m_sbuf{ sbuf }
@@ -22,7 +23,13 @@ public:
     {
     }
 
-    ~indent_sbuf() override
+    indent_sbuf(indent_sbuf const&) = delete;
+    indent_sbuf& operator =(indent_sbuf const&) = delete;
+    indent_sbuf(indent_sbuf&&) = delete;
+    indent_sbuf& operator=(indent_sbuf&&) = delete;
+    
+public:
+    ~indent_sbuf() noexcept override
     {
         // start at column 0 again
         overflow('\n');  // NOLINT(clang-analyzer-optin.cplusplus.VirtualCall) -- functionally intended
@@ -93,6 +100,7 @@ private:
 
 static inline std::ostream& increase_indent(std::ostream& os)
 {
+    //NOLINTNEXTLINE(cppcoreguidelines-pro-type-static-cast-downcast) -- assume this is legitimate
     auto* buf = static_cast<indent_sbuf*>(os.rdbuf());
     buf->increase();
     return os;
@@ -100,6 +108,7 @@ static inline std::ostream& increase_indent(std::ostream& os)
 
 static inline std::ostream& decrease_indent(std::ostream& os)
 {
+    //NOLINTNEXTLINE(cppcoreguidelines-pro-type-static-cast-downcast) -- assume this is legitimate
     auto* buf = static_cast<indent_sbuf*>(os.rdbuf());
     buf->decrease();
     return os;

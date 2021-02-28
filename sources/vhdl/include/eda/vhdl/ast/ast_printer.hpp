@@ -26,10 +26,6 @@ namespace ast {
 class printer 
 {
 public:
-    bool verbose_symbol{ false };
-    bool verbose_variant{ false };
-
-public:
     printer(std::ostream& os_, uint16_t start_indent = 0);
 
     void operator()(abstract_literal const& node);
@@ -231,6 +227,10 @@ private:
     // internal helper
     class scope_printer;
 
+    bool verbose_symbol{ false };
+    bool verbose_variant{ false };
+
+private:
     // yet another internal helper
     template <typename T, typename Enable = void> struct symbol_scope;
 

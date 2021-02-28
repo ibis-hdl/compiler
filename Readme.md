@@ -5,13 +5,12 @@ Required Tools to Build & Configuration
 ----------------------------------------
 
 * C++17 compliant compiler, tested with
-    - clang++ 11, g++10 on Linux (in 2021)
+    - clang++ 11 (in 2021), g++10 untested
     - g++ 7.3.0 Windows MinGW (in 2018)
     - Visual Studio 2017, Version 15.8 (in 2018)
 
 * cmake 3.18
-    - GNU make
-    - ninja
+    - ninja (GNU make not well supported by the maintainer)
     
 * python 3 to generate some files
 
@@ -32,6 +31,7 @@ directory from git repositories:
 
 * RapidJSON
 * CLI11
+* GLS (unused yet)
 
 
 ToDo with respect to Implementation
@@ -40,11 +40,55 @@ ToDo with respect to Implementation
 Obviously the intend is to get the parser working and hence the
 project.
 
+
+### Code Fixes
+
+#### Settings Crash
+
+An old problem from beginning rises, see [wandbox](https://wandbox.org/permlink/SklFbT05oHEGFhqW)
+which isn't obviously solved.
+
+```
+#17 ibis::init::l10n (this=...) at .../sources/ibis/src/init.cpp:513
+```
+
+where:
+
+```
+long const verbose = [&] { return setting["verbose"].get<long>(); }();
+```
+
+rises an exception
+
+```
+terminate called after throwing an instance of 'std::bad_variant_access'
+  what():  std::get: wrong index for variant
+```
+
+thrown from
+
+```
+#16 eda::settings::option_value_proxy::get<long> (this=....>) at .../sources/common/include/eda/settings.hpp:107
+```
+
+The source is the boost::variant visitor:
+
+```
+template <typename T> T const& get() const
+{
+    // bad_variant_access thrown on invalid accesses to the value
+    return std::get<T>(option_value);
+}
+```
+
+  Really time to change to boost.property library.
+
 ### Fix Parser Testsuite
 
 IIRC the tests passed in 2018. Only problems mentioned in vhdl parser_rules
 *test_case_FixMe.txt* where known. In 2021 following test
 *test_vhdl_parser_rule* tests failed:
+
   - test_case_name = aggregate/aggregate_001; 
   - test_case_name = aggregate/aggregate_002; 
   - test_case_name = aggregate/aggregate_003; 
@@ -56,16 +100,16 @@ Other test are fine. Anyway, this is still the main work ground.
 
 Testing hints (verbose flags '-VV'):
 
-  ```
-  # list all test
-  $ ctest -N
-  # run all test and show output on errors
-  $ ctest --output-on-failure 
-  # run specific test <test>
-  $ ctest -R <test>
-  # run specific test <test> and show output on errors
-  $ ctest --output-on-failure -R <test>
-  ```
+```
+# list all test
+$ ctest -N
+# run all test and show output on errors
+$ ctest --output-on-failure 
+# run specific test <test>
+$ ctest -R <test>
+# run specific test <test> and show output on errors
+$ ctest --output-on-failure -R <test>
+```
 
 
 ### App Logging
@@ -75,6 +119,9 @@ report messages are obvious. Next are messages of warning and errors
 from VHDL compiler self. Further internal and debugging messages,
 maybe by use of boost.log.
 
+Generally, a lot of information go trough std::cerr without prefix
+or even using colorizing. E.g. on stacktrace_{gdb.boost} it's not 
+clear what comes from what.
 
 
 ToDo on design
@@ -113,12 +160,12 @@ ToDo on design
 
 ### Sources
 
-- replace C comments by C++ comments, see e.g. [Github](https://github.com/mbitsnbites/c-comments-to-cpp)
+- Replace C comments by C++ comments, see e.g. [Github](https://github.com/mbitsnbites/c-comments-to-cpp)
   for a python script. In 2021 it fails with inline comments like signatures
   like foo(int /* unused */). 
   CHECK if there can clang-tidy and clang-format can help
 
-- make clang-tidy and clang-format working again. By The Way, check clang-format
+- Get clang-tidy and clang-format working again. By The Way, check clang-format
   style for enhancements, so that we get rid off the '// 'clang-format {off|on}'
   pragmas especially on class members.
   A good starting point is 
@@ -129,13 +176,14 @@ ToDo on design
     or simply enable the option DEVELOPER_RUN_CLANG_TIDY or run build
     tool, e.g. ninja. The projects compiles with clang-tidy in front of-
   - testsuite is heavy to improve due to heavy use of macros by boost.test
-  - not checked:
-    - RapidJSON parts of init.cpp isn't checked since it may be replaced
+  - not checked by clang-{tidy,format}:
+
+    1. RapidJSON parts of init.cpp isn't checked since it may be replaced
       by boost.json
-    - ibis/src/stacktrace_{boost,gdb}.cpp since they need more effort
+    2. ibis/src/stacktrace_{boost,gdb}.cpp since they need more effort
       to check and rewrite/improve
 
-- check git hooks using clang-format
+- Write git hooks for checking using clang-{tidy,format} et al.
 
 - Replace:
   - boost.filesystem with std::filesystem, check it before for compliance of 
@@ -170,59 +218,61 @@ See [Undefining the C++ Pre-processor](https://cor3ntin.github.io/posts/undef_pr
 See project's .clang-tidy' and 
 [protozero/.clang-tidy](https://github.com/mapbox/protozero/blob/master/.clang-tidy)
 
-Reworking for Options from 2018:
-        ```
-        ---
-        Checks: "-*,\
-        cert-*,\
-        -cert-err58-cpp,\
-        clang-analyzer-*,\
-        -clang-analyzer-optin.cplusplus.VirtualCall,\
-        cppcoreguidelines-*,\
-        -cppcoreguidelines-pro-bounds-array-to-pointer-decay,\
-        -cppcoreguidelines-pro-type-const-cast,\
-        -cppcoreguidelines-pro-type-member-init,\
-        -cppcoreguidelines-pro-type-vararg,\
-        -cppcoreguidelines-avoid-magic-numbers,\
-        misc-*,\
-        modernize-*,\
-        -modernize-use-trailing-return-type,\
-        -modernize-concat-nested-namespaces,\
-        readability-*,\
-        -readability-magic-numbers,\
-        -readability-redundant-access-specifiers,\
-        performance-*,\
-        "
-        HeaderFilterRegex: '*\.(hpp|h)$'
-        ...
-        ```
+Reworking for Options from 2018, here for reference:
+
+```
+---
+Checks: "-*,\
+cert-*,\
+-cert-err58-cpp,\
+clang-analyzer-*,\
+-clang-analyzer-optin.cplusplus.VirtualCall,\
+cppcoreguidelines-*,\
+-cppcoreguidelines-pro-bounds-array-to-pointer-decay,\
+-cppcoreguidelines-pro-type-const-cast,\
+-cppcoreguidelines-pro-type-member-init,\
+-cppcoreguidelines-pro-type-vararg,\
+-cppcoreguidelines-avoid-magic-numbers,\
+misc-*,\
+modernize-*,\
+-modernize-use-trailing-return-type,\
+-modernize-concat-nested-namespaces,\
+readability-*,\
+-readability-magic-numbers,\
+-readability-redundant-access-specifiers,\
+performance-*,\
+"
+HeaderFilterRegex: '*\.(hpp|h)$'
+...
+```
 
 #### FixMe
 
-- modernize-concat-nested-namespaces:
+- [misc-no-recursion](https://clang.llvm.org/extra/clang-tidy/checks/misc-no-recursion.html):  
+  *Until the ast_printer recursive call chain has been solved.*
+
+- modernize-concat-nested-namespaces:  
   *ToDo: can be done be clang-format?*
 
-- [cert-err58-cpp](https://clang.llvm.org/extra/clang-tidy/checks/cert-err58-cpp.html):
+- [cert-err58-cpp](https://clang.llvm.org/extra/clang-tidy/checks/cert-err58-cpp.html):  
   *It's correct, but depend on others libraries.*
 
-- [cppcoreguidelines-pro-bounds-array-to-pointer-decay](https://clang.llvm.org/extra/clang-tidy/checks/cppcoreguidelines-pro-bounds-array-to-pointer-decay.html)
+- [cppcoreguidelines-pro-bounds-array-to-pointer-decay](https://clang.llvm.org/extra/clang-tidy/checks/cppcoreguidelines-pro-bounds-array-to-pointer-decay.html):  
   *Ignored at this time. With C++20 with get [std::span](https://en.cppreference.com/w/cpp/container/span) 
    aka gsl::span aka gsl:: gsl::array_view. Also starting with C++20 we has also 
    [std::source_location](https://en.cppreference.com/w/cpp/utility/source_location) which simplifies assert macros.*
 
-- [-clang-analyzer-optin.cplusplus.VirtualCall](https://clang.llvm.org/extra/clang-tidy/checks/clang-analyzer-optin.cplusplus.VirtualCall.html)
-  *CheckMe*
-
-- [bugprone-*](https://clang.llvm.org/extra/clang-tidy/checks/list.html)
+- [bugprone-*](https://clang.llvm.org/extra/clang-tidy/checks/list.html):  
+  *Check & try me*
 
 #### permanently disabled
 
-- [modernize-use-trailing-return-type](https://clang.llvm.org/extra/clang-tidy/checks/modernize-use-trailing-return-type.html): 
+- [modernize-use-trailing-return-type](https://clang.llvm.org/extra/clang-tidy/checks/modernize-use-trailing-return-type.html):  
   *This transformation is purely stylistic. We are not quite that modern.*
 
-- [readability-magic-numbers](https://clang.llvm.org/extra/clang-tidy/checks/readability-magic-numbers.html), cppcoreguidelines-avoid-magic-numbers:
+- [readability-magic-numbers](https://clang.llvm.org/extra/clang-tidy/checks/readability-magic-numbers.html), cppcoreguidelines-avoid-magic-numbers:  
   *This goes too far to force this everywhere. Also, it's not applicable mostly here.*
 
-- [readability-redundant-access-specifiers](https://clang.llvm.org/extra/clang-tidy/checks/readability-redundant-access-specifiers.html):
+- [readability-redundant-access-specifiers](https://clang.llvm.org/extra/clang-tidy/checks/readability-redundant-access-specifiers.html):  
   *It's correct, but serves here for segmentation in their tasks or functions.*
   

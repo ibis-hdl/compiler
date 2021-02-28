@@ -7,6 +7,7 @@ cppcoreguidelines-*,\
 -cppcoreguidelines-pro-bounds-array-to-pointer-decay,\
 -cppcoreguidelines-avoid-magic-numbers,\
 misc-*,\
+-misc-no-recursion,\
 modernize-*,\
 -modernize-use-trailing-return-type,\
 -modernize-concat-nested-namespaces,\
