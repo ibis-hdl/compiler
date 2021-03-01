@@ -56,13 +56,9 @@ bool valgrind_detected();
 bool token_found(std::string const& token, std::string const& procfs_path);
 std::string get_executable_path();
 
-namespace /* anonymous */
-{
-
-// or semaphore to notify a waiting thread
-volatile std::sig_atomic_t sig_caught;
-
-
+namespace /* anonymous */ {
+// our semaphore to notify a waiting thread
+volatile std::sig_atomic_t sig_caught;  // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 } // anonymous namespace
 
 using ibis::signal_name;
@@ -70,8 +66,11 @@ using ibis::signal_name;
 #if (BOOST_OS_LINUX)
 bool register_gdb_signal_handler()
 {
+    // Note: This is called in the beginning of main's init() function where
+    //       no colors are configured. hence eda::color isn't applicable.
+
     if (gdb_detected() || valgrind_detected()) {
-        std::cerr << "Note: GDB signal handler already installed, skip.\n";
+        std::cerr << "[ibis/Note] GDB signal handler already installed, skip.\n";
         return true;
     }
 
@@ -94,10 +93,13 @@ bool register_gdb_signal_handler()
     return true;
 }
 
+
 void gdb_signal_handler(int signum, siginfo_t* /*unused*/, void* /*unused*/)
 {
     sig_caught = signum;
 
+    // Note: If something goes wrong before the color definitions are loaded and installed
+    //       no colors are here, e.g. main's init() function.
     using failure = eda::color::message::failure;
 
     std::cerr << failure("FAILURE") << " caught signal #"

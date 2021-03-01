@@ -111,7 +111,6 @@ $ ctest -R <test>
 $ ctest --output-on-failure -R <test>
 ```
 
-
 ### App Logging
 
 There are several needs to log to the user. The VHDL assert and 
@@ -160,6 +159,14 @@ ToDo on design
 
 ### Sources
 
+- **FixMe**: As shown in the past, if main's init() function crash and the color
+  code isn't configured, we don't have these functionality even in the
+  stacktrace_{gdb,boost} functions. Maybe a color 'lite support' may solve it, see
+  [boost.UTF setcolor()](https://github.com/boostorg/test/blob/9d863d07e864ef663e3e8573b55905099b938d3e/include/boost/test/utils/setcolor.hpp)
+  or even use eda::color code with defaults set before - see 
+  init::user_config_message_color(). Maybe initialize the streams really early
+  inside init().
+
 - Replace C comments by C++ comments, see e.g. [Github](https://github.com/mbitsnbites/c-comments-to-cpp)
   for a python script. In 2021 it fails with inline comments like signatures
   like foo(int /* unused */). 
@@ -197,6 +204,26 @@ ToDo on design
   - join back testsuite's librules into parser_rules. The reason was in 2018 the 
     compilation effort: compiling with make -j X and spirit.x3 rules with 
     single core. Starting with CMake 3.16 there is the Unity Build Mode.
+
+
+- AST printer: move ast_printer into ast_walker, printer breaks down into simple class
+  like ast_stats.
+
+  - make a contest for ast_walker, like
+
+  struct ast_walker::context {
+      std::string_view current_node_name();
+      int64_t recursive_depth();
+  };
+
+  - use for recursive depth counting a class with ctor/dtor increment/decrement 
+    capabilities - recursive_depth_{counter,guard}
+
+  -  ast_stats.cpp:
+    - ast_stats sort order - use enum sort::{ascending, descending}
+    - worker collector{ count_map, untagged_nodes } fix to
+      worker stats_worker{ count_map, untagged_nodes };
+
 
 ### Others
 

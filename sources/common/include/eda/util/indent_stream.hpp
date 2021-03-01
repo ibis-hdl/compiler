@@ -14,6 +14,25 @@
 namespace eda {
 namespace util {
 
+
+/// An indenting stream buffer
+///
+/// On each increase() member call the indent is increased respectively
+/// decreased on decrease() call. The buffer is intended to be used with
+/// indent_ostream and the IO manipulators increase_indent() and 
+/// decrease_indent()
+///
+/// FixMe: tabwith is hard coded.
+///
+/// Note: clang-tidy may complain about the overloaded overload()
+///       member function, since it can throw inside the destructor
+///       of the class. Yes, it can following
+///       [Can C++ streambuf methods throw exceptions?](
+///        https://stackoverflow.com/questions/19105657/can-c-streambuf-methods-throw-exceptions).
+///       [std::stringbuf::overflow](
+///        http://www.cplusplus.com/reference/sstream/stringbuf/overflow/)
+///       states basic guarantee: if an exception is thrown, the 
+///       stream buffer is in a valid state.
 class indent_sbuf : public std::streambuf 
 {
 public:
@@ -29,7 +48,7 @@ public:
     indent_sbuf& operator=(indent_sbuf&&) = delete;
     
 public:
-    ~indent_sbuf() noexcept override
+    ~indent_sbuf() override
     {
         // start at column 0 again
         overflow('\n');  // NOLINT(clang-analyzer-optin.cplusplus.VirtualCall) -- functionally intended
@@ -73,6 +92,7 @@ private:
             //        behavior. There may be a problem on huge indent size.
             m_sbuf->sputn(m_indent_str.data(), m_indent_str.size());
         }
+
         return put_ret;
     }
 
