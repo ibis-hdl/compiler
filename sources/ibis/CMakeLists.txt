@@ -62,10 +62,18 @@ target_include_directories(${PROJECT_NAME}
 )
 
 
-target_compile_definitions(${PROJECT_NAME} 
-    PRIVATE
-        $<$<BOOL:${EDA_WITH_GDB_STACKTRACE}>:EDA_WITH_GDB_STACKTRACE>
-        $<$<BOOL:${EDA_WITH_BOOST_STACKTRACE}>:EDA_WITH_BOOST_STACKTRACE>  
+# [How to split strings across multiple lines in CMake?](
+#  https://stackoverflow.com/questions/7637539/how-to-split-strings-across-multiple-lines-in-cmake)
+string(CONCAT SIGNAL_HANDLER_DEFINES
+    "$<$<BOOL:${EDA_WITH_GDB_STACKTRACE}>:EDA_WITH_GDB_STACKTRACE>;"
+    "$<$<BOOL:${EDA_WITH_BOOST_STACKTRACE}>:EDA_WITH_BOOST_STACKTRACE>" 
+)
+set_source_files_properties(
+    src/signal_handler.cpp
+    src/stacktrace_gdb.cpp
+    src/stacktrace_boost.cpp 
+    APPEND PROPERTIES 
+        COMPILE_DEFINITIONS "${SIGNAL_HANDLER_DEFINES}"
 )
 
 

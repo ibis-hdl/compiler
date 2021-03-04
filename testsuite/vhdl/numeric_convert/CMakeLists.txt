@@ -48,7 +48,6 @@ target_sources(${PROJECT_NAME}
 )
 
 
-
 set_source_files_properties(src/common/test_numeric_convert.cpp
     APPEND PROPERTIES 
         COMPILE_DEFINITIONS "BOOST_TEST_DYN_LINK" 

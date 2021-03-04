@@ -8,7 +8,7 @@
 #include <ibis/signal_handler.hpp>
 
 #include <eda/color/message.hpp>
-#include <eda/predef.hpp>
+#include <eda/platform.hpp>
 
 #include <csignal>
 #include <functional>

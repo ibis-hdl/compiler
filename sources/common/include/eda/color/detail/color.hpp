@@ -9,7 +9,7 @@
 #define SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_COLOR_HPP_
 
 #include <eda/configuration.hpp>
-#include <eda/predef.hpp>
+#include <boost/predef/os/windows.h>
 
 // clang-format off
 #if BOOST_OS_WINDOWS && !EDA_ON_WINDOWS_USE_ANSII_COLOR
