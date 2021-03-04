@@ -3,6 +3,8 @@
  *
  *  Created on: 05.08.2018
  *      Author: olaf
+ * 
+ * Note: The sources are related to Linux and tested on it.
  */
 
 #include <ibis/signal_handler.hpp>
@@ -27,16 +29,14 @@
 #include <system_error>
 #include <thread>
 
+#include <eda/platform.hpp>
 #include <eda/color/message.hpp>
-
 #include <eda/compiler/compiler_support.hpp>
 
 /*
  * OS specific system headers
  */
-#include <eda/predef.hpp>
-
-#if (BOOST_OS_LINUX)
+#if (BUILD_PLATFORM_UNIX)
 #include <climits> // PATH_MAX
 #include <sys/prctl.h>
 #include <sys/ptrace.h>
@@ -47,7 +47,11 @@
 namespace fs = boost::filesystem;
 namespace bp = boost::process;
 
-#if (BOOST_OS_LINUX)
+#if !defined(BUILD_SYSTEM_LINUX)
+#error("stackstrace using GDB runs on Linux only!")
+#endif
+
+#if (BUILD_PLATFORM_UNIX)
 void gdb_signal_handler(int signum, siginfo_t* /*unused*/, void* /*unused*/);
 #endif
 bool gdb_detected();
@@ -63,22 +67,26 @@ volatile std::sig_atomic_t sig_caught;  // NOLINT(cppcoreguidelines-avoid-non-co
 
 using ibis::signal_name;
 
-#if (BOOST_OS_LINUX)
+#if (BUILD_PLATFORM_UNIX)
 bool register_gdb_signal_handler()
 {
     // Note: This is called in the beginning of main's init() function where
-    //       no colors are configured. hence eda::color isn't applicable.
+    //       no colors are configured, hence eda::color isn't applicable.
 
     if (gdb_detected() || valgrind_detected()) {
         std::cerr << "[ibis/Note] GDB signal handler already installed, skip.\n";
         return true;
     }
 
-    struct sigaction sa;
+    // FixMe: write it to debug stream as all the others below
+    std::cerr << "[ibis/Note] :-(\n"
+              << "[ibis/Note] GDB signal handler requested:\n";
+
+    struct sigaction sa{};
     memset(&sa, 0, sizeof(sa));
 
     using sigaction_fcn_t = void (*)(int, siginfo_t*, void*);
-    sa.sa_sigaction = static_cast<sigaction_fcn_t>(gdb_signal_handler);
+    sa.sa_sigaction = static_cast<sigaction_fcn_t>(gdb_signal_handler); // NOLINT(cppcoreguidelines-pro-type-union-access)
 
     sigemptyset(&sa.sa_mask);
     sa.sa_flags = SA_RESTART | SA_SIGINFO;
@@ -102,13 +110,13 @@ void gdb_signal_handler(int signum, siginfo_t* /*unused*/, void* /*unused*/)
     //       no colors are here, e.g. main's init() function.
     using failure = eda::color::message::failure;
 
-    std::cerr << failure("FAILURE") << " caught signal #"
+    std::cerr << failure("[ibis/Note] FAILURE") << " caught signal #"
               << signum << " (" << signal_name(signum) << ")\n";
 
     fs::path gdb_exe = bp::search_path("gdb");
 
-    if (cxx_expect_not(gdb_exe.empty())) {
-        std::cerr << "ERROR: gdb not found\n";
+    if (gdb_exe.empty()) {
+        std::cerr << "[ibis/Note] ERROR: gdb not found\n";
         // XXXX
         return;
     }
@@ -124,30 +132,30 @@ void gdb_signal_handler(int signum, siginfo_t* /*unused*/, void* /*unused*/)
             get_executable_path(),  // required symbol data in the executable
             std::to_string(getpid())
         },
-        bp::extend::on_setup([](auto&) {
-            std::cout << "try to launch GDB process from PID = "
+        bp::extend::on_setup([](auto& /*unused*/) {
+            std::cout << "[ibis/Note] try to launch GDB process from PID = "
                       << getpid() << '\n';
         }),
-        bp::extend::on_error([](auto&, std::error_code const& ec) {
-            std::cerr << "error occurred while trying to launch the process: "
+        bp::extend::on_error([](auto& /*unused*/, std::error_code const& ec) {
+            std::cerr << "[ibis/Note] error occurred while trying to launch the process: "
                       << ec.message() << '\n';
         }),
-        bp::extend::on_fork_error([](auto&, std::error_code const& ec) {
-            std::cerr << "error occurred during the call of fork(): "
+        bp::extend::on_fork_error([](auto& /*unused*/, std::error_code const& ec) {
+            std::cerr << "[ibis/Note] error occurred during the call of fork(): "
                       << ec.message() << '\n';
         }),
-        bp::extend::on_exec_error([](auto&, std::error_code const& ec) {
-            std::cerr << "call of execve() failed: "
+        bp::extend::on_exec_error([](auto& /*unused*/, std::error_code const& ec) {
+            std::cerr << "[ibis/Note] call of execve() failed: "
                       << ec.message() << '\n';
         }),
-        bp::extend::on_success([](auto&) {
-            std::cout << "GDB process successfully launched.\n";
+        bp::extend::on_success([](auto& /*unused*/) {
+            std::cout << "[ibis/Note] GDB process successfully launched:\n\n";
         })
     };
     // clang-format on
 
     if (!gdb_proc.valid()) {
-        std::cerr << "unable to fork() GDB\n";
+        std::cerr << "[ibis/Note] unable to fork() GDB\n";
         return;
     }
 
@@ -174,18 +182,18 @@ bool gdb_detected()
 {
     static std::optional<bool> result{};
 
+    // check for cached result gathered before
     if (result) {
         return *result;
     }
 
-#if (BOOST_OS_LINUX)
-
     /* Detect GDB by the mean of /proc/$PID/cmdline for "gdb" */
-    {
+    if constexpr (eda::build_system == eda::system::Linux) {
         std::stringstream path{};
         path << "/proc/" << getppid() << "/cmdline";
 
         if (token_found("gdb", path.str())) {
+            // cache success
             *result = true;
             return *result;
         }
@@ -214,56 +222,44 @@ bool gdb_detected()
     }
 #endif
 
-#else
-#if !defined(_MSC_VER)
-#warning "detecting GNU/GDB incomplete for OS specific build"
-#else
-#pragma message("WARNING: detecting GNU/GDB incomplete for OS specific build")
-#endif
-#endif
-
+    // cache failed
     *result = false;
     return *result;
 }
 
 bool valgrind_detected()
 {
-#if RUNNING_ON_VALGRIND
-    return true;
-#endif
-
     static std::optional<bool> result{};
 
+    // check for cached result gathered before
     if (result) {
         return *result;
     }
 
-    /* [How can I detect if a program is running from within valgrind?](
-     * https://stackoverflow.com/questions/365458/how-can-i-detect-if-a-program-is-running-from-within-valgrind)
-     */
-    const char* val = std::getenv("RUNNING_ON_VALGRIND");
-    if (val != nullptr) {
-        *result = true;
-        return *result;
+    if constexpr(eda::build_platform == eda::platform::Unix) {
+        /* [How can I detect if a program is running from within valgrind?](
+         *  https://stackoverflow.com/questions/365458/how-can-i-detect-if-a-program-is-running-from-within-valgrind)
+         */
+        const char* val = std::getenv("RUNNING_ON_VALGRIND");
+        if (val != nullptr) {
+            // chache success
+            *result = true;
+            return *result;
+        }
     }
 
-#if (BOOST_OS_LINUX)
-    /* [how to set dynamic link library path and environment variable for a process in valgrind](
-     * https://stackoverflow.com/questions/24745120/how-to-set-dynamic-link-library-path-and-environment-variable-for-a-process-in-v)
-     * ... not very sophisticated implemented  */
-    if (token_found("vgpreload", "/proc/self/maps")) {
-        *result = true;
-        return *result;
+    if constexpr(eda::build_system == eda::system::Linux) {
+        /* [how to set dynamic link library path and environment variable for a process in valgrind](
+         *  https://stackoverflow.com/questions/24745120/how-to-set-dynamic-link-library-path-and-environment-variable-for-a-process-in-v)
+         * ... not very sophisticated implemented  */
+        if (token_found("vgpreload", "/proc/self/maps")) {
+            // cache success
+            *result = true;
+            return *result;
+        }
     }
 
-#else
-#if !defined(_MSC_VER)
-#warning "detecting Valgrind incomplete for OS specific build"
-#else
-#pragma message("detecting Valgrind incomplete for OS specific build")
-#endif
-#endif
-
+    // cache failed
     *result = false;
     return *result;
 }
@@ -280,7 +276,7 @@ bool token_found(std::string const& token, std::string const& procfs_path)
     std::ifstream procfs{ procfs_path };
 
     if (!procfs.is_open()) {
-        perror(("error while opening " + procfs_path).c_str());
+        perror(("[ibis/Note] error while opening " + procfs_path).c_str());
         return false;
     }
 
@@ -292,24 +288,12 @@ bool token_found(std::string const& token, std::string const& procfs_path)
     }
 
     if (procfs.bad()) {
-        perror(("error while reading file " + procfs_path).c_str());
+        perror(("[ibis/Note] error while reading file " + procfs_path).c_str());
         return false;
     }
 
     return false;
 }
-
-#if (BOOST_OS_WINDOWS)
-#include <stdlib.h>
-#elif (BOOST_OS_SOLARIS)
-#include <limits.h>
-#include <stdlib.h>
-#elif (BOOST_OS_MACOS)
-#include <mach-o/dyld.h>
-#elif (BOOST_OS_BSD_FREE)
-#include <sys/sysctl.h>
-#include <sys/types.h>
-#endif
 
 /**
  * Get the name of the running executable.
@@ -321,19 +305,22 @@ bool token_found(std::string const& token, std::string const& procfs_path)
  * \see
  * [Finding current executable's path without /proc/self/exe](
  *  https://stackoverflow.com/questions/1023306/finding-current-executables-path-without-proc-self-exe)
+ * [How to implement readlink to find the path](
+ *  https://stackoverflow.com/questions/5525668/how-to-implement-readlink-to-find-the-path)
  */
 std::string get_executable_path()
 {
-#if (BOOST_OS_LINUX)
-    char exePath[PATH_MAX];
-    ssize_t len = ::readlink("/proc/self/exe", exePath, sizeof(exePath));
-    if (len == -1 || len == sizeof(exePath)) {
-        len = 0;
-        perror("error reading '/proc/self/exe'");
+    if constexpr (eda::build_system == eda::system::Linux) {
+
+        std::array<char, PATH_MAX> binary_path{}; // default initialized with zeros
+        ssize_t len = ::readlink("/proc/self/exe", binary_path.data(), binary_path.max_size() - 1);
+        if (len == -1 || len == binary_path.max_size() - 1) {
+            len = 0;
+            perror("[ibis/Note] error reading '/proc/self/exe'");
+        }
+
+        return std::string(binary_path.data(), len);
     }
-    exePath[len] = '\0';
-    return std::string(exePath);
-#endif
 
     return std::string{};
 }

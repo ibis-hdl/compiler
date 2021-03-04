@@ -48,7 +48,7 @@ const char* signal_name(int sig_num)
             return "SIGILL";
         case SIGFPE:
             return "SIGFPE";
-#if (BOOST_OS_LINUX)
+#if (BUILD_PLATFORM_UNIX)
         case SIGUSR1:
             return "SIGUSR1";
         case SIGBUS:
@@ -63,20 +63,20 @@ void register_signal_handlers()
 {
     using failure = eda::color::message::failure;
 
-#if defined(EDA_WITH_GDB_STACKTRACE) && (BOOST_OS_LINUX)
+#if defined(EDA_WITH_GDB_STACKTRACE)
     std::function<bool(void)> signal_handler { &register_gdb_signal_handler };
 #elif defined(EDA_WITH_BOOST_STACKTRACE)
     std::function<bool(void)> signal_handler { &register_stacktrace_signal_handler };
 #else
     auto const signal_handler = []() {
         using warning = eda::color::message::warning;
-        std::cout << warning("No signal handler attached") << '\n';
+        std::cout << warning("[ibis/Note] No signal handler attached") << '\n';
         return true;
     };
 #endif
 
     if (!signal_handler()) {
-        std::cerr << failure("Failed to install signal handlers") << '\n';
+        std::cerr << failure("[ibis/Note] Failed to install signal handlers") << '\n';
         std::exit(EXIT_FAILURE);
     }
 }

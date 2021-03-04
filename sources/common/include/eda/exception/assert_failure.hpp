@@ -30,8 +30,7 @@ struct assert_failure : public boost::exception, public std::logic_error {
         : std::logic_error{ message }
     {
         std::cerr << "Assertion failure: %s\n";
-
-        std_quick_exit(EXIT_FAILURE);
+        std::quick_exit(EXIT_FAILURE);
     }
 };
 

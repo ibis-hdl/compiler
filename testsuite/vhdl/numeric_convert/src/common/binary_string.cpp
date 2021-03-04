@@ -11,6 +11,8 @@
 #include <sstream>
 #include <cmath>
 #include <algorithm>
+#include <type_traits>
+#include <bitset>
 #include <iomanip>
 
 
@@ -47,20 +49,37 @@ binary_string::binary_string(uint64_t n)
 
 std::string binary_string::operator()() const
 {
-    std::size_t const sz = detail::log2(number);
     std::string s{};
-    s.reserve(sz);
 
-    std::stringstream ss{ s };
-    uint64_t n{ number };
+    if constexpr (true) {
+        using numeric_type = decltype(number);
+        using unsigned_type = std::make_unsigned<numeric_type>::type;
+        
+        std::size_t const sz = sizeof(numeric_type) * 8;
+        s.reserve(sz);
 
-    while(n != 0) {
-        ss << ( (n % 2 == 0) ? "0" : "1" );
-        n /= 2;
+        auto const bits = std::bitset<sz>{ static_cast<unsigned_type>(number) };
+
+        std::stringstream ss{ s };
+        ss << bits;
+        s = ss.str();
     }
+    else {
+        // original code as archive
+        std::size_t const sz = detail::log2(number);
+        s.reserve(sz);
 
-    s = ss.str();
-    std::reverse(s.begin(), s.end());
+        std::stringstream ss{ s };
+        uint64_t n{ number };
+
+        while(n != 0) {
+            ss << ( (n % 2 == 0) ? "0" : "1" );
+            n /= 2;
+        }
+
+        s = ss.str();
+        std::reverse(s.begin(), s.end());
+    }
 
     return s;
 }

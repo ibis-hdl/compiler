@@ -9,6 +9,7 @@
 #define TESTSUITE_NUMERIC_CONVERT_INCLUDE_TESTSUITE_DETAIL_PCH_HPP_
 
 #include <algorithm>
+#include <bitset>
 #include <cassert>
 #include <cmath>
 #include <cstdint>

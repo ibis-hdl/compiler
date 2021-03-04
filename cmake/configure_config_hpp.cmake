@@ -5,16 +5,6 @@ include(CheckCXXCompilerFlag)
 # GCC extension
 check_cxx_source_compiles("
 int main() {
-    __builtin_unreachable();
-    return 0;
-}
-" EDA_HAVE_BUILTIN_UNREACHABLE)
-
-
-##
-# GCC extension
-check_cxx_source_compiles("
-int main() {
     __builtin_expect(1, 0);
     return 0;
 }
@@ -33,14 +23,14 @@ int main() {
 " EDA_HAVE_BUILTIN_ASSUME)
 
 
-# MinGW doesn't seems to have C++11 std::quick_exit()
+##
+# GCC extension
 check_cxx_source_compiles("
-#include <cstdlib>
 int main() {
-    std::quick_exit(EXIT_FAILURE);
+    __builtin_unreachable();
     return 0;
 }
-" EDA_HAVE_STD_QUICK_EXIT)
+" EDA_HAVE_BUILTIN_UNREACHABLE)
 
 
 # The plattform/compiler checks belongs to eda::common
@@ -49,7 +39,9 @@ configure_file(
   "${PROJECT_BINARY_DIR}/include/eda/compiler/compiler_support.hpp"
 )
 
-# ... also the user configuration 
+# ... also the user configuration
+# FixMe: Should be build_configuration.hpp, or even use target_compile_definitions
+# for the files affected. So its to global here for the use of.
 configure_file(
   "${PROJECT_SOURCE_DIR}/include/eda/configuration.hpp.in"
   "${PROJECT_BINARY_DIR}/include/eda/configuration.hpp"

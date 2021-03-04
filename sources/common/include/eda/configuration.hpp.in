@@ -1,18 +1,6 @@
-/*
- * configuration.hpp
- *
- *  Created on: 09.08.2018
- *      Author: olaf
- */
+/// DO NOT EDIT! GENERATED AUTOMATICALLY BY CMAKE!
 
-#ifndef SOURCES_COMMON_INCLUDE_EDA_CONFIGURATION_HPP_IN_
-#define SOURCES_COMMON_INCLUDE_EDA_CONFIGURATION_HPP_IN_
-
-
-/*
- *  cmake build options
- */
-
+#pragma once
 
 /**
  * Ignore Window's High-Level Console I/O and use ANSII color codes. This allows
@@ -21,6 +9,3 @@
  * on command line.
  */
 #cmakedefine EDA_ON_WINDOWS_USE_ANSII_COLOR 1
-
-
-#endif /* SOURCES_COMMON_INCLUDE_EDA_CONFIGURATION_HPP_IN_ */

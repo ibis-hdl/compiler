@@ -81,7 +81,8 @@ template <typename T> T const& get() const
 }
 ```
 
-  Really time to change to boost.property library.
+  Really time to change to boost.property library. Unfortunately, it can not be
+  reproduced later on.
 
 ### Fix Parser Testsuite
 
@@ -166,6 +167,11 @@ ToDo on design
   or even use eda::color code with defaults set before - see 
   init::user_config_message_color(). Maybe initialize the streams really early
   inside init().
+
+- Make the path of test inputs hard coded using CMake's configure_file() to run
+  int easily without ctest and command line arguments. They are not intended
+  to be distributed, so it doesn't matter. But, don't remove the command line
+  options to explicit override these paths other specific tests.
 
 - Replace C comments by C++ comments, see e.g. [Github](https://github.com/mbitsnbites/c-comments-to-cpp)
   for a python script. In 2021 it fails with inline comments like signatures

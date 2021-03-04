@@ -30,7 +30,7 @@ void assertion_failed_msg(
               << function << ":\n"
               << file << '(' << line << ")" << std::endl; // flush
 
-    std_quick_exit(EXIT_FAILURE);
+    std::quick_exit(EXIT_FAILURE);
 }
 
 } // namespace detail

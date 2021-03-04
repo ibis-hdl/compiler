@@ -1,42 +1,28 @@
-/*
- * compiler_support.hpp
- *
- *  Created on: 02.04.2017
- *      Author: cmake build
- */
+/// DO NOT EDIT! GENERATED AUTOMATICALLY BY CMAKE!
 
-#ifndef SOURCES_COMMON_INCLUDE_EDA_COMPILER_COMPILER_SUPPORT_HPP_IN_
-#define SOURCES_COMMON_INCLUDE_EDA_COMPILER_COMPILER_SUPPORT_HPP_IN_
+#pragma once
 
 
-/* cmake platform check results start */
+/// Variables as determined by CMake, see
+/// [How To Write Platform Checks](
+///  https://gitlab.kitware.com/cmake/community/-/wikis/doc/tutorials/How-To-Write-Platform-Checks)
 
-
-/* Define to 1 if the compiler supports __builtin_unreachable. */
 #cmakedefine EDA_HAVE_BUILTIN_UNREACHABLE 1
-
-
-/* Define to 1 if the compiler supports __builtin_expect. */
 #cmakedefine EDA_HAVE_BUILTIN_EXPECT 1
-
-
-/* Define to 1 if the compiler supports __assume. */
 #cmakedefine EDA_HAVE_BUILTIN_ASSUME 1
-
-
-/* Define to 1 if the compiler supports C++11 quick_exit.  */
-#cmakedefine EDA_HAVE_STD_QUICK_EXIT 1
-
-
-/* cmake platform check results end */
 
 
 
 /* -----------------------------------------------------------------------------
- * Handling of cmake's platform check results
+ * Compiler intrinsics
+ * 
+ * I would expect those to be intrinsically tied to the optimizer in-situ, so 
+ * that moving them into wrapper functions would break them entirely.
+ * Hence, disable lint.
  */
 
 // use __builtin_expect to provide the compiler with branch prediction information
+// \see [Other Built-in Functions Provided by GCC](https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html)
 #if defined(EDA_HAVE_BUILTIN_EXPECT)
 #define cxx_expect(x)       __builtin_expect(!!(x), 1)
 #define cxx_expect_not(x)   __builtin_expect(!!(x), 0)
@@ -47,21 +33,12 @@
 
 
 #if defined(EDA_HAVE_BUILTIN_UNREACHABLE)
+// \see [Other Built-in Functions Provided by GCC](https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html)
 #define cxx_unreachable() __builtin_unreachable();
 #elif defined(EDA_HAVE_BUILTIN_ASSUME)
+// \see [__assume | Microsoft Docs](https://docs.microsoft.com/de-de/cpp/intrinsics/assume?view=msvc-160)
 #define cxx_unreachable() __assume(0);
 #else
 #define cxx_unreachable() ((void)0)
 #endif
 
-
-#if defined(EDA_HAVE_STD_QUICK_EXIT)
-#define std_quick_exit(EXIT_CODE)  \
-std::quick_exit(EXIT_CODE)
-#else
-#define std_quick_exit(EXIT_CODE)  \
-std::exit(EXIT_CODE);
-#endif
-
-
-#endif /* SOURCES_COMMON_INCLUDE_EDA_COMPILER_COMPILER_SUPPORT_HPP_IN_ */

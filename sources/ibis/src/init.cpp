@@ -46,7 +46,7 @@
 
 #include <eda/util/cxx_bug_fatal.hpp>
 
-#include <eda/predef.hpp>
+#include <eda/platform.hpp>
 
 #include <eda/namespace_alias.hpp>
 
@@ -485,16 +485,16 @@ void init::l10n()
     using namespace eda;
     using namespace std::literals;
 
-#if (BOOST_OS_WINDOWS)
-    static const std::string_view backend_sv{ "winapi" };
-#else
-    static const std::string_view backend_sv{ "std" };
-#endif
-
     // [Using Localization Backends](
     //  https://www.boost.org/doc/libs/1_68_0/libs/locale/doc/html/using_localization_backends.html)
     localization_backend_manager l10n_backend = localization_backend_manager::global();
-    l10n_backend.select(static_cast<std::string>(backend_sv));
+    
+    if constexpr (eda::build_platform == platform::Win32) {
+        l10n_backend.select(static_cast<std::string>("winapi"));
+    } else {
+        l10n_backend.select(static_cast<std::string>("std"));
+    }
+
     generator gen_{ l10n_backend };
     localization_backend_manager::global(l10n_backend);
 
@@ -511,7 +511,7 @@ void init::l10n()
     auto lc_path = fs::canonical(l10n_path, ec);
 
     long const verbose = [&] { return setting["verbose"].get<long>(); }();
-
+ 
     if (ec) {
         if (verbose > 1) {
             // FixMe: notice or warning level for those message

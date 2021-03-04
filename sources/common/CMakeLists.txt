@@ -27,8 +27,9 @@ target_sources(${PROJECT_NAME}
 )
 
 
-# Plattform and compiler checks
-include(build_config_hpp)
+# Platform and compiler checks
+include(configure_platform_hpp)
+include(configure_config_hpp)
 
 
 if (EDA_ENABLE_PCH)
@@ -58,4 +59,3 @@ if(MINGW)
         ws2_32
     )
 endif()
-
