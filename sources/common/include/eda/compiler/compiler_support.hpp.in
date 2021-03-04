@@ -18,7 +18,6 @@
  * 
  * I would expect those to be intrinsically tied to the optimizer in-situ, so 
  * that moving them into wrapper functions would break them entirely.
- * Hence, disable lint.
  */
 
 // use __builtin_expect to provide the compiler with branch prediction information
