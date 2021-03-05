@@ -62,6 +62,7 @@ endif()
 target_include_directories(${PROJECT_NAME} 
     PRIVATE
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
         $<BUILD_INTERFACE:${EXTERNAL_BOOST_UTF_INCLUDE_DIR}>
         $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
 )
@@ -74,9 +75,8 @@ target_compile_definitions(${PROJECT_NAME}
 )
 
 
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-    target_link_libraries(${PROJECT_NAME} 
-        PRIVATE
-            Boost::unit_test_framework 
-    )
-endif()
+set(TESTSUITE_BUILD_TESTCASE_SOURCE_DIR ${PROJECT_SOURCE_DIR}/test_case)
+configure_file(
+  "${PROJECT_SOURCE_DIR}/include/testsuite/ast/testsuite_buildpath.hpp.in"
+  "${PROJECT_BINARY_DIR}/include/testsuite/ast/testsuite_buildpath.hpp"
+)

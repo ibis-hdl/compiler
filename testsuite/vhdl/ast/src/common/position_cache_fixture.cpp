@@ -35,6 +35,7 @@ position_cache_fixture::~position_cache_fixture()
 
 std::string position_cache_fixture::test_case_source_dir() const
 {
+    // use cached input path if any
     if (input_path) {
         return *input_path;
     }
@@ -52,21 +53,26 @@ std::string position_cache_fixture::test_case_source_dir() const
     unsigned const argc = boost::unit_test::framework::master_test_suite().argc;
     char** const   argv = boost::unit_test::framework::master_test_suite().argv;
 
+    // check command line args
     for (unsigned i = 0; i != argc; i++) {
         auto source_dir = parse_for("--source-dir=", argv[i]);
         if (source_dir) {
-                BOOST_TEST_MESSAGE("position_cache_fixture::test_case_source_dir = " << *source_dir);
             input_path.swap(source_dir);
-            return *input_path;
+            BOOST_TEST_MESSAGE("INFO(testsuite::position_cache_fixture) using given 'source-dir' path \""
+                               << *input_path << "\"");
         }
     }
 
+    // fall back: use hard coded from CMake build
     if (!input_path) {
-        std::cerr << "ERROR(testsuite::position_cache_fixture) "
-                  << argv[0] << " --source-dir= must be given\n";
+        BOOST_TEST_REQUIRE(!TESTSUITE_BUILD_TESTCASE_SOURCE_DIR.empty());
+        std::optional<std::string> source_dir{ TESTSUITE_BUILD_TESTCASE_SOURCE_DIR };
+        input_path.swap(source_dir);
+        BOOST_TEST_MESSAGE("INFO(testsuite::position_cache_fixture) using builtin/compiled path \""
+                           << *input_path << "\"");
     }
 
-    return std::string{};
+    return *input_path;
 }
 
 
@@ -79,7 +85,7 @@ std::size_t position_cache_fixture::load_reference(std::string const& file_name)
     return id;
 }
 
-std::string position_cache_fixture::read_file(std::string const& file_name) const
+std::string position_cache_fixture::read_file(std::string const& file_name)
 {
     BOOST_TEST_MESSAGE("INFO(testsuite::position_cache_fixture) load " << file_name);
 

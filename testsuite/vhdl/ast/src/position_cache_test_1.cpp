@@ -255,7 +255,5 @@ BOOST_AUTO_TEST_CASE( proxy_line_1_txt )
     }
 }
 
-
 BOOST_AUTO_TEST_SUITE_END()
-
 

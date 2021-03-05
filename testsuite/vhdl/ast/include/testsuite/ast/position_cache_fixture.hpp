@@ -18,6 +18,7 @@
 #include <map>
 
 #include <testsuite/common/namespace_alias.hpp>
+#include <testsuite/ast/testsuite_buildpath.hpp>
 
 namespace testsuite {
 
@@ -60,7 +61,7 @@ public:
     eda::vhdl::ast::position_cache<parser::iterator_type> position_cache;
 
 private:
-    std::string read_file(std::string const& file_name) const;
+    static std::string read_file(std::string const& file_name);
 
 private:
     std::optional<std::string> mutable              input_path;

@@ -206,7 +206,6 @@ BOOST_AUTO_TEST_CASE( proxy_lineno_2_txt )
     }
 }
 
-
 /**
  * Check for correct line of tagged nodes
  */
