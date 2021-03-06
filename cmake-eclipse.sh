@@ -48,4 +48,4 @@ ${CMAKE_BIN} ${EDA_SOURCE_DIR} \
 # cleanup before the run cmake
 ${CMAKE_BIN} --build ${EDA_BUILD_DIR} --target clean
 # make && build
-${CMAKE_BIN} --build ${EDA_BUILD_DIR} --target all --config ${CMAKE_BUILD_TYPE}
+#${CMAKE_BIN} --build ${EDA_BUILD_DIR} --target all --config ${CMAKE_BUILD_TYPE}

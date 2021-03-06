@@ -20,7 +20,10 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 
-add_dependencies(${PROJECT_NAME} external-RapidJSON)
+add_dependencies(${PROJECT_NAME} 
+    external-cli11
+    external-RapidJSON
+)
 
 
 configure_file(

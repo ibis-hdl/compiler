@@ -10,11 +10,12 @@ Required Tools to Build & Configuration
     - Visual Studio 2017, Version 15.8 (in 2018)
 
 * cmake 3.18
-    - ninja (GNU make not well supported by the maintainer)
+    - ninja (recommended)
+    - GNU make (not well supported by maintainer)
     
 * python 3 to generate some files
 
-* A lot of memory, highly recommended are 16GB
+* much memory, highly recommended are 16GB
 
 
 Required 3rd party Libraries
@@ -31,7 +32,69 @@ directory from git repositories:
 
 * RapidJSON
 * CLI11
-* GLS (unused yet)
+* GLS (currently unused)
+
+Build
+-----
+
+### For end user
+
+There is nothing to build currently, really.
+
+### For developer
+
+There are some environment variables for the clang tools:
+
+- CLANG_TIDY_ROOT_DIR
+- CLANG_FORMAT_ROOT_DIR
+
+One may run into Clang specific linker error:
+
+```
+/usr/bin/ld: cannot find /usr/lib64/libasan.so.6.0.0
+collect2: error: ld returned 1 exit status
+```
+than simply install libasan, e.g. on Fedora:
+```
+$ sudo dnf install libasan libasan-static
+```
+
+
+#### ToDo
+
+- MaybeOfInterest:
+  - https://github.com/ddemidov/amgcl/blob/master/CMakeLists.txt
+  - https://github.com/AmokHuginnsson/replxx/blob/master/CMakeLists.txt
+
+
+-  Ninja parallel build:
+  - https://github.com/microsoft/DirectXShaderCompiler/blob/master/CMakeLists.txt
+  - https://github.com/Bforartists/Bforartists/blob/master/CMakeLists.txt
+
+- [cheshirekow/cmake_format](https://github.com/cheshirekow/cmake_format)
+
+
+- [git-cmake-format](https://github.com/BlueBrain/git-cmake-format)
+  This project aims to provide a quick and easy way to integrate clang-format into your CMake project hosted in a git repository
+
+- cmake tidy && format example code
+  https://github.com/ORNL-CEES/mfmg/tree/master/cmake
+
+- Unit Testing
+  - https://github.com/onqtam/awesome-cmake/blob/master/README.md#toolchains
+  - https://github.com/adishavit/cmake_snippets
+
+#### Running tests
+```
+env CTEST_OUTPUT_ON_FAILURE=1 make check
+ctest --verbose
+
+### verbose build
+ninja -v
+
+### ninja single core build
+ninja -j1
+```
 
 
 ToDo with respect to Implementation
@@ -158,6 +221,12 @@ ToDo on design
 - boost.test has also problems with PCH, the main() is missing on linker time even
   it compiles find without PCH support.
 
+- Miss ome CMake variables? Try [Displaying CMake Variables](
+   https://stackoverflow.com/questions/31343813/displaying-cmake-variables)
+
+- use [cmake-format](https://github.com/cheshirekow/cmake_format)
+  ```pip install cmakelang```
+
 ### Sources
 
 - **FixMe**: As shown in the past, if main's init() function crash and the color
@@ -172,6 +241,9 @@ ToDo on design
   int easily without ctest and command line arguments. They are not intended
   to be distributed, so it doesn't matter. But, don't remove the command line
   options to explicit override these paths other specific tests.
+  After first inspection, more effort is required for parse_rules and syntax
+  testsuite since the concept of parsing command line arguments, using builtin
+  compile path and naming of tests isn't appropriate to this.
 
 - Replace C comments by C++ comments, see e.g. [Github](https://github.com/mbitsnbites/c-comments-to-cpp)
   for a python script. In 2021 it fails with inline comments like signatures
@@ -181,21 +253,7 @@ ToDo on design
 - Get clang-tidy and clang-format working again. By The Way, check clang-format
   style for enhancements, so that we get rid off the '// 'clang-format {off|on}'
   pragmas especially on class members.
-  A good starting point is 
-  [Static checks with CMake/CDash (iwyu, clang-tidy, lwyu, cpplint and cppcheck)](
-  https://blog.kitware.com/static-checks-with-cmake-cdash-iwyu-clang-tidy-lwyu-cpplint-and-cppcheck/)
   
-  - $ cmake "-DCMAKE_CXX_CLANG_TIDY=clang-tidy" ../path/to/source
-    or simply enable the option DEVELOPER_RUN_CLANG_TIDY or run build
-    tool, e.g. ninja. The projects compiles with clang-tidy in front of-
-  - testsuite is heavy to improve due to heavy use of macros by boost.test
-  - not checked by clang-{tidy,format}:
-
-    1. RapidJSON parts of init.cpp isn't checked since it may be replaced
-      by boost.json
-    2. ibis/src/stacktrace_{boost,gdb}.cpp since they need more effort
-      to check and rewrite/improve
-
 - Write git hooks for checking using clang-{tidy,format} et al.
 
 - Replace:
@@ -215,15 +273,8 @@ ToDo on design
 - AST printer: move ast_printer into ast_walker, printer breaks down into simple class
   like ast_stats.
 
-  - make a contest for ast_walker, like
-
-  struct ast_walker::context {
-      std::string_view current_node_name();
-      int64_t recursive_depth();
-  };
-
   - use for recursive depth counting a class with ctor/dtor increment/decrement 
-    capabilities - recursive_depth_{counter,guard}
+    capabilities - recursive_depth_{counter,guard} - as context i.e.
 
   -  ast_stats.cpp:
     - ast_stats sort order - use enum sort::{ascending, descending}
@@ -243,41 +294,22 @@ ToDo on design
 C++ Code style
 --------------
 
-### C++ preprocessing
-See [Undefining the C++ Pre-processor](https://cor3ntin.github.io/posts/undef_preprocessor/)
-
 ### CLang Tidy
 
-See project's .clang-tidy' and 
-[protozero/.clang-tidy](https://github.com/mapbox/protozero/blob/master/.clang-tidy)
+A good starting point is [Static checks with CMake/CDash (iwyu, clang-tidy, lwyu, cpplint and cppcheck)](
+https://blog.kitware.com/static-checks-with-cmake-cdash-iwyu-clang-tidy-lwyu-cpplint-and-cppcheck/)
+  
+  - $ cmake "-DCMAKE_CXX_CLANG_TIDY=clang-tidy" ../path/to/source
+    or simply enable the option DEVELOPER_RUN_CLANG_TIDY or run build
+    tool, e.g. ninja. The projects compiles with clang-tidy in front of-
+  - testsuite is heavy to improve due to heavy use of macros by boost.test
+  - not checked by clang-{tidy,format}:
 
-Reworking for Options from 2018, here for reference:
+    - RapidJSON parts of init.cpp isn't checked since it may be replaced
+      by boost.json
+    - ibis/src/stacktrace_{boost,gdb}.cpp since they need more effort
+      to check and rewrite/improve
 
-```
----
-Checks: "-*,\
-cert-*,\
--cert-err58-cpp,\
-clang-analyzer-*,\
--clang-analyzer-optin.cplusplus.VirtualCall,\
-cppcoreguidelines-*,\
--cppcoreguidelines-pro-bounds-array-to-pointer-decay,\
--cppcoreguidelines-pro-type-const-cast,\
--cppcoreguidelines-pro-type-member-init,\
--cppcoreguidelines-pro-type-vararg,\
--cppcoreguidelines-avoid-magic-numbers,\
-misc-*,\
-modernize-*,\
--modernize-use-trailing-return-type,\
--modernize-concat-nested-namespaces,\
-readability-*,\
--readability-magic-numbers,\
--readability-redundant-access-specifiers,\
-performance-*,\
-"
-HeaderFilterRegex: '*\.(hpp|h)$'
-...
-```
 
 #### FixMe
 
@@ -293,7 +325,7 @@ HeaderFilterRegex: '*\.(hpp|h)$'
 - [cppcoreguidelines-pro-bounds-array-to-pointer-decay](https://clang.llvm.org/extra/clang-tidy/checks/cppcoreguidelines-pro-bounds-array-to-pointer-decay.html):  
   *Ignored at this time. With C++20 with get [std::span](https://en.cppreference.com/w/cpp/container/span) 
    aka gsl::span aka gsl:: gsl::array_view. Also starting with C++20 we has also 
-   [std::source_location](https://en.cppreference.com/w/cpp/utility/source_location) which simplifies assert macros.*
+   [std::source_location](https://en.cppreference.com/w/cpp/utility/source_location) which allows to write assert macros with C++20.*
 
 - [bugprone-*](https://clang.llvm.org/extra/clang-tidy/checks/list.html):  
   *Check & try me*
@@ -304,8 +336,8 @@ HeaderFilterRegex: '*\.(hpp|h)$'
   *This transformation is purely stylistic. We are not quite that modern.*
 
 - [readability-magic-numbers](https://clang.llvm.org/extra/clang-tidy/checks/readability-magic-numbers.html), cppcoreguidelines-avoid-magic-numbers:  
-  *This goes too far to force this everywhere. Also, it's not applicable mostly here.*
+  *This goes too far to force this everywhere.*
 
 - [readability-redundant-access-specifiers](https://clang.llvm.org/extra/clang-tidy/checks/readability-redundant-access-specifiers.html):  
-  *It's correct, but serves here for segmentation in their tasks or functions.*
+  *This is correct, but is used here for classification purposes.*
   

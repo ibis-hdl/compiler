@@ -4,7 +4,7 @@
 ## file: CMakeLists.txt
 ################################################################################
 
-set (CMAKE_USER_MAKE_RULES_OVERRIDE "${CMAKE_CURRENT_LIST_DIR}/cmake/CompilerOptions.cmake")
+set (CMAKE_USER_MAKE_RULES_OVERRIDE "${CMAKE_CURRENT_LIST_DIR}/cmake/module/CompilerOptions.cmake")
 
 cmake_minimum_required(VERSION 3.18)
 
@@ -23,6 +23,9 @@ list(APPEND
     CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake
     CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/module
 )
+
+set(DEVELOPER_RUN_CLANG_TIDY TRUE)
+set(DEVELOPER_RUN_CLANG_FORMAT TRUE)
 
 include(prevent_in_source_builds)
 include(options_build)

@@ -160,16 +160,24 @@ configure_file(${eda_SOURCE_DIR}/.clang-tidy ${eda_BINARY_DIR}/.clang-tidy COPYO
 
 ## -----------------------------------------------------------------------------
 # Clang-format
+#
 # https://github.com/ttroy50/cmake-examples/tree/master/04-static-analysis/clang-format
-set(CLANG_FORMAT_BIN_NAME clang-format)
-list(APPEND CLANG_FORMAT_EXCLUDE_PATTERNS  
-	"testsuite/" 
-	"sources/vhdl/include/eda/vhdl/ast/node/"  
-	"build/" 
-	${CMAKE_BINARY_DIR}
-)
-find_package(ClangFormat)
+option(DEVELOPER_RUN_CLANG_FORMAT
+  "Run clang-format with the compiler." 
+  OFF)
+mark_as_advanced(DEVELOPER_RUN_CLANG_FORMAT)
 
+if(DEVELOPER_RUN_CLANG_FORMAT)
+
+  include(FindClangFormat)
+
+  if(NOT CLANG_FORMAT_FOUND)
+    message(FATAL_ERROR "DEVELOPER_RUN_CLANG_FORMAT is ON but clang-format is not found!")
+  endif()
+endif()
+#
+# and now???
+#
 
 ## -----------------------------------------------------------------------------
 # Include What You Use (IWYU)
