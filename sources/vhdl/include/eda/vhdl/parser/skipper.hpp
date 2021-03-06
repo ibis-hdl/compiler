@@ -40,7 +40,7 @@ auto const skipper_def =
 
 #if !defined(DOXYGEN)
 #include <eda/compiler/warnings_off.hpp> // IWYU pragma: keep
-BOOST_SPIRIT_DEFINE(skipper);
+BOOST_SPIRIT_DEFINE(skipper)
 #include <eda/compiler/warnings_on.hpp> // IWYU pragma: keep
 #endif
 

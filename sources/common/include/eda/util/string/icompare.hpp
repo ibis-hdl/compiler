@@ -48,7 +48,7 @@ static inline bool icompare(std::string_view lhs, std::string_view rhs)
                    return std::tolower(c1) == std::tolower(c2);
         });
     // clang-format on
-};
+}
 
 } // namespace util
 } // namespace eda

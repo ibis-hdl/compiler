@@ -19,7 +19,7 @@
 #include <eda/util/pretty_typename.hpp>
 
 
-BOOST_AUTO_TEST_SUITE(position_cache);
+BOOST_AUTO_TEST_SUITE(position_cache)
 
 namespace fs = testsuite::fs;
 

@@ -46,7 +46,7 @@ static inline void merge_object(::rapidjson::Value& dest, ::rapidjson::Value& sr
             dest.AddMember(src_iter->name, src_iter->value, allocator);
         }
     }
-};
+}
 
 static inline void merge_document(::rapidjson::Document& dest, ::rapidjson::Document& src)
 {

@@ -3439,8 +3439,8 @@ auto const prefix_def = x3::repeat(1, 2)[
     ]
     ;
 
-BOOST_SPIRIT_DEFINE(name);
-BOOST_SPIRIT_DEFINE(prefix);
+BOOST_SPIRIT_DEFINE(name)
+BOOST_SPIRIT_DEFINE(prefix)
 
 } // namespace detail
 
