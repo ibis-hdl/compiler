@@ -122,21 +122,6 @@ void printer::operator()(actual_part const& node)
     static const std::string_view symbol{ "actual_part" };
     symbol_scope<actual_part> _(*this, symbol);
 
-#if 0
-    // clang-format off
-    util::visit_in_place(
-        node,
-        [this](ast::actual_part_chunk const& chunk) {
-            (*this)(chunk.context_tied_name);
-            os << '\n';
-            (*this)(chunk.actual_designator);
-        },
-        [this](ast::actual_designator const& node_) {
-            (*this)(node_);
-        }
-    );
-    // clang-format on
-#else
     // clang-format off
     boost::apply_visitor(util::overloaded {
         [this](ast::actual_part_chunk const& chunk) {
@@ -149,13 +134,19 @@ void printer::operator()(actual_part const& node)
         }
     }, node);
     // clang-format on
-#endif
 }
 
 void printer::operator()(aggregate const& node)
 {
     static const std::string_view symbol{ "aggregate" };
     symbol_scope<aggregate> _(*this, symbol);
+
+    // FixMe: CheckMe - this visitation looks strange!
+    // Unmodified source (tag R2018) runs in 2021 fine
+    // but some case fail, e.g. aggregate/aggregate_00{1,2,3,6}
+    // It looks for an infinity recursive call here!
+    // [BNF](https://www.vhdl-online.de/vhdl_reference_93/aggregates)
+    // states: ( element_association { , element_association } )
     visit(node);
 }
 
@@ -484,26 +475,6 @@ void printer::operator()(block_specification const& node)
     static const std::string_view symbol{ "block_specification" };
     symbol_scope<block_specification> _(*this, symbol);
 
-#if 0
-    // clang-format off
-    util::visit_in_place(
-        node,
-        [this](ast::name const& name) {
-            (*this)(name);
-        },
-        [this](ast::block_specification_chunk const& chunk) {
-            (*this)(chunk.label);
-            if(chunk.index_specification) {
-                os << '\n';
-                (*this)(*chunk.index_specification);
-            }
-        },
-        [this](ast::nullary const& nullary) {
-            (*this)(nullary);
-        }
-    );
-    // clang-format on
-#else
     // clang-format off
     boost::apply_visitor(util::overloaded {
         [this](ast::name const& name) {
@@ -521,7 +492,6 @@ void printer::operator()(block_specification const& node)
         }
     }, node);
     // clang-format on
-#endif
 }
 
 void printer::operator()(block_statement const& node)
@@ -757,19 +727,6 @@ void printer::operator()(concurrent_signal_assignment_statement const& node)
         os << '\n';
     }
 
-#if 0
-    // clang-format off
-    util::visit_in_place(
-        node.signal_assignment,
-        [this](ast::conditional_signal_assignment const& signal_assignment) {
-            (*this)(signal_assignment);
-        },
-        [this](ast::selected_signal_assignment const& signal_assignment) {
-            (*this)(signal_assignment);
-        }
-    );
-    // clang-format on
-#else
     // clang-format off
     boost::apply_visitor(util::overloaded {
         [this](ast::conditional_signal_assignment const& signal_assignment) {
@@ -780,7 +737,6 @@ void printer::operator()(concurrent_signal_assignment_statement const& node)
         }
     }, node.signal_assignment);
     // clang-format on
-#endif
 }
 
 void printer::operator()(concurrent_statement const& node)
@@ -1028,22 +984,6 @@ void printer::operator()(discrete_range const& node)
     static const std::string_view symbol{ "discrete_range" };
     symbol_scope<discrete_range> _(*this, symbol);
 
-#if 0
-    // clang-format off
-    util::visit_in_place(
-        node,
-        [this](ast::subtype_indication const& discrete_subtype_indication) {
-            (*this)(discrete_subtype_indication);
-        },
-        [this](ast::range const& range) {
-            (*this)(range);
-        },
-        [this](ast::nullary const& nullary) {
-            (*this)(nullary);
-        }
-    );
-    // clang-format on
-#else
     // clang-format off
     boost::apply_visitor(util::overloaded {
         [this](ast::subtype_indication const& discrete_subtype_indication) {
@@ -1057,7 +997,6 @@ void printer::operator()(discrete_range const& node)
         }
     }, node);
     // clang-format on
-#endif
 }
 
 void printer::operator()(element_association const& node)
@@ -1088,33 +1027,6 @@ void printer::operator()(entity_aspect const& node)
     static const std::string_view symbol{ "entity_aspect" };
     symbol_scope<entity_aspect> _(*this, symbol);
 
-#if 0
-    // clang-format off
-    util::visit_in_place(
-        node,
-        [this](ast::entity_aspect_entity const& entity) {
-            static const std::string_view symbol{ "entity_aspect::entity" };
-            symbol_scope<entity_aspect_entity> _(*this, symbol);
-            (*this)(entity.name);
-            if(entity.architecture_identifier) {
-                os << '\n';
-                (*this)(*entity.architecture_identifier);
-            }
-        },
-        [this](ast::entity_aspect_configuration const& configuration) {
-            static const std::string_view symbol{ "entity_aspect::configuration" };
-            symbol_scope<entity_aspect_configuration> _(*this, symbol);
-            (*this)(configuration.name);
-        },
-        [this](ast::keyword_token token) {
-            (*this)(token);
-        },
-        [this](ast::nullary const& nullary) {
-            (*this)(nullary);
-        }
-    );
-    // clang-format on
-#else
     // clang-format off
     boost::apply_visitor(util::overloaded {
         [this](ast::entity_aspect_entity const& entity) {
@@ -1139,7 +1051,6 @@ void printer::operator()(entity_aspect const& node)
         }
     }, node);
     // clang-format on
-#endif
 }
 
 void printer::operator()(entity_class_entry_list const& node)
@@ -1225,10 +1136,8 @@ void printer::operator()(entity_name_list const& node)
     static const std::string_view symbol{ "entity_name_list" };
     symbol_scope<entity_name_list> _(*this, symbol);
 
-#if 0
     // clang-format off
-    util::visit_in_place(
-        node,
+    boost::apply_visitor(util::overloaded {
         [this](ast::entity_designator_list const& entity_designator_list) {
             static const std::string_view symbol{ "entity_designator*" };
             symbol_scope<entity_designator> _(*this, symbol);
@@ -1240,25 +1149,8 @@ void printer::operator()(entity_name_list const& node)
         [this](ast::nullary const& nullary) {
             (*this)(nullary);
         }
-    );
-    // clang-format on
-#else
-    // clang-format off
-     boost::apply_visitor(util::overloaded {
-         [this](ast::entity_designator_list const& entity_designator_list) {
-             static const std::string_view symbol{ "entity_designator*" };
-             symbol_scope<entity_designator> _(*this, symbol);
-             visit(entity_designator_list);
-         },
-         [this](ast::keyword_token token) {
-             (*this)(token); // OTHERS | ALL
-         },
-         [this](ast::nullary const& nullary) {
-             (*this)(nullary);
-         }
-     }, node);
+    }, node);
      // clang-format on
-#endif
 }
 
 void printer::operator()(entity_specification const& node)
@@ -1664,10 +1556,8 @@ void printer::operator()(instantiated_unit const& node)
     static const std::string_view symbol{ "instantiated_unit" };
     symbol_scope<instantiated_unit> _(*this, symbol);
 
-#if 0
     // clang-format off
-    util::visit_in_place(
-        node,
+    boost::apply_visitor(util::overloaded {
         [this](ast::instantiated_unit_component const& component) {
             static const std::string_view symbol{ "component" };
             symbol_scope<instantiated_unit_component> _(*this, symbol);
@@ -1690,36 +1580,8 @@ void printer::operator()(instantiated_unit const& node)
         [this](ast::nullary const& nullary) {
             (*this)(nullary);
         }
-    );
+    }, node);
     // clang-format on
-#else
-    // clang-format off
-     boost::apply_visitor(util::overloaded {
-         [this](ast::instantiated_unit_component const& component) {
-             static const std::string_view symbol{ "component" };
-             symbol_scope<instantiated_unit_component> _(*this, symbol);
-             (*this)(component.name);
-         },
-         [this](ast::instantiated_unit_entity const& entity) {
-             static const std::string_view symbol{ "entity" };
-             symbol_scope<instantiated_unit_entity> _(*this, symbol);
-             (*this)(entity.name);
-             if(entity.architecture_identifier) {
-                 os << '\n';
-                 (*this)(*entity.architecture_identifier);
-             }
-         },
-         [this](ast::instantiated_unit_configuration const& configuration) {
-             static const std::string_view symbol{ "configuration" };
-             symbol_scope<instantiated_unit_configuration> _(*this, symbol);
-             (*this)(configuration.name);
-         },
-         [this](ast::nullary const& nullary) {
-             (*this)(nullary);
-         }
-     }, node);
-     // clang-format on
-#endif
 }
 
 void printer::operator()(instantiation_list const& node)
@@ -1727,10 +1589,8 @@ void printer::operator()(instantiation_list const& node)
     static const std::string_view symbol{ "instantiation_list" };
     symbol_scope<instantiation_list> _(*this, symbol);
 
-#if 0
     // clang-format off
-    util::visit_in_place(
-        node,
+    boost::apply_visitor(util::overloaded {
         [this](ast::instantiation_label_list const& instantiation_label_list) {
             static const std::string_view symbol{ "label*" };
             symbol_scope<label> _(*this, symbol);
@@ -1742,25 +1602,8 @@ void printer::operator()(instantiation_list const& node)
         [this](ast::nullary const& nullary) {
             (*this)(nullary);
         }
-    );
+    }, node);
     // clang-format on
-#else
-    // clang-format off
-     boost::apply_visitor(util::overloaded {
-         [this](ast::instantiation_label_list const& instantiation_label_list) {
-             static const std::string_view symbol{ "label*" };
-             symbol_scope<label> _(*this, symbol);
-             visit(instantiation_label_list);
-         },
-         [this](ast::keyword_token token) {
-             (*this)(token);
-         },
-         [this](ast::nullary const& nullary) {
-             (*this)(nullary);
-         }
-     }, node);
-     // clang-format on
-#endif
 }
 
 void printer::operator()(interface_constant_declaration const& node)
@@ -2209,10 +2052,8 @@ void printer::operator()(qualified_expression const& node)
     (*this)(node.type_mark);
     os << '\n';
 
-#if 0
-    // clang-format off
-    util::visit_in_place(
-        node.aggregate_or_expression,
+	// clang-format off
+    boost::apply_visitor(util::overloaded {
         [this](ast::expression const& expr) {
             (*this)(expr);
         },
@@ -2222,23 +2063,8 @@ void printer::operator()(qualified_expression const& node)
         [this](ast::nullary nullary) {
             (*this)(nullary);
         }
-    );
+    }, node.aggregate_or_expression);
     // clang-format on
-#else
-	// clang-format off
-	 boost::apply_visitor(util::overloaded {
-		 [this](ast::expression const& expr) {
-			 (*this)(expr);
-		 },
-		 [this](ast::aggregate const& aggregate) {
-			 (*this)(aggregate);
-		 },
-		 [this](ast::nullary nullary) {
-			 (*this)(nullary);
-		 }
-	 }, node.aggregate_or_expression);
-	 // clang-format on
-#endif
 }
 
 void printer::operator()(range const& node) // aka range_constraint
@@ -2246,10 +2072,8 @@ void printer::operator()(range const& node) // aka range_constraint
     static const std::string_view symbol{ "range" };
     symbol_scope<range> _(*this, symbol);
 
-#if 0
     // clang-format off
-    util::visit_in_place(
-        node,
+    boost::apply_visitor(util::overloaded {
         [this](range_attribute_name const &name) {
             (*this)(name);
         },
@@ -2260,24 +2084,8 @@ void printer::operator()(range const& node) // aka range_constraint
             os << '\n';
             (*this)(expr.rhs);
         }
-    );
-    // clang-format on
-#else
-    // clang-format off
-    boost::apply_visitor(util::overloaded {
-    	[this](range_attribute_name const &name) {
-    		(*this)(name);
-    	},
-		[this](range_expression const &expr) {
-    		(*this)(expr.lhs);
-    		os << '\n';
-    		(*this)(expr.direction);
-    		os << '\n';
-    		(*this)(expr.rhs);
-    	}
     }, node);
     // clang-format on
-#endif
 }
 
 void printer::operator()(record_type_definition const& node)
@@ -2629,32 +2437,6 @@ void printer::operator()(subprogram_specification const& node)
     static const std::string_view symbol{ "subprogram_specification" };
     symbol_scope<subprogram_specification> _(*this, symbol);
 
-#if 0
-    // clang-format off
-    util::visit_in_place(
-        node,
-        [this](ast::subprogram_specification_procedure const& procedure) {
-            os << "PROCEDURE\n";
-            (*this)(procedure.designator);
-            if(procedure.formal_parameter_list) {
-                os << '\n';
-                (*this)(*procedure.formal_parameter_list);
-            }
-        },
-        [this](ast::subprogram_specification_function const& function) {
-            if(function.impure) { os << "IMPURE FUNCTION\n"; }
-            else {                os << "PURE FUNCTION\n"; }
-            (*this)(function.designator);
-            if(function.formal_parameter_list) {
-                os << '\n';
-                (*this)(*function.formal_parameter_list);
-            }
-            os << '\n';
-            (*this)(function.return_type_mark);
-        }
-    );
-    // clang-format on
-#else
     // clang-format off
     boost::apply_visitor(util::overloaded {
         [this](ast::subprogram_specification_procedure const& procedure) {
@@ -2678,7 +2460,6 @@ void printer::operator()(subprogram_specification const& node)
         }
     }, node);
     // clang-format on
-#endif
 }
 
 void printer::operator()(subtype_declaration const& node)
@@ -2908,21 +2689,6 @@ void printer::operator()(waveform const& node)
     static const std::string_view symbol{ "waveform" };
     symbol_scope<waveform> _(*this, symbol);
 
-#if 0
-    // clang-format off
-    util::visit_in_place(
-        node,
-        [this](ast::waveform_element_list const& list) {
-            static const std::string_view symbol{ "waveform_element*" };
-            symbol_scope<waveform_element> _(*this, symbol);
-            visit(list);
-        },
-        [this](ast::keyword_token token) {
-            (*this)(token);
-        }
-    );
-    // clang-format on
-#else
     // clang-format off
     boost::apply_visitor(util::overloaded {
         [this](ast::waveform_element_list const& list) {
@@ -2935,7 +2701,6 @@ void printer::operator()(waveform const& node)
         }
     }, node);
     // clang-format on
-#endif
 }
 
 void printer::operator()(waveform_element const& node)
@@ -2943,19 +2708,6 @@ void printer::operator()(waveform_element const& node)
     static const std::string_view symbol{ "waveform_element" };
     symbol_scope<waveform_element> _(*this, symbol);
 
-#if 0
-    // clang-format off
-    util::visit_in_place(
-        node.form,
-        [this](ast::expression const& expr) {
-            (*this)(expr);
-        },
-        [this](ast::keyword_token token) {
-            (*this)(token);
-        }
-    );
-    // clang-format on
-#else
     // clang-format off
     boost::apply_visitor(util::overloaded {
         [this](ast::expression const& expr) {
@@ -2966,7 +2718,6 @@ void printer::operator()(waveform_element const& node)
         }
     }, node.form);
     // clang-format on
-#endif
 
     if (node.time_expression) {
         os << '\n';
