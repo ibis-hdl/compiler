@@ -24,8 +24,11 @@ list(APPEND
     CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/module
 )
 
-set(DEVELOPER_RUN_CLANG_TIDY TRUE)
-set(DEVELOPER_RUN_CLANG_FORMAT TRUE)
+
+# Developer options enforced
+set(DEVELOPER_RUN_CLANG_TIDY TRUE CACHE STRING "")
+set(DEVELOPER_RUN_CLANG_FORMAT TRUE CACHE STRING "")
+
 
 include(prevent_in_source_builds)
 include(options_build)
