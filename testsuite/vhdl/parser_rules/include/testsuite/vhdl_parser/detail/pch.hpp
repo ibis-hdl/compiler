@@ -27,7 +27,7 @@
 
 #include <boost/test/unit_test.hpp>
 #if 0
-#include <boost/test/output_test_stream.hpp>
+#include <boost/test/tools/output_test_stream.hpp>
 #endif
 
 #endif /* TESTSUITE_PARSER_RULES_INCLUDE_TESTSUITE_DETAIL_PCH_HPP_ */

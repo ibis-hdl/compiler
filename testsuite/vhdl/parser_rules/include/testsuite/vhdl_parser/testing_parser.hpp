@@ -8,7 +8,7 @@
 #ifndef SOURCES_VHDL_TEST_INCLUDE_TESTSUITE_VHDL_PARSER_TESTING_PARSER_HPP_
 #define SOURCES_VHDL_TEST_INCLUDE_TESTSUITE_VHDL_PARSER_TESTING_PARSER_HPP_
 
-#include <boost/test/output_test_stream.hpp>
+#include <boost/test/tools/output_test_stream.hpp>
 
 #include <eda/vhdl/parser/skipper.hpp>
 #include <eda/vhdl/parser/grammar_decl.hpp>

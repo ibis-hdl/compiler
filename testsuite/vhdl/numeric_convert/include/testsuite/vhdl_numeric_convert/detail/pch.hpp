@@ -31,7 +31,7 @@
 #include <boost/core/ignore_unused.hpp>
 #include <boost/test/data/monomorphic.hpp>
 #include <boost/test/data/test_case.hpp>
-#include <boost/test/output_test_stream.hpp>
+#include <boost/test/tools/output_test_stream.hpp>
 #endif
 
 #endif /* TESTSUITE_NUMERIC_CONVERT_INCLUDE_TESTSUITE_DETAIL_PCH_HPP_ */

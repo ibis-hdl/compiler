@@ -26,7 +26,7 @@
 #if 0
 #include <boost/test/data/monomorphic.hpp>
 #include <boost/test/data/test_case.hpp>
-#include <boost/test/output_test_stream.hpp>
+#include <boost/test/tools/output_test_stream.hpp>
 #endif
 
 #endif /* TESTSUITE_AST_INCLUDE_TESTSUITE_DETAIL_PCH_HPP_ */
