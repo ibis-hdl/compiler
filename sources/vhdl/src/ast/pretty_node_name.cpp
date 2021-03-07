@@ -261,9 +261,9 @@ std::tuple<bool, std::string_view> pretty_node_name(std::string_view which)
     auto const iter = node_map.find(which);
 
     if (iter != node_map.end()) {
-        return std::make_tuple(true, iter->second);
+        return std::tuple{ true, iter->second };
     }
-    return std::make_tuple(false, which);
+    return std::tuple{ false, which };
 }
 
 } // namespace ast

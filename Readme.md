@@ -122,6 +122,28 @@ you seem to be passing in an initializer_list which has one element but you're a
 <Alipha> olx69: do you want to initialize all 4 elements to attribute::Attributes_Off?
 ```
 
+#### Boost.Spirit X3 Notes
+
+**WARNING:** Notes about parser rule definition
+
+There are some 'anonymous' helper rules (to break down the complexity and
+to enforce the attributes required) used in the specific rule's detail
+namespace. The X3 tags the rules, e.g.:
+
+```
+  auto const rule = x3::rule<struct _, ...> { "..." } = ...
+```
+
+It would be naturally to use the parent rules's tag type which belongs the
+detail helper. But, unfortunately the memory consumption increases dramatically
+(8+8)GB RAM/SWAP isn't enough). Following StackOverflow
+[X3: Linker Error (unresolved external symbol “parse_rule”) on nonterminal parser](
+  https://stackoverflow.com/questions/50277979/x3-linker-error-unresolved-external-symbol-parse-rule-on-nonterminal-parser?answertab=active#tab-top)
+Sehe's notes, re-using the tag type is recipe for disaster. The rule tags are
+what dispatches the implementation function in the case of
+separated compilation units.
+
+
 #### Settings Crash
 
 An old problem from beginning rises, see [wandbox](https://wandbox.org/permlink/SklFbT05oHEGFhqW)

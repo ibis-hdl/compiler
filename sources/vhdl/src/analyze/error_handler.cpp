@@ -39,7 +39,7 @@ void error_handler<Iterator>::operator()(
 
     auto const iterators_of = [&current_file](ast::position_tagged const& tagged_node) {
         auto range = current_file.position_of(tagged_node);
-        return std::make_tuple((*range).begin(), (*range).end());
+        return std::tuple{ (*range).begin(), (*range).end() };
     };
 
     auto const indicator = [&](auto& start, auto& first, auto& last) {
@@ -103,9 +103,9 @@ void error_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
     auto const iterators_of = [&current_file](ast::position_tagged const& tagged_node) {
         auto range = current_file.position_of(tagged_node);
         if (range) {
-            return std::make_tuple((*range).begin(), (*range).end(), true /* valid */);
+            return std::tuple{ (*range).begin(), (*range).end(), true /* valid */ };
         }
-        return std::make_tuple(iterator_type{}, iterator_type{}, false /* not-valid */);
+        return std::tuple{iterator_type{}, iterator_type{}, false /* not-valid */ };
     };
 
     auto const indicator = [&](auto& start, auto& first, auto& last) {

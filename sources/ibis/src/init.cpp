@@ -75,7 +75,7 @@ void init::parse_cli(int argc, const char* argv[])
 
     static std::string_view const EDA_URL{ R"(https://github.com/???/ibis)" };
 
-    CLI::App app{ EDA_IBIS_VERSION_STR };
+    CLI::App app{ std::string{ EDA_IBIS_VERSION_STR }, std::string{ "ibis" }};
 
     struct Formatter : public CLI::Formatter { };
 

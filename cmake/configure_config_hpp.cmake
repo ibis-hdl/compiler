@@ -33,6 +33,17 @@ int main() {
 " EDA_HAVE_BUILTIN_UNREACHABLE)
 
 
+##
+# Pre C++20 support for std::source_location
+check_cxx_source_compiles("
+#include <experimental/source_location>
+int main() {
+  std::experimental::source_location location{ std::experimental::source_location::current() };
+  return 0;
+}
+" EDA_HAVE_EXPERIMENTAL_SOURCE_LOCATION)
+
+
 # The plattform/compiler checks belongs to eda::common
 configure_file(
   "${PROJECT_SOURCE_DIR}/include/eda/compiler/compiler_support.hpp.in"

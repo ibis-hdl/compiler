@@ -111,7 +111,7 @@ position_cache_fixture::contents_range(std::size_t id, std::string_view str)
     parser::iterator_type begin = position_cache.file_contents(id).begin() + pos;
     parser::iterator_type end   = begin + str.length();
 
-    return std::make_tuple(begin, end);
+    return std::tuple{ begin, end };
 }
 
 ast::position_tagged& position_cache_fixture::addNode(std::string const& key, ast::position_tagged const& node)

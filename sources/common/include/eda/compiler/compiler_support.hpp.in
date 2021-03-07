@@ -11,6 +11,7 @@
 #cmakedefine EDA_HAVE_BUILTIN_EXPECT 1
 #cmakedefine EDA_HAVE_BUILTIN_ASSUME 1
 
+#cmakedefine EDA_HAVE_EXPERIMENTAL_SOURCE_LOCATION 1
 
 
 /* -----------------------------------------------------------------------------

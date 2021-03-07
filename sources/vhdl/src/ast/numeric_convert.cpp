@@ -29,6 +29,12 @@
 #include <string_view>
 #include <type_traits>
 
+#include <eda/compiler/compiler_support.hpp>
+// pre C++20 to avoid lint warnings
+#if defined(EDA_HAVE_EXPERIMENTAL_SOURCE_LOCATION)
+#include <experimental/source_location>
+#endif
+
 namespace eda {
 namespace vhdl {
 namespace ast {
@@ -85,40 +91,54 @@ hex_parser_type const hex = {};
 
 auto const exponent = x3::rule<struct _, unsigned_integer>{} =
     // clang-format off
-        x3::omit[
-             x3::char_("Ee")
-        ]
+       x3::omit[ x3::char_("Ee") ] 
     >> int_ // signed
     ;
-// clang-format on
+    // clang-format on
+
 } // namespace detail
 
+
 /*
- * Utility for debugging
+ * Utility for Spirit.X3 debugging
  */
 namespace dbg_util {
 
 template <typename RangeType, typename RangeFiltType, typename AttributeType>
-void trace_report(RangeType const& range, RangeFiltType const& range_f, bool parse_ok,
-    AttributeType attribute, unsigned line, std::string const& function)
+void trace_report(RangeType const& range, RangeFiltType const& range_f, bool parse_ok, AttributeType attribute, 
+    std::string_view file, unsigned line, std::string_view function)
 {
-    // clang-format off
-    std::cout << __FILE__ << ":" << line << " "
+    std::cout << file << ":" << line << " "
               << function << "('" << range << "')"
               << " -> ['" << range_f << "']: "
               << std::boolalpha
               << "parse_ok = "     << parse_ok
-              << ", attribute = "  << attribute << '\n';
-    // clang-format on
+              << ", attribute = "  << attribute 
+              << '\n';
 }
 
 } // namespace dbg_util
 
-
-// FixMe: warning: function-like macro 'TRACE' used; consider a 'constexpr' template function [cppcoreguidelines-macro-usage]
-// Note: IMO wouldn't work due to use of standard predefined macros __LINE__, __FUNCTION__
-#define TRACE(range, range_f, parse_ok, attribute)  \
-    dbg_util::trace_report(range, range_f, parse_ok, attribute, __LINE__, __FUNCTION__)
+/// FixMe: If we got C++20 standard once here, get rid off the macro stuff which is used only
+///        to gather source location. Unfortunately, we will still stick with it since
+///        MS VisualStudio doesn't support P1208R6 <source_location> in year [2021](
+///        https://docs.microsoft.com/de-de/cpp/overview/visual-cpp-language-conformance?view=msvc-160)
+#if defined(EDA_HAVE_EXPERIMENTAL_SOURCE_LOCATION_)
+template <typename RangeType, typename RangeFiltType, typename AttributeType>
+static inline
+void dbg_trace(RangeType const& range, RangeFiltType const& range_f, bool parse_ok, AttributeType attribute, 
+    std::experimental::source_location const& location = std::experimental::source_location::current())
+{
+    dbg_util::trace_report(range, range_f, parse_ok, attribute, 
+        location.file_name(),
+        location.line(),
+        location.function_name());
+}
+#else
+    // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
+#define dbg_trace(range, range_f, parse_ok, attribute)  \
+    dbg_util::trace_report(range, range_f, parse_ok, attribute, __FILE__, __LINE__, __FUNCTION__)
+#endif
 
 
 /**
@@ -158,7 +178,7 @@ struct primitive_parser
 
         bool const parse_ok = parse(range, detail::bin, attribute);
 
-        return std::make_tuple(parse_ok, attribute);
+        return std::tuple{ parse_ok, attribute };
     }
 
     template <typename RangeType>
@@ -168,7 +188,7 @@ struct primitive_parser
 
         bool const parse_ok = parse(range, detail::oct, attribute);
 
-        return std::make_tuple(parse_ok, attribute);
+        return std::tuple{ parse_ok, attribute };
     }
 
     template <typename RangeType>
@@ -178,7 +198,7 @@ struct primitive_parser
 
         bool const parse_ok = parse(range, detail::uint_base10, attribute);
 
-        return std::make_tuple(parse_ok, attribute);
+        return std::tuple{ parse_ok, attribute };
     }
 
     template <typename RangeType>
@@ -188,7 +208,7 @@ struct primitive_parser
 
         bool const parse_ok = parse(range, detail::hex, attribute);
 
-        return std::make_tuple(parse_ok, attribute);
+        return std::tuple{ parse_ok, attribute };
     }
 
     template <typename RangeType>
@@ -198,7 +218,7 @@ struct primitive_parser
 
         bool const parse_ok = parse(range, detail::real_base10, attribute);
 
-        return std::make_tuple(parse_ok, attribute);
+        return std::tuple{ parse_ok, attribute };
     }
 
     template <typename RangeType>
@@ -208,7 +228,7 @@ struct primitive_parser
 
         bool const parse_ok = parse(range, detail::exponent, attribute);
 
-        return std::make_tuple(parse_ok, attribute);
+        return std::tuple{ parse_ok, attribute };
     }
 
     template <typename RangeType, typename ParserType, typename AttributeType>
@@ -236,7 +256,9 @@ struct primitive_parser
          * test_parser() tests - something has been left unparsed. */
         bool const parse_ok = x3::parse(iter, end, parser >> x3::eoi, attribute);
 
-        TRACE(range, range_f, parse_ok, attribute);
+        if constexpr (true /*debug*/) {
+            dbg_trace(range, range_f, parse_ok, attribute);
+        }
 
         return parse_ok;
     }
@@ -472,7 +494,7 @@ numeric_convert::return_type numeric_convert::operator()(
         report_error{ os }.overflow(literal);
     }
 
-    return std::make_tuple(parse_ok, result);
+    return std::tuple{ parse_ok, result };
 }
 
 /*******************************************************************************
@@ -502,7 +524,7 @@ numeric_convert::return_type numeric_convert::operator()(ast::decimal_literal co
         report_error{ os }.overflow(literal);
     }
 
-    return std::make_tuple(parse_ok, result);
+    return std::tuple{ parse_ok, result };
 }
 
 /*******************************************************************************
@@ -574,12 +596,12 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
     if (!parse_ok) {
         // FixMe: error message not appropriate
         report_error{ os }.unsupported_base(literal.base);
-        return std::make_tuple(parse_ok, base);
+        return std::tuple{ parse_ok, base };
     }
 
     if (!supported_base(base)) {
         report_error{ os }.unsupported_base(literal.base);
-        return std::make_tuple(false, result);
+        return std::tuple{ false, result };
     }
 
     /* -------------------------------------------------------------------------
@@ -655,10 +677,10 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
 
         if (!parse_ok) {
             report_error{ os }.overflow(literal);
-            return std::make_tuple(parse_ok, result);
+            return std::tuple{ parse_ok, result };
         }
 
-        return std::make_tuple(parse_ok, result);
+        return std::tuple{ parse_ok, result };
     }
 
     /* -------------------------------------------------------------------------
@@ -672,7 +694,7 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
 
     if (!parse_ok) {
         report_error{ os }.overflow(literal);
-        return std::make_tuple(parse_ok, result);
+        return std::tuple{ parse_ok, result };
     }
 
     /* -------------------------------------------------------------------------
@@ -709,7 +731,7 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
                 % literal.number.fractional_part
                << '\n';
             // clang-format on
-            return std::make_tuple(false, result);
+            return std::tuple{ false, result };
         }
 
         result += fractional_part;
@@ -726,7 +748,7 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
 
         if (!parse_ok) {
             report_error{ os }.overflow(literal);
-            return std::make_tuple(parse_ok, exponent);
+            return std::tuple{ parse_ok, exponent };
         }
 
         numeric_convert::value_type const pow
@@ -735,7 +757,7 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
         result *= pow;
     }
 
-    return std::make_tuple(true, result);
+    return std::tuple{ true, result };
 }
 
 } // namespace ast

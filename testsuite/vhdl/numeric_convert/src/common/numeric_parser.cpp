@@ -94,10 +94,10 @@ std::tuple<bool, AttrType> literal_parser<IteratorT>::parse(
                                  + std::string(e.where(), end) + "'\n");
     }
 
-    return std::make_tuple(
+    return std::tuple{
         parse_ok && (iter == end),
         attr
-    );
+    };
 }
 
 } // namespace testsuite

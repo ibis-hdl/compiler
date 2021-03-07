@@ -95,10 +95,10 @@ struct testing_parser
                           );
         }
 
-        return std::make_tuple(
+        return std::tuple{
             parse_ok && (!full_match || (iter == end)),
             output.str()
-        );
+        };
     }
 
 };
