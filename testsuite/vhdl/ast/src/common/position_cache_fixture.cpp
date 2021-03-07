@@ -17,17 +17,18 @@ namespace testsuite {
 
 position_cache_fixture*& position_cache_fixture::instance()
 {
-    static position_cache_fixture* self = nullptr;
+    static position_cache_fixture* self = nullptr; // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
     return self;
 }
 
 position_cache_fixture::position_cache_fixture()
+: current_FileID{ 0 }
 {
     //std::cout << "INFO(testsuite::position_cache_fixture) Setup\n";
     instance() = this;
 }
 
-position_cache_fixture::~position_cache_fixture()
+position_cache_fixture::~position_cache_fixture() // NOLINT(modernize-use-equals-default)
 {
     //std::cout << "INFO(testsuite::position_cache_fixture) Teardown\n";
 }
@@ -55,7 +56,8 @@ std::string position_cache_fixture::test_case_source_dir() const
 
     // check command line args
     for (unsigned i = 0; i != argc; i++) {
-        auto source_dir = parse_for("--source-dir=", argv[i]);
+        std::string_view const argv_sv{ argv[i] }; // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
+        auto source_dir = parse_for("--source-dir=", argv_sv);
         if (source_dir) {
             input_path.swap(source_dir);
             BOOST_TEST_MESSAGE("INFO(testsuite::position_cache_fixture) using given 'source-dir' path \""
@@ -115,14 +117,16 @@ position_cache_fixture::contents_range(std::size_t id, std::string_view str)
 ast::position_tagged& position_cache_fixture::addNode(std::string const& key, ast::position_tagged const& node)
 {
     BOOST_TEST_MESSAGE("INFO(position_cache_fixture) add Node: " << key);
-    BOOST_TEST_REQUIRE(node_map.count(key) == 0u);
+    BOOST_TEST_REQUIRE(node_map.count(key) == 0);
     return node_map[key] = node;
 }
 
 ast::position_tagged const& position_cache_fixture::getNode(std::string const& key) const
 {
     BOOST_TEST_MESSAGE("INFO(position_cache_fixture) lookup Node: " << key);
-    BOOST_TEST_REQUIRE(node_map.count(key) > 0u);
+    BOOST_TEST_REQUIRE(node_map.count(key) > 0);
+    // FixMe: Clang-Tidy: warning: do not use const_cast [cppcoreguidelines-pro-type-const-cast]
+    //        but it's required here
     return const_cast<node_map_type&>(node_map)[key];
 }
 

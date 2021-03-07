@@ -185,7 +185,7 @@ std::vector<std::string> const dec_real_lit{
     "2.0332938517515416e+307",
 };
 
-std::vector<eda::vhdl::intrinsic::real_type> dec_real{
+std::vector<eda::vhdl::intrinsic::real_type> const dec_real{
     0.0,
     1.0,
     1000.0,

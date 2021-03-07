@@ -173,11 +173,11 @@ if(DEVELOPER_RUN_CLANG_FORMAT)
 
   if(NOT CLANG_FORMAT_FOUND)
     message(FATAL_ERROR "DEVELOPER_RUN_CLANG_FORMAT is ON but clang-format is not found!")
+  else()
+    include(clang-format)
   endif()
 endif()
-#
-# and now???
-#
+
 
 ## -----------------------------------------------------------------------------
 # Include What You Use (IWYU)
@@ -185,13 +185,13 @@ endif()
 # on Unix/Linux only
 # FixMe: Update with https://github.com/miurahr/cmake-qt-packaging-example/blob/master/CMakeLists.txt
 if(UNIX)
-    configure_file(${CMAKE_SOURCE_DIR}/cmake/util/cmake-iwyu.sh.cmake
-                   ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/cmake-iwyu.sh @ONLY
-    )
-    file(COPY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/cmake-iwyu.sh
-         DESTINATION ${CMAKE_BINARY_DIR}
-         FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ
-         GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
-    )
+  configure_file(${CMAKE_SOURCE_DIR}/cmake/util/cmake-iwyu.sh.cmake
+                 ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/cmake-iwyu.sh @ONLY
+  )
+  file(COPY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/cmake-iwyu.sh
+        DESTINATION ${CMAKE_BINARY_DIR}
+        FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ
+        GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+  )
 endif()
 

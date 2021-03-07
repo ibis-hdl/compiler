@@ -106,6 +106,22 @@ project.
 
 ### Code Fixes
 
+
+#### Fix Clang AddressSanitizer issue
+
+```
+stack-buffer-overflow .../color/detail/ansii_color.hpp:33 in 
+color::detail::esc_printer<eda::color::attribute, 4ul>::esc_printer<0ul, 1ul, 2ul, 3ul>(
+  std::initializer_list<eda::color::attribute>, 
+  std::integer_sequence<unsigned long, 0ul, 1ul, 2ul, 3ul>
+)
+```
+From IRC:
+ ```
+you seem to be passing in an initializer_list which has one element but you're accessing il.begin()[0] through il.begin()[3]?
+<Alipha> olx69: do you want to initialize all 4 elements to attribute::Attributes_Off?
+```
+
 #### Settings Crash
 
 An old problem from beginning rises, see [wandbox](https://wandbox.org/permlink/SklFbT05oHEGFhqW)
@@ -160,6 +176,8 @@ IIRC the tests passed in 2018. Only problems mentioned in vhdl parser_rules
   - test_case_name = attribute_specification/attribute_specification_001; 
   - test_case_name = use_clause/use_clause_000; 
 
+In 2021, the code of 2018 (git tag R2018) compiles and runs without errors
+regards to grammar rules.
 Other test are fine. Anyway, this is still the main work ground.
 
 Testing hints (verbose flags '-VV'):
@@ -197,10 +215,11 @@ ToDo on design
   confusing from maintenance aspect. The best would be to use ninja
   specific switches in CMake. Maybe better to complete switch to ninja.
 
-- maybe move the testsuits below there sources, see e.g. llvm source tree
+- maybe move the testsuites below there sources, see e.g. llvm source tree
 
 ### CMake
 
+- [Modern CMake](https://cliutils.gitlab.io/modern-cmake/)
 - [Effective Modern CMake](https://gist.github.com/mbinna/c61dbb39bca0e4fb7d1f73b0d66a4fd1)
   and [Modern CMake Examples](https://github.com/pr0g/cmake-examples)
 - [PCH](https://cmake.org/cmake/help/latest/command/target_precompile_headers.html?highlight=pch) 
@@ -208,6 +227,9 @@ ToDo on design
 - [Unity Build Mode](https://cmake.org/cmake/help/latest/prop_tgt/UNITY_BUILD_MODE.html#prop_tgt:UNITY_BUILD_MODE)
   see also [CMake Discourse](https://discourse.cmake.org/t/one-source-to-create-multiple-objects/2819)
 - [C++ dependency management with CMake’s FetchContent](https://medium.com/analytics-vidhya/c-dependency-management-with-cmakes-fetchcontent-4ceca4693a5d)
+
+- **Regards to build options, see [Making CMake work for you](
+  http://www.stablecoder.ca/2018/10/30/full-cmake-helper-suite.html)**
 
 - By starting using precompiled headers by CMake, some smaller problems rise.
   E.g. *reference to 'util' is ambiguous* error since name lookup got 
@@ -225,7 +247,7 @@ ToDo on design
    https://stackoverflow.com/questions/31343813/displaying-cmake-variables)
 
 - use [cmake-format](https://github.com/cheshirekow/cmake_format)
-  ```pip install cmakelang```
+  ```pip install cmakelang```. Anyway, the results doesn't impress me...
 
 ### Sources
 

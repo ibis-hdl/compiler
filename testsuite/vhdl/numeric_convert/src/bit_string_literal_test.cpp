@@ -43,7 +43,7 @@ std::string to_bin_literal(uint64_t n, std::string const& postfix="")
 {
     using namespace testsuite::vhdl_numeric_convert::util;
 
-    std::string const s{ "B\"" + binary_string{ n }() + postfix + '"'};
+    std::string s{ "B\"" + binary_string{ n }() + postfix + '"'};
     return s;
 }
 
@@ -52,7 +52,7 @@ std::string to_oct_literal(uint64_t n, std::string const& postfix="")
 {
     using namespace testsuite::vhdl_numeric_convert::util;
 
-    std::string const s{ "O\"" + octal_string{ n }() + postfix + '"'};
+    std::string s{ "O\"" + octal_string{ n }() + postfix + '"'};
     return s;
 }
 
@@ -61,7 +61,7 @@ std::string to_hex_literal(uint64_t n, std::string const& postfix="")
 {
     using namespace testsuite::vhdl_numeric_convert::util;
 
-    std::string const s{ "X\"" + hexadecimal_string{ n }() + postfix + '"'};
+    std::string s{ "X\"" + hexadecimal_string{ n }() + postfix + '"'};
     return s;
 }
 
@@ -118,7 +118,7 @@ std::vector<std::string> const bit_literal{
     detail::to_hex_literal(std::numeric_limits<uint64_t>::max()),
 };
 
-std::vector<eda::vhdl::intrinsic::unsigned_integer_type> bit_decimal {
+std::vector<eda::vhdl::intrinsic::unsigned_integer_type> const bit_decimal {
     // binary
     0,
     1,

@@ -227,6 +227,8 @@ private:
     // internal helper
     class scope_printer;
 
+public:
+    // FixMe: make Getter for this or find a better way.
     bool verbose_symbol{ false };
     bool verbose_variant{ false };
 

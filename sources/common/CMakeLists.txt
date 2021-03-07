@@ -19,6 +19,7 @@ target_link_libraries(${PROJECT_NAME}
 
 target_sources(${PROJECT_NAME} 
     PRIVATE
+        src/buildinfo.cpp
         src/file_reader.cpp
         src/settings.cpp
         src/color.cpp
@@ -49,6 +50,13 @@ target_include_directories(${PROJECT_NAME}
         $<INSTALL_INTERFACE:include>
 )
 
+
+configure_file(
+    "${PROJECT_SOURCE_DIR}/include/eda/buildinfo_static.hpp.in"
+    "${PROJECT_BINARY_DIR}/include/eda/buildinfo_static.hpp"
+    ESCAPE_QUOTES
+    @ONLY
+)
 
 ##
 # Windows MinGW

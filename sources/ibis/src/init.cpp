@@ -8,7 +8,8 @@
 #include <ibis/init.hpp>
 #include <ibis/signal_handler.hpp>
 #include <ibis/version.hpp>
-#include <ibis/build_info.hpp>
+
+#include <eda/buildinfo.hpp>
 
 #include <eda/configuration.hpp>
 #include <eda/settings.hpp>
@@ -252,7 +253,7 @@ void init::parse_cli(int argc, const char* argv[])
     }
 
     if (app.count("--build-info") != 0) {
-        build_info(std::cout);
+        std::cout << eda::buildinfo{} << '\n';
         std::exit(EXIT_SUCCESS);
     }
 
