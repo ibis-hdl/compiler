@@ -787,10 +787,10 @@ auto const access_type_definition_def =
 ///
 /// actual_designator [LRM93 §4.3.2.2]
 ///
-/// \note Note, \ref expression also matches the BNF rules:
-///         - \ref signal_name
-///         - \ref variable_name
-///         - \ref file_name
+/// \note Note, <expression> also matches the BNF rules:
+///         - <signal_name>
+///         - <variable_name>
+///         - <file_name>
 ///
 /// \code{.bnf}
 /// actual_designator ::=
@@ -2081,7 +2081,7 @@ auto const entity_specification_def =
 ///
 /// entity_statement [LRM93 §1.1.3]
 ///
-/// \begin{.bnf}
+/// \code{.bnf}
 /// entity_statement ::=
 ///       concurrent_assertion_statement
 ///     | passive_concurrent_procedure_call_statement

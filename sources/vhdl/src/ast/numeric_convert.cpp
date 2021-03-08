@@ -121,7 +121,7 @@ void trace_report(RangeType const& range, RangeFiltType const& range_f, bool par
 
 /// FixMe: If we got C++20 standard once here, get rid off the macro stuff which is used only
 ///        to gather source location. Unfortunately, we will still stick with it since
-///        MS VisualStudio doesn't support P1208R6 <source_location> in year [2021](
+///        MS VisualStudio doesn't support P1208R6 std::source_location in year [2021](
 ///        https://docs.microsoft.com/de-de/cpp/overview/visual-cpp-language-conformance?view=msvc-160)
 #if defined(EDA_HAVE_EXPERIMENTAL_SOURCE_LOCATION_)
 template <typename RangeType, typename RangeFiltType, typename AttributeType>

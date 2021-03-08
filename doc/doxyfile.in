@@ -162,15 +162,8 @@ FULL_PATH_NAMES        = YES
 # will be relative from the directory where doxygen is started.
 # This tag requires that the tag FULL_PATH_NAMES is set to YES.
 
-STRIP_FROM_PATH        = @PROJECT_SOURCE_DIR@/sources/common/include \
-                         @PROJECT_SOURCE_DIR@/sources/common/src \
-                         @PROJECT_SOURCE_DIR@/sources/vhdl/include \
-                         @PROJECT_SOURCE_DIR@/sources/vhdl/src \
-                         @PROJECT_SOURCE_DIR@/sources/ibis/include \
-                         @PROJECT_SOURCE_DIR@/sources/ibis/src \
-                         @PROJECT_SOURCE_DIR@/external/CLI \
-                         @PROJECT_BINARY_DIR@/external/src/boost-spirit-x3/include \
-                         @PROJECT_BINARY_DIR@/external/src/RapidJSON/include 
+STRIP_FROM_PATH        = @PROJECT_SOURCE_DIR@ \
+                         @PROJECT_BINARY_DIR@
                          
 # The STRIP_FROM_INC_PATH tag can be used to strip a user-defined part of the
 # path mentioned in the documentation of a class, which tells the reader which
@@ -185,9 +178,12 @@ STRIP_FROM_INC_PATH    = @PROJECT_SOURCE_DIR@/sources/common/include \
                          @PROJECT_SOURCE_DIR@/sources/vhdl/src \
                          @PROJECT_SOURCE_DIR@/sources/ibis/include \
                          @PROJECT_SOURCE_DIR@/sources/ibis/src \
-                         @PROJECT_SOURCE_DIR@/external/CLI \
-                         @PROJECT_BINARY_DIR@/external/src/boost-spirit-x3/include \
-                         @PROJECT_BINARY_DIR@/external/src/RapidJSON/include 
+                         @PROJECT_SOURCE_DIR@/sources/common/include \
+                         @PROJECT_SOURCE_DIR@/sources/ibis/include \
+                         @PROJECT_BINARY_DIR@/external/src/external-cli11/include \
+                         @PROJECT_BINARY_DIR@/external/src/external-gsl/include \
+                         @PROJECT_BINARY_DIR@/external/src/external-RapidJSON/include \
+                         @PROJECT_BINARY_DIR@/external/src/external-boost-spirit-x3/include \
 
 # If the SHORT_NAMES tag is set to YES, doxygen will generate much shorter (but
 # less readable) file names. This can be useful is your file systems doesn't
@@ -255,12 +251,6 @@ TAB_SIZE               = 4
 # newlines.
 
 ALIASES                = 
-
-# This tag can be used to specify a number of word-keyword mappings (TCL only).
-# A mapping has the form "name=value". For example adding "class=itcl::class"
-# will allow you to use the command class in the itcl::class meaning.
-
-TCL_SUBST              = 
 
 # Set the OPTIMIZE_OUTPUT_FOR_C tag to YES if your project consists of C sources
 # only. Doxygen will then generate output that is more tailored for C. For
@@ -794,7 +784,7 @@ WARN_FORMAT            = "$file:$line: $text"
 # messages should be written. If left blank the output is written to standard
 # error (stderr).
 
-WARN_LOGFILE           = 
+WARN_LOGFILE           = "@PROJECT_BINARY_DIR@/doc/DoxygenWarningLog.txt"
 
 #---------------------------------------------------------------------------
 # Configuration options related to the input files
@@ -814,11 +804,12 @@ INPUT                  = @doxy_main_page@ \
                          @PROJECT_SOURCE_DIR@/sources/vhdl/src \
                          @PROJECT_SOURCE_DIR@/sources/ibis/include \
                          @PROJECT_SOURCE_DIR@/sources/ibis/src \
-                         @PROJECT_SOURCE_DIR@/external/CLI \
-                         @PROJECT_BINARY_DIR@/sources/common/include \
-                         @PROJECT_BINARY_DIR@/sources/ibis/include \
-                         @PROJECT_BINARY_DIR@/external/src/boost-spirit-x3/include \
-                         @PROJECT_BINARY_DIR@/external/src/RapidJSON/include \
+                         @PROJECT_SOURCE_DIR@/sources/common/include \
+                         @PROJECT_SOURCE_DIR@/sources/ibis/include \
+                         @PROJECT_BINARY_DIR@/external/src/external-cli11/include \
+                         @PROJECT_BINARY_DIR@/external/src/external-gsl/include \
+                         @PROJECT_BINARY_DIR@/external/src/external-RapidJSON/include \
+                         @PROJECT_BINARY_DIR@/external/src/external-boost-spirit-x3/include \
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -861,7 +852,7 @@ RECURSIVE              = YES
 # Note that relative paths are relative to the directory from which doxygen is
 # run.
 
-EXCLUDE                = @PROJECT_BINARY_DIR@/external
+EXCLUDE                =
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded
@@ -877,7 +868,8 @@ EXCLUDE_SYMLINKS       = NO
 # Note that the wildcards are matched against the file with absolute path, so to
 # exclude all test directories for example use the pattern */test/*
 
-EXCLUDE_PATTERNS       = */test/test_case_path.hpp
+EXCLUDE_PATTERNS       = */test/test_case_path.hpp \
+                        pch*.hpp
 
 # The EXCLUDE_SYMBOLS tag can be used to specify one or more symbol names
 # (namespaces, classes, functions, etc.) that should be excluded from the
@@ -935,7 +927,7 @@ IMAGE_PATH             =
 # need to set EXTENSION_MAPPING for the extension otherwise the files are not
 # properly processed by doxygen.
 
-INPUT_FILTER           = 
+#INPUT_FILTER           = "@Python3_EXECUTABLE@ @PROJECT_SOURCE_DIR@/doc/doxyfilter.py"
 
 # The FILTER_PATTERNS tag can be used to specify filters on a per file pattern
 # basis. Doxygen will compare the file name with each pattern and apply the
@@ -2135,12 +2127,6 @@ EXTERNAL_GROUPS        = YES
 
 EXTERNAL_PAGES         = YES
 
-# The PERL_PATH should be the absolute path and name of the perl script
-# interpreter (i.e. the result of 'which perl').
-# The default file (with absolute path) is: /usr/bin/perl.
-
-PERL_PATH              = /usr/bin/perl
-
 #---------------------------------------------------------------------------
 # Configuration options related to the dot tool
 #---------------------------------------------------------------------------
@@ -2153,15 +2139,6 @@ PERL_PATH              = /usr/bin/perl
 # The default value is: YES.
 
 CLASS_DIAGRAMS         = YES
-
-# You can define message sequence charts within doxygen comments using the \msc
-# command. Doxygen will then run the mscgen tool (see:
-# http://www.mcternan.me.uk/mscgen/)) to produce the chart and insert it in the
-# documentation. The MSCGEN_PATH tag allows you to specify the directory where
-# the mscgen tool resides. If left empty the tool is assumed to be found in the
-# default search path.
-
-MSCGEN_PATH            = 
 
 # You can include diagrams made with dia in doxygen documentation. Doxygen will
 # then run dia to produce the diagram and insert it in the documentation. The
@@ -2410,7 +2387,7 @@ PLANTUML_INCLUDE_PATH  =
 # Minimum value: 0, maximum value: 10000, default value: 50.
 # This tag requires that the tag HAVE_DOT is set to YES.
 
-DOT_GRAPH_MAX_NODES    = 100
+DOT_GRAPH_MAX_NODES    = 256
 
 # The MAX_DOT_GRAPH_DEPTH tag can be used to set the maximum depth of the graphs
 # generated by dot. A depth value of 3 means that only nodes reachable from the

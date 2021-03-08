@@ -116,8 +116,10 @@ color::detail::esc_printer<eda::color::attribute, 4ul>::esc_printer<0ul, 1ul, 2u
   std::integer_sequence<unsigned long, 0ul, 1ul, 2ul, 3ul>
 )
 ```
+
 From IRC:
- ```
+
+```
 you seem to be passing in an initializer_list which has one element but you're accessing il.begin()[0] through il.begin()[3]?
 <Alipha> olx69: do you want to initialize all 4 elements to attribute::Attributes_Off?
 ```
@@ -142,6 +144,9 @@ detail helper. But, unfortunately the memory consumption increases dramatically
 Sehe's notes, re-using the tag type is recipe for disaster. The rule tags are
 what dispatches the implementation function in the case of
 separated compilation units.
+
+Check [**Splitting Boost.Spirit.X3 parsers into several TUs**](
+  https://stackoverflow.com/questions/59709229/splitting-boost-spirit-x3-parsers-into-several-tus)
 
 
 #### Settings Crash
@@ -334,6 +339,10 @@ ToDo on design
 - organize convenience scripts into sub dir - or write a doc how use it on command 
   line for use with copy&paste (best approach IMO).
 
+### MS VS
+
+Support Clang on Windows, see [Clang's MSVC compatibility](https://clang.llvm.org/docs/MSVCCompatibility.html)
+
 
 C++ Code style
 --------------
@@ -385,3 +394,25 @@ https://blog.kitware.com/static-checks-with-cmake-cdash-iwyu-clang-tidy-lwyu-cpp
 - [readability-redundant-access-specifiers](https://clang.llvm.org/extra/clang-tidy/checks/readability-redundant-access-specifiers.html):  
   *This is correct, but is used here for classification purposes.*
   
+## ToDo Documentation
+
+Switch from MarkDown to ReStructuredText.
+
+- [Clear, Functional C++ Documentation with Sphinx + Breathe + Doxygen + CMake](
+   https://devblogs.microsoft.com/cppblog/clear-functional-c-documentation-with-sphinx-breathe-doxygen-cmake/)
+
+- [C++ documentation with Doxygen/CMake/Sphinx/Breathe for those of us who are totally lost Part 1](
+   https://medium.com/practical-coding/c-documentation-with-doxygen-cmake-sphinx-breathe-for-those-of-use-who-are-totally-lost-7d555386fe13),
+  [Part 2](https://medium.com/practical-coding/c-documentation-with-doxygen-cmake-sphinx-breathe-for-those-of-use-who-are-totally-lost-part-2-21f4fb1abd9f)
+  and [Part 3](https://medium.com/practical-coding/c-documentation-with-doxygen-cmake-sphinx-breathe-for-those-of-use-who-are-totally-lost-part-3-d20549d3b01f)
+
+- [Documenting C++ Code](https://developer.lsst.io/cpp/api-docs.html)
+
+- Sphinx example projects:
+  - https://github.com/ainfosec/ci_helloworld
+  - https://github.com/normalvector/ue4_doxygen_source_filter
+  - https://github.com/svenevs/exhale
+
+A more sophisticated INPUT filter for doxygen:
+  - https://stackoverflow.com/questions/44166199/trying-to-convert-a-vhdl-bnf-to-a-labeled-bnf-for-bnfc
+

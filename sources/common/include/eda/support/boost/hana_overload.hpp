@@ -16,6 +16,8 @@ namespace util {
 
 // boost::hana::overload copy & paste
 
+#if !defined(DOXYGEN) // temporary disabled for doxygen to avoid warnings
+
 template <typename F, typename... G>
 struct overload_t : overload_t<F>::type, overload_t<G...>::type {
     using type = overload_t;
@@ -46,6 +48,8 @@ template <typename R, typename... Args> struct overload_t<R (*)(Args...)> {
 
     constexpr R operator()(Args... args) const { return fptr_(static_cast<Args&&>(args)...); }
 };
+
+#endif // DOXYGEN
 
 struct make_overload_t {
     template <typename... F,
