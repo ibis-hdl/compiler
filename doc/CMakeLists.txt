@@ -20,15 +20,19 @@ foreach(doxygen_def ${doxygen_definition_list})
 endforeach()
 
     
-set(doxyfile_in ${CMAKE_CURRENT_SOURCE_DIR}/doxyfile.in)
-set(doxyfile ${CMAKE_CURRENT_BINARY_DIR}/doxyfile)
-configure_file(${doxyfile_in} ${doxyfile} @ONLY)
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/doxyfile.in 
+    ${CMAKE_CURRENT_BINARY_DIR}/doxyfile
+    @ONLY
+)
 
 
-# Maybe check [FindDoxygen](https://cmake.org/cmake/help/v3.11/module/FindDoxygen.html)
+# Maybe check [doxygen_add_docs()](https://cmake.org/cmake/help/v3.11/module/FindDoxygen.html)
 add_custom_target(doc
-    COMMAND ${DOXYGEN_EXECUTABLE} ${doxyfile}
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    COMMAND
+        ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/doxyfile
+    WORKING_DIRECTORY
+        ${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Generating API documentation with Doxygen"
     VERBATIM
 )
