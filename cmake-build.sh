@@ -9,19 +9,20 @@ SCRIPT_PATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
 # this script is in the same directory
 EDA_SOURCE_DIR="${SCRIPT_PATH}"
-EDA_BUILD_DIR="${EDA_SOURCE_DIR}/../build"
+#EDA_BUILD_DIR="${EDA_SOURCE_DIR}/../build"
+EDA_BUILD_DIR="$( cd "$(dirname "$PWD")" ; pwd -P )/build"
 
 CMAKE_BIN="$(which cmake)"
 CMAKE_BUILD_TOOL=Ninja
 CMAKE_CXX_COMPILER=clang++
-CMAKE_GENERATOR="Eclipse CDT4 - ${CMAKE_BUILD_TOOL}"
+CMAKE_GENERATOR="${CMAKE_BUILD_TOOL}"
 
 # Debug, Release, RelWithDebInfo, MinSizeRel
 CMAKE_BUILD_TYPE=RelWithDebInfo
 
 cat << EOF
 ##
-## Configure CMake Eclipse/Ninja Build
+## Configure:
 ##
 ## Source directory: ${EDA_SOURCE_DIR}
 ## Build directoy:   ${EDA_BUILD_DIR} 
@@ -37,8 +38,6 @@ cd ${EDA_BUILD_DIR}
 
 ${CMAKE_BIN} ${EDA_SOURCE_DIR} \
         -G "${CMAKE_GENERATOR}" \
-        -DCMAKE_ECLIPSE_VERSION=4.6 \
-        -DCMAKE_ECLIPSE_GENERATE_SOURCE_PROJECT=TRUE \
         -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
         -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} \
         -DCMAKE_INSTALL_PREFIX=stage \
