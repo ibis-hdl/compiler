@@ -258,6 +258,24 @@ ToDo on design
 - **Regards to build options, see [Making CMake work for you](
   http://www.stablecoder.ca/2018/10/30/full-cmake-helper-suite.html)**
 
+- **FetchContent** would work as shown below, if the depend content wouldn't
+  use the same targets as my in their CMakeLists, e.g. custom_target doc
+  at RapidJSON.
+
+```
+include(FetchContent)
+
+FetchContent_Declare(RapidJSON
+  GIT_REPOSITORY    https://github.com/Tencent/rapidjson.git
+  GIT_TAG           master
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND     ""
+)
+
+FetchContent_MakeAvailable(RapidJSON)
+set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
+```
+
 - By starting using precompiled headers by CMake, some smaller problems rise.
   E.g. *reference to 'util' is ambiguous* error since name lookup got 
   'boost::locale::util' and 'eda::util' for i.e. 'util::user_home_dir'
@@ -344,8 +362,17 @@ ToDo on design
 Support Clang on Windows, see [Clang's MSVC compatibility](https://clang.llvm.org/docs/MSVCCompatibility.html)
 
 
+### Boost.Test
+
+An interesting feature is described at 
+[Controlling output of Boost.Test source location format](
+  https://stackoverflow.com/questions/64618840/controlling-output-of-boost-test-source-location-format)
+
 C++ Code style
 --------------
+
+Check [LSST DM Developer Guide](https://developer.lsst.io/index.html) for styles
+and recommendations.
 
 ### CLang Tidy
 

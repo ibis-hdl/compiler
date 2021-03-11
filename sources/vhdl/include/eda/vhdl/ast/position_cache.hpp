@@ -98,7 +98,7 @@ public:
     void annotate(std::size_t file_id, NodeT& node, iterator_type first, iterator_type last)
     {
         if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
-            /* ToDo: maybe better throw range_exception since it's an implementation
+            /* @todo maybe better throw range_exception since it's an implementation
              * limitation. */
             cxx_assert(positions.size() < ast::position_tagged::MAX_ID,
                 "Insufficient range of numeric IDs for AST tagging");

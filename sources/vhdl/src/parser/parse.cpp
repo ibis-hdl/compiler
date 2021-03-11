@@ -67,7 +67,7 @@ bool parse::operator()(std::string const& input, ast::design_file& design_file)
 
         return parse_ok;
     } catch (std::bad_alloc const& e) {
-        /* ToDo: Re-throw using C++11 exception_ptr, see 2nd answer
+        /* @todo Re-throw using C++11 exception_ptr, see 2nd answer
          * [How do I make a call to what() on std::exception_ptr](
          * https://stackoverflow.com/questions/14232814/how-do-i-make-a-call-to-what-on-stdexception-ptr)
          */

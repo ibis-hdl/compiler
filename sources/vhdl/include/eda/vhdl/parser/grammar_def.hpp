@@ -787,10 +787,10 @@ auto const access_type_definition_def =
 ///
 /// actual_designator [LRM93 §4.3.2.2]
 ///
-/// \note Note, <expression> also matches the BNF rules:
-///         - <signal_name>
-///         - <variable_name>
-///         - <file_name>
+/// \note Note, expression also matches the BNF rules:
+///         - signal_name
+///         - variable_name
+///         - file_name
 ///
 /// \code{.bnf}
 /// actual_designator ::=

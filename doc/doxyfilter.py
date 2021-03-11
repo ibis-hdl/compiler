@@ -1,26 +1,33 @@
 #!/usr/bin/env python3
 
 import sys, re
+from pathlib import Path
 
-def copy(file):
-    for line in file:
-        print(line.rstrip())
-
+# unused, but it serves as a reminder:
+# The intention was to speed up RE-ing the input from 
+# doxygen since 'FixMe' strings shall only be replaced
+# inside comments. Currently the problem is related
+# to the C multi line comments used here, hence it's 
+# unused.
 def isComment(line):
     comment_re = r'.*(//.*?|/\*.*)'
     return re.match(comment_re, line, flags=re.S)
 
-def filter(file):
-    fixme_re = r'(FIXME)(:)?'
-    for line in file:
-        if isComment(line):
-            #print('# ' + line)
-            x = re.sub(fixme_re, r'@todo (\\b FixMe)', line, flags=re.IGNORECASE)
-            print(x.rstrip())
-        else:
-            print(line.rstrip())
+def doxy_fixes(lines):
+    # [@|\\]?(todo|fixme):?
+    fixme_re = r'(@|\\)?fixme:?'
+    todo_re  = r'(@|\\)?todo:?'
+    for line in lines:
+        line = re.sub(fixme_re, r'@todo (\\b FixMe)', line, flags=re.IGNORECASE)
+        line = re.sub(todo_re,  r'@todo', line, flags=re.IGNORECASE)
+        print(line.rstrip())
 
 if __name__ == "__main__":
-    with open(sys.argv[1], 'r') as file:
-        filter(file)
-        #copy(file)
+    if len(sys.argv) != 2:
+        print("Usage: {} input_file".format(sys.argv[0]), file=sys.stderr)
+    else:    
+        try:
+            lines = Path(sys.argv[1]).read_text().splitlines()
+            doxy_fixes(lines)
+        except FileNotFoundError as e:
+            print("File {} Is not exist!".format(e.filename), file=sys.stderr)

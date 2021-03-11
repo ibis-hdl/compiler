@@ -56,7 +56,7 @@ public:
         , actual_delimiter{ nullptr }
     {
         // Check iterator requirements; especially MSVC copy requires CopyConstructible
-        // ToDo: Concept Check
+        // @todo Concept Check
         static_assert(std::is_copy_constructible_v<T>, "Iterator must satisfies CopyConstructible");
         static_assert(std::is_copy_assignable_v<T>,    "Iterator must satisfies CopyAssignable");
     }

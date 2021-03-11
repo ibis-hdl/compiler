@@ -37,4 +37,5 @@ CTestTestfile.cmake
 
 # misc
 /build/
-
+/.vscode/
+/.cache/
