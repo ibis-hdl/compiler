@@ -48,7 +48,12 @@ set_source_files_properties(src/common/test_ast.cpp
     APPEND PROPERTIES 
         COMPILE_DEFINITIONS "BOOST_TEST_DYN_LINK" 
 )
-
+# [Boost.Test linker error by use with precompiled headers (PCH)](
+#  https://stackoverflow.com/questions/66535719/boost-test-linker-error-by-use-with-precompiled-headers-pch)
+set_source_files_properties(src/common/test_ast.cpp
+    PROPERTIES
+        SKIP_PRECOMPILE_HEADERS ON
+)
 
 if (EDA_ENABLE_PCH)
     target_precompile_headers(${PROJECT_NAME} 

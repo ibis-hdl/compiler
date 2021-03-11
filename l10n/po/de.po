@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \"\" \"..\"\n"
 "Report-Msgid-Bugs-To: https://github.com/eda/ibis/issues\n"
-"POT-Creation-Date: 2021-03-07 16:37+0100\n"
+"POT-Creation-Date: 2021-03-07 18:27+0100\n"
 "PO-Revision-Date: 2018-08-25 17:30+0100\n"
 "Last-Translator: olaf <olaf@home.lan>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -33,7 +33,7 @@ msgstr "<<-- und hier"
 msgid " <<-- here"
 msgstr "<<-- hier"
 
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:437
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:441
 msgid "An unknown error occurred during parsing of '{1}'."
 msgstr "Unbekannter Fehler aufgetreten während des parsens von '{1}'."
 
@@ -41,7 +41,7 @@ msgstr "Unbekannter Fehler aufgetreten während des parsens von '{1}'."
 msgid "Analyze the design."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:451
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:455
 msgid ""
 "Base specifier '{1}' isn't supported. Supported are only 2, 8, 10 and 16!"
 msgstr ""
@@ -49,7 +49,7 @@ msgstr ""
 "und 16!"
 
 #. TRANSLATORS: Literal Type and passed Value
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:402
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:406
 msgid ""
 "Conversion of VHDL {1} '{2}' failed due to numeric overflow (MAX_VALUE = {3})"
 msgstr ""
@@ -123,7 +123,7 @@ msgstr ""
 msgid "Message Options"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:724
+#: /home/olaf/work/CXX/ibis/source/sources/vhdl/src/ast/numeric_convert.cpp:728
 msgid ""
 "Numeric error occurred during calculation on based_literal with fractional "
 "part of '{1}'."

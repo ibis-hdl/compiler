@@ -11,7 +11,7 @@
 option(EDA_ENABLE_PCH
   "Enable precompile headers support. \"
    This can speed up compilation time."
-  OFF)
+  ON)
 mark_as_advanced(EDA_ENABLE_PCH)
 
 
