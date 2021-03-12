@@ -51,7 +51,7 @@ public:
             switch (iword.data.state) {
                 case init:
                     iword.data.default_attribute = text_attributes(handle_);
-                    [[falltrough]]
+                    [[fallthrough]];
                 case active: {
                         // check on unsupported text-only attribute
                         if ((attr_ & 0xFF) == 0) {

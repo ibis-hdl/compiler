@@ -26,8 +26,18 @@ list(APPEND
 
 
 # Developer options enforced
-set(DEVELOPER_RUN_CLANG_TIDY TRUE CACHE STRING "")
 set(DEVELOPER_RUN_CLANG_FORMAT TRUE CACHE STRING "")
+if(MSVC)
+    if(DEVELOPER_RUN_CLANG_TIDY)
+        # FixMe: Clang-Tidy and MSVC aren't compatible? Got error about:
+        # error: cannot use 'throw' with exceptions disabled [clang-diagnostic-error]
+        message(WARNING "Disable 'DEVELOPER_RUN_CLANG_TIDY' while using MSVC compiler")
+        set(DEVELOPER_RUN_CLANG_TIDY "FALSE" CACHE STRING "")
+    endif()
+else()
+    # always enable it on others platforms
+    set(DEVELOPER_RUN_CLANG_TIDY TRUE CACHE STRING "")
+endif()
 
 
 include(prevent_in_source_builds)
@@ -61,12 +71,20 @@ set(CMAKE_JOB_POOL_LINK    NINJA_JOBS_100pc_CPU)
 # Boost.Org
 # [Cmake doesn't find Boost](https://stackoverflow.com/questions/3808775/cmake-doesnt-find-boost)
 #set(Boost_DEBUG 1)   
-find_package(Boost 1.73.0 REQUIRED COMPONENTS 
-    system
-    filesystem
-    locale
-    unit_test_framework 
+find_package(Boost 1.73.0 
+    REQUIRED COMPONENTS 
+        system
+        filesystem
+        locale
+        unit_test_framework 
+    OPTIONAL_COMPONENTS 
+        stacktrace_basic 
+        stacktrace_backtrace 
+        stacktrace_addr2line 
+        stacktrace_noop
+        stacktrace_windbg   # only @Windows
 )
+add_definitions(${Boost_LIB_DIAGNOSTIC_DEFINITIONS})
 
 
 # This requirement rises by use of cmake's PCH support, otherwise

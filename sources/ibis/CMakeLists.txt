@@ -64,6 +64,17 @@ target_include_directories(${PROJECT_NAME}
 )
 
 
+# MSVC has min/max macro problems, at least CLI11
+# [Possible problem with min() and max()](https://github.com/bkaradzic/bx/issues/252)
+# FixMe: Should be global since it may infer with PCH than
+if(MSVC)
+    set_source_files_properties(src/init.cpp 
+        APPEND PROPERTIES 
+            COMPILE_DEFINITIONS "NOMINMAX"
+    )
+endif()
+
+
 # [How to split strings across multiple lines in CMake?](
 #  https://stackoverflow.com/questions/7637539/how-to-split-strings-across-multiple-lines-in-cmake)
 string(CONCAT SIGNAL_HANDLER_DEFINES
@@ -95,6 +106,13 @@ endif()
 # Boost stacktrace
 # [Configuration and Build](
 #  https://www.boost.org/doc/libs/1_67_0/doc/html/stacktrace/configuration_and_build.html)
+#
+# FixMe: This needs a rewrote; the stacktrace libraries are checked from
+#        top level CMakeList.txt and are optionally now. Here we can choose
+#        the best options than.
+if()
+endif()
+
 if(EDA_WITH_BOOST_STACKTRACE)
     if(WIN32)
         find_package(Boost REQUIRED COMPONENTS stacktrace_windbg)
