@@ -8,11 +8,13 @@
 #ifndef SOURCES_IBIS_INCLUDE_IBIS_SIGNAL_HANDLER_HPP_
 #define SOURCES_IBIS_INCLUDE_IBIS_SIGNAL_HANDLER_HPP_
 
+#include <string_view>
+
 namespace ibis {
 
 void register_signal_handlers();
 
-const char* signal_name(int sig_num);
+std::string_view signal_name(int sig_num);
 
 } // namespace ibis
 

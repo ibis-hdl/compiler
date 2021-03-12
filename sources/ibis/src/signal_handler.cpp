@@ -37,25 +37,27 @@ void testing_signal_handler()
 }
 #endif
 
-const char* signal_name(int sig_num)
+std::string_view signal_name(int sig_num)
 {
+    using namespace std::literals;
+
     switch (sig_num) {
         case SIGSEGV:
-            return "SIGSEGV";
+            return "SIGSEGV"sv;
         case SIGABRT:
-            return "SIGABRT";
+            return "SIGABRT"sv;
         case SIGILL:
-            return "SIGILL";
+            return "SIGILL"sv;
         case SIGFPE:
-            return "SIGFPE";
+            return "SIGFPE"sv;
 #if (BUILD_PLATFORM_UNIX)
         case SIGUSR1:
-            return "SIGUSR1";
+            return "SIGUSR1"sv;
         case SIGBUS:
-            return "SIGBUS";
+            return "SIGBUS"sv;
 #endif
         default:
-            return "???";
+            return "unknown"sv;
     }
 }
 
