@@ -42,8 +42,8 @@ namespace util {
 /// if (buffer != nullptr) {
 ///     return std::string{ buffer };
 /// }
-//  return std::string{};
-/// \endcode
+/// return std::string{};
+/// @endcode
 ///
 /// @see For Windows use [SHGetKnownFolderPath function](
 ///  https://docs.microsoft.com/en-us/windows/desktop/api/shlobj_core/nf-shlobj_core-shgetknownfolderpath)
