@@ -85,6 +85,7 @@ $ sudo dnf install libasan libasan-static
   - https://github.com/adishavit/cmake_snippets
 
 #### Running tests
+
 ```
 env CTEST_OUTPUT_ON_FAILURE=1 make check
 ctest --verbose
@@ -94,6 +95,19 @@ ninja -v
 
 ### ninja single core build
 ninja -j1
+```
+
+Testing hints (verbose flags '-VV'):
+
+```
+# list all test
+$ ctest -N
+# run all test and show output on errors
+$ ctest --output-on-failure 
+# run specific test <test>
+$ ctest -R <test>
+# run specific test <test> and show output on errors
+$ ctest --output-on-failure -R <test>
 ```
 
 
@@ -122,6 +136,29 @@ From IRC:
 ```
 you seem to be passing in an initializer_list which has one element but you're accessing il.begin()[0] through il.begin()[3]?
 <Alipha> olx69: do you want to initialize all 4 elements to attribute::Attributes_Off?
+```
+
+Maybe related is compiler's warning seen on older code:
+
+```
+sources/common/include/eda/color/detail/ansii_color.hpp:33:43: Warnung: Arrayindex 1 ist außerhalb der Arraygrenzen von »const eda::color::attribute [1]« [-Warray-bounds]
+   33 |         : std::array<value_type, SIZE>{ { static_cast<value_type>(il.begin()[N])... } }
+      |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+sources/common/include/eda/color/detail/ansii_color.hpp:130:49: Anmerkung: beim Referenzieren von »<anonymous>«
+  130 | color::printer const bold{ attribute::Text_Bold };
+      |                                                 ^
+sources/common/include/eda/color/detail/ansii_color.hpp:33:43: Warnung: Arrayindex 2 ist außerhalb der Arraygrenzen von »const eda::color::attribute [1]« [-Warray-bounds]
+   33 |         : std::array<value_type, SIZE>{ { static_cast<value_type>(il.begin()[N])... } }
+      |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+sources/common/include/eda/color/detail/ansii_color.hpp:130:49: Anmerkung: beim Referenzieren von »<anonymous>«
+  130 | color::printer const bold{ attribute::Text_Bold };
+      |                                                 ^
+sources/common/include/eda/color/detail/ansii_color.hpp:33:43: Warnung: Arrayindex 3 ist außerhalb der Arraygrenzen von »const eda::color::attribute [1]« [-Warray-bounds]
+   33 |         : std::array<value_type, SIZE>{ { static_cast<value_type>(il.begin()[N])... } }
+      |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+sources/common/include/eda/color/detail/ansii_color.hpp:130:49: Anmerkung: beim Referenzieren von »<anonymous>«
+  130 | color::printer const bold{ attribute::Text_Bold };
+      |                                                 ^
 ```
 
 #### Boost.Spirit X3 Notes
@@ -207,18 +244,6 @@ In 2021, the code of 2018 (git tag R2018) compiles and runs without errors
 regards to grammar rules.
 Other test are fine. Anyway, this is still the main work ground.
 
-Testing hints (verbose flags '-VV'):
-
-```
-# list all test
-$ ctest -N
-# run all test and show output on errors
-$ ctest --output-on-failure 
-# run specific test <test>
-$ ctest -R <test>
-# run specific test <test> and show output on errors
-$ ctest --output-on-failure -R <test>
-```
 
 ### App Logging
 

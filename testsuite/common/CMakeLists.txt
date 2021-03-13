@@ -11,9 +11,15 @@ add_library(${PROJECT_NAME} "")
 add_library(testsuite::common ALIAS ${PROJECT_NAME})
 
 
+# FixMe: depend only on eda::util::make_iomanip header for failure_diagnostic_fixture
 target_link_libraries(${PROJECT_NAME}
-    PUBLIC
+    PRIVATE
         eda::common
+)
+
+
+add_dependencies(${PROJECT_NAME} 
+    external-cli11
 )
 
 
@@ -24,6 +30,7 @@ endif()
 
 target_sources(${PROJECT_NAME} 
     PRIVATE
+        src/cli_args.cpp
         src/data_set.cpp
         src/failure_diagnostic_fixture.cpp
 )
@@ -43,4 +50,5 @@ target_include_directories(${PROJECT_NAME}
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${EXTERNAL_BOOST_UTF_INCLUDE_DIR}>
         $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
+        $<BUILD_INTERFACE:${CLI11_INCLUDE_DIR}>
 )
