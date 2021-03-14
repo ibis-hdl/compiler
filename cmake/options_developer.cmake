@@ -9,8 +9,7 @@
 # ToDO: Study [Faster builds with PCH suggestions from C++ Build Insights](
 #   https://devblogs.microsoft.com/cppblog/faster-builds-with-pch-suggestions-from-c-build-insights/)
 option(EDA_ENABLE_PCH
-  "Enable precompile headers support. \"
-   This can speed up compilation time."
+  "Enable precompile headers support. This can speed up compilation time."
   ON)
 mark_as_advanced(EDA_ENABLE_PCH)
 
@@ -46,15 +45,15 @@ mark_as_advanced(DEVELOPER_RUN_ON_VALGRIND)
 ##------------------------------------------------------------------------------
 # Developer Build Option: Boost.Org @BleedingEdge
 option(DEVELOPER_EXTERNAL_BOOST_SPIRIT_X3 
-  "Configure EDA to use external Boost.Org Spirit Parser X3 - LL(k) Parser Framework. \" 
-  This is usefull for developers which has to work on more recent versions \"
+  "Configure EDA to use external Boost.Org Spirit Parser X3 - LL(k) Parser Framework.\
+  This is usefull for developers which has to work on more recent versions\
   as the build host/system supplies."
   OFF)
 mark_as_advanced(DEVELOPER_EXTERNAL_BOOST_SPIRIT_X3)
 
 option(DEVELOPER_EXTERNAL_BOOST_UTF 
-  "Configure EDA to use external Boost.Org Unit Test Framework (UTF). \"
-  This is usefull for developers which has to work on more recent versions \"
+  "Configure EDA to use external Boost.Org Unit Test Framework (UTF).\
+  This is usefull for developers which has to work on more recent versions\
   as the build host/system supplies."
   OFF)
 mark_as_advanced(DEVELOPER_EXTERNAL_BOOST_UTF)

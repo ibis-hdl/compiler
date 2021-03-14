@@ -229,9 +229,9 @@ template <typename T> T const& get() const
 
 ### Fix Parser Testsuite
 
-IIRC the tests passed in 2018. Only problems mentioned in vhdl parser_rules
-*test_case_FixMe.txt* where known. In 2021 following test
-*test_vhdl_parser_rule* tests failed:
+The tests passed in 2018, using Boost v1.68's spirit X3. Only problems mentioned 
+in vhdl parser_rules *test_case_FixMe.txt* where known. In 2021 boost is bumped
+to v1.73 and following *test_vhdl_parser_rule* tests failed:
 
   - test_case_name = aggregate/aggregate_001; 
   - test_case_name = aggregate/aggregate_002; 
@@ -240,9 +240,11 @@ IIRC the tests passed in 2018. Only problems mentioned in vhdl parser_rules
   - test_case_name = attribute_specification/attribute_specification_001; 
   - test_case_name = use_clause/use_clause_000; 
 
-In 2021, the code of 2018 (git tag R2018) compiles and runs without errors
-regards to grammar rules.
-Other test are fine. Anyway, this is still the main work ground.
+It is even reproducible with the code of 2018 (git tag R2018) and 
+Boost's v1.73 spirit X3 by setting cmake's ExternalProject_Add() 
+GIT_TAG from 1.68.0 to 1.73 (see options_developer.cmake). So these 
+errors are imminent in these code base before. Anyway, parser is 
+still the main work ground.
 
 
 ### App Logging

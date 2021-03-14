@@ -35,8 +35,8 @@ target_sources(${PROJECT_NAME}
         
         src/parser/error_handler.cpp
         src/parser/on_error_base.cpp
-        #src/parser/grammar.cpp  # ---- memory exhausting @compile time ----
-        #src/parser/parse.cpp    # FixMe: also creates Grammar instance? Shouldn't!
+        src/parser/grammar.cpp  # ---- memory exhausting @compile time ----
+        src/parser/parse.cpp    # FixMe: also creates Grammar instance? Shouldn't!
         
         src/analyze/error_handler.cpp
         src/analyze/check/label_match.cpp
@@ -52,7 +52,7 @@ cmake_host_system_information(
     QUERY  AVAILABLE_PHYSICAL_MEMORY
 )
 
-if(localhost_RAM_MiB LESS 12000)
+if(localhost_RAM_MiB LESS 16000)
     # probably to loose on this file, anyway ...
     set_source_files_properties(src/parser/grammar.cpp
         PROPERTIES

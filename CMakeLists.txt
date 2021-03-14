@@ -102,7 +102,7 @@ find_package(Threads REQUIRED)
 include(external_json)
 include(external_cli11)
 # ToDo: stick at C++17 gsl::string_span, with C++20 std::span [unused]
-include(external_gsl) 
+#include(external_gsl) 
 
 
 ## 

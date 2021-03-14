@@ -39,3 +39,10 @@ CTestTestfile.cmake
 /build/
 /.vscode/
 /.cache/
+
+# temporary Readme file
+BoostStacktrace.txt
+BoostTest.txt
+CLangSatanizer.CMake.txt
+CMakeClangFormat.txt
+PCH.txt

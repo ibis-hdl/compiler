@@ -4,6 +4,7 @@
 BasedOnStyle: Google
 AccessModifierOffset: '-2'
 BreakBeforeBraces: Stroustrup
+ColumnLimit: '100'
 Cpp11BracedListStyle: 'false'
 SortIncludes: 'false'
 ...
