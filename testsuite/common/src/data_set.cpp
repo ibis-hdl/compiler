@@ -7,13 +7,13 @@
 
 #include <testsuite/common/data_set.hpp>
 
-#include <boost/filesystem/fstream.hpp>
-
 #include <cassert>
 #include <algorithm>
 #include <iterator>
 #include <exception>
 #include <iostream>
+#include <fstream>
+#include <filesystem>
 
 
 namespace testsuite {
@@ -71,16 +71,16 @@ void dataset_loader::read_files(fs::path const& path)
 
             for(auto const& file_ : dir_list) {
 
-                auto const file = fs::canonical(file_);
+                fs::path file = fs::canonical(file_);
 
-                if (fs::extension(file) == input_extension) {
+                if (file.extension() == input_extension) {
 
                     testfile_name.emplace_back(
                         (file.parent_path().filename() / file.stem()).generic_string()
                     );
                     std::cerr << "INFO: read " << file << '\n';
 
-                    fs::path const expect_file = fs::change_extension(file, expected_extension);
+                    fs::path const expect_file = file.replace_extension(expected_extension);
 
                     testfile_input.emplace_back(   read_file(file ));
                     testfile_expected.emplace_back(read_file(expect_file));
@@ -117,17 +117,17 @@ void dataset_loader::read_files(fs::path const& path)
 
 std::string dataset_loader::read_file(fs::path const& file_path)
 {
-    fs::ifstream file{ file_path };
+    std::ifstream ifs{ file_path };
 
-    if(!file) {
+    if(!ifs.is_open()) {
         std::cerr << "ERROR: unable to open " << pretty_filepath(file_path).string() << "!\n";
         throw std::ios_base::failure{ "file open error" };
     }
 
     std::ostringstream ss{};
-    ss << file.rdbuf();
+    ss << ifs.rdbuf();
 
-    if(file.fail() && !file.eof()) {
+    if(ifs.fail() && !ifs.eof()) {
         std::cerr << "ERROR: unable to open " << pretty_filepath(file_path).string() << '\n';
         throw std::ios_base::failure{ "rdbuf() read error" };
     }

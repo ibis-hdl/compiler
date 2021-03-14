@@ -14,6 +14,7 @@
 #include <csignal>
 #include <cstdlib>
 #include <exception>
+#include <filesystem>
 #include <fstream>
 #include <functional>
 #include <iosfwd>
@@ -28,7 +29,6 @@
 #include <vector>
 
 #include <boost/config.hpp>
-#include <boost/filesystem.hpp> 
 #include <boost/locale.hpp>
 #include <boost/process.hpp>
 #include <boost/stacktrace.hpp>

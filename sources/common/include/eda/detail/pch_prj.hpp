@@ -19,7 +19,7 @@
 #include <eda/settings.hpp>
 
 #include <eda/util/cxx_bug_fatal.hpp>
-#include <eda/util/file/file_reader.hpp>
+#include <eda/util/file/file_loader.hpp>
 #include <eda/util/file/user_home_dir.hpp>
 #include <eda/util/infix_ostream_iterator.hpp>
 #include <eda/util/string/icompare.hpp>

@@ -7,17 +7,14 @@
 
 #include <eda/util/file/user_home_dir.hpp>
 
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
-#include <boost/system/error_code.hpp>
-
-#include <eda/namespace_alias.hpp> // IWYU pragma: keep
 #include <eda/compiler/compiler_support.hpp> // IWYU pragma: keep
 #include <eda/platform.hpp>
 
 #include <cstdlib>
 #include <stdexcept>
 #include <string>
+
+#include <eda/namespace_alias.hpp> // IWYU pragma: keep
 
 namespace eda {
 namespace util {
@@ -75,7 +72,7 @@ fs::path user_home_dir(std::initializer_list<char const*> path_list)
 
     fs::path path{ HOME_ENV };
 
-    boost::system::error_code ec;
+    std::error_code ec;
 
     // The HOME directory must exist and must be a directory
 

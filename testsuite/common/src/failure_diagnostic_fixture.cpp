@@ -13,20 +13,16 @@
 #include <boost/test/utils/lazy_ostream.hpp>        // for lazy_ostream_impl, oper...
 #include <boost/test/results_collector.hpp>         // for results_collector, resu...
 
-#include <boost/filesystem/fstream.hpp>             // for ofstream
-#include <boost/filesystem/operations.hpp>          // for filesystem_error, exists
-#include <boost/filesystem/path.hpp>                // for path, operator<<, opera...
-#include <boost/system/error_code.hpp>              // for error_code
-
 #include <boost/algorithm/string/trim.hpp>          // for trim_right_copy
 
 #include <eda/util/make_iomanip.hpp>
 
-#include <testsuite/common/namespace_alias.hpp>     // IWYU pragma: keep'
-
 #include <utility>                                  // for move
 #include <iostream>
+#include <filesystem>
+#include <fstream>
 
+#include <testsuite/common/namespace_alias.hpp>     // IWYU pragma: keep'
 
 namespace testsuite {
 
@@ -147,9 +143,7 @@ failure_diagnostic_fixture::writer::writer(std::string test_case)
 bool failure_diagnostic_fixture::writer::create_directory(fs::path const& write_path)
 {
     try {
-        if(   !boost::filesystem::exists(write_path)
-           || !boost::filesystem::is_directory(write_path)
-        ) {
+        if(!fs::exists(write_path) || !fs::is_directory(write_path)) {
             BOOST_TEST_MESSAGE("INFO(" << name_self << ") "
                                 << "create directories " << write_path << '\n');
             return fs::create_directories(write_path);
@@ -190,7 +184,7 @@ bool failure_diagnostic_fixture::writer::write_file(fs::path const& filename, st
     }
 
     try {
-        fs::ofstream ofs{ filename };
+        std::ofstream ofs{ filename };
         ofs << contents;
     }
     catch(fs::filesystem_error const& e) {

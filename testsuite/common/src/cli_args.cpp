@@ -32,11 +32,6 @@ bool cli_args::parse_cli()
   int const argc = boost::unit_test::framework::master_test_suite().argc;
   char** const argv = boost::unit_test::framework::master_test_suite().argv;
 
-  std::string source_dir;
-  std::string destination_dir;
-  std::string input_extension;
-  std::string output_extension;
-
   CLI::App app("Boost.UTF cli arg fixture");
 
   // Note: CLI11 validators aren't used here, since the message isn't intuitive:
@@ -79,13 +74,11 @@ bool cli_args::parse_cli()
     else {
       // create if not exist
       if (fs::create_directory(data.destination_dir)) {
-        BOOST_TEST_MESSAGE("destination directory " << data.destination_dir
-                                                    << " created!");
+        BOOST_TEST_MESSAGE("destination directory " << data.destination_dir << " created!");
         data.destination_dir = fs::canonical(data.destination_dir);
       }
       else {
-        BOOST_TEST_ERROR("unable to create destination directory "
-                         << data.destination_dir);
+        BOOST_TEST_ERROR("unable to create destination directory " << data.destination_dir);
         data.destination_dir = fs::path{};  // clear wrong path if failed
       }
     }
@@ -103,10 +96,10 @@ void cli_args::print_settings()
     BOOST_TEST_MESSAGE("destination directory " << data.destination_dir);
   }
   if (!data.input_extension.empty()) {
-    BOOST_TEST_MESSAGE("input file extension '" << data.input_extension);
+    BOOST_TEST_MESSAGE("input file extension '" << data.input_extension << "'");
   }
   if (!data.output_extension.empty()) {
-    BOOST_TEST_MESSAGE("output file extension '" << data.output_extension);
+    BOOST_TEST_MESSAGE("output file extension '" << data.output_extension << "'");
   }
 }
 

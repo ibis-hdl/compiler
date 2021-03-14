@@ -9,17 +9,14 @@
 
 #include <boost/stacktrace.hpp>
 
-#include <boost/filesystem.hpp>
-
 #include <csignal>
 #include <atomic>
 #include <iostream>
+#include <filesystem>
 
 #include <eda/color/message.hpp>
 
 #include <eda/namespace_alias.hpp>
-
-namespace fs = boost::filesystem;
 
 namespace /* anonymous */
 {

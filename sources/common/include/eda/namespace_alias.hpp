@@ -8,8 +8,6 @@
 #ifndef SOURCES_COMMON_INCLUDE_EDA_NAMESPACE_ALIAS_HPP_
 #define SOURCES_COMMON_INCLUDE_EDA_NAMESPACE_ALIAS_HPP_
 
-// clang-format off
-
 // forward Boost.Orgs's namespace used
 namespace boost {
 
@@ -19,11 +17,14 @@ namespace boost {
 
     } }  // namespace spirit.x3
 
-    namespace filesystem {
-
-    } // namespace filesystem
+    namespace filesystem { }
 
 } // namespace boost
+
+
+namespace std { // NOLINT(cert-dcl58-cpp)
+    namespace filesystem { }
+}
 
 
 // namespace forward and alias
@@ -43,10 +44,8 @@ namespace eda {
         namespace analyze { }
     } // namespace vhdl
 
-    namespace fs = boost::filesystem;
+    namespace fs = std::filesystem;
 
 } // namespace eda
-
-// clang-format on
 
 #endif /* SOURCES_COMMON_INCLUDE_EDA_NAMESPACE_ALIAS_HPP_ */

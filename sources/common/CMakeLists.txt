@@ -13,14 +13,14 @@ add_library(eda::common     ALIAS  ${PROJECT_NAME})
 
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
-        Boost::filesystem
+        # nothings
 )
 
 
 target_sources(${PROJECT_NAME} 
     PRIVATE
         src/buildinfo.cpp
-        src/file_reader.cpp
+        src/file_loader.cpp
         src/settings.cpp
         src/color.cpp
         src/winapi_color.cpp ### FixMe: looks strange on Linux, but is correct so far

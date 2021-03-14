@@ -15,13 +15,12 @@
 #include <eda/vhdl/parser/parser_config.hpp>
 
 #include <eda/vhdl/ast/ast_printer.hpp>
+#include <eda/util/pretty_typename.hpp>
 
-#include <boost/filesystem.hpp>
+#include <iostream>
+#include <filesystem>
 
 #include <testsuite/common/namespace_alias.hpp>
-
-#include <eda/util/pretty_typename.hpp>
-#include <iostream>
 
 
 namespace testsuite { namespace vhdl_parser { namespace util {

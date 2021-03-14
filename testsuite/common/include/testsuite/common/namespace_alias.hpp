@@ -2,7 +2,7 @@
  * namespace_alias.hpp
  *
  *  Created on: 26.06.2018
- *      Author: olpetzol
+ *      Author: olaf
  */
 
 #ifndef TESTSUITE_COMMON_INCLUDE_TESTSUITE_COMMON_NAMESPACE_ALIAS_HPP_
@@ -22,6 +22,11 @@ namespace boost {
 } // namespace boost
 
 
+namespace std { // NOLINT(cert-dcl58-cpp)
+    namespace filesystem { }
+}
+
+
 namespace eda {
 
     namespace vhdl {
@@ -35,9 +40,8 @@ namespace eda {
 
 namespace testsuite {
 
-
 namespace x3 = boost::spirit::x3;
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 
 namespace btt      = boost::test_tools;
 namespace utf      = boost::unit_test;

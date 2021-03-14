@@ -28,7 +28,6 @@ target_link_libraries(${PROJECT_NAME}
         testsuite::common
         testsuite::vhdl_rules
         Boost::system
-        Boost::filesystem
         Boost::locale
         Boost::unit_test_framework 
 )

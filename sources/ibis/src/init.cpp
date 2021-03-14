@@ -15,7 +15,7 @@
 #include <eda/settings.hpp>
 
 #include <eda/color/message.hpp>
-#include <eda/util/file/file_reader.hpp>
+
 
 #include <boost/locale/generator.hpp>
 #include <boost/locale/localization_backend.hpp>
@@ -23,7 +23,7 @@
 
 #include <CLI/CLI.hpp>
 
-#include <eda/util/file/file_reader.hpp>
+#include <eda/util/file/file_loader.hpp>
 #include <eda/util/file/user_home_dir.hpp>
 #include <eda/util/string/icompare.hpp>
 // clang-format off
@@ -34,9 +34,6 @@
 #include <eda/support/RapidJSON/merge.hpp>
 // clang-format on
 
-#include <boost/filesystem/path.hpp>
-#include <boost/filesystem.hpp> // canonical
-
 #include <algorithm>
 #include <cstdlib>
 #include <memory>
@@ -44,6 +41,7 @@
 #include <string>
 #include <string_view>
 #include <vector>
+#include <filesystem>
 
 #include <eda/util/cxx_bug_fatal.hpp>
 
@@ -508,7 +506,7 @@ void init::l10n()
         return ::eda::util::user_home_dir({ ".eda", "l10n" });
     }();
 
-    boost::system::error_code ec;
+    std::error_code ec;
     auto lc_path = fs::canonical(l10n_path, ec);
 
     long const verbose = [&] { return setting["verbose"].get<long>(); }();

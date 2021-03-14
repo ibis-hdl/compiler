@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <cassert>
 #include <exception>
+#include <filesystem>
 #include <iostream>
 #include <iterator>
 #include <map>
@@ -19,8 +20,6 @@
 #include <tuple>
 #include <utility>
 #include <vector>
-
-#include <boost/filesystem.hpp>
 
 #include <boost/test/unit_test.hpp>
 #if 0

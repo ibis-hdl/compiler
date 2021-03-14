@@ -27,7 +27,6 @@ target_link_libraries(${PROJECT_NAME}
         eda::vhdl_parser
         testsuite::common
         Boost::system
-        Boost::filesystem
         Boost::locale
         Boost::unit_test_framework 
 

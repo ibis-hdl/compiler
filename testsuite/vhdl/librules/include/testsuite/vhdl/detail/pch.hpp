@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <cassert>
 #include <exception>
+#include <filesystem>
 #include <iostream>
 #include <iterator>
 #include <string>
@@ -19,9 +20,6 @@
 #include <vector>
 
 #include <boost/algorithm/string/trim.hpp>
-#include <boost/filesystem.hpp>
-#include <boost/system/error_code.hpp>
-
 #include <boost/test/unit_test.hpp>
 #if 0
 #include <boost/test/data/test_case.hpp>

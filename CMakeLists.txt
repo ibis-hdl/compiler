@@ -74,8 +74,8 @@ set(CMAKE_JOB_POOL_LINK    NINJA_JOBS_100pc_CPU)
 find_package(Boost 1.73.0 
     REQUIRED COMPONENTS 
         system
-        filesystem
         locale
+        filesystem   # Boost::process depends Boost::filesystem
         unit_test_framework 
     OPTIONAL_COMPONENTS 
         stacktrace_basic 

@@ -22,7 +22,6 @@ target_link_libraries(${PROJECT_NAME}
         eda::vhdl_parser
         testsuite::common
         Boost::system
-        Boost::filesystem
         Boost::unit_test_framework 
 )
 #set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-v")

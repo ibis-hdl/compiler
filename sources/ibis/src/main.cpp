@@ -8,7 +8,7 @@
 // clang-format off
 #include <ibis/init.hpp>
 #include <eda/settings.hpp>
-#include <eda/util/file/file_reader.hpp>
+#include <eda/util/file/file_loader.hpp>
 // clang-format on
 
 #include <eda/color/message.hpp>

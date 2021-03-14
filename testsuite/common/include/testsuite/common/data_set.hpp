@@ -11,12 +11,11 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>
 
-#include <boost/filesystem.hpp>
-
 #include <string>
 #include <string_view>
 #include <tuple>
 #include <vector>
+#include <filesystem>
 
 #include <testsuite/common/namespace_alias.hpp>            // IWYU pragma: keep
 

@@ -5,6 +5,8 @@
  *      Author: olaf
  * 
  * Note: The sources are related to Linux and tested on it.
+ * FixMe: The implementation is outside of ibis' namespace which
+ *        leads to wired (even small and cosmetic) problems.
  */
 
 #include <ibis/signal_handler.hpp>
@@ -13,11 +15,8 @@
 #include <fstream>
 #include <optional>
 #include <sstream>
-
 #include <iostream>
 
-#include <boost/filesystem/config.hpp>
-#include <boost/filesystem/path.hpp>
 #include <boost/process/args.hpp>
 #include <boost/process/child.hpp>
 #include <boost/process/error.hpp>
@@ -28,10 +27,14 @@
 #include <atomic>
 #include <system_error>
 #include <thread>
+#include <filesystem>
 
 #include <eda/platform.hpp>
 #include <eda/color/message.hpp>
 #include <eda/compiler/compiler_support.hpp>
+#include <eda/namespace_alias.hpp>
+
+#include <ibis/namespace_alias.hpp>
 
 /*
  * OS specific system headers
@@ -44,7 +47,6 @@
 #include <unistd.h>
 #endif
 
-namespace fs = boost::filesystem;
 namespace bp = boost::process;
 
 #if !defined(BUILD_SYSTEM_LINUX)
@@ -66,6 +68,7 @@ volatile std::sig_atomic_t sig_caught;  // NOLINT(cppcoreguidelines-avoid-non-co
 } // anonymous namespace
 
 using ibis::signal_name;
+using ibis::fs::path;
 
 #if (BUILD_PLATFORM_UNIX)
 bool register_gdb_signal_handler()
@@ -101,7 +104,6 @@ bool register_gdb_signal_handler()
     return true;
 }
 
-
 void gdb_signal_handler(int signum, siginfo_t* /*unused*/, void* /*unused*/)
 {
     sig_caught = signum;
@@ -113,7 +115,11 @@ void gdb_signal_handler(int signum, siginfo_t* /*unused*/, void* /*unused*/)
     std::cerr << failure("[ibis/Note] FAILURE") << " caught signal #"
               << signum << " (" << signal_name(signum) << ")\n";
 
-    fs::path gdb_exe = bp::search_path("gdb");
+    // See [Handle C++17 std::filesystem::path](
+    // https://github.com/klemens-morgenstern/boost-process/issues/164)
+    // FixMe: Boost::process depends on Boost::filesystem which introduces linker
+    // dependencies which we will omit. This affects only stacktrace_gdb part.
+    ibis::fs::path gdb_exe{ bp::search_path("gdb").string() };
 
     if (gdb_exe.empty()) {
         std::cerr << "[ibis/Note] ERROR: gdb not found\n";

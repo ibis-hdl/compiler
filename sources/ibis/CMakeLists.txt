@@ -15,7 +15,7 @@ target_link_libraries(${PROJECT_NAME}
         eda::common
         Boost::system
         Boost::locale
-        Boost::filesystem
+        Boost::filesystem   # Boost::process depends on
         Threads::Threads
 )
 
@@ -110,6 +110,8 @@ endif()
 # FixMe: This needs a rewrote; the stacktrace libraries are checked from
 #        top level CMakeList.txt and are optionally now. Here we can choose
 #        the best options than.
+#        As an example: https://github.com/aaszodi/multovl/blob/master/CMakeLists.txt
+#        where boost chrono is optional and tested on Boost_CHRONO_FOUND
 if()
 endif()
 

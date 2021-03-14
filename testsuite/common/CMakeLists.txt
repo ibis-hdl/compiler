@@ -12,6 +12,8 @@ add_library(testsuite::common ALIAS ${PROJECT_NAME})
 
 
 # FixMe: depend only on eda::util::make_iomanip header for failure_diagnostic_fixture
+#        check for get_properties INCLUDE_DIRECTORIES or
+#        define a header-only interface library for the headers used in both
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         eda::common

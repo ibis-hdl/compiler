@@ -9,20 +9,14 @@
 #define SOURCES_COMMON_INCLUDE_EDA_UTIL_FILE_USER_HOME_DIR_HPP_
 
 #include <initializer_list>
+#include <filesystem>
 
-namespace boost {
-namespace filesystem {
-
-// forward
-class path;
-
-} // namespace filesystem
-} // namespace boost
+#include <eda/namespace_alias.hpp>
 
 namespace eda {
 namespace util {
 
-boost::filesystem::path user_home_dir(std::initializer_list<char const*> path_list);
+fs::path user_home_dir(std::initializer_list<char const*> path_list);
 
 } // namespace util
 } // namespace eda
