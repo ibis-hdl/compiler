@@ -27,6 +27,7 @@ volatile ::sig_atomic_t sig_caught; // Note, at MSVC not in NS std!
 } // anonymous namespace
 
 using ibis::signal_name;
+using ibis::fs::path;
 
 void stacktrace_signal_handler(int signum)
 {

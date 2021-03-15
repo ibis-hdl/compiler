@@ -9,7 +9,7 @@ set EDA_BUILD_DIR=%cd%
 
 set CMAKE_CXX_COMPILER=Clang
 set CMAKE_BUILD_TOOL=Ninja
-set CMAKE_GENERATOR="${CMAKE_BUILD_TOOL}"
+set CMAKE_GENERATOR="%CMAKE_BUILD_TOOL%"
 
 set BOOST_ROOT="D:\My\IBIS\boost_1_73_0"
 set BOOST_LIBRARYDIR="D:\My\IBIS\boost_1_73_0\lib64-clang-11.0.0"
@@ -46,11 +46,11 @@ cmake %EDA_SOURCE_DIR% ^
     -DBUILD_SHARED_LIBS:BOOL=OFF ^
     -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
-# cleanup before the run cmake
+rem cleanup before the run cmake
 cmake --build %EDA_BUILD_DIR% --target clean
 
-# make && build
-cmake --build %EDA_BUILD_DIR% --target all --config %CMAKE_BUILD_TYPE%
+rem make && build
+rem cmake --build %EDA_BUILD_DIR% --target all --config %CMAKE_BUILD_TYPE%
 
-# wait for user
-set /p temp="Hit enter to continue"
+rem wait for user
+rem set /p temp="Hit enter to continue"

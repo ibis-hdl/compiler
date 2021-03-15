@@ -59,6 +59,38 @@ than simply install libasan, e.g. on Fedora:
 $ sudo dnf install libasan libasan-static
 ```
 
+#### Compiling Boost Libs on Windows
+
+You may come across to build Boost libs by yourself - create a batch file.
+
+For Clang-Win:
+
+
+```
+call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64 
+
+rem link: legal values: "shared" "static"
+
+b2 -j%NUMBER_OF_PROCESSORS% ^
+--stage-libdir=lib64-clang-11.0.0 ^
+link=shared ^
+toolset=clang-win address-model=64 architecture=x86 stage ^
+--with-filesystem --with-locale --with-stacktrace --with-system --with-test --with-thread
+```
+
+and for C++17 capable MS Visual Studio 14.1:
+
+```
+call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64 
+
+rem link: legal values: "shared" "static"
+
+b2 -j%NUMBER_OF_PROCESSORS% ^
+--stage-libdir=lib64-msvc-14.1 ^
+link=shared ^
+toolset=msvc address-model=64 architecture=x86 stage ^
+--with-filesystem --with-locale --with-stacktrace --with-system --with-test --with-thread 
+```
 
 #### ToDo
 

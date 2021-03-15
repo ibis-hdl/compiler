@@ -33,9 +33,3 @@ option(EDA_BUILD_TESTS "Build tests" ON)
 if(EDA_WITH_BOOST_STACKTRACE AND EDA_WITH_GDB_STACKTRACE)
     message(FATAL_ERROR "Only one stacktrace option is useful and hence allowed.")
 endif()
-
-# Windows user know, they have no choice
-if(WIN32)
-    set(EDA_WITH_BOOST_STACKTRACE ON)
-    set(EDA_WITH_GDB_STACKTRACE OFF)
-endif()

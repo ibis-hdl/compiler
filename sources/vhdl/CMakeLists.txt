@@ -91,35 +91,6 @@ target_compile_options(${PROJECT_NAME}
 )
 
 
-# MSVC and MSYS2/MinGW64 has problems with spirit.x3
-# increase object size for windows compiler, otherwise will fail
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-    set_source_files_properties(
-        src/parser/grammar.cpp
-        PROPERTIES 
-            COMPILE_FLAGS /bigobj
-    )
-elseif(WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    set_source_files_properties(
-        src/parser/grammar.cpp
-        PROPERTIES 
-            COMPILE_FLAGS -Wa,-mbig-obj
-    )
-endif()
-    
-
-target_compile_definitions(${PROJECT_NAME}
-    PUBLIC
-        $<$<CXX_COMPILER_ID:MSVC>:
-            # No min/max macros on windows, \see [#define NOMINMAX using std::min/max](
-            #  https://stackoverflow.com/questions/13416418/define-nominmax-using-stdmin-max)
-            NOMINMAX
-            # also remove unnecessary warnings about unchecked iterators
-            _SCL_SECURE_NO_WARNINGS        
-        >
-)
-
-
 ##
 # Clang -Weverything
 if(COMPILER_CLANG_WARN_EVERYTHING)

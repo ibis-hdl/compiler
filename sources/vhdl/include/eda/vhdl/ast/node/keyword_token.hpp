@@ -10,6 +10,14 @@
 
 #include <iosfwd>
 
+// FixMe: required on Win32, investigate!
+#if defined(IN)
+#undef IN
+#endif
+#if defined(OUT)
+#undef OUT
+#endif
+
 namespace eda { namespace vhdl { namespace ast {
 
 enum class keyword_token

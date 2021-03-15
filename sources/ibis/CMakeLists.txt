@@ -64,20 +64,9 @@ target_include_directories(${PROJECT_NAME}
 )
 
 
-# MSVC has min/max macro problems, at least CLI11
-# [Possible problem with min() and max()](https://github.com/bkaradzic/bx/issues/252)
-# FixMe: Should be global since it may infer with PCH than
-if(MSVC)
-    set_source_files_properties(src/init.cpp 
-        APPEND PROPERTIES 
-            COMPILE_DEFINITIONS "NOMINMAX"
-    )
-endif()
-
-
 # [How to split strings across multiple lines in CMake?](
 #  https://stackoverflow.com/questions/7637539/how-to-split-strings-across-multiple-lines-in-cmake)
-string(CONCAT SIGNAL_HANDLER_DEFINES
+string(CONCAT _SIGNAL_HANDLER_DEFINES
     "$<$<BOOL:${EDA_WITH_GDB_STACKTRACE}>:EDA_WITH_GDB_STACKTRACE>;"
     "$<$<BOOL:${EDA_WITH_BOOST_STACKTRACE}>:EDA_WITH_BOOST_STACKTRACE>" 
 )
@@ -86,10 +75,12 @@ set_source_files_properties(
     src/stacktrace_gdb.cpp
     src/stacktrace_boost.cpp 
     APPEND PROPERTIES 
-        COMPILE_DEFINITIONS "${SIGNAL_HANDLER_DEFINES}"
+        COMPILE_DEFINITIONS "${_SIGNAL_HANDLER_DEFINES}"
 )
 
 
+# FixMe: Use generator, e.g. see https://www.brianlheim.com/2018/04/09/cmake-cheat-sheet.html
+# $<$<CXX_COMPILER_ID:GNU>:-g -fno-omit-frame-pointer>
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
     target_compile_options(${PROJECT_NAME} 
         PRIVATE
@@ -103,7 +94,8 @@ endif()
 
 
 ##
-# Boost stacktrace
+# [Boost stacktrace](https://www.boost.org/doc/libs/1_75_0/doc/html/stacktrace/configuration_and_build.html)
+#
 # [Configuration and Build](
 #  https://www.boost.org/doc/libs/1_67_0/doc/html/stacktrace/configuration_and_build.html)
 #
@@ -112,10 +104,29 @@ endif()
 #        the best options than.
 #        As an example: https://github.com/aaszodi/multovl/blob/master/CMakeLists.txt
 #        where boost chrono is optional and tested on Boost_CHRONO_FOUND
-if()
+#        - clangw11 has libboost_stacktrace_{basic,noop}-clangw11-...
+#        - vc141 has libboost_stacktrace_{noop,windbg,windbg_cached}-vc141-...
+#
+# FixMe: below is Win32 specific!
+if(Boost_STACKTRACE_WINDBG_FOUND)
+    message(STATUS "Found stacktrace WinDbg")
+else()
+    if(EDA_WITH_BOOST_STACKTRACE)
+        message(STATUS "=> Configure Fix: Found NO stacktrace WinDbg, disable Boost.stacktrace")
+        set(EDA_WITH_BOOST_STACKTRACE OFF
+            CACHE BOOL "Boost.stacktrace option requires WindDb (not found)" FORCE)
+    endif()
 endif()
 
-if(EDA_WITH_BOOST_STACKTRACE)
+if(WIN32 AND EDA_WITH_GDB_STACKTRACE)
+    # Boost.stacktrace (GDB) is linux only these days
+    message(STATUS "=> Configure Fix: On Win32 Boost.stacktrace (GDB) isn't tested, disabled.")
+            set(EDA_WITH_GDB_STACKTRACE OFF
+                CACHE BOOL "Boost.stacktrace (GDB) option not tested on Win32." FORCE)
+endif()
+
+# old stuff
+if(EDA_WITH_BOOST_STACKTRACE_temporary_disabled)
     if(WIN32)
         find_package(Boost REQUIRED COMPONENTS stacktrace_windbg)
         message(STATUS "WinDbg library found.")
