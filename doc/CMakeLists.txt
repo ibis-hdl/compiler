@@ -19,10 +19,18 @@ foreach(doxygen_def ${doxygen_definition_list})
     set(doxygen_definitions "${doxygen_definitions} \"${doxygen_def}\"")
 endforeach()
 
-    
+
+# API
 configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/doxyfile.in 
-    ${CMAKE_CURRENT_BINARY_DIR}/doxyfile
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/doxyfile.in 
+    ${CMAKE_CURRENT_BINARY_DIR}/api/doxyfile
+    @ONLY
+)
+
+# TestSuite
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/testsuite/doxyfile.in 
+    ${CMAKE_CURRENT_BINARY_DIR}/testsuite/doxyfile
     @ONLY
 )
 
@@ -30,10 +38,18 @@ configure_file(
 # Maybe check [doxygen_add_docs()](https://cmake.org/cmake/help/v3.11/module/FindDoxygen.html)
 add_custom_target(doc
     COMMAND
-        ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/doxyfile
+        ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/api/doxyfile
     WORKING_DIRECTORY
         ${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Generating API documentation with Doxygen"
+    VERBATIM
+)
+add_custom_target(doc-testsuite
+    COMMAND
+        ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/testsuite/doxyfile
+    WORKING_DIRECTORY
+        ${CMAKE_CURRENT_BINARY_DIR}
+    COMMENT "Generating TestSuite documentation with Doxygen"
     VERBATIM
 )
 
