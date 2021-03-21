@@ -6,6 +6,7 @@
 #include <optional>
 #include <string>
 #include <vector>
+#include <filesystem>
 
 #include <eda/namespace_alias.hpp> // IWYU pragma: keep
 

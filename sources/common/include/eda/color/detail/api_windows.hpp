@@ -8,9 +8,7 @@
 #ifndef SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_API_WINDOWS_HPP_
 #define SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_API_WINDOWS_HPP_
 
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#undef WIN32_LEAN_AND_MEAN
 #include <io.h> // _isatty, _fileno
 
 #include <iostream>

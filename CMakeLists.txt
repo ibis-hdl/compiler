@@ -106,10 +106,12 @@ include(external_cli11)
 
 
 ## 
-# Common build options: set the output folder where programs will be created.
+# Ensure that all runtime components end up in the bin directory, including
+# both .exe's and .dll's. All link-time components, including .so's
+# and .a's in Linux and .lib's on Windows, end up in the the lib directory.
 # [Output Artifacts](https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html#output-artifacts)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ## 

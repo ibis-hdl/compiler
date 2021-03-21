@@ -2,9 +2,13 @@
 # [clang-format configurator](https://zed0.co.uk/clang-format-configurator/)
 ---
 BasedOnStyle: Google
-AccessModifierOffset: '-2'
+IndentWidth: '4'
+AccessModifierOffset: '-4'
 BreakBeforeBraces: Stroustrup
+BreakConstructorInitializers: BeforeComma
+BreakInheritanceList: BeforeComma
 ColumnLimit: '100'
+ConstructorInitializerAllOnOneLineOrOnePerLine: 'false'
 Cpp11BracedListStyle: 'false'
 SortIncludes: 'false'
 ...

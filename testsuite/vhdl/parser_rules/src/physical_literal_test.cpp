@@ -18,7 +18,7 @@
 #include <testsuite/vhdl_parser/testing_parser_grammar_hack.hpp>
 
 #include <testsuite/common/data_set.hpp>
-#include <testsuite/common/failure_diagnostic_fixture.hpp>
+#include <testsuite/vhdl_parser/failure_diagnostic_fixture.hpp>
 
 #include <testsuite/common/namespace_alias.hpp>
 
@@ -26,7 +26,7 @@
 BOOST_AUTO_TEST_SUITE( parser_rule )
 
 
-BOOST_DATA_TEST_CASE_F( testsuite::failure_diagnostic_fixture,
+BOOST_DATA_TEST_CASE_F( testsuite::vhdl_parser::util::failure_diagnostic_fixture,
     physical_literal,
     utf_data::make_delayed<testsuite::dataset_loader>( "test_case/physical_literal" ),
     input, expected, test_case_name)
@@ -50,7 +50,7 @@ BOOST_DATA_TEST_CASE_F( testsuite::failure_diagnostic_fixture,
 }
 
 
-BOOST_DATA_TEST_CASE_F( testsuite::failure_diagnostic_fixture,
+BOOST_DATA_TEST_CASE_F( testsuite::vhdl_parser::util::failure_diagnostic_fixture,
     physical_literal_failure,
     utf_data::make_delayed<testsuite::dataset_loader>( "test_case/physical_literal_failure" ),
     input, expected, test_case_name)

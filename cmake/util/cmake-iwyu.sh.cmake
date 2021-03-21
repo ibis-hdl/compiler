@@ -2,7 +2,7 @@
 
 SCRIPT_PATH="${BASH_SOURCE%/*}"
 
-IWYU_BIN=/opt/clang/bin/include-what-you-use
+IWYU_BIN=$(which include-what-you-use)
 IWYU_COMMENT="-Xiwyu;--no_comments"
 #IWYU_COMMENT="-Xiwyu;--max_line_length=160"
 IWYU_MAP="${PWD}/${SCRIPT_PATH}/misc_iwyu.imp"

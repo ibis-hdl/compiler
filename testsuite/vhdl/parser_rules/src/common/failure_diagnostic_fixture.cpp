@@ -1,0 +1,49 @@
+#include <testsuite/vhdl_parser/failure_diagnostic_fixture.hpp>
+#include <testsuite/common/cli_args.hpp>
+
+#include <boost/test/unit_test.hpp>
+
+#include <testsuite/vhdl_parser/detail/compile_builtin.hpp>
+
+namespace testsuite {
+namespace vhdl_parser {
+namespace util {
+
+void failure_diagnostic_fixture::setup()
+{
+    fixture_name = "vhdl/parser_rules/failure_diagnostic_fixture";
+
+    if (cli_args::destination_dir().empty()) {
+        BOOST_TEST_MESSAGE(  // --
+            "INFO: <failure_diagnostic_fixture> use compiled builtin destination_dir "
+            << compile_def_destination_dir);
+        destination_dir = compile_def_destination_dir;
+    }
+    else {
+        BOOST_TEST_MESSAGE(  // --
+            "INFO: <failure_diagnostic_fixture> use command line <destination_dir> "
+            << cli_args::destination_dir());
+        destination_dir = cli_args::destination_dir();
+    }
+
+    if (cli_args::output_extension().empty()) {
+        BOOST_TEST_MESSAGE(  // --
+            "INFO: <failure_diagnostic_fixture> use compiled builtin output_extension "
+            << compile_def_output_extension);
+        output_extension = compile_def_output_extension;
+    }
+    else {
+        BOOST_TEST_MESSAGE(  // --
+            "INFO: <failure_diagnostic_fixture> use command line <output_extension> "
+            << cli_args::output_extension());
+        output_extension = cli_args::output_extension();
+    }
+
+    // post condition
+    BOOST_TEST_REQUIRE(!destination_dir.empty());
+    BOOST_TEST_REQUIRE(!output_extension.empty());
+}
+
+}  // namespace util
+}  // namespace vhdl_parser
+}  // namespace testsuite

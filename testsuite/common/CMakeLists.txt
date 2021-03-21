@@ -20,6 +20,14 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 
+# default paths and settings
+configure_file(
+    ${PROJECT_SOURCE_DIR}/include/testsuite/common/detail/compile_builtin.hpp.in 
+    ${PROJECT_BINARY_DIR}/include/testsuite/common/detail/compile_builtin.hpp
+    @ONLY
+)
+
+
 add_dependencies(${PROJECT_NAME} 
     external-cli11
 )
@@ -50,6 +58,7 @@ endif()
 target_include_directories(${PROJECT_NAME} 
     PUBLIC
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
         $<BUILD_INTERFACE:${EXTERNAL_BOOST_UTF_INCLUDE_DIR}>
         $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
         $<BUILD_INTERFACE:${CLI11_INCLUDE_DIR}>

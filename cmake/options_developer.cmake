@@ -72,13 +72,13 @@ mark_as_advanced(DEVELOPER_EXTERNAL_BOOST_UTF)
 add_compile_options( # FixMe: Fails on Clang-Win actually (cmake 3.19.6)
     #  ---- warnings ----
     # http://clang.llvm.org/docs/DiagnosticsReference.html
-    "$<$<CXX_COMPILER_ID:Clang>:-Wall;-Wextra;-Wpedantic;-Wno-c99-extensions>"
+    "$<$<CXX_COMPILER_ID:Clang>:-Wall;-Wextra;-Wpedantic;-Wno-c11-extensions>"
     # https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
     "$<$<CXX_COMPILER_ID:GNU>:-Wall;-Wextra;-Wpedantic>"
     # https://docs.microsoft.com/en-us/cpp/build/reference/compiler-option-warning-level
     "$<$<CXX_COMPILER_ID:MSVC>:/W4>"
 
-    # ---- Big files on Win32 (grammar.cpp) ----
+    # ---- Big files on Win32 (Boost Spirit-X3, e.g. grammar.cpp) ----
     # Fix Fatal Error C1128: number of sections exceeded object file format limit
     "$<$<CXX_COMPILER_ID:MSVC>:/bigobj>"
     # [GCC equivalent of MS's /bigobj](https://stackoverflow.com/questions/16596876/gcc-equivalent-of-mss-bigobj)
@@ -199,6 +199,7 @@ endif()
 # https://github.com/include-what-you-use/include-what-you-use
 # on Unix/Linux only
 # FixMe: Update with https://github.com/miurahr/cmake-qt-packaging-example/blob/master/CMakeLists.txt
+# Check https://cmake.org/cmake/help/v3.20/prop_tgt/LANG_INCLUDE_WHAT_YOU_USE.html
 if(UNIX)
     configure_file(${CMAKE_SOURCE_DIR}/cmake/util/cmake-iwyu.sh.cmake
                     ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/cmake-iwyu.sh @ONLY

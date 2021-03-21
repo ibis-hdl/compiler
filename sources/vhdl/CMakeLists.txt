@@ -54,10 +54,9 @@ cmake_host_system_information(
 
 if(localhost_RAM_MiB LESS 16000)
     # probably to loose on this file, anyway ...
-    set_source_files_properties(src/parser/grammar.cpp
+    set_source_files_properties(src/parser/grammar.cpp src/parser/parse.cpp
         PROPERTIES
-            # allow one core to bypass to compile other smaller files
-            JOB_POOL_COMPILE NINJA_JOBS_TWO_CPU
+            JOB_POOL_COMPILE NINJA_JOBS_ONE_CPU
     ) 
 endif()
 

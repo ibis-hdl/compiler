@@ -5,6 +5,7 @@ cert-*,\
 clang-analyzer-*,\
 cppcoreguidelines-*,\
 -cppcoreguidelines-pro-bounds-array-to-pointer-decay,\
+-cppcoreguidelines-pro-type-vararg,\
 -cppcoreguidelines-avoid-magic-numbers,\
 misc-*,\
 -misc-no-recursion,\

@@ -278,6 +278,16 @@ GIT_TAG from 1.68.0 to 1.73 (see options_developer.cmake). So these
 errors are imminent in these code base before. Anyway, parser is 
 still the main work ground.
 
+But there is more:
+
+It looks like testsuite/librules/rules_{a-z} instances are not necessary.
+testsuite/librules/rules_api should be able to access grammar.cpp symbols.
+The final question is, does testsuite/librules/rules_{a-z} really need to create 
+all instances again?
+
+testsuite/numeric_convert/numeric_parser again has a helper function parse(), 
+just like testsuite/parser_rules/testing_parser !!! Maybe combine them?
+   
 
 ### App Logging
 
@@ -296,10 +306,30 @@ ToDo on design
 
 ### Project structure
 
+- testsuite/common/failure_diagnostic_fixture and testsuite/vhdl/util/failure_diagnostic_fixture
+  BAD NAMING ...
+
+- rename ${PROJECT_ROOT}/sources to ${PROJECT_ROOT}/source
+
+- testsuite/ibis/ App Tests uses ${PROJECT_ROOT}/Readme.md which got large
+  over time, supply a small test input file.
+
+- rename testsuite/*/test_case/* to test_data which better fits
+
+- rename testsuite/parser_rules/utils -> testsuite/parser_rules/scripts is better
+
+- rename testsuite/common to testsuite/util and libutil. Header, namespaces etc are
+  inconsistant!
+
+- rename common fs paths, namespaces are (as far I remember) 'util' always.
+
 - merge back testsuite librules into parser_rules. The intention was
   to split out compile/memory intensive compile jobs. This is 
-  confusing from maintenance aspect. The best would be to use ninja
-  specific switches in CMake. Maybe better to complete switch to ninja.
+  confusing from maintenance aspect. Ninja build tool support this.
+
+- testsuite/librules/CMake holds some Spirit.X3 compile stuff - make it
+  globally. E.g. GCC/CLang -ftemplate-backtrace-limit=... as well as
+  MSVC /bigobj => use generator expressions in cmake/options_developer.cmake
 
 - maybe move the testsuites below there sources, see e.g. llvm source tree
 
@@ -456,7 +486,8 @@ https://blog.kitware.com/static-checks-with-cmake-cdash-iwyu-clang-tidy-lwyu-cpp
   *Until the ast_printer recursive call chain has been solved.*
 
 - modernize-concat-nested-namespaces:  
-  *ToDo: can be done be clang-format?*
+  *ToDo: [Convert to C++17 nested namespaces in clang-format?](https://stackoverflow.com/questions/61020329/convert-to-c17-nested-namespaces-in-clang-format)*
+  ```$ clang-tidy -checks='-*,modernize-concat-nested-namespaces' -fix myfile.cpp```
 
 - [cert-err58-cpp](https://clang.llvm.org/extra/clang-tidy/checks/cert-err58-cpp.html):  
   *It's correct, but depend on others libraries.*
@@ -479,6 +510,9 @@ https://blog.kitware.com/static-checks-with-cmake-cdash-iwyu-clang-tidy-lwyu-cpp
 
 - [readability-redundant-access-specifiers](https://clang.llvm.org/extra/clang-tidy/checks/readability-redundant-access-specifiers.html):  
   *This is correct, but is used here for classification purposes.*
+
+- [cppcoreguidelines-pro-type-vararg](https://clang.llvm.org/extra/clang-tidy/checks/cppcoreguidelines-pro-type-vararg.html):
+  *By using Boost UTF this rule is triggered on each BOOST_TEST macros. No c-style vararg functions are written in this project.*
   
 ## ToDo Documentation
 

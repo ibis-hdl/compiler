@@ -10,15 +10,27 @@ project(testrunner_vhdl_parser_rules LANGUAGES CXX)
 add_executable(${PROJECT_NAME} "")
 
 
-# The argument is the top level directory of the test directories of 'test_case'
-add_test(NAME test_vhdl_parser_rule
+# Variables used to configure ctest project, also compile time builtin settings
+set(TESTSUITE_SOURCE_DIR "${PROJECT_SOURCE_DIR}")
+set(TESTSUITE_INPUT_EXTENSION ".input")
+set(TESTSUITE_EXPECTED_EXTENSION ".expected")
+set(TESTSUITE_DESTINATION_DIR "${CMAKE_BINARY_DIR}/testsuite_result/vhdl_parser_rules")
+set(TESTSUITE_OUTPUT_EXTENSION ".result")
+
+add_test(NAME test_vhdl_parser_rules
     COMMAND 
-        ${PROJECT_NAME} -- 
-        --source-dir=${PROJECT_SOURCE_DIR}
-        --destination-dir=${PROJECT_BINARY_DIR}
-        --input-extension=.input
-    #    --write-extension=.expected
-        --write-extension=.result    
+        ${PROJECT_NAME} --log_level=error -- 
+        --source-dir=${TESTSUITE_SOURCE_DIR}
+        --input-extension=${TESTSUITE_INPUT_EXTENSION}
+        --expected-extension=${TESTSUITE_EXPECTED_EXTENSION}
+        --destination-dir=${TESTSUITE_DESTINATION_DIR}
+        --output-extension=${TESTSUITE_OUTPUT_EXTENSION}
+)
+
+configure_file(
+    ${PROJECT_SOURCE_DIR}/include/testsuite/vhdl_parser/detail/compile_builtin.hpp.in 
+    ${PROJECT_BINARY_DIR}/include/testsuite/vhdl_parser/detail/compile_builtin.hpp
+    @ONLY
 )
 
 
@@ -45,6 +57,7 @@ endif()
 target_sources(${PROJECT_NAME} 
     PRIVATE
         src/common/test_vhdl_parser.cpp
+        src/common/failure_diagnostic_fixture.cpp
         # concrete test cases
         src/abstract_literal_test.cpp
         src/actual_part_test.cpp
@@ -159,7 +172,8 @@ target_sources(${PROJECT_NAME}
 
 set_source_files_properties(src/common/test_vhdl_parser.cpp
     APPEND PROPERTIES 
-        COMPILE_DEFINITIONS "BOOST_TEST_DYN_LINK" 
+        # Failed to link Boost UTF with Windows/Clang, Linux works
+        COMPILE_DEFINITIONS "$<$<NOT:$<PLATFORM_ID:Windows>>:BOOST_TEST_DYN_LINK>"
 )
 # [Boost.Test linker error by use with precompiled headers (PCH)](
 #  https://stackoverflow.com/questions/66535719/boost-test-linker-error-by-use-with-precompiled-headers-pch)
@@ -181,6 +195,7 @@ endif()
 target_include_directories(${PROJECT_NAME} 
     PRIVATE
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
         $<BUILD_INTERFACE:${EXTERNAL_BOOST_UTF_INCLUDE_DIR}>
         $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
 )

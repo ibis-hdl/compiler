@@ -47,7 +47,7 @@ cmake_host_system_information(
     QUERY  AVAILABLE_PHYSICAL_MEMORY
 )
 
-if(localhost_RAM_MiB LESS 12000)
+if(localhost_RAM_MiB LESS 8000)
     set(SOURCE_LIST
         ${SOURCE_LIST_LOW_MEM}
     )
