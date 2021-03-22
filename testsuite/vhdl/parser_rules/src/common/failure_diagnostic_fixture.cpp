@@ -3,7 +3,7 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <testsuite/vhdl_parser/detail/compile_builtin.hpp>
+#include <testsuite/vhdl_parser/compile_builtin.hpp>
 
 namespace testsuite {
 namespace vhdl_parser {
@@ -16,8 +16,8 @@ void failure_diagnostic_fixture::setup()
     if (cli_args::destination_dir().empty()) {
         BOOST_TEST_MESSAGE(  // --
             "INFO: <failure_diagnostic_fixture> use compiled builtin destination_dir "
-            << compile_def_destination_dir);
-        destination_dir = compile_def_destination_dir;
+            << testsuite::compile_builtin::default_destination_dir);
+        destination_dir = testsuite::compile_builtin::default_destination_dir;
     }
     else {
         BOOST_TEST_MESSAGE(  // --
@@ -29,8 +29,8 @@ void failure_diagnostic_fixture::setup()
     if (cli_args::output_extension().empty()) {
         BOOST_TEST_MESSAGE(  // --
             "INFO: <failure_diagnostic_fixture> use compiled builtin output_extension "
-            << compile_def_output_extension);
-        output_extension = compile_def_output_extension;
+            << testsuite::compile_builtin::default_output_extension);
+        output_extension = testsuite::compile_builtin::default_output_extension;
     }
     else {
         BOOST_TEST_MESSAGE(  // --

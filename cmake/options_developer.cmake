@@ -1,67 +1,17 @@
 ## -----------------------------------------------------------------------------
-# developer configureable build options
+# developer configurable build options
 ## -----------------------------------------------------------------------------
 
 
 ##
 # Developer Build Option: Use PCH
-# Starting with cmake 3.16 projects can use precompiled headers
-# ToDO: Study [Faster builds with PCH suggestions from C++ Build Insights](
+# Starting with CMake 3.16 projects can use precompiled headers
+# ToDo: Study [Faster builds with PCH suggestions from C++ Build Insights](
 #   https://devblogs.microsoft.com/cppblog/faster-builds-with-pch-suggestions-from-c-build-insights/)
 option(EDA_ENABLE_PCH
-    "Enable precompile headers support. This can speed up compilation time."
+    "Enable pre-compiled headers support. This can speed up compilation time."
     ON)
 mark_as_advanced(EDA_ENABLE_PCH)
-
-
-## 
-# CLang extra warnings
-# - [Better Apps with Clang's Weverything or Wall is a Lie!](
-#    https://amattn.com/p/better_apps_clang_weverything_or_wall_is_a_lie.html)
-# - [Warnings: -Weverything and the Kitchen Sink](
-#    https://embeddedartistry.com/blog/2017/3/7/clang-weverythings
-#
-# May require special treatment for clang to prevent contamination with pragmas 
-# by using -Weverything
-#
-# ToDo: modern CMake uses add_compile_options()?
-
-## -----------------------------------------------------------------------------
-# Developer Build Option: Use Clang's -Weverything (Clang only)
-option(DEVELOPER_CLANG_WARN_EVERYTHING 
-    "Use Clang compiler's -Weverything option"
-    OFF)
-mark_as_advanced(DEVELOPER_CLANG_WARN_EVERYTHING)
-
-
-## -----------------------------------------------------------------------------
-# Developer Build Option: run EDA under Valgrind.
-# FixMe: not implemented
-option(DEVELOPER_RUN_ON_VALGRIND 
-    "Configure EDA to be run on Valgrind." 
-    OFF)
-mark_as_advanced(DEVELOPER_RUN_ON_VALGRIND)
-
-##------------------------------------------------------------------------------
-# Developer Build Option: Boost.Org @BleedingEdge
-option(DEVELOPER_EXTERNAL_BOOST_SPIRIT_X3 
-    "Configure EDA to use external Boost.Org Spirit Parser X3 - LL(k) Parser Framework.\
-    This is useful for developers which has to work on more recent versions\
-    as the build host/system supplies."
-    OFF)
-mark_as_advanced(DEVELOPER_EXTERNAL_BOOST_SPIRIT_X3)
-
-option(DEVELOPER_EXTERNAL_BOOST_UTF 
-    "Configure EDA to use external Boost.Org Unit Test Framework (UTF).\
-    This is useful for developers which has to work on more recent versions\
-    as the build host/system supplies."
-    OFF)
-mark_as_advanced(DEVELOPER_EXTERNAL_BOOST_UTF)
-
-
-## -----------------------------------------------------------------------------
-# evaluate options
-## -----------------------------------------------------------------------------
 
 
 ## -----------------------------------------------------------------------------
@@ -69,7 +19,7 @@ mark_as_advanced(DEVELOPER_EXTERNAL_BOOST_UTF)
 #
 # Note [Spaces in conditional output of generator expressions](
 # http://cmake.3232098.n2.nabble.com/Spaces-in-conditional-output-of-generator-expressions-td7597652.html)
-add_compile_options( # FixMe: Fails on Clang-Win actually (cmake 3.19.6)
+add_compile_options( # FixMe: Fails on Clang-Win actually (CMake 3.19.6)
     #  ---- warnings ----
     # http://clang.llvm.org/docs/DiagnosticsReference.html
     "$<$<CXX_COMPILER_ID:Clang>:-Wall;-Wextra;-Wpedantic;-Wno-c11-extensions>"
@@ -85,6 +35,21 @@ add_compile_options( # FixMe: Fails on Clang-Win actually (cmake 3.19.6)
     "$<$<AND:$<CXX_COMPILER_ID:GNU>,$<PLATFORM_ID:Windows>>:-Wa,-mbig-obj>"
 )
 
+
+## -----------------------------------------------------------------------------
+# CLang extra warnings, see
+# - [Better Apps with Clang's Weverything or Wall is a Lie!](
+#    https://amattn.com/p/better_apps_clang_weverything_or_wall_is_a_lie.html)
+# - [Warnings: -Weverything and the Kitchen Sink](
+#    https://embeddedartistry.com/blog/2017/3/7/clang-weverythings
+#
+# May require special treatment for clang to prevent contamination with pragmas
+# by using -Weverything
+option(DEVELOPER_CLANG_WARN_EVERYTHING
+    "Use Clang compiler's -Weverything option"
+    OFF)
+mark_as_advanced(DEVELOPER_CLANG_WARN_EVERYTHING)
+
 if(DEVELOPER_CLANG_WARN_EVERYTHING)
     add_compile_options(
         "$<$<CXX_COMPILER_ID:Clang>:-Weverything>"
@@ -95,7 +60,6 @@ endif()
 ## -----------------------------------------------------------------------------
 # Project wide compiler definitions
 #
-
 add_compile_definitions(
     # ---- Win32 ----
     # Boost Libs; see https://cmake.org/cmake/help/latest/module/FindBoost.html
@@ -112,11 +76,26 @@ add_compile_definitions(
 ## -----------------------------------------------------------------------------
 # Bleeding Edge external Boost dependencies
 # FixMe: Won't work any more: ExternalProject.cmake:1679 (get_property):
-#   get_property could not find TARGET boost-utf.  Perhaps it has not yet been
-#   created.
+#   get_property could not find TARGET boost-utf. Perhaps it has not yet been
+#   created -> investigate if the time is coming.
+option(DEVELOPER_EXTERNAL_BOOST_SPIRIT_X3
+    "Configure EDA to use external Boost.Org Spirit Parser X3 - LL(k) Parser Framework.\
+    This is useful for developers which has to work on more recent versions\
+    as the build host/system supplies."
+    OFF)
+mark_as_advanced(DEVELOPER_EXTERNAL_BOOST_SPIRIT_X3)
+
 if(DEVELOPER_EXTERNAL_BOOST_SPIRIT_X3)
     include(external_spirit_x3)
 endif()
+
+option(DEVELOPER_EXTERNAL_BOOST_UTF
+    "Configure EDA to use external Boost.Org Unit Test Framework (UTF).\
+    This is useful for developers which has to work on more recent versions\
+    as the build host/system supplies."
+    OFF)
+mark_as_advanced(DEVELOPER_EXTERNAL_BOOST_UTF)
+
 if(DEVELOPER_EXTERNAL_BOOST_UTF)
     include(external_boost_utf)
 endif()
@@ -132,9 +111,9 @@ endif()
 ## -----------------------------------------------------------------------------
 # CMake Tidy
 #
-# $ clang-tidy --checks='modernize*,performance*' --header-filter=\*.hpp$ -dump-config 
-option(DEVELOPER_RUN_CLANG_TIDY 
-    "Run clang-tidy with the compiler." 
+# $ clang-tidy --checks='modernize*,performance*' --header-filter=\*.hpp$ -dump-config
+option(DEVELOPER_RUN_CLANG_TIDY
+    "Run clang-tidy with the compiler."
     OFF)
 mark_as_advanced(DEVELOPER_RUN_CLANG_TIDY)
 
@@ -175,26 +154,6 @@ configure_file(${eda_SOURCE_DIR}/.clang-tidy ${eda_BINARY_DIR}/.clang-tidy COPYO
 
 
 ## -----------------------------------------------------------------------------
-# Clang-format
-#
-# https://github.com/ttroy50/cmake-examples/tree/master/04-static-analysis/clang-format
-option(DEVELOPER_RUN_CLANG_FORMAT
-    "Run clang-format with the compiler." 
-    OFF)
-mark_as_advanced(DEVELOPER_RUN_CLANG_FORMAT)
-
-if(DEVELOPER_RUN_CLANG_FORMAT)
-    include(FindClangFormat)
-
-    if(NOT CLANG_FORMAT_FOUND)
-        message(FATAL_ERROR "DEVELOPER_RUN_CLANG_FORMAT is ON but clang-format is not found!")
-    else()
-        include(clang-format)
-    endif()
-endif()
-
-
-## -----------------------------------------------------------------------------
 # Include What You Use (IWYU)
 # https://github.com/include-what-you-use/include-what-you-use
 # on Unix/Linux only
@@ -211,3 +170,31 @@ if(UNIX)
     )
 endif()
 
+## -----------------------------------------------------------------------------
+# Developer Build Option: run EDA under Valgrind.
+# FixMe: not implemented any more
+option(DEVELOPER_RUN_ON_VALGRIND
+    "Configure EDA to be run on Valgrind."
+    OFF)
+mark_as_advanced(DEVELOPER_RUN_ON_VALGRIND)
+
+
+## -----------------------------------------------------------------------------
+# Clang-format
+#
+# https://github.com/ttroy50/cmake-examples/tree/master/04-static-analysis/clang-format
+# Maybe: https://github.com/TheLartians/Format.cmake , or https://github.com/zemasoft/clangformat-cmake ??
+option(DEVELOPER_RUN_CLANG_FORMAT
+    "Run clang-format with the compiler."
+    OFF)
+mark_as_advanced(DEVELOPER_RUN_CLANG_FORMAT)
+
+if(DEVELOPER_RUN_CLANG_FORMAT)
+    include(FindClangFormat)
+
+    if(NOT CLANG_FORMAT_FOUND)
+        message(FATAL_ERROR "DEVELOPER_RUN_CLANG_FORMAT is ON but clang-format is not found!")
+    else()
+        include(clang-format)
+    endif()
+endif()

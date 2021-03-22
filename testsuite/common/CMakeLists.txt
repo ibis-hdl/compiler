@@ -22,13 +22,13 @@ target_link_libraries(${PROJECT_NAME}
 
 # default paths and settings
 configure_file(
-    ${PROJECT_SOURCE_DIR}/include/testsuite/common/detail/compile_builtin.hpp.in 
-    ${PROJECT_BINARY_DIR}/include/testsuite/common/detail/compile_builtin.hpp
+    ${PROJECT_SOURCE_DIR}/include/testsuite/common/compile_builtin.hpp.in
+    ${PROJECT_BINARY_DIR}/include/testsuite/common/compile_builtin.hpp
     @ONLY
 )
 
 
-add_dependencies(${PROJECT_NAME} 
+add_dependencies(${PROJECT_NAME}
     external-cli11
 )
 
@@ -38,7 +38,7 @@ if(DEVELOPER_EXTERNAL_BOOST_UTF)
 endif()
 
 
-target_sources(${PROJECT_NAME} 
+target_sources(${PROJECT_NAME}
     PRIVATE
         src/cli_args.cpp
         src/data_set.cpp
@@ -47,15 +47,15 @@ target_sources(${PROJECT_NAME}
 
 
 if (EDA_ENABLE_PCH)
-    target_precompile_headers(${PROJECT_NAME} 
-        PUBLIC 
+    target_precompile_headers(${PROJECT_NAME}
+        PUBLIC
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/common/detail/pch.hpp>
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/common/detail/pch_prj.hpp>
     )
 endif()
 
 
-target_include_directories(${PROJECT_NAME} 
+target_include_directories(${PROJECT_NAME}
     PUBLIC
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>

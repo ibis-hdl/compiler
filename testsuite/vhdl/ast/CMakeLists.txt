@@ -11,9 +11,19 @@ add_executable(${PROJECT_NAME} "")
 
 
 add_test(NAME test_ast
-    COMMAND 
-        ${PROJECT_NAME} -- 
+    COMMAND
+        ${PROJECT_NAME} --
         --source-dir=${PROJECT_SOURCE_DIR}/test_case
+)
+
+
+# Variables used to configure ctest project, also compile time builtin settings
+set(TESTSUITE_SOURCE_DIR ${PROJECT_SOURCE_DIR}/test_case)
+
+configure_file(
+  "${PROJECT_SOURCE_DIR}/include/testsuite/ast/compile_builtin.hpp.in"
+  "${PROJECT_BINARY_DIR}/include/testsuite/ast/compile_builtin.hpp"
+  @ONLY
 )
 
 
@@ -22,7 +32,7 @@ target_link_libraries(${PROJECT_NAME}
         eda::vhdl_parser
         testsuite::common
         Boost::system
-        Boost::unit_test_framework 
+        Boost::unit_test_framework
 )
 #set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-v")
 
@@ -32,7 +42,7 @@ if(DEVELOPER_EXTERNAL_BOOST_UTF)
 endif()
 
 
-target_sources(${PROJECT_NAME} 
+target_sources(${PROJECT_NAME}
     PRIVATE
         src/common/test_ast.cpp
         src/common/position_cache_fixture.cpp
@@ -44,7 +54,7 @@ target_sources(${PROJECT_NAME}
 
 
 set_source_files_properties(src/common/test_ast.cpp
-    APPEND PROPERTIES 
+    APPEND PROPERTIES
         # Failed to link Boost UTF with Windows/Clang, Linux works
         COMPILE_DEFINITIONS "$<$<NOT:$<PLATFORM_ID:Windows>>:BOOST_TEST_DYN_LINK>"
 )
@@ -56,15 +66,15 @@ set_source_files_properties(src/common/test_ast.cpp
 )
 
 if (EDA_ENABLE_PCH)
-    target_precompile_headers(${PROJECT_NAME} 
-        PRIVATE 
+    target_precompile_headers(${PROJECT_NAME}
+        PRIVATE
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/ast/detail/pch.hpp>
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/ast/detail/pch_prj.hpp>
     )
 endif()
 
 
-target_include_directories(${PROJECT_NAME} 
+target_include_directories(${PROJECT_NAME}
     PRIVATE
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
@@ -73,15 +83,8 @@ target_include_directories(${PROJECT_NAME}
 )
 
 
-target_compile_definitions(${PROJECT_NAME} 
+target_compile_definitions(${PROJECT_NAME}
     PRIVATE
-        # don't allow automatically select which libraries to link against    
+        # don't allow automatically select which libraries to link against
         $<$<CXX_COMPILER_ID:MSVC>:BOOST_ALL_NO_LIB>
-)
-
-
-set(TESTSUITE_BUILD_TESTCASE_SOURCE_DIR ${PROJECT_SOURCE_DIR}/test_case)
-configure_file(
-  "${PROJECT_SOURCE_DIR}/include/testsuite/ast/testsuite_buildpath.hpp.in"
-  "${PROJECT_BINARY_DIR}/include/testsuite/ast/testsuite_buildpath.hpp"
 )

@@ -18,7 +18,6 @@
 #include <map>
 
 #include <testsuite/common/namespace_alias.hpp>
-#include <testsuite/ast/testsuite_buildpath.hpp>
 
 namespace testsuite {
 

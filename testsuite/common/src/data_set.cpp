@@ -209,7 +209,7 @@ void dataset_loader::setup()
     }
     // old cli parse way, which doesn't crash
     else {
-        auto parse_for = [](std::string_view arg, std::string_view str, std::string& value) {
+        auto parse_for = [](std::string_view arg, std::string_view str, auto& value) {
             auto const pos = str.find(arg);
 
             if (pos == std::string::npos) {

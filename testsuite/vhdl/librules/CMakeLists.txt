@@ -33,52 +33,51 @@ set(SOURCE_LIST_HIGH_MEM
 )
 set(SOURCE_LIST_LOW_MEM
     src/rules_api.cpp
-    src/rules_a.cpp    src/rules_b.cpp    src/rules_c.cpp 
-    src/rules_d.cpp    src/rules_e.cpp    src/rules_f.cpp 
-    src/rules_g.cpp                       src/rules_i.cpp 
-    src/rules_l.cpp                       src/rules_n.cpp 
-    src/rules_p.cpp    src/rules_q.cpp    src/rules_r.cpp 
+    src/rules_a.cpp    src/rules_b.cpp    src/rules_c.cpp
+    src/rules_d.cpp    src/rules_e.cpp    src/rules_f.cpp
+    src/rules_g.cpp                       src/rules_i.cpp
+    src/rules_l.cpp                       src/rules_n.cpp
+    src/rules_p.cpp    src/rules_q.cpp    src/rules_r.cpp
     src/rules_s.cpp    src/rules_t.cpp    src/rules_u.cpp
-    src/rules_v.cpp    src/rules_w.cpp 
+    src/rules_v.cpp    src/rules_w.cpp
 )
 
+
+##
+# Ninja Build override to cope on low memory situations to compile "big" files
 cmake_host_system_information(
     RESULT localhost_RAM_MiB
     QUERY  AVAILABLE_PHYSICAL_MEMORY
 )
 
-if(localhost_RAM_MiB LESS 8000)
-    set(SOURCE_LIST
-        ${SOURCE_LIST_LOW_MEM}
-    )
-    # FixMe: Does it really work??
-    set_source_files_properties(${SOURCE_LIST}
-        PROPERTIES
-            JOB_POOL_COMPILE NINJA_JOBS_ONE_CPU
-    ) 
+if(localhost_RAM_MiB LESS 8192)
+    set(SOURCE_LIST ${SOURCE_LIST_LOW_MEM})
 else()
-    set(SOURCE_LIST
-        ${SOURCE_LIST_HIGH_MEM}
-    )
+    set(SOURCE_LIST ${SOURCE_LIST_HIGH_MEM})
 endif()
 
-
-target_sources(${PROJECT_NAME} 
+target_sources(${PROJECT_NAME}
     PRIVATE
         ${SOURCE_LIST}
 )
 
 
+set_source_files_properties(${SOURCE_LIST}
+    PROPERTIES
+        JOB_POOL_COMPILE NINJA_JOBS_ONE_CPU
+)
+
+
 if (EDA_ENABLE_PCH)
-    target_precompile_headers(${PROJECT_NAME} 
-        PRIVATE 
+    target_precompile_headers(${PROJECT_NAME}
+        PRIVATE
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl/detail/pch.hpp>
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl/detail/pch_prj.hpp>
     )
 endif()
 
 
-target_include_directories(${PROJECT_NAME} 
+target_include_directories(${PROJECT_NAME}
     PUBLIC
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     PRIVATE
@@ -87,11 +86,11 @@ target_include_directories(${PROJECT_NAME}
 
 
 # handle problems with Spirit.X template depth
-target_compile_options(${PROJECT_NAME} 
+target_compile_options(${PROJECT_NAME}
     PRIVATE
         # - limit gcc/clang template error depth printing
         # - increase limit especially for clang recursive template instantiation,
-        #   otherwise exceedes maximum depth of 512    
+        #   otherwise exceedes maximum depth of 512
         $<$<CXX_COMPILER_ID:GNU>:  -ftemplate-backtrace-limit=0 -ftemplate-depth=1024>
         $<$<CXX_COMPILER_ID:Clang>:-ftemplate-backtrace-limit=0 -ftemplate-depth=1024>
 )

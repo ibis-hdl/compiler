@@ -18,8 +18,8 @@ set(TESTSUITE_DESTINATION_DIR "${CMAKE_BINARY_DIR}/testsuite_result/vhdl_parser_
 set(TESTSUITE_OUTPUT_EXTENSION ".result")
 
 add_test(NAME test_vhdl_parser_rules
-    COMMAND 
-        ${PROJECT_NAME} --log_level=error -- 
+    COMMAND
+        ${PROJECT_NAME} --log_level=error --
         --source-dir=${TESTSUITE_SOURCE_DIR}
         --input-extension=${TESTSUITE_INPUT_EXTENSION}
         --expected-extension=${TESTSUITE_EXPECTED_EXTENSION}
@@ -28,20 +28,20 @@ add_test(NAME test_vhdl_parser_rules
 )
 
 configure_file(
-    ${PROJECT_SOURCE_DIR}/include/testsuite/vhdl_parser/detail/compile_builtin.hpp.in 
-    ${PROJECT_BINARY_DIR}/include/testsuite/vhdl_parser/detail/compile_builtin.hpp
+    ${PROJECT_SOURCE_DIR}/include/testsuite/vhdl_parser/compile_builtin.hpp.in
+    ${PROJECT_BINARY_DIR}/include/testsuite/vhdl_parser/compile_builtin.hpp
     @ONLY
 )
 
 
-target_link_libraries(${PROJECT_NAME} 
+target_link_libraries(${PROJECT_NAME}
     PRIVATE
         eda::vhdl_parser
         testsuite::common
         testsuite::vhdl_rules
         Boost::system
         Boost::locale
-        Boost::unit_test_framework 
+        Boost::unit_test_framework
 )
 #set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-v")
 
@@ -54,7 +54,7 @@ if(DEVELOPER_EXTERNAL_BOOST_UTF)
 endif()
 
 
-target_sources(${PROJECT_NAME} 
+target_sources(${PROJECT_NAME}
     PRIVATE
         src/common/test_vhdl_parser.cpp
         src/common/failure_diagnostic_fixture.cpp
@@ -171,7 +171,7 @@ target_sources(${PROJECT_NAME}
 
 
 set_source_files_properties(src/common/test_vhdl_parser.cpp
-    APPEND PROPERTIES 
+    APPEND PROPERTIES
         # Failed to link Boost UTF with Windows/Clang, Linux works
         COMPILE_DEFINITIONS "$<$<NOT:$<PLATFORM_ID:Windows>>:BOOST_TEST_DYN_LINK>"
 )
@@ -184,15 +184,15 @@ set_source_files_properties(src/common/test_vhdl_parser.cpp
 
 
 if (EDA_ENABLE_PCH)
-    target_precompile_headers(${PROJECT_NAME} 
-        PRIVATE 
+    target_precompile_headers(${PROJECT_NAME}
+        PRIVATE
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl_parser/detail/pch.hpp>
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl_parser/detail/pch_prj.hpp>
     )
 endif()
 
 
-target_include_directories(${PROJECT_NAME} 
+target_include_directories(${PROJECT_NAME}
     PRIVATE
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
@@ -201,18 +201,35 @@ target_include_directories(${PROJECT_NAME}
 )
 
 
-target_compile_definitions(${PROJECT_NAME} 
+target_compile_definitions(${PROJECT_NAME}
     PRIVATE
-        # don't allow automatically select which libraries to link against    
+        # don't allow automatically select which libraries to link against
         $<$<CXX_COMPILER_ID:MSVC>:BOOST_ALL_NO_LIB>
 )
 
 
 ##
-# Generate the TestMatrix
-# - python3 is required, also PrettyTable
-find_package(PythonInterp 3 REQUIRED)
-#find_package(PythonLibs 3 REQUIRED)
+# Generate the VHDL parser grammar rules TestMatrix
+# Requirements:
+# - python3
+# - packages:
+#   - PrettyTable
+#
+# Note, if the package(s) aren't found, they are installed using pip.
+# Therefore virtualenv is detected and pip args accordingly set.
+find_package(Python3 COMPONENTS Interpreter REQUIRED)
+
+if(DEFINED ENV{VIRTUAL_ENV} OR DEFINED ENV{CONDA_PREFIX})
+    set(_pip_args)
+else()
+    set(_pip_args "--user")
+endif()
+set(_pypkg_names "prettytable")
+
+execute_process(
+    COMMAND
+        ${Python3_EXECUTABLE} -m pip install ${_pip_args} ${_pypkg_names}
+)
 
 set(TEST_MATRIX_GENERATOR        ${PROJECT_SOURCE_DIR}/utils/gen_test_matrix.py)
 set(TEST_MATRIX_GENERATOR_TARGET ${PROJECT_SOURCE_DIR}/parser_test_matrix.rst)
@@ -221,15 +238,15 @@ file(GLOB_RECURSE TEST_CASE_FILES_DEPENDENCY
     "${PROJECT_SOURCE_DIR}/test_case/" "*.expected"
 )
 add_custom_command(
-    TARGET  
+    TARGET
         ${PROJECT_NAME} POST_BUILD
-    COMMAND 
-        ${PYTHON_EXECUTABLE} ${TEST_MATRIX_GENERATOR} ${PROJECT_SOURCE_DIR} > ${TEST_MATRIX_GENERATOR_TARGET}
-    DEPENDS 
+    COMMAND
+        ${Python3_EXECUTABLE} ${TEST_MATRIX_GENERATOR} ${PROJECT_SOURCE_DIR} > ${TEST_MATRIX_GENERATOR_TARGET}
+    DEPENDS
         ${TEST_MATRIX_GENERATOR} ${TEST_CASE_FILES_DEPENDENCY}
-    BYPRODUCT 
+    BYPRODUCT
         ${TEST_MATRIX_GENERATOR_TARGET}
-    COMMENT 
+    COMMENT
         "Generate VHDL Parser TestCase Matrix (RST)"
 )
 

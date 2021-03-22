@@ -12,13 +12,12 @@ add_executable(${PROJECT_NAME} "")
 
 # The argument is the top level directory of the test directories of 'test_case'
 add_test(NAME test_vhdl_syntax
-    COMMAND 
-        ${PROJECT_NAME} -- 
+    COMMAND
+        ${PROJECT_NAME} --
         --source-dir=${PROJECT_SOURCE_DIR}
         --destination-dir=${PROJECT_BINARY_DIR}
         --input-extension=.vhdl
-    #    --write-extension=.expected
-        --write-extension=.result    
+        --output-extension=.result
 )
 
 
@@ -28,7 +27,7 @@ target_link_libraries(${PROJECT_NAME}
         testsuite::common
         Boost::system
         Boost::locale
-        Boost::unit_test_framework 
+        Boost::unit_test_framework
 
 )
 #set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-v")
@@ -39,7 +38,7 @@ if(DEVELOPER_EXTERNAL_BOOST_UTF)
 endif()
 
 
-target_sources(${PROJECT_NAME} 
+target_sources(${PROJECT_NAME}
     PRIVATE
         src/common/test_vhdl_syntax.cpp
         # concrete test cases
@@ -49,7 +48,7 @@ target_sources(${PROJECT_NAME}
 
 
 set_source_files_properties(src/common/test_vhdl_syntax.cpp
-    APPEND PROPERTIES 
+    APPEND PROPERTIES
         # Failed to link Boost UTF with Windows/Clang, Linux works
         COMPILE_DEFINITIONS "$<$<NOT:$<PLATFORM_ID:Windows>>:BOOST_TEST_DYN_LINK>"
 )
@@ -62,15 +61,15 @@ set_source_files_properties(src/common/test_vhdl_syntax.cpp
 
 
 if (EDA_ENABLE_PCH)
-    target_precompile_headers(${PROJECT_NAME} 
-        PRIVATE 
+    target_precompile_headers(${PROJECT_NAME}
+        PRIVATE
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/syntax/detail/pch.hpp>
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/syntax/detail/pch_prj.hpp>
     )
 endif()
 
 
-target_include_directories(${PROJECT_NAME} 
+target_include_directories(${PROJECT_NAME}
     PRIVATE
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${EXTERNAL_BOOST_UTF_INCLUDE_DIR}>
@@ -78,8 +77,8 @@ target_include_directories(${PROJECT_NAME}
 )
 
 
-target_compile_definitions(${PROJECT_NAME} 
+target_compile_definitions(${PROJECT_NAME}
     PRIVATE
-        # don't allow automatically select which libraries to link against    
+        # don't allow automatically select which libraries to link against
         $<$<CXX_COMPILER_ID:MSVC>:BOOST_ALL_NO_LIB>
 )

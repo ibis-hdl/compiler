@@ -6,6 +6,7 @@
  */
 
 #include <testsuite/ast/position_cache_fixture.hpp>
+#include <testsuite/ast/compile_builtin.hpp>
 
 #include <boost/test/unit_test.hpp>
 
@@ -67,8 +68,8 @@ std::string position_cache_fixture::test_case_source_dir() const
 
     // fall back: use hard coded from CMake build
     if (!input_path) {
-        BOOST_TEST_REQUIRE(!TESTSUITE_BUILD_TESTCASE_SOURCE_DIR.empty());
-        std::optional<std::string> source_dir{ TESTSUITE_BUILD_TESTCASE_SOURCE_DIR };
+        BOOST_TEST_REQUIRE(!compile_builtin::default_source_dir.empty());
+        std::optional<std::string> source_dir{ compile_builtin::default_source_dir };
         input_path.swap(source_dir);
         BOOST_TEST_MESSAGE("INFO(testsuite::position_cache_fixture) using builtin/compiled path \""
                            << *input_path << "\"");

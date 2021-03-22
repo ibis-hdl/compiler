@@ -8,6 +8,9 @@
 /// compile time builtin settings for testsuite/common
 ///
 
+namespace testsuite {
+namespace compile_builtin {
+
 // required by dataset loader
 constexpr std::string_view compile_def_source_dir{ "@CMAKE_BINARY_DIR@/testsuite" };
 constexpr std::string_view compile_def_input_extension{ ".vhdl" };
@@ -16,3 +19,6 @@ constexpr std::string_view compile_def_expected_extension{ ".expected" };
 // required by failure diagnostic fixture
 constexpr std::string_view compile_def_destination_dir{ "@CMAKE_BINARY_DIR@/testsuite_result/failure_closure" };
 constexpr std::string_view compile_def_output_extension{ ".result" };
+
+}  // namespace compile_builtin
+}  // namespace testsuite

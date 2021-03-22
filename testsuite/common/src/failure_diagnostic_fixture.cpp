@@ -65,7 +65,7 @@ private:
     /// @return true on success, directory does exist or is created successfull.
     /// @return false on failure on creating the directory.
     ///
-    bool create_directory(fs::path const& write_path);
+    bool create_directories(fs::path const& write_path);
 
     ///
     /// @brief Write the contents into file.
@@ -150,7 +150,7 @@ void failure_diagnostic_fixture::failure_closure(std::string test_case_name,
         std::size_t const col_width{ 80 };
 
         // furnish a nice line with title in the middle
-        auto hline = [&](std::string const& title, std::size_t col_width, char fill = '-') {
+        auto hline = [&](std::string const& title, std::size_t col_width, char fill = '~') {
             using eda::util::make_iomanip;
             return make_iomanip([&title, col_width, fill](std::ostream& os) {
                 std::size_t const w{ (col_width - title.size()) / 2 };
@@ -161,8 +161,9 @@ void failure_diagnostic_fixture::failure_closure(std::string test_case_name,
 
         // trim trailing spaces from test_input, boost::trim_right_copy doesn't work
         // on string_view, hence we write our own
-        // FixMe [C++20] next standard supports string_view iterator pair constructor, so we
-        // can write inside lambda function body:
+        // FixMe [C++20] next standard supports string_view iterator pair constructor
+        // ([basic_string_view](https://en.cppreference.com/w/cpp/string/basic_string_view/basic_string_view) (5)),
+        // so we can write inside lambda function body:
         // @code{.cpp}
         // return std::string_view(
         //   x.begin(), std::find_if(x.rbegin(), x.rend(), [](char c) { return !std::isspace(c);
@@ -171,10 +172,10 @@ void failure_diagnostic_fixture::failure_closure(std::string test_case_name,
         auto const trim_right = [](std::string_view x) {
             // clang-format off
             return std::string_view(
-                x.begin(),
+                x.data(), // const CharT*
                 std::find_if(x.rbegin(), x.rend(), [](char c) {
                                 return !static_cast<bool>(std::isspace(c)); }
-                            ).base() - x.begin());
+                            ).base() - x.begin()); // count
             // clang-format on
         };
 
@@ -214,25 +215,16 @@ BOOST_TEST_GLOBAL_FIXTURE(cli_args);
 
 namespace testsuite {
 
-namespace /* anonymous */ {
-
-inline fs::path pretty_filepath(fs::path file_path)
-{
-    return fs::canonical(file_path.make_preferred());
-}
-
-}  // namespace
-
 void failure_diagnostic_fixture::writer::write(fs::path const& full_pathname,
                                                std::string_view result)
 {
     fs::path const write_path = full_pathname.parent_path();
 
-    BOOST_TEST_REQUIRE(create_directory(write_path));
+    BOOST_TEST_REQUIRE(create_directories(write_path));
     BOOST_TEST_REQUIRE(write_file(full_pathname, result));
 }
 
-bool failure_diagnostic_fixture::writer::create_directory(fs::path const& write_path)
+bool failure_diagnostic_fixture::writer::create_directories(fs::path const& write_path)
 {
     try {
         if (!fs::exists(write_path) || !fs::is_directory(write_path)) {
@@ -243,7 +235,7 @@ bool failure_diagnostic_fixture::writer::create_directory(fs::path const& write_
     }
     catch (fs::filesystem_error const& e) {
         BOOST_TEST_MESSAGE("ERROR(" << writer_name << ") creating directory "
-                                     << pretty_filepath(write_path).string() << " failed with:\n"
+                                     << write_path << " failed with:\n"
                                      << e.code().message());
         return false;
     }
@@ -263,7 +255,7 @@ bool failure_diagnostic_fixture::writer::write_file(fs::path const& filename,
     }
     catch (fs::filesystem_error const& e) {
         BOOST_TEST_MESSAGE("ERROR(" << writer_name << ") remove of older result file "
-                                     << pretty_filepath(filename).string() << " failed with:\n"
+                                     << filename << " failed with:\n"
                                      << e.code().message());
         return false;
     }
@@ -274,7 +266,7 @@ bool failure_diagnostic_fixture::writer::write_file(fs::path const& filename,
     }
     catch (fs::filesystem_error const& e) {
         BOOST_TEST_MESSAGE("ERROR(" << writer_name << ") writing to "
-                                     << pretty_filepath(filename).string() << " failed with:\n"
+                                     << filename << " failed with:\n"
                                      << e.code().message());
         return false;
     }

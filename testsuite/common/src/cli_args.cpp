@@ -57,7 +57,7 @@ bool cli_args::parse_cli()
         return true;
     }
     catch (CLI::ParseError const& e) {
-        std::string const bin_name = fs::path(e.get_name()).stem();
+        std::string const bin_name = fs::path(e.get_name()).stem().generic_string();
         BOOST_TEST_ERROR(bin_name << " => Error occurred during parsing CLI:");
         // strange call to get a nice error message
         std::exit(app.exit(e));
@@ -79,7 +79,7 @@ bool cli_args::parse_cli()
         }
         else {
             // create if not exist
-            if (fs::create_directory(data.destination_dir)) {
+            if (fs::create_directories(data.destination_dir)) {
                 BOOST_TEST_MESSAGE("destination directory " << data.destination_dir << " created!");
                 data.destination_dir = fs::canonical(data.destination_dir);
             }

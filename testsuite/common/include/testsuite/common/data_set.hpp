@@ -97,7 +97,7 @@ private:
     data_type testfile_expected;
     data_type testfile_name;
 
-    std::string source_dir;
+    fs::path source_dir;
     std::string input_extension;
     std::string expected_extension;
 };

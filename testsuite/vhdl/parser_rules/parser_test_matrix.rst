@@ -4851,7 +4851,7 @@ component_instantiation_statement
 | component_instantiation_statement_000 | U1: instantiated_unit                           | (component_instantiation_statement                        |
 |                                       |     -- generic_map_aspect                       |   (identifier                                             |
 |                                       |     -- port_map_aspect                          |     U1                                                    |
-|                                       | 	;                                              |   )                                                       |
+|                                       | 	;                                                 |   )                                                       |
 |                                       |                                                 |   (instantiated_unit<v>                                   |
 |                                       |                                                 |     (component                                            |
 |                                       |                                                 |       (name<v>                                            |
@@ -4871,7 +4871,7 @@ component_instantiation_statement
 |                                       |         B => Y,                                 |   (instantiated_unit<v>                                   |
 |                                       |         C => open                               |     (component                                            |
 |                                       |     );                                          |       (name<v>                                            |
-|                                       | 	                                               |         (identifier                                       |
+|                                       | 	                                                 |         (identifier                                       |
 |                                       |                                                 |           instantiated_unit                               |
 |                                       |                                                 |         )                                                 |
 |                                       |                                                 |       )                                                   |
@@ -4936,13 +4936,13 @@ component_instantiation_statement
 +---------------------------------------+-------------------------------------------------+-----------------------------------------------------------+
 | component_instantiation_statement_002 | U3: ENTITY entity_name(architecture_identifier) | (component_instantiation_statement                        |
 |                                       |     -- generic_map_aspect                       |   (identifier                                             |
-|                                       | 	generic map (N => 8)                           |     U3                                                    |
+|                                       | 	generic map (N => 8)                                                 |     U3                                                    |
 |                                       |     -- port_map_aspect                          |   )                                                       |
 |                                       |     port map(                                   |   (instantiated_unit<v>                                   |
 |                                       |         B => Y,                                 |     (entity                                               |
 |                                       |         C => open                               |       (name<v>                                            |
 |                                       |     );                                          |         (identifier                                       |
-|                                       | 	                                               |           entity_name                                     |
+|                                       | 	                                                 |           entity_name                                     |
 |                                       |                                                 |         )                                                 |
 |                                       |                                                 |       )                                                   |
 |                                       |                                                 |       (identifier                                         |
@@ -6063,8 +6063,8 @@ configuration_specification
 |                                 |     -- component_specification                     |   (component_specification                   |
 |                                 |     Instance : CoolComponent                       |     (instantiation_list<v>                   |
 |                                 |     -- empty binding_indication                    |       (label*                                |
-|                                 | 	;                                                 |         (identifier                          |
-|                                 | 	                                                  |           Instance                           |
+|                                 | 	;                                                    |         (identifier                          |
+|                                 | 	                                                    |           Instance                           |
 |                                 |                                                    |         )                                    |
 |                                 |                                                    |       )                                      |
 |                                 |                                                    |     )                                        |
@@ -6097,7 +6097,7 @@ configuration_specification
 |                                 |         generic map (Buf_Delay  => Comp_Buf_Delay) |           TheInstance                        |
 |                                 |         port map    (Input_pin  => Comp_I,         |         )                                    |
 |                                 |                      Output_pin => Comp_O)         |       )                                      |
-|                                 | 	;                                                 |     )                                        |
+|                                 | 	;                                                    |     )                                        |
 |                                 |                                                    |     (name<v>                                 |
 |                                 |                                                    |       (identifier                            |
 |                                 |                                                    |         MyComponent                          |
