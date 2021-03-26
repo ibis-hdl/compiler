@@ -120,7 +120,6 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ##
 # Sub projects
-add_subdirectory(doc)
 add_subdirectory(sources/common)
 add_subdirectory(sources/vhdl)
 add_subdirectory(sources/ibis)
@@ -135,6 +134,10 @@ if (EDA_BUILD_TESTS)
     add_subdirectory(testsuite/vhdl/syntax)
     add_subdirectory(testsuite/ibis)
 endif()
+add_subdirectory(doc)
+# There are some problems (venv activate/deactivate @Windows/Linux) and
+# clean target to be solved before it's useable ...
+#add_subdirectory(doc_ng)
 
 
 ##

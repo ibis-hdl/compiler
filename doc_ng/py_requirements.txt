@@ -1,0 +1,5 @@
+sphinx
+sphinx_rtd_theme
+sphinx_pdj_theme # dark theme
+breathe
+exhale
