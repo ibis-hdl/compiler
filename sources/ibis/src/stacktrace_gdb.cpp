@@ -3,7 +3,7 @@
  *
  *  Created on: 05.08.2018
  *      Author: olaf
- * 
+ *
  * Note: The sources are related to Linux and tested on it.
  * FixMe: The implementation is outside of ibis' namespace which
  *        leads to wired (even small and cosmetic) problems.
@@ -11,11 +11,14 @@
 
 #include <ibis/signal_handler.hpp>
 
-#include <csignal>
-#include <fstream>
-#include <optional>
-#include <sstream>
-#include <iostream>
+#include <eda/color/message.hpp>
+#include <eda/color/facet.hpp>
+//#include <eda/compiler/compiler_support.hpp>
+//#include <eda/namespace_alias.hpp>
+
+#include <eda/platform.hpp>
+
+#include <ibis/namespace_alias.hpp>
 
 #include <boost/process/args.hpp>
 #include <boost/process/child.hpp>
@@ -24,26 +27,31 @@
 #include <boost/process/extend.hpp>
 #include <boost/process/search_path.hpp>
 
+#include <array>
 #include <atomic>
+#include <chrono>
+#include <csignal>
+#include <cstdlib>
+#include <filesystem>
+#include <fstream>
+#include <iostream>
+#include <memory>
+#include <optional>
+#include <sstream>
+#include <string_view>
+#include <string>
 #include <system_error>
 #include <thread>
-#include <filesystem>
-
-#include <eda/platform.hpp>
-#include <eda/color/message.hpp>
-#include <eda/compiler/compiler_support.hpp>
-#include <eda/namespace_alias.hpp>
-
-#include <ibis/namespace_alias.hpp>
+#include <vector>
 
 /*
  * OS specific system headers
  */
 #if (BUILD_PLATFORM_UNIX)
 #include <climits> // PATH_MAX
-#include <sys/prctl.h>
-#include <sys/ptrace.h>
-#include <sys/types.h>
+// #include <sys/prctl.h>
+// #include <sys/ptrace.h>
+// #include <sys/types.h>
 #include <unistd.h>
 #endif
 

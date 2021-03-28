@@ -6,15 +6,20 @@
  */
 
 #include <eda/vhdl/parser/error_handler.hpp>
+#include <eda/vhdl/parser/iterator_type.hpp>  // for explicit template instantiation
 
-#include <eda/support/boost/locale.hpp>
+#include "eda/vhdl/ast/position_cache.hpp"
 
-#include <eda/color/message.hpp>
 #include <eda/util/string/position_indicator.hpp>
 
-#include <iostream>
+#include <eda/color/message.hpp>
+#include <eda/color/facet.hpp>
 
-#include <eda/vhdl/parser/iterator_type.hpp> // for explicit template instantiation
+#include <boost/locale/format.hpp>
+#include <boost/locale/message.hpp>
+
+#include <algorithm>
+#include <iostream>
 
 namespace eda {
 namespace vhdl {
@@ -28,18 +33,13 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
     using boost::locale::format;
     using boost::locale::translate;
 
-    // clang-format off
-    os << format(translate("in file {1}, line {2}:"))
-          % position_proxy.file_name()
-          % position_proxy.line_number(error_pos)
+    os << format(translate("in file {1}, line {2}:")) // --
+              % position_proxy.file_name()            // {1}
+              % position_proxy.line_number(error_pos) // [2]
        << '\n';
-    // clang-format on
 
-    // clang-format off
     os << color::message::error(translate("Parse ERROR")) << ": "
-       << (!error_message.empty() ? error_message : translate("Unspecified Error, Sorry"))
-       << '\n';
-    // clang-format on
+       << (!error_message.empty() ? error_message : translate("Unspecified Error, Sorry")) << '\n';
 
     // erroneous source snippet
     iterator_type start = position_proxy.get_line_start(error_pos);
@@ -48,18 +48,14 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
 
     // error indicator
     using eda::util::position_indicator;
-    // clang-format off
-    os << position_indicator(start, error_pos, tab_sz, '_')
-       << "^_"
-       << std::endl;
-    // clang-format on
+    os << position_indicator(start, error_pos, tab_sz, '_') << "^_" << std::endl;
 
     return x3::error_handler_result::fail;
 }
 
-} // namespace parser
-} // namespace vhdl
-} // namespace eda
+}  // namespace parser
+}  // namespace vhdl
+}  // namespace eda
 
 namespace eda {
 namespace vhdl {
@@ -68,6 +64,6 @@ namespace parser {
 // Explicit template instantiation
 template class error_handler<parser::iterator_type>;
 
-} // namespace parser
-} // namespace vhdl
-} // namespace eda
+}  // namespace parser
+}  // namespace vhdl
+}  // namespace eda

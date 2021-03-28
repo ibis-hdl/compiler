@@ -7,10 +7,10 @@
 
 #include <eda/settings.hpp>
 
-#include <algorithm>
-#include <eda/support/cxx/overloaded.hpp>
 #include <eda/util/string/icompare.hpp>
 #include <eda/util/infix_ostream_iterator.hpp>
+
+#include <algorithm>
 #include <iostream>
 #include <vector>
 
@@ -35,16 +35,16 @@ std::ostream& settings::dump(std::ostream& os) const
         // clang-format off
         std::visit(util::overloaded{
             [&os](std::monostate /*unused*/) {  // NOLINT(readability-named-parameter)
-                os << "N/A"; 
+                os << "N/A";
             },
             [&os](bool v) {
-                os << std::boolalpha << v; 
+                os << std::boolalpha << v;
             },
             [&os](long v) {
                 os << v;
             },
             [&os](std::string const& v) {
-                os << v; 
+                os << v;
             },
             [&os](std::vector<std::string> const& v) {
                 os << "[ ";

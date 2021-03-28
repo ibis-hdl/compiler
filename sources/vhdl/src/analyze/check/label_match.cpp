@@ -7,9 +7,6 @@
 
 #include <eda/vhdl/analyze/check/label_match.hpp>
 
-#include <eda/vhdl/ast/node/allocator.hpp>
-#include <eda/vhdl/ast/node/qualified_expression.hpp>
-
 #include <eda/vhdl/ast/node/architecture_body.hpp>
 #include <eda/vhdl/ast/node/block_statement.hpp>
 #include <eda/vhdl/ast/node/case_statement.hpp>
@@ -21,10 +18,17 @@
 #include <eda/vhdl/ast/node/package_body.hpp>
 #include <eda/vhdl/ast/node/package_declaration.hpp>
 #include <eda/vhdl/ast/node/process_statement.hpp>
+#include <eda/vhdl/ast/node/identifier.hpp>
+// required due to forward and variant used
+#include <eda/vhdl/ast/node/allocator.hpp>              // IWYU pragma: keep
+#include <eda/vhdl/ast/node/qualified_expression.hpp>   // IWYU pragma: keep
+
+#include <eda/vhdl/ast/util/optional.hpp>
+#include <eda/vhdl/ast/util/string_span.hpp>
 
 #include <eda/util/string/icompare.hpp>
 
-#include <iostream>
+#include <boost/optional/detail/optional_relops.hpp>
 
 // don't pollute AST's namespace with operators required only here
 namespace eda {

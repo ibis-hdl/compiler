@@ -7,19 +7,23 @@
 
 #include <eda/vhdl/context.hpp>
 
+#include <eda/vhdl/ast/util/string_span_hash.hpp>
+
 #include <eda/settings.hpp>
-#include <eda/util/make_iomanip.hpp>
 
-#include <eda/support/boost/locale.hpp> // IWYU pragma
+#include <boost/locale/format.hpp>
+#include <boost/locale/message.hpp>
 
-#include <iostream>
+#include <cstddef>
+#include <algorithm>
+#include <string>
 
 namespace eda {
 namespace vhdl {
 
 context::context()
 {
-    unsigned const  error_limit = 20; // default for testsuite
+    unsigned const error_limit = 20;  // default for testsuite
 
     // check if error_limit is not disabled (equals to 0)
     if (error_limit != 0) {
@@ -62,32 +66,35 @@ std::ostream& failure_status::print(std::ostream& os) const
     // concept, see [Wandbox](https://wandbox.org/permlink/VJrqXuEFppw1htY7)
 
     // TRANSLATORS: singular/plural error(s)
-    auto const error_message
-        = (format(translate("{1} error", "{1} errors", plural_count(ctx.error_count)))
-            % ctx.error_count)
-              .str();
+    auto const error_message =
+        (format(translate("{1} error", "{1} errors", plural_count(ctx.error_count)))  // --
+         % ctx.error_count)
+            .str();
 
     // TRANSLATORS: singular/plural warning(s)
-    auto const warning_message
-        = (format(translate("{1} warning", "{1} warnings", plural_count(ctx.warning_count)))
-            % ctx.warning_count)
-              .str();
+    auto const warning_message =
+        (format(translate("{1} warning", "{1} warnings", plural_count(ctx.warning_count)))  // --
+         % ctx.warning_count)
+            .str();
 
     if ((ctx.error_count != 0) && (ctx.warning_count != 0)) {
         // TRANSLATORS: summary error(s) and warning(s)
         os << format(translate("{1} and {2} generated.")) % error_message % warning_message;
-    } else if (ctx.error_count != 0) {
+    }
+    else if (ctx.error_count != 0) {
         // TRANSLATORS: summary error(s) only
         os << format(translate("{1} generated.")) % error_message;
-    } else if (ctx.warning_count != 0) {
+    }
+    else if (ctx.warning_count != 0) {
         // TRANSLATORS: summary warning(s) only
         os << format(translate("{1} generated.")) % warning_message;
-    } else {
+    }
+    else {
         // all went fine
     }
 
     return os;
 }
 
-} // namespace vhdl
-} // namespace eda
+}  // namespace vhdl
+}  // namespace eda

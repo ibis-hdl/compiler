@@ -18,6 +18,8 @@
  * collected in this header file.
  */
 
+#include <eda/vhdl/ast/util/string_span.hpp>
+
 namespace eda { namespace vhdl { namespace ast {
 
 

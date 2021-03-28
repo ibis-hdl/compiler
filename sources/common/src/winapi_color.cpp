@@ -5,7 +5,7 @@
  *      Author: olaf
  */
 
-#include <eda/color/detail/color.hpp>
+#include <eda/color/detail/color.hpp>   // IWYU pragma: keep
 
 #if BOOST_OS_WINDOWS && !EDA_ON_WINDOWS_USE_ANSII_COLOR
 

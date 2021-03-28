@@ -6,43 +6,33 @@
  */
 
 #include <eda/vhdl/ast/ast_printer.hpp>
+#include <eda/vhdl/ast.hpp>
 
-// clang-format off
-#include <eda/compiler/warnings_off.hpp>
 #include <boost/spirit/home/x3/support/traits/is_variant.hpp>
-#include <eda/compiler/warnings_on.hpp>
-// clang-format on
 
-//#include <eda/compiler/warnings_off.hpp>
-//#include <eda/support/boost/hana_overload.hpp>
-//#include <eda/compiler/warnings_on.hpp>
-#include <eda/support/cxx/overloaded.hpp>
+#include <eda/support/cxx/overloaded.hpp>   // IWYU pragma: keep
 
 #include <eda/util/cxx_bug_fatal.hpp>
-
-#include <map>
 
 namespace eda {
 namespace vhdl {
 namespace ast {
-
-using namespace ::eda::util;
 
 printer::printer(std::ostream& os_, uint16_t start_indent)
     : os{ os_, start_indent }
 {
 }
 
-class printer::scope_printer 
-{
+class printer::scope_printer {
 public:
-    scope_printer(util::indent_ostream& os_, std::string_view name_, bool verbose_, std::string_view name_pfx = std::string_view{})
+    scope_printer(util::indent_ostream& os_, std::string_view name_, bool verbose_,
+                  std::string_view name_pfx = std::string_view{})
         : os{ os_ }
         , name{ name_ }
         , verbose{ verbose_ }
     {
         if (verbose) {
-            os << increase_indent << "(";
+            os << util::increase_indent << "(";
             os << name;
             if (!name_pfx.empty()) {
                 os << "<" << name_pfx << ">";
@@ -54,24 +44,22 @@ public:
     ~scope_printer()
     {
         if (verbose) {
-            os << decrease_indent << "\n)";
+            os << util::decrease_indent << "\n)";
         }
     }
 
-    scope_printer(const scope_printer &) = delete;
-    scope_printer& operator =(scope_printer const&) = delete;
+    scope_printer(const scope_printer&) = delete;
+    scope_printer& operator=(scope_printer const&) = delete;
     scope_printer(scope_printer&&) = delete;
     scope_printer& operator=(scope_printer&&) = delete;
 
 private:
-    // clang-format off
-    util::indent_ostream&                           os;
-    std::string_view const                          name;
-    bool const                                      verbose;
-    // clang-format on
+    util::indent_ostream& os;
+    std::string_view const name;
+    bool const verbose;
 };
 
-template <typename T, typename Enable> 
+template <typename T, typename Enable>
 struct printer::symbol_scope : public scope_printer {
     symbol_scope(printer& root, std::string_view name)
         : scope_printer(root.os, name, root.verbose_symbol)
@@ -88,9 +76,9 @@ struct printer::symbol_scope<T, typename std::enable_if_t<x3::traits::is_variant
     }
 };
 
-} // namespace ast
-} // namespace vhdl
-} // namespace eda
+}  // namespace ast
+}  // namespace vhdl
+}  // namespace eda
 
 namespace eda {
 namespace vhdl {
@@ -301,7 +289,7 @@ void printer::operator()(attribute_name const& node)
     }
 
     os << '\n';
-    { // no own type, printing here
+    {  // no own type, printing here
         static const std::string_view symbol{ "attribute_designator" };
         symbol_scope<attribute_name> _(*this, symbol);
 
@@ -476,20 +464,16 @@ void printer::operator()(block_specification const& node)
     symbol_scope<block_specification> _(*this, symbol);
 
     // clang-format off
-    boost::apply_visitor(util::overloaded {
-        [this](ast::name const& name) {
-            (*this)(name);
-        },
+    boost::apply_visitor(util::overloaded{
+        [this](ast::name const& name) { (*this)(name); },
         [this](ast::block_specification_chunk const& chunk) {
             (*this)(chunk.label);
-            if(chunk.index_specification) {
+            if (chunk.index_specification) {
                 os << '\n';
                 (*this)(*chunk.index_specification);
             }
         },
-        [this](ast::nullary const& nullary) {
-            (*this)(nullary);
-        }
+        [this](ast::nullary const& nullary) { (*this)(nullary); }
     }, node);
     // clang-format on
 }
@@ -1150,7 +1134,7 @@ void printer::operator()(entity_name_list const& node)
             (*this)(nullary);
         }
     }, node);
-     // clang-format on
+    // clang-format on
 }
 
 void printer::operator()(entity_specification const& node)
@@ -1323,7 +1307,6 @@ void printer::operator()(formal_part const& node)
      *    | function_name ( formal_designator )
      *    | type_mark ( formal_designator ) */
     switch (node.context_tied_names.size()) {
-
         case 1: {
             // BNF: formal_designator
             visit_formal_designator(node.context_tied_names[0]);
@@ -1374,7 +1357,8 @@ void printer::operator()(generate_statement const& node)
     if (!node.block_declarative_parts.empty()) {
         os << '\n';
         (*this)(node.block_declarative_parts);
-    } else {
+    }
+    else {
         os << '\n';
     }
 
@@ -2052,7 +2036,7 @@ void printer::operator()(qualified_expression const& node)
     (*this)(node.type_mark);
     os << '\n';
 
-	// clang-format off
+    // clang-format off
     boost::apply_visitor(util::overloaded {
         [this](ast::expression const& expr) {
             (*this)(expr);
@@ -2067,7 +2051,7 @@ void printer::operator()(qualified_expression const& node)
     // clang-format on
 }
 
-void printer::operator()(range const& node) // aka range_constraint
+void printer::operator()(range const& node)  // aka range_constraint
 {
     static const std::string_view symbol{ "range" };
     symbol_scope<range> _(*this, symbol);
@@ -2350,7 +2334,7 @@ void printer::operator()(simple_expression const& node)
     static const std::string_view symbol{ "simple_expression" };
     symbol_scope<simple_expression> _(*this, symbol);
 
-    if (node.sign) { // optional
+    if (node.sign) {  // optional
         os << "sign: " << *node.sign << ",\n";
     }
 
@@ -2492,7 +2476,6 @@ void printer::operator()(subtype_indication const& node)
      * subtype_indication ::=
      *     [ resolution_function_name ] type_mark [ constraint ] */
     switch (node.unspecified_name_list.size()) {
-
         case 1: {
             // BNF: type_mark .... [ constraint ]
             visit_type_mark(node.unspecified_name_list[0]);
@@ -2752,11 +2735,13 @@ void printer::operator()(nullary const& /*unused*/)
     os << "\n*****************************\n";
 }
 
-template <typename T> void printer::visit(std::vector<T> const& vector)
+template <typename T>
+void printer::visit(std::vector<T> const& vector)
 {
     if (vector.empty()) {
         os << "()";
-    } else {
+    }
+    else {
         std::size_t const N = vector.size() - 1;
         std::size_t i = 0;
         for (auto const& e : vector) {
@@ -2768,6 +2753,6 @@ template <typename T> void printer::visit(std::vector<T> const& vector)
     }
 }
 
-} // namespace ast
-} // namespace vhdl
-} // namespace eda
+}  // namespace ast
+}  // namespace vhdl
+}  // namespace eda

@@ -14,7 +14,7 @@
 
 #include <tuple>
 
-#include <testsuite/common/namespace_alias.hpp>
+#include <testsuite/common/namespace_alias.hpp> // IWYU pragma: keep
 
 
 namespace testsuite {

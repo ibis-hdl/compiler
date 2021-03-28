@@ -32,7 +32,8 @@ namespace ast {
  * properties are own, hence it's save to refer to them as long the instance
  * exist.
  */
-template <typename IteratorT> class position_cache {
+template <typename IteratorT>
+class position_cache {
 public:
     using iterator_type = IteratorT;
     using position_container_type = std::vector<boost::iterator_range<iterator_type>>;
@@ -101,12 +102,13 @@ public:
             /* @todo maybe better throw range_exception since it's an implementation
              * limitation. */
             cxx_assert(positions.size() < ast::position_tagged::MAX_ID,
-                "Insufficient range of numeric IDs for AST tagging");
+                       "Insufficient range of numeric IDs for AST tagging");
 
             node.file_id = file_id;
             node.pos_id = positions.size();
             positions.emplace_back(first, last);
-        } else { // ignore
+        }
+        else {  // ignore
             // ... but make gcc quiet
             boost::ignore_unused(file_id);
             boost::ignore_unused(first);
@@ -143,12 +145,7 @@ public:
      * @param file_id ID of actually processed file.
      * @return A reference to a string representing the file contents.
      */
-    std::string& file_contents(std::size_t file_id)
-    {
-        // clang-format off
-        return std::get<1>(files.at(file_id));
-        // clang-format on
-    }
+    std::string& file_contents(std::size_t file_id) { return std::get<1>(files.at(file_id)); }
 
     /**
      * Get the iterator (range) of the file contents.
@@ -173,7 +170,8 @@ public:
      *         not tagged an empty iterator_range is return. To distinguish
      *         between they are packed into an optional.
      */
-    template <typename NodeT> std::optional<range_type> position_of(NodeT const& node) const
+    template <typename NodeT>
+    std::optional<range_type> position_of(NodeT const& node) const
     {
         if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
             return positions[node.pos_id];
@@ -214,10 +212,8 @@ public:
     std::string current_line(std::size_t file_id, iterator_type const& first) const;
 
 private:
-    // clang-format off
-    file_container_type                             files;
-    position_container_type                         positions;
-    // clang-format on
+    file_container_type files;
+    position_container_type positions;
 };
 
 /**
@@ -229,7 +225,8 @@ private:
  * \note This class is intended to created by the position_cache's handle()
  * function only.
  */
-template <typename IteratorT> class position_cache<IteratorT>::proxy {
+template <typename IteratorT>
+class position_cache<IteratorT>::proxy {
 public:
     proxy(position_cache<IteratorT>& position_cache_, std::size_t file_id_)
         : self{ position_cache_ }
@@ -241,13 +238,15 @@ public:
     std::size_t id() const { return file_id; }
 
 public:
-    template <typename NodeT> void annotate(NodeT& node, iterator_type first, iterator_type last)
+    template <typename NodeT>
+    void annotate(NodeT& node, iterator_type first, iterator_type last)
     {
         self.annotate(file_id, node, first, last);
     }
 
 public:
-    template <typename NodeT> std::optional<range_type> position_of(NodeT const& node) const
+    template <typename NodeT>
+    std::optional<range_type> position_of(NodeT const& node) const
     {
         return self.position_of(node);
     }
@@ -274,10 +273,8 @@ public:
     }
 
 private:
-    // clang-format off
-    position_cache<IteratorT>&                      self;
-    std::size_t const                               file_id;
-    // clang-format on
+    position_cache<IteratorT>& self;
+    std::size_t const file_id;
 };
 
 template <typename IteratorT>
@@ -286,8 +283,8 @@ typename position_cache<IteratorT>::proxy position_cache<IteratorT>::handle(std:
     return proxy{ *this, file_id };
 }
 
-} // namespace ast
-} // namespace vhdl
-} // namespace eda
+}  // namespace ast
+}  // namespace vhdl
+}  // namespace eda
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_POSITION_CACHE_HPP_ */

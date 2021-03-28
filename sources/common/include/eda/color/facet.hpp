@@ -84,21 +84,15 @@ public:
     }
 
 public:
-    // clang-format off
     color::printer                                  prefix;
     color::printer                                  postfix;
-    // clang-format on
 
 public:
-    // clang-format off
     static std::locale::id                          id;
-    // clang-format on
 
 private:
-    // clang-format off
     bool                                            force_decoration;
     std::optional<bool> mutable                     enable;
-    // clang-format off
 };
 
 

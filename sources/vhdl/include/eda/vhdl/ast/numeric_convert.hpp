@@ -8,10 +8,12 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_NUMERIC_CONVERT_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_NUMERIC_CONVERT_HPP_
 
-#include <iosfwd>
 #include <tuple>
+#include <iosfwd>
 
-#include <eda/vhdl/ast_fwd.hpp>
+namespace eda::vhdl::ast { struct based_literal; }
+namespace eda::vhdl::ast { struct bit_string_literal; }
+namespace eda::vhdl::ast { struct decimal_literal; }
 
 namespace eda {
 namespace vhdl {

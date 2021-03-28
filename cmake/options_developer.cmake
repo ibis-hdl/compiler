@@ -122,7 +122,8 @@ if(DEVELOPER_RUN_CLANG_TIDY)
     include(FindClangTidy)
 
     if(NOT CLANG_TIDY_FOUND)
-        message(FATAL_ERROR "DEVELOPER_RUN_CLANG_TIDY is ON but clang-tidy is not found!")
+        message(WARNING "=> Configure Fix: DEVELOPER_RUN_CLANG_TIDY is ON but clang-tidy is not found, disabled")
+        set(CLANG_TIDY_FOUND OFF CACHE BOOL "clang-tidy (not found)" FORCE)
     endif()
 
     # Run clang-tidy on each of the C++ source file of the project
@@ -155,20 +156,37 @@ configure_file(${eda_SOURCE_DIR}/.clang-tidy ${eda_BINARY_DIR}/.clang-tidy COPYO
 
 ## -----------------------------------------------------------------------------
 # Include What You Use (IWYU)
+#
 # https://github.com/include-what-you-use/include-what-you-use
-# on Unix/Linux only
-# FixMe: Update with https://github.com/miurahr/cmake-qt-packaging-example/blob/master/CMakeLists.txt
-# Check https://cmake.org/cmake/help/v3.20/prop_tgt/LANG_INCLUDE_WHAT_YOU_USE.html
-if(UNIX)
-    configure_file(${CMAKE_SOURCE_DIR}/cmake/util/cmake-iwyu.sh.cmake
-                    ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/cmake-iwyu.sh @ONLY
-    )
-    file(COPY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/cmake-iwyu.sh
-            DESTINATION ${CMAKE_BINARY_DIR}
-            FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ
-            GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
-    )
+option(DEVELOPER_RUN_IWYU
+    "Run include-what-you-use with the compiler."
+    OFF)
+mark_as_advanced(DEVELOPER_RUN_IWYU)
+
+if(DEVELOPER_RUN_IWYU AND UNIX)
+    find_program(IWYU_EXECUTABLE NAMES include-what-you-use iwyu)
+    if(NOT IWYU_EXECUTABLE)
+        message(WARNING "=> Configure Fix: include-what-you-use not found, no analysis of include files possible, disabled")
+        set(DEVELOPER_RUN_IWYU OFF CACHE BOOL "include-what-you-use (not found)" FORCE)
+    else()
+        # [IWYU Mappings](https://github.com/include-what-you-use/include-what-you-use/blob/master/docs/IWYUMappings.md)
+        #set(_iwyu_mapping "-Xiwyu;--mapping_file=${CMAKE_SOURCE_DIR}/misc_iwyu.imp;-Xiwyu;--mapping_file=${CMAKE_SOURCE_DIR}/boost-1.75-all.imp")
+        set(_iwyu_mapping "-Xiwyu;--mapping_file=${CMAKE_SOURCE_DIR}/misc_iwyu.imp")
+        # misc
+        set(_iwyu_comment "-Xiwyu;--no_comments")
+        #set(_iwyu_comment "-Xiwyu;--max_line_length=160")
+        set(_iwyu_misc "-Xiwyu;--transitive_includes_only;-Xiwyu;--quoted_includes_first;-Xiwyu;--cxx17ns")
+        # https://cmake.org/cmake/help/v3.20/prop_tgt/LANG_INCLUDE_WHAT_YOU_USE.html
+        set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${IWYU_EXECUTABLE};${_iwyu_mapping};${_iwyu_comment};${_iwyu_misc}")
+    endif()
+    # Sanity check: If PCH is enabled, IWYU lookup definitions etc. at precompiled headers
+    # which breaks builds without it, giving false positives. Hence disable PCH if using IWYU.
+    if(EDA_ENABLE_PCH AND DEVELOPER_RUN_IWYU)
+        message(WARNING "=> Configure Fix: include-what-you-use my trigger false positives if PCH is enabled, disabled")
+        set(EDA_ENABLE_PCH OFF CACHE BOOL "PCH disabled due to use of include-what-you-use" FORCE)
+    endif()
 endif()
+
 
 ## -----------------------------------------------------------------------------
 # Developer Build Option: run EDA under Valgrind.
@@ -193,7 +211,8 @@ if(DEVELOPER_RUN_CLANG_FORMAT)
     include(FindClangFormat)
 
     if(NOT CLANG_FORMAT_FOUND)
-        message(FATAL_ERROR "DEVELOPER_RUN_CLANG_FORMAT is ON but clang-format is not found!")
+        message(WARNING "=> Configure Fix: DEVELOPER_RUN_CLANG_FORMAT is ON but clang-format is not found, disabled")
+        set(DEVELOPER_RUN_CLANG_FORMAT OFF CACHE BOOL "clang-format (not found)" FORCE)
     else()
         include(clang-format)
     endif()

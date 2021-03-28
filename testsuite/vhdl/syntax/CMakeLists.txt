@@ -43,6 +43,7 @@ target_sources(${PROJECT_NAME}
         src/common/test_vhdl_syntax.cpp
         # concrete test cases
         src/label_check_test.cpp
+        # FixMe: takes up to >18GB w/o IWYU !!
         src/keyword_match_test.cpp
 )
 

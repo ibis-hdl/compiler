@@ -8,6 +8,7 @@
 #include <eda/vhdl/ast/pretty_node_name.hpp>
 
 #include <unordered_map>
+#include <utility>
 
 namespace eda {
 namespace vhdl {

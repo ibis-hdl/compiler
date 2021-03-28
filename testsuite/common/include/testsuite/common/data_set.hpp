@@ -8,16 +8,14 @@
 #ifndef TESTSUITE_COMMON_INCLUDE_TESTSUITE_COMMON_DATA_SET_HPP_
 #define TESTSUITE_COMMON_INCLUDE_TESTSUITE_COMMON_DATA_SET_HPP_
 
-#include <boost/test/unit_test.hpp>
-#include <boost/test/data/test_case.hpp>
+#include <testsuite/common/namespace_alias.hpp>  // IWYU pragma: keep
+
+#include <boost/test/data/monomorphic.hpp>
 
 #include <string>
-#include <string_view>
 #include <tuple>
 #include <vector>
 #include <filesystem>
-
-#include <testsuite/common/namespace_alias.hpp>  // IWYU pragma: keep
 
 namespace testsuite {
 
@@ -30,6 +28,13 @@ namespace testsuite {
 /// FixMe: This code is related to testsuite/vhdl_parser. Make it universal, so that can be placed
 /// into testsuite/common and the behavior can be replaced by overwriting the appropiate member
 /// functions.
+///
+/// @todo FixMe (Seriously Error): ```warning: Call to virtual method 'dataset_loader::setup'
+/// during construction bypasses virtual dispatch [clang-analyzer-optin.cplusplus.VirtualCall]
+/// setup();```. This is bad design, see [Calling virtual functions inside constructors](
+/// https://stackoverflow.com/questions/962132/calling-virtual-functions-inside-constructors)
+///
+
 class dataset_loader {
 public:
     using data_type = std::vector<std::string>;
@@ -107,7 +112,6 @@ private:
 namespace boost {
 namespace unit_test {
 namespace data {
-
 namespace monomorphic {
 
 template <>
@@ -115,7 +119,6 @@ struct is_dataset<testsuite::dataset_loader> : boost::mpl::true_ {
 };
 
 }  // namespace monomorphic
-
 }  // namespace data
 }  // namespace unit_test
 }  // namespace boost

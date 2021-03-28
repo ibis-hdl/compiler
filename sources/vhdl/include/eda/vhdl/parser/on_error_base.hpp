@@ -8,18 +8,19 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ON_ERROR_BASE_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ON_ERROR_BASE_HPP_
 
-#include <eda/vhdl/parser/error_handler.hpp>
+#include <eda/vhdl/parser/error_handler.hpp>  // IWYU pragma: keep
 
-// clang-format off
-#include <eda/compiler/warnings_off.hpp> // IWYU pragma: keep
 #include <boost/spirit/home/x3/support/context.hpp>
-#include <eda/compiler/warnings_on.hpp>  // IWYU pragma: keep
-// clang-format on
+#include <boost/spirit/home/x3/auxiliary/guard.hpp>
+
+#include <eda/namespace_alias.hpp>  // IWYU pragma: keep
 
 #include <string>
 #include <string_view>
 
-#include <eda/namespace_alias.hpp> // IWYU pragma: keep
+namespace eda::vhdl::parser {
+struct error_handler_tag;
+}
 
 namespace eda {
 namespace vhdl {
@@ -34,16 +35,19 @@ class on_error_base {
 public:
     template <typename IteratorT, typename ExceptionT, typename ContextT>
     x3::error_handler_result on_error(IteratorT& /* first */, IteratorT const& /* last */,
-        ExceptionT const& x, ContextT const& context) const
+                                      ExceptionT const& x, ContextT const& context) const
     {
-#if 0 /* XXX recursive include problem; parser_config requires on_error definition,
-       * but context_type is required here for statis_assert */
-        // detect upcoming linker errors, see notes at parser_config.hpp about
-        static_assert(
-            std::is_same_v<ContextT, context_type>,
-            "The Spirit.X3 Context must be equal"
-        );
-#endif
+        // FixMe: recursive include problem; parser_config requires on_error definition,
+        // but context_type is required here for statis_assert */
+        //
+        // if constexpr (false /* disabled */) {
+        //     // detect upcoming linker errors, see notes at parser_config.hpp about
+        //     static_assert(
+        //         std::is_same_v<ContextT, context_type>,
+        //         "The Spirit.X3 Context must be equal"
+        //     );
+        // }
+
         auto& error_handler = x3::get<parser::error_handler_tag>(context).get();
         return error_handler(x.where(), make_error_description(x.which()));
     }
@@ -67,8 +71,8 @@ private:
     static std::string make_error_description(std::string_view which);
 };
 
-} // namespace parser
-} // namespace vhdl
-} // namespace eda
+}  // namespace parser
+}  // namespace vhdl
+}  // namespace eda
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ON_ERROR_BASE_HPP_ */

@@ -8,11 +8,25 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_ANALYZE_CHECK_LABEL_MATCH_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_ANALYZE_CHECK_LABEL_MATCH_HPP_
 
-#include <eda/vhdl/ast_fwd.hpp>
 #include <eda/vhdl/ast/util/optional.hpp>
-#include <eda/vhdl/ast/node/label.hpp>
 
 #include <type_traits>
+#include <tuple>
+
+namespace eda::vhdl::ast {
+struct architecture_body;
+struct block_statement;
+struct case_statement;
+struct configuration_declaration;
+struct entity_declaration;
+struct generate_statement;
+struct identifier;
+struct if_statement;
+struct loop_statement;
+struct package_body;
+struct package_declaration;
+struct process_statement;
+}  // namespace eda::vhdl::ast
 
 namespace eda {
 namespace vhdl {
@@ -39,10 +53,10 @@ public:
     result operator()(ast::process_statement const& node) const;
 
 private:
-    static result compare(
-        ast::identifier const& start_label, ast::optional<ast::identifier> const& end_label);
+    static result compare(ast::identifier const& start_label,
+                          ast::optional<ast::identifier> const& end_label);
     static result compare(ast::optional<ast::identifier> const& start_label,
-        ast::optional<ast::identifier> const& end_label);
+                          ast::optional<ast::identifier> const& end_label);
 };
 
 /**
@@ -79,7 +93,7 @@ struct detector<Default, std::void_t<Op<Args...>>, Op, Args...> {
     using type = Op<Args...>;
 };
 
-} // namespace detail
+}  // namespace detail
 
 struct nonesuch {
     nonesuch() = delete;
@@ -97,14 +111,16 @@ using detected_t = typename detail::detector<nonesuch, void, Op, Args...>::type;
 template <class Default, template <class...> class Op, class... Args>
 using detected_or = detail::detector<Default, void, Op, Args...>;
 
-} // namespace label_util
+}  // namespace label_util
 
 namespace label_util {
 
-template <class T> using has_label = decltype(std::declval<T&>().label);
-template <class T> using has_identifier = decltype(std::declval<T&>().identifier);
+template <class T>
+using has_label = decltype(std::declval<T&>().label);
+template <class T>
+using has_identifier = decltype(std::declval<T&>().identifier);
 
-} // namespace label_util
+}  // namespace label_util
 
 template <typename NodeT>
 std::tuple<ast::identifier const&, ast::identifier const&> static inline labels_of(
@@ -118,22 +134,24 @@ std::tuple<ast::identifier const&, ast::identifier const&> static inline labels_
      * - identifier - end_identifier (where identifier is mandatory) */
     if constexpr (label_util::is_detected<label_util::has_label, NodeT>::value) {
         if constexpr (std::is_same_v<std::decay_t<decltype(node.label)>,
-                          ast::optional<ast::identifier>>) {
+                                     ast::optional<ast::identifier>>) {
             return tuple_type{ *node.label, *node.end_label };
-        } else {
+        }
+        else {
             // mandatory start label
             return tuple_type{ node.label, *node.end_label };
         }
-    } 
+    }
     else if constexpr (label_util::is_detected<label_util::has_identifier, NodeT>::value) {
         // always mandatory identifier
         return tuple_type{ node.identifier, *node.end_identifier };
     }
-    else { /* expect compiler error */  }
+    else { /* expect compiler error */
+    }
 }
 
-} // namespace analyze
-} // namespace vhdl
-} // namespace eda
+}  // namespace analyze
+}  // namespace vhdl
+}  // namespace eda
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_ANALYZE_CHECK_LABEL_MATCH_HPP_ */

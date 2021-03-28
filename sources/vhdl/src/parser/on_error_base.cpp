@@ -7,10 +7,12 @@
 
 #include <eda/vhdl/parser/on_error_base.hpp>
 
-#include <eda/support/boost/locale.hpp> // IWYU pragma: keep
+#include <boost/locale/format.hpp>
+#include <boost/locale/message.hpp>
 
-#include <iostream>
+#include <algorithm>
 #include <unordered_map>
+#include <utility>
 
 namespace eda {
 namespace vhdl {
@@ -22,7 +24,7 @@ std::string_view on_error_base::lookup(std::string_view which)
 {
     using rule_map_type = std::unordered_map<std::string_view, std::string_view>;
 
-    // Spirit.X3 rule ID/name map. The rule names may be different from node 
+    // Spirit.X3 rule ID/name map. The rule names may be different from node
     // names, so we can't use ast::pretty_node_name here.
     static const rule_map_type ruleid_map{
         { "abstract_literal"sv, "Abstract Literal"sv },
@@ -300,6 +302,6 @@ std::string on_error_base::make_error_description(std::string_view which)
     return (format(translate("Error, expecting {1} here:")) % lookup(which)).str();
 }
 
-} // namespace parser
-} // namespace vhdl
-} // namespace eda
+}  // namespace parser
+}  // namespace vhdl
+}  // namespace eda

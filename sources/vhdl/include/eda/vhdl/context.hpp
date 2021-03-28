@@ -11,18 +11,14 @@
 #include <eda/vhdl/ast/util/string_span.hpp>
 #include <eda/vhdl/ast/util/string_span_hash.hpp>
 
-#include <cstddef>
 #include <unordered_map>
 #include <exception>
 #include <limits>
 #include <iosfwd>
 
 namespace eda {
-
-// forward
 class settings;
-
-} // namespace eda
+}  // namespace eda
 
 namespace eda {
 namespace vhdl {
@@ -37,7 +33,8 @@ namespace detail {
  *
  * \see [Wandbox](https://wandbox.org/permlink/7o4pPgrmHDQUJj1x)
  */
-template <typename Tag> class basic_counter {
+template <typename Tag>
+class basic_counter {
 public:
     struct overflow : public std::exception {
     };
@@ -48,7 +45,6 @@ public:
 public:
     basic_counter(value_type limit_ = std::numeric_limits<value_type>::max())
         : treshold{ limit_ }
-        , value{ 0 }
     {
     }
 
@@ -116,10 +112,8 @@ public:
     }
 
 private:
-    // clang-format off
-    value_type                                      treshold;
-    value_type                                      value;
-    // clang-format on
+    value_type treshold;
+    value_type value{ 0 };
 };
 
 template <typename Tag>
@@ -128,7 +122,7 @@ std::ostream& operator<<(std::ostream& os, basic_counter<Tag> const& counter)
     return counter.print(os);
 }
 
-} // namespace detail
+}  // namespace detail
 
 /**
  * The VHDL context used for analyze and elaboration
@@ -193,7 +187,7 @@ static inline std::ostream& operator<<(std::ostream& os, failure_status const& s
     return status.print(os);
 }
 
-} // namespace vhdl
-} // namespace eda
+}  // namespace vhdl
+}  // namespace eda
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_CONTEXT_HPP_ */

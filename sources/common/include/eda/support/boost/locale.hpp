@@ -10,6 +10,9 @@
 
 /* get rid off compiler warning:
  * 'template<class> class std::auto_ptr' is deprecated */
+
+// @todo DELETE MY - UNUSED && NOT REQUIRED ANYMORE
+
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
 #include <eda/compiler/warnings_off.hpp>

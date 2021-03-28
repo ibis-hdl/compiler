@@ -8,13 +8,13 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_ANALYZE_ERROR_HANDLER_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_ANALYZE_ERROR_HANDLER_HPP_
 
-#include <eda/vhdl/ast/position_cache.hpp>
 #include <eda/vhdl/parser/iterator_type.hpp>
 
 #include <iosfwd>
 #include <string>
 
-#include <eda/namespace_alias.hpp>
+namespace eda::vhdl::ast { struct position_tagged; }
+namespace eda::vhdl::ast { template <typename IteratorT> class position_cache; }
 
 namespace eda {
 namespace vhdl {
@@ -29,6 +29,8 @@ namespace analyze {
  * different.
  *
  * \todo Get "access" to information of node/rule map at parser::on_error_base
+ *
+ * FixMe: CHeck on use of string_view!
  */
 template <typename Iterator> class error_handler {
 public:

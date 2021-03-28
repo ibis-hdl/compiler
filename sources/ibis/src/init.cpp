@@ -11,30 +11,37 @@
 
 #include <eda/buildinfo.hpp>
 
-#include <eda/configuration.hpp>
 #include <eda/settings.hpp>
 
 #include <eda/color/message.hpp>
+#include <eda/color/facet.hpp>
+#include <eda/color/attribute.hpp>
 
-
-#include <boost/locale/generator.hpp>
-#include <boost/locale/localization_backend.hpp>
-#include <eda/support/boost/locale.hpp>
-
-#include <CLI/CLI.hpp>
+#include <eda/platform.hpp>
 
 #include <eda/util/file/file_loader.hpp>
 #include <eda/util/file/user_home_dir.hpp>
 #include <eda/util/string/icompare.hpp>
-// clang-format off
+
+#include <eda/namespace_alias.hpp>  // IWYU pragma: keep
+
+#include <CLI/CLI.hpp>
+
 #include <rapidjson/document.h>
 #include <rapidjson/error/en.h>
 #include <rapidjson/pointer.h>
 #include <rapidjson/prettywriter.h>
+#include <rapidjson/encodings.h>
+#include <rapidjson/rapidjson.h>
+#include <rapidjson/stringbuffer.h>
 #include <eda/support/RapidJSON/merge.hpp>
-// clang-format on
 
-#include <algorithm>
+#include <boost/locale/message.hpp>
+#include <boost/locale/format.hpp>
+#include <boost/locale/generator.hpp>
+#include <boost/locale/localization_backend.hpp>
+#include <boost/locale/time_zone.hpp>
+
 #include <cstdlib>
 #include <memory>
 #include <optional>
@@ -42,13 +49,10 @@
 #include <string_view>
 #include <vector>
 #include <filesystem>
-
-#include <eda/util/cxx_bug_fatal.hpp>
-
-#include <eda/platform.hpp>
-
-#include <eda/namespace_alias.hpp>
-
+#include <locale>
+#include <stdexcept>
+#include <system_error>
+#include <iostream>
 
 namespace ibis {
 
@@ -73,9 +77,10 @@ void init::parse_cli(int argc, const char* argv[])
 
     static std::string_view const EDA_URL{ R"(https://github.com/???/ibis)" };
 
-    CLI::App app{ std::string{ EDA_IBIS_VERSION_STR }, std::string{ "ibis" }};
+    CLI::App app{ std::string{ EDA_IBIS_VERSION_STR }, std::string{ "ibis" } };
 
-    struct Formatter : public CLI::Formatter { };
+    struct Formatter : public CLI::Formatter {
+    };
 
     auto fmt = std::make_shared<Formatter>();
     fmt->column_width(40);
@@ -104,7 +109,7 @@ void init::parse_cli(int argc, const char* argv[])
 
     // clang-format off
     try {
-        
+
         /*
          * Primary Options Group
          */
@@ -183,7 +188,7 @@ void init::parse_cli(int argc, const char* argv[])
         app.add_flag("--Wunused") // unused
             ->description(translate("Warn on unused."))
             ->group(warning_group)
-            ; 
+            ;
         app.add_flag("--Wother") // unused
             ->description(translate("Warn for others."))
             ->group(warning_group)
@@ -212,10 +217,10 @@ void init::parse_cli(int argc, const char* argv[])
         std::cerr << translate("Internal command line parser error") << '\n';
         std::exit(app.exit(e));
     }
-	catch (...) {
+    catch (...) {
         std::cerr << translate("Unexpected CLIUtils/CLI11 error") << '\n';
-		std::exit(EXIT_FAILURE);
-	}
+        std::exit(EXIT_FAILURE);
+    }
 
     // parse CLI arguments ...
     try {
@@ -225,16 +230,15 @@ void init::parse_cli(int argc, const char* argv[])
         // e.g. not fullfilled requirements
         std::exit(app.exit(e));
     }
-	catch (...) {
+    catch (...) {
         std::cerr << translate("Unexpected command line parser error") << '\n';
-		std::exit(EXIT_FAILURE);
-	}
-
+        std::exit(EXIT_FAILURE);
+    }
 
     // ... and evaluate CLI arguments:
 
     /* FixMe: The code below is far away to be practical/useable.
-     * The settings class overloaded set() member and hence the C++ 
+     * The settings class overloaded set() member and hence the C++
      * lambda 'set_option' get into compile error with
      * 'map[trim(option_name)].emplace<T>(value);', so the exhausting
      * way is choosen temporary here.  This mix here testing on given
@@ -303,15 +307,11 @@ void init::parse_cli(int argc, const char* argv[])
     triggered_flags.update(setting);
 }
 
-void init::register_signal_handlers()
-{
-    ibis::register_signal_handlers();
-}
+void init::register_signal_handlers() { ibis::register_signal_handlers(); }
 
 void init::user_config_message_color()
 {
-    static const char default_cfg_json[] =
-R"({
+    static const char default_cfg_json[] = R"({
   "message": {
     "failure": {
       "style": {
@@ -357,12 +357,9 @@ R"({
         rjson::Document document;
         if (document.Parse(json).HasParseError()) {
             if (!quiet) {
-                // clang-format off
-                std::cerr << message::error("Error:")
-                          << " parsing JSON configuration file: "
-                          << rjson::GetParseError_En(document.GetParseError())
+                std::cerr << message::error("Error:") << " parsing JSON configuration file: "
+                          << rjson::GetParseError_En(document.GetParseError())  // --
                           << "(offset " << document.GetErrorOffset() << ")\n";
-                // clang-format on
             }
         }
         return document;
@@ -389,7 +386,8 @@ R"({
     if (json_txt) {
         rjson::Document user_config = parse_json((*json_txt).c_str());
         merge(default_config, user_config);
-    } else {
+    }
+    else {
         /* nothing */
     }
 
@@ -399,31 +397,31 @@ R"({
     }
 
     auto const get_formatter = [&](char const json_ptr[]) {
-
         eda::color::printer format;
 
-        if (rjson::Value* style = rjson::GetValueByPointer(default_config, rjson::Pointer(json_ptr))) {
+        if (rjson::Value* style =
+                rjson::GetValueByPointer(default_config, rjson::Pointer(json_ptr))) {
             for (auto const& object : style->GetObject()) {
                 auto const name = object.name.GetString();
                 auto const attr_name = object.value.GetString();
 
-                // clang-format off
-                auto const update_format = [&](char const attr_name[], auto const attribute_getter) {
+                auto const update_format = [&](char const attr_name[],
+                                               auto const attribute_getter) {
                     auto const attr{ attribute_getter(attr_name) };
                     if (attr) {
                         format |= *attr;
                         if (verbose) {
-                            std::cerr << message::note("NOTE:") << " using "
-                                      << json_ptr << "/" << name << " = " << attr_name << '\n';
+                            std::cerr << message::note("NOTE:") << " using " << json_ptr << "/"
+                                      << name << " = " << attr_name << '\n';
                         }
-                    } else {
+                    }
+                    else {
                         if (!quiet) {
                             std::cerr << message::warning("WARNING:") << " Ignore invalid "
                                       << json_ptr << "/" << name << " = " << attr_name << '\n';
                         }
                     }
                 };
-                // clang-format on
 
                 if (util::icompare(name, "text")) {
                     update_format(attr_name, &color::text_attr);
@@ -447,35 +445,21 @@ R"({
         stream.imbue(locale);
     };
 
-    // clang-format off
     auto const failure_format = get_formatter("/message/failure/style");
-    imbue(std::cerr, std::make_unique<message::failure_facet>(
-        failure_format,
-        color::color_off,
-        force_color)
-    );
+    imbue(std::cerr,
+          std::make_unique<message::failure_facet>(failure_format, color::color_off, force_color));
 
     auto const error_format = get_formatter("/message/error/style");
-    imbue(std::cerr, std::make_unique<message::error_facet>(
-        error_format,
-        color::color_off,
-        force_color)
-    );
+    imbue(std::cerr,
+          std::make_unique<message::error_facet>(error_format, color::color_off, force_color));
 
     auto const warning_format = get_formatter("/message/warning/style");
-    imbue(std::cerr, std::make_unique<message::warning_facet>(
-        warning_format,
-        color::color_off,
-        force_color)
-    );
+    imbue(std::cerr,
+          std::make_unique<message::warning_facet>(warning_format, color::color_off, force_color));
 
     auto const note_format = get_formatter("/message/note/style");
-    imbue(std::cerr, std::make_unique<message::note_facet>(
-        note_format,
-        color::color_off,
-        force_color)
-    );
-    // clang-format on
+    imbue(std::cerr,
+          std::make_unique<message::note_facet>(note_format, color::color_off, force_color));
 }
 
 void init::l10n()
@@ -487,10 +471,11 @@ void init::l10n()
     // [Using Localization Backends](
     //  https://www.boost.org/doc/libs/1_68_0/libs/locale/doc/html/using_localization_backends.html)
     localization_backend_manager l10n_backend = localization_backend_manager::global();
-    
+
     if constexpr (eda::build_platform == platform::Win32) {
         l10n_backend.select(static_cast<std::string>("winapi"));
-    } else {
+    }
+    else {
         l10n_backend.select(static_cast<std::string>("std"));
     }
 
@@ -510,19 +495,18 @@ void init::l10n()
     auto lc_path = fs::canonical(l10n_path, ec);
 
     long const verbose = [&] { return setting["verbose"].get<long>(); }();
- 
+
     if (ec) {
         if (verbose > 1) {
             // FixMe: notice or warning level for those message
-            std::cerr << R"(locale directory ')" << l10n_path.string()
-                      << R"( failure: )" << ec.message() << std::endl;
+            std::cerr << R"(locale directory ')" << l10n_path.string() << R"( failure: )"
+                      << ec.message() << std::endl;
         }
         return;
     }
 
     if (verbose > 2) {
-        std::cout << "LC_PATH = " 
-                    << lc_path.make_preferred().string() << std::endl;
+        std::cout << "LC_PATH = " << lc_path.make_preferred().string() << std::endl;
     }
 
     gen.add_messages_path(lc_path.make_preferred().string());
@@ -534,4 +518,4 @@ void init::l10n()
     std::cerr.imbue(locale);
 }
 
-} // namespace ibis
+}  // namespace ibis

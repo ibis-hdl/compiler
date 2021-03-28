@@ -8,12 +8,14 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_STATS_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_STATS_HPP_
 
-#include <eda/vhdl/ast_fwd.hpp>
-
-#include <iosfwd>
-#include <string_view>
 #include <unordered_map>
 #include <unordered_set>
+#include <string_view>
+#include <iosfwd>
+
+namespace eda::vhdl::ast {
+struct design_file;
+}
 
 namespace eda {
 namespace vhdl {
@@ -32,10 +34,8 @@ private:
     using set_type = std::unordered_set<std::string_view>;
 
 private:
-    // clang-format off
-    map_type                                         count_map;
-    set_type                                         untagged_nodes;
-    // clang-format on
+    map_type count_map;
+    set_type untagged_nodes;
 };
 
 static inline std::ostream& operator<<(std::ostream& os, ast_stats const& stats)
@@ -43,8 +43,8 @@ static inline std::ostream& operator<<(std::ostream& os, ast_stats const& stats)
     return stats.print(os);
 }
 
-} // namespace ast
-} // namespace vhdl
-} // namespace eda
+}  // namespace ast
+}  // namespace vhdl
+}  // namespace eda
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_STATS_HPP_ */

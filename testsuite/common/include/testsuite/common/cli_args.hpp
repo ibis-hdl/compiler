@@ -3,7 +3,7 @@
 #include <string>
 #include <filesystem>
 
-#include <testsuite/common/namespace_alias.hpp>
+#include <testsuite/common/namespace_alias.hpp> // IWYU pragma: keep
 
 namespace testsuite {
 
@@ -106,7 +106,7 @@ public:
 private:
     ///
     /// @brief parse the cli arguments and perform convenience checks on it.
-    /// 
+    ///
     /// @return true on success
     /// @return false on failure of parsing the command line.
     ///
@@ -114,7 +114,7 @@ private:
 
     ///
     /// @brief Print the arguments given from command line if any
-    /// 
+    ///
     static void print_settings();
 
 private:

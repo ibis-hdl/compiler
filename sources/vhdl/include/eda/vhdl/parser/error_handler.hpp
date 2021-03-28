@@ -10,19 +10,16 @@
 
 #include <eda/vhdl/ast/position_cache.hpp>
 
-// clang-format off
+#include <eda/namespace_alias.hpp>  // IWYU pragma: keep
+
 // the following header are required for x3::error_handler_result
-#include <eda/compiler/warnings_off.hpp>            // IWYU pragma: keep
 #include <boost/spirit/home/x3/support/traits/tuple_traits.hpp> // IWYU pragma: keep
-#include <boost/spirit/home/x3/support/traits/is_variant.hpp> // IWYU pragma: keep
-#include <boost/spirit/home/x3/auxiliary/guard.hpp> // IWYU pragma: keep
-#include <eda/compiler/warnings_on.hpp>             // IWYU pragma: keep
-// clang-format on
+#include <boost/spirit/home/x3/support/traits/is_variant.hpp>   // IWYU pragma: keep
+#include <boost/spirit/home/x3/auxiliary/guard.hpp>
 
-#include <iosfwd>
+#include <utility>
 #include <string>
-
-#include <eda/namespace_alias.hpp> // IWYU pragma: keep
+#include <iosfwd>
 
 namespace eda {
 namespace vhdl {
@@ -31,7 +28,7 @@ namespace parser {
 /**
  * tag used to get our error handler from the x3::context
  */
-struct error_handler_tag;
+struct error_handler_tag;  // IWYU pragma: keep
 
 /**
  * Parser error handler
@@ -49,7 +46,8 @@ struct error_handler_tag;
  *
  * \see ast::position_cache
  */
-template <typename Iterator> class error_handler {
+template <typename Iterator>
+class error_handler {
 public:
     using iterator_type = Iterator;
     using result_type = x3::error_handler_result;
@@ -115,15 +113,13 @@ public:
     position_proxy_type const& current_file() const { return position_proxy; }
 
 private:
-    // clang-format off
-    std::ostream&                                   os;
-    position_proxy_type                             position_proxy;
-    std::size_t                                     tab_sz;
-    // clang-format on
+    std::ostream& os;
+    position_proxy_type position_proxy;
+    std::size_t tab_sz;
 };
 
-} // namespace parser
-} // namespace vhdl
-} // namespace eda
+}  // namespace parser
+}  // namespace vhdl
+}  // namespace eda
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ERROR_HANDLER_HPP_ */

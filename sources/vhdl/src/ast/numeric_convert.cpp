@@ -10,30 +10,45 @@
 #include <eda/vhdl/ast/node/based_literal.hpp>
 #include <eda/vhdl/ast/node/bit_string_literal.hpp>
 #include <eda/vhdl/ast/node/decimal_literal.hpp>
+#include <eda/vhdl/ast/util/string_span.hpp>
 
-#include <eda/support/boost/locale.hpp>
-#include <eda/support/boost/spirit_x3.hpp>
-#include <eda/util/cxx_bug_fatal.hpp>
 #include <eda/vhdl/ast/literal_printer.hpp>
-#include <eda/vhdl/parser/parser_config.hpp>
 #include <eda/vhdl/type.hpp>
 
+#include <eda/util/cxx_bug_fatal.hpp>
+#include <eda/compiler/compiler_support.hpp>
+
+#include <eda/namespace_alias.hpp> // IWYU pragma: keep
+
+// IWYU replaces a lot of other header, we stay with this one
+#include <boost/spirit/home/x3.hpp> // IWYU pragma: keep
+
 #include <boost/iterator/filter_iterator.hpp>
-#include <boost/range/iterator_range.hpp>
+#include <boost/iterator/iterator_facade.hpp>
+//#include <boost/range/iterator_range.hpp>
+#include <boost/range/iterator_range_core.hpp>
+#include <boost/range/iterator_range_io.hpp>
 #include <boost/range/join.hpp>
 
-#include <cassert>
-#include <iostream>
+#include <boost/locale/format.hpp>
+#include <boost/locale/message.hpp>
+
+#include <cmath>
+#include <algorithm>
+#include <limits>
 #include <iterator>
 #include <numeric> // accumulate
+#include <string>
 #include <string_view>
 #include <type_traits>
+#include <iostream>
 
-#include <eda/compiler/compiler_support.hpp>
+
 // pre C++20 to avoid lint warnings
 #if defined(EDA_HAVE_EXPERIMENTAL_SOURCE_LOCATION)
-#include <experimental/source_location>
+#include <experimental/source_location> // IWYU pragma: keep
 #endif
+
 
 namespace eda {
 namespace vhdl {
@@ -91,7 +106,7 @@ hex_parser_type const hex = {};
 
 auto const exponent = x3::rule<struct _, unsigned_integer>{} =
     // clang-format off
-       x3::omit[ x3::char_("Ee") ] 
+       x3::omit[ x3::char_("Ee") ]
     >> int_ // signed
     ;
     // clang-format on
@@ -105,7 +120,7 @@ auto const exponent = x3::rule<struct _, unsigned_integer>{} =
 namespace dbg_util {
 
 template <typename RangeType, typename RangeFiltType, typename AttributeType>
-void trace_report(RangeType const& range, RangeFiltType const& range_f, bool parse_ok, AttributeType attribute, 
+void trace_report(RangeType const& range, RangeFiltType const& range_f, bool parse_ok, AttributeType attribute,
     std::string_view file, unsigned line, std::string_view function)
 {
     std::cout << file << ":" << line << " "
@@ -113,7 +128,7 @@ void trace_report(RangeType const& range, RangeFiltType const& range_f, bool par
               << " -> ['" << range_f << "']: "
               << std::boolalpha
               << "parse_ok = "     << parse_ok
-              << ", attribute = "  << attribute 
+              << ", attribute = "  << attribute
               << '\n';
 }
 
@@ -126,10 +141,10 @@ void trace_report(RangeType const& range, RangeFiltType const& range_f, bool par
 #if defined(EDA_HAVE_EXPERIMENTAL_SOURCE_LOCATION_)
 template <typename RangeType, typename RangeFiltType, typename AttributeType>
 static inline
-void dbg_trace(RangeType const& range, RangeFiltType const& range_f, bool parse_ok, AttributeType attribute, 
+void dbg_trace(RangeType const& range, RangeFiltType const& range_f, bool parse_ok, AttributeType attribute,
     std::experimental::source_location const& location = std::experimental::source_location::current())
 {
-    dbg_util::trace_report(range, range_f, parse_ok, attribute, 
+    dbg_util::trace_report(range, range_f, parse_ok, attribute,
         location.file_name(),
         location.line(),
         location.function_name());
@@ -152,7 +167,7 @@ void dbg_trace(RangeType const& range, RangeFiltType const& range_f, bool parse_
  * Treat all of x3's attribute type as double for simplification, otherwise
  * one has to handle with different return types using C++ lambdas.
  */
-struct primitive_parser 
+struct primitive_parser
 {
     // tags for overloading
     struct bin {  };
@@ -301,7 +316,7 @@ using real = eda::vhdl::intrinsic::real_type;
 /**
  * Helper class to calculate fractional parts of binary numbers like bin,
  * oct and hex.  */
-class frac 
+class frac
 {
 public:
     using numeric_type = double;
@@ -383,7 +398,7 @@ numeric_convert::numeric_convert(std::ostream& os_)
 /**
  * numeric_convert's private error reporting utility to unify error messages
  */
-class numeric_convert::report_error 
+class numeric_convert::report_error
 {
 public:
     static constexpr detail::unsigned_integer MAX_VALUE{

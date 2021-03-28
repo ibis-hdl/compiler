@@ -7,14 +7,17 @@
 
 #include <eda/util/file/user_home_dir.hpp>
 
-#include <eda/compiler/compiler_support.hpp> // IWYU pragma: keep
+//#include <eda/compiler/compiler_support.hpp> // IWYU pragma: keep
 #include <eda/platform.hpp>
+//#include <eda/namespace_alias.hpp>
 
 #include <cstdlib>
 #include <stdexcept>
 #include <string>
+#include <filesystem>
+#include <initializer_list>
+#include <system_error>
 
-#include <eda/namespace_alias.hpp> // IWYU pragma: keep
 
 namespace eda {
 namespace util {
@@ -22,14 +25,14 @@ namespace util {
 ///
 /// @brief Lookup user's HOME environment to gather the absolute path
 /// of stringified path elements
-/// 
-/// @param path_list list of path elements 
+///
+/// @param path_list list of path elements
 /// @return fs::path absolute path
 ///
-/// @todo This function requires rework. It's small and only used only in init.cpp. 
-/// Further the arguments list shall be a path self, instead an initializer list of 
-/// chars/strings. On Windows there is the warning: *'getenv' is deprecated: 
-/// This function or variable may be unsafe. Consider using _dupenv_s instead. 
+/// @todo This function requires rework. It's small and only used only in init.cpp.
+/// Further the arguments list shall be a path self, instead an initializer list of
+/// chars/strings. On Windows there is the warning: *'getenv' is deprecated:
+/// This function or variable may be unsafe. Consider using _dupenv_s instead.
 /// To disable deprecation, use _CRT_SECURE_NO_WARNINGS*. Setting these define
 /// globally isn't wise. One solution on windows would be:
 /// \code{.cpp}

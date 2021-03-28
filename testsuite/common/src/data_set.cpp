@@ -7,16 +7,17 @@
 
 #include <testsuite/common/data_set.hpp>
 #include <testsuite/common/cli_args.hpp>
-#include <testsuite/common/detail/compile_builtin.hpp>
+#include <testsuite/common/compile_builtin.hpp>
 
-#include <cassert>
-#include <algorithm>
-#include <iterator>
+#include <boost/test/unit_test.hpp>
+#include <boost/test/data/test_case.hpp>
+
 #include <exception>
-#include <iostream>
+#include <filesystem>
 #include <fstream>
 #include <set>
-#include <filesystem>
+#include <sstream>
+#include <string_view>
 
 using testsuite::cli_args;
 
@@ -60,7 +61,7 @@ void dataset_loader::read_files(fs::path const& path_name)
         // collect all files from directory ...
         // Note, std::set is a container that stores unique elements in sorted order.
         std::set<fs::path> dir_list;
-        for (auto& entry : fs::directory_iterator(path_name)) {
+        for (auto const& entry : fs::directory_iterator(path_name)) {
             // recursion is not intended
             if (entry.is_regular_file()) {
                 dir_list.insert(entry.path());
@@ -165,8 +166,8 @@ void dataset_loader::setup()
         if (cli_args::source_dir().empty()) {
             BOOST_TEST_MESSAGE(  // --
                 "INFO(" << dataset_name << ") use compiled builtin <source_dir> "
-                        << compile_def_source_dir);
-            source_dir = compile_def_source_dir;
+                        << compile_builtin::source_dir);
+            source_dir = compile_builtin::source_dir;
         }
         else {
             BOOST_TEST_MESSAGE(  // --
@@ -181,8 +182,8 @@ void dataset_loader::setup()
         if (cli_args::input_extension().empty()) {
             BOOST_TEST_MESSAGE(  // --
                 "INFO(" << dataset_name << ") use compiled builtin <input_extension> "
-                        << compile_def_input_extension);
-            input_extension = compile_def_input_extension;
+                        << compile_builtin::input_extension);
+            input_extension = compile_builtin::input_extension;
         }
         else {
             BOOST_TEST_MESSAGE(  // --
@@ -197,8 +198,8 @@ void dataset_loader::setup()
         if (cli_args::expected_extension().empty()) {
             BOOST_TEST_MESSAGE(  // --
                 "INFO(" << dataset_name << ") use compiled builtin <expected_extension> "
-                        << compile_def_expected_extension);
-            expected_extension = compile_def_expected_extension;
+                        << compile_builtin::expected_extension);
+            expected_extension = compile_builtin::expected_extension;
         }
         else {
             BOOST_TEST_MESSAGE(  // --
@@ -224,9 +225,9 @@ void dataset_loader::setup()
         char** const argv = boost::unit_test::framework::master_test_suite().argv;
 
         // compile time defaults
-        source_dir = compile_def_source_dir;
-        input_extension = compile_def_input_extension;
-        expected_extension = compile_def_expected_extension;
+        source_dir = compile_builtin::source_dir;
+        input_extension = compile_builtin::input_extension;
+        expected_extension = compile_builtin::expected_extension;
 
         // overwrite defaults with command line arguments if any
         for (unsigned i = 0; i != argc; i++) {

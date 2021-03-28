@@ -5,10 +5,10 @@
  *      Author: olaf
  */
 
-#define BOOST_TEST_MODULE "VHDL AST Test Suite"
-#include <eda/compiler/warnings_off.hpp>            // IWYU pragma: keep
+#define BOOST_TEST_MODULE VHDL AST Test Suite
 #include <boost/test/unit_test.hpp>                 // IWYU pragma: keep
-#include <eda/compiler/warnings_on.hpp>             // IWYU pragma: keep
+
+// FixMe: May move the global fixture to own file to compile
 
 #include <testsuite/ast/position_cache_fixture.hpp>
 

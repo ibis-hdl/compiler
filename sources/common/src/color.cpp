@@ -5,9 +5,17 @@
  *      Author: olaf
  */
 
+//#include <eda/color/attribute.hpp>
+//#include <eda/color/facet.hpp>
 #include <eda/color/message.hpp>
 
 #include <eda/util/string/icompare.hpp>
+
+#include <initializer_list>
+#include <locale>
+#include <optional>
+#include <string_view>
+#include <utility>
 
 namespace eda {
 namespace color {

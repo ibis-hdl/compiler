@@ -109,7 +109,7 @@ toolset=msvc address-model=64 architecture=x86 stage ^
 - [git-cmake-format](https://github.com/BlueBrain/git-cmake-format)
   This project aims to provide a quick and easy way to integrate clang-format into your CMake project hosted in a git repository
 
-- cmake tidy && format example code
+- for cmake tidy && format, code coverage etc. example code look at
   https://github.com/ORNL-CEES/mfmg/tree/master/cmake
 
 - Unit Testing
@@ -404,9 +404,8 @@ set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
 - Replace C comments by C++ comments, see e.g. [Github](https://github.com/mbitsnbites/c-comments-to-cpp)
   for a python script. In 2021 it fails with inline comments like signatures
   like foo(int /* unused */).
-  CHECK if there can clang-tidy and clang-format can help
 
-- Get clang-tidy and clang-format working again. By The Way, check clang-format
+- Get clang-format working again. By The Way, check clang-format
   style for enhancements, so that we get rid off the '// 'clang-format {off|on}'
   pragmas especially on class members.
 
@@ -440,6 +439,10 @@ set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
 - Check build system with [Templight 2.0 - Template Instantiation Profiler and Debugger](
   https://github.com/mikael-s-persson/templight)
 
+- we have buildinfo_static.hpp.in, buildinfo.hpp.in using git info and date/time 
+  would be useful. Copy git part temporary to ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY} 
+  to avoid unnecessary rebuild, for an idea look at blender sources.
+
 
 ### Others
 
@@ -471,11 +474,8 @@ and recommendations.
 A good starting point is [Static checks with CMake/CDash (iwyu, clang-tidy, lwyu, cpplint and cppcheck)](
 https://blog.kitware.com/static-checks-with-cmake-cdash-iwyu-clang-tidy-lwyu-cpplint-and-cppcheck/)
 
-  - $ cmake "-DCMAKE_CXX_CLANG_TIDY=clang-tidy" ../path/to/source
-    or simply enable the option DEVELOPER_RUN_CLANG_TIDY or run build
-    tool, e.g. ninja. The projects compiles with clang-tidy in front of-
   - testsuite is heavy to improve due to heavy use of macros by boost.test
-  - not checked by clang-{tidy,format}:
+  - not checked by clang-tidy:
 
     - RapidJSON parts of init.cpp isn't checked since it may be replaced
       by boost.json

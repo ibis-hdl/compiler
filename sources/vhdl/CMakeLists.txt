@@ -60,6 +60,10 @@ if(localhost_RAM_MiB LESS 12288)
         PROPERTIES
             JOB_POOL_COMPILE NINJA_JOBS_ONE_CPU
     )
+    set_source_files_properties(src/parser/grammar.cpp src/parser/parse.cpp
+        PROPERTIES
+            COMPILE_FLAGS "-O0 -ftemplate-backtrace-limit=10 -ftemplate-depth=900"
+)
 endif()
 
 

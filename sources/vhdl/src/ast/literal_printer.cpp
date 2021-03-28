@@ -7,16 +7,18 @@
 
 #include <eda/vhdl/ast/literal_printer.hpp>
 
-#include <eda/support/cxx/overloaded.hpp>
+#include <eda/support/cxx/overloaded.hpp>   // IWYU pragma: keep
+
 #include <eda/util/cxx_bug_fatal.hpp>
 
-#include <boost/iterator/filter_iterator.hpp>
+#include <boost/iterator/filter_iterator.hpp>   // IWYU pragma: keep
+#include <boost/variant/apply_visitor.hpp>
 
 #include <iostream>
 
 namespace /* anonymous */ {
 
-class unquote_predicate 
+class unquote_predicate
 {
 public:
     unquote_predicate() = default;
@@ -147,7 +149,7 @@ std::ostream& literal_printer::print(std::ostream& os) const
                 boost::make_filter_iterator(unquote_predicate{},
                         str.literal.end())
             );
-            
+
             os << literal_f;
         }
     }, this->literal);

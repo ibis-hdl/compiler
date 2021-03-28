@@ -13,8 +13,9 @@
 #include <eda/vhdl/ast/node/decimal_literal.hpp>
 #include <eda/vhdl/ast/node/string_literal.hpp>
 
-#include <boost/variant.hpp>
-#include <iostream>
+#include <boost/variant/variant.hpp>
+
+#include <iosfwd>
 
 namespace eda {
 namespace vhdl {
@@ -30,6 +31,10 @@ public:
     std::ostream& print(std::ostream& os) const;
 
 private:
+
+    // FixMe: The use of variant requires full definition of the class, hence the
+    // includes of the elements used and no forward declarations can be used. Maybe
+    // write an internal wrapper class to avoid this.
     // clang-format off
     using literal_variant_type = boost::variant<
         ast::bit_string_literal,
@@ -39,9 +44,7 @@ private:
     >;
     // clang-format on
 
-    // clang-format off
-    literal_variant_type const                      literal;
-    // clang-format on
+    literal_variant_type const literal;
 };
 
 static inline std::ostream& operator<<(std::ostream& os, literal_printer const& printer)
@@ -49,8 +52,8 @@ static inline std::ostream& operator<<(std::ostream& os, literal_printer const& 
     return printer.print(os);
 }
 
-} // namespace ast
-} // namespace vhdl
-} // namespace eda
+}  // namespace ast
+}  // namespace vhdl
+}  // namespace eda
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_LITERAL_PRINTER_HPP_ */

@@ -1,10 +1,15 @@
 #include <testsuite/common/cli_args.hpp>
 
-#include <iostream>
+#include <CLI/App.hpp>
+#include <CLI/Error.hpp>
+#include <CLI/Option.hpp>
+#include <CLI/Formatter.hpp>	// IWYU pragma: keep
+#include <CLI/Config.hpp>	// IWYU pragma: keep
 
 #include <boost/test/unit_test.hpp>
 
-#include <CLI/CLI.hpp>
+#include <cstdlib>
+#include <sstream>
 
 namespace testsuite {
 

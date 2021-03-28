@@ -5,18 +5,24 @@
  *      Author: olaf
  */
 
-// clang-format off
 #include <ibis/init.hpp>
+
 #include <eda/settings.hpp>
 #include <eda/util/file/file_loader.hpp>
-// clang-format on
 
 #include <eda/color/message.hpp>
-#include <eda/support/boost/locale.hpp> // IWYU pragma: keep
+#include <eda/color/attribute.hpp>
+#include <eda/color/facet.hpp>
+
+#include <boost/locale/format.hpp>
+#include <boost/locale/message.hpp>
 
 #include <cstdlib>
 #include <exception>
 #include <iostream>
+#include <optional>
+#include <string>
+#include <vector>
 
 extern void testing_signal_handler();
 
@@ -40,34 +46,32 @@ int main(int argc, const char* argv[])
     try {
         util::file_loader file_reader{ std::cerr, setting };
 
-#if 0
-        std::cerr << color::message::failure("FAILURE") <<  " Format Test\n";
-        std::cerr << color::message::error("ERROR") <<  " Format Test\n";
-        std::cerr << color::message::warning("WARNING") <<  " Format Test\n";
-        std::cerr << color::message::note("NOTE") <<  " Format Test\n";
-#endif
+        if constexpr (false /* debug */) {
+            std::cerr << color::message::failure("FAILURE") << " Format Test\n";
+            std::cerr << color::message::error("ERROR") << " Format Test\n";
+            std::cerr << color::message::warning("WARNING") << " Format Test\n";
+            std::cerr << color::message::note("NOTE") << " Format Test\n";
+        }
 
         for (auto const& filename : setting["files"].get<std::vector<std::string>>()) {
             auto const contents = file_reader.read_file(filename);
             if (!setting["quiet"]) {
-                std::cerr << message::note(translate("processing:")) << " "
-                          << filename << '\n';
+                std::cerr << message::note(translate("processing:")) << " " << filename << '\n';
             }
 
             // XXX since we aren't functional, simply print the contents
 
             std::cout << "------------------------------------------------\n"
-            		  << *contents << '\n'
-            		  << "------------------------------------------------\n";
+                      << *contents << '\n'
+                      << "------------------------------------------------\n";
         }
 
         // testing_signal_handler(); // just testing
-    } catch (std::exception const& e) {
-        // clang-format off
-        std::cerr << message::failure(translate("Exception caught:")) << " "
-                  << e.what() << '\n';
-        // clang-format on
-    } catch (...) {
+    }
+    catch (std::exception const& e) {
+        std::cerr << message::failure(translate("Exception caught:")) << " " << e.what() << '\n';
+    }
+    catch (...) {
         std::cerr << message::failure(translate("Unexpected exception caught")) << '\n';
     }
 

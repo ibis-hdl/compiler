@@ -8,8 +8,6 @@
 #ifndef SOURCES_COMMON_INCLUDE_EDA_SETTINGS_HPP_
 #define SOURCES_COMMON_INCLUDE_EDA_SETTINGS_HPP_
 
-#include <eda/support/cxx/overloaded.hpp>
-
 #include <iosfwd>
 #include <string>
 #include <string_view>
@@ -18,6 +16,8 @@
 #include <utility>
 #include <variant>
 #include <vector>
+
+#include <eda/support/cxx/overloaded.hpp>   // IWYU pragma: keep
 
 namespace eda {
 

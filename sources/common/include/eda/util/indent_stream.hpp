@@ -14,12 +14,11 @@
 namespace eda {
 namespace util {
 
-
 /// An indenting stream buffer
 ///
 /// On each increase() member call the indent is increased respectively
 /// decreased on decrease() call. The buffer is intended to be used with
-/// indent_ostream and the IO manipulators increase_indent() and 
+/// indent_ostream and the IO manipulators increase_indent() and
 /// decrease_indent()
 ///
 /// FixMe: tabwith is hard coded.
@@ -31,10 +30,9 @@ namespace util {
 ///        https://stackoverflow.com/questions/19105657/can-c-streambuf-methods-throw-exceptions).
 ///       [std::stringbuf::overflow](
 ///        http://www.cplusplus.com/reference/sstream/stringbuf/overflow/)
-///       states basic guarantee: if an exception is thrown, the 
+///       states basic guarantee: if an exception is thrown, the
 ///       stream buffer is in a valid state.
-class indent_sbuf : public std::streambuf 
-{
+class indent_sbuf : public std::streambuf {
 public:
     explicit indent_sbuf(std::streambuf* sbuf, size_t start_indent = 0)
         : m_sbuf{ sbuf }
@@ -43,15 +41,16 @@ public:
     }
 
     indent_sbuf(indent_sbuf const&) = delete;
-    indent_sbuf& operator =(indent_sbuf const&) = delete;
+    indent_sbuf& operator=(indent_sbuf const&) = delete;
     indent_sbuf(indent_sbuf&&) = delete;
     indent_sbuf& operator=(indent_sbuf&&) = delete;
-    
+
 public:
     ~indent_sbuf() override
     {
         // start at column 0 again
-        overflow('\n');  // NOLINT(clang-analyzer-optin.cplusplus.VirtualCall) -- functionally intended
+        overflow(
+            '\n');  // NOLINT(clang-analyzer-optin.cplusplus.VirtualCall) -- functionally intended
     }
 
     indent_sbuf& increase()
@@ -64,7 +63,8 @@ public:
     {
         if (m_indent_str.size() > TAB_WIDTH) {
             m_indent_str = std::string(m_indent_str.size() - TAB_WIDTH, ' ');
-        } else {
+        }
+        else {
             m_indent_str.clear();
         }
         return *this;
@@ -97,11 +97,9 @@ private:
     }
 
 private:
-    // clang-format off
-    std::streambuf*                                 m_sbuf;
-    std::string                                     m_indent_str;
-    static constexpr std::size_t                    TAB_WIDTH = 2;
-    // clang-format on
+    std::streambuf* m_sbuf;
+    std::string m_indent_str;
+    static constexpr std::size_t TAB_WIDTH = 2;
 };
 
 class indent_ostream : public std::ostream {
@@ -113,14 +111,12 @@ public:
     }
 
 private:
-    // clang-format off
-    indent_sbuf                                     buf;
-    // clang-format on
+    indent_sbuf buf;
 };
 
 static inline std::ostream& increase_indent(std::ostream& os)
 {
-    //NOLINTNEXTLINE(cppcoreguidelines-pro-type-static-cast-downcast) -- assume this is legitimate
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-static-cast-downcast) -- assume this is legitimate
     auto* buf = static_cast<indent_sbuf*>(os.rdbuf());
     buf->increase();
     return os;
@@ -128,13 +124,13 @@ static inline std::ostream& increase_indent(std::ostream& os)
 
 static inline std::ostream& decrease_indent(std::ostream& os)
 {
-    //NOLINTNEXTLINE(cppcoreguidelines-pro-type-static-cast-downcast) -- assume this is legitimate
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-static-cast-downcast) -- assume this is legitimate
     auto* buf = static_cast<indent_sbuf*>(os.rdbuf());
     buf->decrease();
     return os;
 }
 
-} // namespace util
-} // namespace eda
+}  // namespace util
+}  // namespace eda
 
 #endif /* SOURCES_COMMON_INCLUDE_EDA_UTILS_INDENT_STREAM_HPP_ */

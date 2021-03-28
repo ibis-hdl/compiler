@@ -6,17 +6,29 @@
  */
 
 #include <eda/vhdl/analyze/error_handler.hpp>
-
-#include <eda/support/boost/locale.hpp>
-
-#include <eda/color/message.hpp>
-#include <eda/util/string/position_indicator.hpp>
-
-#include <eda/util/make_iomanip.hpp>
-
-#include <eda/util/cxx_bug_fatal.hpp>
+#include <eda/vhdl/ast/position_cache.hpp>
+#include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/parser/iterator_type.hpp> // for explicit template instantiation
+
+#include <eda/util/string/position_indicator.hpp>
+
+#include <eda/color/message.hpp>
+#include <eda/color/facet.hpp>
+
+#include <eda/util/make_iomanip.hpp>
+#include <eda/util/cxx_bug_fatal.hpp>
+
+#include <boost/range/iterator_range_core.hpp>
+#include <boost/core/ignore_unused.hpp>
+
+#include <boost/locale/format.hpp>
+#include <boost/locale/message.hpp>
+
+#include <algorithm>
+#include <optional>
+#include <ostream>
+#include <tuple>
 
 namespace eda {
 namespace vhdl {

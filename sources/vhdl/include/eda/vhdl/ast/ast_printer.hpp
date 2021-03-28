@@ -8,23 +8,35 @@
 #ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_PRINTER_HPP_
 #define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_PRINTER_HPP_
 
-#include <eda/vhdl/ast.hpp>
+#include <eda/vhdl/ast_fwd.hpp>
+
+#include <eda/vhdl/ast/util/variant.hpp>
+#include <eda/vhdl/ast/util/string_span.hpp>
 
 #include <eda/util/indent_stream.hpp>
+
+#include <boost/variant/apply_visitor.hpp>
+
+#include <cstdint>
+#include <vector>
+#include <iosfwd>
 
 namespace eda {
 namespace vhdl {
 namespace ast {
 
-/// AST printer class
 ///
-/// FixMe: clang-tidy got warning: function 'operator()' is within 
+/// @brief AST printer class
+///
+/// FixMe: clang-tidy got warning: function 'operator()' is within
 ///        a recursive call chain [misc-no-recursion]. The
 ///        operator()(block_statement_part const& node) is at least one
 ///        origin. Even within testsuite there is no problem, use a
 ///        recursion counter to catch it.
-class printer 
-{
+///
+/// Warning: Don't trust the suggestions made by IWYU!
+///
+class printer {
 public:
     printer(std::ostream& os_, uint16_t start_indent = 0);
 
@@ -187,7 +199,7 @@ public:
     void operator()(shift_expression const& node);
     void operator()(signal_assignment_statement const& node);
     void operator()(signal_declaration const& node);
-    void operator()(signal_list_list const& node); // signal_list helper (not in BNF)
+    void operator()(signal_list_list const& node);  // signal_list helper (not in BNF)
     void operator()(signal_list const& node);
     void operator()(signature const& node);
     void operator()(simple_expression const& node);
@@ -234,23 +246,24 @@ public:
 
 private:
     // yet another internal helper
-    template <typename T, typename Enable = void> struct symbol_scope;
+    template <typename T, typename Enable = void>
+    struct symbol_scope;
 
-    template <typename... Ts> void visit(variant<Ts...> const& node)
+    template <typename... Ts>
+    void visit(variant<Ts...> const& node)
     {
         boost::apply_visitor(*this, node);
     }
 
-    template <typename T> void visit(std::vector<T> const& vector);
+    template <typename T>
+    void visit(std::vector<T> const& vector);
 
 private:
-    // clang-format off
-    util::indent_ostream                            os;
-    // clang-format on
+    util::indent_ostream os;
 };
 
-} // namespace ast
-} // namespace vhdl
-} // namespace eda
+}  // namespace ast
+}  // namespace vhdl
+}  // namespace eda
 
 #endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_PRINTER_HPP_ */

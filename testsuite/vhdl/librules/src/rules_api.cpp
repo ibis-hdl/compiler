@@ -7,8 +7,9 @@
 
 #include <testsuite/vhdl/rules.hpp>
 
+#include <eda/vhdl/parser/grammar_type.hpp>
 #include <eda/vhdl/parser/grammar_def.hpp>
-#include <eda/vhdl/parser/parser_config.hpp>
+//#include <eda/vhdl/parser/parser_config.hpp>
 
 namespace testsuite {
 namespace vhdl_parser {

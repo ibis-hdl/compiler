@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Use English to make copy&paste of errors easier to 
+# Use English to make copy&paste of errors easier to
 # open reports in forums
 LANG=en_US.UTF-8
 
@@ -23,7 +23,7 @@ cat << EOF
 ## Configure:
 ##
 ## Source directory: ${MY_SOURCE_DIR}
-## Build directoy:   ${MY_BUILD_DIR} 
+## Build directoy:   ${MY_BUILD_DIR}
 ## Build type:       ${CMAKE_BUILD_TYPE}
 ## Build tool:       ${CMAKE_BUILD_TOOL}
 ## Compiler:         ${CMAKE_CXX_COMPILER}
@@ -36,8 +36,8 @@ cd ${MY_BUILD_DIR}
 
 # [IWYU could not find stddef.h on Ubuntu 18.04](
 #  https://github.com/include-what-you-use/include-what-you-use/issues/679)
-# Won't work!!
-export CXXFLAGS="-isystem /usr/lib64/clang/11.0.0/include/"
+# enable this to setup system include path for iwyu if required
+#export CXXFLAGS="-isystem /usr/lib64/clang/11.0.0/include/"
 
 ${CMAKE_BIN} --trace-expand \
         ${MY_SOURCE_DIR} \
@@ -49,7 +49,7 @@ ${CMAKE_BIN} --trace-expand \
         -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
         2> cmake.out
 
-	 
+
 # cleanup before the run cmake
 ${CMAKE_BIN} --build ${MY_BUILD_DIR} --target clean
 # make && build

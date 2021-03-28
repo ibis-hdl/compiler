@@ -6,24 +6,23 @@
  */
 
 #include <testsuite/common/failure_diagnostic_fixture.hpp>
-#include <testsuite/common/detail/compile_builtin.hpp>
 #include <testsuite/common/cli_args.hpp>
+#include <testsuite/common/compile_builtin.hpp>
 
-#include <boost/test/framework.hpp>           // for current_test_case
-#include <boost/test/tree/test_unit.hpp>      // for master_test_suite, test...
-#include <boost/test/unit_test_log.hpp>       // for BOOST_TEST_MESSAGE
-#include <boost/test/utils/lazy_ostream.hpp>  // for lazy_ostream_impl, oper...
-#include <boost/test/results_collector.hpp>   // for results_collector, resu...
-#include <boost/test/test_tools.hpp>
-#include <boost/test/unit_test_suite.hpp>
+#include <testsuite/common/namespace_alias.hpp>  // IWYU pragma: keep
 
 #include <eda/util/make_iomanip.hpp>
 
-#include <iostream>
-#include <filesystem>
-#include <fstream>
+#include <boost/test/unit_test.hpp>
+#include <boost/test/results_collector.hpp>
+#include <boost/test/tools/output_test_stream.hpp>
 
-#include <testsuite/common/namespace_alias.hpp>  // IWYU pragma: keep'
+#include <algorithm>
+#include <cctype>
+#include <fstream>
+#include <iterator>
+#include <sstream>
+#include <system_error>
 
 namespace testsuite {
 
@@ -98,8 +97,8 @@ void failure_diagnostic_fixture::setup()
     if (cli_args::destination_dir().empty()) {
         BOOST_TEST_MESSAGE(  // --
             "INFO(" << fixture_name << ") use compiled builtin <destination_dir> "
-                    << compile_def_destination_dir);
-        destination_dir = compile_def_destination_dir;
+                    << compile_builtin::destination_dir);
+        destination_dir = compile_builtin::destination_dir;
     }
     else {
         BOOST_TEST_MESSAGE(  // --
@@ -111,8 +110,8 @@ void failure_diagnostic_fixture::setup()
     if (cli_args::output_extension().empty()) {
         BOOST_TEST_MESSAGE(  // --
             "INFO(" << fixture_name << ") use compiled builtin <output_extension> "
-                    << compile_def_output_extension);
-        output_extension = compile_def_output_extension;
+                    << compile_builtin::output_extension);
+        output_extension = compile_builtin::output_extension;
     }
     else {
         BOOST_TEST_MESSAGE(  // --
