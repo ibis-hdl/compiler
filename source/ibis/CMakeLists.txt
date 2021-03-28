@@ -1,7 +1,7 @@
 ################################################################################
 ## EDA/ibis project
 ##
-## file: sources/ibis/CMakeLists.txt
+## file: source/ibis/CMakeLists.txt
 ################################################################################
 
 project(ibis LANGUAGES CXX)

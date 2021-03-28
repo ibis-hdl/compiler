@@ -46,3 +46,4 @@ BoostTest.txt
 CLangSatanizer.CMake.txt
 CMakeClangFormat.txt
 PCH.txt
+clang-format.txt

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# THIS SCRIPT EXISTS ONLY FOR ARCHIVING AND IS NO LONGER FUNCTIONAL THESE DAYS.
+
 from math import log2, log10, log, ceil
 from itertools import cycle
 

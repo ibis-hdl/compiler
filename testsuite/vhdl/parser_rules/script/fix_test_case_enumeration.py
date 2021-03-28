@@ -5,8 +5,12 @@ import re
 
 
 class TestCaseEnumerationFixer:
-    """Quick & Dirty python script to fix the enumeration of test_case files used.
+    """
+    THIS SCRIPT EXISTS ONLY FOR ARCHIVING AND IS NO LONGER FUNCTIONAL THESE DAYS.
+
+    Quick & Dirty python script to fix the enumeration of test_case files used.
     
+
     Boost.Test data driven tests enumerate the tests starting with index 0,
     where the files used here starts with 1. This make its difficult to determine
     the correct file input which rises the TEST error.
@@ -18,7 +22,7 @@ class TestCaseEnumerationFixer:
     my_test_003.{input, expected, ...} => my_test_002.{input, expected, ...}
     
     Usage:
-    python sources/vhdl/utils/fix_test_case_enumeration.py sources/vhdl/test
+    python source/vhdl/utils/fix_test_case_enumeration.py source/vhdl/test
     """ 
     
     def __init__(self):

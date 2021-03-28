@@ -180,14 +180,14 @@ STRIP_FROM_PATH        = @PROJECT_SOURCE_DIR@ \
 # specify the list of include paths that are normally passed to the compiler
 # using the -I flag.
 
-STRIP_FROM_INC_PATH    = @PROJECT_SOURCE_DIR@/sources/common/include \
-                         @PROJECT_SOURCE_DIR@/sources/common/src \
-                         @PROJECT_SOURCE_DIR@/sources/vhdl/include \
-                         @PROJECT_SOURCE_DIR@/sources/vhdl/src \
-                         @PROJECT_SOURCE_DIR@/sources/ibis/include \
-                         @PROJECT_SOURCE_DIR@/sources/ibis/src \
-                         @PROJECT_SOURCE_DIR@/sources/common/include \
-                         @PROJECT_SOURCE_DIR@/sources/ibis/include \
+STRIP_FROM_INC_PATH    = @PROJECT_SOURCE_DIR@/source/common/include \
+                         @PROJECT_SOURCE_DIR@/source/common/src \
+                         @PROJECT_SOURCE_DIR@/source/vhdl/include \
+                         @PROJECT_SOURCE_DIR@/source/vhdl/src \
+                         @PROJECT_SOURCE_DIR@/source/ibis/include \
+                         @PROJECT_SOURCE_DIR@/source/ibis/src \
+                         @PROJECT_SOURCE_DIR@/source/common/include \
+                         @PROJECT_SOURCE_DIR@/source/ibis/include \
                          \
                          @PROJECT_BINARY_DIR@/external/src/external-cli11/include \
                          @PROJECT_BINARY_DIR@/external/src/external-gsl/include \
@@ -859,15 +859,15 @@ WARN_LOGFILE           = "@PROJECT_BINARY_DIR@/doc/api/DoxygenWarningLog.txt"
 
 INPUT                  = @doxy_main_page@ \
                          @PROJECT_SOURCE_DIR@/doc \
-                         @PROJECT_SOURCE_DIR@/sources/common/include \
-                         @PROJECT_SOURCE_DIR@/sources/common/src \
-                         @PROJECT_SOURCE_DIR@/sources/ibis/include \
-                         @PROJECT_SOURCE_DIR@/sources/ibis/src \
-                         @PROJECT_SOURCE_DIR@/sources/vhdl/include \
-                         @PROJECT_SOURCE_DIR@/sources/vhdl/src \
+                         @PROJECT_SOURCE_DIR@/source/common/include \
+                         @PROJECT_SOURCE_DIR@/source/common/src \
+                         @PROJECT_SOURCE_DIR@/source/ibis/include \
+                         @PROJECT_SOURCE_DIR@/source/ibis/src \
+                         @PROJECT_SOURCE_DIR@/source/vhdl/include \
+                         @PROJECT_SOURCE_DIR@/source/vhdl/src \
                          \
-                         @PROJECT_BINARY_DIR@/sources/common/include \
-                         @PROJECT_BINARY_DIR@/sources/ibis/include
+                         @PROJECT_BINARY_DIR@/source/common/include \
+                         @PROJECT_BINARY_DIR@/source/ibis/include
 
 #                         @PROJECT_BINARY_DIR@/external/src/external-cli11/include \
 #                         @PROJECT_BINARY_DIR@/external/src/external-gsl/include \

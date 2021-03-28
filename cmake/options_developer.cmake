@@ -179,7 +179,7 @@ if(DEVELOPER_RUN_IWYU AND UNIX)
     else()
         # [IWYU Mappings](https://github.com/include-what-you-use/include-what-you-use/blob/master/docs/IWYUMappings.md)
         #set(_iwyu_mapping "-Xiwyu;--mapping_file=${CMAKE_SOURCE_DIR}/misc_iwyu.imp;-Xiwyu;--mapping_file=${CMAKE_SOURCE_DIR}/boost-1.75-all.imp")
-        set(_iwyu_mapping "-Xiwyu;--mapping_file=${CMAKE_SOURCE_DIR}/misc_iwyu.imp")
+        set(_iwyu_mapping "-Xiwyu;--mapping_file=${CMAKE_SOURCE_DIR}/cmake/utils/iwyu/project.imp")
         # misc
         set(_iwyu_comment "-Xiwyu;--no_comments")
         #set(_iwyu_comment "-Xiwyu;--max_line_length=160")

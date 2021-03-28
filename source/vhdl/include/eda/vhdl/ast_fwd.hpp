@@ -25,7 +25,7 @@ namespace ast {
 /// \code.{.sh}
 /// #!/usr/bin/env bash
 ///
-/// egrep '(struct|using)' sources/vhdl/include/eda/vhdl/ast/node/*.hpp \
+/// egrep '(struct|using)' source/vhdl/include/eda/vhdl/ast/node/*.hpp \
 /// | awk -F':' '{print $2}' \
 /// | sed -e '/^ /d' -e 's/using/struct/g' -e 's/=.*//g' -e 's/ $/;/g' \
 /// | sort | uniq

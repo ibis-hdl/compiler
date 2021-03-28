@@ -106,9 +106,9 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ##
 # Sub projects
-add_subdirectory(sources/common)
-add_subdirectory(sources/vhdl)
-add_subdirectory(sources/ibis)
+add_subdirectory(source/common)
+add_subdirectory(source/vhdl)
+add_subdirectory(source/ibis)
 add_subdirectory(l10n)
 if (EDA_BUILD_TESTS)
     add_subdirectory(testsuite/common)

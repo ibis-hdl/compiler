@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 
+# THIS SCRIPT EXISTS ONLY FOR ARCHIVING AND IS NO LONGER FUNCTIONAL THESE DAYS.
+
 from pygccxml import utils
 from pygccxml import declarations
 from pygccxml import parser
 
 import os
 import sys
-
 
 class AstFusionAdapter:
     script_path = None

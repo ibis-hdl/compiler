@@ -1,6 +1,10 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
+
+# THIS SCRIPT EXISTS ONLY FOR ARCHIVING AND IS NO LONGER FUNCTIONAL THESE DAYS.
+
+
 '''
 primary ::=
     name

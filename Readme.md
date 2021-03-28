@@ -173,22 +173,22 @@ you seem to be passing in an initializer_list which has one element but you're a
 Maybe related is compiler's warning seen on older code:
 
 ```
-sources/common/include/eda/color/detail/ansii_color.hpp:33:43: Warnung: Arrayindex 1 ist außerhalb der Arraygrenzen von »const eda::color::attribute [1]« [-Warray-bounds]
+source/common/include/eda/color/detail/ansii_color.hpp:33:43: Warnung: Arrayindex 1 ist außerhalb der Arraygrenzen von »const eda::color::attribute [1]« [-Warray-bounds]
    33 |         : std::array<value_type, SIZE>{ { static_cast<value_type>(il.begin()[N])... } }
       |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-sources/common/include/eda/color/detail/ansii_color.hpp:130:49: Anmerkung: beim Referenzieren von »<anonymous>«
+source/common/include/eda/color/detail/ansii_color.hpp:130:49: Anmerkung: beim Referenzieren von »<anonymous>«
   130 | color::printer const bold{ attribute::Text_Bold };
       |                                                 ^
-sources/common/include/eda/color/detail/ansii_color.hpp:33:43: Warnung: Arrayindex 2 ist außerhalb der Arraygrenzen von »const eda::color::attribute [1]« [-Warray-bounds]
+source/common/include/eda/color/detail/ansii_color.hpp:33:43: Warnung: Arrayindex 2 ist außerhalb der Arraygrenzen von »const eda::color::attribute [1]« [-Warray-bounds]
    33 |         : std::array<value_type, SIZE>{ { static_cast<value_type>(il.begin()[N])... } }
       |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-sources/common/include/eda/color/detail/ansii_color.hpp:130:49: Anmerkung: beim Referenzieren von »<anonymous>«
+source/common/include/eda/color/detail/ansii_color.hpp:130:49: Anmerkung: beim Referenzieren von »<anonymous>«
   130 | color::printer const bold{ attribute::Text_Bold };
       |                                                 ^
-sources/common/include/eda/color/detail/ansii_color.hpp:33:43: Warnung: Arrayindex 3 ist außerhalb der Arraygrenzen von »const eda::color::attribute [1]« [-Warray-bounds]
+source/common/include/eda/color/detail/ansii_color.hpp:33:43: Warnung: Arrayindex 3 ist außerhalb der Arraygrenzen von »const eda::color::attribute [1]« [-Warray-bounds]
    33 |         : std::array<value_type, SIZE>{ { static_cast<value_type>(il.begin()[N])... } }
       |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-sources/common/include/eda/color/detail/ansii_color.hpp:130:49: Anmerkung: beim Referenzieren von »<anonymous>«
+source/common/include/eda/color/detail/ansii_color.hpp:130:49: Anmerkung: beim Referenzieren von »<anonymous>«
   130 | color::printer const bold{ attribute::Text_Bold };
       |                                                 ^
 ```
@@ -224,7 +224,7 @@ An old problem from beginning rises, see [wandbox](https://wandbox.org/permlink/
 which isn't obviously solved.
 
 ```
-#17 ibis::init::l10n (this=...) at .../sources/ibis/src/init.cpp:513
+#17 ibis::init::l10n (this=...) at .../source/ibis/src/init.cpp:513
 ```
 
 where:
@@ -243,7 +243,7 @@ terminate called after throwing an instance of 'std::bad_variant_access'
 thrown from
 
 ```
-#16 eda::settings::option_value_proxy::get<long> (this=....>) at .../sources/common/include/eda/settings.hpp:107
+#16 eda::settings::option_value_proxy::get<long> (this=....>) at .../source/common/include/eda/settings.hpp:107
 ```
 
 The source is the boost::variant visitor:
@@ -368,10 +368,10 @@ set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
 - By starting using precompiled headers by CMake, some smaller problems rise.
   E.g. *reference to 'util' is ambiguous* error since name lookup got
   'boost::locale::util' and 'eda::util' for i.e. 'util::user_home_dir'
-  at sources/ibis/src/init.cpp - this isn't fatal, but even not tidy.
+  at source/ibis/src/init.cpp - this isn't fatal, but even not tidy.
 
 - l10n seems to have a problem with PCH support, warning/error rises:
-  "xgettext: error while opening "../sources/common//..cmake_pch.hxx.cxx"
+  "xgettext: error while opening "../source/common//..cmake_pch.hxx.cxx"
   for reading: No such file or directory
 
 - boost.test has also problems with PCH, the main() is missing on linker time even

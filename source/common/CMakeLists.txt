@@ -1,7 +1,7 @@
 ################################################################################
 ## EDA/common project
 ##
-## file: sources/common/CMakeLists.txt
+## file: source/common/CMakeLists.txt
 ################################################################################
 
 project(eda_common LANGUAGES CXX)
@@ -24,7 +24,7 @@ target_sources(${PROJECT_NAME}
         src/settings.cpp
         src/color.cpp
         src/winapi_color.cpp ### FixMe: looks strange on Linux, but is correct so far
-        src/user_home.cpp
+        src/user_home_dir.cpp
 )
 
 

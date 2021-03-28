@@ -1,7 +1,7 @@
 ################################################################################
 ## EDA/vhdl project
 ##
-## file: sources/vhdl/CMakeLists.txt
+## file: source/vhdl/CMakeLists.txt
 ################################################################################
 
 project(eda_vhdl_parser LANGUAGES CXX)
