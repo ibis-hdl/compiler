@@ -25,6 +25,19 @@ option(EDA_WITH_GDB_STACKTRACE "Enable support for dumping the stacktrace using 
 # Build option: enable testing.
 option(EDA_BUILD_TESTS "Build tests" ON)
 
+option(EDA_CTEST_OUTPUT_ON_FAILURE "controls if the output should be logged for failed tests." ON)
+
+if (EDA_BUILD_TESTS)
+    enable_testing()
+        if(EDA_CTEST_OUTPUT_ON_FAILURE)
+        # several ways to skin the cat to get more details on errors:
+        # - ['--output-on-failure'](https://cmake.org/cmake/help/latest/manual/ctest.1.html#manual:ctest(1))
+        # - [CTEST_OUTPUT_ON_FAILURE](https://cmake.org/cmake/help/latest/envvar/CTEST_OUTPUT_ON_FAILURE.html)
+        # - [CMAKE_CTEST_ARGUMENTS](https://cmake.org/cmake/help/latest/variable/CMAKE_CTEST_ARGUMENTS.html)
+        #   which requires CMake >= 3.17
+        list (APPEND CMAKE_CTEST_ARGUMENTS "--output-on-failure")
+    endif()
+endif()
 
 
 ###############################################################################

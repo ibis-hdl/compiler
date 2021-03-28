@@ -122,7 +122,7 @@ if(DEVELOPER_RUN_CLANG_TIDY)
     include(FindClangTidy)
 
     if(NOT CLANG_TIDY_FOUND)
-        message(WARNING "=> Configure Fix: DEVELOPER_RUN_CLANG_TIDY is ON but clang-tidy is not found, disabled")
+        message(STATUS "=> Configure Fix: <DEVELOPER_RUN_CLANG_TIDY> is ON but clang-tidy is not found, disabled")
         set(CLANG_TIDY_FOUND OFF CACHE BOOL "clang-tidy (not found)" FORCE)
     endif()
 
@@ -138,20 +138,28 @@ if(DEVELOPER_RUN_CLANG_TIDY)
     # alternative/temporary
     #set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXECUTABLE};-checks=${_cltidy_checks};-header-filter='${_cltidy_filter_re}'")
 
-    # [How to integrate clang-tidy with CMake](
-    #  https://gitlab.kitware.com/cmake/cmake/-/issues/18926)
-    # Create a preprocessor definition that depends on .clang-tidy content so
-    # the compile command will change when .clang-tidy changes.  This ensures
-    # that a subsequent build re-runs clang-tidy on all sources even if they
-    # do not otherwise need to be recompiled.  Nothing actually uses this
-    # definition.  We add it to targets on which we run clang-tidy just to
-    # get the build dependency on the .clang-tidy file.
-    file(SHA1 ${CMAKE_SOURCE_DIR}/.clang-tidy clang_tidy_sha1)
-    set(CLANG_TIDY_DEFINITIONS "CLANG_TIDY_SHA1=${clang_tidy_sha1}")
-    unset(clang_tidy_sha1)
+    # About [How to integrate clang-tidy with CMake](
+    #  https://gitlab.kitware.com/cmake/cmake/-/issues/18926):
+    # My google foo shows many copy&paste solutions, but no one seems to use the
+    # CLANG_TIDY_DEFINITIONS (or even CLANG_TIDY_SHA1) with preprocessor
+    # definition finaly. Some please on clarification aren't answered.
+    # IMO in this state it does nothing, hence omitted.
 endif()
 
 configure_file(${eda_SOURCE_DIR}/.clang-tidy ${eda_BINARY_DIR}/.clang-tidy COPYONLY)
+
+# Special handling for MSVC
+# FixMe: Clang-Tidy and MSVC aren't compatible? Got error about:
+# error: cannot use 'throw' with exceptions disabled [clang-diagnostic-error]
+if(MSVC)
+    if(DEVELOPER_RUN_CLANG_TIDY)
+        message(STATUS "=> Configure Fix: Disable <DEVELOPER_RUN_CLANG_TIDY> while using MSVC compiler")
+        set(DEVELOPER_RUN_CLANG_TIDY "FALSE" CACHE STRING "")
+    endif()
+else()
+    # always enable it on others platforms
+    set(DEVELOPER_RUN_CLANG_TIDY TRUE CACHE STRING "")
+endif()
 
 
 ## -----------------------------------------------------------------------------
@@ -166,7 +174,7 @@ mark_as_advanced(DEVELOPER_RUN_IWYU)
 if(DEVELOPER_RUN_IWYU AND UNIX)
     find_program(IWYU_EXECUTABLE NAMES include-what-you-use iwyu)
     if(NOT IWYU_EXECUTABLE)
-        message(WARNING "=> Configure Fix: include-what-you-use not found, no analysis of include files possible, disabled")
+        message(STATUS "=> Configure Fix: include-what-you-use not found, no analysis of include files possible, disabled")
         set(DEVELOPER_RUN_IWYU OFF CACHE BOOL "include-what-you-use (not found)" FORCE)
     else()
         # [IWYU Mappings](https://github.com/include-what-you-use/include-what-you-use/blob/master/docs/IWYUMappings.md)
@@ -182,7 +190,7 @@ if(DEVELOPER_RUN_IWYU AND UNIX)
     # Sanity check: If PCH is enabled, IWYU lookup definitions etc. at precompiled headers
     # which breaks builds without it, giving false positives. Hence disable PCH if using IWYU.
     if(EDA_ENABLE_PCH AND DEVELOPER_RUN_IWYU)
-        message(WARNING "=> Configure Fix: include-what-you-use my trigger false positives if PCH is enabled, disabled")
+        message(STATUS "=> Configure Fix: include-what-you-use my trigger false positives if PCH is enabled, disabled")
         set(EDA_ENABLE_PCH OFF CACHE BOOL "PCH disabled due to use of include-what-you-use" FORCE)
     endif()
 endif()
@@ -211,9 +219,40 @@ if(DEVELOPER_RUN_CLANG_FORMAT)
     include(FindClangFormat)
 
     if(NOT CLANG_FORMAT_FOUND)
-        message(WARNING "=> Configure Fix: DEVELOPER_RUN_CLANG_FORMAT is ON but clang-format is not found, disabled")
-        set(DEVELOPER_RUN_CLANG_FORMAT OFF CACHE BOOL "clang-format (not found)" FORCE)
+        message(STATUS "=> Configure Fix: <DEVELOPER_RUN_CLANG_FORMAT> is ON but clang-format is not found, disabled")
+        set(DEVELOPER_RUN_CLANG_FORMAT ON CACHE BOOL "clang-format (not found)" FORCE)
     else()
         include(clang-format)
     endif()
 endif()
+
+
+################################################################################
+# CMake Miscellaneous
+#
+################################################################################
+
+## -----------------------------------------------------------------------------
+# Compile Comand JSON, e.g. VS Code
+#
+# [Copy compile_commands.json to project root folder](
+#  https://stackoverflow.com/questions/57464766/copy-compile-commands-json-to-project-root-folder)
+#
+# FixMe: Option #2 doesn't work for me :(
+#
+# Nevertheless, an easy solution is to add on '.vscode/c_cpp_properties.json':
+# {
+#     "configurations": [
+#         {
+#             ...
+#             "compileCommands": "${workspaceFolder}/compile_commands.json"
+#     ],
+#     "version": 4
+# }
+add_custom_target(copy-compile-commands ALL
+    COMMENT "copy compiler database 'compile_commands.json' to source directory."
+    DEPENDS ${CMAKE_BINARY_DIR}/compile_commands.json
+    COMMAND
+        ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/compile_commands.json ${CMAKE_SOURCE_DIR}
+    VERBATIM
+)

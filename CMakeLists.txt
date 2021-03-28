@@ -25,21 +25,6 @@ list(APPEND
 )
 
 
-# Developer options enforced
-set(DEVELOPER_RUN_CLANG_FORMAT TRUE CACHE STRING "")
-if(MSVC)
-    if(DEVELOPER_RUN_CLANG_TIDY)
-        # FixMe: Clang-Tidy and MSVC aren't compatible? Got error about:
-        # error: cannot use 'throw' with exceptions disabled [clang-diagnostic-error]
-        message(WARNING "Disable 'DEVELOPER_RUN_CLANG_TIDY' while using MSVC compiler")
-        set(DEVELOPER_RUN_CLANG_TIDY "FALSE" CACHE STRING "")
-    endif()
-else()
-    # always enable it on others platforms
-    set(DEVELOPER_RUN_CLANG_TIDY TRUE CACHE STRING "")
-endif()
-
-
 include(prevent_in_source_builds)
 include(options_build)
 include(options_developer)
@@ -105,7 +90,7 @@ find_package(Threads REQUIRED)
 # Todo: as of v1.75.0 boost has boost.JSON
 include(external_json)
 include(external_cli11)
-# ToDo: stick at C++17 gsl::string_span, with C++20 std::span [unused]
+# ToDo: stick at C++17 gsl::string_span, with C++20 use std::span [unused]
 #include(external_gsl)
 
 
@@ -118,6 +103,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
+
 ##
 # Sub projects
 add_subdirectory(sources/common)
@@ -125,7 +111,6 @@ add_subdirectory(sources/vhdl)
 add_subdirectory(sources/ibis)
 add_subdirectory(l10n)
 if (EDA_BUILD_TESTS)
-    enable_testing()
     add_subdirectory(testsuite/common)
     add_subdirectory(testsuite/vhdl/numeric_convert)
     add_subdirectory(testsuite/vhdl/ast)

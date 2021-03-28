@@ -112,7 +112,7 @@ if(Boost_STACKTRACE_WINDBG_FOUND)
     message(STATUS "Found stacktrace WinDbg")
 else()
     if(EDA_WITH_BOOST_STACKTRACE)
-        message(STATUS "=> Configure Fix: Found NO stacktrace WinDbg, disable Boost.stacktrace")
+        message(STATUS "=> Configure Fix: Found no stacktrace WinDbg, disable Boost.stacktrace")
         set(EDA_WITH_BOOST_STACKTRACE OFF
             CACHE BOOL "Boost.stacktrace option requires WindDb (not found)" FORCE)
     endif()
