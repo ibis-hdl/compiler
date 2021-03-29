@@ -1,10 +1,3 @@
-/*
- * bit_string_literal_test.cpp
- *
- *  Created on: 29.05.2018
- *      Author: olaf
- */
-
 #include <testsuite/vhdl_numeric_convert/numeric_parser.hpp>
 #include <testsuite/vhdl_numeric_convert/binary_string.hpp>
 
@@ -28,65 +21,65 @@
 #include <cmath>
 #include <vector>
 
-
-BOOST_AUTO_TEST_SUITE( numeric_convert )
-
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+BOOST_AUTO_TEST_SUITE(numeric_convert)
 
 namespace detail {
-
 
 /*******************************************************************************
  * bin/oct/hex generator helper functions
  ******************************************************************************/
 
-std::string to_bin_literal(uint64_t n, std::string const& postfix="")
+std::string to_bin_literal(uint64_t n, std::string const& postfix = "")
 {
     using namespace testsuite::vhdl_numeric_convert::util;
 
-    std::string s{ "B\"" + binary_string{ n }() + postfix + '"'};
+    std::string s{ "B\"" + binary_string{ n }() + postfix + '"' };
     return s;
 }
 
-
-std::string to_oct_literal(uint64_t n, std::string const& postfix="")
+std::string to_oct_literal(uint64_t n, std::string const& postfix = "")
 {
     using namespace testsuite::vhdl_numeric_convert::util;
 
-    std::string s{ "O\"" + octal_string{ n }() + postfix + '"'};
+    std::string s{ "O\"" + octal_string{ n }() + postfix + '"' };
     return s;
 }
 
-
-std::string to_hex_literal(uint64_t n, std::string const& postfix="")
+std::string to_hex_literal(uint64_t n, std::string const& postfix = "")
 {
     using namespace testsuite::vhdl_numeric_convert::util;
 
-    std::string s{ "X\"" + hexadecimal_string{ n }() + postfix + '"'};
+    std::string s{ "X\"" + hexadecimal_string{ n }() + postfix + '"' };
     return s;
 }
 
-
-} // namespace detail
-
+}  // namespace detail
 
 namespace /* anonymous */ {
 
 namespace btt = boost::test_tools;
 
-/* The numeric_convert utility writes messages, but concrete error messages
- * arn't checked. For debugging is useful to see them otherwise. Switch to
- * ostream sink to hide them or let's write to cerr to see them.
- * Note, using global numeric_convert object tests  implicit of state less
- * conversion, otherwise test must fail due to. */
-#if 1
-btt::output_test_stream nil_sink;
-auto const numeric_convert =  ast::numeric_convert{ nil_sink };
-#else
-auto const numeric_convert =  ast::numeric_convert{ std::cerr };
-#endif
+// The numeric_convert utility writes messages, but concrete error messages
+// aren't checked. For debugging is useful to see them otherwise. Switch to
+// ostream sink to hide them or let's write to cerr to see them.
+// Note, using global numeric_convert object tests  implicit of state less
+// conversion, otherwise test must fail due to. */
+//
+// Note: technically, we initialize globals that access extern objects,
+// and therefore can lead to order-of-initialization problems.
+// NOLINTNEXTLINE(cppcoreguidelines-interfaces-global-init)
+auto const numeric_convert = []() {
+    if constexpr (true /* no messages */) {
+        static btt::output_test_stream nil_sink;
+        return ast::numeric_convert{ nil_sink };
+    }
+    else {
+        return ast::numeric_convert(std::cerr);
+    }
+}();
 
-} // anonymous
-
+}  // namespace
 
 /*******************************************************************************
  * bit_string_literal
@@ -97,7 +90,7 @@ std::vector<std::string> const bit_literal{
     R"(B"00_01")",
     R"(B"1_0000")",
     R"(B"1_00_01")",
-    R"(B"00_1_00_01")", // leading zeros
+    R"(B"00_1_00_01")",  // leading zeros
     detail::to_bin_literal(std::numeric_limits<uint32_t>::max()),
     detail::to_bin_literal(std::numeric_limits<uint64_t>::max()),
     // octal
@@ -105,7 +98,7 @@ std::vector<std::string> const bit_literal{
     R"(O"00_01")",
     R"(O"1_7654")",
     R"(O"7_6543210")",
-    R"(O"000_7_6543210")", // leading zeros
+    R"(O"000_7_6543210")",  // leading zeros
     detail::to_oct_literal(std::numeric_limits<uint32_t>::max()),
     detail::to_oct_literal(std::numeric_limits<uint64_t>::max()),
     // hexadecimal
@@ -113,12 +106,12 @@ std::vector<std::string> const bit_literal{
     R"(X"00_01")",
     R"(X"1_AFFE")",
     R"(X"C001_CAFE")",
-    R"(X"0000_C001_CAFE")", // leading zeros
+    R"(X"0000_C001_CAFE")",  // leading zeros
     detail::to_hex_literal(std::numeric_limits<uint32_t>::max()),
     detail::to_hex_literal(std::numeric_limits<uint64_t>::max()),
 };
 
-std::vector<eda::vhdl::intrinsic::unsigned_integer_type> const bit_decimal {
+std::vector<eda::vhdl::intrinsic::unsigned_integer_type> const bit_decimal{
     // binary
     0,
     1,
@@ -145,10 +138,8 @@ std::vector<eda::vhdl::intrinsic::unsigned_integer_type> const bit_decimal {
     std::numeric_limits<uint64_t>::max(),
 };
 
-BOOST_DATA_TEST_CASE(
-    bit_string_literal,
-    utf_data::make(bit_literal) ^ bit_decimal,
-    literal,                      N)
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+BOOST_DATA_TEST_CASE(bit_string_literal, utf_data::make(bit_literal) ^ bit_decimal, literal, N)
 {
     using iterator_type = parser::iterator_type;
 
@@ -163,9 +154,8 @@ BOOST_DATA_TEST_CASE(
 
     auto const [conv_ok, value] = numeric_convert(ast_node);
     BOOST_REQUIRE(conv_ok);
-    BOOST_TEST( value == N );
+    BOOST_TEST(value == N);
 }
-
 
 /*******************************************************************************
  * bit_string_literal overflow tests
@@ -176,10 +166,8 @@ std::vector<std::string> const literal_ovflw{
     detail::to_hex_literal(std::numeric_limits<uint64_t>::max(), "_0"),
 };
 
-BOOST_DATA_TEST_CASE(
-    bit_string_literal_uint64_ovflw,
-    utf_data::make(literal_ovflw),
-    literal)
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+BOOST_DATA_TEST_CASE(bit_string_literal_uint64_ovflw, utf_data::make(literal_ovflw), literal)
 {
     using iterator_type = parser::iterator_type;
 
@@ -190,16 +178,13 @@ BOOST_DATA_TEST_CASE(
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
     auto const [parse_ok, ast_node] = parse.bit_string_literal(position_proxy);
-    BOOST_REQUIRE(parse_ok);    // must parse ...
+    BOOST_REQUIRE(parse_ok);  // must parse ...
 
     auto const [conv_ok, value] = numeric_convert(ast_node);
-    BOOST_REQUIRE(!conv_ok);    // ... but must fail to convert
+    BOOST_REQUIRE(!conv_ok);  // ... but must fail to convert
 
     boost::ignore_unused(value);
 }
 
-
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_SUITE_END()
-
-
-

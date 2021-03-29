@@ -1,10 +1,3 @@
-/*
- * user_home.cpp
- *
- *  Created on: 10.08.2018
- *      Author: olaf
- */
-
 #include <eda/util/file/user_home_dir.hpp>
 
 //#include <eda/compiler/compiler_support.hpp> // IWYU pragma: keep
@@ -18,9 +11,7 @@
 #include <initializer_list>
 #include <system_error>
 
-
-namespace eda {
-namespace util {
+namespace eda::util {
 
 ///
 /// @brief Lookup user's HOME environment to gather the absolute path
@@ -51,7 +42,7 @@ namespace util {
 ///  https://stackoverflow.com/questions/24124851/getenvironmentvariablea-usage)
 /// to avoid warnings from MSVC.
 ///
-fs::path user_home_dir(std::initializer_list<char const*> path_list)
+fs::path user_home_dir(std::initializer_list<char const *> path_list)
 {
     std::string const HOME_ENV = []() {
         if constexpr (eda::build_platform == platform::Unix) {
@@ -63,7 +54,7 @@ fs::path user_home_dir(std::initializer_list<char const*> path_list)
         else {
             // FixMe: hopefully, this will be correct, static_assert doesn't work here
             throw std::runtime_error("Platform support bug: It's not Unix or Win32.");
-            //return std::getenv("HOME");
+            // return std::getenv("HOME");
         }
     }();
 
@@ -94,5 +85,4 @@ fs::path user_home_dir(std::initializer_list<char const*> path_list)
     return path;
 }
 
-} // namespace util
-} // namespace eda
+}  // namespace eda::util

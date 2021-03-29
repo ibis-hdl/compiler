@@ -1,20 +1,11 @@
-/*
- * stacktrace_gdb.cpp
- *
- *  Created on: 05.08.2018
- *      Author: olaf
- *
- * Note: The sources are related to Linux and tested on it.
- * FixMe: The implementation is outside of ibis' namespace which
- *        leads to wired (even small and cosmetic) problems.
- */
+// Note: The sources are related to Linux and tested on it.
+// FixMe: The implementation is outside of ibis' namespace which
+//        leads to wired (even small and cosmetic) problems.
 
 #include <ibis/signal_handler.hpp>
 
 #include <eda/color/message.hpp>
 #include <eda/color/facet.hpp>
-//#include <eda/compiler/compiler_support.hpp>
-//#include <eda/namespace_alias.hpp>
 
 #include <eda/platform.hpp>
 
@@ -48,7 +39,7 @@
  * OS specific system headers
  */
 #if (BUILD_PLATFORM_UNIX)
-#include <climits> // PATH_MAX
+#include <climits>  // PATH_MAX
 // #include <sys/prctl.h>
 // #include <sys/ptrace.h>
 // #include <sys/types.h>
@@ -72,11 +63,11 @@ std::string get_executable_path();
 
 namespace /* anonymous */ {
 // our semaphore to notify a waiting thread
-volatile std::sig_atomic_t sig_caught;  // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
-} // anonymous namespace
+volatile std::sig_atomic_t
+    sig_caught;  // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
+}  // namespace
 
 using ibis::signal_name;
-using ibis::fs::path;
 
 #if (BUILD_PLATFORM_UNIX)
 bool register_gdb_signal_handler()
@@ -93,11 +84,12 @@ bool register_gdb_signal_handler()
     std::cerr << "[ibis/Note] :-(\n"
               << "[ibis/Note] GDB signal handler requested:\n";
 
-    struct sigaction sa{};
+    struct sigaction sa {
+    };
     memset(&sa, 0, sizeof(sa));
 
-    using sigaction_fcn_t = void (*)(int, siginfo_t*, void*);
-    sa.sa_sigaction = static_cast<sigaction_fcn_t>(gdb_signal_handler); // NOLINT(cppcoreguidelines-pro-type-union-access)
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-union-access)
+    sa.sa_sigaction = &gdb_signal_handler;
 
     sigemptyset(&sa.sa_mask);
     sa.sa_flags = SA_RESTART | SA_SIGINFO;
@@ -120,24 +112,25 @@ void gdb_signal_handler(int signum, siginfo_t* /*unused*/, void* /*unused*/)
     //       no colors are here, e.g. main's init() function.
     using failure = eda::color::message::failure;
 
-    std::cerr << failure("[ibis/Note] FAILURE") << " caught signal #"
-              << signum << " (" << signal_name(signum) << ")\n";
+    std::cerr << failure("[ibis/Note] FAILURE") << " caught signal #" << signum << " ("
+              << signal_name(signum) << ")\n";
 
-    // See [Handle C++17 std::filesystem::path](
+    // FixMe: Internally, Boost::process depends on Boost::filesystem which introduces
+    // linker dependencies which we will omit. This affects only stacktrace_gdb part, see
+    // [Handle C++17 std::filesystem::path](
     // https://github.com/klemens-morgenstern/boost-process/issues/164)
-    // FixMe: Boost::process depends on Boost::filesystem which introduces linker
-    // dependencies which we will omit. This affects only stacktrace_gdb part.
-    ibis::fs::path gdb_exe{ bp::search_path("gdb").string() };
+    boost::filesystem::path gdb_exe{ bp::search_path("gdb") };
 
     if (gdb_exe.empty()) {
         std::cerr << "[ibis/Note] ERROR: gdb not found\n";
-        // XXXX
+        // FixMe: any other handling required if gdb not found? Think about ...
         return;
     }
 
+    // FixMe: Clang-Tidy 11.0 gives some notes here, interpreting them is out of my scope ...
     // clang-format off
-    bp::child gdb_proc{
-        bp::exe = gdb_exe.string(),
+    bp::child gdb_proc(
+        bp::exe = gdb_exe,
         bp::args = {
             "--quiet",
             "--nx",                 // ignore commands at ~/.gdbinit
@@ -165,7 +158,7 @@ void gdb_signal_handler(int signum, siginfo_t* /*unused*/, void* /*unused*/)
         bp::extend::on_success([](auto& /*unused*/) {
             std::cout << "[ibis/Note] GDB process successfully launched:\n\n";
         })
-    };
+    );
     // clang-format on
 
     if (!gdb_proc.valid()) {
@@ -250,7 +243,7 @@ bool valgrind_detected()
         return *result;
     }
 
-    if constexpr(eda::build_platform == eda::platform::Unix) {
+    if constexpr (eda::build_platform == eda::platform::Unix) {
         /* [How can I detect if a program is running from within valgrind?](
          *  https://stackoverflow.com/questions/365458/how-can-i-detect-if-a-program-is-running-from-within-valgrind)
          */
@@ -262,8 +255,9 @@ bool valgrind_detected()
         }
     }
 
-    if constexpr(eda::build_system == eda::system::Linux) {
-        /* [how to set dynamic link library path and environment variable for a process in valgrind](
+    if constexpr (eda::build_system == eda::system::Linux) {
+        /* [how to set dynamic link library path and environment variable for a process in
+         * valgrind](
          *  https://stackoverflow.com/questions/24745120/how-to-set-dynamic-link-library-path-and-environment-variable-for-a-process-in-v)
          * ... not very sophisticated implemented  */
         if (token_found("vgpreload", "/proc/self/maps")) {
@@ -295,7 +289,6 @@ bool token_found(std::string const& token, std::string const& procfs_path)
     }
 
     for (std::string line; std::getline(procfs, line);) {
-
         if (line.find(token) != std::string::npos) {
             return true;
         }
@@ -325,8 +318,7 @@ bool token_found(std::string const& token, std::string const& procfs_path)
 std::string get_executable_path()
 {
     if constexpr (eda::build_system == eda::system::Linux) {
-
-        std::array<char, PATH_MAX> binary_path{}; // default initialized with zeros
+        std::array<char, PATH_MAX> binary_path{};  // default initialized with zeros
         ssize_t len = ::readlink("/proc/self/exe", binary_path.data(), binary_path.max_size() - 1);
         if (len == -1 || len == binary_path.max_size() - 1) {
             len = 0;

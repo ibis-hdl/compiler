@@ -1,12 +1,4 @@
-/*
- * syntax.hpp
- *
- *  Created on: 23.06.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_ANALYZE_SYNTAX_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_ANALYZE_SYNTAX_HPP_
+#pragma once
 
 #include <eda/vhdl/ast/basic_ast_walker.hpp>
 
@@ -32,9 +24,7 @@ struct package_declaration;
 struct process_statement;
 }  // namespace eda::vhdl::ast
 
-namespace eda {
-namespace vhdl {
-namespace analyze {
+namespace eda::vhdl::analyze {
 
 class syntax_worker {
 public:
@@ -83,8 +73,4 @@ private:
 
 using syntax_checker = ast::basic_ast_walker<syntax_worker>;
 
-}  // namespace analyze
-}  // namespace vhdl
-}  // namespace eda
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_ANALYZE_SYNTAX_HPP_ */
+}  // namespace eda::vhdl::analyze

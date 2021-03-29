@@ -1,19 +1,8 @@
-/*
- * range_constraint.hpp
- *
- *  Created on: 20.05.2017
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_RANGE_CONSTRAINT_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_RANGE_CONSTRAINT_HPP_
-
+#pragma once
 
 #include <eda/vhdl/ast/node/range.hpp>
 
-
-namespace eda { namespace vhdl { namespace ast {
-
+namespace eda::vhdl::ast {
 
 /* Following the BNF, the range_constraint differs only from range_constraint
  * by the leading keyword RANGE, hence from AST's point of view it's simply a
@@ -24,8 +13,4 @@ namespace eda { namespace vhdl { namespace ast {
  * an own AST node (syntactical sugar). */
 using range_constraint = ast::range;
 
-
-} } } // namespace eda.vhdl.ast
-
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_RANGE_CONSTRAINT_HPP_ */
+}  // namespace eda::vhdl::ast

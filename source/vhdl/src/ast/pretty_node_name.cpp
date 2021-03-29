@@ -1,18 +1,9 @@
-/*
- * pretty_node_name.cpp
- *
- *  Created on: 17.09.2018
- *      Author: olaf
- */
-
 #include <eda/vhdl/ast/pretty_node_name.hpp>
 
 #include <unordered_map>
 #include <utility>
 
-namespace eda {
-namespace vhdl {
-namespace ast {
+namespace eda::vhdl::ast {
 
 std::tuple<bool, std::string_view> pretty_node_name(std::string_view which)
 {
@@ -20,6 +11,7 @@ std::tuple<bool, std::string_view> pretty_node_name(std::string_view which)
     using node_map_type = std::unordered_map<std::string_view, std::string_view>;
 
     static const node_map_type node_map{
+        // clang-format off
         { "abstract_literal"sv, "Abstract Literal"sv },
         { "access_type_definition"sv, "Access Type Definition"sv },
         { "actual_designator"sv, "Actual Designator"sv },
@@ -257,6 +249,7 @@ std::tuple<bool, std::string_view> pretty_node_name(std::string_view which)
         { "wait_statement"sv, "Wait Statement"sv },
         { "waveform"sv, "Waveform"sv },
         { "waveform_element"sv, "Waveform Element"sv },
+        // clang-format on
     };
 
     auto const iter = node_map.find(which);
@@ -267,6 +260,4 @@ std::tuple<bool, std::string_view> pretty_node_name(std::string_view which)
     return std::tuple{ false, which };
 }
 
-} // namespace ast
-} // namespace vhdl
-} // namespace eda
+}  // namespace eda::vhdl::ast

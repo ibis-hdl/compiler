@@ -47,3 +47,8 @@ CLangSatanizer.CMake.txt
 CMakeClangFormat.txt
 PCH.txt
 clang-format.txt
+
+# python virtual environment directory
+venv
+py_venv
+

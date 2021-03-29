@@ -1,13 +1,11 @@
-#ifndef SOURCES_IBIS_INCLUDE_IBIS_VERSION_HPP_CMAKE_
-#define SOURCES_IBIS_INCLUDE_IBIS_VERSION_HPP_CMAKE_
+#pragma once
+
+// DO NOT EDIT! GENERATED AUTOMATICALLY BY CMAKE!
 
 #include <string_view>
-
 
 namespace ibis {
 
 constexpr std::string_view EDA_IBIS_VERSION_STR{ "EDA/@PROJECT_NAME@ v@eda_VERSION@" };
 
 }
-
-#endif /* SOURCES_IBIS_INCLUDE_IBIS_VERSION_HPP_CMAKE_ */

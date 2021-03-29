@@ -11,9 +11,8 @@
 
 #include <eda/vhdl/ast/util/string_span.hpp>
 
-namespace eda { namespace vhdl { namespace ast {
+namespace eda::vhdl::ast {
 
 using integer = ast::string_span;
 
-} } } // namespace eda.vhdl.ast
-
+}

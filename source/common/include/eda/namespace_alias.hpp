@@ -1,51 +1,29 @@
-/*
- * namespace_alias.hpp
- *
- *  Created on: 26.06.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_COMMON_INCLUDE_EDA_NAMESPACE_ALIAS_HPP_
-#define SOURCES_COMMON_INCLUDE_EDA_NAMESPACE_ALIAS_HPP_
+#pragma once
 
 // forward Boost.Orgs's namespace used
-namespace boost {
-
-    namespace spirit { namespace x3 {
-
-         namespace iso8859_1 { }
-
-    } }  // namespace spirit.x3
-
-    namespace filesystem { }
-
-} // namespace boost
-
-
-namespace std { // NOLINT(cert-dcl58-cpp)
-    namespace filesystem { }
+namespace boost::spirit::x3::iso8859_1 {
+}
+namespace boost::filesystem {
 }
 
+// NOLINTNEXTLINE(cert-dcl58-cpp)
+namespace std::filesystem {
+}
 
-// namespace forward and alias
 namespace eda {
 
-    namespace x3 = boost::spirit::x3;
+namespace x3 = boost::spirit::x3;
 
-    namespace vhdl {
+namespace vhdl::ast {
+}
 
-        namespace ast { }
+namespace vhdl::parser {
+// VHDL char set is iso8859:1
+namespace iso8859_1 = boost::spirit::x3::iso8859_1;
+}  // namespace vhdl::parser
 
-        namespace parser {
-            // VHDL char set is iso8859:1
-            namespace iso8859_1 = boost::spirit::x3::iso8859_1;
-        }
+namespace vhdl::analyze {
+}
 
-        namespace analyze { }
-    } // namespace vhdl
-
-    namespace fs = std::filesystem;
-
-} // namespace eda
-
-#endif /* SOURCES_COMMON_INCLUDE_EDA_NAMESPACE_ALIAS_HPP_ */
+namespace fs = std::filesystem;
+}  // namespace eda

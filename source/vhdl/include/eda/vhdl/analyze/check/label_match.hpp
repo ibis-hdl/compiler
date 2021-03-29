@@ -1,12 +1,4 @@
-/*
- * check_label_match.hpp
- *
- *  Created on: 23.06.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_ANALYZE_CHECK_LABEL_MATCH_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_ANALYZE_CHECK_LABEL_MATCH_HPP_
+#pragma once
 
 #include <eda/vhdl/ast/util/optional.hpp>
 
@@ -28,9 +20,7 @@ struct package_declaration;
 struct process_statement;
 }  // namespace eda::vhdl::ast
 
-namespace eda {
-namespace vhdl {
-namespace analyze {
+namespace eda::vhdl::analyze {
 
 /**
  * check for matching label pairs
@@ -150,8 +140,4 @@ std::tuple<ast::identifier const&, ast::identifier const&> static inline labels_
     }
 }
 
-}  // namespace analyze
-}  // namespace vhdl
-}  // namespace eda
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_ANALYZE_CHECK_LABEL_MATCH_HPP_ */
+}  // namespace eda::vhdl::analyze

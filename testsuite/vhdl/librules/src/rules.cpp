@@ -1,19 +1,11 @@
-/*
- * rules.cpp
- *
- *  Created on: 14.06.2018
- *      Author: olaf
- */
-
 #include <testsuite/vhdl/rules.hpp>
 
 #include <eda/vhdl/parser/grammar_def.hpp>
 #include <eda/vhdl/parser/parser_config.hpp>
 
-namespace eda {
-namespace vhdl {
-namespace parser {
+namespace eda::vhdl::parser {
 
+// clang-format off
 BOOST_SPIRIT_INSTANTIATE(abstract_literal_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(actual_part_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(aggregate_type, iterator_type, context_type);
@@ -121,13 +113,10 @@ BOOST_SPIRIT_INSTANTIATE(variable_assignment_statement_type, iterator_type, cont
 BOOST_SPIRIT_INSTANTIATE(variable_declaration_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(wait_statement_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(waveform_type, iterator_type, context_type);
+// clang-format on
+}  // namespace eda::vhdl::parser
 
-} // namespace parser
-} // namespace vhdl
-} // namespace eda
-
-namespace testsuite {
-namespace vhdl_parser {
+namespace testsuite::vhdl_parser {
 
 // clang-format off
 parser::abstract_literal_type const& abstract_literal() {
@@ -559,5 +548,4 @@ parser::waveform_type const& waveform() {
 }
 // clang-format on
 
-} // namespace vhdl_parser
-} // namespace testsuite
+}  // namespace testsuite::vhdl_parser

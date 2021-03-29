@@ -1,10 +1,3 @@
-/*
- * numeric_convert.cpp
- *
- *  Created on: 26.05.2018
- *      Author: olaf
- */
-
 #include <eda/vhdl/ast/numeric_convert.hpp>
 
 #include <eda/vhdl/ast/node/based_literal.hpp>
@@ -18,10 +11,10 @@
 #include <eda/util/cxx_bug_fatal.hpp>
 #include <eda/compiler/compiler_support.hpp>
 
-#include <eda/namespace_alias.hpp> // IWYU pragma: keep
+#include <eda/namespace_alias.hpp>  // IWYU pragma: keep
 
 // IWYU replaces a lot of other header, we stay with this one
-#include <boost/spirit/home/x3.hpp> // IWYU pragma: keep
+#include <boost/spirit/home/x3.hpp>  // IWYU pragma: keep
 
 #include <boost/iterator/filter_iterator.hpp>
 #include <boost/iterator/iterator_facade.hpp>
@@ -37,46 +30,39 @@
 #include <algorithm>
 #include <limits>
 #include <iterator>
-#include <numeric> // accumulate
+#include <numeric>  // accumulate
 #include <string>
 #include <string_view>
 #include <type_traits>
 #include <iostream>
 
-
 // pre C++20 to avoid lint warnings
 #if defined(EDA_HAVE_EXPERIMENTAL_SOURCE_LOCATION)
-#include <experimental/source_location> // IWYU pragma: keep
+#include <experimental/source_location>  // IWYU pragma: keep
 #endif
 
-
-namespace eda {
-namespace vhdl {
-namespace ast {
-namespace parser {
+namespace eda::vhdl::ast::parser {
 
 namespace detail {
 
 /*
  * real types and their parsers
  */
-template <typename T> struct integer_policies : x3::ureal_policies<T> {
-    // clang-format off
-    static bool const allow_leading_dot =  false;
+template <typename T>
+struct integer_policies : x3::ureal_policies<T> {
+    static bool const allow_leading_dot = false;
     static bool const allow_trailing_dot = false;
-    static bool const expect_dot =         false;
-    // clang-format on
+    static bool const expect_dot = false;
 };
 
-template <typename T> struct real_policies : x3::ureal_policies<T> {
-    // clang-format off
-    static bool const allow_leading_dot =  false;
+template <typename T>
+struct real_policies : x3::ureal_policies<T> {
+    static bool const allow_leading_dot = false;
     static bool const allow_trailing_dot = false;
-    static bool const expect_dot =         false;
-    // clang-format on
+    static bool const expect_dot = false;
 };
 
-using value_type = numeric_convert::value_type; // double
+using value_type = numeric_convert::value_type;  // double
 
 x3::real_parser<value_type, detail::real_policies<value_type>> const real_base10;
 
@@ -109,10 +95,9 @@ auto const exponent = x3::rule<struct _, unsigned_integer>{} =
        x3::omit[ x3::char_("Ee") ]
     >> int_ // signed
     ;
-    // clang-format on
+// clang-format on
 
-} // namespace detail
-
+}  // namespace detail
 
 /*
  * Utility for Spirit.X3 debugging
@@ -120,19 +105,16 @@ auto const exponent = x3::rule<struct _, unsigned_integer>{} =
 namespace dbg_util {
 
 template <typename RangeType, typename RangeFiltType, typename AttributeType>
-void trace_report(RangeType const& range, RangeFiltType const& range_f, bool parse_ok, AttributeType attribute,
-    std::string_view file, unsigned line, std::string_view function)
+void trace_report(RangeType const& range, RangeFiltType const& range_f, bool parse_ok,
+                  AttributeType attribute, std::string_view file, unsigned line,
+                  std::string_view function)
 {
-    std::cout << file << ":" << line << " "
-              << function << "('" << range << "')"
-              << " -> ['" << range_f << "']: "
-              << std::boolalpha
-              << "parse_ok = "     << parse_ok
-              << ", attribute = "  << attribute
-              << '\n';
+    std::cout << file << ":" << line << " " << function << "('" << range << "')"
+              << " -> ['" << range_f << "']: " << std::boolalpha << "parse_ok = " << parse_ok
+              << ", attribute = " << attribute << '\n';
 }
 
-} // namespace dbg_util
+}  // namespace dbg_util
 
 /// FixMe: If we got C++20 standard once here, get rid off the macro stuff which is used only
 ///        to gather source location. Unfortunately, we will still stick with it since
@@ -140,21 +122,19 @@ void trace_report(RangeType const& range, RangeFiltType const& range_f, bool par
 ///        https://docs.microsoft.com/de-de/cpp/overview/visual-cpp-language-conformance?view=msvc-160)
 #if defined(EDA_HAVE_EXPERIMENTAL_SOURCE_LOCATION_)
 template <typename RangeType, typename RangeFiltType, typename AttributeType>
-static inline
-void dbg_trace(RangeType const& range, RangeFiltType const& range_f, bool parse_ok, AttributeType attribute,
-    std::experimental::source_location const& location = std::experimental::source_location::current())
+static inline void dbg_trace(RangeType const& range, RangeFiltType const& range_f, bool parse_ok,
+                             AttributeType attribute,
+                             std::experimental::source_location const& location =
+                                 std::experimental::source_location::current())
 {
-    dbg_util::trace_report(range, range_f, parse_ok, attribute,
-        location.file_name(),
-        location.line(),
-        location.function_name());
+    dbg_util::trace_report(range, range_f, parse_ok, attribute, location.file_name(),
+                           location.line(), location.function_name());
 }
 #else
-    // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
-#define dbg_trace(range, range_f, parse_ok, attribute)  \
+   // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
+#define dbg_trace(range, range_f, parse_ok, attribute) \
     dbg_util::trace_report(range, range_f, parse_ok, attribute, __FILE__, __LINE__, __FUNCTION__)
 #endif
-
 
 /**
  * Parse literal primitives. Mainly the task of this class is to handle the
@@ -167,15 +147,20 @@ void dbg_trace(RangeType const& range, RangeFiltType const& range_f, bool parse_
  * Treat all of x3's attribute type as double for simplification, otherwise
  * one has to handle with different return types using C++ lambdas.
  */
-struct primitive_parser
-{
+struct primitive_parser {
     // tags for overloading
-    struct bin {  };
-    struct oct {  };
-    struct dec {  };
-    struct hex {  };
-    struct real { };
-    struct exp {  };
+    struct bin {
+    };
+    struct oct {
+    };
+    struct dec {
+    };
+    struct hex {
+    };
+    struct real {
+    };
+    struct exp {
+    };
 
     /**
      * The type, to which all literals will be converted. */
@@ -278,31 +263,22 @@ struct primitive_parser
         return parse_ok;
     }
 
-    template <typename RangeType> static auto filter_range(RangeType const& range)
+    template <typename RangeType>
+    static auto filter_range(RangeType const& range)
     {
         struct separator_predicate {
             bool operator()(char x) { return '_' != x; }
         };
 
-        // clang-format off
         return boost::make_iterator_range(
-            boost::make_filter_iterator(separator_predicate{},
-                    range.begin(), range.end()),
-            boost::make_filter_iterator(separator_predicate{},
-                    range.end())
-        );
-        // clang-format on
+            boost::make_filter_iterator(separator_predicate{}, range.begin(), range.end()),
+            boost::make_filter_iterator(separator_predicate{}, range.end()));
     }
 };
 
-} // namespace parser
-} // namespace ast
-} // namespace vhdl
-} // namespace eda
+}  // namespace eda::vhdl::ast::parser
 
-namespace eda {
-namespace vhdl {
-namespace ast {
+namespace eda::vhdl::ast {
 
 namespace detail {
 
@@ -316,8 +292,7 @@ using real = eda::vhdl::intrinsic::real_type;
 /**
  * Helper class to calculate fractional parts of binary numbers like bin,
  * oct and hex.  */
-class frac
-{
+class frac {
 public:
     using numeric_type = double;
 
@@ -374,12 +349,12 @@ public:
         return result;
     }
 
-    private:
-        numeric_type const base;
-        numeric_type pow;
+private:
+    numeric_type const base;
+    numeric_type pow;
 };
 
-} // namespace detail
+}  // namespace detail
 
 auto const primitive_parse{ parser::primitive_parser{} };
 
@@ -390,16 +365,16 @@ numeric_convert::numeric_convert(std::ostream& os_)
     : os{ os_ }
 {
     // until we got all templates, check for correct types
-    static_assert(std::integral_constant<bool,
-                      std::is_same_v<numeric_convert::value_type, detail::real>>::value,
+    static_assert(
+        std::integral_constant<bool,
+                               std::is_same_v<numeric_convert::value_type, detail::real>>::value,
         "iterator types must be the same");
 }
 
 /**
  * numeric_convert's private error reporting utility to unify error messages
  */
-class numeric_convert::report_error
-{
+class numeric_convert::report_error {
 public:
     static constexpr detail::unsigned_integer MAX_VALUE{
         std::numeric_limits<detail::unsigned_integer>::max()
@@ -416,16 +391,13 @@ public:
         using boost::locale::format;
         using boost::locale::translate;
 
-        // clang-format off
-        os << format(translate( // TRANSLATORS: Literal Type and passed Value
-            "Conversion of VHDL {1} \'{2}\' failed due to numeric overflow "
-            "(MAX_VALUE = {3})"
-            ))
-            % literal_type
-            % literal_printer(literal)
-            % MAX_VALUE
+        os << format(translate(  // TRANSLATORS: Literal Type and passed Value
+                  "Conversion of VHDL {1} \'{2}\' failed due to numeric overflow "
+                  "(MAX_VALUE = {3})"))       // --
+                  % literal_type              // {1}
+                  % literal_printer(literal)  // {2}
+                  % MAX_VALUE                 // {3}
            << '\n';
-        // clang-format on
     }
 
     void overflow(ast::bit_string_literal const& literal) const
@@ -446,34 +418,29 @@ public:
         overflow_message(type, literal);
     }
 
-    template <typename StringViewT> void unkown_parser_error(StringViewT const& what) const
+    template <typename StringViewT>
+    void unkown_parser_error(StringViewT const& what) const
     {
         using boost::locale::format;
         using boost::locale::translate;
 
-        // clang-format off
-        os << format(translate(
-            "An unknown error occurred during parsing of \'{1}\'."
-            ))
-            % what
+        os << format(translate("An unknown error occurred during parsing of \'{1}\'."))  // --
+                  % what                                                                 // {1}
            << '\n';
-        // clang-format on
     }
 
-    template <typename StringViewT> void unsupported_base(StringViewT const& base_literal) const
+    template <typename StringViewT>
+    void unsupported_base(StringViewT const& base_literal) const
     {
         using boost::locale::format;
         using boost::locale::translate;
 
-        // clang-format off
-        os << format(translate(
-            "Base specifier \'{1}\' isn't supported. "
-            "Supported are only 2, 8, 10 and 16!"
-            ))
-            % base_literal
+        os << format(translate("Base specifier \'{1}\' isn't supported. Supported are only 2, 8, "
+                               "10 and 16!"))  // --
+                  % base_literal               // {1}
            << '\n';
-        // clang-format on
     }
+
 private:
     std::ostream& os;
 };
@@ -503,7 +470,7 @@ numeric_convert::return_type numeric_convert::operator()(
         }
     };
 
-    auto const[parse_ok, result] = parse(literal);
+    auto const [parse_ok, result] = parse(literal);
 
     if (!parse_ok) {
         report_error{ os }.overflow(literal);
@@ -533,7 +500,7 @@ numeric_convert::return_type numeric_convert::operator()(ast::decimal_literal co
         }
     };
 
-    auto const[parse_ok, result] = parse(literal);
+    auto const [parse_ok, result] = parse(literal);
 
     if (!parse_ok) {
         report_error{ os }.overflow(literal);
@@ -624,7 +591,6 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
      * directly
      * ------------------------------------------------------------------------*/
     if (base == 10) {
-
         /* Note, a dumb join of over all numeric literal components doesn't work
          * here since some (empty) number literal components results into an
          * empty iterator_range  where the parser crash with
@@ -640,52 +606,34 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
         using kind_specifier = ast::based_literal::kind_specifier;
 
         switch (literal.number.kind_type) {
-            // clang-format off
             case kind_specifier::integer: {
-                if(literal.number.exponent.empty()) {
-                    std::tie(parse_ok, result) = primitive_parse(
-                        literal.number.integer_part, primitive_parser::dec{});
+                if (literal.number.exponent.empty()) {
+                    std::tie(parse_ok, result) =
+                        primitive_parse(literal.number.integer_part, primitive_parser::dec{});
                 }
                 else {
                     std::tie(parse_ok, result) = primitive_parse(
-                        boost::join(
-                            literal.number.integer_part,
-                            literal.number.exponent
-                        ),
+                        boost::join(literal.number.integer_part, literal.number.exponent),
                         primitive_parser::dec{});
                 }
-            }
-            break;
+            } break;
 
             case kind_specifier::real: {
-                if(literal.number.exponent.empty()) { // 'integer . fractional'
+                if (literal.number.exponent.empty()) {  // 'integer . fractional'
+                    std::tie(parse_ok, result) =
+                        primitive_parse(boost::join(boost::join(literal.number.integer_part, dot),
+                                                    literal.number.fractional_part),
+                                        primitive_parser::real{});
+                }
+                else {  // 'integer . fractional exponent'
                     std::tie(parse_ok, result) = primitive_parse(
-                        boost::join(
-                            boost::join(
-                                literal.number.integer_part,
-                                dot
-                            ),
-                            literal.number.fractional_part
-                        ),
+                        boost::join(boost::join(boost::join(literal.number.integer_part, dot),
+                                                literal.number.fractional_part),
+                                    literal.number.exponent),
                         primitive_parser::real{});
                 }
-                else { // 'integer . fractional exponent'
-                    std::tie(parse_ok, result) = primitive_parse(
-                        boost::join(
-                            boost::join(
-                                boost::join(
-                                    literal.number.integer_part,
-                                    dot
-                                ),
-                                literal.number.fractional_part
-                            ),
-                            literal.number.exponent
-                        ),
-                        primitive_parser::real{});
-                }
-            }
-            break;
-            // clang-format on
+            } break;
+
             default:
                 cxx_unreachable_bug_triggered();
         }
@@ -738,14 +686,10 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
         /* during accumulation using frac_obj a numeric IEEE754 errors may
          * occur */
         if (!std::isnormal(fractional_part)) {
-            // clang-format off
-            os << format(translate(
-                "Numeric error occurred during calculation on based_literal "
-                "with fractional part of \'{1}\'."
-                ))
-                % literal.number.fractional_part
+            os << format(translate("Numeric error occurred during calculation on based_literal "
+                                   "with fractional part of \'{1}\'."))  // --
+                      % literal.number.fractional_part                   // {1}
                << '\n';
-            // clang-format on
             return std::tuple{ false, result };
         }
 
@@ -756,7 +700,6 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
      * exponent
      */
     if (!literal.number.exponent.empty()) {
-
         detail::signed_integer exponent{ 0 };
 
         std::tie(parse_ok, exponent) = parse_exponent(literal);
@@ -766,8 +709,8 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
             return std::tuple{ parse_ok, exponent };
         }
 
-        numeric_convert::value_type const pow
-            = std::pow(static_cast<double>(base), static_cast<double>(exponent));
+        numeric_convert::value_type const pow =
+            std::pow(static_cast<double>(base), static_cast<double>(exponent));
 
         result *= pow;
     }
@@ -775,9 +718,7 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
     return std::tuple{ true, result };
 }
 
-} // namespace ast
-} // namespace vhdl
-} // namespace eda
+}  // namespace eda::vhdl::ast
 
 /******************************************************************************
  * Code fragments from former converting functions, maybe useful later on.

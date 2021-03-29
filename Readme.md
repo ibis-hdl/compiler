@@ -103,18 +103,13 @@ toolset=msvc address-model=64 architecture=x86 stage ^
   - https://github.com/microsoft/DirectXShaderCompiler/blob/master/CMakeLists.txt
   - https://github.com/Bforartists/Bforartists/blob/master/CMakeLists.txt
 
-- [cheshirekow/cmake_format](https://github.com/cheshirekow/cmake_format)
-
-
-- [git-cmake-format](https://github.com/BlueBrain/git-cmake-format)
-  This project aims to provide a quick and easy way to integrate clang-format into your CMake project hosted in a git repository
-
 - for cmake tidy && format, code coverage etc. example code look at
   https://github.com/ORNL-CEES/mfmg/tree/master/cmake
 
 - Unit Testing
   - https://github.com/onqtam/awesome-cmake/blob/master/README.md#toolchains
   - https://github.com/adishavit/cmake_snippets
+
 
 #### Running tests
 
@@ -214,8 +209,11 @@ Sehe's notes, re-using the tag type is recipe for disaster. The rule tags are
 what dispatches the implementation function in the case of
 separated compilation units.
 
-Check [**Splitting Boost.Spirit.X3 parsers into several TUs**](
+- Check [**Splitting Boost.Spirit.X3 parsers into several TUs**](
   https://stackoverflow.com/questions/59709229/splitting-boost-spirit-x3-parsers-into-several-tus)
+
+- Check [Trying to convert a VHDL BNF to a labeled BNF for BNFC](
+  https://stackoverflow.com/questions/44166199/trying-to-convert-a-vhdl-bnf-to-a-labeled-bnf-for-bnfc)
 
 
 #### Settings Crash
@@ -309,14 +307,10 @@ ToDo on design
 - testsuite/common/failure_diagnostic_fixture and testsuite/vhdl/util/failure_diagnostic_fixture
   BAD NAMING ...
 
-- rename ${PROJECT_ROOT}/sources to ${PROJECT_ROOT}/source
-
 - testsuite/ibis/ App Tests uses ${PROJECT_ROOT}/Readme.md which got large
   over time, supply a small test input file.
 
 - rename testsuite/*/test_case/* to test_data which better fits
-
-- rename testsuite/parser_rules/utils -> testsuite/parser_rules/scripts is better
 
 - rename testsuite/common to testsuite/util and libutil. Header, namespaces etc are
   inconsistent!
@@ -380,9 +374,6 @@ set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
 - Miss ome CMake variables? Try [Displaying CMake Variables](
    https://stackoverflow.com/questions/31343813/displaying-cmake-variables)
 
-- use [cmake-format](https://github.com/cheshirekow/cmake_format)
-  ```pip install cmakelang```. Anyway, the results doesn't impress me...
-
 ### Sources
 
 - **FixMe**: As shown in the past, if main's init() function crash and the color
@@ -439,8 +430,8 @@ set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
 - Check build system with [Templight 2.0 - Template Instantiation Profiler and Debugger](
   https://github.com/mikael-s-persson/templight)
 
-- we have buildinfo_static.hpp.in, buildinfo.hpp.in using git info and date/time 
-  would be useful. Copy git part temporary to ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY} 
+- we have buildinfo_static.hpp.in, buildinfo.hpp.in using git info and date/time
+  would be useful. Copy git part temporary to ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}
   to avoid unnecessary rebuild, for an idea look at blender sources.
 
 
@@ -474,11 +465,8 @@ and recommendations.
 A good starting point is [Static checks with CMake/CDash (iwyu, clang-tidy, lwyu, cpplint and cppcheck)](
 https://blog.kitware.com/static-checks-with-cmake-cdash-iwyu-clang-tidy-lwyu-cpplint-and-cppcheck/)
 
-  - testsuite is heavy to improve due to heavy use of macros by boost.test
-  - not checked by clang-tidy:
+  - not checked in deep by clang-tidy:
 
-    - RapidJSON parts of init.cpp isn't checked since it may be replaced
-      by boost.json
     - ibis/src/stacktrace_{boost,gdb}.cpp since they need more effort
       to check and rewrite/improve
 
@@ -487,10 +475,6 @@ https://blog.kitware.com/static-checks-with-cmake-cdash-iwyu-clang-tidy-lwyu-cpp
 
 - [misc-no-recursion](https://clang.llvm.org/extra/clang-tidy/checks/misc-no-recursion.html):
   *Until the ast_printer recursive call chain has been solved.*
-
-- modernize-concat-nested-namespaces:
-  *ToDo: [Convert to C++17 nested namespaces in clang-format?](https://stackoverflow.com/questions/61020329/convert-to-c17-nested-namespaces-in-clang-format)*
-  ```$ clang-tidy -checks='-*,modernize-concat-nested-namespaces' -fix myfile.cpp```
 
 - [cert-err58-cpp](https://clang.llvm.org/extra/clang-tidy/checks/cert-err58-cpp.html):
   *It's correct, but depend on others libraries.*
@@ -536,6 +520,5 @@ Switch from MarkDown to ReStructuredText.
   - https://github.com/normalvector/ue4_doxygen_source_filter
   - https://github.com/svenevs/exhale
 
-A more sophisticated INPUT filter for doxygen:
-  - https://stackoverflow.com/questions/44166199/trying-to-convert-a-vhdl-bnf-to-a-labeled-bnf-for-bnfc
+
 

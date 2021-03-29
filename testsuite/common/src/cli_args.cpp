@@ -3,8 +3,8 @@
 #include <CLI/App.hpp>
 #include <CLI/Error.hpp>
 #include <CLI/Option.hpp>
-#include <CLI/Formatter.hpp>	// IWYU pragma: keep
-#include <CLI/Config.hpp>	// IWYU pragma: keep
+#include <CLI/Formatter.hpp>  // IWYU pragma: keep
+#include <CLI/Config.hpp>     // IWYU pragma: keep
 
 #include <boost/test/unit_test.hpp>
 

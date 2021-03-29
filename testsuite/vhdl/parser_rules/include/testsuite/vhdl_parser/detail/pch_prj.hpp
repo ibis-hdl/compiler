@@ -1,12 +1,4 @@
-/*
- * pch_prj.hpp
- *
- *  Created on: 21.02.2021
- *      Author: olaf
- */
-
-#ifndef TESTSUITE_PARSER_RULES_INCLUDE_TESTSUITE_DETAIL_PCH_PRJ_HPP_
-#define TESTSUITE_PARSER_RULES_INCLUDE_TESTSUITE_DETAIL_PCH_PRJ_HPP_
+#pragma once
 
 #include <eda/util/pretty_typename.hpp>
 #include <eda/vhdl/ast/ast_printer.hpp>
@@ -30,8 +22,4 @@
 
 #include <testsuite/vhdl/rules.hpp>
 
-#include <testsuite/vhdl_parser/testing_parser_grammar_hack.hpp>
 #include <testsuite/vhdl_parser/testing_parser.hpp>
-
-#endif /* TESTSUITE_PARSER_RULES_INCLUDE_TESTSUITE_DETAIL_PCH_PRJ_HPP_ */
-

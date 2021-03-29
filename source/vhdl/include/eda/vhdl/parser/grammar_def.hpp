@@ -1,12 +1,4 @@
-/*
- * grammar_def.h
- *
- *  Created on: 28.02.2017
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_DEF_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_DEF_HPP_
+#pragma once
 
 #include <eda/vhdl/parser/grammar.hpp>
 #include <eda/vhdl/parser/grammar_id.hpp>
@@ -20,10 +12,7 @@
 #include <eda/support/boost/spirit_x3.hpp>
 #include <eda/support/boost/spirit_x3_util.hpp>
 
-namespace eda {
-namespace vhdl {
-namespace parser {
-namespace detail {
+namespace eda::vhdl::parser::detail {
 
 /**
  * distinct parser directive allowing to avoid partial matches while parsing
@@ -40,7 +29,8 @@ struct distinct_directive {
      * @param parser The core parser to be used.
      * @return The combined parser base on given argument
      */
-    template <typename Parser> constexpr auto operator()(Parser&& parser) const
+    template <typename Parser>
+    constexpr auto operator()(Parser&& parser) const
     {
         // clang-format off
         return x3::lexeme[
@@ -100,18 +90,12 @@ struct literal_attribute
 
 const literal_attribute literal = {};
 
-} // namespace detail
-} // namespace parser
-} // namespace vhdl
-} // namespace eda
+}  // namespace eda::vhdl::parser::detail
 
 /*******************************************************************************
  * Keywords
  */
-namespace eda {
-namespace vhdl {
-namespace parser {
-namespace keywords {
+namespace eda::vhdl::parser::keywords {
 
 using detail::distinct;
 
@@ -220,18 +204,12 @@ x3::symbols<> const keywords(
 
 auto const keyword = x3::rule<struct _>{ "keyword" } = distinct(keywords);
 
-} // namespace keywords
-} // namespace parser
-} // namespace vhdl
-} // namespace eda
+}  // namespace eda::vhdl::parser::keywords
 
 /*******************************************************************************
  * Operators
  */
-namespace eda {
-namespace vhdl {
-namespace parser {
-namespace operators {
+namespace eda::vhdl::parser::operators {
 
 /*
  * Operator Rule IDs
@@ -391,17 +369,12 @@ BOOST_SPIRIT_DEFINE(
 
 #include <eda/compiler/warnings_on.hpp>
 
-} // namespace operators
-} // namespace parser
-} // namespace vhdl
-} // namespace eda
+}  // namespace eda::vhdl::parser::operators
 
 /*******************************************************************************
  * Rule Instances
  */
-namespace eda {
-namespace vhdl {
-namespace parser {
+namespace eda::vhdl::parser {
 
 // clang-format off
 abstract_literal_type const abstract_literal { "abstract_literal" };
@@ -632,17 +605,12 @@ waveform_type const waveform { "waveform" };
 waveform_element_type const waveform_element { "waveform_element" };
 // clang-format on
 
-} // namespace parser
-} // namespace vhdl
-} // namespace eda
-
+}  // namespace eda::vhdl::parser
 
 /*******************************************************************************
  * Spirit.X3 BNF Rule Definitions
  */
-namespace eda {
-namespace vhdl {
-namespace parser {
+namespace eda::vhdl::parser {
 
 using namespace parser::keywords;
 
@@ -1932,7 +1900,7 @@ x3::symbols<ast::keyword_token> const entity_class_symbols(
     "entity_class"
 );
 
-} // namespace detail
+} 
 
 auto const entity_class_def =
      distinct(detail::entity_class_symbols)
@@ -2803,7 +2771,7 @@ x3::symbols<ast::keyword_token> const mode_symbols(
     "mode"
 );
 
-}// namespace detail
+}
 
 auto const mode_def =
     distinct(detail::mode_symbols)
@@ -3442,7 +3410,7 @@ auto const prefix_def = x3::repeat(1, 2)[
 BOOST_SPIRIT_DEFINE(name)
 BOOST_SPIRIT_DEFINE(prefix)
 
-} // namespace detail
+} 
 
 auto const selected_name_def =
     x3::lexeme[
@@ -4085,19 +4053,15 @@ auto const waveform_element_def =
     ;
 
 
-} // namespace parser
-} // namespace vhdl
-} // namespace eda
+} 
 
 
-#if !defined(DOXYGEN)
+#if !defined(DOXYGEN_DOCUMENTATION_BUILD)
 
 /*******************************************************************************
  * Spirit.X3 BNF Rule Definitions
  */
-namespace eda {
-namespace vhdl {
-namespace parser {
+namespace eda::vhdl::parser {
 
 #include <eda/compiler/warnings_off.hpp>
 
@@ -4372,12 +4336,8 @@ BOOST_SPIRIT_DEFINE(  // -- W --
 
 #include <eda/compiler/warnings_on.hpp>
 
-#endif // !defined(DOXYGEN)
-
-} // namespace parser
-} // namespace vhdl
-} // namespace eda
-
+#endif  // !defined(DOXYGEN_DOCUMENTATION_BUILD)
+}
 
 /*******************************************************************************
  * Annotation and Error handling
@@ -4391,9 +4351,7 @@ BOOST_SPIRIT_DEFINE(  // -- W --
  * ID are derived from on_success_base (obviously must be changed in
  * the future).
  */
-namespace eda {
-namespace vhdl {
-namespace parser {
+namespace eda::vhdl::parser {
 
 // clang-format off
 struct abstract_literal_class : on_success_base {};
@@ -4620,8 +4578,4 @@ struct waveform_class : on_success_base {};
 struct waveform_element_class : on_success_base {};
 // clang-format on
 
-} // namespace parser
-} // namespace vhdl
-} // namespace eda
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_DEF_HPP_ */
+}  // namespace eda::vhdl::parser

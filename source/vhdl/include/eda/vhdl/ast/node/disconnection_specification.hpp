@@ -1,31 +1,15 @@
-/*
- * disconnection_specification.hpp
- *
- *  Created on: 17.06.2017
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_DISCONNECTION_SPECIFICATION_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_DISCONNECTION_SPECIFICATION_HPP_
-
+#pragma once
 
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/ast/node/guarded_signal_specification.hpp>
 #include <eda/vhdl/ast/node/expression.hpp>
 
+namespace eda::vhdl::ast {
 
-namespace eda { namespace vhdl { namespace ast {
-
-
-struct disconnection_specification : position_tagged
-{
-    ast::guarded_signal_specification   guarded_signal_specification;
-    ast::expression                     time_expression;
+struct disconnection_specification : position_tagged {
+    ast::guarded_signal_specification guarded_signal_specification;
+    ast::expression time_expression;
 };
 
-
-} } } // namespace eda.vhdl.ast
-
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_DISCONNECTION_SPECIFICATION_HPP_ */
+}  // namespace eda::vhdl::ast

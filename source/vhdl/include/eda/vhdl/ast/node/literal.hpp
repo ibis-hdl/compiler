@@ -1,13 +1,4 @@
-/*
- * literal.hpp
- *
- *  Created on: 18.03.2017
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_LITERAL_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_LITERAL_HPP_
-
+#pragma once
 
 #include <eda/vhdl/ast/util/variant.hpp>
 
@@ -18,9 +9,7 @@
 #include <eda/vhdl/ast/node/bit_string_literal.hpp>
 #include <eda/vhdl/ast/node/keyword_token.hpp>
 
-
-namespace eda { namespace vhdl { namespace ast {
-
+namespace eda::vhdl::ast {
 
 // literal ::=
 //        numeric_literal
@@ -28,21 +17,12 @@ namespace eda { namespace vhdl { namespace ast {
 //      | string_literal
 //      | bit_string_literal
 //      | null
-struct literal : variant<
-    nullary,
-    numeric_literal,
-    enumeration_literal,
-    string_literal,
-    bit_string_literal,
-    keyword_token          // NULL
->
-{
+struct literal
+    : variant<nullary, numeric_literal, enumeration_literal, string_literal, bit_string_literal,
+              keyword_token  // NULL
+              > {
     using base_type::base_type;
     using base_type::operator=;
 };
 
-
-} } } // namespace eda.vhdl.ast
-
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_LITERAL_HPP_ */
+}  // namespace eda::vhdl::ast

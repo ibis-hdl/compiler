@@ -1,12 +1,4 @@
-/*
- * api.hpp
- *
- *  Created on: 07.09.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_API_HPP_
-#define SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_API_HPP_
+#pragma once
 
 #if defined(_WIN32)
 #include <eda/color/detail/api_windows.hpp>
@@ -14,9 +6,7 @@
 #include <eda/color/detail/api_unix.hpp>
 #endif
 
-namespace eda {
-namespace color {
-namespace detail {
+namespace eda::color::detail {
 
 #if defined(_WIN32)
 using api_windows::isatty;
@@ -25,8 +15,4 @@ using api_windows::stream_handle;
 using api_unix::isatty;
 #endif
 
-} // namespace detail
-} // namespace color
-} // namespace eda
-
-#endif /* SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_API_HPP_ */
+}  // namespace eda::color::detail

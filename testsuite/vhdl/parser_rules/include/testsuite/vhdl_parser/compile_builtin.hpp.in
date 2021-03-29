@@ -1,12 +1,12 @@
-/// DO NOT EDIT! GENERATED AUTOMATICALLY BY CMAKE!
-
 #pragma once
+
+// DO NOT EDIT! GENERATED AUTOMATICALLY BY CMAKE!
 
 #include <string_view>
 
-///
-/// compile time builtin settings for testsuite/vhdl/parser_rules
-///
+//
+// compile time builtin settings for testsuite/vhdl/parser_rules
+//
 
 namespace testsuite {
 namespace compile_builtin {

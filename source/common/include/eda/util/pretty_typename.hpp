@@ -1,21 +1,13 @@
-/*
- * pretty_typename.hpp
- *
- *  Created on: 21.07.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_COMMON_INCLUDE_EDA_UTILS_PRETTY_TYPENAME_HPP_
-#define SOURCES_COMMON_INCLUDE_EDA_UTILS_PRETTY_TYPENAME_HPP_
+#pragma once
 
 #include <boost/type_index.hpp>
 #include <regex>
 #include <string>
 
-namespace eda {
-namespace util {
+namespace eda::util {
 
-template <typename T> class pretty_typename {
+template <typename T>
+class pretty_typename {
 public:
     pretty_typename() = default;
 
@@ -39,12 +31,10 @@ private:
     std::regex pattern{ "::|boost|spirit|x3|eda|vhdl|ast" };
 };
 
-template <typename T> std::ostream& operator<<(std::ostream& os, pretty_typename<T> const& printer)
+template <typename T>
+std::ostream& operator<<(std::ostream& os, pretty_typename<T> const& printer)
 {
     return printer.print(os);
 }
 
-} // namespace util
-} // namespace eda
-
-#endif /* SOURCES_COMMON_INCLUDE_EDA_UTILS_PRETTY_TYPENAME_HPP_ */
+}  // namespace eda::util

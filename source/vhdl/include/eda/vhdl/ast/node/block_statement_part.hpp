@@ -1,22 +1,10 @@
-/*
- * block_statement_part.hpp
- *
- *  Created on: 19.06.2017
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_BLOCK_STATEMENT_PART_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_BLOCK_STATEMENT_PART_HPP_
-
+#pragma once
 
 #include <vector>
 
+namespace eda::vhdl::ast {
 
-namespace eda { namespace vhdl { namespace ast {
-
-
-struct concurrent_statement;    // forward due to cyclic dependency
-
+struct concurrent_statement;  // forward due to cyclic dependency
 
 /**
  * Ast node cyclic dependency as:
@@ -29,10 +17,7 @@ struct concurrent_statement;    // forward due to cyclic dependency
  * }
  * \enddot
  */
-struct block_statement_part : std::vector<ast::concurrent_statement> { };
+struct block_statement_part : std::vector<ast::concurrent_statement> {
+};
 
-
-} } } // namespace eda.vhdl.ast
-
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_BLOCK_STATEMENT_PART_HPP_ */
+}  // namespace eda::vhdl::ast

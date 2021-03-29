@@ -11,7 +11,6 @@ misc-*,\
 -misc-no-recursion,\
 modernize-*,\
 -modernize-use-trailing-return-type,\
--modernize-concat-nested-namespaces,\
 readability-*,\
 -readability-magic-numbers,\
 -readability-redundant-access-specifiers,\

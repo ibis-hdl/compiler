@@ -1,18 +1,8 @@
-/*
- * position_tagged.hpp
- *
- *  Created on: 23.04.2017
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_POSITION_TAGGED_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_POSITION_TAGGED_HPP_
+#pragma once
 
 #include <limits>
 
-namespace eda {
-namespace vhdl {
-namespace ast {
+namespace eda::vhdl::ast {
 
 /**
  * Tagged AST node
@@ -28,14 +18,8 @@ struct position_tagged {
 
     bool is_tagged() const { return pos_id != MAX_ID && file_id != MAX_ID; }
 
-    // clang-format off
-    tag_type                                         file_id{ MAX_ID };
-    tag_type                                         pos_id{ MAX_ID };
-    // clang-format on
+    tag_type file_id{ MAX_ID };
+    tag_type pos_id{ MAX_ID };
 };
 
-} // namespace ast
-} // namespace vhdl
-} // namespace eda
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_POSITION_TAGGED_HPP_ */
+}  // namespace eda::vhdl::ast

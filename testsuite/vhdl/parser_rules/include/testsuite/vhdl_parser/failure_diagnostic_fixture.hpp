@@ -2,9 +2,7 @@
 
 #include <testsuite/common/failure_diagnostic_fixture.hpp>
 
-namespace testsuite {
-namespace vhdl_parser {
-namespace util {
+namespace testsuite::vhdl_parser::util {
 
 class failure_diagnostic_fixture : public testsuite::failure_diagnostic_fixture {
 public:
@@ -14,6 +12,4 @@ public:
     virtual void setup() override;
 };
 
-}  // namespace util
-}  // namespace vhdl_parser
-}  // namespace testsuite
+}  // namespace testsuite::vhdl_parser::util

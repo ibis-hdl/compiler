@@ -1,18 +1,8 @@
-/*
- * iterator_type.hpp
- *
- *  Created on: 13.05.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ITERATOR_TYPE_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ITERATOR_TYPE_HPP_
+#pragma once
 
 #include <string>
 
-namespace eda {
-namespace vhdl {
-namespace parser {
+namespace eda::vhdl::parser {
 
 /**
  * Basic type used by the parser
@@ -32,8 +22,4 @@ using char_type = char;
 
 using iterator_type = std::basic_string<char_type>::const_iterator;
 
-} // namespace parser
-} // namespace vhdl
-} // namespace eda
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ITERATOR_TYPE_HPP_ */
+}  // namespace eda::vhdl::parser

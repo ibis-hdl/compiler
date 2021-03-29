@@ -1,10 +1,3 @@
-/*
- * position_cache_test_1.cpp
- *
- *  Created on: 05.09.2018
- *      Author: olaf
- */
-
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/output_test_stream.hpp>
 
@@ -18,7 +11,7 @@
 
 #include <eda/util/pretty_typename.hpp>
 
-
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_SUITE(position_cache)
 
 namespace fs = testsuite::fs;
@@ -30,7 +23,8 @@ namespace fs = testsuite::fs;
 /**
  * Test of basic embedding the filename and contents into with test input file #1.
  */
-BOOST_AUTO_TEST_CASE( contents_1_txt )
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+BOOST_AUTO_TEST_CASE(contents_1_txt)
 {
     // short-hands for convenience
     auto& position_cache = testsuite::position_cache_fixture::instance()->position_cache;
@@ -60,13 +54,12 @@ BOOST_AUTO_TEST_CASE( contents_1_txt )
 /**
  * Check basic annotation capabilities *without* proxy/handle using string #1.
  */
-BOOST_AUTO_TEST_CASE( basic_annotate_1_txt )
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+BOOST_AUTO_TEST_CASE(basic_annotate_1_txt)
 {
     std::string const tagging_str{ "elitr" };
 
-    auto const node_name = [](std::size_t id, auto name) {
-        return std::to_string(id) + name;
-    };
+    auto const node_name = [](std::size_t id, auto name) { return std::to_string(id) + name; };
 
     // short-hands for convenience
     auto& position_cache = testsuite::position_cache_fixture::instance()->position_cache;
@@ -82,19 +75,18 @@ BOOST_AUTO_TEST_CASE( basic_annotate_1_txt )
     BOOST_TEST(range.has_value());
     // dereference iterator and compare address of object.
     BOOST_TEST(&*first == &*range.value().begin());
-    BOOST_TEST(&*last  == &*range.value().end());
+    BOOST_TEST(&*last == &*range.value().end());
 }
 
 /**
  * Check basic annotation capabilities *with* proxy/handle using string #2.
  */
-BOOST_AUTO_TEST_CASE( proxy_annotate_1_txt )
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+BOOST_AUTO_TEST_CASE(proxy_annotate_1_txt)
 {
     std::string const tagging_str{ "voluptua" };
 
-    auto const node_name = [](std::size_t id, auto name) {
-        return std::to_string(id) + name;
-    };
+    auto const node_name = [](std::size_t id, auto name) { return std::to_string(id) + name; };
 
     // short-hands for convenience
     auto& position_cache = testsuite::position_cache_fixture::instance()->position_cache;
@@ -112,19 +104,18 @@ BOOST_AUTO_TEST_CASE( proxy_annotate_1_txt )
     BOOST_TEST(range.has_value());
     // dereference iterator and compare address of object.
     BOOST_TEST(&*first == &*range.value().begin());
-    BOOST_TEST(&*last  == &*range.value().end());
+    BOOST_TEST(&*last == &*range.value().end());
 }
 
 /**
  * Check node handling using the proxy with test string #1.
  */
-BOOST_AUTO_TEST_CASE( proxy_position1_of_1_txt )
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+BOOST_AUTO_TEST_CASE(proxy_position1_of_1_txt)
 {
     std::string const tagged_str{ "elitr" };
 
-    auto const node_name = [](std::size_t id, auto name) {
-        return std::to_string(id) + name;
-    };
+    auto const node_name = [](std::size_t id, auto name) { return std::to_string(id) + name; };
 
     // short-hands for convenience
     auto& position_cache = testsuite::position_cache_fixture::instance()->position_cache;
@@ -141,18 +132,16 @@ BOOST_AUTO_TEST_CASE( proxy_position1_of_1_txt )
 
     BOOST_TEST(node_str == tagged_str);
 }
-
 
 /**
  * Check node handling using the proxy with test string #2.
  */
-BOOST_AUTO_TEST_CASE( proxy_position2_of_1_txt )
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+BOOST_AUTO_TEST_CASE(proxy_position2_of_1_txt)
 {
     std::string const tagged_str{ "voluptua" };
 
-    auto const node_name = [](std::size_t id, auto name) {
-        return std::to_string(id) + name;
-    };
+    auto const node_name = [](std::size_t id, auto name) { return std::to_string(id) + name; };
 
     // short-hands for convenience
     auto& position_cache = testsuite::position_cache_fixture::instance()->position_cache;
@@ -170,15 +159,13 @@ BOOST_AUTO_TEST_CASE( proxy_position2_of_1_txt )
     BOOST_TEST(node_str == tagged_str);
 }
 
-
 /**
  * Check for correct line numbers of tagged nodes
  */
-BOOST_AUTO_TEST_CASE( proxy_lineno_1_txt )
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+BOOST_AUTO_TEST_CASE(proxy_lineno_1_txt)
 {
-    auto const node_name = [](std::size_t id, auto name) {
-        return std::to_string(id) + name;
-    };
+    auto const node_name = [](std::size_t id, auto name) { return std::to_string(id) + name; };
 
     // short-hands for convenience
     auto& position_cache = testsuite::position_cache_fixture::instance()->position_cache;
@@ -209,11 +196,10 @@ BOOST_AUTO_TEST_CASE( proxy_lineno_1_txt )
 /**
  * Check for correct line of tagged nodes
  */
-BOOST_AUTO_TEST_CASE( proxy_line_1_txt )
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+BOOST_AUTO_TEST_CASE(proxy_line_1_txt)
 {
-    auto const node_name = [](std::size_t id, auto name) {
-        return std::to_string(id) + name;
-    };
+    auto const node_name = [](std::size_t id, auto name) { return std::to_string(id) + name; };
 
     // short-hands for convenience
     auto& position_cache = testsuite::position_cache_fixture::instance()->position_cache;
@@ -227,9 +213,7 @@ BOOST_AUTO_TEST_CASE( proxy_line_1_txt )
         auto const range = proxy.position_of(node);
         BOOST_TEST(range.has_value());
 
-        std::string expected{
-            "sadipscing elitr, sed diam nonumy eirmod"
-        };
+        std::string expected{ "sadipscing elitr, sed diam nonumy eirmod" };
 
         parser::iterator_type first = range.value().begin();
         parser::iterator_type const iter = proxy.get_line_start(first);
@@ -243,9 +227,7 @@ BOOST_AUTO_TEST_CASE( proxy_line_1_txt )
         auto const range = proxy.position_of(node);
         BOOST_TEST(range.has_value());
 
-        std::string expected{
-            "aliquyam erat, sed diam voluptua. At vero eos"
-        };
+        std::string expected{ "aliquyam erat, sed diam voluptua. At vero eos" };
 
         parser::iterator_type first = range.value().begin();
         parser::iterator_type const iter = proxy.get_line_start(first);
@@ -255,5 +237,5 @@ BOOST_AUTO_TEST_CASE( proxy_line_1_txt )
     }
 }
 
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_SUITE_END()
-

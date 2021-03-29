@@ -1,12 +1,4 @@
-/*
- * pch.hpp
- *
- *  Created on: 21.02.2021
- *      Author: olaf
- */
-
-#ifndef SOURCES_IBIS_INCLUDE_IBIS_DETAIL_PCH_HPP_
-#define SOURCES_IBIS_INCLUDE_IBIS_DETAIL_PCH_HPP_
+#pragma once
 
 #include <algorithm>
 #include <atomic>
@@ -40,5 +32,3 @@
 #include <rapidjson/error/en.h>
 #include <rapidjson/pointer.h>
 #include <rapidjson/prettywriter.h>
-
-#endif /* SOURCES_IBIS_INCLUDE_IBIS_DETAIL_PCH_HPP_ */

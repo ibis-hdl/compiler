@@ -1,12 +1,4 @@
-/*
- * basic_ast_walker.hpp
- *
- *  Created on: 24.07.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_BASIC_AST_WALKER_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_BASIC_AST_WALKER_HPP_
+#pragma once
 
 //#include <eda/vhdl/ast_fwd.hpp>
 #include <eda/vhdl/ast.hpp>
@@ -24,26 +16,27 @@
 
 #include <eda/util/cxx_bug_fatal.hpp>
 
-namespace eda {
-namespace vhdl {
-namespace ast {
+namespace eda::vhdl::ast {
 
 /*
  * useful?
  * https://stackoverflow.com/questions/26380420/boost-fusion-sequence-type-and-name-identification-for-structs-and-class
  */
-template <typename WorkerT> class basic_ast_walker : boost::static_visitor<void> {
+template <typename WorkerT>
+class basic_ast_walker : boost::static_visitor<void> {
     // clang-format off
     WorkerT const                                   worker;
     // clang-format on
 
 private:
-    template <typename... Ts> void visit(variant<Ts...> const& node)
+    template <typename... Ts>
+    void visit(variant<Ts...> const& node)
     {
         boost::apply_visitor(*this, node);
     }
 
-    template <typename T> void visit(std::vector<T> const& vector)
+    template <typename T>
+    void visit(std::vector<T> const& vector)
     {
         std::for_each(vector.begin(), vector.end(), [this](auto const& e) { (*this)(e); });
     }
@@ -1095,7 +1088,6 @@ public:
          *    | function_name ( formal_designator )
          *    | type_mark ( formal_designator ) */
         switch (node.context_tied_names.size()) {
-
             case 1: {
                 // BNF: formal_designator
                 visit_formal_designator(node.context_tied_names[0]);
@@ -1754,7 +1746,7 @@ public:
         // clang-format on
     }
 
-    void operator()(ast::range const& node) // aka range_constraint
+    void operator()(ast::range const& node)  // aka range_constraint
     {
         std::string_view const node_typename{ "range" };
         worker(node, node_typename);
@@ -2109,14 +2101,14 @@ public:
 
         auto const visit_type_mark = [this](auto const& type_mark) { (*this)(type_mark); };
 
-        auto const visit_resolution_function_name
-            = [this](auto const& resolution_function_name) { (*this)(resolution_function_name); };
+        auto const visit_resolution_function_name = [this](auto const& resolution_function_name) {
+            (*this)(resolution_function_name);
+        };
 
         /* parsed as (name) list with trailing constraint
          * subtype_indication ::=
          *     [ resolution_function_name ] type_mark [ constraint ] */
         switch (node.unspecified_name_list.size()) {
-
             case 1: {
                 // BNF: type_mark .... [ constraint ]
                 visit_type_mark(node.unspecified_name_list[0]);
@@ -2353,8 +2345,4 @@ public:
     }
 };
 
-} // namespace ast
-} // namespace vhdl
-} // namespace eda
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_BASIC_AST_WALKER_HPP_ */
+}  // namespace eda::vhdl::ast

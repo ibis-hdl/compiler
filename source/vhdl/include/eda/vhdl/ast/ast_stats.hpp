@@ -1,12 +1,4 @@
-/*
- * ast_stats.hpp
- *
- *  Created on: 15.08.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_STATS_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_STATS_HPP_
+#pragma once
 
 #include <unordered_map>
 #include <unordered_set>
@@ -17,9 +9,7 @@ namespace eda::vhdl::ast {
 struct design_file;
 }
 
-namespace eda {
-namespace vhdl {
-namespace ast {
+namespace eda::vhdl::ast {
 
 class ast_stats {
 public:
@@ -43,8 +33,4 @@ static inline std::ostream& operator<<(std::ostream& os, ast_stats const& stats)
     return stats.print(os);
 }
 
-}  // namespace ast
-}  // namespace vhdl
-}  // namespace eda
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_STATS_HPP_ */
+}  // namespace eda::vhdl::ast

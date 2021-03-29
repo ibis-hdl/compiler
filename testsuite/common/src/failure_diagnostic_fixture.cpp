@@ -1,10 +1,3 @@
-/*
- * failure_diagnostic_fixture.cpp
- *
- *  Created on: 19.08.2018
- *      Author: olaf
- */
-
 #include <testsuite/common/failure_diagnostic_fixture.hpp>
 #include <testsuite/common/cli_args.hpp>
 #include <testsuite/common/compile_builtin.hpp>
@@ -161,8 +154,8 @@ void failure_diagnostic_fixture::failure_closure(std::string test_case_name,
         // trim trailing spaces from test_input, boost::trim_right_copy doesn't work
         // on string_view, hence we write our own
         // FixMe [C++20] next standard supports string_view iterator pair constructor
-        // ([basic_string_view](https://en.cppreference.com/w/cpp/string/basic_string_view/basic_string_view) (5)),
-        // so we can write inside lambda function body:
+        // ([basic_string_view](https://en.cppreference.com/w/cpp/string/basic_string_view/basic_string_view)
+        // (5)), so we can write inside lambda function body:
         // @code{.cpp}
         // return std::string_view(
         //   x.begin(), std::find_if(x.rbegin(), x.rend(), [](char c) { return !std::isspace(c);
@@ -228,14 +221,14 @@ bool failure_diagnostic_fixture::writer::create_directories(fs::path const& writ
     try {
         if (!fs::exists(write_path) || !fs::is_directory(write_path)) {
             BOOST_TEST_MESSAGE("INFO(" << writer_name << ") create directories " << write_path
-                                        << '\n');
+                                       << '\n');
             BOOST_TEST_REQUIRE(fs::create_directories(write_path));
         }
     }
     catch (fs::filesystem_error const& e) {
-        BOOST_TEST_MESSAGE("ERROR(" << writer_name << ") creating directory "
-                                     << write_path << " failed with:\n"
-                                     << e.code().message());
+        BOOST_TEST_MESSAGE("ERROR(" << writer_name << ") creating directory " << write_path
+                                    << " failed with:\n"
+                                    << e.code().message());
         return false;
     }
 
@@ -253,9 +246,9 @@ bool failure_diagnostic_fixture::writer::write_file(fs::path const& filename,
         }
     }
     catch (fs::filesystem_error const& e) {
-        BOOST_TEST_MESSAGE("ERROR(" << writer_name << ") remove of older result file "
-                                     << filename << " failed with:\n"
-                                     << e.code().message());
+        BOOST_TEST_MESSAGE("ERROR(" << writer_name << ") remove of older result file " << filename
+                                    << " failed with:\n"
+                                    << e.code().message());
         return false;
     }
 
@@ -264,9 +257,9 @@ bool failure_diagnostic_fixture::writer::write_file(fs::path const& filename,
         ofs << contents;
     }
     catch (fs::filesystem_error const& e) {
-        BOOST_TEST_MESSAGE("ERROR(" << writer_name << ") writing to "
-                                     << filename << " failed with:\n"
-                                     << e.code().message());
+        BOOST_TEST_MESSAGE("ERROR(" << writer_name << ") writing to " << filename
+                                    << " failed with:\n"
+                                    << e.code().message());
         return false;
     }
 

@@ -1,18 +1,8 @@
-/*
- * literal_ellipsis.hpp
- *
- *  Created on: 20.03.2017
- *      Author: olaf
- */
+#pragma once
 
-#ifndef SOURCES_VHDL_INCLUDE_EDA_UTIL_STRING_LITERAL_ELLIPSIS_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_UTIL_STRING_LITERAL_ELLIPSIS_HPP_
+#include <utility>  // pair
 
-#include <utility> // pair
-
-namespace eda {
-namespace vhdl {
-namespace util {
+namespace eda::vhdl::util {
 
 /**
  * Returns a beautified, shortened string using ellipsis.
@@ -26,15 +16,9 @@ static inline std::string literal_ellipsis(RangeType const& range, std::size_t l
 {
     static std::string const ellipsis = "...";
 
-    // clang-format off
-    std::string const str{
-        std::addressof(*range.begin()), 
-        std::addressof(*range.end()) 
-    };
-    // format-lang on
+    std::string const str{ std::addressof(*range.begin()), std::addressof(*range.end()) };
 
-    if (str.size() < len + 1)
-        return str;
+    if (str.size() < len + 1) return str;
 
     std::size_t const offset = (len - ellipsis.length()) / 2;
 
@@ -43,17 +27,8 @@ static inline std::string literal_ellipsis(RangeType const& range, std::size_t l
     range_t const left{ 0, offset };
     range_t const right{ (str.length() - offset - 1), str.length() };
 
-    // clang-format off
-    return std::string{
-        str.substr(left.first, left.second)
-        + ellipsis
-        + str.substr(right.first, right.second)
-    };
-    // clang-format on
+    return std::string{ str.substr(left.first, left.second) + ellipsis +
+                        str.substr(right.first, right.second) };
 }
 
-} // namespace util
-} // namespace vhdl
-} // namespace eda
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_UTIL_STRING_LITERAL_ELLIPSIS_HPP_ */
+}  // namespace eda::vhdl::util

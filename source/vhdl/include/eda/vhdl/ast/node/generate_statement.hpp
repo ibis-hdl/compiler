@@ -1,13 +1,4 @@
-/*
- * generate_statement.hpp
- *
- *  Created on: 20.06.2017
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_GENERATE_STATEMENT_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_GENERATE_STATEMENT_HPP_
-
+#pragma once
 
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
@@ -17,12 +8,9 @@
 #include <eda/vhdl/ast/util/optional.hpp>
 #include <vector>
 
+namespace eda::vhdl::ast {
 
-namespace eda { namespace vhdl { namespace ast {
-
-
-struct concurrent_statement;    // forward due to cyclic dependency
-
+struct concurrent_statement;  // forward due to cyclic dependency
 
 /**
  * Ast node cyclic dependency as:
@@ -34,17 +22,12 @@ struct concurrent_statement;    // forward due to cyclic dependency
  * }
  * \enddot
  */
-struct generate_statement : position_tagged
-{
-    ast::label                              label;
-    ast::generation_scheme                  generation_scheme;
-    ast::block_declarative_part             block_declarative_parts; // { block_declarative_item }
-    std::vector<ast::concurrent_statement>  concurrent_statements;
-    optional<ast::label>                    end_label;
+struct generate_statement : position_tagged {
+    ast::label label;
+    ast::generation_scheme generation_scheme;
+    ast::block_declarative_part block_declarative_parts;  // { block_declarative_item }
+    std::vector<ast::concurrent_statement> concurrent_statements;
+    optional<ast::label> end_label;
 };
 
-
-} } } // namespace eda.vhdl.ast
-
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_GENERATE_STATEMENT_HPP_ */
+}  // namespace eda::vhdl::ast

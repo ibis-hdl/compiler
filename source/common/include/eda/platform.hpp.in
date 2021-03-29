@@ -1,10 +1,12 @@
-// DO NOT EDIT! GENERATED AUTOMATICALLY BY CMAKE!
-
 #pragma once
 
-/// Variables as determined by CMake, see
-/// [How To Write Platform Checks](
-///  https://gitlab.kitware.com/cmake/community/-/wikis/doc/tutorials/How-To-Write-Platform-Checks)
+// DO NOT EDIT! GENERATED AUTOMATICALLY BY CMAKE!
+
+// file platform.hpp
+//
+// Variables as determined by CMake, see
+// [How To Write Platform Checks](
+//  https://gitlab.kitware.com/cmake/community/-/wikis/doc/tutorials/How-To-Write-Platform-Checks)
 
 #cmakedefine BUILD_PLATFORM_UNIX    1
 #cmakedefine BUILD_PLATFORM_WIN32   1
@@ -21,6 +23,7 @@
 
 namespace eda {
 
+    /// Enum which represents a platform
     enum class platform {
         Unix,       ///< is TRUE on all UNIX-like OS's, including Apple OS X and CygWin
         Win32,      ///< is TRUE on Windows. Prior to 2.8.4 this included CygWin

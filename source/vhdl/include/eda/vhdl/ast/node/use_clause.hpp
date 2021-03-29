@@ -1,22 +1,11 @@
-/*
- * use_clause.hpp
- *
- *  Created on: 10.05.2017
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_USE_CLAUSE_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_USE_CLAUSE_HPP_
-
+#pragma once
 
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/ast/node/selected_name.hpp>
 #include <vector>
 
-
-namespace eda { namespace vhdl { namespace ast {
-
+namespace eda::vhdl::ast {
 
 /*
  * The simple copy & paste of VHDL's BNF doesn't work here. The 93'er LRM
@@ -43,19 +32,13 @@ namespace eda { namespace vhdl { namespace ast {
  * respectively 'library_name.package_name.item' can't parsed that way.
  * Hence an own, specific ast node is used.
  */
-struct use_clause : position_tagged
-{
-   struct selected_name  : position_tagged {
-        std::vector<ast::name>      prefix_list;
-        ast::suffix                 suffix;
+struct use_clause : position_tagged {
+    struct selected_name : position_tagged {
+        std::vector<ast::name> prefix_list;
+        ast::suffix suffix;
     };
 
-    std::vector<selected_name>      list;
+    std::vector<selected_name> list;
 };
 
-
-
-} } } // namespace eda.vhdl.ast
-
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_USE_CLAUSE_HPP_ */
+}  // namespace eda::vhdl::ast

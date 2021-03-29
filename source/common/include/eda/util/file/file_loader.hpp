@@ -12,10 +12,9 @@
 
 namespace eda {
 class settings;
-}  // namespace eda
+}
 
-namespace eda {
-namespace util {
+namespace eda::util {
 
 ///
 /// @brief Utility class for file reading
@@ -120,5 +119,4 @@ private:
     bool const quiet;
 };
 
-}  // namespace util
-}  // namespace eda
+}  // namespace eda::util

@@ -1,25 +1,13 @@
-/*
- * discrete_range.hpp
- *
- *  Created on: 21.05.2017
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_DISCRETE_RANGE_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_DISCRETE_RANGE_HPP_
-
+#pragma once
 
 #include <eda/vhdl/ast/util/variant.hpp>
 
 #include <eda/vhdl/ast/util/nullary.hpp>
 #include <eda/vhdl/ast/node/range.hpp>
 
-
-namespace eda { namespace vhdl { namespace ast {
-
+namespace eda::vhdl::ast {
 
 struct subtype_indication;
-
 
 /**
  * Ast node cyclic dependency as:
@@ -32,18 +20,12 @@ struct subtype_indication;
  * }
  * \enddot
  */
-struct discrete_range : variant<
-    ast::nullary,
-    forward_ast<ast::subtype_indication>,   // discrete_subtype_indication
-    ast::range
->
-{
+struct discrete_range
+    : variant<ast::nullary,
+              forward_ast<ast::subtype_indication>,  // discrete_subtype_indication
+              ast::range> {
     using base_type::base_type;
     using base_type::operator=;
 };
 
-
-} } } // namespace eda.vhdl.ast
-
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_DISCRETE_RANGE_HPP_ */
+}  // namespace eda::vhdl::ast

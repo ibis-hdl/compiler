@@ -1,25 +1,11 @@
-/*
- * association_list.hpp
- *
- *  Created on: 03.06.2017
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_ASSOCIATION_LIST_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_ASSOCIATION_LIST_HPP_
-
+#pragma once
 
 #include <eda/vhdl/ast/node/association_element.hpp>
 #include <vector>
 
+namespace eda::vhdl::ast {
 
-namespace eda { namespace vhdl { namespace ast {
+struct association_list : std::vector<ast::association_element> {
+};
 
-
-struct association_list : std::vector<ast::association_element> { };
-
-
-} } } // namespace eda.vhdl.ast
-
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_ASSOCIATION_LIST_HPP_ */
+}  // namespace eda::vhdl::ast

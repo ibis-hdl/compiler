@@ -1,15 +1,6 @@
-/*
- * overloaded.hpp
- *
- *  Created on: 27.08.2018
- *      Author: olaf
- */
+#pragma once
 
-#ifndef SOURCES_COMMON_INCLUDE_EDA_SUPPORT_CXX_OVERLOADED_HPP_
-#define SOURCES_COMMON_INCLUDE_EDA_SUPPORT_CXX_OVERLOADED_HPP_
-
-namespace eda {
-namespace util {
+namespace eda::util {
 
 /**
  * Variant visitor overload for using with C++ lambda.
@@ -28,13 +19,12 @@ namespace util {
  *
  * Also, \see https://arne-mertz.de/2018/05/overload-build-a-variant-visitor-on-the-fly/
  */
-template <class... Ts> struct overloaded : Ts... {
+template <class... Ts>
+struct overloaded : Ts... {
     using Ts::operator()...;
 };
 
-template <class... Ts> overloaded(Ts...)->overloaded<Ts...>;
+template <class... Ts>
+overloaded(Ts...) -> overloaded<Ts...>;
 
-} // namespace util
-} // namespace eda
-
-#endif /* SOURCES_COMMON_INCLUDE_EDA_SUPPORT_CXX_OVERLOADED_HPP_ */
+}  // namespace eda::util

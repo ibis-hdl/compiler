@@ -1,10 +1,3 @@
-/*
- * on_error_base.cpp
- *
- *  Created on: 17.03.2017
- *      Author: olaf
- */
-
 #include <eda/vhdl/parser/on_error_base.hpp>
 
 #include <boost/locale/format.hpp>
@@ -14,9 +7,7 @@
 #include <unordered_map>
 #include <utility>
 
-namespace eda {
-namespace vhdl {
-namespace parser {
+namespace eda::vhdl::parser {
 
 using namespace std::string_view_literals;
 
@@ -302,6 +293,4 @@ std::string on_error_base::make_error_description(std::string_view which)
     return (format(translate("Error, expecting {1} here:")) % lookup(which)).str();
 }
 
-}  // namespace parser
-}  // namespace vhdl
-}  // namespace eda
+}  // namespace eda::vhdl::parser

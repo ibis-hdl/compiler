@@ -1,13 +1,4 @@
-/*
- * subprogram_declarative_part.hpp
- *
- *  Created on: 20.06.2017
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_SUBPROGRAM_DECLARATIVE_PART_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_SUBPROGRAM_DECLARATIVE_PART_HPP_
-
+#pragma once
 
 #include <eda/vhdl/ast/util/variant.hpp>
 
@@ -27,12 +18,9 @@
 #include <eda/vhdl/ast/node/group_declaration.hpp>
 #include <vector>
 
-
-namespace eda { namespace vhdl { namespace ast {
-
+namespace eda::vhdl::ast {
 
 struct subprogram_body;
-
 
 /**
  * Ast node cyclic dependency as:
@@ -45,28 +33,13 @@ struct subprogram_body;
  * }
  * \enddot
  */
-using subprogram_declarative_item = variant<
-    ast::nullary,
-    ast::subprogram_declaration,
-    forward_ast<ast::subprogram_body>,
-    ast::type_declaration,
-    ast::subtype_declaration,
-    ast::constant_declaration,
-    ast::variable_declaration,
-    ast::file_declaration,
-    ast::alias_declaration,
-    ast::attribute_declaration,
-    ast::attribute_specification,
-    ast::use_clause,
-    ast::group_template_declaration,
-    ast::group_declaration
->;
-
+using subprogram_declarative_item =
+    variant<ast::nullary, ast::subprogram_declaration, forward_ast<ast::subprogram_body>,
+            ast::type_declaration, ast::subtype_declaration, ast::constant_declaration,
+            ast::variable_declaration, ast::file_declaration, ast::alias_declaration,
+            ast::attribute_declaration, ast::attribute_specification, ast::use_clause,
+            ast::group_template_declaration, ast::group_declaration>;
 
 using subprogram_declarative_part = std::vector<ast::subprogram_declarative_item>;
 
-
-} } } // namespace eda.vhdl.ast
-
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_SUBPROGRAM_DECLARATIVE_PART_HPP_ */
+}  // namespace eda::vhdl::ast

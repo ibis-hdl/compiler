@@ -1,11 +1,10 @@
-// DO NOT EDIT! GENERATED AUTOMATICALLY BY CMAKE!
-
 #pragma once
 
+// DO NOT EDIT! GENERATED AUTOMATICALLY BY CMAKE!
 
-/// Variables as determined by CMake, see
-/// [How To Write Platform Checks](
-///  https://gitlab.kitware.com/cmake/community/-/wikis/doc/tutorials/How-To-Write-Platform-Checks)
+// Variables as determined by CMake, see
+// [How To Write Platform Checks](
+//  https://gitlab.kitware.com/cmake/community/-/wikis/doc/tutorials/How-To-Write-Platform-Checks)
 
 #cmakedefine EDA_HAVE_BUILTIN_UNREACHABLE 1
 #cmakedefine EDA_HAVE_BUILTIN_EXPECT 1
@@ -16,8 +15,8 @@
 
 /* -----------------------------------------------------------------------------
  * Compiler intrinsics
- * 
- * FixMe: I would expect those to be intrinsically tied to the optimizer in-situ, so 
+ *
+ * FixMe: I would expect those to be intrinsically tied to the optimizer in-situ, so
  * that moving them into wrapper functions would break them entirely.
  */
 

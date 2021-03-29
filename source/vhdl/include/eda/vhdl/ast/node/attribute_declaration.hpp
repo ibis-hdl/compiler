@@ -1,31 +1,15 @@
-/*
- * attribute_declaration.hpp
- *
- *  Created on: 14.05.2017
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_ATTRIBUTE_DECLARATION_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_ATTRIBUTE_DECLARATION_HPP_
-
+#pragma once
 
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/ast/node/identifier.hpp>
 #include <eda/vhdl/ast/node/name.hpp>
 
+namespace eda::vhdl::ast {
 
-namespace eda { namespace vhdl { namespace ast {
-
-
-struct attribute_declaration : position_tagged
-{
-    ast::identifier             identifier;
-    ast::name                   type_mark;
+struct attribute_declaration : position_tagged {
+    ast::identifier identifier;
+    ast::name type_mark;
 };
 
-
-} } } // namespace eda.vhdl.ast
-
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_ATTRIBUTE_DECLARATION_HPP_ */
+}  // namespace eda::vhdl::ast

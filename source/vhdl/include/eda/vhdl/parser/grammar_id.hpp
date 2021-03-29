@@ -1,16 +1,6 @@
-/*
- * grammar_id.hpp
- *
- *  Created on: 13.06.2018
- *      Author: olaf
- */
+#pragma once
 
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_ID_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_ID_HPP_
-
-namespace eda {
-namespace vhdl {
-namespace parser {
+namespace eda::vhdl::parser {
 
 /*
  * Parser Rule IDs
@@ -242,8 +232,4 @@ struct wait_statement_class;
 struct waveform_class;
 struct waveform_element_class;
 
-} // namespace parser
-} // namespace vhdl
-} // namespace eda
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_ID_HPP_ */
+}  // namespace eda::vhdl::parser

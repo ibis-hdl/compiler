@@ -1,12 +1,4 @@
-/*
- * context.hpp
- *
- *  Created on: 24.06.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_CONTEXT_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_CONTEXT_HPP_
+#pragma once
 
 #include <eda/vhdl/ast/util/string_span.hpp>
 #include <eda/vhdl/ast/util/string_span_hash.hpp>
@@ -18,10 +10,9 @@
 
 namespace eda {
 class settings;
-}  // namespace eda
+}
 
-namespace eda {
-namespace vhdl {
+namespace eda::vhdl {
 
 namespace detail {
 
@@ -152,15 +143,11 @@ public:
     bool error_free() const { return error_count == 0; }
 
 public:
-    // clang-format off
-    error_counter                                   error_count;
-    warning_counter                                 warning_count;
-    // clang-format on
+    error_counter error_count;
+    warning_counter warning_count;
 
 private:
-    // clang-format off
-    std::unordered_map<ast::string_span, int>       dummy;
-    // clang-format on
+    std::unordered_map<ast::string_span, int> dummy;
 };
 
 /**
@@ -177,9 +164,7 @@ public:
     std::ostream& print(std::ostream& os) const;
 
 private:
-    // clang-format off
-    context const&                                  ctx;
-    // clang-format on
+    context const& ctx;
 };
 
 static inline std::ostream& operator<<(std::ostream& os, failure_status const& status)
@@ -187,7 +172,4 @@ static inline std::ostream& operator<<(std::ostream& os, failure_status const& s
     return status.print(os);
 }
 
-}  // namespace vhdl
-}  // namespace eda
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_CONTEXT_HPP_ */
+}  // namespace eda::vhdl

@@ -1,15 +1,15 @@
-/// DO NOT EDIT! GENERATED AUTOMATICALLY BY CMAKE!
-
 #pragma once
+
+// DO NOT EDIT! GENERATED AUTOMATICALLY BY CMAKE!
 
 #include <string_view>
 
 namespace testsuite {
 namespace compile_builtin {
 
-///
-/// compile time builtin settings for testsuite/vhdl/ast
-///
+//
+// compile time builtin settings for testsuite/vhdl/ast
+//
 static constexpr std::string_view default_source_dir{ "@TESTSUITE_SOURCE_DIR@" };
 
 }  // namespace compile_builtin

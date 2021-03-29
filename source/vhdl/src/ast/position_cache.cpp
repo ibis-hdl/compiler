@@ -1,10 +1,3 @@
-/*
- * position_cache.cpp
- *
- *  Created on: 10.09.2018
- *      Author: olaf
- */
-
 #include <eda/vhdl/parser/iterator_type.hpp>  // for explicit template instantiation
 
 #include <eda/vhdl/ast/position_cache.hpp>
@@ -18,9 +11,7 @@
 #include <string>
 #include <iosfwd>
 
-namespace eda {
-namespace vhdl {
-namespace ast {
+namespace eda::vhdl::ast {
 
 template <typename IteratorT>
 std::size_t position_cache<IteratorT>::line_number(std::size_t file_id,
@@ -118,17 +109,11 @@ IteratorT position_cache<IteratorT>::get_line_start(std::size_t file_id, iterato
     return latest;
 }
 
-}  // namespace ast
-}  // namespace vhdl
-}  // namespace eda
+}  // namespace eda::vhdl::ast
 
-namespace eda {
-namespace vhdl {
-namespace ast {
+namespace eda::vhdl::ast {
 
 // Explicit template instantiation
 template class position_cache<parser::iterator_type>;
 
-}  // namespace ast
-}  // namespace vhdl
-}  // namespace eda
+}  // namespace eda::vhdl::ast

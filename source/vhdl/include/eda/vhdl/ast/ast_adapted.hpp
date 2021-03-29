@@ -1,12 +1,4 @@
-/*
- * ast_adapted.hpp
- *
- *  Created on: 15.03.2017
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_ADAPTED_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_ADAPTED_HPP_
+#pragma once
 
 #include <eda/vhdl/ast.hpp>
 
@@ -535,4 +527,4 @@ BOOST_FUSION_ADAPT_STRUCT(eda::vhdl::ast::waveform_element,
 
 // clang-format off
 
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_ADAPTED_HPP_ */
+

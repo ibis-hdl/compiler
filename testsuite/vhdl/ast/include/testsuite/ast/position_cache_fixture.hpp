@@ -1,12 +1,4 @@
-/*
- * position_cache_fixture.hpp
- *
- *  Created on: 06.09.2018
- *      Author: olaf
- */
-
-#ifndef TESTSUITE_VHDL_AST_INCLUDE_TESTSUITE_AST_POSITION_CACHE_FIXTURE_HPP_
-#define TESTSUITE_VHDL_AST_INCLUDE_TESTSUITE_AST_POSITION_CACHE_FIXTURE_HPP_
+#pragma once
 
 #include <eda/vhdl/ast/position_cache.hpp>
 #include <eda/vhdl/parser/iterator_type.hpp>
@@ -17,12 +9,11 @@
 #include <vector>
 #include <map>
 
-#include <testsuite/common/namespace_alias.hpp> // IWYU pragma: keep
+#include <testsuite/common/namespace_alias.hpp>  // IWYU pragma: keep
 
 namespace testsuite {
 
-struct position_cache_fixture
-{
+struct position_cache_fixture {
     position_cache_fixture();
     ~position_cache_fixture();
 
@@ -31,12 +22,10 @@ struct position_cache_fixture
     std::string test_case_source_dir() const;
     std::size_t load_reference(std::string const& file_name);
 
-    std::string const& reference_contents(std::size_t id) const {
-        return inputs[id];
-    }
+    std::string const& reference_contents(std::size_t id) const { return inputs[id]; }
 
-    std::tuple<parser::iterator_type, parser::iterator_type>
-        contents_range(std::size_t id, std::string_view str);
+    std::tuple<parser::iterator_type, parser::iterator_type> contents_range(std::size_t id,
+                                                                            std::string_view str);
 
     ast::position_tagged& addNode(std::string const& key, ast::position_tagged const& node);
     ast::position_tagged const& getNode(std::string const& key) const;
@@ -63,16 +52,11 @@ private:
     static std::string read_file(std::string const& file_name);
 
 private:
-    std::optional<std::string> mutable              input_path;
-    std::vector<std::string>                        inputs;
+    std::optional<std::string> mutable input_path;
+    std::vector<std::string> inputs;
 
     using node_map_type = std::map<std::string, ast::position_tagged>;
-    node_map_type                                   node_map;
+    node_map_type node_map;
 };
 
-
-} // namespace testsuite
-
-
-
-#endif /* TESTSUITE_VHDL_AST_INCLUDE_TESTSUITE_AST_POSITION_CACHE_FIXTURE_HPP_ */
+}  // namespace testsuite

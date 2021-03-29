@@ -1,12 +1,4 @@
-/*
- * grammar.hpp
- *
- *  Created on: 28.02.2017
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_HPP_
+#pragma once
 
 #include <eda/vhdl/ast.hpp>
 
@@ -18,22 +10,16 @@
 #include <eda/compiler/warnings_on.hpp>
 // clang-format on
 
-namespace eda {
-namespace vhdl {
-namespace parser {
+namespace eda::vhdl::parser {
 
 struct design_file_class;
 
-using design_file_type = x3::rule<design_file_class, ast::design_file>;
+using design_file_type = boost::spirit::x3::rule<design_file_class, ast::design_file>;
 
-#if !defined(DOXYGEN)
+#if !defined(DOXYGEN_DOCUMENTATION_BUILD)
 BOOST_SPIRIT_DECLARE(design_file_type)
 #endif
 
 parser::design_file_type const& grammar();
 
-} // namespace parser
-} // namespace vhdl
-} // namespace eda
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_HPP_ */
+}  // namespace eda::vhdl::parser

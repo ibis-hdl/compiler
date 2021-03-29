@@ -1,12 +1,4 @@
-/*
- * ansii_color.hpp
- *
- *  Created on: 05.08.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_ANSII_COLOR_HPP_
-#define SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_ANSII_COLOR_HPP_
+#pragma once
 
 #include <eda/color/attribute.hpp>
 #include <eda/color/detail/api.hpp>
@@ -17,8 +9,7 @@
 #include <algorithm>
 #include <cassert>
 
-namespace eda {
-namespace color {
+namespace eda::color {
 
 namespace detail {
 
@@ -28,10 +19,12 @@ public:
     using value_type = typename std::underlying_type<enum_type>::type;
 
 private:
+    // clang-format off
     // FixMe: Clang AddressSanitizer complains here:
     // https://wandbox.org/permlink/GfF0VgNLDRWOgkd1
     // stack-buffer-overflow .../ansii_color.hpp:33 in 
     // esc_printer<eda::color::attribute, 4ul>::esc_printer<0ul, 1ul, 2ul, 3ul>(std::initializer_list<eda::color::attribute>, std::integer_sequence<unsigned long, 0ul, 1ul, 2ul, 3ul>)
+    // clang-format on
     template <std::size_t... N>
     explicit esc_printer(std::initializer_list<enum_type> il, std::index_sequence<N...>)
         : std::array<value_type, SIZE>{ { static_cast<value_type>(il.begin()[N])... } }
@@ -103,37 +96,35 @@ public:
         count = 0;
     }
 
-    // clang-format off
-    std::size_t                                     count = 0;
-    static constexpr std::size_t                    size = SIZE;
+    std::size_t count = 0;
+    static constexpr std::size_t size = SIZE;
     /* ANSI Control Sequence Introducer/Initiator */
-    static constexpr char                           CSI[] = "\x1B[";
-    // clang-format on
+    static constexpr char CSI[] = "\x1B[";
 };
 
 template <typename enum_type, std::size_t SIZE>
-static inline std::ostream& operator<<(
-    std::ostream& os, esc_printer<enum_type, SIZE> const& printer)
+static inline std::ostream& operator<<(std::ostream& os,
+                                       esc_printer<enum_type, SIZE> const& printer)
 {
     return printer.print(os);
 }
 
 template <typename enum_type, std::size_t SIZE>
-static inline esc_printer<enum_type, SIZE> operator|(
-    esc_printer<enum_type, SIZE> lhs, esc_printer<enum_type, SIZE> const& rhs)
+static inline esc_printer<enum_type, SIZE> operator|(esc_printer<enum_type, SIZE> lhs,
+                                                     esc_printer<enum_type, SIZE> const& rhs)
 {
     lhs |= rhs;
     return lhs;
 }
 
-} // namespace detail
+}  // namespace detail
 
 using printer = detail::esc_printer<color::attribute, 4>;
 
 namespace text {
 color::printer const bold{ attribute::Text_Bold };
 color::printer const underscore{ attribute::Text_Underscore };
-} // namespace text
+}  // namespace text
 
 namespace fg {
 color::printer const black{ attribute::Foreground_Black };
@@ -144,7 +135,7 @@ color::printer const blue{ attribute::Foreground_Blue };
 color::printer const magenta{ attribute::Foreground_Magenta };
 color::printer const cyan{ attribute::Foreground_Cyan };
 color::printer const white{ attribute::Foreground_White };
-} // namespace fg
+}  // namespace fg
 
 namespace bg {
 color::printer const black{ attribute::Background_Black };
@@ -155,11 +146,8 @@ color::printer const blue{ attribute::Background_Blue };
 color::printer const magenta{ attribute::Background_Magenta };
 color::printer const cyan{ attribute::Background_Cyan };
 color::printer const white{ attribute::Background_White };
-} // namespace bg
+}  // namespace bg
 
 color::printer const color_off{ attribute::Attributes_Off };
 
-} // namespace color
-} // namespace eda
-
-#endif /* SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_ANSII_COLOR_HPP_ */
+}  // namespace eda::color

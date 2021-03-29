@@ -1,12 +1,4 @@
-/*
- * on_error_base.hpp
- *
- *  Created on: 19.07.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ON_ERROR_BASE_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ON_ERROR_BASE_HPP_
+#pragma once
 
 #include <eda/vhdl/parser/error_handler.hpp>  // IWYU pragma: keep
 
@@ -22,9 +14,7 @@ namespace eda::vhdl::parser {
 struct error_handler_tag;
 }
 
-namespace eda {
-namespace vhdl {
-namespace parser {
+namespace eda::vhdl::parser {
 
 /**
  * Base class for all AST nodes where the parser error handler can be called.
@@ -71,8 +61,4 @@ private:
     static std::string make_error_description(std::string_view which);
 };
 
-}  // namespace parser
-}  // namespace vhdl
-}  // namespace eda
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ON_ERROR_BASE_HPP_ */
+}  // namespace eda::vhdl::parser

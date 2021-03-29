@@ -1,21 +1,11 @@
-/*
- * api_windows.hpp
- *
- *  Created on: 07.09.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_API_WINDOWS_HPP_
-#define SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_API_WINDOWS_HPP_
+#pragma once
 
 #include <windows.h>
-#include <io.h> // _isatty, _fileno
+#include <io.h>  // _isatty, _fileno
 
 #include <iostream>
 
-namespace eda {
-namespace color {
-namespace api_windows {
+namespace eda::color::api_windows {
 
 class isatty {
     bool is_tty(std::streambuf const* rdbuf) const noexcept
@@ -62,13 +52,7 @@ public:
     constexpr operator HANDLE() const { return handle; }
 
 private:
-    // clang-format off
-    HANDLE const                                    handle;
-    // clang-format on
+    HANDLE const handle;
 };
 
-} // namespace api_windows
-} // namespace color
-} // namespace eda
-
-#endif /* SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_API_WINDOWS_HPP_ */
+}  // namespace eda::color::api_windows

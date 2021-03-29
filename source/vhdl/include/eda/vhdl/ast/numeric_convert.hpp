@@ -1,23 +1,19 @@
-/*
- * numeric_convert.hpp
- *
- *  Created on: 26.05.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_NUMERIC_CONVERT_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_NUMERIC_CONVERT_HPP_
+#pragma once
 
 #include <tuple>
 #include <iosfwd>
 
-namespace eda::vhdl::ast { struct based_literal; }
-namespace eda::vhdl::ast { struct bit_string_literal; }
-namespace eda::vhdl::ast { struct decimal_literal; }
+namespace eda::vhdl::ast {
+struct based_literal;
+}
+namespace eda::vhdl::ast {
+struct bit_string_literal;
+}
+namespace eda::vhdl::ast {
+struct decimal_literal;
+}
 
-namespace eda {
-namespace vhdl {
-namespace ast {
+namespace eda::vhdl::ast {
 
 /**
  * Convert the numeric literals to numeric types
@@ -65,13 +61,7 @@ private:
     class report_error;
 
 private:
-    // clang-format off
-    std::ostream&                                   os;
-    // clang-format on
+    std::ostream& os;
 };
 
-} // namespace ast
-} // namespace vhdl
-} // namespace eda
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_NUMERIC_CONVERT_HPP_ */
+}  // namespace eda::vhdl::ast

@@ -1,10 +1,3 @@
-/*
- * based_literal_test.cpp
- *
- *  Created on: 31.05.2018
- *      Author: olaf
- */
-
 #include <testsuite/vhdl_numeric_convert/numeric_parser.hpp>
 #include <testsuite/vhdl_numeric_convert/binary_string.hpp>
 
@@ -29,49 +22,45 @@
 #include <cmath>
 #include <vector>
 
-
-BOOST_AUTO_TEST_SUITE( numeric_convert )
-
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+BOOST_AUTO_TEST_SUITE(numeric_convert)
 
 namespace detail {
-
 
 /*******************************************************************************
  * generator helper functions
  ******************************************************************************/
 
-template<class T>
-typename std::enable_if<
-    std::is_integral<T>::value, std::string
->::type
-to_based_literal(unsigned base, T value, std::string const& postfix="")
+template <class T>
+typename std::enable_if<std::is_integral<T>::value, std::string>::type to_based_literal(
+    unsigned base, T value, std::string const& postfix = "")
 {
     using namespace testsuite::vhdl_numeric_convert::util;
 
     std::stringstream ss;
 
-    switch(base) {
-    case 2: {
-        ss << base << '#' <<      binary_string(value) << postfix << '#';
-        break;
-    }
-    case 8: {
-        ss << base << '#' <<       octal_string(value) << postfix << '#';
-        break;
-    }
-    case 10: {
-        ss << base << '#' <<                     value << postfix << '#';
-        break;
-    }
-    case 16: {
-        ss << base << '#' << hexadecimal_string(value) << postfix << '#';
-        break;
-    }
-    default:
-        // no assert, write marker
-        ss << "INVALID BASE SPECIFIER" << base;
-        std::cerr << ">>>>> ERROR in function: " << __FUNCTION__
-                  << "(), unexpected base " << base << " <<<<<\n";
+    switch (base) {
+        case 2: {
+            ss << base << '#' << binary_string(value) << postfix << '#';
+            break;
+        }
+        case 8: {
+            ss << base << '#' << octal_string(value) << postfix << '#';
+            break;
+        }
+        case 10: {
+            ss << base << '#' << value << postfix << '#';
+            break;
+        }
+        case 16: {
+            ss << base << '#' << hexadecimal_string(value) << postfix << '#';
+            break;
+        }
+        default:
+            // no assert, write marker
+            ss << "INVALID BASE SPECIFIER" << base;
+            std::cerr << ">>>>> ERROR in function: " << __FUNCTION__ << "(), unexpected base "
+                      << base << " <<<<<\n";
     }
 
     return ss.str();
@@ -112,25 +101,30 @@ to_based_literal(unsigned base, T value)
 }
 #endif
 
-} // namespace detail
-
+}  // namespace detail
 
 namespace /* anonymous */ {
 
-/* The numeric_convert utility writes messages, but concrete error messages
- * arn't checked. For debugging is useful to see them otherwise. Switch to
- * ostream sink to hide them or let's write to cerr to see them.
- * Note, using global numeric_convert object tests  implicit of state less
- * conversion, otherwise test must fail due to. */
-#if 1
-btt::output_test_stream nil_sink;
-auto const numeric_convert =  ast::numeric_convert{ nil_sink };
-#else
-auto const numeric_convert =  ast::numeric_convert{ std::cerr };
-#endif
+// The numeric_convert utility writes messages, but concrete error messages
+// aren't checked. For debugging is useful to see them otherwise. Switch to
+// ostream sink to hide them or let's write to cerr to see them.
+// Note, using global numeric_convert object tests  implicit of state less
+// conversion, otherwise test must fail due to. */
+//
+// Note: technically, we initialize globals that access extern objects,
+// and therefore can lead to order-of-initialization problems.
+// NOLINTNEXTLINE(cppcoreguidelines-interfaces-global-init)
+auto const numeric_convert = []() {
+    if constexpr (true /* no messages */) {
+        static btt::output_test_stream nil_sink;
+        return ast::numeric_convert{ nil_sink };
+    }
+    else {
+        return ast::numeric_convert(std::cerr);
+    }
+}();
 
-} // anonymous
-
+}  // namespace
 
 /*******************************************************************************
  * integer based_literal of different bases
@@ -165,17 +159,17 @@ std::vector<std::string> const integer_lit{
     "16#E#E1",
     "2#1110_0000#",
     // border cases
-    detail::to_based_literal( 2, std::numeric_limits<uint32_t>::max()),
-    detail::to_based_literal( 8, std::numeric_limits<uint32_t>::max()),
+    detail::to_based_literal(2, std::numeric_limits<uint32_t>::max()),
+    detail::to_based_literal(8, std::numeric_limits<uint32_t>::max()),
     detail::to_based_literal(10, std::numeric_limits<uint32_t>::max()),
     detail::to_based_literal(16, std::numeric_limits<uint32_t>::max()),
-    detail::to_based_literal( 2, std::numeric_limits<uint64_t>::max()),
-    detail::to_based_literal( 8, std::numeric_limits<uint64_t>::max()),
+    detail::to_based_literal(2, std::numeric_limits<uint64_t>::max()),
+    detail::to_based_literal(8, std::numeric_limits<uint64_t>::max()),
     detail::to_based_literal(10, std::numeric_limits<uint64_t>::max()),
     detail::to_based_literal(16, std::numeric_limits<uint64_t>::max()),
 };
 
-std::vector<eda::vhdl::intrinsic::unsigned_integer_type> integer_dec{
+std::vector<eda::vhdl::intrinsic::unsigned_integer_type> const integer_dec{
     // binary
     0,
     0,
@@ -207,10 +201,8 @@ std::vector<eda::vhdl::intrinsic::unsigned_integer_type> integer_dec{
     std::numeric_limits<uint64_t>::max(),
 };
 
-BOOST_DATA_TEST_CASE(
-    based_literal_integer,
-    utf_data::make(integer_lit) ^ integer_dec,
-    literal,                      N)
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+BOOST_DATA_TEST_CASE(based_literal_integer, utf_data::make(integer_lit) ^ integer_dec, literal, N)
 {
     using iterator_type = parser::iterator_type;
 
@@ -225,24 +217,21 @@ BOOST_DATA_TEST_CASE(
 
     auto const [conv_ok, value] = numeric_convert(ast_node);
     BOOST_REQUIRE(conv_ok);
-    BOOST_TEST( value == N );
+    BOOST_TEST(value == N);
 }
-
 
 /*******************************************************************************
  * integer based_literal overflow checks
  ******************************************************************************/
 std::vector<std::string> const integer_lit_uint64_ovflw{
-    detail::to_based_literal( 2, std::numeric_limits<uint64_t>::max(), "_0"),
-    detail::to_based_literal( 8, std::numeric_limits<uint64_t>::max(), "_0"),
+    detail::to_based_literal(2, std::numeric_limits<uint64_t>::max(), "_0"),
+    detail::to_based_literal(8, std::numeric_limits<uint64_t>::max(), "_0"),
     detail::to_based_literal(10, std::numeric_limits<uint64_t>::max(), "_0"),
     detail::to_based_literal(16, std::numeric_limits<uint64_t>::max(), "_0"),
 };
 
-BOOST_DATA_TEST_CASE(
-    based_literal_uint64_ovflw,
-    utf_data::make(integer_lit_uint64_ovflw),
-    literal)
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+BOOST_DATA_TEST_CASE(based_literal_uint64_ovflw, utf_data::make(integer_lit_uint64_ovflw), literal)
 {
     using iterator_type = parser::iterator_type;
 
@@ -253,22 +242,19 @@ BOOST_DATA_TEST_CASE(
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
     auto const [parse_ok, ast_node] = parse.based_literal(position_proxy);
-    BOOST_REQUIRE(parse_ok);    // must parse ...
+    BOOST_REQUIRE(parse_ok);  // must parse ...
 
     auto const [conv_ok, value] = numeric_convert(ast_node);
-    BOOST_REQUIRE(!conv_ok);    // ... but must fail to convert
+    BOOST_REQUIRE(!conv_ok);  // ... but must fail to convert
 
     boost::ignore_unused(value);
 }
-
 
 /*******************************************************************************
  * real based_literal of different bases
  ******************************************************************************/
 std::vector<std::string> const real_lit{
-    "10#0.0#",
-    "10#1.0#",
-    "10#42.66#e-1",
+    "10#0.0#", "10#1.0#", "10#42.66#e-1",
     /* Examples from
      * - IEEE_VHDL_1076-1993: Chapter 13.4.2 Based literals
      *
@@ -284,22 +270,16 @@ std::vector<std::string> const real_lit{
      *    + hex2dec('F')/base^2 ...
      *    ) ...
      * ) * base^2                                                             */
-    "16#F.FF#E+2",              // 4095.0
-    "2#1.1111_1111_111#E11",    // 4095.0
+    "16#F.FF#E+2",            // 4095.0
+    "2#1.1111_1111_111#E11",  // 4095.0
 };
 
-std::vector<eda::vhdl::intrinsic::real_type> real_dec{
-    0,
-    1,
-    4.266,
-    4095.0,
-    4095.0,
+std::vector<eda::vhdl::intrinsic::real_type> const real_dec{
+    0, 1, 4.266, 4095.0, 4095.0,
 };
 
-BOOST_DATA_TEST_CASE(
-    based_literal_real,
-    utf_data::make(real_lit) ^ real_dec,
-    literal,                   N)
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+BOOST_DATA_TEST_CASE(based_literal_real, utf_data::make(real_lit) ^ real_dec, literal, N)
 {
     using iterator_type = parser::iterator_type;
 
@@ -314,23 +294,18 @@ BOOST_DATA_TEST_CASE(
 
     auto const [conv_ok, value] = numeric_convert(ast_node);
     BOOST_REQUIRE(conv_ok);
-    BOOST_TEST( value == N );
+    BOOST_TEST(value == N);
 }
-
-
 
 /*******************************************************************************
  * FAILURE test for binary integer/real based_literal
  ******************************************************************************/
 std::vector<std::string> const lit_failure{
-    "3#1111_0000#", // parse ok, but unsupported base
+    "3#1111_0000#",  // parse ok, but unsupported base
 };
 
-
-BOOST_DATA_TEST_CASE(
-    based_literal_failure,
-    utf_data::make(lit_failure),
-    literal)
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+BOOST_DATA_TEST_CASE(based_literal_failure, utf_data::make(lit_failure), literal)
 {
     using iterator_type = parser::iterator_type;
 
@@ -349,11 +324,5 @@ BOOST_DATA_TEST_CASE(
     boost::ignore_unused(value);
 }
 
-
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_SUITE_END()
-
-
-
-
-
-

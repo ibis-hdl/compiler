@@ -1,20 +1,10 @@
-/*
- * grammar_decl.hpp
- *
- *  Created on: 13.06.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_DECL_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_DECL_HPP_
+#pragma once
 
 #include <eda/vhdl/parser/grammar_type.hpp>
 
-namespace eda {
-namespace vhdl {
-namespace parser {
+namespace eda::vhdl::parser {
 
-#if !defined(DOXYGEN)
+#if !defined(DOXYGEN_DOCUMENTATION_BUILD)
 
 BOOST_SPIRIT_DECLARE(abstract_literal_type);
 BOOST_SPIRIT_DECLARE(access_type_definition_type);
@@ -236,10 +226,6 @@ BOOST_SPIRIT_DECLARE(wait_statement_type);
 BOOST_SPIRIT_DECLARE(waveform_type);
 BOOST_SPIRIT_DECLARE(waveform_element_type);
 
-#endif // !defined(DOXYGEN)
+#endif  // !defined(DOXYGEN_DOCUMENTATION_BUILD)
 
-} // namespace parser
-} // namespace vhdl
-} // namespace eda
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_DECL_HPP_ */
+}  // namespace eda::vhdl::parser

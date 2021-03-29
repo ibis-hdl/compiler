@@ -1,12 +1,4 @@
-/*
- * parse.hpp
- *
- *  Created on: 22.06.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_PARSE_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_PARSE_HPP_
+#pragma once
 
 #include <eda/vhdl/parser/parser_config.hpp>
 
@@ -15,19 +7,13 @@
 #include <string_view>
 #include <exception>
 
-namespace eda {
-namespace vhdl {
-namespace ast {
+namespace eda::vhdl::ast {
 
 struct design_file;
 
-} // namespace ast
-} // namespace vhdl
-} // namespace eda
+}
 
-namespace eda {
-namespace vhdl {
-namespace parser {
+namespace eda::vhdl::parser {
 
 class parse {
 public:
@@ -40,20 +26,14 @@ public:
     bool operator()(std::string const& input, ast::design_file& design_file) /* const */;
 
 private:
-    static std::string make_exception_description(
-        std::exception const& exception, std::string_view filename);
+    static std::string make_exception_description(std::exception const& exception,
+                                                  std::string_view filename);
 
     static std::string make_exception_description(std::string_view filename);
 
 private:
-    // clang-format off
-    std::ostream&                                   os;
-    parser::error_handler_type /*const*/&           error_handler;
-    // clang-format on
+    std::ostream& os;
+    parser::error_handler_type /*const*/& error_handler;
 };
 
-} // namespace parser
-} // namespace vhdl
-} // namespace eda
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_PARSE_HPP_ */
+}  // namespace eda::vhdl::parser

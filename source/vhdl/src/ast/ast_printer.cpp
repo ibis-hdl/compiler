@@ -1,22 +1,13 @@
-/*
- * ast_printer.cpp
- *
- *  Created on: 18.03.2017
- *      Author: olaf
- */
-
 #include <eda/vhdl/ast/ast_printer.hpp>
 #include <eda/vhdl/ast.hpp>
 
 #include <boost/spirit/home/x3/support/traits/is_variant.hpp>
 
-#include <eda/support/cxx/overloaded.hpp>   // IWYU pragma: keep
+#include <eda/support/cxx/overloaded.hpp>  // IWYU pragma: keep
 
 #include <eda/util/cxx_bug_fatal.hpp>
 
-namespace eda {
-namespace vhdl {
-namespace ast {
+namespace eda::vhdl::ast {
 
 printer::printer(std::ostream& os_, uint16_t start_indent)
     : os{ os_, start_indent }
@@ -76,13 +67,9 @@ struct printer::symbol_scope<T, typename std::enable_if_t<x3::traits::is_variant
     }
 };
 
-}  // namespace ast
-}  // namespace vhdl
-}  // namespace eda
+}  // namespace eda::vhdl::ast
 
-namespace eda {
-namespace vhdl {
-namespace ast {
+namespace eda::vhdl::ast {
 
 void printer::operator()(abstract_literal const& node)
 {
@@ -2753,6 +2740,4 @@ void printer::visit(std::vector<T> const& vector)
     }
 }
 
-}  // namespace ast
-}  // namespace vhdl
-}  // namespace eda
+}  // namespace eda::vhdl::ast

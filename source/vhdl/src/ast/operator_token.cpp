@@ -1,18 +1,9 @@
-/*
- * operator_token.cpp
- *
- *  Created on: 06.04.2017
- *      Author: olaf
- */
-
 #include <eda/vhdl/ast/node/operator_token.hpp>
 
 #include <eda/util/cxx_bug_fatal.hpp>
 #include <iostream>
 
-namespace eda {
-namespace vhdl {
-namespace ast {
+namespace eda::vhdl::ast {
 
 std::ostream& operator<<(std::ostream& os, operator_token token)
 {
@@ -155,6 +146,4 @@ unsigned precedence(operator_token token)
 }
 #endif
 
-} // namespace ast
-} // namespace vhdl
-} // namespace eda
+}  // namespace eda::vhdl::ast

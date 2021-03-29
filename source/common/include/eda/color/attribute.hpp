@@ -1,19 +1,10 @@
-/*
- * attribute.hpp
- *
- *  Created on: 18.09.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_COMMON_INCLUDE_EDA_COLOR_ATTRIBUTE_HPP_
-#define SOURCES_COMMON_INCLUDE_EDA_COLOR_ATTRIBUTE_HPP_
+#pragma once
 
 #include <cstdint>
 #include <string_view>
 #include <optional>
 
-namespace eda {
-namespace color {
+namespace eda::color {
 
 enum class attribute : uint8_t {
     // Text attribute
@@ -47,9 +38,4 @@ std::optional<color::attribute> text_attr(std::string_view name);
 std::optional<color::attribute> foreground_attr(std::string_view name);
 std::optional<color::attribute> background_attr(std::string_view name);
 
-} // namespace color
-} // namespace eda
-
-
-
-#endif /* SOURCES_COMMON_INCLUDE_EDA_COLOR_ATTRIBUTE_HPP_ */
+}  // namespace eda::color

@@ -1,10 +1,3 @@
-/*
- * error_handler.cpp
- *
- *  Created on: 19.07.2018
- *      Author: olaf
- */
-
 #include <eda/vhdl/parser/error_handler.hpp>
 #include <eda/vhdl/parser/iterator_type.hpp>  // for explicit template instantiation
 
@@ -21,9 +14,7 @@
 #include <algorithm>
 #include <iostream>
 
-namespace eda {
-namespace vhdl {
-namespace parser {
+namespace eda::vhdl::parser {
 
 // AST/parse related error handler
 template <typename Iterator>
@@ -33,9 +24,9 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
     using boost::locale::format;
     using boost::locale::translate;
 
-    os << format(translate("in file {1}, line {2}:")) // --
-              % position_proxy.file_name()            // {1}
-              % position_proxy.line_number(error_pos) // [2]
+    os << format(translate("in file {1}, line {2}:"))  // --
+              % position_proxy.file_name()             // {1}
+              % position_proxy.line_number(error_pos)  // [2]
        << '\n';
 
     os << color::message::error(translate("Parse ERROR")) << ": "
@@ -53,17 +44,11 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
     return x3::error_handler_result::fail;
 }
 
-}  // namespace parser
-}  // namespace vhdl
-}  // namespace eda
+}  // namespace eda::vhdl::parser
 
-namespace eda {
-namespace vhdl {
-namespace parser {
+namespace eda::vhdl::parser {
 
 // Explicit template instantiation
 template class error_handler<parser::iterator_type>;
 
-}  // namespace parser
-}  // namespace vhdl
-}  // namespace eda
+}  // namespace eda::vhdl::parser

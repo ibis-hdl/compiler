@@ -1,21 +1,10 @@
-/*
- * rules.hpp
- *
- *  Created on: 14.06.2018
- *      Author: olaf
- */
-
-#ifndef TESTSUITE_VHDL_LIBRULES_INCLUDE_TESTSUITE_VHDL_RULES_HPP_
-#define TESTSUITE_VHDL_LIBRULES_INCLUDE_TESTSUITE_VHDL_RULES_HPP_
+#pragma once
 
 #include <eda/vhdl/parser/grammar_decl.hpp>
 
-
-namespace testsuite { namespace vhdl_parser {
-
+namespace testsuite::vhdl_parser {
 
 namespace parser = eda::vhdl::parser;
-
 
 parser::abstract_literal_type const& abstract_literal();
 parser::actual_part_type const& actual_part();
@@ -125,8 +114,4 @@ parser::variable_declaration_type const& variable_declaration();
 parser::wait_statement_type const& wait_statement();
 parser::waveform_type const& waveform();
 
-
-} } // namespace testsuite.vhdl_parser
-
-
-#endif /* TESTSUITE_VHDL_LIBRULES_INCLUDE_TESTSUITE_VHDL_RULES_HPP_ */
+}  // namespace testsuite::vhdl_parser

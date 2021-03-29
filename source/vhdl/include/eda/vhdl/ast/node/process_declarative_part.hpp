@@ -1,13 +1,4 @@
-/*
- * process_declarative_part.hpp
- *
- *  Created on: 17.06.2017
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_PROCESS_DECLARATIVE_PART_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_PROCESS_DECLARATIVE_PART_HPP_
-
+#pragma once
 
 #include <eda/vhdl/ast/util/variant.hpp>
 
@@ -27,33 +18,15 @@
 #include <eda/vhdl/ast/node/variable_declaration.hpp>
 #include <vector>
 
+namespace eda::vhdl::ast {
 
-namespace eda { namespace vhdl { namespace ast {
+using process_declarative_item =
+    variant<nullary, alias_declaration, attribute_declaration, attribute_specification,
+            constant_declaration, file_declaration, group_declaration, group_template_declaration,
+            subprogram_body, subprogram_declaration, subtype_declaration, type_declaration,
+            use_clause, variable_declaration>;
 
+struct process_declarative_part : std::vector<ast::process_declarative_item> {
+};
 
-using process_declarative_item = variant<
-    nullary,
-    alias_declaration,
-    attribute_declaration,
-    attribute_specification,
-    constant_declaration,
-    file_declaration,
-    group_declaration,
-    group_template_declaration,
-    subprogram_body,
-    subprogram_declaration,
-    subtype_declaration,
-    type_declaration,
-    use_clause,
-    variable_declaration
->;
-
-
-struct process_declarative_part : std::vector<ast::process_declarative_item> { };
-
-
-} } } // namespace eda.vhdl.ast
-
-
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_PROCESS_DECLARATIVE_PART_HPP_ */
+}  // namespace eda::vhdl::ast

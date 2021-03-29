@@ -1,9 +1,6 @@
-/*
- * compiler_pop.hpp
- *
- *  Created on: 21.06.2018
- *      Author: olaf
- */
+// IWYU pragma: private, include <eda/compiler/warnings_on.hpp>
+//
+// Note: intentionally no header guard / pragma once
 
 #if defined(__clang__)
 #pragma clang diagnostic pop

@@ -1,20 +1,11 @@
-/*
- * winapi_color.hpp
- *
- *  Created on: 09.08.2018
- *      Author: olpetzol
- */
-
-#ifndef SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_WINAPI_COLOR_HPP_
-#define SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_WINAPI_COLOR_HPP_
+#pragma once
 
 #include <eda/color/attribute.hpp>
 #include <eda/color/detail/api.hpp>
 
 #include <iostream>
 
-namespace eda {
-namespace color {
+namespace eda::color {
 
 namespace detail {
 
@@ -213,7 +204,4 @@ color::printer const white{ attribute::Background_White };
 
 color::printer const color_off(attribute::Attributes_Off);
 
-}  // namespace color
-}  // namespace eda
-
-#endif /* SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_WINAPI_COLOR_HPP_ */
+}  // namespace eda::color

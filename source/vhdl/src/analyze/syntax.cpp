@@ -1,10 +1,3 @@
-/*
- * syntax.cpp
- *
- *  Created on: 24.06.2018
- *      Author: olaf
- */
-
 #include <eda/vhdl/analyze/syntax.hpp>
 #include <eda/vhdl/analyze/error_handler.hpp>
 #include <eda/vhdl/analyze/check/label_match.hpp>
@@ -34,9 +27,7 @@
 #include <sstream>
 #include <utility>
 
-namespace eda {
-namespace vhdl {
-namespace analyze {
+namespace eda::vhdl::analyze {
 
 bool syntax_worker::success() const { return context.error_count == 0; }
 
@@ -180,6 +171,4 @@ void syntax_worker::operator()(ast::process_statement const& node, std::string_v
     keyword_matches(node, node_name);  // check postponed
 }
 
-}  // namespace analyze
-}  // namespace vhdl
-}  // namespace eda
+}  // namespace eda::vhdl::analyze

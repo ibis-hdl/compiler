@@ -1,25 +1,10 @@
-/*
- * actual_parameter_part.hpp
- *
- *  Created on: 03.06.2017
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_ACTUAL_PARAMETER_PART_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_ACTUAL_PARAMETER_PART_HPP_
-
+#pragma once
 
 #include <eda/vhdl/ast/node/association_list.hpp>
 #include <vector>
 
-
-namespace eda { namespace vhdl { namespace ast {
-
+namespace eda::vhdl::ast {
 
 using actual_parameter_part = association_list;
 
-
-} } } // namespace eda.vhdl.ast
-
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_ACTUAL_PARAMETER_PART_HPP_ */
+}

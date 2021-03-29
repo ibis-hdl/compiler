@@ -1,12 +1,4 @@
-/*
- * data_set.hpp
- *
- *  Created on: 22.06.2018
- *      Author: olaf
- */
-
-#ifndef TESTSUITE_COMMON_INCLUDE_TESTSUITE_COMMON_DATA_SET_HPP_
-#define TESTSUITE_COMMON_INCLUDE_TESTSUITE_COMMON_DATA_SET_HPP_
+#pragma once
 
 #include <testsuite/common/namespace_alias.hpp>  // IWYU pragma: keep
 
@@ -109,18 +101,10 @@ private:
 
 }  // namespace testsuite
 
-namespace boost {
-namespace unit_test {
-namespace data {
-namespace monomorphic {
+namespace boost::unit_test::data::monomorphic {
 
 template <>
 struct is_dataset<testsuite::dataset_loader> : boost::mpl::true_ {
 };
 
-}  // namespace monomorphic
-}  // namespace data
-}  // namespace unit_test
-}  // namespace boost
-
-#endif /* TESTSUITE_COMMON_INCLUDE_TESTSUITE_COMMON_DATA_SET_HPP_ */
+}  // namespace boost::unit_test::data::monomorphic

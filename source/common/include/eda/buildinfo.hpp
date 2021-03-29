@@ -1,21 +1,17 @@
-#ifndef SOURCES_COMMON_INCLUDE_EDA_BUILDINFO_HPP_
-#define SOURCES_COMMON_INCLUDE_EDA_BUILDINFO_HPP_
+#pragma once
 
 #include <iosfwd>
 
 namespace eda {
 
-class buildinfo 
-{
+class buildinfo {
 public:
     static std::ostream& print_on(std::ostream& os);
 };
 
-static inline
-std::ostream& operator<< (std::ostream& os, buildinfo const& info) {
+static inline std::ostream& operator<<(std::ostream& os, buildinfo const& info)
+{
     return info.print_on(os);
 }
 
-} // namespace eda
-
-#endif // SOURCES_COMMON_INCLUDE_EDA_BUILDINFO_HPP_
+}  // namespace eda

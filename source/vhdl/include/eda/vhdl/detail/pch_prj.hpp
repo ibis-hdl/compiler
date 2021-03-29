@@ -1,12 +1,4 @@
-/*
- * pch_prj.hpp
- *
- *  Created on: 21.02.2021
- *      Author: olaf
- */
-
-#ifndef SOURCES_IBIS_INCLUDE_VHDL_DETAIL_PCH_PRJ_HPP_
-#define SOURCES_IBIS_INCLUDE_VHDL_DETAIL_PCH_PRJ_HPP_
+#pragma once
 
 #include <eda/color/message.hpp>
 
@@ -25,7 +17,7 @@
 #include <eda/vhdl/analyze/syntax.hpp>
 
 #include <eda/vhdl/ast_fwd.hpp>
-#include <eda/vhdl/ast.hpp> // XXX forward
+#include <eda/vhdl/ast.hpp>  // XXX forward
 #include <eda/vhdl/ast/ast_adapted.hpp>
 #include <eda/vhdl/ast/ast_printer.hpp>
 #include <eda/vhdl/ast/ast_stats.hpp>
@@ -245,6 +237,3 @@
 #include <eda/vhdl/type.hpp>
 
 //#include <eda/vhdl/util/literal_ellipsis.hpp> // FixMe: Not found
-
-
-#endif /* SOURCES_IBIS_INCLUDE_VHDL_DETAIL_PCH_PRJ_HPP_ */

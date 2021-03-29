@@ -1,24 +1,11 @@
-/*
- * optional.hpp
- *
- *  Created on: 11.06.2017
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_OPTIONAL_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_OPTIONAL_HPP_
+#pragma once
 
 #include <boost/optional.hpp>
 
-namespace eda {
-namespace vhdl {
-namespace ast {
+namespace eda::vhdl::ast {
 
 /** convenience alias */
-template <typename T> using optional = boost::optional<T>;
+template <typename T>
+using optional = boost::optional<T>;
 
-} // namespace ast
-} // namespace vhdl
-} // namespace eda
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_OPTIONAL_HPP_ */
+}  // namespace eda::vhdl::ast

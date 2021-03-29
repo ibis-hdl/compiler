@@ -1,13 +1,4 @@
-/*
- * instantiation_list.hpp
- *
- *  Created on: 17.06.2017
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_INSTANTIATION_LIST_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_INSTANTIATION_LIST_HPP_
-
+#pragma once
 
 #include <eda/vhdl/ast/util/variant.hpp>
 
@@ -16,25 +7,16 @@
 #include <eda/vhdl/ast/node/label.hpp>
 #include <vector>
 
-
-namespace eda { namespace vhdl { namespace ast {
-
+namespace eda::vhdl::ast {
 
 using instantiation_label_list = std::vector<ast::label>;
 
-
-struct instantiation_list : variant<
-    nullary,
-    instantiation_label_list,
-    keyword_token               // OTHERS | ALL
->
-{
+struct instantiation_list
+    : variant<nullary, instantiation_label_list,
+              keyword_token  // OTHERS | ALL
+              > {
     using base_type::base_type;
     using base_type::operator=;
 };
 
-
-} } } // namespace eda.vhdl.ast
-
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_INSTANTIATION_LIST_HPP_ */
+}  // namespace eda::vhdl::ast

@@ -1,12 +1,4 @@
-/*
- * signal_handler.hpp
- *
- *  Created on: 14.09.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_IBIS_INCLUDE_IBIS_SIGNAL_HANDLER_HPP_
-#define SOURCES_IBIS_INCLUDE_IBIS_SIGNAL_HANDLER_HPP_
+#pragma once
 
 #include <string_view>
 
@@ -16,6 +8,4 @@ void register_signal_handlers();
 
 std::string_view signal_name(int sig_num);
 
-} // namespace ibis
-
-#endif /* SOURCES_IBIS_INCLUDE_IBIS_SIGNAL_HANDLER_HPP_ */
+}  // namespace ibis

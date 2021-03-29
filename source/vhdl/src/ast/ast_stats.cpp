@@ -1,10 +1,3 @@
-/*
- * ast_stats.cpp
- *
- *  Created on: 15.08.2018
- *      Author: olaf
- */
-
 #include <eda/vhdl/ast/ast_stats.hpp>
 
 #include <eda/vhdl/ast/basic_ast_walker.hpp>
@@ -17,11 +10,11 @@
 #include <string>
 #include <iostream>
 
-namespace eda::vhdl::ast { struct position_tagged; }
+namespace eda::vhdl::ast {
+struct position_tagged;
+}
 
-namespace eda {
-namespace vhdl {
-namespace ast {
+namespace eda::vhdl::ast {
 
 namespace detail {
 
@@ -127,6 +120,4 @@ std::ostream& ast_stats::print(std::ostream& os) const
     return os;
 }
 
-}  // namespace ast
-}  // namespace vhdl
-}  // namespace eda
+}  // namespace eda::vhdl::ast

@@ -1,18 +1,9 @@
-/*
- * rules.cpp
- *
- *  Created on: 14.06.2018
- *      Author: olaf
- */
-
 #include <testsuite/vhdl/rules.hpp>
 
 #include <eda/vhdl/parser/grammar_def.hpp>
 #include <eda/vhdl/parser/parser_config.hpp>
 
-namespace eda {
-namespace vhdl {
-namespace parser {
+namespace eda::vhdl::parser {
 
 BOOST_SPIRIT_INSTANTIATE(identifier_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(identifier_list_type, iterator_type, context_type);
@@ -26,6 +17,4 @@ BOOST_SPIRIT_INSTANTIATE(interface_file_declaration_type, iterator_type, context
 BOOST_SPIRIT_INSTANTIATE(interface_signal_declaration_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(interface_variable_declaration_type, iterator_type, context_type);
 
-} // namespace parser
-} // namespace vhdl
-} // namespace eda
+}  // namespace eda::vhdl::parser

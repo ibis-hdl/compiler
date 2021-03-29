@@ -1,9 +1,9 @@
 #pragma once
 
-namespace std { // NOLINT(cert-dcl58-cpp)
-    namespace filesystem { }
+// NOLINTNEXTLINE(cert-dcl58-cpp)
+namespace std::filesystem {
 }
 
 namespace ibis {
-    namespace fs = std::filesystem;
+namespace fs = std::filesystem;
 }

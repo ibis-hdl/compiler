@@ -1,18 +1,10 @@
-/*
- * rules.cpp
- *
- *  Created on: 14.06.2018
- *      Author: olaf
- */
-
 #include <testsuite/vhdl/rules.hpp>
 
 #include <eda/vhdl/parser/grammar_type.hpp>
 #include <eda/vhdl/parser/grammar_def.hpp>
 //#include <eda/vhdl/parser/parser_config.hpp>
 
-namespace testsuite {
-namespace vhdl_parser {
+namespace testsuite::vhdl_parser {
 
 // clang-format off
 parser::abstract_literal_type const& abstract_literal() {
@@ -444,5 +436,4 @@ parser::waveform_type const& waveform() {
 }
 // clang-format on
 
-} // namespace vhdl_parser
-} // namespace testsuite
+}  // namespace testsuite::vhdl_parser

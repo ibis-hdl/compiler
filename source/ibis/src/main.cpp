@@ -1,10 +1,3 @@
-/*
- * main.cpp
- *
- *  Created on: 29.07.2018
- *      Author: olaf
- */
-
 #include <ibis/init.hpp>
 
 #include <eda/settings.hpp>

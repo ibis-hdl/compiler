@@ -1,12 +1,4 @@
-/*
- * assert_failure.hpp
- *
- *  Created on: 02.04.2017
- *      Author: olaf
- */
-
-#ifndef SOURCES_COMMON_INCLUDE_EDA_EXCEPTION_ASSERT_FAILURE_HPP_
-#define SOURCES_COMMON_INCLUDE_EDA_EXCEPTION_ASSERT_FAILURE_HPP_
+#pragma once
 
 #include <stdexcept>
 
@@ -25,7 +17,9 @@ namespace eda {
  *
  * \todo Throwing assert rework
  */
-struct assert_failure : public boost::exception, public std::logic_error {
+struct assert_failure
+    : public boost::exception
+    , public std::logic_error {
     explicit assert_failure(std::string const& message)
         : std::logic_error{ message }
     {
@@ -34,6 +28,4 @@ struct assert_failure : public boost::exception, public std::logic_error {
     }
 };
 
-} // namespace eda
-
-#endif /* SOURCES_COMMON_INCLUDE_EDA_EXCEPTION_ASSERT_FAILURE_HPP_ */
+}  // namespace eda

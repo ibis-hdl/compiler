@@ -1,10 +1,3 @@
-/*
- * ctx.cpp
- *
- *  Created on: 24.06.2018
- *      Author: olaf
- */
-
 #include <eda/vhdl/context.hpp>
 
 #include <eda/vhdl/ast/util/string_span_hash.hpp>
@@ -18,8 +11,7 @@
 #include <algorithm>
 #include <string>
 
-namespace eda {
-namespace vhdl {
+namespace eda::vhdl {
 
 context::context()
 {
@@ -96,5 +88,4 @@ std::ostream& failure_status::print(std::ostream& os) const
     return os;
 }
 
-}  // namespace vhdl
-}  // namespace eda
+}  // namespace eda::vhdl

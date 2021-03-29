@@ -1,10 +1,3 @@
-/*
- * file_loader.cpp
- *
- *  Created on: 31.07.2018
- *      Author: olaf
- */
-
 #include <eda/util/file/file_loader.hpp>
 
 #include <eda/settings.hpp>
@@ -21,8 +14,7 @@
 #include <ratio>
 #include <system_error>
 
-namespace eda {
-namespace util {
+namespace eda::util {
 
 file_loader::file_loader(std::ostream& os_, eda::settings const& setting)
     : os{ os_ }
@@ -204,5 +196,4 @@ std::time_t file_loader::timesstamp(fs::path const& filename) const
     return cftime;
 }
 
-}  // namespace util
-}  // namespace eda
+}  // namespace eda::util

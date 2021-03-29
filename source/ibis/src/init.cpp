@@ -1,10 +1,3 @@
-/*
- * init.cpp
- *
- *  Created on: 07.08.2018
- *      Author: olaf
- */
-
 #include <ibis/init.hpp>
 #include <ibis/signal_handler.hpp>
 #include <ibis/version.hpp>
@@ -311,7 +304,8 @@ void init::register_signal_handlers() { ibis::register_signal_handlers(); }
 
 void init::user_config_message_color()
 {
-    static const char default_cfg_json[] = R"({
+    static const std::string_view default_cfg_json{
+        R"({
   "message": {
     "failure": {
       "style": {
@@ -337,7 +331,8 @@ void init::user_config_message_color()
       }
     }
   }
-})";
+})"
+    };
 
     bool const force_color = [&] { return setting["force-color"]; }();
 
@@ -353,9 +348,9 @@ void init::user_config_message_color()
     using namespace eda::color;
     namespace rjson = rapidjson;
 
-    auto const parse_json = [&quiet](char const json[]) {
+    auto const parse_json = [&quiet](std::string_view json) {
         rjson::Document document;
-        if (document.Parse(json).HasParseError()) {
+        if (document.Parse(json.data()).HasParseError()) {
             if (!quiet) {
                 std::cerr << message::error("Error:") << " parsing JSON configuration file: "
                           << rjson::GetParseError_En(document.GetParseError())  // --
@@ -396,16 +391,16 @@ void init::user_config_message_color()
         print_json(default_config);
     }
 
-    auto const get_formatter = [&](char const json_ptr[]) {
+    auto const get_formatter = [&](std::string_view json_ptr) {
         eda::color::printer format;
 
         if (rjson::Value* style =
-                rjson::GetValueByPointer(default_config, rjson::Pointer(json_ptr))) {
+                rjson::GetValueByPointer(default_config, rjson::Pointer(json_ptr.data()))) {
             for (auto const& object : style->GetObject()) {
-                auto const name = object.name.GetString();
-                auto const attr_name = object.value.GetString();
+                std::string_view const name = object.name.GetString();
+                std::string_view const attr_name = object.value.GetString();
 
-                auto const update_format = [&](char const attr_name[],
+                auto const update_format = [&](std::string_view attr_name,
                                                auto const attribute_getter) {
                     auto const attr{ attribute_getter(attr_name) };
                     if (attr) {

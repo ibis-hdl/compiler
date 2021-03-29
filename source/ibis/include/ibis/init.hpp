@@ -1,12 +1,4 @@
-/*
- * init.hpp
- *
- *  Created on: 07.08.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_IBIS_INCLUDE_IBIS_INIT_HPP_
-#define SOURCES_IBIS_INCLUDE_IBIS_INIT_HPP_
+#pragma once
 
 namespace eda {
 class settings;
@@ -34,11 +26,7 @@ private:
     void user_config_message_color();
 
 private:
-    // clang-format off
-    eda::settings&                                  setting;
-    // clang-format on
+    eda::settings& setting;
 };
 
-} // namespace ibis
-
-#endif /* SOURCES_IBIS_INCLUDE_IBIS_INIT_HPP_ */
+}  // namespace ibis

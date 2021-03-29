@@ -1,21 +1,11 @@
-/*
- * api_unix.hpp
- *
- *  Created on: 07.09.2018
- *      Author: olaf
- */
+#pragma once
 
-#ifndef SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_API_UNIX_HPP_
-#define SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_API_UNIX_HPP_
-
-#include <cstdio> // fileno
-#include <unistd.h> // isatty
+#include <cstdio>    // fileno
+#include <unistd.h>  // isatty
 
 #include <iostream>
 
-namespace eda {
-namespace color {
-namespace api_unix {
+namespace eda::color::api_unix {
 
 class isatty {
     bool is_tty(std::streambuf const* rdbuf) const noexcept
@@ -38,13 +28,7 @@ public:
     constexpr operator bool() const { return tty; }
 
 private:
-    // clang-format off
-    bool const                                      tty;
-    // clang-format on
+    bool const tty;
 };
 
-} // namespace api_unix
-} // namespace color
-} // namespace eda
-
-#endif /* SOURCES_COMMON_INCLUDE_EDA_COLOR_DETAIL_API_UNIX_HPP_ */
+}  // namespace eda::color::api_unix

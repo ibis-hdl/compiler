@@ -133,10 +133,12 @@ if(DEVELOPER_RUN_CLANG_TIDY)
     # '-header-filter' overrides the 'HeaderFilterRegex' option in .clang-tidy file,
     # using POSIX RE expression (ERE) syntax (see llvm::Regex Class Reference)
     set(_cltidy_filter_re "^((?!(/external/|/boost/|/testsuite/)).)*$")
-    set(_cltidy_checks    "-*,modernize-*")
+    # clang-tidy lookup for .clang-tidy upwards and uses it
     set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXECUTABLE};-header-filter='${_cltidy_filter_re}'")
-    # alternative/temporary
-    #set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXECUTABLE};-checks=${_cltidy_checks};-header-filter='${_cltidy_filter_re}'")
+    # ... alternatively apply some fixes
+    #set(_cltidy_checks "-*,modernize-concat-nested-namespaces")
+    #set(_cltidy_fix    "-fix -fix-errors")
+    #set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXECUTABLE};-checks=${_cltidy_checks};${_cltidy_fix};-header-filter='${_cltidy_filter_re}'")
 
     # About [How to integrate clang-tidy with CMake](
     #  https://gitlab.kitware.com/cmake/cmake/-/issues/18926):
@@ -226,6 +228,18 @@ if(DEVELOPER_RUN_CLANG_FORMAT)
     endif()
 endif()
 
+
+include(cmake/CPM.cmake)
+
+CPMAddPackage(
+  NAME Format.cmake
+  VERSION 1.7.0
+  GITHUB_REPOSITORY TheLartians/Format.cmake
+  OPTIONS # set to yes skip cmake formatting
+          "FORMAT_SKIP_CMAKE YES"
+          # path to exclude (optional, supports regular expressions)
+          "CMAKE_FORMAT_EXCLUDE cmake/CPM.cmake"
+)
 
 ################################################################################
 # CMake Miscellaneous

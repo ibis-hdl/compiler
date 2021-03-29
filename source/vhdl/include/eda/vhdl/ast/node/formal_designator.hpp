@@ -1,24 +1,9 @@
-/*
- * formal_designator.hpp
- *
- *  Created on: 03.06.2017
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_FORMAL_DESIGNATOR_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_FORMAL_DESIGNATOR_HPP_
-
+#pragma once
 
 #include <eda/vhdl/ast/node/name.hpp>
 
-
-namespace eda { namespace vhdl { namespace ast {
-
+namespace eda::vhdl::ast {
 
 using formal_designator = ast::name;
 
-
-} } } // namespace eda.vhdl.ast
-
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_FORMAL_DESIGNATOR_HPP_ */
+}

@@ -1,12 +1,4 @@
-/*
- * pch.hpp
- *
- *  Created on: 21.02.2021
- *      Author: olaf
- */
-
-#ifndef SOURCES_IBIS_INCLUDE_VHDL_DETAIL_PCH_HPP_
-#define SOURCES_IBIS_INCLUDE_VHDL_DETAIL_PCH_HPP_
+#pragma once
 
 #include <algorithm>
 #include <cassert>
@@ -38,5 +30,3 @@
 #include <boost/range.hpp>
 //#include <boost/spirit/home/x3.hpp>
 #include <boost/variant.hpp>
-
-#endif /* SOURCES_IBIS_INCLUDE_VHDL_DETAIL_PCH_HPP_ */

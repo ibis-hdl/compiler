@@ -1,41 +1,31 @@
-/*
- * grammar_type.hpp
- *
- *  Created on: 13.06.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_TYPE_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_TYPE_HPP_
+#pragma once
 
 #include <eda/vhdl/ast.hpp>
 #include <eda/vhdl/parser/grammar_id.hpp>
 
 #include <boost/spirit/home/x3/core.hpp>
-#include <boost/spirit/home/x3/nonterminal/rule.hpp> // Note, alone doesn't compile
+#include <boost/spirit/home/x3/nonterminal/rule.hpp>  // Note, alone doesn't compile
 
-namespace eda {
-namespace vhdl {
-namespace parser {
+namespace eda::vhdl::parser {
 
 // clang-format off
-using abstract_literal_type = x3::rule<abstract_literal_class, ast::abstract_literal>;
-using access_type_definition_type = x3::rule<access_type_definition_class, ast::access_type_definition>;
-using actual_designator_type = x3::rule<actual_designator_class, ast::actual_designator>;
-using actual_parameter_part_type = x3::rule<actual_parameter_part_class, ast::actual_parameter_part>;
-using actual_part_type = x3::rule<actual_part_class, ast::actual_part>;
-using aggregate_type = x3::rule<aggregate_class, ast::aggregate>;
-using alias_declaration_type = x3::rule<alias_declaration_class, ast::alias_declaration>;
-using alias_designator_type = x3::rule<alias_designator_class, ast::alias_designator>;
-using allocator_type = x3::rule<allocator_class, ast::allocator>;
-using architecture_body_type = x3::rule<architecture_body_class, ast::architecture_body>;
-using architecture_declarative_part_type = x3::rule<architecture_declarative_part_class, ast::architecture_declarative_part>;
-using architecture_statement_part_type = x3::rule<architecture_statement_part_class, ast::architecture_statement_part>;
-using array_type_definition_type = x3::rule<array_type_definition_class, ast::array_type_definition>;
-using assertion_type = x3::rule<assertion_class, ast::assertion>;
-using assertion_statement_type = x3::rule<assertion_statement_class, ast::assertion_statement>;
-using association_element_type = x3::rule<association_element_class, ast::association_element>;
-using association_list_type = x3::rule<association_list_class, ast::association_list>;
+using abstract_literal_type = boost::spirit::x3::rule<abstract_literal_class, ast::abstract_literal>;
+using access_type_definition_type = boost::spirit::x3::rule<access_type_definition_class, ast::access_type_definition>;
+using actual_designator_type = boost::spirit::x3::rule<actual_designator_class, ast::actual_designator>;
+using actual_parameter_part_type = boost::spirit::x3::rule<actual_parameter_part_class, ast::actual_parameter_part>;
+using actual_part_type = boost::spirit::x3::rule<actual_part_class, ast::actual_part>;
+using aggregate_type = boost::spirit::x3::rule<aggregate_class, ast::aggregate>;
+using alias_declaration_type = boost::spirit::x3::rule<alias_declaration_class, ast::alias_declaration>;
+using alias_designator_type = boost::spirit::x3::rule<alias_designator_class, ast::alias_designator>;
+using allocator_type = boost::spirit::x3::rule<allocator_class, ast::allocator>;
+using architecture_body_type = boost::spirit::x3::rule<architecture_body_class, ast::architecture_body>;
+using architecture_declarative_part_type = boost::spirit::x3::rule<architecture_declarative_part_class, ast::architecture_declarative_part>;
+using architecture_statement_part_type = boost::spirit::x3::rule<architecture_statement_part_class, ast::architecture_statement_part>;
+using array_type_definition_type = boost::spirit::x3::rule<array_type_definition_class, ast::array_type_definition>;
+using assertion_type = boost::spirit::x3::rule<assertion_class, ast::assertion>;
+using assertion_statement_type = boost::spirit::x3::rule<assertion_statement_class, ast::assertion_statement>;
+using association_element_type = boost::spirit::x3::rule<association_element_class, ast::association_element>;
+using association_list_type = boost::spirit::x3::rule<association_list_class, ast::association_list>;
 using attribute_declaration_type = x3::rule<attribute_declaration_class, ast::attribute_declaration>;
 using attribute_designator_type = x3::rule<attribute_designator_class, ast::simple_name>;
 using attribute_name_type = x3::rule<attribute_name_class, ast::attribute_name>;
@@ -247,8 +237,4 @@ using waveform_type = x3::rule<waveform_class, ast::waveform>;
 using waveform_element_type = x3::rule<waveform_element_class, ast::waveform_element>;
 // clang-format on
 
-} // namespace parser
-} // namespace vhdl
-} // namespace eda
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_GRAMMAR_TYPE_HPP_ */
+}  // namespace eda::vhdl::parser

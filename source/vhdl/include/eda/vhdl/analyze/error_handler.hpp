@@ -1,24 +1,19 @@
-/*
- * error_handler.hpp
- *
- *  Created on: 16.08.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_ANALYZE_ERROR_HANDLER_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_ANALYZE_ERROR_HANDLER_HPP_
+#pragma once
 
 #include <eda/vhdl/parser/iterator_type.hpp>
 
 #include <iosfwd>
 #include <string>
 
-namespace eda::vhdl::ast { struct position_tagged; }
-namespace eda::vhdl::ast { template <typename IteratorT> class position_cache; }
+namespace eda::vhdl::ast {
+struct position_tagged;
+}
+namespace eda::vhdl::ast {
+template <typename IteratorT>
+class position_cache;
+}
 
-namespace eda {
-namespace vhdl {
-namespace analyze {
+namespace eda::vhdl::analyze {
 
 /**
  * Syntax/Semantic error handler.
@@ -32,7 +27,8 @@ namespace analyze {
  *
  * FixMe: CHeck on use of string_view!
  */
-template <typename Iterator> class error_handler {
+template <typename Iterator>
+class error_handler {
 public:
     using iterator_type = Iterator;
 
@@ -46,7 +42,7 @@ public:
      *                        source code snippet.
      */
     explicit error_handler(std::ostream& os_, ast::position_cache<iterator_type>& position_cache_,
-        std::size_t tabs = 4)
+                           std::size_t tabs = 4)
         : os{ os_ }
         , position_cache{ position_cache_ }
         , tab_sz{ tabs }
@@ -81,20 +77,14 @@ public:
      * @param error_message The information error message.
      */
     void operator()(ast::position_tagged const& where_tag, ast::position_tagged const& start_label,
-        ast::position_tagged const& end_label, std::string const& error_message) const;
+                    ast::position_tagged const& end_label, std::string const& error_message) const;
 
 private:
-    // clang-format off
-    std::ostream&                                   os;
-    ast::position_cache<iterator_type>&             position_cache;
-    std::size_t                                     tab_sz;
-    // clang-format on
+    std::ostream& os;
+    ast::position_cache<iterator_type>& position_cache;
+    std::size_t tab_sz;
 };
 
 using error_handler_type = error_handler<parser::iterator_type>;
 
-} // namespace analyze
-} // namespace vhdl
-} // namespace eda
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_ANALYZE_ERROR_HANDLER_HPP_ */
+}  // namespace eda::vhdl::analyze

@@ -1,12 +1,4 @@
-/*
- * icompare.hpp
- *
- *  Created on: 02.08.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_COMMON_INCLUDE_EDA_UTIL_STRING_ICOMPARE_HPP_
-#define SOURCES_COMMON_INCLUDE_EDA_UTIL_STRING_ICOMPARE_HPP_
+#pragma once
 
 #include <algorithm>
 #include <cctype>
@@ -14,8 +6,7 @@
 #include <string>
 #include <string_view>
 
-namespace eda {
-namespace util {
+namespace eda::util {
 
 /* \see [Case insensitive sorting of an array of strings](
  *       https://stackoverflow.com/questions/33379846/case-insensitive-sorting-of-an-array-of-strings)
@@ -50,7 +41,4 @@ static inline bool icompare(std::string_view lhs, std::string_view rhs)
     // clang-format on
 }
 
-} // namespace util
-} // namespace eda
-
-#endif /* SOURCES_COMMON_INCLUDE_EDA_UTIL_STRING_ICOMPARE_HPP_ */
+}  // namespace eda::util

@@ -1,12 +1,4 @@
-/*
- * pch.hpp
- *
- *  Created on: 21.02.2021
- *      Author: olaf
- */
-
-#ifndef TESTSUITE_COMMON_INCLUDE_TESTSUITE_DETAIL_PCH_HPP_
-#define TESTSUITE_COMMON_INCLUDE_TESTSUITE_DETAIL_PCH_HPP_
+#pragma once
 
 #include <algorithm>
 #include <cassert>
@@ -33,5 +25,3 @@
 #include <boost/test/unit_test_log.hpp>
 #include <boost/test/utils/lazy_ostream.hpp>
 #endif
-
-#endif /* TESTSUITE_COMMON_INCLUDE_TESTSUITE_DETAIL_PCH_HPP_ */

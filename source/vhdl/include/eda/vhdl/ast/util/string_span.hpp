@@ -1,21 +1,11 @@
-/*
- * string_span.hpp
- *
- *  Created on: 26.06.2018
- *      Author: olpetzol
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_STRING_SPAN_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_STRING_SPAN_HPP_
+#pragma once
 
 #include <boost/range/iterator_range.hpp>
 #include <eda/vhdl/parser/iterator_type.hpp>
 
 #include <string_view>
 
-namespace eda {
-namespace vhdl {
-namespace ast {
+namespace eda::vhdl::ast {
 
 /*
  * Hot Fix
@@ -36,8 +26,4 @@ static inline std::string_view as_string_view(ast::string_span const& string_spa
     return std::string_view{ &string_span.front(), string_span.size() };
 }
 
-} // namespace ast
-} // namespace vhdl
-} // namespace eda
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_UTIL_STRING_SPAN_HPP_ */
+}  // namespace eda::vhdl::ast

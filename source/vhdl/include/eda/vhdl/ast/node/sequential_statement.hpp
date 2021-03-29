@@ -1,13 +1,4 @@
-/*
- * sequential_statement.hpp
- *
- *  Created on: 04.06.2017
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_SEQUENTIAL_STATEMENT_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_SEQUENTIAL_STATEMENT_HPP_
-
+#pragma once
 
 #include <eda/vhdl/ast/util/variant.hpp>
 
@@ -23,14 +14,11 @@
 #include <eda/vhdl/ast/node/variable_assignment_statement.hpp>
 #include <eda/vhdl/ast/node/wait_statement.hpp>
 
-
-namespace eda { namespace vhdl { namespace ast {
-
+namespace eda::vhdl::ast {
 
 struct if_statement;
 struct case_statement;
 struct loop_statement;
-
 
 /**
  * Ast node cyclic dependency as:
@@ -50,25 +38,10 @@ struct loop_statement;
  * }
  * \enddot
  */
-using sequential_statement = variant<
-    nullary,
-    wait_statement,
-    assertion_statement,
-    report_statement,
-    signal_assignment_statement,
-    variable_assignment_statement,
-    procedure_call_statement,
-    forward_ast<if_statement>,
-    forward_ast<case_statement>,
-    forward_ast<loop_statement>,
-    next_statement,
-    exit_statement,
-    return_statement,
-    null_statement
->;
+using sequential_statement =
+    variant<nullary, wait_statement, assertion_statement, report_statement,
+            signal_assignment_statement, variable_assignment_statement, procedure_call_statement,
+            forward_ast<if_statement>, forward_ast<case_statement>, forward_ast<loop_statement>,
+            next_statement, exit_statement, return_statement, null_statement>;
 
-
-} } } // namespace eda.vhdl.ast
-
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_SEQUENTIAL_STATEMENT_HPP_ */
+}  // namespace eda::vhdl::ast

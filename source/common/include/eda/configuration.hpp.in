@@ -1,6 +1,6 @@
-// DO NOT EDIT! GENERATED AUTOMATICALLY BY CMAKE!
-
 #pragma once
+
+// DO NOT EDIT! GENERATED AUTOMATICALLY BY CMAKE!
 
 /**
  * Ignore Window's High-Level Console I/O and use ANSII color codes. This allows

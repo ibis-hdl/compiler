@@ -1,25 +1,17 @@
-/*
- * facet.hpp
- *
- *  Created on: 06.08.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_COMMON_INCLUDE_EDA_COLOR_FACET_HPP_
-#define SOURCES_COMMON_INCLUDE_EDA_COLOR_FACET_HPP_
+#pragma once
 
 #include <eda/color/detail/color.hpp>
 
 #include <eda/color/detail/api.hpp>
 
 #include <iostream>
-#include <locale> // facet
+#include <locale>  // facet
 #include <optional>
 
-namespace eda {
-namespace color {
+namespace eda::color {
 
-template <typename Tag> class message_facet : public std::locale::facet {
+template <typename Tag>
+class message_facet : public std::locale::facet {
 public:
     /**
      * Construct a message facte
@@ -34,8 +26,8 @@ public:
      * trivially-copyable type 'color::printer' (aka 'esc_printer<ansii::attribute, 4>')
      * has no effect.
      */
-    explicit message_facet(
-        color::printer prefix_, color::printer postfix_, bool force_deco_ = false)
+    explicit message_facet(color::printer prefix_, color::printer postfix_,
+                           bool force_deco_ = false)
         : facet{ 0 }
         , prefix{ prefix_ }
         , postfix{ postfix_ }
@@ -84,23 +76,21 @@ public:
     }
 
 public:
-    color::printer                                  prefix;
-    color::printer                                  postfix;
+    color::printer prefix;
+    color::printer postfix;
 
 public:
-    static std::locale::id                          id;
+    static std::locale::id id;
 
 private:
-    bool                                            force_decoration;
-    std::optional<bool> mutable                     enable;
+    bool force_decoration;
+    std::optional<bool> mutable enable;
 };
 
-
-template<typename Tag>
+template <typename Tag>
 std::locale::id message_facet<Tag>::id;
 
-
-template<typename Tag>
+template <typename Tag>
 std::ostream& operator<<(std::ostream& os, message_decorator<Tag> const& decorator)
 {
     std::locale locale = os.getloc();
@@ -112,6 +102,4 @@ std::ostream& operator<<(std::ostream& os, message_decorator<Tag> const& decorat
     return decorator.print(os);
 }
 
-} } // namespace eda.color
-
-#endif /* SOURCES_COMMON_INCLUDE_EDA_COLOR_FACET_HPP_ */
+}  // namespace eda::color

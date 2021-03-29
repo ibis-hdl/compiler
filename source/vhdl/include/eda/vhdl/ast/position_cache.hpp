@@ -1,12 +1,4 @@
-/*
- * position_cache.hpp
- *
- *  Created on: 18.07.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_POSITION_CACHE_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_POSITION_CACHE_HPP_
+#pragma once
 
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
@@ -21,9 +13,7 @@
 
 #include <eda/util/cxx_bug_fatal.hpp>
 
-namespace eda {
-namespace vhdl {
-namespace ast {
+namespace eda::vhdl::ast {
 
 /**
  * AST annotation/position cache
@@ -283,8 +273,4 @@ typename position_cache<IteratorT>::proxy position_cache<IteratorT>::handle(std:
     return proxy{ *this, file_id };
 }
 
-}  // namespace ast
-}  // namespace vhdl
-}  // namespace eda
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_POSITION_CACHE_HPP_ */
+}  // namespace eda::vhdl::ast

@@ -1,18 +1,9 @@
-/*
- * keyword_token.cpp
- *
- *  Created on: 07.04.2017
- *      Author: olaf
- */
-
 #include <eda/vhdl/ast/node/keyword_token.hpp>
 
 #include <eda/util/cxx_bug_fatal.hpp>
 #include <iostream>
 
-namespace eda {
-namespace vhdl {
-namespace ast {
+namespace eda::vhdl::ast {
 
 std::ostream& operator<<(std::ostream& os, keyword_token token)
 {
@@ -124,6 +115,4 @@ std::ostream& operator<<(std::ostream& os, keyword_token token)
     return os;
 }
 
-} // namespace ast
-} // namespace vhdl
-} // namespace eda
+}  // namespace eda::vhdl::ast

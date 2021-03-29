@@ -1,12 +1,4 @@
-/*
- * ast_printer.hpp
- *
- *  Created on: 18.03.2017
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_PRINTER_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_PRINTER_HPP_
+#pragma once
 
 #include <eda/vhdl/ast_fwd.hpp>
 
@@ -21,9 +13,7 @@
 #include <vector>
 #include <iosfwd>
 
-namespace eda {
-namespace vhdl {
-namespace ast {
+namespace eda::vhdl::ast {
 
 ///
 /// @brief AST printer class
@@ -262,8 +252,4 @@ private:
     util::indent_ostream os;
 };
 
-}  // namespace ast
-}  // namespace vhdl
-}  // namespace eda
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_PRINTER_HPP_ */
+}  // namespace eda::vhdl::ast

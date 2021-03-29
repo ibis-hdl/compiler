@@ -1,18 +1,9 @@
-/*
- * indent_stream.hpp
- *
- *  Created on: 27.04.2017
- *      Author: olaf
- */
-
-#ifndef SOURCES_COMMON_INCLUDE_EDA_UTILS_INDENT_STREAM_HPP_
-#define SOURCES_COMMON_INCLUDE_EDA_UTILS_INDENT_STREAM_HPP_
+#pragma once
 
 #include <ostream>
 #include <streambuf>
 
-namespace eda {
-namespace util {
+namespace eda::util {
 
 /// An indenting stream buffer
 ///
@@ -48,9 +39,8 @@ public:
 public:
     ~indent_sbuf() override
     {
-        // start at column 0 again
-        overflow(
-            '\n');  // NOLINT(clang-analyzer-optin.cplusplus.VirtualCall) -- functionally intended
+        // NOLINTNEXTLINE(clang-analyzer-optin.cplusplus.VirtualCall) -- functionally intended
+        overflow('\n');  // start at column 0 again
     }
 
     indent_sbuf& increase()
@@ -130,7 +120,4 @@ static inline std::ostream& decrease_indent(std::ostream& os)
     return os;
 }
 
-}  // namespace util
-}  // namespace eda
-
-#endif /* SOURCES_COMMON_INCLUDE_EDA_UTILS_INDENT_STREAM_HPP_ */
+}  // namespace eda::util

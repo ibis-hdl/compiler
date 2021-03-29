@@ -1,25 +1,17 @@
-/*
- * literal_printer.cpp
- *
- *  Created on: 30.05.2018
- *      Author: olaf
- */
-
 #include <eda/vhdl/ast/literal_printer.hpp>
 
-#include <eda/support/cxx/overloaded.hpp>   // IWYU pragma: keep
+#include <eda/support/cxx/overloaded.hpp>  // IWYU pragma: keep
 
 #include <eda/util/cxx_bug_fatal.hpp>
 
-#include <boost/iterator/filter_iterator.hpp>   // IWYU pragma: keep
+#include <boost/iterator/filter_iterator.hpp>  // IWYU pragma: keep
 #include <boost/variant/apply_visitor.hpp>
 
 #include <iostream>
 
 namespace /* anonymous */ {
 
-class unquote_predicate
-{
+class unquote_predicate {
 public:
     unquote_predicate() = default;
 
@@ -56,11 +48,9 @@ private:
     bool dbl_quote_printed{ false };
 };
 
-} // anonymous namespace
+}  // anonymous namespace
 
-namespace eda {
-namespace vhdl {
-namespace ast {
+namespace eda::vhdl::ast {
 
 literal_printer::literal_printer(bit_string_literal const& literal_)
     : literal{ literal_ }
@@ -158,6 +148,4 @@ std::ostream& literal_printer::print(std::ostream& os) const
     return os;
 }
 
-} // namespace ast
-} // namespace vhdl
-} // namespace eda
+}  // namespace eda::vhdl::ast

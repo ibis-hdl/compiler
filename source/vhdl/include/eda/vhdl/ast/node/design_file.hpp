@@ -1,25 +1,11 @@
-/*
- * design_file.hpp
- *
- *  Created on: 21.06.2017
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_DESIGN_FILE_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_DESIGN_FILE_HPP_
-
+#pragma once
 
 #include <eda/vhdl/ast/node/design_unit.hpp>
 #include <vector>
 
+namespace eda::vhdl::ast {
 
-namespace eda { namespace vhdl { namespace ast {
+struct design_file : std::vector<ast::design_unit> {
+};
 
-
-struct design_file : std::vector<ast::design_unit> { };
-
-
-} } } // namespace eda.vhdl.ast
-
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_DESIGN_FILE_HPP_ */
+}  // namespace eda::vhdl::ast

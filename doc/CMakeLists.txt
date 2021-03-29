@@ -13,7 +13,9 @@ find_package(Python3 COMPONENTS Interpreter)
 
 
 set(doxygen_definition_list
-    "DOXYGEN=1"
+    # same as sphinx-doc defaults, see [Mastering Doxygen](
+    # https://exhale.readthedocs.io/en/latest/mastering_doxygen.html#additional-variables-with-important-impacts)
+    "DOXYGEN_DOCUMENTATION_BUILD DOXYGEN_SHOULD_SKIP_THIS"
 )
 foreach(doxygen_def ${doxygen_definition_list})
     set(doxygen_definitions "${doxygen_definitions} \"${doxygen_def}\"")

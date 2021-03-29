@@ -5,9 +5,7 @@
 
 #include <testsuite/vhdl_parser/compile_builtin.hpp>
 
-namespace testsuite {
-namespace vhdl_parser {
-namespace util {
+namespace testsuite::vhdl_parser::util {
 
 void failure_diagnostic_fixture::setup()
 {
@@ -44,6 +42,4 @@ void failure_diagnostic_fixture::setup()
     BOOST_TEST_REQUIRE(!output_extension.empty());
 }
 
-}  // namespace util
-}  // namespace vhdl_parser
-}  // namespace testsuite
+}  // namespace testsuite::vhdl_parser::util

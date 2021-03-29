@@ -1,29 +1,19 @@
-/*
- * error_handler.hpp
- *
- *  Created on: 18.07.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ERROR_HANDLER_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ERROR_HANDLER_HPP_
+#pragma once
 
 #include <eda/vhdl/ast/position_cache.hpp>
 
 #include <eda/namespace_alias.hpp>  // IWYU pragma: keep
 
 // the following header are required for x3::error_handler_result
-#include <boost/spirit/home/x3/support/traits/tuple_traits.hpp> // IWYU pragma: keep
-#include <boost/spirit/home/x3/support/traits/is_variant.hpp>   // IWYU pragma: keep
+#include <boost/spirit/home/x3/support/traits/tuple_traits.hpp>  // IWYU pragma: keep
+#include <boost/spirit/home/x3/support/traits/is_variant.hpp>    // IWYU pragma: keep
 #include <boost/spirit/home/x3/auxiliary/guard.hpp>
 
 #include <utility>
 #include <string>
 #include <iosfwd>
 
-namespace eda {
-namespace vhdl {
-namespace parser {
+namespace eda::vhdl::parser {
 
 /**
  * tag used to get our error handler from the x3::context
@@ -118,8 +108,4 @@ private:
     std::size_t tab_sz;
 };
 
-}  // namespace parser
-}  // namespace vhdl
-}  // namespace eda
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_PARSER_ERROR_HANDLER_HPP_ */
+}  // namespace eda::vhdl::parser

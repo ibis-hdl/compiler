@@ -3,7 +3,7 @@
 #include <string>
 #include <filesystem>
 
-#include <testsuite/common/namespace_alias.hpp> // IWYU pragma: keep
+#include <testsuite/common/namespace_alias.hpp>  // IWYU pragma: keep
 
 namespace testsuite {
 

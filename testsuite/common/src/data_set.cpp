@@ -1,10 +1,3 @@
-/*
- * data_set.cpp
- *
- *  Created on: 22.06.2018
- *      Author: olaf
- */
-
 #include <testsuite/common/data_set.hpp>
 #include <testsuite/common/cli_args.hpp>
 #include <testsuite/common/compile_builtin.hpp>

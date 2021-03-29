@@ -1,21 +1,11 @@
-/*
- * ast_fwd.hpp
- *
- *  Created on: 24.06.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_FWD_HPP_
-#define SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_FWD_HPP_
+#pragma once
 
 #include <eda/vhdl/ast/util/string_span.hpp>
 #include <eda/vhdl/ast/util/variant.hpp>
 
 #include <vector>
 
-namespace eda {
-namespace vhdl {
-namespace ast {
+namespace eda::vhdl::ast {
 
 ///
 /// AST nodes forward declared
@@ -96,7 +86,7 @@ struct constraint;
 struct decimal_literal;
 struct delay_mechanism;
 struct designator;
-struct design_file; // FixMe: using ... = vector<>
+struct design_file;  // FixMe: using ... = vector<>
 struct design_unit;
 struct disconnection_specification;
 struct discrete_range;
@@ -344,8 +334,4 @@ using package_body_declarative_part = std::vector<ast::package_body_declarative_
 
 using architecture_declarative_part = ast::block_declarative_part;
 
-}  // namespace ast
-}  // namespace vhdl
-}  // namespace eda
-
-#endif /* SOURCES_VHDL_INCLUDE_EDA_VHDL_AST_FWD_HPP_ */
+}  // namespace eda::vhdl::ast

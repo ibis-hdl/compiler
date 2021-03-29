@@ -1,10 +1,3 @@
-/*
- * settings.cpp
- *
- *  Created on: 01.08.2018
- *      Author: olaf
- */
-
 #include <eda/settings.hpp>
 
 #include <eda/util/string/icompare.hpp>
@@ -30,7 +23,7 @@ std::ostream& settings::dump(std::ostream& os) const
     });
 
     os << "(settings [N=" << vec.size() << "]\n";
-    for (auto const & [ option_name, val ] : vec) {
+    for (auto const& [option_name, val] : vec) {
         os << "    " << option_name << ": ";
         // clang-format off
         std::visit(util::overloaded{
@@ -87,8 +80,7 @@ std::ostream& settings::print(std::ostream& os, settings::option_value const& va
     return os;
 }
 
-void settings::debug_print(
-    std::string const& option_name, settings::option_value const& value)
+void settings::debug_print(std::string const& option_name, settings::option_value const& value)
 {
     std::cout << "lookup[" << option_name << "] = " << value << std::endl;
 }
@@ -100,4 +92,4 @@ std::ostream& operator<<(std::ostream& os, settings::option_value const& value)
 
 const settings::option_value settings::none;
 
-} // namespace eda
+}  // namespace eda

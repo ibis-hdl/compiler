@@ -1,12 +1,4 @@
-/*
- * pch.hpp
- *
- *  Created on: 21.02.2021
- *      Author: olaf
- */
-
-#ifndef TESTSUITE_NUMERIC_CONVERT_INCLUDE_TESTSUITE_DETAIL_PCH_HPP_
-#define TESTSUITE_NUMERIC_CONVERT_INCLUDE_TESTSUITE_DETAIL_PCH_HPP_
+#pragma once
 
 #include <algorithm>
 #include <bitset>
@@ -33,6 +25,3 @@
 #include <boost/test/data/test_case.hpp>
 #include <boost/test/tools/output_test_stream.hpp>
 #endif
-
-#endif /* TESTSUITE_NUMERIC_CONVERT_INCLUDE_TESTSUITE_DETAIL_PCH_HPP_ */
-

@@ -1,12 +1,4 @@
-/*
- * settings.hpp
- *
- *  Created on: 01.08.2018
- *      Author: olaf
- */
-
-#ifndef SOURCES_COMMON_INCLUDE_EDA_SETTINGS_HPP_
-#define SOURCES_COMMON_INCLUDE_EDA_SETTINGS_HPP_
+#pragma once
 
 #include <iosfwd>
 #include <string>
@@ -17,7 +9,7 @@
 #include <variant>
 #include <vector>
 
-#include <eda/support/cxx/overloaded.hpp>   // IWYU pragma: keep
+#include <eda/support/cxx/overloaded.hpp>  // IWYU pragma: keep
 
 namespace eda {
 
@@ -51,14 +43,8 @@ namespace eda {
  */
 class settings {
 public:
-    // clang-format off
-    using option_value = std::variant<
-        std::monostate,
-        bool,
-        long,
-        std::string,
-        std::vector<std::string>>;
-    // clang-format on
+    using option_value =
+        std::variant<std::monostate, bool, long, std::string, std::vector<std::string>>;
 
 public:
     settings() = default;
@@ -101,15 +87,14 @@ public:
             // clang-format on
         }
 
-        template <typename T> T const& get() const
+        template <typename T>
+        T const& get() const
         {
             // bad_variant_access thrown on invalid accesses to the value
             return std::get<T>(option_value);
         }
 
-        // clang-format off
-        settings::option_value const&               option_value;
-        // clang-format on
+        settings::option_value const& option_value;
     };
 
 public:
@@ -158,7 +143,8 @@ public:
      * \param  value        The value to be stored.
      * \return config_value The value as reference to optional<string>.
      */
-    template <typename T, typename = std::enable_if_t<!std::is_integral_v<std::remove_reference_t<T>>>>
+    template <typename T,
+              typename = std::enable_if_t<!std::is_integral_v<std::remove_reference_t<T>>>>
     void set(std::string_view option_name, T&& value)
     {
         using type = std::remove_reference_t<T>;
@@ -207,10 +193,8 @@ private:
 private:
     using map_type = std::unordered_map<std::string, option_value>;
 
-    // clang-format off
-    map_type                                        map;
-    static const option_value                       none;
-    // clang-format on
+    map_type map;
+    static const option_value none;
 };
 
 /**
@@ -220,11 +204,7 @@ private:
  * option is set.
  */
 class settings::option_trigger {
-    // clang-format off
-    using trigger_map_type = std::unordered_map<
-        std::string, std::vector<std::string>
-    >;
-    // clang-format on
+    using trigger_map_type = std::unordered_map<std::string, std::vector<std::string>>;
 
     trigger_map_type trigger;
 
@@ -259,7 +239,7 @@ public:
      */
     void update(settings& config) const
     {
-        for (auto const & [ primary_option, secondary_options ] : trigger) {
+        for (auto const& [primary_option, secondary_options] : trigger) {
             if (!config.exist(trim(primary_option))) {
                 continue;
             }
@@ -272,6 +252,4 @@ public:
 
 std::ostream& operator<<(std::ostream& os, settings::option_value const& value);
 
-} // namespace eda
-
-#endif /* SOURCES_COMMON_INCLUDE_EDA_SETTINGS_HPP_ */
+}  // namespace eda

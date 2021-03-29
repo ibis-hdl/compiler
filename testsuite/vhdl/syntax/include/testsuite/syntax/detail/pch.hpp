@@ -1,12 +1,4 @@
-/*
- * pch.hpp
- *
- *  Created on: 21.02.2021
- *      Author: olaf
- */
-
-#ifndef TESTSUITE_SYNTAX_INCLUDE_TESTSUITE_DETAIL_PCH_HPP_
-#define TESTSUITE_SYNTAX_INCLUDE_TESTSUITE_DETAIL_PCH_HPP_
+#pragma once
 
 #include <iomanip>
 #include <iostream>
@@ -18,6 +10,3 @@
 #if 0
 #include <boost/test/tools/output_test_stream.hpp>
 #endif
-
-#endif /* TESTSUITE_SYNTAX_INCLUDE_TESTSUITE_DETAIL_PCH_HPP_ */
-

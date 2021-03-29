@@ -1,10 +1,3 @@
-/*
- * signal_handler.cpp
- *
- *  Created on: 04.08.2018
- *      Author: olaf
- */
-
 #include <ibis/signal_handler.hpp>
 
 #include <eda/color/message.hpp>
@@ -19,10 +12,10 @@ extern bool register_stacktrace_signal_handler();
 
 namespace ibis {
 
-#if 0 // avoid LINT errors
+#if 0  // avoid LINT errors
 void testing_signal_handler()
 {
-#if 0 // doesn't work ????
+#if 0  // doesn't work ????
     int sig = SIGFPE;
     std::cout << "SIGNAL " << signame(sig) << '\n';
     signal(sig, SIG_DFL);
@@ -66,9 +59,9 @@ void register_signal_handlers()
     using failure = eda::color::message::failure;
 
 #if defined(EDA_WITH_GDB_STACKTRACE)
-    std::function<bool(void)> signal_handler { &register_gdb_signal_handler };
+    std::function<bool(void)> signal_handler{ &register_gdb_signal_handler };
 #elif defined(EDA_WITH_BOOST_STACKTRACE)
-    std::function<bool(void)> signal_handler { &register_stacktrace_signal_handler };
+    std::function<bool(void)> signal_handler{ &register_stacktrace_signal_handler };
 #else
     auto const signal_handler = []() {
         using warning = eda::color::message::warning;
@@ -83,5 +76,4 @@ void register_signal_handlers()
     }
 }
 
-
-} // namespace ibis
+}  // namespace ibis
