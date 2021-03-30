@@ -260,8 +260,27 @@ template <typename T> T const& get() const
 ### Fix Parser Testsuite
 
 The tests passed in 2018, using Boost v1.68's spirit X3. Only problems mentioned
-in vhdl parser_rules *test_case_FixMe.txt* where known. In 2021 boost is bumped
-to v1.73 and following *test_vhdl_parser_rule* tests failed:
+in vhdl parser_rules (former) *test_case_FixMe.txt* where known:
+
+  - alias_declaration_00{1...5}
+  - entity_aspect/entity_aspect_002.input
+  - type_declaration_failure/*
+  - interface_constant_declaration/interface_constant_declaration_006.input
+  - type_conversion/type_conversion_001.input
+  - wait_statement/wait_statement_00x.input
+  - binding_indication/binding_indication_00{0,1}.input entity name rule (is work.foo -> name)
+  - allocator_003 (http://vhdl.renerta.com/source/vhd00004.htm)
+  - component_configuration_000; configuration_declaration_000,
+    architecture_body -> must be: work.foo
+    reason is related to rule name, where no selected_name is active!!!
+
+Missing tests:
+
+  - concurrent_procedure_call_statement
+  - concurrent_signal_assignment_statement
+
+
+In 2021 boost is bumped to v1.73 and following *test_vhdl_parser_rule* tests failed:
 
   - test_case_name = aggregate/aggregate_001;
   - test_case_name = aggregate/aggregate_002;
@@ -306,11 +325,6 @@ ToDo on design
 
 - testsuite/common/failure_diagnostic_fixture and testsuite/vhdl/util/failure_diagnostic_fixture
   BAD NAMING ...
-
-- testsuite/ibis/ App Tests uses ${PROJECT_ROOT}/Readme.md which got large
-  over time, supply a small test input file.
-
-- rename testsuite/*/test_case/* to test_data which better fits
 
 - rename testsuite/common to testsuite/util and libutil. Header, namespaces etc are
   inconsistent!

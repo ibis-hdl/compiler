@@ -24,8 +24,7 @@ BOOST_AUTO_TEST_SUITE(parser_rule)
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_DATA_TEST_CASE_F(  // --
     testsuite::vhdl_parser::util::failure_diagnostic_fixture, interface_file_declaration,
-    utf_data::make_delayed<testsuite::dataset_loader>(
-        "test_case/interface_file_declaration"),  // --
+    utf_data::make_delayed<testsuite::dataset_loader>("test_data/interface_file_declaration"),  // --
     input, expected, test_case_name)
 {
     using attribute_type = ast::interface_file_declaration;

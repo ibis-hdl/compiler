@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_SUITE(parser_rule)
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_DATA_TEST_CASE_F(  // --
     testsuite::vhdl_parser::util::failure_diagnostic_fixture, expression,
-    utf_data::make_delayed<testsuite::dataset_loader>("test_case/expression"),  // --
+    utf_data::make_delayed<testsuite::dataset_loader>("test_data/expression"),  // --
     input, expected, test_case_name)
 {
     using attribute_type = ast::expression;
@@ -48,7 +48,7 @@ BOOST_DATA_TEST_CASE_F(  // --
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_DATA_TEST_CASE_F(  // --
     testsuite::vhdl_parser::util::failure_diagnostic_fixture, expression_failure,
-    utf_data::make_delayed<testsuite::dataset_loader>("test_case/expression_failure"),  // --
+    utf_data::make_delayed<testsuite::dataset_loader>("test_data/expression_failure"),  // --
     input, expected, test_case_name)
 {
     using attribute_type = ast::expression;

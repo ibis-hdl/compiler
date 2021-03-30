@@ -7,7 +7,7 @@
 project(eda_vhdl_parser LANGUAGES CXX)
 
 
-add_library(${PROJECT_NAME} "")
+add_library(${PROJECT_NAME})
 add_library(eda::vhdl_parser ALIAS ${PROJECT_NAME})
 
 

@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_SUITE(parser_rule)
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_DATA_TEST_CASE_F(  // --
     testsuite::vhdl_parser::util::failure_diagnostic_fixture, generic_map_aspect,
-    utf_data::make_delayed<testsuite::dataset_loader>("test_case/generic_map_aspect"),  // --
+    utf_data::make_delayed<testsuite::dataset_loader>("test_data/generic_map_aspect"),  // --
     input, expected, test_case_name)
 {
     using attribute_type = ast::generic_map_aspect;

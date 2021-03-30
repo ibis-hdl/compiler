@@ -2,69 +2,72 @@
 
 // DO NOT EDIT! GENERATED AUTOMATICALLY BY CMAKE!
 
-// file platform.hpp
+//
+// @file platform.hpp
 //
 // Variables as determined by CMake, see
 // [How To Write Platform Checks](
 //  https://gitlab.kitware.com/cmake/community/-/wikis/doc/tutorials/How-To-Write-Platform-Checks)
 
-#cmakedefine BUILD_PLATFORM_UNIX    1
-#cmakedefine BUILD_PLATFORM_WIN32   1
-#cmakedefine BUILD_PLATFORM_APPLE   1
-#cmakedefine BUILD_PLATFORM_MINGW   1
-#cmakedefine BUILD_PLATFORM_MSYS    1
-#cmakedefine BUILD_PLATFORM_CYGWIN  1
+#cmakedefine BUILD_PLATFORM_UNIX 1
+#cmakedefine BUILD_PLATFORM_WIN32 1
+#cmakedefine BUILD_PLATFORM_APPLE 1
+#cmakedefine BUILD_PLATFORM_MINGW 1
+#cmakedefine BUILD_PLATFORM_MSYS 1
+#cmakedefine BUILD_PLATFORM_CYGWIN 1
 
-#cmakedefine BUILD_SYSTEM_LINUX     1
-#cmakedefine BUILD_SYSTEM_WINDOWS   1
-#cmakedefine BUILD_SYSTEM_DARWIN    1
-#cmakedefine BUILD_SYSTEM_FREEBSD   1
-#cmakedefine BUILD_SYSTEM_MSYS      1
+#cmakedefine BUILD_SYSTEM_LINUX 1
+#cmakedefine BUILD_SYSTEM_WINDOWS 1
+#cmakedefine BUILD_SYSTEM_DARWIN 1
+#cmakedefine BUILD_SYSTEM_FREEBSD 1
+#cmakedefine BUILD_SYSTEM_MSYS 1
 
 namespace eda {
 
-    /// Enum which represents a platform
-    enum class platform {
-        Unix,       ///< is TRUE on all UNIX-like OS's, including Apple OS X and CygWin
-        Win32,      ///< is TRUE on Windows. Prior to 2.8.4 this included CygWin
-        Apple,      ///< is TRUE on Apple systems. Note this does not imply the system is Mac OS X, only that APPLE is defined in C/C++ header files.
-        MinGW,      ///< is TRUE when using the MinGW compiler in Windows
-        MSYS,       ///< is TRUE when using the MSYS developer environment in Windows
-        Cygwin      ///< is TRUE on Windows when using the CygWin version of cmake
-    };
+/// Enum which represents the build platform
+enum class platform {
+    Unix,   ///< is TRUE on all UNIX-like OS's, including Apple OS X and CygWin
+    Win32,  ///< is TRUE on Windows. Prior to 2.8.4 this included CygWin
+    Apple,  ///< is TRUE on Apple systems. Note this does not imply the system is Mac OS X, only
+            ///  that APPLE is defined in C/C++ header files.
+    MinGW,  ///< is TRUE when using the MinGW compiler in Windows
+    MSYS,   ///< is TRUE when using the MSYS developer environment in Windows
+    Cygwin  ///< is TRUE on Windows when using the CygWin version of cmake
+};
 
 #ifdef BUILD_PLATFORM_UNIX
-    constexpr eda::platform build_platform = platform::Unix;
+constexpr eda::platform build_platform = platform::Unix;
 #elif BUILD_PLATFORM_WIN32
-    constexpr eda::platform build_platform = platform::Win32;
+constexpr eda::platform build_platform = platform::Win32;
 #elif BUILD_PLATFORM_APPLE
-    constexpr eda::platform build_platform = platform::Apple;
+constexpr eda::platform build_platform = platform::Apple;
 #elif BUILD_PLATFORM_MINGW
-    constexpr eda::platform build_platform = platform::MinGW;
+constexpr eda::platform build_platform = platform::MinGW;
 #elif BUILD_PLATFORM_MSYS
-    constexpr eda::platform build_platform = platform::MSYS;
+constexpr eda::platform build_platform = platform::MSYS;
 #elif BUILD_PLATFORM_CYGWIN
-    constexpr eda::platform build_platform = platform::Cygwin;
+constexpr eda::platform build_platform = platform::Cygwin;
 #endif
 
-    enum class system {
-        Linux,      ///< Linux (GCC, Intel, PGI)
-        Windows,    ///< Windows (Visual Studio, MinGW GCC)
-        Darwin,     ///< macOS/OS X (Clang, GCC)
-        FreeBSD,    ///< FreeBSD
-        MSYS        ///< Windows (MSYS2 shell native GCC)
-    };
+/// Enum which represents the build operating system
+enum class system {
+    Linux,    ///< Linux (GCC, Intel, PGI)
+    Windows,  ///< Windows (Visual Studio, MinGW GCC)
+    Darwin,   ///< macOS/OS X (Clang, GCC)
+    FreeBSD,  ///< FreeBSD
+    MSYS      ///< Windows (MSYS2 shell native GCC)
+};
 
 #ifdef BUILD_SYSTEM_LINUX
-    constexpr eda::system build_system = system::Linux;
+constexpr eda::system build_system = system::Linux;
 #elif BUILD_SYSTEM_WINDOWS
-    constexpr eda::system build_system = system::Windows;
+constexpr eda::system build_system = system::Windows;
 #elif BUILD_SYSTEM_DARWIN
-    constexpr eda::system build_system = system::Darwin;
+constexpr eda::system build_system = system::Darwin;
 #elif BUILD_SYSTEM_FREEBSD
-    constexpr eda::system build_system = system::FreeBSD;
+constexpr eda::system build_system = system::FreeBSD;
 #elif BUILD_SYSTEM_MSYS
-    constexpr eda::system build_system = system::MSYS;
+constexpr eda::system build_system = system::MSYS;
 #endif
 
-} // namespace eda
+}  // namespace eda

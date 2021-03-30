@@ -7,18 +7,20 @@
 project(testrunner_vhdl_ast LANGUAGES CXX)
 
 
-add_executable(${PROJECT_NAME} "")
+add_executable(${PROJECT_NAME})
 
 
 add_test(NAME test_ast
     COMMAND
-        ${PROJECT_NAME} --
-        --source-dir=${PROJECT_SOURCE_DIR}/test_case
+        ${PROJECT_NAME} --log_level=error --
+        --source-dir=${PROJECT_SOURCE_DIR}/test_data
 )
+
+set(CMAKE_CTEST_ARGUMENTS "--output-on-failure")
 
 
 # Variables used to configure ctest project, also compile time builtin settings
-set(TESTSUITE_SOURCE_DIR ${PROJECT_SOURCE_DIR}/test_case)
+set(TESTSUITE_SOURCE_DIR ${PROJECT_SOURCE_DIR}/test_data)
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/include/testsuite/ast/compile_builtin.hpp.in"

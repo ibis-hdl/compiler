@@ -7,7 +7,7 @@
 project(testrunner_vhdl_parser_rules LANGUAGES CXX)
 
 
-add_executable(${PROJECT_NAME} "")
+add_executable(${PROJECT_NAME})
 
 
 # Variables used to configure ctest project, also compile time builtin settings
@@ -32,6 +32,8 @@ configure_file(
     ${PROJECT_BINARY_DIR}/include/testsuite/vhdl_parser/compile_builtin.hpp
     @ONLY
 )
+
+set(CMAKE_CTEST_ARGUMENTS "--output-on-failure")
 
 
 target_link_libraries(${PROJECT_NAME}

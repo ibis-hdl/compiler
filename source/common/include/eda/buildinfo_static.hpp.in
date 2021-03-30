@@ -7,8 +7,7 @@
 #include <boost/version.hpp>
 #include <boost/config.hpp>
 
-namespace eda {
-namespace build_info {
+namespace eda::build_info {
 
 /// CMake specific
 static constexpr std::string_view platform{ "@CMAKE_SYSTEM_NAME@" };
@@ -24,6 +23,4 @@ static constexpr std::string_view compiler{ BOOST_COMPILER };
 static constexpr std::string_view stdlib{ BOOST_STDLIB };
 static constexpr std::string_view libboost{ BOOST_LIB_VERSION };
 
-} // namespace build_info
-} // namespace eda
-
+}  // namespace eda::build_info

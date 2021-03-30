@@ -8,8 +8,7 @@
 // compile time builtin settings for testsuite/vhdl/parser_rules
 //
 
-namespace testsuite {
-namespace compile_builtin {
+namespace testsuite::compile_builtin {
 
 // required by dataset loader
 constexpr std::string_view default_source_dir{ "@TESTSUITE_SOURCE_DIR@" };
@@ -20,5 +19,4 @@ constexpr std::string_view default_expected_extension{ "@TESTSUITE_EXPECTED_EXTE
 constexpr std::string_view default_destination_dir{ "@TESTSUITE_DESTINATION_DIR@" };
 constexpr std::string_view default_output_extension{ "@TESTSUITE_OUTPUT_EXTENSION@" };
 
-}  // namespace compile_builtin
-}  // namespace testsuite
+}  // namespace testsuite::compile_builtin

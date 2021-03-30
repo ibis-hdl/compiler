@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_SUITE(parser_rule)
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_DATA_TEST_CASE_F(  // --
     testsuite::vhdl_parser::util::failure_diagnostic_fixture, physical_type_definition,
-    utf_data::make_delayed<testsuite::dataset_loader>("test_case/physical_type_definition"),  // --
+    utf_data::make_delayed<testsuite::dataset_loader>("test_data/physical_type_definition"),  // --
     input, expected, test_case_name)
 {
     using attribute_type = ast::physical_type_definition;

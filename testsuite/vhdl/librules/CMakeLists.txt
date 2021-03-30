@@ -11,7 +11,7 @@
 project(testsuite_vhdl_rules LANGUAGES CXX)
 
 
-add_library(${PROJECT_NAME} "")
+add_library(${PROJECT_NAME})
 add_library(testsuite::vhdl_rules ALIAS ${PROJECT_NAME})
 
 

@@ -26,6 +26,9 @@ namespace testsuite {
 /// setup();```. This is bad design, see [Calling virtual functions inside constructors](
 /// https://stackoverflow.com/questions/962132/calling-virtual-functions-inside-constructors)
 ///
+/// @todo The path leaf of test data is still hard coded into the sources ('test_data'). It
+/// shouldn't depend on it!
+///
 
 class dataset_loader {
 public:

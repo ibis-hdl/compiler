@@ -7,7 +7,7 @@
 project(ibis LANGUAGES CXX)
 
 
-add_executable(${PROJECT_NAME} "")
+add_executable(${PROJECT_NAME})
 
 
 target_link_libraries(${PROJECT_NAME}
@@ -20,7 +20,7 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 
-add_dependencies(${PROJECT_NAME} 
+add_dependencies(${PROJECT_NAME}
     external-cli11
     external-RapidJSON
 )
@@ -33,26 +33,26 @@ configure_file(
 )
 
 
-target_sources(${PROJECT_NAME} 
+target_sources(${PROJECT_NAME}
     PRIVATE
         src/main.cpp
         src/init.cpp
         src/signal_handler.cpp
         $<$<BOOL:${EDA_WITH_GDB_STACKTRACE}>:src/stacktrace_gdb.cpp>
-        $<$<BOOL:${EDA_WITH_BOOST_STACKTRACE}>:src/stacktrace_boost.cpp>  
+        $<$<BOOL:${EDA_WITH_BOOST_STACKTRACE}>:src/stacktrace_boost.cpp>
 )
 
 
 if (EDA_ENABLE_PCH)
-    target_precompile_headers(${PROJECT_NAME} 
-        PRIVATE 
+    target_precompile_headers(${PROJECT_NAME}
+        PRIVATE
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/ibis/detail/pch.hpp>
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/ibis/detail/pch_prj.hpp>
     )
 endif()
 
 
-target_include_directories(${PROJECT_NAME} 
+target_include_directories(${PROJECT_NAME}
     PUBLIC
         $<INSTALL_INTERFACE:include>
     PRIVATE
@@ -68,13 +68,13 @@ target_include_directories(${PROJECT_NAME}
 #  https://stackoverflow.com/questions/7637539/how-to-split-strings-across-multiple-lines-in-cmake)
 string(CONCAT _SIGNAL_HANDLER_DEFINES
     "$<$<BOOL:${EDA_WITH_GDB_STACKTRACE}>:EDA_WITH_GDB_STACKTRACE>;"
-    "$<$<BOOL:${EDA_WITH_BOOST_STACKTRACE}>:EDA_WITH_BOOST_STACKTRACE>" 
+    "$<$<BOOL:${EDA_WITH_BOOST_STACKTRACE}>:EDA_WITH_BOOST_STACKTRACE>"
 )
 set_source_files_properties(
     src/signal_handler.cpp
     src/stacktrace_gdb.cpp
-    src/stacktrace_boost.cpp 
-    APPEND PROPERTIES 
+    src/stacktrace_boost.cpp
+    APPEND PROPERTIES
         COMPILE_DEFINITIONS "${_SIGNAL_HANDLER_DEFINES}"
 )
 
@@ -82,12 +82,12 @@ set_source_files_properties(
 # FixMe: Use generator, e.g. see https://www.brianlheim.com/2018/04/09/cmake-cheat-sheet.html
 # $<$<CXX_COMPILER_ID:GNU>:-g -fno-omit-frame-pointer>
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-    target_compile_options(${PROJECT_NAME} 
+    target_compile_options(${PROJECT_NAME}
         PRIVATE
             -g -fno-omit-frame-pointer
-    )    
-    set_target_properties(${PROJECT_NAME} 
-        PROPERTIES 
+    )
+    set_target_properties(${PROJECT_NAME}
+        PROPERTIES
             LINK_FLAGS "-g -fno-omit-frame-pointer"
     )
 endif()
@@ -130,17 +130,17 @@ if(EDA_WITH_BOOST_STACKTRACE_temporary_disabled)
     if(WIN32)
         find_package(Boost REQUIRED COMPONENTS stacktrace_windbg)
         message(STATUS "WinDbg library found.")
-        target_compile_definitions(${PROJECT_NAME} 
+        target_compile_definitions(${PROJECT_NAME}
             PRIVATE
                 BOOST_STACKTRACE_USE_WINDBG
         )
-        target_include_directories(${PROJECT_NAME} 
-            PRIVATE 
+        target_include_directories(${PROJECT_NAME}
+            PRIVATE
                 ${Boost_INCLUDE_DIRS}
         )
-        target_link_libraries(${PROJECT_NAME} 
+        target_link_libraries(${PROJECT_NAME}
             PRIVATE
-                dbgeng ole32 
+                dbgeng ole32
         )
     else()
         find_package(Backtrace REQUIRED)
@@ -158,4 +158,4 @@ if(EDA_WITH_BOOST_STACKTRACE_temporary_disabled)
     endif()
 endif()
 
- 
+

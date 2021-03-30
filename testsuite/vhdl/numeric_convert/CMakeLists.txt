@@ -7,13 +7,15 @@
 project(testrunner_vhdl_numeric_convert LANGUAGES CXX)
 
 
-add_executable(${PROJECT_NAME} "")
+add_executable(${PROJECT_NAME})
 
 
 add_test(NAME test_vhdl_numeric_conversion
-    COMMAND 
-        ${PROJECT_NAME}
+    COMMAND
+        ${PROJECT_NAME} --log_level=error
 )
+
+set(CMAKE_CTEST_ARGUMENTS "--output-on-failure")
 
 
 target_link_libraries(${PROJECT_NAME}
@@ -22,7 +24,7 @@ target_link_libraries(${PROJECT_NAME}
         testsuite::common
         Boost::system
         Boost::locale
-        Boost::unit_test_framework 
+        Boost::unit_test_framework
 )
 #set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-v")
 
@@ -35,7 +37,7 @@ if(DEVELOPER_EXTERNAL_BOOST_UTF)
 endif()
 
 
-target_sources(${PROJECT_NAME} 
+target_sources(${PROJECT_NAME}
     PRIVATE
         src/common/test_numeric_convert.cpp
         src/common/numeric_parser.cpp
@@ -48,7 +50,7 @@ target_sources(${PROJECT_NAME}
 
 
 set_source_files_properties(src/common/test_numeric_convert.cpp
-    APPEND PROPERTIES 
+    APPEND PROPERTIES
         # Failed to link Boost UTF with Windows/Clang, Linux works
         COMPILE_DEFINITIONS "$<$<NOT:$<PLATFORM_ID:Windows>>:BOOST_TEST_DYN_LINK>"
 )
@@ -61,15 +63,15 @@ set_source_files_properties(src/common/test_numeric_convert.cpp
 
 
 if (EDA_ENABLE_PCH)
-    target_precompile_headers(${PROJECT_NAME} 
-        PRIVATE 
+    target_precompile_headers(${PROJECT_NAME}
+        PRIVATE
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl_numeric_convert/detail/pch.hpp>
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl_numeric_convert/detail/pch_prj.hpp>
     )
 endif()
 
 
-target_include_directories(${PROJECT_NAME} 
+target_include_directories(${PROJECT_NAME}
     PRIVATE
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
@@ -79,8 +81,8 @@ target_include_directories(${PROJECT_NAME}
 )
 
 
-target_compile_definitions(${PROJECT_NAME} 
+target_compile_definitions(${PROJECT_NAME}
     PRIVATE
-        # don't allow automatically select which libraries to link against    
+        # don't allow automatically select which libraries to link against
         $<$<CXX_COMPILER_ID:MSVC>:BOOST_ALL_NO_LIB>
 )

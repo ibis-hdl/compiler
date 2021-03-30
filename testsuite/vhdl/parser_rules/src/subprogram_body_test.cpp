@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_SUITE(parser_rule)
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_DATA_TEST_CASE_F(  // --
     testsuite::vhdl_parser::util::failure_diagnostic_fixture, subprogram_body,
-    utf_data::make_delayed<testsuite::dataset_loader>("test_case/subprogram_body"),  // --
+    utf_data::make_delayed<testsuite::dataset_loader>("test_data/subprogram_body"),  // --
     input, expected, test_case_name)
 {
     using attribute_type = ast::subprogram_body;

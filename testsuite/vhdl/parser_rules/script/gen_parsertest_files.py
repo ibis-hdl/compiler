@@ -427,7 +427,7 @@ class BoostTestGenerator:
         template = """// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_DATA_TEST_CASE_F(  // --
     testsuite::vhdl_parser::util::failure_diagnostic_fixture, {test_case},
-    utf_data::make_delayed<testsuite::dataset_loader>("test_case/{test_case}"),  // --
+    utf_data::make_delayed<testsuite::dataset_loader>("test_data/{test_case}"),  // --
     input, expected, test_case_name)
 {{
     using attribute_type = ast::{attr_name};

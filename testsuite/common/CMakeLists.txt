@@ -7,7 +7,7 @@
 project(testsuite_common LANGUAGES CXX)
 
 
-add_library(${PROJECT_NAME} "")
+add_library(${PROJECT_NAME})
 add_library(testsuite::common ALIAS ${PROJECT_NAME})
 
 

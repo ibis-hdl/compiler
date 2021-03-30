@@ -7,18 +7,20 @@
 project(testrunner_vhdl_syntax LANGUAGES CXX)
 
 
-add_executable(${PROJECT_NAME} "")
+add_executable(${PROJECT_NAME})
 
 
-# The argument is the top level directory of the test directories of 'test_case'
+# The argument is the top level directory of the test directories of 'test_data'
 add_test(NAME test_vhdl_syntax
     COMMAND
-        ${PROJECT_NAME} --
+        ${PROJECT_NAME} --log_level=error --
         --source-dir=${PROJECT_SOURCE_DIR}
         --destination-dir=${PROJECT_BINARY_DIR}
         --input-extension=.vhdl
         --output-extension=.result
 )
+
+set(CMAKE_CTEST_ARGUMENTS "--output-on-failure")
 
 
 target_link_libraries(${PROJECT_NAME}
