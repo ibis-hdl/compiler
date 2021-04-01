@@ -5,7 +5,7 @@
 
 #include <tuple>
 
-#include <testsuite/common/namespace_alias.hpp>  // IWYU pragma: keep
+#include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
 namespace testsuite {
 

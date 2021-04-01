@@ -1,6 +1,6 @@
 #pragma once
 
-#include <testsuite/common/namespace_alias.hpp>  // IWYU pragma: keep
+#include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
 #include <boost/test/data/monomorphic.hpp>
 
@@ -9,26 +9,22 @@
 #include <vector>
 #include <filesystem>
 
-namespace testsuite {
+namespace testsuite::util {
 
-///
-/// @brief
-///
-/// Boost UTF [Datasets](
-///  https://www.boost.org/doc/libs/1_75_0/libs/test/doc/html/boost_test/tests_organization/test_cases/test_case_generation/datasets.html)
-///
-/// FixMe: This code is related to testsuite/vhdl_parser. Make it universal, so that can be placed
-/// into testsuite/common and the behavior can be replaced by overwriting the appropiate member
-/// functions.
-///
-/// @todo FixMe (Seriously Error): ```warning: Call to virtual method 'dataset_loader::setup'
-/// during construction bypasses virtual dispatch [clang-analyzer-optin.cplusplus.VirtualCall]
-/// setup();```. This is bad design, see [Calling virtual functions inside constructors](
-/// https://stackoverflow.com/questions/962132/calling-virtual-functions-inside-constructors)
-///
-/// @todo The path leaf of test data is still hard coded into the sources ('test_data'). It
-/// shouldn't depend on it!
-///
+//
+// @brief
+//
+// Boost UTF [Datasets](
+//  https://www.boost.org/doc/libs/1_75_0/libs/test/doc/html/boost_test/tests_organization/test_cases/test_case_generation/datasets.html)
+//
+// @todo FixMe (Seriously Error): ```warning: Call to virtual method 'dataset_loader::setup'
+// during construction bypasses virtual dispatch [clang-analyzer-optin.cplusplus.VirtualCall]
+// setup();```. This is bad design, see [Calling virtual functions inside constructors](
+// https://stackoverflow.com/questions/962132/calling-virtual-functions-inside-constructors)
+//
+// @todo The path leaf of test data is still hard coded into the sources ('test_data'). It
+// shouldn't depend on it!
+//
 
 class dataset_loader {
 public:
@@ -102,12 +98,12 @@ private:
     std::string expected_extension;
 };
 
-}  // namespace testsuite
+}  // namespace testsuite::util
 
 namespace boost::unit_test::data::monomorphic {
 
 template <>
-struct is_dataset<testsuite::dataset_loader> : boost::mpl::true_ {
+struct is_dataset<testsuite::util::dataset_loader> : boost::mpl::true_ {
 };
 
 }  // namespace boost::unit_test::data::monomorphic

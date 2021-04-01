@@ -26,7 +26,7 @@ set(CMAKE_CTEST_ARGUMENTS "--output-on-failure")
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         eda::vhdl_parser
-        testsuite::common
+        testsuite::util
         Boost::system
         Boost::locale
         Boost::unit_test_framework
@@ -42,7 +42,7 @@ endif()
 
 target_sources(${PROJECT_NAME}
     PRIVATE
-        src/common/test_vhdl_syntax.cpp
+        src/main/test_vhdl_syntax.cpp
         # concrete test cases
         src/label_check_test.cpp
         # FixMe: takes up to >18GB w/o IWYU !!
@@ -50,14 +50,14 @@ target_sources(${PROJECT_NAME}
 )
 
 
-set_source_files_properties(src/common/test_vhdl_syntax.cpp
+set_source_files_properties(src/main/test_vhdl_syntax.cpp
     APPEND PROPERTIES
         # Failed to link Boost UTF with Windows/Clang, Linux works
         COMPILE_DEFINITIONS "$<$<NOT:$<PLATFORM_ID:Windows>>:BOOST_TEST_DYN_LINK>"
 )
 # [Boost.Test linker error by use with precompiled headers (PCH)](
 #  https://stackoverflow.com/questions/66535719/boost-test-linker-error-by-use-with-precompiled-headers-pch)
-set_source_files_properties(src/common/test_vhdl_syntax.cpp
+set_source_files_properties(src/main/test_vhdl_syntax.cpp
     PROPERTIES
         SKIP_PRECOMPILE_HEADERS ON
 )

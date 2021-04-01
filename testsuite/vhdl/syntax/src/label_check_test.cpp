@@ -18,10 +18,10 @@
 //#include <eda/vhdl/ast/ast_stats.hpp>
 #include <eda/vhdl/context.hpp>
 
-#include <testsuite/common/data_set.hpp>
-#include <testsuite/common/failure_diagnostic_fixture.hpp>
+#include <testsuite/util/data_set.hpp>
+#include <testsuite/util/failure_diagnostic_fixture.hpp>
 
-#include <testsuite/common/namespace_alias.hpp>  // IWYU pragma: keep
+#include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
 namespace analyze = eda::vhdl::analyze;
 
@@ -30,8 +30,8 @@ BOOST_AUTO_TEST_SUITE(syntax_check)
 /*
  * SUCCESS test case
  */
-BOOST_DATA_TEST_CASE_F(testsuite::failure_diagnostic_fixture, labels_ok,
-                       utf_data::make_delayed<testsuite::dataset_loader>("test_case/labels_ok"),
+BOOST_DATA_TEST_CASE_F(testsuite::util::failure_diagnostic_fixture, labels_ok,
+                       utf_data::make_delayed<testsuite::util::dataset_loader>("test_case/labels_ok"),
                        input, expected, test_case_name)
 {
     btt::output_test_stream os;
@@ -76,8 +76,8 @@ BOOST_DATA_TEST_CASE_F(testsuite::failure_diagnostic_fixture, labels_ok,
  * FAILURE test case
  */
 BOOST_DATA_TEST_CASE_F(
-    testsuite::failure_diagnostic_fixture, label_missmatch,
-    utf_data::make_delayed<testsuite::dataset_loader>("test_case/label_missmatch"), input, expected,
+    testsuite::util::failure_diagnostic_fixture, label_missmatch,
+    utf_data::make_delayed<testsuite::util::dataset_loader>("test_case/label_missmatch"), input, expected,
     test_case_name)
 {
     btt::output_test_stream os;

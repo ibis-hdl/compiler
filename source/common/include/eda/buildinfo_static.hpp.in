@@ -9,7 +9,7 @@
 
 namespace eda::build_info {
 
-/// CMake specific
+// CMake specific
 static constexpr std::string_view platform{ "@CMAKE_SYSTEM_NAME@" };
 static constexpr std::string_view type{ "@CMAKE_BUILD_TYPE@" };
 static constexpr std::string_view system{ "CMake" };
@@ -18,7 +18,7 @@ static constexpr std::string_view system{ "CMake" };
 static constexpr std::string_view cxxflags{ "@CMAKE_CXX_FLAGS@" };
 static constexpr std::string_view linkflags{ "@CMAKE_LINKFLAGS@" };
 
-/// Boost specific
+// Boost specific
 static constexpr std::string_view compiler{ BOOST_COMPILER };
 static constexpr std::string_view stdlib{ BOOST_STDLIB };
 static constexpr std::string_view libboost{ BOOST_LIB_VERSION };

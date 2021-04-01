@@ -1,6 +1,6 @@
-#include <testsuite/common/data_set.hpp>
-#include <testsuite/common/cli_args.hpp>
-#include <testsuite/common/compile_builtin.hpp>
+#include <testsuite/util/data_set.hpp>
+#include <testsuite/util/cli_args.hpp>
+#include <testsuite/util/compile_builtin.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>
@@ -12,22 +12,23 @@
 #include <sstream>
 #include <string_view>
 
-using testsuite::cli_args;
+using testsuite::util::cli_args;
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_TEST_GLOBAL_FIXTURE(cli_args);
 
-namespace testsuite {
+namespace testsuite::util {
 
-/* The prefix for the test case root directory structure is runtime configurable.
- * For more information look at:
- * - [[Boost.Test] access to boost::unit_test::framework::master_test_suite().{argc, argv} outside
- * from BOOST_TEST]( https://groups.google.com/forum/#!topic/boost-developers-archive/wtnY9F2cWNI)
- * - [access to master_test_suite().{argc, argv}](
- *    https://svn.boost.org/trac10/ticket/12953)
- *
- * FixMe: dataset_name for messages
- * */
+//
+// The prefix for the test case root directory structure is runtime configurable.
+// For more information look at:
+// - [[Boost.Test] access to boost::unit_test::framework::master_test_suite().{argc, argv} outside
+// from BOOST_TEST]( https://groups.google.com/forum/#!topic/boost-developers-archive/wtnY9F2cWNI)
+// - [access to master_test_suite().{argc, argv}](
+//    https://svn.boost.org/trac10/ticket/12953)
+//
+// FixMe: dataset_name for messages
+//
 dataset_loader::dataset_loader(std::string const& path)
     : input_extension{ ".vhdl" }
     , expected_extension{ ".expected" }
@@ -254,4 +255,4 @@ void dataset_loader::setup()
     BOOST_TEST_MESSAGE("INFO(" << dataset_name << ") leave");
 }
 
-}  // namespace testsuite
+}  // namespace testsuite::util

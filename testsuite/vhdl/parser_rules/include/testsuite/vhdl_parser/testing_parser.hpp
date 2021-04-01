@@ -12,7 +12,7 @@
 #include <iostream>
 #include <filesystem>
 
-#include <testsuite/common/namespace_alias.hpp>
+#include <testsuite/namespace_alias.hpp>
 
 namespace testsuite::vhdl_parser::util {
 

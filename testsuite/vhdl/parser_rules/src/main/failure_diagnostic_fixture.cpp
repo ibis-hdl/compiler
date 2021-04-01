@@ -1,5 +1,5 @@
 #include <testsuite/vhdl_parser/failure_diagnostic_fixture.hpp>
-#include <testsuite/common/cli_args.hpp>
+#include <testsuite/util/cli_args.hpp>
 
 #include <boost/test/unit_test.hpp>
 
@@ -10,6 +10,8 @@ namespace testsuite::vhdl_parser::util {
 void failure_diagnostic_fixture::setup()
 {
     fixture_name = "vhdl/parser_rules/failure_diagnostic_fixture";
+
+    using testsuite::util::cli_args;
 
     if (cli_args::destination_dir().empty()) {
         BOOST_TEST_MESSAGE(  // --

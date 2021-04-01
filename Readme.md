@@ -322,17 +322,20 @@ ToDo on design
 
 ### Project structure
 
-- testsuite/common/failure_diagnostic_fixture and testsuite/vhdl/util/failure_diagnostic_fixture
+- testsuite/util/failure_diagnostic_fixture and testsuite/vhdl/util/failure_diagnostic_fixture
   BAD NAMING ...
 
-- rename testsuite/common to testsuite/util and libutil. Header, namespaces etc are
-  inconsistent!
-
-- rename common fs paths, namespaces are (as far I remember) 'util' always.
+- rename common file system paths, namespaces are (as far I remember) 'util' always.
 
 - merge back testsuite librules into parser_rules. The intention was
   to split out compile/memory intensive compile jobs. This is
-  confusing from maintenance aspect. Ninja build tool support this.
+  confusing from maintenance aspect. This may be complicated, so the impression
+  after some test. The linker run out of memory with 20GB... Maybe a compiler
+  template firewall must be introduced, see
+  [Internal compiler error, while using boost spirit x3](
+   https://stackoverflow.com/questions/40195894/internal-compiler-error-while-using-boost-spirit-x3).
+  Maybe the reason was, that all optimizations where turned off? to save
+  time.
 
 - testsuite/librules/CMake holds some Spirit.X3 compile stuff - make it
   globally. E.g. GCC/CLang -ftemplate-backtrace-limit=... as well as

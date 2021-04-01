@@ -16,9 +16,9 @@
 #include <eda/vhdl/parser/skipper.hpp>
 #include <eda/vhdl/type.hpp>
 
-#include <testsuite/common/namespace_alias.hpp>
-#include <testsuite/common/data_set.hpp>
-#include <testsuite/common/failure_diagnostic_fixture.hpp>
+#include <testsuite/namespace_alias.hpp>
+#include <testsuite/util/data_set.hpp>
+#include <testsuite/util/failure_diagnostic_fixture.hpp>
 
 #include <testsuite/vhdl/rules.hpp>
 

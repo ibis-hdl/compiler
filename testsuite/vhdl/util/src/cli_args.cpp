@@ -1,4 +1,4 @@
-#include <testsuite/common/cli_args.hpp>
+#include <testsuite/util/cli_args.hpp>
 
 #include <CLI/App.hpp>
 #include <CLI/Error.hpp>
@@ -11,7 +11,7 @@
 #include <cstdlib>
 #include <sstream>
 
-namespace testsuite {
+namespace testsuite::util {
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 cli_args::cli_data cli_args::data;
@@ -122,4 +122,4 @@ void cli_args::print_settings()
     }
 }
 
-}  // namespace testsuite
+}  // namespace testsuite::util

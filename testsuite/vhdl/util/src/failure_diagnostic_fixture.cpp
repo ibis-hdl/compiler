@@ -1,10 +1,8 @@
-#include <testsuite/common/failure_diagnostic_fixture.hpp>
-#include <testsuite/common/cli_args.hpp>
-#include <testsuite/common/compile_builtin.hpp>
+#include <testsuite/util/failure_diagnostic_fixture.hpp>
+#include <testsuite/util/cli_args.hpp>
+#include <testsuite/util/compile_builtin.hpp>
 
-#include <testsuite/common/namespace_alias.hpp>  // IWYU pragma: keep
-
-#include <eda/util/make_iomanip.hpp>
+#include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/results_collector.hpp>
@@ -17,76 +15,42 @@
 #include <sstream>
 #include <system_error>
 
-namespace testsuite {
+namespace /* anonymous */ {
 
-///
-/// @brief Write the parsed result into file
-///
-/// FixMe: written to fs::path(destination_dir) / "test_case" / testcase_name;
-///
-/// @todo Make the path to the destination/write folder configurable, also
-/// the file extension for the result.
-///
-class failure_diagnostic_fixture::writer {
-public:
-    ///
-    /// @brief Construct a new writer object
-    ///
-    /// @param name is the prefixed name for printing messages.
-    ///
-    writer(std::string_view name)
-        : writer_name{ name }
+/// FixMe: This is a hack to avoid the depency to eda::vhdl to
+/// this project. This depends only on eda::util::make_iomanip
+/// header for failure_diagnostic_fixture
+/// Hence it's a copy&paste of <eda/util/make_iomanip.hpp>
+template <typename T>
+struct A {
+    T x;
+
+    friend std::ostream& operator<<(std::ostream& os, A const& a)
     {
+        a.x(os);
+        return os;
     }
-
-    ///
-    /// @brief Member function to write the contents of result
-    /// into filesystem.
-    ///
-    /// @param full_pathname holds the path/filename to write to
-    /// @param result holds the data to be written.
-    ///
-    void write(fs::path const& full_pathname, std::string_view result);
-
-private:
-    ///
-    /// @brief Create a directory object
-    ///
-    /// @param write_path for the file to write. If the path doesn't exist
-    /// it is created.
-    /// @return true on success, directory does exist or is created successfull.
-    /// @return false on failure on creating the directory.
-    ///
-    bool create_directories(fs::path const& write_path);
-
-    ///
-    /// @brief Write the contents into file.
-    ///
-    /// If a file with the same name exist it will be removed from
-    /// filesstem and new created.
-    ///
-    /// @param filename is the name of the file to be written.
-    /// @param contents to be written.
-    /// @return true if successfully written.
-    /// @return false on failure.
-    ///
-    bool write_file(fs::path const& filename, std::string_view contents);
-
-private:
-    std::string_view const writer_name;
 };
 
-}  // namespace testsuite
+template <typename T>
+A<std::decay_t<T>> make_iomanip(T&& x)
+{
+    return { std::forward<T>(x) };
+}
+
+}  // namespace
 
 /// ---------------------------------------------------------------------------
 ///
 /// failure_diagnostic_fixture implementation
 ///
 /// ---------------------------------------------------------------------------
-namespace testsuite {
+namespace testsuite::util {
 
 void failure_diagnostic_fixture::setup()
 {
+    using util::cli_args;
+
     if (cli_args::destination_dir().empty()) {
         BOOST_TEST_MESSAGE(  // --
             "INFO(" << fixture_name << ") use compiled builtin <destination_dir> "
@@ -143,7 +107,6 @@ void failure_diagnostic_fixture::failure_closure(std::string test_case_name,
 
         // furnish a nice line with title in the middle
         auto hline = [&](std::string const& title, std::size_t col_width, char fill = '~') {
-            using eda::util::make_iomanip;
             return make_iomanip([&title, col_width, fill](std::ostream& os) {
                 std::size_t const w{ (col_width - title.size()) / 2 };
                 std::string const line(w, fill);
@@ -188,26 +151,25 @@ void failure_diagnostic_fixture::failure_closure(std::string test_case_name,
         fs::path full_pathname = destination_dir / test_case_name;
         full_pathname = full_pathname.replace_extension(output_extension);
 
-        failure_diagnostic_fixture::writer writer{ fixture_name };
-        writer.write(full_pathname, test_result);
+        write(full_pathname, test_result);
     }
 }
 
-}  // namespace testsuite
+}  // namespace testsuite::util
 
-/// ---------------------------------------------------------------------------
-///
-/// failure_diagnostic_fixture::writer implementation
-///
-/// ---------------------------------------------------------------------------
-using testsuite::cli_args;
+// ---------------------------------------------------------------------------
+//
+// failure_diagnostic_fixture private writer functions implementation
+//
+// ---------------------------------------------------------------------------
+using testsuite::util::cli_args;
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_TEST_GLOBAL_FIXTURE(cli_args);
 
-namespace testsuite {
+namespace testsuite::util {
 
-void failure_diagnostic_fixture::writer::write(fs::path const& full_pathname,
+void failure_diagnostic_fixture::write(fs::path const& full_pathname,
                                                std::string_view result)
 {
     fs::path const write_path = full_pathname.parent_path();
@@ -216,17 +178,17 @@ void failure_diagnostic_fixture::writer::write(fs::path const& full_pathname,
     BOOST_TEST_REQUIRE(write_file(full_pathname, result));
 }
 
-bool failure_diagnostic_fixture::writer::create_directories(fs::path const& write_path)
+bool failure_diagnostic_fixture::create_directories(fs::path const& write_path)
 {
     try {
         if (!fs::exists(write_path) || !fs::is_directory(write_path)) {
-            BOOST_TEST_MESSAGE("INFO(" << writer_name << ") create directories " << write_path
+            BOOST_TEST_MESSAGE("INFO(" << fixture_name << ") create directories " << write_path
                                        << '\n');
             BOOST_TEST_REQUIRE(fs::create_directories(write_path));
         }
     }
     catch (fs::filesystem_error const& e) {
-        BOOST_TEST_MESSAGE("ERROR(" << writer_name << ") creating directory " << write_path
+        BOOST_TEST_MESSAGE("ERROR(" << fixture_name << ") creating directory " << write_path
                                     << " failed with:\n"
                                     << e.code().message());
         return false;
@@ -235,10 +197,10 @@ bool failure_diagnostic_fixture::writer::create_directories(fs::path const& writ
     return true;
 }
 
-bool failure_diagnostic_fixture::writer::write_file(fs::path const& filename,
+bool failure_diagnostic_fixture::write_file(fs::path const& filename,
                                                     std::string_view contents)
 {
-    BOOST_TEST_MESSAGE("INFO(" << writer_name << ") Write result to " << filename);
+    BOOST_TEST_MESSAGE("INFO(" << fixture_name << ") Write result to " << filename);
     // remove old result file if exist
     try {
         if (fs::exists(filename)) {
@@ -246,7 +208,7 @@ bool failure_diagnostic_fixture::writer::write_file(fs::path const& filename,
         }
     }
     catch (fs::filesystem_error const& e) {
-        BOOST_TEST_MESSAGE("ERROR(" << writer_name << ") remove of older result file " << filename
+        BOOST_TEST_MESSAGE("ERROR(" << fixture_name << ") remove of older result file " << filename
                                     << " failed with:\n"
                                     << e.code().message());
         return false;
@@ -257,7 +219,7 @@ bool failure_diagnostic_fixture::writer::write_file(fs::path const& filename,
         ofs << contents;
     }
     catch (fs::filesystem_error const& e) {
-        BOOST_TEST_MESSAGE("ERROR(" << writer_name << ") writing to " << filename
+        BOOST_TEST_MESSAGE("ERROR(" << fixture_name << ") writing to " << filename
                                     << " failed with:\n"
                                     << e.code().message());
         return false;
@@ -266,4 +228,4 @@ bool failure_diagnostic_fixture::writer::write_file(fs::path const& filename,
     return true;
 }
 
-}  // namespace testsuite
+}  // namespace testsuite::util

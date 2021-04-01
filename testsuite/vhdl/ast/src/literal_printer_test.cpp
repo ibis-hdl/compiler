@@ -5,7 +5,7 @@
 #include <boost/test/data/monomorphic.hpp>
 #include <boost/test/tools/output_test_stream.hpp>
 
-#include <testsuite/common/namespace_alias.hpp>
+#include <testsuite/namespace_alias.hpp>
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_SUITE(literal_print)

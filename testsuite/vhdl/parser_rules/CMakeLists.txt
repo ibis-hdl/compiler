@@ -39,7 +39,7 @@ set(CMAKE_CTEST_ARGUMENTS "--output-on-failure")
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         eda::vhdl_parser
-        testsuite::common
+        testsuite::util
         testsuite::vhdl_rules
         Boost::system
         Boost::locale
@@ -58,8 +58,8 @@ endif()
 
 target_sources(${PROJECT_NAME}
     PRIVATE
-        src/common/test_vhdl_parser.cpp
-        src/common/failure_diagnostic_fixture.cpp
+        src/main/test_vhdl_parser.cpp
+        src/main/failure_diagnostic_fixture.cpp
         # concrete test cases
         src/abstract_literal_test.cpp
         src/actual_part_test.cpp
@@ -172,14 +172,14 @@ target_sources(${PROJECT_NAME}
 
 
 
-set_source_files_properties(src/common/test_vhdl_parser.cpp
+set_source_files_properties(src/main/test_vhdl_parser.cpp
     APPEND PROPERTIES
         # Failed to link Boost UTF with Windows/Clang, Linux works
         COMPILE_DEFINITIONS "$<$<NOT:$<PLATFORM_ID:Windows>>:BOOST_TEST_DYN_LINK>"
 )
 # [Boost.Test linker error by use with precompiled headers (PCH)](
 #  https://stackoverflow.com/questions/66535719/boost-test-linker-error-by-use-with-precompiled-headers-pch)
-set_source_files_properties(src/common/test_vhdl_parser.cpp
+set_source_files_properties(src/main/test_vhdl_parser.cpp
     PROPERTIES
         SKIP_PRECOMPILE_HEADERS ON
 )

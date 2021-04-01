@@ -3,15 +3,18 @@
 #include <string_view>
 #include <filesystem>
 
-#include <testsuite/common/namespace_alias.hpp>  // IWYU pragma: keep
+#include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
-namespace testsuite {
+namespace testsuite::util {
 
 ///
 /// @brief Boost.Test failure diagnostic fixture
 ///
 /// On failed test cases saves the test case data to file system.
 ///
+/// FixMe: written to fs::path(destination_dir) / "test_case" / testcase_name;
+/// Make the path to the destination/write folder configurable, also the file
+/// extension for the result.
 /*
     COMMAND
         ${PROJECT_NAME} --
@@ -76,7 +79,37 @@ protected:
     std::string fixture_name{ "failure_diagnostic_fixture" };
 
 private:
-    class writer;
+    ///
+    /// @brief Member function to write the contents of result
+    /// into filesystem.
+    ///
+    /// @param full_pathname holds the path/filename to write to
+    /// @param result holds the data to be written.
+    ///
+    void write(fs::path const& full_pathname, std::string_view result);
+
+    ///
+    /// @brief Create a directory object
+    ///
+    /// @param write_path for the file to write. If the path doesn't exist
+    /// it is created.
+    /// @return true on success, directory does exist or is created successfull.
+    /// @return false on failure on creating the directory.
+    ///
+    bool create_directories(fs::path const& write_path);
+
+    ///
+    /// @brief Write the contents into file.
+    ///
+    /// If a file with the same name exist it will be removed from
+    /// filesstem and new created.
+    ///
+    /// @param filename is the name of the file to be written.
+    /// @param contents to be written.
+    /// @return true if successfully written.
+    /// @return false on failure.
+    ///
+    bool write_file(fs::path const& filename, std::string_view contents);
 };
 
-}  // namespace testsuite
+}  // namespace testsuite::util

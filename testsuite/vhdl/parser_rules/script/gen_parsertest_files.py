@@ -402,8 +402,8 @@ class BoostTestGenerator:
         return """
 #include <eda/vhdl/ast/node/{attr_name}.hpp>
 
-#include <testsuite/common/data_set.hpp>
-#include <testsuite/common/namespace_alias.hpp>  // IWYU pragma: keep
+#include <testsuite/util/data_set.hpp>
+#include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
 #include <testsuite/vhdl/rules.hpp>
 #include <testsuite/vhdl_parser/testing_parser.hpp>
@@ -427,7 +427,7 @@ class BoostTestGenerator:
         template = """// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_DATA_TEST_CASE_F(  // --
     testsuite::vhdl_parser::util::failure_diagnostic_fixture, {test_case},
-    utf_data::make_delayed<testsuite::dataset_loader>("test_data/{test_case}"),  // --
+    utf_data::make_delayed<testsuite::util::dataset_loader>("test_data/{test_case}"),  // --
     input, expected, test_case_name)
 {{
     using attribute_type = ast::{attr_name};

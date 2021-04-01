@@ -11,6 +11,6 @@
 #include <eda/vhdl/parser/parser_config.hpp>
 #include <eda/vhdl/type.hpp>
 
-#include <testsuite/common/namespace_alias.hpp>
+#include <testsuite/namespace_alias.hpp>
 #include <testsuite/vhdl_numeric_convert/binary_string.hpp>
 #include <testsuite/vhdl_numeric_convert/numeric_parser.hpp>

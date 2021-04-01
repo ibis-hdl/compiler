@@ -32,7 +32,7 @@ configure_file(
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         eda::vhdl_parser
-        testsuite::common
+        testsuite::util
         Boost::system
         Boost::unit_test_framework
 )
@@ -46,8 +46,8 @@ endif()
 
 target_sources(${PROJECT_NAME}
     PRIVATE
-        src/common/test_ast.cpp
-        src/common/position_cache_fixture.cpp
+        src/main/test_ast.cpp
+        src/main/position_cache_fixture.cpp
         # concrete test cases
         src/position_cache_test_1.cpp
         src/position_cache_test_2.cpp
@@ -55,14 +55,14 @@ target_sources(${PROJECT_NAME}
 )
 
 
-set_source_files_properties(src/common/test_ast.cpp
+set_source_files_properties(src/main/test_ast.cpp
     APPEND PROPERTIES
         # Failed to link Boost UTF with Windows/Clang, Linux works
         COMPILE_DEFINITIONS "$<$<NOT:$<PLATFORM_ID:Windows>>:BOOST_TEST_DYN_LINK>"
 )
 # [Boost.Test linker error by use with precompiled headers (PCH)](
 #  https://stackoverflow.com/questions/66535719/boost-test-linker-error-by-use-with-precompiled-headers-pch)
-set_source_files_properties(src/common/test_ast.cpp
+set_source_files_properties(src/main/test_ast.cpp
     PROPERTIES
         SKIP_PRECOMPILE_HEADERS ON
 )

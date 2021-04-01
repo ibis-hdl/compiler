@@ -14,9 +14,9 @@
 #include <eda/vhdl/analyze/error_handler.hpp>
 #include <eda/vhdl/ast/ast_stats.hpp>
 
-#include <testsuite/common/data_set.hpp>
-#include <testsuite/common/failure_diagnostic_fixture.hpp>
-#include <testsuite/common/namespace_alias.hpp>
+#include <testsuite/util/data_set.hpp>
+#include <testsuite/util/failure_diagnostic_fixture.hpp>
+#include <testsuite/namespace_alias.hpp>
 
 namespace analyze = eda::vhdl::analyze;
 
@@ -25,8 +25,8 @@ BOOST_AUTO_TEST_SUITE(syntax_check)
 /*
  * SUCCESS test case
  */
-BOOST_DATA_TEST_CASE_F(testsuite::failure_diagnostic_fixture, keyword_ok,
-                       utf_data::make_delayed<testsuite::dataset_loader>("test_case/keyword_ok"),
+BOOST_DATA_TEST_CASE_F(testsuite::util::failure_diagnostic_fixture, keyword_ok,
+                       utf_data::make_delayed<testsuite::util::dataset_loader>("test_case/keyword_ok"),
                        input, expected, test_case_name)
 {
     btt::output_test_stream os;
@@ -73,8 +73,8 @@ BOOST_DATA_TEST_CASE_F(testsuite::failure_diagnostic_fixture, keyword_ok,
  * FAILURE test case
  */
 BOOST_DATA_TEST_CASE_F(
-    testsuite::failure_diagnostic_fixture, keyword_missmatch,
-    utf_data::make_delayed<testsuite::dataset_loader>("test_case/keyword_mismatch"), input,
+    testsuite::util::failure_diagnostic_fixture, keyword_missmatch,
+    utf_data::make_delayed<testsuite::util::dataset_loader>("test_case/keyword_mismatch"), input,
     expected, test_case_name)
 {
     btt::output_test_stream os;

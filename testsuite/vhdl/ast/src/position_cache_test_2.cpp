@@ -6,8 +6,8 @@
 #include <eda/vhdl/parser/iterator_type.hpp>
 #include <eda/vhdl/ast/position_cache.hpp>
 
-#include <testsuite/common/data_set.hpp>
-#include <testsuite/common/namespace_alias.hpp>
+#include <testsuite/util/data_set.hpp>
+#include <testsuite/namespace_alias.hpp>
 
 #include <eda/util/pretty_typename.hpp>
 

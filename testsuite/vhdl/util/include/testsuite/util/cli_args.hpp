@@ -3,9 +3,9 @@
 #include <string>
 #include <filesystem>
 
-#include <testsuite/common/namespace_alias.hpp>  // IWYU pragma: keep
+#include <testsuite/namespace_alias.hpp>  /// IWYU pragma: keep
 
-namespace testsuite {
+namespace testsuite::util {
 
 ///
 /// @brief Custom command line arguments fixture
@@ -131,4 +131,4 @@ private:
     static cli_data data;
 };
 
-}  // namespace testsuite
+}  // namespace testsuite::util

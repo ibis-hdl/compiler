@@ -5,10 +5,10 @@
 #include <string_view>
 
 //
-// compile time builtin settings for testsuite/common
+// compile time builtin settings for testsuite/util
 //
 
-namespace testsuite::compile_builtin {
+namespace testsuite::util::compile_builtin {
 
 // required by dataset loader
 constexpr std::string_view source_dir{ "@CMAKE_BINARY_DIR@/testsuite" };
@@ -19,4 +19,4 @@ constexpr std::string_view expected_extension{ ".expected" };
 constexpr std::string_view destination_dir{ "@CMAKE_BINARY_DIR@/testsuite_result/failure_closure" };
 constexpr std::string_view output_extension{ ".result" };
 
-}  // namespace testsuite::compile_builtin
+}  // namespace testsuite::util::compile_builtin
