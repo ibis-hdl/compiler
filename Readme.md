@@ -15,7 +15,7 @@ Required Tools to Build & Configuration
 
 * python 3 to generate some files
 
-* much memory, highly recommended are 16GB
+* much memory, highly recommended more than 16GB
 
 
 Required 3rd party Libraries
@@ -279,7 +279,6 @@ Missing tests:
   - concurrent_procedure_call_statement
   - concurrent_signal_assignment_statement
 
-
 In 2021 boost is bumped to v1.73 and following *test_vhdl_parser_rule* tests failed:
 
   - test_case_name = aggregate/aggregate_001;
@@ -339,8 +338,6 @@ ToDo on design
   globally. E.g. GCC/CLang -ftemplate-backtrace-limit=... as well as
   MSVC /bigobj => use generator expressions in cmake/options_developer.cmake
 
-- maybe move the testsuites below there sources, see e.g. llvm source tree
-
 ### CMake
 
 - [Modern CMake](https://cliutils.gitlab.io/modern-cmake/)
@@ -373,11 +370,6 @@ FetchContent_MakeAvailable(RapidJSON)
 set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
 ```
 
-- By starting using precompiled headers by CMake, some smaller problems rise.
-  E.g. *reference to 'util' is ambiguous* error since name lookup got
-  'boost::locale::util' and 'eda::util' for i.e. 'util::user_home_dir'
-  at source/ibis/src/init.cpp - this isn't fatal, but even not tidy.
-
 - l10n seems to have a problem with PCH support, warning/error rises:
   "xgettext: error while opening "../source/common//..cmake_pch.hxx.cxx"
   for reading: No such file or directory
@@ -399,7 +391,7 @@ set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
   inside init().
 
 - Make the path of test inputs hard coded using CMake's configure_file() to run
-  int easily without ctest and command line arguments. They are not intended
+  it easily without ctest and command line arguments. They are not intended
   to be distributed, so it doesn't matter. But, don't remove the command line
   options to explicit override these paths other specific tests.
   After first inspection, more effort is required for parse_rules and syntax
@@ -417,14 +409,11 @@ set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
 - Write git hooks for checking using clang-{tidy,format} et al.
 
 - Replace:
-  - boost.filesystem with std::filesystem, check it before for compliance of
-    used functions.
   - RapidJSON with boost.json - starting with boost 1.75. The results of
     [Benchmarks](https://vinniefalco.github.io/doc/json/json/benchmarks.html)
     look promising
   - util::visit_in_place using boost.hana with util::overloaded
   - swap from make to ninja build to use CMake's Unity Build Mode
-  - unify and simplify the build helper scripts
   - join back testsuite's librules into parser_rules. The reason was in 2018 the
     compilation effort: compiling with make -j X and spirit.x3 rules with
     single core. Starting with CMake 3.16 there is the Unity Build Mode.
@@ -456,10 +445,6 @@ set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
 
 - organize convenience scripts into sub dir - or write a doc how use it on command
   line for use with copy&paste (best approach IMO).
-
-### MS VS
-
-Support Clang on Windows, see [Clang's MSVC compatibility](https://clang.llvm.org/docs/MSVCCompatibility.html)
 
 
 ### Boost.Test
@@ -518,6 +503,9 @@ https://blog.kitware.com/static-checks-with-cmake-cdash-iwyu-clang-tidy-lwyu-cpp
 ## ToDo Documentation
 
 Switch from MarkDown to ReStructuredText.
+
+- the 'testsuite/vhdl/parser_rules/parser_test_matrix.rst' is to big, split it into test cases
+  and link it into doxygen/sphinx
 
 - [Clear, Functional C++ Documentation with Sphinx + Breathe + Doxygen + CMake](
    https://devblogs.microsoft.com/cppblog/clear-functional-c-documentation-with-sphinx-breathe-doxygen-cmake/)
