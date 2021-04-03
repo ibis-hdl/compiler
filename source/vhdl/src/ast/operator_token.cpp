@@ -56,11 +56,11 @@ std::ostream& operator<<(std::ostream& os, operator_token token)
 }
 
 #if 0
-/**
- * VHDL operator arity helper
- *
- * FixMe: unused and not required since BNCF takes care on it.
- */
+///
+/// VHDL operator arity helper
+///
+/// FixMe: unused and not required since BNCF takes care on it.
+///
 unsigned arity(operator_token token)
 {
     switch(token) {
@@ -75,24 +75,24 @@ unsigned arity(operator_token token)
 }
 
 
-/**
- * VHDL operator precedence helper
- *
- * FixMe: unused and not required since BNCF takes care on it.
- *
- * ==== =======================     =================================
- * Prio      operator group                     operator
- * ==== =======================     =================================
- * 6    miscellaneous operators     ** | abs | not
- * 5    multiplying operators       * | / | mod | rem
- * 4    sign operators              + | -
- * 3    adding operators            + | - | &
- * 2    shift operators             sll | srl | sla | sra | rol | ror
- * 1    relational operators        = | /= | < | <= | > | >=
- * 0    logical operators           and | or | nand| nor | xor | xnor
- * ==== =======================     =================================
- * Prio 6 is the highest priority level
- */
+///
+/// VHDL operator precedence helper
+///
+/// FixMe: unused and not required since BNCF takes care on it.
+///
+/// ==== =======================     =================================
+/// Prio      operator group                     operator
+/// ==== =======================     =================================
+/// 6    miscellaneous operators     ** | abs | not
+/// 5    multiplying operators       * | / | mod | rem
+/// 4    sign operators              + | -
+/// 3    adding operators            + | - | &
+/// 2    shift operators             sll | srl | sla | sra | rol | ror
+/// 1    relational operators        = | /= | < | <= | > | >=
+/// 0    logical operators           and | or | nand| nor | xor | xnor
+/// ==== =======================     =================================
+/// Prio 6 is the highest priority level
+///
 unsigned precedence(operator_token token)
 {
     switch(token) {

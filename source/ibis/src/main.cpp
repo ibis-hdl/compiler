@@ -36,10 +36,12 @@ int main(int argc, const char* argv[])
     using namespace eda;
     using namespace eda::color;
 
+    constexpr bool test_color = false;
+
     try {
         util::file_loader file_reader{ std::cerr, setting };
 
-        if constexpr (false /* debug */) {
+        if constexpr (test_color) {
             std::cerr << color::message::failure("FAILURE") << " Format Test\n";
             std::cerr << color::message::error("ERROR") << " Format Test\n";
             std::cerr << color::message::warning("WARNING") << " Format Test\n";

@@ -27,7 +27,7 @@ std::ostream& settings::dump(std::ostream& os) const
         os << "    " << option_name << ": ";
         // clang-format off
         std::visit(util::overloaded{
-            [&os](std::monostate /*unused*/) {  // NOLINT(readability-named-parameter)
+            [&os]([[maybe_unused]] std::monostate v) {
                 os << "N/A";
             },
             [&os](bool v) {
@@ -71,7 +71,7 @@ std::ostream& settings::print(std::ostream& os, settings::option_value const& va
                       util::infix_ostream_iterator<std::string>(std::cout, ", "));
             os << " ]";
         },
-        [&os](std::monostate /*unused*/) {  // NOLINT(readability-named-parameter)
+        [&os]([[maybe_unused]] std::monostate option) {
             os << "N/A (std::monostate)";
         },
     }, value);

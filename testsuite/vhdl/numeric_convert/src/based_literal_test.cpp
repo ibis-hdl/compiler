@@ -27,9 +27,9 @@ BOOST_AUTO_TEST_SUITE(numeric_convert)
 
 namespace detail {
 
-/*******************************************************************************
- * generator helper functions
- ******************************************************************************/
+//******************************************************************************
+// generator helper functions
+//******************************************************************************
 
 template <class T>
 typename std::enable_if<std::is_integral<T>::value, std::string>::type to_based_literal(
@@ -103,7 +103,8 @@ to_based_literal(unsigned base, T value)
 
 }  // namespace detail
 
-namespace /* anonymous */ {
+namespace  // anonymous
+{
 
 // The numeric_convert utility writes messages, but concrete error messages
 // aren't checked. For debugging is useful to see them otherwise. Switch to
@@ -113,9 +114,12 @@ namespace /* anonymous */ {
 //
 // Note: technically, we initialize globals that access extern objects,
 // and therefore can lead to order-of-initialization problems.
+
+bool constexpr no_messages = true;
+
 // NOLINTNEXTLINE(cppcoreguidelines-interfaces-global-init)
 auto const numeric_convert = []() {
-    if constexpr (true /* no messages */) {
+    if constexpr (no_messages) {
         static btt::output_test_stream nil_sink;
         return ast::numeric_convert{ nil_sink };
     }
@@ -126,9 +130,9 @@ auto const numeric_convert = []() {
 
 }  // namespace
 
-/*******************************************************************************
- * integer based_literal of different bases
- ******************************************************************************/
+//******************************************************************************
+// integer based_literal of different bases
+//******************************************************************************
 std::vector<std::string> const integer_lit{
     // binary
     "2#0#",
@@ -145,14 +149,14 @@ std::vector<std::string> const integer_lit{
     // hexadecimal
     "16#1#",
     "16#F#E1",
-    /* Examples from
-     * - IEEE_VHDL_1076-1993: Chapter 13.4.2 Based literals
-     *
-     *   2#1111_1111#            = 255 (integer literal)
-     *   16#FF#                  = 255 (integer literal)
-     *   016#0FF#                = 255 (integer literal)
-     *   16#E#E1                 = 224 (integer literal)
-     *   2#1110_0000#            = 224 (integer literal)                     */
+    // Examples from
+    // - IEEE_VHDL_1076-1993: Chapter 13.4.2 Based literals
+    //
+    //   2#1111_1111#            = 255 (integer literal)
+    //   16#FF#                  = 255 (integer literal)
+    //   016#0FF#                = 255 (integer literal)
+    //   16#E#E1                 = 224 (integer literal)
+    //   2#1110_0000#            = 224 (integer literal)
     "2#1111_1111#",
     "16#FF#",
     "016#0FF#",
@@ -220,9 +224,9 @@ BOOST_DATA_TEST_CASE(based_literal_integer, utf_data::make(integer_lit) ^ intege
     BOOST_TEST(value == N);
 }
 
-/*******************************************************************************
- * integer based_literal overflow checks
- ******************************************************************************/
+//******************************************************************************
+// integer based_literal overflow checks
+//******************************************************************************
 std::vector<std::string> const integer_lit_uint64_ovflw{
     detail::to_based_literal(2, std::numeric_limits<uint64_t>::max(), "_0"),
     detail::to_based_literal(8, std::numeric_limits<uint64_t>::max(), "_0"),
@@ -250,26 +254,26 @@ BOOST_DATA_TEST_CASE(based_literal_uint64_ovflw, utf_data::make(integer_lit_uint
     boost::ignore_unused(value);
 }
 
-/*******************************************************************************
- * real based_literal of different bases
- ******************************************************************************/
+//******************************************************************************
+// real based_literal of different bases
+//******************************************************************************
 std::vector<std::string> const real_lit{
     "10#0.0#", "10#1.0#", "10#42.66#e-1",
-    /* Examples from
-     * - IEEE_VHDL_1076-1993: Chapter 13.4.2 Based literals
-     *
-     *   16#F.FF#E+2             = 4095.0 (real literal)
-     *   2#1.1111_1111_111#E11   = 4095.0 (real literal)
-     *
-     * Algorithm (in Octave/Matlab):
-     * base = 16
-     * result = ( ...
-     *    hex2dec('F')*base^0  ...
-     * + ( ...
-     *      hex2dec('F')/base^1 ...
-     *    + hex2dec('F')/base^2 ...
-     *    ) ...
-     * ) * base^2                                                             */
+    // Examples from
+    // - IEEE_VHDL_1076-1993: Chapter 13.4.2 Based literals
+    //
+    //   16#F.FF#E+2             = 4095.0 (real literal)
+    //   2#1.1111_1111_111#E11   = 4095.0 (real literal)
+    //
+    // Algorithm (in Octave/Matlab):
+    // base = 16
+    // result = ( ...
+    //    hex2dec('F')*base^0  ...
+    // + ( ...
+    //      hex2dec('F')/base^1 ...
+    //    + hex2dec('F')/base^2 ...
+    //    ) ...
+    // ) * base^2
     "16#F.FF#E+2",            // 4095.0
     "2#1.1111_1111_111#E11",  // 4095.0
 };
@@ -297,9 +301,9 @@ BOOST_DATA_TEST_CASE(based_literal_real, utf_data::make(real_lit) ^ real_dec, li
     BOOST_TEST(value == N);
 }
 
-/*******************************************************************************
- * FAILURE test for binary integer/real based_literal
- ******************************************************************************/
+//******************************************************************************
+// FAILURE test for binary integer/real based_literal
+//******************************************************************************
 std::vector<std::string> const lit_failure{
     "3#1111_0000#",  // parse ok, but unsupported base
 };

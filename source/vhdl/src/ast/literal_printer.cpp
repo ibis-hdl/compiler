@@ -9,7 +9,8 @@
 
 #include <iostream>
 
-namespace /* anonymous */ {
+namespace  // anonymous
+{
 
 class unquote_predicate {
 public:

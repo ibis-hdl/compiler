@@ -23,13 +23,13 @@ struct concurrent_statement
               ast::component_instantiation_statement,       // --
               ast::generate_statement                       // --
               > {
-    /* Note, concurrent_statement is forwarded due to cyclic dependency at
-     * block_statement_part. Since x3::variant has move constructor defined,
-     * the copy constructor is implicit deleted, see
-     * [Rule-of-Three becomes Rule-of-Five with C++11?](
-     *  https://stackoverflow.com/questions/4782757/rule-of-three-becomes-rule-of-five-with-c11?answertab=active#tab-top).
-     * Here we bring the compiler generated back and supply specific assign
-     * operator= required to this variant - copy&paste from x3::variant.  */
+    // Note, concurrent_statement is forwarded due to cyclic dependency at
+    // block_statement_part. Since x3::variant has move constructor defined,
+    // the copy constructor is implicit deleted, see
+    // [Rule-of-Three becomes Rule-of-Five with C++11?](
+    //  https://stackoverflow.com/questions/4782757/rule-of-three-becomes-rule-of-five-with-c11?answertab=active#tab-top).
+    // Here we bring the compiler generated back and supply specific assign
+    // operator= required to this variant - copy&paste from x3::variant.
     concurrent_statement() = default;
     ~concurrent_statement() = default;
 

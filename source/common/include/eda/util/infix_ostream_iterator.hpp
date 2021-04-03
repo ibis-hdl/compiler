@@ -6,29 +6,29 @@
 
 namespace eda::util {
 
-/**
- * \see
- * - [Printing lists with commas C++](
- *   https://stackoverflow.com/questions/3496982/printing-lists-with-commas-c)
- * - [infix_iterator code](
- *   https://codereview.stackexchange.com/questions/13176/infix-iterator-code)
- *
- * Usage:
- * \code
- * std::vector<int> numbers = {1, 2, 3, 4};
- * std::copy(numbers.begin(), numbers.end(),
- *           infix_ostream_iterator<int>(std::cout, ", "));
- * \endcode
- *
- * gives:
- * \code{.unparsed}
- * 1, 2, 3, 4
- * \endcode
- *
- * \note This may come obsolete with [std::experimental::ostream_joiner](
- *       https://en.cppreference.com/w/cpp/experimental/ostream_joiner)
- * \note std::iterator is deprecated with C++17, hence isn't derived from this.
- */
+///
+/// \see
+/// - [Printing lists with commas C++](
+///  https://stackoverflow.com/questions/3496982/printing-lists-with-commas-c)
+/// - [infix_iterator code](
+///  https://codereview.stackexchange.com/questions/13176/infix-iterator-code)
+///
+/// Usage:
+/// \code
+/// std::vector<int> numbers = {1, 2, 3, 4};
+/// std::copy(numbers.begin(), numbers.end(),
+///          infix_ostream_iterator<int>(std::cout, ", "));
+/// \endcode
+///
+/// gives:
+/// \code{.unparsed}
+/// 1, 2, 3, 4
+/// \endcode
+///
+/// \note This may come obsolete with [std::experimental::ostream_joiner](
+///      https://en.cppreference.com/w/cpp/experimental/ostream_joiner)
+/// \note std::iterator is deprecated with C++17, hence isn't derived from this.
+///
 template <class T, class CharT = char, class TraitsT = std::char_traits<CharT>>
 class infix_ostream_iterator {
 public:

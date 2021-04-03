@@ -1289,10 +1289,10 @@ void printer::operator()(formal_part const& node)
         (*this)(ctx_name);
     };
 
-    /* parsed as (name) list
-     * formal_designator ::=
-     *    | function_name ( formal_designator )
-     *    | type_mark ( formal_designator ) */
+    // parsed as (name) list
+    // formal_designator ::=
+    //    | function_name ( formal_designator )
+    //    | type_mark ( formal_designator )
     switch (node.context_tied_names.size()) {
         case 1: {
             // BNF: formal_designator
@@ -1433,8 +1433,8 @@ void printer::operator()(identifier const& node)
     static const std::string_view symbol{ "identifier" };
     symbol_scope<identifier> _(*this, symbol);
 
-    /* Note, even if identifier following the BNF is variant, it's treated as
-     * as common identifier for {basic, extended}_identifier */
+    // Note, even if identifier following the BNF is variant, it's treated as
+    // as common identifier for {basic, extended}_identifier
     os << node.name;
 }
 
@@ -2359,9 +2359,9 @@ void printer::operator()(string_literal const& node)
     static const std::string_view symbol{ "string_literal" };
     symbol_scope<string_literal> _(*this, symbol);
 
-    /* Note, following the LRM, if a quotation sign has to be used in a string
-     * literal, it is denoted by two double quotes side by side. This must
-     * be replaced since string_view is used. */
+    // Note, following the LRM, if a quotation sign has to be used in a string
+    // literal, it is denoted by two double quotes side by side. This must
+    // be replaced since string_view is used.
     os << node.literal;
 }
 
@@ -2459,9 +2459,9 @@ void printer::operator()(subtype_indication const& node)
         (*this)(resolution_function_name);
     };
 
-    /* parsed as (name) list with trailing constraint
-     * subtype_indication ::=
-     *     [ resolution_function_name ] type_mark [ constraint ] */
+    // parsed as (name) list with trailing constraint
+    // subtype_indication ::=
+    //     [ resolution_function_name ] type_mark [ constraint ]
     switch (node.unspecified_name_list.size()) {
         case 1: {
             // BNF: type_mark .... [ constraint ]
@@ -2695,9 +2695,9 @@ void printer::operator()(waveform_element const& node)
     }
 }
 
-/*
- * Non AST members, used e.g. for unit tests (namely ast::integer)
- */
+//
+// Non AST members, used e.g. for unit tests (namely ast::integer)
+//
 void printer::operator()(ast::string_span const& node)
 {
     // even boost::iterator_range is used, the symbol is string_view
@@ -2715,7 +2715,7 @@ void printer::operator()(keyword_token token)
     os << token;
 }
 
-void printer::operator()(nullary const& /*unused*/)
+void printer::operator()([[maybe_unused]] nullary const& node)
 {
     os << "\n*****************************";
     os << "\n*    SHALL NEVER BE HERE    *";

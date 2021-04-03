@@ -16,9 +16,9 @@ struct subprogram_specification_procedure : position_tagged {
 };
 
 struct subprogram_specification_function : position_tagged {
-    /* LRM93 2.1
-     * A function is impure if its specification contains the
-     * reserved word IMPURE; otherwise it is said to be pure. */
+    // LRM93 2.1
+    // A function is impure if its specification contains the
+    // reserved word IMPURE; otherwise it is said to be pure.
     bool impure;
     ast::designator designator;
     optional<ast::formal_parameter_list> formal_parameter_list;

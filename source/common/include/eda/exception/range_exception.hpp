@@ -7,10 +7,10 @@
 
 namespace eda {
 
-/**
- * This class defines the type of objects thrown as exceptions to report range
- * errors in internal computations.
- */
+///
+/// This class defines the type of objects thrown as exceptions to report range
+/// errors in internal computations.
+///
 struct range_error
     : public boost::exception
     , public std::range_error {

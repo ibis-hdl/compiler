@@ -31,15 +31,15 @@ struct position_cache_fixture {
     ast::position_tagged const& getNode(std::string const& key) const;
 
 public:
-    /**
-     * store the ID to avoid initialization order problems.
-     *
-     * This ID must be set each time a file is loaded/added to the fixture/position_cache
-     * to prevent problems with the file ID bound to the fixture/cache due to
-     * unspecified order of execution of tests.
-     * This implies, that the contents <N> txt tests must be run with the
-     * approbiate sub tests.
-     */
+    ///
+    /// store the ID to avoid initialization order problems.
+    ///
+    /// This ID must be set each time a file is loaded/added to the fixture/position_cache
+    /// to prevent problems with the file ID bound to the fixture/cache due to
+    /// unspecified order of execution of tests.
+    /// This implies, that the contents <N> txt tests must be run with the
+    /// approbiate sub tests.
+    ///
     std::size_t current_FileID;
 
     std::size_t input_count() const { return inputs.size(); }

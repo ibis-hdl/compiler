@@ -6,13 +6,13 @@
 
 namespace testsuite::vhdl_numeric_convert::util {
 
-/*******************************************************************************
- * binary test pattern generator helper
- *******************************************************************************/
+//******************************************************************************
+// binary test pattern generator helper
+//*******************************************************************************
 
-/**
- * Create a binary string from unsigned integer
- */
+///
+/// Create a binary string from unsigned integer
+///
 struct binary_string {
     std::uint64_t number;
 
@@ -21,9 +21,9 @@ struct binary_string {
     std::string operator()() const;
 };
 
-/**
- * Create an octal string from unsigned integer
- */
+///
+/// Create an octal string from unsigned integer
+///
 struct octal_string {
     std::uint64_t number;
 
@@ -32,9 +32,9 @@ struct octal_string {
     std::string operator()() const;
 };
 
-/**
- * Create a hexadecimal string from unsigned integer
- */
+///
+/// Create a hexadecimal string from unsigned integer
+///
 struct hexadecimal_string {
     std::uint64_t number;
 

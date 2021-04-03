@@ -18,10 +18,10 @@
 
 namespace eda::vhdl::ast {
 
-/*
- * useful?
- * https://stackoverflow.com/questions/26380420/boost-fusion-sequence-type-and-name-identification-for-structs-and-class
- */
+//
+// useful?
+// https://stackoverflow.com/questions/26380420/boost-fusion-sequence-type-and-name-identification-for-structs-and-class
+//
 template <typename WorkerT>
 class basic_ast_walker : boost::static_visitor<void> {
     // clang-format off
@@ -1083,10 +1083,10 @@ public:
 
         auto const visit_formal_designator = [this](auto const& ctx_name) { (*this)(ctx_name); };
 
-        /* parsed as (name) list
-         * formal_designator ::=
-         *    | function_name ( formal_designator )
-         *    | type_mark ( formal_designator ) */
+        // parsed as (name) list
+        // formal_designator ::=
+        //    | function_name ( formal_designator )
+        //    | type_mark ( formal_designator )
         switch (node.context_tied_names.size()) {
             case 1: {
                 // BNF: formal_designator
@@ -2105,9 +2105,9 @@ public:
             (*this)(resolution_function_name);
         };
 
-        /* parsed as (name) list with trailing constraint
-         * subtype_indication ::=
-         *     [ resolution_function_name ] type_mark [ constraint ] */
+        // parsed as (name) list with trailing constraint
+        // subtype_indication ::=
+        //     [ resolution_function_name ] type_mark [ constraint ]
         switch (node.unspecified_name_list.size()) {
             case 1: {
                 // BNF: type_mark .... [ constraint ]
@@ -2312,9 +2312,9 @@ public:
         }
     }
 
-    /*
-     * Non AST members, used e.g. for unit tests (namely ast::integer)
-     */
+    //
+    // Non AST members, used e.g. for unit tests (namely ast::integer)
+    //
     void operator()(ast::string_span const& node)
     {
         // even boost::iterator_range is used, the symbol is string_view
@@ -2335,9 +2335,9 @@ public:
     {
         boost::ignore_unused(node);
 #if 0
-        /******************************/
-        /*    SHALL NEVER BE HERE     */
-        /******************************/
+        //******************************
+        //    SHALL NEVER BE HERE
+        //******************************
         std::string_view const node_typename{ "*** nullary ***" };
         // XXX call worker::fatal_failure() ????
         worker(node, node_typename);

@@ -10,10 +10,10 @@
 
 namespace testsuite::vhdl_numeric_convert::util {
 
-/**
- * Helper function to get the integer result of log(n) to any base. Used for
- * calculating required digits of literal strings.
- */
+///
+/// Helper function to get the integer result of log(n) to any base. Used for
+/// calculating required digits of literal strings.
+///
 namespace detail {
 
 constexpr auto log2 = [](unsigned x) { return static_cast<unsigned>(std::ceil(std::log2(x))); };
@@ -24,9 +24,9 @@ constexpr auto log = [](unsigned base, unsigned x) {
 
 }  // namespace detail
 
-/**
- * Create a binary string from unsigned integer
- */
+///
+/// Create a binary string from unsigned integer
+///
 binary_string::binary_string(uint64_t n)
     : number{ n }
 {
@@ -75,9 +75,9 @@ std::ostream& operator<<(std::ostream& os, binary_string const& generator)
     return os;
 }
 
-/**
- * Create an octal string from unsigned integer
- */
+///
+/// Create an octal string from unsigned integer
+///
 octal_string::octal_string(uint64_t n)
     : number{ n }
 {
@@ -102,9 +102,9 @@ std::ostream& operator<<(std::ostream& os, octal_string const& generator)
     return os;
 }
 
-/**
- * Create a hexadecimal string from unsigned integer
- */
+///
+/// Create a hexadecimal string from unsigned integer
+///
 hexadecimal_string::hexadecimal_string(uint64_t n)
     : number{ n }
 {

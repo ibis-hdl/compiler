@@ -31,10 +31,10 @@ bool parse::operator()(std::string const& input, ast::design_file& design_file)
                           typename std::iterator_traits<parser::iterator_type>::iterator_category>,
         "iterator type must be of multi-pass iterator");
 
-    /* using different iterator_types causes linker errors, see e.g.
-     * [linking errors while separate parser using boost spirit x3](
-     *  https://stackoverflow.com/questions/40496357/linking-errors-while-separate-parser-using-boost-spirit-x3)
-     */
+    // using different iterator_types causes linker errors, see e.g.
+    // [linking errors while separate parser using boost spirit x3](
+    //  https://stackoverflow.com/questions/40496357/linking-errors-while-separate-parser-using-boost-spirit-x3)
+    //
     static_assert(std::is_same_v<decltype(iter), iterator_type>, "iterator types must be the same");
 
     auto const parser =
@@ -60,10 +60,10 @@ bool parse::operator()(std::string const& input, ast::design_file& design_file)
         return parse_ok;
     }
     catch (std::bad_alloc const& e) {
-        /* @todo Re-throw using C++11 exception_ptr, see 2nd answer
-         * [How do I make a call to what() on std::exception_ptr](
-         * https://stackoverflow.com/questions/14232814/how-do-i-make-a-call-to-what-on-stdexception-ptr)
-         */
+        // @todo Re-throw using C++11 exception_ptr, see 2nd answer
+        // [How do I make a call to what() on std::exception_ptr](
+        // https://stackoverflow.com/questions/14232814/how-do-i-make-a-call-to-what-on-stdexception-ptr)
+        //
         os << make_exception_description(e, filename);
     }
     catch (std::exception const& e) {

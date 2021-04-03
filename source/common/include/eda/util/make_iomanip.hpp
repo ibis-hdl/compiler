@@ -5,25 +5,25 @@
 
 namespace eda::util {
 
-/**
- * Helper to make a 'streamable' C++ lambda function
- *
- * Example:
- * \code{.cpp}
- * auto const answer = [](size_t count) {
- *    return make_iomanip([count](std::ostream& os) {
- *         if(count) {
- *            os << "The answer is " << count;
- *        }
- *    });
- * };
- * ...
- * std::cout << answer(42) << std::endl;
- * \endcode
- *
- * Based on yazmir8azyr from IRC \#\#c++ channel, see [WandBox.Org](
- * https://wandbox.org/permlink/wGDqfmxCKwqob5mp)
- */
+///
+/// Helper to make a 'streamable' C++ lambda function
+///
+/// Example:
+/// \code{.cpp}
+/// auto const answer = [](size_t count) {
+///   return make_iomanip([count](std::ostream& os) {
+///        if(count) {
+///           os << "The answer is " << count;
+///       }
+///   });
+/// };
+/// ...
+/// std::cout << answer(42) << std::endl;
+/// \endcode
+///
+/// Based on yazmir8azyr from IRC \#\#c++ channel, see [WandBox.Org](
+/// https://wandbox.org/permlink/wGDqfmxCKwqob5mp)
+///
 template <typename T>
 struct A {
     T x;

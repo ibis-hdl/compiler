@@ -50,18 +50,12 @@ std::tuple<bool, AttrType> literal_parser<IteratorT>::parse(ParserType const& nu
 
     auto [iter, end] = cache_proxy.range();
 
-#if 1
-    /* GCC 7.3.0 fails here for unknown reasons, \see
-    https://wandbox.org/permlink/xdrhEvwQqvGqh8If */
-#if defined(__clang__)
-    /* using different iterator_types causes linker errors, see e.g.
-     * [linking errors while separate parser using boost spirit x3](
-     *  https://stackoverflow.com/questions/40496357/linking-errors-while-separate-parser-using-boost-spirit-x3)
-     */
+    // using different iterator_types causes linker errors, see e.g.
+    // [linking errors while separate parser using boost spirit x3](
+    //  https://stackoverflow.com/questions/40496357/linking-errors-while-separate-parser-using-boost-spirit-x3)
+    //
     static_assert(std::is_same_v<decltype(iter), parser::iterator_type>,
                   "iterator types must be the same");
-#endif
-#endif
 
     bool parse_ok = false;
 
@@ -87,9 +81,9 @@ std::tuple<bool, AttrType> literal_parser<IteratorT>::parse(ParserType const& nu
 
 }  // namespace testsuite
 
-/*
- * Explicit template instantiation
- */
+//
+// Explicit template instantiation
+//
 namespace testsuite {
 
 template class literal_parser<parser::iterator_type>;

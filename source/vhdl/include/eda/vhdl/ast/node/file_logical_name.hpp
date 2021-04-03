@@ -4,6 +4,6 @@
 
 namespace eda::vhdl::ast {
 
-using file_logical_name = /* string */ expression;
+using file_logical_name = expression;  // string expression
 
 }

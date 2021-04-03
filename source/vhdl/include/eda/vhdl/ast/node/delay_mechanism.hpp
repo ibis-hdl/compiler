@@ -15,10 +15,10 @@ struct delay_mechanism : position_tagged {
 
 }  // namespace eda::vhdl::ast
 
-/*
- * Support Spirit.X3's attribute handling.
- * FixMe: What about overloading node's operator=() to avoid x3::move_to?
- */
+//
+// Support Spirit.X3's attribute handling.
+// FixMe: What about overloading node's operator=() to avoid x3::move_to?
+//
 namespace boost::spirit::x3::traits {
 
 static inline void move_to(eda::vhdl::ast::keyword_token delay_type,

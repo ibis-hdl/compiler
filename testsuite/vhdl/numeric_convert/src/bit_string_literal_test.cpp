@@ -26,9 +26,9 @@ BOOST_AUTO_TEST_SUITE(numeric_convert)
 
 namespace detail {
 
-/*******************************************************************************
- * bin/oct/hex generator helper functions
- ******************************************************************************/
+//******************************************************************************
+// bin/oct/hex generator helper functions
+//******************************************************************************
 
 std::string to_bin_literal(uint64_t n, std::string const& postfix = "")
 {
@@ -56,7 +56,8 @@ std::string to_hex_literal(uint64_t n, std::string const& postfix = "")
 
 }  // namespace detail
 
-namespace /* anonymous */ {
+namespace  // anonymous
+{
 
 namespace btt = boost::test_tools;
 
@@ -68,9 +69,12 @@ namespace btt = boost::test_tools;
 //
 // Note: technically, we initialize globals that access extern objects,
 // and therefore can lead to order-of-initialization problems.
+
+bool constexpr no_messages = true;
+
 // NOLINTNEXTLINE(cppcoreguidelines-interfaces-global-init)
 auto const numeric_convert = []() {
-    if constexpr (true /* no messages */) {
+    if constexpr (no_messages) {
         static btt::output_test_stream nil_sink;
         return ast::numeric_convert{ nil_sink };
     }
@@ -81,9 +85,9 @@ auto const numeric_convert = []() {
 
 }  // namespace
 
-/*******************************************************************************
- * bit_string_literal
- ******************************************************************************/
+//******************************************************************************
+// bit_string_literal
+//******************************************************************************
 std::vector<std::string> const bit_literal{
     // binary
     R"(B"00_00")",
@@ -157,9 +161,9 @@ BOOST_DATA_TEST_CASE(bit_string_literal, utf_data::make(bit_literal) ^ bit_decim
     BOOST_TEST(value == N);
 }
 
-/*******************************************************************************
- * bit_string_literal overflow tests
- ******************************************************************************/
+//******************************************************************************
+// bit_string_literal overflow tests
+//******************************************************************************
 std::vector<std::string> const literal_ovflw{
     detail::to_bin_literal(std::numeric_limits<uint64_t>::max(), "_0"),
     detail::to_oct_literal(std::numeric_limits<uint64_t>::max(), "_0"),

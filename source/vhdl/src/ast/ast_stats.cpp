@@ -30,7 +30,7 @@ public:
     }
 
     template <typename NodeT>
-    void operator()(NodeT const& /*unused*/, std::string_view node_name) const
+    void operator()([[maybe_unused]] NodeT const& node, std::string_view node_name) const
     {
         ++count_map[node_name];
 

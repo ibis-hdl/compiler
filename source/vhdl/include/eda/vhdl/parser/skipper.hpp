@@ -4,9 +4,9 @@
 
 #include <eda/namespace_alias.hpp>
 
-/*
- * VHDL Skipper
- */
+//
+// VHDL Skipper
+//
 namespace eda::vhdl::parser {
 
 struct skipper_class;

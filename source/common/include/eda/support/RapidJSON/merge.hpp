@@ -4,11 +4,11 @@
 
 namespace eda::support::rapidjson {
 
-/**
- *  See:
- * - [How to merge two json file using rapidjson](
- *    https://stackoverflow.com/questions/40013355/how-to-merge-two-json-file-using-rapidjson)
- */
+///
+/// See:
+/// - [How to merge two json file using rapidjson](
+///   https://stackoverflow.com/questions/40013355/how-to-merge-two-json-file-using-rapidjson)
+///
 static inline void merge_object(::rapidjson::Value& dest, ::rapidjson::Value& src,
                                 ::rapidjson::Document::AllocatorType& allocator)
 {

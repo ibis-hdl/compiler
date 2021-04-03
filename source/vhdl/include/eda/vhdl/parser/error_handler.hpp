@@ -15,27 +15,27 @@
 
 namespace eda::vhdl::parser {
 
-/**
- * tag used to get our error handler from the x3::context
- */
+///
+/// tag used to get our error handler from the x3::context
+///
 struct error_handler_tag;  // IWYU pragma: keep
 
-/**
- * Parser error handler
- *
- * The error handler for parsing works on file level, means a file is read into
- * memory and parsed. Hence not all informations stored in \ref ast::position_cache
- * are required for reporting and diagnosing and a file ID specific proxy
- * object refers to the related informations for convenience.
- *
- * Further, the error_handler is used to annotate the AST during parsing, means
- * ties the AST to a vector of iterator positions for the purpose of subsequent
- * semantic error handling when the program is being compiled.
- *
- * The concept of tagging doesn't differ from the origin x3::error_handler.
- *
- * \see ast::position_cache
- */
+///
+/// Parser error handler
+///
+/// The error handler for parsing works on file level, means a file is read into
+/// memory and parsed. Hence not all informations stored in \ref ast::position_cache
+/// are required for reporting and diagnosing and a file ID specific proxy
+/// object refers to the related informations for convenience.
+///
+/// Further, the error_handler is used to annotate the AST during parsing, means
+/// ties the AST to a vector of iterator positions for the purpose of subsequent
+/// semantic error handling when the program is being compiled.
+///
+/// The concept of tagging doesn't differ from the origin x3::error_handler.
+///
+/// \see ast::position_cache
+///
 template <typename Iterator>
 class error_handler {
 public:
@@ -45,14 +45,14 @@ public:
     using position_proxy_type = typename ast::position_cache<iterator_type>::proxy;
 
 public:
-    /**
-     * Construct a parser error handler.
-     *
-     * @param os_     Stream to write error and diagnostic messages.
-     * @param proxy_ A \ref ast::position_cache::proxy object of \ref ast::position_cache.
-     * @param tabs     Tabulator size, required for correct rendering of source
-     *               code snippet.
-     */
+    ///
+    /// Construct a parser error handler.
+    ///
+    /// @param os_     Stream to write error and diagnostic messages.
+    /// @param proxy_ A \ref ast::position_cache::proxy object of \ref ast::position_cache.
+    /// @param tabs     Tabulator size, required for correct rendering of source
+    ///              code snippet.
+    ///
     explicit error_handler(std::ostream& os_, position_proxy_type proxy_, std::size_t tabs = 4)
         : os{ os_ }
         , position_proxy{ std::move(proxy_) }
@@ -69,13 +69,13 @@ public:
     error_handler& operator=(error_handler&&) = delete;
 
 public:
-    /**
-     * Annotate the AST node
-     *
-     * @param node  AST Node to tag
-     * @param first Begin of iterator position to tag.
-     * @param last  End of iterator position to tag.
-     */
+    ///
+    /// Annotate the AST node
+    ///
+    /// @param node  AST Node to tag
+    /// @param first Begin of iterator position to tag.
+    /// @param last  End of iterator position to tag.
+    ///
     template <typename NodeT>
     void annotate(NodeT& node, iterator_type const& first, iterator_type const& last)
     {
@@ -83,23 +83,23 @@ public:
     }
 
 public:
-    /**
-     * Handle a parser error at error_pos and render the diagnostic message
-     * error_message.
-     *
-     * @param error_pos     Iterator position where the error occurred.
-     * @param error_message The information error message.
-     * @return x3::result_type, which allows to recover from parser error or
-     *         even give up.
-     */
+    ///
+    /// Handle a parser error at error_pos and render the diagnostic message
+    /// error_message.
+    ///
+    /// @param error_pos     Iterator position where the error occurred.
+    /// @param error_message The information error message.
+    /// @return x3::result_type, which allows to recover from parser error or
+    ///        even give up.
+    ///
     result_type operator()(iterator_type error_pos, std::string const& error_message) const;
 
 public:
-    /**
-     * Access to the file related postion_cache informations.
-     *
-     * @return Reference to the proxy used.
-     */
+    ///
+    /// Access to the file related postion_cache informations.
+    ///
+    /// @return Reference to the proxy used.
+    ///
     position_proxy_type const& current_file() const { return position_proxy; }
 
 private:

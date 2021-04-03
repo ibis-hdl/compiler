@@ -22,12 +22,13 @@ namespace analyze = eda::vhdl::analyze;
 
 BOOST_AUTO_TEST_SUITE(syntax_check)
 
-/*
- * SUCCESS test case
- */
-BOOST_DATA_TEST_CASE_F(testsuite::util::failure_diagnostic_fixture, keyword_ok,
-                       utf_data::make_delayed<testsuite::util::dataset_loader>("test_case/keyword_ok"),
-                       input, expected, test_case_name)
+//
+// SUCCESS test case
+//
+BOOST_DATA_TEST_CASE_F(
+    testsuite::util::failure_diagnostic_fixture, keyword_ok,
+    utf_data::make_delayed<testsuite::util::dataset_loader>("test_case/keyword_ok"), input,
+    expected, test_case_name)
 {
     btt::output_test_stream os;
     ast::position_cache<parser::iterator_type> position_cache;
@@ -69,9 +70,9 @@ BOOST_DATA_TEST_CASE_F(testsuite::util::failure_diagnostic_fixture, keyword_ok,
     failure_closure(test_case_name, input, os.str());
 }
 
-/*
- * FAILURE test case
- */
+//
+// FAILURE test case
+//
 BOOST_DATA_TEST_CASE_F(
     testsuite::util::failure_diagnostic_fixture, keyword_missmatch,
     utf_data::make_delayed<testsuite::util::dataset_loader>("test_case/keyword_mismatch"), input,

@@ -55,7 +55,7 @@ public:
     void operator()(ast::process_statement const& node, std::string_view node_name) const;
 
     template <typename NodeT>
-    void operator()(NodeT const& /*unused*/, std::string_view /*unused*/) const
+    void operator()([[maybe_unused]] NodeT const&, [[maybe_unused]] std::string_view) const
     {
     }
 

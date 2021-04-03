@@ -22,9 +22,9 @@ struct process_statement;
 
 namespace eda::vhdl::analyze {
 
-/**
- * check for matching label pairs
- */
+///
+/// check for matching label pairs
+///
 class label_match {
 public:
     enum class result { OK, MISMATCH, ILLFORMED };
@@ -49,23 +49,23 @@ private:
                           ast::optional<ast::identifier> const& end_label);
 };
 
-/**
- * Helper functions to extract {start, end}_label of nodes for use with the error
- * handler. Basically there are by convention 2 types of AST nodes with labels
- * here:
- *
- * - the 'classic' label pair with label and end_label
- * - blocks with identifier and end_identifier (aka end label)
- *
- * From C++ it's required to detect that a node type has the member label
- * or identifier. The library fundamentals TS v2 provide this; here is a
- * copy&paste from
- * [std::experimental::is_detected](https://en.cppreference.com/w/cpp/experimental/is_detected) used
- * since C++17 (as today) hasn't it.
- *
- * With this, labels_of helper function has the same API for the two labeled
- * nodes.
- */
+///
+/// Helper functions to extract {start, end}_label of nodes for use with the error
+/// handler. Basically there are by convention 2 types of AST nodes with labels
+/// here:
+///
+/// - the 'classic' label pair with label and end_label
+/// - blocks with identifier and end_identifier (aka end label)
+///
+/// From C++ it's required to detect that a node type has the member label
+/// or identifier. The library fundamentals TS v2 provide this; here is a
+/// copy&paste from
+/// [std::experimental::is_detected](https://en.cppreference.com/w/cpp/experimental/is_detected)
+/// used since C++17 (as today) hasn't it.
+///
+/// With this, labels_of helper function has the same API for the two labeled
+/// nodes.
+///
 namespace label_util {
 
 namespace detail {
@@ -118,10 +118,10 @@ std::tuple<ast::identifier const&, ast::identifier const&> static inline labels_
 {
     using tuple_type = std::tuple<ast::identifier const&, ast::identifier const&>;
 
-    /* here it's assumed that the identifier follow the convention as they are
-     * paired as:
-     * - label - end_label (the classical VHDL labels) or
-     * - identifier - end_identifier (where identifier is mandatory) */
+    // here it's assumed that the identifier follow the convention as they are
+    // paired as:
+    // - label - end_label (the classical VHDL labels) or
+    // - identifier - end_identifier (where identifier is mandatory)
     if constexpr (label_util::is_detected<label_util::has_label, NodeT>::value) {
         if constexpr (std::is_same_v<std::decay_t<decltype(node.label)>,
                                      ast::optional<ast::identifier>>) {
@@ -136,7 +136,7 @@ std::tuple<ast::identifier const&, ast::identifier const&> static inline labels_
         // always mandatory identifier
         return tuple_type{ node.identifier, *node.end_identifier };
     }
-    else { /* expect compiler error */
+    else {  // expect compiler error
     }
 }
 

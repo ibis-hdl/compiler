@@ -20,9 +20,9 @@ namespace fs = testsuite::fs;
 /// Test File #1 (Lorem Ipsum)
 ///
 
-/**
- * Test of basic embedding the filename and contents into with test input file #1.
- */
+///
+/// Test of basic embedding the filename and contents into with test input file #1.
+///
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_CASE(contents_1_txt)
 {
@@ -51,9 +51,9 @@ BOOST_AUTO_TEST_CASE(contents_1_txt)
     BOOST_TEST(position_cache.file_contents(id) == fixture->reference_contents(id_ref));
 }
 
-/**
- * Check basic annotation capabilities *without* proxy/handle using string #1.
- */
+///
+/// Check basic annotation capabilities *without* proxy/handle using string #1.
+///
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_CASE(basic_annotate_1_txt)
 {
@@ -78,9 +78,9 @@ BOOST_AUTO_TEST_CASE(basic_annotate_1_txt)
     BOOST_TEST(&*last == &*range.value().end());
 }
 
-/**
- * Check basic annotation capabilities *with* proxy/handle using string #2.
- */
+///
+/// Check basic annotation capabilities *with* proxy/handle using string #2.
+///
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_CASE(proxy_annotate_1_txt)
 {
@@ -107,9 +107,9 @@ BOOST_AUTO_TEST_CASE(proxy_annotate_1_txt)
     BOOST_TEST(&*last == &*range.value().end());
 }
 
-/**
- * Check node handling using the proxy with test string #1.
- */
+///
+/// Check node handling using the proxy with test string #1.
+///
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_CASE(proxy_position1_of_1_txt)
 {
@@ -133,9 +133,9 @@ BOOST_AUTO_TEST_CASE(proxy_position1_of_1_txt)
     BOOST_TEST(node_str == tagged_str);
 }
 
-/**
- * Check node handling using the proxy with test string #2.
- */
+///
+/// Check node handling using the proxy with test string #2.
+///
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_CASE(proxy_position2_of_1_txt)
 {
@@ -159,9 +159,9 @@ BOOST_AUTO_TEST_CASE(proxy_position2_of_1_txt)
     BOOST_TEST(node_str == tagged_str);
 }
 
-/**
- * Check for correct line numbers of tagged nodes
- */
+///
+/// Check for correct line numbers of tagged nodes
+///
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_CASE(proxy_lineno_1_txt)
 {
@@ -193,9 +193,9 @@ BOOST_AUTO_TEST_CASE(proxy_lineno_1_txt)
     }
 }
 
-/**
- * Check for correct line of tagged nodes
- */
+///
+/// Check for correct line of tagged nodes
+///
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_CASE(proxy_line_1_txt)
 {

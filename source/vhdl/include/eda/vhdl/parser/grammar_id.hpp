@@ -2,9 +2,9 @@
 
 namespace eda::vhdl::parser {
 
-/*
- * Parser Rule IDs
- */
+//
+// Parser Rule IDs
+//
 struct abstract_literal_class;
 struct access_type_definition_class;
 struct actual_designator_class;

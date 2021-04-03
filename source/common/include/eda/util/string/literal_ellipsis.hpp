@@ -4,13 +4,13 @@
 
 namespace eda::vhdl::util {
 
-/**
- * Returns a beautified, shortened string using ellipsis.
- *
- * There are cases in error handling, where possible long literals are to
- * process. If the length exceeds the length \c len the given string \c str is
- * in the middle filled with ellipsis '...' to fit the given length \c len.
- */
+///
+/// Returns a beautified, shortened string using ellipsis.
+///
+/// There are cases in error handling, where possible long literals are to
+/// process. If the length exceeds the length \c len the given string \c str is
+/// in the middle filled with ellipsis '...' to fit the given length \c len.
+///
 template <typename RangeType>
 static inline std::string literal_ellipsis(RangeType const& range, std::size_t len)
 {

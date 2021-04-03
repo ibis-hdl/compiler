@@ -37,23 +37,19 @@ struct testing_parser {
 
         auto [iter, end] = position_cache.range(id);
 
-#if 1
-        /* GCC 7.3.0 fails here for unknown reasons, \see
-        https://wandbox.org/permlink/xdrhEvwQqvGqh8If */
-#if defined(__clang__)
-        /* using different iterator_types causes linker errors, see e.g.
-         * [linking errors while separate parser using boost spirit x3](
-         *  https://stackoverflow.com/questions/40496357/linking-errors-while-separate-parser-using-boost-spirit-x3)
-         */
+        // using different iterator_types causes linker errors, see e.g.
+        // [linking errors while separate parser using boost spirit x3](
+        //  https://stackoverflow.com/questions/40496357/linking-errors-while-separate-parser-using-boost-spirit-x3)
+        //
         static_assert(std::is_same_v<decltype(iter), parser::iterator_type>,
                       "iterator types must be the same");
-#endif
-#else
-        std::cerr << "##### get testing_parser<" << eda::util::pretty_typename<decltype(iter)>{}
-                  << ">\n";
-        std::cerr << "##### expect testing_parser<"
-                  << eda::util::pretty_typename<parser::iterator_type>{} << ">\n";
-#endif
+
+        if constexpr (false) {
+            std::cerr << "##### get testing_parser<" << eda::util::pretty_typename<decltype(iter)>{}
+                      << ">\n";
+            std::cerr << "##### expect testing_parser<"
+                      << eda::util::pretty_typename<parser::iterator_type>{} << ">\n";
+        }
 
         bool parse_ok = false;
         attribute_type attr;

@@ -15,7 +15,8 @@
 #include <sstream>
 #include <system_error>
 
-namespace /* anonymous */ {
+namespace  // anonymous
+{
 
 /// FixMe: This is a hack to avoid the depency to eda::vhdl to
 /// this project. This depends only on eda::util::make_iomanip
@@ -169,8 +170,7 @@ BOOST_TEST_GLOBAL_FIXTURE(cli_args);
 
 namespace testsuite::util {
 
-void failure_diagnostic_fixture::write(fs::path const& full_pathname,
-                                               std::string_view result)
+void failure_diagnostic_fixture::write(fs::path const& full_pathname, std::string_view result)
 {
     fs::path const write_path = full_pathname.parent_path();
 
@@ -197,8 +197,7 @@ bool failure_diagnostic_fixture::create_directories(fs::path const& write_path)
     return true;
 }
 
-bool failure_diagnostic_fixture::write_file(fs::path const& filename,
-                                                    std::string_view contents)
+bool failure_diagnostic_fixture::write_file(fs::path const& filename, std::string_view contents)
 {
     BOOST_TEST_MESSAGE("INFO(" << fixture_name << ") Write result to " << filename);
     // remove old result file if exist

@@ -14,21 +14,21 @@
 
 namespace eda::vhdl::parser::detail {
 
-/**
- * distinct parser directive allowing to avoid partial matches while parsing
- * using a skipper.
- *
- * \note This is a problem specific helper function (due to VHDL's character set
- * use here), so it isn't placed into `<eda/support/boost/spirit_x3_util.hpp`
- * file.
- */
+///
+/// distinct parser directive allowing to avoid partial matches while parsing
+/// using a skipper.
+///
+/// \note This is a problem specific helper function (due to VHDL's character set
+/// use here), so it isn't placed into `<eda/support/boost/spirit_x3_util.hpp`
+/// file.
+///
 struct distinct_directive {
-    /**
-     * Attribute less overload.
-     *
-     * @param parser The core parser to be used.
-     * @return The combined parser base on given argument
-     */
+    ///
+    /// Attribute less overload.
+    ///
+    /// @param parser The core parser to be used.
+    /// @return The combined parser base on given argument
+    ///
     template <typename Parser>
     constexpr auto operator()(Parser&& parser) const
     {
@@ -40,13 +40,13 @@ struct distinct_directive {
         // clang-format on
     }
 
-    /**
-     * Overload to use with attributes
-     *
-     * @param parser The core parser to be used.
-     * @param attr The attribute to be exposed.
-     * @return The combined parser based on given argument
-     */
+    ///
+    /// Overload to use with attributes
+    ///
+    /// @param parser The core parser to be used.
+    /// @param attr The attribute to be exposed.
+    /// @return The combined parser based on given argument
+    ///
     template <typename Parser, typename Attr>
     constexpr auto operator()(Parser&& parser, Attr&& attr) const
     {
@@ -61,22 +61,22 @@ struct distinct_directive {
 
 const distinct_directive distinct = { };
 
-/**
- * Literal parser with attribute.
- *
- * Expose an attribute from given literal.
- *
- * \note There is no overload without attribute since it would decay to
- * x3::lit() parser self.
- */
+///
+/// Literal parser with attribute.
+///
+/// Expose an attribute from given literal.
+///
+/// \note There is no overload without attribute since it would decay to
+/// x3::lit() parser self.
+///
 struct literal_attribute
 {
-    /**
-     *
-     * @param str The string literal.
-     * @param attr The Attribute to be exposed.
-     * @return The combined parser based on given argument
-     */
+    ///
+    ///
+    /// @param str The string literal.
+    /// @param attr The Attribute to be exposed.
+    /// @return The combined parser based on given argument
+    ///
     template<typename StrT, typename AttrT>
     constexpr auto operator()(StrT&& str, AttrT&& attr) const {
         // clang-format off
@@ -92,9 +92,9 @@ const literal_attribute literal = {};
 
 }  // namespace eda::vhdl::parser::detail
 
-/*******************************************************************************
- * Keywords
- */
+//******************************************************************************
+// Keywords
+//
 namespace eda::vhdl::parser::keywords {
 
 using detail::distinct;
@@ -177,9 +177,9 @@ auto const WHEN = distinct("when");
 auto const WHILE = distinct("while");
 auto const WITH = distinct("with");
 
-/*
- * Symbols of all keyword to them distinguish from identifier by rule
- */
+//
+// Symbols of all keyword to them distinguish from identifier by rule
+//
 x3::symbols<> const keywords(
     // clang-format off
     {
@@ -206,14 +206,14 @@ auto const keyword = x3::rule<struct _>{ "keyword" } = distinct(keywords);
 
 }  // namespace eda::vhdl::parser::keywords
 
-/*******************************************************************************
- * Operators
- */
+//******************************************************************************
+// Operators
+//
 namespace eda::vhdl::parser::operators {
 
-/*
- * Operator Rule IDs
- */
+//
+// Operator Rule IDs
+//
 struct binary_logical_operator_class;
 struct unary_logical_operator_class;
 struct binary_miscellaneous_operator_class;
@@ -221,9 +221,9 @@ struct unary_miscellaneous_operator_class;
 struct multiplying_operator_class;
 struct shift_operator_class;
 
-/*
- * Rule Types
- */
+//
+// Rule Types
+//
 // clang-format off
 using binary_logical_operator_type = x3::rule<binary_logical_operator_class, ast::operator_token>;
 using unary_logical_operator_type = x3::rule<unary_logical_operator_class, ast::operator_token>;
@@ -235,9 +235,9 @@ using relational_operator_type = x3::symbols<ast::operator_token>;
 using adding_operator_type = x3::symbols<ast::operator_token>;
 // clang-format on
 
-/*
- * Rule Instances
- */
+//
+// Rule Instances
+//
 // clang-format off
 binary_logical_operator_type const binary_logical_operator{ "logical_operator" };
 unary_logical_operator_type const unary_logical_operator{ "logical_operator" };
@@ -247,9 +247,9 @@ multiplying_operator_type const multiplying_operator{ "multiplying_operator" };
 shift_operator_type const shift_operator{ "shift_operator" };
 // clang-format on
 
-/*
- * Rule Definitions
- */
+//
+// Rule Definitions
+//
 using detail::distinct;
 using detail::literal;
 
@@ -352,8 +352,8 @@ x3::symbols<ast::operator_token> const shift_operator_symbols(
 
 auto const shift_operator_def = distinct(shift_operator_symbols);
 
-/* special boost.spirit.x3 header to get rid off the annoying unused parameter
- * warnings from x3 */
+// special boost.spirit.x3 header to get rid off the annoying unused parameter
+// warnings from x3
 #include <eda/compiler/warnings_off.hpp>
 
 // clang-format off
@@ -371,9 +371,9 @@ BOOST_SPIRIT_DEFINE(
 
 }  // namespace eda::vhdl::parser::operators
 
-/*******************************************************************************
- * Rule Instances
- */
+//******************************************************************************
+// Rule Instances
+//
 namespace eda::vhdl::parser {
 
 // clang-format off
@@ -607,9 +607,9 @@ waveform_element_type const waveform_element { "waveform_element" };
 
 }  // namespace eda::vhdl::parser
 
-/*******************************************************************************
- * Spirit.X3 BNF Rule Definitions
- */
+//******************************************************************************
+// Spirit.X3 BNF Rule Definitions
+//
 namespace eda::vhdl::parser {
 
 using namespace parser::keywords;
@@ -633,9 +633,9 @@ using detail::distinct;
 
 // clang-format off
 
-/*
- * Character Sets                                                 [LRM93 §13.1]
- */
+//
+// Character Sets                                                 [LRM93 §13.1]
+//
 auto const upper_case_letter =
     x3::rule<struct upper_case_letter_class, char> { "upper_case_letter" } =
         char_("ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞ");
@@ -715,9 +715,9 @@ auto const letter_or_digit_def =
 
 
 
-/*
- * Common aliases used in BNF
- */
+//
+// Common aliases used in BNF
+//
 
 /// Convenience rule for 'label :'
 auto const label_colon = x3::rule<struct _, ast::identifier> { "label" } =
@@ -733,7 +733,7 @@ auto const label_colon = x3::rule<struct _, ast::identifier> { "label" } =
 /// abstract_literal ::=
 ///     decimal_literal | based_literal
 /// \endcode
-auto const abstract_literal_def = /* order matters */
+auto const abstract_literal_def = // order matters
       based_literal
     | decimal_literal
     ;
@@ -815,7 +815,7 @@ auto const actual_part_chunk = x3::rule<struct _, ast::actual_part_chunk>{ "actu
     ;
 } // end detail
 
-auto const actual_part_def = /* order matters */
+auto const actual_part_def = // order matters
       detail::actual_part_chunk
     | actual_designator
     ;
@@ -1030,7 +1030,7 @@ auto const base_def =
     ;
 
 
-#if 0 /* Note: UNUSED, embedded directly into bit_string_literal rule */
+#if 0 // Note: UNUSED, embedded directly into bit_string_literal rule
 /// base_specifier ::=                                             [LRM93 §13.7]
 /// B | O | X
 auto const base_specifier_def =
@@ -1055,11 +1055,11 @@ auto const based_integer_def =
 namespace based_literal_detail {
 
 auto const integer_type = x3::rule<struct _, ast::based_literal::number_chunk>{ "based_literal<int>" } =
-    /* Note, IEEE1076-93 Ch. 13.4, specifies for decimal_literal the forbidden
-     * negative sign for the exponent of integer types. No restrictions are there
-     * defined for based_literal, assume real type exponent. */
+    // Note, IEEE1076-93 Ch. 13.4, specifies for decimal_literal the forbidden
+    // negative sign for the exponent of integer types. No restrictions are there
+    // defined for based_literal, assume real type exponent.
     lexeme[
-           based_integer >> x3::attr(ast::string_span{/* empty fractional part */})
+           based_integer >> x3::attr(ast::string_span{})  // empty fractional part
         >> '#'
         >> -exponent
     ]
@@ -1157,7 +1157,7 @@ auto const bit_string_literal_def =
 
 
 
-#if 0 /* Note: UNUSED, embedded directly into bit_string_literal */
+#if 0 // Note: UNUSED, embedded directly into bit_string_literal
 /// bit_value ::=
 ///     extended_digit { [ underline ] extended_digit }
 auto const bit_value_def =
@@ -1260,7 +1260,7 @@ auto const block_header_def =
 ///       architecture_name
 ///     | block_statement_label
 ///     | generate_statement_label [ ( index_specification ) ]
-auto const block_specification_def = /* order matters */
+auto const block_specification_def = // order matters
       label >> -( '(' >> index_specification >> ')' )
     | name
     ;
@@ -1352,8 +1352,8 @@ auto const character_literal_def =
 ///     | element_simple_name
 ///     | others
 auto const choice_def =
-/* Note, (element)_simple_name get never been parsed, since:
- * simple_expression -> term -> factor -> primary -> name -> simple_name */
+// Note, (element)_simple_name get never been parsed, since:
+// simple_expression -> term -> factor -> primary -> name -> simple_name
       simple_expression
     | discrete_range
     | OTHERS
@@ -1487,8 +1487,8 @@ auto const concurrent_signal_assignment_statement_def =
 ///     | component_instantiation_statement
 ///     | generate_statement
 auto const concurrent_statement_def =
-    /* Note, order matters but is fragile; the problem seems to rise from rule
-     * label >> ':', which is same/similar to component_instantiation_statement */
+    // Note, order matters but is fragile; the problem seems to rise from rule
+    // label >> ':', which is same/similar to component_instantiation_statement
       component_instantiation_statement
     | concurrent_signal_assignment_statement
     | concurrent_procedure_call_statement
@@ -1669,9 +1669,9 @@ auto const real_type = x3::rule<struct _, ast::decimal_literal> { "decimal_liter
     ;
 
 auto const integer_exponent = x3::rule<struct _, ast::string_span> { "exponent" } =
-   /* Note, following IEEE1076-93 Ch. 13.4, the exponent on integer type must
-    * not have a minus sign. This means implicit (even from NBF) that a positive
-    * (optional) sign is allowed. */
+   // Note, following IEEE1076-93 Ch. 13.4, the exponent on integer type must
+   // not have a minus sign. This means implicit (even from NBF) that a positive
+   // (optional) sign is allowed.
     raw[ lexeme[
         char_("Ee") >> -char_("+") >> integer
     ]]
@@ -1788,7 +1788,7 @@ auto const disconnection_specification_def = ( // operator precedence
 
 /// discrete_range ::=                                            [LRM93 §3.2.1]
 ///     discrete_subtype_indication | range
-auto const discrete_range_def = /* order matters */
+auto const discrete_range_def = // order matters
       range
     | subtype_indication
     ;
@@ -1798,21 +1798,21 @@ auto const discrete_range_def = /* order matters */
 /// element_association ::=                                       [LRM93 §7.3.2]
 ///     [ choices => ] expression
 auto const element_association_def =
-    /* Note, parsing element_association is a bit tricky, due to backtracking side
-     * effect. The problem did rise up first time on parsing attribute_specification's
-     * expression:
-     *
-     * attribute_specification ::=
-     *        attribute attribute_designator OF entity_specification IS expression ;
-     *
-     * with descent aggregate's element_association:
-     *
-     * aggregate           ::= ( element_association { , element_association } )
-     * element_association ::= [ choices => ] expression
-     *
-     * If the choices rule fails due to missing "=>" the element_association node
-     * still contains the previous parsed data, hence holding the leaf data twice
-     * using two parse paths. as[] directive solve this. */
+    // Note, parsing element_association is a bit tricky, due to backtracking side
+    // effect. The problem did rise up first time on parsing attribute_specification's
+    // expression:
+    //
+    // attribute_specification ::=
+    //        attribute attribute_designator OF entity_specification IS expression ;
+    //
+    // with descent aggregate's element_association:
+    //
+    // aggregate           ::= ( element_association { , element_association } )
+    // element_association ::= [ choices => ] expression
+    //
+    // If the choices rule fails due to missing "=>" the element_association node
+    // still contains the previous parsed data, hence holding the leaf data twice
+    // using two parse paths. as[] directive solve this.
        -x3::as<ast::choices>[choices >> "=>"]
     >> expression
     ;
@@ -1900,7 +1900,7 @@ x3::symbols<ast::keyword_token> const entity_class_symbols(
     "entity_class"
 );
 
-} 
+}
 
 auto const entity_class_def =
      distinct(detail::entity_class_symbols)
@@ -2118,8 +2118,8 @@ auto const exit_statement_def = ( // operator precedence
 /// exponent ::=                                                 [LRM93 §13.4.1]
 ///     E [ + ] integer | E - integer
 auto const exponent_def =
-    /* Note, that exponent rule parses real exponent, for integer types no sign
-     * is allowed, hence embedded into the concrete rule */
+    // Note, that exponent rule parses real exponent, for integer types no sign
+    // is allowed, hence embedded into the concrete rule
     x3::as<ast::string_span>[
         raw[ lexeme [
              char_("Ee") >> -char_("-+") >> integer
@@ -2202,7 +2202,7 @@ auto const unary_expr = x3::rule<struct _, ast::factor_unary_operation> { "facto
     ;
 } // end detail
 
-auto const factor_def =    /* order matters */
+auto const factor_def =    // order matters
       factor_detail::binary_expr
     | factor_detail::unary_expr
     | primary
@@ -2286,9 +2286,9 @@ auto const formal_parameter_list_def =
 ///     | type_mark ( formal_designator )
 auto const formal_part_def =
     x3::as<std::vector<ast::name>>[
-        /* formal_designator is a context tied name ({generic, port, parameter}_name)
-         * where function_name and type_mark are also a name. Hence parse a list
-         * of names.  */
+        // formal_designator is a context tied name ({generic, port, parameter}_name)
+        // where function_name and type_mark are also a name. Hence parse a list
+        // of names.
            name
         >> -(
                 '(' >> formal_designator >> ')'
@@ -2712,7 +2712,7 @@ auto const library_unit_def =
 ///     | string_literal
 ///     | bit_string_literal
 ///     | null
-auto const literal_def = /* order matters */
+auto const literal_def = // order matters
       enumeration_literal
     | string_literal
     | bit_string_literal
@@ -2788,8 +2788,8 @@ auto const mode_def =
 ///     | slice_name
 ///     | attribute_name
 auto const name_def =
-/* Note, using LRM BNF rule for selected_name results into left recursion, see
- * selected_name for details. */
+// Note, using LRM BNF rule for selected_name results into left recursion, see
+// selected_name for details.
         simple_name
       | operator_symbol
 ///      | selected_name
@@ -2827,7 +2827,7 @@ auto const null_statement_def = ( // operator precedence
 /// numeric_literal ::=                                           [LRM93 §7.3.1]
 ///       abstract_literal
 ///     | physical_literal
-auto const numeric_literal_def =  /* order matters */
+auto const numeric_literal_def =  // order matters
       physical_literal
     | abstract_literal
     ;
@@ -2996,8 +2996,8 @@ auto const parameter_specification_def =
 ///     [ abstract_literal ] unit_name
 namespace physical_literal_detail {
 
-/* Note, the LRM doesn't specify the allowed characters, hence it's assumed
- * that it follows the natural conventions. */
+// Note, the LRM doesn't specify the allowed characters, hence it's assumed
+// that it follows the natural conventions.
 auto const unit_name = x3::as<ast::string_span>[
     raw[ lexeme[
         +(lower_case_letter | upper_case_letter)
@@ -3086,9 +3086,9 @@ auto const prefix_def =
 ///     | allocator
 ///     | ( expression )
 auto const primary_def =
-    /* Order matters; if aggregate is prior expression as of the BNF, a
-     * backtracking problem occurred at:
-     * aggregate -> element_association -> choices  */
+    // Order matters; if aggregate is prior expression as of the BNF, a
+    // backtracking problem occurred at:
+    // aggregate -> element_association -> choices
       !char_('"') >> name // ignore string_literals which follow below
     | literal
     | function_call
@@ -3223,10 +3223,10 @@ auto const process_statement_part_def =
 /// type_mark ' ( expression )
 ///     | type_mark ' aggregate
 auto const qualified_expression_def =
-    /* Note: This BNF rule is ambiguous, since
-     * aggregate           ::= ( element_association { , element_association } )
-     * element_association ::= [ choices => ] expression
-     * again. AST node takes care on this. */
+    // Note: This BNF rule is ambiguous, since
+    // aggregate           ::= ( element_association { , element_association } )
+    // element_association ::= [ choices => ] expression
+    // again. AST node takes care on this.
        type_mark
     >> "\'"
     >> ( "(" >> expression >> ")"
@@ -3255,7 +3255,7 @@ auto const range_expression = x3::rule<struct _, ast::range_expression> { "range
     ;
 } // end detail
 
-auto const range_def = /* order matters */
+auto const range_def = // order matters
       detail::range_expression
     | attribute_name
     ;
@@ -3333,7 +3333,7 @@ auto const return_statement_def = ( // operator precedence
 /// scalar_type_definition ::=                                      [LRM93 §3.1]
 ///       enumeration_type_definition   | integer_type_definition
 ///     | floating_type_definition      | physical_type_definition
-auto const scalar_type_definition_def = /* order matters */
+auto const scalar_type_definition_def = // order matters
       physical_type_definition
     | enumeration_type_definition
     | range_constraint              // {integer,floating}_type_definition
@@ -3367,22 +3367,22 @@ auto const secondary_unit_declaration_def = ( // operator precedence
 ///     prefix . suffix
 namespace detail {
 
-/* LRM93 [§6.3] defined a concept of an expanded name: A selected name (in
- * the syntactic sense) that denotes one or all of the primary units in a
- * library or any named entity within a primary unit.
- * [...]
- * The prefix of an expanded name may not be a function call.
- *
- * The BNF rule results into recursive calling of prefix (which is a name).
- *
- * selected_name ::= prefix . suffix
- * prefix        ::= name | function_call
- * name          ::= ... | selected_name | ...
- * suffix        ::= simple_name | character_literal | operator_symbol | ALL
- *
- * The solution is to mimic the prefix without the name self (limit the name
- * rules). This allows the name to be selected_name too. No rewrote of the name
- * rule so far.*/
+// LRM93 [§6.3] defined a concept of an expanded name: A selected name (in
+// the syntactic sense) that denotes one or all of the primary units in a
+// library or any named entity within a primary unit.
+// [...]
+// The prefix of an expanded name may not be a function call.
+//
+// The BNF rule results into recursive calling of prefix (which is a name).
+//
+// selected_name ::= prefix . suffix
+// prefix        ::= name | function_call
+// name          ::= ... | selected_name | ...
+// suffix        ::= simple_name | character_literal | operator_symbol | ALL
+//
+// The solution is to mimic the prefix without the name self (limit the name
+// rules). This allows the name to be selected_name too. No rewrote of the name
+// rule so far.
 
 struct name_class_;
 struct prefix_class_;
@@ -3410,11 +3410,11 @@ auto const prefix_def = x3::repeat(1, 2)[
 BOOST_SPIRIT_DEFINE(name)
 BOOST_SPIRIT_DEFINE(prefix)
 
-} 
+}
 
 auto const selected_name_def =
     x3::lexeme[
-           /*detail::*/prefix
+           prefix
         >> '.'
         >> suffix
     ]
@@ -3795,14 +3795,14 @@ auto const subtype_declaration_def = ( // operator precedence
 /// subtype_indication ::=                                          [LRM93 §4.2]
 ///     [ resolution_function_name ] type_mark [ constraint ]
 auto const subtype_indication_def =
-    /* parse a list of unspecified names, since
-     *      resolution_function_name ::= name
-     *      type_mark                ::= type_name | subtype_name
-     * is ambiguous, even with optional. Nevertheless, syntactically
-     * resolution_function_name and type_mark are names, semantically matters on
-     * context as of VHDL.
-     * Further more, 2nd name can be a keyword (which can't be a name), hence
-     * the alternative parse branch. */
+    // parse a list of unspecified names, since
+    //      resolution_function_name ::= name
+    //      type_mark                ::= type_name | subtype_name
+    // is ambiguous, even with optional. Nevertheless, syntactically
+    // resolution_function_name and type_mark are names, semantically matters on
+    // context as of VHDL.
+    // Further more, 2nd name can be a keyword (which can't be a name), hence
+    // the alternative parse branch.
     (
        x3::repeat(1 ,2)[
           name          // range as keyword can follow; name forbids keywords!
@@ -3847,14 +3847,14 @@ auto const target_def =
 /// term ::=                                                        [LRM93 §7.1]
 ///     factor { multiplying_operator factor }
 auto const term_def =
-    /* There is no expectation point: Consider the case of '-5 mod -3', where
-     * mod is a multiplying operator with an higher operator precedence as the
-     * sign operator. This is no valid VHDL and would in case of use of an
-     * expectation point result into expectation_failure. See
-     * 'test_case/expression_failure/expression_failure_003', or even the
-     * [Sigasi: Be careful with VHDL operator precedence](
-     * http://insights.sigasi.com/tech/be-careful-vhdl-operator-precedence.html)
-     */
+    // There is no expectation point: Consider the case of '-5 mod -3', where
+    // mod is a multiplying operator with an higher operator precedence as the
+    // sign operator. This is no valid VHDL and would in case of use of an
+    // expectation point result into expectation_failure. See
+    // 'test_case/expression_failure/expression_failure_003', or even the
+    // [Sigasi: Be careful with VHDL operator precedence](
+    // http://insights.sigasi.com/tech/be-careful-vhdl-operator-precedence.html)
+    //
     factor >> *( multiplying_operator >> factor )
     ;
 
@@ -3881,10 +3881,10 @@ auto const type_conversion_def =
 ///       full_type_declaration
 ///     | incomplete_type_declaration
 auto const type_declaration_def = ( // operator precedence
-       /* Note, this node covers both alternatives from BNF:
-        * full_type_declaration       ::= TYPE identifier IS type_definition ;
-        * incomplete_type_declaration ::= TYPE identifier ;
-        */
+       // Note, this node covers both alternatives from BNF:
+       // full_type_declaration       ::= TYPE identifier IS type_definition ;
+       // incomplete_type_declaration ::= TYPE identifier ;
+       //
        TYPE
     >> identifier
     >> -( IS >> type_definition )
@@ -3912,10 +3912,10 @@ auto const type_definition_def =
 ///       type_name
 ///     | subtype_name
 auto const type_mark_def =
-    /* There is no way to distinguish between type_name and subtype_name at
-     * parser level. Further read
-     * [Question about type_mark bnf](
-     * https://groups.google.com/forum/#!topic/comp.lang.vhdl/exUhoMrFavU) */
+    // There is no way to distinguish between type_name and subtype_name at
+    // parser level. Further read
+    // [Question about type_mark bnf](
+    // https://groups.google.com/forum/#!topic/comp.lang.vhdl/exUhoMrFavU)
     name
     ;
 
@@ -3937,14 +3937,14 @@ auto const unconstrained_array_definition_def =
 ///     use selected_name { , selected_name } ;
 namespace use_clause_detail {
 
-/* LRM93 [§6.3] defined a concept of an expanded name: A selected name (in
- * the syntactic sense) that denotes one or all of the primary units in a
- * library or any named entity within a primary unit.
- * [...]
- * The prefix of an expanded name may not be a function call.
- *
- * For the use clause hence a specialized version is required. See Notes
- * at the AST node ast::use_clause. */
+// LRM93 [§6.3] defined a concept of an expanded name: A selected name (in
+// the syntactic sense) that denotes one or all of the primary units in a
+// library or any named entity within a primary unit.
+// [...]
+// The prefix of an expanded name may not be a function call.
+//
+// For the use clause hence a specialized version is required. See Notes
+// at the AST node ast::use_clause.
 
 auto const lib_prefix = x3::rule<struct _, std::vector<ast::name>> { "prefix" } =
     x3::lexeme[
@@ -4053,14 +4053,14 @@ auto const waveform_element_def =
     ;
 
 
-} 
+}
 
 
 #if !defined(DOXYGEN_DOCUMENTATION_BUILD)
 
-/*******************************************************************************
- * Spirit.X3 BNF Rule Definitions
- */
+//******************************************************************************
+// Spirit.X3 BNF Rule Definitions
+//
 namespace eda::vhdl::parser {
 
 #include <eda/compiler/warnings_off.hpp>
@@ -4339,18 +4339,18 @@ BOOST_SPIRIT_DEFINE(  // -- W --
 #endif  // !defined(DOXYGEN_DOCUMENTATION_BUILD)
 }
 
-/*******************************************************************************
- * Annotation and Error handling
- *
- * Note, the AST odes are tagged with ast::position_tagged which is of type
- * x3::position_tagged. The intension was to extend this approach to tag
- * also the file (id) where the node belongs to as show by Baptiste Wicht's
- * [Compiler of the EDDI programming language](
- * https://github.com/wichtounet/eddic).
- * For convenience (and since this approach isn't realized yet), Spirit.X3's
- * ID are derived from on_success_base (obviously must be changed in
- * the future).
- */
+//******************************************************************************
+// Annotation and Error handling
+//
+// Note, the AST odes are tagged with ast::position_tagged which is of type
+// x3::position_tagged. The intension was to extend this approach to tag
+// also the file (id) where the node belongs to as show by Baptiste Wicht's
+// [Compiler of the EDDI programming language](
+// https://github.com/wichtounet/eddic).
+// For convenience (and since this approach isn't realized yet), Spirit.X3's
+// ID are derived from on_success_base (obviously must be changed in
+// the future).
+//
 namespace eda::vhdl::parser {
 
 // clang-format off

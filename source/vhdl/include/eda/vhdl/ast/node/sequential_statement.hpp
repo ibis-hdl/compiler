@@ -20,24 +20,24 @@ struct if_statement;
 struct case_statement;
 struct loop_statement;
 
-/**
- * Ast node cyclic dependency as:
- *
- * \dot
- * digraph sequential_statement  {
- *   sequential_statement -> if_statement [ label=<<i>forward</i>>];
- *   if_statement         -> sequence_of_statements;
- *
- *   sequential_statement -> case_statement [ label=<<i>forward</i>>];
- *   case_statement       -> sequence_of_statements;
- *
- *   sequential_statement -> loop_statement [ label=<<i>forward</i>>];
- *   loop_statement       -> sequence_of_statements;
- *
- *   sequence_of_statements -> sequential_statement
- * }
- * \enddot
- */
+///
+/// Ast node cyclic dependency as:
+///
+/// \dot
+/// digraph sequential_statement  {
+///  sequential_statement -> if_statement [ label=<<i>forward</i>>];
+///  if_statement         -> sequence_of_statements;
+///
+///  sequential_statement -> case_statement [ label=<<i>forward</i>>];
+///  case_statement       -> sequence_of_statements;
+///
+///  sequential_statement -> loop_statement [ label=<<i>forward</i>>];
+///  loop_statement       -> sequence_of_statements;
+///
+///  sequence_of_statements -> sequential_statement
+/// }
+/// \enddot
+///
 using sequential_statement =
     variant<nullary, wait_statement, assertion_statement, report_statement,
             signal_assignment_statement, variable_assignment_statement, procedure_call_statement,

@@ -15,15 +15,15 @@ namespace testsuite::util {
 /// FixMe: written to fs::path(destination_dir) / "test_case" / testcase_name;
 /// Make the path to the destination/write folder configurable, also the file
 /// extension for the result.
-/*
-    COMMAND
-        ${PROJECT_NAME} --
-        --source-dir=${PROJECT_SOURCE_DIR}
-        --destination-dir=${PROJECT_BINARY_DIR}
-        --input-extension=.input
-    #    --write-extension=.expected
-        --write-extension=.result
-*/
+//
+//  COMMAND
+//      ${PROJECT_NAME} --
+//      --source-dir=${PROJECT_SOURCE_DIR}
+//      --destination-dir=${PROJECT_BINARY_DIR}
+//      --input-extension=.input
+//  #    --write-extension=.expected
+//      --write-extension=.result
+//
 class failure_diagnostic_fixture {
 public:
     ///

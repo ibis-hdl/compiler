@@ -22,7 +22,7 @@ private:
     // clang-format off
     // FixMe: Clang AddressSanitizer complains here:
     // https://wandbox.org/permlink/GfF0VgNLDRWOgkd1
-    // stack-buffer-overflow .../ansii_color.hpp:33 in 
+    // stack-buffer-overflow .../ansii_color.hpp:33 in
     // esc_printer<eda::color::attribute, 4ul>::esc_printer<0ul, 1ul, 2ul, 3ul>(std::initializer_list<eda::color::attribute>, std::integer_sequence<unsigned long, 0ul, 1ul, 2ul, 3ul>)
     // clang-format on
     template <std::size_t... N>
@@ -98,7 +98,7 @@ public:
 
     std::size_t count = 0;
     static constexpr std::size_t size = SIZE;
-    /* ANSI Control Sequence Introducer/Initiator */
+    // ANSI Control Sequence Introducer/Initiator
     static constexpr char CSI[] = "\x1B[";
 };
 

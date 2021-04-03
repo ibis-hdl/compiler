@@ -11,7 +11,7 @@
 
 #include <eda/namespace_alias.hpp>
 
-namespace /* anonymous */
+namespace  // anonymous
 {
 
 // or semaphore to notify a waiting thread

@@ -33,16 +33,16 @@ target_sources(${PROJECT_NAME}
         src/ast/position_cache.cpp
         src/ast/pretty_node_name.cpp
 
-        src/parser/error_handler.cpp
-        src/parser/on_error_base.cpp
-        src/parser/grammar.cpp  # ---- memory exhausting @compile time ----
-        src/parser/parse.cpp    # FixMe: also creates Grammar instance? Shouldn't!
-
         src/analyze/error_handler.cpp
         src/analyze/check/label_match.cpp
         src/analyze/syntax.cpp
 
         src/context.cpp
+
+        src/parser/error_handler.cpp
+        src/parser/on_error_base.cpp
+        src/parser/grammar.cpp  # ---- memory exhausting @compile time ----
+        src/parser/parse.cpp    # FixMe: also creates Grammar instance? Shouldn't!
 )
 
 ##

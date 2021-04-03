@@ -401,10 +401,6 @@ set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
   testsuite since the concept of parsing command line arguments, using builtin
   compile path and naming of tests isn't appropriate to this.
 
-- Replace C comments by C++ comments, see e.g. [Github](https://github.com/mbitsnbites/c-comments-to-cpp)
-  for a python script. In 2021 it fails with inline comments like signatures
-  like foo(int /* unused */).
-
 - Get clang-format working again. By The Way, check clang-format
   style for enhancements, so that we get rid off the '// 'clang-format {off|on}'
   pragmas especially on class members.
@@ -432,9 +428,6 @@ set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
     - ast_stats sort order - use enum sort::{ascending, descending}
     - worker collector{ count_map, untagged_nodes } fix to
       worker stats_worker{ count_map, untagged_nodes };
-
-- Check build system with [Templight 2.0 - Template Instantiation Profiler and Debugger](
-  https://github.com/mikael-s-persson/templight)
 
 - we have buildinfo_static.hpp.in, buildinfo.hpp.in using git info and date/time
   would be useful. Copy git part temporary to ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}

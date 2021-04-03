@@ -22,17 +22,17 @@ namespace eda::vhdl::ast {
 
 struct subprogram_body;
 
-/**
- * Ast node cyclic dependency as:
- *
- * \dot
- * digraph subprogram_declarative_item  {
- *   subprogram_body             -> subprogram_declarative_part;
- *   subprogram_declarative_part -> subprogram_declarative_item;
- *   subprogram_declarative_item -> subprogram_body [ label=<<i>forward</i>>];
- * }
- * \enddot
- */
+///
+/// Ast node cyclic dependency as:
+///
+/// \dot
+/// digraph subprogram_declarative_item  {
+///  subprogram_body             -> subprogram_declarative_part;
+///  subprogram_declarative_part -> subprogram_declarative_item;
+///  subprogram_declarative_item -> subprogram_body [ label=<<i>forward</i>>];
+/// }
+/// \enddot
+///
 using subprogram_declarative_item =
     variant<ast::nullary, ast::subprogram_declaration, forward_ast<ast::subprogram_body>,
             ast::type_declaration, ast::subtype_declaration, ast::constant_declaration,

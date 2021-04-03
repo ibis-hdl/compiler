@@ -94,18 +94,18 @@ void init::parse_cli(int argc, const char* argv[])
         std::string locale_dir;
     } cli_parameter;
 
-    /* Feature Request:
-     * from GCC we also know some cli options (f: Flag, m: Mode)
-     * \see [What do the -f and -m in gcc/clang compiler options stand for](
-     * https://stackoverflow.com/questions/16227501/what-do-the-f-and-m-in-gcc-clang-compiler-options-stand-for),
-     * maybe the nomenclature can be used here too. */
+    // Feature Request:
+    // from GCC we also know some cli options (f: Flag, m: Mode)
+    // \see [What do the -f and -m in gcc/clang compiler options stand for](
+    // https://stackoverflow.com/questions/16227501/what-do-the-f-and-m-in-gcc-clang-compiler-options-stand-for),
+    // maybe the nomenclature can be used here too.
 
     // clang-format off
     try {
 
-        /*
-         * Primary Options Group
-         */
+        //
+        // Primary Options Group
+        //
         app.add_option("files", cli_parameter.hdl_files)
             ->description(translate("One or more VHDL file(s)."))
             ->required()
@@ -118,16 +118,16 @@ void init::parse_cli(int argc, const char* argv[])
             ->description(translate("Show build informations."))
             ;
 
-        /*
-         * Working/Processing flags
-         */
+        //
+        // Working/Processing flags
+        //
 
         app.add_flag("-a,--analyze") // unused
             ->description(translate("Analyze the design."));
 
-        /*
-         * Message Options Group
-         */
+        //
+        // Message Options Group
+        //
         static const std::string message_group{ translate("Message Options") };
 
         app.add_flag("-q,--quiet")
@@ -157,9 +157,9 @@ void init::parse_cli(int argc, const char* argv[])
             ->group(message_group)
             ;
 
-        /*
-         * Locale Options Group
-         */
+        //
+        // Locale Options Group
+        //
         static const std::string locale_group{ translate("Locale/Environment Options") };
 
         app.add_option("--locale-dir", cli_parameter.locale_dir)
@@ -169,9 +169,9 @@ void init::parse_cli(int argc, const char* argv[])
             ->group(locale_group)
             ;
 
-        /*
-         * Warning Options Group
-         */
+        //
+        // Warning Options Group
+        //
         static const std::string warning_group{ translate("Warning Options") };
 
         app.add_flag("--Wall") // unused
@@ -192,9 +192,9 @@ void init::parse_cli(int argc, const char* argv[])
             ->group(warning_group)
             ;
 
-        /*
-         * Paths Group
-         */
+        //
+        // Paths Group
+        //
         static const std::string path_group{ translate("Paths") };
 
         app.add_option("--hdl-lib-path", cli_parameter.hdl_lib_path) // unused
@@ -230,17 +230,17 @@ void init::parse_cli(int argc, const char* argv[])
 
     // ... and evaluate CLI arguments:
 
-    /* FixMe: The code below is far away to be practical/useable.
-     * The settings class overloaded set() member and hence the C++
-     * lambda 'set_option' get into compile error with
-     * 'map[trim(option_name)].emplace<T>(value);', so the exhausting
-     * way is choosen temporary here.  This mix here testing on given
-     * command line arguments, using defaults from cli_parameters etc.
-     * is a mess ....
-     * There is a functor missing for settings flags and options
-     * with suplying their defaults.
-     * Solution: Maybe use boost.property_tree and reuse settings::option_trigger
-     * as option for option dependencies??? */
+    // FixMe: The code below is far away to be practical/useable.
+    // The settings class overloaded set() member and hence the C++
+    // lambda 'set_option' get into compile error with
+    // 'map[trim(option_name)].emplace<T>(value);', so the exhausting
+    // way is choosen temporary here.  This mix here testing on given
+    // command line arguments, using defaults from cli_parameters etc.
+    // is a mess ....
+    // There is a functor missing for settings flags and options
+    // with suplying their defaults.
+    // Solution: Maybe use boost.property_tree and reuse settings::option_trigger
+    // as option for option dependencies???
 
     if (app.count("--version") != 0) {
         std::cout << EDA_IBIS_VERSION_STR << '\n';
@@ -383,7 +383,7 @@ void init::user_config_message_color()
         merge(default_config, user_config);
     }
     else {
-        /* nothing */
+        // nothing
     }
 
     if (verbose) {

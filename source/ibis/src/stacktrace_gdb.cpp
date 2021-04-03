@@ -35,9 +35,9 @@
 #include <thread>
 #include <vector>
 
-/*
- * OS specific system headers
- */
+//
+// OS specific system headers
+//
 #if (BUILD_PLATFORM_UNIX)
 #include <climits>  // PATH_MAX
 // #include <sys/prctl.h>
@@ -53,7 +53,7 @@ namespace bp = boost::process;
 #endif
 
 #if (BUILD_PLATFORM_UNIX)
-void gdb_signal_handler(int signum, siginfo_t* /*unused*/, void* /*unused*/);
+void gdb_signal_handler(int signum, siginfo_t* siginfo, void* ucontext);
 #endif
 bool gdb_detected();
 bool valgrind_detected();
@@ -61,7 +61,8 @@ bool valgrind_detected();
 bool token_found(std::string const& token, std::string const& procfs_path);
 std::string get_executable_path();
 
-namespace /* anonymous */ {
+namespace  // anonymous
+{
 // our semaphore to notify a waiting thread
 volatile std::sig_atomic_t
     sig_caught;  // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
@@ -104,7 +105,8 @@ bool register_gdb_signal_handler()
     return true;
 }
 
-void gdb_signal_handler(int signum, siginfo_t* /*unused*/, void* /*unused*/)
+void gdb_signal_handler(int signum, [[maybe_unused]] siginfo_t* siginfo,
+                        [[maybe_unused]] void* ucontext)
 {
     sig_caught = signum;
 
@@ -139,24 +141,25 @@ void gdb_signal_handler(int signum, siginfo_t* /*unused*/, void* /*unused*/)
             get_executable_path(),  // required symbol data in the executable
             std::to_string(getpid())
         },
-        bp::extend::on_setup([](auto& /*unused*/) {
+        bp::extend::on_setup([]([[maybe_unused]] auto& exec) {
             std::cout << "[ibis/Note] try to launch GDB process from PID = "
                       << getpid() << '\n';
         }),
-        bp::extend::on_error([](auto& /*unused*/, std::error_code const& ec) {
+        bp::extend::on_error([]([[maybe_unused]] auto& exec, std::error_code const& ec) {
             std::cerr << "[ibis/Note] error occurred while trying to launch the process: "
                       << ec.message() << '\n';
         }),
-        bp::extend::on_fork_error([](auto& /*unused*/, std::error_code const& ec) {
+        bp::extend::on_success([]([[maybe_unused]] auto& exec) {
+            std::cout << "[ibis/Note] GDB process successfully launched:\n\n";
+        }),
+        // below is posix specific
+        bp::extend::on_fork_error([]([[maybe_unused]] auto& exec, std::error_code const& ec) {
             std::cerr << "[ibis/Note] error occurred during the call of fork(): "
                       << ec.message() << '\n';
         }),
-        bp::extend::on_exec_error([](auto& /*unused*/, std::error_code const& ec) {
+        bp::extend::on_exec_error([]([[maybe_unused]] auto& exec, std::error_code const& ec) {
             std::cerr << "[ibis/Note] call of execve() failed: "
                       << ec.message() << '\n';
-        }),
-        bp::extend::on_success([](auto& /*unused*/) {
-            std::cout << "[ibis/Note] GDB process successfully launched:\n\n";
         })
     );
     // clang-format on
@@ -176,15 +179,15 @@ void gdb_signal_handler(int signum, siginfo_t* /*unused*/, void* /*unused*/)
 }
 #endif
 
-/**
- * Several techniques to detect debuggers; no real anti-debugger detection
- * \see
- * [Leveraging OS to Detect Debugger's Presence](
- *  https://github.com/yellowbyte/reverse-engineering-reference-manual/blob/master/contents/anti-analysis/Anti-Debugging.md)
- * [jvoisin/pangu](https://github.com/jvoisin/pangu)
- *
- *  also [detection shown](https://gist.github.com/leo-yuriev/06b60804f99d33f11cff)
- */
+///
+/// Several techniques to detect debuggers; no real anti-debugger detection
+/// \see
+/// [Leveraging OS to Detect Debugger's Presence](
+/// https://github.com/yellowbyte/reverse-engineering-reference-manual/blob/master/contents/anti-analysis/Anti-Debugging.md)
+/// [jvoisin/pangu](https://github.com/jvoisin/pangu)
+///
+/// also [detection shown](https://gist.github.com/leo-yuriev/06b60804f99d33f11cff)
+///
 bool gdb_detected()
 {
     static std::optional<bool> result{};
@@ -194,7 +197,7 @@ bool gdb_detected()
         return *result;
     }
 
-    /* Detect GDB by the mean of /proc/$PID/cmdline for "gdb" */
+    // Detect GDB by the mean of /proc/$PID/cmdline for "gdb"
     if constexpr (eda::build_system == eda::system::Linux) {
         std::stringstream path{};
         path << "/proc/" << getppid() << "/cmdline";
@@ -207,15 +210,15 @@ bool gdb_detected()
     }
 
 #if 0
-    /* Doesn't work as expected, gdb can't attach:
-     * warning: process <pid1> is already traced by process <pi2>
-     * ptrace: Operation not permitted.
-     * More investigating required,
-     * [nvc](https://github.com/nickg/nvc/blob/master/src/util.c) forks
-     * the binary to check it, but doesn't set the flag inside these code.  */
+    // Doesn't work as expected, gdb can't attach:
+    // warning: process <pid1> is already traced by process <pi2>
+    // ptrace: Operation not permitted.
+    // More investigating required,
+    // [nvc](https://github.com/nickg/nvc/blob/master/src/util.c) forks
+    // the binary to check it, but doesn't set the flag inside these code.
 
-    /* Classic self ptrace trick: a program can only be ptraced by ONE other,
-     * \see [Yama](https://www.kernel.org/doc/Documentation/security/Yama.txt} */
+    // Classic self ptrace trick: a program can only be ptraced by ONE other,
+    // \see [Yama](https://www.kernel.org/doc/Documentation/security/Yama.txt}
 
     // allow tracing from any process
     prctl(PR_SET_PTRACER, PR_SET_PTRACER_ANY, 0, 0, 0);
@@ -244,9 +247,9 @@ bool valgrind_detected()
     }
 
     if constexpr (eda::build_platform == eda::platform::Unix) {
-        /* [How can I detect if a program is running from within valgrind?](
-         *  https://stackoverflow.com/questions/365458/how-can-i-detect-if-a-program-is-running-from-within-valgrind)
-         */
+        // [How can I detect if a program is running from within valgrind?](
+        //  https://stackoverflow.com/questions/365458/how-can-i-detect-if-a-program-is-running-from-within-valgrind)
+        //
         const char* val = std::getenv("RUNNING_ON_VALGRIND");
         if (val != nullptr) {
             // chache success
@@ -256,10 +259,10 @@ bool valgrind_detected()
     }
 
     if constexpr (eda::build_system == eda::system::Linux) {
-        /* [how to set dynamic link library path and environment variable for a process in
-         * valgrind](
-         *  https://stackoverflow.com/questions/24745120/how-to-set-dynamic-link-library-path-and-environment-variable-for-a-process-in-v)
-         * ... not very sophisticated implemented  */
+        // [how to set dynamic link library path and environment variable for a process in
+        // valgrind](
+        //  https://stackoverflow.com/questions/24745120/how-to-set-dynamic-link-library-path-and-environment-variable-for-a-process-in-v)
+        // ... not very sophisticated implemented
         if (token_found("vgpreload", "/proc/self/maps")) {
             // cache success
             *result = true;
@@ -272,15 +275,15 @@ bool valgrind_detected()
     return *result;
 }
 
-/*
- * Utilities
- */
+//
+// Utilities
+//
 bool token_found(std::string const& token, std::string const& procfs_path)
 {
-    /* [Reading files line by line in C++ using ifstream: dealing correctly with badbit, failbit,
-     * eofbit, and perror()](
-     *  https://gehrcke.de/2011/06/reading-files-in-c-using-ifstream-dealing-correctly-with-badbit-failbit-eofbit-and-perror/)
-     */
+    // [Reading files line by line in C++ using ifstream: dealing correctly with badbit, failbit,
+    // eofbit, and perror()](
+    //  https://gehrcke.de/2011/06/reading-files-in-c-using-ifstream-dealing-correctly-with-badbit-failbit-eofbit-and-perror/)
+    //
     std::ifstream procfs{ procfs_path };
 
     if (!procfs.is_open()) {
@@ -302,19 +305,19 @@ bool token_found(std::string const& token, std::string const& procfs_path)
     return false;
 }
 
-/**
- * Get the name of the running executable.
- *
- * Note, this is terrible platform specific, hence the unconventional way of
- * includes to avoid pollution. Fully supported platform headers are as usually
- * on top.
- *
- * \see
- * [Finding current executable's path without /proc/self/exe](
- *  https://stackoverflow.com/questions/1023306/finding-current-executables-path-without-proc-self-exe)
- * [How to implement readlink to find the path](
- *  https://stackoverflow.com/questions/5525668/how-to-implement-readlink-to-find-the-path)
- */
+///
+/// Get the name of the running executable.
+///
+/// Note, this is terrible platform specific, hence the unconventional way of
+/// includes to avoid pollution. Fully supported platform headers are as usually
+/// on top.
+///
+/// \see
+/// [Finding current executable's path without /proc/self/exe](
+/// https://stackoverflow.com/questions/1023306/finding-current-executables-path-without-proc-self-exe)
+/// [How to implement readlink to find the path](
+/// https://stackoverflow.com/questions/5525668/how-to-implement-readlink-to-find-the-path)
+///
 std::string get_executable_path()
 {
     if constexpr (eda::build_system == eda::system::Linux) {

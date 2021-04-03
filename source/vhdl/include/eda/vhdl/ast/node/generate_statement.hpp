@@ -12,16 +12,16 @@ namespace eda::vhdl::ast {
 
 struct concurrent_statement;  // forward due to cyclic dependency
 
-/**
- * Ast node cyclic dependency as:
- *
- * \dot
- *  digraph generate_statement  {
- *   concurrent_statement -> generate_statement;
- *   generate_statement   -> concurrent_statement [ label=<<i>forward</i>>];
- * }
- * \enddot
- */
+///
+/// Ast node cyclic dependency as:
+///
+/// \dot
+/// digraph generate_statement  {
+///  concurrent_statement -> generate_statement;
+///  generate_statement   -> concurrent_statement [ label=<<i>forward</i>>];
+/// }
+/// \enddot
+///
 struct generate_statement : position_tagged {
     ast::label label;
     ast::generation_scheme generation_scheme;

@@ -256,14 +256,14 @@ std::string_view on_error_base::lookup(std::string_view which)
         { "waveform"sv, "Waveform"sv },
         { "waveform_element"sv, "Waveform Element"sv },
 
-        /* other */
+        // other
         { "signal_name"sv, "Signal Name"sv },
 
         { "boolean_expression"sv, "Boolean Expression"sv },
         { "time_expression"sv, "Time Expression"sv },
         { "value_expression"sv, "Value Expression"sv },
 
-        /* Typographical */
+        // Typographical
         { "';'"sv, "Semicolon ';'"sv },
         { "':'"sv, "Colon ':'"sv },
         { "','"sv, "Comma ':'"sv },

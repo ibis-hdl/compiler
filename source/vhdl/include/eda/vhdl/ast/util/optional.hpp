@@ -4,7 +4,7 @@
 
 namespace eda::vhdl::ast {
 
-/** convenience alias */
+/// convenience alias
 template <typename T>
 using optional = boost::optional<T>;
 

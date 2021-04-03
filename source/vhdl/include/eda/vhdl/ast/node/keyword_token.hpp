@@ -117,11 +117,11 @@ std::ostream& operator<<(std::ostream& os, keyword_token token);
 
 }  // namespace eda::vhdl::ast
 
-/*
- * Support Spirit.X3's attribute handling.
- * Several nodes on AST has an boolean attribute on simply existence of an
- * keyword, this simplifies evaluating on cosst of spirit's move_to traits.
- */
+//
+// Support Spirit.X3's attribute handling.
+// Several nodes on AST has an boolean attribute on simply existence of an
+// keyword, this simplifies evaluating on costs of spirit's move_to traits.
+//
 namespace boost::spirit::x3::traits {
 
 static inline void move_to(eda::vhdl::ast::keyword_token token, bool& dest)

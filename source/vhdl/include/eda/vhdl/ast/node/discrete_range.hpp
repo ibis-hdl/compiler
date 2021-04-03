@@ -9,17 +9,17 @@ namespace eda::vhdl::ast {
 
 struct subtype_indication;
 
-/**
- * Ast node cyclic dependency as:
- *
- * \dot
- * digraph concurrent_statement  {
- *   subtype_indication -> constraint;
- *   constraint -> index_constraint -> discrete_range;
- *   discrete_range -> subtype_indication [ label=<<i>forward</i>>];
- * }
- * \enddot
- */
+///
+/// Ast node cyclic dependency as:
+///
+/// \dot
+/// digraph concurrent_statement  {
+///  subtype_indication -> constraint;
+///  constraint -> index_constraint -> discrete_range;
+///  discrete_range -> subtype_indication [ label=<<i>forward</i>>];
+/// }
+/// \enddot
+///
 struct discrete_range
     : variant<ast::nullary,
               forward_ast<ast::subtype_indication>,  // discrete_subtype_indication

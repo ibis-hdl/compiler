@@ -25,10 +25,10 @@
 
 namespace eda::vhdl::analyze {
 
-/**
- * Display the `error_message` with diagnostics, where only the tagged error
- * position `where_tag` is given.
- */
+///
+/// Display the `error_message` with diagnostics, where only the tagged error
+/// position `where_tag` is given.
+///
 template <typename Iterator>
 void error_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
                                          std::string const& error_message) const
@@ -73,11 +73,11 @@ void error_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
     os << indicator(line_start, error_first, error_last) << translate(" <<-- here\n");
 }
 
-/**
- * Display the `error_message` with diagnostics, where the tagged error
- * position `where_tag` and the associated `start_label` and `stop label` are
- * given.
- */
+///
+/// Display the `error_message` with diagnostics, where the tagged error
+/// position `where_tag` and the associated `start_label` and `stop label` are
+/// given.
+///
 template <typename Iterator>
 void error_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
                                          ast::position_tagged const& start_label,
@@ -93,14 +93,14 @@ void error_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
 
     auto current_file = position_cache.handle(where_tag.file_id);
 
-    /* at ill-formed label pairs (e.g. end, but no start label given) nodes
-     * aren't tagged appropriate. */
+    // at ill-formed label pairs (e.g. end, but no start label given) nodes
+    // aren't tagged appropriate.
     auto const iterators_of = [&current_file](ast::position_tagged const& tagged_node) {
         auto range = current_file.position_of(tagged_node);
         if (range) {
             return std::tuple{ (*range).begin(), (*range).end(), true /* valid */ };
         }
-        return std::tuple{ iterator_type{}, iterator_type{}, false /* not-valid */ };
+        return std::tuple{ iterator_type{}, iterator_type{}, false /* invalid */ };
     };
 
     auto const indicator = [&](auto& start, auto& first, auto& last) {
