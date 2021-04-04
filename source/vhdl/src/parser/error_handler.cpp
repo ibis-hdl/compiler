@@ -1,7 +1,7 @@
 #include <eda/vhdl/parser/error_handler.hpp>
 #include <eda/vhdl/parser/iterator_type.hpp>  // for explicit template instantiation
 
-#include "eda/vhdl/ast/position_cache.hpp"
+#include <eda/vhdl/parser/position_cache.hpp>
 
 #include <eda/util/string/position_indicator.hpp>
 

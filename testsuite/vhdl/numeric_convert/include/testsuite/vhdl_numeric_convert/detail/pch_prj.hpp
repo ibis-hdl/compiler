@@ -5,7 +5,7 @@
 #include <eda/vhdl/ast/node/bit_string_literal.hpp>
 #include <eda/vhdl/ast/node/decimal_literal.hpp>
 #include <eda/vhdl/ast/numeric_convert.hpp>
-#include <eda/vhdl/ast/position_cache.hpp>
+#include <eda/vhdl/parser/position_cache.hpp>
 #include <eda/vhdl/parser/grammar_def.hpp>
 #include <eda/vhdl/parser/iterator_type.hpp>
 #include <eda/vhdl/parser/parser_config.hpp>

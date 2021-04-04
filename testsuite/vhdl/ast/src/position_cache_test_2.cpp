@@ -4,7 +4,7 @@
 #include <testsuite/ast/position_cache_fixture.hpp>
 
 #include <eda/vhdl/parser/iterator_type.hpp>
-#include <eda/vhdl/ast/position_cache.hpp>
+#include <eda/vhdl/parser/position_cache.hpp>
 
 #include <testsuite/util/data_set.hpp>
 #include <testsuite/namespace_alias.hpp>

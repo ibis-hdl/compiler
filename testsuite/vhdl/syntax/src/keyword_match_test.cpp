@@ -31,7 +31,7 @@ BOOST_DATA_TEST_CASE_F(
     expected, test_case_name)
 {
     btt::output_test_stream os;
-    ast::position_cache<parser::iterator_type> position_cache;
+    parser::position_cache<parser::iterator_type> position_cache;
     ast::design_file design_file;
 
     {
@@ -79,7 +79,7 @@ BOOST_DATA_TEST_CASE_F(
     expected, test_case_name)
 {
     btt::output_test_stream os;
-    ast::position_cache<parser::iterator_type> position_cache;
+    parser::position_cache<parser::iterator_type> position_cache;
     ast::design_file design_file;
 
     {

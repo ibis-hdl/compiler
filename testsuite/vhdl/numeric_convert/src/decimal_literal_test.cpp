@@ -2,7 +2,7 @@
 
 #include <eda/vhdl/ast/node/decimal_literal.hpp>
 #include <eda/vhdl/ast/numeric_convert.hpp>
-#include <eda/vhdl/ast/position_cache.hpp>
+#include <eda/vhdl/parser/position_cache.hpp>
 #include <eda/vhdl/parser/iterator_type.hpp>
 #include <eda/vhdl/type.hpp>
 
@@ -102,7 +102,7 @@ BOOST_DATA_TEST_CASE(decimal_literal_integer, utf_data::make(dec_int_lit) ^ dec_
 {
     using iterator_type = parser::iterator_type;
 
-    ast::position_cache<iterator_type> position_cache;
+    parser::position_cache<iterator_type> position_cache;
     std::size_t const id = position_cache.add_file("<decimal_literal>", literal);
     auto const position_proxy{ position_cache.handle(id) };
 
@@ -128,7 +128,7 @@ BOOST_AUTO_TEST_CASE(decimal_literal_uint64max_ovrflw)
 
     using iterator_type = parser::iterator_type;
 
-    ast::position_cache<iterator_type> position_cache;
+    parser::position_cache<iterator_type> position_cache;
     std::size_t const id = position_cache.add_file("<decimal_literal>", literal);
     auto const position_proxy{ position_cache.handle(id) };
 
@@ -197,7 +197,7 @@ BOOST_DATA_TEST_CASE(decimal_literal_real, utf_data::make(dec_real_lit) ^ dec_re
 {
     using iterator_type = parser::iterator_type;
 
-    ast::position_cache<iterator_type> position_cache;
+    parser::position_cache<iterator_type> position_cache;
     std::size_t const id = position_cache.add_file("<decimal_literal>", literal);
     auto const position_proxy{ position_cache.handle(id) };
 

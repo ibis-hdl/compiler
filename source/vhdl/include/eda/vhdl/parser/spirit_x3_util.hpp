@@ -30,7 +30,7 @@ struct protect_gen {
 auto const protect = protect_gen{};
 
 ///
-/// Spirit X3.Parser utility for attribute handling
+/// Spirit X3 parser utility for attribute handling
 ///
 /// \see [Understanding the List Operator (%) in Boost.Spirit](
 ///      https://stackoverflow.com/questions/33816662/understanding-the-list-operator-in-boost-spirit/33817135#33817135)
@@ -54,5 +54,22 @@ namespace boost::spirit::x3::traits {
 template <typename Subject, typename Context>
 struct attribute_of<x3::protect_directive<Subject>, Context> : attribute_of<Subject, Context> {
 };
+
+//
+// ===--------- Spirit X3 Debug Helper ---------==
+//
+#if defined(BOOST_SPIRIT_X3_DEBUG)
+// After Spirit.X3 1.64 the code with defined BOOST_SPIRIT_X3_DEBUG seems to be
+// changed. Old support for the AST nodes using operator<<() isn't required
+// any more, but the code for x3::raw[] / boost::iterator_range<> is missing,
+// hence Quick&Dirty to supply this.
+namespace boost::spirit::x3::traits {
+
+template <typename Out, typename T>
+inline void print_attribute(Out& os, boost::iterator_range<T> const& range)
+{
+    os << range;
+}
+#endif
 
 }  // namespace boost::spirit::x3::traits

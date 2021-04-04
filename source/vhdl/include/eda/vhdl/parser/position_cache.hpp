@@ -12,7 +12,7 @@
 
 #include <eda/util/cxx_bug_fatal.hpp>
 
-namespace eda::vhdl::ast {
+namespace eda::vhdl::parser {
 
 ///
 /// AST annotation/position cache
@@ -269,4 +269,4 @@ typename position_cache<IteratorT>::proxy position_cache<IteratorT>::handle(std:
     return proxy{ *this, file_id };
 }
 
-}  // namespace eda::vhdl::ast
+}  // namespace eda::vhdl::parser

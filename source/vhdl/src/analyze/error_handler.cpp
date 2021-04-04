@@ -1,5 +1,5 @@
 #include <eda/vhdl/analyze/error_handler.hpp>
-#include <eda/vhdl/ast/position_cache.hpp>
+#include <eda/vhdl/parser/position_cache.hpp>
 #include <eda/vhdl/ast/util/position_tagged.hpp>
 
 #include <eda/vhdl/parser/iterator_type.hpp>  // for explicit template instantiation

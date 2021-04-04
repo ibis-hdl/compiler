@@ -14,7 +14,7 @@
 #include <eda/vhdl/parser/parser_config.hpp>
 #include <eda/vhdl/analyze/syntax.hpp>
 #include <eda/vhdl/analyze/error_handler.hpp>
-#include <eda/vhdl/ast/position_cache.hpp>
+#include <eda/vhdl/parser/position_cache.hpp>
 //#include <eda/vhdl/ast/ast_stats.hpp>
 #include <eda/vhdl/context.hpp>
 
@@ -36,7 +36,7 @@ BOOST_DATA_TEST_CASE_F(
     test_case_name)
 {
     btt::output_test_stream os;
-    ast::position_cache<parser::iterator_type> position_cache;
+    parser::position_cache<parser::iterator_type> position_cache;
     ast::design_file design_file;
 
     {
@@ -82,7 +82,7 @@ BOOST_DATA_TEST_CASE_F(
     expected, test_case_name)
 {
     btt::output_test_stream os;
-    ast::position_cache<parser::iterator_type> position_cache;
+    parser::position_cache<parser::iterator_type> position_cache;
     ast::design_file design_file;
 
     {

@@ -8,7 +8,7 @@
 namespace eda::vhdl::ast {
 struct position_tagged;
 }
-namespace eda::vhdl::ast {
+namespace eda::vhdl::parser {
 template <typename IteratorT>
 class position_cache;
 }
@@ -18,14 +18,14 @@ namespace eda::vhdl::analyze {
 ///
 /// Syntax/Semantic error handler.
 ///
-/// Opposite to the pasrer::error_handler, this error handler works on AST/Tree
+/// Opposite to the parser::error_handler, this error handler works on AST/Tree
 /// level. All informations tagged at parse time are required for diagnostics.
-/// Therefore the ast::position_cache is required. Also the API is slightly
+/// Therefore the parser::position_cache is required. Also the API is slightly
 /// different.
 ///
 /// \todo Get "access" to information of node/rule map at parser::on_error_base
 ///
-/// FixMe: CHeck on use of string_view!
+/// FixMe: Check on use of string_view!
 ///
 template <typename Iterator>
 class error_handler {
@@ -37,11 +37,11 @@ public:
     /// Construct a Syntax/Semantic error handler.
     ///
     /// @param os_             Stream to write error and diagnostic messages.
-    /// @param position_cache_ Reference to the ast::position_cache.
+    /// @param position_cache_ Reference to the parser::position_cache.
     /// @param tabs            Tabulator size, required for correct rendering of
     ///                       source code snippet.
     ///
-    explicit error_handler(std::ostream& os_, ast::position_cache<iterator_type>& position_cache_,
+    explicit error_handler(std::ostream& os_, parser::position_cache<iterator_type>& position_cache_,
                            std::size_t tabs = 4)
         : os{ os_ }
         , position_cache{ position_cache_ }
@@ -81,7 +81,7 @@ public:
 
 private:
     std::ostream& os;
-    ast::position_cache<iterator_type>& position_cache;
+    parser::position_cache<iterator_type>& position_cache;
     std::size_t tab_sz;
 };
 

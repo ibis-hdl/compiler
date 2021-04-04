@@ -37,7 +37,7 @@ if (EDA_ENABLE_PCH)
     target_precompile_headers(${PROJECT_NAME}
         PRIVATE
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/eda/detail/pch.hpp>
-            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/eda/detail/pch_prj.hpp>
+            #$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/eda/detail/pch_prj.hpp>
     )
 endif()
 

@@ -211,7 +211,7 @@
 #include <eda/vhdl/ast/node/waveform_element.hpp>
 #include <eda/vhdl/ast/node/waveform.hpp>
 #include <eda/vhdl/ast/numeric_convert.hpp>
-#include <eda/vhdl/ast/position_cache.hpp>
+#include <eda/vhdl/parser/position_cache.hpp>
 #include <eda/vhdl/ast/pretty_node_name.hpp>
 #include <eda/vhdl/ast/util/nullary.hpp>
 #include <eda/vhdl/ast/util/optional.hpp>

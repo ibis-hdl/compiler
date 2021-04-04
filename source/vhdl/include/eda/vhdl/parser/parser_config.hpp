@@ -29,12 +29,14 @@ using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
 /// The last is 'const' following the X3 examples (and it compiles/links
 /// successfully!), but not here (no idea why).
 ///
-/// Several Q&A are written on Stack Overflow:
+/// Several Q&A regards to linker errors are written on Stack Overflow, e.g.:
 ///
 /// - [linking errors while separate parser using boost spirit x3](
 ///    https://stackoverflow.com/questions/40496357/linking-errors-while-separate-parser-using-boost-spirit-x3?answertab=active#tab-top)
 /// - [x3 linker error with separate TU](
 ///    https://stackoverflow.com/questions/43791079/x3-linker-error-with-separate-tu?answertab=active#tab-top)
+/// - [Mixing non-terminal rules from separeted translation unit](
+///    https://stackoverflow.com/questions/66036568/mixing-non-terminal-rules-from-separeted-translation-unit)
 ///
 /// but none pointed out the reference_wrapper<error_handler_type> problem
 /// faced here.

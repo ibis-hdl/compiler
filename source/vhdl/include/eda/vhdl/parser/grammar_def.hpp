@@ -9,8 +9,8 @@
 
 #include <eda/vhdl/ast/ast_adapted.hpp>
 
-#include <eda/support/boost/spirit_x3.hpp>
-#include <eda/support/boost/spirit_x3_util.hpp>
+#include <boost/spirit/home/x3.hpp>
+#include <eda/vhdl/parser/spirit_x3_util.hpp>
 
 namespace eda::vhdl::parser::detail {
 
@@ -19,7 +19,7 @@ namespace eda::vhdl::parser::detail {
 /// using a skipper.
 ///
 /// \note This is a problem specific helper function (due to VHDL's character set
-/// use here), so it isn't placed into `<eda/support/boost/spirit_x3_util.hpp`
+/// use here), so it isn't placed into `spirit_x3_util.hpp`
 /// file.
 ///
 struct distinct_directive {

@@ -5,7 +5,7 @@
 #include <eda/vhdl/parser/skipper.hpp>
 
 #include <eda/vhdl/ast/node/design_file.hpp>
-#include <eda/vhdl/ast/position_cache.hpp>
+#include <eda/vhdl/parser/position_cache.hpp>
 #include <eda/vhdl/parser/error_handler.hpp>
 #include <eda/vhdl/parser/iterator_type.hpp>
 
@@ -16,6 +16,16 @@
 #include <iterator>
 #include <new>  // for bad_alloc
 #include <type_traits>
+
+namespace eda::vhdl::parser {
+
+// required to successfully compile Spirit X3 rules, since we don't include
+// 'grammar_decl.hpp' and hence all it's declarations.
+#if !defined(DOXYGEN_DOCUMENTATION_BUILD)
+BOOST_SPIRIT_DECLARE(design_file_type)
+#endif
+
+}  // namespace eda::vhdl::parser
 
 namespace eda::vhdl::parser {
 

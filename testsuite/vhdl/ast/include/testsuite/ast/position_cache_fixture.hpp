@@ -1,6 +1,6 @@
 #pragma once
 
-#include <eda/vhdl/ast/position_cache.hpp>
+#include <eda/vhdl/parser/position_cache.hpp>
 #include <eda/vhdl/parser/iterator_type.hpp>
 
 #include <string>
@@ -46,7 +46,7 @@ public:
     std::size_t node_count() const { return node_map.size(); }
 
 public:
-    eda::vhdl::ast::position_cache<parser::iterator_type> position_cache;
+    eda::vhdl::parser::position_cache<parser::iterator_type> position_cache;
 
 private:
     static std::string read_file(std::string const& file_name);

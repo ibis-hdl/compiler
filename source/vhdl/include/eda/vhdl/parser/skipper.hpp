@@ -1,6 +1,6 @@
 #pragma once
 
-#include <eda/support/boost/spirit_x3.hpp>
+#include <boost/spirit/home/x3.hpp>
 
 #include <eda/namespace_alias.hpp>
 

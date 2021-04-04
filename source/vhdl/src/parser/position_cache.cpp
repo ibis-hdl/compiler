@@ -1,6 +1,6 @@
 #include <eda/vhdl/parser/iterator_type.hpp>  // for explicit template instantiation
 
-#include <eda/vhdl/ast/position_cache.hpp>
+#include <eda/vhdl/parser/position_cache.hpp>
 
 #include <eda/util/cxx_bug_fatal.hpp>
 
@@ -11,7 +11,7 @@
 #include <string>
 #include <iosfwd>
 
-namespace eda::vhdl::ast {
+namespace eda::vhdl::parser {
 
 template <typename IteratorT>
 std::size_t position_cache<IteratorT>::line_number(std::size_t file_id,
@@ -109,11 +109,11 @@ IteratorT position_cache<IteratorT>::get_line_start(std::size_t file_id, iterato
     return latest;
 }
 
-}  // namespace eda::vhdl::ast
+}  // namespace eda::vhdl::parser
 
-namespace eda::vhdl::ast {
+namespace eda::vhdl::parser {
 
 // Explicit template instantiation
 template class position_cache<parser::iterator_type>;
 
-}  // namespace eda::vhdl::ast
+}  // namespace eda::vhdl::parser

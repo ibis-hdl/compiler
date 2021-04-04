@@ -30,7 +30,6 @@ target_sources(${PROJECT_NAME}
         src/ast/ast_printer.cpp
         src/ast/ast_stats.cpp
         src/ast/numeric_convert.cpp
-        src/ast/position_cache.cpp
         src/ast/pretty_node_name.cpp
 
         src/analyze/error_handler.cpp
@@ -41,6 +40,7 @@ target_sources(${PROJECT_NAME}
 
         src/parser/error_handler.cpp
         src/parser/on_error_base.cpp
+        src/parser/position_cache.cpp
         src/parser/grammar.cpp  # ---- memory exhausting @compile time ----
         src/parser/parse.cpp    # FixMe: also creates Grammar instance? Shouldn't!
 )
@@ -71,7 +71,7 @@ if (EDA_ENABLE_PCH)
     target_precompile_headers(${PROJECT_NAME}
         PRIVATE
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/eda/vhdl/detail/pch.hpp>
-            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/eda/vhdl/detail/pch_prj.hpp>
+            #$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/eda/vhdl/detail/pch_prj.hpp>
     )
 endif()
 
@@ -98,6 +98,8 @@ target_compile_options(${PROJECT_NAME}
 
 ##
 # Clang -Weverything
+#
+# FixMe: What was the intent of this disabled checks?
 if(COMPILER_CLANG_WARN_EVERYTHING)
     if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 

@@ -3,7 +3,7 @@
 
 #include <eda/vhdl/ast/node/bit_string_literal.hpp>
 #include <eda/vhdl/ast/numeric_convert.hpp>
-#include <eda/vhdl/ast/position_cache.hpp>
+#include <eda/vhdl/parser/position_cache.hpp>
 #include <eda/vhdl/parser/iterator_type.hpp>
 #include <eda/vhdl/type.hpp>
 
@@ -147,7 +147,7 @@ BOOST_DATA_TEST_CASE(bit_string_literal, utf_data::make(bit_literal) ^ bit_decim
 {
     using iterator_type = parser::iterator_type;
 
-    ast::position_cache<iterator_type> position_cache;
+    parser::position_cache<iterator_type> position_cache;
     std::size_t const id = position_cache.add_file("<bit_string_literal>", literal);
     auto const position_proxy{ position_cache.handle(id) };
 
@@ -175,7 +175,7 @@ BOOST_DATA_TEST_CASE(bit_string_literal_uint64_ovflw, utf_data::make(literal_ovf
 {
     using iterator_type = parser::iterator_type;
 
-    ast::position_cache<iterator_type> position_cache;
+    parser::position_cache<iterator_type> position_cache;
     std::size_t const id = position_cache.add_file("<bit_string_literal>", literal);
     auto const position_proxy{ position_cache.handle(id) };
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <eda/vhdl/ast/position_cache.hpp>
+#include <eda/vhdl/parser/position_cache.hpp>
 
 #include <eda/namespace_alias.hpp>  // IWYU pragma: keep
 
@@ -24,7 +24,7 @@ struct error_handler_tag;  // IWYU pragma: keep
 /// Parser error handler
 ///
 /// The error handler for parsing works on file level, means a file is read into
-/// memory and parsed. Hence not all informations stored in \ref ast::position_cache
+/// memory and parsed. Hence not all informations stored in \ref parser::position_cache
 /// are required for reporting and diagnosing and a file ID specific proxy
 /// object refers to the related informations for convenience.
 ///
@@ -34,7 +34,7 @@ struct error_handler_tag;  // IWYU pragma: keep
 ///
 /// The concept of tagging doesn't differ from the origin x3::error_handler.
 ///
-/// \see ast::position_cache
+/// \see parser::position_cache
 ///
 template <typename Iterator>
 class error_handler {
@@ -42,14 +42,14 @@ public:
     using iterator_type = Iterator;
     using result_type = x3::error_handler_result;
 
-    using position_proxy_type = typename ast::position_cache<iterator_type>::proxy;
+    using position_proxy_type = typename parser::position_cache<iterator_type>::proxy;
 
 public:
     ///
     /// Construct a parser error handler.
     ///
     /// @param os_     Stream to write error and diagnostic messages.
-    /// @param proxy_ A \ref ast::position_cache::proxy object of \ref ast::position_cache.
+    /// @param proxy_ A \ref parser::position_cache::proxy object of \ref parser::position_cache.
     /// @param tabs     Tabulator size, required for correct rendering of source
     ///              code snippet.
     ///

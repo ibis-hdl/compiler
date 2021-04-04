@@ -25,7 +25,7 @@ struct testing_parser {
                                              ParserType const &parser_rule,
                                              fs::path const &filename = "", bool full_match = true)
     {
-        ast::position_cache<parser::iterator_type> position_cache;
+        parser::position_cache<parser::iterator_type> position_cache;
         std::size_t const id = position_cache.add_file(filename.generic_string() + ".input", input);
 
         btt::output_test_stream output;
