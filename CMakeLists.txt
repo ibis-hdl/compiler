@@ -4,7 +4,7 @@
 ## file: CMakeLists.txt
 ################################################################################
 
-set (CMAKE_USER_MAKE_RULES_OVERRIDE "${CMAKE_CURRENT_LIST_DIR}/cmake/module/CompilerOptions.cmake")
+set (CMAKE_USER_MAKE_RULES_OVERRIDE "${CMAKE_CURRENT_LIST_DIR}/cmake/module/CxxFlagOverrides.cmake")
 
 cmake_minimum_required(VERSION 3.18)
 
