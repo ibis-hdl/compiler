@@ -11,9 +11,10 @@ SCRIPT_PATH="$( cd "$(dirname "$0")" ; pwd -P )"
 MY_SOURCE_DIR="${SCRIPT_PATH}"
 MY_BUILD_DIR="$(cd "$(dirname "$PWD")" ; pwd -P )/build"
 
-CMAKE_BIN="$(which cmake)"
 CMAKE_CXX_COMPILER=clang++
-CMAKE_GENERATOR="Ninja"
+CMAKE_BUILD_TOOL="Ninja"
+CMAKE_GENERATOR="${CMAKE_BUILD_TOOL}"
+CMAKE_BIN="$(which cmake)"
 
 # Debug, Release, RelWithDebInfo, MinSizeRel
 CMAKE_BUILD_TYPE=RelWithDebInfo
@@ -52,5 +53,6 @@ ${CMAKE_BIN} --trace-expand \
 
 # cleanup before the run cmake
 ${CMAKE_BIN} --build ${MY_BUILD_DIR} --target clean
+
 # make && build
 #${CMAKE_BIN} --build ${MY_BUILD_DIR} --target all --config ${CMAKE_BUILD_TYPE}
