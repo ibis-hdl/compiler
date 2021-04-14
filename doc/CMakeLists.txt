@@ -58,14 +58,15 @@ add_custom_command(OUTPUT ${PY_ENV}
         ${CMAKE_CURRENT_SOURCE_DIR}/script/py_requirements.txt
     # command batch
     COMMAND ${Python3_EXECUTABLE} -m venv ${PY_ENV}
-    COMMAND "$<IF:$<PLATFORM_ID:Windows>,${PY_ENV}/Scripts/activate,source ${PY_ENV}/bin/activate>"
+    COMMAND "$<IF:$<PLATFORM_ID:Windows>,${PY_ENV}/Scripts/activate,source;${PY_ENV}/bin/activate>"
     COMMAND python -m ensurepip
     COMMAND python -m pip install --upgrade pip
     COMMAND pip install wheel --upgrade
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/script/py_requirements.txt requirements.txt
     COMMAND pip install --no-cache-dir -r requirements.txt --upgrade
     COMMAND "$<IF:$<PLATFORM_ID:Windows>,${PY_ENV}/Scripts/deactivate,deactivate>"
-    VERBATIM
+    COMMAND_EXPAND_LISTS
+    #VERBATIM
 )
 
 # the target for Python's virtual environment
@@ -96,11 +97,12 @@ add_custom_command(OUTPUT ${TEST_MATRIX_SCRIPT_OUTPUT}
         ${TEST_MATRIX_SCRIPT}
         ${TEST_CASE_FILES_DEPENDENCY}
     # command batch
-    COMMAND "$<IF:$<PLATFORM_ID:Windows>,${PY_ENV}/Scripts/activate,source ${PY_ENV}/bin/activate>"
+    COMMAND "$<IF:$<PLATFORM_ID:Windows>,${PY_ENV}/Scripts/activate,source;${PY_ENV}/bin/activate>"
     COMMAND ${Python3_EXECUTABLE} ${TEST_MATRIX_SCRIPT}
         -i ${TEST_MATRIX_SCRIPT_INPUT} -o ${TEST_MATRIX_SCRIPT_OUTPUT}
         -f grid -p ${CMAKE_CURRENT_SOURCE_DIR}/testsuite/readme.md
     COMMAND "$<IF:$<PLATFORM_ID:Windows>,${PY_ENV}/Scripts/deactivate,deactivate>"
+    COMMAND_EXPAND_LISTS
 )
 
 
