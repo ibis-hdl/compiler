@@ -20,13 +20,18 @@ mark_as_advanced(EDA_ENABLE_PCH)
 # Note [Spaces in conditional output of generator expressions](
 # http://cmake.3232098.n2.nabble.com/Spaces-in-conditional-output-of-generator-expressions-td7597652.html)
 add_compile_options( # FixMe: Fails on Clang-Win actually (CMake 3.19.6)
-    #  ---- warnings ----
+    #  ---- common warnings ----
     # http://clang.llvm.org/docs/DiagnosticsReference.html
     "$<$<CXX_COMPILER_ID:Clang>:-Wall;-Wextra;-Wpedantic;-Wno-c11-extensions>"
     # https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
     "$<$<CXX_COMPILER_ID:GNU>:-Wall;-Wextra;-Wpedantic>"
     # https://docs.microsoft.com/en-us/cpp/build/reference/compiler-option-warning-level
     "$<$<CXX_COMPILER_ID:MSVC>:/W4>"
+
+    # ---- Special treatment for CLang/Windows ----
+    # hide warning: enumerator value is not representable in the underlying type 'int'
+    # at <boost/spirit/home/support/char_encoding/standard_wide.hpp>
+    "$<$<AND:$<CXX_COMPILER_ID:Clang>,$<PLATFORM_ID:Windows>>:-Wno-microsoft-enum-value>"
 
     # ---- Big files on Win32 (Boost Spirit-X3, e.g. grammar.cpp) ----
     # Fix Fatal Error C1128: number of sections exceeded object file format limit
