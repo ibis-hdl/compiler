@@ -1,4 +1,17 @@
+#include <eda/vhdl/ast.hpp>
+#include <eda/vhdl/parser/parse.hpp>
+#include <eda/vhdl/parser/parser_config.hpp>
+#include <eda/vhdl/analyze/syntax.hpp>
+#include <eda/vhdl/analyze/error_handler.hpp>
+#include <eda/vhdl/ast/ast_stats.hpp>
+#include <eda/vhdl/context.hpp>
+
+#include <testsuite/util/data_set.hpp>
+#include <testsuite/util/failure_diagnostic_fixture.hpp>
+#include <testsuite/namespace_alias.hpp>
+
 #include <boost/test/unit_test.hpp>
+#include <boost/test/data/test_case.hpp>
 #include <boost/test/tools/output_test_stream.hpp>
 
 #include <boost/core/ignore_unused.hpp>
@@ -6,17 +19,6 @@
 #include <iostream>
 #include <string_view>
 #include <iomanip>
-
-#include <eda/vhdl/ast.hpp>
-#include <eda/vhdl/parser/parse.hpp>
-#include <eda/vhdl/parser/parser_config.hpp>
-#include <eda/vhdl/analyze/syntax.hpp>
-#include <eda/vhdl/analyze/error_handler.hpp>
-#include <eda/vhdl/ast/ast_stats.hpp>
-
-#include <testsuite/util/data_set.hpp>
-#include <testsuite/util/failure_diagnostic_fixture.hpp>
-#include <testsuite/namespace_alias.hpp>
 
 namespace analyze = eda::vhdl::analyze;
 
