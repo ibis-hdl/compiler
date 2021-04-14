@@ -120,9 +120,7 @@ if (EDA_BUILD_TESTS)
     add_subdirectory(testsuite/ibis)
 endif()
 add_subdirectory(doc)
-# There are some problems (venv activate/deactivate @Windows/Linux) and
-# clean target to be solved before it's useable ...
-#add_subdirectory(doc_ng)
+add_subdirectory(doc_ng)
 
 
 ##

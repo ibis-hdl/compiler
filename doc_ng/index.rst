@@ -12,6 +12,10 @@ Welcome to foo's documentation!
 
    api/testsuite_root
 
+   testsuite_dataset
+
+   todo
+
 
 Indices and tables
 ==================
@@ -19,3 +23,4 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+

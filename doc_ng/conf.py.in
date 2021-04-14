@@ -10,7 +10,7 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
+import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 import textwrap
@@ -34,7 +34,8 @@ release = 'v@eda_VERSION@'
 extensions = [
     'breathe',
     'exhale',
-    'sphinx.ext.autosummary',
+    # ToDo: doesn't work as expected, check https://github.com/svenevs/exhale/issues/88
+    'sphinx.ext.todo',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -48,22 +49,28 @@ exclude_patterns = []
 
 # -- Options for HTML output -------------------------------------------------
 
+# [Modifying content width of the Sphinx theme 'Read the Docs'](
+#  https://stackoverflow.com/questions/23211695/modifying-content-width-of-the-sphinx-theme-read-the-docs)
+# Also: [Adding Custom CSS or JavaScript to Sphinx Documentation](
+#  https://docs.readthedocs.io/en/latest/guides/adding-custom-css.html)
+def setup(app):
+    app.add_stylesheet("main_stylesheet.css")
+
+# [pygments](https://pygments.org/), [Show Example Code](https://sublime-and-sphinx-guide.readthedocs.io/en/latest/code_blocks.html)
+pygments_style = 'sphinx'
+
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 # More themes and their configurations can be found at
 # https://www.sphinx-doc.org/en/master/usage/theming.html
 #
-#html_theme = 'sphinx_rtd_theme'
-import sphinx_pdj_theme
-html_theme = 'sphinx_pdj_theme'
-htm_theme_path = [sphinx_pdj_theme.get_html_theme_path()]
+html_theme = 'sphinx_rtd_theme'
 
 html_theme_options = {
-    'style': 'darker',  # sphinx_pdj_theme
     'canonical_url': '',
     'analytics_id': '',
     'display_version': True,
-    'prev_next_buttons_location': 'bottom',
+    'prev_next_buttons_location': 'both',
     'style_external_links': False,
 
     'logo_only': False,
@@ -82,36 +89,62 @@ html_theme_options = {
 html_static_path = ['_static']
 
 # -- Options for Breathe and Exhale -------------------------------------------
+def doxy_xml(doxy_output : str):
+    """
+    Determine relative path from sphinx-build and conf.py to Doxygen's output
+    :param [doxy_output]: Absolute path to Doxygen's top level output directory
+    :return: The path to Doxygen's XML output, relative to setup.py's path.
+
+    Note [Using pathlib's relative_to for directories on the same level](
+    https://stackoverflow.com/questions/38083555/using-pathlibs-relative-to-for-directories-on-the-same-level)
+    hence `os.path` is used.
+    """
+    # path adjusting looks strange, but works
+    me = os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)
+    dox = os.path.relpath(me, doxy_output)
+    xml = os.path.join(dox, 'doxy_output', 'xml')
+    #print('-- doxygen: {dox}, self = {me} => {rel}'.format(dox=doxy_output, me=me, rel=xml))
+    return os.fsdecode(xml)
+
+
 # Setup the breathe extension
 breathe_projects = {
-    'TestSuite @CMAKE_PROJECT_NAME@': '@_doxygen_output_rel_dir@/xml'
+    #'TestSuite @CMAKE_PROJECT_NAME@': '@DOXYGEN_OUTPUT_DIR_REL@/xml'
+    'TestSuite @CMAKE_PROJECT_NAME@': doxy_xml('@DOXYGEN_OUTPUT_DIR@')
 }
 
 breathe_default_project = 'TestSuite @CMAKE_PROJECT_NAME@'
 
+# [sphinx.ext.todo](https://www.sphinx-doc.org/en/master/usage/extensions/todo.html)
+todo_include_todos = True
+
 # Setup the exhale extension, see
 # [Mastering Doxygen](https://exhale.readthedocs.io/en/latest/mastering_doxygen.html)
+# FixMe: Exhale doesn't support multiple doxygenStripFromPath entries, e.g. build dir?
 exhale_args = {
     # These arguments are required
     "containmentFolder":     "./api",
     "rootFileName":          "testsuite_root.rst",
     "rootFileTitle":         "Testsuite API",
-    "doxygenStripFromPath":  "..",
+    "doxygenStripFromPath":  "@PROJECT_SOURCE_DIR@",
     # Suggested optional arguments
     "createTreeView":        True,
     # TIP: if using the sphinx-bootstrap-theme, you need
     # "treeViewIsBootstrap": True,
     "exhaleExecutesDoxygen": True,
     "exhaleDoxygenStdin":    textwrap.dedent('''
-                            WARN_LOGFILE = "@_doxygen_output_dir@/DoxygenWarningLog.txt"
+                            QUIET = YES
+                            WARN_LOGFILE = "@DOXYGEN_OUTPUT_DIR@/DoxygenWarningLog.txt"
                             EXCLUDE_PATTERNS = pch*.hpp
                             WARN_IF_UNDOCUMENTED = NO
                             BUILTIN_STL_SUPPORT = YES
                             EXTRACT_ALL = YES
                             INTERNAL_DOCS = YES
+                            GENERATE_TODOLIST = YES
                             INPUT = \
-                                "@CMAKE_SOURCE_DIR@/testsuite/common/include" \
-                                "@CMAKE_SOURCE_DIR@/testsuite/common/src"
+                                "@PROJECT_SOURCE_DIR@/testsuite/vhdl/util/include" \
+                                "@PROJECT_SOURCE_DIR@/testsuite/vhdl/util/src" \
+                                "@PROJECT_BINARY_DIR@/testsuite/vhdl/util/include"
     ''')
 }
 

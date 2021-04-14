@@ -3,7 +3,7 @@
 
 """
 Quick&Dirty script to gather the test case data and render them as Markdown
-and reStructuredText for Doxygen.
+and reStructuredText for Doxygen/Sphinx.
 """
 
 
@@ -12,8 +12,11 @@ from pathlib import Path
 import argparse
 import logging
 
+logger = logging.getLogger(os.path.basename(__file__))
+
 # [tabulate](https://pypi.org/project/tabulate/)
 from tabulate import tabulate
+tabulate.PRESERVE_WHITESPACE = True
 
 
 class TestCaseFile_Object:
@@ -92,8 +95,9 @@ class TestCaseGroup_Object:
 
 
 def mkLabel(base_id):
-    """Generate a lable as header attribute for Markdown and Rst
+    """Generate a label as header attribute for Markdown and Rst
 
+    :return: Label string in form of '{#label_id}'
     see [https://www.doxygen.nl/manual/markdown.html#markdown_extra](
             https://www.doxygen.nl/manual/markdown.html)
     """
@@ -105,32 +109,13 @@ class TableMaker:
     A simple table generator
 
     """
-    def __init__(self):
-        self._tablefmt = "grid"
-        self._adornment = {
-            1 : '=',    # title, chapter
-            2 : '-',    # title, section
-            3 : '~'     # subtitle, subsection
-        }
-
-
-
-    def title_header(self, title, depth = 1):
-        adornment = self._adornment.get(depth, '')
-        width = len(title)
-        text="\n{ruler}\n{title:<{w}} {label}\n{ruler}\n".format(
-            ruler=adornment*width,
-            title=title,
-            w=width,
-            label=mkLabel(title)
-        )
-        return text
+    def __init__(self, tablefmt):
+        # see [tabulate](https://pypi.org/project/tabulate/) for table format
+        self._tablefmt = tablefmt
 
     def data(self, test_case_group : TestCaseGroup_Object):
 
         data = list()
-
-        title = self.title_header(test_case_group.name, 1)
 
         for test_case in test_case_group:
             filename = test_case.fileName
@@ -142,11 +127,13 @@ class TableMaker:
                 test_case.expected
             ])
 
-        headers = ['filename', 'input', 'expected']
-        tbl = tabulate(data, headers, self._tablefmt)
+        tbl = tabulate(data,
+            ['filename', 'input', 'expected'], colalign=("left", "left", "left"),
+            tablefmt=self._tablefmt,
+            disable_numparse=True
+        )
 
-        contents = title + '\n' + tbl
-        return contents
+        return tbl
 
 
 class TestMatrixGenerator:
@@ -154,6 +141,26 @@ class TestMatrixGenerator:
     def __init__(self, args):
         self.testcase_path = args.input_dir
         self._output_path = args.output_dir
+        self._dataset_page = args.dataset_page
+        self._ext_dict = {
+            'rst'  : '.rst',
+            'html' : '.html',
+            'latex': '.tex',
+            'latex_raw': '.tex',
+            'latex_booktabs' : '.tex'
+        }
+        self._adornment = {
+            1 : '=',    # title, chapter
+            2 : '-',    # title, section
+            3 : '~'     # subtitle, subsection
+        }
+
+    def getFileExt(self, tablefmt: str):
+        """Lookup the internal dictionary for file extensions according the
+        table format.
+
+        """
+        return self._ext_dict.get(tablefmt, '.txt')
 
     def read_content(self, file_pathname):
         """Read the file contents
@@ -164,6 +171,7 @@ class TestMatrixGenerator:
         """
         try:
             with open(file_pathname) as f:
+                #content = escape(f.read())
                 content = f.read()
                 return content
         except Exception as e:
@@ -187,7 +195,7 @@ class TestMatrixGenerator:
         FixMe: Group all test case, even failure test cases!
         """
 
-        print('Search for test cases in %s' % self.testcase_path)
+        logger.debug('Search for test cases in {}'.format(self.testcase_path))
 
         test_cases_dirlist = list()
 
@@ -196,7 +204,7 @@ class TestMatrixGenerator:
             for subdirname in dirnames:
                 test_cases_dirlist.append(subdirname)
 
-        #print('=> found: ', end=''); print(*sorted(test_cases_dirlist))
+        logger.debug('found: {}'.format(" ".join(sorted(test_cases_dirlist))))
 
         test_case_list = list()
 
@@ -211,7 +219,7 @@ class TestMatrixGenerator:
 
             for dirname, dirnames, test_case_files in os.walk(test_case_path):
 
-                #print('test_case <{}> with data files: {}'.format(test_case, test_case_files))
+                logger.debug('enter test_case <{}> with data files: {}'.format(test_case, test_case_files))
 
                 # lookup the files of concrete test case below test_data's directory
                 for test_case_fname in test_case_files:
@@ -228,13 +236,13 @@ class TestMatrixGenerator:
 
                     # check on disabled test case
                     if basename.endswith('.input'):
-                        #print('read disabled input: {}'.format(test_case_filepath))
+                        logger.debug('read disabled input: {}'.format(test_case_filepath))
                         input = self.read_content(test_case_filepath)
                         # anyway check if there is a expected file
                         expected_filename = os.path.join(
                             self.testcase_path, test_case, Path(basename).stem + '.expected'
                         )
-                        #print('read expected: {}'.format(expected_filename))
+                        logger.debug('read expected: {}'.format(expected_filename))
                         expected = self.read_content(expected_filename)
 
                         # Fill the file object for test case ...
@@ -250,12 +258,12 @@ class TestMatrixGenerator:
                     # read regular input test case
                     if test_case_filepath.endswith('.input'):
                         # regular test case input
-                        #print('read disabled input: {}'.format(test_case_filepath))
+                        logger.debug('read disabled input: {}'.format(test_case_filepath))
                         input = self.read_content(test_case_filepath)
                         expected_filename = os.path.join(
                             self.testcase_path, test_case, basename + '.expected'
                         )
-                        #print('read expected: {}'.format(expected_filename))
+                        logger.debug('read expected: {}'.format(expected_filename))
                         expected = self.read_content(expected_filename)
 
                         # Fill the file object for test case ...
@@ -274,34 +282,130 @@ class TestMatrixGenerator:
 
         return test_case_list
 
+    def title_header(self, title, label = '', depth = 1):
+        adornment = self._adornment.get(depth, '')
+        width = len(title)
+        text="{ruler}\n{title:<{w}} {label}\n{ruler}\n".format(
+            ruler=adornment*width,
+            title=title,
+            w=width,
+            label=label
+        )
+        return text
 
-    def generate(self, file_ext = '.md'):
-        """Generate the test case
+    def create_test_page(self, title, table, fmt):
+        """Generate the page self
 
         """
-        table = TableMaker()
+        if fmt in ['rst']:
+            pg_contents="""{title}
+.. code-block:: none
+
+{table}
+""".format(title=title, table=''.join(f'    {line}' for line in table.splitlines(True)))
+        else:
+            pg_contents = title + '\n' + table
+
+        return pg_contents
+
+    def create_toc_page(self, toc_entries, format: str):
+        """Create the main page for Test Matrix
+
+        FixMe: This paths, names etc are hard coded!
+        """
+        rst_like = ['rst']
+
+        def rST_entry(test_case: str, path: str):
+            return "{path}/{test_case_pg}".format(
+                path=path,
+                test_case_pg=test_case
+            )
+
+        def dox_entry(test_case: str, path : str):
+            file_ext = '.txt' # FixMe
+            return "- [{entry}]({test_case_pg})".format(
+                entry=test_case,
+                test_case_pg='../' + path + '/' + test_case + file_ext,
+                label=mkLabel(test_case)
+            )
+
+        label = mkLabel('mainpage')
+        if format in rst_like:
+            label = ''
+
+        title = self.title_header('TestSuite VHDL Parser Grammar Rules', label, 1)
+
+        entry_list = list()
+
+        for test_case in toc_entries:
+            if format in rst_like:
+                line = rST_entry(test_case, 'parser_test_data')
+            else:
+                line = dox_entry(test_case, 'parser_test_data')
+            entry_list.append(line)
+
+        body = '\n'.join(f"   {line}" for line in entry_list)
+
+        if format in rst_like:
+            # rST page
+            page = """{title}
+.. toctree::
+
+{entries}
+""".format(title=title, entries=body)
+
+        else:
+            # Doxy page
+            page = """{title}
+[TOC]
+
+{entries}
+""".format(title=title, entries=body)
+
+        return page
+
+    def generate(self, format : str):
+        """Generate the test case.
+
+        FixMe: The table created for reStructuredText is generated verbatim to avoid
+        'warnings: Definition list ends without a blank line; unexpected unindent'
+        and other.
+        """
+        # Quick&Dirty fix for rST tables for better 'user experience'
+        tablefmt = format
+        if format in ['rst']:
+            tablefmt = 'grid'
+
+        table = TableMaker(tablefmt)
         toc_entry = list()
+        file_ext = self.getFileExt(format)
 
         # iterate over all test cases
         for test_case_group in self.getTestCases():
 
             name = test_case_group.name
+            title_label = ''
+            title = self.title_header(test_case_group.name, title_label, 1)
             tab = table.data(test_case_group)
 
+            pg_contents = self.create_test_page(title, tab, format)
+
             fname = os.path.join(self._output_path, name + file_ext)
-            self.writeTableFile(fname, tab)
+            self.writeFile(fname, pg_contents)
             toc_entry.append(name)
 
-        # FixMe: This path is hard coded!
-        for test_case in toc_entry:
-            print('- [{entry}]({test_case_md})'.format(
-                entry=test_case,
-                test_case_md='parser_test_data/' + test_case + '.md',
-                label=mkLabel(test_case)
-            ))
+        # testsuite dataset main page
+        pg_contents = self.create_toc_page(toc_entry, format)
+
+        if self._dataset_page:
+            #fname = os.path.join(self._output_path, self._dataset_page)
+            fname = os.path.join(os.getcwd(), self._dataset_page)
+            self.writeFile(fname, pg_contents)
+        else:
+            print(pg_contents)
 
 
-    def writeTableFile(self, filepath_name, contents):
+    def writeFile(self, filepath_name, contents):
         """
         Write the test case file.
 
@@ -312,8 +416,8 @@ class TestMatrixGenerator:
         if not os.path.exists(os.path.dirname(filepath_name)):
             try:
                 os.makedirs(os.path.dirname(filepath_name))
-            except OSError as exc: # Guard against race condition
-                if exc.errno != errno.EEXIST:
+            except OSError as e: # Guard against race condition
+                if e.errno != errno.EEXIST:
                     raise
 
         with open(filepath_name, "w") as f:
@@ -324,16 +428,37 @@ class TestMatrixGenerator:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Generate Testsuite test files matrix.')
-    parser.add_argument('--input-dir', '-I',
+    parser.add_argument('--verbose', '-v',
+        action='store_true',
+        help='print debug information.')
+    parser.add_argument('--input-dir', '-i',
         dest='input_dir',
         default=os.path.join(os.getcwd(), 'test_case'),
         help='top level input directory of test case files, separated in subdirectories for each grammar rule.')
-    parser.add_argument('--output-dir', '-O',
+    parser.add_argument('--output-dir', '-o',
         dest='output_dir',
         default='parser_test_data',
         help='output directory where the resulting files are written into.')
+    parser.add_argument('--format', '-f',
+        dest='tablefmt',
+        default='pretty',
+        help='''set output table format, format name must be given without hyphens; supported formats:
+            plain, simple, github, grid, fancy_grid, pipe, orgtbl, rst, mediawiki, html, latex, latex_raw,
+            latex_booktabs, latex_longtable, tsv (default: pretty)''')
+    parser.add_argument('--dataset-page', '-p',
+        dest='dataset_page',
+        help='path/name to output page with references to the test cases, stored relative to current dir.')
+
     args = parser.parse_args()
-    #print('input: ' + args.input_dir)
-    #print('output: ' + args.output_dir)
+
+    # [Logging setLevel is being ignored](
+    #  https://stackoverflow.com/questions/43109355/logging-setlevel-is-being-ignored)
+    handler = logging.StreamHandler()
+    formatter = logging.Formatter('%(name)s(%(levelname)s): %(message)s')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    if args.verbose:
+        logger.setLevel(logging.DEBUG)
+
     table = TestMatrixGenerator(args)
-    table.generate()
+    table.generate(args.tablefmt)
