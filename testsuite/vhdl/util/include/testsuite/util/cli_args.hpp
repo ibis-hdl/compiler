@@ -1,18 +1,15 @@
 #pragma once
 
 #include <string>
-#include <filesystem>
-
-#include <testsuite/namespace_alias.hpp>  /// IWYU pragma: keep
 
 namespace testsuite::util {
 
 ///
-/// @brief Custom command line arguments fixture
+/// @brief Custom command line arguments
 ///
-/// Boost.UTF allows to apply custom command line arguments to
+/// Boost.Test allows to apply custom command line arguments to
 /// the test, e.g. for configuration purpose etc. The concept
-/// used is described at Boost.UTF page
+/// used is described at Boost.Test page
 /// [Custom command line arguments](
 /// https://www.boost.org/doc/libs/1_75_0/libs/test/doc/html/boost_test/runtime_config/custom_command_line_arguments.html).
 ///
@@ -20,6 +17,8 @@ namespace testsuite::util {
 /// and their fixtures etc. Each component that uses this class selects the one it needs.
 ///
 /// The usage on implementation side is quite simple:
+///
+/// FixMe: API is obsolete
 ///
 /// @code{.cpp}
 /// using testsuite::cli_args;
@@ -56,72 +55,67 @@ namespace testsuite::util {
 ///
 class cli_args {
 public:
-    static void setup();
-    static void teardown();
-
-public:
     ///
-    /// @brief The given "source_dir" option from cli
+    /// The given "source_dir" option from cli.
     ///
     /// @return fs::path to the source_dir in canonical form if the given
     /// path does exist and is a valid directory. Otherwise the path is
     /// empty. If no cli option was given the return fs::path is also empty.
     ///
-    static fs::path source_dir() { return data.source_dir; }
+    static std::string source_dir();
 
     ///
-    /// @brief The given "destination_dir" option from cli
+    /// The given "destination_dir" option from cli.
     ///
     /// @return fs::path to the destination_dir in canonical form if the given
     /// path does exist and is a valid directory. If the destination_dir doesn't
     /// exist it will be created. If creation was failed or no cli option was
     /// given the return fs::path is empty.
     ///
-    static fs::path destination_dir() { return data.destination_dir; }
+    static std::string destination_dir();
 
     ///
-    /// @brief The given "input_extension" option from cli
+    /// The given "input_extension" option from cli.
     ///
     /// @return std::string of "input_extension" option if given from cli,
     /// otherwise an empty string. No checks are performed.
     ///
-    static std::string input_extension() { return data.input_extension; }
+    static std::string input_extension();
 
     ///
-    /// @brief The given "expected_extension" option from cli
+    /// The given "expected_extension" option from cli.
     ///
     /// @return std::string of "expected_extension" option if given from cli,
     /// otherwise an empty string. No checks are performed.
     ///
-    static std::string expected_extension() { return data.expected_extension; }
+    static std::string expected_extension();
 
     ///
-    /// @brief The given "output_extension" option from cli
+    /// The given "output_extension" option from cli.
     ///
     /// @return std::string of "output_extension" option if given from cli,
     /// otherwise an empty string. No checks are performed.
     ///
-    static std::string output_extension() { return data.output_extension; }
-
-private:
-    ///
-    /// @brief parse the cli arguments and perform convenience checks on it.
-    ///
-    /// @return true on success
-    /// @return false on failure of parsing the command line.
-    ///
-    static bool parse_cli();
+    static std::string output_extension();
 
     ///
-    /// @brief Print the arguments given from command line if any
+    /// Print the arguments given from command line if any.
     ///
     static void print_settings();
 
+    ///
+    /// parse the cli arguments and perform convenience checks on it.
+    ///
+    static void parse_cli(int const argc, char** const argv);
+
 private:
+    ///
+    /// The data parsed from CLI and flag internally used for caching.
+    ///
     struct cli_data {
         bool initialized{ false };
-        fs::path source_dir;
-        fs::path destination_dir;
+        std::string source_dir;
+        std::string destination_dir;
         std::string input_extension;
         std::string expected_extension;
         std::string output_extension;

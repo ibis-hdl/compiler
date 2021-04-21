@@ -6,5 +6,5 @@
 #include <eda/vhdl/parser/iterator_type.hpp>
 
 #include <testsuite/ast/position_cache_fixture.hpp>
-#include <testsuite/util/data_set.hpp>
+#include <testsuite/util/dataset_loader.hpp>
 #include <testsuite/namespace_alias.hpp>

@@ -26,7 +26,7 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
 
     os << format(translate("in file {1}, line {2}:"))  // --
               % position_proxy.file_name()             // {1}
-              % position_proxy.line_number(error_pos)  // [2]
+              % position_proxy.line_number(error_pos)  // {2}
        << '\n';
 
     os << color::message::error(translate("Parse ERROR")) << ": "
@@ -35,11 +35,11 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
     // erroneous source snippet
     iterator_type start = position_proxy.get_line_start(error_pos);
     os << position_proxy.current_line(start);
-    os << std::endl;
+    os << '\n';
 
     // error indicator
     using eda::util::position_indicator;
-    os << position_indicator(start, error_pos, tab_sz, '_') << "^_" << std::endl;
+    os << position_indicator(start, error_pos, tab_sz, '_') << "^_" << '\n';
 
     return x3::error_handler_result::fail;
 }

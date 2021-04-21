@@ -2499,7 +2499,7 @@ void printer::operator()(target const& node)
     static const std::string_view symbol{ "target" };
     symbol_scope<target> _(*this, symbol);
 
-    boost::apply_visitor(*this, node);
+    visit(node);
 }
 
 void printer::operator()(term const& node)
@@ -2695,6 +2695,13 @@ void printer::operator()(waveform_element const& node)
     }
 }
 
+void printer::operator()([[maybe_unused]] nullary const& node)
+{
+    os << "\n*****************************";
+    os << "\n*    SHALL NEVER BE HERE    *";
+    os << "\n*****************************\n";
+}
+
 //
 // Non AST members, used e.g. for unit tests (namely ast::integer)
 //
@@ -2713,13 +2720,6 @@ void printer::operator()(keyword_token token)
     symbol_scope<keyword_token> _(*this, symbol);
 
     os << token;
-}
-
-void printer::operator()([[maybe_unused]] nullary const& node)
-{
-    os << "\n*****************************";
-    os << "\n*    SHALL NEVER BE HERE    *";
-    os << "\n*****************************\n";
 }
 
 template <typename T>

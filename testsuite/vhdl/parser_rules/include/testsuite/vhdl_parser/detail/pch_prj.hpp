@@ -17,8 +17,8 @@
 #include <eda/vhdl/type.hpp>
 
 #include <testsuite/namespace_alias.hpp>
-#include <testsuite/util/data_set.hpp>
-#include <testsuite/util/failure_diagnostic_fixture.hpp>
+#include <testsuite/util/dataset_loader.hpp>
+#include <testsuite/util/basic_failure_diagnostic_fixture.hpp>
 
 #include <testsuite/vhdl/rules.hpp>
 

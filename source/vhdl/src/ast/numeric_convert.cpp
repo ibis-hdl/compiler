@@ -539,12 +539,15 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
 
     auto const supported_base = [](unsigned base_) {
         switch (base_) {
-            // clang-format off
-            case 2:  [[fallthrough]];
-            case 8:  [[fallthrough]];
-            case 10: [[fallthrough]];
-            case 16: return true;
-            // clang-format on
+            // NOLINTNEXTLINE(bugprone-branch-clone)
+            case 2:
+                [[fallthrough]];
+            case 8:
+                [[fallthrough]];
+            case 10:
+                [[fallthrough]];
+            case 16:
+                return true;
             default:
                 return false;
         }

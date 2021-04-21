@@ -2,9 +2,9 @@
 
 namespace boost::spirit::x3 {
 }
-namespace boost::filesystem {
-}
 namespace boost::test_tools {
+}
+namespace boost::unit_test::framework {
 }
 namespace boost::unit_test::data {
 }
@@ -22,12 +22,16 @@ namespace eda::vhdl::analyze {
 
 namespace testsuite {
 
-namespace x3 = boost::spirit::x3;
 namespace fs = std::filesystem;
 
+namespace x3 = boost::spirit::x3;
+
+// ToDo: Check for correct and intuitive aliases!
 namespace btt = boost::test_tools;
 namespace utf = boost::unit_test;
 namespace utf_data = boost::unit_test::data;
+
+namespace butf = boost::unit_test::framework;
 
 namespace parser = eda::vhdl::parser;
 namespace ast = eda::vhdl::ast;

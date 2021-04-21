@@ -10,22 +10,30 @@ project(testrunner_vhdl_syntax LANGUAGES CXX)
 add_executable(${PROJECT_NAME})
 
 
-# The argument is the top level directory of the test directories of 'test_data'
+# Variables used to configure ctest project, also compile time builtin settings
+set(TESTSUITE_SOURCE_DIR "${PROJECT_SOURCE_DIR}/test_data")
+set(TESTSUITE_INPUT_EXTENSION ".vhdl")
+set(TESTSUITE_EXPECTED_EXTENSION ".expected")
+set(TESTSUITE_DESTINATION_DIR "${CMAKE_BINARY_DIR}/testsuite_result/vhdl/syntax")
+set(TESTSUITE_OUTPUT_EXTENSION ".result")
+
 add_test(NAME test_vhdl_syntax
     COMMAND
         ${PROJECT_NAME} --log_level=error --
-        --source-dir=${PROJECT_SOURCE_DIR}
-        --destination-dir=${PROJECT_BINARY_DIR}
-        --input-extension=.vhdl
-        --output-extension=.result
+        --source-dir=${TESTSUITE_SOURCE_DIR}
+        --destination-dir=${TESTSUITE_DESTINATION_DIR}
+        --input-extension=${TESTSUITE_INPUT_EXTENSION}
+        --output-extension=${TESTSUITE_OUTPUT_EXTENSION}
 )
 
-set(CMAKE_CTEST_ARGUMENTS "--output-on-failure")
+# already set at options_build.cmake
+#set(CMAKE_CTEST_ARGUMENTS "--output-on-failure")
 
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         eda::vhdl_parser
+    PRIVATE
         testsuite::util
         Boost::system
         Boost::locale
@@ -35,6 +43,18 @@ target_link_libraries(${PROJECT_NAME}
 #set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-v")
 
 
+configure_file(
+    ${PROJECT_SOURCE_DIR}/src/dataset_builtin.cpp.in
+    ${PROJECT_BINARY_DIR}/src/dataset_builtin.cpp
+    @ONLY
+)
+configure_file(
+    ${PROJECT_SOURCE_DIR}/src/failure_diagnostic_fixture_builtin.cpp.in
+    ${PROJECT_BINARY_DIR}/src/failure_diagnostic_fixture_builtin.cpp
+    @ONLY
+)
+
+
 if(DEVELOPER_EXTERNAL_BOOST_UTF)
     add_dependencies(${PROJECT_NAME} external-boost-utf)
 endif()
@@ -42,24 +62,31 @@ endif()
 
 target_sources(${PROJECT_NAME}
     PRIVATE
-        src/main/test_vhdl_syntax.cpp
+        src/test_vhdl_syntax.cpp
+        src/failure_diagnostic_fixture.cpp ${PROJECT_BINARY_DIR}/src/failure_diagnostic_fixture_builtin.cpp
+        src/dataset.cpp ${PROJECT_BINARY_DIR}/src/dataset_builtin.cpp
         # concrete test cases
-        src/label_check_test.cpp
-        # FixMe: takes up to >18GB w/o IWYU !!
-        src/keyword_match_test.cpp
+        src/test/label_check_test.cpp
+        src/test/keyword_match_test.cpp ## FixMe: requires more than 10GB!
 )
 
 
-set_source_files_properties(src/main/test_vhdl_syntax.cpp
+set_source_files_properties(src/test_vhdl_syntax.cpp
     APPEND PROPERTIES
         # Failed to link Boost UTF with Windows/Clang, Linux works
         COMPILE_DEFINITIONS "$<$<NOT:$<PLATFORM_ID:Windows>>:BOOST_TEST_DYN_LINK>"
 )
 # [Boost.Test linker error by use with precompiled headers (PCH)](
 #  https://stackoverflow.com/questions/66535719/boost-test-linker-error-by-use-with-precompiled-headers-pch)
-set_source_files_properties(src/main/test_vhdl_syntax.cpp
+set_source_files_properties(src/test_vhdl_syntax.cpp
     PROPERTIES
         SKIP_PRECOMPILE_HEADERS ON
+)
+
+
+set_property(TARGET ${PROJECT_NAME}
+    PROPERTY
+        JOB_POOL_COMPILE NINJA_JOBS_CORE_10240MiB
 )
 
 

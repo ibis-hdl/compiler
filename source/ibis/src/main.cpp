@@ -19,6 +19,15 @@
 
 extern void testing_signal_handler();
 
+///
+/// @brief The App, used as test driver at this state.
+///
+/// @param argc CLI argument count.
+/// @param argv CLI argument value array.
+/// @return int Exist code of the application.
+///
+/// @todo An exception may be thrown in function 'main' which should
+/// not throw exceptions [clang-tidy(bugprone-exception-escape)]
 int main(int argc, const char* argv[])
 {
     using boost::locale::format;

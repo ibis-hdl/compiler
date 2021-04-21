@@ -1,6 +1,78 @@
 ## -----------------------------------------------------------------------------
-# developer configurable build options
+# developer (configurable) build options
 ## -----------------------------------------------------------------------------
+
+
+## -----------------------------------------------------------------------------
+# Ninja Build using job pools
+#
+
+# Check on low memory situations to compile "big" files
+cmake_host_system_information(
+    RESULT LOCALHOST_RAM_MiB
+    QUERY  AVAILABLE_PHYSICAL_MEMORY
+)
+
+set(LOCALHOST_RAM_MiB "${LOCALHOST_RAM_MiB}" CACHE INTERNAL "" FORCE)
+
+# Check for CPU core count for CMAKE_JOB_POOL_{COMPILE,LINK}
+cmake_host_system_information(
+    RESULT LOCALHOST_LOGICAL_CORES
+    QUERY  NUMBER_OF_LOGICAL_CORES
+)
+
+# Some heuristic to tune Ninja's JOB_POOL
+# Note: GiB = 2^30, MiB = 2^20 Bytes, hence 10*2^(30-20) = 10240 MiB
+math(EXPR CORE_2048MiB  "${LOCALHOST_RAM_MiB} / 2048")
+math(EXPR CORE_3072MiB  "${LOCALHOST_RAM_MiB} / 3072")
+math(EXPR CORE_4096MiB  "${LOCALHOST_RAM_MiB} / 4096")
+math(EXPR CORE_8192MiB  "${LOCALHOST_RAM_MiB} / 8192")
+math(EXPR CORE_10240MiB "${LOCALHOST_RAM_MiB} / 10240")
+
+message(STATUS "Host has ${LOCALHOST_RAM_MiB} MiB of available physical memory to build. Hence")
+
+# test on low memory build hosts and warn
+if(CORE_4096MiB EQUAL 0)
+    message(WARNING "probably unable to compile files using 4096 MiB per CPU core")
+    set(CORE_4096MiB 1)
+endif()
+if(CORE_8192MiB EQUAL 0)
+    message(WARNING "probably unable to compile files using 8192 MiB per CPU core")
+    set(CORE_8192MiB 1)
+endif()
+if(CORE_10240MiB EQUAL 0)
+    message(WARNING "probably unable to compile files using 10240 MiB per CPU core")
+    set(CORE_10240MiB 1)
+endif()
+
+message(STATUS "  ${LOCALHOST_LOGICAL_CORES} CPU core(s) for common jobs")
+message(STATUS "  ${CORE_2048MiB} CPU core(s) for 2048 MiB to compile")
+message(STATUS "  ${CORE_3072MiB} CPU core(s) for 3072 MiB to compile")
+message(STATUS "  ${CORE_4096MiB} CPU core(s) for 4096 MiB to compile")
+message(STATUS "  ${CORE_8192MiB} CPU core(s) for 8192 MiB to compile")
+message(STATUS "  ${CORE_10240MiB} CPU core(s) for 10240 MiB to compile")
+
+set_property(GLOBAL
+    APPEND
+        PROPERTY
+            JOB_POOLS
+                NINJA_JOBS_SINGLE_CORE=1
+                NINJA_JOBS_CORE_MAX=${LOCALHOST_LOGICAL_CORES}
+                NINJA_JOBS_CORE_2048MiB=${CORE_2048MiB}
+                NINJA_JOBS_CORE_3072MiB=${CORE_3072MiB}
+                NINJA_JOBS_CORE_4096MiB=${CORE_4096MiB}
+                NINJA_JOBS_CORE_8192MiB=${CORE_8192MiB}
+                NINJA_JOBS_CORE_10240MiB=${CORE_10240MiB}
+)
+
+set_property(GLOBAL
+    PROPERTY
+        JOB_POOL_COMPILE    NINJA_JOBS_CORE_MAX
+)
+set_property(GLOBAL
+    PROPERTY
+        JOB_POOL_LINK       NINJA_JOBS_CORE_MAX
+)
 
 
 ##
@@ -19,7 +91,7 @@ mark_as_advanced(EDA_ENABLE_PCH)
 #
 # Note [Spaces in conditional output of generator expressions](
 # http://cmake.3232098.n2.nabble.com/Spaces-in-conditional-output-of-generator-expressions-td7597652.html)
-add_compile_options( # FixMe: Fails on Clang-Win actually (CMake 3.19.6)
+add_compile_options(
     #  ---- common warnings ----
     # http://clang.llvm.org/docs/DiagnosticsReference.html
     "$<$<CXX_COMPILER_ID:Clang>:-Wall;-Wextra;-Wpedantic;-Wno-c11-extensions>"
@@ -39,6 +111,30 @@ add_compile_options( # FixMe: Fails on Clang-Win actually (CMake 3.19.6)
     # [GCC equivalent of MS's /bigobj](https://stackoverflow.com/questions/16596876/gcc-equivalent-of-mss-bigobj)
     "$<$<AND:$<CXX_COMPILER_ID:GNU>,$<PLATFORM_ID:Windows>>:-Wa,-mbig-obj>"
 )
+
+# cope with low memory situations
+# for Window compiler reference: [X3: recursive rules reach template instantiation limit too quickly? #575](
+#  https://github.com/boostorg/spirit/issues/575)
+if(LOCALHOST_RAM_MiB GREATER 10240)
+    add_compile_options(
+        # - limit gcc/clang template error depth printing
+        # - increase limit especially for clang recursive template instantiation,
+        #   otherwise exceedes maximum depth
+        "$<$<CXX_COMPILER_ID:GNU>:-ftemplate-backtrace-limit=0;-ftemplate-depth=1024>"
+        "$<$<CXX_COMPILER_ID:Clang>:-ftemplate-backtrace-limit=0;-ftemplate-depth=1024>"
+    )
+else()
+    message(STATUS "limit template optimization level to cope with low memory on build host!")
+    add_compile_options(
+        # Default settings:
+        # [template-backtrace-limit](https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Dialect-Options.html)
+        #  = 10
+        # [-ftemplate-depth](https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Dialect-Options.html)
+        # = 900
+        "$<$<CXX_COMPILER_ID:GNU>:-ftemplate-backtrace-limit=10;-ftemplate-depth=900>"
+        "$<$<CXX_COMPILER_ID:Clang>:-ftemplate-backtrace-limit=10;-ftemplate-depth=900>"
+    )
+endif()
 
 
 ## -----------------------------------------------------------------------------
@@ -149,8 +245,8 @@ if(DEVELOPER_RUN_CLANG_TIDY)
     #  https://gitlab.kitware.com/cmake/cmake/-/issues/18926):
     # My google foo shows many copy&paste solutions, but no one seems to use the
     # CLANG_TIDY_DEFINITIONS (or even CLANG_TIDY_SHA1) with preprocessor
-    # definition finaly. Some please on clarification aren't answered.
-    # IMO in this state it does nothing, hence omitted.
+    # definition finally. Some please on clarification aren't answered.
+    # IMO in this state it does nothing, hence not used/omitted.
 endif()
 
 configure_file(${eda_SOURCE_DIR}/.clang-tidy ${eda_BINARY_DIR}/.clang-tidy COPYONLY)
@@ -234,7 +330,7 @@ if(DEVELOPER_RUN_CLANG_FORMAT)
 endif()
 
 
-include(cmake/CPM.cmake)
+include(cmake/module/CPM.cmake)
 
 CPMAddPackage(
   NAME Format.cmake
@@ -252,7 +348,7 @@ CPMAddPackage(
 ################################################################################
 
 ## -----------------------------------------------------------------------------
-# Compile Comand JSON, e.g. VS Code
+# Compile Command JSON, e.g. VS Code
 #
 # [Copy compile_commands.json to project root folder](
 #  https://stackoverflow.com/questions/57464766/copy-compile-commands-json-to-project-root-folder)
@@ -275,3 +371,4 @@ add_custom_target(copy-compile-commands ALL
         ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/compile_commands.json ${CMAKE_SOURCE_DIR}
     VERBATIM
 )
+

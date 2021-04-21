@@ -21,6 +21,9 @@ namespace eda::vhdl::parser {
 /// properties are own, hence it's save to refer to them as long the instance
 /// exist.
 ///
+/// @todo Make the file ID an opaque type to prevent 'accidents' with integers,
+/// e.g. [rollbear/strong_type](https://github.com/rollbear/strong_type)
+///
 template <typename IteratorT>
 class position_cache {
 public:
@@ -42,9 +45,8 @@ public:
     ~position_cache() = default;
 
     position_cache(position_cache const&) = delete;
-    position_cache& operator=(position_cache const&) = delete;
-
     position_cache(position_cache&&) = delete;
+    position_cache& operator=(position_cache const&) = delete;
     position_cache& operator=(position_cache&&) = delete;
 
 public:
@@ -84,12 +86,12 @@ public:
     /// @param first   Begin of iterator position to tag.
     /// @param last    End  of iterator position to tag.
     ///
+    /// @todo maybe better throw range_exception since it's an implementation
+    /// limitation.
     template <typename NodeT>
     void annotate(std::size_t file_id, NodeT& node, iterator_type first, iterator_type last)
     {
         if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
-            // @todo maybe better throw range_exception since it's an implementation
-            // limitation.
             cxx_assert(positions.size() < ast::position_tagged::MAX_ID,
                        "Insufficient range of numeric IDs for AST tagging");
 
@@ -109,6 +111,8 @@ public:
     /// @param file_id ID of actually processed file.
     /// @return The filename as std::string.
     ///
+    /// FixMe: This is a string_view candidate
+    ///
     std::string const& file_name(std::size_t file_id) const
     {
         return std::get<0>(files.at(file_id));
@@ -120,6 +124,8 @@ public:
     /// @param file_id ID of actually processed file.
     /// @return A const reference to a string representing the file contents.
     ///
+    /// FixMe: This is a string_view candidate
+    ///
     std::string const& file_contents(std::size_t file_id) const
     {
         return std::get<1>(files.at(file_id));
@@ -130,6 +136,8 @@ public:
     ///
     /// @param file_id ID of actually processed file.
     /// @return A reference to a string representing the file contents.
+    ///
+    /// FixMe: This is a string_view candidate
     ///
     std::string& file_contents(std::size_t file_id) { return std::get<1>(files.at(file_id)); }
 
@@ -238,7 +246,9 @@ public:
     }
 
 public:
+    /// FixMe: This is a string_view candidate
     std::string const& file_name() const { return self.file_name(file_id); }
+    /// FixMe: This is a string_view candidate
     std::string const& file_contents() const { return self.file_contents(file_id); }
     std::tuple<IteratorT, IteratorT> range() const { return self.range(file_id); }
 
@@ -253,6 +263,7 @@ public:
         return self.get_line_start(file_id, pos_iter);
     }
 
+    /// FixMe: This is a string_view candidate
     std::string current_line(iterator_type const& start) const
     {
         return self.current_line(file_id, start);

@@ -35,24 +35,24 @@ if (XGETTEXT_FOUND)
         CONTENT "${MY_CONTENT}"
     )
 
-    # ... finaly invoke the run_xgettext cmake script with the path to the 
+    # ... finaly invoke the run_xgettext cmake script with the path to the
     # variables script and template PO file using cmake's '-P' parameter at build
     # time.
-    add_custom_target(extract-translations 
-        COMMAND ${CMAKE_COMMAND} 
-            -DSOURCES=${PROJECT_BINARY_DIR}/sources.cmake 
+    add_custom_target(extract-translations
+        COMMAND ${CMAKE_COMMAND}
+            -DSOURCES=${PROJECT_BINARY_DIR}/sources.cmake
             -DPOT_FILE=${language_template}
             -P ${PROJECT_SOURCE_DIR}/run_xgettext.cmake
-    # sed not on windows        
+    # sed not on windows
     #    COMMAND sed -i
     #        's/charset=CHARSET/charset=UTF-8/'
-    #        ${language_template}                     
-        DEPENDS ${PROJECT_BINARY_DIR}/sources.cmake 
+    #        ${language_template}
+        DEPENDS ${PROJECT_BINARY_DIR}/sources.cmake
         COMMENT "Extract translatable messages from source"
     )
 
-    add_custom_target(l10n ALL
-        DEPENDS extract-translations 
+    add_custom_target(l10n
+        DEPENDS extract-translations
     )
 endif()
 

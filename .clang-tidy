@@ -15,7 +15,10 @@ readability-*,\
 -readability-magic-numbers,\
 -readability-redundant-access-specifiers,\
 performance-*,\
+bugprone-*,\
 "
 HeaderFilterRegex: '*\.(hpp|h)$'
+CheckOptions:
+  - key:             cppcoreguidelines-macro-usage.AllowedRegexp
+    value:           DEBUG_*|TEST_*|BOOST_TEST_*"
 ...
-

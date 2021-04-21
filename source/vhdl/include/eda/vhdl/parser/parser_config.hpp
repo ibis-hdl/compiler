@@ -45,32 +45,32 @@ using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
 /// to check the equality, but here we can get both contexts. Further,
 /// using boost.type_index the concrete type can be printed there:
 ///
-/// \code{.cpp}
+/// @code{.cpp}
 /// std::cout << "\nContext is of Type:\n"
 ///           << boost::typeindex::type_id<Context>().pretty_name() << '\n';
 /// std::cout << "\nConfigured Context is of Type:\n"
 ///           << boost::typeindex::type_id<context_type>().pretty_name() << '\n';
-/// \endcode
+/// @endcode
 ///
 /// At this time, the context is of type:
 ///
-/// \code{.cpp}
+/// @code{.cpp}
 /// x3::context<
 ///     x3::error_handler_tag,
 ///     std::reference_wrapper<
 ///         x3::error_handler<std::string::const_iterator>
-///     >, // ... and not: > const,
+///     >, // ... and (even it should) *not*: > const,
 ///     x3::context<
 ///         x3::skipper_tag,
 ///         x3::rule<eda::vhdl::parser::skipper_class, x3::unused_type, false> const,
 ///         x3::unused_type
 ///     >
 /// >
-/// \endcode
+/// @endcode
 ///
-/// FixMe: The signature should be:
-/// ```x3::context<error_handler_tag,
-///                std::reference_wrapper<error_handler_type> const, phrase_context_type>```
+/// @todo The using type alias should be:
+/// `x3::context<error_handler_tag,
+///             std::reference_wrapper<error_handler_type> const, phrase_context_type>`
 using context_type = x3::context<parser::error_handler_tag,
                                  std::reference_wrapper<error_handler_type>, phrase_context_type>;
 

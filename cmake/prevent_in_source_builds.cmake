@@ -9,9 +9,9 @@ function(prevent_in_source_builds)
 
   # disallow in-source builds
   if("${srcdir}" STREQUAL "${bindir}")
-    message("######################################################")
-    message("# You should not be configure & built in the source directory")
-    message("######################################################")
+    message("############################################################")
+    message("# You should not configure & build in the source directory #")
+    message("############################################################")
     message(FATAL_ERROR "Quitting configuration")
   endif()
 endfunction()

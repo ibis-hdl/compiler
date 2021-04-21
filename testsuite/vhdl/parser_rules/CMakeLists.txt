@@ -11,10 +11,10 @@ add_executable(${PROJECT_NAME})
 
 
 # Variables used to configure ctest project, also compile time builtin settings
-set(TESTSUITE_SOURCE_DIR "${PROJECT_SOURCE_DIR}")
+set(TESTSUITE_SOURCE_DIR "${PROJECT_SOURCE_DIR}/test_data")
 set(TESTSUITE_INPUT_EXTENSION ".input")
 set(TESTSUITE_EXPECTED_EXTENSION ".expected")
-set(TESTSUITE_DESTINATION_DIR "${CMAKE_BINARY_DIR}/testsuite_result/vhdl_parser_rules")
+set(TESTSUITE_DESTINATION_DIR "${CMAKE_BINARY_DIR}/testsuite_result/vhdl/parser_rules")
 set(TESTSUITE_OUTPUT_EXTENSION ".result")
 
 add_test(NAME test_vhdl_parser_rules
@@ -27,18 +27,14 @@ add_test(NAME test_vhdl_parser_rules
         --output-extension=${TESTSUITE_OUTPUT_EXTENSION}
 )
 
-configure_file(
-    ${PROJECT_SOURCE_DIR}/include/testsuite/vhdl_parser/compile_builtin.hpp.in
-    ${PROJECT_BINARY_DIR}/include/testsuite/vhdl_parser/compile_builtin.hpp
-    @ONLY
-)
-
-set(CMAKE_CTEST_ARGUMENTS "--output-on-failure")
+# already set at options_build.cmake
+#set(CMAKE_CTEST_ARGUMENTS "--output-on-failure")
 
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         eda::vhdl_parser
+    PRIVATE
         testsuite::util
         testsuite::vhdl_rules
         Boost::system
@@ -46,6 +42,18 @@ target_link_libraries(${PROJECT_NAME}
         Boost::unit_test_framework
 )
 #set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-v")
+
+
+configure_file(
+    ${PROJECT_SOURCE_DIR}/src/dataset_builtin.cpp.in
+    ${PROJECT_BINARY_DIR}/src/dataset_builtin.cpp
+    @ONLY
+)
+configure_file(
+    ${PROJECT_SOURCE_DIR}/src/failure_diagnostic_fixture_builtin.cpp.in
+    ${PROJECT_BINARY_DIR}/src/failure_diagnostic_fixture_builtin.cpp
+    @ONLY
+)
 
 
 if(DEVELOPER_EXTERNAL_BOOST_SPIRIT_X3)
@@ -58,130 +66,136 @@ endif()
 
 target_sources(${PROJECT_NAME}
     PRIVATE
-        src/main/test_vhdl_parser.cpp
-        src/main/failure_diagnostic_fixture.cpp
+        src/test_vhdl_parser.cpp
+        src/failure_diagnostic_fixture.cpp ${PROJECT_BINARY_DIR}/src/failure_diagnostic_fixture_builtin.cpp
+        src/dataset.cpp ${PROJECT_BINARY_DIR}/src/dataset_builtin.cpp
         # concrete test cases
-        src/abstract_literal_test.cpp
-        src/actual_part_test.cpp
-        src/aggregate_test.cpp
-        src/alias_declaration_test.cpp
-        src/allocator_test.cpp
-        src/architecture_body_test.cpp
-        src/assertion_test.cpp
-        src/association_list_test.cpp
-        src/attribute_name_test.cpp
-        src/attribute_specification_test.cpp
-        src/based_literal_test.cpp
-        src/binding_indication_test.cpp
-        src/bit_string_literal_test.cpp
-        src/block_configuration_test.cpp
-        src/block_header_test.cpp
-        src/block_statement_test.cpp
-        src/case_statement_test.cpp
-        src/character_literal_test.cpp
-        src/choices_test.cpp
-        src/component_configuration_test.cpp
-        src/component_declaration_test.cpp
-        src/component_instantiation_statement_test.cpp
-        src/component_specification_test.cpp
-        src/concurrent_assertion_statement_test.cpp
-        src/conditional_signal_assignment_test.cpp
-        src/configuration_declaration_test.cpp
-        src/configuration_specification_test.cpp
-        src/constant_declaration_test.cpp
-        src/constrained_array_definition_test.cpp
-        src/constraint_test.cpp
-        src/context_clause_test.cpp
-        src/decimal_literal_test.cpp
-        src/disconnection_specification_test.cpp
-        src/discrete_range_test.cpp
-        src/element_declaration_test.cpp
-        src/entity_aspect_test.cpp
-        src/entity_declaration_test.cpp
-        src/enumeration_type_definition_test.cpp
-        src/exit_statement_test.cpp
-        src/expression_test.cpp
-        src/factor_test.cpp
-        src/file_declaration_test.cpp
-        src/file_open_information_test.cpp
-        src/formal_part_test.cpp
-        src/function_call_test.cpp
-        src/generate_statement_test.cpp
-        src/generic_clause_test.cpp
-        src/generic_map_aspect_test.cpp
-        src/group_declaration_test.cpp
-        src/group_template_declaration_test.cpp
-        src/identifier_test.cpp
-        src/identifier_list_test.cpp
-        src/if_statement_test.cpp
-        src/index_constraint_test.cpp
-        src/index_subtype_definition_test.cpp
-        src/indexed_name_test.cpp
-        src/integer_test.cpp
-        src/interface_constant_declaration_test.cpp
-        src/interface_file_declaration_test.cpp
-        src/interface_signal_declaration_test.cpp
-        src/interface_variable_declaration_test.cpp
-        src/library_clause_test.cpp
-        src/literal_test.cpp
-        src/loop_statement_test.cpp
-        src/name_test.cpp
-        src/next_statement_test.cpp
-        src/numeric_literal_test.cpp
-        src/package_body_test.cpp
-        src/package_declaration_test.cpp
-        src/parameter_specification_test.cpp
-        src/physical_literal_test.cpp
-        src/physical_type_definition_test.cpp
-        src/port_clause_test.cpp
-        src/port_map_aspect_test.cpp
-        src/primary_test.cpp
-        src/primary_unit_declaration_test.cpp
-        src/procedure_call_test.cpp
-        src/process_statement_test.cpp
-        src/qualified_expression_test.cpp
-        src/range_constraint_test.cpp
-        src/record_type_definition_test.cpp
-        src/relation_test.cpp
-        src/return_statement_test.cpp
-        src/secondary_unit_declaration_test.cpp
-        src/selected_signal_assignment_test.cpp
-        src/sequential_statement_test.cpp
-        src/shift_expression_test.cpp
-        src/signal_assignment_statement_test.cpp
-        src/signal_declaration_test.cpp
-        src/signal_list_test.cpp
-        src/simple_expression_test.cpp
-        src/slice_name_test.cpp
-        src/string_literal_test.cpp
-        src/subprogram_body_test.cpp
-        src/subprogram_specification_test.cpp
-        src/subtype_declaration_test.cpp
-        src/subtype_indication_test.cpp
-        src/term_test.cpp
-        src/type_conversion_test.cpp
-        src/type_declaration_test.cpp
-        src/type_definition_test.cpp
-        src/unconstrained_array_definition_test.cpp
-        src/use_clause_test.cpp
-        src/variable_assignment_statement_test.cpp
-        src/variable_declaration_test.cpp
-        src/wait_statement_test.cpp
-        src/waveform_test.cpp
+        src/test/abstract_literal_test.cpp
+        src/test/actual_part_test.cpp
+        src/test/aggregate_test.cpp
+        src/test/alias_declaration_test.cpp
+        src/test/allocator_test.cpp
+        src/test/architecture_body_test.cpp
+        src/test/assertion_test.cpp
+        src/test/association_list_test.cpp
+        src/test/attribute_name_test.cpp
+        src/test/attribute_specification_test.cpp
+        src/test/based_literal_test.cpp
+        src/test/binding_indication_test.cpp
+        src/test/bit_string_literal_test.cpp
+        src/test/block_configuration_test.cpp
+        src/test/block_header_test.cpp
+        src/test/block_statement_test.cpp
+        src/test/case_statement_test.cpp
+        src/test/character_literal_test.cpp
+        src/test/choices_test.cpp
+        src/test/component_configuration_test.cpp
+        src/test/component_declaration_test.cpp
+        src/test/component_instantiation_statement_test.cpp
+        src/test/component_specification_test.cpp
+        src/test/concurrent_assertion_statement_test.cpp
+        src/test/conditional_signal_assignment_test.cpp
+        src/test/configuration_declaration_test.cpp
+        src/test/configuration_specification_test.cpp
+        src/test/constant_declaration_test.cpp
+        src/test/constrained_array_definition_test.cpp
+        src/test/constraint_test.cpp
+        src/test/context_clause_test.cpp
+        src/test/decimal_literal_test.cpp
+        src/test/disconnection_specification_test.cpp
+        src/test/discrete_range_test.cpp
+        src/test/element_declaration_test.cpp
+        src/test/entity_aspect_test.cpp
+        src/test/entity_declaration_test.cpp
+        src/test/enumeration_type_definition_test.cpp
+        src/test/exit_statement_test.cpp
+        src/test/expression_test.cpp
+        src/test/factor_test.cpp
+        src/test/file_declaration_test.cpp
+        src/test/file_open_information_test.cpp
+        src/test/formal_part_test.cpp
+        src/test/function_call_test.cpp
+        src/test/generate_statement_test.cpp
+        src/test/generic_clause_test.cpp
+        src/test/generic_map_aspect_test.cpp
+        src/test/group_declaration_test.cpp
+        src/test/group_template_declaration_test.cpp
+        src/test/identifier_list_test.cpp
+        src/test/identifier_test.cpp
+        src/test/if_statement_test.cpp
+        src/test/index_constraint_test.cpp
+        src/test/index_subtype_definition_test.cpp
+        src/test/indexed_name_test.cpp
+        src/test/integer_test.cpp
+        src/test/interface_constant_declaration_test.cpp
+        src/test/interface_file_declaration_test.cpp
+        src/test/interface_signal_declaration_test.cpp
+        src/test/interface_variable_declaration_test.cpp
+        src/test/library_clause_test.cpp
+        src/test/literal_test.cpp
+        src/test/loop_statement_test.cpp
+        src/test/name_test.cpp
+        src/test/next_statement_test.cpp
+        src/test/numeric_literal_test.cpp
+        src/test/package_body_test.cpp
+        src/test/package_declaration_test.cpp
+        src/test/parameter_specification_test.cpp
+        src/test/physical_literal_test.cpp
+        src/test/physical_type_definition_test.cpp
+        src/test/port_clause_test.cpp
+        src/test/port_map_aspect_test.cpp
+        src/test/primary_test.cpp
+        src/test/primary_unit_declaration_test.cpp
+        src/test/procedure_call_test.cpp
+        src/test/process_statement_test.cpp
+        src/test/qualified_expression_test.cpp
+        src/test/range_constraint_test.cpp
+        src/test/record_type_definition_test.cpp
+        src/test/relation_test.cpp
+        src/test/return_statement_test.cpp
+        src/test/secondary_unit_declaration_test.cpp
+        src/test/selected_signal_assignment_test.cpp
+        src/test/sequential_statement_test.cpp
+        src/test/shift_expression_test.cpp
+        src/test/signal_assignment_statement_test.cpp
+        src/test/signal_declaration_test.cpp
+        src/test/signal_list_test.cpp
+        src/test/simple_expression_test.cpp
+        src/test/slice_name_test.cpp
+        src/test/string_literal_test.cpp
+        src/test/subprogram_body_test.cpp
+        src/test/subprogram_specification_test.cpp
+        src/test/subtype_declaration_test.cpp
+        src/test/subtype_indication_test.cpp
+        src/test/term_test.cpp
+        src/test/type_conversion_test.cpp
+        src/test/type_declaration_test.cpp
+        src/test/type_definition_test.cpp
+        src/test/unconstrained_array_definition_test.cpp
+        src/test/use_clause_test.cpp
+        src/test/variable_assignment_statement_test.cpp
+        src/test/variable_declaration_test.cpp
+        src/test/wait_statement_test.cpp
+        src/test/waveform_test.cpp
 )
 
 
-
-set_source_files_properties(src/main/test_vhdl_parser.cpp
+set_source_files_properties(src/test_vhdl_parser.cpp
     APPEND PROPERTIES
         # Failed to link Boost UTF with Windows/Clang, Linux works
         COMPILE_DEFINITIONS "$<$<NOT:$<PLATFORM_ID:Windows>>:BOOST_TEST_DYN_LINK>"
 )
 # [Boost.Test linker error by use with precompiled headers (PCH)](
 #  https://stackoverflow.com/questions/66535719/boost-test-linker-error-by-use-with-precompiled-headers-pch)
-set_source_files_properties(src/main/test_vhdl_parser.cpp
+set_source_files_properties(src/test_vhdl_parser.cpp
     PROPERTIES
         SKIP_PRECOMPILE_HEADERS ON
+)
+
+
+set_property(TARGET ${PROJECT_NAME}
+    PROPERTY
+        JOB_POOL_COMPILE NINJA_JOBS_CORE_3072MiB
 )
 
 
@@ -197,7 +211,6 @@ endif()
 target_include_directories(${PROJECT_NAME}
     PRIVATE
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
         $<BUILD_INTERFACE:${EXTERNAL_BOOST_UTF_INCLUDE_DIR}>
         $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
 )

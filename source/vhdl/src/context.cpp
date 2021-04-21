@@ -42,7 +42,7 @@ std::ostream& failure_status::print(std::ostream& os) const
     // To avoid further references by '-Weverything' diagnostics a plural form
     // lambda function for count is introduced.
     // The underlying problem is that error and warning count are of type size_t/uint64_t.
-    // Even if never so much "failure" will be relevant the range for the locale must
+    // Even if never so much "failure" will be relevant for the range for the locale must
     // be limited to int32. For the plural form the concrete count maximum
     // value isn't critical in human language.
     auto const plural_count = [](size_t count) {

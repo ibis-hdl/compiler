@@ -1,14 +1,12 @@
 #pragma once
 
-// @file: type.hpp
-
 #include <cstdint>
 #include <type_traits>
 
 namespace eda::vhdl::intrinsic {
 
 ///
-/// Integer and Real Types used in VHDL
+/// Universal Integer and Real Types used in VHDL
 ///
 /// Note: On Linux/Clang 5, the std::int_fast32_t has 64 bit
 ///

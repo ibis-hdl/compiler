@@ -19,29 +19,45 @@ namespace eda::vhdl::parser {
 ///
 /// Base class for all AST nodes where the parser error handler can be called.
 ///
-/// This is called directly by spirit.X3 in case of parser error.
+/// This is called directly by Boost.Spirit X3 in case of parser error.
+///
+/// @todo This concept allows also to have different error handling depending
+/// on concrete rule ID, for more see [Custom error on rule level? #657](
+///  https://github.com/boostorg/spirit/issues/657)
 ///
 class on_error_base {
 public:
+    ///
+    /// @brief FillMe :)
+    ///
+    /// @tparam IteratorT Iterator type of the parser
+    /// @tparam ExceptionT Boost.Spirit X3 expectation expection type
+    /// @tparam ContextT Boost.Spirit X3 context type
+    /// @param first
+    /// @param last
+    /// @param ex Boost.Spirit X3 expectation expection
+    /// @param context Boost.Spirit X3 context
+    /// @return x3::error_handler_result
+    ///
+    /// @todo recursive include problem; `parser_config` requires on_error definition,
+    /// but context_type is required here for `static_assert`. Hence there is no static
+    /// assert possible here even if it would be useful.
+    /// @code
+    /// if constexpr (false /* disabled */) {
+    ///     // detect upcoming linker errors, see notes at parser_config.hpp about
+    ///     static_assert(
+    ///         std::is_same_v<ContextT, context_type>,
+    ///         "The Spirit.X3 Context must be equal"
+    ///     );
+    /// }
+    /// @endcode
     template <typename IteratorT, typename ExceptionT, typename ContextT>
     x3::error_handler_result on_error([[maybe_unused]] IteratorT& first,
-                                      [[maybe_unused]] IteratorT const& last, ExceptionT const& ex,
+                                      [[maybe_unused]] IteratorT const& last, ExceptionT const& e,
                                       ContextT const& context) const
     {
-        // FixMe: recursive include problem; parser_config requires on_error definition,
-        // but context_type is required here for statis_assert. Hence there is no static
-        // assert possible here even if it would be useful.
-        //
-        // if constexpr (false /* disabled */) {
-        //     // detect upcoming linker errors, see notes at parser_config.hpp about
-        //     static_assert(
-        //         std::is_same_v<ContextT, context_type>,
-        //         "The Spirit.X3 Context must be equal"
-        //     );
-        // }
-
         auto& error_handler = x3::get<parser::error_handler_tag>(context).get();
-        return error_handler(ex.where(), make_error_description(ex.which()));
+        return error_handler(e.where(), make_error_description(e.which()));
     }
 
 private:

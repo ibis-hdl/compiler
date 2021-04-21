@@ -15,7 +15,8 @@ add_test(NAME test_vhdl_numeric_conversion
         ${PROJECT_NAME} --log_level=error
 )
 
-set(CMAKE_CTEST_ARGUMENTS "--output-on-failure")
+# already set at options_build.cmake
+#set(CMAKE_CTEST_ARGUMENTS "--output-on-failure")
 
 
 target_link_libraries(${PROJECT_NAME}
@@ -39,24 +40,24 @@ endif()
 
 target_sources(${PROJECT_NAME}
     PRIVATE
-        src/main/test_numeric_convert.cpp
-        src/main/numeric_parser.cpp
-        src/main/binary_string.cpp
+        src/test_numeric_convert.cpp
+        src/numeric_parser.cpp
+        src/binary_string.cpp
         # concrete test cases
-        src/bit_string_literal_test.cpp
-        src/decimal_literal_test.cpp
-        src/based_literal_test.cpp
+        src/test/bit_string_literal_test.cpp
+        src/test/decimal_literal_test.cpp
+        src/test/based_literal_test.cpp
 )
 
 
-set_source_files_properties(src/main/test_numeric_convert.cpp
+set_source_files_properties(src/test_numeric_convert.cpp
     APPEND PROPERTIES
         # Failed to link Boost UTF with Windows/Clang, Linux works
         COMPILE_DEFINITIONS "$<$<NOT:$<PLATFORM_ID:Windows>>:BOOST_TEST_DYN_LINK>"
 )
 # [Boost.Test linker error by use with precompiled headers (PCH)](
 #  https://stackoverflow.com/questions/66535719/boost-test-linker-error-by-use-with-precompiled-headers-pch)
-set_source_files_properties(src/main/test_numeric_convert.cpp
+set_source_files_properties(src/test_numeric_convert.cpp
     PROPERTIES
         SKIP_PRECOMPILE_HEADERS ON
 )

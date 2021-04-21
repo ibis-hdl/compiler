@@ -31,32 +31,6 @@ include(options_developer)
 
 
 ##
-# Ninja Build
-cmake_host_system_information(
-    RESULT localhost_logical_cores
-    QUERY  NUMBER_OF_LOGICAL_CORES
-)
-math(EXPR CPU_CORES_50pc  "${localhost_logical_cores} / 2")
-
-set_property(GLOBAL
-    PROPERTY
-        JOB_POOLS
-            NINJA_JOBS_FULL_CPU=${localhost_logical_cores}
-            NINJA_JOBS_HALF_CPU=${CPU_CORES_50pc}
-            NINJA_JOBS_TWO_CPU=2
-            NINJA_JOBS_ONE_CPU=1
-)
-if(WIN32)
-    # be graceful here since we are working on others
-    set(CMAKE_JOB_POOL_COMPILE NINJA_JOBS_HALF_CPU)
-    set(CMAKE_JOB_POOL_LINK    NINJA_JOBS_HALF_CPU)
-else()
-    set(CMAKE_JOB_POOL_COMPILE NINJA_JOBS_FULL_CPU)
-    set(CMAKE_JOB_POOL_LINK    NINJA_JOBS_FULL_CPU)
-endif()
-
-
-##
 # Boost.Org
 # [Cmake doesn't find Boost](https://stackoverflow.com/questions/3808775/cmake-doesnt-find-boost)
 #set(Boost_DEBUG 1)

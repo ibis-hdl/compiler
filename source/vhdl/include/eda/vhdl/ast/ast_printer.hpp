@@ -16,15 +16,20 @@
 namespace eda::vhdl::ast {
 
 ///
-/// @brief AST printer class
+/// @brief AST printer class.
 ///
 /// FixMe: clang-tidy got warning: function 'operator()' is within
-///        a recursive call chain [misc-no-recursion]. The
-///        operator()(block_statement_part const& node) is at least one
-///        origin. Even within testsuite there is no problem, use a
-///        recursion counter to catch it.
+/// a recursive call chain [misc-no-recursion]. The
+/// `operator()(block_statement_part const& node)` is at least one
+/// origin. Even within testsuite there is no problem, use a recursion
+/// counter to catch it.
+/// In-depth investigation of the problem revealed that
+/// `visit(std::vector<T> const& vector)` should be called in function
+/// `operator()(block_statement_part const& node)`. So, check your
+/// C++ knowledge!
 ///
-/// Warning: Don't trust the suggestions made by IWYU!
+/// @warning: Don't trust the suggestions made by IWYU! I got into
+/// serious trouble when i followed the recommendations.
 ///
 class printer {
 public:
@@ -216,11 +221,12 @@ public:
     void operator()(waveform const& node);
     void operator()(waveform_element const& node);
 
+    void operator()([[maybe_unused]] nullary const& node);
+
     // keywords and miscellaneous
     void operator()(ast::string_span const& node);
     void operator()(keyword_token token);
 
-    void operator()(nullary const& node);
 
     //    template<typename T>
     //    void operator()(T const& node);

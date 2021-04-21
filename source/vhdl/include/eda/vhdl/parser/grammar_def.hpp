@@ -727,12 +727,12 @@ auto const label_colon = x3::rule<struct _, ast::identifier> { "label" } =
 
 
 ///
-/// abstract_literal [LRM93 §13.4]
+/// abstract_literal                                               [LRM93 §13.4]
 ///
-/// \code{.bnf}
+/// @code{.bnf}
 /// abstract_literal ::=
 ///     decimal_literal | based_literal
-/// \endcode
+/// @endcode
 auto const abstract_literal_def = // order matters
       based_literal
     | decimal_literal
@@ -740,12 +740,12 @@ auto const abstract_literal_def = // order matters
 
 
 ///
-/// access_type_definition [LRM93 §3.3]
+/// access_type_definition                                          [LRM93 §3.3]
 ///
-/// \code{.bnf}
+/// @code{.bnf}
 /// access_type_definition ::=
 ///     access subtype_indication
-/// \endcode
+/// @endcode
 auto const access_type_definition_def =
        ACCESS
     >> subtype_indication
@@ -753,21 +753,21 @@ auto const access_type_definition_def =
 
 
 ///
-/// actual_designator [LRM93 §4.3.2.2]
+/// actual_designator                                           [LRM93 §4.3.2.2]
 ///
-/// \note Note, expression also matches the BNF rules:
-///         - signal_name
-///         - variable_name
-///         - file_name
-///
-/// \code{.bnf}
+/// @code{.bnf}
 /// actual_designator ::=
 ///       expression
 ///     | signal_name
 ///     | variable_name
 ///     | file_name
 ///     | open
-/// \endcode
+/// @endcode
+///
+/// @note Note, expression also matches the BNF rules:
+///         - signal_name
+///         - variable_name
+///         - file_name
 auto const actual_designator_def =
       expression
     | OPEN
@@ -775,38 +775,39 @@ auto const actual_designator_def =
 
 
 ///
-/// actual_parameter_part [LRM93 §7.3.3]
+/// actual_parameter_part                                         [LRM93 §7.3.3]
 ///
-/// \code{.bnf}
+/// @code{.bnf}
 /// actual_parameter_part ::=
 ///     parameter_association_list
-/// \endcode
+/// @endcode
 ///
-/// \todo actual_parameter_part is used only for function_call and
-///       procedure_call_statement, but there are parse problem with these
-///       to be solved!
-///       XXX: Maybe use of aggregate (procedure_call_statement) or selected_name (function_call)?
-///         \code{.bnf}
-///         function_call ::= function_name [ ( actual_parameter_part ) ]
-///         procedure_call_statement ::= procedure_name [ ( actual_parameter_part ) ] ;
-///         \endcode
+/// @todo actual_parameter_part is used only for function_call and
+/// procedure_call_statement, but there are parse problem with these
+/// to be solved!
+///
+/// @todo Maybe use of aggregate (procedure_call_statement) or selected_name (function_call)?
+/// @code{.bnf}
+/// function_call ::= function_name [ ( actual_parameter_part ) ]
+/// procedure_call_statement ::= procedure_name [ ( actual_parameter_part ) ] ;
+/// @endcode
 auto const actual_parameter_part_def =
     association_list
     ;
 
 
 ///
-/// actual_part [LRM93 §4.3.2.2]
+/// actual_part                                                 [LRM93 §4.3.2.2]
 ///
-/// \note name covers { function_name | type_mark } rules.
-/// \note actual_designator is as of expression and hence {signal, ...}_name.
-///
-/// \code{.bnf}
+/// @code{.bnf}
 /// actual_part ::=
 ///       actual_designator
 ///     | function_name ( actual_designator )
 ///     | type_mark ( actual_designator )
-/// \endcode
+/// @endcode
+///
+/// @note name covers { function_name | type_mark } rules.
+/// @note actual_designator is as of expression and hence {signal, ...}_name.
 namespace detail {
 
 auto const actual_part_chunk = x3::rule<struct _, ast::actual_part_chunk>{ "actual_part" } =
@@ -916,14 +917,14 @@ auto const array_type_definition_def =
 
 
 ///
-/// assertion [LRM93 §8.2]
+/// assertion                                                       [LRM93 §8.2]
 ///
-/// \code{.bnf}
+/// @code{.bnf}
 /// assertion ::=
 ///     assert condition
 ///     [ report expression ]
 ///     [ severity expression ]
-/// \endcode
+/// @endcode
 auto const assertion_def =
         ( ASSERT   >> condition)
     >> -( REPORT   >> expression )
@@ -932,12 +933,12 @@ auto const assertion_def =
 
 
 ///
-/// assertion_statement [LRM93 §8.2]
+/// assertion_statement                                             [LRM93 §8.2]
 ///
-/// \code{.bnf}
+/// @code{.bnf}
 /// assertion_statement ::=
 ///     [ label : ] assertion ;
-/// \endcode
+/// @endcode
 auto const assertion_statement_def = ( // operator precedence
        -label_colon
     >> assertion
@@ -947,12 +948,12 @@ auto const assertion_statement_def = ( // operator precedence
 
 
 ///
-/// association_element [LRM93 §4.3.2.2]
+/// association_element                                         [LRM93 §4.3.2.2]
 ///
-/// \code{.bnf}
+/// @code{.bnf}
 /// association_element ::=
 ///     [ formal_part => ] actual_part
-/// \endcode
+/// @endcode
 auto const association_element_def =
        -x3::as<ast::formal_part>[
            formal_part >> "=>"
@@ -962,12 +963,12 @@ auto const association_element_def =
 
 
 ///
-/// association_list [LRM93 §4.3.2.2]
+/// association_list                                            [LRM93 §4.3.2.2]
 ///
-/// \code{.bnf}
+/// @code{.bnf}
 /// association_list ::=
 ///     association_element { , association_element }
-/// \endcode
+/// @endcode
 auto const association_list_def =
     association_element % ','
     ;
@@ -1050,14 +1051,19 @@ auto const based_integer_def =
 
 
 
-/// based_literal ::=                                            [LRM93 §13.4.2]
+/// based_literal                                                [LRM93 §13.4.2]
+///
+/// @code{.bnf}
+/// based_literal ::=
 ///     base # based_integer [ . based_integer ] # [ exponent ]
+/// @endcode
+///
+/// @note IEEE1076-93 Ch. 13.4, specifies for decimal_literal the forbidden
+/// negative sign for the exponent of integer types. No restrictions are there
+/// defined for based_literal, assume real type exponent.
 namespace based_literal_detail {
 
 auto const integer_type = x3::rule<struct _, ast::based_literal::number_chunk>{ "based_literal<int>" } =
-    // Note, IEEE1076-93 Ch. 13.4, specifies for decimal_literal the forbidden
-    // negative sign for the exponent of integer types. No restrictions are there
-    // defined for based_literal, assume real type exponent.
     lexeme[
            based_integer >> x3::attr(ast::string_span{})  // empty fractional part
         >> '#'
@@ -1795,24 +1801,34 @@ auto const discrete_range_def = // order matters
 
 
 
-/// element_association ::=                                       [LRM93 §7.3.2]
+///
+/// element_association                                           [LRM93 §7.3.2]
+///
+/// @code{.bnf}
+/// element_association ::=
 ///     [ choices => ] expression
+/// @endcode
+///
+/// Note that parsing element_association is a bit tricky, due to backtracking side
+/// effect. The problem did rise up first time on parsing attribute_specification's
+/// expression:
+///
+/// @code{.bnf}
+/// attribute_specification ::=
+///        attribute attribute_designator OF entity_specification IS expression ;
+/// @endcode
+///
+/// with descent aggregate's element_association:
+///
+/// @code{.bnf}
+/// aggregate           ::= ( element_association { , element_association } )
+/// element_association ::= [ choices => ] expression
+/// @endcode
+///
+/// If the choices rule fails due to missing "=>" the element_association node
+/// still contains the previous parsed data, hence holding the leaf data twice
+/// using two parse paths. as[] directive solve this.
 auto const element_association_def =
-    // Note, parsing element_association is a bit tricky, due to backtracking side
-    // effect. The problem did rise up first time on parsing attribute_specification's
-    // expression:
-    //
-    // attribute_specification ::=
-    //        attribute attribute_designator OF entity_specification IS expression ;
-    //
-    // with descent aggregate's element_association:
-    //
-    // aggregate           ::= ( element_association { , element_association } )
-    // element_association ::= [ choices => ] expression
-    //
-    // If the choices rule fails due to missing "=>" the element_association node
-    // still contains the previous parsed data, hence holding the leaf data twice
-    // using two parse paths. as[] directive solve this.
        -x3::as<ast::choices>[choices >> "=>"]
     >> expression
     ;
@@ -1925,7 +1941,7 @@ auto const entity_class_entry_list_def =
 
 
 ///
-/// entity_declaration [LRM93 §1.1]
+/// entity_declaration                                              [LRM93 §1.1]
 ///
 /// \code{.bnf}
 /// entity_declaration ::=
@@ -1954,9 +1970,9 @@ auto const entity_declaration_def = ( // operator precedence
 
 
 ///
-/// entity_declarative_item [LRM93 §1.1.2]
+/// entity_declarative_item                                       [LRM93 §1.1.2]
 ///
-/// \code{.bnf}
+/// @code{.bnf}
 /// entity_declarative_item ::=
 ///       subprogram_declaration
 ///     | subprogram_body
@@ -1973,7 +1989,7 @@ auto const entity_declaration_def = ( // operator precedence
 ///     | use_clause
 ///     | group_template_declaration
 ///     | group_declaration
-/// \endcode
+/// @endcode
 auto const entity_declarative_item_def =
       subprogram_declaration
     | subprogram_body
@@ -1994,7 +2010,7 @@ auto const entity_declarative_item_def =
 
 
 ///
-/// entity_declarative_part [LRM93 §1.1.2]
+/// entity_declarative_part                                       [LRM93 §1.1.2]
 ///
 /// \code{.bnf}
 /// entity_declarative_part ::=
@@ -2047,7 +2063,7 @@ auto const entity_specification_def =
 
 
 ///
-/// entity_statement [LRM93 §1.1.3]
+/// entity_statement                                              [LRM93 §1.1.3]
 ///
 /// \code{.bnf}
 /// entity_statement ::=
@@ -2063,7 +2079,7 @@ auto const entity_statement_def =
 
 
 ///
-/// entity_statement_part [LRM93 §1.1.3]
+/// entity_statement_part                                         [LRM93 §1.1.3]
 ///
 /// \code{.bnf}
 /// entity_statement_part ::=
@@ -2345,7 +2361,7 @@ auto const generate_statement_def = ( // operator precedence
 
 
 ///
-/// generation_scheme [LRM93 §9.7]
+/// generation_scheme                                               [LRM93 §9.7]
 ///
 /// \code{.bnf}
 /// generation_scheme ::=
@@ -2359,7 +2375,7 @@ auto const generation_scheme_def =
 
 
 ///
-/// generic_clause [LRM93 §1.1.1]
+/// generic_clause                                                [LRM93 §1.1.1]
 ///
 /// \code{.bnf}
 /// generic_clause ::=
@@ -2566,7 +2582,7 @@ auto const instantiation_list_def =
 
 
 
-/// integer ::=                                                         § 13.4.1]
+/// integer ::=                                                        § 13.4.1]
 ///     digit { [ underline ] digit }
 auto const integer_def =
     x3::as<ast::string_span>[
@@ -3029,7 +3045,7 @@ auto const physical_type_definition_def =
 
 
 ///
-/// port_clause [LRM93 §1.1.1]
+/// port_clause                                                   [LRM93 §1.1.1]
 ///
 /// \code{.bnf}
 /// port_clause ::=
@@ -3242,7 +3258,7 @@ auto const qualified_expression_def =
 ///       can also be a name as of range_attribute_name
 ///
 /// \code{.bnf}
-/// range ::=                                                       [LRM93 §3.1]
+/// range ::=
 ///       range_attribute_name
 ///     | simple_expression direction simple_expression
 /// \endcode
@@ -3262,7 +3278,7 @@ auto const range_def = // order matters
 
 
 ///
-/// range_constraint [LRM93 §3.1]
+/// range_constraint                                                [LRM93 §3.1]
 ///
 /// \code{.bnf}
 /// range_constraint ::=
@@ -3363,26 +3379,33 @@ auto const secondary_unit_declaration_def = ( // operator precedence
 
 
 
-/// selected_name ::=                                               [LRM93 §6.3]
+/// selected_name                                                   [LRM93 §6.3]
+///
+/// @code{.bnf}
+/// selected_name ::=
 ///     prefix . suffix
-namespace detail {
+/// @endcode
+///
+/// LRM93 [§6.3] defined a concept of an expanded name: A selected name (in
+/// the syntactic sense) that denotes one or all of the primary units in a
+/// library or any named entity within a primary unit.
+/// [...]
+/// The prefix of an expanded name may not be a function call.
+///
+/// The BNF rule results into recursive calling of prefix (which is a name).
+///
+/// @code{.bnf}
+/// selected_name ::= prefix . suffix
+/// prefix        ::= name | function_call
+/// name          ::= ... | selected_name | ...
+/// suffix        ::= simple_name | character_literal | operator_symbol | ALL
+/// @endcode
+///
+/// The solution is to mimic the prefix without the name self (limit the name
+/// rules). This allows the name to be selected_name too. No rewrote of the name
+/// rule so far.
 
-// LRM93 [§6.3] defined a concept of an expanded name: A selected name (in
-// the syntactic sense) that denotes one or all of the primary units in a
-// library or any named entity within a primary unit.
-// [...]
-// The prefix of an expanded name may not be a function call.
-//
-// The BNF rule results into recursive calling of prefix (which is a name).
-//
-// selected_name ::= prefix . suffix
-// prefix        ::= name | function_call
-// name          ::= ... | selected_name | ...
-// suffix        ::= simple_name | character_literal | operator_symbol | ALL
-//
-// The solution is to mimic the prefix without the name self (limit the name
-// rules). This allows the name to be selected_name too. No rewrote of the name
-// rule so far.
+namespace detail {
 
 struct name_class_;
 struct prefix_class_;
@@ -3410,7 +3433,7 @@ auto const prefix_def = x3::repeat(1, 2)[
 BOOST_SPIRIT_DEFINE(name)
 BOOST_SPIRIT_DEFINE(prefix)
 
-}
+} // namespace detail
 
 auto const selected_name_def =
     x3::lexeme[
@@ -3792,17 +3815,26 @@ auto const subtype_declaration_def = ( // operator precedence
 
 
 
-/// subtype_indication ::=                                          [LRM93 §4.2]
+/// subtype_indication                                              [LRM93 §4.2]
+///
+/// @code{.bnf}
+/// subtype_indication ::=
 ///     [ resolution_function_name ] type_mark [ constraint ]
+/// @endcode
+///
+/// Parse a list of unspecified names, since:
+///
+/// @code{.bnf}
+///      resolution_function_name ::= name
+///      type_mark                ::= type_name | subtype_name
+/// @endcode
+///
+/// is ambiguous, even with optional. Nevertheless, syntactically
+/// resolution_function_name and type_mark are names, semantically matters on
+/// context as of VHDL.
+/// Further more, 2nd name can be a keyword (which can't be a name), hence
+/// the alternative parse branch.
 auto const subtype_indication_def =
-    // parse a list of unspecified names, since
-    //      resolution_function_name ::= name
-    //      type_mark                ::= type_name | subtype_name
-    // is ambiguous, even with optional. Nevertheless, syntactically
-    // resolution_function_name and type_mark are names, semantically matters on
-    // context as of VHDL.
-    // Further more, 2nd name can be a keyword (which can't be a name), hence
-    // the alternative parse branch.
     (
        x3::repeat(1 ,2)[
           name          // range as keyword can follow; name forbids keywords!
@@ -3844,17 +3876,21 @@ auto const target_def =
 
 
 
-/// term ::=                                                        [LRM93 §7.1]
+/// term                                                            [LRM93 §7.1]
+///
+/// @code{.bnf}
+/// term ::=
 ///     factor { multiplying_operator factor }
+/// @endcode
+///
+/// Note there is no expectation point: Consider the case of '-5 mod -3', where
+/// mod is a multiplying operator with an higher operator precedence as the
+/// sign operator. This is no valid VHDL and would in case of use of an
+/// expectation point result into expectation_failure. See
+/// 'test_case/expression_failure/expression_failure_003', or even the
+/// [Sigasi: Be careful with VHDL operator precedence](
+/// http://insights.sigasi.com/tech/be-careful-vhdl-operator-precedence.html)
 auto const term_def =
-    // There is no expectation point: Consider the case of '-5 mod -3', where
-    // mod is a multiplying operator with an higher operator precedence as the
-    // sign operator. This is no valid VHDL and would in case of use of an
-    // expectation point result into expectation_failure. See
-    // 'test_case/expression_failure/expression_failure_003', or even the
-    // [Sigasi: Be careful with VHDL operator precedence](
-    // http://insights.sigasi.com/tech/be-careful-vhdl-operator-precedence.html)
-    //
     factor >> *( multiplying_operator >> factor )
     ;
 
@@ -3877,14 +3913,20 @@ auto const type_conversion_def =
 
 
 
-/// type_declaration ::=                                            [LRM93 §4.1]
+/// type_declaration                                                [LRM93 §4.1]
+///
+/// @code{.bnf}
+/// type_declaration ::=
 ///       full_type_declaration
 ///     | incomplete_type_declaration
+/// @endcode
+///
+/// Note, this node covers both alternatives from type_declaration BNF:
+/// @code{.bnf}
+/// full_type_declaration       ::= TYPE identifier IS type_definition ;
+/// incomplete_type_declaration ::= TYPE identifier ;
+/// @endcode
 auto const type_declaration_def = ( // operator precedence
-       // Note, this node covers both alternatives from BNF:
-       // full_type_declaration       ::= TYPE identifier IS type_definition ;
-       // incomplete_type_declaration ::= TYPE identifier ;
-       //
        TYPE
     >> identifier
     >> -( IS >> type_definition )
@@ -3908,14 +3950,19 @@ auto const type_definition_def =
 
 
 
+/// type_mark
+///
+/// @code{.bnf}
 /// type_mark ::=
 ///       type_name
 ///     | subtype_name
+/// @endcode
+///
+/// There is no way to distinguish between type_name and subtype_name at
+/// parser level. Further read
+/// [Question about type_mark bnf](
+/// https://groups.google.com/forum/#!topic/comp.lang.vhdl/exUhoMrFavU)
 auto const type_mark_def =
-    // There is no way to distinguish between type_name and subtype_name at
-    // parser level. Further read
-    // [Question about type_mark bnf](
-    // https://groups.google.com/forum/#!topic/comp.lang.vhdl/exUhoMrFavU)
     name
     ;
 
@@ -3933,18 +3980,22 @@ auto const unconstrained_array_definition_def =
 
 
 
-/// use_clause ::=                                                 [LRM93 §10.4]
+/// use_clause                                                     [LRM93 §10.4]
+///
+/// @code{.bnf}
+/// use_clause ::=
 ///     use selected_name { , selected_name } ;
+/// @endcode
+///
+/// LRM93 [§6.3] defined a concept of an expanded name: A selected name (in
+/// the syntactic sense) that denotes one or all of the primary units in a
+/// library or any named entity within a primary unit.
+/// [...]
+/// The prefix of an expanded name may not be a function call.
+///
+/// For the use clause hence a specialized version is required. See Notes
+/// at the AST node ast::use_clause.
 namespace use_clause_detail {
-
-// LRM93 [§6.3] defined a concept of an expanded name: A selected name (in
-// the syntactic sense) that denotes one or all of the primary units in a
-// library or any named entity within a primary unit.
-// [...]
-// The prefix of an expanded name may not be a function call.
-//
-// For the use clause hence a specialized version is required. See Notes
-// at the AST node ast::use_clause.
 
 auto const lib_prefix = x3::rule<struct _, std::vector<ast::name>> { "prefix" } =
     x3::lexeme[
@@ -4039,7 +4090,7 @@ auto const waveform_def =
 
 
 ///
-/// waveform_element
+/// waveform_element                                              [LRM93 §8.4.1]
 /// [LRM93 §8.4.1](https://rti.etf.bg.ac.rs/rti/ri5rvl/tutorial/TUTORIAL/IEEE/HTML/1076_8.HTM#8.4)
 ///
 /// \code{.bnf}

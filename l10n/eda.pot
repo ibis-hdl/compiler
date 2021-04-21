@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \"\" \"..\"\n"
 "Report-Msgid-Bugs-To: https://github.com/eda/ibis/issues\n"
-"POT-Creation-Date: 2021-03-30 13:00+0200\n"
+"POT-Creation-Date: 2021-04-22 13:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,45 +45,37 @@ msgid "Error reading file \"{1}\""
 msgstr ""
 
 #. TRANSLATORS: Literal Type and passed Value
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/ast/numeric_convert.cpp:395
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/ast/numeric_convert.cpp:408
 msgid "Conversion of VHDL {1} '{2}' failed due to numeric overflow (MAX_VALUE = {3})"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/ast/numeric_convert.cpp:427
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/ast/numeric_convert.cpp:440
 msgid "An unknown error occurred during parsing of '{1}'."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/ast/numeric_convert.cpp:438
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/ast/numeric_convert.cpp:451
 msgid "Base specifier '{1}' isn't supported. Supported are only 2, 8, 10 and 16!"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/ast/numeric_convert.cpp:689
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/ast/numeric_convert.cpp:705
 msgid "Numeric error occurred during calculation on based_literal with fractional part of '{1}'."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/parser/error_handler.cpp:27
 #: /home/olaf/work/CXX/ibis/source/source/vhdl/src/analyze/error_handler.cpp:58
 #: /home/olaf/work/CXX/ibis/source/source/vhdl/src/analyze/error_handler.cpp:131
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/parser/error_handler.cpp:27
 msgid "in file {1}, line {2}:"
-msgstr ""
-
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/parser/error_handler.cpp:32
-msgid "Parse ERROR"
-msgstr ""
-
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/parser/error_handler.cpp:33
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/analyze/error_handler.cpp:64
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/analyze/error_handler.cpp:137
-msgid "Unspecified Error, Sorry"
-msgstr ""
-
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/parser/on_error_base.cpp:293
-msgid "Error, expecting {1} here:"
 msgstr ""
 
 #: /home/olaf/work/CXX/ibis/source/source/vhdl/src/analyze/error_handler.cpp:63
 #: /home/olaf/work/CXX/ibis/source/source/vhdl/src/analyze/error_handler.cpp:136
 msgid "Syntax ERROR"
+msgstr ""
+
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/analyze/error_handler.cpp:64
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/analyze/error_handler.cpp:137
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/parser/error_handler.cpp:33
+msgid "Unspecified Error, Sorry"
 msgstr ""
 
 #: /home/olaf/work/CXX/ibis/source/source/vhdl/src/analyze/error_handler.cpp:73
@@ -110,39 +102,61 @@ msgstr ""
 msgid "ill-formed statement in {1}; (Hint: single trailing keyword 'postponed')"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/context.cpp:62
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/context.cpp:60
 msgid "{1} error"
 msgid_plural "{1} errors"
 msgstr[0] ""
 msgstr[1] ""
 
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/context.cpp:68
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/context.cpp:66
 msgid "{1} warning"
 msgid_plural "{1} warnings"
 msgstr[0] ""
 msgstr[1] ""
 
 #. TRANSLATORS: summary error(s) and warning(s)
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/context.cpp:74
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/context.cpp:72
 msgid "{1} and {2} generated."
 msgstr ""
 
 #. TRANSLATORS: summary error(s) only
 #. TRANSLATORS: summary warning(s) only
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/context.cpp:78
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/context.cpp:82
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/context.cpp:77
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/context.cpp:81
 msgid "{1} generated."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/source/ibis/src/main.cpp:52
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/parser/error_handler.cpp:32
+msgid "Parse ERROR"
+msgstr ""
+
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/parser/on_error_base.cpp:293
+msgid "Error, expecting {1} here:"
+msgstr ""
+
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/parser/parse.cpp:64
+msgid "Source file '{1}' failed to parse!"
+msgstr ""
+
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/parser/parse.cpp:96
+msgctxt "ExceptionDescription"
+msgid "Caught exception '{1}' during parsing file '{2}'"
+msgstr ""
+
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/parser/parse.cpp:109
+msgctxt "ExceptionDescription"
+msgid "Caught unexpected exception during parsing file '{1}'"
+msgstr ""
+
+#: /home/olaf/work/CXX/ibis/source/source/ibis/src/main.cpp:63
 msgid "processing:"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/source/ibis/src/main.cpp:65
+#: /home/olaf/work/CXX/ibis/source/source/ibis/src/main.cpp:76
 msgid "Exception caught:"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/source/ibis/src/main.cpp:68
+#: /home/olaf/work/CXX/ibis/source/source/ibis/src/main.cpp:79
 msgid "Unexpected exception caught"
 msgstr ""
 

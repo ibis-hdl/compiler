@@ -57,14 +57,14 @@ private:
 /// - the 'classic' label pair with label and end_label
 /// - blocks with identifier and end_identifier (aka end label)
 ///
-/// From C++ it's required to detect that a node type has the member label
-/// or identifier. The library fundamentals TS v2 provide this; here is a
-/// copy&paste from
-/// [std::experimental::is_detected](https://en.cppreference.com/w/cpp/experimental/is_detected)
-/// used since C++17 (as today) hasn't it.
-///
 /// With this, labels_of helper function has the same API for the two labeled
 /// nodes.
+///
+/// @todo [C++20] From C++ it's required to detect that a node type has the member `label`
+/// or `identifier`. The library fundamentals TS v2 provide this; here is a
+/// copy&paste from [std::experimental::is_detected](
+/// https://en.cppreference.com/w/cpp/experimental/is_detected)
+/// used since C++17 (as today) hasn't it.
 ///
 namespace label_util {
 
@@ -107,21 +107,32 @@ namespace label_util {
 
 template <class T>
 using has_label = decltype(std::declval<T&>().label);
+
 template <class T>
 using has_identifier = decltype(std::declval<T&>().identifier);
 
 }  // namespace label_util
 
+///
+/// @brief Extract the label and their identifier from given node.
+///
+/// Here it's assumed that the identifier follow the convention as they are
+/// paired as:
+/// - label - end_label (the classical VHDL labels) or
+/// - identifier - end_identifier (where identifier is mandatory)
+///
+/// @tparam NodeT The node type.
+/// @param node Node to be proced.
+/// @return std::tuple<ast::identifier const&, ast::identifier const&>
+///
+/// FixMe: use of internal `tuple_type` should not be required.
+///
 template <typename NodeT>
 std::tuple<ast::identifier const&, ast::identifier const&> static inline labels_of(
     NodeT const& node)
 {
     using tuple_type = std::tuple<ast::identifier const&, ast::identifier const&>;
 
-    // here it's assumed that the identifier follow the convention as they are
-    // paired as:
-    // - label - end_label (the classical VHDL labels) or
-    // - identifier - end_identifier (where identifier is mandatory)
     if constexpr (label_util::is_detected<label_util::has_label, NodeT>::value) {
         if constexpr (std::is_same_v<std::decay_t<decltype(node.label)>,
                                      ast::optional<ast::identifier>>) {

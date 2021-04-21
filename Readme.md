@@ -218,7 +218,7 @@ separated compilation units.
 
 #### Settings Crash
 
-An old problem from beginning rises, see [wandbox](https://wandbox.org/permlink/SklFbT05oHEGFhqW)
+An old problem from beginning rises, see [Wandbox.Org](https://wandbox.org/permlink/SklFbT05oHEGFhqW)
 which isn't obviously solved.
 
 ```
@@ -289,20 +289,24 @@ In 2021 boost is bumped to v1.73 and following *test_vhdl_parser_rule* tests fai
   - test_case_name = use_clause/use_clause_000;
 
 It is even reproducible with the code of 2018 (git tag R2018) and
-Boost's v1.73 spirit X3 by setting cmake's ExternalProject_Add()
+Boost's v1.73 spirit X3 by setting CMake's ExternalProject_Add()
 GIT_TAG from 1.68.0 to 1.73 (see options_developer.cmake). So these
 errors are imminent in these code base before. Anyway, parser is
 still the main work ground.
 
 But there is more:
 
-It looks like testsuite/librules/rules_{a-z} instances are not necessary.
-testsuite/librules/rules_api should be able to access grammar.cpp symbols.
-The final question is, does testsuite/librules/rules_{a-z} really need to create
-all instances again?
+- It looks like testsuite/librules/rules_{a-z} instances are not necessary.
+  testsuite/librules/rules_api should be able to access grammar.cpp symbols.
+  The final question is, does testsuite/librules/rules_{a-z} really need to create
+  all instances again?
 
-testsuite/numeric_convert/numeric_parser again has a helper function parse(),
-just like testsuite/parser_rules/testing_parser !!! Maybe combine them?
+- testsuite/numeric_convert/numeric_parser again has a helper function parse(),
+  just like testsuite/parser_rules/testing_parser !!! Maybe combine them?
+
+- The testsuite namespaces aren't consistent. e.g. testsuite::syntax, or
+  testsuite::vhdl_syntax etc. Shall be testsuite::vhdl::{topic} to reflect
+  directory structure.
 
 
 ### App Logging
@@ -322,8 +326,8 @@ ToDo on design
 
 ### Project structure
 
-- testsuite/util/failure_diagnostic_fixture and testsuite/vhdl/util/failure_diagnostic_fixture
-  BAD NAMING ...
+- testsuite/util/basic_failure_diagnostic_fixture and testsuite/vhdl/util/failure_diagnostic_fixture
+  still BAD NAMING ...
 
 - rename common file system paths, namespaces are (as far I remember) 'util' always.
 
@@ -337,9 +341,6 @@ ToDo on design
   Maybe the reason was, that all optimizations where turned off? to save
   time.
 
-- testsuite/librules/CMake holds some Spirit.X3 compile stuff - make it
-  globally. E.g. GCC/CLang -ftemplate-backtrace-limit=... as well as
-  MSVC /bigobj => use generator expressions in cmake/options_developer.cmake
 
 ### CMake
 
@@ -373,15 +374,6 @@ FetchContent_MakeAvailable(RapidJSON)
 set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
 ```
 
-- l10n seems to have a problem with PCH support, warning/error rises:
-  "xgettext: error while opening "../source/common//..cmake_pch.hxx.cxx"
-  for reading: No such file or directory
-
-- boost.test has also problems with PCH, the main() is missing on linker time even
-  it compiles find without PCH support.
-
-- Miss ome CMake variables? Try [Displaying CMake Variables](
-   https://stackoverflow.com/questions/31343813/displaying-cmake-variables)
 
 ### Sources
 
@@ -401,9 +393,16 @@ set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
   testsuite since the concept of parsing command line arguments, using builtin
   compile path and naming of tests isn't appropriate to this.
 
+- X3 parser objects are very lightweight, change the API (vhdl and testsuite) to
+  return a value copy instead const ref, [X3 Program Structure](
+  https://www.boost.org/doc/libs/develop/libs/spirit/doc/x3/html/spirit_x3/tutorials/minimal.html)
+
 - Get clang-format working again. By The Way, check clang-format
   style for enhancements, so that we get rid off the '// 'clang-format {off|on}'
   pragmas especially on class members.
+
+- Simplify formatting output using [fmtlib/fmt](https://github.com/fmtlib/fmt),
+  which supports color output; related to C++20 std::format support
 
 - Write git hooks for checking using clang-{tidy,format} et al.
 
@@ -433,6 +432,13 @@ set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
   would be useful. Copy git part temporary to ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}
   to avoid unnecessary rebuild, for an idea look at blender sources.
 
+- parser's and syntax's error_handler should have the same API with position_proxy
+  to unify error_handler and hence his formatter.
+
+- Write a formatter for all error report classes/functions, e.g. parser::error_handler.
+  An idea may be [Controlling output of Boost.Test source location format](
+  https://stackoverflow.com/questions/64618840/controlling-output-of-boost-test-source-location-format).
+
 
 ### Others
 
@@ -448,6 +454,7 @@ set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
 An interesting feature is described at
 [Controlling output of Boost.Test source location format](
   https://stackoverflow.com/questions/64618840/controlling-output-of-boost-test-source-location-format)
+
 
 C++ Code style
 --------------
@@ -479,8 +486,14 @@ https://blog.kitware.com/static-checks-with-cmake-cdash-iwyu-clang-tidy-lwyu-cpp
    aka gsl::span aka gsl:: gsl::array_view. Also starting with C++20 we has also
    [std::source_location](https://en.cppreference.com/w/cpp/utility/source_location) which allows to write assert macros with C++20.*
 
-- [bugprone-*](https://clang.llvm.org/extra/clang-tidy/checks/list.html):
-  *Check & try me*
+- [bugprone-branch-clone](https://clang.llvm.org/extra/clang-tidy/checks/bugprone-branch-clone.html):
+  *This check ignores the C++ `[[fallthrough]]` attribute specifier, hence twice the source annotations.* But it
+  checks also examines conditional operators, so we can't it disable completely.
+
+- [readability-identifier-naming](https://clang.llvm.org/extra/clang-tidy/checks/readability-identifier-naming.html)
+  *Here a lot of effort is required to consolidate and unify all the naming*, e.g. see
+  [.clang-tidy](https://github.com/xournalpp/xournalpp/blob/master/.clang-tidy) or
+  [.clang-tidy](https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/blob/develop/.clang-tidy) as example.
 
 #### permanently disabled
 
@@ -496,27 +509,10 @@ https://blog.kitware.com/static-checks-with-cmake-cdash-iwyu-clang-tidy-lwyu-cpp
 - [cppcoreguidelines-pro-type-vararg](https://clang.llvm.org/extra/clang-tidy/checks/cppcoreguidelines-pro-type-vararg.html):
   *By using Boost UTF this rule is triggered on each BOOST_TEST macros. No c-style vararg functions are written in this project.*
 
+
 ## ToDo Documentation
 
-Switch from MarkDown to ReStructuredText.
-
-- the 'testsuite/vhdl/parser_rules/parser_test_matrix.rst' is to big, split it into test cases
-  and link it into doxygen/sphinx
-
-- [Clear, Functional C++ Documentation with Sphinx + Breathe + Doxygen + CMake](
-   https://devblogs.microsoft.com/cppblog/clear-functional-c-documentation-with-sphinx-breathe-doxygen-cmake/)
-
-- [C++ documentation with Doxygen/CMake/Sphinx/Breathe for those of us who are totally lost Part 1](
-   https://medium.com/practical-coding/c-documentation-with-doxygen-cmake-sphinx-breathe-for-those-of-use-who-are-totally-lost-7d555386fe13),
-  [Part 2](https://medium.com/practical-coding/c-documentation-with-doxygen-cmake-sphinx-breathe-for-those-of-use-who-are-totally-lost-part-2-21f4fb1abd9f)
-  and [Part 3](https://medium.com/practical-coding/c-documentation-with-doxygen-cmake-sphinx-breathe-for-those-of-use-who-are-totally-lost-part-3-d20549d3b01f)
+Switch from MarkDown to ReStructuredText. At this state, Doxygen miss some MarkDown
+and ReStructuredText features, Sphinx multi projects and Doxygen's Todo tags/list.
 
 - [Documenting C++ Code](https://developer.lsst.io/cpp/api-docs.html)
-
-- Sphinx example projects:
-  - https://github.com/ainfosec/ci_helloworld
-  - https://github.com/normalvector/ue4_doxygen_source_filter
-  - https://github.com/svenevs/exhale
-
-
-

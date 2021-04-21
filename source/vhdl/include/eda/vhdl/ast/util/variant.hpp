@@ -6,9 +6,11 @@
 
 namespace eda::vhdl::ast {
 
+/// convenience alias
 template <typename... Types>
 using variant = x3::variant<Types...>;
 
+/// convenience alias
 template <typename T>
 using forward_ast = x3::forward_ast<T>;
 

@@ -134,9 +134,9 @@
 #include <eda/vhdl/ast/node/loop_statement.hpp>
 // DISABLED #include <eda/vhdl/ast/node/name.hpp>
 // DISABLED #include <eda/vhdl/ast/node/next_statement.hpp>
-// DISABELD #include <eda/vhdl/ast/node/null_statement.hpp>
+// DISABLED #include <eda/vhdl/ast/node/null_statement.hpp>
 // DISABLED #include <eda/vhdl/ast/node/numeric_literal.hpp>
-// UNSUED_IN_BNF//#include <eda/vhdl/ast/node/object_declaration.hpp>
+// UNUSED_IN_BNF//#include <eda/vhdl/ast/node/object_declaration.hpp>
 // DISABLED #include <eda/vhdl/ast/node/operator_token.hpp>
 // DISABLED #include <eda/vhdl/ast/node/operator_symbol.hpp>
 #include <eda/vhdl/ast/node/options.hpp>

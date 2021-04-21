@@ -16,16 +16,17 @@ add_test(NAME test_ast
         --source-dir=${PROJECT_SOURCE_DIR}/test_data
 )
 
-set(CMAKE_CTEST_ARGUMENTS "--output-on-failure")
+# already set at options_build.cmake
+#set(CMAKE_CTEST_ARGUMENTS "--output-on-failure")
 
 
 # Variables used to configure ctest project, also compile time builtin settings
 set(TESTSUITE_SOURCE_DIR ${PROJECT_SOURCE_DIR}/test_data)
 
 configure_file(
-  "${PROJECT_SOURCE_DIR}/include/testsuite/ast/compile_builtin.hpp.in"
-  "${PROJECT_BINARY_DIR}/include/testsuite/ast/compile_builtin.hpp"
-  @ONLY
+    "${PROJECT_SOURCE_DIR}/include/testsuite/ast/compile_builtin.hpp.in"
+    "${PROJECT_BINARY_DIR}/include/testsuite/ast/compile_builtin.hpp"
+    @ONLY
 )
 
 
@@ -46,23 +47,23 @@ endif()
 
 target_sources(${PROJECT_NAME}
     PRIVATE
-        src/main/test_ast.cpp
-        src/main/position_cache_fixture.cpp
+        src/test_ast.cpp
+        src/position_cache_fixture.cpp
         # concrete test cases
-        src/position_cache_test_1.cpp
-        src/position_cache_test_2.cpp
-        src/literal_printer_test.cpp
+        src/test/position_cache_test_1.cpp
+        src/test/position_cache_test_2.cpp
+        src/test/literal_printer_test.cpp
 )
 
 
-set_source_files_properties(src/main/test_ast.cpp
+set_source_files_properties(src/test_ast.cpp
     APPEND PROPERTIES
         # Failed to link Boost UTF with Windows/Clang, Linux works
         COMPILE_DEFINITIONS "$<$<NOT:$<PLATFORM_ID:Windows>>:BOOST_TEST_DYN_LINK>"
 )
 # [Boost.Test linker error by use with precompiled headers (PCH)](
 #  https://stackoverflow.com/questions/66535719/boost-test-linker-error-by-use-with-precompiled-headers-pch)
-set_source_files_properties(src/main/test_ast.cpp
+set_source_files_properties(src/test_ast.cpp
     PROPERTIES
         SKIP_PRECOMPILE_HEADERS ON
 )

@@ -107,7 +107,7 @@ xor           operator, exclusive "or" of left and right operands
 
 # copy&paste VHDL93 rule
 # from https://tams.informatik.uni-hamburg.de/vhdl/tools/grammar/vhdl93-bnf.txt
-## TopUnit => design_file ???
+## TopUnit => design_file
 # see https://tams-www.informatik.uni-hamburg.de/vhdl/doc/cookbook/VHDL-Cookbook.pdf
 # 5.1 "Design Units and Libraries"
 # http://www.externsoft.ch/download/vhdl.html#vhdl

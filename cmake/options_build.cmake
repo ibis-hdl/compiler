@@ -16,15 +16,13 @@ option(EDA_WITH_BOOST_STACKTRACE "Enable support for the Boost::stacktrace libra
 
 ##
 # Runtime Option: Use GDB to dump the stracktrace
-option(EDA_WITH_GDB_STACKTRACE "Enable support for dumping the stacktrace using GNU/GDB on runtime." ON)
-
-
-
+if(LINUX)
+    option(EDA_WITH_GDB_STACKTRACE "Enable support for dumping the stacktrace using GNU/GDB on runtime." ON)
+endif()
 
 ##
 # Build option: enable testing.
 option(EDA_BUILD_TESTS "Build tests" ON)
-
 option(EDA_CTEST_OUTPUT_ON_FAILURE "controls if the output should be logged for failed tests." ON)
 
 if (EDA_BUILD_TESTS)
@@ -34,7 +32,7 @@ if (EDA_BUILD_TESTS)
         # - ['--output-on-failure'](https://cmake.org/cmake/help/latest/manual/ctest.1.html#manual:ctest(1))
         # - [CTEST_OUTPUT_ON_FAILURE](https://cmake.org/cmake/help/latest/envvar/CTEST_OUTPUT_ON_FAILURE.html)
         # - [CMAKE_CTEST_ARGUMENTS](https://cmake.org/cmake/help/latest/variable/CMAKE_CTEST_ARGUMENTS.html)
-        #   which requires CMake >= 3.17
+        #   used here which requires CMake >= 3.17
         list (APPEND CMAKE_CTEST_ARGUMENTS "--output-on-failure")
     endif()
 endif()

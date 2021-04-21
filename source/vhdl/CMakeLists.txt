@@ -45,26 +45,13 @@ target_sources(${PROJECT_NAME}
         src/parser/parse.cpp    # FixMe: also creates Grammar instance? Shouldn't!
 )
 
-##
-# Ninja Build override to cope on low memory situations to compile "big" files
-cmake_host_system_information(
-    RESULT localhost_RAM_MiB
-    QUERY  AVAILABLE_PHYSICAL_MEMORY
+
+# Maybe Solution - use [Object Libraries](https://cmake.org/cmake/help/latest/command/add_library.html#object-libraries)
+# to compile only {grammar,parse}.cpp with high memory requirements options
+set_property(TARGET ${PROJECT_NAME}
+    PROPERTY
+        JOB_POOL_COMPILE NINJA_JOBS_CORE_10240MiB
 )
-message(STATUS "Host has ${localhost_RAM_MiB} MiB available physical memory to build.")
-# to compile grammar.cpp ~10GB RAM are required using Clang-Win, so 12GiB is set as limit
-# GiB = 2^30, MiB = 2^20 Bytes, hence 12*2^(30-20) = 12288 MiB
-if(localhost_RAM_MiB LESS 12288)
-    # probably to loose on this file, anyway ...
-    set_source_files_properties(src/parser/grammar.cpp src/parser/parse.cpp
-        PROPERTIES
-            JOB_POOL_COMPILE NINJA_JOBS_ONE_CPU
-    )
-    set_source_files_properties(src/parser/grammar.cpp src/parser/parse.cpp
-        PROPERTIES
-            COMPILE_FLAGS "-O0 -ftemplate-backtrace-limit=10 -ftemplate-depth=900"
-)
-endif()
 
 
 if (EDA_ENABLE_PCH)
@@ -85,21 +72,10 @@ target_include_directories(${PROJECT_NAME}
 )
 
 
-# handle problems with Spirit.X template depth
-target_compile_options(${PROJECT_NAME}
-    PRIVATE
-        # - limit gcc/clang template error depth printing
-        # - increase limit especially for clang recursive template instantiation,
-        #   otherwise exceedes maximum depth of 512
-        $<$<CXX_COMPILER_ID:GNU>:  -ftemplate-backtrace-limit=0 -ftemplate-depth=1024>
-        $<$<CXX_COMPILER_ID:Clang>:-ftemplate-backtrace-limit=0 -ftemplate-depth=1024>
-)
-
-
 ##
 # Clang -Weverything
 #
-# FixMe: What was the intent of this disabled checks?
+# FixMe: What was the intent of this disabled warnings?
 if(COMPILER_CLANG_WARN_EVERYTHING)
     if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 

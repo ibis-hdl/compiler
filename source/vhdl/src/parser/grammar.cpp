@@ -9,7 +9,9 @@ parser::design_file_type const& grammar() { return eda::vhdl::parser::design_fil
 
 }  // namespace eda::vhdl::parser
 
+//
 // The Spirit X3 grammar instance
+//
 namespace eda::vhdl::parser {
 
 #if !defined(DOXYGEN_DOCUMENTATION_BUILD)

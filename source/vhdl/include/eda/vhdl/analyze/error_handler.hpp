@@ -27,6 +27,15 @@ namespace eda::vhdl::analyze {
 ///
 /// FixMe: Check on use of string_view!
 ///
+/// @todo: Write a formatter class for conrete error reporting, so that users can
+///  override the default implementation, e.g.
+/// [Controlling output of Boost.Test source location format](
+///  https://stackoverflow.com/questions/64618840/controlling-output-of-boost-test-source-location-format)
+///
+/// @todo Unify parser::error_handler and analyze::error_handler, e.g. on construction
+/// time one is using position_cache<iterator_type>::proxy, other without proxy object
+/// using reference `position_cache<iterator_type>&`. Maybe use `std::reference_wrapper<proxy>`?
+///
 template <typename Iterator>
 class error_handler {
 public:
@@ -41,7 +50,8 @@ public:
     /// @param tabs            Tabulator size, required for correct rendering of
     ///                       source code snippet.
     ///
-    explicit error_handler(std::ostream& os_, parser::position_cache<iterator_type>& position_cache_,
+    explicit error_handler(std::ostream& os_,
+                           parser::position_cache<iterator_type>& position_cache_,
                            std::size_t tabs = 4)
         : os{ os_ }
         , position_cache{ position_cache_ }
@@ -75,6 +85,8 @@ public:
     /// @param start_label   The start label of the where_tag node.
     /// @param end_label     The complementary end label of the where_tag node.
     /// @param error_message The information error message.
+    ///
+    /// @todo Change argument order to be conform to other overload.
     ///
     void operator()(ast::position_tagged const& where_tag, ast::position_tagged const& start_label,
                     ast::position_tagged const& end_label, std::string const& error_message) const;

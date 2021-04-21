@@ -180,9 +180,9 @@ private:
 
 private:
     /// Trim leading '--' chars from key.
+    /// FixMe [C++20] use `starts_with()`
     static inline std::string trim(std::string_view key)
     {
-        // FixMe: C++20 starts_with()
         std::string_view const prefix{ "--" };
         if (key.substr(0, prefix.size()) == prefix) {
             return std::string{ key.substr(prefix.size()) };
@@ -213,9 +213,8 @@ public:
     ~option_trigger() = default;
 
     option_trigger(option_trigger const&) = delete;
-    option_trigger const& operator=(option_trigger const&) = delete;
-
     option_trigger(option_trigger&&) = delete;
+    option_trigger const& operator=(option_trigger const&) = delete;
     option_trigger const& operator=(option_trigger&&) = delete;
 
 public:
@@ -225,6 +224,9 @@ public:
     ///
     /// \param primary_option    The option which triggers depending options.
     /// \param secondary_options The depending options.
+    ///
+    /// @todo Check for repeated options given as primary and secondary option, warn in those case
+    /// to the developer since he got lost somewhere in the options jungle.
     ///
     void add(std::string const& primary_option, std::vector<std::string> const& secondary_options)
     {

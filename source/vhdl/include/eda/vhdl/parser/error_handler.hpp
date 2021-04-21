@@ -36,6 +36,15 @@ struct error_handler_tag;  // IWYU pragma: keep
 ///
 /// \see parser::position_cache
 ///
+/// @todo: Write a formatter class for conrete error reporting, so that users can
+///  override the default implementation, e.g.
+/// [Controlling output of Boost.Test source location format](
+///  https://stackoverflow.com/questions/64618840/controlling-output-of-boost-test-source-location-format)
+///
+/// @todo Unify parser::error_handler and analyze::error_handler, e.g. on construction
+/// time one is using position_cache<iterator_type>::proxy, other without proxy object
+/// using reference `position_cache<iterator_type>&`. Maybe use `std::reference_wrapper<proxy>`?
+///
 template <typename Iterator>
 class error_handler {
 public:

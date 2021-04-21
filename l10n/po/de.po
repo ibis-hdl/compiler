@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \"\" \"..\"\n"
 "Report-Msgid-Bugs-To: https://github.com/eda/ibis/issues\n"
-"POT-Creation-Date: 2021-03-30 13:00+0200\n"
+"POT-Creation-Date: 2021-04-14 19:58+0200\n"
 "PO-Revision-Date: 2018-08-25 17:30+0100\n"
 "Last-Translator: olaf <olaf@home.lan>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -37,7 +37,7 @@ msgstr "<<-- hier"
 msgid " <<-- here\n"
 msgstr "<<-- hier"
 
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/ast/numeric_convert.cpp:427
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/ast/numeric_convert.cpp:440
 msgid "An unknown error occurred during parsing of '{1}'."
 msgstr "Unbekannter Fehler aufgetreten während des parsens von '{1}'."
 
@@ -45,7 +45,7 @@ msgstr "Unbekannter Fehler aufgetreten während des parsens von '{1}'."
 msgid "Analyze the design."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/ast/numeric_convert.cpp:438
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/ast/numeric_convert.cpp:451
 msgid ""
 "Base specifier '{1}' isn't supported. Supported are only 2, 8, 10 and 16!"
 msgstr ""
@@ -53,7 +53,7 @@ msgstr ""
 "und 16!"
 
 #. TRANSLATORS: Literal Type and passed Value
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/ast/numeric_convert.cpp:395
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/ast/numeric_convert.cpp:408
 msgid ""
 "Conversion of VHDL {1} '{2}' failed due to numeric overflow (MAX_VALUE = {3})"
 msgstr ""
@@ -84,7 +84,7 @@ msgid ""
 "Even on redirected output enforce the rendering of messages using colors."
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/source/ibis/src/main.cpp:65
+#: /home/olaf/work/CXX/ibis/source/source/ibis/src/main.cpp:76
 msgid "Exception caught:"
 msgstr ""
 
@@ -125,7 +125,7 @@ msgstr ""
 msgid "Message Options"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/ast/numeric_convert.cpp:689
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/ast/numeric_convert.cpp:705
 msgid ""
 "Numeric error occurred during calculation on based_literal with fractional "
 "part of '{1}'."
@@ -187,13 +187,13 @@ msgstr ""
 msgid "Unexpected command line parser error"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/source/ibis/src/main.cpp:68
+#: /home/olaf/work/CXX/ibis/source/source/ibis/src/main.cpp:79
 msgid "Unexpected exception caught"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/parser/error_handler.cpp:33
 #: /home/olaf/work/CXX/ibis/source/source/vhdl/src/analyze/error_handler.cpp:64
 #: /home/olaf/work/CXX/ibis/source/source/vhdl/src/analyze/error_handler.cpp:137
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/parser/error_handler.cpp:33
 msgid "Unspecified Error, Sorry"
 msgstr "Unspezifizierter Fehler, Sorry"
 
@@ -218,9 +218,9 @@ msgid ""
 "ill-formed statement in {1}; (Hint: single trailing keyword 'postponed')"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/parser/error_handler.cpp:27
 #: /home/olaf/work/CXX/ibis/source/source/vhdl/src/analyze/error_handler.cpp:58
 #: /home/olaf/work/CXX/ibis/source/source/vhdl/src/analyze/error_handler.cpp:131
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/parser/error_handler.cpp:27
 msgid "in file {1}, line {2}:"
 msgstr "In Datei {1}, Zeile {2}:"
 
@@ -228,16 +228,16 @@ msgstr "In Datei {1}, Zeile {2}:"
 msgid "localization catalog data"
 msgstr ""
 
-#: /home/olaf/work/CXX/ibis/source/source/ibis/src/main.cpp:52
+#: /home/olaf/work/CXX/ibis/source/source/ibis/src/main.cpp:63
 msgid "processing:"
 msgstr "bearbeite:"
 
 #. TRANSLATORS: summary error(s) and warning(s)
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/context.cpp:74
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/context.cpp:72
 msgid "{1} and {2} generated."
 msgstr "{1} und {2} generiert."
 
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/context.cpp:62
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/context.cpp:60
 msgid "{1} error"
 msgid_plural "{1} errors"
 msgstr[0] "{1} Fehler"
@@ -245,12 +245,12 @@ msgstr[1] "{1} Fehler"
 
 #. TRANSLATORS: summary error(s) only
 #. TRANSLATORS: summary warning(s) only
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/context.cpp:78
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/context.cpp:82
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/context.cpp:77
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/context.cpp:81
 msgid "{1} generated."
 msgstr "{1} generiert."
 
-#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/context.cpp:68
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/context.cpp:66
 msgid "{1} warning"
 msgid_plural "{1} warnings"
 msgstr[0] "{1} Warnung"
