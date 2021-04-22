@@ -48,7 +48,11 @@ bool parse::operator()(std::string const& input, ast::design_file& design_file)
     static_assert(std::is_same_v<decltype(iter), iterator_type>, "iterator types must be the same");
 
     auto const parser =
-        x3::with<parser::error_handler_tag>(std::ref(error_handler))[parser::grammar()];
+        // clang-format off
+        x3::with<parser::error_handler_tag>(std::ref(error_handler))[
+            parser::grammar()
+        ];
+        // clang-format on
 
     auto filename = error_handler.current_file().file_name();
 

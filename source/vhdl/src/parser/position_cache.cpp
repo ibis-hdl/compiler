@@ -1,6 +1,5 @@
-#include <eda/vhdl/parser/iterator_type.hpp>  // for explicit template instantiation
-
 #include <eda/vhdl/parser/position_cache.hpp>
+#include <eda/vhdl/parser/iterator_type.hpp>  // for explicit template instantiation
 
 #include <eda/util/cxx_bug_fatal.hpp>
 
@@ -60,6 +59,8 @@ std::string position_cache<IteratorT>::current_line(std::size_t file_id,
 
     using char_type = typename std::iterator_traits<iterator_type>::value_type;
 
+    // FixMe: Starting with Spirit V3.0.7 (Boost V1.74.0) dependence on Boost.Locale
+    // is ceased (replace locale::conv::utf_to_utf with x3::to_utf8)
     return boost::locale::conv::utf_to_utf<std::string::value_type>(
         std::basic_string<char_type>{ first, line_end });
 }

@@ -120,7 +120,7 @@ class GrammerAPI:
 
         api_list=list()
         for p in self.api_list:
-            api_list.append("{name}_type const& {name}();".format(name=p))
+            api_list.append("{name}_type {name}();".format(name=p))
 
         return """
 //
@@ -172,7 +172,7 @@ namespace parser = eda::vhdl::parser;
                 "BOOST_SPIRIT_INSTANTIATE({name}_type, iterator_type, context_type);"
                 .format(name=p))
             api_fcn_definitions.append(
-                """parser::{name}_type const& {name}() {{
+                """parser::{name}_type {name}() {{
     return eda::vhdl::parser::{name};
 }}
 """.format(name=p))
@@ -430,7 +430,7 @@ BOOST_DATA_TEST_CASE({test_case}, // --
     input, expected, test_case_name)
 {{
     using attribute_type = ast::{attr_name};
-    auto const& parser = testsuite::vhdl_parser::{parser_name}();
+    auto const parser = testsuite::vhdl_parser::{parser_name}();
 
     using testsuite::vhdl_parser::util::testing_parser;
 

@@ -203,6 +203,8 @@ public:
     /// @param first Iterator position pointing to a line of interest.
     /// @return String representing the source line.
     ///
+    /// FixMe: Starting with Spirit V3.0.7 (Boost V1.74.0) dependence on Boost.Locale
+    /// is ceased (replace locale::conv::utf_to_utf with x3::to_utf8)
     std::string current_line(std::size_t file_id, iterator_type const& first) const;
 
 private:

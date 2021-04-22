@@ -13,6 +13,6 @@ using design_file_type = boost::spirit::x3::rule<design_file_class, ast::design_
 
 namespace eda::vhdl::parser {
 
-parser::design_file_type const& grammar();
+parser::design_file_type grammar();
 
 }  // namespace eda::vhdl::parser

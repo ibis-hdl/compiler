@@ -5,7 +5,7 @@
 
 namespace eda::vhdl::parser {
 
-parser::design_file_type const& grammar() { return eda::vhdl::parser::design_file; }
+parser::design_file_type grammar() { return eda::vhdl::parser::design_file; }
 
 }  // namespace eda::vhdl::parser
 
