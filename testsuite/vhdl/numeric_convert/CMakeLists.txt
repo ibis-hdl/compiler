@@ -15,9 +15,6 @@ add_test(NAME test_vhdl_numeric_conversion
         ${PROJECT_NAME} --log_level=error
 )
 
-# already set at options_build.cmake
-#set(CMAKE_CTEST_ARGUMENTS "--output-on-failure")
-
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE

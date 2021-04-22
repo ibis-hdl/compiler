@@ -1,6 +1,6 @@
-##
-# user configureable build options
-##
+## -----------------------------------------------------------------------------
+## user configureable build options
+## -----------------------------------------------------------------------------
 
 ##
 # Build Option: ANSI Color or Windows  Console I/O

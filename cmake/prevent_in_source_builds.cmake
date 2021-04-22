@@ -1,6 +1,6 @@
-##
-# prevent in-source cmake builds
-##
+## -----------------------------------------------------------------------------
+## prevent in-source cmake builds
+## -----------------------------------------------------------------------------
 
 function(prevent_in_source_builds)
   # make sure the user doesn't play dirty with symlinks

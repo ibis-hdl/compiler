@@ -137,6 +137,66 @@ else()
 endif()
 
 
+
+## -----------------------------------------------------------------------------
+# Satanizer compiler options
+#
+# FixMe: Check and test flags, only added
+
+# --- ThreadSanitizer ---
+option(EDA_ENABLE_TSAN "Enable ThreadSanitizer builds." OFF)
+mark_as_advanced(EDA_ENABLE_TSAN)
+
+set(CMAKE_CXX_FLAGS_TSAN "-fsanitize=thread")
+set(CMAKE_LINK_FLAGS_TSAN "-fsanitize=thread")
+
+# --- AddressSanitize ---
+option(EDA_ENABLE_ASAN "Enable AddressSanitize builds." OFF)
+mark_as_advanced(EDA_ENABLE_ASAN)
+
+set(CMAKE_CXX_FLAGS_ASAN "-fsanitize=address;-fno-omit-frame-pointer")
+set(CMAKE_LINK_FLAGS_ASAN "-fsanitize=address;-fno-omit-frame-pointer")
+
+# --- LeakSanitizer ---
+option(EDA_ENABLE_LSAN "Enable LeakSanitizer builds." OFF)
+mark_as_advanced(EDA_ENABLE_LSAN)
+
+set(CMAKE_CXX_FLAGS_LSAN "-fsanitize=leak;-fno-omit-frame-pointer")
+set(CMAKE_LINK_FLAGS_LSAN "-fsanitize=leak;-fno-omit-frame-pointer")
+
+# --- MemorySanitizer ---
+option(EDA_ENABLE_MSAN "Enable MemorySanitizer builds." OFF)
+mark_as_advanced(EDA_ENABLE_MSAN)
+
+set(CMAKE_CXX_FLAGS_MSAN "-fsanitize=memory;-fno-omit-frame-pointer")
+set(CMAKE_LINK_FLAGS_MSAN "-fsanitize=memory;-fno-omit-frame-pointer")
+
+# --- UndefinedBehaviour ---
+option(EDA_ENABLE_UBSAN "Enable UndefinedBehaviour builds." OFF)
+mark_as_advanced(EDA_ENABLE_UBSAN)
+
+set(CMAKE_CXX_FLAGS_UBSAN "-fsanitize=undefined")
+set(CMAKE_LINK_FLAGS_UBSAN "-fsanitize=undefined")
+
+# FixMe: Sanity checks
+
+add_compile_options(
+    "$<$<BOOL:${EDA_ENABLE_TSAN}>:${CMAKE_CXX_FLAGS_TSAN}>"
+    "$<$<BOOL:${EDA_ENABLE_ASAN}>:${CMAKE_CXX_FLAGS_ASAN}>"
+    "$<$<BOOL:${EDA_ENABLE_LSAN}>:${CMAKE_CXX_FLAGS_LSAN}>"
+    "$<$<BOOL:${EDA_ENABLE_MSAN}>:${CMAKE_CXX_FLAGS_MSAN}>"
+    "$<$<BOOL:${EDA_ENABLE_UBSAN}>:${CMAKE_CXX_FLAGS_UBSAN}>"
+)
+
+add_link_options(
+    "$<$<BOOL:${EDA_ENABLE_TSAN}>:${CMAKE_LINK_FLAGS_TSAN}>"
+    "$<$<BOOL:${EDA_ENABLE_ASAN}>:${CMAKE_LINK_FLAGS_ASAN}>"
+    "$<$<BOOL:${EDA_ENABLE_LSAN}>:${CMAKE_LINK_FLAGS_LSAN}>"
+    "$<$<BOOL:${EDA_ENABLE_MSAN}>:${CMAKE_LINK_FLAGS_MSAN}>"
+    "$<$<BOOL:${EDA_ENABLE_UBSAN}>:${CMAKE_LINK_FLAGS_UBSAN}>"
+)
+
+
 ## -----------------------------------------------------------------------------
 # CLang extra warnings, see
 # - [Better Apps with Clang's Weverything or Wall is a Lie!](
@@ -301,7 +361,7 @@ endif()
 
 ## -----------------------------------------------------------------------------
 # Developer Build Option: run EDA under Valgrind.
-# FixMe: not implemented any more
+# FixMe: Implement, Check and test it, only added (remnants from old project)
 option(DEVELOPER_RUN_ON_VALGRIND
     "Configure EDA to be run on Valgrind."
     OFF)

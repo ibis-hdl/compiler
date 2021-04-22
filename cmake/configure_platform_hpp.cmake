@@ -1,5 +1,10 @@
-# Platform configuration
-# [How To Write Platform Checks](
+## -----------------------------------------------------------------------------
+## Platform configuration
+## -----------------------------------------------------------------------------
+
+# Generate <platform.hpp> header to allow constexpr if() expressions to get rid off
+# most C++ preprocessor #ifdef code.
+# See [How To Write Platform Checks](
 #  https://gitlab.kitware.com/cmake/community/-/wikis/doc/tutorials/How-To-Write-Platform-Checks)
 
 if (UNIX)

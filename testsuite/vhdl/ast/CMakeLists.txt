@@ -16,9 +16,6 @@ add_test(NAME test_ast
         --source-dir=${PROJECT_SOURCE_DIR}/test_data
 )
 
-# already set at options_build.cmake
-#set(CMAKE_CTEST_ARGUMENTS "--output-on-failure")
-
 
 # Variables used to configure ctest project, also compile time builtin settings
 set(TESTSUITE_SOURCE_DIR ${PROJECT_SOURCE_DIR}/test_data)

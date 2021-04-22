@@ -27,9 +27,6 @@ add_test(NAME test_vhdl_parser_rules
         --output-extension=${TESTSUITE_OUTPUT_EXTENSION}
 )
 
-# already set at options_build.cmake
-#set(CMAKE_CTEST_ARGUMENTS "--output-on-failure")
-
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
