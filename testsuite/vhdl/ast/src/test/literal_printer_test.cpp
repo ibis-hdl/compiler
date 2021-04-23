@@ -24,8 +24,9 @@ std::vector<std::string> const expected_string_literal{
 };
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
-BOOST_DATA_TEST_CASE(string_literal, utf_data::make(input_string_literal) ^ expected_string_literal,
-                     input, expected)
+BOOST_DATA_TEST_CASE(string_literal,  // --
+                     utf_data::make(input_string_literal) ^ expected_string_literal, input,
+                     expected)
 {
     auto const as_strlit = [](std::string const& str) {
         ast::string_literal l;
@@ -45,7 +46,7 @@ BOOST_DATA_TEST_CASE(string_literal, utf_data::make(input_string_literal) ^ expe
 
 /// Note: Here is stated, that testing of
 /// ast::{bit_string, decimal, based}_literal
-/// etc. is to simple for testing, but preparing the tests is a big
+/// etc. is too simple for testing, but preparing the tests is a big
 /// effort. Implicit they are checked by parser tests.
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)

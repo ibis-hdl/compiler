@@ -403,9 +403,9 @@ class BoostTestGenerator:
 #include <eda/vhdl/ast/node/{attr_name}.hpp>
 
 #include <testsuite/vhdl/rules.hpp>
-#include <testsuite/vhdl_parser/testing_parser.hpp>
-#include <testsuite/vhdl_parser/failure_diagnostic_fixture.hpp>
-#include <testsuite/vhdl_parser/dataset.hpp>
+#include <testsuite/vhdl/parser/testing_parser.hpp>
+#include <testsuite/vhdl/parser/failure_diagnostic_fixture.hpp>
+#include <testsuite/vhdl/parser/dataset.hpp>
 
 #include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
@@ -426,13 +426,13 @@ class BoostTestGenerator:
 
         template = """// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_DATA_TEST_CASE({test_case}, // --
-    utf_data::make_delayed<testsuite::vhdl_parser::dataset>("{test_case}"),  // --
+    utf_data::make_delayed<testsuite::vhdl::parser::dataset>("{test_case}"),  // --
     input, expected, test_case_name)
 {{
     using attribute_type = ast::{attr_name};
-    auto const parser = testsuite::vhdl_parser::{parser_name}();
+    auto const parser = testsuite::vhdl::parser::{parser_name}();
 
-    using testsuite::vhdl_parser::util::testing_parser;
+    using testsuite::vhdl::parser::util::testing_parser;
 
     testing_parser<attribute_type> parse;
     auto [parse_ok, parse_result] = parse(input, parser, test_case_name);
@@ -481,7 +481,7 @@ BOOST_DATA_TEST_CASE({test_case}, // --
         return """{header}
 {includes}
 
-using testsuite::vhdl_parser::failure_diagnostic_fixture;
+using testsuite::vhdl::parser::failure_diagnostic_fixture;
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_FIXTURE_TEST_SUITE(parser_rule, failure_diagnostic_fixture)

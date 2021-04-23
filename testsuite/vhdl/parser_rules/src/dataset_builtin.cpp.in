@@ -1,8 +1,8 @@
 // DO NOT EDIT! GENERATED AUTOMATICALLY BY CMAKE!
 
-#include <testsuite/vhdl_parser/dataset.hpp>
+#include <testsuite/vhdl/parser/dataset.hpp>
 
-namespace testsuite::vhdl_parser {
+namespace testsuite::vhdl::parser {
 
 std::string_view dataset::compile_builtin::source_dir() const  // --
 {
@@ -19,4 +19,4 @@ std::string_view dataset::compile_builtin::expected_extension() const  // --
     return ".expected";
 }
 
-}  // namespace testsuite::vhdl_parser
+}  // namespace testsuite::vhdl::parser

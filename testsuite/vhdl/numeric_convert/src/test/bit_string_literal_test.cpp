@@ -1,5 +1,5 @@
-#include <testsuite/vhdl_numeric_convert/numeric_parser.hpp>
-#include <testsuite/vhdl_numeric_convert/binary_string.hpp>
+#include <testsuite/vhdl/numeric_convert/numeric_parser.hpp>
+#include <testsuite/vhdl/numeric_convert/binary_string.hpp>
 
 #include <eda/vhdl/ast/node/bit_string_literal.hpp>
 #include <eda/vhdl/ast/numeric_convert.hpp>
@@ -32,7 +32,7 @@ namespace detail {
 
 std::string to_bin_literal(uint64_t n, std::string const& postfix = "")
 {
-    using namespace testsuite::vhdl_numeric_convert::util;
+    using namespace testsuite::vhdl::numeric_convert::util;
 
     std::string s{ "B\"" + binary_string{ n }() + postfix + '"' };
     return s;
@@ -40,7 +40,7 @@ std::string to_bin_literal(uint64_t n, std::string const& postfix = "")
 
 std::string to_oct_literal(uint64_t n, std::string const& postfix = "")
 {
-    using namespace testsuite::vhdl_numeric_convert::util;
+    using namespace testsuite::vhdl::numeric_convert::util;
 
     std::string s{ "O\"" + octal_string{ n }() + postfix + '"' };
     return s;
@@ -48,7 +48,7 @@ std::string to_oct_literal(uint64_t n, std::string const& postfix = "")
 
 std::string to_hex_literal(uint64_t n, std::string const& postfix = "")
 {
-    using namespace testsuite::vhdl_numeric_convert::util;
+    using namespace testsuite::vhdl::numeric_convert::util;
 
     std::string s{ "X\"" + hexadecimal_string{ n }() + postfix + '"' };
     return s;

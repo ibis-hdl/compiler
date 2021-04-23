@@ -116,7 +116,7 @@ BOOST_SPIRIT_INSTANTIATE(waveform_type, iterator_type, context_type);
 // clang-format on
 }  // namespace eda::vhdl::parser
 
-namespace testsuite::vhdl_parser {
+namespace testsuite::vhdl::parser {
 
 // clang-format off
 parser::abstract_literal_type abstract_literal() {

@@ -4,7 +4,7 @@
 #include <eda/vhdl/parser/grammar_def.hpp>
 //#include <eda/vhdl/parser/parser_config.hpp>
 
-namespace testsuite::vhdl_parser {
+namespace testsuite::vhdl::parser {
 
 // clang-format off
 parser::abstract_literal_type abstract_literal() {
@@ -436,4 +436,4 @@ parser::waveform_type waveform() {
 }
 // clang-format on
 
-}  // namespace testsuite::vhdl_parser
+}  // namespace testsuite::vhdl::parser

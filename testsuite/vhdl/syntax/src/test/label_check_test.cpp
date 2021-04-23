@@ -6,8 +6,8 @@
 #include <eda/vhdl/parser/position_cache.hpp>
 #include <eda/vhdl/context.hpp>
 
-#include <testsuite/syntax/failure_diagnostic_fixture.hpp>
-#include <testsuite/syntax/dataset.hpp>
+#include <testsuite/vhdl/syntax/failure_diagnostic_fixture.hpp>
+#include <testsuite/vhdl/syntax/dataset.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>
@@ -19,7 +19,7 @@
 
 namespace analyze = eda::vhdl::analyze;
 
-using testsuite::syntax::failure_diagnostic_fixture;
+using testsuite::vhdl::syntax::failure_diagnostic_fixture;
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_FIXTURE_TEST_SUITE(syntax_check, failure_diagnostic_fixture)
@@ -28,7 +28,7 @@ BOOST_FIXTURE_TEST_SUITE(syntax_check, failure_diagnostic_fixture)
 // SUCCESS test case
 //
 BOOST_DATA_TEST_CASE(labels_ok,  // --
-    utf_data::make_delayed<testsuite::syntax::dataset>("labels_ok"),  // --
+    utf_data::make_delayed<testsuite::vhdl::syntax::dataset>("labels_ok"),  // --
     input, expected, test_case_name)
 {
     btt::output_test_stream os;
@@ -73,7 +73,7 @@ BOOST_DATA_TEST_CASE(labels_ok,  // --
 // FAILURE test case
 //
 BOOST_DATA_TEST_CASE(label_missmatch, // --
-    utf_data::make_delayed<testsuite::syntax::dataset>("label_missmatch"), // --
+    utf_data::make_delayed<testsuite::vhdl::syntax::dataset>("label_missmatch"), // --
     input, expected, test_case_name)
 {
     btt::output_test_stream os;

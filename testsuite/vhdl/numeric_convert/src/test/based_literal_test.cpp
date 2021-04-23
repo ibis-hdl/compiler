@@ -1,5 +1,5 @@
-#include <testsuite/vhdl_numeric_convert/numeric_parser.hpp>
-#include <testsuite/vhdl_numeric_convert/binary_string.hpp>
+#include <testsuite/vhdl/numeric_convert/numeric_parser.hpp>
+#include <testsuite/vhdl/numeric_convert/binary_string.hpp>
 
 #include <eda/vhdl/ast/node/based_literal.hpp>
 #include <eda/vhdl/ast/numeric_convert.hpp>
@@ -35,7 +35,7 @@ template <class T>
 typename std::enable_if<std::is_integral<T>::value, std::string>::type to_based_literal(
     unsigned base, T value, std::string const& postfix = "")
 {
-    using namespace testsuite::vhdl_numeric_convert::util;
+    using namespace testsuite::vhdl::numeric_convert::util;
 
     std::stringstream ss;
 

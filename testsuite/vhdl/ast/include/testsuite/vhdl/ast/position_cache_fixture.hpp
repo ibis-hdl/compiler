@@ -11,7 +11,7 @@
 
 #include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
-namespace testsuite {
+namespace testsuite::vhdl::ast {
 
 ///
 /// @brief Fixture for testing parser::position_cache
@@ -32,8 +32,8 @@ struct position_cache_fixture {
     std::tuple<parser::iterator_type, parser::iterator_type> contents_range(std::size_t id,
                                                                             std::string_view str);
 
-    ast::position_tagged& addNode(std::string const& key, ast::position_tagged const& node);
-    ast::position_tagged const& getNode(std::string const& key) const;
+    eda::vhdl::ast::position_tagged& addNode(std::string const& key, eda::vhdl::ast::position_tagged const& node);
+    eda::vhdl::ast::position_tagged const& getNode(std::string const& key) const;
 
 public:
     ///
@@ -43,7 +43,7 @@ public:
     /// to prevent problems with the file ID bound to the fixture/cache due to
     /// unspecified order of execution of tests.
     /// This implies, that the contents <N> txt tests must be run with the
-    /// approbiate sub tests.
+    /// appropiate sub tests.
     ///
     std::size_t current_FileID;
 
@@ -60,8 +60,8 @@ private:
     std::optional<std::string> mutable input_path;
     std::vector<std::string> inputs;
 
-    using node_map_type = std::map<std::string, ast::position_tagged>;
+    using node_map_type = std::map<std::string, eda::vhdl::ast::position_tagged>;
     node_map_type node_map;
 };
 
-}  // namespace testsuite
+}  // namespace testsuite::vhdl::ast

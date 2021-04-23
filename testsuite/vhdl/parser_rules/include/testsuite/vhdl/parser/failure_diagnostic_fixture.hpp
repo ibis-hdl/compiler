@@ -2,7 +2,7 @@
 
 #include <testsuite/util/basic_failure_diagnostic_fixture.hpp>
 
-namespace testsuite::syntax {
+namespace testsuite::vhdl::parser {
 
 class failure_diagnostic_fixture : public testsuite::util::basic_failure_diagnostic_fixture {
 public:
@@ -26,4 +26,4 @@ private:
     };
 };
 
-}  // namespace testsuite::syntax
+}  // namespace testsuite::vhdl::parser

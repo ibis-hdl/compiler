@@ -4,11 +4,11 @@
 
 #include <string_view>
 
-namespace testsuite::compile_builtin {
+namespace testsuite::vhdl::ast::compile_builtin {
 
 //
 // compile time builtin settings for testsuite/vhdl/ast
 //
 static constexpr std::string_view default_source_dir{ "@TESTSUITE_SOURCE_DIR@" };
 
-}  // namespace testsuite::compile_builtin
+}  // namespace testsuite::vhdl::ast::compile_builtin

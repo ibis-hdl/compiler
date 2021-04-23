@@ -6,8 +6,8 @@
 #include <eda/vhdl/ast/ast_stats.hpp>
 #include <eda/vhdl/context.hpp>
 
-#include <testsuite/syntax/failure_diagnostic_fixture.hpp>
-#include <testsuite/syntax/dataset.hpp>
+#include <testsuite/vhdl/syntax/failure_diagnostic_fixture.hpp>
+#include <testsuite/vhdl/syntax/dataset.hpp>
 
 //#include <testsuite/namespace_alias.hpp>
 
@@ -23,7 +23,7 @@
 
 namespace analyze = eda::vhdl::analyze;
 
-using testsuite::syntax::failure_diagnostic_fixture;
+using testsuite::vhdl::syntax::failure_diagnostic_fixture;
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_FIXTURE_TEST_SUITE(syntax_check, failure_diagnostic_fixture)
@@ -32,7 +32,7 @@ BOOST_FIXTURE_TEST_SUITE(syntax_check, failure_diagnostic_fixture)
 // SUCCESS test case
 //
 BOOST_DATA_TEST_CASE(keyword_ok,  // --
-    utf_data::make_delayed<testsuite::syntax::dataset>("keyword_ok"),  // --
+    utf_data::make_delayed<testsuite::vhdl::syntax::dataset>("keyword_ok"),  // --
     input, expected, test_case_name)
 {
     btt::output_test_stream os;
@@ -79,7 +79,7 @@ BOOST_DATA_TEST_CASE(keyword_ok,  // --
 // FAILURE test case
 //
 BOOST_DATA_TEST_CASE(keyword_missmatch,  // --
-    utf_data::make_delayed<testsuite::syntax::dataset>("keyword_mismatch"),  // --
+    utf_data::make_delayed<testsuite::vhdl::syntax::dataset>("keyword_mismatch"),  // --
     input, expected, test_case_name)
 {
     btt::output_test_stream os;

@@ -1,6 +1,6 @@
-#include <testsuite/vhdl_parser/failure_diagnostic_fixture.hpp>
+#include <testsuite/vhdl/parser/failure_diagnostic_fixture.hpp>
 
-namespace testsuite::vhdl_parser {
+namespace testsuite::vhdl::parser {
 
 void failure_diagnostic_fixture::setup()
 {
@@ -9,4 +9,4 @@ void failure_diagnostic_fixture::setup()
     set_builtin(std::make_unique<failure_diagnostic_fixture::compile_builtin>());
 }
 
-}  // namespace testsuite::vhdl_parser
+}  // namespace testsuite::vhdl::parser

@@ -21,8 +21,8 @@ add_test(NAME test_ast
 set(TESTSUITE_SOURCE_DIR ${PROJECT_SOURCE_DIR}/test_data)
 
 configure_file(
-    "${PROJECT_SOURCE_DIR}/include/testsuite/ast/compile_builtin.hpp.in"
-    "${PROJECT_BINARY_DIR}/include/testsuite/ast/compile_builtin.hpp"
+    "${PROJECT_SOURCE_DIR}/include/testsuite/vhdl/ast/compile_builtin.hpp.in"
+    "${PROJECT_BINARY_DIR}/include/testsuite/vhdl/ast/compile_builtin.hpp"
     @ONLY
 )
 
@@ -68,8 +68,8 @@ set_source_files_properties(src/test_ast.cpp
 if (EDA_ENABLE_PCH)
     target_precompile_headers(${PROJECT_NAME}
         PRIVATE
-            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/ast/detail/pch.hpp>
-            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/ast/detail/pch_prj.hpp>
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl/ast/detail/pch.hpp>
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl/ast/detail/pch_prj.hpp>
     )
 endif()
 

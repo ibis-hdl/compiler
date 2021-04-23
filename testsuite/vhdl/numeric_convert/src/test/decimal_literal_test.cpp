@@ -1,4 +1,4 @@
-#include <testsuite/vhdl_numeric_convert/numeric_parser.hpp>
+#include <testsuite/vhdl/numeric_convert/numeric_parser.hpp>
 
 #include <eda/vhdl/ast/node/decimal_literal.hpp>
 #include <eda/vhdl/ast/numeric_convert.hpp>

@@ -2,7 +2,7 @@
 
 #include <eda/vhdl/parser/grammar_decl.hpp>
 
-namespace testsuite::vhdl_parser {
+namespace testsuite::vhdl::parser {
 
 namespace parser = eda::vhdl::parser;
 
@@ -114,4 +114,4 @@ parser::variable_declaration_type variable_declaration();
 parser::wait_statement_type wait_statement();
 parser::waveform_type waveform();
 
-}  // namespace testsuite::vhdl_parser
+}  // namespace testsuite::vhdl::parser

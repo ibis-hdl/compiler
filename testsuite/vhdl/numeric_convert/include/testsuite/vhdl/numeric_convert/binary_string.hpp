@@ -4,7 +4,7 @@
 #include <string>
 #include <iosfwd>
 
-namespace testsuite::vhdl_numeric_convert::util {
+namespace testsuite::vhdl::numeric_convert::util {
 
 //******************************************************************************
 // binary test pattern generator helper
@@ -47,4 +47,4 @@ std::ostream& operator<<(std::ostream& os, binary_string const& generator);
 std::ostream& operator<<(std::ostream& os, octal_string const& generator);
 std::ostream& operator<<(std::ostream& os, hexadecimal_string const& generator);
 
-}  // namespace testsuite::vhdl_numeric_convert::util
+}  // namespace testsuite::vhdl::numeric_convert::util

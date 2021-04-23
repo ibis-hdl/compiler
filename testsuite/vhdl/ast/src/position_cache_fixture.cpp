@@ -1,5 +1,5 @@
-#include <testsuite/ast/position_cache_fixture.hpp>
-#include <testsuite/ast/compile_builtin.hpp>
+#include <testsuite/vhdl/ast/position_cache_fixture.hpp>
+#include <testsuite/vhdl/ast/compile_builtin.hpp>
 
 #include <boost/test/unit_test.hpp>
 
@@ -7,7 +7,7 @@
 #include <fstream>
 #include <filesystem>
 
-namespace testsuite {
+namespace testsuite::vhdl::ast {
 
 position_cache_fixture*& position_cache_fixture::instance()
 {
@@ -64,6 +64,7 @@ std::string position_cache_fixture::test_case_source_dir() const
 
     // fall back: use hard coded from CMake build
     if (!input_path) {
+        namespace builtin = testsuite::vhdl::ast::compile_builtin;
         BOOST_TEST_REQUIRE(!compile_builtin::default_source_dir.empty());
         std::optional<std::string> source_dir{ compile_builtin::default_source_dir };
         input_path.swap(source_dir);
@@ -110,15 +111,15 @@ std::tuple<parser::iterator_type, parser::iterator_type> position_cache_fixture:
     return std::tuple{ begin, end };
 }
 
-ast::position_tagged& position_cache_fixture::addNode(std::string const& key,
-                                                      ast::position_tagged const& node)
+eda::vhdl::ast::position_tagged& position_cache_fixture::addNode(std::string const& key,
+                                                      eda::vhdl::ast::position_tagged const& node)
 {
     BOOST_TEST_MESSAGE("INFO(position_cache_fixture) add Node: " << key);
     BOOST_TEST_REQUIRE(node_map.count(key) == 0);
     return node_map[key] = node;
 }
 
-ast::position_tagged const& position_cache_fixture::getNode(std::string const& key) const
+eda::vhdl::ast::position_tagged const& position_cache_fixture::getNode(std::string const& key) const
 {
     BOOST_TEST_MESSAGE("INFO(position_cache_fixture) lookup Node: " << key);
     BOOST_TEST_REQUIRE(node_map.count(key) > 0);
@@ -128,13 +129,12 @@ ast::position_tagged const& position_cache_fixture::getNode(std::string const& k
     return const_cast<node_map_type&>(node_map)[key];
 }
 
-}  // namespace testsuite
-
+}  // namespace testsuite::vhdl::ast
 
 ///
 /// Global Boost.Test Fixture Instance
 ///
-using position_cache_fixture = testsuite::position_cache_fixture;
+using position_cache_fixture = testsuite::vhdl::ast::position_cache_fixture;
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_GLOBAL_FIXTURE(position_cache_fixture);

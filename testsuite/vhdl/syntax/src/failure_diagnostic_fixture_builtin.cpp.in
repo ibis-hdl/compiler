@@ -1,8 +1,8 @@
 // DO NOT EDIT! GENERATED AUTOMATICALLY BY CMAKE!
 
-#include <testsuite/syntax/failure_diagnostic_fixture.hpp>
+#include <testsuite/vhdl/syntax/failure_diagnostic_fixture.hpp>
 
-namespace testsuite::syntax {
+namespace testsuite::vhdl::syntax {
 
 std::string_view failure_diagnostic_fixture::compile_builtin::destination_dir() const  // --
 {
@@ -14,4 +14,4 @@ std::string_view failure_diagnostic_fixture::compile_builtin::output_extension()
     return "@TESTSUITE_OUTPUT_EXTENSION@";
 }
 
-}  // namespace testsuite::syntax
+}  // namespace testsuite::vhdl::syntax

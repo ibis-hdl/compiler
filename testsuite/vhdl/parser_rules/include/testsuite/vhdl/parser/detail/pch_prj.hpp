@@ -22,4 +22,4 @@
 
 #include <testsuite/vhdl/rules.hpp>
 
-#include <testsuite/vhdl_parser/testing_parser.hpp>
+#include <testsuite/vhdl/parser/testing_parser.hpp>

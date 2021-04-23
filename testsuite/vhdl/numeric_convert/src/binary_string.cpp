@@ -1,4 +1,4 @@
-#include <testsuite/vhdl_numeric_convert/binary_string.hpp>
+#include <testsuite/vhdl/numeric_convert/binary_string.hpp>
 
 #include <string>
 #include <sstream>
@@ -8,7 +8,7 @@
 #include <bitset>
 #include <iomanip>
 
-namespace testsuite::vhdl_numeric_convert::util {
+namespace testsuite::vhdl::numeric_convert::util {
 
 ///
 /// Helper function to get the integer result of log(n) to any base. Used for
@@ -129,4 +129,4 @@ std::ostream& operator<<(std::ostream& os, hexadecimal_string const& generator)
     return os;
 }
 
-}  // namespace testsuite::vhdl_numeric_convert::util
+}  // namespace testsuite::vhdl::numeric_convert::util

@@ -6,7 +6,7 @@
 
 #include <string_view>
 
-namespace testsuite::syntax {
+namespace testsuite::vhdl::syntax {
 
 class dataset : public testsuite::util::dataset_loader {
 public:
@@ -35,7 +35,7 @@ private:
     };
 };
 
-}  // namespace testsuite::syntax
+}  // namespace testsuite::vhdl::syntax
 
 namespace boost::unit_test::data::monomorphic {
 
@@ -43,7 +43,7 @@ namespace boost::unit_test::data::monomorphic {
 /// The registration of dataset as a proper dataset for Boost.Test.
 ///
 template <>
-struct is_dataset<testsuite::syntax::dataset> : boost::mpl::true_ {
+struct is_dataset<testsuite::vhdl::syntax::dataset> : boost::mpl::true_ {
 };
 
 }  // namespace boost::unit_test::data::monomorphic

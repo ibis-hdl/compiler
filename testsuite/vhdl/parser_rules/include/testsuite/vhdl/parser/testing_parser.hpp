@@ -14,7 +14,7 @@
 
 #include <testsuite/namespace_alias.hpp>
 
-namespace testsuite::vhdl_parser::util {
+namespace testsuite::vhdl::parser::util {
 
 template <typename AttrType = x3::unused_type>
 struct testing_parser {
@@ -82,4 +82,4 @@ struct testing_parser {
     }
 };
 
-}  // namespace testsuite::vhdl_parser::util
+}  // namespace testsuite::vhdl::parser::util

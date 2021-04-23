@@ -1,7 +1,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/output_test_stream.hpp>
 
-#include <testsuite/ast/position_cache_fixture.hpp>
+#include <testsuite/vhdl/ast/position_cache_fixture.hpp>
 
 #include <eda/vhdl/parser/iterator_type.hpp>
 #include <eda/vhdl/parser/position_cache.hpp>
@@ -26,8 +26,10 @@ using namespace testsuite;
 BOOST_AUTO_TEST_CASE(contents_2_txt)
 {
     // short-hands for convenience
-    auto& position_cache = testsuite::position_cache_fixture::instance()->position_cache;
-    auto* fixture = testsuite::position_cache_fixture::instance();
+    using testsuite::vhdl::ast::position_cache_fixture;
+
+    auto& position_cache = position_cache_fixture::instance()->position_cache;
+    auto* fixture = position_cache_fixture::instance();
 
     fs::path const path = fixture->test_case_source_dir();
     auto const file_name = path / "BaconIpsum.txt";
@@ -61,8 +63,10 @@ BOOST_AUTO_TEST_CASE(basic_annotate_2_txt)
     auto const node_name = [](std::size_t id, auto name) { return std::to_string(id) + name; };
 
     // short-hands for convenience
-    auto& position_cache = testsuite::position_cache_fixture::instance()->position_cache;
-    auto* fixture = testsuite::position_cache_fixture::instance();
+    using testsuite::vhdl::ast::position_cache_fixture;
+
+    auto& position_cache = position_cache_fixture::instance()->position_cache;
+    auto* fixture = position_cache_fixture::instance();
     std::size_t const id = fixture->current_FileID;
 
     ast::position_tagged node;
@@ -88,8 +92,10 @@ BOOST_AUTO_TEST_CASE(proxy_annotate_2_txt)
     auto const node_name = [](std::size_t id, auto name) { return std::to_string(id) + name; };
 
     // short-hands for convenience
-    auto& position_cache = testsuite::position_cache_fixture::instance()->position_cache;
-    auto* fixture = testsuite::position_cache_fixture::instance();
+    using testsuite::vhdl::ast::position_cache_fixture;
+
+    auto& position_cache = position_cache_fixture::instance()->position_cache;
+    auto* fixture = position_cache_fixture::instance();
     std::size_t const id = fixture->current_FileID;
 
     auto proxy = position_cache.handle(id);
@@ -117,8 +123,10 @@ BOOST_AUTO_TEST_CASE(proxy_position1_of_2_txt)
     auto const node_name = [](std::size_t id, auto name) { return std::to_string(id) + name; };
 
     // short-hands for convenience
-    auto& position_cache = testsuite::position_cache_fixture::instance()->position_cache;
-    auto* fixture = testsuite::position_cache_fixture::instance();
+    using testsuite::vhdl::ast::position_cache_fixture;
+
+    auto& position_cache = position_cache_fixture::instance()->position_cache;
+    auto* fixture = position_cache_fixture::instance();
     std::size_t const id = fixture->current_FileID;
 
     auto proxy = position_cache.handle(id);
@@ -143,8 +151,10 @@ BOOST_AUTO_TEST_CASE(proxy_position2_of_2_txt)
     auto const node_name = [](std::size_t id, auto name) { return std::to_string(id) + name; };
 
     // short-hands for convenience
-    auto& position_cache = testsuite::position_cache_fixture::instance()->position_cache;
-    auto* fixture = testsuite::position_cache_fixture::instance();
+    using testsuite::vhdl::ast::position_cache_fixture;
+
+    auto& position_cache = position_cache_fixture::instance()->position_cache;
+    auto* fixture = position_cache_fixture::instance();
     std::size_t const id = fixture->current_FileID;
 
     auto proxy = position_cache.handle(id);
@@ -167,8 +177,10 @@ BOOST_AUTO_TEST_CASE(proxy_lineno_2_txt)
     auto const node_name = [](std::size_t id, auto name) { return std::to_string(id) + name; };
 
     // short-hands for convenience
-    auto& position_cache = testsuite::position_cache_fixture::instance()->position_cache;
-    auto* fixture = testsuite::position_cache_fixture::instance();
+    using testsuite::vhdl::ast::position_cache_fixture;
+
+    auto& position_cache = position_cache_fixture::instance()->position_cache;
+    auto* fixture = position_cache_fixture::instance();
     std::size_t const id = fixture->current_FileID;
 
     auto proxy = position_cache.handle(id);
@@ -201,8 +213,10 @@ BOOST_AUTO_TEST_CASE(proxy_line_2_txt)
     auto const node_name = [](std::size_t id, auto name) { return std::to_string(id) + name; };
 
     // short-hands for convenience
-    auto& position_cache = testsuite::position_cache_fixture::instance()->position_cache;
-    auto* fixture = testsuite::position_cache_fixture::instance();
+    using testsuite::vhdl::ast::position_cache_fixture;
+
+    auto& position_cache = position_cache_fixture::instance()->position_cache;
+    auto* fixture = position_cache_fixture::instance();
     std::size_t const id = fixture->current_FileID;
 
     auto proxy = position_cache.handle(id);
