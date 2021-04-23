@@ -1,14 +1,14 @@
 ################################################################################
-## EDA/common project
+## IBIS/common project
 ##
 ## file: source/common/CMakeLists.txt
 ################################################################################
 
-project(eda_common LANGUAGES CXX)
+project(ibis_common LANGUAGES CXX)
 
 
 add_library(${PROJECT_NAME})
-add_library(eda::common ALIAS ${PROJECT_NAME})
+add_library(ibis::common ALIAS ${PROJECT_NAME})
 
 
 target_link_libraries(${PROJECT_NAME}
@@ -33,11 +33,11 @@ include(configure_platform_hpp)
 include(configure_config_hpp)
 
 
-if (EDA_ENABLE_PCH)
+if (IBIS_ENABLE_PCH)
     target_precompile_headers(${PROJECT_NAME}
         PRIVATE
-            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/eda/detail/pch.hpp>
-            #$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/eda/detail/pch_prj.hpp>
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/ibis/detail/pch.hpp>
+            #$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/ibis/detail/pch_prj.hpp>
     )
 endif()
 
@@ -52,8 +52,8 @@ target_include_directories(${PROJECT_NAME}
 
 
 configure_file(
-    "${PROJECT_SOURCE_DIR}/include/eda/buildinfo_static.hpp.in"
-    "${PROJECT_BINARY_DIR}/include/eda/buildinfo_static.hpp"
+    "${PROJECT_SOURCE_DIR}/include/ibis/buildinfo_static.hpp.in"
+    "${PROJECT_BINARY_DIR}/include/ibis/buildinfo_static.hpp"
     ESCAPE_QUOTES
     @ONLY
 )

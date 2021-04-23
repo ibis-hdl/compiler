@@ -1,6 +1,6 @@
-#include <eda/util/file/file_loader.hpp>
+#include <ibis/util/file/file_loader.hpp>
 
-#include <eda/settings.hpp>
+#include <ibis/settings.hpp>
 
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
@@ -14,9 +14,9 @@
 #include <ratio>
 #include <system_error>
 
-namespace eda::util {
+namespace ibis::util {
 
-file_loader::file_loader(std::ostream& os_, eda::settings const& setting)
+file_loader::file_loader(std::ostream& os_, ibis::settings const& setting)
     : os{ os_ }
     , quiet{ setting["quiet"] }
 {
@@ -196,4 +196,4 @@ std::time_t file_loader::timesstamp(fs::path const& filename) const
     return cftime;
 }
 
-}  // namespace eda::util
+}  // namespace ibis::util

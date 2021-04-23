@@ -1,16 +1,16 @@
-#include <eda/vhdl/analyze/error_handler.hpp>
-#include <eda/vhdl/parser/position_cache.hpp>
-#include <eda/vhdl/ast/util/position_tagged.hpp>
+#include <ibis/vhdl/analyze/error_handler.hpp>
+#include <ibis/vhdl/parser/position_cache.hpp>
+#include <ibis/vhdl/ast/util/position_tagged.hpp>
 
-#include <eda/vhdl/parser/iterator_type.hpp>  // for explicit template instantiation
+#include <ibis/vhdl/parser/iterator_type.hpp>  // for explicit template instantiation
 
-#include <eda/util/string/position_indicator.hpp>
+#include <ibis/util/string/position_indicator.hpp>
 
-#include <eda/color/message.hpp>
-#include <eda/color/facet.hpp>
+#include <ibis/color/message.hpp>
+#include <ibis/color/facet.hpp>
 
-#include <eda/util/make_iomanip.hpp>
-#include <eda/util/cxx_bug_fatal.hpp>
+#include <ibis/util/make_iomanip.hpp>
+#include <ibis/util/cxx_bug_fatal.hpp>
 
 #include <boost/range/iterator_range_core.hpp>
 #include <boost/core/ignore_unused.hpp>
@@ -23,7 +23,7 @@
 #include <ostream>
 #include <tuple>
 
-namespace eda::vhdl::analyze {
+namespace ibis::vhdl::analyze {
 
 ///
 /// Display the `error_message` with diagnostics, where only the tagged error
@@ -47,7 +47,7 @@ void error_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
 
     auto const indicator = [&](auto& start, auto& first, auto& last) {
         return util::make_iomanip([&](std::ostream& os) {
-            using eda::util::position_indicator;
+            using ibis::util::position_indicator;
             os << position_indicator(start, first, tab_sz, ' ')
                << position_indicator(start, last, tab_sz, '~');
         });
@@ -69,7 +69,7 @@ void error_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
     os << std::endl;
 
     // error indicator
-    using eda::util::position_indicator;
+    using ibis::util::position_indicator;
     os << indicator(line_start, error_first, error_last) << translate(" <<-- here\n");
 }
 
@@ -105,7 +105,7 @@ void error_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
 
     auto const indicator = [&](auto& start, auto& first, auto& last) {
         return util::make_iomanip([&](std::ostream& os) {
-            using eda::util::position_indicator;
+            using ibis::util::position_indicator;
             os << position_indicator(start, first, tab_sz, ' ')
                << position_indicator(start, last, tab_sz, '~');
         });
@@ -143,11 +143,11 @@ void error_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
     os << std::endl;
 }
 
-}  // namespace eda::vhdl::analyze
+}  // namespace ibis::vhdl::analyze
 
-namespace eda::vhdl::analyze {
+namespace ibis::vhdl::analyze {
 
 // Explicit template instantiation
 template class error_handler<parser::iterator_type>;
 
-}  // namespace eda::vhdl::analyze
+}  // namespace ibis::vhdl::analyze

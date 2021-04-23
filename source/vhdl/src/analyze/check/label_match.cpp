@@ -1,39 +1,39 @@
-#include <eda/vhdl/analyze/check/label_match.hpp>
+#include <ibis/vhdl/analyze/check/label_match.hpp>
 
-#include <eda/vhdl/ast/node/architecture_body.hpp>
-#include <eda/vhdl/ast/node/block_statement.hpp>
-#include <eda/vhdl/ast/node/case_statement.hpp>
-#include <eda/vhdl/ast/node/configuration_declaration.hpp>
-#include <eda/vhdl/ast/node/entity_declaration.hpp>
-#include <eda/vhdl/ast/node/generate_statement.hpp>
-#include <eda/vhdl/ast/node/if_statement.hpp>
-#include <eda/vhdl/ast/node/loop_statement.hpp>
-#include <eda/vhdl/ast/node/package_body.hpp>
-#include <eda/vhdl/ast/node/package_declaration.hpp>
-#include <eda/vhdl/ast/node/process_statement.hpp>
-#include <eda/vhdl/ast/node/identifier.hpp>
+#include <ibis/vhdl/ast/node/architecture_body.hpp>
+#include <ibis/vhdl/ast/node/block_statement.hpp>
+#include <ibis/vhdl/ast/node/case_statement.hpp>
+#include <ibis/vhdl/ast/node/configuration_declaration.hpp>
+#include <ibis/vhdl/ast/node/entity_declaration.hpp>
+#include <ibis/vhdl/ast/node/generate_statement.hpp>
+#include <ibis/vhdl/ast/node/if_statement.hpp>
+#include <ibis/vhdl/ast/node/loop_statement.hpp>
+#include <ibis/vhdl/ast/node/package_body.hpp>
+#include <ibis/vhdl/ast/node/package_declaration.hpp>
+#include <ibis/vhdl/ast/node/process_statement.hpp>
+#include <ibis/vhdl/ast/node/identifier.hpp>
 // required due to forward and variant used
-#include <eda/vhdl/ast/node/allocator.hpp>             // IWYU pragma: keep
-#include <eda/vhdl/ast/node/qualified_expression.hpp>  // IWYU pragma: keep
+#include <ibis/vhdl/ast/node/allocator.hpp>             // IWYU pragma: keep
+#include <ibis/vhdl/ast/node/qualified_expression.hpp>  // IWYU pragma: keep
 
-#include <eda/vhdl/ast/util/optional.hpp>
-#include <eda/vhdl/ast/util/string_span.hpp>
+#include <ibis/vhdl/ast/util/optional.hpp>
+#include <ibis/vhdl/ast/util/string_span.hpp>
 
-#include <eda/util/string/icompare.hpp>
+#include <ibis/util/string/icompare.hpp>
 
 #include <boost/optional/detail/optional_relops.hpp>
 
 // don't pollute AST's namespace with operators required only here
-namespace eda::vhdl::ast {
+namespace ibis::vhdl::ast {
 
 static inline bool operator==(ast::identifier const& lhs, ast::identifier const& rhs)
 {
     return util::icompare(as_string_view(lhs.name), as_string_view(rhs.name));
 }
 
-}  // namespace eda::vhdl::ast
+}  // namespace ibis::vhdl::ast
 
-namespace eda::vhdl::analyze {
+namespace ibis::vhdl::analyze {
 
 label_match::result label_match::compare(ast::identifier const& start_label,
                                          ast::optional<ast::identifier> const& end_label)
@@ -125,4 +125,4 @@ label_match::result label_match::operator()(ast::process_statement const& node) 
     return compare(node.label, node.end_label);
 }
 
-}  // namespace eda::vhdl::analyze
+}  // namespace ibis::vhdl::analyze

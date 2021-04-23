@@ -1,6 +1,6 @@
-#include <eda/vhdl/ast/ast_stats.hpp>
+#include <ibis/vhdl/ast/ast_stats.hpp>
 
-#include <eda/vhdl/ast/basic_ast_walker.hpp>
+#include <ibis/vhdl/ast/basic_ast_walker.hpp>
 
 #include <functional>
 #include <utility>
@@ -10,11 +10,11 @@
 #include <string>
 #include <iostream>
 
-namespace eda::vhdl::ast {
+namespace ibis::vhdl::ast {
 struct position_tagged;
 }
 
-namespace eda::vhdl::ast {
+namespace ibis::vhdl::ast {
 
 namespace detail {
 
@@ -120,4 +120,4 @@ std::ostream& ast_stats::print(std::ostream& os) const
     return os;
 }
 
-}  // namespace eda::vhdl::ast
+}  // namespace ibis::vhdl::ast

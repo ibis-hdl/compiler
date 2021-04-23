@@ -3,8 +3,8 @@
 
 #include <testsuite/vhdl/ast/position_cache_fixture.hpp>
 
-#include <eda/vhdl/parser/iterator_type.hpp>
-#include <eda/vhdl/parser/position_cache.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/parser/position_cache.hpp>
 
 #include <filesystem>
 

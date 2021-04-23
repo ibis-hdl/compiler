@@ -1,9 +1,9 @@
-#include <eda/vhdl/ast/pretty_node_name.hpp>
+#include <ibis/vhdl/ast/pretty_node_name.hpp>
 
 #include <unordered_map>
 #include <utility>
 
-namespace eda::vhdl::ast {
+namespace ibis::vhdl::ast {
 
 std::tuple<bool, std::string_view> pretty_node_name(std::string_view which)
 {
@@ -260,4 +260,4 @@ std::tuple<bool, std::string_view> pretty_node_name(std::string_view which)
     return std::tuple{ false, which };
 }
 
-}  // namespace eda::vhdl::ast
+}  // namespace ibis::vhdl::ast

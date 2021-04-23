@@ -1,7 +1,7 @@
 #pragma once
 
-#include <eda/vhdl/parser/position_cache.hpp>
-#include <eda/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/parser/position_cache.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
 
 #include <string>
 #include <tuple>
@@ -32,8 +32,9 @@ struct position_cache_fixture {
     std::tuple<parser::iterator_type, parser::iterator_type> contents_range(std::size_t id,
                                                                             std::string_view str);
 
-    eda::vhdl::ast::position_tagged& addNode(std::string const& key, eda::vhdl::ast::position_tagged const& node);
-    eda::vhdl::ast::position_tagged const& getNode(std::string const& key) const;
+    ibis::vhdl::ast::position_tagged& addNode(std::string const& key,
+                                              ibis::vhdl::ast::position_tagged const& node);
+    ibis::vhdl::ast::position_tagged const& getNode(std::string const& key) const;
 
 public:
     ///
@@ -51,7 +52,7 @@ public:
     std::size_t node_count() const { return node_map.size(); }
 
 public:
-    eda::vhdl::parser::position_cache<parser::iterator_type> position_cache;
+    ibis::vhdl::parser::position_cache<parser::iterator_type> position_cache;
 
 private:
     static std::string read_file(std::string const& file_name);
@@ -60,7 +61,7 @@ private:
     std::optional<std::string> mutable input_path;
     std::vector<std::string> inputs;
 
-    using node_map_type = std::map<std::string, eda::vhdl::ast::position_tagged>;
+    using node_map_type = std::map<std::string, ibis::vhdl::ast::position_tagged>;
     node_map_type node_map;
 };
 

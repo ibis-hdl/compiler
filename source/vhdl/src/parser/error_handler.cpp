@@ -1,12 +1,12 @@
-#include <eda/vhdl/parser/error_handler.hpp>
-#include <eda/vhdl/parser/iterator_type.hpp>  // for explicit template instantiation
+#include <ibis/vhdl/parser/error_handler.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>  // for explicit template instantiation
 
-#include <eda/vhdl/parser/position_cache.hpp>
+#include <ibis/vhdl/parser/position_cache.hpp>
 
-#include <eda/util/string/position_indicator.hpp>
+#include <ibis/util/string/position_indicator.hpp>
 
-#include <eda/color/message.hpp>
-#include <eda/color/facet.hpp>
+#include <ibis/color/message.hpp>
+#include <ibis/color/facet.hpp>
 
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
@@ -14,7 +14,7 @@
 #include <algorithm>
 #include <iostream>
 
-namespace eda::vhdl::parser {
+namespace ibis::vhdl::parser {
 
 // AST/parse related error handler
 template <typename Iterator>
@@ -38,17 +38,17 @@ typename error_handler<Iterator>::result_type error_handler<Iterator>::operator(
     os << '\n';
 
     // error indicator
-    using eda::util::position_indicator;
+    using ibis::util::position_indicator;
     os << position_indicator(start, error_pos, tab_sz, '_') << "^_" << '\n';
 
     return x3::error_handler_result::fail;
 }
 
-}  // namespace eda::vhdl::parser
+}  // namespace ibis::vhdl::parser
 
-namespace eda::vhdl::parser {
+namespace ibis::vhdl::parser {
 
 // Explicit template instantiation
 template class error_handler<parser::iterator_type>;
 
-}  // namespace eda::vhdl::parser
+}  // namespace ibis::vhdl::parser

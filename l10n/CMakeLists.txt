@@ -1,5 +1,5 @@
 ################################################################################
-## EDA/l10n project
+## IBIS/l10n project
 ##
 ## file: l10n/CMakeLists.txt
 ################################################################################
@@ -21,7 +21,7 @@ if (XGETTEXT_FOUND)
 
     # create a cmake variables script where the sources and directories of the
     # sub projects are  set ...
-    set(SUBPROJECT_LIST "eda_common;eda_vhdl_parser;ibis")
+    set(SUBPROJECT_LIST "ibis_common;ibis_vhdl;ibis")
     set(MY_CONTENT "set(MY_TARGETS \"${SUBPROJECT_LIST}\")\n")
     foreach(project ${SUBPROJECT_LIST})
         string(APPEND MY_CONTENT

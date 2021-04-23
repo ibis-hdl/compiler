@@ -33,15 +33,15 @@ message(STATUS "Host has ${LOCALHOST_RAM_MiB} MiB of available physical memory t
 
 # test on low memory build hosts and warn
 if(CORE_4096MiB EQUAL 0)
-    message(WARNING "probably unable to compile files using 4096 MiB per CPU core")
+    message(WARNING "-- probably unable to compile files using 4096 MiB per CPU core")
     set(CORE_4096MiB 1)
 endif()
 if(CORE_8192MiB EQUAL 0)
-    message(WARNING "probably unable to compile files using 8192 MiB per CPU core")
+    message(WARNING "-- probably unable to compile files using 8192 MiB per CPU core")
     set(CORE_8192MiB 1)
 endif()
 if(CORE_10240MiB EQUAL 0)
-    message(WARNING "probably unable to compile files using 10240 MiB per CPU core")
+    message(WARNING "-- probably unable to compile files using 10240 MiB per CPU core")
     set(CORE_10240MiB 1)
 endif()
 
@@ -80,10 +80,10 @@ set_property(GLOBAL
 # Starting with CMake 3.16 projects can use precompiled headers
 # ToDo: Study [Faster builds with PCH suggestions from C++ Build Insights](
 #   https://devblogs.microsoft.com/cppblog/faster-builds-with-pch-suggestions-from-c-build-insights/)
-option(EDA_ENABLE_PCH
+option(IBIS_ENABLE_PCH
     "Enable pre-compiled headers support. This can speed up compilation time."
     ON)
-mark_as_advanced(EDA_ENABLE_PCH)
+mark_as_advanced(IBIS_ENABLE_PCH)
 
 
 ## -----------------------------------------------------------------------------
@@ -144,36 +144,36 @@ endif()
 # FixMe: Check and test flags, only added
 
 # --- ThreadSanitizer ---
-option(EDA_ENABLE_TSAN "Enable ThreadSanitizer builds." OFF)
-mark_as_advanced(EDA_ENABLE_TSAN)
+option(IBIS_ENABLE_TSAN "Enable ThreadSanitizer builds." OFF)
+mark_as_advanced(IBIS_ENABLE_TSAN)
 
 set(CMAKE_CXX_FLAGS_TSAN "-fsanitize=thread")
 set(CMAKE_LINK_FLAGS_TSAN "-fsanitize=thread")
 
 # --- AddressSanitize ---
-option(EDA_ENABLE_ASAN "Enable AddressSanitize builds." OFF)
-mark_as_advanced(EDA_ENABLE_ASAN)
+option(IBIS_ENABLE_ASAN "Enable AddressSanitize builds." OFF)
+mark_as_advanced(IBIS_ENABLE_ASAN)
 
 set(CMAKE_CXX_FLAGS_ASAN "-fsanitize=address;-fno-omit-frame-pointer")
 set(CMAKE_LINK_FLAGS_ASAN "-fsanitize=address;-fno-omit-frame-pointer")
 
 # --- LeakSanitizer ---
-option(EDA_ENABLE_LSAN "Enable LeakSanitizer builds." OFF)
-mark_as_advanced(EDA_ENABLE_LSAN)
+option(IBIS_ENABLE_LSAN "Enable LeakSanitizer builds." OFF)
+mark_as_advanced(IBIS_ENABLE_LSAN)
 
 set(CMAKE_CXX_FLAGS_LSAN "-fsanitize=leak;-fno-omit-frame-pointer")
 set(CMAKE_LINK_FLAGS_LSAN "-fsanitize=leak;-fno-omit-frame-pointer")
 
 # --- MemorySanitizer ---
-option(EDA_ENABLE_MSAN "Enable MemorySanitizer builds." OFF)
-mark_as_advanced(EDA_ENABLE_MSAN)
+option(IBIS_ENABLE_MSAN "Enable MemorySanitizer builds." OFF)
+mark_as_advanced(IBIS_ENABLE_MSAN)
 
 set(CMAKE_CXX_FLAGS_MSAN "-fsanitize=memory;-fno-omit-frame-pointer")
 set(CMAKE_LINK_FLAGS_MSAN "-fsanitize=memory;-fno-omit-frame-pointer")
 
 # --- UndefinedBehaviour ---
-option(EDA_ENABLE_UBSAN "Enable UndefinedBehaviour builds." OFF)
-mark_as_advanced(EDA_ENABLE_UBSAN)
+option(IBIS_ENABLE_UBSAN "Enable UndefinedBehaviour builds." OFF)
+mark_as_advanced(IBIS_ENABLE_UBSAN)
 
 set(CMAKE_CXX_FLAGS_UBSAN "-fsanitize=undefined")
 set(CMAKE_LINK_FLAGS_UBSAN "-fsanitize=undefined")
@@ -181,19 +181,19 @@ set(CMAKE_LINK_FLAGS_UBSAN "-fsanitize=undefined")
 # FixMe: Sanity checks
 
 add_compile_options(
-    "$<$<BOOL:${EDA_ENABLE_TSAN}>:${CMAKE_CXX_FLAGS_TSAN}>"
-    "$<$<BOOL:${EDA_ENABLE_ASAN}>:${CMAKE_CXX_FLAGS_ASAN}>"
-    "$<$<BOOL:${EDA_ENABLE_LSAN}>:${CMAKE_CXX_FLAGS_LSAN}>"
-    "$<$<BOOL:${EDA_ENABLE_MSAN}>:${CMAKE_CXX_FLAGS_MSAN}>"
-    "$<$<BOOL:${EDA_ENABLE_UBSAN}>:${CMAKE_CXX_FLAGS_UBSAN}>"
+    "$<$<BOOL:${IBIS_ENABLE_TSAN}>:${CMAKE_CXX_FLAGS_TSAN}>"
+    "$<$<BOOL:${IBIS_ENABLE_ASAN}>:${CMAKE_CXX_FLAGS_ASAN}>"
+    "$<$<BOOL:${IBIS_ENABLE_LSAN}>:${CMAKE_CXX_FLAGS_LSAN}>"
+    "$<$<BOOL:${IBIS_ENABLE_MSAN}>:${CMAKE_CXX_FLAGS_MSAN}>"
+    "$<$<BOOL:${IBIS_ENABLE_UBSAN}>:${CMAKE_CXX_FLAGS_UBSAN}>"
 )
 
 add_link_options(
-    "$<$<BOOL:${EDA_ENABLE_TSAN}>:${CMAKE_LINK_FLAGS_TSAN}>"
-    "$<$<BOOL:${EDA_ENABLE_ASAN}>:${CMAKE_LINK_FLAGS_ASAN}>"
-    "$<$<BOOL:${EDA_ENABLE_LSAN}>:${CMAKE_LINK_FLAGS_LSAN}>"
-    "$<$<BOOL:${EDA_ENABLE_MSAN}>:${CMAKE_LINK_FLAGS_MSAN}>"
-    "$<$<BOOL:${EDA_ENABLE_UBSAN}>:${CMAKE_LINK_FLAGS_UBSAN}>"
+    "$<$<BOOL:${IBIS_ENABLE_TSAN}>:${CMAKE_LINK_FLAGS_TSAN}>"
+    "$<$<BOOL:${IBIS_ENABLE_ASAN}>:${CMAKE_LINK_FLAGS_ASAN}>"
+    "$<$<BOOL:${IBIS_ENABLE_LSAN}>:${CMAKE_LINK_FLAGS_LSAN}>"
+    "$<$<BOOL:${IBIS_ENABLE_MSAN}>:${CMAKE_LINK_FLAGS_MSAN}>"
+    "$<$<BOOL:${IBIS_ENABLE_UBSAN}>:${CMAKE_LINK_FLAGS_UBSAN}>"
 )
 
 
@@ -240,7 +240,7 @@ add_compile_definitions(
 #   get_property could not find TARGET boost-utf. Perhaps it has not yet been
 #   created -> investigate if the time is coming.
 option(DEVELOPER_EXTERNAL_BOOST_SPIRIT_X3
-    "Configure EDA to use external Boost.Org Spirit Parser X3 - LL(k) Parser Framework.\
+    "Configure IBIS HDL to use external Boost.Org Spirit Parser X3 - LL(k) Parser Framework.\
     This is useful for developers which has to work on more recent versions\
     as the build host/system supplies."
     OFF)
@@ -251,7 +251,7 @@ if(DEVELOPER_EXTERNAL_BOOST_SPIRIT_X3)
 endif()
 
 option(DEVELOPER_EXTERNAL_BOOST_UTF
-    "Configure EDA to use external Boost.Org Unit Test Framework (UTF).\
+    "Configure IBIS HDL to use external Boost.Org Unit Test Framework (UTF).\
     This is useful for developers which has to work on more recent versions\
     as the build host/system supplies."
     OFF)
@@ -309,7 +309,7 @@ if(DEVELOPER_RUN_CLANG_TIDY)
     # IMO in this state it does nothing, hence not used/omitted.
 endif()
 
-configure_file(${eda_SOURCE_DIR}/.clang-tidy ${eda_BINARY_DIR}/.clang-tidy COPYONLY)
+configure_file(${CMAKE_SOURCE_DIR}/.clang-tidy ${CMAKE_BINARY_DIR}/.clang-tidy COPYONLY)
 
 # Special handling for MSVC
 # FixMe: Clang-Tidy and MSVC aren't compatible? Got error about:
@@ -352,18 +352,18 @@ if(DEVELOPER_RUN_IWYU AND UNIX)
     endif()
     # Sanity check: If PCH is enabled, IWYU lookup definitions etc. at precompiled headers
     # which breaks builds without it, giving false positives. Hence disable PCH if using IWYU.
-    if(EDA_ENABLE_PCH AND DEVELOPER_RUN_IWYU)
+    if(IBIS_ENABLE_PCH AND DEVELOPER_RUN_IWYU)
         message(STATUS "=> Configure Fix: include-what-you-use my trigger false positives if PCH is enabled, disabled")
-        set(EDA_ENABLE_PCH OFF CACHE BOOL "PCH disabled due to use of include-what-you-use" FORCE)
+        set(IBIS_ENABLE_PCH OFF CACHE BOOL "PCH disabled due to use of include-what-you-use" FORCE)
     endif()
 endif()
 
 
 ## -----------------------------------------------------------------------------
-# Developer Build Option: run EDA under Valgrind.
+# Developer Build Option: run IBIS under Valgrind.
 # FixMe: Implement, Check and test it, only added (remnants from old project)
 option(DEVELOPER_RUN_ON_VALGRIND
-    "Configure EDA to be run on Valgrind."
+    "Configure IBIS HDL to be run on Valgrind."
     OFF)
 mark_as_advanced(DEVELOPER_RUN_ON_VALGRIND)
 

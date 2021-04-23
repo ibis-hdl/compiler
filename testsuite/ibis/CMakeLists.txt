@@ -1,5 +1,5 @@
 ################################################################################
-## EDA/testsuite ibis project
+## IBIS/testsuite ibis project
 ##
 ## file: testsuite/ibis/CMakeLists.txt
 ################################################################################
@@ -31,6 +31,6 @@ add_test(NAME test_ibis_cli_locale_env
 )
 
 set_tests_properties(test_ibis_cli_locale_env PROPERTIES
-    ENVIRONMENT "EDA_LOCALE_DIR=${CMAKE_BINARY_DIR}/l10n"
+    ENVIRONMENT "IBIS_LOCALE_DIR=${CMAKE_BINARY_DIR}/l10n"
 )
 

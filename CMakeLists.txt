@@ -1,5 +1,5 @@
 ################################################################################
-## EDA project
+## IBIS HDL project
 ##
 ## file: CMakeLists.txt
 ################################################################################
@@ -8,9 +8,14 @@ set (CMAKE_USER_MAKE_RULES_OVERRIDE "${CMAKE_CURRENT_LIST_DIR}/cmake/module/CxxF
 
 cmake_minimum_required(VERSION 3.18)
 
-project(eda VERSION 0.0.1 LANGUAGES CXX)
+project(ibis
+    VERSION 0.0.1
+    DESCRIPTION "HDL compiler and simulator"
+    HOMEPAGE_URL "https://github.com/ibis-hdl/ibis"
+    LANGUAGES CXX
+)
 message(STATUS "System name: ${CMAKE_SYSTEM_NAME}")
-message(STATUS "EDA version: ${eda_VERSION}")
+message(STATUS "Version: ${ibis_VERSION}")
 
 
 ## global C++ Standard
@@ -82,9 +87,9 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 # Sub projects
 add_subdirectory(source/common)
 add_subdirectory(source/vhdl)
-add_subdirectory(source/ibis)
+add_subdirectory(source/frontend)
 add_subdirectory(l10n)
-if (EDA_BUILD_TESTS)
+if (IBIS_BUILD_TESTS)
     add_subdirectory(testsuite/util)
     add_subdirectory(testsuite/vhdl/numeric_convert)
     add_subdirectory(testsuite/vhdl/ast)

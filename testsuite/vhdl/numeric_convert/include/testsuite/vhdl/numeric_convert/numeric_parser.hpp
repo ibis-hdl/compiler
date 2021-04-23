@@ -1,7 +1,7 @@
 #pragma once
 
-#include <eda/vhdl/ast_fwd.hpp>
-#include <eda/vhdl/parser/position_cache.hpp>
+#include <ibis/vhdl/ast_fwd.hpp>
+#include <ibis/vhdl/parser/position_cache.hpp>
 
 #include <tuple>
 

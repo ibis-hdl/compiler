@@ -1,25 +1,25 @@
-#include <eda/vhdl/analyze/syntax.hpp>
-#include <eda/vhdl/analyze/error_handler.hpp>
-#include <eda/vhdl/analyze/check/label_match.hpp>
+#include <ibis/vhdl/analyze/syntax.hpp>
+#include <ibis/vhdl/analyze/error_handler.hpp>
+#include <ibis/vhdl/analyze/check/label_match.hpp>
 
-#include <eda/vhdl/ast/node/architecture_body.hpp>
-#include <eda/vhdl/ast/node/block_statement.hpp>
-#include <eda/vhdl/ast/node/case_statement.hpp>
-#include <eda/vhdl/ast/node/configuration_declaration.hpp>
-#include <eda/vhdl/ast/node/entity_declaration.hpp>
-#include <eda/vhdl/ast/node/generate_statement.hpp>
-#include <eda/vhdl/ast/node/if_statement.hpp>
-#include <eda/vhdl/ast/node/loop_statement.hpp>
-#include <eda/vhdl/ast/node/package_body.hpp>
-#include <eda/vhdl/ast/node/package_declaration.hpp>
-#include <eda/vhdl/ast/node/process_statement.hpp>
-#include <eda/vhdl/ast/util/optional.hpp>
+#include <ibis/vhdl/ast/node/architecture_body.hpp>
+#include <ibis/vhdl/ast/node/block_statement.hpp>
+#include <ibis/vhdl/ast/node/case_statement.hpp>
+#include <ibis/vhdl/ast/node/configuration_declaration.hpp>
+#include <ibis/vhdl/ast/node/entity_declaration.hpp>
+#include <ibis/vhdl/ast/node/generate_statement.hpp>
+#include <ibis/vhdl/ast/node/if_statement.hpp>
+#include <ibis/vhdl/ast/node/loop_statement.hpp>
+#include <ibis/vhdl/ast/node/package_body.hpp>
+#include <ibis/vhdl/ast/node/package_declaration.hpp>
+#include <ibis/vhdl/ast/node/process_statement.hpp>
+#include <ibis/vhdl/ast/util/optional.hpp>
 
-#include <eda/vhdl/ast/pretty_node_name.hpp>
+#include <ibis/vhdl/ast/pretty_node_name.hpp>
 
-#include <eda/vhdl/context.hpp>
+#include <ibis/vhdl/context.hpp>
 
-#include <eda/util/cxx_bug_fatal.hpp>
+#include <ibis/util/cxx_bug_fatal.hpp>
 
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
@@ -27,7 +27,7 @@
 #include <sstream>
 #include <utility>
 
-namespace eda::vhdl::analyze {
+namespace ibis::vhdl::analyze {
 
 bool syntax_worker::success() const { return context.error_count == 0; }
 
@@ -171,4 +171,4 @@ void syntax_worker::operator()(ast::process_statement const& node, std::string_v
     keyword_matches(node, node_name);  // check postponed
 }
 
-}  // namespace eda::vhdl::analyze
+}  // namespace ibis::vhdl::analyze

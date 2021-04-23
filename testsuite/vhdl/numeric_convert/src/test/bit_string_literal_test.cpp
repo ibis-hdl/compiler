@@ -1,11 +1,11 @@
 #include <testsuite/vhdl/numeric_convert/numeric_parser.hpp>
 #include <testsuite/vhdl/numeric_convert/binary_string.hpp>
 
-#include <eda/vhdl/ast/node/bit_string_literal.hpp>
-#include <eda/vhdl/ast/numeric_convert.hpp>
-#include <eda/vhdl/parser/position_cache.hpp>
-#include <eda/vhdl/parser/iterator_type.hpp>
-#include <eda/vhdl/type.hpp>
+#include <ibis/vhdl/ast/node/bit_string_literal.hpp>
+#include <ibis/vhdl/ast/numeric_convert.hpp>
+#include <ibis/vhdl/parser/position_cache.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/type.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>
@@ -115,7 +115,7 @@ std::vector<std::string> const bit_literal{
     detail::to_hex_literal(std::numeric_limits<uint64_t>::max()),
 };
 
-std::vector<eda::vhdl::intrinsic::unsigned_integer_type> const bit_decimal{
+std::vector<ibis::vhdl::intrinsic::unsigned_integer_type> const bit_decimal{
     // binary
     0,
     1,

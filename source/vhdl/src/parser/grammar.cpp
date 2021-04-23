@@ -1,21 +1,21 @@
-#include <eda/vhdl/parser/grammar.hpp>
-#include <eda/vhdl/parser/grammar_def.hpp>
-#include <eda/vhdl/parser/iterator_type.hpp>
-#include <eda/vhdl/parser/parser_config.hpp>
+#include <ibis/vhdl/parser/grammar.hpp>
+#include <ibis/vhdl/parser/grammar_def.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/parser/parser_config.hpp>
 
-namespace eda::vhdl::parser {
+namespace ibis::vhdl::parser {
 
-parser::design_file_type grammar() { return eda::vhdl::parser::design_file; }
+parser::design_file_type grammar() { return ibis::vhdl::parser::design_file; }
 
-}  // namespace eda::vhdl::parser
+}  // namespace ibis::vhdl::parser
 
 //
 // The Spirit X3 grammar instance
 //
-namespace eda::vhdl::parser {
+namespace ibis::vhdl::parser {
 
 #if !defined(DOXYGEN_DOCUMENTATION_BUILD)
 BOOST_SPIRIT_INSTANTIATE(design_file_type, iterator_type, context_type);
 #endif
 
-}  // namespace eda::vhdl::parser
+}  // namespace ibis::vhdl::parser

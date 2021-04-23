@@ -1,5 +1,5 @@
 ################################################################################
-## EDA/testsuite VHDL AST project
+## IBIS/testsuite VHDL AST project
 ##
 ## file: testsuite/vhdl/ast/CMakeLists.txt
 ################################################################################
@@ -29,7 +29,7 @@ configure_file(
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
-        eda::vhdl_parser
+        ibis::vhdl
         testsuite::util
         Boost::system
         Boost::unit_test_framework
@@ -65,7 +65,7 @@ set_source_files_properties(src/test_ast.cpp
         SKIP_PRECOMPILE_HEADERS ON
 )
 
-if (EDA_ENABLE_PCH)
+if (IBIS_ENABLE_PCH)
     target_precompile_headers(${PROJECT_NAME}
         PRIVATE
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl/ast/detail/pch.hpp>

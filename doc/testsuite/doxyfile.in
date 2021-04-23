@@ -38,7 +38,7 @@ PROJECT_NAME           = "TestSuite @CMAKE_PROJECT_NAME@"
 # could be handy for archiving the generated documentation or if some version
 # control system is used.
 
-PROJECT_NUMBER         = @eda_VERSION@
+PROJECT_NUMBER         = @ibis_VERSION@
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description
 # for a project that appears at the top of each page and should give viewer a
@@ -876,8 +876,8 @@ INPUT                  = \
                          @PROJECT_SOURCE_DIR@/testsuite/vhdl/parser_rules/src \
                          @PROJECT_SOURCE_DIR@/testsuite/vhdl/syntax/include \
                          @PROJECT_SOURCE_DIR@/testsuite/vhdl/syntax/src \
-                         @PROJECT_SOURCE_DIR@/testsuite/vhdl/util/include \
-                         @PROJECT_SOURCE_DIR@/testsuite/vhdl/util/src \
+                         @PROJECT_SOURCE_DIR@/testsuite/util/include \
+                         @PROJECT_SOURCE_DIR@/testsuite/util/src \
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses

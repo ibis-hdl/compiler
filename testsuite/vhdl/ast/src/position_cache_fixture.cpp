@@ -111,15 +111,16 @@ std::tuple<parser::iterator_type, parser::iterator_type> position_cache_fixture:
     return std::tuple{ begin, end };
 }
 
-eda::vhdl::ast::position_tagged& position_cache_fixture::addNode(std::string const& key,
-                                                      eda::vhdl::ast::position_tagged const& node)
+ibis::vhdl::ast::position_tagged& position_cache_fixture::addNode(
+    std::string const& key, ibis::vhdl::ast::position_tagged const& node)
 {
     BOOST_TEST_MESSAGE("INFO(position_cache_fixture) add Node: " << key);
     BOOST_TEST_REQUIRE(node_map.count(key) == 0);
     return node_map[key] = node;
 }
 
-eda::vhdl::ast::position_tagged const& position_cache_fixture::getNode(std::string const& key) const
+ibis::vhdl::ast::position_tagged const& position_cache_fixture::getNode(
+    std::string const& key) const
 {
     BOOST_TEST_MESSAGE("INFO(position_cache_fixture) lookup Node: " << key);
     BOOST_TEST_REQUIRE(node_map.count(key) > 0);

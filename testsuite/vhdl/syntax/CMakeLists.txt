@@ -1,5 +1,5 @@
 ################################################################################
-## EDA/testsuite VHDL syntax project
+## IBIS/testsuite VHDL syntax project
 ##
 ## file: testsuite/vhdl/syntax/CMakeLists.txt
 ################################################################################
@@ -29,7 +29,7 @@ add_test(NAME test_vhdl_syntax
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
-        eda::vhdl_parser
+        ibis::vhdl
     PRIVATE
         testsuite::util
         Boost::system
@@ -87,7 +87,7 @@ set_property(TARGET ${PROJECT_NAME}
 )
 
 
-if (EDA_ENABLE_PCH)
+if (IBIS_ENABLE_PCH)
     target_precompile_headers(${PROJECT_NAME}
         PRIVATE
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl/syntax/detail/pch.hpp>

@@ -11,7 +11,7 @@ int main() {
     __builtin_expect(1, 0);
     return 0;
 }
-" EDA_HAVE_BUILTIN_EXPECT)
+" IBIS_HAVE_BUILTIN_EXPECT)
 
 
 ##
@@ -23,7 +23,7 @@ int main() {
     __assume(x == 3);
     return 0;
 }
-" EDA_HAVE_BUILTIN_ASSUME)
+" IBIS_HAVE_BUILTIN_ASSUME)
 
 
 ##
@@ -33,7 +33,7 @@ int main() {
     __builtin_unreachable();
     return 0;
 }
-" EDA_HAVE_BUILTIN_UNREACHABLE)
+" IBIS_HAVE_BUILTIN_UNREACHABLE)
 
 
 ##
@@ -44,19 +44,19 @@ int main() {
   std::experimental::source_location location{ std::experimental::source_location::current() };
   return 0;
 }
-" EDA_HAVE_EXPERIMENTAL_SOURCE_LOCATION)
+" IBIS_HAVE_EXPERIMENTAL_SOURCE_LOCATION)
 
 
 # The plattform/compiler checks belongs to eda::common
 configure_file(
-  "${PROJECT_SOURCE_DIR}/include/eda/compiler/compiler_support.hpp.in"
-  "${PROJECT_BINARY_DIR}/include/eda/compiler/compiler_support.hpp"
+  "${PROJECT_SOURCE_DIR}/include/ibis/compiler/compiler_support.hpp.in"
+  "${PROJECT_BINARY_DIR}/include/ibis/compiler/compiler_support.hpp"
 )
 
 # ... also the user configuration
 # FixMe: Should be build_configuration.hpp, or even use target_compile_definitions
 # for the files affected. So its to global here for the use of.
 configure_file(
-  "${PROJECT_SOURCE_DIR}/include/eda/configuration.hpp.in"
-  "${PROJECT_BINARY_DIR}/include/eda/configuration.hpp"
+  "${PROJECT_SOURCE_DIR}/include/ibis/configuration.hpp.in"
+  "${PROJECT_BINARY_DIR}/include/ibis/configuration.hpp"
 )

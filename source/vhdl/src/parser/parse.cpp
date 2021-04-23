@@ -1,13 +1,13 @@
-#include <eda/vhdl/parser/parse.hpp>
+#include <ibis/vhdl/parser/parse.hpp>
 
-#include <eda/vhdl/parser/grammar.hpp>
-#include <eda/vhdl/parser/parser_config.hpp>
-#include <eda/vhdl/parser/skipper.hpp>
+#include <ibis/vhdl/parser/grammar.hpp>
+#include <ibis/vhdl/parser/parser_config.hpp>
+#include <ibis/vhdl/parser/skipper.hpp>
 
-#include <eda/vhdl/ast/node/design_file.hpp>
-#include <eda/vhdl/parser/position_cache.hpp>
-#include <eda/vhdl/parser/error_handler.hpp>
-#include <eda/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/ast/node/design_file.hpp>
+#include <ibis/vhdl/parser/position_cache.hpp>
+#include <ibis/vhdl/parser/error_handler.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
 
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
@@ -17,7 +17,7 @@
 #include <new>  // for bad_alloc
 #include <type_traits>
 
-namespace eda::vhdl::parser {
+namespace ibis::vhdl::parser {
 
 // required to successfully compile Spirit X3 rules, since we don't include
 // 'grammar_decl.hpp' and hence all it's declarations.
@@ -25,9 +25,9 @@ namespace eda::vhdl::parser {
 BOOST_SPIRIT_DECLARE(design_file_type)
 #endif
 
-}  // namespace eda::vhdl::parser
+}  // namespace ibis::vhdl::parser
 
-namespace eda::vhdl::parser {
+namespace ibis::vhdl::parser {
 
 bool parse::operator()(std::string const& input, ast::design_file& design_file)
 {
@@ -52,7 +52,7 @@ bool parse::operator()(std::string const& input, ast::design_file& design_file)
         x3::with<parser::error_handler_tag>(std::ref(error_handler))[
             parser::grammar()
         ];
-        // clang-format on
+    // clang-format on
 
     auto filename = error_handler.current_file().file_name();
 
@@ -116,4 +116,4 @@ std::string parse::make_exception_description(std::string_view filename)
         .str();
 };
 
-}  // namespace eda::vhdl::parser
+}  // namespace ibis::vhdl::parser

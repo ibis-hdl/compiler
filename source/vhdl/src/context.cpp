@@ -1,8 +1,8 @@
-#include <eda/vhdl/context.hpp>
+#include <ibis/vhdl/context.hpp>
 
-#include <eda/vhdl/ast/util/string_span_hash.hpp>
+#include <ibis/vhdl/ast/util/string_span_hash.hpp>
 
-#include <eda/settings.hpp>
+#include <ibis/settings.hpp>
 
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
@@ -11,14 +11,14 @@
 #include <algorithm>
 #include <string>
 
-namespace eda::vhdl {
+namespace ibis::vhdl {
 
 context::context(std::size_t default_error_limit)
     : error_count(default_error_limit)
 {
 }
 
-context::context(eda::settings const& settings)
+context::context(ibis::settings const& settings)
 {
     unsigned const error_limit = settings["ferror-limit"].get<long>();
 
@@ -87,4 +87,4 @@ std::ostream& failure_status::print(std::ostream& os) const
     return os;
 }
 
-}  // namespace eda::vhdl
+}  // namespace ibis::vhdl

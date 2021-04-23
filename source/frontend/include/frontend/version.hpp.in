@@ -1,0 +1,12 @@
+#pragma once
+
+// DO NOT EDIT! GENERATED AUTOMATICALLY BY CMAKE!
+
+#include <string_view>
+
+namespace frontend {
+
+constexpr std::string_view IBIS_HDL_VERSION_STR{ "@PROJECT_NAME@ v@ibis_VERSION@" };
+constexpr std::string_view IBIS_HDL_HOMEPAGE_URL{ R"(@CMAKE_PROJECT_HOMEPAGE_URL@)" };
+
+}

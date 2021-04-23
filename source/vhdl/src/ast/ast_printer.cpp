@@ -1,13 +1,13 @@
-#include <eda/vhdl/ast/ast_printer.hpp>
-#include <eda/vhdl/ast.hpp>
+#include <ibis/vhdl/ast/ast_printer.hpp>
+#include <ibis/vhdl/ast.hpp>
 
 #include <boost/spirit/home/x3/support/traits/is_variant.hpp>
 
-#include <eda/support/cxx/overloaded.hpp>  // IWYU pragma: keep
+#include <ibis/support/cxx/overloaded.hpp>  // IWYU pragma: keep
 
-#include <eda/util/cxx_bug_fatal.hpp>
+#include <ibis/util/cxx_bug_fatal.hpp>
 
-namespace eda::vhdl::ast {
+namespace ibis::vhdl::ast {
 
 printer::printer(std::ostream& os_, uint16_t start_indent)
     : os{ os_, start_indent }
@@ -67,9 +67,9 @@ struct printer::symbol_scope<T, typename std::enable_if_t<x3::traits::is_variant
     }
 };
 
-}  // namespace eda::vhdl::ast
+}  // namespace ibis::vhdl::ast
 
-namespace eda::vhdl::ast {
+namespace ibis::vhdl::ast {
 
 void printer::operator()(abstract_literal const& node)
 {
@@ -2740,4 +2740,4 @@ void printer::visit(std::vector<T> const& vector)
     }
 }
 
-}  // namespace eda::vhdl::ast
+}  // namespace ibis::vhdl::ast

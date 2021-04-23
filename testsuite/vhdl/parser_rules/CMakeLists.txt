@@ -1,5 +1,5 @@
 ################################################################################
-## EDA/testsuite VHDL parser project
+## IBIS/testsuite VHDL parser project
 ##
 ## file: testsuite/vhdl/parser/CMakeLists.txt
 ################################################################################
@@ -30,7 +30,7 @@ add_test(NAME test_vhdl_parser_rules
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
-        eda::vhdl_parser
+        ibis::vhdl
     PRIVATE
         testsuite::util
         testsuite::vhdl_rules
@@ -196,11 +196,11 @@ set_property(TARGET ${PROJECT_NAME}
 )
 
 
-if (EDA_ENABLE_PCH)
+if (IBIS_ENABLE_PCH)
     target_precompile_headers(${PROJECT_NAME}
         PRIVATE
-            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl_parser/detail/pch.hpp>
-            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl_parser/detail/pch_prj.hpp>
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl/parser/detail/pch.hpp>
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl/parser/detail/pch_prj.hpp>
     )
 endif()
 

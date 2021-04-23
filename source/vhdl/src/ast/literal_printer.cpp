@@ -1,8 +1,8 @@
-#include <eda/vhdl/ast/literal_printer.hpp>
+#include <ibis/vhdl/ast/literal_printer.hpp>
 
-#include <eda/support/cxx/overloaded.hpp>  // IWYU pragma: keep
+#include <ibis/support/cxx/overloaded.hpp>  // IWYU pragma: keep
 
-#include <eda/util/cxx_bug_fatal.hpp>
+#include <ibis/util/cxx_bug_fatal.hpp>
 
 #include <boost/iterator/filter_iterator.hpp>  // IWYU pragma: keep
 #include <boost/variant/apply_visitor.hpp>
@@ -51,7 +51,7 @@ private:
 
 }  // anonymous namespace
 
-namespace eda::vhdl::ast {
+namespace ibis::vhdl::ast {
 
 literal_printer::literal_printer(bit_string_literal const& literal_)
     : literal{ literal_ }
@@ -149,4 +149,4 @@ std::ostream& literal_printer::print(std::ostream& os) const
     return os;
 }
 
-}  // namespace eda::vhdl::ast
+}  // namespace ibis::vhdl::ast

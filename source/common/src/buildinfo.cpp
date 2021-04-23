@@ -1,10 +1,10 @@
-#include <eda/buildinfo.hpp>
-#include <eda/buildinfo_static.hpp>
+#include <ibis/buildinfo.hpp>
+#include <ibis/buildinfo_static.hpp>
 
 #include <iostream>
 #include <string_view>
 
-namespace eda {
+namespace ibis {
 
 std::ostream& buildinfo::print_on(std::ostream& os)
 {
@@ -19,4 +19,4 @@ std::ostream& buildinfo::print_on(std::ostream& os)
     return os;
 }
 
-}  // namespace eda
+}  // namespace ibis

@@ -1,19 +1,19 @@
 ################################################################################
-## EDA/vhdl project
+## IBIS/vhdl project
 ##
 ## file: source/vhdl/CMakeLists.txt
 ################################################################################
 
-project(eda_vhdl_parser LANGUAGES CXX)
+project(ibis_vhdl LANGUAGES CXX)
 
 
 add_library(${PROJECT_NAME})
-add_library(eda::vhdl_parser ALIAS ${PROJECT_NAME})
+add_library(ibis::vhdl ALIAS ${PROJECT_NAME})
 
 
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
-        eda::common
+        ibis::common
 )
 
 
@@ -42,7 +42,7 @@ target_sources(${PROJECT_NAME}
         src/parser/on_error_base.cpp
         src/parser/position_cache.cpp
         src/parser/grammar.cpp  # ---- memory exhausting @compile time ----
-        src/parser/parse.cpp    # FixMe: also creates Grammar instance? Shouldn't!
+        src/parser/parse.cpp
 )
 
 
@@ -54,11 +54,11 @@ set_property(TARGET ${PROJECT_NAME}
 )
 
 
-if (EDA_ENABLE_PCH)
+if (IBIS_ENABLE_PCH)
     target_precompile_headers(${PROJECT_NAME}
         PRIVATE
-            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/eda/vhdl/detail/pch.hpp>
-            #$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/eda/vhdl/detail/pch_prj.hpp>
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/ibis/vhdl/detail/pch.hpp>
+            #$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/ibis/vhdl/detail/pch_prj.hpp>
     )
 endif()
 

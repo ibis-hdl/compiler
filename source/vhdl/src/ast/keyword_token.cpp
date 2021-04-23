@@ -1,9 +1,9 @@
-#include <eda/vhdl/ast/node/keyword_token.hpp>
+#include <ibis/vhdl/ast/node/keyword_token.hpp>
 
-#include <eda/util/cxx_bug_fatal.hpp>
+#include <ibis/util/cxx_bug_fatal.hpp>
 #include <iostream>
 
-namespace eda::vhdl::ast {
+namespace ibis::vhdl::ast {
 
 std::ostream& operator<<(std::ostream& os, keyword_token token)
 {
@@ -115,4 +115,4 @@ std::ostream& operator<<(std::ostream& os, keyword_token token)
     return os;
 }
 
-}  // namespace eda::vhdl::ast
+}  // namespace ibis::vhdl::ast

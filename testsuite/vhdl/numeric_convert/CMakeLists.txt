@@ -1,5 +1,5 @@
 ################################################################################
-## EDA/testsuite VHDL numeric convert project
+## IBIS/testsuite VHDL numeric convert project
 ##
 ## file: testsuite/vhdl/numeric_convert/CMakeLists.txt
 ################################################################################
@@ -18,7 +18,7 @@ add_test(NAME test_vhdl_numeric_conversion
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
-        eda::vhdl_parser
+        ibis::vhdl
         testsuite::util
         Boost::system
         Boost::locale
@@ -60,7 +60,7 @@ set_source_files_properties(src/test_numeric_convert.cpp
 )
 
 
-if (EDA_ENABLE_PCH)
+if (IBIS_ENABLE_PCH)
     target_precompile_headers(${PROJECT_NAME}
         PRIVATE
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl/numeric_convert/detail/pch.hpp>

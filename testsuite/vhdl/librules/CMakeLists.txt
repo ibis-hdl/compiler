@@ -1,5 +1,5 @@
 ################################################################################
-## EDA/testsuite VHDL rules project
+## IBIS/testsuite VHDL rules project
 ##
 ## The purpose of this project is simply to allow this big object to be compile
 ## in parallel with low-memory configurations.
@@ -15,7 +15,7 @@ add_library(testsuite::vhdl_rules ALIAS ${PROJECT_NAME})
 
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    eda::vhdl_parser
+    ibis::vhdl
 )
 
 if(DEVELOPER_EXTERNAL_BOOST_SPIRIT_X3)
@@ -35,7 +35,7 @@ set_property(TARGET ${PROJECT_NAME}
 )
 
 
-if (EDA_ENABLE_PCH)
+if (IBIS_ENABLE_PCH)
     target_precompile_headers(${PROJECT_NAME}
         PRIVATE
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl/detail/pch.hpp>
@@ -54,8 +54,8 @@ target_include_directories(${PROJECT_NAME}
 
 #
 # parser with Spirit.X3 DEBUG
-set(EDA_VHDL_PARSER_DEBUG OFF CACHE BOOL "debug printer of spirit.x3 parser tree")
-if("${EDA_VHDL_PARSER_DEBUG}")
+set(IBIS_VHDL_PARSER_DEBUG OFF CACHE BOOL "debug printer of spirit.x3 parser tree")
+if(${IBIS_VHDL_PARSER_DEBUG})
     target_compile_definitions(${PROJECT_NAME}
         PRIVATE BOOST_SPIRIT_X3_DEBUG)
 endif()

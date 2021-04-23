@@ -23,7 +23,7 @@ copyright = '(c) 2021, Me'
 author = 'AuthorName'
 
 # The full version, including alpha/beta/rc tags
-release = 'v@eda_VERSION@'
+release = 'v@ibis_VERSION@'
 
 
 # -- General configuration ---------------------------------------------------
@@ -142,9 +142,9 @@ exhale_args = {
                             INTERNAL_DOCS = YES
                             GENERATE_TODOLIST = YES
                             INPUT = \
-                                "@PROJECT_SOURCE_DIR@/testsuite/vhdl/util/include" \
-                                "@PROJECT_SOURCE_DIR@/testsuite/vhdl/util/src" \
-                                "@PROJECT_BINARY_DIR@/testsuite/vhdl/util/include"
+                                "@PROJECT_SOURCE_DIR@/testsuite/util/include" \
+                                "@PROJECT_SOURCE_DIR@/testsuite/util/src" \
+                                "@PROJECT_BINARY_DIR@/testsuite/util/include"
     ''')
 }
 

@@ -1,10 +1,10 @@
 #include <testsuite/vhdl/numeric_convert/numeric_parser.hpp>
 
-#include <eda/vhdl/ast/node/decimal_literal.hpp>
-#include <eda/vhdl/ast/numeric_convert.hpp>
-#include <eda/vhdl/parser/position_cache.hpp>
-#include <eda/vhdl/parser/iterator_type.hpp>
-#include <eda/vhdl/type.hpp>
+#include <ibis/vhdl/ast/node/decimal_literal.hpp>
+#include <ibis/vhdl/ast/numeric_convert.hpp>
+#include <ibis/vhdl/parser/position_cache.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/type.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>
@@ -93,7 +93,7 @@ std::vector<std::string> const dec_int_lit{
     detail::to_decimal_literal(std::numeric_limits<uint64_t>::max()),
 };
 
-std::vector<eda::vhdl::intrinsic::unsigned_integer_type> const dec_int{
+std::vector<ibis::vhdl::intrinsic::unsigned_integer_type> const dec_int{
     0, 1, 1000, 1000000, std::numeric_limits<uint32_t>::max(), std::numeric_limits<uint64_t>::max(),
 };
 
@@ -111,7 +111,7 @@ BOOST_DATA_TEST_CASE(decimal_literal_integer, utf_data::make(dec_int_lit) ^ dec_
     auto const [parse_ok, ast_node] = parse.decimal_literal(position_proxy);
     BOOST_REQUIRE(parse_ok);
 
-    using kind_specifier = eda::vhdl::ast::decimal_literal::kind_specifier;
+    using kind_specifier = ibis::vhdl::ast::decimal_literal::kind_specifier;
     BOOST_REQUIRE(ast_node.kind_type == kind_specifier::integer);
 
     auto const [conv_ok, value] = numeric_convert(ast_node);
@@ -169,7 +169,7 @@ std::vector<std::string> const dec_real_lit{
     "2.0332938517515416e+307",
 };
 
-std::vector<eda::vhdl::intrinsic::real_type> const dec_real{
+std::vector<ibis::vhdl::intrinsic::real_type> const dec_real{
     0.0,
     1.0,
     1000.0,
@@ -206,7 +206,7 @@ BOOST_DATA_TEST_CASE(decimal_literal_real, utf_data::make(dec_real_lit) ^ dec_re
     auto const [parse_ok, ast_node] = parse.decimal_literal(position_proxy);
     BOOST_REQUIRE(parse_ok);
 
-    using kind_specifier = eda::vhdl::ast::decimal_literal::kind_specifier;
+    using kind_specifier = ibis::vhdl::ast::decimal_literal::kind_specifier;
     BOOST_REQUIRE(ast_node.kind_type == kind_specifier::real);
 
     auto const [conv_ok, value] = numeric_convert(ast_node);

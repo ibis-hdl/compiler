@@ -9,9 +9,9 @@
 /// header fakes this node
 ///
 
-#include <eda/vhdl/ast/util/string_span.hpp>
+#include <ibis/vhdl/ast/util/string_span.hpp>
 
-namespace eda::vhdl::ast {
+namespace ibis::vhdl::ast {
 
 using integer = ast::string_span;
 

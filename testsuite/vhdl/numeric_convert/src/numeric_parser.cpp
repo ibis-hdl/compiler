@@ -1,7 +1,7 @@
 #include <testsuite/vhdl/numeric_convert/numeric_parser.hpp>
 
-#include <eda/vhdl/parser/parser_config.hpp>
-#include <eda/vhdl/parser/grammar_def.hpp>
+#include <ibis/vhdl/parser/parser_config.hpp>
+#include <ibis/vhdl/parser/grammar_def.hpp>
 
 #include <iostream>
 
@@ -11,7 +11,7 @@ template <typename IteratorT>
 std::tuple<bool, ast::bit_string_literal> literal_parser<IteratorT>::bit_string_literal(
     position_proxy const& cache) const
 {
-    auto const parser = eda::vhdl::parser::bit_string_literal;
+    auto const parser = ibis::vhdl::parser::bit_string_literal;
     ast::bit_string_literal attr;
 
     return parse(parser, attr, cache);
@@ -21,7 +21,7 @@ template <typename IteratorT>
 std::tuple<bool, ast::decimal_literal> literal_parser<IteratorT>::decimal_literal(
     position_proxy const& cache) const
 {
-    auto const parser = eda::vhdl::parser::decimal_literal;
+    auto const parser = ibis::vhdl::parser::decimal_literal;
     ast::decimal_literal attr;
 
     return parse(parser, attr, cache);
@@ -31,7 +31,7 @@ template <typename IteratorT>
 std::tuple<bool, ast::based_literal> literal_parser<IteratorT>::based_literal(
     position_proxy const& cache) const
 {
-    auto const parser = eda::vhdl::parser::based_literal;
+    auto const parser = ibis::vhdl::parser::based_literal;
     ast::based_literal attr;
 
     return parse(parser, attr, cache);

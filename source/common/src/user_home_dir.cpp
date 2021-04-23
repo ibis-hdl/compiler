@@ -1,8 +1,8 @@
-#include <eda/util/file/user_home_dir.hpp>
+#include <ibis/util/file/user_home_dir.hpp>
 
-//#include <eda/compiler/compiler_support.hpp> // IWYU pragma: keep
-#include <eda/platform.hpp>
-//#include <eda/namespace_alias.hpp>
+//#include<ibis/compiler/compiler_support.hpp> // IWYU pragma: keep
+#include <ibis/platform.hpp>
+//#include<ibis/namespace_alias.hpp>
 
 #include <cstdlib>
 #include <stdexcept>
@@ -11,7 +11,7 @@
 #include <initializer_list>
 #include <system_error>
 
-namespace eda::util {
+namespace ibis::util {
 
 ///
 /// @brief Lookup user's HOME environment to gather the absolute path
@@ -45,10 +45,10 @@ namespace eda::util {
 fs::path user_home_dir(std::initializer_list<char const *> path_list)
 {
     std::string const HOME_ENV = []() {
-        if constexpr (eda::build_platform == platform::Unix) {
+        if constexpr (ibis::build_platform == platform::Unix) {
             return std::getenv("HOME");
         }
-        else if constexpr (eda::build_platform == platform::Win32) {
+        else if constexpr (ibis::build_platform == platform::Win32) {
             return std::getenv("USERPROFILE");
         }
         else {
@@ -85,4 +85,4 @@ fs::path user_home_dir(std::initializer_list<char const *> path_list)
     return path;
 }
 
-}  // namespace eda::util
+}  // namespace ibis::util

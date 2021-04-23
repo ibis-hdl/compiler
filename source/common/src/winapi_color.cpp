@@ -1,8 +1,8 @@
-#include <eda/color/detail/color.hpp>  // IWYU pragma: keep
+#include <ibis/color/detail/color.hpp>  // IWYU pragma: keep
 
-#if BOOST_OS_WINDOWS && !EDA_ON_WINDOWS_USE_ANSII_COLOR
+#if BOOST_OS_WINDOWS && !IBIS_WITH_ANSI_COLOR_ON_WINDOWS
 
-namespace eda::color::detail {
+namespace ibis::color::detail {
 
 const int win_printer::xindex = std::ios_base::xalloc();
 

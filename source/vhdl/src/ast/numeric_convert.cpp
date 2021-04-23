@@ -1,17 +1,17 @@
-#include <eda/vhdl/ast/numeric_convert.hpp>
+#include <ibis/vhdl/ast/numeric_convert.hpp>
 
-#include <eda/vhdl/ast/node/based_literal.hpp>
-#include <eda/vhdl/ast/node/bit_string_literal.hpp>
-#include <eda/vhdl/ast/node/decimal_literal.hpp>
-#include <eda/vhdl/ast/util/string_span.hpp>
+#include <ibis/vhdl/ast/node/based_literal.hpp>
+#include <ibis/vhdl/ast/node/bit_string_literal.hpp>
+#include <ibis/vhdl/ast/node/decimal_literal.hpp>
+#include <ibis/vhdl/ast/util/string_span.hpp>
 
-#include <eda/vhdl/ast/literal_printer.hpp>
-#include <eda/vhdl/type.hpp>
+#include <ibis/vhdl/ast/literal_printer.hpp>
+#include <ibis/vhdl/type.hpp>
 
-#include <eda/util/cxx_bug_fatal.hpp>
-#include <eda/compiler/compiler_support.hpp>
+#include <ibis/util/cxx_bug_fatal.hpp>
+#include <ibis/compiler/compiler_support.hpp>
 
-#include <eda/namespace_alias.hpp>  // IWYU pragma: keep
+#include <ibis/namespace_alias.hpp>  // IWYU pragma: keep
 
 // IWYU replaces a lot of other header, we stay with this one
 #include <boost/spirit/home/x3.hpp>  // IWYU pragma: keep
@@ -37,11 +37,11 @@
 #include <iostream>
 
 // pre C++20 to avoid lint warnings
-#if defined(EDA_HAVE_EXPERIMENTAL_SOURCE_LOCATION)
+#if defined(IBIS_HAVE_EXPERIMENTAL_SOURCE_LOCATION)
 #include <experimental/source_location>  // IWYU pragma: keep
 #endif
 
-namespace eda::vhdl::ast::parser {
+namespace ibis::vhdl::ast::parser {
 
 namespace detail {
 
@@ -69,8 +69,8 @@ x3::real_parser<value_type, detail::real_policies<value_type>> const real_base10
 //
 // integer types and their parsers
 //
-using unsigned_integer = eda::vhdl::intrinsic::unsigned_integer_type;
-using signed_integer = eda::vhdl::intrinsic::unsigned_integer_type;
+using unsigned_integer = ibis::vhdl::intrinsic::unsigned_integer_type;
+using signed_integer = ibis::vhdl::intrinsic::unsigned_integer_type;
 
 x3::real_parser<unsigned_integer, detail::integer_policies<unsigned_integer>> const uint_base10;
 
@@ -120,7 +120,7 @@ void trace_report(RangeType const& range, RangeFiltType const& range_f, bool par
 ///        to gather source location. Unfortunately, we will still stick with it since
 ///        MS VisualStudio doesn't support P1208R6 std::source_location in year [2021](
 ///        https://docs.microsoft.com/de-de/cpp/overview/visual-cpp-language-conformance?view=msvc-160)
-#if defined(EDA_HAVE_EXPERIMENTAL_SOURCE_LOCATION_)
+#if defined(IBIS_HAVE_EXPERIMENTAL_SOURCE_LOCATION)
 template <typename RangeType, typename RangeFiltType, typename AttributeType>
 static inline void dbg_trace(RangeType const& range, RangeFiltType const& range_f, bool parse_ok,
                              AttributeType attribute,
@@ -289,18 +289,18 @@ struct primitive_parser {
     }
 };
 
-}  // namespace eda::vhdl::ast::parser
+}  // namespace ibis::vhdl::ast::parser
 
-namespace eda::vhdl::ast {
+namespace ibis::vhdl::ast {
 
 namespace detail {
 
 //
 // Integer Types and Parsers
 //
-using unsigned_integer = eda::vhdl::intrinsic::unsigned_integer_type;
-using signed_integer = eda::vhdl::intrinsic::unsigned_integer_type;
-using real = eda::vhdl::intrinsic::real_type;
+using unsigned_integer = ibis::vhdl::intrinsic::unsigned_integer_type;
+using signed_integer = ibis::vhdl::intrinsic::unsigned_integer_type;
+using real = ibis::vhdl::intrinsic::real_type;
 
 ///
 /// Helper class to calculate fractional parts of binary numbers like bin,
@@ -348,6 +348,7 @@ public:
             default:
                 cxx_unreachable_bug_triggered();
         }
+        cxx_unreachable();
     }
 
     numeric_type operator()(numeric_type acc, char ch)
@@ -574,6 +575,7 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
             default:
                 cxx_unreachable_bug_triggered();
         }
+        cxx_unreachable();
     };
 
     auto const parse_exponent = [](ast::based_literal const& literal_) {
@@ -692,6 +694,7 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
                 default:
                     cxx_unreachable_bug_triggered();
             }
+            cxx_unreachable();
         };
 
         auto range_f{ primitive_parser::filter_range(literal.number.fractional_part) };
@@ -734,7 +737,7 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
     return std::tuple{ true, result };
 }
 
-}  // namespace eda::vhdl::ast
+}  // namespace ibis::vhdl::ast
 
 //*****************************************************************************
 // Code fragments from former converting functions, maybe useful later on.
@@ -742,7 +745,7 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
 // it to shorten the error message in case of range overflow.
 //*****************************************************************************
 //
-// #include <eda/vhdl/util/literal_ellipsis.hpp>
+// #include<ibis/vhdl/util/literal_ellipsis.hpp>
 //
 // ...
 // // for bit_string_literal
@@ -756,7 +759,7 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
 //  }};
 //
 //  BOOST_THROW_EXCEPTION(
-//      eda::range_error(
+//      ibis::range_error(
 //          "VHDL Bit String Literal='"
 //          + literal_ellipsis(node.bit_literal, length[static_cast<unsigned>(node.base)])
 //          + "' <int32> Range Error")
@@ -769,7 +772,7 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
 // if (ok && iter != cend) {
 //  // syntactically ok, but literal probably to long
 //  BOOST_THROW_EXCEPTION(
-//      eda::range_error(
+//      ibis::range_error(
 //          "VHDL Decimal Literal='"
 //          + literal_ellipsis(node.literal, 15)
 //          + "' <double> Range Error")

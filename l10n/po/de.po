@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \"\" \"..\"\n"
 "Report-Msgid-Bugs-To: https://github.com/eda/ibis/issues\n"
-"POT-Creation-Date: 2021-04-14 19:58+0200\n"
+"POT-Creation-Date: 2021-04-22 13:59+0200\n"
 "PO-Revision-Date: 2018-08-25 17:30+0100\n"
 "Last-Translator: olaf <olaf@home.lan>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -51,6 +51,17 @@ msgid ""
 msgstr ""
 "Basis Bezeichner '{1}' wird nicht unterstützt. Unterstützt wird nur 2, 8, 10 "
 "und 16!"
+
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/parser/parse.cpp:96
+msgctxt "ExceptionDescription"
+msgid "Caught exception '{1}' during parsing file '{2}'"
+msgstr "Ausnahme '{1}' gefangen während des parsens der Datei '{2}'"
+
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/parser/parse.cpp:109
+#, fuzzy
+msgctxt "ExceptionDescription"
+msgid "Caught unexpected exception during parsing file '{1}'"
+msgstr "Ausnahme '{1}' gefangen während des parsens der Datei '{2}'"
 
 #. TRANSLATORS: Literal Type and passed Value
 #: /home/olaf/work/CXX/ibis/source/source/vhdl/src/ast/numeric_convert.cpp:408
@@ -165,6 +176,10 @@ msgstr ""
 msgid "Show version."
 msgstr ""
 
+#: /home/olaf/work/CXX/ibis/source/source/vhdl/src/parser/parse.cpp:64
+msgid "Source file '{1}' failed to parse!"
+msgstr "Parsen der Quell-Datei '{1}'  fehlgeschlagen"
+
 #: /home/olaf/work/CXX/ibis/source/source/vhdl/src/analyze/error_handler.cpp:63
 #: /home/olaf/work/CXX/ibis/source/source/vhdl/src/analyze/error_handler.cpp:136
 msgid "Syntax ERROR"
@@ -260,20 +275,8 @@ msgstr[1] "{2} Warnungen"
 #~ msgid "<unknown>"
 #~ msgstr "<Unbekannt>"
 
-#~ msgctxt "ExceptionDescription"
-#~ msgid "Caught exception '{1}' during parsing file '{2}'"
-#~ msgstr "Ausnahme '{1}' gefangen während des parsens der Datei '{2}'"
-
-#, fuzzy
-#~ msgctxt "ExceptionDescription"
-#~ msgid "Caught unexpected exception during parsing file '{1}'"
-#~ msgstr "Ausnahme '{1}' gefangen während des parsens der Datei '{2}'"
-
 #~ msgid "Error opening file \"{1}\""
 #~ msgstr "Fehler beim öffnen der Datei \"{1}\""
-
-#~ msgid "Source file '{1}' failed to parse!"
-#~ msgstr "Parsen der Quell-Datei '{1}'  fehlgeschlagen"
 
 #~ msgid ""
 #~ "WARNING: failed to lookup '{1}' at parser's expectation symbol table\n"

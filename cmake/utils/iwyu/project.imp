@@ -1,7 +1,7 @@
 # [IWYU Mappings](https://github.com/include-what-you-use/include-what-you-use/blob/master/docs/IWYUMappings.md)
 [
-    # EDA project specific
-    { include: [ "<eda/color/detail/ansii_color.hpp>", "private", "<eda/color/facet.hpp>", "public" ] },
+    # IBIS HDL project specific
+    { include: [ "<ibis/color/detail/ansii_color.hpp>", "private", "<ibis/color/facet.hpp>", "public" ] },
     # clang specific
     { include: [ "<bits/types/time_t.h>", "private", "<ctime>", "public" ] },
     { include: [ "<bits/exception.h>", "private", "<exception>", "public" ] },

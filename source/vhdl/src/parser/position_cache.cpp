@@ -1,7 +1,7 @@
-#include <eda/vhdl/parser/position_cache.hpp>
-#include <eda/vhdl/parser/iterator_type.hpp>  // for explicit template instantiation
+#include <ibis/vhdl/parser/position_cache.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>  // for explicit template instantiation
 
-#include <eda/util/cxx_bug_fatal.hpp>
+#include <ibis/util/cxx_bug_fatal.hpp>
 
 #include <boost/locale/encoding_utf.hpp>
 
@@ -10,7 +10,7 @@
 #include <string>
 #include <iosfwd>
 
-namespace eda::vhdl::parser {
+namespace ibis::vhdl::parser {
 
 template <typename IteratorT>
 std::size_t position_cache<IteratorT>::line_number(std::size_t file_id,
@@ -110,11 +110,11 @@ IteratorT position_cache<IteratorT>::get_line_start(std::size_t file_id, iterato
     return latest;
 }
 
-}  // namespace eda::vhdl::parser
+}  // namespace ibis::vhdl::parser
 
-namespace eda::vhdl::parser {
+namespace ibis::vhdl::parser {
 
 // Explicit template instantiation
 template class position_cache<parser::iterator_type>;
 
-}  // namespace eda::vhdl::parser
+}  // namespace ibis::vhdl::parser

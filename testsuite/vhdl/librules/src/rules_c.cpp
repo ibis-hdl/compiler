@@ -1,9 +1,9 @@
 #include <testsuite/vhdl/rules.hpp>
 
-#include <eda/vhdl/parser/grammar_def.hpp>
-#include <eda/vhdl/parser/parser_config.hpp>
+#include <ibis/vhdl/parser/grammar_def.hpp>
+#include <ibis/vhdl/parser/parser_config.hpp>
 
-namespace eda::vhdl::parser {
+namespace ibis::vhdl::parser {
 
 BOOST_SPIRIT_INSTANTIATE(case_statement_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(character_literal_type, iterator_type, context_type);
@@ -21,4 +21,4 @@ BOOST_SPIRIT_INSTANTIATE(constrained_array_definition_type, iterator_type, conte
 BOOST_SPIRIT_INSTANTIATE(constraint_type, iterator_type, context_type);
 BOOST_SPIRIT_INSTANTIATE(context_clause_type, iterator_type, context_type);
 
-}  // namespace eda::vhdl::parser
+}  // namespace ibis::vhdl::parser

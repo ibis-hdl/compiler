@@ -13,11 +13,11 @@ namespace boost::unit_test::data {
 namespace std::filesystem {
 }
 
-namespace eda::vhdl::ast {
+namespace ibis::vhdl::ast {
 }
-namespace eda::vhdl::parser {
+namespace ibis::vhdl::parser {
 }
-namespace eda::vhdl::analyze {
+namespace ibis::vhdl::analyze {
 }
 
 namespace testsuite {
@@ -33,9 +33,9 @@ namespace utf_data = boost::unit_test::data;
 
 namespace butf = boost::unit_test::framework;
 
-namespace parser = eda::vhdl::parser;
-namespace ast = eda::vhdl::ast;
-namespace analyze = eda::vhdl::analyze;
+namespace parser = ibis::vhdl::parser;
+namespace ast = ibis::vhdl::ast;
+namespace analyze = ibis::vhdl::analyze;
 
 }  // namespace testsuite
 
@@ -43,6 +43,6 @@ namespace analyze = eda::vhdl::analyze;
 namespace btt = testsuite::btt;
 namespace utf_data = testsuite::utf_data;
 
-namespace parser = eda::vhdl::parser;
-namespace ast = eda::vhdl::ast;
-namespace vhdl = eda::vhdl;
+namespace parser = ibis::vhdl::parser;
+namespace ast = ibis::vhdl::ast;
+namespace vhdl = ibis::vhdl;

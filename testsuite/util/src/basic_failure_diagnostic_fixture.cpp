@@ -17,10 +17,10 @@
 namespace  // anonymous
 {
 
-/// FixMe: This is a hack to avoid the depency to eda::vhdl to
-/// this project. This depends only on eda::util::make_iomanip
+/// FixMe: This is a hack to avoid the depency to ibis::vhdl to
+/// this project. This depends only on ibis::util::make_iomanip
 /// header for failure_diagnostic_fixture
-/// Hence it's a copy&paste of <eda/util/make_iomanip.hpp>
+/// Hence it's a copy&paste of <ibis/util/make_iomanip.hpp>
 template <typename T>
 struct A {
     T x;

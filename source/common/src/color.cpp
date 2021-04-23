@@ -1,8 +1,8 @@
-//#include <eda/color/attribute.hpp>
-//#include <eda/color/facet.hpp>
-#include <eda/color/message.hpp>
+//#include<ibis/color/attribute.hpp>
+//#include<ibis/color/facet.hpp>
+#include <ibis/color/message.hpp>
 
-#include <eda/util/string/icompare.hpp>
+#include <ibis/util/string/icompare.hpp>
 
 #include <initializer_list>
 #include <locale>
@@ -10,7 +10,7 @@
 #include <string_view>
 #include <utility>
 
-namespace eda::color {
+namespace ibis::color {
 
 // static std::locale::id for each facet
 template <>
@@ -91,4 +91,4 @@ std::optional<color::attribute> background_attr(std::string_view name)
     return std::optional<color::attribute>{};
 }
 
-}  // namespace eda::color
+}  // namespace ibis::color

@@ -52,7 +52,7 @@ namespace testsuite::util {
 /// // indicating that the specified type is a dataset.
 /// namespace boost::unit_test::data::monomorphic {
 /// template <>
-/// struct is_dataset<testsuite::vhdl_parser::dataset> : boost::mpl::true_ { };
+/// struct is_dataset<testsuite::vhdl::parser::dataset> : boost::mpl::true_ { };
 /// }
 /// @endcode
 ///
@@ -104,8 +104,8 @@ public:
     struct iterator {
         using iterator_type = std::vector<std::string>::const_iterator;
 
-        iterator(iterator_type input_iter_,          /// input
-                 iterator_type expected_iter_,       /// expected aka 'gold'
+        iterator(iterator_type input_iter_,           /// input
+                 iterator_type expected_iter_,        /// expected aka 'gold'
                  iterator_type testcase_name_iter_);  /// test name
 
         std::tuple<std::string, std::string, std::string> operator*() const;
@@ -172,7 +172,7 @@ private:
     std::string read_file(fs::path const& file_path) const;
 
 private:
-    //std::string test_case_pathname;
+    // std::string test_case_pathname;
     std::string const loader_name;
     std::string const testcase_group;
 

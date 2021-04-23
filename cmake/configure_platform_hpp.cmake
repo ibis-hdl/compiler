@@ -39,6 +39,6 @@ endif()
 
 
 configure_file(
-  "${PROJECT_SOURCE_DIR}/include/eda/platform.hpp.in"
-  "${PROJECT_BINARY_DIR}/include/eda/platform.hpp"
+  "${PROJECT_SOURCE_DIR}/include/ibis/platform.hpp.in"
+  "${PROJECT_BINARY_DIR}/include/ibis/platform.hpp"
 )

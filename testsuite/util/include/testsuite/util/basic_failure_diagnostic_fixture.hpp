@@ -84,7 +84,7 @@ protected:
     /// The compiled builtin defaults, used if no CLI argument was given.
     ///
     // NOLINTNEXTLINE(cppcoreguidelines-special-member-functions) -- due to abstract class!
-   struct compile_builtin {
+    struct compile_builtin {
         compile_builtin() = default;
         virtual ~compile_builtin() = default;
 

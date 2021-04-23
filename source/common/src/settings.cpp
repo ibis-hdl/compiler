@@ -1,13 +1,13 @@
-#include <eda/settings.hpp>
+#include <ibis/settings.hpp>
 
-#include <eda/util/string/icompare.hpp>
-#include <eda/util/infix_ostream_iterator.hpp>
+#include <ibis/util/string/icompare.hpp>
+#include <ibis/util/infix_ostream_iterator.hpp>
 
 #include <algorithm>
 #include <iostream>
 #include <vector>
 
-namespace eda {
+namespace ibis {
 
 std::ostream& settings::dump(std::ostream& os) const
 {
@@ -92,4 +92,4 @@ std::ostream& operator<<(std::ostream& os, settings::option_value const& value)
 
 const settings::option_value settings::none;
 
-}  // namespace eda
+}  // namespace ibis

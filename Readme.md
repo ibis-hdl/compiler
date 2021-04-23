@@ -1,5 +1,5 @@
-EDA project
-===========
+IBIS HDL project
+================
 
 Required Tools to Build & Configuration
 ----------------------------------------
@@ -39,7 +39,7 @@ Build
 
 ### For end user
 
-There is nothing to build currently, really.
+There is nothing of interest at this time, really.
 
 ### For developer
 
@@ -152,8 +152,8 @@ project.
 
 ```
 stack-buffer-overflow .../color/detail/ansii_color.hpp:33 in
-color::detail::esc_printer<eda::color::attribute, 4ul>::esc_printer<0ul, 1ul, 2ul, 3ul>(
-  std::initializer_list<eda::color::attribute>,
+color::detail::esc_printer<ibis::color::attribute, 4ul>::esc_printer<0ul, 1ul, 2ul, 3ul>(
+  std::initializer_list<ibis::color::attribute>,
   std::integer_sequence<unsigned long, 0ul, 1ul, 2ul, 3ul>
 )
 ```
@@ -168,22 +168,22 @@ you seem to be passing in an initializer_list which has one element but you're a
 Maybe related is compiler's warning seen on older code:
 
 ```
-source/common/include/eda/color/detail/ansii_color.hpp:33:43: Warnung: Arrayindex 1 ist außerhalb der Arraygrenzen von »const eda::color::attribute [1]« [-Warray-bounds]
+source/common/include/ibis/color/detail/ansii_color.hpp:33:43: Warnung: Arrayindex 1 ist außerhalb der Arraygrenzen von »const ibis::color::attribute [1]« [-Warray-bounds]
    33 |         : std::array<value_type, SIZE>{ { static_cast<value_type>(il.begin()[N])... } }
       |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-source/common/include/eda/color/detail/ansii_color.hpp:130:49: Anmerkung: beim Referenzieren von »<anonymous>«
+source/common/include/ibis/color/detail/ansii_color.hpp:130:49: Anmerkung: beim Referenzieren von »<anonymous>«
   130 | color::printer const bold{ attribute::Text_Bold };
       |                                                 ^
-source/common/include/eda/color/detail/ansii_color.hpp:33:43: Warnung: Arrayindex 2 ist außerhalb der Arraygrenzen von »const eda::color::attribute [1]« [-Warray-bounds]
+source/common/include/ibis/color/detail/ansii_color.hpp:33:43: Warnung: Arrayindex 2 ist außerhalb der Arraygrenzen von »const ibis::color::attribute [1]« [-Warray-bounds]
    33 |         : std::array<value_type, SIZE>{ { static_cast<value_type>(il.begin()[N])... } }
       |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-source/common/include/eda/color/detail/ansii_color.hpp:130:49: Anmerkung: beim Referenzieren von »<anonymous>«
+source/common/include/ibis/color/detail/ansii_color.hpp:130:49: Anmerkung: beim Referenzieren von »<anonymous>«
   130 | color::printer const bold{ attribute::Text_Bold };
       |                                                 ^
-source/common/include/eda/color/detail/ansii_color.hpp:33:43: Warnung: Arrayindex 3 ist außerhalb der Arraygrenzen von »const eda::color::attribute [1]« [-Warray-bounds]
+source/common/include/ibis/color/detail/ansii_color.hpp:33:43: Warnung: Arrayindex 3 ist außerhalb der Arraygrenzen von »const ibis::color::attribute [1]« [-Warray-bounds]
    33 |         : std::array<value_type, SIZE>{ { static_cast<value_type>(il.begin()[N])... } }
       |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-source/common/include/eda/color/detail/ansii_color.hpp:130:49: Anmerkung: beim Referenzieren von »<anonymous>«
+source/common/include/ibis/color/detail/ansii_color.hpp:130:49: Anmerkung: beim Referenzieren von »<anonymous>«
   130 | color::printer const bold{ attribute::Text_Bold };
       |                                                 ^
 ```
@@ -241,7 +241,7 @@ terminate called after throwing an instance of 'std::bad_variant_access'
 thrown from
 
 ```
-#16 eda::settings::option_value_proxy::get<long> (this=....>) at .../source/common/include/eda/settings.hpp:107
+#16 ibis::settings::option_value_proxy::get<long> (this=....>) at .../source/common/include/ibis/settings.hpp:107
 ```
 
 The source is the boost::variant visitor:
@@ -304,10 +304,6 @@ But there is more:
 - testsuite/numeric_convert/numeric_parser again has a helper function parse(),
   just like testsuite/parser_rules/testing_parser !!! Maybe combine them?
 
-- The testsuite namespaces aren't consistent. e.g. testsuite::syntax, or
-  testsuite::vhdl_syntax etc. Shall be testsuite::vhdl::{topic} to reflect
-  directory structure.
-
 
 ### App Logging
 
@@ -328,8 +324,6 @@ ToDo on design
 
 - testsuite/util/basic_failure_diagnostic_fixture and testsuite/vhdl/util/failure_diagnostic_fixture
   still BAD NAMING ...
-
-- rename common file system paths, namespaces are (as far I remember) 'util' always.
 
 - merge back testsuite librules into parser_rules. The intention was
   to split out compile/memory intensive compile jobs. This is
@@ -381,21 +375,9 @@ set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
   code isn't configured, we don't have these functionality even in the
   stacktrace_{gdb,boost} functions. Maybe a color 'lite support' may solve it, see
   [boost.UTF setcolor()](https://github.com/boostorg/test/blob/9d863d07e864ef663e3e8573b55905099b938d3e/include/boost/test/utils/setcolor.hpp)
-  or even use eda::color code with defaults set before - see
+  or even use ibis::color code with defaults set before - see
   init::user_config_message_color(). Maybe initialize the streams really early
   inside init().
-
-- Make the path of test inputs hard coded using CMake's configure_file() to run
-  it easily without ctest and command line arguments. They are not intended
-  to be distributed, so it doesn't matter. But, don't remove the command line
-  options to explicit override these paths other specific tests.
-  After first inspection, more effort is required for parse_rules and syntax
-  testsuite since the concept of parsing command line arguments, using builtin
-  compile path and naming of tests isn't appropriate to this.
-
-- X3 parser objects are very lightweight, change the API (vhdl and testsuite) to
-  return a value copy instead const ref, [X3 Program Structure](
-  https://www.boost.org/doc/libs/develop/libs/spirit/doc/x3/html/spirit_x3/tutorials/minimal.html)
 
 - Get clang-format working again. By The Way, check clang-format
   style for enhancements, so that we get rid off the '// 'clang-format {off|on}'
@@ -410,7 +392,6 @@ set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
   - RapidJSON with boost.json - starting with boost 1.75. The results of
     [Benchmarks](https://vinniefalco.github.io/doc/json/json/benchmarks.html)
     look promising
-  - util::visit_in_place using boost.hana with util::overloaded
   - swap from make to ninja build to use CMake's Unity Build Mode
   - join back testsuite's librules into parser_rules. The reason was in 2018 the
     compilation effort: compiling with make -j X and spirit.x3 rules with
@@ -419,6 +400,9 @@ set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
 
 - AST printer: move ast_printer into ast_walker, printer breaks down into simple class
   like ast_stats.
+
+  - util::visit_in_place using boost.hana with util::overloaded, afterwards it can
+    be removed
 
   - use for recursive depth counting a class with ctor/dtor increment/decrement
     capabilities - recursive_depth_{counter,guard} - as context i.e.
@@ -442,11 +426,7 @@ set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
 
 ### Others
 
-- find a project name, project vhdl is named EDA and the app ibis. Get a logo, e.g.
-  ibis as mascot with assets sub directories.
-
-- organize convenience scripts into sub dir - or write a doc how use it on command
-  line for use with copy&paste (best approach IMO).
+- Get a logo, e.g. ibis as mascot with assets sub directories.
 
 
 ### Boost.Test
@@ -462,6 +442,7 @@ C++ Code style
 Check [LSST DM Developer Guide](https://developer.lsst.io/index.html) for styles
 and recommendations.
 
+
 ### CLang Tidy
 
 A good starting point is [Static checks with CMake/CDash (iwyu, clang-tidy, lwyu, cpplint and cppcheck)](
@@ -469,7 +450,7 @@ https://blog.kitware.com/static-checks-with-cmake-cdash-iwyu-clang-tidy-lwyu-cpp
 
   - not checked in deep by clang-tidy:
 
-    - ibis/src/stacktrace_{boost,gdb}.cpp since they need more effort
+    - frontend/src/stacktrace_{boost,gdb}.cpp since they need more effort
       to check and rewrite/improve
 
 
@@ -513,6 +494,8 @@ https://blog.kitware.com/static-checks-with-cmake-cdash-iwyu-clang-tidy-lwyu-cpp
 ## ToDo Documentation
 
 Switch from MarkDown to ReStructuredText. At this state, Doxygen miss some MarkDown
-and ReStructuredText features, Sphinx multi projects and Doxygen's Todo tags/list.
+and ReStructuredText features, Sphinx multi projects and doesn't seems to support 
+Doxygen's Todo tags/list.
 
 - [Documenting C++ Code](https://developer.lsst.io/cpp/api-docs.html)
+

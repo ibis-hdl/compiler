@@ -1,10 +1,10 @@
 #pragma once
 
-#include <eda/vhdl/parser/grammar_decl.hpp>
+#include <ibis/vhdl/parser/grammar_decl.hpp>
 
 namespace testsuite::vhdl::parser {
 
-namespace parser = eda::vhdl::parser;
+namespace parser = ibis::vhdl::parser;
 
 parser::abstract_literal_type abstract_literal();
 parser::actual_part_type actual_part();

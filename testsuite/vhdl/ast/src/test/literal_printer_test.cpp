@@ -1,4 +1,4 @@
-#include <eda/vhdl/ast/literal_printer.hpp>
+#include <ibis/vhdl/ast/literal_printer.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>
@@ -10,7 +10,7 @@
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_SUITE(literal_print)
 
-using namespace eda::vhdl::ast;
+using namespace ibis::vhdl::ast;
 
 // Check on correct printing of quoted string literals
 std::vector<std::string> const input_string_literal{
@@ -34,7 +34,7 @@ BOOST_DATA_TEST_CASE(string_literal,  // --
         return l;
     };
 
-    using eda::vhdl::ast::literal_printer;
+    using ibis::vhdl::ast::literal_printer;
 
     btt::output_test_stream os;
 

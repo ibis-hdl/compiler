@@ -1,10 +1,10 @@
-#include <eda/vhdl/ast/node/design_file.hpp>
-#include <eda/vhdl/parser/parse.hpp>
-#include <eda/vhdl/parser/parser_config.hpp>
-#include <eda/vhdl/analyze/syntax.hpp>
-#include <eda/vhdl/analyze/error_handler.hpp>
-#include <eda/vhdl/parser/position_cache.hpp>
-#include <eda/vhdl/context.hpp>
+#include <ibis/vhdl/ast/node/design_file.hpp>
+#include <ibis/vhdl/parser/parse.hpp>
+#include <ibis/vhdl/parser/parser_config.hpp>
+#include <ibis/vhdl/analyze/syntax.hpp>
+#include <ibis/vhdl/analyze/error_handler.hpp>
+#include <ibis/vhdl/parser/position_cache.hpp>
+#include <ibis/vhdl/context.hpp>
 
 #include <testsuite/vhdl/syntax/failure_diagnostic_fixture.hpp>
 #include <testsuite/vhdl/syntax/dataset.hpp>
@@ -17,7 +17,7 @@
 
 #include <iostream>
 
-namespace analyze = eda::vhdl::analyze;
+namespace analyze = ibis::vhdl::analyze;
 
 using testsuite::vhdl::syntax::failure_diagnostic_fixture;
 
@@ -27,9 +27,9 @@ BOOST_FIXTURE_TEST_SUITE(syntax_check, failure_diagnostic_fixture)
 //
 // SUCCESS test case
 //
-BOOST_DATA_TEST_CASE(labels_ok,  // --
-    utf_data::make_delayed<testsuite::vhdl::syntax::dataset>("labels_ok"),  // --
-    input, expected, test_case_name)
+BOOST_DATA_TEST_CASE(labels_ok,                                                              // --
+                     utf_data::make_delayed<testsuite::vhdl::syntax::dataset>("labels_ok"),  // --
+                     input, expected, test_case_name)
 {
     btt::output_test_stream os;
     parser::position_cache<parser::iterator_type> position_cache;
@@ -72,8 +72,9 @@ BOOST_DATA_TEST_CASE(labels_ok,  // --
 //
 // FAILURE test case
 //
-BOOST_DATA_TEST_CASE(label_missmatch, // --
-    utf_data::make_delayed<testsuite::vhdl::syntax::dataset>("label_missmatch"), // --
+BOOST_DATA_TEST_CASE(
+    label_missmatch,                                                              // --
+    utf_data::make_delayed<testsuite::vhdl::syntax::dataset>("label_missmatch"),  // --
     input, expected, test_case_name)
 {
     btt::output_test_stream os;

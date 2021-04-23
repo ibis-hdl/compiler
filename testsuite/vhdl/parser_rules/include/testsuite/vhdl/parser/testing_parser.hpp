@@ -2,12 +2,12 @@
 
 #include <boost/test/tools/output_test_stream.hpp>
 
-#include <eda/vhdl/parser/skipper.hpp>
-#include <eda/vhdl/parser/grammar_decl.hpp>
-#include <eda/vhdl/parser/parser_config.hpp>
+#include <ibis/vhdl/parser/skipper.hpp>
+#include <ibis/vhdl/parser/grammar_decl.hpp>
+#include <ibis/vhdl/parser/parser_config.hpp>
 
-#include <eda/vhdl/ast/ast_printer.hpp>
-#include <eda/util/pretty_typename.hpp>
+#include <ibis/vhdl/ast/ast_printer.hpp>
+#include <ibis/util/pretty_typename.hpp>
 
 #include <iostream>
 #include <filesystem>
@@ -45,10 +45,10 @@ struct testing_parser {
                       "iterator types must be the same");
 
         if constexpr (false) {
-            std::cerr << "##### get testing_parser<" << eda::util::pretty_typename<decltype(iter)>{}
-                      << ">\n";
+            std::cerr << "##### get testing_parser<"
+                      << ibis::util::pretty_typename<decltype(iter)>{} << ">\n";
             std::cerr << "##### expect testing_parser<"
-                      << eda::util::pretty_typename<parser::iterator_type>{} << ">\n";
+                      << ibis::util::pretty_typename<parser::iterator_type>{} << ">\n";
         }
 
         bool parse_ok = false;
