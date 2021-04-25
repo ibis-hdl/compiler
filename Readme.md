@@ -30,7 +30,6 @@ Required 3rd party Libraries
 The following libraries are downloaded automatically into project's external
 directory from git repositories:
 
-* RapidJSON
 * CLI11
 * GLS (currently unused)
 
@@ -151,7 +150,7 @@ project.
 #### Fix Clang AddressSanitizer issue
 
 ```
-stack-buffer-overflow .../color/detail/ansii_color.hpp:33 in
+stack-buffer-overflow .../color/detail/ansi_color.hpp:33 in
 color::detail::esc_printer<ibis::color::attribute, 4ul>::esc_printer<0ul, 1ul, 2ul, 3ul>(
   std::initializer_list<ibis::color::attribute>,
   std::integer_sequence<unsigned long, 0ul, 1ul, 2ul, 3ul>
@@ -216,51 +215,10 @@ separated compilation units.
   https://stackoverflow.com/questions/44166199/trying-to-convert-a-vhdl-bnf-to-a-labeled-bnf-for-bnfc)
 
 
-#### Settings Crash
-
-An old problem from beginning rises, see [Wandbox.Org](https://wandbox.org/permlink/SklFbT05oHEGFhqW)
-which isn't obviously solved.
-
-```
-#17 ibis::init::l10n (this=...) at .../source/ibis/src/init.cpp:513
-```
-
-where:
-
-```
-long const verbose = [&] { return setting["verbose"].get<long>(); }();
-```
-
-rises an exception
-
-```
-terminate called after throwing an instance of 'std::bad_variant_access'
-  what():  std::get: wrong index for variant
-```
-
-thrown from
-
-```
-#16 ibis::settings::option_value_proxy::get<long> (this=....>) at .../source/common/include/ibis/settings.hpp:107
-```
-
-The source is the boost::variant visitor:
-
-```
-template <typename T> T const& get() const
-{
-    // bad_variant_access thrown on invalid accesses to the value
-    return std::get<T>(option_value);
-}
-```
-
-  Really time to change to boost.property library. Unfortunately, it can not be
-  reproduced later on.
-
 ### Fix Parser Testsuite
 
 The tests passed in 2018, using Boost v1.68's spirit X3. Only problems mentioned
-in vhdl parser_rules (former) *test_case_FixMe.txt* where known:
+in VHDL parser_rules (former) *test_case_FixMe.txt* where known:
 
   - alias_declaration_00{1...5}
   - entity_aspect/entity_aspect_002.input
@@ -338,6 +296,8 @@ ToDo on design
 
 ### CMake
 
+- use CMake's Unity Build Mode
+
 - [Modern CMake](https://cliutils.gitlab.io/modern-cmake/)
 - [Effective Modern CMake](https://gist.github.com/mbinna/c61dbb39bca0e4fb7d1f73b0d66a4fd1)
   and [Modern CMake Examples](https://github.com/pr0g/cmake-examples)
@@ -371,32 +331,22 @@ set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
 
 ### Sources
 
-- **FixMe**: As shown in the past, if main's init() function crash and the color
-  code isn't configured, we don't have these functionality even in the
-  stacktrace_{gdb,boost} functions. Maybe a color 'lite support' may solve it, see
-  [boost.UTF setcolor()](https://github.com/boostorg/test/blob/9d863d07e864ef663e3e8573b55905099b938d3e/include/boost/test/utils/setcolor.hpp)
-  or even use ibis::color code with defaults set before - see
-  init::user_config_message_color(). Maybe initialize the streams really early
-  inside init().
+- **FixMe**: Before main's init() there is no text style/color functionality even in the
+  stacktrace_{gdb,boost} functions.
+
+- Simplify formatting output using [fmtlib/fmt](https://github.com/fmtlib/fmt),
+  which supports color output; related to C++20 std::format support
 
 - Get clang-format working again. By The Way, check clang-format
   style for enhancements, so that we get rid off the '// 'clang-format {off|on}'
   pragmas especially on class members.
 
-- Simplify formatting output using [fmtlib/fmt](https://github.com/fmtlib/fmt),
-  which supports color output; related to C++20 std::format support
+- Write git hooks for checking using clang-{tidy,format} et al. Note, that not
+  everywhere clang-format may be installed.
 
-- Write git hooks for checking using clang-{tidy,format} et al.
-
-- Replace:
-  - RapidJSON with boost.json - starting with boost 1.75. The results of
-    [Benchmarks](https://vinniefalco.github.io/doc/json/json/benchmarks.html)
-    look promising
-  - swap from make to ninja build to use CMake's Unity Build Mode
-  - join back testsuite's librules into parser_rules. The reason was in 2018 the
-    compilation effort: compiling with make -j X and spirit.x3 rules with
-    single core. Starting with CMake 3.16 there is the Unity Build Mode.
-
+- join back testsuite's librules into parser_rules. The reason was in 2018 the
+  compilation effort: compiling with make -j X and spirit.x3 rules with
+  single core. Starting with CMake 3.16 there is the Unity Build Mode.
 
 - AST printer: move ast_printer into ast_walker, printer breaks down into simple class
   like ast_stats.
@@ -494,7 +444,7 @@ https://blog.kitware.com/static-checks-with-cmake-cdash-iwyu-clang-tidy-lwyu-cpp
 ## ToDo Documentation
 
 Switch from MarkDown to ReStructuredText. At this state, Doxygen miss some MarkDown
-and ReStructuredText features, Sphinx multi projects and doesn't seems to support 
+and ReStructuredText features, Sphinx multi projects and doesn't seems to support
 Doxygen's Todo tags/list.
 
 - [Documenting C++ Code](https://developer.lsst.io/cpp/api-docs.html)

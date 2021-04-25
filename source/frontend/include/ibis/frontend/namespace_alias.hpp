@@ -4,6 +4,6 @@
 namespace std::filesystem {
 }
 
-namespace frontend {
+namespace ibis::frontend {
 namespace fs = std::filesystem;
 }

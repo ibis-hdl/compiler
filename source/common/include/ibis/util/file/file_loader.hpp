@@ -10,10 +10,6 @@
 
 #include <ibis/namespace_alias.hpp>  // IWYU pragma: keep
 
-namespace ibis {
-class settings;
-}
-
 namespace ibis::util {
 
 //
@@ -26,9 +22,8 @@ public:
     // @brief Construct a new file loader object
     //
     // @param os_ the stream to write error messages on failure
-    // @param setting runtime settings, e.g. option "quiet"
     //
-    explicit file_loader(std::ostream& os_, ibis::settings const& setting);
+    explicit file_loader(std::ostream& os_);
 
     //
     // @brief Construct a new file loader object

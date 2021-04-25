@@ -1,4 +1,4 @@
-#include <frontend/signal_handler.hpp>
+#include <ibis/frontend/signal_handler.hpp>
 
 #include <boost/stacktrace.hpp>
 

@@ -1,6 +1,6 @@
-#include <frontend/init.hpp>
-#include <frontend/signal_handler.hpp>
-#include <frontend/version.hpp>
+#include <ibis/frontend/init.hpp>
+#include <ibis/frontend/signal_handler.hpp>
+#include <ibis/frontend/version.hpp>
 
 #include <ibis/buildinfo.hpp>
 
@@ -20,14 +20,7 @@
 
 #include <CLI/CLI.hpp>
 
-#include <rapidjson/document.h>
-#include <rapidjson/error/en.h>
-#include <rapidjson/pointer.h>
-#include <rapidjson/prettywriter.h>
-#include <rapidjson/encodings.h>
-#include <rapidjson/rapidjson.h>
-#include <rapidjson/stringbuffer.h>
-#include <ibis/support/RapidJSON/merge.hpp>
+#include <boost/property_tree/json_parser.hpp>
 
 #include <boost/locale/message.hpp>
 #include <boost/locale/format.hpp>
@@ -45,13 +38,13 @@
 #include <locale>
 #include <stdexcept>
 #include <system_error>
+#include <unordered_map>
 #include <iostream>
 
-namespace frontend {
+namespace ibis::frontend {
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
-init::init(int argc, const char* argv[], ibis::settings& setting_)
-    : setting{ setting_ }
+init::init(int argc, const char* argv[])
 {
     register_signal_handlers();
 
@@ -79,17 +72,21 @@ void init::parse_cli(int argc, const char* argv[])
 
     app.footer((format(translate("\nReport bugs to {1}")) % IBIS_HDL_HOMEPAGE_URL).str());
 
-    // defaults
+    // options and defaults
     struct {
+        // --- primary options group ---
         std::vector<std::string> hdl_files;
         std::string hdl_lib_path;
 
-        unsigned verbose = 0;
-
+        // --- message options group ---
+        unsigned verbose_level = 0;
         unsigned tab_size = 4;
-        unsigned error_limit = 20;
 
+        // --- locale options group ---
         std::string locale_dir;
+
+        // --- warning options group ---
+        unsigned error_limit = 20;
     } cli_parameter;
 
     // Feature Request:
@@ -102,9 +99,9 @@ void init::parse_cli(int argc, const char* argv[])
     try {
 
         //
-        // Primary Options Group
+        // Primary option group
         //
-        app.add_option("files", cli_parameter.hdl_files)
+        app.add_option("hdl_files", cli_parameter.hdl_files)
             ->description(translate("One or more VHDL file(s)."))
             ->required()
             ->check(CLI::ExistingFile)
@@ -117,6 +114,50 @@ void init::parse_cli(int argc, const char* argv[])
             ;
 
         //
+        // Message option group
+        //
+        {
+            auto* group = app.add_option_group(translate("Message Options"), // --
+                translate("Options regards to messages."));
+
+            group->add_flag("-q,--quiet")
+                ->description(translate("Print less text."))
+                ;
+                // FixMe: Allow e.g. '-vv' and '--verbose=2' with range check to enums
+            group->add_flag("-v,--verbose", cli_parameter.verbose_level)
+                ->description(translate("Print more text."))
+                ->excludes("--quiet")
+                ;
+            group->add_flag("--no-color")
+                ->description(translate("Don\'t render messages using colors. On output redirection "
+                                        "no colors are used."))
+                ;
+            group->add_flag("--force-color")
+                ->description(translate("Even on redirected output enforce the rendering of messages "
+                                        "using colors."))
+                ->excludes("--no-color")
+                ;
+            group->add_option("--tab-size", cli_parameter.tab_size) // XXX unused in e.g. error_handler.cpp
+                ->description(translate("Tabulator size, affects printing source snippet on error printing."))
+                ->check(CLI::Range(1, 10))
+                ;
+        }
+
+        //
+        // Locale option group
+        //
+        {
+            auto* group = app.add_option_group(translate("Locale/Environment Options"), // --
+                translate("Path to locale etc."));
+
+            group->add_option("--locale-dir", cli_parameter.locale_dir)
+                ->description(translate("localization catalog data"))
+                ->envname("IBIS_LOCALE_DIR")
+                ->check(CLI::ExistingDirectory)
+                ;
+        }
+
+        //
         // Working/Processing flags
         //
 
@@ -124,84 +165,41 @@ void init::parse_cli(int argc, const char* argv[])
             ->description(translate("Analyze the design."));
 
         //
-        // Message Options Group
+        // Warning option group
         //
-        static const std::string message_group{ translate("Message Options") };
+        {
+            auto* group = app.add_option_group(translate("Warning Options"),  // --
+                translate("Level of warnings"));
 
-        app.add_flag("-q,--quiet")
-            ->description(translate("Print less text."))
-            ->group(message_group)
-            ;
-            // FixMe: Allow e.g. '-vv' and '--verbose=2' with range check to enums
-        app.add_flag("-v,--verbose", cli_parameter.verbose)
-            ->description(translate("Print more text."))
-            ->excludes("--quiet")
-            ->group(message_group)
-            ;
-        app.add_flag("--no-color")
-            ->description(translate("Don\'t render messages using colors. On output redirection "
-                                    "no colors are used."))
-            ->group(message_group)
-            ;
-        app.add_flag("--force-color")
-            ->description(translate("Even on redirected output enforce the rendering of messages "
-                                    "using colors."))
-            ->excludes("--no-color")
-            ->group(message_group)
-            ;
-        app.add_option("--tab-size", cli_parameter.tab_size) // XXX unused in e.g. error_handler.cpp
-            ->description(translate("Tabulator size, affects printing source snippet on error printing."))
-            ->check(CLI::Range(1, 10))
-            ->group(message_group)
-            ;
-
-        //
-        // Locale Options Group
-        //
-        static const std::string locale_group{ translate("Locale/Environment Options") };
-
-        app.add_option("--locale-dir", cli_parameter.locale_dir)
-            ->description(translate("localization catalog data"))
-            ->envname("IBIS_LOCALE_DIR")
-            ->check(CLI::ExistingDirectory)
-            ->group(locale_group)
-            ;
-
-        //
-        // Warning Options Group
-        //
-        static const std::string warning_group{ translate("Warning Options") };
-
-        app.add_flag("--Wall") // unused
-            ->description(translate("Warn all."))
-            ->group(warning_group)
-            ;
-        app.add_flag("--Wunused") // unused
-            ->description(translate("Warn on unused."))
-            ->group(warning_group)
-            ;
-        app.add_flag("--Wother") // unused
-            ->description(translate("Warn for others."))
-            ->group(warning_group)
-            ;
-        // Option to Control Error and Warning Messages Flags
-        app.add_option("--ferror-limit", cli_parameter.error_limit) // XXX unused in context.cpp
-            ->description(translate("Limit emitting diagnostics, can be disabled with --ferror-limit=0."))
-            ->group(warning_group)
-            ;
+            group->add_flag("--Wall") // unused
+                ->description(translate("Warn all."))
+                ;
+            group->add_flag("--Wunused") // unused
+                ->description(translate("Warn on unused."))
+                ;
+            group->add_flag("--Wother") // unused
+                ->description(translate("Warn for others."))
+                ;
+            // Option to Control Error and Warning Messages Flags
+            group->add_option("--ferror-limit", cli_parameter.error_limit) // XXX unused in context.cpp
+                ->description(translate("Limit emitting diagnostics, can be disabled with --ferror-limit=0."))
+                ;
+        }
 
         //
         // Paths Group
         //
-        static const std::string path_group{ translate("Paths") };
+        {
+            auto* group = app.add_option_group(translate("Paths"), // --
+                translate("Important path settings"));
 
-        app.add_option("--hdl-lib-path", cli_parameter.hdl_lib_path) // unused
-            ->description(translate("Path to libraries."))
-            ->envname("IBIS_LIBPATH")
-            ->take_last()
-            ->check(CLI::ExistingDirectory)
-            ->group(path_group)
-            ;
+            group->add_option("--hdl-lib-path", cli_parameter.hdl_lib_path) // unused
+                ->description(translate("Path to libraries."))
+                ->envname("IBIS_LIBPATH")
+                ->take_last()
+                ->check(CLI::ExistingDirectory)
+                ;
+        }
     }
     // clang-format on
     catch (CLI::Error const& e) {
@@ -228,17 +226,7 @@ void init::parse_cli(int argc, const char* argv[])
 
     // ... and evaluate CLI arguments:
 
-    // FixMe: The code below is far away to be practical/useable.
-    // The settings class overloaded set() member and hence the C++
-    // lambda 'set_option' get into compile error with
-    // 'map[trim(option_name)].emplace<T>(value);', so the exhausting
-    // way is choosen temporary here.  This mix here testing on given
-    // command line arguments, using defaults from cli_parameters etc.
-    // is a mess ....
-    // There is a functor missing for settings flags and options
-    // with suplying their defaults.
-    // Solution: Maybe use boost.property_tree and reuse settings::option_trigger
-    // as option for option dependencies???
+    ibis::settings::reference_type pt = ibis::settings::instance();
 
     if (app.count("--version") != 0) {
         std::cout << IBIS_HDL_VERSION_STR << '\n';
@@ -251,51 +239,91 @@ void init::parse_cli(int argc, const char* argv[])
     }
 
     // helper for configure settings from CLI args
-    auto const set_flag = [&](std::string const& flag, bool value = true) {
-        if (app.count(flag) != 0) {
-            setting.set(flag, value);
+    struct setup {
+        CLI::App const& app;
+        ibis::settings::reference_type pt;
+        setup(CLI::App const& app_, ibis::settings::reference_type pt_)
+            : app{ app_ }
+            , pt{ pt_ }
+        {
         }
-    };
 
-    // secondary triggered option dependencies
-    ibis::settings::option_trigger triggered_flags;
-    triggered_flags.add("--Wall", { "--Wunused", "--Wother" });
+        void flag(std::string const& cli_arg, std::string const& setting_flag)
+        {
+            pt.put(setting_flag, app.count(cli_arg) != 0);
+        }
 
-    // Primary Options
-    setting.set("--files", cli_parameter.hdl_files);
+        void option(std::string const& setting_flag, unsigned option)
+        {
+            pt.put(setting_flag, option);
+        }
 
-    if (app.count("--hdl-lib-path") != 0) {
-        setting.set("--hdl-lib-path", cli_parameter.hdl_lib_path);
-    }
+        void option(std::string const& cli_arg, std::string const& setting_flag, unsigned option)
+        {
+            if (app.count(cli_arg) != 0) {
+                pt.add(setting_flag, option);
+            }
+        }
 
+        void option(std::string const& cli_arg, std::string const& setting_flag, std::string option)
+        {
+            if (app.count(cli_arg) != 0) {
+                pt.add(setting_flag, option);
+            }
+        }
+
+        void option(std::string const& setting_flag, std::vector<std::string> options)
+        {
+            for (std::string const& item : options) {
+                pt.add(setting_flag, item);
+            }
+        }
+    } setup(app, pt);
+
+    //
+    // Primary option group
+    //
+    setup.option("hdl-files.file", cli_parameter.hdl_files);
+
+    //
+    // Message option group
+    //
+    setup.flag("--quiet", "quiet");
+    setup.option("verbose", cli_parameter.verbose_level);  // note, CLI11 flag
+    setup.flag("--no-color", "no-color");
+    setup.flag("--force-color", "force-color");
+    setup.option("tab-size", cli_parameter.tab_size);
+
+    //
+    // Locale option group
+    //
+    setup.option("--locale-dir", "locale.dir", cli_parameter.locale_dir);
+
+    //
     // Working/Processing flags
-    set_flag("--analyze");
+    //
+    setup.flag("--analyze", "analyze");
 
-    // Message Options
-    if (app.count("--verbose") != 0) {
-        setting.set<long>("--verbose", cli_parameter.verbose);
-    }
+    //
+    // Warning option group
+    //
 
-    set_flag("--quiet");
-    set_flag("--no-color");
-    set_flag("--force-color");
-    setting.set<long>("--tab-size", cli_parameter.tab_size);
+    setup.flag("--Wunused", "warning.unused");
+    setup.flag("--Wother", "warning.other");
 
-    // Warning Options
-    set_flag("--Wall");
-    set_flag("--Wunused");
-    set_flag("--Wother");
+    setup.flag("--Wall", "warning.all");
 
-    // Options to Control Error and Warning Messages Flags
-    setting.set<long>("--ferror-limit", cli_parameter.error_limit);
+    // ToDo: secondary triggered option dependencies, lhs is the primary
+    // secondary_flag["--Wall"] = { "--Wunused", "--Wother" };
 
-    // Locale Options
-    if (app.count("--locale-dir") != 0) {
-        setting.set("--locale-dir", cli_parameter.locale_dir);
-    }
+    setup.option("--ferror-limit", "f.error_limit", cli_parameter.error_limit);
 
-    // update all secondary triggered flags
-    triggered_flags.update(setting);
+    //
+    // Paths Group
+    //
+    setup.option("--hdl-lib-path", "hdl-lib.path", cli_parameter.hdl_lib_path);
+
+    // ibis::settings::dump(std::cout);
 }
 
 void init::register_signal_handlers() { frontend::register_signal_handlers(); }
@@ -332,105 +360,88 @@ void init::user_config_message_color()
 })"
     };
 
-    bool const force_color = [&] { return setting["force-color"]; }();
+    ibis::settings::insert_json(default_cfg_json);
 
-    if (setting["no-color"] && !force_color) {
+    ibis::settings::reference_type pt = ibis::settings::instance();
+
+    bool const force_color = [&] { return pt.get<bool>("force-color"); }();
+    bool const no_color = [&] { return pt.get<bool>("no-color"); }();
+
+    if (no_color && !force_color) {
         // no color wanted - skip further proceeding
         return;
     }
 
-    bool const quiet = [&] { return setting["quiet"]; }();
-    bool const verbose = [&] { return setting["verbose"]; }();
+    // bool const quiet = [&] { return pt.get<bool>("quiet"); }();
+    bool const verbose = [&] { return pt.get<unsigned>("verbose"); }();
 
-    using namespace ibis;
-    using namespace ibis::color;
-    namespace rjson = rapidjson;
-
-    auto const parse_json = [&quiet](std::string_view json) {
-        rjson::Document document;
-        if (document.Parse(json.data()).HasParseError()) {
-            if (!quiet) {
-                std::cerr << message::error("Error:") << " parsing JSON configuration file: "
-                          << rjson::GetParseError_En(document.GetParseError())  // --
-                          << "(offset " << document.GetErrorOffset() << ")\n";
-            }
-        }
-        return document;
-    };
-
-    auto const print_json = [](rjson::Document const& doc) {
-        rjson::StringBuffer buffer;
-        rjson::PrettyWriter<rjson::StringBuffer> writer(buffer);
-        doc.Accept(writer);
-        std::cerr << buffer.GetString() << std::endl;
-    };
-
-    rjson::Document default_config = parse_json(default_cfg_json);
-
-    // load user settings if exists and merge them into defaults
+#if 0
+    // Old code based on RapidJSON. The idea was to override defaults by user
+    // configureable JSON settings file and merge it. The merge algorithm
+    // is at <ibis/support/RapidJSON/merge.hpp>.
+    // Unfortunately RapidJSON has only a master branch in 2021, v1.1.0
+    // is from 2016 and got compile errors using clang-11-win on Windows.
+    // Sometimes the master branch compiles, sometimes not. So it's
+    // decidet to get rid off RapidJSON and using boost's property_tree,
+    // even if merging isn't support still with boost v1.75, see
+    // [Future Development: Mathematical relations: ptree difference, union, intersection](
+    // https://www.boost.org/doc/libs/1_75_0/doc/html/property_tree/appendices.html)
+    // Hopefully, this is solved if the frontend get more usefull.
     using ::ibis::util::file_loader;
     using ::ibis::util::user_home_dir;
 
     fs::path json_path = user_home_dir({ ".ibis" }) / "config.json";
 
-    file_loader file_reader{ std::cerr, setting };
+    file_loader file_reader{ std::cerr, quiet };
     auto const json_txt = file_reader.read_file(json_path);
 
     if (json_txt) {
         rjson::Document user_config = parse_json((*json_txt).c_str());
         merge(default_config, user_config);
     }
-    else {
-        // nothing
-    }
+#endif
+
+    using namespace ibis;
+    using namespace ibis::color;
 
     if (verbose) {
-        std::cerr << message::note("Note:") << " Using message color defaults:\n";
-        print_json(default_config);
+        std::cout << message::note("Note:") << " Using message color defaults:\n";
+        std::cout << default_cfg_json << '\n';
     }
 
     auto const get_formatter = [&](std::string_view json_ptr) {
-        ibis::color::printer format;
+        auto const& child = ibis::settings::instance().get_child(json_ptr.data());
+        // pt::write_json(std::cout, child);
 
-        if (rjson::Value* style =
-                rjson::GetValueByPointer(default_config, rjson::Pointer(json_ptr.data()))) {
-            for (auto const& object : style->GetObject()) {
-                std::string_view const name = object.name.GetString();
-                std::string_view const attr_name = object.value.GetString();
+        ibis::color::printer format_style;
 
-                auto const update_format = [&](std::string_view attr_name,
-                                               auto const attribute_getter) {
-                    auto const attr{ attribute_getter(attr_name) };
-                    if (attr) {
-                        format |= *attr;
-                        if (verbose) {
-                            std::cerr << message::note("NOTE:") << " using " << json_ptr << "/"
-                                      << name << " = " << attr_name << '\n';
-                        }
-                    }
-                    else {
-                        if (!quiet) {
-                            std::cerr << message::warning("WARNING:") << " Ignore invalid "
-                                      << json_ptr << "/" << name << " = " << attr_name << '\n';
-                        }
-                    }
-                };
+        auto const update_format = [&](std::string_view attr_name, auto const attribute_getter,
+                                       ibis::color::printer& format) {
+            auto const attr{ attribute_getter(attr_name) };
+            if (attr) {
+                format |= *attr;
+            }
+        };
 
-                if (util::icompare(name, "text")) {
-                    update_format(attr_name, &color::text_attr);
-                    continue;
-                }
-                if (util::icompare(name, "foreground")) {
-                    update_format(attr_name, &color::foreground_attr);
-                    continue;
-                }
-                if (util::icompare(name, "background")) {
-                    update_format(attr_name, &color::background_attr);
-                    continue;
-                }
+        for (auto const& x : child) {
+            std::string_view const name = x.first.data();        // key
+            std::string_view const attr_name = x.second.data();  // value
+
+            if (util::icompare(name, "text")) {
+                update_format(attr_name, &color::text_attr, format_style);
+                continue;
+            }
+            if (util::icompare(name, "foreground")) {
+                update_format(attr_name, &color::foreground_attr, format_style);
+                continue;
+            }
+            if (util::icompare(name, "background")) {
+                update_format(attr_name, &color::background_attr, format_style);
+                continue;
             }
         }
-        return format;
+
+        return format_style;
     };
 
     auto const imbue = [](auto& stream, auto&& facet_ptr) {
@@ -438,19 +449,19 @@ void init::user_config_message_color()
         stream.imbue(locale);
     };
 
-    auto const failure_format = get_formatter("/message/failure/style");
+    auto const failure_format = get_formatter("message.failure.style");
     imbue(std::cerr,
           std::make_unique<message::failure_facet>(failure_format, color::color_off, force_color));
 
-    auto const error_format = get_formatter("/message/error/style");
+    auto const error_format = get_formatter("message.error.style");
     imbue(std::cerr,
           std::make_unique<message::error_facet>(error_format, color::color_off, force_color));
 
-    auto const warning_format = get_formatter("/message/warning/style");
+    auto const warning_format = get_formatter("message.warning.style");
     imbue(std::cerr,
           std::make_unique<message::warning_facet>(warning_format, color::color_off, force_color));
 
-    auto const note_format = get_formatter("/message/note/style");
+    auto const note_format = get_formatter("message.note.style");
     imbue(std::cerr,
           std::make_unique<message::note_facet>(note_format, color::color_off, force_color));
 }
@@ -477,9 +488,12 @@ void init::l10n()
 
     generator gen{};
 
-    auto const l10n_path = [this] {
-        if (setting["locale-dir"]) {
-            return fs::path{ setting["locale-dir"].get<std::string>() };
+    ibis::settings::reference_type pt = ibis::settings::instance();
+
+    fs::path const l10n_path = [&] {
+        boost::optional<std::string> path = pt.get_optional<std::string>("locale-dir");
+        if (path) {
+            return fs::path{ path.get() };
         }
         return ::ibis::util::user_home_dir({ ".ibis", "l10n" });
     }();
@@ -487,10 +501,10 @@ void init::l10n()
     std::error_code ec;
     auto lc_path = fs::canonical(l10n_path, ec);
 
-    long const verbose = [&] { return setting["verbose"].get<long>(); }();
+    unsigned const verbose_level = [&] { return pt.get<unsigned>("verbose"); }();
 
     if (ec) {
-        if (verbose > 1) {
+        if (verbose_level > 1) {
             // FixMe: notice or warning level for those message
             std::cerr << R"(locale directory ')" << l10n_path.string() << R"( failure: )"
                       << ec.message() << std::endl;
@@ -498,7 +512,7 @@ void init::l10n()
         return;
     }
 
-    if (verbose > 2) {
+    if (verbose_level > 2) {
         std::cout << "LC_PATH = " << lc_path.make_preferred().string() << std::endl;
     }
 
@@ -511,4 +525,4 @@ void init::l10n()
     std::cerr.imbue(locale);
 }
 
-}  // namespace frontend
+}  // namespace ibis::frontend

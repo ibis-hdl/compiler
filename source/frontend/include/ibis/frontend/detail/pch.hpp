@@ -27,8 +27,3 @@
 #include <boost/version.hpp>
 
 #include <CLI/CLI.hpp>
-
-#include <rapidjson/document.h>
-#include <rapidjson/error/en.h>
-#include <rapidjson/pointer.h>
-#include <rapidjson/prettywriter.h>

@@ -58,7 +58,7 @@ void cli_args::parse_cli(int const argc, char** const argv)
     //
     // Dataset loader
     //
-    auto dataset_group =
+    auto* dataset_group =
         app.add_option_group("Dataset", "Test Data input sources with their reference files.");
 
     dataset_group->add_option("-I,--source-dir", data.source_dir)
@@ -71,7 +71,7 @@ void cli_args::parse_cli(int const argc, char** const argv)
     //
     // Failure Diagnostic Fixture
     //
-    auto diag_group =
+    auto* diag_group =
         app.add_option_group("Failure Diagnostic", "On Failure, write output to destination.");
 
     diag_group->add_option("-O,--destination-dir", data.destination_dir)

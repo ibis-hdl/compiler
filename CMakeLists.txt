@@ -66,8 +66,6 @@ find_package(Threads REQUIRED)
 
 ##
 # External dependencies
-# Todo: as of v1.75.0 boost has boost.JSON
-include(external_json)
 include(external_cli11)
 # ToDo: stick at C++17 gsl::string_span, with C++20 use std::span [unused]
 #include(external_gsl)
@@ -96,7 +94,7 @@ if (IBIS_BUILD_TESTS)
     add_subdirectory(testsuite/vhdl/librules)
     add_subdirectory(testsuite/vhdl/parser_rules)
     add_subdirectory(testsuite/vhdl/syntax)
-    add_subdirectory(testsuite/ibis)
+    add_subdirectory(testsuite/frontend)
 endif()
 add_subdirectory(doc)
 add_subdirectory(doc_ng)

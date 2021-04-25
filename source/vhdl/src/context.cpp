@@ -2,8 +2,6 @@
 
 #include <ibis/vhdl/ast/util/string_span_hash.hpp>
 
-#include <ibis/settings.hpp>
-
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
 
@@ -13,19 +11,9 @@
 
 namespace ibis::vhdl {
 
-context::context(std::size_t default_error_limit)
-    : error_count(default_error_limit)
+context::context(std::size_t error_limit)
+    : error_count(error_limit)
 {
-}
-
-context::context(ibis::settings const& settings)
-{
-    unsigned const error_limit = settings["ferror-limit"].get<long>();
-
-    // check if error_limit is not disabled (equals to 0)
-    if (error_limit != 0) {
-        error_count.limit() = error_limit;
-    }
 }
 
 std::ostream& failure_status::print(std::ostream& os) const

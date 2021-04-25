@@ -16,9 +16,9 @@
 
 namespace ibis::util {
 
-file_loader::file_loader(std::ostream& os_, ibis::settings const& setting)
+file_loader::file_loader(std::ostream& os_)
     : os{ os_ }
-    , quiet{ setting["quiet"] }
+    , quiet{ ibis::settings::instance().get<bool>("quiet") }
 {
 }
 

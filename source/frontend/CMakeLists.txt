@@ -7,7 +7,7 @@
 project(ibis LANGUAGES CXX)
 
 
-add_executable(${PROJECT_NAME} EXCLUDE_FROM_ALL)
+add_executable(${PROJECT_NAME})
 
 
 target_link_libraries(${PROJECT_NAME}
@@ -22,13 +22,12 @@ target_link_libraries(${PROJECT_NAME}
 
 add_dependencies(${PROJECT_NAME}
     external-cli11
-    external-RapidJSON
 )
 
 
 configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/frontend/version.hpp.in
-    ${CMAKE_CURRENT_BINARY_DIR}/include/frontend/version.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/ibis/frontend/version.hpp.in
+    ${CMAKE_CURRENT_BINARY_DIR}/include/ibis/frontend/version.hpp
     @ONLY
 )
 
@@ -46,8 +45,8 @@ target_sources(${PROJECT_NAME}
 if (IBIS_ENABLE_PCH)
     target_precompile_headers(${PROJECT_NAME}
         PRIVATE
-            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/frontend/detail/pch.hpp>
-            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/frontend/detail/pch_prj.hpp>
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/ibis/frontend/detail/pch.hpp>
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/ibis/frontend/detail/pch_prj.hpp>
     )
 endif()
 
@@ -60,7 +59,6 @@ target_include_directories(${PROJECT_NAME}
         $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
         $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
         $<BUILD_INTERFACE:${CLI11_INCLUDE_DIR}>
-        $<BUILD_INTERFACE:${RapidJSON_INCLUDE_DIR}>
 )
 
 
@@ -70,6 +68,7 @@ string(CONCAT _SIGNAL_HANDLER_DEFINES
     "$<$<BOOL:${IBIS_WITH_GDB_STACKTRACE}>:IBIS_WITH_GDB_STACKTRACE>;"
     "$<$<BOOL:${IBIS_WITH_BOOST_STACKTRACE}>:IBIS_WITH_BOOST_STACKTRACE>"
 )
+
 set_source_files_properties(
     src/signal_handler.cpp
     src/stacktrace_gdb.cpp

@@ -8,10 +8,6 @@
 #include <limits>
 #include <iosfwd>
 
-namespace ibis {
-class settings;
-}
-
 namespace ibis::vhdl {
 
 namespace detail {
@@ -27,6 +23,11 @@ namespace detail {
 template <typename Tag>
 class basic_counter {
 public:
+    ///
+    /// @brief Exception thrown if the counter limit has been reached.
+    ///
+    /// @todo Make it more expressive with string message, configured
+    /// treshold etc.
     struct overflow : public std::exception {
     };
 
@@ -132,8 +133,7 @@ std::ostream& operator<<(std::ostream& os, basic_counter<Tag> const& counter)
 ///
 class context {
 public:
-    context(std::size_t default_error_limit = 25);
-    context(ibis::settings const& settings);
+    context(std::size_t error_limit = 42);
 
 public:
     using error_counter = detail::basic_counter<struct error_tag>;

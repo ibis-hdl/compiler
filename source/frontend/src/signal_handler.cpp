@@ -1,4 +1,4 @@
-#include <frontend/signal_handler.hpp>
+#include <ibis/frontend/signal_handler.hpp>
 
 #include <ibis/color/message.hpp>
 #include <ibis/platform.hpp>
@@ -10,7 +10,7 @@
 extern bool register_gdb_signal_handler();
 extern bool register_stacktrace_signal_handler();
 
-namespace frontend {
+namespace ibis::frontend {
 
 #if 0  // avoid LINT errors
 void testing_signal_handler()
@@ -76,4 +76,4 @@ void register_signal_handlers()
     }
 }
 
-}  // namespace frontend
+}  // namespace ibis::frontend

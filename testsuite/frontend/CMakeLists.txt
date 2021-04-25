@@ -1,7 +1,7 @@
 ################################################################################
 ## IBIS/testsuite ibis project
 ##
-## file: testsuite/ibis/CMakeLists.txt
+## file: testsuite/frontend/CMakeLists.txt
 ################################################################################
 
 #project(testrunner_ibis)

@@ -16,7 +16,7 @@ option(IBIS_WITH_BOOST_STACKTRACE "Enable support for the Boost::stacktrace libr
 
 ##
 # Runtime Option: Use GDB to dump the stracktrace
-if(LINUX)
+if(UNIX)
     option(IBIS_WITH_GDB_STACKTRACE "Enable support for dumping the stacktrace using GNU/GDB on runtime." ON)
 endif()
 

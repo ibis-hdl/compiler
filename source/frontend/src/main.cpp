@@ -1,4 +1,4 @@
-#include <frontend/init.hpp>
+#include <ibis/frontend/init.hpp>
 
 #include <ibis/settings.hpp>
 #include <ibis/util/file/file_loader.hpp>
@@ -15,6 +15,7 @@
 #include <iostream>
 #include <optional>
 #include <string>
+#include <string_view>
 #include <vector>
 
 extern void testing_signal_handler();
@@ -33,22 +34,26 @@ int main(int argc, const char* argv[])
     using boost::locale::format;
     using boost::locale::translate;
 
-    ibis::settings setting;
+    // FixMe: try/catch block
+    ibis::frontend::init init(argc, argv);
 
-    frontend::init init(argc, argv, setting);
+    bool const quiet = [&] { return ibis::settings::instance().get<bool>("quiet"); }();
+    unsigned const verbose_level = [&] {
+        return ibis::settings::instance().get<unsigned>("verbose");
+    }();
 
-    if (setting["verbose"]) {
-        setting.dump(std::cout);
+    if (verbose_level > 1) {
+        ibis::settings::dump(std::cout);
         std::cout << '\n';
     }
 
     using namespace ibis;
     using namespace ibis::color;
 
-    constexpr bool test_color = false;
+    constexpr bool test_color = true;
 
     try {
-        util::file_loader file_reader{ std::cerr, setting };
+        util::file_loader file_reader{ std::cerr, quiet };
 
         if constexpr (test_color) {
             std::cerr << color::message::failure("FAILURE") << " Format Test\n";
@@ -57,10 +62,11 @@ int main(int argc, const char* argv[])
             std::cerr << color::message::note("NOTE") << " Format Test\n";
         }
 
-        for (auto const& filename : setting["files"].get<std::vector<std::string>>()) {
-            auto const contents = file_reader.read_file(filename);
-            if (!setting["quiet"]) {
-                std::cerr << message::note(translate("processing:")) << " " << filename << '\n';
+        for (auto const& child : settings::instance().get_child("hdl-files")) {
+            std::string_view const hdl_file = child.second.data();
+            auto const contents = file_reader.read_file(hdl_file);
+            if (!quiet) {
+                std::cerr << message::note(translate("processing:")) << " " << hdl_file << '\n';
             }
 
             // XXX since we aren't functional, simply print the contents

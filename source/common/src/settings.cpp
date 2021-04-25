@@ -1,95 +1,34 @@
 #include <ibis/settings.hpp>
+#include <ibis/namespace_alias.hpp>
 
-#include <ibis/util/string/icompare.hpp>
-#include <ibis/util/infix_ostream_iterator.hpp>
+#include <boost/iostreams/device/array.hpp>
+#include <boost/iostreams/stream.hpp>
 
-#include <algorithm>
-#include <iostream>
-#include <vector>
+#include <boost/property_tree/json_parser.hpp>
 
 namespace ibis {
 
-std::ostream& settings::dump(std::ostream& os) const
+std::ostream& settings::dump(std::ostream& os)
 {
-    using key_type = map_type::key_type;
-    using value_type = map_type::mapped_type;
-    using pair_type = std::pair<key_type, value_type>;
-    using vector_type = std::vector<pair_type>;
-
-    vector_type vec{ map.begin(), map.end() };
-
-    std::sort(vec.begin(), vec.end(), [](pair_type const& p1, pair_type const& p2) {
-        return util::icompare_less(p1.first, p2.first);
-    });
-
-    os << "(settings [N=" << vec.size() << "]\n";
-    for (auto const& [option_name, val] : vec) {
-        os << "    " << option_name << ": ";
-        // clang-format off
-        std::visit(util::overloaded{
-            [&os]([[maybe_unused]] std::monostate v) {
-                os << "N/A";
-            },
-            [&os](bool v) {
-                os << std::boolalpha << v;
-            },
-            [&os](long v) {
-                os << v;
-            },
-            [&os](std::string const& v) {
-                os << v;
-            },
-            [&os](std::vector<std::string> const& v) {
-                os << "[ ";
-                std::copy(v.begin(), v.end(),
-                          util::infix_ostream_iterator<std::string>(os, ", "));
-                os << " ]";
-            },
-        }, val);
-        // clang-format on
-        os << '\n';
-    }
-    os << ")\n";
-
+    pt::write_json(os, instance());
     return os;
 }
 
-std::ostream& settings::print(std::ostream& os, settings::option_value const& value)
+void settings::insert_json(std::string_view json_sv)
 {
-    // clang-format off
-    std::visit(util::overloaded{
-        // <long> is (implicit converted) handled as boolean, as intended
-        [&os](bool option) {
-            os << std::boolalpha << option;
-        },
-        [&os](std::string const& option) {
-            os << "\'" << option << "\'";
-        },
-        [&os](std::vector<std::string> const& option) {
-            os << "[ ";
-            std::copy(option.begin(), option.end(),
-                      util::infix_ostream_iterator<std::string>(std::cout, ", "));
-            os << " ]";
-        },
-        [&os]([[maybe_unused]] std::monostate option) {
-            os << "N/A (std::monostate)";
-        },
-    }, value);
-    // clang-format on
+    // [Is there a way to create a stringstream from a string_view without copying data?](
+    // https://stackoverflow.com/questions/58524805/is-there-a-way-to-create-a-stringstream-from-a-string-view-without-copying-data)
+    using char_type = std::string_view::value_type;
 
-    return os;
+    boost::iostreams::stream<  // --
+        boost::iostreams::basic_array_source<char_type> >
+        is(json_sv.begin(), json_sv.size());
+
+    pt::ptree other;
+    pt::read_json(is, other);
+
+    // call ptree's API, if called multiple times, other is appended multiple times too!
+    instance().insert(instance().end(), other.begin(), other.end());
 }
-
-void settings::debug_print(std::string const& option_name, settings::option_value const& value)
-{
-    std::cout << "lookup[" << option_name << "] = " << value << std::endl;
-}
-
-std::ostream& operator<<(std::ostream& os, settings::option_value const& value)
-{
-    return settings::print(os, value);
-}
-
-const settings::option_value settings::none;
 
 }  // namespace ibis

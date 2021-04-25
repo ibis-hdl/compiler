@@ -1,10 +1,8 @@
 // Note: The sources are related to Linux and tested on it.
-// FixMe: The implementation is outside of ibis' namespace which
-//        leads to wired (even small and cosmetic) problems.
 
-#include <frontend/signal_handler.hpp>
+#include <ibis/frontend/signal_handler.hpp>
 
-#include <frontend/namespace_alias.hpp>
+#include <ibis/frontend/namespace_alias.hpp>
 
 #include <ibis/color/message.hpp>
 #include <ibis/color/facet.hpp>
@@ -68,7 +66,7 @@ volatile std::sig_atomic_t
     sig_caught;  // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 }  // namespace
 
-using frontend::signal_name;
+using ibis::frontend::signal_name;
 
 #if (BUILD_PLATFORM_UNIX)
 bool register_gdb_signal_handler()
@@ -80,10 +78,6 @@ bool register_gdb_signal_handler()
         std::cerr << "[ibis/Note] GDB signal handler already installed, skip.\n";
         return true;
     }
-
-    // FixMe: write it to debug stream as all the others below
-    std::cerr << "[ibis/Note] :-(\n"
-              << "[ibis/Note] GDB signal handler requested:\n";
 
     struct sigaction sa {
     };
