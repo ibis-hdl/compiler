@@ -75,7 +75,16 @@ target_include_directories(${PROJECT_NAME}
 ##
 # Clang -Weverything
 #
-# FixMe: What was the intent of this disabled warnings?
+# Disable some warning which aren't relevant here.
+#
+# * -Wno-covered-switch-default
+#   - if one extended the enum, you'd fall into the default case which probably
+#     isn't what you want. The correct thing to do is to remove the default case
+#     and get warnings for unhandled conditions, see
+#     [Why does Clang/LLVM warn me about using default in a switch statement where all enumerated cases are covered?](
+#     https://softwareengineering.stackexchange.com/questions/179269/why-does-clang-llvm-warn-me-about-using-default-in-a-switch-statement-where-all)
+#   - in project, default branches are covered with `cxx_unreachable_bug_triggered();`
+#     normally
 if(COMPILER_CLANG_WARN_EVERYTHING)
     if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 

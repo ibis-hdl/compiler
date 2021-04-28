@@ -38,6 +38,11 @@ public:
     ///
     static reference_type instance()
     {
+        // Clang -Wverything warning: declaration requires an exit-timedestructor
+        // [-Wexit-time-destructors]. Global and function static objects will get their
+        // destructors called when the application is exiting. These destructors are "exit time
+        // destructors" and are called in the reverse order that they were constructed in.
+        // There is no problem by use ony singleon, the warnign is ignored.
         static settings::type instance_;
         return instance_;
     }

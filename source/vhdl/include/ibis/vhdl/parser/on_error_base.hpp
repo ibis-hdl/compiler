@@ -33,9 +33,9 @@ public:
     /// @tparam IteratorT Iterator type of the parser
     /// @tparam ExceptionT Boost.Spirit X3 expectation expection type
     /// @tparam ContextT Boost.Spirit X3 context type
-    /// @param first
-    /// @param last
-    /// @param ex Boost.Spirit X3 expectation expection
+    /// @param first Iterator to the begin of somewhat, unused
+    /// @param last  Iterator to the end of somewhat, unused
+    /// @param e Boost.Spirit X3 expectation expection
     /// @param context Boost.Spirit X3 context
     /// @return x3::error_handler_result
     ///

@@ -215,8 +215,11 @@ option(DEVELOPER_CLANG_WARN_EVERYTHING
 mark_as_advanced(DEVELOPER_CLANG_WARN_EVERYTHING)
 
 if(DEVELOPER_CLANG_WARN_EVERYTHING)
+    # no interest in compatibilty to old standards
+    set(_warn_compat -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-c++98-c++11-c++14-compat)
+    set(_warn_misc -Wno-padded -Wno-global-constructors)
     add_compile_options(
-        "$<$<CXX_COMPILER_ID:Clang>:-Weverything>"
+        "$<$<CXX_COMPILER_ID:Clang>:${_warn_compat};${_warn_misc}>"
     )
 endif()
 

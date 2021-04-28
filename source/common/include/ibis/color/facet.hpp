@@ -41,7 +41,7 @@ public:
     {
     }
 
-    ~message_facet() = default;
+    ~message_facet() override = default;
 
     message_facet(message_facet const&) = delete;
     message_facet& operator=(message_facet const&) = delete;

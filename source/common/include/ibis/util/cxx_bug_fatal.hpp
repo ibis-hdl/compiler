@@ -38,8 +38,8 @@ void assertion_failed_msg(const CharT* expr, const char msg[], const char functi
 
 #define cxx_bug_fatal(message)  \
     cxx_assert(false, message); \
-    cxx_unreachable();
+    cxx_unreachable()
 
 #define cxx_unreachable_bug_triggered()                   \
     cxx_assert(false, "unreachable code path triggered"); \
-    cxx_unreachable();
+    cxx_unreachable()

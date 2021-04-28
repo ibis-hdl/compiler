@@ -332,6 +332,13 @@ set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
 - **FixMe**: Before main's init() there is no text style/color functionality even in the
   stacktrace_{gdb,boost} functions.
 
+- Make position_cache std::string_view aware. The position_cache owns the HDL file
+  contents as string, so there is no reason the cope with std::string::iterator
+  everywhere. This does influence other code parts apart of position_cache!
+
+- position_cache got interesting warnings by compiling with `-Weverything`
+  regards to `.line_number()` and `.get_line_start`: Investigate!
+
 - Simplify formatting output using [fmtlib/fmt](https://github.com/fmtlib/fmt),
   which supports color output; related to C++20 std::format support
 

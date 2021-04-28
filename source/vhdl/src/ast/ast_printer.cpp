@@ -888,6 +888,8 @@ void printer::operator()(decimal_literal const& node)
             os << "real";
             break;
         default:
+            // cxx_unreachable_bug_triggered();
+            // we are greedy at this today
             os << "INVALID";
     }
 }

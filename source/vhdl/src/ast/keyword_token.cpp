@@ -7,8 +7,8 @@ namespace ibis::vhdl::ast {
 
 std::ostream& operator<<(std::ostream& os, keyword_token token)
 {
+    // clang-format off
     switch (token) {
-        // clang-format off
         case keyword_token::ABS:             os << "ABS";           break;
         case keyword_token::ACCESS:          os << "ACCESS";        break;
         case keyword_token::AFTER:           os << "AFTER";         break;
@@ -106,11 +106,14 @@ std::ostream& operator<<(std::ostream& os, keyword_token token)
         case keyword_token::WITH:            os << "WITH";          break;
         case keyword_token::XNOR:            os << "XNOR";          break;
         case keyword_token::XOR:             os << "XOR";           break;
-            // clang-format on
+
+        case keyword_token::UNSPECIFIED:
+            cxx_bug_fatal("keyword_token not specified!");
 
         default:
             cxx_unreachable_bug_triggered();
     }
+    // clang-format on
 
     return os;
 }

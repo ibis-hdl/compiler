@@ -158,7 +158,7 @@ std::optional<std::string> file_loader::read_file_alt(fs::path const& filename) 
     ifs.seekg(0, std::ios::beg);
 
     std::string contents{};
-    contents.reserve(size);
+    contents.reserve(static_cast<std::string::size_type>(size));
 
     ifs.read(&contents[0], size);
 
@@ -169,7 +169,7 @@ std::optional<std::string> file_loader::read_file_alt(fs::path const& filename) 
         return {};
     }
 
-    return contents;
+    return std::optional<std::string>{ contents };
 }
 
 std::time_t file_loader::timesstamp(fs::path const& filename) const

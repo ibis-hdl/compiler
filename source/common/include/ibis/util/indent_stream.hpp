@@ -78,8 +78,7 @@ private:
             // >::size_type' (aka 'unsigned long') to 'std::streamsize' (aka 'long')
             // [-Wsign-conversion] Also, on success the number of characters written is returned and
             // no check is done here - no error expected ;-) FixMe: Add some indent_level and assert
-            // to avoid non-intentionally
-            //        behavior. There may be a problem on huge indent size.
+            // to avoid non-intentionally behavior. There may be a problem on huge indent size.
             m_sbuf->sputn(m_indent_str.data(), m_indent_str.size());
         }
 
