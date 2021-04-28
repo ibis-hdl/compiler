@@ -19,16 +19,14 @@ public:
     using value_type = typename std::underlying_type<enum_type>::type;
 
 private:
-    /// FixMe: Clang AddressSanitizer complains here:
-    /// https://wandbox.org/permlink/GfF0VgNLDRWOgkd1
-    /// stack-buffer-overflow .../ansi_color.hpp:33 in
-    /// esc_printer<ibis::color::attribute, 4ul>::esc_printer<0ul, 1ul, 2ul, 3ul>(std::initializer_list<ibis::color::attribute>, std::integer_sequence<unsigned long, 0ul, 1ul, 2ul, 3ul>)
     template <std::size_t... N>
     explicit esc_printer(std::initializer_list<enum_type> il, std::index_sequence<N...>)
-        : std::array<value_type, SIZE>{ { static_cast<value_type>(il.begin()[N])... } }
+        : std::array<value_type, SIZE>{}  // default initialized (with 0x00)
         , count{ il.size() }
     {
         assert(il.size() <= SIZE && "range error of initializer_list");
+        std::transform(il.begin(), il.begin() + std::min(SIZE, il.size()), this->begin(),
+                       [](enum_type x) { return static_cast<value_type>(x); });
     }
 
 public:

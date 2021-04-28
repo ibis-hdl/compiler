@@ -152,52 +152,7 @@ Obviously the intend is to get the parser working and hence the
 project.
 
 
-### Code Fixes
-
-
-#### Fix Clang AddressSanitizer issue
-
-Clang AddressSanitizer complains here [Wandbox](https://wandbox.org/permlink/GfF0VgNLDRWOgkd1):
-
-```
-stack-buffer-overflow .../color/detail/ansi_color.hpp:33 in
-color::detail::esc_printer<ibis::color::attribute, 4ul>::esc_printer<0ul, 1ul, 2ul, 3ul>(
-  std::initializer_list<ibis::color::attribute>,
-  std::integer_sequence<unsigned long, 0ul, 1ul, 2ul, 3ul>
-)
-```
-
-From IRC:
-
-```
-you seem to be passing in an initializer_list which has one element but you're accessing il.begin()[0] through il.begin()[3]?
-<Alipha> olx69: do you want to initialize all 4 elements to attribute::Attributes_Off?
-```
-
-Maybe related is compiler's warning seen on older code:
-
-```
-source/common/include/ibis/color/detail/ansii_color.hpp:33:43: Warnung: Arrayindex 1 ist außerhalb der Arraygrenzen von »const ibis::color::attribute [1]« [-Warray-bounds]
-   33 |         : std::array<value_type, SIZE>{ { static_cast<value_type>(il.begin()[N])... } }
-      |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-source/common/include/ibis/color/detail/ansii_color.hpp:130:49: Anmerkung: beim Referenzieren von »<anonymous>«
-  130 | color::printer const bold{ attribute::Text_Bold };
-      |                                                 ^
-source/common/include/ibis/color/detail/ansii_color.hpp:33:43: Warnung: Arrayindex 2 ist außerhalb der Arraygrenzen von »const ibis::color::attribute [1]« [-Warray-bounds]
-   33 |         : std::array<value_type, SIZE>{ { static_cast<value_type>(il.begin()[N])... } }
-      |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-source/common/include/ibis/color/detail/ansii_color.hpp:130:49: Anmerkung: beim Referenzieren von »<anonymous>«
-  130 | color::printer const bold{ attribute::Text_Bold };
-      |                                                 ^
-source/common/include/ibis/color/detail/ansii_color.hpp:33:43: Warnung: Arrayindex 3 ist außerhalb der Arraygrenzen von »const ibis::color::attribute [1]« [-Warray-bounds]
-   33 |         : std::array<value_type, SIZE>{ { static_cast<value_type>(il.begin()[N])... } }
-      |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-source/common/include/ibis/color/detail/ansii_color.hpp:130:49: Anmerkung: beim Referenzieren von »<anonymous>«
-  130 | color::printer const bold{ attribute::Text_Bold };
-      |                                                 ^
-```
-
-#### Boost.Spirit X3 Notes
+### Boost.Spirit X3 Notes
 
 **WARNING:** Notes about parser rule definition
 
