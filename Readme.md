@@ -1,8 +1,9 @@
 IBIS HDL project
 ================
 
-Required Tools to Build & Configuration
-----------------------------------------
+## Build
+
+### Required Tools to Build & Configuration
 
 * C++17 compliant compiler, tested with
     - clang++ 11 (in 2021), g++10 untested
@@ -15,11 +16,10 @@ Required Tools to Build & Configuration
 
 * python 3 to generate some files
 
-* much memory, highly recommended more than 16GB
+* lot of memory, highly recommended more than 16GB
 
 
-Required 3rd party Libraries
-----------------------------
+### Required 3rd party Libraries
 
 * Boost 1.73
     - filesystem
@@ -33,37 +33,12 @@ directory from git repositories:
 * CLI11
 * GLS (currently unused)
 
-Build
------
-
-### For end user
-
-There is nothing of interest at this time, really.
-
-### For developer
-
-There are some environment variables for the clang tools:
-
-- CLANG_TIDY_ROOT_DIR
-- CLANG_FORMAT_ROOT_DIR
-
-One may run into Clang specific linker error:
-
-```
-/usr/bin/ld: cannot find /usr/lib64/libasan.so.6.0.0
-collect2: error: ld returned 1 exit status
-```
-than simply install libasan, e.g. on Fedora:
-```
-$ sudo dnf install libasan libasan-static
-```
 
 #### Compiling Boost Libs on Windows
 
 You may come across to build Boost libs by yourself - create a batch file.
 
 For Clang-Win:
-
 
 ```
 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
@@ -91,26 +66,8 @@ toolset=msvc address-model=64 architecture=x86 stage ^
 --with-filesystem --with-locale --with-stacktrace --with-system --with-test --with-thread
 ```
 
-#### ToDo
 
-- MaybeOfInterest:
-  - https://github.com/ddemidov/amgcl/blob/master/CMakeLists.txt
-  - https://github.com/AmokHuginnsson/replxx/blob/master/CMakeLists.txt
-
-
--  Ninja parallel build:
-  - https://github.com/microsoft/DirectXShaderCompiler/blob/master/CMakeLists.txt
-  - https://github.com/Bforartists/Bforartists/blob/master/CMakeLists.txt
-
-- for cmake tidy && format, code coverage etc. example code look at
-  https://github.com/ORNL-CEES/mfmg/tree/master/cmake
-
-- Unit Testing
-  - https://github.com/onqtam/awesome-cmake/blob/master/README.md#toolchains
-  - https://github.com/adishavit/cmake_snippets
-
-
-#### Running tests
+### Running tests
 
 ```
 env CTEST_OUTPUT_ON_FAILURE=1 make check
@@ -137,8 +94,59 @@ $ ctest --output-on-failure -R <test>
 ```
 
 
-ToDo with respect to Implementation
------------------------------------
+Developer
+---------
+
+### Intro
+
+- [Documenting C++ Code](https://developer.lsst.io/cpp/api-docs.html)
+
+**More serious**: The source code has partially documentation which is
+expressive, but outdated. A documentation marathon is required if the
+source base is stable.
+
+### Clang Tidy
+
+#### Disabled checks, which shouldn't - FixMe
+
+- [misc-no-recursion](https://clang.llvm.org/extra/clang-tidy/checks/misc-no-recursion.html):
+  *Until the ast_printer recursive call chain has been solved.*
+
+- [cert-err58-cpp](https://clang.llvm.org/extra/clang-tidy/checks/cert-err58-cpp.html):
+  *It's correct, but depend on others libraries.*
+
+- [cppcoreguidelines-pro-bounds-array-to-pointer-decay](https://clang.llvm.org/extra/clang-tidy/checks/cppcoreguidelines-pro-bounds-array-to-pointer-decay.html):
+  *Ignored at this time. With C++20 with get [std::span](https://en.cppreference.com/w/cpp/container/span)
+   aka gsl::span aka gsl:: gsl::array_view. Also starting with C++20 we has also
+   [std::source_location](https://en.cppreference.com/w/cpp/utility/source_location) which allows to write assert macros with C++20.*
+
+- [bugprone-branch-clone](https://clang.llvm.org/extra/clang-tidy/checks/bugprone-branch-clone.html):
+  *This check ignores the C++ `[[fallthrough]]` attribute specifier, hence twice the source annotations.* But it
+  checks and examines conditional operators, so we can't it disable completely. Hopefully later Clang-tidy
+  version will honor those attribute specifier.
+
+- [readability-identifier-naming](https://clang.llvm.org/extra/clang-tidy/checks/readability-identifier-naming.html)
+  *Here a lot of effort is required to consolidate and unify all the naming*, e.g. see
+  [.clang-tidy](https://github.com/xournalpp/xournalpp/blob/master/.clang-tidy) or
+  [.clang-tidy](https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/blob/develop/.clang-tidy) as example.
+
+#### Permanently disabled checks
+
+- [modernize-use-trailing-return-type](https://clang.llvm.org/extra/clang-tidy/checks/modernize-use-trailing-return-type.html):
+  *This transformation is purely stylistic. We are not quite that modern.*
+
+- [readability-magic-numbers](https://clang.llvm.org/extra/clang-tidy/checks/readability-magic-numbers.html), cppcoreguidelines-avoid-magic-numbers:
+  *This goes too far to force this everywhere.*
+
+- [readability-redundant-access-specifiers](https://clang.llvm.org/extra/clang-tidy/checks/readability-redundant-access-specifiers.html):
+  *This is correct, but is used here for classification purposes.*
+
+- [cppcoreguidelines-pro-type-vararg](https://clang.llvm.org/extra/clang-tidy/checks/cppcoreguidelines-pro-type-vararg.html):
+  *By using Boost UTF this rule is triggered on each BOOST_TEST macros. No c-style vararg functions are written in this project.*
+
+
+## ToDo
+
 
 Obviously the intend is to get the parser working and hence the
 project.
@@ -148,6 +156,8 @@ project.
 
 
 #### Fix Clang AddressSanitizer issue
+
+Clang AddressSanitizer complains here [Wandbox](https://wandbox.org/permlink/GfF0VgNLDRWOgkd1):
 
 ```
 stack-buffer-overflow .../color/detail/ansi_color.hpp:33 in
@@ -214,6 +224,9 @@ separated compilation units.
 - Check [Trying to convert a VHDL BNF to a labeled BNF for BNFC](
   https://stackoverflow.com/questions/44166199/trying-to-convert-a-vhdl-bnf-to-a-labeled-bnf-for-bnfc)
 
+- Maybe a compiler template firewall must be introduced, see
+  [Internal compiler error, while using boost spirit x3](
+   https://stackoverflow.com/questions/40195894/internal-compiler-error-while-using-boost-spirit-x3).
 
 ### Fix Parser Testsuite
 
@@ -268,31 +281,16 @@ But there is more:
 There are several needs to log to the user. The VHDL assert and
 report messages are obvious. Next are messages of warning and errors
 from VHDL compiler self. Further internal and debugging messages,
-maybe by use of boost.log.
+maybe by use of boost.log or spdlog.
 
 Generally, a lot of information go trough std::cerr without prefix
 or even using colorizing. E.g. on stacktrace_{gdb.boost} it's not
 clear what comes from what.
 
-
-ToDo on design
----------------
-
 ### Project structure
 
 - testsuite/util/basic_failure_diagnostic_fixture and testsuite/vhdl/util/failure_diagnostic_fixture
   still BAD NAMING ...
-
-- merge back testsuite librules into parser_rules. The intention was
-  to split out compile/memory intensive compile jobs. This is
-  confusing from maintenance aspect. This may be complicated, so the impression
-  after some test. The linker run out of memory with 20GB... Maybe a compiler
-  template firewall must be introduced, see
-  [Internal compiler error, while using boost spirit x3](
-   https://stackoverflow.com/questions/40195894/internal-compiler-error-while-using-boost-spirit-x3).
-  Maybe the reason was, that all optimizations where turned off? to save
-  time.
-
 
 ### CMake
 
@@ -327,7 +325,7 @@ FetchContent_Declare(RapidJSON
 FetchContent_MakeAvailable(RapidJSON)
 set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
 ```
-
+- Check for useful snippets: https://github.com/adishavit/cmake_snippets
 
 ### Sources
 
@@ -343,10 +341,6 @@ set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
 
 - Write git hooks for checking using clang-{tidy,format} et al. Note, that not
   everywhere clang-format may be installed.
-
-- join back testsuite's librules into parser_rules. The reason was in 2018 the
-  compilation effort: compiling with make -j X and spirit.x3 rules with
-  single core. Starting with CMake 3.16 there is the Unity Build Mode.
 
 - AST printer: move ast_printer into ast_walker, printer breaks down into simple class
   like ast_stats.
@@ -386,66 +380,14 @@ An interesting feature is described at
   https://stackoverflow.com/questions/64618840/controlling-output-of-boost-test-source-location-format)
 
 
-C++ Code style
---------------
-
-Check [LSST DM Developer Guide](https://developer.lsst.io/index.html) for styles
-and recommendations.
-
-
-### CLang Tidy
-
-A good starting point is [Static checks with CMake/CDash (iwyu, clang-tidy, lwyu, cpplint and cppcheck)](
-https://blog.kitware.com/static-checks-with-cmake-cdash-iwyu-clang-tidy-lwyu-cpplint-and-cppcheck/)
-
-  - not checked in deep by clang-tidy:
-
-    - frontend/src/stacktrace_{boost,gdb}.cpp since they need more effort
-      to check and rewrite/improve
-
-
-#### FixMe
-
-- [misc-no-recursion](https://clang.llvm.org/extra/clang-tidy/checks/misc-no-recursion.html):
-  *Until the ast_printer recursive call chain has been solved.*
-
-- [cert-err58-cpp](https://clang.llvm.org/extra/clang-tidy/checks/cert-err58-cpp.html):
-  *It's correct, but depend on others libraries.*
-
-- [cppcoreguidelines-pro-bounds-array-to-pointer-decay](https://clang.llvm.org/extra/clang-tidy/checks/cppcoreguidelines-pro-bounds-array-to-pointer-decay.html):
-  *Ignored at this time. With C++20 with get [std::span](https://en.cppreference.com/w/cpp/container/span)
-   aka gsl::span aka gsl:: gsl::array_view. Also starting with C++20 we has also
-   [std::source_location](https://en.cppreference.com/w/cpp/utility/source_location) which allows to write assert macros with C++20.*
-
-- [bugprone-branch-clone](https://clang.llvm.org/extra/clang-tidy/checks/bugprone-branch-clone.html):
-  *This check ignores the C++ `[[fallthrough]]` attribute specifier, hence twice the source annotations.* But it
-  checks also examines conditional operators, so we can't it disable completely.
-
-- [readability-identifier-naming](https://clang.llvm.org/extra/clang-tidy/checks/readability-identifier-naming.html)
-  *Here a lot of effort is required to consolidate and unify all the naming*, e.g. see
-  [.clang-tidy](https://github.com/xournalpp/xournalpp/blob/master/.clang-tidy) or
-  [.clang-tidy](https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/blob/develop/.clang-tidy) as example.
-
-#### permanently disabled
-
-- [modernize-use-trailing-return-type](https://clang.llvm.org/extra/clang-tidy/checks/modernize-use-trailing-return-type.html):
-  *This transformation is purely stylistic. We are not quite that modern.*
-
-- [readability-magic-numbers](https://clang.llvm.org/extra/clang-tidy/checks/readability-magic-numbers.html), cppcoreguidelines-avoid-magic-numbers:
-  *This goes too far to force this everywhere.*
-
-- [readability-redundant-access-specifiers](https://clang.llvm.org/extra/clang-tidy/checks/readability-redundant-access-specifiers.html):
-  *This is correct, but is used here for classification purposes.*
-
-- [cppcoreguidelines-pro-type-vararg](https://clang.llvm.org/extra/clang-tidy/checks/cppcoreguidelines-pro-type-vararg.html):
-  *By using Boost UTF this rule is triggered on each BOOST_TEST macros. No c-style vararg functions are written in this project.*
-
-
-## ToDo Documentation
+### Documentation
 
 Switch from MarkDown to ReStructuredText. At this state, Doxygen miss some MarkDown
 and ReStructuredText features, Sphinx multi projects and doesn't seems to support
 Doxygen's Todo tags/list.
 
-- [Documenting C++ Code](https://developer.lsst.io/cpp/api-docs.html)
+
+Check [LSST DM Developer Guide](https://developer.lsst.io/index.html) for styles
+and recommendations.
+
 

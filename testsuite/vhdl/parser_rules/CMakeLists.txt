@@ -33,7 +33,6 @@ target_link_libraries(${PROJECT_NAME}
         ibis::vhdl
     PRIVATE
         testsuite::util
-        testsuite::vhdl_rules
         Boost::system
         Boost::locale
         Boost::unit_test_framework
@@ -66,6 +65,7 @@ target_sources(${PROJECT_NAME}
         src/test_vhdl_parser.cpp
         src/failure_diagnostic_fixture.cpp ${PROJECT_BINARY_DIR}/src/failure_diagnostic_fixture_builtin.cpp
         src/dataset.cpp ${PROJECT_BINARY_DIR}/src/dataset_builtin.cpp
+        src/rules.cpp
         # concrete test cases
         src/test/abstract_literal_test.cpp
         src/test/actual_part_test.cpp
@@ -76,7 +76,7 @@ target_sources(${PROJECT_NAME}
         src/test/assertion_test.cpp
         src/test/association_list_test.cpp
         src/test/attribute_name_test.cpp
-        src/test/attribute_specification_test.cpp
+        src/test/attribute_specification_test.cpp # fatal error: in "parser_rule/attribute_specification/_1": std::length_error: basic_string::_M_create
         src/test/based_literal_test.cpp
         src/test/binding_indication_test.cpp
         src/test/bit_string_literal_test.cpp
@@ -200,7 +200,7 @@ if (IBIS_ENABLE_PCH)
     target_precompile_headers(${PROJECT_NAME}
         PRIVATE
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl/parser/detail/pch.hpp>
-            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl/parser/detail/pch_prj.hpp>
+            #$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl/parser/detail/pch_prj.hpp>
     )
 endif()
 

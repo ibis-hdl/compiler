@@ -80,9 +80,12 @@ set_property(GLOBAL
 # Starting with CMake 3.16 projects can use precompiled headers
 # ToDo: Study [Faster builds with PCH suggestions from C++ Build Insights](
 #   https://devblogs.microsoft.com/cppblog/faster-builds-with-pch-suggestions-from-c-build-insights/)
+# Note: PCH seems to slow down (Clang11/Fedora)! compilation time especially
+# on testsuite's vhdl_rulesproject, even at system update PCH are invalided
+# and hence all is compiled now. Hence disabled for now.
 option(IBIS_ENABLE_PCH
     "Enable pre-compiled headers support. This can speed up compilation time."
-    ON)
+    OFF)
 mark_as_advanced(IBIS_ENABLE_PCH)
 
 

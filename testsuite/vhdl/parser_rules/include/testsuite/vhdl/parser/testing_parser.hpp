@@ -55,14 +55,14 @@ struct testing_parser {
         attribute_type attr;
 
         try {
+            // FixMe: Instantiation of phrase_parse() takes the 99% of the time here
+            // Even use of parser::skipper() helper doesn't change it.
             parse_ok = x3::phrase_parse(iter, end, parser, parser::skipper, attr);
 
             if (parse_ok) {
                 if (iter != end) {
-                    error_handler(iter,
-                                  "Test Suite Full Match Error! "
-                                  "Unparsed input left:\n" +
-                                      std::string(iter, end));
+                    error_handler(iter, "Test Suite Full Match Error! Unparsed input left:\n" +
+                                            std::string(iter, end));
                 }
                 else {
                     ast::printer print(output);
