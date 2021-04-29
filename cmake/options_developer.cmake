@@ -174,14 +174,17 @@ mark_as_advanced(IBIS_ENABLE_MSAN)
 set(CMAKE_CXX_FLAGS_MSAN "-fsanitize=memory;-fno-omit-frame-pointer")
 set(CMAKE_LINK_FLAGS_MSAN "-fsanitize=memory;-fno-omit-frame-pointer")
 
-# --- UndefinedBehaviour ---
-option(IBIS_ENABLE_UBSAN "Enable UndefinedBehaviour builds." OFF)
+# --- UndefinedBehavior ---
+option(IBIS_ENABLE_UBSAN "Enable UndefinedBehavior builds." OFF)
 mark_as_advanced(IBIS_ENABLE_UBSAN)
 
 set(CMAKE_CXX_FLAGS_UBSAN "-fsanitize=undefined")
 set(CMAKE_LINK_FLAGS_UBSAN "-fsanitize=undefined")
 
 # FixMe: Sanity checks
+# Clang: [Controlling Code Generation](https://github.com/llvm/llvm-project/blob/d480f968ad8b56d3ee4a6b6df5532d485b0ad01e/clang/docs/UsersManual.rst#id108)
+# It is not possible to combine more than one of the -fsanitize=address,
+# -fsanitize=thread, and -fsanitize=memory checkers in the same program.
 
 add_compile_options(
     "$<$<BOOL:${IBIS_ENABLE_TSAN}>:${CMAKE_CXX_FLAGS_TSAN}>"
