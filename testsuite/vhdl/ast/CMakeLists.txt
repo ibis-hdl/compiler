@@ -58,20 +58,20 @@ set_source_files_properties(src/test_ast.cpp
         # Failed to link Boost UTF with Windows/Clang, Linux works
         COMPILE_DEFINITIONS "$<$<NOT:$<PLATFORM_ID:Windows>>:BOOST_TEST_DYN_LINK>"
 )
-# [Boost.Test linker error by use with precompiled headers (PCH)](
+# [Boost.Test linker error by use with pre-compiled headers (PCH)](
 #  https://stackoverflow.com/questions/66535719/boost-test-linker-error-by-use-with-precompiled-headers-pch)
 set_source_files_properties(src/test_ast.cpp
     PROPERTIES
         SKIP_PRECOMPILE_HEADERS ON
 )
 
-if (IBIS_ENABLE_PCH)
-    target_precompile_headers(${PROJECT_NAME}
-        PRIVATE
-            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl/ast/detail/pch.hpp>
-            #$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl/ast/detail/pch_prj.hpp>
-    )
-endif()
+
+target_precompile_headers(${PROJECT_NAME}
+    PRIVATE
+        $<$<BOOL:${IBIS_ENABLE_PCH_STD}>:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl/ast/detail/pch.hpp>
+        $<$<BOOL:${IBIS_ENABLE_PCH_BOOST}>:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl/ast/detail/pch_boost.hpp>
+        $<$<BOOL:${IBIS_ENABLE_PCH_IBIS}>:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl/ast/detail/pch_prj.hpp>
+)
 
 
 target_include_directories(${PROJECT_NAME}

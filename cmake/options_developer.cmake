@@ -77,16 +77,41 @@ set_property(GLOBAL
 
 ##
 # Developer Build Option: Use PCH
-# Starting with CMake 3.16 projects can use precompiled headers
+# Starting with CMake 3.16 projects can use pre-compiled headers
 # ToDo: Study [Faster builds with PCH suggestions from C++ Build Insights](
 #   https://devblogs.microsoft.com/cppblog/faster-builds-with-pch-suggestions-from-c-build-insights/)
-# Note: PCH seems to slow down (Clang11/Fedora)! compilation time especially
-# on testsuite's vhdl_rulesproject, even at system update PCH are invalided
-# and hence all is compiled now. Hence disabled for now.
-option(IBIS_ENABLE_PCH
-    "Enable pre-compiled headers support. This can speed up compilation time."
+# Note: Don't put all headers into PCH, this may  slow down (Clang-11/Fedora)
+# compilation time, especially on testsuite's vhdl_rules project. See
+# DEVELOPER_RUN_CLANG_TIME_TRACE
+option(IBIS_ENABLE_PCH_STD
+    "Enable pre-compiled headers support for standard C++ headers."
     OFF)
-mark_as_advanced(IBIS_ENABLE_PCH)
+mark_as_advanced(IBIS_ENABLE_PCH_STD)
+
+option(IBIS_ENABLE_PCH_BOOST
+    "Enable pre-compiled headers support for Boost.Org C++ headers."
+    OFF)
+mark_as_advanced(IBIS_ENABLE_PCH_BOOST)
+
+option(IBIS_ENABLE_PCH_IBIS
+    "Enable pre-compiled headers support for Ibis HDL C++ headers."
+    OFF)
+mark_as_advanced(IBIS_ENABLE_PCH_IBIS)
+
+
+# Clang option to find headers which consume compile time, best effort to optimize
+# PCH support.
+# [time-trace: timeline / flame chart profiler for Clang](
+#  https://aras-p.info/blog/2019/01/16/time-trace-timeline-flame-chart-profiler-for-Clang/)
+option(DEVELOPER_RUN_CLANG_TIME_TRACE
+    "What and where in my code things are slow to compile? Generate flame chart Tracing JSON."
+    OFF
+)
+if (DEVELOPER_RUN_CLANG_TIME_TRACE)
+add_compile_options(
+    "$<$<CXX_COMPILER_ID:Clang>:-ftime-trace>"
+)
+endif()
 
 
 ## -----------------------------------------------------------------------------
@@ -122,7 +147,7 @@ if(LOCALHOST_RAM_MiB GREATER 10240)
     add_compile_options(
         # - limit gcc/clang template error depth printing
         # - increase limit especially for clang recursive template instantiation,
-        #   otherwise exceedes maximum depth
+        #   otherwise exceeds maximum depth
         "$<$<CXX_COMPILER_ID:GNU>:-ftemplate-backtrace-limit=0;-ftemplate-depth=1024>"
         "$<$<CXX_COMPILER_ID:Clang>:-ftemplate-backtrace-limit=0;-ftemplate-depth=1024>"
     )
@@ -138,7 +163,6 @@ else()
         "$<$<CXX_COMPILER_ID:Clang>:-ftemplate-backtrace-limit=10;-ftemplate-depth=900>"
     )
 endif()
-
 
 
 ## -----------------------------------------------------------------------------
