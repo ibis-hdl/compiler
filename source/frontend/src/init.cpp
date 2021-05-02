@@ -413,10 +413,10 @@ void init::user_config_message_color()
         auto const& child = ibis::settings::instance().get_child(json_ptr.data());
         // pt::write_json(std::cout, child);
 
-        ibis::color::printer format_style;
+        ibis::color::attribute_container format_style;
 
         auto const update_format = [&](std::string_view attr_name, auto const attribute_getter,
-                                       ibis::color::printer& format) {
+                                       ibis::color::attribute_container& format) {
             auto const attr{ attribute_getter(attr_name) };
             if (attr) {
                 format |= *attr;
@@ -451,19 +451,19 @@ void init::user_config_message_color()
 
     auto const failure_format = get_formatter("message.failure.style");
     imbue(std::cerr,
-          std::make_unique<message::failure_facet>(failure_format, color::color_off, force_color));
+          std::make_unique<message::failure_facet>(failure_format, color::color_off));
 
     auto const error_format = get_formatter("message.error.style");
     imbue(std::cerr,
-          std::make_unique<message::error_facet>(error_format, color::color_off, force_color));
+          std::make_unique<message::error_facet>(error_format, color::color_off));
 
     auto const warning_format = get_formatter("message.warning.style");
     imbue(std::cerr,
-          std::make_unique<message::warning_facet>(warning_format, color::color_off, force_color));
+          std::make_unique<message::warning_facet>(warning_format, color::color_off));
 
     auto const note_format = get_formatter("message.note.style");
     imbue(std::cerr,
-          std::make_unique<message::note_facet>(note_format, color::color_off, force_color));
+          std::make_unique<message::note_facet>(note_format, color::color_off));
 }
 
 void init::l10n()

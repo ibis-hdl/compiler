@@ -1,5 +1,3 @@
-//#include<ibis/color/attribute.hpp>
-//#include<ibis/color/facet.hpp>
 #include <ibis/color/message.hpp>
 
 #include <ibis/util/string/icompare.hpp>
@@ -30,7 +28,7 @@ std::optional<color::attribute> text_attr(std::string_view name)
 {
     using namespace std::literals::string_view_literals;
 
-    std::initializer_list<std::pair<std::string_view, color::attribute>> const map{
+    static std::initializer_list<std::pair<std::string_view, color::attribute>> constexpr map{
         { "bold"sv, color::attribute::Text_Bold }
     };
 
@@ -47,7 +45,7 @@ std::optional<color::attribute> foreground_attr(std::string_view name)
 {
     using namespace std::literals::string_view_literals;
 
-    static std::initializer_list<std::pair<std::string_view, color::attribute>> const map{
+    static std::initializer_list<std::pair<std::string_view, color::attribute>> constexpr map{
         { "black"sv, color::attribute::Foreground_Black },
         { "red"sv, color::attribute::Foreground_Red },
         { "green"sv, color::attribute::Foreground_Green },
@@ -71,7 +69,7 @@ std::optional<color::attribute> background_attr(std::string_view name)
 {
     using namespace std::literals::string_view_literals;
 
-    static std::initializer_list<std::pair<std::string_view, color::attribute>> const map{
+    static std::initializer_list<std::pair<std::string_view, color::attribute>> constexpr map{
         { "black"sv, color::attribute::Background_Black },
         { "red"sv, color::attribute::Background_Red },
         { "green"sv, color::attribute::Background_Green },

@@ -5,11 +5,21 @@
 
 #include <iostream>
 
-namespace ibis::color::api_unix {
+namespace ibis::color::platform_unix {
 
 class isatty {
+public:
+    isatty(std::ostream const& os)
+        : tty{ is_tty(os.rdbuf()) }
+    {
+    }
+
+    constexpr operator bool() const { return tty; }
+
+private:
     bool is_tty(std::streambuf const* rdbuf) const noexcept
     {
+        // ordered by likelihood
         if (rdbuf == std::cout.rdbuf()) {
             return ::isatty(::fileno(stdout));
         }
@@ -18,14 +28,6 @@ class isatty {
         }
         return false;
     }
-
-public:
-    isatty(std::ostream const& os)
-        : tty{ is_tty(os.rdbuf()) }
-    {
-    }
-
-    constexpr operator bool() const { return tty; }
 
 private:
     bool const tty;

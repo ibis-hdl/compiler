@@ -1,8 +1,10 @@
 #pragma once
 
+#include <ibis/color/attribute.hpp>
+#include <ibis/color/manip.hpp>
 #include <ibis/color/detail/color.hpp>
-
-#include <ibis/color/detail/api.hpp>
+#include <ibis/color/detail/platform.hpp>
+#include <ibis/platform.hpp>
 
 #include <iostream>
 #include <locale>  // facet
@@ -13,31 +15,31 @@ namespace ibis::color {
 template <typename Tag>
 class message_facet : public std::locale::facet {
 public:
+    using attributes = detail::attribute_container<color::attribute, 4>;
+
+public:
     ///
-    /// Construct a message facte
+    /// Construct a message facet
     ///
-    /// @param prefix_     The color before priting the embraced message.
-    /// @param postfix_    The color past priting the embraced message, commonly
+    /// @param prefix_     The color before printing the embraced message.
+    /// @param postfix_    The color past printing the embraced message, commonly
     ///                   restore the default state.
     /// @param force_deco_ Force the color printing.
     ///
     /// \note Clang-Tidy '[misc-move-const-arg]' message:
     /// std::move of the variable {'prefix_', 'postfix_'} of the
-    /// trivially-copyable type 'color::printer' (aka 'esc_printer<ansii::attribute, 4>')
+    /// trivially-copyable type 'attribute_container<color::attribute, 4>'
     /// has no effect.
     ///
-    explicit message_facet(color::printer prefix_, color::printer postfix_,
-                           bool force_deco_ = false)
+    explicit message_facet(attributes prefix_, attributes postfix_)
         : facet{ 0 }
         , prefix{ prefix_ }
         , postfix{ postfix_ }
-        , force_decoration{ force_deco_ }
     {
     }
 
-    explicit message_facet(bool force_deco_ = false)
+    explicit message_facet()
         : facet{ 0 }
-        , force_decoration{ force_deco_ }
     {
     }
 
@@ -50,40 +52,62 @@ public:
     message_facet& operator=(message_facet&&) = delete;
 
 public:
-    std::ostream& print(std::ostream& os, message_decorator<Tag> const& decorator) const
+    std::ostream& print(std::ostream& os, message_decorator<Tag> const& message) const
     {
-        if (!enable) {
-            *enable = detail::isatty{ os };
-            // os << (*enable ? "is TTY" : "redirected");
-            if (force_decoration) {
-                // os << ", but forced";
-                *enable = true;
+#if defined(BUILD_PLATFORM_WIN32)
+        using printer = detail::winapi_printer<color::attribute, 4>;
+#else
+        using printer = detail::ansi_esc_printer<color::attribute, 4>;
+#endif
+
+        auto const use_color = [&](color::control ctrl) -> bool {
+            switch (ctrl) {
+                case color::control::Auto:
+                    return detail::isatty{ os };
+                case color::control::Force:
+                    return true;
+                default:  // aka color::control::Off
+                    return false;
             }
-            // os << '\n';
+        };
+
+        auto const ctrl = basic_manip<color::control>::value(os);
+
+        // first time initialization
+        if (!enable) {
+            *enable = use_color(ctrl);
+        }
+
+        // only on changes check to use colors
+        if (ctrl != control) {
+            control = ctrl;
+            *enable = use_color(ctrl);
         }
 
         if (*enable) {
-            os << prefix;
+            printer prefix_{ prefix };
+            os << prefix_;
         }
 
-        decorator.print(os);
+        message.print(os);
 
         if (*enable) {
-            os << postfix;
+            printer postfix_{ postfix };
+            os << postfix_;
         }
 
         return os;
     }
 
 public:
-    color::printer prefix;
-    color::printer postfix;
+    attributes prefix;
+    attributes postfix;
 
 public:
     static std::locale::id id;
 
 private:
-    bool force_decoration;
+    color::control mutable control;
     std::optional<bool> mutable enable;
 };
 

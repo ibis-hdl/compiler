@@ -8,6 +8,9 @@ namespace ibis::color {
 template <typename Tag>
 class message_decorator {
 public:
+    /// @todo [Boost.Locale future] must be const reference to std::string due to boost.locale API
+    /// which returns basic_message<char> which isn't convertible from 'basic_message<char>' to
+    /// 'std::string_view' yet, so we stick std::basic_string<char_type>
     explicit message_decorator(std::string const& contents_)
         : contents{ contents_ }
     {

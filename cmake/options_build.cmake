@@ -1,13 +1,6 @@
 ## -----------------------------------------------------------------------------
-## user configureable build options
+## user configurable build options
 ## -----------------------------------------------------------------------------
-
-##
-# Build Option: ANSI Color or Windows  Console I/O
-if(WIN32)
-    option(IBIS_WITH_ANSI_COLOR_ON_WINDOWS "Ignore Window's High-Level Console I/O API and use ANSI color codes." OFF)
-endif()
-
 
 ##
 # Build Option: Support Boost.stacktrace library
@@ -15,7 +8,7 @@ option(IBIS_WITH_BOOST_STACKTRACE "Enable support for the Boost::stacktrace libr
 
 
 ##
-# Runtime Option: Use GDB to dump the stracktrace
+# Runtime Option: Use GDB to dump the stacktrace
 if(UNIX)
     option(IBIS_WITH_GDB_STACKTRACE "Enable support for dumping the stacktrace using GNU/GDB on runtime." ON)
 endif()

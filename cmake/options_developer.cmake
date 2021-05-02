@@ -99,7 +99,7 @@ option(IBIS_ENABLE_PCH_IBIS
 mark_as_advanced(IBIS_ENABLE_PCH_IBIS)
 
 
-# Clang option to find headers which consume compile time, best effort to optimize
+# Clang option to find headers which consumes compile time, best effort to optimize
 # PCH support.
 # [time-trace: timeline / flame chart profiler for Clang](
 #  https://aras-p.info/blog/2019/01/16/time-trace-timeline-flame-chart-profiler-for-Clang/)
@@ -166,7 +166,7 @@ endif()
 
 
 ## -----------------------------------------------------------------------------
-# Satanizer compiler options
+# Sanitize support and compiler options
 #
 # FixMe: Check and test flags, only added
 
@@ -242,7 +242,7 @@ option(DEVELOPER_CLANG_WARN_EVERYTHING
 mark_as_advanced(DEVELOPER_CLANG_WARN_EVERYTHING)
 
 if(DEVELOPER_CLANG_WARN_EVERYTHING)
-    # no interest in compatibilty to old standards
+    # no interest in compatibility to old standards
     set(_warn_compat -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-c++98-c++11-c++14-compat)
     set(_warn_misc -Wno-padded -Wno-global-constructors)
     add_compile_options(

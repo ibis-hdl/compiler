@@ -52,11 +52,3 @@ configure_file(
   "${PROJECT_SOURCE_DIR}/include/ibis/compiler/compiler_support.hpp.in"
   "${PROJECT_BINARY_DIR}/include/ibis/compiler/compiler_support.hpp"
 )
-
-# ... also the user configuration
-# FixMe: Should be build_configuration.hpp, or even use target_compile_definitions
-# for the files affected. So its to global here for the use of.
-configure_file(
-  "${PROJECT_SOURCE_DIR}/include/ibis/configuration.hpp.in"
-  "${PROJECT_BINARY_DIR}/include/ibis/configuration.hpp"
-)

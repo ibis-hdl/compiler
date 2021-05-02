@@ -23,7 +23,7 @@ target_sources(${PROJECT_NAME}
         src/file_loader.cpp
         src/settings.cpp
         src/color.cpp
-        src/winapi_color.cpp ### FixMe: looks strange on Linux, but is correct so far
+        $<$<BOOL:${WIN32}>:src/color_platform_windows.cpp>
         src/user_home_dir.cpp
 )
 
