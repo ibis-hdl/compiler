@@ -83,19 +83,14 @@ set_property(GLOBAL
 # Note: Don't put all headers into PCH, this may  slow down (Clang-11/Fedora)
 # compilation time, especially on testsuite's vhdl_rules project. See
 # DEVELOPER_RUN_CLANG_TIME_TRACE
-option(IBIS_ENABLE_PCH_STD
-    "Enable pre-compiled headers support for standard C++ headers."
-    OFF)
-mark_as_advanced(IBIS_ENABLE_PCH_STD)
-
-option(IBIS_ENABLE_PCH_BOOST
-    "Enable pre-compiled headers support for Boost.Org C++ headers."
-    OFF)
-mark_as_advanced(IBIS_ENABLE_PCH_BOOST)
+option(IBIS_ENABLE_PCH_DEFAULT
+    "Enable pre-compiled headers support for standard C++, Boost.Org and 3rd party headers."
+    ON)
+mark_as_advanced(IBIS_ENABLE_PCH_DEFAULT)
 
 option(IBIS_ENABLE_PCH_IBIS
     "Enable pre-compiled headers support for Ibis HDL C++ headers."
-    OFF)
+    ON)
 mark_as_advanced(IBIS_ENABLE_PCH_IBIS)
 
 

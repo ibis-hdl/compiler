@@ -54,12 +54,16 @@ set_property(TARGET ${PROJECT_NAME}
 )
 
 
-target_precompile_headers(${PROJECT_NAME}
-    PRIVATE
-        $<$<BOOL:${IBIS_ENABLE_PCH_STD}>:${PROJECT_SOURCE_DIR}/include/ibis/vhdl/detail/pch.hpp>
-        $<$<BOOL:${IBIS_ENABLE_PCH_BOOST}>:${PROJECT_SOURCE_DIR}/include/ibis/vhdl/detail/pch_boost.hpp>
-        $<$<BOOL:${IBIS_ENABLE_PCH_IBIS}>:${PROJECT_SOURCE_DIR}/include/ibis/vhdl/detail/pch_prj.hpp>
-)
+if(${PROJECT_NAME}_PCH)
+    # override ibis::pch helper
+    target_precompile_headers(${PROJECT_NAME}
+        PRIVATE
+            $<$<BOOL:${IBIS_ENABLE_PCH_DEFAULT}>:${PROJECT_SOURCE_DIR}/include/ibis/vhdl/detail/pch_default.hpp>
+            $<$<BOOL:${IBIS_ENABLE_PCH_IBIS}>:${PROJECT_SOURCE_DIR}/include/ibis/vhdl/detail/pch_ibis.hpp>
+    )
+elseif(IBIS_ENABLE_PCH_DEFAULT OR IBIS_ENABLE_PCH_IBIS)
+    target_precompile_headers(${PROJECT_NAME} REUSE_FROM ibis::pch)
+endif()
 
 
 target_include_directories(${PROJECT_NAME}

@@ -27,14 +27,16 @@ target_sources(${PROJECT_NAME}
         src/basic_failure_diagnostic_fixture.cpp
 )
 
-
-target_precompile_headers(${PROJECT_NAME}
-    PRIVATE
-        $<$<BOOL:${IBIS_ENABLE_PCH_STD}>:${PROJECT_SOURCE_DIR}/include/testsuite/util/detail/pch.hpp>
-        $<$<BOOL:${IBIS_ENABLE_PCH_BOOST}>:${PROJECT_SOURCE_DIR}/include/testsuite/util/detail/pch_boost.hpp>
-        $<$<BOOL:${IBIS_ENABLE_PCH_IBIS}>:${PROJECT_SOURCE_DIR}/include/testsuite/util/detail/pch_prj.hpp>
-)
-
+if(${PROJECT_NAME}_PCH)
+    # override testsuite::pch helper
+    target_precompile_headers(${PROJECT_NAME}
+        PRIVATE
+            $<$<BOOL:${IBIS_ENABLE_PCH_DEFAULT}>:${PROJECT_SOURCE_DIR}/include/testsuite/util/detail/pch_default.hpp>
+            $<$<BOOL:${IBIS_ENABLE_PCH_IBIS}>:${PROJECT_SOURCE_DIR}/include/testsuite/util/detail/pch_ibis.hpp>
+    )
+elseif(IBIS_ENABLE_PCH_DEFAULT OR IBIS_ENABLE_PCH_IBIS)
+    target_precompile_headers(${PROJECT_NAME} REUSE_FROM testsuite::pch)
+endif()
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC

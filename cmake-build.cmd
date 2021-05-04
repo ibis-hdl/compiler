@@ -16,7 +16,7 @@ set BOOST_LIBRARYDIR="D:\My\IBIS\boost_1_73_0\lib64-clang-11.0.0"
 set Boost_COMPILER="-clangw11"
 
 rem Debug, Release, RelWithDebInfo, MinSizeRel
-set CMAKE_BUILD_TYPE=RelWithDebInfo
+set CMAKE_BUILD_TYPE=Release
 
 echo ##
 echo ## Configure:
@@ -32,7 +32,7 @@ cmake -E make_directory %MY_BUILD_DIR%
 cd %MY_BUILD_DIR%
 
 rem Load MSVC console build environment
-rem call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64 
+rem call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
 
 cmake %MY_SOURCE_DIR% ^
     -G %CMAKE_GENERATOR% ^

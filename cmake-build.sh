@@ -17,7 +17,7 @@ CMAKE_GENERATOR="${CMAKE_BUILD_TOOL}"
 CMAKE_BIN="$(which cmake)"
 
 # Debug, Release, RelWithDebInfo, MinSizeRel
-CMAKE_BUILD_TYPE=RelWithDebInfo
+CMAKE_BUILD_TYPE=Release
 
 cat << EOF
 ##
