@@ -18,7 +18,7 @@ namespace ibis::vhdl::parser::detail {
 /// distinct parser directive allowing to avoid partial matches while parsing
 /// using a skipper.
 ///
-/// \note This is a problem specific helper function (due to VHDL's character set
+/// @note This is a problem specific helper function (due to VHDL's character set
 /// use here), so it isn't placed into `spirit_x3_util.hpp`
 /// file.
 ///
@@ -833,15 +833,14 @@ auto const aggregate_def =
 
 /// alias_declaration ::=                                         [LRM93 §4.3.3]
 ///     alias alias_designator [ : subtype_indication ] is name [ signature ] ;
-auto const alias_declaration_def = ( // operator precedence
+auto const alias_declaration_def =
        ALIAS
     >> alias_designator
     >> -( ':' >> subtype_indication )
     >> IS
     >> name
     >> -signature
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -874,7 +873,7 @@ auto const allocator_def =
 ///     begin
 ///         architecture_statement_part
 ///     end [ architecture ] [ architecture_simple_name ] ;
-auto const architecture_body_def = ( // operator precedence
+auto const architecture_body_def =
        ARCHITECTURE
     >> identifier
     >> OF
@@ -886,8 +885,7 @@ auto const architecture_body_def = ( // operator precedence
     >> END
     >> -ARCHITECTURE
     >> -simple_name
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -939,11 +937,10 @@ auto const assertion_def =
 /// assertion_statement ::=
 ///     [ label : ] assertion ;
 /// @endcode
-auto const assertion_statement_def = ( // operator precedence
+auto const assertion_statement_def =
        -label_colon
     >> assertion
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -977,13 +974,12 @@ auto const association_list_def =
 
 /// attribute_declaration ::=                                       [LRM93 §4.4]
 ///     attribute identifier : type_mark ;
-auto const attribute_declaration_def = ( // operator precedence
+auto const attribute_declaration_def =
        ATTRIBUTE
     >> identifier
     >> ':'
     >> type_mark
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -1012,22 +1008,21 @@ auto const attribute_name_def =
 
 /// attribute_specification ::=                                     [LRM93 §5.1]
 ///     attribute attribute_designator of entity_specification is expression ;
-auto const attribute_specification_def = ( // operator precedence
+auto const attribute_specification_def =
        ATTRIBUTE
     >> attribute_designator
     >> OF
     >> entity_specification
     >> IS
     >> expression
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
 /// base ::=                                                     [LRM93 §13.4.2]
 ///     integer
 auto const base_def =
-    integer // FixMe: Limit base integer size to 2 digits (range [2...16/32])
+    integer
     ;
 
 
@@ -1177,14 +1172,13 @@ auto const bit_value_def =
 ///         { use_clause }
 ///         { configuration_item }
 ///     end for ;
-auto const block_configuration_def = ( // operator precedence
+auto const block_configuration_def =
        FOR
     >> block_specification
     >> *use_clause
     >> *configuration_item
     >> END >> FOR
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -1246,12 +1240,12 @@ namespace detail {
 
 auto const block_header_generic = x3::rule<struct _, ast::block_header::generic_part_chunk> { "block_header.generic" } =
        generic_clause
-    >> -( generic_map_aspect > ';' )
+    >> -( generic_map_aspect >> x3::expect[';'] )
     ;
 
 auto const block_header_port = x3::rule<struct _, ast::block_header::port_part_chunk> { "block_header.port" } =
        port_clause
-    >> -( port_map_aspect > ';' )
+    >> -( port_map_aspect >> x3::expect[';'] )
     ;
 } // end detail
 
@@ -1281,7 +1275,7 @@ auto const block_specification_def = // order matters
 ///         begin
 ///             block_statement_part
 ///         end block [ block_label ] ;
-auto const block_statement_def = ( // operator precedence
+auto const block_statement_def =
        label_colon
     >> BLOCK
     >> -( '(' >> expression >> ')' )
@@ -1292,8 +1286,7 @@ auto const block_statement_def = ( // operator precedence
     >> block_statement_part
     >> END >> BLOCK
     >> -label
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -1312,7 +1305,7 @@ auto const block_statement_part_def =
 ///             case_statement_alternative
 ///             { case_statement_alternative }
 ///         end case [ case_label ] ;
-auto const case_statement_def = ( // operator precedence
+auto const case_statement_def =
        -label_colon
     >> CASE
     >> expression
@@ -1320,8 +1313,7 @@ auto const case_statement_def = ( // operator precedence
     >> +case_statement_alternative
     >> END >> CASE
     >> -label
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -1380,14 +1372,13 @@ auto const choices_def =
 ///         [ binding_indication ; ]
 ///         [ block_configuration ]
 ///     end for ;
-auto const component_configuration_def = ( // operator precedence
+auto const component_configuration_def =
        FOR
     >> component_specification
-    >> -( binding_indication > ';' )
+    >> -( binding_indication >> x3::expect[';'] )
     >> -block_configuration
     >> END >> FOR
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -1397,7 +1388,7 @@ auto const component_configuration_def = ( // operator precedence
 ///         [ local_generic_clause ]
 ///         [ local_port_clause ]
 ///     end component [ component_simple_name ] ;
-auto const component_declaration_def = ( // operator precedence
+auto const component_declaration_def =
        COMPONENT
     >> identifier
     >> -IS
@@ -1405,8 +1396,7 @@ auto const component_declaration_def = ( // operator precedence
     >> -port_clause
     >> END >> COMPONENT
     >> -simple_name
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -1416,13 +1406,12 @@ auto const component_declaration_def = ( // operator precedence
 ///         instantiated_unit
 ///             [ generic_map_aspect ]
 ///             [ port_map_aspect ] ;
-auto const component_instantiation_statement_def = ( // operator precedence
+auto const component_instantiation_statement_def =
        label_colon
     >> instantiated_unit
     >> -generic_map_aspect
     >> -port_map_aspect
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -1449,24 +1438,22 @@ auto const composite_type_definition_def =
 
 /// concurrent_assertion_statement ::=                              [LRM93 §9.4]
 /// [ label : ] [ postponed ] assertion ;
-auto const concurrent_assertion_statement_def = ( // operator precedence
+auto const concurrent_assertion_statement_def =
        -label_colon
     >> -POSTPONED
     >> assertion
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
 
 /// concurrent_procedure_call_statement ::=                         [LRM93 §9.3]
 /// [ label : ] [ postponed ] procedure_call ;
-auto const concurrent_procedure_call_statement_def = ( // operator precedence
+auto const concurrent_procedure_call_statement_def =
        -label_colon
     >> -POSTPONED
     >> procedure_call
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -1524,13 +1511,12 @@ auto const condition_clause_def =
 
 /// conditional_signal_assignment ::=                             [LRM93 §9.5.1]
 ///     target    <= options conditional_waveforms ;
-auto const conditional_signal_assignment_def = ( // operator precedence
+auto const conditional_signal_assignment_def =
        target
     >> "<="
     >> options
     >> conditional_waveforms
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -1551,7 +1537,7 @@ auto const conditional_waveforms_def =
 ///         configuration_declarative_part
 ///         block_configuration
 ///     end [ configuration ] [ configuration_simple_name ] ;
-auto const configuration_declaration_def = ( // operator precedence
+auto const configuration_declaration_def =
        CONFIGURATION
     >> identifier
     >> OF
@@ -1561,8 +1547,7 @@ auto const configuration_declaration_def = ( // operator precedence
     >> block_configuration
     >> END >> -CONFIGURATION
     >> -simple_name
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -1599,25 +1584,23 @@ auto const configuration_item_def =
 
 /// configuration_specification ::=                                 [LRM93 §5.2]
 ///     for component_specification binding_indication ;
-auto const configuration_specification_def = ( // operator precedence
+auto const configuration_specification_def =
        FOR
     >> component_specification
     >> binding_indication
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
 /// constant_declaration ::=                                    [LRM93 §4.3.1.1]
 ///     constant identifier_list : subtype_indication [ := expression ] ;
-auto const constant_declaration_def = ( // operator precedence
+auto const constant_declaration_def =
        omit[ CONSTANT ]
     >> identifier_list
     >> ':'
     >> subtype_indication
     >> -( ":=" >>  expression )
-    )
-    >  ';'
+    >> x3::expect[';']
 ;
 
 
@@ -1781,13 +1764,12 @@ auto const direction_def =
 
 /// disconnection_specification ::=                                 [LRM93 §5.3]
 ///     disconnect guarded_signal_specification after time_expression ;
-auto const disconnection_specification_def = ( // operator precedence
+auto const disconnection_specification_def =
        DISCONNECT
     >> guarded_signal_specification
     >> AFTER
     >> expression
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -1829,7 +1811,7 @@ auto const discrete_range_def = // order matters
 /// still contains the previous parsed data, hence holding the leaf data twice
 /// using two parse paths. as[] directive solve this.
 auto const element_association_def =
-       -x3::as<ast::choices>[choices >> "=>"]
+       -x3::as<ast::choices>[choices >> "=>" ] // no expected[]
     >> expression
     ;
 
@@ -1837,12 +1819,11 @@ auto const element_association_def =
 
 /// element_declaration ::=                                       [LRM93 §3.2.2]
 ///     identifier_list : element_subtype_definition ;
-auto const element_declaration_def = ( // operator precedence
+auto const element_declaration_def =
        identifier_list
     >> ':'
     >> element_subtype_definition
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -1952,7 +1933,7 @@ auto const entity_class_entry_list_def =
 ///         entity_statement_part ]
 ///     end [ entity ] [ entity_simple_name ] ;
 /// \endcode
-auto const entity_declaration_def = ( // operator precedence
+auto const entity_declaration_def =
        ENTITY
     >> identifier
     >> IS
@@ -1964,8 +1945,7 @@ auto const entity_declaration_def = ( // operator precedence
     >> END
     >> -ENTITY
     >> -simple_name
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -2120,13 +2100,12 @@ auto const enumeration_type_definition_def =
 
 /// exit_statement ::=                                             [LRM93 §8.11]
 ///     [ label : ] exit [ loop_label ] [ when condition ] ;
-auto const exit_statement_def = ( // operator precedence
+auto const exit_statement_def =
        -label_colon
     >> EXIT
     >> -label
     >> -( WHEN >> condition )
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -2228,14 +2207,13 @@ auto const factor_def =    // order matters
 
 /// file_declaration ::=                                        [LRM93 §4.3.1.4]
 ///     file identifier_list : subtype_indication [ file_open_information ] ;
-auto const file_declaration_def = ( // operator precedence
+auto const file_declaration_def =
        FILE
     >> identifier_list
     >> ':'
     >> subtype_indication
     >> -file_open_information
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -2278,12 +2256,17 @@ auto const floating_type_definition_def =
 #endif
 
 
+///
+/// formal_designator ::=                                       [LRM93 §4.3.2.2]
+///
+/// @code{.bnf}
 /// formal_designator ::=                                       [LRM93 §4.3.2.2]
 ///       generic_name
 ///     | port_name
 ///     | parameter_name
+/// @endcode
 auto const formal_designator_def =
-    name    // aka {generic, port, parameter}_name
+    name
     ;
 
 
@@ -2296,15 +2279,22 @@ auto const formal_parameter_list_def =
 
 
 
-/// formal_part ::=                                             [LRM93 §4.3.2.2]
+///
+/// formal_part                                                 [LRM93 §4.3.2.2]
+///
+/// @code{.bnf}
+/// formal_part ::=
 ///       formal_designator
 ///     | function_name ( formal_designator )
 ///     | type_mark ( formal_designator )
+/// @endcode
+///
+/// @note formal_designator is a context tied name ({generic, port, parameter}_name)
+/// where `function_name` and `type_mark` are also names. Hence parse a list of names, for
+/// convenience into `std::vector`, even if the number of elements parsed can not reach more
+/// than 2 due to explicit grammar rule.
 auto const formal_part_def =
     x3::as<std::vector<ast::name>>[
-        // formal_designator is a context tied name ({generic, port, parameter}_name)
-        // where function_name and type_mark are also a name. Hence parse a list
-        // of names.
            name
         >> -(
                 '(' >> formal_designator >> ')'
@@ -2345,18 +2335,19 @@ auto const function_call_def =
 ///         begin ]
 ///             { concurrent_statement }
 ///         end generate [ generate_label ] ;
-auto const generate_statement_def = ( // operator precedence
+///
+/// FixMe: testing this rule failed - never seen concurrent_statement/component_instantiation_statement
+auto const generate_statement_def =
        label_colon
     >> generation_scheme
     >> GENERATE
     >> -(*block_declarative_item
           >> BEGIN
-       ) // FIXME: rule failed - never get concurrent_statement/component_instantiation_statement
+       )
     >> *concurrent_statement
     >> END >> GENERATE
     >> -label
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -2381,13 +2372,12 @@ auto const generation_scheme_def =
 /// generic_clause ::=
 ///     generic ( generic_list ) ;
 /// \endcode
-auto const generic_clause_def = ( // operator precedence
+auto const generic_clause_def =
        GENERIC
     >> '('
     >> interface_list
     >> ')'
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -2431,22 +2421,21 @@ auto const group_constituent_list_def =
 
 /// group_template_declaration ::=                                  [LRM93 §4.6]
 ///     group identifier is ( entity_class_entry_list ) ;
-auto const group_template_declaration_def = ( // operator precedence
+auto const group_template_declaration_def =
        GROUP
     >> identifier
     >> IS
     >> '('
     >> entity_class_entry_list
     >> ')'
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
 
 /// group_declaration ::=                                           [LRM93 §4.7]
 ///     group identifier : group_template_name ( group_constituent_list ) ;
-auto const group_declaration_def = ( // operator precedence
+auto const group_declaration_def =
        GROUP
     >> identifier
     >> ':'
@@ -2454,8 +2443,7 @@ auto const group_declaration_def = ( // operator precedence
     >> '('
     >> group_constituent_list
     >> ')'
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -2496,7 +2484,7 @@ auto const identifier_list_def =
 ///       [ else
 ///             sequence_of_statements ]
 ///         end if [ if_label ] ;
-auto const if_statement_def = ( // operator precedence
+auto const if_statement_def =
        -label_colon
     >> IF >> condition >> THEN
     >> sequence_of_statements
@@ -2504,8 +2492,7 @@ auto const if_statement_def = ( // operator precedence
     >> -( ELSE >> sequence_of_statements )
     >> END >> IF
     >> -label
-    )
-    >  ';'
+    >> x3::expect[';']
 ;
 
 
@@ -2703,11 +2690,10 @@ auto const label_def =
 
 /// library_clause ::=                                             [LRM93 §11.2]
 ///     library logical_name_list ;
-auto const library_clause_def = ( // operator precedence
+auto const library_clause_def =
        LIBRARY
     >> logical_name_list
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -2759,15 +2745,14 @@ auto const logical_name_list_def =
 ///         [ iteration_scheme ] loop
 ///             sequence_of_statements
 ///         end loop [ loop_label ] ;
-auto const loop_statement_def = ( // operator precedence
+auto const loop_statement_def =
       -label_colon
     >> -iteration_scheme
     >> LOOP
     >> sequence_of_statements
     >> END >> LOOP
     >> -label
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -2818,24 +2803,22 @@ auto const name_def =
 
 /// next_statement ::=                                             [LRM93 §8.10]
 ///     [ label : ] next [ loop_label ] [ when condition ] ;
-auto const next_statement_def = ( // operator precedence
+auto const next_statement_def =
        -label_colon
     >> NEXT
     >> -label
     >> -( WHEN >> condition )
-    )
-    >  ';'
+    >> x3::expect[';']
 ;
 
 
 
 /// null_statement ::=                                             [LRM93 §8.13]
 ///      [ label : ] null ;
-auto const null_statement_def = ( // operator precedence
+auto const null_statement_def =
        -label_colon
     >> omit[ NULL_ ]
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -2885,7 +2868,7 @@ auto const options_def =
 ///     package body package_simple_name is
 ///         package_body_declarative_part
 ///     end [ package body ] [ package_simple_name ] ;
-auto const package_body_def = ( // operator precedence
+auto const package_body_def =
        PACKAGE
     >> BODY
     >> simple_name
@@ -2894,8 +2877,7 @@ auto const package_body_def = ( // operator precedence
     >> END
     >> -(PACKAGE >> BODY)
     >> -simple_name
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -2940,7 +2922,7 @@ auto const package_body_declarative_part_def =
 ///     package identifier is
 ///         package_declarative_part
 ///     end [ package ] [ package_simple_name ] ;
-auto const package_declaration_def = ( // operator precedence
+auto const package_declaration_def =
        PACKAGE
     >> identifier
     >> IS
@@ -2948,8 +2930,7 @@ auto const package_declaration_def = ( // operator precedence
     >> END
     >> -PACKAGE
     >> -simple_name   // package_simple_name, aka identifier
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -3051,13 +3032,12 @@ auto const physical_type_definition_def =
 /// port_clause ::=
 ///     port ( port_list ) ;
 /// \endcode
-auto const port_clause_def = ( // operator precedence
+auto const port_clause_def =
        PORT
     >> '('
     >> interface_list
     >> ')'
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -3134,7 +3114,7 @@ auto const primary_unit_def =
 ///     identifier ;
 auto const primary_unit_declaration_def =
        identifier
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -3152,11 +3132,10 @@ auto const procedure_call_def =
 
 /// procedure_call_statement ::=                                    [LRM93 §8.6]
 ///     [ label : ] procedure_call ;
-auto const procedure_call_statement_def = ( // operator precedence
+auto const procedure_call_statement_def =
        -label_colon
     >> procedure_call
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -3208,7 +3187,7 @@ auto const process_declarative_part_def =
 ///         begin
 ///             process_statement_part
 ///         end [ postponed ] process [ process_label ] ;
-auto const process_statement_def = ( // operator precedence
+auto const process_statement_def =
        -label_colon
     >> -POSTPONED
     >> PROCESS
@@ -3221,8 +3200,7 @@ auto const process_statement_def = ( // operator precedence
     >> -POSTPONED
     >> PROCESS
     >> -label
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -3324,24 +3302,22 @@ auto const relation_def =
 ///     [ label : ]
 ///     report expression
 ///     [ severity expression ] ;
-auto const report_statement_def = ( // operator precedence
+auto const report_statement_def =
        -label_colon
     >> ( REPORT   >> expression )
     >> -( SEVERITY >> expression )
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
 
 /// return_statement ::=                                           [LRM93 §8.12]
 ///     [ label : ] return [ expression ] ;
-auto const return_statement_def = ( // operator precedence
+auto const return_statement_def =
        -label_colon
     >> RETURN
     >> -expression
-    )
-    >  ';'
+    >> x3::expect[';']
 ;
 
 
@@ -3369,12 +3345,11 @@ auto const secondary_unit_def =
 
 /// secondary_unit_declaration ::=                                [LRM93 §3.1.3]
 ///     identifier = physical_literal ;
-auto const secondary_unit_declaration_def = ( // operator precedence
+auto const secondary_unit_declaration_def =
        identifier
     >> "="
     >> physical_literal
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -3448,7 +3423,7 @@ auto const selected_name_def =
 /// selected_signal_assignment ::=                                [LRM93 §9.5.2]
 ///     with expression select
 ///         target    <= options selected_waveforms ;
-auto const selected_signal_assignment_def = ( // operator precedence
+auto const selected_signal_assignment_def =
         WITH
      >> expression
      >> SELECT
@@ -3456,8 +3431,7 @@ auto const selected_signal_assignment_def = ( // operator precedence
      >> "<="
      >> options
      >> selected_waveforms
-     )
-     >  ';'
+     >> x3::expect[';']
     ;
 
 
@@ -3558,29 +3532,27 @@ auto const sign_def =
 
 /// signal_assignment_statement ::=                                 [LRM93 §8.4]
 ///     [ label : ] target <= [ delay_mechanism ] waveform ;
-auto const signal_assignment_statement_def = ( // operator precedence
+auto const signal_assignment_statement_def =
        -label_colon
     >> target
     >> "<="
     >> -delay_mechanism
     >> waveform
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
 
 /// signal_declaration ::=                                      [LRM93 §4.3.1.2]
 ///     signal identifier_list : subtype_indication [ signal_kind ] [ := expression ] ;
-auto const signal_declaration_def = ( // operator precedence
+auto const signal_declaration_def =
        omit[ SIGNAL ]
     >> identifier_list
     >> ':'
     >> subtype_indication
     >> -signal_kind
     >> -( ":=" >>  expression )
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -3686,7 +3658,7 @@ auto const string_literal_def =
 ///     begin
 ///         subprogram_statement_part
 ///     end [ subprogram_kind ] [ designator ] ;
-auto const subprogram_body_def = ( // operator precedence
+auto const subprogram_body_def =
        subprogram_specification
     >> IS
     >> subprogram_declarative_part
@@ -3695,8 +3667,7 @@ auto const subprogram_body_def = ( // operator precedence
     >> END
     >> -subprogram_kind
     >> -designator
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -3704,8 +3675,8 @@ auto const subprogram_body_def = ( // operator precedence
 /// subprogram_declaration ::=                                      [LRM93 §2.1]
 ///     subprogram_specification ;
 auto const subprogram_declaration_def =
-      subprogram_specification
-    >  ';'
+       subprogram_specification
+    >> x3::expect[';']
     ;
 
 
@@ -3804,13 +3775,12 @@ auto const subprogram_statement_part_def =
 
 /// subtype_declaration ::=
 ///     subtype identifier is subtype_indication ;
-auto const subtype_declaration_def = ( // operator precedence
+auto const subtype_declaration_def =
        SUBTYPE
     >> identifier
     >> IS
     >> subtype_indication
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -3926,12 +3896,11 @@ auto const type_conversion_def =
 /// full_type_declaration       ::= TYPE identifier IS type_definition ;
 /// incomplete_type_declaration ::= TYPE identifier ;
 /// @endcode
-auto const type_declaration_def = ( // operator precedence
+auto const type_declaration_def =
        TYPE
     >> identifier
     >> -( IS >> type_definition )
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
@@ -4029,53 +3998,49 @@ auto const selected_name = x3::rule<struct _, ast::use_clause::selected_name> { 
     ;
 } // end detail
 
-auto const use_clause_def = ( // operator precedence
+auto const use_clause_def =
        USE
     >> (use_clause_detail::selected_name % ',')
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
 
 /// variable_assignment_statement ::=                               [LRM93 §8.5]
 ///     [ label : ] target  := expression ;
-auto const variable_assignment_statement_def = ( // operator precedence
+auto const variable_assignment_statement_def =
        -label_colon
     >> target
     >> ":="
     >> expression
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
 
 /// variable_declaration ::=                                    [LRM93 §4.3.1.3]
 ///     [ shared ] variable identifier_list : subtype_indication [ := expression ] ;
-auto const variable_declaration_def = ( // operator precedence
+auto const variable_declaration_def =
       -SHARED
     >> omit[ VARIABLE ]
     >> identifier_list
     >> ':'
     >> subtype_indication
     >> -(  ":=" >>  expression )
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 
 
 /// wait_statement ::=                                              [LRM93 §8.1]
 ///     [ label : ] wait [ sensitivity_clause ] [ condition_clause ] [ timeout_clause ] ;
-auto const wait_statement_def = ( // operator precedence
+auto const wait_statement_def =
        -( label >> ':' )
     >> WAIT
     >> -sensitivity_clause
     >> -condition_clause
     >> -timeout_clause
-    )
-    >  ';'
+    >> x3::expect[';']
     ;
 
 

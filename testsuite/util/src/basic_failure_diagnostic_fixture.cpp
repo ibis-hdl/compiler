@@ -156,9 +156,11 @@ void basic_failure_diagnostic_fixture::failure_closure(std::string test_case_nam
 
     // if current test fail render closure to console and save test_result to filesystem
     if (!current_test_passing()) {
-        BOOST_TEST_MESSAGE(name() << ": save closure");
-        // render on terminal
-        display_closure(std::cerr);
+        if(/* verbose */ false) {
+            BOOST_TEST_MESSAGE(name() << ": save closure");
+            // render on terminal
+            display_closure(std::cerr);
+        }
 
         // write on filesystem
         fs::path full_pathname = destination_dir / test_case_name;

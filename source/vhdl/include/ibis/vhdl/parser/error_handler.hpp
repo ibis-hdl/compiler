@@ -24,7 +24,7 @@ struct error_handler_tag;  // IWYU pragma: keep
 /// Parser error handler
 ///
 /// The error handler for parsing works on file level, means a file is read into
-/// memory and parsed. Hence not all informations stored in \ref parser::position_cache
+/// memory and parsed. Hence not all informations stored in @ref parser::position_cache
 /// are required for reporting and diagnosing and a file ID specific proxy
 /// object refers to the related informations for convenience.
 ///
@@ -34,7 +34,7 @@ struct error_handler_tag;  // IWYU pragma: keep
 ///
 /// The concept of tagging doesn't differ from the origin x3::error_handler.
 ///
-/// \see parser::position_cache
+/// @see parser::position_cache
 ///
 /// @todo: Write a formatter class for conrete error reporting, so that users can
 ///  override the default implementation, e.g.

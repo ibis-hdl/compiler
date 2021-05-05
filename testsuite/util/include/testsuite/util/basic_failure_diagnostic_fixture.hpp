@@ -24,9 +24,12 @@ namespace testsuite::util {
 //      --input-extension=.input
 //      --write-extension=.result
 //
+/// @todo introduce verbose option, using CLI argument
+///
 /// @todo At this time, input and output result are captured. Add expected to
 /// the closure and save the difference as unified format for convenience,
 /// e.g. using [cubicdaiya/dtl](https://github.com/cubicdaiya/dtl).
+///
 /// @todo Also usefull informations to store on filesystem are the messages,
 /// maybe [Observing test failure messages](
 /// https://stackoverflow.com/questions/56963902/observing-test-failure-messages/61371602#61371602)

@@ -23,7 +23,7 @@ namespace ibis::vhdl::analyze {
 /// Therefore the parser::position_cache is required. Also the API is slightly
 /// different.
 ///
-/// \todo Get "access" to information of node/rule map at parser::on_error_base
+/// @todo Get "access" to information of node/rule map at parser::on_error_base
 ///
 /// FixMe: Check on use of string_view!
 ///

@@ -1291,8 +1291,9 @@ void printer::operator()(formal_part const& node)
         (*this)(ctx_name);
     };
 
-    // parsed as (name) list
+    // parsed as list of names
     // formal_designator ::=
+    //      formal_designator
     //    | function_name ( formal_designator )
     //    | type_mark ( formal_designator )
     switch (node.context_tied_names.size()) {

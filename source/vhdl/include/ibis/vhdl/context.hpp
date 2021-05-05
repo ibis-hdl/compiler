@@ -18,7 +18,7 @@ namespace detail {
 /// Simply increments events and throws basic_counter::overflow if a configurable
 /// limit has been reached.
 ///
-/// \see [Wandbox](https://wandbox.org/permlink/7o4pPgrmHDQUJj1x)
+/// @see [Wandbox](https://wandbox.org/permlink/7o4pPgrmHDQUJj1x)
 ///
 template <typename Tag>
 class basic_counter {

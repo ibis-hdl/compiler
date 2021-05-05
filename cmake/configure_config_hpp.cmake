@@ -47,7 +47,7 @@ int main() {
 " IBIS_HAVE_EXPERIMENTAL_SOURCE_LOCATION)
 
 
-# The plattform/compiler checks belongs to eda::common
+# The platform/compiler checks belongs to eda::common
 configure_file(
   "${PROJECT_SOURCE_DIR}/include/ibis/compiler/compiler_support.hpp.in"
   "${PROJECT_BINARY_DIR}/include/ibis/compiler/compiler_support.hpp"

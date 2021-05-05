@@ -173,6 +173,23 @@ Sehe's notes, re-using the tag type is recipe for disaster. The rule tags are
 what dispatches the implementation function in the case of
 separated compilation units.
 
+- Fix Testcase attribute_specification, unit test failed seriously with:
+
+```
+unknown location(0): fatal error: in "parser_rule/attribute_specification/_1": class std::bad_alloc: bad allocation
+../testsuite/vhdl/parser_rules/src/test/attribute_specification_test.cpp(46): last checkpoint
+```
+
+- Add TestCase for assertion_statement, assertion self is tested already. It appends only
+  "label: .... ;" to the tests.
+
+- testsuite's testing_parser may setup on error a message with "Unparsed input left ...",
+  which goes to the parser::error_handler, which renders this as "Parse ERROR: ..."
+  This isn't the error message intended to display. Note: changing this results into
+  failed failure tests due to changes messages!
+
+- Make Tests to check expectation points for ';'
+
 - Check [**Splitting Boost.Spirit.X3 parsers into several TUs**](
   https://stackoverflow.com/questions/59709229/splitting-boost-spirit-x3-parsers-into-several-tus)
 
@@ -325,6 +342,10 @@ set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
 - parser's and syntax's error_handler should have the same API with position_proxy
   to unify error_handler and hence his formatter.
 
+- parser's error_handler should also use the vhdl::context to allow multiple parse errors
+  from expectation points, e.g. forgotten ';' at the end. Maybe the name of vhdl::context
+  isn't appropriate any more than.
+
 - Write a formatter for all error report classes/functions, e.g. parser::error_handler.
   An idea may be [Controlling output of Boost.Test source location format](
   https://stackoverflow.com/questions/64618840/controlling-output-of-boost-test-source-location-format).
@@ -334,12 +355,23 @@ set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
 
 - Get a logo, e.g. ibis as mascot with assets sub directories.
 
+- rename all print() member to print_on()
 
 ### Boost.Test
 
-An interesting feature is described at
-[Controlling output of Boost.Test source location format](
-  https://stackoverflow.com/questions/64618840/controlling-output-of-boost-test-source-location-format)
+- basic_failure_diagnostic_fixture needs a verbose argument, not all the time one
+  is interested in detail failing messages (even the can get long due to rendered
+  context). Using `basic_failure_diagnostic_fixture(bool verbose = true)` got
+  compile error, so it must be cli args. Temporary it's disabled in source cpp
+  file.
+
+- basic_failure_diagnostic_fixture should also save the expected context to dir/file.
+  maybe save as unified diff, see todo inside header.
+
+
+- An interesting feature is described at
+  [Controlling output of Boost.Test source location format](
+   https://stackoverflow.com/questions/64618840/controlling-output-of-boost-test-source-location-format)
 
 
 ### Documentation
