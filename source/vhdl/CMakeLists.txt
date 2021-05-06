@@ -17,8 +17,8 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 
-if(DEVELOPER_EXTERNAL_BOOST_SPIRIT_X3)
-    add_dependencies(${PROJECT_NAME} boost-spirit-x3)
+if(DEVELOPER_EXTERNAL_BOOST_SPIRIT)
+    add_dependencies(${PROJECT_NAME} external-boost-spirit)
 endif()
 
 
@@ -69,7 +69,7 @@ endif()
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-        $<BUILD_INTERFACE:${EXTERNAL_SPIRIT_X3_INCLUDE_DIR}>
+        $<BUILD_INTERFACE:${EXTERNAL_BOOST_SPIRIT_INCLUDE_DIR}>
         $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
         $<INSTALL_INTERFACE:include>
 )

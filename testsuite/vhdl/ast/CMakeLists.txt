@@ -37,8 +37,8 @@ target_link_libraries(${PROJECT_NAME}
 #set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-v")
 
 
-if(DEVELOPER_EXTERNAL_BOOST_UTF)
-    add_dependencies(${PROJECT_NAME} external-boost-utf)
+if(DEVELOPER_EXTERNAL_BOOST_TEST)
+    add_dependencies(${PROJECT_NAME} external-boost-test)
 endif()
 
 
@@ -82,7 +82,7 @@ target_include_directories(${PROJECT_NAME}
     PRIVATE
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
-        $<BUILD_INTERFACE:${EXTERNAL_BOOST_UTF_INCLUDE_DIR}>
+        $<BUILD_INTERFACE:${EXTERNAL_BOOST_TEST_INCLUDE_DIR}>
         $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
 )
 

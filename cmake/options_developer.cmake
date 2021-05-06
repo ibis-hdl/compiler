@@ -262,34 +262,6 @@ add_compile_definitions(
 )
 
 
-## -----------------------------------------------------------------------------
-# Bleeding Edge external Boost dependencies
-# FixMe: Won't work any more: ExternalProject.cmake:1679 (get_property):
-#   get_property could not find TARGET boost-utf. Perhaps it has not yet been
-#   created -> investigate if the time is coming.
-option(DEVELOPER_EXTERNAL_BOOST_SPIRIT_X3
-    "Configure IBIS HDL to use external Boost.Org Spirit Parser X3 - LL(k) Parser Framework.\
-    This is useful for developers which has to work on more recent versions\
-    as the build host/system supplies."
-    OFF)
-mark_as_advanced(DEVELOPER_EXTERNAL_BOOST_SPIRIT_X3)
-
-if(DEVELOPER_EXTERNAL_BOOST_SPIRIT_X3)
-    include(external_spirit_x3)
-endif()
-
-option(DEVELOPER_EXTERNAL_BOOST_UTF
-    "Configure IBIS HDL to use external Boost.Org Unit Test Framework (UTF).\
-    This is useful for developers which has to work on more recent versions\
-    as the build host/system supplies."
-    OFF)
-mark_as_advanced(DEVELOPER_EXTERNAL_BOOST_UTF)
-
-if(DEVELOPER_EXTERNAL_BOOST_UTF)
-    include(external_boost_utf)
-endif()
-
-
 ################################################################################
 # CMake source code analysis support
 #
@@ -417,8 +389,6 @@ if(DEVELOPER_RUN_CLANG_FORMAT)
     endif()
 endif()
 
-
-include(cmake/module/CPM.cmake)
 
 CPMAddPackage(
   NAME Format.cmake

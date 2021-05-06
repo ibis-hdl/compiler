@@ -15,8 +15,8 @@ add_dependencies(${PROJECT_NAME}
 )
 
 
-if(DEVELOPER_EXTERNAL_BOOST_UTF)
-    add_dependencies(${PROJECT_NAME} external-boost-utf)
+if(DEVELOPER_EXTERNAL_BOOST_TEST)
+    add_dependencies(${PROJECT_NAME} external-boost-test)
 endif()
 
 
@@ -41,7 +41,7 @@ endif()
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-        $<BUILD_INTERFACE:${EXTERNAL_BOOST_UTF_INCLUDE_DIR}>
+        $<BUILD_INTERFACE:${EXTERNAL_BOOST_TEST_INCLUDE_DIR}>
         $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
         $<BUILD_INTERFACE:${CLI11_INCLUDE_DIR}>
     PRIVATE

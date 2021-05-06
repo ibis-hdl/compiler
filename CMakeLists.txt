@@ -25,14 +25,19 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 
 list(APPEND
-    CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake
-    CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/module
+    CMAKE_MODULE_PATH
+        ${PROJECT_SOURCE_DIR}/cmake
+        ${PROJECT_SOURCE_DIR}/cmake/module
 )
 
-
 include(prevent_in_source_builds)
+# [cpm-cmake/CPM.cmake](https://github.com/cpm-cmake/CPM.cmake)
+include(cmake/module/CPM.cmake) # FixMe full path
+
 include(options_build)
 include(options_developer)
+include(external)
+include(external_optional)
 
 
 ##
@@ -62,13 +67,6 @@ add_definitions(${Boost_LIB_DIAGNOSTIC_DEFINITIONS})
 #set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
 #set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 find_package(Threads REQUIRED)
-
-
-##
-# External dependencies
-include(external_cli11)
-# ToDo: stick at C++17 gsl::string_span, with C++20 use std::span [unused]
-#include(external_gsl)
 
 
 ##

@@ -194,10 +194,8 @@ STRIP_FROM_INC_PATH    = \
                          @PROJECT_SOURCE_DIR@/testsuite/vhdl/util/include \
                          @PROJECT_SOURCE_DIR@/testsuite/vhdl/util/src \
                          \
-                         @PROJECT_BINARY_DIR@/external/src/external-cli11/include \
-                         @PROJECT_BINARY_DIR@/external/src/external-gsl/include \
-                         @PROJECT_BINARY_DIR@/external/src/external-RapidJSON/include \
-                         @PROJECT_BINARY_DIR@/external/src/external-boost-spirit-x3/include \
+                         @CLI11_INCLUDE_DIR@ \
+                         @EXTERNAL_BOOST_SPIRIT_INCLUDE_DIR@ \
 
 # If the SHORT_NAMES tag is set to YES, doxygen will generate much shorter (but
 # less readable) file names. This can be useful is your file systems doesn't

@@ -42,7 +42,7 @@ target_include_directories(${PROJECT_NAME}
         $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/source/common/include>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source/vhdl/include>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source/frontend/include>
-        $<BUILD_INTERFACE:${EXTERNAL_SPIRIT_X3_INCLUDE_DIR}>
+        $<BUILD_INTERFACE:${EXTERNAL_BOOST_SPIRIT_INCLUDE_DIR}>
         $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
         $<BUILD_INTERFACE:${CLI11_INCLUDE_DIR}>
 )

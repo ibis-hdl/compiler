@@ -231,11 +231,9 @@ In 2021 boost is bumped to v1.73 and following *test_vhdl_parser_rule* tests fai
   - test_case_name = attribute_specification/attribute_specification_001;
   - test_case_name = use_clause/use_clause_000;
 
-It is even reproducible with the code of 2018 (git tag R2018) and
-Boost's v1.73 spirit X3 by setting CMake's ExternalProject_Add()
-GIT_TAG from 1.68.0 to 1.73 (see options_developer.cmake). So these
-errors are imminent in these code base before. Anyway, parser is
-still the main work ground.
+It is even reproducible with the code of 2018 (git tag R2018 using Boost v1.68.0) and
+switching to Boost v1.73. So these errors are imminent in these code base
+before. Anyway, parser is still the main work ground.
 
 But there is more:
 
@@ -279,25 +277,6 @@ clear what comes from what.
 
 - **Regards to build options, see [Making CMake work for you](
   http://www.stablecoder.ca/2018/10/30/full-cmake-helper-suite.html)**
-
-- **FetchContent** would work as shown below, if the depend content wouldn't
-  use the same targets as my in their CMakeLists, e.g. custom_target doc
-  at RapidJSON.
-
-```
-include(FetchContent)
-
-FetchContent_Declare(RapidJSON
-  GIT_REPOSITORY    https://github.com/Tencent/rapidjson.git
-  GIT_TAG           master
-  CONFIGURE_COMMAND ""
-  BUILD_COMMAND     ""
-)
-
-FetchContent_MakeAvailable(RapidJSON)
-set(RapidJSON_INCLUDE_DIR "${RapidJSON_SOURCE_DIR}/include" CACHE STRING "")
-```
-- Check for useful snippets: https://github.com/adishavit/cmake_snippets
 
 ### Sources
 
