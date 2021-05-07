@@ -238,10 +238,12 @@ void init::parse_cli(int argc, const char* argv[])
         std::exit(EXIT_SUCCESS);
     }
 
-    // helper for configure settings from CLI args
-    struct setup {
+    // quick&dirty helper for configure settings from CLI args
+    class setup {
         CLI::App const& app;
         ibis::settings::reference_type pt;
+
+    public:
         setup(CLI::App const& app_, ibis::settings::reference_type pt_)
             : app{ app_ }
             , pt{ pt_ }
@@ -265,14 +267,14 @@ void init::parse_cli(int argc, const char* argv[])
             }
         }
 
-        void option(std::string const& cli_arg, std::string const& setting_flag, std::string option)
+        void option(std::string const& cli_arg, std::string const& setting_flag, std::string const& option)
         {
             if (app.count(cli_arg) != 0) {
                 pt.add(setting_flag, option);
             }
         }
 
-        void option(std::string const& setting_flag, std::vector<std::string> options)
+        void option(std::string const& setting_flag, std::vector<std::string> const& options)
         {
             for (std::string const& item : options) {
                 pt.add(setting_flag, item);
@@ -373,33 +375,7 @@ void init::user_config_message_color()
     }
 
     // bool const quiet = [&] { return pt.get<bool>("quiet"); }();
-    bool const verbose = [&] { return pt.get<unsigned>("verbose"); }();
-
-#if 0
-    // Old code based on RapidJSON. The idea was to override defaults by user
-    // configureable JSON settings file and merge it. The merge algorithm
-    // is at <ibis/support/RapidJSON/merge.hpp>.
-    // Unfortunately RapidJSON has only a master branch in 2021, v1.1.0
-    // is from 2016 and got compile errors using clang-11-win on Windows.
-    // Sometimes the master branch compiles, sometimes not. So it's
-    // decidet to get rid off RapidJSON and using boost's property_tree,
-    // even if merging isn't support still with boost v1.75, see
-    // [Future Development: Mathematical relations: ptree difference, union, intersection](
-    // https://www.boost.org/doc/libs/1_75_0/doc/html/property_tree/appendices.html)
-    // Hopefully, this is solved if the frontend get more usefull.
-    using ::ibis::util::file_loader;
-    using ::ibis::util::user_home_dir;
-
-    fs::path json_path = user_home_dir({ ".ibis" }) / "config.json";
-
-    file_loader file_reader{ std::cerr, quiet };
-    auto const json_txt = file_reader.read_file(json_path);
-
-    if (json_txt) {
-        rjson::Document user_config = parse_json((*json_txt).c_str());
-        merge(default_config, user_config);
-    }
-#endif
+    auto const verbose = [&] { return pt.get<unsigned>("verbose"); }();
 
     using namespace ibis;
     using namespace ibis::color;
@@ -450,20 +426,16 @@ void init::user_config_message_color()
     };
 
     auto const failure_format = get_formatter("message.failure.style");
-    imbue(std::cerr,
-          std::make_unique<message::failure_facet>(failure_format, color::color_off));
+    imbue(std::cerr, std::make_unique<message::failure_facet>(failure_format, color::color_off));
 
     auto const error_format = get_formatter("message.error.style");
-    imbue(std::cerr,
-          std::make_unique<message::error_facet>(error_format, color::color_off));
+    imbue(std::cerr, std::make_unique<message::error_facet>(error_format, color::color_off));
 
     auto const warning_format = get_formatter("message.warning.style");
-    imbue(std::cerr,
-          std::make_unique<message::warning_facet>(warning_format, color::color_off));
+    imbue(std::cerr, std::make_unique<message::warning_facet>(warning_format, color::color_off));
 
     auto const note_format = get_formatter("message.note.style");
-    imbue(std::cerr,
-          std::make_unique<message::note_facet>(note_format, color::color_off));
+    imbue(std::cerr, std::make_unique<message::note_facet>(note_format, color::color_off));
 }
 
 void init::l10n()

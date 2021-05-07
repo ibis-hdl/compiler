@@ -64,7 +64,6 @@ std::string position_cache_fixture::test_case_source_dir() const
 
     // fall back: use hard coded from CMake build
     if (!input_path) {
-        namespace builtin = testsuite::vhdl::ast::compile_builtin;
         BOOST_TEST_REQUIRE(!compile_builtin::default_source_dir.empty());
         std::optional<std::string> source_dir{ compile_builtin::default_source_dir };
         input_path.swap(source_dir);

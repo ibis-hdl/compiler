@@ -8,6 +8,7 @@
 #include <ibis/color/facet.hpp>
 
 #include <ibis/platform.hpp>
+#include <ibis/compiler/compiler_support.hpp>
 
 #include <boost/process/args.hpp>
 #include <boost/process/child.hpp>
@@ -117,7 +118,7 @@ void gdb_signal_handler(int signum, [[maybe_unused]] siginfo_t* siginfo,
     // https://github.com/klemens-morgenstern/boost-process/issues/164)
     boost::filesystem::path gdb_exe{ bp::search_path("gdb") };
 
-    if (gdb_exe.empty()) {
+    if (gdb_exe.empty()) { // Clang-Tidy note - even by using of cxx_expect_not()
         std::cerr << "[ibis/Note] ERROR: gdb not found\n";
         // FixMe: any other handling required if gdb not found? Think about ...
         return;
