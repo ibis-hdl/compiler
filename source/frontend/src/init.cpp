@@ -375,12 +375,12 @@ void init::user_config_message_color()
     }
 
     // bool const quiet = [&] { return pt.get<bool>("quiet"); }();
-    auto const verbose = [&] { return pt.get<unsigned>("verbose"); }();
+    unsigned const verbose = [&] { return pt.get<unsigned>("verbose"); }();
 
     using namespace ibis;
     using namespace ibis::color;
 
-    if (verbose) {
+    if (verbose != 0) {
         std::cout << message::note("Note:") << " Using message color defaults:\n";
         std::cout << default_cfg_json << '\n';
     }

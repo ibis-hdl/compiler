@@ -12,7 +12,7 @@ namespace ibis::vhdl::util {
 /// in the middle filled with ellipsis '...' to fit the given length \c len.
 ///
 template <typename RangeType>
-static inline std::string literal_ellipsis(RangeType const& range, std::size_t len)
+inline std::string literal_ellipsis(RangeType const& range, std::size_t len)
 {
     static std::string const ellipsis = "...";
 

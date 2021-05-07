@@ -9,7 +9,7 @@ namespace ibis::support::rapidjson {
 /// - [How to merge two json file using rapidjson](
 ///   https://stackoverflow.com/questions/40013355/how-to-merge-two-json-file-using-rapidjson)
 ///
-static inline void merge_object(::rapidjson::Value& dest, ::rapidjson::Value& src,
+inline void merge_object(::rapidjson::Value& dest, ::rapidjson::Value& src,
                                 ::rapidjson::Document::AllocatorType& allocator)
 {
     for (auto src_iter = src.MemberBegin(); src_iter != src.MemberEnd(); ++src_iter) {
@@ -38,7 +38,7 @@ static inline void merge_object(::rapidjson::Value& dest, ::rapidjson::Value& sr
     }
 }
 
-static inline void merge_document(::rapidjson::Document& dest, ::rapidjson::Document& src)
+inline void merge_document(::rapidjson::Document& dest, ::rapidjson::Document& src)
 {
     merge_object(dest, src, dest.GetAllocator());
 }
@@ -47,12 +47,12 @@ static inline void merge_document(::rapidjson::Document& dest, ::rapidjson::Docu
 
 namespace rapidjson {
 
-static inline void merge(Value& dest, Value& src, Document::AllocatorType& allocator)
+inline void merge(Value& dest, Value& src, Document::AllocatorType& allocator)
 {
     ::ibis::support::rapidjson::merge_object(dest, src, allocator);
 }
 
-static inline void merge(Document& dest, Document& src)
+inline void merge(Document& dest, Document& src)
 {
     ::ibis::support::rapidjson::merge_document(dest, src);
 }

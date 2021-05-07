@@ -46,7 +46,7 @@ namespace pow{radix}_helper
     /* max exponent must be less than max_exponent() */
     constexpr std::size_t upper_bound() {{ return {N}; }}
 
-    static inline const double call(unsigned dim) {{
+    inline const double call(unsigned dim) {{
 
 {decl}
         static const double exponents[/* {N} */] = {{

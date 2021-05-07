@@ -124,7 +124,7 @@ std::ostream& operator<<(std::ostream& os, keyword_token token);
 //
 namespace boost::spirit::x3::traits {
 
-static inline void move_to(ibis::vhdl::ast::keyword_token token, bool& dest)
+inline void move_to(ibis::vhdl::ast::keyword_token token, bool& dest)
 {
     dest = static_cast<bool>(token);
 }

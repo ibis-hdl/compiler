@@ -84,7 +84,7 @@ private:
 };
 
 template <typename enum_type, std::size_t SIZE>
-static inline std::ostream& operator<<(  // --
+inline std::ostream& operator<<(  // --
     std::ostream& os, winapi_printer<enum_type, SIZE> const& printer)
 {
     return printer.print(os);

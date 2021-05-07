@@ -28,7 +28,7 @@ private:
     set_type untagged_nodes;
 };
 
-static inline std::ostream& operator<<(std::ostream& os, ast_stats const& stats)
+inline std::ostream& operator<<(std::ostream& os, ast_stats const& stats)
 {
     return stats.print(os);
 }

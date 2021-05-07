@@ -11,7 +11,7 @@ namespace ibis::util {
 /// \see [Case insensitive sorting of an array of strings](
 ///       https://stackoverflow.com/questions/33379846/case-insensitive-sorting-of-an-array-of-strings)
 ///
-static inline bool icompare_less(std::string_view lhs, std::string_view rhs)
+inline bool icompare_less(std::string_view lhs, std::string_view rhs)
 {
     // clang-format off
     auto const result = std::mismatch(lhs.cbegin(), lhs.cend(), rhs.cbegin(), rhs.cend(),
@@ -30,7 +30,7 @@ static inline bool icompare_less(std::string_view lhs, std::string_view rhs)
 ///
 /// \return Returns true of lhs equals to rhs, otherwise false.
 ///
-static inline bool icompare(std::string_view lhs, std::string_view rhs)
+inline bool icompare(std::string_view lhs, std::string_view rhs)
 {
     // clang-format off
     return lhs.size() == rhs.size()

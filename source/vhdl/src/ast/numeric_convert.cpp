@@ -122,7 +122,7 @@ void trace_report(RangeType const& range, RangeFiltType const& range_f, bool par
 ///        https://docs.microsoft.com/de-de/cpp/overview/visual-cpp-language-conformance?view=msvc-160)
 #if defined(IBIS_HAVE_EXPERIMENTAL_SOURCE_LOCATION)
 template <typename RangeType, typename RangeFiltType, typename AttributeType>
-static inline void dbg_trace(RangeType const& range, RangeFiltType const& range_f, bool parse_ok,
+inline void dbg_trace(RangeType const& range, RangeFiltType const& range_f, bool parse_ok,
                              AttributeType attribute,
                              std::experimental::source_location const& location =
                                  std::experimental::source_location::current())

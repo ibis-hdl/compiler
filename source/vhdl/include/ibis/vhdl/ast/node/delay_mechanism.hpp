@@ -21,7 +21,7 @@ struct delay_mechanism : position_tagged {
 //
 namespace boost::spirit::x3::traits {
 
-static inline void move_to(ibis::vhdl::ast::keyword_token delay_type,
+inline void move_to(ibis::vhdl::ast::keyword_token delay_type,
                            ibis::vhdl::ast::delay_mechanism& delay_mechanism)
 {
     delay_mechanism.delay_type = delay_type;

@@ -103,7 +103,7 @@ private:
     indent_sbuf buf;
 };
 
-static inline std::ostream& increase_indent(std::ostream& os)
+inline std::ostream& increase_indent(std::ostream& os)
 {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-static-cast-downcast) -- assume this is legitimate
     auto* buf = static_cast<indent_sbuf*>(os.rdbuf());
@@ -111,7 +111,7 @@ static inline std::ostream& increase_indent(std::ostream& os)
     return os;
 }
 
-static inline std::ostream& decrease_indent(std::ostream& os)
+inline std::ostream& decrease_indent(std::ostream& os)
 {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-static-cast-downcast) -- assume this is legitimate
     auto* buf = static_cast<indent_sbuf*>(os.rdbuf());

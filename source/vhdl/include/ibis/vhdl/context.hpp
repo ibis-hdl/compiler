@@ -167,7 +167,7 @@ private:
     context const& ctx;
 };
 
-static inline std::ostream& operator<<(std::ostream& os, failure_status const& status)
+inline std::ostream& operator<<(std::ostream& os, failure_status const& status)
 {
     return status.print(os);
 }

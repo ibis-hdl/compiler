@@ -30,7 +30,7 @@ private:
     literal_variant_type const literal;
 };
 
-static inline std::ostream& operator<<(std::ostream& os, literal_printer const& printer)
+inline std::ostream& operator<<(std::ostream& os, literal_printer const& printer)
 {
     return printer.print(os);
 }

@@ -128,7 +128,7 @@ using has_identifier = decltype(std::declval<T&>().identifier);
 /// FixMe: use of internal `tuple_type` should not be required.
 ///
 template <typename NodeT>
-std::tuple<ast::identifier const&, ast::identifier const&> static inline labels_of(
+std::tuple<ast::identifier const&, ast::identifier const&> inline labels_of(
     NodeT const& node)
 {
     using tuple_type = std::tuple<ast::identifier const&, ast::identifier const&>;

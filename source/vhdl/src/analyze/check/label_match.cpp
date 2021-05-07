@@ -26,7 +26,7 @@
 // don't pollute AST's namespace with operators required only here
 namespace ibis::vhdl::ast {
 
-static inline bool operator==(ast::identifier const& lhs, ast::identifier const& rhs)
+inline bool operator==(ast::identifier const& lhs, ast::identifier const& rhs)
 {
     return util::icompare(as_string_view(lhs.name), as_string_view(rhs.name));
 }

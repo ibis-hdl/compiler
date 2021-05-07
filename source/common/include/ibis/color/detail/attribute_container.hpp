@@ -83,7 +83,7 @@ private:
 };
 
 template <typename attribute_type, std::size_t SIZE>
-static inline attribute_container<attribute_type, SIZE> operator|(
+inline attribute_container<attribute_type, SIZE> operator|(
     attribute_container<attribute_type, SIZE> lhs,
     attribute_container<attribute_type, SIZE> const& rhs)
 {
