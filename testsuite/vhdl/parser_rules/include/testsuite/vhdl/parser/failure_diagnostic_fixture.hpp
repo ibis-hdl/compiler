@@ -21,6 +21,9 @@ private:
         compile_builtin operator=(compile_builtin&) = delete;
         compile_builtin operator=(compile_builtin&&) = delete;
 
+        std::string_view input_extension() const override;
+        std::string_view expected_extension() const override;
+
         std::string_view destination_dir() const override;
         std::string_view output_extension() const override;
     };

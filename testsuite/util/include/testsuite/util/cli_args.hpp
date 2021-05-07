@@ -56,7 +56,7 @@ namespace testsuite::util {
 class cli_args {
 public:
     ///
-    /// The given "source_dir" option from cli.
+    /// The given "source_dir" option from cli for dataset loader.
     ///
     /// @return fs::path to the source_dir in canonical form if the given
     /// path does exist and is a valid directory. Otherwise the path is
@@ -65,7 +65,23 @@ public:
     static std::string source_dir();
 
     ///
-    /// The given "destination_dir" option from cli.
+    /// The given "input_extension" option from cli for dataset loader.
+    ///
+    /// @return std::string of "input_extension" option if given from cli,
+    /// otherwise an empty string. No checks are performed.
+    ///
+    static std::string input_extension();
+
+    ///
+    /// The given "expected_extension" option from cli for dataset loader.
+    ///
+    /// @return std::string of "expected_extension" option if given from cli,
+    /// otherwise an empty string. No checks are performed.
+    ///
+    static std::string expected_extension();
+
+    ///
+    /// The given "destination_dir" option from cli for failure diagnostic fixture.
     ///
     /// @return fs::path to the destination_dir in canonical form if the given
     /// path does exist and is a valid directory. If the destination_dir doesn't
@@ -75,28 +91,19 @@ public:
     static std::string destination_dir();
 
     ///
-    /// The given "input_extension" option from cli.
-    ///
-    /// @return std::string of "input_extension" option if given from cli,
-    /// otherwise an empty string. No checks are performed.
-    ///
-    static std::string input_extension();
-
-    ///
-    /// The given "expected_extension" option from cli.
-    ///
-    /// @return std::string of "expected_extension" option if given from cli,
-    /// otherwise an empty string. No checks are performed.
-    ///
-    static std::string expected_extension();
-
-    ///
-    /// The given "output_extension" option from cli.
+    /// The given "output_extension" option from cli for failure diagnostic fixture.
     ///
     /// @return std::string of "output_extension" option if given from cli,
     /// otherwise an empty string. No checks are performed.
     ///
     static std::string output_extension();
+
+    ///
+    /// The given "verbose_diagnostic" option from cli for failure diagnostic fixture.
+    ///
+    /// @return bool of "verbose_diagnostic" option if given from cli. No checks are performed.
+    ///
+    static bool verbose_diagnostic();
 
     ///
     /// Print the arguments given from command line if any.
@@ -113,12 +120,15 @@ private:
     /// The data parsed from CLI and flag internally used for caching.
     ///
     struct cli_data {
-        bool initialized{ false };
+        bool initialized = false;
+        // Dataset loader
         std::string source_dir;
-        std::string destination_dir;
         std::string input_extension;
         std::string expected_extension;
+        // Failure Diagnostic Fixture
+        std::string destination_dir;
         std::string output_extension;
+        bool verbose_diagnostic = false;
     };
 
     // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)

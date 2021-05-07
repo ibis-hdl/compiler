@@ -47,6 +47,12 @@ std::string cli_args::output_extension()
     return data.output_extension;
 }
 
+bool cli_args::verbose_diagnostic()
+{
+    // BOOST_TEST_REQUIRE(data.initialized);
+    return data.verbose_diagnostic;
+}
+
 void cli_args::parse_cli(int const argc, char** const argv)
 {
     if (data.initialized) {
@@ -79,6 +85,10 @@ void cli_args::parse_cli(int const argc, char** const argv)
     diag_group->add_option("-o,--output-extension", data.output_extension)
         ->description(
             "file extension to be written to destination-dir for what was ultimately the result.");
+    diag_group->add_flag("--verbose-diagnostic", data.verbose_diagnostic)
+        ->description(
+            "display verbose failure diagnostic on console.");
+
 
     try {
         app.parse(argc, argv);
@@ -119,6 +129,9 @@ void cli_args::print_settings()
 
     std::cout << "command line output file extension:    '"
               << (!data.output_extension.empty() ? data.output_extension : "N/A") << "'\n";
+
+    std::cout << "command line verbose diagnostic:       '"
+              << std::boolalpha << data.verbose_diagnostic << "'\n";
 }
 
 }  // namespace testsuite::util

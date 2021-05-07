@@ -4,6 +4,16 @@
 
 namespace testsuite::vhdl::syntax {
 
+std::string_view failure_diagnostic_fixture::compile_builtin::input_extension() const  // --
+{
+    return "@TESTSUITE_INPUT_EXTENSION@";
+}
+
+std::string_view failure_diagnostic_fixture::compile_builtin::expected_extension() const  // --
+{
+    return "@TESTSUITE_EXPECTED_EXTENSION@";
+}
+
 std::string_view failure_diagnostic_fixture::compile_builtin::destination_dir() const  // --
 {
     return "@TESTSUITE_DESTINATION_DIR@";

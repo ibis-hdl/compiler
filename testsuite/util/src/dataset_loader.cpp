@@ -82,7 +82,9 @@ void dataset_loader::check_args() const
         option.expected_extension = cli_args::expected_extension();
     }
 
+    //
     // check post conditions
+    //
     if (option.source_dir.empty()) {
         throw std::logic_error("empty cli parameter <source_dir>");
     }

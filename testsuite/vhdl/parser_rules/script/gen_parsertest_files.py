@@ -444,7 +444,7 @@ BOOST_DATA_TEST_CASE({test_case}, // --
     }}
 
     BOOST_TEST(parse_result == expected, btt::per_element());
-    failure_closure(test_case_name, input, parse_result);
+    failure_closure(test_case_name, input, expected, parse_result);
 }}
 """
 

@@ -11,12 +11,12 @@ std::string_view dataset::compile_builtin::source_dir() const  // --
 
 std::string_view dataset::compile_builtin::input_extension() const  // --
 {
-    return ".input";
+    return "@TESTSUITE_INPUT_EXTENSION@";
 }
 
 std::string_view dataset::compile_builtin::expected_extension() const  // --
 {
-    return ".expected";
+    return "@TESTSUITE_EXPECTED_EXTENSION@";
 }
 
 }  // namespace testsuite::vhdl::parser

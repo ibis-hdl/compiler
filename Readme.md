@@ -336,17 +336,12 @@ clear what comes from what.
 
 - rename all print() member to print_on()
 
-### Boost.Test
+### Testsuite and Boost.Test
 
-- basic_failure_diagnostic_fixture needs a verbose argument, not all the time one
-  is interested in detail failing messages (even the can get long due to rendered
-  context). Using `basic_failure_diagnostic_fixture(bool verbose = true)` got
-  compile error, so it must be cli args. Temporary it's disabled in source cpp
-  file.
+- basic_failure_diagnostic_fixture should also save as unified diff, see todo inside header.
 
-- basic_failure_diagnostic_fixture should also save the expected context to dir/file.
-  maybe save as unified diff, see todo inside header.
-
+- Useful information to store on filesystem are the messages, maybe [Observing test failure messages](
+   https://stackoverflow.com/questions/56963902/observing-test-failure-messages/61371602#61371602)
 
 - An interesting feature is described at
   [Controlling output of Boost.Test source location format](

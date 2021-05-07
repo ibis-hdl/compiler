@@ -64,39 +64,6 @@ void basic_failure_diagnostic_fixture::set_builtin(std::unique_ptr<compile_built
     // cli_args::print_settings();
 }
 
-void basic_failure_diagnostic_fixture::check_args()
-{
-    if (cli_args::destination_dir().empty()) {
-        BOOST_TEST_MESSAGE(name() << ": use compiled builtin <destination_dir> "
-                                  << builtin->destination_dir());
-        destination_dir = builtin->destination_dir();
-    }
-    else {
-        BOOST_TEST_MESSAGE(name() << ": use command line <destination_dir> "
-                                  << cli_args::destination_dir());
-        destination_dir = cli_args::destination_dir();
-    }
-
-    if (cli_args::output_extension().empty()) {
-        BOOST_TEST_MESSAGE(name() << ": use compiled builtin <output_extension> "
-                                  << builtin->output_extension());
-        output_extension = builtin->output_extension();
-    }
-    else {
-        BOOST_TEST_MESSAGE(name() << ": use command line <output_extension> "
-                                  << cli_args::output_extension());
-        output_extension = cli_args::output_extension();
-    }
-
-    // check post conditions
-    if (destination_dir.empty()) {
-        throw std::logic_error("empty cli parameter <destination_dir>");
-    }
-    if (output_extension.empty()) {
-        throw std::logic_error("empty cli parameter <output_extension>");
-    }
-}
-
 void basic_failure_diagnostic_fixture::setup()
 {
     // nothings to do
@@ -117,6 +84,19 @@ bool basic_failure_diagnostic_fixture::current_test_passing()
     return test_results.passed();
 }
 
+// local helper to trim trailing spaces from test_input, boost::trim_right_copy doesn't work
+// on string_view, hence we write our own
+// FixMe: [C++20] next standard supports string_view iterator pair constructor.
+auto const trim_right = [](std::string_view x) {
+    // clang-format off
+    return std::string_view(
+        x.data(), // const CharT*
+        std::find_if(x.rbegin(), x.rend(), [](char c) {
+                        return !static_cast<bool>(std::isspace(c)); }
+                    ).base() - x.begin()); // count
+    // clang-format on
+};
+
 void basic_failure_diagnostic_fixture::failure_closure(std::string test_case_name,
                                                        std::string_view test_input,
                                                        std::string_view test_result)
@@ -125,30 +105,14 @@ void basic_failure_diagnostic_fixture::failure_closure(std::string test_case_nam
     auto const display_closure = [&](std::ostream& os) {
         std::size_t const col_width{ 80 };
 
-        // furnish a nice line with title in the middle
         auto hline = [&](std::string const& title, std::size_t col_width, char fill = '~') {
-            return make_iomanip([&title, col_width, fill](std::ostream& os) {
-                std::size_t const w{ (col_width - title.size()) / 2 };
-                std::string const line(w, fill);
-                os << '\n' << line << title << line << '\n';
+            return make_iomanip([this, &title, col_width, fill](std::ostream& os) {
+                head_line(os, title, col_width, fill);
             });
         };
 
-        // trim trailing spaces from test_input, boost::trim_right_copy doesn't work
-        // on string_view, hence we write our own
-        // FixMe: [C++20] next standard supports string_view iterator pair constructor.
-        auto const trim_right = [](std::string_view x) {
-            // clang-format off
-            return std::string_view(
-                x.data(), // const CharT*
-                std::find_if(x.rbegin(), x.rend(), [](char c) {
-                                return !static_cast<bool>(std::isspace(c)); }
-                            ).base() - x.begin()); // count
-            // clang-format on
-        };
-
         // finally the nice rendered failure closure for diagnostic
-        os << hline(" failure diagnostic closure: '" + test_case_name + "'", col_width, '#')
+        os << hline(" failure diagnostic closure: '" + test_case_name + "' ", col_width, '#')
            << hline(" INPUT ", col_width) << trim_right(test_input)  // input
            << hline(" RESULT ", col_width) << test_result            // output
            << hline("", col_width);                                  // footer
@@ -156,7 +120,7 @@ void basic_failure_diagnostic_fixture::failure_closure(std::string test_case_nam
 
     // if current test fail render closure to console and save test_result to filesystem
     if (!current_test_passing()) {
-        if(/* verbose */ false) {
+        if (cli_args::verbose_diagnostic()) {
             BOOST_TEST_MESSAGE(name() << ": save closure");
             // render on terminal
             display_closure(std::cerr);
@@ -170,14 +134,143 @@ void basic_failure_diagnostic_fixture::failure_closure(std::string test_case_nam
     }
 }
 
+void basic_failure_diagnostic_fixture::failure_closure(std::string test_case_name,
+                                                       std::string_view test_input,
+                                                       std::string_view test_expected,
+                                                       std::string_view test_result)
+{
+    // render test_input and test_result on stream
+    auto const display_closure = [&](std::ostream& os) {
+        std::size_t const col_width{ 80 };
+
+        auto hline = [&](std::string const& title, std::size_t col_width, char fill = '~') {
+            return make_iomanip([this, &title, col_width, fill](std::ostream& os) {
+                head_line(os, title, col_width, fill);
+            });
+        };
+
+        // finally the nice rendered failure closure for diagnostic
+        os << hline(" failure diagnostic closure: '" + test_case_name + "' ", col_width, '#')
+           << hline(" INPUT ", col_width) << trim_right(test_input)        // input
+           << hline(" EXPECTED ", col_width) << trim_right(test_expected)  // expected
+           << hline(" RESULT ", col_width) << test_result                  // output
+           << hline("", col_width);                                        // footer
+    };
+
+    // if current test fail render closure to console and save test_result to filesystem
+    if (!current_test_passing()) {
+        if (cli_args::verbose_diagnostic()) {
+            BOOST_TEST_MESSAGE(name() << ": save closure");
+            // render on terminal
+            display_closure(std::cerr);
+        }
+
+        // write on filesystem
+        fs::path full_pathname = destination_dir / test_case_name;
+
+        full_pathname = full_pathname.replace_extension(input_extension);
+        write(full_pathname, test_input);
+
+        full_pathname = full_pathname.replace_extension(expected_extension);
+        write(full_pathname, test_expected);
+
+        full_pathname = full_pathname.replace_extension(output_extension);
+        write(full_pathname, test_result);
+    }
+}
+
 }  // namespace testsuite::util
 
 // ---------------------------------------------------------------------------
 //
-// failure_diagnostic_fixture private writer functions implementation
+// failure_diagnostic_fixture private (utility) function implementation
 //
 // ---------------------------------------------------------------------------
 namespace testsuite::util {
+
+void basic_failure_diagnostic_fixture::check_args()
+{
+    //
+    // file extension of input files
+    //
+    if (cli_args::input_extension().empty()) {
+        BOOST_TEST_MESSAGE(name() << ": use compiled builtin <input_extension> "
+                                  << builtin->input_extension());
+        input_extension = builtin->input_extension();
+    }
+    else {
+        BOOST_TEST_MESSAGE(name() << ": use command line <input_extension> "
+                                  << cli_args::input_extension());
+        input_extension = cli_args::input_extension();
+    }
+
+    //
+    // file extension of expected files
+    //
+    if (cli_args::expected_extension().empty()) {
+        BOOST_TEST_MESSAGE(name() << ": use compiled builtin <expected_extension> "
+                                  << builtin->expected_extension());
+        expected_extension = builtin->expected_extension();
+    }
+    else {
+        BOOST_TEST_MESSAGE(name() << ": use command line <expected_extension> "
+                                  << cli_args::expected_extension());
+        expected_extension = cli_args::expected_extension();
+    }
+
+    //
+    // output dir for result files
+    //
+    if (cli_args::destination_dir().empty()) {
+        BOOST_TEST_MESSAGE(name() << ": use compiled builtin <destination_dir> "
+                                  << builtin->destination_dir());
+        destination_dir = builtin->destination_dir();
+    }
+    else {
+        BOOST_TEST_MESSAGE(name() << ": use command line <destination_dir> "
+                                  << cli_args::destination_dir());
+        destination_dir = cli_args::destination_dir();
+    }
+
+    //
+    // file extensions for result files
+    if (cli_args::output_extension().empty()) {
+        BOOST_TEST_MESSAGE(name() << ": use compiled builtin <output_extension> "
+                                  << builtin->output_extension());
+        output_extension = builtin->output_extension();
+    }
+    else {
+        BOOST_TEST_MESSAGE(name() << ": use command line <output_extension> "
+                                  << cli_args::output_extension());
+        output_extension = cli_args::output_extension();
+    }
+
+    //
+    // check post conditions
+    //
+    if (input_extension.empty()) {
+        throw std::logic_error("empty cli parameter <input_extension>");
+    }
+    if (expected_extension.empty()) {
+        throw std::logic_error("empty cli parameter <expected_extension>");
+    }
+    if (destination_dir.empty()) {
+        throw std::logic_error("empty cli parameter <destination_dir>");
+    }
+    if (output_extension.empty()) {
+        throw std::logic_error("empty cli parameter <output_extension>");
+    }
+}
+
+std::string_view basic_failure_diagnostic_fixture::name() const { return fixture_name; }
+
+void basic_failure_diagnostic_fixture::head_line(std::ostream& os, std::string_view title,
+                                                 std::size_t col_width, char fill)
+{
+    std::size_t const w = (col_width - title.size()) / 2;
+    std::string const line(w, fill);
+    os << '\n' << line << title << line << '\n';
+}
 
 void basic_failure_diagnostic_fixture::write(fs::path const& full_pathname, std::string_view result)
 {
@@ -233,7 +326,5 @@ bool basic_failure_diagnostic_fixture::write_file(fs::path const& filename,
 
     return true;
 }
-
-std::string_view basic_failure_diagnostic_fixture::name() const { return fixture_name; }
 
 }  // namespace testsuite::util

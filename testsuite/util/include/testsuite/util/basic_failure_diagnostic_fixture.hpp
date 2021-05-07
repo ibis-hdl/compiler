@@ -24,16 +24,19 @@ namespace testsuite::util {
 //      --input-extension=.input
 //      --write-extension=.result
 //
-/// @todo introduce verbose option, using CLI argument
+/// @todo At this time, input, expected and output result are captured. Save the difference as
+/// unified format for convenience, using [cubicdaiya/dtl](https://github.com/cubicdaiya/dtl)
+/// doesn't work since it's on character level.
+/// [leutloff/diff-match-patch-cpp-stl](https://github.com/leutloff/diff-match-patch-cpp-stl) based
+/// on [google/diff-match-patch](https://github.com/google/diff-match-patch) also doesn't bring the
+/// expected output. Maybe the simplest is to call diff on unix via external process. Windows will
+/// lose.
 ///
-/// @todo At this time, input and output result are captured. Add expected to
-/// the closure and save the difference as unified format for convenience,
-/// e.g. using [cubicdaiya/dtl](https://github.com/cubicdaiya/dtl).
-///
-/// @todo Also usefull informations to store on filesystem are the messages,
+/// @todo Also useful information to store on filesystem are the messages,
 /// maybe [Observing test failure messages](
-/// https://stackoverflow.com/questions/56963902/observing-test-failure-messages/61371602#61371602)
-/// is the right way for this.
+///  https://stackoverflow.com/questions/56963902/observing-test-failure-messages/61371602#61371602)
+/// is the right way for this. See
+/// [github](https://github.com/boostorg/test/blob/boost-1.76.0/include/boost/test/impl/plain_report_formatter.ipp)
 ///
 class basic_failure_diagnostic_fixture {
 public:
@@ -86,6 +89,21 @@ public:
     void failure_closure(std::string test_case_name,  // --
                          std::string_view test_input, std::string_view test_result);
 
+    ///
+    /// @brief Writes the test completion to the file system
+    /// for later investigation for the causes.
+    ///
+    /// @param test_case_name The name of the current test case.
+    /// @param test_input The input string given to the test
+    /// @param test_expected The expected string given to the test
+    /// @param test_result The output string get from test back.
+    ///
+    /// FixMe: both failure_closure signatures share same C++ lambda code, simplify!
+    ///
+    void failure_closure(std::string test_case_name,  // --
+                         std::string_view test_input, std::string_view test_expected,
+                         std::string_view test_result);
+
 protected:
     ///
     /// The compiled builtin defaults, used if no CLI argument was given.
@@ -97,6 +115,9 @@ protected:
 
         compile_builtin(compile_builtin&) = delete;
         compile_builtin(compile_builtin&&) = delete;
+
+        virtual std::string_view input_extension() const = 0;
+        virtual std::string_view expected_extension() const = 0;
 
         virtual std::string_view destination_dir() const = 0;
         virtual std::string_view output_extension() const = 0;
@@ -122,6 +143,9 @@ private:
 
     /// The name of the fixture for logging.
     std::string_view name() const;
+
+    /// furnish a nice line with title in the middle
+    void head_line(std::ostream& os, std::string_view title, std::size_t col_width, char fill);
 
 private:
     ///
@@ -158,6 +182,9 @@ private:
 
 private:
     std::unique_ptr<compile_builtin> builtin;
+
+    std::string input_extension;
+    std::string expected_extension;
 
     fs::path destination_dir;
     std::string output_extension;
