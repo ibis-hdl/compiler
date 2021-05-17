@@ -14,7 +14,7 @@ namespace ibis::util {
 ///
 /// @see [coliru](https://coliru.stacked-crooked.com/a/0eb51327cb759036)
 ///
-void tokenize(std::string_view sv, std::vector<std::string_view>& vector_sv, char delimiter)
+inline void tokenize(std::string_view sv, std::vector<std::string_view>& vector_sv, char delimiter)
 {
     std::size_t start = 0;
     std::size_t end = 0;
