@@ -335,8 +335,8 @@ void printer::operator()(based_literal const& node)
             os << "real";
             break;
         }
-        default:
-            os << "INVALID";
+        default:  // unreachable_bug_triggered
+            cxx_unreachable_bug_triggered();
     }
 }
 
@@ -374,8 +374,8 @@ void printer::operator()(bit_string_literal const& node)
         case base_specifier::hex:
             os << "hex";
             break;
-        default:
-            os << "INVALID";
+        default:  // unreachable_bug_triggered
+            cxx_unreachable_bug_triggered();
     }
 
     os << ", literal: " << node.literal;
@@ -887,10 +887,8 @@ void printer::operator()(decimal_literal const& node)
         case kind_specifier::real:
             os << "real";
             break;
-        default:
-            // cxx_unreachable_bug_triggered();
-            // we are greedy at this today
-            os << "INVALID";
+        default:  // unreachable_bug_triggered
+            cxx_unreachable_bug_triggered();
     }
 }
 
@@ -899,7 +897,7 @@ void printer::operator()(delay_mechanism const& node)
     static const std::string_view symbol{ "delay_mechanism" };
     symbol_scope<delay_mechanism> _(*this, symbol);
 
-    switch (node.delay_type) {
+    switch (node.delay_type) {  // invalid keywords call unreachable_bug_triggered() on default
         case ast::keyword_token::INERTIAL: {
             os << "INERTIAL_DELAY";
             break;
@@ -908,7 +906,7 @@ void printer::operator()(delay_mechanism const& node)
             os << "TRANSPORT_DELAY";
             break;
         }
-        default:
+        default:  // unreachable_bug_triggered, covers keywords 'UNSPECIFIED', 'ABS', 'ACCESS'...
             cxx_unreachable_bug_triggered();
     }
 

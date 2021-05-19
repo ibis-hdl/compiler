@@ -13,7 +13,6 @@
 #include <ibis/util/cxx_bug_fatal.hpp>
 
 #include <boost/range/iterator_range_core.hpp>
-#include <boost/core/ignore_unused.hpp>
 
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
@@ -125,8 +124,8 @@ void error_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
 
     auto [error_first, error_last, valid] = iterators_of(where_tag);
 
-    boost::ignore_unused(error_last);
-    boost::ignore_unused(valid);
+    // boost::ignore_unused(error_last);
+    // boost::ignore_unused(valid);
 
     os << format(translate("in file {1}, line {2}:"))  // --
               % current_file.file_name()               // {1}

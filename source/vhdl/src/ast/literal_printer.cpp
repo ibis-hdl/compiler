@@ -90,7 +90,7 @@ std::ostream& literal_printer::print(std::ostream& os) const
                 case base_specifier::hex:
                     os << 'X';
                     break;
-                default:
+                default: // unreachable_bug_triggered
                     cxx_unreachable_bug_triggered();
             }
 
@@ -105,7 +105,7 @@ std::ostream& literal_printer::print(std::ostream& os) const
                     os << lit.literal;
                     break;
                 }
-                default:
+                default: // unreachable_bug_triggered
                     cxx_unreachable_bug_triggered();
             }
         },
@@ -123,7 +123,7 @@ std::ostream& literal_printer::print(std::ostream& os) const
                     os << lit.number.integer_part << '.' << lit.number.fractional_part;
                     break;
                 }
-                default:
+                default: // unreachable_bug_triggered
                     cxx_unreachable_bug_triggered();
             }
 

@@ -33,8 +33,10 @@ target_link_libraries(${PROJECT_NAME}
         testsuite::util
         Boost::system
         Boost::unit_test_framework
+        # cope with "fatal error LNK2011: precompiled object not linked in"
+        "$<$<CXX_COMPILER_ID:MSVC>:testsuite::pch>"
 )
-#set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-v")
+#set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "/Verbose")
 
 
 if(DEVELOPER_EXTERNAL_BOOST_TEST)

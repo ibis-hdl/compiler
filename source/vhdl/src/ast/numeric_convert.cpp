@@ -123,9 +123,9 @@ void trace_report(RangeType const& range, RangeFiltType const& range_f, bool par
 #if defined(IBIS_HAVE_EXPERIMENTAL_SOURCE_LOCATION)
 template <typename RangeType, typename RangeFiltType, typename AttributeType>
 inline void dbg_trace(RangeType const& range, RangeFiltType const& range_f, bool parse_ok,
-                             AttributeType attribute,
-                             std::experimental::source_location const& location =
-                                 std::experimental::source_location::current())
+                      AttributeType attribute,
+                      std::experimental::source_location const& location =
+                          std::experimental::source_location::current())
 {
     dbg_util::trace_report(range, range_f, parse_ok, attribute, location.file_name(),
                            location.line(), location.function_name());
@@ -169,6 +169,9 @@ struct primitive_parser {
 
     ///
     /// The type, to which all literals will be converted.
+    ///
+    /// FixMe: This approach results into warnings about precission lost - make the attribute type
+    /// as template argument
     using attribute_type = double;
 
     ///
@@ -719,7 +722,7 @@ numeric_convert::return_type numeric_convert::operator()(ast::based_literal cons
     // exponent
     //
     if (!literal.number.exponent.empty()) {
-        detail::signed_integer exponent{ 0 };
+        detail::signed_integer exponent{ 0 }; // FixMe: No need for 'vhdl::intrinsic::unsigned_integer_type'
 
         std::tie(parse_ok, exponent) = parse_exponent(literal);
 

@@ -47,6 +47,10 @@ A<std::decay_t<T>> make_iomanip(T&& x)
 /// ---------------------------------------------------------------------------
 namespace testsuite::util {
 
+// Quiet compiler warning: ... has no out-of-line virtual method definitions; its vtable will be
+// emitted in every translation unit [-Wweak-vtables]
+basic_failure_diagnostic_fixture::compile_builtin::~compile_builtin() = default;
+
 basic_failure_diagnostic_fixture::basic_failure_diagnostic_fixture()
     : fixture_name{ "failure_diagnostic_fixture" }
 {
@@ -141,20 +145,19 @@ void basic_failure_diagnostic_fixture::failure_closure(std::string test_case_nam
 {
     // render test_input and test_result on stream
     auto const display_closure = [&](std::ostream& os) {
-        std::size_t const col_width{ 80 };
+        static constexpr std::size_t col_width = 80;
 
-        auto hline = [&](std::string const& title, std::size_t col_width, char fill = '~') {
-            return make_iomanip([this, &title, col_width, fill](std::ostream& os) {
-                head_line(os, title, col_width, fill);
-            });
+        auto hline = [&](std::string const& title, char fill = '~') {
+            return make_iomanip(
+                [this, &title, fill](std::ostream& os) { head_line(os, title, col_width, fill); });
         };
 
         // finally the nice rendered failure closure for diagnostic
-        os << hline(" failure diagnostic closure: '" + test_case_name + "' ", col_width, '#')
-           << hline(" INPUT ", col_width) << trim_right(test_input)        // input
-           << hline(" EXPECTED ", col_width) << trim_right(test_expected)  // expected
-           << hline(" RESULT ", col_width) << test_result                  // output
-           << hline("", col_width);                                        // footer
+        os << hline(" failure diagnostic closure: '" + test_case_name + "' ", '#')
+           << hline(" INPUT ") << trim_right(test_input)        // input
+           << hline(" EXPECTED ") << trim_right(test_expected)  // expected
+           << hline(" RESULT ") << test_result                  // output
+           << hline("");                                        // footer
     };
 
     // if current test fail render closure to console and save test_result to filesystem

@@ -330,6 +330,63 @@ clear what comes from what.
   https://stackoverflow.com/questions/64618840/controlling-output-of-boost-test-source-location-format).
 
 
+### NumericConvert / 2nd pass Parser
+
+The whole conversation of the numerical VHDL types from the AST is confusing,
+possibly also complicated:
+
+- warnings pointed:
+
+  ```
+  [7/169] Building CXX object testsuite\vhdl\numeric_convert\CMakeFiles\testrunner_vhdl_numeric_convert.dir\src\binary_string.cpp.obj
+  ..\testsuite\vhdl\numeric_convert\src\binary_string.cpp(54): warning C4244: "Argument": Konvertierung von "const uint64_t" in "unsigned int", möglicher Datenverlust
+  ..\testsuite\vhdl\numeric_convert\src\binary_string.cpp(88): warning C4244: "Argument": Konvertierung von "const uint64_t" in "unsigned int", möglicher Datenverlust
+  ..\testsuite\vhdl\numeric_convert\src\binary_string.cpp(115): warning C4244: "Argument": Konvertierung von "const uint64_t" in "unsigned int", möglicher Datenverlust
+  [14/169] Building CXX object testsuite\vhdl\numeric_convert\CMakeFiles\testrunner_vhdl_numeric_convert.dir\src\test\bit_string_literal_test.cpp.obj
+  D:\My\IBIS\boost_1_76_0\boost/test/tools/fpc_op.hpp(134): warning C4244: "Argument": Konvertierung von "const Rhs" in "const FPT", möglicher Datenverlust
+  ```
+
+  A double is used as a "generic universal type"; using a template argument,
+  i.e. attribute_type, such warnings are bypassed and it is clearer to read.
+
+- In numeric_convert.cpp a lot of "trickery" is done because of splitting the
+  numeric VHDL types into their components by the actual vhdl::parser to save
+  parse time. Even with C++20 there are more possibilities, eg.
+  [coliru](https://coliru.stacked-crooked.com/a/17f844b879507aed):
+
+
+  ```
+  #include <iostream>
+  //#include <ranges> // C++20
+  #include <range/v3/view.hpp>
+  #include <string_view>
+  #include <algorithm>
+  #include <iterator>
+
+  template <typename RangeT>
+  void print(RangeT str) {
+      std::copy(str.begin(), str.end(), std::ostream_iterator<char>(std::cout));
+      std::cout << "\n";
+  }
+
+  int main()
+  {
+      using namespace std::literals;
+      auto const bits = { "https:"sv, "//"sv, "cppreference"sv, "."sv, "com"sv };
+      print(bits | ranges::views::join);
+  }
+
+  ```
+
+  ... with this the nested boost::join() can be omitted and this becomes more
+  readable. In principle the problem with the '_' in the literals should be
+  avoided with std::ranges.
+
+- Next: [Stackoverflow](
+  https://stackoverflow.com/questions/29132809/using-boostspiritqi-to-parse-numbers-with-separators?answertab=active#tab-top)
+  shows a better approach than the present one.
+
+
 ### Others
 
 - Get a logo, e.g. ibis as mascot with assets sub directories.

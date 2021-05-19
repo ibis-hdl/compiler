@@ -17,6 +17,14 @@ dataset_loader::dataset_loader(std::string_view testcase_group_)
 {
 }
 
+// Quiet compiler warning: ... has no out-of-line virtual method definitions; its vtable will be
+// emitted in every translation unit [-Wweak-vtables]
+dataset_loader::~dataset_loader()  = default;
+
+// Quiet compiler warning: ... has no out-of-line virtual method definitions; its vtable will be
+// emitted in every translation unit [-Wweak-vtables]
+dataset_loader::compile_builtin::~compile_builtin()  = default;
+
 void dataset_loader::set_builtin(std::unique_ptr<compile_builtin> other)
 {
     builtin = std::move(other);
@@ -130,7 +138,7 @@ void dataset_loader::read_files(fs::path const& path_name) const
                     dataset.expected.emplace_back(read_file(expect_file));
                 }
             }
-            catch (std::exception const& e) {
+            catch ([[maybe_unused]] std::exception const& e) {
                 // BOOST_TEST_MESSAGE(name() << ": caught '" << e.what() << "' exception!");
 
                 // try to recover from error and continue; simply assume no {file}.expected was

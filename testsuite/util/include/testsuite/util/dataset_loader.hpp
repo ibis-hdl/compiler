@@ -76,7 +76,7 @@ public:
     /// At the same time this is the group name of the parent test.
     ///
     explicit dataset_loader(std::string_view testcase_group);
-    virtual ~dataset_loader() = default;
+    virtual ~dataset_loader();
 
     dataset_loader() = delete;
     dataset_loader(dataset_loader const&) = delete;
@@ -139,7 +139,7 @@ protected:
     // NOLINTNEXTLINE(cppcoreguidelines-special-member-functions) -- due to abstract class!
     struct compile_builtin {
         compile_builtin() = default;
-        virtual ~compile_builtin() = default;
+        virtual ~compile_builtin();
 
         compile_builtin(compile_builtin&) = delete;
         compile_builtin(compile_builtin&&) = delete;

@@ -14,6 +14,8 @@ add_library(ibis::vhdl ALIAS ${PROJECT_NAME})
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
         ibis::common
+        # cope with "fatal error LNK2011: precompiled object not linked in"
+        "$<$<CXX_COMPILER_ID:MSVC>:ibis::pch>"
 )
 
 
@@ -73,6 +75,18 @@ target_include_directories(${PROJECT_NAME}
         $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
         $<INSTALL_INTERFACE:include>
 )
+
+
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    set_source_files_properties(
+        # nested std::string_view const {symbol, node_typename}
+        src/ast/ast_printer.cpp
+        src/ast/ast_stats.cpp
+        PROPERTIES
+            COMPILE_FLAGS
+                /wd4456 # C4456 - declaration of 'identifier' hides previous local declaration
+    )
+endif()
 
 
 ##

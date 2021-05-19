@@ -111,7 +111,7 @@ protected:
     // NOLINTNEXTLINE(cppcoreguidelines-special-member-functions) -- due to abstract class!
     struct compile_builtin {
         compile_builtin() = default;
-        virtual ~compile_builtin() = default;
+        virtual ~compile_builtin();
 
         compile_builtin(compile_builtin&) = delete;
         compile_builtin(compile_builtin&&) = delete;

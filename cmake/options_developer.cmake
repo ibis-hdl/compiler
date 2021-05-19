@@ -116,12 +116,14 @@ endif()
 # http://cmake.3232098.n2.nabble.com/Spaces-in-conditional-output-of-generator-expressions-td7597652.html)
 add_compile_options(
     #  ---- common warnings ----
+    # FixMe: [-Wundefined-func-template], BUT see:
+    #   https://www.reddit.com/r/cpp_questions/comments/8g5v3s/dealing_with_clang_warningerrors_re_static/
     # http://clang.llvm.org/docs/DiagnosticsReference.html
-    "$<$<CXX_COMPILER_ID:Clang>:-Wall;-Wextra;-Wpedantic;-Wno-c11-extensions>"
+    "$<$<CXX_COMPILER_ID:Clang>:-Wall;-Wextra;-Wpedantic;-Wno-c11-extensions;-Wconversion>"
     # https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
-    "$<$<CXX_COMPILER_ID:GNU>:-Wall;-Wextra;-Wpedantic>"
+    "$<$<CXX_COMPILER_ID:GNU>:-Wall;-Wextra;-Wpedantic;-Wconversion>"
     # https://docs.microsoft.com/en-us/cpp/build/reference/compiler-option-warning-level
-    "$<$<CXX_COMPILER_ID:MSVC>:/W4>"
+    "$<$<CXX_COMPILER_ID:MSVC>:/W3>"
 
     # ---- Special treatment for CLang/Windows ----
     # hide warning: enumerator value is not representable in the underlying type 'int'
@@ -239,9 +241,13 @@ mark_as_advanced(DEVELOPER_CLANG_WARN_EVERYTHING)
 if(DEVELOPER_CLANG_WARN_EVERYTHING)
     # no interest in compatibility to old standards
     set(_warn_compat -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-c++98-c++11-c++14-compat)
-    set(_warn_misc -Wno-padded -Wno-global-constructors)
+    # misc
+    set(_warn_misc -Wno-padded -Wno-global-constructors -Wno-exit-time-destructors)
+    # boost.test macros hell, ibis is using rarely macros
+    # boost.test fires [-Wused-but-marked-unused]
+    set(_warn_boost -Wno-disabled-macro-expansion -Wno-used-but-marked-unused)
     add_compile_options(
-        "$<$<CXX_COMPILER_ID:Clang>:${_warn_compat};${_warn_misc}>"
+        "$<$<CXX_COMPILER_ID:Clang>:${_warn_compat};${_warn_boost};${_warn_misc}>"
     )
 endif()
 

@@ -17,7 +17,10 @@ target_link_libraries(${PROJECT_NAME}
         Boost::locale
         Boost::filesystem   # Boost::process depends on
         Threads::Threads
+        # cope with "fatal error LNK2011: precompiled object not linked in"
+        "$<$<CXX_COMPILER_ID:MSVC>:ibis::pch>"
 )
+#set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-v")
 
 
 add_dependencies(${PROJECT_NAME}

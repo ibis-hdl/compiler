@@ -30,7 +30,7 @@ namespace detail {
 // bin/oct/hex generator helper functions
 //******************************************************************************
 
-std::string to_bin_literal(uint64_t n, std::string const& postfix = "")
+static std::string to_bin_literal(uint64_t n, std::string const& postfix = "")
 {
     using namespace testsuite::vhdl::numeric_convert::util;
 
@@ -38,7 +38,7 @@ std::string to_bin_literal(uint64_t n, std::string const& postfix = "")
     return s;
 }
 
-std::string to_oct_literal(uint64_t n, std::string const& postfix = "")
+static std::string to_oct_literal(uint64_t n, std::string const& postfix = "")
 {
     using namespace testsuite::vhdl::numeric_convert::util;
 
@@ -46,7 +46,7 @@ std::string to_oct_literal(uint64_t n, std::string const& postfix = "")
     return s;
 }
 
-std::string to_hex_literal(uint64_t n, std::string const& postfix = "")
+static std::string to_hex_literal(uint64_t n, std::string const& postfix = "")
 {
     using namespace testsuite::vhdl::numeric_convert::util;
 

@@ -75,3 +75,10 @@ using context_type = x3::context<parser::error_handler_tag,
                                  std::reference_wrapper<error_handler_type>, phrase_context_type>;
 
 }  // namespace ibis::vhdl::parser
+
+namespace ibis::vhdl::parser {
+
+// Explicit template instantiation declaration (source/vhdl/src/parser/error_handler.cpp)
+extern template class error_handler<parser::iterator_type>;
+
+}  // namespace ibis::vhdl::parser

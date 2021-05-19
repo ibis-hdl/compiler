@@ -37,11 +37,7 @@ public:
     indent_sbuf& operator=(indent_sbuf&&) = delete;
 
 public:
-    ~indent_sbuf() override
-    {
-        // NOLINTNEXTLINE(clang-analyzer-optin.cplusplus.VirtualCall) -- functionally intended
-        overflow('\n');  // start at column 0 again
-    }
+    ~indent_sbuf() override;
 
     indent_sbuf& increase()
     {
@@ -63,23 +59,16 @@ public:
 private:
     int_type overflow(int_type chr) override
     {
-        // CLang -Weverything Diagnostic:
-        // warning: implicit conversion loses integer precision:
-        // 'std::basic_streambuf<char, std::char_traits<char> >::int_type'
-        // (aka 'int') to 'std::basic_streambuf<char, std::char_traits<char> >::char_type'
-        // (aka 'char') [-Wconversion]
-        // ... may not give problems due to ANSI charset of VHDL
-        int_type const put_ret{ m_sbuf->sputc(chr) };
+        // Quiet Compiler warning [-Wimplicit-int-conversion]
+        // [Correct implementation of std::streambuf::overflow](
+        //  https://stackoverflow.com/questions/20667951/correct-implementation-of-stdstreambufoverflow)
+        // so no interest of eof, hence its legitimate to cast, see
+        // [CharTraits](https://en.cppreference.com/w/cpp/named_req/CharTraits)
+        int_type const put_ret{ m_sbuf->sputc(static_cast<char_type>(chr)) };
 
         if (chr == '\n') {
-            // CLang -Weverything Diagnostic:
-            // warning: implicit conversion changes signedness:
-            // 'std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char>
-            // >::size_type' (aka 'unsigned long') to 'std::streamsize' (aka 'long')
-            // [-Wsign-conversion] Also, on success the number of characters written is returned and
-            // no check is done here - no error expected ;-) FixMe: Add some indent_level and assert
-            // to avoid non-intentionally behavior. There may be a problem on huge indent size.
-            m_sbuf->sputn(m_indent_str.data(), m_indent_str.size());
+            // Quiet Compiler warning [-Wsign-conversion]. There may be a problem on huge indent size.
+            m_sbuf->sputn(m_indent_str.data(), static_cast<std::streamsize>(m_indent_str.size()));
         }
 
         return put_ret;
@@ -98,6 +87,8 @@ public:
         , buf{ os.rdbuf(), width }
     {
     }
+
+    ~indent_ostream() override;
 
 private:
     indent_sbuf buf;

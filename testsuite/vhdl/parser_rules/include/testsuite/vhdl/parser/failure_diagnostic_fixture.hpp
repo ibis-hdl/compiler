@@ -14,7 +14,7 @@ public:
 private:
     struct compile_builtin : testsuite::util::basic_failure_diagnostic_fixture::compile_builtin {
         compile_builtin() = default;
-        ~compile_builtin() = default;
+        ~compile_builtin() override = default;
 
         compile_builtin(compile_builtin&) = delete;
         compile_builtin(compile_builtin&&) = delete;

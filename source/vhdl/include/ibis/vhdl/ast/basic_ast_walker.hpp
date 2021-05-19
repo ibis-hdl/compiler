@@ -12,8 +12,6 @@
 #include <algorithm>
 #include <string_view>
 
-#include <boost/core/ignore_unused.hpp>
-
 #include <ibis/util/cxx_bug_fatal.hpp>
 
 namespace ibis::vhdl::ast {
@@ -2322,18 +2320,16 @@ public:
         worker(node, node_typename);
     }
 
-    void operator()(ast::keyword_token token)
+    void operator()([[maybe_unused]] ast::keyword_token token)
     {
-        boost::ignore_unused(token);
 #if 0
         std::string_view const node_typename{ "keyword" };
         //XXX worker(node, node_typename);
 #endif
     }
 
-    void operator()(ast::nullary const& node)
+    void operator()([[maybe_unused]] ast::nullary const& node)
     {
-        boost::ignore_unused(node);
 #if 0
         //******************************
         //    SHALL NEVER BE HERE

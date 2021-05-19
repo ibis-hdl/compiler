@@ -74,7 +74,7 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name)
             return false;
         }
 
-        default:
+        default: // unreachable_bug_triggered
             cxx_unreachable_bug_triggered();
     }
 

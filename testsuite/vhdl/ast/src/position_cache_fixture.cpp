@@ -45,11 +45,13 @@ std::string position_cache_fixture::test_case_source_dir() const
         return std::optional<std::string>{ argv.substr(pos + key.size()) };
     };
 
-    unsigned const argc = boost::unit_test::framework::master_test_suite().argc;
+    int const argc = boost::unit_test::framework::master_test_suite().argc;
     char** const argv = boost::unit_test::framework::master_test_suite().argv;
 
+    assert(argc > 0 && "unexpected argc value from master_test_suite");
+
     // check command line args
-    for (unsigned i = 0; i != argc; i++) {
+    for (int i = 0; i != argc; i++) {
         // FixMe: Clang-Tidy [cppcoreguidelines-pro-bounds-pointer-arithmetic]
         // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-pointer-arithmetic)
         std::string_view const argv_sv{ argv[i] };
@@ -104,8 +106,12 @@ std::tuple<parser::iterator_type, parser::iterator_type> position_cache_fixture:
     auto const pos = position_cache.file_contents(id).find(str);
     BOOST_TEST_REQUIRE(pos != std::string::npos);
 
-    parser::iterator_type begin = position_cache.file_contents(id).begin() + pos;
-    parser::iterator_type end = begin + str.length();
+    parser::iterator_type begin =  // --
+        position_cache.file_contents(id).begin() +
+        static_cast<std::string_view::difference_type>(pos);
+
+    parser::iterator_type end =  // --
+        begin + static_cast<std::string_view::difference_type>(str.length());
 
     return std::tuple{ begin, end };
 }

@@ -11,7 +11,7 @@ namespace testsuite::vhdl::parser {
 class dataset : public testsuite::util::dataset_loader {
 public:
     explicit dataset(std::string_view testcase_group);
-    ~dataset() = default;
+    ~dataset() override;
 
     dataset() = delete;
     dataset(dataset const&) = delete;
@@ -22,7 +22,7 @@ public:
 private:
     struct compile_builtin : testsuite::util::dataset_loader::compile_builtin {
         compile_builtin() = default;
-        ~compile_builtin() = default;
+        ~compile_builtin() override;
 
         compile_builtin(compile_builtin&) = delete;
         compile_builtin(compile_builtin&&) = delete;

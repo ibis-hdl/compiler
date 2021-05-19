@@ -110,7 +110,7 @@ std::ostream& operator<<(std::ostream& os, keyword_token token)
         case keyword_token::UNSPECIFIED:
             cxx_bug_fatal("keyword_token not specified!");
 
-        default:
+        default:// unreachable_bug_triggered
             cxx_unreachable_bug_triggered();
     }
     // clang-format on

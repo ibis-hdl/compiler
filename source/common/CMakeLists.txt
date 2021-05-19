@@ -19,6 +19,7 @@ target_link_libraries(${PROJECT_NAME}
 
 target_sources(${PROJECT_NAME}
     PRIVATE
+        src/indent_stream.cpp
         src/buildinfo.cpp
         src/file_loader.cpp
         src/settings.cpp
