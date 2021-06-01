@@ -25,8 +25,8 @@ BOOST_AUTO_TEST_CASE(tokenize_sv)
     tokenize(sv, result, ',');
 
     if constexpr ((false)) {  // intentionally disabled
-        for (auto sv : result) {
-            std::cout << "'" << sv << "'\n";
+        for (auto str_v : result) {
+            std::cout << "'" << str_v << "'\n";
         }
     }
     BOOST_TEST(expected.size() == result.size());

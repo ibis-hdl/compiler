@@ -94,10 +94,12 @@ bool basic_failure_diagnostic_fixture::current_test_passing()
 auto const trim_right = [](std::string_view x) {
     // clang-format off
     return std::string_view(
-        x.data(), // const CharT*
-        std::find_if(x.rbegin(), x.rend(), [](char c) {
-                        return !static_cast<bool>(std::isspace(c)); }
-                    ).base() - x.begin()); // count
+        x.data(),                  // const CharT*
+        static_cast<std::size_t>(  // --
+            std::find_if(x.rbegin(), x.rend(),
+                         [](char c) { return !static_cast<bool>(std::isspace(c)); })
+                .base() - x.begin())  // count
+    );
     // clang-format on
 };
 
@@ -107,19 +109,18 @@ void basic_failure_diagnostic_fixture::failure_closure(std::string test_case_nam
 {
     // render test_input and test_result on stream
     auto const display_closure = [&](std::ostream& os) {
-        std::size_t const col_width{ 80 };
+        static constexpr std::size_t col_width = 80;
 
-        auto hline = [&](std::string const& title, std::size_t col_width, char fill = '~') {
-            return make_iomanip([this, &title, col_width, fill](std::ostream& os) {
-                head_line(os, title, col_width, fill);
-            });
+        auto hline = [&](std::string const& title, char fill = '~') {
+            return make_iomanip(
+                [this, &title, fill](std::ostream& os) { head_line(os, title, col_width, fill); });
         };
 
         // finally the nice rendered failure closure for diagnostic
-        os << hline(" failure diagnostic closure: '" + test_case_name + "' ", col_width, '#')
-           << hline(" INPUT ", col_width) << trim_right(test_input)  // input
-           << hline(" RESULT ", col_width) << test_result            // output
-           << hline("", col_width);                                  // footer
+        os << hline(" failure diagnostic closure: '" + test_case_name + "' ", '#')
+           << hline(" INPUT ") << trim_right(test_input)  // input
+           << hline(" RESULT ") << test_result            // output
+           << hline("");                                  // footer
     };
 
     // if current test fail render closure to console and save test_result to filesystem
