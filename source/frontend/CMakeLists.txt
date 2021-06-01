@@ -18,7 +18,7 @@ target_link_libraries(${PROJECT_NAME}
         Boost::filesystem   # Boost::process depends on
         Threads::Threads
         # cope with "fatal error LNK2011: precompiled object not linked in"
-        "$<$<CXX_COMPILER_ID:MSVC>:ibis::pch>"
+        "$<$<CXX_COMPILER_ID:MSVC>:ibis_pch>"
 )
 #set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-v")
 
@@ -46,14 +46,14 @@ target_sources(${PROJECT_NAME}
 
 
 if(${PROJECT_NAME}_PCH)
-    # override ibis::pch helper
+    # override ibis_pch helper
     target_precompile_headers(${PROJECT_NAME}
         PRIVATE
             $<$<BOOL:${IBIS_ENABLE_PCH_DEFAULT}>:${PROJECT_SOURCE_DIR}/include/ibis/frontend/detail/pch_default.hpp>
             $<$<BOOL:${IBIS_ENABLE_PCH_IBIS}>:${PROJECT_SOURCE_DIR}/include/ibis/frontend/detail/pch_ibis.hpp>
     )
 elseif(IBIS_ENABLE_PCH_DEFAULT OR IBIS_ENABLE_PCH_IBIS)
-    target_precompile_headers(${PROJECT_NAME} REUSE_FROM ibis::pch)
+    target_precompile_headers(${PROJECT_NAME} REUSE_FROM ibis_pch)
 endif()
 
 
