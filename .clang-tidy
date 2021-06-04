@@ -11,6 +11,7 @@ misc-*,\
 -misc-no-recursion,\
 modernize-*,\
 -modernize-use-trailing-return-type,\
+-modernize-use-nodiscard,\
 readability-*,\
 -readability-magic-numbers,\
 -readability-redundant-access-specifiers,\

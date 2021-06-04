@@ -135,6 +135,9 @@ source base is stable.
 - [modernize-use-trailing-return-type](https://clang.llvm.org/extra/clang-tidy/checks/modernize-use-trailing-return-type.html):
   *This transformation is purely stylistic. We are not quite that modern.*
 
+- [modernize-use-nodiscard](https://clang.llvm.org/extra/clang-tidy/checks/modernize-use-nodiscard.html):
+  *This would affect a lot of value returning member functions everywhere and doesn't give any additional information.*
+
 - [readability-magic-numbers](https://clang.llvm.org/extra/clang-tidy/checks/readability-magic-numbers.html), cppcoreguidelines-avoid-magic-numbers:
   *This goes too far to force this everywhere.*
 
