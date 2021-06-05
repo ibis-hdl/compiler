@@ -12,9 +12,13 @@ BOOST_AUTO_TEST_SUITE(literal_print)
 
 using namespace ibis::vhdl::ast;
 
+//
 // Check on correct printing of quoted string literals
-std::vector<std::string> const input_string_literal{
-    R"("""")", R"(%%%%)", R"(""Hello"")", R"(Quotation: ""REPORT..."")", R"("%"%")", R"(%"%"")",
+//
+std::vector<std::string_view> const input_string_literal{
+    R"("""")",  R"(%%%%)", R"(""Hello"")", R"(Quotation: ""REPORT..."")",
+    R"("%"%")",  // --
+    R"(%"%"")",  // --
 };
 
 std::vector<std::string> const expected_string_literal{
@@ -24,13 +28,14 @@ std::vector<std::string> const expected_string_literal{
 };
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
-BOOST_DATA_TEST_CASE(string_literal,  // --
-                     utf_data::make(input_string_literal) ^ expected_string_literal, input,
-                     expected)
+BOOST_DATA_TEST_CASE(                                                // --
+    string_literal,                                                  // --
+    utf_data::make(input_string_literal) ^ expected_string_literal,  // --
+    input, expected)
 {
-    auto const as_strlit = [](std::string const& str) {
+    auto const as_strlit = [](std::string_view sv) {
         ast::string_literal l;
-        l.literal = boost::make_iterator_range(str);
+        l.literal = boost::make_iterator_range(sv);
         return l;
     };
 
@@ -41,7 +46,7 @@ BOOST_DATA_TEST_CASE(string_literal,  // --
     literal_printer literal{ as_strlit(input) };
     os << literal;
 
-    BOOST_TEST(os.str() == expected, btt::per_element());
+    BOOST_TEST( os.str() == expected, btt::per_element());
 }
 
 /// Note: Here is stated, that testing of

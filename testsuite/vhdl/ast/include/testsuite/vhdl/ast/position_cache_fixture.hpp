@@ -3,6 +3,7 @@
 #include <ibis/vhdl/parser/position_cache.hpp>
 #include <ibis/vhdl/parser/iterator_type.hpp>
 
+#include <filesystem>
 #include <string>
 #include <tuple>
 #include <optional>
@@ -18,48 +19,58 @@ namespace testsuite::vhdl::ast {
 ///
 /// @todo Implement using testsuite::util::cli_args
 ///
-struct position_cache_fixture {
+class position_cache_fixture {
+public:
+public:
+    using position_cache_type = ibis::vhdl::parser::position_cache<parser::iterator_type>;
+    using file_id_type = position_cache_type::file_id_type;
+
+public:
     position_cache_fixture();
     ~position_cache_fixture();
 
-    static position_cache_fixture*& instance();
+    static position_cache_fixture& instance();
 
+    /// Get the path to the test case input, given from CLI or compile builtin.
+    /// @todo Implement using testsuite::util::cli_args
     std::string test_case_source_dir() const;
-    std::size_t load_reference(std::string const& file_name);
+
+    /// read the file contents into internal reference storage, returning the ID of them. Same time,
+    /// current_FileID() is updated. The position_cache isn't altered.
+    std::size_t load_reference(fs::path const& file_name);
+
+    /// return the last ID given from load_reference().
+    std::size_t current_FileID() const { return current_file_id; }
 
     std::string const& reference_contents(std::size_t id) const { return inputs[id]; }
 
-    std::tuple<parser::iterator_type, parser::iterator_type> contents_range(std::size_t id,
-                                                                            std::string_view str);
+    /// find in the given file ID a string view @a str and return a pair of iterators to begin and
+    /// end pointing the @a str.
+    std::tuple<parser::iterator_type, parser::iterator_type> contents_range(  // --
+        file_id_type id, std::string_view str);
 
-    ibis::vhdl::ast::position_tagged& addNode(std::string const& key,
-                                              ibis::vhdl::ast::position_tagged const& node);
+    /// add a tagged ast::position_tagged node by key into internal registry.
+    ibis::vhdl::ast::position_tagged& addNode(  // --
+        std::string const& key, ibis::vhdl::ast::position_tagged const& node);
+
+    /// get tagged ast::position_tagged node by key from internal registry.
     ibis::vhdl::ast::position_tagged const& getNode(std::string const& key) const;
 
 public:
-    ///
-    /// store the ID to avoid initialization order problems.
-    ///
-    /// This ID must be set each time a file is loaded/added to the fixture/position_cache
-    /// to prevent problems with the file ID bound to the fixture/cache due to
-    /// unspecified order of execution of tests.
-    /// This implies, that the contents <N> txt tests must be run with the
-    /// appropiate sub tests.
-    ///
-    std::size_t current_FileID;
-
     std::size_t input_count() const { return inputs.size(); }
     std::size_t node_count() const { return node_map.size(); }
 
 public:
-    ibis::vhdl::parser::position_cache<parser::iterator_type> position_cache;
+    position_cache_type position_cache;
 
 private:
-    static std::string read_file(std::string const& file_name);
+    static std::string read_file(fs::path const& file_name);
 
 private:
     std::optional<std::string> mutable input_path;
     std::vector<std::string> inputs;
+
+    std::size_t current_file_id = 0;
 
     using node_map_type = std::map<std::string, ibis::vhdl::ast::position_tagged>;
     node_map_type node_map;

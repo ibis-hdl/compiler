@@ -54,7 +54,7 @@ public:
     /// this is only required if you have recursive rules or need external linkage
     /// on rules (define them in separate translation units).
     ///
-    bool operator()(std::string const& input, ast::design_file& design_file);
+    bool operator()(std::string_view input, ast::design_file& design_file);
 
 private:
     static std::string make_exception_description(std::exception const& exception,

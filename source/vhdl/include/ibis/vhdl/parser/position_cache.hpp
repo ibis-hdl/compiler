@@ -21,8 +21,7 @@ namespace ibis::vhdl::parser {
 /// properties are own, hence it's save to refer to them as long the instance
 /// exist.
 ///
-/// @todo Make the file ID an opaque type to prevent 'accidents' with integers,
-/// e.g. [rollbear/strong_type](https://github.com/rollbear/strong_type)
+/// The class owns the filename and there contents as std::string.
 ///
 template <typename IteratorT>
 class position_cache {
@@ -31,6 +30,8 @@ public:
     using position_container_type = std::vector<boost::iterator_range<iterator_type>>;
 
     using range_type = typename position_container_type::value_type;
+
+    using file_id_type = ast::position_tagged::file_tag_type;
 
 private:
     // <filename, contents>
@@ -56,7 +57,7 @@ public:
     /// @param file_id ID of actually processed file.
     /// @return A proxy object with fixed file_id for convenience.
     ///
-    proxy handle(std::size_t file_id);
+    proxy get_proxy(file_id_type file_id);
 
     std::size_t file_count() const { return files.size(); }
     std::size_t position_count() const { return positions.size(); }
@@ -70,11 +71,14 @@ public:
     /// @return An ID which identifies the pair of 'filename' and 'contents' which
     ///        can be referred later on using the proxy.
     ///
-    std::size_t add_file(std::string filename, std::string contents = std::string{})
+    /// @note This call makes internally a copy of filename and contents.
+    /// @todo Check on use of fs::path as filename argument
+    ///
+    file_id_type add_file(std::string_view filename, std::string_view contents)
     {
         std::size_t const file_id = files.size();
-        files.emplace_back(std::move(filename), std::move(contents));
-        return file_id;
+        files.emplace_back(filename, contents);
+        return file_id_type{ file_id };
     }
 
 public:
@@ -89,7 +93,7 @@ public:
     /// @todo maybe better throw range_exception since it's an implementation
     /// limitation.
     template <typename NodeT>
-    void annotate(std::size_t file_id, NodeT& node, iterator_type first, iterator_type last)
+    void annotate(file_id_type file_id, NodeT& node, iterator_type first, iterator_type last)
     {
         if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
             cxx_assert(positions.size() < ast::position_tagged::MAX_ID,
@@ -109,37 +113,25 @@ public:
     /// Get the file name.
     ///
     /// @param file_id ID of actually processed file.
-    /// @return The filename as std::string.
+    /// @return The filename as string view.
     ///
-    /// FixMe: This is a string_view candidate
-    ///
-    std::string const& file_name(std::size_t file_id) const
+    std::string_view file_name(file_id_type file_id) const
     {
-        return std::get<0>(files.at(file_id));
+        assert(value_of(file_id) < files.size() && "file_id out of range!");
+        return std::get<0>(files[value_of(file_id)]);
     }
 
     ///
     /// Get the file contents.
     ///
     /// @param file_id ID of actually processed file.
-    /// @return A const reference to a string representing the file contents.
+    /// @return A string view representing the file contents.
     ///
-    /// FixMe: This is a string_view candidate
-    ///
-    std::string const& file_contents(std::size_t file_id) const
+    std::string_view file_contents(file_id_type file_id) const
     {
-        return std::get<1>(files.at(file_id));
+        assert(value_of(file_id) < files.size() && "file_id out of range!");
+        return std::get<1>(files[value_of(file_id)]);
     }
-
-    ///
-    /// Get the file contents.
-    ///
-    /// @param file_id ID of actually processed file.
-    /// @return A reference to a string representing the file contents.
-    ///
-    /// FixMe: This is a string_view candidate
-    ///
-    std::string& file_contents(std::size_t file_id) { return std::get<1>(files.at(file_id)); }
 
     ///
     /// Get the iterator (range) of the file contents.
@@ -147,22 +139,19 @@ public:
     /// @param file_id ID of actually processed file.
     /// @return A pair of iterators pointing to begin and end of the file contents.
     ///
-    std::tuple<iterator_type, iterator_type> range(std::size_t file_id) const
+    std::tuple<iterator_type, iterator_type> range(file_id_type file_id) const
     {
-        auto const make_range = [](std::string const& contents) {
-            return std::tuple<iterator_type, iterator_type>{ contents.begin(), contents.end() };
-        };
+        auto const contents = file_contents(file_id);
 
-        return make_range(file_contents(file_id));
+        return { contents.cbegin(), contents.cend() };
     }
 
     ///
     /// Extract the iterator range from AST tagged node.
     ///
     /// @param node The AST node.
-    /// @return boost::iterator_range tagged before by \ref annotate. If the node
-    ///        not tagged an empty iterator_range is return. To distinguish
-    ///        between they are packed into an optional.
+    /// @return boost::iterator_range tagged before by \ref annotate. If the node not tagged an
+    /// empty iterator_range is returned. To distinguish between they are packed into an optional.
     ///
     template <typename NodeT>
     std::optional<range_type> position_of(NodeT const& node) const
@@ -183,7 +172,7 @@ public:
     /// @param pos Iterator position where to gather the line number.
     /// @return The line number.
     ///
-    std::size_t line_number(std::size_t file_id, iterator_type const& pos) const;
+    std::size_t line_number(file_id_type file_id, iterator_type const& pos) const;
 
     ///
     /// Return an iterator to the begin of the line. White spaces are skipped.
@@ -194,7 +183,7 @@ public:
     /// @param pos Iterator position pointing to a line of interest.
     /// @return Iterator position pointing to the begin of line.
     ///
-    iterator_type get_line_start(std::size_t file_id, iterator_type& pos) const;
+    iterator_type get_line_start(file_id_type file_id, iterator_type& pos) const;
 
     ///
     /// Print the line where the iterator points to until end-of-line.
@@ -205,7 +194,7 @@ public:
     ///
     /// FixMe: Starting with Spirit V3.0.7 (Boost V1.74.0) dependence on Boost.Locale
     /// is ceased (replace locale::conv::utf_to_utf with x3::to_utf8)
-    std::string current_line(std::size_t file_id, iterator_type const& first) const;
+    std::string_view current_line(file_id_type file_id, iterator_type const& first) const;
 
 private:
     file_container_type files;
@@ -218,20 +207,20 @@ private:
 /// This gives the same API as position_cache, but with an ID bound to this proxy
 /// to simplify AST tagging and error_handling.
 ///
-/// \note This class is intended to created by the position_cache's handle()
+/// \note This class is intended to created by the position_cache's get_proxy()
 /// function only.
 ///
 template <typename IteratorT>
 class position_cache<IteratorT>::proxy {
 public:
-    proxy(position_cache<IteratorT>& position_cache_, std::size_t file_id_)
+    proxy(position_cache<IteratorT>& position_cache_, file_id_type file_id_)
         : self{ position_cache_ }
         , file_id{ file_id_ }
     {
     }
 
 public:
-    std::size_t id() const { return file_id; }
+    file_id_type id() const { return file_id; }
 
 public:
     template <typename NodeT>
@@ -248,10 +237,10 @@ public:
     }
 
 public:
-    /// FixMe: This is a string_view candidate
-    std::string const& file_name() const { return self.file_name(file_id); }
-    /// FixMe: This is a string_view candidate
-    std::string const& file_contents() const { return self.file_contents(file_id); }
+    std::string_view file_name() const { return self.file_name(file_id); }
+
+    std::string_view file_contents() const { return self.file_contents(file_id); }
+
     std::tuple<IteratorT, IteratorT> range() const { return self.range(file_id); }
 
 public:
@@ -265,19 +254,18 @@ public:
         return self.get_line_start(file_id, pos_iter);
     }
 
-    /// FixMe: This is a string_view candidate
-    std::string current_line(iterator_type const& start) const
+    std::string_view current_line(iterator_type const& start) const
     {
         return self.current_line(file_id, start);
     }
 
 private:
     position_cache<IteratorT>& self;
-    std::size_t const file_id;
+    file_id_type const file_id;
 };
 
 template <typename IteratorT>
-typename position_cache<IteratorT>::proxy position_cache<IteratorT>::handle(std::size_t file_id)
+typename position_cache<IteratorT>::proxy position_cache<IteratorT>::get_proxy(file_id_type file_id)
 {
     return proxy{ *this, file_id };
 }

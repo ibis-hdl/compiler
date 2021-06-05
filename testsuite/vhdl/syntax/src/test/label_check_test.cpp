@@ -36,9 +36,9 @@ BOOST_DATA_TEST_CASE(labels_ok,                                                 
     ast::design_file design_file;
 
     {
-        std::size_t const id = position_cache.add_file(test_case_name, input);
+        auto const id = position_cache.add_file(test_case_name, input);
 
-        parser::error_handler_type error_handler{ os, position_cache.handle(id) };
+        parser::error_handler_type error_handler{ os, position_cache.get_proxy(id) };
         parser::parse parse{ os, error_handler };
 
         bool const parse_ok = parse(position_cache.file_contents(id), design_file);
@@ -82,9 +82,9 @@ BOOST_DATA_TEST_CASE(
     ast::design_file design_file;
 
     {
-        std::size_t const id = position_cache.add_file(test_case_name, input);
+        auto const id = position_cache.add_file(test_case_name, input);
 
-        parser::error_handler_type error_handler{ os, position_cache.handle(id) };
+        parser::error_handler_type error_handler{ os, position_cache.get_proxy(id) };
         parser::parse parse{ os, error_handler };
 
         bool const parse_ok = parse(position_cache.file_contents(id), design_file);

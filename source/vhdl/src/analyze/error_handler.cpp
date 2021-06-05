@@ -37,7 +37,7 @@ void error_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
 
     cxx_assert(where_tag.is_tagged(), "Node not tagged");
 
-    auto current_file = position_cache.handle(where_tag.file_id);
+    auto current_file = position_cache.get_proxy(where_tag.file_id);
 
     auto const iterators_of = [&current_file](ast::position_tagged const& tagged_node) {
         auto range = current_file.position_of(tagged_node);
@@ -90,7 +90,7 @@ void error_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
     cxx_assert(start_label.is_tagged(), "Node/StartLabel not tagged");
     cxx_assert(end_label.is_tagged(), "Node/EndLabel not tagged");
 
-    auto current_file = position_cache.handle(where_tag.file_id);
+    auto current_file = position_cache.get_proxy(where_tag.file_id);
 
     // at ill-formed label pairs (e.g. end, but no start label given) nodes
     // aren't tagged appropriate.
@@ -123,9 +123,6 @@ void error_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
     };
 
     auto [error_first, error_last, valid] = iterators_of(where_tag);
-
-    // boost::ignore_unused(error_last);
-    // boost::ignore_unused(valid);
 
     os << format(translate("in file {1}, line {2}:"))  // --
               % current_file.file_name()               // {1}

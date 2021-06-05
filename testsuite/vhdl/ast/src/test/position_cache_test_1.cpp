@@ -13,126 +13,158 @@
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_SUITE(position_cache)
 
+//
+// Test File #1 (Lorem Ipsum)
+//
+// ----8<----8<----8<----8<----8<----8<----
+// Lorem ipsum dolor sit amet, consetetur
+// sadipscing elitr, sed diam nonumy eirmod
+// tempor invidunt ut labore et dolore magna
+// aliquyam erat, sed diam voluptua. At vero eos
+// et accusam et justo duo dolores et ea rebum.
+// Stet clita kasd gubergren, no sea takimata
+// sanctus est Lorem ipsum dolor sit amet.
+// Lorem ipsum dolor sit amet, consetetur
+// sadipscing elitr, sed diam nonumy eirmod
+// tempor invidunt ut labore et dolore magna
+// aliquyam erat, sed diam voluptua. At vero eos
+// et accusam et justo duo dolores et ea rebum.
+// Stet clita kasd gubergren, no sea takimata
+// sanctus est Lorem ipsum dolor sit amet.
+// ---->8---->8---->8---->8---->8---->8----
+
 using namespace testsuite;
+using testsuite::vhdl::ast::position_cache_fixture;
 
-///
-/// Test File #1 (Lorem Ipsum)
-///
-
-///
-/// Test of basic embedding the filename and contents into with test input file #1.
-///
+//
+// Test of basic embedding the filename and contents into, using test input file #1.
+//
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_CASE(contents_1_txt)
 {
     // short-hands for convenience
-    using testsuite::vhdl::ast::position_cache_fixture;
+    auto& fixture = position_cache_fixture::instance();
+    auto& position_cache_ut = fixture.position_cache;  // under test
 
-    auto& position_cache = position_cache_fixture::instance()->position_cache;
-    auto* fixture = position_cache_fixture::instance();
-
-    fs::path const path = fixture->test_case_source_dir();
+    fs::path const path = fixture.test_case_source_dir();
     auto const file_name = path / "LoremIpsum.txt";
+    std::size_t const id_ref = fixture.load_reference(file_name);
+    std::string const file_contents = fixture.reference_contents(id_ref);
 
-    std::size_t const id_ref = fixture->load_reference(file_name.string());
-    fixture->current_FileID = id_ref;
+    // add file name with contents to position cache.
+    auto const id = position_cache_ut.add_file(file_name.string(), file_contents);
 
-    std::size_t const id = position_cache.add_file(file_name.string());
-    BOOST_TEST(id == id_ref);
+    // ID and file_name with contents shall be the same.
+    BOOST_TEST(value_of(id) == id_ref);
+    BOOST_TEST(position_cache_ut.file_name(id) == file_name);
+    BOOST_TEST(position_cache_ut.file_contents(id) == file_contents);
 
-    position_cache.file_contents(id) = fixture->reference_contents(id_ref);
-
-    BOOST_TEST(position_cache.file_name(id) == file_name);
-    BOOST_TEST(position_cache.file_contents(id) == fixture->reference_contents(id_ref));
-
-    auto const [first, last] = position_cache.range(id);
+    // check the range functionality by creating a temporary string from this range.
+    auto const [first, last] = position_cache_ut.range(id);
     std::string const range_contents{ first, last };
-    BOOST_TEST(range_contents == position_cache.file_contents(id));
-    BOOST_TEST(range_contents == fixture->reference_contents(id_ref));
-    BOOST_TEST(position_cache.file_contents(id) == fixture->reference_contents(id_ref));
+
+    // the contents created from cache's range shall be equal to origin.
+    BOOST_TEST(range_contents == position_cache_ut.file_contents(id));
+    BOOST_TEST(range_contents == fixture.reference_contents(id_ref));
 }
 
-///
-/// Check basic annotation capabilities *without* proxy/handle using string #1.
-///
+//
+// Check basic annotation capabilities *without* proxy/handle using string #1.
+//
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_CASE(basic_annotate_1_txt)
 {
+    // short-hands for convenience
+    auto& fixture = position_cache_fixture::instance();
+    auto& position_cache_ut = fixture.position_cache;
+
+    // helper
+    auto const make_key = [](std::size_t id, auto name) { return std::to_string(id) + name; };
+
+   // position/string to find
     std::string const tagging_str{ "elitr" };
 
-    auto const node_name = [](std::size_t id, auto name) { return std::to_string(id) + name; };
+    // reuse ID from last test 'contents_1_txt'
+    std::size_t const id_ref = fixture.current_FileID();
+    auto const id = position_cache_fixture::file_id_type(id_ref);
 
-    // short-hands for convenience
-    using testsuite::vhdl::ast::position_cache_fixture;
+    // emulate the parser, return pair of iterator to search string 'tagging_str' ...
+    auto const [first, last] = fixture.contents_range(id, tagging_str);
 
-    auto& position_cache = position_cache_fixture::instance()->position_cache;
-    auto* fixture = position_cache_fixture::instance();
-    std::size_t const id = fixture->current_FileID;
-
+    // ... and pseudo 'tag' them, basically initialize the AST node.
     ast::position_tagged node;
-    auto const [first, last] = fixture->contents_range(id, tagging_str);
-    position_cache.annotate(id, node, first, last);
-    auto const range = position_cache.position_of(node);
-    fixture->addNode(node_name(id, tagging_str), node);
+    position_cache_ut.annotate(id, node, first, last);
+
+    auto const range = position_cache_ut.position_of(node);
 
     BOOST_TEST(range.has_value());
     // dereference iterator and compare address of object.
     BOOST_TEST(&*first == &*range.value().begin());
     BOOST_TEST(&*last == &*range.value().end());
+
+    // store tagged node by key into fixture's internal memory for later use.
+    fixture.addNode(make_key(id_ref, tagging_str), node);
 }
 
-///
-/// Check basic annotation capabilities *with* proxy/handle using string #2.
-///
+//
+// Check basic annotation capabilities *with* proxy/handle using string #2.
+//
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_CASE(proxy_annotate_1_txt)
 {
+    // short-hands for convenience
+    auto& fixture = position_cache_fixture::instance();
+    auto& position_cache_ut = fixture.position_cache;
+
+    // helper
+    auto const make_key = [](std::size_t id, auto name) { return std::to_string(id) + name; };
+
+    // position/string to find
     std::string const tagging_str{ "voluptua" };
 
-    auto const node_name = [](std::size_t id, auto name) { return std::to_string(id) + name; };
+    // reuse ID from last test 'contents_1_txt'
+    std::size_t const id_ref = fixture.current_FileID();
+    auto const id = position_cache_fixture::file_id_type(id_ref);
 
-    // short-hands for convenience
-    using testsuite::vhdl::ast::position_cache_fixture;
+    auto proxy = position_cache_ut.get_proxy(id);
 
-    auto& position_cache = position_cache_fixture::instance()->position_cache;
-    auto* fixture = position_cache_fixture::instance();
-    std::size_t const id = fixture->current_FileID;
-
-    auto proxy = position_cache.handle(id);
-
+    auto const [first, last] = fixture.contents_range(id, tagging_str);
     ast::position_tagged node;
-    auto const [first, last] = fixture->contents_range(id, tagging_str);
     proxy.annotate(node, first, last);
     auto const range = proxy.position_of(node);
-    fixture->addNode(node_name(id, tagging_str), node);
 
     BOOST_TEST(range.has_value());
     // dereference iterator and compare address of object.
     BOOST_TEST(&*first == &*range.value().begin());
     BOOST_TEST(&*last == &*range.value().end());
+
+    // store tagged node by key into fixture's internal memory for later use.
+    fixture.addNode(make_key(id_ref, tagging_str), node);
 }
 
-///
-/// Check node handling using the proxy with test string #1.
-///
+//
+// Check node handling using the proxy with test string #1.
+//
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_CASE(proxy_position1_of_1_txt)
 {
+    // short-hands for convenience
+    auto& fixture = position_cache_fixture::instance();
+    auto& position_cache_ut = fixture.position_cache;
+
+    // helper
+    auto const make_key = [](std::size_t id, auto name) { return std::to_string(id) + name; };
+
+    // position/string to find
     std::string const tagged_str{ "elitr" };
 
-    auto const node_name = [](std::size_t id, auto name) { return std::to_string(id) + name; };
+    // get the tagged node from test before
+    std::size_t const id_ref = fixture.current_FileID();
+    auto const id = position_cache_fixture::file_id_type(id_ref);
+    auto tagged_node = fixture.getNode(make_key(id_ref, tagged_str));
 
-    // short-hands for convenience
-    using testsuite::vhdl::ast::position_cache_fixture;
-
-    auto& position_cache = position_cache_fixture::instance()->position_cache;
-    auto* fixture = position_cache_fixture::instance();
-    std::size_t const id = fixture->current_FileID;
-
-    auto proxy = position_cache.handle(id);
-    auto node = fixture->getNode(node_name(id, tagged_str));
-
-    auto const range = proxy.position_of(node);
+    auto proxy = position_cache_ut.get_proxy(id);
+    auto const range = proxy.position_of(tagged_node);
     BOOST_TEST(range.has_value());
 
     std::string const node_str{ range.value().begin(), range.value().end() };
@@ -140,27 +172,29 @@ BOOST_AUTO_TEST_CASE(proxy_position1_of_1_txt)
     BOOST_TEST(node_str == tagged_str);
 }
 
-///
-/// Check node handling using the proxy with test string #2.
-///
+//
+// Check node handling using the proxy with test string #2.
+//
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_CASE(proxy_position2_of_1_txt)
 {
+    // short-hands for convenience
+    auto& fixture = position_cache_fixture::instance();
+    auto& position_cache_ut = fixture.position_cache;
+
+    // helper
+    auto const make_key = [](std::size_t id, auto name) { return std::to_string(id) + name; };
+
+    // position/string to find
     std::string const tagged_str{ "voluptua" };
 
-    auto const node_name = [](std::size_t id, auto name) { return std::to_string(id) + name; };
+    // get the tagged node from test before
+    std::size_t const id_ref = fixture.current_FileID();
+    auto const id = position_cache_fixture::file_id_type(id_ref);
+    auto tagged_node = fixture.getNode(make_key(id_ref, tagged_str));
 
-    // short-hands for convenience
-    using testsuite::vhdl::ast::position_cache_fixture;
-
-    auto& position_cache = position_cache_fixture::instance()->position_cache;
-    auto* fixture = position_cache_fixture::instance();
-    std::size_t const id = fixture->current_FileID;
-
-    auto proxy = position_cache.handle(id);
-    auto node = fixture->getNode(node_name(id, tagged_str));
-
-    auto const range = proxy.position_of(node);
+    auto proxy = position_cache_ut.get_proxy(id);
+    auto const range = proxy.position_of(tagged_node);
     BOOST_TEST(range.has_value());
 
     std::string const node_str{ range.value().begin(), range.value().end() };
@@ -168,83 +202,87 @@ BOOST_AUTO_TEST_CASE(proxy_position2_of_1_txt)
     BOOST_TEST(node_str == tagged_str);
 }
 
-///
-/// Check for correct line numbers of tagged nodes
-///
+//
+// Check for correct line numbers of tagged nodes
+//
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_CASE(proxy_lineno_1_txt)
 {
-    auto const node_name = [](std::size_t id, auto name) { return std::to_string(id) + name; };
-
     // short-hands for convenience
-    using testsuite::vhdl::ast::position_cache_fixture;
+    auto& fixture = position_cache_fixture::instance();
+    auto& position_cache_ut = fixture.position_cache;
 
-    auto& position_cache = position_cache_fixture::instance()->position_cache;
-    auto* fixture = position_cache_fixture::instance();
-    std::size_t const id = fixture->current_FileID;
+    // helper
+    auto const make_key = [](std::size_t id, auto name) { return std::to_string(id) + name; };
 
-    auto proxy = position_cache.handle(id);
+    std::size_t const id_ref = fixture.current_FileID();
+    auto const id = position_cache_fixture::file_id_type(id_ref);
+    auto proxy = position_cache_ut.get_proxy(id);
 
     {
-        auto node = fixture->getNode(node_name(id, "elitr"));
+        // test string #1
+        auto node = fixture.getNode(make_key(id_ref, "elitr"));
         auto const range = proxy.position_of(node);
         BOOST_TEST(range.has_value());
 
         std::size_t const line_no = proxy.line_number(range.value().begin());
-        BOOST_TEST(line_no == 2U);
+        BOOST_TEST(line_no == 2);
     }
 
     {
-        auto node = fixture->getNode(node_name(id, "voluptua"));
+        // test string #2
+        auto node = fixture.getNode(make_key(id_ref, "voluptua"));
         auto const range = proxy.position_of(node);
         BOOST_TEST(range.has_value());
 
         std::size_t const line_no = proxy.line_number(range.value().begin());
-        BOOST_TEST(line_no == 4U);
+        BOOST_TEST(line_no == 4);
     }
 }
 
-///
-/// Check for correct line of tagged nodes
-///
+//
+// Check for correct line of tagged nodes
+//
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_CASE(proxy_line_1_txt)
 {
-    auto const node_name = [](std::size_t id, auto name) { return std::to_string(id) + name; };
-
     // short-hands for convenience
-    using testsuite::vhdl::ast::position_cache_fixture;
+    auto& fixture = position_cache_fixture::instance();
+    auto& position_cache_ut = fixture.position_cache;
 
-    auto& position_cache = position_cache_fixture::instance()->position_cache;
-    auto* fixture = position_cache_fixture::instance();
-    std::size_t const id = fixture->current_FileID;
+    // helper
+    auto const make_key = [](std::size_t id, auto name) { return std::to_string(id) + name; };
 
-    auto proxy = position_cache.handle(id);
+    std::size_t const id_ref = fixture.current_FileID();
+    auto const id = position_cache_fixture::file_id_type(id_ref);
+    auto proxy = position_cache_ut.get_proxy(id);
 
     {
-        auto node = fixture->getNode(node_name(id, "elitr"));
+        auto node = fixture.getNode(make_key(id_ref, "elitr"));
         auto const range = proxy.position_of(node);
         BOOST_TEST(range.has_value());
 
-        std::string expected{ "sadipscing elitr, sed diam nonumy eirmod" };
+        // expect line #2 of LoremIpsum.txt
+        std::string const expected{ "sadipscing elitr, sed diam nonumy eirmod" };
 
         parser::iterator_type first = range.value().begin();
         parser::iterator_type const iter = proxy.get_line_start(first);
-        std::string current_line = proxy.current_line(iter);
+        auto const current_line = proxy.current_line(iter);
 
         BOOST_TEST(expected == current_line);
     }
 
     {
-        auto node = fixture->getNode(node_name(id, "voluptua"));
+        auto node = fixture.getNode(make_key(id_ref, "voluptua"));
         auto const range = proxy.position_of(node);
         BOOST_TEST(range.has_value());
 
+        // expect line #4 of LoremIpsum.txt
         std::string expected{ "aliquyam erat, sed diam voluptua. At vero eos" };
 
         parser::iterator_type first = range.value().begin();
         parser::iterator_type const iter = proxy.get_line_start(first);
-        std::string current_line = proxy.current_line(iter);
+        auto const current_line = proxy.current_line(iter);
 
         BOOST_TEST(expected == current_line);
     }

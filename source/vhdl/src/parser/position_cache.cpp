@@ -3,7 +3,7 @@
 
 #include <ibis/util/cxx_bug_fatal.hpp>
 
-#include <boost/locale/encoding_utf.hpp>
+// #include <boost/locale/encoding_utf.hpp>
 
 #include <cctype>
 #include <iterator>
@@ -13,8 +13,8 @@
 namespace ibis::vhdl::parser {
 
 template <typename IteratorT>
-std::size_t position_cache<IteratorT>::line_number(std::size_t file_id,
-                                                   iterator_type const& pos) const
+std::size_t position_cache<IteratorT>::line_number(  // --
+    file_id_type file_id, iterator_type const& pos) const
 {
     using char_type = typename std::iterator_traits<iterator_type>::value_type;
 
@@ -42,8 +42,8 @@ std::size_t position_cache<IteratorT>::line_number(std::size_t file_id,
 }
 
 template <typename IteratorT>
-std::string position_cache<IteratorT>::current_line(std::size_t file_id,
-                                                    iterator_type const& first) const
+std::string_view position_cache<IteratorT>::current_line(  // --
+    file_id_type file_id, iterator_type const& first) const
 {
     iterator_type line_end = first;
 
@@ -57,16 +57,24 @@ std::string position_cache<IteratorT>::current_line(std::size_t file_id,
         ++line_end;
     }
 
-    using char_type = typename std::iterator_traits<iterator_type>::value_type;
-
-    // FixMe: Starting with Spirit V3.0.7 (Boost V1.74.0) dependence on Boost.Locale
+    // FixMe: Generally, UTF8 in VHDL is difficult, see also [VHDL file encoding](
+    // https://insights.sigasi.com/tech/vhdl-file-encoding/). The X3 way is using:
+    // @code{.cpp}
+    //     return boost::locale::conv::utf_to_utf<std::string::value_type>(
+    //         std::string_view(&(*first), std::distance(first, line_end)));
+    // @endcode
+    // but with using ```std::string_view``` this isn't possible any more due to
+    // use of this. Personally, the intention of converting UTF to UTF isn't clear.
+    // Further, Starting with Spirit V3.0.7 (Boost V1.74.0) dependence on Boost.Locale
     // is ceased (replace locale::conv::utf_to_utf with x3::to_utf8)
-    return boost::locale::conv::utf_to_utf<std::string::value_type>(
-        std::basic_string<char_type>{ first, line_end });
+
+    // FixMe [C++20]: constructor by pair of string_view iterators.
+    return std::string_view(&(*first), static_cast<std::size_t>(std::distance(first, line_end)));
 }
 
 template <typename IteratorT>
-IteratorT position_cache<IteratorT>::get_line_start(std::size_t file_id, iterator_type& pos) const
+IteratorT position_cache<IteratorT>::get_line_start(  // --
+    file_id_type file_id, iterator_type& pos) const
 {
     // make sure err_pos does not point to white space
     auto const skip_whitespace = [](iterator_type& iter, iterator_type const& last) {

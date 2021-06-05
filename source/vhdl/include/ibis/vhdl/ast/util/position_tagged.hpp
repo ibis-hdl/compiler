@@ -2,6 +2,8 @@
 
 #include <limits>
 
+#include <strong_type/strong_type.hpp>
+
 namespace ibis::vhdl::ast {
 
 ///
@@ -12,14 +14,27 @@ namespace ibis::vhdl::ast {
 /// node.
 ///
 struct position_tagged {
-    using tag_type = std::size_t;
+    /// the basic underlaying type
+    using base_tag_type = std::size_t;
 
-    static constexpr tag_type MAX_ID = std::numeric_limits<tag_type>::max();
+    /// The strong type of file id. This type is opaque to prevent unwanted allocation by accident
+    /// or chance, since this type is also used outside the AST node and position_cache.
+    using file_tag_type = strong::type<base_tag_type, struct position_tagged_, strong::ordered>;
 
-    bool is_tagged() const { return pos_id != MAX_ID && file_id != MAX_ID; }
+    /// Type of position, used internally, so no need for opaque type.
+    using pos_tag_type = base_tag_type;
 
-    tag_type file_id{ MAX_ID };
-    tag_type pos_id{ MAX_ID };
+    /// The max. ID value of file_id respectively pod_id.
+    static constexpr base_tag_type MAX_ID = std::numeric_limits<base_tag_type>::max();
+
+    /// return true if the node is tagged, false otherwise.
+    bool is_tagged() const { return pos_id != MAX_ID && value_of(file_id) != MAX_ID; }
+
+    /// The file ID (handle) used by position_cache.
+    file_tag_type file_id{ MAX_ID };
+
+    /// The position ID of tagged iterator range.
+    pos_tag_type pos_id{ MAX_ID };
 };
 
 }  // namespace ibis::vhdl::ast

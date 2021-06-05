@@ -9,24 +9,15 @@
 
 namespace testsuite::vhdl::ast {
 
-position_cache_fixture*& position_cache_fixture::instance()
+position_cache_fixture& position_cache_fixture::instance()
 {
     // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
-    static position_cache_fixture* self = nullptr;
-    return self;
+    static position_cache_fixture static_position_cache_fixture;
+    return static_position_cache_fixture;
 }
 
-position_cache_fixture::position_cache_fixture()
-    : current_FileID{ 0 }
-{
-    // std::cout << "INFO(testsuite::position_cache_fixture) Setup\n";
-    instance() = this;
-}
-
-position_cache_fixture::~position_cache_fixture()  // NOLINT(modernize-use-equals-default)
-{
-    // std::cout << "INFO(testsuite::position_cache_fixture) Teardown\n";
-}
+position_cache_fixture::position_cache_fixture() = default;
+position_cache_fixture::~position_cache_fixture() = default;
 
 std::string position_cache_fixture::test_case_source_dir() const
 {
@@ -76,16 +67,19 @@ std::string position_cache_fixture::test_case_source_dir() const
     return *input_path;
 }
 
-std::size_t position_cache_fixture::load_reference(std::string const& file_name)
+std::size_t position_cache_fixture::load_reference(fs::path const& file_name)
 {
     std::size_t const id = inputs.size();
-    BOOST_TEST_MESSAGE("INFO(testsuite::position_cache_fixture) emplace " << file_name
-                                                                          << " with ID = " << id);
+
+    BOOST_TEST_MESSAGE("INFO(testsuite::position_cache_fixture) emplace "  // --
+                       << file_name << " with ID = " << id);
     inputs.emplace_back(read_file(file_name));
+
+    current_file_id = id; // update
     return id;
 }
 
-std::string position_cache_fixture::read_file(std::string const& file_name)
+std::string position_cache_fixture::read_file(fs::path const& file_name)
 {
     BOOST_TEST_MESSAGE("INFO(testsuite::position_cache_fixture) load " << file_name);
 
@@ -101,7 +95,7 @@ std::string position_cache_fixture::read_file(std::string const& file_name)
 }
 
 std::tuple<parser::iterator_type, parser::iterator_type> position_cache_fixture::contents_range(
-    std::size_t id, std::string_view str)
+    file_id_type id, std::string_view str)
 {
     auto const pos = position_cache.file_contents(id).find(str);
     BOOST_TEST_REQUIRE(pos != std::string::npos);
@@ -120,6 +114,7 @@ ibis::vhdl::ast::position_tagged& position_cache_fixture::addNode(
     std::string const& key, ibis::vhdl::ast::position_tagged const& node)
 {
     BOOST_TEST_MESSAGE("INFO(position_cache_fixture) add Node: " << key);
+    // this key doesn't have to be mapped before
     BOOST_TEST_REQUIRE(node_map.count(key) == 0);
     return node_map[key] = node;
 }
@@ -128,9 +123,8 @@ ibis::vhdl::ast::position_tagged const& position_cache_fixture::getNode(
     std::string const& key) const
 {
     BOOST_TEST_MESSAGE("INFO(position_cache_fixture) lookup Node: " << key);
+    // this key has to be mapped before
     BOOST_TEST_REQUIRE(node_map.count(key) > 0);
-    // FixMe: Clang-Tidy: [cppcoreguidelines-pro-type-const-cast]
-    //        but it's required here
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-const-cast)
     return const_cast<node_map_type&>(node_map)[key];
 }

@@ -32,11 +32,11 @@ namespace detail {
 template <class T>
 typename std::enable_if<std::is_integral<T>::value, std::string>::type to_decimal_literal(T value)
 {
-#if 0
-    std::cout << "to_decimal_literal(" << value << ") <"
-              << boost::typeindex::type_id<T>().pretty_name()
-              << ">\n";
-#endif
+    if constexpr ((false)) {
+        std::cout << "to_decimal_literal(" << value << ") <"
+                  << boost::typeindex::type_id<T>().pretty_name() << ">\n";
+    }
+
     return std::to_string(value);
 }
 
@@ -44,11 +44,10 @@ template <class T>
 typename std::enable_if<std::is_floating_point<T>::value, std::string>::type to_decimal_literal(
     T value)
 {
-#if 0
-    std::cout << "to_decimal_literal(" << value << ") <"
-              << boost::typeindex::type_id<T>().pretty_name()
-              << ">\n";
-#endif
+    if constexpr ((false)) {
+        std::cout << "to_decimal_literal(" << value << ") <"
+                  << boost::typeindex::type_id<T>().pretty_name() << ">\n";
+    }
     return std::to_string(value);
 }
 
@@ -103,8 +102,8 @@ BOOST_DATA_TEST_CASE(decimal_literal_integer, utf_data::make(dec_int_lit) ^ dec_
     using iterator_type = parser::iterator_type;
 
     parser::position_cache<iterator_type> position_cache;
-    std::size_t const id = position_cache.add_file("<decimal_literal>", literal);
-    auto const position_proxy{ position_cache.handle(id) };
+    auto const id = position_cache.add_file("<decimal_literal>", literal);
+    auto const position_proxy{ position_cache.get_proxy(id) };
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
@@ -129,8 +128,8 @@ BOOST_AUTO_TEST_CASE(decimal_literal_uint64max_ovrflw)
     using iterator_type = parser::iterator_type;
 
     parser::position_cache<iterator_type> position_cache;
-    std::size_t const id = position_cache.add_file("<decimal_literal>", literal);
-    auto const position_proxy{ position_cache.handle(id) };
+    auto const id = position_cache.add_file("<decimal_literal>", literal);
+    auto const position_proxy{ position_cache.get_proxy(id) };
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
@@ -198,8 +197,8 @@ BOOST_DATA_TEST_CASE(decimal_literal_real, utf_data::make(dec_real_lit) ^ dec_re
     using iterator_type = parser::iterator_type;
 
     parser::position_cache<iterator_type> position_cache;
-    std::size_t const id = position_cache.add_file("<decimal_literal>", literal);
-    auto const position_proxy{ position_cache.handle(id) };
+    auto const id = position_cache.add_file("<decimal_literal>", literal);
+    auto const position_proxy{ position_cache.get_proxy(id) };
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 

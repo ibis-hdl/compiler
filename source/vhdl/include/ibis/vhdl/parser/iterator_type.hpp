@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string>
+#include <string_view>
 
 namespace ibis::vhdl::parser {
 
@@ -20,6 +20,6 @@ namespace ibis::vhdl::parser {
 ///
 using char_type = char;
 
-using iterator_type = std::basic_string<char_type>::const_iterator;
+using iterator_type = std::basic_string_view<char_type>::const_iterator;
 
 }  // namespace ibis::vhdl::parser

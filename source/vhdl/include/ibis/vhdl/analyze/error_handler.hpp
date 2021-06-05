@@ -40,6 +40,7 @@ template <typename Iterator>
 class error_handler {
 public:
     using iterator_type = Iterator;
+    using position_cache_type = parser::position_cache<iterator_type>;
 
 public:
     ///
@@ -50,8 +51,7 @@ public:
     /// @param tabs            Tabulator size, required for correct rendering of
     ///                       source code snippet.
     ///
-    explicit error_handler(std::ostream& os_,
-                           parser::position_cache<iterator_type>& position_cache_,
+    explicit error_handler(std::ostream& os_, position_cache_type& position_cache_,
                            std::size_t tabs = 4)
         : os{ os_ }
         , position_cache{ position_cache_ }
@@ -93,7 +93,7 @@ public:
 
 private:
     std::ostream& os;
-    parser::position_cache<iterator_type>& position_cache;
+    position_cache_type& position_cache;
     std::size_t tab_sz;
 };
 
