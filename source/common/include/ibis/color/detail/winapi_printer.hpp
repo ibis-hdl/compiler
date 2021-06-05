@@ -27,7 +27,7 @@ public:
     winapi_printer() = default;
 
 public:
-    std::ostream& print(std::ostream& os) const
+    std::ostream& print_on(std::ostream& os) const
     {
         auto const use_ansi_writer = [&](color::terminal term_mode) -> bool {
             switch (term_mode) {
@@ -87,7 +87,7 @@ template <typename enum_type, std::size_t SIZE>
 inline std::ostream& operator<<(  // --
     std::ostream& os, winapi_printer<enum_type, SIZE> const& printer)
 {
-    return printer.print(os);
+    return printer.print_on(os);
 }
 
 }  // namespace detail

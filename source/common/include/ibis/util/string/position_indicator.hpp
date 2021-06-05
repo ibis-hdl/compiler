@@ -17,7 +17,7 @@ struct position_indicator {
     {
     }
 
-    std::ostream& print(std::ostream& os) const
+    std::ostream& print_on(std::ostream& os) const
     {
         for (; first != last; ++first) {
             auto const chr = *first;
@@ -47,7 +47,7 @@ struct position_indicator {
 template <typename Iterator>
 std::ostream& operator<<(std::ostream& os, position_indicator<Iterator> const indicator)
 {
-    return indicator.print(os);
+    return indicator.print_on(os);
 }
 
 }  // namespace ibis::util

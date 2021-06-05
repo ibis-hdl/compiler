@@ -87,7 +87,7 @@ auto ast_stats::sort_by_count(bool ascending) const
     return vec;
 }
 
-std::ostream& ast_stats::print(std::ostream& os) const
+std::ostream& ast_stats::print_on(std::ostream& os) const
 {
     auto const vec{ sort_by_count() };
 

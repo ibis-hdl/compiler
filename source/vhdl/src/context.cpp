@@ -16,7 +16,7 @@ context::context(std::size_t error_limit)
 {
 }
 
-std::ostream& failure_status::print(std::ostream& os) const
+std::ostream& failure_status::print_on(std::ostream& os) const
 {
     using boost::locale::format;
     using boost::locale::translate;

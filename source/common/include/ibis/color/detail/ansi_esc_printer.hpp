@@ -26,7 +26,7 @@ public:
     }
 
 public:
-    std::ostream& print(std::ostream& os) const
+    std::ostream& print_on(std::ostream& os) const
     {
         detail::ansi_writer ansi{ os };
         ansi(attributes);
@@ -40,7 +40,7 @@ template <typename enum_type, std::size_t SIZE>
 inline std::ostream& operator<<(  // --
     std::ostream& os, ansi_esc_printer<enum_type, SIZE> const& printer)
 {
-    return printer.print(os);
+    return printer.print_on(os);
 }
 
 }  // namespace detail

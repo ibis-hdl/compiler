@@ -52,7 +52,7 @@ public:
     message_facet& operator=(message_facet&&) = delete;
 
 public:
-    std::ostream& print(std::ostream& os, message_decorator<Tag> const& message) const
+    std::ostream& print_on(std::ostream& os, message_decorator<Tag> const& message) const
     {
 #if defined(IBIS_BUILD_PLATFORM_WIN32)
         using printer = detail::winapi_printer<color::attribute, 4>;
@@ -89,7 +89,7 @@ public:
             os << prefix_;
         }
 
-        message.print(os);
+        message.print_on(os);
 
         if (*enable) {
             printer postfix_{ postfix };
@@ -120,10 +120,10 @@ std::ostream& operator<<(std::ostream& os, message_decorator<Tag> const& decorat
     std::locale locale = os.getloc();
 
     if (std::has_facet<message_facet<Tag>>(locale)) {
-        return std::use_facet<message_facet<Tag>>(locale).print(os, decorator);
+        return std::use_facet<message_facet<Tag>>(locale).print_on(os, decorator);
     }
 
-    return decorator.print(os);
+    return decorator.print_on(os);
 }
 
 }  // namespace ibis::color

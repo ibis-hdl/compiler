@@ -17,7 +17,7 @@ public:
 
     auto sort_by_count(bool ascending = true) const;
 
-    std::ostream& print(std::ostream& os) const;
+    std::ostream& print_on(std::ostream& os) const;
 
 private:
     using map_type = std::unordered_map<std::string_view, std::size_t>;
@@ -30,7 +30,7 @@ private:
 
 inline std::ostream& operator<<(std::ostream& os, ast_stats const& stats)
 {
-    return stats.print(os);
+    return stats.print_on(os);
 }
 
 }  // namespace ibis::vhdl::ast

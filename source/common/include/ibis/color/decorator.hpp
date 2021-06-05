@@ -16,7 +16,7 @@ public:
     {
     }
 
-    std::ostream& print(std::ostream& os) const
+    std::ostream& print_on(std::ostream& os) const
     {
         os << contents;
         return os;

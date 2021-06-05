@@ -97,7 +97,7 @@ public:
     /// @param  os std::ostream handle to write
     /// @return The written ostream handle.
     ///
-    std::ostream& print(std::ostream& os) const
+    std::ostream& print_on(std::ostream& os) const
     {
         os << value;
         return os;
@@ -111,7 +111,7 @@ private:
 template <typename Tag>
 std::ostream& operator<<(std::ostream& os, basic_counter<Tag> const& counter)
 {
-    return counter.print(os);
+    return counter.print_on(os);
 }
 
 }  // namespace detail
@@ -161,7 +161,7 @@ public:
     }
 
 public:
-    std::ostream& print(std::ostream& os) const;
+    std::ostream& print_on(std::ostream& os) const;
 
 private:
     context const& ctx;
@@ -169,7 +169,7 @@ private:
 
 inline std::ostream& operator<<(std::ostream& os, failure_status const& status)
 {
-    return status.print(os);
+    return status.print_on(os);
 }
 
 }  // namespace ibis::vhdl

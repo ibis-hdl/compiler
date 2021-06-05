@@ -20,7 +20,7 @@ public:
     pretty_typename const& operator=(pretty_typename const&) = delete;
 
 public:
-    std::ostream& print(std::ostream& os) const
+    std::ostream& print_on(std::ostream& os) const
     {
         std::string name{ boost::typeindex::type_id<T>().pretty_name() };
         os << std::regex_replace(name, pattern, "");
@@ -34,7 +34,7 @@ private:
 template <typename T>
 std::ostream& operator<<(std::ostream& os, pretty_typename<T> const& printer)
 {
-    return printer.print(os);
+    return printer.print_on(os);
 }
 
 }  // namespace ibis::util

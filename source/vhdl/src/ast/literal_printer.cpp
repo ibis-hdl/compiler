@@ -73,7 +73,7 @@ literal_printer::literal_printer(string_literal const& literal_)
 {
 }
 
-std::ostream& literal_printer::print(std::ostream& os) const
+std::ostream& literal_printer::print_on(std::ostream& os) const
 {
     // clang-format off
     boost::apply_visitor(util::overloaded {

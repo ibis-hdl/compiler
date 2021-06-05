@@ -10,7 +10,7 @@ IBIS HDL project
     - g++ 7.3.0 Windows MinGW (in 2018)
     - Visual Studio 2017, Version 15.8 (in 2018)
 
-* cmake 3.18
+* CMake 3.18
     - ninja (recommended)
     - GNU make (not well supported by maintainer)
 
@@ -21,7 +21,8 @@ IBIS HDL project
 
 ### Required 3rd party Libraries
 
-* Boost 1.73
+* Boost > 1.73
+    - system
     - filesystem
     - locale
     - spirit X3
@@ -30,8 +31,8 @@ IBIS HDL project
 The following libraries are downloaded automatically into project's external
 directory from git repositories:
 
-* CLI11
-* GLS (currently unused)
+* [CLI11](https://github.com/CLIUtils/CLI11)
+* [strong_type](https://github.com/rollbear/strong_type)
 
 
 #### Compiling Boost Libs on Windows
@@ -389,8 +390,6 @@ possibly also complicated:
 ### Others
 
 - Get a logo, e.g. ibis as mascot with assets sub directories.
-
-- rename all print() member to print_on()
 
 ### Testsuite and Boost.Test
 

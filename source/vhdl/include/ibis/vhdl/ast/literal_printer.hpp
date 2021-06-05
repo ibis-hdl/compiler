@@ -18,7 +18,7 @@ public:
     literal_printer(ast::based_literal const& literal_);
     literal_printer(ast::string_literal const& literal_);
 
-    std::ostream& print(std::ostream& os) const;
+    std::ostream& print_on(std::ostream& os) const;
 
 private:
     // FixMe: The use of variant requires full definition of the class, hence the
@@ -32,7 +32,7 @@ private:
 
 inline std::ostream& operator<<(std::ostream& os, literal_printer const& printer)
 {
-    return printer.print(os);
+    return printer.print_on(os);
 }
 
 }  // namespace ibis::vhdl::ast
