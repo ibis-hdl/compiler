@@ -294,7 +294,7 @@ clear what comes from what.
 
 - Get clang-format working again. By The Way, check clang-format
   style for enhancements, so that we get rid off the '// 'clang-format {off|on}'
-  pragmas especially on class members.
+  pragmas.
 
 - Write git hooks for checking using clang-{tidy,format} et al. Note, that not
   everywhere clang-format may be installed.

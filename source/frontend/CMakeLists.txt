@@ -65,6 +65,9 @@ target_include_directories(${PROJECT_NAME}
         $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
         $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
         $<BUILD_INTERFACE:${CLI11_INCLUDE_DIR}>
+        # PCH, especially G++ requires this
+        $<$<BOOL:${IBIS_ENABLE_PCH_IBIS}>:$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source/vhdl/include>>
+        $<$<BOOL:${IBIS_ENABLE_PCH_IBIS}>:$<BUILD_INTERFACE:${STRONG_TYPE_INCLUDE_DIR}>>
 )
 
 
@@ -86,15 +89,22 @@ set_source_files_properties(
 
 # FixMe: Use generator, e.g. see https://www.brianlheim.com/2018/04/09/cmake-cheat-sheet.html
 # $<$<CXX_COMPILER_ID:GNU>:-g -fno-omit-frame-pointer>
+# 
+# FixMe: What was the intend of this compile flags? G++ with PCH fires probably here a 
+# warning: "cmake_pch.hxx.gch: created with -gnone, but used with -gdwarf-2".
+# Maybe it's related to stack unwinding? Nevertheless, than this should be moved
+# to options_devel and stacktrace section (depending on enabled option).
+# It's disabled for now. 
+
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-    target_compile_options(${PROJECT_NAME}
-        PRIVATE
-            -g -fno-omit-frame-pointer
-    )
-    set_target_properties(${PROJECT_NAME}
-        PROPERTIES
-            LINK_FLAGS "-g -fno-omit-frame-pointer"
-    )
+#    target_compile_options(${PROJECT_NAME}
+#        PRIVATE
+#            -g -fno-omit-frame-pointer
+#    )
+#    set_target_properties(${PROJECT_NAME}
+#        PROPERTIES
+#            LINK_FLAGS "-g -fno-omit-frame-pointer"
+#    )
 endif()
 
 
