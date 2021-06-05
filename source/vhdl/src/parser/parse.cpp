@@ -29,7 +29,7 @@ BOOST_SPIRIT_DECLARE(design_file_type)
 
 namespace ibis::vhdl::parser {
 
-bool parse::operator()(std::string const& input, ast::design_file& design_file)
+bool parse::operator()(std::string_view input, ast::design_file& design_file)
 {
     using vhdl::parser::iterator_type;
 
@@ -102,7 +102,7 @@ std::string parse::make_exception_description(std::exception const& exception,
             % filename                                                             // {2}
             )
         .str();
-};
+}
 
 std::string parse::make_exception_description(std::string_view filename)
 {
@@ -114,6 +114,6 @@ std::string parse::make_exception_description(std::string_view filename)
             % filename                                                                  // {1}
             )
         .str();
-};
+}
 
 }  // namespace ibis::vhdl::parser

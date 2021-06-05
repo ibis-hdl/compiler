@@ -15,7 +15,7 @@ parser::design_file_type grammar() { return ibis::vhdl::parser::design_file; }
 namespace ibis::vhdl::parser {
 
 #if !defined(DOXYGEN_DOCUMENTATION_BUILD)
-BOOST_SPIRIT_INSTANTIATE(design_file_type, iterator_type, context_type);
+BOOST_SPIRIT_INSTANTIATE(design_file_type, iterator_type, context_type)
 #endif
 
 }  // namespace ibis::vhdl::parser
