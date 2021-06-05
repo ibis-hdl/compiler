@@ -2,29 +2,37 @@
 
 // DO NOT EDIT! GENERATED AUTOMATICALLY BY CMAKE!
 
-//
-// @file platform.hpp
-//
-// Variables as determined by CMake, see
-// [How To Write Platform Checks](
-//  https://gitlab.kitware.com/cmake/community/-/wikis/doc/tutorials/How-To-Write-Platform-Checks)
+///
+/// @file platform.hpp
+///
+/// Variables as determined by CMake, see
+/// [How To Write Platform Checks](
+///  https://gitlab.kitware.com/cmake/community/-/wikis/doc/tutorials/How-To-Write-Platform-Checks)
+/// This allows to prevent the use of preprocessor using ```constexpr```.
 
-#cmakedefine BUILD_PLATFORM_UNIX 1
-#cmakedefine BUILD_PLATFORM_WIN32 1
-#cmakedefine BUILD_PLATFORM_APPLE 1
-#cmakedefine BUILD_PLATFORM_MINGW 1
-#cmakedefine BUILD_PLATFORM_MSYS 1
-#cmakedefine BUILD_PLATFORM_CYGWIN 1
+#cmakedefine IBIS_BUILD_PLATFORM_UNIX 1
+#cmakedefine IBIS_BUILD_PLATFORM_WIN32 1
+#cmakedefine IBIS_BUILD_PLATFORM_APPLE 1
+#cmakedefine IBIS_BUILD_PLATFORM_MINGW 1
+#cmakedefine IBIS_BUILD_PLATFORM_MSYS 1
+#cmakedefine IBIS_BUILD_PLATFORM_CYGWIN 1
 
-#cmakedefine BUILD_SYSTEM_LINUX 1
-#cmakedefine BUILD_SYSTEM_WINDOWS 1
-#cmakedefine BUILD_SYSTEM_DARWIN 1
-#cmakedefine BUILD_SYSTEM_FREEBSD 1
-#cmakedefine BUILD_SYSTEM_MSYS 1
+#cmakedefine IBIS_BUILD_SYSTEM_LINUX 1
+#cmakedefine IBIS_BUILD_SYSTEM_WINDOWS 1
+#cmakedefine IBIS_BUILD_SYSTEM_DARWIN 1
+#cmakedefine IBIS_BUILD_SYSTEM_FREEBSD 1
+#cmakedefine IBIS_BUILD_SYSTEM_MSYS 1
+
+#cmakedefine IBIS_BUILD_COMPILER_Clang 1
+#cmakedefine IBIS_BUILD_COMPILER_Clang_GNU 1
+#cmakedefine IBIS_BUILD_COMPILER_Clang_MSVC 1
+#cmakedefine IBIS_BUILD_COMPILER_GNU 1
+#cmakedefine IBIS_BUILD_COMPILER_Intel 1
+#cmakedefine IBIS_BUILD_COMPILER_MSVC 1
 
 namespace ibis {
 
-/// Enum which represents the build platform
+/// Enum which represents the build platform.
 enum class platform {
     Unix,   ///< is TRUE on all UNIX-like OS's, including Apple OS X and CygWin
     Win32,  ///< is TRUE on Windows. Prior to 2.8.4 this included CygWin
@@ -32,24 +40,24 @@ enum class platform {
             ///  that APPLE is defined in C/C++ header files.
     MinGW,  ///< is TRUE when using the MinGW compiler in Windows
     MSYS,   ///< is TRUE when using the MSYS developer environment in Windows
-    Cygwin  ///< is TRUE on Windows when using the CygWin version of cmake
+    Cygwin  ///< is TRUE on Windows when using the CygWin version of CMake
 };
 
-#ifdef BUILD_PLATFORM_UNIX
+#ifdef IBIS_BUILD_PLATFORM_UNIX
 constexpr ibis::platform build_platform = platform::Unix;
-#elif BUILD_PLATFORM_WIN32
+#elif IBIS_BUILD_PLATFORM_WIN32
 constexpr ibis::platform build_platform = platform::Win32;
-#elif BUILD_PLATFORM_APPLE
+#elif IBIS_BUILD_PLATFORM_APPLE
 constexpr ibis::platform build_platform = platform::Apple;
-#elif BUILD_PLATFORM_MINGW
+#elif IBIS_BUILD_PLATFORM_MINGW
 constexpr ibis::platform build_platform = platform::MinGW;
-#elif BUILD_PLATFORM_MSYS
+#elif IBIS_BUILD_PLATFORM_MSYS
 constexpr ibis::platform build_platform = platform::MSYS;
-#elif BUILD_PLATFORM_CYGWIN
+#elif IBIS_BUILD_PLATFORM_CYGWIN
 constexpr ibis::platform build_platform = platform::Cygwin;
 #endif
 
-/// Enum which represents the build operating system
+/// Enum which represents the build operating system.
 enum class system {
     Linux,    ///< Linux (GCC, Intel, PGI)
     Windows,  ///< Windows (Visual Studio, MinGW GCC)
@@ -58,16 +66,45 @@ enum class system {
     MSYS      ///< Windows (MSYS2 shell native GCC)
 };
 
-#ifdef BUILD_SYSTEM_LINUX
+#ifdef IBIS_BUILD_SYSTEM_LINUX
 constexpr ibis::system build_system = system::Linux;
-#elif BUILD_SYSTEM_WINDOWS
+#elif IBIS_BUILD_SYSTEM_WINDOWS
 constexpr ibis::system build_system = system::Windows;
-#elif BUILD_SYSTEM_DARWIN
+#elif IBIS_BUILD_SYSTEM_DARWIN
 constexpr ibis::system build_system = system::Darwin;
-#elif BUILD_SYSTEM_FREEBSD
+#elif IBIS_BUILD_SYSTEM_FREEBSD
 constexpr ibis::system build_system = system::FreeBSD;
-#elif BUILD_SYSTEM_MSYS
+#elif IBIS_BUILD_SYSTEM_MSYS
 constexpr ibis::system build_system = system::MSYS;
+#endif
+
+/// Enum which represents the platform compiler.
+/// The list is based on CMake's [Compiler identification string](
+/// https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_ID.html),
+/// but not all compiler are supported.
+enum class platform_compiler {
+    Clang,       ///< LLVM Clang (clang.llvm.org)
+    Clang_GNU,   ///< LLVM Clang with regular front end (clang.llvm.org)
+    Clang_MSVC,  ///< LLVM Clang with clang-cl front (clang.llvm.org)
+    GNU,         ///< GNU Compiler Collection (gcc.gnu.org)
+    Intel,       ///< Intel Compiler (intel.com)
+    MSVC         ///< Microsoft Visual Studio (microsoft.com)
+};
+
+#ifdef IBIS_BUILD_COMPILER_Clang
+constexpr ibis::platform_compiler build_compiler = platform_compiler::Clang;
+#elif IBIS_BUILD_COMPILER_GNU
+constexpr ibis::platform_compiler build_compiler = platform_compiler::GNU;
+#elif IBIS_BUILD_COMPILER_Intel
+constexpr ibis::platform_compiler build_compiler = platform_compiler::Intel;
+#elif IBIS_BUILD_COMPILER_MSVC
+constexpr ibis::platform_compiler build_compiler = platform_compiler::MSVC;
+#endif
+
+#ifdef IBIS_BUILD_COMPILER_Clang_GNU
+constexpr ibis::platform_compiler build_compiler_variant = platform_compiler::Clang_GNU;
+#elif IBIS_BUILD_COMPILER_Clang_MSVC
+constexpr ibis::platform_compiler build_compiler_variant = platform_compiler::Clang_MSVC;
 #endif
 
 }  // namespace ibis

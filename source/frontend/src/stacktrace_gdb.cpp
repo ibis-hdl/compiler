@@ -37,7 +37,7 @@
 //
 // OS specific system headers
 //
-#if (BUILD_PLATFORM_UNIX)
+#if defined(IBIS_BUILD_PLATFORM_UNIX)
 #include <climits>  // PATH_MAX
 // #include <sys/prctl.h>
 // #include <sys/ptrace.h>
@@ -47,11 +47,11 @@
 
 namespace bp = boost::process;
 
-#if !defined(BUILD_SYSTEM_LINUX)
+#if !defined(IBIS_BUILD_SYSTEM_LINUX)
 #error("stackstrace using GDB runs on Linux only!")
 #endif
 
-#if (BUILD_PLATFORM_UNIX)
+#if defined(IBIS_BUILD_PLATFORM_UNIX)
 void gdb_signal_handler(int signum, siginfo_t* siginfo, void* ucontext);
 #endif
 bool gdb_detected();
@@ -69,7 +69,7 @@ volatile std::sig_atomic_t
 
 using ibis::frontend::signal_name;
 
-#if (BUILD_PLATFORM_UNIX)
+#if defined(IBIS_BUILD_PLATFORM_UNIX)
 bool register_gdb_signal_handler()
 {
     // Note: This is called in the beginning of main's init() function where
@@ -308,7 +308,7 @@ bool token_found(std::string const& token, std::string const& procfs_path)
 /// on top.
 ///
 /// \see
-/// [Finding current executable's path without /proc/self/exe](
+/// [Finding current executable path without /proc/self/exe](
 /// https://stackoverflow.com/questions/1023306/finding-current-executables-path-without-proc-self-exe)
 /// [How to implement readlink to find the path](
 /// https://stackoverflow.com/questions/5525668/how-to-implement-readlink-to-find-the-path)
@@ -323,7 +323,9 @@ std::string get_executable_path()
             perror("[ibis/Note] error reading '/proc/self/exe'");
         }
 
-        return std::string(binary_path.data(), len);
+        assert(len > 0 && "readlink failed, but the result is unintentionally used.");
+
+        return std::string(binary_path.data(), static_cast<std::size_t>(len));
     }
 
     return std::string{};
