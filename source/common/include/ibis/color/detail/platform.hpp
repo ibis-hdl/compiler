@@ -2,7 +2,7 @@
 
 #include <ibis/platform.hpp>
 
-#if defined(BUILD_PLATFORM_WIN32)
+#if defined(IBIS_BUILD_PLATFORM_WIN32)
 #include <ibis/color/detail/platform_windows.hpp>
 #else
 #include <ibis/color/detail/platform_unix.hpp>
@@ -10,7 +10,7 @@
 
 namespace ibis::color::detail {
 
-#if defined(BUILD_PLATFORM_WIN32)
+#if defined(IBIS_BUILD_PLATFORM_WIN32)
 using platform_windows::isatty;
 #else
 using platform_unix::isatty;

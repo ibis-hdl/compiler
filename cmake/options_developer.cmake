@@ -102,6 +102,8 @@ option(DEVELOPER_RUN_CLANG_TIME_TRACE
     "What and where in my code things are slow to compile? Generate flame chart Tracing JSON."
     OFF
 )
+mark_as_advanced(DEVELOPER_RUN_CLANG_TIME_TRACE)
+
 if (DEVELOPER_RUN_CLANG_TIME_TRACE)
 add_compile_options(
     "$<$<CXX_COMPILER_ID:Clang>:-ftime-trace>"
@@ -412,27 +414,43 @@ CPMAddPackage(
 ################################################################################
 
 ## -----------------------------------------------------------------------------
-# Compile Command JSON, e.g. VS Code
+# VS Code, supporting Clang11 (Windows) and MSVC
+#
+if (WIN32)
+    if(NOT EXISTS ${CMAKE_SOURCE_DIR}/.vscode/settings.json)
+        message(STATUS "**** create Microsoft Visual Studio Code (VSCode) settings.")
+        if(NOT BOOST_ROOT)
+            # BOOST_ROOT not given, start with my path
+            set(BOOST_ROOT_PATH "D:/My/IBIS/boost_1_76_0")
+        else()
+            file(TO_CMAKE_PATH ${BOOST_ROOT} BOOST_ROOT_PATH)
+        endif()
+        if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+            set(Boost_COMPILER "-clangw11")
+        else()
+            set(Boost_COMPILER "-vc142")
+        endif()
+        configure_file(
+            ${CMAKE_SOURCE_DIR}/cmake/utils/settings.json.in ${CMAKE_SOURCE_DIR}/.vscode/settings.json
+                @ONLY
+                ESCAPE_QUOTES
+                NEWLINE_STYLE WIN32
+        )
+    endif()
+endif()
+
+## -----------------------------------------------------------------------------
+# Compile Command JSON
 #
 # [Copy compile_commands.json to project root folder](
 #  https://stackoverflow.com/questions/57464766/copy-compile-commands-json-to-project-root-folder)
 #
-# FixMe: Option #2 doesn't work for me :(
-#
-# Nevertheless, an easy solution is to add on '.vscode/c_cpp_properties.json':
-# {
-#     "configurations": [
-#         {
-#             ...
-#             "compileCommands": "${workspaceFolder}/compile_commands.json"
-#     ],
-#     "version": 4
-# }
-add_custom_target(copy-compile-commands ALL
-    COMMENT "copy compiler database 'compile_commands.json' to source directory."
-    DEPENDS ${CMAKE_BINARY_DIR}/compile_commands.json
-    COMMAND
-        ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/compile_commands.json ${CMAKE_SOURCE_DIR}
-    VERBATIM
-)
-
+if(CMAKE_GENERATOR STREQUAL "Ninja")
+    add_custom_target(copy-compile-commands ALL
+        COMMENT "copy compiler database 'compile_commands.json' to source directory."
+        DEPENDS ${CMAKE_BINARY_DIR}/compile_commands.json
+        COMMAND
+            ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/compile_commands.json ${CMAKE_SOURCE_DIR}
+        VERBATIM
+    )
+endif()

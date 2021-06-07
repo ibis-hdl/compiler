@@ -12,8 +12,7 @@ MY_SOURCE_DIR="${SCRIPT_PATH}"
 MY_BUILD_DIR="$(cd "$(dirname "$PWD")" ; pwd -P )/build"
 
 CMAKE_CXX_COMPILER=clang++
-CMAKE_BUILD_TOOL="Ninja"
-CMAKE_GENERATOR="${CMAKE_BUILD_TOOL}"
+CMAKE_GENERATOR="Ninja"
 CMAKE_BIN="$(which cmake)"
 
 # Debug, Release, RelWithDebInfo, MinSizeRel
@@ -26,7 +25,7 @@ cat << EOF
 ## Source directory: ${MY_SOURCE_DIR}
 ## Build directoy:   ${MY_BUILD_DIR}
 ## Build type:       ${CMAKE_BUILD_TYPE}
-## Build tool:       ${CMAKE_BUILD_TOOL}
+## Build generator:  ${CMAKE_GENERATOR}
 ## Compiler:         ${CMAKE_CXX_COMPILER}
 ##
 EOF

@@ -1,0 +1,10 @@
+{
+   "cmake.preferredGenerators":["Ninja"],
+   "cmake.copyCompileCommands":"${workspaceFolder}/compile_commands.json",
+   "cmake.configureSettings":{
+      "BOOST_ROOT":"@BOOST_ROOT_PATH@",
+      "Boost_COMPILER":"@Boost_COMPILER@",
+      "Boost_USE_STATIC_LIBS":"TRUE",
+      "CMAKE_EXPORT_COMPILE_COMMANDS":"ON"
+   }
+}
