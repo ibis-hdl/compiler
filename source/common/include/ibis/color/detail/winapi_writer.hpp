@@ -44,7 +44,7 @@ private:
     /// C++ due to violating C/C++'s 'strict aliasing rule which basically says that if you cast a
     /// pointer to a different kind of pointer and then dereference it, then your program has
     /// executed an undefined behavior, see e.g.  C++CoreGuidelines
-    /// [C.183: Dont use a union for typepruning](
+    /// [C.183: Don't use a union for typepruning](
     ///  http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Ru-pun) for
     /// details. Here the memcpy() solution is used as described at [Type Pruning, Strict Aliasing,
     /// and Optimization](https://blog.regehr.org/archives/959).

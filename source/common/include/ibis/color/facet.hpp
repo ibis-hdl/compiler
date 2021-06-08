@@ -24,7 +24,6 @@ public:
     /// @param prefix_     The color before printing the embraced message.
     /// @param postfix_    The color past printing the embraced message, commonly
     ///                   restore the default state.
-    /// @param force_deco_ Force the color printing.
     ///
     /// \note Clang-Tidy '[misc-move-const-arg]' message:
     /// std::move of the variable {'prefix_', 'postfix_'} of the

@@ -12,7 +12,7 @@ VHDL Docs
 YoSYS
 -----
 - [Yet Another VHDL tool](https://github.com/rqou/yavhdl)
-- [yosys � Yosys Open SYnthesis Suite](https://github.com/YosysHQ/yosys)
+- [Yosys Open SYnthesis Suite](https://github.com/YosysHQ/yosys)
 
 SAVANT Project - Components for the Analysis and Simulation of VHDL
 -------------------------------------------------------------------

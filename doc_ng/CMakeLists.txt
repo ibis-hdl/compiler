@@ -11,61 +11,26 @@ find_package(Doxygen)
 option(BUILD_DOCUMENTATION_NG "Create and install the HTML based API documentation (requires Doxygen & Sphinx)" ${DOXYGEN_FOUND})
 
 
-if(${DOXYGEN_FOUND})
-    find_package(Python3 COMPONENTS Interpreter REQUIRED)
-endif()
-
-
-##
-# target helper to setup doc-{api,testsuite}
-#
-# Python's virtual environment is used to avoid pollution of user's Python directory.
-# FixMe: Find a way to exclude the 'command' venv from clean target. Using ${PY_ENV}
-#        as dependency results on an ninja error:  remove(doc/venv): Permission denied
-#        (at least) on Windows. Using a 'tag' file approach as dependency calls each
-#        time the 'command' to recreate the venv.
-#
-# See: using Python's [Virtual Environments and Packages](https://docs.python.org/3/tutorial/venv.html)
-# and [Activating a virtual environment](https://pythonise.com/categories/python/python-virtual-environments-with-the-venv-command#activating-a-virtual-environment)
-# self-bootstrap pip, see [Installation](https://pip.pypa.io/en/stable/installing/),
-# and install requirements.
-set(PY_ENV ${CMAKE_CURRENT_BINARY_DIR}/venv)
-
-add_custom_command(OUTPUT ${PY_ENV}
-    COMMENT "Setup Python's virtual environment to generate documentation."
+# the target for Python's virtual environment
+add_custom_target(doc-ng-pyenv
+    COMMENT "Update Python's virtual environment to generate documentation."
     DEPENDS
+        ibis-pyenv
         ${CMAKE_CURRENT_SOURCE_DIR}/script/py_requirements.txt
     # command batch
-    COMMAND ${Python3_EXECUTABLE} -m venv ${PY_ENV}
     COMMAND "$<IF:$<PLATFORM_ID:Windows>,${PY_ENV}/Scripts/activate,source;${PY_ENV}/bin/activate>"
-    COMMAND python -m ensurepip
-    COMMAND python -m pip install --upgrade pip
-    COMMAND pip install wheel --upgrade
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/script/py_requirements.txt requirements.txt
     COMMAND pip install --no-cache-dir -r requirements.txt --upgrade
     #COMMAND pip list
     COMMAND "$<IF:$<PLATFORM_ID:Windows>,${PY_ENV}/Scripts/deactivate,deactivate>"
     COMMAND_EXPAND_LISTS
-    #VERBATIM
-)
-
-# the target for Python's virtual environment
-add_custom_target(doc-ng-pyenv
-    COMMENT "Setup Python's virtual environment."
-    DEPENDS ${PY_ENV}
 )
 
 
 ##
 # target helper for running Sphinx-doc
 #
-# determine relative path to conf.py which is a required variable inside conf.py
 set(DOXYGEN_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/doxy_output)
-#file(RELATIVE_PATH DOXYGEN_OUTPUT_DIR_REL
-#    # strange, but works. I would expect ${CMAKE_CURRENT_BINARY_DIR} ...
-#    ${CMAKE_CURRENT_SOURCE_DIR}/source/conf.py ${DOXYGEN_OUTPUT_DIR}
-#)
-#message(STATUS "Doxygen's relative output path: ${DOXYGEN_OUTPUT_DIR_REL}")
 configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/conf.py.in
     ${CMAKE_CURRENT_BINARY_DIR}/source/conf.py
@@ -110,7 +75,7 @@ file(GLOB_RECURSE TEST_CASE_FILES_DEPENDENCY
 add_custom_command(OUTPUT ${TEST_MATRIX_SCRIPT_OUTPUT}
     COMMENT "Generate VHDL Parser TestCase Matrix (RST)"
     DEPENDS
-        ${PY_ENV}
+        doc-ng-pyenv
         ${TEST_MATRIX_SCRIPT}
         ${TEST_CASE_FILES_DEPENDENCY}
     # command batch
@@ -126,7 +91,14 @@ add_custom_command(OUTPUT ${TEST_MATRIX_SCRIPT_OUTPUT}
 # the target for generating the test case matrix only
 add_custom_target(doc-ng-testmatrix
     COMMENT "Generate VHDL test case matrix for Spirit X3 parser rules"
-    DEPENDS ${TEST_MATRIX_SCRIPT_OUTPUT}
+    DEPENDS
+        ${TEST_MATRIX_SCRIPT_OUTPUT}
+)
+# Clean up output, CMake doesn't know about it. This also prevents from ninja's error
+# about permission denied (on Windows)
+set_target_properties(doc-ng-testmatrix
+    PROPERTIES
+        ADDITIONAL_CLEAN_FILES ${TEST_MATRIX_SCRIPT_OUTPUT}
 )
 
 
@@ -136,7 +108,7 @@ add_custom_target(doc-ng-testmatrix
 add_custom_command(OUTPUT ./output
     COMMENT "Generating API documentation using Sphinx + Exhale + Breathe + Doxygen"
     DEPENDS
-        ${PY_ENV}
+        doc-ng-pyenv
         ${CMAKE_CURRENT_BINARY_DIR}/source/.copy.tag
         ${TEST_MATRIX_SCRIPT}
         ${TEST_MATRIX_SCRIPT_OUTPUT}
@@ -156,8 +128,8 @@ add_custom_target(doc-ng
     COMMENT "Generating documentation"
     DEPENDS ./output
 )
-# also clean up output, CMake doesn't know about it.
-# Note: This prevents from ninja's error about permission denied (on Windows)
+# Clean up output, CMake doesn't know about it. This also prevents from ninja's error
+# about permission denied (on Windows)
 set_target_properties(doc-ng
     PROPERTIES
         ADDITIONAL_CLEAN_FILES ./output

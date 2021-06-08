@@ -53,8 +53,10 @@ exclude_patterns = []
 #  https://stackoverflow.com/questions/23211695/modifying-content-width-of-the-sphinx-theme-read-the-docs)
 # Also: [Adding Custom CSS or JavaScript to Sphinx Documentation](
 #  https://docs.readthedocs.io/en/latest/guides/adding-custom-css.html)
+# Note: [Changed in version 1.8: Renamed app.add_stylesheet()](
+#  https://www.sphinx-doc.org/en/master/extdev/appapi.html) to add_css_file()
 def setup(app):
-    app.add_stylesheet("main_stylesheet.css")
+    app.add_css_file("main_stylesheet.css")
 
 # [pygments](https://pygments.org/), [Show Example Code](https://sublime-and-sphinx-guide.readthedocs.io/en/latest/code_blocks.html)
 pygments_style = 'sphinx'
@@ -99,7 +101,7 @@ def doxy_xml(doxy_output : str):
     https://stackoverflow.com/questions/38083555/using-pathlibs-relative-to-for-directories-on-the-same-level)
     hence `os.path` is used.
     """
-    # path adjusting looks strange, but works
+    # my path adjusting looks strange, but works
     me = os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir)
     dox = os.path.relpath(me, doxy_output)
     xml = os.path.join(dox, 'doxy_output', 'xml')
@@ -109,7 +111,6 @@ def doxy_xml(doxy_output : str):
 
 # Setup the breathe extension
 breathe_projects = {
-    #'TestSuite @CMAKE_PROJECT_NAME@': '@DOXYGEN_OUTPUT_DIR_REL@/xml'
     'TestSuite @CMAKE_PROJECT_NAME@': doxy_xml('@DOXYGEN_OUTPUT_DIR@')
 }
 

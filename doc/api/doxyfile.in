@@ -183,19 +183,20 @@ STRIP_FROM_PATH        = @PROJECT_SOURCE_DIR@ \
 STRIP_FROM_INC_PATH    = \
                          @PROJECT_SOURCE_DIR@/source/vhdl/include \
                          @PROJECT_SOURCE_DIR@/source/vhdl/src \
-                         @PROJECT_SOURCE_DIR@/source/ibis/include \
-                         @PROJECT_SOURCE_DIR@/source/ibis/src \
+                         @PROJECT_SOURCE_DIR@/source/frontend/include \
+                         @PROJECT_SOURCE_DIR@/source/frontend/src \
                          @PROJECT_SOURCE_DIR@/source/common/include \
                          @PROJECT_SOURCE_DIR@/source/common/src \
                          \
                          @PROJECT_BINARY_DIR@/source/vhdl/include \
                          @PROJECT_BINARY_DIR@/source/vhdl/src \
-                         @PROJECT_BINARY_DIR@/source/ibis/include \
-                         @PROJECT_BINARY_DIR@/source/ibis/src \
+                         @PROJECT_BINARY_DIR@/source/frontend/include \
+                         @PROJECT_BINARY_DIR@/source/frontend/src \
                          @PROJECT_BINARY_DIR@/source/common/include \
                          @PROJECT_BINARY_DIR@/source/common/src \
                          \
                          @CLI11_INCLUDE_DIR@ \
+                         @STRONG_TYPE_INCLUDE_DIR@ \
                          @EXTERNAL_BOOST_SPIRIT_INCLUDE_DIR@ \
 
 # If the SHORT_NAMES tag is set to YES, doxygen will generate much shorter (but
@@ -865,20 +866,19 @@ INPUT                  = \
                          @CMAKE_CURRENT_SOURCE_DIR@/api/readme.md \
                          @PROJECT_SOURCE_DIR@/doc \
                          \
-                         @PROJECT_SOURCE_DIR@/source/vhdl/include \
-                         @PROJECT_SOURCE_DIR@/source/vhdl/src \
-                         @PROJECT_SOURCE_DIR@/source/ibis/include \
-                         @PROJECT_SOURCE_DIR@/source/ibis/src \
                          @PROJECT_SOURCE_DIR@/source/common/include \
                          @PROJECT_SOURCE_DIR@/source/common/src \
+                         @PROJECT_SOURCE_DIR@/source/vhdl/include \
+                         @PROJECT_SOURCE_DIR@/source/vhdl/src \
+                         @PROJECT_SOURCE_DIR@/source/frontend/include \
+                         @PROJECT_SOURCE_DIR@/source/frontend/src \
                          \
-                         @PROJECT_BINARY_DIR@/source/vhdl/include \
-                         @PROJECT_BINARY_DIR@/source/vhdl/src \
-                         @PROJECT_BINARY_DIR@/source/ibis/include \
-                         @PROJECT_BINARY_DIR@/source/ibis/src \
                          @PROJECT_BINARY_DIR@/source/common/include \
                          @PROJECT_BINARY_DIR@/source/common/src \
-
+                         @PROJECT_BINARY_DIR@/source/vhdl/include \
+                         @PROJECT_BINARY_DIR@/source/vhdl/src \
+                         @PROJECT_BINARY_DIR@/source/frontend/include \
+                         @PROJECT_BINARY_DIR@/source/frontend/src \
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -1160,13 +1160,6 @@ CLANG_DATABASE_PATH    =
 # The default value is: YES.
 
 ALPHABETICAL_INDEX     = YES
-
-# The COLS_IN_ALPHA_INDEX tag can be used to specify the number of columns in
-# which the alphabetical index list will be split.
-# Minimum value: 1, maximum value: 20, default value: 5.
-# This tag requires that the tag ALPHABETICAL_INDEX is set to YES.
-
-COLS_IN_ALPHA_INDEX    = 5
 
 # In case all classes in a project start with a common prefix, all classes will
 # be put under the same header in the alphabetical index. The IGNORE_PREFIX tag

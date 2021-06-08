@@ -104,9 +104,15 @@ public:
     struct iterator {
         using iterator_type = std::vector<std::string>::const_iterator;
 
-        iterator(iterator_type input_iter_,           /// input
-                 iterator_type expected_iter_,        /// expected aka 'gold'
-                 iterator_type testcase_name_iter_);  /// test name
+        ///
+        /// @brief Construct a new iterator object
+        ///
+        /// @param input_iter_ The origin input to proceed.
+        /// @param expected_iter_ The expected result, aka 'gold'.
+        /// @param testcase_name_iter_ The test name self.
+        ///
+        iterator(iterator_type input_iter_, iterator_type expected_iter_,
+                 iterator_type testcase_name_iter_);
 
         std::tuple<std::string, std::string, std::string> operator*() const;
 
