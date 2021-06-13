@@ -1,5 +1,4 @@
 in file expression_failure/expression_failure_002.input, line 2:
-Parse ERROR: Test Suite Full Match Error! Unparsed input left:
-mod -3
+Parse ERROR: Test Suite Full Match Error! Unparsed input left!
 -5 mod -3
 ___^_

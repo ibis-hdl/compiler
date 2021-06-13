@@ -142,6 +142,12 @@ public:
 public:
     bool error_free() const { return error_count == 0; }
 
+    error_counter& errors() { return error_count; };
+    error_counter const & errors() const { return error_count; };
+
+    warning_counter& warnings() { return warning_count; }
+    warning_counter const& warnings() const { return warning_count; }
+
 public:
     error_counter error_count;
     warning_counter warning_count;

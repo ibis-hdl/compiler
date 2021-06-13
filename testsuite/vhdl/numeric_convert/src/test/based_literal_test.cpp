@@ -211,8 +211,7 @@ BOOST_DATA_TEST_CASE(based_literal_integer, utf_data::make(integer_lit) ^ intege
     using iterator_type = parser::iterator_type;
 
     parser::position_cache<iterator_type> position_cache;
-    auto const id = position_cache.add_file("<based_literal>", literal);
-    auto const position_proxy{ position_cache.get_proxy(id) };
+    auto position_proxy = position_cache.add_file("<based_literal>", literal);
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
@@ -240,8 +239,7 @@ BOOST_DATA_TEST_CASE(based_literal_uint64_ovflw, utf_data::make(integer_lit_uint
     using iterator_type = parser::iterator_type;
 
     parser::position_cache<iterator_type> position_cache;
-    auto const id = position_cache.add_file("<based_literal>", literal);
-    auto const position_proxy{ position_cache.get_proxy(id) };
+    auto position_proxy = position_cache.add_file("<based_literal>", literal);
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
@@ -288,8 +286,7 @@ BOOST_DATA_TEST_CASE(based_literal_real, utf_data::make(real_lit) ^ real_dec, li
     using iterator_type = parser::iterator_type;
 
     parser::position_cache<iterator_type> position_cache;
-    auto const id = position_cache.add_file("<based_literal>", literal);
-    auto const position_proxy{ position_cache.get_proxy(id) };
+    auto position_proxy = position_cache.add_file("<based_literal>", literal);
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
@@ -314,8 +311,7 @@ BOOST_DATA_TEST_CASE(based_literal_failure, utf_data::make(lit_failure), literal
     using iterator_type = parser::iterator_type;
 
     parser::position_cache<iterator_type> position_cache;
-    auto const id = position_cache.add_file("<based_literal>", literal);
-    auto const position_proxy{ position_cache.get_proxy(id) };
+    auto position_proxy = position_cache.add_file("<based_literal>", literal);
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 

@@ -52,7 +52,8 @@ BOOST_AUTO_TEST_CASE(contents_1_txt)
     std::string const file_contents = fixture.reference_contents(id_ref);
 
     // add file name with contents to position cache.
-    auto const id = position_cache_ut.add_file(file_name.string(), file_contents);
+    auto position_proxy = position_cache_ut.add_file(file_name.string(), file_contents);
+    auto const id = position_proxy.id();
 
     // ID and file_name with contents shall be the same.
     BOOST_TEST(value_of(id) == id_ref);

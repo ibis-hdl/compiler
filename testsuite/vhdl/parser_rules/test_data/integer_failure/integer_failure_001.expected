@@ -1,7 +1,4 @@
 in file integer_failure/integer_failure_001.input, line 1:
-Parse ERROR: Test Suite Full Match Error! Unparsed input left:
-_
-
-
+Parse ERROR: Test Suite Full Match Error! Unparsed input left!
  42_
 ___^_

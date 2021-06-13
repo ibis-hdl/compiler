@@ -6,6 +6,9 @@
 #include <ibis/vhdl/parser/grammar_decl.hpp>
 #include <ibis/vhdl/parser/parser_config.hpp>
 
+#include <ibis/vhdl/parser/error_handler.hpp>
+#include <ibis/vhdl/parser/context.hpp>
+
 #include <ibis/vhdl/ast/ast_printer.hpp>
 #include <ibis/util/pretty_typename.hpp>
 
@@ -25,16 +28,24 @@ struct testing_parser {
                                              fs::path const &filename = "", bool full_match = true)
     {
         parser::position_cache<parser::iterator_type> position_cache;
-        auto const id = position_cache.add_file(filename.generic_string() + ".input", input);
+        auto position_cache_proxy =
+            position_cache.add_file(filename.generic_string() + ".input", input);
 
         btt::output_test_stream output;
+        parser::context ctx;
 
-        parser::error_handler_type error_handler{ output, position_cache.get_proxy(id) };
+        parser::error_handler_type error_handler{ output, ctx, position_cache_proxy };
 
+        // clang-format off
         auto const parser =
-            x3::with<parser::error_handler_tag>(std::ref(error_handler))[parser_rule];
+            x3::with<parser::position_cache_tag>(std::ref(position_cache_proxy))[
+                x3::with<parser::error_handler_tag>(std::ref(error_handler))[
+                    parser_rule
+                ]
+            ];
+        // clang-format on
 
-        auto [iter, end] = position_cache.range(id);
+        auto [iter, end] = position_cache_proxy.range();
 
         // using different iterator_types causes linker errors, see e.g.
         // [linking errors while separate parser using boost spirit x3](
@@ -70,8 +81,7 @@ struct testing_parser {
 
             if (parse_ok) {
                 if (iter != end) {
-                    error_handler(iter, "Test Suite Full Match Error! Unparsed input left:\n" +
-                                            std::string(iter, end));
+                    error_handler(iter, "Test Suite Full Match Error! Unparsed input left!");
                 }
                 else {
                     ast::printer print(output);
@@ -82,10 +92,12 @@ struct testing_parser {
             }
         }
         catch (x3::expectation_failure<parser::iterator_type> const &e) {
-            error_handler(e.where(), "Test Suite caught expectation_failure! Expecting "  // --
-                                         + e.which() + " here: '"                         // --
-                                         + std::string(e.where(), input.end())            // --
-                                         + "'\n");
+            // This shall be caught by on_error_base class' on_error()
+            error_handler(e.where(),
+                          "Test Suite caught *unexpected* expectation failure! Expecting "  // --
+                              + e.which() + " here: '"                                      // --
+                              + std::string(e.where(), input.end())                         // --
+                              + "'\n");
         }
 
         return std::tuple{ parse_ok && (!full_match || (iter == end)), output.str() };

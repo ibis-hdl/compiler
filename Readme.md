@@ -187,11 +187,6 @@ unknown location(0): fatal error: in "parser_rule/attribute_specification/_1": c
 - Add TestCase for assertion_statement, assertion self is tested already. It appends only
   "label: .... ;" to the tests.
 
-- testsuite's testing_parser may setup on error a message with "Unparsed input left ...",
-  which goes to the parser::error_handler, which renders this as "Parse ERROR: ..."
-  This isn't the error message intended to display. Note: changing this results into
-  failed failure tests due to changes messages!
-
 - Make Tests to check expectation points for ';'
 
 - Check [**Splitting Boost.Spirit.X3 parsers into several TUs**](
@@ -318,16 +313,7 @@ clear what comes from what.
   would be useful. Copy git part temporary to ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}
   to avoid unnecessary rebuild, for an idea look at blender sources.
 
-- parser's and syntax's error_handler should have the same API with position_proxy
-  to unify error_handler and hence his formatter.
-
-- parser's error_handler should also use the vhdl::context to allow multiple parse errors
-  from expectation points, e.g. forgotten ';' at the end. Maybe the name of vhdl::context
-  isn't appropriate any more than.
-
-- Write a formatter for all error report classes/functions, e.g. parser::error_handler.
-  An idea may be [Controlling output of Boost.Test source location format](
-  https://stackoverflow.com/questions/64618840/controlling-output-of-boost-test-source-location-format).
+- Improve a formatter for all error report classes/functions, especially vhdl::error_handler.
 
 
 ### NumericConvert / 2nd pass Parser

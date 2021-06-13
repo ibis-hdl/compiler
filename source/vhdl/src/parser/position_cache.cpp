@@ -76,44 +76,18 @@ template <typename IteratorT>
 IteratorT position_cache<IteratorT>::get_line_start(  // --
     file_id_type file_id, iterator_type& pos) const
 {
-    // make sure err_pos does not point to white space
-    auto const skip_whitespace = [](iterator_type& iter, iterator_type const& last) {
-        while (iter != last) {
-            char const ch = *iter;
-            // Note: The behavior is undefined if the value of ch is not
-            // representable as unsigned char and is not equal to EOF.
-            // [std::isspace](https://en.cppreference.com/w/cpp/string/byte/isspace)
-            if (std::isspace(static_cast<unsigned char>(ch)) != 0) {
-                ++iter;
-            }
-            else {
-                break;
-            }
-        }
-    };
-
     auto [begin, end] = range(file_id);
 
-    skip_whitespace(pos, end);
+    iterator_type latest = begin;
 
-    iterator_type latest{ begin };
-
-    for (iterator_type i = begin; i != pos; ++i) {
-        if (*i == '\r' || *i == '\n') {
-            latest = i;
+    for (iterator_type iter = begin; iter != pos; ) {
+        if (*iter == '\r' || *iter == '\n') {
+            latest = ++iter;
+        }
+        else {
+            ++iter;
         }
     }
-
-    // pos/latest is on the first line
-    if (latest == begin) {
-        return latest;
-    }
-
-    // skip over line breaks
-    if (latest != pos) {
-        ++latest;
-    }
-    cxx_assert(latest < end, "iterator range error");
 
     return latest;
 }

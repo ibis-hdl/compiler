@@ -15,6 +15,11 @@
 namespace ibis::vhdl::parser {
 
 ///
+/// tag used to get our position cache proxy from the x3::context
+///
+struct position_cache_tag;  // IWYU pragma: keep
+
+///
 /// AST annotation/position cache
 ///
 /// Mainly acts as manager to map file names to there string contents. These
@@ -74,16 +79,19 @@ public:
     /// @note This call makes internally a copy of filename and contents.
     /// @todo Check on use of fs::path as filename argument
     ///
-    file_id_type add_file(std::string_view filename, std::string_view contents)
+    proxy add_file(std::string_view filename, std::string_view contents)
     {
         std::size_t const file_id = files.size();
         files.emplace_back(filename, contents);
-        return file_id_type{ file_id };
+        return get_proxy(file_id_type(file_id));
     }
 
 public:
     ///
     /// Annotate the AST node with positional iterators.
+    ///
+    /// This is called from parser::on_success_base to allow expressive error handling. Only
+    /// AST nodes that are derived from ```ast::position_tagged``` are tagged.
     ///
     /// @param file_id ID of actually processed file.
     /// @param node    The AST node to tag
@@ -220,9 +228,14 @@ public:
     }
 
 public:
+    /// Get the id of current <file_name, contents>.
     file_id_type id() const { return file_id; }
 
+    /// Set the current <file_name, contents> to another id.
+    void set_id(file_id_type id) const { file_id = id; }
+
 public:
+    /// annotate the given node.
     template <typename NodeT>
     void annotate(NodeT& node, iterator_type first, iterator_type last)
     {
@@ -238,9 +251,7 @@ public:
 
 public:
     std::string_view file_name() const { return self.file_name(file_id); }
-
     std::string_view file_contents() const { return self.file_contents(file_id); }
-
     std::tuple<IteratorT, IteratorT> range() const { return self.range(file_id); }
 
 public:
@@ -261,7 +272,7 @@ public:
 
 private:
     position_cache<IteratorT>& self;
-    file_id_type const file_id;
+    file_id_type mutable file_id;
 };
 
 template <typename IteratorT>
@@ -269,5 +280,12 @@ typename position_cache<IteratorT>::proxy position_cache<IteratorT>::get_proxy(f
 {
     return proxy{ *this, file_id };
 }
+
+}  // namespace ibis::vhdl::parser
+
+namespace ibis::vhdl::parser {
+
+/// Explicit template instantiation declaration
+extern template class position_cache<parser::iterator_type>;
 
 }  // namespace ibis::vhdl::parser

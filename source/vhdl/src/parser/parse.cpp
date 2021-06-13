@@ -7,7 +7,9 @@
 #include <ibis/vhdl/ast/node/design_file.hpp>
 #include <ibis/vhdl/parser/position_cache.hpp>
 #include <ibis/vhdl/parser/error_handler.hpp>
+#include <ibis/vhdl/parser/context.hpp>
 #include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/context.hpp>
 
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
@@ -29,17 +31,29 @@ BOOST_SPIRIT_DECLARE(design_file_type)
 
 namespace ibis::vhdl::parser {
 
-bool parse::operator()(std::string_view input, ast::design_file& design_file)
+bool parse::operator()(position_cache<parser::iterator_type>::proxy& position_cache_proxy,
+                       ast::design_file& design_file)
 {
     using vhdl::parser::iterator_type;
-
-    iterator_type iter = input.begin();
-    iterator_type end = input.end();
 
     static_assert(
         std::is_base_of_v<std::forward_iterator_tag,
                           typename std::iterator_traits<parser::iterator_type>::iterator_category>,
         "iterator type must be of multi-pass iterator");
+
+    parser::context ctx;
+    parser::error_handler_type error_handler{ os, ctx, position_cache_proxy };
+
+    // clang-format off
+    auto const parser =
+        x3::with<parser::position_cache_tag>(std::ref(position_cache_proxy))[
+            x3::with<parser::error_handler_tag>(std::ref(error_handler))[
+                parser::grammar()
+            ]
+        ];
+    // clang-format on
+
+    auto [iter, end] = position_cache_proxy.range();
 
     // using different iterator_types causes linker errors, see e.g.
     // [linking errors while separate parser using boost spirit x3](
@@ -47,14 +61,7 @@ bool parse::operator()(std::string_view input, ast::design_file& design_file)
     //
     static_assert(std::is_same_v<decltype(iter), iterator_type>, "iterator types must be the same");
 
-    auto const parser =
-        // clang-format off
-        x3::with<parser::error_handler_tag>(std::ref(error_handler))[
-            parser::grammar()
-        ];
-    // clang-format on
-
-    auto filename = error_handler.current_file().file_name();
+    auto const filename = position_cache_proxy.file_name();
 
     try {
         bool const parse_ok =

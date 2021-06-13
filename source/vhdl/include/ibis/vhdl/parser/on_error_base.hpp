@@ -11,10 +11,6 @@
 #include <string_view>
 
 namespace ibis::vhdl::parser {
-struct error_handler_tag;
-}
-
-namespace ibis::vhdl::parser {
 
 ///
 /// Base class for all AST nodes where the parser error handler can be called.
@@ -43,13 +39,11 @@ public:
     /// but context_type is required here for `static_assert`. Hence there is no static
     /// assert possible here even if it would be useful.
     /// @code
-    /// if constexpr (false /* disabled */) {
     ///     // detect upcoming linker errors, see notes at parser_config.hpp about
     ///     static_assert(
     ///         std::is_same_v<ContextT, context_type>,
     ///         "The Spirit.X3 Context must be equal"
     ///     );
-    /// }
     /// @endcode
     template <typename IteratorT, typename ExceptionT, typename ContextT>
     x3::error_handler_result on_error([[maybe_unused]] IteratorT& first,

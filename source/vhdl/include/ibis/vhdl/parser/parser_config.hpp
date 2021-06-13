@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ibis/vhdl/parser/error_handler.hpp>
+#include <ibis/vhdl/parser/position_cache.hpp>
 #include <ibis/vhdl/parser/iterator_type.hpp>
 #include <ibis/vhdl/parser/skipper.hpp>
 
@@ -8,6 +9,7 @@
 
 namespace ibis::vhdl::parser {
 
+using position_proxy_type = parser::position_cache<iterator_type>::proxy;
 using error_handler_type = parser::error_handler<iterator_type>;
 
 using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
@@ -21,16 +23,14 @@ using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
 /// at parser_config.hpp. Otherwise linker errors will occur if the rules
 /// have external translation units (use of BOOST_SPIRIT_INSTANTIATE).
 ///
-/// Namely equal of the x3::context  must be
-/// - phrase_context_type
-/// - iterator_type and
-/// - and reference_wrapper<error_handler_type>
-///
-/// The last is 'const' following the X3 examples (and it compiles/links
-/// successfully!), but not here (no idea why).
-///
 /// Several Q&A regards to linker errors are written on Stack Overflow, e.g.:
 ///
+/// - [What are contexts in boost spirit X3?](
+///    https://stackoverflow.com/questions/66393775/what-are-contexts-in-boost-spirit-x3)
+/// - [Boost spirit x3 example calculator (calc8, calc9) linker error](
+///    https://stackoverflow.com/questions/51627938/boost-spirit-x3-example-calculator-calc8-calc9-linker-error/51641878#51641878)
+/// - [X3: Linker Error (unresolved external symbol “parse_rule”) on nonterminal parser](
+///     https://stackoverflow.com/questions/50277979/x3-linker-error-unresolved-external-symbol-parse-rule-on-nonterminal-parser/50301865#50301865)
 /// - [linking errors while separate parser using boost spirit x3](
 ///    https://stackoverflow.com/questions/40496357/linking-errors-while-separate-parser-using-boost-spirit-x3?answertab=active#tab-top)
 /// - [x3 linker error with separate TU](
@@ -38,12 +38,7 @@ using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
 /// - [Mixing non-terminal rules from separeted translation unit](
 ///    https://stackoverflow.com/questions/66036568/mixing-non-terminal-rules-from-separeted-translation-unit)
 ///
-/// but none pointed out the reference_wrapper<error_handler_type> problem
-/// faced here.
-///
-/// So, finally the performed check at handle_on_error class isn't a right place
-/// to check the equality, but here we can get both contexts. Further,
-/// using boost.type_index the concrete type can be printed there:
+/// Using boost.type_index the concrete type can be printed there:
 ///
 /// @code{.cpp}
 /// std::cout << "\nContext is of Type:\n"
@@ -52,33 +47,41 @@ using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
 ///           << boost::typeindex::type_id<context_type>().pretty_name() << '\n';
 /// @endcode
 ///
-/// At this time, the context is of type:
-///
+/// @todo Report a bug: It's curious, since e.g. ```parse.cpp``` instantiate the parser as:
+/// @code{.cpp}
+/// x3::with<parser::position_cache_tag>(std::ref(position_cache_proxy))[
+///     x3::with<parser::error_handler_tag>(std::ref(error_handler))[
+///         parser::grammar()
+///     ]
+/// ];
+/// @endcode
+/// naturally the ```context_type``` here should be in the same order
 /// @code{.cpp}
 /// x3::context<
-///     x3::error_handler_tag,
-///     std::reference_wrapper<
-///         x3::error_handler<std::string::const_iterator>
-///     >, // ... and (even it should) *not*: > const,
+///     parser::position_cache_tag,
+///     std::reference_wrapper<parser::position_proxy_type>,
 ///     x3::context<
-///         x3::skipper_tag,
-///         x3::rule<ibis::vhdl::parser::skipper_class, x3::unused_type, false> const,
-///         x3::unused_type
+///         parser::error_handler_tag,
+///         std::reference_wrapper<parser::error_handler_type>,
+///         phrase_context_type
 ///     >
-/// >
+/// >;
 /// @endcode
+/// **but** the ```context_type``` must be in another order to avoid
+/// linker errors - see below!
 ///
-/// @todo The using type alias should be:
-/// `x3::context<error_handler_tag,
-///             std::reference_wrapper<error_handler_type> const, phrase_context_type>`
-using context_type = x3::context<parser::error_handler_tag,
-                                 std::reference_wrapper<error_handler_type>, phrase_context_type>;
 
-}  // namespace ibis::vhdl::parser
-
-namespace ibis::vhdl::parser {
-
-// Explicit template instantiation declaration (source/vhdl/src/parser/error_handler.cpp)
-extern template class error_handler<parser::iterator_type>;
+// clang-format off
+using context_type =
+    x3::context<
+        parser::error_handler_tag,
+        std::reference_wrapper<parser::error_handler_type>,
+        x3::context<
+            parser::position_cache_tag,
+            std::reference_wrapper<parser::position_proxy_type>,
+            phrase_context_type
+        >
+    >;
+// clang-format on
 
 }  // namespace ibis::vhdl::parser

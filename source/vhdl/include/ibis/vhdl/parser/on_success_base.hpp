@@ -1,10 +1,10 @@
 #pragma once
 
+#include <ibis/vhdl/parser/position_cache.hpp>
+#include <ibis/vhdl/ast/util/variant.hpp>
+
 #include <boost/spirit/home/x3/support/context.hpp>
 #include <boost/spirit/home/x3/support/utility/lambda_visitor.hpp>
-
-#include <ibis/vhdl/parser/error_handler.hpp>
-#include <ibis/vhdl/ast/util/variant.hpp>
 
 #include <ibis/namespace_alias.hpp>
 
@@ -43,8 +43,10 @@ struct on_success_base {
     inline void on_success(IteratorT const& first, IteratorT const& last, NodeT& node,
                            ContextT const& context) const
     {
-        auto& error_handler = x3::get<parser::error_handler_tag>(context).get();
-        error_handler.annotate(node, first, last);
+        //struct {} _ = *static_cast<decltype(context)*>(nullptr);
+        auto& position_cache_proxy = x3::get<parser::position_cache_tag>(context).get();
+        position_cache_proxy.annotate(node, first, last);
+
     }
 };
 

@@ -102,8 +102,7 @@ BOOST_DATA_TEST_CASE(decimal_literal_integer, utf_data::make(dec_int_lit) ^ dec_
     using iterator_type = parser::iterator_type;
 
     parser::position_cache<iterator_type> position_cache;
-    auto const id = position_cache.add_file("<decimal_literal>", literal);
-    auto const position_proxy{ position_cache.get_proxy(id) };
+    auto position_proxy = position_cache.add_file("<decimal_literal>", literal);
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
@@ -128,8 +127,7 @@ BOOST_AUTO_TEST_CASE(decimal_literal_uint64max_ovrflw)
     using iterator_type = parser::iterator_type;
 
     parser::position_cache<iterator_type> position_cache;
-    auto const id = position_cache.add_file("<decimal_literal>", literal);
-    auto const position_proxy{ position_cache.get_proxy(id) };
+    auto position_proxy = position_cache.add_file("<decimal_literal>", literal);
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
@@ -197,8 +195,7 @@ BOOST_DATA_TEST_CASE(decimal_literal_real, utf_data::make(dec_real_lit) ^ dec_re
     using iterator_type = parser::iterator_type;
 
     parser::position_cache<iterator_type> position_cache;
-    auto const id = position_cache.add_file("<decimal_literal>", literal);
-    auto const position_proxy{ position_cache.get_proxy(id) };
+    auto position_proxy = position_cache.add_file("<decimal_literal>", literal);
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 

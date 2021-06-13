@@ -56,7 +56,8 @@ BOOST_AUTO_TEST_CASE(contents_2_txt)
     std::string const file_contents = fixture.reference_contents(id_ref);
 
     // add file name with contents to position cache.
-    auto const id = position_cache_ut.add_file(file_name.string(), file_contents);
+    auto position_proxy = position_cache_ut.add_file(file_name.string(), file_contents);
+    auto const id = position_proxy.id();
 
     // ID and file_name with contents shall be the same.
     BOOST_TEST(value_of(id) == id_ref);
@@ -85,7 +86,7 @@ BOOST_AUTO_TEST_CASE(basic_annotate_2_txt)
     // helper
     auto const make_key = [](std::size_t id, auto name) { return std::to_string(id) + name; };
 
-   // position/string to find
+    // position/string to find
     std::string const tagging_str{ "Bacon" };
 
     // reuse ID from last test 'contents_2_txt'
