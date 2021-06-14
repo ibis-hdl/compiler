@@ -5,7 +5,8 @@ rem [What is the current directory in a batch file?](
 rem  https://stackoverflow.com/questions/4419868/what-is-the-current-directory-in-a-batch-file)
 set SCRIPT_PATH=%~dp0
 set MY_SOURCE_DIR=%SCRIPT_PATH%
-set MY_BUILD_DIR=%cd%
+rem set MY_BUILD_DIR=%cd%
+set MY_BUILD_DIR=%MY_SOURCE_DIR%\build
 
 set CMAKE_CXX_COMPILER=Clang
 set CMAKE_GENERATOR="Ninja"
@@ -33,7 +34,7 @@ rem Load MSVC console build environment
 rem call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
 call  "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsx86_amd64.bat"
 
-cmake %MY_SOURCE_DIR% ^
+cmake -S%MY_SOURCE_DIR% -B%MY_BUILD_DIR% ^
     -G %CMAKE_GENERATOR% ^
     -DBOOST_ROOT=%BOOST_ROOT% ^
     -DBoost_USE_STATIC_LIBS=TRUE ^

@@ -9,7 +9,7 @@ SCRIPT_PATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
 # this script is in the same directory
 MY_SOURCE_DIR="${SCRIPT_PATH}"
-MY_BUILD_DIR="$(cd "$(dirname "$PWD")" ; pwd -P )/build"
+MY_BUILD_DIR="${MY_SOURCE_DIR}/build"
 
 CMAKE_CXX_COMPILER=clang++
 CMAKE_GENERATOR="Ninja"
@@ -39,15 +39,15 @@ cd ${MY_BUILD_DIR}
 # enable this to setup system include path for iwyu if required
 #export CXXFLAGS="-isystem /usr/lib64/clang/11.0.0/include/"
 
-${CMAKE_BIN} --trace-expand \
-        ${MY_SOURCE_DIR} \
+${CMAKE_BIN} \
+        -S${MY_SOURCE_DIR} -B${MY_BUILD_DIR} \
         -G "${CMAKE_GENERATOR}" \
         -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
         -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} \
         -DCMAKE_INSTALL_PREFIX=stage \
         -DBUILD_SHARED_LIBS:BOOL=OFF \
         -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-        2> cmake.out
+#        --trace-expand 2> cmake.out
 
 
 # cleanup before the run cmake

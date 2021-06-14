@@ -127,6 +127,14 @@ add_compile_options(
     # https://docs.microsoft.com/en-us/cpp/build/reference/compiler-option-warning-level
     "$<$<CXX_COMPILER_ID:MSVC>:/W3>"
 
+    # ---- IDE support ----
+    # [Full code paths in clang errors](https://stackoverflow.com/questions/31324457/full-code-paths-in-clang-errors)
+    # for VS Code CodeMatcher
+    "$<$<CXX_COMPILER_ID:Clang>:-fdiagnostics-absolute-paths>"
+    # [/FC (Full path of source code file in diagnostics)](
+    #  https://docs.microsoft.com/en-us/cpp/build/reference/fc-full-path-of-source-code-file-in-diagnostics?view=msvc-160)
+    "$<$<CXX_COMPILER_ID:MSVC>:/FC>"
+
     # ---- Special treatment for CLang/Windows ----
     # hide warning: enumerator value is not representable in the underlying type 'int'
     # at <boost/spirit/home/support/char_encoding/standard_wide.hpp>
