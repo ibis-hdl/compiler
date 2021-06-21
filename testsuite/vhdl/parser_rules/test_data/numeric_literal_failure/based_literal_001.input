@@ -1,0 +1,2 @@
+-- An exponent for a based integer literal must not have a minus sign.
+016#0_FF#e-23

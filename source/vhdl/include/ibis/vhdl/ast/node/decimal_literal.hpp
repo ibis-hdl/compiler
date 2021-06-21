@@ -7,10 +7,13 @@
 namespace ibis::vhdl::ast {
 
 struct decimal_literal : position_tagged {
-    enum class kind_specifier { integer, real };
+    enum class numeric_type_specifier { integer, real };
 
     ast::string_span literal;
-    kind_specifier kind_type;
+    numeric_type_specifier type_specifier;
+
+    /// convenience access to numeric type represented.
+    numeric_type_specifier numeric_type() const { return type_specifier; }
 };
 
 }  // namespace ibis::vhdl::ast

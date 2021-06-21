@@ -1,17 +1,16 @@
 #include <testsuite/vhdl/numeric_convert/numeric_parser.hpp>
 
+#include <ibis/vhdl/parser/error_handler.hpp>
+#include <ibis/vhdl/parser/context.hpp>
+#include <ibis/vhdl/type.hpp>
+
 #include <ibis/vhdl/ast/node/decimal_literal.hpp>
 #include <ibis/vhdl/ast/numeric_convert.hpp>
-#include <ibis/vhdl/parser/position_cache.hpp>
-#include <ibis/vhdl/parser/iterator_type.hpp>
-#include <ibis/vhdl/type.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>
 #include <boost/test/data/monomorphic.hpp>
 #include <boost/test/tools/output_test_stream.hpp>
-
-#include <boost/core/ignore_unused.hpp>
 
 #include <iostream>
 #include <sstream>
@@ -53,32 +52,9 @@ typename std::enable_if<std::is_floating_point<T>::value, std::string>::type to_
 
 }  // namespace detail
 
-namespace  // anonymous
-{
+namespace btt = boost::test_tools;
 
-// The numeric_convert utility writes messages, but concrete error messages
-// aren't checked. For debugging is useful to see them otherwise. Switch to
-// ostream sink to hide them or let's write to cerr to see them.
-// Note, using global numeric_convert object tests  implicit of state less
-// conversion, otherwise test must fail due to. */
-//
-// Note: technically, we initialize globals that access extern objects,
-// and therefore can lead to order-of-initialization problems.
-
-bool constexpr no_messages = true;
-
-// NOLINTNEXTLINE(cppcoreguidelines-interfaces-global-init)
-auto const numeric_convert = []() {
-    if constexpr (no_messages) {
-        static btt::output_test_stream nil_sink;
-        return ast::numeric_convert{ nil_sink };
-    }
-    else {
-        return ast::numeric_convert(std::cerr);
-    }
-}();
-
-}  // namespace
+using ast::numeric_convert;
 
 //******************************************************************************
 // integer decimal_literal
@@ -104,17 +80,28 @@ BOOST_DATA_TEST_CASE(decimal_literal_integer, utf_data::make(dec_int_lit) ^ dec_
     parser::position_cache<iterator_type> position_cache;
     auto position_proxy = position_cache.add_file("<decimal_literal>", literal);
 
+    btt::output_test_stream os;
+    parser::context ctx;
+    parser::error_handler<iterator_type> error_handler{ os, ctx, position_proxy };
+
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
-    auto const [parse_ok, ast_node] = parse.decimal_literal(position_proxy);
+    auto const [parse_ok, ast_node] = parse.decimal_literal(position_proxy, error_handler);
     BOOST_REQUIRE(parse_ok);
 
-    using kind_specifier = ibis::vhdl::ast::decimal_literal::kind_specifier;
-    BOOST_REQUIRE(ast_node.kind_type == kind_specifier::integer);
+    using numeric_type_specifier = ibis::vhdl::ast::decimal_literal::numeric_type_specifier;
+    BOOST_REQUIRE(ast_node.type_specifier == numeric_type_specifier::integer);
 
-    auto const [conv_ok, value] = numeric_convert(ast_node);
+    numeric_convert numeric{ error_handler };
+
+    auto const [conv_ok, value] = numeric(ast_node);
     BOOST_REQUIRE(conv_ok);
-    BOOST_TEST(value == N);
+    BOOST_TEST(std::get<numeric_convert::integer_type>(value) == N);
+
+    os << vhdl::failure_status(ctx);
+    if (!os.str().empty()) {
+        std::cout << '\n' << os.str() << '\n';
+    }
 }
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
@@ -129,15 +116,25 @@ BOOST_AUTO_TEST_CASE(decimal_literal_uint64max_ovrflw)
     parser::position_cache<iterator_type> position_cache;
     auto position_proxy = position_cache.add_file("<decimal_literal>", literal);
 
+    btt::output_test_stream os;
+    parser::context ctx;
+    parser::error_handler<iterator_type> error_handler{ os, ctx, position_proxy };
+
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
-    auto const [parse_ok, ast_node] = parse.decimal_literal(position_proxy);
+    auto const [parse_ok, ast_node] = parse.decimal_literal(position_proxy, error_handler);
     BOOST_REQUIRE(parse_ok);  // must parse ...
 
-    auto const [conv_ok, value] = numeric_convert(ast_node);
-    BOOST_TEST(!conv_ok);  // ... but must fail to convert
+    numeric_convert numeric{ error_handler };
 
-    boost::ignore_unused(value);
+    bool conv_ok = true;
+    std::tie(conv_ok, std::ignore) = numeric(ast_node);
+    BOOST_REQUIRE(!conv_ok);  // ... but must fail to convert
+
+    os << vhdl::failure_status(ctx);
+    if (!os.str().empty()) {
+        std::cout << '\n' << os.str() << '\n';
+    }
 }
 
 //******************************************************************************
@@ -197,17 +194,28 @@ BOOST_DATA_TEST_CASE(decimal_literal_real, utf_data::make(dec_real_lit) ^ dec_re
     parser::position_cache<iterator_type> position_cache;
     auto position_proxy = position_cache.add_file("<decimal_literal>", literal);
 
+    btt::output_test_stream os;
+    parser::context ctx;
+    parser::error_handler<iterator_type> error_handler{ os, ctx, position_proxy };
+
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
-    auto const [parse_ok, ast_node] = parse.decimal_literal(position_proxy);
+    auto const [parse_ok, ast_node] = parse.decimal_literal(position_proxy, error_handler);
     BOOST_REQUIRE(parse_ok);
 
-    using kind_specifier = ibis::vhdl::ast::decimal_literal::kind_specifier;
-    BOOST_REQUIRE(ast_node.kind_type == kind_specifier::real);
+    using numeric_type_specifier = ibis::vhdl::ast::decimal_literal::numeric_type_specifier;
+    BOOST_REQUIRE(ast_node.type_specifier == numeric_type_specifier::real);
 
-    auto const [conv_ok, value] = numeric_convert(ast_node);
+    numeric_convert numeric{ error_handler };
+
+    auto const [conv_ok, value] = numeric(ast_node);
     BOOST_REQUIRE(conv_ok);
-    BOOST_TEST(value == N, btt::tolerance(REAL_TOLERANCE));
+    BOOST_TEST(std::get<numeric_convert::real_type>(value) == N, btt::tolerance(REAL_TOLERANCE));
+
+    os << vhdl::failure_status(ctx);
+    if (!os.str().empty()) {
+        std::cout << '\n' << os.str() << '\n';
+    }
 }
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)

@@ -323,15 +323,15 @@ void printer::operator()(based_literal const& node)
         os << ", exp: " << node.number.exponent;
     }
 
-    using kind_specifier = ast::based_literal::kind_specifier;
+    using numeric_type_specifier = ast::based_literal::numeric_type_specifier;
 
     os << ", type: ";
-    switch (node.number.kind_type) {
-        case kind_specifier::integer: {
+    switch (node.numeric_type()) {
+        case numeric_type_specifier::integer: {
             os << "integer";
             break;
         }
-        case kind_specifier::real: {
+        case numeric_type_specifier::real: {
             os << "real";
             break;
         }
@@ -876,15 +876,15 @@ void printer::operator()(decimal_literal const& node)
     static const std::string_view symbol{ "decimal_literal" };
     symbol_scope<decimal_literal> _(*this, symbol);
 
-    using kind_specifier = decimal_literal::kind_specifier;
+    using numeric_type_specifier = decimal_literal::numeric_type_specifier;
 
     os << "literal: " << node.literal << ", type: ";
 
-    switch (node.kind_type) {
-        case kind_specifier::integer:
+    switch (node.numeric_type()) {
+        case numeric_type_specifier::integer:
             os << "integer";
             break;
-        case kind_specifier::real:
+        case numeric_type_specifier::real:
             os << "real";
             break;
         default:  // unreachable_bug_triggered

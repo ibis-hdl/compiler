@@ -31,8 +31,12 @@ target_sources(${PROJECT_NAME}
         src/ast/operator_token.cpp
         src/ast/ast_printer.cpp
         src/ast/ast_stats.cpp
-        src/ast/numeric_convert.cpp
         src/ast/pretty_node_name.cpp
+
+        src/ast/numeric_convert.cpp
+        src/ast/numeric_convert/convert_bit_string.cpp
+        src/ast/numeric_convert/convert_decimal.cpp
+        src/ast/numeric_convert/convert_based.cpp
 
         src/analyze/check/label_match.cpp
         src/analyze/syntax.cpp

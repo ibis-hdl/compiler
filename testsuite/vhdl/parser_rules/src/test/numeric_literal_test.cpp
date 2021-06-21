@@ -47,4 +47,27 @@ BOOST_DATA_TEST_CASE(numeric_literal, // --
 }
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+BOOST_DATA_TEST_CASE(numeric_literal_failure, // --
+    utf_data::make_delayed<testsuite::vhdl::parser::dataset>("numeric_literal_failure"),  // --
+    input, expected, test_case_name)
+{
+    using attribute_type = ast::numeric_literal;
+    auto const parser = testsuite::vhdl::parser::numeric_literal();
+
+    using testsuite::vhdl::parser::util::testing_parser;
+
+    testing_parser<attribute_type> parse;
+    auto [parse_ok, parse_result] = parse(input, parser, test_case_name);
+
+    BOOST_TEST(!parse_ok);
+    if (!current_test_passing()) {
+        failure_closure(test_case_name, input, parse_result);
+        return;
+    }
+
+    BOOST_TEST(parse_result == expected, btt::per_element());
+    failure_closure(test_case_name, input, expected, parse_result);
+}
+
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_SUITE_END()

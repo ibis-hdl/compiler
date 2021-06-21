@@ -45,33 +45,13 @@ public:
     }
 
 private:
-    char prev_char{ 0 };
-    bool dbl_quote_printed{ false };
+    char prev_char = 0;
+    bool dbl_quote_printed = false;
 };
 
 }  // anonymous namespace
 
 namespace ibis::vhdl::ast {
-
-literal_printer::literal_printer(bit_string_literal const& literal_)
-    : literal{ literal_ }
-{
-}
-
-literal_printer::literal_printer(decimal_literal const& literal_)
-    : literal{ literal_ }
-{
-}
-
-literal_printer::literal_printer(based_literal const& literal_)
-    : literal{ literal_ }
-{
-}
-
-literal_printer::literal_printer(string_literal const& literal_)
-    : literal{ literal_ }
-{
-}
 
 std::ostream& literal_printer::print_on(std::ostream& os) const
 {
@@ -97,11 +77,11 @@ std::ostream& literal_printer::print_on(std::ostream& os) const
             os << lit.literal;
         },
         [&os](decimal_literal const& lit) {
-            using kind_specifier = ast::decimal_literal::kind_specifier;
+            using numeric_type_specifier = ast::decimal_literal::numeric_type_specifier;
 
-            switch (lit.kind_type) {
-                case kind_specifier::integer: [[fallthrough]];
-                case kind_specifier::real: {
+            switch (lit.numeric_type()) {
+                case numeric_type_specifier::integer: [[fallthrough]];
+                case numeric_type_specifier::real: {
                     os << lit.literal;
                     break;
                 }
@@ -110,16 +90,16 @@ std::ostream& literal_printer::print_on(std::ostream& os) const
             }
         },
         [&os](based_literal const& lit) {
-            using kind_specifier = ast::based_literal::kind_specifier;
+            using numeric_type_specifier = ast::based_literal::numeric_type_specifier;
 
             os << lit.base << '#';
 
-            switch (lit.number.kind_type) {
-                case kind_specifier::integer: {
+            switch (lit.numeric_type()) {
+                case numeric_type_specifier::integer: {
                     os << lit.number.integer_part;
                     break;
                 }
-                case kind_specifier::real: {
+                case numeric_type_specifier::real: {
                     os << lit.number.integer_part << '.' << lit.number.fractional_part;
                     break;
                 }

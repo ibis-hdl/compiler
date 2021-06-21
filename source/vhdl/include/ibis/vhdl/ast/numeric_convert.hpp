@@ -1,16 +1,19 @@
 #pragma once
 
+#include <ibis/vhdl/type.hpp>
+
 #include <tuple>
 #include <iosfwd>
 
 namespace ibis::vhdl::ast {
 struct based_literal;
-}
-namespace ibis::vhdl::ast {
 struct bit_string_literal;
-}
-namespace ibis::vhdl::ast {
 struct decimal_literal;
+}  // namespace ibis::vhdl::ast
+
+namespace ibis::vhdl {
+template <typename IteratorT>
+class error_handler;
 }
 
 namespace ibis::vhdl::ast {
@@ -20,13 +23,13 @@ namespace ibis::vhdl::ast {
 ///
 /// Note #1: About numeric literals
 /// ----------------------------------
-/// The correct tagged kind_type of {based, decimal}_literal is elementary on
+/// The correct tagged type_specifier of {based, decimal}_literal is elementary on
 /// elaboration time, since after converting to numeric the informations about
 /// the integer/real string are lost, see concrete why it's important e.g.
 /// [vhdl error: integer literal cannot have negative exponent](
 /// https://stackoverflow.com/questions/22113223/vhdl-error-integer-literal-cannot-have-negative-exponent)
 ///
-/// Strong rules here on parser level simplifies simplifies numeric conversion
+/// Strong rules here on parser level simplifies numeric conversion
 /// since more sloppy rules can be used for conversion from literals to concrete
 /// intrinsic types.
 ///
@@ -39,25 +42,35 @@ namespace ibis::vhdl::ast {
 ///
 class numeric_convert {
 public:
-    ///
-    /// The type, to which all literals will be converted.
-    using value_type = double;
+    /// basic integer type
+    using basic_integer_type = intrinsic::signed_integer_type;
+
+    /// integer type.
+    using integer_type = typename std::make_unsigned<basic_integer_type>::type;
+
+    /// real type for floats/doubles.
+    using real_type = intrinsic::real_type;
+
+    /// literal result type as variant of integer and real type.
+    using result_type = std::variant<integer_type, real_type>;
 
     ///
     /// Return a tuple with the converted value and a boolean flag of
     /// success/failure of converting. If False, the parsing process on the AST
     /// node's literal string may be failed (means the top level VHDL parser
     /// wasn't strict enough -> bug), or numeric problems rises (e.g. the numeric
-    /// literal can fit the value_type).
-    using return_type = std::tuple<bool, value_type>;
+    /// literal can fit the target_type).
+    using return_type = std::tuple<bool, result_type>;
+
+    /// error handler used for error reporting
+    using error_handler_type = ibis::vhdl::error_handler<parser::iterator_type>;
 
     ///
     /// Construct a new numeric convert object.
     ///
-    /// @param os_ The stream where informations and messages during time of
-    /// conversion goes.
+    /// @param error_handler_ Error reporter.
     ///
-    numeric_convert(std::ostream& os_);
+    numeric_convert(error_handler_type& error_handler_);
 
     ///
     /// Convert the a bit string literal to numeric value.
@@ -75,10 +88,7 @@ public:
     return_type operator()(ast::based_literal const& literal) const;
 
 private:
-    class report_error;
-
-private:
-    std::ostream& os;
+    error_handler_type& error_handler;
 };
 
 }  // namespace ibis::vhdl::ast

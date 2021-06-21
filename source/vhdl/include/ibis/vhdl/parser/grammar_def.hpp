@@ -1053,27 +1053,35 @@ auto const based_integer_def =
 ///     base # based_integer [ . based_integer ] # [ exponent ]
 /// @endcode
 ///
-/// @note IEEE1076-93 Ch. 13.4, specifies for decimal_literal the forbidden
-/// negative sign for the exponent of integer types. No restrictions are there
-/// defined for based_literal, assume real type exponent.
+/// @note IEEE1076-93 Ch. 13.4.2: "The base and the exponent, if any, are in decimal notation." ...
+/// Further, "An exponent for a based integer literal must not have a minus sign."
+///
 namespace based_literal_detail {
 
-auto const integer_type = x3::rule<struct _, ast::based_literal::number_chunk>{ "based_literal<int>" } =
+auto const integer_exponent = x3::rule<struct _exp, ast::string_span>{ "based_literal" } =
+    x3::as<ast::string_span>[
+        raw[ lexeme [
+             char_("Ee") >> -char_('+') >> integer
+        ]]
+    ]
+    ;
+
+auto const integer = x3::rule<struct _int, ast::based_literal::number_chunk>{ "based_literal" } =
     lexeme[
            based_integer >> x3::attr(ast::string_span{})  // empty fractional part
         >> '#'
-        >> -exponent
+        >> -integer_exponent
     ]
-    >> x3::attr(ast::based_literal::kind_specifier::integer)
+    >> x3::attr(ast::based_literal::numeric_type_specifier::integer)
     ;
 
-auto const real_type = x3::rule<struct _, ast::based_literal::number_chunk>{ "based_literal<real>" } =
+auto const real = x3::rule<struct _real, ast::based_literal::number_chunk>{ "based_literal" } =
     lexeme[
           based_integer >> lit('.') >> based_integer
         >> '#'
         >> -exponent
     ]
-    >> x3::attr(ast::based_literal::kind_specifier::real)
+    >> x3::attr(ast::based_literal::numeric_type_specifier::real)
     ;
 
 
@@ -1083,7 +1091,7 @@ auto const based_literal_def =
     lexeme [
            base
         >> '#'
-        >> ( based_literal_detail::real_type | based_literal_detail::integer_type )
+        >> ( based_literal_detail::real | based_literal_detail::integer )
     ]
     ;
 
@@ -1654,7 +1662,7 @@ auto const real_type = x3::rule<struct _, ast::decimal_literal> { "decimal_liter
                integer >> char_('.') >> integer >> -exponent
            ]]
        ]
-    >> x3::attr(ast::decimal_literal::kind_specifier::real)
+    >> x3::attr(ast::decimal_literal::numeric_type_specifier::real)
     ;
 
 auto const integer_exponent = x3::rule<struct _, ast::string_span> { "exponent" } =
@@ -1669,11 +1677,10 @@ auto const integer_exponent = x3::rule<struct _, ast::string_span> { "exponent" 
 auto const integer_type = x3::rule<struct _, ast::decimal_literal> { "decimal_literal<int>" } =
        x3::as<ast::string_span>[
            raw[ lexeme[
-               // Note, exponent on integer is always without sign!
                integer >> -integer_exponent
            ]]
        ]
-    >> x3::attr(ast::decimal_literal::kind_specifier::integer)
+    >> x3::attr(ast::decimal_literal::numeric_type_specifier::integer)
     ;
 } // end detail
 

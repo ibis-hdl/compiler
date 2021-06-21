@@ -139,7 +139,15 @@ public:
     void operator()(ast::position_tagged const& where_tag, ast::position_tagged const& start_label,
                     ast::position_tagged const& end_label, std::string const& error_message) const;
 
-public:  // FixMe: private??
+public:
+    ///
+    /// Print a simple error message
+    ///
+    /// @param error_message The error message to print.
+    ///
+    void message(std::string const& error_message) const;
+
+public:
     ///
     /// Access to the file related postion_cache informations.
     ///

@@ -1,19 +1,19 @@
 in file label_missmatch/009_mixed, line 4:
-Syntax ERROR: Label mismatch in Entity Declaration
+syntax error: Label mismatch in Entity Declaration
 entity testbench is
        ~~~~~~~~~ <<-- here
 ...
 end entity test_bench; -- testbench vs. test_bench
            ~~~~~~~~~~ <<-- and here
 in file label_missmatch/009_mixed, line 7:
-Syntax ERROR: Label mismatch in Architecture Body
+syntax error: Label mismatch in Architecture Body
 architecture BENCH of testbench is
              ~~~~~ <<-- here
 ...
 end architecture bench_test; -- BENCH vs. bench_test
                  ~~~~~~~~~~ <<-- and here
 in file label_missmatch/009_mixed, line 11:
-Syntax ERROR: Label mismatch in Process Statement
+syntax error: Label mismatch in Process Statement
   Stimuli: process
   ~~~~~~~ <<-- here
 ...

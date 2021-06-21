@@ -1,5 +1,5 @@
 in file label_missmatch/002_entity, line 4:
-Syntax ERROR: Label mismatch in Entity Declaration
+syntax error: Label mismatch in Entity Declaration
 entity testbench is
        ~~~~~~~~~ <<-- here
 ...

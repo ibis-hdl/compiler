@@ -1,5 +1,5 @@
 in file label_missmatch/003_process, line 11:
-Syntax ERROR: Label mismatch in Process Statement
+syntax error: Label mismatch in Process Statement
   Stimulus: process
   ~~~~~~~~ <<-- here
 ...

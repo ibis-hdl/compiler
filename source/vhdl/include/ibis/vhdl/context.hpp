@@ -35,13 +35,18 @@ public:
     using value_type = std::size_t;
 
 public:
-    basic_counter(value_type limit_ = std::numeric_limits<value_type>::max())
+    explicit basic_counter(value_type limit_ = std::numeric_limits<value_type>::max())
         : treshold{ limit_ }
     {
     }
 
+    ~basic_counter() = default;
+
     basic_counter(basic_counter const&) = delete;
     basic_counter& operator=(basic_counter const&) = delete;
+
+    basic_counter(basic_counter&&) = default;
+    basic_counter& operator=(basic_counter&&) = default;
 
 public:
     ///
@@ -105,7 +110,7 @@ public:
 
 private:
     value_type treshold;
-    value_type value{ 0 };
+    value_type value = 0;
 };
 
 template <typename Tag>
@@ -133,7 +138,13 @@ std::ostream& operator<<(std::ostream& os, basic_counter<Tag> const& counter)
 ///
 class context {
 public:
-    context(std::size_t error_limit = 42);
+    explicit context(std::size_t error_limit = 42);
+
+    context(context&) = delete;
+    context& operator=(context&) = delete;
+    context(context&&) = default;
+    context& operator=(context&&) = default;
+    ~context() = default;
 
 public:
     using error_counter = detail::basic_counter<struct error_tag>;
@@ -142,8 +153,8 @@ public:
 public:
     bool error_free() const { return error_count == 0; }
 
-    error_counter& errors() { return error_count; };
-    error_counter const & errors() const { return error_count; };
+    error_counter& errors() { return error_count; }
+    error_counter const & errors() const { return error_count; }
 
     warning_counter& warnings() { return warning_count; }
     warning_counter const& warnings() const { return warning_count; }
@@ -151,9 +162,6 @@ public:
 public:
     error_counter error_count;
     warning_counter warning_count;
-
-private:
-    std::unordered_map<ast::string_span, int> dummy;
 };
 
 ///

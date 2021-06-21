@@ -1,18 +1,17 @@
 #include <testsuite/vhdl/numeric_convert/numeric_parser.hpp>
 #include <testsuite/vhdl/numeric_convert/binary_string.hpp>
 
+#include <ibis/vhdl/parser/error_handler.hpp>
+#include <ibis/vhdl/parser/context.hpp>
+#include <ibis/vhdl/type.hpp>
+
 #include <ibis/vhdl/ast/node/bit_string_literal.hpp>
 #include <ibis/vhdl/ast/numeric_convert.hpp>
-#include <ibis/vhdl/parser/position_cache.hpp>
-#include <ibis/vhdl/parser/iterator_type.hpp>
-#include <ibis/vhdl/type.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>
 #include <boost/test/data/monomorphic.hpp>
 #include <boost/test/tools/output_test_stream.hpp>
-
-#include <boost/core/ignore_unused.hpp>
 
 #include <iostream>
 #include <sstream>
@@ -56,34 +55,9 @@ static std::string to_hex_literal(uint64_t n, std::string const& postfix = "")
 
 }  // namespace detail
 
-namespace  // anonymous
-{
-
 namespace btt = boost::test_tools;
 
-// The numeric_convert utility writes messages, but concrete error messages
-// aren't checked. For debugging is useful to see them otherwise. Switch to
-// ostream sink to hide them or let's write to cerr to see them.
-// Note, using global numeric_convert object tests  implicit of state less
-// conversion, otherwise test must fail due to. */
-//
-// Note: technically, we initialize globals that access extern objects,
-// and therefore can lead to order-of-initialization problems.
-
-bool constexpr no_messages = true;
-
-// NOLINTNEXTLINE(cppcoreguidelines-interfaces-global-init)
-auto const numeric_convert = []() {
-    if constexpr (no_messages) {
-        static btt::output_test_stream nil_sink;
-        return ast::numeric_convert{ nil_sink };
-    }
-    else {
-        return ast::numeric_convert(std::cerr);
-    }
-}();
-
-}  // namespace
+using ast::numeric_convert;
 
 //******************************************************************************
 // bit_string_literal
@@ -150,14 +124,25 @@ BOOST_DATA_TEST_CASE(bit_string_literal, utf_data::make(bit_literal) ^ bit_decim
     parser::position_cache<iterator_type> position_cache;
     auto position_proxy = position_cache.add_file("<bit_string_literal>", literal);
 
+    btt::output_test_stream os;
+    parser::context ctx;
+    parser::error_handler<iterator_type> error_handler{ os, ctx, position_proxy };
+
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
-    auto const [parse_ok, ast_node] = parse.bit_string_literal(position_proxy);
+    auto const [parse_ok, ast_node] = parse.bit_string_literal(position_proxy, error_handler);
     BOOST_REQUIRE(parse_ok);
 
-    auto const [conv_ok, value] = numeric_convert(ast_node);
+    numeric_convert numeric{ error_handler };
+
+    auto const [conv_ok, value] = numeric(ast_node);
     BOOST_REQUIRE(conv_ok);
-    BOOST_TEST(value == N);
+    BOOST_TEST(std::get<numeric_convert::integer_type>(value) == N);
+
+    os << vhdl::failure_status(ctx);
+    if (!os.str().empty()) {
+        std::cout << '\n' << os.str() << '\n';
+    }
 }
 
 //******************************************************************************
@@ -177,15 +162,25 @@ BOOST_DATA_TEST_CASE(bit_string_literal_uint64_ovflw, utf_data::make(literal_ovf
     parser::position_cache<iterator_type> position_cache;
     auto position_proxy = position_cache.add_file("<bit_string_literal>", literal);
 
+    btt::output_test_stream os;
+    parser::context ctx;
+    parser::error_handler<iterator_type> error_handler{ os, ctx, position_proxy };
+
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
-    auto const [parse_ok, ast_node] = parse.bit_string_literal(position_proxy);
+    auto const [parse_ok, ast_node] = parse.bit_string_literal(position_proxy, error_handler);
     BOOST_REQUIRE(parse_ok);  // must parse ...
 
-    auto const [conv_ok, value] = numeric_convert(ast_node);
+    numeric_convert numeric{ error_handler };
+
+    bool conv_ok = true;
+    std::tie(conv_ok, std::ignore) = numeric(ast_node);
     BOOST_REQUIRE(!conv_ok);  // ... but must fail to convert
 
-    boost::ignore_unused(value);
+    os << vhdl::failure_status(ctx);
+    if (!os.str().empty()) {
+        std::cout << '\n' << os.str() << '\n';
+    }
 }
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)

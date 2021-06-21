@@ -1,4 +1,4 @@
 in file expression_failure/expression_failure_000.input, line 2:
-Parse ERROR: Test Suite Full Match Error! Unparsed input left!
+parse error: Test Suite Full Match Error! Unparsed input left!
 "0011" nand "0010" nand "1000"
-___________________^_
+                   ^

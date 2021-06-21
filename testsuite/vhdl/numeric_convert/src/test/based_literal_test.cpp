@@ -1,18 +1,17 @@
 #include <testsuite/vhdl/numeric_convert/numeric_parser.hpp>
 #include <testsuite/vhdl/numeric_convert/binary_string.hpp>
 
+#include <ibis/vhdl/parser/error_handler.hpp>
+#include <ibis/vhdl/parser/context.hpp>
+#include <ibis/vhdl/type.hpp>
+
 #include <ibis/vhdl/ast/node/based_literal.hpp>
 #include <ibis/vhdl/ast/numeric_convert.hpp>
-#include <ibis/vhdl/parser/position_cache.hpp>
-#include <ibis/vhdl/parser/iterator_type.hpp>
-#include <ibis/vhdl/type.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>
 #include <boost/test/data/monomorphic.hpp>
 #include <boost/test/tools/output_test_stream.hpp>
-
-#include <boost/core/ignore_unused.hpp>
 
 #include <iostream>
 #include <sstream>
@@ -57,10 +56,8 @@ typename std::enable_if<std::is_integral<T>::value, std::string>::type to_based_
             break;
         }
         default:
-            // no assert, write marker
-            ss << "INVALID BASE SPECIFIER" << base;
-            std::cerr << ">>>>> ERROR in function: " << __FUNCTION__ << "(), unexpected base "
-                      << base << " <<<<<\n";
+            // as is:
+            ss << base << '#' << value << postfix << '#';
     }
 
     return ss.str();
@@ -103,32 +100,9 @@ to_based_literal(unsigned base, T value)
 
 }  // namespace detail
 
-namespace  // anonymous
-{
+namespace btt = boost::test_tools;
 
-// The numeric_convert utility writes messages, but concrete error messages
-// aren't checked. For debugging is useful to see them otherwise. Switch to
-// ostream sink to hide them or let's write to cerr to see them.
-// Note, using global numeric_convert object tests  implicit of state less
-// conversion, otherwise test must fail due to. */
-//
-// Note: technically, we initialize globals that access extern objects,
-// and therefore can lead to order-of-initialization problems.
-
-bool constexpr no_messages = true;
-
-// NOLINTNEXTLINE(cppcoreguidelines-interfaces-global-init)
-auto const numeric_convert = []() {
-    if constexpr (no_messages) {
-        static btt::output_test_stream nil_sink;
-        return ast::numeric_convert{ nil_sink };
-    }
-    else {
-        return ast::numeric_convert(std::cerr);
-    }
-}();
-
-}  // namespace
+using ast::numeric_convert;
 
 //******************************************************************************
 // integer based_literal of different bases
@@ -211,16 +185,29 @@ BOOST_DATA_TEST_CASE(based_literal_integer, utf_data::make(integer_lit) ^ intege
     using iterator_type = parser::iterator_type;
 
     parser::position_cache<iterator_type> position_cache;
-    auto position_proxy = position_cache.add_file("<based_literal>", literal);
+    auto position_proxy = position_cache.add_file("<based_literal/integer>", literal);
+
+    btt::output_test_stream os;
+    parser::context ctx;
+    parser::error_handler<iterator_type> error_handler{ os, ctx, position_proxy };
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
-    auto const [parse_ok, ast_node] = parse.based_literal(position_proxy);
+    auto const [parse_ok, ast_node] = parse.based_literal(position_proxy, error_handler);
     BOOST_REQUIRE(parse_ok);
 
-    auto const [conv_ok, value] = numeric_convert(ast_node);
+    using numeric_type_specifier = ibis::vhdl::ast::based_literal::numeric_type_specifier;
+    BOOST_REQUIRE(ast_node.numeric_type() == numeric_type_specifier::integer);
+
+    numeric_convert numeric{ error_handler };
+    auto const [conv_ok, value] = numeric(ast_node);
     BOOST_REQUIRE(conv_ok);
-    BOOST_TEST(value == N);
+    BOOST_TEST(std::get<numeric_convert::integer_type>(value) == N);
+
+    os << vhdl::failure_status(ctx);
+    if (!os.str().empty()) {
+        std::cout << os.str() << "\n\n";
+    }
 }
 
 //******************************************************************************
@@ -239,24 +226,38 @@ BOOST_DATA_TEST_CASE(based_literal_uint64_ovflw, utf_data::make(integer_lit_uint
     using iterator_type = parser::iterator_type;
 
     parser::position_cache<iterator_type> position_cache;
-    auto position_proxy = position_cache.add_file("<based_literal>", literal);
+    auto position_proxy = position_cache.add_file("<based_literal/uint64_ovflw>", literal);
+
+    btt::output_test_stream os;
+    parser::context ctx;
+    parser::error_handler<iterator_type> error_handler{ os, ctx, position_proxy };
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
-    auto const [parse_ok, ast_node] = parse.based_literal(position_proxy);
+    auto const [parse_ok, ast_node] = parse.based_literal(position_proxy, error_handler);
     BOOST_REQUIRE(parse_ok);  // must parse ...
 
-    auto const [conv_ok, value] = numeric_convert(ast_node);
+    using numeric_type_specifier = ibis::vhdl::ast::based_literal::numeric_type_specifier;
+    BOOST_REQUIRE(ast_node.numeric_type() == numeric_type_specifier::integer);
+
+    numeric_convert numeric{ error_handler };
+
+    bool conv_ok = true;
+    std::tie(conv_ok, std::ignore) = numeric(ast_node);
     BOOST_REQUIRE(!conv_ok);  // ... but must fail to convert
 
-    boost::ignore_unused(value);
+    os << vhdl::failure_status(ctx);
+    if (!os.str().empty()) {
+        std::cout << os.str() << "\n\n";
+    }
 }
 
 //******************************************************************************
 // real based_literal of different bases
 //******************************************************************************
 std::vector<std::string> const real_lit{
-    "10#0.0#", "10#1.0#", "10#42.66#e-1",
+    "10#0.0#", "10#1.0#",
+    "10#42.66#e-1",  // based real with allowed negative exponent
     // Examples from
     // - IEEE_VHDL_1076-1993: Chapter 13.4.2 Based literals
     //
@@ -286,23 +287,39 @@ BOOST_DATA_TEST_CASE(based_literal_real, utf_data::make(real_lit) ^ real_dec, li
     using iterator_type = parser::iterator_type;
 
     parser::position_cache<iterator_type> position_cache;
-    auto position_proxy = position_cache.add_file("<based_literal>", literal);
+    auto position_proxy = position_cache.add_file("<based_literal/real>", literal);
+
+    btt::output_test_stream os;
+    parser::context ctx;
+    parser::error_handler<iterator_type> error_handler{ os, ctx, position_proxy };
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
-    auto const [parse_ok, ast_node] = parse.based_literal(position_proxy);
+    auto const [parse_ok, ast_node] = parse.based_literal(position_proxy, error_handler);
     BOOST_REQUIRE(parse_ok);
 
-    auto const [conv_ok, value] = numeric_convert(ast_node);
+    using numeric_type_specifier = ibis::vhdl::ast::based_literal::numeric_type_specifier;
+    BOOST_REQUIRE(ast_node.numeric_type() == numeric_type_specifier::real);
+
+    numeric_convert numeric{ error_handler };
+
+    auto const [conv_ok, value] = numeric(ast_node);
     BOOST_REQUIRE(conv_ok);
-    BOOST_TEST(value == N);
+    BOOST_TEST(std::get<numeric_convert::real_type>(value) == N);
+
+    os << vhdl::failure_status(ctx);
+    if (!os.str().empty()) {
+        std::cout << os.str() << "\n\n";
+    }
 }
 
 //******************************************************************************
 // FAILURE test for binary integer/real based_literal
 //******************************************************************************
 std::vector<std::string> const lit_failure{
-    "3#1111_0000#",  // parse ok, but unsupported base
+    "3#1111_0000#",              // parse ok, but unsupported base
+    "18446744073709551616#42#",  // base numeric overflow
+    //"8#42#2147483648"            // exponent numeric overflow
 };
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
@@ -311,17 +328,27 @@ BOOST_DATA_TEST_CASE(based_literal_failure, utf_data::make(lit_failure), literal
     using iterator_type = parser::iterator_type;
 
     parser::position_cache<iterator_type> position_cache;
-    auto position_proxy = position_cache.add_file("<based_literal>", literal);
+    auto position_proxy = position_cache.add_file("<based_literal/failure>", literal);
+
+    btt::output_test_stream os;
+    parser::context ctx;
+    parser::error_handler<iterator_type> error_handler{ os, ctx, position_proxy };
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
-    auto const [parse_ok, ast_node] = parse.based_literal(position_proxy);
+    auto const [parse_ok, ast_node] = parse.based_literal(position_proxy, error_handler);
     BOOST_REQUIRE(parse_ok);
 
-    auto const [conv_ok, value] = numeric_convert(ast_node);
+    numeric_convert numeric{ error_handler };
+
+    bool conv_ok = true;
+    std::tie(conv_ok, std::ignore) = numeric(ast_node);
     BOOST_REQUIRE(!conv_ok);
 
-    boost::ignore_unused(value);
+    os << vhdl::failure_status(ctx);
+    if (!os.str().empty()) {
+        std::cout << '\n' << os.str() << '\n';
+    }
 }
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)

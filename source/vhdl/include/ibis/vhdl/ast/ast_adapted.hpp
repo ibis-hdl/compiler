@@ -51,7 +51,7 @@ BOOST_FUSION_ADAPT_STRUCT(ibis::vhdl::ast::based_literal,
 )
 
 BOOST_FUSION_ADAPT_STRUCT(ibis::vhdl::ast::based_literal::number_chunk,
-    integer_part, fractional_part, exponent, kind_type
+    integer_part, fractional_part, exponent, type_specifier
 )
 
 BOOST_FUSION_ADAPT_STRUCT(ibis::vhdl::ast::binding_indication,
@@ -159,7 +159,7 @@ BOOST_FUSION_ADAPT_STRUCT(ibis::vhdl::ast::constrained_array_definition,
 )
 
 BOOST_FUSION_ADAPT_STRUCT(ibis::vhdl::ast::decimal_literal,
-    literal, kind_type
+    literal, type_specifier
 )
 
 BOOST_FUSION_ADAPT_STRUCT(ibis::vhdl::ast::delay_mechanism,

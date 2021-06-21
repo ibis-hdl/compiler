@@ -56,9 +56,20 @@ error_handler<Iterator>::get_source_location(iterator_type error_pos) const
 template <typename Iterator>
 class error_handler<Iterator>::formatter {
 public:
-    using error_type = enum { parser, syntax, semantic };
+    using error_type = enum { parser, syntax, semantic, numeric };
 
 public:
+    ///
+    /// @brief Construct a new formatter object
+    ///
+    /// @param os_ The destination of error message.
+    /// @param source_location_ The location of the error to print.
+    ///
+    /// @todo The error_type specifier must be accessible by the header to allow specific error
+    /// messages. Best would be to make it an own non-nested class.
+    ///
+    /// ToDo: Check for usefull error format, like [GCC's Formatting Error Messages](
+    /// https://www.gnu.org/prep/standards/html_node/Errors.html)
     formatter(std::ostream& os_, source_location const& source_location_)
         : os{ os_ }
         , source_location{ source_location_ }
@@ -71,8 +82,8 @@ public:
         using boost::locale::translate;
 
         os << format(translate("in file {1}, line {2}:"))  // --
-                  % source_location.file_name()            // {1}
-                  % source_location.line()                 // {2}
+                  % source_location.file_name()         // {1}
+                  % source_location.line()              // {2}
            << '\n';
         return os;
     }
@@ -84,13 +95,16 @@ public:
 
         switch (type) {
             case error_type::parser:
-                os << color::message::error(translate("Parse ERROR"));
+                os << color::message::error(translate("parse error"));
                 break;
             case error_type::syntax:
-                os << color::message::error(translate("Syntax ERROR"));
+                os << color::message::error(translate("syntax error"));
                 break;
             case error_type::semantic:
-                os << color::message::error(translate("Semantic ERROR"));
+                os << color::message::error(translate("semantic error"));
+                break;
+            case error_type::numeric:
+                os << color::message::error(translate("numeric error"));
                 break;
             default:  // unreachable_bug_triggered
                 cxx_unreachable_bug_triggered();
@@ -104,7 +118,7 @@ public:
         using boost::locale::format;
         using boost::locale::translate;
 
-        os << (!error_message.empty() ? error_message : translate("Unspecified ERROR")) << '\n';
+        os << (!error_message.empty() ? error_message : translate("Unspecified error")) << '\n';
         return os;
     }
 
@@ -119,7 +133,7 @@ private:
 namespace ibis::vhdl {
 
 // ----------------------------------------------------------------------------
-// AST/parse related error handler
+// AST/parse related, expectation error handler
 // ----------------------------------------------------------------------------
 template <typename Iterator>
 typename error_handler<Iterator>::x3_result_type error_handler<Iterator>::operator()(
@@ -143,7 +157,8 @@ typename error_handler<Iterator>::x3_result_type error_handler<Iterator>::operat
 
     // error indicator
     using ibis::util::position_indicator;
-    os << position_indicator(start, error_pos, tab_sz, '_') << "^_" << '\n';
+    os << position_indicator(start, error_pos, tab_sz, ' ') << "^"
+       << "\n";
 
     return x3::error_handler_result::fail;
 }
@@ -161,7 +176,6 @@ void error_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
     cxx_assert(where_tag.is_tagged(), "Node not tagged");
 
     ++context.errors();
-
 
     position_proxy.set_id(where_tag.file_id);
 
@@ -188,8 +202,7 @@ void error_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
 
     // erroneous source snippet
     iterator_type line_start = position_proxy.get_line_start(error_first);
-    os << position_proxy.current_line(line_start);
-    os << std::endl;
+    os << position_proxy.current_line(line_start) << '\n';
 
     // error indicator
     using ibis::util::position_indicator;
@@ -205,6 +218,7 @@ void error_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
     using boost::locale::format;
     using boost::locale::translate;
 
+    // check on applied tagging, related to position_cache
     cxx_assert(where_tag.is_tagged(), "Node not tagged");
     cxx_assert(start_label.is_tagged(), "Node/StartLabel not tagged");
     cxx_assert(end_label.is_tagged(), "Node/EndLabel not tagged");
@@ -245,6 +259,10 @@ void error_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
 
     auto [error_first, error_last, valid] = iterators_of(where_tag);
 
+    // FixMe: validity of error_{first,last} iterators aren't checked! Neverstheless, it's always
+    // valid since this function signature allows only ast::position_tagged node, see implementation
+    // of iterators_of()
+
     formatter report(os, get_source_location(error_first));
 
     report.print_source_location();
@@ -256,6 +274,20 @@ void error_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
        << source_snippet(end_label, translate(" <<-- and here"));
 
     os << std::endl;
+}
+
+template <typename Iterator>
+void error_handler<Iterator>::message(std::string const& error_message) const
+{
+    using boost::locale::format;
+    using boost::locale::translate;
+
+    ++context.errors();
+
+    formatter report(os, source_location(position_proxy.file_name(), 1));
+    report.print_source_location();
+    report.print_error_type(formatter::error_type::syntax);
+    report.print_error_message(error_message);
 }
 
 }  // namespace ibis::vhdl

@@ -31,7 +31,7 @@ public:
     ///
     /// Functor to call parse implementation.
     ///
-    /// @param input File contents to be parsed.
+    /// @param pos_proxy Proxy of position_cache with the file contents to be parsed.
     /// @param design_file AST node of input/file contents.
     /// @return true success.
     /// @return false failure.

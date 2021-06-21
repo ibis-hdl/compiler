@@ -16,8 +16,7 @@ void assertion_failed_msg(const CharT* expr, const char msg[], const char functi
               << "****************************************\n"
               << "assertion:   " << expr << '\n'
               << "what failed: " << msg << '\n'
-              << "in function:\n"
-              << function << ":\n"
+              << "in function:"  << function << '\n'
               << file << '(' << line << ")" << std::endl;  // flush
 
     std::quick_exit(EXIT_FAILURE);

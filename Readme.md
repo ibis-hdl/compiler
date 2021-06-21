@@ -177,7 +177,7 @@ Sehe's notes, re-using the tag type is recipe for disaster. The rule tags are
 what dispatches the implementation function in the case of
 separated compilation units.
 
-- Fix Testcase attribute_specification, unit test failed seriously with:
+- Fix Testcase attribute_specification, unit test failed severe (not reproducible) with:
 
 ```
 unknown location(0): fatal error: in "parser_rule/attribute_specification/_1": class std::bad_alloc: bad allocation
@@ -318,27 +318,10 @@ clear what comes from what.
 
 ### NumericConvert / 2nd pass Parser
 
-The whole conversation of the numerical VHDL types from the AST is confusing,
-possibly also complicated:
-
-- warnings pointed:
-
-  ```
-  [7/169] Building CXX object testsuite\vhdl\numeric_convert\CMakeFiles\testrunner_vhdl_numeric_convert.dir\src\binary_string.cpp.obj
-  ..\testsuite\vhdl\numeric_convert\src\binary_string.cpp(54): warning C4244: "Argument": Konvertierung von "const uint64_t" in "unsigned int", möglicher Datenverlust
-  ..\testsuite\vhdl\numeric_convert\src\binary_string.cpp(88): warning C4244: "Argument": Konvertierung von "const uint64_t" in "unsigned int", möglicher Datenverlust
-  ..\testsuite\vhdl\numeric_convert\src\binary_string.cpp(115): warning C4244: "Argument": Konvertierung von "const uint64_t" in "unsigned int", möglicher Datenverlust
-  [14/169] Building CXX object testsuite\vhdl\numeric_convert\CMakeFiles\testrunner_vhdl_numeric_convert.dir\src\test\bit_string_literal_test.cpp.obj
-  D:\My\IBIS\boost_1_76_0\boost/test/tools/fpc_op.hpp(134): warning C4244: "Argument": Konvertierung von "const Rhs" in "const FPT", möglicher Datenverlust
-  ```
-
-  A double is used as a "generic universal type"; using a template argument,
-  i.e. attribute_type, such warnings are bypassed and it is clearer to read.
-
-- In numeric_convert.cpp a lot of "trickery" is done because of splitting the
-  numeric VHDL types into their components by the actual vhdl::parser to save
-  parse time. Even with C++20 there are more possibilities, eg.
-  [coliru](https://coliru.stacked-crooked.com/a/17f844b879507aed):
+In numeric_convert.cpp a lot of "trickery" is done because of splitting the
+numeric VHDL types into their components by the actual vhdl::parser to save
+parse and check/test time. Even with C++20 there are more possibilities, eg.
+[coliru](https://coliru.stacked-crooked.com/a/17f844b879507aed):
 
 
   ```
@@ -368,9 +351,9 @@ possibly also complicated:
   readable. In principle the problem with the '_' in the literals should be
   avoided with std::ranges.
 
-- Next: [Stackoverflow](
-  https://stackoverflow.com/questions/29132809/using-boostspiritqi-to-parse-numbers-with-separators?answertab=active#tab-top)
-  shows a better approach than the present one.
+Other approaches are shown at [Stackoverflow](
+https://stackoverflow.com/questions/29132809/using-boostspiritqi-to-parse-numbers-with-separators?answertab=active#tab-top)
+but how to cope with error handling than? Hacking X3's internals isn't the way!
 
 
 ### Others

@@ -1,4 +1,4 @@
 in file keyword_mismatch/000_process, line 11:
-Syntax ERROR: ill-formed statement in Process Statement; (Hint: single trailing keyword 'postponed')
+syntax error: ill-formed statement in Process Statement; (Hint: single trailing keyword 'postponed')
   Stimulus: process -- no starting 'postponed'
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ <<-- here

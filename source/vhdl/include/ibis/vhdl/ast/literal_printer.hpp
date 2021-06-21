@@ -13,16 +13,31 @@ namespace ibis::vhdl::ast {
 
 class literal_printer {
 public:
-    literal_printer(ast::bit_string_literal const& literal_);
-    literal_printer(ast::decimal_literal const& literal_);
-    literal_printer(ast::based_literal const& literal_);
-    literal_printer(ast::string_literal const& literal_);
+    literal_printer(bit_string_literal const& literal_)
+        : literal{ literal_ }
+    {
+    }
+
+    literal_printer(decimal_literal const& literal_)
+        : literal{ literal_ }
+    {
+    }
+
+    literal_printer(based_literal const& literal_)
+        : literal{ literal_ }
+    {
+    }
+
+    literal_printer(string_literal const& literal_)
+        : literal{ literal_ }
+    {
+    }
 
     std::ostream& print_on(std::ostream& os) const;
 
 private:
     // FixMe: The use of variant requires full definition of the class, hence the
-    // includes of the elements used and no forward declarations can be used. Maybe
+    // include header of the elements are used and no forward declarations are useable. Maybe
     // write an internal wrapper class to avoid this.
     using literal_variant_type = boost::variant<ast::bit_string_literal, ast::decimal_literal,
                                                 ast::based_literal, ast::string_literal>;
