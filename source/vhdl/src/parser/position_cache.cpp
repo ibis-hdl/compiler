@@ -73,14 +73,13 @@ std::string_view position_cache<IteratorT>::current_line(  // --
 }
 
 template <typename IteratorT>
-IteratorT position_cache<IteratorT>::get_line_start(  // --
-    file_id_type file_id, iterator_type& pos) const
+IteratorT position_cache<IteratorT>::get_line_start(file_id_type file_id, iterator_type& pos) const
 {
     auto [begin, end] = range(file_id);
 
     iterator_type latest = begin;
 
-    for (iterator_type iter = begin; iter != pos; ) {
+    for (iterator_type iter = begin; iter != pos;) {
         if (*iter == '\r' || *iter == '\n') {
             latest = ++iter;
         }

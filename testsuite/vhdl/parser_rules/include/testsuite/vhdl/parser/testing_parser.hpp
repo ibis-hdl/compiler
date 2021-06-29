@@ -92,13 +92,22 @@ struct testing_parser {
             }
         }
         catch (x3::expectation_failure<parser::iterator_type> const &e) {
-            // This shall be caught by on_error_base class' on_error()
+            // Note: Don't use the documentation/stackoverflow.com idiom
+            //   std::string(e.where(), input.end())
+            // below for the error message. The chances are high, that this isn't the right error
+            // position iterator - we relay on positions_cache file-iterator mapping knowledge here!
+            // Otherwise it will crash there.
+            auto err_pos = e.where();
+            auto const start = position_cache_proxy.get_line_start(err_pos);
+            auto const line = position_cache_proxy.current_line(start);
+
             error_handler(e.where(),
                           "Test Suite caught *unexpected* expectation failure! Expecting "  // --
                               + e.which() + " here: '"                                      // --
-                              + std::string(e.where(), input.end())                         // --
+                              + std::string(line.begin(), line.end())                       // --
                               + "'\n");
         }
+        std::cerr << output.str() << '\n';
 
         return std::tuple{ parse_ok && (!full_match || (iter == end)), output.str() };
     }
