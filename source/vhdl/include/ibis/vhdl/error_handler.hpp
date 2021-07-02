@@ -5,13 +5,9 @@
 
 #include <ibis/namespace_alias.hpp>  // IWYU pragma: keep
 
-// the following header are required for x3::error_handler_result
-#include <boost/spirit/home/x3/support/traits/tuple_traits.hpp>  // IWYU pragma: keep
-#include <boost/spirit/home/x3/support/traits/is_variant.hpp>    // IWYU pragma: keep
-#include <boost/spirit/home/x3/auxiliary/guard.hpp>
-
 #include <utility>
 #include <string>
+#include <optional>
 #include <iosfwd>
 
 namespace ibis::vhdl {
@@ -78,13 +74,16 @@ public:
     using position_proxy_type = typename parser::position_cache<iterator_type>::proxy;
 
 public:
+    using error_type = enum { unspecific, parser, syntax, semantic, numeric };
+
+public:
     ///
     /// Construct a parser error handler.
     ///
-    /// @param os_     Stream to write error and diagnostic messages.
+    /// @param os_    Stream to write error and diagnostic messages.
     /// @param proxy_ A \ref parser::position_cache::proxy object of \ref parser::position_cache.
-    /// @param tabs     Tabulator size, required for correct rendering of source
-    ///              code snippet.
+    /// @param tabs   Tabulator size, required for correct rendering of source
+    /// code snippet.
     ///
     explicit error_handler(std::ostream& os_, vhdl::context& context_, position_proxy_type proxy_,
                            std::size_t tabs = 4)
@@ -105,47 +104,54 @@ public:
 
 public:
     ///
-    /// Handle a parser error at error_pos and render the diagnostic message
-    /// error_message.
+    /// Render the diagnostic error_message. Error source is in most cases the parser to handle
+    /// expectation errors.
     ///
     /// @param error_pos     Iterator position where the error occurred.
     /// @param error_message The information error message.
-    /// @return x3::result_type, which allows to recover from parser error or
-    ///        even give up.
+    /// @param err_type      The type of error message.
     ///
-    x3_result_type operator()(iterator_type error_pos, std::string const& error_message) const;
+    void operator()(iterator_type error_pos, std::string const& error_message,
+                    error_type err_type = error_type::parser) const;
 
 public:
     ///
-    /// Handle a syntax/semantic error at node and render the diagnostic message
-    /// error_message, where only the tagged error position `where_tag` is given.
+    /// Render the diagnostic error_message. Error source is in most cases the parser.
     ///
     /// @param where_tag     The ast::position_tagged node, which triggers the error
     /// @param error_message The information error message.
+    /// @param err_type      The type of error message.
     ///
-    void operator()(ast::position_tagged const& where_tag, std::string const& error_message) const;
+    void operator()(ast::position_tagged const& where_tag, std::string const& error_message,
+                    error_type err_type = error_type::parser) const;
 
     ///
-    /// Handle a syntax/semantic error at node and render the diagnostic message
-    /// error_message. This is a special overload for label pairs.
+    /// Render the diagnostic error_message. Error source is in most cases the syntax check.
     ///
     /// @param where_tag     The node, which triggers the error.
     /// @param start_label   The start label of the where_tag node.
     /// @param end_label     The complementary end label of the where_tag node.
     /// @param error_message The information error message.
+    /// @param err_type      The type of error message.
     ///
     /// @todo Change argument order to be conform to other overload.
     ///
     void operator()(ast::position_tagged const& where_tag, ast::position_tagged const& start_label,
-                    ast::position_tagged const& end_label, std::string const& error_message) const;
+                    ast::position_tagged const& end_label, std::string const& error_message,
+                    error_type err_type = error_type::syntax) const;
 
 public:
     ///
-    /// Print a simple error message
+    /// Render the diagnostic error_message and increments the error count at context.
     ///
-    /// @param error_message The error message to print.
+    /// @param error_first Iterator position where the error occurred.
+    /// @param error_last Optional Iterator of end position where the error occurred.
+    /// @param error_message The information error message.
+    /// @param err_type      The type of error message.
     ///
-    void message(std::string const& error_message) const;
+    void operator()(iterator_type error_first, std::optional<iterator_type> error_last,
+                    std::string const& error_message,
+                    error_type err_type = error_type::syntax) const;
 
 public:
     ///
@@ -166,6 +172,61 @@ private:
     vhdl::context& context;
     position_proxy_type position_proxy;
     std::size_t tab_sz;
+};
+
+// ----------------------------------------------------------------------------
+// error_handler::source_location
+// ----------------------------------------------------------------------------
+template <typename Iterator>
+class error_handler<Iterator>::source_location {
+public:
+    source_location(std::string_view file_name, std::size_t line, std::size_t column);
+
+    /// The line number of the error
+    std::size_t line() const { return line_; }
+
+    /// The column number of the error.
+    std::size_t column() const { return column_; }
+
+    /// The file name
+    std::string_view file_name() const { return file_name_; }
+
+private:
+    std::string_view file_name_;
+    std::size_t line_;
+    std::size_t column_;
+};
+
+// ----------------------------------------------------------------------------
+// error_handler::formatter
+// ----------------------------------------------------------------------------
+template <typename Iterator>
+class error_handler<Iterator>::formatter {
+public:
+    using error_type = error_handler<Iterator>::error_type;
+
+public:
+    ///
+    /// @brief Construct a new formatter object
+    ///
+    /// @param os_ The destination of error message.
+    /// @param source_location_ The location of the error to print.
+    ///
+    /// @todo The error_type specifier must be accessible by the header to allow specific error
+    /// messages. Best would be to make it an own non-nested class.
+    ///
+    /// ToDo: Check for usefull error format, like [GCC's Formatting Error Messages](
+    /// https://www.gnu.org/prep/standards/html_node/Errors.html)
+    formatter(std::ostream& os_, source_location const& source_location_);
+
+    std::ostream& print_source_location();
+    std::ostream& print_error_type(error_type type);
+    std::ostream& print_error_message(std::string const& error_message);
+
+private:
+    std::ostream& os;
+    bool color_output = true;  /// FixMe: ignored, not active
+    error_handler<Iterator>::source_location source_location;
 };
 
 }  // namespace ibis::vhdl

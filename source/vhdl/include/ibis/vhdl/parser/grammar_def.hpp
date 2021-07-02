@@ -19,8 +19,7 @@ namespace ibis::vhdl::parser::detail {
 /// using a skipper.
 ///
 /// @note This is a problem specific helper function (due to VHDL's character set
-/// use here), so it isn't placed into `spirit_x3_util.hpp`
-/// file.
+/// use here), so it isn't placed into `spirit_x3_util.hpp` file.
 ///
 struct distinct_directive {
     ///
@@ -4365,14 +4364,15 @@ BOOST_SPIRIT_DEFINE(  // -- W --
 //******************************************************************************
 // Annotation and Error handling
 //
-// Note, the AST odes are tagged with ast::position_tagged which is of type
-// x3::position_tagged. The intension was to extend this approach to tag
-// also the file (id) where the node belongs to as show by Baptiste Wicht's
-// [Compiler of the EDDI programming language](
-// https://github.com/wichtounet/eddic).
-// For convenience (and since this approach isn't realized yet), Spirit.X3's
-// ID are derived from on_success_base (obviously must be changed in
-// the future).
+// Here the "classic" approach from spirit x3's examples/documention is used:
+// Derive the tag class from success "handler" to tag the node self and from
+// error "handler" to cope with parser/expectation exceptions using on_error()
+// member function.
+// Possible is also to cope with specific error handling as shown by
+// - Code Vamping's Blog [Spirit X3 Error Handling: V3 - Tag and release](
+//    https://www.codevamping.com/2018/12/spirit-x3-error-handling/)
+// - or even [Custom error on rule level? #657](
+//   https://github.com/boostorg/spirit/issues/657)
 //
 namespace ibis::vhdl::parser {
 

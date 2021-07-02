@@ -41,6 +41,8 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name)
     using ast::pretty_node_name;
     using boost::locale::format;
     using boost::locale::translate;
+    using error_type = typename vhdl::error_handler<parser::iterator_type>::error_type;
+    auto constexpr syntax_error = error_type::syntax;
 
     switch (check_label(node)) {
         case label_match::result::OK:
@@ -53,9 +55,7 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name)
             error_handler(node, start_label, end_label,
                           (format(translate("Label mismatch in {1}"))  // --
                            % node_name_sv)                             // {1}
-                              .str());
-
-
+                              .str(), syntax_error);
 
             return false;
         }
@@ -67,12 +67,12 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name)
             error_handler(node, start_label, end_label,
                           (format(translate("Label ill-formed in {1}"))  // --
                            % node_name_sv)                               // {1}
-                              .str());
+                              .str(), syntax_error);
 
             return false;
         }
 
-        default: // unreachable_bug_triggered
+        default:  // unreachable_bug_triggered
             cxx_unreachable_bug_triggered();
     }
 
@@ -85,7 +85,8 @@ bool syntax_worker::keyword_matches(ast::process_statement const& node,
     // Note: Re-Using label_match here results into misleading error message
     //       "Label mismatch". Further, the keywords aren't tagged so beauty
     //       error messages aren't possible this way.
-    // FixMe: pretty error rendering
+    // FixMe: pretty error rendering; the error message's node lookup shows the
+    // 1st optional postponed as error location with line number, the 2nd is not rendered.
 
     // FixMe: If pretty_node_name lookup failed, give a warning to user/developer
 
@@ -93,13 +94,16 @@ bool syntax_worker::keyword_matches(ast::process_statement const& node,
     using boost::locale::format;
     using boost::locale::translate;
 
+    using error_type = typename vhdl::error_handler<parser::iterator_type>::error_type;
+    auto constexpr syntax_error = error_type::syntax;
+
     if (!node.postponed && node.end_postponed) {
         auto const [found, node_name_sv] = pretty_node_name(node_name);
 
         error_handler(node, (format(translate("ill-formed statement in {1}; "
                                               "(Hint: single trailing keyword 'postponed')"))  //--
                              % node_name_sv)  // {1}
-                                .str());
+                                .str(), syntax_error);
 
         return false;
     }

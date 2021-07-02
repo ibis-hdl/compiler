@@ -71,11 +71,14 @@ bool parse::operator()(position_cache<parser::iterator_type>::proxy& position_ca
             using boost::locale::format;
             using boost::locale::translate;
 
+            using error_type = typename vhdl::error_handler<parser::iterator_type>::error_type;
+            auto constexpr parser_error = error_type::parser;
+
             std::string const message{
                 (format(translate("Source file '{1}' failed to parse!")) % filename).str()
             };
 
-            error_handler(iter, message);
+            error_handler(iter, message, parser_error);
         }
 
         return parse_ok;

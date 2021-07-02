@@ -178,9 +178,11 @@ public:
     ///
     /// @param file_id ID of actually processed file.
     /// @param pos Iterator position where to gather the line number.
+    /// @param tab_sz The tab size, required to calculate the column number.
     /// @return The line number.
     ///
-    std::size_t line_number(file_id_type file_id, iterator_type const& pos) const;
+    std::tuple<std::size_t, std::size_t> line_column_number(  // --
+        file_id_type file_id, iterator_type const& pos, std::size_t tab_sz) const;
 
     ///
     /// Return an iterator to the begin of the line. White spaces are skipped.
@@ -255,9 +257,9 @@ public:
     std::tuple<IteratorT, IteratorT> range() const { return self.range(file_id); }
 
 public:
-    std::size_t line_number(iterator_type const& pos) const
+    std::tuple<std::size_t, std::size_t> line_column_number(iterator_type const& pos, std::size_t tab_sz) const
     {
-        return self.line_number(file_id, pos);
+        return self.line_column_number(file_id, pos, tab_sz);
     }
 
     iterator_type get_line_start(iterator_type& pos_iter) const

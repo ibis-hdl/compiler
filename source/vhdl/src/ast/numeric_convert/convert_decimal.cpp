@@ -107,12 +107,16 @@ convert_decimal<IntegerT, RealT>::parse_integer(ast::string_span const& literal)
     }
 
     if (!parse_ok) {
+        using error_type = typename vhdl::error_handler<parser::iterator_type>::error_type;
+        auto constexpr parser_error = error_type::parser;
+
         // parse failed - can't fit the target_type, iter is rewind to begin.
-        report_error(        // --
+        report_error(         // --
             literal.begin(),  // --
             (format(translate("in {1} the integer number can't fit the numeric type")) %
              literal_name)
-                .str());
+                .str(),
+            parser_error);
         return std::tuple{ false, 0 };
     }
 
@@ -146,11 +150,15 @@ convert_decimal<IntegerT, RealT>::parse_real(ast::string_span const& literal) co
     }
 
     if (!parse_ok) {
+        using error_type = typename vhdl::error_handler<parser::iterator_type>::error_type;
+        auto constexpr parser_error = error_type::parser;
+
         // parse failed - can't fit the target_type, iter is rewind to begin.
-        report_error(        // --
+        report_error(         // --
             literal.begin(),  // --
             (format(translate("in {1} the real number can't fit the numeric type")) % literal_name)
-                .str());
+                .str(),
+            parser_error);
         return std::tuple{ false, 0 };
     }
 

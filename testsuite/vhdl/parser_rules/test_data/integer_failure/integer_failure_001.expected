@@ -1,4 +1,3 @@
-in file integer_failure/integer_failure_001.input, line 1:
-parse error: Test Suite Full Match Error! Unparsed input left!
+integer_failure/integer_failure_001.input:1:4: parse error: Test Suite Full Match Error! Unparsed input left!
  42_
    ^

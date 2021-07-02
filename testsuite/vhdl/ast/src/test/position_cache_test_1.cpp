@@ -82,7 +82,7 @@ BOOST_AUTO_TEST_CASE(basic_annotate_1_txt)
     // helper
     auto const make_key = [](std::size_t id, auto name) { return std::to_string(id) + name; };
 
-   // position/string to find
+    // position/string to find
     std::string const tagging_str{ "elitr" };
 
     // reuse ID from last test 'contents_1_txt'
@@ -220,13 +220,15 @@ BOOST_AUTO_TEST_CASE(proxy_lineno_1_txt)
     auto const id = position_cache_fixture::file_id_type(id_ref);
     auto proxy = position_cache_ut.get_proxy(id);
 
+    std::size_t tab_sz = 4;  // only to satisfy arg count
+
     {
         // test string #1
         auto node = fixture.getNode(make_key(id_ref, "elitr"));
         auto const range = proxy.position_of(node);
         BOOST_TEST(range.has_value());
 
-        std::size_t const line_no = proxy.line_number(range.value().begin());
+        auto const [line_no, col_no] = proxy.line_column_number(range.value().begin(), tab_sz);
         BOOST_TEST(line_no == 2);
     }
 
@@ -236,7 +238,7 @@ BOOST_AUTO_TEST_CASE(proxy_lineno_1_txt)
         auto const range = proxy.position_of(node);
         BOOST_TEST(range.has_value());
 
-        std::size_t const line_no = proxy.line_number(range.value().begin());
+        auto const [line_no, col_no] = proxy.line_column_number(range.value().begin(), tab_sz);
         BOOST_TEST(line_no == 4);
     }
 }

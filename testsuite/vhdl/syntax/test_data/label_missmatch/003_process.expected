@@ -1,5 +1,4 @@
-in file label_missmatch/003_process, line 11:
-syntax error: Label mismatch in Process Statement
+label_missmatch/003_process:11:3: syntax error: Label mismatch in Process Statement
   Stimulus: process
   ~~~~~~~~ <<-- here
 ...

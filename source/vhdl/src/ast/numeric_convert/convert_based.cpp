@@ -78,12 +78,16 @@ std::tuple<bool, std::uint32_t> convert_based<IntegerT, RealT>::parse_base(
     bool const parse_ok = x3::parse(iter, end, x3::uint_ >> x3::eoi, base);
 
     if (!parse_ok) {
+        using error_type = typename vhdl::error_handler<parser::iterator_type>::error_type;
+        auto constexpr parser_error = error_type::parser;
+
         // parse failed - can't fit the target_type, iter is rewind to begin.
-        report_error(                                                                  // --
+        report_error(                                                                   // --
             literal.base.begin(),                                                       // --
             (format(translate("in {1} the base specifier can't fit the numeric type"))  // --
              % literal_name)
-                .str());
+                .str(),
+            parser_error);
         return std::tuple{ false, 0 };
     }
 
@@ -134,12 +138,16 @@ std::tuple<bool, std::uint64_t> convert_based<IntegerT, RealT>::parse_integer(
         bool const parse_ok = x3::parse(iter, end, parser(base, iter) >> x3::eoi, integer);
 
         if (!parse_ok) {
+            using error_type = typename vhdl::error_handler<parser::iterator_type>::error_type;
+            auto constexpr parser_error = error_type::parser;
+
             // parse failed - can't fit the target_type, iter is rewind to begin.
-            report_error(                                                                // --
+            report_error(                                                                 // --
                 literal.number.integer_part.begin(),                                      // --
                 (format(translate("in {1} the integer part can't fit the numeric type"))  // --
                  % literal_name)
-                    .str());
+                    .str(),
+                parser_error);
             return std::tuple{ false, integer };
         }
 
@@ -206,12 +214,16 @@ std::tuple<bool, double> convert_based<IntegerT, RealT>::parse_fractional(
 
     // during accumulation a numeric IEEE754 errors may occur
     if (!std::isnormal(fractional)) {
-        report_error(                                                                    // --
+        using error_type = typename vhdl::error_handler<parser::iterator_type>::error_type;
+        auto constexpr numeric_error = error_type::numeric;
+
+        report_error(                                                                     // --
             literal.number.fractional_part.begin(),                                       // --
             (format(translate(                                                            // --
                  "in {1} numeric error occurred during calculation of fractional part"))  // --
              % literal_name)
-                .str());
+                .str(),
+            numeric_error);
         return std::tuple{ false, fractional };
     }
 
@@ -246,12 +258,16 @@ std::tuple<bool, std::int32_t> convert_based<IntegerT, RealT>::parse_exponent(
     bool const parse_ok = x3::parse(iter, end, exp >> x3::eoi, exponent);
 
     if (!parse_ok) {
+        using error_type = typename vhdl::error_handler<parser::iterator_type>::error_type;
+        auto constexpr parser_error = error_type::parser;
+
         // parse failed - can't fit the target_type, iter is rewind to begin.
-        report_error(                                                                 // --
+        report_error(                                                                  // --
             literal.number.exponent.begin(),                                           // --
             (format(translate("in {1} the exponent part can't fit the numeric type"))  // --
              % literal_name)
-                .str());
+                .str(),
+            parser_error);
         return std::tuple{ false, 0 };
     }
 
@@ -291,12 +307,16 @@ std::tuple<bool, double> convert_based<IntegerT, RealT>::parse_real10(
     bool const parse_ok = x3::parse(iter, end, real_parser >> x3::eoi, real);
 
     if (!parse_ok) {
+        using error_type = typename vhdl::error_handler<parser::iterator_type>::error_type;
+        auto constexpr parser_error = error_type::parser;
+
         // parse failed - can't fit the target_type, iter is rewind to begin.
-        report_error(                                                               // --
+        report_error(                                                                // --
             literal.number.integer_part.begin(),                                     // --
             (format(translate("in {1} the real number can't fit the numeric type"))  //--
              % literal_name)
-                .str());
+                .str(),
+            parser_error);
 
         return std::tuple{ false, 0 };
     }
@@ -353,12 +373,16 @@ typename convert_based<IntegerT, RealT>::return_type convert_based<IntegerT, Rea
         return failure_return_value();
     }
     if (!supported_base(base)) {
-        report_error(          // --
+        using error_type = typename vhdl::error_handler<parser::iterator_type>::error_type;
+        auto constexpr supporting_error = error_type::numeric;
+
+        report_error(           // --
             node.base.begin(),  // --
             (format(translate("in {1} the base specifier of \'{2}\' isn't supported; "
                               "only 2, 8, 10 and 16!"))  // --
              % literal_name % base)
-                .str());
+                .str(),
+            supporting_error);
         return failure_return_value();
     }
 

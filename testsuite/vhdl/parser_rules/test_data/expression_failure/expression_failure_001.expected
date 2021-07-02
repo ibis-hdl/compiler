@@ -1,4 +1,3 @@
-in file expression_failure/expression_failure_001.input, line 2:
-parse error: Test Suite Full Match Error! Unparsed input left!
+expression_failure/expression_failure_001.input:2:19: parse error: Test Suite Full Match Error! Unparsed input left!
 "0011" nor "0010" nor "1000"
                   ^

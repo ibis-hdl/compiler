@@ -27,11 +27,10 @@ public:
     /// @brief FillMe :)
     ///
     /// @tparam IteratorT Iterator type of the parser
-    /// @tparam ExceptionT Boost.Spirit X3 expectation expection type
     /// @tparam ContextT Boost.Spirit X3 context type
     /// @param first Iterator to the begin of somewhat, unused
     /// @param last  Iterator to the end of somewhat, unused
-    /// @param e Boost.Spirit X3 expectation expection
+    /// @param e Boost.Spirit X3 x3::expectation_failure<IteratorT> exception
     /// @param context Boost.Spirit X3 context
     /// @return x3::error_handler_result
     ///
@@ -45,13 +44,27 @@ public:
     ///         "The Spirit.X3 Context must be equal"
     ///     );
     /// @endcode
-    template <typename IteratorT, typename ExceptionT, typename ContextT>
+    ///
+    template <typename IteratorT, typename ContextT>
     x3::error_handler_result on_error([[maybe_unused]] IteratorT& first,
-                                      [[maybe_unused]] IteratorT const& last, ExceptionT const& e,
+                                      [[maybe_unused]] IteratorT const& last, x3::expectation_failure<IteratorT> const& e,
                                       ContextT const& context) const
     {
         auto& error_handler = x3::get<parser::error_handler_tag>(context).get();
-        return error_handler(e.where(), make_error_description(e.which()));
+
+        using error_type = typename vhdl::error_handler<IteratorT>::error_type;
+        auto constexpr parser_error = error_type::parser;
+
+        error_handler(e.where(), make_error_description(e.which()), parser_error);
+
+        // FixMe: just here as "concept" marker, but untested by testsuite yet.
+        if (e.which() == "';'") {
+            // adavance iter after the error occurred, the error is registered above
+            first = e.where();
+            return x3::error_handler_result::accept;
+        }
+
+        return x3::error_handler_result::fail;
     }
 
 private:

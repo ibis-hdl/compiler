@@ -96,7 +96,7 @@ struct testing_parser {
             //   std::string(e.where(), input.end())
             // below for the error message. The chances are high, that this isn't the right error
             // position iterator - we relay on positions_cache file-iterator mapping knowledge here!
-            // Otherwise it will crash there.
+            // Otherwise it will crash there with: class std::length_error: string too long
             auto err_pos = e.where();
             auto const start = position_cache_proxy.get_line_start(err_pos);
             auto const line = position_cache_proxy.current_line(start);
@@ -104,10 +104,11 @@ struct testing_parser {
             error_handler(e.where(),
                           "Test Suite caught *unexpected* expectation failure! Expecting "  // --
                               + e.which() + " here: '"                                      // --
-                              + std::string(line.begin(), line.end())                       // --
+                              + std::string(line)                                           // --
                               + "'\n");
+
+            std::cerr << output.str() << '\n';
         }
-        std::cerr << output.str() << '\n';
 
         return std::tuple{ parse_ok && (!full_match || (iter == end)), output.str() };
     }

@@ -1,4 +1,3 @@
-in file numeric_literal_failure/based_literal_001.input, line 2:
-parse error: Test Suite Full Match Error! Unparsed input left!
+numeric_literal_failure/based_literal_001.input:2:11: parse error: Test Suite Full Match Error! Unparsed input left!
 016#0_FF#e-23
           ^

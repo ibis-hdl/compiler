@@ -158,7 +158,10 @@ project.
 
 ### Boost.Spirit X3 Notes
 
-**WARNING:** Notes about parser rule definition
+The X3 rules are from start of the project in 2017, so `grammar_def.h` requires
+rework. The headers are generated from EBNF using a python script. Only recursive
+rules require the template engine of BOOST_SPIRIT_{DECLARE, DEFINE}.
+Also replace x3::char_("0-9"), x3::char_("0-9a-fA-F") with x3::digit/x3::xdigit etc.
 
 There are some 'anonymous' helper rules (to break down the complexity and
 to enforce the attributes required) used in the specific rule's detail
@@ -183,6 +186,8 @@ separated compilation units.
 unknown location(0): fatal error: in "parser_rule/attribute_specification/_1": class std::bad_alloc: bad allocation
 ../testsuite/vhdl/parser_rules/src/test/attribute_specification_test.cpp(46): last checkpoint
 ```
+
+  ToDo: Confirm, that this may occur only in debug mode using MS VC?!
 
 - Add TestCase for assertion_statement, assertion self is tested already. It appends only
   "label: .... ;" to the tests.
@@ -263,15 +268,14 @@ clear what comes from what.
 
 ### CMake
 
-- use CMake's Unity Build Mode
+- use CMake's [Unity Build Mode](https://cmake.org/cmake/help/latest/prop_tgt/UNITY_BUILD_MODE.html#prop_tgt:UNITY_BUILD_MODE)
+
+Read carefully:
 
 - [Modern CMake](https://cliutils.gitlab.io/modern-cmake/)
 - [Effective Modern CMake](https://gist.github.com/mbinna/c61dbb39bca0e4fb7d1f73b0d66a4fd1)
   and [Modern CMake Examples](https://github.com/pr0g/cmake-examples)
-- [PCH](https://cmake.org/cmake/help/latest/command/target_precompile_headers.html?highlight=pch)
-  and [reusing them](https://cmake.org/cmake/help/git-stage/command/target_precompile_headers.html)
-- [Unity Build Mode](https://cmake.org/cmake/help/latest/prop_tgt/UNITY_BUILD_MODE.html#prop_tgt:UNITY_BUILD_MODE)
-  see also [CMake Discourse](https://discourse.cmake.org/t/one-source-to-create-multiple-objects/2819)
+- also [CMake Discourse](https://discourse.cmake.org/t/one-source-to-create-multiple-objects/2819)
 - [C++ dependency management with CMake’s FetchContent](https://medium.com/analytics-vidhya/c-dependency-management-with-cmakes-fetchcontent-4ceca4693a5d)
 
 - **Regards to build options, see [Making CMake work for you](
@@ -282,18 +286,30 @@ clear what comes from what.
 - **FixMe**: Before main's init() there is no text style/color functionality even in the
   stacktrace_{gdb,boost} functions.
 
-- position_cache got interesting warnings by compiling with `-Weverything`
-  regards to `.line_number()` and `.get_line_start`: Investigate!
+- exceptions can leave ibis frontend, encapsulate inside try/catch block. No problem
+  nowadays since it isn't functional.
+
+- X3's error_handler, on_{error,success}_base classes: The original x3::error_handler
+  is/was always a diagnostic message handler only.
+  This days, the tagging task is done using the on_success_base respectively by the
+  position_cache class - rename to success_handler. The on_error_base performs the
+  expectation handling - rename to error_handler. Hence, rename the old error_handler
+  to message_{handler, engine, ..) since this is the task.
+  Since the parser, syntax, etc. error handling isn't completed we will move these task
+  to the future if the things get more clearly.
+
+- position_cache got warnings by compiling with `-Weverything`
+  regards to `.line_number()` and `.get_line_start`: IIRC deduction guide, Investigate!
 
 - Simplify formatting output using [fmtlib/fmt](https://github.com/fmtlib/fmt),
   which supports color output; related to C++20 std::format support
 
-- Get clang-format working again. By The Way, check clang-format
-  style for enhancements, so that we get rid off the '// 'clang-format {off|on}'
-  pragmas.
-
 - Write git hooks for checking using clang-{tidy,format} et al. Note, that not
-  everywhere clang-format may be installed.
+  everywhere clang-format may be installed. The git hooks should capture
+  - PCH with and without, declarations are hidden in the PCH headers, so if one isn't using
+    PCH it results into compile errors.
+  - release and debug mode, later one triggers more tests, even using MS compiler.
+  - and of course, Linux and Windows, Clang, GNU C++ and MS VC.
 
 - AST printer: move ast_printer into ast_walker, printer breaks down into simple class
   like ast_stats.
@@ -314,7 +330,6 @@ clear what comes from what.
   to avoid unnecessary rebuild, for an idea look at blender sources.
 
 - Improve a formatter for all error report classes/functions, especially vhdl::error_handler.
-
 
 ### NumericConvert / 2nd pass Parser
 
@@ -366,11 +381,6 @@ but how to cope with error handling than? Hacking X3's internals isn't the way!
 
 - Useful information to store on filesystem are the messages, maybe [Observing test failure messages](
    https://stackoverflow.com/questions/56963902/observing-test-failure-messages/61371602#61371602)
-
-- An interesting feature is described at
-  [Controlling output of Boost.Test source location format](
-   https://stackoverflow.com/questions/64618840/controlling-output-of-boost-test-source-location-format)
-
 
 ### Documentation
 

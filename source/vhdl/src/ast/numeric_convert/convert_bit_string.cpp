@@ -96,12 +96,16 @@ typename convert_bit_string<IntegerT>::return_type convert_bit_string<IntegerT>:
         }
 
         if (!parse_ok) {
+            using error_type = typename vhdl::error_handler<parser::iterator_type>::error_type;
+            auto constexpr parser_error = error_type::parser;
+
             // parse failed - can't fit the integer_type, iter is rewind to begin.
-            report_error(             // --
+            report_error(              // --
                 node.literal.begin(),  // --
                 (format(translate("in {1} the integer number can't fit the numeric type")) %
                  literal_name)
-                    .str());
+                    .str(),
+                parser_error);
             std::tuple{ false, 0 };
         }
 
