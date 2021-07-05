@@ -37,6 +37,7 @@ BOOST_DATA_TEST_CASE(keyword_ok,                                                
 {
     btt::output_test_stream os;
     parser::position_cache<parser::iterator_type> position_cache;
+    parser::context ctx;
     ast::design_file design_file;
 
     auto position_cache_proxy = position_cache.add_file(test_case_name, input);
@@ -44,7 +45,7 @@ BOOST_DATA_TEST_CASE(keyword_ok,                                                
     {
         parser::parse parse{ os  };
 
-        bool const parse_ok = parse(position_cache_proxy, design_file);
+        bool const parse_ok = parse(position_cache_proxy, ctx, design_file);
         if (!parse_ok) {
             std::cout << os.str() << std::endl;
         }
@@ -82,6 +83,7 @@ BOOST_DATA_TEST_CASE(
 {
     btt::output_test_stream os;
     parser::position_cache<parser::iterator_type> position_cache;
+    parser::context ctx;
     ast::design_file design_file;
 
     auto position_cache_proxy = position_cache.add_file(test_case_name, input);
@@ -89,7 +91,7 @@ BOOST_DATA_TEST_CASE(
     {
         parser::parse parse{ os };
 
-        bool const parse_ok = parse(position_cache_proxy, design_file);
+        bool const parse_ok = parse(position_cache_proxy, ctx, design_file);
         if (!parse_ok) {
             std::cout << os.str() << std::endl;
         }

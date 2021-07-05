@@ -22,12 +22,6 @@ file_loader::file_loader(std::ostream& os_)
 {
 }
 
-file_loader::file_loader(std::ostream& os_, bool quiet_)
-    : os{ os_ }
-    , quiet{ quiet_ }
-{
-}
-
 bool file_loader::exist_file(fs::path const& filename) const
 {
     using boost::locale::format;

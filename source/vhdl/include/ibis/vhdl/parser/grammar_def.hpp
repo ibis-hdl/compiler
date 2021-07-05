@@ -2643,6 +2643,9 @@ auto const interface_file_declaration_def =
 
 /// interface_list ::=                                          [LRM93 §4.3.2.1]
 ///     interface_element { ; interface_element }
+///
+/// FixMe: using ```interface_element % x3::expect[';']``` won't work here since the
+/// last interface_element isn't terminated with trailing ';'
 auto const interface_list_def =
     interface_element % ';'
     ;

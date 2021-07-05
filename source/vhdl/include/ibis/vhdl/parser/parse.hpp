@@ -2,6 +2,7 @@
 
 #include <ibis/vhdl/parser/position_cache.hpp>
 #include <ibis/vhdl/parser/parser_config.hpp>
+#include <ibis/vhdl/parser/context.hpp>
 
 #include <iosfwd>
 #include <string>
@@ -9,9 +10,7 @@
 #include <exception>
 
 namespace ibis::vhdl::ast {
-
 struct design_file;
-
 }
 
 namespace ibis::vhdl::parser {
@@ -32,6 +31,7 @@ public:
     /// Functor to call parse implementation.
     ///
     /// @param pos_proxy Proxy of position_cache with the file contents to be parsed.
+    /// @param ctx The context used to parse and others.
     /// @param design_file AST node of input/file contents.
     /// @return true success.
     /// @return false failure.
@@ -48,7 +48,7 @@ public:
     /// on rules (define them in separate translation units).
     ///
     bool operator()(position_cache<parser::iterator_type>::proxy& pos_proxy,
-                    ast::design_file& design_file);
+                    parser::context& ctx, ast::design_file& design_file);
 
 private:
     static std::string make_exception_description(std::exception const& exception,

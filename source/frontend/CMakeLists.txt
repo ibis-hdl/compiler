@@ -13,6 +13,7 @@ add_executable(${PROJECT_NAME})
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         ibis::common
+        ibis::vhdl
         Boost::system
         Boost::locale
         Boost::filesystem   # Boost::process depends on
@@ -89,12 +90,12 @@ set_source_files_properties(
 
 # FixMe: Use generator, e.g. see https://www.brianlheim.com/2018/04/09/cmake-cheat-sheet.html
 # $<$<CXX_COMPILER_ID:GNU>:-g -fno-omit-frame-pointer>
-# 
-# FixMe: What was the intend of this compile flags? G++ with PCH fires probably here a 
+#
+# FixMe: What was the intend of this compile flags? G++ with PCH fires probably here a
 # warning: "cmake_pch.hxx.gch: created with -gnone, but used with -gdwarf-2".
 # Maybe it's related to stack unwinding? Nevertheless, than this should be moved
 # to options_devel and stacktrace section (depending on enabled option).
-# It's disabled for now. 
+# It's disabled for now.
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 #    target_compile_options(${PROJECT_NAME}

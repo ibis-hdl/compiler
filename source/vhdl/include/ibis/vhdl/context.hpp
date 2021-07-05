@@ -152,6 +152,9 @@ public:
 
 public:
     bool error_free() const { return error_count == 0; }
+    bool warning_free() const { return warning_count == 0; }
+
+    bool issue_free() const { return error_count == 0 && warning_count == 0; }
 
     error_counter& errors() { return error_count; }
     error_counter const & errors() const { return error_count; }

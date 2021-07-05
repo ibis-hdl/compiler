@@ -1,5 +1,10 @@
 #include <ibis/frontend/init.hpp>
 
+#include <ibis/vhdl/parser/parse.hpp>
+#include <ibis/vhdl/ast.hpp>
+
+#include <ibis/vhdl/ast/ast_printer.hpp>
+
 #include <ibis/settings.hpp>
 #include <ibis/util/file/file_loader.hpp>
 
@@ -34,52 +39,108 @@ int main(int argc, const char* argv[])
     using boost::locale::format;
     using boost::locale::translate;
 
-    // FixMe: try/catch block
-    ibis::frontend::init init(argc, argv);
-
-    bool const quiet = [&] { return ibis::settings::instance().get<bool>("quiet"); }();
-    unsigned const verbose_level = [&] {
-        return ibis::settings::instance().get<unsigned>("verbose");
-    }();
-
-    if (verbose_level > 1) {
-        ibis::settings::dump(std::cout);
-        std::cout << '\n';
-    }
-
     using namespace ibis;
     using namespace ibis::color;
 
-    constexpr bool test_color = true;
+    namespace parser = ibis::vhdl::parser;
+    namespace ast = ibis::vhdl::ast;
 
     try {
-        util::file_loader file_reader{ std::cerr, quiet };
+        ibis::frontend::init init(argc, argv);
 
-        if constexpr (test_color) {
+        bool const quiet = [&] { return ibis::settings::instance().get<bool>("quiet"); }();
+        unsigned const verbose_level = [&] {
+            return ibis::settings::instance().get<unsigned>("verbose");
+        }();
+
+        if (verbose_level > 1) {
+            ibis::settings::dump(std::cout);
+            std::cout << '\n';
+        }
+
+        constexpr bool test_color = false;
+
+        util::file_loader file_reader{ std::cerr };
+
+        if constexpr ((test_color)) {
             std::cerr << color::message::failure("FAILURE") << " Format Test\n";
             std::cerr << color::message::error("ERROR") << " Format Test\n";
             std::cerr << color::message::warning("WARNING") << " Format Test\n";
             std::cerr << color::message::note("NOTE") << " Format Test\n";
         }
 
+        // Quick & Dirty main() function to test the parser from command line
+        parser::position_cache<parser::iterator_type> position_cache;
+        parser::parse parse{ std::cout };
+        parser::context ctx;
+
         for (auto const& child : settings::instance().get_child("hdl-files")) {
             std::string_view const hdl_file = child.second.data();
+            // FixMe: Throw on read_file(), no optional!!
             auto const contents = file_reader.read_file(hdl_file);
             if (!quiet) {
-                std::cerr << message::note(translate("processing:")) << " " << hdl_file << '\n';
+                std::cout << message::note(                             // --
+                                 (format(translate("processing: {1}"))  // --
+                                  % hdl_file)
+                                     .str())
+                          << '\n';
             }
 
-            // XXX since we aren't functional, simply print the contents
-
-            std::cout << "------------------------------------------------\n"
+            std::cout << "------------------- input ----------------------\n"
                       << *contents << '\n'
                       << "------------------------------------------------\n";
+
+            auto position_cache_proxy = position_cache.add_file(hdl_file, *contents);
+
+            ast::design_file design_file;
+
+            parse(position_cache_proxy, ctx, design_file);
+
+            if (!quiet) {
+                ast::printer ast_printer{ std::cout };
+                ast_printer.verbose_symbol = true;
+                ast_printer.verbose_variant = false;
+                ast_printer(design_file);
+            }
+        }
+
+        // FixMe: plural_count copy & paste from context.cpp, make it re-useable
+        auto const plural_count = [](size_t count) {
+            if (count > std::numeric_limits<int>::max()) {
+                return std::numeric_limits<int>::max();
+            }
+            return static_cast<int>(count);
+        };
+
+        std::cout << message::note(          // --
+                         (format(translate(  // --
+                              "processed {1} file", "processed {1} files",
+                              plural_count(position_cache.file_count())))  // --
+                          % position_cache.file_count())
+                             .str())
+                  << '\n';
+        if (!ctx.issue_free()) {
+            std::cout << vhdl::failure_status(ctx) << '\n';
         }
 
         // testing_signal_handler(); // just testing
     }
+    catch (boost::spirit::x3::expectation_failure<vhdl::parser::iterator_type> const& e) {
+        // This shouldn't be happen!
+        std::cerr << message::failure(                                                       // --
+                         (format(translate(                                                  // --
+                              "caught unhandled Boost.Spirit X3 expectation_failure: {1}"))  // --
+                          % e.what())
+                             .str())
+                  << '\n';
+    }
     catch (std::exception const& e) {
-        std::cerr << message::failure(translate("Exception caught:")) << " " << e.what() << '\n';
+        std::cerr << message::failure(                   // --
+                         (format(translate(              // --
+                              "Exception caught: {1}"))  // --
+                          % e.what())
+                             .str())
+                  << '\n';
     }
     catch (...) {
         std::cerr << message::failure(translate("Unexpected exception caught")) << '\n';

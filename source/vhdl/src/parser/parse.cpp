@@ -32,7 +32,7 @@ BOOST_SPIRIT_DECLARE(design_file_type)
 namespace ibis::vhdl::parser {
 
 bool parse::operator()(position_cache<parser::iterator_type>::proxy& position_cache_proxy,
-                       ast::design_file& design_file)
+                       parser::context& ctx, ast::design_file& design_file)
 {
     using vhdl::parser::iterator_type;
 
@@ -41,7 +41,6 @@ bool parse::operator()(position_cache<parser::iterator_type>::proxy& position_ca
                           typename std::iterator_traits<parser::iterator_type>::iterator_category>,
         "iterator type must be of multi-pass iterator");
 
-    parser::context ctx;
     parser::error_handler_type error_handler{ os, ctx, position_cache_proxy };
 
     // clang-format off
@@ -74,11 +73,11 @@ bool parse::operator()(position_cache<parser::iterator_type>::proxy& position_ca
             using error_type = typename vhdl::error_handler<parser::iterator_type>::error_type;
             auto constexpr parser_error = error_type::parser;
 
-            std::string const message{
+            std::string const error_message{
                 (format(translate("Source file '{1}' failed to parse!")) % filename).str()
             };
 
-            error_handler(iter, message, parser_error);
+            error_handler(iter, error_message, parser_error);
         }
 
         return parse_ok;
