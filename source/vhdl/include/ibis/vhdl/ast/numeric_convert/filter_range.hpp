@@ -15,6 +15,8 @@ static auto filter_range(RangeType const& range)
         bool operator()(char x) { return '_' != x; }
     };
 
+    // FixMe: MSVC 2019 with '_CONTAINER_DEBUG_LEVEL > 0' triggers assertion:
+    // "cannot compare incompatible string_view iterators for equality"
     return boost::make_iterator_range(
         boost::make_filter_iterator(separator_predicate{}, range.begin(), range.end()),
         boost::make_filter_iterator(separator_predicate{}, range.end()));

@@ -59,7 +59,7 @@ public:
         using printer = detail::ansi_esc_printer<color::attribute, 4>;
 #endif
 
-        auto const use_color = [&](color::control ctrl) -> bool {
+        auto const use_color = [&](color::control ctrl) -> std::optional<bool> {
             switch (ctrl) {
                 case color::control::Auto:
                     return detail::isatty{ os };
@@ -74,13 +74,13 @@ public:
 
         // first time initialization
         if (!enable) {
-            *enable = use_color(ctrl);
+            enable = use_color(ctrl);
         }
 
         // only on changes check to use colors
         if (ctrl != control) {
             control = ctrl;
-            *enable = use_color(ctrl);
+            enable = use_color(ctrl);
         }
 
         if (*enable) {

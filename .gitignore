@@ -2,6 +2,7 @@
 
 # git self
 *.patch
+*.diff
 
 # other dev files
 *.orig

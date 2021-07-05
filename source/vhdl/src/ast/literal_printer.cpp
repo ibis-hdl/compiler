@@ -27,7 +27,7 @@ public:
             return false;
         };
 
-        bool flag{ false };
+        bool flag = false;
 
         switch (chr) {
             case '"':
@@ -55,76 +55,69 @@ namespace ibis::vhdl::ast {
 
 std::ostream& literal_printer::print_on(std::ostream& os) const
 {
-    // clang-format off
-    boost::apply_visitor(util::overloaded {
-        [&os](bit_string_literal const& lit) {
-            using base_specifier = bit_string_literal::base_specifier;
+    boost::apply_visitor(
+        util::overloaded{
+            [&os](bit_string_literal const& lit) {
+                using base_specifier = bit_string_literal::base_specifier;
 
-            switch (lit.base_type) {
-                case base_specifier::bin:
-                    os << 'B';
-                    break;
-                case base_specifier::oct:
-                    os << 'O';
-                    break;
-                case base_specifier::hex:
-                    os << 'X';
-                    break;
-                default: // unreachable_bug_triggered
-                    cxx_unreachable_bug_triggered();
-            }
-
-            os << lit.literal;
-        },
-        [&os](decimal_literal const& lit) {
-            using numeric_type_specifier = ast::decimal_literal::numeric_type_specifier;
-
-            switch (lit.numeric_type()) {
-                case numeric_type_specifier::integer: [[fallthrough]];
-                case numeric_type_specifier::real: {
-                    os << lit.literal;
-                    break;
+                switch (lit.base_type) {
+                    case base_specifier::bin:
+                        os << 'B';
+                        break;
+                    case base_specifier::oct:
+                        os << 'O';
+                        break;
+                    case base_specifier::hex:
+                        os << 'X';
+                        break;
+                    default:  // unreachable_bug_triggered
+                        cxx_unreachable_bug_triggered();
                 }
-                default: // unreachable_bug_triggered
-                    cxx_unreachable_bug_triggered();
-            }
-        },
-        [&os](based_literal const& lit) {
-            using numeric_type_specifier = ast::based_literal::numeric_type_specifier;
 
-            os << lit.base << '#';
+                os << lit.literal;
+            },
+            [&os](decimal_literal const& lit) {
+                // same for numeric_type_specifier integer and real
+                os << lit.literal;
+            },
+            [&os](based_literal const& lit) {
+                using numeric_type_specifier = ast::based_literal::numeric_type_specifier;
 
-            switch (lit.numeric_type()) {
-                case numeric_type_specifier::integer: {
-                    os << lit.number.integer_part;
-                    break;
+                os << lit.base << '#';
+
+                switch (lit.numeric_type()) {
+                    case numeric_type_specifier::integer: {
+                        os << lit.number.integer_part;
+                        break;
+                    }
+                    case numeric_type_specifier::real: {
+                        os << lit.number.integer_part << '.' << lit.number.fractional_part;
+                        break;
+                    }
+                    default:  // unreachable_bug_triggered
+                        cxx_unreachable_bug_triggered();
                 }
-                case numeric_type_specifier::real: {
-                    os << lit.number.integer_part << '.' << lit.number.fractional_part;
-                    break;
+
+                os << '#';
+
+                if (!lit.number.exponent.empty()) {
+                    os << lit.number.exponent;
                 }
-                default: // unreachable_bug_triggered
-                    cxx_unreachable_bug_triggered();
-            }
+            },
+            [&os](string_literal const& str) {
+                // FixMe: MSVC 2019 with '_CONTAINER_DEBUG_LEVEL > 0' triggers assertion:
+                // "cannot compare incompatible string_view iterators for equality"
+                auto const literal_f = boost::make_iterator_range(
+                    boost::make_filter_iterator(  // --
+                        unquote_predicate{}, str.literal.begin(), str.literal.end()),
+                    boost::make_filter_iterator(  // --
+                        unquote_predicate{}, str.literal.end()));
 
-            os << '#';
-
-            if (!lit.number.exponent.empty()) {
-                os << lit.number.exponent;
-            }
-        },
-        [&os](string_literal const& str) {
-            auto const literal_f = boost::make_iterator_range(
-                boost::make_filter_iterator(unquote_predicate{},
-                        str.literal.begin(), str.literal.end()),
-                boost::make_filter_iterator(unquote_predicate{},
-                        str.literal.end())
-            );
-
-            os << literal_f;
-        }
-    }, this->literal);
-    // clang-format on
+                os << literal_f;
+            }          // --
+        },             // overloaded{ ... }
+        this->literal  // variant
+    );
 
     return os;
 }
