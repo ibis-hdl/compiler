@@ -448,7 +448,7 @@ void init::l10n()
     //  https://www.boost.org/doc/libs/1_68_0/libs/locale/doc/html/using_localization_backends.html)
     localization_backend_manager l10n_backend = localization_backend_manager::global();
 
-    if constexpr (ibis::build_platform == platform::Win32) {
+    if constexpr (ibis::platform == platform::Windows) {
         l10n_backend.select(static_cast<std::string>("winapi"));
     }
     else {

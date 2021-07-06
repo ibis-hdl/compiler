@@ -2,7 +2,7 @@
 
 #include <ibis/platform.hpp>
 
-#if defined(IBIS_BUILD_PLATFORM_WIN32)
+#if defined(IBIS_BUILD_PLATFORM_WINDOWS)
 // not fully C++17 MinGW g++-7.3.0
 // #  include <ibis/compiler/detail/compiler_push.hpp>
 // #  if defined(__GNUC__) && !defined(__clang__)

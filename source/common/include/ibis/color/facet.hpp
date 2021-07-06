@@ -53,7 +53,7 @@ public:
 public:
     std::ostream& print_on(std::ostream& os, message_decorator<Tag> const& message) const
     {
-#if defined(IBIS_BUILD_PLATFORM_WIN32)
+#if defined(IBIS_BUILD_PLATFORM_WINDOWS)
         using printer = detail::winapi_printer<color::attribute, 4>;
 #else
         using printer = detail::ansi_esc_printer<color::attribute, 4>;

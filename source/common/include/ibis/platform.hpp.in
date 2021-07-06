@@ -10,18 +10,10 @@
 ///  https://gitlab.kitware.com/cmake/community/-/wikis/doc/tutorials/How-To-Write-Platform-Checks)
 /// This allows to prevent the use of preprocessor using ```constexpr```.
 
-#cmakedefine IBIS_BUILD_PLATFORM_UNIX 1
-#cmakedefine IBIS_BUILD_PLATFORM_WIN32 1
-#cmakedefine IBIS_BUILD_PLATFORM_APPLE 1
-#cmakedefine IBIS_BUILD_PLATFORM_MINGW 1
-#cmakedefine IBIS_BUILD_PLATFORM_MSYS 1
-#cmakedefine IBIS_BUILD_PLATFORM_CYGWIN 1
-
-#cmakedefine IBIS_BUILD_SYSTEM_LINUX 1
-#cmakedefine IBIS_BUILD_SYSTEM_WINDOWS 1
-#cmakedefine IBIS_BUILD_SYSTEM_DARWIN 1
-#cmakedefine IBIS_BUILD_SYSTEM_FREEBSD 1
-#cmakedefine IBIS_BUILD_SYSTEM_MSYS 1
+#cmakedefine IBIS_BUILD_PLATFORM_LINUX 1
+#cmakedefine IBIS_BUILD_PLATFORM_WINDOWS 1
+#cmakedefine IBIS_BUILD_PLATFORM_DARWIN 1
+#cmakedefine IBIS_BUILD_PLATFORM_FREEBSD 1
 
 #cmakedefine IBIS_BUILD_COMPILER_Clang 1
 #cmakedefine IBIS_BUILD_COMPILER_Clang_GNU 1
@@ -32,50 +24,22 @@
 
 namespace ibis {
 
-/// Enum which represents the build platform.
+/// Enum which represents the build operating platform.
 enum class platform {
-    Unix,   ///< is TRUE on all UNIX-like OS's, including Apple OS X and CygWin
-    Win32,  ///< is TRUE on Windows. Prior to 2.8.4 this included CygWin
-    Apple,  ///< is TRUE on Apple systems. Note this does not imply the system is Mac OS X, only
-            ///  that APPLE is defined in C/C++ header files.
-    MinGW,  ///< is TRUE when using the MinGW compiler in Windows
-    MSYS,   ///< is TRUE when using the MSYS developer environment in Windows
-    Cygwin  ///< is TRUE on Windows when using the CygWin version of CMake
+    Linux,    ///< Linux
+    Windows,  ///< Windows
+    Darwin,   ///< macOS/OS X
+    FreeBSD   ///< FreeBSD
 };
 
-#ifdef IBIS_BUILD_PLATFORM_UNIX
-constexpr ibis::platform build_platform = platform::Unix;
-#elif IBIS_BUILD_PLATFORM_WIN32
-constexpr ibis::platform build_platform = platform::Win32;
-#elif IBIS_BUILD_PLATFORM_APPLE
-constexpr ibis::platform build_platform = platform::Apple;
-#elif IBIS_BUILD_PLATFORM_MINGW
-constexpr ibis::platform build_platform = platform::MinGW;
-#elif IBIS_BUILD_PLATFORM_MSYS
-constexpr ibis::platform build_platform = platform::MSYS;
-#elif IBIS_BUILD_PLATFORM_CYGWIN
-constexpr ibis::platform build_platform = platform::Cygwin;
-#endif
-
-/// Enum which represents the build operating system.
-enum class system {
-    Linux,    ///< Linux (GCC, Intel, PGI)
-    Windows,  ///< Windows (Visual Studio, MinGW GCC)
-    Darwin,   ///< macOS/OS X (Clang, GCC)
-    FreeBSD,  ///< FreeBSD
-    MSYS      ///< Windows (MSYS2 shell native GCC)
-};
-
-#ifdef IBIS_BUILD_SYSTEM_LINUX
-constexpr ibis::system build_system = system::Linux;
-#elif IBIS_BUILD_SYSTEM_WINDOWS
-constexpr ibis::system build_system = system::Windows;
-#elif IBIS_BUILD_SYSTEM_DARWIN
-constexpr ibis::system build_system = system::Darwin;
-#elif IBIS_BUILD_SYSTEM_FREEBSD
-constexpr ibis::system build_system = system::FreeBSD;
-#elif IBIS_BUILD_SYSTEM_MSYS
-constexpr ibis::system build_system = system::MSYS;
+#ifdef IBIS_BUILD_PLATFORM_LINUX
+constexpr ibis::platform platform = platform::Linux;
+#elif IBIS_BUILD_PLATFORM_WINDOWS
+constexpr ibis::platform platform = platform::Windows;
+#elif IBIS_BUILD_PLATFORM_DARWIN
+constexpr ibis::platform platform = platform::Darwin;
+#elif IBIS_BUILD_PLATFORM_FREEBSD
+constexpr ibis::platform platform = platform::FreeBSD;
 #endif
 
 /// Enum which represents the platform compiler.

@@ -33,15 +33,15 @@ message(STATUS "Host has ${LOCALHOST_RAM_MiB} MiB of available physical memory t
 
 # test on low memory build hosts and warn
 if(CORE_4096MiB EQUAL 0)
-    message(WARNING "-- probably unable to compile files using 4096 MiB per CPU core")
+    #message(WARNING "-- probably unable to compile files using 4096 MiB per CPU core")
     set(CORE_4096MiB 1)
 endif()
 if(CORE_8192MiB EQUAL 0)
-    message(WARNING "-- probably unable to compile files using 8192 MiB per CPU core")
+    #message(WARNING "-- probably unable to compile files using 8192 MiB per CPU core")
     set(CORE_8192MiB 1)
 endif()
 if(CORE_10240MiB EQUAL 0)
-    message(WARNING "-- probably unable to compile files using 10240 MiB per CPU core")
+    #message(WARNING "-- probably unable to compile files using 10240 MiB per CPU core")
     set(CORE_10240MiB 1)
 endif()
 
@@ -105,17 +105,19 @@ option(DEVELOPER_RUN_CLANG_TIME_TRACE
 mark_as_advanced(DEVELOPER_RUN_CLANG_TIME_TRACE)
 
 if (DEVELOPER_RUN_CLANG_TIME_TRACE)
-add_compile_options(
-    "$<$<CXX_COMPILER_ID:Clang>:-ftime-trace>"
-)
+    add_compile_options(
+        "$<$<CXX_COMPILER_ID:Clang>:-ftime-trace>"
+    )
 endif()
 
 
-## -----------------------------------------------------------------------------
+###############################################################################
 # Project wide compiler options
 #
 # Note [Spaces in conditional output of generator expressions](
 # http://cmake.3232098.n2.nabble.com/Spaces-in-conditional-output-of-generator-expressions-td7597652.html)
+###############################################################################
+
 add_compile_options(
     #  ---- common warnings ----
     # FixMe: [-Wundefined-func-template], BUT see:
@@ -147,29 +149,19 @@ add_compile_options(
     "$<$<AND:$<CXX_COMPILER_ID:GNU>,$<PLATFORM_ID:Windows>>:-Wa,-mbig-obj>"
 )
 
-# cope with low memory situations
-# for Window compiler reference: [X3: recursive rules reach template instantiation limit too quickly? #575](
-#  https://github.com/boostorg/spirit/issues/575)
-if(LOCALHOST_RAM_MiB GREATER 10240)
-    add_compile_options(
-        # - limit gcc/clang template error depth printing
-        # - increase limit especially for clang recursive template instantiation,
-        #   otherwise exceeds maximum depth
-        "$<$<CXX_COMPILER_ID:GNU>:-ftemplate-backtrace-limit=0;-ftemplate-depth=1024>"
-        "$<$<CXX_COMPILER_ID:Clang>:-ftemplate-backtrace-limit=0;-ftemplate-depth=1024>"
-    )
-else()
-    message(STATUS "limit template optimization level to cope with low memory on build host!")
-    add_compile_options(
-        # Default settings:
-        # [template-backtrace-limit](https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Dialect-Options.html)
-        #  = 10
-        # [-ftemplate-depth](https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Dialect-Options.html)
-        # = 900
-        "$<$<CXX_COMPILER_ID:GNU>:-ftemplate-backtrace-limit=10;-ftemplate-depth=900>"
-        "$<$<CXX_COMPILER_ID:Clang>:-ftemplate-backtrace-limit=10;-ftemplate-depth=900>"
-    )
-endif()
+# recursive template instance compiler tweaks
+add_compile_options(
+    # - limit gcc/clang template error depth printing
+    # - increase limit especially for clang recursive template instantiation,
+    #   otherwise exceeds maximum depth
+    # Default settings:
+    # [template-backtrace-limit](https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Dialect-Options.html)
+    #  = 10
+    # [-ftemplate-depth](https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Dialect-Options.html)
+    # = 900
+    "$<$<CXX_COMPILER_ID:GNU>:-ftemplate-backtrace-limit=0;-ftemplate-depth=1024>"
+    "$<$<CXX_COMPILER_ID:Clang>:-ftemplate-backtrace-limit=0;-ftemplate-depth=1024>"
+)
 
 
 ## -----------------------------------------------------------------------------
@@ -235,7 +227,7 @@ add_link_options(
 
 
 ## -----------------------------------------------------------------------------
-# CLang extra warnings, see
+# Clang extra warnings, see
 # - [Better Apps with Clang's Weverything or Wall is a Lie!](
 #    https://amattn.com/p/better_apps_clang_weverything_or_wall_is_a_lie.html)
 # - [Warnings: -Weverything and the Kitchen Sink](
@@ -262,9 +254,10 @@ if(DEVELOPER_CLANG_WARN_EVERYTHING)
 endif()
 
 
-## -----------------------------------------------------------------------------
+###############################################################################
 # Project wide compiler definitions
-#
+###############################################################################
+
 add_compile_definitions(
     # ---- Win32 ----
     # Boost Libs; see https://cmake.org/cmake/help/latest/module/FindBoost.html
@@ -384,11 +377,12 @@ option(DEVELOPER_RUN_ON_VALGRIND
 mark_as_advanced(DEVELOPER_RUN_ON_VALGRIND)
 
 
-## -----------------------------------------------------------------------------
+###############################################################################
 # Clang-format
 #
 # https://github.com/ttroy50/cmake-examples/tree/master/04-static-analysis/clang-format
 # Maybe: https://github.com/TheLartians/Format.cmake , or https://github.com/zemasoft/clangformat-cmake ??
+###############################################################################
 option(DEVELOPER_RUN_CLANG_FORMAT
     "Run clang-format with the compiler."
     OFF)

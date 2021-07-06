@@ -42,7 +42,7 @@ include(py_env)
 
 ##
 # Boost.Org
-# [Cmake doesn't find Boost](https://stackoverflow.com/questions/3808775/cmake-doesnt-find-boost)
+# [CMake doesn't find Boost](https://stackoverflow.com/questions/3808775/cmake-doesnt-find-boost)
 #set(Boost_DEBUG 1)
 find_package(Boost 1.73.0
     REQUIRED COMPONENTS
@@ -60,9 +60,9 @@ find_package(Boost 1.73.0
 add_definitions(${Boost_LIB_DIAGNOSTIC_DEFINITIONS})
 
 
-# This requirement rises by use of cmake's PCH support, otherwise
-# linker errors occour. Probably due to boost.org
-# [How do I force cmake to include “-pthread” option during compilation?](
+# This requirement rises by use of CMake's PCH support, otherwise
+# linker errors occur. Probably due to boost.org
+# [How do I force CMake to include “-pthread” option during compilation?](
 #   https://stackoverflow.com/questions/5395309/how-do-i-force-cmake-to-include-pthread-option-during-compilation)
 #set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
 #set(THREADS_PREFER_PTHREAD_FLAG TRUE)
@@ -107,6 +107,6 @@ include(GNUInstallDirs)
 
 ##
 # Ignore build dir by backup apps using some 'magic'; e.g. Bacula/Bareos has
-# "Exclude Dir Containing" directive for filesets
+# "Exclude Dir Containing" directive for file sets
 file(WRITE ${CMAKE_BINARY_DIR}/.no_backup "Don't backup the build dir\n")
 

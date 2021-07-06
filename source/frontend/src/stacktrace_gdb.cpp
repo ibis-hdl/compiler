@@ -37,7 +37,7 @@
 //
 // OS specific system headers
 //
-#if defined(IBIS_BUILD_PLATFORM_UNIX)
+#if defined(IBIS_BUILD_PLATFORM_LINUX)
 #include <climits>  // PATH_MAX
 // #include <sys/prctl.h>
 // #include <sys/ptrace.h>
@@ -47,11 +47,11 @@
 
 namespace bp = boost::process;
 
-#if !defined(IBIS_BUILD_SYSTEM_LINUX)
+#if !defined(IBIS_BUILD_PLATFORM_LINUX)
 #error("stackstrace using GDB runs on Linux only!")
 #endif
 
-#if defined(IBIS_BUILD_PLATFORM_UNIX)
+#if defined(IBIS_BUILD_PLATFORM_LINUX)
 void gdb_signal_handler(int signum, siginfo_t* siginfo, void* ucontext);
 #endif
 bool gdb_detected();
@@ -69,7 +69,7 @@ volatile std::sig_atomic_t
 
 using ibis::frontend::signal_name;
 
-#if defined(IBIS_BUILD_PLATFORM_UNIX)
+#if defined(IBIS_BUILD_PLATFORM_LINUX)
 bool register_gdb_signal_handler()
 {
     // Note: This is called in the beginning of main's init() function where
@@ -193,7 +193,7 @@ bool gdb_detected()
     }
 
     // Detect GDB by the mean of /proc/$PID/cmdline for "gdb"
-    if constexpr (ibis::build_system == ibis::system::Linux) {
+    if constexpr (ibis::platform == ibis::platform::Linux) {
         std::stringstream path{};
         path << "/proc/" << getppid() << "/cmdline";
 
@@ -241,7 +241,7 @@ bool valgrind_detected()
         return *result;
     }
 
-    if constexpr (ibis::build_platform == ibis::platform::Unix) {
+    if constexpr (ibis::platform == ibis::platform::Linux) {
         // [How can I detect if a program is running from within valgrind?](
         //  https://stackoverflow.com/questions/365458/how-can-i-detect-if-a-program-is-running-from-within-valgrind)
         //
@@ -251,9 +251,7 @@ bool valgrind_detected()
             *result = true;
             return *result;
         }
-    }
 
-    if constexpr (ibis::build_system == ibis::system::Linux) {
         // [how to set dynamic link library path and environment variable for a process in
         // valgrind](
         //  https://stackoverflow.com/questions/24745120/how-to-set-dynamic-link-library-path-and-environment-variable-for-a-process-in-v)
@@ -307,15 +305,14 @@ bool token_found(std::string const& token, std::string const& procfs_path)
 /// includes to avoid pollution. Fully supported platform headers are as usually
 /// on top.
 ///
-/// \see
-/// [Finding current executable path without /proc/self/exe](
+/// \see [Finding current executable path without /proc/self/exe](
 /// https://stackoverflow.com/questions/1023306/finding-current-executables-path-without-proc-self-exe)
 /// [How to implement readlink to find the path](
 /// https://stackoverflow.com/questions/5525668/how-to-implement-readlink-to-find-the-path)
 ///
 std::string get_executable_path()
 {
-    if constexpr (ibis::build_system == ibis::system::Linux) {
+    if constexpr (ibis::platform == ibis::platform::Linux) {
         std::array<char, PATH_MAX> binary_path{};  // default initialized with zeros
         ssize_t len = ::readlink("/proc/self/exe", binary_path.data(), binary_path.max_size() - 1);
         if (len == -1 || len == binary_path.max_size() - 1) {

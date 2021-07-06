@@ -43,7 +43,7 @@ std::string_view signal_name(int sig_num)
             return "SIGILL"sv;
         case SIGFPE:
             return "SIGFPE"sv;
-#if (IBIS_BUILD_PLATFORM_UNIX)
+#if (IBIS_BUILD_PLATFORM_LINUX)
         case SIGUSR1:
             return "SIGUSR1"sv;
         case SIGBUS:

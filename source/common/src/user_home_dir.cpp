@@ -16,10 +16,10 @@ namespace ibis::util {
 fs::path user_home_dir(std::initializer_list<char const *> path_list)
 {
     std::string const HOME_ENV = []() {
-        if constexpr (ibis::build_platform == platform::Unix) {
+        if constexpr (ibis::platform == platform::Linux) {
             return std::getenv("HOME");
         }
-        else if constexpr (ibis::build_platform == platform::Win32) {
+        else if constexpr (ibis::platform == platform::Windows) {
             return std::getenv("USERPROFILE");
         }
         else {
