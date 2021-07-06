@@ -1,7 +1,7 @@
 #include <testsuite/vhdl/numeric_convert/numeric_parser.hpp>
 #include <testsuite/vhdl/numeric_convert/binary_string.hpp>
 
-#include <ibis/vhdl/parser/error_handler.hpp>
+#include <ibis/vhdl/parser/diagnostic_handler.hpp>
 #include <ibis/vhdl/parser/context.hpp>
 #include <ibis/vhdl/type.hpp>
 
@@ -189,17 +189,17 @@ BOOST_DATA_TEST_CASE(based_literal_integer, utf_data::make(integer_lit) ^ intege
 
     btt::output_test_stream os;
     parser::context ctx;
-    parser::error_handler<iterator_type> error_handler{ os, ctx, position_proxy };
+    parser::diagnostic_handler<iterator_type> diagnostic_handler{ os, ctx, position_proxy };
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
-    auto const [parse_ok, ast_node] = parse.based_literal(position_proxy, error_handler);
+    auto const [parse_ok, ast_node] = parse.based_literal(position_proxy, diagnostic_handler);
     BOOST_REQUIRE(parse_ok);
 
     using numeric_type_specifier = ibis::vhdl::ast::based_literal::numeric_type_specifier;
     BOOST_REQUIRE(ast_node.numeric_type() == numeric_type_specifier::integer);
 
-    numeric_convert numeric{ error_handler };
+    numeric_convert numeric{ diagnostic_handler };
     auto const [conv_ok, value] = numeric(ast_node);
     BOOST_REQUIRE(conv_ok);
     BOOST_TEST(std::get<numeric_convert::integer_type>(value) == N);
@@ -230,17 +230,17 @@ BOOST_DATA_TEST_CASE(based_literal_uint64_ovflw, utf_data::make(integer_lit_uint
 
     btt::output_test_stream os;
     parser::context ctx;
-    parser::error_handler<iterator_type> error_handler{ os, ctx, position_proxy };
+    parser::diagnostic_handler<iterator_type> diagnostic_handler{ os, ctx, position_proxy };
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
-    auto const [parse_ok, ast_node] = parse.based_literal(position_proxy, error_handler);
+    auto const [parse_ok, ast_node] = parse.based_literal(position_proxy, diagnostic_handler);
     BOOST_REQUIRE(parse_ok);  // must parse ...
 
     using numeric_type_specifier = ibis::vhdl::ast::based_literal::numeric_type_specifier;
     BOOST_REQUIRE(ast_node.numeric_type() == numeric_type_specifier::integer);
 
-    numeric_convert numeric{ error_handler };
+    numeric_convert numeric{ diagnostic_handler };
 
     bool conv_ok = true;
     std::tie(conv_ok, std::ignore) = numeric(ast_node);
@@ -291,17 +291,17 @@ BOOST_DATA_TEST_CASE(based_literal_real, utf_data::make(real_lit) ^ real_dec, li
 
     btt::output_test_stream os;
     parser::context ctx;
-    parser::error_handler<iterator_type> error_handler{ os, ctx, position_proxy };
+    parser::diagnostic_handler<iterator_type> diagnostic_handler{ os, ctx, position_proxy };
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
-    auto const [parse_ok, ast_node] = parse.based_literal(position_proxy, error_handler);
+    auto const [parse_ok, ast_node] = parse.based_literal(position_proxy, diagnostic_handler);
     BOOST_REQUIRE(parse_ok);
 
     using numeric_type_specifier = ibis::vhdl::ast::based_literal::numeric_type_specifier;
     BOOST_REQUIRE(ast_node.numeric_type() == numeric_type_specifier::real);
 
-    numeric_convert numeric{ error_handler };
+    numeric_convert numeric{ diagnostic_handler };
 
     auto const [conv_ok, value] = numeric(ast_node);
     BOOST_REQUIRE(conv_ok);
@@ -332,14 +332,14 @@ BOOST_DATA_TEST_CASE(based_literal_failure, utf_data::make(lit_failure), literal
 
     btt::output_test_stream os;
     parser::context ctx;
-    parser::error_handler<iterator_type> error_handler{ os, ctx, position_proxy };
+    parser::diagnostic_handler<iterator_type> diagnostic_handler{ os, ctx, position_proxy };
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
-    auto const [parse_ok, ast_node] = parse.based_literal(position_proxy, error_handler);
+    auto const [parse_ok, ast_node] = parse.based_literal(position_proxy, diagnostic_handler);
     BOOST_REQUIRE(parse_ok);
 
-    numeric_convert numeric{ error_handler };
+    numeric_convert numeric{ diagnostic_handler };
 
     bool conv_ok = true;
     std::tie(conv_ok, std::ignore) = numeric(ast_node);

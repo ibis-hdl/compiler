@@ -1,4 +1,4 @@
-#include <ibis/vhdl/parser/on_error_base.hpp>
+#include <ibis/vhdl/parser/error_handler.hpp>
 
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
@@ -11,7 +11,7 @@ namespace ibis::vhdl::parser {
 
 using namespace std::string_view_literals;
 
-std::string_view on_error_base::lookup(std::string_view which)
+std::string_view error_handler::lookup(std::string_view which)
 {
     using rule_map_type = std::unordered_map<std::string_view, std::string_view>;
 
@@ -285,7 +285,7 @@ std::string_view on_error_base::lookup(std::string_view which)
     return which;
 }
 
-std::string on_error_base::make_error_description(std::string_view which)
+std::string error_handler::make_error_description(std::string_view which)
 {
     using boost::locale::format;
     using boost::locale::translate;

@@ -6,7 +6,7 @@
 #include <ibis/vhdl/parser/grammar_decl.hpp>
 #include <ibis/vhdl/parser/parser_config.hpp>
 
-#include <ibis/vhdl/parser/error_handler.hpp>
+#include <ibis/vhdl/parser/diagnostic_handler.hpp>
 #include <ibis/vhdl/parser/context.hpp>
 
 #include <ibis/vhdl/ast/ast_printer.hpp>
@@ -34,12 +34,12 @@ struct testing_parser {
         btt::output_test_stream output;
         parser::context ctx;
 
-        parser::error_handler_type error_handler{ output, ctx, position_cache_proxy };
+        parser::diagnostic_handler_type diagnostic_handler{ output, ctx, position_cache_proxy };
 
         // clang-format off
         auto const parser =
             x3::with<parser::position_cache_tag>(std::ref(position_cache_proxy))[
-                x3::with<parser::error_handler_tag>(std::ref(error_handler))[
+                x3::with<parser::diagnostic_handler_tag>(std::ref(diagnostic_handler))[
                     parser_rule
                 ]
             ];
@@ -81,7 +81,7 @@ struct testing_parser {
 
             if (parse_ok) {
                 if (iter != end) {
-                    error_handler(iter, "Test Suite Full Match Error! Unparsed input left!");
+                    diagnostic_handler(iter, "Test Suite Full Match Error! Unparsed input left!");
                 }
                 else {
                     ast::printer print(output);
@@ -101,7 +101,7 @@ struct testing_parser {
             auto const start = position_cache_proxy.get_line_start(err_pos);
             auto const line = position_cache_proxy.current_line(start);
 
-            error_handler(e.where(),
+            diagnostic_handler(e.where(),
                           "Test Suite caught *unexpected* expectation failure! Expecting "  // --
                               + e.which() + " here: '"                                      // --
                               + std::string(line)                                           // --

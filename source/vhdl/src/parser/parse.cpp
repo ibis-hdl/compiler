@@ -6,7 +6,7 @@
 
 #include <ibis/vhdl/ast/node/design_file.hpp>
 #include <ibis/vhdl/parser/position_cache.hpp>
-#include <ibis/vhdl/parser/error_handler.hpp>
+#include <ibis/vhdl/parser/diagnostic_handler.hpp>
 #include <ibis/vhdl/parser/context.hpp>
 #include <ibis/vhdl/parser/iterator_type.hpp>
 #include <ibis/vhdl/context.hpp>
@@ -41,12 +41,12 @@ bool parse::operator()(position_cache<parser::iterator_type>::proxy& position_ca
                           typename std::iterator_traits<parser::iterator_type>::iterator_category>,
         "iterator type must be of multi-pass iterator");
 
-    parser::error_handler_type error_handler{ os, ctx, position_cache_proxy };
+    parser::diagnostic_handler_type diagnostic_handler{ os, ctx, position_cache_proxy };
 
     // clang-format off
     auto const parser =
         x3::with<parser::position_cache_tag>(std::ref(position_cache_proxy))[
-            x3::with<parser::error_handler_tag>(std::ref(error_handler))[
+            x3::with<parser::diagnostic_handler_tag>(std::ref(diagnostic_handler))[
                 parser::grammar()
             ]
         ];
@@ -70,14 +70,14 @@ bool parse::operator()(position_cache<parser::iterator_type>::proxy& position_ca
             using boost::locale::format;
             using boost::locale::translate;
 
-            using error_type = typename vhdl::error_handler<parser::iterator_type>::error_type;
+            using error_type = typename vhdl::diagnostic_handler<parser::iterator_type>::error_type;
             auto constexpr parser_error = error_type::parser;
 
             std::string const error_message{
                 (format(translate("Source file '{1}' failed to parse!")) % filename).str()
             };
 
-            error_handler(iter, error_message, parser_error);
+            diagnostic_handler(iter, error_message, parser_error);
         }
 
         return parse_ok;

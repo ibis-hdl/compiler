@@ -1,4 +1,4 @@
-#include <ibis/vhdl/error_handler.hpp>
+#include <ibis/vhdl/diagnostic_handler.hpp>
 #include <ibis/vhdl/context.hpp>
 
 #include <ibis/vhdl/parser/iterator_type.hpp>  // for explicit template instantiation
@@ -22,7 +22,7 @@
 namespace ibis::vhdl {
 
 template <typename Iterator>
-error_handler<Iterator>::source_location::source_location(  // --
+diagnostic_handler<Iterator>::source_location::source_location(  // --
     std::string_view file_name, std::size_t line, std::size_t column)
     : file_name_{ file_name }
     , line_{ line }
@@ -31,8 +31,8 @@ error_handler<Iterator>::source_location::source_location(  // --
 }
 
 template <typename Iterator>
-inline typename error_handler<Iterator>::source_location
-error_handler<Iterator>::get_source_location(iterator_type error_pos) const
+inline typename diagnostic_handler<Iterator>::source_location
+diagnostic_handler<Iterator>::get_source_location(iterator_type error_pos) const
 {
     auto const [line, column] = position_proxy.line_column_number(error_pos, tab_sz);
     return source_location(  // --
@@ -40,18 +40,18 @@ error_handler<Iterator>::get_source_location(iterator_type error_pos) const
 }
 
 // ----------------------------------------------------------------------------
-// error_handler::formatter
+// diagnostic_handler::formatter
 // ----------------------------------------------------------------------------
 template <typename Iterator>
-error_handler<Iterator>::formatter::formatter(
-    std::ostream& os_, error_handler<Iterator>::source_location const& source_location_)
+diagnostic_handler<Iterator>::formatter::formatter(
+    std::ostream& os_, diagnostic_handler<Iterator>::source_location const& source_location_)
     : os{ os_ }
     , source_location{ source_location_ }
 {
 }
 
 template <typename Iterator>
-std::ostream& error_handler<Iterator>::formatter::print_source_location()
+std::ostream& diagnostic_handler<Iterator>::formatter::print_source_location()
 {
     using boost::locale::format;
     using boost::locale::translate;
@@ -68,7 +68,7 @@ std::ostream& error_handler<Iterator>::formatter::print_source_location()
 }
 
 template <typename Iterator>
-std::ostream& error_handler<Iterator>::formatter::print_error_type(error_type type)
+std::ostream& diagnostic_handler<Iterator>::formatter::print_error_type(error_type type)
 {
     using boost::locale::format;
     using boost::locale::translate;
@@ -97,7 +97,7 @@ std::ostream& error_handler<Iterator>::formatter::print_error_type(error_type ty
 }
 
 template <typename Iterator>
-std::ostream& error_handler<Iterator>::formatter::print_error_message(
+std::ostream& diagnostic_handler<Iterator>::formatter::print_error_message(
     std::string const& error_message)
 {
     using boost::locale::format;
@@ -112,10 +112,10 @@ std::ostream& error_handler<Iterator>::formatter::print_error_message(
 namespace ibis::vhdl {
 
 // ----------------------------------------------------------------------------
-// error_handler - AST/parse related, expectation error handler
+// diagnostic_handler - AST/parse related, expectation error handler
 // ----------------------------------------------------------------------------
 template <typename Iterator>
-void error_handler<Iterator>::operator()(iterator_type error_pos, std::string const& error_message,
+void diagnostic_handler<Iterator>::operator()(iterator_type error_pos, std::string const& error_message,
                                          error_type err_type) const
 {
     using boost::locale::format;
@@ -128,7 +128,7 @@ void error_handler<Iterator>::operator()(iterator_type error_pos, std::string co
 /// Syntax and semantic related error handler
 /// ----------------------------------------------------------------------------
 template <typename Iterator>
-void error_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
+void diagnostic_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
                                          std::string const& error_message,
                                          error_type err_type) const
 {
@@ -154,7 +154,7 @@ void error_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
 }
 
 template <typename Iterator>
-void error_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
+void diagnostic_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
                                          ast::position_tagged const& start_label,
                                          ast::position_tagged const& end_label,
                                          std::string const& error_message,
@@ -222,7 +222,7 @@ void error_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
 }
 
 template <typename Iterator>
-void error_handler<Iterator>::operator()(iterator_type error_first,
+void diagnostic_handler<Iterator>::operator()(iterator_type error_first,
                                          std::optional<iterator_type> error_last,
                                          std::string const& error_message,
                                          error_type err_type) const
@@ -262,6 +262,6 @@ void error_handler<Iterator>::operator()(iterator_type error_first,
 // ----------------------------------------------------------------------------
 namespace ibis::vhdl {
 
-template class error_handler<parser::iterator_type>;
+template class diagnostic_handler<parser::iterator_type>;
 
 }  // namespace ibis::vhdl

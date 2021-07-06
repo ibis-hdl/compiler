@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ibis/vhdl/parser/error_handler.hpp>
+#include <ibis/vhdl/parser/diagnostic_handler.hpp>
 #include <ibis/vhdl/parser/position_cache.hpp>
 #include <ibis/vhdl/parser/iterator_type.hpp>
 #include <ibis/vhdl/parser/skipper.hpp>
@@ -10,7 +10,7 @@
 namespace ibis::vhdl::parser {
 
 using position_proxy_type = parser::position_cache<iterator_type>::proxy;
-using error_handler_type = parser::error_handler<iterator_type>;
+using diagnostic_handler_type = parser::diagnostic_handler<iterator_type>;
 
 using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
 
@@ -50,7 +50,7 @@ using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
 /// @todo Report a bug: It's curious, since e.g. ```parse.cpp``` instantiate the parser as:
 /// @code{.cpp}
 /// x3::with<parser::position_cache_tag>(std::ref(position_cache_proxy))[
-///     x3::with<parser::error_handler_tag>(std::ref(error_handler))[
+///     x3::with<parser::diagnostic_handler_tag>(std::ref(diagnostic_handler))[
 ///         parser::grammar()
 ///     ]
 /// ];
@@ -61,8 +61,8 @@ using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
 ///     parser::position_cache_tag,
 ///     std::reference_wrapper<parser::position_proxy_type>,
 ///     x3::context<
-///         parser::error_handler_tag,
-///         std::reference_wrapper<parser::error_handler_type>,
+///         parser::diagnostic_handler_tag,
+///         std::reference_wrapper<parser::diagnostic_handler_type>,
 ///         phrase_context_type
 ///     >
 /// >;
@@ -74,8 +74,8 @@ using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
 // clang-format off
 using context_type =
     x3::context<
-        parser::error_handler_tag,
-        std::reference_wrapper<parser::error_handler_type>,
+        parser::diagnostic_handler_tag,
+        std::reference_wrapper<parser::diagnostic_handler_type>,
         x3::context<
             parser::position_cache_tag,
             std::reference_wrapper<parser::position_proxy_type>,

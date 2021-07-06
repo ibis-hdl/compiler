@@ -2,7 +2,7 @@
 #include <ibis/vhdl/parser/parse.hpp>
 #include <ibis/vhdl/parser/parser_config.hpp>
 #include <ibis/vhdl/analyze/syntax.hpp>
-#include <ibis/vhdl/analyze/error_handler.hpp>
+#include <ibis/vhdl/analyze/diagnostic_handler.hpp>
 #include <ibis/vhdl/analyze/context.hpp>
 #include <ibis/vhdl/ast/ast_stats.hpp>
 
@@ -55,8 +55,8 @@ BOOST_DATA_TEST_CASE(keyword_ok,                                                
 
     {
         analyze::context ctx;
-        analyze::error_handler<parser::iterator_type> error_handler{ os, ctx, position_cache_proxy };
-        analyze::syntax_checker syntax_check{ os, ctx, error_handler };
+        analyze::diagnostic_handler<parser::iterator_type> diagnostic_handler{ os, ctx, position_cache_proxy };
+        analyze::syntax_checker syntax_check{ os, ctx, diagnostic_handler };
 
         syntax_check(design_file);
 
@@ -101,8 +101,8 @@ BOOST_DATA_TEST_CASE(
 
     {
         analyze::context ctx;
-        analyze::error_handler<parser::iterator_type> error_handler{ os, ctx, position_cache_proxy };
-        analyze::syntax_checker syntax_check{ os, ctx, error_handler };
+        analyze::diagnostic_handler<parser::iterator_type> diagnostic_handler{ os, ctx, position_cache_proxy };
+        analyze::syntax_checker syntax_check{ os, ctx, diagnostic_handler };
 
         syntax_check(design_file);
 

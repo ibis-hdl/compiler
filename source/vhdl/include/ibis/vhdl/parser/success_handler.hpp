@@ -18,7 +18,7 @@ namespace ibis::vhdl::parser {
 /// positions for the purpose of subsequent semantic error handling when the
 /// program is being compiled.
 ///
-/// The parser's error_handler utility is responsible to do these since he depends
+/// The parser's diagnostic_handler utility is responsible to do these since he depends
 /// on this informations.
 ///
 /// @note It may be natural to separate the process of tagging to an own class,
@@ -30,7 +30,7 @@ namespace ibis::vhdl::parser {
 /// @note The source is based on the original [x3::annotate_on_success](
 /// https://github.com/boostorg/spirit/blob/master/include/boost/spirit/home/x3/support/utility/annotate_on_success.hpp)
 ///
-struct on_success_base {
+struct success_handler {
     template <typename IteratorT, typename ContextT, typename... Types>
     inline void on_success(IteratorT const& first, IteratorT const& last,
                            ast::variant<Types...>& node, ContextT const& context) const

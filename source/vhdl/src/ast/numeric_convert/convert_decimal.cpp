@@ -2,7 +2,7 @@
 #include <ibis/vhdl/ast/numeric_convert/filter_range.hpp>
 #include <ibis/vhdl/ast/numeric_convert/dbg_trace.hpp>
 
-#include <ibis/vhdl/error_handler.hpp>
+#include <ibis/vhdl/diagnostic_handler.hpp>
 
 #include <ibis/vhdl/ast/node/decimal_literal.hpp>
 #include <ibis/vhdl/ast/util/string_span.hpp>
@@ -50,8 +50,8 @@ struct real_policies : x3::ureal_policies<T> {
 };
 
 template <typename IntegerT, typename RealT>
-convert_decimal<IntegerT, RealT>::convert_decimal(error_handler_type& error_handler_)
-    : report_error{ error_handler_ }
+convert_decimal<IntegerT, RealT>::convert_decimal(diagnostic_handler_type& diagnostic_handler_)
+    : report_error{ diagnostic_handler_ }
 {
 }
 
@@ -107,7 +107,7 @@ convert_decimal<IntegerT, RealT>::parse_integer(ast::string_span const& literal)
     }
 
     if (!parse_ok) {
-        using error_type = typename vhdl::error_handler<parser::iterator_type>::error_type;
+        using error_type = typename vhdl::diagnostic_handler<parser::iterator_type>::error_type;
         auto constexpr parser_error = error_type::parser;
 
         // parse failed - can't fit the target_type, iter is rewind to begin.
@@ -150,7 +150,7 @@ convert_decimal<IntegerT, RealT>::parse_real(ast::string_span const& literal) co
     }
 
     if (!parse_ok) {
-        using error_type = typename vhdl::error_handler<parser::iterator_type>::error_type;
+        using error_type = typename vhdl::diagnostic_handler<parser::iterator_type>::error_type;
         auto constexpr parser_error = error_type::parser;
 
         // parse failed - can't fit the target_type, iter is rewind to begin.

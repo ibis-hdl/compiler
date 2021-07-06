@@ -2,7 +2,7 @@
 
 #include <ibis/vhdl/ast/basic_ast_walker.hpp>
 
-#include <ibis/vhdl/analyze/error_handler.hpp>
+#include <ibis/vhdl/analyze/diagnostic_handler.hpp>
 
 #include <string_view>
 #include <iosfwd>
@@ -29,10 +29,10 @@ namespace ibis::vhdl::analyze {
 class syntax_worker {
 public:
     syntax_worker(std::ostream& os_, vhdl::context& context_,
-                  analyze::error_handler_type& error_handler_)
+                  analyze::diagnostic_handler_type& diagnostic_handler_)
         : os{ os_ }
         , context{ context_ }
-        , error_handler{ error_handler_ }
+        , diagnostic_handler{ diagnostic_handler_ }
     {
     }
 
@@ -68,7 +68,7 @@ private:
 private:
     std::ostream& os;  // unused, required later on
     vhdl::context& context;
-    analyze::error_handler_type& error_handler;
+    analyze::diagnostic_handler_type& diagnostic_handler;
 };
 
 using syntax_checker = ast::basic_ast_walker<syntax_worker>;

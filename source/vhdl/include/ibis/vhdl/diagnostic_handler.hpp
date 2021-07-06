@@ -35,41 +35,12 @@ class position_cache;
 namespace ibis::vhdl {
 
 ///
-/// Parser/Syntax/Semantic error handler
+/// Render Parser/Syntax/Semantic error messages
 ///
-/// The responsibility of the error handler is two folded. It worked on parser level to
-/// handle parse errors. Otherwise it has to handle syntax and semantic errors.
-///
-/// The error handler for parsing works on file level, means a file is read into
-/// memory and parsed. Hence not all informations stored in @ref parser::position_cache
-/// are required for reporting and diagnosing and a file ID specific proxy
-/// object refers to the related informations for convenience.
-///
-/// Opposite to the parser's error_handler task, the error handler has to work on AST/Tree
-/// level. All informations tagged at parse time are required for diagnostics.
-///
-/// Further, the error_handler is used to annotate the AST during parsing, means
-/// ties the AST to a vector of iterator positions for the purpose of subsequent
-/// semantic error handling when the program is being compiled.
-///
-/// @todo: Write a formatter class for conrete error reporting, so that users can
-///  override the default implementation, e.g.
-/// [Controlling output of Boost.Test source location format](
-///  https://stackoverflow.com/questions/64618840/controlling-output-of-boost-test-source-location-format)
-///
-/// @todo Check [Custom error on rule level? #657](https://github.com/boostorg/spirit/issues/657)
-///
-/// @todo Get "access" to information of node/rule map at parser::on_error_base; or even
-/// move the rule name lookup to to the private part of error_handler self.
-///
-/// @see parser::position_cache
-///
-
 template <typename Iterator>
-class error_handler {
+class diagnostic_handler {
 public:
     using iterator_type = Iterator;
-    using x3_result_type = x3::error_handler_result;
 
     using position_proxy_type = typename parser::position_cache<iterator_type>::proxy;
 
@@ -78,15 +49,15 @@ public:
 
 public:
     ///
-    /// Construct a parser error handler.
+    /// Construct a diagnostic handler.
     ///
     /// @param os_    Stream to write error and diagnostic messages.
     /// @param proxy_ A \ref parser::position_cache::proxy object of \ref parser::position_cache.
     /// @param tabs   Tabulator size, required for correct rendering of source
     /// code snippet.
     ///
-    explicit error_handler(std::ostream& os_, vhdl::context& context_, position_proxy_type proxy_,
-                           std::size_t tabs = 4)
+    explicit diagnostic_handler(std::ostream& os_, vhdl::context& context_,
+                                position_proxy_type proxy_, std::size_t tabs = 4)
         : os{ os_ }
         , context{ context_ }
         , position_proxy{ std::move(proxy_) }
@@ -94,13 +65,13 @@ public:
     {
     }
 
-    ~error_handler() = default;
+    ~diagnostic_handler() = default;
 
-    error_handler(error_handler const&) = delete;
-    error_handler& operator=(error_handler const&) = delete;
+    diagnostic_handler(diagnostic_handler const&) = delete;
+    diagnostic_handler& operator=(diagnostic_handler const&) = delete;
 
-    error_handler(error_handler&&) = delete;
-    error_handler& operator=(error_handler&&) = delete;
+    diagnostic_handler(diagnostic_handler&&) = delete;
+    diagnostic_handler& operator=(diagnostic_handler&&) = delete;
 
 public:
     ///
@@ -175,10 +146,10 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// error_handler::source_location
+// diagnostic_handler::source_location
 // ----------------------------------------------------------------------------
 template <typename Iterator>
-class error_handler<Iterator>::source_location {
+class diagnostic_handler<Iterator>::source_location {
 public:
     source_location(std::string_view file_name, std::size_t line, std::size_t column);
 
@@ -198,12 +169,12 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// error_handler::formatter
+// diagnostic_handler::formatter
 // ----------------------------------------------------------------------------
 template <typename Iterator>
-class error_handler<Iterator>::formatter {
+class diagnostic_handler<Iterator>::formatter {
 public:
-    using error_type = error_handler<Iterator>::error_type;
+    using error_type = diagnostic_handler<Iterator>::error_type;
 
 public:
     ///
@@ -226,7 +197,7 @@ public:
 private:
     std::ostream& os;
     bool color_output = true;  /// FixMe: ignored, not active
-    error_handler<Iterator>::source_location source_location;
+    diagnostic_handler<Iterator>::source_location source_location;
 };
 
 }  // namespace ibis::vhdl
@@ -234,6 +205,6 @@ private:
 namespace ibis::vhdl {
 
 /// Explicit template instantiation declaration
-extern template class error_handler<parser::iterator_type>;
+extern template class diagnostic_handler<parser::iterator_type>;
 
 }  // namespace ibis::vhdl

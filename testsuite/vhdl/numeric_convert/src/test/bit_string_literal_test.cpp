@@ -1,7 +1,7 @@
 #include <testsuite/vhdl/numeric_convert/numeric_parser.hpp>
 #include <testsuite/vhdl/numeric_convert/binary_string.hpp>
 
-#include <ibis/vhdl/parser/error_handler.hpp>
+#include <ibis/vhdl/parser/diagnostic_handler.hpp>
 #include <ibis/vhdl/parser/context.hpp>
 #include <ibis/vhdl/type.hpp>
 
@@ -126,14 +126,14 @@ BOOST_DATA_TEST_CASE(bit_string_literal, utf_data::make(bit_literal) ^ bit_decim
 
     btt::output_test_stream os;
     parser::context ctx;
-    parser::error_handler<iterator_type> error_handler{ os, ctx, position_proxy };
+    parser::diagnostic_handler<iterator_type> diagnostic_handler{ os, ctx, position_proxy };
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
-    auto const [parse_ok, ast_node] = parse.bit_string_literal(position_proxy, error_handler);
+    auto const [parse_ok, ast_node] = parse.bit_string_literal(position_proxy, diagnostic_handler);
     BOOST_REQUIRE(parse_ok);
 
-    numeric_convert numeric{ error_handler };
+    numeric_convert numeric{ diagnostic_handler };
 
     auto const [conv_ok, value] = numeric(ast_node);
     BOOST_REQUIRE(conv_ok);
@@ -164,14 +164,14 @@ BOOST_DATA_TEST_CASE(bit_string_literal_uint64_ovflw, utf_data::make(literal_ovf
 
     btt::output_test_stream os;
     parser::context ctx;
-    parser::error_handler<iterator_type> error_handler{ os, ctx, position_proxy };
+    parser::diagnostic_handler<iterator_type> diagnostic_handler{ os, ctx, position_proxy };
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
-    auto const [parse_ok, ast_node] = parse.bit_string_literal(position_proxy, error_handler);
+    auto const [parse_ok, ast_node] = parse.bit_string_literal(position_proxy, diagnostic_handler);
     BOOST_REQUIRE(parse_ok);  // must parse ...
 
-    numeric_convert numeric{ error_handler };
+    numeric_convert numeric{ diagnostic_handler };
 
     bool conv_ok = true;
     std::tie(conv_ok, std::ignore) = numeric(ast_node);

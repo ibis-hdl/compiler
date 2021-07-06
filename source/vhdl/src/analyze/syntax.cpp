@@ -1,5 +1,5 @@
 #include <ibis/vhdl/analyze/syntax.hpp>
-#include <ibis/vhdl/analyze/error_handler.hpp>
+#include <ibis/vhdl/analyze/diagnostic_handler.hpp>
 #include <ibis/vhdl/analyze/check/label_match.hpp>
 
 #include <ibis/vhdl/ast/node/architecture_body.hpp>
@@ -41,7 +41,7 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name)
     using ast::pretty_node_name;
     using boost::locale::format;
     using boost::locale::translate;
-    using error_type = typename vhdl::error_handler<parser::iterator_type>::error_type;
+    using error_type = typename vhdl::diagnostic_handler<parser::iterator_type>::error_type;
     auto constexpr syntax_error = error_type::syntax;
 
     switch (check_label(node)) {
@@ -52,7 +52,7 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name)
             auto const [start_label, end_label] = labels_of(node);
             auto const [found, node_name_sv] = pretty_node_name(node_name);
 
-            error_handler(node, start_label, end_label,
+            diagnostic_handler(node, start_label, end_label,
                           (format(translate("Label mismatch in {1}"))  // --
                            % node_name_sv)                             // {1}
                               .str(), syntax_error);
@@ -64,7 +64,7 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name)
             auto const [start_label, end_label] = labels_of(node);
             auto const [found, node_name_sv] = pretty_node_name(node_name);
 
-            error_handler(node, start_label, end_label,
+            diagnostic_handler(node, start_label, end_label,
                           (format(translate("Label ill-formed in {1}"))  // --
                            % node_name_sv)                               // {1}
                               .str(), syntax_error);
@@ -94,13 +94,13 @@ bool syntax_worker::keyword_matches(ast::process_statement const& node,
     using boost::locale::format;
     using boost::locale::translate;
 
-    using error_type = typename vhdl::error_handler<parser::iterator_type>::error_type;
+    using error_type = typename vhdl::diagnostic_handler<parser::iterator_type>::error_type;
     auto constexpr syntax_error = error_type::syntax;
 
     if (!node.postponed && node.end_postponed) {
         auto const [found, node_name_sv] = pretty_node_name(node_name);
 
-        error_handler(node, (format(translate("ill-formed statement in {1}; "
+        diagnostic_handler(node, (format(translate("ill-formed statement in {1}; "
                                               "(Hint: single trailing keyword 'postponed')"))  //--
                              % node_name_sv)  // {1}
                                 .str(), syntax_error);

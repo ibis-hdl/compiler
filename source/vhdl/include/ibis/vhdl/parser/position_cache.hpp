@@ -90,7 +90,7 @@ public:
     ///
     /// Annotate the AST node with positional iterators.
     ///
-    /// This is called from parser::on_success_base to allow expressive error handling. Only
+    /// This is called from parser::success_handler to allow expressive error handling. Only
     /// AST nodes that are derived from ```ast::position_tagged``` are tagged.
     ///
     /// @param file_id ID of actually processed file.

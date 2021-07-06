@@ -14,7 +14,7 @@ struct decimal_literal;
 
 namespace ibis::vhdl {
 template <typename IteratorT>
-class error_handler;
+class diagnostic_handler;
 }
 
 namespace ibis::vhdl::ast {
@@ -48,14 +48,14 @@ public:
     using return_type = std::tuple<bool, result_type>;
 
     /// error handler used for error reporting
-    using error_handler_type = ibis::vhdl::error_handler<parser::iterator_type>;
+    using diagnostic_handler_type = ibis::vhdl::diagnostic_handler<parser::iterator_type>;
 
     ///
     /// Construct a new numeric convert object.
     ///
-    /// @param error_handler_  Error reporter.
+    /// @param diagnostic_handler_  Error reporter.
     ///
-    convert_decimal(error_handler_type& error_handler_);
+    convert_decimal(diagnostic_handler_type& diagnostic_handler_);
 
     ///
     /// Convert the a bit string literal to numeric value.
@@ -69,7 +69,7 @@ private:
     std::tuple<bool, real_type> parse_real(ast::string_span const& literal) const;
 
 private:
-    error_handler_type& report_error;
+    diagnostic_handler_type& report_error;
 };
 
 }  // namespace ibis::vhdl::ast

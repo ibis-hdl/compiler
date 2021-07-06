@@ -2,7 +2,7 @@
 #include <ibis/vhdl/ast/numeric_convert/filter_range.hpp>
 #include <ibis/vhdl/ast/numeric_convert/dbg_trace.hpp>
 
-#include <ibis/vhdl/error_handler.hpp>
+#include <ibis/vhdl/diagnostic_handler.hpp>
 
 #include <ibis/vhdl/ast/node/based_literal.hpp>
 #include <ibis/vhdl/ast/literal_printer.hpp>
@@ -57,8 +57,8 @@ auto const literal_name = "based literal"sv;
 namespace ibis::vhdl::ast {
 
 template <typename IntegerT, typename RealT>
-convert_based<IntegerT, RealT>::convert_based(error_handler_type& error_handler_)
-    : report_error{ error_handler_ }
+convert_based<IntegerT, RealT>::convert_based(diagnostic_handler_type& diagnostic_handler_)
+    : report_error{ diagnostic_handler_ }
 {
 }
 
@@ -78,7 +78,7 @@ std::tuple<bool, std::uint32_t> convert_based<IntegerT, RealT>::parse_base(
     bool const parse_ok = x3::parse(iter, end, x3::uint_ >> x3::eoi, base);
 
     if (!parse_ok) {
-        using error_type = typename vhdl::error_handler<parser::iterator_type>::error_type;
+        using error_type = typename vhdl::diagnostic_handler<parser::iterator_type>::error_type;
         auto constexpr parser_error = error_type::parser;
 
         // parse failed - can't fit the target_type, iter is rewind to begin.
@@ -138,7 +138,7 @@ std::tuple<bool, std::uint64_t> convert_based<IntegerT, RealT>::parse_integer(
         bool const parse_ok = x3::parse(iter, end, parser(base, iter) >> x3::eoi, integer);
 
         if (!parse_ok) {
-            using error_type = typename vhdl::error_handler<parser::iterator_type>::error_type;
+            using error_type = typename vhdl::diagnostic_handler<parser::iterator_type>::error_type;
             auto constexpr parser_error = error_type::parser;
 
             // parse failed - can't fit the target_type, iter is rewind to begin.
@@ -214,7 +214,7 @@ std::tuple<bool, double> convert_based<IntegerT, RealT>::parse_fractional(
 
     // during accumulation a numeric IEEE754 errors may occur
     if (!std::isnormal(fractional)) {
-        using error_type = typename vhdl::error_handler<parser::iterator_type>::error_type;
+        using error_type = typename vhdl::diagnostic_handler<parser::iterator_type>::error_type;
         auto constexpr numeric_error = error_type::numeric;
 
         report_error(                                                                     // --
@@ -258,7 +258,7 @@ std::tuple<bool, std::int32_t> convert_based<IntegerT, RealT>::parse_exponent(
     bool const parse_ok = x3::parse(iter, end, exp >> x3::eoi, exponent);
 
     if (!parse_ok) {
-        using error_type = typename vhdl::error_handler<parser::iterator_type>::error_type;
+        using error_type = typename vhdl::diagnostic_handler<parser::iterator_type>::error_type;
         auto constexpr parser_error = error_type::parser;
 
         // parse failed - can't fit the target_type, iter is rewind to begin.
@@ -307,7 +307,7 @@ std::tuple<bool, double> convert_based<IntegerT, RealT>::parse_real10(
     bool const parse_ok = x3::parse(iter, end, real_parser >> x3::eoi, real);
 
     if (!parse_ok) {
-        using error_type = typename vhdl::error_handler<parser::iterator_type>::error_type;
+        using error_type = typename vhdl::diagnostic_handler<parser::iterator_type>::error_type;
         auto constexpr parser_error = error_type::parser;
 
         // parse failed - can't fit the target_type, iter is rewind to begin.
@@ -373,7 +373,7 @@ typename convert_based<IntegerT, RealT>::return_type convert_based<IntegerT, Rea
         return failure_return_value();
     }
     if (!supported_base(base)) {
-        using error_type = typename vhdl::error_handler<parser::iterator_type>::error_type;
+        using error_type = typename vhdl::diagnostic_handler<parser::iterator_type>::error_type;
         auto constexpr supporting_error = error_type::numeric;
 
         report_error(           // --

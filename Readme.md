@@ -5,10 +5,10 @@ IBIS HDL project
 
 ### Required Tools to Build & Configuration
 
-* C++17 compliant compiler, tested with
-    - clang++ 11 (in 2021), g++10 untested
-    - g++ 7.3.0 Windows MinGW (in 2018)
-    - Visual Studio 2017, Version 15.8 (in 2018)
+* C++17 compliant compiler, have developed and tested with
+    - clang++ 11
+    - g++ 11
+    - Visual Studio 2019 16.10.3
 
 * CMake 3.18
     - ninja (recommended)
@@ -35,70 +35,11 @@ directory from git repositories:
 * [strong_type](https://github.com/rollbear/strong_type)
 
 
-#### Compiling Boost Libs on Windows
-
-You may come across to build Boost libs by yourself - create a batch file.
-
-For Clang-Win:
-
-```
-call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
-
-rem link: legal values: "shared" "static"
-
-b2 -j%NUMBER_OF_PROCESSORS% ^
---stage-libdir=lib64-clang-11.0.0 ^
-link=shared ^
-toolset=clang-win address-model=64 architecture=x86 stage ^
---with-filesystem --with-locale --with-stacktrace --with-system --with-test --with-thread
-```
-
-and for C++17 capable MS Visual Studio 14.1:
-
-```
-call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
-
-rem link: legal values: "shared" "static"
-
-b2 -j%NUMBER_OF_PROCESSORS% ^
---stage-libdir=lib64-msvc-14.1 ^
-link=shared ^
-toolset=msvc address-model=64 architecture=x86 stage ^
---with-filesystem --with-locale --with-stacktrace --with-system --with-test --with-thread
-```
-
-
-### Running tests
-
-```
-env CTEST_OUTPUT_ON_FAILURE=1 make check
-ctest --verbose
-
-### verbose build
-ninja -v
-
-### ninja single core build
-ninja -j1
-```
-
-Testing hints (verbose flags '-VV'):
-
-```
-# list all test
-$ ctest -N
-# run all test and show output on errors
-$ ctest --output-on-failure
-# run specific test <test>
-$ ctest -R <test>
-# run specific test <test> and show output on errors
-$ ctest --output-on-failure -R <test>
-```
-
-
-Developer
----------
+## Developer
 
 ### Intro
+
+Generally honor:
 
 - [Documenting C++ Code](https://developer.lsst.io/cpp/api-docs.html)
 
@@ -108,7 +49,9 @@ source base is stable.
 
 ### Clang Tidy
 
-#### Disabled checks, which shouldn't - FixMe
+#### Disabled checks:
+
+There are disabled checks which shouldn't be. Enabling this checks requires more effort:
 
 - [misc-no-recursion](https://clang.llvm.org/extra/clang-tidy/checks/misc-no-recursion.html):
   *Until the ast_printer recursive call chain has been solved.*
@@ -131,7 +74,7 @@ source base is stable.
   [.clang-tidy](https://github.com/xournalpp/xournalpp/blob/master/.clang-tidy) or
   [.clang-tidy](https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/blob/develop/.clang-tidy) as example.
 
-#### Permanently disabled checks
+#### Permanently disabled checks:
 
 - [modernize-use-trailing-return-type](https://clang.llvm.org/extra/clang-tidy/checks/modernize-use-trailing-return-type.html):
   *This transformation is purely stylistic. We are not quite that modern.*
@@ -161,38 +104,38 @@ project.
 The X3 rules are from start of the project in 2017, so `grammar_def.h` requires
 rework. The headers are generated from EBNF using a python script. Only recursive
 rules require the template engine of BOOST_SPIRIT_{DECLARE, DEFINE}.
-Also replace x3::char_("0-9"), x3::char_("0-9a-fA-F") with x3::digit/x3::xdigit etc.
 
-There are some 'anonymous' helper rules (to break down the complexity and
-to enforce the attributes required) used in the specific rule's detail
-namespace. The X3 tags the rules, e.g.:
+- There are some 'anonymous' helper rules (to break down the complexity and
+  to enforce the attributes required) used in the specific rule's detail
+  namespace. The X3 tags the rules, e.g.:
 
-```
-  auto const rule = x3::rule<struct _, ...> { "..." } = ...
-```
+  ```
+    auto const rule = x3::rule<struct _, ...> { "..." } = ...
+  ```
 
-It would be naturally to use the parent rules's tag type which belongs the
-detail helper. But, unfortunately the memory consumption increases dramatically
-(8+8)GB RAM/SWAP isn't enough). Following StackOverflow
-[X3: Linker Error (unresolved external symbol “parse_rule”) on nonterminal parser](
-  https://stackoverflow.com/questions/50277979/x3-linker-error-unresolved-external-symbol-parse-rule-on-nonterminal-parser?answertab=active#tab-top)
-Sehe's notes, re-using the tag type is recipe for disaster. The rule tags are
-what dispatches the implementation function in the case of
-separated compilation units.
+  It would be naturally to use the parent rules's tag type which belongs the
+  detail helper. Following StackOverflow
+  [X3: Linker Error (unresolved external symbol “parse_rule”) on nonterminal parser](
+  https://stackoverflow.com/questions/50277979/x3-linker-error-unresolved-external-symbol-parse-rule-on-nonterminal-parser?answertab=active#tab-top) at
+  Sehe's notes, re-using the tag type is recipe for disaster. The rule tags are
+  what dispatches the implementation function in the case of
+  separated compilation units.
 
 - Fix Testcase attribute_specification, unit test failed severe (not reproducible) with:
 
-```
-unknown location(0): fatal error: in "parser_rule/attribute_specification/_1": class std::bad_alloc: bad allocation
-../testsuite/vhdl/parser_rules/src/test/attribute_specification_test.cpp(46): last checkpoint
-```
+  ```
+  unknown location(0): fatal error: in "parser_rule/attribute_specification/_1": class std::bad_alloc: bad allocation
+  ../testsuite/vhdl/parser_rules/src/test/attribute_specification_test.cpp(46): last checkpoint
+  ```
 
   ToDo: Confirm, that this may occur only in debug mode using MS VC?!
 
 - Add TestCase for assertion_statement, assertion self is tested already. It appends only
   "label: .... ;" to the tests.
 
-- Make Tests to check expectation points for ';'
+- Make Tests to check expectation points for ';'. This days, the error indicator shows
+  most of the time to the wrong line/position if is missing. That's correct from parser's
+  view (it doesn't rewind the iterator) but confuse the user.
 
 - Check [**Splitting Boost.Spirit.X3 parsers into several TUs**](
   https://stackoverflow.com/questions/59709229/splitting-boost-spirit-x3-parsers-into-several-tus)
@@ -266,9 +209,9 @@ clear what comes from what.
 - testsuite/util/basic_failure_diagnostic_fixture and testsuite/vhdl/util/failure_diagnostic_fixture
   still BAD NAMING ...
 
-### CMake
+### CMake Build
 
-- use CMake's [Unity Build Mode](https://cmake.org/cmake/help/latest/prop_tgt/UNITY_BUILD_MODE.html#prop_tgt:UNITY_BUILD_MODE)
+- Consider use of CMake's [Unity Build Mode](https://cmake.org/cmake/help/latest/prop_tgt/UNITY_BUILD_MODE.html#prop_tgt:UNITY_BUILD_MODE)
 
 Read carefully:
 
@@ -281,22 +224,10 @@ Read carefully:
 - **Regards to build options, see [Making CMake work for you](
   http://www.stablecoder.ca/2018/10/30/full-cmake-helper-suite.html)**
 
-### Sources
+### Sources related
 
 - **FixMe**: Before main's init() there is no text style/color functionality even in the
   stacktrace_{gdb,boost} functions.
-
-- exceptions can leave ibis frontend, encapsulate inside try/catch block. No problem
-  nowadays since it isn't functional.
-
-- X3's error_handler, on_{error,success}_base classes: The original x3::error_handler
-  is/was always a diagnostic message handler only.
-  This days, the tagging task is done using the on_success_base respectively by the
-  position_cache class - rename to success_handler. The on_error_base performs the
-  expectation handling - rename to error_handler. Hence, rename the old error_handler
-  to message_{handler, engine, ..) since this is the task.
-  Since the parser, syntax, etc. error handling isn't completed we will move these task
-  to the future if the things get more clearly.
 
 - position_cache got warnings by compiling with `-Weverything`
   regards to `.line_number()` and `.get_line_start`: IIRC deduction guide, Investigate!
@@ -327,51 +258,50 @@ Read carefully:
 
 - we have buildinfo_static.hpp.in, buildinfo.hpp.in using git info and date/time
   would be useful. Copy git part temporary to ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}
-  to avoid unnecessary rebuild, for an idea look at blender sources.
-
-- Improve a formatter for all error report classes/functions, especially vhdl::error_handler.
+  to avoid unnecessary rebuild, for an idea look at blender sources. But this clearly
+  future work.
 
 ### NumericConvert / 2nd pass Parser
 
-In numeric_convert.cpp a lot of "trickery" is done because of splitting the
-numeric VHDL types into their components by the actual vhdl::parser to save
-parse and check/test time. Even with C++20 there are more possibilities, eg.
-[coliru](https://coliru.stacked-crooked.com/a/17f844b879507aed):
+  In numeric_convert.cpp a lot of "trickery" is done because of splitting the
+  numeric VHDL types into their components by the actual vhdl::parser to save
+  parse and check/test time. Even with C++20 there are more possibilities, eg.
+  [coliru](https://coliru.stacked-crooked.com/a/17f844b879507aed):
 
 
-  ```
-  #include <iostream>
-  //#include <ranges> // C++20
-  #include <range/v3/view.hpp>
-  #include <string_view>
-  #include <algorithm>
-  #include <iterator>
+    ```
+    #include <iostream>
+    //#include <ranges> // C++20
+    #include <range/v3/view.hpp>
+    #include <string_view>
+    #include <algorithm>
+    #include <iterator>
 
-  template <typename RangeT>
-  void print(RangeT str) {
-      std::copy(str.begin(), str.end(), std::ostream_iterator<char>(std::cout));
-      std::cout << "\n";
-  }
+    template <typename RangeT>
+    void print(RangeT str) {
+        std::copy(str.begin(), str.end(), std::ostream_iterator<char>(std::cout));
+        std::cout << "\n";
+    }
 
-  int main()
-  {
-      using namespace std::literals;
-      auto const bits = { "https:"sv, "//"sv, "cppreference"sv, "."sv, "com"sv };
-      print(bits | ranges::views::join);
-  }
+    int main()
+    {
+        using namespace std::literals;
+        auto const bits = { "https:"sv, "//"sv, "cppreference"sv, "."sv, "com"sv };
+        print(bits | ranges::views::join);
+    }
 
-  ```
+    ```
 
-  ... with this the nested boost::join() can be omitted and this becomes more
-  readable. In principle the problem with the '_' in the literals should be
-  avoided with std::ranges.
+    ... with this the nested boost::join() can be omitted and this becomes more
+    readable. In principle the problem with the '_' in the literals should be
+    avoided with std::ranges.
 
-Other approaches are shown at [Stackoverflow](
-https://stackoverflow.com/questions/29132809/using-boostspiritqi-to-parse-numbers-with-separators?answertab=active#tab-top)
-but how to cope with error handling than? Hacking X3's internals isn't the way!
+  Other approaches are shown at [Stackoverflow](
+  https://stackoverflow.com/questions/29132809/using-boostspiritqi-to-parse-numbers-with-separators?answertab=active#tab-top)
+  but how to cope with error handling than? Hacking X3's internals isn't the way!
 
 
-### Others
+## Others
 
 - Get a logo, e.g. ibis as mascot with assets sub directories.
 
@@ -387,7 +317,6 @@ but how to cope with error handling than? Hacking X3's internals isn't the way!
 Switch from MarkDown to ReStructuredText. At this state, Doxygen miss some MarkDown
 and ReStructuredText features, Sphinx multi projects and doesn't seems to support
 Doxygen's Todo tags/list.
-
 
 Check [LSST DM Developer Guide](https://developer.lsst.io/index.html) for styles
 and recommendations.

@@ -42,9 +42,9 @@ target_sources(${PROJECT_NAME}
         src/analyze/syntax.cpp
 
         src/context.cpp
-        src/error_handler.cpp
+        src/diagnostic_handler.cpp
 
-        src/parser/on_error_base.cpp
+        src/parser/error_handler.cpp
         src/parser/position_cache.cpp
         src/parser/grammar.cpp  # ---- memory exhausting ----
         src/parser/parse.cpp

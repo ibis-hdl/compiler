@@ -2,7 +2,7 @@
 #include <ibis/vhdl/ast/numeric_convert/filter_range.hpp>
 #include <ibis/vhdl/ast/numeric_convert/dbg_trace.hpp>
 
-#include <ibis/vhdl/error_handler.hpp>
+#include <ibis/vhdl/diagnostic_handler.hpp>
 
 #include <ibis/vhdl/ast/node/bit_string_literal.hpp>
 #include <ibis/vhdl/ast/util/string_span.hpp>
@@ -46,8 +46,8 @@ auto const literal_name = "bit string literal"sv;
 namespace ibis::vhdl::ast {
 
 template <typename IntegerT>
-convert_bit_string<IntegerT>::convert_bit_string(error_handler_type& error_handler_)
-    : report_error{ error_handler_ }
+convert_bit_string<IntegerT>::convert_bit_string(diagnostic_handler_type& diagnostic_handler_)
+    : report_error{ diagnostic_handler_ }
 {
 }
 
@@ -96,7 +96,7 @@ typename convert_bit_string<IntegerT>::return_type convert_bit_string<IntegerT>:
         }
 
         if (!parse_ok) {
-            using error_type = typename vhdl::error_handler<parser::iterator_type>::error_type;
+            using error_type = typename vhdl::diagnostic_handler<parser::iterator_type>::error_type;
             auto constexpr parser_error = error_type::parser;
 
             // parse failed - can't fit the integer_type, iter is rewind to begin.
