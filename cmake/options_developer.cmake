@@ -90,7 +90,7 @@ mark_as_advanced(IBIS_ENABLE_PCH_DEFAULT)
 
 option(IBIS_ENABLE_PCH_IBIS
     "Enable pre-compiled headers support for Ibis HDL C++ headers."
-    ON)
+    OFF)
 mark_as_advanced(IBIS_ENABLE_PCH_IBIS)
 
 

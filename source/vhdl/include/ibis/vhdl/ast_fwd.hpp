@@ -1,28 +1,27 @@
 #pragma once
 
-#include <ibis/vhdl/ast/util/string_span.hpp>
 #include <ibis/vhdl/ast/util/variant.hpp>
 
 #include <vector>
 
 namespace ibis::vhdl::ast {
 
-///
-/// AST nodes forward declared
-///
-/// Quick & Dirty created by:
-///
-/// \code.{.sh}
-/// #!/usr/bin/env bash
-///
-/// egrep '(struct|using)' source/vhdl/include/ibis/vhdl/ast/node/*.hpp \
-/// | awk -F':' '{print $2}' \
-/// | sed -e '/^ /d' -e 's/using/struct/g' -e 's/=.*//g' -e 's/ $/;/g' \
-/// | sort | uniq
-/// \endcode
-///
-/// with tweaking by hand afterwards.
-///
+//
+// AST nodes forward declared
+//
+// Quick & Dirty created by:
+//
+// \code.{.sh}
+// #!/usr/bin/env bash
+//
+// egrep '(struct|using)' source/vhdl/include/ibis/vhdl/ast/node/*.hpp \
+// | awk -F':' '{print $2}' \
+// | sed -e '/^ /d' -e 's/using/struct/g' -e 's/=.*//g' -e 's/ $/;/g' \
+// | sort | uniq
+// \endcode
+//
+// with tweaking by hand afterwards.
+//
 struct abstract_literal;
 struct access_type_definition;
 struct actual_designator;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ibis/vhdl/type.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
 
 #include <tuple>
 #include <iosfwd>

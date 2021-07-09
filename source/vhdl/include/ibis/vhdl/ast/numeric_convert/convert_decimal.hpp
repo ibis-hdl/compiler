@@ -2,19 +2,23 @@
 
 #include <ibis/vhdl/type.hpp>
 #include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/ast/util/string_span.hpp>
 
 #include <tuple>
 #include <iosfwd>
 #include <variant>
 
 namespace ibis::vhdl::ast {
-// AST node forward
+
 struct decimal_literal;
+
 }  // namespace ibis::vhdl::ast
 
 namespace ibis::vhdl {
+
 template <typename IteratorT>
 class diagnostic_handler;
+
 }
 
 namespace ibis::vhdl::ast {

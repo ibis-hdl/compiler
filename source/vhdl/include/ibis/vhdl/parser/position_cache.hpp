@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ibis/vhdl/ast/util/position_tagged.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
 
 #include <iosfwd>
 #include <optional>
