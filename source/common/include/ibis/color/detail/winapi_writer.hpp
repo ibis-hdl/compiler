@@ -78,7 +78,9 @@ private:
                     }
                     // set only color relevant (lower) byte
                     WORD const upper = (data.saved_attribute >> 8) & 0xFF;
-                    attr = (upper << 8) | (attr & 0xFF);
+                    // tamming C integer promotion to avoid warning [-Wimplicit-int-conversion]
+                    attr = static_cast<WORD>((upper << 8) | (attr & 0xFF));
+
                     SetConsoleTextAttribute(hConsoleHandle, attr);
                     next_state = passiv;
                 }
