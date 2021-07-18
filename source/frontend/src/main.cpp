@@ -86,10 +86,17 @@ int main(int argc, const char* argv[])
                           << '\n';
             }
 
-            std::cout << "------------------- input ----------------------\n"
-                      << *contents << '\n'
-                      << "------------------------------------------------\n";
+            // render the source with lines numbers (quick & dirty solution)
+            uint16_t line_no = 1;
+            std::istringstream iss(*contents);
+            std::cout << "------------------- input ----------------------\n";
+            for (std::string line; std::getline(iss, line, '\n'); line_no++) {
+                std::cout << std::setfill(' ') << std::setw(3) << line_no << " | "  // --
+                          << line << '\n';
+            }
+            std::cout << "------------------------------------------------\n";
 
+            // prepare to parse
             auto position_cache_proxy = position_cache.add_file(hdl_file, *contents);
 
             ast::design_file design_file;

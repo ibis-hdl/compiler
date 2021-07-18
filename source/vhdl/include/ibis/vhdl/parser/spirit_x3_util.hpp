@@ -32,8 +32,11 @@ auto const protect = protect_gen{};
 ///
 /// Spirit X3 parser utility for attribute handling
 ///
-/// \see [Understanding the List Operator (%) in Boost.Spirit](
-///      https://stackoverflow.com/questions/33816662/understanding-the-list-operator-in-boost-spirit/33817135#33817135)
+/// @see [Understanding the List Operator (%) in Boost.Spirit](
+///  https://stackoverflow.com/questions/33816662/understanding-the-list-operator-in-boost-spirit/33817135#33817135)
+/// For a more modern variant with C++ lambdas check near the bottom of
+/// [Spirit X3, Is this error handling approach useful?](
+/// https://stackoverflow.com/questions/57048008/spirit-x3-is-this-error-handling-approach-useful/57067207#57067207)
 ///
 template <typename T>
 struct as_type {

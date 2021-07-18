@@ -11,15 +11,30 @@
 #include <string_view>
 
 namespace ibis::vhdl::parser {
-
 ///
 /// Base class for all AST nodes where the parser error handler can be called.
 ///
 /// This is called directly by Boost.Spirit X3 in case of parser error.
 ///
-/// @todo This concept allows also to have different error handling depending
-/// on concrete rule ID, for more see [Custom error on rule level? #657](
-///  https://github.com/boostorg/spirit/issues/657)
+/// @todo This concept allows also to have different error handling strategies
+/// depending on concrete rule ID, for more see [Custom error on rule level? #657](
+///  https://github.com/boostorg/spirit/issues/657).
+/// This may be used to get more detailed informations on which concrete BNF rule has
+/// thrown the exception, since the X3 context contains only the tags - in these
+/// days:
+/// @code
+/// context<
+///     parser::diagnostic_handler_tag, ...,
+///     context<parser::position_cache_tag, ...,
+///         context<skipper_tag, ..., unused_type>
+///     >
+/// >
+/// @endcode
+/// It would be nice to get these information, e.g. on missing ';', not only the
+/// error position in (single line) source context. Maybe the rule name can be gathered
+/// using ``get_info<T> { std::string operator()(T const&)``,
+/// see [Spirit X3, Is this error handling approach useful?](
+/// https://stackoverflow.com/questions/57048008/spirit-x3-is-this-error-handling-approach-useful/57067207#57067207)
 ///
 class error_handler {
 public:
