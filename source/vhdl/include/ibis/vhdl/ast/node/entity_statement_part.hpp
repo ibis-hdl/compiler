@@ -16,7 +16,6 @@ using entity_statement = variant<
     ast::process_statement                     // passive_process_statement
     >;
 
-struct entity_statement_part : std::vector<ast::entity_statement> {
-};
+using entity_statement_part = std::vector<ast::entity_statement>;
 
 }  // namespace ibis::vhdl::ast

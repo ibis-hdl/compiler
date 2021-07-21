@@ -928,8 +928,10 @@ void printer::operator()(design_unit const& node)
     static const std::string_view symbol{ "design_unit" };
     symbol_scope<design_unit> _(*this, symbol);
 
-    (*this)(node.context_clause);
-    os << '\n';
+    if (!node.context_clause.empty()) {
+        (*this)(node.context_clause);
+        os << '\n';
+    }
     (*this)(node.library_unit);
 }
 
@@ -1831,9 +1833,11 @@ void printer::operator()(package_declaration const& node)
     symbol_scope<package_declaration> _(*this, symbol);
 
     (*this)(node.identifier);
-    os << '\n';
 
-    (*this)(node.declarative_part);
+    if (!node.declarative_part.empty()) {
+        os << '\n';
+        (*this)(node.declarative_part);
+    }
 
     if (node.end_identifier) {
         os << '\n';

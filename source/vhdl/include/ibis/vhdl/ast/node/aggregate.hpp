@@ -5,7 +5,6 @@
 
 namespace ibis::vhdl::ast {
 
-struct aggregate : std::vector<ast::element_association> {
-};
+using aggregate = std::vector<ast::element_association>;
 
 }  // namespace ibis::vhdl::ast

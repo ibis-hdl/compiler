@@ -23,7 +23,7 @@ namespace ibis::vhdl::parser::detail {
 ///
 struct distinct_directive {
     ///
-    /// Attribute less overload.
+    /// Attributeless overload.
     ///
     /// @param parser The core parser to be used.
     /// @return The combined parser base on given argument
@@ -40,21 +40,34 @@ struct distinct_directive {
     }
 
     ///
-    /// Overload to use with attributes
+    /// Overload for literals, like keywords
     ///
-    /// @param parser The core parser to be used.
-    /// @param attr The attribute to be exposed.
-    /// @return The combined parser based on given argument
+    /// @param keyword_str The keyword.
+    /// @return The distinct rule.
     ///
-    template <typename Parser, typename Attr>
-    constexpr auto operator()(Parser&& parser, Attr&& attr) const
+    constexpr auto operator()(char const* keyword_str) const
     {
         // clang-format off
-        return
-               operator()(std::forward<Parser>(parser))
-            >> x3::attr(std::forward<Attr>(attr))
-            ;
-        // clang-format off
+        return x3::rule<struct _, x3::unused_type>{ keyword_str } = //this->operator()(keyword_str);
+            x3::lexeme[
+                    x3::no_case[ x3::lit(keyword_str) ]
+                >> !(x3::iso8859_1::alnum | '_')
+            ];
+        // clang-format on
+    }
+
+    ///
+    /// Overload to use with attributes
+    ///
+    /// @param keyword_str The keyword.
+    /// @param attr The attribute to be exposed.
+    /// @return The combined parser based on given argument.
+    ///
+    template <typename Attr>
+    constexpr auto operator()(char const* keyword_str, Attr&& attr) const
+
+    {
+        return this->operator()(keyword_str) >> x3::attr(std::forward<Attr>(attr));
     }
 };
 

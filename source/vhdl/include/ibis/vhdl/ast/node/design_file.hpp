@@ -5,7 +5,6 @@
 
 namespace ibis::vhdl::ast {
 
-struct design_file : std::vector<ast::design_unit> {
-};
+using design_file = std::vector<ast::design_unit>;
 
 }  // namespace ibis::vhdl::ast

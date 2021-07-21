@@ -3,11 +3,13 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <string_view>
+#include <vector>
 #include <iosfwd>
 
 namespace ibis::vhdl::ast {
-struct design_file;
-}
+struct design_unit;
+using design_file = std::vector<ast::design_unit>;
+}  // namespace ibis::vhdl::ast
 
 namespace ibis::vhdl::ast {
 

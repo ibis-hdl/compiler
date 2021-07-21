@@ -137,7 +137,7 @@ add_compile_options(
     #  https://docs.microsoft.com/en-us/cpp/build/reference/fc-full-path-of-source-code-file-in-diagnostics?view=msvc-160)
     "$<$<CXX_COMPILER_ID:MSVC>:/FC>"
 
-    # ---- Special treatment for CLang/Windows ----
+    # ---- Special treatment for Clang/Windows ----
     # hide warning: enumerator value is not representable in the underlying type 'int'
     # at <boost/spirit/home/support/char_encoding/standard_wide.hpp>
     "$<$<AND:$<CXX_COMPILER_ID:Clang>,$<PLATFORM_ID:Windows>>:-Wno-microsoft-enum-value>"
@@ -233,7 +233,7 @@ add_link_options(
 # - [Warnings: -Weverything and the Kitchen Sink](
 #    https://embeddedartistry.com/blog/2017/3/7/clang-weverythings
 #
-# May require special treatment for clang to prevent contamination with pragmas
+# May require special treatment for Clang to prevent contamination with pragmas
 # by using -Weverything
 option(DEVELOPER_CLANG_WARN_EVERYTHING
     "Use Clang compiler's -Weverything option"
@@ -258,6 +258,9 @@ endif()
 # Project wide compiler definitions
 ###############################################################################
 
+## -----------------------------------------------------------------------------
+# Common definitions
+#
 add_compile_definitions(
     # ---- Win32 ----
     # Boost Libs; see https://cmake.org/cmake/help/latest/module/FindBoost.html
@@ -269,6 +272,15 @@ add_compile_definitions(
     # [Possible problem with min() and max()](https://github.com/bkaradzic/bx/issues/252)
     "$<$<PLATFORM_ID:Windows>:NOMINMAX;_CRT_SECURE_NO_WARNINGS>"
 )
+
+
+## -----------------------------------------------------------------------------
+# Boost Spirit X3 BOOST_SPIRIT_X3_DEBUG; Note, this affects also PCH
+#
+option(DEVELOPER_BOOST_SPIRIT_X3_DEBUG
+    "Compile the parser with BOOST_SPIRIT_X3_DEBUG."
+    ON)
+mark_as_advanced(DEVELOPER_BOOST_SPIRIT_X3_DEBUG)
 
 
 ################################################################################
@@ -410,6 +422,7 @@ CPMAddPackage(
           "CMAKE_FORMAT_EXCLUDE cmake/CPM.cmake"
 )
 
+
 ################################################################################
 # CMake Miscellaneous
 #
@@ -440,6 +453,7 @@ if (WIN32)
         )
     endif()
 endif()
+
 
 ## -----------------------------------------------------------------------------
 # Compile Command JSON

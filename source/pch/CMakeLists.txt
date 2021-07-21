@@ -32,6 +32,12 @@ target_precompile_headers(${PROJECT_NAME}
 )
 
 
+if(DEVELOPER_BOOST_SPIRIT_X3_DEBUG)
+    target_compile_definitions(${PROJECT_NAME}
+        PRIVATE BOOST_SPIRIT_X3_DEBUG
+    )
+endif()
+
 
 # Note, target_link_libraries(... ibis::common ibis::vhdl) doesn't work here
 # since this would add cyclic dependencies

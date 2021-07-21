@@ -5,14 +5,18 @@
 #include <ibis/vhdl/ast/util/nullary.hpp>
 #include <ibis/vhdl/ast/node/literal.hpp>
 
+#include <vector>
+
 namespace ibis::vhdl::ast {
 
 struct name;
-struct aggregate;
 struct expression;
 struct function_call;
 struct qualified_expression;
 struct allocator;
+
+struct element_association;
+using aggregate = std::vector<ast::element_association>;
 
 // primary ::=
 //      name

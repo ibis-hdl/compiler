@@ -28,7 +28,7 @@ struct actual_designator;
 // struct actual_parameter_part;
 // struct actual_part;
 struct actual_part_chunk;
-struct aggregate;
+//struct aggregate;
 struct alias_declaration;
 struct alias_designator;
 struct allocator;
@@ -74,7 +74,7 @@ struct conditional_waveforms;
 struct condition_clause;
 struct configuration_declaration;
 // struct configuration_declarative_item;
-struct configuration_declarative_part;  // FixMe: using ... = vector<>
+// struct configuration_declarative_part;
 // struct configuration_item;
 struct configuration_specification;
 struct constant_declaration;
@@ -85,7 +85,7 @@ struct constraint;
 struct decimal_literal;
 struct delay_mechanism;
 struct designator;
-struct design_file;  // FixMe: using ... = vector<>
+// struct design_file;
 struct design_unit;
 struct disconnection_specification;
 struct discrete_range;
@@ -97,14 +97,14 @@ struct entity_aspect_entity;
 struct entity_class_entry_list;
 struct entity_declaration;
 // struct entity_declarative_item;
-struct entity_declarative_part;  // FixMe: using ... = vector<>
+// struct entity_declarative_part;
 struct entity_designator;
 struct entity_designator_list;
 struct entity_header;
 struct entity_name_list;
 struct entity_specification;
 // struct entity_statement;
-struct entity_statement_part;  // FixMe: using .. vector<>
+// struct entity_statement_part;
 // struct entity_tag;
 struct enumeration_literal;
 struct enumeration_type_definition;
@@ -181,7 +181,7 @@ struct primary_unit;
 struct procedure_call;
 struct procedure_call_statement;
 // struct process_declarative_item;
-struct process_declarative_part;  // FixMe: using ... = vector<>
+// struct process_declarative_part;
 struct process_statement;
 // struct process_statement_part;
 struct qualified_expression;
@@ -323,13 +323,19 @@ using package_body_declarative_item =
 using library_unit = variant<ast::nullary, ast::primary_unit, ast::secondary_unit>;
 using waveform_element_form = variant<ast::expression, ast::keyword_token>;
 
+using aggregate = std::vector<ast::element_association>;
 using choices = std::vector<choice>;
+using configuration_declarative_part = std::vector<ast::configuration_declarative_item>;
+using design_file = std::vector<ast::design_unit>;
+using entity_declarative_part = std::vector<ast::entity_declarative_item>;
+using entity_statement_part = std::vector<ast::entity_statement>;
 using group_constituent_list = std::vector<ast::group_constituent>;
 using instantiation_label_list = std::vector<ast::label>;
 using subprogram_declarative_part = std::vector<ast::subprogram_declarative_item>;
 using block_declarative_part = std::vector<ast::block_declarative_item>;
 using package_declarative_part = std::vector<ast::package_declarative_item>;
 using package_body_declarative_part = std::vector<ast::package_body_declarative_item>;
+using process_declarative_part = std::vector<ast::process_declarative_item>;
 
 using architecture_declarative_part = ast::block_declarative_part;
 

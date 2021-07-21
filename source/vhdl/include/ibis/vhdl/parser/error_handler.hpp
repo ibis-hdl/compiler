@@ -2,8 +2,9 @@
 
 #include <ibis/vhdl/parser/diagnostic_handler.hpp>  // IWYU pragma: keep
 
-#include <boost/spirit/home/x3/support/context.hpp>
-#include <boost/spirit/home/x3/auxiliary/guard.hpp>
+// #include <boost/spirit/home/x3/support/context.hpp>
+// #include <boost/spirit/home/x3/auxiliary/guard.hpp>
+#include <boost/spirit/home/x3.hpp> // FixMe: Don't include all the stuff
 
 #include <ibis/namespace_alias.hpp>  // IWYU pragma: keep
 

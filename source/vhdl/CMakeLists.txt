@@ -51,6 +51,13 @@ target_sources(${PROJECT_NAME}
 )
 
 
+if(DEVELOPER_BOOST_SPIRIT_X3_DEBUG)
+    target_compile_definitions(${PROJECT_NAME}
+        PRIVATE BOOST_SPIRIT_X3_DEBUG
+    )
+endif()
+
+
 # Maybe Solution - use [Object Libraries](https://cmake.org/cmake/help/latest/command/add_library.html#object-libraries)
 # to compile only {grammar,parse}.cpp with high memory requirements options
 set_property(TARGET ${PROJECT_NAME}

@@ -13,11 +13,121 @@ using namespace std::string_view_literals;
 
 std::string_view error_handler::lookup(std::string_view which)
 {
-    using rule_map_type = std::unordered_map<std::string_view, std::string_view>;
+    using map_type = std::unordered_map<std::string_view, std::string_view>;
 
-    // Spirit.X3 rule ID/name map. The rule names may be different from node
-    // names, so we can't use ast::pretty_node_name here.
-    static const rule_map_type ruleid_map{
+    static const map_type map{
+        // keywords
+        { "abs"sv, "keyword 'abs'"sv },
+        { "access"sv, "keyword 'access'"sv },
+        { "after"sv, "keyword 'after'"sv },
+        { "alias"sv, "keyword 'alias'"sv },
+        { "all"sv, "keyword 'all'"sv },
+        { "and"sv, "keyword 'and'"sv },
+        { "architecture"sv, "keyword 'architecture'"sv },
+        { "array"sv, "keyword 'array'"sv },
+        { "assert"sv, "keyword 'assert'"sv },
+        { "attribute"sv, "keyword 'attribute'"sv },
+        { "begin"sv, "keyword 'begin'"sv },
+        { "block"sv, "keyword 'block'"sv },
+        { "body"sv, "keyword 'body'"sv },
+        { "buffer"sv, "keyword 'buffer'"sv },
+        { "bus"sv, "keyword 'bus'"sv },
+        { "case"sv, "keyword 'case'"sv },
+        { "component"sv, "keyword 'component'"sv },
+        { "configuration"sv, "keyword 'configuration'"sv },
+        { "constant"sv, "keyword 'constant'"sv },
+        { "disconnect"sv, "keyword 'disconnect'"sv },
+        { "downto"sv, "keyword 'downto'"sv },
+        { "else"sv, "keyword 'else'"sv },
+        { "elsif"sv, "keyword 'elsif'"sv },
+        { "end"sv, "keyword 'end'"sv },
+        { "entity"sv, "keyword 'entity'"sv },
+        { "exit"sv, "keyword 'exit'"sv },
+        { "file"sv, "keyword 'file'"sv },
+        { "for"sv, "keyword 'for'"sv },
+        { "function"sv, "keyword 'function'"sv },
+        { "generate"sv, "keyword 'generate'"sv },
+        { "generic"sv, "keyword 'generic'"sv },
+        { "group"sv, "keyword 'group'"sv },
+        { "guarded"sv, "keyword 'guarded'"sv },
+        { "if"sv, "keyword 'if'"sv },
+        { "impure"sv, "keyword 'impure'"sv },
+        { "in"sv, "keyword 'in'"sv },
+        { "inertial"sv, "keyword 'inertial'"sv },
+        { "inout"sv, "keyword 'inout'"sv },
+        { "is"sv, "keyword 'is'"sv },
+        { "label"sv, "keyword 'label'"sv },
+        { "library"sv, "keyword 'library'"sv },
+        { "linkage"sv, "keyword 'linkage'"sv },
+        { "literal"sv, "keyword 'literal'"sv },
+        { "loop"sv, "keyword 'loop'"sv },
+        { "map"sv, "keyword 'map'"sv },
+        { "mod"sv, "keyword 'mod'"sv },
+        { "nand"sv, "keyword 'nand'"sv },
+        { "new"sv, "keyword 'new'"sv },
+        { "next"sv, "keyword 'next'"sv },
+        { "nor"sv, "keyword 'nor'"sv },
+        { "not"sv, "keyword 'not'"sv },
+        { "null"sv, "keyword 'null'"sv },
+        { "of"sv, "keyword 'of'"sv },
+        { "on"sv, "keyword 'on'"sv },
+        { "open"sv, "keyword 'open'"sv },
+        { "or"sv, "keyword 'or'"sv },
+        { "others"sv, "keyword 'others'"sv },
+        { "out"sv, "keyword 'out'"sv },
+        { "package"sv, "keyword 'package'"sv },
+        { "port"sv, "keyword 'port'"sv },
+        { "postponed"sv, "keyword 'postponed'"sv },
+        { "procedure"sv, "keyword 'procedure'"sv },
+        { "process"sv, "keyword 'process'"sv },
+        { "pure"sv, "keyword 'pure'"sv },
+        { "range"sv, "keyword 'range'"sv },
+        { "record"sv, "keyword 'record'"sv },
+        { "register"sv, "keyword 'register'"sv },
+        { "reject"sv, "keyword 'reject'"sv },
+        { "rem"sv, "keyword 'rem'"sv },
+        { "report"sv, "keyword 'report'"sv },
+        { "return"sv, "keyword 'return'"sv },
+        { "rol"sv, "keyword 'rol'"sv },
+        { "ror"sv, "keyword 'ror'"sv },
+        { "select"sv, "keyword 'select'"sv },
+        { "severity"sv, "keyword 'severity'"sv },
+        { "signal"sv, "keyword 'signal'"sv },
+        { "shared"sv, "keyword 'shared'"sv },
+        { "sla"sv, "keyword 'sla'"sv },
+        { "sll"sv, "keyword 'sll'"sv },
+        { "sra"sv, "keyword 'sra'"sv },
+        { "srl"sv, "keyword 'srl'"sv },
+        { "subtype"sv, "keyword 'subtype'"sv },
+        { "then"sv, "keyword 'then'"sv },
+        { "to"sv, "keyword 'to'"sv },
+        { "transport"sv, "keyword 'transport'"sv },
+        { "type"sv, "keyword 'type'"sv },
+        { "unaffected"sv, "keyword 'unaffected'"sv },
+        { "units"sv, "keyword 'units'"sv },
+        { "until"sv, "keyword 'until'"sv },
+        { "use"sv, "keyword 'use'"sv },
+        { "variable"sv, "keyword 'variable'"sv },
+        { "wait"sv, "keyword 'wait'"sv },
+        { "when"sv, "keyword 'when'"sv },
+        { "while"sv, "keyword 'while'"sv },
+        { "with"sv, "keyword 'with'"sv },
+        { "xnor"sv, "keyword 'xnor'"sv },
+        { "xor"sv, "keyword 'xor'"sv },
+
+        // Typographical
+        { "';'"sv, "Semicolon ';'"sv },
+        { "':'"sv, "Colon ':'"sv },
+        { "','"sv, "Comma ':'"sv },
+        { "'{'"sv, "Opening '{' Curly Brace"sv },
+        { "'}'"sv, "Closing '}' Curly Brace"sv },
+        { "'['"sv, "Opening '[' Square Bracket"sv },
+        { "']'"sv, "Closing ']' Square Bracket"sv },
+        { "'('"sv, "Opening '(' Brace/Parentheses"sv },
+        { "'('"sv, "Closing ')' Brace/Parentheses"sv },
+
+        // Spirit.X3 rule ID/name. Rule names may be different from node
+        // names, so we can't use ast::pretty_node_name here.
         { "abstract_literal"sv, "Abstract Literal"sv },
         { "access_type_definition"sv, "Access Type Definition"sv },
         { "actual_designator"sv, "Actual Designator"sv },
@@ -262,22 +372,11 @@ std::string_view error_handler::lookup(std::string_view which)
         { "boolean_expression"sv, "Boolean Expression"sv },
         { "time_expression"sv, "Time Expression"sv },
         { "value_expression"sv, "Value Expression"sv },
-
-        // Typographical
-        { "';'"sv, "Semicolon ';'"sv },
-        { "':'"sv, "Colon ':'"sv },
-        { "','"sv, "Comma ':'"sv },
-        { "'{'"sv, "Opening '{' Curly Brace"sv },
-        { "'}'"sv, "Closing '}' Curly Brace"sv },
-        { "'['"sv, "Opening '[' Square Bracket"sv },
-        { "']'"sv, "Closing ']' Square Bracket"sv },
-        { "'('"sv, "Opening '(' Brace/Parentheses"sv },
-        { "'('"sv, "Closing ')' Brace/Parentheses"sv },
     };
 
-    auto const iter = ruleid_map.find(which);
+    auto const iter = map.find(which);
 
-    if (iter != ruleid_map.end()) {
+    if (iter != map.end()) {
         return iter->second;
     }
 

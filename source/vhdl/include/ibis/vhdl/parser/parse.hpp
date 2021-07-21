@@ -10,8 +10,9 @@
 #include <exception>
 
 namespace ibis::vhdl::ast {
-struct design_file;
-}
+struct design_unit;
+using design_file = std::vector<ast::design_unit>;
+}  // namespace ibis::vhdl::ast
 
 namespace ibis::vhdl::parser {
 
@@ -47,8 +48,8 @@ public:
     /// this is only required if you have recursive rules or need external linkage
     /// on rules (define them in separate translation units).
     ///
-    bool operator()(position_cache<parser::iterator_type>::proxy& pos_proxy,
-                    parser::context& ctx, ast::design_file& design_file);
+    bool operator()(position_cache<parser::iterator_type>::proxy& pos_proxy, parser::context& ctx,
+                    ast::design_file& design_file);
 
 private:
     static std::string make_exception_description(std::exception const& exception,

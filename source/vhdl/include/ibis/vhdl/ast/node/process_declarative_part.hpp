@@ -26,7 +26,6 @@ using process_declarative_item =
             subprogram_body, subprogram_declaration, subtype_declaration, type_declaration,
             use_clause, variable_declaration>;
 
-struct process_declarative_part : std::vector<ast::process_declarative_item> {
-};
+using process_declarative_part = std::vector<ast::process_declarative_item>;
 
 }  // namespace ibis::vhdl::ast

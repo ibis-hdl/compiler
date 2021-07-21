@@ -30,7 +30,6 @@ using entity_declarative_item =
             signal_declaration, subprogram_body, subprogram_declaration, subtype_declaration,
             type_declaration, use_clause>;
 
-struct entity_declarative_part : std::vector<ast::entity_declarative_item> {
-};
+using entity_declarative_part = std::vector<ast::entity_declarative_item>;
 
 }  // namespace ibis::vhdl::ast

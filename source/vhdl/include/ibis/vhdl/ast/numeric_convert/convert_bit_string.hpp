@@ -6,6 +6,7 @@
 #include <tuple>
 #include <iosfwd>
 #include <numeric>
+#include <limits>
 
 namespace ibis::vhdl::ast {
 // AST node forward

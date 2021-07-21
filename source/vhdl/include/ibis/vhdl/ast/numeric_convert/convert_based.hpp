@@ -6,6 +6,8 @@
 #include <tuple>
 #include <iosfwd>
 #include <numeric>
+#include <limits>
+#include <variant>
 #include <type_traits>
 
 namespace ibis::vhdl::ast {

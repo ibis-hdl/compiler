@@ -13,4 +13,28 @@ struct bit_string_literal : position_tagged {
     base_specifier base_type;
 };
 
+#if defined(BOOST_SPIRIT_X3_DEBUG)
+inline std::ostream& operator<<(std::ostream& os, ast::bit_string_literal::base_specifier specifier)
+{
+    using base_specifier = ast::bit_string_literal::base_specifier;
+    auto const lookup = [&os](base_specifier specifier) {
+        switch (specifier) {
+            case base_specifier::bin:
+                os << "[bin]";
+                break;
+            case base_specifier::oct:
+                os << "[oct]";
+                break;
+            case base_specifier::hex:
+                os << "[hex]";
+                break;
+            default:
+                os << "[N/A]";
+        }
+    };
+    lookup(specifier);
+    return os;
+}
+#endif
+
 }  // namespace ibis::vhdl::ast
