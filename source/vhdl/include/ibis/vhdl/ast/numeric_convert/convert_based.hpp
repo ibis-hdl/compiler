@@ -4,6 +4,7 @@
 #include <ibis/vhdl/parser/iterator_type.hpp>
 
 #include <tuple>
+#include <variant>
 #include <iosfwd>
 #include <numeric>
 #include <limits>

@@ -279,7 +279,7 @@ add_compile_definitions(
 #
 option(DEVELOPER_BOOST_SPIRIT_X3_DEBUG
     "Compile the parser with BOOST_SPIRIT_X3_DEBUG."
-    ON)
+    OFF)
 mark_as_advanced(DEVELOPER_BOOST_SPIRIT_X3_DEBUG)
 
 
@@ -314,7 +314,7 @@ if(DEVELOPER_RUN_CLANG_TIDY)
     # https://stackoverflow.com/questions/61001314/what-is-the-correct-way-of-providing-header-filter-for-clang-tidy-in-cmake)
     # '-header-filter' overrides the 'HeaderFilterRegex' option in .clang-tidy file,
     # using POSIX RE expression (ERE) syntax (see llvm::Regex Class Reference)
-    set(_cltidy_filter_re "^((?!(/external/|/boost/|/testsuite/)).)*$")
+    set(_cltidy_filter_re "^((?!(/external/|/boost/|/CLI/|/testsuite/)).)*$")
     # clang-tidy lookup for .clang-tidy upwards and uses it
     set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXECUTABLE};-header-filter='${_cltidy_filter_re}'")
     # ... alternatively apply some fixes
@@ -339,10 +339,13 @@ if(MSVC)
     if(DEVELOPER_RUN_CLANG_TIDY)
         message(STATUS "=> Configure Fix: Disable <DEVELOPER_RUN_CLANG_TIDY> while using MSVC compiler")
         set(DEVELOPER_RUN_CLANG_TIDY "FALSE" CACHE STRING "")
+        # CMAKE_CXX_CLANG_TIDY must be cleared too, otherwise PCH header compiles with clang-tidy
+        # command line for some unknown reasons
+        set(CMAKE_CXX_CLANG_TIDY "" CACHE STRING "")
     endif()
 else()
     # always enable it on others platforms
-    set(DEVELOPER_RUN_CLANG_TIDY TRUE CACHE STRING "")
+    set(DEVELOPER_RUN_CLANG_TIDY "TRUE" CACHE STRING "")
 endif()
 
 
@@ -429,41 +432,14 @@ CPMAddPackage(
 ################################################################################
 
 ## -----------------------------------------------------------------------------
-# VS Code, supporting Clang11 (Windows) and MSVC
-#
-if (WIN32)
-    if(NOT EXISTS ${CMAKE_SOURCE_DIR}/.vscode/settings.json)
-        message(STATUS "**** create Microsoft Visual Studio Code (VSCode) settings.")
-        if(NOT BOOST_ROOT)
-            # BOOST_ROOT not given, start with my path
-            set(BOOST_ROOT_PATH "D:/My/IBIS/boost_1_76_0")
-        else()
-            file(TO_CMAKE_PATH ${BOOST_ROOT} BOOST_ROOT_PATH)
-        endif()
-        if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-            set(Boost_COMPILER "-clangw11")
-        else()
-            set(Boost_COMPILER "-vc142")
-        endif()
-        configure_file(
-            ${CMAKE_SOURCE_DIR}/cmake/utils/settings.json.in ${CMAKE_SOURCE_DIR}/.vscode/settings.json
-                @ONLY
-                ESCAPE_QUOTES
-                NEWLINE_STYLE WIN32
-        )
-    endif()
-endif()
-
-
-## -----------------------------------------------------------------------------
-# Compile Command JSON
+# Compile Command JSON, required by external tools like clang-tidy.
 #
 # [Copy compile_commands.json to project root folder](
 #  https://stackoverflow.com/questions/57464766/copy-compile-commands-json-to-project-root-folder)
 #
 if(CMAKE_GENERATOR STREQUAL "Ninja")
     add_custom_target(copy-compile-commands ALL
-        COMMENT "copy compiler database 'compile_commands.json' to source directory."
+        COMMENT "copy generated database 'compile_commands.json' to source directory."
         DEPENDS ${CMAKE_BINARY_DIR}/compile_commands.json
         COMMAND
             ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/compile_commands.json ${CMAKE_SOURCE_DIR}

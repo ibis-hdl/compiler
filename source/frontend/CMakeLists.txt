@@ -24,11 +24,6 @@ target_link_libraries(${PROJECT_NAME}
 #set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-v")
 
 
-add_dependencies(${PROJECT_NAME}
-    external-cli11
-)
-
-
 configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/include/ibis/frontend/version.hpp.in
     ${CMAKE_CURRENT_BINARY_DIR}/include/ibis/frontend/version.hpp

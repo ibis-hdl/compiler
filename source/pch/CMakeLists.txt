@@ -10,10 +10,6 @@ project(ibis_pch LANGUAGES CXX)
 add_library(${PROJECT_NAME} OBJECT)
 add_library(ibis::pch ALIAS ${PROJECT_NAME})
 
-add_dependencies(${PROJECT_NAME}
-    external-cli11
-)
-
 
 # see [PCH: Unclear error when reusing precompiled headers from interface library](
 # https://gitlab.kitware.com/cmake/cmake/-/issues/20288)

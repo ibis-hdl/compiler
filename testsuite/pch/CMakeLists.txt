@@ -11,11 +11,6 @@ add_library(${PROJECT_NAME} OBJECT)
 add_library(testsuite::pch ALIAS ${PROJECT_NAME})
 
 
-add_dependencies(${PROJECT_NAME}
-    external-cli11
-)
-
-
 # see [PCH: Unclear error when reusing precompiled headers from interface library](
 # https://gitlab.kitware.com/cmake/cmake/-/issues/20288)
 file(TOUCH ${CMAKE_CURRENT_BINARY_DIR}/pch_dummy.cpp)

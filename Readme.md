@@ -3,16 +3,52 @@ IBIS HDL project
 
 ## Build
 
+### Build on Windows
+
+Until 2021 the main developer machine was Fedora/Linux. In 2022 I started with developing on Windows, using WSL2 and container, also VS Code.
+
+Open *Visual Studio 2022 Developer Command Prompt* to get the tool chain correct
+initialized.
+
+The best to continue is to install [Python's virtual environment](https://docs.python.org/3/library/venv.html):
+
+```
+python -m venv .venv
+```
+
+If you run it from PowerShell, you have to prepare it, see 
+[here](https://stackoverflow.com/questions/1365081/virtualenv-in-powershell):
+
+```
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
+./.venv/Scripts/activate.ps1
+pip install conan
+```
+
+install [conan](https://conan.io/) as prerequisite, than you can start to build:
+
+```
+cmake --list-presets=all
+...
+cmake --preset "windows-msvc-release"
+...
+cmake build --preset "windows-msvc-release"
+...
+```
+
+### Build on Linux
+
+You know what to do :)
+
 ### Required Tools to Build & Configuration
 
-* C++17 compliant compiler, have developed and tested with
-    - clang++ 11
-    - g++ 11
-    - Visual Studio 2019 16.10.3
+* C++20 compliant compiler, have developed and tested with
+    - Visual Studio 2022 Developer Command Prompt v17.1.6
+    - clang++ 13
+    - g++ 12
 
-* CMake 3.18
-    - ninja (recommended)
-    - GNU make (not well supported by maintainer)
+* CMake 3.20
+    - ninja 1.10.2
 
 * python 3 to generate some files
 
@@ -21,19 +57,18 @@ IBIS HDL project
 
 ### Required 3rd party Libraries
 
-* Boost > 1.73
+* [Boost](https://www.boost.org/) 1.78
     - system
     - filesystem
     - locale
     - spirit X3
     - test (for testsuite)
-
-The following libraries are downloaded automatically into project's external
-directory from git repositories:
-
 * [CLI11](https://github.com/CLIUtils/CLI11)
 * [strong_type](https://github.com/rollbear/strong_type)
 
+By using [Conan package manager for C and C++](https://github.com/conan-io/conan)
+with [CMake wrapper](https://github.com/conan-io/cmake-conan) the libraries are
+build within the project.
 
 ## Developer
 
@@ -49,6 +84,8 @@ source base is stable.
 
 ### Clang Tidy
 
+The is a CMake target to run Clang-Tidy checks, nevertheless the VS Code extension.
+
 #### Disabled checks:
 
 There are disabled checks which shouldn't be. Enabling this checks requires more effort:
@@ -61,8 +98,7 @@ There are disabled checks which shouldn't be. Enabling this checks requires more
 
 - [cppcoreguidelines-pro-bounds-array-to-pointer-decay](https://clang.llvm.org/extra/clang-tidy/checks/cppcoreguidelines-pro-bounds-array-to-pointer-decay.html):
   *Ignored at this time. With C++20 with get [std::span](https://en.cppreference.com/w/cpp/container/span)
-   aka gsl::span aka gsl:: gsl::array_view. Also starting with C++20 we has also
-   [std::source_location](https://en.cppreference.com/w/cpp/utility/source_location) which allows to write assert macros with C++20.*
+   aka gsl::span aka gsl:: gsl::array_view.*
 
 - [bugprone-branch-clone](https://clang.llvm.org/extra/clang-tidy/checks/bugprone-branch-clone.html):
   *This check ignores the C++ `[[fallthrough]]` attribute specifier, hence twice the source annotations.* But it
@@ -96,7 +132,9 @@ There are disabled checks which shouldn't be. Enabling this checks requires more
 
 
 Obviously the intend is to get the parser working and hence the
-project.
+project. Even the compiler requires C++20, the tools inside [Microsofts Devcontainer](https://github.com/Microsoft/vscode-dev-containers) are not
+the latest, hence still sticking with C++17 (e.g. C++20 std::source_location
+and others).
 
 
 ### Boost.Spirit X3 Notes
@@ -158,7 +196,8 @@ in VHDL parser_rules (former) *test_case_FixMe.txt* where known:
   - interface_constant_declaration/interface_constant_declaration_006.input
   - type_conversion/type_conversion_001.input
   - wait_statement/wait_statement_00x.input
-  - binding_indication/binding_indication_00{0,1}.input entity name rule (is work.foo -> name)
+  - binding_indication/binding_indication_00{0,1}.input entity name rule 
+    (is work.foo -> name)
   - allocator_003 (http://vhdl.renerta.com/source/vhd00004.htm)
   - component_configuration_000; configuration_declaration_000,
     architecture_body -> must be: work.foo

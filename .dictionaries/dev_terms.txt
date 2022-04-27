@@ -1,0 +1,10 @@
+buildsystems
+clang
+cmake
+libc
+msvc
+stdlib
+toolset
+vcpkg
+POSIX
+Valgrind
