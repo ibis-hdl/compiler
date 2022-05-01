@@ -8,6 +8,9 @@
 *.{cmd,[cC][mM][dD]} text eol=crlf
 *.{bat,[bB][aA][tT]} text eol=crlf
 
+# enforce shell scripts to be LF
+*.sh text eol=lf
+
 # Explicitly declare text files you want to always be normalized and converted
 # to native line endings on checkout.
 *.{cpp,hpp} text

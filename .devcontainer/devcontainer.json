@@ -27,14 +27,14 @@
 		"ms-vscode.cpptools",
 		"ms-vscode.cmake-tools",
 		"ms-python.python",
+		"hbenl.vscode-test-explorer",
 		"mutantdino.resourcemonitor",
 		"xaver.clang-format",
 		"notskm.clang-tidy",
 		"streetsidesoftware.code-spell-checker",
 		"Gruntfuggly.todo-tree",
 		"zcoinofficial.boost-test-adapter",
-		"fredericbonnet.cmake-test-adapter",
-		"hbenl.vscode-test-explorer"
+		"fredericbonnet.cmake-test-adapter"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
