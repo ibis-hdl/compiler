@@ -1,0 +1,76 @@
+name: 'CMake Build/Test'
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  # [Manual triggers with workflow_dispatch](
+  # https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/)
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Self-hosted Linux Runner
+    # ${{github.workspace}}/build
+    # ${{env.BUILD_TYPE}}
+    #runs-on: ubuntu-latest
+    runs-on: [self-hosted, '${{ matrix.os }}', x64]
+    strategy:
+      matrix:
+        os: [Linux, Windows]
+        include:
+          - os: Linux
+            cmake_preset: ci-linux
+          - os: Windows
+            cmake_preset: ci-windows
+
+    steps:
+    - name: Install basic dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install --no-install-recommends -y g++-10 clang-12 python3 python3-pip ccache
+
+    - name: Install CMake and ninja
+      uses: lukka/get-cmake@v3.23.0
+
+    - name: Install Conan package manager
+      run: |
+        pip3 --disable-pip-version-check --no-cache-dir install conan
+        conan profile new --detect --force default > /dev/null
+        # Conan detects a GCC version > 5 but has adjusted the 'compiler.libcxx' setting to
+        # 'libstdc++' for backwards compatibility. Our compiler is using the new CXX11 ABI 
+        # by default (libstdc++11).
+        conan profile update settings.compiler.libcxx=libstdc++11 default
+        # C++20 standard
+        conan profile update settings.compiler.std=20 default
+
+    - name: Version info of tools used
+      run: |
+        lsb_release -a
+        g++-10 --version
+        clang++-12 --version
+        ccache --version
+        python3 --version
+        conan  --version
+        cmake --version
+        ninja --version
+
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+      with:
+        submodules: true
+
+    - name: Setup Compiler Cache [ccache]
+      uses: hendrikmuhs/ccache-action@v1.2.2
+
+    - name: Configure and Build
+      uses: lukka/run-cmake@v10
+      with:
+        configurePreset: ${{ matrix.cmake_preset }}
+        buildPreset: ${{ matrix.cmake_preset }}
+
+    - name: Run Unit Test
+      run: |
+        ctest --preset ${{ matrix.cmake_preset }}
