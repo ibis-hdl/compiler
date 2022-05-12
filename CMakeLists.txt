@@ -19,6 +19,10 @@ message(STATUS "Version: ${ibis_VERSION}")
 
 
 ## global C++ Standard
+# Note:
+# - on C++ Std change, also set conan's compiler.std in
+#   - GitHubs actions
+#   - VS Code devcontainer
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -56,51 +60,10 @@ endif()
 
 include(${CMAKE_BINARY_DIR}/conan.cmake)
 
-conan_cmake_configure(
-    REQUIRES
-        boost/1.78.0
-        cli11/2.2.0
-        #fmt/8.1.1
-    GENERATORS
-        cmake_find_package
-        #virtualenv
-    #BUILD_REQUIRES cmake/3.23.1 ninja/1.10.2
-    IMPORTS "bin, *.dll -> ${CMAKE_BINARY_DIR}/bin"
-    IMPORTS "lib, *.dylib* -> ${CMAKE_BINARY_DIR}/lib"
-    # override defaults [https://github.com/conan-io/conan-center-index/blob/master/recipes/boost/all/conanfile.py]
-    # > conan inspect boost/1.X.Y@ -a options
-    OPTIONS "boost:zstd=True"
-    OPTIONS "boost:system_no_deprecated=True"
-    OPTIONS "boost:asio_no_deprecated=True"
-    OPTIONS "boost:filesystem_no_deprecated=True"
-    OPTIONS "boost:diagnostic_definitions=False"
-    #OPTIONS "boost:python_executable=${Python3_EXECUTABLE}"
-    # boost libs, avoid unnecessary builds; Note: python is disabled due to NumPy dependency
-    # [conan-center-index/issues/8826]{https://github.com/conan-io/conan-center-index/issues/8826}
-    OPTIONS "boost:without_python=True"
-    OPTIONS "boost:without_context=True"
-    OPTIONS "boost:without_contract=True"
-    OPTIONS "boost:without_coroutine=True"
-    OPTIONS "boost:without_fiber=True"
-    OPTIONS "boost:without_graph=True"
-    OPTIONS "boost:without_iostreams=True"
-    OPTIONS "boost:without_log=True"
-    OPTIONS "boost:without_math=True"
-    OPTIONS "boost:without_nowide=True"
-    OPTIONS "boost:without_program_options=True"
-    OPTIONS "boost:without_random=True"
-    OPTIONS "boost:without_regex=True"
-    OPTIONS "boost:without_serialization=True"
-    OPTIONS "boost:without_timer=True"
-    OPTIONS "boost:without_type_erasure=True"
-    OPTIONS "boost:without_wave=True"
-    #OPTIONS "fmt:shared=True"
-)
-
 conan_cmake_autodetect(conan_settings)
 
 conan_cmake_install(
-    PATH_OR_REFERENCE .
+    PATH_OR_REFERENCE ${CMAKE_SOURCE_DIR}
     BUILD missing
     REMOTE conancenter
     SETTINGS ${conan_settings} # compiler.libcxx=libstdc++11"

@@ -1,3 +1,5 @@
+[![Build/Test](https://github.com/ibis-hdl/ci-cmake-test/actions/workflows/cmake.yml/badge.svg)](https://github.com/ibis-hdl/ci-cmake-test/actions/workflows/cmake.yml)
+
 IBIS HDL project
 ================
 
@@ -16,7 +18,7 @@ The best to continue is to install [Python's virtual environment](https://docs.p
 python -m venv .venv
 ```
 
-If you run it from PowerShell, you have to prepare it, see 
+If you run it from PowerShell, you have to prepare it, see
 [here](https://stackoverflow.com/questions/1365081/virtualenv-in-powershell):
 
 ```
@@ -32,7 +34,11 @@ cmake --list-presets=all
 ...
 cmake --preset "windows-msvc-release"
 ...
-cmake build --preset "windows-msvc-release"
+cmake --build --preset "windows-msvc-release"
+...
+cmake --build --preset "windows-msvc-release" --target doc
+...
+ctest --preset "windows-msvc-release"
 ...
 ```
 
@@ -40,12 +46,12 @@ cmake build --preset "windows-msvc-release"
 
 You know what to do :)
 
-### Required Tools to Build & Configuration
+### Required Tools to Build & Configuration (e.g., see [.devcontainer](https://github.com/ibis-hdl/ci-cmake-test/tree/main/.devcontainer))
 
 * C++20 compliant compiler, have developed and tested with
     - Visual Studio 2022 Developer Command Prompt v17.1.6
-    - clang++ 13
-    - g++ 12
+    - clang++ 14
+    - g++ 11
 
 * CMake 3.20
     - ninja 1.10.2
@@ -196,7 +202,7 @@ in VHDL parser_rules (former) *test_case_FixMe.txt* where known:
   - interface_constant_declaration/interface_constant_declaration_006.input
   - type_conversion/type_conversion_001.input
   - wait_statement/wait_statement_00x.input
-  - binding_indication/binding_indication_00{0,1}.input entity name rule 
+  - binding_indication/binding_indication_00{0,1}.input entity name rule
     (is work.foo -> name)
   - allocator_003 (http://vhdl.renerta.com/source/vhd00004.htm)
   - component_configuration_000; configuration_declaration_000,

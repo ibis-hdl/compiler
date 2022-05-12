@@ -440,9 +440,10 @@ CPMAddPackage(
 if(CMAKE_GENERATOR STREQUAL "Ninja")
     add_custom_target(copy-compile-commands ALL
         COMMENT "copy generated database 'compile_commands.json' to source directory."
+        message(STATUS "copy_if_different ${PROJECT_BINARY_DIR}/compile_commands.json ${CMAKE_SOURCE_DIR}")
         DEPENDS ${CMAKE_BINARY_DIR}/compile_commands.json
         COMMAND
-            ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/compile_commands.json ${CMAKE_SOURCE_DIR}
+            ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BINARY_DIR}/compile_commands.json ${CMAKE_SOURCE_DIR}
         VERBATIM
     )
 endif()

@@ -105,7 +105,7 @@ endif()
 #
 # Disable some warning which aren't relevant here.
 #
-# * -Wno-covered-switch-default
+#   -Wno-covered-switch-default
 #   - if one extended the enum, you'd fall into the default case which probably
 #     isn't what you want. The correct thing to do is to remove the default case
 #     and get warnings for unhandled conditions, see

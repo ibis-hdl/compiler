@@ -62,7 +62,7 @@ filter_regex(EXCLUDE ".*cmake_pch\\.hxx(\\.cxx)?"
 # by xgettext
 list(JOIN SOURCES_WITH_ABSOLUTE_PATHS "\n" SOURCES_WITH_ABSOLUTE_PATHS_NL)
 
-file(WRITE ${CMAKE_BINARY_DIR}/sources.txt
+file(WRITE ${PROJECT_BINARY_DIR}/sources.txt
     "${SOURCES_WITH_ABSOLUTE_PATHS_NL}"
 )
 
