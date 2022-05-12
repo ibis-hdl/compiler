@@ -10,6 +10,13 @@
 find_package(Doxygen)
 option(BUILD_DOCUMENTATION_NG "Create and install the HTML based API documentation (requires Doxygen & Sphinx)" ${DOXYGEN_FOUND})
 
+if(${BUILD_DOCUMENTATION})
+    # require at least Doxygen 1.9
+    if (DOXYGEN_VERSION VERSION_LESS 1.9)
+        message(FATAL_ERROR "Doxygen version must be at least 1.9!")
+    endif()
+endif()
+
 
 # the target for Python's virtual environment
 add_custom_target(doc-ng-pyenv
@@ -80,7 +87,7 @@ add_custom_command(OUTPUT ${TEST_MATRIX_SCRIPT_OUTPUT}
         ${TEST_CASE_FILES_DEPENDENCY}
     # command batch
     COMMAND "$<IF:$<PLATFORM_ID:Windows>,${PY_ENV}/Scripts/activate,source;${PY_ENV}/bin/activate>"
-    COMMAND ${Python3_EXECUTABLE} ${TEST_MATRIX_SCRIPT}
+    COMMAND python ${TEST_MATRIX_SCRIPT}
         -i ${TEST_MATRIX_SCRIPT_INPUT} -o ${TEST_MATRIX_SCRIPT_OUTPUT}
         -f rst -p ${CMAKE_CURRENT_BINARY_DIR}/source/testsuite_parser_grammar.rst
     COMMAND "$<IF:$<PLATFORM_ID:Windows>,${PY_ENV}/Scripts/deactivate,deactivate>"

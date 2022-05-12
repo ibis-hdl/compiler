@@ -4,4 +4,4 @@ sphinx_pdj_theme # dark theme
 breathe
 exhale
 MarkupSafe
-
+tabulate

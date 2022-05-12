@@ -74,6 +74,7 @@ TestSuite VHDL Parser Grammar Rules {#testcase_mainpage}
    - [name](../parser_test_data/name.txt)
    - [next_statement](../parser_test_data/next_statement.txt)
    - [numeric_literal](../parser_test_data/numeric_literal.txt)
+   - [numeric_literal_failure](../parser_test_data/numeric_literal_failure.txt)
    - [package_body](../parser_test_data/package_body.txt)
    - [package_declaration](../parser_test_data/package_declaration.txt)
    - [parameter_specification](../parser_test_data/parameter_specification.txt)

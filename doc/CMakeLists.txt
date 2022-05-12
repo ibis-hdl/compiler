@@ -8,6 +8,13 @@
 find_package(Doxygen OPTIONAL_COMPONENTS dot)
 option(BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen)" ${DOXYGEN_FOUND})
 
+if(${BUILD_DOCUMENTATION})
+    # require at least Doxygen 1.9
+    if (DOXYGEN_VERSION VERSION_LESS 1.9)
+        message(FATAL_ERROR "Doxygen version must be at least 1.9!")
+    endif()
+endif()
+
 
 ##
 # Doxygen configuration file(s)
@@ -71,7 +78,7 @@ add_custom_command(OUTPUT ${TEST_MATRIX_SCRIPT_OUTPUT}
         ${TEST_CASE_FILES_DEPENDENCY}
     # command batch
     COMMAND "$<IF:$<PLATFORM_ID:Windows>,${PY_ENV}/Scripts/activate,source;${PY_ENV}/bin/activate>"
-    COMMAND ${Python3_EXECUTABLE} ${TEST_MATRIX_SCRIPT}
+    COMMAND python ${TEST_MATRIX_SCRIPT}
         -i ${TEST_MATRIX_SCRIPT_INPUT} -o ${TEST_MATRIX_SCRIPT_OUTPUT}
         -f grid -p ${CMAKE_CURRENT_SOURCE_DIR}/testsuite/readme.md
     COMMAND "$<IF:$<PLATFORM_ID:Windows>,${PY_ENV}/Scripts/deactivate,deactivate>"
@@ -91,13 +98,13 @@ add_custom_target(doc-testsuite-parser-testmatrix
 ##
 # The targets self: doc, doc-testsuite
 add_custom_target(doc
-    COMMENT "Generating API documentation with Doxygen"
+    COMMENT "Generating API documentation with Doxygen ${DOXYGEN_VERSION}"
     COMMAND doxygen doxyfile
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/api
     VERBATIM
 )
 add_custom_target(doc-testsuite
-    COMMENT "Generating TestSuite documentation with Doxygen"
+    COMMENT "Generating TestSuite documentation with Doxygen ${DOXYGEN_VERSION}"
     DEPENDS
         ${TEST_MATRIX_SCRIPT_OUTPUT}
     COMMAND doxygen doxyfile
