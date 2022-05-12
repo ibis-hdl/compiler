@@ -1,10 +1,12 @@
 buildsystems
 clang
 cmake
+devcontainer
+doxygen
 libc
 msvc
 stdlib
 toolset
 vcpkg
 POSIX
-Valgrind
+valgrind
