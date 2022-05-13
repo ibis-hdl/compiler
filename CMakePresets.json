@@ -66,7 +66,7 @@
                 "use-ninja"
             ],
             "cacheVariables": {
-                "CMAKE_CXX_COMPILER": "clang++-14"
+                "CMAKE_CXX_COMPILER": "clang++"
             }
         },
         {
@@ -78,7 +78,7 @@
                 "use-ninja"
             ],
             "cacheVariables": {
-                "CMAKE_CXX_COMPILER": "g++-11"
+                "CMAKE_CXX_COMPILER": "g++"
             }
         },
         {
@@ -287,7 +287,6 @@
             "name": "ci-default",
             "hidden": true,
             "cacheVariables": {
-                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
                 "IBIS_BUILD_TESTS": "ON",
                 "IBIS_ENABLE_PCH_DEFAULT": "OFF",
                 "IBIS_ENABLE_PCH_IBIS": "OFF",
@@ -316,7 +315,10 @@
             "inherits": [
                 "ci-default",
                 "linux-clang-release"
-            ]
+            ],
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache"
+            }            
         }
 
     ],

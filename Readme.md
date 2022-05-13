@@ -1,4 +1,4 @@
-[![Build/Test](https://github.com/ibis-hdl/ci-cmake-test/actions/workflows/cmake.yml/badge.svg)](https://github.com/ibis-hdl/ci-cmake-test/actions/workflows/cmake.yml)
+[![Build/Test](https://github.com/ibis-hdl/compiler/actions/workflows/cmake.yml/badge.svg)](https://github.com/ibis-hdl/compiler/actions/workflows/cmake.yml)
 
 IBIS HDL project
 ================
