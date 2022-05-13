@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-import os, errno
+import os
+import errno
 from pathlib import Path
 
 import argparse
@@ -19,53 +20,53 @@ class TestCase_Object:
         # failure test end with '_failure' inside directory name
         self._test_case_name = test_case_name
 
-        [self._is_failure_test, self._test_case_base_name] = self._hasTrailingName(test_case_name, '_failure')
+        [self._is_failure_test, self._test_case_base_name] = self._has_trailing_name(
+            test_case_name, '_failure')
 
         self._parser_name = self._test_case_base_name
         self._attribute_name = self._test_case_base_name
         self._has_failure_test = False
 
-    def set_Testsuite_Name(self, name):
+    def set_testsuite_name(self, name):
         self._testsuite_name
 
-    def get_Testsuite_Name(self):
+    def get_testsuite_name(self):
         return self._testsuite_name
 
-    def set_TestCase_Name(self, name):
+    def set_test_case_name(self, name):
         self._test_case_name = name
 
-    def get_TestCase_Name(self):
+    def get_test_case_name(self):
         return self._test_case_name
 
-    def set_Parser_Name(self, name):
+    def set_parser_name(self, name):
         self._parser_name = name
 
-    def get_Parser_Name(self):
+    def get_parser_name(self):
         return self._parser_name
 
-    def set_Attribute_Name(self, name):
+    def set_attribute_name(self, name):
         self._attribute_name = name
 
-    def get_Attribute_Name(self):
+    def get_attribute_name(self):
         return self._attribute_name
 
-    def set_HasFailureTest(self, value = True):
+    def set_has_failure_test(self, value=True):
         self._has_failure_test = value
 
-    def get_HasFailureTest(self):
+    def get_has_failure_test(self):
         return self._has_failure_test
 
+    testsuite_name = property(get_testsuite_name, set_testsuite_name)
+    TestCase_Name = property(get_test_case_name, set_test_case_name)
+    parser_name = property(get_parser_name, set_parser_name)
+    attribute_name = property(get_attribute_name, set_attribute_name)
+    has_failure_test = property(get_has_failure_test, set_has_failure_test)
 
-    Testsuite_Name = property(get_Testsuite_Name, set_Testsuite_Name)
-    TestCase_Name = property(get_TestCase_Name, set_TestCase_Name)
-    Parser_Name = property(get_Parser_Name, set_Parser_Name)
-    Attribute_Name = property(get_Attribute_Name, set_Attribute_Name)
-    HasFailureTest = property(get_HasFailureTest, set_HasFailureTest)
-
-    def is_FailureTestCase(self):
+    def is_failure_test_case(self):
         return self._is_failure_test
 
-    def as_FailureTestCase_Name(self):
+    def as_failure_test_case_name(self):
         """Helper to unify naming of failure test case names
 
         :return: The pure test case name with trailing '_failure' to indicate a failure test case.
@@ -73,7 +74,7 @@ class TestCase_Object:
         """
         return self._test_case_base_name + '_failure'
 
-    def _hasTrailingName(self, test_case_name, string):
+    def _has_trailing_name(self, test_case_name, string):
         """Check if there is a trailing 'string' at given name, this identifies a parser fail test.
 
         :param str test_case_name: The case case name, may have a '_failure' in the name.
@@ -85,8 +86,7 @@ class TestCase_Object:
         if string in test_case_name:
             sz = len(string)
             return [True, test_case_name[:-sz]]
-        else:
-            return [False, test_case_name]
+        return [False, test_case_name]
 
 
 class GrammerAPI:
@@ -97,20 +97,19 @@ class GrammerAPI:
         # some test cases have no parsers here, they are embedded into grammar
         # so we have to filter out them
         self.skiplist = ['_failure', 'xxx',
-                    # artifacts below??
-                    'floating_type_definition',
-                    'full_type_declaration',
-                    'incomplete_type_declaration',
-                    'integer_type_definition'
-                    ]
-        self.api_list = list()
+                         # artifacts below??
+                         'floating_type_definition',
+                         'full_type_declaration',
+                         'incomplete_type_declaration',
+                         'integer_type_definition'
+                         ]
+        self.api_list = []
         for p in self.parser_list:
             if self.inSkipList(p):
                 continue
             self.api_list.append(p)
 
-
-    def cxxDeclarations(self, file_name):
+    def cxx_declarations(self, file_name):
         """ Generate the API header to access the parsers
 
         :param file_name: The name inside the header's documentation
@@ -118,7 +117,7 @@ class GrammerAPI:
         :rtype: str
         """
 
-        api_list=list()
+        api_list = []
         for p in self.api_list:
             api_list.append("{name}_type {name}();".format(name=p))
 
@@ -145,16 +144,15 @@ namespace parser = ibis::vhdl::parser;
 
 {namespace_end}
 """.format(
-    file=file_name + '.hpp',
-    script=self.script_name,
-    d=now.day,
-    m=now.month,
-    y=now.year,
-    namespace_bgn=self.namespace_open(self.api_namespaces),
-    api_fcn_decl='\n'.join(f"parser::{x}" for x in api_list),
-    namespace_end=self.namespace_close(self.api_namespaces)
-)
-
+            file=file_name + '.hpp',
+            script=self.script_name,
+            d=now.day,
+            m=now.month,
+            y=now.year,
+            namespace_bgn=self.namespace_open(self.api_namespaces),
+            api_fcn_decl='\n'.join(f"parser::{x}" for x in api_list),
+            namespace_end=self.namespace_close(self.api_namespaces)
+        )
 
     def cxxInstances(self, file_name):
         """ Generate the API instances to access the parsers
@@ -164,8 +162,8 @@ namespace parser = ibis::vhdl::parser;
         :rtype: str
         """
 
-        api_instances=list()
-        api_fcn_definitions=list()
+        api_instances = []
+        api_fcn_definitions = []
 
         for p in self.parser_list:
             api_instances.append(
@@ -206,17 +204,16 @@ namespace ibis {{ namespace vhdl {{ namespace parser {{
 
 {namespace_api_end}
 """.format(
-    file=file_name + '.cpp',
-    script=self.script_name,
-    d=now.day,
-    m=now.month,
-    y=now.year,
-    namespace_api_bgn=self.namespace_open(self.api_namespaces),
-    instances='\n'.join(f"{x}" for x in api_instances),
-    api_fcn_def='\n'.join(f"{x}" for x in api_fcn_definitions),
-    namespace_api_end=self.namespace_close(self.api_namespaces)
-)
-
+            file=file_name + '.cpp',
+            script=self.script_name,
+            d=now.day,
+            m=now.month,
+            y=now.year,
+            namespace_api_bgn=self.namespace_open(self.api_namespaces),
+            instances='\n'.join(f"{x}" for x in api_instances),
+            api_fcn_def='\n'.join(f"{x}" for x in api_fcn_definitions),
+            namespace_api_end=self.namespace_close(self.api_namespaces)
+        )
 
     def inSkipList(self, name):
         """check if name is inside the skip list.
@@ -231,7 +228,6 @@ namespace ibis {{ namespace vhdl {{ namespace parser {{
                 return True
         return False
 
-
     def namespace_open(self, namespaces):
         """Helper for opening namespace from namespace list.
 
@@ -239,9 +235,9 @@ namespace ibis {{ namespace vhdl {{ namespace parser {{
         :return str: A string of all opening namespaces with curly braces.
         """
 
-        txt=' '.join('namespace {name} {{'.format(name=name) for name in namespaces)
+        txt = ' '.join('namespace {name} {{'.format(
+            name=name) for name in namespaces)
         return txt
-
 
     def namespace_close(self, namespaces):
         """Helper for closing namespace from namespace list.
@@ -250,9 +246,9 @@ namespace ibis {{ namespace vhdl {{ namespace parser {{
         :return str: A string of all closing namespaces with curly braces and comments.
         """
 
-        braces=' '.join('}' for name in namespaces)
-        comment='.'.join('{name}'.format(name=name) for name in namespaces)
-        txt=braces + ' // namespace ' + comment
+        braces = ' '.join('}' for name in namespaces)
+        comment = '.'.join('{name}'.format(name=name) for name in namespaces)
+        txt = braces + ' // namespace ' + comment
         return txt
 
 
@@ -265,14 +261,14 @@ class BoostTestGenerator:
     Over the time there where changes on the AST printer output format and
     macros used to generate the stuff, rewriting by hand isn't suitable.
     """
+
     def __init__(self):
         self.script_name = os.path.basename(__file__)
         self.ext_hxx = '.hpp'
         self.ext_cxx = '.cpp'
         self.testfile_postfix = '_test' + self.ext_cxx
 
-
-    def create_cxxTestFileName(self, testcase_obj):
+    def create_cxx_test_file_name(self, testcase_obj):
         """
         Generate C++ file name to be used to write on filesystem.
 
@@ -283,8 +279,7 @@ class BoostTestGenerator:
         file_name = testcase_obj.TestCase_Name + self.testfile_postfix
         return file_name
 
-
-    def create_cxxTestFilePathName(self, output_dir, testcase_obj):
+    def create_cxx_test_file_path_name(self, output_dir, testcase_obj):
         """
         Generate C++ file name with full path to be used to write on filesystem.
 
@@ -293,12 +288,11 @@ class BoostTestGenerator:
         :return: The C++ file full path name for the test case.
         """
 
-        file_name = self.create_cxxTestFileName(testcase_obj)
+        file_name = self.create_cxx_test_file_name(testcase_obj)
         filepath_name = os.path.join(output_dir, file_name)
         return filepath_name
 
-
-    def create_cxxApiFilePathNames(self, output_dir, base_name):
+    def create_cxx_api_file_path_names(self, output_dir, base_name):
         """
         Generate API C++ header/source file names with full paths to be used to write on filesystem.
 
@@ -311,8 +305,7 @@ class BoostTestGenerator:
         cxx_filepath = os.path.join(output_dir, base_name + self.ext_cxx)
         return hxx_filepath, cxx_filepath
 
-
-    def isFailuretest(self, test_case_name):
+    def is_failure_test(self, test_case_name):
         """Check if there is a '_failure' into given name.
 
         :param str test_case_name: The case case name, may have a '_failure' in the name.
@@ -323,11 +316,9 @@ class BoostTestGenerator:
 
         if '_failure' in test_case_name:
             return [True, test_case_name[:-8]]
-        else:
-            return [False, test_case_name]
+        return [False, test_case_name]
 
-
-    def getTestCasesFrom(self, input_dir):
+    def get_test_cases_from(self, input_dir):
         """Iterate over the input path to gather test_cases.
 
         :param str input_dir: The top level directory which contains the test cases.
@@ -349,7 +340,7 @@ class BoostTestGenerator:
 
         print('Search for test cases in %s' % input_dir)
 
-        test_cases_dirlist = list()
+        test_cases_dirlist = []
 
         # iterate over directory structure to gather the test cases, even failure tests
         for dirname, dirnames, filenames in os.walk(input_dir):
@@ -358,23 +349,22 @@ class BoostTestGenerator:
 
         #print('=> found: ', end=''); print(*test_cases_dirlist)
 
-        test_cases = list()
+        test_cases = []
 
         # filter for special handled failure test
         for test_case in sorted(test_cases_dirlist):
             test_case_obj = TestCase_Object(test_case)
-            if test_case_obj.is_FailureTestCase():
+            if test_case_obj.is_failure_test_case():
                 # discard ...
                 continue
             # ... but tag the underlaying test case
-            if test_case_obj.as_FailureTestCase_Name() in test_cases_dirlist:
-                test_case_obj.HasFailureTest = True
+            if test_case_obj.as_failure_test_case_name() in test_cases_dirlist:
+                test_case_obj.has_failure_test = True
             test_cases.append(test_case_obj)
 
         return test_cases
 
-
-    def cxxFileHeader(self, testcase_obj):
+    def cxx_file_header(self, testcase_obj):
         """Create a common C++ header
 
         :param testcase_obj: The test cas object
@@ -385,15 +375,14 @@ class BoostTestGenerator:
 //
 // Generated by <{script}> on: {d}.{m}.{y}, do not edit!
 //""".format(
-        file=self.create_cxxTestFileName(testcase_obj),
-        script=self.script_name,
-        d=now.day,
-        m=now.month,
-        y=now.year
-    )
+            file=self.create_cxx_test_file_name(testcase_obj),
+            script=self.script_name,
+            d=now.day,
+            m=now.month,
+            y=now.year
+        )
 
-
-    def cxxIncludes(self, testcase_obj):
+    def cxx_includes(self, testcase_obj):
         """Generate the headers required to compile.
 
         :param testcase_obj: The test cas object
@@ -413,11 +402,10 @@ class BoostTestGenerator:
 #include <boost/test/data/test_case.hpp>
 
 #include <iostream>""".format(
-        attr_name=testcase_obj.Attribute_Name
-    )
+            attr_name=testcase_obj.attribute_name
+        )
 
-
-    def cxxDataTestCase(self, testcase_obj):
+    def cxx_data_test_case(self, testcase_obj):
         """Generate the Boost UTF C++ body
 
         :param str testcase_obj: The test case object, used to label Boost's dataset test case.
@@ -450,27 +438,25 @@ BOOST_DATA_TEST_CASE({test_case}, // --
 
         body = template.format(
             test_case=testcase_obj.TestCase_Name,
-            attr_name=testcase_obj.Attribute_Name,
-            parser_name=testcase_obj.Parser_Name,
+            attr_name=testcase_obj.attribute_name,
+            parser_name=testcase_obj.parser_name,
             bOk=''
         )
 
         body_failure = ''
-        if testcase_obj.HasFailureTest:
+        if testcase_obj.has_failure_test:
             body_failure = template.format(
-                test_case=testcase_obj.as_FailureTestCase_Name(),
-                attr_name=testcase_obj.Attribute_Name,
-                parser_name=testcase_obj.Parser_Name,
+                test_case=testcase_obj.as_failure_test_case_name(),
+                attr_name=testcase_obj.attribute_name,
+                parser_name=testcase_obj.parser_name,
                 bOk='!'
             )
 
         if not body_failure:
             return body
-        else:
-            return body + '\n' + body_failure
+        return body + '\n' + body_failure
 
-
-    def cxxTestFileContents(self, testcase_obj):
+    def cxx_test_file_contents(self, testcase_obj):
         """
         Assemble the contents of the test case file.
 
@@ -490,14 +476,13 @@ BOOST_FIXTURE_TEST_SUITE(parser_rule, failure_diagnostic_fixture)
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_SUITE_END()
 """.format(
-    header=self.cxxFileHeader(testcase_obj),
-    includes=self.cxxIncludes(testcase_obj),
-    testsuite_name=testcase_obj.Testsuite_Name,
-    datatest_case=self.cxxDataTestCase(testcase_obj)
-)
+            header=self.cxx_file_header(testcase_obj),
+            includes=self.cxx_includes(testcase_obj),
+            testsuite_name=testcase_obj.testsuite_name,
+            datatest_case=self.cxx_data_test_case(testcase_obj)
+        )
 
-
-    def writeTestFile(self, filepath_name, cxx_contents):
+    def write_test_file(self, filepath_name, cxx_contents):
         """
         Write the C++ Boost UTF test file.
 
@@ -508,47 +493,46 @@ BOOST_AUTO_TEST_SUITE_END()
         if not os.path.exists(os.path.dirname(filepath_name)):
             try:
                 os.makedirs(os.path.dirname(filepath_name))
-            except OSError as exc: # Guard against race condition
+            except OSError as exc:  # Guard against race condition
                 if exc.errno != errno.EEXIST:
                     raise
 
         with open(filepath_name, "w") as f:
             f.write(cxx_contents)
 
-
     def generate(self, args):
         """generate the Boost UTF test case files.
 
         :param str args: The arguments given from command line.
         """
-        test_cases = self.getTestCasesFrom(args.input_dir)
-        cmake_source_list = list()
-        parser_list = list()
+        test_cases = self.get_test_cases_from(args.input_dir)
+        cmake_source_list = []
+        parser_list = []
 
         # iterate over the file list of test cases
         for testcase_obj in test_cases:
 
             print('generate {0}: <{1}> parser "{2}" with attr "{3}"'.format(
-                testcase_obj.Testsuite_Name, testcase_obj.TestCase_Name,
-                testcase_obj.Parser_Name, testcase_obj.Attribute_Name))
+                testcase_obj.testsuite_name, testcase_obj.TestCase_Name,
+                testcase_obj.parser_name, testcase_obj.attribute_name))
 
-            cxx_contents = self.cxxTestFileContents(testcase_obj)
-            #print(cxx_contents)
+            cxx_contents = self.cxx_test_file_contents(testcase_obj)
+            # print(cxx_contents)
 
-            test_cxx = self.create_cxxTestFilePathName(
+            test_cxx = self.create_cxx_test_file_path_name(
                 args.output_dir, testcase_obj)
 
-            self.writeTestFile(test_cxx, cxx_contents)
+            self.write_test_file(test_cxx, cxx_contents)
 
             cmake_source_list.append("{cxx}".format(
                 cxx=os.path.join(
-                        args.output_dir,
-                        self.create_cxxTestFileName(testcase_obj)))
-                    )
+                    args.output_dir,
+                    self.create_cxx_test_file_name(testcase_obj)))
+            )
 
             # don't put failure tests to grammar rule's API
-            if not testcase_obj.is_FailureTestCase():
-                parser_list.append(testcase_obj.Parser_Name)
+            if not testcase_obj.is_failure_test_case():
+                parser_list.append(testcase_obj.parser_name)
 
         # print source file list for copy&paste to CMakeFiles
         print('set(TESTCASE_SOURCES')
@@ -558,33 +542,33 @@ BOOST_AUTO_TEST_SUITE_END()
         # parser rule access API files, name leading '0' to sort on top on dir listing
         api_file_name = '0_rules'
         api = GrammerAPI(parser_list)
-        #print(api.cxxDeclarations(api_file_name))
-        #print(api.cxxInstances(api_file_name))
+        # print(api.cxx_declarations(api_file_name))
+        # print(api.cxxInstances(api_file_name))
 
-        [api_hxx, api_cxx] = self.create_cxxApiFilePathNames(
+        [api_hxx, api_cxx] = self.create_cxx_api_file_path_names(
             args.output_dir, api_file_name
         )
 
-        #print(api_hxx)
-        #print(api_cxx)
-        self.writeTestFile(api_hxx, api.cxxDeclarations(api_file_name))
-        self.writeTestFile(api_cxx, api.cxxInstances(api_file_name))
+        # print(api_hxx)
+        # print(api_cxx)
+        self.write_test_file(api_hxx, api.cxx_declarations(api_file_name))
+        self.write_test_file(api_cxx, api.cxxInstances(api_file_name))
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Generate Boost UTF files for grammars.')
     parser.add_argument('--input-dir', '-i',
-        dest='input_dir',
-        default=os.path.join(os.getcwd(), 'test_case'),
-        help='top level input directory of test case files, separated in subdirectories for each grammar rule.')
+                        dest='input_dir',
+                        default=os.path.join(os.getcwd(), 'test_case'),
+                        help='top level input directory of test case files, separated in subdirectories for each grammar rule.')
     parser.add_argument('--output-dir', '-o',
-        dest='output_dir',
-        default='parser_test',
-        help='output directory where the resulting files are written into.')
+                        dest='output_dir',
+                        default='parser_test',
+                        help='output directory where the resulting files are written into.')
     args = parser.parse_args()
     #print('input: ' + args.input_dir)
     #print('output: ' + args.output_dir)
 
-    generator = BoostTestGenerator();
+    generator = BoostTestGenerator()
     generator.generate(args)
