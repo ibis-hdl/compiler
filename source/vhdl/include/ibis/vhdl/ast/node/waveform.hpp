@@ -7,8 +7,7 @@
 
 namespace ibis::vhdl::ast {
 
-struct waveform_element_list : std::vector<waveform_element> {
-};
+struct waveform_element_list : std::vector<waveform_element> {};
 
 struct waveform
     : variant<waveform_element_list,

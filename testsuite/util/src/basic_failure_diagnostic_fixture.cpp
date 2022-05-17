@@ -25,17 +25,17 @@ template <typename T>
 struct A {
     T x;
 
-    friend std::ostream& operator<<(std::ostream& os, A const& a)
+    friend std::ostream& operator<<(std::ostream& os, A const& aaa)
     {
-        a.x(os);
+        aaa.x(os);
         return os;
     }
 };
 
 template <typename T>
-A<std::decay_t<T>> make_iomanip(T&& x)
+A<std::decay_t<T>> make_iomanip(T&& functor)
 {
-    return { std::forward<T>(x) };
+    return { std::forward<T>(functor) };
 }
 
 }  // namespace
@@ -91,14 +91,14 @@ bool basic_failure_diagnostic_fixture::current_test_passing()
 // local helper to trim trailing spaces from test_input, boost::trim_right_copy doesn't work
 // on string_view, hence we write our own
 // FixMe: [C++20] next standard supports string_view iterator pair constructor.
-auto const trim_right = [](std::string_view x) {
+auto const trim_right = [](std::string_view sv) {
     // clang-format off
     return std::string_view(
-        x.data(),                  // const CharT*
+        sv.data(),                 // const CharT*
         static_cast<std::size_t>(  // --
-            std::find_if(x.rbegin(), x.rend(),
-                         [](char c) { return !static_cast<bool>(std::isspace(c)); })
-                .base() - x.begin())  // count
+            std::find_if(sv.rbegin(), sv.rend(),
+                         [](char chr) { return !static_cast<bool>(std::isspace(chr)); })
+                .base() - sv.begin())  // count
     );
     // clang-format on
 };
@@ -268,11 +268,12 @@ void basic_failure_diagnostic_fixture::check_args()
 
 std::string_view basic_failure_diagnostic_fixture::name() const { return fixture_name; }
 
+// static
 void basic_failure_diagnostic_fixture::head_line(std::ostream& os, std::string_view title,
                                                  std::size_t col_width, char fill)
 {
-    std::size_t const w = (col_width - title.size()) / 2;
-    std::string const line(w, fill);
+    std::size_t const width = (col_width - title.size()) / 2;
+    std::string const line(width, fill);
     os << '\n' << line << title << line << '\n';
 }
 

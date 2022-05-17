@@ -9,8 +9,7 @@
 
 namespace ibis::vhdl::ast {
 
-struct entity_designator_list : std::vector<ast::entity_designator> {
-};
+struct entity_designator_list : std::vector<ast::entity_designator> {};
 
 struct entity_name_list
     : variant<nullary, entity_designator_list,

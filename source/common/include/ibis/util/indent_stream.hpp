@@ -67,7 +67,8 @@ private:
         int_type const put_ret{ m_sbuf->sputc(static_cast<char_type>(chr)) };
 
         if (chr == '\n') {
-            // Quiet Compiler warning [-Wsign-conversion]. There may be a problem on huge indent size.
+            // Quiet Compiler warning [-Wsign-conversion]. There may be a problem on huge indent
+            // size.
             m_sbuf->sputn(m_indent_str.data(), static_cast<std::streamsize>(m_indent_str.size()));
         }
 

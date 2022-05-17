@@ -5,7 +5,6 @@
 
 namespace ibis::vhdl::ast {
 
-struct association_list : std::vector<ast::association_element> {
-};
+struct association_list : std::vector<ast::association_element> {};
 
 }  // namespace ibis::vhdl::ast

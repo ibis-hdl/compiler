@@ -36,7 +36,9 @@ namespace /* anonymous */ {
 namespace x3 = boost::spirit::x3;
 
 template <typename T, typename IteratorT = ibis::vhdl::parser::iterator_type>
-auto const as = [](auto p) { return x3::any_parser<IteratorT, T>{ x3::as_parser(p) }; };
+auto const as = [](auto derived_parser) {
+    return x3::any_parser<IteratorT, T>{ x3::as_parser(derived_parser) };
+};
 
 using namespace std::literals;
 auto const literal_name = "bit string literal"sv;
@@ -91,7 +93,8 @@ typename convert_bit_string<IntegerT>::return_type convert_bit_string<IntegerT>:
 
         bool parse_ok = x3::parse(iter, end, parser(base, iter) >> x3::eoi, attribute);
 
-        if constexpr ((false)) {
+        //  intentionally disabled
+        if constexpr ((false)) {  // NOLINT(readability-simplify-boolean-expr)
             dbg_trace(literal, range_f, parse_ok, attribute);
         }
 

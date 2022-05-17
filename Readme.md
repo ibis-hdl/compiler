@@ -15,30 +15,32 @@ initialized.
 The best to continue is to install [Python's virtual environment](https://docs.python.org/3/library/venv.html):
 
 ```
-python -m venv .venv
+$ python -m venv .venv
 ```
 
 If you run it from PowerShell, you have to prepare it, see
 [here](https://stackoverflow.com/questions/1365081/virtualenv-in-powershell):
 
 ```
-Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
-./.venv/Scripts/activate.ps1
-pip install conan
+$ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
+$ ./.venv/Scripts/activate.ps1
+$ pip install conan
 ```
 
 install [conan](https://conan.io/) as prerequisite, than you can start to build:
 
 ```
-cmake --list-presets=all
+$ cmake --list-presets=all
 ...
-cmake --preset "windows-msvc-release"
+$ cmake --preset "windows-msvc-release"
 ...
-cmake --build --preset "windows-msvc-release"
+$ cmake --build --preset linux-dev --target clean
 ...
-cmake --build --preset "windows-msvc-release" --target doc
+$ cmake --build --preset "windows-msvc-release"
 ...
-ctest --preset "windows-msvc-release"
+$ cmake --build --preset "windows-msvc-release" --target doc
+...
+$ ctest --preset "windows-msvc-release"
 ...
 ```
 
@@ -159,7 +161,7 @@ rules require the template engine of BOOST_SPIRIT_{DECLARE, DEFINE}.
 
   It would be naturally to use the parent rules's tag type which belongs the
   detail helper. Following StackOverflow
-  [X3: Linker Error (unresolved external symbol “parse_rule”) on nonterminal parser](
+  [X3: Linker Error (unresolved external symbol "parse_rule") on nonterminal parser](
   https://stackoverflow.com/questions/50277979/x3-linker-error-unresolved-external-symbol-parse-rule-on-nonterminal-parser?answertab=active#tab-top) at
   Sehe's notes, re-using the tag type is recipe for disaster. The rule tags are
   what dispatches the implementation function in the case of
@@ -264,7 +266,7 @@ Read carefully:
 - [Effective Modern CMake](https://gist.github.com/mbinna/c61dbb39bca0e4fb7d1f73b0d66a4fd1)
   and [Modern CMake Examples](https://github.com/pr0g/cmake-examples)
 - also [CMake Discourse](https://discourse.cmake.org/t/one-source-to-create-multiple-objects/2819)
-- [C++ dependency management with CMake’s FetchContent](https://medium.com/analytics-vidhya/c-dependency-management-with-cmakes-fetchcontent-4ceca4693a5d)
+- [C++ dependency management with CMake's FetchContent](https://medium.com/analytics-vidhya/c-dependency-management-with-cmakes-fetchcontent-4ceca4693a5d)
 
 - **Regards to build options, see [Making CMake work for you](
   http://www.stablecoder.ca/2018/10/30/full-cmake-helper-suite.html)**

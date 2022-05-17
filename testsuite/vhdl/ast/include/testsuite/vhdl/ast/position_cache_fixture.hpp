@@ -46,8 +46,8 @@ public:
 
     /// find in the given file ID a string view @a str and return a pair of iterators to begin and
     /// end pointing the @a str.
-    std::tuple<parser::iterator_type, parser::iterator_type> contents_range(  // --
-        file_id_type id, std::string_view str);
+    std::tuple<parser::iterator_type, parser::iterator_type> contents_range(
+        file_id_type id, std::string_view str) const;
 
     /// add a tagged ast::position_tagged node by key into internal registry.
     ibis::vhdl::ast::position_tagged& addNode(  // --

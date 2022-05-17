@@ -75,7 +75,7 @@ std::size_t position_cache_fixture::load_reference(fs::path const& file_name)
                        << file_name << " with ID = " << id);
     inputs.emplace_back(read_file(file_name));
 
-    current_file_id = id; // update
+    current_file_id = id;  // update
     return id;
 }
 
@@ -95,7 +95,7 @@ std::string position_cache_fixture::read_file(fs::path const& file_name)
 }
 
 std::tuple<parser::iterator_type, parser::iterator_type> position_cache_fixture::contents_range(
-    file_id_type id, std::string_view str)
+    file_id_type id, std::string_view str) const
 {
     auto const pos = position_cache.file_contents(id).find(str);
     BOOST_TEST_REQUIRE(pos != std::string::npos);

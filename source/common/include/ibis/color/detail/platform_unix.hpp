@@ -33,4 +33,4 @@ private:
     bool const tty;
 };
 
-}  // namespace ibis::color::api_unix
+}  // namespace ibis::color::platform_unix

@@ -115,8 +115,9 @@ namespace ibis::vhdl {
 // diagnostic_handler - AST/parse related, expectation error handler
 // ----------------------------------------------------------------------------
 template <typename Iterator>
-void diagnostic_handler<Iterator>::operator()(iterator_type error_pos, std::string const& error_message,
-                                         error_type err_type) const
+void diagnostic_handler<Iterator>::operator()(iterator_type error_pos,
+                                              std::string const& error_message,
+                                              error_type err_type) const
 {
     using boost::locale::format;
     using boost::locale::translate;
@@ -129,8 +130,8 @@ void diagnostic_handler<Iterator>::operator()(iterator_type error_pos, std::stri
 /// ----------------------------------------------------------------------------
 template <typename Iterator>
 void diagnostic_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
-                                         std::string const& error_message,
-                                         error_type err_type) const
+                                              std::string const& error_message,
+                                              error_type err_type) const
 {
     using boost::locale::format;
     using boost::locale::translate;
@@ -155,10 +156,10 @@ void diagnostic_handler<Iterator>::operator()(ast::position_tagged const& where_
 
 template <typename Iterator>
 void diagnostic_handler<Iterator>::operator()(ast::position_tagged const& where_tag,
-                                         ast::position_tagged const& start_label,
-                                         ast::position_tagged const& end_label,
-                                         std::string const& error_message,
-                                         error_type err_type) const
+                                              ast::position_tagged const& start_label,
+                                              ast::position_tagged const& end_label,
+                                              std::string const& error_message,
+                                              error_type err_type) const
 {
     using boost::locale::format;
     using boost::locale::translate;
@@ -223,9 +224,9 @@ void diagnostic_handler<Iterator>::operator()(ast::position_tagged const& where_
 
 template <typename Iterator>
 void diagnostic_handler<Iterator>::operator()(iterator_type error_first,
-                                         std::optional<iterator_type> error_last,
-                                         std::string const& error_message,
-                                         error_type err_type) const
+                                              std::optional<iterator_type> error_last,
+                                              std::string const& error_message,
+                                              error_type err_type) const
 {
     using boost::locale::format;
     using boost::locale::translate;

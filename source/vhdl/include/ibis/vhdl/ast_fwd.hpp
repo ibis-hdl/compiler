@@ -16,7 +16,7 @@ struct actual_designator;
 // struct actual_parameter_part;
 // struct actual_part;
 struct actual_part_chunk;
-//struct aggregate;
+// struct aggregate;
 struct alias_declaration;
 struct alias_designator;
 struct allocator;

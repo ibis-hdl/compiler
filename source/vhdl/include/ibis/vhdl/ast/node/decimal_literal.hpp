@@ -17,7 +17,8 @@ struct decimal_literal : position_tagged {
 };
 
 #if defined(BOOST_SPIRIT_X3_DEBUG)
-inline std::ostream& operator<<(std::ostream& os, ast::decimal_literal::numeric_type_specifier specifier)
+inline std::ostream& operator<<(std::ostream& os,
+                                ast::decimal_literal::numeric_type_specifier specifier)
 {
     using numeric_type_specifier = ast::decimal_literal::numeric_type_specifier;
     auto const lookup = [&os](numeric_type_specifier specifier) {

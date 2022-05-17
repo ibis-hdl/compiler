@@ -53,9 +53,10 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name)
             auto const [found, node_name_sv] = pretty_node_name(node_name);
 
             diagnostic_handler(node, start_label, end_label,
-                          (format(translate("Label mismatch in {1}"))  // --
-                           % node_name_sv)                             // {1}
-                              .str(), syntax_error);
+                               (format(translate("Label mismatch in {1}"))  // --
+                                % node_name_sv)                             // {1}
+                                   .str(),
+                               syntax_error);
 
             return false;
         }
@@ -65,9 +66,10 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name)
             auto const [found, node_name_sv] = pretty_node_name(node_name);
 
             diagnostic_handler(node, start_label, end_label,
-                          (format(translate("Label ill-formed in {1}"))  // --
-                           % node_name_sv)                               // {1}
-                              .str(), syntax_error);
+                               (format(translate("Label ill-formed in {1}"))  // --
+                                % node_name_sv)                               // {1}
+                                   .str(),
+                               syntax_error);
 
             return false;
         }
@@ -100,10 +102,12 @@ bool syntax_worker::keyword_matches(ast::process_statement const& node,
     if (!node.postponed && node.end_postponed) {
         auto const [found, node_name_sv] = pretty_node_name(node_name);
 
-        diagnostic_handler(node, (format(translate("ill-formed statement in {1}; "
-                                              "(Hint: single trailing keyword 'postponed')"))  //--
-                             % node_name_sv)  // {1}
-                                .str(), syntax_error);
+        diagnostic_handler(node,
+                           (format(translate("ill-formed statement in {1}; "
+                                             "(Hint: single trailing keyword 'postponed')"))  //--
+                            % node_name_sv)                                                   // {1}
+                               .str(),
+                           syntax_error);
 
         return false;
     }

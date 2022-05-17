@@ -31,7 +31,8 @@ namespace detail {
 template <class T>
 typename std::enable_if<std::is_integral<T>::value, std::string>::type to_decimal_literal(T value)
 {
-    if constexpr ((false)) {
+    //  intentionally disabled
+    if constexpr ((false)) {  // NOLINT(readability-simplify-boolean-expr)
         std::cout << "to_decimal_literal(" << value << ") <"
                   << boost::typeindex::type_id<T>().pretty_name() << ">\n";
     }
@@ -43,7 +44,8 @@ template <class T>
 typename std::enable_if<std::is_floating_point<T>::value, std::string>::type to_decimal_literal(
     T value)
 {
-    if constexpr ((false)) {
+    // intentionally disabled
+    if constexpr ((false)) {  // NOLINT(readability-simplify-boolean-expr)
         std::cout << "to_decimal_literal(" << value << ") <"
                   << boost::typeindex::type_id<T>().pretty_name() << ">\n";
     }

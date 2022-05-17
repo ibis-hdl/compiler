@@ -5,7 +5,6 @@
 
 namespace ibis::vhdl::ast {
 
-struct index_constraint : std::vector<ast::discrete_range> {
-};
+struct index_constraint : std::vector<ast::discrete_range> {};
 
 }  // namespace ibis::vhdl::ast

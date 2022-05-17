@@ -24,9 +24,10 @@ using testsuite::vhdl::parser::failure_diagnostic_fixture;
 BOOST_FIXTURE_TEST_SUITE(parser_rule, failure_diagnostic_fixture)
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
-BOOST_DATA_TEST_CASE(interface_variable_declaration, // --
-    utf_data::make_delayed<testsuite::vhdl::parser::dataset>("interface_variable_declaration"),  // --
-    input, expected, test_case_name)
+BOOST_DATA_TEST_CASE(interface_variable_declaration,  // --
+                     utf_data::make_delayed<testsuite::vhdl::parser::dataset>(
+                         "interface_variable_declaration"),  // --
+                     input, expected, test_case_name)
 {
     using attribute_type = ast::interface_variable_declaration;
     auto const parser = testsuite::vhdl::parser::interface_variable_declaration();

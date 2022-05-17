@@ -69,15 +69,15 @@ std::tuple<bool, AttrType> literal_parser<IteratorT>::parse(  // --
         if (parse_ok) {
             if (iter != end) {
                 diagnostic_handler(iter,
-                              "Full Match Error! "
-                              "unparsed input left:\n" +
-                                  std::string(iter, end));
+                                   "Full Match Error! "
+                                   "unparsed input left:\n" +
+                                       std::string(iter, end));
             }
         }
     }
     catch (x3::expectation_failure<parser::iterator_type> const& e) {
-        diagnostic_handler(e.where(), "Caught expectation_failure! Expecting " + e.which() + " here: '" +
-                                     std::string(e.where(), end) + "'\n");
+        diagnostic_handler(e.where(), "Caught expectation_failure! Expecting " + e.which() +
+                                          " here: '" + std::string(e.where(), end) + "'\n");
     }
 
     return std::tuple{ parse_ok && (iter == end), attr };

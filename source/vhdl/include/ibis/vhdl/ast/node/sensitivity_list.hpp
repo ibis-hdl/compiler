@@ -5,7 +5,6 @@
 
 namespace ibis::vhdl::ast {
 
-struct sensitivity_list : std::vector<ast::name> {
-};
+struct sensitivity_list : std::vector<ast::name> {};
 
 }  // namespace ibis::vhdl::ast

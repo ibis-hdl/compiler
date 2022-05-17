@@ -24,9 +24,9 @@ using testsuite::vhdl::parser::failure_diagnostic_fixture;
 BOOST_FIXTURE_TEST_SUITE(parser_rule, failure_diagnostic_fixture)
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
-BOOST_DATA_TEST_CASE(identifier, // --
-    utf_data::make_delayed<testsuite::vhdl::parser::dataset>("identifier"),  // --
-    input, expected, test_case_name)
+BOOST_DATA_TEST_CASE(identifier,                                                              // --
+                     utf_data::make_delayed<testsuite::vhdl::parser::dataset>("identifier"),  // --
+                     input, expected, test_case_name)
 {
     using attribute_type = ast::identifier;
     auto const parser = testsuite::vhdl::parser::identifier();
@@ -47,7 +47,8 @@ BOOST_DATA_TEST_CASE(identifier, // --
 }
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
-BOOST_DATA_TEST_CASE(identifier_failure, // --
+BOOST_DATA_TEST_CASE(
+    identifier_failure,                                                              // --
     utf_data::make_delayed<testsuite::vhdl::parser::dataset>("identifier_failure"),  // --
     input, expected, test_case_name)
 {

@@ -49,7 +49,9 @@ BOOST_DATA_TEST_CASE(labels_ok,                                                 
 
     {
         analyze::context ctx;
-        analyze::diagnostic_handler<parser::iterator_type> diagnostic_handler{ os, ctx, position_cache_proxy };
+        analyze::diagnostic_handler<parser::iterator_type> diagnostic_handler{
+            os, ctx, position_cache_proxy
+        };
         analyze::syntax_checker syntax_check{ os, ctx, diagnostic_handler };
 
         syntax_check(design_file);
@@ -92,8 +94,10 @@ BOOST_DATA_TEST_CASE(
 
     {
         analyze::context ctx;
-        analyze::diagnostic_handler<parser::iterator_type> diagnostic_handler{ os, ctx, position_cache_proxy };
-        analyze::syntax_checker syntax_check{ os, ctx,diagnostic_handler };
+        analyze::diagnostic_handler<parser::iterator_type> diagnostic_handler{
+            os, ctx, position_cache_proxy
+        };
+        analyze::syntax_checker syntax_check{ os, ctx, diagnostic_handler };
 
         syntax_check(design_file);
 

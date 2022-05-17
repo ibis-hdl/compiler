@@ -154,7 +154,7 @@ std::optional<std::string> file_loader::read_file_alt(fs::path const& filename) 
     std::string contents{};
     contents.reserve(static_cast<std::string::size_type>(size));
 
-    ifs.read(&contents[0], size);
+    ifs.read(contents.data(), size);
 
     if (ifs.fail() && !ifs.eof()) {
         if (!quiet) {
@@ -179,10 +179,10 @@ std::time_t file_loader::timesstamp(fs::path const& filename) const
     // FixMe [C++20] What for a mess, see
     // [How to convert std::filesystem::file_time_type to time_t?](
     // https://stackoverflow.com/questions/61030383/how-to-convert-stdfilesystemfile-time-type-to-time-t)
-    auto const to_time_t = [](fs::file_time_type tp) {
+    auto const to_time_t = [](fs::file_time_type time_point) {
         using namespace std::chrono;
-        auto sctp = time_point_cast<system_clock::duration>(tp - fs::file_time_type::clock::now() +
-                                                            system_clock::now());
+        auto sctp = time_point_cast<system_clock::duration>(
+            time_point - fs::file_time_type::clock::now() + system_clock::now());
         return system_clock::to_time_t(sctp);
     };
 

@@ -20,12 +20,13 @@ void settings::insert_json(std::string_view json_sv)
     // https://stackoverflow.com/questions/58524805/is-there-a-way-to-create-a-stringstream-from-a-string-view-without-copying-data)
     using char_type = std::string_view::value_type;
 
-    // FixMe [Future Boost]: std::string_view doesn't seems to be well supported using Boost+Clang-Win:
-    // error: no matching constructor for initialization of
+    // FixMe [Future Boost]: std::string_view doesn't seems to be well supported using
+    // Boost+Clang-Win: error: no matching constructor for initialization of
     // 'boost::iostreams::basic_array_source<char_type>' (aka 'basic_array_source<char>')
     // note: candidate constructor not viable: no known conversion from
-    // 'std::basic_string_view<char, std::char_traits<char>>::const_iterator' (aka '_String_view_iterator<std::char_traits<char>>')
-    // to 'boost::iostreams::basic_array_source<char>::char_type *' (aka 'char *') for 1st argument
+    // 'std::basic_string_view<char, std::char_traits<char>>::const_iterator' (aka
+    // '_String_view_iterator<std::char_traits<char>>') to
+    // 'boost::iostreams::basic_array_source<char>::char_type *' (aka 'char *') for 1st argument
     boost::iostreams::stream<  // --
         boost::iostreams::basic_array_source<char_type> >
         json_stream(json_sv.data(), json_sv.size());

@@ -10,7 +10,7 @@ namespace ibis::support::rapidjson {
 ///   https://stackoverflow.com/questions/40013355/how-to-merge-two-json-file-using-rapidjson)
 ///
 inline void merge_object(::rapidjson::Value& dest, ::rapidjson::Value& src,
-                                ::rapidjson::Document::AllocatorType& allocator)
+                         ::rapidjson::Document::AllocatorType& allocator)
 {
     for (auto src_iter = src.MemberBegin(); src_iter != src.MemberEnd(); ++src_iter) {
         auto dest_iter = dest.FindMember(src_iter->name);

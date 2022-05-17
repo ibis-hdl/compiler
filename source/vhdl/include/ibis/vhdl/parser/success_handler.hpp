@@ -44,7 +44,7 @@ struct success_handler {
                            ContextT const& context) const
     {
         // to get the type of the context, just uncomment next line
-        //struct {} _ = *static_cast<decltype(context)*>(nullptr);
+        // struct {} _ = *static_cast<decltype(context)*>(nullptr);
 
         auto& position_cache_proxy = x3::get<parser::position_cache_tag>(context).get();
         position_cache_proxy.annotate(node, first, last);

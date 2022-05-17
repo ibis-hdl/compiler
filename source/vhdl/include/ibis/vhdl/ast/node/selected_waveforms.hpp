@@ -14,7 +14,6 @@ struct selected_waveform : position_tagged {
     ast::choices choices;
 };
 
-struct selected_waveforms : std::vector<selected_waveform> {
-};
+struct selected_waveforms : std::vector<selected_waveform> {};
 
 }  // namespace ibis::vhdl::ast

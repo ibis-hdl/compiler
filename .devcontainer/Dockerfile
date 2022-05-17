@@ -20,4 +20,4 @@ RUN if [ "${REINSTALL_CMAKE_VERSION_FROM_SOURCE}" != "none" ]; then \
 
 # [Optional] Uncomment this section to install additional packages.
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends ccache g++-11 clang-14 doxygen graphviz
+    && apt-get -y install --no-install-recommends ccache g++-11 clang-14 clang-format clang-tidy doxygen graphviz gettext

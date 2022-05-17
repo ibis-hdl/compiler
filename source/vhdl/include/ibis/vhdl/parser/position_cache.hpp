@@ -258,7 +258,8 @@ public:
     std::tuple<IteratorT, IteratorT> range() const { return self.range(file_id); }
 
 public:
-    std::tuple<std::size_t, std::size_t> line_column_number(iterator_type const& pos, std::size_t tab_sz) const
+    std::tuple<std::size_t, std::size_t> line_column_number(iterator_type const& pos,
+                                                            std::size_t tab_sz) const
     {
         return self.line_column_number(file_id, pos, tab_sz);
     }

@@ -18,7 +18,7 @@ public:
 
     bool operator()(char chr)
     {
-        auto const check = [this](char c, char quote) {
+        auto const check = [this](char c, char quote) {  // NOLINT(readability-identifier-length)
             if ((prev_char != c) || (prev_char != quote) || dbl_quote_printed) {
                 dbl_quote_printed = false;
                 return true;

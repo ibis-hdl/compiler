@@ -34,9 +34,9 @@ BOOST_DATA_TEST_CASE(                                                // --
     input, expected)
 {
     auto const as_strlit = [](std::string_view sv) {
-        ast::string_literal l;
-        l.literal = boost::make_iterator_range(sv);
-        return l;
+        ast::string_literal strlit;
+        strlit.literal = boost::make_iterator_range(sv);
+        return strlit;
     };
 
     using ibis::vhdl::ast::literal_printer;
@@ -46,7 +46,7 @@ BOOST_DATA_TEST_CASE(                                                // --
     literal_printer literal{ as_strlit(input) };
     os << literal;
 
-    BOOST_TEST( os.str() == expected, btt::per_element());
+    BOOST_TEST(os.str() == expected, btt::per_element());
 }
 
 /// Note: Here is stated, that testing of

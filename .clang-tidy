@@ -1,25 +1,36 @@
 ---
-Checks: "-*,\
-cert-*,\
--cert-err58-cpp,\
-clang-analyzer-*,\
-cppcoreguidelines-*,\
--cppcoreguidelines-pro-bounds-array-to-pointer-decay,\
--cppcoreguidelines-pro-type-vararg,\
--cppcoreguidelines-avoid-magic-numbers,\
-misc-*,\
--misc-no-recursion,\
-modernize-*,\
--modernize-use-trailing-return-type,\
--modernize-use-nodiscard,\
-readability-*,\
--readability-magic-numbers,\
--readability-redundant-access-specifiers,\
-performance-*,\
-bugprone-*,\
+Checks: "-*,
+  boost-*,
+  cert-*,
+  -cert-err58-cpp,
+  clang-analyzer-*,
+  -concurrency-*,
+  cppcoreguidelines-*,
+  -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
+  -cppcoreguidelines-pro-type-vararg,
+  -cppcoreguidelines-avoid-magic-numbers,
+  misc-*,
+  -misc-no-recursion,
+  modernize-*,
+  -modernize-use-nodiscard,
+  -modernize-use-trailing-return-type,
+  readability-*,
+  -readability-magic-numbers,
+  -readability-redundant-access-specifiers,
+  performance-*,
+  bugprone-*
 "
-HeaderFilterRegex: '*\.(hpp|h)$'
+FormatStyle: file
+HeaderFilterRegex: '^((?!(/external/|\.?conan/data/|/boost/|/CLI/|/testsuite/)).)*$'
+HeaderFilterRegex: '*\.(hpp|h|.hpp.in)$'
 CheckOptions:
-  - key:             cppcoreguidelines-macro-usage.AllowedRegexp
-    value:           DEBUG_*|TEST_*|BOOST_TEST_*"
+  - key:   cppcoreguidelines-macro-usage.AllowedRegexp
+    value: ^(DEBUG_|TEST_|BOOST_TEST_)*
+  # common identifier, also '_', 'as' for Spirit.X3 grammar
+  - key:   readability-identifier-length.IgnoredVariableNames
+    value: ^(sv|ec|id|os|ss|_|as)$
+  - key:   readability-identifier-length.IgnoredParameterNames
+    value: ^(sv|ec|id|os|ss)$
+  - key:   readability-identifier-length.IgnoredExceptionVariableNames
+    value: ^ex?$
 ...

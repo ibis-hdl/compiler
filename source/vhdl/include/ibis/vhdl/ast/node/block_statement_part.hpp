@@ -17,7 +17,6 @@ struct concurrent_statement;  // forward due to cyclic dependency
 /// }
 /// \enddot
 ///
-struct block_statement_part : std::vector<ast::concurrent_statement> {
-};
+struct block_statement_part : std::vector<ast::concurrent_statement> {};
 
 }  // namespace ibis::vhdl::ast

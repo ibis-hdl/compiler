@@ -28,8 +28,7 @@ public:
     ///
     /// @todo Make it more expressive with string message, configured
     /// treshold etc.
-    struct overflow : public std::exception {
-    };
+    struct overflow : public std::exception {};
 
 public:
     using value_type = std::size_t;
@@ -157,7 +156,7 @@ public:
     bool issue_free() const { return error_count == 0 && warning_count == 0; }
 
     error_counter& errors() { return error_count; }
-    error_counter const & errors() const { return error_count; }
+    error_counter const& errors() const { return error_count; }
 
     warning_counter& warnings() { return warning_count; }
     warning_counter const& warnings() const { return warning_count; }

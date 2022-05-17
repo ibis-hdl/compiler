@@ -58,6 +58,20 @@
             }
         },
         {
+            "name": "clang-tidy",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_CLANG_TIDY": "clang-tidy"
+            }
+        },
+        {
+            "name": "clang-tidy-fix",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_CLANG_TIDY": "clang-tidy;-checks='-*,modernize-concat-nested-namespaces';-fix;-fix-errors"
+            }
+        },
+        {
             "name": "compiler-clang",
             "description": "Clang C language family frontend for LLVM",
             "hidden": true,
@@ -318,9 +332,21 @@
             ],
             "cacheVariables": {
                 "CMAKE_CXX_COMPILER_LAUNCHER": "ccache"
-            }            
+            }
+        },
+        {
+            "name": "linux-dev",
+            "displayName": "Linux Clang Developer Mode",
+            "description": "Linux/WSL2 LLVM Clang compiler Developer Mode",
+            "inherits": [
+                "linux-clang-default",
+                "release-build",
+                "clang-tidy"
+            ],
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache"
+            }
         }
-
     ],
     "buildPresets": [
         {
@@ -375,11 +401,18 @@
         },
         {
             "name": "ci-windows",
+            "displayName": "CI",
             "configurePreset": "ci-windows"
         },
         {
             "name": "ci-linux",
+            "displayName": "CI",
             "configurePreset": "ci-linux"
+        },
+        {
+            "name": "linux-dev",
+            "displayName": "Dev-Build",
+            "configurePreset": "linux-dev"
         }
     ],
     "testPresets": [
@@ -396,6 +429,7 @@
         },
         {
             "name": "linux-clang-release",
+            "displayName": "Test-All",
             "configurePreset": "linux-clang-release",
             "inherits": [
                 "test-default"
@@ -403,6 +437,7 @@
         },
         {
             "name": "linux-clang-debug",
+            "displayName": "Test-All",
             "configurePreset": "linux-clang-debug",
             "inherits": [
                 "test-default"
@@ -410,6 +445,7 @@
         },
         {
             "name": "windows-msvc-release",
+            "displayName": "Test-All",
             "configurePreset": "windows-msvc-release",
             "inherits": [
                 "test-default"
@@ -417,6 +453,7 @@
         },
         {
             "name": "windows-msvc-debug",
+            "displayName": "Test-All",
             "configurePreset": "windows-msvc-debug",
             "inherits": [
                 "test-default"
@@ -424,6 +461,7 @@
         },
         {
             "name": "windows-clang-release",
+            "displayName": "Test-All",
             "configurePreset": "windows-clang-release",
             "inherits": [
                 "test-default"
@@ -431,6 +469,7 @@
         },
         {
             "name": "windows-clang-debug",
+            "displayName": "Test-All",
             "configurePreset": "windows-clang-debug",
             "inherits": [
                 "test-default"
@@ -438,6 +477,7 @@
         },
         {
             "name": "ci-windows",
+            "displayName": "Test-All",
             "configurePreset": "ci-windows",
             "inherits": [
                 "test-default"
@@ -445,7 +485,16 @@
         },
         {
             "name": "ci-linux",
+            "displayName": "Test-All",
             "configurePreset": "ci-linux",
+            "inherits": [
+                "test-default"
+            ]
+        },
+        {
+            "name": "linux-dev",
+            "displayName": "Dev-Tests",
+            "configurePreset": "linux-dev",
             "inherits": [
                 "test-default"
             ]

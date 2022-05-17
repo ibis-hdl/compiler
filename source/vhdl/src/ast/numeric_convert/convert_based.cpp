@@ -47,7 +47,9 @@ namespace /* anonymous */ {
 namespace x3 = boost::spirit::x3;
 
 template <typename T, typename IteratorT = ibis::vhdl::parser::iterator_type>
-auto const as = [](auto p) { return x3::any_parser<IteratorT, T>{ x3::as_parser(p) }; };
+auto const as = [](auto derived_parser) {
+    return x3::any_parser<IteratorT, T>{ x3::as_parser(derived_parser) };
+};
 
 using namespace std::literals;
 auto const literal_name = "based literal"sv;
@@ -173,44 +175,45 @@ std::tuple<bool, double> convert_based<IntegerT, RealT>::parse_fractional(
     // FixMe: there are no (parser) checks, we depend on VHDL parser!
 
     // naive implementation of fractional part calculation
-    auto const fractional = std::accumulate(iter, last, 0.0, [&pow, base](double acc, char ch) {
-        // We trust on VHDL parser's 1st pass to simplify converting char to their integer value,
-        // hence no checks are required.
-        // ToDo: Std. C++ and Spirit.X3 offers utilities for converting chars - maybe use them.
-        auto const hex2dec = [](char chr) {
+    auto const fractional =
+        std::accumulate(iter, last, 0.0, [&pow, base](double acc, char hex_chr) {
+            // We trust on VHDL parser's 1st pass to simplify converting char to their integer
+            // value, hence no checks are required.
+            // ToDo: Std. C++ and Spirit.X3 offers utilities for converting chars - maybe use them.
             // clang-format off
-            switch (chr) {
-                case '0':   return  0;
-                case '1':   return  1;
-                case '2':   return  2;
-                case '3':   return  3;
-                case '4':   return  4;
-                case '5':   return  5;
-                case '6':   return  6;
-                case '7':   return  7;
-                case '8':   return  8;
-                case '9':   return  9;
-                case 'a':   [[fallthrough]];
-                case 'A':   return 10;
-                case 'b':   [[fallthrough]];
-                case 'B':   return 11;
-                case 'c':   [[fallthrough]];
-                case 'C':   return 12;
-                case 'd':   [[fallthrough]];
-                case 'D':   return 13;
-                case 'e':   [[fallthrough]];
-                case 'E':   return 14;
-                case 'f':   [[fallthrough]];
-                case 'F':   return 15;
-                default:    cxx_unreachable_bug_triggered();
-            }
+            auto const hex2dec = [](char chr) {
+                switch (chr) {
+                    case '0':   return  0;
+                    case '1':   return  1;
+                    case '2':   return  2;
+                    case '3':   return  3;
+                    case '4':   return  4;
+                    case '5':   return  5;
+                    case '6':   return  6;
+                    case '7':   return  7;
+                    case '8':   return  8;
+                    case '9':   return  9;
+                    case 'a':   [[fallthrough]];
+                    case 'A':   return 10;
+                    case 'b':   [[fallthrough]];
+                    case 'B':   return 11;
+                    case 'c':   [[fallthrough]];
+                    case 'C':   return 12;
+                    case 'd':   [[fallthrough]];
+                    case 'D':   return 13;
+                    case 'e':   [[fallthrough]];
+                    case 'E':   return 14;
+                    case 'f':   [[fallthrough]];
+                    case 'F':   return 15;
+                    default:    cxx_unreachable_bug_triggered();
+                }
+            };
             // clang-format on
-        };
-        double dig = hex2dec(ch);
-        dig /= pow;
-        pow *= static_cast<double>(base);
-        return acc + dig;
-    });
+            double dig = hex2dec(hex_chr);
+            dig /= pow;
+            pow *= static_cast<double>(base);
+            return acc + dig;
+        });
 
     // during accumulation a numeric IEEE754 errors may occur
     if (!std::isnormal(fractional)) {

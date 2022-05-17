@@ -13,8 +13,8 @@ namespace testsuite::vhdl::numeric_convert::util {
 ///
 /// Create a binary string from unsigned integer
 ///
-binary_string::binary_string(uint64_t n)
-    : number{ n }
+binary_string::binary_string(uint64_t num)
+    : number{ num }
 {
 }
 
@@ -23,8 +23,8 @@ std::string binary_string::operator()() const
     using numeric_type = decltype(number);
     using unsigned_type = std::make_unsigned<numeric_type>::type;
 
-    std::size_t const sz = sizeof(numeric_type) * 8;
-    auto const bits = std::bitset<sz>{ static_cast<unsigned_type>(number) };
+    std::size_t const size = sizeof(numeric_type) * 8;
+    auto const bits = std::bitset<size>{ static_cast<unsigned_type>(number) };
 
     std::stringstream ss;
     ss << bits;
@@ -41,8 +41,8 @@ std::ostream& operator<<(std::ostream& os, binary_string const& generator)
 ///
 /// Create an octal string from unsigned integer
 ///
-octal_string::octal_string(uint64_t n)
-    : number{ n }
+octal_string::octal_string(uint64_t num)
+    : number{ num }
 {
 }
 
@@ -64,8 +64,8 @@ std::ostream& operator<<(std::ostream& os, octal_string const& generator)
 ///
 /// Create a hexadecimal string from unsigned integer
 ///
-hexadecimal_string::hexadecimal_string(uint64_t n)
-    : number{ n }
+hexadecimal_string::hexadecimal_string(uint64_t num)
+    : number{ num }
 {
 }
 

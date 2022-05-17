@@ -14,7 +14,7 @@
 
 namespace testsuite::util {
 
-// _NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 cli_args::cli_data cli_args::data;
 
 std::string cli_args::source_dir()
@@ -86,9 +86,7 @@ void cli_args::parse_cli(int const argc, char** const argv)
         ->description(
             "file extension to be written to destination-dir for what was ultimately the result.");
     diag_group->add_flag("--verbose-diagnostic", data.verbose_diagnostic)
-        ->description(
-            "display verbose failure diagnostic on console.");
-
+        ->description("display verbose failure diagnostic on console.");
 
     try {
         app.parse(argc, argv);
@@ -130,8 +128,8 @@ void cli_args::print_settings()
     std::cout << "command line output file extension:    '"
               << (!data.output_extension.empty() ? data.output_extension : "N/A") << "'\n";
 
-    std::cout << "command line verbose diagnostic:       '"
-              << std::boolalpha << data.verbose_diagnostic << "'\n";
+    std::cout << "command line verbose diagnostic:       '" << std::boolalpha
+              << data.verbose_diagnostic << "'\n";
 }
 
 }  // namespace testsuite::util

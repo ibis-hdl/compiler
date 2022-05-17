@@ -145,7 +145,8 @@ private:
     std::string_view name() const;
 
     /// furnish a nice line with title in the middle
-    void head_line(std::ostream& os, std::string_view title, std::size_t col_width, char fill);
+    static void head_line(std::ostream& os, std::string_view title, std::size_t col_width,
+                          char fill);
 
 private:
     ///

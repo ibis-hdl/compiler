@@ -24,9 +24,10 @@ using testsuite::vhdl::parser::failure_diagnostic_fixture;
 BOOST_FIXTURE_TEST_SUITE(parser_rule, failure_diagnostic_fixture)
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
-BOOST_DATA_TEST_CASE(unconstrained_array_definition, // --
-    utf_data::make_delayed<testsuite::vhdl::parser::dataset>("unconstrained_array_definition"),  // --
-    input, expected, test_case_name)
+BOOST_DATA_TEST_CASE(unconstrained_array_definition,  // --
+                     utf_data::make_delayed<testsuite::vhdl::parser::dataset>(
+                         "unconstrained_array_definition"),  // --
+                     input, expected, test_case_name)
 {
     using attribute_type = ast::unconstrained_array_definition;
     auto const parser = testsuite::vhdl::parser::unconstrained_array_definition();

@@ -31,7 +31,7 @@ public:
     ///
     /// Functor to call parse implementation.
     ///
-    /// @param pos_proxy Proxy of position_cache with the file contents to be parsed.
+    /// @param position_cache_proxy Proxy of position_cache with the file contents to be parsed.
     /// @param ctx The context used to parse and others.
     /// @param design_file AST node of input/file contents.
     /// @return true success.
@@ -48,8 +48,8 @@ public:
     /// this is only required if you have recursive rules or need external linkage
     /// on rules (define them in separate translation units).
     ///
-    bool operator()(position_cache<parser::iterator_type>::proxy& pos_proxy, parser::context& ctx,
-                    ast::design_file& design_file);
+    bool operator()(position_cache<parser::iterator_type>::proxy& position_cache_proxy,
+                    parser::context& ctx, ast::design_file& design_file);
 
 private:
     static std::string make_exception_description(std::exception const& exception,

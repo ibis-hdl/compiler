@@ -80,8 +80,7 @@ bool register_gdb_signal_handler()
         return true;
     }
 
-    struct sigaction sa {
-    };
+    struct sigaction sa {};  // NOLINT(readability-identifier-length)
     memset(&sa, 0, sizeof(sa));
 
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-union-access)
@@ -118,7 +117,7 @@ void gdb_signal_handler(int signum, [[maybe_unused]] siginfo_t* siginfo,
     // https://github.com/klemens-morgenstern/boost-process/issues/164)
     boost::filesystem::path gdb_exe{ bp::search_path("gdb") };
 
-    if (gdb_exe.empty()) { // Clang-Tidy note - even by using of cxx_expect_not()
+    if (gdb_exe.empty()) {  // Clang-Tidy note - even by using of cxx_expect_not()
         std::cerr << "[ibis/Note] ERROR: gdb not found\n";
         // FixMe: any other handling required if gdb not found? Think about ...
         return;
@@ -170,7 +169,8 @@ void gdb_signal_handler(int signum, [[maybe_unused]] siginfo_t* siginfo,
     gdb_proc.wait_for(time, ec);
 
     // ... dropping into the default signal handler
-    signal(signum, SIG_DFL);
+    // FixMe: Check on success, no exhausting how to/what about to care example found
+    signal(signum, SIG_DFL);  // NOLINT(cert-err33-c)
 }
 #endif
 
@@ -322,8 +322,8 @@ std::string get_executable_path()
 
         assert(len > 0 && "readlink failed, but the result is unintentionally used.");
 
-        return std::string(binary_path.data(), static_cast<std::size_t>(len));
+        return { binary_path.data(), static_cast<std::size_t>(len) };
     }
 
-    return std::string{};
+    return {};
 }

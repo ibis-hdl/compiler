@@ -40,8 +40,9 @@ inline void dbg_trace(RangeType const& range, RangeFiltType const& range_f, bool
 }
 #else
 // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
-#define dbg_trace(range, range_f, parse_ok, attribute) \
-    ibis::vhdl::ast::numeric_convert::detail::trace_report(range, range_f, parse_ok, attribute, __FILE__, __LINE__, __FUNCTION__)
+#define dbg_trace(range, range_f, parse_ok, attribute)                                          \
+    ibis::vhdl::ast::numeric_convert::detail::trace_report(range, range_f, parse_ok, attribute, \
+                                                           __FILE__, __LINE__, __FUNCTION__)
 #endif
 
 }  // namespace ibis::vhdl::ast::numeric_convert

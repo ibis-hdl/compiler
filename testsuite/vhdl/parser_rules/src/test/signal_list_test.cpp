@@ -24,9 +24,9 @@ using testsuite::vhdl::parser::failure_diagnostic_fixture;
 BOOST_FIXTURE_TEST_SUITE(parser_rule, failure_diagnostic_fixture)
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
-BOOST_DATA_TEST_CASE(signal_list, // --
-    utf_data::make_delayed<testsuite::vhdl::parser::dataset>("signal_list"),  // --
-    input, expected, test_case_name)
+BOOST_DATA_TEST_CASE(signal_list,                                                              // --
+                     utf_data::make_delayed<testsuite::vhdl::parser::dataset>("signal_list"),  // --
+                     input, expected, test_case_name)
 {
     using attribute_type = ast::signal_list;
     auto const parser = testsuite::vhdl::parser::signal_list();

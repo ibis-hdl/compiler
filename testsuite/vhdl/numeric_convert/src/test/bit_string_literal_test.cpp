@@ -29,28 +29,28 @@ namespace detail {
 // bin/oct/hex generator helper functions
 //******************************************************************************
 
-static std::string to_bin_literal(uint64_t n, std::string const& postfix = "")
+static std::string to_bin_literal(uint64_t num, std::string const& postfix = "")
 {
     using namespace testsuite::vhdl::numeric_convert::util;
 
-    std::string s{ "B\"" + binary_string{ n }() + postfix + '"' };
-    return s;
+    std::string str{ "B\"" + binary_string{ num }() + postfix + '"' };
+    return str;
 }
 
-static std::string to_oct_literal(uint64_t n, std::string const& postfix = "")
+static std::string to_oct_literal(uint64_t num, std::string const& postfix = "")
 {
     using namespace testsuite::vhdl::numeric_convert::util;
 
-    std::string s{ "O\"" + octal_string{ n }() + postfix + '"' };
-    return s;
+    std::string str{ "O\"" + octal_string{ num }() + postfix + '"' };
+    return str;
 }
 
-static std::string to_hex_literal(uint64_t n, std::string const& postfix = "")
+static std::string to_hex_literal(uint64_t num, std::string const& postfix = "")
 {
     using namespace testsuite::vhdl::numeric_convert::util;
 
-    std::string s{ "X\"" + hexadecimal_string{ n }() + postfix + '"' };
-    return s;
+    std::string str{ "X\"" + hexadecimal_string{ num }() + postfix + '"' };
+    return str;
 }
 
 }  // namespace detail

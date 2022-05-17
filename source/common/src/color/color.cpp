@@ -34,7 +34,7 @@ std::optional<color::attribute> text_attr(std::string_view name)
 
     for (auto const& [color_name, attribute] : map) {
         if (util::icompare(color_name, name)) {
-            return std::optional<color::attribute>(attribute);
+            return { attribute };
         }
     }
 
@@ -58,7 +58,7 @@ std::optional<color::attribute> foreground_attr(std::string_view name)
 
     for (auto const& [color_name, attribute] : map) {
         if (util::icompare(color_name, name)) {
-            return std::optional<color::attribute>(attribute);
+            return { attribute };
         }
     }
 
@@ -82,11 +82,11 @@ std::optional<color::attribute> background_attr(std::string_view name)
 
     for (auto const& [color_name, attribute] : map) {
         if (util::icompare(color_name, name)) {
-            return std::optional<color::attribute>(attribute);
+            return { attribute };
         }
     }
 
-    return std::optional<color::attribute>{};
+    return {};
 }
 
 }  // namespace ibis::color

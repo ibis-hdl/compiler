@@ -104,7 +104,7 @@ std::ostream& ast_stats::print_on(std::ostream& os) const
     for (auto const& [key, value] : vec) {
         os << key << std::string_view(padding).substr(0, max_key_size - key.size());
 
-        if (untagged_nodes.count(key) != 0) {
+        if (untagged_nodes.contains(key)) {
             os << " T";  // position_tagged
         }
         else {

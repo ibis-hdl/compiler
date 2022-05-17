@@ -5,7 +5,6 @@
 
 namespace ibis::vhdl::ast {
 
-struct sequence_of_statements : std::vector<ast::sequential_statement> {
-};
+struct sequence_of_statements : std::vector<ast::sequential_statement> {};
 
 }  // namespace ibis::vhdl::ast

@@ -24,7 +24,8 @@ BOOST_AUTO_TEST_CASE(tokenize_sv)
 
     tokenize(sv, result, ',');
 
-    if constexpr ((false)) {  // intentionally disabled
+    //  intentionally disabled
+    if constexpr ((false)) {  // NOLINT(readability-simplify-boolean-expr)
         for (auto str_v : result) {
             std::cout << "'" << str_v << "'\n";
         }

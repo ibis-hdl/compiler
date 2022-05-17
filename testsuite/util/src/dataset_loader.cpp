@@ -19,11 +19,11 @@ dataset_loader::dataset_loader(std::string_view testcase_group_)
 
 // Quiet compiler warning: ... has no out-of-line virtual method definitions; its vtable will be
 // emitted in every translation unit [-Wweak-vtables]
-dataset_loader::~dataset_loader()  = default;
+dataset_loader::~dataset_loader() = default;
 
 // Quiet compiler warning: ... has no out-of-line virtual method definitions; its vtable will be
 // emitted in every translation unit [-Wweak-vtables]
-dataset_loader::compile_builtin::~compile_builtin()  = default;
+dataset_loader::compile_builtin::~compile_builtin() = default;
 
 void dataset_loader::set_builtin(std::unique_ptr<compile_builtin> other)
 {
@@ -38,8 +38,8 @@ void dataset_loader::set_builtin(std::unique_ptr<compile_builtin> other)
 
     BOOST_TEST_MESSAGE(name() << ": load test files for " << testcase_group);
 
-    fs::path p = fs::path(option.source_dir) / testcase_group;
-    read_files(p);
+    fs::path path = fs::path(option.source_dir) / testcase_group;
+    read_files(path);
 
     if (dataset.input.empty()) {
         BOOST_TEST_MESSAGE(name() << " WARNING: empty dataset in " << testcase_group);
@@ -200,7 +200,7 @@ utf_data::size_t dataset_loader::size() const { return dataset.input.size(); }
 
 dataset_loader::iterator dataset_loader::begin() const
 {
-    return iterator(dataset.input.begin(), dataset.expected.begin(), dataset.name.begin());
+    return { dataset.input.begin(), dataset.expected.begin(), dataset.name.begin() };
 }
 
 // ----------------------------------------------------------------------------

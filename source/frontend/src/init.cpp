@@ -63,8 +63,7 @@ void init::parse_cli(int argc, const char* argv[])
 
     CLI::App app{ std::string{ IBIS_HDL_VERSION_STR }, std::string{ "ibis" } };
 
-    struct Formatter : public CLI::Formatter {
-    };
+    struct Formatter : public CLI::Formatter {};
 
     auto fmt = std::make_shared<Formatter>();
     fmt->column_width(40);
@@ -226,7 +225,7 @@ void init::parse_cli(int argc, const char* argv[])
 
     // ... and evaluate CLI arguments:
 
-    ibis::settings::reference_type pt = ibis::settings::instance();
+    ibis::settings::reference_type ptree = ibis::settings::instance();
 
     if (app.count("--version") != 0) {
         std::cout << IBIS_HDL_VERSION_STR << '\n';
@@ -267,7 +266,8 @@ void init::parse_cli(int argc, const char* argv[])
             }
         }
 
-        void option(std::string const& cli_arg, std::string const& setting_flag, std::string const& option)
+        void option(std::string const& cli_arg, std::string const& setting_flag,
+                    std::string const& option)
         {
             if (app.count(cli_arg) != 0) {
                 pt.add(setting_flag, option);
@@ -280,7 +280,7 @@ void init::parse_cli(int argc, const char* argv[])
                 pt.add(setting_flag, item);
             }
         }
-    } setup(app, pt);
+    } setup(app, ptree);
 
     //
     // Primary option group
@@ -364,18 +364,18 @@ void init::user_config_message_color()
 
     ibis::settings::insert_json(default_cfg_json);
 
-    ibis::settings::reference_type pt = ibis::settings::instance();
+    ibis::settings::reference_type ptree = ibis::settings::instance();
 
-    bool const force_color = [&] { return pt.get<bool>("force-color"); }();
-    bool const no_color = [&] { return pt.get<bool>("no-color"); }();
+    bool const force_color = [&] { return ptree.get<bool>("force-color"); }();
+    bool const no_color = [&] { return ptree.get<bool>("no-color"); }();
 
     if (no_color && !force_color) {
         // no color wanted - skip further proceeding
         return;
     }
 
-    // bool const quiet = [&] { return pt.get<bool>("quiet"); }();
-    unsigned const verbose = [&] { return pt.get<unsigned>("verbose"); }();
+    // bool const quiet = [&] { return ptree.get<bool>("quiet"); }();
+    unsigned const verbose = [&] { return ptree.get<unsigned>("verbose"); }();
 
     using namespace ibis;
     using namespace ibis::color;
@@ -387,7 +387,7 @@ void init::user_config_message_color()
 
     auto const get_formatter = [&](std::string_view json_ptr) {
         auto const& child = ibis::settings::instance().get_child(json_ptr.data());
-        // pt::write_json(std::cout, child);
+        // ptree::write_json(std::cout, child);
 
         ibis::color::attribute_container format_style;
 
@@ -399,9 +399,9 @@ void init::user_config_message_color()
             }
         };
 
-        for (auto const& x : child) {
-            std::string_view const name = x.first.data();        // key
-            std::string_view const attr_name = x.second.data();  // value
+        for (auto const& prop_pair : child) {
+            std::string_view const name = prop_pair.first.data();        // key
+            std::string_view const attr_name = prop_pair.second.data();  // value
 
             if (util::icompare(name, "text")) {
                 update_format(attr_name, &color::text_attr, format_style);
@@ -460,10 +460,10 @@ void init::l10n()
 
     generator gen{};
 
-    ibis::settings::reference_type pt = ibis::settings::instance();
+    ibis::settings::reference_type ptree = ibis::settings::instance();
 
     fs::path const l10n_path = [&] {
-        boost::optional<std::string> path = pt.get_optional<std::string>("locale-dir");
+        boost::optional<std::string> path = ptree.get_optional<std::string>("locale-dir");
         if (path) {
             return fs::path{ path.get() };
         }
@@ -473,7 +473,7 @@ void init::l10n()
     std::error_code ec;
     auto lc_path = fs::canonical(l10n_path, ec);
 
-    unsigned const verbose_level = [&] { return pt.get<unsigned>("verbose"); }();
+    unsigned const verbose_level = [&] { return ptree.get<unsigned>("verbose"); }();
 
     if (ec) {
         if (verbose_level > 1) {

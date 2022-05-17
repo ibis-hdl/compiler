@@ -71,7 +71,7 @@ struct distinct_directive {
     }
 };
 
-const distinct_directive distinct = { };
+const distinct_directive distinct = {};
 
 ///
 /// Literal parser with attribute.
@@ -81,16 +81,16 @@ const distinct_directive distinct = { };
 /// \note There is no overload without attribute since it would decay to
 /// x3::lit() parser self.
 ///
-struct literal_attribute
-{
+struct literal_attribute {
     ///
     ///
     /// @param str The string literal.
     /// @param attr The Attribute to be exposed.
     /// @return The combined parser based on given argument
     ///
-    template<typename StrT, typename AttrT>
-    constexpr auto operator()(StrT&& str, AttrT&& attr) const {
+    template <typename StrT, typename AttrT>
+    constexpr auto operator()(StrT&& str, AttrT&& attr) const
+    {
         // clang-format off
         return
                x3::lit(std::forward<StrT>(str))

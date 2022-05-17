@@ -24,7 +24,8 @@ using testsuite::vhdl::parser::failure_diagnostic_fixture;
 BOOST_FIXTURE_TEST_SUITE(parser_rule, failure_diagnostic_fixture)
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
-BOOST_DATA_TEST_CASE(shift_expression, // --
+BOOST_DATA_TEST_CASE(
+    shift_expression,                                                              // --
     utf_data::make_delayed<testsuite::vhdl::parser::dataset>("shift_expression"),  // --
     input, expected, test_case_name)
 {

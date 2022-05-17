@@ -24,7 +24,8 @@ using testsuite::vhdl::parser::failure_diagnostic_fixture;
 BOOST_FIXTURE_TEST_SUITE(parser_rule, failure_diagnostic_fixture)
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
-BOOST_DATA_TEST_CASE(record_type_definition, // --
+BOOST_DATA_TEST_CASE(
+    record_type_definition,                                                              // --
     utf_data::make_delayed<testsuite::vhdl::parser::dataset>("record_type_definition"),  // --
     input, expected, test_case_name)
 {

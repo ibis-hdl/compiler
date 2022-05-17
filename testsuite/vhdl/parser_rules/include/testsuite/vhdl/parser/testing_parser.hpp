@@ -101,11 +101,12 @@ struct testing_parser {
             auto const start = position_cache_proxy.get_line_start(err_pos);
             auto const line = position_cache_proxy.current_line(start);
 
-            diagnostic_handler(e.where(),
-                          "Test Suite caught *unexpected* expectation failure! Expecting "  // --
-                              + e.which() + " here: '"                                      // --
-                              + std::string(line)                                           // --
-                              + "'\n");
+            diagnostic_handler(
+                e.where(),
+                "Test Suite caught *unexpected* expectation failure! Expecting "  // --
+                    + e.which() + " here: '"                                      // --
+                    + std::string(line)                                           // --
+                    + "'\n");
 
             std::cerr << output.str() << '\n';
         }

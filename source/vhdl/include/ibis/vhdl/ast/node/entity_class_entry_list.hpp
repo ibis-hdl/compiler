@@ -5,7 +5,6 @@
 
 namespace ibis::vhdl::ast {
 
-struct entity_class_entry_list : std::vector<ast::keyword_token> {
-};
+struct entity_class_entry_list : std::vector<ast::keyword_token> {};
 
 }  // namespace ibis::vhdl::ast

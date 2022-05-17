@@ -24,9 +24,9 @@ using testsuite::vhdl::parser::failure_diagnostic_fixture;
 BOOST_FIXTURE_TEST_SUITE(parser_rule, failure_diagnostic_fixture)
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
-BOOST_DATA_TEST_CASE(aggregate, // --
-    utf_data::make_delayed<testsuite::vhdl::parser::dataset>("aggregate"),  // --
-    input, expected, test_case_name)
+BOOST_DATA_TEST_CASE(aggregate,                                                              // --
+                     utf_data::make_delayed<testsuite::vhdl::parser::dataset>("aggregate"),  // --
+                     input, expected, test_case_name)
 {
     using attribute_type = ast::aggregate;
     auto const parser = testsuite::vhdl::parser::aggregate();

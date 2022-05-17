@@ -43,7 +43,7 @@ BOOST_DATA_TEST_CASE(keyword_ok,                                                
     auto position_cache_proxy = position_cache.add_file(test_case_name, input);
 
     {
-        parser::parse parse{ os  };
+        parser::parse parse{ os };
 
         bool const parse_ok = parse(position_cache_proxy, ctx, design_file);
         if (!parse_ok) {
@@ -55,7 +55,9 @@ BOOST_DATA_TEST_CASE(keyword_ok,                                                
 
     {
         analyze::context ctx;
-        analyze::diagnostic_handler<parser::iterator_type> diagnostic_handler{ os, ctx, position_cache_proxy };
+        analyze::diagnostic_handler<parser::iterator_type> diagnostic_handler{
+            os, ctx, position_cache_proxy
+        };
         analyze::syntax_checker syntax_check{ os, ctx, diagnostic_handler };
 
         syntax_check(design_file);
@@ -101,7 +103,9 @@ BOOST_DATA_TEST_CASE(
 
     {
         analyze::context ctx;
-        analyze::diagnostic_handler<parser::iterator_type> diagnostic_handler{ os, ctx, position_cache_proxy };
+        analyze::diagnostic_handler<parser::iterator_type> diagnostic_handler{
+            os, ctx, position_cache_proxy
+        };
         analyze::syntax_checker syntax_check{ os, ctx, diagnostic_handler };
 
         syntax_check(design_file);

@@ -9,8 +9,7 @@
 
 namespace ibis::vhdl::ast {
 
-struct signal_list_list : std::vector<ast::name> {
-};
+struct signal_list_list : std::vector<ast::name> {};
 
 // signal_list ::=
 //           signal_name { , signal_name }

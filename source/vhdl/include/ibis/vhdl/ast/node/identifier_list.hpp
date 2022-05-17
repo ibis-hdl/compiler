@@ -5,7 +5,6 @@
 
 namespace ibis::vhdl::ast {
 
-struct identifier_list : std::vector<ast::identifier> {
-};
+struct identifier_list : std::vector<ast::identifier> {};
 
 }  // namespace ibis::vhdl::ast

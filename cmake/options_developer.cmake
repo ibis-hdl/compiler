@@ -286,66 +286,35 @@ mark_as_advanced(DEVELOPER_BOOST_SPIRIT_X3_DEBUG)
 ################################################################################
 # CMake source code analysis support
 #
-# [Static checks with CMake/CDash (iwyu, clang-tidy, lwyu, cpplint and cppcheck)](
+# [Static checks with CMake/CDash (iwyu, lwyu, cpplint and cppcheck)](
 # https://blog.kitware.com/static-checks-with-cmake-cdash-iwyu-clang-tidy-lwyu-cpplint-and-cppcheck/)
+#
+# Note:
+# - Clang-tidy is started from CMake presets
 ################################################################################
 
 ## -----------------------------------------------------------------------------
 # CMake Tidy
 #
-# $ clang-tidy --checks='modernize*,performance*' --header-filter=\*.hpp$ -dump-config
-option(DEVELOPER_RUN_CLANG_TIDY
-    "Run clang-tidy with the compiler."
-    OFF)
-mark_as_advanced(DEVELOPER_RUN_CLANG_TIDY)
+include(FindClangTidy)
 
-if(DEVELOPER_RUN_CLANG_TIDY)
+if(CLANG_TIDY_FOUND)
+    configure_file(${CMAKE_SOURCE_DIR}/.clang-tidy ${CMAKE_BINARY_DIR}/.clang-tidy COPYONLY)
 
-    include(FindClangTidy)
-
-    if(NOT CLANG_TIDY_FOUND)
-        message(STATUS "=> Configure Fix: <DEVELOPER_RUN_CLANG_TIDY> is ON but clang-tidy is not found, disabled")
-        set(CLANG_TIDY_FOUND OFF CACHE BOOL "clang-tidy (not found)" FORCE)
+    # Sanity check: If PCH is enabled, for some reasons at pch_default.hpp <CLI/CLI.hpp> is not found, hence disabled
+    # Todo: Fixme, this shouldn't happen, and why only CLI11?
+    if(IBIS_ENABLE_PCH_DEFAULT OR IBIS_ENABLE_PCH_IBIS)
+        message(STATUS "=> Configure Fix: Clang tidy may trigger false positives if PCH is enabled, disabled")
+        set(IBIS_ENABLE_PCH_DEFAULT OFF CACHE BOOL "PCH disabled due to use of clang-tidy" FORCE)
+        set(IBIS_ENABLE_PCH_IBIS    OFF CACHE BOOL "PCH disabled due to use of clang-tidy" FORCE)
     endif()
 
-    # Run clang-tidy on each of the C++ source file of the project
-    # Don't apply on 3rd party libraries, see
-    # [What is the correct way of providing header-filter for clang-tidy in Cmake?](
-    # https://stackoverflow.com/questions/61001314/what-is-the-correct-way-of-providing-header-filter-for-clang-tidy-in-cmake)
-    # '-header-filter' overrides the 'HeaderFilterRegex' option in .clang-tidy file,
-    # using POSIX RE expression (ERE) syntax (see llvm::Regex Class Reference)
-    set(_cltidy_filter_re "^((?!(/external/|/boost/|/CLI/|/testsuite/)).)*$")
-    # clang-tidy lookup for .clang-tidy upwards and uses it
-    set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXECUTABLE};-header-filter='${_cltidy_filter_re}'")
-    # ... alternatively apply some fixes
-    #set(_cltidy_checks "-*,modernize-concat-nested-namespaces")
-    #set(_cltidy_fix    "-fix -fix-errors")
-    #set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXECUTABLE};-checks=${_cltidy_checks};${_cltidy_fix};-header-filter='${_cltidy_filter_re}'")
-
-    # About [How to integrate clang-tidy with CMake](
-    #  https://gitlab.kitware.com/cmake/cmake/-/issues/18926):
-    # My google foo shows many copy&paste solutions, but no one seems to use the
-    # CLANG_TIDY_DEFINITIONS (or even CLANG_TIDY_SHA1) with preprocessor
-    # definition finally. Some please on clarification aren't answered.
-    # IMO in this state it does nothing, hence not used/omitted.
-endif()
-
-configure_file(${CMAKE_SOURCE_DIR}/.clang-tidy ${CMAKE_BINARY_DIR}/.clang-tidy COPYONLY)
-
-# Special handling for MSVC
-# FixMe: Clang-Tidy and MSVC aren't compatible? Got error about:
-# error: cannot use 'throw' with exceptions disabled [clang-diagnostic-error]
-if(MSVC)
-    if(DEVELOPER_RUN_CLANG_TIDY)
-        message(STATUS "=> Configure Fix: Disable <DEVELOPER_RUN_CLANG_TIDY> while using MSVC compiler")
-        set(DEVELOPER_RUN_CLANG_TIDY "FALSE" CACHE STRING "")
-        # CMAKE_CXX_CLANG_TIDY must be cleared too, otherwise PCH header compiles with clang-tidy
-        # command line for some unknown reasons
+    # Special handling for MSVC
+    # FixMe: Clang-Tidy and MSVC aren't compatible? Got error about: cannot use 'throw' with exceptions disabled [clang-diagnostic-error]
+    if(MSVC)
+        # CMAKE_CXX_CLANG_TIDY must be cleared, otherwise PCH header compiles with clang-tidy, why ever
         set(CMAKE_CXX_CLANG_TIDY "" CACHE STRING "")
     endif()
-else()
-    # always enable it on others platforms
-    set(DEVELOPER_RUN_CLANG_TIDY "TRUE" CACHE STRING "")
 endif()
 
 
@@ -417,7 +386,7 @@ endif()
 
 CPMAddPackage(
   NAME Format.cmake
-  VERSION 1.7.0
+  VERSION 1.7.3
   GITHUB_REPOSITORY TheLartians/Format.cmake
   OPTIONS # set to yes skip cmake formatting
           "FORMAT_SKIP_CMAKE YES"
