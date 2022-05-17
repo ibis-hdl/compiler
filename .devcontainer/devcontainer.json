@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.231.6/containers/cpp
 {
-	"name": "Linux C++ Developer",
+	"name": "Linux C++",
 	"build": {
 		"dockerfile": "Dockerfile",
 		"context": ".",
@@ -21,6 +21,14 @@
 	"settings": {
 
 	},
+
+	"mounts": [
+		// FixMe: volume not created automatically, run once
+		// $ docker volume create conan_data
+		// FixMe: Mounted as root; the temporary fix is at scripts/postCreateCommand.sh
+		"source=conan_data,target=/home/vscode/.conan/data,type=volume",
+		"source=ccache_data,target=/home/vscode/.cache,type=volume"
+	],
 
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
