@@ -311,7 +311,6 @@
                 "DEVELOPER_RUN_IWYU": "OFF",
                 "DEVELOPER_BOOST_SPIRIT_X3_DEBUG": "OFF",
                 "DEVELOPER_RUN_ON_VALGRIND": "OFF",
-                "DEVELOPER_RUN_CLANG_TIDY": "OFF",
                 "DEVELOPER_RUN_CLANG_FORMAT": "OFF"
             }
         },
