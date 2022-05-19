@@ -1,5 +1,5 @@
 ################################################################################
-## IBIS/testsuite comon utils project
+## IBIS/testsuite common utils project
 ##
 ## file: testsuite/common_utils/CMakeLists.txt
 ################################################################################

@@ -81,8 +81,8 @@ include(py_env)
 
 
 # This requirement rises by use of CMake's PCH support, otherwise
-# linker errors occur. Probably due to boost.org
-# [How do I force CMake to include “-pthread” option during compilation?](
+# linker errors occour. Probably due to boost.org
+# [How do I force CMake to include '-pthread' option during compilation?](
 #   https://stackoverflow.com/questions/5395309/how-do-i-force-cmake-to-include-pthread-option-during-compilation)
 #set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
 #set(THREADS_PREFER_PTHREAD_FLAG TRUE)

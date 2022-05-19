@@ -17,7 +17,7 @@
 namespace  // anonymous
 {
 
-/// FixMe: This is a hack to avoid the depency to ibis::vhdl to
+/// FixMe: This is a hack to avoid the dependency to ibis::vhdl to
 /// this project. This depends only on ibis::util::make_iomanip
 /// header for failure_diagnostic_fixture
 /// Hence it's a copy&paste of <ibis/util/make_iomanip.hpp>
@@ -113,7 +113,7 @@ void basic_failure_diagnostic_fixture::failure_closure(std::string test_case_nam
 
         auto hline = [&](std::string const& title, char fill = '~') {
             return make_iomanip(
-                [this, &title, fill](std::ostream& os) { head_line(os, title, col_width, fill); });
+                [&title, fill](std::ostream& os) { head_line(os, title, col_width, fill); });
         };
 
         // finally the nice rendered failure closure for diagnostic
@@ -150,7 +150,7 @@ void basic_failure_diagnostic_fixture::failure_closure(std::string test_case_nam
 
         auto hline = [&](std::string const& title, char fill = '~') {
             return make_iomanip(
-                [this, &title, fill](std::ostream& os) { head_line(os, title, col_width, fill); });
+                [&title, fill](std::ostream& os) { head_line(os, title, col_width, fill); });
         };
 
         // finally the nice rendered failure closure for diagnostic
