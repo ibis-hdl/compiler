@@ -27,6 +27,13 @@ target_sources(${PROJECT_NAME}
         # util::color
         src/color/color.cpp
         $<$<BOOL:${WIN32}>:src/color/color_platform_windows.cpp>
+        # tool::event_trace
+        src/tool/event_trace/category.cpp
+        src/tool/event_trace/trace_event.cpp
+        src/tool/event_trace/trace_log.cpp
+        src/tool/event_trace/event_trace.cpp
+        src/tool/event_trace/trace_value.cpp
+        src/tool/event_trace/json_ostream.cpp
 )
 
 
