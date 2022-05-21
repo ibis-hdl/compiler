@@ -5,7 +5,9 @@
 #include <vector>
 #include <unordered_map>
 
+#include <ibis/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/property_tree/ptree.hpp>
+#include <ibis/compiler/warnings_on.hpp>
 
 #include <ibis/namespace_alias.hpp>
 

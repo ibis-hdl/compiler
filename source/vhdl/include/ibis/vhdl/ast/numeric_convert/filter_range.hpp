@@ -2,8 +2,9 @@
 
 #include <boost/iterator/filter_iterator.hpp>
 #include <boost/iterator/iterator_facade.hpp>
-//#include <boost/range/iterator_range.hpp>
+#include <ibis/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/range/iterator_range_core.hpp>
+#include <ibis/compiler/warnings_on.hpp>
 #include <boost/range/iterator_range_io.hpp>
 
 namespace ibis::vhdl::ast::numeric_convert::detail {

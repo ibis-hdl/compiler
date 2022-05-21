@@ -9,7 +9,10 @@
 
 #include <ibis/vhdl/ast/ast_adapted.hpp>
 
+#include <ibis/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/spirit/home/x3.hpp>
+#include <ibis/compiler/warnings_on.hpp>
+
 #include <ibis/vhdl/parser/spirit_x3_util.hpp>
 
 namespace ibis::vhdl::parser::detail {

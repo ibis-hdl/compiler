@@ -1,6 +1,8 @@
 #pragma once
 
+#include <ibis/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/spirit/home/x3.hpp>
+#include <ibis/compiler/warnings_on.hpp>
 
 #include <ibis/namespace_alias.hpp>
 

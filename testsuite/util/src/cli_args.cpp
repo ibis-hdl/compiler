@@ -1,11 +1,13 @@
 #include <testsuite/util/cli_args.hpp>
 #include <testsuite/namespace_alias.hpp>  /// IWYU pragma: keep
 
+//#include <ibis/compiler/warnings_off.hpp> // -Wimplicit-int-float-conversion
 #include <CLI/App.hpp>
 #include <CLI/Error.hpp>
 #include <CLI/Option.hpp>
 #include <CLI/Formatter.hpp>  // IWYU pragma: keep
 #include <CLI/Config.hpp>     // IWYU pragma: keep
+//#include <ibis/compiler/warnings_on.hpp>
 
 #include <cstdlib>
 #include <sstream>

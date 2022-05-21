@@ -79,7 +79,7 @@ BOOST_DATA_TEST_CASE(keyword_ok,                                                
 // FAILURE test case
 //
 BOOST_DATA_TEST_CASE(
-    keyword_missmatch,                                                             // --
+    keyword_mismatch,                                                              // --
     utf_data::make_delayed<testsuite::vhdl::syntax::dataset>("keyword_mismatch"),  // --
     input, expected, test_case_name)
 {

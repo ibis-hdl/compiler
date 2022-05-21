@@ -9,7 +9,11 @@
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#pragma GCC diagnostic ignored "-Wdeprecated-copy"
 #pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#pragma GCC diagnostic ignored "-Wimplicit-int-float-conversion"
+// see MSVC C4146
+#pragma GCC diagnostic ignored "-Wsign-conversion"
 #endif
 
 // CLang++ only
@@ -23,5 +27,6 @@
 #endif
 
 #if defined(_MSC_VER)
-// ...
+// C4146: unary minus operator applied to unsigned type, result still unsigned
+#pragma warning(disable : 4146)
 #endif

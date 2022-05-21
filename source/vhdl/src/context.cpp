@@ -2,8 +2,10 @@
 
 #include <ibis/vhdl/ast/util/string_span_hash.hpp>
 
+#include <ibis/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
+#include <ibis/compiler/warnings_on.hpp>
 
 #include <cstddef>
 #include <algorithm>

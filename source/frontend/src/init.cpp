@@ -18,7 +18,9 @@
 
 #include <ibis/namespace_alias.hpp>  // IWYU pragma: keep
 
+#include <ibis/compiler/warnings_off.hpp>  // -Wimplicit-int-float-conversion
 #include <CLI/CLI.hpp>
+#include <ibis/compiler/warnings_on.hpp>
 
 #include <boost/property_tree/json_parser.hpp>
 
