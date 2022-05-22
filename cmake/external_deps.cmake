@@ -34,6 +34,6 @@ find_package(CLI11 2.2.0 REQUIRED)
 ##
 # strong_type: strong typedef library for C++14/17/20
 # [https://github.com/rollbear/strong_type]
-CPMAddPackage("gh:rollbear/strong_type#main")
+CPMAddPackage("gh:rollbear/strong_type#v4")
 add_custom_target(external-strong_type)
 set(STRONG_TYPE_INCLUDE_DIR ${strong_type_SOURCE_DIR}/include)
