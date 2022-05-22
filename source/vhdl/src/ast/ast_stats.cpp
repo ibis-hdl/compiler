@@ -80,7 +80,7 @@ auto ast_stats::sort_by_count(bool ascending) const
         return std::function<bool(pair_type const&, pair_type const&)>{ descending_predicate };
     }(ascending);
 
-    // FixMe: Conside use of std::set since it's sorted by C++ std.
+    // FixMe: Consider use of std::set since it's sorted by C++ std.
     std::vector<pair_type> vec{ count_map.begin(), count_map.end() };
     std::sort(vec.begin(), vec.end(), predicate);
 

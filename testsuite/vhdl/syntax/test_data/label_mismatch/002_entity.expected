@@ -1,4 +1,4 @@
-label_missmatch/002_entity:4:1: syntax error: Label mismatch in Entity Declaration
+label_mismatch/002_entity:4:1: syntax error: Label mismatch in Entity Declaration
 entity testbench is
        ~~~~~~~~~ <<-- here
 ...

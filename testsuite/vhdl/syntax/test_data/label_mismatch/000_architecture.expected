@@ -1,4 +1,4 @@
-label_missmatch/000_architecture:7:1: syntax error: Label mismatch in Architecture Body
+label_mismatch/000_architecture:7:1: syntax error: Label mismatch in Architecture Body
 architecture BENCH of testbench is
              ~~~~~ <<-- here
 ...

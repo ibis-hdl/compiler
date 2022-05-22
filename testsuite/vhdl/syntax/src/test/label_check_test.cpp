@@ -73,8 +73,8 @@ BOOST_DATA_TEST_CASE(labels_ok,                                                 
 // FAILURE test case
 //
 BOOST_DATA_TEST_CASE(
-    label_missmatch,                                                              // --
-    utf_data::make_delayed<testsuite::vhdl::syntax::dataset>("label_missmatch"),  // --
+    label_mismatch,                                                              // --
+    utf_data::make_delayed<testsuite::vhdl::syntax::dataset>("label_mismatch"),  // --
     input, expected, test_case_name)
 {
     btt::output_test_stream os;
