@@ -111,7 +111,12 @@ int main(int argc, const char* argv[])
             }
         }
 
-        // FixMe: plural_count copy & paste from context.cpp, make it re-useable
+        // Fix for Clang '-Weverything' diagnostic at format(translate("...", count)):
+        //     warning: implicit conversion loses integer precision: 'const size_t'
+        //     (aka 'const unsigned long') to 'int' [-Wshorten-64-to-32]
+        // To avoid references by Clang's '-Weverything' diagnostics a plural form lambda function 
+        // for count value is applied. The underlying problem is that file count are of 64-bit type
+        // size_t.
         auto const plural_count = [](size_t count) {
             if (count > std::numeric_limits<int>::max()) {
                 return std::numeric_limits<int>::max();

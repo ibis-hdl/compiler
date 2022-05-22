@@ -15,49 +15,67 @@ namespace detail {
 ///
 /// Tagged Counter
 ///
-/// Simply increments events and throws basic_counter::overflow if a configurable
+/// Simply increments events and throws tagged_counter::overflow if a configurable
 /// limit has been reached.
 ///
 /// @see [Wandbox](https://wandbox.org/permlink/7o4pPgrmHDQUJj1x)
 ///
 template <typename Tag>
-class basic_counter {
+class tagged_counter {
 public:
     ///
     /// @brief Exception thrown if the counter limit has been reached.
     ///
     /// @todo Make it more expressive with string message, configured
-    /// treshold etc.
+    /// threshold etc.
     struct overflow : public std::exception {};
 
 public:
-    using value_type = std::size_t;
+    ///
+    /// Underlying type of counter.
+    /// @note: It would be only natural to use type of `std::size_t`, but then there are compiler 
+    /// warnings like `[-Wshorten-64-to-32]` at Clang '-Weverything' Diagnostic. The reason is the 
+    // use of `boost::locale`'s `translate()` function, where the singular/plural argument is of 
+    /// type `int32`. Since the value range of `int32` is sufficient for errors and warnings, a 
+    /// work-around with lambda functions is unnecessary.
+    ///
+    using value_type = std::int32_t;
+
+    /// The max. ID value of file_id respectively pod_id.
+    static constexpr value_type MAX_THRESHOLD = std::numeric_limits<value_type>::max();
 
 public:
-    explicit basic_counter(value_type limit_ = std::numeric_limits<value_type>::max())
-        : treshold{ limit_ }
+    ///
+    /// constructs the tagged counter.
+    ///
+    /// @param limit_ threshold of count value. Must be in range of `[0 ... INT32_MAX)`
+    ///
+    explicit tagged_counter(value_type limit_ = MAX_THRESHOLD - 1)
+        : threshold{ limit_ }
     {
+        assert(!(limit < 0) && limit_ < MAX_THRESHOLD 
+            && "counter threshold out of range must be [0 ... INT32_MAX)");
     }
 
-    ~basic_counter() = default;
+    ~tagged_counter() = default;
 
-    basic_counter(basic_counter const&) = delete;
-    basic_counter& operator=(basic_counter const&) = delete;
+    tagged_counter(tagged_counter const&) = delete;
+    tagged_counter& operator=(tagged_counter const&) = delete;
 
-    basic_counter(basic_counter&&) = default;
-    basic_counter& operator=(basic_counter&&) = default;
+    tagged_counter(tagged_counter&&) = default;
+    tagged_counter& operator=(tagged_counter&&) = default;
 
 public:
     ///
     /// prefix increment
     ///
-    /// @fn     basic_counter::operator++()
-    /// @return incremented value.
+    /// @fn     tagged_counter::operator++()
+    /// @return incremented count value.
     ///
-    basic_counter& operator++()
+    tagged_counter& operator++()
     {
         ++value;
-        if (value > treshold) {
+        if (value > threshold) {
             throw overflow{};
         }
         return *this;
@@ -66,12 +84,12 @@ public:
     ///
     /// postfix increment
     ///
-    /// @fn     const basic_counter::operator++(int)
-    /// @return the value before increment.
+    /// @fn     tagged_counter::operator++(int)
+    /// @return the count value before increment.
     ///
-    basic_counter operator++(int)
+    tagged_counter operator++(int)
     {
-        basic_counter result(*this);
+        tagged_counter result(*this);
         ++(*this);
         return result;
     }
@@ -86,14 +104,14 @@ public:
     ///
     /// @return Reference to the threshold value.
     ///
-    value_type& limit() { return treshold; }
+    value_type& limit() { return threshold; }
 
     ///
     /// Threshold at where the overflow exception will be thrown.
     ///
     /// @return Const reference to the threshold value.
     ///
-    value_type limit() const { return treshold; }
+    value_type limit() const { return threshold; }
 
     ///
     /// Common ostream API
@@ -108,12 +126,12 @@ public:
     }
 
 private:
-    value_type treshold;
+    value_type threshold;
     value_type value = 0;
 };
 
 template <typename Tag>
-std::ostream& operator<<(std::ostream& os, basic_counter<Tag> const& counter)
+std::ostream& operator<<(std::ostream& os, tagged_counter<Tag> const& counter)
 {
     return counter.print_on(os);
 }
@@ -126,7 +144,7 @@ std::ostream& operator<<(std::ostream& os, basic_counter<Tag> const& counter)
 /// The error_count will throw if the limit of errors is reached:
 /// \code
 /// try {
-///   ... // analyse
+///   ... // analyze
 /// }
 /// catch(context::error_counter::overflow const&) {
 ///    std::cerr << "fatal error: too many errors emitted, stopping now "
@@ -137,7 +155,12 @@ std::ostream& operator<<(std::ostream& os, basic_counter<Tag> const& counter)
 ///
 class context {
 public:
-    explicit context(std::size_t error_limit = 42);
+    ///
+    /// Creates the VHDL context
+    ///
+    /// @param error_limit  threshold of error count value. Must be in range of `[0 ... INT32_MAX)`
+    ///
+    explicit context(std::int32_t error_limit = 42);
 
     context(context&) = delete;
     context& operator=(context&) = delete;
@@ -146,8 +169,8 @@ public:
     ~context() = default;
 
 public:
-    using error_counter = detail::basic_counter<struct error_tag>;
-    using warning_counter = detail::basic_counter<struct warning_tag>;
+    using error_counter = detail::tagged_counter<struct error_tag>;
+    using warning_counter = detail::tagged_counter<struct warning_tag>;
 
 public:
     bool error_free() const { return error_count == 0; }

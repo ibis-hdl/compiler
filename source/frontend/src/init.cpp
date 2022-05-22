@@ -182,8 +182,10 @@ void init::parse_cli(int argc, const char* argv[])
                 ->description(translate("Warn for others."))
                 ;
             // Option to Control Error and Warning Messages Flags
-            group->add_option("--ferror-limit", cli_parameter.error_limit) // XXX unused in context.cpp
+            // FixMe: unused in context.cpp, also CLI11's range check should use tagged_counter::MAX
+            group->add_option("--ferror-limit", cli_parameter.error_limit) // --
                 ->description(translate("Limit emitting diagnostics, can be disabled with --ferror-limit=0."))
+                ->check(CLI::Range(0, std::numeric_limits<std::int32_t>::max()))
                 ;
         }
 

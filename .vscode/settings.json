@@ -1,4 +1,7 @@
 {
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
-    "python.terminal.activateEnvironment": true
+    "python.terminal.activateEnvironment": true,
+	"editor.rulers": [
+        100
+    ]
 }
