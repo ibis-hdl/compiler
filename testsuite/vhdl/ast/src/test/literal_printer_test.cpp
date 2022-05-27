@@ -19,12 +19,14 @@ std::vector<std::string_view> const input_string_literal{
     R"("""")",  R"(%%%%)", R"(""Hello"")", R"(Quotation: ""REPORT..."")",
     R"("%"%")",  // --
     R"(%"%"")",  // --
+    R"(""")"
 };
 
 std::vector<std::string> const expected_string_literal{
     R"("")",    R"(%%)", R"("Hello")", R"(Quotation: "REPORT...")",
     R"("%"%")",  // as-is
-    R"(%"%")",   // as-is
+    R"(%"%")",
+    R"("")"
 };
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)

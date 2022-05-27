@@ -18,7 +18,7 @@ namespace detail {
 /// Simply increments events and throws tagged_counter::overflow if a configurable
 /// limit has been reached.
 ///
-/// @see [Wandbox](https://wandbox.org/permlink/7o4pPgrmHDQUJj1x)
+/// @see [coliru](https://coliru.stacked-crooked.com/a/17ad075a66133c27)
 ///
 template <typename Tag>
 class tagged_counter {
@@ -33,10 +33,10 @@ public:
 public:
     ///
     /// Underlying type of counter.
-    /// @note: It would be only natural to use type of `std::size_t`, but then there are compiler 
-    /// warnings like `[-Wshorten-64-to-32]` at Clang '-Weverything' Diagnostic. The reason is the 
-    // use of `boost::locale`'s `translate()` function, where the singular/plural argument is of 
-    /// type `int32`. Since the value range of `int32` is sufficient for errors and warnings, a 
+    /// @note: It would be only natural to use type of `std::size_t`, but then there are compiler
+    /// warnings like `[-Wshorten-64-to-32]` at Clang '-Weverything' Diagnostic. The reason is the
+    // use of `boost::locale`'s `translate()` function, where the singular/plural argument is of
+    /// type `int32`. Since the value range of `int32` is sufficient for errors and warnings, a
     /// work-around with lambda functions is unnecessary.
     ///
     using value_type = std::int32_t;
@@ -53,8 +53,8 @@ public:
     explicit tagged_counter(value_type limit_ = MAX_THRESHOLD - 1)
         : threshold{ limit_ }
     {
-        assert(!(limit < 0) && limit_ < MAX_THRESHOLD 
-            && "counter threshold out of range must be [0 ... INT32_MAX)");
+        assert(!(limit_ < 0) && limit_ < MAX_THRESHOLD &&
+               "counter threshold out of range must be [0 ... INT32_MAX)");
     }
 
     ~tagged_counter() = default;
@@ -174,9 +174,9 @@ public:
 
 public:
     bool error_free() const { return error_count == 0; }
-    bool warning_free() const { return warning_count == 0; }
 
-    bool issue_free() const { return error_count == 0 && warning_count == 0; }
+    bool has_errors() const { return error_count != 0; }
+    bool has_warnings() const { return warning_count != 0; }
 
     error_counter& errors() { return error_count; }
     error_counter const& errors() const { return error_count; }
@@ -184,7 +184,7 @@ public:
     warning_counter& warnings() { return warning_count; }
     warning_counter const& warnings() const { return warning_count; }
 
-public:
+private:
     error_counter error_count;
     warning_counter warning_count;
 };

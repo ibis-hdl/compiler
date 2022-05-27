@@ -63,6 +63,16 @@ private:
     template <typename NodeT>
     bool label_matches(NodeT const& node, std::string_view node_name) const;
 
+    ///
+    /// Check the matching keyword.
+    ///
+    /// FixMe: Re-Using label_match here results into misleading error message
+    /// "Label mismatch". Further, the keywords aren't tagged so beauty
+    /// error messages aren't possible this way.
+    ///
+    /// FixMe: pretty error rendering; the error message's node lookup shows the
+    /// 1st optional postponed as error location with line number, the 2nd is not rendered.
+    ///
     bool keyword_matches(ast::process_statement const& node, std::string_view node_name) const;
 
 private:

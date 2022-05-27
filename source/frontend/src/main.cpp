@@ -25,26 +25,24 @@
 
 extern void testing_signal_handler();
 
+using boost::locale::format;
+using boost::locale::translate;
+
+using namespace ibis;
+using namespace ibis::color;
+
+namespace parser = ibis::vhdl::parser;
+namespace ast = ibis::vhdl::ast;
+
 ///
 /// @brief The App, used as test driver at this state.
 ///
 /// @param argc CLI argument count.
 /// @param argv CLI argument value array.
-/// @return int Exist code of the application.
+/// @return int Exit code of the application.
 ///
-/// @todo An exception may be thrown in function 'main' which should
-/// not throw exceptions [clang-tidy(bugprone-exception-escape)]
 int main(int argc, const char* argv[])
 {
-    using boost::locale::format;
-    using boost::locale::translate;
-
-    using namespace ibis;
-    using namespace ibis::color;
-
-    namespace parser = ibis::vhdl::parser;
-    namespace ast = ibis::vhdl::ast;
-
     try {
         ibis::frontend::init init(argc, argv);
 
@@ -114,7 +112,7 @@ int main(int argc, const char* argv[])
         // Fix for Clang '-Weverything' diagnostic at format(translate("...", count)):
         //     warning: implicit conversion loses integer precision: 'const size_t'
         //     (aka 'const unsigned long') to 'int' [-Wshorten-64-to-32]
-        // To avoid references by Clang's '-Weverything' diagnostics a plural form lambda function 
+        // To avoid references by Clang's '-Weverything' diagnostics a plural form lambda function
         // for count value is applied. The underlying problem is that file count are of 64-bit type
         // size_t.
         auto const plural_count = [](size_t count) {
@@ -131,9 +129,9 @@ int main(int argc, const char* argv[])
                           % position_cache.file_count())
                              .str())
                   << '\n';
-        if (!ctx.issue_free()) {
-            std::cout << vhdl::failure_status(ctx) << '\n';
-        }
+
+        // print error/warning state if any (failure_status takes care on it)
+        std::cout << vhdl::failure_status(ctx) << '\n';
 
         // testing_signal_handler(); // just testing
     }

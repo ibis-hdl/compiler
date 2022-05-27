@@ -5,9 +5,7 @@
 #include <boost/locale/message.hpp>
 #include <ibis/compiler/warnings_on.hpp>
 
-#include <algorithm>
 #include <unordered_map>
-#include <utility>
 
 namespace ibis::vhdl::parser {
 
@@ -128,8 +126,8 @@ std::string_view error_handler::lookup(std::string_view which)
         { "'('"sv, "Opening '(' Brace/Parentheses"sv },
         { "'('"sv, "Closing ')' Brace/Parentheses"sv },
 
-        // Spirit.X3 rule ID/name. Rule names may be different from node
-        // names, so we can't use ast::pretty_node_name here.
+        // Spirit.X3 rule ID/names may be different from node names, so we can't use
+        // ast::pretty_node_name here.
         { "abstract_literal"sv, "Abstract Literal"sv },
         { "access_type_definition"sv, "Access Type Definition"sv },
         { "actual_designator"sv, "Actual Designator"sv },

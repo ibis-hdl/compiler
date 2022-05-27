@@ -4,49 +4,31 @@
 
 #include <ibis/util/cxx_bug_fatal.hpp>
 
-#include <boost/iterator/filter_iterator.hpp>  // IWYU pragma: keep
 #include <boost/variant/apply_visitor.hpp>
 
 #include <iostream>
 
-namespace  // anonymous
-{
+namespace {  // anonymous
 
 class unquote_predicate {
 public:
-    unquote_predicate() = default;
-
     bool operator()(char chr)
     {
-        auto const check = [this](char c, char quote) {  // NOLINT(readability-identifier-length)
-            if ((prev_char != c) || (prev_char != quote) || dbl_quote_printed) {
-                dbl_quote_printed = false;
-                return true;
-            }
-            dbl_quote_printed = true;
+        if (chr == prev_quote) {
+            prev_quote = 0;
             return false;
-        };
-
-        bool flag = false;
-
-        switch (chr) {
-            case '"':
-                flag = check(chr, '"');
-                break;
-            case '%':
-                flag = check(chr, '%');
-                break;
-            default:
-                flag = true;
         }
-
-        prev_char = chr;
-        return flag;
+        if (chr == '"' || chr == '%') {
+            prev_quote = chr;
+        }
+        else {
+            prev_quote = 0;
+        }
+        return true;
     }
 
 private:
-    char prev_char = 0;
-    bool dbl_quote_printed = false;
+    char prev_quote = 0;
 };
 
 }  // anonymous namespace
@@ -105,15 +87,12 @@ std::ostream& literal_printer::print_on(std::ostream& os) const
                 }
             },
             [&os](string_literal const& str) {
-                // FixMe: MSVC 2019 with '_CONTAINER_DEBUG_LEVEL > 0' triggers assertion:
-                // "cannot compare incompatible string_view iterators for equality"
-                auto const literal_f = boost::make_iterator_range(
-                    boost::make_filter_iterator(  // --
-                        unquote_predicate{}, str.literal.begin(), str.literal.end()),
-                    boost::make_filter_iterator(  // --
-                        unquote_predicate{}, str.literal.end()));
-
-                os << literal_f;
+                auto predicate = unquote_predicate{};
+                for (auto const chr : str.literal) {
+                    if (predicate(chr)) {
+                        os << chr;
+                    }
+                }
             }          // --
         },             // overloaded{ ... }
         this->literal  // variant

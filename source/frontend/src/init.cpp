@@ -138,7 +138,7 @@ void init::parse_cli(int argc, const char* argv[])
                                         "using colors."))
                 ->excludes("--no-color")
                 ;
-            group->add_option("--tab-size", cli_parameter.tab_size) // XXX unused in e.g. diagnostic_handler.cpp
+            group->add_option("--tab-size", cli_parameter.tab_size) // ToDo: unused in e.g. diagnostic_handler.cpp
                 ->description(translate("Tabulator size, affects printing source snippet on error printing."))
                 ->check(CLI::Range(1, 10))
                 ;

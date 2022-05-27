@@ -28,32 +28,39 @@
 
 #include <sstream>
 #include <utility>
+#include <iostream>
 
 namespace ibis::vhdl::analyze {
 
-bool syntax_worker::success() const { return context.error_count == 0; }
+bool syntax_worker::success() const { return context.error_free(); }
 
 template <typename NodeT>
 bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name) const
 {
-    // FixMe: Generally here, if pretty_node_name lookup failed, give a warning to developer
-
-    label_match check_label{};
-
     using ast::pretty_node_name;
     using boost::locale::format;
     using boost::locale::translate;
     using error_type = typename vhdl::diagnostic_handler<parser::iterator_type>::error_type;
+
     auto constexpr syntax_error = error_type::syntax;
 
-    switch (check_label(node)) {
-        case label_match::result::OK:
-            return true;
+    label_match const check_label{};
 
+    auto const match_result = check_label(node);
+    // all went fine
+    if (match_result == label_match::result::OK) {
+        return true;
+    }
+
+    // diagnostic to user
+
+    auto const [start_label, end_label] = labels_of(node);
+    auto const [found, node_name_sv] = pretty_node_name(node_name);
+
+    // FixMe: 'found' unused, but in the future maybe - remove it
+
+    switch (match_result) {
         case label_match::result::MISMATCH: {
-            auto const [start_label, end_label] = labels_of(node);
-            auto const [found, node_name_sv] = pretty_node_name(node_name);
-
             diagnostic_handler(node, start_label, end_label,
                                (format(translate("Label mismatch in {1}"))  // --
                                 % node_name_sv)                             // {1}
@@ -64,9 +71,6 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name)
         }
 
         case label_match::result::ILLFORMED: {
-            auto const [start_label, end_label] = labels_of(node);
-            auto const [found, node_name_sv] = pretty_node_name(node_name);
-
             diagnostic_handler(node, start_label, end_label,
                                (format(translate("Label ill-formed in {1}"))  // --
                                 % node_name_sv)                               // {1}
@@ -92,8 +96,6 @@ bool syntax_worker::keyword_matches(ast::process_statement const& node,
     // FixMe: pretty error rendering; the error message's node lookup shows the
     // 1st optional postponed as error location with line number, the 2nd is not rendered.
 
-    // FixMe: If pretty_node_name lookup failed, give a warning to user/developer
-
     using ast::pretty_node_name;
     using boost::locale::format;
     using boost::locale::translate;
@@ -103,6 +105,8 @@ bool syntax_worker::keyword_matches(ast::process_statement const& node,
 
     if (!node.postponed && node.end_postponed) {
         auto const [found, node_name_sv] = pretty_node_name(node_name);
+
+        // FixMe: 'found' unused, but in the future maybe - remove it
 
         diagnostic_handler(node,
                            (format(translate("ill-formed statement in {1}; "

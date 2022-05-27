@@ -27,25 +27,27 @@ std::ostream& failure_status::print_on(std::ostream& os) const
     // see [Wandbox](https://wandbox.org/permlink/VJrqXuEFppw1htY7)
 
     // TRANSLATORS: singular/plural error(s)
-    auto const error_message =
-        (format(translate("{1} error", "{1} errors", ctx.error_count)) // --
-            % ctx.error_count).str();
+    auto const error_message =                                       // --
+        (format(translate("{1} error", "{1} errors", ctx.errors()))  // --
+         % ctx.errors())
+            .str();
 
     // TRANSLATORS: singular/plural warning(s)
-    auto const warning_message =
-        (format(translate("{1} warning", "{1} warnings", ctx.warning_count)) // --
-            % ctx.warning_count).str();
+    auto const warning_message =                                           // --
+        (format(translate("{1} warning", "{1} warnings", ctx.warnings()))  // --
+         % ctx.warnings())
+            .str();
 
-    if ((ctx.error_count != 0) && (ctx.warning_count != 0)) {
+    if (ctx.has_errors() && ctx.has_warnings()) {
         // TRANSLATORS: summary error(s) and warning(s)
         os << format(translate("{1} and {2} generated."))  // --
                   % error_message % warning_message;
     }
-    else if (ctx.error_count != 0) {
+    else if (ctx.has_errors()) {
         // TRANSLATORS: summary error(s) only
         os << format(translate("{1} generated.")) % error_message;
     }
-    else if (ctx.warning_count != 0) {
+    else if (ctx.has_warnings()) {
         // TRANSLATORS: summary warning(s) only
         os << format(translate("{1} generated.")) % warning_message;
     }

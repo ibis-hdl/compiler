@@ -3,8 +3,6 @@
 
 #include <ibis/util/cxx_bug_fatal.hpp>
 
-// #include <boost/locale/encoding_utf.hpp>
-
 #include <cctype>
 #include <iterator>
 #include <string>

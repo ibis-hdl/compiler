@@ -18,7 +18,7 @@
 namespace ibis::vhdl::parser {
 
 ///
-/// tag used to get our position cache proxy from the x3::context
+/// tag used to get our position cache proxy back from the x3::context inside Spirit.X3 rules
 ///
 struct position_cache_tag;  // IWYU pragma: keep
 
@@ -35,16 +35,15 @@ template <typename IteratorT>
 class position_cache {
 public:
     using iterator_type = IteratorT;
-    using position_container_type = std::vector<boost::iterator_range<iterator_type>>;
+    using range_type = boost::iterator_range<iterator_type>;
+    using position_registry_type = std::vector<range_type>;
 
-    using range_type = typename position_container_type::value_type;
-
-    using file_id_type = ast::position_tagged::file_tag_type;
+    using file_id_type = ast::position_tagged::file_id_type;
 
 private:
     // <filename, contents>
     using file_pair = std::tuple<std::string, std::string>;
-    using file_container_type = std::vector<file_pair>;
+    using file_registry_type = std::vector<file_pair>;
 
 public:
     class proxy;
@@ -67,8 +66,8 @@ public:
     ///
     proxy get_proxy(file_id_type file_id);
 
-    std::size_t file_count() const { return files.size(); }
-    std::size_t position_count() const { return positions.size(); }
+    std::size_t file_count() const { return file_registry.size(); }
+    std::size_t position_count() const { return position_registry.size(); }
 
 public:
     ///
@@ -84,8 +83,8 @@ public:
     ///
     proxy add_file(std::string_view filename, std::string_view contents)
     {
-        std::size_t const file_id = files.size();
-        files.emplace_back(filename, contents);
+        std::size_t const file_id = file_registry.size();
+        file_registry.emplace_back(filename, contents);
         return get_proxy(file_id_type(file_id));
     }
 
@@ -107,12 +106,12 @@ public:
     void annotate(file_id_type file_id, NodeT& node, iterator_type first, iterator_type last)
     {
         if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
-            cxx_assert(positions.size() < ast::position_tagged::MAX_ID,
+            cxx_assert(position_registry.size() < ast::position_tagged::MAX_ID,
                        "Insufficient range of numeric IDs for AST tagging");
 
             node.file_id = file_id;
-            node.pos_id = positions.size();
-            positions.emplace_back(first, last);
+            node.position_id = position_registry.size();
+            position_registry.emplace_back(first, last);
         }
         else {
             // ignored since isn't tagged
@@ -128,8 +127,8 @@ public:
     ///
     std::string_view file_name(file_id_type file_id) const
     {
-        assert(value_of(file_id) < files.size() && "file_id out of range!");
-        return std::get<0>(files[value_of(file_id)]);
+        assert(value_of(file_id) < file_registry.size() && "file_id out of range!");
+        return std::get<0>(file_registry[value_of(file_id)]);
     }
 
     ///
@@ -140,8 +139,8 @@ public:
     ///
     std::string_view file_contents(file_id_type file_id) const
     {
-        assert(value_of(file_id) < files.size() && "file_id out of range!");
-        return std::get<1>(files[value_of(file_id)]);
+        assert(value_of(file_id) < file_registry.size() && "file_id out of range!");
+        return std::get<1>(file_registry[value_of(file_id)]);
     }
 
     ///
@@ -149,6 +148,8 @@ public:
     ///
     /// @param file_id ID of actually processed file.
     /// @return A pair of iterators pointing to begin and end of the file contents.
+    ///
+    /// FixMe: The member name is misleading!
     ///
     std::tuple<iterator_type, iterator_type> range(file_id_type file_id) const
     {
@@ -161,14 +162,14 @@ public:
     /// Extract the iterator range from AST tagged node.
     ///
     /// @param node The AST node.
-    /// @return boost::iterator_range tagged before by \ref annotate. If the node not tagged an
+    /// @return boost::iterator_range tagged before by @ref annotate. If the node not tagged an
     /// empty iterator_range is returned. To distinguish between they are packed into an optional.
     ///
     template <typename NodeT>
     std::optional<range_type> position_of(NodeT const& node) const
     {
         if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
-            return positions[node.pos_id];
+            return position_registry[node.position_id];
         }
 
         return {};
@@ -190,7 +191,7 @@ public:
     ///
     /// Return an iterator to the begin of the line. White spaces are skipped.
     /// The position must be within the position cache range.
-    /// \note For this, the pos_iter is modified.
+    /// @note For this, the position iterator is modified.
     ///
     /// @param file_id ID of actually processed file.
     /// @param pos Iterator position pointing to a line of interest.
@@ -210,8 +211,8 @@ public:
     std::string_view current_line(file_id_type file_id, iterator_type const& first) const;
 
 private:
-    file_container_type files;
-    position_container_type positions;
+    file_registry_type file_registry;
+    position_registry_type position_registry;
 };
 
 ///
