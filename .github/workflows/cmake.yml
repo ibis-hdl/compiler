@@ -48,7 +48,7 @@ jobs:
         # by default (libstdc++11).
         conan profile update settings.compiler.libcxx=libstdc++11 default
         # C++20 standard
-        conan profile update settings.compiler.std=20 default
+        conan profile update settings.compiler.cppstd=20 default
         # install other packages
         if [ -f requirements.txt ]; then pip --disable-pip-version-check --no-cache-dir install -r requirements.txt; fi
 
