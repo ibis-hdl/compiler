@@ -227,6 +227,9 @@ It is even reproducible with the code of 2018 (git tag R2018 using Boost v1.68.0
 switching to Boost v1.73. So these errors are imminent in these code base
 before. Anyway, parser is still the main work ground.
 
+Starting with boost 1.78 `test_vhdl_syntax` fails with respect to human readable error location and marker. Probably run into [X3 3.0.10 error_handler where() is wrong #712](
+https://github.com/boostorg/spirit/issues/712).
+
 But there is more:
 
 - It looks like testsuite/librules/rules_{a-z} instances are not necessary.

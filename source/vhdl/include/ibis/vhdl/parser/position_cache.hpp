@@ -31,6 +31,12 @@ struct position_cache_tag;  // IWYU pragma: keep
 ///
 /// The class owns the filename and there contents as std::string.
 ///
+/// FixMe: Move the `line_column_number()`, `get_line_start()` etc. to diagnostic_handler and
+/// let them based on `boost/spirit/home/x3/support/utility/error_reporting.hpp`. Starting with
+/// boost 1.78 `test_vhdl_syntax` fails with respect to human readable error location and marker.
+/// Probably run into [X3 3.0.10 error_handler where() is wrong #712](
+/// https://github.com/boostorg/spirit/issues/712).
+///
 template <typename IteratorT>
 class position_cache {
 public:

@@ -14,15 +14,16 @@ template <typename IteratorT>
 std::tuple<std::size_t, std::size_t> position_cache<IteratorT>::line_column_number(  // --
     file_id_type file_id, iterator_type const& pos, std::size_t tab_sz) const
 {
+    // based on [.../x3/support/utility/error_reporting.hpp:position(...)](
+    // https://github.com/boostorg/spirit/blob/master/include/boost/spirit/home/x3/support/utility/error_reporting.hpp)
+    // Further reading at [What is the unit of a text column number?](
+    // https://www.foonathan.net/2021/02/column/#content).
+
     using char_type = typename std::iterator_traits<iterator_type>::value_type;
 
     std::size_t line_no = 1;
     std::size_t col_no = 1;
     char_type chr_prev = 0;
-
-    // The implementation is based on the original one from Spirit X3. Further reading
-    // is done at [What is the unit of a text column number?](
-    // https://www.foonathan.net/2021/02/column/#content).
 
     for (iterator_type iter = file_contents(file_id).begin(); iter != pos; ++iter) {
         auto const chr = *iter;
@@ -38,15 +39,11 @@ std::tuple<std::size_t, std::size_t> position_cache<IteratorT>::line_column_numb
                 col_no = 1;
                 break;
             case '\t':
-                // Note:
                 // https://github.com/boostorg/spirit/blob/master/include/boost/spirit/home/support/iterators/line_pos_iterator.hpp
-                // has get_column() with column += tabs - (column - 1) % tabs;
-                // not sure about the intention of trailing expression.
-                col_no += tab_sz;
+                col_no += tab_sz - (col_no - 1) % tab_sz;
                 break;
             default:
                 // On UTF8, skip code points, VHDL is fortunately ASCII.
-                // skip_code_point(iter, end);
                 ++col_no;
                 break;
         }
@@ -60,6 +57,9 @@ template <typename IteratorT>
 std::string_view position_cache<IteratorT>::current_line(  // --
     file_id_type file_id, iterator_type const& first) const
 {
+    // based on [.../x3/support/utility/error_reporting.hpp:print_line(...)](
+    // https://github.com/boostorg/spirit/blob/master/include/boost/spirit/home/x3/support/utility/error_reporting.hpp)
+
     auto line_end = first;
     auto const end = file_contents(file_id).end();
 
@@ -76,17 +76,12 @@ std::string_view position_cache<IteratorT>::current_line(  // --
     // FixMe: Generally, UTF8 in VHDL is difficult, see also [VHDL file encoding](
     // https://insights.sigasi.com/tech/vhdl-file-encoding/). The X3 way is using:
     // @code{.cpp}
-    //     return boost::locale::conv::utf_to_utf<std::string::value_type>(
-    //         std::string_view(&(*first), std::distance(first, line_end)));
+    // std::basic_string<char_type> line{start, end};
+    // err_out << x3::to_utf8(line) << std::endl;
     // @endcode
-    // but with using ```std::string_view``` this isn't possible any more due to
-    // use of this. Personally, the intention of converting UTF to UTF isn't clear.
-    // Further, Starting with Spirit V3.0.7 (Boost V1.74.0) dependence on Boost.Locale
-    // is ceased (replace locale::conv::utf_to_utf with x3::to_utf8)
-
-    auto const count = static_cast<std::size_t>(std::distance(first, line_end));
 
     // FixMe [C++20]: constructor by pair of string_view iterators.
+    auto const count = static_cast<std::size_t>(std::distance(first, line_end));
     return std::string_view(&(*first), count);
 }
 
@@ -95,6 +90,8 @@ IteratorT position_cache<IteratorT>::get_line_start(file_id_type file_id, iterat
 {
     auto [begin, end] = range(file_id);
 
+    // based on [.../x3/support/utility/error_reporting.hpp:get_line_start(...)](
+    // https://github.com/boostorg/spirit/blob/master/include/boost/spirit/home/x3/support/utility/error_reporting.hpp)
     auto last_iter = begin;
 
     for (auto iter = begin; iter != pos;) {
