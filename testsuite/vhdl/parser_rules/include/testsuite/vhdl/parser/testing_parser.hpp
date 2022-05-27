@@ -45,25 +45,17 @@ struct testing_parser {
             ];
         // clang-format on
 
-        auto [iter, end] = position_cache_proxy.range();
+        auto [iter, end] = position_cache_proxy.file_contents_range();
 
         // using different iterator_types causes linker errors, see e.g.
         // [linking errors while separate parser using boost spirit x3](
         //  https://stackoverflow.com/questions/40496357/linking-errors-while-separate-parser-using-boost-spirit-x3)
         //
-#if defined(__GNUC__) && !defined(__clang__)
-        // ToDo: Investigate: g++ 10 complains about different types! The position_cache code
-        // above temporary added to parser::parse() works as expected even with GNU C++!
-        // As a work around we use:
         static_assert(std::is_same_v<                                                     // --
                           std::remove_reference_t<decltype(iter)>, parser::iterator_type  // --
                           >,
                       "iterator types must be the same");
 
-#else
-        static_assert(std::is_same_v<decltype(iter), parser::iterator_type>,
-                      "iterator types must be the same");
-#endif
         if constexpr ((false)) {
             std::cerr << "##### testing_parser iterator type<"
                       << ibis::util::pretty_typename<decltype(iter)>{}  // --
@@ -81,7 +73,8 @@ struct testing_parser {
 
             if (parse_ok) {
                 if (iter != end) {
-                    diagnostic_handler(iter, "Test Suite Full Match Error! Unparsed input left!");
+                    diagnostic_handler.parser_error(
+                        iter, "Test Suite Full Match Error! Unparsed input left!");
                 }
                 else {
                     ast::printer print(output);
@@ -97,16 +90,10 @@ struct testing_parser {
             // below for the error message. The chances are high, that this isn't the right error
             // position iterator - we relay on positions_cache file-iterator mapping knowledge here!
             // Otherwise it will crash there with: class std::length_error: string too long
-            auto err_pos = e.where();
-            auto const start = position_cache_proxy.get_line_start(err_pos);
-            auto const line = position_cache_proxy.current_line(start);
-
-            diagnostic_handler(
+            diagnostic_handler.parser_error(
                 e.where(),
                 "Test Suite caught *unexpected* expectation failure! Expecting "  // --
-                    + e.which() + " here: '"                                      // --
-                    + std::string(line)                                           // --
-                    + "'\n");
+                    + e.which() + "\n");
 
             std::cerr << output.str() << '\n';
         }

@@ -60,7 +60,7 @@ public:
     return_type operator()(ast::bit_string_literal const& node) const;
 
 private:
-    diagnostic_handler_type& report_error;
+    diagnostic_handler_type& diagnostic_handler;
 };
 
 }  // namespace ibis::vhdl::ast

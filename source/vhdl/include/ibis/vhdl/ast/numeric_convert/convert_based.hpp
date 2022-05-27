@@ -86,7 +86,7 @@ private:
     bool supported_base(unsigned base) const;
 
 private:
-    diagnostic_handler_type& report_error;
+    diagnostic_handler_type& diagnostic_handler;
 };
 
 }  // namespace ibis::vhdl::ast

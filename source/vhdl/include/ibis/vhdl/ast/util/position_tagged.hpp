@@ -24,7 +24,7 @@ struct position_tagged {
 
     /// The strong type of file id. This type is opaque to prevent unwanted allocation by accident
     /// or chance, since this type is also used outside the AST node and position_cache.
-    using file_id_type = strong::type<underlying_type, struct position_tagged_, // --
+    using file_id_type = strong::type<underlying_type, struct position_tagged_,  // --
                                       strong::ordered, strong::equality>;
 
     /// Type of position, used internally, so no need for opaque type.

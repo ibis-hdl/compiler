@@ -3,17 +3,15 @@
 #include <ibis/vhdl/ast/util/position_tagged.hpp>
 #include <ibis/vhdl/parser/iterator_type.hpp>
 
-#include <iosfwd>
-#include <optional>
-#include <tuple>
-#include <type_traits>
-#include <vector>
-
 #include <ibis/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/range/iterator_range_core.hpp>
 #include <ibis/compiler/warnings_on.hpp>
 
-#include <ibis/util/cxx_bug_fatal.hpp>
+#include <iosfwd>
+#include <tuple>
+#include <type_traits>
+#include <vector>
+#include <cassert>
 
 namespace ibis::vhdl::parser {
 
@@ -31,11 +29,8 @@ struct position_cache_tag;  // IWYU pragma: keep
 ///
 /// The class owns the filename and there contents as std::string.
 ///
-/// FixMe: Move the `line_column_number()`, `get_line_start()` etc. to diagnostic_handler and
-/// let them based on `boost/spirit/home/x3/support/utility/error_reporting.hpp`. Starting with
-/// boost 1.78 `test_vhdl_syntax` fails with respect to human readable error location and marker.
-/// Probably run into [X3 3.0.10 error_handler where() is wrong #712](
-/// https://github.com/boostorg/spirit/issues/712).
+/// @note parts of source is based on [../x3/support/utility/error_reporting.hpp](
+/// https://github.com/boostorg/spirit/blob/develop/include/boost/spirit/home/x3/support/utility/error_reporting.hpp)
 ///
 template <typename IteratorT>
 class position_cache {
@@ -80,9 +75,9 @@ public:
     /// Maps a filename to contents.
     ///
     /// @param filename The file name as is it's shown e.g. by the error handler
-    /// @param contents Optional a string holding the file contents
+    /// @param contents String view holding the file contents
     /// @return An ID which identifies the pair of 'filename' and 'contents' which
-    ///        can be referred later on using the proxy.
+    /// can be referred later on using the proxy.
     ///
     /// @note This call makes internally a copy of filename and contents.
     /// @todo Check on use of fs::path as filename argument
@@ -99,28 +94,27 @@ public:
     /// Annotate the AST node with positional iterators.
     ///
     /// This is called from parser::success_handler to allow expressive error handling. Only
-    /// AST nodes that are derived from ```ast::position_tagged``` are tagged.
+    /// AST nodes that are derived from @ref ast::position_tagged are tagged.
     ///
     /// @param file_id ID of actually processed file.
     /// @param node    The AST node to tag
     /// @param first   Begin of iterator position to tag.
     /// @param last    End  of iterator position to tag.
     ///
-    /// @todo maybe better throw range_exception since it's an implementation
-    /// limitation.
     template <typename NodeT>
     void annotate(file_id_type file_id, NodeT& node, iterator_type first, iterator_type last)
     {
         if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
-            cxx_assert(position_registry.size() < ast::position_tagged::MAX_ID,
-                       "Insufficient range of numeric IDs for AST tagging");
+            // std::size_t size isn't enough?, this shouldn't never happen
+            assert(position_registry.size() < ast::position_tagged::MAX_ID &&
+                   "Insufficient range of numeric IDs for AST tagging");
 
             node.file_id = file_id;
             node.position_id = position_registry.size();
             position_registry.emplace_back(first, last);
         }
         else {
-            // ignored since isn't tagged
+            // ignored since isn't ast::position_tagged derived
         }
     }
 
@@ -141,7 +135,7 @@ public:
     /// Get the file contents.
     ///
     /// @param file_id ID of actually processed file.
-    /// @return A string view representing the file contents.
+    /// @return A string view representing of the file contents.
     ///
     std::string_view file_contents(file_id_type file_id) const
     {
@@ -150,71 +144,15 @@ public:
     }
 
     ///
-    /// Get the iterator (range) of the file contents.
-    ///
-    /// @param file_id ID of actually processed file.
-    /// @return A pair of iterators pointing to begin and end of the file contents.
-    ///
-    /// FixMe: The member name is misleading!
-    ///
-    std::tuple<iterator_type, iterator_type> range(file_id_type file_id) const
-    {
-        auto const contents = file_contents(file_id);
-
-        return { contents.cbegin(), contents.cend() };
-    }
-
-    ///
-    /// Extract the iterator range from AST tagged node.
+    /// Extract the annotated iterator range from AST tagged node.
     ///
     /// @param node The AST node.
-    /// @return boost::iterator_range tagged before by @ref annotate. If the node not tagged an
-    /// empty iterator_range is returned. To distinguish between they are packed into an optional.
+    /// @return boost::iterator_range tagged before by @ref annotate.
     ///
-    template <typename NodeT>
-    std::optional<range_type> position_of(NodeT const& node) const
+    range_type position_of(ast::position_tagged const& node) const
     {
-        if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
-            return position_registry[node.position_id];
-        }
-
-        return {};
+        return position_registry[node.position_id];
     }
-
-public:
-    ///
-    /// Return the line number of a given iterator position. The position must
-    /// be within the position cache range.
-    ///
-    /// @param file_id ID of actually processed file.
-    /// @param pos Iterator position where to gather the line number.
-    /// @param tab_sz The tab size, required to calculate the column number.
-    /// @return The line number.
-    ///
-    std::tuple<std::size_t, std::size_t> line_column_number(  // --
-        file_id_type file_id, iterator_type const& pos, std::size_t tab_sz) const;
-
-    ///
-    /// Return an iterator to the begin of the line. White spaces are skipped.
-    /// The position must be within the position cache range.
-    /// @note For this, the position iterator is modified.
-    ///
-    /// @param file_id ID of actually processed file.
-    /// @param pos Iterator position pointing to a line of interest.
-    /// @return Iterator position pointing to the begin of line.
-    ///
-    iterator_type get_line_start(file_id_type file_id, iterator_type& pos) const;
-
-    ///
-    /// Print the line where the iterator points to until end-of-line.
-    ///
-    /// @param file_id ID of actually processed file.
-    /// @param first Iterator position pointing to a line of interest.
-    /// @return String representing the source line.
-    ///
-    /// FixMe: Starting with Spirit V3.0.7 (Boost V1.74.0) dependence on Boost.Locale
-    /// is ceased (replace locale::conv::utf_to_utf with x3::to_utf8)
-    std::string_view current_line(file_id_type file_id, iterator_type const& first) const;
 
 private:
     file_registry_type file_registry;
@@ -255,32 +193,25 @@ public:
     }
 
 public:
-    template <typename NodeT>
-    std::optional<range_type> position_of(NodeT const& node) const
+    /// annotated iterator range from AST tagged node.
+    range_type position_of(ast::position_tagged const& node) const
     {
         return self.position_of(node);
     }
 
 public:
+    /// Get the file name.
     std::string_view file_name() const { return self.file_name(file_id); }
+
+    /// Get the file contents.
     std::string_view file_contents() const { return self.file_contents(file_id); }
-    std::tuple<IteratorT, IteratorT> range() const { return self.range(file_id); }
 
-public:
-    std::tuple<std::size_t, std::size_t> line_column_number(iterator_type const& pos,
-                                                            std::size_t tab_sz) const
+    /// Get the iterator (range) of the file contents.
+    std::tuple<iterator_type, iterator_type> file_contents_range() const
     {
-        return self.line_column_number(file_id, pos, tab_sz);
-    }
+        auto const contents = file_contents();
 
-    iterator_type get_line_start(iterator_type& pos_iter) const
-    {
-        return self.get_line_start(file_id, pos_iter);
-    }
-
-    std::string_view current_line(iterator_type const& start) const
-    {
-        return self.current_line(file_id, start);
+        return { contents.cbegin(), contents.cend() };
     }
 
 private:

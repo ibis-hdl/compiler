@@ -57,7 +57,7 @@ struct real_policies : x3::ureal_policies<T> {
 
 template <typename IntegerT, typename RealT>
 convert_decimal<IntegerT, RealT>::convert_decimal(diagnostic_handler_type& diagnostic_handler_)
-    : report_error{ diagnostic_handler_ }
+    : diagnostic_handler{ diagnostic_handler_ }
 {
 }
 
@@ -114,16 +114,12 @@ convert_decimal<IntegerT, RealT>::parse_integer(ast::string_span const& literal)
     }
 
     if (!parse_ok) {
-        using error_type = typename vhdl::diagnostic_handler<parser::iterator_type>::error_type;
-        auto constexpr parser_error = error_type::parser;
-
         // parse failed - can't fit the target_type, iter is rewind to begin.
-        report_error(         // --
-            literal.begin(),  // --
-            (format(translate("in {1} the integer number can't fit the numeric type")) %
-             literal_name)
-                .str(),
-            parser_error);
+        diagnostic_handler.parser_error(                                                // --
+            literal.begin(),                                                            // --
+            (format(translate("in {1} the integer number can't fit the numeric type"))  // --
+             % literal_name)
+                .str());
         return std::tuple{ false, 0 };
     }
 
@@ -158,15 +154,12 @@ convert_decimal<IntegerT, RealT>::parse_real(ast::string_span const& literal) co
     }
 
     if (!parse_ok) {
-        using error_type = typename vhdl::diagnostic_handler<parser::iterator_type>::error_type;
-        auto constexpr parser_error = error_type::parser;
-
         // parse failed - can't fit the target_type, iter is rewind to begin.
-        report_error(         // --
-            literal.begin(),  // --
-            (format(translate("in {1} the real number can't fit the numeric type")) % literal_name)
-                .str(),
-            parser_error);
+        diagnostic_handler.parser_error(                                             // --
+            literal.begin(),                                                         // --
+            (format(translate("in {1} the real number can't fit the numeric type"))  // --
+             % literal_name)
+                .str());
         return std::tuple{ false, 0 };
     }
 

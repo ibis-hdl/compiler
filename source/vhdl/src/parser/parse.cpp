@@ -54,7 +54,7 @@ bool parse::operator()(position_cache<parser::iterator_type>::proxy& position_ca
         ];
     // clang-format on
 
-    auto [iter, end] = position_cache_proxy.range();
+    auto [iter, end] = position_cache_proxy.file_contents_range();
 
     // using different iterator_types causes linker errors, see e.g.
     // [linking errors while separate parser using boost spirit x3](
@@ -72,14 +72,11 @@ bool parse::operator()(position_cache<parser::iterator_type>::proxy& position_ca
             using boost::locale::format;
             using boost::locale::translate;
 
-            using error_type = typename vhdl::diagnostic_handler<parser::iterator_type>::error_type;
-            auto constexpr parser_error = error_type::parser;
-
             std::string const error_message{
                 (format(translate("Source file '{1}' failed to parse!")) % filename).str()
             };
 
-            diagnostic_handler(iter, error_message, parser_error);
+            diagnostic_handler.parser_error(iter, error_message);
         }
 
         return parse_ok;

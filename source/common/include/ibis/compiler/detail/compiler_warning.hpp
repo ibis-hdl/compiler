@@ -11,7 +11,6 @@
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #pragma GCC diagnostic ignored "-Wdeprecated-copy"
 #pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
-#pragma GCC diagnostic ignored "-Wimplicit-int-float-conversion"
 // see MSVC C4146
 #pragma GCC diagnostic ignored "-Wsign-conversion"
 #endif
@@ -19,11 +18,14 @@
 // CLang++ only
 #if defined(__clang__)
 #pragma GCC diagnostic ignored "-Weverything"
+#pragma GCC diagnostic ignored "-Wimplicit-int-float-conversion"
 #endif
 
 // G++ only
 #if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#pragma GCC diagnostic ignored "-Wpedantic"
+#pragma GCC diagnostic ignored "-Wfloat-conversion"
 #endif
 
 #if defined(_MSC_VER)

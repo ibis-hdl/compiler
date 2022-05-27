@@ -39,9 +39,7 @@ label_match::result label_match::compare(ast::identifier const& start_label,
                                          ast::optional<ast::identifier> const& end_label)
 {
     if (end_label) {
-        bool const label_equal{ start_label == end_label };
-
-        if (label_equal) {
+        if (start_label == end_label) {
             return result::OK;
         }
         return result::MISMATCH;
@@ -58,9 +56,7 @@ label_match::result label_match::compare(ast::optional<ast::identifier> const& s
     }
 
     if (start_label && end_label) {
-        bool const label_equal{ start_label == end_label };
-
-        if (label_equal) {
+        if (start_label == end_label) {
             return result::OK;
         }
         return result::MISMATCH;

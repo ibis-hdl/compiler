@@ -60,9 +60,9 @@ BOOST_AUTO_TEST_CASE(contents_1_txt)
     BOOST_TEST(position_cache_ut.file_name(id) == file_name);
     BOOST_TEST(position_cache_ut.file_contents(id) == file_contents);
 
-    // check the range functionality by creating a temporary string from this range.
-    auto const [first, last] = position_cache_ut.range(id);
-    std::string const range_contents{ first, last };
+    // check the functionality by creating a temporary string from this range.
+    auto const ut_contents = position_cache_ut.file_contents(id);
+    std::string const range_contents{ ut_contents.begin(), ut_contents.end() };
 
     // the contents created from cache's range shall be equal to origin.
     BOOST_TEST(range_contents == position_cache_ut.file_contents(id));
@@ -98,10 +98,9 @@ BOOST_AUTO_TEST_CASE(basic_annotate_1_txt)
 
     auto const range = position_cache_ut.position_of(node);
 
-    BOOST_TEST(range.has_value());
     // dereference iterator and compare address of object.
-    BOOST_TEST(&*first == &*range.value().begin());
-    BOOST_TEST(&*last == &*range.value().end());
+    BOOST_TEST(&*first == &*range.begin());
+    BOOST_TEST(&*last == &*range.end());
 
     // store tagged node by key into fixture's internal memory for later use.
     fixture.addNode(make_key(id_ref, tagging_str), node);
@@ -134,10 +133,9 @@ BOOST_AUTO_TEST_CASE(proxy_annotate_1_txt)
     proxy.annotate(node, first, last);
     auto const range = proxy.position_of(node);
 
-    BOOST_TEST(range.has_value());
     // dereference iterator and compare address of object.
-    BOOST_TEST(&*first == &*range.value().begin());
-    BOOST_TEST(&*last == &*range.value().end());
+    BOOST_TEST(&*first == &*range.begin());
+    BOOST_TEST(&*last == &*range.end());
 
     // store tagged node by key into fixture's internal memory for later use.
     fixture.addNode(make_key(id_ref, tagging_str), node);
@@ -166,9 +164,8 @@ BOOST_AUTO_TEST_CASE(proxy_position1_of_1_txt)
 
     auto proxy = position_cache_ut.get_proxy(id);
     auto const range = proxy.position_of(tagged_node);
-    BOOST_TEST(range.has_value());
 
-    std::string const node_str{ range.value().begin(), range.value().end() };
+    std::string const node_str{ range.begin(), range.end() };
 
     BOOST_TEST(node_str == tagged_str);
 }
@@ -196,99 +193,10 @@ BOOST_AUTO_TEST_CASE(proxy_position2_of_1_txt)
 
     auto proxy = position_cache_ut.get_proxy(id);
     auto const range = proxy.position_of(tagged_node);
-    BOOST_TEST(range.has_value());
 
-    std::string const node_str{ range.value().begin(), range.value().end() };
+    std::string const node_str{ range.begin(), range.end() };
 
     BOOST_TEST(node_str == tagged_str);
-}
-
-//
-// Check for correct line numbers of tagged nodes
-//
-// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
-BOOST_AUTO_TEST_CASE(proxy_lineno_1_txt)
-{
-    // short-hands for convenience
-    auto& fixture = position_cache_fixture::instance();
-    auto& position_cache_ut = fixture.position_cache;
-
-    // helper
-    auto const make_key = [](std::size_t id, auto name) { return std::to_string(id) + name; };
-
-    std::size_t const id_ref = fixture.current_FileID();
-    auto const id = position_cache_fixture::file_id_type(id_ref);
-    auto proxy = position_cache_ut.get_proxy(id);
-
-    std::size_t tab_sz = 4;  // only to satisfy arg count
-
-    {
-        // test string #1
-        auto node = fixture.getNode(make_key(id_ref, "elitr"));
-        auto const range = proxy.position_of(node);
-        BOOST_TEST(range.has_value());
-
-        auto const [line_no, col_no] = proxy.line_column_number(range.value().begin(), tab_sz);
-        BOOST_TEST(line_no == 2);
-    }
-
-    {
-        // test string #2
-        auto node = fixture.getNode(make_key(id_ref, "voluptua"));
-        auto const range = proxy.position_of(node);
-        BOOST_TEST(range.has_value());
-
-        auto const [line_no, col_no] = proxy.line_column_number(range.value().begin(), tab_sz);
-        BOOST_TEST(line_no == 4);
-    }
-}
-
-//
-// Check for correct line of tagged nodes
-//
-// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
-BOOST_AUTO_TEST_CASE(proxy_line_1_txt)
-{
-    // short-hands for convenience
-    auto& fixture = position_cache_fixture::instance();
-    auto& position_cache_ut = fixture.position_cache;
-
-    // helper
-    auto const make_key = [](std::size_t id, auto name) { return std::to_string(id) + name; };
-
-    std::size_t const id_ref = fixture.current_FileID();
-    auto const id = position_cache_fixture::file_id_type(id_ref);
-    auto proxy = position_cache_ut.get_proxy(id);
-
-    {
-        auto node = fixture.getNode(make_key(id_ref, "elitr"));
-        auto const range = proxy.position_of(node);
-        BOOST_TEST(range.has_value());
-
-        // expect line #2 of LoremIpsum.txt
-        std::string const expected{ "sadipscing elitr, sed diam nonumy eirmod" };
-
-        parser::iterator_type first = range.value().begin();
-        parser::iterator_type const iter = proxy.get_line_start(first);
-        auto const current_line = proxy.current_line(iter);
-
-        BOOST_TEST(expected == current_line);
-    }
-
-    {
-        auto node = fixture.getNode(make_key(id_ref, "voluptua"));
-        auto const range = proxy.position_of(node);
-        BOOST_TEST(range.has_value());
-
-        // expect line #4 of LoremIpsum.txt
-        std::string expected{ "aliquyam erat, sed diam voluptua. At vero eos" };
-
-        parser::iterator_type first = range.value().begin();
-        parser::iterator_type const iter = proxy.get_line_start(first);
-        auto const current_line = proxy.current_line(iter);
-
-        BOOST_TEST(expected == current_line);
-    }
 }
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)

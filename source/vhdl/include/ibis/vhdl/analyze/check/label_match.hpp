@@ -122,29 +122,25 @@ using has_identifier = decltype(std::declval<T&>().identifier);
 /// - identifier - end_identifier (where identifier is mandatory)
 ///
 /// @tparam NodeT The node type.
-/// @param node Node to be proced.
+/// @param node Node to be proceed.
 /// @return std::tuple<ast::identifier const&, ast::identifier const&>
-///
-/// FixMe: use of internal `tuple_type` should not be required.
 ///
 template <typename NodeT>
 std::tuple<ast::identifier const&, ast::identifier const&> inline labels_of(NodeT const& node)
 {
-    using tuple_type = std::tuple<ast::identifier const&, ast::identifier const&>;
-
     if constexpr (label_util::is_detected<label_util::has_label, NodeT>::value) {
         if constexpr (std::is_same_v<std::decay_t<decltype(node.label)>,
                                      ast::optional<ast::identifier>>) {
-            return tuple_type{ *node.label, *node.end_label };
+            return { *node.label, *node.end_label };
         }
         else {
             // mandatory start label
-            return tuple_type{ node.label, *node.end_label };
+            return { node.label, *node.end_label };
         }
     }
     else if constexpr (label_util::is_detected<label_util::has_identifier, NodeT>::value) {
         // always mandatory identifier
-        return tuple_type{ node.identifier, *node.end_identifier };
+        return { node.identifier, *node.end_identifier };
     }
     else {  // expect compiler error
     }

@@ -73,7 +73,7 @@ private:
     std::tuple<bool, real_type> parse_real(ast::string_span const& literal) const;
 
 private:
-    diagnostic_handler_type& report_error;
+    diagnostic_handler_type& diagnostic_handler;
 };
 
 }  // namespace ibis::vhdl::ast

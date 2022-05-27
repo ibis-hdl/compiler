@@ -15,19 +15,25 @@ using namespace ibis::vhdl::ast;
 //
 // Check on correct printing of quoted string literals
 //
+// clang-format off
 std::vector<std::string_view> const input_string_literal{
-    R"("""")",  R"(%%%%)", R"(""Hello"")", R"(Quotation: ""REPORT..."")",
-    R"("%"%")",  // --
-    R"(%"%"")",  // --
+    R"("""")",  R"(%%%%)", 
+    R"(""Hello"")", R"(Quotation: ""REPORT..."")",
+    R"("%"%")",
+    R"(%"%"")",
     R"(""")"
 };
+// clang-format on
 
+// clang-format off
 std::vector<std::string> const expected_string_literal{
-    R"("")",    R"(%%)", R"("Hello")", R"(Quotation: "REPORT...")",
+    R"("")",      R"(%%)",
+    R"("Hello")", R"(Quotation: "REPORT...")",
     R"("%"%")",  // as-is
     R"(%"%")",
     R"("")"
 };
+// clang-format on
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_DATA_TEST_CASE(                                                // --

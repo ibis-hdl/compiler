@@ -30,7 +30,7 @@ CheckOptions:
   - key:   readability-identifier-length.IgnoredVariableNames
     value: ^(sv|ec|id|os|ss|_|as)$
   - key:   readability-identifier-length.IgnoredParameterNames
-    value: ^(sv|ec|id|os|ss)$
+    value: ^(sv|ec|id|os|ss|sz)$
   - key:   readability-identifier-length.IgnoredExceptionVariableNames
     value: ^ex?$
 ...

@@ -52,7 +52,7 @@ std::tuple<bool, AttrType> literal_parser<IteratorT>::parse(  // --
         ];
     // clang-format on
 
-    auto [iter, end] = position_cache_proxy.range();
+    auto [iter, end] = position_cache_proxy.file_contents_range();
 
     // using different iterator_types causes linker errors, see e.g.
     // [linking errors while separate parser using boost spirit x3](
@@ -68,16 +68,15 @@ std::tuple<bool, AttrType> literal_parser<IteratorT>::parse(  // --
 
         if (parse_ok) {
             if (iter != end) {
-                diagnostic_handler(iter,
-                                   "Full Match Error! "
-                                   "unparsed input left:\n" +
-                                       std::string(iter, end));
+                diagnostic_handler.parser_error(
+                    iter, "Full Match Error! unparsed input left:\n" + std::string(iter, end));
             }
         }
     }
     catch (x3::expectation_failure<parser::iterator_type> const& e) {
-        diagnostic_handler(e.where(), "Caught expectation_failure! Expecting " + e.which() +
-                                          " here: '" + std::string(e.where(), end) + "'\n");
+        diagnostic_handler.parser_error(e.where(),  // --
+                                        "Caught expectation_failure! Expecting " + e.which() +
+                                            " here: '" + std::string(e.where(), end) + "'\n");
     }
 
     return std::tuple{ parse_ok && (iter == end), attr };

@@ -74,14 +74,14 @@ public:
     {
         auto& diagnostic_handler = x3::get<parser::diagnostic_handler_tag>(context).get();
 
-        using error_type = typename vhdl::diagnostic_handler<IteratorT>::error_type;
-        auto constexpr parser_error = error_type::parser;
+        diagnostic_handler.parser_error(e.where(), make_error_description(e.which()));
 
-        diagnostic_handler(e.where(), make_error_description(e.which()), parser_error);
-
-        // FixMe: just here as "concept" marker, but untested by testsuite yet.
+        // FixMe: just here as "concept" marker, but untested by testsuite yet. The idea is to
+        // accept some count of errors (using vhdl context for error/warning count) before to
+        // throw the towel.
         if (e.which() == "';'") {
-            // adavance iter after the error occurred, the error is registered above
+            // advance iter after the error occurred to continue parsing, the error is reported
+            // before.
             first = e.where();
             return x3::error_handler_result::accept;
         }
