@@ -164,6 +164,7 @@
         {
             "name": "linux-gcc-default",
             "displayName": "Linux GCC",
+            "hidden" : true,
             "description": "Linux/WSL2 GNU C compiler",
             "inherits": [
                 "linux-default",
