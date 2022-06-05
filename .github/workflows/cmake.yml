@@ -10,6 +10,9 @@ on:
   # https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/)
   workflow_dispatch:
   
+env:
+  CONAN_V2_MODE : 1
+
 jobs:
   build:
     name: Self-hosted Runner
@@ -31,7 +34,7 @@ jobs:
       if: matrix.os == 'Linux'
       run: |
         sudo apt-get update
-        sudo apt-get install --no-install-recommends -y g++-11 clang-14 ccache gettext
+        sudo apt-get install --no-install-recommends -y ccache g++-11 clang-14 clang-format clang-tidy gettext
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
@@ -42,15 +45,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip --disable-pip-version-check --no-cache-dir install conan
-        conan profile new --detect --force default > /dev/null
-        # Conan detects a GCC version > 5 but has adjusted the 'compiler.libcxx' setting to
-        # 'libstdc++' for backwards compatibility. Our compiler is using the new CXX11 ABI 
-        # by default (libstdc++11).
-        conan profile update settings.compiler.libcxx=libstdc++11 default
-        # C++20 standard
-        conan profile update settings.compiler.cppstd=20 default
-        # install other packages
-        if [ -f requirements.txt ]; then pip --disable-pip-version-check --no-cache-dir install -r requirements.txt; fi
+        conan profile new --detect --force default
 
     - name: Install CMake and ninja
       uses: lukka/get-cmake@v3.23.0

@@ -142,6 +142,11 @@ project. Even the compiler requires C++20, the tools inside [Microsofts Devconta
 the latest, hence still sticking with C++17 (e.g. C++20 std::source_location
 and others).
 
+### Project structure
+
+ibis::common is a linker library these days. Some sub projects depends only on the 
+header of them. Hence, a CMake INTERFACE library would lower the compile dependency.
+
 
 ### Boost.Spirit X3 Notes
 

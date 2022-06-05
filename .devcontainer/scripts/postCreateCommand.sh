@@ -3,7 +3,7 @@
 set -ex
 
 # using docker volumes to store data, fix permissions
-# ToDo: solve this problem with correct configurations using e.g. by JSON
+
 if [ ! -d "/home/vscode/.conan" ]; then
     sudo mkdir /home/vscode/.conan && chown -R vscode.vscode /home/vscode/.conan
 elif [ $(stat --format '%U' "/home/vscode/.conan") = "root" ]; then
@@ -18,11 +18,12 @@ elif [ $(stat --format '%U' "/home/vscode/.cache") = "root" ]; then
     sudo chown -R vscode.vscode /home/vscode/.cache
 fi
 
+if [ $(stat --format '%U' "/workspaces") = "root" ]; then
+    echo "fix permissions for workspaces folder"
+    sudo chown -R vscode.vscode /workspaces
+fi
+
+export CONAN_V2_MODE=1
+
 pip3 --disable-pip-version-check --no-cache-dir install wheel conan
-conan profile new --detect --force default > /dev/null
-# Conan detects a GCC version > 5 but has adjusted the 'compiler.libcxx' setting to
-# 'libstdc++' for backwards compatibility. Our compiler is using the new CXX11 ABI
-# by default (libstdc++11).
-conan profile update settings.compiler.libcxx=libstdc++11 default
-# C++20 standard
-conan profile update settings.compiler.cppstd=20 default
+conan profile new --detect --force default

@@ -22,6 +22,12 @@ target_sources(${PROJECT_NAME}
         src/basic_failure_diagnostic_fixture.cpp
 )
 
+target_link_libraries(${PROJECT_NAME}
+    PUBLIC
+        # FixMe: use only for <ibis/compiler/warnings...> header
+        ibis::common
+)
+
 if(${PROJECT_NAME}_PCH)
     # override testsuite_pch helper
     target_precompile_headers(${PROJECT_NAME}

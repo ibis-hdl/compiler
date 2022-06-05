@@ -3,7 +3,9 @@
 
 #include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
+#include <ibis/compiler/warnings_off.hpp> // -Wsign-conversion
 #include <boost/test/unit_test.hpp>
+#include <ibis/compiler/warnings_on.hpp>
 #include <boost/test/results_collector.hpp>
 #include <boost/test/tools/output_test_stream.hpp>
 
