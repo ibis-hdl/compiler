@@ -4,6 +4,59 @@
 	"editor.rulers": [
         100
     ],
+    "doxdocgen.c.triggerSequence": "///",
+    "doxdocgen.c.firstLine": "/// ",
+    "doxdocgen.c.commentPrefix": "/// ",
+    "doxdocgen.c.lastLine": "///",
+    "todo-tree.general.tags": [
+        "BUG",
+        "HACK",
+        "FIXME",
+        "TODO",
+        "XXX",
+        "[ ]",
+        "[x]",
+        "@todo",
+        "@fixme"
+    ],
+    "todo-tree.general.enableFileWatcher": true,
+    "todo-tree.regex.regexCaseSensitive": false,
+    "todo-tree.general.statusBar": "total",
+	"psi-header.config": {
+		"license": "Custom"
+	},
+	"psi-header.templates": [
+		{
+			"language": "*",
+			"template": [
+                "Copyright (c) <<projectCreationYear>>-<<year>> <<author>> (<<authoremail>>).",
+                "SPDX-License-Identifier: GPL-3.0-only"
+			]
+		}
+	],
+	"psi-header.variables": [
+		["projectCreationYear", "2017"],
+        ["author", "Olaf"],
+        ["authoremail", "<ibis-hdl@users.noreply.github.com>"],
+        ["spdxid", "GPL-3.0-only"]
+	],
+    "psi-header.lang-config": [
+		{
+			"language": "cpp",
+			"begin": "",
+			"end": "",
+			"prefix": "// "
+		},
+		{
+			"language": "python",
+			"begin": "",
+			"end": "",
+			"prefix": "# "
+		}        
+	],
+    "psi-header.changes-tracking": {
+        "autoHeader": "autoSave"
+    },
     "files.associations": {
         "algorithm": "cpp",
         "array": "cpp",
@@ -92,6 +145,14 @@
         "xtr1common": "cpp",
         "xtree": "cpp",
         "xutility": "cpp",
-        "*.ipp": "cpp"
+        "condition_variable": "cpp",
+        "memory_resource": "cpp",
+        "source_location": "cpp",
+        "string_view": "cpp",
+        "numbers": "cpp",
+        "semaphore": "cpp",
+        "cinttypes": "cpp",
+        "*.ipp": "cpp",
+        "*.tcc": "cpp"
     }
 }

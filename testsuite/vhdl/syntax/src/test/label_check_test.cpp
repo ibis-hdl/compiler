@@ -1,3 +1,8 @@
+//
+// Copyright (c) 2017-2022 Olaf (<ibis-hdl@users.noreply.github.com>).
+// SPDX-License-Identifier: GPL-3.0-only
+//
+
 #include <ibis/vhdl/ast/node/design_file.hpp>
 #include <ibis/vhdl/parser/parse.hpp>
 #include <ibis/vhdl/parser/parser_config.hpp>

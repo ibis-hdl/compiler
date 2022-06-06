@@ -1,3 +1,8 @@
+//
+// Copyright (c) 2017-2022 Olaf (<ibis-hdl@users.noreply.github.com>).
+// SPDX-License-Identifier: GPL-3.0-only
+//
+
 #include <ibis/vhdl/parser/grammar.hpp>
 #include <ibis/vhdl/parser/grammar_def.hpp>
 #include <ibis/vhdl/parser/iterator_type.hpp>

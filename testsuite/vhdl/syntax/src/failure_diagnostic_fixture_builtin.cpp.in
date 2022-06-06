@@ -1,3 +1,8 @@
+//
+// Copyright (c) 2017-2022 Olaf (<ibis-hdl@users.noreply.github.com>).
+// SPDX-License-Identifier: GPL-3.0-only
+//
+
 // DO NOT EDIT! GENERATED AUTOMATICALLY BY CMAKE!
 
 #include <testsuite/vhdl/syntax/failure_diagnostic_fixture.hpp>
