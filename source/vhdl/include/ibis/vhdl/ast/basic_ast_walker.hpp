@@ -9,9 +9,9 @@
 #include <ibis/vhdl/ast.hpp>
 
 // clang-format off
-#include<ibis/compiler/warnings_off.hpp>
-#include<ibis/support/boost/hana_overload.hpp>
-#include<ibis/compiler/warnings_on.hpp>
+#include<ibis/util/compiler/warnings_off.hpp>
+#include<ibis/util/support/boost/hana_overload.hpp>
+#include<ibis/util/compiler/warnings_on.hpp>
 // clang-format on
 
 #include <algorithm>

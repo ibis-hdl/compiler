@@ -8,8 +8,6 @@
 // DO NOT EDIT! GENERATED AUTOMATICALLY BY CMAKE!
 
 ///
-/// @file platform.hpp
-///
 /// Variables as determined by CMake, see
 /// [How To Write Platform Checks](
 ///  https://gitlab.kitware.com/cmake/community/-/wikis/doc/tutorials/How-To-Write-Platform-Checks)
@@ -27,9 +25,12 @@
 #cmakedefine IBIS_BUILD_COMPILER_Intel 1
 #cmakedefine IBIS_BUILD_COMPILER_MSVC 1
 
+// platform support goes to namespace ibis for syntactical reasons!
 namespace ibis {
 
+///
 /// Enum which represents the build operating platform.
+///
 enum class platform {
     Linux,    ///< Linux
     Windows,  ///< Windows
@@ -47,10 +48,12 @@ constexpr ibis::platform platform = platform::Darwin;
 constexpr ibis::platform platform = platform::FreeBSD;
 #endif
 
+///
 /// Enum which represents the platform compiler.
 /// The list is based on CMake's [Compiler identification string](
 /// https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_ID.html),
 /// but not all compiler are supported.
+///
 enum class platform_compiler {
     Clang,       ///< LLVM Clang (clang.llvm.org)
     Clang_GNU,   ///< LLVM Clang with regular front end (clang.llvm.org)

@@ -11,7 +11,7 @@
 namespace ibis::util {
 
 ///
-/// @brief Tokenize a `std::string_view` by given delimiter into vector
+/// Tokenize a `std::string_view` by given delimiter into vector
 ///
 /// @param sv The Input to tokenize.
 /// @param vector_sv Destination of tokenized string views.

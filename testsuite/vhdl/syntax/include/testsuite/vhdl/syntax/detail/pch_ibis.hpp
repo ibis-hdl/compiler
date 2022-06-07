@@ -8,7 +8,7 @@
 #include <ibis/util/indent_stream.hpp>
 #include <ibis/util/pretty_typename.hpp>
 
-#include <ibis/support/boost/hana_overload.hpp>
+#include <ibis/util/support/boost/hana_overload.hpp>
 
 #include <ibis/vhdl/ast_fwd.hpp>
 #include <ibis/vhdl/ast.hpp>

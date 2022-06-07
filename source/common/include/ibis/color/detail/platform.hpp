@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <ibis/platform.hpp>
+#include <ibis/util/platform.hpp>
 
 #if defined(IBIS_BUILD_PLATFORM_WINDOWS)
 #include <ibis/color/detail/platform_windows.hpp>

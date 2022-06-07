@@ -18,14 +18,14 @@
 #include <ibis/vhdl/type.hpp>
 
 #include <ibis/util/cxx_bug_fatal.hpp>
-#include <ibis/compiler/compiler_support.hpp>
+#include <ibis/util/compiler/compiler_support.hpp>
 
 #include <ibis/namespace_alias.hpp>  // IWYU pragma: keep
 
-#include <ibis/compiler/warnings_off.hpp>  // [-Wsign-conversion]
+#include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 // IWYU replaces a lot of other header, we stay with this one
 #include <boost/spirit/home/x3.hpp>  // IWYU pragma: keep
-#include <ibis/compiler/warnings_on.hpp>
+#include <ibis/util/compiler/warnings_on.hpp>
 
 #include <boost/iterator/filter_iterator.hpp>
 #include <boost/iterator/iterator_facade.hpp>

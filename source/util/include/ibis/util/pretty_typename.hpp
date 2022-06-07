@@ -5,9 +5,10 @@
 
 #pragma once
 
-#include <boost/type_index.hpp>
 #include <regex>
 #include <string>
+
+#include <boost/type_index.hpp>
 
 namespace ibis::util {
 
@@ -41,7 +42,7 @@ public:
     }
 
 private:
-    std::regex pattern{ "::|boost|spirit|x3|ibis|vhdl|ast" };
+    std::regex const pattern{ "::|boost|spirit|x3|ibis|vhdl|ast" };
 };
 
 template <typename T>

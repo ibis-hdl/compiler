@@ -27,6 +27,7 @@
 // use __builtin_expect to provide the compiler with branch prediction information
 // \see [Other Built-in Functions Provided by GCC](
 // https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html)
+// FixMe: [C++20] use C++ attribute: likely, unlikely; see https://en.cppreference.com/w/cpp/language/attributes/likely
 #if defined(IBIS_HAVE_BUILTIN_EXPECT)
 #define cxx_expect(x) __builtin_expect(!!(x), 1)      // NOLINT(cppcoreguidelines-macro-usage)
 #define cxx_expect_not(x) __builtin_expect(!!(x), 0)  // NOLINT(cppcoreguidelines-macro-usage)
@@ -35,6 +36,7 @@
 #define cxx_expect_not(x) x  // NOLINT(cppcoreguidelines-macro-usage)
 #endif
 
+// @todo [C++23] use [[[noreturn]] void unreachable()](https://en.cppreference.com/w/cpp/utility/unreachable)
 #if defined(IBIS_HAVE_BUILTIN_UNREACHABLE)
 // \see [Other Built-in Functions Provided by
 // GCC](https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html)

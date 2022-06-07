@@ -7,9 +7,9 @@
 
 #include <ibis/vhdl/ast.hpp>
 
-#include <ibis/compiler/warnings_off.hpp>  // [-Wsign-conversion]
+#include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/spirit/home/x3.hpp>
-#include <ibis/compiler/warnings_on.hpp>
+#include <ibis/util/compiler/warnings_on.hpp>
 #include <boost/spirit/home/x3/nonterminal/rule.hpp>
 
 namespace ibis::vhdl::parser {

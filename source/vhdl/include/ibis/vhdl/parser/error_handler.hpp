@@ -7,11 +7,11 @@
 
 #include <ibis/vhdl/parser/diagnostic_handler.hpp>  // IWYU pragma: keep
 
-#include <ibis/compiler/warnings_off.hpp>  // [-Wsign-conversion]
+#include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/spirit/home/x3.hpp>        // FixMe: How to avoid to include all these stuff?!
 // #include <boost/spirit/home/x3/support/context.hpp>
-// #include <boost/spirit/home/x3/auxiliary/guard.hpp>
-#include <ibis/compiler/warnings_on.hpp>
+// #include <boost/spirit/home/x3/util/guard.hpp>
+#include <ibis/util/compiler/warnings_on.hpp>
 
 #include <ibis/namespace_alias.hpp>  // IWYU pragma: keep
 

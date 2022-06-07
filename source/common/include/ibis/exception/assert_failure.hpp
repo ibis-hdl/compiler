@@ -10,7 +10,7 @@
 #include <boost/exception/error_info.hpp>
 #include <boost/exception/exception.hpp>
 
-#include <ibis/compiler/compiler_support.hpp>
+#include <ibis/util/compiler/compiler_support.hpp>
 
 namespace ibis {
 

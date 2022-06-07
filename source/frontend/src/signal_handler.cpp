@@ -6,7 +6,7 @@
 #include <ibis/frontend/signal_handler.hpp>
 
 #include <ibis/color/message.hpp>
-#include <ibis/platform.hpp>
+#include <ibis/util/platform.hpp>
 
 #include <csignal>
 #include <functional>

@@ -5,9 +5,9 @@
 
 #pragma once
 
-#include <ibis/compiler/warnings_off.hpp>  // [-Wsign-conversion]
+#include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/spirit/home/x3.hpp>
-#include <ibis/compiler/warnings_on.hpp>
+#include <ibis/util/compiler/warnings_on.hpp>
 
 #include <ibis/namespace_alias.hpp>
 
@@ -36,9 +36,9 @@ auto const skipper_def =
     // clang-format off
 
 #if !defined(DOXYGEN_DOCUMENTATION_BUILD)
-//#include<ibis/compiler/warnings_off.hpp> // IWYU pragma: keep
+//#include<ibis/util/compiler/warnings_off.hpp> // IWYU pragma: keep
 BOOST_SPIRIT_DEFINE(skipper)
-//#include<ibis/compiler/warnings_on.hpp> // IWYU pragma: keep
+//#include<ibis/util/compiler/warnings_on.hpp> // IWYU pragma: keep
 #endif
 
 }

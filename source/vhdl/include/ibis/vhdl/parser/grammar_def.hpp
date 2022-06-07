@@ -14,9 +14,9 @@
 
 #include <ibis/vhdl/ast/ast_adapted.hpp>
 
-#include <ibis/compiler/warnings_off.hpp>  // [-Wsign-conversion]
+#include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/spirit/home/x3.hpp>
-#include <ibis/compiler/warnings_on.hpp>
+#include <ibis/util/compiler/warnings_on.hpp>
 
 #include <ibis/vhdl/parser/spirit_x3_util.hpp>
 
@@ -374,7 +374,7 @@ auto const shift_operator_def = distinct(shift_operator_symbols);
 
 // special boost.spirit.x3 header to get rid off the annoying unused parameter
 // warnings from x3
-#include <ibis/compiler/warnings_off.hpp>
+#include <ibis/util/compiler/warnings_off.hpp>
 
 // clang-format off
 BOOST_SPIRIT_DEFINE(
@@ -387,7 +387,7 @@ BOOST_SPIRIT_DEFINE(
 )
 // clang-format on
 
-#include <ibis/compiler/warnings_on.hpp>
+#include <ibis/util/compiler/warnings_on.hpp>
 
 }  // namespace ibis::vhdl::parser::operators
 
@@ -4109,7 +4109,7 @@ auto const waveform_element_def =
 //
 namespace ibis::vhdl::parser {
 
-#include<ibis/compiler/warnings_off.hpp>
+#include<ibis/util/compiler/warnings_off.hpp>
 
 
 BOOST_SPIRIT_DEFINE(  // -- A --
@@ -4380,7 +4380,7 @@ BOOST_SPIRIT_DEFINE(  // -- W --
 
 // clang-format on
 
-#include <ibis/compiler/warnings_on.hpp>
+#include <ibis/util/compiler/warnings_on.hpp>
 
 #endif  // !defined(DOXYGEN_DOCUMENTATION_BUILD)
 }

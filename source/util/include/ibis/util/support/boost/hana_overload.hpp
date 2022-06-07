@@ -62,10 +62,11 @@ struct make_overload_t {
 
 constexpr make_overload_t overload{};
 
-// ["Fire-and-forget"
-// visitation](https://vittorioromeo.info/index/blog/variants_lambdas_part_1.html)
+// ["Fire-and-forget" visitation](
+//  https://vittorioromeo.info/index/blog/variants_lambdas_part_1.html)
 #define FWD(...) ::std::forward<decltype(__VA_ARGS__)>(__VA_ARGS__)
 
+// FixMe [C++20] make overload and visit C++20 aware; this is still C++14 ?
 template <typename... Ts>
 decltype(auto) visit(Ts&&... xs)
 {

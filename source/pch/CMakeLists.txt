@@ -40,6 +40,8 @@ endif()
 target_include_directories(${PROJECT_NAME}
     PRIVATE
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source/util/include>
+        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/source/util/include>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source/common/include>
         $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/source/common/include>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source/vhdl/include>

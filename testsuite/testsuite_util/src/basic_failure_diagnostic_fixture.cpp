@@ -8,9 +8,10 @@
 
 #include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
-#include <ibis/compiler/warnings_off.hpp> // -Wsign-conversion
+#include <ibis/util/compiler/warnings_off.hpp> // -Wsign-conversion
 #include <boost/test/unit_test.hpp>
-#include <ibis/compiler/warnings_on.hpp>
+#include <ibis/util/compiler/warnings_on.hpp>
+#include <ibis/util/make_iomanip.hpp>
 #include <boost/test/results_collector.hpp>
 #include <boost/test/tools/output_test_stream.hpp>
 
@@ -21,38 +22,14 @@
 #include <sstream>
 #include <system_error>
 
-namespace  // anonymous
-{
-
-/// FixMe: This is a hack to avoid the dependency to ibis::vhdl to
-/// this project. This depends only on ibis::util::make_iomanip
-/// header for failure_diagnostic_fixture
-/// Hence it's a copy&paste of <ibis/util/make_iomanip.hpp>
-template <typename T>
-struct A {
-    T x;
-
-    friend std::ostream& operator<<(std::ostream& os, A const& aaa)
-    {
-        aaa.x(os);
-        return os;
-    }
-};
-
-template <typename T>
-A<std::decay_t<T>> make_iomanip(T&& functor)
-{
-    return { std::forward<T>(functor) };
-}
-
-}  // namespace
-
 /// ---------------------------------------------------------------------------
 ///
 /// failure_diagnostic_fixture implementation
 ///
 /// ---------------------------------------------------------------------------
 namespace testsuite::util {
+
+using ibis::util::make_iomanip;
 
 // Quiet compiler warning: ... has no out-of-line virtual method definitions; its vtable will be
 // emitted in every translation unit [-Wweak-vtables]
@@ -119,7 +96,7 @@ void basic_failure_diagnostic_fixture::failure_closure(std::string test_case_nam
         static constexpr std::size_t col_width = 80;
 
         auto hline = [&](std::string const& title, char fill = '~') {
-            return make_iomanip(
+            return util::make_iomanip(
                 [&title, fill](std::ostream& os) { head_line(os, title, col_width, fill); });
         };
 

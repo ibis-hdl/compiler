@@ -8,7 +8,7 @@
 #include <cstdlib>
 #include <iostream>
 
-#include <ibis/compiler/compiler_support.hpp>
+#include <ibis/util/compiler/compiler_support.hpp>
 
 namespace ibis::util::detail {
 

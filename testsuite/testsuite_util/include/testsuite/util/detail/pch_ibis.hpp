@@ -3,6 +3,4 @@
 // SPDX-License-Identifier: GPL-3.0-only
 //
 
-// Note: intentionally no header guard / pragma once
-
-#include <ibis/compiler/detail/compiler_pop.hpp>
+#pragma once

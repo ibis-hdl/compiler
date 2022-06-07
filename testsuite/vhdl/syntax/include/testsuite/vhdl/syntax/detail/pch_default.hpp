@@ -34,7 +34,7 @@
 #include <boost/test/utils/string_cast.hpp>
 
 // The header <boost/spirit/home/x3/auxiliary.hpp>, which includes the problemtic header
-// <boost/spirit/home/x3/auxiliary/any_parser.hpp>, runs into compile problems due to Spirit X3's
+// <boost/spirit/home/x3/util/any_parser.hpp>, runs into compile problems due to Spirit X3's
 // `move_to` traits. Even forwarding of enum class ast's `keyword_token` doesn't helped
 // here.
 #include <boost/spirit/home/x3/char.hpp>

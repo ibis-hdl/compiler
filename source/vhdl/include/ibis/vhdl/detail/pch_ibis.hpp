@@ -10,9 +10,9 @@
 
 #include <ibis/settings.hpp>
 
-#include <ibis/util/string/icompare.hpp>
+#include <ibis/util/icompare.hpp>
 
-#include <ibis/support/boost/hana_overload.hpp>
+#include <ibis/util/support/boost/hana_overload.hpp>
 
 #include <ibis/vhdl/ast_fwd.hpp>
 #include <ibis/vhdl/ast.hpp>

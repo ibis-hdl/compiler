@@ -14,7 +14,7 @@
 #include <ibis/color/facet.hpp>
 
 #include <ibis/platform.hpp>
-#include <ibis/compiler/compiler_support.hpp>
+#include <ibis/util/compiler/compiler_support.hpp>
 
 #include <boost/process/args.hpp>
 #include <boost/process/child.hpp>

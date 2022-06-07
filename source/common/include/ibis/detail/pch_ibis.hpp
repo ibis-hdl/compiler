@@ -11,4 +11,4 @@
 // may change frequently, if settled, activate
 // #include <ibis/settings.hpp>
 
-#include <ibis/util/string/icompare.hpp>
+#include <ibis/util/icompare.hpp>

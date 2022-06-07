@@ -15,17 +15,17 @@
 #include <ibis/color/facet.hpp>
 #include <ibis/color/attribute.hpp>
 
-#include <ibis/platform.hpp>
+#include <ibis/util/platform.hpp>
 
 #include <ibis/util/file/file_loader.hpp>
 #include <ibis/util/file/user_home_dir.hpp>
-#include <ibis/util/string/icompare.hpp>
+#include <ibis/util/icompare.hpp>
 
 #include <ibis/namespace_alias.hpp>  // IWYU pragma: keep
 
-#include <ibis/compiler/warnings_off.hpp>  // -Wimplicit-int-float-conversion
+#include <ibis/util/compiler/warnings_off.hpp>  // -Wimplicit-int-float-conversion
 #include <CLI/CLI.hpp>
-#include <ibis/compiler/warnings_on.hpp>
+#include <ibis/util/compiler/warnings_on.hpp>
 
 #include <boost/property_tree/json_parser.hpp>
 

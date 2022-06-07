@@ -13,7 +13,15 @@
 
 namespace ibis::util {
 
-/// \see [Case insensitive sorting of an array of strings](
+/// 
+/// Case insensitive less compare function for `std::string_view`
+/// 
+/// @param lhs left string_view
+/// @param rhs right string_view
+/// @return true if lhs <= rhs
+/// @return false if lhs > rhs
+///
+/// @see [Case insensitive sorting of an array of strings](
 ///       https://stackoverflow.com/questions/33379846/case-insensitive-sorting-of-an-array-of-strings)
 ///
 inline bool icompare_less(std::string_view lhs, std::string_view rhs)
@@ -24,16 +32,18 @@ inline bool icompare_less(std::string_view lhs, std::string_view rhs)
             return std::tolower(c1) == std::tolower(c2);
         });
 
-    return    result.second != rhs.cend()
-           && (result.first == lhs.cend()
-           || std::tolower(*result.first) < std::tolower(*result.second));
+    return result.second != rhs.cend()
+        && (result.first == lhs.cend() || std::tolower(*result.first) < std::tolower(*result.second));
     // clang-format on
 }
 
 ///
-/// case in-sensitive compare
+/// Case insensitive compare function for `std::string_view`
 ///
-/// \return Returns true of lhs equals to rhs, otherwise false.
+/// @param lhs left string_view
+/// @param rhs right string_view
+/// @return true lhs equals to rhs
+/// @return false lhs doesn not equals to rhs
 ///
 inline bool icompare(std::string_view lhs, std::string_view rhs)
 {

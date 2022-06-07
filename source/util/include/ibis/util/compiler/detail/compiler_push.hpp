@@ -4,18 +4,18 @@
 //
 
 
-// IWYU pragma: private, include <ibis/compiler/warnings_on.hpp>
+// IWYU pragma: private, include <ibis/util/compiler/warnings_off.hpp>
 //
 // Note: intentionally no header guard / pragma once
 
 #if defined(__clang__)
-#pragma clang diagnostic pop
+#pragma clang diagnostic push
 #endif
 
 #if defined(__GNUC__) && !defined(__clang__)
-#pragma GCC diagnostic pop
+#pragma GCC diagnostic push
 #endif
 
 #if defined(_MSC_VER)
-#pragma warning(pop)
+#pragma warning(push)
 #endif

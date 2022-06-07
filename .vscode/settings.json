@@ -21,9 +21,10 @@
     ],
     "todo-tree.general.enableFileWatcher": true,
     "todo-tree.regex.regexCaseSensitive": false,
-    "todo-tree.general.statusBar": "total",
 	"psi-header.config": {
-		"license": "Custom"
+		"license": "Custom",
+        "forceToTop": true,
+        "spacesBetweenYears": false
 	},
 	"psi-header.templates": [
 		{
@@ -43,19 +44,36 @@
     "psi-header.lang-config": [
 		{
 			"language": "cpp",
+            "lineLength": 100,
 			"begin": "",
 			"end": "",
 			"prefix": "// "
 		},
 		{
 			"language": "python",
+            "lineLength": 100,
 			"begin": "",
 			"end": "",
 			"prefix": "# "
-		}        
+		}
 	],
     "psi-header.changes-tracking": {
-        "autoHeader": "autoSave"
+        "autoHeader": "autoSave",
+        "include": [
+            "cpp",
+            "python"
+        ],
+        "exclude": [
+            "jsonc",
+            "json",
+            "markdown"
+        ],
+        "excludeGlob": [
+            "**/CMakeLists.txt",
+            "**/*.cmake",
+            "**/settings.json",
+            "*"
+        ]
     },
     "files.associations": {
         "algorithm": "cpp",

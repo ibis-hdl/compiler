@@ -13,7 +13,7 @@ add_library(ibis::common ALIAS ${PROJECT_NAME})
 
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
-        # nothings
+        ibis::util
 )
 
 
@@ -28,11 +28,6 @@ target_sources(${PROJECT_NAME}
         src/color/color.cpp
         $<$<BOOL:${WIN32}>:src/color/color_platform_windows.cpp>
 )
-
-
-# Platform and compiler checks
-include(configure_platform_hpp)
-include(configure_config_hpp)
 
 
 if(${PROJECT_NAME}_PCH)

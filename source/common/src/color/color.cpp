@@ -5,7 +5,7 @@
 
 #include <ibis/color/message.hpp>
 
-#include <ibis/util/string/icompare.hpp>
+#include <ibis/util/icompare.hpp>
 
 #include <initializer_list>
 #include <locale>

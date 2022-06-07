@@ -9,7 +9,7 @@
 #include <ibis/color/manip.hpp>
 #include <ibis/color/detail/color.hpp>
 #include <ibis/color/detail/platform.hpp>
-#include <ibis/platform.hpp>
+#include <ibis/util/platform.hpp>
 
 #include <iostream>
 #include <locale>  // facet

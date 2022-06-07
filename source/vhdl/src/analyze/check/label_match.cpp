@@ -24,7 +24,7 @@
 #include <ibis/vhdl/ast/util/optional.hpp>
 #include <ibis/vhdl/ast/util/string_span.hpp>
 
-#include <ibis/util/string/icompare.hpp>
+#include <ibis/util/icompare.hpp>
 
 #include <boost/optional/detail/optional_relops.hpp>
 
