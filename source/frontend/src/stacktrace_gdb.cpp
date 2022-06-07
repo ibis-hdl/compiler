@@ -13,7 +13,7 @@
 #include <ibis/color/message.hpp>
 #include <ibis/color/facet.hpp>
 
-#include <ibis/platform.hpp>
+#include <ibis/util/platform.hpp>
 #include <ibis/util/compiler/compiler_support.hpp>
 
 #include <boost/process/args.hpp>
