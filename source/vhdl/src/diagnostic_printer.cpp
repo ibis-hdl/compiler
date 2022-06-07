@@ -112,8 +112,7 @@ std::ostream& diagnostic_printer::print_snippets(std::ostream& os) const
         // clang-format off
         os << source_snippet.source_line() << '\n'
            << indicator(line_start, source_snippet.first(), source_snippet.last())
-           << " <<-- " << (i == 0 ? translate("here") : translate("and here")) 
-           << (i == 0 ? "\n" : "")
+           << " <<-- " << (i == 0 ? translate("here") : translate("and here"))
            << (i + 1 < count ? "...\n" : "");
         // clang-format on
     }
