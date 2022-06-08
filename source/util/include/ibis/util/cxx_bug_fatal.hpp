@@ -8,7 +8,7 @@
 #include <cstdlib>
 #include <iostream>
 
-#include <ibis/util/compiler/compiler_support.hpp>
+#include <fmt/format.h>
 
 namespace ibis::util::detail {
 
@@ -16,15 +16,22 @@ template <typename CharT>
 void assertion_failed_msg(const CharT* expr, const char msg[], const char function[],
                           const char file[], long line)
 {
-    std::cerr << "\n****************************************\n"
-              << "***** Internal Fatal Program Error *****\n"
-              << "****************************************\n"
-              << "assertion:   " << expr << '\n'
-              << "what failed: " << msg << '\n'
-              << "in function:" << function << '\n'
-              << file << '(' << line << ")" << std::endl;  // flush
-
-    std::quick_exit(EXIT_FAILURE);
+    std::cerr << fmt::format(
+        "\n"
+        "****************************************\n"
+        "***** Internal Fatal Program Error *****\n"
+        "****************************************\n"
+        "in file:     {0}:{1}\n"
+        "in function: {2}\n"
+        "assertion:   {3}\n"
+        "message:     {4}\n",
+        file,      // {0}
+        line,      // {1}
+        function,  // {2}
+        expr,      // {3}
+        msg        // {4}
+    );
+    std::cerr << std::flush;
 }
 
 }  // namespace ibis::util::detail
@@ -35,15 +42,15 @@ void assertion_failed_msg(const CharT* expr, const char msg[], const char functi
 #define CXX_FUNCTION_NAME __FUNCTION__
 #endif
 
-#define cxx_assert(condition, message)                                   \
-    (cxx_expect(condition) ? ((void)0)                                   \
-                           : ::ibis::util::detail::assertion_failed_msg( \
-                                 #condition, message, CXX_FUNCTION_NAME, __FILE__, __LINE__))
+#define cxx_assert(condition, message)                         \
+    ((condition) ? ((void)0)                                   \
+                 : ::ibis::util::detail::assertion_failed_msg( \
+                   #condition, message, CXX_FUNCTION_NAME, __FILE__, __LINE__))
 
 #define cxx_bug_fatal(message)  \
     cxx_assert(false, message); \
-    cxx_unreachable()
+    std::quick_exit(EXIT_FAILURE);
 
 #define cxx_unreachable_bug_triggered()                   \
     cxx_assert(false, "unreachable code path triggered"); \
-    cxx_unreachable()
+    std::quick_exit(EXIT_FAILURE);

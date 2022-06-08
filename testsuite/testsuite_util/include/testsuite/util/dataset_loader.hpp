@@ -187,21 +187,19 @@ private:
     std::string const loader_name;
     std::string const testcase_group;
 
-    ///
     /// The options from parsed CLI arguments or compiled builtin options.
-    ///
-    /// @todo [C++20] designated initializers
-    ///
     struct options {
         fs::path source_dir;
-        std::string input_extension = ".vhdl";
-        std::string expected_extension = ".expected";
+        std::string input_extension;
+        std::string expected_extension;
     };
-    options mutable option;
 
-    ///
+    /// designated initializers for @ref options
+    options mutable option {
+        {}, ".vhdl", ".expected"
+    };
+
     /// The dataset loaded from file system using the options given.
-    ///
     struct test_dataset {
         std::vector<std::string> input;
         std::vector<std::string> expected;

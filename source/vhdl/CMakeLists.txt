@@ -14,6 +14,7 @@ add_library(ibis::vhdl ALIAS ${PROJECT_NAME})
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
         ibis::common
+        fmt::fmt
         # cope with "fatal error LNK2011: precompiled object not linked in"
         "$<$<CXX_COMPILER_ID:MSVC>:ibis_pch>"
 )

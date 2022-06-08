@@ -5,7 +5,7 @@
 
 #include <ibis/vhdl/ast/literal_printer.hpp>
 
-#include <ibis/util/support/cxx/overloaded.hpp>  // IWYU pragma: keep
+#include <ibis/util/overloaded.hpp>  // IWYU pragma: keep
 
 #include <ibis/util/cxx_bug_fatal.hpp>
 

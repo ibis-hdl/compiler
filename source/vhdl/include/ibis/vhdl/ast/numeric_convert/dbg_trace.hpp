@@ -5,10 +5,11 @@
 
 #pragma once
 
-// pre C++20 to avoid lint warnings
-#if defined(IBIS_HAVE_EXPERIMENTAL_SOURCE_LOCATION)
-#include <experimental/source_location>  // IWYU pragma: keep
+#ifdef __cpp_lib_source_location
+#include <source_location>  // IWYU pragma: keep
 #endif
+
+#include <fmt/format.h>
 
 #include <string_view>
 #include <iostream>
@@ -22,23 +23,28 @@ void trace_report(RangeType const& range, RangeFiltType const& range_f, bool par
                   AttributeType attribute, std::string_view file, unsigned line,
                   std::string_view function)
 {
-    std::cout << file << ":" << line << " " << function << "('" << range << "')"
-              << " -> ['" << range_f << "']: " << std::boolalpha << "parse_ok = " << parse_ok
-              << ", attribute = " << attribute << '\n';
+    std::cout << fmt::format("{0}:{1} {2}('{3}') -> '{4}' => attr='{5}' (parse_ok={6})\n",
+                             file,       // {0}
+                             line,       // {1}
+                             function,   // {2}
+                             range,      // {3}
+                             range_f,    // {4}
+                             attribute,  // {5}
+                             parse_ok    // {6}
+    );
 }
 
 }  // namespace detail
 
-/// FixMe: If we got C++20 standard once here, get rid off the macro stuff which is used only
-///        to gather source location. Unfortunately, we will still stick with it since
-///        MS VisualStudio doesn't support P1208R6 std::source_location in year [2021](
-///        https://docs.microsoft.com/de-de/cpp/overview/visual-cpp-language-conformance?view=msvc-160)
-#if defined(IBIS_HAVE_EXPERIMENTAL_SOURCE_LOCATION)
+/// FixMe [C++20] MSVC 19 (Studio 2022) and g++ 11 support `source_location`, clang++ 14 doesn't :(
+/// [godbolt](https://godbolt.org/z/q6GGcM1Y3), hence we depend on
+/// feature testing
+/// [__cpp_lib_source_location](https://en.cppreference.com/w/cpp/feature_test#Library_features)
+#ifdef __cpp_lib_source_location
 template <typename RangeType, typename RangeFiltType, typename AttributeType>
 inline void dbg_trace(RangeType const& range, RangeFiltType const& range_f, bool parse_ok,
                       AttributeType attribute,
-                      std::experimental::source_location const& location =
-                          std::experimental::source_location::current())
+                      std::source_location const& location = std::source_location::current())
 {
     detail::trace_report(range, range_f, parse_ok, attribute, location.file_name(), location.line(),
                          location.function_name());

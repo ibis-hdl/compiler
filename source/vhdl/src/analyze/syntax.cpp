@@ -54,6 +54,8 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name)
     }
 
     // failure diagnostic to user
+    // @todo Check, if label_of alway return valid (non empty) ast::identifier, even on ill-formed
+    // nodes. diagnostic_handler::syntax_error() doesn't care about!
 
     auto const [start_label, end_label] = labels_of(node);
     node_name = ast::pretty_node_name(node_name);

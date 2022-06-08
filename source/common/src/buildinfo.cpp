@@ -6,6 +6,8 @@
 #include <ibis/buildinfo.hpp>
 #include <ibis/buildinfo_static.hpp>
 
+#include <fmt/format.h>
+
 #include <iostream>
 #include <string_view>
 
@@ -13,13 +15,20 @@ namespace ibis {
 
 std::ostream& buildinfo::print_on(std::ostream& os)
 {
-    os << "platform: " << build_info::platform << '\n'
-       << "type:     " << build_info::type << '\n'
-       << "system:   " << build_info::system << '\n';
-
-    os << "compiler: " << build_info::compiler << '\n'
-       << "stdlib:   " << build_info::stdlib << '\n'
-       << "libboost: " << build_info::libboost << '\n';
+    os << fmt::format(
+        "platform: {0}\n"
+        "type:     {1}\n"
+        "system:   {2}\n"
+        "compiler: {3}\n"
+        "stdlib:   {4}\n"
+        "libboost: {5}\n",
+        build_info::platform,  // {0}
+        build_info::type,      // {1}
+        build_info::system,    // {2}
+        build_info::compiler,  // {3}
+        build_info::stdlib,    // {4}
+        build_info::libboost   // {5}
+    );
 
     return os;
 }

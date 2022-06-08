@@ -18,7 +18,6 @@
 #include <ibis/vhdl/type.hpp>
 
 #include <ibis/util/cxx_bug_fatal.hpp>
-#include <ibis/util/compiler/compiler_support.hpp>
 
 #include <ibis/namespace_alias.hpp>  // IWYU pragma: keep
 

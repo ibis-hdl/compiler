@@ -203,6 +203,9 @@ std::string_view diagnostic_handler<IteratorT>::current_line(iterator_type first
 {
     // based on [.../x3/support/utility/error_reporting.hpp:print_line(...)](
     // https://github.com/boostorg/spirit/blob/master/include/boost/spirit/home/x3/support/utility/error_reporting.hpp)
+    // Note: VHDL has no UTF8, see [VHDL file encoding](
+    // https://insights.sigasi.com/tech/vhdl-file-encoding/). The X3 way is using
+    // `x3::to_utf8(line)` above.
 
     auto line_end = first;
     auto const end = current_file().file_contents().end();
@@ -215,13 +218,7 @@ std::string_view diagnostic_handler<IteratorT>::current_line(iterator_type first
         ++line_end;
     }
 
-    // VHDL has no UTF8, see [VHDL file encoding](
-    // https://insights.sigasi.com/tech/vhdl-file-encoding/). The X3 way is using
-    // `x3::to_utf8(line)`
-
-    // FixMe [C++20]: constructor by pair of string_view iterators.
-    auto const count = static_cast<std::size_t>(std::distance(first, line_end));
-    return std::string_view(&(*first), count);
+    return std::string_view(first, line_end);
 }
 
 }  // namespace ibis::vhdl

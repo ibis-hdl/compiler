@@ -11,9 +11,11 @@
 #include <ibis/util/compiler/warnings_off.hpp> // -Wsign-conversion
 #include <boost/test/unit_test.hpp>
 #include <ibis/util/compiler/warnings_on.hpp>
-#include <ibis/util/make_iomanip.hpp>
 #include <boost/test/results_collector.hpp>
 #include <boost/test/tools/output_test_stream.hpp>
+
+#include <ibis/util/make_iomanip.hpp>
+#include <ibis/util/trim.hpp>
 
 #include <algorithm>
 #include <cctype>
@@ -72,21 +74,6 @@ bool basic_failure_diagnostic_fixture::current_test_passing()
     return test_results.passed();
 }
 
-// local helper to trim trailing spaces from test_input, boost::trim_right_copy doesn't work
-// on string_view, hence we write our own
-// FixMe: [C++20] next standard supports string_view iterator pair constructor.
-auto const trim_right = [](std::string_view sv) {
-    // clang-format off
-    return std::string_view(
-        sv.data(),                 // const CharT*
-        static_cast<std::size_t>(  // --
-            std::find_if(sv.rbegin(), sv.rend(),
-                         [](char chr) { return !static_cast<bool>(std::isspace(chr)); })
-                .base() - sv.begin())  // count
-    );
-    // clang-format on
-};
-
 void basic_failure_diagnostic_fixture::failure_closure(std::string test_case_name,
                                                        std::string_view test_input,
                                                        std::string_view test_result)
@@ -100,11 +87,13 @@ void basic_failure_diagnostic_fixture::failure_closure(std::string test_case_nam
                 [&title, fill](std::ostream& os) { head_line(os, title, col_width, fill); });
         };
 
+        using ibis::util::rtrim;
+
         // finally the nice rendered failure closure for diagnostic
         os << hline(" failure diagnostic closure: '" + test_case_name + "' ", '#')
-           << hline(" INPUT ") << trim_right(test_input)  // input
-           << hline(" RESULT ") << test_result            // output
-           << hline("");                                  // footer
+           << hline(" INPUT ") << rtrim(test_input)  // input
+           << hline(" RESULT ") << test_result       // output
+           << hline("");                             // footer
     };
 
     // if current test fail render closure to console and save test_result to filesystem
@@ -137,12 +126,14 @@ void basic_failure_diagnostic_fixture::failure_closure(std::string test_case_nam
                 [&title, fill](std::ostream& os) { head_line(os, title, col_width, fill); });
         };
 
+        using ibis::util::rtrim;
+
         // finally the nice rendered failure closure for diagnostic
         os << hline(" failure diagnostic closure: '" + test_case_name + "' ", '#')
-           << hline(" INPUT ") << trim_right(test_input)        // input
-           << hline(" EXPECTED ") << trim_right(test_expected)  // expected
-           << hline(" RESULT ") << test_result                  // output
-           << hline("");                                        // footer
+           << hline(" INPUT ") << rtrim(test_input)        // input
+           << hline(" EXPECTED ") << rtrim(test_expected)  // expected
+           << hline(" RESULT ") << test_result             // output
+           << hline("");                                   // footer
     };
 
     // if current test fail render closure to console and save test_result to filesystem

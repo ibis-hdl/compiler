@@ -14,6 +14,8 @@ add_library(ibis::common ALIAS ${PROJECT_NAME})
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
         ibis::util
+    PRIVATE
+        fmt::fmt
 )
 
 

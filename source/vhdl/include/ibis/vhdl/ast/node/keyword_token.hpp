@@ -6,6 +6,9 @@
 #pragma once
 
 #include <iosfwd>
+#include <string_view>
+
+#include <fmt/format.h>
 
 // FixMe: required on Win32, investigate!
 #if defined(IN)
@@ -118,9 +121,25 @@ enum class keyword_token {
     XOR
 };
 
-std::ostream& operator<<(std::ostream& os, keyword_token token);
+std::string_view as_string_view(keyword_token token);
+
+inline std::ostream& operator<<(std::ostream& os, keyword_token token)
+{
+    os << as_string_view(token);
+
+    return os;
+}
 
 }  // namespace ibis::vhdl::ast
+
+template <>
+struct fmt::formatter<ibis::vhdl::ast::keyword_token> : fmt::formatter<std::string_view> {
+    template <typename FormatContext>
+    std::string_view format(ibis::vhdl::ast::keyword_token token, FormatContext& ctx) const
+    {
+        return fmt::formatter<std::string_view>::format(as_string_view(token), ctx);
+    }
+};
 
 //
 // Support Spirit.X3's attribute handling.

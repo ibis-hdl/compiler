@@ -8,11 +8,7 @@
 //#include<ibis/vhdl/ast_fwd.hpp>
 #include <ibis/vhdl/ast.hpp>
 
-// clang-format off
-#include<ibis/util/compiler/warnings_off.hpp>
-#include<ibis/util/support/boost/hana_overload.hpp>
-#include<ibis/util/compiler/warnings_on.hpp>
-// clang-format on
+#include <ibis/util/overloaded.hpp>
 
 #include <algorithm>
 #include <string_view>
@@ -88,8 +84,7 @@ public:
         worker(node, node_typename);
 
         // clang-format off
-        util::visit_in_place(
-            node,
+        boost::apply_visitor(util::overloaded {
             [this](ast::actual_part_chunk const& chunk) {
                 (*this)(chunk.context_tied_name);
                 (*this)(chunk.actual_designator);
@@ -97,7 +92,7 @@ public:
             [this](ast::actual_designator node_) {
                 (*this)(node_);
             }
-        );
+        }, node);
         // clang-format on
     }
 
@@ -358,8 +353,7 @@ public:
         worker(node, node_typename);
 
         // clang-format off
-        util::visit_in_place(
-            node,
+        boost::apply_visitor(util::overloaded {
             [this](ast::name const& name) {
                 (*this)(name);
             },
@@ -372,7 +366,7 @@ public:
             [this](ast::nullary const& nullary) {
                 (*this)(nullary);
             }
-        );
+        }, node);
         // clang-format on
     }
 
@@ -573,15 +567,14 @@ public:
         }
 
         // clang-format off
-        util::visit_in_place(
-            node.signal_assignment,
+        boost::apply_visitor(util::overloaded {
             [this](ast::conditional_signal_assignment const& signal_assignment) {
                 (*this)(signal_assignment);
             },
             [this](ast::selected_signal_assignment const& signal_assignment) {
                 (*this)(signal_assignment);
             }
-        );
+        }, node.signal_assignment);
         // clang-format on
     }
 
@@ -788,8 +781,7 @@ public:
         worker(node, node_typename);
 
         // clang-format off
-        util::visit_in_place(
-            node,
+        boost::apply_visitor(util::overloaded {
             [this](ast::subtype_indication const& discrete_subtype_indication) {
                 (*this)(discrete_subtype_indication);
             },
@@ -799,7 +791,7 @@ public:
             [this](ast::nullary const& nullary) {
                 (*this)(nullary);
             }
-        );
+        }, node);
         // clang-format on
     }
 
@@ -830,8 +822,7 @@ public:
         worker(node, node_typename);
 
         // clang-format off
-        util::visit_in_place(
-            node,
+        boost::apply_visitor(util::overloaded {
             [this](ast::entity_aspect_entity const& entity) {
                 (*this)(entity.name);
                 if(entity.architecture_identifier) {
@@ -847,7 +838,7 @@ public:
             [this](ast::nullary const& nullary) {
                 (*this)(nullary);
             }
-        );
+        }, node);
         // clang-format on
     }
 
@@ -930,8 +921,7 @@ public:
         worker(node, node_typename);
 
         // clang-format off
-        util::visit_in_place(
-            node,
+        boost::apply_visitor(util::overloaded {
             [this](ast::entity_designator_list const& entity_designator_list) {
                 visit(entity_designator_list);
             },
@@ -941,7 +931,7 @@ public:
             [this](ast::nullary const& nullary) {
                 (*this)(nullary);
             }
-        );
+        }, node);
         // clang-format on
     }
 
@@ -1304,8 +1294,7 @@ public:
         worker(node, node_typename);
 
         // clang-format off
-        util::visit_in_place(
-            node,
+        boost::apply_visitor(util::overloaded {
             [this](ast::instantiated_unit_component const& component) {
                 (*this)(component.name);
             },
@@ -1321,7 +1310,7 @@ public:
             [this](ast::nullary const& nullary) {
                 (*this)(nullary);
             }
-        );
+        }, node);
         // clang-format on
     }
 
@@ -1331,8 +1320,7 @@ public:
         worker(node, node_typename);
 
         // clang-format off
-        util::visit_in_place(
-            node,
+        boost::apply_visitor(util::overloaded {
             [this](ast::instantiation_label_list const& instantiation_label_list) {
                 visit(instantiation_label_list);
             },
@@ -1342,7 +1330,7 @@ public:
             [this](ast::nullary const& nullary) {
                 (*this)(nullary);
             }
-        );
+        }, node);
         // clang-format on
     }
 
@@ -1734,8 +1722,7 @@ public:
         (*this)(node.type_mark);
 
         // clang-format off
-        util::visit_in_place(
-            node.aggregate_or_expression,
+        boost::apply_visitor(util::overloaded {
             [this](ast::expression const& expr) {
                 (*this)(expr);
             },
@@ -1745,7 +1732,7 @@ public:
             [this](ast::nullary nullary) {
                 (*this)(nullary);
             }
-        );
+        }, node.aggregate_or_expression);
         // clang-format on
     }
 
@@ -1755,8 +1742,7 @@ public:
         worker(node, node_typename);
 
         // clang-format off
-        util::visit_in_place(
-            node,
+        boost::apply_visitor(util::overloaded {
             [this](range_attribute_name const &name) {
                 (*this)(name);
             },
@@ -1765,7 +1751,7 @@ public:
                 (*this)(expr.direction);
                 (*this)(expr.rhs);
             }
-        );
+        }, node);
         // clang-format on
     }
 
@@ -2069,8 +2055,7 @@ public:
         worker(node, node_typename);
 
         // clang-format off
-        util::visit_in_place(
-            node,
+        boost::apply_visitor(util::overloaded {
             [this](ast::subprogram_specification_procedure const& procedure) {
                 (*this)(procedure.designator);
                 if(procedure.formal_parameter_list) {
@@ -2084,7 +2069,7 @@ public:
                 }
                 (*this)(function.return_type_mark);
             }
-        );
+        }, node);
         // clang-format on
     }
 
@@ -2281,15 +2266,14 @@ public:
         worker(node, node_typename);
 
         // clang-format off
-        util::visit_in_place(
-            node,
+        boost::apply_visitor(util::overloaded {
             [this](ast::waveform_element_list const& list) {
                 visit(list);
             },
             [this](ast::keyword_token token) {
                 (*this)(token);
             }
-        );
+        }, node);
         // clang-format on
     }
 
@@ -2299,15 +2283,14 @@ public:
         worker(node, node_typename);
 
         // clang-format off
-        util::visit_in_place(
-            node.form,
+        boost::apply_visitor(util::overloaded {
             [this](ast::expression const& expr) {
                 (*this)(expr);
             },
             [this](ast::keyword_token token) {
                 (*this)(token);
             }
-        );
+        }, node.form);
         // clang-format on
 
         if (node.time_expression) {

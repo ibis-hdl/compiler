@@ -7,6 +7,10 @@
 
 #include <iosfwd>
 
+#include <string_view>
+
+#include <fmt/format.h>
+
 namespace ibis::vhdl::ast {
 
 enum class operator_token {
@@ -50,9 +54,22 @@ enum class operator_token {
     XNOR
 };
 
-std::ostream& operator<<(std::ostream& os, operator_token token);
+std::string_view as_string_view(operator_token token);
 
-unsigned arity(operator_token token);
-unsigned precedence(operator_token token);
+inline std::ostream& operator<<(std::ostream& os, operator_token token)
+{
+    os << as_string_view(token);
+
+    return os;
+}
 
 }  // namespace ibis::vhdl::ast
+
+template <>
+struct fmt::formatter<ibis::vhdl::ast::operator_token> : fmt::formatter<std::string_view> {
+    template <typename FormatContext>
+    std::string_view format(ibis::vhdl::ast::operator_token token, FormatContext& ctx) const
+    {
+        return fmt::formatter<std::string_view>::format(as_string_view(token), ctx);
+    }
+};

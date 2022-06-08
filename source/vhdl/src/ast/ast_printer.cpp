@@ -8,7 +8,7 @@
 
 #include <boost/spirit/home/x3/support/traits/is_variant.hpp>
 
-#include <ibis/util/support/cxx/overloaded.hpp>  // IWYU pragma: keep
+#include <ibis/util/overloaded.hpp>  // IWYU pragma: keep
 
 #include <ibis/util/cxx_bug_fatal.hpp>
 

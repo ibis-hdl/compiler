@@ -72,6 +72,11 @@ You know what to do :)
 * [CLI11](https://github.com/CLIUtils/CLI11)
 * [strong_type](https://github.com/rollbear/strong_type)
 
+Until compilers' full C++20 support is there:
+
+* [{fmt}](https://github.com/fmtlib/fmt)
+* [range-v3](https://github.com/ericniebler/range-v3)
+
 By using [Conan package manager for C and C++](https://github.com/conan-io/conan)
 with [CMake wrapper](https://github.com/conan-io/cmake-conan) the libraries are
 build within the project.

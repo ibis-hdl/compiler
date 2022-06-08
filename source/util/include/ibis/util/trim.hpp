@@ -14,6 +14,14 @@
 /// @see [coliru](https://coliru.stacked-crooked.com/a/5fe15808572bbc52) for lambda
 /// @see [coliru](https://coliru.stacked-crooked.com/a/c5d1023bb1dbb8ec) for class
 ///
+/// For historical reasons, old approach (with better handling of whitespaces) shown here:
+///
+/// @code {.cpp}
+/// return std::string_view(
+///   x.begin(), std::find_if(x.rbegin(), x.rend(), [](char c) { return !std::isspace(c);
+///   }).base());
+/// @endcode
+///
 namespace ibis::util {
 
 inline std::string_view ltrim(std::string_view sv)

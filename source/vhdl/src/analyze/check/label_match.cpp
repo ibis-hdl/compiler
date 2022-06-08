@@ -40,10 +40,14 @@ inline bool operator==(ast::identifier const& lhs, ast::identifier const& rhs)
 
 namespace ibis::vhdl::analyze {
 
-label_match::result label_match::compare(ast::identifier const& start_label,
-                                         ast::optional<ast::identifier> const& end_label)
+label_match::result label_match::compare(ast::optional<ast::label> const& start_label,
+                                         ast::optional<ast::label> const& end_label)
 {
-    if (end_label) {
+    if (!start_label && end_label) {
+        return result::ILLFORMED;
+    }
+
+    if (start_label && end_label) {
         if (start_label == end_label) {
             return result::OK;
         }
@@ -53,15 +57,11 @@ label_match::result label_match::compare(ast::identifier const& start_label,
     return result::OK;
 }
 
-label_match::result label_match::compare(ast::optional<ast::identifier> const& start_label,
-                                         ast::optional<ast::identifier> const& end_label)
+label_match::result label_match::compare(ast::identifier const& start_identifier,
+                                         ast::optional<ast::identifier> const& end_identifier)
 {
-    if (end_label && !start_label) {
-        return result::ILLFORMED;
-    }
-
-    if (start_label && end_label) {
-        if (start_label == end_label) {
+    if (end_identifier) {
+        if (start_identifier == end_identifier) {
             return result::OK;
         }
         return result::MISMATCH;
@@ -77,7 +77,6 @@ label_match::result label_match::operator()(ast::architecture_body const& node) 
 
 label_match::result label_match::operator()(ast::block_statement const& node) const
 {
-    // block_label mandatory
     return compare(node.label, node.end_label);
 }
 

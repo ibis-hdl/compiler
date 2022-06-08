@@ -82,15 +82,6 @@ public:
     /// @param test_input The input string given to th test
     /// @param test_result The output string get from test back.
     ///
-    /// FixMe [C++20] next standard supports string_view iterator pair constructor
-    /// ([basic_string_view](https://en.cppreference.com/w/cpp/string/basic_string_view/basic_string_view)
-    /// Item (5)), so we can write inside lambda ```trim_right``` function body:
-    /// @code{.cpp}
-    /// return std::string_view(
-    ///   x.begin(), std::find_if(x.rbegin(), x.rend(), [](char c) { return !std::isspace(c);
-    ///   }).base());
-    /// @endcode
-    ///
     void failure_closure(std::string test_case_name,  // --
                          std::string_view test_input, std::string_view test_result);
 
@@ -102,8 +93,6 @@ public:
     /// @param test_input The input string given to the test
     /// @param test_expected The expected string given to the test
     /// @param test_result The output string get from test back.
-    ///
-    /// FixMe: both failure_closure signatures share same C++ lambda code, simplify!
     ///
     void failure_closure(std::string test_case_name,  // --
                          std::string_view test_input, std::string_view test_expected,

@@ -14,7 +14,6 @@
 #include <ibis/vhdl/type.hpp>
 
 #include <ibis/util/cxx_bug_fatal.hpp>
-#include <ibis/util/compiler/compiler_support.hpp>
 
 #include <ibis/namespace_alias.hpp>  // IWYU pragma: keep
 
@@ -288,8 +287,8 @@ std::tuple<bool, double> convert_based<IntegerT, RealT>::parse_real10(
     using boost::locale::format;
     using boost::locale::translate;
 
-    // it's better to use X3's base10 double parser to avoid maschine's epsilon errors
-    // FixMe: Candidate for C++20 range
+    // it's better to use X3's base10 double parser to avoid machine's epsilon errors
+    // FixMe [C++20] Candidate for C++20 range
     static std::string const dot{ "." };
     auto const range =
         boost::join(boost::join(literal.number.integer_part, dot), literal.number.fractional_part);

@@ -32,6 +32,20 @@ find_package(CLI11 2.2.0 REQUIRED)
 
 
 ##
+# {fmt} a modern formatting library, until full C++20 support is there
+# [https://github.com/fmtlib/fmt]
+#
+find_package(fmt 8.1.1 REQUIRED)
+
+
+##
+# range-v3: Range library for C++14/17/20, until full C++20 support is there
+# [https://github.com/ericniebler/range-v3]
+#
+find_package(range-v3 0.11.0 REQUIRED)
+
+
+##
 # strong_type: strong typedef library for C++14/17/20
 # [https://github.com/rollbear/strong_type]
 CPMAddPackage("gh:rollbear/strong_type#v4")

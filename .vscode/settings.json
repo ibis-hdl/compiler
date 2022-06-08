@@ -17,8 +17,20 @@
         "[ ]",
         "[x]",
         "@todo",
-        "@fixme"
+        "@fixme",
+        "FixMe [C++20]",
+        "FixMe: [C++20]",
+        "@todo [C++20]", "@todo [C++23]",
+        "<<<<<<<"
     ],
+    "todo-tree.tree.buttons.groupBySubTag": true,
+    "todo-tree.general.tagGroups": {
+        "TODO": ["TODO", "FIXME", "XXX", "@todo", "@fixme"],
+        "BUGS": ["BUG", "HACK"],
+        "C++20/C++23": ["FixMe [C++20]", "FixMe: [C++20]", "@todo [C++20]", "@todo [C++23]"],
+        "git-conflict": [ "<<<<<<<" ]
+    },
+    "todo-tree.general.debug": true,
     "todo-tree.general.enableFileWatcher": true,
     "todo-tree.regex.regexCaseSensitive": false,
 	"psi-header.config": {
@@ -172,5 +184,5 @@
         "cinttypes": "cpp",
         "*.ipp": "cpp",
         "*.tcc": "cpp"
-    }
+    },
 }
