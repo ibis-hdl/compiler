@@ -1,6 +1,6 @@
-label_mismatch/003_process:11:3: syntax error: Label mismatch in Process Statement
-  Stimulus: process
-  ~~~~~~~~ <<-- here
-...
-end process Stim; -- Stimulus vs. Stim
-            ~~~~ <<-- and here
+In 'label_mismatch/003_process':11:3: syntax error: Label mismatch in Process Statement
+  11|   Stimulus: process
+    |   ~~~~~~~~ <<-- here
+    | ...
+  18| end process Stim; -- Stimulus vs. Stim
+    |             ~~~~ <<-- and here

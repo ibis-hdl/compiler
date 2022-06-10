@@ -1,6 +1,6 @@
-label_mismatch/000_architecture:7:1: syntax error: Label mismatch in Architecture Body
-architecture BENCH of testbench is
-             ~~~~~ <<-- here
-...
-end architecture TEST_BENCH; -- BENCH vs. TEST_BENCH
-                 ~~~~~~~~~~ <<-- and here
+In 'label_mismatch/000_architecture':7:1: syntax error: Label mismatch in Architecture Body
+   7| architecture BENCH of testbench is
+    |              ~~~~~ <<-- here
+    | ...
+  20| end architecture TEST_BENCH; -- BENCH vs. TEST_BENCH
+    |                  ~~~~~~~~~~ <<-- and here

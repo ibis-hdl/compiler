@@ -1,3 +1,3 @@
-expression_failure/expression_failure_002.input:2:4: parse error: Test Suite Full Match Error! Unparsed input left!
--5 mod -3
-   ^ <<-- here
+In 'expression_failure/expression_failure_002.input':2:4: parse error: Test Suite Full Match Error! Unparsed input left!
+   2| -5 mod -3
+    |    ^ <<-- here

@@ -6,6 +6,9 @@
 #pragma once
 
 #include <ibis/vhdl/ast/util/optional.hpp>
+#include <ibis/vhdl/ast/util/position_tagged.hpp>
+
+#include <ibis/util/cxx_bug_fatal.hpp>
 
 #include <type_traits>
 #include <tuple>
@@ -131,23 +134,29 @@ using has_identifier = decltype(std::declval<T&>().identifier);
 /// @return std::tuple<ast::identifier const&, ast::identifier const&>
 ///
 template <typename NodeT>
-std::tuple<ast::identifier const&, ast::identifier const&> inline labels_of(NodeT const& node)
+std::tuple<ast::identifier, ast::identifier> inline labels_of(NodeT const& node)
 {
+    static_assert(std::is_base_of_v<ast::position_tagged, std::decay_t<NodeT>>, // --
+        "AST node must be derived from ast::position_tagged to provide diagnostics");
+
     if constexpr (label_util::is_detected<label_util::has_label, NodeT>::value) {
         if constexpr (std::is_same_v<std::decay_t<decltype(node.label)>,
                                      ast::optional<ast::identifier>>) {
+            // optional start and end label; e.g. ast::if_statement
             return { *node.label, *node.end_label };
         }
         else {
-            // mandatory start label
+            // mandatory start label, optional end label; e.g. ast::block_statement
             return { node.label, *node.end_label };
         }
     }
     else if constexpr (label_util::is_detected<label_util::has_identifier, NodeT>::value) {
-        // always mandatory identifier
+        // mandatory identifier, optional identifier; e.g. ast::architecture_body
         return { node.identifier, *node.end_identifier };
     }
-    else {  // expect compiler error
+    else {
+        // obviously this function was called with an AST node which doesn't have any labels
+        cxx_unreachable_bug_triggered();
     }
 }
 

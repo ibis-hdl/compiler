@@ -1,18 +1,18 @@
-label_mismatch/009_mixed:4:1: syntax error: Label mismatch in Entity Declaration
-entity testbench is
-       ~~~~~~~~~ <<-- here
-...
-end entity test_bench; -- testbench vs. test_bench
-           ~~~~~~~~~~ <<-- and here
-label_mismatch/009_mixed:7:1: syntax error: Label mismatch in Architecture Body
-architecture BENCH of testbench is
-             ~~~~~ <<-- here
-...
-end architecture bench_test; -- BENCH vs. bench_test
-                 ~~~~~~~~~~ <<-- and here
-label_mismatch/009_mixed:11:3: syntax error: Label mismatch in Process Statement
-  Stimuli: process
-  ~~~~~~~ <<-- here
-...
-end process Stim; -- Stimuli vs. Stim
-            ~~~~ <<-- and here
+In 'label_mismatch/009_mixed':4:1: syntax error: Label mismatch in Entity Declaration
+   4| entity testbench is
+    |        ~~~~~~~~~ <<-- here
+    | ...
+   5| end entity test_bench; -- testbench vs. test_bench
+    |            ~~~~~~~~~~ <<-- and here
+In 'label_mismatch/009_mixed':5:24: syntax error: Label mismatch in Architecture Body
+   7| architecture BENCH of testbench is
+    |              ~~~~~ <<-- here
+    | ...
+  19| end architecture bench_test; -- BENCH vs. bench_test
+    |                  ~~~~~~~~~~ <<-- and here
+In 'label_mismatch/009_mixed':11:3: syntax error: Label mismatch in Process Statement
+  11|   Stimuli: process
+    |   ~~~~~~~ <<-- here
+    | ...
+  17| end process Stim; -- Stimuli vs. Stim
+    |             ~~~~ <<-- and here

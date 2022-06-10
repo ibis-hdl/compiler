@@ -170,7 +170,7 @@ private:
 /// This gives the same API as position_cache, but with an ID bound to this proxy
 /// to simplify AST tagging and error_handling.
 ///
-/// \note This class is intended to created by the position_cache's get_proxy()
+/// @note This class is intended to created by the position_cache's get_proxy()
 /// function only.
 ///
 template <typename IteratorT>

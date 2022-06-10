@@ -35,21 +35,21 @@ namespace ibis::vhdl {
 // ----------------------------------------------------------------------------
 template <typename Iterator>
 void diagnostic_handler<Iterator>::parser_error(iterator_type error_pos,
-                                                std::string const& error_message) const
+                                                std::string_view error_message) const
 {
     error(error_pos, std::nullopt, error_message, error_type::parser);
 }
 
 template <typename Iterator>
 void diagnostic_handler<Iterator>::unsupported(iterator_type error_pos,
-                                               std::string const& error_message) const
+                                               std::string_view error_message) const
 {
     error(error_pos, std::nullopt, error_message, error_type::not_supported);
 }
 
 template <typename Iterator>
 void diagnostic_handler<Iterator>::numeric_error(iterator_type error_pos,
-                                                 std::string const& error_message) const
+                                                 std::string_view error_message) const
 {
     error(error_pos, std::nullopt, error_message, error_type::numeric);
 }
@@ -59,7 +59,7 @@ void diagnostic_handler<Iterator>::numeric_error(iterator_type error_pos,
 /// ----------------------------------------------------------------------------
 template <typename Iterator>
 void diagnostic_handler<Iterator>::syntax_error(ast::position_tagged const& where_tag,
-                                                std::string const& error_message) const
+                                                std::string_view error_message) const
 {
     // the node must be tagged before
     cxx_assert(where_tag.is_tagged(), "Node not correct tagged");
@@ -79,7 +79,7 @@ template <typename Iterator>
 void diagnostic_handler<Iterator>::syntax_error(ast::position_tagged const& where_tag,
                                                 ast::position_tagged const& start_label,
                                                 ast::position_tagged const& end_label,
-                                                std::string const& error_message) const
+                                                std::string_view error_message) const
 {
     // check on applied tagging, related to position_cache
     cxx_assert(where_tag.is_tagged(), "Node not tagged");
@@ -95,16 +95,9 @@ void diagnostic_handler<Iterator>::syntax_error(ast::position_tagged const& wher
 
     diagnostic_context diag_ctx{ syntax_error, error_message };
 
-    auto [where_first, where_last] = iterators_of(where_tag);
-    diag_ctx.set_source_location(get_source_location(where_first));
-
-    auto [label_bgn_first, label_bgn_last] = iterators_of(start_label);
-    diag_ctx.set_source_snippet(current_line(get_line_start(label_bgn_first)), label_bgn_first,
-                                label_bgn_last);
-
-    auto [label_end_first, label_end_last] = iterators_of(end_label);
-    diag_ctx.set_source_snippet(current_line(get_line_start(label_end_first)), label_end_first,
-                                label_end_last);
+    set_source_location(diag_ctx, where_tag);
+    set_source_snippet(diag_ctx, start_label);
+    set_source_snippet(diag_ctx, end_label);
 
     diagnostic_printer diagnostic{ diag_ctx };
     os << diagnostic << '\n';
@@ -113,7 +106,7 @@ void diagnostic_handler<Iterator>::syntax_error(ast::position_tagged const& wher
 template <typename Iterator>
 void diagnostic_handler<Iterator>::error(iterator_type error_first,
                                          std::optional<iterator_type> error_last,
-                                         std::string const& error_message,
+                                         std::string_view error_message,
                                          error_type err_type) const
 {
     using boost::locale::format;
@@ -123,9 +116,8 @@ void diagnostic_handler<Iterator>::error(iterator_type error_first,
 
     diagnostic_context diag_ctx{ err_type, error_message };
 
-    diag_ctx.set_source_location(get_source_location(error_first));
-
-    diag_ctx.set_source_snippet(current_line(get_line_start(error_first)), error_first, error_last);
+    set_source_location(diag_ctx, error_first);
+    set_source_snippet(diag_ctx, error_first, error_last);
 
     diagnostic_printer diagnostic{ diag_ctx };
     os << diagnostic << '\n';
@@ -144,7 +136,7 @@ source_location diagnostic_handler<Iterator>::get_source_location(iterator_type 
 
 template <typename IteratorT>
 std::tuple<std::size_t, std::size_t> diagnostic_handler<IteratorT>::line_column_number(
-    iterator_type const& pos) const
+    iterator_type pos) const
 {
     // based on [.../x3/support/utility/error_reporting.hpp:position(...)](
     // https://github.com/boostorg/spirit/blob/master/include/boost/spirit/home/x3/support/utility/error_reporting.hpp)
@@ -186,7 +178,7 @@ std::tuple<std::size_t, std::size_t> diagnostic_handler<IteratorT>::line_column_
 }
 
 template <typename IteratorT>
-IteratorT diagnostic_handler<IteratorT>::get_line_start(iterator_type const& pos) const
+IteratorT diagnostic_handler<IteratorT>::get_line_start(iterator_type pos) const
 {
     auto [begin, end] = current_file().file_contents_range();
 
@@ -207,7 +199,7 @@ IteratorT diagnostic_handler<IteratorT>::get_line_start(iterator_type const& pos
 }
 
 template <typename IteratorT>
-std::string_view diagnostic_handler<IteratorT>::current_line(iterator_type const& first) const
+std::string_view diagnostic_handler<IteratorT>::current_line(iterator_type first) const
 {
     // based on [.../x3/support/utility/error_reporting.hpp:print_line(...)](
     // https://github.com/boostorg/spirit/blob/master/include/boost/spirit/home/x3/support/utility/error_reporting.hpp)

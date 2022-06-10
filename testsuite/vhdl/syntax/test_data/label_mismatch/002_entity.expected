@@ -1,6 +1,6 @@
-label_mismatch/002_entity:4:1: syntax error: Label mismatch in Entity Declaration
-entity testbench is
-       ~~~~~~~~~ <<-- here
-...
-end entity test_bench;
-           ~~~~~~~~~~ <<-- and here
+In 'label_mismatch/002_entity':4:1: syntax error: Label mismatch in Entity Declaration
+   4| entity testbench is
+    |        ~~~~~~~~~ <<-- here
+    | ...
+   5| end entity test_bench;
+    |            ~~~~~~~~~~ <<-- and here

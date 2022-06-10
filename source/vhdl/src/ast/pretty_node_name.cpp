@@ -11,7 +11,7 @@
 
 namespace ibis::vhdl::ast {
 
-std::tuple<bool, std::string_view> pretty_node_name(std::string_view which)
+std::string_view pretty_node_name(std::string_view which)
 {
     using namespace std::string_view_literals;
     using node_map_type = std::unordered_map<std::string_view, std::string_view>;
@@ -261,7 +261,7 @@ std::tuple<bool, std::string_view> pretty_node_name(std::string_view which)
     auto const iter = node_map.find(which);
 
     if (iter != node_map.end()) {
-        return std::tuple{ true, iter->second };
+        return iter->second;
     }
 
     std::cerr << '\n'
@@ -271,7 +271,8 @@ std::tuple<bool, std::string_view> pretty_node_name(std::string_view which)
               << "pretty_node_name() lookup failed" << '\n'
               << "subject:" << which << std::endl;  // flush
 
-    return std::tuple{ false, which };
+    // simply return lookup argument back
+    return which;
 }
 
 }  // namespace ibis::vhdl::ast

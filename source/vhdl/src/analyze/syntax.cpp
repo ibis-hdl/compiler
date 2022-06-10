@@ -56,23 +56,20 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name)
     // failure diagnostic to user
 
     auto const [start_label, end_label] = labels_of(node);
-    auto const [found, pretty_node_name] = ast::pretty_node_name(node_name);
-
-    // FixMe: 'found' unused, but in the future maybe - remove it
+    node_name = ast::pretty_node_name(node_name);
 
     switch (match_result) {
         case label_match::result::MISMATCH: {
             auto const err_msg =  // --
-                (format(translate("Label mismatch in {1}")) % pretty_node_name).str();
+                (format(translate("Label mismatch in {1}")) % node_name).str();
             diagnostic_handler.syntax_error(node, start_label, end_label, err_msg);
             return false;
         }
 
         case label_match::result::ILLFORMED: {
             auto const err_msg =  // --
-                (format(translate("Label ill-formed in {1}")) % pretty_node_name).str();
+                (format(translate("Label ill-formed in {1}")) % node_name).str();
             diagnostic_handler.syntax_error(node, start_label, end_label, err_msg);
-
             return false;
         }
 
@@ -96,14 +93,12 @@ bool syntax_worker::keyword_matches(ast::process_statement const& node,
     using boost::locale::translate;
 
     if (!node.postponed && node.end_postponed) {
-        auto const [found, pretty_node_name] = ast::pretty_node_name(node_name);
-
-        // FixMe: 'found' unused, but in the future maybe - remove it
+        node_name = ast::pretty_node_name(node_name);
 
         auto const err_msg =  // --
             (format(translate("ill-formed statement in {1}; "
                               "(Hint: single trailing keyword 'postponed')"))  //--
-             % pretty_node_name)
+             % node_name)
                 .str();
         diagnostic_handler.syntax_error(node, err_msg);
 

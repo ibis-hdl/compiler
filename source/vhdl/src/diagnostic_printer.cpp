@@ -11,6 +11,7 @@
 #include <ibis/util/cxx_bug_fatal.hpp>
 
 #include <iostream>
+#include <iomanip>
 
 #include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/locale/format.hpp>
@@ -31,7 +32,7 @@ std::ostream& diagnostic_printer::print_source_location(std::ostream& os) const
     // See GNU standard of [Formatting Error Messages](
     // https://www.gnu.org/prep/standards/html_node/Errors.html)
 
-    os << format("{1}:{2}:{3}")                 // --
+    os << format("'{1}':{2}:{3}")               // --
               % context.location().file_name()  // {1}
               % context.location().line()       // {2}
               % context.location().column()     // {3}
@@ -94,7 +95,7 @@ std::ostream& diagnostic_printer::print_snippets(std::ostream& os) const
         using util::position_indicator;
         return util::make_iomanip([&](std::ostream& os) {
             os << position_indicator(start, first, tab_size, ' ');
-            if (opt_last) {
+            if (opt_last.has_value()) {
                 os << position_indicator(start, opt_last.value(), tab_size, marker_symbol);
             }
             else {
@@ -103,17 +104,40 @@ std::ostream& diagnostic_printer::print_snippets(std::ostream& os) const
         });
     };
 
+    std::size_t const num_width = 4; // up to 9999 line numbers w/o problems
+
+    auto const left_border = [num_width](std::size_t num = 0) {
+        static std::string const space(num_width, ' ');
+        static std::string const vline("| ");
+        return util::make_iomanip([&](std::ostream& os) {
+            if(num != 0) {
+                os << std::setw(num_width) << std::right << num;
+            }
+            else {
+                os << space;
+            }
+            os << vline;
+        });
+    };
+
     auto const count = context.source_snippets().size();
 
+    // @todo [C++20] this is a use case for std::format
     for (std::size_t i = 0; i != count; i++) {
         auto const& source_snippet = context.source_snippets()[i];
         auto line_start = source_snippet.source_line().begin();
 
         // clang-format off
-        os << source_snippet.source_line() << '\n'
+        os << left_border(source_snippet.line_number()) << source_snippet.source_line() << '\n'
+           << left_border()
            << indicator(line_start, source_snippet.first(), source_snippet.last())
-           << " <<-- " << (i == 0 ? translate("here") : translate("and here"))
-           << (i + 1 < count ? "...\n" : "");
+           << " <<-- " << (i == 0 ? translate("here") : translate("and here"));
+        if(i + 1 < count) {
+            os << '\n' << left_border() << "...\n";
+        }
+        else {
+            // nothing
+        }
         // clang-format on
     }
 
@@ -139,7 +163,8 @@ std::ostream& diagnostic_printer::print_on(std::ostream& os) const
     using boost::locale::translate;
 
     // clang-format off
-    os << location() << ": " << error_type() << ": " << error_message() << '\n'
+    os << translate("In")  << " "
+       << location() << ": " << error_type() << ": " << error_message() << '\n'
        << snippets()
        ;
     // clang-format on

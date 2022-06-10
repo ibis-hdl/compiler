@@ -34,34 +34,49 @@ public:
         using iterator_type = parser::iterator_type;
 
     public:
-        source_snippet(std::string_view src_line_, iterator_type const& first_,
-                       std::optional<iterator_type> const& last_)
-            : src_line{ src_line_ }
+        source_snippet(std::size_t line_no_, std::string_view src_line_,
+                       iterator_type first_, std::optional<iterator_type> last_)
+            : line_no{ line_no_ }
+            , src_line{ src_line_ }
             , iter_first{ first_ }
             , iter_last{ last_ }
         {
         }
 
     public:
+        /// The line number of source snippet
+        std::size_t line_number() const { return line_no; }
+
         /// code snippet of erroneous part as text line
         std::string_view source_line() const { return src_line; }
 
         /// iterator position pointing to error/warning part inside code snippet
-        iterator_type const& first() const { return iter_first; }
+        iterator_type first() const { return iter_first; }
 
         /// iterator position pointing to error/warning part inside code snippet
-        std::optional<iterator_type> const& last() const { return iter_last; }
+        std::optional<iterator_type> last() const { return iter_last; }
 
     private:
+        /// The line number of source snippet
+        std::size_t line_no;
+
         /// code snippet of erroneous part as text line
         std::string_view src_line;
 
-        /// iterator position pointing to error/warning part inside code snippet
-        iterator_type const& iter_first;
-        std::optional<iterator_type> const iter_last;  // no reference
+        /// iterator position pointing to error/warning beginning part inside code snippet
+        iterator_type const iter_first;
+
+        /// optional iterator position pointing to error/warning ending part inside code snippet
+        std::optional<iterator_type> const iter_last;
     };
 
 public:
+    /// 
+    /// @brief Construct a new diagnostic context object
+    /// 
+    /// @param provider_ The origin of issue
+    /// @param err_message_ Store a copy of error _message
+    ///
     diagnostic_context(provider provider_, std::string_view err_message_)
         : msg_provider{ provider_ }
         , err_message{ err_message_ }
@@ -78,13 +93,16 @@ public:
     ///
     /// Set the source snippet object
     ///
+    /// @param line_no line number of source
     /// @param src_line full line of source where the issue appears
-    /// @param iterator_range Begin/End of erroneous code
+    /// @param first Begin of erroneous part to be marked
+    /// @param last optional end of erroneous part to be marked
     ///
-    void set_source_snippet(std::string_view src_line, source_snippet::iterator_type const& first,
+    void set_source_snippet(std::size_t line_no, std::string_view src_line,
+                            source_snippet::iterator_type const& first,
                             std::optional<source_snippet::iterator_type> const& last)
     {
-        src_snippets.emplace_back(src_line, first, last);
+        src_snippets.emplace_back(line_no, src_line, first, last);
     }
 
     ///
