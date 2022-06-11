@@ -8,6 +8,9 @@
 #include <ibis/vhdl/ast/util/optional.hpp>
 #include <ibis/vhdl/ast/util/position_tagged.hpp>
 
+// G++-11  requires full defined types
+#include <ibis/vhdl/ast/node/identifier.hpp>
+
 #include <ibis/util/cxx_bug_fatal.hpp>
 
 #include <type_traits>

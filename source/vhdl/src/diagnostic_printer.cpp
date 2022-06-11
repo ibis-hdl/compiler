@@ -106,12 +106,16 @@ std::ostream& diagnostic_printer::print_snippets(std::ostream& os) const
 
     std::size_t const num_width = 4; // up to 9999 line numbers w/o problems
 
-    auto const left_border = [num_width](std::size_t num = 0) {
+    auto const left_border = [](std::size_t num = 0) {
         static std::string const space(num_width, ' ');
         static std::string const vline("| ");
-        return util::make_iomanip([&](std::ostream& os) {
+        // Note, explicit capturing 'num' by copy in your inner lambda, otherwise (capturing by 
+        // reference) using that lambda after the outer has finished execution that's a dangling 
+        // reference! Thanks affects GCC-11 (and maybe later) only (failed test case); Gcc got a
+        // warning: ‘num’ may be used uninitialized [-Wmaybe-uninitialized]
+        return util::make_iomanip([&, num](std::ostream& os) {
             if(num != 0) {
-                os << std::setw(num_width) << std::right << num;
+                os << std::setw(static_cast<int>(num_width)) << std::right << num;
             }
             else {
                 os << space;

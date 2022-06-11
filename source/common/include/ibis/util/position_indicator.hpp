@@ -48,7 +48,8 @@ public:
             if (chr == '\r' || chr == '\n') {
                 break;
             }
-            else if (chr == '\t') {
+            // do not use 'else' after 'break' clang-tidy(readability-else-after-return)
+            if (chr == '\t') {
                 for (std::size_t i = 0; i != tab_sz; ++i) {
                     os << symbol;
                 }
