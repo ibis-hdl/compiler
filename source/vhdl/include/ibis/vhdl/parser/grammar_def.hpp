@@ -31,7 +31,7 @@ namespace ibis::vhdl::parser::detail {
 ///
 struct distinct_directive {
     ///
-    /// Attributeless overload.
+    /// Attribute-less overload.
     ///
     /// @param parser The core parser to be used.
     /// @return The combined parser base on given argument
@@ -214,7 +214,7 @@ using detail::distinct;
 ///@{
 auto const binary_miscellaneous_operator =
     x3::rule<struct binary_miscellaneous_operator_class, ast::operator_token>{
-        "miscellaneous_operator"
+        "miscellaneous operator"
     } = x3::lit("**") >> x3::attr(ast::operator_token::EXPONENT);
 
 auto const ABS = distinct("abs", ast::operator_token::ABS);
@@ -222,7 +222,7 @@ auto const NOT = distinct("not", ast::operator_token::NOT);
 
 auto const unary_miscellaneous_operator =
     x3::rule<struct unary_miscellaneous_operator_class, ast::operator_token>{
-        "miscellaneous_operator"
+        "miscellaneous operator"
     } = ABS | NOT;
 ///@}
 
@@ -244,19 +244,19 @@ x3::symbols<ast::operator_token> const binary_logical_operator_symbols(
         { "xor",  ast::operator_token::XOR },
         { "xnor", ast::operator_token::XNOR }
     },
-    "logical_operator"
+    "logical operator"
     // clang-format on
 );
 
 auto const binary_logical_operator =
-    x3::rule<struct binary_logical_operator_class, ast::operator_token>{ "logical_operator" } =
+    x3::rule<struct binary_logical_operator_class, ast::operator_token>{ "logical operator" } =
         distinct(binary_logical_operator_symbols);
 
 auto const NAND = distinct("nand", ast::operator_token::NAND);
 auto const NOR = distinct("nor", ast::operator_token::NOR);
 
 auto const unary_logical_operator =
-    x3::rule<struct unary_logical_operator_class, ast::operator_token>{ "logical_operator" } =
+    x3::rule<struct unary_logical_operator_class, ast::operator_token>{ "logical operator" } =
         NAND | NOR;
 ///@}
 
@@ -279,7 +279,7 @@ x3::symbols<ast::operator_token> const relational_operator(
         { ">",  ast::operator_token::GREATER },
         { ">=", ast::operator_token::GREATER_EQUALS }
     },
-    "relational_operator"
+    "relational operator"
     // clang-format on
 );
 ///@}
@@ -300,7 +300,7 @@ x3::symbols<ast::operator_token> const adding_operator(
         { "-", ast::operator_token::SUB },
         { "&", ast::operator_token::CONCAT }
     },
-    "adding_operator"
+    "adding operator"
     // clang-format on
 );
 ///@}
@@ -320,7 +320,7 @@ auto const MOD = distinct("mod", ast::operator_token::MOD);
 auto const REM = distinct("rem", ast::operator_token::REM);
 
 auto const multiplying_operator =
-    x3::rule<struct multiplying_operator_class, ast::operator_token>{ "multiplying_operator" } =
+    x3::rule<struct multiplying_operator_class, ast::operator_token>{ "multiplying operator" } =
         MUL | DIV | MOD | REM;
 ///@}
 
@@ -343,12 +343,12 @@ x3::symbols<ast::operator_token> const shift_operator_symbols(
         { "rol", ast::operator_token::ROL },
         { "ror", ast::operator_token::ROR }
     },
-    "shift_operator"
+    "shift operator"
     // clang-format on
 );
 
 auto const shift_operator =
-    x3::rule<struct shift_operator_class, ast::operator_token>{ "shift_operator" } =
+    x3::rule<struct shift_operator_class, ast::operator_token>{ "shift operator" } =
         distinct(shift_operator_symbols);
 ///@}
 
@@ -359,28 +359,28 @@ auto const shift_operator =
 //
 namespace ibis::vhdl::parser {
 
-configuration_item_type const configuration_item{ "configuration_item" };
-concurrent_statement_type const concurrent_statement{ "concurrent_statement" };
+configuration_item_type const configuration_item{ "configuration item" };
+concurrent_statement_type const concurrent_statement{ "concurrent statement" };
 constraint_type const constraint{ "constraint" };
-sequence_of_statements_type const sequence_of_statements{ "sequence_of_statements" };
-subprogram_declarative_item_type const subprogram_declarative_item{ "subprogram_declarative_item" };
+sequence_of_statements_type const sequence_of_statements{ "sequence of statements" };
+subprogram_declarative_item_type const subprogram_declarative_item{ "subprogram declarative item" };
 
 /// top level
 /// FixMe: Make an alias for it, like vhdl::grammar
-design_file_type const design_file{ "design_file" };
+design_file_type const design_file{ "design file" };
 
 // clang-format off
-attribute_name_type const attribute_name{ "attribute_name" };
+attribute_name_type const attribute_name{ "attribute name" };
 expression_type const expression{ "expression" };
-function_call_type const function_call{ "function_call" };
-indexed_name_type const indexed_name{ "indexed_name" };
+function_call_type const function_call{ "function call" };
+indexed_name_type const indexed_name{ "indexed name" };
 literal_type const literal{ "literal" };
 name_type const name{ "name" };
 prefix_type const prefix{ "prefix" };
 primary_type const primary{ "primary" };
 range_type const range{ "range" };
-selected_name_type const selected_name{ "selected_name" };
-slice_name_type const slice_name{ "slice_name" };
+selected_name_type const selected_name{ "selected name" };
+slice_name_type const slice_name{ "slice name" };
 // clang-format on
 
 }  // namespace ibis::vhdl::parser
@@ -419,33 +419,33 @@ using detail::distinct;
 // basic_character ::= basic_graphic_character | format_effector
 //
 auto const upper_case_letter =
-    x3::rule<struct upper_case_letter_class, char>{ "upper_case_letter" } =
+    x3::rule<struct upper_case_letter_class, char>{ "upper case letter" } =
         char_("ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞ");
 auto const lower_case_letter =
-    x3::rule<struct lower_case_letter_class, char>{ "lower_case_letter" } =
+    x3::rule<struct lower_case_letter_class, char>{ "lower case letter" } =
         char_("abcdefghijklmnopqrstuvwxyzßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ");
 auto const digit =
     x3::rule<struct digit_class, char>{ "digit" } =
         x3::digit; // char_("0-9");
 auto const special_character =
-    x3::rule<struct special_character_class, char>{ "special_character" } =
+    x3::rule<struct special_character_class, char>{ "special character" } =
         char_("\"#&'()*+,-./:;<=>[]_|");
 auto const other_special_character =
-    x3::rule<struct other_special_character_class, char>{ "other_special_character" } =
+    x3::rule<struct other_special_character_class, char>{ "other special character" } =
         char_("!$%?@\\^`{}~¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿×÷");
 
 auto const space_character =
-    x3::rule<struct space_character_class, char>{ "space_character" } =
+    x3::rule<struct space_character_class, char>{ "space character" } =
         iso8859_1::space;
 // auto const format_effector =
-//     x3::rule<struct format_effector_class>{ "format_effector" } =
+//     x3::rule<struct format_effector_class>{ "format effector" } =
 //         char_("\t\n\v\r\f");
 
 
 
 /// basic_graphic_character ::=                                    [LRM93 §13.1]
 ///     upper_case_letter | digit | special_character| space_character
-auto const basic_graphic_character = x3::rule<struct basic_graphic_character_class, char>{ "basic_graphic_character" } =
+auto const basic_graphic_character = x3::rule<struct basic_graphic_character_class, char>{ "basic graphic character" } =
         upper_case_letter
       | digit
       | special_character
@@ -464,7 +464,7 @@ auto const basic_graphic_character = x3::rule<struct basic_graphic_character_cla
 /// @endcode
 ///
 auto const extended_digit =
-    x3::rule<struct extended_digit_class, char>{ "extended_digit" } =
+    x3::rule<struct extended_digit_class, char>{ "extended digit" } =
         x3::xdigit; // char_("0-9a-fA-F");
 
 
@@ -530,7 +530,7 @@ auto const extended_digit =
 ///
 /// @todo Check for X3 character parser to use them in the related/this rule.
 ///
-auto const graphic_character = x3::rule<struct graphic_character_class, char>{ "graphic_character" } =
+auto const graphic_character = x3::rule<struct graphic_character_class, char>{ "graphic character" } =
     x3::print
     ;
 
@@ -567,7 +567,7 @@ auto const letter = x3::rule<struct letter_class, char>{ "letter" } =
 ///       https://www.boost.org/doc/libs/1_76_0/libs/spirit/doc/html/spirit/qi/reference/char/char_class.html)
 /// @see [cppreference.com isalnum](https://en.cppreference.com/w/cpp/string/byte/isalnum)
 ///
-auto const letter_or_digit = x3::rule<struct letter_or_digit_class, char>{ "letter_or_digit" } =
+auto const letter_or_digit = x3::rule<struct letter_or_digit_class, char>{ "letter or digit" } =
     // letter | digit
     x3::alnum
     ;
@@ -621,7 +621,7 @@ auto const base = x3::rule<struct base_class, ast::string_span>{ "base" } =
 ///     extended_digit { [ underline ] extended_digit }
 /// @endcode
 ///
-auto const based_integer = x3::rule<struct based_integer_class, ast::string_span>{ "based_integer" } =
+auto const based_integer = x3::rule<struct based_integer_class, ast::string_span>{ "based integer" } =
     raw [ lexeme[
         extended_digit >> *( -lit('_') >> extended_digit )
     ]]
@@ -641,7 +641,7 @@ auto const based_integer = x3::rule<struct based_integer_class, ast::string_span
 ///
 namespace detail {
 
-auto const basic_identifier_feasible = x3::rule<struct basic_identifier_feasible_, ast::string_span>{ "basic_identifier" } =
+auto const basic_identifier_feasible = x3::rule<struct basic_identifier_feasible_, ast::string_span>{ "basic identifier" } =
     raw[ lexeme [
            letter
         >> !lit('"') // reject bit_string_literal
@@ -651,7 +651,7 @@ auto const basic_identifier_feasible = x3::rule<struct basic_identifier_feasible
 
 } // end detail
 
-auto const basic_identifier = x3::rule<struct basic_identifier_class, ast::string_span>{ "basic_identifier" } =
+auto const basic_identifier = x3::rule<struct basic_identifier_class, ast::string_span>{ "basic identifier" } =
     detail::basic_identifier_feasible - keyword
     ;
 
@@ -686,7 +686,7 @@ auto const bit_string_literal = [](auto&& base, auto&& char_range, auto&& attr)
     using AttrT = decltype(attr);
 
     auto const char_set = [](auto&& char_range_) {
-        return x3::rule<struct _, ast::string_span>{ "bit_string_literal" } = x3::as_parser(
+        return x3::rule<struct _, ast::string_span>{ "bit string literal" } = x3::as_parser(
              raw[ lexeme[
                     char_(std::forward<CharT>(char_range_))
                  >> *( -lit("_") >> char_(std::forward<CharT>(char_range_) ))
@@ -694,7 +694,7 @@ auto const bit_string_literal = [](auto&& base, auto&& char_range, auto&& attr)
         );
     };
 
-    return x3::rule<struct _, ast::bit_string_literal>{ "bit_string_literal" } = x3::as_parser(
+    return x3::rule<struct _, ast::bit_string_literal>{ "bit string literal" } = x3::as_parser(
         lexeme[
                x3::omit[char_(std::forward<decltype(base)>(base))]
             >> lit('"')
@@ -707,7 +707,7 @@ auto const bit_string_literal = [](auto&& base, auto&& char_range, auto&& attr)
 
 } // end detail
 
-auto const bit_string_literal = x3::rule<struct bit_string_literal_class, ast::bit_string_literal>{ "bit_string_literal" } =
+auto const bit_string_literal = x3::rule<struct bit_string_literal_class, ast::bit_string_literal>{ "bit string literal" } =
       detail::bit_string_literal("Bb", "01",        ast::bit_string_literal::base_specifier::bin)
     | detail::bit_string_literal("Xx", "0-9a-fA-F", ast::bit_string_literal::base_specifier::hex)
     | detail::bit_string_literal("Oo", "0-7",       ast::bit_string_literal::base_specifier::oct)
@@ -726,7 +726,7 @@ auto const bit_string_literal = x3::rule<struct bit_string_literal_class, ast::b
 ///     ' graphic_character '
 /// @endcode
 ///
-auto const character_literal = x3::rule<struct character_literal_class, ast::character_literal>{ "character_literal" } =
+auto const character_literal = x3::rule<struct character_literal_class, ast::character_literal>{ "character literal" } =
     x3::lexeme [
         "\'" >> ( ( graphic_character - '\'' ) | char_("\'") ) >> "\'"
     ]
@@ -762,7 +762,7 @@ auto const condition = x3::rule<struct condition_class, ast::condition>{ "condit
 ///     | [ reject time_expression ] inertial
 /// @endcode
 ///
-auto const delay_mechanism = x3::rule<struct delay_mechanism_class, ast::delay_mechanism>{ "delay_mechanism" } =
+auto const delay_mechanism = x3::rule<struct delay_mechanism_class, ast::delay_mechanism>{ "delay mechanism" } =
       TRANSPORT
     | -( REJECT >> expression ) >> INERTIAL
     ;
@@ -824,7 +824,7 @@ auto const exponent = [](auto&& signs) {
 ///
 namespace detail {
 
-auto const ext_identifier_atom = x3::rule<struct ext_id_atom, ast::string_span>{ "extended_identifier" } =
+auto const ext_identifier_atom = x3::rule<struct ext_id_atom, ast::string_span>{ "extended identifier" } =
     raw[ lexeme [
            char_('\\')
         >> +( graphic_character - char_('\\') )
@@ -833,7 +833,7 @@ auto const ext_identifier_atom = x3::rule<struct ext_id_atom, ast::string_span>{
     ;
 } // end detail
 
-auto const extended_identifier = x3::rule<struct extended_identifier_class, ast::string_span>{ "extended_identifier" } =
+auto const extended_identifier = x3::rule<struct extended_identifier_class, ast::string_span>{ "extended identifier" } =
     x3::as<ast::string_span>[
         raw[ lexeme [
                detail::ext_identifier_atom
@@ -857,7 +857,7 @@ auto const extended_identifier = x3::rule<struct extended_identifier_class, ast:
 ///     string_expression
 /// @endcode
 ///
-auto const file_logical_name = x3::rule<struct file_logical_name_class, ast::file_logical_name>{ "file_logical_name" } =
+auto const file_logical_name = x3::rule<struct file_logical_name_class, ast::file_logical_name>{ "file logical name" } =
     expression
     ;
 
@@ -873,7 +873,7 @@ auto const file_logical_name = x3::rule<struct file_logical_name_class, ast::fil
 ///     [ open file_open_kind_expression ] is file_logical_name
 /// @endcode
 ///
-auto const file_open_information = x3::rule<struct file_open_information_class, ast::file_open_information>{ "file_open_information" } =
+auto const file_open_information = x3::rule<struct file_open_information_class, ast::file_open_information>{ "file open information" } =
     -( omit[ OPEN ] >> expression )>> IS >> file_logical_name
     ;
 
@@ -909,7 +909,7 @@ auto const identifier = x3::rule<struct identifier_class, ast::identifier>{ "ide
 ///     identifier { , identifier }
 /// @endcode
 ///
-auto const identifier_list = x3::rule<struct identifier_list_class, ast::identifier_list>{ "identifier_list" } =
+auto const identifier_list = x3::rule<struct identifier_list_class, ast::identifier_list>{ "identifier list" } =
     identifier % ','
     ;
 
@@ -933,7 +933,7 @@ auto const identifier_list = x3::rule<struct identifier_list_class, ast::identif
 ///     identifier
 /// @endcode
 ///
-auto const logical_name_list = x3::rule<struct logical_name_list_class, ast::logical_name_list>{ "logical_name_list" } =
+auto const logical_name_list = x3::rule<struct logical_name_list_class, ast::logical_name_list>{ "logical name list" } =
     identifier % ','
     ;
 
@@ -1004,7 +1004,7 @@ auto const mode = x3::rule<struct mode_class, ast::keyword_token>{ "mode" } =
 ///     range range
 /// @endcode
 ///
-auto const range_constraint = x3::rule<struct range_constraint_class, ast::range_constraint>{ "range_constraint" } =
+auto const range_constraint = x3::rule<struct range_constraint_class, ast::range_constraint>{ "range constraint" } =
     RANGE >> range
     ;
 
@@ -1039,7 +1039,7 @@ auto const sign = x3::rule<struct sign_class, ast::operator_token>{ "sign" } =
 ///     identifier
 /// @endcode
 ///
-auto const simple_name = x3::rule<struct simple_name_class, ast::simple_name>{ "simple_name" } =
+auto const simple_name = x3::rule<struct simple_name_class, ast::simple_name>{ "simple name" } =
     identifier
     ;
 
@@ -1056,7 +1056,7 @@ auto const simple_name = x3::rule<struct simple_name_class, ast::simple_name>{ "
 ///     | all
 /// @endcode
 ///
-auto const signal_list = x3::rule<struct signal_list_class, ast::signal_list>{ "signal_list" } =
+auto const signal_list = x3::rule<struct signal_list_class, ast::signal_list>{ "signal list" } =
       (name % ',')
     | OTHERS
     | ALL
@@ -1078,7 +1078,7 @@ namespace detail {
 
 auto const string_literal = [](auto&& chr) {
     using CharT = decltype(chr);
-    return x3::rule<struct string_literal_lambda, ast::string_span>{ "string_literal" } = x3::as_parser(
+    return x3::rule<struct string_literal_lambda, ast::string_span>{ "string literal" } = x3::as_parser(
         raw[
             *( ( graphic_character - char_(std::forward<CharT>(chr))  )
             | ( char_(std::forward<CharT>(chr)) >> char_(std::forward<CharT>(chr)) )
@@ -1089,7 +1089,7 @@ auto const string_literal = [](auto&& chr) {
 
 } // end detail
 
-auto const string_literal = x3::rule<struct string_literal_class, ast::string_literal>{ "string_literal" } =
+auto const string_literal = x3::rule<struct string_literal_class, ast::string_literal>{ "string literal" } =
     lexeme [
           '"' >> detail::string_literal('"') >> '"'
         | '%' >> detail::string_literal('%') >> '%'
@@ -1108,7 +1108,7 @@ auto const string_literal = x3::rule<struct string_literal_class, ast::string_li
 ///     string_literal
 /// @endcode
 ///
-auto const operator_symbol = x3::rule<struct operator_symbol_class, ast::operator_symbol>{ "operator_symbol" } =
+auto const operator_symbol = x3::rule<struct operator_symbol_class, ast::operator_symbol>{ "operator symbol" } =
     string_literal
     ;
 
@@ -1146,7 +1146,7 @@ auto const suffix = x3::rule<struct suffix_class, ast::suffix>{ "suffix" } =
 ///     procedure | function
 /// @endcode
 ///
-auto const subprogram_kind = x3::rule<struct subprogram_kind_class, ast::keyword_token>{ "subprogram_kind" } =
+auto const subprogram_kind = x3::rule<struct subprogram_kind_class, ast::keyword_token>{ "subprogram kind" } =
       PROCEDURE
     | FUNCTION
     ;
@@ -1171,7 +1171,7 @@ auto const subprogram_kind = x3::rule<struct subprogram_kind_class, ast::keyword
 /// [Question about type_mark bnf](
 /// https://groups.google.com/forum/#!topic/comp.lang.vhdl/exUhoMrFavU)
 ///
-auto const type_mark = x3::rule<struct type_mark_class, ast::name>{ "type_mark" } =
+auto const type_mark = x3::rule<struct type_mark_class, ast::name>{ "type mark" } =
     name
     ;
 
@@ -1208,7 +1208,7 @@ auto const signature = x3::rule<struct signature_class, ast::signature>{ "signat
 ///
 /// @note XXX ** ALSO NOTE, ANTLR and hdlConvertor haven't this rule! ** XXX
 ///
-auto const type_conversion = x3::rule<struct type_conversion_class, ast::type_conversion>{ "type_conversion" } =
+auto const type_conversion = x3::rule<struct type_conversion_class, ast::type_conversion>{ "type conversion" } =
     type_mark >> '(' >> expression >> ')'
     ;
 
@@ -1227,7 +1227,7 @@ auto const type_conversion = x3::rule<struct type_conversion_class, ast::type_co
 ///     | null [ after time_expression ]
 /// @endcode
 ///
-auto const waveform_element = x3::rule<struct waveform_element_class, ast::waveform_element>{ "waveform_element" } =
+auto const waveform_element = x3::rule<struct waveform_element_class, ast::waveform_element>{ "waveform element" } =
        ( expression | NULL_ )
     >>  -( AFTER >> expression )
     ;
@@ -1274,7 +1274,7 @@ auto const waveform = x3::rule<struct waveform_class, ast::waveform>{ "waveform"
 ///   ( KW_ELSE waveform | {_input->LA(1) != KW_ELSE}? ) // LA(1) -> LookAhead(1)
 /// @endcode
 ///
-auto const conditional_waveforms = x3::rule<struct conditional_waveforms_class, ast::conditional_waveforms>{ "conditional_waveforms" } =
+auto const conditional_waveforms = x3::rule<struct conditional_waveforms_class, ast::conditional_waveforms>{ "conditional waveforms" } =
        *( waveform >> WHEN >> condition >> ELSE )
     >> waveform
     >> -( WHEN >> condition )
@@ -1318,7 +1318,7 @@ auto const assertion = x3::rule<struct assertion_class, ast::assertion>{ "assert
 ///
 /// FixMe: test case with selected_name, e.g.``work.NAND2`` not working yet.
 ///
-auto const entity_aspect = x3::rule<struct entity_aspect_class, ast::entity_aspect>{ "entity_aspect" } =
+auto const entity_aspect = x3::rule<struct entity_aspect_class, ast::entity_aspect>{ "entity aspect" } =
       x3::as<ast::entity_aspect_entity>[
         ENTITY >> name >> -( '(' >> identifier >> ')' )
       ]
@@ -1368,12 +1368,12 @@ x3::symbols<ast::keyword_token> const entity_class_symbols(
         { "group"         , ast::keyword_token::GROUP },
         { "file"          , ast::keyword_token::FILE }
     },
-    "entity_class"
+    "entity class"
 );
 
 }
 
-auto const entity_class = x3::rule<struct entity_class_class, ast::keyword_token>{ "entity_class" } =
+auto const entity_class = x3::rule<struct entity_class_class, ast::keyword_token>{ "entity class" } =
      distinct(detail::entity_class_symbols)
      ;
 
@@ -1389,7 +1389,7 @@ auto const entity_class = x3::rule<struct entity_class_class, ast::keyword_token
 ///     entity_class [ <> ]
 /// @endcode
 ///
-auto const entity_class_entry = x3::rule<struct entity_class_entry_class, ast::keyword_token>{ "entity_class_entry" } =
+auto const entity_class_entry = x3::rule<struct entity_class_entry_class, ast::keyword_token>{ "entity class entry" } =
     entity_class >> -lit("<>")
     ;
 
@@ -1421,7 +1421,7 @@ auto const entity_class_entry_list = x3::rule<struct entity_class_entry_list_cla
 /// simple_name | character_literal | operator_symbol
 /// @endcode
 ///
-auto const entity_tag = x3::rule<struct entity_tag_class, ast::entity_tag>{ "entity_tag" } =
+auto const entity_tag = x3::rule<struct entity_tag_class, ast::entity_tag>{ "entity tag" } =
       simple_name
     | character_literal
     | operator_symbol
@@ -1439,7 +1439,7 @@ auto const entity_tag = x3::rule<struct entity_tag_class, ast::entity_tag>{ "ent
 ///     entity_tag [ signature ]
 /// @endcode
 ///
-auto const entity_designator = x3::rule<struct entity_designator_class, ast::entity_designator>{ "entity_designator" } =
+auto const entity_designator = x3::rule<struct entity_designator_class, ast::entity_designator>{ "entity designator" } =
     entity_tag >> -signature
     ;
 
@@ -1457,7 +1457,7 @@ auto const entity_designator = x3::rule<struct entity_designator_class, ast::ent
 ///     | all
 /// @endcode
 ///
-auto const entity_name_list = x3::rule<struct entity_name_list_class, ast::entity_name_list>{ "entity_name_list" } =
+auto const entity_name_list = x3::rule<struct entity_name_list_class, ast::entity_name_list>{ "entity name list" } =
       (entity_designator % ',')
     | OTHERS
     | ALL
@@ -1475,7 +1475,7 @@ auto const entity_name_list = x3::rule<struct entity_name_list_class, ast::entit
 ///     entity_name_list : entity_class
 /// @endcode
 ///
-auto const entity_specification = x3::rule<struct entity_specification_class, ast::entity_specification>{ "entity_specification" } =
+auto const entity_specification = x3::rule<struct entity_specification_class, ast::entity_specification>{ "entity specification" } =
     entity_name_list >> ':' >> entity_class
     ;
 
@@ -1497,7 +1497,7 @@ auto const entity_specification = x3::rule<struct entity_specification_class, as
 ///
 /// @note Note, expression also matches {signal, variable, file}_name
 ///
-auto const actual_designator = x3::rule<struct actual_designator_class, ast::actual_designator>{ "actual_designator" } =
+auto const actual_designator = x3::rule<struct actual_designator_class, ast::actual_designator>{ "actual designator" } =
       expression
     | OPEN
     ;
@@ -1519,7 +1519,7 @@ auto const actual_designator = x3::rule<struct actual_designator_class, ast::act
 /// @note name covers { function_name | type_mark } rules.
 /// @note actual_designator is as of expression and hence {signal, ...}_name.
 ///
-auto const actual_part = x3::rule<struct actual_part_class, ast::actual_part>{ "actual_part" } =
+auto const actual_part = x3::rule<struct actual_part_class, ast::actual_part>{ "actual part" } =
     // order matters
       x3::as<ast::actual_part_chunk>[
         name >> '(' >> actual_designator >> ')'
@@ -1540,7 +1540,7 @@ auto const actual_part = x3::rule<struct actual_part_class, ast::actual_part>{ "
 ///     | parameter_name
 /// @endcode
 ///
-auto const formal_designator = x3::rule<struct formal_designator_class, ast::name>{ "formal_designator" } =
+auto const formal_designator = x3::rule<struct formal_designator_class, ast::name>{ "formal designator" } =
     name
     ;
 
@@ -1563,7 +1563,7 @@ auto const formal_designator = x3::rule<struct formal_designator_class, ast::nam
 /// convenience into `std::vector`, even if the number of elements parsed can not reach more
 /// than 2 due to explicit grammar rule.
 ///
-auto const formal_part = x3::rule<struct formal_part_class, ast::formal_part>{ "formal_part" } =
+auto const formal_part = x3::rule<struct formal_part_class, ast::formal_part>{ "formal part" } =
     x3::as<std::vector<ast::name>>[
         name >> -( '(' >> formal_designator >> ')' )
     ]
@@ -1594,7 +1594,7 @@ auto const formal_part = x3::rule<struct formal_part_class, ast::formal_part>{ "
 /// }
 /// @enddot
 ///
-auto const association_element = x3::rule<struct association_element_class, ast::association_element>{ "association_element" } =
+auto const association_element = x3::rule<struct association_element_class, ast::association_element>{ "association element" } =
        -x3::as<ast::formal_part>[ // enforce backtracing
            formal_part >> "=>"
        ]
@@ -1614,7 +1614,7 @@ auto const association_element = x3::rule<struct association_element_class, ast:
 ///
 /// FixMe: Even not recursive, but testsuite test case pending ....
 ///
-auto const association_list = x3::rule<struct association_list_class, ast::association_list>{ "association_list" } =
+auto const association_list = x3::rule<struct association_list_class, ast::association_list>{ "association list" } =
     association_element % ','
     ;
 
@@ -1640,7 +1640,7 @@ auto const association_list = x3::rule<struct association_list_class, ast::assoc
 /// procedure_call_statement ::= procedure_name [ ( actual_parameter_part ) ] ;
 /// @endcode
 ///
-auto const actual_parameter_part = x3::rule<struct actual_parameter_part_class, ast::actual_parameter_part>{ "actual_parameter_part" } =
+auto const actual_parameter_part = x3::rule<struct actual_parameter_part_class, ast::actual_parameter_part>{ "actual parameter part" } =
     association_list
     ;
 
@@ -1659,7 +1659,7 @@ auto const actual_parameter_part = x3::rule<struct actual_parameter_part_class, 
 ///     | operator_symbol
 /// @endcode
 ///
-auto const alias_designator = x3::rule<struct alias_designator_class, ast::alias_designator>{ "alias_designator" } =
+auto const alias_designator = x3::rule<struct alias_designator_class, ast::alias_designator>{ "alias designator" } =
       identifier
     | character_literal
     | operator_symbol
@@ -1682,7 +1682,7 @@ auto const alias_designator = x3::rule<struct alias_designator_class, ast::alias
 ///
 namespace detail {
 
-auto const based_literal_integer = x3::rule<struct based_literal_int_class, ast::based_literal::number_chunk>{ "based_literal" } =
+auto const based_literal_integer = x3::rule<struct based_literal_int_class, ast::based_literal::number_chunk>{ "based literal" } =
        lexeme[
             // note the empty fractional part
             based_integer >> x3::attr(ast::string_span{}) >> '#' >> -exponent('+')
@@ -1690,7 +1690,7 @@ auto const based_literal_integer = x3::rule<struct based_literal_int_class, ast:
     >> x3::attr(ast::based_literal::numeric_type_specifier::integer)
     ;
 
-auto const based_literal_real = x3::rule<struct based_literal_real_class, ast::based_literal::number_chunk>{ "based_literal" } =
+auto const based_literal_real = x3::rule<struct based_literal_real_class, ast::based_literal::number_chunk>{ "based literal" } =
        lexeme[
             based_integer >> lit('.') >> based_integer >> '#' >> -exponent("-+")
        ]
@@ -1699,7 +1699,7 @@ auto const based_literal_real = x3::rule<struct based_literal_real_class, ast::b
 
 } // end detail
 
-auto const based_literal = x3::rule<struct based_literal_class, ast::based_literal>{ "based_literal" } =
+auto const based_literal = x3::rule<struct based_literal_class, ast::based_literal>{ "based literal" } =
     lexeme [
         base >> '#' >> ( detail::based_literal_real |detail::based_literal_integer )
     ]
@@ -1755,7 +1755,7 @@ auto const decimal_literal = x3::rule<struct decimal_literal_class, ast::decimal
 ///     decimal_literal | based_literal
 /// @endcode
 ///
-auto const abstract_literal = boost::spirit::x3::rule<struct abstract_literal_class, ast::abstract_literal>{ "abstract_literal" } =
+auto const abstract_literal = boost::spirit::x3::rule<struct abstract_literal_class, ast::abstract_literal>{ "abstract literal" } =
     // order matters
       based_literal
     | decimal_literal
@@ -1791,7 +1791,7 @@ auto const designator = x3::rule<struct designator_class, ast::designator>{ "des
 ///     type_mark range <>
 /// @endcode
 ///
-auto const index_subtype_definition = x3::rule<struct index_subtype_definition_class, ast::index_subtype_definition>{ "index_subtype_definition" } =
+auto const index_subtype_definition = x3::rule<struct index_subtype_definition_class, ast::index_subtype_definition>{ "index subtype definition" } =
     type_mark >> RANGE >> "<>"
     ;
 
@@ -1866,7 +1866,7 @@ auto const term = x3::rule<struct term_class, ast::term>{ "term" } =
 ///     [ sign ] term { adding_operator term }
 /// @endcode
 ///
-auto const simple_expression = x3::rule<struct simple_expression_class, ast::simple_expression>{ "simple_expression" } =
+auto const simple_expression = x3::rule<struct simple_expression_class, ast::simple_expression>{ "simple expression" } =
     -sign >> term >> *(adding_operator >> term)
     ;
 
@@ -1881,7 +1881,7 @@ auto const simple_expression = x3::rule<struct simple_expression_class, ast::sim
 ///     simple_expression [ shift_operator simple_expression ]
 /// @endcode
 ///
-auto const shift_expression = x3::rule<struct shift_expression_class, ast::shift_expression>{ "shift_expression" } =
+auto const shift_expression = x3::rule<struct shift_expression_class, ast::shift_expression>{ "shift expression" } =
        simple_expression
     >> -x3::as<ast::shift_expression::chunk>[
             shift_operator >> simple_expression
@@ -1930,7 +1930,7 @@ auto const relation = x3::rule<struct relation_class, ast::relation>{ "relation"
 /// resolution_function_name and type_mark are names, semantically matters on
 /// context as of VHDL.
 ///
-auto const subtype_indication = x3::rule<struct subtype_indication_class, ast::subtype_indication>{ "subtype_indication" } =
+auto const subtype_indication = x3::rule<struct subtype_indication_class, ast::subtype_indication>{ "subtype indication" } =
     (
        x3::repeat(1 ,2)[
           name          // range as keyword can follow; name forbids keywords!
@@ -1959,7 +1959,7 @@ auto const subtype_indication = x3::rule<struct subtype_indication_class, ast::s
 ///     discrete_subtype_indication | range
 /// @endcode
 ///
-auto const discrete_range = x3::rule<struct discrete_range_class, ast::discrete_range>{ "discrete_range" } =
+auto const discrete_range = x3::rule<struct discrete_range_class, ast::discrete_range>{ "discrete range" } =
     // order matters
       range
     | subtype_indication
@@ -1977,7 +1977,7 @@ auto const discrete_range = x3::rule<struct discrete_range_class, ast::discrete_
 ///     identifier in discrete_range
 /// @endcode
 ///
-auto const parameter_specification = x3::rule<struct parameter_specification_class, ast::parameter_specification>{ "parameter_specification" } =
+auto const parameter_specification = x3::rule<struct parameter_specification_class, ast::parameter_specification>{ "parameter specification" } =
     identifier >> omit[ IN ] >> discrete_range
     ;
 
@@ -1992,7 +1992,7 @@ auto const parameter_specification = x3::rule<struct parameter_specification_cla
 ///     | for loop_parameter_specification
 /// @endcode
 ///
-auto const iteration_scheme = x3::rule<struct iteration_scheme_class, ast::iteration_scheme>{ "iteration_scheme" } =
+auto const iteration_scheme = x3::rule<struct iteration_scheme_class, ast::iteration_scheme>{ "iteration scheme" } =
       (WHILE >> condition)
     | (FOR >> parameter_specification)
     ;
@@ -2012,7 +2012,7 @@ auto const iteration_scheme = x3::rule<struct iteration_scheme_class, ast::itera
 ///     identifier | character_literal
 /// @endcode
 ///
-auto const enumeration_literal = x3::rule<struct enumeration_literal_class, ast::enumeration_literal>{ "enumeration_literal" } =
+auto const enumeration_literal = x3::rule<struct enumeration_literal_class, ast::enumeration_literal>{ "enumeration literal" } =
       identifier
     | character_literal
     ;
@@ -2029,7 +2029,7 @@ auto const enumeration_literal = x3::rule<struct enumeration_literal_class, ast:
 ///     ( enumeration_literal { , enumeration_literal } )
 /// @endcode
 ///
-auto const enumeration_type_definition = x3::rule<struct enumeration_type_definition_class, ast::enumeration_type_definition>{ "enumeration_type_definition" } =
+auto const enumeration_type_definition = x3::rule<struct enumeration_type_definition_class, ast::enumeration_type_definition>{ "enumeration type definition" } =
     '(' >> (enumeration_literal % ',') >> ')'
     ;
 
@@ -2080,7 +2080,7 @@ auto const physical_unit_name = x3::as<ast::string_span>[
 ];
 } // end detail
 
-auto const physical_literal = x3::rule<struct physical_literal_class, ast::physical_literal>{ "physical_literal" } =
+auto const physical_literal = x3::rule<struct physical_literal_class, ast::physical_literal>{ "physical literal" } =
     -abstract_literal >> (detail::physical_unit_name - keyword)
     ;
 
@@ -2096,7 +2096,7 @@ auto const physical_literal = x3::rule<struct physical_literal_class, ast::physi
 ///     identifier ;
 /// @endcode
 ///
-auto const primary_unit_declaration = x3::rule<struct primary_unit_declaration_class, ast::primary_unit_declaration>{ "primary_unit_declaration" } =
+auto const primary_unit_declaration = x3::rule<struct primary_unit_declaration_class, ast::primary_unit_declaration>{ "primary unit declaration" } =
     identifier >> x3::expect[';']
     ;
 
@@ -2112,7 +2112,7 @@ auto const primary_unit_declaration = x3::rule<struct primary_unit_declaration_c
 ///     identifier = physical_literal ;
 /// @endcode
 ///
-auto const secondary_unit_declaration = x3::rule<struct secondary_unit_declaration_class, ast::secondary_unit_declaration>{ "secondary_unit_declaration" } =
+auto const secondary_unit_declaration = x3::rule<struct secondary_unit_declaration_class, ast::secondary_unit_declaration>{ "secondary unit declaration" } =
     identifier >> "=" >> physical_literal >> x3::expect[';']
     ;
 
@@ -2133,7 +2133,7 @@ auto const secondary_unit_declaration = x3::rule<struct secondary_unit_declarati
 ///         end units [ physical_type_simple_name ]
 /// @endcode
 ///
-auto const physical_type_definition = x3::rule<struct physical_type_definition_class, ast::physical_type_definition>{ "physical_type_definition" } =
+auto const physical_type_definition = x3::rule<struct physical_type_definition_class, ast::physical_type_definition>{ "physical type definition" } =
        range_constraint
     >> UNITS
     >> primary_unit_declaration
@@ -2160,7 +2160,7 @@ auto const physical_type_definition = x3::rule<struct physical_type_definition_c
 /// integer_type_definition  ::= range_constraint
 /// @endcode
 ///
-auto const scalar_type_definition = x3::rule<struct scalar_type_definition_class, ast::scalar_type_definition>{ "scalar_type_definition" } =
+auto const scalar_type_definition = x3::rule<struct scalar_type_definition_class, ast::scalar_type_definition>{ "scalar type definition" } =
     // order matters
       physical_type_definition
     | enumeration_type_definition
@@ -2181,7 +2181,7 @@ auto const scalar_type_definition = x3::rule<struct scalar_type_definition_class
 ///     subtype_indication
 /// @endcode
 ///
-auto const element_subtype_definition = x3::rule<struct element_subtype_definition_class, ast::subtype_indication>{ "element_subtype_definition" } =
+auto const element_subtype_definition = x3::rule<struct element_subtype_definition_class, ast::subtype_indication>{ "element subtype definition" } =
     subtype_indication
     ;
 
@@ -2197,7 +2197,7 @@ auto const element_subtype_definition = x3::rule<struct element_subtype_definiti
 ///     identifier_list : element_subtype_definition ;
 /// @endcode
 ///
-auto const element_declaration = x3::rule<struct element_declaration_class, ast::element_declaration>{ "element_declaration" } =
+auto const element_declaration = x3::rule<struct element_declaration_class, ast::element_declaration>{ "element declaration" } =
     identifier_list >> ':' >> element_subtype_definition >> x3::expect[';']
     ;
 
@@ -2217,7 +2217,7 @@ auto const element_declaration = x3::rule<struct element_declaration_class, ast:
 ///     end record [ record_type_simple_name ]
 /// @endcode
 ///
-auto const record_type_definition = x3::rule<struct record_type_definition_class, ast::record_type_definition>{ "record_type_definition" } =
+auto const record_type_definition = x3::rule<struct record_type_definition_class, ast::record_type_definition>{ "record type definition" } =
        RECORD
     >> +element_declaration
     >> END >> RECORD >> -simple_name
@@ -2236,7 +2236,7 @@ auto const record_type_definition = x3::rule<struct record_type_definition_class
 ///         of element_subtype_indication
 /// @endcode
 ///
-auto const unconstrained_array_definition = x3::rule<struct unconstrained_array_definition_class, ast::unconstrained_array_definition>{ "unconstrained_array_definition" } =
+auto const unconstrained_array_definition = x3::rule<struct unconstrained_array_definition_class, ast::unconstrained_array_definition>{ "unconstrained array definition" } =
     ARRAY >> '(' >> (index_subtype_definition % ',') >>  ')' >> OF >> subtype_indication
     ;
 
@@ -2252,7 +2252,7 @@ auto const unconstrained_array_definition = x3::rule<struct unconstrained_array_
 ///     ( discrete_range { , discrete_range } )
 /// @endcode
 ///
-auto const index_constraint = x3::rule<struct index_constraint_class, ast::index_constraint>{ "index_constraint" } =
+auto const index_constraint = x3::rule<struct index_constraint_class, ast::index_constraint>{ "index constraint" } =
     '(' >> (discrete_range % ',') >> ')'
     ;
 
@@ -2269,7 +2269,7 @@ auto const index_constraint = x3::rule<struct index_constraint_class, ast::index
 ///     array index_constraint of element_subtype_indication
 /// @endcode
 ///
-auto const constrained_array_definition = x3::rule<struct constrained_array_definition_class, ast::constrained_array_definition>{ "constrained_array_definition" } =
+auto const constrained_array_definition = x3::rule<struct constrained_array_definition_class, ast::constrained_array_definition>{ "constrained array definition" } =
     ARRAY >> index_constraint >> OF >> subtype_indication
     ;
 
@@ -2285,7 +2285,7 @@ auto const constrained_array_definition = x3::rule<struct constrained_array_defi
 ///     unconstrained_array_definition | constrained_array_definition
 /// @endcode
 ///
-auto const array_type_definition = x3::rule<struct array_type_definition_class, ast::array_type_definition>{ "array_type_definition" } =
+auto const array_type_definition = x3::rule<struct array_type_definition_class, ast::array_type_definition>{ "array type definition" } =
       unconstrained_array_definition
     | constrained_array_definition
     ;
@@ -2303,7 +2303,7 @@ auto const array_type_definition = x3::rule<struct array_type_definition_class, 
 ///     | record_type_definition
 /// @endcode
 ///
-auto const composite_type_definition = x3::rule<struct composite_type_definition_class, ast::composite_type_definition>{ "composite_type_definition" } =
+auto const composite_type_definition = x3::rule<struct composite_type_definition_class, ast::composite_type_definition>{ "composite type definition" } =
       array_type_definition
     | record_type_definition
     ;
@@ -2320,7 +2320,7 @@ auto const composite_type_definition = x3::rule<struct composite_type_definition
 ///     access subtype_indication
 /// @endcode
 ///
-auto const access_type_definition = x3::rule<struct access_type_definition_class, ast::access_type_definition>{ "access_type_definition" } =
+auto const access_type_definition = x3::rule<struct access_type_definition_class, ast::access_type_definition>{ "access type definition" } =
     ACCESS >> subtype_indication
     ;
 
@@ -2336,7 +2336,7 @@ auto const access_type_definition = x3::rule<struct access_type_definition_class
 ///     file  of type_mark
 /// @endcode
 ///
-auto const file_type_definition = x3::rule<struct file_type_definition_class, ast::file_type_definition>{ "file_type_definition" } =
+auto const file_type_definition = x3::rule<struct file_type_definition_class, ast::file_type_definition>{ "file type definition" } =
     FILE >> OF >> type_mark
     ;
 
@@ -2356,7 +2356,7 @@ auto const file_type_definition = x3::rule<struct file_type_definition_class, as
 ///     | file_type_definition
 /// @endcode
 ///
-auto const type_definition = x3::rule<struct type_definition_class, ast::type_definition>{ "type_definition" } =
+auto const type_definition = x3::rule<struct type_definition_class, ast::type_definition>{ "type definition" } =
       scalar_type_definition
     | composite_type_definition
     | access_type_definition
@@ -2377,7 +2377,7 @@ auto const type_definition = x3::rule<struct type_definition_class, ast::type_de
 ///     | physical_literal
 /// @endcode
 ///
-auto const numeric_literal = x3::rule<struct numeric_literal_class, ast::numeric_literal>{ "numeric_literal" } =
+auto const numeric_literal = x3::rule<struct numeric_literal_class, ast::numeric_literal>{ "numeric literal" } =
     // order matters
       physical_literal
     | abstract_literal
@@ -2451,7 +2451,7 @@ auto const choices = x3::rule<struct choices_class, ast::choices>{ "choices" } =
 ///     signal_name { , signal_name }
 /// @endcode
 ///
-auto const sensitivity_list = x3::rule<struct sensitivity_list_class, ast::sensitivity_list>{ "sensitivity_list" } =
+auto const sensitivity_list = x3::rule<struct sensitivity_list_class, ast::sensitivity_list>{ "sensitivity list" } =
     name % ','
     ;
 
@@ -2467,7 +2467,7 @@ auto const sensitivity_list = x3::rule<struct sensitivity_list_class, ast::sensi
 ///     on sensitivity_list
 /// @endcode
 ///
-auto const sensitivity_clause = x3::rule<struct sensitivity_clause_class, ast::sensitivity_clause>{ "sensitivity_clause" } =
+auto const sensitivity_clause = x3::rule<struct sensitivity_clause_class, ast::sensitivity_clause>{ "sensitivity clause" } =
     ON >> sensitivity_list
     ;
 
@@ -2486,7 +2486,7 @@ auto const sensitivity_clause = x3::rule<struct sensitivity_clause_class, ast::s
 ///     | generate_statement
 /// @endcode
 ///
-auto const condition_clause = x3::rule<struct condition_clause_class, ast::condition_clause>{ "condition_clause" } =
+auto const condition_clause = x3::rule<struct condition_clause_class, ast::condition_clause>{ "condition clause" } =
     UNTIL >> condition
     ;
 
@@ -2504,7 +2504,7 @@ auto const condition_clause = x3::rule<struct condition_clause_class, ast::condi
 ///     for time_expression
 /// @endcode
 ///
-auto const timeout_clause = x3::rule<struct timeout_clause_class, ast::timeout_clause>{ "timeout_clause" } =
+auto const timeout_clause = x3::rule<struct timeout_clause_class, ast::timeout_clause>{ "timeout clause" } =
     FOR >> expression
     ;
 
@@ -2520,7 +2520,7 @@ auto const timeout_clause = x3::rule<struct timeout_clause_class, ast::timeout_c
 ///     [ label : ] wait [ sensitivity_clause ] [ condition_clause ] [ timeout_clause ] ;
 /// @endcode
 ///
-auto const wait_statement = x3::rule<struct wait_statement_class, ast::wait_statement>{ "wait_statement" } =
+auto const wait_statement = x3::rule<struct wait_statement_class, ast::wait_statement>{ "wait statement" } =
     -label_colon >> WAIT >> -sensitivity_clause >> -condition_clause >> -timeout_clause >> x3::expect[';']
     ;
 
@@ -2537,7 +2537,7 @@ auto const wait_statement = x3::rule<struct wait_statement_class, ast::wait_stat
 ///     [ label : ] assertion ;
 /// @endcode
 ///
-auto const assertion_statement = x3::rule<struct assertion_statement_class, ast::assertion_statement>{ "assertion_statement" } =
+auto const assertion_statement = x3::rule<struct assertion_statement_class, ast::assertion_statement>{ "assertion statement" } =
     -label_colon >> assertion >> x3::expect[';']
     ;
 
@@ -2562,7 +2562,7 @@ auto const assertion_statement = x3::rule<struct assertion_statement_class, ast:
 /// @endcode
 /// since attribute_name isn't correctly parsed.
 ///
-auto const report_statement = x3::rule<struct report_statement_class, ast::report_statement>{ "report_statement" } =
+auto const report_statement = x3::rule<struct report_statement_class, ast::report_statement>{ "report statement" } =
     -label_colon >> ( REPORT >> expression ) >> -( SEVERITY >> expression ) >> x3::expect[';']
     ;
 
@@ -2600,7 +2600,7 @@ auto const report_statement = x3::rule<struct report_statement_class, ast::repor
 /// still contains the previous parsed data, hence holding the leaf data twice
 /// using two parse paths. as[] directive solve this.
 ///
-auto const element_association = x3::rule<struct element_association_class, ast::element_association>{ "element_association" } =
+auto const element_association = x3::rule<struct element_association_class, ast::element_association>{ "element association" } =
     -x3::as<ast::choices>[choices >> "=>" ] >> expression
     ;
 
@@ -2651,7 +2651,7 @@ auto const target = x3::rule<struct target_class, ast::target>{ "target" } =
 ///     [ label : ] target <= [ delay_mechanism ] waveform ;
 /// @endcode
 ///
-auto const signal_assignment_statement = x3::rule<struct signal_assignment_statement_class, ast::signal_assignment_statement>{ "signal_assignment_statement" } =
+auto const signal_assignment_statement = x3::rule<struct signal_assignment_statement_class, ast::signal_assignment_statement>{ "signal assignment statement" } =
     -label_colon >> target >> "<=" >> -delay_mechanism >> waveform >> x3::expect[';']
     ;
 
@@ -2667,7 +2667,7 @@ auto const signal_assignment_statement = x3::rule<struct signal_assignment_state
 ///     [ label : ] target  := expression ;
 /// @endcode
 ///
-auto const variable_assignment_statement = x3::rule<struct variable_assignment_statement_class, ast::variable_assignment_statement>{ "variable_assignment_statement" } =
+auto const variable_assignment_statement = x3::rule<struct variable_assignment_statement_class, ast::variable_assignment_statement>{ "variable assignment statement" } =
     -label_colon >> target >> ":=" >> expression >> x3::expect[';']
     ;
 
@@ -2691,7 +2691,7 @@ auto const variable_assignment_statement = x3::rule<struct variable_assignment_s
 ///         end if [ if_label ] ;
 /// @endcode
 ///
-auto const if_statement = x3::rule<struct if_statement_class, ast::if_statement>{ "if_statement" } =
+auto const if_statement = x3::rule<struct if_statement_class, ast::if_statement>{ "if statement" } =
        -label_colon
     >> IF >> condition >> THEN
     >> sequence_of_statements
@@ -2717,7 +2717,7 @@ auto const if_statement = x3::rule<struct if_statement_class, ast::if_statement>
 ///         sequence_of_statements
 /// @endcode
 ///
-auto const case_statement_alternative = x3::rule<struct case_statement_alternative_class, ast::case_statement_alternative>{ "case_statement_alternative" } =
+auto const case_statement_alternative = x3::rule<struct case_statement_alternative_class, ast::case_statement_alternative>{ "case statement alternative" } =
     WHEN >> choices >> "=>" >> sequence_of_statements
     ;
 
@@ -2738,7 +2738,7 @@ auto const case_statement_alternative = x3::rule<struct case_statement_alternati
 ///         end case [ case_label ] ;
 /// @endcode
 ///
-auto const case_statement = x3::rule<struct case_statement_class, ast::case_statement>{ "case_statement" } =
+auto const case_statement = x3::rule<struct case_statement_class, ast::case_statement>{ "case statement" } =
        -label_colon
     >> CASE
     >> expression
@@ -2763,7 +2763,7 @@ auto const case_statement = x3::rule<struct case_statement_class, ast::case_stat
 ///         end loop [ loop_label ] ;
 /// @endcode
 ///
-auto const loop_statement = x3::rule<struct loop_statement_class, ast::loop_statement>{ "loop_statement" } =
+auto const loop_statement = x3::rule<struct loop_statement_class, ast::loop_statement>{ "loop statement" } =
        -label_colon
     >> -iteration_scheme
     >> LOOP
@@ -2783,7 +2783,7 @@ auto const loop_statement = x3::rule<struct loop_statement_class, ast::loop_stat
 ///     [ label : ] next [ loop_label ] [ when condition ] ;
 /// @endcode
 ///
-auto const next_statement = x3::rule<struct next_statement_class, ast::next_statement>{ "next_statement" } =
+auto const next_statement = x3::rule<struct next_statement_class, ast::next_statement>{ "next statement" } =
     -label_colon >> NEXT >> -label >> -( WHEN >> condition ) >> x3::expect[';']
     ;
 
@@ -2799,7 +2799,7 @@ auto const next_statement = x3::rule<struct next_statement_class, ast::next_stat
 ///     [ label : ] exit [ loop_label ] [ when condition ] ;
 /// @endcode
 ///
-auto const exit_statement = x3::rule<struct exit_statement_class, ast::exit_statement>{ "exit_statement" } =
+auto const exit_statement = x3::rule<struct exit_statement_class, ast::exit_statement>{ "exit statement" } =
     -label_colon >> EXIT >> -label >> -( WHEN >> condition ) >> x3::expect[';']
     ;
 
@@ -2816,7 +2816,7 @@ auto const exit_statement = x3::rule<struct exit_statement_class, ast::exit_stat
 ///     [ label : ] return [ expression ] ;
 /// @endcode
 ///
-auto const return_statement = x3::rule<struct return_statement_class, ast::return_statement>{ "return_statement" } =
+auto const return_statement = x3::rule<struct return_statement_class, ast::return_statement>{ "return statement" } =
     -label_colon >> RETURN >> -expression >> x3::expect[';']
     ;
 
@@ -2833,7 +2833,7 @@ auto const return_statement = x3::rule<struct return_statement_class, ast::retur
 ///     procedure_name [ ( actual_parameter_part ) ]
 /// @endcode
 ///
-auto const procedure_call = x3::rule<struct procedure_call_class, ast::procedure_call>{ "procedure_call" } =
+auto const procedure_call = x3::rule<struct procedure_call_class, ast::procedure_call>{ "procedure call" } =
     name >> -( '(' >> actual_parameter_part >> ')' )
     ;
 
@@ -2849,7 +2849,7 @@ auto const procedure_call = x3::rule<struct procedure_call_class, ast::procedure
 ///     [ label : ] procedure_call ;
 /// @endcode
 ///
-auto const procedure_call_statement = x3::rule<struct procedure_call_statement_class, ast::procedure_call_statement>{ "procedure_call_statement" } =
+auto const procedure_call_statement = x3::rule<struct procedure_call_statement_class, ast::procedure_call_statement>{ "procedure call statement" } =
     -label_colon >> procedure_call >> x3::expect[';']
     ;
 
@@ -2866,7 +2866,7 @@ auto const procedure_call_statement = x3::rule<struct procedure_call_statement_c
 ///      [ label : ] null ;
 /// @endcode
 ///
-auto const null_statement = x3::rule<struct null_statement_class, ast::null_statement>{ "null_statement" } =
+auto const null_statement = x3::rule<struct null_statement_class, ast::null_statement>{ "null statement" } =
     -label_colon >> omit[ NULL_ ] >> x3::expect[';']
     ;
 
@@ -2899,7 +2899,7 @@ auto const null_statement = x3::rule<struct null_statement_class, ast::null_stat
 /// @todo All alternatives have an optional label, resulting in backtracing. Hence bound the
 /// label to this AST node - which makes the check of label pairs more complicate otherwise!
 ///
-auto const sequential_statement = x3::rule<struct sequential_statement_class, ast::sequential_statement>{ "sequential_statement" } =
+auto const sequential_statement = x3::rule<struct sequential_statement_class, ast::sequential_statement>{ "sequential statement" } =
       wait_statement
     | assertion_statement
     | report_statement
@@ -2958,7 +2958,7 @@ auto const sequence_of_statements_def = // recursive call
 /// [ label : ] [ postponed ] assertion ;
 /// @endcode
 ///
-auto const concurrent_assertion_statement = x3::rule<struct concurrent_assertion_statement_class, ast::concurrent_assertion_statement>{ "concurrent_assertion_statement" } =
+auto const concurrent_assertion_statement = x3::rule<struct concurrent_assertion_statement_class, ast::concurrent_assertion_statement>{ "concurrent assertion statement" } =
     -label_colon >> -POSTPONED >> assertion >> x3::expect[';']
     ;
 
@@ -2992,7 +2992,7 @@ auto const concurrent_procedure_call_statement = x3::rule<struct concurrent_proc
 ///     [ constant ] identifier_list : [ in ] subtype_indication [ := static_expression ]
 /// @endcode
 ///
-auto const interface_constant_declaration = x3::rule<struct interface_constant_declaration_class, ast::interface_constant_declaration>{ "interface_constant_declaration" } =
+auto const interface_constant_declaration = x3::rule<struct interface_constant_declaration_class, ast::interface_constant_declaration>{ "interface constant declaration" } =
        -CONSTANT
     >> identifier_list
     >> ':'
@@ -3014,7 +3014,7 @@ auto const interface_constant_declaration = x3::rule<struct interface_constant_d
 ///     [signal] identifier_list : [ mode ] subtype_indication [ bus ] [ := static_expression ]
 /// @endcode
 ///
-auto const interface_signal_declaration = x3::rule<struct interface_signal_declaration_class, ast::interface_signal_declaration>{ "interface_signal_declaration" } =
+auto const interface_signal_declaration = x3::rule<struct interface_signal_declaration_class, ast::interface_signal_declaration>{ "interface signal declaration" } =
        -SIGNAL
     >> identifier_list
     >> ':'
@@ -3037,7 +3037,7 @@ auto const interface_signal_declaration = x3::rule<struct interface_signal_decla
 ///     [variable] identifier_list : [ mode ] subtype_indication [ := static_expression ]
 /// @endcode
 ///
-auto const interface_variable_declaration = x3::rule<struct interface_variable_declaration_class, ast::interface_variable_declaration>{ "interface_variable_declaration" } =
+auto const interface_variable_declaration = x3::rule<struct interface_variable_declaration_class, ast::interface_variable_declaration>{ "interface variable declaration" } =
        -VARIABLE
     >> identifier_list
     >> ':'
@@ -3058,7 +3058,7 @@ auto const interface_variable_declaration = x3::rule<struct interface_variable_d
 ///     file identifier_list : subtype_indication
 /// @endcode
 ///
-auto const interface_file_declaration = x3::rule<struct interface_file_declaration_class, ast::interface_file_declaration>{ "interface_file_declaration" } =
+auto const interface_file_declaration = x3::rule<struct interface_file_declaration_class, ast::interface_file_declaration>{ "interface file declaration" } =
     FILE >> identifier_list >> ':' >> subtype_indication
     ;
 
@@ -3076,7 +3076,7 @@ auto const interface_file_declaration = x3::rule<struct interface_file_declarati
 ///     | interface_file_declaration
 /// @endcode
 ///
-auto const interface_declaration = x3::rule<struct interface_declaration_class, ast::interface_declaration>{ "interface_declaration" } =
+auto const interface_declaration = x3::rule<struct interface_declaration_class, ast::interface_declaration>{ "interface declaration" } =
       interface_constant_declaration
     | interface_signal_declaration
     | interface_variable_declaration
@@ -3095,7 +3095,7 @@ auto const interface_declaration = x3::rule<struct interface_declaration_class, 
 ///      interface_declaration
 /// @endcode
 ///
-auto const interface_element = x3::rule<struct interface_element_class, ast::interface_element>{ "interface_element" } =
+auto const interface_element = x3::rule<struct interface_element_class, ast::interface_element>{ "interface element" } =
     interface_declaration
     ;
 
@@ -3113,7 +3113,7 @@ auto const interface_element = x3::rule<struct interface_element_class, ast::int
 /// FixMe: using ``interface_element % x3::expect[';']`` won't work here since the
 /// last interface_element isn't terminated with trailing ';'
 ///
-auto const interface_list = x3::rule<struct interface_list_class, ast::interface_list>{ "interface_list" } =
+auto const interface_list = x3::rule<struct interface_list_class, ast::interface_list>{ "interface list" } =
     interface_element % ';'
     ;
 
@@ -3129,7 +3129,7 @@ auto const interface_list = x3::rule<struct interface_list_class, ast::interface
 ///     parameter_interface_list
 /// @endcode
 ///
-auto const formal_parameter_list = x3::rule<struct formal_parameter_list_class, ast::formal_parameter_list>{ "formal_parameter_list" } =
+auto const formal_parameter_list = x3::rule<struct formal_parameter_list_class, ast::formal_parameter_list>{ "formal parameter list" } =
     interface_list
     ;
 
@@ -3153,7 +3153,7 @@ auto const formal_parameter_list = x3::rule<struct formal_parameter_list_class, 
 ///     generic_interface_list
 /// @endcode
 ///
-auto const generic_clause = x3::rule<struct generic_clause_class, ast::generic_clause>{ "generic_clause" } =
+auto const generic_clause = x3::rule<struct generic_clause_class, ast::generic_clause>{ "generic clause" } =
     GENERIC >> '(' >> interface_list >> ')' >> x3::expect[';']
     ;
 
@@ -3176,7 +3176,7 @@ auto const generic_clause = x3::rule<struct generic_clause_class, ast::generic_c
 ///     port_interface_list
 /// @endcode
 ///
-auto const port_clause = x3::rule<struct port_clause_class, ast::port_clause>{ "port_clause" } =
+auto const port_clause = x3::rule<struct port_clause_class, ast::port_clause>{ "port clause" } =
     PORT >> '(' >> interface_list >> ')' >> x3::expect[';']
     ;
 
@@ -3194,7 +3194,7 @@ auto const port_clause = x3::rule<struct port_clause_class, ast::port_clause>{ "
 ///     [ formal_port_clause ]
 /// @endcode
 ///
-auto const entity_header = x3::rule<struct entity_header_class, ast::entity_header>{ "entity_header" } =
+auto const entity_header = x3::rule<struct entity_header_class, ast::entity_header>{ "entity header" } =
        -generic_clause
     >> -port_clause
     ;
@@ -3222,7 +3222,7 @@ auto const entity_header = x3::rule<struct entity_header_class, ast::entity_head
 ///     register  |  bus
 /// @endcode
 ///
-auto const signal_declaration = x3::rule<struct signal_declaration_class, ast::signal_declaration>{ "signal_declaration" } =
+auto const signal_declaration = x3::rule<struct signal_declaration_class, ast::signal_declaration>{ "signal declaration" } =
        omit[ SIGNAL ]
     >> identifier_list
     >> ':'
@@ -3262,7 +3262,7 @@ auto const function_specification = x3::rule<struct function_specification_class
 
 } // end detail
 
-auto const subprogram_specification = x3::rule<struct subprogram_specification_class, ast::subprogram_specification>{ "subprogram_specification" } =
+auto const subprogram_specification = x3::rule<struct subprogram_specification_class, ast::subprogram_specification>{ "subprogram specification" } =
       detail::procedure_specification
     | detail::function_specification
     ;
@@ -3279,7 +3279,7 @@ auto const subprogram_specification = x3::rule<struct subprogram_specification_c
 ///     subprogram_specification ;
 /// @endcode
 ///
-auto const subprogram_declaration = x3::rule<struct subprogram_declaration_class, ast::subprogram_declaration>{ "subprogram_declaration" } =
+auto const subprogram_declaration = x3::rule<struct subprogram_declaration_class, ast::subprogram_declaration>{ "subprogram declaration" } =
     subprogram_specification >> x3::expect[';']
     ;
 
@@ -3296,7 +3296,7 @@ auto const subprogram_declaration = x3::rule<struct subprogram_declaration_class
 ///     { subprogram_declarative_item }
 /// @endcode
 ///
-auto const subprogram_declarative_part = x3::rule<struct subprogram_declarative_part_class, ast::subprogram_declarative_part>{ "subprogram_declarative_part" } =
+auto const subprogram_declarative_part = x3::rule<struct subprogram_declarative_part_class, ast::subprogram_declarative_part>{ "subprogram declarative part" } =
     *subprogram_declarative_item
     ;
 
@@ -3313,7 +3313,7 @@ auto const subprogram_declarative_part = x3::rule<struct subprogram_declarative_
 ///     { sequential_statement }
 /// @endcode
 ///
-auto const subprogram_statement_part = x3::rule<struct subprogram_statement_part_class, ast::subprogram_statement_part>{ "subprogram_statement_part" } =
+auto const subprogram_statement_part = x3::rule<struct subprogram_statement_part_class, ast::subprogram_statement_part>{ "subprogram statement part" } =
     sequence_of_statements
     ;
 
@@ -3333,7 +3333,7 @@ auto const subprogram_statement_part = x3::rule<struct subprogram_statement_part
 ///     end [ subprogram_kind ] [ designator ] ;
 /// @endcode
 ///
-auto const subprogram_body = x3::rule<struct subprogram_body_class, ast::subprogram_body>{ "subprogram_body" } =
+auto const subprogram_body = x3::rule<struct subprogram_body_class, ast::subprogram_body>{ "subprogram body" } =
        subprogram_specification
     >> IS
     >> subprogram_declarative_part
@@ -3372,7 +3372,7 @@ auto const subprogram_body = x3::rule<struct subprogram_body_class, ast::subprog
 /// is parsed successfully, even it shouldn't. Probably this shouldn't be fixed
 /// at parse level self - think about!
 ///
-auto const type_declaration = x3::rule<struct type_declaration_class, ast::type_declaration>{ "type_declaration" } =
+auto const type_declaration = x3::rule<struct type_declaration_class, ast::type_declaration>{ "type declaration" } =
     TYPE >> identifier >> -( IS >> type_definition ) >> x3::expect[';']
     ;
 
@@ -3388,7 +3388,7 @@ auto const type_declaration = x3::rule<struct type_declaration_class, ast::type_
 ///     subtype identifier is subtype_indication ;
 /// @endcode
 ///
-auto const subtype_declaration = x3::rule<struct subtype_declaration_class, ast::subtype_declaration>{ "subtype_declaration" } =
+auto const subtype_declaration = x3::rule<struct subtype_declaration_class, ast::subtype_declaration>{ "subtype declaration" } =
     SUBTYPE >> identifier >> IS >> subtype_indication >> x3::expect[';']
     ;
 
@@ -3404,7 +3404,7 @@ auto const subtype_declaration = x3::rule<struct subtype_declaration_class, ast:
 ///     constant identifier_list : subtype_indication [ := expression ] ;
 /// @endcode
 ///
-auto const constant_declaration = x3::rule<struct constant_declaration_class, ast::constant_declaration>{ "constant_declaration" } =
+auto const constant_declaration = x3::rule<struct constant_declaration_class, ast::constant_declaration>{ "constant declaration" } =
     omit[ CONSTANT ] >> identifier_list >> ':' >> subtype_indication >> -( ":=" >>  expression ) >> x3::expect[';']
 ;
 
@@ -3421,7 +3421,7 @@ auto const constant_declaration = x3::rule<struct constant_declaration_class, as
 ///     [ shared ] variable identifier_list : subtype_indication [ := expression ] ;
 /// @endcode
 ///
-auto const variable_declaration = x3::rule<struct variable_declaration_class, ast::variable_declaration>{ "variable_declaration" } =
+auto const variable_declaration = x3::rule<struct variable_declaration_class, ast::variable_declaration>{ "variable declaration" } =
        -SHARED >> omit[ VARIABLE ]
     >> identifier_list >> ':' >> subtype_indication >> -(  ":=" >>  expression )
     >> x3::expect[';']
@@ -3440,7 +3440,7 @@ auto const variable_declaration = x3::rule<struct variable_declaration_class, as
 ///     file identifier_list : subtype_indication [ file_open_information ] ;
 /// @endcode
 ///
-auto const file_declaration = x3::rule<struct file_declaration_class, ast::file_declaration>{ "file_declaration" } =
+auto const file_declaration = x3::rule<struct file_declaration_class, ast::file_declaration>{ "file declaration" } =
     FILE >> identifier_list >> ':' >> subtype_indication >> -file_open_information >> x3::expect[';']
     ;
 
@@ -3457,7 +3457,7 @@ auto const file_declaration = x3::rule<struct file_declaration_class, ast::file_
 ///     alias alias_designator [ : subtype_indication ] is name [ signature ] ;
 /// @endcode
 ///
-auto const alias_declaration = x3::rule<struct alias_declaration_class, ast::alias_declaration>{ "alias_declaration" } =
+auto const alias_declaration = x3::rule<struct alias_declaration_class, ast::alias_declaration>{ "alias declaration" } =
     ALIAS >> alias_designator >> -( ':' >> subtype_indication ) >> IS >> name >> -signature >> x3::expect[';']
     ;
 
@@ -3475,7 +3475,7 @@ auto const alias_declaration = x3::rule<struct alias_declaration_class, ast::ali
 ///     attribute identifier : type_mark ;
 /// @endcode
 ///
-auto const attribute_declaration = x3::rule<struct attribute_declaration_class, ast::attribute_declaration>{ "attribute_declaration" } =
+auto const attribute_declaration = x3::rule<struct attribute_declaration_class, ast::attribute_declaration>{ "attribute declaration" } =
     ATTRIBUTE >> identifier >> ':' >> type_mark >> x3::expect[';']
     ;
 
@@ -3501,7 +3501,7 @@ auto const attribute_declaration = x3::rule<struct attribute_declaration_class, 
 ///     attribute_simple_name
 /// @endcode
 ///
-auto const attribute_specification = x3::rule<struct attribute_specification_class, ast::attribute_specification>{ "attribute_specification" } =
+auto const attribute_specification = x3::rule<struct attribute_specification_class, ast::attribute_specification>{ "attribute specification" } =
        ATTRIBUTE
     >> simple_name // attribute_designator
     >> OF
@@ -3563,25 +3563,25 @@ auto const pkg_prefix = x3::rule<struct _, std::vector<ast::name>>{ "prefix" } =
         name
     ];
 
-auto const lib_selected_name = x3::rule<struct _, ast::use_clause::selected_name>{ "selected_name" } =
+auto const lib_selected_name = x3::rule<struct _, ast::use_clause::selected_name>{ "selected name" } =
     x3::lexeme[
         lib_prefix >> '.' >> suffix
     ]
     ;
 
-auto const pkg_selected_name = x3::rule<struct _, ast::use_clause::selected_name>{ "selected_name" } =
+auto const pkg_selected_name = x3::rule<struct _, ast::use_clause::selected_name>{ "selected name" } =
     x3::lexeme[
         pkg_prefix >> '.' >> suffix
     ]
     ;
 
-auto const selected_name = x3::rule<struct _, ast::use_clause::selected_name>{ "selected_name" } =
+auto const selected_name = x3::rule<struct _, ast::use_clause::selected_name>{ "selected name" } =
       lib_selected_name
     | pkg_selected_name
     ;
 } // end detail
 
-auto const use_clause = x3::rule<struct use_clause_class, ast::use_clause>{ "use_clause" } =
+auto const use_clause = x3::rule<struct use_clause_class, ast::use_clause>{ "use clause" } =
     USE >> (detail::selected_name % ',') >> x3::expect[';']
     ;
 
@@ -3597,7 +3597,7 @@ auto const use_clause = x3::rule<struct use_clause_class, ast::use_clause>{ "use
 ///     group identifier is ( entity_class_entry_list ) ;
 /// @endcode
 ///
-auto const group_template_declaration = x3::rule<struct group_template_declaration_class, ast::group_template_declaration>{ "group_template_declaration" } =
+auto const group_template_declaration = x3::rule<struct group_template_declaration_class, ast::group_template_declaration>{ "group template declaration" } =
     GROUP >> identifier >> IS >> '(' >> entity_class_entry_list >> ')' >> x3::expect[';']
     ;
 
@@ -3613,7 +3613,7 @@ auto const group_template_declaration = x3::rule<struct group_template_declarati
 ///     name | character_literal
 /// @endcode
 ///
-auto const group_constituent = x3::rule<struct group_constituent_class, ast::group_constituent>{ "group_constituent" } =
+auto const group_constituent = x3::rule<struct group_constituent_class, ast::group_constituent>{ "group constituent" } =
     name | character_literal
     ;
 
@@ -3629,7 +3629,7 @@ auto const group_constituent = x3::rule<struct group_constituent_class, ast::gro
 ///     group_constituent { , group_constituent }
 /// @endcode
 ///
-auto const group_constituent_list = x3::rule<struct group_constituent_list_class, ast::group_constituent_list>{ "group_constituent_list" } =
+auto const group_constituent_list = x3::rule<struct group_constituent_list_class, ast::group_constituent_list>{ "group constituent list" } =
     group_constituent % ','
     ;
 
@@ -3644,7 +3644,7 @@ auto const group_constituent_list = x3::rule<struct group_constituent_list_class
 ///     group identifier : group_template_name ( group_constituent_list ) ;
 /// @endcode
 ///
-auto const group_declaration = x3::rule<struct group_declaration_class, ast::group_declaration>{ "group_declaration" } =
+auto const group_declaration = x3::rule<struct group_declaration_class, ast::group_declaration>{ "group declaration" } =
     GROUP >> identifier >> ':' >> name >> '(' >> group_constituent_list >> ')' >> x3::expect[';']
     ;
 
@@ -3722,7 +3722,7 @@ auto const subprogram_declarative_item_def = // recursive call
 ///     | group_declaration
 /// @endcode
 ///
-auto const process_declarative_item = x3::rule<struct process_declarative_item_class, ast::process_declarative_item>{ "process_declarative_item" } =
+auto const process_declarative_item = x3::rule<struct process_declarative_item_class, ast::process_declarative_item>{ "process declarative item" } =
       subprogram_declaration
     | subprogram_body
     | type_declaration
@@ -3750,7 +3750,7 @@ auto const process_declarative_item = x3::rule<struct process_declarative_item_c
 ///     { process_declarative_item }
 /// @endcode
 ///
-auto const process_declarative_part = x3::rule<struct process_declarative_part_class, ast::process_declarative_part>{ "process_declarative_part" } =
+auto const process_declarative_part = x3::rule<struct process_declarative_part_class, ast::process_declarative_part>{ "process declarative part" } =
     *process_declarative_item
     ;
 
@@ -3766,7 +3766,7 @@ auto const process_declarative_part = x3::rule<struct process_declarative_part_c
 ///     { sequential_statement }
 /// @endcode
 ///
-auto const process_statement_part = x3::rule<struct process_statement_part_class, ast::process_statement_part>{ "process_statement_part" } =
+auto const process_statement_part = x3::rule<struct process_statement_part_class, ast::process_statement_part>{ "process statement part" } =
     sequence_of_statements
     ;
 
@@ -3787,7 +3787,7 @@ auto const process_statement_part = x3::rule<struct process_statement_part_class
 ///         end [ postponed ] process [ process_label ] ;
 /// @endcode
 ///
-auto const process_statement = x3::rule<struct process_statement_class, ast::process_statement>{ "process_statement" } =
+auto const process_statement = x3::rule<struct process_statement_class, ast::process_statement>{ "process statement" } =
        -label_colon
     >> -POSTPONED >> PROCESS  >> -( '(' >> sensitivity_list >> ')' ) >> -IS
     >> process_declarative_part
@@ -3814,7 +3814,7 @@ auto const process_statement = x3::rule<struct process_statement_class, ast::pro
 /// @todo All alternatives have an optional label, resulting in backtracing. Hence bound the
 /// label to this AST node - which makes the check of label pairs more complicate otherwise!
 ///
-auto const entity_statement = x3::rule<struct entity_statement_class, ast::entity_statement>{ "entity_statement" } =
+auto const entity_statement = x3::rule<struct entity_statement_class, ast::entity_statement>{ "entity statement" } =
       concurrent_assertion_statement
     | concurrent_procedure_call_statement
     | process_statement
@@ -3831,7 +3831,7 @@ auto const entity_statement = x3::rule<struct entity_statement_class, ast::entit
 ///     { entity_statement }
 /// @endcode
 ///
-auto const entity_statement_part = x3::rule<struct entity_statement_part_class, ast::entity_statement_part>{ "entity_statement_part" } =
+auto const entity_statement_part = x3::rule<struct entity_statement_part_class, ast::entity_statement_part>{ "entity statement part" } =
     *entity_statement
     ;
 
@@ -3850,7 +3850,7 @@ auto const entity_statement_part = x3::rule<struct entity_statement_part_class, 
 ///     | all
 /// @endcode
 ///
-auto const instantiation_list = x3::rule<struct instantiation_list_class, ast::instantiation_list>{ "instantiation_list" } =
+auto const instantiation_list = x3::rule<struct instantiation_list_class, ast::instantiation_list>{ "instantiation list" } =
       (label % ',')
     | OTHERS
     | ALL
@@ -3868,7 +3868,7 @@ auto const instantiation_list = x3::rule<struct instantiation_list_class, ast::i
 ///     instantiation_list : component_name
 /// @endcode
 ///
-auto const component_specification = x3::rule<struct component_specification_class, ast::component_specification>{ "component_specification" } =
+auto const component_specification = x3::rule<struct component_specification_class, ast::component_specification>{ "component specification" } =
     instantiation_list >> ':' >> name
     ;
 
@@ -3887,7 +3887,7 @@ auto const component_specification = x3::rule<struct component_specification_cla
 ///     generic map ( generic_association_list )
 /// @endcode
 ///
-auto const generic_map_aspect = x3::rule<struct generic_map_aspect_class, ast::generic_map_aspect>{ "generic_map_aspect" } =
+auto const generic_map_aspect = x3::rule<struct generic_map_aspect_class, ast::generic_map_aspect>{ "generic map aspect" } =
     GENERIC >> MAP >> '(' >> association_list >> ')'
     ;
 
@@ -3904,7 +3904,7 @@ auto const generic_map_aspect = x3::rule<struct generic_map_aspect_class, ast::g
 ///     port map ( port_association_list )
 /// @endcode
 ///
-auto const port_map_aspect = x3::rule<struct port_map_aspect_class, ast::port_map_aspect>{ "port_map_aspect" } =
+auto const port_map_aspect = x3::rule<struct port_map_aspect_class, ast::port_map_aspect>{ "port map aspect" } =
     PORT >> MAP >> '(' >> association_list >> ')'
     ;
 
@@ -3925,7 +3925,7 @@ auto const port_map_aspect = x3::rule<struct port_map_aspect_class, ast::port_ma
 ///
 /// FixMe: test case with selected_name doesn't work as expected yet.
 ///
-auto const binding_indication = x3::rule<struct binding_indication_class, ast::binding_indication>{ "binding_indication" } =
+auto const binding_indication = x3::rule<struct binding_indication_class, ast::binding_indication>{ "binding indication" } =
        -( USE >> entity_aspect )
     >> -generic_map_aspect
     >> -port_map_aspect
@@ -3947,7 +3947,7 @@ auto const binding_indication = x3::rule<struct binding_indication_class, ast::b
 ///     | static_expression
 /// @endcode
 ///
-auto const index_specification = x3::rule<struct index_specification_class, ast::index_specification>{ "index_specification" } =
+auto const index_specification = x3::rule<struct index_specification_class, ast::index_specification>{ "index specification" } =
       discrete_range
     | expression
     ;
@@ -3969,7 +3969,7 @@ auto const index_specification = x3::rule<struct index_specification_class, ast:
 /// @note name matches also label (identifier), due to the optional index_specification the
 /// meaning of parsed label identifier depends on context.
 ///
-auto const block_specification = x3::rule<struct block_specification_class, ast::block_specification>{ "block_specification" } =
+auto const block_specification = x3::rule<struct block_specification_class, ast::block_specification>{ "block specification" } =
     // order matters
       label >> -( '(' >> index_specification >> ')' )
     | name      // architecture_name, label (identifier)
@@ -3990,7 +3990,7 @@ auto const block_specification = x3::rule<struct block_specification_class, ast:
 ///     end for ;
 /// @endcode
 ///
-auto const block_configuration = x3::rule<struct block_configuration_class, ast::block_configuration>{ "block_configuration" } =
+auto const block_configuration = x3::rule<struct block_configuration_class, ast::block_configuration>{ "block configuration" } =
        FOR
     >> block_specification
     >> *use_clause
@@ -4014,7 +4014,7 @@ auto const block_configuration = x3::rule<struct block_configuration_class, ast:
 ///     end for ;
 /// @endcode
 ///
-auto const component_configuration = x3::rule<struct component_configuration_class, ast::component_configuration>{ "component_configuration" } =
+auto const component_configuration = x3::rule<struct component_configuration_class, ast::component_configuration>{ "component configuration" } =
        FOR
     >> component_specification
     >> -( binding_indication >> x3::expect[';'] )
@@ -4037,7 +4037,7 @@ auto const component_configuration = x3::rule<struct component_configuration_cla
 ///     end component [ component_simple_name ] ;
 /// @endcode
 ///
-auto const component_declaration = x3::rule<struct component_declaration_class, ast::component_declaration>{ "component_declaration" } =
+auto const component_declaration = x3::rule<struct component_declaration_class, ast::component_declaration>{ "component declaration" } =
        COMPONENT
     >> identifier
     >> -IS
@@ -4061,7 +4061,7 @@ auto const component_declaration = x3::rule<struct component_declaration_class, 
 ///     for component_specification binding_indication ;
 /// @endcode
 ///
-auto const configuration_specification = x3::rule<struct configuration_specification_class, ast::configuration_specification>{ "configuration_specification" } =
+auto const configuration_specification = x3::rule<struct configuration_specification_class, ast::configuration_specification>{ "configuration specification" } =
     FOR >> component_specification >> binding_indication >> x3::expect[';']
     ;
 
@@ -4078,7 +4078,7 @@ auto const configuration_specification = x3::rule<struct configuration_specifica
 ///     guarded_signal_list : type_mark
 /// @endcode
 ///
-auto const guarded_signal_specification = x3::rule<struct guarded_signal_specification_class, ast::guarded_signal_specification>{ "guarded_signal_specification" } =
+auto const guarded_signal_specification = x3::rule<struct guarded_signal_specification_class, ast::guarded_signal_specification>{ "guarded signal specification" } =
     signal_list >> ':' >> type_mark
     ;
 
@@ -4094,7 +4094,7 @@ auto const guarded_signal_specification = x3::rule<struct guarded_signal_specifi
 ///     disconnect guarded_signal_specification after time_expression ;
 /// @endcode
 ///
-auto const disconnection_specification = x3::rule<struct disconnection_specification_class, ast::disconnection_specification>{ "disconnection_specification" } =
+auto const disconnection_specification = x3::rule<struct disconnection_specification_class, ast::disconnection_specification>{ "disconnection specification" } =
     DISCONNECT >> guarded_signal_specification >> AFTER >> expression >> x3::expect[';']
     ;
 
@@ -4125,7 +4125,7 @@ auto const disconnection_specification = x3::rule<struct disconnection_specifica
 ///     | group_declaration
 /// @endcode
 ///
-auto const block_declarative_item = x3::rule<struct block_declarative_item_class, ast::block_declarative_item>{ "block_declarative_item" } =
+auto const block_declarative_item = x3::rule<struct block_declarative_item_class, ast::block_declarative_item>{ "block declarative item" } =
       subprogram_declaration
     | subprogram_body
     | type_declaration
@@ -4158,7 +4158,7 @@ auto const block_declarative_item = x3::rule<struct block_declarative_item_class
 ///     { block_declarative_item }
 /// @endcode
 ///
-auto const block_declarative_part = x3::rule<struct block_declarative_part_class, ast::block_declarative_part>{ "block_declarative_part" } =
+auto const block_declarative_part = x3::rule<struct block_declarative_part_class, ast::block_declarative_part>{ "block declarative part" } =
     *block_declarative_item
     ;
 
@@ -4175,7 +4175,7 @@ auto const block_declarative_part = x3::rule<struct block_declarative_part_class
 ///     [ port_map_aspect ; ] ]
 /// @endcode
 ///
-auto const block_header = x3::rule<struct block_header_class, ast::block_header>{ "block_header" } =
+auto const block_header = x3::rule<struct block_header_class, ast::block_header>{ "block header" } =
        -x3::as<ast::block_header::generic_part_chunk>[
             generic_clause >> -( generic_map_aspect >> x3::expect[';'] )
        ]
@@ -4197,7 +4197,7 @@ auto const block_header = x3::rule<struct block_header_class, ast::block_header>
 ///     { concurrent_statement }
 /// @endcode
 ///
-auto const block_statement_part = x3::rule<struct block_statement_part_class, ast::block_statement_part>{ "block_statement_part" } =
+auto const block_statement_part = x3::rule<struct block_statement_part_class, ast::block_statement_part>{ "block statement part" } =
     *concurrent_statement
     ;
 
@@ -4219,7 +4219,7 @@ auto const block_statement_part = x3::rule<struct block_statement_part_class, as
 ///         end block [ block_label ] ;
 /// @endcode
 ///
-auto const block_statement = x3::rule<struct block_statement_class, ast::block_statement>{ "block_statement" } =
+auto const block_statement = x3::rule<struct block_statement_class, ast::block_statement>{ "block statement" } =
        label_colon
     >> BLOCK
     >> -( '(' >> expression >> ')' )
@@ -4245,7 +4245,7 @@ auto const block_statement = x3::rule<struct block_statement_class, ast::block_s
 ///     | configuration configuration_name
 /// @endcode
 ///
-auto const instantiated_unit = x3::rule<struct instantiated_unit_class, ast::instantiated_unit>{ "instantiated_unit" } =
+auto const instantiated_unit = x3::rule<struct instantiated_unit_class, ast::instantiated_unit>{ "instantiated unit" } =
       x3::as<ast::instantiated_unit_component>[
         -COMPONENT >> name
       ]
@@ -4272,7 +4272,7 @@ auto const instantiated_unit = x3::rule<struct instantiated_unit_class, ast::ins
 ///             [ port_map_aspect ] ;
 /// @endcode
 ///
-auto const component_instantiation_statement = x3::rule<struct component_instantiation_statement_class, ast::component_instantiation_statement>{ "component_instantiation_statement" } =
+auto const component_instantiation_statement = x3::rule<struct component_instantiation_statement_class, ast::component_instantiation_statement>{ "component instantiation statement" } =
        label_colon
     >> instantiated_unit
     >> -generic_map_aspect
@@ -4293,7 +4293,7 @@ auto const component_instantiation_statement = x3::rule<struct component_instant
 ///     target    <= options conditional_waveforms ;
 /// @endcode
 ///
-auto const conditional_signal_assignment = x3::rule<struct conditional_signal_assignment_class, ast::conditional_signal_assignment>{ "conditional_signal_assignment" } =
+auto const conditional_signal_assignment = x3::rule<struct conditional_signal_assignment_class, ast::conditional_signal_assignment>{ "conditional signal assignment" } =
     target >> "<=" >> options >> conditional_waveforms >> x3::expect[';']
     ;
 
@@ -4311,7 +4311,7 @@ auto const conditional_signal_assignment = x3::rule<struct conditional_signal_as
 ///     waveform when choices
 /// @endcode
 ///
-auto const selected_waveforms = x3::rule<struct selected_waveforms_class, ast::selected_waveforms>{ "selected_waveforms" } =
+auto const selected_waveforms = x3::rule<struct selected_waveforms_class, ast::selected_waveforms>{ "selected waveforms" } =
     ( waveform >> WHEN >> choices ) % ','
     ;
 
@@ -4328,7 +4328,7 @@ auto const selected_waveforms = x3::rule<struct selected_waveforms_class, ast::s
 ///         target    <= options selected_waveforms ;
 /// @endcode
 ///
-auto const selected_signal_assignment = x3::rule<struct selected_signal_assignment_class, ast::selected_signal_assignment>{ "selected_signal_assignment" } =
+auto const selected_signal_assignment = x3::rule<struct selected_signal_assignment_class, ast::selected_signal_assignment>{ "selected signal assignment" } =
     WITH >> expression >> SELECT >> target >> "<=" >> options >> selected_waveforms >> x3::expect[';']
     ;
 
@@ -4366,7 +4366,7 @@ auto const concurrent_signal_assignment_statement = x3::rule<struct concurrent_s
 ///     | if condition
 /// @endcode
 ///
-auto const generation_scheme = x3::rule<struct generation_scheme_class, ast::generation_scheme>{ "generation_scheme" } =
+auto const generation_scheme = x3::rule<struct generation_scheme_class, ast::generation_scheme>{ "generation scheme" } =
       (FOR >> parameter_specification)
     | (IF  >> condition)
     ;
@@ -4390,7 +4390,7 @@ auto const generation_scheme = x3::rule<struct generation_scheme_class, ast::gen
 ///
 /// FixMe: testing this rule failed - never seen concurrent_statement/component_instantiation_statement
 ///
-auto const generate_statement = x3::rule<struct generate_statement_class, ast::generate_statement>{ "generate_statement" } =
+auto const generate_statement = x3::rule<struct generate_statement_class, ast::generate_statement>{ "generate statement" } =
        label_colon
     >> generation_scheme >> GENERATE >> -(*block_declarative_item >> BEGIN )
     >> *concurrent_statement
@@ -4454,7 +4454,7 @@ auto const concurrent_statement_def = // recursive call
 ///     { block_declarative_item }
 /// @endcode
 ///
-auto const architecture_declarative_part = x3::rule<struct architecture_declarative_part_class, ast::architecture_declarative_part>{ "architecture_declarative_part" } =
+auto const architecture_declarative_part = x3::rule<struct architecture_declarative_part_class, ast::architecture_declarative_part>{ "architecture declarative part" } =
     *block_declarative_item
     ;
 
@@ -4470,7 +4470,7 @@ auto const architecture_declarative_part = x3::rule<struct architecture_declarat
 ///     { concurrent_statement }
 /// @endcode
 ///
-auto const architecture_statement_part = x3::rule<struct architecture_statement_part_class, ast::architecture_statement_part>{ "architecture_statement_part" } =
+auto const architecture_statement_part = x3::rule<struct architecture_statement_part_class, ast::architecture_statement_part>{ "architecture statement part" } =
     *concurrent_statement
     ;
 
@@ -4490,7 +4490,7 @@ auto const architecture_statement_part = x3::rule<struct architecture_statement_
 ///     end [ architecture ] [ architecture_simple_name ] ;
 /// @endcode
 ///
-auto const architecture_body = x3::rule<struct architecture_body_class, ast::architecture_body>{ "architecture_body" } =
+auto const architecture_body = x3::rule<struct architecture_body_class, ast::architecture_body>{ "architecture body" } =
        ARCHITECTURE >> identifier >> OF >> name >> IS
     >> architecture_declarative_part
     >> BEGIN
@@ -4540,7 +4540,7 @@ auto const configuration_item_def = // recursive call
 ///     | group_declaration
 /// @endcode
 ///
-auto const configuration_declarative_item = x3::rule<struct configuration_declarative_item_class, ast::configuration_declarative_item>{ "configuration_declarative_item" } =
+auto const configuration_declarative_item = x3::rule<struct configuration_declarative_item_class, ast::configuration_declarative_item>{ "configuration declarative item" } =
       use_clause
     | attribute_specification
     | group_declaration
@@ -4558,7 +4558,7 @@ auto const configuration_declarative_item = x3::rule<struct configuration_declar
 ///     { configuration_declarative_item }
 /// @endcode
 ///
-auto const configuration_declarative_part = x3::rule<struct configuration_declarative_part_class, ast::configuration_declarative_part>{ "configuration_declarative_part" } =
+auto const configuration_declarative_part = x3::rule<struct configuration_declarative_part_class, ast::configuration_declarative_part>{ "configuration declarative part" } =
     *configuration_declarative_item
     ;
 
@@ -4577,7 +4577,7 @@ auto const configuration_declarative_part = x3::rule<struct configuration_declar
 ///     end [ configuration ] [ configuration_simple_name ] ;
 /// @endcode
 ///
-auto const configuration_declaration = x3::rule<struct configuration_declaration_class, ast::configuration_declaration>{ "configuration_declaration" } =
+auto const configuration_declaration = x3::rule<struct configuration_declaration_class, ast::configuration_declaration>{ "configuration declaration" } =
        CONFIGURATION
     >> identifier
     >> OF
@@ -4615,7 +4615,7 @@ auto const configuration_declaration = x3::rule<struct configuration_declaration
 ///     | group_declaration
 /// @endcode
 ///
-auto const entity_declarative_item = x3::rule<struct entity_declarative_item_class, ast::entity_declarative_item>{ "entity_declarative_item" } =
+auto const entity_declarative_item = x3::rule<struct entity_declarative_item_class, ast::entity_declarative_item>{ "entity declarative item" } =
       subprogram_declaration
     | subprogram_body
     | type_declaration
@@ -4644,7 +4644,7 @@ auto const entity_declarative_item = x3::rule<struct entity_declarative_item_cla
 ///     { entity_declarative_item }
 /// @endcode
 ///
-auto const entity_declarative_part = x3::rule<struct entity_declarative_part_class, ast::entity_declarative_part>{ "entity_declarative_part" } =
+auto const entity_declarative_part = x3::rule<struct entity_declarative_part_class, ast::entity_declarative_part>{ "entity declarative part" } =
     *entity_declarative_item
     ;
 
@@ -4665,7 +4665,7 @@ auto const entity_declarative_part = x3::rule<struct entity_declarative_part_cla
 ///     end [ entity ] [ entity_simple_name ] ;
 /// @endcode
 ///
-auto const entity_declaration = x3::rule<struct entity_declaration_class, ast::entity_declaration>{ "entity_declaration" } =
+auto const entity_declaration = x3::rule<struct entity_declaration_class, ast::entity_declaration>{ "entity declaration" } =
        ENTITY
     >> identifier
     >> IS
@@ -4709,7 +4709,7 @@ auto const entity_declaration = x3::rule<struct entity_declaration_class, ast::e
 ///     | group_declaration
 /// @endcode
 ///
-auto const package_declarative_item  = x3::rule<struct package_declarative_item_class, ast::package_declarative_item>{ "package_declarative_item" } =
+auto const package_declarative_item  = x3::rule<struct package_declarative_item_class, ast::package_declarative_item>{ "package declarative item" } =
       subprogram_declaration
     | type_declaration
     | subtype_declaration
@@ -4739,7 +4739,7 @@ auto const package_declarative_item  = x3::rule<struct package_declarative_item_
 ///     { package_declarative_item }
 /// @endcode
 ///
-auto const package_declarative_part = x3::rule<struct package_declarative_part_class, ast::package_declarative_part>{ "package_declarative_part" } =
+auto const package_declarative_part = x3::rule<struct package_declarative_part_class, ast::package_declarative_part>{ "package declarative part" } =
     *package_declarative_item
     ;
 
@@ -4757,7 +4757,7 @@ auto const package_declarative_part = x3::rule<struct package_declarative_part_c
 ///     end [ package ] [ package_simple_name ] ;
 /// @endcode
 ///
-auto const package_declaration = x3::rule<struct package_declaration_class, ast::package_declaration>{ "package_declaration" } =
+auto const package_declaration = x3::rule<struct package_declaration_class, ast::package_declaration>{ "package declaration" } =
     ( PACKAGE > identifier > IS
     >      package_declarative_part
     > END ) >> -PACKAGE >> -simple_name >> x3::expect[';']
@@ -4778,7 +4778,7 @@ auto const package_declaration = x3::rule<struct package_declaration_class, ast:
 ///     | package_declaration
 /// @endcode
 ///
-auto const primary_unit = x3::rule<struct primary_unit_class, ast::primary_unit>{ "primary_unit" } =
+auto const primary_unit = x3::rule<struct primary_unit_class, ast::primary_unit>{ "primary unit" } =
       entity_declaration
     | configuration_declaration
     | package_declaration
@@ -4851,7 +4851,7 @@ auto const package_body_declarative_part = x3::rule<struct package_body_declarat
 ///     end [ package body ] [ package_simple_name ] ;
 /// @endcode
 ///
-auto const package_body = x3::rule<struct package_body_class, ast::package_body>{ "package_body" } =
+auto const package_body = x3::rule<struct package_body_class, ast::package_body>{ "package body" } =
        PACKAGE
     >> BODY
     >> simple_name
@@ -4876,7 +4876,7 @@ auto const package_body = x3::rule<struct package_body_class, ast::package_body>
 ///     | package_body
 /// @endcode
 ///
-auto const secondary_unit = x3::rule<struct secondary_unit_class, ast::secondary_unit>{ "secondary_unit" } =
+auto const secondary_unit = x3::rule<struct secondary_unit_class, ast::secondary_unit>{ "secondary unit" } =
       architecture_body
     | package_body
     ;
@@ -4894,7 +4894,7 @@ auto const secondary_unit = x3::rule<struct secondary_unit_class, ast::secondary
 ///     | secondary_unit
 /// @endcode
 ///
-auto const library_unit = x3::rule<struct library_unit_class, ast::library_unit>{ "library_unit" } =
+auto const library_unit = x3::rule<struct library_unit_class, ast::library_unit>{ "library unit" } =
       primary_unit
     | secondary_unit
     ;
@@ -4980,7 +4980,7 @@ auto const literal_def = //  = x3::rule<struct _class, ast::>{ "" } = // order m
 ///
 /// The AST node takes care on this.
 ///
-auto const qualified_expression = x3::rule<struct qualified_expression_class, ast::qualified_expression>{ "qualified_expression" } =
+auto const qualified_expression = x3::rule<struct qualified_expression_class, ast::qualified_expression>{ "qualified expression" } =
        type_mark
     >> "\'"
     >> (
@@ -5023,7 +5023,7 @@ auto const allocator = x3::rule<struct allocator_class, ast::allocator>{ "alloca
 ///     library logical_name_list ;
 /// @endcode
 ///
-auto const library_clause = x3::rule<struct library_clause_class, ast::library_clause>{ "library_clause" } =
+auto const library_clause = x3::rule<struct library_clause_class, ast::library_clause>{ "library clause" } =
     LIBRARY >> logical_name_list >> x3::expect[';']
     ;
 
@@ -5041,7 +5041,7 @@ auto const library_clause = x3::rule<struct library_clause_class, ast::library_c
 ///     | use_clause
 /// @endcode
 ///
-auto const context_item = x3::rule<struct context_item_class, ast::context_item>{ "context_item" } =
+auto const context_item = x3::rule<struct context_item_class, ast::context_item>{ "context item" } =
       library_clause
     | use_clause
     ;
@@ -5057,7 +5057,7 @@ auto const context_item = x3::rule<struct context_item_class, ast::context_item>
 ///     { context_item }
 /// @endcode
 ///
-auto const context_clause = x3::rule<struct context_clause_class, ast::context_clause>{ "context_clause" } =
+auto const context_clause = x3::rule<struct context_clause_class, ast::context_clause>{ "context clause" } =
     *context_item
     ;
 
@@ -5072,7 +5072,7 @@ auto const context_clause = x3::rule<struct context_clause_class, ast::context_c
 ///     context_clause library_unit
 /// @endcode
 ///
-auto const design_unit = x3::rule<struct design_unit_class, ast::design_unit>{ "design_unit" } =
+auto const design_unit = x3::rule<struct design_unit_class, ast::design_unit>{ "design unit" } =
     context_clause >> library_unit
     ;
 
@@ -5089,7 +5089,7 @@ auto const design_unit = x3::rule<struct design_unit_class, ast::design_unit>{ "
 ///
 /// ToDo Make an alias for this top level rule
 ///
-auto const design_file_def = //x3::rule<struct design_file_class, ast::design_file>{ "design_file" } =
+auto const design_file_def = //x3::rule<struct design_file_class, ast::design_file>{ "design file" } =
     *design_unit
     ;
 
