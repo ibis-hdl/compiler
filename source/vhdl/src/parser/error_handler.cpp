@@ -156,7 +156,7 @@ std::string error_handler::make_error_description(std::string_view which)
     using boost::locale::format;
     using boost::locale::translate;
 
-    return (format(translate("expecting '{1}' here:")) % lookup(which)).str();
+    return (format(translate("expecting {1} here:")) % lookup(which)).str();
 }
 
 }  // namespace ibis::vhdl::parser

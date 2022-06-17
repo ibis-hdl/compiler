@@ -355,6 +355,42 @@ auto const shift_operator =
 }  // namespace ibis::vhdl::parser::operators
 
 //******************************************************************************
+// Separators
+//
+namespace ibis::vhdl::parser::separator {
+
+class accepting_error_handler {
+public:
+    template <typename IteratorT, typename ContextT>
+    x3::error_handler_result on_error([[maybe_unused]] IteratorT& first,
+                                      [[maybe_unused]] IteratorT last,
+                                      x3::expectation_failure<IteratorT> const& e,
+                                      ContextT const& context) const
+    {
+        auto& diagnostic_handler = x3::get<parser::diagnostic_handler_tag>(context).get();
+
+        diagnostic_handler.parser_error(e.where(), // --
+            parser::error_handler::make_error_description(e.which()));
+
+        // advance iter after the error occurred to continue parsing, the error is reported
+        // before.
+        first = e.where();
+        return x3::error_handler_result::accept;
+    }
+};
+
+// use compiler firewall
+
+x3::rule<class accepting_error_handler> const SEMICOLON{ "semicolon ';'" };
+auto const SEMICOLON_def = x3::expect[ ';' ];
+
+BOOST_SPIRIT_DEFINE(
+    SEMICOLON
+)
+
+}  // namespace ibis::vhdl::parser::separator
+
+//******************************************************************************
 // Rule Instances
 //
 namespace ibis::vhdl::parser {
@@ -400,6 +436,8 @@ using operators::relational_operator;
 using operators::shift_operator;
 using operators::unary_logical_operator;
 using operators::unary_miscellaneous_operator;
+
+using separator::SEMICOLON;
 
 using iso8859_1::char_;
 using iso8859_1::lit;
@@ -2097,7 +2135,7 @@ auto const physical_literal = x3::rule<struct physical_literal_class, ast::physi
 /// @endcode
 ///
 auto const primary_unit_declaration = x3::rule<struct primary_unit_declaration_class, ast::primary_unit_declaration>{ "primary unit declaration" } =
-    identifier >> x3::expect[';']
+    identifier >> x3::expect[ ';' ]
     ;
 
 
@@ -2113,7 +2151,7 @@ auto const primary_unit_declaration = x3::rule<struct primary_unit_declaration_c
 /// @endcode
 ///
 auto const secondary_unit_declaration = x3::rule<struct secondary_unit_declaration_class, ast::secondary_unit_declaration>{ "secondary unit declaration" } =
-    identifier >> "=" >> physical_literal >> x3::expect[';']
+    identifier >> "=" >> physical_literal >> x3::expect[ ';' ]
     ;
 
 
@@ -2198,7 +2236,7 @@ auto const element_subtype_definition = x3::rule<struct element_subtype_definiti
 /// @endcode
 ///
 auto const element_declaration = x3::rule<struct element_declaration_class, ast::element_declaration>{ "element declaration" } =
-    identifier_list >> ':' >> element_subtype_definition >> x3::expect[';']
+    identifier_list >> ':' >> element_subtype_definition >> x3::expect[ ';' ]
     ;
 
 
@@ -2521,7 +2559,7 @@ auto const timeout_clause = x3::rule<struct timeout_clause_class, ast::timeout_c
 /// @endcode
 ///
 auto const wait_statement = x3::rule<struct wait_statement_class, ast::wait_statement>{ "wait statement" } =
-    -label_colon >> WAIT >> -sensitivity_clause >> -condition_clause >> -timeout_clause >> x3::expect[';']
+    -label_colon >> WAIT >> -sensitivity_clause >> -condition_clause >> -timeout_clause >> x3::expect[ ';' ]
     ;
 
 
@@ -2538,7 +2576,7 @@ auto const wait_statement = x3::rule<struct wait_statement_class, ast::wait_stat
 /// @endcode
 ///
 auto const assertion_statement = x3::rule<struct assertion_statement_class, ast::assertion_statement>{ "assertion statement" } =
-    -label_colon >> assertion >> x3::expect[';']
+    -label_colon >> assertion >> x3::expect[ ';' ]
     ;
 
 
@@ -2563,7 +2601,7 @@ auto const assertion_statement = x3::rule<struct assertion_statement_class, ast:
 /// since attribute_name isn't correctly parsed.
 ///
 auto const report_statement = x3::rule<struct report_statement_class, ast::report_statement>{ "report statement" } =
-    -label_colon >> ( REPORT >> expression ) >> -( SEVERITY >> expression ) >> x3::expect[';']
+    -label_colon >> ( REPORT >> expression ) >> -( SEVERITY >> expression ) >> x3::expect[ ';' ]
     ;
 
 
@@ -2652,7 +2690,7 @@ auto const target = x3::rule<struct target_class, ast::target>{ "target" } =
 /// @endcode
 ///
 auto const signal_assignment_statement = x3::rule<struct signal_assignment_statement_class, ast::signal_assignment_statement>{ "signal assignment statement" } =
-    -label_colon >> target >> "<=" >> -delay_mechanism >> waveform >> x3::expect[';']
+    -label_colon >> target >> "<=" >> -delay_mechanism >> waveform >> x3::expect[ ';' ]
     ;
 
 
@@ -2668,7 +2706,7 @@ auto const signal_assignment_statement = x3::rule<struct signal_assignment_state
 /// @endcode
 ///
 auto const variable_assignment_statement = x3::rule<struct variable_assignment_statement_class, ast::variable_assignment_statement>{ "variable assignment statement" } =
-    -label_colon >> target >> ":=" >> expression >> x3::expect[';']
+    -label_colon >> target >> ":=" >> expression >> x3::expect[ ';' ]
     ;
 
 
@@ -2699,7 +2737,7 @@ auto const if_statement = x3::rule<struct if_statement_class, ast::if_statement>
     >> -( ELSE >> sequence_of_statements )
     >> END >> IF
     >> -label
-    >> x3::expect[';']
+    >> x3::expect[ ';' ]
 ;
 
 
@@ -2745,7 +2783,7 @@ auto const case_statement = x3::rule<struct case_statement_class, ast::case_stat
     >> IS
     >> +case_statement_alternative
     >> END >> CASE >> -label
-    >> x3::expect[';']
+    >> x3::expect[ ';' ]
     ;
 
 
@@ -2769,7 +2807,7 @@ auto const loop_statement = x3::rule<struct loop_statement_class, ast::loop_stat
     >> LOOP
     >> sequence_of_statements
     >> END >> LOOP >> -label
-    >> x3::expect[';']
+    >> x3::expect[ ';' ]
     ;
 
 
@@ -2784,7 +2822,7 @@ auto const loop_statement = x3::rule<struct loop_statement_class, ast::loop_stat
 /// @endcode
 ///
 auto const next_statement = x3::rule<struct next_statement_class, ast::next_statement>{ "next statement" } =
-    -label_colon >> NEXT >> -label >> -( WHEN >> condition ) >> x3::expect[';']
+    -label_colon >> NEXT >> -label >> -( WHEN >> condition ) >> x3::expect[ ';' ]
     ;
 
 
@@ -2800,7 +2838,7 @@ auto const next_statement = x3::rule<struct next_statement_class, ast::next_stat
 /// @endcode
 ///
 auto const exit_statement = x3::rule<struct exit_statement_class, ast::exit_statement>{ "exit statement" } =
-    -label_colon >> EXIT >> -label >> -( WHEN >> condition ) >> x3::expect[';']
+    -label_colon >> EXIT >> -label >> -( WHEN >> condition ) >> x3::expect[ ';' ]
     ;
 
 
@@ -2817,7 +2855,7 @@ auto const exit_statement = x3::rule<struct exit_statement_class, ast::exit_stat
 /// @endcode
 ///
 auto const return_statement = x3::rule<struct return_statement_class, ast::return_statement>{ "return statement" } =
-    -label_colon >> RETURN >> -expression >> x3::expect[';']
+    -label_colon >> RETURN >> -expression >> x3::expect[ ';' ]
     ;
 
 
@@ -2850,7 +2888,7 @@ auto const procedure_call = x3::rule<struct procedure_call_class, ast::procedure
 /// @endcode
 ///
 auto const procedure_call_statement = x3::rule<struct procedure_call_statement_class, ast::procedure_call_statement>{ "procedure call statement" } =
-    -label_colon >> procedure_call >> x3::expect[';']
+    -label_colon >> procedure_call >> x3::expect[ ';' ]
     ;
 
 
@@ -2867,7 +2905,7 @@ auto const procedure_call_statement = x3::rule<struct procedure_call_statement_c
 /// @endcode
 ///
 auto const null_statement = x3::rule<struct null_statement_class, ast::null_statement>{ "null statement" } =
-    -label_colon >> omit[ NULL_ ] >> x3::expect[';']
+    -label_colon >> omit[ NULL_ ] >> x3::expect[ ';' ]
     ;
 
 
@@ -2959,7 +2997,7 @@ auto const sequence_of_statements_def = // recursive call
 /// @endcode
 ///
 auto const concurrent_assertion_statement = x3::rule<struct concurrent_assertion_statement_class, ast::concurrent_assertion_statement>{ "concurrent assertion statement" } =
-    -label_colon >> -POSTPONED >> assertion >> x3::expect[';']
+    -label_colon >> -POSTPONED >> assertion >> x3::expect[ ';' ]
     ;
 
 
@@ -2976,7 +3014,7 @@ auto const concurrent_assertion_statement = x3::rule<struct concurrent_assertion
 /// @endcode
 ///
 auto const concurrent_procedure_call_statement = x3::rule<struct concurrent_procedure_call_statement_class, ast::concurrent_procedure_call_statement>{ "concurrent_procedure_call_statement" } =
-    -label_colon >> -POSTPONED >> procedure_call >> x3::expect[';']
+    -label_colon >> -POSTPONED >> procedure_call >> x3::expect[ ';' ]
     ;
 
 
@@ -3110,7 +3148,7 @@ auto const interface_element = x3::rule<struct interface_element_class, ast::int
 ///     interface_element { ; interface_element }
 /// @endcode
 ///
-/// FixMe: using ``interface_element % x3::expect[';']`` won't work here since the
+/// FixMe: using ``interface_element % x3::expect[ ';' ]`` won't work here since the
 /// last interface_element isn't terminated with trailing ';'
 ///
 auto const interface_list = x3::rule<struct interface_list_class, ast::interface_list>{ "interface list" } =
@@ -3154,7 +3192,7 @@ auto const formal_parameter_list = x3::rule<struct formal_parameter_list_class, 
 /// @endcode
 ///
 auto const generic_clause = x3::rule<struct generic_clause_class, ast::generic_clause>{ "generic clause" } =
-    GENERIC >> '(' >> interface_list >> ')' >> x3::expect[';']
+    GENERIC >> '(' >> interface_list >> ')' >> x3::expect[ ';' ]
     ;
 
 
@@ -3177,7 +3215,7 @@ auto const generic_clause = x3::rule<struct generic_clause_class, ast::generic_c
 /// @endcode
 ///
 auto const port_clause = x3::rule<struct port_clause_class, ast::port_clause>{ "port clause" } =
-    PORT >> '(' >> interface_list >> ')' >> x3::expect[';']
+    PORT >> '(' >> interface_list >> ')' >> x3::expect[ ';' ]
     ;
 
 
@@ -3231,7 +3269,7 @@ auto const signal_declaration = x3::rule<struct signal_declaration_class, ast::s
             REGISTER | BUS
        ]
     >> -( ":=" >>  expression )
-    >> x3::expect[';']
+    >> x3::expect[ ';' ]
     ;
 
 
@@ -3280,7 +3318,7 @@ auto const subprogram_specification = x3::rule<struct subprogram_specification_c
 /// @endcode
 ///
 auto const subprogram_declaration = x3::rule<struct subprogram_declaration_class, ast::subprogram_declaration>{ "subprogram declaration" } =
-    subprogram_specification >> x3::expect[';']
+    subprogram_specification >> x3::expect[ ';' ]
     ;
 
 
@@ -3342,7 +3380,7 @@ auto const subprogram_body = x3::rule<struct subprogram_body_class, ast::subprog
     >> END
     >> -subprogram_kind
     >> -designator
-    >> x3::expect[';']
+    >> x3::expect[ ';' ]
     ;
 
 
@@ -3373,7 +3411,7 @@ auto const subprogram_body = x3::rule<struct subprogram_body_class, ast::subprog
 /// at parse level self - think about!
 ///
 auto const type_declaration = x3::rule<struct type_declaration_class, ast::type_declaration>{ "type declaration" } =
-    TYPE >> identifier >> -( IS >> type_definition ) >> x3::expect[';']
+    TYPE >> identifier >> -( IS >> type_definition ) >> x3::expect[ ';' ]
     ;
 
 
@@ -3389,7 +3427,7 @@ auto const type_declaration = x3::rule<struct type_declaration_class, ast::type_
 /// @endcode
 ///
 auto const subtype_declaration = x3::rule<struct subtype_declaration_class, ast::subtype_declaration>{ "subtype declaration" } =
-    SUBTYPE >> identifier >> IS >> subtype_indication >> x3::expect[';']
+    SUBTYPE >> identifier >> IS >> subtype_indication >> x3::expect[ ';' ]
     ;
 
 
@@ -3405,7 +3443,7 @@ auto const subtype_declaration = x3::rule<struct subtype_declaration_class, ast:
 /// @endcode
 ///
 auto const constant_declaration = x3::rule<struct constant_declaration_class, ast::constant_declaration>{ "constant declaration" } =
-    omit[ CONSTANT ] >> identifier_list >> ':' >> subtype_indication >> -( ":=" >>  expression ) >> x3::expect[';']
+    omit[ CONSTANT ] >> identifier_list >> ':' >> subtype_indication >> -( ":=" >>  expression ) >> x3::expect[ ';' ]
 ;
 
 
@@ -3424,7 +3462,7 @@ auto const constant_declaration = x3::rule<struct constant_declaration_class, as
 auto const variable_declaration = x3::rule<struct variable_declaration_class, ast::variable_declaration>{ "variable declaration" } =
        -SHARED >> omit[ VARIABLE ]
     >> identifier_list >> ':' >> subtype_indication >> -(  ":=" >>  expression )
-    >> x3::expect[';']
+    >> x3::expect[ ';' ]
     ;
 
 
@@ -3441,7 +3479,7 @@ auto const variable_declaration = x3::rule<struct variable_declaration_class, as
 /// @endcode
 ///
 auto const file_declaration = x3::rule<struct file_declaration_class, ast::file_declaration>{ "file declaration" } =
-    FILE >> identifier_list >> ':' >> subtype_indication >> -file_open_information >> x3::expect[';']
+    FILE >> identifier_list >> ':' >> subtype_indication >> -file_open_information >> x3::expect[ ';' ]
     ;
 
 
@@ -3458,7 +3496,7 @@ auto const file_declaration = x3::rule<struct file_declaration_class, ast::file_
 /// @endcode
 ///
 auto const alias_declaration = x3::rule<struct alias_declaration_class, ast::alias_declaration>{ "alias declaration" } =
-    ALIAS >> alias_designator >> -( ':' >> subtype_indication ) >> IS >> name >> -signature >> x3::expect[';']
+    ALIAS >> alias_designator >> -( ':' >> subtype_indication ) >> IS >> name >> -signature >> x3::expect[ ';' ]
     ;
 
 
@@ -3476,7 +3514,7 @@ auto const alias_declaration = x3::rule<struct alias_declaration_class, ast::ali
 /// @endcode
 ///
 auto const attribute_declaration = x3::rule<struct attribute_declaration_class, ast::attribute_declaration>{ "attribute declaration" } =
-    ATTRIBUTE >> identifier >> ':' >> type_mark >> x3::expect[';']
+    ATTRIBUTE >> identifier >> ':' >> type_mark >> x3::expect[ ';' ]
     ;
 
 
@@ -3508,7 +3546,7 @@ auto const attribute_specification = x3::rule<struct attribute_specification_cla
     >> entity_specification
     >> IS
     >> expression
-    >> x3::expect[';']
+    >> x3::expect[ ';' ]
     ;
 
 
@@ -3582,7 +3620,7 @@ auto const selected_name = x3::rule<struct _, ast::use_clause::selected_name>{ "
 } // end detail
 
 auto const use_clause = x3::rule<struct use_clause_class, ast::use_clause>{ "use clause" } =
-    USE >> (detail::selected_name % ',') >> x3::expect[';']
+    USE >> (detail::selected_name % ',') >> x3::expect[ ';' ]
     ;
 
 
@@ -3598,7 +3636,7 @@ auto const use_clause = x3::rule<struct use_clause_class, ast::use_clause>{ "use
 /// @endcode
 ///
 auto const group_template_declaration = x3::rule<struct group_template_declaration_class, ast::group_template_declaration>{ "group template declaration" } =
-    GROUP >> identifier >> IS >> '(' >> entity_class_entry_list >> ')' >> x3::expect[';']
+    GROUP >> identifier >> IS >> '(' >> entity_class_entry_list >> ')' >> x3::expect[ ';' ]
     ;
 
 
@@ -3645,7 +3683,7 @@ auto const group_constituent_list = x3::rule<struct group_constituent_list_class
 /// @endcode
 ///
 auto const group_declaration = x3::rule<struct group_declaration_class, ast::group_declaration>{ "group declaration" } =
-    GROUP >> identifier >> ':' >> name >> '(' >> group_constituent_list >> ')' >> x3::expect[';']
+    GROUP >> identifier >> ':' >> name >> '(' >> group_constituent_list >> ')' >> x3::expect[ ';' ]
     ;
 
 
@@ -3794,7 +3832,7 @@ auto const process_statement = x3::rule<struct process_statement_class, ast::pro
     >> BEGIN
     >> process_statement_part
     >> END >> -POSTPONED >> PROCESS >> -label
-    >> x3::expect[';']
+    >> x3::expect[ ';' ]
     ;
 
 
@@ -3996,7 +4034,7 @@ auto const block_configuration = x3::rule<struct block_configuration_class, ast:
     >> *use_clause
     >> *configuration_item
     >> END >> FOR
-    >> x3::expect[';']
+    >> x3::expect[ ';' ]
     ;
 
 
@@ -4017,10 +4055,10 @@ auto const block_configuration = x3::rule<struct block_configuration_class, ast:
 auto const component_configuration = x3::rule<struct component_configuration_class, ast::component_configuration>{ "component configuration" } =
        FOR
     >> component_specification
-    >> -( binding_indication >> x3::expect[';'] )
+    >> -( binding_indication >> x3::expect[ ';' ] )
     >> -block_configuration
     >> END >> FOR
-    >> x3::expect[';']
+    >> x3::expect[ ';' ]
     ;
 
 
@@ -4044,7 +4082,7 @@ auto const component_declaration = x3::rule<struct component_declaration_class, 
     >> -generic_clause
     >> -port_clause
     >> END >> COMPONENT >> -simple_name
-    >> x3::expect[';']
+    >> x3::expect[ ';' ]
     ;
 
 
@@ -4062,7 +4100,7 @@ auto const component_declaration = x3::rule<struct component_declaration_class, 
 /// @endcode
 ///
 auto const configuration_specification = x3::rule<struct configuration_specification_class, ast::configuration_specification>{ "configuration specification" } =
-    FOR >> component_specification >> binding_indication >> x3::expect[';']
+    FOR >> component_specification >> binding_indication >> x3::expect[ ';' ]
     ;
 
 
@@ -4095,7 +4133,7 @@ auto const guarded_signal_specification = x3::rule<struct guarded_signal_specifi
 /// @endcode
 ///
 auto const disconnection_specification = x3::rule<struct disconnection_specification_class, ast::disconnection_specification>{ "disconnection specification" } =
-    DISCONNECT >> guarded_signal_specification >> AFTER >> expression >> x3::expect[';']
+    DISCONNECT >> guarded_signal_specification >> AFTER >> expression >> x3::expect[ ';' ]
     ;
 
 
@@ -4177,10 +4215,10 @@ auto const block_declarative_part = x3::rule<struct block_declarative_part_class
 ///
 auto const block_header = x3::rule<struct block_header_class, ast::block_header>{ "block header" } =
        -x3::as<ast::block_header::generic_part_chunk>[
-            generic_clause >> -( generic_map_aspect >> x3::expect[';'] )
+            generic_clause >> -( generic_map_aspect >> x3::expect[ ';' ] )
        ]
     >> -x3::as<ast::block_header::port_part_chunk>[
-            port_clause >> -( port_map_aspect >> x3::expect[';'] )
+            port_clause >> -( port_map_aspect >> x3::expect[ ';' ] )
        ]
     ;
 
@@ -4229,7 +4267,7 @@ auto const block_statement = x3::rule<struct block_statement_class, ast::block_s
     >> BEGIN
     >> block_statement_part
     >> END >> BLOCK >> -label
-    >> x3::expect[';']
+    >> x3::expect[ ';' ]
     ;
 
 
@@ -4277,7 +4315,7 @@ auto const component_instantiation_statement = x3::rule<struct component_instant
     >> instantiated_unit
     >> -generic_map_aspect
     >> -port_map_aspect
-    >> x3::expect[';']
+    >> x3::expect[ ';' ]
     ;
 
 
@@ -4294,7 +4332,7 @@ auto const component_instantiation_statement = x3::rule<struct component_instant
 /// @endcode
 ///
 auto const conditional_signal_assignment = x3::rule<struct conditional_signal_assignment_class, ast::conditional_signal_assignment>{ "conditional signal assignment" } =
-    target >> "<=" >> options >> conditional_waveforms >> x3::expect[';']
+    target >> "<=" >> options >> conditional_waveforms >> x3::expect[ ';' ]
     ;
 
 
@@ -4329,7 +4367,7 @@ auto const selected_waveforms = x3::rule<struct selected_waveforms_class, ast::s
 /// @endcode
 ///
 auto const selected_signal_assignment = x3::rule<struct selected_signal_assignment_class, ast::selected_signal_assignment>{ "selected signal assignment" } =
-    WITH >> expression >> SELECT >> target >> "<=" >> options >> selected_waveforms >> x3::expect[';']
+    WITH >> expression >> SELECT >> target >> "<=" >> options >> selected_waveforms >> x3::expect[ ';' ]
     ;
 
 
@@ -4395,7 +4433,7 @@ auto const generate_statement = x3::rule<struct generate_statement_class, ast::g
     >> generation_scheme >> GENERATE >> -(*block_declarative_item >> BEGIN )
     >> *concurrent_statement
     >> END >> GENERATE  >> -label
-    >> x3::expect[';']
+    >> x3::expect[ ';' ]
     ;
 
 
@@ -4496,7 +4534,7 @@ auto const architecture_body = x3::rule<struct architecture_body_class, ast::arc
     >> BEGIN
     >> architecture_statement_part
     >> END >> -ARCHITECTURE >> -simple_name
-    >> x3::expect[';']
+    >> x3::expect[ ';' ]
     ;
 
 
@@ -4586,7 +4624,7 @@ auto const configuration_declaration = x3::rule<struct configuration_declaration
     >> configuration_declarative_part
     >> block_configuration
     >> END >> -CONFIGURATION  >> -simple_name
-    >> x3::expect[';']
+    >> x3::expect[ ';' ]
     ;
 
 
@@ -4677,7 +4715,7 @@ auto const entity_declaration = x3::rule<struct entity_declaration_class, ast::e
     >> END
     >> -ENTITY
     >> -simple_name
-    >> x3::expect[';']
+    >> x3::expect[ ';' ]
     ;
 
     //   entity_declaration
@@ -4760,7 +4798,7 @@ auto const package_declarative_part = x3::rule<struct package_declarative_part_c
 auto const package_declaration = x3::rule<struct package_declaration_class, ast::package_declaration>{ "package declaration" } =
     ( PACKAGE > identifier > IS
     >      package_declarative_part
-    > END ) >> -PACKAGE >> -simple_name >> x3::expect[';']
+    > END ) >> -PACKAGE >> -simple_name >> x3::expect[ ';' ]
     ;
 
 
@@ -4860,7 +4898,7 @@ auto const package_body = x3::rule<struct package_body_class, ast::package_body>
     >> END
     >> -(PACKAGE >> BODY)
     >> -simple_name
-    >> x3::expect[';']
+    >> x3::expect[ ';' ]
     ;
 
 
@@ -5024,7 +5062,7 @@ auto const allocator = x3::rule<struct allocator_class, ast::allocator>{ "alloca
 /// @endcode
 ///
 auto const library_clause = x3::rule<struct library_clause_class, ast::library_clause>{ "library clause" } =
-    LIBRARY >> logical_name_list >> x3::expect[';']
+    LIBRARY >> logical_name_list >> x3::expect[ ';' ]
     ;
 
 
@@ -5428,7 +5466,7 @@ namespace ibis::vhdl::parser {
 
 #include<ibis/util/compiler/warnings_off.hpp>
 
-
+// recursive calls
 BOOST_SPIRIT_DEFINE(
       configuration_item
     , concurrent_statement
@@ -5748,3 +5786,4 @@ struct wait_statement_class : success_handler {};
 struct waveform_class : success_handler {};
 struct waveform_element_class : success_handler {};
 } // namespace ibis::vhdl::parser
+#endif
