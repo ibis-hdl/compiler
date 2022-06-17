@@ -17,7 +17,12 @@ struct constraint_class;
 struct sequence_of_statements_class;
 struct subprogram_declarative_item_class;
 
+
 struct design_file_class;
+
+// start rule
+struct grammar_class;
+
 
 //
 // old

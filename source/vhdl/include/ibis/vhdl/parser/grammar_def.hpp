@@ -402,8 +402,10 @@ sequence_of_statements_type const sequence_of_statements{ "sequence of statement
 subprogram_declarative_item_type const subprogram_declarative_item{ "subprogram declarative item" };
 
 /// top level
-/// FixMe: Make an alias for it, like vhdl::grammar
 design_file_type const design_file{ "design file" };
+
+// start rule
+grammar_type const grammar_entry{ "VHDL" };
 
 // clang-format off
 attribute_name_type const attribute_name{ "attribute name" };
@@ -5134,10 +5136,16 @@ auto const design_unit = x3::rule<struct design_unit_class, ast::design_unit>{ "
 ///     design_unit { design_unit }
 /// @endcode
 ///
-/// ToDo Make an alias for this top level rule
-///
 auto const design_file_def = //x3::rule<struct design_file_class, ast::design_file>{ "design file" } =
-    x3::skip(space | comment)[ *design_unit ]
+    *design_unit
+    ;
+
+
+///
+/// start rule for grammar
+///
+auto const grammar_entry_def =
+    x3::skip(space | comment)[ design_file ]
     ;
 
 
@@ -5487,6 +5495,9 @@ BOOST_SPIRIT_DEFINE(
 // top rule
 BOOST_SPIRIT_DEFINE( design_file )
 
+// start rule
+BOOST_SPIRIT_DEFINE( grammar_entry )
+
 
 BOOST_SPIRIT_DEFINE(
       literal // for testing only
@@ -5532,8 +5543,11 @@ namespace ibis::vhdl::parser {
 
 // clang-format off
 
-// our start rule
+// top rule
 struct design_file_class : success_handler, error_handler {};
+
+// start rule
+struct grammar_class : success_handler, error_handler {};
 
 // currently used by start/end labels etc. to get diagnostic from diagnostic_handler,
 // see also label_match.hpp

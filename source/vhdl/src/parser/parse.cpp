@@ -30,7 +30,7 @@ namespace ibis::vhdl::parser {
 // required to successfully compile Spirit X3 rules, since we don't include
 // 'grammar_decl.hpp' and hence all it's declarations.
 #if !defined(DOXYGEN_DOCUMENTATION_BUILD)
-BOOST_SPIRIT_DECLARE(design_file_type)
+BOOST_SPIRIT_DECLARE(grammar_type)
 #endif
 
 }  // namespace ibis::vhdl::parser
@@ -53,7 +53,9 @@ bool parse::operator()(position_cache<parser::iterator_type>::proxy& position_ca
     auto const parser =
         x3::with<parser::position_cache_tag>(std::ref(position_cache_proxy))[
             x3::with<parser::diagnostic_handler_tag>(std::ref(diagnostic_handler))[
-                parser::grammar() >> x3::eoi
+                // FixMe: How to handle white spaces after valid VHDL, so that `x3::eoi´ doesn't
+                // make parse fail??
+                vhdl::grammar() // >> x3:eoi
             ]
         ];
     // clang-format on

@@ -23,6 +23,9 @@ BOOST_SPIRIT_DECLARE(subprogram_declarative_item)
 
 BOOST_SPIRIT_DECLARE(design_file_type)
 
+// start rule
+BOOST_SPIRIT_DECLARE(grammar_type)
+
 // old
 
 BOOST_SPIRIT_DECLARE(attribute_name_type)

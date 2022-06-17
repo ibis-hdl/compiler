@@ -14,13 +14,13 @@
 
 namespace ibis::vhdl::parser {
 
-struct design_file_class;
-using design_file_type = boost::spirit::x3::rule<design_file_class, ast::design_file>;
+struct grammar_class;
+using grammar_type = boost::spirit::x3::rule<grammar_class, ast::design_file>;
 
 }  // namespace ibis::vhdl::parser
 
-namespace ibis::vhdl::parser {
+namespace ibis::vhdl {
 
-parser::design_file_type const& grammar();
+parser::grammar_type const& grammar();
 
-}  // namespace ibis::vhdl::parser
+}  // namespace ibis::vhdl

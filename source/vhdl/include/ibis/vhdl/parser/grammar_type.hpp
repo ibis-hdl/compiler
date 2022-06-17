@@ -26,6 +26,9 @@ using subprogram_declarative_item_type = x3::rule<subprogram_declarative_item_cl
 
 using design_file_type = x3::rule<design_file_class, ast::design_file>;
 
+// start rule
+using grammar_type = x3::rule<grammar_class, ast::design_file>;
+
 // clang-format off
 using attribute_name_type = x3::rule<attribute_name_class, ast::attribute_name>;
 using expression_type = x3::rule<expression_class, ast::expression>;
