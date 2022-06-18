@@ -7,14 +7,15 @@
 
 #include <ibis/vhdl/parser/grammar_type.hpp>
 
+//
+// rule declaration
+//
+
 namespace ibis::vhdl::parser {
 
 #if !defined(DOXYGEN_DOCUMENTATION_BUILD)
 
-//
-// recursive parser rule declaration
-//
-
+// recursive parser
 BOOST_SPIRIT_DECLARE(configuration_item_type)
 BOOST_SPIRIT_DECLARE(concurrent_statement_type)
 BOOST_SPIRIT_DECLARE(constraint_type)
@@ -26,8 +27,7 @@ BOOST_SPIRIT_DECLARE(design_file_type)
 // start rule
 BOOST_SPIRIT_DECLARE(grammar_type)
 
-// old
-
+// other
 BOOST_SPIRIT_DECLARE(attribute_name_type)
 BOOST_SPIRIT_DECLARE(expression_type)
 BOOST_SPIRIT_DECLARE(function_call_type)

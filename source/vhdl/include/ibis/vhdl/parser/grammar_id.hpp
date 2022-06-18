@@ -5,29 +5,25 @@
 
 #pragma once
 
+//
+// rule IDs
+//
 namespace ibis::vhdl::parser {
 
-//
-// recursive parser rule IDs
-//
-
+// recursive parser
 struct configuration_item_class;
 struct concurrent_statement_class;
 struct constraint_class;
 struct sequence_of_statements_class;
 struct subprogram_declarative_item_class;
 
-
+// top rule
 struct design_file_class;
 
 // start rule
 struct grammar_class;
 
-
-//
-// old
-//
-
+// other
 struct attribute_name_class;
 struct expression_class;
 struct function_call_class;
