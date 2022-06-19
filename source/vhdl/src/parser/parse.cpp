@@ -27,16 +27,6 @@
 
 namespace ibis::vhdl::parser {
 
-// required to successfully compile Spirit X3 rules, since we don't include
-// 'grammar_decl.hpp' and hence all it's declarations.
-#if !defined(DOXYGEN_DOCUMENTATION_BUILD)
-BOOST_SPIRIT_DECLARE(grammar_type)
-#endif
-
-}  // namespace ibis::vhdl::parser
-
-namespace ibis::vhdl::parser {
-
 bool parse::operator()(position_cache<parser::iterator_type>::proxy& position_cache_proxy,
                        parser::context& ctx, ast::design_file& design_file)
 {
@@ -87,12 +77,20 @@ bool parse::operator()(position_cache<parser::iterator_type>::proxy& position_ca
 
         return parse_ok;
     }
+    // @todo Re-throw using C++11 exception_ptr, see 2nd answer
+    // [How do I make a call to what() on std::exception_ptr](
+    // https://stackoverflow.com/questions/14232814/how-do-i-make-a-call-to-what-on-stdexception-ptr)
     catch (std::bad_alloc const& e) {
-        // @todo Re-throw using C++11 exception_ptr, see 2nd answer
-        // [How do I make a call to what() on std::exception_ptr](
-        // https://stackoverflow.com/questions/14232814/how-do-i-make-a-call-to-what-on-stdexception-ptr)
-        //
         os << make_exception_description(e, filename);
+    }
+    catch (x3::expectation_failure<parser::iterator_type> const &e) {
+        using boost::locale::format;
+        using boost::locale::translate;
+
+        std::string const err_msg = // --
+            (format(translate("ExceptionDescription", // --
+                "Caught X3 expectation failure! Expecting '{1}'")) % e.which()).str();
+        os << make_exception_description(err_msg, filename);
     }
     catch (std::exception const& e) {
         os << make_exception_description(e, filename);
@@ -113,6 +111,20 @@ std::string parse::make_exception_description(std::exception const& exception,
     return (format(translate("ExceptionDescription",
                              "Caught exception '{1}' during parsing file '{2}'"))  // --
             % exception.what()                                                     // {1}
+            % filename                                                             // {2}
+            )
+        .str();
+}
+
+std::string parse::make_exception_description(std::string_view message,
+                                              std::string_view filename)
+{
+    using boost::locale::format;
+    using boost::locale::translate;
+
+    return (format(translate("ExceptionDescription",
+                             "{1} during parsing file '{2}'"))  // --
+            % message                                                              // {1}
             % filename                                                             // {2}
             )
         .str();

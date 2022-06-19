@@ -17,6 +17,12 @@ namespace ibis::vhdl::parser {
 struct grammar_class;
 using grammar_type = boost::spirit::x3::rule<grammar_class, ast::design_file>;
 
+// required to successfully compile Spirit X3 rules, since we don't include
+// 'grammar_decl.hpp' and hence all it's declarations.
+#if !defined(DOXYGEN_DOCUMENTATION_BUILD)
+BOOST_SPIRIT_DECLARE(grammar_type)
+#endif
+
 }  // namespace ibis::vhdl::parser
 
 namespace ibis::vhdl {

@@ -55,6 +55,9 @@ private:
     static std::string make_exception_description(std::exception const& exception,
                                                   std::string_view filename);
 
+    static std::string make_exception_description(std::string_view message,
+                                                  std::string_view filename);
+
     static std::string make_exception_description(std::string_view filename);
 
 private:
