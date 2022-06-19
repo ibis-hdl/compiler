@@ -1,0 +1,32 @@
+//
+// Copyright (c) 2017-2022 Olaf (<ibis-hdl@users.noreply.github.com>).
+// SPDX-License-Identifier: GPL-3.0-only
+//
+
+// DO NOT EDIT! GENERATED AUTOMATICALLY BY CMAKE!
+
+#include <testsuite/vhdl/grammar/failure_diagnostic_fixture.hpp>
+
+namespace testsuite {
+
+std::string_view failure_diagnostic_fixture::compile_builtin::input_extension() const  // --
+{
+    return "@TESTSUITE_INPUT_EXTENSION@";
+}
+
+std::string_view failure_diagnostic_fixture::compile_builtin::expected_extension() const  // --
+{
+    return "@TESTSUITE_EXPECTED_EXTENSION@";
+}
+
+std::string_view failure_diagnostic_fixture::compile_builtin::destination_dir() const  // --
+{
+    return "@TESTSUITE_DESTINATION_DIR@";
+}
+
+std::string_view failure_diagnostic_fixture::compile_builtin::output_extension() const  // --
+{
+    return "@TESTSUITE_OUTPUT_EXTENSION@";
+}
+
+}  // namespace testsuite

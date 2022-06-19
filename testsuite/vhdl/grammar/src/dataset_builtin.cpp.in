@@ -1,0 +1,27 @@
+//
+// Copyright (c) 2017-2022 Olaf (<ibis-hdl@users.noreply.github.com>).
+// SPDX-License-Identifier: GPL-3.0-only
+//
+
+// DO NOT EDIT! GENERATED AUTOMATICALLY BY CMAKE!
+
+#include <testsuite/vhdl/grammar/dataset.hpp>
+
+namespace testsuite {
+
+std::string_view dataset::compile_builtin::source_dir() const  // --
+{
+    return "@TESTSUITE_SOURCE_DIR@";
+}
+
+std::string_view dataset::compile_builtin::input_extension() const  // --
+{
+    return "@TESTSUITE_INPUT_EXTENSION@";
+}
+
+std::string_view dataset::compile_builtin::expected_extension() const  // --
+{
+    return "@TESTSUITE_EXPECTED_EXTENSION@";
+}
+
+}  // namespace testsuite
