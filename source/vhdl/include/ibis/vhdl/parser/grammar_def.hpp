@@ -20,6 +20,8 @@
 
 #include <ibis/vhdl/parser/spirit_x3_util.hpp>
 
+#include <range/v3/view/filter.hpp>
+
 namespace ibis::vhdl::parser::detail {
 
 ///
@@ -418,7 +420,7 @@ attribute_declaration_type const attribute_declaration { "attribute_declaration"
 attribute_designator_type const attribute_designator { "attribute_designator" };
 attribute_name_type const attribute_name { "attribute_name" };
 attribute_specification_type const attribute_specification { "attribute_specification" };
-base_type const base { "base" };
+//base_type const base { "base" };
 based_integer_type const based_integer { "based_integer" };
 based_literal_type const based_literal { "based_literal" };
 basic_graphic_character_type const basic_graphic_character { "basic_graphic_character" };
@@ -1039,11 +1041,13 @@ auto const attribute_specification_def =
     ;
 
 
+#if 0 // Note: UNUSED, embedded directly into based_literal rule
 /// base ::=                                                     [LRM93 §13.4.2]
 ///     integer
 auto const base_def =
     integer
     ;
+#endif
 
 
 #if 0 // Note: UNUSED, embedded directly into bit_string_literal rule
@@ -1076,7 +1080,140 @@ auto const based_integer_def =
 /// @note IEEE1076-93 Ch. 13.4.2: "The base and the exponent, if any, are in decimal notation." ...
 /// Further, "An exponent for a based integer literal must not have a minus sign."
 ///
+
+/// [Spirit X3, Is this error handling approach useful?](
+/// https://stackoverflow.com/questions/57048008/spirit-x3-is-this-error-handling-approach-useful/57067207#57067207)
+#if 0
+namespace boost::spirit::x3 {
+    template <> struct get_info<int_type> {
+        typedef std::string result_type;
+        std::string operator()(int_type const&) const { return "integral number"; }
+    };
+    template <> struct get_info<square::peg::main_type> {
+        typedef std::string result_type;
+        std::string operator()(square::peg::main_type const&) const { return "quoted string, bare string or integer number pair"; }
+    };
+}
+#endif
+
 namespace based_literal_detail {
+
+// see https://github.com/boostorg/spirit/issues/657
+//template <typename RuleID>
+struct based_literal_error_handler {
+    template<typename IteratorT, typename ContextT>
+    x3::error_handler_result on_error(IteratorT& first, IteratorT last, 
+        x3::expectation_failure<IteratorT> const& e, ContextT const& context) const 
+    {
+        auto& diagnostic_handler = x3::get<parser::diagnostic_handler_tag>(context).get();
+
+        std::string const message = // --
+            "in based literal '" + e.which() +  "' the base specifier isn't supported; only 2, 8, 10 and 16!";
+
+        //diagnostic_handler.parser_error(e.where(), message);
+        diagnostic_handler.parser_error(first, e.where(), message);
+
+        // advance iter after the error occurred to continue parsing, the error is reported before.
+        first = e.where();
+
+        return x3::error_handler_result::accept;
+    }
+};    
+
+template <typename T = x3::unused_type> 
+auto const as = [](auto parser, const char* name = typeid(T).name()) {
+    struct tag : based_literal_error_handler {};
+    return x3::rule<tag, T> { name } = parser;
+};
+
+/// parse base of based literals                                [LRM93 §13.4.2]
+///
+/// @code {.bnf}
+/// base ::=                   
+///     integer
+/// @endcode
+///
+/// @note IEEE1076-93 Ch. 13.4 specifies:
+/// - "The base and the exponent, if any, are in decimal notation."
+/// - "base must be at least two and at most 16."
+/// @note Only the common bases of 2, 8, 10, 16 are supported.
+///
+/// Unfortunately, there isn't a straight forward way to handle decimal separators in Spirit.X3.
+/// This implementation uses a 2nd pass to parse the base specifier with help of filtered
+/// ranges to handle with '_' separators. This is another approach to handle separators like
+/// '_' shown by sehe at  [X3 parse rule doesn't compile](
+/// https://stackoverflow.com/questions/47008258/x3-parse-rule-doesnt-compile/47013918#47013918)
+/// which also uses a 2nd pass using `stoull`.
+///
+struct based_literal_base_type : x3::parser<based_literal_base_type> {
+
+    using attribute_type = std::uint32_t;
+
+    template<typename IteratorT, typename ContextT, typename RContextT, typename AttributeT>
+    bool parse(IteratorT& first, IteratorT const& last, [[maybe_unused]] ContextT const& ctx,
+        [[maybe_unused]] RContextT const& rctx, AttributeT& base_attribute) const
+    {
+        skip_over(first, last, ctx); // pre-skip using surrounding skipper
+
+        using range_type = ast::string_span;
+        range_type base_literal;
+
+        // clang-format off
+        auto const integer_literal = x3::rule<struct _, range_type>{ "based literal's base" } =
+            raw[ lexeme [
+                digit >> *( -lit("_") >> digit )
+            ]]
+            ;
+        // clang-format on
+
+        bool const literal_ok = x3::parse(first, last, integer_literal, base_literal);
+
+        if(!literal_ok) {
+            return false;
+        }
+
+        using namespace ranges;
+        auto pruned_literal = base_literal | views::filter([](char chr) { return chr != '_'; });
+
+        auto iter = std::begin(pruned_literal);
+        auto const end = std::end(pruned_literal);
+
+        bool const parse_ok = x3::parse(iter, end, x3::uint_ >> x3::eoi, base_attribute);
+
+        if (!parse_ok || !supported_base(base_attribute)) {
+            return false;
+        }
+        return true;
+    };
+
+    bool supported_base(attribute_type base) const {
+        // clang-format off
+        switch (base) {
+            // NOLINTNEXTLINE(bugprone-branch-clone)
+            case 2:  [[fallthrough]];
+            case 8:  [[fallthrough]];
+            case 10: [[fallthrough]];
+            case 16: return true;
+            default: return false;
+        }
+        // clang-format on
+    }
+};
+
+based_literal_base_type const base_r;
+auto const base = x3::expect[ as<unsigned>(base_r, "based literal base") ];
+
+#if 0 // FixMe: Move out of this namespace, requires based_literal_detail::base_type before!
+// @see https://wandbox.org/permlink/Up1mD3FTVbE02tJG
+namespace boost::spirit::x3 {
+    template <> struct x3::get_info<based_literal_detail::base_type> {
+        using result_type = std::string;
+        result_type operator()(based_literal_detail::base_type const&) const {
+             return "based literal's base specifier"; 
+        }
+    };
+}
+#endif
 
 auto const integer_exponent = x3::rule<struct _exp, ast::string_span>{ "based_literal" } =
     x3::as<ast::string_span>[
@@ -1107,7 +1244,7 @@ auto const real = x3::rule<struct _real, ast::based_literal::number_chunk>{ "bas
 
 auto const based_literal_def =
     lexeme [
-           base
+           based_literal_detail::base
         >> '#'
         >> ( based_literal_detail::real | based_literal_detail::integer )
     ]
@@ -4139,8 +4276,8 @@ BOOST_SPIRIT_DEFINE(  // -- A --
     , attribute_specification
 )
 BOOST_SPIRIT_DEFINE(  // -- B --
-      base
-    , based_integer
+    //  base
+      based_integer
     , based_literal
     //, basic_character
     , basic_graphic_character
@@ -4427,7 +4564,7 @@ struct attribute_name_class : success_handler {};
 struct attribute_specification_class : success_handler {};
 struct base_class : success_handler {};
 struct based_integer_class : success_handler {};
-struct based_literal_class : success_handler {};
+struct based_literal_class : success_handler, based_literal_detail::based_literal_error_handler {};
 // struct basic_graphic_character_class : success_handler {};    // char isn't tagable
 struct basic_identifier_class : success_handler {};
 struct binding_indication_class : success_handler {};

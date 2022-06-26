@@ -21,7 +21,8 @@ struct based_literal : position_tagged {
         numeric_type_specifier type_specifier;
     };
 
-    ast::string_span base;
+    unsigned base;
+    //ast::string_span base;
     number_chunk number;
 
     /// convenience access to numeric type represented.

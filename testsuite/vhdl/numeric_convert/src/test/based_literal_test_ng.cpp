@@ -1,6 +1,6 @@
 //
 // Copyright (c) 2017-2022 Olaf (<ibis-hdl@users.noreply.github.com>).
-// SPDX-License-Identifier: GPL-3.0-only
+// SPDX-License-Identifier: GPL-3.0-or-later
 //
 
 #include <ibis/vhdl/ast/numeric_convert/convert_based.hpp>
@@ -48,7 +48,7 @@ PACKAGE real_based_literal IS
     --      hex2dec('F')/base^1 ...
     --    + hex2dec('F')/base^2 ...
     --    ) ...
-    -- ) * 16^2    
+    -- ) * 16^2
     CONSTANT real_01 : REAL := 16#F.FF#E+2;         -- value 4095.0
     CONSTANT real_02 : REAL := 2#1.1111_1111_111#E11; -- value 4095.0
     -- other self-choosen
@@ -88,24 +88,24 @@ struct {
     numeric_type_specifier  numeric_type;
     std::variant<uint64_t, double> value;
     struct {
-        std::string_view    base;
+        unsigned            base;
         std::string_view    integer;
         std::string_view    fractional;
         std::string_view    exponent;
     }                       literal;
 } const expect[] = {
      // Examples from IEEE_VHDL_1076-1993: Chapter 13.4.2 Based literals
-     { based_integer, 255U , { "2", "1111_1111", "", ""} },
-     { based_integer, 255U , { "16", "FF", "", ""} },
-     { based_integer, 255U , { "016", "0_FF", "", ""} },
-     { based_integer, 224U , { "16", "E", "", "1"} },
-     { based_integer, 224U , { "2", "1110_0000", "", ""} },
-     { based_real,    4095.0 , { "16", "F", "FF", "+2"} },
-     { based_real,    4095.0 , { "2", "1", "1111_1111_111", "11"} },
+     { based_integer, 255U , { 2, "1111_1111", "", ""} },
+     { based_integer, 255U , { 16, "FF", "", ""} },
+     { based_integer, 255U , { 16, "0_FF", "", ""} },
+     { based_integer, 224U , { 16, "E", "", "1"} },
+     { based_integer, 224U , { 2, "1110_0000", "", ""} },
+     { based_real,    4095.0 , { 16, "F", "FF", "+2"} },
+     { based_real,    4095.0 , { 2, "1", "1111_1111_111", "11"} },
      // self-choosen
-     { based_real,    0.0 , { "10", "0", "0", ""} },
-     { based_real,    1.0 , { "10", "1", "0", ""} },
-     { based_real,    4.2666 , { "10", "42", "666", "-1"} },
+     { based_real,    0.0 , { 10, "0", "0", ""} },
+     { based_real,    1.0 , { 10, "1", "0", ""} },
+     { based_real,    4.2666 , { 10, "42", "666", "-1"} },
 };
 
 // clang-format off

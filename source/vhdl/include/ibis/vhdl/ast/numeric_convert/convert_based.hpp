@@ -85,13 +85,6 @@ public:
     return_type operator()(ast::based_literal const& node) const;
 
 private:
-    /// parse base of based literals
-    /// @note IEEE1076-93 Ch. 13.4 specifies:
-    /// - "The base and the exponent, if any, are in decimal notation."
-    /// - "base must be at least two and at most 16."
-    /// @note Only the common bases of 2, 8, 10, 16 are supported.
-    std::tuple<bool, std::uint32_t> parse_base(ast::based_literal const& literal) const;
-
     /// Parse the integer part of based literal.
     std::tuple<bool, std::uint64_t> parse_integer(unsigned base,
                                                   ast::based_literal const& literal) const;

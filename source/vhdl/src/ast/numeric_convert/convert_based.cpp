@@ -75,58 +75,6 @@ convert_based<IntegerT, RealT>::convert_based(diagnostic_handler_type& diagnosti
 }
 
 template <typename IntegerT, typename RealT>
-std::tuple<bool, std::uint32_t> convert_based<IntegerT, RealT>::parse_base(
-    ast::based_literal const& literal) const
-{
-    using boost::locale::format;
-    using boost::locale::translate;
-
-    // convenience alias
-    auto const& base_literal = literal.base;
-    auto const base_literal_sv = as_string_view(base_literal);
-
-    /// intermediate integer type for base part
-    using base_type = std::uint32_t;
-    base_type base_attribute = 0;
-
-    // TRANSLATORS: error message for numeric target type
-    std::string const error_msg_tr = translate(
-        "in {1} the base specifier '{2}' isn't supported; only 2, 8, 10 and 16!");
-
-    auto range_f = numeric_convert::detail::filter_range(base_literal);
-
-    if(ranges::distance(range_f) > std::numeric_limits<base_type>::digits10) {
-        // for some very smart people who fill up with leading zeros
-        diagnostic_handler.unsupported(                 // --
-            base_literal.begin(), base_literal.end(),   // --
-            (format(error_msg_tr) % node_name % base_literal_sv).str());
-        return { false, base_attribute };
-    }
-
-    auto iter = std::begin(range_f);
-    auto const end = std::end(range_f);
-
-    bool const parse_ok = x3::parse(iter, end, x3::uint_ >> x3::eoi, base_attribute);
-
-    if (!parse_ok) {
-        diagnostic_handler.parser_error(                // --
-            base_literal.begin(), base_literal.end(),   // --
-            (format(translate("in {1} parse of base specifier '{2}' failed"))  // --
-             % node_name % base_literal_sv).str());
-        return { false, base_attribute };
-    }
-
-    if (!supported_base(base_attribute)) {
-        diagnostic_handler.unsupported(                 // --
-            base_literal.begin(), base_literal.end(),   // --
-            (format(error_msg_tr) % node_name % base_literal_sv).str());
-        return { false, base_attribute };
-    }
-
-    return { true, base_attribute };
-}
-
-template <typename IntegerT, typename RealT>
 std::tuple<bool, std::uint64_t> convert_based<IntegerT, RealT>::parse_integer(
     unsigned base, ast::based_literal const& literal) const
 {
@@ -423,13 +371,7 @@ typename convert_based<IntegerT, RealT>::return_type convert_based<IntegerT, Rea
 
     // ------------------------------------------------------------------------
     // BASE
-    //std::uint32_t base = 0;
-    auto const [base_ok, base] = parse_base(node);
-
-    if (!base_ok) {
-        // parse error rendering done before
-        return failure_return_value();
-    }
+    unsigned base = node.base;
 
     // ------------------------------------------------------------------------
     // INTEGER
