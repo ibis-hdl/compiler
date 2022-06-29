@@ -1,12 +1,12 @@
 //
 // Copyright (c) 2017-2022 Olaf (<ibis-hdl@users.noreply.github.com>).
-// SPDX-License-Identifier: GPL-3.0-only
+// SPDX-License-Identifier: GPL-3.0-or-later
 //
 
 #include <testsuite/util/cli_args.hpp>
 #include <testsuite/namespace_alias.hpp>  /// IWYU pragma: keep
 
-#include <ibis/util/compiler/warnings_off.hpp> // -Wimplicit-int-float-conversion
+#include <ibis/util/compiler/warnings_off.hpp>  // -Wimplicit-int-float-conversion
 #include <CLI/App.hpp>
 #include <CLI/Error.hpp>
 #include <CLI/Option.hpp>

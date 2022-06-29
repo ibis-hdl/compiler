@@ -1,6 +1,6 @@
 //
 // Copyright (c) 2017-2022 Olaf (<ibis-hdl@users.noreply.github.com>).
-// SPDX-License-Identifier: GPL-3.0-only
+// SPDX-License-Identifier: GPL-3.0-or-later
 //
 
 #pragma once
@@ -195,9 +195,7 @@ private:
     };
 
     /// designated initializers for @ref options
-    options mutable option {
-        {}, ".vhdl", ".expected"
-    };
+    options mutable option{ {}, ".vhdl", ".expected" };
 
     /// The dataset loaded from file system using the options given.
     struct test_dataset {

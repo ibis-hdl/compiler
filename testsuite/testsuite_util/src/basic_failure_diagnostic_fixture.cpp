@@ -1,6 +1,6 @@
 //
 // Copyright (c) 2017-2022 Olaf (<ibis-hdl@users.noreply.github.com>).
-// SPDX-License-Identifier: GPL-3.0-only
+// SPDX-License-Identifier: GPL-3.0-or-later
 //
 
 #include <testsuite/util/basic_failure_diagnostic_fixture.hpp>
@@ -8,7 +8,7 @@
 
 #include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
-#include <ibis/util/compiler/warnings_off.hpp> // -Wsign-conversion
+#include <ibis/util/compiler/warnings_off.hpp>  // -Wsign-conversion
 #include <boost/test/unit_test.hpp>
 #include <ibis/util/compiler/warnings_on.hpp>
 #include <boost/test/results_collector.hpp>

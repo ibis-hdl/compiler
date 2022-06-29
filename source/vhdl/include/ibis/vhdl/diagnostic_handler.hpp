@@ -1,6 +1,6 @@
 //
 // Copyright (c) 2017-2022 Olaf (<ibis-hdl@users.noreply.github.com>).
-// SPDX-License-Identifier: GPL-3.0-only
+// SPDX-License-Identifier: GPL-3.0-or-later
 //
 
 #pragma once
@@ -122,8 +122,7 @@ public:
     /// @param where_tag     The ast::position_tagged node, which triggers the error
     /// @param error_message The information error message.
     ///
-    void syntax_error(ast::position_tagged const& where_tag,
-                      std::string_view error_message) const;
+    void syntax_error(ast::position_tagged const& where_tag, std::string_view error_message) const;
 
     ///
     /// Render the diagnostic error_message.
@@ -137,8 +136,7 @@ public:
     ///
     void syntax_error(ast::position_tagged const& where_tag,
                       ast::position_tagged const& start_label,
-                      ast::position_tagged const& end_label,
-                      std::string_view error_message) const;
+                      ast::position_tagged const& end_label, std::string_view error_message) const;
 
 public:
     ///
@@ -191,7 +189,7 @@ private:
         ast::position_tagged const& tagged_node) const
     {
         auto const iterator_range = current_file().position_of(tagged_node);
-        
+
         auto first = iterator_range.begin();
         auto const last = iterator_range.end();
         skip_whitespace(first, last);
@@ -216,7 +214,7 @@ private:
     /// @param tab_sz The tab size, required to calculate the column number.
     /// @return The line and column number.
     ///
-    std::tuple<std::size_t, std::size_t> line_column_number(iterator_type  pos) const;
+    std::tuple<std::size_t, std::size_t> line_column_number(iterator_type pos) const;
 
     ///
     /// Return an iterator to the begin of the line. White spaces are skipped.
@@ -226,7 +224,7 @@ private:
     /// @param pos Iterator position pointing to a line of interest.
     /// @return Iterator position pointing to the begin of line.
     ///
-    iterator_type get_line_start(iterator_type  pos_iter) const;
+    iterator_type get_line_start(iterator_type pos_iter) const;
 
     ///
     /// Print the line where the iterator points to until end-of-line.
@@ -234,7 +232,7 @@ private:
     /// @param first Iterator position pointing to a line of interest.
     /// @return String representing the source line.
     ///
-    std::string_view current_line(iterator_type  start) const;
+    std::string_view current_line(iterator_type start) const;
 
     ///
     /// gather location information with file name etc.
@@ -254,7 +252,8 @@ private:
     /// @param diag_ctx VHDL diagnostic context to be filled with informations
     /// @param position_tagged AST tagged node with error/warning informations
     ///
-    void set_source_location(vhdl::diagnostic_context& diag_ctx, ast::position_tagged const& position_tagged) const
+    void set_source_location(vhdl::diagnostic_context& diag_ctx,
+                             ast::position_tagged const& position_tagged) const
     {
         auto const [first, last] = iterators_of(position_tagged);
         diag_ctx.set_source_location(get_source_location(first));
@@ -266,38 +265,39 @@ private:
     /// @param diag_ctx VHDL diagnostic context to be filled with informations
     /// @param position_tagged AST tagged node with error/warning informations
     ///
-    void set_source_snippet(vhdl::diagnostic_context& diag_ctx, ast::position_tagged const& position_tagged) const
+    void set_source_snippet(vhdl::diagnostic_context& diag_ctx,
+                            ast::position_tagged const& position_tagged) const
     {
         auto const [first, last] = iterators_of(position_tagged);
         auto const line_no = std::get<0>(line_column_number(first));
-        diag_ctx.set_source_snippet(line_no, current_line(get_line_start(first)), // --
+        diag_ctx.set_source_snippet(line_no, current_line(get_line_start(first)),  // --
                                     first, last);
     }
 
-    /// 
+    ///
     /// gather erroneous part as source snippet, e.g. on parser error
-    /// 
+    ///
     /// @param diag_ctx VHDL diagnostic context to be filled with informations
     /// @param first Iterator to point of failure
     /// @param last optional Iterator to end point of failure
     ///
-    void set_source_snippet(vhdl::diagnostic_context& diag_ctx, iterator_type first, std::optional<iterator_type> last) const
+    void set_source_snippet(vhdl::diagnostic_context& diag_ctx, iterator_type first,
+                            std::optional<iterator_type> last) const
     {
-        if(last.has_value()) {
+        if (last.has_value()) {
             skip_whitespace(first, last.value());
         }
         auto const line_no = std::get<0>(line_column_number(first));
-        diag_ctx.set_source_snippet(line_no, current_line(get_line_start(first)),
-                                    first, last);
+        diag_ctx.set_source_snippet(line_no, current_line(get_line_start(first)), first, last);
     }
 
-    /// 
+    ///
     /// Move the first iterator forward, ensure iter does not point to white space
-    /// 
+    ///
     /// @param first iterator to be adjust
     /// @param last end iterator
     ///
-    /// @see 
+    /// @see
     /// - [X3: error_handler should not skip whitespaces #670](
     ///    https://github.com/boostorg/spirit/pull/670)
     /// - [ X3 3.0.10 error_handler where() is wrong #712 ](

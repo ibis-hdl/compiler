@@ -1,6 +1,6 @@
 //
 // Copyright (c) 2017-2022 Olaf (<ibis-hdl@users.noreply.github.com>).
-// SPDX-License-Identifier: GPL-3.0-only
+// SPDX-License-Identifier: GPL-3.0-or-later
 //
 
 #pragma once
@@ -34,8 +34,8 @@ public:
         using iterator_type = parser::iterator_type;
 
     public:
-        source_snippet(std::size_t line_no_, std::string_view src_line_,
-                       iterator_type first_, std::optional<iterator_type> last_)
+        source_snippet(std::size_t line_no_, std::string_view src_line_, iterator_type first_,
+                       std::optional<iterator_type> last_)
             : line_no{ line_no_ }
             , src_line{ src_line_ }
             , iter_first{ first_ }
@@ -71,9 +71,9 @@ public:
     };
 
 public:
-    /// 
+    ///
     /// @brief Construct a new diagnostic context object
-    /// 
+    ///
     /// @param provider_ The origin of issue
     /// @param err_message_ Store a copy of error _message
     ///

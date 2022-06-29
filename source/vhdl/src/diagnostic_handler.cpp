@@ -1,6 +1,6 @@
 //
 // Copyright (c) 2017-2022 Olaf (<ibis-hdl@users.noreply.github.com>).
-// SPDX-License-Identifier: GPL-3.0-only
+// SPDX-License-Identifier: GPL-3.0-or-later
 //
 
 #include <ibis/vhdl/diagnostic_handler.hpp>
@@ -106,8 +106,7 @@ void diagnostic_handler<Iterator>::syntax_error(ast::position_tagged const& wher
 template <typename Iterator>
 void diagnostic_handler<Iterator>::error(iterator_type error_first,
                                          std::optional<iterator_type> error_last,
-                                         std::string_view error_message,
-                                         error_type err_type) const
+                                         std::string_view error_message, error_type err_type) const
 {
     using boost::locale::format;
     using boost::locale::translate;

@@ -1,6 +1,6 @@
 //
 // Copyright (c) 2017-2022 Olaf (<ibis-hdl@users.noreply.github.com>).
-// SPDX-License-Identifier: GPL-3.0-only
+// SPDX-License-Identifier: GPL-3.0-or-later
 //
 
 #pragma once
@@ -105,8 +105,8 @@ public:
     /// FixMe [C++20] What for a mess, see
     /// [How to convert std::filesystem::file_time_type to time_t?](
     /// https://stackoverflow.com/questions/61030383/how-to-convert-stdfilesystemfile-time-type-to-time-t)
-    /// Since not all used compiler (MSVC17, gcc-11, clang-14) accept the specified solution, the 
-    /// adaptation to C++20 is only carried out with the use of the `timestamp` function in 
+    /// Since not all used compiler (MSVC17, gcc-11, clang-14) accept the specified solution, the
+    /// adaptation to C++20 is only carried out with the use of the `timestamp` function in
     /// the project necessary.
     ///
     std::time_t timesstamp(fs::path const& filename) const;

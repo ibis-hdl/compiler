@@ -43,7 +43,7 @@
 			"language": "*",
 			"template": [
                 "Copyright (c) <<projectCreationYear>>-<<year>> <<author>> (<<authoremail>>).",
-                "SPDX-License-Identifier: GPL-3.0-only"
+                "SPDX-License-Identifier: GPL-3.0-or-later"
 			]
 		}
 	],
@@ -51,7 +51,7 @@
 		["projectCreationYear", "2017"],
         ["author", "Olaf"],
         ["authoremail", "<ibis-hdl@users.noreply.github.com>"],
-        ["spdxid", "GPL-3.0-only"]
+        ["spdxid", "GPL-3.0-or-later"]
 	],
     "psi-header.lang-config": [
 		{

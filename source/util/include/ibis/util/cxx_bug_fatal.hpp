@@ -1,6 +1,6 @@
 //
 // Copyright (c) 2017-2022 Olaf (<ibis-hdl@users.noreply.github.com>).
-// SPDX-License-Identifier: GPL-3.0-only
+// SPDX-License-Identifier: GPL-3.0-or-later
 //
 
 #pragma once
@@ -45,7 +45,7 @@ void assertion_failed_msg(const CharT* expr, const char msg[], const char functi
 #define cxx_assert(condition, message)                         \
     ((condition) ? ((void)0)                                   \
                  : ::ibis::util::detail::assertion_failed_msg( \
-                   #condition, message, CXX_FUNCTION_NAME, __FILE__, __LINE__))
+                       #condition, message, CXX_FUNCTION_NAME, __FILE__, __LINE__))
 
 #define cxx_bug_fatal(message)  \
     cxx_assert(false, message); \

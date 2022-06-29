@@ -1,6 +1,6 @@
 //
 // Copyright (c) 2017-2022 Olaf (<ibis-hdl@users.noreply.github.com>).
-// SPDX-License-Identifier: GPL-3.0-only
+// SPDX-License-Identifier: GPL-3.0-or-later
 //
 
 #pragma once
@@ -13,9 +13,9 @@
 
 namespace ibis::util {
 
-/// 
+///
 /// Case insensitive less compare function for `std::string_view`
-/// 
+///
 /// @param lhs left string_view
 /// @param rhs right string_view
 /// @return true if lhs <= rhs

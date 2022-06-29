@@ -1,6 +1,6 @@
 //
 // Copyright (c) 2017-2022 Olaf (<ibis-hdl@users.noreply.github.com>).
-// SPDX-License-Identifier: GPL-3.0-only
+// SPDX-License-Identifier: GPL-3.0-or-later
 //
 
 #include <ibis/vhdl/diagnostic_printer.hpp>
@@ -104,17 +104,17 @@ std::ostream& diagnostic_printer::print_snippets(std::ostream& os) const
         });
     };
 
-    std::size_t const num_width = 4; // up to 9999 line numbers w/o problems
+    std::size_t const num_width = 4;  // up to 9999 line numbers w/o problems
 
     auto const left_border = [](std::size_t num = 0) {
         static std::string const space(num_width, ' ');
         static std::string const vline("| ");
-        // Note: Explicitly capturing 'num' by copying in the inner lambda; otherwise (capturing 
-        // by reference) using this lambda results in a dangling reference after the outer one has 
-        // finished execution! Affected only GCC-11 (and maybe later) (failed test case) and a 
+        // Note: Explicitly capturing 'num' by copying in the inner lambda; otherwise (capturing
+        // by reference) using this lambda results in a dangling reference after the outer one has
+        // finished execution! Affected only GCC-11 (and maybe later) (failed test case) and a
         // warning from GCC: ‘num’ may be used uninitialized [-Wmaybe-uninitialized]
         return util::make_iomanip([&, num](std::ostream& os) {
-            if(num != 0) {
+            if (num != 0) {
                 os << std::setw(static_cast<int>(num_width)) << std::right << num;
             }
             else {

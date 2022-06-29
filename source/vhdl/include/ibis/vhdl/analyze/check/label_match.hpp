@@ -1,6 +1,6 @@
 //
 // Copyright (c) 2017-2022 Olaf (<ibis-hdl@users.noreply.github.com>).
-// SPDX-License-Identifier: GPL-3.0-only
+// SPDX-License-Identifier: GPL-3.0-or-later
 //
 
 #pragma once
@@ -62,7 +62,7 @@ private:
 
 ///
 /// Helper functions to extract {start, end}_label of nodes for use with the diagnostic of error
-/// handler. VHDL LRM states by convention two types of AST nodes with labels: 
+/// handler. VHDL LRM states by convention two types of AST nodes with labels:
 /// - node with label pair of label and end_label
 /// - node with identifier pair of  identifier and end_identifier
 ///
@@ -72,29 +72,44 @@ private:
 ///
 namespace detail {
 
-template<typename NodeT>
-concept has_identifier = requires (const NodeT& node) { 
-    { node.identifier } -> std::convertible_to<ast::identifier>; 
+template <typename NodeT>
+concept has_identifier = requires(const NodeT& node)
+{
+    {
+        node.identifier
+        } -> std::convertible_to<ast::identifier>;
 };
 
-template<typename NodeT>
-concept has_optional_end_identifier = requires (const NodeT& node) { 
-    { node.end_identifier.get() } -> std::convertible_to<ast::identifier>; 
+template <typename NodeT>
+concept has_optional_end_identifier = requires(const NodeT& node)
+{
+    {
+        node.end_identifier.get()
+        } -> std::convertible_to<ast::identifier>;
 };
 
-template<typename NodeT>
-concept has_label = requires (const NodeT& node) { 
-    { node.label } -> std::convertible_to<ast::label>; 
+template <typename NodeT>
+concept has_label = requires(const NodeT& node)
+{
+    {
+        node.label
+        } -> std::convertible_to<ast::label>;
 };
 
-template<typename NodeT>
-concept has_optional_label = requires (const NodeT& node) { 
-    { node.label.get() } -> std::convertible_to<ast::label>; 
+template <typename NodeT>
+concept has_optional_label = requires(const NodeT& node)
+{
+    {
+        node.label.get()
+        } -> std::convertible_to<ast::label>;
 };
 
-template<typename NodeT>
-concept has_optional_end_label = requires (const NodeT& node) { 
-    { node.end_label.get() } -> std::convertible_to<ast::label>; 
+template <typename NodeT>
+concept has_optional_end_label = requires(const NodeT& node)
+{
+    {
+        node.end_label.get()
+        } -> std::convertible_to<ast::label>;
 };
 
 }  // namespace detail
@@ -114,10 +129,10 @@ concept has_optional_end_label = requires (const NodeT& node) {
 template <typename NodeT>
 std::tuple<ast::identifier, ast::identifier> inline labels_of(NodeT const& node)
 {
-    static_assert(std::is_base_of_v<ast::position_tagged, std::decay_t<NodeT>>, // --
-        "AST node must be derived from ast::position_tagged to provide diagnostics");
+    static_assert(std::is_base_of_v<ast::position_tagged, std::decay_t<NodeT>>,  // --
+                  "AST node must be derived from ast::position_tagged to provide diagnostics");
 
-    // It is assumed that the AST nodes are correctly initialized with their labels/identifiers. 
+    // It is assumed that the AST nodes are correctly initialized with their labels/identifiers.
     // Otherwise boost::optional's `.get()` throws an exception.
     // Using C++20 concept here, which find concepts by looking at the algorithms that use them.
     try {
@@ -129,7 +144,8 @@ std::tuple<ast::identifier, ast::identifier> inline labels_of(NodeT const& node)
             // e.g. ast::block_statement
             return { node.label, node.end_label.get() };
         }
-        else if constexpr (detail::has_identifier<NodeT> && detail::has_optional_end_identifier<NodeT>) {
+        else if constexpr (detail::has_identifier<NodeT> &&
+                           detail::has_optional_end_identifier<NodeT>) {
             // e.g. ast::architecture_body
             return { node.identifier, node.end_identifier.get() };
         }
@@ -138,12 +154,12 @@ std::tuple<ast::identifier, ast::identifier> inline labels_of(NodeT const& node)
             static_assert(sizeof(NodeT) == 0, "unexpected node with identifier/label pairs");
         }
     }
-    catch(boost::bad_optional_access const& e) {
+    catch (boost::bad_optional_access const& e) {
         // An access to optional's .get() has been performed, where the optional doesn't contain
         // a value. This shouldn't happen since Spirit.X3 grammar should prevent this.
         // @todo [Assert] Render Warning only so we can continue with misleading error message.
-        std::cerr << "caught '" << e.what() 
-                  << "' by accessing AST node '" <<  util::pretty_typename<NodeT>().str() << "'\n";
+        std::cerr << "caught '" << e.what() << "' by accessing AST node '"
+                  << util::pretty_typename<NodeT>().str() << "'\n";
     }
 
     // we shouldn't be here, but isn't critical
