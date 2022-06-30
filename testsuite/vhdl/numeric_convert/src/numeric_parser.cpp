@@ -8,6 +8,10 @@
 #include <ibis/vhdl/parser/parser_config.hpp>
 #include <ibis/vhdl/parser/grammar_def.hpp>
 
+#include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
+#include <boost/spirit/home/x3.hpp>
+#include <ibis/util/compiler/warnings_on.hpp>
+
 #include <iostream>
 
 namespace testsuite {
@@ -48,11 +52,18 @@ std::tuple<bool, AttrType> literal_parser<IteratorT>::parse(  // --
     ParserType const& numeric_parser, AttrType& attr,         // --
     position_proxy& position_cache_proxy, diagnostic_handler_type& diagnostic_handler) const
 {
+    using x3::iso8859_1::char_;
+    using x3::iso8859_1::space;
+
+    auto const comment = "--" >> *(char_ - x3::eol) >> x3::eol;
+
     // clang-format off
     auto const parser =
         x3::with<parser::position_cache_tag>(std::ref(position_cache_proxy))[
             x3::with<parser::diagnostic_handler_tag>(std::ref(diagnostic_handler))[
-                numeric_parser
+                x3::skip(space | comment)[
+                    numeric_parser // @todo check with '>> x3::eoi'
+                ]
             ]
         ];
     // clang-format on
@@ -69,7 +80,7 @@ std::tuple<bool, AttrType> literal_parser<IteratorT>::parse(  // --
     bool parse_ok = false;
 
     try {
-        parse_ok = x3::phrase_parse(iter, end, parser, parser::skipper, attr);
+        parse_ok = x3::parse(iter, end, parser, attr);
 
         if (parse_ok) {
             if (iter != end) {

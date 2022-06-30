@@ -10,7 +10,7 @@
 
 namespace ibis::vhdl::parser {
 
-parser::design_file_type grammar() { return ibis::vhdl::parser::design_file; }
+parser::design_file_type const& grammar() { return ibis::vhdl::parser::design_file; }
 
 }  // namespace ibis::vhdl::parser
 

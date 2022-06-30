@@ -440,6 +440,7 @@ using operators::unary_miscellaneous_operator;
 using separator::SEMICOLON;
 
 using iso8859_1::char_;
+using iso8859_1::space;
 using iso8859_1::lit;
 using x3::lexeme;
 using x3::omit;
@@ -614,6 +615,14 @@ auto const letter_or_digit = x3::rule<struct letter_or_digit_class, char>{ "lett
 // ----------------------------------------------------------------------------
 // Non recursive rules (without dependencies to other rules)
 // ----------------------------------------------------------------------------
+
+///
+/// comment                                                            [§ 13.8]
+///
+auto const comment = x3::rule<struct comment_class, x3::unused_type>{ "comment" } =
+    "--" >> *(char_ - x3::eol) >> x3::eol
+    ;
+
 
 ///
 /// integer                                                          [§ 13.4.1]
@@ -5128,7 +5137,7 @@ auto const design_unit = x3::rule<struct design_unit_class, ast::design_unit>{ "
 /// ToDo Make an alias for this top level rule
 ///
 auto const design_file_def = //x3::rule<struct design_file_class, ast::design_file>{ "design file" } =
-    *design_unit
+    x3::skip(space | comment)[ *design_unit ]
     ;
 
 

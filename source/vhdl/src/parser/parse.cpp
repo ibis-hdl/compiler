@@ -7,7 +7,6 @@
 
 #include <ibis/vhdl/parser/grammar.hpp>
 #include <ibis/vhdl/parser/parser_config.hpp>
-#include <ibis/vhdl/parser/skipper.hpp>
 
 #include <ibis/vhdl/ast/node/design_file.hpp>
 #include <ibis/vhdl/parser/position_cache.hpp>
@@ -54,7 +53,7 @@ bool parse::operator()(position_cache<parser::iterator_type>::proxy& position_ca
     auto const parser =
         x3::with<parser::position_cache_tag>(std::ref(position_cache_proxy))[
             x3::with<parser::diagnostic_handler_tag>(std::ref(diagnostic_handler))[
-                parser::grammar()
+                parser::grammar() >> x3::eoi
             ]
         ];
     // clang-format on
@@ -71,7 +70,7 @@ bool parse::operator()(position_cache<parser::iterator_type>::proxy& position_ca
 
     try {
         bool const parse_ok =
-            x3::phrase_parse(iter, end, parser >> x3::eoi, parser::skipper, design_file);
+            x3::parse(iter, end, parser, design_file);
 
         if (!parse_ok) {
             using boost::locale::format;
