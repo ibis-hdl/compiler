@@ -1025,7 +1025,7 @@ public:
 
         visit(node.primary);
 
-        if(node.binary_operation) {
+        if (node.binary_operation) {
             // (*node.binary_operation).operator
             visit((*node.binary_operation).primary);
         }
@@ -1591,7 +1591,7 @@ public:
         std::string_view const node_typename{ "physical_literal" };
         worker(node, node_typename);
 
-        if(node.literal) {
+        if (node.literal) {
             (*this)(*node.literal);
         }
     }

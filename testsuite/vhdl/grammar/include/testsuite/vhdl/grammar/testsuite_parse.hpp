@@ -1,12 +1,11 @@
 //
 // Copyright (c) 2017-2022 Olaf (<ibis-hdl@users.noreply.github.com>).
-// SPDX-License-Identifier: GPL-3.0-only
+// SPDX-License-Identifier: GPL-3.0-or-later
 //
 
 #pragma once
 
 #include <boost/test/tools/output_test_stream.hpp>
-
 
 #include <ibis/vhdl/parser/context.hpp>
 #include <ibis/vhdl/parser/parse.hpp>
@@ -22,20 +21,20 @@
 
 namespace testsuite {
 
-class testsuite_parse
-{
+class testsuite_parse {
 public:
     testsuite_parse(fs::path const filename_)
-    : filename{ filename_ }
-    {}
+        : filename{ filename_ }
+    {
+    }
 
 public:
     bool operator()(std::string_view contents, vhdl::ast::design_file& design_file);
 
 public:
-    /// 
+    ///
     /// Return the output written by the parser and error/diagnostic handler.
-    /// 
+    ///
     /// @return std::string_view The output; valid as long the class is alive.
     ///
     std::string output() const { return os.str(); }

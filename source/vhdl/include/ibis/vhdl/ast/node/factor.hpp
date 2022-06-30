@@ -34,8 +34,7 @@ struct factor_unary_operation : position_tagged {
 //       primary [ ** primary ]
 //     | ABS primary
 //     | NOT primary
-struct factor
-    : variant<nullary, factor_binary_operation, factor_unary_operation> {
+struct factor : variant<nullary, factor_binary_operation, factor_unary_operation> {
     using base_type::base_type;
     using base_type::operator=;
 };

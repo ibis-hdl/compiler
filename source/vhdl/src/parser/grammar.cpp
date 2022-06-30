@@ -12,7 +12,7 @@ namespace ibis::vhdl {
 
 parser::grammar_type const& grammar() { return ibis::vhdl::parser::grammar_entry; }
 
-}  // namespace ibis::vhdl::parser
+}  // namespace ibis::vhdl
 
 //
 // The Spirit X3 grammar instance

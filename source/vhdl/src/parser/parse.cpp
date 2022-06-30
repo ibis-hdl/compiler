@@ -61,8 +61,7 @@ bool parse::operator()(position_cache<parser::iterator_type>::proxy& position_ca
     auto const filename = position_cache_proxy.file_name();
 
     try {
-        bool const parse_ok =
-            x3::parse(iter, end, parser, design_file);
+        bool const parse_ok = x3::parse(iter, end, parser, design_file);
 
         if (!parse_ok) {
             using boost::locale::format;
@@ -83,13 +82,15 @@ bool parse::operator()(position_cache<parser::iterator_type>::proxy& position_ca
     catch (std::bad_alloc const& e) {
         os << make_exception_description(e, filename);
     }
-    catch (x3::expectation_failure<parser::iterator_type> const &e) {
+    catch (x3::expectation_failure<parser::iterator_type> const& e) {
         using boost::locale::format;
         using boost::locale::translate;
 
-        std::string const err_msg = // --
-            (format(translate("ExceptionDescription", // --
-                "Caught X3 expectation failure! Expecting '{1}'")) % e.which()).str();
+        std::string const err_msg =                    // --
+            (format(translate("ExceptionDescription",  // --
+                              "Caught X3 expectation failure! Expecting '{1}'")) %
+             e.which())
+                .str();
         os << make_exception_description(err_msg, filename);
     }
     catch (std::exception const& e) {
@@ -116,16 +117,15 @@ std::string parse::make_exception_description(std::exception const& exception,
         .str();
 }
 
-std::string parse::make_exception_description(std::string_view message,
-                                              std::string_view filename)
+std::string parse::make_exception_description(std::string_view message, std::string_view filename)
 {
     using boost::locale::format;
     using boost::locale::translate;
 
     return (format(translate("ExceptionDescription",
                              "{1} during parsing file '{2}'"))  // --
-            % message                                                              // {1}
-            % filename                                                             // {2}
+            % message                                           // {1}
+            % filename                                          // {2}
             )
         .str();
 }

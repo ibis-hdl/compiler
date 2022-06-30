@@ -20,7 +20,6 @@ struct association_element : position_tagged {
     ast::actual_part actual_part;
 };
 
-struct association_list : std::vector<ast::association_element> 
-{ };
+struct association_list : std::vector<ast::association_element> {};
 
 }  // namespace ibis::vhdl::ast

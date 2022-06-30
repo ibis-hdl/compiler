@@ -1230,7 +1230,7 @@ void printer::operator()(factor_binary_operation const& node)
 
     (*this)(node.primary);
 
-    if(node.binary_operation) {
+    if (node.binary_operation) {
         os << '\n' << "(operator: " << (*node.binary_operation).operator_ << "),\n";
         (*this)((*node.binary_operation).primary);
     }
@@ -1880,7 +1880,7 @@ void printer::operator()(physical_literal const& node)
     static const std::string_view symbol{ "physical_literal" };
     symbol_scope<physical_literal> _(*this, symbol);
 
-    if(node.literal) {
+    if (node.literal) {
         (*this)(*node.literal);
         os << ",\n";
     }

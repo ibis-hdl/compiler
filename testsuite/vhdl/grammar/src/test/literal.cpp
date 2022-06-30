@@ -1,6 +1,6 @@
 //
 // Copyright (c) 2017-2022 Olaf (<ibis-hdl@users.noreply.github.com>).
-// SPDX-License-Identifier: GPL-3.0-only
+// SPDX-License-Identifier: GPL-3.0-or-later
 //
 
 #include <testsuite/vhdl/grammar/testsuite_parse.hpp>
@@ -61,8 +61,8 @@ using base_specifier = ast::bit_string_literal::base_specifier;
 using namespace std::literals::string_view_literals;
 
 struct {
-    base_specifier      base_type;
-    std::string_view    literal;
+    base_specifier base_type;
+    std::string_view literal;
 } const expected[] = {
     // hex
     { base_specifier::hex, "01234"sv },
@@ -86,16 +86,16 @@ struct {
     { base_specifier::bin, "1111_1111_1111"sv },
 };
 
-template<typename ExpectedT, bool verbose = false>
-struct verify_worker
-{
+template <typename ExpectedT, bool verbose = false>
+struct verify_worker {
     verify_worker(ExpectedT const& expected_)
-    : expected{ expected_ }
-    , expected_size{ sizeof(expected_) / sizeof(expected_[0]) }
-    , os{ std::cout }
-    {  }
+        : expected{ expected_ }
+        , expected_size{ sizeof(expected_) / sizeof(expected_[0]) }
+        , os{ std::cout }
+    {
+    }
 
-    void operator()(ast::constant_declaration const& node, [[maybe_unused]] std::string_view) const 
+    void operator()(ast::constant_declaration const& node, [[maybe_unused]] std::string_view) const
     {
         if constexpr (verbose) {
             static ast::printer print(os);
@@ -105,7 +105,7 @@ struct verify_worker
         }
     }
 
-    void operator()(ast::bit_string_literal const& node, [[maybe_unused]] std::string_view) const 
+    void operator()(ast::bit_string_literal const& node, [[maybe_unused]] std::string_view) const
     {
         assert(test_index < expected_size && "test_index reached count of expected array size!");
 
@@ -127,14 +127,14 @@ struct verify_worker
 
 using verifier_type = ast::basic_ast_walker<verify_worker<decltype(expected), false>>;
 
-std::string_view const expected_failure = 
-R"(In 'bit_string_literal':28:38: parse error: expecting semicolon ';' here:
+std::string_view const expected_failure =
+    R"(In 'bit_string_literal':28:38: parse error: expecting semicolon ';' here:
   28|     CONSTANT hex_01 : bit_vector := x"egg";     -- 'g' is invalid
     |                                      ^ <<-- here
 1 error generated.
 )";
 
-} // namespace data
+}  // namespace data
 
 BOOST_AUTO_TEST_CASE(bit_string_literal)
 {
@@ -153,5 +153,5 @@ BOOST_AUTO_TEST_CASE(bit_string_literal)
 
     // ToDo: add error recovery to the parser, so that all errors can be verified.
     BOOST_TEST(parse.output() == expected_failure, btt::per_element());
-    //std::cout << parse.output() << '\n';
+    // std::cout << parse.output() << '\n';
 }

@@ -45,7 +45,7 @@ auto const tagged_diag = [](auto const& where_tag, [[maybe_unused]] auto const& 
                             [[maybe_unused]] auto const& end_label) {
     if (!where_tag.is_tagged()) {
         std::cerr << (fmt::format("Node '{0}' not tagged\n",  // --
-                      ibis::util::pretty_typename<decltype(where_tag)>().str()));
+                                  ibis::util::pretty_typename<decltype(where_tag)>().str()));
     }
 };
 
