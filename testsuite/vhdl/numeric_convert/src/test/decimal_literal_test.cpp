@@ -107,7 +107,7 @@ BOOST_DATA_TEST_CASE(decimal_literal_integer, utf_data::make(dec_int_lit) ^ dec_
 
     os << vhdl::failure_status(ctx);
     if (!os.str().empty()) {
-        //std::cout << '\n' << os.str() << '\n';
+        // std::cout << '\n' << os.str() << '\n';
     }
 }
 
@@ -140,7 +140,7 @@ BOOST_AUTO_TEST_CASE(decimal_literal_uint64max_ovrflw)
 
     os << vhdl::failure_status(ctx);
     if (!os.str().empty()) {
-        //std::cout << '\n' << os.str() << '\n';
+        // std::cout << '\n' << os.str() << '\n';
     }
 }
 

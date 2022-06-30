@@ -1168,7 +1168,7 @@ struct based_literal_base_type : x3::parser<based_literal_base_type> {
 
         bool const literal_ok = x3::parse(first, last, integer_literal, base_literal);
 
-        if(!literal_ok) {
+        if (!literal_ok) {
             return false;
         }
 
@@ -1186,7 +1186,8 @@ struct based_literal_base_type : x3::parser<based_literal_base_type> {
         return true;
     };
 
-    bool supported_base(attribute_type base) const {
+    bool supported_base(attribute_type base) const
+    {
         // clang-format off
         switch (base) {
             // NOLINTNEXTLINE(bugprone-branch-clone)
@@ -1201,9 +1202,9 @@ struct based_literal_base_type : x3::parser<based_literal_base_type> {
 };
 
 based_literal_base_type const base_r;
-auto const base = x3::expect[ as<unsigned>(base_r, "based literal base") ];
+auto const base = x3::expect[as<unsigned>(base_r, "based literal base")];
 
-#if 0 // FixMe: Move out of this namespace, requires based_literal_detail::base_type before!
+#if 0  // FixMe: Move out of this namespace, requires based_literal_detail::base_type before!
 // @see https://wandbox.org/permlink/Up1mD3FTVbE02tJG
 namespace boost::spirit::x3 {
     template <> struct x3::get_info<based_literal_detail::base_type> {
@@ -1216,112 +1217,68 @@ namespace boost::spirit::x3 {
 #endif
 
 auto const integer_exponent = x3::rule<struct _exp, ast::string_span>{ "based_literal" } =
-    x3::as<ast::string_span>[
-        x3::omit[ char_("Ee") >> -char_('+') ] >> integer
-    ]
-    ;
+    x3::as<ast::string_span>[x3::omit[char_("Ee") >> -char_('+')] >> integer];
 
 auto const integer = x3::rule<struct _int, ast::based_literal::number_chunk>{ "based_literal" } =
-    lexeme[
-           based_integer >> x3::attr(ast::string_span{})  // empty fractional part
-        >> '#'
-        >> -integer_exponent
-    ]
-    >> x3::attr(ast::based_literal::numeric_type_specifier::integer)
-    ;
+    lexeme[based_integer >> x3::attr(ast::string_span{})  // empty fractional part
+           >> '#' >> -integer_exponent] >>
+    x3::attr(ast::based_literal::numeric_type_specifier::integer);
 
 auto const real = x3::rule<struct _real, ast::based_literal::number_chunk>{ "based_literal" } =
-    lexeme[
-          based_integer >> lit('.') >> based_integer
-        >> '#'
-        >> -exponent
-    ]
-    >> x3::attr(ast::based_literal::numeric_type_specifier::real)
-    ;
+    lexeme[based_integer >> lit('.') >> based_integer >> '#' >> -exponent] >>
+    x3::attr(ast::based_literal::numeric_type_specifier::real);
 
+}  // namespace based_literal_detail
 
-} // end detail
-
-auto const based_literal_def =
-    lexeme [
-           based_literal_detail::base
-        >> '#'
-        >> ( based_literal_detail::real | based_literal_detail::integer )
-    ]
-    ;
-
+auto const based_literal_def = lexeme[based_literal_detail::base >> '#' >>
+                                      (based_literal_detail::real | based_literal_detail::integer)];
 
 /// basic_identifier ::=                                           [LRM93 §13.3]
 ///     letter { [ underline ] letter_or_digit }
 namespace basic_identifier_detail {
 
-auto const feasible = x3::rule<struct _, ast::string_span> { "basic_identifier" } =
-    raw[ lexeme [
-           letter
-        >> !char_('"') // reject bit_string_literal
-        >> *( letter_or_digit | char_("_") )
-    ]]
-    ;
-} // end detail
+auto const feasible = x3::rule<struct _, ast::string_span>{ "basic_identifier" } =
+    raw[lexeme[letter >> !char_('"')  // reject bit_string_literal
+               >> *(letter_or_digit | char_("_"))]];
+}  // namespace basic_identifier_detail
 
-auto const basic_identifier_def =
-    basic_identifier_detail::feasible - keyword
-    ;
-
-
+auto const basic_identifier_def = basic_identifier_detail::feasible - keyword;
 
 /// binding_indication ::=                                        [LRM93 §5.2.1]
 ///     [ use entity_aspect ]
 ///     [ generic_map_aspect ]
 ///     [ port_map_aspect ]
 auto const binding_indication_def =
-       -( USE >> entity_aspect )
-    >> -generic_map_aspect
-    >> -port_map_aspect
-    ;
-
-
+    -(USE >> entity_aspect) >> -generic_map_aspect >> -port_map_aspect;
 
 /// bit_string_literal ::=                                         [LRM93 §13.7]
 ///     base_specifier " bit_value "
 namespace detail {
 
-auto const bit_string_literal = [](auto&& base, auto&& char_range, auto&& attr)
-{
+auto const bit_string_literal = [](auto&& base, auto&& char_range, auto&& attr) {
     using CharT = decltype(char_range);
     using AttrT = decltype(attr);
 
     auto const char_set = [](auto&& char_range_) {
-        return x3::rule<struct _, ast::string_span>{ "char_set" } = x3::as_parser(
-             raw[
-                    char_(std::forward<CharT>(char_range_))
-                 >> *( -lit("_") >> char_(std::forward<CharT>(char_range_) ))
-             ]
-        );
+        return x3::rule<struct _, ast::string_span>{ "char_set" } =
+                   x3::as_parser(raw[char_(std::forward<CharT>(char_range_)) >>
+                                     *(-lit("_") >> char_(std::forward<CharT>(char_range_)))]);
     };
 
     return x3::rule<struct _, ast::bit_string_literal>{ "bit_string_literal" } = x3::as_parser(
-        lexeme[
-               x3::omit[char_(std::forward<decltype(base)>(base))]
-            >> lit('"')
-            >> char_set(std::forward<CharT>(char_range))
-            >> lit('"')
-        ]
-        >> x3::attr(std::forward<AttrT>(attr))
-    );
+               lexeme[x3::omit[char_(std::forward<decltype(base)>(base))] >> lit('"') >>
+                      char_set(std::forward<CharT>(char_range)) >> lit('"')] >>
+               x3::attr(std::forward<AttrT>(attr)));
 };
 
-} // end detail
+}  // namespace detail
 
 auto const bit_string_literal_def =
-      detail::bit_string_literal("Bb", "01",        ast::bit_string_literal::base_specifier::bin)
-    | detail::bit_string_literal("Xx", "0-9a-fA-F", ast::bit_string_literal::base_specifier::hex)
-    | detail::bit_string_literal("Oo", "0-7",       ast::bit_string_literal::base_specifier::oct)
-    ;
+    detail::bit_string_literal("Bb", "01", ast::bit_string_literal::base_specifier::bin) |
+    detail::bit_string_literal("Xx", "0-9a-fA-F", ast::bit_string_literal::base_specifier::hex) |
+    detail::bit_string_literal("Oo", "0-7", ast::bit_string_literal::base_specifier::oct);
 
-
-
-#if 0 // Note: UNUSED, embedded directly into bit_string_literal
+#if 0  // Note: UNUSED, embedded directly into bit_string_literal
 /// bit_value ::=
 ///     extended_digit { [ underline ] extended_digit }
 auto const bit_value_def =
@@ -1329,22 +1286,13 @@ auto const bit_value_def =
     ;
 #endif
 
-
 /// block_configuration ::                                        [LRM93 §1.3.1]
 ///     for block_specification
 ///         { use_clause }
 ///         { configuration_item }
 ///     end for ;
-auto const block_configuration_def =
-       FOR
-    >> block_specification
-    >> *use_clause
-    >> *configuration_item
-    >> END >> FOR
-    >> x3::expect[';']
-    ;
-
-
+auto const block_configuration_def = FOR >> block_specification >> *use_clause >>
+                                     *configuration_item >> END >> FOR >> x3::expect[';'];
 
 /// block_declarative_item ::=                                    [LRM93 §1.2.1]
 ///       subprogram_declaration
@@ -1365,34 +1313,15 @@ auto const block_configuration_def =
 ///     | group_template_declaration
 ///     | group_declaration
 auto const block_declarative_item_def =
-      subprogram_declaration
-    | subprogram_body
-    | type_declaration
-    | subtype_declaration
-    | constant_declaration
-    | signal_declaration
-    | variable_declaration  // shared_variable_declaration
-    | file_declaration
-    | alias_declaration
-    | component_declaration
-    | attribute_declaration
-    | attribute_specification
-    | configuration_specification
-    | disconnection_specification
-    | use_clause
-    | group_template_declaration
-    | group_declaration
-    ;
-
-
+    subprogram_declaration | subprogram_body | type_declaration | subtype_declaration |
+    constant_declaration | signal_declaration | variable_declaration  // shared_variable_declaration
+    | file_declaration | alias_declaration | component_declaration | attribute_declaration |
+    attribute_specification | configuration_specification | disconnection_specification |
+    use_clause | group_template_declaration | group_declaration;
 
 /// block_declarative_part ::=                                      [LRM93 §9.1]
 ///     { block_declarative_item }
-auto const block_declarative_part_def =
-    *block_declarative_item
-    ;
-
-
+auto const block_declarative_part_def = *block_declarative_item;
 
 /// block_header ::=                                                [LRM93 §9.1]
 ///     [ generic_clause
@@ -1401,34 +1330,23 @@ auto const block_declarative_part_def =
 ///     [ port_map_aspect ; ] ]
 namespace detail {
 
-auto const block_header_generic = x3::rule<struct _, ast::block_header::generic_part_chunk> { "block_header.generic" } =
-       generic_clause
-    >> -( generic_map_aspect >> x3::expect[';'] )
-    ;
+auto const block_header_generic = x3::rule<struct _, ast::block_header::generic_part_chunk>{
+    "block_header.generic"
+} = generic_clause >> -(generic_map_aspect >> x3::expect[';']);
 
-auto const block_header_port = x3::rule<struct _, ast::block_header::port_part_chunk> { "block_header.port" } =
-       port_clause
-    >> -( port_map_aspect >> x3::expect[';'] )
-    ;
-} // end detail
+auto const block_header_port = x3::rule<struct _, ast::block_header::port_part_chunk>{
+    "block_header.port"
+} = port_clause >> -(port_map_aspect >> x3::expect[';']);
+}  // namespace detail
 
-auto const block_header_def =
-       -detail::block_header_generic
-    >> -detail::block_header_port
-    ;
-
-
+auto const block_header_def = -detail::block_header_generic >> -detail::block_header_port;
 
 /// block_specification ::=                                       [LRM93 §1.3.1]
 ///       architecture_name
 ///     | block_statement_label
 ///     | generate_statement_label [ ( index_specification ) ]
-auto const block_specification_def = // order matters
-      label >> -( '(' >> index_specification >> ')' )
-    | name
-    ;
-
-
+auto const block_specification_def =  // order matters
+    label >> -('(' >> index_specification >> ')') | name;
 
 /// block_statement ::=                                             [LRM93 §9.1]
 ///     block_label :
@@ -1438,29 +1356,14 @@ auto const block_specification_def = // order matters
 ///         begin
 ///             block_statement_part
 ///         end block [ block_label ] ;
-auto const block_statement_def =
-       label_colon
-    >> BLOCK
-    >> -( '(' >> expression >> ')' )
-    >> -IS
-    >> block_header
-    >> block_declarative_part
-    >> BEGIN
-    >> block_statement_part
-    >> END >> BLOCK
-    >> -label
-    >> x3::expect[';']
-    ;
-
-
+auto const block_statement_def = label_colon >> BLOCK >> -('(' >> expression >> ')') >> -IS
+                                 >> block_header >> block_declarative_part >> BEGIN
+                                 >> block_statement_part >> END >> BLOCK >> -label
+                                 >> x3::expect[';'];
 
 /// block_statement_part ::=                                        [LRM93 §9.1]
 ///     { concurrent_statement }
-auto const block_statement_part_def =
-    *concurrent_statement
-    ;
-
-
+auto const block_statement_part_def = *concurrent_statement;
 
 /// case_statement ::=                                              [LRM93 §8.8]
 ///     [ case_label : ]
@@ -1468,44 +1371,19 @@ auto const block_statement_part_def =
 ///             case_statement_alternative
 ///             { case_statement_alternative }
 ///         end case [ case_label ] ;
-auto const case_statement_def =
-       -label_colon
-    >> CASE
-    >> expression
-    >> IS
-    >> +case_statement_alternative
-    >> END >> CASE
-    >> -label
-    >> x3::expect[';']
-    ;
-
-
+auto const case_statement_def = -label_colon >> CASE >> expression >> IS >>
+                                +case_statement_alternative >> END >> CASE >> -label >>
+                                x3::expect[';'];
 
 /// case_statement_alternative ::=                                  [LRM93 §8.8]
 ///     when choices =>
 ///         sequence_of_statements
-auto const case_statement_alternative_def =
-       WHEN
-    >> choices
-    >> "=>"
-    >> sequence_of_statements
-    ;
-
-
+auto const case_statement_alternative_def = WHEN >> choices >> "=>" >> sequence_of_statements;
 
 /// character_literal ::=                                          [LRM93 §13.5]
 ///     ' graphic_character '
 auto const character_literal_def =
-    x3::lexeme [
-           "\'"
-        >> ( ( graphic_character - '\'' )
-           | char_("\'")
-           )
-        >> "\'"
-    ]
-    ;
-
-
+    x3::lexeme["\'" >> ((graphic_character - '\'') | char_("\'")) >> "\'"];
 
 /// choice ::=                                                    [LRM93 §7.3.2]
 ///       simple_expression
@@ -1513,56 +1391,31 @@ auto const character_literal_def =
 ///     | element_simple_name
 ///     | others
 auto const choice_def =
-// Note, (element)_simple_name get never been parsed, since:
-// simple_expression -> term -> factor -> primary -> name -> simple_name
-      simple_expression
-    | discrete_range
-    | OTHERS
-    ;
-
-
+    // Note, (element)_simple_name get never been parsed, since:
+    // simple_expression -> term -> factor -> primary -> name -> simple_name
+    simple_expression | discrete_range | OTHERS;
 
 /// choices ::=                                                   [LRM93 §7.3.2]
 ///     choice { | choice }
-auto const choices_def =
-    choice % '|'
-    ;
-
-
+auto const choices_def = choice % '|';
 
 /// component_configuration ::=                                   [LRM93 §1.3.2]
 ///     for component_specification
 ///         [ binding_indication ; ]
 ///         [ block_configuration ]
 ///     end for ;
-auto const component_configuration_def =
-       FOR
-    >> component_specification
-    >> -( binding_indication >> x3::expect[';'] )
-    >> -block_configuration
-    >> END >> FOR
-    >> x3::expect[';']
-    ;
-
-
+auto const component_configuration_def = FOR >> component_specification >>
+                                         -(binding_indication >> x3::expect[';']) >>
+                                         -block_configuration >> END >> FOR >> x3::expect[';'];
 
 /// component_declaration ::=                                       [LRM93 §4.5]
 ///     component identifier [ is ]
 ///         [ local_generic_clause ]
 ///         [ local_port_clause ]
 ///     end component [ component_simple_name ] ;
-auto const component_declaration_def =
-       COMPONENT
-    >> identifier
-    >> -IS
-    >> -generic_clause
-    >> -port_clause
-    >> END >> COMPONENT
-    >> -simple_name
-    >> x3::expect[';']
-    ;
-
-
+auto const component_declaration_def = COMPONENT >> identifier >> -IS >> -generic_clause >>
+                                       -port_clause >> END >> COMPONENT >> -simple_name >>
+                                       x3::expect[';'];
 
 /// component_instantiation_statement ::=                           [LRM93 §9.6]
 ///     instantiation_label :
@@ -1570,69 +1423,33 @@ auto const component_declaration_def =
 ///             [ generic_map_aspect ]
 ///             [ port_map_aspect ] ;
 auto const component_instantiation_statement_def =
-       label_colon
-    >> instantiated_unit
-    >> -generic_map_aspect
-    >> -port_map_aspect
-    >> x3::expect[';']
-    ;
-
-
+    label_colon >> instantiated_unit >> -generic_map_aspect >> -port_map_aspect >> x3::expect[';'];
 
 /// component_specification ::=                                     [LRM93 §5.2]
 ///     instantiation_list : component_name
-auto const component_specification_def =
-       instantiation_list
-    >> ':'
-    >> name
-    ;
-
-
+auto const component_specification_def = instantiation_list >> ':' >> name;
 
 /// composite_type_definition ::=                                   [LRM93 §3.2]
 ///       array_type_definition
 ///     | record_type_definition
-auto const composite_type_definition_def =
-      array_type_definition
-    | record_type_definition
-    ;
-
-
+auto const composite_type_definition_def = array_type_definition | record_type_definition;
 
 /// concurrent_assertion_statement ::=                              [LRM93 §9.4]
 /// [ label : ] [ postponed ] assertion ;
 auto const concurrent_assertion_statement_def =
-       -label_colon
-    >> -POSTPONED
-    >> assertion
-    >> x3::expect[';']
-    ;
-
-
+    -label_colon >> -POSTPONED >> assertion >> x3::expect[';'];
 
 /// concurrent_procedure_call_statement ::=                         [LRM93 §9.3]
 /// [ label : ] [ postponed ] procedure_call ;
 auto const concurrent_procedure_call_statement_def =
-       -label_colon
-    >> -POSTPONED
-    >> procedure_call
-    >> x3::expect[';']
-    ;
-
-
+    -label_colon >> -POSTPONED >> procedure_call >> x3::expect[';'];
 
 /// concurrent_signal_assignment_statement ::=                      [LRM93 §9.5]
 ///       [ label : ] [ postponed ] conditional_signal_assignment
 ///     | [ label : ] [ postponed ] selected_signal_assignment
-auto const concurrent_signal_assignment_statement_def =
-       -label_colon
-    >> -POSTPONED
-    >> (  conditional_signal_assignment
-       | selected_signal_assignment
-       )
-    ;
-
-
+auto const concurrent_signal_assignment_statement_def = -label_colon >> -POSTPONED >>
+                                                        (conditional_signal_assignment |
+                                                         selected_signal_assignment);
 
 /// concurrent_statement ::=                                          [LRM93 §9]
 ///       block_statement
@@ -1645,207 +1462,106 @@ auto const concurrent_signal_assignment_statement_def =
 auto const concurrent_statement_def =
     // Note, order matters but is fragile; the problem seems to rise from rule
     // label >> ':', which is same/similar to component_instantiation_statement
-      component_instantiation_statement
-    | concurrent_signal_assignment_statement
-    | concurrent_procedure_call_statement
-    | concurrent_assertion_statement
-    | block_statement
-    | generate_statement
-    | process_statement
-    ;
-
-
+    component_instantiation_statement | concurrent_signal_assignment_statement |
+    concurrent_procedure_call_statement | concurrent_assertion_statement | block_statement |
+    generate_statement | process_statement;
 
 /// condition ::=                                                   [LRM93 §8.1]
 ///     boolean_expression
-auto const condition_def =
-    expression
-    ;
-
-
+auto const condition_def = expression;
 
 /// condition_clause ::=                                            [LRM93 §8.1]
 ///     until condition
-auto const condition_clause_def =
-    UNTIL >> condition
-    ;
-
-
+auto const condition_clause_def = UNTIL >> condition;
 
 /// conditional_signal_assignment ::=                             [LRM93 §9.5.1]
 ///     target    <= options conditional_waveforms ;
 auto const conditional_signal_assignment_def =
-       target
-    >> "<="
-    >> options
-    >> conditional_waveforms
-    >> x3::expect[';']
-    ;
-
-
+    target >> "<=" >> options >> conditional_waveforms >> x3::expect[';'];
 
 /// conditional_waveforms ::=                                     [LRM93 §9.5.1]
 ///     { waveform when condition else }
 ///       waveform [ when condition ]
-auto const conditional_waveforms_def =
-       *( waveform >> WHEN >> condition >> ELSE )
-    >> waveform
-    >> -( WHEN >> condition )
-    ;
-
-
+auto const conditional_waveforms_def = *(waveform >> WHEN >> condition >> ELSE) >> waveform >>
+                                       -(WHEN >> condition);
 
 /// configuration_declaration ::=                                   [LRM93 §1.3]
 ///     configuration identifier of entity_name is
 ///         configuration_declarative_part
 ///         block_configuration
 ///     end [ configuration ] [ configuration_simple_name ] ;
-auto const configuration_declaration_def =
-       CONFIGURATION
-    >> identifier
-    >> OF
-    >> name
-    >> IS
-    >> configuration_declarative_part
-    >> block_configuration
-    >> END >> -CONFIGURATION
-    >> -simple_name
-    >> x3::expect[';']
-    ;
-
-
+auto const configuration_declaration_def = CONFIGURATION >> identifier >> OF >> name >> IS >>
+                                           configuration_declarative_part >> block_configuration >>
+                                           END >> -CONFIGURATION >> -simple_name >> x3::expect[';'];
 
 /// configuration_declarative_item ::=                              [LRM93 §1.3]
 ///       use_clause
 ///     | attribute_specification
 ///     | group_declaration
 auto const configuration_declarative_item_def =
-      use_clause
-    | attribute_specification
-    | group_declaration
-    ;
-
-
+    use_clause | attribute_specification | group_declaration;
 
 /// configuration_declarative_part ::=                              [LRM93 §1.3]
 ///     { configuration_declarative_item }
-auto const configuration_declarative_part_def =
-    *configuration_declarative_item
-    ;
-
-
+auto const configuration_declarative_part_def = *configuration_declarative_item;
 
 /// configuration_item ::=                                        [LRM93 §1.3.1]
 ///       block_configuration
 ///     | component_configuration
-auto const configuration_item_def =
-      block_configuration
-    | component_configuration
-    ;
-
-
+auto const configuration_item_def = block_configuration | component_configuration;
 
 /// configuration_specification ::=                                 [LRM93 §5.2]
 ///     for component_specification binding_indication ;
 auto const configuration_specification_def =
-       FOR
-    >> component_specification
-    >> binding_indication
-    >> x3::expect[';']
-    ;
-
+    FOR >> component_specification >> binding_indication >> x3::expect[';'];
 
 /// constant_declaration ::=                                    [LRM93 §4.3.1.1]
 ///     constant identifier_list : subtype_indication [ := expression ] ;
-auto const constant_declaration_def =
-       omit[ CONSTANT ]
-    >> identifier_list
-    >> ':'
-    >> subtype_indication
-    >> -( ":=" >>  expression )
-    >> x3::expect[';']
-;
-
-
+auto const constant_declaration_def = omit[CONSTANT] >> identifier_list >> ':' >>
+                                      subtype_indication >>
+                                      -(":=" >> expression) >> x3::expect[';'];
 
 /// constrained_array_definition ::=                              [LRM93 §3.2.1]
 ///     array index_constraint of element_subtype_indication
-auto const constrained_array_definition_def =
-       ARRAY
-    >> index_constraint
-    >> OF
-    >> subtype_indication
-    ;
-
-
+auto const constrained_array_definition_def = ARRAY >> index_constraint >> OF >> subtype_indication;
 
 /// constraint ::=                                                  [LRM93 §4.2]
 ///       range_constraint
 ///     | index_constraint
-auto const constraint_def =
-      range_constraint
-    | index_constraint
-    ;
-
-
+auto const constraint_def = range_constraint | index_constraint;
 
 /// context_clause ::=                                             [LRM93 §11.3]
 ///     { context_item }
-auto const context_clause_def =
-    *context_item
-    ;
-
-
+auto const context_clause_def = *context_item;
 
 /// context_item ::=                                               [LRM93 §11.3]
 ///       library_clause
 ///     | use_clause
-auto const context_item_def =
-      library_clause
-    | use_clause
-    ;
-
-
+auto const context_item_def = library_clause | use_clause;
 
 /// decimal_literal ::=                                          [LRM93 §13.4.1]
 ///     integer [ . integer ] [ exponent ]
 namespace decimal_literal_detail {
 
-auto const real_type = x3::rule<struct _, ast::decimal_literal> { "decimal_literal<real>" } =
-       x3::as<ast::string_span>[
-           raw[ lexeme[
-               integer >> char_('.') >> integer >> -exponent
-           ]]
-       ]
-    >> x3::attr(ast::decimal_literal::numeric_type_specifier::real)
-    ;
+auto const real_type = x3::rule<struct _, ast::decimal_literal>{ "decimal_literal<real>" } =
+    x3::as<ast::string_span>[raw[lexeme[integer >> char_('.') >> integer >> -exponent]]] >>
+    x3::attr(ast::decimal_literal::numeric_type_specifier::real);
 
-auto const integer_exponent = x3::rule<struct _, ast::string_span> { "exponent" } =
-   // Note, following IEEE1076-93 Ch. 13.4, the exponent on integer type must
-   // not have a minus sign. This means implicit (even from NBF) that a positive
-   // (optional) sign is allowed.
-    raw[ lexeme[
-        char_("Ee") >> -char_("+") >> integer
-    ]]
-    ;
+auto const integer_exponent = x3::rule<struct _, ast::string_span>{ "exponent" } =
+    // Note, following IEEE1076-93 Ch. 13.4, the exponent on integer type must
+    // not have a minus sign. This means implicit (even from NBF) that a positive
+    // (optional) sign is allowed.
+    raw[lexeme[char_("Ee") >> -char_("+") >> integer]];
 
-auto const integer_type = x3::rule<struct _, ast::decimal_literal> { "decimal_literal<int>" } =
-       x3::as<ast::string_span>[
-           raw[ lexeme[
-               integer >> -integer_exponent
-           ]]
-       ]
-    >> x3::attr(ast::decimal_literal::numeric_type_specifier::integer)
-    ;
-} // end detail
+auto const integer_type = x3::rule<struct _, ast::decimal_literal>{ "decimal_literal<int>" } =
+    x3::as<ast::string_span>[raw[lexeme[integer >> -integer_exponent]]] >>
+    x3::attr(ast::decimal_literal::numeric_type_specifier::integer);
+}  // namespace decimal_literal_detail
 
 auto const decimal_literal_def =
-      decimal_literal_detail::real_type
-    | decimal_literal_detail::integer_type
-    ;
+    decimal_literal_detail::real_type | decimal_literal_detail::integer_type;
 
-
-#if 0 // UNUSED in the BNF
+#if 0  // UNUSED in the BNF
 /// declaration ::=                                                   [LRM93 §4]
 ///       type_declaration
 ///     | subtype_declaration
@@ -1877,73 +1593,36 @@ auto const declaration_def =
     ;
 #endif
 
-
 /// delay_mechanism ::=                                             [LRM93 §8.4]
 ///       transport
 ///     | [ reject time_expression ] inertial
-auto const delay_mechanism_def =
-       TRANSPORT
-    | (   -( REJECT >> expression )
-       >> INERTIAL
-      )
-    ;
-
-
+auto const delay_mechanism_def = TRANSPORT | (-(REJECT >> expression) >> INERTIAL);
 
 /// design_file ::=                                                [LRM93 §11.1]
 ///     design_unit { design_unit }
-auto const design_file_def =
-    *design_unit
-    ;
-
-
+auto const design_file_def = *design_unit;
 
 /// design_unit ::=                                                [LRM93 §11.1]
 ///     context_clause library_unit
-auto const design_unit_def =
-       context_clause
-    >> library_unit
-    ;
-
-
+auto const design_unit_def = context_clause >> library_unit;
 
 /// designator ::=                                                  [LRM93 §2.1]
 ///     identifier  |  operator_symbol
-auto const designator_def =
-      identifier
-    | operator_symbol
-    ;
-
-
+auto const designator_def = identifier | operator_symbol;
 
 /// direction ::=                                                   [LRM93 §3.1]
 ///     to | downto
-auto const direction_def =
-    TO | DOWNTO
-    ;
-
-
+auto const direction_def = TO | DOWNTO;
 
 /// disconnection_specification ::=                                 [LRM93 §5.3]
 ///     disconnect guarded_signal_specification after time_expression ;
 auto const disconnection_specification_def =
-       DISCONNECT
-    >> guarded_signal_specification
-    >> AFTER
-    >> expression
-    >> x3::expect[';']
-    ;
-
-
+    DISCONNECT >> guarded_signal_specification >> AFTER >> expression >> x3::expect[';'];
 
 /// discrete_range ::=                                            [LRM93 §3.2.1]
 ///     discrete_subtype_indication | range
-auto const discrete_range_def = // order matters
-      range
-    | subtype_indication
-    ;
-
-
+auto const discrete_range_def =  // order matters
+    range | subtype_indication;
 
 ///
 /// element_association                                           [LRM93 §7.3.2]
@@ -1972,31 +1651,17 @@ auto const discrete_range_def = // order matters
 /// If the choices rule fails due to missing "=>" the element_association node
 /// still contains the previous parsed data, hence holding the leaf data twice
 /// using two parse paths. as[] directive solve this.
-auto const element_association_def =
-       -x3::as<ast::choices>[choices >> "=>" ] // no expected[]
-    >> expression
-    ;
-
-
+auto const element_association_def = -x3::as<ast::choices>[choices >> "=>"]  // no expected[]
+                                     >> expression;
 
 /// element_declaration ::=                                       [LRM93 §3.2.2]
 ///     identifier_list : element_subtype_definition ;
 auto const element_declaration_def =
-       identifier_list
-    >> ':'
-    >> element_subtype_definition
-    >> x3::expect[';']
-    ;
-
-
+    identifier_list >> ':' >> element_subtype_definition >> x3::expect[';'];
 
 /// element_subtype_definition ::=                                [LRM93 §3.2.2]
 ///     subtype_indication
-auto const element_subtype_definition_def =
-    subtype_indication
-    ;
-
-
+auto const element_subtype_definition_def = subtype_indication;
 
 /// entity_aspect ::=                                           [LRM93 §5.2.1.1]
 ///       entity entity_name [ ( architecture_identifier) ]
@@ -2004,28 +1669,17 @@ auto const element_subtype_definition_def =
 ///     | open
 namespace entity_aspect_detail {
 
-auto const entity = x3::rule<struct _, ast::entity_aspect_entity> { "entity_aspect.entity" } =
-       ENTITY
-    >> name
-    >> -(      '('
-            >> identifier
-            >> ')'
-        )
-    ;
+auto const entity = x3::rule<struct _, ast::entity_aspect_entity>{
+    "entity_aspect.entity"
+} = ENTITY >> name >> -('(' >> identifier >> ')');
 
-auto const configuration = x3::rule<struct _, ast::entity_aspect_configuration> { "entity_aspect.configuration" } =
-       CONFIGURATION
-    >> name
-    ;
-} // end detail
+auto const configuration =
+    x3::rule<struct _, ast::entity_aspect_configuration>{ "entity_aspect.configuration" } =
+        CONFIGURATION >> name;
+}  // namespace entity_aspect_detail
 
 auto const entity_aspect_def =
-      entity_aspect_detail::entity
-    | entity_aspect_detail::configuration
-    | OPEN
-    ;
-
-
+    entity_aspect_detail::entity | entity_aspect_detail::configuration | OPEN;
 
 /// entity_class ::=                                                [LRM93 §5.1]
 ///       entity        | architecture  | configuration
@@ -2037,51 +1691,36 @@ auto const entity_aspect_def =
 namespace detail {
 
 x3::symbols<ast::keyword_token> const entity_class_symbols(
-    {
-        { "entity"        , ast::keyword_token::ENTITY },
-        { "architecture"  , ast::keyword_token::ARCHITECTURE },
-        { "configuration" , ast::keyword_token::CONFIGURATION },
-        { "procedure"     , ast::keyword_token::PROCEDURE },
-        { "function"      , ast::keyword_token::FUNCTION },
-        { "package"       , ast::keyword_token::PACKAGE },
-        { "type"          , ast::keyword_token::TYPE },
-        { "subtype"       , ast::keyword_token::SUBTYPE },
-        { "constant"      , ast::keyword_token::CONSTANT },
-        { "signal"        , ast::keyword_token::SIGNAL },
-        { "variable"      , ast::keyword_token::VARIABLE },
-        { "component"     , ast::keyword_token::COMPONENT },
-        { "label"         , ast::keyword_token::LABEL },
-        { "literal"       , ast::keyword_token::LITERAL },
-        { "units"         , ast::keyword_token::UNITS },
-        { "group"         , ast::keyword_token::GROUP },
-        { "file"          , ast::keyword_token::FILE }
-    },
-    "entity_class"
-);
+    { { "entity", ast::keyword_token::ENTITY },
+      { "architecture", ast::keyword_token::ARCHITECTURE },
+      { "configuration", ast::keyword_token::CONFIGURATION },
+      { "procedure", ast::keyword_token::PROCEDURE },
+      { "function", ast::keyword_token::FUNCTION },
+      { "package", ast::keyword_token::PACKAGE },
+      { "type", ast::keyword_token::TYPE },
+      { "subtype", ast::keyword_token::SUBTYPE },
+      { "constant", ast::keyword_token::CONSTANT },
+      { "signal", ast::keyword_token::SIGNAL },
+      { "variable", ast::keyword_token::VARIABLE },
+      { "component", ast::keyword_token::COMPONENT },
+      { "label", ast::keyword_token::LABEL },
+      { "literal", ast::keyword_token::LITERAL },
+      { "units", ast::keyword_token::UNITS },
+      { "group", ast::keyword_token::GROUP },
+      { "file", ast::keyword_token::FILE } },
+    "entity_class");
 
 }
 
-auto const entity_class_def =
-     distinct(detail::entity_class_symbols)
-     ;
-
-
+auto const entity_class_def = distinct(detail::entity_class_symbols);
 
 /// entity_class_entry ::=                                          [LRM93 §4.6]
 ///     entity_class [ <> ]
-auto const entity_class_entry_def =
-       entity_class
-    >> -lit("<>")
-    ;
-
-
+auto const entity_class_entry_def = entity_class >> -lit("<>");
 
 /// entity_class_entry_list ::=                                     [LRM93 §4.6]
 ///     entity_class_entry { , entity_class_entry }
-auto const entity_class_entry_list_def =
-    entity_class_entry % ','
-    ;
-
+auto const entity_class_entry_list_def = entity_class_entry % ',';
 
 ///
 /// entity_declaration                                              [LRM93 §1.1]
@@ -2095,21 +1734,10 @@ auto const entity_class_entry_list_def =
 ///         entity_statement_part ]
 ///     end [ entity ] [ entity_simple_name ] ;
 /// \endcode
-auto const entity_declaration_def =
-       ENTITY
-    >> identifier
-    >> IS
-    >> entity_header
-    >> entity_declarative_part
-    >> -(      BEGIN
-            >> entity_statement_part
-        )
-    >> END
-    >> -ENTITY
-    >> -simple_name
-    >> x3::expect[';']
-    ;
-
+auto const entity_declaration_def = ENTITY >> identifier >> IS >> entity_header >>
+                                    entity_declarative_part >>
+                                    -(BEGIN >> entity_statement_part) >> END >> -ENTITY >>
+                                    -simple_name >> x3::expect[';'];
 
 ///
 /// entity_declarative_item                                       [LRM93 §1.1.2]
@@ -2133,23 +1761,10 @@ auto const entity_declaration_def =
 ///     | group_declaration
 /// @endcode
 auto const entity_declarative_item_def =
-      subprogram_declaration
-    | subprogram_body
-    | type_declaration
-    | subtype_declaration
-    | constant_declaration
-    | signal_declaration
-    | variable_declaration  // shared_variable_declaration
-    | file_declaration
-    | alias_declaration
-    | attribute_declaration
-    | attribute_specification
-    | disconnection_specification
-    | use_clause
-    | group_template_declaration
-    | group_declaration
-    ;
-
+    subprogram_declaration | subprogram_body | type_declaration | subtype_declaration |
+    constant_declaration | signal_declaration | variable_declaration  // shared_variable_declaration
+    | file_declaration | alias_declaration | attribute_declaration | attribute_specification |
+    disconnection_specification | use_clause | group_template_declaration | group_declaration;
 
 ///
 /// entity_declarative_part                                       [LRM93 §1.1.2]
@@ -2158,51 +1773,26 @@ auto const entity_declarative_item_def =
 /// entity_declarative_part ::=
 ///     { entity_declarative_item }
 /// \endcode
-auto const entity_declarative_part_def =
-    *entity_declarative_item
-    ;
-
-
+auto const entity_declarative_part_def = *entity_declarative_item;
 
 /// entity_designator ::=                                           [LRM93 §5.1]
 ///     entity_tag [ signature ]
-auto const entity_designator_def =
-       entity_tag
-    >> -signature
-    ;
-
-
+auto const entity_designator_def = entity_tag >> -signature;
 
 /// entity_header ::=                                             [LRM93 §1.1.1]
 ///     [ formal_generic_clause ]
 ///     [ formal_port_clause ]
-auto const entity_header_def =
-       -generic_clause
-    >> -port_clause
-    ;
-
-
+auto const entity_header_def = -generic_clause >> -port_clause;
 
 /// entity_name_list ::=                                            [LRM93 §5.1]
 ///       entity_designator { , entity_designator }
 ///     | others
 ///     | all
-auto const entity_name_list_def =
-      (entity_designator % ',')
-    | OTHERS
-    | ALL
-    ;
-
-
+auto const entity_name_list_def = (entity_designator % ',') | OTHERS | ALL;
 
 /// entity_specification ::=                                        [LRM93 §5.1]
 ///     entity_name_list : entity_class
-auto const entity_specification_def =
-      entity_name_list
-    >> ':'
-    >> entity_class
-    ;
-
+auto const entity_specification_def = entity_name_list >> ':' >> entity_class;
 
 ///
 /// entity_statement                                              [LRM93 §1.1.3]
@@ -2214,11 +1804,7 @@ auto const entity_specification_def =
 ///     | passive_process_statement
 /// \endcode
 auto const entity_statement_def =
-      concurrent_assertion_statement
-    | concurrent_procedure_call_statement
-    | process_statement
-    ;
-
+    concurrent_assertion_statement | concurrent_procedure_call_statement | process_statement;
 
 ///
 /// entity_statement_part                                         [LRM93 §1.1.3]
@@ -2227,69 +1813,40 @@ auto const entity_statement_def =
 /// entity_statement_part ::=
 ///     { entity_statement }
 /// \endcode
-auto const entity_statement_part_def =
-    *entity_statement
-    ;
-
-
+auto const entity_statement_part_def = *entity_statement;
 
 /// entity_tag ::=                                                  [LRM93 §5.1]
 /// simple_name | character_literal | operator_symbol
-auto const entity_tag_def =
-      simple_name
-    | character_literal
-    | operator_symbol
-    ;
-
-
+auto const entity_tag_def = simple_name | character_literal | operator_symbol;
 
 /// enumeration_literal ::=                                       [LRM93 §3.1.1]
 ///     identifier | character_literal
-auto const enumeration_literal_def =
-      identifier
-    | character_literal
-    ;
-
-
+auto const enumeration_literal_def = identifier | character_literal;
 
 /// enumeration_type_definition ::=                               [LRM93 §3.1.1]
 ///     ( enumeration_literal { , enumeration_literal } )
-auto const enumeration_type_definition_def =
-    '(' >> (enumeration_literal % ',') >> ')'
-    ;
-
-
+auto const enumeration_type_definition_def = '(' >> (enumeration_literal % ',') >> ')';
 
 /// exit_statement ::=                                             [LRM93 §8.11]
 ///     [ label : ] exit [ loop_label ] [ when condition ] ;
-auto const exit_statement_def =
-       -label_colon
-    >> EXIT
-    >> -label
-    >> -( WHEN >> condition )
-    >> x3::expect[';']
-    ;
-
-
+auto const exit_statement_def = -label_colon >> EXIT >> -label >>
+                                -(WHEN >> condition) >> x3::expect[';'];
 
 /// exponent ::=                                                 [LRM93 §13.4.1]
 ///     E [ + ] integer | E - integer
 auto const exponent_def =
-    // Note, that exponent rule parses real exponent, for integer types no sign
-    // is allowed, hence embedded into the concrete rule
+// Note, that exponent rule parses real exponent, for integer types no sign
+// is allowed, hence embedded into the concrete rule
 #if 1
-    //x3::as<ast::string_span>[
-        x3::omit[ char_("Ee") ] >> x3::raw[ -char_("-+") >> integer ]
-    //]
+    // x3::as<ast::string_span>[
+    x3::omit[char_("Ee")] >> x3::raw[-char_("-+") >> integer]
+//]
 #else
-    x3::raw[ //x3::as<ast::string_span>[
-        x3::omit[ char_("Ee") ] >> -char_("-+") >> integer
-    ]
+    x3::raw[  // x3::as<ast::string_span>[
+        x3::omit[char_("Ee")] >> -char_("-+") >> integer]
 
 #endif
     ;
-
-
 
 /// expression ::=                                                  [LRM93 §7.1]
 ///       relation { and relation }
@@ -2300,52 +1857,33 @@ auto const exponent_def =
 ///     | relation { xnor relation }
 namespace expression_detail {
 
-auto const chunks_1 = x3::rule<struct _, std::vector<ast::expression::chunk>> { "expression" } =
-    *(binary_logical_operator >> relation)
-    ;
+auto const chunks_1 = x3::rule<struct _, std::vector<ast::expression::chunk>>{ "expression" } =
+    *(binary_logical_operator >> relation);
 
-auto const chunk_2 = x3::rule<struct _, std::vector<ast::expression::chunk>> { "expression" } =
-    x3::repeat(1)[ // enforce artificial vector to unify ast node
-        unary_logical_operator >> relation
-    ];
-} // end detail
+auto const chunk_2 = x3::rule<struct _, std::vector<ast::expression::chunk>>{ "expression" } =
+    x3::repeat(1)[  // enforce artificial vector to unify ast node
+        unary_logical_operator >> relation];
+}  // namespace expression_detail
 
-auto const expression_def =
-       relation
-    >> ( expression_detail::chunk_2    // NAND, NOR
-       | expression_detail::chunks_1   // AND, ...
-       )
-    ;
-
-
+auto const expression_def = relation >> (expression_detail::chunk_2     // NAND, NOR
+                                         | expression_detail::chunks_1  // AND, ...
+                                        );
 
 /// extended_identifier ::=                                      [LRM93 §13.3.2]
 ///     \ graphic_character { graphic_character } \                             .
 namespace extended_identifier_detail {
 
-auto const charset = x3::rule<struct _, ast::string_span> { "extended_identifier" } =
-     +( graphic_character - char_('\\') )
-     ;
+auto const charset = x3::rule<struct _, ast::string_span>{ "extended_identifier" } =
+    +(graphic_character - char_('\\'));
 
-auto const atom = x3::rule<struct _, ast::string_span> { "extended_identifier" } =
-    raw[ lexeme [
-           char_('\\')
-        >> charset
-        >> char_('\\')
-    ]]
-    ;
-} // end detail
+auto const atom = x3::rule<struct _, ast::string_span>{ "extended_identifier" } =
+    raw[lexeme[char_('\\') >> charset >> char_('\\')]];
+}  // namespace extended_identifier_detail
 
 auto const extended_identifier_def =
-    x3::as<ast::string_span>[
-        raw[ lexeme [
-               extended_identifier_detail::atom
-            >> *(extended_identifier_detail::atom % (char_('\\') >> char_('\\')))
-        ]]
-    ]
-    ;
-
-
+    x3::as<ast::string_span>[raw[lexeme[extended_identifier_detail::atom >>
+                                        *(extended_identifier_detail::atom %
+                                          (char_('\\') >> char_('\\')))]]];
 
 /// factor ::=                                                      [LRM93 §7.1]
 ///       primary [ ** primary ]
@@ -2353,75 +1891,42 @@ auto const extended_identifier_def =
 ///     | not primary
 namespace factor_detail {
 
-auto const binary_expr = x3::rule<struct _, ast::factor_binary_operation> { "factor" } =
-       primary
-    >> binary_miscellaneous_operator // ** (exponent)
-    >> primary
+auto const binary_expr = x3::rule<struct _, ast::factor_binary_operation>{ "factor" } =
+    primary >> binary_miscellaneous_operator  // ** (exponent)
+    >> primary;
+
+auto const unary_expr = x3::rule<struct _, ast::factor_unary_operation>{ "factor" } =
+    unary_miscellaneous_operator >> primary  // ABS | NOT
     ;
+}  // namespace factor_detail
 
-auto const unary_expr = x3::rule<struct _, ast::factor_unary_operation> { "factor" } =
-    unary_miscellaneous_operator >> primary // ABS | NOT
-    ;
-} // end detail
-
-auto const factor_def =    // order matters
-      factor_detail::binary_expr
-    | factor_detail::unary_expr
-    | primary
-    ;
-
-
+auto const factor_def =  // order matters
+    factor_detail::binary_expr | factor_detail::unary_expr | primary;
 
 /// file_declaration ::=                                        [LRM93 §4.3.1.4]
 ///     file identifier_list : subtype_indication [ file_open_information ] ;
-auto const file_declaration_def =
-       FILE
-    >> identifier_list
-    >> ':'
-    >> subtype_indication
-    >> -file_open_information
-    >> x3::expect[';']
-    ;
-
-
+auto const file_declaration_def = FILE >> identifier_list >> ':' >> subtype_indication >>
+                                  -file_open_information >> x3::expect[';'];
 
 /// file_logical_name ::=                                       [LRM93 §4.3.1.4]
 ///     string_expression
-auto const file_logical_name_def =
-    expression
-    ;
-
-
+auto const file_logical_name_def = expression;
 
 /// file_open_information ::=                                   [LRM93 §4.3.1.4]
 ///     [ open file_open_kind_expression ] is file_logical_name
-auto const file_open_information_def =
-    -(    omit[ OPEN ]
-       >> expression
-     )
-    >> IS
-    >> file_logical_name
-    ;
-
-
+auto const file_open_information_def = -(omit[OPEN] >> expression) >> IS >> file_logical_name;
 
 /// file_type_definition ::=                                        [LRM93 §3.4]
 ///     file  of type_mark
-auto const file_type_definition_def =
-       FILE
-    >> OF
-    >> type_mark
-    ;
+auto const file_type_definition_def = FILE >> OF >> type_mark;
 
-
-#if 0 // UNUSED; embedded into scalar_type_definition
+#if 0  // UNUSED; embedded into scalar_type_definition
 /// floating_type_definition ::=                                  [LRM93 §3.1.4]
 ///     range_constraint
 auto const floating_type_definition_def =
     range_constraint
     ;
 #endif
-
 
 ///
 /// formal_designator ::=                                       [LRM93 §4.3.2.2]
@@ -2432,19 +1937,11 @@ auto const floating_type_definition_def =
 ///     | port_name
 ///     | parameter_name
 /// @endcode
-auto const formal_designator_def =
-    name
-    ;
-
-
+auto const formal_designator_def = name;
 
 /// formal_parameter_list ::=                                     [LRM93 §2.1.1]
 ///     parameter_interface_list
-auto const formal_parameter_list_def =
-    interface_list
-    ;
-
-
+auto const formal_parameter_list_def = interface_list;
 
 ///
 /// formal_part                                                 [LRM93 §4.3.2.2]
@@ -2461,16 +1958,9 @@ auto const formal_parameter_list_def =
 /// convenience into `std::vector`, even if the number of elements parsed can not reach more
 /// than 2 due to explicit grammar rule.
 auto const formal_part_def =
-    x3::as<std::vector<ast::name>>[
-           name
-        >> -(
-                '(' >> formal_designator >> ')'
-            )
-    ]
-    ;
+    x3::as<std::vector<ast::name>>[name >> -('(' >> formal_designator >> ')')];
 
-
-#if 0 // UNUSED; embedded into type_declaration
+#if 0  // UNUSED; embedded into type_declaration
 /// full_type_declaration ::=                                       [LRM93 §4.1]
 ///     type identifier is type_definition ;
 auto const full_type_declaration_def = ( // operator precedence
@@ -2483,17 +1973,9 @@ auto const full_type_declaration_def = ( // operator precedence
     ;
 #endif
 
-
 /// function_call ::=                                             [LRM93 §7.3.3]
 ///     function_name [ ( actual_parameter_part ) ]
-auto const function_call_def =
-       name
-    >> -(
-            '(' >> actual_parameter_part >> ')'
-        )
-    ;
-
-
+auto const function_call_def = name >> -('(' >> actual_parameter_part >> ')');
 
 /// generate_statement ::=                                          [LRM93 §9.7]
 ///     generate_label :
@@ -2503,20 +1985,11 @@ auto const function_call_def =
 ///             { concurrent_statement }
 ///         end generate [ generate_label ] ;
 ///
-/// FixMe: testing this rule failed - never seen concurrent_statement/component_instantiation_statement
-auto const generate_statement_def =
-       label_colon
-    >> generation_scheme
-    >> GENERATE
-    >> -(*block_declarative_item
-          >> BEGIN
-       )
-    >> *concurrent_statement
-    >> END >> GENERATE
-    >> -label
-    >> x3::expect[';']
-    ;
-
+/// FixMe: testing this rule failed - never seen
+/// concurrent_statement/component_instantiation_statement
+auto const generate_statement_def = label_colon >> generation_scheme >> GENERATE >>
+                                    -(*block_declarative_item >> BEGIN) >> *concurrent_statement
+                                    >> END >> GENERATE >> -label >> x3::expect[';'];
 
 ///
 /// generation_scheme                                               [LRM93 §9.7]
@@ -2526,11 +1999,7 @@ auto const generate_statement_def =
 ///       for generate_parameter_specification
 ///     | if condition
 /// \endcode
-auto const generation_scheme_def =
-      (FOR >> parameter_specification)
-    | (IF  >> condition)
-    ;
-
+auto const generation_scheme_def = (FOR >> parameter_specification) | (IF >> condition);
 
 ///
 /// generic_clause                                                [LRM93 §1.1.1]
@@ -2539,16 +2008,9 @@ auto const generation_scheme_def =
 /// generic_clause ::=
 ///     generic ( generic_list ) ;
 /// \endcode
-auto const generic_clause_def =
-       GENERIC
-    >> '('
-    >> interface_list
-    >> ')'
-    >> x3::expect[';']
-    ;
+auto const generic_clause_def = GENERIC >> '(' >> interface_list >> ')' >> x3::expect[';'];
 
-
-#if 0 // DISABLED; embedded into generic_clause
+#if 0  // DISABLED; embedded into generic_clause
 /// generic_list ::=                                            [LRM93 §1.1.1.1]
 ///     generic_interface_list
 auto const generic_list_def =
@@ -2556,91 +2018,39 @@ auto const generic_list_def =
     ;
 #endif
 
-
 /// generic_map_aspect ::=                                      [LRM93 §5.2.1.2]
 ///     generic map ( generic_association_list )
-auto const generic_map_aspect_def =
-       GENERIC
-    >> MAP
-    >> '('
-    >> association_list
-    >> ')'
-    ;
-
-
-
+auto const generic_map_aspect_def = GENERIC >> MAP >> '(' >> association_list >> ')';
 
 /// group_constituent ::                                            [LRM93 §4.7]
 ///     name | character_literal
-auto const group_constituent_def =
-    name | character_literal
-    ;
-
-
+auto const group_constituent_def = name | character_literal;
 
 /// group_constituent_list ::=                                      [LRM93 §4.7]
 ///     group_constituent { , group_constituent }
-auto const group_constituent_list_def =
-    group_constituent % ','
-    ;
-
-
+auto const group_constituent_list_def = group_constituent % ',';
 
 /// group_template_declaration ::=                                  [LRM93 §4.6]
 ///     group identifier is ( entity_class_entry_list ) ;
 auto const group_template_declaration_def =
-       GROUP
-    >> identifier
-    >> IS
-    >> '('
-    >> entity_class_entry_list
-    >> ')'
-    >> x3::expect[';']
-    ;
-
-
+    GROUP >> identifier >> IS >> '(' >> entity_class_entry_list >> ')' >> x3::expect[';'];
 
 /// group_declaration ::=                                           [LRM93 §4.7]
 ///     group identifier : group_template_name ( group_constituent_list ) ;
 auto const group_declaration_def =
-       GROUP
-    >> identifier
-    >> ':'
-    >> name
-    >> '('
-    >> group_constituent_list
-    >> ')'
-    >> x3::expect[';']
-    ;
-
-
+    GROUP >> identifier >> ':' >> name >> '(' >> group_constituent_list >> ')' >> x3::expect[';'];
 
 /// guarded_signal_specification ::=                                [LRM93 §5.3]
 ///     guarded_signal_list : type_mark
-auto const guarded_signal_specification_def =
-       signal_list
-    >> ':'
-    >> type_mark
-    ;
-
-
+auto const guarded_signal_specification_def = signal_list >> ':' >> type_mark;
 
 /// identifier ::=                                                 [LRM93 §13.3]
 ///     basic_identifier | extended_identifier
-auto const identifier_def =
-      basic_identifier
-    | extended_identifier
-    ;
-
-
+auto const identifier_def = basic_identifier | extended_identifier;
 
 /// identifier_list ::=                                           [LRM93 §3.2.2]
 ///     identifier { , identifier }
-auto const identifier_list_def =
-    identifier % ','
-    ;
-
-
+auto const identifier_list_def = identifier % ',';
 
 /// if_statement ::=                                                [LRM93 §8.7]
 ///     [ if_label : ]
@@ -2651,19 +2061,12 @@ auto const identifier_list_def =
 ///       [ else
 ///             sequence_of_statements ]
 ///         end if [ if_label ] ;
-auto const if_statement_def =
-       -label_colon
-    >> IF >> condition >> THEN
-    >> sequence_of_statements
-    >> *( ELSIF >> condition >> THEN >> sequence_of_statements )
-    >> -( ELSE >> sequence_of_statements )
-    >> END >> IF
-    >> -label
-    >> x3::expect[';']
-;
+auto const if_statement_def = -label_colon >> IF >> condition >> THEN >> sequence_of_statements >>
+                              *(ELSIF >> condition >> THEN >> sequence_of_statements) >>
+                              -(ELSE >> sequence_of_statements) >> END >> IF >> -label
+                              >> x3::expect[';'];
 
-
-#if 0 // UNUSED; embedded into type_declaration
+#if 0  // UNUSED; embedded into type_declaration
 /// incomplete_type_declaration ::=                               [LRM93 §3.3.1]
 ///     type identifier ;
 auto const incomplete_type_declaration_def = ( // operator precedence
@@ -2674,80 +2077,43 @@ auto const incomplete_type_declaration_def = ( // operator precedence
     ;
 #endif
 
-
 /// index_constraint ::=                                          [LRM93 §3.2.1]
 ///     ( discrete_range { , discrete_range } )
-auto const index_constraint_def =
-     '(' >> (discrete_range % ',') >> ')'
-     ;
-
-
+auto const index_constraint_def = '(' >> (discrete_range % ',') >> ')';
 
 /// index_specification ::=                                       [LRM93 §1.3.1]
 ///       discrete_range
 ///     | static_expression
-auto const index_specification_def =
-      discrete_range
-    | expression
-    ;
-
-
+auto const index_specification_def = discrete_range | expression;
 
 /// index_subtype_definition ::=                                  [LRM93 §3.2.1]
 ///     type_mark range <>
-auto const index_subtype_definition_def =
-       type_mark
-    >> RANGE
-    >> "<>"
-    ;
-
-
+auto const index_subtype_definition_def = type_mark >> RANGE >> "<>";
 
 /// indexed_name ::=                                                [LRM93 §6.4]
 ///     prefix ( expression { , expression } )
-auto const indexed_name_def =
-       prefix
-    >> '(' >> (expression % ',') >> ')'
-    ;
-
-
+auto const indexed_name_def = prefix >> '(' >> (expression % ',') >> ')';
 
 /// instantiated_unit ::=                                           [LRM93 §9.6]
 ///       [ component ] component_name
 ///     | entity entity_name [ ( architecture_identifier ) ]
 ///     | configuration configuration_name
 auto const instantiated_unit_def =
-      x3::as<ast::instantiated_unit_component>[-COMPONENT >> name]
-    | x3::as<ast::instantiated_unit_entity>[ENTITY >> name >> -( '(' >> identifier >> ')' )]
-    | x3::as<ast::instantiated_unit_configuration>[CONFIGURATION   >> name]
-    ;
-
-
+    x3::as<ast::instantiated_unit_component>[-COMPONENT >> name] |
+    x3::as<ast::instantiated_unit_entity>[ENTITY >> name >> -('(' >> identifier >> ')')] |
+    x3::as<ast::instantiated_unit_configuration>[CONFIGURATION >> name];
 
 /// instantiation_list ::=                                          [LRM93 §5.2]
 ///       instantiation_label { , instantiation_label }
 ///     | others
 ///     | all
-auto const instantiation_list_def =
-      (label % ',')
-    | OTHERS
-    | ALL
-    ;
-
-
+auto const instantiation_list_def = (label % ',') | OTHERS | ALL;
 
 /// integer ::=                                                        § 13.4.1]
 ///     digit { [ underline ] digit }
-auto const integer_def =
-    x3::as<ast::string_span>[
-        raw[ lexeme [
-            digit >> *( -lit("_") >> digit )
-        ]]
-    ]
-    ;
+auto const integer_def = x3::as<ast::string_span>[raw[lexeme[digit >> *(-lit("_") >> digit)]]];
 
-
-#if 0 // DISABLED, embedded into scalar_type_definition
+#if 0  // DISABLED, embedded into scalar_type_definition
 /// integer_type_definition ::=                                   [LRM93 §3.1.2]
 ///     range_constraint
 auto const integer_type_definition_def =
@@ -2755,128 +2121,62 @@ auto const integer_type_definition_def =
     ;
 #endif
 
-
 /// interface_constant_declaration ::=                            [LRM93 §4.3.2]
 ///     [ constant ] identifier_list : [ in ] subtype_indication [ := static_expression ]
-auto const interface_constant_declaration_def =
-       -CONSTANT
-    >> identifier_list
-    >> ':'
-    >> -IN
-    >> subtype_indication
-    >> -( ":=" >> expression )
-    ;
-
-
+auto const interface_constant_declaration_def = -CONSTANT >> identifier_list >> ':' >> -IN >>
+                                                subtype_indication >> -(":=" >> expression);
 
 /// interface_declaration ::=                                     [LRM93 §4.3.2]
 ///       interface_constant_declaration
 ///     | interface_signal_declaration
 ///     | interface_variable_declaration
 ///     | interface_file_declaration
-auto const interface_declaration_def =
-      interface_constant_declaration
-    | interface_signal_declaration
-    | interface_variable_declaration
-    | interface_file_declaration
-    ;
-
-
+auto const interface_declaration_def = interface_constant_declaration |
+                                       interface_signal_declaration |
+                                       interface_variable_declaration | interface_file_declaration;
 
 /// interface_element ::=                                       [LRM93 §4.3.2.1]
 ///      interface_declaration
-auto const interface_element_def =
-    interface_declaration
-    ;
-
-
+auto const interface_element_def = interface_declaration;
 
 /// interface_file_declaration ::=                                [LRM93 §4.3.2]
 ///     file identifier_list : subtype_indication
-auto const interface_file_declaration_def =
-       FILE
-    >> identifier_list
-    >> ':'
-    >> subtype_indication
-    ;
-
-
+auto const interface_file_declaration_def = FILE >> identifier_list >> ':' >> subtype_indication;
 
 /// interface_list ::=                                          [LRM93 §4.3.2.1]
 ///     interface_element { ; interface_element }
 ///
 /// FixMe: using ```interface_element % x3::expect[';']``` won't work here since the
 /// last interface_element isn't terminated with trailing ';'
-auto const interface_list_def =
-    interface_element % ';'
-    ;
-
-
+auto const interface_list_def = interface_element % ';';
 
 /// interface_signal_declaration ::=                              [LRM93 §4.3.2]
 ///     [signal] identifier_list : [ mode ] subtype_indication [ bus ] [ := static_expression ]
-auto const interface_signal_declaration_def =
-       -SIGNAL
-    >> identifier_list
-    >> ':'
-    >> -mode
-    >> subtype_indication
-    >> -BUS
-    >> -( ":=" >>  expression )
-    ;
-
-
+auto const interface_signal_declaration_def = -SIGNAL >> identifier_list >> ':' >> -mode >>
+                                              subtype_indication >> -BUS >> -(":=" >> expression);
 
 /// interface_variable_declaration ::=                            [LRM93 §4.3.2]
 ///     [variable] identifier_list : [ mode ] subtype_indication [ := static_expression ]
-auto const interface_variable_declaration_def =
-       -VARIABLE
-    >> identifier_list
-    >> ':'
-    >> -mode
-    >> subtype_indication
-    >> -( ":=" >>  expression )
-    ;
-
-
+auto const interface_variable_declaration_def = -VARIABLE >> identifier_list >> ':' >> -mode >>
+                                                subtype_indication >> -(":=" >> expression);
 
 /// iteration_scheme ::=                                            [LRM93 §8.9]
 ///       while condition
 ///     | for loop_parameter_specification
-auto const iteration_scheme_def =
-      (WHILE >> condition)
-    | (FOR >> parameter_specification)
-    ;
-
-
+auto const iteration_scheme_def = (WHILE >> condition) | (FOR >> parameter_specification);
 
 /// label ::=                                                       [LRM93 §9.7]
 ///     identifier
-auto const label_def =
-    identifier
-    ;
-
-
+auto const label_def = identifier;
 
 /// library_clause ::=                                             [LRM93 §11.2]
 ///     library logical_name_list ;
-auto const library_clause_def =
-       LIBRARY
-    >> logical_name_list
-    >> x3::expect[';']
-    ;
-
-
+auto const library_clause_def = LIBRARY >> logical_name_list >> x3::expect[';'];
 
 /// library_unit ::=                                               [LRM93 §11.1]
 ///       primary_unit
 ///     | secondary_unit
-auto const library_unit_def =
-      primary_unit
-    | secondary_unit
-    ;
-
-
+auto const library_unit_def = primary_unit | secondary_unit;
 
 /// literal ::=                                                   [LRM93 §7.3.1]
 ///       numeric_literal
@@ -2884,72 +2184,39 @@ auto const library_unit_def =
 ///     | string_literal
 ///     | bit_string_literal
 ///     | null
-auto const literal_def = // order matters
-      enumeration_literal
-    | string_literal
-    | bit_string_literal
-    | numeric_literal
-    | NULL_
-    ;
-
-
+auto const literal_def =  // order matters
+    enumeration_literal | string_literal | bit_string_literal | numeric_literal | NULL_;
 
 /// logical_name ::=                                               [LRM93 §11.2]
 ///     identifier
-auto const logical_name_def =
-    identifier
-    ;
-
-
+auto const logical_name_def = identifier;
 
 /// logical_name_list ::=                                          [LRM93 §11.2]
 ///     logical_name { , logical_name }
-auto const logical_name_list_def =
-    logical_name % ','
-    ;
-
-
+auto const logical_name_list_def = logical_name % ',';
 
 /// loop_statement ::=                                              [LRM93 §8.9]
 ///     [ loop_label : ]
 ///         [ iteration_scheme ] loop
 ///             sequence_of_statements
 ///         end loop [ loop_label ] ;
-auto const loop_statement_def =
-      -label_colon
-    >> -iteration_scheme
-    >> LOOP
-    >> sequence_of_statements
-    >> END >> LOOP
-    >> -label
-    >> x3::expect[';']
-    ;
-
-
+auto const loop_statement_def = -label_colon >> -iteration_scheme >> LOOP >>
+                                sequence_of_statements >> END >> LOOP >> -label >> x3::expect[';'];
 
 /// mode ::=                                                      [LRM93 §4.3.2]
 ///     in | out | inout | buffer | linkage
 namespace detail {
 
-x3::symbols<ast::keyword_token> const mode_symbols(
-    {
-        { "in"     , ast::keyword_token::IN },
-        { "out"    , ast::keyword_token::OUT },
-        { "inout"  , ast::keyword_token::INOUT },
-        { "buffer" , ast::keyword_token::BUFFER },
-        { "linkage", ast::keyword_token::LINKAGE }
-    },
-    "mode"
-);
+x3::symbols<ast::keyword_token> const mode_symbols({ { "in", ast::keyword_token::IN },
+                                                     { "out", ast::keyword_token::OUT },
+                                                     { "inout", ast::keyword_token::INOUT },
+                                                     { "buffer", ast::keyword_token::BUFFER },
+                                                     { "linkage", ast::keyword_token::LINKAGE } },
+                                                   "mode");
 
 }
 
-auto const mode_def =
-    distinct(detail::mode_symbols)
-    ;
-
-
-
+auto const mode_def = distinct(detail::mode_symbols);
 
 /// name ::=                                                        [LRM93 §6.1]
 ///       simple_name
@@ -2959,50 +2226,31 @@ auto const mode_def =
 ///     | slice_name
 ///     | attribute_name
 auto const name_def =
-// Note, using LRM BNF rule for selected_name results into left recursion, see
-// selected_name for details.
-        simple_name
-      | operator_symbol
-///      | selected_name
-///    | indexed_name // FixMe
-///    | slice_name
-///    | attribute_name
+    // Note, using LRM BNF rule for selected_name results into left recursion, see
+    // selected_name for details.
+    simple_name | operator_symbol
+    ///      | selected_name
+    ///    | indexed_name // FixMe
+    ///    | slice_name
+    ///    | attribute_name
     ;
-
-
 
 /// next_statement ::=                                             [LRM93 §8.10]
 ///     [ label : ] next [ loop_label ] [ when condition ] ;
-auto const next_statement_def =
-       -label_colon
-    >> NEXT
-    >> -label
-    >> -( WHEN >> condition )
-    >> x3::expect[';']
-;
-
-
+auto const next_statement_def = -label_colon >> NEXT >> -label >>
+                                -(WHEN >> condition) >> x3::expect[';'];
 
 /// null_statement ::=                                             [LRM93 §8.13]
 ///      [ label : ] null ;
-auto const null_statement_def =
-       -label_colon
-    >> omit[ NULL_ ]
-    >> x3::expect[';']
-    ;
-
-
+auto const null_statement_def = -label_colon >> omit[NULL_] >> x3::expect[';'];
 
 /// numeric_literal ::=                                           [LRM93 §7.3.1]
 ///       abstract_literal
 ///     | physical_literal
 auto const numeric_literal_def =  // order matters
-      physical_literal
-    | abstract_literal
-    ;
+    physical_literal | abstract_literal;
 
-
-#if 0 // UNUSED, no refererer in BNF (even unused declaration)
+#if 0  // UNUSED, no refererer in BNF (even unused declaration)
 /// object_declaration ::=                                        [LRM93 §4.3.1]
 ///       constant_declaration
 ///     | signal_declaration
@@ -3016,41 +2264,21 @@ auto const object_declaration_def =
     ;
 #endif
 
-
 /// operator_symbol ::=                                             [LRM93 §2.1]
 ///     string_literal
-auto const operator_symbol_def =
-    string_literal
-    ;
-
-
+auto const operator_symbol_def = string_literal;
 
 /// options ::=                                                     [LRM93 §9.5]
 ///     [ guarded ] [ delay_mechanism ]
-auto const options_def =
-       -GUARDED
-    >> -delay_mechanism
-    ;
-
-
+auto const options_def = -GUARDED >> -delay_mechanism;
 
 /// package_body ::=                                                [LRM93 §2.6]
 ///     package body package_simple_name is
 ///         package_body_declarative_part
 ///     end [ package body ] [ package_simple_name ] ;
-auto const package_body_def =
-       PACKAGE
-    >> BODY
-    >> simple_name
-    >> IS
-    >> package_body_declarative_part
-    >> END
-    >> -(PACKAGE >> BODY)
-    >> -simple_name
-    >> x3::expect[';']
-    ;
-
-
+auto const package_body_def = PACKAGE >> BODY >> simple_name >> IS >>
+                              package_body_declarative_part >> END >> -(PACKAGE >> BODY) >>
+                              -simple_name >> x3::expect[';'];
 
 /// package_body_declarative_item ::=                               [LRM93 §2.6]
 ///       subprogram_declaration
@@ -3065,45 +2293,23 @@ auto const package_body_def =
 ///     | group_template_declaration
 ///     | group_declaration
 auto const package_body_declarative_item_def =
-      subprogram_declaration
-    | subprogram_body
-    | type_declaration
-    | subtype_declaration
-    | constant_declaration
-    | variable_declaration  // shared_variable_declaration
-    | file_declaration
-    | alias_declaration
-    | use_clause
-    | group_template_declaration
-    | group_declaration
-    ;
-
-
+    subprogram_declaration | subprogram_body | type_declaration | subtype_declaration |
+    constant_declaration | variable_declaration  // shared_variable_declaration
+    | file_declaration | alias_declaration | use_clause | group_template_declaration |
+    group_declaration;
 
 /// package_body_declarative_part ::=                               [LRM93 §2.6]
 ///     { package_body_declarative_item }
-auto const package_body_declarative_part_def =
-    *package_body_declarative_item
-    ;
-
-
+auto const package_body_declarative_part_def = *package_body_declarative_item;
 
 /// package_declaration ::=                                         [LRM93 §2.5]
 ///     package identifier is
 ///         package_declarative_part
 ///     end [ package ] [ package_simple_name ] ;
-auto const package_declaration_def =
-       PACKAGE
-    >> identifier
-    >> IS
-    >> package_declarative_part
-    >> END
-    >> -PACKAGE
-    >> -simple_name   // package_simple_name, aka identifier
-    >> x3::expect[';']
-    ;
-
-
+auto const package_declaration_def = PACKAGE >> identifier >> IS >> package_declarative_part >>
+                                     END >> -PACKAGE >>
+                                     -simple_name  // package_simple_name, aka identifier
+                                     >> x3::expect[';'];
 
 /// package_declarative_item ::=                                    [LRM93 §2.5]
 ///       subprogram_declaration
@@ -3122,42 +2328,19 @@ auto const package_declaration_def =
 ///     | group_template_declaration
 ///     | group_declaration
 auto const package_declarative_item_def =
-      subprogram_declaration
-    | type_declaration
-    | subtype_declaration
-    | constant_declaration
-    | signal_declaration
-    | variable_declaration  // shared_variable_declaration
-    | file_declaration
-    | alias_declaration
-    | component_declaration
-    | attribute_declaration
-    | attribute_specification
-    | disconnection_specification
-    | use_clause
-    | group_template_declaration
-    | group_declaration
-    ;
-
-
+    subprogram_declaration | type_declaration | subtype_declaration | constant_declaration |
+    signal_declaration | variable_declaration  // shared_variable_declaration
+    | file_declaration | alias_declaration | component_declaration | attribute_declaration |
+    attribute_specification | disconnection_specification | use_clause |
+    group_template_declaration | group_declaration;
 
 /// package_declarative_part ::=                                    [LRM93 §2.5]
 ///     { package_declarative_item }
-auto const package_declarative_part_def =
-    *package_declarative_item
-    ;
-
-
+auto const package_declarative_part_def = *package_declarative_item;
 
 /// parameter_specification ::=                                     [LRM93 §8.9]
 ///     identifier in discrete_range
-auto const parameter_specification_def =
-       identifier
-    >> omit[ IN ]
-    >> discrete_range
-    ;
-
-
+auto const parameter_specification_def = identifier >> omit[IN] >> discrete_range;
 
 /// physical_literal ::=                                          [LRM93 §3.1.3]
 ///     [ abstract_literal ] unit_name
@@ -3165,19 +2348,12 @@ namespace physical_literal_detail {
 
 // Note, the LRM doesn't specify the allowed characters, hence it's assumed
 // that it follows the natural conventions.
-auto const unit_name = x3::as<ast::string_span>[
-    raw[ lexeme[
-        +(lower_case_letter | upper_case_letter)
-    ]]
-];
-} // end detail
+auto const unit_name =
+    x3::as<ast::string_span>[raw[lexeme[+(lower_case_letter | upper_case_letter)]]];
+}  // namespace physical_literal_detail
 
-auto const physical_literal_def =
-       -abstract_literal
-    >> (physical_literal_detail::unit_name - keyword)
-    ;
-
-
+auto const physical_literal_def = -abstract_literal >>
+                                  (physical_literal_detail::unit_name - keyword);
 
 /// physical_type_definition ::=                                  [LRM93 §3.1.3]
 ///     range_constraint
@@ -3185,15 +2361,9 @@ auto const physical_literal_def =
 ///             primary_unit_declaration
 ///             { secondary_unit_declaration }
 ///         end units [ physical_type_simple_name ]
-auto const physical_type_definition_def =
-       range_constraint
-    >> UNITS
-    >> primary_unit_declaration
-    >> *secondary_unit_declaration
-    >> END >> UNITS
-    >> -simple_name
-    ;
-
+auto const physical_type_definition_def = range_constraint >> UNITS >> primary_unit_declaration >>
+                                          *secondary_unit_declaration >> END >> UNITS >>
+                                          -simple_name;
 
 ///
 /// port_clause                                                   [LRM93 §1.1.1]
@@ -3202,16 +2372,9 @@ auto const physical_type_definition_def =
 /// port_clause ::=
 ///     port ( port_list ) ;
 /// \endcode
-auto const port_clause_def =
-       PORT
-    >> '('
-    >> interface_list
-    >> ')'
-    >> x3::expect[';']
-    ;
+auto const port_clause_def = PORT >> '(' >> interface_list >> ')' >> x3::expect[';'];
 
-
-#if 0 // DISABLED; embedded into port_clause
+#if 0  // DISABLED; embedded into port_clause
 /// port_list ::=                                               [LRM93 §1.1.1.2]
 ///     port_interface_list
 auto const port_list_def =
@@ -3219,28 +2382,14 @@ auto const port_list_def =
     ;
 #endif
 
-
 /// port_map_aspect ::=                                         [LRM93 §5.2.1.2]
 ///     port map ( port_association_list )
-auto const port_map_aspect_def =
-       PORT
-    >> MAP
-    >> '('
-    >> association_list
-    >> ')'
-    ;
-
-
+auto const port_map_aspect_def = PORT >> MAP >> '(' >> association_list >> ')';
 
 /// prefix ::=                                                      [LRM93 §6.1]
 ///       name
 ///     | function_call
-auto const prefix_def =
-      name
-    | function_call
-    ;
-
-
+auto const prefix_def = name | function_call;
 
 /// primary ::=                                                     [LRM93 §7.1]
 ///       name
@@ -3255,60 +2404,29 @@ auto const primary_def =
     // Order matters; if aggregate is prior expression as of the BNF, a
     // backtracking problem occurred at:
     // aggregate -> element_association -> choices
-      !char_('"') >> name // ignore string_literals which follow below
-    | literal
-    | function_call
-    | qualified_expression
+    !char_('"') >> name  // ignore string_literals which follow below
+    | literal | function_call |
+    qualified_expression
     //     | type_conversion
-    | allocator
-    | ( '(' >> expression >> ')' )
-    | aggregate
-    ;
-
-
+    | allocator | ('(' >> expression >> ')') | aggregate;
 
 /// primary_unit ::=                                               [LRM93 §11.1]
 ///       entity_declaration
 ///     | configuration_declaration
 ///     | package_declaration
-auto const primary_unit_def =
-      entity_declaration
-    | configuration_declaration
-    | package_declaration
-    ;
-
-
-
+auto const primary_unit_def = entity_declaration | configuration_declaration | package_declaration;
 
 /// primary_unit_declaration ::=
 ///     identifier ;
-auto const primary_unit_declaration_def =
-       identifier
-    >> x3::expect[';']
-    ;
-
-
+auto const primary_unit_declaration_def = identifier >> x3::expect[';'];
 
 /// procedure_call ::=                                              [LRM93 §8.6]
 ///     procedure_name [ ( actual_parameter_part ) ]
-auto const procedure_call_def =
-       name
-    >> -(
-            '(' >> actual_parameter_part >> ')'
-        )
-    ;
-
-
+auto const procedure_call_def = name >> -('(' >> actual_parameter_part >> ')');
 
 /// procedure_call_statement ::=                                    [LRM93 §8.6]
 ///     [ label : ] procedure_call ;
-auto const procedure_call_statement_def =
-       -label_colon
-    >> procedure_call
-    >> x3::expect[';']
-    ;
-
-
+auto const procedure_call_statement_def = -label_colon >> procedure_call >> x3::expect[';'];
 
 /// process_declarative_item ::=                                    [LRM93 §9.2]
 ///       subprogram_declaration
@@ -3325,30 +2443,14 @@ auto const procedure_call_statement_def =
 ///     | group_template_declaration
 ///     | group_declaration
 auto const process_declarative_item_def =
-      subprogram_declaration
-    | subprogram_body
-    | type_declaration
-    | subtype_declaration
-    | constant_declaration
-    | variable_declaration
-    | file_declaration
-    | alias_declaration
-    | attribute_declaration
-    | attribute_specification
-    | use_clause
-    | group_template_declaration
-    | group_declaration
-    ;
-
-
+    subprogram_declaration | subprogram_body | type_declaration | subtype_declaration |
+    constant_declaration | variable_declaration | file_declaration | alias_declaration |
+    attribute_declaration | attribute_specification | use_clause | group_template_declaration |
+    group_declaration;
 
 /// process_declarative_part ::=                                    [LRM93 §9.2]
 ///     { process_declarative_item }
-auto const process_declarative_part_def =
-    *process_declarative_item
-    ;
-
-
+auto const process_declarative_part_def = *process_declarative_item;
 
 /// process_statement ::=                                           [LRM93 §9.2]
 ///     [ process_label : ]
@@ -3357,31 +2459,14 @@ auto const process_declarative_part_def =
 ///         begin
 ///             process_statement_part
 ///         end [ postponed ] process [ process_label ] ;
-auto const process_statement_def =
-       -label_colon
-    >> -POSTPONED
-    >> PROCESS
-    >> -( '(' >> sensitivity_list >> ')' )
-    >> -IS
-    >> process_declarative_part
-    >> BEGIN
-    >> process_statement_part
-    >> END
-    >> -POSTPONED
-    >> PROCESS
-    >> -label
-    >> x3::expect[';']
-    ;
-
-
+auto const process_statement_def = -label_colon >> -POSTPONED >> PROCESS >>
+                                   -('(' >> sensitivity_list >> ')') >> -IS
+                                   >> process_declarative_part >> BEGIN >> process_statement_part
+                                   >> END >> -POSTPONED >> PROCESS >> -label >> x3::expect[';'];
 
 /// process_statement_part ::=                                      [LRM93 §9.2]
 ///     { sequential_statement }
-auto const process_statement_part_def =
-    sequence_of_statements
-    ;
-
-
+auto const process_statement_part_def = sequence_of_statements;
 
 /// qualified_expression ::=                                      [LRM93 §7.3.4]
 /// type_mark ' ( expression )
@@ -3391,13 +2476,7 @@ auto const qualified_expression_def =
     // aggregate           ::= ( element_association { , element_association } )
     // element_association ::= [ choices => ] expression
     // again. AST node takes care on this.
-       type_mark
-    >> "\'"
-    >> ( "(" >> expression >> ")"
-       |  aggregate
-       )
-    ;
-
+    type_mark >> "\'" >> ("(" >> expression >> ")" | aggregate);
 
 ///
 /// range [LRM93 §3.1]
@@ -3412,18 +2491,12 @@ auto const qualified_expression_def =
 /// \endcode
 namespace detail {
 
-auto const range_expression = x3::rule<struct _, ast::range_expression> { "range_expression" } =
-       simple_expression
-    >> direction
-    >> simple_expression
-    ;
-} // end detail
+auto const range_expression = x3::rule<struct _, ast::range_expression>{ "range_expression" } =
+    simple_expression >> direction >> simple_expression;
+}  // namespace detail
 
-auto const range_def = // order matters
-      detail::range_expression
-    | attribute_name
-    ;
-
+auto const range_def =  // order matters
+    detail::range_expression | attribute_name;
 
 ///
 /// range_constraint                                                [LRM93 §3.1]
@@ -3432,11 +2505,7 @@ auto const range_def = // order matters
 /// range_constraint ::=
 ///     range range
 /// \endcode
-auto const range_constraint_def =
-    RANGE >> range
-    ;
-
-
+auto const range_constraint_def = RANGE >> range;
 
 /// record_type_definition ::=                                    [LRM93 §3.2.2]
 ///     record
@@ -3444,85 +2513,46 @@ auto const range_constraint_def =
 ///         { element_declaration }
 ///     end record [ record_type_simple_name ]
 auto const record_type_definition_def =
-       RECORD
-    >> +element_declaration
-    >> END >> RECORD
-    >> -simple_name
-    ;
-
-
+    RECORD >> +element_declaration >> END >> RECORD >> -simple_name;
 
 /// relation ::=                                                    [LRM93 §7.1]
 ///     shift_expression [ relational_operator shift_expression ]
 namespace relation_detail {
 
-auto const chunk = x3::rule<struct _, ast::relation::chunk> { "relation" } =
-    relational_operator >> shift_expression
-    ;
-} // end detail
+auto const chunk = x3::rule<struct _, ast::relation::chunk>{ "relation" } =
+    relational_operator >> shift_expression;
+}  // namespace relation_detail
 
-auto const relation_def =
-       shift_expression
-    >> -relation_detail::chunk
-    ;
-
-
+auto const relation_def = shift_expression >> -relation_detail::chunk;
 
 /// report_statement ::=                                            [LRM93 §8.3]
 ///     [ label : ]
 ///     report expression
 ///     [ severity expression ] ;
-auto const report_statement_def =
-       -label_colon
-    >> ( REPORT   >> expression )
-    >> -( SEVERITY >> expression )
-    >> x3::expect[';']
-    ;
-
-
+auto const report_statement_def = -label_colon >> (REPORT >> expression) >>
+                                  -(SEVERITY >> expression) >> x3::expect[';'];
 
 /// return_statement ::=                                           [LRM93 §8.12]
 ///     [ label : ] return [ expression ] ;
-auto const return_statement_def =
-       -label_colon
-    >> RETURN
-    >> -expression
-    >> x3::expect[';']
-;
-
-
+auto const return_statement_def = -label_colon >> RETURN >> -expression >> x3::expect[';'];
 
 /// scalar_type_definition ::=                                      [LRM93 §3.1]
 ///       enumeration_type_definition   | integer_type_definition
 ///     | floating_type_definition      | physical_type_definition
-auto const scalar_type_definition_def = // order matters
-      physical_type_definition
-    | enumeration_type_definition
-    | range_constraint              // {integer,floating}_type_definition
+auto const scalar_type_definition_def =  // order matters
+    physical_type_definition | enumeration_type_definition |
+    range_constraint  // {integer,floating}_type_definition
     ;
-
-
 
 /// secondary_unit ::=                                             [LRM93 §11.1]
 ///       architecture_body
 ///     | package_body
-auto const secondary_unit_def =
-      architecture_body
-    | package_body
-    ;
-
-
+auto const secondary_unit_def = architecture_body | package_body;
 
 /// secondary_unit_declaration ::=                                [LRM93 §3.1.3]
 ///     identifier = physical_literal ;
 auto const secondary_unit_declaration_def =
-       identifier
-    >> "="
-    >> physical_literal
-    >> x3::expect[';']
-    ;
-
-
+    identifier >> "=" >> physical_literal >> x3::expect[';'];
 
 /// selected_name                                                   [LRM93 §6.3]
 ///
@@ -3558,90 +2588,47 @@ struct prefix_class_;
 using name_type = x3::rule<struct name_class_, ast::name>;
 using prefix_list_type = x3::rule<struct prefix_class_, std::vector<ast::prefix>>;
 
-name_type const name { "name" };
-prefix_list_type const prefix { "prefix" };
+name_type const name{ "name" };
+prefix_list_type const prefix{ "prefix" };
 
-auto const name_def =
-      simple_name
-    | operator_symbol
-//    | indexed_name
-//    | slice_name
-//    | attribute_name
+auto const name_def = simple_name | operator_symbol
+    //    | indexed_name
+    //    | slice_name
+    //    | attribute_name
     ;
 
 // function_call doesn't make sense here
-auto const prefix_def = x3::repeat(1, 2)[
-        name % '.'
-    ]
-    ;
+auto const prefix_def = x3::repeat(1, 2)[name % '.'];
 
 BOOST_SPIRIT_DEFINE(name)
 BOOST_SPIRIT_DEFINE(prefix)
 
-} // namespace detail
+}  // namespace detail
 
-auto const selected_name_def =
-    x3::lexeme[
-           prefix
-        >> '.'
-        >> suffix
-    ]
-    ;
-
-
+auto const selected_name_def = x3::lexeme[prefix >> '.' >> suffix];
 
 /// selected_signal_assignment ::=                                [LRM93 §9.5.2]
 ///     with expression select
 ///         target    <= options selected_waveforms ;
-auto const selected_signal_assignment_def =
-        WITH
-     >> expression
-     >> SELECT
-     >> target
-     >> "<="
-     >> options
-     >> selected_waveforms
-     >> x3::expect[';']
-    ;
-
-
+auto const selected_signal_assignment_def = WITH >> expression >> SELECT >> target >> "<=" >>
+                                            options >> selected_waveforms >> x3::expect[';'];
 
 /// selected_waveforms ::=                                        [LRM93 §9.5.2]
 ///     { waveform when choices , }
 ///     waveform when choices
-auto const selected_waveforms_def =
-    (      waveform
-        >> WHEN
-        >> choices
-    )
-    % ','
-    ;
-
-
+auto const selected_waveforms_def = (waveform >> WHEN >> choices) % ',';
 
 /// sensitivity_clause ::=                                          [LRM93 §8.1]
 ///     on sensitivity_list
-auto const sensitivity_clause_def =
-    ON >> sensitivity_list
-    ;
-
-
+auto const sensitivity_clause_def = ON >> sensitivity_list;
 
 /// sensitivity_list ::=                                            [LRM93 §8.1]
 ///     signal_name { , signal_name }
-auto const sensitivity_list_def =
-    name % ','
-    ;
-
-
+auto const sensitivity_list_def = name % ',';
 
 /// sequence_of_statements ::=                                        [LRM93 §8]
 ///     { sequential_statement }
-auto const sequence_of_statements_def =
-    *sequential_statement
-    ;
-
-
+auto const sequence_of_statements_def = *sequential_statement;
 
 /// sequential_statement ::=                                          [LRM93 §8]
 ///       wait_statement
@@ -3658,169 +2645,78 @@ auto const sequence_of_statements_def =
 ///     | return_statement
 ///     | null_statement
 auto const sequential_statement_def =
-      wait_statement
-    | assertion_statement
-    | report_statement
-    | signal_assignment_statement
-    | variable_assignment_statement
-//    | procedure_call_statement
-    | if_statement
-    | case_statement
-    | loop_statement
-    | next_statement
-    | exit_statement
-    | return_statement
-    | null_statement
-    ;
-
-
+    wait_statement | assertion_statement | report_statement | signal_assignment_statement |
+    variable_assignment_statement
+    //    | procedure_call_statement
+    | if_statement | case_statement | loop_statement | next_statement | exit_statement |
+    return_statement | null_statement;
 
 /// shift_expression ::=                                            [LRM93 §7.1]
 ///     simple_expression [ shift_operator simple_expression ]
 namespace shift_expression_detail {
 
-auto const chunk = x3::rule<struct _, ast::shift_expression::chunk> { "shift_expression" } =
-    shift_operator >> simple_expression
-    ;
-} // end detail
+auto const chunk = x3::rule<struct _, ast::shift_expression::chunk>{ "shift_expression" } =
+    shift_operator >> simple_expression;
+}  // namespace shift_expression_detail
 
-auto const shift_expression_def =
-       simple_expression
-    >> -shift_expression_detail::chunk
-    ;
-
-
+auto const shift_expression_def = simple_expression >> -shift_expression_detail::chunk;
 
 /// sign ::=                                                        [LRM93 §7.2]
 ///     + | -
-auto const sign_def =
-      ("-" >> x3::attr(ast::operator_token::SIGN_NEG))
-    | ("+" >> x3::attr(ast::operator_token::SIGN_POS))
-    ;
-
-
+auto const sign_def = ("-" >> x3::attr(ast::operator_token::SIGN_NEG)) |
+                      ("+" >> x3::attr(ast::operator_token::SIGN_POS));
 
 /// signal_assignment_statement ::=                                 [LRM93 §8.4]
 ///     [ label : ] target <= [ delay_mechanism ] waveform ;
 auto const signal_assignment_statement_def =
-       -label_colon
-    >> target
-    >> "<="
-    >> -delay_mechanism
-    >> waveform
-    >> x3::expect[';']
-    ;
-
-
+    -label_colon >> target >> "<=" >> -delay_mechanism >> waveform >> x3::expect[';'];
 
 /// signal_declaration ::=                                      [LRM93 §4.3.1.2]
 ///     signal identifier_list : subtype_indication [ signal_kind ] [ := expression ] ;
-auto const signal_declaration_def =
-       omit[ SIGNAL ]
-    >> identifier_list
-    >> ':'
-    >> subtype_indication
-    >> -signal_kind
-    >> -( ":=" >>  expression )
-    >> x3::expect[';']
-    ;
-
-
+auto const signal_declaration_def = omit[SIGNAL] >> identifier_list >> ':' >> subtype_indication >>
+                                    -signal_kind >> -(":=" >> expression) >> x3::expect[';'];
 
 /// signal_kind ::=                                             [LRM93 §4.3.1.2]
 ///     register  |  bus
-auto const signal_kind_def =
-      REGISTER
-    | BUS
-    ;
-
-
+auto const signal_kind_def = REGISTER | BUS;
 
 /// signal_list ::=                                                 [LRM93 §5.3]
 ///       signal_name { , signal_name }
 ///     | others
 ///     | all
-auto const signal_list_def =
-      (name % ',')
-    | OTHERS
-    | ALL
-    ;
-
-
+auto const signal_list_def = (name % ',') | OTHERS | ALL;
 
 /// signature ::=                                                 [LRM93 §2.3.2]
 ///     [ [ type_mark { , type_mark } ] [ return type_mark ] ]
-auto const signature_def =
-       '['
-    >> -(type_mark % ',')
-    >> -(
-          RETURN
-       >> type_mark
-       )
-    >> ']'
-    ;
-
-
+auto const signature_def = '[' >> -(type_mark % ',') >> -(RETURN >> type_mark) >> ']';
 
 /// simple_expression ::=
 ///     [ sign ] term { adding_operator term }
-auto const simple_expression_def =
-       -sign
-    >> term
-    >> *(adding_operator >> term)
-    ;
-
-
+auto const simple_expression_def = -sign >> term >> *(adding_operator >> term);
 
 /// simple_name ::=                                                 [LRM93 §6.2]
 ///     identifier
-auto const simple_name_def =
-    identifier
-    ;
-
-
+auto const simple_name_def = identifier;
 
 /// slice_name ::=                                                  [LRM93 §6.5]
 ///     prefix ( discrete_range )
-auto const slice_name_def =
-       prefix
-    >> '('
-    >> discrete_range
-    >> ')'
-    ;
-
-
+auto const slice_name_def = prefix >> '(' >> discrete_range >> ')';
 
 /// string_literal ::=                                             [LRM93 §13.6]
 ///     " { graphic_character } "
 namespace string_literal_detail {
 
-auto const string_literal_1 = x3::rule<struct _, ast::string_span> { "string_literal" } =
-    x3::raw[
-        *( ( graphic_character - '"'  )
-         | ( char_('"')       >> '"' )
-         )
-    ]
-    ;
+auto const string_literal_1 = x3::rule<struct _, ast::string_span>{ "string_literal" } =
+    x3::raw[*((graphic_character - '"') | (char_('"') >> '"'))];
 
-auto const string_literal_2 = x3::rule<struct _, ast::string_span> { "string_literal" } =
-    x3::raw[
-        *( ( graphic_character - '%'  )
-         | ( char_('%')       >> '%' )
-         )
-    ]
-    ;
+auto const string_literal_2 = x3::rule<struct _, ast::string_span>{ "string_literal" } =
+    x3::raw[*((graphic_character - '%') | (char_('%') >> '%'))];
 
-} // end detail
+}  // namespace string_literal_detail
 
 auto const string_literal_def =
-    lexeme [
-          '"' >> x3::raw[string_literal_detail::string_literal_1] >> '"'
-        | '%' >> x3::raw[string_literal_detail::string_literal_2] >> '%'
-    ]
-    ;
-
-
+    lexeme['"' >> x3::raw[string_literal_detail::string_literal_1] >> '"' |
+           '%' >> x3::raw[string_literal_detail::string_literal_2] >> '%'];
 
 /// subprogram_body ::=                                             [LRM93 §2.2]
 ///     subprogram_specification is
@@ -3828,28 +2724,13 @@ auto const string_literal_def =
 ///     begin
 ///         subprogram_statement_part
 ///     end [ subprogram_kind ] [ designator ] ;
-auto const subprogram_body_def =
-       subprogram_specification
-    >> IS
-    >> subprogram_declarative_part
-    >> BEGIN
-    >> subprogram_statement_part
-    >> END
-    >> -subprogram_kind
-    >> -designator
-    >> x3::expect[';']
-    ;
-
-
+auto const subprogram_body_def = subprogram_specification >> IS >> subprogram_declarative_part >>
+                                 BEGIN >> subprogram_statement_part >> END >> -subprogram_kind >>
+                                 -designator >> x3::expect[';'];
 
 /// subprogram_declaration ::=                                      [LRM93 §2.1]
 ///     subprogram_specification ;
-auto const subprogram_declaration_def =
-       subprogram_specification
-    >> x3::expect[';']
-    ;
-
-
+auto const subprogram_declaration_def = subprogram_specification >> x3::expect[';'];
 
 /// subprogram_declarative_item ::=                                 [LRM93 §2.2]
 ///       subprogram_declaration
@@ -3866,39 +2747,19 @@ auto const subprogram_declaration_def =
 ///     | group_template_declaration
 ///     | group_declaration
 auto const subprogram_declarative_item_def =
-      subprogram_declaration
-    | subprogram_body
-    | type_declaration
-    | subtype_declaration
-    | constant_declaration
-    | variable_declaration
-    | file_declaration
-    | alias_declaration
-    | attribute_declaration
-    | attribute_specification
-    | use_clause
-    | group_template_declaration
-    | group_declaration
-    ;
-
-
+    subprogram_declaration | subprogram_body | type_declaration | subtype_declaration |
+    constant_declaration | variable_declaration | file_declaration | alias_declaration |
+    attribute_declaration | attribute_specification | use_clause | group_template_declaration |
+    group_declaration;
 
 /// subprogram_declarative_part ::=                                 [LRM93 §2.2]
 ///     { subprogram_declarative_item }
-auto const subprogram_declarative_part_def =
-    *subprogram_declarative_item
-    ;
-
-
+auto const subprogram_declarative_part_def = *subprogram_declarative_item;
 
 /// subprogram_kind ::=                                             [LRM93 §2.2]
 ///     procedure | function
-auto const subprogram_kind_def =
-      distinct("procedure", ast::keyword_token::PROCEDURE)
-    | distinct("function", ast::keyword_token::FUNCTION)
-    ;
-
-
+auto const subprogram_kind_def = distinct("procedure", ast::keyword_token::PROCEDURE) |
+                                 distinct("function", ast::keyword_token::FUNCTION);
 
 /// subprogram_specification ::=                                    [LRM93 §2.1]
 ///       procedure designator [ ( formal_parameter_list ) ]
@@ -3906,54 +2767,28 @@ auto const subprogram_kind_def =
 ///       return type_mark
 namespace subprogram_specification_detail {
 
-auto const procedure = x3::rule<struct _, ast::subprogram_specification_procedure> { "subprogram_specification.procedure" } =
-       PROCEDURE
-    >> designator
-    >> -(      '('
-            >> formal_parameter_list
-            >> ')'
-        )
-    ;
+auto const procedure = x3::rule<struct _, ast::subprogram_specification_procedure>{
+    "subprogram_specification.procedure"
+} = PROCEDURE >> designator >> -('(' >> formal_parameter_list >> ')');
 
-auto const function = x3::rule<struct _, ast::subprogram_specification_function> { "subprogram_specification.function" } =
-       -(IMPURE | PURE)
-    >> FUNCTION
-    >> designator
-    >> -(      '('
-            >> formal_parameter_list
-            >> ')'
-        )
-    >> RETURN
-    >> type_mark
-    ;
-} // end detail
+auto const function =
+    x3::rule<struct _, ast::subprogram_specification_function>{
+        "subprogram_specification.function"
+    } = -(IMPURE | PURE) >> FUNCTION >> designator >>
+        -('(' >> formal_parameter_list >> ')') >> RETURN >> type_mark;
+}  // namespace subprogram_specification_detail
 
 auto const subprogram_specification_def =
-      subprogram_specification_detail::procedure
-    | subprogram_specification_detail::function
-    ;
-
-
+    subprogram_specification_detail::procedure | subprogram_specification_detail::function;
 
 /// subprogram_statement_part ::=                                   [LRM93 §2.2]
 ///     { sequential_statement }
-auto const subprogram_statement_part_def =
-    sequence_of_statements
-    ;
-
-
+auto const subprogram_statement_part_def = sequence_of_statements;
 
 /// subtype_declaration ::=
 ///     subtype identifier is subtype_indication ;
 auto const subtype_declaration_def =
-       SUBTYPE
-    >> identifier
-    >> IS
-    >> subtype_indication
-    >> x3::expect[';']
-    ;
-
-
+    SUBTYPE >> identifier >> IS >> subtype_indication >> x3::expect[';'];
 
 /// subtype_indication                                              [LRM93 §4.2]
 ///
@@ -3975,46 +2810,23 @@ auto const subtype_declaration_def =
 /// Further more, 2nd name can be a keyword (which can't be a name), hence
 /// the alternative parse branch.
 auto const subtype_indication_def =
-    (
-       x3::repeat(1 ,2)[
-          name          // range as keyword can follow; name forbids keywords!
-       ]
-       >> -constraint
-    )
-    |
-    (
-       x3::repeat(1)[
-          name          // mandatory type_mark ...
-       ]
-       >> -constraint   // followed by keyword RANGE ...
-    )
-    ;
-
-
+    (x3::repeat(1, 2)[name  // range as keyword can follow; name forbids keywords!
+] >> -constraint) |
+    (x3::repeat(1)[name  // mandatory type_mark ...
+] >> -constraint         // followed by keyword RANGE ...
+    );
 
 /// suffix ::=                                                      [LRM93 §6.3]
 ///       simple_name
 ///     | character_literal
 ///     | operator_symbol
 ///     | all
-auto const suffix_def =
-      simple_name
-    | character_literal
-    | operator_symbol
-    | ALL
-    ;
-
-
+auto const suffix_def = simple_name | character_literal | operator_symbol | ALL;
 
 /// target ::=                                                      [LRM93 §8.4]
 ///       name
 ///     | aggregate
-auto const target_def =
-      name
-    | aggregate
-    ;
-
-
+auto const target_def = name | aggregate;
 
 /// term                                                            [LRM93 §7.1]
 ///
@@ -4030,28 +2842,15 @@ auto const target_def =
 /// 'test_case/expression_failure/expression_failure_003', or even the
 /// [Sigasi: Be careful with VHDL operator precedence](
 /// http://insights.sigasi.com/tech/be-careful-vhdl-operator-precedence.html)
-auto const term_def =
-    factor >> *( multiplying_operator >> factor )
-    ;
-
-
+auto const term_def = factor >> *(multiplying_operator >> factor);
 
 /// timeout_clause ::=                                              [LRM93 §8.1]
 ///     for time_expression
-auto const timeout_clause_def =
-    FOR >> expression
-    ;
-
-
+auto const timeout_clause_def = FOR >> expression;
 
 /// type_conversion ::=                                           [LRM93 §7.3.5]
 ///     type_mark ( expression )
-auto const type_conversion_def =
-       type_mark
-    >> '(' >> expression >> ')'
-    ;
-
-
+auto const type_conversion_def = type_mark >> '(' >> expression >> ')';
 
 /// type_declaration                                                [LRM93 §4.1]
 ///
@@ -4066,28 +2865,15 @@ auto const type_conversion_def =
 /// full_type_declaration       ::= TYPE identifier IS type_definition ;
 /// incomplete_type_declaration ::= TYPE identifier ;
 /// @endcode
-auto const type_declaration_def =
-       TYPE
-    >> identifier
-    >> -( IS >> type_definition )
-    >> x3::expect[';']
-    ;
-
-
+auto const type_declaration_def = TYPE >> identifier >> -(IS >> type_definition) >> x3::expect[';'];
 
 /// type_definition ::=                                             [LRM93 §4.1]
 ///       scalar_type_definition
 ///     | composite_type_definition
 ///     | access_type_definition
 ///     | file_type_definition
-auto const type_definition_def =
-      scalar_type_definition
-    | composite_type_definition
-    | access_type_definition
-    | file_type_definition
-    ;
-
-
+auto const type_definition_def = scalar_type_definition | composite_type_definition |
+                                 access_type_definition | file_type_definition;
 
 /// type_mark
 ///
@@ -4101,23 +2887,13 @@ auto const type_definition_def =
 /// parser level. Further read
 /// [Question about type_mark bnf](
 /// https://groups.google.com/forum/#!topic/comp.lang.vhdl/exUhoMrFavU)
-auto const type_mark_def =
-    name
-    ;
-
-
+auto const type_mark_def = name;
 
 /// unconstrained_array_definition ::=                            [LRM93 §3.2.1]
 ///     array ( index_subtype_definition { , index_subtype_definition } )
 ///         of element_subtype_indication
-auto const unconstrained_array_definition_def =
-       ARRAY
-    >> '(' >> (index_subtype_definition % ',') >>  ')'
-    >> OF
-    >> subtype_indication
-    ;
-
-
+auto const unconstrained_array_definition_def = ARRAY >> '(' >> (index_subtype_definition % ',') >>
+                                                ')' >> OF >> subtype_indication;
 
 /// use_clause                                                     [LRM93 §10.4]
 ///
@@ -4136,93 +2912,47 @@ auto const unconstrained_array_definition_def =
 /// at the AST node ast::use_clause.
 namespace use_clause_detail {
 
-auto const lib_prefix = x3::rule<struct _, std::vector<ast::name>> { "prefix" } =
-    x3::lexeme[
-        name >> '.' >> name
-    ];
+auto const lib_prefix = x3::rule<struct _, std::vector<ast::name>>{ "prefix" } =
+    x3::lexeme[name >> '.' >> name];
 
-auto const pkg_prefix = x3::rule<struct _, std::vector<ast::name>> { "prefix" } =
-    x3::repeat(1)[ // enforce artificial vector to unify ast node
-        name
-    ];
+auto const pkg_prefix = x3::rule<struct _, std::vector<ast::name>>{ "prefix" } =
+    x3::repeat(1)[  // enforce artificial vector to unify ast node
+        name];
 
-auto const lib_selected_name = x3::rule<struct _, ast::use_clause::selected_name> { "selected_name" } =
-    x3::lexeme[
-           lib_prefix
-        >> '.'
-        >> suffix
-    ]
-    ;
+auto const lib_selected_name =
+    x3::rule<struct _, ast::use_clause::selected_name>{ "selected_name" } =
+        x3::lexeme[lib_prefix >> '.' >> suffix];
 
-auto const pkg_selected_name = x3::rule<struct _, ast::use_clause::selected_name> { "selected_name" } =
-    x3::lexeme[
-           pkg_prefix
-        >> '.'
-        >> suffix
-    ]
-    ;
+auto const pkg_selected_name =
+    x3::rule<struct _, ast::use_clause::selected_name>{ "selected_name" } =
+        x3::lexeme[pkg_prefix >> '.' >> suffix];
 
-auto const selected_name = x3::rule<struct _, ast::use_clause::selected_name> { "selected_name" } =
-      lib_selected_name
-    | pkg_selected_name
-    ;
-} // end detail
+auto const selected_name = x3::rule<struct _, ast::use_clause::selected_name>{ "selected_name" } =
+    lib_selected_name | pkg_selected_name;
+}  // namespace use_clause_detail
 
-auto const use_clause_def =
-       USE
-    >> (use_clause_detail::selected_name % ',')
-    >> x3::expect[';']
-    ;
-
-
+auto const use_clause_def = USE >> (use_clause_detail::selected_name % ',') >> x3::expect[';'];
 
 /// variable_assignment_statement ::=                               [LRM93 §8.5]
 ///     [ label : ] target  := expression ;
 auto const variable_assignment_statement_def =
-       -label_colon
-    >> target
-    >> ":="
-    >> expression
-    >> x3::expect[';']
-    ;
-
-
+    -label_colon >> target >> ":=" >> expression >> x3::expect[';'];
 
 /// variable_declaration ::=                                    [LRM93 §4.3.1.3]
 ///     [ shared ] variable identifier_list : subtype_indication [ := expression ] ;
-auto const variable_declaration_def =
-      -SHARED
-    >> omit[ VARIABLE ]
-    >> identifier_list
-    >> ':'
-    >> subtype_indication
-    >> -(  ":=" >>  expression )
-    >> x3::expect[';']
-    ;
-
-
+auto const variable_declaration_def = -SHARED >> omit[VARIABLE] >> identifier_list >> ':' >>
+                                      subtype_indication >>
+                                      -(":=" >> expression) >> x3::expect[';'];
 
 /// wait_statement ::=                                              [LRM93 §8.1]
 ///     [ label : ] wait [ sensitivity_clause ] [ condition_clause ] [ timeout_clause ] ;
-auto const wait_statement_def =
-       -( label >> ':' )
-    >> WAIT
-    >> -sensitivity_clause
-    >> -condition_clause
-    >> -timeout_clause
-    >> x3::expect[';']
-    ;
-
-
+auto const wait_statement_def = -(label >> ':') >> WAIT >> -sensitivity_clause >>
+                                -condition_clause >> -timeout_clause >> x3::expect[';'];
 
 /// waveform ::=                                                    [LRM93 §8.4]
 ///       waveform_element { , waveform_element }
 ///     | unaffected
-auto const waveform_def =
-      (waveform_element % ',')
-    | UNAFFECTED
-    ;
-
+auto const waveform_def = (waveform_element % ',') | UNAFFECTED;
 
 ///
 /// waveform_element                                              [LRM93 §8.4.1]
@@ -4233,14 +2963,9 @@ auto const waveform_def =
 ///       value_expression [ after time_expression ]
 ///     | null [ after time_expression ]
 /// \endcode
-auto const waveform_element_def =
-       ( expression | NULL_ )
-    >>  -( AFTER >> expression )
-    ;
+auto const waveform_element_def = (expression | NULL_) >> -(AFTER >> expression);
 
-
-}
-
+}  // namespace ibis::vhdl::parser
 
 #if !defined(DOXYGEN_DOCUMENTATION_BUILD)
 
@@ -4249,274 +2974,105 @@ auto const waveform_element_def =
 //
 namespace ibis::vhdl::parser {
 
-#include<ibis/util/compiler/warnings_off.hpp>
-
+#include <ibis/util/compiler/warnings_off.hpp>
 
 BOOST_SPIRIT_DEFINE(  // -- A --
-      abstract_literal
-    , access_type_definition
-    , actual_designator
-    , actual_parameter_part
-    , actual_part
-    , aggregate
-    , alias_declaration
-    , alias_designator
-    , allocator
-    , architecture_body
-    , architecture_declarative_part
-    , architecture_statement_part
-    , array_type_definition
-    , assertion
-    , assertion_statement
-    , association_element
-    , association_list
-    , attribute_declaration
-    , attribute_designator
-    , attribute_name
-    , attribute_specification
-)
+    abstract_literal, access_type_definition, actual_designator, actual_parameter_part, actual_part,
+    aggregate, alias_declaration, alias_designator, allocator, architecture_body,
+    architecture_declarative_part, architecture_statement_part, array_type_definition, assertion,
+    assertion_statement, association_element, association_list, attribute_declaration,
+    attribute_designator, attribute_name, attribute_specification)
 BOOST_SPIRIT_DEFINE(  // -- B --
-    //  base
-      based_integer
-    , based_literal
+                      //  base
+    based_integer,
+    based_literal
     //, basic_character
-    , basic_graphic_character
-    , basic_identifier
-    , binding_indication
-    , bit_string_literal
-    , block_configuration
-    , block_declarative_item
-    , block_declarative_part
-    , block_header
-    , block_specification
-    , block_statement
-    , block_statement_part
-)
+    ,
+    basic_graphic_character, basic_identifier, binding_indication, bit_string_literal,
+    block_configuration, block_declarative_item, block_declarative_part, block_header,
+    block_specification, block_statement, block_statement_part)
 BOOST_SPIRIT_DEFINE(  // -- C --
-      case_statement
-    , case_statement_alternative
-    , character_literal
-    , choice
-    , choices
-    , component_configuration
-    , component_declaration
-    , component_instantiation_statement
-    , component_specification
-    , composite_type_definition
-    , concurrent_assertion_statement
-    , concurrent_procedure_call_statement
-    , concurrent_signal_assignment_statement
-    , concurrent_statement
-    , condition
-    , condition_clause
-    , conditional_signal_assignment
-    , conditional_waveforms
-    , configuration_declaration
-    , configuration_declarative_item
-    , configuration_declarative_part
-    , configuration_item
-    , configuration_specification
-    , constant_declaration
-    , constrained_array_definition
-    , constraint
-    , context_clause
-    , context_item
-)
+    case_statement, case_statement_alternative, character_literal, choice, choices,
+    component_configuration, component_declaration, component_instantiation_statement,
+    component_specification, composite_type_definition, concurrent_assertion_statement,
+    concurrent_procedure_call_statement, concurrent_signal_assignment_statement,
+    concurrent_statement, condition, condition_clause, conditional_signal_assignment,
+    conditional_waveforms, configuration_declaration, configuration_declarative_item,
+    configuration_declarative_part, configuration_item, configuration_specification,
+    constant_declaration, constrained_array_definition, constraint, context_clause, context_item)
 BOOST_SPIRIT_DEFINE(  // -- D --
-      decimal_literal
-    , delay_mechanism
-    , design_file
-    , design_unit
-    , designator
-    , direction
-    , disconnection_specification
-    , discrete_range
-)
+    decimal_literal, delay_mechanism, design_file, design_unit, designator, direction,
+    disconnection_specification, discrete_range)
 BOOST_SPIRIT_DEFINE(  // -- E --
-      element_association
-    , element_declaration
-    , element_subtype_definition
-    , entity_aspect
-    , entity_class
-    , entity_class_entry
-    , entity_class_entry_list
-    , entity_declaration
-    , entity_declarative_item
-    , entity_declarative_part
-    , entity_designator
-    , entity_header
-    , entity_name_list
-    , entity_specification
-    , entity_statement
-    , entity_statement_part
-    , entity_tag
-    , enumeration_literal
-    , enumeration_type_definition
-    , exit_statement
-    , exponent
-    , expression
-    , extended_identifier
-)
+    element_association, element_declaration, element_subtype_definition, entity_aspect,
+    entity_class, entity_class_entry, entity_class_entry_list, entity_declaration,
+    entity_declarative_item, entity_declarative_part, entity_designator, entity_header,
+    entity_name_list, entity_specification, entity_statement, entity_statement_part, entity_tag,
+    enumeration_literal, enumeration_type_definition, exit_statement, exponent, expression,
+    extended_identifier)
 BOOST_SPIRIT_DEFINE(  // -- F --
-      factor
-    , file_declaration
-    , file_logical_name
-    , file_open_information
-    , file_type_definition
-    //EMBEDDED, floating_type_definition
-    , formal_designator
-    , formal_parameter_list
-    , formal_part
-    //EMBEDDED, full_type_declaration
-    , function_call
-)
+    factor, file_declaration, file_logical_name, file_open_information,
+    file_type_definition
+    // EMBEDDED, floating_type_definition
+    ,
+    formal_designator, formal_parameter_list,
+    formal_part
+    // EMBEDDED, full_type_declaration
+    ,
+    function_call)
 BOOST_SPIRIT_DEFINE(  // -- G --
-      generate_statement
-    , generation_scheme
-    , generic_clause
-    , generic_map_aspect
-    , graphic_character
-    , group_constituent
-    , group_constituent_list
-    , group_template_declaration
-    , group_declaration
-    , guarded_signal_specification
-)
+    generate_statement, generation_scheme, generic_clause, generic_map_aspect, graphic_character,
+    group_constituent, group_constituent_list, group_template_declaration, group_declaration,
+    guarded_signal_specification)
 BOOST_SPIRIT_DEFINE(  // -- I --
-      identifier
-    , identifier_list
-    , if_statement
-    //EMBEDDED, incomplete_type_declaration
-    , index_constraint
-    , index_specification
-    , index_subtype_definition
-    , indexed_name
-    , instantiated_unit
-    , instantiation_list
-    , integer
+    identifier, identifier_list,
+    if_statement
+    // EMBEDDED, incomplete_type_declaration
+    ,
+    index_constraint, index_specification, index_subtype_definition, indexed_name,
+    instantiated_unit, instantiation_list,
+    integer
     // EMBEDDED, integer_type_definition
-    , interface_constant_declaration
-    , interface_declaration
-    , interface_element
-    , interface_file_declaration
-    , interface_list
-    , interface_signal_declaration
-    , interface_variable_declaration
-    , iteration_scheme
-)
+    ,
+    interface_constant_declaration, interface_declaration, interface_element,
+    interface_file_declaration, interface_list, interface_signal_declaration,
+    interface_variable_declaration, iteration_scheme)
 BOOST_SPIRIT_DEFINE(  // -- L --
-      label
-    , letter
-    , letter_or_digit
-    , library_clause
-    , library_unit
-    , literal
-    , logical_name
-    , logical_name_list
-    , loop_statement
-)
+    label, letter, letter_or_digit, library_clause, library_unit, literal, logical_name,
+    logical_name_list, loop_statement)
 BOOST_SPIRIT_DEFINE(  // -- M --
-      mode
-)
+    mode)
 BOOST_SPIRIT_DEFINE(  // -- N --
-      name
-    , next_statement
-    , null_statement
-    , numeric_literal
-)
+    name, next_statement, null_statement, numeric_literal)
 BOOST_SPIRIT_DEFINE(  // -- O --
-      operator_symbol
-    , options
-)
+    operator_symbol, options)
 BOOST_SPIRIT_DEFINE(  // -- P --
-      package_body
-    , package_body_declarative_item
-    , package_body_declarative_part
-    , package_declaration
-    , package_declarative_item
-    , package_declarative_part
-    , parameter_specification
-    , physical_literal
-    , physical_type_definition
-    , port_clause
-    , port_map_aspect
-    , prefix
-    , primary
-    , primary_unit
-    , primary_unit_declaration
-    , procedure_call
-    , procedure_call_statement
-    , process_declarative_item
-    , process_declarative_part
-    , process_statement
-    , process_statement_part
-)
+    package_body, package_body_declarative_item, package_body_declarative_part, package_declaration,
+    package_declarative_item, package_declarative_part, parameter_specification, physical_literal,
+    physical_type_definition, port_clause, port_map_aspect, prefix, primary, primary_unit,
+    primary_unit_declaration, procedure_call, procedure_call_statement, process_declarative_item,
+    process_declarative_part, process_statement, process_statement_part)
 BOOST_SPIRIT_DEFINE(  // -- Q --
-      qualified_expression
-)
+    qualified_expression)
 BOOST_SPIRIT_DEFINE(  // -- R --
-      range
-    , range_constraint
-    , record_type_definition
-    , relation
-    , report_statement
-    , return_statement
-)
+    range, range_constraint, record_type_definition, relation, report_statement, return_statement)
 BOOST_SPIRIT_DEFINE(  // -- S --
-      scalar_type_definition
-    , secondary_unit
-    , secondary_unit_declaration
-    , selected_name
-    , selected_signal_assignment
-    , selected_waveforms
-    , sensitivity_clause
-    , sensitivity_list
-    , sequence_of_statements
-    , sequential_statement
-    , shift_expression
-    , sign
-    , signal_assignment_statement
-    , signal_declaration
-    , signal_kind
-    , signal_list
-    , signature
-    , simple_expression
-    , simple_name
-    , slice_name
-    , string_literal
-    , subprogram_body
-    , subprogram_declaration
-    , subprogram_declarative_item
-    , subprogram_declarative_part
-    , subprogram_kind
-    , subprogram_specification
-    , subprogram_statement_part
-    , subtype_declaration
-    , subtype_indication
-    , suffix
-)
+    scalar_type_definition, secondary_unit, secondary_unit_declaration, selected_name,
+    selected_signal_assignment, selected_waveforms, sensitivity_clause, sensitivity_list,
+    sequence_of_statements, sequential_statement, shift_expression, sign,
+    signal_assignment_statement, signal_declaration, signal_kind, signal_list, signature,
+    simple_expression, simple_name, slice_name, string_literal, subprogram_body,
+    subprogram_declaration, subprogram_declarative_item, subprogram_declarative_part,
+    subprogram_kind, subprogram_specification, subprogram_statement_part, subtype_declaration,
+    subtype_indication, suffix)
 BOOST_SPIRIT_DEFINE(  // -- T --
-      target
-    , term
-    , timeout_clause
-    , type_conversion
-    , type_declaration
-    , type_definition
-    , type_mark
-)
+    target, term, timeout_clause, type_conversion, type_declaration, type_definition, type_mark)
 BOOST_SPIRIT_DEFINE(  // -- U --
-      unconstrained_array_definition
-    , use_clause
-)
+    unconstrained_array_definition, use_clause)
 BOOST_SPIRIT_DEFINE(  // -- V --
-      variable_assignment_statement
-    , variable_declaration
-)
+    variable_assignment_statement, variable_declaration)
 BOOST_SPIRIT_DEFINE(  // -- W --
-      wait_statement
-    , waveform
-    , waveform_element
-)
+    wait_statement, waveform, waveform_element)
 
 // clang-format on
 

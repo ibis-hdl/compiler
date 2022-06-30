@@ -22,7 +22,7 @@ struct based_literal : position_tagged {
     };
 
     unsigned base;
-    //ast::string_span base;
+    // ast::string_span base;
     number_chunk number;
 
     /// convenience access to numeric type represented.

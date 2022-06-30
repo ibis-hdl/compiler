@@ -85,27 +85,27 @@ auto constexpr based_integer = numeric_type_specifier::integer;
 auto constexpr based_real = numeric_type_specifier::real;
 
 struct {
-    numeric_type_specifier  numeric_type;
+    numeric_type_specifier numeric_type;
     std::variant<uint64_t, double> value;
     struct {
-        unsigned            base;
-        std::string_view    integer;
-        std::string_view    fractional;
-        std::string_view    exponent;
-    }                       literal;
+        unsigned base;
+        std::string_view integer;
+        std::string_view fractional;
+        std::string_view exponent;
+    } literal;
 } const expect[] = {
-     // Examples from IEEE_VHDL_1076-1993: Chapter 13.4.2 Based literals
-     { based_integer, 255U , { 2, "1111_1111", "", ""} },
-     { based_integer, 255U , { 16, "FF", "", ""} },
-     { based_integer, 255U , { 16, "0_FF", "", ""} },
-     { based_integer, 224U , { 16, "E", "", "1"} },
-     { based_integer, 224U , { 2, "1110_0000", "", ""} },
-     { based_real,    4095.0 , { 16, "F", "FF", "+2"} },
-     { based_real,    4095.0 , { 2, "1", "1111_1111_111", "11"} },
-     // self-choosen
-     { based_real,    0.0 , { 10, "0", "0", ""} },
-     { based_real,    1.0 , { 10, "1", "0", ""} },
-     { based_real,    4.2666 , { 10, "42", "666", "-1"} },
+    // Examples from IEEE_VHDL_1076-1993: Chapter 13.4.2 Based literals
+    { based_integer, 255U, { 2, "1111_1111", "", "" } },
+    { based_integer, 255U, { 16, "FF", "", "" } },
+    { based_integer, 255U, { 16, "0_FF", "", "" } },
+    { based_integer, 224U, { 16, "E", "", "1" } },
+    { based_integer, 224U, { 2, "1110_0000", "", "" } },
+    { based_real, 4095.0, { 16, "F", "FF", "+2" } },
+    { based_real, 4095.0, { 2, "1", "1111_1111_111", "11" } },
+    // self-choosen
+    { based_real, 0.0, { 10, "0", "0", "" } },
+    { based_real, 1.0, { 10, "1", "0", "" } },
+    { based_real, 4.2666, { 10, "42", "666", "-1" } },
 };
 
 // clang-format off

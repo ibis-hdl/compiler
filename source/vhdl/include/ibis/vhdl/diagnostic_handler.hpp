@@ -107,7 +107,7 @@ public:
     /// @param error_message The information error message.
     ///
     void parser_error(iterator_type error_first, std::optional<iterator_type> error_last,
-                     std::string_view error_message) const;
+                      std::string_view error_message) const;
 
     ///
     /// Render the diagnostic error_message.
@@ -143,7 +143,7 @@ public:
     /// @param error_message The information error message.
     ///
     void numeric_error(iterator_type error_first, std::optional<iterator_type> error_last,
-                      std::string_view error_message) const;
+                       std::string_view error_message) const;
 
 public:
     ///

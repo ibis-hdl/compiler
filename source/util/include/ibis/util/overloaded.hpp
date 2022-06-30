@@ -33,6 +33,6 @@ struct overloaded : Ts... {
 };
 
 template <class... Ts>
-overloaded(Ts...) -> overloaded<Ts...>; // not needed in C++20...
+overloaded(Ts...) -> overloaded<Ts...>;  // not needed in C++20...
 
 }  // namespace ibis::util

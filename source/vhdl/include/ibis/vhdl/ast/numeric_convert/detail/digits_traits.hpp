@@ -21,6 +21,7 @@ namespace ibis::vhdl::ast::detail {
 /// @endcode
 ///
 template <typename T, unsigned Radix>
-struct digits_traits : boost::spirit::x3::detail::digits_traits<T, Radix> {};
+struct digits_traits : boost::spirit::x3::detail::digits_traits<T, Radix> {
+};
 
-} // namespace ibis::vhdl::ast::detail
+}  // namespace ibis::vhdl::ast::detail

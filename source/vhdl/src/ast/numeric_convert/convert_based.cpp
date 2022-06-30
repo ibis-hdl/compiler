@@ -115,14 +115,14 @@ std::tuple<bool, std::uint64_t> convert_based<IntegerT, RealT>::parse_integer(
     auto const integer_literal_sv = as_string_view(integer_literal);
 
     // TRANSLATORS: error message for numeric target type
-    std::string const error_msg_tr = translate(
-        "in {1} integer part '{2}' can't fit the numeric type");
+    std::string const error_msg_tr =
+        translate("in {1} integer part '{2}' can't fit the numeric type");
 
     auto range_f = numeric_convert::detail::filter_range(integer_literal);
 
-    if(ranges::distance(range_f) > std::numeric_limits<integer_type>::digits10) {
-        diagnostic_handler.parser_error(                            // --
-            integer_literal.begin(), integer_literal.end(),         // --
+    if (ranges::distance(range_f) > std::numeric_limits<integer_type>::digits10) {
+        diagnostic_handler.parser_error(                     // --
+            integer_literal.begin(), integer_literal.end(),  // --
             (format(error_msg_tr) % node_name % integer_literal_sv).str());
         return { false, 0 };
     }
@@ -134,10 +134,11 @@ std::tuple<bool, std::uint64_t> convert_based<IntegerT, RealT>::parse_integer(
     bool const parse_ok = x3::parse(iter, end, parser(base, iter) >> x3::eoi, integer_attribute);
 
     if (!parse_ok) {
-        diagnostic_handler.parser_error(                                        // --
-            integer_literal.begin(), integer_literal.end(),                     // --
-            (format(translate("in {1} parse of integer part '{2}' failed"))     // --
-            % node_name % integer_literal_sv).str());
+        diagnostic_handler.parser_error(                                     // --
+            integer_literal.begin(), integer_literal.end(),                  // --
+            (format(translate("in {1} parse of integer part '{2}' failed"))  // --
+             % node_name % integer_literal_sv)
+                .str());
         return { false, 0 };
     }
 
@@ -206,11 +207,15 @@ std::tuple<bool, double> convert_based<IntegerT, RealT>::parse_fractional(
 
     // during accumulation a numeric IEEE754 errors may occur
     if (!std::isnormal(fractional)) {
-        diagnostic_handler.numeric_error(                           // --
-            fractional_literal.begin(), fractional_literal.end(),   // --
-            (format(translate(                                      // --
-                "in {1} numeric error occurred during calculation of fractional part '{2}'"))  // --
-                % node_name % fractional_literal_sv).str());
+        diagnostic_handler.numeric_error(                          // --
+            fractional_literal.begin(), fractional_literal.end(),  // --
+            (
+                format(
+                    translate(  // --
+                        "in {1} numeric error occurred during calculation of fractional part "
+                        "'{2}'"))  // --
+                % node_name % fractional_literal_sv)
+                .str());
         return { false, fractional };
     }
 
@@ -240,13 +245,14 @@ std::tuple<bool, std::int32_t> convert_based<IntegerT, RealT>::parse_exponent(
     }
 
     // TRANSLATORS: error message for numeric target type
-    std::string const error_msg_tr = translate("in {1} the exponent part '{2}' can't fit the {3} type");
+    std::string const error_msg_tr =
+        translate("in {1} the exponent part '{2}' can't fit the {3} type");
 
     auto range_f = numeric_convert::detail::filter_range(exponent_literal);
 
-    if(ranges::distance(range_f) > std::numeric_limits<exponent_type>::digits10) {
-        diagnostic_handler.parser_error(                        // --
-            exponent_literal.begin(), exponent_literal.end(),   // --
+    if (ranges::distance(range_f) > std::numeric_limits<exponent_type>::digits10) {
+        diagnostic_handler.parser_error(                       // --
+            exponent_literal.begin(), exponent_literal.end(),  // --
             (format(error_msg_tr) % node_name % exponent_literal_sv).str());
         return { false, exponent_attribute };
     }
@@ -260,32 +266,34 @@ std::tuple<bool, std::int32_t> convert_based<IntegerT, RealT>::parse_exponent(
     bool const parse_ok = x3::parse(iter, end, exp >> x3::eoi, exponent_attribute);
 
     if (!parse_ok) {
-        diagnostic_handler.parser_error(                                    // --
-            exponent_literal.begin(), exponent_literal.end(),               // --
-            (format(translate("in {1} parse of exponent '{2}' failed"))     // --
-            % node_name % exponent_literal_sv).str());
+        diagnostic_handler.parser_error(                                 // --
+            exponent_literal.begin(), exponent_literal.end(),            // --
+            (format(translate("in {1} parse of exponent '{2}' failed"))  // --
+             % node_name % exponent_literal_sv)
+                .str());
         return { false, exponent_attribute };
     }
 
     // there are only integer and real types
     using numeric_type_specifier = ast::based_literal::numeric_type_specifier;
-    static_assert(static_cast<unsigned>(numeric_type_specifier::COUNT) == 2, "unexpected count of type specifier");
+    static_assert(static_cast<unsigned>(numeric_type_specifier::COUNT) == 2,
+                  "unexpected count of type specifier");
 
     // check on valid exponent numeric range
     if (literal.number.type_specifier == numeric_type_specifier::real) {
         // max. exponent for e.g. double 308 as in 1.0e308
-        if(exponent_attribute > std::numeric_limits<real_type>::max_exponent10) {
-            diagnostic_handler.parser_error(                        // --
-                exponent_literal.begin(), exponent_literal.end(),   // --
+        if (exponent_attribute > std::numeric_limits<real_type>::max_exponent10) {
+            diagnostic_handler.parser_error(                       // --
+                exponent_literal.begin(), exponent_literal.end(),  // --
                 (format(error_msg_tr) % node_name % exponent_literal_sv % "real").str());
             return { false, exponent_attribute };
         }
     }
     else {
         // max. exponent for e.g. 32bit integer 9 as in 1e+9
-        if(exponent_attribute > std::numeric_limits<integer_type>::digits10) {
-            diagnostic_handler.parser_error(                        // --
-                exponent_literal.begin(), exponent_literal.end(),   // --
+        if (exponent_attribute > std::numeric_limits<integer_type>::digits10) {
+            diagnostic_handler.parser_error(                       // --
+                exponent_literal.begin(), exponent_literal.end(),  // --
                 (format(error_msg_tr) % node_name % exponent_literal_sv % "integer").str());
             return { false, exponent_attribute };
         }
@@ -305,9 +313,10 @@ std::tuple<bool, double> convert_based<IntegerT, RealT>::parse_real10(
 
     // ranges-v3 concept: [coliru](https://coliru.stacked-crooked.com/a/530a793796999fab)
     // c++20 range concept [coliru](https://coliru.stacked-crooked.com/a/17f844b879507aed)
-    auto const real10_literal = {                               // --
-        as_string_view(literal.number.integer_part),            // --
-        "."sv , as_string_view(literal.number.fractional_part)  // --
+    auto const real10_literal = {
+        // --
+        as_string_view(literal.number.integer_part),           // --
+        "."sv, as_string_view(literal.number.fractional_part)  // --
     };
 
     auto range_f = numeric_convert::detail::filter_range(real10_literal | views::join);
@@ -322,10 +331,11 @@ std::tuple<bool, double> convert_based<IntegerT, RealT>::parse_real10(
 
     if (!parse_ok) {
         auto const real10_str = range_f | to<std::string>();
-        diagnostic_handler.parser_error(                                             // --
-            literal.number.integer_part.begin(),                                     // --
+        diagnostic_handler.parser_error(                             // --
+            literal.number.integer_part.begin(),                     // --
             (format(translate("in {1} parse of real '{2}' failed"))  //--
-             % node_name % real10_str).str());
+             % node_name % real10_str)
+                .str());
         return std::tuple{ false, 0 };
     }
 
