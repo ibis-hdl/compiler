@@ -12,7 +12,7 @@
 namespace ibis::vhdl::ast {
 
 struct based_literal : position_tagged {
-    enum class numeric_type_specifier { integer, real };
+    enum class numeric_type_specifier { integer, real, COUNT };
 
     struct number_chunk {
         ast::string_span integer_part;
@@ -28,7 +28,6 @@ struct based_literal : position_tagged {
     numeric_type_specifier numeric_type() const { return number.type_specifier; }
 };
 
-#if defined(BOOST_SPIRIT_X3_DEBUG)
 inline std::ostream& operator<<(std::ostream& os,
                                 ast::based_literal::numeric_type_specifier specifier)
 {
@@ -36,18 +35,17 @@ inline std::ostream& operator<<(std::ostream& os,
     auto const lookup = [&os](numeric_type_specifier specifier) {
         switch (specifier) {
             case numeric_type_specifier::integer:
-                os << "[integer]";
+                os << "integer";
                 break;
             case numeric_type_specifier::real:
-                os << "[real]";
+                os << "real";
                 break;
             default:
-                os << "[N/A]";
+                os << "N/A";
         }
     };
     lookup(specifier);
     return os;
 }
-#endif
 
 }  // namespace ibis::vhdl::ast

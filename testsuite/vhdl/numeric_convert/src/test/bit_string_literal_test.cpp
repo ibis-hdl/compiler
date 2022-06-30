@@ -146,7 +146,7 @@ BOOST_DATA_TEST_CASE(bit_string_literal, utf_data::make(bit_literal) ^ bit_decim
 
     os << vhdl::failure_status(ctx);
     if (!os.str().empty()) {
-        std::cout << '\n' << os.str() << '\n';
+        //std::cout << '\n' << os.str() << '\n';
     }
 }
 
@@ -184,7 +184,7 @@ BOOST_DATA_TEST_CASE(bit_string_literal_uint64_ovflw, utf_data::make(literal_ovf
 
     os << vhdl::failure_status(ctx);
     if (!os.str().empty()) {
-        std::cout << '\n' << os.str() << '\n';
+        //std::cout << '\n' << os.str() << '\n';
     }
 }
 

@@ -41,6 +41,14 @@ void diagnostic_handler<Iterator>::parser_error(iterator_type error_pos,
 }
 
 template <typename Iterator>
+void diagnostic_handler<Iterator>::parser_error(iterator_type error_pos,
+                                                std::optional<iterator_type> error_last,
+                                                std::string_view error_message) const
+{
+    error(error_pos, error_last, error_message, error_type::parser);
+}
+
+template <typename Iterator>
 void diagnostic_handler<Iterator>::unsupported(iterator_type error_pos,
                                                std::string_view error_message) const
 {
@@ -48,10 +56,26 @@ void diagnostic_handler<Iterator>::unsupported(iterator_type error_pos,
 }
 
 template <typename Iterator>
+void diagnostic_handler<Iterator>::unsupported(iterator_type error_first,
+                                               std::optional<iterator_type> error_last,
+                                               std::string_view error_message) const
+{
+    error(error_first, error_last, error_message, error_type::not_supported);
+}
+
+template <typename Iterator>
 void diagnostic_handler<Iterator>::numeric_error(iterator_type error_pos,
                                                  std::string_view error_message) const
 {
     error(error_pos, std::nullopt, error_message, error_type::numeric);
+}
+
+template <typename Iterator>
+void diagnostic_handler<Iterator>::numeric_error(iterator_type error_pos,
+                                                 std::optional<iterator_type> error_last,
+                                                 std::string_view error_message) const
+{
+    error(error_pos, error_last, error_message, error_type::numeric);
 }
 
 ///  ----------------------------------------------------------------------------

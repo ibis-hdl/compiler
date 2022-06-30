@@ -18,6 +18,11 @@ namespace testsuite::vhdl::numeric_convert::util {
 ///
 /// Create a binary string from unsigned integer
 ///
+/// Example usage:
+/// @code {.cpp}
+/// std::cout << base << '#' << binary_string(value) << '#';
+/// @endcode
+///
 struct binary_string {
     std::uint64_t number;
 
@@ -29,6 +34,11 @@ struct binary_string {
 ///
 /// Create an octal string from unsigned integer
 ///
+/// Example usage:
+/// @code {.cpp}
+/// std::cout << base << '#' << octal_string(value) << '#';
+/// @endcode
+///
 struct octal_string {
     std::uint64_t number;
 
@@ -39,6 +49,11 @@ struct octal_string {
 
 ///
 /// Create a hexadecimal string from unsigned integer
+///
+/// Example usage:
+/// @code {.cpp}
+/// std::cout << base << '#' << hexadecimal_string(value) << '#';
+/// @endcode
 ///
 struct hexadecimal_string {
     std::uint64_t number;

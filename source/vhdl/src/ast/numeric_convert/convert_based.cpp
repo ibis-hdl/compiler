@@ -5,6 +5,8 @@
 
 #include <ibis/vhdl/ast/numeric_convert/convert_based.hpp>
 #include <ibis/vhdl/ast/numeric_convert/filter_range.hpp>
+#include <ibis/vhdl/ast/numeric_convert/detail/digits_traits.hpp>
+
 #include <ibis/vhdl/ast/numeric_convert/dbg_trace.hpp>
 
 #include <ibis/vhdl/diagnostic_handler.hpp>
@@ -22,12 +24,15 @@
 #include <boost/spirit/home/x3.hpp>  // IWYU pragma: keep
 #include <ibis/util/compiler/warnings_on.hpp>
 
-#include <boost/range/join.hpp>
+#include <range/v3/view/join.hpp>
+#include <range/v3/range/conversion.hpp>
 
 #include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
 #include <ibis/util/compiler/warnings_on.hpp>
+
+#include <fmt/format.h>
 
 #include <cmath>
 #include <algorithm>
@@ -59,9 +64,6 @@ auto const as = [](auto derived_parser) {
     return x3::any_parser<IteratorT, T>{ x3::as_parser(derived_parser) };
 };
 
-using namespace std::literals;
-auto const literal_name = "based literal"sv;
-
 }  // namespace
 
 namespace ibis::vhdl::ast {
@@ -79,25 +81,49 @@ std::tuple<bool, std::uint32_t> convert_based<IntegerT, RealT>::parse_base(
     using boost::locale::format;
     using boost::locale::translate;
 
-    auto const range_f = numeric_convert::detail::filter_range(literal.base);
-    auto iter = std::cbegin(range_f);
-    auto const end = std::cend(range_f);
+    // convenience alias
+    auto const& base_literal = literal.base;
+    auto const base_literal_sv = as_string_view(base_literal);
 
-    std::uint32_t base = 0;
-    // base is in decimal notation
-    bool const parse_ok = x3::parse(iter, end, x3::uint_ >> x3::eoi, base);
+    /// intermediate integer type for base part
+    using base_type = std::uint32_t;
+    base_type base_attribute = 0;
 
-    if (!parse_ok) {
-        // parse failed - can't fit the target_type, iter is rewind to begin.
-        diagnostic_handler.parser_error(                                                // --
-            literal.base.begin(),                                                       // --
-            (format(translate("in {1} the base specifier can't fit the numeric type"))  // --
-             % literal_name)
-                .str());
-        return std::tuple{ false, 0 };
+    // TRANSLATORS: error message for numeric target type
+    std::string const error_msg_tr = translate(
+        "in {1} the base specifier '{2}' isn't supported; only 2, 8, 10 and 16!");
+
+    auto range_f = numeric_convert::detail::filter_range(base_literal);
+
+    if(ranges::distance(range_f) > std::numeric_limits<base_type>::digits10) {
+        // for some very smart people who fill up with leading zeros
+        diagnostic_handler.unsupported(                 // --
+            base_literal.begin(), base_literal.end(),   // --
+            (format(error_msg_tr) % node_name % base_literal_sv).str());
+        return { false, base_attribute };
     }
 
-    return std::tuple{ parse_ok && (iter == end), base };
+    auto iter = std::begin(range_f);
+    auto const end = std::end(range_f);
+
+    bool const parse_ok = x3::parse(iter, end, x3::uint_ >> x3::eoi, base_attribute);
+
+    if (!parse_ok) {
+        diagnostic_handler.parser_error(                // --
+            base_literal.begin(), base_literal.end(),   // --
+            (format(translate("in {1} parse of base specifier '{2}' failed"))  // --
+             % node_name % base_literal_sv).str());
+        return { false, base_attribute };
+    }
+
+    if (!supported_base(base_attribute)) {
+        diagnostic_handler.unsupported(                 // --
+            base_literal.begin(), base_literal.end(),   // --
+            (format(error_msg_tr) % node_name % base_literal_sv).str());
+        return { false, base_attribute };
+    }
+
+    return { true, base_attribute };
 }
 
 template <typename IntegerT, typename RealT>
@@ -107,56 +133,67 @@ std::tuple<bool, std::uint64_t> convert_based<IntegerT, RealT>::parse_integer(
     using boost::locale::format;
     using boost::locale::translate;
 
-    auto const parse = [&](unsigned base, auto const& integer_part) {
-        auto const parser = [](unsigned base_spec, auto iter_t) {
-            using iterator_type = decltype(iter_t);
-            switch (base_spec) {
-                case 2: {
-                    using parser_type = x3::uint_parser<integer_type, 2>;
-                    parser_type const parse_bin = parser_type{};
-                    return as<integer_type, iterator_type>(parse_bin);
-                }
-                case 8: {
-                    using parser_type = x3::uint_parser<integer_type, 8>;
-                    parser_type const parse_oct = parser_type{};
-                    return as<integer_type, iterator_type>(parse_oct);
-                }
-                case 10: {
-                    using parser_type = x3::uint_parser<integer_type, 10>;
-                    parser_type const parse_dec = parser_type{};
-                    return as<integer_type, iterator_type>(parse_dec);
-                }
-                case 16: {
-                    using parser_type = x3::uint_parser<integer_type, 16>;
-                    parser_type const parse_hex = parser_type{};
-                    return as<integer_type, iterator_type>(parse_hex);
-                }
-                default:  // cxx_unreachable_bug
-                    cxx_unreachable_bug_triggered();
+    // select a concrete parser depending the the base specifier
+    auto const parser = [](unsigned base_spec, auto iter_t) {
+        using iterator_type = decltype(iter_t);
+        switch (base_spec) {
+            case 2: {
+                using parser_type = x3::uint_parser<integer_type, 2>;
+                parser_type const parse_bin = parser_type{};
+                return as<integer_type, iterator_type>(parse_bin);
             }
-        };
-
-        auto const range_f = numeric_convert::detail::filter_range(integer_part);
-        auto iter = std::cbegin(range_f);
-        auto const end = std::cend(range_f);
-
-        std::uint64_t integer = 0;
-        bool const parse_ok = x3::parse(iter, end, parser(base, iter) >> x3::eoi, integer);
-
-        if (!parse_ok) {
-            // parse failed - can't fit the target_type, iter is rewind to begin.
-            diagnostic_handler.parser_error(                                              // --
-                literal.number.integer_part.begin(),                                      // --
-                (format(translate("in {1} the integer part can't fit the numeric type"))  // --
-                 % literal_name)
-                    .str());
-            return std::tuple{ false, integer };
+            case 8: {
+                using parser_type = x3::uint_parser<integer_type, 8>;
+                parser_type const parse_oct = parser_type{};
+                return as<integer_type, iterator_type>(parse_oct);
+            }
+            case 10: {
+                using parser_type = x3::uint_parser<integer_type, 10>;
+                parser_type const parse_dec = parser_type{};
+                return as<integer_type, iterator_type>(parse_dec);
+            }
+            case 16: {
+                using parser_type = x3::uint_parser<integer_type, 16>;
+                parser_type const parse_hex = parser_type{};
+                return as<integer_type, iterator_type>(parse_hex);
+            }
+            default:  // cxx_unreachable_bug
+                cxx_unreachable_bug_triggered();
         }
-
-        return std::tuple{ parse_ok && (iter == end), integer };
     };
 
-    return parse(base, literal.number.integer_part);
+    // convenience alias
+    auto const& integer_literal = literal.number.integer_part;
+    auto const integer_literal_sv = as_string_view(integer_literal);
+
+    // TRANSLATORS: error message for numeric target type
+    std::string const error_msg_tr = translate(
+        "in {1} integer part '{2}' can't fit the numeric type");
+
+    auto range_f = numeric_convert::detail::filter_range(integer_literal);
+
+    if(ranges::distance(range_f) > std::numeric_limits<integer_type>::digits10) {
+        diagnostic_handler.parser_error(                            // --
+            integer_literal.begin(), integer_literal.end(),         // --
+            (format(error_msg_tr) % node_name % integer_literal_sv).str());
+        return { false, 0 };
+    }
+
+    auto iter = std::begin(range_f);
+    auto const end = std::end(range_f);
+
+    integer_type integer_attribute = 0;
+    bool const parse_ok = x3::parse(iter, end, parser(base, iter) >> x3::eoi, integer_attribute);
+
+    if (!parse_ok) {
+        diagnostic_handler.parser_error(                                        // --
+            integer_literal.begin(), integer_literal.end(),                     // --
+            (format(translate("in {1} parse of integer part '{2}' failed"))     // --
+            % node_name % integer_literal_sv).str());
+        return { false, 0 };
+    }
+
+    return { true, integer_attribute };
 }
 
 template <typename IntegerT, typename RealT>
@@ -166,20 +203,24 @@ std::tuple<bool, double> convert_based<IntegerT, RealT>::parse_fractional(
     using boost::locale::format;
     using boost::locale::translate;
 
-    auto range_f{ numeric_convert::detail::filter_range(literal.number.fractional_part) };
-    auto iter = std::cbegin(range_f);
-    auto const last = std::cend(range_f);
+    // convenience alias
+    auto const& fractional_literal = literal.number.fractional_part;
+    auto const fractional_literal_sv = as_string_view(fractional_literal);
 
-    double pow = base;
+    auto range_f{ numeric_convert::detail::filter_range(fractional_literal) };
+    auto iter = std::begin(range_f);
+    auto const last = std::end(range_f);
 
-    // FixMe: there are no (parser) checks, we depend on VHDL parser!
+    real_type pow = base;
 
     // naive implementation of fractional part calculation
     auto const fractional =
-        std::accumulate(iter, last, 0.0, [&pow, base](double acc, char hex_chr) {
+        std::accumulate(iter, last, 0.0, [&pow, base](real_type acc, char hex_chr) {
             // We trust on VHDL parser's 1st pass to simplify converting char to their integer
             // value, hence no checks are required.
-            // ToDo: Std. C++ and Spirit.X3 offers utilities for converting chars - maybe use them.
+            // Also, see [What's the fastest way to convert hex to integer in C++?](
+            // https://stackoverflow.com/questions/34365746/whats-the-fastest-way-to-convert-hex-to-integer-in-c)
+            // here we let the compiler decide how o optimize
             // clang-format off
             auto const hex2dec = [](char chr) {
                 switch (chr) {
@@ -209,24 +250,23 @@ std::tuple<bool, double> convert_based<IntegerT, RealT>::parse_fractional(
                 }
             };
             // clang-format on
-            double dig = hex2dec(hex_chr);
+            real_type dig = hex2dec(hex_chr);
             dig /= pow;
-            pow *= static_cast<double>(base);
+            pow *= static_cast<real_type>(base);
             return acc + dig;
         });
 
     // during accumulation a numeric IEEE754 errors may occur
     if (!std::isnormal(fractional)) {
-        diagnostic_handler.numeric_error(                                                 // --
-            literal.number.fractional_part.begin(),                                       // --
-            (format(translate(                                                            // --
-                 "in {1} numeric error occurred during calculation of fractional part"))  // --
-             % literal_name)
-                .str());
-        return std::tuple{ false, fractional };
+        diagnostic_handler.numeric_error(                           // --
+            fractional_literal.begin(), fractional_literal.end(),   // --
+            (format(translate(                                      // --
+                "in {1} numeric error occurred during calculation of fractional part '{2}'"))  // --
+                % node_name % fractional_literal_sv).str());
+        return { false, fractional };
     }
 
-    return std::tuple{ true, fractional };
+    return { true, fractional };
 }
 
 template <typename IntegerT, typename RealT>
@@ -236,48 +276,74 @@ std::tuple<bool, std::int32_t> convert_based<IntegerT, RealT>::parse_exponent(
     using boost::locale::format;
     using boost::locale::translate;
 
-    if (literal.number.exponent.empty()) {
+    // intermediate integer type for exponent part
+    // type is unsigned for based, signed for real
+    using exponent_type = std::int32_t;
+    exponent_type exponent_attribute = 0;
+
+    // convenience alias
+    auto const& exponent_literal = literal.number.exponent;
+    auto const exponent_literal_sv = as_string_view(exponent_literal);
+
+    // optional exponent is empty
+    if (exponent_literal.empty()) {
         // no need to parse
-        return std::tuple{ true, 0 };
+        return { true, exponent_attribute };
     }
 
-    auto const range_f = numeric_convert::detail::filter_range(literal.number.exponent);
-    auto iter = std::cbegin(range_f);
-    auto const end = std::cend(range_f);
+    // TRANSLATORS: error message for numeric target type
+    std::string const error_msg_tr = translate("in {1} the exponent part '{2}' can't fit the {3} type");
 
-    using x3::char_;
-    using x3::int_;  // exponent is in decimal notation
+    auto range_f = numeric_convert::detail::filter_range(exponent_literal);
 
-    // IEEE1076-93 Ch. 13.4, specifies for decimal_literal the forbidden
-    // negative sign for the exponent of integer types.
-    // Note: rule valid for based integer and real!
-    auto const exp = x3::rule<struct _, std::int32_t>{} = x3::omit[char_("Ee")] >> int_;
+    if(ranges::distance(range_f) > std::numeric_limits<exponent_type>::digits10) {
+        diagnostic_handler.parser_error(                        // --
+            exponent_literal.begin(), exponent_literal.end(),   // --
+            (format(error_msg_tr) % node_name % exponent_literal_sv).str());
+        return { false, exponent_attribute };
+    }
 
-    std::int32_t exponent = 0;
-    bool const parse_ok = x3::parse(iter, end, exp >> x3::eoi, exponent);
+    // parse attribute
+    auto iter = std::begin(range_f);
+    auto const end = std::end(range_f);
+
+    auto const exp = x3::rule<struct _, exponent_type>{ node_name.data() } = x3::int_;
+
+    bool const parse_ok = x3::parse(iter, end, exp >> x3::eoi, exponent_attribute);
 
     if (!parse_ok) {
-        // parse failed - can't fit the target_type, iter is rewind to begin.
-        diagnostic_handler.parser_error(                                               // --
-            literal.number.exponent.begin(),                                           // --
-            (format(translate("in {1} the exponent part can't fit the numeric type"))  // --
-             % literal_name)
-                .str());
-        return std::tuple{ false, 0 };
+        diagnostic_handler.parser_error(                                    // --
+            exponent_literal.begin(), exponent_literal.end(),               // --
+            (format(translate("in {1} parse of exponent '{2}' failed"))     // --
+            % node_name % exponent_literal_sv).str());
+        return { false, exponent_attribute };
     }
 
-    // XXX Check on valid range
-
+    // there are only integer and real types
     using numeric_type_specifier = ast::based_literal::numeric_type_specifier;
+    static_assert(static_cast<unsigned>(numeric_type_specifier::COUNT) == 2, "unexpected count of type specifier");
 
-    // The top-level VHDL parser is strict enough so that this will not happen this time.
-    if (literal.number.type_specifier == numeric_type_specifier::integer) {
-        // internal error: our top-level VHDL parser has failed
-        assert(exponent >= 0  // --
-               && "An exponent for a based integer literal must not have a minus sign.");
+    // check on valid exponent numeric range
+    if (literal.number.type_specifier == numeric_type_specifier::real) {
+        // max. exponent for e.g. double 308 as in 1.0e308
+        if(exponent_attribute > std::numeric_limits<real_type>::max_exponent10) {
+            diagnostic_handler.parser_error(                        // --
+                exponent_literal.begin(), exponent_literal.end(),   // --
+                (format(error_msg_tr) % node_name % exponent_literal_sv % "real").str());
+            return { false, exponent_attribute };
+        }
+    }
+    else {
+        // max. exponent for e.g. 32bit integer 9 as in 1e+9
+        if(exponent_attribute > std::numeric_limits<integer_type>::digits10) {
+            diagnostic_handler.parser_error(                        // --
+                exponent_literal.begin(), exponent_literal.end(),   // --
+                (format(error_msg_tr) % node_name % exponent_literal_sv % "integer").str());
+            return { false, exponent_attribute };
+        }
     }
 
-    return std::tuple{ parse_ok && (iter == end), exponent };
+    return { true, exponent_attribute };
 }
 
 template <typename IntegerT, typename RealT>
@@ -286,33 +352,36 @@ std::tuple<bool, double> convert_based<IntegerT, RealT>::parse_real10(
 {
     using boost::locale::format;
     using boost::locale::translate;
+    using namespace ranges;
+    using namespace std::literals::string_view_literals;
 
-    // it's better to use X3's base10 double parser to avoid machine's epsilon errors
-    // FixMe [C++20] Candidate for C++20 range
-    static std::string const dot{ "." };
-    auto const range =
-        boost::join(boost::join(literal.number.integer_part, dot), literal.number.fractional_part);
-    auto const range_f = numeric_convert::detail::filter_range(range);
-    auto iter = std::cbegin(range_f);
-    auto const end = std::cend(range_f);
+    // ranges-v3 concept: [coliru](https://coliru.stacked-crooked.com/a/530a793796999fab)
+    // c++20 range concept [coliru](https://coliru.stacked-crooked.com/a/17f844b879507aed)
+    auto const real10_literal = {                               // --
+        as_string_view(literal.number.integer_part),            // --
+        "."sv , as_string_view(literal.number.fractional_part)  // --
+    };
 
+    auto range_f = numeric_convert::detail::filter_range(real10_literal | views::join);
+    auto iter = std::begin(range_f);
+    auto const end = std::end(range_f);
+
+    // use X3's base10 double parser which is well tested
     x3::real_parser<double, detail::real_policies<double>> const real_parser;
 
     double real = 0;
     bool const parse_ok = x3::parse(iter, end, real_parser >> x3::eoi, real);
 
     if (!parse_ok) {
-        // parse failed - can't fit the target_type, iter is rewind to begin.
+        auto const real10_str = range_f | to<std::string>();
         diagnostic_handler.parser_error(                                             // --
             literal.number.integer_part.begin(),                                     // --
-            (format(translate("in {1} the real number can't fit the numeric type"))  //--
-             % literal_name)
-                .str());
-
+            (format(translate("in {1} parse of real '{2}' failed"))  //--
+             % node_name % real10_str).str());
         return std::tuple{ false, 0 };
     }
 
-    return std::tuple{ parse_ok && (iter == end), real };
+    return std::tuple{ true, real };
 }
 
 template <typename IntegerT, typename RealT>
@@ -352,44 +421,31 @@ typename convert_based<IntegerT, RealT>::return_type convert_based<IntegerT, Rea
         }
     };
 
-    bool parse_ok = false;
-
     // ------------------------------------------------------------------------
     // BASE
-    std::uint32_t base = 0;
-    std::tie(parse_ok, base) = parse_base(node);
+    //std::uint32_t base = 0;
+    auto const [base_ok, base] = parse_base(node);
 
-    if (!parse_ok) {
+    if (!base_ok) {
         // parse error rendering done before
-        return failure_return_value();
-    }
-    if (!supported_base(base)) {
-        diagnostic_handler.unsupported(  // --
-            node.base.begin(),           // --
-            (format(translate("in {1} the base specifier of \'{2}\' isn't supported; "
-                              "only 2, 8, 10 and 16!"))  // --
-             % literal_name                              // {1}
-             % base)                                     // {2}
-                .str());
         return failure_return_value();
     }
 
     // ------------------------------------------------------------------------
     // INTEGER
-    std::uint64_t integer = 0;
+    auto const [int_ok, integer] = parse_integer(base, node);
 
-    std::tie(parse_ok, integer) = parse_integer(base, node);
-
-    if (!parse_ok) {
+    if (!int_ok) {
         // parse error rendering done before
         return failure_return_value();
     }
 
     // ------------------------------------------------------------------------
     // FRACTIONAL (only for based real)
-    double fractional = 0;
+    real_type fractional = 0;
 
     if (base != 10U && node.numeric_type() == numeric_type_specifier::real) {
+        bool parse_ok = false;
         std::tie(parse_ok, fractional) = parse_fractional(base, node);
 
         if (!parse_ok) {
@@ -399,10 +455,11 @@ typename convert_based<IntegerT, RealT>::return_type convert_based<IntegerT, Rea
     }
 
     // ------------------------------------------------------------------------
-    // base 10 real numeric parser using spirit.X3
-    double real10 = 0;
+    // base 10 real numeric parser
+    real_type real10 = 0;
 
     if (base == 10U && node.numeric_type() == numeric_type_specifier::real) {
+        bool parse_ok = false;
         std::tie(parse_ok, real10) = parse_real10(node);
 
         if (!parse_ok) {
@@ -413,10 +470,9 @@ typename convert_based<IntegerT, RealT>::return_type convert_based<IntegerT, Rea
 
     // ------------------------------------------------------------------------
     // EXPONENT
-    std::int32_t exponent = 0;
-    std::tie(parse_ok, exponent) = parse_exponent(node);
+    auto const [exp_ok, exponent] = parse_exponent(node);
 
-    if (!parse_ok) {
+    if (!exp_ok) {
         // parse error rendering done before
         return failure_return_value();
     }

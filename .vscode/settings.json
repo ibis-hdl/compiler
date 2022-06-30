@@ -183,6 +183,7 @@
         "semaphore": "cpp",
         "cinttypes": "cpp",
         "*.ipp": "cpp",
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "span": "cpp"
     },
 }

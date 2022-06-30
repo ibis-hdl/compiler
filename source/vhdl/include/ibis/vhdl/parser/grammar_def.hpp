@@ -1080,9 +1080,7 @@ namespace based_literal_detail {
 
 auto const integer_exponent = x3::rule<struct _exp, ast::string_span>{ "based_literal" } =
     x3::as<ast::string_span>[
-        raw[ lexeme [
-             char_("Ee") >> -char_('+') >> integer
-        ]]
+        x3::omit[ char_("Ee") >> -char_('+') ] >> integer
     ]
     ;
 
@@ -2142,11 +2140,16 @@ auto const exit_statement_def =
 auto const exponent_def =
     // Note, that exponent rule parses real exponent, for integer types no sign
     // is allowed, hence embedded into the concrete rule
-    x3::as<ast::string_span>[
-        raw[ lexeme [
-             char_("Ee") >> -char_("-+") >> integer
-        ]]
+#if 1
+    //x3::as<ast::string_span>[
+        x3::omit[ char_("Ee") ] >> x3::raw[ -char_("-+") >> integer ]
+    //]
+#else
+    x3::raw[ //x3::as<ast::string_span>[
+        x3::omit[ char_("Ee") ] >> -char_("-+") >> integer
     ]
+
+#endif
     ;
 
 
