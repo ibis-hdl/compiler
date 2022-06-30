@@ -9,11 +9,12 @@
 
 #include <ibis/vhdl/ast/node/abstract_literal.hpp>
 #include <ibis/vhdl/ast/util/string_span.hpp>
+#include <ibis/vhdl/ast/util/optional.hpp>
 
 namespace ibis::vhdl::ast {
 
 struct physical_literal : position_tagged {
-    abstract_literal literal;
+    ast::optional<abstract_literal> literal;
     ast::string_span unit_name;
 };
 

@@ -129,9 +129,6 @@ concept has_optional_end_label = requires(const NodeT& node)
 template <typename NodeT>
 std::tuple<ast::identifier, ast::identifier> inline labels_of(NodeT const& node)
 {
-    static_assert(std::is_base_of_v<ast::position_tagged, std::decay_t<NodeT>>,  // --
-                  "AST node must be derived from ast::position_tagged to provide diagnostics");
-
     // It is assumed that the AST nodes are correctly initialized with their labels/identifiers.
     // Otherwise boost::optional's `.get()` throws an exception.
     // Using C++20 concept here, which find concepts by looking at the algorithms that use them.

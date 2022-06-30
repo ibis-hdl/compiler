@@ -223,8 +223,12 @@ BOOST_FUSION_ADAPT_STRUCT(ibis::vhdl::ast::expression::chunk,
     logical_operator, relation
 )
 
+BOOST_FUSION_ADAPT_STRUCT(ibis::vhdl::ast::factor_binary_operation::chunk,
+    operator_, primary
+)
+
 BOOST_FUSION_ADAPT_STRUCT(ibis::vhdl::ast::factor_binary_operation,
-    primary_lhs, operator_, primary_rhs
+    primary, binary_operation
 )
 
 BOOST_FUSION_ADAPT_STRUCT(ibis::vhdl::ast::factor_unary_operation,

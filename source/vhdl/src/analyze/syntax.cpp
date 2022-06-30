@@ -31,9 +31,25 @@
 #include <boost/locale/message.hpp>
 #include <ibis/util/compiler/warnings_on.hpp>
 
+#include <fmt/format.h>
+
 #include <sstream>
 #include <utility>
 #include <iostream>
+
+namespace {
+
+/// FixMe: This is hot fix for gathering non-tagged AST nodes and give an expressive
+/// error message; diagnostic_handler simply assert without node name.
+auto const tagged_diag = [](auto const& where_tag, [[maybe_unused]] auto const& start_label,
+                            [[maybe_unused]] auto const& end_label) {
+    if (!where_tag.is_tagged()) {
+        std::cerr << (fmt::format("Node '{0}' not tagged\n",  // --
+                      ibis::util::pretty_typename<decltype(where_tag)>().str()));
+    }
+};
+
+}  // namespace
 
 namespace ibis::vhdl::analyze {
 
@@ -59,6 +75,8 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name)
 
     auto const [start_label, end_label] = labels_of(node);
     node_name = ast::pretty_node_name(node_name);
+
+    tagged_diag(node, start_label, end_label);
 
     switch (match_result) {
         case label_match::result::MISMATCH: {

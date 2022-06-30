@@ -1023,8 +1023,12 @@ public:
         std::string_view const node_typename{ "factor_binary_operation" };
         worker(node, node_typename);
 
-        visit(node.primary_lhs);
-        visit(node.primary_rhs);
+        visit(node.primary);
+
+        if(node.binary_operation) {
+            // (*node.binary_operation).operator
+            visit((*node.binary_operation).primary);
+        }
     }
 
     void operator()(ast::factor_unary_operation const& node)
@@ -1587,7 +1591,9 @@ public:
         std::string_view const node_typename{ "physical_literal" };
         worker(node, node_typename);
 
-        (*this)(node.literal);
+        if(node.literal) {
+            (*this)(*node.literal);
+        }
     }
 
     void operator()(ast::physical_type_definition const& node)

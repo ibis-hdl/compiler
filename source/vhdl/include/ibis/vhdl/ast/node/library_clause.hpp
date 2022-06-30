@@ -13,9 +13,10 @@
 namespace ibis::vhdl::ast {
 
 using logical_name = ast::identifier;
+using logical_name_list = std::vector<logical_name>;
 
 struct library_clause : position_tagged {
-    std::vector<logical_name> logical_name_list;
+    ast::logical_name_list logical_name_list;
 };
 
 }  // namespace ibis::vhdl::ast

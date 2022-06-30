@@ -1228,11 +1228,12 @@ void printer::operator()(factor_binary_operation const& node)
     static const std::string_view symbol{ "factor_binary_operation" };
     symbol_scope<factor_binary_operation> _(*this, symbol);
 
-    visit(node.primary_lhs);
+    (*this)(node.primary);
 
-    os << '\n' << "(operator: " << node.operator_ << "),\n";
-
-    visit(node.primary_rhs);
+    if(node.binary_operation) {
+        os << '\n' << "(operator: " << (*node.binary_operation).operator_ << "),\n";
+        (*this)((*node.binary_operation).primary);
+    }
 }
 
 void printer::operator()(factor_unary_operation const& node)
@@ -1241,7 +1242,7 @@ void printer::operator()(factor_unary_operation const& node)
     symbol_scope<factor_unary_operation> _(*this, symbol);
 
     os << "(operator: " << node.operator_ << "),\n";
-    visit(node.primary);
+    (*this)(node.primary);
 }
 
 void printer::operator()(factor const& node)
@@ -1879,9 +1880,12 @@ void printer::operator()(physical_literal const& node)
     static const std::string_view symbol{ "physical_literal" };
     symbol_scope<physical_literal> _(*this, symbol);
 
-    (*this)(node.literal);
-    os << ",\n"
-       << "(unit_name: " << node.unit_name << ")";
+    if(node.literal) {
+        (*this)(*node.literal);
+        os << ",\n";
+    }
+
+    os << "(unit_name: " << node.unit_name << ")";
 }
 
 void printer::operator()(physical_type_definition const& node)
@@ -2517,7 +2521,7 @@ void printer::operator()(term const& node)
     static const std::string_view symbol{ "term" };
     symbol_scope<term> _(*this, symbol);
 
-    visit(node.factor);
+    (*this)(node.factor);
 
     if (node.rest_list.empty()) {
         return;
@@ -2529,7 +2533,7 @@ void printer::operator()(term const& node)
     std::size_t i = 0;
     for (auto const& term_chunk : node.rest_list) {
         os << "(operator: " << term_chunk.multiplying_operator << "),\n";
-        visit(term_chunk.factor);
+        (*this)(term_chunk.factor);
         if (i++ != N) {
             os << ",\n";
         }
