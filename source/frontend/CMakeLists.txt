@@ -13,6 +13,7 @@ add_executable(${PROJECT_NAME})
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         ibis::common
+        ibis::color
         ibis::vhdl
         Boost::system
         Boost::locale

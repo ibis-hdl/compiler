@@ -26,9 +26,6 @@ target_sources(${PROJECT_NAME}
         src/file_loader.cpp
         src/settings.cpp
         src/user_home_dir.cpp
-        # util::color
-        src/color/color.cpp
-        $<$<BOOL:${WIN32}>:src/color/color_platform_windows.cpp>
 )
 
 
