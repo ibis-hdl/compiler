@@ -420,10 +420,13 @@ using detail::distinct;
 // Character Sets                                                 [LRM93 §13.1]
 // ----------------------------------------------------------------------------
 
-//
-// basic_character ::= basic_graphic_character | format_effector
-//
-// @todo write unit test for correct support of VHDL's character sets 
+/// 
+/// basic character                                               [LRM93 §13.1]
+/// 
+/// @code{.bnf}
+/// basic_character ::= basic_graphic_character | format_effector
+/// @endcode
+///
 #if 0
 // clang-format off
 auto const upper_case_letter = x3::rule<struct upper_case_letter_class, char>{ "upper case letter" } =
@@ -435,8 +438,9 @@ auto const lower_case_letter = x3::rule<struct lower_case_letter_class, char>{ "
 auto const special_character = x3::rule<struct special_character_class, char>{ "special character" } =
     char_("\"#&'()*+,-./:;<=>[]_|")
     ;
+// Note: VS Code doesn't render soft hyphen (U+00AD) at string's end!, e.g. use emacs/vi, notepad++
 auto const other_special_character = x3::rule<struct other_special_character_class, char>{ "other special character" } =
-    char_("!$%?@\\^`{}~¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿×÷")
+    char_("!$%?@\\^`{}~¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿×÷­")
     ;
 auto const space_character = x3::rule<struct space_character_class, char>{ "space character" } =
     iso8859_1::space
@@ -446,10 +450,13 @@ auto const format_effector = x3::rule<struct format_effector_class>{ "format eff
     ;
 // clang-format on
 
-
-///
-/// basic_graphic_character ::=                                    [LRM93 §13.1]
+/// 
+/// basic graphic character                                       [LRM93 §13.1]
+/// 
+/// @code{.bnf}
+/// basic_graphic_character ::=
 ///     upper_case_letter | digit | special_character| space_character
+/// @endcode
 // clang-format off
 auto const basic_graphic_character = x3::rule<struct basic_graphic_character_class, char>{ "basic graphic character" } =
       upper_case_letter
@@ -460,6 +467,9 @@ auto const basic_graphic_character = x3::rule<struct basic_graphic_character_cla
 // clang-format on
 #endif
 
+/// 
+/// digit                                                         [LRM93 §13.1]
+/// 
 // clang-format off
 auto const digit = x3::rule<struct digit_class, char>{ "digit" } =
     x3::digit // char_("0-9");
@@ -544,7 +554,9 @@ auto const extended_digit = x3::rule<struct extended_digit_class, char>{ "extend
 /// @see Boost Spirit X3 [Character Parsers](
 ///     https://www.boost.org/doc/libs/1_76_0/libs/spirit/doc/x3/html/spirit_x3/quick_reference/char.html)
 ///
-/// @todo Check for X3 character parser to use them in the related/this rule.
+/// @FixMe: Spirit.X3 shall fully support iso8859_1, which it doesn't, see 
+/// [X3: Provide documentation for different encodings/unicode usage](https://github.com/boostorg/spirit/issues/614)
+/// For convenience Spirit's x3::graph parser is used - see testsuite/spirit_x3
 ///
 // clang-format off
 auto const graphic_character = x3::rule<struct graphic_character_class, char>{ "graphic character" } =
