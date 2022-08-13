@@ -4,23 +4,24 @@
 ## file: CMakeLists.txt
 ################################################################################
 
-#set (CMAKE_USER_MAKE_RULES_OVERRIDE "${CMAKE_CURRENT_LIST_DIR}/cmake/module/CxxFlagOverrides.cmake")
-
 cmake_minimum_required(VERSION 3.20)
 
+set(CMAKE_PROJECT_INCLUDE_BEFORE
+    "${CMAKE_SOURCE_DIR}/cmake/project-meta-info.cmake")
+
 project(ibis
-    VERSION 0.0.1
-    DESCRIPTION "HDL compiler and simulator"
-    HOMEPAGE_URL "https://github.com/ibis-hdl/compiler"
+    VERSION "${ibis_version}"
+    DESCRIPTION "${ibis_description}"
+    HOMEPAGE_URL "${ibis_homepage}"
     LANGUAGES CXX
 )
+message(STATUS "${CMAKE_PROJECT_NAME}: ${ibis_description} v${ibis_version} [${ibis_homepage}]")
 message(STATUS "System name: ${CMAKE_SYSTEM_NAME}")
-message(STATUS "Version: ${ibis_VERSION}")
 
 
 ## global C++ Standard
 # Note:
-# - on C++ Std change, also set conan's compiler.std in
+# - on C++ Std change, also set
 #   - GitHubs actions
 #   - VS Code devcontainer
 set(CMAKE_CXX_STANDARD 20)
@@ -31,44 +32,23 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 ## CMake modules
 list(APPEND
     CMAKE_MODULE_PATH
-        ${CMAKE_BINARY_DIR} # conan
         ${PROJECT_SOURCE_DIR}/cmake
         ${PROJECT_SOURCE_DIR}/cmake/module
+)
+
+## CMake Config mode for Boost
+list(PREPEND
+    CMAKE_PREFIX_PATH
+        ${PROJECT_SOURCE_DIR}/conan/${CMAKE_BUILD_TYPE}
 )
 
 
 include(prevent_in_source_builds)
 
 
-## Conan C/C++ Open Source Package Manager
-## [https://docs.conan.io/en/latest/howtos/cmake_launch.html]
-## [https://github.com/conan-io/cmake-conan]
-##
-## FixMe:
-## - [https://github.com/conan-io/conan-center-index/pull/9069]
-## - [https://github.com/conan-io/cmake-conan/issues/416]
-find_package(Python3 COMPONENTS Interpreter REQUIRED)
-
-if(NOT EXISTS "${CMAKE_BINARY_DIR}/conan.cmake")
-    message(STATUS "Downloading conan.cmake from https://github.com/conan-io/cmake-conan")
-    file(DOWNLOAD
-        #                                   CHECK RELEASES -----v
-        "https://raw.githubusercontent.com/conan-io/cmake-conan/0.18.1/conan.cmake"
-        "${CMAKE_BINARY_DIR}/conan.cmake"
-        TLS_VERIFY ON)
-endif()
-
-include(${CMAKE_BINARY_DIR}/conan.cmake)
-
-conan_cmake_autodetect(conan_settings)
-
-conan_cmake_install(
-    PATH_OR_REFERENCE ${CMAKE_SOURCE_DIR}
-    BUILD missing
-    REMOTE conancenter
-    SETTINGS ${conan_settings} # compiler.libcxx=libstdc++11"
-)
-
+## [Conan C/C++ Open Source Package Manager](https://github.com/conan-io/cmake-conan)
+## ... "cmake-conan is not compatible with Conan 2.0"
+#find_package(Python3 COMPONENTS Interpreter REQUIRED)
 
 # [cpm-cmake/CPM.cmake](https://github.com/cpm-cmake/CPM.cmake)
 include(cmake/module/CPM.cmake) # FixMe full path

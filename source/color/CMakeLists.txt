@@ -4,7 +4,15 @@
 ## file: source/color/CMakeLists.txt
 ################################################################################
 
-project(ibis_color LANGUAGES CXX)
+project(ibis_color
+    VERSION "${ibis_version}"
+    DESCRIPTION "${ibis_description}"
+    HOMEPAGE_URL "${ibis_homepage}"
+    LANGUAGES CXX
+)
+message(STATUS
+    "project ${CMAKE_PROJECT_NAME}/${PROJECT_NAME} @v${ibis_version}: "
+    "${ibis_description} [${ibis_homepage}]")
 
 
 add_library(${PROJECT_NAME})
@@ -14,6 +22,7 @@ add_library(ibis::color ALIAS ${PROJECT_NAME})
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
         ibis::util
+        Boost::headers
 )
 
 
@@ -40,6 +49,5 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
-        $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
         $<INSTALL_INTERFACE:include>
 )

@@ -263,8 +263,6 @@ endif()
 #
 add_compile_definitions(
     # ---- Win32 ----
-    # Boost Libs; see https://cmake.org/cmake/help/latest/module/FindBoost.html
-    "$<$<PLATFORM_ID:Windows>:${Boost_LIB_DIAGNOSTIC_DEFINITIONS};BOOST_ALL_NO_LIB>"
     # [What does #defining WIN32_LEAN_AND_MEAN exclude exactly?](
     #  https://stackoverflow.com/questions/11040133/what-does-defining-win32-lean-and-mean-exclude-exactly)
     "$<$<PLATFORM_ID:Windows>:WIN32_LEAN_AND_MEAN;VC_EXTRALEAN>"
