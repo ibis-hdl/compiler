@@ -81,17 +81,24 @@ Install [conan](https://conan.io/) as prerequisite (as shown above):
 > pip install conan
 ```
 
-Afterwards you may create a profile for build of dependencies. Conan v2 will require it (these days
-you got only a waning about), e.g. using MSVC on Windows
+Afterwards you may create a profile for build of project's dependencies. Conan v2 will require it 
+(these days you got only a waning about), e.g. using MSVC with Powershell
 
 ```
-❯ conan profile new msvc --detect
+> $env:CONAN_V2_MODE=1
+> conan profile new msvc --detect
 ```
 
-than you can start to build, i.e.:
+or simply use CMake self for setting the ENV variable:
 
 ```
-> conan install . --install-folder conan/Release --remote=conancenter --profile:build=msvc \
+> cmake -E env CONAN_V2_MODE=1 conan profile new msvc --detect
+```
+
+Than you can start to build, i.e.:
+
+```
+> conan install . --install-folder conan/Release --remote=conancenter --profile:build=msvc `
   --build=missing --settings build_type=Release
 ...
 > cmake --list-presets=all
@@ -123,10 +130,16 @@ $ source ~/.venv/bin/activate
 $ pip install conan
 ```
 
-create a profile for Conan, e.g. for use of Clang as compiler of depend libraries:
+create a profile for Conan, e.g. for use of Clang[^conan-clang-profile] as compiler of
+depend libraries:
+
+[^conan-clang-profile]: see [Detect libstdc++ ABI mode when using Clang on Linux #11886](
+  https://github.com/conan-io/conan/pull/11886)
+
 
 ```
-❯ CXX=clang conan profile new clang --detect
+$ export CONAN_V2_MODE=1
+$ CXX=clang conan profile new clang --detect
 ```
 
 than you can start to build, i.e.:
@@ -156,3 +169,4 @@ The same procedure for GCC.
 Also read
 - [Developer](doc/developer.md)
 - [ToDo](doc/todo.md)
+

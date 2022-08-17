@@ -47,11 +47,11 @@ class IbisConan(ConanFile):
     }
 
     """
-    CMakeDeps - multi-configuration generator
+    using the multi-configuration generator
     """
     def generate(self):
-        cmake = CMakeDeps(self)
-        cmake.generate()
+        deps = CMakeDeps(self)
+        deps.generate()
 
-        tc = CMakeToolchain(self)
-        tc.generate()
+        toolchain = CMakeToolchain(self)
+        toolchain.generate()
