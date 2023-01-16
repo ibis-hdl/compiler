@@ -68,7 +68,7 @@ jobs:
 
     - name: Setup ccache Compiler Cache
       if: matrix.os == 'Linux'
-      uses: hendrikmuhs/ccache-action@v1.2.2
+      uses: hendrikmuhs/ccache-action@v1.2.8
 
     - name: Configure and Build
       uses: lukka/run-cmake@v10
