@@ -48,7 +48,7 @@ jobs:
         conan profile new --detect --force default
 
     - name: Install CMake and ninja
-      uses: lukka/get-cmake@v3.23.0
+      uses: lukka/get-cmake@v3.28.1
 
     - name: Version info of tools used
       run: |
