@@ -1,6 +1,6 @@
-# https://github.com/devcontainers/images/blob/main/src/cpp/README.md
-ARG VARIANT="ubuntu-22.04"
-FROM mcr.microsoft.com/vscode/devcontainers/cpp:0-${VARIANT}
+# https://github.com/devcontainers/images/tree/main/src/cpp
+ARG VARIANT="ubuntu-24.04"
+FROM mcr.microsoft.com/vscode/devcontainers/cpp:${VARIANT}
 
 # [Optional] Install CMake version different from what base image has already installed.
 # CMake reinstall choices: none, 3.21.5, 3.22.2, or versions from https://cmake.org/download/
@@ -18,4 +18,4 @@ RUN if [ "${REINSTALL_CMAKE_VERSION_FROM_SOURCE}" != "none" ]; then \
 
 # [Optional] Uncomment this section to install additional packages.
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends ccache g++-11 clang-14 git clang-format clang-tidy doxygen graphviz gettext
+    && apt-get -y install --no-install-recommends ccache git g++ clang clang-tools doxygen graphviz gettext

@@ -16,13 +16,13 @@ Some projects exist temporary twice, not yet mature enough to replace the old ap
 e.g., see [.devcontainer](https://github.com/ibis-hdl/compiler/tree/main/.devcontainer)
 
 * C++20 compliant compiler; developed and tested with the big three:
-    - Visual Studio 2022 Developer Command Prompt v17.1.6 (not clang-cl due to missing Cmake
+    - Visual Studio 2022 Developer Command Prompt v17.11.5 (not clang-cl due to missing Cmake
       support on project's side at this time)
-    - clang++ 14
-    - g++ 11
+    - clang++ 18
+    - g++ 13
 
-* CMake 3.20
-    - ninja 1.10.2
+* CMake 3.28
+    - ninja 1.10
 
 * python 3 for conan and to generate some project files
 
@@ -46,7 +46,7 @@ Until compilers' full C++20/23 support is there:
 * [{fmt}](https://github.com/fmtlib/fmt)
 * [range-v3](https://github.com/ericniebler/range-v3)
 
-By using [Conan package manager for C and C++](https://github.com/conan-io/conan) with
+By using [Conan2 package manager for C and C++](https://github.com/conan-io/conan) with
 [CMake wrapper](https://github.com/conan-io/cmake-conan) the libraries are build within
 the project. Note, the project aims to be ready for conan v2!
 

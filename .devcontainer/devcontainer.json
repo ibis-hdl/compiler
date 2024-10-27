@@ -1,11 +1,11 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.245.0/containers/cpp
 {
-	"name": "Linux C++",
+	"name": "Ubuntu/Linux C++",
 	"build": {
 		"dockerfile": "Dockerfile",
 		"args": {
-			"VARIANT": "ubuntu-22.04"
+			"VARIANT": "ubuntu-24.04"
 		}
 	},
 
