@@ -36,10 +36,10 @@ list(APPEND
         ${PROJECT_SOURCE_DIR}/cmake/module
 )
 
-## CMake Config mode for Boost
+## CMake Config modules from Conan2
 list(PREPEND
     CMAKE_PREFIX_PATH
-        ${PROJECT_SOURCE_DIR}/conan/${CMAKE_BUILD_TYPE}
+        ${PROJECT_SOURCE_DIR}/build/conan/build/generators
 )
 
 

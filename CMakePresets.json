@@ -1,5 +1,5 @@
 {
-    "version": 3,
+    "version": 4,
     "cmakeMinimumRequired": {
         "major": 3,
         "minor": 20,
@@ -51,7 +51,6 @@
             "description": "Default environment variables for the CMake process",
             "hidden": true,
             "environment": {
-                "CONAN_V2_MODE": "1"
             }
         },
         {

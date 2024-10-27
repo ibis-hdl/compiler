@@ -8,7 +8,7 @@ This project aims to become a VHDL compiler.
 The project is divided into smaller sub project for maintenance. The idea is to developer parts
 independent and use them as library for 3rd party binaries in the future.
 
-Some projects exist temporary twice, not yet mature enough to replace the old approach 
+Some projects exist temporary twice, not yet mature enough to replace the old approach
 (e.g. doc_ng using doxygen and [sphinx](https://www.sphinx-doc.org/)), so both resist here.
 
 ## Required Tools to Build & Configuration
@@ -16,7 +16,8 @@ Some projects exist temporary twice, not yet mature enough to replace the old ap
 e.g., see [.devcontainer](https://github.com/ibis-hdl/compiler/tree/main/.devcontainer)
 
 * C++20 compliant compiler; developed and tested with the big three:
-    - Visual Studio 2022 Developer Command Prompt v17.1.6
+    - Visual Studio 2022 Developer Command Prompt v17.1.6 (not clang-cl due to missing Cmake
+      support on project's side at this time)
     - clang++ 14
     - g++ 11
 
@@ -53,18 +54,26 @@ the project. Note, the project aims to be ready for conan v2!
 
 ### Build on Windows
 
-Until 2021 the main developer machine was Fedora/Linux. In 2022 I started with 
-developing on Windows, using WSL2 and container, also VS Code. But this does not 
+Until 2021 the main developer machine was Fedora/Linux. In 2022 I started with
+developing on Windows, using WSL2 and container, also VS Code. But this does not
 reflect preference - merely convenience.
 
 Open *Visual Studio 2022 Developer Command Prompt* to get the tool chain correct
 initialized.
 
-The best to continue is to install [Python's virtual environment](https://docs.python.org/3/library/venv.html):
+The best to continue is to install [Python's virtual environment](https://docs.python.org/3/library/venv.html) (the option `--system-site-packages` allows usage of the site-packages from the global installation):
 
 ```
-> python -m venv .venv
+> python3 -m venv .venv --system-site-packages
 ```
+
+You may use
+
+```
+> pip3 -V
+```
+
+to check that you are running the virtual env (notice capital V) for now.
 
 If you run it from PowerShell, you may have to prepare the [Execution Policies](
 https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.2) before, see
@@ -75,31 +84,30 @@ https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/abo
 > ./.venv/Scripts/activate.ps1
 ```
 
-Install [conan](https://conan.io/) as prerequisite (as shown above):
+Install [conan](https://conan.io/) as prerequisite to build the project:
 
 ```
-> pip install conan
+> pip3 install conan
 ```
 
-Afterwards you may create a profile for build of project's dependencies. Conan v2 will require it 
-(these days you got only a waning about), e.g. using MSVC with Powershell
+Afterwards you may create a profile for build of project's dependencies (or even overwrite
+an existing one with `--force`), e.g. using default MSVC compiler from
+[Visual Studio 22 Community Edition](https://visualstudio.microsoft.com/de/vs/community/)
 
 ```
-> $env:CONAN_V2_MODE=1
-> conan profile new msvc --detect
+> conan profile detect --force
 ```
 
 or simply use CMake self for setting the ENV variable:
 
 ```
-> cmake -E env CONAN_V2_MODE=1 conan profile new msvc --detect
+> cmake -E env conan profile detect
 ```
 
 Than you can start to build, i.e.:
 
 ```
-> conan install . --install-folder conan/Release --remote=conancenter --profile:build=msvc `
-  --build=missing --settings build_type=Release
+> conan install . -s compiler.cppstd=17 --output-folder build/conan --build=missing
 ...
 > cmake --list-presets=all
 ...
@@ -115,19 +123,21 @@ Than you can start to build, i.e.:
 ...
 ```
 
+***Note:*** Boost Spirit X3 @1.78 [MSVC (VS 2023) fails to compile example/x3/annotation.cpp with /std:c++20 or /std:c++latest option #782](https://github.com/boostorg/spirit/issues/782)
+
 ### Build on Linux
 
-Quite similar to Windows. I also recommend to use [Python's virtual environment](https://docs.python.org/3/library/venv.html):
+Quite similar to Windows. I also recommend to use [Python's virtual environment](https://docs.python.org/3/library/venv.html) (the option `--system-site-packages` allows usage of the site-packages from the global installation):
 
 ```
-$ python -m venv .venv
+$ python3 -m venv .venv --system-site-packages
 ```
 
 and install [conan](https://conan.io/) as prerequisite:
 
 ```
 $ source ~/.venv/bin/activate
-$ pip install conan
+$ pip3 install conan
 ```
 
 create a profile for Conan, e.g. for use of Clang[^conan-clang-profile] as compiler of
@@ -138,7 +148,6 @@ depend libraries:
 
 
 ```
-$ export CONAN_V2_MODE=1
 $ CXX=clang conan profile new clang --detect
 ```
 
@@ -169,4 +178,3 @@ The same procedure for GCC.
 Also read
 - [Developer](doc/developer.md)
 - [ToDo](doc/todo.md)
-

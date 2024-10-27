@@ -120,7 +120,7 @@ endif()
 
 add_compile_options(
     #  ---- common warnings ----
-    # FixMe: [-Wundefined-func-template], BUT see:
+    # FixMe [CMake]: [-Wundefined-func-template], BUT see:
     #   https://www.reddit.com/r/cpp_questions/comments/8g5v3s/dealing_with_clang_warningerrors_re_static/
     # http://clang.llvm.org/docs/DiagnosticsReference.html
     "$<$<CXX_COMPILER_ID:Clang>:-Wall;-Wextra;-Wpedantic;-Wno-c11-extensions;-Wconversion>"
@@ -160,9 +160,13 @@ add_compile_options(
     # [-ftemplate-depth](https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Dialect-Options.html)
     # = 900
     "$<$<CXX_COMPILER_ID:GNU>:-ftemplate-backtrace-limit=0;-ftemplate-depth=1024>"
-    "$<$<CXX_COMPILER_ID:Clang>:-ftemplate-backtrace-limit=0;-ftemplate-depth=1024>"
+    #"$<$<CXX_COMPILER_ID:Clang>:-ftemplate-backtrace-limit=0;-ftemplate-depth=1024>"
+    # FixMe [CMake]: won't work on MSVC Clang frontend, hence won't compile with clang-cl
+    # [cmake]   Error evaluating generator expression:
+    # [cmake]   $<CMAKE_CXX_COMPILER_FRONTEND_VARIANT:MSVC>
+    # [cmake]   Expression did not evaluate to a known generator expression
+    "$<$<AND:$<CXX_COMPILER_ID:Clang>,$<NOT:$<CMAKE_CXX_COMPILER_FRONTEND_VARIANT:MSVC>>>:-ftemplate-backtrace-limit=0;-ftemplate-depth=1024>"
 )
-
 
 ## -----------------------------------------------------------------------------
 # Sanitize support and compiler options
@@ -300,7 +304,7 @@ if(CLANG_TIDY_FOUND)
     configure_file(${CMAKE_SOURCE_DIR}/.clang-tidy ${CMAKE_BINARY_DIR}/.clang-tidy COPYONLY)
 
     # Sanity check: If PCH is enabled, for some reasons at pch_default.hpp <CLI/CLI.hpp> is not found, hence disabled
-    # Todo: Fixme, this shouldn't happen, and why only CLI11?
+    # FixMe [CMake]: this shouldn't happen, and why only CLI11?
     if(IBIS_ENABLE_PCH_DEFAULT OR IBIS_ENABLE_PCH_IBIS)
         message(STATUS "=> Configure Fix: Clang tidy may trigger false positives if PCH is enabled, disabled")
         set(IBIS_ENABLE_PCH_DEFAULT OFF CACHE BOOL "PCH disabled due to use of clang-tidy" FORCE)
@@ -308,7 +312,7 @@ if(CLANG_TIDY_FOUND)
     endif()
 
     # Special handling for MSVC
-    # FixMe: Clang-Tidy and MSVC aren't compatible? Got error about: cannot use 'throw' with exceptions disabled [clang-diagnostic-error]
+    # FixMe [CMake]: Clang-Tidy and MSVC aren't compatible? Got error about: cannot use 'throw' with exceptions disabled [clang-diagnostic-error]
     if(MSVC)
         # CMAKE_CXX_CLANG_TIDY must be cleared, otherwise PCH header compiles with clang-tidy, why ever
         set(CMAKE_CXX_CLANG_TIDY "" CACHE STRING "")

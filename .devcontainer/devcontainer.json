@@ -63,7 +63,6 @@
 	"features": {
 		"git": "latest",
 		"github-cli": "latest",
-		"fish": "latest",
 		"python": "latest"
 	}
 }

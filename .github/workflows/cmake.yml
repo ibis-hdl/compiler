@@ -9,9 +9,6 @@ on:
   # [Manual triggers with workflow_dispatch](
   # https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/)
   workflow_dispatch:
-  
-env:
-  CONAN_V2_MODE : 1
 
 jobs:
   build:
@@ -20,7 +17,7 @@ jobs:
     strategy:
       matrix:
         os: [Linux, Windows]
-        
+
         include:
           - os: Linux
             cmake_preset: ci-linux
@@ -80,7 +77,7 @@ jobs:
       if: matrix.os == 'Linux'
       run: |
         cmake --build --preset ${{ matrix.cmake_preset }} --target l10n
-      
+
     - name: Run Unit Test
       run: |
         ctest --preset ${{ matrix.cmake_preset }}

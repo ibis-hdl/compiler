@@ -23,8 +23,6 @@ if [ $(stat --format '%U' "/workspaces") = "root" ]; then
     sudo chown -R vscode.vscode /workspaces
 fi
 
-export CONAN_V2_MODE=1
-
 pip3 --disable-pip-version-check --no-cache-dir install wheel conan
 
 # g++ is using new C++11 ABI (libstdc++11) with in Conan v2 mode
