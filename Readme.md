@@ -32,7 +32,7 @@ e.g., see [.devcontainer](https://github.com/ibis-hdl/compiler/tree/main/.devcon
 
 actually:
 
-* [Boost](https://www.boost.org/) 1.78
+* [Boost](https://www.boost.org/) 1.86
     - spirit X3 (header only)
     - system
     - filesystem
@@ -122,8 +122,6 @@ Than you can start to build, i.e.:
 > ctest --preset windows-msvc-release
 ...
 ```
-
-***Note:*** Boost Spirit X3 @1.78 [MSVC (VS 2023) fails to compile example/x3/annotation.cpp with /std:c++20 or /std:c++latest option #782](https://github.com/boostorg/spirit/issues/782)
 
 ### Build on Linux
 

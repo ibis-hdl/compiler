@@ -9,10 +9,10 @@ class IbisConan(ConanFile):
     generators = "CMakeDeps", "CMakeToolchain"
 
     def requirements(self):
-        self.requires('boost/1.78.0')
-        self.requires('cli11/2.2.0')
-        self.requires('fmt/8.1.1')
-        self.requires('range-v3/0.11.0')
+        self.requires('boost/1.86.0')
+        self.requires('cli11/2.4.2')
+        self.requires('fmt/11.0.2')
+        self.requires('range-v3/0.12.0')
 
     def layout(self):
         cmake_layout(self)

@@ -65,16 +65,6 @@ maybe by use of boost.log or spdlog.
 Generally, a lot of information go trough std::cerr without prefix or even using colorizing. E.g. on
 stacktrace_{gdb.boost} it's not clear what comes from what.
 
-## CMake build and Conan (v2)
-
-Consider use of CMake's [Unity Build Mode](https://cmake.org/cmake/help/latest/prop_tgt/UNITY_BUILD_MODE.html#prop_tgt:UNITY_BUILD_MODE).
-
-More serious is the up coming conan v2. Used [cmake-conan](https://github.com/conan-io/cmake-conan)
-isn't supported in 2022 any more. The way to use is *CMakeDeps* generator using  plain
-`conanfile.txt` with *CMakeDeps*, CMakeToolchain (and even the new [layout]). This will take
-time ... The problem behind is related to CMake's `find_package( .... OPTIONAL ...)` command which
-makes the optionals required (and hence results into configure error).
-
 ## Sources (`main` branch) related
 
 - **FixMe**: Before main's init() there is no text style/color functionality even in the
@@ -120,4 +110,3 @@ Maybe retire the `ibis/color` support and use `{fmt}` color support - which woul
 replaceable with std::format. Future C++ standards will show the way.
 
 Get a logo, e.g. ibis as mascot with assets
-
