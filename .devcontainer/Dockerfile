@@ -1,6 +1,4 @@
-# See here for image contents: https://github.com/microsoft/vscode-dev-containers/tree/v0.231.6/containers/cpp/.devcontainer/base.Dockerfile
-
-# [Choice] Debian / Ubuntu version (use Debian 11, Ubuntu 18.04/21.04 on local arm64/Apple Silicon): debian-11, debian-10, ubuntu-21.04, ubuntu-20.04, ubuntu-18.04
+# https://github.com/devcontainers/images/blob/main/src/cpp/README.md
 ARG VARIANT="ubuntu-22.04"
 FROM mcr.microsoft.com/vscode/devcontainers/cpp:0-${VARIANT}
 
@@ -20,4 +18,4 @@ RUN if [ "${REINSTALL_CMAKE_VERSION_FROM_SOURCE}" != "none" ]; then \
 
 # [Optional] Uncomment this section to install additional packages.
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends ccache g++-11 clang-14 clang-format clang-tidy doxygen graphviz gettext
+    && apt-get -y install --no-install-recommends ccache g++-11 clang-14 git clang-format clang-tidy doxygen graphviz gettext

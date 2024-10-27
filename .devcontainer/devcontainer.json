@@ -4,12 +4,11 @@
 	"name": "Linux C++",
 	"build": {
 		"dockerfile": "Dockerfile",
-		// Update 'VARIANT' to pick an Debian / Ubuntu OS version: debian-11, debian-10, debian-9, ubuntu-21.04, ubuntu-20.04, ubuntu-18.04
-		// Use Debian 11, Debian 9, Ubuntu 18.04 or Ubuntu 21.04 on local arm64/Apple Silicon
 		"args": {
 			"VARIANT": "ubuntu-22.04"
 		}
 	},
+
 	"runArgs": [
 		"--cap-add=SYS_PTRACE",
 		"--security-opt",
@@ -20,11 +19,10 @@
 		"NINJA_STATUS" : "[%f/%t (%es)] "
 	},
 
-	// Configure tool-specific properties.
 	"customizations": {
-		// Configure properties specific to VS Code.
 		"vscode": {
-			// Add the IDs of extensions you want installed when the container is created.
+			"settings": {},
+			// IDs of extensions you want installed when the container is created.
 			"extensions": [
 				"ms-vscode.cpptools",
 				"ms-vscode.cmake-tools",
@@ -32,7 +30,6 @@
 				"mutantdino.resourcemonitor",
 				"streetsidesoftware.code-spell-checker",
 				"hbenl.vscode-test-explorer",
-				"fredericbonnet.cmake-test-adapter",
 				"zcoinofficial.boost-test-adapter",
 				"xaver.clang-format",
 				"notskm.clang-tidy",
@@ -44,10 +41,9 @@
 	},
 
 	"mounts": [
-		// FixMe: volume not created automatically, run once
+		// if volume not created automatically, run once e.g.
 		// $ docker volume create conan_data
-		// FixMe: Mounted as root; the temporary fix is at scripts/postCreateCommand.sh
-		"source=conan_data,target=/home/vscode/.conan/data,type=volume",
+		"source=conan2_data,target=/home/vscode/.conan2,type=volume",
 		"source=ccache_data,target=/home/vscode/.cache,type=volume"
 	],
 
@@ -57,8 +53,8 @@
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "/bin/sh .devcontainer/scripts/postCreateCommand.sh",
 
-	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode",
+	"containerUser": "vscode",
 
 	"features": {
 		"git": "latest",

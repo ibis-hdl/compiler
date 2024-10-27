@@ -165,7 +165,7 @@ add_compile_options(
     # [cmake]   Error evaluating generator expression:
     # [cmake]   $<CMAKE_CXX_COMPILER_FRONTEND_VARIANT:MSVC>
     # [cmake]   Expression did not evaluate to a known generator expression
-    "$<$<AND:$<CXX_COMPILER_ID:Clang>,$<NOT:$<CMAKE_CXX_COMPILER_FRONTEND_VARIANT:MSVC>>>:-ftemplate-backtrace-limit=0;-ftemplate-depth=1024>"
+    #"$<$<AND:$<CXX_COMPILER_ID:Clang>,$<NOT:$<CMAKE_CXX_COMPILER_FRONTEND_VARIANT:MSVC>>>:-ftemplate-backtrace-limit=0;-ftemplate-depth=1024>"
 )
 
 ## -----------------------------------------------------------------------------

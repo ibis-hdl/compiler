@@ -140,22 +140,16 @@ $ source ~/.venv/bin/activate
 $ pip3 install conan
 ```
 
-create a profile for Conan, e.g. for use of Clang[^conan-clang-profile] as compiler of
-depend libraries:
-
-[^conan-clang-profile]: see [Detect libstdc++ ABI mode when using Clang on Linux #11886](
-  https://github.com/conan-io/conan/pull/11886)
-
+create a profile for Conan, e.g. for use of Clang as compiler for default profile:
 
 ```
-$ CXX=clang conan profile new clang --detect
+$ CXX=clang conan profile detect
 ```
 
 than you can start to build, i.e.:
 
 ```
-$ conan install . --install-folder conan/Release --remote=conancenter --profile:build=clang \
-  --build=missing --settings build_type=Release
+$ conan install . --settings=compiler.cppstd=17 -s "&:build_type=Debug" -s build_type=Release --output-folder build/conan --build=missing
 ...
 $ cmake --list-presets=all
 ...
