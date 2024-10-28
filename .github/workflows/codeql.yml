@@ -2,11 +2,11 @@ name: 'CodeQL Analysis'
 
 on:
   push:
-    branches: [ main ]
+    # branches: [ main ]
   pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [ main ]
-
+    # branches: [ main ]
+  # [Manual triggers with workflow_dispatch](
+  # https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/)
   workflow_dispatch:
 
 jobs:
@@ -26,19 +26,18 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Initialize CodeQL
       if: 'false' # skip repository not enabled for code scanning
-      uses: github/codeql-action/init@v2
+      uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
 
     - name: Autobuild
       if: 'false' # skip repository not enabled for code scanning
-      uses: github/codeql-action/autobuild@v2
+      uses: github/codeql-action/autobuild@v3
 
     - name: Perform CodeQL Analysis
       if: 'false' # skip repository not enabled for code scanning
-      uses: github/codeql-action/analyze@v2
-
+      uses: github/codeql-action/analyze@v3

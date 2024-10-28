@@ -64,13 +64,13 @@ initialized.
 The best to continue is to install [Python's virtual environment](https://docs.python.org/3/library/venv.html) (the option `--system-site-packages` allows usage of the site-packages from the global installation):
 
 ```
-> python3 -m venv .venv --system-site-packages
+> python -m venv .venv --system-site-packages
 ```
 
 You may use
 
 ```
-> pip3 -V
+> pip -V
 ```
 
 to check that you are running the virtual env (notice capital V) for now.
@@ -87,7 +87,7 @@ https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/abo
 Install [conan](https://conan.io/) as prerequisite to build the project:
 
 ```
-> pip3 install conan
+> pip install conan
 ```
 
 Afterwards you may create a profile for build of project's dependencies (or even overwrite

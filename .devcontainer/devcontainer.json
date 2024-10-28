@@ -27,6 +27,7 @@
 				"ms-vscode.cpptools",
 				"ms-vscode.cmake-tools",
 				"ms-python.python",
+				"github.vscode-github-actions",
 				"mutantdino.resourcemonitor",
 				"streetsidesoftware.code-spell-checker",
 				"hbenl.vscode-test-explorer",

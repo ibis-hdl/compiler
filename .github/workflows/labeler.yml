@@ -1,6 +1,8 @@
 # https://github.com/actions/labeler
 name: 'Pull Request Labeler'
-on: [pull_request]
+
+on:
+  pull_request:
 
 jobs:
   label:
@@ -13,4 +15,3 @@ jobs:
       with:
         repo-token: "${{ secrets.GITHUB_TOKEN }}"
         sync-labels: true
-
