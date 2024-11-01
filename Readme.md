@@ -24,7 +24,9 @@ e.g., see [.devcontainer](https://github.com/ibis-hdl/compiler/tree/main/.devcon
 * CMake 3.28
     - ninja 1.10
 
-* python 3 for conan and to generate some project files
+* python 3 for [Conan2](https://conan.io/) and for handling dependencies
+
+and
 
 * lot of memory, highly recommended more than 16GB
 
@@ -46,10 +48,6 @@ Until compilers' full C++20/23 support is there:
 * [{fmt}](https://github.com/fmtlib/fmt)
 * [range-v3](https://github.com/ericniebler/range-v3)
 
-By using [Conan2 package manager for C and C++](https://github.com/conan-io/conan) with
-[CMake wrapper](https://github.com/conan-io/cmake-conan) the libraries are build within
-the project. Note, the project aims to be ready for conan v2!
-
 ## Build
 
 ### Build on Windows
@@ -64,16 +62,8 @@ initialized.
 The best to continue is to install [Python's virtual environment](https://docs.python.org/3/library/venv.html) (the option `--system-site-packages` allows usage of the site-packages from the global installation):
 
 ```
-> python -m venv .venv --system-site-packages
+> py -m venv .venv --system-site-packages
 ```
-
-You may use
-
-```
-> pip -V
-```
-
-to check that you are running the virtual env (notice capital V) for now.
 
 If you run it from PowerShell, you may have to prepare the [Execution Policies](
 https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.2) before, see
@@ -81,10 +71,18 @@ https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/abo
 
 ```
 > Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
-> ./.venv/Scripts/activate.ps1
+> ./.venv/Scripts/activate
 ```
 
-Install [conan](https://conan.io/) as prerequisite to build the project:
+In PowerShell you may use `$ Get-Command python`, or even
+
+```
+> pip -V
+```
+
+to check that you are running the virtual env (notice capital V here) for now.
+
+Install [Conan](https://conan.io/) as prerequisite to build the project:
 
 ```
 > pip install conan
@@ -98,11 +96,25 @@ an existing one with `--force`), e.g. using default MSVC compiler from
 > conan profile detect --force
 ```
 
-or simply use CMake self for setting the ENV variable:
+or simply use [CMake](https://cmake.org) self for setting the ENV variable:
 
 ```
 > cmake -E env conan profile detect
 ```
+
+Now, you have to install the dependencies provided by [Conan](https://conan.io/):
+
+```
+> conan install . -s compiler.cppstd=17 --output-folder build/conan --build=missing
+...
+```
+
+Afterwards, you can disable Python's virtual environment by simply
+
+```
+> deactivate
+```
+
 
 Than you can start to build, i.e.:
 
@@ -131,24 +143,29 @@ Quite similar to Windows. I also recommend to use [Python's virtual environment]
 $ python3 -m venv .venv --system-site-packages
 ```
 
-and install [conan](https://conan.io/) as prerequisite:
+and install [Conan](https://conan.io/) as prerequisite:
 
 ```
 $ source ~/.venv/bin/activate
 $ pip3 install conan
 ```
 
-create a profile for Conan, e.g. for use of Clang as compiler for default profile:
+create a profile for [Conan](https://conan.io/), e.g. for use of Clang as compiler for default profile:
 
 ```
 $ CXX=clang conan profile detect
 ```
 
-than you can start to build, i.e.:
+Now, you have to install the dependencies provided by [Conan](https://conan.io/):
 
 ```
-$ conan install . --settings=compiler.cppstd=17 -s "&:build_type=Debug" -s build_type=Release --output-folder build/conan --build=missing
+> conan install . -s compiler.cppstd=17 --output-folder build/conan --build=missing
 ...
+```
+
+Than you can start to build, i.e.:
+
+```
 $ cmake --list-presets=all
 ...
 $ cmake --preset linux-clang-release

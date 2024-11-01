@@ -30,7 +30,7 @@ jobs:
       if: matrix.os == 'Linux'
       run: |
         sudo apt-get update
-        sudo apt-get install -y --no-install-recommends git ccache g++ clang clang-tools doxygen gettext
+        sudo apt-get install -y --no-install-recommends git ccache g++ clang clang-tools doxygen gettext python3-venv
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
