@@ -1,0 +1,91 @@
+name: 'CMake Build/Test'
+
+on:
+  push:
+  pull_request:
+  # [Manual triggers with workflow_dispatch](
+  # https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/)
+  workflow_dispatch:
+  
+jobs:
+
+  build:
+    name: Self-hosted Runner
+    runs-on: [self-hosted, x64]
+    strategy:
+      matrix:
+        # Note: assume Ubuntu-24.04
+        os: [Linux, Windows]
+        include:
+          - os: Linux
+            compiler:           "clang++"
+            configure_preset:   "clang"
+            build_preset:       "clang-release"
+            test_preset:        "clang-release-test"
+          - os: Windows
+            compiler:           "cl"
+            configure_preset:   "msvc"
+            build_preset:       "msvc-release"
+            test_preset:        "msvc-release-test"
+            vcvars:             "C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\VC\\Auxiliary\\Build\\vcvars64.bat"
+
+    env:
+      PYTHON_VERSION: "3.13"
+
+    steps:
+    - name: Install basic dependencies on ${{matrix.os}}
+      if: matrix.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install --no-install-recommends -y clang clang-tools clang-format clang-tidy ccache doxygen python3-pip python3-venv pipx gettext
+        pipx install virtualenv
+
+    - name: Install Conan package manager
+      if: matrix.os == 'Linux'
+      env:
+        CC: clang
+        CXX: clang++
+      run: |
+        virtualenv .venv
+        source .venv/bin/activate
+        pip install -r requirements.txt
+        # conan profile new --detect --force clang
+
+    - name: Install Conan package manager
+      if: matrix.os == 'Windows'
+      env:
+        CC: cl
+        CXX: cl      
+      run: |
+        virtualenv .win64-venv
+        .\.win64-venv\Scripts\activate
+        pip install -r requirements.txt
+        conan profile new --detect --force msvc
+        
+    - name: Install CMake and ninja
+      uses: lukka/get-cmake@v3.29.5
+
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+      with:
+        submodules: true
+
+    - name: Setup ccache Compiler Cache
+      # matrix.os == 'Linux'
+      if: false
+      uses: hendrikmuhs/ccache-action@v1.2.2
+
+    - name: Configure and Build
+      uses: lukka/run-cmake@v10
+      with:
+        configurePreset: ${{ matrix.configure_preset }}
+        buildPreset: ${{ matrix.build_preset }}
+
+    - name: Build l10n
+      if: matrix.os == 'Linux'
+      run: |
+        cmake --build --preset ${{ matrix.build_preset }} --target l10n
+      
+    - name: Run Unit Test
+      run: |
+        ctest --preset ${{ matrix.test_preset }}

@@ -2,17 +2,13 @@ name: 'CodeQL Analysis'
 
 on:
   push:
-    # branches: [ main ]
   pull_request:
-    # branches: [ main ]
-  # [Manual triggers with workflow_dispatch](
-  # https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/)
   workflow_dispatch:
 
 jobs:
   analyze:
     name: Analyze
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       actions: read
       contents: read
@@ -21,23 +17,32 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'cpp', 'python' ]
-        # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
+        include:
+          - language: cpp
+            build-mode: manual
+          - language: python
+            build-mode: autobuild
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        submodules: true
 
     - name: Initialize CodeQL
-      if: 'false' # skip repository not enabled for code scanning
       uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
 
-    - name: Autobuild
-      if: 'false' # skip repository not enabled for code scanning
-      uses: github/codeql-action/autobuild@v3
+    - if: ${{ matrix.build-mode == 'manual' }}
+      name: Build C++ code
+      run: |
+        sudo apt-get update && sudo apt-get install --no-install-recommends -y \
+          cmake ninja-build g++
+        pip --disable-pip-version-check --no-cache-dir install wheel conan
+        conan profile detect --force --name default
+        cmake --preset gcc
+        cmake --build --preset gcc-release
 
     - name: Perform CodeQL Analysis
-      if: 'false' # skip repository not enabled for code scanning
       uses: github/codeql-action/analyze@v3

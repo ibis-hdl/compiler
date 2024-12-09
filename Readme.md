@@ -3,6 +3,29 @@ IBIS HDL project
 
 This project aims to become a VHDL compiler.
 
+## Build the `update-2024` branch
+
+### on Windows
+
+Ensure you have VS 2022 (Community).
+
+```powershell
+> virtualenv .win64-venv
+...
+> .\.win64-venv\Scripts\activate
+> pip install -r requirements.txt
+...
+> py .\conan_install.py --profile msvc
+...
+> cmake --preset msvc
+...
+> cmake --build --preset msvc-release
+...
+> ctest.exe --preset msvc-release-test
+...
+```
+
+
 ## Project structure
 
 The project is divided into smaller sub project for maintenance. The idea is to developer parts

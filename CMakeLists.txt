@@ -36,19 +36,6 @@ list(APPEND
         ${PROJECT_SOURCE_DIR}/cmake/module
 )
 
-## CMake config modules from Conan2
-# Mote:
-# - Conan's path differ at Windows and Linux
-if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    set(CMAKE_CONAN_CONFIG_PATH build/conan/build/${CMAKE_BUILD_TYPE}/generators)
-elseif (CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    set(CMAKE_CONAN_CONFIG_PATH build/conan/build/generators)
-else()
-    message(FATAL_ERROR "CMAKE_SYSTEM_NAME ${CMAKE_SYSTEM_NAME} not supported.")
-endif()
-
-list(PREPEND CMAKE_PREFIX_PATH ${CMAKE_CONAN_CONFIG_PATH})
-
 include(prevent_in_source_builds)
 
 

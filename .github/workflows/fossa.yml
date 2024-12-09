@@ -2,22 +2,26 @@ name: FOSSA
 
 on:
   push:
-    # branches: [ main ]
   pull_request:
-    # branches: [ main ]
-  # [Manual triggers with workflow_dispatch](
-  # https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/)
   workflow_dispatch:
 
 jobs:
   fossa-scan:
     name: Fossa Scan
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          submodules: true
 
-      - name: FOSSA analysis
+      - name: FOSSA scan analysis
         uses: fossas/fossa-action@main
         with:
           api-key:  ${{ secrets.FOSSA_API_KEY }}
+
+      - name: FOSSA test analysis
+        uses: fossas/fossa-action@main
+        with:
+          api-key:  ${{ secrets.FOSSA_API_KEY }}
+          run-tests: true

@@ -1,38 +1,103 @@
 # https://github.com/actions/labeler
-# Note: https://github.com/actions/labeler/issues/103
-# - checkAll() equivalent to [Array.every()](https://www.tutorialspoint.com/typescript/typescript_array_every.htm)
-# - checkAny() equivalent to [Array.some()](https://www.tutorialspoint.com/typescript/typescript_array_some.htm)
-# - asterisk has a special meaning in yaml, hence quote it.
 
-repo:
-- '.*'
+github_actions:
+- changed-files:
+  - any-glob-to-any-file:
+    - '.github/**'
 
-workflow:
-- '.github/**'
+git:
+- all:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '.gitignore'
+      - '.gitattributes'
+      - '.gitmodules'
 
-dictionaries:
-- any: ['.dictionaries/**', '.cspell.json']
+vscode:
+- all:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '.vscode/settings.json'
+      - '.vscode/tasks.json'
+      - '.vscode/launch.json'
+
+cspell:
+- changed-files:
+  - any-glob-to-any-file:
+    - '.vscode/dictionaries/**'
+    - '.vscode/cspell.json'
 
 cmake:
-- 'cmake/**/*.cmake'
-- '**/CMakeLists.txt'
-- 'CMakePresets.json'
+- all:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'cmake/**/*.cmake'
+      - '**/CMakeLists.txt'
+      - 'CMakePresets.json'
+      - 'conanfile.py'
+    - all-globs-to-all-files:
+      - '!cmake/cmake-conan/**'
 
 python:
-- any: ['**/*.py', '**/*.py.in', 'requirements.txt', 'py_requirements.txt']
+- all:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.py'
+      - '**/*.py.in'
+      - 'requirements.txt'
+      - 'py_requirements.txt'
+    - all-globs-to-all-files:
+      - '!conanfile.py'
 
 doc:
-- any: ['doc/**', 'doc_ng/**', '**/*.{md,rst,txt}', '**/doxyfile.in', '**/*.dot']
-  all: ['!**/CMakeLists.txt']
+- all:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'doc/**'
+      - 'doc_ng/**'
+      - '**/*.{md,rst,txt}'
+      - '**/doxyfile.in'
+      - '**/*.dot'
+    - all-globs-to-all-files:
+      - '!**/CMakeLists.txt'
+      - '!requirements.txt'
+      - '!py_requirements.txt'
 
 l10n:
-- any: ['l10n/**']
-  all: ['!**/CMakeLists.txt']
+- all:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'l10n/**'
+    - all-globs-to-all-files:
+      - '!**/CMakeLists.txt'
 
 source:
-- any: ['source/**']
-  all: ['!**/CMakeLists.txt']
+- all:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'source/**'
+    - all-globs-to-all-files:
+      - '!**/CMakeLists.txt'
 
 testsuite:
-- any: ['testsuite/**']
-  all: ['!**/CMakeLists.txt']
+- all:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'testsuite/**'
+    - all-globs-to-all-files:
+      - '!**/CMakeLists.txt'
+
+# branch related
+
+feature:
+ - head-branch: ['^feature', 'feature', '^next', 'next']
+
+update:
+ - head-branch: ['^update', 'update', '^better', 'better']
+
+fix:
+ - head-branch: ['^fix', 'fix']
+
+# Add 'release' label to any PR that is opened against the `main` branch
+release:
+ - base-branch: 'main'

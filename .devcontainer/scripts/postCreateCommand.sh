@@ -4,39 +4,34 @@ set -ex
 
 # using docker volumes to store data; fix permissions as it's mounted as
 # root on Windows/Docker/WSL
-fix_container_permissions() {
-    # This script is running as user 'vscode'
-    echo "[devcontainer] '${0##*/}' runs as user '${SUDO_USER:-$USER}'"
+# intentionally not recursive, since volumes are mound-bind by docker
+apply_dir() {
+    local dir=$1
 
-    if [ ! -d "/home/vscode/.conan2" ]; then
-        sudo mkdir /home/vscode/.conan2 && chown -R vscode.vscode /home/vscode/.conan2
-    elif [ $(stat --format '%U' "/home/vscode/.conan2") = "root" ]; then
-        echo "[DevContainer] INFO: fix 'root' permissions for conan2"
-        sudo chown -R vscode.vscode /home/vscode/.conan2
-    fi
-
-    if [ ! -d "/home/vscode/.cache" ]; then
-        sudo mkdir /home/vscode/.cache && chown -R vscode.vscode /home/vscode/.cache
-    elif [ $(stat --format '%U' "/home/vscode/.cache") = "root" ]; then
-        echo "[DevContainer] INFO: fix 'root' permissions for ccache"
-        sudo chown -R vscode.vscode /home/vscode/.cache
-    fi
-
-    if [ $(stat --format '%U' "/workspaces") = "root" ]; then
-        echo "[DevContainer] INFO: fix 'root' permissions for workspaces folder"
-        # intentionally not recursive, since project is mound-bind by docker
-        sudo chown vscode.vscode /workspaces
+    echo "[DevContainer] INFO: check for '${dir}'"
+    if [ ! -d "${dir}" ]; then
+        sudo mkdir ${dir} && chown vscode:vscode "${dir}"
+    elif [ $(stat --format '%U' "${dir}") = "root" ]; then
+        echo "[DevContainer] INFO: fix 'root' permissions for '${dir}'"
+        sudo chown vscode:vscode "${dir}"
     fi
 }
 
-fix_container_permissions
+# using docker volumes to store data; fix permissions as it's mounted as
+# root on Windows/Docker/WSL
+# intentionally not recursive, since volumes are mound-bind by docker
+fix_volume_permissions() {
+    # This script is running as user 'vscode'
+    echo "[DevContainer] '${0##*/}' runs as user '${SUDO_USER:-$USER}'"
 
-pip3 --disable-pip-version-check --no-cache-dir install conan
+    if [ $(stat --format '%U' "/workspaces") = "root" ]; then
+        echo "[DevContainer] INFO: fix 'root' permissions for workspaces folder"
+        sudo chown vscode:vscode /workspaces
+    fi
 
-# create compiler preset for Conan2
-CXX=clang++ conan profile detect --force --name clang
-CXX=g++ conan profile detect --force --name gcc
-conan profile detect --force --name default
+    apply_dir "/home/vscode/.conan2"    # not required, but in case of ...
+    apply_dir "/home/vscode/.cache"     # not required, but in case of ...
+    apply_dir "/home/vscode/.ssh"
+}
 
-# apply project's Conan2 recipe for Release, Debug build
-conan install . --settings=compiler.cppstd=17 -s "&:build_type=Debug" -s build_type=Release --output-folder build/conan --build=missing
+fix_volume_permissions
