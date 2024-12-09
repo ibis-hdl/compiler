@@ -93,6 +93,10 @@ jobs:
         rem dir /s /b C:\\Users\\runneradmin\\.conan2
         echo $HOME
 
+    - name: Conan install
+      run: |
+        py conan_install.py --profile ${{ matrix.cmake.configure_preset }}
+            
     - name: CMake configuration
       shell: cmd
       env:

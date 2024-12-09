@@ -121,6 +121,10 @@ jobs:
         (cd ~/.conan2 && pwd)
         echo $HOME
 
+    - name: Conan install
+      run: |
+        python3 conan_install.py --profile ${{ matrix.cmake.configure_preset }}
+      
     - name: CMake configuration
       run: |
         # conan list '*'

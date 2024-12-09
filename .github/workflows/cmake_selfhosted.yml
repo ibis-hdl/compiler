@@ -75,6 +75,10 @@ jobs:
       if: false
       uses: hendrikmuhs/ccache-action@v1.2.2
 
+    - name: Conan install
+      run: |
+        python3 conan_install.py --profile ${{ matrix.configure_preset }}
+
     - name: Configure and Build
       uses: lukka/run-cmake@v10
       with:
