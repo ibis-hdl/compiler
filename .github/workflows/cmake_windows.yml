@@ -50,8 +50,7 @@ jobs:
 
     - name: Install required build dependencies on ${{ matrix.image }}
       run: |
-        choco install ninja
-        scoop install pipx
+        choco install ninja conan python3-virtualenv
 
     - name: Checkout Repo
       uses: actions/checkout@v4
@@ -59,14 +58,16 @@ jobs:
         submodules: true
 
     - name: Set Github runner's env (CXX=${{ matrix.cmake.compiler }})
-      shell: cmd    
+      shell: cmd
       run: |
         echo "CXX=${{ matrix.cmake.compiler }}" >> $GITHUB_ENV
 
     - name: Install conan package manager
+      # installed by Chocolatey before
+      if: false
       id: conan2
       run: |
-        # pip --disable-pip-version-check --no-cache-dir install pipx
+        pip --disable-pip-version-check --no-cache-dir install pipx
         pipx install virtualenv conan
 
     - name: Cache Conan2 dependencies
@@ -78,10 +79,12 @@ jobs:
           C:\\Users\\runneradmin\\.conan2
 
     - name: Create Conan2 profile (default, ${{ matrix.cmake.conan_profile }})
-      if: ${{ steps.conan2-cache.outputs.cache-hit != 'true' }}
+      if: steps.conan2-cache.outputs.cache-hit != 'true'
+      shell: cmd
       run: |
-        conan profile detect --force --name default
         conan profile detect --force --name ${{ matrix.cmake.conan_profile }}
+        copy ~/.conan2/profiles/${{ matrix.cmake.conan_profile }} ~/.conan2/profiles/default
+        conan profile show -pr=${{ matrix.cmake.conan_profile }}
 
     - name: Setup Github cache for compiler cache (Mozilla sccache-cache)
       uses: mozilla-actions/sccache-action@v0.0.6
@@ -93,21 +96,18 @@ jobs:
       shell: cmd
       run: |
         rem env
-        echo %cd%
-        dir
-        rem dir /s /b C:\\Users\\runneradmin\\.conan2
         echo $HOME
 
     - name: Conan install
       run: |
         py --version
         virtualenv .win64-venv
-        .win64-venv\Scripts\activate      
+        .win64-venv\Scripts\activate
         pip -V
         pip install multipledispatch
         py conan_install.py --profile ${{ matrix.cmake.conan_profile }}
         deactivate
-            
+
     - name: CMake configuration
       shell: cmd
       env:
@@ -117,7 +117,7 @@ jobs:
         CMAKE_CXX_COMPILER_LAUNCHER: "sccache"
       run: |
         call "${{ matrix.cmake.vcvars }}"
-        conan profile show -pr=${{ matrix.cmake.conan_profile }}
+        conan list '*'
         cmake --preset ${{ matrix.cmake.configure_preset }}
 
     - name: CMake build

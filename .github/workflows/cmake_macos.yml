@@ -76,8 +76,9 @@ jobs:
     - name: Create Conan2 profile (default, ${{ matrix.cmake.conan_profile }})
       if: ${{ steps.conan2-cache.outputs.cache-hit != 'true' }}
       run: |
-        conan profile detect --force --name default
         conan profile detect --force --name ${{ matrix.cmake.conan_profile }}
+        cp ~/.conan2/profiles/${{ matrix.cmake.conan_profile }} ~/.conan2/profiles/default
+        conan profile show -pr=${{ matrix.cmake.conan_profile }}
 
     - name: Setup Github cache for compiler cache (Mozilla sccache-cache)
       uses: mozilla-actions/sccache-action@v0.0.6
@@ -88,12 +89,7 @@ jobs:
       if: false
       shell: bash
       run: |
-        # env
-        pwd
-        ls -alF .
-        echo ${{ env.GITHUB_WORKSPACE }}
-        ls -alF  ~/.conan2
-        (cd ~/.conan2 && pwd)
+        env
         echo $HOME
 
     - name: Conan install
@@ -101,15 +97,15 @@ jobs:
         virtualenv .venv
         source .venv/bin/activate
         pip -V
-        pip install multipledispatch      
+        pip install multipledispatch
         python3 conan_install.py --profile ${{ matrix.cmake.conan_profile }}
         deactivate
-          
+
     - name: CMake configuration
       env:
         CMAKE_CXX_COMPILER_LAUNCHER: "sccache"
       run: |
-        conan profile show -pr=${{ matrix.cmake.conan_profile }}
+        conan list '*'
         cmake --preset ${{ matrix.cmake.configure_preset }}
 
     - name: CMake build

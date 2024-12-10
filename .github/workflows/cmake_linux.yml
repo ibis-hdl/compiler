@@ -78,7 +78,7 @@ jobs:
       id: conan2
       run: |
         pip --disable-pip-version-check --no-cache-dir install pipx
-        pipx install virtualenv conan     
+        pipx install virtualenv conan
 
     - name: Cache Conan2 dependencies
       id: conan2-cache
@@ -92,19 +92,18 @@ jobs:
       if: steps.conan2-cache.outputs.cache-hit != 'true'
       shell: bash
       run: |
-        conan profile detect --force --name default
+        conan profile detect --force --name ${{ matrix.cmake.conan_profile }}
         echo "Check to tweak Conan's profile to use libc++ ..."
         if [[ "${{ matrix.cmake.configure_preset }}" ==  *"libc++"* ]]; then
-          echo "... *is* required, add ${{ matrix.cmake.configure_preset }}"
-          sed -i ~/.conan2/profiles/default -E \
+          echo "... *is* required"
+          sed -i ~/.conan2/profiles/${{ matrix.cmake.conan_profile }} -E \
                   -e "s|^(compiler\.cppstd\s*)=(.*)$|\1=20|g" \
                   -e "s|^(compiler\.libcxx\s*)=(.*)$|\1=libc++|g"
-          cp ~/.conan2/profiles/default ~/.conan2/profiles/${{ matrix.cmake.conan_profile }}
-          conan profile show -pr default # ${{ matrix.cmake.conan_profile }}
         else
           echo "... not required."
-          conan profile show -pr default
         fi
+        cp ~/.conan2/profiles/${{ matrix.cmake.conan_profile }} ~/.conan2/profiles/default
+        conan profile show -pr=${{ matrix.cmake.conan_profile }}
 
     - name: Setup Github cache for compiler cache (ccache)
       uses: actions/cache@v4
@@ -118,10 +117,6 @@ jobs:
       if: false
       run: |
         env
-        pwd
-        echo "GITHUB_WORKSPACE = ${{ env.GITHUB_WORKSPACE }}"
-        ls -alF  ~/.conan2
-        (cd ~/.conan2 && pwd)
         echo $HOME
 
     - name: Conan install
@@ -132,13 +127,12 @@ jobs:
         pip install multipledispatch
         python3 conan_install.py --profile ${{ matrix.cmake.conan_profile }}
         deactivate
-      
+
     - name: CMake configuration
       env:
         CMAKE_CXX_COMPILER_LAUNCHER: "$(which ccache)"
       run: |
-        # conan list '*'
-        conan profile show -pr=${{ matrix.cmake.conan_profile }}
+        conan list '*'
         cmake --preset ${{ matrix.cmake.configure_preset }}
 
     - name: CMake build

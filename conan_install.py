@@ -8,7 +8,6 @@ from multipledispatch import dispatch
 
 class ConanInstaller:
     def __init__(self):
-
         match platform.system():
             case 'Linux':
                 self.python = 'python3'
@@ -29,8 +28,12 @@ class ConanInstaller:
                 # https://docs.python.org/3/library/platform.html#platform.system
                 raise Exception(f"Unsupported Platform {platform.system()}")
 
+        # Set C++ standard to C++20, to avoid warning about modified CMAKE_CXX_STANDARD
+        # value defined in conan_toolchain.cmake by ${workspaces}/compiler/CMakeLists.txt
+        self.cppstd = 20
         self.all_build_types = ['release', 'debug']
         self.all_profiles = ['default', 'gcc', 'clang', 'clang-libc++', 'msvc', 'msvc-cl']
+
         parser = argparse.ArgumentParser()
         parser.add_argument("--profile", help="Conan profile used to install.",
                             type=str, choices=self.valid_profiles)
@@ -40,6 +43,7 @@ class ConanInstaller:
             self.conan_profile = arg.profile
         else:
             self.conan_profile = 'default'
+
         print(f"using conan profile '{self.conan_profile}'")
 
     """
@@ -65,14 +69,10 @@ class ConanInstaller:
         if not conan_profile.lower() in self.all_profiles:
             raise Exception(f"Unsupported Conan profile '{conan_profile}'")
 
-        settings_cppstd=''
-        if self.conan_profile == 'msvc':
-            settings_cppstd="--settings compiler.cppstd=17"
-
         cmd_args = [
-            f"{settings_cppstd}",
+            f"--settings compiler.cppstd={self.cppstd}",
             f"--settings build_type={build_type}",
-            f"--conf tools.cmake.cmaketoolchain:generator={self.generator}",
+            f"--conf tools.cmake.cmaketoolchain:generator='{self.generator}'",
             f"--build=missing",
             f"--profile:all={conan_profile}"
         ]
