@@ -50,7 +50,9 @@ jobs:
 
     - name: Install required build dependencies on ${{ matrix.image }}
       run: |
-        choco install ninja conan # python3-virtualenv
+        choco install ninja
+        choco install conan /PathType:'User'
+        # python3-virtualenv
 
     - name: Checkout Repo
       uses: actions/checkout@v4
