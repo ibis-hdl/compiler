@@ -50,7 +50,7 @@ jobs:
 
     - name: Install required build dependencies on ${{ matrix.image }}
       run: |
-        choco install ninja conan python3-virtualenv
+        choco install ninja conan # python3-virtualenv
 
     - name: Checkout Repo
       uses: actions/checkout@v4
@@ -118,6 +118,7 @@ jobs:
       run: |
         call "${{ matrix.cmake.vcvars }}"
         conan list '*'
+        cmake --list-presets
         cmake --preset ${{ matrix.cmake.configure_preset }}
 
     - name: CMake build

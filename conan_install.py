@@ -12,17 +12,17 @@ class ConanInstaller:
             case 'Linux':
                 self.python = 'python3'
                 self.shell = ['bash', '-c']
-                self.generator = "'Ninja Multi-Config'"
+                self.generator = '"Ninja Multi-Config"'
                 self.valid_profiles = ['gcc', 'clang', 'clang-libc++']
             case 'Windows':
                 self.python = 'py'
                 self.shell = ['pwsh', '-Command']
-                self.generator = "'Ninja Multi-Config'"
+                self.generator = '"Ninja Multi-Config"'
                 self.valid_profiles = ['msvc', 'msvc-cl']
             case 'Darwin':
                 self.python = 'python3'
                 self.shell = ['bash', '-c']
-                self.generator = 'Ninja Multi-Config'
+                self.generator = '"Ninja Multi-Config"'
                 self.valid_profiles = ['clang', 'gcc']
             case _:
                 # https://docs.python.org/3/library/platform.html#platform.system
@@ -72,7 +72,7 @@ class ConanInstaller:
         cmd_args = [
             f"--settings compiler.cppstd={self.cppstd}",
             f"--settings build_type={build_type}",
-            f"--conf tools.cmake.cmaketoolchain:generator='{self.generator}'",
+            f"--conf tools.cmake.cmaketoolchain:generator={self.generator}",
             f"--build=missing",
             f"--profile:all={conan_profile}"
         ]

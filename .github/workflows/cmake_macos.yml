@@ -106,6 +106,7 @@ jobs:
         CMAKE_CXX_COMPILER_LAUNCHER: "sccache"
       run: |
         conan list '*'
+        cmake --list-presets
         cmake --preset ${{ matrix.cmake.configure_preset }}
 
     - name: CMake build
