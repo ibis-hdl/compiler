@@ -65,6 +65,7 @@ class ConanInstaller:
         if not conan_profile.lower() in self.all_profiles:
             raise Exception(f"Unsupported Conan profile '{conan_profile}'")
 
+        settings_cppstd=''
         if self.conan_profile == 'msvc':
             settings_cppstd="--settings compiler.cppstd=17"
 
