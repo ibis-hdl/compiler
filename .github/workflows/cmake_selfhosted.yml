@@ -19,11 +19,13 @@ jobs:
         include:
           - os: Linux
             compiler:           "clang++"
+            conan_profile:      "clang"           
             configure_preset:   "clang"
             build_preset:       "clang-release"
             test_preset:        "clang-release-test"
           - os: Windows
             compiler:           "cl"
+            conan_profile:      "msvc"            
             configure_preset:   "msvc"
             build_preset:       "msvc-release"
             test_preset:        "msvc-release-test"
@@ -33,35 +35,39 @@ jobs:
       PYTHON_VERSION: "3.13"
 
     steps:
-    - name: Install basic dependencies on ${{matrix.os}}
-      if: matrix.os == 'Linux'
-      run: |
-        sudo apt-get update
-        sudo apt-get install --no-install-recommends -y clang clang-tools clang-format clang-tidy ccache doxygen python3-pip python3-venv pipx gettext
-        pipx install virtualenv
-
-    - name: Install Conan package manager
+    - name: Install required build dependencies on ${{ matrix.os }}
       if: matrix.os == 'Linux'
       env:
         CC: clang
         CXX: clang++
       run: |
+        sudo apt-get update
+        sudo apt-get install --no-install-recommends -y clang clang-tools clang-format clang-tidy ccache doxygen python3-pip python3-venv pipx gettext
+        pipx install virtualenv conan
         virtualenv .venv
         source .venv/bin/activate
-        pip install -r requirements.txt
-        # conan profile new --detect --force clang
+        pip -V
+        pip install conan multipledispatch
+        conan profile new --detect default
+        conan profile new --detect ${{ matrix.conan_profile }}
+        python3 conan_install.py --profile ${{ matrix.configure_preset }}
+        deactivate
 
-    - name: Install Conan package manager
+    - name: Install required build dependencies on ${{ matrix.os }}
       if: matrix.os == 'Windows'
       env:
         CC: cl
         CXX: cl      
       run: |
-        virtualenv .win64-venv
+        py -m venv .win64-venv
         .\.win64-venv\Scripts\activate
-        pip install -r requirements.txt
-        conan profile new --detect --force msvc
-        
+        pip -V
+        pip install conan multipledispatch
+        conan profile new --detect default
+        conan profile new --detect ${{ matrix.conan_profile }}
+        py conan_install.py --profile ${{ matrix.configure_preset }}
+        deactivate
+         
     - name: Install CMake and ninja
       uses: lukka/get-cmake@v3.29.5
 
@@ -74,10 +80,6 @@ jobs:
       # matrix.os == 'Linux'
       if: false
       uses: hendrikmuhs/ccache-action@v1.2.2
-
-    - name: Conan install
-      run: |
-        python3 conan_install.py --profile ${{ matrix.configure_preset }}
 
     - name: Configure and Build
       uses: lukka/run-cmake@v10

@@ -20,18 +20,21 @@ jobs:
         cmake:
         - {
             compiler:           "g++",
+            conan_profile:      "gcc",
             configure_preset:   "gcc",
             build_preset:       "gcc-release",
             test_preset:        "gcc-release-test"
           }
         - {
             compiler:           "clang++",
+            conan_profile:      "clang",
             configure_preset:   "clang",
             build_preset:       "clang-release",
             test_preset:        "clang-release-test"
           }
         - {
             compiler:           "clang++",
+            conan_profile:      "clang-libc++",
             configure_preset:   "clang-libc++",
             build_preset:       "clang-libc++-release",
             test_preset:        "clang-libc++-release-test",
@@ -65,7 +68,6 @@ jobs:
       run: |
         {
           echo CXX=${{ matrix.cmake.compiler }}
-          echo CMAKE_CXX_COMPILER_LAUNCHER="$(which ccache)"
           echo CCACHE_DIR=${HOME}/.cache/ccache
           echo CCACHE_NOCOMPRESS=true   # GitHub actions automatically zstd compresses caches
         } >> "$GITHUB_ENV"
@@ -75,7 +77,8 @@ jobs:
     - name: Install Conan package manager
       id: conan2
       run: |
-        pip --disable-pip-version-check --no-cache-dir install wheel conan
+        pip --disable-pip-version-check --no-cache-dir install pipx
+        pipx install virtualenv conan     
 
     - name: Cache Conan2 dependencies
       id: conan2-cache
@@ -85,7 +88,7 @@ jobs:
         path: |
           ~/.conan2
 
-    - name: Create Conan2 (default) profile
+    - name: Create Conan2 profile (default, ${{ matrix.cmake.conan_profile }})
       if: steps.conan2-cache.outputs.cache-hit != 'true'
       shell: bash
       run: |
@@ -96,8 +99,8 @@ jobs:
           sed -i ~/.conan2/profiles/default -E \
                   -e "s|^(compiler\.cppstd\s*)=(.*)$|\1=20|g" \
                   -e "s|^(compiler\.libcxx\s*)=(.*)$|\1=libc++|g"
-          cp ~/.conan2/profiles/default ~/.conan2/profiles/${{ matrix.cmake.configure_preset }}
-          conan profile show -pr default # ${{ matrix.cmake.configure_preset }}
+          cp ~/.conan2/profiles/default ~/.conan2/profiles/${{ matrix.cmake.conan_profile }}
+          conan profile show -pr default # ${{ matrix.cmake.conan_profile }}
         else
           echo "... not required."
           conan profile show -pr default
@@ -123,12 +126,19 @@ jobs:
 
     - name: Conan install
       run: |
-        python3 conan_install.py --profile ${{ matrix.cmake.configure_preset }}
+        virtualenv .venv
+        source .venv/bin/activate
+        pip -V
+        pip install multipledispatch
+        python3 conan_install.py --profile ${{ matrix.cmake.conan_profile }}
+        deactivate
       
     - name: CMake configuration
+      env:
+        CMAKE_CXX_COMPILER_LAUNCHER: "$(which ccache)"
       run: |
         # conan list '*'
-        conan profile show
+        conan profile show -pr=${{ matrix.cmake.conan_profile }}
         cmake --preset ${{ matrix.cmake.configure_preset }}
 
     - name: CMake build

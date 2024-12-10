@@ -28,6 +28,7 @@ jobs:
         cmake:
         - {
             compiler:           "clang++",
+            conan_profile:      "clang",
             configure_preset:   "clang",
             build_preset:       "clang-release",
             test_preset:        "clang-release-test"
@@ -44,7 +45,7 @@ jobs:
       #  https://github.com/actions/runner-images/blob/main/images/macos/macos-15-Readme.md)
       run: |
         brew update
-        brew install ninja
+        brew install ninja pipx
         # set the path to homebrew's LLVM
         echo "$(brew --prefix llvm@18)/bin" >> $GITHUB_PATH
 
@@ -62,10 +63,7 @@ jobs:
       # cope with [PEP 668 – Marking Python base environments as “externally managed”](
       #  https://peps.python.org/pep-0668/).
       run: |
-        python3 -m venv .venv
-        source .venv/bin/activate
-        pip3 --disable-pip-version-check --no-cache-dir install wheel conan
-        deactivate
+        pipx install virtualenv conan
 
     - name: Cache Conan2 dependencies
       id: conan2-cache
@@ -75,12 +73,11 @@ jobs:
         path: |
           ~/.conan2
 
-    - name: Create Conan2 (default) profile
+    - name: Create Conan2 profile (default, ${{ matrix.cmake.conan_profile }})
       if: ${{ steps.conan2-cache.outputs.cache-hit != 'true' }}
       run: |
-        source .venv/bin/activate
         conan profile detect --force --name default
-        deactivate
+        conan profile detect --force --name ${{ matrix.cmake.conan_profile }}
 
     - name: Setup Github cache for compiler cache (Mozilla sccache-cache)
       uses: mozilla-actions/sccache-action@v0.0.6
@@ -101,24 +98,24 @@ jobs:
 
     - name: Conan install
       run: |
-        python3 conan_install.py --profile ${{ matrix.cmake.configure_preset }}
+        virtualenv .venv
+        source .venv/bin/activate
+        pip -V
+        pip install multipledispatch      
+        python3 conan_install.py --profile ${{ matrix.cmake.conan_profile }}
+        deactivate
           
     - name: CMake configuration
       env:
         CMAKE_CXX_COMPILER_LAUNCHER: "sccache"
       run: |
-        source .venv/bin/activate
+        conan profile show -pr=${{ matrix.cmake.conan_profile }}
         cmake --preset ${{ matrix.cmake.configure_preset }}
-        deactivate
 
     - name: CMake build
       run: |
-        source .venv/bin/activate
         cmake --build --preset ${{ matrix.cmake.build_preset }}
-        deactivate
 
     - name: Run Unit Test
       run: |
-        source .venv/bin/activate
         ctest --preset ${{ matrix.cmake.test_preset }}
-        deactivate
