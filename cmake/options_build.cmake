@@ -37,3 +37,8 @@ endif()
 if(IBIS_WITH_BOOST_STACKTRACE AND IBIS_WITH_GDB_STACKTRACE)
     message(FATAL_ERROR "Only one stacktrace option is useful and hence allowed.")
 endif()
+
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(IBIS_WITH_BOOST_STACKTRACE OFF CACHE BOOL "No stacktrace on Darwin" FORCE)
+    set(IBIS_WITH_GDB_STACKTRACE OFF CACHE BOOL "No gdb stacktrace on Darwin" FORCE)
+endif()
