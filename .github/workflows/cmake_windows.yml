@@ -50,10 +50,10 @@ jobs:
 
     - name: Install required build dependencies on ${{ matrix.image }}
       run: |
-        choco install ninja
-        choco install /PathType:'User' conan
+        choco install ninja conan
         dir  'C:\Program Files\Conan\'
-        # python3-virtualenv
+        # [Add-Content](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/add-content?view=powershell-7.2)
+        Add-Content $env:GITHUB_PATH "C:\Program Files\Conan\"
 
     - name: Checkout Repo
       uses: actions/checkout@v4

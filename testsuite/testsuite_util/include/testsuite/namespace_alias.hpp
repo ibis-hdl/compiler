@@ -5,29 +5,20 @@
 
 #pragma once
 
-namespace boost::spirit::x3 {
-}
-namespace boost::test_tools {
-}
-namespace boost::unit_test::framework {
-}
-namespace boost::unit_test::data {
-}
+// clang-format off
+namespace boost::spirit::x3 {}
+namespace boost::test_tools {}
+namespace boost::unit_test::framework {}
+namespace boost::unit_test::data {}
 
-// NOLINTNEXTLINE(cert-dcl58-cpp)
-namespace std::filesystem {
-}
-
-namespace ibis::vhdl::ast {
-}
-namespace ibis::vhdl::parser {
-}
-namespace ibis::vhdl::analyze {
-}
+namespace ibis::vhdl::ast {}
+namespace ibis::vhdl::parser {}
+namespace ibis::vhdl::analyze {}
+// clang-format on
 
 namespace testsuite {
 
-namespace fs = std::filesystem;
+//namespace fs = std::filesystem;
 
 namespace x3 = boost::spirit::x3;
 

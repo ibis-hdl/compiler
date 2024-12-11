@@ -130,7 +130,7 @@ jobs:
 
     - name: CMake configuration
       env:
-        CMAKE_CXX_COMPILER_LAUNCHER: $(which ccache)
+        CMAKE_CXX_COMPILER_LAUNCHER: ccache
       run: |
         conan list '*'
         cmake --list-presets
