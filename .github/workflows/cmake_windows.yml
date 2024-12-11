@@ -51,7 +51,8 @@ jobs:
     - name: Install required build dependencies on ${{ matrix.image }}
       run: |
         choco install ninja
-        choco install conan /PathType:'User'
+        choco install /PathType:'User' conan
+        dir  'C:\Program Files\Conan\'
         # python3-virtualenv
 
     - name: Checkout Repo
