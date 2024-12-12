@@ -94,14 +94,13 @@ jobs:
       run: |
         virtualenv .venv
         source .venv/bin/activate
-        pip -V
         pip install multipledispatch
         python3 conan_install.py --profile ${{ matrix.cmake.conan_profile }}
         deactivate
 
     - name: CMake configuration
       env:
-        CMAKE_CXX_COMPILER_LAUNCHER: "sccache"
+        CMAKE_CXX_COMPILER_LAUNCHER: sccache
       run: |
         conan list '*'
         cmake --list-presets

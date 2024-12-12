@@ -68,12 +68,12 @@ jobs:
         echo "CXX=${{ matrix.cmake.compiler }}" >> $GITHUB_ENV
 
     - name: Install conan package manager
+      id: conan2
       run: |
-        py -c "from Cython.Compiler.Version import version; print(version)"
         py --version
         py -m venv .win64-venv
         .\.win64-venv\Scripts\activate
-        pip install conan multipledispatch
+        pip install conan
         (get-command pip).source
         (get-command conan).source
         deactivate
@@ -110,8 +110,7 @@ jobs:
     - name: Conan install
       run: |
         .win64-venv\Scripts\activate
-        py --version
-        pip -V
+        pip install multipledispatch
         py conan_install.py --profile ${{ matrix.cmake.conan_profile }}
         deactivate
 
@@ -121,7 +120,7 @@ jobs:
         # Did run into trouble with Conan-CMake provider and sccache on build of
         # Debug build (Release works fine) ...
         # CMAKE_CXX_COMPILER_LAUNCHER: ${{ matrix.cmake.configure_preset != 'msvc' && 'sccache' || '' }}
-        CMAKE_CXX_COMPILER_LAUNCHER: "sccache"
+        CMAKE_CXX_COMPILER_LAUNCHER: sccache
       run: |
         call "${{ matrix.cmake.vcvars }}"
         conan list '*'
