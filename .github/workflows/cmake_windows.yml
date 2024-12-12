@@ -69,6 +69,7 @@ jobs:
 
     - name: Install conan package manager
       run: |
+        py -c "from Cython.Compiler.Version import version; print(version)"
         py --version
         py -m venv .win64-venv
         .\.win64-venv\Scripts\activate

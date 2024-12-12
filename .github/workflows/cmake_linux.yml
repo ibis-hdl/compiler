@@ -58,7 +58,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install --no-install-recommends -y \
-          cmake ninja-build ccache g++ clang "${{ matrix.cmake.depend_pkgs }}"
+          cmake ninja-build g++ clang "${{ matrix.cmake.depend_pkgs }}"
 
     - name: Checkout Repo
       uses: actions/checkout@v4
@@ -69,11 +69,7 @@ jobs:
       run: |
         {
           echo CXX=${{ matrix.cmake.compiler }}
-          echo CCACHE_DIR=${HOME}/.cache/ccache
-          echo CCACHE_NOCOMPRESS=true   # GitHub actions automatically zstd compresses caches
         } >> "$GITHUB_ENV"
-        # 10GB total for compile jobs and conan data, unlimited files
-        ccache --max-size 3GB --max-files 0
 
     - name: Install Conan package manager
       id: conan2
@@ -106,15 +102,6 @@ jobs:
         cp ~/.conan2/profiles/${{ matrix.cmake.conan_profile }} ~/.conan2/profiles/default
         conan profile show -pr=${{ matrix.cmake.conan_profile }}
 
-    - name: Setup Github cache for compiler cache (ccache)
-      if: false
-      uses: actions/cache@v4
-      with:
-        key: ${{ matrix.os }}-${{ matrix.cmake.compiler }}-ccache
-        path: |
-          ~/.config/ccache
-          ~/.cache/ccache
-
     - name: Setup Github cache for compiler cache (Mozilla sccache-cache)
       uses: mozilla-actions/sccache-action@v0.0.6
       env:
@@ -137,7 +124,6 @@ jobs:
 
     - name: CMake configuration
       env:
-        #CMAKE_CXX_COMPILER_LAUNCHER: ccache
         CMAKE_CXX_COMPILER_LAUNCHER: sccache
       run: |
         conan list '*'
@@ -152,7 +138,3 @@ jobs:
       continue-on-error: true
       run: |
         ctest --preset ${{ matrix.cmake.test_preset }}
-
-    - name: CCache statistics
-      run: |
-        ccache --show-stats

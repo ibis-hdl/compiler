@@ -12,6 +12,10 @@ class ConanInstaller:
         # match statements are a feature of Python 3.10
         assert python_ver > (3,10,0), f"Python > 3.10 required, got {platform.python_version()}"
 
+        # run into [[ENH] PEP 634 - Structural Pattern Matching #4029](
+        # https://github.com/cython/cython/issues/4029) even using Python > 3.10 on GH Windows 2022
+        # image which uses Cython 3.12
+        """"
         match platform.system():
             case 'Linux':
                 self.python = 'python3'
@@ -31,7 +35,26 @@ class ConanInstaller:
             case _:
                 # https://docs.python.org/3/library/platform.html#platform.system
                 raise Exception(f"Unsupported Platform {platform.system()}")
-
+        """
+        if (platform.system() == 'Linux'):
+            self.python = 'python3'
+            self.shell = ['bash', '-c']
+            self.generator = '"Ninja Multi-Config"'
+            self.valid_profiles = ['gcc', 'clang', 'clang-libc++']
+        elif (platform.system() == 'Windows'):
+            self.python = 'py'
+            self.shell = ['pwsh', '-Command']
+            self.generator = '"Ninja Multi-Config"'
+            self.valid_profiles = ['msvc', 'msvc-cl']            
+        elif (platform.system() == 'Darwin'):
+            self.python = 'python3'
+            self.shell = ['bash', '-c']
+            self.generator = '"Ninja Multi-Config"'
+            self.valid_profiles = ['clang', 'gcc']
+        else:
+            # https://docs.python.org/3/library/platform.html#platform.system
+            raise Exception(f"Unsupported Platform {platform.system()}")
+                
         # Set C++ standard to C++20, to avoid warning about modified CMAKE_CXX_STANDARD
         # value defined in conan_toolchain.cmake by ${workspaces}/compiler/CMakeLists.txt
         self.cppstd = 20
