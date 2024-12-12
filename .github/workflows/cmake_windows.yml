@@ -70,12 +70,12 @@ jobs:
     - name: Install conan package manager
       run: |
         py --version
-        py -${{ matrix.python_version }} -m pip install --user pipx
-        Add-Content $env:GITHUB_PATH "C:\Users\runneradmin\AppData\Roaming\Python\Python312\Scripts"
-        pipx install --python ${{ matrix.python_version }} virtualenv conan
-        (get-command pipx).source
-        (get-command virtualenv).source
+        py -m venv .win64-venv
+        .\.win64-venv\Scripts\activate
+        pip install conan multipledispatch
+        (get-command pip).source
         (get-command conan).source
+        deactivate
 
     - name: Cache Conan2 dependencies
       id: conan2-cache
@@ -88,9 +88,11 @@ jobs:
     - name: Create Conan2 profile (default, ${{ matrix.cmake.conan_profile }})
       if: steps.conan2-cache.outputs.cache-hit != 'true'
       run: |
+        .\.win64-venv\Scripts\activate
         conan profile detect --force --name ${{ matrix.cmake.conan_profile }}
         Copy-Item -Path $HOME\.conan2\profiles\${{ matrix.cmake.conan_profile }} -Destination $HOME\.conan2\profiles\default -Force
         conan profile show -pr=${{ matrix.cmake.conan_profile }}
+        deactivate
 
     - name: Setup Github cache for compiler cache (Mozilla sccache-cache)
       uses: mozilla-actions/sccache-action@v0.0.6
@@ -106,11 +108,9 @@ jobs:
 
     - name: Conan install
       run: |
-        py --version
-        virtualenv .win64-venv
         .win64-venv\Scripts\activate
+        py --version
         pip -V
-        py -${{ matrix.python_version }} -m pip install multipledispatch
         py conan_install.py --profile ${{ matrix.cmake.conan_profile }}
         deactivate
 

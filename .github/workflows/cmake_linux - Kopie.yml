@@ -107,18 +107,12 @@ jobs:
         conan profile show -pr=${{ matrix.cmake.conan_profile }}
 
     - name: Setup Github cache for compiler cache (ccache)
-      if: false
       uses: actions/cache@v4
       with:
         key: ${{ matrix.os }}-${{ matrix.cmake.compiler }}-ccache
         path: |
           ~/.config/ccache
           ~/.cache/ccache
-
-    - name: Setup Github cache for compiler cache (Mozilla sccache-cache)
-      uses: mozilla-actions/sccache-action@v0.0.6
-      env:
-        SCCACHE_GHA_ENABLED: "true"          
 
     - name: Show CMake configure and build pre-conditions
       if: false
@@ -137,8 +131,7 @@ jobs:
 
     - name: CMake configuration
       env:
-        #CMAKE_CXX_COMPILER_LAUNCHER: ccache
-        CMAKE_CXX_COMPILER_LAUNCHER: sccache
+        CMAKE_CXX_COMPILER_LAUNCHER: ccache
       run: |
         conan list '*'
         cmake --list-presets

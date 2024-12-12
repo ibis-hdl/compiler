@@ -10,7 +10,7 @@ class ConanInstaller:
     def __init__(self):
         python_ver=tuple(map(int, platform.python_version_tuple()))
         # match statements are a feature of Python 3.10
-        assert python_ver > (3,10,0), f"Python > 3.10 required, got {platform.python_version()}"
+        assert python_ver > (3,14,0), f"Python > 3.10 required, got {platform.python_version()}"
 
         match platform.system():
             case 'Linux':
@@ -103,7 +103,6 @@ class ConanInstaller:
         self.install(build_types, self.conan_profile)
 
 if __name__ == '__main__':
-    print(f"python version: {platform.python_version()}")
     conan = ConanInstaller()
     conan.removeConanPresetsJson('CMakeConanPresets.json')
     conan.install(['Debug', 'Release'])
