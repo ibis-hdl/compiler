@@ -21,7 +21,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # https://github.com/actions/runner-images/blob/main/images/windows/Windows2022-Readme.md
         image:    [ windows-2022 ]
         os:       [ windows ]
         cmake:
@@ -49,12 +48,13 @@ jobs:
         echo "Triggered by ${{ github.event_name }}"
 
     - name: Install required build dependencies on ${{ matrix.image }}
+      # https://github.com/actions/runner-images/blob/main/images/windows/Windows2022-Readme.md
       run: |
         choco install ninja
-        # choco install conan --params "/PathType:'Machine'"
+        # choco install conan --params "/PathType:'Machine'"  # PATH doesn't work with pwsh
         # [Add-Content](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/add-content?view=powershell-7.2)
         # Add-Content $env:GITHUB_PATH "C:\Program Files\Conan\conan"
-        pipx install virtualenv conan
+        # pipx install virtualenv   # Windows 2022 image, based on Python 3.9!!, match statements are a feature of Python 3.10
 
     - name: Checkout Repo
       uses: actions/checkout@v4
@@ -67,12 +67,10 @@ jobs:
         echo "CXX=${{ matrix.cmake.compiler }}" >> $GITHUB_ENV
 
     - name: Install conan package manager
-      # installed by Chocolatey before
-      if: false
-      id: conan2
       run: |
-        pip --disable-pip-version-check --no-cache-dir install pipx
-        pipx install virtualenv conan
+        py --version
+        py -m pip install --user pipx
+        pipx install virtualenv conan        
 
     - name: Cache Conan2 dependencies
       id: conan2-cache
@@ -104,7 +102,7 @@ jobs:
     - name: Conan install
       run: |
         py --version
-        virtualenv .win64-venv --python=python3.12
+        virtualenv .win64-venv
         .win64-venv\Scripts\activate
         pip -V
         pip install multipledispatch

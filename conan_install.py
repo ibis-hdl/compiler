@@ -8,6 +8,10 @@ from multipledispatch import dispatch
 
 class ConanInstaller:
     def __init__(self):
+        python_ver=tuple(map(int, platform.python_version_tuple()))
+        # match statements are a feature of Python 3.10
+        assert (python_ver > (3,10,0)), 'Python > 3.10 required'
+
         match platform.system():
             case 'Linux':
                 self.python = 'python3'
