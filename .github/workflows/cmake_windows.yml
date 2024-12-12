@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # https://github.com/actions/runner-images/blob/main/images/win/Windows2022-Readme.md
+        # https://github.com/actions/runner-images/blob/main/images/windows/Windows2022-Readme.md
         image:    [ windows-2022 ]
         os:       [ windows ]
         cmake:
@@ -50,10 +50,11 @@ jobs:
 
     - name: Install required build dependencies on ${{ matrix.image }}
       run: |
-        choco install ninja conan
-        dir  'C:\Program Files\Conan\conan'
+        choco install ninja
+        # choco install conan --params "/PathType:'Machine'"
         # [Add-Content](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/add-content?view=powershell-7.2)
-        Add-Content $env:GITHUB_PATH "C:\Program Files\Conan\conan"
+        # Add-Content $env:GITHUB_PATH "C:\Program Files\Conan\conan"
+        pipx install conan
 
     - name: Checkout Repo
       uses: actions/checkout@v4
@@ -83,10 +84,9 @@ jobs:
 
     - name: Create Conan2 profile (default, ${{ matrix.cmake.conan_profile }})
       if: steps.conan2-cache.outputs.cache-hit != 'true'
-      shell: cmd
       run: |
         conan profile detect --force --name ${{ matrix.cmake.conan_profile }}
-        copy ~/.conan2/profiles/${{ matrix.cmake.conan_profile }} ~/.conan2/profiles/default
+        Copy-Item -Path $HOME\.conan2\profiles\${{ matrix.cmake.conan_profile }} -Destination $HOME\.conan2\profiles\default -Force
         conan profile show -pr=${{ matrix.cmake.conan_profile }}
 
     - name: Setup Github cache for compiler cache (Mozilla sccache-cache)
@@ -131,5 +131,6 @@ jobs:
         cmake --build --preset ${{ matrix.cmake.build_preset }}
 
     - name: Run Unit Test
+      continue-on-error: true    
       run: |
-        ctest --preset ${{ matrix.cmake.test_preset }} || exit(0)
+        ctest --preset ${{ matrix.cmake.test_preset }}

@@ -22,7 +22,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # https://github.com/actions/runner-images/blob/main/images/macos/macos-15-Readme.md
         image:    [ macos-15 ]
         os:       [ macos ]
         cmake:
@@ -41,8 +40,7 @@ jobs:
         echo "Triggered by ${{ github.event_name }}"
 
     - name: Install required build dependencies on ${{ matrix.image }}
-      # [macOS15](
-      #  https://github.com/actions/runner-images/blob/main/images/macos/macos-15-Readme.md)
+      # https://github.com/actions/runner-images/blob/main/images/macos/macos-15-Readme.md
       run: |
         brew update
         brew install ninja pipx
@@ -114,5 +112,6 @@ jobs:
         cmake --build --preset ${{ matrix.cmake.build_preset }}
 
     - name: Run Unit Test
+      continue-on-error: true
       run: |
-        ctest --preset ${{ matrix.cmake.test_preset }} || exit(0)
+        ctest --preset ${{ matrix.cmake.test_preset }}
