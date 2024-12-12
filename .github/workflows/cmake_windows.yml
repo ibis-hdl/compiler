@@ -21,8 +21,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image:    [ windows-2022 ]
-        os:       [ windows ]
+        image:                  [ windows-2022 ]
+        os:                     [ windows ]
+        python_version:         [ "3.12" ]
         cmake:
         - {
             compiler:           "cl",
@@ -69,8 +70,11 @@ jobs:
     - name: Install conan package manager
       run: |
         py --version
-        py -m pip install --user pipx
-        pipx install virtualenv conan        
+        py -${{ matrix.python_version }} -m pip install --user pipx
+        pipx install --python ${{ matrix.python_version }} virtualenv conan
+        (get-command pipx).source
+        (get-command virtualenv).source
+        (get-command conan).source
 
     - name: Cache Conan2 dependencies
       id: conan2-cache
@@ -105,7 +109,7 @@ jobs:
         virtualenv .win64-venv
         .win64-venv\Scripts\activate
         pip -V
-        pip install multipledispatch
+        py -${{ matrix.python_version }} -m pip install multipledispatch
         py conan_install.py --profile ${{ matrix.cmake.conan_profile }}
         deactivate
 
