@@ -71,6 +71,7 @@ jobs:
       run: |
         py --version
         py -${{ matrix.python_version }} -m pip install --user pipx
+        Add-Content $env:GITHUB_PATH "C:\Users\runneradmin\AppData\Roaming\Python\Python312\Scripts"
         pipx install --python ${{ matrix.python_version }} virtualenv conan
         (get-command pipx).source
         (get-command virtualenv).source
