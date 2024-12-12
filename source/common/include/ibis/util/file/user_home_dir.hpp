@@ -10,11 +10,9 @@
 
 #include <ibis/namespace_alias.hpp>
 
-#if 0
 namespace ibis {
     namespace fs = std::filesystem;
 }
-#endif
 
 namespace ibis::util {
 

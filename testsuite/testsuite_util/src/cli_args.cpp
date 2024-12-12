@@ -19,11 +19,9 @@
 #include <filesystem>
 #include <iostream>
 
-#if 0
 namespace testsuite {
     namespace fs = std::filesystem;
 }
-#endif
 
 namespace testsuite::util {
 

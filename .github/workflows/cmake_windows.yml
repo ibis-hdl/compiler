@@ -104,7 +104,7 @@ jobs:
     - name: Conan install
       run: |
         py --version
-        virtualenv .win64-venv
+        virtualenv .win64-venv --python=python3.12
         .win64-venv\Scripts\activate
         pip -V
         pip install multipledispatch

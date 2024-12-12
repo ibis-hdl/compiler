@@ -17,7 +17,7 @@ namespace ibis::vhdl::analyze {}
 // clang-format on
 
 namespace testsuite {
-namespace fs = std::filesystem;
+//namespace fs = std::filesystem;  // can't fwd with libc++
 namespace x3 = boost::spirit::x3;
 // ToDo: Check for correct and intuitive aliases!
 namespace btt = boost::test_tools;
