@@ -17,9 +17,11 @@
 
 #include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
+#if 0
 namespace testsuite {
     namespace fs = std::filesystem;
 }
+#endif
 
 namespace testsuite::vhdl::ast {
 

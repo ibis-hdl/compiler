@@ -11,7 +11,7 @@ namespace boost::filesystem {}
 namespace boost::property_tree {}
 
 namespace ibis {
-
+namespace fs = std::filesystem;
 namespace x3 = boost::spirit::x3;
 namespace pt = boost::property_tree;
 namespace vhdl::ast {}

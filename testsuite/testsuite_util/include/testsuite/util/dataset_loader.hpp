@@ -16,9 +16,11 @@
 #include <vector>
 #include <filesystem>
 
+#if 0
 namespace testsuite {
     namespace fs = std::filesystem;
 }
+#endif
 
 namespace testsuite::util {
 

@@ -22,9 +22,11 @@
 
 #include <testsuite/namespace_alias.hpp>
 
+#if 0
 namespace testsuite {
     namespace fs = std::filesystem;
 }
+#endif
 
 namespace testsuite::vhdl::parser::util {
 
