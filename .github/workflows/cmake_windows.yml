@@ -70,14 +70,12 @@ jobs:
     - name: Install conan package manager
       id: conan2
       run: |
-        py --version
-        py -m venv .win64-venv
-        (get-command py).Path
-        (get-command python).Path
+        py -${{ matrix.python_version }} --version
+        py -${{ matrix.python_version }} -m pip -V
+        py -${{ matrix.python_version }} -m venv .win64-venv
         .\.win64-venv\Scripts\activate
-        .win64-venv\Scripts\python.exe
-        py -m pip -V
-        py -m pip install conan
+        py -${{ matrix.python_version }} -m pip install conan
+        .win64-venv\Scripts\python.exe --version
         deactivate
 
     - name: Cache Conan2 dependencies
@@ -112,12 +110,8 @@ jobs:
     - name: Conan install
       run: |
         .win64-venv\Scripts\activate
-        .win64-venv\Scripts\python.exe --version
-        py -m pip install signature_dispatch
-        py -m pip --version
-        py -c "import sys; print(sys.executable)"
-        py -m pip freeze
-        py conan_install.py --profile ${{ matrix.cmake.conan_profile }}
+        py -${{ matrix.python_version }} -m pip install multipledispatch signature_dispatch
+        py -${{ matrix.python_version }} conan_install.py --profile ${{ matrix.cmake.conan_profile }}
         deactivate
 
     - name: CMake configuration

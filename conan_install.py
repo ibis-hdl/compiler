@@ -13,7 +13,7 @@ class ConanInstaller:
     def __init__(self):
         python_ver=tuple(map(int, platform.python_version_tuple()))
         # match statements are a feature of Python 3.10
-        #assert python_ver > (3,10,0), f"Python > 3.10 required, got {platform.python_version()}"
+        assert python_ver > (3,10,0), f"Python > 3.10 required, got {platform.python_version()}"
 
         # run into [[ENH] PEP 634 - Structural Pattern Matching #4029](
         # https://github.com/cython/cython/issues/4029) even using Python > 3.10 on GH Windows 2022
