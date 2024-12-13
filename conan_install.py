@@ -14,27 +14,11 @@ class ConanInstaller:
 
         # run into [[ENH] PEP 634 - Structural Pattern Matching #4029](
         # https://github.com/cython/cython/issues/4029) even using Python > 3.10 on GH Windows 2022
-        # image which uses Cython 3.12
+        # image which uses Cython 3.12, so this won't work:
         """"
         match platform.system():
             case 'Linux':
-                self.python = 'python3'
-                self.shell = ['bash', '-c']
-                self.generator = '"Ninja Multi-Config"'
-                self.valid_profiles = ['gcc', 'clang', 'clang-libc++']
-            case 'Windows':
-                self.python = 'py'
-                self.shell = ['pwsh', '-Command']
-                self.generator = '"Ninja Multi-Config"'
-                self.valid_profiles = ['msvc', 'msvc-cl']
-            case 'Darwin':
-                self.python = 'python3'
-                self.shell = ['bash', '-c']
-                self.generator = '"Ninja Multi-Config"'
-                self.valid_profiles = ['clang', 'gcc']
-            case _:
-                # https://docs.python.org/3/library/platform.html#platform.system
-                raise Exception(f"Unsupported Platform {platform.system()}")
+                ...
         """
         if (platform.system() == 'Linux'):
             self.python = 'python3'
@@ -51,6 +35,11 @@ class ConanInstaller:
             self.shell = ['bash', '-c']
             self.generator = '"Ninja Multi-Config"'
             self.valid_profiles = ['clang', 'gcc']
+        elif (platform.system() == 'FreeBSD'):
+            self.python = 'python3'
+            self.shell = ['bash', '-c']
+            self.generator = '"Ninja Multi-Config"'
+            self.valid_profiles = ['clang']  
         else:
             # https://docs.python.org/3/library/platform.html#platform.system
             raise Exception(f"Unsupported Platform {platform.system()}")

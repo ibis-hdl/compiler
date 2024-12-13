@@ -111,6 +111,7 @@ jobs:
         py -m pip install multipledispatch
         py -m pip --version
         py -c "import sys; print(sys.executable)"
+        py -m pip freeze
         py conan_install.py --profile ${{ matrix.cmake.conan_profile }}
         deactivate
 
