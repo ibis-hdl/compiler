@@ -1,6 +1,7 @@
 autobuild
 ccache
 choco
+cmaketoolchain
 conanfile
 cppstd
 ctest
