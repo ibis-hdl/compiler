@@ -72,6 +72,8 @@ jobs:
       run: |
         py --version
         py -m venv .win64-venv
+        (get-command py).Path
+        (get-command python).Path
         .\.win64-venv\Scripts\activate
         py -m pip install conan
         deactivate

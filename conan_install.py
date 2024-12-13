@@ -3,8 +3,8 @@
 import subprocess
 import platform
 import argparse
+import signature_dispatch
 from pathlib import Path
-from multipledispatch import dispatch
 
 class ConanInstaller:
     def __init__(self):
@@ -77,7 +77,7 @@ class ConanInstaller:
             print(f"remove former generated Conan CMake preset '{file_name}'")
             Path(file_name).unlink(missing_ok=True)
 
-    @dispatch(str, str)
+    @signature_dispatch
     def install(self, build_type: str, conan_profile: str) -> None:
 
         if not build_type.lower() in self.all_build_types:
@@ -105,12 +105,12 @@ class ConanInstaller:
                 f"Returned {e.returncode}\n{e}"
             )
 
-    @dispatch(list, str)
+    @signature_dispatch
     def install(self, build_types: list, conan_profile: str) -> None:
         for build_type in build_types:
             self.install(build_type, conan_profile)
 
-    @dispatch(list)
+    @signature_dispatch
     def install(self, build_types: list) -> None:
         self.install(build_types, self.conan_profile)
 
