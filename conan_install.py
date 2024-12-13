@@ -3,8 +3,11 @@
 import subprocess
 import platform
 import argparse
-import signature_dispatch
 from pathlib import Path
+
+# Neither 'multipledispatch' nor 'signature_dispatch' work on Github's Windows 2022 action runner, 
+# always get the error e.g.: ModuleNotFoundError: No module named 'signature_dispatch'
+# Hence, no function overload and ugly function naming of install{1,2,3}
 
 class ConanInstaller:
     def __init__(self):
@@ -77,8 +80,8 @@ class ConanInstaller:
             print(f"remove former generated Conan CMake preset '{file_name}'")
             Path(file_name).unlink(missing_ok=True)
 
-    @signature_dispatch
-    def install(self, build_type: str, conan_profile: str) -> None:
+    #@signature_dispatch
+    def install3(self, build_type: str, conan_profile: str) -> None:
 
         if not build_type.lower() in self.all_build_types:
             raise Exception(f"Unsupported CMAKE_BUILD_TYPE '{build_type}'")
@@ -105,14 +108,14 @@ class ConanInstaller:
                 f"Returned {e.returncode}\n{e}"
             )
 
-    @signature_dispatch
-    def install(self, build_types: list, conan_profile: str) -> None:
+    #@signature_dispatch
+    def install2(self, build_types: list, conan_profile: str) -> None:
         for build_type in build_types:
-            self.install(build_type, conan_profile)
+            self.install3(build_type, conan_profile)
 
-    @signature_dispatch
+    #@signature_dispatch
     def install(self, build_types: list) -> None:
-        self.install(build_types, self.conan_profile)
+        self.install2(build_types, self.conan_profile)
 
 if __name__ == '__main__':
     conan = ConanInstaller()
