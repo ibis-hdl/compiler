@@ -75,6 +75,8 @@ jobs:
         (get-command py).Path
         (get-command python).Path
         .\.win64-venv\Scripts\activate
+        .win64-venv\Scripts\python.exe
+        py -m pip -V
         py -m pip install conan
         deactivate
 
@@ -110,6 +112,7 @@ jobs:
     - name: Conan install
       run: |
         .win64-venv\Scripts\activate
+        .win64-venv\Scripts\python.exe --version
         py -m pip install signature_dispatch
         py -m pip --version
         py -c "import sys; print(sys.executable)"
