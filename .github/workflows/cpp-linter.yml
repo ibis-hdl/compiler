@@ -12,32 +12,49 @@ jobs:
     steps:
     - name: Install basic dependencies
       run: |
-        sudo apt-get update
-        sudo apt-get install --no-install-recommends -y cmake ninja-build ccache clang clang-tools
+        sudo apt-get update && sudo apt-get install --no-install-recommends -y \
+          cmake ninja-build clang clang-tools
 
     - name: Checkout Repo
       uses: actions/checkout@v4
       with:
         submodules: true
 
-    - name: Install Conan package manager
+    - name: Set Github runner's env (CXX=clang++)
       run: |
-        pip --disable-pip-version-check --no-cache-dir install wheel conan
+        {
+          echo CXX=clang++
+        } >> "$GITHUB_ENV"
+
+    - name: Install Conan package manager
+      id: conan2    
+      run: |
+        pip --disable-pip-version-check --no-cache-dir install pipx
+        pipx install virtualenv conan
 
     - name: Cache Conan2' dependencies
       id: conan2-cache
       uses: actions/cache@v4
       with:
-        key: ${{ runner.os }}-conan-${{ hashFiles('conanfile.py') }}
+        key: linux-clang--conan-${{ hashFiles('conanfile.py') }}
         path: |
           ~/.conan2
 
-    - name: Check the state of installed dependencies by Conan2
-      if: ${{ steps.conan2-cache.outputs.cache-hit != 'true' }}
-      # note, no build required for linting but it fills the cache!
+    - name: Create Conan2 profile
+      if: steps.conan2-cache.outputs.cache-hit != 'true'
+      # note, no build required for linting
       run: |
-        CXX=clang conan profile detect --force --name default
+        conan profile detect --force --name clang
+        cp ~/.conan2/profiles/clang ~/.conan2/profiles/default
 
+    - name: Conan install
+      run: |
+        virtualenv .venv
+        source .venv/bin/activate
+        pip install multipledispatch
+        python3 conan_install.py --profile clang
+        deactivate
+        
     - name: CMake configuration
       run: |
         cmake --preset clang
@@ -57,6 +74,6 @@ jobs:
         thread-comments: ${{ github.event_name == 'pull_request' && 'update' }}
 
     - name: Check for passed C++ checks
-      if: steps.linter.outputs.checks-failed > 0
+      if: steps.cpp-linter.outputs.checks-failed > 0
       run: |
         echo "Some files failed the Clang tidy/format checks!"

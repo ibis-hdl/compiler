@@ -31,20 +31,30 @@ jobs:
     - name: Install Conan package manager
       id: conan2
       run: |
-        pip --disable-pip-version-check --no-cache-dir install wheel conan
+        pip --disable-pip-version-check --no-cache-dir install pipx
+        pipx install virtualenv conan
 
-    - name: Cache Conan2 dependencies
+    - name: Cache Conan2
       id: conan2-cache
       uses: actions/cache@v4
       with:
-        key: ${{ runner.os }}-conan-${{ hashFiles('conanfile.py') }}
+        key: linux-clang-conan-${{ hashFiles('conanfile.py') }}
         path: |
           ~/.conan2
 
-    - name: Check the state of installed dependencies by Conan2
-      if: ${{ steps.conan2-cache.outputs.cache-hit != 'true' }}
+    - name: Create Conan2 profile
+      if: steps.conan2-cache.outputs.cache-hit != 'true'
       run: |
-        conan profile detect --force --name default
+        conan profile detect --force --name clang
+        cp ~/.conan2/profiles/clang ~/.conan2/profiles/default
+   
+    - name: Conan install
+      run: |
+        virtualenv .venv
+        source .venv/bin/activate
+        pip install multipledispatch
+        python3 conan_install.py --profile clang
+        deactivate
 
     - name: CMake configuration
       run: |

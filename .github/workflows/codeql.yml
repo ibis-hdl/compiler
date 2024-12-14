@@ -20,6 +20,9 @@ jobs:
         include:
           - language: cpp
             build-mode: manual
+            conan_profile: gcc
+            cmake_configure_preset: gcc
+            cmake_build_preset: gcc-release
           - language: python
             build-mode: autobuild
 
@@ -35,14 +38,44 @@ jobs:
         languages: ${{ matrix.language }}
 
     - if: ${{ matrix.build-mode == 'manual' }}
+      name: Cache Conan2
+      uses: actions/cache@v4
+      with:
+        key: linux-${{ matrix.cmake_configure_preset }}-conan-${{ hashFiles('conanfile.py') }}
+        path: |
+          ~/.conan2
+
+    - if: ${{ matrix.build-mode == 'manual' }}
+      name: Cache Compiler (Mozilla sccache-cache)
+      uses: mozilla-actions/sccache-action@v0.0.6
+      env:
+        SCCACHE_GHA_ENABLED: "true"      
+          
+    - if: ${{ matrix.build-mode == 'manual' }}
       name: Build C++ code
+      env:
+        CXX: g++
+        CMAKE_CXX_COMPILER_LAUNCHER: sccache
       run: |
+        # update OS
         sudo apt-get update && sudo apt-get install --no-install-recommends -y \
           cmake ninja-build g++
-        pip --disable-pip-version-check --no-cache-dir install wheel conan
-        conan profile detect --force --name default
-        cmake --preset gcc
-        cmake --build --preset gcc-release
+        # Install python utils
+        pip --disable-pip-version-check --no-cache-dir install pipx
+        pipx install virtualenv conan
+        # Conan profile
+        conan profile detect --force --name ${{ matrix.conan_profile }}
+        # Conan Install
+        virtualenv .venv
+        source .venv/bin/activate
+        pip install multipledispatch
+        python3 conan_install.py --profile ${{ matrix.conan_profile }}
+        deactivate
+        # CMake Configure && Build
+        conan list '*'
+        cmake --list-presets        
+        cmake --preset ${{ matrix.cmake_configure_preset }}
+        cmake --build --preset $${{ matrix.cmake_build_preset }}
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3

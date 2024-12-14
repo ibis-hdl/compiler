@@ -39,7 +39,7 @@ Some projects exist temporary twice, not yet mature enough to replace the old ap
 e.g., see [.devcontainer](https://github.com/ibis-hdl/compiler/tree/main/.devcontainer)
 
 * C++20 compliant compiler; developed and tested with the big three:
-    - Visual Studio 2022 Developer Command Prompt v17.11.5 (not clang-cl due to missing Cmake
+    - Visual Studio 2022 Developer Command Prompt v17.11.5 (not clang-cl due to missing CMake
       support on project's side at this time)
     - clang++ 18
     - g++ 13
@@ -119,7 +119,7 @@ an existing one with `--force`), e.g. using default MSVC compiler from
 > conan profile detect --force
 ```
 
-or simply use [CMake](https://cmake.org) self for setting the ENV variable:
+or simply use [CMake](https://cmake.org) self for setting the environment variable:
 
 ```
 > cmake -E env conan profile detect
