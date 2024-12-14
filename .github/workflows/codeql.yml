@@ -57,6 +57,7 @@ jobs:
         CXX: g++
         CMAKE_CXX_COMPILER_LAUNCHER: sccache
       run: |
+        # one-block build
         # update OS
         sudo apt-get update && sudo apt-get install --no-install-recommends -y \
           cmake ninja-build g++
@@ -75,7 +76,7 @@ jobs:
         conan list '*'
         cmake --list-presets        
         cmake --preset ${{ matrix.cmake_configure_preset }}
-        cmake --build --preset $${{ matrix.cmake_build_preset }}
+        cmake --build --preset ${{ matrix.cmake_build_preset }}
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
