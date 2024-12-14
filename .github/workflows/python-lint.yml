@@ -22,12 +22,7 @@ jobs:
 
     - name: Gather Python files from git
       run: |
-        # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#multiline-strings
-        {
-          echo 'PYTHON_FILES<<EOF'
-          $(git ls-files '*.py')
-          echo EOF
-        } >> "$GITHUB_ENV"
+        echo "PYTHON_FILES=$(for py in $(git ls-files '*.py'); do echo -n "$py "; done)" >> "$GITHUB_ENV"
 
     - name: autopep8
       id: autopep8
@@ -79,12 +74,7 @@ jobs:
 
     - name: Gather Python files from git
       run: |
-        # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#multiline-strings
-        {
-          echo 'PYTHON_FILES<<EOF'
-          $(git ls-files '*.py')
-          echo EOF
-        } >> "$GITHUB_ENV"
+        echo "PYTHON_FILES=$(for py in $(git ls-files '*.py'); do echo -n "$py "; done)" >> "$GITHUB_ENV"
 
     - name: Analyzing the Python code
       uses: ricardochaves/python-lint@v1.4.0
