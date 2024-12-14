@@ -23,7 +23,6 @@ jobs:
       matrix:
         image:                  [ windows-2022 ]
         os:                     [ windows ]
-        python_version:         [ "3.12" ]
         cmake:
         - {
             compiler:           "cl",
@@ -70,12 +69,9 @@ jobs:
     - name: Install conan package manager
       id: conan2
       run: |
-        py -${{ matrix.python_version }} --version
-        py -${{ matrix.python_version }} -m pip -V
-        py -${{ matrix.python_version }} -m venv .win64-venv
+        py -m venv .win64-venv
         .\.win64-venv\Scripts\activate
-        py -${{ matrix.python_version }} -m pip install conan
-        .win64-venv\Scripts\python.exe --version
+        py -m pip install conan
         deactivate
 
     - name: Cache Conan2 dependencies
@@ -110,8 +106,8 @@ jobs:
     - name: Conan install
       run: |
         .win64-venv\Scripts\activate
-        py -${{ matrix.python_version }} -m pip install multipledispatch signature_dispatch
-        py -${{ matrix.python_version }} conan_install.py --profile ${{ matrix.cmake.conan_profile }}
+        py -m pip install multipledispatch
+        py conan_install.py --profile ${{ matrix.cmake.conan_profile }}
         deactivate
 
     - name: CMake configuration
