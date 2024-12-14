@@ -1,3 +1,5 @@
+autopep
 multipledispatch
 pipx
+pylint
 virtualenv
