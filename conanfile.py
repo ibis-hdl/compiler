@@ -31,7 +31,7 @@ class IbisConan(ConanFile):
         tc.generate()
         # remove buildPresets/jobs since we'll use own calculation, see: conan-io #16036
         conan_jobs = False
-        if(not conan_jobs):
+        if not conan_jobs:
             presets = json.loads(load(self, "CMakePresets.json"))
             for element in presets['buildPresets']:
                 if element.get("jobs") is not None:
