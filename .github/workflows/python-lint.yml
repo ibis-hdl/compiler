@@ -9,7 +9,7 @@ jobs:
 
   autopep8:
     # Check if the PR is not raised by this workflow
-    if: startsWith(github.head_ref, 'autopep8-patches') == false  && github.event.pull_request.head.repo.full_name == github.repository
+    if: startsWith(github.head_ref, 'autopep8-patches') == false # && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
     steps:
 

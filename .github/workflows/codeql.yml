@@ -19,12 +19,10 @@ jobs:
       matrix:
         include:
           - language: cpp
-            build-mode: manual
             conan_profile: gcc
             cmake_configure_preset: gcc
             cmake_build_preset: gcc-release
           - language: python
-            build-mode: autobuild
 
     steps:
     - name: Checkout repository
@@ -36,9 +34,9 @@ jobs:
       uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
-        build-mode: ${{ matrix.build-mode }}
 
-    - if: ${{ matrix.build-mode == 'manual' }}
+    - if: ${{ matrix.language == 'cpp' }}
+      # build-mode: manual
       name: Cache Conan2
       uses: actions/cache@v4
       with:
@@ -46,13 +44,15 @@ jobs:
         path: |
           ~/.conan2
 
-    - if: ${{ matrix.build-mode == 'manual' }}
+    - if: ${{ matrix.language == 'cpp' }}
+      # build-mode: manual
       name: Cache Compiler (Mozilla sccache-cache)
       uses: mozilla-actions/sccache-action@v0.0.6
       env:
         SCCACHE_GHA_ENABLED: "true"      
           
-    - if: ${{ matrix.build-mode == 'manual' }}
+    - if: ${{ matrix.language == 'cpp' }}
+      # build-mode: manual
       name: Build C++ code
       env:
         CXX: g++
