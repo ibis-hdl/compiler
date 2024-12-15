@@ -10,7 +10,7 @@
       ".git",
       ".gitignore",
       "*.log",
-      "**/__snapshots__/**"
+      "build/**"
    ],
    "dictionaryDefinitions": [
       {

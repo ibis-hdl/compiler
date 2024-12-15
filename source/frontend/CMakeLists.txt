@@ -28,6 +28,7 @@ target_link_libraries(${PROJECT_NAME}
         Boost::locale
         Boost::filesystem   # Boost::process depends on
         CLI11::CLI11
+        rollbear::strong_type
         Threads::Threads
         # cope with "fatal error LNK2011: precompiled object not linked in"
         "$<$<CXX_COMPILER_ID:MSVC>:ibis_pch>"
@@ -72,7 +73,6 @@ target_include_directories(${PROJECT_NAME}
         $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
         # PCH, especially G++ requires this
         $<$<BOOL:${IBIS_ENABLE_PCH_IBIS}>:$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source/vhdl/include>>
-        $<$<BOOL:${IBIS_ENABLE_PCH_IBIS}>:$<BUILD_INTERFACE:${STRONG_TYPE_INCLUDE_DIR}>>
 )
 
 

@@ -21,12 +21,54 @@ To use, e.g. [Ccache (a fast C/C++ compiler cache)](https://ccache.dev/) for CMa
     ], 
     "configurePresets": [
         {
-            "name": "ccache-gcc",
-            "displayName": "GnuC (ccache)",
-            "description": "GnuC compiler using compiler cache",
+            "name": "gcc-ccache",
+            "displayName": "GnuC (CCache)",
+            "description": "GnuC compiler using compiler (CCache)",
             "inherits": [
                 "gcc",
                 "ccache"
+            ]
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "gcc-ccache-release",
+            "displayName": "Release",
+            "description": "Release build with GnuC",
+            "configuration": "Release",
+            "configurePreset": "gcc-ccache"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "gcc-ccache-release-test",
+            "displayName": "Release Test",
+            "description": "Test GnuC build",
+            "configuration": "Release",
+            "configurePreset": "gcc-ccache",
+            "inherits": [
+                "default-testPreset"
+            ]
+        }
+    ],
+    "workflowPresets": [
+        {
+            "name": "GnuC Release (CCache)",
+            "displayName": "CI GnuC Debug",
+            "description": "Continuous Integration/Continuous Delivery using GnUC (Release)",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "gcc-ccache"
+                },
+                {
+                    "type": "build",
+                    "name": "gcc-ccache-release"
+                },
+                {
+                    "type": "test",
+                    "name": "gcc-ccache-release-test"
+                }
             ]
         }
     ]
