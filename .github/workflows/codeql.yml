@@ -92,9 +92,11 @@ jobs:
         cmake --preset ${{ matrix.cmake_configure_preset }}
         cmake --build --preset ${{ matrix.cmake_build_preset }}
 
+    - if: ${{ matrix.language == 'cpp' }}
+      name: CCache statistics
+      run: |
+        ccache --show-stats
+          
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
 
-    - name: CCache statistics
-      run: |
-        ccache --show-stats
