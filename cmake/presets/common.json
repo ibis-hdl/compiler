@@ -136,31 +136,19 @@
             "environment": {}
         },
         {
-            "name": "default-compiler-cache-settings",
-            "hidden": true,
-            "environment": {
-                "CCACHE_BASEDIR": "${sourceDir}",
-                "CCACHE_SLOPPINESS": "pch_defines,time_macros"
-            }
-        },
-        {
             "name": "ccache",
-            "description": "Ccache compiler cache.",
+            "description": "ccache - compiler cache",
             "hidden": true,
-            "inherits": [
-                "default-compiler-cache-settings"
-            ],
             "cacheVariables": {
-                "CMAKE_CXX_COMPILER_LAUNCHER": "sccache"
+                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
+                "CCACHE_BASEDIR": "${sourceDir}",
+                "CCACHE_SLOPPINESS": "pch_defines,time_macros"                
             }
         },
         {
             "name": "sccache",
-            "description": "Mozilla's sccache ccache-like tool.",
+            "description": "sccache - Mozilla's ccache-like tool",
             "hidden": true,
-            "inherits": [
-                "default-compiler-cache-settings"
-            ],
             "cacheVariables": {
                 "CMAKE_CXX_COMPILER_LAUNCHER": "sccache"
             }

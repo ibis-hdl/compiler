@@ -47,17 +47,29 @@ jobs:
 
     - if: ${{ matrix.language == 'cpp' }}
       # build-mode: manual
-      name: Cache Compiler (Mozilla sccache-cache)
-      uses: mozilla-actions/sccache-action@v0.0.6
-      env:
-        SCCACHE_GHA_ENABLED: "true"      
+      name: Set Github runner's env
+      run: |
+        {
+          echo CXX=g++
+          echo CCACHE_DIR=${HOME}/.cache/ccache
+          echo CCACHE_NOCOMPRESS=true   # GitHub actions automatically zstd compresses caches
+        } >> "$GITHUB_ENV"
+                
+    - if: ${{ matrix.language == 'cpp' }}
+      # build-mode: manual
+      name: Setup Github cache for compiler cache (ccache)
+      uses: actions/cache@v4
+      with:
+        key: linux-${{ matrix.cmake_configure_preset }}-ccache
+        path: |
+          ~/.config/ccache
+          ~/.cache/ccache     
           
     - if: ${{ matrix.language == 'cpp' }}
       # build-mode: manual
       name: Build C++ code
       env:
-        CXX: g++
-        CMAKE_CXX_COMPILER_LAUNCHER: sccache
+        CMAKE_CXX_COMPILER_LAUNCHER: ccache
       run: |
         # one-block build
         # update OS
@@ -82,3 +94,7 @@ jobs:
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
+
+    - name: CCache statistics
+      run: |
+        ccache --show-stats

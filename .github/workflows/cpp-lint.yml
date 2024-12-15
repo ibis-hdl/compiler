@@ -36,7 +36,7 @@ jobs:
       id: conan2-cache
       uses: actions/cache@v4
       with:
-        key: linux-clang--conan-${{ hashFiles('conanfile.py') }}
+        key: linux-clang-conan-${{ hashFiles('conanfile.py') }}
         path: |
           ~/.conan2
 
