@@ -5,6 +5,50 @@ This project aims to become a VHDL compiler.
 
 ## Build the `update-2024` branch
 
+## Customize CMake build
+
+CMake supports two files, `CMakePresets.json` and `CMakeUserPresets.json`, that allow users to 
+specify common configure, build, and test options and share them with others. For more
+information see [cmake-presets](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html).
+
+To use, e.g. [Ccache (a fast C/C++ compiler cache)](https://ccache.dev/) for CMake's configure phase, write your own `CMakeUserPresets.json` with
+
+```json
+{
+    "version": 8,
+    "include": [
+        "cmake/presets/common.json"
+    ], 
+    "configurePresets": [
+        {
+            "name": "ccache-gcc",
+            "displayName": "GnuC (ccache)",
+            "description": "GnuC compiler using compiler cache",
+            "inherits": [
+                "gcc",
+                "ccache"
+            ]
+        }
+    ]
+}
+```
+
+The build and test presets remain. The JSON `common.json` already contains a predefined "ccache" section:
+
+```
+        {
+            "name": "ccache",
+            "description": "ccache - compiler cache",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
+                "CCACHE_BASEDIR": "${sourceDir}",
+                "CCACHE_SLOPPINESS": "pch_defines,time_macros",
+                "CCACHE_DIR": "~/.cache/ccache" 
+            }
+        },
+```
+
 ### on Windows
 
 Ensure you have VS 2022 (Community).

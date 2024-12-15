@@ -142,7 +142,8 @@
             "cacheVariables": {
                 "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
                 "CCACHE_BASEDIR": "${sourceDir}",
-                "CCACHE_SLOPPINESS": "pch_defines,time_macros"                
+                "CCACHE_SLOPPINESS": "pch_defines,time_macros",
+                "CCACHE_DIR": "~/.cache/ccache" 
             }
         },
         {

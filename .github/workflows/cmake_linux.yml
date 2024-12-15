@@ -19,21 +19,21 @@ jobs:
         os:                     [ linux ]
         cmake:
         - {
-            compiler:           "g++",
+            cxx:                "g++",
             conan_profile:      "gcc",
             configure_preset:   "gcc",
             build_preset:       "gcc-release",
             test_preset:        "gcc-release-test"
           }
         - {
-            compiler:           "clang++",
+            cxx:                "clang++",
             conan_profile:      "clang",
             configure_preset:   "clang",
             build_preset:       "clang-release",
             test_preset:        "clang-release-test"
           }
         - {
-            compiler:           "clang++",
+            cxx:                "clang++",
             conan_profile:      "clang-libc++",
             configure_preset:   "clang-libc++",
             build_preset:       "clang-libc++-release",
@@ -65,10 +65,10 @@ jobs:
       with:
         submodules: true
 
-    - name: Set Github runner's env (CXX=${{ matrix.cmake.compiler }} etc.)
+    - name: Set Github runner's env (CXX=${{ matrix.cmake.cxx }} etc.)
       run: |
         {
-          echo CXX=${{ matrix.cmake.compiler }}
+          echo CXX=${{ matrix.cmake.cxx }}
           echo CCACHE_DIR=${HOME}/.cache/ccache
           echo CCACHE_NOCOMPRESS=true   # GitHub actions automatically zstd compresses caches
         } >> "$GITHUB_ENV"
@@ -109,7 +109,7 @@ jobs:
     - name: Setup Github cache for compiler cache (ccache)
       uses: actions/cache@v4
       with:
-        key: ${{ matrix.os }}-${{ matrix.cmake.compiler }}-ccache
+        key: ${{ matrix.os }}-${{ matrix.cmake.configure_preset }}-ccache
         path: |
           ~/.config/ccache
           ~/.cache/ccache

@@ -3,6 +3,11 @@ name: 'Clang tidy review'
 on:
   [ pull_request ]
 
+env:
+  # must be clang for clang-tidy!
+  cmake_cxx: clang++
+  cmake_configure_preset: clang
+
 jobs:
   tidy-review:
     runs-on: ubuntu-24.04
@@ -26,7 +31,7 @@ jobs:
 
     - name: Set Github runner's env (CXX=clang++)
       run: |
-        echo "CXX=clang++" >> "$GITHUB_ENV"
+        echo "CXX=$cmake_cxx" >> "$GITHUB_ENV"
                 
     - name: Install Conan package manager
       id: conan2
@@ -38,27 +43,28 @@ jobs:
       id: conan2-cache
       uses: actions/cache@v4
       with:
-        key: linux-clang-conan-${{ hashFiles('conanfile.py') }}
+        key: linux-${cmake_configure_preset}-conan-${{ hashFiles('conanfile.py') }}
         path: |
           ~/.conan2
 
     - name: Create Conan2 profile
       if: steps.conan2-cache.outputs.cache-hit != 'true'
       run: |
-        conan profile detect --force --name clang
-        cp ~/.conan2/profiles/clang ~/.conan2/profiles/default
+        conan profile detect --force --name ${cmake_configure_preset}
+        cp ~/.conan2/profiles/${cmake_configure_preset} ~/.conan2/profiles/default
    
     - name: Conan install
       run: |
         virtualenv .venv
         source .venv/bin/activate
         pip install multipledispatch
-        python3 conan_install.py --profile clang
+        python3 conan_install.py --profile ${cmake_configure_preset}
         deactivate
 
     - name: CMake configuration
       run: |
-        cmake --preset clang
+        cmake --preset ${cmake_configure_preset}
+        # no build required
 
     - name: Run Clang tidy review
       id: clang-tidy-review
