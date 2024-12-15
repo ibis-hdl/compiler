@@ -7,9 +7,10 @@ on:
 
 jobs:
 
+  # Automated pull requests with "on: pull_request" workflows
   autopep8:
-    # Check if the PR is not raised by this workflow
-    if: startsWith(github.head_ref, 'autopep8-patches') == false # && github.event.pull_request.head.repo.full_name == github.repository
+    # Check if the PR is not raised by this workflow and is not from a fork
+    if: startsWith(github.head_ref, 'autopep8-patches') == false && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
     steps:
 
@@ -17,7 +18,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         submodules: true
-        ref: ${{github.event.pull_request.head.ref}}
+        ref: ${{ github.head_ref }}
 
     - name: Gather Python files from git
       run: |
