@@ -74,7 +74,7 @@ jobs:
         # one-block build
         # update OS
         sudo apt-get update && sudo apt-get install --no-install-recommends -y \
-          cmake ninja-build g++
+          ccache cmake ninja-build g++
         # Install python utils
         pip --disable-pip-version-check --no-cache-dir install pipx
         pipx install virtualenv conan
