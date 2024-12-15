@@ -16,14 +16,9 @@ find_package(Boost 1.86.0 EXACT
         headers
         system
         locale
-        filesystem   # Boost::process depends Boost::filesystem
         unit_test_framework
     OPTIONAL_COMPONENTS
-        stacktrace_basic
-        stacktrace_backtrace
-        stacktrace_addr2line
-        stacktrace_noop
-        stacktrace_windbg   # only @Windows
+        #none
 )
 
 # Make found Boost's targets globally available.

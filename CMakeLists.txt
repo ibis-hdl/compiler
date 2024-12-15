@@ -56,7 +56,6 @@ include(cmake/module/CPM.cmake) # FixMe full path
 include(options_build)
 include(options_developer)
 include(external_deps)
-include(external_optional)
 include(py_env)
 
 
@@ -89,6 +88,7 @@ add_subdirectory(source/vhdl)
 add_subdirectory(source/frontend)
 add_subdirectory(l10n)
 if (IBIS_BUILD_TESTS)
+    enable_testing()
     add_subdirectory(testsuite/pch)
     add_subdirectory(testsuite/util)
     add_subdirectory(testsuite/testsuite_util)

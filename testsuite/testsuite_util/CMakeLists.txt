@@ -18,11 +18,6 @@ add_library(${PROJECT_NAME})
 add_library(testsuite::util ALIAS ${PROJECT_NAME})
 
 
-if(DEVELOPER_EXTERNAL_BOOST_TEST)
-    add_dependencies(${PROJECT_NAME} external-boost-test)
-endif()
-
-
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/cli_args.cpp

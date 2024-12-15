@@ -62,13 +62,7 @@ There are several needs to log to the user. The VHDL assert and report messages 
 are messages of warning and errors from VHDL compiler self. Further internal and debugging messages,
 maybe by use of boost.log or spdlog.
 
-Generally, a lot of information go trough std::cerr without prefix or even using colorizing. E.g. on
-stacktrace_{gdb.boost} it's not clear what comes from what.
-
 ## Sources (`main` branch) related
-
-- **FixMe**: Before main's init() there is no text style/color functionality even in the
-  stacktrace_{gdb,boost} functions.
 
 - position_cache got warnings by compiling with `-Weverything`
   regards to `.line_number()` and `.get_line_start`: IIRC deduction guide, Investigate!

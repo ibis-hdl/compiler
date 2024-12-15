@@ -354,15 +354,6 @@ if(DEVELOPER_RUN_IWYU AND UNIX)
 endif()
 
 
-## -----------------------------------------------------------------------------
-# Developer Build Option: run IBIS under Valgrind.
-# FixMe: Implement, Check and test it, only added (remnants from old project)
-option(DEVELOPER_RUN_ON_VALGRIND
-    "Configure IBIS HDL to be run on Valgrind."
-    OFF)
-mark_as_advanced(DEVELOPER_RUN_ON_VALGRIND)
-
-
 ###############################################################################
 # Clang-format
 #

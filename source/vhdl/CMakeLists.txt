@@ -32,11 +32,6 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 
-if(DEVELOPER_EXTERNAL_BOOST_SPIRIT)
-    add_dependencies(${PROJECT_NAME} external-boost-spirit)
-endif()
-
-
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/ast/literal_printer.cpp

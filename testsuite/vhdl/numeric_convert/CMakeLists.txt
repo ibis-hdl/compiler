@@ -38,14 +38,6 @@ target_link_libraries(${PROJECT_NAME}
 #set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-v")
 
 
-if(DEVELOPER_EXTERNAL_BOOST_SPIRIT)
-    add_dependencies(${PROJECT_NAME} external-boost-spirit)
-endif()
-if(DEVELOPER_EXTERNAL_BOOST_TEST)
-    add_dependencies(${PROJECT_NAME} external-boost-test)
-endif()
-
-
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/test_numeric_convert.cpp

@@ -28,6 +28,7 @@
     ],
     "files.associations": {
         "__config": "cpp",
-        "filesystem": "cpp"
+        "filesystem": "cpp",
+        "csignal": "cpp"
     }
 }
