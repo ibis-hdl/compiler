@@ -50,7 +50,7 @@ jobs:
     - name: Install required build dependencies on ${{ matrix.image }}
       # https://github.com/actions/runner-images/blob/main/images/windows/Windows2022-Readme.md
       run: |
-        choco install ninja
+        choco install ninja doxygen.portable
         # choco install conan --params "/PathType:'Machine'"  # PATH doesn't work with pwsh
         # [Add-Content](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/add-content?view=powershell-7.2)
         # Add-Content $env:GITHUB_PATH "C:\Program Files\Conan\conan"

@@ -23,6 +23,7 @@ jobs:
             cmake_configure_preset: gcc
             cmake_build_preset: gcc-release
           - language: python
+            build-mode: none
 
     steps:
     - name: Checkout repository

@@ -60,7 +60,7 @@ jobs:
       if: steps.autopep8.outputs.exit-code == 2
       run: exit 1
 
-  pylint:
+  Python-Lint:
     runs-on: ubuntu-24.04
     env:
       # threshold to decide if the test was successful
