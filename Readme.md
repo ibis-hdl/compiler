@@ -5,15 +5,38 @@ This project aims to become a VHDL compiler.
 
 ## Build the `update-2024` branch
 
+### on Windows
+
+Ensure you have VS 2022 (Community).
+
+```powershell
+> virtualenv .win64-venv
+...
+> .\.win64-venv\Scripts\activate
+> pip install -r requirements.txt
+...
+> py .\conan_install.py --profile msvc
+...
+> cmake --preset msvc
+...
+> cmake --build --preset msvc-release
+...
+> ctest.exe --preset msvc-release-test
+...
+```
+
 ## Customize CMake build
 
 CMake supports two files, `CMakePresets.json` and `CMakeUserPresets.json`, that allow users to 
 specify common configure, build, and test options and share them with others. For more
 information see [cmake-presets](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html).
 
+### CCache on Linux using GnuC gcc
+
 To use, e.g. [Ccache (a fast C/C++ compiler cache)](https://ccache.dev/) for CMake's configure phase, write your own `CMakeUserPresets.json` with
 
 ```json
+{
 {
     "version": 8,
     "include": [
@@ -54,7 +77,7 @@ To use, e.g. [Ccache (a fast C/C++ compiler cache)](https://ccache.dev/) for CMa
     "workflowPresets": [
         {
             "name": "GnuC Release (CCache)",
-            "displayName": "CI GnuC Debug",
+            "displayName": "CI GnuC Release (CCache)",
             "description": "Continuous Integration/Continuous Delivery using GnUC (Release)",
             "steps": [
                 {
@@ -75,7 +98,7 @@ To use, e.g. [Ccache (a fast C/C++ compiler cache)](https://ccache.dev/) for CMa
 }
 ```
 
-The build and test presets remain. The JSON `common.json` already contains a predefined "ccache" section:
+The JSON `common.json` already contains a predefined "ccache" section:
 
 ```
         {
@@ -91,26 +114,17 @@ The build and test presets remain. The JSON `common.json` already contains a pre
         },
 ```
 
-### on Windows
+### Todo
 
-Ensure you have VS 2022 (Community).
-
-```powershell
-> virtualenv .win64-venv
-...
-> .\.win64-venv\Scripts\activate
-> pip install -r requirements.txt
-...
-> py .\conan_install.py --profile msvc
-...
-> cmake --preset msvc
-...
-> cmake --build --preset msvc-release
-...
-> ctest.exe --preset msvc-release-test
-...
+```
+# hide time intensive compiling from Clang-Tidy 
+set_source_files_properties(
+    src/parser/grammar.cpp
+    PROPERTIES
+        SKIP_LINTING ON
 ```
 
+------------------------------------------------------------------
 
 ## Project structure
 

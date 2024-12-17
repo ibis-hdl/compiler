@@ -37,22 +37,6 @@ list(APPEND
 )
 
 include(prevent_in_source_builds)
-
-
-## [Conan C/C++ Open Source Package Manager](https://github.com/conan-io/cmake-conan)
-## ... "cmake-conan is not compatible with Conan 2.0"
-#find_package(Python3 COMPONENTS Interpreter REQUIRED)
-
-# [cpm-cmake/CPM.cmake](https://github.com/cpm-cmake/CPM.cmake)
-# download if required, but it's on git
-#file(DOWNLOAD
-#  https://github.com/cpm-cmake/CPM.cmake/releases/download/v0.40.2/CPM.cmake
-#  ${PROJECT_SOURCE_DIR}/cmake/module/CPM.cmake
-#  EXPECTED_HASH SHA256=c8cdc32c03816538ce22781ed72964dc864b2a34a310d3b7104812a5ca2d835d
-#  STATUS result
-#)
-include(cmake/module/CPM.cmake) # FixMe full path
-
 include(options_build)
 include(options_developer)
 include(external_deps)

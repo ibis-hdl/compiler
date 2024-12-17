@@ -298,8 +298,8 @@ mark_as_advanced(DEVELOPER_BOOST_SPIRIT_X3_DEBUG)
 ## -----------------------------------------------------------------------------
 # CMake Tidy
 #
-include(FindClangTidy)
-
+# ToDo/FixMe: https://www.google.com/search?q=cmake+warning+LNK4272+%22x64%22++%22x86%22
+set(CLANG_TIDY_FOUND True)
 if(CLANG_TIDY_FOUND)
     configure_file(${CMAKE_SOURCE_DIR}/.clang-tidy ${CMAKE_BINARY_DIR}/.clang-tidy COPYONLY)
 
@@ -352,40 +352,6 @@ if(DEVELOPER_RUN_IWYU AND UNIX)
         set(IBIS_ENABLE_PCH OFF CACHE BOOL "PCH disabled due to use of include-what-you-use" FORCE)
     endif()
 endif()
-
-
-###############################################################################
-# Clang-format
-#
-# https://github.com/ttroy50/cmake-examples/tree/master/04-static-analysis/clang-format
-# Maybe: https://github.com/TheLartians/Format.cmake , or https://github.com/zemasoft/clangformat-cmake ??
-###############################################################################
-option(DEVELOPER_RUN_CLANG_FORMAT
-    "Run clang-format with the compiler."
-    OFF)
-mark_as_advanced(DEVELOPER_RUN_CLANG_FORMAT)
-
-if(DEVELOPER_RUN_CLANG_FORMAT)
-    include(FindClangFormat)
-
-    if(NOT CLANG_FORMAT_FOUND)
-        message(STATUS "=> Configure Fix: <DEVELOPER_RUN_CLANG_FORMAT> is ON but clang-format is not found, disabled")
-        set(DEVELOPER_RUN_CLANG_FORMAT ON CACHE BOOL "clang-format (not found)" FORCE)
-    else()
-        include(clang-format)
-    endif()
-endif()
-
-
-CPMAddPackage(
-  NAME Format.cmake
-  VERSION 1.7.3
-  GITHUB_REPOSITORY TheLartians/Format.cmake
-  OPTIONS # set to yes skip cmake formatting
-          "FORMAT_SKIP_CMAKE YES"
-          # path to exclude (optional, supports regular expressions)
-          "CMAKE_FORMAT_EXCLUDE cmake/CPM.cmake"
-)
 
 
 ################################################################################
