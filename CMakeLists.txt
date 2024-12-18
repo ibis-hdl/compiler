@@ -44,7 +44,7 @@ include(py_env)
 
 
 # This requirement rises by use of CMake's PCH support, otherwise
-# linker errors occour. Probably due to boost.org
+# linker errors occur. Probably due to boost.org
 # [How do I force CMake to include '-pthread' option during compilation?](
 #   https://stackoverflow.com/questions/5395309/how-do-i-force-cmake-to-include-pthread-option-during-compilation)
 #set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
@@ -61,6 +61,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
+if(IBIS_ENABLE_CXXSTD_PCH)
+    message(STATUS "=> **** PCH ENABLED ****")
+endif()
 
 ##
 # Sub projects
@@ -73,7 +76,6 @@ add_subdirectory(source/frontend)
 add_subdirectory(l10n)
 if (IBIS_BUILD_TESTS)
     enable_testing()
-    add_subdirectory(testsuite/pch)
     add_subdirectory(testsuite/util)
     add_subdirectory(testsuite/testsuite_util)
     add_subdirectory(testsuite/vhdl/numeric_convert)

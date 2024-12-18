@@ -21,14 +21,7 @@ add_library(${PROJECT_NAME} INTERFACE)
 add_library(ibis::util ALIAS ${PROJECT_NAME})
 
 
-if(${PROJECT_NAME}_PCH)
-    # override ibis_pch helper
-    target_precompile_headers(${PROJECT_NAME}
-        PRIVATE
-            $<$<BOOL:${IBIS_ENABLE_PCH_DEFAULT}>:${PROJECT_SOURCE_DIR}/include/ibis/util/detail/pch_default.hpp>
-            $<$<BOOL:${IBIS_ENABLE_PCH_IBIS}>:${PROJECT_SOURCE_DIR}/include/ibis/util/detail/pch_ibis.hpp>
-    )
-elseif(IBIS_ENABLE_PCH_DEFAULT OR IBIS_ENABLE_PCH_IBIS)
+if(IBIS_ENABLE_CXXSTD_PCH)
     target_precompile_headers(${PROJECT_NAME} REUSE_FROM ibis_pch)
 endif()
 

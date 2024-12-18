@@ -5,10 +5,6 @@ message(STATUS "External Projects (required)")
 
 ##
 # [Boost.Org](www.boost.org)
-# See [Why is "BOOST_ALL_NO_LIB" set automatically? #54](https://github.com/boostorg/boost_install/issues/54)
-# Boost::headers defines BOOST_ALL_NO_LIB, since there is no reason to use autolinking when using
-# CMake
-#
 #set(Boost_DEBUG 1)
 find_package(Boost 1.86.0 EXACT
     CONFIG
@@ -21,13 +17,9 @@ find_package(Boost 1.86.0 EXACT
         #none
 )
 
-# Make found Boost's targets globally available.
-if(Boost_FOUND)
-    message(STATUS "Using Boost libraries v${Boost_VERSION_STRING}")
-    set_target_properties(
-        Boost::headers
-        PROPERTIES IMPORTED_GLOBAL TRUE )
-endif ()
+set_target_properties(
+    Boost::headers Boost::disable_autolinking
+    PROPERTIES IMPORTED_GLOBAL TRUE )
 
 
 ##
@@ -56,4 +48,4 @@ find_package(range-v3 0.12.0 REQUIRED)
 # strong typedef library for C++14/17/20
 #
 find_package(strong_type REQUIRED)
-# ToDo: use explicit version: find_package(strong_type v15 REQUIRED)
+# ToDo: use explicit version: find_package(strong_type 15 REQUIRED)

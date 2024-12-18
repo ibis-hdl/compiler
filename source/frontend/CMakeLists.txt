@@ -30,7 +30,7 @@ target_link_libraries(${PROJECT_NAME}
         rollbear::strong_type
         Threads::Threads
         # cope with "fatal error LNK2011: precompiled object not linked in"
-        "$<$<CXX_COMPILER_ID:MSVC>:ibis_pch>"
+        #"$<$<CXX_COMPILER_ID:MSVC>:ibis_pch>"
 )
 #set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-v")
 
@@ -50,14 +50,7 @@ target_sources(${PROJECT_NAME}
 )
 
 
-if(${PROJECT_NAME}_PCH)
-    # override ibis_pch helper
-    target_precompile_headers(${PROJECT_NAME}
-        PRIVATE
-            $<$<BOOL:${IBIS_ENABLE_PCH_DEFAULT}>:${PROJECT_SOURCE_DIR}/include/ibis/frontend/detail/pch_default.hpp>
-            $<$<BOOL:${IBIS_ENABLE_PCH_IBIS}>:${PROJECT_SOURCE_DIR}/include/ibis/frontend/detail/pch_ibis.hpp>
-    )
-elseif(IBIS_ENABLE_PCH_DEFAULT OR IBIS_ENABLE_PCH_IBIS)
+if(IBIS_ENABLE_CXXSTD_PCH)
     target_precompile_headers(${PROJECT_NAME} REUSE_FROM ibis_pch)
 endif()
 
@@ -68,6 +61,6 @@ target_include_directories(${PROJECT_NAME}
     PRIVATE
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
-        # PCH, especially G++ requires this
-        $<$<BOOL:${IBIS_ENABLE_PCH_IBIS}>:$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source/vhdl/include>>
+        # PCH, especially G++ requires this, FIXME: 2024 - what was the intention here?
+        #$<$<BOOL:${IBIS_ENABLE_PCH_D}>:$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source/vhdl/include>>
 )

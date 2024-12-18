@@ -83,15 +83,15 @@ set_property(GLOBAL
 # Note: Don't put all headers into PCH, this may  slow down (Clang-11/Fedora)
 # compilation time, especially on testsuite's vhdl_rules project. See
 # DEVELOPER_RUN_CLANG_TIME_TRACE
-option(IBIS_ENABLE_PCH_DEFAULT
+option(IBIS_ENABLE_CXXSTD_PCH
     "Enable pre-compiled headers support for standard C++, Boost.Org and 3rd party headers."
     ON)
-mark_as_advanced(IBIS_ENABLE_PCH_DEFAULT)
+mark_as_advanced(IBIS_ENABLE_CXXSTD_PCH)
 
-option(IBIS_ENABLE_PCH_IBIS
-    "Enable pre-compiled headers support for Ibis HDL C++ headers."
-    OFF)
-mark_as_advanced(IBIS_ENABLE_PCH_IBIS)
+if(WIN32)
+    set(IBIS_ENABLE_CXXSTD_PCH OFF CACHE BOOL "PCH disabled on WIndows due to PCH problems" FORCE)
+    message(STATUS "=> **** Disable PCH on Windows temporary due to issues ****")
+endif()
 
 
 # Clang option to find headers which consumes compile time, best effort to optimize
@@ -285,43 +285,9 @@ option(DEVELOPER_BOOST_SPIRIT_X3_DEBUG
 mark_as_advanced(DEVELOPER_BOOST_SPIRIT_X3_DEBUG)
 
 
-################################################################################
-# CMake source code analysis support
-#
-# [Static checks with CMake/CDash (iwyu, lwyu, cpplint and cppcheck)](
-# https://blog.kitware.com/static-checks-with-cmake-cdash-iwyu-clang-tidy-lwyu-cpplint-and-cppcheck/)
-#
-# Note:
-# - Clang-tidy is started from CMake presets
-################################################################################
-
 ## -----------------------------------------------------------------------------
-# CMake Tidy
-#
-# ToDo/FixMe: https://www.google.com/search?q=cmake+warning+LNK4272+%22x64%22++%22x86%22
-set(CLANG_TIDY_FOUND True)
-if(CLANG_TIDY_FOUND)
-    configure_file(${CMAKE_SOURCE_DIR}/.clang-tidy ${CMAKE_BINARY_DIR}/.clang-tidy COPYONLY)
-
-    # Sanity check: If PCH is enabled, for some reasons at pch_default.hpp <CLI/CLI.hpp> is not found, hence disabled
-    # FixMe [CMake]: this shouldn't happen, and why only CLI11?
-    if(IBIS_ENABLE_PCH_DEFAULT OR IBIS_ENABLE_PCH_IBIS)
-        message(STATUS "=> Configure Fix: Clang tidy may trigger false positives if PCH is enabled, disabled")
-        set(IBIS_ENABLE_PCH_DEFAULT OFF CACHE BOOL "PCH disabled due to use of clang-tidy" FORCE)
-        set(IBIS_ENABLE_PCH_IBIS    OFF CACHE BOOL "PCH disabled due to use of clang-tidy" FORCE)
-    endif()
-
-    # Special handling for MSVC
-    # FixMe [CMake]: Clang-Tidy and MSVC aren't compatible? Got error about: cannot use 'throw' with exceptions disabled [clang-diagnostic-error]
-    if(MSVC)
-        # CMAKE_CXX_CLANG_TIDY must be cleared, otherwise PCH header compiles with clang-tidy, why ever
-        set(CMAKE_CXX_CLANG_TIDY "" CACHE STRING "")
-    endif()
-endif()
-
-
-## -----------------------------------------------------------------------------
-# Include What You Use (IWYU)
+# Include What You Use (IWYU) 
+# FIXME: 2024 - using CMakePresets for this
 #
 # https://github.com/include-what-you-use/include-what-you-use
 option(DEVELOPER_RUN_IWYU
@@ -345,33 +311,4 @@ if(DEVELOPER_RUN_IWYU AND UNIX)
         # https://cmake.org/cmake/help/v3.20/prop_tgt/LANG_INCLUDE_WHAT_YOU_USE.html
         set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${IWYU_EXECUTABLE};${_iwyu_mapping};${_iwyu_comment};${_iwyu_misc}")
     endif()
-    # Sanity check: If PCH is enabled, IWYU lookup definitions etc. at precompiled headers
-    # which breaks builds without it, giving false positives. Hence disable PCH if using IWYU.
-    if(IBIS_ENABLE_PCH AND DEVELOPER_RUN_IWYU)
-        message(STATUS "=> Configure Fix: include-what-you-use my trigger false positives if PCH is enabled, disabled")
-        set(IBIS_ENABLE_PCH OFF CACHE BOOL "PCH disabled due to use of include-what-you-use" FORCE)
-    endif()
-endif()
-
-
-################################################################################
-# CMake Miscellaneous
-#
-################################################################################
-
-## -----------------------------------------------------------------------------
-# Compile Command JSON, required by external tools like clang-tidy.
-#
-# [Copy compile_commands.json to project root folder](
-#  https://stackoverflow.com/questions/57464766/copy-compile-commands-json-to-project-root-folder)
-#
-if(CMAKE_GENERATOR STREQUAL "Ninja")
-    add_custom_target(copy-compile-commands ALL
-        COMMENT "copy generated database 'compile_commands.json' to source directory."
-        message(STATUS "copy_if_different ${PROJECT_BINARY_DIR}/compile_commands.json ${CMAKE_SOURCE_DIR}")
-        DEPENDS ${CMAKE_BINARY_DIR}/compile_commands.json
-        COMMAND
-            ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BINARY_DIR}/compile_commands.json ${CMAKE_SOURCE_DIR}
-        VERBATIM
-    )
 endif()
