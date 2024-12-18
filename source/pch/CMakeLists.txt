@@ -7,22 +7,24 @@
 project(ibis_pch LANGUAGES CXX)
 
 
-add_library(${PROJECT_NAME} OBJECT)
-add_library(ibis::pch ALIAS ${PROJECT_NAME})
-
 # see [PCH: Unclear error when reusing precompiled headers from interface library](
 # https://gitlab.kitware.com/cmake/cmake/-/issues/20288)
 file(TOUCH ${CMAKE_CURRENT_BINARY_DIR}/pch_dummy.cpp)
 
-target_sources(${PROJECT_NAME}
-    PRIVATE
-        ${CMAKE_CURRENT_BINARY_DIR}/pch_dummy.cpp
-)
+add_library(${PROJECT_NAME} ${CMAKE_CURRENT_BINARY_DIR}/pch_dummy.cpp)
+add_library(ibis::pch ALIAS ${PROJECT_NAME})
 
 
 target_precompile_headers(${PROJECT_NAME}
     PUBLIC
         ${PROJECT_SOURCE_DIR}/include/ibis/pch_default.hpp
+)
+
+target_include_directories(${PROJECT_NAME}
+    PRIVATE
+        $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
+        $<BUILD_INTERFACE:${CLI11_INCLUDE_DIR}>
+        $<BUILD_INTERFACE:${strong_type_INCLUDE_DIR}>
 )
 
 
@@ -31,20 +33,3 @@ if(DEVELOPER_BOOST_SPIRIT_X3_DEBUG)
         PRIVATE BOOST_SPIRIT_X3_DEBUG
     )
 endif()
-
-
-# Note, target_link_libraries(... ibis::common ibis::vhdl) doesn't work here
-# since this would add cyclic dependencies
-target_include_directories(${PROJECT_NAME}
-    PRIVATE
-        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-        $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
-        $<BUILD_INTERFACE:${CLI11_INCLUDE_DIR}>
-        $<BUILD_INTERFACE:${strong_type_INCLUDE_DIR}>
-        #$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source/util/include>
-        #$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/source/util/include>
-        #$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source/common/include>
-        #$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/source/common/include>
-        #$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source/vhdl/include>
-        #$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source/frontend/include>
-        )

@@ -53,7 +53,7 @@
 
 #include <boost/fusion/include/adapt_struct.hpp>
 
-// The header <boost/spirit/home/x3/auxiliary.hpp>, which includes the problemtic header
+// The header <boost/spirit/home/x3/auxiliary.hpp>, which includes the problematic header
 // <boost/spirit/home/x3/util/any_parser.hpp>, runs into compile problems due to Spirit X3's
 // `move_to` traits. Even forwarding of enum class ast's `keyword_token` doesn't helped here.
 #include <boost/spirit/home/x3/char.hpp>
@@ -73,8 +73,3 @@
 #include <boost/test/data/monomorphic.hpp>
 #include <boost/test/data/for_each_sample.hpp>
 #include <boost/test/utils/string_cast.hpp>
-
-// other 3rd party
-#include <CLI/CLI.hpp>
-#include <strong_type/strong_type.hpp>
-
