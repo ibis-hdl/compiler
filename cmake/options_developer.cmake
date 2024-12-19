@@ -77,20 +77,21 @@ set_property(GLOBAL
 
 ##
 # Developer Build Option: Use PCH
-# Starting with CMake 3.16 projects can use pre-compiled headers
-# ToDo: Study [Faster builds with PCH suggestions from C++ Build Insights](
-#   https://devblogs.microsoft.com/cppblog/faster-builds-with-pch-suggestions-from-c-build-insights/)
-# Note: Don't put all headers into PCH, this may  slow down (Clang-11/Fedora)
-# compilation time, especially on testsuite's vhdl_rules project. See
-# DEVELOPER_RUN_CLANG_TIME_TRACE
+# Note: Don't put all headers into PCH, this may slow down
+# compilation time, especially on testsuite's vhdl_rules project. See also
+# DEVELOPER_RUN_CLANG_TIME_TRACE to check for headers to include in PCH
+# Note: See additional notes about MSVC issues at 'source/pch/CMakeLists.txt'
 option(IBIS_ENABLE_CXXSTD_PCH
     "Enable pre-compiled headers support for standard C++, Boost.Org and 3rd party headers."
     ON)
 mark_as_advanced(IBIS_ENABLE_CXXSTD_PCH)
 
 if(WIN32)
-    set(IBIS_ENABLE_CXXSTD_PCH OFF CACHE BOOL "PCH disabled on WIndows due to PCH problems" FORCE)
-    message(STATUS "=> **** Disable PCH on Windows temporary due to issues ****")
+    # conan recipe {fmt} lib `set(fmt_COMPILE_OPTIONS_CXX_RELEASE /utf-8)` which prevents
+    # PCH on MSVC/Windows. Currently, the work-around is to pre-compile the headers also with
+    # this compiler option, see options_developer.cmake
+    #set(IBIS_ENABLE_CXXSTD_PCH OFF CACHE BOOL "PCH disabled on WIndows due to PCH problems" FORCE)
+    #message(STATUS "=> **** Disable PCH on Windows temporary due to issues ****")
 endif()
 
 
