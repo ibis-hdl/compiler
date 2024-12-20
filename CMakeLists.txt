@@ -4,7 +4,7 @@
 ## file: CMakeLists.txt
 ################################################################################
 
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.28)
 
 set(CMAKE_PROJECT_INCLUDE_BEFORE
     "${CMAKE_SOURCE_DIR}/cmake/project-meta-info.cmake")
@@ -40,7 +40,6 @@ include(prevent_in_source_builds)
 include(options_build)
 include(options_developer)
 include(external_deps)
-include(py_env)
 
 
 # This requirement rises by use of CMake's PCH support, otherwise
