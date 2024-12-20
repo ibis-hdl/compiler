@@ -177,8 +177,10 @@ public:
 
     void operator()(ast::assertion const& node)
     {
-        std::string_view const node_typename{ "assertion" };
-        worker(node, node_typename);
+        {
+            std::string_view const node_typename{ "assertion" };
+            worker(node, node_typename);
+        }
 
         (*this)(node.condition);
 
@@ -289,8 +291,10 @@ public:
 
     void operator()(ast::block_configuration const& node)
     {
-        std::string_view const node_typename{ "block_configuration" };
-        worker(node, node_typename);
+        {
+            std::string_view const node_typename{ "block_configuration" };
+            worker(node, node_typename);
+        }
 
         (*this)(node.block_specification);
 
@@ -408,8 +412,10 @@ public:
 
     void operator()(ast::case_statement const& node)
     {
-        std::string_view const node_typename{ "case_statement" };
-        worker(node, node_typename);
+        {
+            std::string_view const node_typename{ "case_statement" };
+            worker(node, node_typename);
+        }
 
         if (node.label) {
             (*this)(*node.label);
@@ -1106,8 +1112,10 @@ public:
 
     void operator()(ast::function_call const& node)
     {
-        std::string_view const node_typename{ "function_call" };
-        worker(node, node_typename);
+        {
+            std::string_view const node_typename{ "function_call" };
+            worker(node, node_typename);
+        }
 
         (*this)(node.function_name);
 
@@ -1123,8 +1131,10 @@ public:
 
     void operator()(ast::generate_statement const& node)
     {
-        std::string_view const node_typename{ "generate_statement" };
-        worker(node, node_typename);
+        {
+            std::string_view const node_typename{ "generate_statement" };
+            worker(node, node_typename);
+        }
 
         (*this)(node.label);
         (*this)(node.generation_scheme);
@@ -1763,8 +1773,10 @@ public:
 
     void operator()(ast::record_type_definition const& node)
     {
-        std::string_view const node_typename{ "record_type_definition" };
-        worker(node, node_typename);
+        {
+            std::string_view const node_typename{ "record_type_definition" };
+            worker(node, node_typename);
+        }
 
         {
             std::string_view const node_typename{ "element_declaration*" };
@@ -1974,8 +1986,10 @@ public:
 
     void operator()(ast::signature const& node)
     {
-        std::string_view const node_typename{ "signature" };
-        worker(node, node_typename);
+        {
+            std::string_view const node_typename{ "signature" };
+            worker(node, node_typename);
+        }
 
         {
             std::string_view const node_typename{ "parameter_type_list" };

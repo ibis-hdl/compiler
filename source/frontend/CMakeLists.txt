@@ -4,7 +4,15 @@
 ## file: source/ibis/CMakeLists.txt
 ################################################################################
 
-project(ibis LANGUAGES CXX)
+project(ibis
+    VERSION "${ibis_version}"
+    DESCRIPTION "${ibis_description}"
+    HOMEPAGE_URL "${ibis_homepage}"
+    LANGUAGES CXX
+)
+message(STATUS
+    "project ${CMAKE_PROJECT_NAME}/${PROJECT_NAME} @v${ibis_version}: "
+    "${ibis_description} [${ibis_homepage}]")
 
 
 add_executable(${PROJECT_NAME})
@@ -13,10 +21,13 @@ add_executable(${PROJECT_NAME})
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         ibis::common
+        ibis::color
         ibis::vhdl
+        Boost::headers
         Boost::system
         Boost::locale
         Boost::filesystem   # Boost::process depends on
+        CLI11::CLI11
         Threads::Threads
         # cope with "fatal error LNK2011: precompiled object not linked in"
         "$<$<CXX_COMPILER_ID:MSVC>:ibis_pch>"
@@ -59,8 +70,6 @@ target_include_directories(${PROJECT_NAME}
     PRIVATE
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
-        $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
-        $<BUILD_INTERFACE:${CLI11_INCLUDE_DIR}>
         # PCH, especially G++ requires this
         $<$<BOOL:${IBIS_ENABLE_PCH_IBIS}>:$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/source/vhdl/include>>
         $<$<BOOL:${IBIS_ENABLE_PCH_IBIS}>:$<BUILD_INTERFACE:${STRONG_TYPE_INCLUDE_DIR}>>

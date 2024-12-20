@@ -4,7 +4,15 @@
 ## file: l10n/CMakeLists.txt
 ################################################################################
 
-project(eda_l10n)
+project(ibis_l10n
+    VERSION "${ibis_version}"
+    DESCRIPTION "${ibis_description}"
+    HOMEPAGE_URL "${ibis_homepage}"
+    LANGUAGES CXX
+)
+message(STATUS
+    "project ${CMAKE_PROJECT_NAME}/${PROJECT_NAME} @v${ibis_version}: "
+    "${ibis_description} [${ibis_homepage}]")
 
 
 set(language_template ${PROJECT_SOURCE_DIR}/eda.pot)

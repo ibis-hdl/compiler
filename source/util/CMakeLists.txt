@@ -4,10 +4,18 @@
 ## Just for curiosity: [Windows 10 Still Won’t Let You Use These File Names Reserved in 1974](
 ## https://www.howtogeek.com/fyi/windows-10-still-wont-let-you-use-these-file-names-reserved-in-1974/)
 ##
-## file: source/aux/CMakeLists.txt
+## file: source/util/CMakeLists.txt
 ################################################################################
 
-project(ibis_util LANGUAGES CXX)
+project(ibis_util
+    VERSION "${ibis_version}"
+    DESCRIPTION "${ibis_description}"
+    HOMEPAGE_URL "${ibis_homepage}"
+    LANGUAGES CXX
+)
+message(STATUS
+    "project ${CMAKE_PROJECT_NAME}/${PROJECT_NAME} @v${ibis_version}: "
+    "${ibis_description} [${ibis_homepage}]")
 
 add_library(${PROJECT_NAME} INTERFACE)
 add_library(ibis::util ALIAS ${PROJECT_NAME})
@@ -29,8 +37,14 @@ target_include_directories(${PROJECT_NAME}
     INTERFACE
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
-        $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
         $<INSTALL_INTERFACE:include>
+)
+
+target_link_libraries(${PROJECT_NAME}
+    INTERFACE
+        fmt::fmt
+        Boost::headers
+        Boost::unit_test_framework
 )
 
 
