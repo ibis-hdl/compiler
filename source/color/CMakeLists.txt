@@ -1,10 +1,10 @@
 ################################################################################
-## IBIS/common project
+## IBIS/color project
 ##
-## file: source/common/CMakeLists.txt
+## file: source/color/CMakeLists.txt
 ################################################################################
 
-project(ibis_common
+project(ibis_color
     VERSION "${ibis_version}"
     DESCRIPTION "${ibis_description}"
     HOMEPAGE_URL "${ibis_homepage}"
@@ -16,25 +16,20 @@ message(STATUS
 
 
 add_library(${PROJECT_NAME})
-add_library(ibis::common ALIAS ${PROJECT_NAME})
+add_library(ibis::color ALIAS ${PROJECT_NAME})
 
 
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
         ibis::util
         Boost::headers
-    PRIVATE
-        fmt::fmt
 )
 
 
 target_sources(${PROJECT_NAME}
     PRIVATE
-        src/indent_stream.cpp
-        src/buildinfo.cpp
-        src/file_loader.cpp
-        src/settings.cpp
-        src/user_home_dir.cpp
+        src/color.cpp
+        $<$<BOOL:${WIN32}>:src/color_platform_windows.cpp>
 )
 
 
@@ -42,8 +37,8 @@ if(${PROJECT_NAME}_PCH)
     # override ibis_pch helper
     target_precompile_headers(${PROJECT_NAME}
         PRIVATE
-            $<$<BOOL:${IBIS_ENABLE_PCH_DEFAULT}>:${PROJECT_SOURCE_DIR}/include/ibis/detail/pch_default.hpp>
-            $<$<BOOL:${IBIS_ENABLE_PCH_IBIS}>:${PROJECT_SOURCE_DIR}/include/ibis/detail/pch_ibis.hpp>
+            $<$<BOOL:${IBIS_ENABLE_PCH_DEFAULT}>:${PROJECT_SOURCE_DIR}/include/ibis/color/detail/pch_default.hpp>
+            $<$<BOOL:${IBIS_ENABLE_PCH_IBIS}>:${PROJECT_SOURCE_DIR}/include/ibis/color/detail/pch_ibis.hpp>
     )
 elseif(IBIS_ENABLE_PCH_DEFAULT OR IBIS_ENABLE_PCH_IBIS)
     target_precompile_headers(${PROJECT_NAME} REUSE_FROM ibis_pch)
@@ -56,21 +51,3 @@ target_include_directories(${PROJECT_NAME}
         $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
         $<INSTALL_INTERFACE:include>
 )
-
-
-configure_file(
-    "${PROJECT_SOURCE_DIR}/include/ibis/buildinfo_static.hpp.in"
-    "${PROJECT_BINARY_DIR}/include/ibis/buildinfo_static.hpp"
-    ESCAPE_QUOTES
-    @ONLY
-)
-
-##
-# Windows MinGW
-# [How to fix undefined reference to `__imp_WSACleanup' (Boost.Asio) in CLion](
-#  https://stackoverflow.com/questions/38767653/how-to-fix-undefined-reference-to-imp-wsacleanup-boost-asio-in-clion)
-if(MINGW)
-    target_link_libraries(${PROJECT_NAME}
-        ws2_32
-    )
-endif()

@@ -4,7 +4,15 @@
 ## file: testsuite/util/CMakeLists.txt
 ################################################################################
 
-project(testrunner_util LANGUAGES CXX)
+project(testrunner_util
+    VERSION "${ibis_version}"
+    DESCRIPTION "${ibis_description}"
+    HOMEPAGE_URL "${ibis_homepage}"
+    LANGUAGES CXX
+)
+message(STATUS
+    "project ${CMAKE_PROJECT_NAME}/${PROJECT_NAME} @v${ibis_version}: "
+    "${ibis_description} [${ibis_homepage}]")
 
 
 add_executable(${PROJECT_NAME})
@@ -19,6 +27,7 @@ add_test(NAME test_util
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         ibis::util
+        Boost::headers
         Boost::unit_test_framework
 )
 #set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-v")
@@ -61,8 +70,15 @@ target_include_directories(${PROJECT_NAME}
 )
 
 
-target_compile_definitions(${PROJECT_NAME}
-    PRIVATE
-        # don't allow automatically select which libraries to link against
-        $<$<CXX_COMPILER_ID:MSVC>:BOOST_ALL_NO_LIB>
-)
+# FixMe: on Windows, mt.exe failed to write the updated manifest to the resource
+# The settings below doesn't solve the problem ... Simply restart compiling.
+if(WIN32)
+    set_property(TARGET ${PROJECT_NAME}
+        PROPERTY
+            JOB_POOL_COMPILE    NINJA_JOBS_SINGLE_CORE
+    )
+    set_property(TARGET ${PROJECT_NAME}
+        PROPERTY
+            JOB_POOL_LINK       NINJA_JOBS_SINGLE_CORE
+    )
+endif()

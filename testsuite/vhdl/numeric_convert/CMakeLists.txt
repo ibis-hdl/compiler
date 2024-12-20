@@ -4,7 +4,15 @@
 ## file: testsuite/vhdl/numeric_convert/CMakeLists.txt
 ################################################################################
 
-project(testrunner_vhdl_numeric_convert LANGUAGES CXX)
+project(testrunner_vhdl_numeric_convert
+    VERSION "${ibis_version}"
+    DESCRIPTION "${ibis_description}"
+    HOMEPAGE_URL "${ibis_homepage}"
+    LANGUAGES CXX
+)
+message(STATUS
+    "project ${CMAKE_PROJECT_NAME}/${PROJECT_NAME} @v${ibis_version}: "
+    "${ibis_description} [${ibis_homepage}]")
 
 
 add_executable(${PROJECT_NAME})
@@ -20,6 +28,7 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
         ibis::vhdl
         testsuite::util
+        Boost::headers
         Boost::system
         Boost::locale
         Boost::unit_test_framework
@@ -79,14 +88,7 @@ target_include_directories(${PROJECT_NAME}
     PRIVATE
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    SYSTEM PUBLIC
         $<BUILD_INTERFACE:${EXTERNAL_BOOST_SPIRIT_INCLUDE_DIR}>
         $<BUILD_INTERFACE:${EXTERNAL_BOOST_TEST_INCLUDE_DIR}>
-        $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
-)
-
-
-target_compile_definitions(${PROJECT_NAME}
-    PRIVATE
-        # don't allow automatically select which libraries to link against
-        $<$<CXX_COMPILER_ID:MSVC>:BOOST_ALL_NO_LIB>
 )

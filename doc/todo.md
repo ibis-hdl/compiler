@@ -65,9 +65,6 @@ maybe by use of boost.log or spdlog.
 Generally, a lot of information go trough std::cerr without prefix or even using colorizing. E.g. on
 stacktrace_{gdb.boost} it's not clear what comes from what.
 
-Maybe retire the `ibis/color` support and use `{fmt}` color support - which would make them non
-replaceable with std::format. Future C++ standards will show the way.
-
 ## CMake build and Conan (v2)
 
 Consider use of CMake's [Unity Build Mode](https://cmake.org/cmake/help/latest/prop_tgt/UNITY_BUILD_MODE.html#prop_tgt:UNITY_BUILD_MODE).
@@ -105,7 +102,7 @@ makes the optionals required (and hence results into configure error).
     - worker collector{ count_map, untagged_nodes } fix to
       worker stats_worker{ count_map, untagged_nodes };
 
-- we have buildinfo_static.hpp.in, buildinfo.hpp.in using git info and date/time
+- we have `buildinfo_static.hpp.in`; `buildinfo.hpp.in` using git info and date/time
   would be useful, for an idea look at blender sources. But this clearly future work.
 
 ## Documentation
@@ -118,6 +115,9 @@ Check [LSST DM Developer Guide](https://developer.lsst.io/index.html) for styles
 and recommendations.
 
 ## Others
+
+Maybe retire the `ibis/color` support and use `{fmt}` color support - which would make them non
+replaceable with std::format. Future C++ standards will show the way.
 
 Get a logo, e.g. ibis as mascot with assets
 

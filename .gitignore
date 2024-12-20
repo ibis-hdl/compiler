@@ -5,8 +5,9 @@
 *.org
 *.bak
 
-## build dir
+## build and conan's dir
 **/build/*
+**/conan/*
 
 ## Windows
 desktop.ini

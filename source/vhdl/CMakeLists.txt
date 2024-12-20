@@ -4,7 +4,15 @@
 ## file: source/vhdl/CMakeLists.txt
 ################################################################################
 
-project(ibis_vhdl LANGUAGES CXX)
+project(ibis_vhdl
+    VERSION "${ibis_version}"
+    DESCRIPTION "${ibis_description}"
+    HOMEPAGE_URL "${ibis_homepage}"
+    LANGUAGES CXX
+)
+message(STATUS
+    "project ${CMAKE_PROJECT_NAME}/${PROJECT_NAME} @v${ibis_version}: "
+    "${ibis_description} [${ibis_homepage}]")
 
 
 add_library(${PROJECT_NAME})
@@ -14,8 +22,10 @@ add_library(ibis::vhdl ALIAS ${PROJECT_NAME})
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
         ibis::common
+        ibis::color
         fmt::fmt
         range-v3::range-v3
+        Boost::headers
         # cope with "fatal error LNK2011: precompiled object not linked in"
         "$<$<CXX_COMPILER_ID:MSVC>:ibis_pch>"
 )
@@ -84,16 +94,18 @@ endif()
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    SYSTEM PUBLIC
         $<BUILD_INTERFACE:${EXTERNAL_BOOST_SPIRIT_INCLUDE_DIR}>
-        $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
         $<BUILD_INTERFACE:${STRONG_TYPE_INCLUDE_DIR}>
         $<INSTALL_INTERFACE:include>
 )
 
 
+## Fix for Warning 'declaration of "symbol" hides previous local declaration' - too much changes 
+# required to fix it ...
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     set_source_files_properties(
-        # nested std::string_view const {symbol, node_typename}
+        # ... due to nested std::string_view const {symbol, node_typename}
         src/ast/ast_printer.cpp
         src/ast/ast_stats.cpp
         PROPERTIES

@@ -7,7 +7,7 @@
     },
     "configurePresets": [
         {
-            "name": "use-ninja",
+            "name": "tool-ninja-settings",
             "description": "Default build tool",
             "hidden": true,
             "generator": "Ninja",
@@ -16,6 +16,28 @@
             }
         },
         {
+            "name": "tool-cmake-settings",
+            "description": "Default CMake settings",
+            "hidden": true,
+            "warnings": {
+              "dev": true,
+              "uninitialized": false,
+              "unusedCli": true,
+              "systemVars": true
+            },
+            "errors": {
+              "deprecated": true
+            }
+        },
+        {
+            "name": "tools-settings",
+            "description": "Default tool settings",
+            "hidden": true,
+            "inherits": [
+                "tool-cmake-settings",
+                "tool-ninja-settings"
+            ]
+        },        {
             "name": "default-dirs",
             "description": "Default build and install directories",
             "hidden": true,
@@ -77,9 +99,9 @@
             "description": "Clang C language family frontend for LLVM",
             "hidden": true,
             "inherits": [
+                "tools-settings",
                 "default-dirs",
-                "default-env",
-                "use-ninja"
+                "default-env"
             ],
             "cacheVariables": {
                 "CMAKE_CXX_COMPILER": "clang++"
@@ -90,9 +112,9 @@
             "description": "GNU Compiler Collection (GCC)",
             "hidden": true,
             "inherits": [
+                "tools-settings",
                 "default-dirs",
-                "default-env",
-                "use-ninja"
+                "default-env"
             ],
             "cacheVariables": {
                 "CMAKE_CXX_COMPILER": "g++"
@@ -103,10 +125,9 @@
             "description": "Microsoft Visual Studio C++ compiler",
             "hidden": true,
             "inherits": [
+                "tools-settings",
                 "default-dirs",
-                "default-env",
-                "use-ninja"
-            ],
+                "default-env"            ],
             "cacheVariables": {
                 "CMAKE_CXX_COMPILER": "cl"
             }
@@ -116,9 +137,9 @@
             "description": "Microsoft Visual Studio bundled Clang-Cl",
             "hidden": true,
             "inherits": [
+                "tools-settings",
                 "default-dirs",
-                "default-env",
-                "use-ninja"
+                "default-env"
             ],
             "cacheVariables": {
                 "CMAKE_CXX_COMPILER": "clang-cl"
@@ -134,8 +155,7 @@
                         "Linux"
                     ]
                 },
-                "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {
-                }
+                "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {}
               }
         },
         {
@@ -313,8 +333,7 @@
                         "macOS"
                     ]
                 },
-                "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {
-                }
+                "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {}
             }
         },
         {
@@ -349,7 +368,7 @@
             "name": "ci-default",
             "description": "OS shared settings for ci pipeline",
             "hidden": true,
-            "cacheVariables": {  }
+            "cacheVariables": {}
         },
         {
             "name": "ci-linux-default",
@@ -360,7 +379,7 @@
             ],
             "cacheVariables": {
                 "CMAKE_CXX_COMPILER_LAUNCHER": "ccache"
-             }
+            }
         },
         {
             "name": "ci-windows-default",
@@ -382,7 +401,7 @@
             ],
             "cacheVariables": {
                 "CMAKE_CXX_COMPILER_LAUNCHER": "sccache"
-             }
+            }
         },
         {
             "name": "ci-linux-clang",
