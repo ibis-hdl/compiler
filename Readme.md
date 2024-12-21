@@ -72,12 +72,12 @@ The best to continue is to install [Python's virtual environment](https://docs.p
 and activate Python's virtual environment depend on the OS using:
 
 On Windows:
-```
+```shell
 > .venv\Scripts\activate
 ```
 
 On Linux `bash`:
-```
+```shell
 > source .venv/bin/activate
 ```
 
