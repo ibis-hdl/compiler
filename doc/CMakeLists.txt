@@ -17,13 +17,13 @@ endif()
 
 
 ##
-# Doxygen configuration file(s)
+# Doxygen configuration file(s), see doxyfile.in for configurable settings below
+#
 set(DOXYGEN_PREDEFINED
     # same as sphinx-doc defaults, see [Mastering Doxygen](
     # https://exhale.readthedocs.io/en/latest/mastering_doxygen.html#additional-variables-with-important-impacts)
     "DOXYGEN_DOCUMENTATION_BUILD DOXYGEN_SHOULD_SKIP_THIS"
 )
-# quiet doxygen ("YES"|"NO")
 set(DOXYGEN_QUIET "YES")
 
 # API Doxyfile
@@ -38,21 +38,6 @@ configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/testsuite/doxyfile.in
     ${CMAKE_CURRENT_BINARY_DIR}/testsuite/doxyfile
     @ONLY
-)
-
-# the target for Python's virtual environment
-add_custom_target(doc-pyenv
-    COMMENT "Update Python's virtual environment to generate documentation."
-    DEPENDS
-        ibis-pyenv
-        ${CMAKE_CURRENT_SOURCE_DIR}/script/py_requirements.txt
-    # command batch to update requirements
-    COMMAND "$<IF:$<PLATFORM_ID:Windows>,${PY_ENV}/Scripts/activate,source;${PY_ENV}/bin/activate>"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/script/py_requirements.txt requirements.txt
-    COMMAND pip install --no-cache-dir -r requirements.txt --upgrade
-    #COMMAND pip list
-    COMMAND "$<IF:$<PLATFORM_ID:Windows>,${PY_ENV}/Scripts/deactivate,deactivate>"
-    COMMAND_EXPAND_LISTS
 )
 
 
@@ -73,15 +58,12 @@ file(GLOB_RECURSE TEST_CASE_FILES_DEPENDENCY
 add_custom_command(OUTPUT ${TEST_MATRIX_SCRIPT_OUTPUT}
     COMMENT "Generate VHDL Parser TestCase Matrix (RST)"
     DEPENDS
-        doc-pyenv
         ${TEST_MATRIX_SCRIPT}
         ${TEST_CASE_FILES_DEPENDENCY}
     # command batch
-    COMMAND "$<IF:$<PLATFORM_ID:Windows>,${PY_ENV}/Scripts/activate,source;${PY_ENV}/bin/activate>"
     COMMAND python ${TEST_MATRIX_SCRIPT}
         -i ${TEST_MATRIX_SCRIPT_INPUT} -o ${TEST_MATRIX_SCRIPT_OUTPUT}
         -f grid -p ${CMAKE_CURRENT_SOURCE_DIR}/testsuite/readme.md
-    COMMAND "$<IF:$<PLATFORM_ID:Windows>,${PY_ENV}/Scripts/deactivate,deactivate>"
     COMMAND_EXPAND_LISTS
 )
 
@@ -90,7 +72,6 @@ add_custom_command(OUTPUT ${TEST_MATRIX_SCRIPT_OUTPUT}
 add_custom_target(doc-testsuite-parser-testmatrix
     COMMENT "Generate VHDL test case matrix for Spirit X3 parser rules"
     DEPENDS
-        doc-pyenv
         ${TEST_MATRIX_SCRIPT_OUTPUT}
 )
 

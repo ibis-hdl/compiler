@@ -22,6 +22,10 @@
 
 #include <testsuite/namespace_alias.hpp>
 
+namespace testsuite {
+    namespace fs = std::filesystem;
+}
+
 namespace testsuite::vhdl::parser::util {
 
 template <typename AttrType = x3::unused_type>

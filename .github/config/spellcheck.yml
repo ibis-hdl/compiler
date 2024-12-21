@@ -1,0 +1,24 @@
+jobs: 4
+matrix:
+- name: Markdown
+  sources:
+  - '!cmake/cmake-conan/**|**/*.md'
+  default_encoding: utf-8
+  aspell:
+    lang: en
+  dictionary:
+    wordlists:
+    - .vscode/dictionaries/cpp_terms.txt
+    - .vscode/dictionaries/python_terms.txt
+    - .vscode/dictionaries/project_words.txt
+    # cspell uses different dictionary than spellcheck/pyspelling
+    # GH action, hence add additionally one
+    - .github/config/spellcheck-wordlist.txt
+    encoding: utf-8
+  pipeline:
+  - pyspelling.filters.markdown:
+  - pyspelling.filters.html:
+      comments: false
+      ignores:
+      - code
+      - pre

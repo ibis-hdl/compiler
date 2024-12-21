@@ -1,0 +1,84 @@
+name: 'Clang tidy review'
+
+on:
+  [ pull_request ]
+
+jobs:
+  tidy-review:
+    runs-on: ubuntu-24.04
+
+    env:
+      # must be clang for clang-tidy!
+      cmake_cxx: clang++
+      conan_profile: clang
+      cmake_configure_preset: clang
+
+    steps:
+
+    - name: Trigger event
+      run: |
+        echo "Triggered by ${{ github.event_name }}"
+
+    - name: Install basic dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install --no-install-recommends -y \
+          cmake ninja-build clang clang-tools clang-tidy
+
+    - name: Checkout Repo
+      uses: actions/checkout@v4
+      with:
+        submodules: true
+
+    - name: Set Github runner's env (CXX=${{ env.cmake_CXX }})
+      run: |
+        echo "CXX=${{ env.cmake_CXX }}" >> "$GITHUB_ENV"
+                
+    - name: Install Conan package manager
+      id: conan2
+      run: |
+        pip --disable-pip-version-check --no-cache-dir install pipx
+        pipx install virtualenv conan
+
+    - name: Cache Conan2
+      id: conan2-cache
+      uses: actions/cache@v4
+      with:
+        key: linux-${{ env.conan_profile }}-conan-${{ hashFiles('conanfile.py') }}
+        path: |
+          ~/.conan2
+
+    - name: Create Conan2 profile
+      if: steps.conan2-cache.outputs.cache-hit != 'true'
+      run: |
+        conan profile detect --force --name ${{ env.conan_profile }}
+        cp ~/.conan2/profiles/${{ env.conan_profile }} ~/.conan2/profiles/default
+   
+    - name: Conan install
+      run: |
+        virtualenv .venv
+        source .venv/bin/activate
+        pip install multipledispatch
+        python3 conan_install.py --profile ${{ env.conan_profile }}
+        deactivate
+
+    - name: CMake configuration
+      run: |
+        cmake --preset ${{ env.cmake_configure_preset }}
+        # no build required
+
+    - name: Run Clang tidy review
+      id: clang-tidy-review
+      uses: ZedThree/clang-tidy-review@v0.20.1
+      with:
+        build_dir: ${{ github.workspace }}/build
+        config_file: .clang-tidy
+
+    - name: Uploads an artefact containing clang_fixes.json
+      id: clang-tidy-upload-review
+      uses: ZedThree/clang-tidy-review/upload@v0.20.1
+
+    - name: Passed C++ style guide checks?!
+      if: steps.clang-tidy-review.outputs.total_comments > 0
+      run: |
+        echo "Some files failed the Clang tidy review!"
