@@ -53,7 +53,7 @@ function(filter_regex _action _regex _listname)
 endfunction()
 
 # remove PCH headers
-filter_regex(EXCLUDE ".*cmake_pch\\.hxx(\\.cxx)?"
+filter_regex(EXCLUDE ".*ibis_pch\\.hxx(\\.cxx)?"
     SOURCES_WITH_ABSOLUTE_PATHS ${SOURCES_WITH_ABSOLUTE_PATHS}
 )
 

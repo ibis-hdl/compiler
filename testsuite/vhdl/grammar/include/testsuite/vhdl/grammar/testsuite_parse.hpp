@@ -20,6 +20,10 @@
 #include <testsuite/namespace_alias.hpp>
 
 namespace testsuite {
+namespace fs = std::filesystem;
+}
+
+namespace testsuite {
 
 class testsuite_parse {
 public:
