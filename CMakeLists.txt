@@ -4,7 +4,7 @@
 ## file: CMakeLists.txt
 ################################################################################
 
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.28)
 
 set(CMAKE_PROJECT_INCLUDE_BEFORE
     "${CMAKE_SOURCE_DIR}/cmake/project-meta-info.cmake")
@@ -36,32 +36,14 @@ list(APPEND
         ${PROJECT_SOURCE_DIR}/cmake/module
 )
 
-## CMake Config mode for Boost
-list(PREPEND
-    CMAKE_PREFIX_PATH
-        ${PROJECT_SOURCE_DIR}/conan/${CMAKE_BUILD_TYPE}
-)
-
-
 include(prevent_in_source_builds)
-
-
-## [Conan C/C++ Open Source Package Manager](https://github.com/conan-io/cmake-conan)
-## ... "cmake-conan is not compatible with Conan 2.0"
-#find_package(Python3 COMPONENTS Interpreter REQUIRED)
-
-# [cpm-cmake/CPM.cmake](https://github.com/cpm-cmake/CPM.cmake)
-include(cmake/module/CPM.cmake) # FixMe full path
-
 include(options_build)
 include(options_developer)
 include(external_deps)
-include(external_optional)
-include(py_env)
 
 
 # This requirement rises by use of CMake's PCH support, otherwise
-# linker errors occour. Probably due to boost.org
+# linker errors occur. Probably due to boost.org
 # [How do I force CMake to include '-pthread' option during compilation?](
 #   https://stackoverflow.com/questions/5395309/how-do-i-force-cmake-to-include-pthread-option-during-compilation)
 #set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
@@ -89,8 +71,7 @@ add_subdirectory(source/vhdl)
 add_subdirectory(source/frontend)
 add_subdirectory(l10n)
 if (IBIS_BUILD_TESTS)
-    add_subdirectory(testsuite/pch)
-    add_subdirectory(testsuite/spirit_x3)
+    enable_testing()
     add_subdirectory(testsuite/util)
     add_subdirectory(testsuite/testsuite_util)
     add_subdirectory(testsuite/vhdl/numeric_convert)

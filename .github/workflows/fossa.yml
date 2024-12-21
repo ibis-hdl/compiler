@@ -1,24 +1,27 @@
 name: FOSSA
 
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
   pull_request:
-    branches: [ main ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
   fossa-scan:
     name: Fossa Scan
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
-        
-      - name: FOSSA analysis
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: FOSSA scan analysis
         uses: fossas/fossa-action@main
         with:
           api-key:  ${{ secrets.FOSSA_API_KEY }}
+
+      - name: FOSSA test analysis
+        uses: fossas/fossa-action@main
+        with:
+          api-key:  ${{ secrets.FOSSA_API_KEY }}
+          run-tests: true

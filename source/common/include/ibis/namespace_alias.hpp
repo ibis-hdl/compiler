@@ -5,34 +5,20 @@
 
 #pragma once
 
-// forward Boost.Orgs's namespace used
-namespace boost::spirit::x3::iso8859_1 {
-}
-namespace boost::filesystem {
-}
-namespace boost::property_tree {
-}
-
-// NOLINTNEXTLINE(cert-dcl58-cpp)
-namespace std::filesystem {
-}
+// clang-format off
+namespace boost::spirit::x3::iso8859_1 {}
+namespace boost::filesystem {}
+namespace boost::property_tree {}
 
 namespace ibis {
-
+// namespace fs = std::filesystem;  // can't fwd with libc++
 namespace x3 = boost::spirit::x3;
-
 namespace pt = boost::property_tree;
-
-namespace vhdl::ast {
-}
-
+namespace vhdl::ast {}
+namespace vhdl::analyze {}
 namespace vhdl::parser {
-// VHDL char set is iso8859:1
 namespace iso8859_1 = boost::spirit::x3::iso8859_1;
 }  // namespace vhdl::parser
-
-namespace vhdl::analyze {
-}
-
-namespace fs = std::filesystem;
 }  // namespace ibis
+
+// clang-format on

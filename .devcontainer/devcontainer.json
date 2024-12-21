@@ -1,38 +1,54 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
-// https://github.com/microsoft/vscode-dev-containers/tree/v0.245.0/containers/cpp
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/cpp
+//
+// References:
+// - https://containers.dev/implementors/json_reference/
+// - https://containers.dev/features, https://github.com/devcontainers/features
+// - https://aka.ms/dev-containers-non-root
 {
-	"name": "Linux C++",
+	"name": "Ubuntu C++",
 	"build": {
 		"dockerfile": "Dockerfile",
-		// Update 'VARIANT' to pick an Debian / Ubuntu OS version: debian-11, debian-10, debian-9, ubuntu-21.04, ubuntu-20.04, ubuntu-18.04
-		// Use Debian 11, Debian 9, Ubuntu 18.04 or Ubuntu 21.04 on local arm64/Apple Silicon
 		"args": {
-			"VARIANT": "ubuntu-22.04"
+			"VARIANT": "ubuntu-24.04",
+			// Preset files specifying version 10 or above may include comments
+			"REINSTALL_CMAKE_VERSION_FROM_SOURCE": "3.30.5"
 		}
 	},
-	"runArgs": [
-		"--cap-add=SYS_PTRACE",
-		"--security-opt",
-		"seccomp=unconfined"
-	],
-
-	"containerEnv": {
-		"NINJA_STATUS" : "[%f/%t (%es)] "
+	"features": {
+		// spell-checker: disable
+		// git is already here
+		// cmake feature won't build (old URL?), hence stick with 'reinstall-cmake.sh'
+		// "ghcr.io/devcontainers-community/features/cmake:2": { "version": "3.30.5" },
+		"ghcr.io/devcontainers/features/github-cli:1": {},
+		"ghcr.io/eliises/devcontainer-features/devcontainers-cli:1": {},
+		"ghcr.io/lee-orr/rusty-dev-containers/sccache:0": {}
+		// spell-checker: enable
 	},
-
-	// Configure tool-specific properties.
+	// allows ptrace based debuggers like C++ to work in the container
+	"capAdd": [
+		"SYS_PTRACE"			// cspell: disable-line
+	],
+	"runArgs": [
+		//"--dns=8.8.8.8",    	// may help on DNS problems with pip, python.org et all
+		"--security-opt",		// cspell: disable-line
+		"seccomp=unconfined"	// cspell: disable-line
+	],
+	"containerEnv": {},
 	"customizations": {
-		// Configure properties specific to VS Code.
 		"vscode": {
-			// Add the IDs of extensions you want installed when the container is created.
+			"settings": {},
+			// IDs of extensions you want installed when the container is created.
+			// spell-checker: disable
 			"extensions": [
 				"ms-vscode.cpptools",
 				"ms-vscode.cmake-tools",
+				"ms-vscode.cpptools-extension-pack",
 				"ms-python.python",
-				"mutantdino.resourcemonitor",
+				"github.vscode-github-actions",
 				"streetsidesoftware.code-spell-checker",
 				"hbenl.vscode-test-explorer",
-				"fredericbonnet.cmake-test-adapter",
+				"matepek.vscode-catch2-test-adapter",
 				"zcoinofficial.boost-test-adapter",
 				"xaver.clang-format",
 				"notskm.clang-tidy",
@@ -40,30 +56,21 @@
 				"psioniq.psi-header",
 				"cschlosser.doxdocgen"
 			]
+			// spell-checker: enable
 		}
 	},
-
 	"mounts": [
-		// FixMe: volume not created automatically, run once
-		// $ docker volume create conan_data
-		// FixMe: Mounted as root; the temporary fix is at scripts/postCreateCommand.sh
-		"source=conan_data,target=/home/vscode/.conan/data,type=volume",
-		"source=ccache_data,target=/home/vscode/.cache,type=volume"
+		// if volume is not created automatically, run once e.g.
+		// `docker volume create my_volume`
+		"source=conan2_data,target=/home/vscode/.conan2,type=volume",
+		"source=ccache_data,target=/home/vscode/.cache,type=volume",
+		// it's expected to work across Windows and Linux, as either one must be set depending on the OS.
+		// FixMe: On Windows ${localEnv:HOME} points to WSL user's home
+		"source=${localEnv:USERPROFILE}${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
 	],
-
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
-
-	// Use 'postCreateCommand' to run commands after the container is created.
+	"forwardPorts": [],
 	"postCreateCommand": "/bin/sh .devcontainer/scripts/postCreateCommand.sh",
-
-	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+	"postStartCommand": "/bin/sh .devcontainer/scripts/postStartCommand.sh",
 	"remoteUser": "vscode",
-
-	"features": {
-		"git": "latest",
-		"github-cli": "latest",
-		"fish": "latest",
-		"python": "latest"
-	}
+	"containerUser": "vscode"
 }

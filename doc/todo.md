@@ -1,10 +1,17 @@
 ToDo
 ====
 
-Obviously the intend is to get the parser working and hence the project. Even the compiler requires
-C++20, the tools inside [Microsofts Devcontainer](https://github.com/Microsoft/vscode-dev-containers)
-are not the latest, hence still sticking with C++17 and limited C++20 support (e.g. C++20
-std::source_location isn't supported by all compiler used, also `std::format` and `std::range`).
+Obviously the intend is to get the parser working and hence the project. 
+
+## CMake build
+
+* Hide time intensive compiling from Clang-Tidy like
+  ```cmake
+  set_source_files_properties(
+      src/parser/grammar.cpp
+      PROPERTIES
+          SKIP_LINTING ON
+  ```
 
 ## Boost.Spirit X3
 
@@ -38,6 +45,10 @@ Spirit X3 has ASCII and ISO 8859-1 parsers, but the character set is limit to < 
   A good playground is `testsuite/spirit_x3/test/lexical_elements`.
 
 
+
+Starting with Boost 1.87 there is a new [Boost.Parser library](https://www.boost.org/doc/libs/1_87_0/doc/html/parser.html)
+by T. Zachary Laine. Maybe this gives better results regards writing, testing (see below)
+and compile time.
 
 ## Unit testing
 
@@ -85,23 +96,7 @@ There are several needs to log to the user. The VHDL assert and report messages 
 are messages of warning and errors from VHDL compiler self. Further internal and debugging messages,
 maybe by use of boost.log or spdlog.
 
-Generally, a lot of information go trough std::cerr without prefix or even using colorizing. E.g. on
-stacktrace_{gdb.boost} it's not clear what comes from what.
-
-## CMake build and Conan (v2)
-
-Consider use of CMake's [Unity Build Mode](https://cmake.org/cmake/help/latest/prop_tgt/UNITY_BUILD_MODE.html#prop_tgt:UNITY_BUILD_MODE).
-
-More serious is the up coming conan v2. Used [cmake-conan](https://github.com/conan-io/cmake-conan)
-isn't supported in 2022 any more. The way to use is *CMakeDeps* generator using  plain
-`conanfile.txt` with *CMakeDeps*, CMakeToolchain (and even the new [layout]). This will take
-time ... The problem behind is related to CMake's `find_package( .... OPTIONAL ...)` command which
-makes the optionals required (and hence results into configure error).
-
 ## Sources (`main` branch) related
-
-- **FixMe**: Before main's init() there is no text style/color functionality even in the
-  stacktrace_{gdb,boost} functions.
 
 - position_cache got warnings by compiling with `-Weverything`
   regards to `.line_number()` and `.get_line_start`: IIRC deduction guide, Investigate!
@@ -139,8 +134,7 @@ and recommendations.
 
 ## Others
 
-Maybe retire the `ibis/color` support and use `{fmt}` color support - which would make them non
-replaceable with std::format. Future C++ standards will show the way.
-
-Get a logo, e.g. ibis as mascot with assets
-
+- Maybe retire the `ibis/color` support and use `{fmt}` color support - which would make them non
+  replaceable with std::format as it doesn't support coloring yet. Future C++ 
+  standards will show the way.
+- Get a logo, e.g. ibis as mascot with assets

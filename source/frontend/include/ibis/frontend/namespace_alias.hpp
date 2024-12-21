@@ -5,10 +5,6 @@
 
 #pragma once
 
-// NOLINTNEXTLINE(cert-dcl58-cpp)
-namespace std::filesystem {
-}
-
 namespace ibis::frontend {
-namespace fs = std::filesystem;
+//namespace fs = std::filesystem;  // can't fwd with libc++
 }

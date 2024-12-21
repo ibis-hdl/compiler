@@ -11,9 +11,9 @@ jobs:
     permissions:
       issues: write
       pull-requests: write
-      
+
     steps:
-      - uses: actions/stale@v5
+      - uses: actions/stale@v9
         id: stale
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}

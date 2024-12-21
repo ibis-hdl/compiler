@@ -15,6 +15,10 @@
 
 #include <ibis/namespace_alias.hpp>  // IWYU pragma: keep
 
+namespace ibis {
+    namespace fs = std::filesystem;
+}
+
 namespace ibis::util {
 
 ///
