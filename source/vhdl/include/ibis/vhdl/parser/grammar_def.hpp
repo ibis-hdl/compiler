@@ -1102,7 +1102,7 @@ namespace based_literal_detail {
 //template <typename RuleID>
 struct based_literal_error_handler {
     template<typename IteratorT, typename ContextT>
-    x3::error_handler_result on_error(IteratorT& first, IteratorT last, 
+    x3::error_handler_result on_error(IteratorT& first, IteratorT /* last */, 
         x3::expectation_failure<IteratorT> const& e, ContextT const& context) const 
     {
         auto& diagnostic_handler = x3::get<parser::diagnostic_handler_tag>(context).get();
@@ -1184,7 +1184,7 @@ struct based_literal_base_type : x3::parser<based_literal_base_type> {
             return false;
         }
         return true;
-    };
+    }
 
     bool supported_base(attribute_type base) const
     {
