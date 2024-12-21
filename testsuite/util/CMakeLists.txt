@@ -56,12 +56,12 @@ set_source_files_properties(src/test_util.cpp
 )
 
 
-if (IBIS_ENABLE_PCH)
-    target_precompile_headers(${PROJECT_NAME}
-        PRIVATE
-
-    )
-endif()
+#if (IBIS_ENABLE_PCH)
+#    target_precompile_headers(${PROJECT_NAME}
+#        PRIVATE
+#
+#    )
+#endif()
 
 
 target_include_directories(${PROJECT_NAME}

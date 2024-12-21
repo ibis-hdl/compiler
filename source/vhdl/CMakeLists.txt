@@ -26,14 +26,10 @@ target_link_libraries(${PROJECT_NAME}
         fmt::fmt
         range-v3::range-v3
         Boost::headers
+        rollbear::strong_type
         # cope with "fatal error LNK2011: precompiled object not linked in"
-        "$<$<CXX_COMPILER_ID:MSVC>:ibis_pch>"
+        #"$<$<CXX_COMPILER_ID:MSVC>:ibis_pch>"
 )
-
-
-if(DEVELOPER_EXTERNAL_BOOST_SPIRIT)
-    add_dependencies(${PROJECT_NAME} external-boost-spirit)
-endif()
 
 
 target_sources(${PROJECT_NAME}
@@ -79,14 +75,7 @@ set_property(TARGET ${PROJECT_NAME}
 )
 
 
-if(${PROJECT_NAME}_PCH)
-    # override ibis_pch helper
-    target_precompile_headers(${PROJECT_NAME}
-        PRIVATE
-            $<$<BOOL:${IBIS_ENABLE_PCH_DEFAULT}>:${PROJECT_SOURCE_DIR}/include/ibis/vhdl/detail/pch_default.hpp>
-            $<$<BOOL:${IBIS_ENABLE_PCH_IBIS}>:${PROJECT_SOURCE_DIR}/include/ibis/vhdl/detail/pch_ibis.hpp>
-    )
-elseif(IBIS_ENABLE_PCH_DEFAULT OR IBIS_ENABLE_PCH_IBIS)
+if(IBIS_ENABLE_CXXSTD_PCH)
     target_precompile_headers(${PROJECT_NAME} REUSE_FROM ibis_pch)
 endif()
 
@@ -95,8 +84,6 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     SYSTEM PUBLIC
-        $<BUILD_INTERFACE:${EXTERNAL_BOOST_SPIRIT_INCLUDE_DIR}>
-        $<BUILD_INTERFACE:${STRONG_TYPE_INCLUDE_DIR}>
         $<INSTALL_INTERFACE:include>
 )
 

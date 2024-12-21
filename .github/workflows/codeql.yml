@@ -2,17 +2,13 @@ name: 'CodeQL Analysis'
 
 on:
   push:
-    branches: [ main ]
   pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [ main ]
-
   workflow_dispatch:
 
 jobs:
   analyze:
     name: Analyze
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       actions: read
       contents: read
@@ -21,24 +17,86 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'cpp', 'python' ]
-        # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
+        include:
+          - language: cpp
+            conan_profile: gcc
+            cmake_configure_preset: gcc
+            cmake_build_preset: gcc-release
+          - language: python
+            build-mode: none
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
+      with:
+        submodules: true
 
     - name: Initialize CodeQL
-      if: 'false' # skip repository not enabled for code scanning
-      uses: github/codeql-action/init@v2
+      uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
 
-    - name: Autobuild
-      if: 'false' # skip repository not enabled for code scanning
-      uses: github/codeql-action/autobuild@v2
+    - if: ${{ matrix.language == 'cpp' }}
+      # build-mode: manual
+      name: Cache Conan2
+      uses: actions/cache@v4
+      with:
+        key: linux-${{ matrix.cmake_configure_preset }}-conan-${{ hashFiles('conanfile.py') }}
+        path: |
+          ~/.conan2
 
+    - if: ${{ matrix.language == 'cpp' }}
+      # build-mode: manual
+      name: Set Github runner's env
+      run: |
+        {
+          echo CXX=g++
+          echo CCACHE_DIR=${HOME}/.cache/ccache
+          echo CCACHE_NOCOMPRESS=true   # GitHub actions automatically zstd compresses caches
+        } >> "$GITHUB_ENV"
+                
+    - if: ${{ matrix.language == 'cpp' }}
+      # build-mode: manual
+      name: Setup Github cache for compiler cache (ccache)
+      uses: actions/cache@v4
+      with:
+        key: linux-${{ matrix.cmake_configure_preset }}-ccache
+        path: |
+          ~/.config/ccache
+          ~/.cache/ccache     
+          
+    - if: ${{ matrix.language == 'cpp' }}
+      # build-mode: manual
+      name: Build C++ code
+      env:
+        CMAKE_CXX_COMPILER_LAUNCHER: ccache
+      run: |
+        # one-block build
+        # update OS
+        sudo apt-get update && sudo apt-get install --no-install-recommends -y \
+          ccache cmake ninja-build g++
+        # Install python utils
+        pip --disable-pip-version-check --no-cache-dir install pipx
+        pipx install virtualenv conan
+        # Conan profile
+        conan profile detect --force --name ${{ matrix.conan_profile }}
+        # Conan Install
+        virtualenv .venv
+        source .venv/bin/activate
+        pip install multipledispatch
+        python3 conan_install.py --profile ${{ matrix.conan_profile }}
+        deactivate
+        # CMake Configure && Build
+        conan list '*'
+        cmake --list-presets        
+        cmake --preset ${{ matrix.cmake_configure_preset }}
+        cmake --build --preset ${{ matrix.cmake_build_preset }}
+
+    - if: ${{ matrix.language == 'cpp' }}
+      name: CCache statistics
+      run: |
+        ccache --show-stats
+          
     - name: Perform CodeQL Analysis
-      if: 'false' # skip repository not enabled for code scanning
-      uses: github/codeql-action/analyze@v2
+      uses: github/codeql-action/analyze@v3
 

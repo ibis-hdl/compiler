@@ -77,21 +77,14 @@ set_property(GLOBAL
 
 ##
 # Developer Build Option: Use PCH
-# Starting with CMake 3.16 projects can use pre-compiled headers
-# ToDo: Study [Faster builds with PCH suggestions from C++ Build Insights](
-#   https://devblogs.microsoft.com/cppblog/faster-builds-with-pch-suggestions-from-c-build-insights/)
-# Note: Don't put all headers into PCH, this may  slow down (Clang-11/Fedora)
-# compilation time, especially on testsuite's vhdl_rules project. See
-# DEVELOPER_RUN_CLANG_TIME_TRACE
-option(IBIS_ENABLE_PCH_DEFAULT
+# Note: Don't put all headers into PCH, this may slow down
+# compilation time, especially on testsuite's vhdl_rules project. See also
+# DEVELOPER_RUN_CLANG_TIME_TRACE to check for headers to include in PCH
+# Note: See additional notes about MSVC issues at 'source/pch/CMakeLists.txt'
+option(IBIS_ENABLE_CXXSTD_PCH
     "Enable pre-compiled headers support for standard C++, Boost.Org and 3rd party headers."
     ON)
-mark_as_advanced(IBIS_ENABLE_PCH_DEFAULT)
-
-option(IBIS_ENABLE_PCH_IBIS
-    "Enable pre-compiled headers support for Ibis HDL C++ headers."
-    OFF)
-mark_as_advanced(IBIS_ENABLE_PCH_IBIS)
+mark_as_advanced(IBIS_ENABLE_CXXSTD_PCH)
 
 
 # Clang option to find headers which consumes compile time, best effort to optimize
@@ -120,7 +113,7 @@ endif()
 
 add_compile_options(
     #  ---- common warnings ----
-    # FixMe: [-Wundefined-func-template], BUT see:
+    # FixMe [CMake]: [-Wundefined-func-template], BUT see:
     #   https://www.reddit.com/r/cpp_questions/comments/8g5v3s/dealing_with_clang_warningerrors_re_static/
     # http://clang.llvm.org/docs/DiagnosticsReference.html
     "$<$<CXX_COMPILER_ID:Clang>:-Wall;-Wextra;-Wpedantic;-Wno-c11-extensions;-Wconversion>"
@@ -160,9 +153,13 @@ add_compile_options(
     # [-ftemplate-depth](https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Dialect-Options.html)
     # = 900
     "$<$<CXX_COMPILER_ID:GNU>:-ftemplate-backtrace-limit=0;-ftemplate-depth=1024>"
-    "$<$<CXX_COMPILER_ID:Clang>:-ftemplate-backtrace-limit=0;-ftemplate-depth=1024>"
+    #"$<$<CXX_COMPILER_ID:Clang>:-ftemplate-backtrace-limit=0;-ftemplate-depth=1024>"
+    # FixMe [CMake]: won't work on MSVC Clang frontend, hence won't compile with clang-cl
+    # [cmake]   Error evaluating generator expression:
+    # [cmake]   $<CMAKE_CXX_COMPILER_FRONTEND_VARIANT:MSVC>
+    # [cmake]   Expression did not evaluate to a known generator expression
+    #"$<$<AND:$<CXX_COMPILER_ID:Clang>,$<NOT:$<CMAKE_CXX_COMPILER_FRONTEND_VARIANT:MSVC>>>:-ftemplate-backtrace-limit=0;-ftemplate-depth=1024>"
 )
-
 
 ## -----------------------------------------------------------------------------
 # Sanitize support and compiler options
@@ -255,7 +252,7 @@ endif()
 
 
 ###############################################################################
-# Project wide compiler definitions
+# Project wide compile definitions
 ###############################################################################
 
 ## -----------------------------------------------------------------------------
@@ -266,7 +263,7 @@ add_compile_definitions(
     # [What does #defining WIN32_LEAN_AND_MEAN exclude exactly?](
     #  https://stackoverflow.com/questions/11040133/what-does-defining-win32-lean-and-mean-exclude-exactly)
     "$<$<PLATFORM_ID:Windows>:WIN32_LEAN_AND_MEAN;VC_EXTRALEAN>"
-    # Note: MSVC/Clang-Win etc. all have min/max macro problems
+    # Note: MSVC/Clang-Win etc. all have min/max macro problems, see
     # [Possible problem with min() and max()](https://github.com/bkaradzic/bx/issues/252)
     "$<$<PLATFORM_ID:Windows>:NOMINMAX;_CRT_SECURE_NO_WARNINGS>"
 )
@@ -281,43 +278,9 @@ option(DEVELOPER_BOOST_SPIRIT_X3_DEBUG
 mark_as_advanced(DEVELOPER_BOOST_SPIRIT_X3_DEBUG)
 
 
-################################################################################
-# CMake source code analysis support
-#
-# [Static checks with CMake/CDash (iwyu, lwyu, cpplint and cppcheck)](
-# https://blog.kitware.com/static-checks-with-cmake-cdash-iwyu-clang-tidy-lwyu-cpplint-and-cppcheck/)
-#
-# Note:
-# - Clang-tidy is started from CMake presets
-################################################################################
-
 ## -----------------------------------------------------------------------------
-# CMake Tidy
-#
-include(FindClangTidy)
-
-if(CLANG_TIDY_FOUND)
-    configure_file(${CMAKE_SOURCE_DIR}/.clang-tidy ${CMAKE_BINARY_DIR}/.clang-tidy COPYONLY)
-
-    # Sanity check: If PCH is enabled, for some reasons at pch_default.hpp <CLI/CLI.hpp> is not found, hence disabled
-    # Todo: Fixme, this shouldn't happen, and why only CLI11?
-    if(IBIS_ENABLE_PCH_DEFAULT OR IBIS_ENABLE_PCH_IBIS)
-        message(STATUS "=> Configure Fix: Clang tidy may trigger false positives if PCH is enabled, disabled")
-        set(IBIS_ENABLE_PCH_DEFAULT OFF CACHE BOOL "PCH disabled due to use of clang-tidy" FORCE)
-        set(IBIS_ENABLE_PCH_IBIS    OFF CACHE BOOL "PCH disabled due to use of clang-tidy" FORCE)
-    endif()
-
-    # Special handling for MSVC
-    # FixMe: Clang-Tidy and MSVC aren't compatible? Got error about: cannot use 'throw' with exceptions disabled [clang-diagnostic-error]
-    if(MSVC)
-        # CMAKE_CXX_CLANG_TIDY must be cleared, otherwise PCH header compiles with clang-tidy, why ever
-        set(CMAKE_CXX_CLANG_TIDY "" CACHE STRING "")
-    endif()
-endif()
-
-
-## -----------------------------------------------------------------------------
-# Include What You Use (IWYU)
+# Include What You Use (IWYU) 
+# FIXME: 2024 - using CMakePresets for this
 #
 # https://github.com/include-what-you-use/include-what-you-use
 option(DEVELOPER_RUN_IWYU
@@ -341,76 +304,4 @@ if(DEVELOPER_RUN_IWYU AND UNIX)
         # https://cmake.org/cmake/help/v3.20/prop_tgt/LANG_INCLUDE_WHAT_YOU_USE.html
         set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${IWYU_EXECUTABLE};${_iwyu_mapping};${_iwyu_comment};${_iwyu_misc}")
     endif()
-    # Sanity check: If PCH is enabled, IWYU lookup definitions etc. at precompiled headers
-    # which breaks builds without it, giving false positives. Hence disable PCH if using IWYU.
-    if(IBIS_ENABLE_PCH AND DEVELOPER_RUN_IWYU)
-        message(STATUS "=> Configure Fix: include-what-you-use my trigger false positives if PCH is enabled, disabled")
-        set(IBIS_ENABLE_PCH OFF CACHE BOOL "PCH disabled due to use of include-what-you-use" FORCE)
-    endif()
-endif()
-
-
-## -----------------------------------------------------------------------------
-# Developer Build Option: run IBIS under Valgrind.
-# FixMe: Implement, Check and test it, only added (remnants from old project)
-option(DEVELOPER_RUN_ON_VALGRIND
-    "Configure IBIS HDL to be run on Valgrind."
-    OFF)
-mark_as_advanced(DEVELOPER_RUN_ON_VALGRIND)
-
-
-###############################################################################
-# Clang-format
-#
-# https://github.com/ttroy50/cmake-examples/tree/master/04-static-analysis/clang-format
-# Maybe: https://github.com/TheLartians/Format.cmake , or https://github.com/zemasoft/clangformat-cmake ??
-###############################################################################
-option(DEVELOPER_RUN_CLANG_FORMAT
-    "Run clang-format with the compiler."
-    OFF)
-mark_as_advanced(DEVELOPER_RUN_CLANG_FORMAT)
-
-if(DEVELOPER_RUN_CLANG_FORMAT)
-    include(FindClangFormat)
-
-    if(NOT CLANG_FORMAT_FOUND)
-        message(STATUS "=> Configure Fix: <DEVELOPER_RUN_CLANG_FORMAT> is ON but clang-format is not found, disabled")
-        set(DEVELOPER_RUN_CLANG_FORMAT ON CACHE BOOL "clang-format (not found)" FORCE)
-    else()
-        include(clang-format)
-    endif()
-endif()
-
-
-CPMAddPackage(
-  NAME Format.cmake
-  VERSION 1.7.3
-  GITHUB_REPOSITORY TheLartians/Format.cmake
-  OPTIONS # set to yes skip cmake formatting
-          "FORMAT_SKIP_CMAKE YES"
-          # path to exclude (optional, supports regular expressions)
-          "CMAKE_FORMAT_EXCLUDE cmake/CPM.cmake"
-)
-
-
-################################################################################
-# CMake Miscellaneous
-#
-################################################################################
-
-## -----------------------------------------------------------------------------
-# Compile Command JSON, required by external tools like clang-tidy.
-#
-# [Copy compile_commands.json to project root folder](
-#  https://stackoverflow.com/questions/57464766/copy-compile-commands-json-to-project-root-folder)
-#
-if(CMAKE_GENERATOR STREQUAL "Ninja")
-    add_custom_target(copy-compile-commands ALL
-        COMMENT "copy generated database 'compile_commands.json' to source directory."
-        message(STATUS "copy_if_different ${PROJECT_BINARY_DIR}/compile_commands.json ${CMAKE_SOURCE_DIR}")
-        DEPENDS ${CMAKE_BINARY_DIR}/compile_commands.json
-        COMMAND
-            ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BINARY_DIR}/compile_commands.json ${CMAKE_SOURCE_DIR}
-        VERBATIM
-    )
 endif()

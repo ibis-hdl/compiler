@@ -5,9 +5,9 @@
 
 #include <ibis/util/file/user_home_dir.hpp>
 
-//#include<ibis/util/compiler/compiler_support.hpp> // IWYU pragma: keep
+// #include<ibis/util/compiler/compiler_support.hpp> // IWYU pragma: keep
 #include <ibis/util/platform.hpp>
-//#include<ibis/namespace_alias.hpp>
+// #include<ibis/namespace_alias.hpp>
 
 #include <cstdlib>
 #include <stdexcept>
@@ -20,17 +20,18 @@ namespace ibis::util {
 
 fs::path user_home_dir(std::initializer_list<char const *> path_list)
 {
-    std::string const HOME_ENV = []() {
-        if constexpr (ibis::platform == platform::Linux) {
-            return std::getenv("HOME");
-        }
-        else if constexpr (ibis::platform == platform::Windows) {
+    static std::string const HOME_ENV = []() {
+        if constexpr (ibis::platform == platform::Windows) {
             return std::getenv("USERPROFILE");
         }
         else {
-            // FixMe: hopefully, this will be correct, static_assert doesn't work here
-            throw std::runtime_error("Platform support bug: It's not Unix or Win32.");
-            // return std::getenv("HOME");
+            // Unix-like OS
+            // clang-format off
+            static_assert(   ibis::platform == platform::Linux 
+                          || ibis::platform == platform::Darwin
+                          || ibis::platform == platform::FreeBSD);
+            // clang-format on
+            return std::getenv("HOME");
         }
     }();
 

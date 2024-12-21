@@ -19,6 +19,10 @@
 #include <filesystem>
 #include <iostream>
 
+namespace testsuite {
+    namespace fs = std::filesystem;
+}
+
 namespace testsuite::util {
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)

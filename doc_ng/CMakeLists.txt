@@ -10,7 +10,7 @@
 find_package(Doxygen)
 option(BUILD_DOCUMENTATION_NG "Create and install the HTML based API documentation (requires Doxygen & Sphinx)" ${DOXYGEN_FOUND})
 
-if(${BUILD_DOCUMENTATION})
+if(${BUILD_DOCUMENTATION_NG})
     # require at least Doxygen 1.9
     if (DOXYGEN_VERSION VERSION_LESS 1.9)
         message(FATAL_ERROR "Doxygen version must be at least 1.9!")
@@ -18,21 +18,10 @@ if(${BUILD_DOCUMENTATION})
 endif()
 
 
-# the target for Python's virtual environment
-add_custom_target(doc-ng-pyenv
-    COMMENT "Update Python's virtual environment to generate documentation."
-    DEPENDS
-        ibis-pyenv
-        ${CMAKE_CURRENT_SOURCE_DIR}/script/py_requirements.txt
-    # command batch
-    COMMAND "$<IF:$<PLATFORM_ID:Windows>,${PY_ENV}/Scripts/activate,source;${PY_ENV}/bin/activate>"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/script/py_requirements.txt requirements.txt
-    COMMAND pip install --no-cache-dir -r requirements.txt --upgrade
-    #COMMAND pip list
-    COMMAND "$<IF:$<PLATFORM_ID:Windows>,${PY_ENV}/Scripts/deactivate,deactivate>"
-    COMMAND_EXPAND_LISTS
-)
-
+# setup the target for Python's virtual environment
+# CMake way doesn't work any more: 
+#   https://gist.github.com/ibis-hdl/83d93bf891f5f405cddd9fb0c32d60c3
+# pip install --no-cache-dir -r doc_ng/requirements.txt --upgrade
 
 ##
 # target helper for running Sphinx-doc
@@ -82,15 +71,12 @@ file(GLOB_RECURSE TEST_CASE_FILES_DEPENDENCY
 add_custom_command(OUTPUT ${TEST_MATRIX_SCRIPT_OUTPUT}
     COMMENT "Generate VHDL Parser TestCase Matrix (RST)"
     DEPENDS
-        doc-ng-pyenv
         ${TEST_MATRIX_SCRIPT}
         ${TEST_CASE_FILES_DEPENDENCY}
     # command batch
-    COMMAND "$<IF:$<PLATFORM_ID:Windows>,${PY_ENV}/Scripts/activate,source;${PY_ENV}/bin/activate>"
     COMMAND python ${TEST_MATRIX_SCRIPT}
         -i ${TEST_MATRIX_SCRIPT_INPUT} -o ${TEST_MATRIX_SCRIPT_OUTPUT}
         -f rst -p ${CMAKE_CURRENT_BINARY_DIR}/source/testsuite_parser_grammar.rst
-    COMMAND "$<IF:$<PLATFORM_ID:Windows>,${PY_ENV}/Scripts/deactivate,deactivate>"
     COMMAND_EXPAND_LISTS
 )
 
@@ -115,15 +101,12 @@ set_target_properties(doc-ng-testmatrix
 add_custom_command(OUTPUT ./output
     COMMENT "Generating API documentation using Sphinx + Exhale + Breathe + Doxygen"
     DEPENDS
-        doc-ng-pyenv
         ${CMAKE_CURRENT_BINARY_DIR}/source/.copy.tag
         ${TEST_MATRIX_SCRIPT}
         ${TEST_MATRIX_SCRIPT_OUTPUT}
     # command batch
     COMMAND ${CMAKE_COMMAND} -E make_directory ${DOXYGEN_OUTPUT_DIR}
-    COMMAND "$<IF:$<PLATFORM_ID:Windows>,${PY_ENV}/Scripts/activate,source;${PY_ENV}/bin/activate>"
     COMMAND sphinx-build -M html ./source ./output
-    COMMAND "$<IF:$<PLATFORM_ID:Windows>,${PY_ENV}/Scripts/deactivate,deactivate>"
     COMMAND_EXPAND_LISTS
     #VERBATIM
 )

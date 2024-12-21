@@ -1,0 +1,97 @@
+name: 'Python Lint'
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+
+  # Automated pull requests with "on: pull_request" workflows
+  autopep8:
+    # Check if the PR is not raised by this workflow and is not from a fork
+    if: startsWith(github.head_ref, 'autopep8-patches') == false && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    steps:
+
+    - name: Checkout Repo
+      uses: actions/checkout@v4
+      with:
+        submodules: true
+        ref: ${{ github.head_ref }}
+
+    - name: Gather Python files from git
+      run: |
+        echo "PYTHON_FILES=$(for py in $(git ls-files '*.py'); do echo -n "$py "; done)" >> "$GITHUB_ENV"
+
+    - name: autopep8
+      id: autopep8
+      uses: peter-evans/autopep8@v2
+      with:
+        args: --exit-code --recursive --in-place --aggressive --aggressive ${{ env.PYTHON_FILES }}
+
+    - name: Set autopep8 branch name
+      id: vars
+      run: |
+        branch-name="autopep8-patches/${{ github.head_ref }}"
+        echo "branch-name=$branch-name" >> $GITHUB_OUTPUT      
+
+    - name: Create Pull Request
+      # ... also check if the PR is not from a fork
+      if: steps.autopep8.outputs.exit-code == 2
+      uses: peter-evans/create-pull-request@v7
+      id: cpr
+      with:
+        commit-message: autopep8 action fixes
+        title: Fixes by autopep8 action
+        body: This is an auto-generated PR with fixes by autopep8.
+        labels: |
+          autopep8
+          automated pr
+        reviewers: autopep8
+        branch: ${{ steps.vars.outputs.branch-name }}
+
+    - name: Check outputs
+      if: ${{ steps.cpr.outputs.pull-request-number }}
+      run: |
+        echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+        echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
+
+    - name: Fail if autopep8 made changes
+      if: steps.autopep8.outputs.exit-code == 2
+      run: exit 1
+
+  Python-Lint:
+    runs-on: ubuntu-24.04
+    env:
+      # threshold to decide if the test was successful
+      PYLINT_THRESHOLD_FAIL: 5  # [0 ... 10.0]
+
+    steps:
+
+    - name: Checkout Repo
+      uses: actions/checkout@v4
+      with:
+        submodules: true
+
+    - name: Gather Python files from git
+      run: |
+        echo "PYTHON_FILES=$(for py in $(git ls-files '*.py'); do echo -n "$py "; done)" >> "$GITHUB_ENV"
+
+    - name: Analyzing the Python code
+      uses: ricardochaves/python-lint@v1.4.0
+      continue-on-error: true
+      with:
+        python-root-list: "${{ env.PYTHON_FILES }}"
+        use-pylint: true
+        use-pycodestyle: true
+        use-flake8: true
+        use-black: false
+        use-isort: true
+        use-mypy: true
+        extra-pylint-options: "--fail-under ${{env.PYLINT_THRESHOLD_FAIL}}"
+        extra-pycodestyle-options: ""
+        extra-flake8-options: ""
+        extra-black-options: ""
+        extra-isort-options: ""
+        extra-mypy-options: ""

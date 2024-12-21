@@ -43,14 +43,9 @@ target_link_libraries(${PROJECT_NAME}
         Boost::system
         Boost::unit_test_framework
         # cope with "fatal error LNK2011: precompiled object not linked in"
-        "$<$<CXX_COMPILER_ID:MSVC>:testsuite_pch>"
+        #"$<$<CXX_COMPILER_ID:MSVC>:ibis_pch>"
 )
 #set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "/Verbose")
-
-
-if(DEVELOPER_EXTERNAL_BOOST_TEST)
-    add_dependencies(${PROJECT_NAME} external-boost-test)
-endif()
 
 
 target_sources(${PROJECT_NAME}
@@ -78,15 +73,8 @@ set_source_files_properties(src/test_ast.cpp
 )
 
 
-if(${PROJECT_NAME}_PCH)
-    # override testsuite_pch helper
-    target_precompile_headers(${PROJECT_NAME}
-        PRIVATE
-            $<$<BOOL:${IBIS_ENABLE_PCH_DEFAULT}>:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl/ast/detail/pch_default.hpp>
-            $<$<BOOL:${IBIS_ENABLE_PCH_IBIS}>:${PROJECT_SOURCE_DIR}/include/testsuite/vhdl/ast/detail/pch_ibis.hpp>
-    )
-elseif(IBIS_ENABLE_PCH_DEFAULT OR IBIS_ENABLE_PCH_IBIS)
-    target_precompile_headers(${PROJECT_NAME} REUSE_FROM testsuite_pch)
+if(IBIS_ENABLE_CXXSTD_PCH)
+    target_precompile_headers(${PROJECT_NAME} REUSE_FROM ibis_pch)
 endif()
 
 
