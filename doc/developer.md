@@ -9,10 +9,99 @@ Generally honor:
 partially expressive, but outdated. A documentation marathon is required if the
 source base is **stable**.
 
-## Clang Tidy
+## Building: Customize CMake build
 
-There is a CMake target to run Clang-Tidy checks, nevertheless the VS Code extension.
-Further the [.clang-tidy](../.clang-tidy) config file applies some checks and disabled others.
+
+CMake supports two files, `CMakePresets.json` and `CMakeUserPresets.json`, that allow users to 
+specify common configure, build, and test options and share them with others. For more
+information see [cmake-presets](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html).
+
+### CCache on Linux
+
+To use, e.g. [CCache (a fast C/C++ compiler cache)](https://ccache.dev/) for CMake's configure phase, write your own `CMakeUserPresets.json` using e.g. GNU compiler with
+
+```json
+{
+    "version": 8,
+    "include": [
+        "cmake/presets/common.json"
+    ], 
+    "configurePresets": [
+        {
+            "name": "gcc-ccache",
+            "displayName": "GnuC (CCache)",
+            "description": "GnuC compiler using compiler (CCache)",
+            "inherits": [
+                "gcc",
+                "ccache"
+            ]
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "gcc-ccache-release",
+            "displayName": "Release",
+            "description": "Release build with GnuC",
+            "configuration": "Release",
+            "configurePreset": "gcc-ccache"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "gcc-ccache-release-test",
+            "displayName": "Release Test",
+            "description": "Test GnuC build",
+            "configuration": "Release",
+            "configurePreset": "gcc-ccache",
+            "inherits": [
+                "default-testPreset"
+            ]
+        }
+    ],
+    "workflowPresets": [
+        {
+            "name": "GnuC Release (CCache)",
+            "displayName": "CI GnuC Release (CCache)",
+            "description": "Continuous Integration/Continuous Delivery using GnUC (Release)",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "gcc-ccache"
+                },
+                {
+                    "type": "build",
+                    "name": "gcc-ccache-release"
+                },
+                {
+                    "type": "test",
+                    "name": "gcc-ccache-release-test"
+                }
+            ]
+        }
+    ]
+}
+```
+
+The JSON [`cmake/presets/common.json`](/cmake/presets/common.json) already 
+contains a predefined "ccache" section:
+
+```json
+        {
+            "name": "ccache",
+            "description": "ccache - compiler cache",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
+                "CCACHE_BASEDIR": "${sourceDir}",
+                "CCACHE_SLOPPINESS": "pch_defines,time_macros",
+                "CCACHE_DIR": "~/.cache/ccache" 
+            }
+        },
+```
+
+## Linting: Clang Tidy
+
+The [.clang-tidy](../.clang-tidy) config file applies some checks and disabled others.
 
 ### Disabled checks:
 
@@ -55,10 +144,7 @@ There are disabled checks which shouldn't be. Enabling this checks requires more
 - [cppcoreguidelines-pro-type-vararg](https://clang.llvm.org/extra/clang-tidy/checks/cppcoreguidelines-pro-type-vararg.html):
   *By using Boost UTF this rule is triggered on each BOOST_TEST macros. No c-style vararg functions are written in this project.*
 
-## Clang-Format
+## Formatting: Clang-Format
 
 The source format is given by Clang-Format's configuration [.clang-format](../.clang-format), or
 even simpler by [EditorConfig](https://editorconfig.org/)'s [.editorconfig](../.editorconfig).
-
-To format source, the CMake target `fix-format` exist, using [TheLartians/Format.cmake](
-https://github.com/TheLartians/Format.cmake). Note, formatting `CMakeLists.txt` is excluded.

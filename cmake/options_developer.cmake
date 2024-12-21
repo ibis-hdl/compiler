@@ -86,14 +86,6 @@ option(IBIS_ENABLE_CXXSTD_PCH
     ON)
 mark_as_advanced(IBIS_ENABLE_CXXSTD_PCH)
 
-if(WIN32)
-    # conan recipe {fmt} lib `set(fmt_COMPILE_OPTIONS_CXX_RELEASE /utf-8)` which prevents
-    # PCH on MSVC/Windows. Currently, the work-around is to pre-compile the headers also with
-    # this compiler option, see options_developer.cmake
-    #set(IBIS_ENABLE_CXXSTD_PCH OFF CACHE BOOL "PCH disabled on WIndows due to PCH problems" FORCE)
-    #message(STATUS "=> **** Disable PCH on Windows temporary due to issues ****")
-endif()
-
 
 # Clang option to find headers which consumes compile time, best effort to optimize
 # PCH support.
@@ -260,7 +252,7 @@ endif()
 
 
 ###############################################################################
-# Project wide compiler definitions
+# Project wide compile definitions
 ###############################################################################
 
 ## -----------------------------------------------------------------------------
@@ -271,7 +263,7 @@ add_compile_definitions(
     # [What does #defining WIN32_LEAN_AND_MEAN exclude exactly?](
     #  https://stackoverflow.com/questions/11040133/what-does-defining-win32-lean-and-mean-exclude-exactly)
     "$<$<PLATFORM_ID:Windows>:WIN32_LEAN_AND_MEAN;VC_EXTRALEAN>"
-    # Note: MSVC/Clang-Win etc. all have min/max macro problems
+    # Note: MSVC/Clang-Win etc. all have min/max macro problems, see
     # [Possible problem with min() and max()](https://github.com/bkaradzic/bx/issues/252)
     "$<$<PLATFORM_ID:Windows>:NOMINMAX;_CRT_SECURE_NO_WARNINGS>"
 )

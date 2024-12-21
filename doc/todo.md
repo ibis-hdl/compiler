@@ -1,10 +1,17 @@
 ToDo
 ====
 
-Obviously the intend is to get the parser working and hence the project. Even the compiler requires
-C++20, the tools inside [Microsofts Devcontainer](https://github.com/Microsoft/vscode-dev-containers)
-are not the latest, hence still sticking with C++17 and limited C++20 support (e.g. C++20
-std::source_location isn't supported by all compiler used, also `std::format` and `std::range`).
+Obviously the intend is to get the parser working and hence the project. 
+
+## CMake build
+
+* Hide time intensive compiling from Clang-Tidy like
+  ```cmake
+  set_source_files_properties(
+      src/parser/grammar.cpp
+      PROPERTIES
+          SKIP_LINTING ON
+  ```
 
 ## Boost.Spirit X3
 
@@ -15,6 +22,10 @@ rules require the template engine of BOOST_SPIRIT_{DECLARE, DEFINE}.
 These days there is are two branches `next-x3-grammar` and `next-x3-grammar-v2` (the last is the
 current). Also, there is a branch `next-cpp20-numeric-convert` which affects parsing and will
 replace the old approach of ast's sub project numeric_convert.
+
+Starting with Boost 1.87 there is a new [Boost.Parser library](https://www.boost.org/doc/libs/1_87_0/doc/html/parser.html)
+by T. Zachary Laine. Maybe this gives better results regards writing, testing (see below)
+and compile time.
 
 ## Unit testing
 
@@ -100,7 +111,7 @@ and recommendations.
 
 ## Others
 
-Maybe retire the `ibis/color` support and use `{fmt}` color support - which would make them non
-replaceable with std::format. Future C++ standards will show the way.
-
-Get a logo, e.g. ibis as mascot with assets
+- Maybe retire the `ibis/color` support and use `{fmt}` color support - which would make them non
+  replaceable with std::format as it doesn't support coloring yet. Future C++ 
+  standards will show the way.
+- Get a logo, e.g. ibis as mascot with assets
