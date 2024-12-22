@@ -78,7 +78,7 @@ jobs:
       id: conan2-cache
       uses: actions/cache@v4
       with:
-        key: ${{ matrix.os }}-${{ matrix.cmake.configure_preset }}-conan-${{ hashFiles('conanfile.py') }}
+        key: ${{ matrix.os }}-${{ matrix.cmake.conan_profile }}-conan-${{ hashFiles('conanfile.py') }}
         path: |
           C:\\Users\\runneradmin\\.conan2
 

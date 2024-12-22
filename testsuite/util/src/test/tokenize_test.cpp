@@ -8,8 +8,6 @@
 #include <boost/test/unit_test.hpp>
 
 #include <iostream>
-#include <utility>
-#include <algorithm>
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_SUITE(common_utils)

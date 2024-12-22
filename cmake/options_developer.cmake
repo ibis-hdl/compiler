@@ -276,32 +276,3 @@ option(DEVELOPER_BOOST_SPIRIT_X3_DEBUG
     "Compile the parser with BOOST_SPIRIT_X3_DEBUG."
     OFF)
 mark_as_advanced(DEVELOPER_BOOST_SPIRIT_X3_DEBUG)
-
-
-## -----------------------------------------------------------------------------
-# Include What You Use (IWYU) 
-# FIXME: 2024 - using CMakePresets for this
-#
-# https://github.com/include-what-you-use/include-what-you-use
-option(DEVELOPER_RUN_IWYU
-    "Run include-what-you-use with the compiler."
-    OFF)
-mark_as_advanced(DEVELOPER_RUN_IWYU)
-
-if(DEVELOPER_RUN_IWYU AND UNIX)
-    find_program(IWYU_EXECUTABLE NAMES include-what-you-use iwyu)
-    if(NOT IWYU_EXECUTABLE)
-        message(STATUS "=> Configure Fix: include-what-you-use not found, no analysis of include files possible, disabled")
-        set(DEVELOPER_RUN_IWYU OFF CACHE BOOL "include-what-you-use (not found)" FORCE)
-    else()
-        # [IWYU Mappings](https://github.com/include-what-you-use/include-what-you-use/blob/master/docs/IWYUMappings.md)
-        #set(_iwyu_mapping "-Xiwyu;--mapping_file=${CMAKE_SOURCE_DIR}/misc_iwyu.imp;-Xiwyu;--mapping_file=${CMAKE_SOURCE_DIR}/boost-1.75-all.imp")
-        set(_iwyu_mapping "-Xiwyu;--mapping_file=${CMAKE_SOURCE_DIR}/cmake/utils/iwyu/project.imp")
-        # misc
-        set(_iwyu_comment "-Xiwyu;--no_comments")
-        #set(_iwyu_comment "-Xiwyu;--max_line_length=160")
-        set(_iwyu_misc "-Xiwyu;--transitive_includes_only;-Xiwyu;--quoted_includes_first;-Xiwyu;--cxx17ns")
-        # https://cmake.org/cmake/help/v3.20/prop_tgt/LANG_INCLUDE_WHAT_YOU_USE.html
-        set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${IWYU_EXECUTABLE};${_iwyu_mapping};${_iwyu_comment};${_iwyu_misc}")
-    endif()
-endif()

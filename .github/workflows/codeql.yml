@@ -41,7 +41,7 @@ jobs:
       name: Cache Conan2
       uses: actions/cache@v4
       with:
-        key: linux-${{ matrix.cmake_configure_preset }}-conan-${{ hashFiles('conanfile.py') }}
+        key: linux-${{ matrix.conan_profile }}-conan-${{ hashFiles('conanfile.py') }}
         path: |
           ~/.conan2
 

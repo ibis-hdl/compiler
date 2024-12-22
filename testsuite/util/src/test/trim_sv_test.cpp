@@ -5,10 +5,11 @@
 
 #include <ibis/util/trim.hpp>
 
-#include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test.hpp>  // IWYU pragma: keep
 
-#include <iostream>
 #include <utility>
+#include <initializer_list>
+#include <string_view>
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_SUITE(common_utils)
