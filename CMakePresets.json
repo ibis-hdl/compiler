@@ -28,36 +28,45 @@
             "displayName": "GnuC",
             "description": "GnuC compiler",
             "inherits": [
+                "compiler-gcc",
                 "condition-linux",
                 "ninja-multi-config",
                 "ibis-conan",
                 "cmake-default-configure-settings",
                 "default-install-settings",
                 "default-environment"
-            ]
+            ],
+            "cacheVariables": {
+                "CONAN_HOST_PROFILE": "gcc",
+                "CONAN_BUILD_PROFILE": "gcc"
+            }
         },
         {
             "name": "clang",
             "displayName": "Clang",
             "description": "Clang compiler",
             "inherits": [
+                "compiler-clang",
                 "condition-linux-or-macos",
                 "ninja-multi-config",
-                "clang-release-build-type",
                 "ibis-conan",
                 "cmake-default-configure-settings",
                 "default-install-settings",
                 "default-environment"
-            ]
+            ],
+            "cacheVariables": {
+                "CONAN_HOST_PROFILE": "clang",
+                "CONAN_BUILD_PROFILE": "clang"
+            }
         },
         {
             "name": "clang-libc++",
             "displayName": "Clang-libc++",
             "description": "Clang-libc++ compiler",
             "inherits": [
-                "condition-linux",
+                "compiler-clang-libc++",
+                "condition-linux-or-macos",
                 "ninja-multi-config",
-                "clang-libc++-release-build-type",
                 "ibis-conan",
                 "cmake-default-configure-settings",
                 "default-install-settings",
@@ -69,34 +78,68 @@
             }
         },
         {
+            "name": "clang-tidy",
+            "displayName": "Clang-Tidy",
+            "description": "Clang-based C++ “linter” tool",
+            "inherits": [
+                "clang",
+                "tool-clang-tidy"
+            ],
+            "cacheVariables": {
+                "CONAN_HOST_PROFILE": "clang",
+                "CONAN_BUILD_PROFILE": "clang"
+            }
+        },
+        {
+            "name": "clang-iwyu",
+            "displayName": "Clang-IWYU",
+            "description": "Clang based Include-What-You-Use tool",
+            "inherits": [
+                "clang",
+                "tool-iwyu"
+            ],
+            "cacheVariables": {
+                "CONAN_HOST_PROFILE": "clang",
+                "CONAN_BUILD_PROFILE": "clang"
+            }
+        },  
+        {
             "name": "msvc",
             "displayName": "MSVC",
             "description": "Microsoft Visual Studio C++ compiler",
             "inherits": [
+                "compiler-msvc",
                 "condition-windows",
                 "windows-x64-arch",
                 "ninja-multi-config",
-                "msvc-release-build-type",
                 "ibis-conan",
                 "cmake-default-configure-settings",
                 "default-install-settings",
                 "default-environment"
-            ]
+            ],
+            "cacheVariables": {
+                "CONAN_HOST_PROFILE": "msvc",
+                "CONAN_BUILD_PROFILE": "msvc"
+            }
         },
         {
             "name": "msvc-cl",
             "displayName": "MSVC-Cl",
             "description": "Microsoft Visual Studio bundled Clang C++ compiler",
             "inherits": [
+                "compiler-msvc-clang",
                 "condition-windows",
                 "windows-x64-arch",
                 "ninja-multi-config",
-                "msvc-clang-release-build-type",
                 "ibis-conan",
                 "cmake-default-configure-settings",
                 "default-install-settings",
                 "default-environment"
-            ]
+            ],
+            "cacheVariables": {
+                "CONAN_HOST_PROFILE": "msvc-cl",
+                "CONAN_BUILD_PROFILE": "msvc-cl"
+            }
         }
     ],
     "buildPresets": [
@@ -142,6 +185,20 @@
             "configuration": "Debug",
             "configurePreset": "clang-libc++"
         },
+        {
+            "name": "clang-tidy-release",
+            "displayName": "Release",
+            "description": "Release build with Clang Tidy",
+            "configuration": "Release",
+            "configurePreset": "clang-tidy"
+        },        
+        {
+            "name": "clang-iwyu-release",
+            "displayName": "Release",
+            "description": "Release build with Clang Include-What-You-Use",
+            "configuration": "Release",
+            "configurePreset": "clang-iwyu"
+        },        
         {
             "name": "msvc-release",
             "displayName": "Release",
@@ -233,6 +290,26 @@
             ]
         },
         {
+            "name": "clang-tidy-release-test",
+            "displayName": "Release Test",
+            "description": "Test Clang Tidy build",
+            "configuration": "Release",
+            "configurePreset": "clang-tidy",
+            "inherits": [
+                "default-testPreset"
+            ]
+        },        
+        {
+            "name": "clang-iwyu-release-test",
+            "displayName": "Release Test",
+            "description": "Test Clang IWYU build",
+            "configuration": "Release",
+            "configurePreset": "clang-iwyu",
+            "inherits": [
+                "default-testPreset"
+            ]
+        },        
+        {
             "name": "msvc-release-test",
             "displayName": "Release Test",
             "description": "Test Microsoft Visual Studio build",
@@ -276,8 +353,8 @@
     "workflowPresets": [
         {
             "name": "GnuC Debug",
-            "displayName": "CI GnuC Debug",
-            "description": "Continuous Integration/Continuous Delivery using GnUC (Debug)",
+            "displayName": "CI GnuC **Debug**",
+            "description": "Continuous Integration using GnUC (**Debug**)",
             "steps": [
                 {
                     "type": "configure",

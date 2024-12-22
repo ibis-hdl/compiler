@@ -1,0 +1,59 @@
+{
+    "version": 8,
+    "include": [
+        "cmake/presets/common.json"
+    ], 
+    "configurePresets": [
+        {
+            "name": "clang-ccache",
+            "displayName": "LLVM Clang (CCache)",
+            "description": "LLVM Clang compiler using compiler (CCache)",
+            "inherits": [
+                "clang",
+                "ccache"
+            ]
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "clang-ccache-release",
+            "displayName": "Release",
+            "description": "Release build with LLVM Clang",
+            "configuration": "Release",
+            "configurePreset": "clang-ccache"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "clang-ccache-release-test",
+            "displayName": "Release Test",
+            "description": "Test LLVM Clang build",
+            "configuration": "Release",
+            "configurePreset": "clang-ccache",
+            "inherits": [
+                "default-testPreset"
+            ]
+        }
+    ],
+    "workflowPresets": [
+        {
+            "name": "LLVM Clang Release (CCache)",
+            "displayName": "CI LLVM Clang Release (CCache)",
+            "description": "Continuous Integration/Continuous Delivery using LLVM Clang (Release)",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "clang-ccache"
+                },
+                {
+                    "type": "build",
+                    "name": "clang-ccache-release"
+                },
+                {
+                    "type": "test",
+                    "name": "clang-ccache-release-test"
+                }
+            ]
+        }
+    ]
+}

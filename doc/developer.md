@@ -11,7 +11,6 @@ source base is **stable**.
 
 ## Building: Customize CMake build
 
-
 CMake supports two files, `CMakePresets.json` and `CMakeUserPresets.json`, that allow users to 
 specify common configure, build, and test options and share them with others. For more
 information see [cmake-presets](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html).
@@ -82,7 +81,7 @@ To use, e.g. [CCache (a fast C/C++ compiler cache)](https://ccache.dev/) for CMa
 }
 ```
 
-The JSON [`cmake/presets/common.json`](/cmake/presets/common.json) already 
+The [`cmake/presets/common.json`](/cmake/presets/common.json) presets already 
 contains a predefined "ccache" section:
 
 ```json
@@ -98,6 +97,11 @@ contains a predefined "ccache" section:
             }
         },
 ```
+
+Also, there are some already pre-configured CMake presets below 
+[`cmake/presets/user`](/cmake/presets/user). Simply copy one of your
+choice to `${source_dir}` as `CMakeUserPresets.json` - this file
+is excluded from *git*, see [`.gitignore`](/.gitignore).
 
 ## Linting: Clang Tidy
 

@@ -13,33 +13,6 @@
                 "CMAKE_C_COMPILER": "clang-cl",
                 "CMAKE_CXX_COMPILER": "clang-cl"
             }
-        },
-        {
-            "name": "msvc-clang-release-build-type",
-            "hidden": true,
-            "inherits": [
-                "compiler-msvc-clang",
-                "release-build-type"
-            ],
-            "cacheVariables": {}
-        },
-        {
-            "name": "msvc-clang-debug-build-type",
-            "hidden": true,
-            "inherits": [
-                "compiler-msvc-clang",
-                "debug-build-type"
-            ],
-            "cacheVariables": {}
-        },
-        {
-            "name": "msvc-clang-release-build-type-with-debug",
-            "hidden": true,
-            "inherits": [
-                "compiler-msvc-clang",
-                "release-build-type-with-debug"
-            ],
-            "cacheVariables": {}
         }
     ],
     "buildPresets": [],

@@ -13,33 +13,6 @@
                 "CMAKE_C_COMPILER": "gcc",
                 "CMAKE_CXX_COMPILER": "g++"
             }
-        },
-        {
-            "name": "gcc-release-build-type",
-            "hidden": true,
-            "inherits": [
-                "compiler-gcc",
-                "release-build-type"
-            ],
-            "cacheVariables": {}
-        },
-        {
-            "name": "gcc-debug-build-type",
-            "hidden": true,
-            "inherits": [
-                "compiler-gcc",
-                "debug-build-type"
-            ],
-            "cacheVariables": {}
-        },
-        {
-            "name": "gcc-release-build-type-with-debug",
-            "hidden": true,
-            "inherits": [
-                "compiler-gcc",
-                "release-build-type-with-debug"
-            ],
-            "cacheVariables": {}
         }
     ],
     "buildPresets": [],
