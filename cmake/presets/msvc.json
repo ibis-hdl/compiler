@@ -14,33 +14,6 @@
                 "CMAKE_CXX_COMPILER": "cl",
                 "CMAKE_CXX_FLAGS_INIT": "/nologo"
             }
-        },
-        {
-            "name": "msvc-release-build-type",
-            "hidden": true,
-            "inherits": [
-                "compiler-msvc",
-                "release-build-type"
-            ],
-            "cacheVariables": {}
-        },
-        {
-            "name": "msvc-debug-build-type",
-            "hidden": true,
-            "inherits": [
-                "compiler-msvc",
-                "debug-build-type"
-            ],
-            "cacheVariables": {}
-        },
-        {
-            "name": "msvc-release-build-type-with-debug",
-            "hidden": true,
-            "inherits": [
-                "compiler-msvc",
-                "release-build-type-with-debug"
-            ],
-            "cacheVariables": {}
         }
     ],
     "buildPresets": [],
