@@ -7,7 +7,6 @@
 
 #include <ibis/vhdl/parser/grammar.hpp>
 #include <ibis/vhdl/parser/parser_config.hpp>
-#include <ibis/vhdl/parser/skipper.hpp>
 
 #include <ibis/vhdl/ast/node/design_file.hpp>
 #include <ibis/vhdl/parser/position_cache.hpp>
@@ -28,16 +27,6 @@
 
 namespace ibis::vhdl::parser {
 
-// required to successfully compile Spirit X3 rules, since we don't include
-// 'grammar_decl.hpp' and hence all it's declarations.
-#if !defined(DOXYGEN_DOCUMENTATION_BUILD)
-BOOST_SPIRIT_DECLARE(design_file_type)
-#endif
-
-}  // namespace ibis::vhdl::parser
-
-namespace ibis::vhdl::parser {
-
 bool parse::operator()(position_cache<parser::iterator_type>::proxy& position_cache_proxy,
                        parser::context& ctx, ast::design_file& design_file)
 {
@@ -54,7 +43,9 @@ bool parse::operator()(position_cache<parser::iterator_type>::proxy& position_ca
     auto const parser =
         x3::with<parser::position_cache_tag>(std::ref(position_cache_proxy))[
             x3::with<parser::diagnostic_handler_tag>(std::ref(diagnostic_handler))[
-                parser::grammar()
+                // FixMe: How to handle white spaces after valid VHDL, so that `x3::eoi´ doesn't
+                // make parse fail??
+                vhdl::grammar() // >> x3:eoi
             ]
         ];
     // clang-format on
@@ -70,8 +61,7 @@ bool parse::operator()(position_cache<parser::iterator_type>::proxy& position_ca
     auto const filename = position_cache_proxy.file_name();
 
     try {
-        bool const parse_ok =
-            x3::phrase_parse(iter, end, parser >> x3::eoi, parser::skipper, design_file);
+        bool const parse_ok = x3::parse(iter, end, parser, design_file);
 
         if (!parse_ok) {
             using boost::locale::format;
@@ -86,12 +76,22 @@ bool parse::operator()(position_cache<parser::iterator_type>::proxy& position_ca
 
         return parse_ok;
     }
+    // @todo Re-throw using C++11 exception_ptr, see 2nd answer
+    // [How do I make a call to what() on std::exception_ptr](
+    // https://stackoverflow.com/questions/14232814/how-do-i-make-a-call-to-what-on-stdexception-ptr)
     catch (std::bad_alloc const& e) {
-        // @todo Re-throw using C++11 exception_ptr, see 2nd answer
-        // [How do I make a call to what() on std::exception_ptr](
-        // https://stackoverflow.com/questions/14232814/how-do-i-make-a-call-to-what-on-stdexception-ptr)
-        //
         os << make_exception_description(e, filename);
+    }
+    catch (x3::expectation_failure<parser::iterator_type> const& e) {
+        using boost::locale::format;
+        using boost::locale::translate;
+
+        std::string const err_msg =                    // --
+            (format(translate("ExceptionDescription",  // --
+                              "Caught X3 expectation failure! Expecting '{1}'")) %
+             e.which())
+                .str();
+        os << make_exception_description(err_msg, filename);
     }
     catch (std::exception const& e) {
         os << make_exception_description(e, filename);
@@ -113,6 +113,19 @@ std::string parse::make_exception_description(std::exception const& exception,
                              "Caught exception '{1}' during parsing file '{2}'"))  // --
             % exception.what()                                                     // {1}
             % filename                                                             // {2}
+            )
+        .str();
+}
+
+std::string parse::make_exception_description(std::string_view message, std::string_view filename)
+{
+    using boost::locale::format;
+    using boost::locale::translate;
+
+    return (format(translate("ExceptionDescription",
+                             "{1} during parsing file '{2}'"))  // --
+            % message                                           // {1}
+            % filename                                          // {2}
             )
         .str();
 }

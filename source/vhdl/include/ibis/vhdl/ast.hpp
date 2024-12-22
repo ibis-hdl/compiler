@@ -20,7 +20,6 @@
 //#include<ibis/vhdl/ast/node/array_type_definition.hpp>
 // DISABLED #include<ibis/vhdl/ast/node/assertion.hpp>
 #include <ibis/vhdl/ast/node/assertion_statement.hpp>
-// DISABLED #include<ibis/vhdl/ast/node/association_element.hpp>
 #include <ibis/vhdl/ast/node/association_list.hpp>
 #include <ibis/vhdl/ast/node/attribute_declaration.hpp>
 #include <ibis/vhdl/ast/node/attribute_name.hpp>
@@ -107,7 +106,6 @@
 //#include<ibis/vhdl/ast/node/extended_identifier.hpp>
 // DISABLED  #include<ibis/vhdl/ast/node/factor.hpp>
 #include <ibis/vhdl/ast/node/file_declaration.hpp>
-// DISABLED #include<ibis/vhdl/ast/node/file_logical_name.hpp>
 // DISABLED #include<ibis/vhdl/ast/node/file_open_information.hpp>
 #include <ibis/vhdl/ast/node/file_type_definition.hpp>
 #include <ibis/vhdl/ast/node/formal_parameter_list.hpp>
@@ -170,7 +168,6 @@
 // DISABLED #include<ibis/vhdl/ast/node/return_statement.hpp>
 //#include<ibis/vhdl/ast/node/scalar_type_definition.hpp>
 //#include<ibis/vhdl/ast/node/secondary_unit.hpp>
-//#include<ibis/vhdl/ast/node/secondary_unit_declaration.hpp>
 // DISABLED #include<ibis/vhdl/ast/node/selected_name.hpp>
 #include <ibis/vhdl/ast/node/selected_signal_assignment.hpp>
 #include <ibis/vhdl/ast/node/selected_waveforms.hpp>

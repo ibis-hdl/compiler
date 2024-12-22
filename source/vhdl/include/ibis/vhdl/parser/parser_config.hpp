@@ -8,7 +8,10 @@
 #include <ibis/vhdl/parser/diagnostic_handler.hpp>
 #include <ibis/vhdl/parser/position_cache.hpp>
 #include <ibis/vhdl/parser/iterator_type.hpp>
-#include <ibis/vhdl/parser/skipper.hpp>
+
+#include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
+#include <boost/spirit/home/x3.hpp>
+#include <ibis/util/compiler/warnings_on.hpp>
 
 #include <ibis/namespace_alias.hpp>
 
@@ -16,8 +19,6 @@ namespace ibis::vhdl::parser {
 
 using position_proxy_type = parser::position_cache<iterator_type>::proxy;
 using diagnostic_handler_type = parser::diagnostic_handler<iterator_type>;
-
-using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
 
 ///
 /// @brief Context used for external linkage
@@ -83,8 +84,7 @@ using context_type =
         std::reference_wrapper<parser::diagnostic_handler_type>,
         x3::context<
             parser::position_cache_tag,
-            std::reference_wrapper<parser::position_proxy_type>,
-            phrase_context_type
+            std::reference_wrapper<parser::position_proxy_type>
         >
     >;
 // clang-format on

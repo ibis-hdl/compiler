@@ -88,6 +88,8 @@ public:
     /// file in a string. Otherwise a default constructed std::optional.
     /// @see[How to read in a file in C++](
     /// https://insanecoding.blogspot.com/2011/11/how-to-read-in-file-in-c.html)
+    /// @todo Consider to throw an exception to inform about failed read, so no
+    /// optional is required.
     ///
     std::optional<std::string> read_file(fs::path const& filename) const;
 
@@ -99,6 +101,8 @@ public:
     /// file in a string. Otherwise a default constructed std::optional.
     /// @see[How to read in a file in C++](
     /// https://insanecoding.blogspot.com/2011/11/how-to-read-in-file-in-c.html)
+    /// @todo Consider to throw an exception to inform about failed read, so no
+    /// optional is required.
     ///
     std::optional<std::string> read_file_alt(fs::path const& filename) const;
 

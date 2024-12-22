@@ -35,6 +35,7 @@ namespace ibis::vhdl::ast {
 ///
 /// @warning: Don't trust the suggestions made by IWYU! I got into
 /// serious trouble when i followed the recommendations.
+/// @todo Make the member functions const, there isn't any reason to do not so!
 ///
 class printer {
 public:
