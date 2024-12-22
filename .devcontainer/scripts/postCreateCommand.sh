@@ -25,7 +25,8 @@ fi
 
 export CONAN_V2_MODE=1
 
-pip3 --disable-pip-version-check --no-cache-dir install wheel conan
+# pip index versions conan
+pip3 --disable-pip-version-check --no-cache-dir install conan==1.66.0
 
 # g++ is using new C++11 ABI (libstdc++11) with in Conan v2 mode
 # check: https://github.com/conan-io/conan/issues/11881

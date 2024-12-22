@@ -98,8 +98,8 @@ or simply use CMake self for setting the ENV variable:
 Than you can start to build, i.e.:
 
 ```
-> conan install . --install-folder conan/Release --remote=conancenter --profile:build=msvc `
-  --build=missing --settings build_type=Release
+> conan install . --install-folder conan/Release --remote=conancenter 
+  --profile:build=msvc --build=missing --settings build_type=Release
 ...
 > cmake --list-presets=all
 ...
@@ -145,8 +145,8 @@ $ CXX=clang conan profile new clang --detect
 than you can start to build, i.e.:
 
 ```
-$ conan install . --install-folder conan/Release --remote=conancenter --profile:build=clang \
-  --build=missing --settings build_type=Release
+$ conan install . --install-folder conan/Release --remote=conancenter 
+  --profile:build=clang --build=missing --settings build_type=Release
 ...
 $ cmake --list-presets=all
 ...

@@ -118,6 +118,13 @@ endif()
 # http://cmake.3232098.n2.nabble.com/Spaces-in-conditional-output-of-generator-expressions-td7597652.html)
 ###############################################################################
 
+add_compile_definitions(
+    # 2024: [Boost unit test link error -- abi mismatch?](
+    # https://stackoverflow.com/questions/30668560/boost-unit-test-link-error-abi-mismatch)
+    "$<$<CXX_COMPILER_ID:Clang>:_GLIBCXX_USE_CXX11_ABI=0>"
+    "$<$<CXX_COMPILER_ID:GNU>:_GLIBCXX_USE_CXX11_ABI=0>"
+)
+
 add_compile_options(
     #  ---- common warnings ----
     # FixMe: [-Wundefined-func-template], BUT see:
