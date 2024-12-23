@@ -226,7 +226,7 @@ struct verify_worker
     }
 
     template <typename NodeT>
-    void operator()([[maybe_unused]] NodeT const&, [[maybe_unused]] std::string_view) const
+    void operator()([[maybe_unused]] NodeT const& /*unused*/, [[maybe_unused]] std::string_view /*unused*/) const
     { }
 
 private:
