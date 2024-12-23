@@ -171,7 +171,7 @@ struct verify_worker
         }
     }
 
-    void operator()(ast::based_literal const& node, [[maybe_unused]] std::string_view) const
+    void operator()(ast::based_literal const& node, [[maybe_unused]] std::string_view /*unused*/) const
     {
         // check on conversion
         auto const [conv_ok, result] = convert_based(node);
