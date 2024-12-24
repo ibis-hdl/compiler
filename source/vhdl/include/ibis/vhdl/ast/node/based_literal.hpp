@@ -9,10 +9,12 @@
 
 #include <ibis/vhdl/ast/util/string_span.hpp>
 
+#include <iosfwd>
+
 namespace ibis::vhdl::ast {
 
 struct based_literal : position_tagged {
-    enum class numeric_type_specifier { integer, real, COUNT };
+    enum class numeric_type_specifier : std::uint8_t { integer, real, COUNT };
 
     struct number_chunk {
         ast::string_span integer_part;

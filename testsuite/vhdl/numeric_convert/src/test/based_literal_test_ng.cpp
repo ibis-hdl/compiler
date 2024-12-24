@@ -12,20 +12,23 @@
 #include <ibis/vhdl/type.hpp>
 #include <ibis/util/overloaded.hpp>
 
-#include <ibis/vhdl/parser/context.hpp>
 #include <ibis/vhdl/parser/parse.hpp>
 #include <ibis/vhdl/ast.hpp>
 
 #include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
 #include <boost/test/unit_test.hpp>  // IWYU pragma: keep
+#include <boost/test/unit_test_log.hpp>
 #include <boost/test/tools/output_test_stream.hpp>
 #include <boost/test/tree/decorator.hpp>
 
 #include <fmt/format.h>
 
 #include <iostream>
+#include <string_view>
+#include <type_traits>
 #include <variant>
+#include <cstdint>
 
 namespace testsuite_data {
 
@@ -95,17 +98,37 @@ struct {
     } literal;
 } const expect[] = {
     // Examples from IEEE_VHDL_1076-1993: Chapter 13.4.2 Based literals
-    { based_integer, 255U, { 2, "1111_1111", "", "" } },
-    { based_integer, 255U, { 16, "FF", "", "" } },
-    { based_integer, 255U, { 16, "0_FF", "", "" } },
-    { based_integer, 224U, { 16, "E", "", "1" } },
-    { based_integer, 224U, { 2, "1110_0000", "", "" } },
-    { based_real, 4095.0, { 16, "F", "FF", "+2" } },
-    { based_real, 4095.0, { 2, "1", "1111_1111_111", "11" } },
+    { .numeric_type = based_integer,
+      .value = 255U,
+      .literal = { .base = 2, .integer = "1111_1111", .fractional = "", .exponent = "" } },
+    { .numeric_type = based_integer,
+      .value = 255U,
+      .literal = { .base = 16, .integer = "FF", .fractional = "", .exponent = "" } },
+    { .numeric_type = based_integer,
+      .value = 255U,
+      .literal = { .base = 16, .integer = "0_FF", .fractional = "", .exponent = "" } },
+    { .numeric_type = based_integer,
+      .value = 224U,
+      .literal = { .base = 16, .integer = "E", .fractional = "", .exponent = "1" } },
+    { .numeric_type = based_integer,
+      .value = 224U,
+      .literal = { .base = 2, .integer = "1110_0000", .fractional = "", .exponent = "" } },
+    { .numeric_type = based_real,
+      .value = 4095.0,
+      .literal = { .base = 16, .integer = "F", .fractional = "FF", .exponent = "+2" } },
+    { .numeric_type = based_real,
+      .value = 4095.0,
+      .literal = { .base = 2, .integer = "1", .fractional = "1111_1111_111", .exponent = "11" } },
     // self-choosen
-    { based_real, 0.0, { 10, "0", "0", "" } },
-    { based_real, 1.0, { 10, "1", "0", "" } },
-    { based_real, 4.2666, { 10, "42", "666", "-1" } },
+    { .numeric_type = based_real,
+      .value = 0.0,
+      .literal = { .base = 10, .integer = "0", .fractional = "0", .exponent = "" } },
+    { .numeric_type = based_real,
+      .value = 1.0,
+      .literal = { .base = 10, .integer = "1", .fractional = "0", .exponent = "" } },
+    { .numeric_type = based_real,
+      .value = 4.2666,
+      .literal = { .base = 10, .integer = "42", .fractional = "666", .exponent = "-1" } },
 };
 
 // clang-format off
@@ -161,7 +184,7 @@ struct verify_worker
         os << '\n';
     }
 
-    void operator()(ast::constant_declaration const& node, [[maybe_unused]] std::string_view) const
+    void operator()(ast::constant_declaration const& node, [[maybe_unused]] std::string_view /*unused*/) const
     {
         if constexpr (verbose) {
             static ast::printer print(os);

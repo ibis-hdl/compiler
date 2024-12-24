@@ -114,16 +114,15 @@ std::tuple<bool, std::uint64_t> convert_based<IntegerT, RealT>::parse_integer(
     auto const& integer_literal = literal.number.integer_part;
     auto const integer_literal_sv = as_string_view(integer_literal);
 
-    // TRANSLATORS: error message for numeric target type
-    std::string const error_msg_tr =
-        translate("in {1} integer part '{2}' can't fit the numeric type");
-
     auto range_f = numeric_convert::detail::filter_range(integer_literal);
 
     if (ranges::distance(range_f) > std::numeric_limits<integer_type>::digits10) {
         diagnostic_handler.parser_error(                     // --
             integer_literal.begin(), integer_literal.end(),  // --
-            (format(error_msg_tr) % node_name % integer_literal_sv).str());
+            // TRANSLATORS: error message for numeric target type
+            (format(translate("in {1} integer part '{2}' can't fit the numeric type"))  // --
+             % node_name % integer_literal_sv)
+                .str());
         return { false, 0 };
     }
 
@@ -134,8 +133,9 @@ std::tuple<bool, std::uint64_t> convert_based<IntegerT, RealT>::parse_integer(
     bool const parse_ok = x3::parse(iter, end, parser(base, iter) >> x3::eoi, integer_attribute);
 
     if (!parse_ok) {
-        diagnostic_handler.parser_error(                                     // --
-            integer_literal.begin(), integer_literal.end(),                  // --
+        diagnostic_handler.parser_error(                     // --
+            integer_literal.begin(), integer_literal.end(),  // --
+            // TRANSLATORS: error message for numeric target type
             (format(translate("in {1} parse of integer part '{2}' failed"))  // --
              % node_name % integer_literal_sv)
                 .str());
@@ -209,12 +209,9 @@ std::tuple<bool, double> convert_based<IntegerT, RealT>::parse_fractional(
     if (!std::isnormal(fractional)) {
         diagnostic_handler.numeric_error(                          // --
             fractional_literal.begin(), fractional_literal.end(),  // --
-            (
-                format(
-                    translate(  // --
-                        "in {1} numeric error occurred during calculation of fractional part "
-                        "'{2}'"))  // --
-                % node_name % fractional_literal_sv)
+            (format(translate(  // TRANSLATORS: error message for numeric target type
+                 "in {1} numeric error occurred during calculation of fractional part '{2}'"))  //
+             % node_name % fractional_literal_sv)
                 .str());
         return { false, fractional };
     }
@@ -244,16 +241,18 @@ std::tuple<bool, std::int32_t> convert_based<IntegerT, RealT>::parse_exponent(
         return { true, exponent_attribute };
     }
 
-    // TRANSLATORS: error message for numeric target type
-    std::string const error_msg_tr =
-        translate("in {1} the exponent part '{2}' can't fit the {3} type");
-
     auto range_f = numeric_convert::detail::filter_range(exponent_literal);
+
+    // TRANSLATORS: error message for numeric target type
+    std::string const error_msg_tr =  // same message template for several error messages
+        translate("in {1} the exponent part '{2}' can't fit the {3} type");
 
     if (ranges::distance(range_f) > std::numeric_limits<exponent_type>::digits10) {
         diagnostic_handler.parser_error(                       // --
             exponent_literal.begin(), exponent_literal.end(),  // --
-            (format(error_msg_tr) % node_name % exponent_literal_sv).str());
+            (format(translate(error_msg_tr))                   //
+             % node_name % exponent_literal_sv)
+                .str());
         return { false, exponent_attribute };
     }
 
@@ -266,8 +265,9 @@ std::tuple<bool, std::int32_t> convert_based<IntegerT, RealT>::parse_exponent(
     bool const parse_ok = x3::parse(iter, end, exp >> x3::eoi, exponent_attribute);
 
     if (!parse_ok) {
-        diagnostic_handler.parser_error(                                 // --
-            exponent_literal.begin(), exponent_literal.end(),            // --
+        diagnostic_handler.parser_error(                       // --
+            exponent_literal.begin(), exponent_literal.end(),  // --
+            // TRANSLATORS: error message for numeric target type
             (format(translate("in {1} parse of exponent '{2}' failed"))  // --
              % node_name % exponent_literal_sv)
                 .str());

@@ -3,13 +3,16 @@
     "editor.rulers": [
         100
     ],
-    // MS C++ Tools
+    // MS C++ Tools “Run Code Analysis.” 
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
     "C_Cpp.codeAnalysis.clangTidy.enabled": true,
     "C_Cpp.codeAnalysis.clangTidy.useBuildPath": true,
     "C_Cpp.codeAnalysis.clangTidy.args": [
         " -extra-arg=-std=c++20"
     ],
+    "C_Cpp.codeAnalysis.exclude": {
+        "*grammar_def.hpp": true
+    },
     // CMake
     "cmake.configureOnOpen": false,
     "cmake.useCMakePresets": "auto",
