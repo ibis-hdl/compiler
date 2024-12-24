@@ -46,7 +46,7 @@ target_sources(${PROJECT_NAME}
         # concrete test cases
         src/test/bit_string_literal_test.cpp
         src/test/decimal_literal_test.cpp
-        src/test/based_literal_test.cpp
+		src/test/based_literal_test_ng.cpp
 )
 
 

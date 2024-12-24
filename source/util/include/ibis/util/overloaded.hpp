@@ -11,8 +11,8 @@ namespace ibis::util {
 /// Variant visitor overload for using with C++ lambda.
 /// Until we get this in C++20 we have here our own overload.
 ///
-/// \see https://en.cppreference.com/w/cpp/utility/variant/visit
-/// \code
+/// @see https://en.cppreference.com/w/cpp/utility/variant/visit
+/// @code
 /// for (auto& v: vec) {
 ///   std::visit(overloaded {
 ///        [](auto arg) { std::cout << arg << ' '; },
@@ -20,9 +20,12 @@ namespace ibis::util {
 ///        [](const std::string& arg) { std::cout << std::quoted(arg) << ' '; },
 ///    }, v);
 /// }
-/// \endcode
+/// @endcode
 ///
-/// Also, \see https://arne-mertz.de/2018/05/overload-build-a-variant-visitor-on-the-fly/
+/// Also:
+/// - @see [Overload: Build a Variant Visitor on the Fly](
+///        https://arne-mertz.de/2018/05/overload-build-a-variant-visitor-on-the-fly/)
+/// - @see [The Amazing std::visit](https://www.cppstories.com/2018/09/visit-variants/)
 ///
 template <class... Ts>
 struct overloaded : Ts... {
@@ -30,6 +33,6 @@ struct overloaded : Ts... {
 };
 
 template <class... Ts>
-overloaded(Ts...) -> overloaded<Ts...>;
+overloaded(Ts...) -> overloaded<Ts...>;  // not needed in C++20...
 
 }  // namespace ibis::util

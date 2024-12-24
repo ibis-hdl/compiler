@@ -32,7 +32,7 @@ namespace ibis::vhdl::ast {
 template <typename IntegerT>
 class convert_bit_string {
     static_assert(std::numeric_limits<IntegerT>::is_integer,  // --
-                  "TagetType must be of type integer");
+                  "TargetType must be of type integer");
 
 public:
     ///

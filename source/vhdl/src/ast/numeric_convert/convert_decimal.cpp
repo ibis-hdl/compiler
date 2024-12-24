@@ -105,9 +105,9 @@ convert_decimal<IntegerT, RealT>::parse_integer(ast::string_span const& literal)
         return as<integer_type, iterator_type>(parse_int);
     };
 
-    auto const range_f = numeric_convert::detail::filter_range(literal);
-    auto iter = std::cbegin(range_f);
-    auto const end = std::cend(range_f);
+    auto range_f = numeric_convert::detail::filter_range(literal);
+    auto iter = std::begin(range_f);
+    auto const end = std::end(range_f);
 
     integer_type attribute = 0;
     bool const parse_ok = x3::parse(iter, end, parser(iter) >> x3::eoi, attribute);
@@ -145,9 +145,9 @@ convert_decimal<IntegerT, RealT>::parse_real(ast::string_span const& literal) co
         return as<real_type, iterator_type>(parse_real);
     };
 
-    auto const range_f = numeric_convert::detail::filter_range(literal);
-    auto iter = std::cbegin(range_f);
-    auto const end = std::cend(range_f);
+    auto range_f = numeric_convert::detail::filter_range(literal);
+    auto iter = std::begin(range_f);
+    auto const end = std::end(range_f);
 
     real_type attribute = 0;
     bool const parse_ok = x3::parse(iter, end, parser(iter) >> x3::eoi, attribute);

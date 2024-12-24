@@ -93,9 +93,9 @@ typename convert_bit_string<IntegerT>::return_type convert_bit_string<IntegerT>:
             }
         };
 
-        auto const range_f = numeric_convert::detail::filter_range(literal);
-        auto iter = std::cbegin(range_f);
-        auto const end = std::cend(range_f);
+        auto range_f = numeric_convert::detail::filter_range(literal);
+        auto iter = std::begin(range_f);
+        auto const end = std::end(range_f);
 
         integer_type attribute = 0;
 
@@ -116,7 +116,7 @@ typename convert_bit_string<IntegerT>::return_type convert_bit_string<IntegerT>:
             std::tuple{ false, 0 };
         }
 
-        return std::tuple{ parse_ok && (iter == end), attribute };
+        return std::tuple{ parse_ok, attribute };
     };
 
     return parse(node.base_type, node.literal);

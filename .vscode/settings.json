@@ -1,10 +1,19 @@
 {
+    // Misc/Editor
+    "editor.rulers": [
+        100
+    ],
+    // MS C++ Tools “Run Code Analysis.” 
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
-    "C_Cpp.codeAnalysis.clangTidy.enabled": false,
+    "C_Cpp.codeAnalysis.clangTidy.enabled": true,
+    "C_Cpp.codeAnalysis.clangTidy.useBuildPath": true,
     "C_Cpp.codeAnalysis.clangTidy.args": [
         " -extra-arg=-std=c++20"
     ],
-    "C_Cpp.codeAnalysis.clangTidy.useBuildPath": true,
+    "C_Cpp.codeAnalysis.exclude": {
+        "*grammar_def.hpp": true
+    },
+    // CMake
     "cmake.configureOnOpen": false,
     "cmake.useCMakePresets": "auto",
     "cmake.options.statusBarVisibility": "compact",
@@ -19,16 +28,115 @@
             "statusBarVisibility": "compact"
         }
     },
+    // MS Python tools
     "python.terminal.activateEnvironment": true,
-    // https://stackoverflow.com/questions/72322120/vscode-import-x-could-not-be-resolved-even-though-listed-under-helpmodules
+    //   see https://stackoverflow.com/questions/72322120/vscode-import-x-could-not-be-resolved-even-though-listed-under-helpmodules
     "python.analysis.extraPaths": [
-        "~/.local/share/pipx/venvs/conan/lib/python3.12/site-packages/",  // pipx
+        "~/.local/share/pipx/venvs/conan/lib/python3.12/site-packages/", // pipx
         "${workspaceFolder}/.venv/lib/*/site-packages/",
         "${workspaceFolder}/.win64-venv/"
     ],
-    "files.associations": {
-        "__config": "cpp",
-        "filesystem": "cpp",
-        "csignal": "cpp"
-    }
+    // Doxygen
+    "doxdocgen.c.triggerSequence": "///",
+    "doxdocgen.c.firstLine": "/// ",
+    "doxdocgen.c.commentPrefix": "/// ",
+    "doxdocgen.c.lastLine": "///",
+    // To-Do Tree
+    "todo-tree.general.tags": [
+        "BUG", "HACK", "FIXME", "TODO", "XXX",
+        "@todo", "@fixme",
+        "FixMe [C++20]", "FixMe: [C++20]", "@todo [C++20]", 
+        "FixMe [C++23]", "FixMe: [C++20]", "@todo [C++23]",
+        "<<<<<<<"
+    ],
+    "todo-tree.general.tagGroups": {
+        "BUGS": [
+            "BUG", "HACK"
+        ],
+        "TODO": [
+            "FIXME", "TODO", "XXX",
+            "@todo", "@fixme"
+        ],
+        "C++20/C++23": [
+            "FixMe [C++20]", "FixMe: [C++20]", "@todo [C++20]", 
+            "FixMe [C++23]", "FixMe: [C++20]", "@todo [C++23]",
+        ],
+        "git-conflict": [
+            "<<<<<<<"
+        ]
+    },
+    "todo-tree.tree.buttons.groupBySubTag": true,
+    "todo-tree.general.debug": true,
+    "todo-tree.general.periodicRefreshInterval": 15,
+    "todo-tree.general.automaticGitRefreshInterval": 60,
+    "todo-tree.regex.regexCaseSensitive": false,
+    // psioniq File Header
+    "psi-header.config": {
+        "license": "Custom",
+        "forceToTop": true,
+        "spacesBetweenYears": false
+    },
+    "psi-header.templates": [
+        {
+            "language": "*",
+            "template": [
+                "Copyright (c) <<projectCreationYear>>-<<year>> <<author>> (<<authoremail>>).",
+                "SPDX-License-Identifier: GPL-3.0-or-later"
+            ]
+        }
+    ],
+    "psi-header.variables": [
+        [
+            "projectCreationYear",
+            "2017"
+        ],
+        [
+            "author",
+            "Olaf"
+        ],
+        [
+            "authoremail",
+            "<ibis-hdl@users.noreply.github.com>"
+        ],
+        [
+            "spdxid",
+            "GPL-3.0-or-later"
+        ]
+    ],
+    "psi-header.lang-config": [
+        {
+            "language": "cpp",
+            "lineLength": 100,
+            "begin": "",
+            "end": "",
+            "prefix": "// "
+        },
+        {
+            "language": "python",
+            "lineLength": 100,
+            "begin": "",
+            "end": "",
+            "prefix": "# "
+        }
+    ],
+    "psi-header.changes-tracking": {
+        "autoHeader": "autoSave",
+        "include": [
+            "cpp",
+            "python"
+        ],
+        "exclude": [
+            "jsonc",
+            "json",
+            "markdown"
+        ],
+        "excludeGlob": [
+            "**/CMakeLists.txt",
+            "**/*.cmake",
+            "**/settings.json",
+            "*"
+        ]
+    },
+    // others
+    {}
 }

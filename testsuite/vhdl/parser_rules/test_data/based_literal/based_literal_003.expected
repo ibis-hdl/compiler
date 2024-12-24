@@ -1,3 +1,3 @@
 (based_literal
-  base: 16, integer: E, exp: E1, type: integer
+  base: 16, integer: E, exp: 1, type: integer
 )

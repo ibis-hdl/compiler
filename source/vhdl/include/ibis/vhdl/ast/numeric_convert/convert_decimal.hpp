@@ -37,10 +37,10 @@ namespace ibis::vhdl::ast {
 template <typename IntegerT, typename RealT>
 class convert_decimal {
     static_assert(std::numeric_limits<IntegerT>::is_integer,  // --
-                  "TagetType must be of type integer");
+                  "TargetType must be of type integer");
 
     static_assert(std::numeric_limits<RealT>::is_iec559,  // --
-                  "TagetType must be IEC 559 (IEEE 754) real/float");
+                  "TargetType must be IEC 559 (IEEE 754) real/float");
 
 public:
     using integer_type = typename std::make_unsigned<IntegerT>::type;

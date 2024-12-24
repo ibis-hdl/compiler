@@ -15,9 +15,8 @@
 
 namespace testsuite::vhdl::numeric_convert::util {
 
-///
-/// Create a binary string from unsigned integer
-///
+// ----------------------------------------------------------------------------
+
 binary_string::binary_string(uint64_t num)
     : number{ num }
 {
@@ -43,9 +42,8 @@ std::ostream& operator<<(std::ostream& os, binary_string const& generator)
     return os;
 }
 
-///
-/// Create an octal string from unsigned integer
-///
+// ----------------------------------------------------------------------------
+
 octal_string::octal_string(uint64_t num)
     : number{ num }
 {
@@ -66,9 +64,8 @@ std::ostream& operator<<(std::ostream& os, octal_string const& generator)
     return os;
 }
 
-///
-/// Create a hexadecimal string from unsigned integer
-///
+// ----------------------------------------------------------------------------
+
 hexadecimal_string::hexadecimal_string(uint64_t num)
     : number{ num }
 {
