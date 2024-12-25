@@ -9,7 +9,45 @@ Generally honor:
 partially expressive, but outdated. A documentation marathon is required if the
 source base is **stable**.
 
-## Building: Customize CMake build
+## Build: Requisites
+
+For Ubuntu please have a look at the files in [`.devcontainer`](../.devcontainer) and the scripts.
+
+For Fedora:
+
+```shell
+sudo dnf install gcc clang clang-tools-extra cmake ninja-build
+```
+
+## Build: Conan Profile
+
+It is important to set up the right Conan profile, e.g. setup the right compiler and path. E.g.
+for Clang profile `clang`, `[buildenv]`and `[conf]` are added manually:
+
+```shell
+$ cat .conan2/profiles/clang 
+[settings]
+arch=x86_64
+build_type=Release
+compiler=clang
+compiler.cppstd=gnu17
+compiler.libcxx=libstdc++11
+compiler.version=19
+os=Linux
+
+[buildenv]
+CC=clang
+CXX=clang++
+
+[conf]
+tools.build:compiler_executables={ "c": "/usr/bin/clang", "cpp": "/usr/bin/clang++" }
+```
+
+Further, if during `conan install` one gets
+ `c++: error: unrecognized command-line option ‘-stdlib=libstdc++’`
+ then the compiler aren't correctly setup - it's not a valid flag for GCC.
+
+## Build: Customize CMake build
 
 CMake supports two files, `CMakePresets.json` and `CMakeUserPresets.json`, that allow users to 
 specify common configure, build, and test options and share them with others. For more
@@ -81,7 +119,7 @@ To use, e.g. [CCache (a fast C/C++ compiler cache)](https://ccache.dev/) for CMa
 }
 ```
 
-The [`cmake/presets/common.json`](/cmake/presets/common.json) presets already 
+The [`cmake/presets/common.json`](../cmake/presets/common.json) presets already 
 contains a predefined "ccache" section:
 
 ```json
@@ -98,10 +136,10 @@ contains a predefined "ccache" section:
         },
 ```
 
-Also, there are some already pre-configured CMake presets below 
+Also, there are some already pre-configured user CMake presets below 
 [`cmake/presets/user`](/cmake/presets/user). Simply copy one of your
 choice to `${source_dir}` as `CMakeUserPresets.json` - this file
-is excluded from *git*, see [`.gitignore`](/.gitignore).
+is excluded from *git*, see [`.gitignore`](../.gitignore).
 
 ## Linting: Clang Tidy
 

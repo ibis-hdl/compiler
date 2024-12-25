@@ -93,7 +93,7 @@ add_custom_target(doc-testsuite
     VERBATIM
 )
 # also clean up test matrix output, CMake doesn't know about it.
-# FixMe: This prevents from ninja's error about permission denied (on Windows)
+# FixMe [CMake]: This prevents from ninja's error about permission denied (on Windows)
 # recreating is cheap ...
 set_target_properties(doc-testsuite
     PROPERTIES

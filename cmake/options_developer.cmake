@@ -164,7 +164,7 @@ add_compile_options(
 ## -----------------------------------------------------------------------------
 # Sanitize support and compiler options
 #
-# FixMe: Check and test flags, only added
+# FixMe [CMake]: Check and test flags, only added
 
 # --- ThreadSanitizer ---
 option(IBIS_ENABLE_TSAN "Enable ThreadSanitizer builds." OFF)
@@ -201,7 +201,7 @@ mark_as_advanced(IBIS_ENABLE_UBSAN)
 set(CMAKE_CXX_FLAGS_UBSAN "-fsanitize=undefined")
 set(CMAKE_LINK_FLAGS_UBSAN "-fsanitize=undefined")
 
-# FixMe: Sanity checks
+# FixMe [CMake]: Sanity checks
 # Clang: [Controlling Code Generation](https://github.com/llvm/llvm-project/blob/d480f968ad8b56d3ee4a6b6df5532d485b0ad01e/clang/docs/UsersManual.rst#id108)
 # It is not possible to combine more than one of the -fsanitize=address,
 # -fsanitize=thread, and -fsanitize=memory checkers in the same program.

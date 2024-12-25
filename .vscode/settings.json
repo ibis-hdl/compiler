@@ -46,7 +46,8 @@
         "BUG", "HACK", "FIXME", "TODO", "XXX",
         "@todo", "@fixme",
         "FixMe [C++20]", "FixMe: [C++20]", "@todo [C++20]", 
-        "FixMe [C++23]", "FixMe: [C++20]", "@todo [C++23]",
+        "FixMe [C++23]", "FixMe: [C++23]", "@todo [C++23]",
+        "FixMe [CMake]", "ToDo [CMake]", "@fixme [CMake]", "@todo [CMake]",
         "<<<<<<<"
     ],
     "todo-tree.general.tagGroups": {
@@ -60,6 +61,9 @@
         "C++20/C++23": [
             "FixMe [C++20]", "FixMe: [C++20]", "@todo [C++20]", 
             "FixMe [C++23]", "FixMe: [C++20]", "@todo [C++23]",
+        ],
+        "CMake": [
+            "FixMe [CMake]", "ToDo [CMake]", "@fixme [CMake]", "@todo [CMake]"
         ],
         "git-conflict": [
             "<<<<<<<"
@@ -107,8 +111,8 @@
         {
             "language": "cpp",
             "lineLength": 100,
-            "begin": "",
-            "end": "",
+            "begin": "//",
+            "end": "//",
             "prefix": "// "
         },
         {
@@ -136,7 +140,5 @@
             "**/settings.json",
             "*"
         ]
-    },
-    // others
-    {}
+    }
 }

@@ -22,8 +22,7 @@
 #include <boost/test/tools/output_test_stream.hpp>
 #include <boost/test/tree/decorator.hpp>
 
-#include <fmt/format.h>
-
+#include <format>
 #include <iostream>
 #include <string_view>
 #include <type_traits>
@@ -188,7 +187,7 @@ struct verify_worker
     {
         if constexpr (verbose) {
             static ast::printer print(os);
-            os << fmt::format("verify {0:2d}: identifier '", test_index);
+            os << std::format("verify {0:2d}: identifier '", test_index);
             print(node.identifier_list);
             os << "'\n";
         }

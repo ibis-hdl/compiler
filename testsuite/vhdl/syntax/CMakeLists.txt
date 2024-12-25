@@ -69,7 +69,7 @@ target_sources(${PROJECT_NAME}
         src/dataset.cpp ${PROJECT_BINARY_DIR}/src/dataset_builtin.cpp
         # concrete test cases
         src/test/label_check_test.cpp
-        src/test/keyword_match_test.cpp ## FixMe: requires more than 10GB!
+        src/test/keyword_match_test.cpp ## FixMe [CMake]: requires more than 10GB!
 )
 
 

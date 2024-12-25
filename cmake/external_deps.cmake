@@ -48,4 +48,4 @@ find_package(range-v3 0.12.0 REQUIRED)
 # strong typedef library for C++14/17/20
 #
 find_package(strong_type REQUIRED)
-# ToDo: use explicit version: find_package(strong_type 15 REQUIRED)
+# @todo [CMake] use explicit version: find_package(strong_type 15 REQUIRED)

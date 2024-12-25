@@ -4,9 +4,7 @@
 //
 
 #include <ibis/frontend/signal_handler.hpp>
-
-#include <ibis/color/message.hpp>
-#include <ibis/util/platform.hpp>
+#include <ibis/message.hpp>
 
 #include <csignal>
 #include <functional>
@@ -58,16 +56,13 @@ std::string_view signal_name(int sig_num)
 
 void register_signal_handlers()
 {
-    using failure = ibis::color::message::failure;
-
     auto const signal_handler = []() {
-        using warning = ibis::color::message::warning;
-        std::cout << warning("[ibis/Note] No signal handler attached") << '\n';
+        ibis::warning("No signal handler attached");
         return true;
     };
 
     if (!signal_handler()) {
-        std::cerr << failure("[ibis/Note] Failed to install signal handlers") << '\n';
+        ibis::failure("Failed to install signal handlers");
         std::exit(EXIT_FAILURE);
     }
 }

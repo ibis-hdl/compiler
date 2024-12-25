@@ -56,21 +56,13 @@ set_source_files_properties(src/test_util.cpp
 )
 
 
-#if (IBIS_ENABLE_PCH)
-#    target_precompile_headers(${PROJECT_NAME}
-#        PRIVATE
-#
-#    )
-#endif()
-
-
 target_include_directories(${PROJECT_NAME}
     PRIVATE
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
 )
 
 
-# FixMe: on Windows, mt.exe failed to write the updated manifest to the resource
+# FixMe [CMake]: on Windows, mt.exe failed to write the updated manifest to the resource
 # The settings below doesn't solve the problem ... Simply restart compiling.
 if(WIN32)
     set_property(TARGET ${PROJECT_NAME}

@@ -39,7 +39,6 @@ private:
     void parse_cli(int argc, const char* argv[]);
     static void l10n();
     static void register_signal_handlers();
-    static void user_config_message_color();
 };
 
 }  // namespace ibis::frontend

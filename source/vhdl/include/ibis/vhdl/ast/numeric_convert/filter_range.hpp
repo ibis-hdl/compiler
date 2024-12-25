@@ -7,6 +7,8 @@
 
 #include <range/v3/view/filter.hpp>
 
+#include <format>
+
 namespace ibis::vhdl::ast::numeric_convert::detail {
 
 ///
@@ -21,7 +23,7 @@ namespace ibis::vhdl::ast::numeric_convert::detail {
 /// Also read [Why must a std::ranges::filter_view object be non-const for querying its elements?](
 ///  https://stackoverflow.com/questions/67667318/why-must-a-stdrangesfilter-view-object-be-non-const-for-querying-its-element)
 ///
-/// Concept @see [godbolt.org](https://godbolt.org/z/ej5rdPs9e)
+/// Concept @see [godbolt.org](https://godbolt.org/z/5Mv6zbhEM)
 ///
 /// @code{.cpp}
 /// ...
@@ -34,7 +36,7 @@ namespace ibis::vhdl::ast::numeric_convert::detail {
 ///     using namespace ranges;
 ///
 ///     auto const input = "007_42"sv;
-///     std::cout << fmt::format("{0}\n", input);
+///     std::cout << std::format("{}\n", input);
 ///
 ///     auto /*const*/ input_f = input | views::filter([](char chr) { return chr != '_'; });
 ///     foo(input_f.begin(), input_f.end());
