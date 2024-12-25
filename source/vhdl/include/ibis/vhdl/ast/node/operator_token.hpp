@@ -6,10 +6,8 @@
 #pragma once
 
 #include <iosfwd>
-
 #include <string_view>
-
-#include <fmt/format.h>
+#include <format>
 
 namespace ibis::vhdl::ast {
 
@@ -66,10 +64,10 @@ inline std::ostream& operator<<(std::ostream& os, operator_token token)
 }  // namespace ibis::vhdl::ast
 
 template <>
-struct fmt::formatter<ibis::vhdl::ast::operator_token> : fmt::formatter<std::string_view> {
+struct std::formatter<ibis::vhdl::ast::operator_token> : std::formatter<std::string_view> {
     template <typename FormatContext>
     std::string_view format(ibis::vhdl::ast::operator_token token, FormatContext& ctx) const
     {
-        return fmt::formatter<std::string_view>::format(as_string_view(token), ctx);
+        return std::formatter<std::string_view>::format(as_string_view(token), ctx);
     }
 };

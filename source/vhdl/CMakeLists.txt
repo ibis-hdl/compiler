@@ -22,7 +22,7 @@ add_library(ibis::vhdl ALIAS ${PROJECT_NAME})
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
         ibis::common
-        fmt::fmt
+        # fmt::fmt
         range-v3::range-v3
         Boost::headers
         rollbear::strong_type

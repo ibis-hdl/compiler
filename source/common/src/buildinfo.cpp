@@ -6,8 +6,7 @@
 #include <ibis/buildinfo.hpp>
 #include <ibis/buildinfo_static.hpp>
 
-#include <fmt/format.h>
-
+#include <format>
 #include <iostream>
 #include <string_view>
 
@@ -15,7 +14,7 @@ namespace ibis {
 
 std::ostream& buildinfo::print_on(std::ostream& os)
 {
-    os << fmt::format(
+    os << std::format(
         "platform: {0}\n"
         "type:     {1}\n"
         "system:   {2}\n"

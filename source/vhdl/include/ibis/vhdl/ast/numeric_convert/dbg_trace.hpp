@@ -9,8 +9,7 @@
 #include <source_location>  // IWYU pragma: keep
 #endif
 
-#include <fmt/format.h>
-
+#include <format>
 #include <string_view>
 #include <iostream>
 
@@ -23,7 +22,7 @@ void trace_report(RangeType const& range, RangeFiltType const& range_f, bool par
                   AttributeType attribute, std::string_view file, unsigned line,
                   std::string_view function)
 {
-    std::cout << fmt::format("{0}:{1} {2}('{3}') -> '{4}' => attr='{5}' (parse_ok={6})\n",
+    std::cout << std::format("{0}:{1} {2}('{3}') -> '{4}' => attr='{5}' (parse_ok={6})\n",
                              file,       // {0}
                              line,       // {1}
                              function,   // {2}

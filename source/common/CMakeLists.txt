@@ -24,7 +24,7 @@ target_link_libraries(${PROJECT_NAME}
         ibis::util
         Boost::headers
     PRIVATE
-        fmt::fmt
+        # fmt::fmt
 )
 
 

@@ -32,8 +32,6 @@
 #include <boost/locale/message.hpp>
 #include <ibis/util/compiler/warnings_on.hpp>
 
-#include <fmt/format.h>
-
 #include <cmath>
 #include <algorithm>
 #include <limits>
