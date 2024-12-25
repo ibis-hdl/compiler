@@ -72,8 +72,8 @@ The best to continue is to install [Python's virtual environment](https://docs.p
 and activate Python's virtual environment depend on the OS using:
 
 On Windows:
-```shell
-> .venv\Scripts\activate
+```powershell
+> .win64-venv\Scripts\activate
 ```
 
 On Linux `bash`:
@@ -81,8 +81,8 @@ On Linux `bash`:
 > source .venv/bin/activate
 ```
 
-Check that you are running the right virtual environment (in PowerShell you may use `(Get-Command python).path`)
-by using `pip` (notice capital `V` here)
+Check that you are running the right virtual environment by using `pip` (notice capital `V` here),
+on PowerShell you may also use `(Get-Command python).path`:
 
 ```shell
 > pip -V
