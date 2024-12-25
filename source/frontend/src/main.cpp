@@ -12,10 +12,7 @@
 
 #include <ibis/settings.hpp>
 #include <ibis/util/file/file_loader.hpp>
-
-#include <ibis/color/message.hpp>
-#include <ibis/color/attribute.hpp>
-#include <ibis/color/facet.hpp>
+#include <ibis/message.hpp>
 
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
@@ -33,11 +30,10 @@ extern void testing_signal_handler();
 using boost::locale::format;
 using boost::locale::translate;
 
-using namespace ibis;
-using namespace ibis::color;
-
 namespace parser = ibis::vhdl::parser;
 namespace ast = ibis::vhdl::ast;
+
+using namespace ibis;
 
 ///
 /// @brief The App, used as test driver at this state.
@@ -61,16 +57,7 @@ int main(int argc, const char* argv[])
             std::cout << '\n';
         }
 
-        constexpr bool test_color = false;
-
         util::file_loader file_reader{ std::cerr };
-
-        if constexpr ((test_color)) {
-            std::cerr << color::message::failure("FAILURE") << " Format Test\n";
-            std::cerr << color::message::error("ERROR") << " Format Test\n";
-            std::cerr << color::message::warning("WARNING") << " Format Test\n";
-            std::cerr << color::message::note("NOTE") << " Format Test\n";
-        }
 
         // Quick & Dirty main() function to test the parser from command line
         parser::position_cache<parser::iterator_type> position_cache;
@@ -82,15 +69,14 @@ int main(int argc, const char* argv[])
             // FixMe: Throw on read_file(), no optional!!
             auto const contents = file_reader.read_file(hdl_file);
             if (!quiet) {
-                std::cout << message::note(                             // --
-                                 (format(translate("processing: {1}"))  // --
-                                  % hdl_file)
-                                     .str())
-                          << '\n';
+                ibis::note(                                // --
+                    (format(translate("processing: {1}"))  // --
+                     % hdl_file)
+                        .str());
             }
 
             // render the source with lines numbers (quick & dirty solution)
-            uint16_t line_no = 1;
+            std::uint16_t line_no = 1;
             std::istringstream iss(*contents);
             std::cout << "------------------- input ----------------------\n";
             for (std::string line; std::getline(iss, line, '\n'); line_no++) {
@@ -127,13 +113,12 @@ int main(int argc, const char* argv[])
             return static_cast<int>(count);
         };
 
-        std::cout << message::note(          // --
-                         (format(translate(  // --
-                              "processed {1} file", "processed {1} files",
-                              plural_count(position_cache.file_count())))  // --
-                          % position_cache.file_count())
-                             .str())
-                  << '\n';
+        ibis::note(             // --
+            (format(translate(  // --
+                 "processed {1} file", "processed {1} files",
+                 plural_count(position_cache.file_count())))  // --
+             % position_cache.file_count())
+                .str());
 
         // print error/warning state if any (failure_status takes care on it)
         std::cout << vhdl::failure_status(ctx) << '\n';
@@ -142,23 +127,21 @@ int main(int argc, const char* argv[])
     }
     catch (boost::spirit::x3::expectation_failure<vhdl::parser::iterator_type> const& e) {
         // This shouldn't be happen!
-        std::cerr << message::failure(                                                       // --
-                         (format(translate(                                                  // --
-                              "caught unhandled Boost.Spirit X3 expectation_failure: {1}"))  // --
-                          % e.what())
-                             .str())
-                  << '\n';
+        ibis::failure(                                                          // --
+            (format(translate(                                                  // --
+                 "caught unhandled Boost.Spirit X3 expectation_failure: {1}"))  // --
+             % e.what())
+                .str());
     }
     catch (std::exception const& e) {
-        std::cerr << message::failure(                   // --
-                         (format(translate(              // --
-                              "Exception caught: {1}"))  // --
-                          % e.what())
-                             .str())
-                  << '\n';
+        ibis::failure(                        // --
+            (format(translate(                // --
+                 "Exception caught: {1}\n"))  // --
+             % e.what())
+                .str());
     }
     catch (...) {
-        std::cerr << message::failure(translate("Unexpected exception caught")) << '\n';
+        ibis::failure(translate("Unexpected exception caught"));
     }
 
     return EXIT_SUCCESS;

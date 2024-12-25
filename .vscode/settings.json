@@ -46,7 +46,7 @@
         "BUG", "HACK", "FIXME", "TODO", "XXX",
         "@todo", "@fixme",
         "FixMe [C++20]", "FixMe: [C++20]", "@todo [C++20]", 
-        "FixMe [C++23]", "FixMe: [C++20]", "@todo [C++23]",
+        "FixMe [C++23]", "FixMe: [C++23]", "@todo [C++23]",
         "<<<<<<<"
     ],
     "todo-tree.general.tagGroups": {
@@ -107,8 +107,8 @@
         {
             "language": "cpp",
             "lineLength": 100,
-            "begin": "",
-            "end": "",
+            "begin": "//",
+            "end": "//",
             "prefix": "// "
         },
         {

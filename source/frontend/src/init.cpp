@@ -11,10 +11,6 @@
 
 #include <ibis/settings.hpp>
 
-#include <ibis/color/message.hpp>
-#include <ibis/color/facet.hpp>
-#include <ibis/color/attribute.hpp>
-
 #include <ibis/util/platform.hpp>
 
 #include <ibis/util/file/file_loader.hpp>
@@ -27,8 +23,6 @@
 #include <CLI/CLI.hpp>
 #include <ibis/util/compiler/warnings_on.hpp>
 
-#include <boost/property_tree/json_parser.hpp>
-
 #include <boost/locale/message.hpp>
 #include <boost/locale/format.hpp>
 #include <boost/locale/generator.hpp>
@@ -37,7 +31,6 @@
 
 #include <cstdlib>
 #include <memory>
-#include <optional>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -58,8 +51,6 @@ init::init(int argc, const char* argv[])
     parse_cli(argc, argv);
 
     l10n();
-
-    user_config_message_color();
 }
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
@@ -224,7 +215,7 @@ void init::parse_cli(int argc, const char* argv[])
         app.parse(argc, argv);
     }
     catch (CLI::ParseError const& e) {
-        // e.g. not fullfilled requirements
+        // e.g. not fulfilled requirements
         std::exit(app.exit(e));
     }
     catch (...) {
@@ -338,114 +329,6 @@ void init::parse_cli(int argc, const char* argv[])
 }
 
 void init::register_signal_handlers() { frontend::register_signal_handlers(); }
-
-void init::user_config_message_color()
-{
-    static const std::string_view default_cfg_json{
-        R"({
-  "message": {
-    "failure": {
-      "style": {
-        "foreground": "red",
-        "background": "white",
-        "text"      : "bold"
-      }
-    },
-    "error": {
-      "style": {
-        "foreground": "red",
-        "text"      : "bold"
-      }
-    },
-    "warning": {
-      "style": {
-        "foreground": "yellow"
-      }
-    },
-    "note": {
-      "style": {
-        "foreground": "green"
-      }
-    }
-  }
-})"
-    };
-
-    ibis::settings::insert_json(default_cfg_json);
-
-    ibis::settings::reference_type ptree = ibis::settings::instance();
-
-    bool const force_color = [&] { return ptree.get<bool>("force-color"); }();
-    bool const no_color = [&] { return ptree.get<bool>("no-color"); }();
-
-    if (no_color && !force_color) {
-        // no color wanted - skip further proceeding
-        return;
-    }
-
-    // bool const quiet = [&] { return ptree.get<bool>("quiet"); }();
-    unsigned const verbose = [&] { return ptree.get<unsigned>("verbose"); }();
-
-    using namespace ibis;
-    using namespace ibis::color;
-
-    if (verbose != 0) {
-        std::cout << message::note("Note:") << " Using message color defaults:\n";
-        std::cout << default_cfg_json << '\n';
-    }
-
-    auto const get_formatter = [&](std::string_view json_ptr) {
-        auto const& child = ibis::settings::instance().get_child(json_ptr.data());
-        // ptree::write_json(std::cout, child);
-
-        ibis::color::attribute_container format_style;
-
-        auto const update_format = [&](std::string_view attr_name, auto const attribute_getter,
-                                       ibis::color::attribute_container& format) {
-            auto const attr{ attribute_getter(attr_name) };
-            if (attr) {
-                format |= *attr;
-            }
-        };
-
-        for (auto const& prop_pair : child) {
-            std::string_view const name = prop_pair.first.data();        // key
-            std::string_view const attr_name = prop_pair.second.data();  // value
-
-            if (util::icompare(name, "text")) {
-                update_format(attr_name, &color::text_attr, format_style);
-                continue;
-            }
-            if (util::icompare(name, "foreground")) {
-                update_format(attr_name, &color::foreground_attr, format_style);
-                continue;
-            }
-            if (util::icompare(name, "background")) {
-                update_format(attr_name, &color::background_attr, format_style);
-                continue;
-            }
-        }
-
-        return format_style;
-    };
-
-    auto const imbue = [](auto& stream, auto&& facet_ptr) {
-        std::locale locale(stream.getloc(), facet_ptr.release());
-        stream.imbue(locale);
-    };
-
-    auto const failure_format = get_formatter("message.failure.style");
-    imbue(std::cerr, std::make_unique<message::failure_facet>(failure_format, color::color_off));
-
-    auto const error_format = get_formatter("message.error.style");
-    imbue(std::cerr, std::make_unique<message::error_facet>(error_format, color::color_off));
-
-    auto const warning_format = get_formatter("message.warning.style");
-    imbue(std::cerr, std::make_unique<message::warning_facet>(warning_format, color::color_off));
-
-    auto const note_format = get_formatter("message.note.style");
-    imbue(std::cerr, std::make_unique<message::note_facet>(note_format, color::color_off));
-}
 
 void init::l10n()
 {

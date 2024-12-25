@@ -35,6 +35,7 @@ target_sources(${PROJECT_NAME}
         src/file_loader.cpp
         src/settings.cpp
         src/user_home_dir.cpp
+        src/message.cpp
 )
 
 

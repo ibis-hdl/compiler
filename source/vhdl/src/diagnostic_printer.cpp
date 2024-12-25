@@ -7,6 +7,7 @@
 
 #include <ibis/util/position_indicator.hpp>
 #include <ibis/util/make_iomanip.hpp>
+#include <ibis/message.hpp>
 
 #include <ibis/util/cxx_bug_fatal.hpp>
 
@@ -47,22 +48,22 @@ std::ostream& diagnostic_printer::print_error_type(std::ostream& os) const
 
     switch (context.message_provider()) {
         case error_type::parser:
-            os << color::message::error(translate("parse error"));
+            ibis::error(translate("parse error"), false);
             break;
         case error_type::syntax:
-            os << color::message::error(translate("syntax error"));
+            ibis::error(translate("syntax error"), false);
             break;
         case error_type::semantic:
-            os << color::message::error(translate("semantic error"));
+            ibis::error(translate("semantic error"), false);
             break;
         case error_type::numeric:
-            os << color::message::error(translate("numeric error"));
+            ibis::error(translate("numeric error"), false);
             break;
         case error_type::not_supported:
-            os << color::message::error(translate("unsupported"));
+            ibis::error(translate("unsupported"), false);
             break;
         case error_type::unspecific:
-            os << color::message::error(translate("unspecific"));
+            ibis::error(translate("unspecific"), false);
             break;
         default:  // unreachable_bug_triggered
             cxx_unreachable_bug_triggered();
@@ -148,6 +149,8 @@ std::ostream& diagnostic_printer::print_snippets(std::ostream& os) const
     return os;
 }
 
+// ToDo: With retirement of the ibis::color code base, the diagnostic_printer API must be renewed
+// - it is no longer intuitive.
 std::ostream& diagnostic_printer::print_on(std::ostream& os) const
 {
     auto const location = [&]() {
