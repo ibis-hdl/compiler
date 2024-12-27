@@ -5,10 +5,9 @@
 
 #pragma once
 
-#include <cstdlib>
+#include <format>
 #include <iostream>
-
-#include <fmt/format.h>
+#include <cstdlib>
 
 namespace ibis::util::detail {
 
@@ -16,7 +15,7 @@ template <typename CharT>
 void assertion_failed_msg(const CharT* expr, const char msg[], const char function[],
                           const char file[], long line)
 {
-    std::cerr << fmt::format(
+    std::cerr << std::format(
         "\n"
         "****************************************\n"
         "***** Internal Fatal Program Error *****\n"

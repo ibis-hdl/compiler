@@ -8,9 +8,6 @@
 #include <ibis/vhdl/diagnostic_handler.hpp>
 #include <ibis/vhdl/diagnostic_context.hpp>
 
-#include <ibis/color/message.hpp>
-#include <ibis/color/facet.hpp>
-
 #include <iosfwd>
 #include <string>
 

@@ -13,9 +13,6 @@
 
 #include <ibis/util/position_indicator.hpp>
 
-#include <ibis/color/message.hpp>
-#include <ibis/color/facet.hpp>
-
 #include <ibis/util/make_iomanip.hpp>
 #include <ibis/util/cxx_bug_fatal.hpp>
 

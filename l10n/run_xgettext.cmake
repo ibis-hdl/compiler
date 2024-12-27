@@ -78,7 +78,7 @@ set(l10n_email "https://github.com/eda/ibis/issues")
 # Note: running in -P script mode, CMake sets the variables CMAKE_BINARY_DIR etc.
 # to the current working directory (https://cmake.org/cmake/help/latest/variable/CMAKE_CURRENT_SOURCE_DIR.html).
 execute_process(
-    COMMAND xgettext # XXXX ${GETTEXT_XGETTEXT_EXECUTABLE}
+    COMMAND xgettext # FixMe [CMake] ${GETTEXT_XGETTEXT_EXECUTABLE}
         --add-comments=TRANSLATORS
         --package-name="${PROJECT_NAME}"
         --package-version="${eda_VERSION_MAJOR}.${eda_VERSION_MINOR}.${eda_VERSION_REVISION}"

@@ -1,5 +1,5 @@
 ################################################################################
-## IBIS/auxiliary project
+## IBIS/util project
 ##
 ## Just for curiosity: [Windows 10 Still Won’t Let You Use These File Names Reserved in 1974](
 ## https://www.howtogeek.com/fyi/windows-10-still-wont-let-you-use-these-file-names-reserved-in-1974/)
@@ -35,9 +35,9 @@ target_include_directories(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
     INTERFACE
-        fmt::fmt
         Boost::headers
-        Boost::unit_test_framework
+        fmt::fmt    # FixMe [CMake]: Even not required, MSVC PCH errors due to /utf-8 compile flag
+        Boost::unit_test_framework  # FixMe [CMake]: ibis::util shouldn't be depend on Boost::Utf
 )
 
 

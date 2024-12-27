@@ -7,8 +7,7 @@
 
 #include <iosfwd>
 #include <string_view>
-
-#include <fmt/format.h>
+#include <format>
 
 // FixMe: required on Win32, investigate!
 #if defined(IN)
@@ -133,11 +132,11 @@ inline std::ostream& operator<<(std::ostream& os, keyword_token token)
 }  // namespace ibis::vhdl::ast
 
 template <>
-struct fmt::formatter<ibis::vhdl::ast::keyword_token> : fmt::formatter<std::string_view> {
+struct std::formatter<ibis::vhdl::ast::keyword_token> : std::formatter<std::string_view> {
     template <typename FormatContext>
     std::string_view format(ibis::vhdl::ast::keyword_token token, FormatContext& ctx) const
     {
-        return fmt::formatter<std::string_view>::format(as_string_view(token), ctx);
+        return std::formatter<std::string_view>::format(as_string_view(token), ctx);
     }
 };
 
