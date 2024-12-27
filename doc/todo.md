@@ -3,6 +3,8 @@ ToDo
 
 Obviously the intend is to get the parser working and hence the project. 
 
+Some of the marks are from 2022 and hence needs also rework.
+
 ## CMake build
 
 * Hide time intensive compiling from Clang-Tidy like
@@ -16,16 +18,32 @@ Obviously the intend is to get the parser working and hence the project.
 ## Boost.Spirit X3
 
 The X3 rules are from start of the project in 2017, so `grammar_def.h` requires
-rework. The headers are generated from EBNF using a python script. Only recursive
-rules require the template engine of BOOST_SPIRIT_{DECLARE, DEFINE}.
+rework. The headers are generated from EBNF using a python script. 
+Only recursive rules require the template engine of BOOST_SPIRIT_{DECLARE, DEFINE}.
 
-These days there is are two branches `next-x3-grammar` and `next-x3-grammar-v2` (the last is the
-current). Also, there is a branch `next-cpp20-numeric-convert` which affects parsing and will
-replace the old approach of ast's sub project numeric_convert.
+### VHDL's Lexical elements
+
+VHDL defines the (ISO/IEC 8859-1:1998) character sets:
+
+```
+upper_case_letter ::= ABCDEFGHIJKLMNOPQRSTUVWXYZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞ
+lower_case_letter ::= abcdefghijklmnopqrstuvwxyzßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ
+special_character ::= \"#&'()*+,-./:;<=>[]_|
+other_special_character ::= !$%?@\\^`{}~¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿×÷­
+```
+> **_Note_**:  VS Code doesn't render soft hyphen (U+00AD) at *other_special_character* string's end!
+
+Spirit X3 has ASCII and ISO 8859-1 parsers, but the character set is limit to < 127, see
+[X3: Provide documentation for different encodings/unicode usage](
+  https://github.com/boostorg/spirit/issues/614).
+
+At these days for convenience the `x3::iso8859_1` namespace is used, full character set support requires also to integrate an extended compare function for these character set (for use with `x3::no_case`)!, since VHDL's identifiers are case insensitive.
+  
+  A good playground is `${CMAKE_SOURCE_DIR}/testsuite/spirit_x3/test/lexical_elements`.
+
 
 Starting with Boost 1.87 there is a new [Boost.Parser library](https://www.boost.org/doc/libs/1_87_0/doc/html/parser.html)
-by T. Zachary Laine. Maybe this gives better results regards writing, testing (see below)
-and compile time.
+by T. Zachary Laine. Maybe this gives better results regards writing, testing (see below) and compile time.
 
 ## Unit testing
 
