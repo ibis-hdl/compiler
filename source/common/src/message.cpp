@@ -44,6 +44,13 @@ std::ostream& write(std::ostream& os, boost::locale::basic_message<char> msg, bo
     return os;
 }
 
+std::ostream& write(std::ostream& os, boost::locale::basic_format<char> const& fmt, bool newline)
+{
+    fmt.write(os);
+    os << (newline ? "\n" : "");
+    return os;
+}
+
 }  // namespace
 
 namespace ibis {
@@ -96,6 +103,35 @@ std::ostream& message(boost::locale::basic_message<char> msg, ibis::severity sev
         case failure: {
             fmt::print(stderr, fg(fmt::color::red), "[{}] ", "Failure");
             return write(std::cerr, msg, newline);
+        }
+        default:
+            unreachable();
+    }
+
+    unreachable();
+}
+
+std::ostream& message(boost::locale::basic_format<char> const& fmt, ibis::severity severity,
+                      bool newline)
+{
+    using enum ibis::severity;
+
+    switch (severity) {
+        case note: {
+            fmt::print(stdout, fg(fmt::color::green), "[{}] ", "Note");
+            return write(std::cout, fmt, newline);
+        }
+        case warning: {
+            fmt::print(stdout, fg(fmt::color::yellow), "[{}] ", "Warning");
+            return write(std::cout, fmt, newline);
+        }
+        case error: {
+            fmt::print(stderr, fg(fmt::color::red), "[{}] ", "Error");
+            return write(std::cerr, fmt, newline);
+        }
+        case failure: {
+            fmt::print(stderr, fg(fmt::color::red), "[{}] ", "Failure");
+            return write(std::cerr, fmt, newline);
         }
         default:
             unreachable();

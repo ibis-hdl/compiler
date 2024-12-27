@@ -69,10 +69,8 @@ int main(int argc, const char* argv[])
             // FixMe: Throw on read_file(), no optional!!
             auto const contents = file_reader.read_file(hdl_file);
             if (!quiet) {
-                ibis::note(                                // --
-                    (format(translate("processing: {1}"))  // --
-                     % hdl_file)
-                        .str());
+                ibis::note((format(translate("processing: {1}"))  // --
+                            % hdl_file));
             }
 
             // render the source with lines numbers (quick & dirty solution)
@@ -113,12 +111,10 @@ int main(int argc, const char* argv[])
             return static_cast<int>(count);
         };
 
-        ibis::note(             // --
-            (format(translate(  // --
-                 "processed {1} file", "processed {1} files",
-                 plural_count(position_cache.file_count())))  // --
-             % position_cache.file_count())
-                .str());
+        ibis::note(  // --
+            (format(translate("processed {1} file", "processed {1} files",
+                              plural_count(position_cache.file_count())))  // --
+             % position_cache.file_count()));
 
         // print error/warning state if any (failure_status takes care on it)
         std::cout << vhdl::failure_status(ctx) << '\n';
@@ -127,18 +123,14 @@ int main(int argc, const char* argv[])
     }
     catch (boost::spirit::x3::expectation_failure<vhdl::parser::iterator_type> const& e) {
         // This shouldn't be happen!
-        ibis::failure(                                                          // --
-            (format(translate(                                                  // --
-                 "caught unhandled Boost.Spirit X3 expectation_failure: {1}"))  // --
-             % e.what())
-                .str());
+        ibis::failure(                                                                       // --
+            (format(translate("caught unhandled Boost.Spirit X3 expectation_failure: {1}"))  // --
+             % e.what()));
     }
     catch (std::exception const& e) {
-        ibis::failure(                        // --
-            (format(translate(                // --
-                 "Exception caught: {1}\n"))  // --
-             % e.what())
-                .str());
+        ibis::failure(                                     // --
+            (format(translate("Exception caught: {1}\n"))  // --
+             % e.what()));
     }
     catch (...) {
         ibis::failure(translate("Unexpected exception caught"));

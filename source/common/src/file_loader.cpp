@@ -6,6 +6,7 @@
 #include <ibis/util/file/file_loader.hpp>
 
 #include <ibis/settings.hpp>
+#include <ibis/message.hpp>
 
 #include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/locale/format.hpp>
@@ -175,26 +176,27 @@ std::optional<std::string> file_loader::read_file_alt(fs::path const& filename) 
 
 std::time_t file_loader::timesstamp(fs::path const& filename) const
 {
-    std::error_code ec;
-    auto const ftime = fs::last_write_time(filename, ec);
+    namespace chrono = std::chrono;
+    using boost::locale::format;
+    using boost::locale::translate;
 
-    if (ec && !quiet) {
-        os << "Failed to determine file time of " << fs::path{ filename }.make_preferred() << ": "
-           << ec.message() << std::endl;
-    }
-
-    // FixMe [C++20] What for a mess, see
-    // [How to convert std::filesystem::file_time_type to time_t?](
-    // https://stackoverflow.com/questions/61030383/how-to-convert-stdfilesystemfile-time-type-to-time-t)
-    auto const to_time_t = [](fs::file_time_type time_point) {
-        using namespace std::chrono;
-        auto sctp = time_point_cast<system_clock::duration>(
-            time_point - fs::file_time_type::clock::now() + system_clock::now());
-        return system_clock::to_time_t(sctp);
+    auto const report_error = [&](std::error_code ec) {
+        if (ec && !quiet) {
+            ibis::warning(                                                      // --
+                format(translate("Failed to determine file time of {1}: {2}"))  // --
+                % fs::path{ filename }.make_preferred() % ec.message()          // --
+            );
+        }
     };
 
-    std::time_t cftime = to_time_t(ftime);
-    return cftime;
+    // See [How to convert std::filesystem::file_time_type to time_t?](
+    //  https://stackoverflow.com/questions/61030383/how-to-convert-stdfilesystemfile-time-type-to-time-t)
+    std::error_code ec;
+    auto const file_time = fs::last_write_time(filename, ec);
+    report_error(ec);
+    auto const sys_time = chrono::clock_cast<chrono::system_clock>(file_time);
+
+    return chrono::system_clock::to_time_t(sys_time);
 }
 
 }  // namespace ibis::util
