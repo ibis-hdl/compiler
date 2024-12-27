@@ -13,7 +13,7 @@ namespace ibis::vhdl::ast {
 
 struct name;
 
-/// formal_part                                                 [LRM93 §4.3.2.2]
+/// formal_part                                                  [LRM93 §4.3.2.2]
 ///
 /// @code{.bnf}
 /// formal_part ::=

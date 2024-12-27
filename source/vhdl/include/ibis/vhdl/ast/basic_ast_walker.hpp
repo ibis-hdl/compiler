@@ -1597,7 +1597,9 @@ public:
         std::string_view const node_typename{ "physical_literal" };
         worker(node, node_typename);
 
-        (*this)(node.literal);
+        if (node.literal) {
+            (*this)(*node.literal);
+        }
     }
 
     void operator()(ast::physical_type_definition const& node)

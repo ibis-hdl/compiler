@@ -134,7 +134,6 @@ std::tuple<ast::identifier, ast::identifier> inline labels_of(NodeT const& node)
 
     // It is assumed that the AST nodes are correctly initialized with their labels/identifiers.
     // Otherwise boost::optional's `.get()` throws an exception.
-    // Using C++20 concept here, which find concepts by looking at the algorithms that use them.
     try {
         if constexpr (detail::has_optional_label<NodeT> && detail::has_optional_end_label<NodeT>) {
             // e.g. ast::if_statement

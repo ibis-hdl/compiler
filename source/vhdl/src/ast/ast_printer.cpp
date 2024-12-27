@@ -1879,9 +1879,12 @@ void printer::operator()(physical_literal const& node)
     static const std::string_view symbol{ "physical_literal" };
     symbol_scope<physical_literal> _(*this, symbol);
 
-    (*this)(node.literal);
-    os << ",\n"
-       << "(unit_name: " << node.unit_name << ")";
+    if (node.literal) {
+        (*this)(*node.literal);
+        os << ",\n";
+    }
+
+    os << "(unit_name: " << node.unit_name << ")";
 }
 
 void printer::operator()(physical_type_definition const& node)

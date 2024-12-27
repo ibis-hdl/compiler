@@ -7,14 +7,19 @@
 
 #include <ibis/vhdl/ast/util/position_tagged.hpp>
 
-#include <ibis/vhdl/ast/node/primary_unit_declaration.hpp>
 #include <ibis/vhdl/ast/node/range_constraint.hpp>
-#include <ibis/vhdl/ast/node/secondary_unit_declaration.hpp>
 #include <ibis/vhdl/ast/node/simple_name.hpp>
 #include <ibis/vhdl/ast/util/optional.hpp>
 #include <vector>
 
 namespace ibis::vhdl::ast {
+
+using primary_unit_declaration = ast::identifier;
+
+struct secondary_unit_declaration : position_tagged {
+    ast::identifier identifier;
+    ast::physical_literal physical_literal;
+};
 
 struct physical_type_definition : position_tagged {
     ast::range_constraint range_constraint;
