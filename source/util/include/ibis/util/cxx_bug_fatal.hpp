@@ -6,45 +6,48 @@
 #pragma once
 
 #include <format>
+#include <source_location>
 #include <iostream>
 #include <cstdlib>
 
 namespace ibis::util::detail {
 
 template <typename CharT>
-void assertion_failed_msg(const CharT* expr, const char msg[], const char function[],
-                          const char file[], long line)
+void assertion_failed_msg(const CharT* expr, const char msg[], std::source_location const& location)
 {
     std::cerr << std::format(
         "\n"
-        "****************************************\n"
-        "***** Internal Fatal Program Error *****\n"
-        "****************************************\n"
+        "*******************************\n"
+        "***** Fatal Program Error *****\n"
+        "*******************************\n"
         "in file:     {0}:{1}\n"
         "in function: {2}\n"
         "assertion:   {3}\n"
         "message:     {4}\n",
-        file,      // {0}
-        line,      // {1}
-        function,  // {2}
-        expr,      // {3}
-        msg        // {4}
+        location.file_name(),      // {0}
+        location.line(),           // {1}
+        location.function_name(),  // {2}
+        expr,                      // {3}
+        msg                        // {4}
     );
-    std::cerr << std::flush;
+    std::cerr.flush();
+}
+
+[[noreturn]] static inline void unreachable()  // @todo [C++23] std::unreachable()
+{
+#if defined(_MSC_VER) && !defined(__clang__)  // MSVC
+    __assume(false);
+#else  // GCC, Clang
+    __builtin_unreachable();
+#endif
 }
 
 }  // namespace ibis::util::detail
 
-#if defined(__GNUC__)
-#define CXX_FUNCTION_NAME __PRETTY_FUNCTION__
-#else
-#define CXX_FUNCTION_NAME __FUNCTION__
-#endif
-
-#define cxx_assert(condition, message)                         \
-    ((condition) ? ((void)0)                                   \
-                 : ::ibis::util::detail::assertion_failed_msg( \
-                       #condition, message, CXX_FUNCTION_NAME, __FILE__, __LINE__))
+#define cxx_assert(condition, message)                                             \
+    ((condition) ? ((void)0)                                                       \
+                 : ::ibis::util::detail::assertion_failed_msg(#condition, message, \
+                                                              std::source_location::current()))
 
 #define cxx_bug_fatal(message)  \
     cxx_assert(false, message); \
@@ -52,4 +55,5 @@ void assertion_failed_msg(const CharT* expr, const char msg[], const char functi
 
 #define cxx_unreachable_bug_triggered()                   \
     cxx_assert(false, "unreachable code path triggered"); \
+    ::ibis::util::detail::unreachable();                  \
     std::quick_exit(EXIT_FAILURE);

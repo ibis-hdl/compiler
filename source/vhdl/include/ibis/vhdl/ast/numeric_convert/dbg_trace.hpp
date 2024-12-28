@@ -5,10 +5,7 @@
 
 #pragma once
 
-#ifdef __cpp_lib_source_location
 #include <source_location>  // IWYU pragma: keep
-#endif
-
 #include <format>
 #include <string_view>
 #include <iostream>
@@ -35,11 +32,6 @@ void trace_report(RangeType const& range, RangeFiltType const& range_f, bool par
 
 }  // namespace detail
 
-/// FixMe [C++20] MSVC 19 (Studio 2022) and g++ 11 support `source_location`, clang++ 14 doesn't :(
-/// [godbolt](https://godbolt.org/z/q6GGcM1Y3), hence we depend on
-/// feature testing
-/// [__cpp_lib_source_location](https://en.cppreference.com/w/cpp/feature_test#Library_features)
-#ifdef __cpp_lib_source_location
 template <typename RangeType, typename RangeFiltType, typename AttributeType>
 inline void dbg_trace(RangeType const& range, RangeFiltType const& range_f, bool parse_ok,
                       AttributeType attribute,
@@ -48,11 +40,5 @@ inline void dbg_trace(RangeType const& range, RangeFiltType const& range_f, bool
     detail::trace_report(range, range_f, parse_ok, attribute, location.file_name(), location.line(),
                          location.function_name());
 }
-#else
-// NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
-#define dbg_trace(range, range_f, parse_ok, attribute)                                          \
-    ibis::vhdl::ast::numeric_convert::detail::trace_report(range, range_f, parse_ok, attribute, \
-                                                           __FILE__, __LINE__, __FUNCTION__)
-#endif
 
 }  // namespace ibis::vhdl::ast::numeric_convert
