@@ -56,7 +56,7 @@ public:
 
     using position_cache_proxy_type = typename parser::position_cache<iterator_type>::proxy;
 
-    using error_type = diagnostic_context::provider;
+    using error_type = diagnostic_context::failure_type;
 
 public:
     ///

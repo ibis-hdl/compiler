@@ -46,9 +46,9 @@ public:
     std::string_view file_name() const { return file_name_; }
 
 private:
-    std::string_view file_name_ = "N/A";
-    std::size_t line_ = 0;
-    std::size_t column_ = 0;
+    std::string_view file_name_{};
+    std::size_t line_{};
+    std::size_t column_{};
 };
 
 }  // namespace ibis::vhdl

@@ -18,7 +18,7 @@ namespace ibis::vhdl {
 ///
 class diagnostic_printer {
 public:
-    using error_type = diagnostic_context::provider;
+    using failure_type = diagnostic_context::failure_type;
 
 public:
     ///
@@ -26,7 +26,7 @@ public:
     ///
     /// @param source_location_ The location of the error to print.
     ///
-    /// @todo The error_type specifier must be accessible by the header to allow specific error
+    /// @todo The failure_type specifier must be accessible by the header to allow specific error
     /// messages. Best would be to make it an own non-nested class.
     ///
     /// @todo: This class does the formatting only for some peaces of the final error/warning
@@ -37,9 +37,6 @@ public:
     ///
     diagnostic_printer(diagnostic_context const& context);
 
-    std::ostream& print_source_location(std::ostream& os) const;
-    std::ostream& print_error_type(std::ostream& os) const;
-    std::ostream& print_error_message(std::ostream& os) const;
     std::ostream& print_snippets(std::ostream& os) const;
 
     std::ostream& print_on(std::ostream& os) const;
@@ -57,9 +54,9 @@ private:
     char location_symbol = '^';
 };
 
-inline std::ostream& operator<<(std::ostream& os, diagnostic_printer const& formatter)
+inline std::ostream& operator<<(std::ostream& os, diagnostic_printer const& diag_format)
 {
-    return formatter.print_on(os);
+    return diag_format.print_on(os);
 }
 
 }  // namespace ibis::vhdl

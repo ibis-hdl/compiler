@@ -25,8 +25,7 @@ namespace ibis::vhdl {
 ///
 class diagnostic_context {
 public:
-    /// @todo find a better name for this
-    enum class provider { unspecific, parser, syntax, semantic, numeric, not_supported };
+    enum class failure_type { unspecific, parser, syntax, semantic, numeric, not_supported };
 
 public:
     class source_snippet {
@@ -77,7 +76,7 @@ public:
     /// @param provider_ The origin of issue
     /// @param err_message_ Store a copy of error _message
     ///
-    diagnostic_context(provider provider_, std::string_view err_message_)
+    diagnostic_context(failure_type provider_, std::string_view err_message_)
         : msg_provider{ provider_ }
         , err_message{ err_message_ }
     {
@@ -113,11 +112,11 @@ public:
     source_location const& location() const { return src_location; }
 
     ///
-    /// Get the message provider enum
+    /// Get the message failure_type enum
     ///
-    /// @return provider
+    /// @return failure_type
     ///
-    provider message_provider() const { return msg_provider; }
+    failure_type message_provider() const { return msg_provider; }
 
     ///
     /// Get the error/warning message
@@ -129,7 +128,7 @@ public:
     std::vector<source_snippet> const& source_snippets() const { return src_snippets; }
 
 private:
-    provider msg_provider;
+    failure_type msg_provider;
     std::string err_message;
     source_location src_location;
     std::vector<source_snippet> src_snippets;

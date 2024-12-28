@@ -91,7 +91,7 @@ void diagnostic_handler<Iterator>::syntax_error(ast::position_tagged const& wher
 
     auto const where_range = current_file().position_of(where_tag);
 
-    constexpr auto syntax_error = diagnostic_context::provider::syntax;
+    constexpr auto syntax_error = diagnostic_context::failure_type::syntax;
 
     error(where_range.begin(), where_range.end(), error_message, syntax_error);
 }
@@ -112,7 +112,7 @@ void diagnostic_handler<Iterator>::syntax_error(ast::position_tagged const& wher
     // set the correct file name and contents by id from position cache proxy
     current_file().set_id(where_tag.file_id);
 
-    constexpr auto syntax_error = diagnostic_context::provider::syntax;
+    constexpr auto syntax_error = diagnostic_context::failure_type::syntax;
 
     diagnostic_context diag_ctx{ syntax_error, error_message };
 

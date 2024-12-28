@@ -4,6 +4,7 @@
 //
 
 #include <ibis/message.hpp>
+#include <ibis/util/cxx_bug_fatal.hpp>
 
 #include <boost/locale/message.hpp>
 
@@ -21,15 +22,6 @@
 // ------------------------------------------------------------------------------------------------
 
 namespace /* anonymous */ {
-
-[[noreturn]] inline void unreachable()  // @todo [C++23] std::unreachable()
-{
-#if defined(_MSC_VER) && !defined(__clang__)  // MSVC
-    __assume(false);
-#else  // GCC, Clang
-    __builtin_unreachable();
-#endif
-}
 
 std::ostream& write(std::ostream& os, std::string_view msg, bool newline)
 {
@@ -77,10 +69,10 @@ std::ostream& message(std::string_view msg, ibis::severity severity, bool newlin
             return write(std::cerr, msg, newline);
         }
         default:
-            unreachable();
+            cxx_unreachable_bug_triggered();
     }
 
-    unreachable();
+    cxx_unreachable_bug_triggered();
 }
 
 std::ostream& message(boost::locale::basic_message<char> msg, ibis::severity severity, bool newline)
@@ -105,10 +97,10 @@ std::ostream& message(boost::locale::basic_message<char> msg, ibis::severity sev
             return write(std::cerr, msg, newline);
         }
         default:
-            unreachable();
+            cxx_unreachable_bug_triggered();
     }
 
-    unreachable();
+    cxx_unreachable_bug_triggered();
 }
 
 std::ostream& message(boost::locale::basic_format<char> const& fmt, ibis::severity severity,
@@ -134,10 +126,10 @@ std::ostream& message(boost::locale::basic_format<char> const& fmt, ibis::severi
             return write(std::cerr, fmt, newline);
         }
         default:
-            unreachable();
+            cxx_unreachable_bug_triggered();
     }
 
-    unreachable();
+    cxx_unreachable_bug_triggered();
 }
 
 }  // namespace ibis
