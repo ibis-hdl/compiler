@@ -12,7 +12,6 @@
 #include <ibis/vhdl/diagnostic_handler.hpp>
 
 #include <ibis/vhdl/ast/node/based_literal.hpp>
-#include <ibis/vhdl/ast/literal_printer.hpp>
 #include <ibis/vhdl/type.hpp>
 
 #include <ibis/util/cxx_bug_fatal.hpp>
@@ -274,8 +273,6 @@ std::tuple<bool, std::int32_t> convert_based<IntegerT, RealT>::parse_exponent(
 
     // there are only integer and real types
     using numeric_type_specifier = ast::based_literal::numeric_type_specifier;
-    static_assert(static_cast<unsigned>(numeric_type_specifier::COUNT) == 2,
-                  "unexpected count of type specifier");
 
     // check on valid exponent numeric range
     if (literal.number.type_specifier == numeric_type_specifier::real) {
@@ -365,7 +362,7 @@ typename convert_based<IntegerT, RealT>::return_type convert_based<IntegerT, Rea
     using numeric_type_specifier = ast::based_literal::numeric_type_specifier;
 
     auto const failure_return_value = [&node]() -> convert_based::return_type {
-        switch (node.numeric_type()) {
+        switch (node.number.type_specifier) {
             case numeric_type_specifier::integer: {
                 return std::tuple{ false, integer_type(0) };
             }
@@ -394,7 +391,7 @@ typename convert_based<IntegerT, RealT>::return_type convert_based<IntegerT, Rea
     // FRACTIONAL (only for based real)
     real_type fractional = 0;
 
-    if (base != 10U && node.numeric_type() == numeric_type_specifier::real) {
+    if (base != 10U && node.number.type_specifier == numeric_type_specifier::real) {
         bool parse_ok = false;
         std::tie(parse_ok, fractional) = parse_fractional(base, node);
 
@@ -408,7 +405,7 @@ typename convert_based<IntegerT, RealT>::return_type convert_based<IntegerT, Rea
     // base 10 real numeric parser
     real_type real10 = 0;
 
-    if (base == 10U && node.numeric_type() == numeric_type_specifier::real) {
+    if (base == 10U && node.number.type_specifier == numeric_type_specifier::real) {
         bool parse_ok = false;
         std::tie(parse_ok, real10) = parse_real10(node);
 
@@ -436,7 +433,7 @@ typename convert_based<IntegerT, RealT>::return_type convert_based<IntegerT, Rea
 
     using numeric_type_specifier = ast::based_literal::numeric_type_specifier;
 
-    switch (node.numeric_type()) {
+    switch (node.number.type_specifier) {
         case numeric_type_specifier::integer: {
             integer_type result = integer;
             result *= static_cast<integer_type>(pow);

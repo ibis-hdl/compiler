@@ -12,7 +12,6 @@
 #include <ibis/vhdl/ast/node/decimal_literal.hpp>
 #include <ibis/vhdl/ast/util/string_span.hpp>
 
-#include <ibis/vhdl/ast/literal_printer.hpp>
 #include <ibis/vhdl/type.hpp>
 
 #include <ibis/util/cxx_bug_fatal.hpp>
@@ -38,8 +37,7 @@ auto const as = [](auto derived_parser) {
     return x3::any_parser<IteratorT, T>{ x3::as_parser(derived_parser) };
 };
 
-using namespace std::literals;
-auto const literal_name = "decimal literal"sv;
+std::string_view const literal_name = "decimal literal";
 
 }  // namespace
 

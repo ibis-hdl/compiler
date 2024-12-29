@@ -178,7 +178,7 @@ void init::parse_cli(int argc, const char* argv[])
                 ->description(translate("Warn for others."))
                 ;
             // Option to Control Error and Warning Messages Flags
-            // FixMe: unused in context.cpp, also CLI11's range check should use tagged_counter::MAX
+            // FixMe: unused in context.cpp, also CLI11's range check should use treshold_counter::MAX
             group->add_option("--ferror-limit", cli_parameter.error_limit) // --
                 ->description(translate("Limit emitting diagnostics, can be disabled with --ferror-limit=0."))
                 ->check(CLI::Range(0, std::numeric_limits<std::int32_t>::max()))
@@ -334,7 +334,7 @@ void init::l10n()
 {
     using namespace boost::locale;
     using namespace ibis;
-    using namespace std::literals;
+    using namespace std::literals::string_view_literals;
 
     // [Using Localization Backends](
     //  https://www.boost.org/doc/libs/1_68_0/libs/locale/doc/html/using_localization_backends.html)

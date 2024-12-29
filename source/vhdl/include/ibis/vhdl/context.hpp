@@ -12,27 +12,28 @@
 #include <exception>
 #include <limits>
 #include <iosfwd>
+#include <format>
+#include <cstdint>
 
 namespace ibis::vhdl {
 
 namespace detail {
 
 ///
-/// Tagged Counter
+/// Tagged treshold counter
 ///
-/// Simply increments events and throws tagged_counter::overflow if a configurable
+/// Simply increments events and throws treshold_counter::overflow if a configurable
 /// limit has been reached.
 ///
-/// @see [coliru](https://coliru.stacked-crooked.com/a/17ad075a66133c27)
+/// @see Concept at [coliru](https://coliru.stacked-crooked.com/a/a9780ceb475570bf)
 ///
 template <typename Tag>
-class tagged_counter {
+class treshold_counter {
 public:
     ///
     /// @brief Exception thrown if the counter limit has been reached.
     ///
-    /// @todo Make it more expressive with string message, configured
-    /// threshold etc.
+    /// ToDo Make it more expressive with string message, configured threshold_ etc.
     struct overflow : public std::exception {};
 
 public:
@@ -41,60 +42,58 @@ public:
     /// @note: It would be only natural to use type of `std::size_t`, but then there are compiler
     /// warnings like `[-Wshorten-64-to-32]` at Clang '-Weverything' Diagnostic. The reason is the
     // use of `boost::locale`'s `translate()` function, where the singular/plural argument is of
-    /// type `int32`. Since the value range of `int32` is sufficient for errors and warnings, a
-    /// work-around with lambda functions is unnecessary.
+    /// type `uint32`. Since the count_value range of `uint32` is sufficient here for errors and
+    /// warnings, a work-around with lambda functions is unnecessary.
     ///
-    using value_type = std::int32_t;
+    using value_type = std::uint32_t;
 
-    /// The max. ID value of file_id respectively pod_id.
-    static constexpr value_type MAX_THRESHOLD = std::numeric_limits<value_type>::max();
+    /// The maximum numeric/count count_value.
+    static constexpr value_type MAX_THRESHOLD = std::numeric_limits<value_type>::max() - 1;
 
 public:
     ///
     /// constructs the tagged counter.
     ///
-    /// @param limit_ threshold of count value. Must be in range of `[0 ... INT32_MAX)`
+    /// @param threshold threshold of count value. Must be in range of `[0 ... MAX_THRESHOLD)`
     ///
-    explicit tagged_counter(value_type limit_ = MAX_THRESHOLD - 1)
-        : threshold{ limit_ }
+    explicit treshold_counter(value_type threshold)
+        : threshold_value{ threshold }
     {
-        assert(!(limit_ < 0) && limit_ < MAX_THRESHOLD &&
-               "counter threshold out of range must be [0 ... INT32_MAX)");
     }
 
-    ~tagged_counter() = default;
+    ~treshold_counter() = default;
 
-    tagged_counter(tagged_counter const&) = delete;
-    tagged_counter& operator=(tagged_counter const&) = delete;
+    treshold_counter(treshold_counter const&) = delete;
+    treshold_counter& operator=(treshold_counter const&) = delete;
 
-    tagged_counter(tagged_counter&&) = default;
-    tagged_counter& operator=(tagged_counter&&) = default;
+    treshold_counter(treshold_counter&&) = default;
+    treshold_counter& operator=(treshold_counter&&) = default;
 
 public:
     ///
     /// prefix increment
     ///
-    /// @fn     tagged_counter::operator++()
-    /// @return incremented count value.
+    /// @fn     treshold_counter::operator++()
+    /// @return incremented count count_value.
     ///
-    tagged_counter& operator++()
+    treshold_counter& operator++()
     {
-        ++value;
-        if (value > threshold) {
+        if (count_value > threshold_value) {
             throw overflow{};
         }
+        ++count_value;
         return *this;
     }
 
     ///
     /// postfix increment
     ///
-    /// @fn     tagged_counter::operator++(int)
-    /// @return the count value before increment.
+    /// @fn     treshold_counter::operator++(int)
+    /// @return the count count_value before increment.
     ///
-    tagged_counter operator++(int)
+    treshold_counter operator++(int)
     {
-        tagged_counter result(*this);
+        treshold_counter result{ *this };
         ++(*this);
         return result;
     }
@@ -102,44 +101,26 @@ public:
     ///
     /// user-defined conversion
     ///
-    operator value_type() const { return value; }
+    operator value_type() const { return count_value; }
 
     ///
     /// Threshold at where the overflow exception will be thrown.
     ///
-    /// @return Reference to the threshold value.
+    /// @return Reference to the threshold count_value.
     ///
-    value_type& limit() { return threshold; }
+    value_type& threshold() { return threshold_value; }
 
     ///
     /// Threshold at where the overflow exception will be thrown.
     ///
-    /// @return Const reference to the threshold value.
+    /// @return Const reference to the threshold count_value.
     ///
-    value_type limit() const { return threshold; }
-
-    ///
-    /// Common ostream API
-    ///
-    /// @param  os std::ostream handle to write
-    /// @return The written ostream handle.
-    ///
-    std::ostream& print_on(std::ostream& os) const
-    {
-        os << value;
-        return os;
-    }
+    value_type threshold() const { return threshold_value; }
 
 private:
-    value_type threshold;
-    value_type value = 0;
+    value_type threshold_value;
+    value_type count_value = 0;
 };
-
-template <typename Tag>
-std::ostream& operator<<(std::ostream& os, tagged_counter<Tag> const& counter)
-{
-    return counter.print_on(os);
-}
 
 }  // namespace detail
 
@@ -147,7 +128,7 @@ std::ostream& operator<<(std::ostream& os, tagged_counter<Tag> const& counter)
 /// The VHDL context used for analyze and elaboration
 ///
 /// The error_count will throw if the limit of errors is reached:
-/// \code
+/// @code{.cpp}
 /// try {
 ///   ... // analyze
 /// }
@@ -156,26 +137,34 @@ std::ostream& operator<<(std::ostream& os, tagged_counter<Tag> const& counter)
 ///              << "[-ferror-limit=]"
 ///    // ...
 /// }
-/// \endcode
+/// @endcode
+///
+/// Todo Find a better name, too much context classes with different purpose in ibis.
 ///
 class context {
+public:
+    using error_counter = detail::treshold_counter<struct error_tag>;
+    using warning_counter = detail::treshold_counter<struct warning_tag>;
+
+    using value_type = typename error_counter::value_type;
+
 public:
     ///
     /// Creates the VHDL context
     ///
-    /// @param error_limit  threshold of error count value. Must be in range of `[0 ... INT32_MAX)`
+    /// @param error_limit threshold of error count value.
     ///
-    explicit context(std::int32_t error_limit = 42);
+    explicit context(value_type error_limit = 42)
+        : error_count{ error_limit }
+        , warning_count{ warning_counter::MAX_THRESHOLD }
+    {
+    }
 
     context(context&) = delete;
     context& operator=(context&) = delete;
     context(context&&) = default;
     context& operator=(context&&) = default;
     ~context() = default;
-
-public:
-    using error_counter = detail::tagged_counter<struct error_tag>;
-    using warning_counter = detail::tagged_counter<struct warning_tag>;
 
 public:
     bool error_free() const { return error_count == 0; }
@@ -195,25 +184,31 @@ private:
 };
 
 ///
-/// IO-manipulator to print the context error/warning status on ostream
+/// IO-manipulator to print the context error/warning status of context
 ///
 class failure_status {
+    using value_type = context::value_type;
+
 public:
     failure_status(context const& ctx_)
         : ctx{ ctx_ }
     {
     }
 
-public:
-    std::ostream& print_on(std::ostream& os) const;
+    bool error_free() const { return ctx.error_free(); }
+    bool has_errors() const { return ctx.has_errors(); }
+    bool has_warnings() const { return ctx.has_warnings(); }
+
+    value_type errors() const { return ctx.errors(); }
+    value_type warnings() const { return ctx.warnings(); }
 
 private:
     context const& ctx;
 };
 
-inline std::ostream& operator<<(std::ostream& os, failure_status const& status)
-{
-    return status.print_on(os);
-}
+std::ostream& operator<<(std::ostream& os, vhdl::failure_status const& status);
 
 }  // namespace ibis::vhdl
+
+template <>
+struct std::formatter<ibis::vhdl::failure_status>;

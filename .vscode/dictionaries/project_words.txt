@@ -2,6 +2,7 @@ autobuild
 ccache
 choco
 cmaketoolchain
+coliru
 conanfile
 cppstd
 ctest
@@ -9,6 +10,7 @@ devcontainers
 doxyfile
 gitmodules
 gnuc
+godbolt
 iwyu
 libc
 libcpp
@@ -21,9 +23,13 @@ pwsh
 pyspelling
 runneradmin
 sccache
+treshold
 vcvars
 venv
 VHDL
+Wandbox
+Weverything
 wordlist
 wordlists
+Wshorten
 zstd

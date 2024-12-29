@@ -32,7 +32,7 @@ void testing_signal_handler()
 
 std::string_view signal_name(int sig_num)
 {
-    using namespace std::literals;
+    using namespace std::literals::string_view_literals;
 
     switch (sig_num) {
         case SIGSEGV:

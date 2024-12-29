@@ -79,7 +79,8 @@ std::string hexadecimal_string::operator()() const
 
     return ss.str();
 }
-
+// ToDo [c++20] replace with std::formatter, also inside source using this (bad API); make a conform
+// to test.../binary_string.hpp
 std::ostream& operator<<(std::ostream& os, hexadecimal_string const& generator)
 {
     os << generator();

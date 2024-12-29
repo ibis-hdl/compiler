@@ -3,12 +3,14 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#include <ibis/vhdl/ast/literal_printer.hpp>
+#include <ibis/vhdl/ast/ast_formatter.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>
 #include <boost/test/data/monomorphic.hpp>
 #include <boost/test/tools/output_test_stream.hpp>
+
+#include <format>
 
 #include <testsuite/namespace_alias.hpp>
 
@@ -46,18 +48,17 @@ BOOST_DATA_TEST_CASE(                                                // --
     utf_data::make(input_string_literal) ^ expected_string_literal,  // --
     input, expected)
 {
-    auto const as_strlit = [](std::string_view sv) {
+    // make ast::string_literal from string_view input
+    auto const make_string_literal_from = [](std::string_view sv) {
         ast::string_literal strlit;
         strlit.literal = boost::make_iterator_range(sv);
         return strlit;
     };
 
-    using ibis::vhdl::ast::literal_printer;
-
     btt::output_test_stream os;
 
-    literal_printer literal{ as_strlit(input) };
-    os << literal;
+    ast::string_literal const string_literal{ make_string_literal_from(input) };
+    os << std::format("{}", string_literal);
 
     BOOST_TEST(os.str() == expected, btt::per_element());
 }

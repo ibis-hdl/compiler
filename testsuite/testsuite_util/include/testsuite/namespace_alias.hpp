@@ -17,7 +17,7 @@ namespace ibis::vhdl::analyze {}
 // clang-format on
 
 namespace testsuite {
-//namespace fs = std::filesystem;  // can't fwd with libc++
+// namespace fs = std::filesystem;  // can't fwd with libc++
 namespace x3 = boost::spirit::x3;
 // ToDo: Check for correct and intuitive aliases!
 namespace btt = boost::test_tools;
@@ -30,8 +30,9 @@ namespace analyze = ibis::vhdl::analyze;
 }  // namespace testsuite
 
 // global for BOOST_DATA_TEST_CASE()
-namespace btt = testsuite::btt;
-namespace utf_data = testsuite::utf_data;
+namespace btt = boost::test_tools;
+namespace utf = boost::unit_test;
+namespace utf_data = boost::unit_test::data;
 namespace parser = ibis::vhdl::parser;
 namespace ast = ibis::vhdl::ast;
 namespace vhdl = ibis::vhdl;

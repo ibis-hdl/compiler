@@ -7,6 +7,7 @@
 
 #include <ibis/vhdl/ast/basic_ast_walker.hpp>
 #include <ibis/vhdl/ast/ast_printer.hpp>
+#include <ibis/vhdl/ast/ast_formatter.hpp>
 #include <ibis/vhdl/parser/diagnostic_handler.hpp>
 #include <ibis/vhdl/parser/context.hpp>
 #include <ibis/vhdl/type.hpp>

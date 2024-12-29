@@ -4,6 +4,7 @@
 //
 
 #include <ibis/vhdl/ast/ast_printer.hpp>
+#include <ibis/vhdl/ast/ast_formatter.hpp>
 #include <ibis/vhdl/ast.hpp>
 
 #include <boost/spirit/home/x3/support/traits/is_variant.hpp>
@@ -317,8 +318,7 @@ void printer::operator()(based_literal const& node)
     static const std::string_view symbol{ "based_literal" };
     symbol_scope<based_literal> _(*this, symbol);
 
-    os << "base: " << node.base << ", "
-       << "integer: " << node.number.integer_part;
+    os << "base: " << node.base << ", " << "integer: " << node.number.integer_part;
 
     if (!node.number.fractional_part.empty()) {
         os << ", fraction: " << node.number.fractional_part;
@@ -331,7 +331,7 @@ void printer::operator()(based_literal const& node)
     using numeric_type_specifier = ast::based_literal::numeric_type_specifier;
 
     os << ", type: ";
-    switch (node.numeric_type()) {
+    switch (node.number.type_specifier) {
         case numeric_type_specifier::integer: {
             os << "integer";
             break;
@@ -341,6 +341,7 @@ void printer::operator()(based_literal const& node)
             break;
         }
         default:  // unreachable_bug_triggered
+            // @BUG triggered by 'parser_rules/test_data/abstract_literal/decimal_literal_000'
             cxx_unreachable_bug_triggered();
     }
 }
@@ -1450,7 +1451,7 @@ void printer::operator()(identifier_list const& node)
 {
     static const std::string_view symbol{ "identifier_list" };
     symbol_scope<identifier_list> _(*this, symbol);
-    visit(node);
+    visit(node);  // aka std::vector<ast::identifier>
 }
 
 void printer::operator()(if_statement const& node)
@@ -2331,6 +2332,7 @@ void printer::operator()(simple_expression const& node)
     static const std::string_view symbol{ "simple_expression" };
     symbol_scope<simple_expression> _(*this, symbol);
 
+    // FixMe: Better member naming, like sign_operator
     if (node.sign) {  // optional
         os << "sign: " << *node.sign << ",\n";
     }
@@ -2721,15 +2723,15 @@ void printer::operator()(ast::string_span const& node)
     static const std::string_view symbol{ "std::string_view" };
     symbol_scope<std::string> _(*this, symbol);
 
-    os << node;
+    os << std::format("{}", node);
 }
 
-void printer::operator()(keyword_token token)
+void printer::operator()(ast::keyword_token token)
 {
     static const std::string_view symbol{ "keyword" };
     symbol_scope<keyword_token> _(*this, symbol);
 
-    os << token;
+    os << std::format("{}", token);
 }
 
 template <typename T>

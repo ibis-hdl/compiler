@@ -9,12 +9,11 @@
 #include <ibis/vhdl/analyze/syntax.hpp>
 #include <ibis/vhdl/analyze/diagnostic_handler.hpp>
 #include <ibis/vhdl/analyze/context.hpp>
-#include <ibis/vhdl/ast/ast_stats.hpp>
 
 #include <testsuite/vhdl/syntax/failure_diagnostic_fixture.hpp>
 #include <testsuite/vhdl/syntax/dataset.hpp>
 
-//#include <testsuite/namespace_alias.hpp>
+// #include <testsuite/namespace_alias.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>

@@ -29,6 +29,7 @@ using string_span = boost::iterator_range<parser::iterator_type>;
 // Helper function to handle string_span node elements into an C++ standard
 // conformance way.
 //
+// @note: superseded by std::formatter<ibis::vhdl::ast::string_span>
 inline std::string_view as_string_view(ast::string_span const& string_span)
 {
     return std::string_view{ &string_span.front(), string_span.size() };

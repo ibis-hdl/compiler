@@ -33,9 +33,7 @@ target_link_libraries(${PROJECT_NAME}
 
 target_sources(${PROJECT_NAME}
     PRIVATE
-        src/ast/literal_printer.cpp
-        src/ast/keyword_token.cpp
-        src/ast/operator_token.cpp
+        src/ast/ast_formatter.cpp
         src/ast/ast_printer.cpp
         src/ast/ast_stats.cpp
         src/ast/pretty_node_name.cpp
@@ -104,26 +102,23 @@ endif()
 ##
 # Clang -Weverything
 #
-# Disable some warning which aren't relevant here.
+# Disable some warnings.
 #
-#   -Wno-covered-switch-default
-#   - if one extended the enum, you'd fall into the default case which probably
+#   "-Wno-switch-default":
+#     If one extended an *enum*, you'd fall into the default case which probably
 #     isn't what you want. The correct thing to do is to remove the default case
 #     and get warnings for unhandled conditions, see
 #     [Why does Clang/LLVM warn me about using default in a switch statement where all enumerated cases are covered?](
 #     https://softwareengineering.stackexchange.com/questions/179269/why-does-clang-llvm-warn-me-about-using-default-in-a-switch-statement-where-all)
-#   - in project, default branches are covered with `cxx_unreachable_bug_triggered();`
-#     normally
+#     See also compiler test case [godbolt.org](https://godbolt.org/z/7hGecT6qx)
 if(COMPILER_CLANG_WARN_EVERYTHING)
     if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 
         set_source_files_properties(
-            src/ast/literal_printer.cpp
-            src/ast/keyword_token.cpp
-            src/ast/operator_token.cpp
+            src/ast/ast_formatter.cpp
             PROPERTIES
                 COMPILE_FLAGS
-                    -Wno-covered-switch-default
+                    -Wno-switch-default
         )
 
         set_source_files_properties(

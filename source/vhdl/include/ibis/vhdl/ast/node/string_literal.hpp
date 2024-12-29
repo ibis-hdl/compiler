@@ -11,6 +11,11 @@
 
 namespace ibis::vhdl::ast {
 
+///
+/// @code{.bnf}
+/// string_literal ::= " { graphic_character } "
+/// @endcode
+///
 struct string_literal : position_tagged {
     ast::string_span literal;
 };

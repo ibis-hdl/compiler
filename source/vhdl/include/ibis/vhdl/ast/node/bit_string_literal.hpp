@@ -9,37 +9,18 @@
 
 #include <ibis/vhdl/ast/util/string_span.hpp>
 
+#include <iosfwd>
+
 namespace ibis::vhdl::ast {
 
 struct bit_string_literal : position_tagged {
-    enum class base_specifier { bin, oct, hex };
+    enum class base_specifier : std::uint8_t { unspecified, bin, oct, hex };
 
     ast::string_span literal;
     base_specifier base_type;
 };
 
-#if defined(BOOST_SPIRIT_X3_DEBUG)
-inline std::ostream& operator<<(std::ostream& os, ast::bit_string_literal::base_specifier specifier)
-{
-    using base_specifier = ast::bit_string_literal::base_specifier;
-    auto const lookup = [&os](base_specifier specifier) {
-        switch (specifier) {
-            case base_specifier::bin:
-                os << "[bin]";
-                break;
-            case base_specifier::oct:
-                os << "[oct]";
-                break;
-            case base_specifier::hex:
-                os << "[hex]";
-                break;
-            default:
-                os << "[N/A]";
-        }
-    };
-    lookup(specifier);
-    return os;
-}
-#endif
+// required for BOOST_SPIRIT_X3_DEBUG
+std::ostream& operator<<(std::ostream& os, ast::bit_string_literal::base_specifier specifier);
 
 }  // namespace ibis::vhdl::ast

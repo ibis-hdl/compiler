@@ -15,51 +15,77 @@
 #include <cstddef>
 #include <algorithm>
 #include <string>
+#include <format>
+
+template <>
+struct std::formatter<ibis::vhdl::failure_status> : std::formatter<std::string> {
+    // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+    auto format(ibis::vhdl::failure_status status, std::format_context& ctx) const
+    {
+        using boost::locale::format;
+        using boost::locale::translate;
+
+        // render the error and warning message to console, for concept
+        // see [Wandbox](https://wandbox.org/permlink/VJrqXuEFppw1htY7)
+
+        // clang-format off
+        auto const error_message = 
+            // TRANSLATORS: singular/plural error(s)
+            (format(translate("{1} error", "{1} errors",
+                              status.errors())) % status.errors()).str();
+        // clang-format on
+
+        // clang-format off
+        auto const warning_message =
+            // TRANSLATORS: singular/plural warning(s)
+            (format(translate("{1} warning", "{1} warnings",
+                              status.warnings())) % status.warnings()).str();
+        // clang-format on
+
+        if (status.has_errors() && status.has_warnings()) {
+            // clang-format off
+            return std::formatter<std::string>::format(
+                std::string{
+                    // TRANSLATORS: summary error(s) and warning(s)
+                    (format(translate("{1} and {2} generated."))
+                            % error_message % warning_message).str()
+                }, ctx
+            );
+            // clang-format on
+        }
+        else if (status.has_errors()) {
+            // clang-format off
+            return std::formatter<std::string>::format(
+                std::string{
+                    // TRANSLATORS: summary error(s) only
+                    (format(translate("{1} generated.")) % error_message).str()
+                }, ctx
+            );
+            // clang-format on
+        }
+        else if (status.has_warnings()) {
+            // clang-format off
+            return std::formatter<std::string>::format(
+                std::string{
+                    // TRANSLATORS: summary warning(s) only
+                    (format(translate("{1} generated.")) % warning_message).str()
+                }, ctx
+            );
+            // clang-format on            
+        }
+        else {
+            // all went fine
+        }
+
+        return ctx.out();
+    }
+};
 
 namespace ibis::vhdl {
 
-context::context(std::int32_t error_limit)
-    : error_count(error_limit)
+std::ostream& operator<<(std::ostream& os, vhdl::failure_status const& status)
 {
-}
-
-std::ostream& failure_status::print_on(std::ostream& os) const
-{
-    using boost::locale::format;
-    using boost::locale::translate;
-
-    // render the error and warning message to console, for concept
-    // see [Wandbox](https://wandbox.org/permlink/VJrqXuEFppw1htY7)
-
-    // TRANSLATORS: singular/plural error(s)
-    auto const error_message =                                       // --
-        (format(translate("{1} error", "{1} errors", ctx.errors()))  // --
-         % ctx.errors())
-            .str();
-
-    // TRANSLATORS: singular/plural warning(s)
-    auto const warning_message =                                           // --
-        (format(translate("{1} warning", "{1} warnings", ctx.warnings()))  // --
-         % ctx.warnings())
-            .str();
-
-    if (ctx.has_errors() && ctx.has_warnings()) {
-        // TRANSLATORS: summary error(s) and warning(s)
-        os << format(translate("{1} and {2} generated."))  // --
-                  % error_message % warning_message;
-    }
-    else if (ctx.has_errors()) {
-        // TRANSLATORS: summary error(s) only
-        os << format(translate("{1} generated.")) % error_message;
-    }
-    else if (ctx.has_warnings()) {
-        // TRANSLATORS: summary warning(s) only
-        os << format(translate("{1} generated.")) % warning_message;
-    }
-    else {
-        // all went fine
-    }
-
+    os << std::format("{}", status);
     return os;
 }
 

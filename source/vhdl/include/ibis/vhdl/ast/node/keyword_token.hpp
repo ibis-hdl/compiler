@@ -6,8 +6,6 @@
 #pragma once
 
 #include <iosfwd>
-#include <string_view>
-#include <format>
 
 // FixMe: required on Win32, investigate!
 #if defined(IN)
@@ -20,7 +18,7 @@
 namespace ibis::vhdl::ast {
 
 enum class keyword_token {
-    UNSPECIFIED,  // used as default constructible marker
+    UNSPECIFIED,
     ABS,
     ACCESS,
     AFTER,
@@ -120,25 +118,10 @@ enum class keyword_token {
     XOR
 };
 
-std::string_view as_string_view(keyword_token token);
-
-inline std::ostream& operator<<(std::ostream& os, keyword_token token)
-{
-    os << as_string_view(token);
-
-    return os;
-}
+// required for BOOST_SPIRIT_X3_DEBUG
+std::ostream& operator<<(std::ostream& os, ast::keyword_token token);
 
 }  // namespace ibis::vhdl::ast
-
-template <>
-struct std::formatter<ibis::vhdl::ast::keyword_token> : std::formatter<std::string_view> {
-    template <typename FormatContext>
-    std::string_view format(ibis::vhdl::ast::keyword_token token, FormatContext& ctx) const
-    {
-        return std::formatter<std::string_view>::format(as_string_view(token), ctx);
-    }
-};
 
 //
 // Support Spirit.X3's attribute handling.

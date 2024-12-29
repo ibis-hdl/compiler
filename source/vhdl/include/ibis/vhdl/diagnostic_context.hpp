@@ -21,7 +21,9 @@ namespace ibis::vhdl {
 ///
 /// error/warning messages data
 ///
-/// @todo Find a more appropiate name for this - too much .._context in class names anywhere.
+/// ToDo Find a more appropiate name for this - too much .._context in class names anywhere.
+/// ToDo Make it unformatted comparable for use in test, no need to compare diagnostic printer's
+///       output!
 ///
 class diagnostic_context {
 public:
