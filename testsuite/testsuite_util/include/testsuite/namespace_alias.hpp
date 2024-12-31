@@ -33,6 +33,3 @@ namespace analyze = ibis::vhdl::analyze;
 namespace btt = boost::test_tools;
 namespace utf = boost::unit_test;
 namespace utf_data = boost::unit_test::data;
-namespace parser = ibis::vhdl::parser;
-namespace ast = ibis::vhdl::ast;
-namespace vhdl = ibis::vhdl;

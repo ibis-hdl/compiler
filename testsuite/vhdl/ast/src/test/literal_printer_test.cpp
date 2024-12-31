@@ -17,6 +17,7 @@
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_SUITE(literal_print)
 
+using namespace ibis::vhdl;
 using namespace ibis::vhdl::ast;
 
 //

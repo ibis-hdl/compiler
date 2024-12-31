@@ -61,6 +61,8 @@ typename std::enable_if<std::is_floating_point<T>::value, std::string>::type to_
 
 namespace btt = boost::test_tools;
 
+using namespace ibis::vhdl;
+
 using ast::numeric_convert;
 
 //******************************************************************************
@@ -105,7 +107,7 @@ BOOST_DATA_TEST_CASE(decimal_literal_integer, utf_data::make(dec_int_lit) ^ dec_
     BOOST_REQUIRE(conv_ok);
     BOOST_TEST(std::get<numeric_convert::integer_type>(value) == N);
 
-    os << vhdl::failure_status(ctx);
+    os << failure_status(ctx);
     if (!os.str().empty()) {
         // std::cout << '\n' << os.str() << '\n';
     }
@@ -138,7 +140,7 @@ BOOST_AUTO_TEST_CASE(decimal_literal_uint64max_ovrflw)
     std::tie(conv_ok, std::ignore) = numeric(ast_node);
     BOOST_REQUIRE(!conv_ok);  // ... but must fail to convert
 
-    os << vhdl::failure_status(ctx);
+    os << failure_status(ctx);
     if (!os.str().empty()) {
         // std::cout << '\n' << os.str() << '\n';
     }
@@ -219,7 +221,7 @@ BOOST_DATA_TEST_CASE(decimal_literal_real, utf_data::make(dec_real_lit) ^ dec_re
     BOOST_REQUIRE(conv_ok);
     BOOST_TEST(std::get<numeric_convert::real_type>(value) == N, btt::tolerance(REAL_TOLERANCE));
 
-    os << vhdl::failure_status(ctx);
+    os << failure_status(ctx);
     if (!os.str().empty()) {
         std::cout << '\n' << os.str() << '\n';
     }

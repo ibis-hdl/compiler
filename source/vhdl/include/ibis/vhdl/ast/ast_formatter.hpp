@@ -14,6 +14,8 @@
 #include <ibis/util/cxx_bug_fatal.hpp>
 
 #include <format>
+#include <memory_resource>
+#include <array>
 
 // clang-format off
 ///
@@ -41,9 +43,52 @@
 // templated https://coliru.stacked-crooked.com/a/0b2d7492245fbb77
 // https://coliru.stacked-crooked.com/a/3be354f85e84f461 (C++23)
 // "prefer composition over inheritance": https://coliru.stacked-crooked.com/a/4a3a355b1b6a6963 (C++23)
-// using std::pmr doesn't work as expected: https://coliru.stacked-crooked.com/a/ae71f49d8e2007c2
 // clang-format on
 //
+
+namespace ibis::vhdl::ast::detail {
+
+// https://www.modernescpp.com/index.php/special-allocators-with-c17/
+
+///
+/// upstream allocator for polymorphic allocator required for formatting
+///
+/// @note Concept using std::pmr [coliru](https://coliru.stacked-crooked.com/a/f01afbac75d7723c)
+template <bool verbose = false>
+class TrackingAllocator : public std::pmr::memory_resource {
+public:
+    TrackingAllocator(std::string_view name_ = std::string_view{ "N/A" })
+        : name{ name_ }
+    {
+    }
+
+    void* do_allocate(std::size_t bytes, std::size_t alignment) override
+    {
+        void* ptr = std::pmr::new_delete_resource()->allocate(bytes, alignment);
+        if constexpr (verbose) {
+            std::cout << std::format("  pmr::allocate {:6} bytes at {} ({})\n", bytes, ptr, name);
+        }
+        return ptr;
+    }
+
+    void do_deallocate(void* ptr, std::size_t bytes, std::size_t alignment) override
+    {
+        if constexpr (verbose) {
+            std::cout << std::format("  pmr::deallocate {:4} bytes at {} ({})\n", bytes, ptr, name);
+        }
+        return std::pmr::new_delete_resource()->deallocate(ptr, bytes, alignment);
+    }
+
+    bool do_is_equal(const std::pmr::memory_resource& other) const noexcept override
+    {
+        return std::pmr::new_delete_resource()->is_equal(other);
+    }
+
+private:
+    std::string_view const name;
+};
+
+}  // namespace ibis::vhdl::ast::detail
 
 ///
 /// formatter helper for std::span
@@ -119,8 +164,19 @@ struct std::formatter<ibis::vhdl::ast::bit_string_literal> : std::formatter<stri
     // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
     auto format(ibis::vhdl::ast::bit_string_literal bit_string, std::format_context& ctx) const
     {
-        std::string literal;
-        literal.reserve(bit_string.literal.size());
+        using namespace ibis::vhdl;
+
+        ast::detail::TrackingAllocator<true> upstream_allocator{ "'bit_string_literal' formatter" };
+
+        // worst case for 32-bit considered
+        static constexpr std::size_t BUF_SIZE{
+            std::string_view{ "1111_1111_1111_1111_1111_1111_1111_1111" }.size()
+        };
+
+        std::array<string_view::value_type, BUF_SIZE> buf;
+        std::pmr::monotonic_buffer_resource pool{ buf.data(), buf.size(), &upstream_allocator };
+        std::pmr::string literal{ &pool };
+
         std::format_to(std::back_inserter(literal), "{}{}", bit_string.base_type,
                        bit_string.literal);
 

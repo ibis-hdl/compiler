@@ -45,9 +45,10 @@
     "todo-tree.general.tags": [
         "BUG", "HACK", "FIXME", "TODO", "XXX",
         "@todo", "@fixme",
-        "FixMe [C++20]", "FixMe: [C++20]", "@todo [C++20]", 
-        "FixMe [C++23]", "FixMe: [C++23]", "@todo [C++23]",
-        "FixMe [CMake]", "ToDo [CMake]", "@fixme [CMake]", "@todo [CMake]",
+        "FixMe [C++20]", "FixMe [C++23]", "FixMe [C++26]",
+        "ToDo [C++20]",  "ToDo [C++23]",  "ToDo [C++26]",
+        "FixMe [CMake]", "ToDo [CMake]",  "@todo [CMake]",
+        "@fixme [CMake]",
         "<<<<<<<"
     ],
     "todo-tree.general.tagGroups": {
@@ -58,9 +59,9 @@
             "FIXME", "TODO", "XXX",
             "@todo", "@fixme"
         ],
-        "C++20/C++23": [
-            "FixMe [C++20]", "FixMe: [C++20]", "@todo [C++20]", 
-            "FixMe [C++23]", "FixMe: [C++20]", "@todo [C++23]",
+        "C++20/23/26": [
+            "FixMe [C++20]", "FixMe [C++23]", "FixMe [C++26]",
+            "ToDo [C++20]",  "ToDo [C++23]",  "ToDo [C++26]",
         ],
         "CMake": [
             "FixMe [CMake]", "ToDo [CMake]", "@fixme [CMake]", "@todo [CMake]"
@@ -70,7 +71,8 @@
         ]
     },
     "todo-tree.filtering.excludeGlobs": [
-        "**/doxyfilter.py"
+        "**/doxyfilter.py",
+        "**/conf.py.in"
     ],
     "todo-tree.tree.buttons.groupBySubTag": true,
     "todo-tree.general.debug": true,

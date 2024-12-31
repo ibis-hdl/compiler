@@ -2,27 +2,25 @@
 Checks: "-*,
   boost-*,
   cert-*,
-  -cert-err58-cpp,
   clang-analyzer-*,
   -concurrency-*,
   cppcoreguidelines-*,
   -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
   -cppcoreguidelines-pro-type-vararg,
-  -cppcoreguidelines-avoid-magic-numbers,
   misc-*,
   -misc-no-recursion,
   modernize-*,
   -modernize-use-nodiscard,
   -modernize-use-trailing-return-type,
   readability-*,
-  -readability-magic-numbers,
   -readability-redundant-access-specifiers,
   performance-*,
+  portability-*.
   bugprone-*
 "
 FormatStyle: file
 #HeaderFilterRegex: '^((?!(/external/|\.?conan/data/|/boost/|/CLI/|/testsuite/)).)*$'
-HeaderFilterRegex: '*\.(hpp|h|.hpp.in)$'
+HeaderFilterRegex: '*\.(hpp|.hpp.in)$'
 CheckOptions:
   - key:   cppcoreguidelines-macro-usage.AllowedRegexp
     value: ^(DEBUG_|TEST_|BOOST_TEST_)*

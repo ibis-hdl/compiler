@@ -62,6 +62,8 @@ static std::string to_hex_literal(uint64_t num, std::string const& postfix = "")
 
 namespace btt = boost::test_tools;
 
+using namespace ibis::vhdl;
+
 using ast::numeric_convert;
 
 //******************************************************************************
@@ -144,7 +146,7 @@ BOOST_DATA_TEST_CASE(bit_string_literal, utf_data::make(bit_literal) ^ bit_decim
     BOOST_REQUIRE(conv_ok);
     BOOST_TEST(std::get<numeric_convert::integer_type>(value) == N);
 
-    os << vhdl::failure_status(ctx);
+    os << failure_status(ctx);
     if (!os.str().empty()) {
         // std::cout << '\n' << os.str() << '\n';
     }
@@ -182,7 +184,7 @@ BOOST_DATA_TEST_CASE(bit_string_literal_uint64_ovflw, utf_data::make(literal_ovf
     std::tie(conv_ok, std::ignore) = numeric(ast_node);
     BOOST_REQUIRE(!conv_ok);  // ... but must fail to convert
 
-    os << vhdl::failure_status(ctx);
+    os << failure_status(ctx);
     if (!os.str().empty()) {
         // std::cout << '\n' << os.str() << '\n';
     }

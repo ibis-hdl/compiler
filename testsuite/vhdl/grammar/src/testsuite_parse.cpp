@@ -5,7 +5,9 @@
 
 namespace testsuite {
 
-bool testsuite_parse::operator()(std::string_view contents, vhdl::ast::design_file& design_file)
+using namespace ibis::vhdl;
+
+bool testsuite_parse::operator()(std::string_view contents, ast::design_file& design_file)
 {
     bool parse_ok = false;
 

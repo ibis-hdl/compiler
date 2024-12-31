@@ -25,6 +25,8 @@
 
 using testsuite::vhdl::parser::failure_diagnostic_fixture;
 
+using namespace ibis::vhdl;
+
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_FIXTURE_TEST_SUITE(parser_rule, failure_diagnostic_fixture)
 

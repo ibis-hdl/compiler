@@ -33,7 +33,7 @@ public:
     }
 
 public:
-    bool operator()(std::string_view contents, vhdl::ast::design_file& design_file);
+    bool operator()(std::string_view contents, ibis::vhdl::ast::design_file& design_file);
 
 public:
     ///

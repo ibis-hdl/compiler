@@ -19,9 +19,11 @@
 #include <cassert>
 #include <cstddef>
 
+using namespace ibis::vhdl;
+
 namespace valid_data {
 
-using base_specifier = ast::bit_string_literal::base_specifier;
+using base_specifier = ibis::vhdl::ast::bit_string_literal::base_specifier;
 using namespace std::literals::string_view_literals;
 
 // Valid input to test the grammar rule, no numeric conversion here.
@@ -93,7 +95,7 @@ struct test_worker {
                     [[maybe_unused]] std::string_view /* node_name */) const
     {
         if constexpr (verbose) {
-            // FixMe [C++20] non-critical C++20 std::format, more complex work using ast walker
+            // ToDo [C++20] non-critical C++20 std::format, more complex work using ast walker
             static ast::printer print(os);
             os << std::format("({:2d}/{:2d}): identifier '", index + 1, test_case_count);
             print(node.identifier_list);
@@ -147,8 +149,8 @@ BOOST_AUTO_TEST_CASE(bit_string_literal__valid_test,    // test shall pass
                      *utf::label("bit_string_literal")  //
                          * utf::label("format"))
 {
+    using ast::design_file;
     using testsuite::testsuite_parse;
-    using vhdl::ast::design_file;
     using namespace valid_data;
 
     testsuite_parse parse("bit_string_literal");

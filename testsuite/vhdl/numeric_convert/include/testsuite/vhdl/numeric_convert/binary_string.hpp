@@ -63,7 +63,7 @@ struct hexadecimal_string {
     std::string operator()() const;
 };
 
-// ToDo [c++20] replace with std::formatter, also inside source using this (bad API)
+// ToDo [C++20] replace with std::formatter, also inside source using this (bad API)
 std::ostream& operator<<(std::ostream& os, binary_string const& generator);
 std::ostream& operator<<(std::ostream& os, octal_string const& generator);
 std::ostream& operator<<(std::ostream& os, hexadecimal_string const& generator);

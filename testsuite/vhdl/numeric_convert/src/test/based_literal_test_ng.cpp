@@ -83,7 +83,10 @@ END PACKAGE;
 )";
 // clang-format on
 
+using namespace ibis::vhdl;
+
 using numeric_type_specifier = ast::based_literal::numeric_type_specifier;
+
 auto constexpr based_integer = numeric_type_specifier::integer;
 auto constexpr based_real = numeric_type_specifier::real;
 
@@ -166,10 +169,10 @@ In 'based_literal':46:39: parse error: in based literal parse of integer part 'f
 template<typename ExpectT, bool verbose = false>
 struct verify_worker
 {
-    using diagnostic_handler_type = vhdl::diagnostic_handler<parser::iterator_type>;
-    using basic_integer_type = vhdl::intrinsic::signed_integer_type;
+    using diagnostic_handler_type = ibis::vhdl::diagnostic_handler<parser::iterator_type>;
+    using basic_integer_type = ibis::vhdl::intrinsic::signed_integer_type;
     using integer_type = typename std::make_unsigned<basic_integer_type>::type;
-    using real_type = vhdl::intrinsic::real_type;
+    using real_type = ibis::vhdl::intrinsic::real_type;
 
     using converter_type = ast::convert_based<basic_integer_type, real_type>;
 
@@ -267,11 +270,13 @@ using verifier_type = ast::basic_ast_walker<verify_worker<decltype(expect), fals
 
 namespace utf = boost::unit_test;
 
+using namespace ibis::vhdl;
+
 BOOST_AUTO_TEST_CASE(based_literal_ng)
 {
     //using testsuite::testsuite_parse;
     using diagnostic_handler_type = ibis::vhdl::diagnostic_handler<parser::iterator_type>;
-    using vhdl::ast::design_file;
+    using ast::design_file;
     using namespace testsuite_data;
 
     parser::position_cache<parser::iterator_type> position_cache;

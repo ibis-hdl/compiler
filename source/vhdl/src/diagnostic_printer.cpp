@@ -85,7 +85,7 @@ diagnostic_printer::diagnostic_printer(diagnostic_context const& ctx)
 {
 }
 
-// @todo [C++20] port this code using std:.formatter, this is a complex use case
+// ToDO [C++20] port this code using std:.formatter, this is a complex use case
 std::ostream& diagnostic_printer::print_snippets(std::ostream& os) const
 {
     using boost::locale::format;

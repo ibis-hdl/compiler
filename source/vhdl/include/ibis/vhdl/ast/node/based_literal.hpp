@@ -21,8 +21,6 @@ namespace ibis::vhdl::ast {
 struct based_literal : position_tagged {
     enum class numeric_type_specifier : std::uint8_t { unspecified, integer, real };
 
-    // @ToDo Check parser rule with (real|integer) std::variant instead of numeric fragments/parts
-    // like decimal_literal rule?
     struct number_chunk {
         ast::string_span integer_part;
         ast::string_span fractional_part;

@@ -27,6 +27,8 @@
 
 namespace analyze = ibis::vhdl::analyze;
 
+using namespace ibis::vhdl;
+
 using testsuite::vhdl::syntax::failure_diagnostic_fixture;
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
