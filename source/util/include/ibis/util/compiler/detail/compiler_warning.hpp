@@ -4,7 +4,7 @@
 //
 
 //
-// Compiler Warning disabled for 3rd party sources
+// Compiler Warning disabled for *3rd party sources to be used only*
 //
 // see [Is using #pragma warning push/pop the right way to temporarily alter warning level?](
 // https://stackoverflow.com/questions/4193476/is-using-pragma-warning-push-pop-the-right-way-to-temporarily-alter-warning-lev)

@@ -4,6 +4,7 @@
 //
 
 #include <ibis/util/file/file_loader.hpp>
+#include <ibis/util/platform.hpp>
 
 #include <ibis/settings.hpp>
 #include <ibis/message.hpp>
@@ -21,6 +22,7 @@
 #include <chrono>
 #include <ratio>
 #include <system_error>
+#include <ctime>
 
 namespace ibis::util {
 
@@ -189,14 +191,29 @@ std::time_t file_loader::timesstamp(fs::path const& filename) const
         }
     };
 
-    // See [How to convert std::filesystem::file_time_type to time_t?](
-    //  https://stackoverflow.com/questions/61030383/how-to-convert-stdfilesystemfile-time-type-to-time-t)
     std::error_code ec;
     auto const file_time = fs::last_write_time(filename, ec);
-    report_error(ec);
-    auto const sys_time = chrono::clock_cast<chrono::system_clock>(file_time);
+    report_error(ec);  // not tragic from today's perspective, as not (yet) used (and tested)
 
-    return chrono::system_clock::to_time_t(sys_time);
+    // See [How to convert std::filesystem::file_time_type to time_t?](
+    //  https://stackoverflow.com/questions/61030383/how-to-convert-stdfilesystemfile-time-type-to-time-t)
+    if constexpr (ibis::build_compiler_has_libcpp) {
+        // handle libc++ compile error: no member named 'clock_cast' in namespace 'std::chrono'
+        auto const to_time_t = [](fs::file_time_type time_point) {
+            using namespace std::chrono;
+            auto sctp = time_point_cast<system_clock::duration>(
+                time_point - fs::file_time_type::clock::now() + system_clock::now());
+            return system_clock::to_time_t(sctp);
+        };
+
+        std::time_t const sys_time = to_time_t(file_time);
+        return sys_time;
+    }
+    else {
+        auto const sys_time = chrono::clock_cast<chrono::system_clock>(file_time);
+
+        return chrono::system_clock::to_time_t(sys_time);
+    }
 }
 
 }  // namespace ibis::util

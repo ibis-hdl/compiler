@@ -9,9 +9,13 @@
 #include <ibis/vhdl/ast/basic_ast_walker.hpp>
 #include <ibis/vhdl/ast/ast_formatter.hpp>
 #include <ibis/vhdl/ast/node/bit_string_literal.hpp>
+#include <ibis/vhdl/ast/node/constant_declaration.hpp>
 #include <ibis/vhdl/ast/node/design_file.hpp>
 
-#include <boost/test/unit_test.hpp>  // IWYU pragma: keep
+#include <boost/test/unit_test.hpp>        // IWYU pragma: keep
+#include <boost/test/tools/interface.hpp>  // BOOST_TEST()
+#include <boost/test/unit_test_suite.hpp>  // BOOST_AUTO_TEST_CASE()
+#include <boost/test/tree/decorator.hpp>   // utf::label
 
 #include <format>
 #include <string_view>
@@ -52,12 +56,13 @@ PACKAGE bitstring IS
     CONSTANT bin_04 : bit_vector := b"1111_1111_1111";
 END PACKAGE;
 )";
-
 // clang-format off
+
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays)
 struct {
-    base_specifier base_type;
-    std::string_view literal;
-    std::string_view formatted;
+    base_specifier const base_type;     // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
+    std::string_view const literal;     // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
+    std::string_view const formatted;   // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
 } const gold_data[] = {
     // hex
     { .base_type = base_specifier::hex, .literal = "01234", .formatted = "x01234" },
@@ -130,24 +135,27 @@ struct test_worker {
     {
     }
 
-    GoldDataT const& gold;
-    std::size_t const test_case_count;
-    std::size_t mutable index = 0;
-    std::ostream& os;
+private:
+    GoldDataT const& gold;              // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
+    std::size_t const test_case_count;  // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
+    std::size_t mutable index = 0;      // NOLINT(misc-non-private-member-variables-in-classes)
+    std::ostream& os;                   // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
 };
 
 using verifier_type = ast::basic_ast_walker<test_worker<decltype(gold_data), false /* verbose */>>;
 
-auto const verify = [&](ast::design_file const& ast) {
+auto const verify = [](ast::design_file const& ast) {
     verifier_type verify(gold_data);
     verify(ast);
 };
 
 }  // namespace valid_data
 
+// clang-format off
 BOOST_AUTO_TEST_CASE(bit_string_literal__valid_test,    // test shall pass
-                     *utf::label("bit_string_literal")  //
-                         * utf::label("format"))
+                     *utf::label("bit_string_literal")
+                     *utf::label("format"))
+// clang-format on
 {
     using ast::design_file;
     using testsuite::testsuite_parse;
