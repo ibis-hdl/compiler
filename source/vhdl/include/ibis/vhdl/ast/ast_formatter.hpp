@@ -46,6 +46,9 @@
 // clang-format on
 //
 
+// ToDo [Clang] This code doesn't compile with Clang/libc++ v18, but v19 is OK, see
+// https://godbolt.org/z/rc1sszThT
+
 namespace ibis::vhdl::ast::detail {
 
 // https://www.modernescpp.com/index.php/special-allocators-with-c17/
@@ -57,7 +60,7 @@ namespace ibis::vhdl::ast::detail {
 template <bool verbose = false>
 class TrackingAllocator : public std::pmr::memory_resource {
 public:
-    TrackingAllocator(std::string_view name_ = std::string_view{ "N/A" })
+    constexpr TrackingAllocator(std::string_view name_ = std::string_view{ "N/A" })
         : name{ name_ }
     {
     }
@@ -119,14 +122,12 @@ struct std::formatter<ibis::vhdl::ast::string_span> : std::formatter<std::string
 };
 
 ///
-/// formatter for ast::bit_string_literal::base_specifier
+/// formatter for ast::bit_string_literal::base_specifier enumerator
 /// required for BOOST_SPIRIT_X3_DEBUG
 ///
 template <>
-struct std::formatter<ibis::vhdl::ast::bit_string_literal::base_specifier> {
-    // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-    constexpr auto parse(std::format_parse_context& ctx) { return ctx.begin(); }
-
+struct std::formatter<ibis::vhdl::ast::bit_string_literal::base_specifier>
+    : std::formatter<std::string_view> {
     // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
     auto format(ibis::vhdl::ast::bit_string_literal::base_specifier specifier,
                 std::format_context& ctx) const
@@ -134,25 +135,25 @@ struct std::formatter<ibis::vhdl::ast::bit_string_literal::base_specifier> {
         using base_specifier = ibis::vhdl::ast::bit_string_literal::base_specifier;
         using namespace std::literals::string_view_literals;
 
-        static auto const as_sv = [](base_specifier specifier) {
-            // clang-format off
-            switch (specifier) {
-                case base_specifier::bin:                       return "b"sv;
-                case base_specifier::oct:                       return "o"sv;
-                case base_specifier::hex:                       return "x"sv;
-                // probably an unintentionally constructed enum by default, be graceful
-                [[unlikely]] case base_specifier::unspecified:  return "?"sv;
-                //
-                // *No* default branch: let the compiler generate warning about enumeration
-                // value not handled in switch
-                //
-            }
-            // clang-format on
+        // clang-format off
+        switch (specifier) {
+            case base_specifier::bin:
+                return std::formatter<std::string_view>::format("b"sv, ctx);
+            case base_specifier::oct:
+                return std::formatter<std::string_view>::format("o"sv, ctx);
+            case base_specifier::hex:
+                return std::formatter<std::string_view>::format("x"sv, ctx);
+            // probably an unintentionally constructed enum by default, be graceful
+            [[unlikely]] case base_specifier::unspecified:
+                return std::formatter<std::string_view>::format("unspecified"sv, ctx);
+            //
+            // *No* default branch: let the compiler generate warning about enumeration
+            // value not handled in switch
+            //
+        }
+        // clang-format on
 
-            ::cxx23::unreachable();
-        };
-
-        return std::format_to(ctx.out(), "{}", as_sv(specifier));
+        ::cxx23::unreachable();
     }
 };
 
@@ -162,31 +163,31 @@ struct std::formatter<ibis::vhdl::ast::bit_string_literal::base_specifier> {
 template <>
 struct std::formatter<ibis::vhdl::ast::bit_string_literal> : std::formatter<string_view> {
     // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-    auto format(ibis::vhdl::ast::bit_string_literal bit_string, std::format_context& ctx) const
+    auto format(ibis::vhdl::ast::bit_string_literal const& bit_string,
+                std::format_context& ctx) const
     {
         using namespace ibis::vhdl;
 
         ast::detail::TrackingAllocator<true> upstream_allocator{ "'bit_string_literal' formatter" };
 
-        // worst case for 32-bit considered
         static constexpr std::size_t BUF_SIZE{
+            // optimistic 'worst case' for 32-bit considered
             std::string_view{ "1111_1111_1111_1111_1111_1111_1111_1111" }.size()
         };
 
         std::array<string_view::value_type, BUF_SIZE> buf;
         std::pmr::monotonic_buffer_resource pool{ buf.data(), buf.size(), &upstream_allocator };
-        std::pmr::string literal{ &pool };
+        std::pmr::string temp_literal{ &pool };
 
-        std::format_to(std::back_inserter(literal), "{}{}", bit_string.base_type,
+        std::format_to(std::back_inserter(temp_literal), "{}{}", bit_string.base_type,
                        bit_string.literal);
 
-        return std::formatter<string_view>::format(literal, ctx);
+        return std::formatter<string_view>::format(temp_literal, ctx);
     }
 };
 
 ///
-/// formatter for ast::based_literal::numeric_type_specifier
-/// required for BOOST_SPIRIT_X3_DEBUG
+/// formatter for ast::based_literal::numeric_type_specifier enumerator
 ///
 template <>
 struct std::formatter<ibis::vhdl::ast::based_literal::numeric_type_specifier>
@@ -198,24 +199,23 @@ struct std::formatter<ibis::vhdl::ast::based_literal::numeric_type_specifier>
         using numeric_type_specifier = ibis::vhdl::ast::based_literal::numeric_type_specifier;
         using namespace std::literals::string_view_literals;
 
-        static auto const as_sv = [](numeric_type_specifier specifier) {
-            // clang-format off
-            switch (specifier) {
-                case numeric_type_specifier::integer:                   return "integer"sv;
-                case numeric_type_specifier::real:                      return "real"sv;
-                // probably an unintentionally constructed enum by default, be graceful
-                [[unlikely]] case numeric_type_specifier::unspecified:  return "?"sv;
-                //
-                // *No* default branch: let the compiler generate warning about enumeration
-                // value not handled in switch
-                //
-            }
-            // clang-format on
+        // clang-format off
+        switch (specifier) {
+            case numeric_type_specifier::integer:
+                return std::formatter<std::string_view>::format("integer"sv, ctx);
+            case numeric_type_specifier::real:
+                return std::formatter<std::string_view>::format("real"sv, ctx);
+            // probably an unintentionally constructed enum by default, be graceful
+            [[unlikely]] case numeric_type_specifier::unspecified:
+                return std::formatter<std::string_view>::format("unspecified"sv, ctx);
+            //
+            // *No* default branch: let the compiler generate warning about enumeration
+            // value not handled in switch
+            //
+        }
+        // clang-format on
 
-            ::cxx23::unreachable();
-        };
-
-        return std::formatter<std::string_view>::format(as_sv(specifier), ctx);
+        ::cxx23::unreachable();
     }
 };
 
@@ -223,22 +223,36 @@ struct std::formatter<ibis::vhdl::ast::based_literal::numeric_type_specifier>
 /// formatter for ast::based_literal
 ///
 template <>
-struct std::formatter<ibis::vhdl::ast::based_literal> {
-    // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-    constexpr auto parse(std::format_parse_context& ctx) { return ctx.begin(); }
-
+struct std::formatter<ibis::vhdl::ast::based_literal> : std::formatter<std::string_view> {
     // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
     auto format(ibis::vhdl::ast::based_literal based, std::format_context& ctx) const
     {
+        using namespace ibis::vhdl;
         using numeric_type_specifier = ibis::vhdl::ast::based_literal::numeric_type_specifier;
+
+        ast::detail::TrackingAllocator<true> upstream_allocator{ "'based_literal' formatter" };
+
+        static constexpr std::size_t BUF_SIZE{
+            // optimistic 'worst case' for 32-bit considered
+            std::string_view{ "10#4_294_967_295.4_294_967_295#+E1024" }.size()
+        };
+
+        std::array<string_view::value_type, BUF_SIZE> buf;
+        std::pmr::monotonic_buffer_resource pool{ buf.data(), buf.size(), &upstream_allocator };
+        std::pmr::string temp_literal{ &pool };
+
         if (based.number.type_specifier == numeric_type_specifier::integer) {
-            return std::format_to(ctx.out(), "{}#{}#{}",  // --
-                                  based.base, based.number.integer_part, based.number.exponent);
+            std::format_to(std::back_inserter(temp_literal), "{}#{}#{}", based.base,  // --
+                           based.number.integer_part,                                 // --
+                           based.number.exponent);
         }
-        return std::format_to(ctx.out(), "{}#{}.{}#{}",
-                              based.base,                                               //
-                              based.number.integer_part, based.number.fractional_part,  //
-                              based.number.exponent);
+        else {
+            std::format_to(std::back_inserter(temp_literal), "{}#{}.{}#{}", based.base,  // --
+                           based.number.integer_part, based.number.fractional_part,      // --
+                           based.number.exponent);
+        }
+
+        return std::formatter<string_view>::format(temp_literal, ctx);
     }
 };
 
@@ -246,14 +260,13 @@ struct std::formatter<ibis::vhdl::ast::based_literal> {
 /// formatter for ast::decimal_literal
 ///
 template <>
-struct std::formatter<ibis::vhdl::ast::decimal_literal> {
-    // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-    constexpr auto parse(std::format_parse_context& ctx) { return ctx.begin(); }
-
+struct std::formatter<ibis::vhdl::ast::decimal_literal> : std::formatter<std::string_view> {
     // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
     auto format(ibis::vhdl::ast::decimal_literal decimal, std::format_context& ctx) const
     {
-        return std::format_to(ctx.out(), "{}", decimal.literal);
+        return std::formatter<std::string_view>::format(
+            // FixMe [C++23] C++23 can construct std::basic_string_view over range
+            std::string_view{ begin(decimal.literal), end(decimal.literal) }, ctx);
     }
 };
 
@@ -262,9 +275,6 @@ struct std::formatter<ibis::vhdl::ast::decimal_literal> {
 ///
 template <>
 struct std::formatter<ibis::vhdl::ast::string_literal> : std::formatter<std::string_view> {
-    static constexpr std::string_view raw_spec{ "raw" };
-    bool raw_format = false;
-
     // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
     constexpr auto parse(std::format_parse_context& ctx)
     {
@@ -287,8 +297,18 @@ struct std::formatter<ibis::vhdl::ast::string_literal> : std::formatter<std::str
                 std::string_view{ begin(string.literal), end(string.literal) }, ctx);
         }
 
-        // maybe better use Andreas Spindler answer?
-        // https://stackoverflow.com/questions/7378902/how-to-efficiently-remove-double-quotes-from-stdstring-if-they-exist
+        using namespace ibis::vhdl;
+
+        ast::detail::TrackingAllocator<true> upstream_allocator{ "'string_literal' formatter" };
+
+        // simple buffer size estimation
+        static constexpr std::size_t BUF_SIZE{ 64 };
+
+        std::array<string_view::value_type, BUF_SIZE> buf;
+        std::pmr::monotonic_buffer_resource pool{ buf.data(), buf.size(), &upstream_allocator };
+        std::pmr::string temp_literal{ &pool };
+
+        // ToDo: Find a better way to unquote, not robust in all cases (maybe Boost.Parser?)
         auto unquote = [prev_quote = '\0'](char chr) mutable {
             if (chr == prev_quote) {
                 prev_quote = '\0';
@@ -303,15 +323,18 @@ struct std::formatter<ibis::vhdl::ast::string_literal> : std::formatter<std::str
             return true;
         };
 
-        std::string temp;
         for (auto const chr : string.literal) {
             if (unquote(chr)) {
-                std::format_to(std::back_inserter(temp), "{}", chr);
+                std::format_to(std::back_inserter(temp_literal), "{}", chr);
             }
         }
 
-        return std::formatter<std::string_view>::format(temp, ctx);
+        return std::formatter<std::string_view>::format(temp_literal, ctx);
     }
+
+private:
+    static constexpr std::string_view raw_spec{ "raw" };
+    bool raw_format = false;
 };
 
 ///

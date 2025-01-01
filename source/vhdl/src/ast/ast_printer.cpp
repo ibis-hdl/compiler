@@ -886,7 +886,7 @@ void printer::operator()(decimal_literal const& node)
 
     os << "literal: " << node.literal << ", type: ";
 
-    switch (node.numeric_type()) {
+    switch (node.type_specifier) {
         case numeric_type_specifier::integer:
             os << "integer";
             break;

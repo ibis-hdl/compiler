@@ -194,36 +194,3 @@ std::string_view std::formatter<ibis::vhdl::ast::keyword_token>::as_sv(
 
     ::cxx23::unreachable();
 }
-
-///
-/// ostream operators required for BOOST_SPIRIT_X3_DEBUG
-///
-namespace ibis::vhdl::ast {
-
-std::ostream& operator<<(std::ostream& os, ast::decimal_literal::numeric_type_specifier specifier)
-{
-    using numeric_type_specifier = ast::decimal_literal::numeric_type_specifier;
-    using namespace std::literals::string_view_literals;
-
-    static auto const as_sv = [](numeric_type_specifier specifier) {
-        // clang-format off
-        switch (specifier) {
-            case numeric_type_specifier::integer:   return "integer"sv;
-            case numeric_type_specifier::real:      return "real"sv;
-            // probably an unintentionally constructed enum by default, be graceful
-            [[unlikely]] case numeric_type_specifier::unspecified:
-                return "unspecified"sv;
-            //
-            // *No* default branch: let the compiler generate warning about enumeration
-            // value not handled in switch
-            //
-        }
-        // clang-format on
-        ::cxx23::unreachable();
-    };
-
-    os << std::format("{}", as_sv(specifier));
-    return os;
-}
-
-}  // namespace ibis::vhdl::ast

@@ -197,7 +197,7 @@ std::time_t file_loader::timesstamp(fs::path const& filename) const
 
     // See [How to convert std::filesystem::file_time_type to time_t?](
     //  https://stackoverflow.com/questions/61030383/how-to-convert-stdfilesystemfile-time-type-to-time-t)
-    if constexpr (ibis::build_compiler_has_libcpp) {
+    if constexpr (ibis::build_compiler_has_libcpp == true) {
         // handle libc++ compile error: no member named 'clock_cast' in namespace 'std::chrono'
         auto const to_time_t = [](fs::file_time_type time_point) {
             using namespace std::chrono;
@@ -210,9 +210,10 @@ std::time_t file_loader::timesstamp(fs::path const& filename) const
         return sys_time;
     }
     else {
+#if !defined(_LIBCPP_VERSION)  // hide "faulty code" from Clang/libc++ (clock_cast<> won't found)
         auto const sys_time = chrono::clock_cast<chrono::system_clock>(file_time);
-
         return chrono::system_clock::to_time_t(sys_time);
+#endif
     }
 }
 

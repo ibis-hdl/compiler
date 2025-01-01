@@ -1124,7 +1124,8 @@ struct based_literal_error_handler {
     {
         auto& diagnostic_handler = x3::get<parser::diagnostic_handler_tag>(context).get();
 
-        std::string const message =  // --
+        std::string const message =
+            // FixMe e.which() contains rule name 'based literal base', hence misleading error msg
             "in based literal '" + e.which() +
             "' the base specifier isn't supported; only 2, 8, 10 and 16!";
 

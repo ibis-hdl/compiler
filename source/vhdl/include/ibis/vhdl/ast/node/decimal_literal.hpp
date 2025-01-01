@@ -23,9 +23,6 @@ struct decimal_literal : position_tagged {
 
     ast::string_span literal;
     numeric_type_specifier type_specifier;
-
-    /// convenience access to numeric type represented.
-    numeric_type_specifier numeric_type() const { return type_specifier; }
 };
 
 // required for BOOST_SPIRIT_X3_DEBUG

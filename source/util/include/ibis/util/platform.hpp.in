@@ -82,10 +82,11 @@ constexpr ibis::platform_compiler build_compiler_variant = platform_compiler::Cl
 ///
 /// Some code parts require special handling for use with libc++, namely macOS
 ///
-#ifdef _LIBCPP_VERSION
+#if defined(_LIBCPP_VERSION)
 // [How to detect -stdlib=libc++ in the preprocessor?](
 //  https://stackoverflow.com/questions/31657499/how-to-detect-stdlib-libc-in-the-preprocessor)
 constexpr bool build_compiler_has_libcpp = true;
+// #pragma message "libc++"
 #else
 constexpr bool build_compiler_has_libcpp = false;
 #endif
