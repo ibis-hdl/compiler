@@ -12,8 +12,8 @@
 #include <ibis/vhdl/ast/node/constant_declaration.hpp>
 #include <ibis/vhdl/ast/node/design_file.hpp>
 
-#include <boost/test/unit_test.hpp>        // IWYU pragma: keep
 #include <boost/test/tools/interface.hpp>  // BOOST_TEST()
+#include <boost/test/tools/context.hpp>    // BOOST_TEST_CONTEXT()
 #include <boost/test/unit_test_suite.hpp>  // BOOST_AUTO_TEST_CASE()
 #include <boost/test/tree/decorator.hpp>   // utf::label
 
@@ -119,12 +119,14 @@ struct test_worker {
     {
         assert(index < test_case_count && "index reached count of gold data array size!");
 
-        auto const expected = gold[index];
-        // FixMe BOOST_TEST_xxxx("Test index at " << index);
-        BOOST_TEST(node.base_type == expected.base_type);
-        BOOST_TEST(node.literal == expected.literal);
-        BOOST_TEST(std::format("{}", node) == expected.formatted);
-
+        BOOST_TEST_CONTEXT("Test index at " << index)
+        {
+            auto const expected = gold[index];
+            BOOST_TEST(node.base_type == expected.base_type);
+            auto const node_literal = std::string_view{ begin(node.literal), end(node.literal) };
+            BOOST_TEST(node_literal == expected.literal, btt::per_element());
+            BOOST_TEST(std::format("{}", node) == expected.formatted, btt::per_element());
+        }
         ++index;
     }
 

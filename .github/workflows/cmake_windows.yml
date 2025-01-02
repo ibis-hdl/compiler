@@ -96,13 +96,6 @@ jobs:
       env:
         SCCACHE_GHA_ENABLED: "true"
 
-    - name: Show CMake configure and build pre-conditions
-      if: false
-      shell: cmd
-      run: |
-        rem env
-        echo $HOME
-
     - name: Conan install
       run: |
         .win64-venv\Scripts\activate
@@ -110,17 +103,20 @@ jobs:
         py conan_install.py --profile ${{ matrix.cmake.conan_profile }}
         deactivate
 
+    - name: Show prerequisites
+      if: true
+      run: |
+        # eval ${CXX} --version
+        cmake --version
+        conan list '*'
+        cmake --list-presets
+
     - name: CMake configuration
       shell: cmd
       env:
-        # Did run into trouble with Conan-CMake provider and sccache on build of
-        # Debug build (Release works fine) ...
-        # CMAKE_CXX_COMPILER_LAUNCHER: ${{ matrix.cmake.configure_preset != 'msvc' && 'sccache' || '' }}
         CMAKE_CXX_COMPILER_LAUNCHER: sccache
       run: |
         call "${{ matrix.cmake.vcvars }}"
-        conan list '*'
-        cmake --list-presets
         cmake --preset ${{ matrix.cmake.configure_preset }}
 
     - name: CMake build

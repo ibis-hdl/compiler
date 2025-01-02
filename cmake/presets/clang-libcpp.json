@@ -8,7 +8,9 @@
             "name": "compiler-clang-libc++",
             "description": "Clang C/C++ language family frontend for LLVM",
             "hidden": true,
-            "inherits": [],
+            "inherits": [
+                "settings-stdlib-libc++"
+            ],
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "clang",
                 "CMAKE_CXX_COMPILER": "clang++"

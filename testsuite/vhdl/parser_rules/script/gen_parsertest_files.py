@@ -425,6 +425,7 @@ BOOST_DATA_TEST_CASE({test_case}, // --
     auto const parser = testsuite::vhdl::parser::{parser_name}();
 
     using testsuite::vhdl::parser::util::testing_parser;
+    using namespace ibis::vhdl;
 
     testing_parser<attribute_type> parse;
     auto [parse_ok, parse_result] = parse(input, parser, test_case_name);

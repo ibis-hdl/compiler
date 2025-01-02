@@ -35,28 +35,17 @@
 /// - [std::format from scratch, part 3](https://quuxplusone.github.io/blog/2023/04/23/format-part-3/)
 // clang-format on
 
-//
-// clang-format off
-// Test field 
-// https://coliru.stacked-crooked.com/a/e742770da18d2d43
-// https://coliru.stacked-crooked.com/a/f2eaad89999517e4
-// templated https://coliru.stacked-crooked.com/a/0b2d7492245fbb77
-// https://coliru.stacked-crooked.com/a/3be354f85e84f461 (C++23)
-// "prefer composition over inheritance": https://coliru.stacked-crooked.com/a/4a3a355b1b6a6963 (C++23)
-// clang-format on
-//
-
 // ToDo [Clang] This code doesn't compile with Clang/libc++ v18, but v19 is OK, see
 // https://godbolt.org/z/rc1sszThT
 
 namespace ibis::vhdl::ast::detail {
 
-// https://www.modernescpp.com/index.php/special-allocators-with-c17/
-
 ///
-/// upstream allocator for polymorphic allocator required for formatting
+/// upstream polymorphic allocator used for formatting
 ///
 /// @note Concept using std::pmr [coliru](https://coliru.stacked-crooked.com/a/f01afbac75d7723c)
+/// @see [Special Allocators with C++17](
+///       https://www.modernescpp.com/index.php/special-allocators-with-c17/)
 template <bool verbose = false>
 class TrackingAllocator : public std::pmr::memory_resource {
 public:
@@ -309,6 +298,15 @@ struct std::formatter<ibis::vhdl::ast::string_literal> : std::formatter<std::str
         std::pmr::string temp_literal{ &pool };
 
         // ToDo: Find a better way to unquote, not robust in all cases (maybe Boost.Parser?)
+        /* from clack channel:
+            prev_quote is just:
+            % -> the second % is then cancelled, and prev_quote is assigned to \0;
+            repeat 1;
+            %, nothing to read
+
+            Then it's %%% inserted into the context. If you want only a single % to output, you're
+            not supposed to assign prev_quote to \0 when quit, or do some loop inside the lambda.
+        */
         auto unquote = [prev_quote = '\0'](char chr) mutable {
             if (chr == prev_quote) {
                 prev_quote = '\0';

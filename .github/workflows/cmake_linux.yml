@@ -114,12 +114,6 @@ jobs:
           ~/.config/ccache
           ~/.cache/ccache
 
-    - name: Show CMake configure and build pre-conditions
-      if: false
-      run: |
-        env
-        echo $HOME
-
     - name: Conan install
       run: |
         virtualenv .venv
@@ -128,12 +122,18 @@ jobs:
         python3 conan_install.py --profile ${{ matrix.cmake.conan_profile }}
         deactivate
 
+    - name: Show prerequisites
+      if: true
+      run: |
+        eval ${CXX} --version
+        cmake --version
+        conan list '*'
+        cmake --list-presets
+
     - name: CMake configuration
       env:
         CMAKE_CXX_COMPILER_LAUNCHER: ccache
       run: |
-        conan list '*'
-        cmake --list-presets
         cmake --preset ${{ matrix.cmake.configure_preset }}
 
     - name: CMake build
