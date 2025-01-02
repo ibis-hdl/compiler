@@ -105,11 +105,15 @@ jobs:
 
     - name: Show prerequisites
       if: true
+      shell: cmd
       run: |
+        call "${{ matrix.cmake.vcvars }}"
+        .\.win64-venv\Scripts\activate
         # eval ${CXX} --version
         cmake --version
         conan list '*'
         cmake --list-presets
+        deactivate
 
     - name: CMake configuration
       shell: cmd

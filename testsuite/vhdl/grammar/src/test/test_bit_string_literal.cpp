@@ -123,7 +123,8 @@ struct test_worker {
         {
             auto const expected = gold[index];
             BOOST_TEST(node.base_type == expected.base_type);
-            auto const node_literal = std::string_view{ begin(node.literal), end(node.literal) };
+            auto const node_literal =
+                std::string_view{ std::begin(node.literal), std::end(node.literal) };
             BOOST_TEST(node_literal == expected.literal, btt::per_element());
             BOOST_TEST(std::format("{}", node) == expected.formatted, btt::per_element());
         }
