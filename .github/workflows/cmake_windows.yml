@@ -110,8 +110,8 @@ jobs:
         call "${{ matrix.cmake.vcvars }}"
         .\.win64-venv\Scripts\activate
         # eval ${CXX} --version
-        cmake --version
         conan list '*'
+        cmake --version
         cmake --list-presets
         deactivate
 

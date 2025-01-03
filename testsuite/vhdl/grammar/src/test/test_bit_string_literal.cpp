@@ -3,9 +3,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#include <testsuite/vhdl/grammar/testsuite_parse.hpp>
-#include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
-
 #include <ibis/vhdl/ast/basic_ast_walker.hpp>
 #include <ibis/vhdl/ast/ast_formatter.hpp>
 #include <ibis/vhdl/ast/node/bit_string_literal.hpp>
@@ -16,6 +13,9 @@
 #include <boost/test/tools/context.hpp>    // BOOST_TEST_CONTEXT()
 #include <boost/test/unit_test_suite.hpp>  // BOOST_AUTO_TEST_CASE()
 #include <boost/test/tree/decorator.hpp>   // utf::label
+
+#include <testsuite/vhdl/grammar/testsuite_parse.hpp>
+#include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
 #include <format>
 #include <string_view>

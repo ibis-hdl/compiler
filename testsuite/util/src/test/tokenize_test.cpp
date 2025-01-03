@@ -5,7 +5,11 @@
 
 #include <ibis/util/tokenize.hpp>
 
-#include <boost/test/unit_test.hpp>
+#include <boost/test/tools/interface.hpp>  // BOOST_TEST()
+#include <boost/test/unit_test_suite.hpp>  // BOOST_AUTO_TEST_CASE()
+#include <boost/test/unit_test.hpp>        // IWYU pragma: keep
+
+#include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
 #include <iostream>
 
@@ -17,7 +21,6 @@ BOOST_AUTO_TEST_CASE(tokenize_sv)
 {
     using namespace std::literals::string_view_literals;
     using namespace ibis::util;
-    namespace tt = boost::test_tools;
 
     std::string_view const sv = " foo , bar,baz,  foo   baz, ,,+foo, *bra,";
     std::vector<std::string_view> const expected{
@@ -34,7 +37,7 @@ BOOST_AUTO_TEST_CASE(tokenize_sv)
         }
     }
     BOOST_TEST(expected.size() == result.size());
-    BOOST_TEST(result == expected, tt::per_element());
+    BOOST_TEST(result == expected, btt::per_element());
 }
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)

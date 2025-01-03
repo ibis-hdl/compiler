@@ -5,14 +5,14 @@
 
 #pragma once
 
-#include <boost/test/tools/output_test_stream.hpp>
-
 #include <ibis/vhdl/parser/context.hpp>
 #include <ibis/vhdl/parser/parse.hpp>
 #include <ibis/vhdl/ast.hpp>
 
 #include <ibis/vhdl/ast/ast_printer.hpp>
 #include <ibis/util/pretty_typename.hpp>
+
+#include <boost/test/tools/output_test_stream.hpp>
 
 #include <iostream>
 #include <filesystem>

@@ -17,7 +17,7 @@
 #include <filesystem>
 
 namespace testsuite {
-    namespace fs = std::filesystem;
+namespace fs = std::filesystem;
 }
 
 namespace testsuite::util {
@@ -32,7 +32,7 @@ namespace testsuite::util {
 /// A dataset holds:
 ///
 /// - one or more input files.
-/// - one or more correspondending expected file.
+/// - one or more corescondending expected file.
 /// - the bundled basename of these pair of files, aka name of test_case.
 ///
 /// The data for input and expected are linked to the corresponding testdata file

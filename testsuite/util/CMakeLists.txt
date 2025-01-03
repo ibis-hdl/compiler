@@ -27,6 +27,7 @@ add_test(NAME test_util
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         ibis::util
+        testsuite::util
         Boost::headers
         Boost::unit_test_framework
 )

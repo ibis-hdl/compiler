@@ -95,8 +95,8 @@ jobs:
       if: true
       run: |
         eval ${CXX} --version
-        cmake --version
         conan list '*'
+        cmake --version
         cmake --list-presets
 
     - name: CMake configuration

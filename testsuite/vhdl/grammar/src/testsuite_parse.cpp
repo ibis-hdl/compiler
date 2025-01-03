@@ -3,32 +3,42 @@
 
 #include <testsuite/vhdl/grammar/testsuite_parse.hpp>
 
+#include <ibis/vhdl/ast/node/design_file.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/parser/position_cache.hpp>
+#include <ibis/vhdl/parser/parse.hpp>
+#include <ibis/vhdl/parser/context.hpp>
+
+#include <string_view>
+#include <format>
+#include <exception>
+
 namespace testsuite {
 
-using namespace ibis::vhdl;
+using namespace ibis;
 
 bool testsuite_parse::operator()(std::string_view contents, ast::design_file& design_file)
 {
     bool parse_ok = false;
 
     try {
-        parser::position_cache<parser::iterator_type> position_cache;
-        parser::parse parse{ os };
-        parser::context ctx;
+        vhdl::parser::position_cache<parser::iterator_type> position_cache;
+        vhdl::parser::parse parse{ os };
+        vhdl::parser::context ctx;
 
         auto position_cache_proxy = position_cache.add_file(filename.generic_string(), contents);
 
         parse_ok = parse(position_cache_proxy, ctx, design_file);
 
-        using ibis::vhdl::failure_status;
+        using vhdl::failure_status;
 
         os << failure_status(ctx) << '\n';
     }
     catch (std::exception const& e) {
-        os << "Test Suite caught exception ''" << e.what() << "'\n";
+        os << std::format("Test Suite parse caught exception '{}'\n", e.what());
     }
     catch (...) {
-        os << "Test Suite caught *unexpected* exception\n";
+        os << "Test Suite parse caught *unexpected* exception\n";
     }
     return parse_ok;
 }
