@@ -34,6 +34,18 @@ using namespace std::literals::string_view_literals;
 std::string_view const input = R"(
 -- test 'bit_string_literal' grammar
 PACKAGE bitstring IS
+    -- bin
+    CONSTANT bin_01 : bit_vector := B"0101";
+    CONSTANT bin_02 : bit_vector := b"0101";
+    CONSTANT bin_03 : bit_vector := b"1_0";
+    CONSTANT bin_04 : bit_vector := b"1111_1111_1111";
+    -- oct
+    CONSTANT oct_01 : bit_vector := O"01234";
+    CONSTANT oct_02 : bit_vector := o"01234";
+    CONSTANT oct_03 : bit_vector := o"777";
+    CONSTANT oct_04 : bit_vector := o"7";
+    CONSTANT oct_05 : bit_vector := o"7_42";
+    CONSTANT oct_06 : bit_vector := o"0_1_2";
     -- hex
     CONSTANT hex_01 : bit_vector := X"01234";
     CONSTANT hex_02 : bit_vector := x"01234";
@@ -42,18 +54,6 @@ PACKAGE bitstring IS
     CONSTANT hex_05 : bit_vector := x"ffff";
     CONSTANT hex_06 : bit_vector := x"a_b";
     CONSTANT hex_07 : bit_vector := x"a_b_c";
-    -- oct
-    CONSTANT oct_01 : bit_vector := O"01234";
-    CONSTANT oct_02 : bit_vector := o"01234";
-    CONSTANT oct_03 : bit_vector := o"777";
-    CONSTANT oct_04 : bit_vector := o"7";
-    CONSTANT oct_05 : bit_vector := o"7_42";
-    CONSTANT oct_06 : bit_vector := o"0_1_2";
-    -- bin
-    CONSTANT bin_01 : bit_vector := B"0101";
-    CONSTANT bin_02 : bit_vector := b"0101";
-    CONSTANT bin_03 : bit_vector := b"1_0";
-    CONSTANT bin_04 : bit_vector := b"1111_1111_1111";
 END PACKAGE;
 )";
 // clang-format off
@@ -64,6 +64,18 @@ struct {
     std::string_view const literal;     // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
     std::string_view const formatted;   // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
 } const gold_data[] = {
+    // bin
+    { .base_type = base_specifier::bin, .literal = "0101", .formatted = "b0101" },
+    { .base_type = base_specifier::bin, .literal = "0101", .formatted = "b0101" },
+    { .base_type = base_specifier::bin, .literal = "1_0", .formatted = "b1_0" },
+    { .base_type = base_specifier::bin, .literal = "1111_1111_1111", .formatted = "b1111_1111_1111" },
+    // oct
+    { .base_type = base_specifier::oct, .literal = "01234", .formatted = "o01234" },
+    { .base_type = base_specifier::oct, .literal = "01234", .formatted = "o01234" },
+    { .base_type = base_specifier::oct, .literal = "777", .formatted = "o777" },
+    { .base_type = base_specifier::oct, .literal = "7", .formatted = "o7" },
+    { .base_type = base_specifier::oct, .literal = "7_42", .formatted = "o7_42" },
+    { .base_type = base_specifier::oct, .literal = "0_1_2", .formatted = "o0_1_2" },
     // hex
     { .base_type = base_specifier::hex, .literal = "01234", .formatted = "x01234" },
     { .base_type = base_specifier::hex, .literal = "01234", .formatted = "x01234" },
@@ -72,18 +84,6 @@ struct {
     { .base_type = base_specifier::hex, .literal = "ffff", .formatted = "xffff" },
     { .base_type = base_specifier::hex, .literal = "a_b", .formatted = "xa_b" },
     { .base_type = base_specifier::hex, .literal = "a_b_c", .formatted = "xa_b_c" },
-    // oct
-    { .base_type = base_specifier::oct, .literal = "01234", .formatted = "o01234" },
-    { .base_type = base_specifier::oct, .literal = "01234", .formatted = "o01234" },
-    { .base_type = base_specifier::oct, .literal = "777", .formatted = "o777" },
-    { .base_type = base_specifier::oct, .literal = "7", .formatted = "o7" },
-    { .base_type = base_specifier::oct, .literal = "7_42", .formatted = "o7_42" },
-    { .base_type = base_specifier::oct, .literal = "0_1_2", .formatted = "o0_1_2" },
-    // bin
-    { .base_type = base_specifier::bin, .literal = "0101", .formatted = "b0101" },
-    { .base_type = base_specifier::bin, .literal = "0101", .formatted = "b0101" },
-    { .base_type = base_specifier::bin, .literal = "1_0", .formatted = "b1_0" },
-    { .base_type = base_specifier::bin, .literal = "1111_1111_1111", .formatted = "b1111_1111_1111" },
 };
 // clang-format on
 

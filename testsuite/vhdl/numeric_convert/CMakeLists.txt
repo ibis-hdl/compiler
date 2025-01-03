@@ -42,7 +42,6 @@ target_sources(${PROJECT_NAME}
     PRIVATE
         src/test_numeric_convert.cpp
         src/numeric_parser.cpp
-        src/binary_string.cpp
         # concrete test cases
         src/test/bit_string_literal_test.cpp
         src/test/decimal_literal_test.cpp
