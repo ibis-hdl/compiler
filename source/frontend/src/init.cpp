@@ -11,7 +11,7 @@
 
 #include <ibis/settings.hpp>
 
-#include <ibis/util/platform.hpp>
+#include <ibis/platform.hpp>
 
 #include <ibis/util/file/file_loader.hpp>
 #include <ibis/util/file/user_home_dir.hpp>

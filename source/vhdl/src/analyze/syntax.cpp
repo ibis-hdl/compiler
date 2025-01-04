@@ -60,6 +60,7 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name)
     auto const [start_label, end_label] = labels_of(node);
     node_name = ast::pretty_node_name(node_name);
 
+    // clang-format off
     switch (match_result) {
         case label_match::result::MISMATCH: {
             auto const err_msg =  // --
@@ -67,19 +68,22 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name)
             diagnostic_handler.syntax_error(node, start_label, end_label, err_msg);
             return false;
         }
-
         case label_match::result::ILLFORMED: {
             auto const err_msg =  // --
                 (format(translate("Label ill-formed in {1}")) % node_name).str();
             diagnostic_handler.syntax_error(node, start_label, end_label, err_msg);
             return false;
         }
-
-        default:  // unreachable_bug_triggered
+        // test on OK before on function entry, shouldn't be here
+        [[unlikely]] case label_match::result::OK:
             cxx_unreachable_bug_triggered();
+        // *No* default branch: let the compiler generate warning about enumeration
+        // value not handled in switch
+        // *Note* on changes, also check `to_base_specifier()!`
     }
+    // clang-format on
 
-    cxx_unreachable_bug_triggered();
+    std::unreachable();
 }
 
 bool syntax_worker::keyword_matches(ast::process_statement const& node,

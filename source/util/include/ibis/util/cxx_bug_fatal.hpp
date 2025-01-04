@@ -10,21 +10,6 @@
 #include <iostream>
 #include <cstdlib>
 
-// porting helper for C++23
-namespace cxx23 {
-
-// FixMe [C++23] to be replaced with std::unreachable()
-[[noreturn]] static inline void unreachable()
-{
-#if defined(_MSC_VER) && !defined(__clang__)  // MSVC
-    __assume(false);
-#else  // GCC, Clang
-    __builtin_unreachable();
-#endif
-}
-
-}  // namespace cxx23
-
 namespace ibis::util::detail {
 
 template <typename CharT>
@@ -61,5 +46,5 @@ void assertion_failed_msg(const CharT* expr, const char msg[], std::source_locat
 
 #define cxx_unreachable_bug_triggered()                   \
     cxx_assert(false, "unreachable code path triggered"); \
-    ::cxx23::unreachable();                               \
+    std::unreachable();                                   \
     std::quick_exit(EXIT_FAILURE);

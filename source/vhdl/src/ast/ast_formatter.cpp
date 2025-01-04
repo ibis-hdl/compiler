@@ -69,7 +69,7 @@ std::string_view std::formatter<ibis::vhdl::ast::operator_token>::as_sv(
     }
     // clang-format on
 
-    ::cxx23::unreachable();
+    std::unreachable();
 }
 
 ///
@@ -192,5 +192,5 @@ std::string_view std::formatter<ibis::vhdl::ast::keyword_token>::as_sv(
     }
     // clang-format on
 
-    ::cxx23::unreachable();
+    std::unreachable();
 }

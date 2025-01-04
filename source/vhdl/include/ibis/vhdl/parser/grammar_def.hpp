@@ -1164,6 +1164,10 @@ auto const as = [](auto parser, const char* name = typeid(T).name()) {
 /// https://stackoverflow.com/questions/47008258/x3-parse-rule-doesnt-compile/47013918#47013918)
 /// which also uses a 2nd pass using `stoull`.
 ///
+//
+// ToDo Revert Spirit.X3 here, make mini-parser for 3-chars-width and convert
+// see notes at ast::based_literal header
+//
 struct based_literal_base_type : x3::parser<based_literal_base_type> {
     using attribute_type = std::uint32_t;
 
@@ -1335,9 +1339,9 @@ auto const bit_string_literal = [](auto&& base, auto&& char_range, auto&& attr) 
 
 // clang-format off
 auto const bit_string_literal_def =
-    detail::bit_string_literal("Bb", "01", ast::bit_string_literal::base_specifier::bin) |
-    detail::bit_string_literal("Xx", "0-9a-fA-F", ast::bit_string_literal::base_specifier::hex) |
-    detail::bit_string_literal("Oo", "0-7", ast::bit_string_literal::base_specifier::oct);
+    detail::bit_string_literal("Bb", "01", ast::bit_string_literal::numeric_base_specifier::base2) |
+    detail::bit_string_literal("Xx", "0-9a-fA-F", ast::bit_string_literal::numeric_base_specifier::base16) |
+    detail::bit_string_literal("Oo", "0-7", ast::bit_string_literal::numeric_base_specifier::base8);
 // clang-format on
 
 #if 0  // Note: UNUSED, embedded directly into bit_string_literal

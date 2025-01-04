@@ -92,6 +92,7 @@ auto ast_stats::sort_by_count(bool ascending) const
     return vec;
 }
 
+// ToDo [C++20] use std::format, or as member format_to()
 std::ostream& ast_stats::print_on(std::ostream& os) const
 {
     auto const vec{ sort_by_count() };

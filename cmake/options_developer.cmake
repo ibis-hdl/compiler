@@ -120,7 +120,8 @@ add_compile_options(
     # https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
     "$<$<CXX_COMPILER_ID:GNU>:-Wall;-Wextra;-Wpedantic;-Wconversion>"
     # https://docs.microsoft.com/en-us/cpp/build/reference/compiler-option-warning-level
-    "$<$<CXX_COMPILER_ID:MSVC>:/W3>"
+    # - C4062 - enumerator 'identifier' in switch of enum 'enumeration' is not handled
+    "$<$<CXX_COMPILER_ID:MSVC>:/W3;/w34062>"
 
     # ---- IDE support ----
     # [Full code paths in clang errors](https://stackoverflow.com/questions/31324457/full-code-paths-in-clang-errors)

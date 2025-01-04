@@ -24,19 +24,19 @@ BOOST_AUTO_TEST_CASE(ltrim_sv)
     using namespace std::literals::string_view_literals;
     using ibis::util::ltrim;
 
-    for (auto const test : { std::pair
-                             // phrase
-                             { "trim me"sv, "trim me"sv },
-                             { "  trim me"sv, "trim me"sv },
-                             { "trim me  "sv, "trim me  "sv },
-                             { "  trim me  "sv, "trim me  "sv },
-                             // single char test
-                             { "x"sv, "x"sv },
-                             { "  x"sv, "x"sv },
-                             { "x  "sv, "x  "sv },
-                             { "  x  "sv, "x  "sv },
-                             // empty string
-                             { "  "sv, ""sv } })  // --
+    for (auto const& test : { std::pair
+                              // phrase
+                              { "trim me"sv, "trim me"sv },
+                              { "  trim me"sv, "trim me"sv },
+                              { "trim me  "sv, "trim me  "sv },
+                              { "  trim me  "sv, "trim me  "sv },
+                              // single char test
+                              { "x"sv, "x"sv },
+                              { "  x"sv, "x"sv },
+                              { "x  "sv, "x  "sv },
+                              { "  x  "sv, "x  "sv },
+                              // empty string
+                              { "  "sv, ""sv } })  // --
     {
         // std::cout << "ltrim: '" << test.first << "' -> '" << ltrim(test.first) << "'\n";
         BOOST_TEST(ltrim(test.first) == test.second, btt::per_element());
@@ -49,19 +49,19 @@ BOOST_AUTO_TEST_CASE(rtrim_sv)
     using namespace std::literals::string_view_literals;
     using ibis::util::rtrim;
 
-    for (auto const test : { std::pair
-                             // phrase
-                             { "trim me"sv, "trim me"sv },
-                             { "  trim me"sv, "  trim me"sv },
-                             { "trim me  "sv, "trim me"sv },
-                             { "  trim me  "sv, "  trim me"sv },
-                             // single char test
-                             { "x"sv, "x"sv },
-                             { "  x"sv, "  x"sv },
-                             { "x  "sv, "x"sv },
-                             { "  x  "sv, "  x"sv },
-                             // empty string
-                             { "  "sv, ""sv } })  // --
+    for (auto const& test : { std::pair
+                              // phrase
+                              { "trim me"sv, "trim me"sv },
+                              { "  trim me"sv, "  trim me"sv },
+                              { "trim me  "sv, "trim me"sv },
+                              { "  trim me  "sv, "  trim me"sv },
+                              // single char test
+                              { "x"sv, "x"sv },
+                              { "  x"sv, "  x"sv },
+                              { "x  "sv, "x"sv },
+                              { "  x  "sv, "  x"sv },
+                              // empty string
+                              { "  "sv, ""sv } })  // --
     {
         // std::cout << "rtrim: '" << test.first << "' -> '" << rtrim(test.first) << "'\n";
         BOOST_TEST(rtrim(test.first) == test.second, btt::per_element());
@@ -74,19 +74,19 @@ BOOST_AUTO_TEST_CASE(trim_sv)
     using namespace std::literals::string_view_literals;
     using ibis::util::trim;
 
-    for (auto const test : { std::pair
-                             // phrase
-                             { "trim me"sv, "trim me"sv },
-                             { "  trim me"sv, "trim me"sv },
-                             { "trim me  "sv, "trim me"sv },
-                             { "  trim me  "sv, "trim me"sv },
-                             // single char test
-                             { "x"sv, "x"sv },
-                             { "  x"sv, "x"sv },
-                             { "x  "sv, "x"sv },
-                             { "  x  "sv, "x"sv },
-                             // empty string
-                             { "  "sv, ""sv } }) {
+    for (auto const& test : { std::pair
+                              // phrase
+                              { "trim me"sv, "trim me"sv },
+                              { "  trim me"sv, "trim me"sv },
+                              { "trim me  "sv, "trim me"sv },
+                              { "  trim me  "sv, "trim me"sv },
+                              // single char test
+                              { "x"sv, "x"sv },
+                              { "  x"sv, "x"sv },
+                              { "x  "sv, "x"sv },
+                              { "  x  "sv, "x"sv },
+                              // empty string
+                              { "  "sv, ""sv } }) {
         // std::cout << "trim:  '" << test.first << "' -> '" << trim(test.first) << "'\n";
         BOOST_TEST(trim(test.first) == test.second, btt::per_element());
     }

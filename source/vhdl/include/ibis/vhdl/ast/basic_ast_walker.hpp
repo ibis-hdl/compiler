@@ -5,7 +5,7 @@
 
 #pragma once
 
-//#include<ibis/vhdl/ast_fwd.hpp>
+// #include<ibis/vhdl/ast_fwd.hpp>
 #include <ibis/vhdl/ast.hpp>
 
 #include <ibis/util/overloaded.hpp>
@@ -187,14 +187,14 @@ public:
         if (node.report) {
             std::string_view const node_typename{ "assertion.report" };
             worker(node.report, node_typename);
-            // XXXX
+            // FixMe from 2022
             (*this)(*node.report);
         }
 
         if (node.severity) {
             std::string_view const node_typename{ "assertion.severity" };
             worker(node.severity, node_typename);
-            // XXX
+            // FixMe from 2022
             (*this)(*node.severity);
         }
     }
@@ -301,14 +301,14 @@ public:
         {
             std::string_view const node_typename{ "use_clause*" };
             worker(node.use_clause_list, node_typename);
-            // XXX
+            // FixMe from 2022
             visit(node.use_clause_list);
         }
 
         {
             std::string_view const node_typename{ "configuration_item*" };
             worker(node.configuration_item_list, node_typename);
-            // XXX
+            // FixMe from 2022
             visit(node.configuration_item_list);
         }
     }
@@ -426,7 +426,7 @@ public:
         {
             std::string_view const node_typename{ "case_statement_alternative*" };
             worker(node.alternatives, node_typename);
-            // XXX
+            // FixMe from 2022
             visit(node.alternatives);
         }
 
@@ -2326,7 +2326,7 @@ public:
     {
 #if 0
         std::string_view const node_typename{ "keyword" };
-        //XXX worker(node, node_typename);
+        //ToDo usefull to call worker(node, node_typename); ??
 #endif
     }
 
@@ -2337,7 +2337,7 @@ public:
         //    SHALL NEVER BE HERE
         //******************************
         std::string_view const node_typename{ "*** nullary ***" };
-        // XXX call worker::fatal_failure() ????
+        // Todo: Decide of call of worker::fatal_failure() ????
         worker(node, node_typename);
 #endif
     }

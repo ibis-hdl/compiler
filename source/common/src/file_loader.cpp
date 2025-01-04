@@ -4,7 +4,7 @@
 //
 
 #include <ibis/util/file/file_loader.hpp>
-#include <ibis/util/platform.hpp>
+#include <ibis/platform.hpp>
 
 #include <ibis/settings.hpp>
 #include <ibis/message.hpp>
@@ -210,7 +210,7 @@ std::time_t file_loader::timesstamp(fs::path const& filename) const
         return sys_time;
     }
     else {
-#if !defined(_LIBCPP_VERSION)  // hide "faulty code" from Clang/libc++ (clock_cast<> won't found)
+#if !defined(_LIBCPP_VERSION)  // hide "faulty code" from Clang/libc++ 18 (clock_cast<> won't found)
         auto const sys_time = chrono::clock_cast<chrono::system_clock>(file_time);
         return chrono::system_clock::to_time_t(sys_time);
 #endif

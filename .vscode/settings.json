@@ -47,14 +47,19 @@
         "@todo", "@fixme",
         "FixMe [C++20]", "FixMe [C++23]", "FixMe [C++26]",
         "ToDo [C++20]",  "ToDo [C++23]",  "ToDo [C++26]",
-        "FixMe [CMake]", "ToDo [CMake]",  "@todo [CMake]",
-        "@fixme [CMake]",
+        "FixMe [CMake]", "ToDo [CMake]",  "@todo [CMake]", "@fixme [CMake]",
+        "FixMe [XXX]",   "ToDo [XXX]",    "@todo [XXX]",   "@fixme [XXX]", "XXX",
         "<<<<<<<"
     ],
     "todo-tree.general.tagGroups": {
         "BUGS": [
             "BUG", "HACK"
         ],
+        "Urgent": [
+            "FixMe [XXX]",  "ToDo [XXX]",
+            "@fixme [XXX]", "@todo [XXX]",
+            "XXX"
+        ],        
         "TODO": [
             "FIXME", "TODO", "XXX",
             "@todo", "@fixme"

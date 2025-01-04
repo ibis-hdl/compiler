@@ -90,9 +90,8 @@ struct std::formatter<std::span<const CharT>> : std::formatter<basic_string_view
     // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
     auto format(std::span<const CharT> const& string_span, std::format_context& ctx) const
     {
-        // FixMe [C++23] C++23 std::format will support formatting ranges right out of the box
         return std::formatter<std::basic_string_view<CharT>>::format(
-            std::basic_string_view<CharT>{ begin(string_span), end(string_span) }, ctx);
+            std::basic_string_view<CharT>{ string_span }, ctx);
     }
 };
 
@@ -104,9 +103,7 @@ struct std::formatter<ibis::vhdl::ast::string_span> : std::formatter<std::string
     // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
     auto format(ibis::vhdl::ast::string_span const& string_span, std::format_context& ctx) const
     {
-        // FixMe [C++23] C++23 std::format will support formatting ranges right out of the box
-        return std::formatter<std::string_view>::format(
-            std::string_view{ begin(string_span), end(string_span) }, ctx);
+        return std::formatter<std::string_view>::format(std::string_view{ string_span }, ctx);
     }
 };
 
@@ -115,26 +112,29 @@ struct std::formatter<ibis::vhdl::ast::string_span> : std::formatter<std::string
 /// required for BOOST_SPIRIT_X3_DEBUG
 ///
 template <>
-struct std::formatter<ibis::vhdl::ast::bit_string_literal::base_specifier>
+struct std::formatter<ibis::vhdl::ast::bit_string_literal::numeric_base_specifier>
     : std::formatter<std::string_view> {
     // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-    auto format(ibis::vhdl::ast::bit_string_literal::base_specifier specifier,
+    auto format(ibis::vhdl::ast::bit_string_literal::numeric_base_specifier specifier,
                 std::format_context& ctx) const
     {
-        using base_specifier = ibis::vhdl::ast::bit_string_literal::base_specifier;
+        using numeric_base_specifier = ibis::vhdl::ast::bit_string_literal::numeric_base_specifier;
         using namespace std::literals::string_view_literals;
 
         // clang-format off
         switch (specifier) {
-            case base_specifier::bin:
+            case numeric_base_specifier::base2:
                 return std::formatter<std::string_view>::format("b"sv, ctx);
-            case base_specifier::oct:
+            case numeric_base_specifier::base8:
                 return std::formatter<std::string_view>::format("o"sv, ctx);
-            case base_specifier::hex:
+            case numeric_base_specifier::base16:
                 return std::formatter<std::string_view>::format("x"sv, ctx);
-            // probably an unintentionally constructed enum by default, be graceful
-            [[unlikely]] case base_specifier::unspecified:
+            // be graceful, probably an unintentionally constructed enum by default
+            [[unlikely]] case numeric_base_specifier::unspecified:
                 return std::formatter<std::string_view>::format("unspecified"sv, ctx);
+            // be graceful, definitely wrong enum - the caller has not worked out properly
+            [[unlikely]] case numeric_base_specifier::unsupported:
+                return std::formatter<std::string_view>::format("unsupported"sv, ctx);
             //
             // *No* default branch: let the compiler generate warning about enumeration
             // value not handled in switch
@@ -142,7 +142,7 @@ struct std::formatter<ibis::vhdl::ast::bit_string_literal::base_specifier>
         }
         // clang-format on
 
-        ::cxx23::unreachable();
+        std::unreachable();
     }
 };
 
@@ -168,7 +168,7 @@ struct std::formatter<ibis::vhdl::ast::bit_string_literal> : std::formatter<stri
         std::pmr::monotonic_buffer_resource pool{ buf.data(), buf.size(), &upstream_allocator };
         std::pmr::string temp_literal{ &pool };
 
-        std::format_to(std::back_inserter(temp_literal), "{}{}", bit_string.base_type,
+        std::format_to(std::back_inserter(temp_literal), "{}{}", bit_string.base_specifier,
                        bit_string.literal);
 
         return std::formatter<string_view>::format(temp_literal, ctx);
@@ -194,7 +194,7 @@ struct std::formatter<ibis::vhdl::ast::based_literal::numeric_type_specifier>
                 return std::formatter<std::string_view>::format("integer"sv, ctx);
             case numeric_type_specifier::real:
                 return std::formatter<std::string_view>::format("real"sv, ctx);
-            // probably an unintentionally constructed enum by default, be graceful
+            // be graceful, probably an unintentionally constructed enum by default
             [[unlikely]] case numeric_type_specifier::unspecified:
                 return std::formatter<std::string_view>::format("unspecified"sv, ctx);
             //
@@ -204,7 +204,48 @@ struct std::formatter<ibis::vhdl::ast::based_literal::numeric_type_specifier>
         }
         // clang-format on
 
-        ::cxx23::unreachable();
+        std::unreachable();
+    }
+};
+
+///
+/// formatter for ast::based_literal::numeric_base_specifier enumerator
+///
+template <>
+struct std::formatter<ibis::vhdl::ast::based_literal::numeric_base_specifier>
+    : std::formatter<std::string_view> {
+    // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+    auto format(ibis::vhdl::ast::based_literal::numeric_base_specifier specifier,
+                std::format_context& ctx) const
+    {
+        using namespace ibis::vhdl;
+        using numeric_base_specifier = ast::based_literal::numeric_base_specifier;
+        using namespace std::literals::string_view_literals;
+
+        // clang-format off
+        switch (specifier) {
+            case numeric_base_specifier::base2:
+                return std::formatter<std::string_view>::format("2"sv, ctx);
+            case numeric_base_specifier::base8:
+                return std::formatter<std::string_view>::format("8"sv, ctx);
+            case numeric_base_specifier::base10:
+                return std::formatter<std::string_view>::format("10"sv, ctx);
+            case numeric_base_specifier::base16:
+                return std::formatter<std::string_view>::format("16"sv, ctx);
+            // be graceful, probably an unintentionally constructed enum by default
+            [[unlikely]] case numeric_base_specifier::unspecified:
+                return std::formatter<std::string_view>::format("unspecified"sv, ctx);
+            // be graceful, definitely wrong enum - the caller has not worked out properly
+            [[unlikely]] case numeric_base_specifier::unsupported:
+                return std::formatter<std::string_view>::format("unsupported"sv, ctx);
+            //
+            // *No* default branch: let the compiler generate warning about enumeration
+            // value not handled in switch
+            //
+        }
+        // clang-format on
+
+        std::unreachable();
     }
 };
 
@@ -217,7 +258,12 @@ struct std::formatter<ibis::vhdl::ast::based_literal> : std::formatter<std::stri
     auto format(ibis::vhdl::ast::based_literal based, std::format_context& ctx) const
     {
         using namespace ibis::vhdl;
-        using numeric_type_specifier = ibis::vhdl::ast::based_literal::numeric_type_specifier;
+        using numeric_type_specifier = ast::based_literal::numeric_type_specifier;
+        using numeric_base_specifier = ast::based_literal::numeric_base_specifier;
+
+        // ToDo: Let the parser grammar the AST node fill in
+        // *Attention* assignment is locally only!
+        based.base_specifier = ast::convert_to<numeric_base_specifier>(based.base_id);
 
         ast::detail::TrackingAllocator<true> upstream_allocator{ "'based_literal' formatter" };
 
@@ -231,13 +277,15 @@ struct std::formatter<ibis::vhdl::ast::based_literal> : std::formatter<std::stri
         std::pmr::string temp_literal{ &pool };
 
         if (based.number.type_specifier == numeric_type_specifier::integer) {
-            std::format_to(std::back_inserter(temp_literal), "{}#{}#{}", based.base,  // --
-                           based.number.integer_part,                                 // --
+            std::format_to(std::back_inserter(temp_literal), "{}#{}#{}",
+                           based.base_specifier,       // --
+                           based.number.integer_part,  // --
                            based.number.exponent);
         }
         else {
-            std::format_to(std::back_inserter(temp_literal), "{}#{}.{}#{}", based.base,  // --
-                           based.number.integer_part, based.number.fractional_part,      // --
+            std::format_to(std::back_inserter(temp_literal), "{}#{}.{}#{}",
+                           based.base_specifier,                                     // --
+                           based.number.integer_part, based.number.fractional_part,  // --
                            based.number.exponent);
         }
 
@@ -253,9 +301,7 @@ struct std::formatter<ibis::vhdl::ast::decimal_literal> : std::formatter<std::st
     // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
     auto format(ibis::vhdl::ast::decimal_literal decimal, std::format_context& ctx) const
     {
-        return std::formatter<std::string_view>::format(
-            // FixMe [C++23] C++23 can construct std::basic_string_view over range
-            std::string_view{ begin(decimal.literal), end(decimal.literal) }, ctx);
+        return std::formatter<std::string_view>::format(std::string_view{ decimal.literal }, ctx);
     }
 };
 
@@ -268,8 +314,7 @@ struct std::formatter<ibis::vhdl::ast::string_literal> : std::formatter<std::str
     constexpr auto parse(std::format_parse_context& ctx)
     {
         for (auto it = begin(ctx); it != end(ctx); ++it) {
-            // FixMe [C++23] C++23 can construct std::basic_string_view over range
-            if (std::string_view{ begin(ctx), end(ctx) }.starts_with(raw_spec)) {
+            if (std::string_view{ ctx }.starts_with(raw_spec)) {
                 raw_format = true;
                 ctx.advance_to(begin(ctx) + raw_spec.size());
             }
@@ -281,9 +326,8 @@ struct std::formatter<ibis::vhdl::ast::string_literal> : std::formatter<std::str
     auto format(ibis::vhdl::ast::string_literal string, std::format_context& ctx) const
     {
         if (raw_format) [[unlikely]] /* rarely used, only for debugging purpose */ {
-            return std::formatter<std::string_view>::format(
-                // FixMe [C++23] C++23 can construct std::basic_string_view over range
-                std::string_view{ begin(string.literal), end(string.literal) }, ctx);
+            return std::formatter<std::string_view>::format(std::string_view{ string.literal },
+                                                            ctx);
         }
 
         using namespace ibis::vhdl;
@@ -368,7 +412,8 @@ struct std::formatter<ibis::vhdl::ast::keyword_token> : std::formatter<std::stri
 ///
 namespace ibis::vhdl::ast {
 
-inline std::ostream& operator<<(std::ostream& os, bit_string_literal::base_specifier specifier)
+inline std::ostream& operator<<(std::ostream& os,
+                                bit_string_literal::numeric_base_specifier specifier)
 {
     os << std::format("{}", specifier);
     return os;

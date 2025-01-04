@@ -14,9 +14,9 @@ temporary here.
 
 ## Required Tools to Build & Configuration
 
-e.g., see Ubuntu 20.24 [.devcontainer](/.devcontainer)
+e.g., see Ubuntu 24.04 [.devcontainer](/.devcontainer)
 
-* C++20 compliant compiler; developed and tested with the big three:
+* C++23 compliant compiler; developed and tested with the big three:
     - [Visual Studio 22 Community Edition](https://visualstudio.microsoft.com/de/vs/community/)
       Command Prompt v17.11.5 (no clang-cl yet due to 
       missing/complete CMake support on project's side at this time)

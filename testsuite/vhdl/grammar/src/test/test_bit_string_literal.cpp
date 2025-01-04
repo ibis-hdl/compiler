@@ -27,7 +27,7 @@ using namespace ibis::vhdl;
 
 namespace valid_data {
 
-using base_specifier = ibis::vhdl::ast::bit_string_literal::base_specifier;
+using numeric_base_specifier = ibis::vhdl::ast::bit_string_literal::numeric_base_specifier;
 using namespace std::literals::string_view_literals;
 
 // Valid input to test the grammar rule, no numeric conversion here.
@@ -56,34 +56,34 @@ PACKAGE bitstring IS
     CONSTANT hex_07 : bit_vector := x"a_b_c";
 END PACKAGE;
 )";
-// clang-format off
 
+// clang-format off
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays)
 struct {
-    base_specifier const base_type;     // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
+    numeric_base_specifier const base_specifier;  // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
     std::string_view const literal;     // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
     std::string_view const formatted;   // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
 } const gold_data[] = {
     // bin
-    { .base_type = base_specifier::bin, .literal = "0101", .formatted = "b0101" },
-    { .base_type = base_specifier::bin, .literal = "0101", .formatted = "b0101" },
-    { .base_type = base_specifier::bin, .literal = "1_0", .formatted = "b1_0" },
-    { .base_type = base_specifier::bin, .literal = "1111_1111_1111", .formatted = "b1111_1111_1111" },
+    { .base_specifier = numeric_base_specifier::base2, .literal = "0101", .formatted = "b0101" },
+    { .base_specifier = numeric_base_specifier::base2, .literal = "0101", .formatted = "b0101" },
+    { .base_specifier = numeric_base_specifier::base2, .literal = "1_0", .formatted = "b1_0" },
+    { .base_specifier = numeric_base_specifier::base2, .literal = "1111_1111_1111", .formatted = "b1111_1111_1111" },
     // oct
-    { .base_type = base_specifier::oct, .literal = "01234", .formatted = "o01234" },
-    { .base_type = base_specifier::oct, .literal = "01234", .formatted = "o01234" },
-    { .base_type = base_specifier::oct, .literal = "777", .formatted = "o777" },
-    { .base_type = base_specifier::oct, .literal = "7", .formatted = "o7" },
-    { .base_type = base_specifier::oct, .literal = "7_42", .formatted = "o7_42" },
-    { .base_type = base_specifier::oct, .literal = "0_1_2", .formatted = "o0_1_2" },
+    { .base_specifier = numeric_base_specifier::base8, .literal = "01234", .formatted = "o01234" },
+    { .base_specifier = numeric_base_specifier::base8, .literal = "01234", .formatted = "o01234" },
+    { .base_specifier = numeric_base_specifier::base8, .literal = "777", .formatted = "o777" },
+    { .base_specifier = numeric_base_specifier::base8, .literal = "7", .formatted = "o7" },
+    { .base_specifier = numeric_base_specifier::base8, .literal = "7_42", .formatted = "o7_42" },
+    { .base_specifier = numeric_base_specifier::base8, .literal = "0_1_2", .formatted = "o0_1_2" },
     // hex
-    { .base_type = base_specifier::hex, .literal = "01234", .formatted = "x01234" },
-    { .base_type = base_specifier::hex, .literal = "01234", .formatted = "x01234" },
-    { .base_type = base_specifier::hex, .literal = "aB", .formatted = "xaB" },
-    { .base_type = base_specifier::hex, .literal = "f", .formatted = "xf" },
-    { .base_type = base_specifier::hex, .literal = "ffff", .formatted = "xffff" },
-    { .base_type = base_specifier::hex, .literal = "a_b", .formatted = "xa_b" },
-    { .base_type = base_specifier::hex, .literal = "a_b_c", .formatted = "xa_b_c" },
+    { .base_specifier = numeric_base_specifier::base16, .literal = "01234", .formatted = "x01234" },
+    { .base_specifier = numeric_base_specifier::base16, .literal = "01234", .formatted = "x01234" },
+    { .base_specifier = numeric_base_specifier::base16, .literal = "aB", .formatted = "xaB" },
+    { .base_specifier = numeric_base_specifier::base16, .literal = "f", .formatted = "xf" },
+    { .base_specifier = numeric_base_specifier::base16, .literal = "ffff", .formatted = "xffff" },
+    { .base_specifier = numeric_base_specifier::base16, .literal = "a_b", .formatted = "xa_b" },
+    { .base_specifier = numeric_base_specifier::base16, .literal = "a_b_c", .formatted = "xa_b_c" },
 };
 // clang-format on
 
@@ -122,7 +122,7 @@ struct test_worker {
         BOOST_TEST_CONTEXT("Test index at " << index)
         {
             auto const expected = gold[index];
-            BOOST_TEST(node.base_type == expected.base_type);
+            BOOST_TEST(node.base_specifier == expected.base_specifier);
             auto const node_literal =
                 std::string_view{ std::begin(node.literal), std::end(node.literal) };
             BOOST_TEST(node_literal == expected.literal, btt::per_element());

@@ -8,6 +8,7 @@
 #include <ibis/vhdl/type.hpp>
 #include <ibis/vhdl/parser/iterator_type.hpp>
 #include <ibis/vhdl/ast/util/string_span.hpp>
+#include <ibis/concepts.hpp>
 
 #include <tuple>
 #include <iosfwd>
@@ -34,14 +35,8 @@ namespace ibis::vhdl::ast {
 /// @tparam IntegerT The integer type of the numeric converted into.
 /// @tparam RealT The real type of the numeric converted into.
 ///
-template <typename IntegerT, typename RealT>
+template <ibis::integer IntegerT, ibis::real RealT>
 class convert_decimal {
-    static_assert(std::numeric_limits<IntegerT>::is_integer,  // --
-                  "TargetType must be of type integer");
-
-    static_assert(std::numeric_limits<RealT>::is_iec559,  // --
-                  "TargetType must be IEC 559 (IEEE 754) real/float");
-
 public:
     using integer_type = IntegerT;
     using real_type = RealT;

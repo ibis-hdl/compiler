@@ -6,7 +6,7 @@
 #include <ibis/util/file/user_home_dir.hpp>
 
 // #include<ibis/util/compiler/compiler_support.hpp> // IWYU pragma: keep
-#include <ibis/util/platform.hpp>
+#include <ibis/platform.hpp>
 // #include<ibis/namespace_alias.hpp>
 
 #include <cstdlib>

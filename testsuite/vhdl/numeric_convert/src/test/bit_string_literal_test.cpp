@@ -65,7 +65,7 @@ BOOST_AUTO_TEST_CASE(bit_string_literal_pre_condition)
 
 namespace valid_data {
 
-using base_specifier = ibis::vhdl::ast::bit_string_literal::base_specifier;
+using base_specifier = ibis::vhdl::ast::bit_string_literal::numeric_base_specifier;
 using namespace std::literals::string_view_literals;
 
 // Valid input to test the grammar rule, no numeric conversion here.

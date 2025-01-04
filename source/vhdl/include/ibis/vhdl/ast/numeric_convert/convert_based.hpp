@@ -7,6 +7,7 @@
 
 #include <ibis/vhdl/type.hpp>
 #include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/concepts.hpp>
 
 #include <tuple>
 #include <variant>
@@ -44,14 +45,8 @@ namespace ibis::vhdl::ast {
 ///
 /// @tparam RealT The real type of the numeric converted into.
 ///
-template <typename IntegerT, typename RealT>
+template <ibis::integer IntegerT, ibis::real RealT>
 class convert_based {
-    static_assert(std::numeric_limits<IntegerT>::is_integer,  // --
-                  "TargetType must be of type integer");
-
-    static_assert(std::numeric_limits<RealT>::is_iec559,  // --
-                  "TargetType must be IEC 559 (IEEE 754) real (float, double)");
-
 public:
     using integer_type = IntegerT;
     using real_type = RealT;
@@ -86,8 +81,8 @@ public:
 
 private:
     /// Parse the integer part of based literal.
-    std::tuple<bool, std::uint64_t> parse_integer(unsigned base,
-                                                  ast::based_literal const& literal) const;
+    std::tuple<bool, integer_type> parse_integer(unsigned base,
+                                                 ast::based_literal const& literal) const;
 
     /// Parse the fractional part of based literal.
     std::tuple<bool, double> parse_fractional(unsigned base,
@@ -102,10 +97,6 @@ private:
 
     /// parse the the `ast::based_literal` as real with base of 10.
     std::tuple<bool, double> parse_real10(ast::based_literal const& literal) const;
-
-    /// Check of base to be supported, LRM93 Ch. 13.4.2: base must be at least two and at most 16.
-    /// This time, only the common bases of 2, 8, 10, 16 are supported.
-    bool supported_base(unsigned base) const;
 
 private:
     diagnostic_handler_type& diagnostic_handler;

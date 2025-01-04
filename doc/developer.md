@@ -55,7 +55,8 @@ information see [cmake-presets](https://cmake.org/cmake/help/latest/manual/cmake
 
 ### CCache on Linux
 
-To use, e.g. [CCache (a fast C/C++ compiler cache)](https://ccache.dev/) for CMake's configure phase, write your own `CMakeUserPresets.json` using e.g. GNU compiler with
+To use, e.g. [CCache (a fast C/C++ compiler cache)](https://ccache.dev/) for CMake's configure 
+phase, write your own `CMakeUserPresets.json` using e.g. GNU compiler with
 
 ```json
 {
@@ -153,7 +154,7 @@ There are disabled checks which shouldn't be. Enabling this checks requires more
   *Until the ast_printer recursive call chain has been solved.*
 
 - [cppcoreguidelines-pro-bounds-array-to-pointer-decay](https://clang.llvm.org/extra/clang-tidy/checks/cppcoreguidelines-pro-bounds-array-to-pointer-decay.html):
-  *Ignored at this time. With C++20 with get [std::span](https://en.cppreference.com/w/cpp/container/span)
+  *Ignored at this time. With C++20 we get [std::span](https://en.cppreference.com/w/cpp/container/span)
    aka gsl::span aka gsl:: gsl::array_view.* But Boost Spirit.X3 or even Boost.parser must support
    this too.
 

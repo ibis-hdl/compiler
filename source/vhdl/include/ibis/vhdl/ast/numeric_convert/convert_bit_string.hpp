@@ -7,6 +7,7 @@
 
 #include <ibis/vhdl/type.hpp>
 #include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/concepts.hpp>
 
 #include <tuple>
 #include <iosfwd>
@@ -29,12 +30,8 @@ namespace ibis::vhdl::ast {
 ///
 /// @tparam IntegerT The integer type of the numeric converted into.
 ///
-template <typename IntegerT>
+template <ibis::integer IntegerT>
 class convert_bit_string {
-    // FixMe [C++20] use concept/requires
-    static_assert(std::numeric_limits<IntegerT>::is_integer,  // --
-                  "TargetType must be of type integer");
-
 public:
     ///
     /// The type, to which all literals will be converted.

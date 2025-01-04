@@ -206,13 +206,13 @@ struct verify_worker
             BOOST_TEST_MESSAGE("verify 'based_literal' success test with test_index = " << test_index);
             // check on parser
             BOOST_TEST(node.number.type_specifier == expect[test_index].numeric_type);
-            BOOST_TEST(node.base == expect[test_index].literal.base);
+            BOOST_TEST(node.base_id == expect[test_index].literal.base);
             BOOST_TEST(node.number.integer_part == expect[test_index].literal.integer);
             BOOST_TEST(node.number.fractional_part == expect[test_index].literal.fractional);
             BOOST_TEST(node.number.exponent == expect[test_index].literal.exponent);
 
             BOOST_CHECK(conv_ok);
-#if 0 // Fixme XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
             using ibis::util::overloaded;
             std::visit(overloaded {
                 [&](std::uint64_t value) {
@@ -240,7 +240,7 @@ struct verify_worker
                     }
                 }
             }, result);
-#endif
+            
             ++test_index;
         }
         else {

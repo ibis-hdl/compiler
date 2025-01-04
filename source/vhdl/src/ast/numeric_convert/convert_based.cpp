@@ -6,6 +6,7 @@
 #include <ibis/vhdl/ast/numeric_convert/convert_based.hpp>
 #include <ibis/vhdl/ast/numeric_convert/filter_range.hpp>
 #include <ibis/vhdl/ast/numeric_convert/detail/digits_traits.hpp>
+#include <ibis/vhdl/ast/numeric_convert/detail/convert_util.hpp>
 
 #include <ibis/vhdl/ast/numeric_convert/dbg_trace.hpp>
 
@@ -52,59 +53,50 @@ struct real_policies : x3::ureal_policies<T> {
 
 }  // namespace ibis::vhdl::ast::detail
 
-namespace /* anonymous */ {
-
-namespace x3 = boost::spirit::x3;
-
-template <typename T, typename IteratorT = ibis::vhdl::parser::iterator_type>
-auto const as = [](auto derived_parser) {
-    return x3::any_parser<IteratorT, T>{ x3::as_parser(derived_parser) };
-};
-
-}  // namespace
-
 namespace ibis::vhdl::ast {
 
-template <typename IntegerT, typename RealT>
+template <ibis::integer IntegerT, ibis::real RealT>
 convert_based<IntegerT, RealT>::convert_based(diagnostic_handler_type& diagnostic_handler_)
     : diagnostic_handler{ diagnostic_handler_ }
 {
 }
 
-template <typename IntegerT, typename RealT>
-std::tuple<bool, std::uint64_t> convert_based<IntegerT, RealT>::parse_integer(
-    unsigned base, ast::based_literal const& literal) const
+template <ibis::integer IntegerT, ibis::real RealT>
+std::tuple<bool, typename convert_based<IntegerT, RealT>::integer_type>
+convert_based<IntegerT, RealT>::parse_integer(unsigned base,
+                                              ast::based_literal const& literal) const
 {
     using boost::locale::format;
     using boost::locale::translate;
 
     // select a concrete parser depending the the base specifier
     auto const parser = [](unsigned base_spec, auto iter_t) {
+        using numeric_base_specifier = ast::numeric_base_specifier;
+        auto const base_specifier = to_base_specifier(base_spec);
+
         using iterator_type = decltype(iter_t);
-        switch (base_spec) {
-            case 2: {
-                using parser_type = x3::uint_parser<integer_type, 2>;
-                parser_type const parse_bin = parser_type{};
-                return as<integer_type, iterator_type>(parse_bin);
-            }
-            case 8: {
-                using parser_type = x3::uint_parser<integer_type, 8>;
-                parser_type const parse_oct = parser_type{};
-                return as<integer_type, iterator_type>(parse_oct);
-            }
-            case 10: {
-                using parser_type = x3::uint_parser<integer_type, 10>;
-                parser_type const parse_dec = parser_type{};
-                return as<integer_type, iterator_type>(parse_dec);
-            }
-            case 16: {
-                using parser_type = x3::uint_parser<integer_type, 16>;
-                parser_type const parse_hex = parser_type{};
-                return as<integer_type, iterator_type>(parse_hex);
-            }
-            default:  // cxx_unreachable_bug
+        // clang-format off
+        switch (base_specifier) {
+            case numeric_base_specifier::base2:
+                return detail::uint_parser<iterator_type, integer_type>::base(ast::numeric_base_specifier::base2);
+            case numeric_base_specifier::base8:
+                return detail::uint_parser<iterator_type, integer_type>::base(ast::numeric_base_specifier::base8);
+            case numeric_base_specifier::base10:
+                return detail::uint_parser<iterator_type, integer_type>::base(ast::numeric_base_specifier::base10);
+            case numeric_base_specifier::base16:
+                return detail::uint_parser<iterator_type, integer_type>::base(ast::numeric_base_specifier::base16);
+            // definitely wrong enum, the caller has not worked out properly
+            [[unlikely]] case numeric_base_specifier::unspecified: [[fallthrough]];
+            [[unlikely]] case numeric_base_specifier::unsupported:
                 cxx_unreachable_bug_triggered();
+            //
+            // *No* default branch: let the compiler generate warning about enumeration
+            // value not handled in switch
+            //
         }
+        // clang-format on
+
+        std::unreachable();
     };
 
     // convenience alias
@@ -142,7 +134,7 @@ std::tuple<bool, std::uint64_t> convert_based<IntegerT, RealT>::parse_integer(
     return { true, integer_attribute };
 }
 
-template <typename IntegerT, typename RealT>
+template <ibis::integer IntegerT, ibis::real RealT>
 std::tuple<bool, double> convert_based<IntegerT, RealT>::parse_fractional(
     unsigned base, ast::based_literal const& literal) const
 {
@@ -216,7 +208,7 @@ std::tuple<bool, double> convert_based<IntegerT, RealT>::parse_fractional(
     return { true, fractional };
 }
 
-template <typename IntegerT, typename RealT>
+template <ibis::integer IntegerT, ibis::real RealT>
 std::tuple<bool, std::int32_t> convert_based<IntegerT, RealT>::parse_exponent(
     ast::based_literal const& literal) const
 {
@@ -297,7 +289,7 @@ std::tuple<bool, std::int32_t> convert_based<IntegerT, RealT>::parse_exponent(
     return { true, exponent_attribute };
 }
 
-template <typename IntegerT, typename RealT>
+template <ibis::integer IntegerT, ibis::real RealT>
 std::tuple<bool, double> convert_based<IntegerT, RealT>::parse_real10(
     ast::based_literal const& literal) const
 {
@@ -331,28 +323,13 @@ std::tuple<bool, double> convert_based<IntegerT, RealT>::parse_real10(
             (format(translate("in {1} parse of real '{2}' failed"))  //--
              % node_name % real10_str)
                 .str());
-        return std::tuple{ false, 0 };
+        return { false, 0 };
     }
 
-    return std::tuple{ true, real };
+    return { true, real };
 }
 
-template <typename IntegerT, typename RealT>
-bool convert_based<IntegerT, RealT>::supported_base(unsigned base) const
-{
-    // clang-format off
-    switch (base) {
-        // NOLINTNEXTLINE(bugprone-branch-clone)
-        case 2:  [[fallthrough]];
-        case 8:  [[fallthrough]];
-        case 10: [[fallthrough]];
-        case 16: return true;
-        default: return false;
-    }
-    // clang-format on
-}
-
-template <typename IntegerT, typename RealT>
+template <ibis::integer IntegerT, ibis::real RealT>
 typename convert_based<IntegerT, RealT>::return_type convert_based<IntegerT, RealT>::operator()(
     ast::based_literal const& node) const
 {
@@ -362,21 +339,27 @@ typename convert_based<IntegerT, RealT>::return_type convert_based<IntegerT, Rea
     using numeric_type_specifier = ast::based_literal::numeric_type_specifier;
 
     auto const failure_return_value = [&node]() -> convert_based::return_type {
+        // clang-format off
         switch (node.number.type_specifier) {
-            case numeric_type_specifier::integer: {
-                return std::tuple{ false, integer_type(0) };
-            }
-            case numeric_type_specifier::real: {
-                return std::tuple{ false, real_type(0) };
-            }
-            default:  // unreachable_bug_triggered
+            case numeric_type_specifier::integer:
+                return return_type{ false, integer_type{ 0 } };
+            case numeric_type_specifier::real:
+                return return_type{ false, real_type{ 0 } };
+            // definitely wrong enum - the caller has not worked out properly
+            [[unlikely]] case numeric_type_specifier::unspecified:
                 cxx_unreachable_bug_triggered();
+            // *No* default branch: let the compiler generate warning about enumeration
+            // value not handled in switch
+            // *Note* on changes, also check `to_base_specifier()!`
         }
+        // clang-format on
+
+        std::unreachable();
     };
 
     // ------------------------------------------------------------------------
     // BASE
-    unsigned base = node.base;
+    unsigned base = node.base_id;
 
     // ------------------------------------------------------------------------
     // INTEGER
@@ -433,6 +416,7 @@ typename convert_based<IntegerT, RealT>::return_type convert_based<IntegerT, Rea
 
     using numeric_type_specifier = ast::based_literal::numeric_type_specifier;
 
+    // clang-format off
     switch (node.number.type_specifier) {
         case numeric_type_specifier::integer: {
             integer_type result = integer;
@@ -453,9 +437,16 @@ typename convert_based<IntegerT, RealT>::return_type convert_based<IntegerT, Rea
 
             return std::tuple{ true, result };
         }
-        default:  // unreachable_bug_triggered
+        // definitely wrong enum - the caller has not worked out properly
+        [[unlikely]] case numeric_type_specifier::unspecified:
             cxx_unreachable_bug_triggered();
+        // *No* default branch: let the compiler generate warning about enumeration
+        // value not handled in switch
+        // *Note* on changes, also check `to_base_specifier()!`
     }
+    // clang-format on
+
+    std::unreachable();
 }
 
 }  // namespace ibis::vhdl::ast

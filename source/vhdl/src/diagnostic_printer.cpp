@@ -56,6 +56,7 @@ struct std::formatter<ibis::vhdl::diagnostic_context::failure_type> {
         using boost::locale::translate;
 
         auto const string_of = [](failure_type failure) {
+            // clang-format off
             switch (failure) {
                 case failure_type::unspecific:
                     return translate("unspecific").str();
@@ -69,9 +70,13 @@ struct std::formatter<ibis::vhdl::diagnostic_context::failure_type> {
                     return translate("numeric error").str();
                 case failure_type::not_supported:
                     return translate("unsupported").str();
-                default:
-                    cxx_unreachable_bug_triggered();
+                // *No* default branch: let the compiler generate warning about enumeration
+                // value not handled in switch
+                // *Note* on changes, also check `to_base_specifier()!`
             }
+            // clang-format on
+
+            std::unreachable();
         };
 
         return std::format_to(ctx.out(), "{}", string_of(failure));

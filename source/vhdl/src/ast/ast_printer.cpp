@@ -318,7 +318,7 @@ void printer::operator()(based_literal const& node)
     static const std::string_view symbol{ "based_literal" };
     symbol_scope<based_literal> _(*this, symbol);
 
-    os << "base: " << node.base << ", " << "integer: " << node.number.integer_part;
+    os << "base: " << node.base_id << ", " << "integer: " << node.number.integer_part;
 
     if (!node.number.fractional_part.empty()) {
         os << ", fraction: " << node.number.fractional_part;
@@ -366,18 +366,18 @@ void printer::operator()(bit_string_literal const& node)
     static const std::string_view symbol{ "bit_string_literal" };
     symbol_scope<bit_string_literal> _(*this, symbol);
 
-    using base_specifier = bit_string_literal::base_specifier;
+    using numeric_base_specifier = bit_string_literal::numeric_base_specifier;
 
     os << "base: ";
 
-    switch (node.base_type) {
-        case base_specifier::bin:
+    switch (node.base_specifier) {
+        case numeric_base_specifier::base2:
             os << "bin";
             break;
-        case base_specifier::oct:
+        case numeric_base_specifier::base8:
             os << "oct";
             break;
-        case base_specifier::hex:
+        case numeric_base_specifier::base16:
             os << "hex";
             break;
         default:  // unreachable_bug_triggered
