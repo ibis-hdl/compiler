@@ -32,6 +32,7 @@ namespace /* anonymous */ {
 
 namespace x3 = boost::spirit::x3;
 
+// FixMe XXXXXXXXXXXXXXXXXXX duplicate code
 template <typename T, typename IteratorT = ibis::vhdl::parser::iterator_type>
 auto const as = [](auto derived_parser) {
     return x3::any_parser<IteratorT, T>{ x3::as_parser(derived_parser) };
@@ -175,6 +176,6 @@ convert_decimal<IntegerT, RealT>::parse_real(ast::string_span const& literal) co
 // ----------------------------------------------------------------------------
 namespace ibis::vhdl::ast {
 
-template class convert_decimal<intrinsic::signed_integer_type, intrinsic::real_type>;
+template class convert_decimal<intrinsic::unsigned_integer_type, intrinsic::real_type>;
 
 }  // namespace ibis::vhdl::ast

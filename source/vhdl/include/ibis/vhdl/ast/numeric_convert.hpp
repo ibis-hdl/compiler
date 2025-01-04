@@ -47,13 +47,16 @@ namespace ibis::vhdl::ast {
 /// correct converting depends on correct parsing of the VHDL grammar, since the
 /// exponent of integer doesn't allow a negative sign.
 ///
+/// Note #3:
+/// --------
+/// The conversion always takes place to an unsigned type. However, this also means
+/// that the sign from the AST must be taken into account during the actual assignment
+/// and a range overflow of the signed target type must be checked.
+///
 class numeric_convert {
 public:
-    /// basic integer type
-    using basic_integer_type = intrinsic::signed_integer_type;
-
     /// integer type.
-    using integer_type = typename std::make_unsigned<basic_integer_type>::type;
+    using integer_type = intrinsic::unsigned_integer_type;
 
     /// real type for floats/doubles.
     using real_type = intrinsic::real_type;

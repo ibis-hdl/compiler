@@ -68,8 +68,10 @@ typename convert_bit_string<IntegerT>::return_type convert_bit_string<IntegerT>:
 
     auto const parse = [&](ast::bit_string_literal::base_specifier base, auto const& literal) {
         using base_specifier = ast::bit_string_literal::base_specifier;
-        auto const parser = [](base_specifier base_spec, auto iter_t) {
+        // select the concrete x3::uint-parser<> using the base_specifier
+        auto const radix_parser = [](base_specifier base_spec, auto iter_t) {
             using iterator_type = decltype(iter_t);
+            // clang-format off
             switch (base_spec) {
                 case base_specifier::bin: {
                     using parser_type = x3::uint_parser<integer_type, 2>;
@@ -86,9 +88,17 @@ typename convert_bit_string<IntegerT>::return_type convert_bit_string<IntegerT>:
                     parser_type const parse_hex = parser_type{};
                     return as<integer_type, iterator_type>(parse_hex);
                 }
-                default:  // cxx_unreachable_bug
+                [[unlikely]] case base_specifier::unspecified:
+                    // The caller must pass checked base_specifier
                     cxx_unreachable_bug_triggered();
+                //
+                // *No* default branch: let the compiler generate warning about enumeration
+                // value not handled in switch
+                //
             }
+            // clang-format on
+
+            ::cxx23::unreachable();
         };
 
         auto range_f = numeric_convert::detail::filter_range(literal);
@@ -97,7 +107,7 @@ typename convert_bit_string<IntegerT>::return_type convert_bit_string<IntegerT>:
 
         integer_type attribute = 0;
 
-        bool parse_ok = x3::parse(iter, end, parser(base, iter) >> x3::eoi, attribute);
+        bool const parse_ok = x3::parse(iter, end, radix_parser(base, iter) >> x3::eoi, attribute);
 
         //  intentionally disabled
         if constexpr ((false)) {  // NOLINT(readability-simplify-boolean-expr)
@@ -127,6 +137,6 @@ typename convert_bit_string<IntegerT>::return_type convert_bit_string<IntegerT>:
 // ----------------------------------------------------------------------------
 namespace ibis::vhdl::ast {
 
-template class convert_bit_string<intrinsic::signed_integer_type>;
+template class convert_bit_string<intrinsic::unsigned_integer_type>;
 
 }  // namespace ibis::vhdl::ast

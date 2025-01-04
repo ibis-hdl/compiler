@@ -53,7 +53,7 @@ class convert_based {
                   "TargetType must be IEC 559 (IEEE 754) real (float, double)");
 
 public:
-    using integer_type = typename std::make_unsigned<IntegerT>::type;
+    using integer_type = IntegerT;
     using real_type = RealT;
 
     /// Result type is variant, since based literal can be of type integer or real.
@@ -120,6 +120,6 @@ private:
 namespace ibis::vhdl::ast {
 
 /// Explicit template instantiation declaration
-extern template class convert_based<intrinsic::signed_integer_type, intrinsic::real_type>;
+extern template class convert_based<intrinsic::unsigned_integer_type, intrinsic::real_type>;
 
 }  // namespace ibis::vhdl::ast

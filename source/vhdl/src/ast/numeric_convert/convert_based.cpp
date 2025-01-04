@@ -465,6 +465,6 @@ typename convert_based<IntegerT, RealT>::return_type convert_based<IntegerT, Rea
 // ----------------------------------------------------------------------------
 namespace ibis::vhdl::ast {
 
-template class convert_based<intrinsic::signed_integer_type, intrinsic::real_type>;
+template class convert_based<intrinsic::unsigned_integer_type, intrinsic::real_type>;
 
 }  // namespace ibis::vhdl::ast

@@ -43,7 +43,7 @@ class convert_decimal {
                   "TargetType must be IEC 559 (IEEE 754) real/float");
 
 public:
-    using integer_type = typename std::make_unsigned<IntegerT>::type;
+    using integer_type = IntegerT;
     using real_type = RealT;
 
     using result_type = std::variant<integer_type, real_type>;

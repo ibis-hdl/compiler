@@ -31,13 +31,14 @@ namespace ibis::vhdl::ast {
 ///
 template <typename IntegerT>
 class convert_bit_string {
+    // FixMe [C++20] use concept/requires
     static_assert(std::numeric_limits<IntegerT>::is_integer,  // --
                   "TargetType must be of type integer");
 
 public:
     ///
     /// The type, to which all literals will be converted.
-    using integer_type = typename std::make_unsigned<IntegerT>::type;
+    using integer_type = IntegerT;
 
     ///
     /// Return a tuple with the converted value and a boolean flag of
@@ -73,6 +74,6 @@ private:
 namespace ibis::vhdl::ast {
 
 /// Explicit template instantiation declaration
-extern template class convert_bit_string<intrinsic::signed_integer_type>;
+extern template class convert_bit_string<intrinsic::unsigned_integer_type>;
 
 }  // namespace ibis::vhdl::ast

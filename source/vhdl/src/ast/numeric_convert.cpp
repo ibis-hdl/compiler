@@ -50,7 +50,7 @@ numeric_convert::numeric_convert(diagnostic_handler_type& diagnostic_handler_)
 numeric_convert::return_type numeric_convert::operator()(
     ast::bit_string_literal const& literal) const
 {
-    ast::convert_bit_string<basic_integer_type> const convert(diagnostic_handler);
+    ast::convert_bit_string<integer_type> const convert(diagnostic_handler);
     return convert(literal);
 }
 
@@ -59,7 +59,7 @@ numeric_convert::return_type numeric_convert::operator()(
 //
 numeric_convert::return_type numeric_convert::operator()(ast::decimal_literal const& literal) const
 {
-    ast::convert_decimal<basic_integer_type, real_type> const convert(diagnostic_handler);
+    ast::convert_decimal<integer_type, real_type> const convert(diagnostic_handler);
     return convert(literal);
 }
 
@@ -68,7 +68,7 @@ numeric_convert::return_type numeric_convert::operator()(ast::decimal_literal co
 //
 numeric_convert::return_type numeric_convert::operator()(ast::based_literal const& literal) const
 {
-    ast::convert_based<basic_integer_type, real_type> const convert(diagnostic_handler);
+    ast::convert_based<integer_type, real_type> const convert(diagnostic_handler);
     return convert(literal);
 }
 
