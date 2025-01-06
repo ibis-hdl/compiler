@@ -1,0 +1,104 @@
+{
+    "version": 8,
+    "include": [
+        "cmake/presets/common.json"
+    ], 
+    "configurePresets": [
+        {
+            "name": "gcc-ccache",
+            "displayName": "GnuC (CCache)",
+            "description": "GnuC compiler using compiler (CCache)",
+            "inherits": [
+                "gcc",
+                "ccache"
+            ]
+        },
+        {
+            "name": "clang-ccache",
+            "displayName": "LLVM Clang (CCache)",
+            "description": "LLVM Clang compiler using compiler (CCache)",
+            "inherits": [
+                "clang",
+                "ccache"
+            ]
+        }        
+    ],
+    "buildPresets": [
+        {
+            "name": "gcc-ccache-release",
+            "displayName": "Release",
+            "description": "Release build with GnuC",
+            "configuration": "Release",
+            "configurePreset": "gcc-ccache"
+        },
+        {
+            "name": "clang-ccache-release",
+            "displayName": "Release",
+            "description": "Release build with LLVM Clang",
+            "configuration": "Release",
+            "configurePreset": "clang-ccache"
+        }        
+    ],
+    "testPresets": [
+        {
+            "name": "gcc-ccache-release-test",
+            "displayName": "Release Test",
+            "description": "Test GnuC build",
+            "configuration": "Release",
+            "configurePreset": "gcc-ccache",
+            "inherits": [
+                "default-testPreset"
+            ]
+        },
+        {
+            "name": "clang-ccache-release-test",
+            "displayName": "Release Test",
+            "description": "Test LLVM Clang build",
+            "configuration": "Release",
+            "configurePreset": "clang-ccache",
+            "inherits": [
+                "default-testPreset"
+            ]
+        }        
+    ],
+    "workflowPresets": [
+        {
+            "name": "GnuC Release (CCache)",
+            "displayName": "CI GnuC Release (CCache)",
+            "description": "Continuous Integration/Continuous Delivery using GnUC (Release)",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "gcc-ccache"
+                },
+                {
+                    "type": "build",
+                    "name": "gcc-ccache-release"
+                },
+                {
+                    "type": "test",
+                    "name": "gcc-ccache-release-test"
+                }
+            ]
+        },
+        {
+            "name": "LLVM Clang Release (CCache)",
+            "displayName": "CI LLVM Clang Release (CCache)",
+            "description": "Continuous Integration/Continuous Delivery using LLVM Clang (Release)",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "clang-ccache"
+                },
+                {
+                    "type": "build",
+                    "name": "clang-ccache-release"
+                },
+                {
+                    "type": "test",
+                    "name": "clang-ccache-release-test"
+                }
+            ]
+        }
+    ]
+}

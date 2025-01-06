@@ -133,20 +133,24 @@ Afterwards, you can disable Python's virtual environment by simply
 > deactivate
 ```
 
-Now you can start to build, i.e. on Windows:
+Now you can start to build:
 
 ```shell
-> cmake --preset msvc
+> cmake --list-presets
 ...
-> cmake --build --preset msvc-release
+> cmake --preset <configurePreset-name>
 ...
-> ctest.exe --preset msvc-release-test
+> cmake --build --list-presets
 ...
-> cmake --build --preset msvc-release-test --target help
+> cmake --build --preset <buildPreset-name>
+...
+> ctest --list-presets
+...
+> ctest --preset <testPreset-name>
+...
+> cmake --build --preset <testPreset-name> --target help
 ...
 ```
-
-The same procedure for Clang and GCC on Linux or macOS.
 
 ## Miscellaneous
 

@@ -171,7 +171,7 @@ struct std::formatter<ibis::vhdl::ast::bit_string_literal> : std::formatter<stri
         std::format_to(std::back_inserter(temp_literal), "{}{}", bit_string.base_specifier,
                        bit_string.literal);
 
-        return std::formatter<string_view>::format(temp_literal, ctx);
+        return std::formatter<std::string_view>::format(temp_literal, ctx);
     }
 };
 
@@ -289,7 +289,7 @@ struct std::formatter<ibis::vhdl::ast::based_literal> : std::formatter<std::stri
                            based.number.exponent);
         }
 
-        return std::formatter<string_view>::format(temp_literal, ctx);
+        return std::formatter<std::string_view>::format(temp_literal, ctx);
     }
 };
 

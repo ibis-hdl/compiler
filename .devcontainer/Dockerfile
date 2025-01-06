@@ -19,7 +19,19 @@ RUN if [ "${REINSTALL_CMAKE_VERSION_FROM_SOURCE}" != "none" ]; then \
 RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get update && apt-get install -y --no-install-recommends \
        libc++-dev clang-tools clang-format clang-tidy iwyu ccache doxygen graphviz \
-       python3-pip python3-venv pipx \
+       python3-pip python3-venv pipx 
+#   && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
+
+# update to GGC 14; MS devcontainers/cpp is shipped with gcc-13!
+# update-alternatives --get-selections
+# update-alternatives --{list,display,query} c++
+RUN export DEBIAN_FRONTEND=noninteractive \
+    && apt-get update && apt-get install -y --no-install-recommends \
+    && apt-get install -y --no-install-recommends g++-14 gcc-14 \
+    && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 20 \
+    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 20 \
+    && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 30 \
+    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 30 \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 USER vscode
