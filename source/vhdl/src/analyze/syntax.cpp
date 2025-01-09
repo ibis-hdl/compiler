@@ -79,7 +79,6 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name)
             cxx_unreachable_bug_triggered();
         // *No* default branch: let the compiler generate warning about enumeration
         // value not handled in switch
-        // *Note* on changes, also check `to_base_specifier()!`
     }
     // clang-format on
 

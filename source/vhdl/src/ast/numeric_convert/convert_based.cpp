@@ -350,7 +350,6 @@ typename convert_based<IntegerT, RealT>::return_type convert_based<IntegerT, Rea
                 cxx_unreachable_bug_triggered();
             // *No* default branch: let the compiler generate warning about enumeration
             // value not handled in switch
-            // *Note* on changes, also check `to_base_specifier()!`
         }
         // clang-format on
 
@@ -442,7 +441,6 @@ typename convert_based<IntegerT, RealT>::return_type convert_based<IntegerT, Rea
             cxx_unreachable_bug_triggered();
         // *No* default branch: let the compiler generate warning about enumeration
         // value not handled in switch
-        // *Note* on changes, also check `to_base_specifier()!`
     }
     // clang-format on
 

@@ -17,24 +17,6 @@
 #include <memory_resource>
 #include <array>
 
-// clang-format off
-///
-/// This header contains the specializations of the `ast` nodes custom types for rendering
-/// with `std::format`.
-/// In addition to the documentation on CppReference.com
-/// ([Formatting library (since C++20)](https://en.cppreference.com/w/cpp/utility/format),
-/// see more-in-depth MC++ blog:
-/// - [The Formatting Library in C++20](https://www.modernescpp.com/index.php/the-formatting-library-in-c20/)
-/// - [The Formatting Library in C++20: The Format String](https://www.modernescpp.com/index.php/the-formatting-library-in-c20-the-format-string/)
-/// - [The Formatting Library in C++20: The Format String (2)](https://www.modernescpp.com/index.php/the-formatting-library-in-c20-the-format-string-2/)
-/// - [Formatting User-Defined Types in C++20](https://www.modernescpp.com/index.php/formatting-user-defined-types-in-c20/)
-/// - [More Details to Formatting User-Defined Types in C++20](https://www.modernescpp.com/index.php/more-details-to-formatting-user-defined-types-in-c20/)
-/// also Arthur O’Dwyer Stuff mostly about C++:
-/// - [std::format from scratch, part 1](https://quuxplusone.github.io/blog/2023/04/21/format-part-1/)
-/// - [std::format from scratch, part 2](https://quuxplusone.github.io/blog/2023/04/22/format-part-2/)
-/// - [std::format from scratch, part 3](https://quuxplusone.github.io/blog/2023/04/23/format-part-3/)
-// clang-format on
-
 // ToDo [Clang] This code doesn't compile with Clang/libc++ v18, but v19 is OK, see
 // https://godbolt.org/z/rc1sszThT
 
@@ -118,22 +100,22 @@ struct std::formatter<ibis::vhdl::ast::bit_string_literal::numeric_base_specifie
     auto format(ibis::vhdl::ast::bit_string_literal::numeric_base_specifier specifier,
                 std::format_context& ctx) const
     {
-        using numeric_base_specifier = ibis::vhdl::ast::bit_string_literal::numeric_base_specifier;
         using namespace std::literals::string_view_literals;
 
         // clang-format off
         switch (specifier) {
-            case numeric_base_specifier::base2:
+            using enum ibis::vhdl::ast::bit_string_literal::numeric_base_specifier;
+            case base2:
                 return std::formatter<std::string_view>::format("b"sv, ctx);
-            case numeric_base_specifier::base8:
+            case base8:
                 return std::formatter<std::string_view>::format("o"sv, ctx);
-            case numeric_base_specifier::base16:
+            case base16:
                 return std::formatter<std::string_view>::format("x"sv, ctx);
             // be graceful, probably an unintentionally constructed enum by default
-            [[unlikely]] case numeric_base_specifier::unspecified:
+            [[unlikely]] case unspecified:
                 return std::formatter<std::string_view>::format("unspecified"sv, ctx);
             // be graceful, definitely wrong enum - the caller has not worked out properly
-            [[unlikely]] case numeric_base_specifier::unsupported:
+            [[unlikely]] case unsupported:
                 return std::formatter<std::string_view>::format("unsupported"sv, ctx);
             //
             // *No* default branch: let the compiler generate warning about enumeration
@@ -185,17 +167,17 @@ struct std::formatter<ibis::vhdl::ast::based_literal::numeric_type_specifier>
     auto format(ibis::vhdl::ast::based_literal::numeric_type_specifier specifier,
                 std::format_context& ctx) const
     {
-        using numeric_type_specifier = ibis::vhdl::ast::based_literal::numeric_type_specifier;
         using namespace std::literals::string_view_literals;
 
         // clang-format off
         switch (specifier) {
-            case numeric_type_specifier::integer:
+            using enum ibis::vhdl::ast::based_literal::numeric_type_specifier;
+            case integer:
                 return std::formatter<std::string_view>::format("integer"sv, ctx);
-            case numeric_type_specifier::real:
+            case real:
                 return std::formatter<std::string_view>::format("real"sv, ctx);
             // be graceful, probably an unintentionally constructed enum by default
-            [[unlikely]] case numeric_type_specifier::unspecified:
+            [[unlikely]] case unspecified:
                 return std::formatter<std::string_view>::format("unspecified"sv, ctx);
             //
             // *No* default branch: let the compiler generate warning about enumeration
@@ -218,25 +200,24 @@ struct std::formatter<ibis::vhdl::ast::based_literal::numeric_base_specifier>
     auto format(ibis::vhdl::ast::based_literal::numeric_base_specifier specifier,
                 std::format_context& ctx) const
     {
-        using namespace ibis::vhdl;
-        using numeric_base_specifier = ast::based_literal::numeric_base_specifier;
         using namespace std::literals::string_view_literals;
 
         // clang-format off
         switch (specifier) {
-            case numeric_base_specifier::base2:
+            using enum ibis::vhdl::ast::based_literal::numeric_base_specifier;
+            case base2:
                 return std::formatter<std::string_view>::format("2"sv, ctx);
-            case numeric_base_specifier::base8:
+            case base8:
                 return std::formatter<std::string_view>::format("8"sv, ctx);
-            case numeric_base_specifier::base10:
+            case base10:
                 return std::formatter<std::string_view>::format("10"sv, ctx);
-            case numeric_base_specifier::base16:
+            case base16:
                 return std::formatter<std::string_view>::format("16"sv, ctx);
             // be graceful, probably an unintentionally constructed enum by default
-            [[unlikely]] case numeric_base_specifier::unspecified:
+            [[unlikely]] case unspecified:
                 return std::formatter<std::string_view>::format("unspecified"sv, ctx);
             // be graceful, definitely wrong enum - the caller has not worked out properly
-            [[unlikely]] case numeric_base_specifier::unsupported:
+            [[unlikely]] case unsupported:
                 return std::formatter<std::string_view>::format("unsupported"sv, ctx);
             //
             // *No* default branch: let the compiler generate warning about enumeration

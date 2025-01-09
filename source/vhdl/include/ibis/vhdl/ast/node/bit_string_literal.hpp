@@ -16,13 +16,15 @@
 namespace ibis::vhdl::ast {
 
 struct bit_string_literal : position_tagged {
+    // clang-format off
     enum class numeric_base_specifier : std::uint8_t {
-        unspecified = static_cast<std::uint8_t>(ast::numeric_base_specifier::unspecified),
-        base2 = static_cast<std::uint8_t>(ast::numeric_base_specifier::base2),
-        base8 = static_cast<std::uint8_t>(ast::numeric_base_specifier::base8),
-        base16 = static_cast<std::uint8_t>(ast::numeric_base_specifier::base16),
-        unsupported = static_cast<std::uint8_t>(ast::numeric_base_specifier::unsupported)
+        unspecified = std::to_underlying(ast::numeric_base_specifier::unspecified),
+        base2       = std::to_underlying(ast::numeric_base_specifier::base2),
+        base8       = std::to_underlying(ast::numeric_base_specifier::base8),
+        base16      = std::to_underlying(ast::numeric_base_specifier::base16),
+        unsupported = std::to_underlying(ast::numeric_base_specifier::unsupported)
     };
+    // clang-format on
 
     ast::string_span literal;
     numeric_base_specifier base_specifier;
@@ -38,7 +40,6 @@ struct bit_string_literal : position_tagged {
             [[unlikely]] case numeric_base_specifier::unsupported: return false;
             // *No* default branch: let the compiler generate warning about enumeration
             // value not handled in switch
-            // *Note* on changes, also check `to_base_specifier()!`
         }
         // clang-format on
 

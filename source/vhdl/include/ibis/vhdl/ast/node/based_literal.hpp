@@ -23,14 +23,16 @@ namespace ibis::vhdl::ast {
 struct based_literal : position_tagged {
     enum class numeric_type_specifier : std::uint8_t { unspecified, integer, real };
 
+    // clang-format off
     enum class numeric_base_specifier : std::uint8_t {
-        unspecified = static_cast<std::uint8_t>(ast::numeric_base_specifier::unspecified),
-        base2 = static_cast<std::uint8_t>(ast::numeric_base_specifier::base2),
-        base8 = static_cast<std::uint8_t>(ast::numeric_base_specifier::base8),
-        base10 = static_cast<std::uint8_t>(ast::numeric_base_specifier::base10),
-        base16 = static_cast<std::uint8_t>(ast::numeric_base_specifier::base16),
-        unsupported = static_cast<std::uint8_t>(ast::numeric_base_specifier::unsupported)
+        unspecified = std::to_underlying(ast::numeric_base_specifier::unspecified),
+        base2       = std::to_underlying(ast::numeric_base_specifier::base2),
+        base8       = std::to_underlying(ast::numeric_base_specifier::base8),
+        base10      = std::to_underlying(ast::numeric_base_specifier::base10),
+        base16      = std::to_underlying(ast::numeric_base_specifier::base16),
+        unsupported = std::to_underlying(ast::numeric_base_specifier::unsupported)
     };
+    // clang-format on
 
     struct number_chunk {
         ast::string_span integer_part;

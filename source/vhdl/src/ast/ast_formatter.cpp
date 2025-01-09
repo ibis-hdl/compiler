@@ -16,50 +16,50 @@
 std::string_view std::formatter<ibis::vhdl::ast::operator_token>::as_sv(
     ibis::vhdl::ast::operator_token token)
 {
-    using operator_token = ibis::vhdl::ast::operator_token;
     using namespace std::literals::string_view_literals;
 
     // clang-format off
     switch (token) {
+        using enum ibis::vhdl::ast::operator_token;
         // miscellaneous_operator
-        case operator_token::EXPONENT:        return "EXPONENT"sv;
-        case operator_token::ABS:             return "ABS"sv;
-        case operator_token::NOT:             return "NOT"sv;
+        case EXPONENT:        return "EXPONENT"sv;
+        case ABS:             return "ABS"sv;
+        case NOT:             return "NOT"sv;
         // multiplying_operator
-        case operator_token::MUL:             return "MUL"sv;
-        case operator_token::DIV:             return "DIV"sv;
-        case operator_token::MOD:             return "MOD"sv;
-        case operator_token::REM:             return "REM"sv;
+        case MUL:             return "MUL"sv;
+        case DIV:             return "DIV"sv;
+        case MOD:             return "MOD"sv;
+        case REM:             return "REM"sv;
         // sign_operator
-        case operator_token::SIGN_POS:        return "SIGN_POS"sv;
-        case operator_token::SIGN_NEG:        return "SIGN_NEG"sv;
+        case SIGN_POS:        return "SIGN_POS"sv;
+        case SIGN_NEG:        return "SIGN_NEG"sv;
         // adding_operator
-        case operator_token::ADD:             return "ADD"sv;
-        case operator_token::SUB:             return "SUB"sv;
-        case operator_token::CONCAT:          return "CONCAT"sv;
+        case ADD:             return "ADD"sv;
+        case SUB:             return "SUB"sv;
+        case CONCAT:          return "CONCAT"sv;
         // shift_operator
-        case operator_token::SLL:             return "SLL"sv;
-        case operator_token::SRL:             return "SRL"sv;
-        case operator_token::SLA:             return "SLA"sv;
-        case operator_token::SRA:             return "SRA"sv;
-        case operator_token::ROL:             return "ROL"sv;
-        case operator_token::ROR:             return "ROR"sv;
+        case SLL:             return "SLL"sv;
+        case SRL:             return "SRL"sv;
+        case SLA:             return "SLA"sv;
+        case SRA:             return "SRA"sv;
+        case ROL:             return "ROL"sv;
+        case ROR:             return "ROR"sv;
         // relational_operator
-        case operator_token::EQUAL:           return "EQUAL"sv;
-        case operator_token::NOT_EQUALS:      return "NOT_EQUALS"sv;
-        case operator_token::LESS:            return "LESS"sv;
-        case operator_token::LESS_EQUALS:     return "LESS_EQUALS"sv;
-        case operator_token::GREATER:         return "GREATER"sv;
-        case operator_token::GREATER_EQUALS:  return "GREATER_EQUALS"sv;
+        case EQUAL:           return "EQUAL"sv;
+        case NOT_EQUALS:      return "NOT_EQUALS"sv;
+        case LESS:            return "LESS"sv;
+        case LESS_EQUALS:     return "LESS_EQUALS"sv;
+        case GREATER:         return "GREATER"sv;
+        case GREATER_EQUALS:  return "GREATER_EQUALS"sv;
         // logical_operator
-        case operator_token::AND:             return "AND"sv;
-        case operator_token::OR:              return "OR"sv;
-        case operator_token::NAND:            return "NAND"sv;
-        case operator_token::NOR:             return "NOR"sv;
-        case operator_token::XOR:             return "XOR"sv;
-        case operator_token::XNOR:            return "XNOR"sv;
+        case AND:             return "AND"sv;
+        case OR:              return "OR"sv;
+        case NAND:            return "NAND"sv;
+        case NOR:             return "NOR"sv;
+        case XOR:             return "XOR"sv;
+        case XNOR:            return "XNOR"sv;
         // probably an unintentionally constructed enum by default
-        [[unlikely]] case operator_token::UNSPECIFIED:
+        [[unlikely]] case UNSPECIFIED:
             // something in the grammar is wired, stop here
             cxx_bug_fatal("operator_token is *unspecified*!");
         //
@@ -79,110 +79,110 @@ std::string_view std::formatter<ibis::vhdl::ast::operator_token>::as_sv(
 std::string_view std::formatter<ibis::vhdl::ast::keyword_token>::as_sv(
     ibis::vhdl::ast::keyword_token token)
 {
-    using keyword_token = ibis::vhdl::ast::keyword_token;
     using namespace std::literals::string_view_literals;
 
     // clang-format off
     switch (token) {
-        case keyword_token::ABS:             return "ABS"sv;
-        case keyword_token::ACCESS:          return "ACCESS"sv;
-        case keyword_token::AFTER:           return "AFTER"sv;
-        case keyword_token::ALIAS:           return "ALIAS"sv;
-        case keyword_token::ALL:             return "ALL"sv;
-        case keyword_token::AND:             return "AND"sv;
-        case keyword_token::ARCHITECTURE:    return "ARCHITECTURE"sv;
-        case keyword_token::ARRAY:           return "ARRAY"sv;
-        case keyword_token::ASSERT:          return "ASSERT"sv;
-        case keyword_token::ATTRIBUTE:       return "ATTRIBUTE"sv;
-        case keyword_token::BEGIN:           return "BEGIN"sv;
-        case keyword_token::BLOCK:           return "BLOCK"sv;
-        case keyword_token::BODY:            return "BODY"sv;
-        case keyword_token::BUFFER:          return "BUFFER"sv;
-        case keyword_token::BUS:             return "BUS"sv;
-        case keyword_token::CASE:            return "CASE"sv;
-        case keyword_token::COMPONENT:       return "COMPONENT"sv;
-        case keyword_token::CONFIGURATION:   return "CONFIGURATION"sv;
-        case keyword_token::CONSTANT:        return "CONSTANT"sv;
-        case keyword_token::DISCONNECT:      return "DISCONNECT"sv;
-        case keyword_token::DOWNTO:          return "DOWNTO"sv;
-        case keyword_token::ELSE:            return "ELSE"sv;
-        case keyword_token::ELSIF:           return "ELSIF"sv;
-        case keyword_token::END:             return "END"sv;
-        case keyword_token::ENTITY:          return "ENTITY"sv;
-        case keyword_token::EXIT:            return "EXIT"sv;
-        case keyword_token::FILE:            return "FILE"sv;
-        case keyword_token::FOR:             return "FOR"sv;
-        case keyword_token::FUNCTION:        return "FUNCTION"sv;
-        case keyword_token::GENERATE:        return "GENERATE"sv;
-        case keyword_token::GENERIC:         return "GENERIC"sv;
-        case keyword_token::GROUP:           return "GROUP"sv;
-        case keyword_token::GUARDED:         return "GUARDED"sv;
-        case keyword_token::IF:              return "IF"sv;
-        case keyword_token::IMPURE:          return "IMPURE"sv;
-        case keyword_token::IN:              return "IN"sv;
-        case keyword_token::INERTIAL:        return "INERTIAL"sv;
-        case keyword_token::INOUT:           return "INOUT"sv;
-        case keyword_token::IS:              return "IS"sv;
-        case keyword_token::LABEL:           return "LABEL"sv;
-        case keyword_token::LIBRARY:         return "LIBRARY"sv;
-        case keyword_token::LINKAGE:         return "LINKAGE"sv;
-        case keyword_token::LITERAL:         return "LITERAL"sv;
-        case keyword_token::LOOP:            return "LOOP"sv;
-        case keyword_token::MAP:             return "MAP"sv;
-        case keyword_token::MOD:             return "MOD"sv;
-        case keyword_token::NAND:            return "NAND"sv;
-        case keyword_token::NEW:             return "NEW"sv;
-        case keyword_token::NEXT:            return "NEXT"sv;
-        case keyword_token::NOR:             return "NOR"sv;
-        case keyword_token::NOT:             return "NOT"sv;
-        case keyword_token::NULL_:           return "NULL"sv;
-        case keyword_token::OF:              return "OF"sv;
-        case keyword_token::ON:              return "ON"sv;
-        case keyword_token::OPEN:            return "OPEN"sv;
-        case keyword_token::OR:              return "OR"sv;
-        case keyword_token::OTHERS:          return "OTHERS"sv;
-        case keyword_token::OUT:             return "OUT"sv;
-        case keyword_token::PACKAGE:         return "PACKAGE"sv;
-        case keyword_token::PORT:            return "PORT"sv;
-        case keyword_token::POSTPONED:       return "POSTPONED"sv;
-        case keyword_token::PROCEDURE:       return "PROCEDURE"sv;
-        case keyword_token::PROCESS:         return "PROCESS"sv;
-        case keyword_token::PURE:            return "PURE"sv;
-        case keyword_token::RANGE:           return "RANGE"sv;
-        case keyword_token::RECORD:          return "RECORD"sv;
-        case keyword_token::REGISTER:        return "REGISTER"sv;
-        case keyword_token::REJECT:          return "REJECT"sv;
-        case keyword_token::REM:             return "REM"sv;
-        case keyword_token::REPORT:          return "REPORT"sv;
-        case keyword_token::RETURN:          return "RETURN"sv;
-        case keyword_token::ROL:             return "ROL"sv;
-        case keyword_token::ROR:             return "ROR"sv;
-        case keyword_token::SELECT:          return "SELECT"sv;
-        case keyword_token::SEVERITY:        return "SEVERITY"sv;
-        case keyword_token::SIGNAL:          return "SIGNAL"sv;
-        case keyword_token::SHARED:          return "SHARED"sv;
-        case keyword_token::SLA:             return "SLA"sv;
-        case keyword_token::SLL:             return "SLL"sv;
-        case keyword_token::SRA:             return "SRA"sv;
-        case keyword_token::SRL:             return "SRL"sv;
-        case keyword_token::SUBTYPE:         return "SUBTYPE"sv;
-        case keyword_token::THEN:            return "THEN"sv;
-        case keyword_token::TO:              return "TO"sv;
-        case keyword_token::TRANSPORT:       return "TRANSPORT"sv;
-        case keyword_token::TYPE:            return "TYPE"sv;
-        case keyword_token::UNAFFECTED:      return "UNAFFECTED"sv;
-        case keyword_token::UNITS:           return "UNITS"sv;
-        case keyword_token::UNTIL:           return "UNTIL"sv;
-        case keyword_token::USE:             return "USE"sv;
-        case keyword_token::VARIABLE:        return "VARIABLE"sv;
-        case keyword_token::WAIT:            return "WAIT"sv;
-        case keyword_token::WHEN:            return "WHEN"sv;
-        case keyword_token::WHILE:           return "WHILE"sv;
-        case keyword_token::WITH:            return "WITH"sv;
-        case keyword_token::XNOR:            return "XNOR"sv;
-        case keyword_token::XOR:             return "XOR"sv;
+        using enum ibis::vhdl::ast::keyword_token;
+        case ABS:             return "ABS"sv;
+        case ACCESS:          return "ACCESS"sv;
+        case AFTER:           return "AFTER"sv;
+        case ALIAS:           return "ALIAS"sv;
+        case ALL:             return "ALL"sv;
+        case AND:             return "AND"sv;
+        case ARCHITECTURE:    return "ARCHITECTURE"sv;
+        case ARRAY:           return "ARRAY"sv;
+        case ASSERT:          return "ASSERT"sv;
+        case ATTRIBUTE:       return "ATTRIBUTE"sv;
+        case BEGIN:           return "BEGIN"sv;
+        case BLOCK:           return "BLOCK"sv;
+        case BODY:            return "BODY"sv;
+        case BUFFER:          return "BUFFER"sv;
+        case BUS:             return "BUS"sv;
+        case CASE:            return "CASE"sv;
+        case COMPONENT:       return "COMPONENT"sv;
+        case CONFIGURATION:   return "CONFIGURATION"sv;
+        case CONSTANT:        return "CONSTANT"sv;
+        case DISCONNECT:      return "DISCONNECT"sv;
+        case DOWNTO:          return "DOWNTO"sv;
+        case ELSE:            return "ELSE"sv;
+        case ELSIF:           return "ELSIF"sv;
+        case END:             return "END"sv;
+        case ENTITY:          return "ENTITY"sv;
+        case EXIT:            return "EXIT"sv;
+        case FILE:            return "FILE"sv;
+        case FOR:             return "FOR"sv;
+        case FUNCTION:        return "FUNCTION"sv;
+        case GENERATE:        return "GENERATE"sv;
+        case GENERIC:         return "GENERIC"sv;
+        case GROUP:           return "GROUP"sv;
+        case GUARDED:         return "GUARDED"sv;
+        case IF:              return "IF"sv;
+        case IMPURE:          return "IMPURE"sv;
+        case IN:              return "IN"sv;
+        case INERTIAL:        return "INERTIAL"sv;
+        case INOUT:           return "INOUT"sv;
+        case IS:              return "IS"sv;
+        case LABEL:           return "LABEL"sv;
+        case LIBRARY:         return "LIBRARY"sv;
+        case LINKAGE:         return "LINKAGE"sv;
+        case LITERAL:         return "LITERAL"sv;
+        case LOOP:            return "LOOP"sv;
+        case MAP:             return "MAP"sv;
+        case MOD:             return "MOD"sv;
+        case NAND:            return "NAND"sv;
+        case NEW:             return "NEW"sv;
+        case NEXT:            return "NEXT"sv;
+        case NOR:             return "NOR"sv;
+        case NOT:             return "NOT"sv;
+        case NULL_:           return "NULL"sv;
+        case OF:              return "OF"sv;
+        case ON:              return "ON"sv;
+        case OPEN:            return "OPEN"sv;
+        case OR:              return "OR"sv;
+        case OTHERS:          return "OTHERS"sv;
+        case OUT:             return "OUT"sv;
+        case PACKAGE:         return "PACKAGE"sv;
+        case PORT:            return "PORT"sv;
+        case POSTPONED:       return "POSTPONED"sv;
+        case PROCEDURE:       return "PROCEDURE"sv;
+        case PROCESS:         return "PROCESS"sv;
+        case PURE:            return "PURE"sv;
+        case RANGE:           return "RANGE"sv;
+        case RECORD:          return "RECORD"sv;
+        case REGISTER:        return "REGISTER"sv;
+        case REJECT:          return "REJECT"sv;
+        case REM:             return "REM"sv;
+        case REPORT:          return "REPORT"sv;
+        case RETURN:          return "RETURN"sv;
+        case ROL:             return "ROL"sv;
+        case ROR:             return "ROR"sv;
+        case SELECT:          return "SELECT"sv;
+        case SEVERITY:        return "SEVERITY"sv;
+        case SIGNAL:          return "SIGNAL"sv;
+        case SHARED:          return "SHARED"sv;
+        case SLA:             return "SLA"sv;
+        case SLL:             return "SLL"sv;
+        case SRA:             return "SRA"sv;
+        case SRL:             return "SRL"sv;
+        case SUBTYPE:         return "SUBTYPE"sv;
+        case THEN:            return "THEN"sv;
+        case TO:              return "TO"sv;
+        case TRANSPORT:       return "TRANSPORT"sv;
+        case TYPE:            return "TYPE"sv;
+        case UNAFFECTED:      return "UNAFFECTED"sv;
+        case UNITS:           return "UNITS"sv;
+        case UNTIL:           return "UNTIL"sv;
+        case USE:             return "USE"sv;
+        case VARIABLE:        return "VARIABLE"sv;
+        case WAIT:            return "WAIT"sv;
+        case WHEN:            return "WHEN"sv;
+        case WHILE:           return "WHILE"sv;
+        case WITH:            return "WITH"sv;
+        case XNOR:            return "XNOR"sv;
+        case XOR:             return "XOR"sv;
         // probably an unintentionally constructed enum by default
-        [[unlikely]] case keyword_token::UNSPECIFIED:
+        [[unlikely]] case UNSPECIFIED:
             // something in the grammar is wired, stop here
             cxx_bug_fatal("keyword_token is *unspecified*!");
         //
