@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2017-2022 Olaf (<ibis-hdl@users.noreply.github.com>).
+// Copyright (c) 2017-2025 Olaf (<ibis-hdl@users.noreply.github.com>).
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
@@ -31,7 +31,7 @@ using numeric_base_specifier = ibis::vhdl::ast::bit_string_literal::numeric_base
 using namespace std::literals::string_view_literals;
 
 // Valid input to test the grammar rule, no numeric conversion here.
-std::string_view const input = R"(
+constexpr std::string_view const input = R"(
 -- test 'bit_string_literal' grammar
 PACKAGE bitstring IS
     -- bin
@@ -58,12 +58,12 @@ END PACKAGE;
 )";
 
 // clang-format off
-// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays)
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
 struct {
-    numeric_base_specifier const base_specifier;  // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
-    std::string_view const literal;     // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
-    std::string_view const formatted;   // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
-} const gold_data[] = {
+    numeric_base_specifier base_specifier;
+    std::string_view literal; 
+    std::string_view formatted;
+} constexpr gold_data[] = {
     // bin
     { .base_specifier = numeric_base_specifier::base2, .literal = "0101", .formatted = "b0101" },
     { .base_specifier = numeric_base_specifier::base2, .literal = "0101", .formatted = "b0101" },
@@ -119,7 +119,7 @@ struct test_worker {
     {
         assert(index < test_case_count && "index reached count of gold data array size!");
 
-        BOOST_TEST_CONTEXT("Test index at " << index)
+        BOOST_TEST_CONTEXT(">>> Test index at " << index << " <<<")
         {
             auto const expected = gold[index];
             BOOST_TEST(node.base_specifier == expected.base_specifier);
@@ -157,7 +157,7 @@ auto const verify = [](ast::design_file const& ast) {
 // clang-format off
 BOOST_AUTO_TEST_CASE(bit_string_literal__valid_test,    // test shall pass
                      *utf::label("bit_string_literal")
-                     *utf::label("format"))
+                     *utf::label("formatter"))
 // clang-format on
 {
     using ast::design_file;

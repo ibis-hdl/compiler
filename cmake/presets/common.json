@@ -185,7 +185,10 @@
                 "noTestsAction": "error",
                 "stopOnFailure": false,
                 "timeout": 60
-            }
+            },
+            "environment": {
+                "BOOST_TEST_LOG_LEVEL": "error"
+              }
         }
     ]
 }

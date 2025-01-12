@@ -72,6 +72,8 @@ BOOST_DATA_TEST_CASE(labels_ok,                                                 
         return;
     }
 
+    // std::cout << "### output:\n" << os.str() << " -- -- -- -- -- -- -- -- -- -- -- -- -- --\n ";
+
     BOOST_TEST(os.str() == expected, btt::per_element());
     failure_closure(test_case_name, input, expected, os.str());
 }
@@ -116,6 +118,8 @@ BOOST_DATA_TEST_CASE(
         failure_closure(test_case_name, input, os.str());
         return;
     }
+
+    std::cout << "### output:\n" << os.str() << " -- -- -- -- -- -- -- -- -- -- -- -- -- --\n ";
 
     BOOST_TEST(os.str() == expected, btt::per_element());
     failure_closure(test_case_name, input, expected, os.str());

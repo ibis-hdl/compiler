@@ -43,8 +43,6 @@ public:
 
 public:
     void set_tab_size(std::size_t sz) { tab_size = sz; }
-    void set_marker_symbol(char symbol) { marker_symbol = symbol; }
-    void set_location_symbol(char symbol) { location_symbol = symbol; }
 
 private:
     diagnostic_context const& context;
