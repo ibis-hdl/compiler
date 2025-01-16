@@ -69,7 +69,7 @@ jobs:
         deactivate
          
     - name: Install CMake and ninja
-      uses: lukka/get-cmake@v3.31.3
+      uses: lukka/get-cmake@v3.31.4
 
     - name: Checkout Repo
       uses: actions/checkout@v3
@@ -79,7 +79,7 @@ jobs:
     - name: Setup ccache Compiler Cache
       # matrix.os == 'Linux'
       if: false
-      uses: hendrikmuhs/ccache-action@v1.2.2
+      uses: hendrikmuhs/ccache-action@v1.2.6
 
     - name: Configure and Build
       uses: lukka/run-cmake@v10
