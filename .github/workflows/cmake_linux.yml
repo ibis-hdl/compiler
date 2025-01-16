@@ -58,8 +58,8 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install --no-install-recommends -y \
-          cmake ninja-build ccache clang "${{ matrix.cmake.depend_pkgs }}" \
-          g++-14 gcc-14
+          cmake ninja-build ccache clang "${{ matrix.cmake.depend_pkgs }}"
+        sudo apt-get install --no-install-recommends -y g++-14 gcc-14
         update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 20
         update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 20
         update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 30
