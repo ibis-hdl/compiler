@@ -58,7 +58,12 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install --no-install-recommends -y \
-          cmake ninja-build ccache g++ clang "${{ matrix.cmake.depend_pkgs }}"
+          cmake ninja-build ccache clang "${{ matrix.cmake.depend_pkgs }}" \
+          g++-14 gcc-14
+        update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 20
+        update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 20
+        update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 30
+        update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 30        
 
     - name: Checkout Repo
       uses: actions/checkout@v4
