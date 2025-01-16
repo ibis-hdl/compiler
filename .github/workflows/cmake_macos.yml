@@ -43,9 +43,20 @@ jobs:
       # https://github.com/actions/runner-images/blob/main/images/macos/macos-15-Readme.md
       run: |
         brew update
-        brew install ninja pipx
+        brew install llvm@19 ninja pipx 
         # set the path to homebrew's LLVM
-        echo "$(brew --prefix llvm@18)/bin" >> $GITHUB_PATH
+        echo "$(brew --prefix llvm@19)/bin" >> $GITHUB_PATH
+
+    - name: Write Homebrew's Clang 19 user config
+      run: |
+        mkdir -p ~/.config/clang/
+        {
+          echo "# See note on brew install llvm@19"
+          echo "# See https://clang.llvm.org/docs/UsersManual.html#configuration-files"
+          echo "-I/opt/homebrew/opt/llvm/include"
+          echo "-L/opt/homebrew/opt/llvm/lib/c++"
+          echo "-L/opt/homebrew/opt/llvm/lib/unwind -lunwind"
+        } > ~/.config/clang/clang++.cfg
 
     - name: Checkout Repo
       uses: actions/checkout@v4
@@ -94,6 +105,11 @@ jobs:
     - name: Show prerequisites
       if: true
       run: |
+        echo "--- /opt/homebrew/etc/clang/arm64-apple-darwin24.cfg ---"
+        cat /opt/homebrew/etc/clang/arm64-apple-darwin24.cfg
+        echo "------------- ~/.config/clang/clang++.cfg --------------"
+        cat ~/.config/clang/clang++.cfg
+        echo "--------------------------------------------------------"      
         eval ${CXX} --version
         conan list '*'
         cmake --version
