@@ -19,7 +19,7 @@ jobs:
         os:                     [ linux ]
         cmake:
         - {
-            cxx:                "g++",
+            cxx:                "g++-14",
             conan_profile:      "gcc",
             configure_preset:   "gcc",
             build_preset:       "gcc-release",
@@ -57,12 +57,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install --no-install-recommends -y \
-          cmake ninja-build ccache clang libc++-dev
-        sudo apt-get install --no-install-recommends -y g++-14 gcc-14
-        update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 20
-        update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 20
-        update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 30
-        update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 30        
+          cmake ninja-build ccache clang libc++-dev   
 
     - name: Checkout Repo
       uses: actions/checkout@v4
