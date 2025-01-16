@@ -37,8 +37,7 @@ jobs:
             conan_profile:      "clang-libc++",
             configure_preset:   "clang-libc++",
             build_preset:       "clang-libc++-release",
-            test_preset:        "clang-libc++-release-test",
-            depend_pkgs:        "libc++-dev"
+            test_preset:        "clang-libc++-release-test"
           }
         # exclude temporary clang-libc++ due to conan/cmake provider issues
         # see: https://github.com/actions/runner/issues/1512
@@ -58,7 +57,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install --no-install-recommends -y \
-          cmake ninja-build ccache clang "${{ matrix.cmake.depend_pkgs }}"
+          cmake ninja-build ccache clang libc++-dev
         sudo apt-get install --no-install-recommends -y g++-14 gcc-14
         update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 20
         update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 20
