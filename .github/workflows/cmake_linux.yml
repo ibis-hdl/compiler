@@ -39,10 +39,10 @@ jobs:
             build_preset:       "clang-libc++-release",
             test_preset:        "clang-libc++-release-test"
           }
-        # exclude temporary clang-libc++ due to conan/cmake provider issues
-        # see: https://github.com/actions/runner/issues/1512
-        #exclude:
-        #  - { cmake: {configure_preset: "clang-libc++" } }
+        # exclude temporary clang-libc++ since we can't install Clang 19 on Ubuntu, see
+        # [#121496](https://github.com/llvm/llvm-project/issues/121496)
+        exclude:
+          - { cmake: {configure_preset: "clang-libc++" } }
 
     steps:
 
