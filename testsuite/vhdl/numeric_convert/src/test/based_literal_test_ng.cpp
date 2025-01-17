@@ -99,7 +99,7 @@ struct {
         std::string_view fractional;
         std::string_view exponent;
     } literal;
-} const expect[] = {
+} constexpr expect[] = {
     // Examples from IEEE_VHDL_1076-1993: Chapter 13.4.2 Based literals
     { .numeric_type = based_integer,
       .value = 255U,
@@ -178,7 +178,7 @@ struct verify_worker
     verify_worker(std::ostream& os_, ExpectT const& expect_, diagnostic_handler_type& handler_)
     : os{ os_ }
     , expect{ expect_ }
-    , max_index{ sizeof(expect_) / sizeof(expect_[0]) }
+    , max_index{ std::size(expect_) }
     , diagnostic_handler{ handler_ }
     , convert_based{ handler_ }
     {

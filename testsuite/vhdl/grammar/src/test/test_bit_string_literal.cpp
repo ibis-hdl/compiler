@@ -91,7 +91,7 @@ template <typename GoldDataT, bool verbose = false>
 struct test_worker {
     test_worker(GoldDataT const& gold_data)
         : gold{ gold_data }
-        , test_case_count{ sizeof(gold_data) / sizeof(gold_data[0]) }
+        , test_case_count{ std::size(gold_data) }
         , os{ std::cout }
     {
     }
