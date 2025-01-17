@@ -44,15 +44,30 @@ struct spacer {
 /// Wrapper for failure/issue indication as single location or range.
 /// If there is an optional @arg last argument, there is a range to be markup, otherwise single
 /// issue point at @arg first is to emphasize.
-/// ToDo Maybe separate the concern using variant<single_mark, mark_range>
 template <typename IteratorT>
 struct issue_range {
-    IteratorT const first;
-    std::optional<IteratorT> const last;
+    using difference_type = typename std::iterator_traits<IteratorT>::difference_type;
 
-    // ToDo Urgent: write iterator support for begin() and end(), throwing on access on empty
-    // optional end!
-    // failed at diagnostic_formatter issue_marker line ~276
+    constexpr issue_range(IteratorT begin, std::optional<IteratorT> end)
+        : iter{ begin }
+        , distance{ [&]() -> difference_type {
+            if (end.has_value()) return std::distance(begin, end.value());
+            return 0;
+        }() }
+    {
+        // Can be disabled on Release build, no static_assert possible
+        assert(!(distance < 0) && "unexpected order of iterators, end() comes before begin()");
+    }
+
+    // iterator to begin of issue
+    IteratorT position() const { return iter; }
+
+    // issue width, equals to 0 if no range available
+    std::size_t width() const { return distance; }
+
+private:
+    IteratorT iter;
+    difference_type distance;
 };
 
 /// @brief Wrapper for issue locator/indicator
@@ -80,8 +95,7 @@ struct std::formatter<ibis::vhdl::source_location> {
         if (auto const begin = ctx.begin(); begin == ctx.end() || *begin == '}') {
             return begin;
         }
-
-        throw std::format_error("format specification should be empty");
+        throw std::format_error("non-empty format specification for <vhdl::source_location>");
     }
 
     // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
@@ -102,7 +116,17 @@ struct std::formatter<ibis::vhdl::source_location> {
 };
 
 template <>
-struct std::formatter<ibis::vhdl::diagnostic_context::failure_type> : std::formatter<std::string> {
+struct std::formatter<ibis::vhdl::diagnostic_context::failure_type> {
+    template <class ParseContext>
+    static constexpr auto parse(ParseContext& ctx)
+    {
+        if (auto const begin = ctx.begin(); begin == ctx.end() || *begin == '}') {
+            return begin;
+        }
+        throw std::format_error(
+            "non-empty format specification for <vhdl::diagnostic_context::failure_type>");
+    }
+
     // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
     template <class FmtContext>
     auto format(ibis::vhdl::diagnostic_context::failure_type failure, FmtContext& ctx) const
@@ -134,7 +158,7 @@ struct std::formatter<ibis::vhdl::diagnostic_context::failure_type> : std::forma
             std::unreachable();
         };
 
-        return std::formatter<std::string>::format(as_str(failure), ctx);
+        return std::format_to(ctx.out(), "{}", as_str(failure));
     }
 };
 
@@ -146,8 +170,7 @@ struct std::formatter<ibis::vhdl::number_gutter> {
         if (auto const begin = ctx.begin(); begin == ctx.end() || *begin == '}') {
             return begin;
         }
-
-        throw std::format_error("format specification should be empty");
+        throw std::format_error("non-empty format specification for <vhdl::number_gutter>");
     }
 
     // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
@@ -160,7 +183,7 @@ struct std::formatter<ibis::vhdl::number_gutter> {
         // ToDo [C++26] fixed-size static array for empty gutter, not constexpr - neither
         // format_to_n() nor format() are constexpr in C++23
         auto const void_gutter = [&]() {
-            // *note* array isn't '\0' terminated, hence intended to be used with string_view only!!
+            // *Note* array isn't '\0' terminated, hence intended to be used with string_view only!!
             static std::array<std::string_view::value_type, BUF_SZ - 1> const buf = [&]() {
                 std::array<std::string_view::value_type, BUF_SZ - 1> buf{};
                 std::ignore =
@@ -170,7 +193,7 @@ struct std::formatter<ibis::vhdl::number_gutter> {
             return std::string_view{ buf };
         };
 
-        if (gutter.number == 0ul) {
+        if (gutter.number == 0UL) {
             // empty gutter without line number to align e.g. error/warning locator
             return std::format_to(ctx.out(), "{}", void_gutter());
         }
@@ -209,14 +232,14 @@ struct std::formatter<ibis::vhdl::spacer> {
         if (auto const begin = ctx.begin(); begin == ctx.end() || *begin == '}') {
             return begin;
         }
-        throw std::format_error("format specification should be empty");
+        throw std::format_error("non-empty format specification for <vhdl::spacer>");
     }
 
     // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
     template <class FmtContext>
     auto format(ibis::vhdl::spacer spacer_, FmtContext& ctx) const
     {
-        if (spacer_.width == 0ul) {
+        if (spacer_.width == 0UL) {
             // format_to() will fail at runtime otherwise
             return ctx.out();
         }
@@ -235,28 +258,23 @@ struct std::formatter<ibis::vhdl::issue_range<IteratorT>> {
         if (auto const begin = ctx.begin(); begin == ctx.end() || *begin == '}') {
             return begin;
         }
-        throw std::format_error("format specification should be empty");
+        throw std::format_error("non-empty format specification for <vhdl::issue_range>");
     }
 
     // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
     template <class FmtContext>
     auto format(ibis::vhdl::issue_range<IteratorT> issue, FmtContext& ctx) const
     {
-        if (!issue.last.has_value()) {
+        using ibis::vhdl::spacer;
+
+        if (issue.width() == 0) {
             return std::format_to(ctx.out(), "{}", locator_symbol);
         }
 
-        auto const distance = std::distance(issue.first, issue.last.value());
-        cxx_assert(!(distance < 0), "unexpected order of iterators, end() comes before begin()");
-        std::size_t const width = static_cast<std::size_t>(distance);
-
-        if (true /* debug */ && width == 0) {
-            std::format_to(ctx.out(), "(width={})", width);
-        }
-
-        return std::format_to(ctx.out(), "{}", ibis::vhdl::spacer{ width, range_mark_symbol });
+        return std::format_to(ctx.out(), "{}", spacer{ issue.width(), range_mark_symbol });
     }
 
+private:
     static constexpr std::string_view locator_symbol{ "^" };
     static constexpr std::string_view range_mark_symbol{ "~" };
 };
@@ -269,27 +287,20 @@ struct std::formatter<ibis::vhdl::issue_marker<IteratorT>> {
         if (auto const begin = ctx.begin(); begin == ctx.end() || *begin == '}') {
             return begin;
         }
-        throw std::format_error("format spec should be empty");
+        throw std::format_error("non-empty format specification for <vhdl::issue_marker>");
     }
 
     // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
     template <class FmtContext>
     auto format(ibis::vhdl::issue_marker<IteratorT> const& issue, FmtContext& ctx) const
     {
+        using ibis::vhdl::spacer;
+
         // left margin/offset to issue marker begin
-        auto const distance = std::distance(issue.start, issue.failure.first);
+        auto const distance = std::distance(issue.start, issue.failure.position());
         cxx_assert(!(distance < 0), "unexpected order of iterators, end() comes before begin()");
         std::size_t const width = static_cast<std::size_t>(distance);
-#if 0
-        if (issue.failure.last.has_value()) {
-            std::cout << "+++ single point issue\n";
-        }
-        else {
-            std::cout << "+++ range '"
-                      << std::string_view{ issue.failure.first, issue.failure.last.get_value() }
-                      << "' issue\n";
-        }
-#endif
-        return std::format_to(ctx.out(), "{}{}", ibis::vhdl::spacer{ width }, issue.failure);
+
+        return std::format_to(ctx.out(), "{}{}", spacer{ width }, issue.failure);
     }
 };

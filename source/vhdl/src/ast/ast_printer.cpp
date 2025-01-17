@@ -341,7 +341,7 @@ void printer::operator()(based_literal const& node)
             break;
         }
         default:  // unreachable_bug_triggered
-            // @BUG triggered by 'parser_rules/test_data/abstract_literal/decimal_literal_000'
+            // BUG triggered by 'parser_rules/test_data/abstract_literal/decimal_literal_000'
             cxx_unreachable_bug_triggered();
     }
 }

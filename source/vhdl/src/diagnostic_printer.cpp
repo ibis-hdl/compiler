@@ -100,7 +100,7 @@ std::ostream& diagnostic_printer::print_snippets(std::ostream& os) const
     else {  // new implementation width std::format()
         auto const snippet_count = context.source_snippets().size();
 
-        for (auto snippet_idx{ 0ul }; auto const& source_snippet : context.source_snippets()) {
+        for (auto snippet_idx{ 0UL }; auto const& source_snippet : context.source_snippets()) {
             auto line_start = source_snippet.source_line().begin();
 
             constexpr bool debug = true;

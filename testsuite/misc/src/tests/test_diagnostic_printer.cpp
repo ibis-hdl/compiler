@@ -65,7 +65,7 @@ constexpr auto find_char = [](IteratorT begin, IteratorT end, char chr) {
 };
 
 // create an issue_marker by generating a set of iterators - mimics x3 parser error handler result
-// proof of concept including wrapper/formatter see https://godbolt.org/z/z5Yrz6e6M
+// for proof of concept including wrapper/formatter see https://godbolt.org/z/z5Yrz6e6M
 constexpr auto make_issue = [](std::string_view str, char first_chr,
                                std::optional<char> last_chr = {}) {
     using iterator_type = std::string_view::const_iterator;
@@ -140,15 +140,15 @@ BOOST_AUTO_TEST_CASE(issue_marker_formatter, *utf::label("formatter"))
     constexpr bool const verbose = false;
 
     btt::output_test_stream output;  // reused, flushed/cleared after each test
-    using valid_data::input_string;
 
-    for (auto index{ 0u }; auto const& [issue, expected] : valid_data::gold_data) {
+    for (auto index{ 0U }; auto const& [issue, expected] : valid_data::gold_data) {
         BOOST_TEST_CONTEXT(">>> Test index at " << index << " <<<")
         {
             output << std::format("{}", issue);
 
             // verbose output for debugging
             if constexpr (verbose) {
+                using valid_data::input_string;
                 std::cout << std::format(
                     "{0:-^76}\n"        // -- top border
                     "input    |{1}|\n"  // -- | <input> |
@@ -163,7 +163,6 @@ BOOST_AUTO_TEST_CASE(issue_marker_formatter, *utf::label("formatter"))
             }
 
             BOOST_REQUIRE(!output.str().empty());
-            BOOST_TEST(output.str().size() == expected.size());
             BOOST_TEST(output.str() == expected, btt::per_element());
         }
         output.flush();  // clear output for next run

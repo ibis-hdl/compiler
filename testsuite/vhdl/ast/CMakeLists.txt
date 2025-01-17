@@ -53,6 +53,7 @@ target_sources(${PROJECT_NAME}
         src/test_ast.cpp
         src/position_cache_fixture.cpp
         # concrete test cases
+        src/test/test_ast_formatter.cpp
         src/test/position_cache_test_1.cpp
         src/test/position_cache_test_2.cpp
         src/test/literal_printer_test.cpp
