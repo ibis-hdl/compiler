@@ -5,6 +5,7 @@
 
 #include <ibis/vhdl/ast/basic_ast_walker.hpp>
 #include <ibis/vhdl/ast/ast_formatter.hpp>
+#include <ibis/vhdl/ast/ast_printer.hpp>
 #include <ibis/vhdl/ast/node/bit_string_literal.hpp>
 #include <ibis/vhdl/ast/node/constant_declaration.hpp>
 #include <ibis/vhdl/ast/node/design_file.hpp>
@@ -20,6 +21,7 @@
 #include <format>
 #include <string_view>
 #include <iostream>
+#include <functional>
 #include <cassert>
 #include <cstddef>
 
@@ -91,7 +93,6 @@ template <typename GoldDataT, bool verbose = false>
 struct test_worker {
     test_worker(GoldDataT const& gold_data)
         : gold{ gold_data }
-        , test_case_count{ std::size(gold_data) }
         , os{ std::cout }
     {
     }
@@ -102,7 +103,7 @@ struct test_worker {
         if constexpr (verbose) {
             // ToDo [C++20] non-critical C++20 std::format, more complex work using ast walker
             static ast::printer print(os);
-            os << std::format("({:2d}/{:2d}): identifier '", index + 1, test_case_count);
+            os << std::format("({:2d}/{:2d}): identifier '", index + 1, std::size(gold_data));
             print(node.identifier_list);
             os << "' of subtype '";
             print(node.subtype_indication);
@@ -117,14 +118,11 @@ struct test_worker {
     void operator()(ast::bit_string_literal const& node,
                     [[maybe_unused]] std::string_view /* node_name */) const
     {
-        assert(index < test_case_count && "index reached count of gold data array size!");
-
         BOOST_TEST_CONTEXT(">>> Test index at " << index << " <<<")
         {
             auto const expected = gold[index];
             BOOST_TEST(node.base_specifier == expected.base_specifier);
-            auto const node_literal =
-                std::string_view{ std::begin(node.literal), std::end(node.literal) };
+            auto const node_literal = std::string_view{ node.literal };
             BOOST_TEST(node_literal == expected.literal, btt::per_element());
             BOOST_TEST(std::format("{}", node) == expected.formatted, btt::per_element());
         }
@@ -139,10 +137,9 @@ struct test_worker {
     }
 
 private:
-    GoldDataT const& gold;              // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
-    std::size_t const test_case_count;  // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
-    std::size_t mutable index = 0;      // NOLINT(misc-non-private-member-variables-in-classes)
-    std::ostream& os;                   // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
+    std::reference_wrapper<GoldDataT> gold;
+    std::size_t mutable index = 0;
+    std::ostream& os;  // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
 };
 
 using verifier_type = ast::basic_ast_walker<test_worker<decltype(gold_data), false /* verbose */>>;
