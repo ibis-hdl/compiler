@@ -64,18 +64,25 @@ int main(int argc, const char* argv[])
         parser::parse parse{ std::cout };
         parser::context ctx;
 
+        // iterate over property_tree::path by using API get_child()
         for (auto const& child : settings::instance().get_child("hdl-files")) {
             std::string_view const hdl_file = child.second.data();
-            // FixMe: Throw on read_file(), no optional!!
-            auto const contents = file_reader.read_file(hdl_file);
+
+            auto const result = file_reader.read_file(hdl_file);
+            if (!result.has_value()) {
+                auto const ec = result.error();
+                ibis::error(format(translate("Error loading file \"{1}\" ({2})"))  // --
+                            % hdl_file % ec.message());
+                return EXIT_FAILURE;
+            }
             if (!quiet) {
-                ibis::note((format(translate("processing: {1}"))  // --
-                            % hdl_file));
+                ibis::note((format(translate("processing: {1}")) % hdl_file));
             }
 
             // render the source with lines numbers (quick & dirty solution)
             std::uint16_t line_no = 1;
-            std::istringstream iss(*contents);
+            std::istringstream iss(result.value());
+            // FixMe [C++20] use std::format and number_gutter
             std::cout << "------------------- input ----------------------\n";
             for (std::string line; std::getline(iss, line, '\n'); line_no++) {
                 std::cout << std::setfill(' ') << std::setw(3) << line_no << " | "  // --
@@ -84,7 +91,7 @@ int main(int argc, const char* argv[])
             std::cout << "------------------------------------------------\n";
 
             // prepare to parse
-            auto position_cache_proxy = position_cache.add_file(hdl_file, *contents);
+            auto position_cache_proxy = position_cache.add_file(hdl_file, result.value());
 
             ast::design_file design_file;
 
