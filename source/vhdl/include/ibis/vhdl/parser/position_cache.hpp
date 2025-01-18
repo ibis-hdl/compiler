@@ -21,7 +21,7 @@
 namespace ibis::vhdl::parser {
 
 ///
-/// tag used to get our position cache proxy back from the x3::context inside Spirit.X3 rules
+/// tag used to get a position cache proxy back from the x3::context inside Spirit.X3 rules
 ///
 struct position_cache_tag;  // IWYU pragma: keep
 
@@ -47,9 +47,17 @@ public:
     using file_id_type = ast::position_tagged::file_id_type;
 
 private:
-    // <filename, contents>
-    using file_pair = std::tuple<std::string, std::string>;
-    using file_registry_type = std::vector<file_pair>;
+    struct file_reg_entry {
+        file_reg_entry() = default;
+        file_reg_entry(std::string_view filename_, std::string&& contents_)
+            : filename{ filename_ }
+            , contents{ std::move(contents_) }
+        {
+        }
+        std::string filename;  // Todo Check on use of fs::path as filename argument
+        std::string contents;
+    };
+    using file_registry_type = std::vector<file_reg_entry>;
 
 public:
     class proxy;
@@ -80,18 +88,23 @@ public:
     /// Maps a filename to contents.
     ///
     /// @param filename The file name as is it's shown e.g. by the error handler
-    /// @param contents String view holding the file contents
-    /// @return An ID which identifies the pair of 'filename' and 'contents' which
-    /// can be referred later on using the proxy.
+    /// @param contents String holding the file contents
+    /// @return A proxy object which identifies the pair of 'filename' and 'contents' which
+    /// can be referred later.
     ///
-    /// @note This call makes internally a copy of filename and contents.
-    /// @todo Check on use of fs::path as filename argument
+    proxy add_file(std::string_view filename, std::string&& contents)
+    {
+        file_id_type file_id{ file_registry.size() };
+        file_registry.emplace_back(filename, std::move(contents));
+        return get_proxy(file_id);
+    }
+
+    ///
+    /// @overload proxy add_file(std::string_view filename, std::string&& contents)
     ///
     proxy add_file(std::string_view filename, std::string_view contents)
     {
-        std::size_t const file_id = file_registry.size();
-        file_registry.emplace_back(filename, contents);
-        return get_proxy(file_id_type(file_id));
+        return add_file(filename, std::string{ contents });
     }
 
 public:
@@ -111,7 +124,7 @@ public:
     {
         if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
             // std::size_t size isn't enough?, this shouldn't never happen
-            assert(position_registry.size() < ast::position_tagged::MAX_ID &&
+            assert(position_registry.size() < ast::position_tagged::MAX_POSITION_ID &&
                    "Insufficient range of numeric IDs for AST tagging");
 
             node.file_id = file_id;
@@ -133,7 +146,7 @@ public:
     std::string_view file_name(file_id_type file_id) const
     {
         assert(value_of(file_id) < file_registry.size() && "file_id out of range!");
-        return std::get<0>(file_registry[value_of(file_id)]);
+        return file_registry[file_id].filename;
     }
 
     ///
@@ -145,7 +158,7 @@ public:
     std::string_view file_contents(file_id_type file_id) const
     {
         assert(value_of(file_id) < file_registry.size() && "file_id out of range!");
-        return std::get<1>(file_registry[value_of(file_id)]);
+        return file_registry[file_id].contents;
     }
 
     ///
@@ -186,9 +199,6 @@ public:
     /// Get the id of current <file_name, contents>.
     file_id_type id() const { return file_id; }
 
-    /// Set the current <file_name, contents> to another id.
-    void set_id(file_id_type id) const { file_id = id; }
-
 public:
     /// annotate the given node.
     template <typename NodeT>
@@ -214,8 +224,7 @@ public:
     /// Get the iterator (range) of the file contents.
     std::tuple<iterator_type, iterator_type> file_contents_range() const
     {
-        auto const contents = file_contents();
-
+        auto contents = file_contents();
         return { contents.cbegin(), contents.cend() };
     }
 

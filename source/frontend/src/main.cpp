@@ -9,6 +9,7 @@
 #include <ibis/vhdl/ast.hpp>
 
 #include <ibis/vhdl/ast/ast_printer.hpp>
+#include <ibis/vhdl/diagnostic_formatter.hpp>
 
 #include <ibis/settings.hpp>
 #include <ibis/util/file/file_loader.hpp>
@@ -79,16 +80,17 @@ int main(int argc, const char* argv[])
                 ibis::note((format(translate("processing: {1}")) % hdl_file));
             }
 
-            // render the source with lines numbers (quick & dirty solution)
-            std::uint16_t line_no = 1;
-            std::istringstream iss(result.value());
-            // FixMe [C++20] use std::format and number_gutter
-            std::cout << "------------------- input ----------------------\n";
-            for (std::string line; std::getline(iss, line, '\n'); line_no++) {
-                std::cout << std::setfill(' ') << std::setw(3) << line_no << " | "  // --
-                          << line << '\n';
+            {
+                // render the source with lines numbers (quick & dirty solution)
+                std::istringstream iss(result.value());
+                auto line_no{ 1UL };
+                std::cout << std::format("{:-^80}\n", " input ");
+                for (std::string line; std::getline(iss, line, '\n');) {
+                    using ibis::vhdl::number_gutter;
+                    std::cout << std::format("{}| {}\n", number_gutter{ line_no++ }, line);
+                }
+                std::cout << std::format("{:-^80}\n", "");
             }
-            std::cout << "------------------------------------------------\n";
 
             // prepare to parse
             auto position_cache_proxy = position_cache.add_file(hdl_file, result.value());

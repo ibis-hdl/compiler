@@ -16,7 +16,7 @@
 #include <iostream>
 
 namespace ibis::vhdl::ast {
-struct position_tagged;
+class position_tagged;
 }
 
 namespace ibis::vhdl::ast {

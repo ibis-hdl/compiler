@@ -14,7 +14,7 @@
 #include <ibis/util/cxx_bug_fatal.hpp>
 
 #include <format>
-#include <memory_resource>
+#include <span>
 #include <array>
 
 ///

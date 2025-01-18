@@ -131,10 +131,8 @@ std::expected<std::string, std::error_code> file_loader::read_file(fs::path cons
         return std::unexpected{ ec };
     }
 
-    ifs.unsetf(std::ios::skipws);
-
-    std::ostringstream ss{};
-    ss << ifs.rdbuf();
+    // see Scott Meyers "Effective STL" item 29
+    std::string contents{ std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>() };
 
     if (ifs.fail() && !ifs.eof()) {
         std::error_code const ec{ errno, std::generic_category() };
@@ -145,7 +143,12 @@ std::expected<std::string, std::error_code> file_loader::read_file(fs::path cons
         return std::unexpected{ ec };
     }
 
-    return ss.str();
+    if (!quiet) {
+        std::cout << std::format("read '{}' ({} bytes)\n", filename.generic_string(),
+                                 contents.size());
+    }
+
+    return contents;
 }
 
 std::expected<std::string, std::error_code> file_loader::read_file_alt(
@@ -209,8 +212,8 @@ std::time_t file_loader::timesstamp(fs::path const& filename) const
         if (ec && !quiet) {
             ibis::warning(                                                      // --
                 format(translate("Failed to determine file time of {1}: {2}"))  // --
-                % fs::path{ filename }.make_preferred() % ec.message()          // --
-            );
+                // [C++26] has std::formatter<std::filesystem::path>
+                % fs::path{ filename }.make_preferred() % ec.message());
         }
     };
 

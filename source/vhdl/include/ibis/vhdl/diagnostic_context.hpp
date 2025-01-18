@@ -18,6 +18,51 @@
 
 namespace ibis::vhdl {
 
+namespace detail {
+
+class source_snippet {
+public:
+    using iterator_type = parser::iterator_type;
+
+public:
+    explicit source_snippet(std::size_t line_no_, std::string_view src_line_, iterator_type first_,
+                            std::optional<iterator_type> last_)
+        : line_no{ line_no_ }
+        , src_line{ src_line_ }
+        , iter_first{ first_ }
+        , iter_last{ last_ }
+    {
+    }
+
+public:
+    /// The line number of source snippet
+    std::size_t line_number() const { return line_no; }
+
+    /// code snippet of erroneous part as text line
+    std::string_view source_line() const { return src_line; }
+
+    /// iterator position pointing to error/warning part inside code snippet
+    iterator_type first() const { return iter_first; }
+
+    /// iterator position pointing to error/warning part inside code snippet
+    std::optional<iterator_type> last() const { return iter_last; }
+
+private:
+    /// The line number of source snippet
+    std::size_t line_no;
+
+    /// code snippet of erroneous part as text line
+    std::string_view src_line;
+
+    /// iterator position pointing to error/warning beginning part inside code snippet
+    iterator_type const iter_first;
+
+    /// optional iterator position pointing to error/warning ending part inside code snippet
+    std::optional<iterator_type> const iter_last;
+};
+
+}  // namespace detail
+
 ///
 /// error/warning messages data
 ///
@@ -30,46 +75,7 @@ public:
     enum class failure_type { unspecific, parser, syntax, semantic, numeric, not_supported };
 
 public:
-    class source_snippet {
-    public:
-        using iterator_type = parser::iterator_type;
-
-    public:
-        source_snippet(std::size_t line_no_, std::string_view src_line_, iterator_type first_,
-                       std::optional<iterator_type> last_)
-            : line_no{ line_no_ }
-            , src_line{ src_line_ }
-            , iter_first{ first_ }
-            , iter_last{ last_ }
-        {
-        }
-
-    public:
-        /// The line number of source snippet
-        std::size_t line_number() const { return line_no; }
-
-        /// code snippet of erroneous part as text line
-        std::string_view source_line() const { return src_line; }
-
-        /// iterator position pointing to error/warning part inside code snippet
-        iterator_type first() const { return iter_first; }
-
-        /// iterator position pointing to error/warning part inside code snippet
-        std::optional<iterator_type> last() const { return iter_last; }
-
-    private:
-        /// The line number of source snippet
-        std::size_t line_no;
-
-        /// code snippet of erroneous part as text line
-        std::string_view src_line;
-
-        /// iterator position pointing to error/warning beginning part inside code snippet
-        iterator_type const iter_first;
-
-        /// optional iterator position pointing to error/warning ending part inside code snippet
-        std::optional<iterator_type> const iter_last;
-    };
+    using source_snippet = detail::source_snippet;
 
 public:
     ///

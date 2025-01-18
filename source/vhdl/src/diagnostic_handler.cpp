@@ -109,8 +109,16 @@ void diagnostic_handler<Iterator>::syntax_error(ast::position_tagged const& wher
 
     ++context.errors();
 
+#if 0
+    // ToDo [XXX] position_cache::proxy::set_id() on branch code-review-2024 removed 
+    // -> check the intention here, since diagnostic_handler is created by proxy as ctor argument
+
     // set the correct file name and contents by id from position cache proxy
-    current_file().set_id(where_tag.file_id);
+    current_file().set_id(
+        where_tag.file_id);
+#else
+    cxx_assert(current_file().id() == where_tag.file_id, "cache proxy id different");
+#endif
 
     constexpr auto syntax_error = diagnostic_context::failure_type::syntax;
 
@@ -118,7 +126,7 @@ void diagnostic_handler<Iterator>::syntax_error(ast::position_tagged const& wher
 
     set_source_location(diag_ctx, where_tag);
     set_source_snippet(diag_ctx, start_label);
-    set_source_snippet(diag_ctx, end_label);
+    set_source_snippet(diag_ctx, end_label);  // FixMe [XXX] same function signature, how to diff?
 
     diagnostic_printer diagnostic{ diag_ctx };
     os << diagnostic << '\n';
@@ -172,13 +180,13 @@ std::tuple<std::size_t, std::size_t> diagnostic_handler<IteratorT>::line_column_
     for (iterator_type iter = current_file().file_contents().begin(); iter != pos; ++iter) {
         auto const chr = *iter;
         switch (chr) {
-            case '\n':
-                if (chr_prev != '\r') {
+            case '\n':                   // Line Feed (Linux, Mac OS X)
+                if (chr_prev != '\r') {  // EOL - End of Line (Windows)
                     ++line_no;
                     col_no = 1;
                 }
                 break;
-            case '\r':
+            case '\r':  // Carriage Return (Mac pre-OS X)
                 ++line_no;
                 col_no = 1;
                 break;

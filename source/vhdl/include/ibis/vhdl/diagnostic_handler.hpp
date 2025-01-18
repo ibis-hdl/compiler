@@ -27,7 +27,7 @@ class source_location;
 namespace ast {
 
 // forward ast::position_tagged for parser::position_cache
-struct position_tagged;
+class position_tagged;
 
 }  // namespace ast
 

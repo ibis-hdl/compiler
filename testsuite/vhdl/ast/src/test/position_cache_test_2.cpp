@@ -65,7 +65,7 @@ BOOST_AUTO_TEST_CASE(contents_2_txt)
     auto const id = position_proxy.id();
 
     // ID and file_name with contents shall be the same.
-    BOOST_TEST(value_of(id) == id_ref);
+    BOOST_TEST(id == id_ref);
     BOOST_TEST(position_cache_ut.file_name(id) == file_name);
     BOOST_TEST(position_cache_ut.file_contents(id) == file_contents);
 
