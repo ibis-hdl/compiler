@@ -26,7 +26,6 @@ target_link_libraries(${PROJECT_NAME}
         Boost::system
         Boost::locale
         CLI11::CLI11
-        rollbear::strong_type
         Threads::Threads
         # cope with "fatal error LNK2011: precompiled object not linked in"
         #"$<$<CXX_COMPILER_ID:MSVC>:ibis_pch>"

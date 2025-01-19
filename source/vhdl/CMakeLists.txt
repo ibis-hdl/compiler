@@ -25,7 +25,6 @@ target_link_libraries(${PROJECT_NAME}
         # fmt::fmt
         range-v3::range-v3
         Boost::headers
-        rollbear::strong_type
         # cope with "fatal error LNK2011: precompiled object not linked in"
         #"$<$<CXX_COMPILER_ID:MSVC>:ibis_pch>"
 )
