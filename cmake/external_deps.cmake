@@ -47,5 +47,5 @@ find_package(range-v3 0.12.0 REQUIRED)
 # [strong_type](https://github.com/rollbear/strong_type)
 # strong typedef library for C++14/17/20
 #
-find_package(strong_type REQUIRED)
+#find_package(strong_type REQUIRED)
 # @todo [CMake] use explicit version: find_package(strong_type 15 REQUIRED)
