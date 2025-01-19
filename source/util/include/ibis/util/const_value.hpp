@@ -46,19 +46,19 @@ public:
     }
     auto operator<=>(const_value const&) const = default;
 
-    [[nodiscard]] constexpr auto get() const -> const T& { return val_; }
+    [[nodiscard]] constexpr const T& get() const { return val_; }
     [[nodiscard]] constexpr operator T() const { return val_; }
 };
 
 template <typename T, typename U>
-    requires std::equality_comparable_with<T, U>
+    requires std::integral<U> && std::equality_comparable_with<T, U>
 constexpr bool operator==(const_value<T> lhs, U rhs)
 {
-    return lhs.get() == rhs;
+    return std::cmp_equal(lhs.get(), rhs);
 }
 
 template <typename T, typename U>
-    requires std::totally_ordered_with<T, U>
+    requires std::integral<U> && std::totally_ordered_with<T, U>
 constexpr auto operator<=>(const_value<T> lhs, U rhs)
 {
     return lhs.get() <=> rhs;

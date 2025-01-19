@@ -24,6 +24,12 @@ target_sources(${PROJECT_NAME}
         src/dataset_loader.cpp
         src/basic_failure_diagnostic_fixture.cpp
 )
+# https://cmake.org/cmake/help/latest/prop_tgt/UNITY_BUILD_MODE.html
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    UNITY_BUILD_MODE BATCH
+    UNITY_BUILD_BATCH_SIZE 3
+)
+
 
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
@@ -32,9 +38,11 @@ target_link_libraries(${PROJECT_NAME}
     CLI11::CLI11
 )
 
+
 if(IBIS_ENABLE_CXXSTD_PCH)
     target_precompile_headers(${PROJECT_NAME} REUSE_FROM ibis_pch)
 endif()
+
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC

@@ -232,7 +232,7 @@ std::time_t file_loader::timesstamp(fs::path const& filename) const
             return system_clock::to_time_t(sctp);
         };
 
-        std::time_t const sys_time = to_time_t(file_time);
+        std::time_t sys_time = to_time_t(file_time);
         return sys_time;
     }
     else {

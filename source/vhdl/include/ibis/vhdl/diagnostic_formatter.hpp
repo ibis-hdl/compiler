@@ -19,14 +19,18 @@ namespace ibis::vhdl {
 
 using ibis::util::const_value;
 
-/// Gutter with number, intended to be used with line numbers
+///
+/// @brief Gutter with number, intended to be used with line numbers
 /// for proof of concept @see https://godbolt.org/z/ca7ejMjMz
+///
 struct number_gutter {
     const_value<std::size_t> number{ 0 };
 };
 
-// Wrapper for spacer
-// for proof of concept @see https://coliru.stacked-crooked.com/a/15fe1a8b1c2d6991
+///
+/// @brief Wrapper for spacer
+/// for proof of concept @see https://coliru.stacked-crooked.com/a/15fe1a8b1c2d6991
+///
 struct spacer {
     constexpr spacer() = default;
     constexpr spacer(std::size_t const width_, std::string_view chr_sv = " ")
@@ -41,9 +45,11 @@ struct spacer {
     const_value<char> chr{ ' ' };
 };
 
-/// Wrapper for failure/issue indication as single location or range.
+///
+/// @brief Wrapper for failure/issue indication as single location or range.
 /// If there is an optional @arg last argument, there is a range to be markup, otherwise single
 /// issue point at @arg first is to emphasize.
+///
 template <typename IteratorT>
 struct issue_range {
     using difference_type = typename std::iterator_traits<IteratorT>::difference_type;
@@ -63,7 +69,7 @@ struct issue_range {
     IteratorT position() const { return iter; }
 
     // issue width, equals to 0 if no range available
-    std::size_t width() const { return distance; }
+    std::size_t width() const { return static_cast<std::size_t>(distance); }
 
 private:
     IteratorT iter;

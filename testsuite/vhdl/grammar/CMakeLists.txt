@@ -43,7 +43,11 @@ target_sources(${PROJECT_NAME}
         # concrete test cases
         src/test/test_bit_string_literal.cpp
 )
-
+# https://cmake.org/cmake/help/latest/prop_tgt/UNITY_BUILD_MODE.html
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    UNITY_BUILD_MODE BATCH
+    UNITY_BUILD_BATCH_SIZE 3
+)
 
 # [Boost.Test linker error by use with pre-compiled headers (PCH)](
 #  https://stackoverflow.com/questions/66535719/boost-test-linker-error-by-use-with-precompiled-headers-pch)

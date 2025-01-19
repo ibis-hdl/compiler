@@ -5,6 +5,17 @@
 
 #pragma once
 
+#if defined(__GLIBCXX__) && \
+    defined(CLANG_GLIBCXX_EXPECTED_HACK)  // HACK update to Clang-19 for std::expected
+// Very rude hack to compile Clang18 with GNU libstdc++ and std::expected, see
+// - Clangd [#2200](https://github.com/clangd/clangd/issues/2200)
+// - [Update __cpp_concepts macro #87998](https://github.com/llvm/llvm-project/pull/87998)
+// until [[installation Clang-19] 404 on apt.llvm.org repository for noble (ubuntu 24.04) #121496](
+// https://github.com/llvm/llvm-project/issues/121496) has been fixed.
+#pragma message("issue 121496 hack active")
+#define __cpp_concepts 202002L
+#endif
+
 #include <algorithm>
 #include <ctime>
 #include <iosfwd>

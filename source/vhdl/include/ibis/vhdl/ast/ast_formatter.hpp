@@ -227,7 +227,6 @@ struct std::formatter<ibis::vhdl::ast::based_literal> {
     auto format(ibis::vhdl::ast::based_literal based, FmtContext& ctx) const
     {
         using namespace ibis::vhdl;
-        using numeric_type_specifier = ast::based_literal::numeric_type_specifier;
         using numeric_base_specifier = ast::based_literal::numeric_base_specifier;
 
         // ToDo: Let the parser grammar the AST node fill in

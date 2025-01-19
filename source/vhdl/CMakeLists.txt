@@ -54,6 +54,16 @@ target_sources(${PROJECT_NAME}
         src/parser/grammar.cpp  # ---- memory exhausting ----
         src/parser/parse.cpp
 )
+# https://cmake.org/cmake/help/latest/prop_tgt/UNITY_BUILD_MODE.html
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    UNITY_BUILD_MODE BATCH
+    UNITY_BUILD_BATCH_SIZE 3
+)
+set_source_files_properties(
+    src/parser/grammar.cpp  # memory exhausting
+    PROPERTIES
+        SKIP_UNITY_BUILD_INCLUSION true
+)
 
 
 if(DEVELOPER_BOOST_SPIRIT_X3_DEBUG)

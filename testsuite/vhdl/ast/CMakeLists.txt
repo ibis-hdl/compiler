@@ -58,7 +58,11 @@ target_sources(${PROJECT_NAME}
         src/test/position_cache_test_2.cpp
         src/test/literal_printer_test.cpp
 )
-
+# https://cmake.org/cmake/help/latest/prop_tgt/UNITY_BUILD_MODE.html
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    UNITY_BUILD_MODE BATCH
+    UNITY_BUILD_BATCH_SIZE 3
+)
 
 #set_source_files_properties(src/test_ast.cpp
 #    APPEND PROPERTIES

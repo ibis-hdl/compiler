@@ -71,6 +71,11 @@ target_sources(${PROJECT_NAME}
         src/test/label_check_test.cpp
         src/test/keyword_match_test.cpp ## FixMe [CMake]: requires more than 10GB!
 )
+# https://cmake.org/cmake/help/latest/prop_tgt/UNITY_BUILD_MODE.html
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    UNITY_BUILD_MODE BATCH
+    UNITY_BUILD_BATCH_SIZE 3
+)
 
 
 #set_source_files_properties(src/test_vhdl_syntax.cpp
