@@ -142,6 +142,36 @@ Also, there are some already pre-configured user CMake presets below
 choice to `${source_dir}` as `CMakeUserPresets.json` - this file
 is excluded from *git*, see [`.gitignore`](../.gitignore).
 
+You can check the use of PCH with given `-H` argument, see SO
+[How do I check if precompiled headers are really used?](
+https://stackoverflow.com/questions/77838811/how-do-i-check-if-precompiled-headers-are-really-used)
+
+> **ToDo** See Clang Issue [Ccache clang and `-fno-pch-timestamp`](https://discourse.cmake.org/t/ccache-clang-and-fno-pch-timestamp/7253)
+
+### MSVC and sccache
+
+Following [SCCache Usage](https://github.com/mozilla/sccache?tab=readme-ov-file#usage) for
+MSVC and CMake 3.25 and later, you have to use the new `CMAKE_MSVC_DEBUG_INFORMATION_FORMAT` option,
+meant to configure the `-Z7` flag. Additionally, you must set the cmake policy number 
+[CMP0141](https://cmake.org/cmake/help/latest/policy/CMP0141.html) to the `NEW` setting.
+
+```json
+        {
+            "name": "sccache",
+            "description": "sccache - Mozilla's ccache-like tool",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER_LAUNCHER": "sccache",
+                "CMAKE_MSVC_DEBUG_INFORMATION_FORMAT": "Embedded",
+                "CMAKE_POLICY_DEFAULT_CMP0141": "NEW"                
+            }
+        },
+```
+
+> **ToDo** See Issue [MSVC: /FC, and /Fp "Non-cacheable reasons #978](
+https://github.com/mozilla/sccache/issues/978), so we can have pre-compiled header or
+sccache.
+
 ## Linting: Clang Tidy
 
 The [.clang-tidy](../.clang-tidy) config file applies some checks and disabled others.

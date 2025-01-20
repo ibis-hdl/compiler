@@ -101,6 +101,8 @@ jobs:
         .win64-venv\Scripts\activate
         py -m pip install multipledispatch
         py conan_install.py --profile ${{ matrix.cmake.conan_profile }}
+        # cleanup to get Github's cache small (clean sources, build, download, temp)
+        conan cache clean -s -b -d -t        
         deactivate
 
     - name: Show prerequisites
