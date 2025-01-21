@@ -8,6 +8,7 @@
 #include <ibis/util/strong_type.hpp>
 
 #include <limits>
+#include <cstdint>
 
 namespace ibis::vhdl::ast {
 
@@ -28,22 +29,25 @@ public:
     /// or chance, since this type is also used outside the AST node (e.g. position_cache).
     using file_id_type = ibis::util::strong_type<underlying_type, struct position_tagged_file_id>;
 
-    /// Type of position, only used internally, so no need for opaque type.
-    using position_id_type = underlying_type;
-
-    /// The max. ID value of file_id
+    /// The max. ID value of file_id, also identifies uninitialized id
     static constexpr file_id_type MAX_FILE_ID{
-        std::numeric_limits<file_id_type::underlying_type>::max()
+        std::numeric_limits<file_id_type::value_type>::max()
     };
 
-    /// The max. ID value of position_id
+public:
+    /// Type of position, only used internally, so no need for opaque type.
+    using position_id_type = underlying_type;  // ToDo also position_id_type as strong_type
+
+    /// The max. ID value of position_id, also identifies uninitialized id
     static constexpr position_id_type MAX_POSITION_ID{
         std::numeric_limits<position_id_type>::max()
     };
 
+public:
     /// return true if the node is tagged, false otherwise.
     bool is_tagged() const { return position_id != MAX_POSITION_ID && file_id != MAX_FILE_ID; }
 
+public:
     /// The file ID (handle) used by position_cache.
     file_id_type file_id{ MAX_FILE_ID };
 

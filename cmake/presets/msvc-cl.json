@@ -6,7 +6,7 @@
     "configurePresets": [
         {
             "name": "compiler-msvc-clang",
-            "description": "Microsoft Visual Studio bundled Clang-Cl",
+            "description": "Microsoft Visual Studio bundled ClangCL",
             "hidden": true,
             "inherits": [],
             "cacheVariables": {

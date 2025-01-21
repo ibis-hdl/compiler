@@ -126,7 +126,7 @@
         {
             "name": "msvc-cl",
             "displayName": "MSVC-Cl",
-            "description": "Microsoft Visual Studio bundled Clang C++ compiler",
+            "description": "Microsoft Visual Studio bundled ClangCL C++ compiler",
             "inherits": [
                 "compiler-msvc-clang",
                 "condition-windows",
@@ -217,14 +217,14 @@
         {
             "name": "msvc-cl-release",
             "displayName": "Release",
-            "description": "Release build with Microsoft Visual Studio bundled Clang C++ compiler",
+            "description": "Release build with Microsoft Visual Studio bundled ClangCL C++ compiler",
             "configuration": "Release",
             "configurePreset": "msvc-cl"
         },
         {
             "name": "msvc-cl-debug",
             "displayName": "Debug",
-            "description": "Debug build with Microsoft Visual Studio bundled Clang C++ compiler",
+            "description": "Debug build with Microsoft Visual Studio bundled ClangCL C++ compiler",
             "configuration": "Debug",
             "configurePreset": "msvc-cl"
         }
@@ -333,7 +333,7 @@
         {
             "name": "msvc-cl-release-test",
             "displayName": "Release Test",
-            "description": "Test Microsoft Visual Studio bundled Clang build",
+            "description": "Test Microsoft Visual Studio bundled ClangCL build",
             "configuration": "Release",
             "configurePreset": "msvc-cl",
             "inherits": [
@@ -343,7 +343,7 @@
         {
             "name": "msvc-cl-debug-test",
             "displayName": "Debug Test",
-            "description": "Test Microsoft Visual Studio bundled Clang build",
+            "description": "Test Microsoft Visual Studio bundled ClangCL build",
             "configuration": "Release",
             "configurePreset": "msvc-cl",
             "inherits": [
@@ -449,8 +449,8 @@
         },
         {
             "name": "MSVC-Cl Release",
-            "displayName": "CI/CD MSVC-Clang",
-            "description": "Continuous Integration/Continuous Delivery using Clang's compatibility mode with MSVC Release",
+            "displayName": "CI/CD MSVC-ClangCL",
+            "description": "Continuous Integration/Continuous Delivery using ClangCL compatibility mode with MSVC Release",
             "steps": [
                 {
                     "type": "configure",

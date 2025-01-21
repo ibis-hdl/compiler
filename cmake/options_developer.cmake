@@ -155,7 +155,7 @@ add_compile_options(
     # = 900
     "$<$<CXX_COMPILER_ID:GNU>:-ftemplate-backtrace-limit=0;-ftemplate-depth=1024>"
     #"$<$<CXX_COMPILER_ID:Clang>:-ftemplate-backtrace-limit=0;-ftemplate-depth=1024>"
-    # FixMe [CMake]: won't work on MSVC Clang frontend, hence won't compile with clang-cl
+    # FixMe [CMake]: won't work on MSVC ClangCL frontend
     # [cmake]   Error evaluating generator expression:
     # [cmake]   $<CMAKE_CXX_COMPILER_FRONTEND_VARIANT:MSVC>
     # [cmake]   Expression did not evaluate to a known generator expression

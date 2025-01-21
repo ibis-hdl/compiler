@@ -250,7 +250,7 @@ struct std::formatter<ibis::vhdl::spacer> {
             return ctx.out();
         }
         // ToDo [C++26] format() isn't completely constexpr, hence we'll use vformat_to()!
-        return std::vformat_to(ctx.out(),
+        return std::vformat_to(ctx.out(),  // C++26 std::runtime_format()
                                std::format("{{:{}>{}}}", spacer_.chr.get(), spacer_.width.get()),
                                std::make_format_args(""));
     }

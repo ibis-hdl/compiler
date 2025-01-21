@@ -18,7 +18,7 @@ e.g., see Ubuntu 24.04 [.devcontainer](/.devcontainer)
 
 * C++23 compliant compiler; developed and tested with the big three:
     - [Visual Studio 22 Community Edition](https://visualstudio.microsoft.com/de/vs/community/)
-      Command Prompt v17.11.5 (no clang-cl yet due to 
+      Command Prompt v17.11.5 (no ClangCL yet due to 
       missing/complete CMake support on project's side at this time)
     - clang++ 19
     - g++ 14

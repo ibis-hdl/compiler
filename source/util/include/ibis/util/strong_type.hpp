@@ -7,6 +7,7 @@
 
 #include <ibis/concepts.hpp>
 #include <concepts>
+#include <type_traits>
 #include <utility>
 
 namespace ibis::util {
@@ -28,8 +29,6 @@ namespace ibis::util {
 template <typename T, typename uniqueTag>
     requires ibis::integer<T>
 class strong_type {
-    T val_;
-
 public:
     constexpr strong_type() = default;
 
@@ -44,14 +43,17 @@ public:
     }
 
 public:
-    using underlying_type = T;
+    using value_type = std::remove_cv_t<T>;
 
 public:
     auto operator<=>(strong_type const&) const = default;
 
 public:
-    [[nodiscard]] constexpr const T& get() const { return val_; }
-    [[nodiscard]] constexpr operator T() const { return val_; }
+    [[nodiscard]] constexpr const value_type& get() const { return val_; }
+    [[nodiscard]] constexpr operator value_type() const { return val_; }
+
+private:
+    value_type val_;
 };
 
 template <typename T, typename uniqueTag, typename U>
