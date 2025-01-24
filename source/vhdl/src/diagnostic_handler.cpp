@@ -85,9 +85,13 @@ void diagnostic_handler<Iterator>::syntax_error(ast::position_tagged const& wher
     // the node must be tagged before
     cxx_assert(where_tag.is_tagged(), "Node not correct tagged");
 
+#if 0
+    // ToDo [XXX] fix position_cache::proxy::set_id(), current_file().id()
+    // on branch code-review-2024 removed 
     // The parser's position cache proxy is configured to have the same file id tagged as the node
     // holds. Probably somewhere forgotten position_proxy.set_id(where_tag.file_id) ??
-    cxx_assert(where_tag.file_id == current_file().id(), "unexpected file ID");
+    cxx_assert(current_file().id() == where_tag.file_id, "cache proxy file id different");
+#endif
 
     auto const where_range = current_file().position_of(where_tag);
 
@@ -110,14 +114,9 @@ void diagnostic_handler<Iterator>::syntax_error(ast::position_tagged const& wher
     ++context.errors();
 
 #if 0
-    // ToDo [XXX] position_cache::proxy::set_id() on branch code-review-2024 removed 
-    // -> check the intention here, since diagnostic_handler is created by proxy as ctor argument
-
-    // set the correct file name and contents by id from position cache proxy
-    current_file().set_id(
-        where_tag.file_id);
-#else
-    cxx_assert(current_file().id() == where_tag.file_id, "cache proxy id different");
+    // ToDo [XXX] fix position_cache::proxy::set_id(), current_file().id()
+    // on branch code-review-2024 removed 
+    cxx_assert(current_file().id() == where_tag.file_id, "cache proxy file id different");
 #endif
 
     constexpr auto syntax_error = diagnostic_context::failure_type::syntax;
@@ -128,7 +127,7 @@ void diagnostic_handler<Iterator>::syntax_error(ast::position_tagged const& wher
     set_source_snippet(diag_ctx, start_label);
     set_source_snippet(diag_ctx, end_label);  // FixMe [XXX] same function signature, how to diff?
 
-    diagnostic_printer diagnostic{ diag_ctx };
+    diagnostic_printer const diagnostic{ diag_ctx };
     os << diagnostic << '\n';
 }
 
@@ -147,7 +146,7 @@ void diagnostic_handler<Iterator>::error(iterator_type error_first,
     set_source_location(diag_ctx, error_first);
     set_source_snippet(diag_ctx, error_first, error_last);
 
-    diagnostic_printer diagnostic{ diag_ctx };
+    diagnostic_printer const diagnostic{ diag_ctx };
     os << diagnostic << '\n';
 }
 

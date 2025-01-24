@@ -262,6 +262,8 @@
         "__tree": "cpp",
         "__verbose_abort": "cpp",
         "expected": "cpp",
-        "cerrno": "cpp"
+        "cerrno": "cpp",
+        "text_encoding": "cpp",
+        "execution": "cpp"
     }
 }

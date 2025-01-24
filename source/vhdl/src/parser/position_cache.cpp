@@ -9,6 +9,6 @@
 namespace ibis::vhdl::parser {
 
 // Explicit template instantiation
-template class position_cache<parser::iterator_type>;
+// XXX template class position_cache<parser::iterator_type>;
 
 }  // namespace ibis::vhdl::parser

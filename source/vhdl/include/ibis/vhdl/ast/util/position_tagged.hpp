@@ -18,9 +18,6 @@ namespace ibis::vhdl::ast {
 /// Use this to annotate an AST with the iterator position. These ids are used
 /// as a key to the @ref position_cache and marks the start and end of an AST node.
 ///
-/// FixMe: Using the right approach with class and read-only access by function to member file_id
-/// and position_id the compile time of grammar.cpp increases dramatically. Maybe due to use of
-/// opaque type strong::type??
 class position_tagged {
     using underlying_type = std::size_t;
 

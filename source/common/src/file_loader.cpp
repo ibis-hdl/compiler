@@ -15,10 +15,14 @@
 #include <ibis/util/compiler/warnings_on.hpp>
 
 #include <fstream>
+#include <sstream>
+#include <iostream>
 #include <format>
 #include <map>
-#include <sstream>
+#include <vector>
 #include <utility>
+#include <string>
+#include <iterator>
 #include <string_view>
 #include <filesystem>
 #include <chrono>
@@ -80,7 +84,7 @@ bool file_loader::unique_files(std::vector<fs::path> const& fs_path_list) const
     };
 
     auto const print_duplicates = [&](auto const& canonical_filename) {
-        std::string_view delimiter{ "" };
+        std::string_view delimiter{ "" };  // NOLINT(readability-redundant-string-init)
         for (auto const& filename : fs_path_list) {
             if (canonical(filename) == canonical_filename) {
                 os << std::format("{}'{}'", std::exchange(delimiter, ", "), filename.string());
@@ -100,7 +104,7 @@ bool file_loader::unique_files(std::vector<fs::path> const& fs_path_list) const
         ++occurrence[canonical(filename)];
     }
 
-    for (auto const& [filename, count] : occurrence) {  // NOLINT(readability-use-anyofallof)
+    for (auto const& [filename, count] : occurrence) {  // _NOLINT(std::ranges::any_of)
 
         if (count > 1) {
             if (!quiet) {
@@ -123,7 +127,8 @@ std::expected<std::string, std::error_code> file_loader::read_file(fs::path cons
     std::ifstream ifs{ filename, std::ios::in | std::ios::binary };
 
     if (!ifs.is_open()) {
-        std::error_code const ec{ errno, std::generic_category() };
+        std::error_code const ec{ errno, std::iostream_category() };
+        // ToDo: replace *all* if(!quiet) { ... } with single report_verbose_error() member
         if (!quiet) {
             std::cout << format(translate("Error opening file \"{1}\" ({2})"))  // --
                              % filename % ec.message();
@@ -135,7 +140,7 @@ std::expected<std::string, std::error_code> file_loader::read_file(fs::path cons
     std::string contents{ std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>() };
 
     if (ifs.fail() && !ifs.eof()) {
-        std::error_code const ec{ errno, std::generic_category() };
+        std::error_code const ec{ errno, std::iostream_category() };
         if (!quiet) {
             std::cout << format(translate("Error reading file \"{1}\" ({2})"))  // --
                              % filename % ec.message();

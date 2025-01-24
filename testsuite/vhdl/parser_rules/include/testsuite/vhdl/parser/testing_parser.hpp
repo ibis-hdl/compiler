@@ -36,25 +36,30 @@ struct testing_parser {
     std::tuple<bool, std::string> operator()(std::string_view input, ParserType const &parser_rule,
                                              fs::path const &filename = "", bool full_match = true)
     {
-        parser::position_cache<parser::iterator_type> position_cache;
-        auto position_cache_proxy =
-            position_cache.add_file(filename.generic_string() + ".input", input);
+        using iterator_type = parser::iterator_type;
+
+        ibis::util::file_mapper file_mapper{};
+        auto const file_id = file_mapper.add_file(filename.generic_string() + ".input", input);
+
+        parser::position_cache<iterator_type> position_cache{ file_mapper };
+        auto position_proxy = position_cache.get_proxy(file_id);  // FixMe: 2 copies required
 
         btt::output_test_stream output;
         parser::context ctx;
 
-        parser::diagnostic_handler_type diagnostic_handler{ output, ctx, position_cache_proxy };
+        parser::diagnostic_handler_type diagnostic_handler{ output, ctx,
+                                                            position_cache.get_proxy(file_id) };
 
         // clang-format off
         auto const parser =
-            x3::with<parser::position_cache_tag>(std::ref(position_cache_proxy))[
+            x3::with<parser::position_cache_tag>(std::ref(position_proxy))[
                 x3::with<parser::diagnostic_handler_tag>(std::ref(diagnostic_handler))[
                     parser_rule
                 ]
             ];
         // clang-format on
 
-        auto [iter, end] = position_cache_proxy.file_contents_range();
+        auto [iter, end] = position_proxy.file_contents_range();  // FixMe move to fixture
 
         // using different iterator_types causes linker errors, see e.g.
         // [linking errors while separate parser using boost spirit x3](

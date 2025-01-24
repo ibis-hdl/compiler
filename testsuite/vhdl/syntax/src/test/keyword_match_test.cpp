@@ -41,17 +41,22 @@ BOOST_DATA_TEST_CASE(keyword_ok,                                                
                      utf_data::make_delayed<testsuite::vhdl::syntax::dataset>("keyword_ok"),  // --
                      input, expected, test_case_name)
 {
+    using iterator_type = parser::iterator_type;
+
     btt::output_test_stream os;
-    parser::position_cache<parser::iterator_type> position_cache;
     ast::design_file design_file;
 
-    auto position_cache_proxy = position_cache.add_file(test_case_name, input);
-
     {
+        ibis::util::file_mapper file_mapper{};
+        auto const file_id = file_mapper.add_file(test_case_name, input);
+
+        parser::position_cache<iterator_type> position_cache{ file_mapper };
+        auto position_proxy = position_cache.get_proxy(file_id);
+
         parser::parse parse{ os };
         parser::context ctx;
 
-        bool const parse_ok = parse(position_cache_proxy, ctx, design_file);
+        bool const parse_ok = parse(std::move(position_proxy), ctx, design_file);
         if (!parse_ok) {
             std::cout << os.str() << std::endl;
         }
@@ -60,9 +65,15 @@ BOOST_DATA_TEST_CASE(keyword_ok,                                                
     }
 
     {
+        ibis::util::file_mapper file_mapper{};
+        auto const file_id = file_mapper.add_file(test_case_name, input);
+
+        parser::position_cache<iterator_type> position_cache{ file_mapper };
+        auto position_proxy = position_cache.get_proxy(file_id);
+
         analyze::context ctx;
         analyze::diagnostic_handler<parser::iterator_type> diagnostic_handler{
-            os, ctx, position_cache_proxy
+            os, ctx, std::move(position_proxy)
         };
         analyze::syntax_checker syntax_check{ os, ctx, diagnostic_handler };
 
@@ -89,17 +100,22 @@ BOOST_DATA_TEST_CASE(
     utf_data::make_delayed<testsuite::vhdl::syntax::dataset>("keyword_mismatch"),  // --
     input, expected, test_case_name)
 {
+    using iterator_type = parser::iterator_type;
+
     btt::output_test_stream os;
-    parser::position_cache<parser::iterator_type> position_cache;
     ast::design_file design_file;
 
-    auto position_cache_proxy = position_cache.add_file(test_case_name, input);
-
     {
+        ibis::util::file_mapper file_mapper{};
+        auto const file_id = file_mapper.add_file(test_case_name, input);
+
+        parser::position_cache<iterator_type> position_cache{ file_mapper };
+        auto position_proxy = position_cache.get_proxy(file_id);
+
         parser::parse parse{ os };
         parser::context ctx;
 
-        bool const parse_ok = parse(position_cache_proxy, ctx, design_file);
+        bool const parse_ok = parse(std::move(position_proxy), ctx, design_file);
         if (!parse_ok) {
             std::cout << os.str() << std::endl;
         }
@@ -108,9 +124,15 @@ BOOST_DATA_TEST_CASE(
     }
 
     {
+        ibis::util::file_mapper file_mapper{};
+        auto const file_id = file_mapper.add_file(test_case_name, input);
+
+        parser::position_cache<iterator_type> position_cache{ file_mapper };
+        auto position_proxy = position_cache.get_proxy(file_id);
+
         analyze::context ctx;
         analyze::diagnostic_handler<parser::iterator_type> diagnostic_handler{
-            os, ctx, position_cache_proxy
+            os, ctx, std::move(position_proxy)
         };
         analyze::syntax_checker syntax_check{ os, ctx, diagnostic_handler };
 

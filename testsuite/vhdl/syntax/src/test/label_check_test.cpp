@@ -39,17 +39,22 @@ BOOST_DATA_TEST_CASE(labels_ok,                                                 
                      utf_data::make_delayed<testsuite::vhdl::syntax::dataset>("labels_ok"),  // --
                      input, expected, test_case_name)
 {
-    btt::output_test_stream os;
-    parser::position_cache<parser::iterator_type> position_cache;
-    ast::design_file design_file;
+    using iterator_type = parser::iterator_type;
 
-    auto position_cache_proxy = position_cache.add_file(test_case_name, input);
+    ibis::util::file_mapper file_mapper{};
+    auto const file_id = file_mapper.add_file(test_case_name, input);
+
+    parser::position_cache<iterator_type> position_cache{ file_mapper };
+    auto position_proxy = position_cache.get_proxy(file_id);  // FixMe: 2 copies required
+
+    btt::output_test_stream os;
+    ast::design_file design_file;
 
     {
         parser::parse parse{ os };
         parser::context ctx;
 
-        bool const parse_ok = parse(position_cache_proxy, ctx, design_file);
+        bool const parse_ok = parse(std::move(position_proxy), ctx, design_file);
 
         BOOST_TEST_REQUIRE(parse_ok);
     }
@@ -57,7 +62,7 @@ BOOST_DATA_TEST_CASE(labels_ok,                                                 
     {
         analyze::context ctx;
         analyze::diagnostic_handler<parser::iterator_type> diagnostic_handler{
-            os, ctx, position_cache_proxy
+            os, ctx, position_cache.get_proxy(file_id)
         };
         analyze::syntax_checker syntax_check{ os, ctx, diagnostic_handler };
 
@@ -86,17 +91,22 @@ BOOST_DATA_TEST_CASE(
     utf_data::make_delayed<testsuite::vhdl::syntax::dataset>("label_mismatch"),  // --
     input, expected, test_case_name)
 {
-    btt::output_test_stream os;
-    parser::position_cache<parser::iterator_type> position_cache;
-    ast::design_file design_file;
+    using iterator_type = parser::iterator_type;
 
-    auto position_cache_proxy = position_cache.add_file(test_case_name, input);
+    ibis::util::file_mapper file_mapper{};
+    auto const file_id = file_mapper.add_file(test_case_name, input);
+
+    parser::position_cache<iterator_type> position_cache{ file_mapper };
+    auto position_proxy = position_cache.get_proxy(file_id);  // FixMe: 2 copies required
+
+    btt::output_test_stream os;
+    ast::design_file design_file;
 
     {
         parser::parse parse{ os };
         parser::context ctx;
 
-        bool const parse_ok = parse(position_cache_proxy, ctx, design_file);
+        bool const parse_ok = parse(std::move(position_proxy), ctx, design_file);
 
         BOOST_TEST_REQUIRE(parse_ok);
     }
@@ -104,7 +114,7 @@ BOOST_DATA_TEST_CASE(
     {
         analyze::context ctx;
         analyze::diagnostic_handler<parser::iterator_type> diagnostic_handler{
-            os, ctx, position_cache_proxy
+            os, ctx, position_cache.get_proxy(file_id)
         };
         analyze::syntax_checker syntax_check{ os, ctx, diagnostic_handler };
 

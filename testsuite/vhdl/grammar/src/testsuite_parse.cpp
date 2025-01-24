@@ -20,15 +20,19 @@ using namespace ibis;
 bool testsuite_parse::operator()(std::string_view contents, ast::design_file& design_file)
 {
     bool parse_ok = false;
+    using iterator_type = parser::iterator_type;
 
     try {
-        vhdl::parser::position_cache<parser::iterator_type> position_cache;
+        ibis::util::file_mapper file_mapper{};
+        auto const file_id = file_mapper.add_file(filename.generic_string(), contents);
+
+        parser::position_cache<iterator_type> position_cache{ file_mapper };
+        auto position_proxy = position_cache.get_proxy(file_id);
+
         vhdl::parser::parse parse{ os };
         vhdl::parser::context ctx;
 
-        auto position_cache_proxy = position_cache.add_file(filename.generic_string(), contents);
-
-        parse_ok = parse(position_cache_proxy, ctx, design_file);
+        parse_ok = parse(std::move(position_proxy), ctx, design_file);
 
         using vhdl::failure_status;
 

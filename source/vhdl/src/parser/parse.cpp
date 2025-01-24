@@ -38,9 +38,10 @@ BOOST_SPIRIT_DECLARE(design_file_type)
 
 namespace ibis::vhdl::parser {
 
-bool parse::operator()(position_cache<parser::iterator_type>::proxy& position_cache_proxy,
+bool parse::operator()(position_cache<parser::iterator_type>::proxy&& position_cache_proxy,
                        parser::context& ctx, ast::design_file& design_file)
 {
+    // ToDo Fix/unify constructor signature (e.g. parse()) -> (os, proxy, ctx)
     using vhdl::parser::iterator_type;
 
     static_assert(
@@ -48,7 +49,9 @@ bool parse::operator()(position_cache<parser::iterator_type>::proxy& position_ca
                           typename std::iterator_traits<parser::iterator_type>::iterator_category>,
         "iterator type must be of multi-pass iterator");
 
-    parser::diagnostic_handler_type diagnostic_handler{ os, ctx, position_cache_proxy };
+    parser::diagnostic_handler_type diagnostic_handler{ os, ctx, std::move(position_cache_proxy) };
+
+    // FixMe [XXX] Urgent - x3::with<> reference to stolen position_cache_proxy
 
     // clang-format off
     auto const parser =

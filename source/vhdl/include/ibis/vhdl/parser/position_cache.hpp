@@ -5,7 +5,9 @@
 
 #pragma once
 
+#include <ibis/util/file_mapper.hpp>
 #include <ibis/vhdl/ast/util/position_tagged.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
 #include <ibis/vhdl/parser/iterator_type.hpp>
 
 #include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
@@ -16,6 +18,8 @@
 #include <tuple>
 #include <type_traits>
 #include <vector>
+#include <functional>
+#include <utility>
 #include <cassert>
 
 namespace ibis::vhdl::parser {
@@ -36,40 +40,41 @@ struct position_cache_tag;  // IWYU pragma: keep
 ///
 /// @note parts of source is based on [../x3/support/utility/error_reporting.hpp](
 /// https://github.com/boostorg/spirit/blob/develop/include/boost/spirit/home/x3/support/utility/error_reporting.hpp)
+/// and [../x3/support/ast/position_tagged.hpp](
+/// https://github.com/boostorg/spirit/blob/develop/include/boost/spirit/home/x3/support/ast/position_tagged.hpp)
 ///
+// ToDo For historical and convenience reasons the API acts for file_mapper and position_cache,
+// fix it later - move it to future vhdl_global_context, accessible via x3::which[] or
+// boost::parser::global()
 template <typename IteratorT>
 class position_cache {
 public:
-    using iterator_type = IteratorT;
+    using iterator_type = std::remove_cv_t<IteratorT>;
     using range_type = boost::iterator_range<iterator_type>;
-    using position_registry_type = std::vector<range_type>;
-
-    using file_id_type = ast::position_tagged::file_id_type;
+    using file_id_type = vhdl::ast::position_tagged::file_id_type;
+    using position_id_type = vhdl::ast::position_tagged::position_id_type;
 
 private:
-    struct file_reg_entry {
-        file_reg_entry() = default;
-        file_reg_entry(std::string_view filename_, std::string&& contents_)
-            : filename{ filename_ }
-            , contents{ std::move(contents_) }
-        {
-        }
-        std::string filename;  // Todo Check on use of fs::path as filename argument
-        std::string contents;
-    };
-    using file_registry_type = std::vector<file_reg_entry>;
+    static constexpr auto MAX_ID = ast::position_tagged::MAX_POSITION_ID;
 
 public:
-    class proxy;
+    class proxy;  // FixMe XXX rename current_file(_proxy)
 
 public:
-    position_cache() = default;
+    position_cache(std::reference_wrapper<util::file_mapper> file_mapper_,
+                   std::size_t mem_reserve = 4096)
+        : file_mapper{ file_mapper_ }
+    {
+        position_registry.reserve(mem_reserve);
+    }
+
     ~position_cache() = default;
 
+    position_cache(position_cache&&) = default;
+    position_cache& operator=(position_cache&&) = default;
+
     position_cache(position_cache const&) = delete;
-    position_cache(position_cache&&) = delete;
     position_cache& operator=(position_cache const&) = delete;
-    position_cache& operator=(position_cache&&) = delete;
 
 public:
     ///
@@ -80,31 +85,34 @@ public:
     ///
     proxy get_proxy(file_id_type file_id);
 
-    std::size_t file_count() const { return file_registry.size(); }
+public:
     std::size_t position_count() const { return position_registry.size(); }
 
 public:
+    std::size_t file_count() const { return file_mapper.get().file_count(); }
+
     ///
-    /// Maps a filename to contents.
+    /// Get the file name.
     ///
-    /// @param filename The file name as is it's shown e.g. by the error handler
-    /// @param contents String holding the file contents
-    /// @return A proxy object which identifies the pair of 'filename' and 'contents' which
-    /// can be referred later.
+    /// @param file_id ID of actually processed file.
+    /// @return The filename as string view.
     ///
-    proxy add_file(std::string_view filename, std::string&& contents)
+    std::string_view file_name(file_id_type file_id) const
     {
-        file_id_type file_id{ file_registry.size() };
-        file_registry.emplace_back(filename, std::move(contents));
-        return get_proxy(file_id);
+        assert(file_mapper.get().valid_id(file_id) && "file_id out of range!");
+        return file_mapper.get().file_name(file_id);
     }
 
     ///
-    /// @overload proxy add_file(std::string_view filename, std::string&& contents)
+    /// Get the file contents.
     ///
-    proxy add_file(std::string_view filename, std::string_view contents)
+    /// @param file_id ID of actually processed file.
+    /// @return A string view representing of the file contents.
+    ///
+    std::string_view file_contents(file_id_type file_id) const
     {
-        return add_file(filename, std::string{ contents });
+        assert(file_mapper.get().valid_id(file_id) && "file_id out of range!");
+        return file_mapper.get().file_contents(file_id);
     }
 
 public:
@@ -123,44 +131,22 @@ public:
     void annotate(file_id_type file_id, NodeT& node, iterator_type first, iterator_type last)
     {
         if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
-            // std::size_t size isn't enough?, this shouldn't never happen
-            assert(position_registry.size() < ast::position_tagged::MAX_POSITION_ID &&
+            // ToDo [C++26] use std::format to print the max ID
+            assert(std::cmp_less(position_registry.size(), MAX_ID) &&
                    "Insufficient range of numeric IDs for AST tagging");
 
             node.file_id = file_id;
-            node.position_id = position_registry.size();
+            node.position_id = next_id();
+            // ToDo OOM error handling (scope_exit would be overkill)
             position_registry.emplace_back(first, last);
         }
         else {
             // ignored since isn't ast::position_tagged derived
+            // ToDo: Consider about handling annotating untagged node, nothings, logging, abort()?
         }
     }
 
 public:
-    ///
-    /// Get the file name.
-    ///
-    /// @param file_id ID of actually processed file.
-    /// @return The filename as string view.
-    ///
-    std::string_view file_name(file_id_type file_id) const
-    {
-        assert(value_of(file_id) < file_registry.size() && "file_id out of range!");
-        return file_registry[file_id].filename;
-    }
-
-    ///
-    /// Get the file contents.
-    ///
-    /// @param file_id ID of actually processed file.
-    /// @return A string view representing of the file contents.
-    ///
-    std::string_view file_contents(file_id_type file_id) const
-    {
-        assert(value_of(file_id) < file_registry.size() && "file_id out of range!");
-        return file_registry[file_id].contents;
-    }
-
     ///
     /// Extract the annotated iterator range from AST tagged node.
     ///
@@ -169,11 +155,26 @@ public:
     ///
     range_type position_of(ast::position_tagged const& node) const
     {
+        assert(valid_id(node.position_id) && "node position_id out of range!");
         return position_registry[node.position_id];
     }
 
 private:
-    file_registry_type file_registry;
+    ///
+    /// Check if a given position ID is valid
+    ///
+    bool valid_id(position_id_type id) const { return std::cmp_less(id, position_registry.size()); }
+
+    ///
+    /// Get an ID
+    ///
+    std::size_t next_id() const { return position_registry.size(); }
+
+private:
+    using position_registry_type = std::vector<range_type>;
+
+private:
+    std::reference_wrapper<util::file_mapper> file_mapper;
     position_registry_type position_registry;
 };
 
@@ -189,11 +190,20 @@ private:
 template <typename IteratorT>
 class position_cache<IteratorT>::proxy {
 public:
-    proxy(position_cache<IteratorT>& position_cache_, file_id_type file_id_)
-        : self{ position_cache_ }
-        , file_id{ file_id_ }
+    proxy(std::reference_wrapper<position_cache<IteratorT>> ref_self, file_id_type id)
+        : self{ ref_self }
+        , file_id{ id }
     {
     }
+
+    proxy() = delete;
+    ~proxy() = default;
+
+    proxy(proxy&&) = default;
+    proxy& operator=(proxy&&) = default;
+
+    proxy(proxy const&) = default;
+    proxy& operator=(proxy const&) = default;
 
 public:
     /// Get the id of current <file_name, contents>.
@@ -204,22 +214,22 @@ public:
     template <typename NodeT>
     void annotate(NodeT& node, iterator_type first, iterator_type last)
     {
-        self.annotate(file_id, node, first, last);
+        self.get().annotate(file_id, node, first, last);
     }
 
 public:
     /// annotated iterator range from AST tagged node.
     range_type position_of(ast::position_tagged const& node) const
     {
-        return self.position_of(node);
+        return self.get().position_of(node);
     }
 
-public:
+public:  // ToDo Fix alienated file_mapper API functions
     /// Get the file name.
-    std::string_view file_name() const { return self.file_name(file_id); }
+    std::string_view file_name() const { return self.get().file_name(file_id); }
 
     /// Get the file contents.
-    std::string_view file_contents() const { return self.file_contents(file_id); }
+    std::string_view file_contents() const { return self.get().file_contents(file_id); }
 
     /// Get the iterator (range) of the file contents.
     std::tuple<iterator_type, iterator_type> file_contents_range() const
@@ -229,14 +239,14 @@ public:
     }
 
 private:
-    position_cache<IteratorT>& self;
-    file_id_type mutable file_id;
+    std::reference_wrapper<position_cache<IteratorT>> self;
+    file_id_type file_id;
 };
 
 template <typename IteratorT>
 typename position_cache<IteratorT>::proxy position_cache<IteratorT>::get_proxy(file_id_type file_id)
 {
-    return proxy{ *this, file_id };
+    return proxy{ std::ref(*this), file_id };
 }
 
 }  // namespace ibis::vhdl::parser
@@ -244,6 +254,6 @@ typename position_cache<IteratorT>::proxy position_cache<IteratorT>::get_proxy(f
 namespace ibis::vhdl::parser {
 
 /// Explicit template instantiation declaration
-extern template class position_cache<parser::iterator_type>;
+// XXX extern template class position_cache<parser::iterator_type>;
 
 }  // namespace ibis::vhdl::parser

@@ -73,8 +73,9 @@ public:
     /// also [X3: error_handler should not skip whitespaces #670](
     ///   https://github.com/boostorg/spirit/pull/670)
     ///
+    // ToDo Fix/unify constructor signature (e.g. parse()) -> (os, proxy, ctx)
     explicit diagnostic_handler(std::ostream& os_, vhdl::context& context_,
-                                position_cache_proxy_type proxy_, std::size_t tabs = 4)
+                                position_cache_proxy_type&& proxy_, std::size_t tabs = 4)
         : os{ os_ }
         , context{ context_ }
         , position_cache_proxy{ std::move(proxy_) }
@@ -87,8 +88,8 @@ public:
     diagnostic_handler(diagnostic_handler const&) = delete;
     diagnostic_handler& operator=(diagnostic_handler const&) = delete;
 
-    diagnostic_handler(diagnostic_handler&&) = delete;
-    diagnostic_handler& operator=(diagnostic_handler&&) = delete;
+    diagnostic_handler(diagnostic_handler&&) = delete;             // ToDo move-ctor default
+    diagnostic_handler& operator=(diagnostic_handler&&) = delete;  // ToDo move-assign default
 
 public:
     ///

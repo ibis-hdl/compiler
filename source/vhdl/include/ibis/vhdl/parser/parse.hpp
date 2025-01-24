@@ -53,7 +53,7 @@ public:
     /// this is only required if you have recursive rules or need external linkage
     /// on rules (define them in separate translation units).
     ///
-    bool operator()(position_cache<parser::iterator_type>::proxy& position_cache_proxy,
+    bool operator()(position_cache<parser::iterator_type>::proxy&& position_cache_proxy,
                     parser::context& ctx, ast::design_file& design_file);
 
 private:
