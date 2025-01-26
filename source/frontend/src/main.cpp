@@ -38,6 +38,19 @@ namespace ast = ibis::vhdl::ast;
 
 using namespace ibis;
 
+// render the source with lines numbers (quick & dirty solution)
+void render_source(std::string const& contents)
+{
+    std::istringstream iss(contents);
+    auto line_no{ 1UL };
+    std::cout << std::format("{:-^80}\n", " input ");
+    for (std::string line; std::getline(iss, line, '\n');) {
+        using ibis::vhdl::number_gutter;
+        std::cout << std::format("{}| {}\n", number_gutter{ line_no++ }, line);
+    }
+    std::cout << std::format("{:-^80}\n", "");
+}
+
 ///
 /// @brief The App, used as test driver at this state.
 ///
@@ -47,6 +60,8 @@ using namespace ibis;
 ///
 int main(int argc, const char* argv[])
 {
+    using iterator_type = parser::iterator_type;
+
     try {
         ibis::frontend::init init(argc, argv);
 
@@ -64,10 +79,10 @@ int main(int argc, const char* argv[])
          * Quick & Dirty main() function to test the parser from command line
          */
 
-        // instantiate functions for parsing outside of hdl-files loop
+        // instantiate functions required for parsing inside hdl-files loop
         util::file_loader file_reader{ std::cerr };
-        util::file_mapper file_mapper;
-        parser::position_cache<parser::iterator_type> position_cache(file_mapper);
+        util::file_mapper file_mapper{};
+        parser::position_cache<iterator_type> position_cache{};
         parser::parse parse{ std::cout };
         parser::context ctx;
 
@@ -75,9 +90,9 @@ int main(int argc, const char* argv[])
         for (auto const& child : settings::instance().get_child("hdl-files")) {
             std::string_view const hdl_file = child.second.data();
 
-            auto contents = file_reader.read_file(hdl_file);
-            if (!contents) {
-                auto const ec = contents.error();
+            auto const file_expected = file_reader.read_file(hdl_file);
+            if (!file_expected) {
+                auto const ec = file_expected.error();
                 ibis::error(format(translate("Error loading file \"{1}\" ({2})"))  // --
                             % hdl_file % ec.message());
                 return EXIT_FAILURE;
@@ -86,24 +101,15 @@ int main(int argc, const char* argv[])
                 ibis::note((format(translate("processing: {1}")) % hdl_file));
             }
 
-            {
-                // render the source with lines numbers (quick & dirty solution)
-                std::istringstream iss(contents.value());
-                auto line_no{ 1UL };
-                std::cout << std::format("{:-^80}\n", " input ");
-                for (std::string line; std::getline(iss, line, '\n');) {
-                    using ibis::vhdl::number_gutter;
-                    std::cout << std::format("{}| {}\n", number_gutter{ line_no++ }, line);
-                }
-                std::cout << std::format("{:-^80}\n", "");
-            }
+            auto file_contents{ file_expected.value() };
+
+            render_source(file_contents);
 
             // prepare to parse
-            auto const file_id = file_mapper.add_file(hdl_file, contents.value());
-            auto position_cache_proxy = position_cache.get_proxy(file_id);
+            auto current_file = file_mapper.add_file(hdl_file, std::move(file_contents));
             ast::design_file design_file;
 
-            parse(std::move(position_cache_proxy), ctx, design_file);
+            parse(std::move(current_file), position_cache, ctx, design_file);
 
             if (!quiet) {
                 ast::printer ast_printer{ std::cout };

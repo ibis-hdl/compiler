@@ -91,7 +91,7 @@ BOOST_DATA_TEST_CASE(decimal_literal_integer, utf_data::make(dec_int_lit) ^ dec_
     ibis::util::file_mapper file_mapper{};
     auto const file_id = file_mapper.add_file("<decimal_literal>", literal);
 
-    parser::position_cache<iterator_type> position_cache{ file_mapper };
+    parser::position_cache<iterator_type> position_cache{};
     auto position_proxy = position_cache.get_proxy(file_id);
 
     btt::output_test_stream os;
@@ -131,7 +131,7 @@ BOOST_AUTO_TEST_CASE(decimal_literal_uint64max_ovrflw)
     ibis::util::file_mapper file_mapper{};
     auto const file_id = file_mapper.add_file("<decimal_literal>", literal);
 
-    parser::position_cache<iterator_type> position_cache{ file_mapper };
+    parser::position_cache<iterator_type> position_cache{};
     auto position_proxy = position_cache.get_proxy(file_id);
 
     btt::output_test_stream os;
@@ -213,7 +213,7 @@ BOOST_DATA_TEST_CASE(decimal_literal_real, utf_data::make(dec_real_lit) ^ dec_re
     ibis::util::file_mapper file_mapper{};
     auto const file_id = file_mapper.add_file("<decimal_literal>", literal);
 
-    parser::position_cache<iterator_type> position_cache{ file_mapper };
+    parser::position_cache<iterator_type> position_cache{};
     auto position_proxy = position_cache.get_proxy(file_id);
 
     btt::output_test_stream os;

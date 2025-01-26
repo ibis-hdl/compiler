@@ -282,7 +282,7 @@ BOOST_AUTO_TEST_CASE(based_literal_ng)
     ibis::util::file_mapper file_mapper{};
     auto const file_id = file_mapper.add_file("<based_literal>", input);
 
-    parser::position_cache<iterator_type> position_cache{ file_mapper };
+    parser::position_cache<iterator_type> position_cache{};
     auto position_proxy = position_cache.get_proxy(file_id);  // FixMe: 2 copies required
 
     //auto& os = std::cout;

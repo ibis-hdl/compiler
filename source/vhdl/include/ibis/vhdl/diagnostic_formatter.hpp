@@ -37,7 +37,7 @@ struct spacer {
         : width{ width_ }
         , chr{ chr_sv.front() }
     {
-        // Can be disabled on Release build, no static_assert possible
+        // FixMe no way for static_assert?
         assert(chr_sv.size() == 1 && "spacer accept only single char string!");
     }
 

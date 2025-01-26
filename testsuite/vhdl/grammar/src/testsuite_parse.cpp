@@ -26,8 +26,8 @@ bool testsuite_parse::operator()(std::string_view contents, ast::design_file& de
         ibis::util::file_mapper file_mapper{};
         auto const file_id = file_mapper.add_file(filename.generic_string(), contents);
 
-        parser::position_cache<iterator_type> position_cache{ file_mapper };
-        auto position_proxy = position_cache.get_proxy(file_id);
+        parser::position_cache<iterator_type> position_cache{};
+        auto position_proxy = position_cache.annotator_for(file_id);
 
         vhdl::parser::parse parse{ os };
         vhdl::parser::context ctx;

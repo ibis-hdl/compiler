@@ -264,6 +264,7 @@
         "expected": "cpp",
         "cerrno": "cpp",
         "text_encoding": "cpp",
-        "execution": "cpp"
+        "execution": "cpp",
+        "__hash_table": "cpp"
     }
 }

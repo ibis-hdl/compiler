@@ -8,6 +8,7 @@
 #include <ibis/vhdl/diagnostic_printer.hpp>
 #include <ibis/vhdl/source_location.hpp>
 #include <ibis/vhdl/context.hpp>
+#include <ibis/util/get_iterator_pair.hpp>
 
 #include <ibis/vhdl/parser/iterator_type.hpp>  // for explicit template instantiation
 
@@ -93,7 +94,7 @@ void diagnostic_handler<Iterator>::syntax_error(ast::position_tagged const& wher
     cxx_assert(current_file().id() == where_tag.file_id, "cache proxy file id different");
 #endif
 
-    auto const where_range = current_file().position_of(where_tag);
+    auto const where_range = position_cache.get().position_of(where_tag);
 
     constexpr auto syntax_error = diagnostic_context::failure_type::syntax;
 
@@ -111,7 +112,7 @@ void diagnostic_handler<Iterator>::syntax_error(ast::position_tagged const& wher
     cxx_assert(start_label.is_tagged(), "Node/StartLabel not tagged");
     cxx_assert(end_label.is_tagged(), "Node/EndLabel not tagged");
 
-    ++context.errors();
+    ++context.get().errors();
 
 #if 0
     // ToDo [XXX] fix position_cache::proxy::set_id(), current_file().id()
@@ -139,7 +140,7 @@ void diagnostic_handler<Iterator>::error(iterator_type error_first,
     using boost::locale::format;
     using boost::locale::translate;
 
-    ++context.errors();
+    ++context.get().errors();
 
     diagnostic_context diag_ctx{ err_type, error_message };
 
@@ -157,8 +158,7 @@ template <typename Iterator>
 source_location diagnostic_handler<Iterator>::get_source_location(iterator_type error_pos) const
 {
     auto const [line, column] = line_column_number(error_pos);
-    return source_location(  // --
-        current_file().file_name(), line, column);
+    return source_location(current_file.file_name(), line, column);
 }
 
 template <typename IteratorT>
@@ -176,7 +176,7 @@ std::tuple<std::size_t, std::size_t> diagnostic_handler<IteratorT>::line_column_
     std::size_t col_no = 1;
     char_type chr_prev = 0;
 
-    for (iterator_type iter = current_file().file_contents().begin(); iter != pos; ++iter) {
+    for (iterator_type iter = begin(current_file.file_contents()); iter != pos; ++iter) {
         auto const chr = *iter;
         switch (chr) {
             case '\n':                   // Line Feed (Linux, Mac OS X)
@@ -207,13 +207,16 @@ std::tuple<std::size_t, std::size_t> diagnostic_handler<IteratorT>::line_column_
 template <typename IteratorT>
 IteratorT diagnostic_handler<IteratorT>::get_line_start(iterator_type pos) const
 {
-    auto [begin, end] = current_file().file_contents_range();
+    using ibis::util::get_iterator_pair;
+
+    auto [begin, end] = get_iterator_pair(current_file.file_contents());
 
     // based on [.../x3/support/utility/error_reporting.hpp:get_line_start(...)](
     // https://github.com/boostorg/spirit/blob/master/include/boost/spirit/home/x3/support/utility/error_reporting.hpp)
     auto last_iter = begin;
 
     for (auto iter = begin; iter != pos;) {
+        // Windows ('\r\n')
         if (*iter == '\r' || *iter == '\n') {
             last_iter = ++iter;
         }
@@ -235,7 +238,7 @@ std::string_view diagnostic_handler<IteratorT>::current_line(iterator_type first
     // `x3::to_utf8(line)` above.
 
     auto line_end = first;
-    auto const end = current_file().file_contents().end();
+    auto const end = current_file.file_contents().end();
 
     while (line_end != end) {
         if (*line_end == '\r' || *line_end == '\n') {

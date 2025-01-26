@@ -202,7 +202,7 @@ BOOST_DATA_TEST_CASE(bit_string_literal, utf_data::make(bit_literal) ^ bit_decim
     ibis::util::file_mapper file_mapper{};
     auto const file_id = file_mapper.add_file("<bit_string_literal>", literal);
 
-    parser::position_cache<iterator_type> position_cache{ file_mapper };
+    parser::position_cache<iterator_type> position_cache{};
     auto position_proxy = position_cache.get_proxy(file_id);
 
     btt::output_test_stream os;
@@ -244,7 +244,7 @@ BOOST_DATA_TEST_CASE(bit_string_literal_uint64_ovflw, utf_data::make(literal_ovf
     ibis::util::file_mapper file_mapper{};
     auto const file_id = file_mapper.add_file("<bit_string_literal>", literal);
 
-    parser::position_cache<iterator_type> position_cache{ file_mapper };
+    parser::position_cache<iterator_type> position_cache{};
     auto position_proxy = position_cache.get_proxy(file_id);
 
     btt::output_test_stream os;

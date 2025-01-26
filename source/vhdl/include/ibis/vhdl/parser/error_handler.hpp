@@ -33,7 +33,7 @@ namespace ibis::vhdl::parser {
 /// @code
 /// context<
 ///     parser::diagnostic_handler_tag, ...,
-///     context<parser::position_cache_tag, ...,
+///     context<parser::annotator_tag, ...,
 ///         context<skipper_tag, ..., unused_type>
 ///     >
 /// >

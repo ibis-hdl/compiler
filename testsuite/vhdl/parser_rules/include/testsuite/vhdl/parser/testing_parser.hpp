@@ -41,7 +41,7 @@ struct testing_parser {
         ibis::util::file_mapper file_mapper{};
         auto const file_id = file_mapper.add_file(filename.generic_string() + ".input", input);
 
-        parser::position_cache<iterator_type> position_cache{ file_mapper };
+        parser::position_cache<iterator_type> position_cache{};
         auto position_proxy = position_cache.get_proxy(file_id);  // FixMe: 2 copies required
 
         btt::output_test_stream output;
@@ -52,7 +52,7 @@ struct testing_parser {
 
         // clang-format off
         auto const parser =
-            x3::with<parser::position_cache_tag>(std::ref(position_proxy))[
+            x3::with<parser::annotator_tag>(std::ref(position_proxy))[
                 x3::with<parser::diagnostic_handler_tag>(std::ref(diagnostic_handler))[
                     parser_rule
                 ]

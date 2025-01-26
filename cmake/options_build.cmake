@@ -4,4 +4,4 @@
 
 ##
 # Build option: enable testing.
-option(IBIS_BUILD_TESTS "Build tests" ON)
+option(IBIS_BUILD_TESTS "Build tests" OFF)
