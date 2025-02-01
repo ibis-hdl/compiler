@@ -2,6 +2,73 @@
 # developer (configurable) build options
 ## -----------------------------------------------------------------------------
 
+## ----------------------------------------------------------------------------
+# Developer Build Option: Use PCH
+option(IBIS_ENABLE_PCH
+
+    "Enable pre-compiled headers support for standard C++, Boost.Org and 3rd party headers."
+    OFF
+)
+mark_as_advanced(IBIS_ENABLE_PCH)
+
+
+## -----------------------------------------------------------------------------
+# Clang option to find headers which consumes compile time
+option(DEVELOPER_RUN_CLANG_TIME_TRACE
+    "What and where in my code things are slow to compile? Generate flame chart Tracing JSON."
+    OFF
+)
+mark_as_advanced(DEVELOPER_RUN_CLANG_TIME_TRACE)
+
+
+## -----------------------------------------------------------------------------
+# Sanitize support
+#
+
+# --- ThreadSanitizer ---
+option(IBIS_ENABLE_TSAN "Enable ThreadSanitizer builds." OFF)
+mark_as_advanced(IBIS_ENABLE_TSAN)
+
+# --- AddressSanitize ---
+option(IBIS_ENABLE_ASAN "Enable AddressSanitize builds." OFF)
+mark_as_advanced(IBIS_ENABLE_ASAN)
+
+# --- LeakSanitizer ---
+option(IBIS_ENABLE_LSAN "Enable LeakSanitizer builds." OFF)
+mark_as_advanced(IBIS_ENABLE_LSAN)
+
+# --- MemorySanitizer ---
+option(IBIS_ENABLE_MSAN "Enable MemorySanitizer builds." OFF)
+mark_as_advanced(IBIS_ENABLE_MSAN)
+
+# --- UndefinedBehavior ---
+option(IBIS_ENABLE_UBSAN "Enable UndefinedBehavior builds." OFF)
+mark_as_advanced(IBIS_ENABLE_UBSAN)
+
+
+## -----------------------------------------------------------------------------
+# Clang extra warnings
+#
+option(DEVELOPER_CLANG_WARN_EVERYTHING
+    "Use Clang compiler's -Weverything option"
+    OFF)
+mark_as_advanced(DEVELOPER_CLANG_WARN_EVERYTHING)
+
+
+
+## -----------------------------------------------------------------------------
+# Boost Spirit X3 BOOST_SPIRIT_X3_DEBUG (Dev Note: this affects also PCH)
+#
+option(DEVELOPER_BOOST_SPIRIT_X3_DEBUG
+    "Compile the parser with BOOST_SPIRIT_X3_DEBUG."
+    OFF)
+mark_as_advanced(DEVELOPER_BOOST_SPIRIT_X3_DEBUG)
+
+
+## -----------------------------------------------------------------------------
+## end of options
+## -----------------------------------------------------------------------------
+
 
 ## -----------------------------------------------------------------------------
 # Ninja Build using job pools
@@ -75,28 +142,6 @@ set_property(GLOBAL
 )
 
 
-##
-# Developer Build Option: Use PCH
-# Note: Don't put all headers into PCH, this may slow down
-# compilation time, especially on testsuite's vhdl_rules project. See also
-# DEVELOPER_RUN_CLANG_TIME_TRACE to check for headers to include in PCH
-# Note: See additional notes about MSVC issues at 'source/pch/CMakeLists.txt'
-option(IBIS_ENABLE_CXXSTD_PCH
-    "Enable pre-compiled headers support for standard C++, Boost.Org and 3rd party headers."
-    ON)
-mark_as_advanced(IBIS_ENABLE_CXXSTD_PCH)
-
-
-# Clang option to find headers which consumes compile time, best effort to optimize
-# PCH support.
-# [time-trace: timeline / flame chart profiler for Clang](
-#  https://aras-p.info/blog/2019/01/16/time-trace-timeline-flame-chart-profiler-for-Clang/)
-option(DEVELOPER_RUN_CLANG_TIME_TRACE
-    "What and where in my code things are slow to compile? Generate flame chart Tracing JSON."
-    OFF
-)
-mark_as_advanced(DEVELOPER_RUN_CLANG_TIME_TRACE)
-
 if (DEVELOPER_RUN_CLANG_TIME_TRACE)
     add_compile_options(
         "$<$<CXX_COMPILER_ID:Clang>:-ftime-trace>"
@@ -116,7 +161,7 @@ add_compile_options(
     # FixMe [CMake]: [-Wundefined-func-template], BUT see:
     #   https://www.reddit.com/r/cpp_questions/comments/8g5v3s/dealing_with_clang_warningerrors_re_static/
     # http://clang.llvm.org/docs/DiagnosticsReference.html
-    "$<$<CXX_COMPILER_ID:Clang>:-Wall;-Wextra;-Wpedantic;-Wno-c11-extensions;-Wconversion;-ftime-trace>"
+    "$<$<CXX_COMPILER_ID:Clang>:-Wall;-Wextra;-Wpedantic;-Wno-c11-extensions;-Wconversion>"
     # https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
     "$<$<CXX_COMPILER_ID:GNU>:-Wall;-Wextra;-Wpedantic;-Wconversion>"
     # https://docs.microsoft.com/en-us/cpp/build/reference/compiler-option-warning-level
@@ -168,39 +213,25 @@ add_compile_options(
 # FixMe [CMake]: Check and test flags, only added
 
 # --- ThreadSanitizer ---
-option(IBIS_ENABLE_TSAN "Enable ThreadSanitizer builds." OFF)
-mark_as_advanced(IBIS_ENABLE_TSAN)
-
 set(CMAKE_CXX_FLAGS_TSAN "-fsanitize=thread")
 set(CMAKE_LINK_FLAGS_TSAN "-fsanitize=thread")
 
 # --- AddressSanitize ---
-option(IBIS_ENABLE_ASAN "Enable AddressSanitize builds." OFF)
-mark_as_advanced(IBIS_ENABLE_ASAN)
-
 set(CMAKE_CXX_FLAGS_ASAN "-fsanitize=address;-fno-omit-frame-pointer")
 set(CMAKE_LINK_FLAGS_ASAN "-fsanitize=address;-fno-omit-frame-pointer")
 
 # --- LeakSanitizer ---
-option(IBIS_ENABLE_LSAN "Enable LeakSanitizer builds." OFF)
-mark_as_advanced(IBIS_ENABLE_LSAN)
-
 set(CMAKE_CXX_FLAGS_LSAN "-fsanitize=leak;-fno-omit-frame-pointer")
 set(CMAKE_LINK_FLAGS_LSAN "-fsanitize=leak;-fno-omit-frame-pointer")
 
 # --- MemorySanitizer ---
-option(IBIS_ENABLE_MSAN "Enable MemorySanitizer builds." OFF)
-mark_as_advanced(IBIS_ENABLE_MSAN)
-
 set(CMAKE_CXX_FLAGS_MSAN "-fsanitize=memory;-fno-omit-frame-pointer")
 set(CMAKE_LINK_FLAGS_MSAN "-fsanitize=memory;-fno-omit-frame-pointer")
 
 # --- UndefinedBehavior ---
-option(IBIS_ENABLE_UBSAN "Enable UndefinedBehavior builds." OFF)
-mark_as_advanced(IBIS_ENABLE_UBSAN)
-
 set(CMAKE_CXX_FLAGS_UBSAN "-fsanitize=undefined")
 set(CMAKE_LINK_FLAGS_UBSAN "-fsanitize=undefined")
+
 
 # FixMe [CMake]: Sanity checks
 # Clang: [Controlling Code Generation](https://github.com/llvm/llvm-project/blob/d480f968ad8b56d3ee4a6b6df5532d485b0ad01e/clang/docs/UsersManual.rst#id108)
@@ -233,11 +264,6 @@ add_link_options(
 #
 # May require special treatment for Clang to prevent contamination with pragmas
 # by using -Weverything
-option(DEVELOPER_CLANG_WARN_EVERYTHING
-    "Use Clang compiler's -Weverything option"
-    OFF)
-mark_as_advanced(DEVELOPER_CLANG_WARN_EVERYTHING)
-
 if(DEVELOPER_CLANG_WARN_EVERYTHING)
     # no interest in compatibility to old standards
     set(_warn_compat -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-c++98-c++11-c++14-compat)
@@ -269,11 +295,3 @@ add_compile_definitions(
     "$<$<PLATFORM_ID:Windows>:NOMINMAX;_CRT_SECURE_NO_WARNINGS>"
 )
 
-
-## -----------------------------------------------------------------------------
-# Boost Spirit X3 BOOST_SPIRIT_X3_DEBUG; Note, this affects also PCH
-#
-option(DEVELOPER_BOOST_SPIRIT_X3_DEBUG
-    "Compile the parser with BOOST_SPIRIT_X3_DEBUG."
-    OFF)
-mark_as_advanced(DEVELOPER_BOOST_SPIRIT_X3_DEBUG)

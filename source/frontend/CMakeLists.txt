@@ -52,7 +52,8 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     UNITY_BUILD_BATCH_SIZE 3
 )
 
-if(IBIS_ENABLE_CXXSTD_PCH)
+if(IBIS_ENABLE_PCH
+)
     target_precompile_headers(${PROJECT_NAME} REUSE_FROM ibis_pch)
 endif()
 

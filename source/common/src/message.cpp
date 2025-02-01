@@ -7,6 +7,7 @@
 #include <ibis/util/cxx_bug_fatal.hpp>
 
 #include <boost/locale/message.hpp>
+#include <boost/locale/format.hpp>
 
 #include <fmt/printf.h>
 #include <fmt/color.h>

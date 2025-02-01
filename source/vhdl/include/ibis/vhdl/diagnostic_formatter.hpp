@@ -10,7 +10,10 @@
 #include <ibis/util/const_value.hpp>
 #include <ibis/util/cxx_bug_fatal.hpp>
 
+#include <boost/locale/message.hpp>
+
 #include <format>
+#include <array>
 #include <string>
 #include <string_view>
 #include <cassert>

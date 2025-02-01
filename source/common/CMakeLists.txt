@@ -47,7 +47,8 @@ set_source_files_properties(
 )
 
 
-if(IBIS_ENABLE_CXXSTD_PCH)
+if(IBIS_ENABLE_PCH
+)
     target_precompile_headers(${PROJECT_NAME} REUSE_FROM ibis_pch)
 endif()
 
