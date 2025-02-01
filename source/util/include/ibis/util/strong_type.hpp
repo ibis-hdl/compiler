@@ -33,12 +33,12 @@ public:
     constexpr strong_type() = default;
 
     constexpr explicit strong_type(T const& val)
-        : val_{ val }
+        : value{ val }
     {
     }
 
     constexpr explicit strong_type(T&& val)
-        : val_{ std::move(val) }
+        : value{ std::move(val) }
     {
     }
 
@@ -49,11 +49,11 @@ public:
     auto operator<=>(strong_type const&) const = default;
 
 public:
-    [[nodiscard]] constexpr const value_type& get() const { return val_; }
-    [[nodiscard]] constexpr operator value_type() const { return val_; }
+    [[nodiscard]] constexpr const value_type& get() const { return value; }
+    [[nodiscard]] constexpr operator value_type() const { return value; }
 
 private:
-    value_type val_;
+    value_type value;
 };
 
 template <typename T, typename uniqueTag, typename U>

@@ -53,7 +53,7 @@ public:
     /// @return A proxy which identifies the tuple of 'filename' and 'contents' which
     /// can be referred later.
     ///
-    current_file add_file(std::string_view filename, std::string&& contents);
+    current_file add_file(std::string&& filename, std::string&& contents);
 
     ///
     /// @overload add_file(std::string_view filename, std::string&& contents)
@@ -125,9 +125,12 @@ private:
 /// Current file proxy, holding informations related to current_file_id
 ///
 class file_mapper::current_file {
+    std::reference_wrapper<file_mapper> file_mapper_ref;
+    file_id_type /* const */ current_file_id;
+
 public:
     current_file(std::reference_wrapper<file_mapper> ref_self, file_id_type id)
-        : self{ ref_self }
+        : file_mapper_ref{ ref_self }
         , current_file_id{ id }
     {
     }
@@ -144,21 +147,20 @@ public:
 
 public:
     file_id_type id() const { return current_file_id; }
-    std::string_view file_name() const { return self.get().file_name(this->id()); }
-    std::string_view file_contents() const { return self.get().file_contents(this->id()); }
-
-private:
-    std::reference_wrapper<file_mapper> self;
-    file_id_type /* const */ current_file_id;
+    std::string_view file_name() const { return file_mapper_ref.get().file_name(this->id()); }
+    std::string_view file_contents() const
+    {
+        return file_mapper_ref.get().file_contents(this->id());
+    }
 };
 
-inline file_mapper::current_file file_mapper::add_file(std::string_view filename,
+inline file_mapper::current_file file_mapper::add_file(std::string&& filename,
                                                        std::string&& contents)
 {
     file_id_type current_file_id{ next_id() };
 
     // ToDo OOM error handling (scope_exit would be overkill)
-    file_registry.emplace_back(filename, std::move(contents));
+    file_registry.emplace_back(std::move(filename), std::move(contents));
 
     return current_file(std::ref(*this), current_file_id);
 }
@@ -166,7 +168,7 @@ inline file_mapper::current_file file_mapper::add_file(std::string_view filename
 inline file_mapper::current_file file_mapper::add_file(std::string_view filename,
                                                        std::string_view contents)
 {
-    return add_file(filename, std::string{ contents });
+    return add_file(std::string{ filename }, std::string{ contents });
 }
 
 }  // namespace ibis::util

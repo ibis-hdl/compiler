@@ -12,6 +12,7 @@ namespace ibis::vhdl::analyze {
 ///
 /// Parser context, e.g. {error, warnings} counter
 ///
+// FixMe: To much context aliases - single use single on for all
 using context = vhdl::context;
 
 }  // namespace ibis::vhdl::analyze

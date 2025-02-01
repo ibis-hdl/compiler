@@ -52,6 +52,12 @@ public:
     using position_id_type = vhdl::ast::position_tagged::position_id_type;
 
 private:
+    using position_registry_type = std::vector<range_type>;
+
+private:
+    position_registry_type position_registry;
+
+private:
     static constexpr auto MAX_ID = ast::position_tagged::MAX_POSITION_ID;
 
 public:
@@ -95,7 +101,7 @@ public:
         return position_registry[node.position_id];
     }
 
-public:
+private:
     ///
     /// Check if a given position ID is valid
     ///
@@ -136,12 +142,6 @@ private:
     /// Get an ID
     ///
     std::size_t next_id() const { return position_registry.size(); }
-
-private:
-    using position_registry_type = std::vector<range_type>;
-
-private:
-    position_registry_type position_registry;
 };
 
 ///
@@ -153,9 +153,12 @@ private:
 ///
 template <typename IteratorT>
 class position_cache<IteratorT>::annotator {
+    std::reference_wrapper<position_cache<IteratorT>> position_cache_ref;
+    file_id_type current_file_id;
+
 public:
     annotator(std::reference_wrapper<position_cache<IteratorT>> ref_self, file_id_type id)
-        : self{ ref_self }
+        : position_cache_ref{ ref_self }
         , current_file_id{ id }
     {
     }
@@ -178,12 +181,8 @@ public:
     template <typename NodeT>
     void annotate(NodeT& node, iterator_type first, iterator_type last)
     {
-        self.get().annotate(current_file_id, node, first, last);
+        position_cache_ref.get().annotate(current_file_id, node, first, last);
     }
-
-private:
-    std::reference_wrapper<position_cache<IteratorT>> self;
-    file_id_type current_file_id;
 };
 
 template <typename IteratorT>

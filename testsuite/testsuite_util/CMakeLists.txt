@@ -20,6 +20,7 @@ add_library(testsuite::util ALIAS ${PROJECT_NAME})
 
 target_sources(${PROJECT_NAME}
     PRIVATE
+        src/testsuite_parser.cpp
         src/cli_args.cpp
         src/dataset_loader.cpp
         src/basic_failure_diagnostic_fixture.cpp
@@ -33,9 +34,10 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
-    ibis::util
-    Boost::headers
-    CLI11::CLI11
+        ibis::vhdl
+        ibis::util
+        Boost::headers
+        CLI11::CLI11
 )
 
 

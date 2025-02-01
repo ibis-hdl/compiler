@@ -12,6 +12,7 @@
 #include <ibis/vhdl/parser/position_cache.hpp>
 #include <ibis/vhdl/parser/diagnostic_handler.hpp>
 #include <ibis/vhdl/parser/context.hpp>
+#include <ibis/literals.hpp>
 
 namespace testsuite::util {
 
@@ -36,10 +37,12 @@ struct diagnostic_handler_fixture {
     using vhdl_context = parser::context;
 
     static constexpr vhdl_context::value_type const error_limit{ 10 };
-    static constexpr std::size_t const position_cache_memory_reserve{ 4096 };
 
-    diagnostic_handler_fixture()
-        : position_cache{ file_mapper, position_cache_memory_reserve }
+    diagnostic_handler_fixture() { BOOST_TEST_MESSAGE("setup diagnostic_handler_fixture"); }
+
+    diagnostic_handler_fixture(std::size_t position_cache_reserve, std::uint32_t error_limit_)
+        : position_cache{ position_cache_reserve }
+        , ctx{ error_limit_ }
     {
         BOOST_TEST_MESSAGE("setup diagnostic_handler_fixture");
     }
@@ -67,11 +70,11 @@ struct diagnostic_handler_fixture {
     std::string output() const { return os.str(); }
 
     /// The VHDL context
-    vhdl_context const& context() const { return ctx; }
+    vhdl_context& context() { return ctx; }
 
 private:
     ibis::util::file_mapper file_mapper{};
-    position_cache_type position_cache;
+    position_cache_type position_cache{ 4096 };
     btt::output_test_stream os{};
     vhdl_context ctx{ error_limit };
 };

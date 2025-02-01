@@ -16,6 +16,7 @@
 #include <ibis/util/file_mapper.hpp>
 #include <ibis/vhdl/parser/position_cache.hpp>
 #include <ibis/message.hpp>
+#include <ibis/literals.hpp>
 
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
@@ -61,6 +62,7 @@ void render_source(std::string const& contents)
 int main(int argc, const char* argv[])
 {
     using iterator_type = parser::iterator_type;
+    using namespace ibis::literals::memory;
 
     try {
         ibis::frontend::init init(argc, argv);
@@ -82,7 +84,7 @@ int main(int argc, const char* argv[])
         // instantiate functions required for parsing inside hdl-files loop
         util::file_loader file_reader{ std::cerr };
         util::file_mapper file_mapper{};
-        parser::position_cache<iterator_type> position_cache{};
+        parser::position_cache<iterator_type> position_cache{ 4_KiB };
         parser::parse parse{ std::cout };
         parser::context ctx;
 

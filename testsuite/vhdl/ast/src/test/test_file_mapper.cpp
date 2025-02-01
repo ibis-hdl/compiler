@@ -18,7 +18,7 @@ namespace valid_data {
 using namespace std::literals;
 
 // https://www.loremipsum.de/
-auto constexpr lorem_ipsum = R"(
+constexpr auto const lorem_ipsum = R"(
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut 
 labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo 
 dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit 
@@ -28,7 +28,7 @@ justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctu
 dolor sit amet.)"sv;
 
 // https://baconipsum.com/
-auto constexpr bacon_ipsum = R"(
+constexpr auto const bacon_ipsum = R"(
 Bacon ipsum dolor amet flank ham brisket, sirloin rump tail doner swine sausage beef pig drumstick 
 leberkas landjaeger. Ground round tongue fatback, sausage ball tip salami turducken biltong pork 
 belly tenderloin. Tongue filet mignon brisket, pork loin turkey venison kielbasa cow drumstick 
@@ -39,12 +39,101 @@ ball tip turducken boudin. Shankle jerky bacon brisket tongue turducken flank gr
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_SUITE(file_mapper)
 
+///
+/// Check basic functionality with current_file "proxy"
+///
 // clang-format off
-BOOST_AUTO_TEST_CASE(file_mapper,
+BOOST_AUTO_TEST_CASE(file_mapper_basic,
+                     *utf::label("ast")
                      *utf::label("parser")
                      *utf::label("tagging"))
 // clang-format on
 {
+    ibis::util::file_mapper file_mapper;
+    auto const filename{ "Lorem Ipsum" };
+
+    // use overload @fn add_file(std::string_view filename, std::string_view contents)
+    auto current_file = file_mapper.add_file(filename, valid_data::lorem_ipsum);
+
+    BOOST_TEST(file_mapper.file_count() == 1U);
+    BOOST_TEST((file_mapper.file_count() - 1) == current_file.id().get());
+    BOOST_TEST(file_mapper.valid_id(current_file.id()) == true);
+    BOOST_TEST(file_mapper.file_name(current_file.id()) == filename);
+    BOOST_TEST(file_mapper.file_contents(current_file.id()) == valid_data::lorem_ipsum,
+               btt::per_element());
+    // check correctness of current_file proxy
+    BOOST_TEST(current_file.file_name() == file_mapper.file_name(current_file.id()),
+               btt::per_element());
+    BOOST_TEST(current_file.file_contents() == file_mapper.file_contents(current_file.id()),
+               btt::per_element());
+    // check (range) iterators
+    BOOST_TEST(begin(current_file.file_contents()) == begin(valid_data::lorem_ipsum));
+    BOOST_TEST(end(current_file.file_contents()) == end(valid_data::lorem_ipsum));
+
+    // use move-sematic overload @fn add_file(std::string&& filename, std::string&& contents)
+    // with same filename and contents (for convenience)
+    current_file =
+        file_mapper.add_file(std::string{ filename }, std::string{ valid_data::lorem_ipsum });
+
+    BOOST_TEST(file_mapper.file_count() == 2U);
+    BOOST_TEST((file_mapper.file_count() - 1) == current_file.id().get());
+    BOOST_TEST(file_mapper.valid_id(current_file.id()) == true);
+    BOOST_TEST(file_mapper.file_name(current_file.id()) == filename);
+    BOOST_TEST(file_mapper.file_contents(current_file.id()) == valid_data::lorem_ipsum,
+               btt::per_element());
+    // check correctness of current_file proxy
+    BOOST_TEST(current_file.file_name() == file_mapper.file_name(current_file.id()),
+               btt::per_element());
+    BOOST_TEST(current_file.file_contents() == file_mapper.file_contents(current_file.id()),
+               btt::per_element());
+    // check (range) iterators
+    BOOST_TEST(begin(current_file.file_contents()) == begin(valid_data::lorem_ipsum));
+    BOOST_TEST(end(current_file.file_contents()) == end(valid_data::lorem_ipsum));
+}
+
+///
+/// Check functionality with two files
+///
+// clang-format off
+BOOST_AUTO_TEST_CASE(file_mapper_api,
+                     *utf::label("ast")
+                     *utf::label("parser")
+                     *utf::label("tagging"))
+// clang-format on
+{
+    ibis::util::file_mapper file_mapper;
+    auto const filename_lorem{ "Lorem Ipsum" };
+    auto const filename_bacon{ "Bacon Ipsum" };
+
+    // use overload @fn add_file(std::string_view filename, std::string_view contents)
+    auto lorem_ipsum = file_mapper.add_file(filename_lorem, valid_data::lorem_ipsum);
+    auto bacon_ipsum = file_mapper.add_file(filename_bacon, valid_data::bacon_ipsum);
+
+    BOOST_TEST(file_mapper.file_count() == 2U);
+
+    BOOST_TEST(file_mapper.valid_id(lorem_ipsum.id()) == true);
+    BOOST_TEST(file_mapper.file_name(lorem_ipsum.id()) == filename_lorem);
+    BOOST_TEST(file_mapper.file_contents(lorem_ipsum.id()) == valid_data::lorem_ipsum,
+               btt::per_element());
+
+    BOOST_TEST(file_mapper.valid_id(bacon_ipsum.id()) == true);
+    BOOST_TEST(file_mapper.file_name(bacon_ipsum.id()) == filename_bacon);
+    BOOST_TEST(file_mapper.file_contents(bacon_ipsum.id()) == valid_data::bacon_ipsum,
+               btt::per_element());
+
+    // check correctness of proxy and (range) iterators
+    BOOST_TEST(lorem_ipsum.file_name() == file_mapper.file_name(lorem_ipsum.id()),
+               btt::per_element());
+    BOOST_TEST(begin(lorem_ipsum.file_contents()) == begin(valid_data::lorem_ipsum));
+    BOOST_TEST(end(lorem_ipsum.file_contents()) == end(valid_data::lorem_ipsum));
+
+    BOOST_TEST(bacon_ipsum.file_name() == file_mapper.file_name(bacon_ipsum.id()),
+               btt::per_element());
+    BOOST_TEST(begin(bacon_ipsum.file_contents()) == begin(valid_data::bacon_ipsum));
+    BOOST_TEST(end(bacon_ipsum.file_contents()) == end(valid_data::bacon_ipsum));
+
+    // paranoid
+    BOOST_TEST(lorem_ipsum.file_contents() != bacon_ipsum.file_contents());
 }
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)

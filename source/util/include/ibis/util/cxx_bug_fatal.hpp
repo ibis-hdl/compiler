@@ -35,6 +35,8 @@ void assertion_failed_msg(const CharT* expr, const char msg[], std::source_locat
 
 }  // namespace ibis::util::detail
 
+// ToDo add format_string support for parametrized messages
+
 #define cxx_assert(condition, message)                                             \
     ((condition) ? ((void)0)                                                       \
                  : ::ibis::util::detail::assertion_failed_msg(#condition, message, \

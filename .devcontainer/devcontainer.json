@@ -46,6 +46,7 @@
 				"ms-vscode.cpptools-extension-pack",
 				"ms-python.python",
 				"github.vscode-github-actions",
+				"mhutchie.git-graph",
 				"streetsidesoftware.code-spell-checker",
 				"hbenl.vscode-test-explorer",
 				"matepek.vscode-catch2-test-adapter",

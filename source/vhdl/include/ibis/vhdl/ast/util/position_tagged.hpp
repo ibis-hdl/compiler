@@ -42,6 +42,7 @@ public:
 
 public:
     /// return true if the node is tagged, false otherwise.
+    // ToDo: Check/Consider, if assumption of is_tagged() is correct: both id are always tagged!
     bool is_tagged() const { return position_id != MAX_POSITION_ID && file_id != MAX_FILE_ID; }
 
 public:

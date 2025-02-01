@@ -9,6 +9,10 @@
 #include <ibis/vhdl/analyze/syntax.hpp>
 #include <ibis/vhdl/analyze/diagnostic_handler.hpp>
 #include <ibis/vhdl/analyze/context.hpp>
+#include <ibis/vhdl/analyze/context.hpp>
+#include <ibis/util/file_mapper.hpp>
+#include <ibis/vhdl/parser/position_cache.hpp>
+#include <ibis/vhdl/context.hpp>
 
 #include <testsuite/vhdl/syntax/failure_diagnostic_fixture.hpp>
 #include <testsuite/vhdl/syntax/dataset.hpp>
@@ -34,6 +38,8 @@ using testsuite::vhdl::syntax::failure_diagnostic_fixture;
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_FIXTURE_TEST_SUITE(syntax_check, failure_diagnostic_fixture)
 
+// ToDo Source same as label_match_test.cpp - unify test
+
 //
 // SUCCESS test case
 //
@@ -43,53 +49,45 @@ BOOST_DATA_TEST_CASE(keyword_ok,                                                
 {
     using iterator_type = parser::iterator_type;
 
-    btt::output_test_stream os;
+    ibis::util::file_mapper file_mapper{};
+    parser::position_cache<iterator_type> position_cache{};
+
+    auto current_file = file_mapper.add_file(test_case_name, input);
+
+    btt::output_test_stream output;
     ast::design_file design_file;
+    parser::context vhdl_ctx;
 
     {
-        ibis::util::file_mapper file_mapper{};
-        auto const file_id = file_mapper.add_file(test_case_name, input);
+        parser::parse parse{ output };
 
-        parser::position_cache<iterator_type> position_cache{};
-        auto position_proxy = position_cache.get_proxy(file_id);
+        bool const parse_ok = parse(std::move(current_file), position_cache, vhdl_ctx, design_file);
 
-        parser::parse parse{ os };
-        parser::context ctx;
-
-        bool const parse_ok = parse(std::move(position_proxy), ctx, design_file);
-        if (!parse_ok) {
-            std::cout << os.str() << std::endl;
-        }
-
-        BOOST_TEST_REQUIRE(parse_ok);
+        // syntactically correct
+        BOOST_TEST_REQUIRE(parse_ok == true);
+        BOOST_TEST_REQUIRE(vhdl_ctx.error_free() == true);
     }
 
     {
-        ibis::util::file_mapper file_mapper{};
-        auto const file_id = file_mapper.add_file(test_case_name, input);
-
-        parser::position_cache<iterator_type> position_cache{};
-        auto position_proxy = position_cache.get_proxy(file_id);
-
-        analyze::context ctx;
         analyze::diagnostic_handler<parser::iterator_type> diagnostic_handler{
-            os, ctx, std::move(position_proxy)
+            output, std::move(current_file), std::ref(position_cache), std::ref(vhdl_ctx)
         };
-        analyze::syntax_checker syntax_check{ os, ctx, diagnostic_handler };
+        analyze::syntax_checker syntax_check{ output, vhdl_ctx, diagnostic_handler };
 
         syntax_check(design_file);
 
-        bool const syntax_ok = ctx.error_free();
-        BOOST_TEST(syntax_ok);
+        BOOST_TEST(vhdl_ctx.error_free() == true);
     }
 
     if (!current_test_passing()) {
-        failure_closure(test_case_name, input, os.str());
+        // failure_closure(test_case_name, input, output.str());
         return;
     }
 
-    BOOST_TEST(os.str() == expected, btt::per_element());
-    failure_closure(test_case_name, input, expected, os.str());
+    // std::cout << "### output:\n" << os.str() << " -- -- -- -- -- -- -- -- -- -- -- -- -- --\n ";
+
+    BOOST_TEST(output.str() == expected, btt::per_element());
+    // failure_closure(test_case_name, input, expected, output.str());
 }
 
 //
@@ -102,53 +100,46 @@ BOOST_DATA_TEST_CASE(
 {
     using iterator_type = parser::iterator_type;
 
-    btt::output_test_stream os;
+    ibis::util::file_mapper file_mapper{};
+    parser::position_cache<iterator_type> position_cache{};
+
+    auto current_file = file_mapper.add_file(test_case_name, input);
+
+    btt::output_test_stream output;
     ast::design_file design_file;
+    parser::context vhdl_ctx;
 
     {
-        ibis::util::file_mapper file_mapper{};
-        auto const file_id = file_mapper.add_file(test_case_name, input);
+        parser::parse parse{ output };
 
-        parser::position_cache<iterator_type> position_cache{};
-        auto position_proxy = position_cache.get_proxy(file_id);
+        bool const parse_ok = parse(std::move(current_file), position_cache, vhdl_ctx, design_file);
 
-        parser::parse parse{ os };
-        parser::context ctx;
-
-        bool const parse_ok = parse(std::move(position_proxy), ctx, design_file);
-        if (!parse_ok) {
-            std::cout << os.str() << std::endl;
-        }
-
-        BOOST_TEST_REQUIRE(parse_ok);
+        // syntactically correct
+        BOOST_TEST_REQUIRE(parse_ok == true);
+        BOOST_TEST_REQUIRE(vhdl_ctx.error_free() == true);
     }
 
     {
-        ibis::util::file_mapper file_mapper{};
-        auto const file_id = file_mapper.add_file(test_case_name, input);
-
-        parser::position_cache<iterator_type> position_cache{};
-        auto position_proxy = position_cache.get_proxy(file_id);
-
-        analyze::context ctx;
         analyze::diagnostic_handler<parser::iterator_type> diagnostic_handler{
-            os, ctx, std::move(position_proxy)
+            output, std::move(current_file), std::ref(position_cache), std::ref(vhdl_ctx)
         };
-        analyze::syntax_checker syntax_check{ os, ctx, diagnostic_handler };
+        analyze::syntax_checker syntax_check{ output, vhdl_ctx, diagnostic_handler };
 
         syntax_check(design_file);
 
-        bool const syntax_ok = ctx.error_free();
-        BOOST_TEST(!syntax_ok);
+        BOOST_TEST(vhdl_ctx.error_free() == false);
     }
 
     if (!current_test_passing()) {
-        failure_closure(test_case_name, input, os.str());
+        // failure_closure(test_case_name, input, output.str());
         return;
     }
 
-    BOOST_TEST(os.str() == expected, btt::per_element());
-    failure_closure(test_case_name, input, expected, os.str());
+    // std::cout << "### output:\n" << output.str() << " -- -- -- -- -- -- -- -- -- -- -- -- -- --\n
+    // ";
+
+    BOOST_TEST(output.str() == expected, btt::per_element());
+    // failure_closure(test_case_name, input, expected, output.str());
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -55,6 +55,7 @@ auto const make_string_literal_from = [](std::string_view sv) {
 
 // clang-format off
 BOOST_AUTO_TEST_CASE(string_literal_formatter,  // test shall pass
+                     *utf::label("ast")
                      *utf::label("string_literal")
                      *utf::label("formatter"))
 // clang-format on
@@ -79,6 +80,7 @@ BOOST_AUTO_TEST_CASE(string_literal_formatter,  // test shall pass
 
 // clang-format off
 BOOST_AUTO_TEST_CASE(string_literal_raw_formatter,  // test shall pass
+                     *utf::label("ast")
                      *utf::label("string_literal")
                      *utf::label("formatter"))
 // clang-format on

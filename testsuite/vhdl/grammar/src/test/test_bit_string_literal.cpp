@@ -15,7 +15,7 @@
 #include <boost/test/unit_test_suite.hpp>  // BOOST_AUTO_TEST_CASE()
 #include <boost/test/tree/decorator.hpp>   // utf::label
 
-#include <testsuite/vhdl/grammar/testsuite_parse.hpp>
+#include <testsuite/testsuite_parser.hpp>
 #include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
 #include <format>
@@ -31,6 +31,8 @@ namespace valid_data {
 
 using numeric_base_specifier = ibis::vhdl::ast::bit_string_literal::numeric_base_specifier;
 using namespace std::literals::string_view_literals;
+
+// XXXX take the literals from testsuite / numeric_literals to check all valid digits and max
 
 // Valid input to test the grammar rule, no numeric conversion here.
 constexpr std::string_view const input = R"(
@@ -107,11 +109,11 @@ struct test_worker {
             print(node.identifier_list);
             os << "' of subtype '";
             print(node.subtype_indication);
-            os << "' with expr <";
+            os << "' with expr { ";
             if (node.expression) {
                 print(*node.expression);
             }
-            os << ">\n";
+            os << " }\n";
         }
     }
 
@@ -165,6 +167,8 @@ BOOST_AUTO_TEST_CASE(bit_string_literal__valid_test,    // test shall pass
     ast::design_file ast;
 
     BOOST_TEST(parse(input, ast) == true);
+
+    std::cout << parse.output() << '\n';
 
     verify(ast);
 }

@@ -60,7 +60,6 @@ bool parse::operator()(current_file_type&& current_file, position_cache_type& po
 
     // clang-format off
     auto const parser =
-    // FixMe: Rename annotator_tag to annotator_tag
         x3::with<parser::annotator_tag>(std::ref(ast_annotator))[
             x3::with<parser::diagnostic_handler_tag>(std::ref(diagnostic_handler))[
                 parser::grammar()
@@ -77,10 +76,10 @@ bool parse::operator()(current_file_type&& current_file, position_cache_type& po
     static_assert(std::is_same_v<decltype(iter), iterator_type>, "iterator types must be the same");
 
     auto const filename = current_file.file_name();
+    bool parse_ok = false;
 
     try {
-        bool const parse_ok =
-            x3::phrase_parse(iter, end, parser >> x3::eoi, parser::skipper, design_file);
+        parse_ok = x3::phrase_parse(iter, end, parser >> x3::eoi, parser::skipper, design_file);
 
         if (!parse_ok) {
             using boost::locale::format;
@@ -109,7 +108,7 @@ bool parse::operator()(current_file_type&& current_file, position_cache_type& po
         os << make_exception_description(filename);
     }
 
-    return false;
+    return parse_ok;
 }
 
 std::string parse::make_exception_description(std::exception const& exception,

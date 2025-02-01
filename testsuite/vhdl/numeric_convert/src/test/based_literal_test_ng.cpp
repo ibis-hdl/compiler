@@ -16,6 +16,7 @@
 #include <ibis/vhdl/parser/parse.hpp>
 #include <ibis/vhdl/ast.hpp>
 
+#include <testsuite/testsuite_parser.hpp>
 #include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
 #include <boost/test/unit_test.hpp>  // IWYU pragma: keep
@@ -263,7 +264,7 @@ private:
     converter_type convert_based;
 };
 
-using verifier_type = ast::basic_ast_walker<verify_worker<decltype(expect), false>>;
+using verifier_type = ast::basic_ast_walker<verify_worker<decltype(expect), false /* verbose */>>;
 
 } // namespace testsuite_data
 
