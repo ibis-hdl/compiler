@@ -54,15 +54,6 @@ public:
     {
     }
 
-    tagged_treshold_counter() = default;
-    ~tagged_treshold_counter() = default;
-
-    tagged_treshold_counter(tagged_treshold_counter&&) = default;
-    tagged_treshold_counter& operator=(tagged_treshold_counter&&) = default;
-
-    tagged_treshold_counter(tagged_treshold_counter const&) = delete;
-    tagged_treshold_counter& operator=(tagged_treshold_counter const&) = delete;
-
 public:
     ///
     /// prefix increment
@@ -81,9 +72,9 @@ public:
     ///
     tagged_treshold_counter operator++(int)
     {
-        tagged_treshold_counter result{ *this };
+        tagged_treshold_counter self{ *this };
         ++(*this);
-        return result;
+        return self;
     }
 
     ///

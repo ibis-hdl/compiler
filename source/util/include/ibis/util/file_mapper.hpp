@@ -29,7 +29,7 @@ private:
     struct entry {
         entry() = default;
         entry(std::string&& filename_, std::string&& contents_)
-            : filename{ filename_ }
+            : filename{ std::move(filename_) }
             , contents{ std::move(contents_) }
         {
         }

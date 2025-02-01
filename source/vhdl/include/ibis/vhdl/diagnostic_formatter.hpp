@@ -277,12 +277,12 @@ struct std::formatter<ibis::vhdl::issue_range<IteratorT>> {
             return std::format_to(ctx.out(), "{}", locator_symbol);
         }
 
-        return std::format_to(ctx.out(), "{}", spacer{ issue.width(), range_mark_symbol });
+        return std::format_to(ctx.out(), "{}", spacer{ issue.width(), squiggle_symbol });
     }
 
 private:
     static constexpr std::string_view locator_symbol{ "^" };
-    static constexpr std::string_view range_mark_symbol{ "~" };
+    static constexpr std::string_view squiggle_symbol{ "~" };
 };
 
 template <typename IteratorT>
