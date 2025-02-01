@@ -35,7 +35,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
         ibis::vhdl
-        ibis::util
+        ibis::common
         Boost::headers
         CLI11::CLI11
 )

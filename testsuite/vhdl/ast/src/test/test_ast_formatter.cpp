@@ -6,7 +6,7 @@
 #include <ibis/vhdl/ast/ast_formatter.hpp>
 #include <ibis/vhdl/ast/node/string_literal.hpp>
 
-// #include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test.hpp>
 #include <boost/test/tools/interface.hpp>  // BOOST_TEST()
 #include <boost/test/tools/context.hpp>    // BOOST_TEST_CONTEXT()
 #include <boost/test/unit_test_suite.hpp>  // BOOST_AUTO_TEST_CASE()

@@ -225,6 +225,7 @@ private:
     // up to 9'999 line numbers w/o problems
     static constexpr std::size_t const number_width{ 4 };
     // buffer size for void gutter template, MSVC `strlen` not constexpr???
+    // ToDo ... = number_width + strlen(" ") + 1;
     static constexpr std::size_t const BUF_SZ = number_width + std::string_view{ " " }.size() + 1;
     // limit to squeeze some more numbers out of the space/format
     static auto constexpr number_limit = pow(10, number_width);

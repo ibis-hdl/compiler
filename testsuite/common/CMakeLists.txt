@@ -4,7 +4,7 @@
 ## file: testsuite/util/CMakeLists.txt
 ################################################################################
 
-project(testrunner_util
+project(testrunner_common
     VERSION "${ibis_version}"
     DESCRIPTION "${ibis_description}"
     HOMEPAGE_URL "${ibis_homepage}"
@@ -18,7 +18,7 @@ message(STATUS
 add_executable(${PROJECT_NAME})
 
 
-add_test(NAME test_util
+add_test(NAME test_common
     COMMAND
         ${PROJECT_NAME} --log_level=error
 )
@@ -26,7 +26,7 @@ add_test(NAME test_util
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
-        ibis::util
+        ibis::common
         testsuite::util
         Boost::headers
         Boost::unit_test_framework

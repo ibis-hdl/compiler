@@ -10,6 +10,7 @@
 #include <array>
 #include <bitset>
 #include <chrono>
+#include <concepts>
 #include <filesystem>
 #include <format>
 #include <fstream>
@@ -21,6 +22,7 @@
 #include <limits>
 #include <locale>
 #include <optional>
+#include <ranges>
 #include <regex>
 #include <set>
 #include <sstream>
@@ -65,12 +67,3 @@
 #include <boost/spirit/home/x3/support/ast/variant.hpp>
 #include <boost/spirit/home/x3/support/traits/tuple_traits.hpp>
 #include <boost/spirit/home/x3/support/traits/is_variant.hpp>
-
-#include <boost/test/test_tools.hpp>
-#include <boost/test/unit_test_suite.hpp>
-#include <boost/test/results_collector.hpp>
-#include <boost/test/tools/output_test_stream.hpp>
-#include <boost/test/data/size.hpp>
-#include <boost/test/data/monomorphic.hpp>
-#include <boost/test/data/for_each_sample.hpp>
-#include <boost/test/utils/string_cast.hpp>

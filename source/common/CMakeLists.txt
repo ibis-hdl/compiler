@@ -21,10 +21,8 @@ add_library(ibis::common ALIAS ${PROJECT_NAME})
 
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
-        ibis::util
+        fmt::fmt    # FixMe [CMake]: Even not required, MSVC PCH errors due to /utf-8 compile flag
         Boost::headers
-    PRIVATE
-        # fmt::fmt
 )
 
 

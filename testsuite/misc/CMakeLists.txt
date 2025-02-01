@@ -27,6 +27,7 @@ target_link_libraries(${PROJECT_NAME}
         Boost::headers
         ibis::vhdl
         testsuite::util
+        Boost::unit_test_framework 
 )
 
 

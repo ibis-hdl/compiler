@@ -64,14 +64,13 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 ##
 # Sub projects
 add_subdirectory(source/pch)
-add_subdirectory(source/util)
 add_subdirectory(source/common)
 add_subdirectory(source/vhdl)
 add_subdirectory(source/frontend)
 add_subdirectory(l10n)
 if (IBIS_BUILD_TESTS)
     enable_testing()
-    add_subdirectory(testsuite/util)
+    add_subdirectory(testsuite/common)
     add_subdirectory(testsuite/misc)
     add_subdirectory(testsuite/testsuite_util)
     # ToDo consider (simpler) approach for testing as using the parser
