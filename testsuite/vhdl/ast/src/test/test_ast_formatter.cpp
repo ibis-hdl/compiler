@@ -14,6 +14,7 @@
 #include <boost/test/tools/output_test_stream.hpp>
 
 #include <format>
+#include <utility>
 #include <string_view>
 
 #include <testsuite/namespace_alias.hpp>
@@ -54,6 +55,7 @@ auto const make_string_literal_from = [](std::string_view sv) {
 
 // clang-format off
 BOOST_AUTO_TEST_CASE(string_literal_formatter,  // test shall pass
+                     *utf::label("ast")
                      *utf::label("string_literal")
                      *utf::label("formatter"))
 // clang-format on
@@ -62,8 +64,8 @@ BOOST_AUTO_TEST_CASE(string_literal_formatter,  // test shall pass
 
     btt::output_test_stream output;  // reused, flushed/cleared after each test
 
-    for (auto index{ 0U }; auto const& [literal, expected] : valid_data::gold_data) {
-        ast::string_literal const string_literal{ make_string_literal_from(literal) };
+    for (auto index{ 0U }; auto const& [input, expected] : valid_data::gold_data) {
+        ast::string_literal const string_literal{ make_string_literal_from(input) };
 
         BOOST_TEST_CONTEXT(">>> Test index at " << index << " <<<")
         {
@@ -78,6 +80,7 @@ BOOST_AUTO_TEST_CASE(string_literal_formatter,  // test shall pass
 
 // clang-format off
 BOOST_AUTO_TEST_CASE(string_literal_raw_formatter,  // test shall pass
+                     *utf::label("ast")
                      *utf::label("string_literal")
                      *utf::label("formatter"))
 // clang-format on
@@ -86,22 +89,23 @@ BOOST_AUTO_TEST_CASE(string_literal_raw_formatter,  // test shall pass
 
     btt::output_test_stream output;  // reused, flushed/cleared after each test
 
-    for (auto index{ 0U }; auto const& [raw_literal, expected] : valid_data::gold_data) {
-        ast::string_literal const string_literal{ make_string_literal_from(raw_literal) };
+    for (auto index{ 0U }; auto const& [input, expected] : valid_data::gold_data) {
+        ast::string_literal const string_literal{ make_string_literal_from(input) };
 
         BOOST_TEST_CONTEXT(">>> Test index at " << index << " <<<")
         {
+            // raw specifier means take the input as output as-is. Hence we compare against
+            // the (raw) input self; the designated initializer expected is ignored.
             output << std::format("{:raw}", string_literal);
             BOOST_REQUIRE(!output.str().empty());
-            BOOST_TEST(output.str() == raw_literal, btt::per_element());
+            BOOST_TEST(output.str() == input, btt::per_element());
         }
         output.flush();  // clear output for next run
         ++index;
     }
 }
 
-/// Note: Here is stated, that formatter testing of
-/// ast::{bit_string, decimal, based}_literal
+/// Note: formatter testing of ast::{bit_string, decimal, based}_literal
 /// etc. is too simple for testing, but preparing the tests is a big
 /// effort. Implicit they are checked by parser and other tests.
 

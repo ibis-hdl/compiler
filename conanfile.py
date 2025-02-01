@@ -17,7 +17,6 @@ class IbisConan(ConanFile):
         self.requires('cli11/2.4.2')
         self.requires('fmt/11.0.2')
         self.requires('range-v3/0.12.0')
-        #self.requires('strong_type/v15')
 
     def layout(self):
         # see: conan.io #17324

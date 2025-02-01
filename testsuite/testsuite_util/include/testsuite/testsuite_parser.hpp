@@ -28,12 +28,15 @@ namespace testsuite {
 class testsuite_parse {
 public:
     testsuite_parse(fs::path const filename_)
-        : filename{ filename_ }
+        : fs_pathname{ filename_ }
     {
     }
 
 public:
     bool operator()(std::string_view contents, ibis::vhdl::ast::design_file& design_file);
+
+public:
+    std::string file_name() const { return fs_pathname.string(); }
 
 public:
     ///
@@ -43,11 +46,16 @@ public:
     ///
     std::string output() const { return os.str(); }
 
+    ///
+    /// Return the captured output stream from testsuite_parse::operator()
+    ///
+    /// @return btt::output_test_stream&
+    ///
     btt::output_test_stream& ostream() { return os; }
 
 private:
     btt::output_test_stream os;
-    fs::path const filename;
+    fs::path const fs_pathname;
 };
 
 }  // namespace testsuite

@@ -66,8 +66,10 @@ private:
 ///
 /// error/warning messages data
 ///
-/// ToDo Find a more appropiate name for this - too much .._context in class names anywhere.
-/// ToDo Make it unformatted comparable for use in test, no need to compare diagnostic printer's
+/// ToDo Find a more appropiate name for this - too much .._context in class names anywhere, maybe
+/// failure_data
+/// ToDo Make it unformatted comparable for use in test, no need to compare diagnostic
+/// printer's
 ///       output!
 ///
 class diagnostic_context {

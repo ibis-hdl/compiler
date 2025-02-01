@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <ibis/util/file_mapper.hpp>
 #include <ibis/vhdl/parser/position_cache.hpp>
 #include <ibis/vhdl/parser/parser_config.hpp>
 #include <ibis/vhdl/parser/context.hpp>
@@ -22,6 +23,12 @@ using design_file = std::vector<ast::design_unit>;
 namespace ibis::vhdl::parser {
 
 class parse {
+public:
+    using iterator_type = vhdl::parser::iterator_type;
+    using position_cache_type = position_cache<iterator_type>;
+    using current_file_type = ibis::util::file_mapper::current_file;
+    using vhdl_context_type = parser::context;
+
 public:
     ///
     /// Construct a new parse object.
@@ -53,8 +60,8 @@ public:
     /// this is only required if you have recursive rules or need external linkage
     /// on rules (define them in separate translation units).
     ///
-    bool operator()(position_cache<parser::iterator_type>::proxy& position_cache_proxy,
-                    parser::context& ctx, ast::design_file& design_file);
+    bool operator()(current_file_type&& current_file, position_cache_type& position_cache,
+                    vhdl_context_type& vhdl_ctx, ast::design_file& design_file);
 
 private:
     static std::string make_exception_description(std::exception const& exception,

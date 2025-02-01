@@ -12,6 +12,8 @@ namespace ibis::vhdl::parser {
 ///
 /// Parser context, e.g. {error, warnings} counter
 ///
+
+// ToDo [XXX] get rid off this alias, use vhdl::vhdl_context direct
 using context = vhdl::context;
 
 }  // namespace ibis::vhdl::parser

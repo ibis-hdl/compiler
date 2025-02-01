@@ -26,7 +26,6 @@ target_include_directories(${PROJECT_NAME}
         ${PROJECT_SOURCE_DIR}/include/ibis/pch_default.hpp
         $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
         $<BUILD_INTERFACE:${CLI11_INCLUDE_DIR}>
-        $<BUILD_INTERFACE:${strong_type_INCLUDE_DIR}>
 )
 
 

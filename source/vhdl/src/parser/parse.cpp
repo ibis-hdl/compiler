@@ -15,6 +15,7 @@
 #include <ibis/vhdl/parser/context.hpp>
 #include <ibis/vhdl/parser/iterator_type.hpp>
 #include <ibis/vhdl/context.hpp>
+#include <ibis/util/get_iterator_pair.hpp>
 
 #include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/locale/format.hpp>
@@ -24,6 +25,7 @@
 #include <iostream>
 #include <iterator>
 #include <new>  // for bad_alloc
+#include <ranges>
 #include <type_traits>
 
 namespace ibis::vhdl::parser {
@@ -38,28 +40,34 @@ BOOST_SPIRIT_DECLARE(design_file_type)
 
 namespace ibis::vhdl::parser {
 
-bool parse::operator()(position_cache<parser::iterator_type>::proxy& position_cache_proxy,
-                       parser::context& ctx, ast::design_file& design_file)
+bool parse::operator()(current_file_type&& current_file, position_cache_type& position_cache,
+                       vhdl_context_type& vhdl_ctx, ast::design_file& design_file)
 {
-    using vhdl::parser::iterator_type;
+    using ibis::util::get_iterator_pair;
 
     static_assert(
         std::is_base_of_v<std::forward_iterator_tag,
-                          typename std::iterator_traits<parser::iterator_type>::iterator_category>,
-        "iterator type must be of multi-pass iterator");
+                          typename std::iterator_traits<iterator_type>::iterator_category>,
+        "iterator type must be of multi-pass iterator");  // ToDo realize this as concept
 
-    parser::diagnostic_handler_type diagnostic_handler{ os, ctx, position_cache_proxy };
+    // clang-format off
+    parser::diagnostic_handler_type diagnostic_handler{
+        os, std::move(current_file), std::ref(position_cache), std::ref(vhdl_ctx)
+    };
+    // clang-format on
+
+    auto ast_annotator = position_cache.annotator_for(current_file.id());
 
     // clang-format off
     auto const parser =
-        x3::with<parser::position_cache_tag>(std::ref(position_cache_proxy))[
+        x3::with<parser::annotator_tag>(std::ref(ast_annotator))[
             x3::with<parser::diagnostic_handler_tag>(std::ref(diagnostic_handler))[
                 parser::grammar()
             ]
         ];
     // clang-format on
 
-    auto [iter, end] = position_cache_proxy.file_contents_range();
+    auto [iter, end] = get_iterator_pair(current_file.file_contents());
 
     // using different iterator_types causes linker errors, see e.g.
     // [linking errors while separate parser using boost spirit x3](
@@ -67,11 +75,11 @@ bool parse::operator()(position_cache<parser::iterator_type>::proxy& position_ca
     //
     static_assert(std::is_same_v<decltype(iter), iterator_type>, "iterator types must be the same");
 
-    auto const filename = position_cache_proxy.file_name();
+    auto const filename = current_file.file_name();
+    bool parse_ok = false;
 
     try {
-        bool const parse_ok =
-            x3::phrase_parse(iter, end, parser >> x3::eoi, parser::skipper, design_file);
+        parse_ok = x3::phrase_parse(iter, end, parser >> x3::eoi, parser::skipper, design_file);
 
         if (!parse_ok) {
             using boost::locale::format;
@@ -100,7 +108,7 @@ bool parse::operator()(position_cache<parser::iterator_type>::proxy& position_ca
         os << make_exception_description(filename);
     }
 
-    return false;
+    return parse_ok;
 }
 
 std::string parse::make_exception_description(std::exception const& exception,

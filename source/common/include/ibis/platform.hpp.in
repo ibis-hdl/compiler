@@ -57,7 +57,7 @@ constexpr ibis::platform platform = platform::FreeBSD;
 enum class platform_compiler {
     Clang,       ///< LLVM Clang (clang.llvm.org)
     Clang_GNU,   ///< LLVM Clang with regular front end (clang.llvm.org)
-    Clang_MSVC,  ///< LLVM Clang with clang-cl front (clang.llvm.org)
+    Clang_MSVC,  ///< LLVM Clang with ClangCL front (clang.llvm.org)
     GNU,         ///< GNU Compiler Collection (gcc.gnu.org)
     Intel,       ///< Intel Compiler (intel.com)
     MSVC         ///< Microsoft Visual Studio (microsoft.com)

@@ -37,7 +37,7 @@ struct spacer {
         : width{ width_ }
         , chr{ chr_sv.front() }
     {
-        // Can be disabled on Release build, no static_assert possible
+        // FixMe no way for static_assert?
         assert(chr_sv.size() == 1 && "spacer accept only single char string!");
     }
 
@@ -250,7 +250,7 @@ struct std::formatter<ibis::vhdl::spacer> {
             return ctx.out();
         }
         // ToDo [C++26] format() isn't completely constexpr, hence we'll use vformat_to()!
-        return std::vformat_to(ctx.out(),
+        return std::vformat_to(ctx.out(),  // C++26 std::runtime_format()
                                std::format("{{:{}>{}}}", spacer_.chr.get(), spacer_.width.get()),
                                std::make_format_args(""));
     }
@@ -277,12 +277,12 @@ struct std::formatter<ibis::vhdl::issue_range<IteratorT>> {
             return std::format_to(ctx.out(), "{}", locator_symbol);
         }
 
-        return std::format_to(ctx.out(), "{}", spacer{ issue.width(), range_mark_symbol });
+        return std::format_to(ctx.out(), "{}", spacer{ issue.width(), squiggle_symbol });
     }
 
 private:
     static constexpr std::string_view locator_symbol{ "^" };
-    static constexpr std::string_view range_mark_symbol{ "~" };
+    static constexpr std::string_view squiggle_symbol{ "~" };
 };
 
 template <typename IteratorT>

@@ -1,0 +1,59 @@
+{
+    "version": 8,
+    "include": [
+        "cmake/presets/common.json"
+    ], 
+    "configurePresets": [
+        {
+            "name": "msvc-sccache",
+            "displayName": "MSVC (SCCache)",
+            "description": "Microsoft Visual Studio C++ compiler (SCCache)",
+            "inherits": [
+                "msvc",
+                "sccache"
+            ]
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "msvc-sccache-release",
+            "displayName": "Release",
+            "description": "Release build with MSVC",
+            "configuration": "Release",
+            "configurePreset": "msvc-sccache"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "msvc-sccache-release-test",
+            "displayName": "Release Test",
+            "description": "Test LLVM Clang build",
+            "configuration": "Release",
+            "configurePreset": "msvc-sccache",
+            "inherits": [
+                "default-testPreset"
+            ]
+        }
+    ],
+    "workflowPresets": [
+        {
+            "name": "MSVC Release (SCCache)",
+            "displayName": "CI MSVC Release (SCCache)",
+            "description": "Continuous Integration/Continuous Delivery using MSVC (Release)",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "msvc-sccache"
+                },
+                {
+                    "type": "build",
+                    "name": "msvc-sccache-release"
+                },
+                {
+                    "type": "test",
+                    "name": "msvc-sccache-release-test"
+                }
+            ]
+        }
+    ]
+}

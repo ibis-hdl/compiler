@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <ibis/util/file_mapper.hpp>
 #include <ibis/vhdl/parser/position_cache.hpp>
 #include <ibis/vhdl/parser/iterator_type.hpp>
 #include <ibis/vhdl/diagnostic_context.hpp>
@@ -49,35 +50,37 @@ namespace ibis::vhdl {
 /// @tparam IteratorT Type of iterator used by `parser::position_cache`'s `proxy`. Generally
 /// equals to `vhdl::parser::iterator_type`.
 ///
+// ToDo To much functionality in a single class, make free function of line_column_number(),
+// get_line_start() etc.
 template <typename Iterator>
 class diagnostic_handler {
 public:
     using iterator_type = Iterator;
 
-    using position_cache_proxy_type = typename parser::position_cache<iterator_type>::proxy;
-
+    using current_file_type = ibis::util::file_mapper::current_file;
+    using position_cache_type = parser::position_cache<iterator_type>;
+    using vhdl_context_type = ibis::vhdl::context;
     using error_type = diagnostic_context::failure_type;
 
 public:
     ///
     /// Construct a diagnostic handler.
     ///
-    /// @param os_    Stream to write error and diagnostic messages.
-    /// @param context_ The VHDL context, e.g. with error counter.
-    /// @param proxy_ A \ref parser::position_cache::proxy object of \ref parser::position_cache.
-    /// @param tabs   Tabulator size, required for correct rendering of source
-    /// code snippet.
-    ///
     /// @todo affected by [X3 3.0.10 error_handler where() is wrong #712](
     ///   https://github.com/boostorg/spirit/issues/712),
     /// also [X3: error_handler should not skip whitespaces #670](
     ///   https://github.com/boostorg/spirit/pull/670)
     ///
-    explicit diagnostic_handler(std::ostream& os_, vhdl::context& context_,
-                                position_cache_proxy_type proxy_, std::size_t tabs = 4)
+
+    diagnostic_handler() = delete;
+
+    diagnostic_handler(std::ostream& os_, current_file_type&& current_file_,
+                       std::reference_wrapper<position_cache_type const> position_cache_,
+                       std::reference_wrapper<vhdl_context_type> context_, std::size_t tabs = 4)
         : os{ os_ }
+        , current_file{ std::move(current_file_) }
+        , position_cache{ position_cache_ }
         , context{ context_ }
-        , position_cache_proxy{ std::move(proxy_) }
         , tab_sz{ tabs }
     {
     }
@@ -87,8 +90,8 @@ public:
     diagnostic_handler(diagnostic_handler const&) = delete;
     diagnostic_handler& operator=(diagnostic_handler const&) = delete;
 
-    diagnostic_handler(diagnostic_handler&&) = delete;
-    diagnostic_handler& operator=(diagnostic_handler&&) = delete;
+    diagnostic_handler(diagnostic_handler&&) = default;
+    diagnostic_handler& operator=(diagnostic_handler&&) = default;
 
 public:
     ///
@@ -198,13 +201,6 @@ public:
 
 private:
     ///
-    /// Access to the file related postion_cache informations.
-    ///
-    /// @return Reference to the proxy used.
-    ///
-    position_cache_proxy_type const& current_file() const { return position_cache_proxy; }
-
-    ///
     /// Return the annotated iterator range from AST tagged node.
     ///
     /// Wraps the call of @ref position_cache::position_of() to get begin/end iterators for
@@ -218,7 +214,7 @@ private:
     std::tuple<iterator_type, iterator_type> iterators_of(
         ast::position_tagged const& tagged_node) const
     {
-        auto const iterator_range = current_file().position_of(tagged_node);
+        auto const iterator_range = position_cache.get().position_of(tagged_node);
 
         auto first = iterator_range.begin();
         auto const last = iterator_range.end();
@@ -350,9 +346,10 @@ private:
 
 private:
     std::ostream& os;
-    vhdl::context& context;
-    position_cache_proxy_type position_cache_proxy;
-    std::size_t tab_sz = 4;
+    current_file_type current_file;  // moved proxy from file_mapper with fixed file_id
+    std::reference_wrapper<position_cache_type const> position_cache;  // only reading positions
+    std::reference_wrapper<vhdl_context_type> context;
+    std::size_t tab_sz;
 };
 
 }  // namespace ibis::vhdl

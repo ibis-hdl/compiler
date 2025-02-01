@@ -12,8 +12,7 @@
 // - [Update __cpp_concepts macro #87998](https://github.com/llvm/llvm-project/pull/87998)
 // until [[installation Clang-19] 404 on apt.llvm.org repository for noble (ubuntu 24.04) #121496](
 // https://github.com/llvm/llvm-project/issues/121496) has been fixed.
-#pragma message("issue 121496 hack active")
-#define __cpp_concepts 202002L
+#define __cpp_concepts 202002L  // issue 121496 hack
 #endif
 
 #include <algorithm>

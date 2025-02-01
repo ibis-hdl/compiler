@@ -16,6 +16,7 @@
 #include <ibis/vhdl/parser/parse.hpp>
 #include <ibis/vhdl/ast.hpp>
 
+#include <testsuite/testsuite_parser.hpp>
 #include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
 #include <boost/test/unit_test.hpp>  // IWYU pragma: keep
@@ -263,7 +264,7 @@ private:
     converter_type convert_based;
 };
 
-using verifier_type = ast::basic_ast_walker<verify_worker<decltype(expect), false>>;
+using verifier_type = ast::basic_ast_walker<verify_worker<decltype(expect), false /* verbose */>>;
 
 } // namespace testsuite_data
 
@@ -274,12 +275,16 @@ using namespace ibis::vhdl;
 BOOST_AUTO_TEST_CASE(based_literal_ng)
 {
     //using testsuite::testsuite_parse;
-    using diagnostic_handler_type = ibis::vhdl::diagnostic_handler<parser::iterator_type>;
+    using iterator_type = parser::iterator_type;
+    using diagnostic_handler_type = ibis::vhdl::diagnostic_handler<iterator_type>;
     using ast::design_file;
     using namespace testsuite_data;
 
-    parser::position_cache<parser::iterator_type> position_cache;
-    auto position_cache_proxy = position_cache.add_file("based_literal", input);
+    ibis::util::file_mapper file_mapper{};
+    auto const file_id = file_mapper.add_file("<based_literal>", input);
+
+    parser::position_cache<iterator_type> position_cache{};
+    auto position_proxy = position_cache.get_proxy(file_id);  // FixMe: 2 copies required
 
     //auto& os = std::cout;
     btt::output_test_stream os;
@@ -288,11 +293,12 @@ BOOST_AUTO_TEST_CASE(based_literal_ng)
 
     // parse
     parser::parse parse{ os };
-    bool parse_ok = parse(position_cache_proxy, ctx, ast);
+    bool parse_ok = parse(std::move(position_proxy), ctx, ast);
     BOOST_TEST(parse_ok);
 
     // convert
-    diagnostic_handler_type diagnostic_handler{ os, ctx, position_cache_proxy };
+    // FixMe: Cloning position_cache_proxy twice isn't clever - look for other way
+    diagnostic_handler_type diagnostic_handler{ os, ctx, position_cache.get_proxy(file_id) };
     verifier_type verify(os, expect, diagnostic_handler);
     verify(ast);
 

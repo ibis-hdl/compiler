@@ -39,7 +39,6 @@ target_link_libraries(${PROJECT_NAME}
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/test_grammar.cpp
-        src/testsuite_parse.cpp
         # concrete test cases
         src/test/test_bit_string_literal.cpp
 )

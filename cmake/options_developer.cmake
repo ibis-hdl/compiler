@@ -116,7 +116,7 @@ add_compile_options(
     # FixMe [CMake]: [-Wundefined-func-template], BUT see:
     #   https://www.reddit.com/r/cpp_questions/comments/8g5v3s/dealing_with_clang_warningerrors_re_static/
     # http://clang.llvm.org/docs/DiagnosticsReference.html
-    "$<$<CXX_COMPILER_ID:Clang>:-Wall;-Wextra;-Wpedantic;-Wno-c11-extensions;-Wconversion>"
+    "$<$<CXX_COMPILER_ID:Clang>:-Wall;-Wextra;-Wpedantic;-Wno-c11-extensions;-Wconversion;-ftime-trace>"
     # https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
     "$<$<CXX_COMPILER_ID:GNU>:-Wall;-Wextra;-Wpedantic;-Wconversion>"
     # https://docs.microsoft.com/en-us/cpp/build/reference/compiler-option-warning-level
@@ -155,7 +155,7 @@ add_compile_options(
     # = 900
     "$<$<CXX_COMPILER_ID:GNU>:-ftemplate-backtrace-limit=0;-ftemplate-depth=1024>"
     #"$<$<CXX_COMPILER_ID:Clang>:-ftemplate-backtrace-limit=0;-ftemplate-depth=1024>"
-    # FixMe [CMake]: won't work on MSVC Clang frontend, hence won't compile with clang-cl
+    # FixMe [CMake]: won't work on MSVC ClangCL frontend
     # [cmake]   Error evaluating generator expression:
     # [cmake]   $<CMAKE_CXX_COMPILER_FRONTEND_VARIANT:MSVC>
     # [cmake]   Expression did not evaluate to a known generator expression

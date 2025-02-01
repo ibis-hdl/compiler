@@ -85,6 +85,8 @@ jobs:
         source .venv/bin/activate
         pip install multipledispatch
         python3 conan_install.py --profile ${{ matrix.conan_profile }}
+        # cleanup to get Github's cache small (clean sources, build, download, temp)
+        conan cache clean -s -b -d -t        
         deactivate
         # CMake Configure && Build
         conan list '*'

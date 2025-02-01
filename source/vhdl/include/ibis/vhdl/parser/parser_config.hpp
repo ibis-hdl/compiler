@@ -14,7 +14,8 @@
 
 namespace ibis::vhdl::parser {
 
-using position_proxy_type = parser::position_cache<iterator_type>::proxy;
+using iterator_type = parser::iterator_type;
+using position_annotator_type = parser::position_cache<iterator_type>::annotator;
 using diagnostic_handler_type = parser::diagnostic_handler<iterator_type>;
 
 using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
@@ -54,7 +55,7 @@ using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
 ///
 /// @todo Report a bug: It's curious, since e.g. ```parse.cpp``` instantiate the parser as:
 /// @code{.cpp}
-/// x3::with<parser::position_cache_tag>(std::ref(position_cache_proxy))[
+/// x3::with<parser::annotator_tag>(std::ref(position_cache_proxy))[
 ///     x3::with<parser::diagnostic_handler_tag>(std::ref(diagnostic_handler))[
 ///         parser::grammar()
 ///     ]
@@ -63,8 +64,8 @@ using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
 /// naturally the ```context_type``` here should be in the same order
 /// @code{.cpp}
 /// x3::context<
-///     parser::position_cache_tag,
-///     std::reference_wrapper<parser::position_proxy_type>,
+///     parser::annotator_tag,
+///     std::reference_wrapper<parser::position_annotator_type>,
 ///     x3::context<
 ///         parser::diagnostic_handler_tag,
 ///         std::reference_wrapper<parser::diagnostic_handler_type>,
@@ -82,8 +83,8 @@ using context_type =
         parser::diagnostic_handler_tag,
         std::reference_wrapper<parser::diagnostic_handler_type>,
         x3::context<
-            parser::position_cache_tag,
-            std::reference_wrapper<parser::position_proxy_type>,
+            parser::annotator_tag,
+            std::reference_wrapper<parser::position_annotator_type>,
             phrase_context_type
         >
     >;

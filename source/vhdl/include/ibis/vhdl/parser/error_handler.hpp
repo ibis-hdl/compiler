@@ -33,7 +33,7 @@ namespace ibis::vhdl::parser {
 /// @code
 /// context<
 ///     parser::diagnostic_handler_tag, ...,
-///     context<parser::position_cache_tag, ...,
+///     context<parser::annotator_tag, ...,
 ///         context<skipper_tag, ..., unused_type>
 ///     >
 /// >
@@ -68,8 +68,8 @@ public:
     ///     );
     /// @endcode
     ///
-    /// @todo Check [Custom error on rule level?
-    /// #657](https://github.com/boostorg/spirit/issues/657)
+    /// @todo Check [Custom error on rule level? #657](
+    ///              https://github.com/boostorg/spirit/issues/657)
     ///
     template <typename IteratorT, typename ContextT>
     x3::error_handler_result on_error([[maybe_unused]] IteratorT& first,
@@ -80,16 +80,6 @@ public:
         auto& diagnostic_handler = x3::get<parser::diagnostic_handler_tag>(context).get();
 
         diagnostic_handler.parser_error(e.where(), make_error_description(e.which()));
-
-        // FixMe: just here as "concept" marker, but untested by testsuite yet. The idea is to
-        // accept some count of errors (using vhdl context for error/warning count) before to
-        // throw the towel.
-        if (e.which() == "';'") {
-            // advance iter after the error occurred to continue parsing, the error is reported
-            // before.
-            first = e.where();
-            return x3::error_handler_result::accept;
-        }
 
         return x3::error_handler_result::fail;
     }

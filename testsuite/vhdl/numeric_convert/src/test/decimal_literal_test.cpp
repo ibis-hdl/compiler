@@ -5,6 +5,8 @@
 
 #include <testsuite/vhdl/numeric_convert/numeric_parser.hpp>
 
+#include <ibis/util/file_mapper.hpp>
+#include <ibis/vhdl/parser/position_cache.hpp>
 #include <ibis/vhdl/parser/diagnostic_handler.hpp>
 #include <ibis/vhdl/parser/context.hpp>
 #include <ibis/vhdl/type.hpp>
@@ -86,12 +88,16 @@ BOOST_DATA_TEST_CASE(decimal_literal_integer, utf_data::make(dec_int_lit) ^ dec_
 {
     using iterator_type = parser::iterator_type;
 
-    parser::position_cache<iterator_type> position_cache;
-    auto position_proxy = position_cache.add_file("<decimal_literal>", literal);
+    ibis::util::file_mapper file_mapper{};
+    auto const file_id = file_mapper.add_file("<decimal_literal>", literal);
+
+    parser::position_cache<iterator_type> position_cache{};
+    auto position_proxy = position_cache.get_proxy(file_id);
 
     btt::output_test_stream os;
     parser::context ctx;
-    parser::diagnostic_handler<iterator_type> diagnostic_handler{ os, ctx, position_proxy };
+    parser::diagnostic_handler<iterator_type> diagnostic_handler{ os, ctx,
+                                                                  std::move(position_proxy) };
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
@@ -122,12 +128,16 @@ BOOST_AUTO_TEST_CASE(decimal_literal_uint64max_ovrflw)
 
     using iterator_type = parser::iterator_type;
 
-    parser::position_cache<iterator_type> position_cache;
-    auto position_proxy = position_cache.add_file("<decimal_literal>", literal);
+    ibis::util::file_mapper file_mapper{};
+    auto const file_id = file_mapper.add_file("<decimal_literal>", literal);
+
+    parser::position_cache<iterator_type> position_cache{};
+    auto position_proxy = position_cache.get_proxy(file_id);
 
     btt::output_test_stream os;
     parser::context ctx;
-    parser::diagnostic_handler<iterator_type> diagnostic_handler{ os, ctx, position_proxy };
+    parser::diagnostic_handler<iterator_type> diagnostic_handler{ os, ctx,
+                                                                  std::move(position_proxy) };
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
@@ -200,12 +210,16 @@ BOOST_DATA_TEST_CASE(decimal_literal_real, utf_data::make(dec_real_lit) ^ dec_re
 {
     using iterator_type = parser::iterator_type;
 
-    parser::position_cache<iterator_type> position_cache;
-    auto position_proxy = position_cache.add_file("<decimal_literal>", literal);
+    ibis::util::file_mapper file_mapper{};
+    auto const file_id = file_mapper.add_file("<decimal_literal>", literal);
+
+    parser::position_cache<iterator_type> position_cache{};
+    auto position_proxy = position_cache.get_proxy(file_id);
 
     btt::output_test_stream os;
     parser::context ctx;
-    parser::diagnostic_handler<iterator_type> diagnostic_handler{ os, ctx, position_proxy };
+    parser::diagnostic_handler<iterator_type> diagnostic_handler{ os, ctx,
+                                                                  std::move(position_proxy) };
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 

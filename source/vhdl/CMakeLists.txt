@@ -50,7 +50,6 @@ target_sources(${PROJECT_NAME}
         src/diagnostic_printer.cpp
 
         src/parser/error_handler.cpp
-        src/parser/position_cache.cpp
         src/parser/grammar.cpp  # ---- memory exhausting ----
         src/parser/parse.cpp
 )

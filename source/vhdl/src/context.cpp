@@ -45,33 +45,20 @@ struct std::formatter<ibis::vhdl::failure_status> : std::formatter<std::string> 
         if (status.has_errors() && status.has_warnings()) {
             // clang-format off
             return std::formatter<std::string>::format(
-                std::string{
-                    // TRANSLATORS: summary error(s) and warning(s)
-                    (format(translate("{1} and {2} generated."))
-                            % error_message % warning_message).str()
-                }, ctx
-            );
+                // TRANSLATORS: summary error(s) and warning(s)
+                (format(translate("{1} and {2} generated.")) % error_message % warning_message).str(),
+                ctx);
             // clang-format on
         }
-        else if (status.has_errors()) {
-            // clang-format off
+        if (status.has_errors()) {
             return std::formatter<std::string>::format(
-                std::string{
-                    // TRANSLATORS: summary error(s) only
-                    (format(translate("{1} generated.")) % error_message).str()
-                }, ctx
-            );
-            // clang-format on
+                // TRANSLATORS: summary error(s) only
+                (format(translate("{1} generated.")) % error_message).str(), ctx);
         }
-        else if (status.has_warnings()) {
-            // clang-format off
+        if (status.has_warnings()) {
             return std::formatter<std::string>::format(
-                std::string{
-                    // TRANSLATORS: summary warning(s) only
-                    (format(translate("{1} generated.")) % warning_message).str()
-                }, ctx
-            );
-            // clang-format on            
+                // TRANSLATORS: summary warning(s) only
+                (format(translate("{1} generated.")) % warning_message).str(), ctx);
         }
         else {
             // all went fine

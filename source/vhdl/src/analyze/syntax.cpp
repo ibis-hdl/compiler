@@ -32,6 +32,7 @@
 #include <ibis/util/compiler/warnings_on.hpp>
 
 #include <sstream>
+#include <string_view>
 #include <utility>
 #include <iostream>
 
