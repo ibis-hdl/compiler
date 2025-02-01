@@ -21,7 +21,7 @@ namespace ibis::util {
 /// @see Proof of concept [coliru](https://coliru.stacked-crooked.com/a/4bf440f2fe69dab7)
 ///
 template <typename T, typename Tag>
-// requires ibis::unsigned_integer<T>
+    requires ibis::unsigned_integer<T>
 class tagged_treshold_counter {
 public:
     ///

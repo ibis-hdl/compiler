@@ -5,24 +5,24 @@
 
 #pragma once
 
-namespace ibis::literals {
-
-namespace memory {
+namespace ibis::literals::memory {
 
 constexpr unsigned long long operator""_KiB(unsigned long long value)
 {
-    return value * 1'024UZ;  // NOLINT(cppcoreguidelines-avoid-magic-numbers)
+    return value *
+           1'024U;  // NOLINT(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
 }
 
 constexpr unsigned long long operator""_MiB(unsigned long long value)
 {
-    return value * 1'024UZ * 1_KiB;  // NOLINT(cppcoreguidelines-avoid-magic-numbers)
+    return value * 1'024U *
+           1_KiB;  // NOLINT(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
 }
 
 constexpr unsigned long long operator""_GiB(unsigned long long value)
 {
-    return value * 1'024UZ * 1_MiB;  // NOLINT(cppcoreguidelines-avoid-magic-numbers)
+    return value * 1'024U *
+           1_MiB;  // NOLINT(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
 }
-}  // namespace memory
 
 }  // namespace ibis::literals

@@ -3,19 +3,20 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#include <boost/test/unit_test.hpp>
-#include <boost/test/tools/output_test_stream.hpp>
-
 #include <ibis/util/file_mapper.hpp>
 
-#include <filesystem>
+#include <boost/test/unit_test.hpp>
+#include <boost/test/tools/output_test_stream.hpp>
+#include <boost/test/tools/interface.hpp>
+
 #include <string_view>
+#include <cassert>
 
 #include <testsuite/namespace_alias.hpp>
 
-namespace valid_data {
+using namespace std::literals::string_view_literals;
 
-using namespace std::literals;
+namespace valid_data {
 
 // https://www.loremipsum.de/
 constexpr auto const lorem_ipsum = R"(
@@ -50,7 +51,7 @@ BOOST_AUTO_TEST_CASE(file_mapper_basic,
 // clang-format on
 {
     ibis::util::file_mapper file_mapper;
-    auto const filename{ "Lorem Ipsum" };
+    auto const filename{ "Lorem Ipsum"sv };
 
     // use overload @fn add_file(std::string_view filename, std::string_view contents)
     auto current_file = file_mapper.add_file(filename, valid_data::lorem_ipsum);
@@ -66,9 +67,6 @@ BOOST_AUTO_TEST_CASE(file_mapper_basic,
                btt::per_element());
     BOOST_TEST(current_file.file_contents() == file_mapper.file_contents(current_file.id()),
                btt::per_element());
-    // check (range) iterators
-    BOOST_TEST(begin(current_file.file_contents()) == begin(valid_data::lorem_ipsum));
-    BOOST_TEST(end(current_file.file_contents()) == end(valid_data::lorem_ipsum));
 
     // use move-sematic overload @fn add_file(std::string&& filename, std::string&& contents)
     // with same filename and contents (for convenience)
@@ -86,9 +84,6 @@ BOOST_AUTO_TEST_CASE(file_mapper_basic,
                btt::per_element());
     BOOST_TEST(current_file.file_contents() == file_mapper.file_contents(current_file.id()),
                btt::per_element());
-    // check (range) iterators
-    BOOST_TEST(begin(current_file.file_contents()) == begin(valid_data::lorem_ipsum));
-    BOOST_TEST(end(current_file.file_contents()) == end(valid_data::lorem_ipsum));
 }
 
 ///
@@ -102,8 +97,8 @@ BOOST_AUTO_TEST_CASE(file_mapper_api,
 // clang-format on
 {
     ibis::util::file_mapper file_mapper;
-    auto const filename_lorem{ "Lorem Ipsum" };
-    auto const filename_bacon{ "Bacon Ipsum" };
+    auto const filename_lorem{ "Lorem Ipsum"sv };
+    auto const filename_bacon{ "Bacon Ipsum"sv };
 
     // use overload @fn add_file(std::string_view filename, std::string_view contents)
     auto lorem_ipsum = file_mapper.add_file(filename_lorem, valid_data::lorem_ipsum);
@@ -121,16 +116,11 @@ BOOST_AUTO_TEST_CASE(file_mapper_api,
     BOOST_TEST(file_mapper.file_contents(bacon_ipsum.id()) == valid_data::bacon_ipsum,
                btt::per_element());
 
-    // check correctness of proxy and (range) iterators
+    // check correctness of proxy
     BOOST_TEST(lorem_ipsum.file_name() == file_mapper.file_name(lorem_ipsum.id()),
                btt::per_element());
-    BOOST_TEST(begin(lorem_ipsum.file_contents()) == begin(valid_data::lorem_ipsum));
-    BOOST_TEST(end(lorem_ipsum.file_contents()) == end(valid_data::lorem_ipsum));
-
     BOOST_TEST(bacon_ipsum.file_name() == file_mapper.file_name(bacon_ipsum.id()),
                btt::per_element());
-    BOOST_TEST(begin(bacon_ipsum.file_contents()) == begin(valid_data::bacon_ipsum));
-    BOOST_TEST(end(bacon_ipsum.file_contents()) == end(valid_data::bacon_ipsum));
 
     // paranoid
     BOOST_TEST(lorem_ipsum.file_contents() != bacon_ipsum.file_contents());

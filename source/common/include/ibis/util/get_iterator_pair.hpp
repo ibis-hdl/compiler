@@ -22,11 +22,11 @@ namespace ibis::util {
 /// Proof of concept @see [Coliru](https://coliru.stacked-crooked.com/a/642115010e33c5b0)
 template <typename ContainerT>
 // clang-format off
-requires requires(ContainerT c) {
-    { c.begin() }  -> std::same_as<typename ContainerT::iterator>;
-    { c.end() }    -> std::same_as<typename ContainerT::iterator>;
-    { c.cbegin() } -> std::same_as<typename ContainerT::const_iterator>;
-    { c.cend() }   -> std::same_as<typename ContainerT::const_iterator>;  
+requires requires(ContainerT container) {
+    { container.begin() }  -> std::same_as<typename ContainerT::iterator>;
+    { container.end() }    -> std::same_as<typename ContainerT::iterator>;
+    { container.cbegin() } -> std::same_as<typename ContainerT::const_iterator>;
+    { container.cend() }   -> std::same_as<typename ContainerT::const_iterator>;  
 }
 // clang-format on
 static inline auto get_iterator_pair(ContainerT const& container)

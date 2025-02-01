@@ -12,8 +12,8 @@
 #include <vector>
 #include <utility>
 #include <functional>
+#include <cstddef>
 #include <cassert>
-#include <cstdint>
 
 namespace ibis::util {
 
@@ -23,10 +23,31 @@ namespace ibis::util {
 ///
 class file_mapper {
 private:
+    ///
+    /// The (internal) data type for registry
+    ///
+    struct entry {
+        entry() = default;
+        entry(std::string&& filename_, std::string&& contents_)
+            : filename{ filename_ }
+            , contents{ std::move(contents_) }
+        {
+        }
+        // NOLINTBEGIN(misc-non-private-member-variables-in-classes)
+        std::string filename;  // Todo Check on use of fs::path as filename argument
+        std::string contents;
+        // NOLINTEND(misc-non-private-member-variables-in-classes)
+    };
+
+    using file_registry_type = std::vector<entry>;
+
+    file_registry_type file_registry;
+
+private:
     static constexpr auto MAX_ID = vhdl::ast::position_tagged::MAX_FILE_ID;
 
 public:
-    using file_id_type = vhdl::ast::position_tagged::file_id_type;
+    using file_id_type = ibis::vhdl::ast::position_tagged::file_id_type;
 
 public:
     class current_file;
@@ -96,29 +117,6 @@ private:
     /// Get an ID
     ///
     std::size_t next_id() const { return file_registry.size(); }
-
-private:
-    ///
-    /// The data type for registry
-    ///
-    ///
-    struct entry {
-        entry() = default;
-        entry(std::string_view filename_, std::string&& contents_)
-            : filename{ filename_ }
-            , contents{ std::move(contents_) }
-        {
-        }
-        // NOLINTBEGIN(misc-non-private-member-variables-in-classes)
-        std::string filename;  // Todo Check on use of fs::path as filename argument
-        std::string contents;
-        // NOLINTEND(misc-non-private-member-variables-in-classes)
-    };
-
-    using file_registry_type = std::vector<entry>;
-
-private:
-    file_registry_type file_registry{};
 };
 
 ///
@@ -157,12 +155,12 @@ public:
 inline file_mapper::current_file file_mapper::add_file(std::string&& filename,
                                                        std::string&& contents)
 {
-    file_id_type current_file_id{ next_id() };
+    file_id_type const current_file_id{ next_id() };
 
     // ToDo OOM error handling (scope_exit would be overkill)
     file_registry.emplace_back(std::move(filename), std::move(contents));
 
-    return current_file(std::ref(*this), current_file_id);
+    return { std::ref(*this), current_file_id };
 }
 
 inline file_mapper::current_file file_mapper::add_file(std::string_view filename,
