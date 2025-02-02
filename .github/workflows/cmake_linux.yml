@@ -39,10 +39,9 @@ jobs:
             build_preset:       "clang-libc++-release",
             test_preset:        "clang-libc++-release-test"
           }
-        # exclude temporary clang-libc++ since we can't install Clang 19 on Ubuntu, see
-        # [#121496](https://github.com/llvm/llvm-project/issues/121496)
-        exclude:
-          - { cmake: {configure_preset: "clang-libc++" } }
+        # exclude temporary e.g. clang-libc++
+        # exclude:
+        #   - { cmake: {configure_preset: "clang-libc++" } }
 
     steps:
 
@@ -72,6 +71,7 @@ jobs:
       run: |
         {
           echo CXX=${{ matrix.cmake.cxx }}
+          echo CMAKE_CXX_COMPILER=${{ matrix.cmake.cxx }}
           echo CCACHE_DIR=${HOME}/.cache/ccache
           echo CCACHE_NOCOMPRESS=true   # GitHub actions automatically zstd compresses caches
         } >> "$GITHUB_ENV"
