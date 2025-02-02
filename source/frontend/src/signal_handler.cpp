@@ -6,9 +6,12 @@
 #include <ibis/frontend/signal_handler.hpp>
 #include <ibis/message.hpp>
 
-#include <csignal>
 #include <functional>
 #include <iostream>
+#include <string_view>
+
+#include <csignal>
+#include <cstdlib>
 
 namespace ibis::frontend {
 

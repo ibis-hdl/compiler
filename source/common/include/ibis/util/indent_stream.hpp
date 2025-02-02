@@ -7,6 +7,9 @@
 
 #include <ostream>
 #include <streambuf>
+#include <string>
+
+#include <cstddef>
 
 namespace ibis::util {
 

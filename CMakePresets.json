@@ -56,8 +56,7 @@
             ],
             "cacheVariables": {
                 "CONAN_HOST_PROFILE": "clang",
-                "CONAN_BUILD_PROFILE": "clang",
-                "CMAKE_CXX_FLAGS_INIT": "-D CLANG_GLIBCXX_EXPECTED_HACK=1"
+                "CONAN_BUILD_PROFILE": "clang"
             }
         },
         {

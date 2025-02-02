@@ -7,8 +7,9 @@
 #include <ibis/vhdl/ast/node/operator_token.hpp>
 #include <ibis/vhdl/ast/node/keyword_token.hpp>
 
+#include <ibis/util/cxx_bug_fatal.hpp>
+
 #include <string_view>
-#include <format>
 
 ///
 /// formatter for ast::operator_token

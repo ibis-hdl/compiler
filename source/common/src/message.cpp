@@ -9,11 +9,14 @@
 #include <boost/locale/message.hpp>
 #include <boost/locale/format.hpp>
 
-#include <fmt/printf.h>
+#include <fmt/base.h>
+// #include <fmt/printf.h>
 #include <fmt/color.h>
 
+#include <iostream>
 #include <string_view>
 #include <iostream>
+
 #include <cstdio>
 
 // ------------------------------------------------------------------------------------------------

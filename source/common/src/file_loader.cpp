@@ -4,8 +4,8 @@
 //
 
 #include <ibis/util/file/file_loader.hpp>
-#include <ibis/platform.hpp>
 
+#include <ibis/platform.hpp>
 #include <ibis/settings.hpp>
 #include <ibis/message.hpp>
 
@@ -14,22 +14,20 @@
 #include <boost/locale/message.hpp>
 #include <ibis/util/compiler/warnings_on.hpp>
 
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include <format>
-#include <map>
-#include <vector>
-#include <utility>
-#include <string>
-#include <iterator>
-#include <string_view>
-#include <filesystem>
-#include <chrono>
-#include <ratio>
-#include <system_error>
-#include <ctime>
 #include <cerrno>
+#include <chrono>
+#include <ctime>
+#include <filesystem>
+#include <format>
+#include <fstream>
+#include <iostream>
+#include <iterator>
+#include <map>
+#include <ratio>
+#include <string_view>
+#include <string>
+#include <utility>
+#include <vector>
 
 namespace ibis::util {
 

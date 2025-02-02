@@ -5,14 +5,17 @@
 
 #pragma once
 
-#include <string_view>
 #include <filesystem>
 #include <memory>
+#include <string>
+#include <string_view>
+
+#include <cstddef>
 
 #include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
 namespace testsuite {
-    namespace fs = std::filesystem;
+namespace fs = std::filesystem;
 }
 
 namespace testsuite::util {

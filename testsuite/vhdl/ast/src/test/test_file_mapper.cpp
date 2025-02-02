@@ -10,6 +10,8 @@
 #include <boost/test/tools/interface.hpp>
 
 #include <string_view>
+#include <string>
+
 #include <cassert>
 
 #include <testsuite/namespace_alias.hpp>

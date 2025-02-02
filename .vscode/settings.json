@@ -151,6 +151,7 @@
             "*"
         ]
     },
+    "iwyu.max_line_length": 100,
     "files.associations": {
         "algorithm": "cpp",
         "any": "cpp",
@@ -267,6 +268,8 @@
         "execution": "cpp",
         "__hash_table": "cpp",
         "semaphore": "cpp",
-        "__locale": "cpp"
-    }
+        "__locale": "cpp",
+        "cinttypes": "cpp"
+    },
+    "cSpell.words": []
 }

@@ -9,6 +9,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <cassert>
+#include <exception>
 #include <filesystem>
 #include <fstream>
 #include <set>

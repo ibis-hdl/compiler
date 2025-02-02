@@ -6,6 +6,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <ibis/vhdl/ast/util/position_tagged.hpp>
+#include <ibis/util/strong_type.hpp>
 
 #include <testsuite/namespace_alias.hpp>
 

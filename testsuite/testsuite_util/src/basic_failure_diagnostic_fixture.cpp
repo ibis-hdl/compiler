@@ -6,8 +6,6 @@
 #include <testsuite/util/basic_failure_diagnostic_fixture.hpp>
 #include <testsuite/util/cli_args.hpp>
 
-#include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
-
 #include <ibis/util/compiler/warnings_off.hpp>  // -Wsign-conversion
 #include <boost/test/unit_test.hpp>
 #include <ibis/util/compiler/warnings_on.hpp>
@@ -18,11 +16,15 @@
 #include <ibis/util/trim.hpp>
 
 #include <algorithm>
-#include <cctype>
 #include <fstream>
 #include <iterator>
 #include <sstream>
+#include <string_view>
 #include <system_error>
+
+#include <cctype>
+
+#include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
 /// ---------------------------------------------------------------------------
 ///
