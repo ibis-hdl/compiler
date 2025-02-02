@@ -61,6 +61,14 @@ jobs:
         # Install Clang-19 from llvm.org, as we do not have actually any official package available
         # for GH-Runner Ubuntu 24.04 used currently
         wget https://apt.llvm.org/llvm.sh -O - | sudo bash -s -- 19 all
+        sudo update-alternatives --install /usr/bin/llvm-config llvm-config /usr/bin/llvm-config-18 18
+        sudo update-alternatives --install /usr/bin/llvm-config llvm-config /usr/bin/llvm-config-19 19
+        sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-18 18
+        sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-19 19
+        sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-18 18
+        sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-19 19
+        sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-19 19
+        sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-19 19           
 
     - name: Checkout Repo
       uses: actions/checkout@v4

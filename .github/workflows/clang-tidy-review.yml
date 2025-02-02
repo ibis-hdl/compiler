@@ -23,7 +23,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install --no-install-recommends -y \
-          cmake ninja-build clang clang-tools clang-tidy
+          cmake ninja-build clang clang-tools
 
     - name: Checkout Repo
       uses: actions/checkout@v4
