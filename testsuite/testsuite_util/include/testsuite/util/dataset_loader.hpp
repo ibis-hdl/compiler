@@ -7,6 +7,7 @@
 
 #include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
+#include <cstddef>  // work around for Clang19 libc++ && Boost 1.86
 #include <boost/test/data/size.hpp>
 
 #include <memory>

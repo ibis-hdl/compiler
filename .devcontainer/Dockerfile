@@ -18,11 +18,11 @@ RUN if [ "${REINSTALL_CMAKE_VERSION_FROM_SOURCE}" != "none" ]; then \
 # clang, lldb, llvm, gdb; vcpkg)
 RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get update && apt-get install -y --no-install-recommends \
-       libc++-dev clang-tools clang-format clang-tidy iwyu ccache doxygen graphviz \
+       iwyu ccache doxygen graphviz \
        python3-pip python3-venv pipx 
 #   && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
-# update to GGC 14; MS devcontainers/cpp is shipped with gcc-13!
+# install GGC 14; MS devcontainers/cpp is shipped with gcc-13!
 # update-alternatives --get-selections
 # update-alternatives --{list,display,query} c++
 RUN export DEBIAN_FRONTEND=noninteractive \
@@ -31,7 +31,13 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 20 \
     && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 20 \
     && update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 30 \
-    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 30 \
+    && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 30
+
+# install Clang-19/libc++ from llvm.org
+RUN export DEBIAN_FRONTEND=noninteractive \
+    && apt-get update && apt-get install -y --no-install-recommends \
+    && apt-get install -y --no-install-recommends lsb-release wget software-properties-common gnupg \
+    && wget https://apt.llvm.org/llvm.sh -O - | sudo bash -s -- 19 all \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 USER vscode

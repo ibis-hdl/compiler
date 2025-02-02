@@ -54,7 +54,7 @@
                 "CMAKE_EXPORT_COMPILE_COMMANDS": true
             },
             "environment": {
-                "NINJA_STATUS": "[%f/%t (%es)] "
+                "NINJA_STATUS": "[%f/%t (Σ %es)] "
             }
         },
         {
