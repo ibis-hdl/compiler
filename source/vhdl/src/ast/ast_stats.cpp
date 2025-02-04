@@ -14,6 +14,9 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <unordered_map>
+#include <string_view>
+#include <cstdlib>
 
 namespace ibis::vhdl::ast {
 class position_tagged;
@@ -85,7 +88,7 @@ auto ast_stats::sort_by_count(bool ascending) const
         return std::function<bool(pair_type const&, pair_type const&)>{ descending_predicate };
     }(ascending);
 
-    // FixMe: Consider use of std::set since it's sorted by C++ std.
+    // FixMe: Consider modernize-use-ranges
     std::vector<pair_type> vec{ count_map.begin(), count_map.end() };
     std::sort(vec.begin(), vec.end(), predicate);
 
@@ -97,7 +100,7 @@ std::ostream& ast_stats::print_on(std::ostream& os) const
 {
     auto const vec{ sort_by_count() };
 
-    std::size_t const max_key_size = [&] {
+    std::size_t const max_key_size = [&] {  // ToDo [C++20] use std::ranges
         std::size_t size{ 0 };
         std::for_each(vec.begin(), vec.end(),
                       [&size](auto const& pair) { size = std::max(size, pair.first.size()); });

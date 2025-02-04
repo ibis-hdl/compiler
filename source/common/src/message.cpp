@@ -4,7 +4,6 @@
 //
 
 #include <ibis/message.hpp>
-#include <ibis/util/cxx_bug_fatal.hpp>
 
 #include <boost/locale/message.hpp>
 #include <boost/locale/format.hpp>
@@ -15,8 +14,6 @@
 
 #include <iostream>
 #include <string_view>
-#include <iostream>
-
 #include <cstdio>
 
 // ------------------------------------------------------------------------------------------------
@@ -51,60 +48,65 @@ std::ostream& write(std::ostream& os, boost::locale::basic_format<char> const& f
 
 namespace ibis {
 
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable : 4702)  // unreachable
+#endif                           // _MSC_VER
+
 std::ostream& message(std::string_view msg, ibis::severity severity, bool newline)
 {
     using enum ibis::severity;
 
+    // clang-format off
     switch (severity) {
-        case note: {
+        case note:
             fmt::print(stdout, fg(fmt::color::green), "[{}] ", "Note");
             return write(std::cout, msg, newline);
-        }
-        case warning: {
+        case warning:
             fmt::print(stdout, fg(fmt::color::yellow), "[{}] ", "Warning");
             return write(std::cout, msg, newline);
-        }
-        case error: {
+        case error:
             fmt::print(stderr, fg(fmt::color::red), "[{}] ", "Error");
             return write(std::cerr, msg, newline);
-        }
-        case failure: {
+        case failure:
             fmt::print(stderr, fg(fmt::color::red), "[{}] ", "Failure");
             return write(std::cerr, msg, newline);
-        }
-        default:
-            cxx_unreachable_bug_triggered();
+        //
+        // *No* default branch: let the compiler generate warning about enumeration
+        // value not handled in switch
+        //
     }
+    // clang-format on
 
-    cxx_unreachable_bug_triggered();
+    std::unreachable();
 }
 
 std::ostream& message(boost::locale::basic_message<char> msg, ibis::severity severity, bool newline)
 {
     using enum ibis::severity;
 
+    // clang-format off
     switch (severity) {
-        case note: {
+        case note:
             fmt::print(stdout, fg(fmt::color::green), "[{}] ", "Note");
             return write(std::cout, msg, newline);
-        }
-        case warning: {
+        case warning:
             fmt::print(stdout, fg(fmt::color::yellow), "[{}] ", "Warning");
             return write(std::cout, msg, newline);
-        }
-        case error: {
+        case error:
             fmt::print(stderr, fg(fmt::color::red), "[{}] ", "Error");
             return write(std::cerr, msg, newline);
-        }
-        case failure: {
+        case failure:
             fmt::print(stderr, fg(fmt::color::red), "[{}] ", "Failure");
             return write(std::cerr, msg, newline);
-        }
-        default:
-            cxx_unreachable_bug_triggered();
+        //
+        // *No* default branch: let the compiler generate warning about enumeration
+        // value not handled in switch
+        //
     }
+    // clang-format on
 
-    cxx_unreachable_bug_triggered();
+    std::unreachable();
 }
 
 std::ostream& message(boost::locale::basic_format<char> const& fmt, ibis::severity severity,
@@ -112,28 +114,32 @@ std::ostream& message(boost::locale::basic_format<char> const& fmt, ibis::severi
 {
     using enum ibis::severity;
 
+    // clang-format off
     switch (severity) {
-        case note: {
+        case note:
             fmt::print(stdout, fg(fmt::color::green), "[{}] ", "Note");
             return write(std::cout, fmt, newline);
-        }
-        case warning: {
+        case warning:
             fmt::print(stdout, fg(fmt::color::yellow), "[{}] ", "Warning");
             return write(std::cout, fmt, newline);
-        }
-        case error: {
+        case error:
             fmt::print(stderr, fg(fmt::color::red), "[{}] ", "Error");
             return write(std::cerr, fmt, newline);
-        }
-        case failure: {
+        case failure:
             fmt::print(stderr, fg(fmt::color::red), "[{}] ", "Failure");
             return write(std::cerr, fmt, newline);
-        }
-        default:
-            cxx_unreachable_bug_triggered();
+        //
+        // *No* default branch: let the compiler generate warning about enumeration
+        // value not handled in switch
+        //
     }
+    // clang-format on
 
-    cxx_unreachable_bug_triggered();
+    std::unreachable();
 }
+
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
 
 }  // namespace ibis

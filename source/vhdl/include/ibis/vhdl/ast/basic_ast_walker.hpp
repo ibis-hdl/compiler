@@ -1087,22 +1087,17 @@ public:
         //    | function_name ( formal_designator )
         //    | type_mark ( formal_designator )
         switch (node.context_tied_names.size()) {
-            case 1: {
+            case 1:
                 // BNF: formal_designator
                 visit_formal_designator(node.context_tied_names[0]);
                 break;
-            }
-
-            case 2: {
+            case 2:
                 // BNF: {function_name|type_mark} ( formal_designator )
                 visit_name(node.context_tied_names[0]);
                 visit_formal_designator(node.context_tied_names[1]);
                 break;
-            }
-
-            default: {
+            default:
                 cxx_bug_fatal("VHDL BNF rules violation, parser rule failed!");
-            }
         }
     }
 

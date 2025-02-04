@@ -31,10 +31,8 @@
 #include <boost/locale/message.hpp>
 #include <ibis/util/compiler/warnings_on.hpp>
 
-#include <sstream>
 #include <string_view>
 #include <utility>
-#include <iostream>
 
 namespace ibis::vhdl::analyze {
 
@@ -77,7 +75,7 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name)
         }
         // test on OK before on function entry, shouldn't be here
         [[unlikely]] case label_match::result::OK:
-            cxx_unreachable_bug_triggered();
+            cxx_bug_fatal("Internal logic error");
         // *No* default branch: let the compiler generate warning about enumeration
         // value not handled in switch
     }

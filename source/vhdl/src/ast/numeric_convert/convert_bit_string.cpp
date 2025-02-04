@@ -69,7 +69,7 @@ typename convert_bit_string<IntegerT>::return_type convert_bit_string<IntegerT>:
                 // definitely wrong enum, the caller has not worked out properly
                 [[unlikely]] case numeric_base_specifier::unspecified: [[fallthrough]];
                 [[unlikely]] case numeric_base_specifier::unsupported:
-                    cxx_unreachable_bug_triggered();
+                    cxx_bug_fatal("unspecified or unsupported numeric base type for bit string");
                 //
                 // *No* default branch: let the compiler generate warning about enumeration
                 // value not handled in switch

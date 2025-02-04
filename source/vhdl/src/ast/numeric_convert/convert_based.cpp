@@ -22,12 +22,8 @@
 #include <ibis/util/compiler/warnings_off.hpp>
 // IWYU replaces a lot of other header, we stay with this one
 #include <boost/spirit/home/x3.hpp>  // IWYU pragma: keep
-#include <ibis/util/compiler/warnings_on.hpp>
-
 #include <range/v3/view/join.hpp>
 #include <range/v3/range/conversion.hpp>
-
-#include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
 #include <ibis/util/compiler/warnings_on.hpp>
@@ -41,6 +37,8 @@
 #include <string_view>
 #include <type_traits>
 #include <iostream>
+#include <utility>
+#include <tuple>
 
 namespace ibis::vhdl::ast::detail {
 
@@ -88,7 +86,7 @@ convert_based<IntegerT, RealT>::parse_integer(unsigned base,
             // definitely wrong enum, the caller has not worked out properly
             [[unlikely]] case numeric_base_specifier::unspecified: [[fallthrough]];
             [[unlikely]] case numeric_base_specifier::unsupported:
-                cxx_unreachable_bug_triggered();
+                cxx_bug_fatal("unspecified or unsupported base for based literal");
             //
             // *No* default branch: let the compiler generate warning about enumeration
             // value not handled in switch
@@ -161,6 +159,7 @@ std::tuple<bool, double> convert_based<IntegerT, RealT>::parse_fractional(
             // here we let the compiler decide how o optimize
             // clang-format off
             auto const hex2dec = [](char chr) {
+                // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
                 switch (chr) {
                     case '0':   return  0;
                     case '1':   return  1;
@@ -184,13 +183,17 @@ std::tuple<bool, double> convert_based<IntegerT, RealT>::parse_fractional(
                     case 'E':   return 14;
                     case 'f':   [[fallthrough]];
                     case 'F':   return 15;
-                    default:    cxx_unreachable_bug_triggered();
+                    default:    // parser's character validation failed
+                        cxx_bug_fatal("invalid hex character for based literal");
                 }
+                // NOLINTEND(cppcoreguidelines-avoid-magic-numbers)
             };
             // clang-format on
+
             real_type dig = hex2dec(hex_chr);
             dig /= pow;
             pow *= static_cast<real_type>(base);
+
             return acc + dig;
         });
 
@@ -308,13 +311,13 @@ std::tuple<bool, double> convert_based<IntegerT, RealT>::parse_real10(
 
     auto range_f = numeric_convert::detail::filter_range(real10_literal | views::join);
     auto iter = std::begin(range_f);
-    auto const end = std::end(range_f);
+    auto const last = std::end(range_f);
 
     // use X3's base10 double parser which is well tested
     x3::real_parser<double, detail::real_policies<double>> const real_parser;
 
     double real = 0;
-    bool const parse_ok = x3::parse(iter, end, real_parser >> x3::eoi, real);
+    bool const parse_ok = x3::parse(iter, last, real_parser >> x3::eoi, real);
 
     if (!parse_ok) {
         auto const real10_str = range_f | to<std::string>();
@@ -347,7 +350,7 @@ typename convert_based<IntegerT, RealT>::return_type convert_based<IntegerT, Rea
                 return return_type{ false, real_type{ 0 } };
             // definitely wrong enum - the caller has not worked out properly
             [[unlikely]] case numeric_type_specifier::unspecified:
-                cxx_unreachable_bug_triggered();
+                cxx_bug_fatal("unspecified numeric type for based literal");
             // *No* default branch: let the compiler generate warning about enumeration
             // value not handled in switch
         }
@@ -438,7 +441,7 @@ typename convert_based<IntegerT, RealT>::return_type convert_based<IntegerT, Rea
         }
         // definitely wrong enum - the caller has not worked out properly
         [[unlikely]] case numeric_type_specifier::unspecified:
-            cxx_unreachable_bug_triggered();
+            cxx_bug_fatal("unspecified numeric type for based literal");
         // *No* default branch: let the compiler generate warning about enumeration
         // value not handled in switch
     }

@@ -6,8 +6,9 @@
 #include <ibis/vhdl/ast/pretty_node_name.hpp>
 
 #include <unordered_map>
-#include <utility>
+#include <string_view>
 #include <iostream>
+#include <format>
 
 namespace ibis::vhdl::ast {
 
@@ -264,12 +265,10 @@ std::string_view pretty_node_name(std::string_view which)
         return iter->second;
     }
 
-    std::cerr << '\n'
-              << "****************************************\n"
-              << "*****    WARNING (Internal Bug)    *****\n"
-              << "****************************************\n"
-              << "pretty_node_name() lookup failed" << '\n'
-              << "subject:" << which << std::endl;  // flush
+    // ToDo: Printing headers like this orroures at several places here, make it generic,
+    // e.g. main.cpp:render_source() or cxx_assert()
+    std::cerr << std::format("{:*^80}\n{:*^80}\n{:*^80}\n", "", "WARNING (Internal Bug)", "");
+    std::cerr << std::format("pretty_node_name() lookup failed\nsubject: '{}'\n", which);
 
     // simply return lookup argument back
     return which;

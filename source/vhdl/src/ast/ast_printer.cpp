@@ -6,6 +6,7 @@
 #include <ibis/vhdl/ast/ast_printer.hpp>
 #include <ibis/vhdl/ast/ast_formatter.hpp>
 #include <ibis/vhdl/ast.hpp>
+#include <ibis/util/indent_stream.hpp>
 
 #include <boost/spirit/home/x3/support/traits/is_variant.hpp>
 
@@ -13,7 +14,16 @@
 
 #include <ibis/util/cxx_bug_fatal.hpp>
 
+#include <iostream>
+#include <cstdint>
+#include <string_view>
+
 namespace ibis::vhdl::ast {
+
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable : 4702)  // unreachable
+#endif
 
 printer::printer(std::ostream& os_, uint16_t start_indent)
     : os{ os_, start_indent }
@@ -332,17 +342,15 @@ void printer::operator()(based_literal const& node)
 
     os << ", type: ";
     switch (node.number.type_specifier) {
-        case numeric_type_specifier::integer: {
+        case numeric_type_specifier::integer:
             os << "integer";
             break;
-        }
-        case numeric_type_specifier::real: {
+        case numeric_type_specifier::real:
             os << "real";
             break;
-        }
-        default:  // unreachable_bug_triggered
+        default:
             // BUG triggered by 'parser_rules/test_data/abstract_literal/decimal_literal_000'
-            cxx_unreachable_bug_triggered();
+            cxx_bug_fatal("unspecified numeric type for based literal");
     }
 }
 
@@ -380,7 +388,7 @@ void printer::operator()(bit_string_literal const& node)
         case numeric_base_specifier::base16:
             os << "hex";
             break;
-        default:  // unreachable_bug_triggered
+        default:
             cxx_unreachable_bug_triggered();
     }
 
@@ -893,7 +901,7 @@ void printer::operator()(decimal_literal const& node)
         case numeric_type_specifier::real:
             os << "real";
             break;
-        default:  // unreachable_bug_triggered
+        default:
             cxx_unreachable_bug_triggered();
     }
 }
@@ -904,15 +912,13 @@ void printer::operator()(delay_mechanism const& node)
     symbol_scope<delay_mechanism> _(*this, symbol);
 
     switch (node.delay_type) {  // invalid keywords call unreachable_bug_triggered() on default
-        case ast::keyword_token::INERTIAL: {
+        case ast::keyword_token::INERTIAL:
             os << "INERTIAL_DELAY";
             break;
-        }
-        case ast::keyword_token::TRANSPORT: {
+        case ast::keyword_token::TRANSPORT:
             os << "TRANSPORT_DELAY";
             break;
-        }
-        default:  // unreachable_bug_triggered, covers keywords 'UNSPECIFIED', 'ABS', 'ACCESS'...
+        default:
             cxx_unreachable_bug_triggered();
     }
 
@@ -1303,23 +1309,18 @@ void printer::operator()(formal_part const& node)
     //    | function_name ( formal_designator )
     //    | type_mark ( formal_designator )
     switch (node.context_tied_names.size()) {
-        case 1: {
+        case 1:
             // BNF: formal_designator
             visit_formal_designator(node.context_tied_names[0]);
             break;
-        }
-
-        case 2: {
+        case 2:
             // BNF: {function_name|type_mark} ( formal_designator )
             visit_name(node.context_tied_names[0]);
             os << ",\n";
             visit_formal_designator(node.context_tied_names[1]);
             break;
-        }
-
-        default: {
+        default:
             cxx_bug_fatal("VHDL BNF rules violation, parser rule failed!");
-        }
     }
 }
 
@@ -2475,20 +2476,16 @@ void printer::operator()(subtype_indication const& node)
     // subtype_indication ::=
     //     [ resolution_function_name ] type_mark [ constraint ]
     switch (node.unspecified_name_list.size()) {
-        case 1: {
+        case 1:
             // BNF: type_mark .... [ constraint ]
             visit_type_mark(node.unspecified_name_list[0]);
             break;
-        }
-
-        case 2: {
+        case 2:
             // BNF: [ resolution_function_name ] type_mark ... [ constraint ]
             visit_resolution_function_name(node.unspecified_name_list[0]);
             os << '\n';
             visit_type_mark(node.unspecified_name_list[1]);
             break;
-        }
-
         default:
             cxx_bug_fatal("VHDL BNF rules violation, parser rule failed!");
     }
@@ -2751,5 +2748,9 @@ void printer::visit(std::vector<T> const& vector)
         }
     }
 }
+
+#if defined(_MSC_VER)
+#pragma warning(pop)  // 4702 unreachable
+#endif
 
 }  // namespace ibis::vhdl::ast

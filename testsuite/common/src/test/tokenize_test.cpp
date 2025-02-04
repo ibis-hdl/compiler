@@ -12,6 +12,8 @@
 #include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
 #include <iostream>
+#include <string_view>
+#include <vector>
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_SUITE(common_utils)

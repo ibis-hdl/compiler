@@ -8,6 +8,9 @@
 
 #include <testsuite/namespace_alias.hpp>
 
+#include <string_view>
+#include <memory>
+
 namespace testsuite::vhdl::parser {
 
 // Quiet compiler warning: ... has no out-of-line virtual method definitions; its vtable will be

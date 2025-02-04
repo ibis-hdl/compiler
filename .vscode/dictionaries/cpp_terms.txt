@@ -1,4 +1,6 @@
 libcxx
+libstdc
+libstdcxx
 NOLINTNEXTLINE
 PTHREAD
 XNOR

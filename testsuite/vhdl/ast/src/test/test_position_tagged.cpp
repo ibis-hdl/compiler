@@ -4,9 +4,12 @@
 //
 
 #include <boost/test/unit_test.hpp>
+#include <boost/test/tools/interface.hpp>  // BOOST_TEST()
+#include <boost/test/tools/context.hpp>    // BOOST_TEST_CONTEXT()
+#include <boost/test/unit_test_suite.hpp>  // BOOST_AUTO_TEST_CASE()
+#include <boost/test/tree/decorator.hpp>   // utf::label
 
 #include <ibis/vhdl/ast/util/position_tagged.hpp>
-#include <ibis/util/strong_type.hpp>
 
 #include <testsuite/namespace_alias.hpp>
 
@@ -38,6 +41,7 @@ BOOST_AUTO_TEST_CASE(position_tagged,
     {
         // wrong constructed - file tag only
         ast::position_tagged position_tagged{
+            // NOLINT(modernize-use-designated-initializers)
             ast::position_tagged::file_id_type{ 0U },
             ast::position_tagged::MAX_POSITION_ID  // -- default
         };
@@ -48,7 +52,7 @@ BOOST_AUTO_TEST_CASE(position_tagged,
     {
         // wrong constructed - position tag only
         // clang-format off
-        ast::position_tagged position_tagged{
+        ast::position_tagged position_tagged{// NOLINT(modernize-use-designated-initializers)
             ast::position_tagged::MAX_FILE_ID,  // -- default
             ast::position_tagged::position_id_type{ 0U }
         };
@@ -59,8 +63,12 @@ BOOST_AUTO_TEST_CASE(position_tagged,
     }
     {
         // correct tagged
-        ast::position_tagged position_tagged{ ast::position_tagged::file_id_type{ 42U },
-                                              ast::position_tagged::position_id_type{ 42U } };
+        // clang-format off
+        ast::position_tagged position_tagged{ // NOLINT(modernize-use-designated-initializers)
+            ast::position_tagged::file_id_type{ 42U },
+            ast::position_tagged::position_id_type{ 42U }
+        };
+        // clang-format on
         BOOST_TEST(position_tagged.file_id == 42U);
         BOOST_TEST(position_tagged.position_id == 42U);
         BOOST_TEST(position_tagged.is_tagged() == true);

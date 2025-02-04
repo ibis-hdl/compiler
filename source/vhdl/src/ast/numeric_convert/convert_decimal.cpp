@@ -8,6 +8,7 @@
 #include <ibis/vhdl/ast/numeric_convert/dbg_trace.hpp>
 
 #include <ibis/vhdl/diagnostic_handler.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
 
 #include <ibis/vhdl/ast/node/decimal_literal.hpp>
 #include <ibis/vhdl/ast/util/string_span.hpp>
@@ -22,12 +23,12 @@
 #include <ibis/util/compiler/warnings_off.hpp>
 // IWYU replaces a lot of other header, we stay with this one
 #include <boost/spirit/home/x3.hpp>  // IWYU pragma: keep
-#include <ibis/util/compiler/warnings_on.hpp>
-
-#include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
-#include <boost/locale/format.hpp>
+#include <boost/locale/format.hpp>   // [-Wsign-conversion]
 #include <boost/locale/message.hpp>
 #include <ibis/util/compiler/warnings_on.hpp>
+
+#include <string_view>
+#include <tuple>
 
 namespace /* anonymous */ {
 
@@ -86,8 +87,7 @@ typename convert_decimal<IntegerT, RealT>::return_type convert_decimal<IntegerT,
                 return return_type{ parse_ok, result_type(attribute) };
             }
             [[unlikely]] case numeric_type_specifier::unspecified:
-                // The caller must pass checked base_specifier
-                cxx_unreachable_bug_triggered();
+                cxx_bug_fatal("caller must pass checked base_specifier");
             //
             // *No* default branch: let the compiler generate warning about enumeration
             // value not handled in switch

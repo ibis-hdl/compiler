@@ -6,10 +6,14 @@
 #include <ibis/frontend/init.hpp>
 
 #include <ibis/vhdl/parser/parse.hpp>
-#include <ibis/vhdl/ast.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/parser/context.hpp>
 
 #include <ibis/vhdl/ast/ast_printer.hpp>
+#include <ibis/vhdl/ast/node/design_unit.hpp>  // include doesn't work, linker errors
+#include <ibis/vhdl/ast.hpp>
 #include <ibis/vhdl/diagnostic_formatter.hpp>
+#include <ibis/vhdl/context.hpp>  // failure_status
 
 #include <ibis/settings.hpp>
 #include <ibis/util/file/file_loader.hpp>
@@ -24,10 +28,12 @@
 #include <cstdlib>
 #include <exception>
 #include <iostream>
-#include <optional>
 #include <string>
 #include <string_view>
-#include <vector>
+#include <format>
+#include <sstream>
+#include <utility>
+#include <limits>
 
 extern void testing_signal_handler();
 
@@ -38,6 +44,8 @@ namespace parser = ibis::vhdl::parser;
 namespace ast = ibis::vhdl::ast;
 
 using namespace ibis;
+
+namespace /* anonymous */ {
 
 // render the source with lines numbers (quick & dirty solution)
 void render_source(std::string const& contents)
@@ -52,6 +60,8 @@ void render_source(std::string const& contents)
     std::cout << std::format("{:-^80}\n", "");
 }
 
+}  // namespace
+
 ///
 /// @brief The App, used as test driver at this state.
 ///
@@ -65,7 +75,7 @@ int main(int argc, const char* argv[])
     using namespace ibis::literals::memory;
 
     try {
-        ibis::frontend::init init(argc, argv);
+        ibis::frontend::init const init(argc, argv);
 
         bool const quiet = [&] { return ibis::settings::instance().get<bool>("quiet"); }();
         unsigned const verbose_level = [&] {
@@ -82,7 +92,7 @@ int main(int argc, const char* argv[])
          */
 
         // instantiate functions required for parsing inside hdl-files loop
-        util::file_loader file_reader{ std::cerr };
+        util::file_loader const file_reader{ std::cerr };
         util::file_mapper file_mapper{};
         parser::position_cache<iterator_type> position_cache{ 4_KiB };
         parser::parse parse{ std::cout };

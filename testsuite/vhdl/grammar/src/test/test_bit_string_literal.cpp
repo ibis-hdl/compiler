@@ -94,8 +94,8 @@ struct {
 
 template <typename GoldDataT, bool verbose = false>
 struct test_worker {
-    test_worker(GoldDataT const& gold_data)
-        : gold{ gold_data }
+    test_worker(GoldDataT const& data)
+        : gold_data{ data }
         , os{ std::cout }
     {
     }
@@ -123,7 +123,7 @@ struct test_worker {
     {
         BOOST_TEST_CONTEXT(">>> Test index at " << index << " <<<")
         {
-            auto const expected = gold[index];
+            auto const expected = gold_data[index];
             BOOST_TEST(node.base_specifier == expected.base_specifier);
             auto const node_literal = std::string_view{ node.literal };
             BOOST_TEST(node_literal == expected.literal, btt::per_element());
@@ -140,7 +140,7 @@ struct test_worker {
     }
 
 private:
-    std::reference_wrapper<GoldDataT> gold;
+    std::reference_wrapper<GoldDataT> gold_data;
     std::size_t mutable index = 0;
     std::ostream& os;  // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
 };
@@ -148,14 +148,14 @@ private:
 using verifier_type = ast::basic_ast_walker<test_worker<decltype(gold_data), false /* verbose */>>;
 
 auto const verify = [](ast::design_file const& ast) {
-    verifier_type verify(gold_data);
-    verify(ast);
+    verifier_type verifier(gold_data);
+    verifier(ast);
 };
 
 }  // namespace valid_data
 
 // clang-format off
-BOOST_AUTO_TEST_CASE(bit_string_literal__valid_test,    // test shall pass
+BOOST_AUTO_TEST_CASE(bit_string_literal_valid_test,    // test shall pass
                      *utf::label("bit_string_literal")
                      *utf::label("formatter"))
 // clang-format on

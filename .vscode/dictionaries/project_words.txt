@@ -4,6 +4,7 @@ choco
 cmaketoolchain
 coliru
 conanfile
+cppcheck
 cppstd
 ctest
 devcontainers

@@ -6,8 +6,7 @@
 #include <ibis/frontend/signal_handler.hpp>
 #include <ibis/message.hpp>
 
-#include <functional>
-#include <iostream>
+// #include <iostream>
 #include <string_view>
 
 #include <csignal>
@@ -15,7 +14,7 @@
 
 namespace ibis::frontend {
 
-#if 0  // avoid LINT errors
+#if 0  // NOLINT(readability-avoid-unconditional-preprocessor-if)
 void testing_signal_handler()
 {
 #if 0  // doesn't work ????

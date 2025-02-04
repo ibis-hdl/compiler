@@ -38,7 +38,8 @@ struct testing_parser {
 
     template <typename ParserType>
     std::tuple<bool, std::string> operator()(std::string_view input, ParserType const &parser_rule,
-                                             std::string_view filename, bool full_match = true)
+                                             std::string_view filename,
+                                             bool full_match = true) const
     {
         using namespace ibis::literals::memory;
         using iterator_type = parser::iterator_type;
@@ -49,7 +50,11 @@ struct testing_parser {
 
         btt::output_test_stream output;
 
+        // FixMe API still not sufficient, shall be call of current_file.id(), but it's moved before
+        // same with iterators use later
         auto current_file = file_mapper.add_file(filename, input);
+        auto const current_file_id = current_file.id();  // safe id and iters before move
+        auto [iter, end] = ibis::util::get_iterator_pair(current_file.file_contents());
 
         // clang-format off
         parser::diagnostic_handler_type diagnostic_handler{
@@ -57,7 +62,7 @@ struct testing_parser {
         };
         // clang-format on
 
-        auto ast_annotator = position_cache.annotator_for(current_file.id());
+        auto ast_annotator = position_cache.annotator_for(current_file_id);
 
         // clang-format off
         auto const parser =
@@ -67,8 +72,6 @@ struct testing_parser {
                 ]
             ];
         // clang-format on
-
-        auto [iter, end] = ibis::util::get_iterator_pair(current_file.file_contents());
 
         // using different iterator_types causes linker errors, see e.g.
         // [linking errors while separate parser using boost spirit x3](

@@ -6,8 +6,10 @@
 #include <ibis/util/file_mapper.hpp>
 
 #include <boost/test/unit_test.hpp>
-#include <boost/test/tools/output_test_stream.hpp>
-#include <boost/test/tools/interface.hpp>
+#include <boost/test/tools/interface.hpp>  // BOOST_TEST()
+#include <boost/test/tools/context.hpp>    // BOOST_TEST_CONTEXT()
+#include <boost/test/unit_test_suite.hpp>  // BOOST_AUTO_TEST_CASE()
+#include <boost/test/tree/decorator.hpp>   // utf::label
 
 #include <string_view>
 #include <string>

@@ -35,7 +35,7 @@ public:
     /// hence it isn't configurable/derivable as intended. Maybe introduce an `error_context` for
     /// all the informations carried?
     ///
-    diagnostic_printer(diagnostic_context const& context);
+    diagnostic_printer(diagnostic_context const& ctx);
 
     std::ostream& print_snippets(std::ostream& os) const;
 

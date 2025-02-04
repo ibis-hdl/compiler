@@ -7,13 +7,17 @@
 #include <testsuite/util/cli_args.hpp>
 
 #include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test_log.hpp>  // BOOST_TEST_MESSAGE()
 
 #include <cassert>
 #include <exception>
 #include <filesystem>
 #include <fstream>
+#include <string>
 #include <set>
 #include <string_view>
+#include <utility>
+#include <stdexcept>
 
 namespace testsuite::util {
 
@@ -44,7 +48,7 @@ void dataset_loader::set_builtin(std::unique_ptr<compile_builtin> other)
 
     BOOST_TEST_MESSAGE(name() << ": load test files for " << testcase_group);
 
-    fs::path path = fs::path(option.source_dir) / testcase_group;
+    fs::path const path = fs::path(option.source_dir) / testcase_group;
     read_files(path);
 
     if (dataset.input.empty()) {

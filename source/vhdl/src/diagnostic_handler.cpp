@@ -12,19 +12,19 @@
 
 #include <ibis/vhdl/parser/iterator_type.hpp>  // for explicit template instantiation
 
-#include <ibis/util/position_indicator.hpp>
-
-#include <ibis/util/make_iomanip.hpp>
 #include <ibis/util/cxx_bug_fatal.hpp>
 
 #include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
-#include <boost/range/iterator_range_core.hpp>
+// #include <boost/range/iterator_range_core.hpp>
 #include <ibis/util/compiler/warnings_on.hpp>
 
-#include <algorithm>
-#include <iostream>
+#include <string_view>
+#include <optional>
+#include <tuple>
+#include <iterator>
+#include <cstddef>
 
 namespace ibis::vhdl {
 
@@ -54,11 +54,11 @@ void diagnostic_handler<Iterator>::unsupported(iterator_type error_pos,
 }
 
 template <typename Iterator>
-void diagnostic_handler<Iterator>::unsupported(iterator_type error_first,
+void diagnostic_handler<Iterator>::unsupported(iterator_type error_pos,
                                                std::optional<iterator_type> error_last,
                                                std::string_view error_message) const
 {
-    error(error_first, error_last, error_message, error_type::not_supported);
+    error(error_pos, error_last, error_message, error_type::not_supported);
 }
 
 template <typename Iterator>
@@ -86,7 +86,7 @@ void diagnostic_handler<Iterator>::syntax_error(ast::position_tagged const& wher
     // the node must be tagged before
     cxx_assert(where_tag.is_tagged(), "Node not correct tagged");
 
-#if 0
+#if 0  // NOLINT(readability-avoid-unconditional-preprocessor-if)
     // ToDo [XXX] fix position_cache::proxy::set_id(), current_file().id()
     // on branch code-review-2024 removed 
     // The parser's position cache proxy is configured to have the same file id tagged as the node
@@ -114,7 +114,7 @@ void diagnostic_handler<Iterator>::syntax_error(ast::position_tagged const& wher
 
     ++context.get().errors();
 
-#if 0
+#if 0  // NOLINT(readability-avoid-unconditional-preprocessor-if)
     // ToDo [XXX] fix position_cache::proxy::set_id(), current_file().id()
     // on branch code-review-2024 removed 
     cxx_assert(current_file().id() == where_tag.file_id, "cache proxy file id different");

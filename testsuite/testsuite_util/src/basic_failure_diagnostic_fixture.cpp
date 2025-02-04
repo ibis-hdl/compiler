@@ -10,19 +10,20 @@
 #include <boost/test/unit_test.hpp>
 #include <ibis/util/compiler/warnings_on.hpp>
 #include <boost/test/results_collector.hpp>
-#include <boost/test/tools/output_test_stream.hpp>
+#include <boost/test/tools/interface.hpp>  // BOOST_TEST_REQUIRE()
+#include <boost/test/framework.hpp>
 
 #include <ibis/util/make_iomanip.hpp>
 #include <ibis/util/trim.hpp>
 
-#include <algorithm>
 #include <fstream>
-#include <iterator>
-#include <sstream>
+#include <utility>
 #include <string_view>
 #include <system_error>
-
+#include <cstddef>
 #include <cctype>
+#include <filesystem>
+#include <stdexcept>
 
 #include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
@@ -48,7 +49,7 @@ void basic_failure_diagnostic_fixture::set_builtin(std::unique_ptr<compile_built
 {
     builtin = std::move(other);
 
-    int argc = boost::unit_test::framework::master_test_suite().argc;
+    int const argc = boost::unit_test::framework::master_test_suite().argc;
     char** argv = boost::unit_test::framework::master_test_suite().argv;
 
     cli_args::parse_cli(argc, argv);

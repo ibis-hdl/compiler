@@ -53,20 +53,21 @@ BOOST_AUTO_TEST_CASE(bit_string_literal_requirements_check)
     using namespace testsuite::vhdl::numeric_convert;
 
     // binary
-    BOOST_REQUIRE(bsl_gen::bin(1, "_010") == R"(b"1_010")");
-    BOOST_REQUIRE(bsl_gen::bin(detail::uint32_max) == R"(b"11111111111111111111111111111111")");
-    BOOST_REQUIRE(bsl_gen::bin(detail::uint64_max) ==
-                  R"(b"1111111111111111111111111111111111111111111111111111111111111111")");
+    BOOST_TEST_REQUIRE(bsl_gen::bin(1, "_010") == R"(b"1_010")");
+    BOOST_TEST_REQUIRE(bsl_gen::bin(detail::uint32_max) ==
+                       R"(b"11111111111111111111111111111111")");
+    BOOST_TEST_REQUIRE(bsl_gen::bin(detail::uint64_max) ==
+                       R"(b"1111111111111111111111111111111111111111111111111111111111111111")");
 
     // octal
-    BOOST_REQUIRE(bsl_gen::oct(1, "_010") == R"(o"1_010")");
-    BOOST_REQUIRE(bsl_gen::oct(detail::uint32_max) == R"(o"37777777777")");
-    BOOST_REQUIRE(bsl_gen::oct(detail::uint64_max) == R"(o"1777777777777777777777")");
+    BOOST_TEST_REQUIRE(bsl_gen::oct(1, "_010") == R"(o"1_010")");
+    BOOST_TEST_REQUIRE(bsl_gen::oct(detail::uint32_max) == R"(o"37777777777")");
+    BOOST_TEST_REQUIRE(bsl_gen::oct(detail::uint64_max) == R"(o"1777777777777777777777")");
 
     // hexadecimal
-    BOOST_REQUIRE(bsl_gen::hex(1, "_010") == R"(x"1_010")");
-    BOOST_REQUIRE(bsl_gen::hex(detail::uint32_max) == R"(x"ffffffff")");
-    BOOST_REQUIRE(bsl_gen::hex(detail::uint64_max) == R"(x"ffffffffffffffff")");
+    BOOST_TEST_REQUIRE(bsl_gen::hex(1, "_010") == R"(x"1_010")");
+    BOOST_TEST_REQUIRE(bsl_gen::hex(detail::uint32_max) == R"(x"ffffffff")");
+    BOOST_TEST_REQUIRE(bsl_gen::hex(detail::uint64_max) == R"(x"ffffffffffffffff")");
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -382,12 +383,12 @@ BOOST_DATA_TEST_CASE(bit_string_literal, utf_data::make(bit_literal) ^ bit_decim
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
     auto const [parse_ok, ast_node] = parse.bit_string_literal(position_proxy, diagnostic_handler);
-    BOOST_REQUIRE(parse_ok);
+    BOOST_TEST_REQUIRE(parse_ok);
 
     numeric_convert numeric{ diagnostic_handler };
 
     auto const [conv_ok, value] = numeric(ast_node);
-    BOOST_REQUIRE(conv_ok);
+    BOOST_TEST_REQUIRE(conv_ok);
     BOOST_TEST(std::get<numeric_convert::integer_type>(value) == N);
 
     os << failure_status(ctx);
@@ -424,13 +425,13 @@ BOOST_DATA_TEST_CASE(bit_string_literal_uint64_ovflw, utf_data::make(literal_ovf
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
     auto const [parse_ok, ast_node] = parse.bit_string_literal(position_proxy, diagnostic_handler);
-    BOOST_REQUIRE(parse_ok);  // must parse ...
+    BOOST_TEST_REQUIRE(parse_ok);  // must parse ...
 
     numeric_convert numeric{ diagnostic_handler };
 
     bool conv_ok = true;
     std::tie(conv_ok, std::ignore) = numeric(ast_node);
-    BOOST_REQUIRE(!conv_ok);  // ... but must fail to convert
+    BOOST_TEST_REQUIRE(!conv_ok);  // ... but must fail to convert
 
     os << failure_status(ctx);
     if (!os.str().empty()) {

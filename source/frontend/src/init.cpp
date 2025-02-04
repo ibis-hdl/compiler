@@ -36,9 +36,7 @@
 #include <vector>
 #include <filesystem>
 #include <locale>
-#include <stdexcept>
 #include <system_error>
-#include <unordered_map>
 #include <iostream>
 
 namespace ibis::frontend {
