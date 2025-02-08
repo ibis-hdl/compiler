@@ -65,7 +65,22 @@ set_source_files_properties(
 )
 
 
-if(DEVELOPER_BOOST_SPIRIT_X3_DEBUG)
+# Disable Clang -Weverything Warning regards:
+# [-Wshadow]: The ast_printer uses a lot of
+#    static const std::string_view symbol{ "<node-name>" }, even on dispatch inside same
+#    member, hence disable warning: declaration shadows a local variable [-Wshadow]
+# [-Wswitch-enum]: Rework required, or replacement with generic_ast_walker visitor
+# [-Wextra-semi-stmt]: a lot of macro stuff regards cxx_bug() etc.; also requires rework,
+#    so silence this
+# ToDo remove this compiler options
+if(IBIS_DEVELOPER_CLANG_WARN_EVERYTHING)
+    target_compile_options(${PROJECT_NAME} PRIVATE # append
+        "-Wno-Wshadow" "-Wno-shadow-uncaptured-local" "-Wno-switch-enum" "-Wno-extra-semi-stmt"
+    )
+endif()
+
+
+if(IBIS_DEVELOPER_BOOST_SPIRIT_X3_DEBUG)
     target_compile_definitions(${PROJECT_NAME}
         PRIVATE BOOST_SPIRIT_X3_DEBUG
     )
@@ -80,8 +95,7 @@ set_property(TARGET ${PROJECT_NAME}
 )
 
 
-if(IBIS_ENABLE_PCH
-)
+if(IBIS_ENABLE_PCH)
     target_precompile_headers(${PROJECT_NAME} REUSE_FROM ibis_pch)
 endif()
 
@@ -89,8 +103,6 @@ endif()
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-    SYSTEM PUBLIC
-        $<INSTALL_INTERFACE:include>
 )
 
 

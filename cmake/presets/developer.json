@@ -1,0 +1,151 @@
+{
+    "version": 8,
+    "include": [
+        "clang.json",
+        "clang-libcpp.json"
+    ],
+    "configurePresets": [
+        {
+            "name": "developer-mode",
+            "hidden": true,
+            "cacheVariables": {
+              "IBIS_DEVELOPER_MODE": "ON",
+              "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },        
+        {
+            "name": "dev-clang",
+            "displayName": "Clang (Developer)",
+            "description": "Clang compiler (using GNU libstdc++) with strong developer flags",
+            "hidden": true,
+            "inherits": [
+                "compiler-clang",
+                "condition-linux-or-macos",
+                "ninja-multi-config",
+                "cmake-pedantic-configure-settings",
+                "default-install-settings",
+                "default-environment"
+            ],
+            "cacheVariables": {
+                "IBIS_DEVELOPER_CLANG_WARN_EVERYTHING": "ON",
+                "CONAN_HOST_PROFILE": "clang",
+                "CONAN_BUILD_PROFILE": "clang"
+            }
+        },        
+        {
+            "name": "dev-clang-tidy",
+            "displayName": "Clang-Tidy",
+            "description": "Clang-based C++ “linter” tool",
+            "hidden": true,
+            "inherits": [
+                "dev-clang",
+                "tool-clang-tidy"
+            ]
+        },
+        {
+            "name": "dev-clang-cppcheck",
+            "displayName": "Clang-cppcheck",
+            "description": "Cppcheck tool for static C/C++ code analysis",
+            "hidden": true,
+            "inherits": [
+                "dev-clang",
+                "tool-cppcheck"
+            ]
+        },        
+        {
+            "name": "dev-clang-iwyu",
+            "displayName": "Clang-IWYU",
+            "description": "Clang based Include-What-You-Use tool",
+            "hidden": true,
+            "inherits": [
+                "dev-clang",
+                "tool-iwyu"
+            ]
+        },
+        {
+            "name": "dev-clang-sanitize",
+            "displayName": "Clang-Sanitize",
+            "description": "Developer-Mode with Clang using sanitize settings",
+            "hidden": true,
+            "inherits": [
+                "dev-clang",
+                "tool-sanitize-asan-ubsan"
+            ]
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "dev-clang-tidy-release",
+            "displayName": "Release",
+            "description": "Release build with Clang Tidy",
+            "configuration": "Release",
+            "configurePreset": "dev-clang-tidy"
+        },        
+        {
+            "name": "dev-clang-cppcheck-release",
+            "displayName": "Release",
+            "description": "Release build with Clang Tidy",
+            "configuration": "Release",
+            "configurePreset": "dev-clang-tidy"
+        },
+        {
+            "name": "dev-clang-iwyu-release",
+            "displayName": "Release",
+            "description": "Release build with Clang Include-What-You-Use",
+            "configuration": "Release",
+            "configurePreset": "dev-clang-iwyu"
+        },
+        {
+            "name": "dev-clang-dev-sanitize-debug",
+            "displayName": "Debug",
+            "description": "Debug build with Clang sanitizer settings",
+            "configuration": "Release",
+            "configurePreset": "dev-clang-sanitize"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "dev-clang-tidy-release-test",
+            "displayName": "Release Test",
+            "description": "Test Clang Tidy build",
+            "configuration": "Release",
+            "configurePreset": "dev-clang-tidy",
+            "inherits": [
+                "default-testPreset"
+            ]
+        },
+        {
+            "name": "dev-clang-cppcheck-release-test",
+            "displayName": "Release Test",
+            "description": "Test Clang Cppcheck build",
+            "configuration": "Release",
+            "configurePreset": "dev-clang-cppcheck",
+            "inherits": [
+                "default-testPreset"
+            ]
+        },               
+        {
+            "name": "dev-clang-iwyu-release-test",
+            "displayName": "Release Test",
+            "description": "Test Clang IWYU build",
+            "configuration": "Release",
+            "configurePreset": "dev-clang-iwyu",
+            "inherits": [
+                "default-testPreset"
+            ]
+        },
+        {
+            "name": "dev-clang-sanitize-debug-test",
+            "displayName": "Debug Test",
+            "description": "Test Clang sanitize build",
+            "configuration": "Debug",
+            "configurePreset": "dev-clang-sanitize",
+            "inherits": [
+                "default-testPreset"
+            ]
+        }
+    ],
+    "workflowPresets": [
+
+    ]    
+}

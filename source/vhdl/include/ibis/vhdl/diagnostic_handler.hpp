@@ -52,10 +52,10 @@ namespace ibis::vhdl {
 ///
 // ToDo To much functionality in a single class, make free function of line_column_number(),
 // get_line_start() etc.
-template <typename Iterator>
+template <typename IteratorT>
 class diagnostic_handler {
 public:
-    using iterator_type = Iterator;
+    using iterator_type = IteratorT;
 
     using current_file_type = ibis::util::file_mapper::current_file;
     using position_cache_type = parser::position_cache<iterator_type>;
@@ -237,7 +237,6 @@ private:
     /// be within the position cache range.
     ///
     /// @param pos Iterator position where to gather the line number.
-    /// @param tab_sz The tab size, required to calculate the column number.
     /// @return The line and column number.
     ///
     std::tuple<std::size_t, std::size_t> line_column_number(iterator_type pos) const;
@@ -247,7 +246,7 @@ private:
     /// The position must be within the position cache range.
     /// @note For this, the position iterator is modified.
     ///
-    /// @param pos Iterator position pointing to a line of interest.
+    /// @param pos_iter Iterator position pointing to a line of interest.
     /// @return Iterator position pointing to the begin of line.
     ///
     iterator_type get_line_start(iterator_type pos_iter) const;
@@ -263,14 +262,13 @@ private:
     ///
     /// gather location information with file name etc.
     ///
-    /// @tparam IteratorT Error iterator type
     /// @param diag_ctx VHDL diagnostic context to be filled with informations
     /// @param first  iterator pointing to point of failure
     ///
     void set_source_location(vhdl::diagnostic_context& diag_ctx, iterator_type first) const
     {
         diag_ctx.set_source_location(get_source_location(first));
-    };
+    }
 
     ///
     /// gather location information with file name etc.

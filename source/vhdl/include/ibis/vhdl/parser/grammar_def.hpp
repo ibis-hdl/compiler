@@ -1140,7 +1140,7 @@ struct based_literal_error_handler {
 };
 
 template <typename T = x3::unused_type>
-auto const as = [](auto parser, const char* name = typeid(T).name()) {
+static inline auto const as = [](auto parser, const char* name = typeid(T).name()) {
     struct tag : based_literal_error_handler {};
     return x3::rule<tag, T>{ name } = parser;
 };

@@ -2,11 +2,6 @@ import subprocess
 import platform
 import argparse
 from pathlib import Path
-from multipledispatch import dispatch
-
-# Neither 'multipledispatch' nor 'signature_dispatch' work on Github's Windows 2022 action runner, 
-# always get the error e.g.: ModuleNotFoundError: No module named 'signature_dispatch'
-# Hence, no function overload and ugly function naming of install{1,2,3}
 
 class ConanInstaller:
     def __init__(self):
@@ -36,28 +31,32 @@ class ConanInstaller:
                 self.python = 'python3'
                 self.shell = ['bash', '-c']
                 self.generator = '"Ninja Multi-Config"'
-                self.valid_profiles = ['clang']  
+                self.valid_profiles = ['clang-libc++']  
             case _:
                 # https://docs.python.org/3/library/platform.html#platform.system
                 raise Exception(f"Unsupported Platform {platform.system()}")
  
-        # Set C++ standard to C++20, to avoid warning about modified CMAKE_CXX_STANDARD
+        # Set C++ standard to C++23, to avoid warning about modified CMAKE_CXX_STANDARD
         # value defined in conan_toolchain.cmake by ${workspaces}/compiler/CMakeLists.txt
-        self.cppstd = 20
-        self.all_build_types = ['release', 'debug']
-        self.all_profiles = ['default', 'gcc', 'clang', 'clang-libc++', 'msvc', 'msvc-cl']
+        self.cppstd = 23
+        self.supported_profiles = ['default', 'gcc', 'clang', 'clang-libc++', 'msvc', 'msvc-cl']
+        self.supported_build_type = ['Release', 'Debug']
 
-        parser = argparse.ArgumentParser()
-        parser.add_argument("--profile", help="Conan profile used to install.",
+        parser = argparse.ArgumentParser(description='Conan install helper script.')
+        parser.add_argument("--profile", default='default',
+                            help=f"Conan profile used to install on {platform.system()}.",
                             type=str, choices=self.valid_profiles)
+        parser.add_argument("--build-type", default=['Release'],
+                            help="Space separated list of build types used to install.",
+                            type=str, nargs='*', choices=self.supported_build_type)
+        parser.add_argument('--dry', action='store_true')
+        
         arg = parser.parse_args()
 
-        if arg.profile:
-            self.conan_profile = arg.profile
-        else:
-            self.conan_profile = 'default'
+        self.conan_profile = arg.profile
+        self.build_type = arg.build_type
+        self.dry = arg.dry
 
-        print(f"using conan profile '{self.conan_profile}'")
 
     """
     Remove Conan generated CMake preset file.
@@ -68,18 +67,17 @@ class ConanInstaller:
     messages. Hence, simply delete it before on each run.
     @see `conanfile.py` at generate().
     """
-    def removeConanPresetsJson(self, file_name: str):
+    def removeConanPresetsJson(self, file_name: str) -> None:
         file_path = Path(file_name)
         if file_path.exists():
             print(f"remove former generated Conan CMake preset '{file_name}'")
             Path(file_name).unlink(missing_ok=True)
 
-    @dispatch(str, str)
-    def install(self, build_type: str, conan_profile: str) -> None:
+    def do_install(self, build_type: str, conan_profile: str) -> None:
 
-        if not build_type.lower() in self.all_build_types:
+        if not build_type.lower() in [x.lower() for x in self.supported_build_type]:
             raise Exception(f"Unsupported CMAKE_BUILD_TYPE '{build_type}'")
-        if not conan_profile.lower() in self.all_profiles:
+        if not conan_profile.lower() in self.supported_profiles:
             raise Exception(f"Unsupported Conan profile '{conan_profile}'")
 
         cmd_args = [
@@ -92,8 +90,9 @@ class ConanInstaller:
         cmd_line = f"conan install . " + f' '.join(cmd_args)
 
         try:
-            print(f"call `" + ' '.join([*self.shell, cmd_line]) + "`")
-            subprocess.run([*self.shell, cmd_line], check=True)
+            print(f">>>  call `" + ' '.join([*self.shell, cmd_line]) + "`")
+            if not self.dry:
+                subprocess.run([*self.shell, cmd_line], check=True)
         except FileNotFoundError as e:
             print(f"Process failed because the executable could not be found.\n{e}")
         except subprocess.CalledProcessError as e:
@@ -102,16 +101,15 @@ class ConanInstaller:
                 f"Returned {e.returncode}\n{e}"
             )
 
-    @dispatch(list, str)
-    def install(self, build_types: list, conan_profile: str) -> None:
-        for build_type in build_types:
-            self.install(build_type, conan_profile)
+    def install_config(self, build_type: list, conan_profile: str) -> None:
+        for build_type in build_type:
+            #print(f">>>  install {build_type} {conan_profile}")
+            self.do_install(build_type, conan_profile)
 
-    @dispatch(list)
-    def install(self, build_types: list) -> None:
-        self.install(build_types, self.conan_profile)
+    def install(self) -> None:
+        self.install_config(self.build_type, self.conan_profile)
 
 if __name__ == '__main__':
     conan = ConanInstaller()
     conan.removeConanPresetsJson('CMakeConanPresets.json')
-    conan.install(['Debug', 'Release'])
+    conan.install()

@@ -14,7 +14,7 @@ namespace ibis::vhdl::ast::numeric_convert::detail {
 ///
 /// Filter separators from numeric string
 ///
-/// @tparam RangeType
+/// @tparam RangeType The range template argument
 /// @param range The range (string) to be filter
 /// @return auto a filtered view object
 ///

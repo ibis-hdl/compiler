@@ -40,13 +40,17 @@ std::ostream& diagnostic_printer::print_snippets(std::ostream& os) const
         auto const line_start = source_snippet.source_line().begin();
 
         constexpr bool debug = true;
+        // cope with Clang' warning: 'issue_marker' may not intend to support class template
+        // argument deduction [-Wctad-maybe-unsupported]
+        using iterator_type = std::string_view::const_iterator;
 
         os << std::format(
             "{}|{}\n"   // <gutter>|<source_snippet>
             "{}|{}{}",  // <gutter>|<issue_marker>
             number_gutter{ source_snippet.line_number() }, source_snippet.source_line(),
             number_gutter{},
-            issue_marker{ line_start, source_snippet.first(), source_snippet.last() },
+            issue_marker<iterator_type>{ line_start, source_snippet.first(),
+                                         source_snippet.last() },
             debug ? "$print-snippet-end" : ""  // end marker
         );
 
@@ -65,7 +69,7 @@ std::ostream& diagnostic_printer::print_snippets(std::ostream& os) const
 std::ostream& diagnostic_printer::print_on(std::ostream& os) const
 {
     auto const snippets = [&]() {
-        return util::make_iomanip([&](std::ostream& os) { print_snippets(os); });
+        return util::make_iomanip([&](std::ostream& ostrm) { print_snippets(ostrm); });
     };
 
     using boost::locale::format;

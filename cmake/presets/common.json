@@ -5,11 +5,22 @@
     ],
     "configurePresets": [
         {
-            "name": "cmake-default-policies",
-            "description": "Set CMake policies",
+            "name": "cpp-standard",
+            "description": "Set Compiler's C++ Standard",
             "hidden": true,
             "cacheVariables": {
-                "CMAKE_POLICY_DEFAULT_CMP0167": "NEW"
+                "CMAKE_CXX_EXTENSIONS": "OFF",
+                "CMAKE_CXX_STANDARD": "23",
+                "CMAKE_CXX_STANDARD_REQUIRED": "ON"
+            }
+        },
+        {
+            "name": "cmake-default-policies",
+            "description": "Set CMake policies (regards FindBoost module, MSVC runtime)",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_POLICY_DEFAULT_CMP0167": "NEW",
+                "CMAKE_POLICY_DEFAULT_CMP0091": "NEW"
             }
         },
         {
@@ -19,9 +30,7 @@
             "warnings": {
                 "unusedCli": false
             },
-            "inherits": [
-                "cmake-default-policies"
-            ],
+            "inherits": [ "cmake-default-policies" ],
             "cacheVariables": {
                 "CMAKE_VERBOSE_MAKEFILE": "OFF"
             }
@@ -35,11 +44,13 @@
                 "deprecated": true,
                 "uninitialized": false,
                 "unusedCli": true,
-                "systemVars": false
+                "systemVars": true
             },
-            "inherits": [
-                "cmake-default-policies"
-            ],
+            "errors": {
+              "dev": false,
+              "deprecated": true
+            },
+            "inherits": [ "cmake-default-policies" ],
             "cacheVariables": {
                 "CMAKE_VERBOSE_MAKEFILE": "ON"
             }
@@ -62,20 +73,16 @@
             "description": "Traditional single-config Ninja generator.",
             "hidden": true,
             "generator": "Ninja",
-            "inherits": [
-                "ninja-default-settings"
-            ]
+            "inherits": [ "ninja-default-settings" ]
         },
         {
             "name": "ninja-multi-config",
-            "description": "Multiple configurations for Visual Studio and XCode.",
+            "description": "Multiple configurations Generator.",
             "hidden": true,
             "generator": "Ninja Multi-Config",
-            "inherits": [
-                "ninja-default-settings"
-            ],
+            "inherits": [ "ninja-default-settings" ],
             "cacheVariables": {
-                "CMAKE_CONFIGURATION_TYPES": "Debug;Release;RelWithDebInfo",
+                "CMAKE_CONFIGURATION_TYPES": "Debug;Release",
                 "CMAKE_DEFAULT_BUILD_TYPE": "Release"
             }
         },
@@ -87,30 +94,6 @@
                 "CMAKE_CXX_FLAGS": "-stdlib=libc++",
                 "CMAKE_EXE_LINKER_FLAGS": "-stdlib=libc++",
                 "CMAKE_SHARED_LINKER_FLAGS": "-stdlib=libc++"
-            }
-        },
-        {
-            "name": "release-build-type",
-            "description": "CMake Release build target",
-            "hidden": true,
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
-            }
-        },
-        {
-            "name": "debug-build-type",
-            "description": "CMake Debug build target",
-            "hidden": true,
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
-        },
-        {
-            "name": "release-build-type-with-debug",
-            "description": "CMake Release with Debug symbols build target",
-            "hidden": true,
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
             }
         },
         {
@@ -157,6 +140,14 @@
             }
         },
         {
+            "name": "tool-cppcheck",
+            "description": "CMake CppCheck tool",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_CLANG_CPPCHECK": "cppcheck;--inline-suppr"
+            }
+        },
+        {
             "name": "tool-iwyu",
             "description": "CMake Clang based Include-What-You-Use (IWYU)",
             "hidden": true,
@@ -165,14 +156,50 @@
             }
         },
         {
-            "name": "iwyu-windows",
+            "name": "tool-iwyu-windows",
             "description": "CMake Clang based Include-What-You-Use",
             "hidden": true,
             "inherits": [ "condition-windows" ],
             "cacheVariables": {
                 "CXX_INCLUDE_WHAT_YOU_USE": "iwyu;--driver-mode=cl"
             }
-        }
+        },
+        {
+            "name": "tool-coverage-linux",
+            "description": "Code coverage using Clang/Gcc on Linux/macOS",
+            "hidden": true,
+            "binaryDir": "${sourceDir}/build/coverage",
+            "inherits": [ "condition-linux-or-macos" ],
+            "cacheVariables": {
+                "ENABLE_COVERAGE": "ON",
+                "CMAKE_BUILD_TYPE": "Coverage",
+                "CMAKE_CXX_FLAGS_COVERAGE": "-Og -g --coverage -fkeep-inline-functions -fkeep-static-functions",
+                "CMAKE_EXE_LINKER_FLAGS_COVERAGE": "--coverage",
+                "CMAKE_SHARED_LINKER_FLAGS_COVERAGE": "--coverage",
+                "CMAKE_MAP_IMPORTED_CONFIG_COVERAGE": "Coverage;Release;Debug;",
+                "COVERAGE_HTML_COMMAND": ""
+            }
+        },
+        {
+            "name": "tool-sanitize-asan-ubsan",
+            "description": "Sanitize Address and UndefinedBehavior using Clang/Gcc on Linux/macOS",
+            "hidden": true,
+            "binaryDir": "${sourceDir}/build/sanitize",
+            "inherits": [ "condition-linux-or-macos" ],
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Sanitize",
+                "CMAKE_CXX_FLAGS_SANITIZE": "-U_FORTIFY_SOURCE -O2 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-common",
+                "CMAKE_MAP_IMPORTED_CONFIG_SANITIZE": "Sanitize;Release;Debug;"
+            }
+        },
+        {
+            "name": "libstdcxx-debug",
+            "description": "GNU libstdc++ Debug Mode for GCC and Clang, also Glibc",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS_INIT": "-D_GLIBCXX_ASSERTIONS=1 -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3"
+            }
+        }      
     ],
     "buildPresets": [],
     "testPresets": [

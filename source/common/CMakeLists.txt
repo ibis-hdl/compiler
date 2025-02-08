@@ -29,7 +29,6 @@ target_link_libraries(${PROJECT_NAME}
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/indent_stream.cpp
-        src/buildinfo.cpp
         src/file_loader.cpp
         src/settings.cpp
         src/user_home_dir.cpp
@@ -47,8 +46,7 @@ set_source_files_properties(
 )
 
 
-if(IBIS_ENABLE_PCH
-)
+if(IBIS_ENABLE_PCH)
     target_precompile_headers(${PROJECT_NAME} REUSE_FROM ibis_pch)
 endif()
 
@@ -59,24 +57,6 @@ target_include_directories(${PROJECT_NAME}
         $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
         $<INSTALL_INTERFACE:include>
 )
-
-
-configure_file(
-    "${PROJECT_SOURCE_DIR}/include/ibis/buildinfo_static.hpp.in"
-    "${PROJECT_BINARY_DIR}/include/ibis/buildinfo_static.hpp"
-    ESCAPE_QUOTES
-    @ONLY
-)
-
-##
-# Windows MinGW
-# [How to fix undefined reference to `__imp_WSACleanup' (Boost.Asio) in CLion](
-#  https://stackoverflow.com/questions/38767653/how-to-fix-undefined-reference-to-imp-wsacleanup-boost-asio-in-clion)
-if(MINGW)
-    target_link_libraries(${PROJECT_NAME}
-        ws2_32
-    )
-endif()
 
 
 ## -----------------------------------------------------------------------------

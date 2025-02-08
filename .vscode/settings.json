@@ -271,5 +271,7 @@
         "__locale": "cpp",
         "cinttypes": "cpp"
     },
-    "cSpell.words": []
+    "cSpell.words": [],
+    "cmake.automaticReconfigure": false,
+    "cmake.configureOnEdit": false
 }

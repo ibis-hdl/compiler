@@ -4,6 +4,7 @@
 //
 
 #include <ibis/frontend/signal_handler.hpp>
+#include <ibis/platform.hpp>
 #include <ibis/message.hpp>
 
 // #include <iostream>
@@ -64,6 +65,8 @@ void register_signal_handlers()
     };
 
     if (!signal_handler()) {
+        // Don't worry about warning: code will never be executed [-Wunreachable-code] since we
+        // install an error_handler which always return successfully (true)
         ibis::failure("Failed to install signal handlers");
         std::exit(EXIT_FAILURE);
     }

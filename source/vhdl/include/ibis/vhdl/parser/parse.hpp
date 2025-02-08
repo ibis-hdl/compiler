@@ -43,8 +43,9 @@ public:
     ///
     /// Functor to call parse implementation.
     ///
-    /// @param position_cache_proxy Proxy of position_cache with the file contents to be parsed.
-    /// @param ctx The context used to parse and others.
+    /// @param current_file file_mapper proxy with current_file context
+    /// @param position_cache position_cache with the file contents to be parsed.
+    /// @param vhdl_ctx The context used to parse and others.
     /// @param design_file AST node of input/file contents.
     /// @return true success.
     /// @return false failure.

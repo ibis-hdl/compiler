@@ -87,7 +87,7 @@ void basic_failure_diagnostic_fixture::failure_closure(std::string test_case_nam
 
         auto hline = [&](std::string const& title, char fill = '~') {
             return util::make_iomanip(
-                [&title, fill](std::ostream& os) { head_line(os, title, col_width, fill); });
+                [&title, fill](std::ostream& ostrm) { head_line(ostrm, title, col_width, fill); });
         };
 
         using ibis::util::rtrim;
@@ -126,7 +126,7 @@ void basic_failure_diagnostic_fixture::failure_closure(std::string test_case_nam
 
         auto hline = [&](std::string const& title, char fill = '~') {
             return make_iomanip(
-                [&title, fill](std::ostream& os) { head_line(os, title, col_width, fill); });
+                [&title, fill](std::ostream& ostrm) { head_line(ostrm, title, col_width, fill); });
         };
 
         using ibis::util::rtrim;

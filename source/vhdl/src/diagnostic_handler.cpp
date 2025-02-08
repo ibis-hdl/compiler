@@ -176,6 +176,7 @@ std::tuple<std::size_t, std::size_t> diagnostic_handler<IteratorT>::line_column_
     std::size_t col_no = 1;
     char_type chr_prev = 0;
 
+    // ToDo Clang -Weverything Warning: ++iter unsafe pointer arithmetic [-Wunsafe-buffer-usage]
     for (iterator_type iter = begin(current_file.file_contents()); iter != pos; ++iter) {
         auto const chr = *iter;
         switch (chr) {

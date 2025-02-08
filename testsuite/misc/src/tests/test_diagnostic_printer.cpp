@@ -54,13 +54,17 @@ BOOST_AUTO_TEST_CASE(spacer_formatter, *utf::label("formatter"))
     // clang-format on
 }
 
-namespace valid_data {  // for issue_marker_formatter
+namespace /* anonymous */ {
 
 // helper function for make_issue() below to create an iterator pointing to char's position
 template <typename IteratorT>
 constexpr auto find_char = [](IteratorT begin, IteratorT end, char srch_chr) {
     return std::find_if(begin, end, [srch_chr](char chr) { return chr == srch_chr; });
 };
+
+}  // namespace
+
+namespace valid_data {  // for issue_marker_formatter
 
 // create an issue_marker by generating a set of iterators - mimics x3 parser error handler result
 // for proof of concept including wrapper/formatter see https://godbolt.org/z/z5Yrz6e6M
@@ -82,7 +86,7 @@ constexpr auto make_issue = [](std::string_view str, char first_chr,
         return std::optional<iterator_type>{};
     }();
 
-    return issue_marker{ start, failure_begin, failure_end };
+    return issue_marker<iterator_type>{ start, failure_begin, failure_end };
 };
 
 using ibis::vhdl::issue_marker;

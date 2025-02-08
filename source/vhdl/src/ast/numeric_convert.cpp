@@ -59,6 +59,13 @@ numeric_convert::return_type numeric_convert::operator()(
 //
 numeric_convert::return_type numeric_convert::operator()(ast::decimal_literal const& literal) const
 {
+    // ToDo Clang -Weverything Warning regard
+    //  instantiation of function 'ibis::vhdl::ast::convert_decimal<unsigned long,
+    //  double>::convert_decimal' required here, but no definition is available
+    //  [-Wundefined-func-template]
+    // note: add an explicit instantiation declaration to suppress this warning if
+    // 'ibis::vhdl::ast::convert_decimal<unsigned long, double>::convert_decimal' is explicitly
+    // instantiated in another translation unit
     ast::convert_decimal<integer_type, real_type> const convert(diagnostic_handler);
     return convert(literal);
 }

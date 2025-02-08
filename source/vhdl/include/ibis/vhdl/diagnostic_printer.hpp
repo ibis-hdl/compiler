@@ -24,7 +24,7 @@ public:
     ///
     /// @brief Construct a new printer object
     ///
-    /// @param source_location_ The location of the error to print.
+    /// @param ctx diagnostic_context with location of the error to print.
     ///
     /// @todo The failure_type specifier must be accessible by the header to allow specific error
     /// messages. Best would be to make it an own non-nested class.

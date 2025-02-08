@@ -7,8 +7,6 @@
 #include <ibis/frontend/signal_handler.hpp>
 #include <ibis/frontend/version.hpp>
 
-#include <ibis/buildinfo.hpp>
-
 #include <ibis/settings.hpp>
 
 #include <ibis/platform.hpp>
@@ -104,9 +102,6 @@ void init::parse_cli(int argc, const char* argv[])
         app.add_flag("--version") // FixMe: set_version_flag() @CLI11 v1.10
             ->description(translate("Show version."))
             ;
-        app.add_flag("--build-info")
-            ->description(translate("Show build informations."))
-            ;
 
         //
         // Message option group
@@ -147,7 +142,7 @@ void init::parse_cli(int argc, const char* argv[])
 
             group->add_option("--locale-dir", cli_parameter.locale_dir)
                 ->description(translate("localization catalog data"))
-                ->envname("IBIS_LOCALE_DIR")
+                ->envname("IBIS_HDL_LOCALE_DIR")
                 ->check(CLI::ExistingDirectory)
                 ;
         }
@@ -227,11 +222,6 @@ void init::parse_cli(int argc, const char* argv[])
 
     if (app.count("--version") != 0) {
         std::cout << IBIS_HDL_VERSION_STR << '\n';
-        std::exit(EXIT_SUCCESS);
-    }
-
-    if (app.count("--build-info") != 0) {
-        std::cout << ibis::buildinfo{} << '\n';
         std::exit(EXIT_SUCCESS);
     }
 

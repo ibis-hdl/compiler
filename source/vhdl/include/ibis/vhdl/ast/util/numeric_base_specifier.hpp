@@ -28,11 +28,12 @@ static constexpr bool supported_base(numeric_base_specifier base_specifier)
 {
     // clang-format off
     switch (base_specifier) {
-        case numeric_base_specifier::base2:  [[fallthrough]];
-        case numeric_base_specifier::base8:  [[fallthrough]];
-        case numeric_base_specifier::base10: [[fallthrough]];
-        case numeric_base_specifier::base16: return true;
-        default: return false;
+        case numeric_base_specifier::base2:       [[fallthrough]];
+        case numeric_base_specifier::base8:       [[fallthrough]];
+        case numeric_base_specifier::base10:      [[fallthrough]];
+        case numeric_base_specifier::base16:      return true;
+        case numeric_base_specifier::unspecified: [[fallthrough]];
+        case numeric_base_specifier::unsupported: return false;
     }
     // clang-format on
 

@@ -27,3 +27,6 @@ Thumbs.db
 ## CMake user, conan presets
 *CMakeUserPresets.json*
 ConanCMakePresets.json
+
+## CMake
+Testing/**
