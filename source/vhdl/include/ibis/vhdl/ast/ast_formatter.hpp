@@ -319,7 +319,7 @@ struct std::formatter<ibis::vhdl::ast::string_literal> {
         // ToDo: Find a better way to unquote, not robust in all cases (maybe Boost.Parser?)
         /* from clack channel:
             prev_quote is just:
-            % -> the second % is then cancelled, and prev_quote is assigned to \0;
+            % -> the second % is then canceled, and prev_quote is assigned to \0;
             repeat 1;
             %, nothing to read
 

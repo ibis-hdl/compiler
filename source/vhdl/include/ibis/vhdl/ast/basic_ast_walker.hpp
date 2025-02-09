@@ -2321,7 +2321,7 @@ public:
     {
 #if 0
         std::string_view const node_typename{ "keyword" };
-        //ToDo usefull to call worker(node, node_typename); ??
+        //ToDo useful to call worker(node, node_typename); ??
 #endif
     }
 

@@ -120,7 +120,7 @@ private:
 };
 
 ///
-/// Current file proxy, holding informations related to current_file_id
+/// Current file proxy, holding information related to current_file_id
 ///
 class file_mapper::current_file {
     std::reference_wrapper<file_mapper> file_mapper_ref;

@@ -12,7 +12,7 @@ namespace ibis::frontend {
 ///
 /// @todo By replacing the old settings class concept (replaced by
 /// boost::property_tree approach for now), updating secondary
-/// depeneding flags comes more investigative. The idea was like
+/// depending flags comes more investigative. The idea was like
 /// `secondary_flag["--Wall"] = { "--Wunused", "--Wother" }`
 /// and an update() does setting up the setting variables. By using
 /// boost::property_tree approach, CLI argument names differ from

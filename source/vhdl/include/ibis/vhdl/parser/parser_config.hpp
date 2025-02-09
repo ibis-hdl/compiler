@@ -41,7 +41,7 @@ using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
 ///    https://stackoverflow.com/questions/40496357/linking-errors-while-separate-parser-using-boost-spirit-x3?answertab=active#tab-top)
 /// - [x3 linker error with separate TU](
 ///    https://stackoverflow.com/questions/43791079/x3-linker-error-with-separate-tu?answertab=active#tab-top)
-/// - [Mixing non-terminal rules from separeted translation unit](
+/// - [Mixing non-terminal rules from separated translation unit](
 ///    https://stackoverflow.com/questions/66036568/mixing-non-terminal-rules-from-separeted-translation-unit)
 ///
 /// Using boost.type_index the concrete type can be printed there:

@@ -114,7 +114,7 @@ struct std::formatter<ibis::vhdl::source_location> {
     auto format(ibis::vhdl::source_location const& location, FmtContext& ctx) const
     {
         std::string temp;
-        temp.reserve(256);  // inital guess
+        temp.reserve(256);  // initial guess
 
         // Based on GNU standard of [Formatting Error Messages](
         // https://www.gnu.org/prep/standards/html_node/Errors.html)

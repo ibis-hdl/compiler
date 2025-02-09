@@ -37,6 +37,7 @@ include(prevent_in_source_builds)   # prelude
 include(options_build)
 include(options_developer)
 include(external_deps)
+include(codespell-targets)
 
 
 # This requirement rises by use of CMake's PCH support, otherwise

@@ -144,7 +144,7 @@ public:
     /// available replaced with the compile builtin values. Then the actual dataset
     /// files are loaded and the iterator object is returned with this data.
     ///
-    /// @return iterator holding the datset contents.
+    /// @return iterator holding the dataset contents.
     ///
     iterator begin() const;
 
@@ -168,7 +168,7 @@ protected:
     ///
     /// Set the builtin object
     ///
-    /// @param other The bultin object intended to replace the current one.
+    /// @param other The builtin object intended to replace the current one.
     ///
     void set_builtin(std::unique_ptr<compile_builtin> other);
 

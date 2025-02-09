@@ -33,7 +33,7 @@ public:
     /// message. These are combined into the final one inside
     /// `diagnostic_handler<IteratorT>::operator()(ast::position_tagged, ast::position_tagged, ...)`
     /// hence it isn't configurable/derivable as intended. Maybe introduce an `error_context` for
-    /// all the informations carried?
+    /// all the information carried?
     ///
     diagnostic_printer(diagnostic_context const& ctx);
 

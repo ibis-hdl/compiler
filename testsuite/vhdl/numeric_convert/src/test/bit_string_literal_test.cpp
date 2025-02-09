@@ -75,7 +75,7 @@ BOOST_AUTO_TEST_CASE(bit_string_literal_requirements_check)
 // -------------------------------------------------------------------------------------------------
 namespace valid_data {
 
-// XXX check only the converted results with 0, 1, 42 and uint { 32, 64 }::max only.
+// XXX check only the converted results with 0, 1, 42 and {uint32,uint64}::max only.
 
 static const std::string input = []() {
     // VHDL package template
@@ -110,7 +110,7 @@ END PACKAGE;
     auto constexpr uint32_max = detail::uint32_max;
     auto constexpr uint64_max = detail::uint64_max;
 
-    // format uint{32,64}::max values into input using pkg_template
+    // format {uint32,uint64}::max values into input using pkg_template
     return std::format(pkg_template,
                        // bin uint32_max, uint64_max
                        bsl_gen::bin(uint32_max), bsl_gen::bin(uint64_max),
@@ -260,7 +260,7 @@ struct test_worker {
         ++index;
     }
 
-    // "catch them all" operator to be able to walk trough the AST organized by ast_walker
+    // "catch them all" operator to be able to walk through the AST organized by ast_walker
     template <typename NodeT>
     void operator()([[maybe_unused]] NodeT const& /* ast_node */,
                     [[maybe_unused]] std::string_view /* node_name */) const

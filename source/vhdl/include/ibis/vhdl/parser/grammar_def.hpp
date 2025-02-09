@@ -4329,7 +4329,7 @@ BOOST_SPIRIT_DEFINE(  // -- W --
 //******************************************************************************
 // Annotation and Error handling
 //
-// Here the "classic" approach from spirit x3's examples/documention is used:
+// Here the "classic" approach from spirit x3's examples/documentation is used:
 // Derive the tag class from success "handler" to tag the node self and from
 // error "handler" to cope with parser/expectation exceptions using on_error()
 // member function.

@@ -137,7 +137,7 @@ struct test_worker {
         ++index;
     }
 
-    // "catch them all" operator to be able to walk trough the AST organized by ast_walker
+    // "catch them all" operator to be able to walk through the AST organized by ast_walker
     template <typename NodeT>
     void operator()([[maybe_unused]] NodeT const& /* ast_node */,
                     [[maybe_unused]] std::string_view /* node_name */) const

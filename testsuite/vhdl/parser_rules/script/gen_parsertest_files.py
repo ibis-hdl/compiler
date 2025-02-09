@@ -233,7 +233,7 @@ namespace ibis {{ namespace vhdl {{ namespace parser {{
         :param str name: The name to lookup. The name self may a grammar rule or '_failure' trigger.
         :return bool: returns True if name is inside the skip list, otherwise False.
 
-        This is only usefull for the API header/source file generation!
+        This is only useful for the API header/source file generation!
         """
         for s in self.skiplist:
             if s in name:
@@ -369,7 +369,7 @@ class BoostTestGenerator:
             if test_case_obj.is_failure_test_case():
                 # discard ...
                 continue
-            # ... but tag the underlaying test case
+            # ... but tag the underlying test case
             if test_case_obj.as_failure_test_case_name() in test_cases_dirlist:
                 test_case_obj.has_failure_test = True
             test_cases.append(test_case_obj)
@@ -379,7 +379,7 @@ class BoostTestGenerator:
     def cxx_file_header(self, testcase_obj):
         """Create a common C++ header
 
-        :param testcase_obj: The test cas object
+        :param testcase_obj: The test case object
         """
 
         return """//
@@ -402,7 +402,7 @@ class BoostTestGenerator:
     def cxx_includes(self, testcase_obj):
         """Generate the headers required to compile.
 
-        :param testcase_obj: The test cas object
+        :param testcase_obj: The test case object
         """
 
         return """
@@ -509,7 +509,7 @@ BOOST_AUTO_TEST_SUITE_END()
         Write the C++ Boost UTF test file.
 
         :param str filepath_name: The full file path be written into.
-        :param cxx_contents: The C++ contens of the test case.
+        :param cxx_contents: The C++ contents of the test case.
         """
 
         if not os.path.exists(os.path.dirname(filepath_name)):

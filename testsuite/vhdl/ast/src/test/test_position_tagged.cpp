@@ -19,7 +19,7 @@ BOOST_AUTO_TEST_SUITE(position_tagged)
 ///
 /// Test position_tagged functionality
 ///
-/// This checks here can't be tested usefull with file_mapper or position_cache due to numeric range
+/// This checks here can't be tested useful with file_mapper or position_cache due to numeric range
 /// of types used. Testing util::strong_type<> alone doesn't give new information/tests
 ///
 // clang-format off

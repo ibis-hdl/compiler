@@ -1,4 +1,4 @@
-name: 'SpellCheck Action'
+name: 'SpellCheck Actions'
 
 on:
   push:
@@ -7,14 +7,24 @@ on:
 
 jobs:
   spellcheck:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
     - name: Checkout repo
       uses: actions/checkout@v4
       with:
         submodules: true
 
-    - name: Gather Markdown files from git
+    - name: Ensure proper Python version
+      uses: actions/setup-python@v5
+      with: { python-version: "3.12" }
+  
+    - name: Install codespell
+      run: pip3 install codespell
+
+    - name: CodeSpell check
+      run: cmake -P cmake/codespell.cmake
+
+    - name: Gather Markdown files from git for PySpelling
       # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/workflow-commands-for-github-actions#multiline-strings
       # echo "MARKDOWN_FILES=$(git ls-files '*.md')" >> $GITHUB_ENV
       run: |
@@ -24,11 +34,11 @@ jobs:
           echo EOF
         } >> "$GITHUB_ENV"
 
-    - name: Show files to spell check
+    - name: Show Markdown files for PySpelling
       run: |
         echo "Markdown: ${{ env.MARKDOWN_FILES }}"
 
-    - name: Check Spelling [Markdown]
+    - name: PySpelling [Markdown]
       id: spellcheck
       uses: rojopolis/spellcheck-github-actions@0.46.0
       continue-on-error: true
@@ -38,7 +48,7 @@ jobs:
         task_name: Markdown
         output_file: spellcheck-output.txt
 
-    - name: Upload Spellcheck Artifact
+    - name: Upload PySpelling Artifact
       uses: actions/upload-artifact@v4
       if: '!cancelled()' # Do not upload artifact if job was cancelled
       with:

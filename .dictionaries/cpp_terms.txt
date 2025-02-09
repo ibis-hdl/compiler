@@ -1,6 +1,7 @@
 libcxx
 libstdc
 libstdcxx
+NDEBUG
 NOLINTNEXTLINE
 PTHREAD
 XNOR

@@ -2,6 +2,7 @@ autobuild
 ccache
 choco
 cmaketoolchain
+codespell
 coliru
 conanfile
 cppcheck
@@ -28,7 +29,6 @@ sccache
 treshold
 vcvars
 venv
-VHDL
 Wandbox
 Weverything
 wordlist

@@ -262,7 +262,7 @@ private:
     ///
     /// gather location information with file name etc.
     ///
-    /// @param diag_ctx VHDL diagnostic context to be filled with informations
+    /// @param diag_ctx VHDL diagnostic context to be filled with information
     /// @param first  iterator pointing to point of failure
     ///
     void set_source_location(vhdl::diagnostic_context& diag_ctx, iterator_type first) const
@@ -273,8 +273,8 @@ private:
     ///
     /// gather location information with file name etc.
     ///
-    /// @param diag_ctx VHDL diagnostic context to be filled with informations
-    /// @param position_tagged AST tagged node with error/warning informations
+    /// @param diag_ctx VHDL diagnostic context to be filled with information
+    /// @param position_tagged AST tagged node with error/warning information
     ///
     void set_source_location(vhdl::diagnostic_context& diag_ctx,
                              ast::position_tagged const& position_tagged) const
@@ -286,8 +286,8 @@ private:
     ///
     /// gather erroneous part as source snippet, e.g. start label
     ///
-    /// @param diag_ctx VHDL diagnostic context to be filled with informations
-    /// @param position_tagged AST tagged node with error/warning informations
+    /// @param diag_ctx VHDL diagnostic context to be filled with information
+    /// @param position_tagged AST tagged node with error/warning information
     ///
     void set_source_snippet(vhdl::diagnostic_context& diag_ctx,
                             ast::position_tagged const& position_tagged) const
@@ -301,7 +301,7 @@ private:
     ///
     /// gather erroneous part as source snippet, e.g. on parser error
     ///
-    /// @param diag_ctx VHDL diagnostic context to be filled with informations
+    /// @param diag_ctx VHDL diagnostic context to be filled with information
     /// @param first Iterator to point of failure
     /// @param last optional Iterator to end point of failure
     ///

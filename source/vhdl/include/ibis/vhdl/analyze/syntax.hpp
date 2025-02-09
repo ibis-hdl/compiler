@@ -71,7 +71,7 @@ private:
     ///
     /// Check the matching keyword.
     ///
-    /// FixMe: Re-Using label_match here results into misleading error message
+    /// FixMe: Reuse of label_match here results into misleading error message
     /// "Label mismatch". Further, the keywords aren't tagged so beauty
     /// error messages aren't possible this way.
     ///

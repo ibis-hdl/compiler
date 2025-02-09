@@ -31,7 +31,7 @@ namespace ibis::vhdl::ast {
 /// Note #1: About numeric literals
 /// ----------------------------------
 /// The correct tagged type_specifier of {based, decimal}_literal is elementary on
-/// elaboration time, since after converting to numeric the informations about
+/// elaboration time, since after converting to numeric the information about
 /// the integer/real string are lost, see concrete why it's important e.g.
 /// [vhdl error: integer literal cannot have negative exponent](
 /// https://stackoverflow.com/questions/22113223/vhdl-error-integer-literal-cannot-have-negative-exponent)
