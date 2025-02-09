@@ -38,6 +38,7 @@ include(options_build)
 include(options_developer)
 include(external_deps)
 include(codespell-targets)
+include(format-targets)
 
 
 # This requirement rises by use of CMake's PCH support, otherwise
