@@ -97,8 +97,9 @@ BOOST_AUTO_TEST_CASE(string_literal_raw_formatter,  // test shall pass
         {
             // raw specifier means take the input as output as-is. Hence we compare against
             // the (raw) input self; the designated initializer expected is ignored.
-            // Bug: MSVC /W4 Debug failed to compile
 #if !defined(_MSC_VER)
+            // Bug: MSVC Debug build failed to compile: __msvc_string_view.hpp(1058): note: Error
+            // was caused by calling an undefined function or an undeclared “constexpr”
             output << std::format("{:raw}", string_literal);
             BOOST_TEST_REQUIRE(!output.str().empty());
             BOOST_TEST(output.str() == input, btt::per_element());

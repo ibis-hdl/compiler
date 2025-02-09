@@ -128,6 +128,11 @@ struct test_worker {
             auto const node_literal = std::string_view{ node.literal };
             BOOST_TEST(node_literal == expected.literal, btt::per_element());
             BOOST_TEST(std::format("{}", node) == expected.formatted, btt::per_element());
+            // Bug Failed in MSVC Debug mode, node_literal shows non-ascii chars
+            if constexpr ((false)) {
+                std::cout << std::format("    >>> Failure context: '{}' <-> '{}' (expected)\n",
+                                         node_literal, expected.literal);
+            }
         }
         ++index;
     }
