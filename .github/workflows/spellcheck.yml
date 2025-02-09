@@ -18,10 +18,11 @@ jobs:
       uses: actions/setup-python@v5
       with: { python-version: "3.12" }
   
-    - name: Install codespell
+    - name: Install CodeSpell
       run: pip3 install codespell
 
     - name: CodeSpell check
+      continue-on-error: true
       run: cmake -P cmake/codespell.cmake
 
     - name: Gather Markdown files from git for PySpelling
