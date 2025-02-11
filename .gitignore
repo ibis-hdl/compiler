@@ -11,6 +11,11 @@ out/**
 .venv/**
 .win64-venv/**
 
+## Git merge conflicts
+*.BASE.txt
+*.LOCAL.txt
+*.REMOTE.txt
+
 ## Windows
 desktop.ini
 Thumbs.db
