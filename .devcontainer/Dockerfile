@@ -18,7 +18,7 @@ RUN if [ "${REINSTALL_CMAKE_VERSION_FROM_SOURCE}" != "none" ]; then \
 # clang, lldb, llvm, gdb; vcpkg)
 RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get update && apt-get install -y --no-install-recommends \
-       iwyu ccache doxygen graphviz \
+       iwyu ccache lcov doxygen graphviz \
        python3-pip python3-venv pipx 
 #   && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 

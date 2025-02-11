@@ -130,76 +130,7 @@
                 "CMAKE_MSVC_DEBUG_INFORMATION_FORMAT": "Embedded",
                 "CMAKE_POLICY_DEFAULT_CMP0141": "NEW"                
             }
-        },
-        {
-            "name": "tool-clang-tidy",
-            "description": "CMake Clang-Tidy build target",
-            "hidden": true,
-            "cacheVariables": {
-                "CMAKE_CXX_CLANG_TIDY": "clang-tidy;--format-style=file;-p=${sourceDir}/build"
-            }
-        },
-        {
-            "name": "tool-cppcheck",
-            "description": "CMake CppCheck tool",
-            "hidden": true,
-            "cacheVariables": {
-                "CMAKE_CXX_CLANG_CPPCHECK": "cppcheck;--inline-suppr"
-            }
-        },
-        {
-            "name": "tool-iwyu",
-            "description": "CMake Clang based Include-What-You-Use (IWYU)",
-            "hidden": true,
-            "cacheVariables": {
-                "CMAKE_CXX_INCLUDE_WHAT_YOU_USE": "iwyu;-Xiwyu;--mapping_file=${sourceDir}/cmake/utils/iwyu/project.imp;-Xiwyu;--no_comments;-Xiwyu;--max_line_length=160;-Xiwyu;--transitive_includes_only;-Xiwyu;--quoted_includes_first;-Xiwyu;--cxx23ns"
-            }
-        },
-        {
-            "name": "tool-iwyu-windows",
-            "description": "CMake Clang based Include-What-You-Use",
-            "hidden": true,
-            "inherits": [ "condition-windows" ],
-            "cacheVariables": {
-                "CXX_INCLUDE_WHAT_YOU_USE": "iwyu;--driver-mode=cl"
-            }
-        },
-        {
-            "name": "tool-coverage-linux",
-            "description": "Code coverage using Clang/Gcc on Linux/macOS",
-            "hidden": true,
-            "binaryDir": "${sourceDir}/build/coverage",
-            "inherits": [ "condition-linux-or-macos" ],
-            "cacheVariables": {
-                "ENABLE_COVERAGE": "ON",
-                "CMAKE_BUILD_TYPE": "Coverage",
-                "CMAKE_CXX_FLAGS_COVERAGE": "-Og -g --coverage -fkeep-inline-functions -fkeep-static-functions",
-                "CMAKE_EXE_LINKER_FLAGS_COVERAGE": "--coverage",
-                "CMAKE_SHARED_LINKER_FLAGS_COVERAGE": "--coverage",
-                "CMAKE_MAP_IMPORTED_CONFIG_COVERAGE": "Coverage;Release;Debug;",
-                "COVERAGE_HTML_COMMAND": ""
-            }
-        },
-        {
-            "name": "tool-sanitize-asan-ubsan",
-            "description": "Sanitize Address and UndefinedBehavior using Clang/Gcc on Linux/macOS",
-            "hidden": true,
-            "binaryDir": "${sourceDir}/build/sanitize",
-            "inherits": [ "condition-linux-or-macos" ],
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Sanitize",
-                "CMAKE_CXX_FLAGS_SANITIZE": "-U_FORTIFY_SOURCE -O2 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-common",
-                "CMAKE_MAP_IMPORTED_CONFIG_SANITIZE": "Sanitize;Release;Debug;"
-            }
-        },
-        {
-            "name": "libstdcxx-debug",
-            "description": "GNU libstdc++ Debug Mode for GCC and Clang, also Glibc",
-            "hidden": true,
-            "cacheVariables": {
-                "CMAKE_CXX_FLAGS_INIT": "-D_GLIBCXX_ASSERTIONS=1 -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3"
-            }
-        }      
+        }
     ],
     "buildPresets": [],
     "testPresets": [

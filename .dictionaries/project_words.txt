@@ -1,6 +1,7 @@
 autobuild
 ccache
 choco
+Clangd
 cmaketoolchain
 codespell
 coliru
@@ -14,6 +15,7 @@ gitmodules
 gnuc
 godbolt
 iwyu
+libassert
 libc
 libcpp
 MAXSIZE

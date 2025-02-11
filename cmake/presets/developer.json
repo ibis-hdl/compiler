@@ -1,10 +1,87 @@
 {
     "version": 8,
     "include": [
-        "clang.json",
-        "clang-libcpp.json"
+        "compiler.json"
     ],
     "configurePresets": [
+        {
+            "name": "tool-clang-tidy",
+            "description": "CMake Clang-Tidy build target",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_CLANG_TIDY": "clang-tidy;--format-style=file;-p=${sourceDir}/build"
+            }
+        },
+        {
+            "name": "tool-cppcheck",
+            "description": "CMake CppCheck tool",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_CLANG_CPPCHECK": "cppcheck;--inline-suppr"
+            }
+        },
+        {
+            "name": "tool-iwyu",
+            "description": "CMake Clang based Include-What-You-Use (IWYU)",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_INCLUDE_WHAT_YOU_USE": "iwyu;-Xiwyu;--mapping_file=${sourceDir}/cmake/utils/iwyu/project.imp;-Xiwyu;--no_comments;-Xiwyu;--max_line_length=160;-Xiwyu;--transitive_includes_only;-Xiwyu;--quoted_includes_first;-Xiwyu;--cxx23ns"
+            }
+        },
+        {
+            "name": "tool-iwyu-windows",
+            "description": "CMake Clang based Include-What-You-Use",
+            "hidden": true,
+            "inherits": [ "condition-windows" ],
+            "cacheVariables": {
+                "CXX_INCLUDE_WHAT_YOU_USE": "iwyu;--driver-mode=cl"
+            }
+        },
+        {
+            "name": "tool-coverage-linux",
+            "description": "Code coverage using Gcc/Clang on Linux/macOS",
+            "hidden": true,
+            "inherits": [ "condition-linux-or-macos" ],
+            "cacheVariables": {
+                "ENABLE_COVERAGE": "ON",
+                "CMAKE_BUILD_TYPE": "Coverage",
+                "CMAKE_CXX_FLAGS_COVERAGE": "-Og -g --coverage -fkeep-inline-functions -fkeep-static-functions -fprofile-abs-path",
+                "CMAKE_EXE_LINKER_FLAGS_COVERAGE": "--coverage",
+                "CMAKE_SHARED_LINKER_FLAGS_COVERAGE": "--coverage",
+                "CMAKE_MAP_IMPORTED_CONFIG_COVERAGE": "Coverage;Release;Debug;",
+                "COVERAGE_HTML_COMMAND": ""
+            }
+        },
+        {
+            "name": "tool-sanitize-asan-ubsan",
+            "description": "Sanitize Address and UndefinedBehavior using Clang/Gcc on Linux/macOS",
+            "hidden": true,
+            "inherits": [ "condition-linux-or-macos" ],
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Sanitize",
+                "CMAKE_CXX_FLAGS_SANITIZE": "-O2 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-common -U_GLIBCXX_DEBUG -U_GLIBCXX_DEBUG_PEDANTIC -U_GLIBCXX_SANITIZE_VECTOR -U_FORTIFY_SOURCE",
+                "CMAKE_MAP_IMPORTED_CONFIG_SANITIZE": "Sanitize;Release;Debug;"
+            }
+        },
+        {
+            "name": "libstdcxx-debug",
+            "description": "GNU libstdc++ Debug Mode for GCC and Clang, also Glibc",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS_INIT": "-D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_GLIBCXX_SANITIZE_VECTOR -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3"
+            },
+            "environment":{
+                "GLIBCXX_DEBUG_MESSAGE_LENGTH": "100"
+            }
+        },   
+        {
+            "name": "libcxx-debug",
+            "description": "LLVM lib++ Debug Mode for Clang",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS_INIT": "-D_LIBCPP_DEBUG=1"
+            }
+        },
         {
             "name": "developer-mode",
             "hidden": true,
@@ -12,33 +89,14 @@
               "IBIS_DEVELOPER_MODE": "ON",
               "CMAKE_BUILD_TYPE": "Debug"
             }
-        },        
-        {
-            "name": "dev-clang",
-            "displayName": "Clang (Developer)",
-            "description": "Clang compiler (using GNU libstdc++) with strong developer flags",
-            "hidden": true,
-            "inherits": [
-                "compiler-clang",
-                "condition-linux-or-macos",
-                "ninja-multi-config",
-                "cmake-pedantic-configure-settings",
-                "default-install-settings",
-                "default-environment"
-            ],
-            "cacheVariables": {
-                "IBIS_DEVELOPER_CLANG_WARN_EVERYTHING": "ON",
-                "CONAN_HOST_PROFILE": "clang",
-                "CONAN_BUILD_PROFILE": "clang"
-            }
-        },        
+        },  
         {
             "name": "dev-clang-tidy",
             "displayName": "Clang-Tidy",
             "description": "Clang-based C++ “linter” tool",
             "hidden": true,
             "inherits": [
-                "dev-clang",
+                "dev-compiler-clang",
                 "tool-clang-tidy"
             ]
         },
@@ -48,7 +106,7 @@
             "description": "Cppcheck tool for static C/C++ code analysis",
             "hidden": true,
             "inherits": [
-                "dev-clang",
+                "dev-compiler-clang",
                 "tool-cppcheck"
             ]
         },        
@@ -58,7 +116,7 @@
             "description": "Clang based Include-What-You-Use tool",
             "hidden": true,
             "inherits": [
-                "dev-clang",
+                "dev-compiler-clang",
                 "tool-iwyu"
             ]
         },
@@ -68,8 +126,18 @@
             "description": "Developer-Mode with Clang using sanitize settings",
             "hidden": true,
             "inherits": [
-                "dev-clang",
+                "dev-compiler-clang",
                 "tool-sanitize-asan-ubsan"
+            ]
+        },
+        {
+            "name": "dev-clang-coverage",
+            "displayName": "Clang-Coverage",
+            "description": "Developer-Mode with Clang using coverage settings",
+            "hidden": true,
+            "inherits": [
+                "dev-compiler-clang",
+                "tool-coverage-linux"
             ]
         }
     ],

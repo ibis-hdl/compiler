@@ -57,7 +57,7 @@ mark_as_advanced(IBIS_DEVELOPER_BOOST_SPIRIT_X3_DEBUG)
 ## -----------------------------------------------------------------------------
 
 if(IBIS_DEVELOPER_CLANG_WARN_EVERYTHING AND NOT IBIS_DEVELOPER_MODE)
-    message(FATAL_ERROR "Clang's -Weverything is only allowed in Developer mode!")
+    message(FATAL_ERROR "Clang's -Weverything is only allowed in *developer mode*!")
 endif()
 
 ## -----------------------------------------------------------------------------

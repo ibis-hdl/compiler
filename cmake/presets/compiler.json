@@ -1,0 +1,78 @@
+{
+    "version": 8,
+    "include": [
+        "common.json"
+    ],
+    "configurePresets": [
+        {
+            "name": "compiler-clang",
+            "description": "Clang C/C++ language family frontend for LLVM",
+            "hidden": true,
+            "inherits": [],
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
+        },
+        {
+            "name": "compiler-clang-libc++",
+            "description": "Clang C/C++ language family frontend for LLVM",
+            "hidden": true,
+            "inherits": [
+                "settings-stdlib-libc++"
+            ],
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
+        },
+        {
+            "name": "compiler-gcc",
+            "description": "GNU Compiler Collection (GCC)",
+            "hidden": true,
+            "inherits": [],
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "gcc-14",
+                "CMAKE_CXX_COMPILER": "g++-14"
+            }
+        },
+        {
+            "name": "compiler-msvc",
+            "description": "Microsoft Visual Studio C++ compiler",
+            "hidden": true,
+            "inherits": [],
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "cl",
+                "CMAKE_CXX_COMPILER": "cl",
+                "CMAKE_CXX_FLAGS_INIT": "/nologo"
+            }
+        },
+        {
+            "name": "compiler-msvc-clang",
+            "description": "Microsoft Visual Studio bundled ClangCL",
+            "hidden": true,
+            "inherits": [],
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang-cl",
+                "CMAKE_CXX_COMPILER": "clang-cl"
+            }
+        },
+        {
+            "name": "dev-compiler-clang",
+            "displayName": "Clang (Developer)",
+            "description": "Clang compiler (using GNU libstdc++) with strong compiler flags",
+            "hidden": true,
+            "inherits": [
+                "compiler-clang",
+                "condition-linux-or-macos",
+                "ninja-multi-config",
+                "cmake-pedantic-configure-settings"
+            ],
+            "cacheVariables": {
+                "IBIS_DEVELOPER_CLANG_WARN_EVERYTHING": "OFF",
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++"                
+            }
+        }        
+    ]
+}
