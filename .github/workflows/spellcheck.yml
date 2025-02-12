@@ -41,7 +41,7 @@ jobs:
 
     - name: PySpelling [Markdown]
       id: spellcheck
-      uses: rojopolis/spellcheck-github-actions@0.46.0
+      uses: rojopolis/spellcheck-github-actions@0.47.0
       continue-on-error: true
       with:
         config_path: .github/config/spellcheck.yml
