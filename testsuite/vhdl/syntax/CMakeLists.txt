@@ -78,6 +78,17 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 )
 
 
+# Disable Clang -Weverything Warning regards:
+# BOOST_DATA_TEST_CASE() - warning: '<test name>case' has no out-of-line virtual method definitions;
+#   its vtable will be emitted in every translation unit [-Wweak-vtables]
+# ToDo remove this compiler options
+if(IBIS_DEVELOPER_CLANG_WARN_EVERYTHING)
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        "-Wno-weak-vtables"
+    )
+endif()
+
+
 #set_source_files_properties(src/test_vhdl_syntax.cpp
 #    APPEND PROPERTIES
 #        # Failed to link Boost UTF with Windows/Clang, Linux works

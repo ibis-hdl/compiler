@@ -52,7 +52,7 @@
             },
             "inherits": [ "cmake-default-policies" ],
             "cacheVariables": {
-                "CMAKE_VERBOSE_MAKEFILE": "ON"
+                "CMAKE_VERBOSE_MAKEFILE": "OFF"
             }
         },
         {
@@ -80,11 +80,7 @@
             "description": "Multiple configurations Generator.",
             "hidden": true,
             "generator": "Ninja Multi-Config",
-            "inherits": [ "ninja-default-settings" ],
-            "cacheVariables": {
-                "CMAKE_CONFIGURATION_TYPES": "Debug;Release",
-                "CMAKE_DEFAULT_BUILD_TYPE": "Release"
-            }
+            "inherits": [ "ninja-default-settings" ]
         },
         {
             "name": "settings-stdlib-libc++",

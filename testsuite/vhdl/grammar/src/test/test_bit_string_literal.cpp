@@ -62,13 +62,13 @@ PACKAGE bitstring IS
 END PACKAGE;
 )";
 
-// clang-format off
-// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
-struct {
+struct gold_data_type {
     numeric_base_specifier base_specifier;
-    std::string_view literal; 
+    std::string_view literal;
     std::string_view formatted;
-} constexpr gold_data[] = {
+};
+// clang-format off
+constexpr auto gold_data = std::to_array<gold_data_type>({
     // bin
     { .base_specifier = numeric_base_specifier::base2, .literal = "0101", .formatted = "b0101" },
     { .base_specifier = numeric_base_specifier::base2, .literal = "0101", .formatted = "b0101" },
@@ -89,7 +89,7 @@ struct {
     { .base_specifier = numeric_base_specifier::base16, .literal = "ffff", .formatted = "xffff" },
     { .base_specifier = numeric_base_specifier::base16, .literal = "a_b", .formatted = "xa_b" },
     { .base_specifier = numeric_base_specifier::base16, .literal = "a_b_c", .formatted = "xa_b_c" },
-};
+});
 // clang-format on
 
 template <typename GoldDataT, bool verbose = false>
@@ -123,7 +123,7 @@ struct test_worker {
     {
         BOOST_TEST_CONTEXT(">>> Test index at " << index << " <<<")
         {
-            auto const expected = gold_data[index];
+            auto const& expected = gold_data.get()[index];
             BOOST_TEST(node.base_specifier == expected.base_specifier);
             auto const node_literal = std::string_view{ node.literal };
             BOOST_TEST(node_literal == expected.literal, btt::per_element());

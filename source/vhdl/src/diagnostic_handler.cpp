@@ -170,14 +170,14 @@ std::tuple<std::size_t, std::size_t> diagnostic_handler<IteratorT>::line_column_
     // Further reading at [What is the unit of a text column number?](
     // https://www.foonathan.net/2021/02/column/#content).
 
-    using char_type = typename std::iterator_traits<iterator_type>::value_type;
+    using char_type = std::iter_value_t<iterator_type>;
 
     std::size_t line_no = 1;
     std::size_t col_no = 1;
     char_type chr_prev = 0;
 
     // ToDo Clang -Weverything Warning: ++iter unsafe pointer arithmetic [-Wunsafe-buffer-usage]
-    for (iterator_type iter = begin(current_file.file_contents()); iter != pos; ++iter) {
+    for (iterator_type iter = current_file.file_contents().begin(); iter != pos; ++iter) {
         auto const chr = *iter;
         switch (chr) {
             case '\n':                   // Line Feed (Linux, Mac OS X)
@@ -210,6 +210,7 @@ IteratorT diagnostic_handler<IteratorT>::get_line_start(iterator_type pos) const
 {
     using ibis::util::get_iterator_pair;
 
+    // FixMe This should be rewritten with range based loops
     auto [begin, end] = get_iterator_pair(current_file.file_contents());
 
     // based on [.../x3/support/utility/error_reporting.hpp:get_line_start(...)](
@@ -239,6 +240,7 @@ std::string_view diagnostic_handler<IteratorT>::current_line(iterator_type first
     // `x3::to_utf8(line)` above.
 
     auto line_end = first;
+    // FixMe This should be rewritten with range based loops
     auto const end = current_file.file_contents().end();
 
     while (line_end != end) {

@@ -96,7 +96,7 @@
             "description": "Clang-based C++ “linter” tool",
             "hidden": true,
             "inherits": [
-                "dev-compiler-clang",
+                "compiler-clang-dev",
                 "tool-clang-tidy"
             ]
         },
@@ -106,7 +106,7 @@
             "description": "Cppcheck tool for static C/C++ code analysis",
             "hidden": true,
             "inherits": [
-                "dev-compiler-clang",
+                "compiler-clang-dev",
                 "tool-cppcheck"
             ]
         },        
@@ -116,7 +116,7 @@
             "description": "Clang based Include-What-You-Use tool",
             "hidden": true,
             "inherits": [
-                "dev-compiler-clang",
+                "compiler-clang-dev",
                 "tool-iwyu"
             ]
         },
@@ -126,7 +126,7 @@
             "description": "Developer-Mode with Clang using sanitize settings",
             "hidden": true,
             "inherits": [
-                "dev-compiler-clang",
+                "compiler-clang-dev",
                 "tool-sanitize-asan-ubsan"
             ]
         },
@@ -136,7 +136,7 @@
             "description": "Developer-Mode with Clang using coverage settings",
             "hidden": true,
             "inherits": [
-                "dev-compiler-clang",
+                "compiler-clang-dev",
                 "tool-coverage-linux"
             ]
         }

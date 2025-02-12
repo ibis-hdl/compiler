@@ -58,18 +58,16 @@
             }
         },
         {
-            "name": "dev-compiler-clang",
+            "name": "compiler-clang-dev",
             "displayName": "Clang (Developer)",
             "description": "Clang compiler (using GNU libstdc++) with strong compiler flags",
             "hidden": true,
             "inherits": [
                 "compiler-clang",
-                "condition-linux-or-macos",
-                "ninja-multi-config",
                 "cmake-pedantic-configure-settings"
             ],
             "cacheVariables": {
-                "IBIS_DEVELOPER_CLANG_WARN_EVERYTHING": "OFF",
+                "IBIS_DEVELOPER_CLANG_WARN_EVERYTHING": "ON",
                 "CMAKE_C_COMPILER": "clang",
                 "CMAKE_CXX_COMPILER": "clang++"                
             }

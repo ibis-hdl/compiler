@@ -30,7 +30,7 @@ Thumbs.db
 *.zip
 
 ## CMake user, conan presets
-*CMakeUserPresets.json*
+CMakeUserPresets.json
 ConanCMakePresets.json
 
 ## CMake

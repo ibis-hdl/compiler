@@ -75,7 +75,8 @@ set_source_files_properties(
 # ToDo remove this compiler options
 if(IBIS_DEVELOPER_CLANG_WARN_EVERYTHING)
     target_compile_options(${PROJECT_NAME} PRIVATE # append
-        "-Wno-Wshadow" "-Wno-shadow-uncaptured-local" "-Wno-switch-enum" "-Wno-extra-semi-stmt"
+        "-Wno-shadow" "-Wno-shadow-uncaptured-local" # XXX consider this!
+        "-Wno-switch-enum" "-Wno-extra-semi-stmt"
     )
 endif()
 

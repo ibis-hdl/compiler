@@ -6,7 +6,7 @@
 # Developer Mode
 #
 if(IBIS_DEVELOPER_MODE)
-    message(AUTHOR_WARNING ">>> Enable IBIS_DEVELOPER_MODE")
+    message(AUTHOR_WARNING ">>> Enable DEVELOPER_MODE <<<")
     set(IBIS_DEVELOPER_MODE ON CACHE BOOL "Enabled 'developer mode'" FORCE)
 endif()
 

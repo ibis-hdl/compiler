@@ -1,0 +1,71 @@
+{
+    "version": 8,
+    "include": [
+        "cmake/presets/developer.json"
+    ],
+    "configurePresets": [
+        {
+            "name": "clang-dev",
+            "displayName": "Clang (Developer)",
+            "description": "Clang compiler with developer settings (using GNU libstdc++)",
+            "inherits": [
+                "compiler-clang-dev",
+                "developer-mode",
+                "libstdcxx-debug",
+                "condition-linux-or-macos",
+                "ninja-multi-config",
+                "manual-conan-install",
+                "cmake-pedantic-configure-settings",
+                "default-install-settings",
+                "default-environment"
+            ],
+            "cacheVariables": {
+                "CONAN_HOST_PROFILE": "clang",
+                "CONAN_BUILD_PROFILE": "clang",
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "clang-dev-build",
+            "displayName": "Developer Build",
+            "description": "Developer build with Clang",
+            "configuration": "Debug",
+            "configurePreset": "clang-dev"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "clang-dev-test",
+            "displayName": "Developer Test",
+            "description": "Test Clang developer build",
+            "configuration": "Debug",
+            "configurePreset": "clang-dev",
+            "inherits": [
+                "default-testPreset"
+            ]
+        }
+    ],
+    "workflowPresets": [
+        {
+            "name": "Clang-Dev",
+            "displayName": "Clang Debug Workflow",
+            "description": "Clang Compiler Debug workflow",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "clang-dev"
+                },
+                {
+                    "type": "build",
+                    "name": "clang-dev-build"
+                },
+                {
+                    "type": "test",
+                    "name": "clang-dev-test"
+                }
+            ]
+        }
+    ]
+}

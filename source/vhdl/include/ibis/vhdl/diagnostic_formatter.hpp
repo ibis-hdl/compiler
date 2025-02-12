@@ -55,7 +55,7 @@ struct spacer {
 ///
 template <typename IteratorT>
 struct issue_range {
-    using difference_type = typename std::iterator_traits<IteratorT>::difference_type;
+    using difference_type = std::iter_difference_t<IteratorT>;
 
     constexpr issue_range(IteratorT begin, std::optional<IteratorT> end)
         : iter{ begin }

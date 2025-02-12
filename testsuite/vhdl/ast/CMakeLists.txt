@@ -28,6 +28,7 @@ add_test(NAME test_ast
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         ibis::vhdl
+        ibis::common
         testsuite::util
         Boost::headers
         Boost::system

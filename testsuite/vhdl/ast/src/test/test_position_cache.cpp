@@ -14,11 +14,11 @@
 #include <boost/test/tree/decorator.hpp>   // utf::label
 // #include <boost/test/tools/output_test_stream.hpp>
 
-#include <string_view>
-// #include <utility>
-#include <tuple>
-#include <iostream>
+#include <array>
 #include <cassert>
+#include <iostream>
+#include <string_view>
+#include <tuple>
 
 #include <testsuite/namespace_alias.hpp>
 
@@ -195,16 +195,17 @@ BOOST_AUTO_TEST_CASE(position_cache_annotate,
     std::vector<position_tagged> tagged_nodes;
 
     // prepare
-    struct {  // NOLINT(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+    struct file_data_type {
         ibis::util::file_mapper::file_id_type file_id;
         std::string_view search_str;
-        // NOLINTNEXTLINE(modernize-use-designated-initializers)
-    } const file_data[] = {
-        { lorem_ipsum_file.id(), "ipsum" },  // --
-        { bacon_ipsum_file.id(), "beef" }    // --
     };
 
-    for (auto [file_id, search_str] : file_data) {
+    auto const file_data = std::to_array<file_data_type>({
+        { lorem_ipsum_file.id(), "ipsum" },  // --
+        { bacon_ipsum_file.id(), "beef" }    // --
+    });
+
+    for (auto const& [file_id, search_str] : file_data) {
         auto annotator = position_cache.annotator_for(file_id);
         auto [pos, first, last] = find(file_mapper.file_contents(file_id), search_str);
 
