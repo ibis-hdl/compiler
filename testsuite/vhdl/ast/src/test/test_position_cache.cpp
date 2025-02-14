@@ -19,6 +19,7 @@
 #include <iostream>
 #include <string_view>
 #include <tuple>
+#include <vector>
 
 #include <testsuite/namespace_alias.hpp>
 
@@ -58,8 +59,8 @@ auto find(std::string_view contents, std::string_view search_str,
 {
     auto pos = contents.find(search_str, pos_);
     // ensure correct found
-    assert(pos != std::string::npos);
-    assert(contents.substr(pos, search_str.size()).compare(search_str) == 0);
+    assert(pos != std::string_view::npos);
+    assert(contents.substr(pos, search_str.size()) == search_str);
 
     auto view = contents.substr(pos, search_str.size());
     return { pos, begin(view), end(view) };
@@ -130,9 +131,9 @@ BOOST_AUTO_TEST_CASE(position_cache_basic,
         BOOST_TEST(ast_node.file_id == current_file.id());
         BOOST_TEST(ast_node.position_id == 0U);
         // getting iterators back (annotated by x3 on_success error_handler)
-        [[maybe_unused]] auto iter_range = position_cache.position_of(ast_node);
-        BOOST_CHECK(std::begin(iter_range) == first);
-        // ToDo BOOST_TEST(std::end(iter_range) == last);
+        auto iter_range = position_cache.position_of(ast_node);
+        BOOST_TEST_CHECK(std::begin(iter_range) == first);
+        BOOST_TEST_CHECK(std::end(iter_range) == last);
     }
     {  // #1
         auto const search_str{ "voluptua"sv };
@@ -146,13 +147,13 @@ BOOST_AUTO_TEST_CASE(position_cache_basic,
         BOOST_TEST(ast_node.file_id == current_file.id());
         BOOST_TEST(ast_node.position_id == 1U);
         // getting iterators back (annotated by x3 on_success error_handler)
-        [[maybe_unused]] auto iter_range = position_cache.position_of(ast_node);
-        // ToDo BOOST_TEST(std::begin(iter_range) == first);
-        // ToDo BOOST_TEST(std::end(iter_range) == last);
+        auto iter_range = position_cache.position_of(ast_node);
+        BOOST_TEST_CHECK(std::begin(iter_range) == first);
+        BOOST_TEST_CHECK(std::end(iter_range) == last);
     }
     {  // #2
         auto const search_str{ "elitr"sv };
-        [[maybe_unused]] auto [pos_prev, f, l] = find_pos[0];  // previous find pass
+        auto [pos_prev, f, l] = find_pos[0];  // previous find pass
         auto [pos, first, last] = find(valid_data::lorem_ipsum, search_str, pos_prev + 1);
         BOOST_TEST_REQUIRE(pos_prev != pos);
         find_pos.emplace_back(pos, first, last);
@@ -201,8 +202,8 @@ BOOST_AUTO_TEST_CASE(position_cache_annotate,
     };
 
     auto const file_data = std::to_array<file_data_type>({
-        { lorem_ipsum_file.id(), "ipsum" },  // --
-        { bacon_ipsum_file.id(), "beef" }    // --
+        { lorem_ipsum_file.id(), "ipsum" },  // NOLINT(modernize-use-designated-initializers)
+        { bacon_ipsum_file.id(), "beef" }    // NOLINT(modernize-use-designated-initializers)
     });
 
     for (auto const& [file_id, search_str] : file_data) {
@@ -222,7 +223,7 @@ BOOST_AUTO_TEST_CASE(position_cache_annotate,
             {
                 // FixMe Tidy: do not use array subscript when the index is not an integer constant
                 // expression [cppcoreguidelines-pro-bounds-constant-array-index]
-                auto gold_data = file_data[index];
+                auto gold_data = file_data.at(index);
                 BOOST_TEST(ast_node.file_id == gold_data.file_id);
                 BOOST_TEST(ast_node.position_id == index);
                 auto iter_range = position_cache.position_of(ast_node);

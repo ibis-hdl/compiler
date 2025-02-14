@@ -52,7 +52,7 @@ BOOST_AUTO_TEST_CASE(position_tagged,
     {
         // test case: wrong constructed - position tag only
         // clang-format off
-        ast::position_tagged position_tagged{// NOLINT(modernize-use-designated-initializers)
+        ast::position_tagged position_tagged{   // NOLINT(modernize-use-designated-initializers)
             ast::position_tagged::MAX_FILE_ID,  // -- default
             ast::position_tagged::position_id_type{ 0U }
         };

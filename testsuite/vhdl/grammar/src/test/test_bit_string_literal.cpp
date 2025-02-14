@@ -64,7 +64,7 @@ END PACKAGE;
 )";
 
 struct gold_data_type {
-    numeric_base_specifier base_specifier;
+    numeric_base_specifier base_specifier{};
     std::string_view literal;
     std::string_view formatted;
 };
