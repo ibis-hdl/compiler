@@ -35,8 +35,6 @@
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
 
-#include <iostream>
-
 namespace ibis::vhdl::ast {
 
 numeric_convert::numeric_convert(diagnostic_handler_type& diagnostic_handler_)
@@ -59,7 +57,7 @@ numeric_convert::return_type numeric_convert::operator()(
 //
 numeric_convert::return_type numeric_convert::operator()(ast::decimal_literal const& literal) const
 {
-    // ToDo Clang -Weverything Warning regard
+    // ToDo Clang -Weverything Warning regards
     //  instantiation of function 'ibis::vhdl::ast::convert_decimal<unsigned long,
     //  double>::convert_decimal' required here, but no definition is available
     //  [-Wundefined-func-template]

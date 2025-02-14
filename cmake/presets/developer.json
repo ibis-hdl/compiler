@@ -21,15 +21,15 @@
             }
         },
         {
-            "name": "tool-iwyu",
+            "name": "tool-iwyu-clang",
             "description": "CMake Clang based Include-What-You-Use (IWYU)",
             "hidden": true,
             "cacheVariables": {
-                "CMAKE_CXX_INCLUDE_WHAT_YOU_USE": "iwyu;-Xiwyu;--mapping_file=${sourceDir}/cmake/utils/iwyu/project.imp;-Xiwyu;--no_comments;-Xiwyu;--max_line_length=160;-Xiwyu;--transitive_includes_only;-Xiwyu;--quoted_includes_first;-Xiwyu;--cxx23ns"
+                "CMAKE_CXX_INCLUDE_WHAT_YOU_USE": "iwyu;-Xiwyu;--mapping_file=${sourceDir}/cmake/utils/iwyu/project.imp;-Xiwyu;--comment_style=short;-Xiwyu;--update_comments;-Xiwyu;--max_line_length=100;-Xiwyu;--transitive_includes_only;-Xiwyu;--quoted_includes_first;-Xiwyu;--cxx17ns;-Xiwyu;--verbose=3;-Xiwyu;--driver-mode=clang"
             }
         },
         {
-            "name": "tool-iwyu-windows",
+            "name": "tool-iwyu-msvc",
             "description": "CMake Clang based Include-What-You-Use",
             "hidden": true,
             "inherits": [ "condition-windows" ],
@@ -91,16 +91,6 @@
             }
         },      
         {
-            "name": "dev-clang-iwyu",
-            "displayName": "Clang-IWYU",
-            "description": "Clang based Include-What-You-Use tool",
-            "hidden": true,
-            "inherits": [
-                "compiler-clang-dev",
-                "tool-iwyu"
-            ]
-        },
-        {
             "name": "dev-clang-sanitize",
             "displayName": "Clang-Sanitize",
             "description": "Developer-Mode with Clang using sanitize settings",
@@ -123,13 +113,6 @@
     ],
     "buildPresets": [
         {
-            "name": "dev-clang-iwyu-release",
-            "displayName": "Release",
-            "description": "Release build with Clang Include-What-You-Use",
-            "configuration": "Release",
-            "configurePreset": "dev-clang-iwyu"
-        },
-        {
             "name": "dev-clang-dev-sanitize-debug",
             "displayName": "Debug",
             "description": "Debug build with Clang sanitizer settings",
@@ -138,16 +121,6 @@
         }
     ],
     "testPresets": [            
-        {
-            "name": "dev-clang-iwyu-release-test",
-            "displayName": "Release Test",
-            "description": "Test Clang IWYU build",
-            "configuration": "Release",
-            "configurePreset": "dev-clang-iwyu",
-            "inherits": [
-                "default-testPreset"
-            ]
-        },
         {
             "name": "dev-clang-sanitize-debug-test",
             "displayName": "Debug Test",
@@ -159,7 +132,5 @@
             ]
         }
     ],
-    "workflowPresets": [
-
-    ]    
+    "workflowPresets": [ ]    
 }
