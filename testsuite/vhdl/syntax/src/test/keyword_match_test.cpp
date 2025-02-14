@@ -106,7 +106,7 @@ BOOST_DATA_TEST_CASE(
     parser::context vhdl_ctx;
 
     {
-        parser::parse parse{ output };
+        parser::parse const parse{ output };
 
         bool const parse_ok = parse(std::move(current_file), position_cache, vhdl_ctx, design_file);
 

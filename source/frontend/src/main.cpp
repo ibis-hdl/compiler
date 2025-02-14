@@ -95,7 +95,7 @@ int main(int argc, const char* argv[])
         util::file_loader const file_reader{ std::cerr };
         util::file_mapper file_mapper{};
         parser::position_cache<iterator_type> position_cache{ 4_KiB };
-        parser::parse parse{ std::cout };
+        parser::parse const parse{ std::cout };
         parser::context ctx;
 
         // iterate over property_tree::path by using API get_child()

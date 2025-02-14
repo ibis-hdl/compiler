@@ -13,6 +13,11 @@
 #include <csignal>
 #include <cstdlib>
 
+#if defined(IBIS_BUILD_PLATFORM_LINUX)
+// SIGUSR1, SIGBUS are linux specific
+#include <signal.h>  // NOLINT(misc-include-cleaner,modernize-deprecated-headers)
+#endif
+
 namespace ibis::frontend {
 
 #if 0  // NOLINT(readability-avoid-unconditional-preprocessor-if)

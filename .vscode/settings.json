@@ -43,12 +43,13 @@
     "doxdocgen.c.lastLine": "///",
     // To-Do Tree
     "todo-tree.general.tags": [
-        "BUG", "HACK", "FIXME", "TODO", "XXX",
+        "BUG", "HACK", "FIXME", "TODO",
         "@todo", "@fixme",
         "FixMe [C++20]", "FixMe [C++23]", "FixMe [C++26]",
         "ToDo [C++20]",  "ToDo [C++23]",  "ToDo [C++26]",
         "FixMe [CMake]", "ToDo [CMake]",  "@todo [CMake]", "@fixme [CMake]",
         "FixMe [XXX]",   "ToDo [XXX]",    "@todo [XXX]",   "@fixme [XXX]", "XXX",
+        "FixMe [DRY]", "ToDo [DRY]", 
         "<<<<<<<"
     ],
     "todo-tree.general.tagGroups": {
@@ -59,7 +60,10 @@
             "FixMe [XXX]",  "ToDo [XXX]",
             "@fixme [XXX]", "@todo [XXX]",
             "XXX"
-        ],        
+        ],
+        "Don't-Repeat-Yourself": [
+            "FixMe [DRY]", "ToDo [DRY]"
+        ],
         "TODO": [
             "FIXME", "TODO", "XXX",
             "@todo", "@fixme"

@@ -9,8 +9,6 @@
 
 #include <ibis/util/make_iomanip.hpp>
 
-#include <ibis/util/cxx_bug_fatal.hpp>
-
 #include <iostream>
 #include <format>
 #include <string>
@@ -36,12 +34,11 @@ std::ostream& diagnostic_printer::print_snippets(std::ostream& os) const
 
     auto const snippet_count = context.source_snippets().size();
 
-    for (auto snippet_idx{ 0UL }; auto const& source_snippet : context.source_snippets()) {
+    for (auto snippet_idx{ 0UZ }; auto const& source_snippet : context.source_snippets()) {
+        // NOLINTNEXTLINE(readability-qualified-auto): different implementations for iterators
         auto const line_start = source_snippet.source_line().begin();
-
         constexpr bool debug = true;
-        // cope with Clang' warning: 'issue_marker' may not intend to support class template
-        // argument deduction [-Wctad-maybe-unsupported]
+
         using iterator_type = std::string_view::const_iterator;
 
         os << std::format(
@@ -49,6 +46,8 @@ std::ostream& diagnostic_printer::print_snippets(std::ostream& os) const
             "{}|{}{}",  // <gutter>|<issue_marker>
             number_gutter{ source_snippet.line_number() }, source_snippet.source_line(),
             number_gutter{},
+            // considering the Clang' warning: 'issue_marker' may not intend to support class
+            // template argument deduction [-Wctad-maybe-unsupported]
             issue_marker<iterator_type>{ line_start, source_snippet.first(),
                                          source_snippet.last() },
             debug ? "$print-snippet-end" : ""  // end marker

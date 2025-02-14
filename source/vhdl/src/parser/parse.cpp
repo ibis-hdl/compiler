@@ -22,11 +22,12 @@
 #include <boost/locale/message.hpp>
 #include <ibis/util/compiler/warnings_on.hpp>
 
-#include <iostream>
+#include <exception>
+#include <functional>
 #include <iterator>
 #include <new>  // for bad_alloc
-#include <ranges>
-#include <type_traits>
+#include <string>
+#include <utility>
 
 namespace ibis::vhdl::parser {
 
@@ -41,7 +42,7 @@ BOOST_SPIRIT_DECLARE(design_file_type)
 namespace ibis::vhdl::parser {
 
 bool parse::operator()(current_file_type&& current_file, position_cache_type& position_cache,
-                       vhdl_context_type& vhdl_ctx, ast::design_file& design_file)
+                       vhdl_context_type& vhdl_ctx, ast::design_file& design_file) const
 {
     using ibis::util::get_iterator_pair;
 
@@ -56,6 +57,7 @@ bool parse::operator()(current_file_type&& current_file, position_cache_type& po
     };
     // clang-format on
 
+    // FixMe Urgent - current_file moved before!!
     auto ast_annotator = position_cache.annotator_for(current_file.id());
 
     // clang-format off
@@ -67,6 +69,7 @@ bool parse::operator()(current_file_type&& current_file, position_cache_type& po
         ];
     // clang-format on
 
+    // FixMe Urgent - current_file moved before!!
     auto [iter, end] = get_iterator_pair(current_file.file_contents());
 
     // using different iterator_types causes linker errors, see e.g.

@@ -32,16 +32,16 @@ BOOST_AUTO_TEST_CASE(position_tagged,
     using namespace ibis::vhdl;
 
     {
-        // empty/default constructed, MAX_ID as marker
+        // test case: empty/default constructed, MAX_ID as marker
         ast::position_tagged position_tagged{};
         BOOST_TEST(position_tagged.file_id == ast::position_tagged::MAX_FILE_ID);
         BOOST_TEST(position_tagged.position_id == ast::position_tagged::MAX_POSITION_ID);
         BOOST_TEST(position_tagged.is_tagged() == false);
     }
     {
-        // wrong constructed - file tag only
+        // test case: wrong constructed - file tag only
+        // NOLINTNEXTLINE(modernize-use-designated-initializers)
         ast::position_tagged position_tagged{
-            // NOLINT(modernize-use-designated-initializers)
             ast::position_tagged::file_id_type{ 0U },
             ast::position_tagged::MAX_POSITION_ID  // -- default
         };
@@ -50,7 +50,7 @@ BOOST_AUTO_TEST_CASE(position_tagged,
         BOOST_TEST(position_tagged.is_tagged() == false);
     }
     {
-        // wrong constructed - position tag only
+        // test case: wrong constructed - position tag only
         // clang-format off
         ast::position_tagged position_tagged{// NOLINT(modernize-use-designated-initializers)
             ast::position_tagged::MAX_FILE_ID,  // -- default
@@ -63,14 +63,15 @@ BOOST_AUTO_TEST_CASE(position_tagged,
     }
     {
         // correct tagged
+        auto const id = 42U;
         // clang-format off
         ast::position_tagged position_tagged{ // NOLINT(modernize-use-designated-initializers)
-            ast::position_tagged::file_id_type{ 42U },
-            ast::position_tagged::position_id_type{ 42U }
+            ast::position_tagged::file_id_type{ id },
+            ast::position_tagged::position_id_type{ id }
         };
         // clang-format on
-        BOOST_TEST(position_tagged.file_id == 42U);
-        BOOST_TEST(position_tagged.position_id == 42U);
+        BOOST_TEST(position_tagged.file_id == id);
+        BOOST_TEST(position_tagged.position_id == id);
         BOOST_TEST(position_tagged.is_tagged() == true);
     }
 }

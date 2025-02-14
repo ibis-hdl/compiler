@@ -30,7 +30,7 @@ bool testsuite_parse::operator()(std::string_view contents, ast::design_file& de
     try {
         util::file_mapper file_mapper{};
         parser::position_cache<iterator_type> position_cache{ 4_KiB };
-        parser::parse parse{ os };
+        parser::parse const parse{ os };
         parser::context vhdl_ctx;
 
         // no std::move of the variable 'contents' (trivially-copyable type 'std::string_view')

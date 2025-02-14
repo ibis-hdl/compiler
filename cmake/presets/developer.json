@@ -17,7 +17,7 @@
             "description": "CMake CppCheck tool",
             "hidden": true,
             "cacheVariables": {
-                "CMAKE_CXX_CLANG_CPPCHECK": "cppcheck;--inline-suppr"
+                "CMAKE_CXX_CPPCHECK": "cppcheck;--library=boost;--inline-suppr"
             }
         },
         {
@@ -89,27 +89,7 @@
               "IBIS_DEVELOPER_MODE": "ON",
               "CMAKE_BUILD_TYPE": "Debug"
             }
-        },  
-        {
-            "name": "dev-clang-tidy",
-            "displayName": "Clang-Tidy",
-            "description": "Clang-based C++ “linter” tool",
-            "hidden": true,
-            "inherits": [
-                "compiler-clang-dev",
-                "tool-clang-tidy"
-            ]
-        },
-        {
-            "name": "dev-clang-cppcheck",
-            "displayName": "Clang-cppcheck",
-            "description": "Cppcheck tool for static C/C++ code analysis",
-            "hidden": true,
-            "inherits": [
-                "compiler-clang-dev",
-                "tool-cppcheck"
-            ]
-        },        
+        },      
         {
             "name": "dev-clang-iwyu",
             "displayName": "Clang-IWYU",
@@ -143,20 +123,6 @@
     ],
     "buildPresets": [
         {
-            "name": "dev-clang-tidy-release",
-            "displayName": "Release",
-            "description": "Release build with Clang Tidy",
-            "configuration": "Release",
-            "configurePreset": "dev-clang-tidy"
-        },        
-        {
-            "name": "dev-clang-cppcheck-release",
-            "displayName": "Release",
-            "description": "Release build with Clang Tidy",
-            "configuration": "Release",
-            "configurePreset": "dev-clang-tidy"
-        },
-        {
             "name": "dev-clang-iwyu-release",
             "displayName": "Release",
             "description": "Release build with Clang Include-What-You-Use",
@@ -171,27 +137,7 @@
             "configurePreset": "dev-clang-sanitize"
         }
     ],
-    "testPresets": [
-        {
-            "name": "dev-clang-tidy-release-test",
-            "displayName": "Release Test",
-            "description": "Test Clang Tidy build",
-            "configuration": "Release",
-            "configurePreset": "dev-clang-tidy",
-            "inherits": [
-                "default-testPreset"
-            ]
-        },
-        {
-            "name": "dev-clang-cppcheck-release-test",
-            "displayName": "Release Test",
-            "description": "Test Clang Cppcheck build",
-            "configuration": "Release",
-            "configurePreset": "dev-clang-cppcheck",
-            "inherits": [
-                "default-testPreset"
-            ]
-        },               
+    "testPresets": [            
         {
             "name": "dev-clang-iwyu-release-test",
             "displayName": "Release Test",

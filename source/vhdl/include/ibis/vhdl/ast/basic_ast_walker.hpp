@@ -1287,8 +1287,8 @@ public:
         (*this)(node.prefix);
 
         {
-            std::string_view const node_typename{ "expression*" };
-            worker(node, node_typename);
+            std::string_view const node_typename_{ "expression*" };
+            worker(node, node_typename_);
             visit(node.expression_list);
         }
     }

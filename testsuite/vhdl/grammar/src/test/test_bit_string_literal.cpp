@@ -19,12 +19,13 @@
 #include <testsuite/testsuite_parser.hpp>
 #include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
-#include <format>
-#include <string_view>
-#include <iostream>
-#include <functional>
+#include <array>
 #include <cassert>
 #include <cstddef>
+#include <format>
+#include <functional>
+#include <iostream>
+#include <string_view>
 
 using namespace ibis::vhdl;
 
@@ -123,7 +124,7 @@ struct test_worker {
     {
         BOOST_TEST_CONTEXT(">>> Test index at " << index << " <<<")
         {
-            auto const& expected = gold_data.get()[index];
+            auto const& expected = gold_data.get().at(index);
             BOOST_TEST(node.base_specifier == expected.base_specifier);
             auto const node_literal = std::string_view{ node.literal };
             BOOST_TEST(node_literal == expected.literal, btt::per_element());

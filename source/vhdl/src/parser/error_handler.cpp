@@ -11,6 +11,8 @@
 #include <ibis/util/compiler/warnings_on.hpp>
 
 #include <unordered_map>
+#include <string_view>
+#include <string>
 
 namespace ibis::vhdl::parser {
 

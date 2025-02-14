@@ -131,7 +131,7 @@ BOOST_AUTO_TEST_CASE(position_cache_basic,
         BOOST_TEST(ast_node.position_id == 0U);
         // getting iterators back (annotated by x3 on_success error_handler)
         [[maybe_unused]] auto iter_range = position_cache.position_of(ast_node);
-        // ToDo BOOST_TEST(std::begin(iter_range) == first);
+        BOOST_CHECK(std::begin(iter_range) == first);
         // ToDo BOOST_TEST(std::end(iter_range) == last);
     }
     {  // #1
