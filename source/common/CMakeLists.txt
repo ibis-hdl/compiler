@@ -23,6 +23,7 @@ target_link_libraries(${PROJECT_NAME}
     PUBLIC
         fmt::fmt    # FixMe [CMake]: Even not required, MSVC PCH errors due to /utf-8 compile flag
         Boost::headers
+        Boost::locale
 )
 
 

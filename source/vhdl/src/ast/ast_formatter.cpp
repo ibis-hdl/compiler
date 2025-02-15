@@ -11,6 +11,7 @@
 
 #include <string_view>
 #include <format>
+#include <ostream>
 #include <utility>
 
 ///
