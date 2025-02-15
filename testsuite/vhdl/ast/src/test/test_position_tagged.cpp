@@ -42,7 +42,7 @@ BOOST_AUTO_TEST_CASE(position_tagged,
         // test case: wrong constructed - file tag only
         // NOLINTNEXTLINE(modernize-use-designated-initializers)
         ast::position_tagged position_tagged{
-            ast::position_tagged::file_id_type{ 0U },
+            ast::position_tagged::file_id_type{ 0UL },
             ast::position_tagged::MAX_POSITION_ID  // -- default
         };
         BOOST_TEST(position_tagged.file_id == 0U);
@@ -54,7 +54,7 @@ BOOST_AUTO_TEST_CASE(position_tagged,
         // clang-format off
         ast::position_tagged position_tagged{   // NOLINT(modernize-use-designated-initializers)
             ast::position_tagged::MAX_FILE_ID,  // -- default
-            ast::position_tagged::position_id_type{ 0U }
+            ast::position_tagged::position_id_type{ 0UL }
         };
         // clang-format on
         BOOST_TEST(position_tagged.file_id == ast::position_tagged::MAX_FILE_ID);

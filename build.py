@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import os, shutil, subprocess
 
 def run(cmd):
@@ -16,8 +18,8 @@ def cleanup():
         pass
     
 cleanup()
-run("python3 conan_install.py --profile gcc")
+run("python3 conan_install.py --profile clang --build-type Debug")
 #run("cmake --list-presets")
-#run('cmake --preset "gcc-ccache"')
-#run('cmake --build --preset "gcc-ccache-release"')
-run('cmake --workflow --preset "GnuC Release (CCache)"')
+run("cmake --preset dev-clang-iwyu")
+run("cmake --build --preset dev-clang-iwyu-build | tee build-iwyu.log")
+

@@ -767,7 +767,7 @@ void printer::operator()(conditional_waveforms const& node)
     if (!node.chunks.empty()) {
         std::size_t const SIZE = node.chunks.size() - 1;
         // NOLINTNEXTLINE(readability-identifier-length)
-        for (auto i{ 0UZ }; auto const& chunk : node.chunks) {  // ToDo [DRY]
+        for (auto i{ 0UL }; auto const& chunk : node.chunks) {  // ToDo [DRY]
             (*this)(chunk.waveform);
             os << ",\n";
             (*this)(chunk.condition);
@@ -1224,7 +1224,7 @@ void printer::operator()(expression const& node)
 
     std::size_t const SIZE = node.rest_list.size() - 1;
     // NOLINTNEXTLINE(readability-identifier-length)
-    for (auto i{ 0UZ }; auto const& chunk : node.rest_list) {  // ToDo [DRY]
+    for (auto i{ 0UL }; auto const& chunk : node.rest_list) {  // ToDo [DRY]
         os << ",\n"
            << "(operator: " << chunk.logical_operator << "),\n";
         (*this)(chunk.relation);
@@ -1478,7 +1478,7 @@ void printer::operator()(if_statement const& node)
         os << '\n';
         std::size_t const SIZE = node.elseif_chunks.size() - 1;
         // NOLINTNEXTLINE(readability-identifier-length)
-        for (auto i{ 0UZ }; auto const& elsif_chunk : node.elseif_chunks) {  // ToDo [DRY]
+        for (auto i{ 0UL }; auto const& elsif_chunk : node.elseif_chunks) {  // ToDo [DRY]
             os << "ELSIF:\n";
             (*this)(elsif_chunk.condition);
             os << "\nTHAN:\n";
@@ -2198,7 +2198,7 @@ void printer::operator()(selected_waveforms const& node)
     // doesn't make sense to unify this
     std::size_t const SIZE = node.size() - 1;
     // NOLINTNEXTLINE(readability-identifier-length)
-    for (auto i{ 0UZ }; auto const& selected_waveform : node) {  // ToDo [DRY]
+    for (auto i{ 0UL }; auto const& selected_waveform : node) {  // ToDo [DRY]
         (*this)(selected_waveform.waveform);
         os << '\n';
         (*this)(selected_waveform.choices);
@@ -2350,7 +2350,7 @@ void printer::operator()(simple_expression const& node)
 
     std::size_t const SIZE = node.rest_list.size() - 1;
     // NOLINTNEXTLINE(readability-identifier-length)
-    for (auto i{ 0UZ }; auto const& chunk : node.rest_list) {  // ToDo [DRY]
+    for (auto i{ 0UL }; auto const& chunk : node.rest_list) {  // ToDo [DRY]
         os << ",\n"
            << "(operator: " << chunk.adding_operator << "),\n";
         (*this)(chunk.term);
@@ -2530,7 +2530,7 @@ void printer::operator()(term const& node)
 
     std::size_t const SIZE = node.rest_list.size() - 1;
     // NOLINTNEXTLINE(readability-identifier-length)
-    for (auto i{ 0UZ }; auto const& term_chunk : node.rest_list) {  // ToDo [DRY]
+    for (auto i{ 0UL }; auto const& term_chunk : node.rest_list) {  // ToDo [DRY]
         os << "(operator: " << term_chunk.multiplying_operator << "),\n";
         visit(term_chunk.factor);
         if (i++ != SIZE) {
@@ -2594,7 +2594,7 @@ void printer::operator()(use_clause const& node)
 
     std::size_t const SIZE = node.list.size() - 1;
     // NOLINTNEXTLINE(readability-identifier-length)
-    for (auto i{ 0UZ }; auto const& selected_name : node.list) {  // ToDo [DRY]
+    for (auto i{ 0UL }; auto const& selected_name : node.list) {  // ToDo [DRY]
         for (auto const& name : selected_name.prefix_list) {
             (*this)(name);
             os << ".\n";
@@ -2745,7 +2745,7 @@ void printer::visit(std::vector<T> const& vector)
 
     std::size_t const SIZE = vector.size() - 1;
     // NOLINTNEXTLINE(readability-identifier-length)
-    for (auto i{ 0UZ }; auto const& element : vector) {  // ToDo [DRY]
+    for (auto i{ 0UL }; auto const& element : vector) {  // ToDo [DRY]
         (*this)(element);
         if (i++ != SIZE) {
             os << ",\n";

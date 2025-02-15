@@ -65,7 +65,7 @@ BOOST_AUTO_TEST_CASE(string_literal_formatter,  // test shall pass
 
     btt::output_test_stream output;  // reused, flushed/cleared after each test
 
-    for (auto index{ 0U }; auto const& [input, expected] : valid_data::gold_data) {
+    for (auto index{ 0UL }; auto const& [input, expected] : valid_data::gold_data) {
         ast::string_literal const string_literal{ make_string_literal_from(input) };
 
         BOOST_TEST_CONTEXT(">>> Test index at " << index << " <<<")
@@ -90,7 +90,7 @@ BOOST_AUTO_TEST_CASE(string_literal_raw_formatter,  // test shall pass
 
     btt::output_test_stream output;  // reused, flushed/cleared after each test
 
-    for (auto index{ 0U }; auto const& [input, expected] : valid_data::gold_data) {
+    for (auto index{ 0UL }; auto const& [input, expected] : valid_data::gold_data) {
         ast::string_literal const string_literal{ make_string_literal_from(input) };
 
         BOOST_TEST_CONTEXT(">>> Test index at " << index << " <<<")

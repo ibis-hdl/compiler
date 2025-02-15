@@ -143,7 +143,7 @@ BOOST_AUTO_TEST_CASE(issue_marker_formatter, *utf::label("formatter"))
 
     btt::output_test_stream output;  // reused, flushed/cleared after each test
 
-    for (auto index{ 0U }; auto const& [issue, expected] : valid_data::gold_data) {
+    for (auto index{ 0UL }; auto const& [issue, expected] : valid_data::gold_data) {
         BOOST_TEST_CONTEXT(">>> Test index at " << index << " <<<")
         {
             output << std::format("{}", issue);

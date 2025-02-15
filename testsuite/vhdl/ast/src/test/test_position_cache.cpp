@@ -218,7 +218,7 @@ BOOST_AUTO_TEST_CASE(position_cache_annotate,
 
     // test
     {
-        for (auto index{ 0U }; auto const& ast_node : tagged_nodes) {
+        for (auto index{ 0UL }; auto const& ast_node : tagged_nodes) {
             BOOST_TEST_CONTEXT(">>> Test index at " << index << " <<<")
             {
                 // FixMe Tidy: do not use array subscript when the index is not an integer constant

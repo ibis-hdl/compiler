@@ -34,7 +34,7 @@ std::ostream& diagnostic_printer::print_snippets(std::ostream& os) const
 
     auto const snippet_count = context.source_snippets().size();
 
-    for (auto snippet_idx{ 0UZ }; auto const& source_snippet : context.source_snippets()) {
+    for (auto snippet_idx{ 0UL }; auto const& source_snippet : context.source_snippets()) {
         // NOLINTNEXTLINE(readability-qualified-auto): different implementations for iterators
         auto const line_start = source_snippet.source_line().begin();
         constexpr bool debug = true;
