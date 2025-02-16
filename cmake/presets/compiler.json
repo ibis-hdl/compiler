@@ -5,35 +5,33 @@
     ],
     "configurePresets": [
         {
-            "name": "compiler-clang",
-            "description": "Clang C/C++ language family frontend for LLVM",
-            "hidden": true,
-            "inherits": [],
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "clang",
-                "CMAKE_CXX_COMPILER": "clang++"
-            }
-        },
-        {
-            "name": "compiler-clang-libc++",
-            "description": "Clang C/C++ language family frontend for LLVM",
-            "hidden": true,
-            "inherits": [
-                "settings-stdlib-libc++"
-            ],
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "clang",
-                "CMAKE_CXX_COMPILER": "clang++"
-            }
-        },
-        {
             "name": "compiler-gcc",
             "description": "GNU Compiler Collection (GCC)",
             "hidden": true,
             "inherits": [],
             "cacheVariables": {
-                "CMAKE_C_COMPILER": "gcc-14",
-                "CMAKE_CXX_COMPILER": "g++-14"
+                "CONAN_HOST_PROFILE": "gcc",
+                "CONAN_BUILD_PROFILE": "gcc"
+            }
+        },
+        {
+            "name": "compiler-clang",
+            "description": "Clang C/C++ with GNU LibStdC++",
+            "hidden": true,
+            "inherits": [],
+            "cacheVariables": {
+                "CONAN_HOST_PROFILE": "clang",
+                "CONAN_BUILD_PROFILE": "clang"
+            }
+        },
+        {
+            "name": "compiler-clang-libc++",
+            "description": "Clang C/C++ with LibC++",
+            "hidden": true,
+            "inherits": [ ],
+            "cacheVariables": {
+                "CONAN_HOST_PROFILE": "clang-libc++",
+                "CONAN_BUILD_PROFILE": "clang-libc++"
             }
         },
         {
@@ -42,9 +40,8 @@
             "hidden": true,
             "inherits": [],
             "cacheVariables": {
-                "CMAKE_C_COMPILER": "cl",
-                "CMAKE_CXX_COMPILER": "cl",
-                "CMAKE_CXX_FLAGS_INIT": "/nologo"
+                "CONAN_HOST_PROFILE": "msvc-cl",
+                "CONAN_BUILD_PROFILE": "msvc-cl"
             }
         },
         {
@@ -53,8 +50,8 @@
             "hidden": true,
             "inherits": [],
             "cacheVariables": {
-                "CMAKE_C_COMPILER": "clang-cl",
-                "CMAKE_CXX_COMPILER": "clang-cl"
+                "CONAN_HOST_PROFILE": "msvc",
+                "CONAN_BUILD_PROFILE": "msvc"
             }
         },
         {
@@ -63,14 +60,8 @@
             "description": "Clang compiler (using GNU libstdc++) with strong compiler flags",
             "hidden": true,
             "inherits": [
-                "compiler-clang",
-                "cmake-pedantic-configure-settings"
-            ],
-            "cacheVariables": {
-                "IBIS_DEVELOPER_CLANG_WARN_EVERYTHING": "ON",
-                "CMAKE_C_COMPILER": "clang",
-                "CMAKE_CXX_COMPILER": "clang++"                
-            }
+                "compiler-clang"
+            ]
         }        
     ]
 }

@@ -1,8 +1,7 @@
 {
     "version": 8,
     "include": [
-        "cmake/presets/compiler.json",
-        "ConanCMakePresets.json"
+        "cmake/presets/compiler.json"
     ],
     "configurePresets": [
         {
@@ -13,12 +12,12 @@
             }
         },
         {
-            "name": "manual-conan-install",
-            "description": "Required run: python3 conan_install.py --profile <conan-profile>, depends on 'ConanCMakePresets.json'",
+            "name": "conan-toolchain",
+            "description": "Conan toolchain file; run: python3 conan_install.py --profile <conan-profile>",
             "hidden": true,
-            "inherits": [
-                "conan-default"
-            ]
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/build/generators/conan_toolchain.cmake"
+              }
         },
         {
             "name": "gcc",
@@ -28,14 +27,12 @@
                 "compiler-gcc",
                 "condition-linux",
                 "ninja-multi-config",
-                "manual-conan-install",
-                "cmake-default-configure-settings",
+                "conan-toolchain",
+                "cmake-default-settings",
                 "default-install-settings",
                 "default-environment"
             ],
             "cacheVariables": {
-                "CONAN_HOST_PROFILE": "gcc",
-                "CONAN_BUILD_PROFILE": "gcc",
                 "CMAKE_BUILD_TYPE": "Release"
             }
         },
@@ -47,33 +44,29 @@
                 "compiler-clang",
                 "condition-linux-or-macos",
                 "ninja-multi-config",
-                "manual-conan-install",
-                "cmake-default-configure-settings",
+                "conan-toolchain",
+                "cmake-default-settings",
                 "default-install-settings",
                 "default-environment"
             ],
             "cacheVariables": {
-                "CONAN_HOST_PROFILE": "clang",
-                "CONAN_BUILD_PROFILE": "clang",
                 "CMAKE_BUILD_TYPE": "Release"
             }
         },
         {
             "name": "clang-libc++",
             "displayName": "Clang-libc++",
-            "description": "Clang compiler (using libc++)",
+            "description": "Clang compiler (using libc++) - used for Linux 'cross-compiling' only; macOS and FreeBSD use libc++ by default",
             "inherits": [
                 "compiler-clang-libc++",
-                "condition-linux-or-macos",
+                "condition-linux",
                 "ninja-multi-config",
-                "manual-conan-install",
-                "cmake-default-configure-settings",
+                "conan-toolchain",
+                "cmake-default-settings",
                 "default-install-settings",
                 "default-environment"
             ],
             "cacheVariables": {
-                "CONAN_HOST_PROFILE": "clang-libc++",
-                "CONAN_BUILD_PROFILE": "clang-libc++",
                 "CMAKE_BUILD_TYPE": "Release"
             }
         },
@@ -84,16 +77,13 @@
             "inherits": [
                 "compiler-msvc",
                 "condition-windows",
-                "windows-x64-arch",
                 "ninja-multi-config",
-                "manual-conan-install",
-                "cmake-default-configure-settings",
+                "conan-toolchain",
+                "cmake-default-settings",
                 "default-install-settings",
                 "default-environment"
             ],
             "cacheVariables": {
-                "CONAN_HOST_PROFILE": "msvc",
-                "CONAN_BUILD_PROFILE": "msvc",
                 "CMAKE_BUILD_TYPE": "Release"
             }
         },
@@ -104,16 +94,13 @@
             "inherits": [
                 "compiler-msvc-clang",
                 "condition-windows",
-                "windows-x64-arch",
                 "ninja-multi-config",
-                "manual-conan-install",
-                "cmake-default-configure-settings",
+                "conan-toolchain",
+                "cmake-default-settings",
                 "default-install-settings",
                 "default-environment"
             ],
             "cacheVariables": {
-                "CONAN_HOST_PROFILE": "msvc-cl",
-                "CONAN_BUILD_PROFILE": "msvc-cl",
                 "CMAKE_BUILD_TYPE": "Release"
             }
         }      

@@ -24,7 +24,7 @@
             }
         },
         {
-            "name": "cmake-default-configure-settings",
+            "name": "cmake-default-settings",
             "description": "Enable, Disable some CMake warnings, e.g. '--no-warn-unused-cli'",
             "hidden": true,
             "warnings": {
@@ -32,12 +32,13 @@
             },
             "inherits": [ "cmake-default-policies" ],
             "cacheVariables": {
+                "CMAKE_CXX_SCAN_FOR_MODULES": "0",
                 "CMAKE_VERBOSE_MAKEFILE": "OFF"
             }
         },
         {
-            "name": "cmake-pedantic-configure-settings",
-            "description": "Enable CMake pedantic warnings",
+            "name": "cmake-pedantic-settings",
+            "description": "Enable CMake pedantic warnings for developer mode",
             "hidden": true,
             "warnings": {
                 "dev": true,
@@ -56,7 +57,7 @@
             }
         },
         {
-            "name": "ninja-default-settings",
+            "name": "ninja-common-settings",
             "description": "Common settings related to build tool Ninja.",
             "hidden": true,
             "binaryDir": "${sourceDir}/build/",
@@ -73,25 +74,29 @@
             "description": "Traditional single-config Ninja generator.",
             "hidden": true,
             "generator": "Ninja",
-            "inherits": [ "ninja-default-settings" ]
+            "inherits": [ "ninja-common-settings" ]
         },
         {
             "name": "ninja-multi-config",
-            "description": "Multiple configurations Generator.",
+            "description": "Multiple configurations build generator.",
             "hidden": true,
             "generator": "Ninja Multi-Config",
-            "inherits": [ "ninja-default-settings" ]
+            "inherits": [ "ninja-common-settings" ]
         },
         {
-            "name": "settings-stdlib-libc++",
-            "description": "Settings to compile and link with libc++",
+            "name": "xcode-config",
+            "description": "XCode configurations build generator.",
             "hidden": true,
-            "cacheVariables": {
-                "CMAKE_CXX_FLAGS": "-stdlib=libc++",
-                "CMAKE_EXE_LINKER_FLAGS": "-stdlib=libc++",
-                "CMAKE_SHARED_LINKER_FLAGS": "-stdlib=libc++"
-            }
-        },
+            "generator": "XCode",
+            "inherits": []
+        },        
+        {
+            "name": "vs2020-config",
+            "description": "Visual Studio 17 2022 configurations build generator.",
+            "hidden": true,
+            "generator": "Visual Studio 17 2022",
+            "inherits": []
+        },        
         {
             "name": "default-install-settings",
             "description": "Default build and install directories",

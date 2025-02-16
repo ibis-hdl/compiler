@@ -37,6 +37,7 @@ target_link_libraries(${PROJECT_NAME}
         ibis::vhdl
         ibis::common
         Boost::headers
+        Boost::unit_test_framework
         CLI11::CLI11
 )
 

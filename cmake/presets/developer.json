@@ -5,6 +5,14 @@
     ],
     "configurePresets": [
         {
+            "name": "developer-mode",
+            "hidden": true,
+            "cacheVariables": {
+              "IBIS_DEVELOPER_MODE": "ON",
+              "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
             "name": "tool-clang-tidy",
             "description": "CMake Clang-Tidy build target",
             "hidden": true,
@@ -34,7 +42,7 @@
             "hidden": true,
             "inherits": [ "condition-windows" ],
             "cacheVariables": {
-                "CXX_INCLUDE_WHAT_YOU_USE": "iwyu;--driver-mode=cl"
+                "CMAKE_CXX_INCLUDE_WHAT_YOU_USE": "iwyu;--driver-mode=cl"
             }
         },
         {
@@ -60,7 +68,7 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Sanitize",
                 "CMAKE_CXX_FLAGS_SANITIZE": "-O2 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-common -U_GLIBCXX_DEBUG -U_GLIBCXX_DEBUG_PEDANTIC -U_GLIBCXX_SANITIZE_VECTOR -U_FORTIFY_SOURCE",
-                "CMAKE_MAP_IMPORTED_CONFIG_SANITIZE": "Sanitize;Release;Debug;"
+                "CMAKE_MAP_IMPORTED_CONFIG_SANITIZE": "Sanitize;RelWithDebInfo;Release;Debug;"
             }
         },
         {
@@ -81,25 +89,7 @@
             "cacheVariables": {
                 "CMAKE_CXX_FLAGS_INIT": "-D_LIBCPP_DEBUG=1"
             }
-        },
-        {
-            "name": "developer-mode",
-            "hidden": true,
-            "cacheVariables": {
-              "IBIS_DEVELOPER_MODE": "ON",
-              "CMAKE_BUILD_TYPE": "Debug"
-            }
-        },      
-        {
-            "name": "dev-clang-sanitize",
-            "displayName": "Clang-Sanitize",
-            "description": "Developer-Mode with Clang using sanitize settings",
-            "hidden": true,
-            "inherits": [
-                "compiler-clang-dev",
-                "tool-sanitize-asan-ubsan"
-            ]
-        },
+        },    
         {
             "name": "dev-clang-coverage",
             "displayName": "Clang-Coverage",
@@ -112,25 +102,19 @@
         }
     ],
     "buildPresets": [
+
+    ],
+    "testPresets": [
         {
-            "name": "dev-clang-dev-sanitize-debug",
-            "displayName": "Debug",
-            "description": "Debug build with Clang sanitizer settings",
-            "configuration": "Release",
-            "configurePreset": "dev-clang-sanitize"
+            "name": "dev-clang-asan-test-env",
+            "displayName": "Clang sanitize environment",
+            "description": "Developer-Mode with Clang Sanitize environment settings",
+            "hidden": true,
+            "environment":{
+                "ASAN_OPTIONS": "strict_string_checks=1:detect_stack_use_after_return=1:check_initialization_order=1:strict_init_order=1:detect_leaks=1:halt_on_error=1",
+                "UBSAN_OPTIONS": "print_stacktrace=1:halt_on_error=1"
+            }
         }
     ],
-    "testPresets": [            
-        {
-            "name": "dev-clang-sanitize-debug-test",
-            "displayName": "Debug Test",
-            "description": "Test Clang sanitize build",
-            "configuration": "Debug",
-            "configurePreset": "dev-clang-sanitize",
-            "inherits": [
-                "default-testPreset"
-            ]
-        }
-    ],
-    "workflowPresets": [ ]    
+    "workflowPresets": []    
 }
