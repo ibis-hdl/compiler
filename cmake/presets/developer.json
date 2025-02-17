@@ -8,8 +8,7 @@
             "name": "developer-mode",
             "hidden": true,
             "cacheVariables": {
-              "IBIS_DEVELOPER_MODE": "ON",
-              "CMAKE_BUILD_TYPE": "Debug"
+              "IBIS_DEVELOPER_MODE": "ON"
             }
         },
         {
@@ -33,7 +32,7 @@
             "description": "CMake Clang based Include-What-You-Use (IWYU)",
             "hidden": true,
             "cacheVariables": {
-                "CMAKE_CXX_INCLUDE_WHAT_YOU_USE": "iwyu;-Xiwyu;--mapping_file=${sourceDir}/cmake/utils/iwyu/project.imp;-Xiwyu;--comment_style=short;-Xiwyu;--update_comments;-Xiwyu;--max_line_length=100;-Xiwyu;--transitive_includes_only;-Xiwyu;--quoted_includes_first;-Xiwyu;--cxx17ns;-Xiwyu;--verbose=3;-Xiwyu;--driver-mode=clang"
+                "CMAKE_CXX_INCLUDE_WHAT_YOU_USE": "iwyu;-Xiwyu;--mapping_file=${sourceDir}/cmake/utils/iwyu/project.imp;-Xiwyu;--comment_style=none;-Xiwyu;--max_line_length=100;-Xiwyu;--transitive_includes_only;-Xiwyu;--quoted_includes_first;-Xiwyu;--cxx17ns;-Xiwyu;--verbose=0"
             }
         },
         {

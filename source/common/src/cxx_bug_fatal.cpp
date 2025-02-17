@@ -1,8 +1,15 @@
+//
+// Copyright (c) 2017-2025 Olaf (<ibis-hdl@users.noreply.github.com>).
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+
 #include <ibis/util/cxx_bug_fatal.hpp>
 
+#include <cstdlib>
 #include <format>
 #include <iostream>
 #include <source_location>
+#include <string>
 #include <string_view>
 
 namespace /* anonymous */ {
