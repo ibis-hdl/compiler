@@ -5,10 +5,9 @@
 
 #pragma once
 
+#include <cstddef>
 #include <string_view>
 #include <vector>
-
-#include <cstddef>
 
 namespace ibis::util {
 

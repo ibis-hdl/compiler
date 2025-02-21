@@ -3,19 +3,23 @@
 
 #include <testsuite/testsuite_parser.hpp>
 
-#include <ibis/vhdl/ast/node/design_file.hpp>
-#include <ibis/vhdl/parser/iterator_type.hpp>
-#include <ibis/vhdl/parser/position_cache.hpp>
-#include <ibis/vhdl/parser/parse.hpp>
-#include <ibis/vhdl/parser/context.hpp>
-#include <ibis/vhdl/context.hpp>  // failure_status
-#include <ibis/util/file_mapper.hpp>
 #include <ibis/literals.hpp>
+#include <ibis/util/file_mapper.hpp>
+#include <ibis/vhdl/ast/node/design_file.hpp>
+#include <ibis/vhdl/context.hpp>  // failure_status
+#include <ibis/vhdl/parser/context.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/parser/parse.hpp>
+#include <ibis/vhdl/parser/position_cache.hpp>
 
-#include <string_view>
-#include <format>
 #include <exception>
+#include <format>
+#include <functional>
+#include <iostream>
+#include <string_view>
 #include <utility>
+
+#include <testsuite/namespace_alias.hpp>
 
 namespace testsuite {
 

@@ -5,17 +5,17 @@
 
 #pragma once
 
-#include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
-
-#include <cstddef>  // work around for Clang19 libc++ && Boost 1.86
+#include <cstddef>  // FixMe [Bug] work around for Clang19 libc++ && Boost 1.86
 #include <boost/test/data/size.hpp>
 
+#include <filesystem>
 #include <memory>
-#include <string>
 #include <string_view>
+#include <string>
 #include <tuple>
 #include <vector>
-#include <filesystem>
+
+#include <testsuite/namespace_alias.hpp>
 
 namespace testsuite {
 namespace fs = std::filesystem;

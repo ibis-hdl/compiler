@@ -5,7 +5,7 @@
 
 #include <testsuite/vhdl/syntax/failure_diagnostic_fixture.hpp>
 
-#include <memory>  // std::make_unique
+#include <memory>
 
 namespace testsuite::vhdl::syntax {
 

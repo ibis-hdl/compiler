@@ -6,17 +6,23 @@
 #pragma once
 
 #include <ibis/util/file_mapper.hpp>
-#include <ibis/vhdl/parser/position_cache.hpp>
-#include <ibis/vhdl/parser/iterator_type.hpp>
 #include <ibis/vhdl/diagnostic_context.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/parser/position_cache.hpp>
+#include <ibis/vhdl/source_location.hpp>
 
 #include <ibis/namespace_alias.hpp>  // IWYU pragma: keep
 
-#include <utility>
-#include <string>
-#include <optional>
-#include <tuple>
+#include <cctype>
+#include <cstddef>
+#include <functional>
 #include <iosfwd>
+#include <optional>
+#include <string_view>
+#include <tuple>
+#include <utility>
+
+#include <ibis/namespace_alias.hpp>
 
 namespace ibis::vhdl {
 

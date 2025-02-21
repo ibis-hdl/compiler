@@ -16,6 +16,8 @@
 #include <boost/test/tools/output_test_stream.hpp>
 
 #include <format>
+#include <ostream>
+#include <string>
 #include <string_view>
 
 #include <testsuite/namespace_alias.hpp>

@@ -7,8 +7,9 @@
 #include <boost/locale/message.hpp>
 #include <boost/locale/format.hpp>
 
-#include <string_view>
 #include <cstdint>
+#include <iosfwd>
+#include <string_view>
 
 namespace ibis {
 

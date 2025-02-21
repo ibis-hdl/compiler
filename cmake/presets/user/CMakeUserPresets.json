@@ -22,6 +22,7 @@
             "cacheVariables": {
                 "CONAN_HOST_PROFILE": "clang",
                 "CONAN_BUILD_PROFILE": "clang",
+                "IBIS_DEVELOPER_CLANG_WARN_EVERYTHING": "ON",
                 "CMAKE_BUILD_TYPE": "Debug"
             }
         },
@@ -55,7 +56,6 @@
                 "tool-iwyu-clang",
                 "compiler-clang-dev",
                 "developer-mode",
-                "libstdcxx-debug",
                 "condition-linux-or-macos",
                 "ninja-multi-config",
                 "conan-toolchain",
@@ -111,7 +111,7 @@
             "name": "dev-clang-iwyu-build",
             "displayName": "Developer Build",
             "description": "Developer build with Clang/IWYU",
-            "configuration": "Debug",
+            "configuration": "Release",
             "configurePreset": "dev-clang-iwyu"
         },
         {

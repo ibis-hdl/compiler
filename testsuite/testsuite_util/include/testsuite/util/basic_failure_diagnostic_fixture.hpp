@@ -5,12 +5,12 @@
 
 #pragma once
 
-#include <filesystem>
-#include <memory>
-#include <string>
-#include <string_view>
-
 #include <cstddef>
+#include <filesystem>
+#include <iosfwd>
+#include <memory>
+#include <string_view>
+#include <string>
 
 #include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 

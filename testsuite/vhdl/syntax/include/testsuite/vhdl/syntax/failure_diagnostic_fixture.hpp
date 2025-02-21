@@ -7,6 +7,8 @@
 
 #include <testsuite/util/basic_failure_diagnostic_fixture.hpp>
 
+#include <string_view>
+
 namespace testsuite::vhdl::syntax {
 
 class failure_diagnostic_fixture : public testsuite::util::basic_failure_diagnostic_fixture {

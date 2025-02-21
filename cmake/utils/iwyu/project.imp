@@ -316,7 +316,10 @@
     { include: ["<boost/test/tools/detail/print_helper.hpp>", private, "<boost/test/tools/assertion.hpp>", public ] },
     { include: ["<boost/test/tools/detail/print_helper.hpp>", private, "<boost/test/tools/old/impl.hpp>", public ] },
     { include: ["<boost/test/tools/detail/print_helper.hpp>", private, "<boost/test/utils/lazy_ostream.hpp>", public ] },
-    { include: ["<boost/test/tools/detail/tolerance_manip.hpp>", private, "<boost/test/test_tools.hpp>", public ] }
+    { include: ["<boost/test/tools/detail/tolerance_manip.hpp>", private, "<boost/test/test_tools.hpp>", public ] },
+    # GNU LibStdC++ debug
+    { include: [ "<debug/vector>", "private", "<vector>", "public" ] },
+    { include: [ "<debug/safe_iterator.h>", "private", "<iterator>", "public" ] },
     # template
     #{ include: [ "xxx", "private", "yyy", "public" ] }
 ]

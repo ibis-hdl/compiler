@@ -7,7 +7,9 @@
 
 #include <testsuite/util/dataset_loader.hpp>
 
-#include <boost/test/data/monomorphic.hpp>
+#include <boost/test/data/monomorphic.hpp>  // IWYU pragma: keep
+#include <boost/mpl/bool.hpp>
+#include <boost/mpl/bool_fwd.hpp>
 
 #include <string_view>
 
@@ -48,7 +50,6 @@ namespace boost::unit_test::data::monomorphic {
 /// The registration of dataset as a proper dataset for Boost.Test.
 ///
 template <>
-struct is_dataset<testsuite::vhdl::syntax::dataset> : boost::mpl::true_ {
-};
+struct is_dataset<testsuite::vhdl::syntax::dataset> : boost::mpl::true_ {};
 
 }  // namespace boost::unit_test::data::monomorphic

@@ -5,19 +5,15 @@
 
 #pragma once
 
-#include <ibis/vhdl/parser/context.hpp>
-#include <ibis/vhdl/parser/parse.hpp>
-#include <ibis/vhdl/ast.hpp>
-
-#include <ibis/vhdl/ast/ast_printer.hpp>
-#include <ibis/util/pretty_typename.hpp>
+#include <ibis/vhdl/ast_fwd.hpp>
+#include <ibis/vhdl/ast.hpp>  // FixMe: not the best solution to include all
 
 #include <boost/test/tools/output_test_stream.hpp>
 
 #include <iostream>
 #include <filesystem>
 
-#include <testsuite/namespace_alias.hpp>
+#include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
 namespace testsuite {
 namespace fs = std::filesystem;

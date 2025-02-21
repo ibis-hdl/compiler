@@ -8,16 +8,21 @@
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/unit_test_log.hpp>  // BOOST_TEST_MESSAGE()
+#include <boost/test/utils/lazy_ostream.hpp>
 
-#include <cassert>
+#include <algorithm>
+// #include <cassert>
 #include <exception>
 #include <filesystem>
 #include <fstream>
-#include <string>
 #include <set>
-#include <string_view>
-#include <utility>
+#include <sstream>
 #include <stdexcept>
+#include <string_view>
+#include <string>
+#include <utility>
+
+#include <testsuite/namespace_alias.hpp>
 
 namespace testsuite::util {
 

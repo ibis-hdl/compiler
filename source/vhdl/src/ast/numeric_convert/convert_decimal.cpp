@@ -4,31 +4,30 @@
 //
 
 #include <ibis/vhdl/ast/numeric_convert/convert_decimal.hpp>
-#include <ibis/vhdl/ast/numeric_convert/filter_range.hpp>
-#include <ibis/vhdl/ast/numeric_convert/dbg_trace.hpp>
 
+#include <ibis/concepts.hpp>
+#include <ibis/vhdl/ast/node/decimal_literal.hpp>
+#include <ibis/vhdl/ast/numeric_convert/dbg_trace.hpp>
+#include <ibis/vhdl/ast/numeric_convert/filter_range.hpp>
+#include <ibis/vhdl/ast/util/string_span.hpp>
 #include <ibis/vhdl/diagnostic_handler.hpp>
 #include <ibis/vhdl/parser/iterator_type.hpp>
-
-#include <ibis/vhdl/ast/node/decimal_literal.hpp>
-#include <ibis/vhdl/ast/util/string_span.hpp>
-#include <ibis/concepts.hpp>
-
-#include <ibis/vhdl/type.hpp>
+#include <ibis/vhdl/type.hpp>  // for explicit instanciation
 
 #include <ibis/util/cxx_bug_fatal.hpp>
 
-#include <ibis/namespace_alias.hpp>  // IWYU pragma: keep
-
-#include <ibis/util/compiler/warnings_off.hpp>
-// IWYU replaces a lot of other header, we stay with this one
 #include <boost/spirit/home/x3.hpp>  // IWYU pragma: keep
-#include <boost/locale/format.hpp>   // [-Wsign-conversion]
-#include <boost/locale/message.hpp>
-#include <ibis/util/compiler/warnings_on.hpp>
 
+#include <boost/locale/format.hpp>
+#include <boost/locale/message.hpp>
+
+#include <iterator>
+#include <string>
 #include <string_view>
 #include <tuple>
+#include <utility>
+
+#include <ibis/namespace_alias.hpp>  // IWYU pragma: keep
 
 namespace /* anonymous */ {
 

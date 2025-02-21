@@ -3,20 +3,30 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#include <ibis/vhdl/ast/ast_printer.hpp>
-#include <ibis/vhdl/ast/ast_formatter.hpp>
-#include <ibis/vhdl/ast.hpp>
 #include <ibis/util/indent_stream.hpp>
-
-#include <boost/spirit/home/x3/support/traits/is_variant.hpp>
-
 #include <ibis/util/overloaded.hpp>  // IWYU pragma: keep
+#include <ibis/vhdl/ast.hpp>         // IWYU pragma: keep
+#include <ibis/vhdl/ast/ast_formatter.hpp>
+#include <ibis/vhdl/ast/ast_printer.hpp>
+#include <ibis/vhdl/ast/util/nullary.hpp>
+#include <ibis/vhdl/ast/util/optional.hpp>
+#include <ibis/vhdl/ast/util/string_span.hpp>
+#include <ibis/vhdl/ast/util/variant.hpp>
 
 #include <ibis/util/cxx_bug_fatal.hpp>
 
-#include <iostream>
-#include <cstdint>
-#include <string_view>
+#include <boost/optional.hpp>
+#include <boost/range/iterator_range_io.hpp>
+#include <boost/spirit/home/x3/support/traits/is_variant.hpp>
+#include <boost/variant/apply_visitor.hpp>
+
+#include <cstddef>
+#include <format>
+#include <string>
+#include <type_traits>
+#include <vector>
+
+#include <ibis/namespace_alias.hpp>
 
 namespace ibis::vhdl::ast {
 

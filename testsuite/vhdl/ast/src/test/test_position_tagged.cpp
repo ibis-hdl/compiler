@@ -3,13 +3,16 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#include <boost/test/unit_test.hpp>
-#include <boost/test/tools/interface.hpp>  // BOOST_TEST()
-#include <boost/test/tools/context.hpp>    // BOOST_TEST_CONTEXT()
-#include <boost/test/unit_test_suite.hpp>  // BOOST_AUTO_TEST_CASE()
-#include <boost/test/tree/decorator.hpp>   // utf::label
-
 #include <ibis/vhdl/ast/util/position_tagged.hpp>
+
+#include <ibis/util/strong_type.hpp>
+
+#include <boost/test/tools/context.hpp>    // BOOST_TEST_CONTEXT()
+#include <boost/test/tools/interface.hpp>  // BOOST_TEST()
+#include <boost/test/tree/decorator.hpp>   // utf::label
+#include <boost/test/unit_test_suite.hpp>  // BOOST_AUTO_TEST_CASE()
+#include <boost/test/unit_test.hpp>
+#include <boost/test/utils/lazy_ostream.hpp>
 
 #include <testsuite/namespace_alias.hpp>
 

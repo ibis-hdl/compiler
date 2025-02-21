@@ -5,17 +5,11 @@
 
 #pragma once
 
-// #include <ibis/vhdl/ast/util/string_span.hpp>
-// #include <ibis/vhdl/ast/util/string_span_hash.hpp>
 #include <ibis/util/tagged_treshold_counter.hpp>
 
-// #include <unordered_map>
-#include <exception>
-#include <limits>
-#include <iosfwd>
-#include <format>
-#include <utility>
 #include <cstdint>
+#include <functional>
+#include <iosfwd>
 
 namespace ibis::vhdl {
 
@@ -96,6 +90,3 @@ private:
 std::ostream& operator<<(std::ostream& os, vhdl::failure_status const& status);
 
 }  // namespace ibis::vhdl
-
-template <>
-struct std::formatter<ibis::vhdl::failure_status>;

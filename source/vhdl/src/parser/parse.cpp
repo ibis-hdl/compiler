@@ -5,29 +5,27 @@
 
 #include <ibis/vhdl/parser/parse.hpp>
 
+#include <ibis/util/get_iterator_pair.hpp>
+#include <ibis/vhdl/ast/node/design_file.hpp>
 #include <ibis/vhdl/parser/grammar.hpp>
 #include <ibis/vhdl/parser/parser_config.hpp>
 #include <ibis/vhdl/parser/skipper.hpp>
 
-#include <ibis/vhdl/ast/node/design_file.hpp>
-#include <ibis/vhdl/parser/position_cache.hpp>
-#include <ibis/vhdl/parser/diagnostic_handler.hpp>
-#include <ibis/vhdl/parser/context.hpp>
-#include <ibis/vhdl/parser/iterator_type.hpp>
-#include <ibis/vhdl/context.hpp>
-#include <ibis/util/get_iterator_pair.hpp>
+#include <boost/spirit/home/x3.hpp>
 
-#include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
-#include <ibis/util/compiler/warnings_on.hpp>
 
 #include <exception>
 #include <functional>
 #include <iterator>
-#include <new>  // for bad_alloc
+#include <new>
+#include <ostream>
 #include <string>
+#include <type_traits>
 #include <utility>
+
+#include <ibis/namespace_alias.hpp>
 
 namespace ibis::vhdl::parser {
 

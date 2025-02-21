@@ -3,28 +3,27 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#include <ibis/vhdl/diagnostic_handler.hpp>
-#include <ibis/vhdl/diagnostic_context.hpp>
-#include <ibis/vhdl/diagnostic_printer.hpp>
-#include <ibis/vhdl/source_location.hpp>
-#include <ibis/vhdl/context.hpp>
 #include <ibis/util/get_iterator_pair.hpp>
-
+#include <ibis/vhdl/ast/util/position_tagged.hpp>
+#include <ibis/vhdl/context.hpp>
+#include <ibis/vhdl/diagnostic_context.hpp>
+#include <ibis/vhdl/diagnostic_handler.hpp>
+#include <ibis/vhdl/diagnostic_printer.hpp>
 #include <ibis/vhdl/parser/iterator_type.hpp>  // for explicit template instantiation
+#include <ibis/vhdl/parser/position_cache.hpp>
+#include <ibis/vhdl/source_location.hpp>
 
 #include <ibis/util/cxx_bug_fatal.hpp>
 
-#include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
-// #include <boost/range/iterator_range_core.hpp>
-#include <ibis/util/compiler/warnings_on.hpp>
 
-#include <string_view>
-#include <optional>
-#include <tuple>
-#include <iterator>
 #include <cstddef>
+#include <iterator>
+#include <optional>
+#include <ostream>
+#include <string_view>
+#include <tuple>
 
 namespace ibis::vhdl {
 

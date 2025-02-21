@@ -6,14 +6,15 @@
 #pragma once
 
 #include <ibis/util/file_mapper.hpp>
-#include <ibis/vhdl/parser/position_cache.hpp>
-#include <ibis/vhdl/parser/parser_config.hpp>
 #include <ibis/vhdl/parser/context.hpp>
+#include <ibis/vhdl/parser/parser_config.hpp>
+#include <ibis/vhdl/parser/position_cache.hpp>
 
-#include <iosfwd>
-#include <string>
-#include <string_view>
 #include <exception>
+#include <iosfwd>
+#include <string_view>
+#include <string>
+#include <vector>
 
 namespace ibis::vhdl::ast {
 struct design_unit;

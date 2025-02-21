@@ -7,16 +7,16 @@
 #include <ibis/platform.hpp>
 #include <ibis/message.hpp>
 
-// #include <iostream>
+#include <csignal>  // IWYU pragma: keep
+#include <cstdlib>
 #include <string_view>
 
-#include <csignal>
-#include <cstdlib>
-
+// IWYU pragma: begin_keep
 #if defined(IBIS_BUILD_PLATFORM_LINUX)
 // SIGUSR1, SIGBUS are linux specific
 #include <signal.h>  // NOLINT(misc-include-cleaner,modernize-deprecated-headers)
 #endif
+// IWYU pragma: end_keep
 
 namespace ibis::frontend {
 

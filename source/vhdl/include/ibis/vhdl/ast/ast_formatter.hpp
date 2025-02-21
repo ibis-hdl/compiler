@@ -13,10 +13,11 @@
 
 #include <ibis/util/cxx_bug_fatal.hpp>
 
+#include <format>
 #include <ios>
-#include <iterator>
 #include <span>
 #include <string_view>
+#include <string>
 #include <utility>
 
 ///

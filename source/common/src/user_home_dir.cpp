@@ -4,16 +4,13 @@
 //
 
 #include <ibis/util/file/user_home_dir.hpp>
-
-// #include<ibis/util/compiler/compiler_support.hpp> // IWYU pragma: keep
 #include <ibis/platform.hpp>
-// #include<ibis/namespace_alias.hpp>
 
 #include <cstdlib>
-#include <stdexcept>
-#include <string>
 #include <filesystem>
 #include <initializer_list>
+#include <stdexcept>
+#include <string>
 #include <system_error>
 
 namespace ibis::util {
@@ -21,18 +18,17 @@ namespace ibis::util {
 fs::path user_home_dir(std::initializer_list<char const *> path_list)
 {
     static std::string const HOME_ENV = []() {
+        // Windows
         if constexpr (ibis::platform == platform::Windows) {
             return std::getenv("USERPROFILE");
         }
-        else {
-            // Unix-like OS
-            // clang-format off
+        // Unix/POSIX
+        // clang-format off
             static_assert(   ibis::platform == platform::Linux 
                           || ibis::platform == platform::Darwin
                           || ibis::platform == platform::FreeBSD);
-            // clang-format on
-            return std::getenv("HOME");
-        }
+        // clang-format on
+        return std::getenv("HOME");
     }();
 
     // FixMe: throwing exceptions should not be a viable solution here ...

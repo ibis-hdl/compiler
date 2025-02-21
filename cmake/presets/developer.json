@@ -32,7 +32,7 @@
             "description": "CMake Clang based Include-What-You-Use (IWYU)",
             "hidden": true,
             "cacheVariables": {
-                "CMAKE_CXX_INCLUDE_WHAT_YOU_USE": "iwyu;-Xiwyu;--mapping_file=${sourceDir}/cmake/utils/iwyu/project.imp;-Xiwyu;--comment_style=none;-Xiwyu;--max_line_length=100;-Xiwyu;--transitive_includes_only;-Xiwyu;--quoted_includes_first;-Xiwyu;--cxx17ns;-Xiwyu;--verbose=0"
+                "CMAKE_CXX_INCLUDE_WHAT_YOU_USE": "iwyu;-Xiwyu;--mapping_file=${sourceDir}/cmake/utils/iwyu/project.imp;-Xiwyu;--comment_style=none;-Xiwyu;--transitive_includes_only;-Xiwyu;--quoted_includes_first;-Xiwyu;--cxx17ns;-Xiwyu;--verbose=2;-Xiwyu;--driver-mode=clang"
             }
         },
         {

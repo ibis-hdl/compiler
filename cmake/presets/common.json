@@ -15,12 +15,13 @@
             }
         },
         {
-            "name": "cmake-default-policies",
-            "description": "Set CMake policies (regards FindBoost module, MSVC runtime)",
+            "name": "cmake-common",
+            "description": "Set CMake settings shared by all CMake presets",
             "hidden": true,
             "cacheVariables": {
+                "CMAKE_CXX_SCAN_FOR_MODULES": "OFF",
                 "CMAKE_POLICY_DEFAULT_CMP0167": "NEW",
-                "CMAKE_POLICY_DEFAULT_CMP0091": "NEW"
+                "CMAKE_POLICY_DEFAULT_CMP0091": "NEW"                
             }
         },
         {
@@ -30,9 +31,8 @@
             "warnings": {
                 "unusedCli": false
             },
-            "inherits": [ "cmake-default-policies" ],
+            "inherits": [ "cmake-common" ],
             "cacheVariables": {
-                "CMAKE_CXX_SCAN_FOR_MODULES": "0",
                 "CMAKE_VERBOSE_MAKEFILE": "OFF"
             }
         },
@@ -51,7 +51,7 @@
               "dev": false,
               "deprecated": true
             },
-            "inherits": [ "cmake-default-policies" ],
+            "inherits": [ "cmake-common" ],
             "cacheVariables": {
                 "CMAKE_VERBOSE_MAKEFILE": "OFF"
             }

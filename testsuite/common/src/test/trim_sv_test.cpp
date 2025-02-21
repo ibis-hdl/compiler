@@ -5,15 +5,19 @@
 
 #include <ibis/util/trim.hpp>
 
-#include <boost/test/tools/interface.hpp>  // BOOST_TEST()
-#include <boost/test/unit_test_suite.hpp>  // BOOST_AUTO_TEST_CASE()
-#include <boost/test/unit_test.hpp>        // IWYU pragma: keep
+#include <boost/preprocessor.hpp>
+#include <boost/test/test_tools.hpp>
+#include <boost/test/tools/detail/indirections.hpp>
+#include <boost/test/tools/interface.hpp>
+#include <boost/test/unit_test_suite.hpp>
+#include <boost/test/utils/basic_cstring/basic_cstring.hpp>
+#include <boost/test/utils/lazy_ostream.hpp>
 
-#include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
-
-#include <utility>
 #include <initializer_list>
 #include <string_view>
+#include <utility>
+
+#include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_SUITE(common_utils)

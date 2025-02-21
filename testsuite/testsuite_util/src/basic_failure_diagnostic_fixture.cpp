@@ -6,24 +6,25 @@
 #include <testsuite/util/basic_failure_diagnostic_fixture.hpp>
 #include <testsuite/util/cli_args.hpp>
 
-#include <ibis/util/compiler/warnings_off.hpp>  // -Wsign-conversion
-#include <boost/test/unit_test.hpp>
-#include <ibis/util/compiler/warnings_on.hpp>
+#include <boost/test/framework.hpp>
 #include <boost/test/results_collector.hpp>
 #include <boost/test/tools/interface.hpp>  // BOOST_TEST_REQUIRE()
-#include <boost/test/framework.hpp>
+#include <boost/test/tree/test_unit.hpp>
+#include <boost/test/unit_test_log.hpp>
+#include <boost/test/unit_test.hpp>
+#include <boost/test/utils/lazy_ostream.hpp>
 
 #include <ibis/util/make_iomanip.hpp>
 #include <ibis/util/trim.hpp>
 
+#include <cstddef>
+#include <filesystem>
 #include <fstream>
-#include <utility>
+#include <iostream>
+#include <stdexcept>
 #include <string_view>
 #include <system_error>
-#include <cstddef>
-#include <cctype>
-#include <filesystem>
-#include <stdexcept>
+#include <utility>
 
 #include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 

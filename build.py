@@ -1,62 +1,66 @@
 #!/usr/bin/env python3
 
-import os, shutil, subprocess
+import os, sys, shutil, subprocess
 
 def run(cmd):
-    print(f"RUNNING: '{cmd}':")
+    print(f">>>>> Build Script Running: '{cmd}' <<<<", file=sys.stderr)
     os.system(cmd)
 
 def cleanup():
-    # remove build folder
-    try:
+    try:  # remove build folder
         shutil.rmtree("build")
     except:
         pass
-    # remove ConanCMakePresets.json
-    try:
+    try:  # remove ConanCMakePresets.json
         shutil.rmtree("ConanCMakePresets.json")
     except:
         pass
-    
-def workflow_release(conan_profile : str, cmake_base_preset: str):
-    run(f"python3 conan_install.py --profile {conan_profile} --build-type Release")
-    run(f"cmake --preset {cmake_base_preset}")
-    run(f"cmake --build --preset {cmake_base_preset}-release")
-    run(f"ctest --preset {cmake_base_preset}-release-test")
 
-def workflow_dev(conan_profile : str, cmake_base_preset: str, build_type : str, ctest : bool = False):
+def workflow(conan_profile : str, cmake_conf_preset: str, build_type : str, preset_sfx : str, jobs: int, ctest : bool):
+    cleanup()
     run(f"python3 conan_install.py --profile {conan_profile} --build-type {build_type}")
-    run(f"cmake --preset {cmake_base_preset}")
-    run(f"cmake --build --preset {cmake_base_preset}-build -j1")
+    run(f"cmake --preset {cmake_conf_preset}")
+    run(f"cmake --build --preset {cmake_conf_preset}-{preset_sfx} -j{jobs}")
     if ctest:
-        run(f"ctest --preset {cmake_base_preset}-build-test")
+        run(f"ctest --preset {cmake_conf_preset}-{preset_sfx}-test")
+
+def workflow_release(conan_profile : str, cmake_conf_preset: str, jobs: int = 34, ctest : bool = True):
+    workflow(conan_profile, cmake_conf_preset, "Release", "release", jobs, True)
+
+def workflow_dev(conan_profile : str, cmake_conf_preset: str, build_type : str, jobs: int = 34, ctest : bool = False):
+    workflow(conan_profile, cmake_conf_preset, build_type, "build", jobs, False)
 
 def gcc_release():
     conan_profile = "gcc"
-    cmake_base_preset = "gcc"
-    workflow_release(conan_profile, cmake_base_preset)
+    cmake_conf_preset = "gcc"
+    jobs = 34
+    workflow_release(conan_profile, cmake_conf_preset, jobs)
 
 def clang_release():
     conan_profile = "clang"
-    cmake_base_preset = "clang"
-    workflow_release(conan_profile, cmake_base_preset)
+    cmake_conf_preset = "clang"
+    jobs = 34
+    workflow_release(conan_profile, cmake_conf_preset, jobs)
 
 def clang_libcxx_release():
     conan_profile = "clang-libc++"
-    cmake_base_preset = "clang-libc++"
-    workflow_release(conan_profile, cmake_base_preset)
+    cmake_conf_preset = "clang-libc++"
+    jobs = 34
+    workflow_release(conan_profile, cmake_conf_preset, jobs)
 
 def dev_clang():
     conan_profile = "clang"
-    cmake_base_preset = "dev-clang"
+    cmake_conf_preset = "dev-clang"
     build_type = "Debug"
-    workflow_dev(conan_profile, cmake_base_preset, build_type)
+    jobs = 34
+    workflow_dev(conan_profile, cmake_conf_preset, build_type, jobs)
 
 def dev_clang_iwyu():
     conan_profile = "clang"
-    cmake_base_preset = "dev-clang-iwyu"
+    cmake_conf_preset = "dev-clang-iwyu"
     build_type = "Debug"
-    workflow_dev(conan_profile, cmake_base_preset, build_type)
+    jobs = 34
+    workflow_dev(conan_profile, cmake_conf_preset, build_type, jobs)
 
 
 #def asan_test():
@@ -65,7 +69,7 @@ def dev_clang_iwyu():
 #    run("cmake --preset dev-clang-asan")
 #    run("cmake --build --preset dev-clang-asan-build | tee build.log")
 
-cleanup()
+
 run("cmake --list-presets")
 #gcc_release()
 #clang_release()

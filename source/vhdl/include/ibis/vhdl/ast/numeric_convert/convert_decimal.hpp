@@ -5,13 +5,12 @@
 
 #pragma once
 
-#include <ibis/vhdl/type.hpp>
-#include <ibis/vhdl/parser/iterator_type.hpp>
-#include <ibis/vhdl/ast/util/string_span.hpp>
 #include <ibis/concepts.hpp>
+#include <ibis/vhdl/ast/util/string_span.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/type.hpp>
 
 #include <tuple>
-#include <iosfwd>
 #include <variant>
 
 namespace ibis::vhdl::ast {
