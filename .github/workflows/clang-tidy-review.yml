@@ -62,11 +62,11 @@ jobs:
 
     - name: CMake configuration
       run: |
-        clang++ --version
         cmake --preset ${{ env.cmake_configure_preset }}
         # no build required
         cat build/compile_commands.json
         cat build/generators/conan_toolchain.cmake
+        cmake --build --preset clang-release
 
     - name: Run Clang tidy review
       id: clang-tidy-review
