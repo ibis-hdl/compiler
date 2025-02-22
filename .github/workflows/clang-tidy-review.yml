@@ -73,7 +73,8 @@ jobs:
       id: clang-tidy-review
       uses: ZedThree/clang-tidy-review@v0.20.1
       with:
-        build_dir: ${{ github.workspace }}/build
+        # Note GITHUB_WORKSPACE and github.workspace are different when running in container #785
+        build_dir: ${{env.GITHUB_ACTION_PATH}}/build
         config_file: .clang-tidy
 
     - name: Uploads an artefact containing clang_fixes.json
