@@ -22,13 +22,15 @@ fs::path user_home_dir(std::initializer_list<char const *> path_list)
         if constexpr (ibis::platform == platform::Windows) {
             return std::getenv("USERPROFILE");
         }
-        // Unix/POSIX
-        // clang-format off
+        else {
+            // Unix/POSIX
+            // clang-format off
             static_assert(   ibis::platform == platform::Linux 
                           || ibis::platform == platform::Darwin
                           || ibis::platform == platform::FreeBSD);
-        // clang-format on
-        return std::getenv("HOME");
+            // clang-format on
+            return std::getenv("HOME");
+        }
     }();
 
     // FixMe: throwing exceptions should not be a viable solution here ...
