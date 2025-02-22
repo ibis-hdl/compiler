@@ -49,18 +49,20 @@ init::init(int argc, const char* argv[])
     l10n();
 }
 
-// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays,readability-convert-member-functions-to-static)
 void init::parse_cli(int argc, const char* argv[])
 {
     using boost::locale::format;
     using boost::locale::translate;
+
+    static constexpr std::size_t cli_column_width = 80;
 
     CLI::App app{ std::string{ IBIS_HDL_VERSION_STR }, std::string{ "ibis" } };
 
     struct Formatter : public CLI::Formatter {};
 
     auto fmt = std::make_shared<Formatter>();
-    fmt->column_width(40);
+    fmt->column_width(cli_column_width);
     app.formatter(fmt);
 
     app.footer((format(translate("\nReport bugs to {1}")) % IBIS_HDL_HOMEPAGE_URL).str());
@@ -107,6 +109,8 @@ void init::parse_cli(int argc, const char* argv[])
         // Message option group
         //
         {
+            static constexpr int MAX_TAB_SIZE = 10;
+
             auto* group = app.add_option_group(translate("Message Options"), // --
                 translate("Options regards to messages."));
 
@@ -129,7 +133,7 @@ void init::parse_cli(int argc, const char* argv[])
                 ;
             group->add_option("--tab-size", cli_parameter.tab_size) // ToDo: unused in e.g. diagnostic_handler.cpp
                 ->description(translate("Tabulator size, affects printing source snippet on error printing."))
-                ->check(CLI::Range(1, 10))
+                ->check(CLI::Range(1, MAX_TAB_SIZE))
                 ;
         }
 
@@ -227,9 +231,10 @@ void init::parse_cli(int argc, const char* argv[])
 
     // quick&dirty helper for configure settings from CLI args
     class setup {
+        // NOLINTBEGIN(cppcoreguidelines-avoid-const-or-ref-data-members)
         CLI::App const& app;
         ibis::settings::reference_type pt;
-
+        // NOLINTEND(cppcoreguidelines-avoid-const-or-ref-data-members)
     public:
         setup(CLI::App const& app_, ibis::settings::reference_type pt_)
             : app{ app_ }
@@ -335,7 +340,7 @@ void init::l10n()
         l10n_backend.select(static_cast<std::string>("std"));
     }
 
-    generator gen_{ l10n_backend };
+    generator const gen_{ l10n_backend };
     localization_backend_manager::global(l10n_backend);
 
     generator gen{};
@@ -359,19 +364,19 @@ void init::l10n()
         if (verbose_level > 1) {
             // FixMe: notice or warning level for those message
             std::cerr << R"(locale directory ')" << l10n_path.string() << R"( failure: )"
-                      << ec.message() << std::endl;
+                      << ec.message() << '\n';
         }
         return;
     }
 
     if (verbose_level > 2) {
-        std::cout << "LC_PATH = " << lc_path.make_preferred().string() << std::endl;
+        std::cout << "LC_PATH = " << lc_path.make_preferred().string() << '\n';
     }
 
     gen.add_messages_path(lc_path.make_preferred().string());
     gen.add_messages_domain("ibis");
 
-    std::locale locale = gen("");
+    std::locale const locale = gen("");
     std::locale::global(locale);
     std::cout.imbue(locale);
     std::cerr.imbue(locale);

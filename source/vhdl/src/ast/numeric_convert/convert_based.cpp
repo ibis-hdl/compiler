@@ -51,6 +51,8 @@ struct real_policies : x3::ureal_policies<T> {
 
 namespace ibis::vhdl::ast {
 
+static constexpr unsigned BASE10 = 10;
+
 template <ibis::integer IntegerT, ibis::real RealT>
 convert_based<IntegerT, RealT>::convert_based(diagnostic_handler_type& diagnostic_handler_)
     : diagnostic_handler{ diagnostic_handler_ }
@@ -157,7 +159,7 @@ std::tuple<bool, double> convert_based<IntegerT, RealT>::parse_fractional(
             // here we let the compiler decide how o optimize
             // clang-format off
             auto const hex2dec = [](char chr) {
-                // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
+                // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
                 switch (chr) {
                     case '0':   return  0;
                     case '1':   return  1;
@@ -184,7 +186,7 @@ std::tuple<bool, double> convert_based<IntegerT, RealT>::parse_fractional(
                     default:    // parser's character validation failed
                         cxx_bug_fatal("invalid hex character for based literal");
                 }
-                // NOLINTEND(cppcoreguidelines-avoid-magic-numbers)
+                // NOLINTEND(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
             };
             // clang-format on
 
@@ -359,7 +361,7 @@ typename convert_based<IntegerT, RealT>::return_type convert_based<IntegerT, Rea
 
     // ------------------------------------------------------------------------
     // BASE
-    unsigned base = node.base_id;
+    unsigned const base = node.base_id;
 
     // ------------------------------------------------------------------------
     // INTEGER
@@ -374,7 +376,7 @@ typename convert_based<IntegerT, RealT>::return_type convert_based<IntegerT, Rea
     // FRACTIONAL (only for based real)
     real_type fractional = 0;
 
-    if (base != 10U && node.number.type_specifier == numeric_type_specifier::real) {
+    if (base != BASE10 && node.number.type_specifier == numeric_type_specifier::real) {
         bool parse_ok = false;
         std::tie(parse_ok, fractional) = parse_fractional(base, node);
 
@@ -388,7 +390,7 @@ typename convert_based<IntegerT, RealT>::return_type convert_based<IntegerT, Rea
     // base 10 real numeric parser
     real_type real10 = 0;
 
-    if (base == 10U && node.number.type_specifier == numeric_type_specifier::real) {
+    if (base == BASE10 && node.number.type_specifier == numeric_type_specifier::real) {
         bool parse_ok = false;
         std::tie(parse_ok, real10) = parse_real10(node);
 
@@ -425,7 +427,7 @@ typename convert_based<IntegerT, RealT>::return_type convert_based<IntegerT, Rea
         }
         case numeric_type_specifier::real: {
             real_type result = 0;
-            if (base == 10) {
+            if (base == BASE10) {
                 result = real10;
             }
             else {

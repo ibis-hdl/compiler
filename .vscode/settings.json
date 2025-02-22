@@ -50,6 +50,7 @@
         "FixMe [CMake]", "ToDo [CMake]",  "@todo [CMake]", "@fixme [CMake]",
         "FixMe [XXX]",   "ToDo [XXX]",    "@todo [XXX]",   "@fixme [XXX]", "XXX",
         "FixMe [DRY]", "ToDo [DRY]", 
+        "FixMe [LINT]", "ToDo [LINT]",
         "<<<<<<<"
     ],
     "todo-tree.general.tagGroups": {
@@ -74,6 +75,9 @@
         ],
         "CMake": [
             "FixMe [CMake]", "ToDo [CMake]", "@fixme [CMake]", "@todo [CMake]"
+        ],
+        "Linting": [
+            "FixMe [LINT]", "ToDo [LINT]"
         ],
         "git-conflict": [
             "<<<<<<<"

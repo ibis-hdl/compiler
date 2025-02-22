@@ -32,6 +32,13 @@ public:
     using map_type = std::unordered_map<std::string_view, std::size_t>;
     using set_type = std::unordered_set<std::string_view>;
 
+private:
+    // NOLINTBEGIN(cppcoreguidelines-avoid-const-or-ref-data-members)
+    map_type& count_map;
+    set_type& untagged_node;
+    // NOLINTEND(cppcoreguidelines-avoid-const-or-ref-data-members)
+
+public:
     collect_worker(map_type& count_map_, set_type& untagged_node_)
         : count_map{ count_map_ }
         , untagged_node{ untagged_node_ }
@@ -47,10 +54,6 @@ public:
             untagged_node.insert(node_name);
         }
     }
-
-private:
-    map_type& count_map;
-    set_type& untagged_node;
 };
 
 }  // namespace detail
@@ -91,7 +94,7 @@ auto ast_stats::sort_by_count(bool ascending) const
 
     // FixMe: Consider modernize-use-ranges
     std::vector<pair_type> vec{ count_map.begin(), count_map.end() };
-    std::sort(vec.begin(), vec.end(), predicate);
+    std::sort(vec.begin(), vec.end(), predicate);  // NOLINT(boost-use-ranges,modernize-use-ranges)
 
     return vec;
 }
@@ -103,6 +106,7 @@ std::ostream& ast_stats::print_on(std::ostream& os) const
 
     std::size_t const max_key_size = [&] {  // ToDo [C++20] use std::ranges
         std::size_t size{ 0 };
+        // NOLINTNEXTLINE(boost-use-ranges,modernize-use-ranges)
         std::for_each(vec.begin(), vec.end(),
                       [&size](auto const& pair) { size = std::max(size, pair.first.size()); });
         return size;

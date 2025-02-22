@@ -16,7 +16,7 @@
             "description": "CMake Clang-Tidy build target",
             "hidden": true,
             "cacheVariables": {
-                "CMAKE_CXX_CLANG_TIDY": "clang-tidy;--format-style=file;-p=${sourceDir}/build"
+                "CMAKE_CXX_CLANG_TIDY": "clang-tidy;--format-style=file;-p=${sourceDir}/build;--extra-arg-before=--driver-mode=clang"
             }
         },
         {
@@ -65,7 +65,6 @@
             "hidden": true,
             "inherits": [ "condition-linux-or-macos" ],
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Sanitize",
                 "CMAKE_CXX_FLAGS_SANITIZE": "-O2 -g -fsanitize=address,undefined -fno-omit-frame-pointer -fno-common -U_GLIBCXX_DEBUG -U_GLIBCXX_DEBUG_PEDANTIC -U_GLIBCXX_SANITIZE_VECTOR -U_FORTIFY_SOURCE",
                 "CMAKE_MAP_IMPORTED_CONFIG_SANITIZE": "Sanitize;RelWithDebInfo;Release;Debug;"
             }

@@ -3,7 +3,7 @@
 import os, sys, shutil, subprocess
 
 def run(cmd):
-    print(f">>>>> Build Script Running: '{cmd}' <<<<", file=sys.stderr)
+    print(f"##### Build Script Running: '{cmd}' #####", file=sys.stderr)
     os.system(cmd)
 
 def cleanup():
@@ -55,6 +55,13 @@ def dev_clang():
     jobs = 34
     workflow_dev(conan_profile, cmake_conf_preset, build_type, jobs)
 
+def dev_clang_tidy():
+    conan_profile = "clang"
+    cmake_conf_preset = "dev-clang-tidy"
+    build_type = "Release"
+    jobs = 34
+    workflow_dev(conan_profile, cmake_conf_preset, build_type, jobs)
+
 def dev_clang_iwyu():
     conan_profile = "clang"
     cmake_conf_preset = "dev-clang-iwyu"
@@ -62,18 +69,21 @@ def dev_clang_iwyu():
     jobs = 34
     workflow_dev(conan_profile, cmake_conf_preset, build_type, jobs)
 
-
-#def asan_test():
-#    run("python3 conan_install.py --profile clang --build-type Debug")
-#    #run("cmake --list-presets")
-#    run("cmake --preset dev-clang-asan")
-#    run("cmake --build --preset dev-clang-asan-build | tee build.log")
-
+#def dev_clang_asan():
+#    conan_profile = "clang"
+#    cmake_conf_preset = "dev-clang-asan"
+#    build_type = "Debug"
+#    jobs = 34
+#    workflow_dev(conan_profile, cmake_conf_preset, build_type, jobs)
 
 run("cmake --list-presets")
 #gcc_release()
 #clang_release()
 #clang_libcxx_release()
 #dev_clang()
-dev_clang_iwyu()            # ./build.py 2>&1 | tee -a build-iwyu.log
+dev_clang_tidy()
+#dev_clang_iwyu()
+#dev_clang_asan()
 
+
+# ./build.py 2>&1 | tee -a build-asan.log

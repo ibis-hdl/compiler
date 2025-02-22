@@ -239,7 +239,8 @@ std::string_view diagnostic_handler<IteratorT>::current_line(iterator_type first
     // `x3::to_utf8(line)` above.
 
     auto line_end = first;
-    // FixMe This should be rewritten with range based loops
+    // ClangTidy - don't touch, since this may be an iterator classes
+    // NOLINTNEXTLINE(readability-qualified-auto,readability-qualified-auto)
     auto const end = current_file.file_contents().end();
 
     while (line_end != end) {

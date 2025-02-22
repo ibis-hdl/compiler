@@ -44,7 +44,7 @@ void dataset_loader::set_builtin(std::unique_ptr<compile_builtin> other)
 {
     builtin = std::move(other);
 
-    int argc = boost::unit_test::framework::master_test_suite().argc;
+    int const argc = boost::unit_test::framework::master_test_suite().argc;
     char** argv = boost::unit_test::framework::master_test_suite().argv;
 
     cli_args::parse_cli(argc, argv);
@@ -119,6 +119,8 @@ void dataset_loader::check_args() const
     }
 }
 
+// ToDo warning: function 'read_files' has cognitive complexity of 30 (threshold 25)
+// [readability-function-cognitive-complexity]
 void dataset_loader::read_files(fs::path const& path_name) const
 {
     if (fs::exists(path_name) && fs::is_directory(path_name)) {

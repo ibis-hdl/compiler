@@ -53,7 +53,7 @@
             },
             "inherits": [ "cmake-common" ],
             "cacheVariables": {
-                "CMAKE_VERBOSE_MAKEFILE": "OFF"
+                "CMAKE_VERBOSE_MAKEFILE": "ON"
             }
         },
         {

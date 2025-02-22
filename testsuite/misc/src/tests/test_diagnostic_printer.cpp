@@ -73,8 +73,10 @@ constexpr auto make_issue = [](std::string_view str, char first_chr,
     using iterator_type = std::string_view::const_iterator;
     using ibis::vhdl::issue_marker;
 
+    // NOLINTBEGIN(readability-qualified-auto) don't touch, since this may be an iterator classes
     auto const start = str.begin();
     auto const failure_begin = find_char<iterator_type>(str.begin(), str.end(), first_chr);
+    // NOLINTEND(readability-qualified-auto)
     auto const failure_end = [&]() {
         if (last_chr.has_value()) {
             // clang-format off

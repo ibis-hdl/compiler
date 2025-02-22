@@ -11,6 +11,7 @@
 
 #include <string_view>
 #include <utility>
+#include <format>  // formatter (Clang-Tidy)
 
 ///
 /// formatter for ast::operator_token
@@ -20,6 +21,8 @@ std::string_view std::formatter<ibis::vhdl::ast::operator_token>::as_sv(
 {
     using namespace std::literals::string_view_literals;
 
+    // ToDo [LINT] Clang-Tidy 19.1.7 has problems with C++20 Using Enum??
+    // NOLINT_BEGIN(misc-include-cleaner)
     // clang-format off
     switch (token) {
         using enum ibis::vhdl::ast::operator_token;
@@ -70,7 +73,7 @@ std::string_view std::formatter<ibis::vhdl::ast::operator_token>::as_sv(
         //
     }
     // clang-format on
-
+    // NOLINT_END(misc-include-cleaner)
     std::unreachable();
 }
 
@@ -83,6 +86,8 @@ std::string_view std::formatter<ibis::vhdl::ast::keyword_token>::as_sv(
 {
     using namespace std::literals::string_view_literals;
 
+    // ToDo [LINT] Clang-Tidy 19.1.7 has problems with C++20 Using Enum??
+    // NOLINT_BEGIN(misc-include-cleaner)
     // clang-format off
     switch (token) {
         using enum ibis::vhdl::ast::keyword_token;
@@ -193,6 +198,7 @@ std::string_view std::formatter<ibis::vhdl::ast::keyword_token>::as_sv(
         //
     }
     // clang-format on
+    // NOLINT_END(misc-include-cleaner)
 
     std::unreachable();
 }

@@ -55,6 +55,7 @@ struct std::formatter<ibis::vhdl::failure_status> : std::formatter<std::string> 
                 // TRANSLATORS: summary warning(s) only
                 (format(translate("{1} generated.")) % warning_message).str(), ctx);
         }
+        // NOLINTNEXTLINE(readability-else-after-return)
         else {
             // all went fine
         }
