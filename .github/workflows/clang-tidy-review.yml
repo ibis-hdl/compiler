@@ -56,18 +56,17 @@ jobs:
    
     - name: Conan install
       run: |
-        virtualenv .venv
-        source .venv/bin/activate
-        python3 conan_install.py --profile ${{ env.conan_profile }}
+        python3 conan_install.py --profile ${{ env.conan_profile }} --build-type Release
         # cleanup to get Github's cache small (clean sources, build, download, temp)
         conan cache clean -s -b -d -t        
-        deactivate
 
     - name: CMake configuration
       run: |
+        clang++ --version
         cmake --preset ${{ env.cmake_configure_preset }}
         # no build required
         cat build/compile_commands.json
+        cat build/generators/conan_toolchain.cmake
 
     - name: Run Clang tidy review
       id: clang-tidy-review
