@@ -9,7 +9,7 @@ jobs:
 
     env:
       # must be clang for clang-tidy!
-      cmake_cxx: clang++
+      cmake_CXX: clang++
       conan_profile: clang
       cmake_configure_preset: clang
 
