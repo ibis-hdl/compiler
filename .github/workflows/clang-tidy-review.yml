@@ -58,7 +58,6 @@ jobs:
       run: |
         virtualenv .venv
         source .venv/bin/activate
-        pip install multipledispatch
         python3 conan_install.py --profile ${{ env.conan_profile }}
         # cleanup to get Github's cache small (clean sources, build, download, temp)
         conan cache clean -s -b -d -t        
@@ -68,6 +67,7 @@ jobs:
       run: |
         cmake --preset ${{ env.cmake_configure_preset }}
         # no build required
+        cat build/compile_commands.json
 
     - name: Run Clang tidy review
       id: clang-tidy-review
