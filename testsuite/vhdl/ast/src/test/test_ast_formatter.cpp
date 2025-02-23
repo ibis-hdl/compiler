@@ -19,6 +19,7 @@
 #include <boost/test/utils/basic_cstring/basic_cstring.hpp>  // for basic_cstring
 #include <boost/test/utils/lazy_ostream.hpp>  // for operator<<, lazy_ostream, lazy_ostream_impl
 
+#include <array>
 #include <format>
 #include <ostream>
 #include <string>
@@ -37,19 +38,19 @@ using namespace ibis::vhdl::ast;
 //
 namespace valid_data {
 
-// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
-struct {
+struct test_data_type {
     std::string_view input;
     std::string_view expected;
-} constexpr gold_data[] = {  // --
-    { .input = R"("""")", .expected = R"("")" },
-    { .input = R"(%%%%)", .expected = R"(%%)" },
-    { .input = R"(""Hello"")", .expected = R"("Hello")" },
-    { .input = R"(Quotation: ""REPORT..."")", .expected = R"(Quotation: "REPORT...")" },
-    { .input = R"("%"%")", .expected = R"("%"%")" },  // as-is
-    { .input = R"(%"%"")", .expected = R"(%"%")" },
-    { .input = R"(""")", .expected = R"("")" }
 };
+
+constexpr auto gold_data = std::to_array<test_data_type>(
+    { { .input = R"("""")", .expected = R"("")" },
+      { .input = R"(%%%%)", .expected = R"(%%)" },
+      { .input = R"(""Hello"")", .expected = R"("Hello")" },
+      { .input = R"(Quotation: ""REPORT..."")", .expected = R"(Quotation: "REPORT...")" },
+      { .input = R"("%"%")", .expected = R"("%"%")" },  // as-is
+      { .input = R"(%"%"")", .expected = R"(%"%")" },
+      { .input = R"(""")", .expected = R"("")" } });
 
 // make ast::string_literal from string_view input
 auto const make_string_literal_from = [](std::string_view sv) {

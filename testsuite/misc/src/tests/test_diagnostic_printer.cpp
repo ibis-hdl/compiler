@@ -14,6 +14,7 @@
 
 #include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
+#include <array>
 #include <iostream>
 #include <format>
 #include <string_view>
@@ -99,13 +100,12 @@ constexpr auto const input_string =
     // simple input string with unique symbols to avoid unintentional errors such as (end < begin)
     "abcdefghijklmnopqrstuvwxyz.ABCDEFGHIJKLMNOPQRSTUVWXYZ,0123456789;"sv;
 
-// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
-struct {
-    // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members)
+struct test_data_type {
     issue_marker<iterator_type> issue;
-    // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members)
     std::string_view expected;
-} constexpr gold_data[] = {
+};
+
+constexpr auto gold_data = std::to_array<test_data_type>({
     //  --
     { .issue = make_issue(input_string, 'a'),  // single marker at begin
       //          "abcdefghijklmnopqrstuvwxyz.ABCDEFGHIJKLMNOPQRSTUVWXYZ,0123456789;"
@@ -134,7 +134,7 @@ struct {
     { .issue = make_issue(input_string, 'A', ';'),
       //          "abcdefghijklmnopqrstuvwxyz.ABCDEFGHIJKLMNOPQRSTUVWXYZ,0123456789;"
       .expected = "                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" },
-};
+});
 
 }  // namespace valid_data
 

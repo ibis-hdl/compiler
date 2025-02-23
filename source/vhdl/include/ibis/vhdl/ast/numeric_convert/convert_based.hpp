@@ -99,8 +99,8 @@ private:
     diagnostic_handler_type& diagnostic_handler;
 
 private:
-    /// The BNF name of the literal to convert
-    std::string_view const node_name = "based literal";
+    /// The BNF name of the literal to convert, '\0' terminated
+    static constexpr char const* node_name{ "based literal" };  // NOLINT(hicpp-avoid-c-arrays)
 };
 
 }  // namespace ibis::vhdl::ast

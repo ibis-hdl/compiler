@@ -23,6 +23,7 @@
 
 #include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
+#include <array>
 #include <iostream>
 #include <format>
 #include <string_view>
@@ -122,14 +123,14 @@ END PACKAGE;
 
 using numeric_base_specifier = ibis::vhdl::ast::bit_string_literal::numeric_base_specifier;
 
-// clang-format off_
-// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
-struct {
+struct test_data_type {
     numeric_base_specifier base_specifier;
     std::string_view literal;
     std::string_view formatted;
     ibis::vhdl::intrinsic::unsigned_integer_type result;
-} constexpr gold_data[] = {
+};
+
+constexpr auto gold_data = std::to_array<file_data_type>({
     // bin
     { .base_specifier = numeric_base_specifier::base2,
       .literal = "00_0_0",
@@ -213,8 +214,7 @@ struct {
       .literal = "FFFFFFFFFFFFFFFF",
       .formatted = "xFFFFFFFFFFFFFFFF",
       .result = 0 },
-};
-// clang-format on
+});
 
 template <typename GoldDataT, bool verbose = false>
 struct test_worker {

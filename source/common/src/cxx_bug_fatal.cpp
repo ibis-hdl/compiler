@@ -15,11 +15,11 @@
 namespace /* anonymous */ {
 
 struct message_header {
-    std::string_view title{};
+    std::string_view title;
 };
 
 struct message_footer {
-    std::string_view title{};
+    std::string_view title;
 };
 
 }  // namespace

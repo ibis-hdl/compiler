@@ -147,7 +147,7 @@ private:
 
     /// furnish a nice line with title in the middle
     static void head_line(std::ostream& os, std::string_view title, std::size_t col_width,
-                          char fill);
+                          char fill_char);
 
 private:
     ///

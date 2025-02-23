@@ -26,6 +26,27 @@
             }
         },
         {
+            "name": "dev-gcc",
+            "displayName": "GCC (Developer)",
+            "description": "GCC compiler with developer settings (using GNU libstdc++)",
+            "inherits": [
+                "compiler-gcc-dev",
+                "developer-mode",
+                "libstdcxx-debug",
+                "condition-linux-or-macos",
+                "ninja-multi-config",
+                "conan-toolchain",
+                "cmake-pedantic-settings",
+                "default-environment"
+            ],
+            "cacheVariables": {
+                "CONAN_HOST_PROFILE": "gcc",
+                "CONAN_BUILD_PROFILE": "gcc",
+                "IBIS_DEVELOPER_CLANG_WARN_EVERYTHING": "ON",
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },        
+        {
             "name": "dev-clang-tidy",
             "displayName": "Clang/Tidy (Developer)",
             "description": "Clang/Tidy compiler with developer settings (using GNU libstdc++)",
@@ -65,6 +86,26 @@
                 "CMAKE_BUILD_TYPE": "Release"
             }
         },
+        {
+            "name": "dev-gcc-iwyu",
+            "displayName": "IWYU (Developer)",
+            "description": "IWYU gcc compiler with developer settings (using GNU libstdc++)",
+            "inherits": [
+                "tool-iwyu-gcc",
+                "compiler-gcc-dev",
+                "developer-mode",
+                "condition-linux-or-macos",
+                "ninja-multi-config",
+                "conan-toolchain",
+                "cmake-pedantic-settings",
+                "default-environment"
+            ],
+            "cacheVariables": {
+                "CONAN_HOST_PROFILE": "gcc",
+                "CONAN_BUILD_PROFILE": "gcc",
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },        
         {
             "name": "dev-clang-asan",
             "displayName": "Clang ASAN/UBSAN (Developer)",
@@ -110,6 +151,13 @@
             "configurePreset": "dev-clang-iwyu"
         },
         {
+            "name": "dev-gcc-iwyu-build",
+            "displayName": "Developer Build",
+            "description": "Developer build with Gcc/IWYU",
+            "configuration": "Release",
+            "configurePreset": "dev-gcc-iwyu"
+        },        
+        {
             "name": "dev-clang-asan-build",
             "displayName": "Developer Build",
             "description": "Developer build with Clang ASAN/UBSAN",
@@ -134,16 +182,6 @@
             "description": "Test Clang/Tidy developer build",
             "configuration": "Debug",
             "configurePreset": "dev-clang-tidy",
-            "inherits": [
-                "default-testPreset"
-            ]
-        },
-        {
-            "name": "dev-clang-iwyu-test",
-            "displayName": "Developer Test",
-            "description": "Test Clang/IWYU developer build",
-            "configuration": "Debug",
-            "configurePreset": "dev-clang-iwyu",
             "inherits": [
                 "default-testPreset"
             ]

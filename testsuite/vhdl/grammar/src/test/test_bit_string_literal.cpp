@@ -108,7 +108,7 @@ constexpr auto gold_data = std::to_array<gold_data_type>({
 
 template <typename GoldDataT, bool verbose = false>
 struct test_worker {
-    test_worker(GoldDataT const& data)
+    explicit test_worker(GoldDataT const& data)
         : gold_data{ data }
         , os{ std::cout }
     {

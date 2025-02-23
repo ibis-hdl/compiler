@@ -38,12 +38,13 @@ fix_volume_permissions() {
 set_clang_alternatives() {
     sudo update-alternatives --install /usr/bin/llvm-config llvm-config /usr/bin/llvm-config-18 18
     sudo update-alternatives --install /usr/bin/llvm-config llvm-config /usr/bin/llvm-config-19 19
-    sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-18 18
-    sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-19 19
-    sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-18 18
-    sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-19 19
+    sudo update-alternatives --install /usr/bin/clang       clang       /usr/bin/clang-18 18
+    sudo update-alternatives --install /usr/bin/clang       clang       /usr/bin/clang-19 19
+    sudo update-alternatives --install /usr/bin/clang++     clang++     /usr/bin/clang++-18 18
+    sudo update-alternatives --install /usr/bin/clang++     clang++     /usr/bin/clang++-19 19
     sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-19 19
-    sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-19 19     
+    sudo update-alternatives --install /usr/bin/clang-tidy  clang-tidy  /usr/bin/clang-tidy-19 19     
+    sudo update-alternatives --install /usr/bin/clangd      clangd      /usr/bin/clangd-19 19     
 }
 
 fix_volume_permissions

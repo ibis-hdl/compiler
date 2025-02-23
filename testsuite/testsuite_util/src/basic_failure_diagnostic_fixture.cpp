@@ -248,12 +248,14 @@ void basic_failure_diagnostic_fixture::check_args()
 
 std::string_view basic_failure_diagnostic_fixture::name() const { return fixture_name; }
 
-// static
+// warning: 2 adjacent parameters of 'head_line' of convertible types are easily swapped by mistake
+// 'std::size_t' and 'char' may be implicitly converted:
+// NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
 void basic_failure_diagnostic_fixture::head_line(std::ostream& os, std::string_view title,
-                                                 std::size_t col_width, char fill)
+                                                 std::size_t col_width, char fill_char)
 {
     std::size_t const width = (col_width - title.size()) / 2;
-    std::string const line(width, fill);
+    std::string const line(width, fill_char);
     os << '\n' << line << title << line << '\n';
 }
 

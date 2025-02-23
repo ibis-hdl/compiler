@@ -59,9 +59,6 @@
   - https://martin-fieber.de/blog/cmake-presets/
   - https://github.com/MartinHelmut/cpp-gui-template-sdl2/blob/main/CMakeLists.txt
 
-- enable use IWYU
-  -> https://github.com/include-what-you-use/include-what-you-use/blob/master/docs/IWYUMappings.md
-
 - PCH and DEVELOPER_MODE looks fragile/wrong, check it 
 
 - https://github.com/friendlyanon/cmake-init-multi-target

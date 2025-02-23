@@ -14,7 +14,8 @@
 // IWYU pragma: begin_keep
 #if defined(IBIS_BUILD_PLATFORM_LINUX)
 // SIGUSR1, SIGBUS are linux specific
-#include <signal.h>  // NOLINT(misc-include-cleaner,modernize-deprecated-headers)
+// NOLINTNEXTLINE(misc-include-cleaner,modernize-deprecated-headers,hicpp-deprecated-headers)
+#include <signal.h>
 #endif
 // IWYU pragma: end_keep
 

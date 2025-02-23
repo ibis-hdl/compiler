@@ -51,6 +51,7 @@
 				"hbenl.vscode-test-explorer",
 				"matepek.vscode-catch2-test-adapter",
 				"zcoinofficial.boost-test-adapter",
+				"llvm-vs-code-extensions.vscode-clangd",
 				"xaver.clang-format",
 				"notskm.clang-tidy",
 				"Gruntfuggly.todo-tree",

@@ -271,7 +271,7 @@ std::tuple<bool, std::int32_t> convert_based<IntegerT, RealT>::parse_exponent(
     auto iter = std::begin(range_f);
     auto const end = std::end(range_f);
 
-    auto const exp = x3::rule<struct _, exponent_type>{ node_name.data() } = x3::int_;
+    auto const exp = x3::rule<struct _, exponent_type>{ node_name } = x3::int_;
 
     bool const parse_ok = x3::parse(iter, end, exp >> x3::eoi, exponent_attribute);
 

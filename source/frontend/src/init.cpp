@@ -252,6 +252,7 @@ void init::parse_cli(int argc, const char* argv[])
             pt.put(setting_flag, option);
         }
 
+        // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
         void option(std::string const& cli_arg, std::string const& setting_flag, unsigned option)
         {
             if (app.count(cli_arg) != 0) {
@@ -259,6 +260,7 @@ void init::parse_cli(int argc, const char* argv[])
             }
         }
 
+        // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
         void option(std::string const& cli_arg, std::string const& setting_flag,
                     std::string const& option)
         {

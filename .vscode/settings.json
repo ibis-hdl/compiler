@@ -13,10 +13,13 @@
     "C_Cpp.codeAnalysis.exclude": {
         "*grammar_def.hpp": true
     },
+    "C_Cpp.intelliSenseEngine": "disabled", // Clangd
     // CMake
     "cmake.configureOnOpen": false,
     "cmake.useCMakePresets": "auto",
     "cmake.options.statusBarVisibility": "compact",
+    "cmake.automaticReconfigure": false,
+    "cmake.configureOnEdit": false,
     "cmake.options.advanced": {
         "cpack": {
             "statusBarVisibility": "hidden"
@@ -279,7 +282,5 @@
         "__locale": "cpp",
         "cinttypes": "cpp"
     },
-    "cSpell.words": [],
-    "cmake.automaticReconfigure": false,
-    "cmake.configureOnEdit": false
+    "cSpell.words": []
 }

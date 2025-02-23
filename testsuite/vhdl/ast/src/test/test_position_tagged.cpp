@@ -5,8 +5,6 @@
 
 #include <ibis/vhdl/ast/util/position_tagged.hpp>
 
-#include <ibis/util/strong_type.hpp>
-
 #include <boost/test/included/unit_test.hpp>                 // for BOOST_PP...
 #include <boost/test/tools/assertion.hpp>                    // for EQ, binary_expr, value_expr
 #include <boost/test/tools/interface.hpp>                    // for BOOST_TEST
@@ -14,7 +12,6 @@
 #include <boost/test/utils/basic_cstring/basic_cstring.hpp>  // for basic_cstring
 #include <boost/test/utils/lazy_ostream.hpp>                 // for operator<<
 #include <ibis/util/strong_type.hpp>                         // for strong_type, operator==
-#include <ibis/vhdl/ast/util/position_tagged.hpp>            // for position_tagged
 
 #include <testsuite/namespace_alias.hpp>  // for utf
 

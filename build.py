@@ -71,7 +71,6 @@ def dev_clang_iwyu():
     workflow_dev(conan_profile, cmake_conf_preset, build_type, jobs)
 
 def dev_gcc_iwyu():
-    # ToDo Doesn't work as expected
     conan_profile = "gcc"
     cmake_conf_preset = "dev-gcc-iwyu"
     build_type = "Release"
@@ -91,10 +90,10 @@ run("cmake --list-presets")
 #clang_release()
 #clang_libcxx_release()
 #dev_clang()
-#dev_clang_tidy()
+dev_clang_tidy()
 #dev_clang_iwyu()
-dev_gcc_iwyu()
+#dev_gcc_iwyu()
 #dev_clang_asan()
 
 
-# ./build.py 2>&1 | tee -a build-asan.log
+# ./build.py 2>&1 | tee -a build-script.log

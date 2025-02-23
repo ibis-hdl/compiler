@@ -5,4 +5,5 @@ libstdcxx
 NDEBUG
 NOLINTNEXTLINE
 PTHREAD
+vararg
 XNOR
