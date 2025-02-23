@@ -11,7 +11,6 @@
 #include <boost/test/utils/lazy_ostream.hpp>
 
 #include <algorithm>
-// #include <cassert>
 #include <exception>
 #include <filesystem>
 #include <fstream>
@@ -21,6 +20,8 @@
 #include <string_view>
 #include <string>
 #include <utility>
+
+#include <boost/test/framework.hpp>  // for master_test_suite
 
 #include <testsuite/namespace_alias.hpp>
 

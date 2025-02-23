@@ -15,7 +15,6 @@
 
 #include <ibis/util/cxx_bug_fatal.hpp>
 
-#include <boost/optional.hpp>
 #include <boost/range/iterator_range_io.hpp>
 #include <boost/spirit/home/x3/support/traits/is_variant.hpp>
 #include <boost/variant/apply_visitor.hpp>

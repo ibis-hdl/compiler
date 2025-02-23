@@ -5,13 +5,12 @@
 
 #include <ibis/util/trim.hpp>
 
-#include <boost/preprocessor.hpp>
-#include <boost/test/test_tools.hpp>
-#include <boost/test/tools/detail/indirections.hpp>
-#include <boost/test/tools/interface.hpp>
-#include <boost/test/unit_test_suite.hpp>
-#include <boost/test/utils/basic_cstring/basic_cstring.hpp>
-#include <boost/test/utils/lazy_ostream.hpp>
+#include <boost/test/tools/detail/indirections.hpp>          // for assertion_type
+#include <boost/test/tools/detail/per_element_manip.hpp>     // for per_element
+#include <boost/test/tools/interface.hpp>                    // for BOOST_TEST
+#include <boost/test/unit_test.hpp>                          // for BOOST_PP...
+#include <boost/test/utils/basic_cstring/basic_cstring.hpp>  // for basic_cstring
+#include <boost/test/utils/lazy_ostream.hpp>                 // for operator<<
 
 #include <initializer_list>
 #include <string_view>

@@ -3,24 +3,28 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#include <ibis/vhdl/ast/ast_formatter.hpp>
+#include <ibis/vhdl/ast/ast_formatter.hpp>  // IWYU pragma: keep
 #include <ibis/vhdl/ast/node/string_literal.hpp>
 
 #include <boost/range/iterator_range_core.hpp>
 
-#include <boost/test/unit_test.hpp>
-#include <boost/test/tools/interface.hpp>  // BOOST_TEST(), BOOST_TEST_REQUIRE()
-#include <boost/test/tools/context.hpp>    // BOOST_TEST_CONTEXT()
-#include <boost/test/unit_test_suite.hpp>  // BOOST_AUTO_TEST_CASE()
-#include <boost/test/tree/decorator.hpp>   // utf::label
-#include <boost/test/tools/output_test_stream.hpp>
+#include <boost/test/tools/assertion.hpp>                 // for value_expr
+#include <boost/test/tools/context.hpp>                   // for context_frame, BOOST_TEST_CONTEXT
+#include <boost/test/tools/detail/indirections.hpp>       // for assertion_type
+#include <boost/test/tools/detail/per_element_manip.hpp>  // for per_element
+#include <boost/test/tools/interface.hpp>                 // for BOOST_TEST, BOOST_TEST_REQUIRE
+#include <boost/test/tools/output_test_stream.hpp>        // for output_test_stream
+#include <boost/test/tree/decorator.hpp>                  // for label, collector_t, base
+#include <boost/test/unit_test.hpp>                       // for BOOST_PP...
+#include <boost/test/utils/basic_cstring/basic_cstring.hpp>  // for basic_cstring
+#include <boost/test/utils/lazy_ostream.hpp>  // for operator<<, lazy_ostream, lazy_ostream_impl
 
 #include <format>
 #include <ostream>
 #include <string>
 #include <string_view>
 
-#include <testsuite/namespace_alias.hpp>
+#include <testsuite/namespace_alias.hpp>  // for btt, utf
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_SUITE(ast_formatter)

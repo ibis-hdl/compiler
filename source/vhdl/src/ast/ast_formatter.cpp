@@ -11,7 +11,7 @@
 
 #include <string_view>
 #include <utility>
-#include <format>  // formatter (Clang-Tidy)
+#include <format>  // IWYU pragma: keep -> formatter (Clang-Tidy)
 
 ///
 /// formatter for ast::operator_token

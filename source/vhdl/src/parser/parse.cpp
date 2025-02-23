@@ -11,7 +11,12 @@
 #include <ibis/vhdl/parser/parser_config.hpp>
 #include <ibis/vhdl/parser/skipper.hpp>
 
-#include <boost/spirit/home/x3.hpp>
+// #include <boost/spirit/home/x3.hpp>                    // IWYU pragma: keep
+#include <boost/spirit/home/x3/auxiliary/eoi.hpp>      // for eoi_parser, eoi
+#include <boost/spirit/home/x3/core/parse.hpp>         // for phrase_parse
+#include <boost/spirit/home/x3/directive/with.hpp>     // for with_directive, with, with_gen
+#include <boost/spirit/home/x3/nonterminal/rule.hpp>   // for rule, BOOST_SPIRIT_DECLARE
+#include <boost/spirit/home/x3/operator/sequence.hpp>  // for sequence, operator>>
 
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>

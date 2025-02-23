@@ -4,15 +4,20 @@
 //
 
 #include <ibis/util/file_mapper.hpp>
-#include <ibis/vhdl/parser/position_cache.hpp>
+#include <ibis/util/strong_type.hpp>
 #include <ibis/vhdl/ast/util/position_tagged.hpp>
+#include <ibis/vhdl/parser/position_cache.hpp>
 
-#include <boost/test/unit_test.hpp>
-#include <boost/test/tools/interface.hpp>  // BOOST_TEST(), BOOST_TEST_REQUIRE
-#include <boost/test/tools/context.hpp>    // BOOST_TEST_CONTEXT()
-#include <boost/test/unit_test_suite.hpp>  // BOOST_AUTO_TEST_CASE()
-#include <boost/test/tree/decorator.hpp>   // utf::label
-// #include <boost/test/tools/output_test_stream.hpp>
+#include <boost/test/tools/assertion.hpp>                 // for EQ, binary_expr, value_expr, NE
+#include <boost/test/tools/context.hpp>                   // for context_frame, BOOST_TEST_CONTEXT
+#include <boost/test/tools/cstring_comparison_op.hpp>     // for EQ
+#include <boost/test/tools/detail/indirections.hpp>       // for assertion_type
+#include <boost/test/tools/detail/per_element_manip.hpp>  // for per_element
+#include <boost/test/tools/interface.hpp>                 // for BOOST_TEST, BOOST_TEST_REQUIRE
+#include <boost/test/tree/decorator.hpp>                  // for label, base, collector_t
+#include <boost/test/unit_test.hpp>                       // for BOOST_PP...
+#include <boost/test/utils/basic_cstring/basic_cstring.hpp>  // for basic_cstring
+#include <boost/test/utils/lazy_ostream.hpp>  // for operator<<, lazy_ostream, lazy_ostream_impl
 
 #include <array>
 #include <cassert>

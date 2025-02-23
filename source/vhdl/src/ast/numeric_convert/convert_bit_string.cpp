@@ -9,13 +9,21 @@
 #include <ibis/vhdl/ast/numeric_convert/detail/convert_util.hpp>
 #include <ibis/vhdl/ast/numeric_convert/filter_range.hpp>
 #include <ibis/vhdl/ast/util/numeric_base_specifier.hpp>
-#include <ibis/vhdl/ast/util/string_span.hpp>
+// #include <ibis/vhdl/ast/util/string_span.hpp>
 #include <ibis/vhdl/diagnostic_handler.hpp>
 #include <ibis/vhdl/type.hpp>
+#include <ibis/concepts.hpp>
 
 #include <ibis/util/cxx_bug_fatal.hpp>
 
 #include <boost/spirit/home/x3.hpp>  // IWYU pragma: keep
+#include <boost/spirit/home/x3/auxiliary/eoi.hpp>
+#include <boost/spirit/home/x3/core/parse.hpp>
+#include <boost/spirit/home/x3/core/parser.hpp>
+#include <boost/spirit/home/x3/operator/sequence.hpp>
+
+#include <range/v3/iterator/basic_iterator.hpp>
+#include <range/v3/view/view.hpp>
 
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
@@ -23,7 +31,6 @@
 #include <iterator>
 #include <string_view>
 #include <string>
-#include <type_traits>
 #include <utility>
 
 #include <ibis/namespace_alias.hpp>

@@ -62,6 +62,15 @@
             "inherits": [
                 "compiler-clang"
             ]
-        }        
+        },
+        {
+            "name": "compiler-gcc-dev",
+            "displayName": "ClGccang (Developer)",
+            "description": "Gcc compiler (using GNU libstdc++) with strong compiler flags",
+            "hidden": true,
+            "inherits": [
+                "compiler-gcc"
+            ]
+        }
     ]
 }

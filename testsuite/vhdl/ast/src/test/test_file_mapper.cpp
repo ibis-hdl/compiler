@@ -5,17 +5,20 @@
 
 #include <ibis/util/file_mapper.hpp>
 
-#include <boost/test/tools/context.hpp>    // BOOST_TEST_CONTEXT()
-#include <boost/test/tools/interface.hpp>  // BOOST_TEST()
-#include <boost/test/tree/decorator.hpp>   // utf::label
-#include <boost/test/unit_test_suite.hpp>  // BOOST_AUTO_TEST_CASE()
-#include <boost/test/unit_test.hpp>
-#include <boost/test/utils/lazy_ostream.hpp>
+#include <boost/test/tools/assertion.hpp>                    // for binary_expr, value_expr, EQ
+#include <boost/test/tools/cstring_comparison_op.hpp>        // for EQ, NE
+#include <boost/test/tools/detail/indirections.hpp>          // for assertion_type
+#include <boost/test/tools/detail/per_element_manip.hpp>     // for per_element
+#include <boost/test/tools/interface.hpp>                    // for BOOST_TEST
+#include <boost/test/tree/decorator.hpp>                     // for label, collector_t, base
+#include <boost/test/unit_test.hpp>                          // for BOOST_PP...
+#include <boost/test/utils/basic_cstring/basic_cstring.hpp>  // for basic_cstring
+#include <boost/test/utils/lazy_ostream.hpp>                 // for operator<<
 
 #include <string_view>
 #include <string>
 
-#include <testsuite/namespace_alias.hpp>
+#include <testsuite/namespace_alias.hpp>  // for btt, utf
 
 using namespace std::literals::string_view_literals;
 

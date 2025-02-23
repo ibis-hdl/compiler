@@ -5,9 +5,10 @@
 
 #pragma once
 
+// #include <ibis/vhdl/parser/parser_config.hpp>
 #include <ibis/util/file_mapper.hpp>
 #include <ibis/vhdl/parser/context.hpp>
-#include <ibis/vhdl/parser/parser_config.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
 #include <ibis/vhdl/parser/position_cache.hpp>
 
 #include <exception>
@@ -18,7 +19,7 @@
 
 namespace ibis::vhdl::ast {
 struct design_unit;
-using design_file = std::vector<ast::design_unit>;
+using design_file = std::vector<ast::design_unit>;  // FixMe not clever, include <.../ast.hpp>
 }  // namespace ibis::vhdl::ast
 
 namespace ibis::vhdl::parser {

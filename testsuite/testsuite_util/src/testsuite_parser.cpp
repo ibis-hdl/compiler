@@ -5,8 +5,9 @@
 
 #include <ibis/literals.hpp>
 #include <ibis/util/file_mapper.hpp>
-#include <ibis/vhdl/ast/node/design_file.hpp>
-#include <ibis/vhdl/context.hpp>  // failure_status
+#include <ibis/vhdl/ast/node/design_file.hpp>  // IWYU pragma: keep
+#include <ibis/vhdl/ast.hpp>                   // IWYU pragma: keep
+#include <ibis/vhdl/context.hpp>               // failure_status
 #include <ibis/vhdl/parser/context.hpp>
 #include <ibis/vhdl/parser/iterator_type.hpp>
 #include <ibis/vhdl/parser/parse.hpp>

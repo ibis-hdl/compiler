@@ -8,8 +8,9 @@
 
 #include <boost/test/framework.hpp>
 #include <boost/test/results_collector.hpp>
+#include <boost/test/tools/assertion.hpp>  // for value_expr
 #include <boost/test/tools/interface.hpp>  // BOOST_TEST_REQUIRE()
-#include <boost/test/tree/test_unit.hpp>
+// #include <boost/test/tree/test_unit.hpp>
 #include <boost/test/unit_test_log.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/test/utils/lazy_ostream.hpp>

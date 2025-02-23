@@ -1,6 +1,6 @@
 [codespell]
 ignore-words = .dictionaries/cpp_terms.txt,.dictionaries/vhdl_terms.txt,.dictionaries/python_terms.txt,.dictionaries/project_words.txt
-ignore-words-list = endcode,master
+ignore-words-list = asan,ubsan,master,endcode
 builtin = clear,rare,informal,usage,code,names,en-GB_to_en-US
 check-filenames =
 check-hidden =

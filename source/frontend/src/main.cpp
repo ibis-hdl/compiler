@@ -22,6 +22,8 @@
 #include <ibis/message.hpp>
 #include <ibis/literals.hpp>
 
+#include <boost/spirit/home/x3.hpp>  // x3::expectation_failure
+
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
 
@@ -34,6 +36,8 @@
 #include <sstream>
 #include <utility>
 #include <limits>
+
+#include <ibis/namespace_alias.hpp>  // for x3
 
 extern void testing_signal_handler();
 

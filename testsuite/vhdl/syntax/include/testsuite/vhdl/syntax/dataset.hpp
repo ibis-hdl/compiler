@@ -7,11 +7,16 @@
 
 #include <testsuite/util/dataset_loader.hpp>
 
-#include <boost/test/data/monomorphic.hpp>  // IWYU pragma: keep
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/bool_fwd.hpp>
 
 #include <string_view>
+
+namespace boost::unit_test::data::monomorphic {
+// <boost/test/data/monomorphic.hpp>
+template <typename DataSet>
+struct is_dataset;
+}  // namespace boost::unit_test::data::monomorphic
 
 namespace testsuite::vhdl::syntax {
 

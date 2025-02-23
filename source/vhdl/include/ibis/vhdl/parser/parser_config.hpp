@@ -14,7 +14,7 @@
 
 namespace ibis::vhdl::parser {
 
-using iterator_type = parser::iterator_type;
+// using iterator_type = parser::iterator_type;
 using position_annotator_type = parser::position_cache<iterator_type>::annotator;
 using diagnostic_handler_type = parser::diagnostic_handler<iterator_type>;
 

@@ -12,7 +12,7 @@
 #include <string_view>
 #include <string>
 
-#include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
+// #include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
 namespace testsuite {
 namespace fs = std::filesystem;

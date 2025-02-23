@@ -4,28 +4,47 @@
 //
 
 #include <ibis/vhdl/ast/numeric_convert/convert_based.hpp>
-#include <ibis/vhdl/ast/node/based_literal.hpp>
+
+// #include <ibis/vhdl/ast/numeric_convert/dbg_trace.hpp>
+// #include <ibis/vhdl/ast/numeric_convert/detail/digits_traits.hpp>
 #include <ibis/concepts.hpp>
+#include <ibis/vhdl/ast/node/based_literal.hpp>
+#include <ibis/vhdl/ast/numeric_convert/detail/convert_util.hpp>
+#include <ibis/vhdl/ast/numeric_convert/filter_range.hpp>
 #include <ibis/vhdl/ast/util/numeric_base_specifier.hpp>
 #include <ibis/vhdl/ast/util/string_span.hpp>
-#include <ibis/vhdl/ast/numeric_convert/dbg_trace.hpp>
-#include <ibis/vhdl/ast/numeric_convert/detail/convert_util.hpp>
-#include <ibis/vhdl/ast/numeric_convert/detail/digits_traits.hpp>
-#include <ibis/vhdl/ast/numeric_convert/filter_range.hpp>
 #include <ibis/vhdl/diagnostic_handler.hpp>
 #include <ibis/vhdl/type.hpp>
 
 #include <ibis/util/cxx_bug_fatal.hpp>
 
-// IWYU replaces a lot of other header, we stay with this one
-// #include <boost/spirit/home/x3.hpp>  // IWYU pragma: keep
-#include <range/v3/view/join.hpp>
+#include <boost/range/iterator_range_core.hpp>  // for iterator_range
+
+#include <boost/spirit/home/x3.hpp>                        // IWYU pragma: keep
+#include <boost/spirit/home/x3/auxiliary/any_parser.hpp>   // for any_parser
+#include <boost/spirit/home/x3/auxiliary/eoi.hpp>          // for eoi_parser, eoi
+#include <boost/spirit/home/x3/core/parse.hpp>             // for parse
+#include <boost/spirit/home/x3/core/parser.hpp>            // for as_parser
+#include <boost/spirit/home/x3/nonterminal/rule.hpp>       // for rule_definition, rule
+#include <boost/spirit/home/x3/numeric/int.hpp>            // for int_parser, int_
+#include <boost/spirit/home/x3/numeric/real.hpp>           // for real_parser
+#include <boost/spirit/home/x3/numeric/real_policies.hpp>  // for ureal_policies
+#include <boost/spirit/home/x3/operator/sequence.hpp>
+
+#include <range/v3/functional/invoke.hpp>
+#include <range/v3/iterator/basic_iterator.hpp>
+#include <range/v3/iterator/operations.hpp>
 #include <range/v3/range/conversion.hpp>
+#include <range/v3/view/all.hpp>
+#include <range/v3/view/facade.hpp>
+#include <range/v3/view/join.hpp>
+#include <range/v3/view/view.hpp>
+
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
 
 #include <cmath>
-#include <iostream>
+// #include <iostream>
 #include <initializer_list>
 #include <iterator>
 #include <limits>
@@ -36,7 +55,7 @@
 #include <tuple>
 #include <utility>
 
-#include <ibis/namespace_alias.hpp>  // IWYU pragma: keep
+#include <ibis/namespace_alias.hpp>  // for x3
 
 namespace ibis::vhdl::ast::detail {
 

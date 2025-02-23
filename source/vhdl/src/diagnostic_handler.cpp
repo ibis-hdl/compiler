@@ -3,11 +3,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
+#include <ibis/vhdl/diagnostic_handler.hpp>
+
 #include <ibis/util/get_iterator_pair.hpp>
 #include <ibis/vhdl/ast/util/position_tagged.hpp>
 #include <ibis/vhdl/context.hpp>
 #include <ibis/vhdl/diagnostic_context.hpp>
-#include <ibis/vhdl/diagnostic_handler.hpp>
 #include <ibis/vhdl/diagnostic_printer.hpp>
 #include <ibis/vhdl/parser/iterator_type.hpp>  // for explicit template instantiation
 #include <ibis/vhdl/parser/position_cache.hpp>
@@ -19,6 +20,7 @@
 #include <boost/locale/message.hpp>
 
 #include <cstddef>
+#include <functional>
 #include <iterator>
 #include <optional>
 #include <ostream>

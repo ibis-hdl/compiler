@@ -7,7 +7,7 @@
 
 #include <ibis/concepts.hpp>
 #include <ibis/vhdl/ast/node/decimal_literal.hpp>
-#include <ibis/vhdl/ast/numeric_convert/dbg_trace.hpp>
+// #include <ibis/vhdl/ast/numeric_convert/dbg_trace.hpp>
 #include <ibis/vhdl/ast/numeric_convert/filter_range.hpp>
 #include <ibis/vhdl/ast/util/string_span.hpp>
 #include <ibis/vhdl/diagnostic_handler.hpp>
@@ -16,7 +16,22 @@
 
 #include <ibis/util/cxx_bug_fatal.hpp>
 
-#include <boost/spirit/home/x3.hpp>  // IWYU pragma: keep
+#include <boost/range/iterator_range_core.hpp>  // for iterator_range
+
+#include <boost/spirit/home/x3.hpp>                        // IWYU pragma: keep
+#include <boost/spirit/home/x3/auxiliary/any_parser.hpp>   // for any_parser
+#include <boost/spirit/home/x3/auxiliary/eoi.hpp>          // for eoi_parser, eoi
+#include <boost/spirit/home/x3/core/parse.hpp>             // for parse
+#include <boost/spirit/home/x3/core/parser.hpp>            // for as_parser
+#include <boost/spirit/home/x3/numeric/real.hpp>           // for real_parser
+#include <boost/spirit/home/x3/numeric/real_policies.hpp>  // for ureal_policies
+#include <boost/spirit/home/x3/operator/sequence.hpp>      // for sequence, operator>>
+
+#include <range/v3/functional/invoke.hpp>        // for invoke_result_t
+#include <range/v3/iterator/basic_iterator.hpp>  // for operator==, operator!=, basic_iterator
+#include <range/v3/view/all.hpp>                 // for all_t
+#include <range/v3/view/facade.hpp>              // for facade_iterator_t
+#include <range/v3/view/view.hpp>                // for operator|
 
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>

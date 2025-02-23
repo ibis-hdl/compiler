@@ -3,29 +3,42 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#include <ibis/vhdl/ast/basic_ast_walker.hpp>
+#include <ibis/vhdl/ast/node/bit_string_literal.hpp>
+
+#include <testsuite/testsuite_parser.hpp>  // FixMe path not intuitive, missing ibis
+
+#include <ibis/vhdl/ast_fwd.hpp>
+#include <ibis/vhdl/ast/node/design_file.hpp>
 #include <ibis/vhdl/ast/ast_formatter.hpp>
 #include <ibis/vhdl/ast/ast_printer.hpp>
-#include <ibis/vhdl/ast/node/bit_string_literal.hpp>
+#include <ibis/vhdl/ast/basic_ast_walker.hpp>
 #include <ibis/vhdl/ast/node/constant_declaration.hpp>
-#include <ibis/vhdl/ast/node/design_file.hpp>
+#include <ibis/vhdl/ast/node/design_unit.hpp>
+#include <ibis/vhdl/ast/node/expression.hpp>
+#include <ibis/vhdl/ast/util/optional.hpp>
 
-#include <boost/test/unit_test.hpp>
-#include <boost/test/tools/interface.hpp>  // BOOST_TEST()
-#include <boost/test/tools/context.hpp>    // BOOST_TEST_CONTEXT()
-#include <boost/test/unit_test_suite.hpp>  // BOOST_AUTO_TEST_CASE()
-#include <boost/test/tree/decorator.hpp>   // utf::label
+#include <boost/test/tools/assertion.hpp>                 // for EQ, binary_expr, value_expr
+#include <boost/test/tools/context.hpp>                   // for context_frame, BOOST_TEST_CONTEXT
+#include <boost/test/tools/detail/per_element_manip.hpp>  // for operator<<, per_element
+#include <boost/test/tools/interface.hpp>                 // for BOOST_TEST
+#include <boost/test/tree/decorator.hpp>                  // for label, base, collector_t
+#include <boost/test/unit_test.hpp>                       // for BOOST_PP...
+#include <boost/test/utils/basic_cstring/basic_cstring.hpp>  // for basic_cstring
+#include <boost/test/utils/lazy_ostream.hpp>  // for operator<<, lazy_ostream, lazy_ostream_impl
 
-#include <testsuite/testsuite_parser.hpp>
-#include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
+#include <boost/variant/apply_visitor.hpp>  // for apply_visitor
 
 #include <array>
-#include <cassert>
 #include <cstddef>
+#include <filesystem>
 #include <format>
 #include <functional>
 #include <iostream>
+#include <iterator>
+#include <string>
 #include <string_view>
+
+#include <testsuite/namespace_alias.hpp>  // for btt, utf
 
 using namespace ibis::vhdl;
 

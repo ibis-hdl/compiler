@@ -8,9 +8,9 @@
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
 
-#include <cstddef>
-#include <string>
 #include <format>
+#include <ostream>
+#include <string>
 
 template <>
 struct std::formatter<ibis::vhdl::failure_status> : std::formatter<std::string> {

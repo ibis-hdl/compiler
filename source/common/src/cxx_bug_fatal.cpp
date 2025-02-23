@@ -9,16 +9,17 @@
 #include <format>
 #include <iostream>
 #include <source_location>
+#include <string>  // for operator<<
 #include <string_view>
 
 namespace /* anonymous */ {
 
 struct message_header {
-    std::string_view title;
+    std::string_view title{};
 };
 
 struct message_footer {
-    std::string_view title;
+    std::string_view title{};
 };
 
 }  // namespace

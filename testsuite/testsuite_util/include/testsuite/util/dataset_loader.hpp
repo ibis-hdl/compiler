@@ -5,7 +5,8 @@
 
 #pragma once
 
-#include <cstddef>  // FixMe [Bug] work around for Clang19 libc++ && Boost 1.86
+// FixMe [Bug] work around for Clang19 libc++ && Boost 1.86
+#include <cstddef>  // IWYU pragma: keep
 #include <boost/test/data/size.hpp>
 
 #include <filesystem>

@@ -16,7 +16,6 @@
                 "ninja-multi-config",
                 "conan-toolchain",
                 "cmake-pedantic-settings",
-                "default-install-settings",
                 "default-environment"
             ],
             "cacheVariables": {
@@ -31,21 +30,19 @@
             "displayName": "Clang/Tidy (Developer)",
             "description": "Clang/Tidy compiler with developer settings (using GNU libstdc++)",
             "inherits": [
-                "compiler-clang-dev",
                 "tool-clang-tidy",
+                "compiler-clang-dev",
                 "developer-mode",
-                "libstdcxx-debug",
                 "condition-linux-or-macos",
                 "ninja-multi-config",
                 "conan-toolchain",
                 "cmake-pedantic-settings",
-                "default-install-settings",
                 "default-environment"
             ],
             "cacheVariables": {
                 "CONAN_HOST_PROFILE": "clang",
                 "CONAN_BUILD_PROFILE": "clang",
-                "CMAKE_BUILD_TYPE": "Debug"
+                "CMAKE_BUILD_TYPE": "Release"
             }
         },
         {
@@ -60,13 +57,12 @@
                 "ninja-multi-config",
                 "conan-toolchain",
                 "cmake-pedantic-settings",
-                "default-install-settings",
                 "default-environment"
             ],
             "cacheVariables": {
                 "CONAN_HOST_PROFILE": "clang",
                 "CONAN_BUILD_PROFILE": "clang",
-                "CMAKE_BUILD_TYPE": "Debug"
+                "CMAKE_BUILD_TYPE": "Release"
             }
         },
         {
@@ -82,7 +78,6 @@
                 "ninja-multi-config",
                 "conan-toolchain",
                 "cmake-pedantic-settings",
-                "default-install-settings",
                 "default-environment"
             ],
             "cacheVariables": {
@@ -104,7 +99,7 @@
             "name": "dev-clang-tidy-build",
             "displayName": "Developer Build",
             "description": "Developer build with Clang/Tidy",
-            "configuration": "Debug",
+            "configuration": "Release",
             "configurePreset": "dev-clang-tidy"
         },
         {
@@ -118,7 +113,7 @@
             "name": "dev-clang-asan-build",
             "displayName": "Developer Build",
             "description": "Developer build with Clang ASAN/UBSAN",
-            "configuration": "Sanitize",
+            "configuration": "Debug",
             "configurePreset": "dev-clang-asan"
         }
     ],
@@ -157,7 +152,7 @@
             "name": "dev-clang-asan-test",
             "displayName": "Developer Test",
             "description": "Test Clang/ASAN developer build",
-            "configuration": "Sanitize",
+            "configuration": "Debug",
             "configurePreset": "dev-clang-asan",
             "inherits": [
                 "default-testPreset",

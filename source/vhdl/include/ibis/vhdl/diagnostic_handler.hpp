@@ -25,28 +25,12 @@
 #include <ibis/namespace_alias.hpp>
 
 namespace ibis::vhdl {
-
-// forward vhdl::context
 class context;
-// forward vhdl::source_location
-class source_location;
-
-namespace ast {
-
-// forward ast::position_tagged for parser::position_cache
-class position_tagged;
-
-}  // namespace ast
-
-namespace parser {
-
-// forward parser::position_cache
-template <typename IteratorT>
-class position_cache;
-
-}  // namespace parser
-
 }  // namespace ibis::vhdl
+
+namespace ibis::vhdl::ast {
+class position_tagged;
+}  // namespace ibis::vhdl::ast
 
 namespace ibis::vhdl {
 
