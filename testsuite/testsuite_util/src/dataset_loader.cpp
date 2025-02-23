@@ -7,12 +7,23 @@
 #include <testsuite/util/cli_args.hpp>
 
 #include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test_log.hpp>  // BOOST_TEST_MESSAGE()
+#include <boost/test/utils/lazy_ostream.hpp>
 
-#include <cassert>
+#include <algorithm>
+#include <exception>
 #include <filesystem>
 #include <fstream>
 #include <set>
+#include <sstream>
+#include <stdexcept>
 #include <string_view>
+#include <string>
+#include <utility>
+
+#include <boost/test/framework.hpp>  // for master_test_suite
+
+#include <testsuite/namespace_alias.hpp>
 
 namespace testsuite::util {
 
@@ -34,7 +45,7 @@ void dataset_loader::set_builtin(std::unique_ptr<compile_builtin> other)
 {
     builtin = std::move(other);
 
-    int argc = boost::unit_test::framework::master_test_suite().argc;
+    int const argc = boost::unit_test::framework::master_test_suite().argc;
     char** argv = boost::unit_test::framework::master_test_suite().argv;
 
     cli_args::parse_cli(argc, argv);
@@ -43,7 +54,7 @@ void dataset_loader::set_builtin(std::unique_ptr<compile_builtin> other)
 
     BOOST_TEST_MESSAGE(name() << ": load test files for " << testcase_group);
 
-    fs::path path = fs::path(option.source_dir) / testcase_group;
+    fs::path const path = fs::path(option.source_dir) / testcase_group;
     read_files(path);
 
     if (dataset.input.empty()) {
@@ -109,6 +120,8 @@ void dataset_loader::check_args() const
     }
 }
 
+// ToDo warning: function 'read_files' has cognitive complexity of 30 (threshold 25)
+// [readability-function-cognitive-complexity]
 void dataset_loader::read_files(fs::path const& path_name) const
 {
     if (fs::exists(path_name) && fs::is_directory(path_name)) {

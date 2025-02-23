@@ -5,17 +5,12 @@
 
 #include <ibis/vhdl/context.hpp>
 
-#include <ibis/vhdl/ast/util/string_span_hash.hpp>
-
-#include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
-#include <ibis/util/compiler/warnings_on.hpp>
 
-#include <cstddef>
-#include <algorithm>
-#include <string>
 #include <format>
+#include <ostream>
+#include <string>
 
 template <>
 struct std::formatter<ibis::vhdl::failure_status> : std::formatter<std::string> {
@@ -60,6 +55,7 @@ struct std::formatter<ibis::vhdl::failure_status> : std::formatter<std::string> 
                 // TRANSLATORS: summary warning(s) only
                 (format(translate("{1} generated.")) % warning_message).str(), ctx);
         }
+        // NOLINTNEXTLINE(readability-else-after-return)
         else {
             // all went fine
         }

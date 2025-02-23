@@ -14,9 +14,10 @@
 #include <ibis/util/pretty_typename.hpp>
 #include <ibis/util/cxx_bug_fatal.hpp>
 
-#include <type_traits>
-#include <tuple>
 #include <format>
+#include <iostream>
+#include <tuple>
+#include <type_traits>
 
 namespace ibis::vhdl::ast {
 struct architecture_body;

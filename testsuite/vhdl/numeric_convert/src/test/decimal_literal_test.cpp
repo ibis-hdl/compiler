@@ -102,15 +102,15 @@ BOOST_DATA_TEST_CASE(decimal_literal_integer, utf_data::make(dec_int_lit) ^ dec_
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
     auto const [parse_ok, ast_node] = parse.decimal_literal(position_proxy, diagnostic_handler);
-    BOOST_REQUIRE(parse_ok);
+    BOOST_TEST_REQUIRE(parse_ok);
 
     using numeric_type_specifier = ibis::vhdl::ast::decimal_literal::numeric_type_specifier;
-    BOOST_REQUIRE(ast_node.type_specifier == numeric_type_specifier::integer);
+    BOOST_TEST_REQUIRE(ast_node.type_specifier == numeric_type_specifier::integer);
 
     numeric_convert numeric{ diagnostic_handler };
 
     auto const [conv_ok, value] = numeric(ast_node);
-    BOOST_REQUIRE(conv_ok);
+    BOOST_TEST_REQUIRE(conv_ok);
     BOOST_TEST(std::get<numeric_convert::integer_type>(value) == N);
 
     os << failure_status(ctx);
@@ -142,13 +142,13 @@ BOOST_AUTO_TEST_CASE(decimal_literal_uint64max_ovrflw)
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
     auto const [parse_ok, ast_node] = parse.decimal_literal(position_proxy, diagnostic_handler);
-    BOOST_REQUIRE(parse_ok);  // must parse ...
+    BOOST_TEST_REQUIRE(parse_ok);  // must parse ...
 
     numeric_convert numeric{ diagnostic_handler };
 
     bool conv_ok = true;
     std::tie(conv_ok, std::ignore) = numeric(ast_node);
-    BOOST_REQUIRE(!conv_ok);  // ... but must fail to convert
+    BOOST_TEST_REQUIRE(!conv_ok);  // ... but must fail to convert
 
     os << failure_status(ctx);
     if (!os.str().empty()) {
@@ -224,15 +224,15 @@ BOOST_DATA_TEST_CASE(decimal_literal_real, utf_data::make(dec_real_lit) ^ dec_re
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
     auto const [parse_ok, ast_node] = parse.decimal_literal(position_proxy, diagnostic_handler);
-    BOOST_REQUIRE(parse_ok);
+    BOOST_TEST_REQUIRE(parse_ok);
 
     using numeric_type_specifier = ibis::vhdl::ast::decimal_literal::numeric_type_specifier;
-    BOOST_REQUIRE(ast_node.type_specifier == numeric_type_specifier::real);
+    BOOST_TEST_REQUIRE(ast_node.type_specifier == numeric_type_specifier::real);
 
     numeric_convert numeric{ diagnostic_handler };
 
     auto const [conv_ok, value] = numeric(ast_node);
-    BOOST_REQUIRE(conv_ok);
+    BOOST_TEST_REQUIRE(conv_ok);
     BOOST_TEST(std::get<numeric_convert::real_type>(value) == N, btt::tolerance(REAL_TOLERANCE));
 
     os << failure_status(ctx);

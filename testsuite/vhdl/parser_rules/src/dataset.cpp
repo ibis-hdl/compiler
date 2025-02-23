@@ -4,9 +4,12 @@
 //
 
 #include <testsuite/vhdl/parser/dataset.hpp>
-#include <testsuite/util/cli_args.hpp>
+#include <testsuite/util/dataset_loader.hpp>
 
-#include <testsuite/namespace_alias.hpp>
+#include <string_view>
+#include <memory>
+
+// #include <testsuite/namespace_alias.hpp>
 
 namespace testsuite::vhdl::parser {
 

@@ -19,6 +19,7 @@ jobs:
       matrix:
         include:
           - language: cpp
+            cxx: g++-14
             conan_profile: gcc
             cmake_configure_preset: gcc
             cmake_build_preset: gcc-release
@@ -30,7 +31,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         submodules: true
-
+            
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
       with:
@@ -50,7 +51,8 @@ jobs:
       name: Set Github runner's env
       run: |
         {
-          echo CXX=g++
+          echo CXX=${{ matrix.cxx }}
+          echo CMAKE_CXX_COMPILER=${{ matrix.cxx }}
           echo CCACHE_DIR=${HOME}/.cache/ccache
           echo CCACHE_NOCOMPRESS=true   # GitHub actions automatically zstd compresses caches
         } >> "$GITHUB_ENV"
@@ -77,17 +79,13 @@ jobs:
           ccache cmake ninja-build g++
         # Install python utils
         pip --disable-pip-version-check --no-cache-dir install pipx
-        pipx install virtualenv conan
+        pipx install conan
         # Conan profile
         conan profile detect --force --name ${{ matrix.conan_profile }}
         # Conan Install
-        virtualenv .venv
-        source .venv/bin/activate
-        pip install multipledispatch
         python3 conan_install.py --profile ${{ matrix.conan_profile }}
         # cleanup to get Github's cache small (clean sources, build, download, temp)
         conan cache clean -s -b -d -t        
-        deactivate
         # CMake Configure && Build
         conan list '*'
         cmake --list-presets        

@@ -4,9 +4,10 @@
 //
 
 #include <testsuite/vhdl/syntax/dataset.hpp>
-#include <testsuite/util/cli_args.hpp>
+#include <testsuite/util/dataset_loader.hpp>
 
-#include <testsuite/namespace_alias.hpp>
+#include <string_view>
+#include <memory>
 
 namespace testsuite::vhdl::syntax {
 

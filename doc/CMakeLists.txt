@@ -15,6 +15,9 @@ if(${BUILD_DOCUMENTATION})
     endif()
 endif()
 
+## Python3 required
+find_package (Python3 COMPONENTS Interpreter)
+
 
 ##
 # Doxygen configuration file(s), see doxyfile.in for configurable settings below

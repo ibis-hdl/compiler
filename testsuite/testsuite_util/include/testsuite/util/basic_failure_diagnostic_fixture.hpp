@@ -5,14 +5,17 @@
 
 #pragma once
 
-#include <string_view>
+#include <cstddef>
 #include <filesystem>
+#include <iosfwd>
 #include <memory>
+#include <string_view>
+#include <string>
 
-#include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
+// #include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
 namespace testsuite {
-    namespace fs = std::filesystem;
+namespace fs = std::filesystem;
 }
 
 namespace testsuite::util {
@@ -124,7 +127,7 @@ protected:
     ///
     /// Set the builtin object
     ///
-    /// @param other The bultin object intended to replace the current one.
+    /// @param other The builtin object intended to replace the current one.
     ///
     void set_builtin(std::unique_ptr<compile_builtin> other);
 
@@ -144,7 +147,7 @@ private:
 
     /// furnish a nice line with title in the middle
     static void head_line(std::ostream& os, std::string_view title, std::size_t col_width,
-                          char fill);
+                          char fill_char);
 
 private:
     ///
@@ -161,7 +164,7 @@ private:
     ///
     /// @param write_path for the file to write. If the path doesn't exist
     /// it is created.
-    /// @return true on success, directory does exist or is created successfull.
+    /// @return true on success, directory does exist or is created successful.
     /// @return false on failure on creating the directory.
     ///
     bool create_directories(fs::path const& write_path);
@@ -170,7 +173,7 @@ private:
     /// @brief Write the contents into file.
     ///
     /// If a file with the same name exist it will be removed from
-    /// filesstem and new created.
+    /// filesystem and new created.
     ///
     /// @param filename is the name of the file to be written.
     /// @param contents to be written.

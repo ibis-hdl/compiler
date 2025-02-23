@@ -1,22 +1,73 @@
 ---
+# Explanation for why some of the checks are disabled
+#
+# ******************** Disabled checks ********************
+# 
+# There are disabled checks which shouldn't be. Enabling this checks requires more effort:
+# 
+# - [misc-no-recursion](https://clang.llvm.org/extra/clang-tidy/checks/misc-no-recursion.html):
+# 		Until the ast_printer recursive call chain has been solved.
+# 
+# - [cppcoreguidelines-pro-bounds-array-to-pointer-decay](https://clang.llvm.org/extra/clang-tidy/checks/cppcoreguidelines-pro-bounds-array-to-pointer-decay.html):
+# 		Ignored at this time. With C++20 we get [std::span](
+# 		https://en.cppreference.com/w/cpp/container/span), but Boost Spirit.X3 or even 
+#     Boost.parser must support this too. Still stick with Spirit.X3.
+#
+# - [misc-include-cleaner](https://clang.llvm.org/extra/clang-tidy/checks/misc/include-cleaner.html):
+#      This days IWYU is used, maybe later Clang Tidy will be used.
+# 
+# - [readability-identifier-naming](https://clang.llvm.org/extra/clang-tidy/checks/readability-identifier-naming.html):
+# 		Here a lot of effort is required to consolidate and unify all the 
+# 		naming, for examples e.g. see
+# 		[.clang-tidy](https://github.com/xournalpp/xournalpp/blob/master/.clang-tidy) or
+# 		[.clang-tidy](https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/blob/develop/.clang-tidy)
+# 		as example.
+#
+# - [concurrency-mt-unsafe](https://clang.llvm.org/extra/clang-tidy/checks/concurrency/mt-unsafe.html):
+#      Actually, there isn't any parallel/threading code yet. Get warnings about thread-unsafe 
+#      functions against a black list of known-to-be-unsafe functions (e.g. exit(), getenv(), ...)
+# 
+# ******************** Permanently disabled checks ********************
+# 
+# - [modernize-use-trailing-return-type](https://clang.llvm.org/extra/clang-tidy/checks/modernize-use-trailing-return-type.html):
+# 		This transformation is purely stylistic. We are not quite that modern.
+# 
+# - [modernize-use-nodiscard](https://clang.llvm.org/extra/clang-tidy/checks/modernize-use-nodiscard.html):
+# 		This would affect a lot of value returning member functions everywhere
+# 		and doesn't give any additional information.
+# 
+# - [readability-redundant-access-specifiers](https://clang.llvm.org/extra/clang-tidy/checks/readability-redundant-access-specifiers.html):
+# 		This is correct, but is used here for classification purposes.
+# 
+# - [cppcoreguidelines-pro-type-vararg](https://clang.llvm.org/extra/clang-tidy/checks/cppcoreguidelines-pro-type-vararg.html):
+# 		By using Boost UTF this rule is triggered on each BOOST_TEST macros. 
+# 		No c-style vararg functions are written in this project.
+#
+# - [hicpp-avoid-c-arrays](https://clang.llvm.org/extra/clang-tidy/checks/hicpp/avoid-c-arrays.html):
+#     Duplicate with [cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays]
+#
 Checks: "-*,
   boost-*,
+  bugprone-*,
   cert-*,
   clang-analyzer-*,
-  -concurrency-*,
+  concurrency-*,
+  -concurrency-mt-unsafe,
   cppcoreguidelines-*,
   -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
   -cppcoreguidelines-pro-type-vararg,
+  hicpp-*,
+  -hicpp-avoid-c-arrays,
   misc-*,
   -misc-no-recursion,
+  -misc-include-cleaner,
   modernize-*,
   -modernize-use-nodiscard,
   -modernize-use-trailing-return-type,
   readability-*,
   -readability-redundant-access-specifiers,
   performance-*,
-  portability-*.
-  bugprone-*
+  portability-*
 "
 FormatStyle: file
 #HeaderFilterRegex: '^((?!(/external/|\.?conan/data/|/boost/|/CLI/|/testsuite/)).)*$'

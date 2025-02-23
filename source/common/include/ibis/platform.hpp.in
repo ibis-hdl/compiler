@@ -7,6 +7,8 @@
 
 // DO NOT EDIT! GENERATED AUTOMATICALLY BY CMAKE!
 
+#include <cstdint>
+
 ///
 /// Variables as determined by CMake, see
 /// [How To Write Platform Checks](
@@ -31,7 +33,7 @@ namespace ibis {
 ///
 /// Enum which represents the build operating platform.
 ///
-enum class platform {
+enum class platform : std::uint8_t {
     Linux,    ///< Linux
     Windows,  ///< Windows
     Darwin,   ///< macOS/OS X
@@ -54,7 +56,7 @@ constexpr ibis::platform platform = platform::FreeBSD;
 /// https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_ID.html),
 /// but not all compiler are supported.
 ///
-enum class platform_compiler {
+enum class platform_compiler : std::uint8_t {
     Clang,       ///< LLVM Clang (clang.llvm.org)
     Clang_GNU,   ///< LLVM Clang with regular front end (clang.llvm.org)
     Clang_MSVC,  ///< LLVM Clang with ClangCL front (clang.llvm.org)

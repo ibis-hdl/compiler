@@ -4,8 +4,8 @@
 //
 
 #include <ibis/util/file/file_loader.hpp>
-#include <ibis/platform.hpp>
 
+#include <ibis/platform.hpp>
 #include <ibis/settings.hpp>
 #include <ibis/message.hpp>
 
@@ -14,22 +14,21 @@
 #include <boost/locale/message.hpp>
 #include <ibis/util/compiler/warnings_on.hpp>
 
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include <format>
-#include <map>
-#include <vector>
-#include <utility>
-#include <string>
-#include <iterator>
-#include <string_view>
-#include <filesystem>
-#include <chrono>
-#include <ratio>
-#include <system_error>
-#include <ctime>
 #include <cerrno>
+#include <chrono>
+#include <ctime>
+#include <filesystem>
+#include <format>
+#include <fstream>
+#include <iostream>
+#include <iterator>
+#include <map>
+#include <string_view>
+#include <string>
+#include <utility>
+#include <vector>
+#include <expected>
+#include <system_error>
 
 namespace ibis::util {
 
@@ -104,7 +103,7 @@ bool file_loader::unique_files(std::vector<fs::path> const& fs_path_list) const
         ++occurrence[canonical(filename)];
     }
 
-    for (auto const& [filename, count] : occurrence) {  // _NOLINT(std::ranges::any_of)
+    for (auto const& [filename, count] : occurrence) {  // NOLINT(readability-use-anyofallof)
 
         if (count > 1) {
             if (!quiet) {
@@ -228,7 +227,7 @@ std::time_t file_loader::timesstamp(fs::path const& filename) const
 
     // See [How to convert std::filesystem::file_time_type to time_t?](
     //  https://stackoverflow.com/questions/61030383/how-to-convert-stdfilesystemfile-time-type-to-time-t)
-    if constexpr (ibis::build_compiler_has_libcpp == true) {
+    if constexpr (ibis::build_compiler_has_libcpp) {
         // handle libc++ compile error: no member named 'clock_cast' in namespace 'std::chrono'
         auto const to_time_t = [](fs::file_time_type time_point) {
             using namespace std::chrono;
@@ -237,7 +236,7 @@ std::time_t file_loader::timesstamp(fs::path const& filename) const
             return system_clock::to_time_t(sctp);
         };
 
-        std::time_t sys_time = to_time_t(file_time);
+        std::time_t sys_time = to_time_t(file_time);  // NOLINT(misc-const-correctness); -> moveable
         return sys_time;
     }
     else {

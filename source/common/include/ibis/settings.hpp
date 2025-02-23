@@ -49,7 +49,7 @@ public:
         // [-Wexit-time-destructors]. Global and function static objects will get their
         // destructors called when the application is exiting. These destructors are "exit time
         // destructors" and are called in the reverse order that they were constructed in.
-        // There is no problem by use ony singleon, the warnign is ignored.
+        // There is no problem by use only singleton, the warning is ignored.
         static settings::type instance_;
         return instance_;
     }

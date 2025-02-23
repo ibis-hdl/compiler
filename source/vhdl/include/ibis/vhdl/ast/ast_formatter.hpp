@@ -3,19 +3,23 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#include <ibis/vhdl/ast/util/string_span.hpp>
+#include <ibis/vhdl/ast/node/based_literal.hpp>
 #include <ibis/vhdl/ast/node/bit_string_literal.hpp>
 #include <ibis/vhdl/ast/node/decimal_literal.hpp>
-#include <ibis/vhdl/ast/node/based_literal.hpp>
-#include <ibis/vhdl/ast/node/string_literal.hpp>
-#include <ibis/vhdl/ast/node/operator_token.hpp>
 #include <ibis/vhdl/ast/node/keyword_token.hpp>
+#include <ibis/vhdl/ast/node/operator_token.hpp>
+#include <ibis/vhdl/ast/node/string_literal.hpp>
+#include <ibis/vhdl/ast/util/string_span.hpp>
 
 #include <ibis/util/cxx_bug_fatal.hpp>
 
 #include <format>
+#include <ios>
+#include <ostream>
 #include <span>
-#include <array>
+#include <string_view>
+#include <string>
+#include <utility>
 
 ///
 /// formatter helper for std::span
@@ -317,7 +321,7 @@ struct std::formatter<ibis::vhdl::ast::string_literal> {
         // ToDo: Find a better way to unquote, not robust in all cases (maybe Boost.Parser?)
         /* from clack channel:
             prev_quote is just:
-            % -> the second % is then cancelled, and prev_quote is assigned to \0;
+            % -> the second % is then canceled, and prev_quote is assigned to \0;
             repeat 1;
             %, nothing to read
 

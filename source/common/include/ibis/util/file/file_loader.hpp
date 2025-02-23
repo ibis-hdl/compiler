@@ -6,13 +6,12 @@
 #pragma once
 
 #include <algorithm>
-#include <ctime>
-#include <iosfwd>
-#include <optional>
-#include <string>
-#include <vector>
 #include <expected>
 #include <filesystem>
+#include <string>
+#include <vector>
+
+#include <ctime>
 
 #include <ibis/namespace_alias.hpp>  // IWYU pragma: keep
 
@@ -85,8 +84,8 @@ public:
     /// file read method using rdbuf().
     ///
     /// @param filename the file to read into buffer string
-    /// @return std::optional<std::string> on success with contents of the
-    /// file in a string. Otherwise a default constructed std::optional.
+    /// @return std::expected<std::string, std::error_code> on success with contents of the
+    /// file in a string. Otherwise a std::error_code.
     /// @see[How to read in a file in C++](
     /// https://insanecoding.blogspot.com/2011/11/how-to-read-in-file-in-c.html)
     ///
@@ -96,8 +95,8 @@ public:
     /// alternative read method using seek().
     ///
     /// @param filename the file to read into buffer string
-    /// @return std::optional<std::string> on success with contents of the
-    /// file in a string. Otherwise a default constructed std::optional.
+    /// @return std::expected<std::string, std::error_code> on success with contents of the
+    /// file in a string. Otherwise a std::error_code.
     /// @see [How to read in a file in C++](
     ///        https://insanecoding.blogspot.com/2011/11/how-to-read-in-file-in-c.html)
     /// @see [How do I read an entire file into a std::string in C++?](

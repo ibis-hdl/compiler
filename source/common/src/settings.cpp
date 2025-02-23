@@ -4,17 +4,18 @@
 //
 
 #include <ibis/settings.hpp>
-#include <ibis/namespace_alias.hpp>
 
-#include <ibis/util/compiler/warnings_off.hpp>  // [-Wdeprecated-copy]
-#include <boost/iostreams/stream.hpp>
+#include <ibis/util/compiler/warnings_off.hpp>
+#include <boost/iostreams/stream.hpp>           // [-Wdeprecated-copy]
+#include <boost/property_tree/json_parser.hpp>  // [-Wsign-conversion]
+#include <boost/property_tree/ptree.hpp>        // [-Wsign-conversion]
 #include <ibis/util/compiler/warnings_on.hpp>
 
 #include <boost/iostreams/device/array.hpp>
 
-#include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
-#include <boost/property_tree/json_parser.hpp>
-#include <ibis/util/compiler/warnings_on.hpp>
+#include <string_view>
+
+#include <ibis/namespace_alias.hpp>
 
 namespace ibis {
 

@@ -51,6 +51,6 @@ and in the cited article
 which it refers. Sometimes there arises some funny problems like
 - [Question about type_mark bnf](https://groups.google.com/forum/#!topic/comp.lang.vhdl/exUhoMrFavU)
   from comp.lang.vhdl
-- unfortunately, the other I din't find any more - from standard committee talk?
+- unfortunately, the other I didn't find any more - from standard committee talk?
 
 

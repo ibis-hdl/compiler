@@ -1,0 +1,12 @@
+CompileFlags:
+  Add: [
+    -std=c++23
+  ]
+
+Diagnostics:
+    ClangTidy:
+        # checks can been added, e.g. disabled in .clang-tidy
+        Add: [
+        ]
+Style:
+  AngledHeaders: [".*"]

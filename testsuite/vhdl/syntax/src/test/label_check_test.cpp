@@ -19,10 +19,10 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>
 #include <boost/test/tools/output_test_stream.hpp>
+#include <boost/test/tools/interface.hpp>  // BOOST_TEST_REQUIRE, BOOST_TEST
+#include <boost/test/unit_test_suite.hpp>  // BOOST_FIXTURE_TEST_SUITE
 
-#include <boost/core/ignore_unused.hpp>
-
-#include <iostream>
+#include <functional>
 
 namespace analyze = ibis::vhdl::analyze;
 
@@ -54,7 +54,7 @@ BOOST_DATA_TEST_CASE(labels_ok,                                                 
     parser::context vhdl_ctx;
 
     {
-        parser::parse parse{ output };
+        parser::parse const parse{ output };
 
         bool const parse_ok = parse(std::move(current_file), position_cache, vhdl_ctx, design_file);
 
@@ -105,7 +105,7 @@ BOOST_DATA_TEST_CASE(
     parser::context vhdl_ctx;
 
     {
-        parser::parse parse{ output };
+        parser::parse const parse{ output };
 
         bool const parse_ok = parse(std::move(current_file), position_cache, vhdl_ctx, design_file);
 

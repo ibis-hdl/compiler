@@ -5,14 +5,11 @@
 
 #pragma once
 
-#include <ibis/vhdl/type.hpp>
-#include <ibis/vhdl/parser/iterator_type.hpp>
 #include <ibis/concepts.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/type.hpp>  // for explicit instanciation
 
 #include <tuple>
-#include <iosfwd>
-#include <numeric>
-#include <limits>
 
 namespace ibis::vhdl::ast {
 // AST node forward

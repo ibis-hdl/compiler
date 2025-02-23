@@ -71,7 +71,7 @@ private:
     ///
     /// Check the matching keyword.
     ///
-    /// FixMe: Re-Using label_match here results into misleading error message
+    /// FixMe: Reuse of label_match here results into misleading error message
     /// "Label mismatch". Further, the keywords aren't tagged so beauty
     /// error messages aren't possible this way.
     ///
@@ -81,7 +81,7 @@ private:
     bool keyword_matches(ast::process_statement const& node, std::string_view node_name) const;
 
 private:
-    std::ostream& os;  // unused, required later on
+    [[maybe_unused]] std::ostream& os;  // required later on
     vhdl::context& context;
     analyze::diagnostic_handler_type& diagnostic_handler;
 };

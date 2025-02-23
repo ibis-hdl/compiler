@@ -1,39 +1,38 @@
 # [IWYU Mappings](https://github.com/include-what-you-use/include-what-you-use/blob/master/docs/IWYUMappings.md)
 [
-    # IBIS HDL project specific
+    # IBIS HDL project specific, obsolete, but for reference
     { include: [ "<ibis/color/detail/ansii_color.hpp>", "private", "<ibis/color/facet.hpp>", "public" ] },
-    # clang specific
-    { include: [ "<bits/types/time_t.h>", "private", "<ctime>", "public" ] },
-    { include: [ "<bits/exception.h>", "private", "<exception>", "public" ] },
-    # --- 8< --- stl.c.headers.imp --- 8< ---
-    # These headers are defined in C++14 [headers]p3.  You can get them with
-    # on https://github.com/cplusplus/draft/blob/master/source/lib-intro.tex
-    { include: [ "<assert.h>", public, "<cassert>", public ] },
-    { include: [ "<complex.h>", public, "<ccomplex>", public ] },
-    { include: [ "<ctype.h>", public, "<cctype>", public ] },
-    { include: [ "<errno.h>", public, "<cerrno>", public ] },
-    { include: [ "<fenv.h>", public, "<cfenv>", public ] },
-    { include: [ "<float.h>", public, "<cfloat>", public ] },
-    { include: [ "<inttypes.h>", public, "<cinttypes>", public ] },
-    { include: [ "<iso646.h>", public, "<ciso646>", public ] },
-    { include: [ "<limits.h>", public, "<climits>", public ] },
-    { include: [ "<locale.h>", public, "<clocale>", public ] },
-    { include: [ "<math.h>", public, "<cmath>", public ] },
-    { include: [ "<setjmp.h>", public, "<csetjmp>", public ] },
-    { include: [ "<signal.h>", public, "<csignal>", public ] },
-    { include: [ "<stdalign.h>", public, "<cstdalign>", public ] },
-    { include: [ "<stdarg.h>", public, "<cstdarg>", public ] },
-    { include: [ "<stdbool.h>", public, "<cstdbool>", public ] },
-    { include: [ "<stddef.h>", public, "<cstddef>", public ] },
-    { include: [ "<stdint.h>", public, "<cstdint>", public ] },
-    { include: [ "<stdio.h>", public, "<cstdio>", public ] },
-    { include: [ "<stdlib.h>", public, "<cstdlib>", public ] },
-    { include: [ "<string.h>", public, "<cstring>", public ] },
-    { include: [ "<tgmath.h>", public, "<ctgmath>", public ] },
-    { include: [ "<time.h>", public, "<ctime>", public ] },
-    { include: [ "<uchar.h>", public, "<cuchar>", public ] },
-    { include: [ "<wchar.h>", public, "<cwchar>", public ] },
-    { include: [ "<wctype.h>", public, "<cwctype>", public ] },
+    # locally installed
+    { ref: "/usr/share/include-what-you-use/boost-all.imp" },
+    # Boost::UTF 1.86
+    { include: [ "<boost/preprocessor/arithmetic/dec.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+    { include: [ "<boost/preprocessor/arithmetic/limits/dec_256.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+    { include: [ "<boost/preprocessor/arithmetic/limits/inc_256.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+    { include: [ "<boost/preprocessor/comparison/limits/not_equal_256.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+    { include: [ "<boost/preprocessor/comparison/not_equal.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+    { include: [ "<boost/preprocessor/comparison/not_equal.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+    { include: [ "<boost/preprocessor/control/expr_iif.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+    { include: [ "<boost/preprocessor/control/iif.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+    { include: [ "<boost/preprocessor/detail/limits/auto_rec_256.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+ #  { include: [ "<boost/preprocessor/repetition/for.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+    { include: [ "<boost/preprocessor/logical/bool.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+    { include: [ "<boost/preprocessor/logical/compl.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+    { include: [ "<boost/preprocessor/logical/limits/bool_256.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+    { include: [ "<boost/preprocessor/repetition/detail/limits/for_256.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+    { include: [ "<boost/preprocessor/seq/elem.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+    { include: [ "<boost/preprocessor/seq/enum.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+    { include: [ "<boost/preprocessor/seq/limits/elem_256.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+    { include: [ "<boost/preprocessor/seq/limits/size_256.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+    { include: [ "<boost/preprocessor/seq/size.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+    { include: [ "<boost/preprocessor/tuple/elem.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+    { include: [ "<boost/preprocessor/tuple/limits/to_seq_64.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+    { include: [ "<boost/preprocessor/tuple/to_seq.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+    { include: [ "<boost/preprocessor/variadic/elem.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+    { include: [ "<boost/preprocessor/variadic/limits/elem_64.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+    { include: [ "<boost/test/tools/old/interface.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+    { include: [ "<boost/test/tree/test_unit.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] },
+    { include: [ "<boost/test/unit_test_suite.hpp>", "private", "<boost/test/unit_test.hpp>", "public" ] }
+    # template
+    #{ include: [ "xxx", "private", "yyy", "public" ] }
 ]
-
 

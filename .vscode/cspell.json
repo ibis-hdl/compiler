@@ -15,19 +15,24 @@
    "dictionaryDefinitions": [
       {
          "name": "c++-terms",
-         "path": "dictionaries/cpp_terms.txt"
+         "path": "../.dictionaries/cpp_terms.txt"
+      },
+      {
+         "name": "vhdl-terms",
+         "path": "../.dictionaries/vhdl_terms.txt"
       },
       {
          "name": "python-terms",
-         "path": "dictionaries/python_terms.txt"
+         "path": "../.dictionaries/python_terms.txt"
       },
       {
          "name": "project",
-         "path": "dictionaries/project_words.txt"
+         "path": "../.dictionaries/project_words.txt"
       }
    ],
    "dictionaries": [
       "c++-terms",
+      "vhdl-terms",
       "python-terms",
       "project"
    ],
@@ -38,6 +43,12 @@
             "c++-terms"
          ]
       },
+      {
+         "languageId": "vhdl",
+         "dictionaries": [
+            "vhdl-terms"
+         ]
+      },      
       {
          "languageId": "python",
          "dictionaries": [

@@ -8,9 +8,10 @@ matrix:
     lang: en
   dictionary:
     wordlists:
-    - .vscode/dictionaries/cpp_terms.txt
-    - .vscode/dictionaries/python_terms.txt
-    - .vscode/dictionaries/project_words.txt
+    - .dictionaries/cpp_terms.txt
+    - .dictionaries/vhdl_terms.txt
+    - .dictionaries/python_terms.txt
+    - .dictionaries/project_words.txt
     # cspell uses different dictionary than spellcheck/pyspelling
     # GH action, hence add additionally one
     - .github/config/spellcheck-wordlist.txt

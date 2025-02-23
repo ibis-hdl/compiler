@@ -1087,22 +1087,17 @@ public:
         //    | function_name ( formal_designator )
         //    | type_mark ( formal_designator )
         switch (node.context_tied_names.size()) {
-            case 1: {
+            case 1:
                 // BNF: formal_designator
                 visit_formal_designator(node.context_tied_names[0]);
                 break;
-            }
-
-            case 2: {
+            case 2:
                 // BNF: {function_name|type_mark} ( formal_designator )
                 visit_name(node.context_tied_names[0]);
                 visit_formal_designator(node.context_tied_names[1]);
                 break;
-            }
-
-            default: {
+            default:
                 cxx_bug_fatal("VHDL BNF rules violation, parser rule failed!");
-            }
         }
     }
 
@@ -1292,8 +1287,8 @@ public:
         (*this)(node.prefix);
 
         {
-            std::string_view const node_typename{ "expression*" };
-            worker(node, node_typename);
+            std::string_view const node_typename_{ "expression*" };
+            worker(node, node_typename_);
             visit(node.expression_list);
         }
     }
@@ -2326,7 +2321,7 @@ public:
     {
 #if 0
         std::string_view const node_typename{ "keyword" };
-        //ToDo usefull to call worker(node, node_typename); ??
+        //ToDo useful to call worker(node, node_typename); ??
 #endif
     }
 

@@ -442,7 +442,7 @@ class TestMatrixGenerator:
         Write the test case file.
 
         :param str filepath_name: The full file path be written into.
-        :param contents: The contens of the file.
+        :param contents: The contents of the file.
         """
 
         if not os.path.exists(os.path.dirname(filepath_name)):

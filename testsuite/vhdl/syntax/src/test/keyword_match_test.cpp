@@ -6,13 +6,11 @@
 #include <ibis/vhdl/ast.hpp>
 #include <ibis/vhdl/parser/parse.hpp>
 #include <ibis/vhdl/parser/parser_config.hpp>
+#include <ibis/vhdl/parser/context.hpp>
 #include <ibis/vhdl/analyze/syntax.hpp>
 #include <ibis/vhdl/analyze/diagnostic_handler.hpp>
-#include <ibis/vhdl/analyze/context.hpp>
-#include <ibis/vhdl/analyze/context.hpp>
 #include <ibis/util/file_mapper.hpp>
 #include <ibis/vhdl/parser/position_cache.hpp>
-#include <ibis/vhdl/context.hpp>
 
 #include <testsuite/vhdl/syntax/failure_diagnostic_fixture.hpp>
 #include <testsuite/vhdl/syntax/dataset.hpp>
@@ -20,14 +18,12 @@
 // #include <testsuite/namespace_alias.hpp>
 
 #include <boost/test/unit_test.hpp>
+#include <boost/test/tools/interface.hpp>  // BOOST_TEST()
+#include <boost/test/unit_test_suite.hpp>  // BOOST_AUTO_TEST_CASE()
 #include <boost/test/data/test_case.hpp>
 #include <boost/test/tools/output_test_stream.hpp>
 
-#include <boost/core/ignore_unused.hpp>
-
-#include <iostream>
-#include <string_view>
-#include <iomanip>
+#include <functional>
 
 namespace analyze = ibis::vhdl::analyze;
 
@@ -59,7 +55,7 @@ BOOST_DATA_TEST_CASE(keyword_ok,                                                
     parser::context vhdl_ctx;
 
     {
-        parser::parse parse{ output };
+        parser::parse parse{ output };  // NOLINT(misc-const-correctness)
 
         bool const parse_ok = parse(std::move(current_file), position_cache, vhdl_ctx, design_file);
 
@@ -110,7 +106,7 @@ BOOST_DATA_TEST_CASE(
     parser::context vhdl_ctx;
 
     {
-        parser::parse parse{ output };
+        parser::parse const parse{ output };
 
         bool const parse_ok = parse(std::move(current_file), position_cache, vhdl_ctx, design_file);
 

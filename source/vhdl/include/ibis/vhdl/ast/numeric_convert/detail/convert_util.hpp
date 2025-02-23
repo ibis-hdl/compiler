@@ -61,7 +61,7 @@ public:
             [[unlikely]] case numeric_base_specifier::unspecified: [[fallthrough]];
             [[unlikely]] case numeric_base_specifier::unsupported:
                 // The caller must pass checked base_specifier
-                cxx_unreachable_bug_triggered();
+                cxx_bug_fatal("unspecified or unsupported numeric base");
             //
             // *No* default branch: let the compiler generate warning about enumeration
             // value not handled in switch

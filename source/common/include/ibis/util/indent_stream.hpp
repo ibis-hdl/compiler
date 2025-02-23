@@ -5,8 +5,9 @@
 
 #pragma once
 
+#include <cstddef>
 #include <ostream>
-#include <streambuf>
+#include <string>
 
 namespace ibis::util {
 

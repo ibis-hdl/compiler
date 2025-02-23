@@ -27,7 +27,7 @@ namespace ibis::vhdl::parser {
 /// @todo This concept allows also to have different error handling strategies
 /// depending on concrete rule ID, for more see [Custom error on rule level? #657](
 ///  https://github.com/boostorg/spirit/issues/657).
-/// This may be used to get more detailed informations on which concrete BNF rule has
+/// This may be used to get more detailed information on which concrete BNF rule has
 /// thrown the exception, since the X3 context contains only the tags - in these
 /// days:
 /// @code

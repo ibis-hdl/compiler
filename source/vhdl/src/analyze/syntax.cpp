@@ -31,10 +31,8 @@
 #include <boost/locale/message.hpp>
 #include <ibis/util/compiler/warnings_on.hpp>
 
-#include <sstream>
 #include <string_view>
 #include <utility>
-#include <iostream>
 
 namespace ibis::vhdl::analyze {
 
@@ -55,7 +53,7 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name)
     }
 
     // failure diagnostic to user
-    // @todo Check, if label_of alway return valid (non empty) ast::identifier, even on ill-formed
+    // @todo Check, if label_of always return valid (non empty) ast::identifier, even on ill-formed
     // nodes. diagnostic_handler::syntax_error() doesn't care about!
 
     auto const [start_label, end_label] = labels_of(node);
@@ -77,7 +75,7 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name)
         }
         // test on OK before on function entry, shouldn't be here
         [[unlikely]] case label_match::result::OK:
-            cxx_unreachable_bug_triggered();
+            cxx_bug_fatal("Internal logic error");
         // *No* default branch: let the compiler generate warning about enumeration
         // value not handled in switch
     }
@@ -89,7 +87,7 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name)
 bool syntax_worker::keyword_matches(ast::process_statement const& node,
                                     std::string_view node_name) const
 {
-    // Note: Re-Using label_match here results into misleading error message
+    // Note: Reusing label_match here results into misleading error message
     //       "Label mismatch". Further, the keywords aren't tagged so beauty
     //       error messages aren't possible this way.
     // FixMe: pretty error rendering; the error message's node lookup shows the

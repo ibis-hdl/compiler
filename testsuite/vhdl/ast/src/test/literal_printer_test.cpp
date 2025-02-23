@@ -11,6 +11,9 @@
 #include <boost/test/tools/output_test_stream.hpp>
 
 #include <format>
+#include <vector>
+#include <string_view>
+#include <string>
 
 #include <testsuite/namespace_alias.hpp>
 
@@ -24,7 +27,7 @@ using namespace ibis::vhdl::ast;
 // Check on correct printing of quoted string literals
 //
 // clang-format off
-std::vector<std::string_view> const input_string_literal{
+std::vector<std::string_view> const input_string_literal{  // NOLINT(cert-err58-cpp)
     R"("""")",  R"(%%%%)", 
     R"(""Hello"")", R"(Quotation: ""REPORT..."")",
     R"("%"%")",
@@ -34,7 +37,7 @@ std::vector<std::string_view> const input_string_literal{
 // clang-format on
 
 // clang-format off
-std::vector<std::string> const expected_string_literal{
+std::vector<std::string> const expected_string_literal{  // NOLINT(cert-err58-cpp)
     R"("")",      R"(%%)",
     R"("Hello")", R"(Quotation: "REPORT...")",
     R"("%"%")",  // as-is

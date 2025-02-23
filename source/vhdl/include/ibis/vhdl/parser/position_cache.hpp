@@ -80,7 +80,7 @@ public:
     ///
     /// Create an annotation/position proxy.
     ///
-    /// @param file_id ID of actually processed file.
+    /// @param current_file_id ID of actually processed file.
     /// @return A proxy object with fixed file_id for convenience.
     ///
     annotator annotator_for(file_id_type current_file_id);
