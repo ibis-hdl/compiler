@@ -4,7 +4,6 @@
 //
 
 #include <testsuite/util/cli_args.hpp>
-#include <testsuite/namespace_alias.hpp>  /// IWYU pragma: keep
 
 #include <ibis/util/compiler/warnings_off.hpp>  // -Wimplicit-int-float-conversion
 #include <CLI/App.hpp>
@@ -15,12 +14,13 @@
 #include <ibis/util/compiler/warnings_on.hpp>
 
 #include <cstdlib>
-#include <sstream>
 #include <filesystem>
 #include <iostream>
 
+#include <testsuite/namespace_alias.hpp>  /// IWYU pragma: keep
+
 namespace testsuite {
-    namespace fs = std::filesystem;
+namespace fs = std::filesystem;
 }
 
 namespace testsuite::util {

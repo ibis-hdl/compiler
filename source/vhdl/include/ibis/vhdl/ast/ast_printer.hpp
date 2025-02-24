@@ -5,14 +5,10 @@
 
 #pragma once
 
-#include <ibis/vhdl/ast_fwd.hpp>
-
-#include <ibis/vhdl/ast/util/variant.hpp>
-#include <ibis/vhdl/ast/util/string_span.hpp>
-
+#include <ibis/vhdl/ast_fwd.hpp>  // IWYU pragma: keep
 #include <ibis/util/indent_stream.hpp>
-
-#include <boost/variant/apply_visitor.hpp>
+#include <ibis/vhdl/ast/util/string_span.hpp>
+#include <ibis/vhdl/ast/util/variant.hpp>
 
 #include <cstdint>
 #include <vector>
@@ -256,7 +252,7 @@ private:
     }
 
     template <typename T>
-    void visit(std::vector<T> const& vector);
+    void visit_each(std::vector<T> const& vector);
 
 private:
     util::indent_ostream os;

@@ -1,0 +1,76 @@
+{
+    "version": 8,
+    "include": [
+        "common.json"
+    ],
+    "configurePresets": [
+        {
+            "name": "compiler-gcc",
+            "description": "GNU Compiler Collection (GCC)",
+            "hidden": true,
+            "inherits": [],
+            "cacheVariables": {
+                "CONAN_HOST_PROFILE": "gcc",
+                "CONAN_BUILD_PROFILE": "gcc"
+            }
+        },
+        {
+            "name": "compiler-clang",
+            "description": "Clang C/C++ with GNU LibStdC++",
+            "hidden": true,
+            "inherits": [],
+            "cacheVariables": {
+                "CONAN_HOST_PROFILE": "clang",
+                "CONAN_BUILD_PROFILE": "clang"
+            }
+        },
+        {
+            "name": "compiler-clang-libc++",
+            "description": "Clang C/C++ with LibC++",
+            "hidden": true,
+            "inherits": [ ],
+            "cacheVariables": {
+                "CONAN_HOST_PROFILE": "clang-libc++",
+                "CONAN_BUILD_PROFILE": "clang-libc++"
+            }
+        },
+        {
+            "name": "compiler-msvc",
+            "description": "Microsoft Visual Studio C++ compiler",
+            "hidden": true,
+            "inherits": [],
+            "cacheVariables": {
+                "CONAN_HOST_PROFILE": "msvc-cl",
+                "CONAN_BUILD_PROFILE": "msvc-cl"
+            }
+        },
+        {
+            "name": "compiler-msvc-clang",
+            "description": "Microsoft Visual Studio bundled ClangCL",
+            "hidden": true,
+            "inherits": [],
+            "cacheVariables": {
+                "CONAN_HOST_PROFILE": "msvc",
+                "CONAN_BUILD_PROFILE": "msvc"
+            }
+        },
+        {
+            "name": "compiler-clang-dev",
+            "displayName": "Clang (Developer)",
+            "description": "Clang compiler (using GNU libstdc++) with strong compiler flags",
+            "hidden": true,
+            "inherits": [
+                "compiler-clang"
+            ]
+        },
+        {
+            "name": "compiler-gcc-dev",
+            "displayName": "ClGccang (Developer)",
+            "description": "Gcc compiler (using GNU libstdc++) with strong compiler flags",
+            "hidden": true,
+            "inherits": [
+                "compiler-gcc"
+            ]
+        }
+    ]
+}

@@ -3,28 +3,42 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#include <ibis/vhdl/ast/basic_ast_walker.hpp>
+#include <ibis/vhdl/ast/node/bit_string_literal.hpp>
+
+#include <testsuite/testsuite_parser.hpp>  // FixMe path not intuitive, missing ibis
+
+#include <ibis/vhdl/ast_fwd.hpp>
+#include <ibis/vhdl/ast/node/design_file.hpp>
 #include <ibis/vhdl/ast/ast_formatter.hpp>
 #include <ibis/vhdl/ast/ast_printer.hpp>
-#include <ibis/vhdl/ast/node/bit_string_literal.hpp>
+#include <ibis/vhdl/ast/basic_ast_walker.hpp>
 #include <ibis/vhdl/ast/node/constant_declaration.hpp>
-#include <ibis/vhdl/ast/node/design_file.hpp>
+#include <ibis/vhdl/ast/node/design_unit.hpp>
+#include <ibis/vhdl/ast/node/expression.hpp>
+#include <ibis/vhdl/ast/util/optional.hpp>
 
-#include <boost/test/unit_test.hpp>
-#include <boost/test/tools/interface.hpp>  // BOOST_TEST()
-#include <boost/test/tools/context.hpp>    // BOOST_TEST_CONTEXT()
-#include <boost/test/unit_test_suite.hpp>  // BOOST_AUTO_TEST_CASE()
-#include <boost/test/tree/decorator.hpp>   // utf::label
+#include <boost/test/tools/assertion.hpp>                 // for EQ, binary_expr, value_expr
+#include <boost/test/tools/context.hpp>                   // for context_frame, BOOST_TEST_CONTEXT
+#include <boost/test/tools/detail/per_element_manip.hpp>  // for operator<<, per_element
+#include <boost/test/tools/interface.hpp>                 // for BOOST_TEST
+#include <boost/test/tree/decorator.hpp>                  // for label, base, collector_t
+#include <boost/test/unit_test.hpp>                       // for BOOST_PP...
+#include <boost/test/utils/basic_cstring/basic_cstring.hpp>  // for basic_cstring
+#include <boost/test/utils/lazy_ostream.hpp>  // for operator<<, lazy_ostream, lazy_ostream_impl
 
-#include <testsuite/testsuite_parser.hpp>
-#include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
+#include <boost/variant/apply_visitor.hpp>  // for apply_visitor
 
-#include <format>
-#include <string_view>
-#include <iostream>
-#include <functional>
-#include <cassert>
+#include <array>
 #include <cstddef>
+#include <filesystem>
+#include <format>
+#include <functional>
+#include <iostream>
+#include <iterator>
+#include <string>
+#include <string_view>
+
+#include <testsuite/namespace_alias.hpp>  // for btt, utf
 
 using namespace ibis::vhdl;
 
@@ -62,13 +76,13 @@ PACKAGE bitstring IS
 END PACKAGE;
 )";
 
-// clang-format off
-// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
-struct {
-    numeric_base_specifier base_specifier;
-    std::string_view literal; 
+struct gold_data_type {
+    numeric_base_specifier base_specifier{};
+    std::string_view literal;
     std::string_view formatted;
-} constexpr gold_data[] = {
+};
+// clang-format off
+constexpr auto gold_data = std::to_array<gold_data_type>({
     // bin
     { .base_specifier = numeric_base_specifier::base2, .literal = "0101", .formatted = "b0101" },
     { .base_specifier = numeric_base_specifier::base2, .literal = "0101", .formatted = "b0101" },
@@ -89,13 +103,13 @@ struct {
     { .base_specifier = numeric_base_specifier::base16, .literal = "ffff", .formatted = "xffff" },
     { .base_specifier = numeric_base_specifier::base16, .literal = "a_b", .formatted = "xa_b" },
     { .base_specifier = numeric_base_specifier::base16, .literal = "a_b_c", .formatted = "xa_b_c" },
-};
+});
 // clang-format on
 
 template <typename GoldDataT, bool verbose = false>
 struct test_worker {
-    test_worker(GoldDataT const& gold_data)
-        : gold{ gold_data }
+    explicit test_worker(GoldDataT const& data)
+        : gold_data{ data }
         , os{ std::cout }
     {
     }
@@ -123,16 +137,21 @@ struct test_worker {
     {
         BOOST_TEST_CONTEXT(">>> Test index at " << index << " <<<")
         {
-            auto const expected = gold[index];
+            auto const& expected = gold_data.get().at(index);
             BOOST_TEST(node.base_specifier == expected.base_specifier);
             auto const node_literal = std::string_view{ node.literal };
             BOOST_TEST(node_literal == expected.literal, btt::per_element());
             BOOST_TEST(std::format("{}", node) == expected.formatted, btt::per_element());
+            // Bug Failed in MSVC Debug mode, node_literal shows non-ascii chars
+            if constexpr ((false)) {
+                std::cout << std::format("    >>> Failure context: '{}' <-> '{}' (expected)\n",
+                                         node_literal, expected.literal);
+            }
         }
         ++index;
     }
 
-    // "catch them all" operator to be able to walk trough the AST organized by ast_walker
+    // "catch them all" operator to be able to walk through the AST organized by ast_walker
     template <typename NodeT>
     void operator()([[maybe_unused]] NodeT const& /* ast_node */,
                     [[maybe_unused]] std::string_view /* node_name */) const
@@ -140,7 +159,7 @@ struct test_worker {
     }
 
 private:
-    std::reference_wrapper<GoldDataT> gold;
+    std::reference_wrapper<GoldDataT> gold_data;
     std::size_t mutable index = 0;
     std::ostream& os;  // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
 };
@@ -148,14 +167,14 @@ private:
 using verifier_type = ast::basic_ast_walker<test_worker<decltype(gold_data), false /* verbose */>>;
 
 auto const verify = [](ast::design_file const& ast) {
-    verifier_type verify(gold_data);
-    verify(ast);
+    verifier_type verifier(gold_data);
+    verifier(ast);
 };
 
 }  // namespace valid_data
 
 // clang-format off
-BOOST_AUTO_TEST_CASE(bit_string_literal__valid_test,    // test shall pass
+BOOST_AUTO_TEST_CASE(bit_string_literal_valid_test,    // test shall pass
                      *utf::label("bit_string_literal")
                      *utf::label("formatter"))
 // clang-format on

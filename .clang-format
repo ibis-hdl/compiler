@@ -11,4 +11,5 @@ ColumnLimit: '100'
 ConstructorInitializerAllOnOneLineOrOnePerLine: 'false'
 Cpp11BracedListStyle: 'false'
 SortIncludes: 'false'
+InsertNewlineAtEOF: 'true'
 ...

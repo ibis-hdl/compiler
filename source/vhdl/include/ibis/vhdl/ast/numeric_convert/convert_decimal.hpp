@@ -5,13 +5,12 @@
 
 #pragma once
 
-#include <ibis/vhdl/type.hpp>
-#include <ibis/vhdl/parser/iterator_type.hpp>
-#include <ibis/vhdl/ast/util/string_span.hpp>
 #include <ibis/concepts.hpp>
+#include <ibis/vhdl/ast/util/string_span.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/type.hpp>
 
 #include <tuple>
-#include <iosfwd>
 #include <variant>
 
 namespace ibis::vhdl::ast {
@@ -57,9 +56,9 @@ public:
     ///
     /// Construct a new numeric convert object.
     ///
-    /// @param diagnostic_handler_  Error reporter.
+    /// @param diag_handler  Error reporter.
     ///
-    convert_decimal(diagnostic_handler_type& diagnostic_handler_);
+    explicit convert_decimal(diagnostic_handler_type& diag_handler);
 
     ///
     /// Convert the a bit string literal to numeric value.

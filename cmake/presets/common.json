@@ -5,47 +5,39 @@
     ],
     "configurePresets": [
         {
-            "name": "cmake-default-policies",
-            "description": "Set CMake policies",
+            "name": "cpp-standard",
+            "description": "Set Compiler's C++ Standard",
             "hidden": true,
             "cacheVariables": {
-                "CMAKE_POLICY_DEFAULT_CMP0167": "NEW"
+                "CMAKE_CXX_EXTENSIONS": "OFF",
+                "CMAKE_CXX_STANDARD": "23",
+                "CMAKE_CXX_STANDARD_REQUIRED": "ON"
             }
         },
         {
-            "name": "cmake-default-configure-settings",
+            "name": "cmake-common",
+            "description": "Set CMake settings shared by all CMake presets",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_SCAN_FOR_MODULES": "OFF",
+                "CMAKE_POLICY_DEFAULT_CMP0167": "NEW",
+                "CMAKE_POLICY_DEFAULT_CMP0091": "NEW"                
+            }
+        },
+        {
+            "name": "cmake-default-settings",
             "description": "Enable, Disable some CMake warnings, e.g. '--no-warn-unused-cli'",
             "hidden": true,
             "warnings": {
                 "unusedCli": false
             },
-            "inherits": [
-                "cmake-default-policies"
-            ],
+            "inherits": [ "cmake-common" ],
             "cacheVariables": {
                 "CMAKE_VERBOSE_MAKEFILE": "OFF"
             }
         },
         {
-            "name": "cmake-pedantic-configure-settings",
-            "description": "Enable CMake pedantic warnings",
-            "hidden": true,
-            "warnings": {
-                "dev": true,
-                "deprecated": true,
-                "uninitialized": false,
-                "unusedCli": true,
-                "systemVars": false
-            },
-            "inherits": [
-                "cmake-default-policies"
-            ],
-            "cacheVariables": {
-                "CMAKE_VERBOSE_MAKEFILE": "ON"
-            }
-        },
-        {
-            "name": "ninja-default-settings",
+            "name": "ninja-common-settings",
             "description": "Common settings related to build tool Ninja.",
             "hidden": true,
             "binaryDir": "${sourceDir}/build/",
@@ -62,57 +54,29 @@
             "description": "Traditional single-config Ninja generator.",
             "hidden": true,
             "generator": "Ninja",
-            "inherits": [
-                "ninja-default-settings"
-            ]
+            "inherits": [ "ninja-common-settings" ]
         },
         {
             "name": "ninja-multi-config",
-            "description": "Multiple configurations for Visual Studio and XCode.",
+            "description": "Multiple configurations build generator.",
             "hidden": true,
             "generator": "Ninja Multi-Config",
-            "inherits": [
-                "ninja-default-settings"
-            ],
-            "cacheVariables": {
-                "CMAKE_CONFIGURATION_TYPES": "Debug;Release;RelWithDebInfo",
-                "CMAKE_DEFAULT_BUILD_TYPE": "Release"
-            }
+            "inherits": [ "ninja-common-settings" ]
         },
         {
-            "name": "settings-stdlib-libc++",
-            "description": "Settings to compile and link with libc++",
+            "name": "xcode-config",
+            "description": "XCode configurations build generator.",
             "hidden": true,
-            "cacheVariables": {
-                "CMAKE_CXX_FLAGS": "-stdlib=libc++",
-                "CMAKE_EXE_LINKER_FLAGS": "-stdlib=libc++",
-                "CMAKE_SHARED_LINKER_FLAGS": "-stdlib=libc++"
-            }
-        },
+            "generator": "XCode",
+            "inherits": []
+        },        
         {
-            "name": "release-build-type",
-            "description": "CMake Release build target",
+            "name": "vs2020-config",
+            "description": "Visual Studio 17 2022 configurations build generator.",
             "hidden": true,
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
-            }
-        },
-        {
-            "name": "debug-build-type",
-            "description": "CMake Debug build target",
-            "hidden": true,
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
-        },
-        {
-            "name": "release-build-type-with-debug",
-            "description": "CMake Release with Debug symbols build target",
-            "hidden": true,
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
-            }
-        },
+            "generator": "Visual Studio 17 2022",
+            "inherits": []
+        },        
         {
             "name": "default-install-settings",
             "description": "Default build and install directories",
@@ -146,31 +110,6 @@
                 "CMAKE_CXX_COMPILER_LAUNCHER": "sccache",
                 "CMAKE_MSVC_DEBUG_INFORMATION_FORMAT": "Embedded",
                 "CMAKE_POLICY_DEFAULT_CMP0141": "NEW"                
-            }
-        },
-        {
-            "name": "tool-clang-tidy",
-            "description": "CMake Clang-Tidy build target",
-            "hidden": true,
-            "cacheVariables": {
-                "CMAKE_CXX_CLANG_TIDY": "clang-tidy;--format-style=file;-p=${sourceDir}/build"
-            }
-        },
-        {
-            "name": "tool-iwyu",
-            "description": "CMake Clang based Include-What-You-Use (IWYU)",
-            "hidden": true,
-            "cacheVariables": {
-                "CMAKE_CXX_INCLUDE_WHAT_YOU_USE": "iwyu;-Xiwyu;--mapping_file=${sourceDir}/cmake/utils/iwyu/project.imp;-Xiwyu;--no_comments;-Xiwyu;--max_line_length=160;-Xiwyu;--transitive_includes_only;-Xiwyu;--quoted_includes_first;-Xiwyu;--cxx17ns"
-            }
-        },
-        {
-            "name": "iwyu-windows",
-            "description": "CMake Clang based Include-What-You-Use",
-            "hidden": true,
-            "inherits": [ "condition-windows" ],
-            "cacheVariables": {
-                "CXX_INCLUDE_WHAT_YOU_USE": "iwyu;--driver-mode=cl"
             }
         }
     ],

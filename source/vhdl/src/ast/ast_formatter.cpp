@@ -7,8 +7,11 @@
 #include <ibis/vhdl/ast/node/operator_token.hpp>
 #include <ibis/vhdl/ast/node/keyword_token.hpp>
 
+#include <ibis/util/cxx_bug_fatal.hpp>
+
 #include <string_view>
-#include <format>
+#include <utility>
+#include <format>  // IWYU pragma: keep -> formatter (Clang-Tidy)
 
 ///
 /// formatter for ast::operator_token
@@ -18,6 +21,8 @@ std::string_view std::formatter<ibis::vhdl::ast::operator_token>::as_sv(
 {
     using namespace std::literals::string_view_literals;
 
+    // ToDo [LINT] Clang-Tidy 19.1.7 has problems with C++20 Using Enum??
+    // NOLINT_BEGIN(misc-include-cleaner)
     // clang-format off
     switch (token) {
         using enum ibis::vhdl::ast::operator_token;
@@ -59,7 +64,7 @@ std::string_view std::formatter<ibis::vhdl::ast::operator_token>::as_sv(
         case XOR:             return "XOR"sv;
         case XNOR:            return "XNOR"sv;
         // probably an unintentionally constructed enum by default
-        [[unlikely]] case UNSPECIFIED:
+        [[unlikely]] case UNSPECIFIED_OPERATOR:
             // something in the grammar is wired, stop here
             cxx_bug_fatal("operator_token is *unspecified*!");
         //
@@ -68,7 +73,7 @@ std::string_view std::formatter<ibis::vhdl::ast::operator_token>::as_sv(
         //
     }
     // clang-format on
-
+    // NOLINT_END(misc-include-cleaner)
     std::unreachable();
 }
 
@@ -81,6 +86,8 @@ std::string_view std::formatter<ibis::vhdl::ast::keyword_token>::as_sv(
 {
     using namespace std::literals::string_view_literals;
 
+    // ToDo [LINT] Clang-Tidy 19.1.7 has problems with C++20 Using Enum??
+    // NOLINT_BEGIN(misc-include-cleaner)
     // clang-format off
     switch (token) {
         using enum ibis::vhdl::ast::keyword_token;
@@ -182,7 +189,7 @@ std::string_view std::formatter<ibis::vhdl::ast::keyword_token>::as_sv(
         case XNOR:            return "XNOR"sv;
         case XOR:             return "XOR"sv;
         // probably an unintentionally constructed enum by default
-        [[unlikely]] case UNSPECIFIED:
+        [[unlikely]] case UNSPECIFIED_KEYWORD:
             // something in the grammar is wired, stop here
             cxx_bug_fatal("keyword_token is *unspecified*!");
         //
@@ -191,6 +198,7 @@ std::string_view std::formatter<ibis::vhdl::ast::keyword_token>::as_sv(
         //
     }
     // clang-format on
+    // NOLINT_END(misc-include-cleaner)
 
     std::unreachable();
 }

@@ -5,19 +5,21 @@
 
 #pragma once
 
+// #include <ibis/vhdl/parser/parser_config.hpp>
 #include <ibis/util/file_mapper.hpp>
-#include <ibis/vhdl/parser/position_cache.hpp>
-#include <ibis/vhdl/parser/parser_config.hpp>
 #include <ibis/vhdl/parser/context.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/parser/position_cache.hpp>
 
-#include <iosfwd>
-#include <string>
-#include <string_view>
 #include <exception>
+#include <iosfwd>
+#include <string_view>
+#include <string>
+#include <vector>
 
 namespace ibis::vhdl::ast {
 struct design_unit;
-using design_file = std::vector<ast::design_unit>;
+using design_file = std::vector<ast::design_unit>;  // FixMe not clever, include <.../ast.hpp>
 }  // namespace ibis::vhdl::ast
 
 namespace ibis::vhdl::parser {
@@ -43,8 +45,9 @@ public:
     ///
     /// Functor to call parse implementation.
     ///
-    /// @param position_cache_proxy Proxy of position_cache with the file contents to be parsed.
-    /// @param ctx The context used to parse and others.
+    /// @param current_file file_mapper proxy with current_file context
+    /// @param position_cache position_cache with the file contents to be parsed.
+    /// @param vhdl_ctx The context used to parse and others.
     /// @param design_file AST node of input/file contents.
     /// @return true success.
     /// @return false failure.
@@ -61,7 +64,7 @@ public:
     /// on rules (define them in separate translation units).
     ///
     bool operator()(current_file_type&& current_file, position_cache_type& position_cache,
-                    vhdl_context_type& vhdl_ctx, ast::design_file& design_file);
+                    vhdl_context_type& vhdl_ctx, ast::design_file& design_file) const;
 
 private:
     static std::string make_exception_description(std::exception const& exception,

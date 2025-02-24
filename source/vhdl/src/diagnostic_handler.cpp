@@ -4,27 +4,28 @@
 //
 
 #include <ibis/vhdl/diagnostic_handler.hpp>
+
+#include <ibis/util/get_iterator_pair.hpp>
+#include <ibis/vhdl/ast/util/position_tagged.hpp>
+#include <ibis/vhdl/context.hpp>
 #include <ibis/vhdl/diagnostic_context.hpp>
 #include <ibis/vhdl/diagnostic_printer.hpp>
-#include <ibis/vhdl/source_location.hpp>
-#include <ibis/vhdl/context.hpp>
-#include <ibis/util/get_iterator_pair.hpp>
-
 #include <ibis/vhdl/parser/iterator_type.hpp>  // for explicit template instantiation
+#include <ibis/vhdl/parser/position_cache.hpp>
+#include <ibis/vhdl/source_location.hpp>
 
-#include <ibis/util/position_indicator.hpp>
-
-#include <ibis/util/make_iomanip.hpp>
 #include <ibis/util/cxx_bug_fatal.hpp>
 
-#include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
-#include <boost/range/iterator_range_core.hpp>
-#include <ibis/util/compiler/warnings_on.hpp>
 
-#include <algorithm>
-#include <iostream>
+#include <cstddef>
+#include <functional>
+#include <iterator>
+#include <optional>
+#include <ostream>
+#include <string_view>
+#include <tuple>
 
 namespace ibis::vhdl {
 
@@ -54,11 +55,11 @@ void diagnostic_handler<Iterator>::unsupported(iterator_type error_pos,
 }
 
 template <typename Iterator>
-void diagnostic_handler<Iterator>::unsupported(iterator_type error_first,
+void diagnostic_handler<Iterator>::unsupported(iterator_type error_pos,
                                                std::optional<iterator_type> error_last,
                                                std::string_view error_message) const
 {
-    error(error_first, error_last, error_message, error_type::not_supported);
+    error(error_pos, error_last, error_message, error_type::not_supported);
 }
 
 template <typename Iterator>
@@ -86,7 +87,7 @@ void diagnostic_handler<Iterator>::syntax_error(ast::position_tagged const& wher
     // the node must be tagged before
     cxx_assert(where_tag.is_tagged(), "Node not correct tagged");
 
-#if 0
+#if 0  // NOLINT(readability-avoid-unconditional-preprocessor-if)
     // ToDo [XXX] fix position_cache::proxy::set_id(), current_file().id()
     // on branch code-review-2024 removed 
     // The parser's position cache proxy is configured to have the same file id tagged as the node
@@ -114,7 +115,7 @@ void diagnostic_handler<Iterator>::syntax_error(ast::position_tagged const& wher
 
     ++context.get().errors();
 
-#if 0
+#if 0  // NOLINT(readability-avoid-unconditional-preprocessor-if)
     // ToDo [XXX] fix position_cache::proxy::set_id(), current_file().id()
     // on branch code-review-2024 removed 
     cxx_assert(current_file().id() == where_tag.file_id, "cache proxy file id different");
@@ -170,13 +171,14 @@ std::tuple<std::size_t, std::size_t> diagnostic_handler<IteratorT>::line_column_
     // Further reading at [What is the unit of a text column number?](
     // https://www.foonathan.net/2021/02/column/#content).
 
-    using char_type = typename std::iterator_traits<iterator_type>::value_type;
+    using char_type = std::iter_value_t<iterator_type>;
 
     std::size_t line_no = 1;
     std::size_t col_no = 1;
     char_type chr_prev = 0;
 
-    for (iterator_type iter = begin(current_file.file_contents()); iter != pos; ++iter) {
+    // ToDo Clang -Weverything Warning: ++iter unsafe pointer arithmetic [-Wunsafe-buffer-usage]
+    for (iterator_type iter = current_file.file_contents().begin(); iter != pos; ++iter) {
         auto const chr = *iter;
         switch (chr) {
             case '\n':                   // Line Feed (Linux, Mac OS X)
@@ -209,6 +211,7 @@ IteratorT diagnostic_handler<IteratorT>::get_line_start(iterator_type pos) const
 {
     using ibis::util::get_iterator_pair;
 
+    // FixMe This should be rewritten with range based loops
     auto [begin, end] = get_iterator_pair(current_file.file_contents());
 
     // based on [.../x3/support/utility/error_reporting.hpp:get_line_start(...)](
@@ -238,6 +241,8 @@ std::string_view diagnostic_handler<IteratorT>::current_line(iterator_type first
     // `x3::to_utf8(line)` above.
 
     auto line_end = first;
+    // ClangTidy - don't touch, since this may be an iterator classes
+    // NOLINTNEXTLINE(readability-qualified-auto,readability-qualified-auto)
     auto const end = current_file.file_contents().end();
 
     while (line_end != end) {

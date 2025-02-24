@@ -14,9 +14,10 @@
 #include <ibis/util/pretty_typename.hpp>
 #include <ibis/util/cxx_bug_fatal.hpp>
 
-#include <type_traits>
-#include <tuple>
 #include <format>
+#include <iostream>
+#include <tuple>
+#include <type_traits>
 
 namespace ibis::vhdl::ast {
 struct architecture_body;
@@ -39,7 +40,7 @@ namespace ibis::vhdl::analyze {
 ///
 class label_match {
 public:
-    enum class result { OK, MISMATCH, ILLFORMED };
+    enum class result { LABEL_OK, LABEL_MISMATCH, LABEL_ILLFORMED };
 
 public:
     result operator()(ast::architecture_body const& node) const;

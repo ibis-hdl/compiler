@@ -23,6 +23,7 @@
 
 #include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
+#include <array>
 #include <iostream>
 #include <format>
 #include <string_view>
@@ -53,20 +54,21 @@ BOOST_AUTO_TEST_CASE(bit_string_literal_requirements_check)
     using namespace testsuite::vhdl::numeric_convert;
 
     // binary
-    BOOST_REQUIRE(bsl_gen::bin(1, "_010") == R"(b"1_010")");
-    BOOST_REQUIRE(bsl_gen::bin(detail::uint32_max) == R"(b"11111111111111111111111111111111")");
-    BOOST_REQUIRE(bsl_gen::bin(detail::uint64_max) ==
-                  R"(b"1111111111111111111111111111111111111111111111111111111111111111")");
+    BOOST_TEST_REQUIRE(bsl_gen::bin(1, "_010") == R"(b"1_010")");
+    BOOST_TEST_REQUIRE(bsl_gen::bin(detail::uint32_max) ==
+                       R"(b"11111111111111111111111111111111")");
+    BOOST_TEST_REQUIRE(bsl_gen::bin(detail::uint64_max) ==
+                       R"(b"1111111111111111111111111111111111111111111111111111111111111111")");
 
     // octal
-    BOOST_REQUIRE(bsl_gen::oct(1, "_010") == R"(o"1_010")");
-    BOOST_REQUIRE(bsl_gen::oct(detail::uint32_max) == R"(o"37777777777")");
-    BOOST_REQUIRE(bsl_gen::oct(detail::uint64_max) == R"(o"1777777777777777777777")");
+    BOOST_TEST_REQUIRE(bsl_gen::oct(1, "_010") == R"(o"1_010")");
+    BOOST_TEST_REQUIRE(bsl_gen::oct(detail::uint32_max) == R"(o"37777777777")");
+    BOOST_TEST_REQUIRE(bsl_gen::oct(detail::uint64_max) == R"(o"1777777777777777777777")");
 
     // hexadecimal
-    BOOST_REQUIRE(bsl_gen::hex(1, "_010") == R"(x"1_010")");
-    BOOST_REQUIRE(bsl_gen::hex(detail::uint32_max) == R"(x"ffffffff")");
-    BOOST_REQUIRE(bsl_gen::hex(detail::uint64_max) == R"(x"ffffffffffffffff")");
+    BOOST_TEST_REQUIRE(bsl_gen::hex(1, "_010") == R"(x"1_010")");
+    BOOST_TEST_REQUIRE(bsl_gen::hex(detail::uint32_max) == R"(x"ffffffff")");
+    BOOST_TEST_REQUIRE(bsl_gen::hex(detail::uint64_max) == R"(x"ffffffffffffffff")");
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -74,7 +76,7 @@ BOOST_AUTO_TEST_CASE(bit_string_literal_requirements_check)
 // -------------------------------------------------------------------------------------------------
 namespace valid_data {
 
-// XXX check only the converted results with 0, 1, 42 and uint { 32, 64 }::max only.
+// XXX check only the converted results with 0, 1, 42 and {uint32,uint64}::max only.
 
 static const std::string input = []() {
     // VHDL package template
@@ -109,7 +111,7 @@ END PACKAGE;
     auto constexpr uint32_max = detail::uint32_max;
     auto constexpr uint64_max = detail::uint64_max;
 
-    // format uint{32,64}::max values into input using pkg_template
+    // format {uint32,uint64}::max values into input using pkg_template
     return std::format(pkg_template,
                        // bin uint32_max, uint64_max
                        bsl_gen::bin(uint32_max), bsl_gen::bin(uint64_max),
@@ -121,14 +123,14 @@ END PACKAGE;
 
 using numeric_base_specifier = ibis::vhdl::ast::bit_string_literal::numeric_base_specifier;
 
-// clang-format off_
-// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
-struct {
+struct test_data_type {
     numeric_base_specifier base_specifier;
     std::string_view literal;
     std::string_view formatted;
     ibis::vhdl::intrinsic::unsigned_integer_type result;
-} constexpr gold_data[] = {
+};
+
+constexpr auto gold_data = std::to_array<file_data_type>({
     // bin
     { .base_specifier = numeric_base_specifier::base2,
       .literal = "00_0_0",
@@ -212,8 +214,7 @@ struct {
       .literal = "FFFFFFFFFFFFFFFF",
       .formatted = "xFFFFFFFFFFFFFFFF",
       .result = 0 },
-};
-// clang-format on
+});
 
 template <typename GoldDataT, bool verbose = false>
 struct test_worker {
@@ -259,7 +260,7 @@ struct test_worker {
         ++index;
     }
 
-    // "catch them all" operator to be able to walk trough the AST organized by ast_walker
+    // "catch them all" operator to be able to walk through the AST organized by ast_walker
     template <typename NodeT>
     void operator()([[maybe_unused]] NodeT const& /* ast_node */,
                     [[maybe_unused]] std::string_view /* node_name */) const
@@ -382,12 +383,12 @@ BOOST_DATA_TEST_CASE(bit_string_literal, utf_data::make(bit_literal) ^ bit_decim
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
     auto const [parse_ok, ast_node] = parse.bit_string_literal(position_proxy, diagnostic_handler);
-    BOOST_REQUIRE(parse_ok);
+    BOOST_TEST_REQUIRE(parse_ok);
 
     numeric_convert numeric{ diagnostic_handler };
 
     auto const [conv_ok, value] = numeric(ast_node);
-    BOOST_REQUIRE(conv_ok);
+    BOOST_TEST_REQUIRE(conv_ok);
     BOOST_TEST(std::get<numeric_convert::integer_type>(value) == N);
 
     os << failure_status(ctx);
@@ -424,13 +425,13 @@ BOOST_DATA_TEST_CASE(bit_string_literal_uint64_ovflw, utf_data::make(literal_ovf
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
     auto const [parse_ok, ast_node] = parse.bit_string_literal(position_proxy, diagnostic_handler);
-    BOOST_REQUIRE(parse_ok);  // must parse ...
+    BOOST_TEST_REQUIRE(parse_ok);  // must parse ...
 
     numeric_convert numeric{ diagnostic_handler };
 
     bool conv_ok = true;
     std::tie(conv_ok, std::ignore) = numeric(ast_node);
-    BOOST_REQUIRE(!conv_ok);  // ... but must fail to convert
+    BOOST_TEST_REQUIRE(!conv_ok);  // ... but must fail to convert
 
     os << failure_status(ctx);
     if (!os.str().empty()) {

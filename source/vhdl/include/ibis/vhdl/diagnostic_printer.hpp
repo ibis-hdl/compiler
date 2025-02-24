@@ -24,7 +24,7 @@ public:
     ///
     /// @brief Construct a new printer object
     ///
-    /// @param source_location_ The location of the error to print.
+    /// @param ctx diagnostic_context with location of the error to print.
     ///
     /// @todo The failure_type specifier must be accessible by the header to allow specific error
     /// messages. Best would be to make it an own non-nested class.
@@ -33,9 +33,9 @@ public:
     /// message. These are combined into the final one inside
     /// `diagnostic_handler<IteratorT>::operator()(ast::position_tagged, ast::position_tagged, ...)`
     /// hence it isn't configurable/derivable as intended. Maybe introduce an `error_context` for
-    /// all the informations carried?
+    /// all the information carried?
     ///
-    diagnostic_printer(diagnostic_context const& context);
+    diagnostic_printer(diagnostic_context const& ctx);
 
     std::ostream& print_snippets(std::ostream& os) const;
 

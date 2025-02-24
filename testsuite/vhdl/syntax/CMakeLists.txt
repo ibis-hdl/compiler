@@ -78,6 +78,17 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 )
 
 
+# Disable Clang -Weverything Warning regards:
+# BOOST_DATA_TEST_CASE() - warning: '<test name>case' has no out-of-line virtual method definitions;
+#   its vtable will be emitted in every translation unit [-Wweak-vtables]
+# ToDo remove this compiler options
+if(IBIS_DEVELOPER_CLANG_WARN_EVERYTHING)
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        "-Wno-weak-vtables"
+    )
+endif()
+
+
 #set_source_files_properties(src/test_vhdl_syntax.cpp
 #    APPEND PROPERTIES
 #        # Failed to link Boost UTF with Windows/Clang, Linux works
@@ -98,8 +109,7 @@ set_property(TARGET ${PROJECT_NAME}
 )
 
 
-if(IBIS_ENABLE_PCH
-)
+if(IBIS_ENABLE_PCH)
     target_precompile_headers(${PROJECT_NAME} REUSE_FROM ibis_pch)
 endif()
 
@@ -107,6 +117,4 @@ endif()
 target_include_directories(${PROJECT_NAME}
     PRIVATE
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-    SYSTEM PUBLIC
-        $<BUILD_INTERFACE:${EXTERNAL_BOOST_TEST_INCLUDE_DIR}>
 )

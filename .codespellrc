@@ -1,0 +1,8 @@
+[codespell]
+ignore-words = .dictionaries/cpp_terms.txt,.dictionaries/vhdl_terms.txt,.dictionaries/python_terms.txt,.dictionaries/project_words.txt
+ignore-words-list = asan,ubsan,master,endcode,nodiscard,cppcoreguidelines,hicpp
+builtin = clear,rare,informal,usage,code,names,en-GB_to_en-US
+check-filenames =
+check-hidden =
+skip = */.devcontainer,*/.git,*/.github,*/.vscode,*/.env,*/.venv,*/.win64-venv,*/build,*/l10n,*.input
+quiet-level = 0

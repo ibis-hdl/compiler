@@ -1140,7 +1140,7 @@ struct based_literal_error_handler {
 };
 
 template <typename T = x3::unused_type>
-auto const as = [](auto parser, const char* name = typeid(T).name()) {
+static inline auto const as = [](auto parser, const char* name = typeid(T).name()) {
     struct tag : based_literal_error_handler {};
     return x3::rule<tag, T>{ name } = parser;
 };
@@ -1177,11 +1177,11 @@ struct based_literal_base_type : x3::parser<based_literal_base_type> {
     {
         skip_over(first, last, ctx);  // pre-skip using surrounding skipper
 
-        using range_type = ast::string_span;
-        range_type base_literal;
+        using string_range_type = ast::string_span;
+        string_range_type base_literal;
 
         // clang-format off
-        auto const integer_literal = x3::rule<struct _, range_type>{ "based literal's base" } =
+        auto const integer_literal = x3::rule<struct _, string_range_type>{ "based literal's base" } =
             raw[ lexeme [
                 digit >> *( -lit("_") >> digit )
             ]]
@@ -1197,10 +1197,11 @@ struct based_literal_base_type : x3::parser<based_literal_base_type> {
         using namespace ranges;
         auto pruned_literal = base_literal | views::filter([](char chr) { return chr != '_'; });
 
-        auto iter = std::begin(pruned_literal);
-        auto const end = std::end(pruned_literal);
+        auto parse_iter = std::begin(pruned_literal);
+        auto const parse_last = std::end(pruned_literal);
 
-        bool const parse_ok = x3::parse(iter, end, x3::uint_ >> x3::eoi, base_attribute);
+        bool const parse_ok =
+            x3::parse(parse_iter, parse_last, x3::uint_ >> x3::eoi, base_attribute);
 
         if (!parse_ok || !supported_base(base_attribute)) {
             return false;
@@ -1213,10 +1214,10 @@ struct based_literal_base_type : x3::parser<based_literal_base_type> {
         // clang-format off
         switch (base) {
             // NOLINTNEXTLINE(bugprone-branch-clone)
-            case 2:  [[fallthrough]];
-            case 8:  [[fallthrough]];
-            case 10: [[fallthrough]];
-            case 16: return true;
+            case 2U:  [[fallthrough]];
+            case 8U:  [[fallthrough]];
+            case 10U: [[fallthrough]];
+            case 16U: return true;
             default: return false;
         }
         // clang-format on
@@ -4328,7 +4329,7 @@ BOOST_SPIRIT_DEFINE(  // -- W --
 //******************************************************************************
 // Annotation and Error handling
 //
-// Here the "classic" approach from spirit x3's examples/documention is used:
+// Here the "classic" approach from spirit x3's examples/documentation is used:
 // Derive the tag class from success "handler" to tag the node self and from
 // error "handler" to cope with parser/expectation exceptions using on_error()
 // member function.

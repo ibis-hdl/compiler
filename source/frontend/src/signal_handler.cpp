@@ -4,15 +4,24 @@
 //
 
 #include <ibis/frontend/signal_handler.hpp>
+#include <ibis/platform.hpp>
 #include <ibis/message.hpp>
 
-#include <csignal>
-#include <functional>
-#include <iostream>
+#include <csignal>  // IWYU pragma: keep
+#include <cstdlib>
+#include <string_view>
+
+// IWYU pragma: begin_keep
+#if defined(IBIS_BUILD_PLATFORM_LINUX)
+// SIGUSR1, SIGBUS are linux specific
+// NOLINTNEXTLINE(misc-include-cleaner,modernize-deprecated-headers,hicpp-deprecated-headers)
+#include <signal.h>
+#endif
+// IWYU pragma: end_keep
 
 namespace ibis::frontend {
 
-#if 0  // avoid LINT errors
+#if 0  // NOLINT(readability-avoid-unconditional-preprocessor-if)
 void testing_signal_handler()
 {
 #if 0  // doesn't work ????
@@ -62,6 +71,8 @@ void register_signal_handlers()
     };
 
     if (!signal_handler()) {
+        // Don't worry about warning: code will never be executed [-Wunreachable-code] since we
+        // install an error_handler which always return successfully (true)
         ibis::failure("Failed to install signal handlers");
         std::exit(EXIT_FAILURE);
     }

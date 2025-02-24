@@ -3,16 +3,24 @@
 
 #include <testsuite/testsuite_parser.hpp>
 
-#include <ibis/vhdl/ast/node/design_file.hpp>
-#include <ibis/vhdl/parser/iterator_type.hpp>
-#include <ibis/vhdl/parser/position_cache.hpp>
-#include <ibis/vhdl/parser/parse.hpp>
-#include <ibis/vhdl/parser/context.hpp>
 #include <ibis/literals.hpp>
+#include <ibis/util/file_mapper.hpp>
+#include <ibis/vhdl/ast/node/design_file.hpp>  // IWYU pragma: keep
+#include <ibis/vhdl/ast.hpp>                   // IWYU pragma: keep
+#include <ibis/vhdl/context.hpp>               // failure_status
+#include <ibis/vhdl/parser/context.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/parser/parse.hpp>
+#include <ibis/vhdl/parser/position_cache.hpp>
 
-#include <string_view>
-#include <format>
 #include <exception>
+#include <format>
+#include <functional>
+#include <iostream>
+#include <string_view>
+#include <utility>
+
+#include <testsuite/namespace_alias.hpp>
 
 namespace testsuite {
 
@@ -27,10 +35,11 @@ bool testsuite_parse::operator()(std::string_view contents, ast::design_file& de
     try {
         util::file_mapper file_mapper{};
         parser::position_cache<iterator_type> position_cache{ 4_KiB };
-        parser::parse parse{ os };
+        parser::parse const parse{ os };
         parser::context vhdl_ctx;
 
-        auto current_file = file_mapper.add_file(this->file_name(), std::move(contents));
+        // no std::move of the variable 'contents' (trivially-copyable type 'std::string_view')
+        auto current_file = file_mapper.add_file(this->file_name(), contents);
 
         parse_ok = parse(std::move(current_file), position_cache, vhdl_ctx, design_file);
 

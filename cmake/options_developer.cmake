@@ -1,74 +1,64 @@
 ## -----------------------------------------------------------------------------
-# developer (configurable) build options
+# configurable build options
 ## -----------------------------------------------------------------------------
 
-## ----------------------------------------------------------------------------
-# Developer Build Option: Use PCH
-option(IBIS_ENABLE_PCH
+## -----------------------------------------------------------------------------
+# Developer Mode
+#
+if(IBIS_DEVELOPER_MODE)
+    message(AUTHOR_WARNING ">>> Enable DEVELOPER_MODE <<<")
+    set(IBIS_DEVELOPER_MODE ON CACHE BOOL "Enabled 'developer mode'" FORCE)
+endif()
 
-    "Enable pre-compiled headers support for standard C++, Boost.Org and 3rd party headers."
-    OFF
-)
+
+## ----------------------------------------------------------------------------
+# Build Option: Use PCH
+#
+if(IBIS_ENABLE_PCH)
+    if(IBIS_DEVELOPER_MODE)
+        set(IBIS_ENABLE_PCH OFF CACHE BOOL "Disabled PCH in 'developer mode'" FORCE)
+        message(AUTHOR_WARNING "Disable PCH in 'developer mode' to avoid false positives of includes header")
+    endif()
+endif()
 mark_as_advanced(IBIS_ENABLE_PCH)
 
 
 ## -----------------------------------------------------------------------------
-# Clang option to find headers which consumes compile time
-option(DEVELOPER_RUN_CLANG_TIME_TRACE
+# Developer Clang option to find headers which consumes compile time
+#
+option(IBIS_DEVELOPER_RUN_CLANG_TIME_TRACE
     "What and where in my code things are slow to compile? Generate flame chart Tracing JSON."
     OFF
 )
-mark_as_advanced(DEVELOPER_RUN_CLANG_TIME_TRACE)
+mark_as_advanced(IBIS_DEVELOPER_RUN_CLANG_TIME_TRACE)
 
 
 ## -----------------------------------------------------------------------------
-# Sanitize support
+# Developer Clang extra warnings
 #
-
-# --- ThreadSanitizer ---
-option(IBIS_ENABLE_TSAN "Enable ThreadSanitizer builds." OFF)
-mark_as_advanced(IBIS_ENABLE_TSAN)
-
-# --- AddressSanitize ---
-option(IBIS_ENABLE_ASAN "Enable AddressSanitize builds." OFF)
-mark_as_advanced(IBIS_ENABLE_ASAN)
-
-# --- LeakSanitizer ---
-option(IBIS_ENABLE_LSAN "Enable LeakSanitizer builds." OFF)
-mark_as_advanced(IBIS_ENABLE_LSAN)
-
-# --- MemorySanitizer ---
-option(IBIS_ENABLE_MSAN "Enable MemorySanitizer builds." OFF)
-mark_as_advanced(IBIS_ENABLE_MSAN)
-
-# --- UndefinedBehavior ---
-option(IBIS_ENABLE_UBSAN "Enable UndefinedBehavior builds." OFF)
-mark_as_advanced(IBIS_ENABLE_UBSAN)
-
-
-## -----------------------------------------------------------------------------
-# Clang extra warnings
-#
-option(DEVELOPER_CLANG_WARN_EVERYTHING
+option(IBIS_DEVELOPER_CLANG_WARN_EVERYTHING
     "Use Clang compiler's -Weverything option"
     OFF)
-mark_as_advanced(DEVELOPER_CLANG_WARN_EVERYTHING)
+mark_as_advanced(IBIS_DEVELOPER_CLANG_WARN_EVERYTHING)
 
 
 
 ## -----------------------------------------------------------------------------
-# Boost Spirit X3 BOOST_SPIRIT_X3_DEBUG (Dev Note: this affects also PCH)
+# Developer Boost Spirit X3 BOOST_SPIRIT_X3_DEBUG (Note: this affects also PCH)
 #
-option(DEVELOPER_BOOST_SPIRIT_X3_DEBUG
+option(IBIS_DEVELOPER_BOOST_SPIRIT_X3_DEBUG
     "Compile the parser with BOOST_SPIRIT_X3_DEBUG."
     OFF)
-mark_as_advanced(DEVELOPER_BOOST_SPIRIT_X3_DEBUG)
+mark_as_advanced(IBIS_DEVELOPER_BOOST_SPIRIT_X3_DEBUG)
 
 
 ## -----------------------------------------------------------------------------
 ## end of options
 ## -----------------------------------------------------------------------------
 
+if(IBIS_DEVELOPER_CLANG_WARN_EVERYTHING AND NOT IBIS_DEVELOPER_MODE)
+    message(FATAL_ERROR "Clang's -Weverything is only allowed in *developer mode*!")
+endif()
 
 ## -----------------------------------------------------------------------------
 # Ninja Build using job pools
@@ -142,15 +132,9 @@ set_property(GLOBAL
 )
 
 
-if (DEVELOPER_RUN_CLANG_TIME_TRACE)
-    add_compile_options(
-        "$<$<CXX_COMPILER_ID:Clang>:-ftime-trace>"
-    )
-endif()
-
 
 ###############################################################################
-# Project wide compiler options
+# Project wide **compile options**
 #
 # Note [Spaces in conditional output of generator expressions](
 # http://cmake.3232098.n2.nabble.com/Spaces-in-conditional-output-of-generator-expressions-td7597652.html)
@@ -166,7 +150,12 @@ add_compile_options(
     "$<$<CXX_COMPILER_ID:GNU>:-Wall;-Wextra;-Wpedantic;-Wconversion>"
     # https://docs.microsoft.com/en-us/cpp/build/reference/compiler-option-warning-level
     # - C4062 - enumerator 'identifier' in switch of enum 'enumeration' is not handled
-    "$<$<CXX_COMPILER_ID:MSVC>:/W3;/w34062>"
+    "$<$<CXX_COMPILER_ID:MSVC>:/W4;/w34062>"
+
+    # ---- Clang Warn Everything sherry picking ----
+    # [Clang-19 Diagnostic](https://releases.llvm.org/19.1.0/tools/clang/docs/DiagnosticsReference.html)
+    # ToDo add -Wshadow-all
+    "$<$<CXX_COMPILER_ID:Clang>:-Wctad-maybe-unsupported;-Wnewline-eof>"
 
     # ---- IDE support ----
     # [Full code paths in clang errors](https://stackoverflow.com/questions/31324457/full-code-paths-in-clang-errors)
@@ -208,55 +197,27 @@ add_compile_options(
 )
 
 ## -----------------------------------------------------------------------------
-# Sanitize support and compiler options
+# Developer Mode - disable PCH if required
 #
-# FixMe [CMake]: Check and test flags, only added
-
-# --- ThreadSanitizer ---
-set(CMAKE_CXX_FLAGS_TSAN "-fsanitize=thread")
-set(CMAKE_LINK_FLAGS_TSAN "-fsanitize=thread")
-
-# --- AddressSanitize ---
-set(CMAKE_CXX_FLAGS_ASAN "-fsanitize=address;-fno-omit-frame-pointer")
-set(CMAKE_LINK_FLAGS_ASAN "-fsanitize=address;-fno-omit-frame-pointer")
-
-# --- LeakSanitizer ---
-set(CMAKE_CXX_FLAGS_LSAN "-fsanitize=leak;-fno-omit-frame-pointer")
-set(CMAKE_LINK_FLAGS_LSAN "-fsanitize=leak;-fno-omit-frame-pointer")
-
-# --- MemorySanitizer ---
-set(CMAKE_CXX_FLAGS_MSAN "-fsanitize=memory;-fno-omit-frame-pointer")
-set(CMAKE_LINK_FLAGS_MSAN "-fsanitize=memory;-fno-omit-frame-pointer")
-
-# --- UndefinedBehavior ---
-set(CMAKE_CXX_FLAGS_UBSAN "-fsanitize=undefined")
-set(CMAKE_LINK_FLAGS_UBSAN "-fsanitize=undefined")
+if(IBIS_DEVELOPER_MODE)
+    set(IBIS_DEVELOPER_MODE TRUE CACHE BOOL "Enabled 'developer mode'")
+    if(IBIS_ENABLE_PCH)
+        # disable PCH in developer mode since precompiled header may mislead,
+        # because PCH can lead to wrong (not included) headers
+        set(IBIS_ENABLE_PCH TRUE CACHE BOOL "Disabled PCH in 'developer mode'" FORCE)
+        message(AUTHOR_WARNING "Disable PCH in 'developer mode' to avoid false positives of includes header")
+    endif()
+endif()
 
 
-# FixMe [CMake]: Sanity checks
-# Clang: [Controlling Code Generation](https://github.com/llvm/llvm-project/blob/d480f968ad8b56d3ee4a6b6df5532d485b0ad01e/clang/docs/UsersManual.rst#id108)
-# It is not possible to combine more than one of the -fsanitize=address,
-# -fsanitize=thread, and -fsanitize=memory checkers in the same program.
-
-add_compile_options(
-    "$<$<BOOL:${IBIS_ENABLE_TSAN}>:${CMAKE_CXX_FLAGS_TSAN}>"
-    "$<$<BOOL:${IBIS_ENABLE_ASAN}>:${CMAKE_CXX_FLAGS_ASAN}>"
-    "$<$<BOOL:${IBIS_ENABLE_LSAN}>:${CMAKE_CXX_FLAGS_LSAN}>"
-    "$<$<BOOL:${IBIS_ENABLE_MSAN}>:${CMAKE_CXX_FLAGS_MSAN}>"
-    "$<$<BOOL:${IBIS_ENABLE_UBSAN}>:${CMAKE_CXX_FLAGS_UBSAN}>"
-)
-
-add_link_options(
-    "$<$<BOOL:${IBIS_ENABLE_TSAN}>:${CMAKE_LINK_FLAGS_TSAN}>"
-    "$<$<BOOL:${IBIS_ENABLE_ASAN}>:${CMAKE_LINK_FLAGS_ASAN}>"
-    "$<$<BOOL:${IBIS_ENABLE_LSAN}>:${CMAKE_LINK_FLAGS_LSAN}>"
-    "$<$<BOOL:${IBIS_ENABLE_MSAN}>:${CMAKE_LINK_FLAGS_MSAN}>"
-    "$<$<BOOL:${IBIS_ENABLE_UBSAN}>:${CMAKE_LINK_FLAGS_UBSAN}>"
-)
-
+if (IBIS_DEVELOPER_RUN_CLANG_TIME_TRACE)
+    add_compile_options(
+        "$<$<CXX_COMPILER_ID:Clang>:-ftime-trace>"
+    )
+endif()
 
 ## -----------------------------------------------------------------------------
-# Clang extra warnings, see
+# Developer Mode - Clang extra warnings, see
 # - [Better Apps with Clang's Weverything or Wall is a Lie!](
 #    https://amattn.com/p/better_apps_clang_weverything_or_wall_is_a_lie.html)
 # - [Warnings: -Weverything and the Kitchen Sink](
@@ -264,22 +225,33 @@ add_link_options(
 #
 # May require special treatment for Clang to prevent contamination with pragmas
 # by using -Weverything
-if(DEVELOPER_CLANG_WARN_EVERYTHING)
+if(IBIS_DEVELOPER_CLANG_WARN_EVERYTHING)
     # no interest in compatibility to old standards
-    set(_warn_compat -Weverything -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-c++98-c++11-c++14-compat)
+    #set(_warn_compat -Wno-error=pre-c++23-compat-pedantic)
+    set(_warn_compat98 -Wno-c++98-compat -Wno-c++98-compat-pedantic)
+    set(_warn_compat14 -Wno-pre-c++14-compat -Wno-pre-c++14-compat-pedantic)
+    set(_warn_compat17 -Wno-pre-c++17-compat -Wno-pre-c++17-compat-pedantic)
+    set(_warn_compat20 -Wno-pre-c++20-compat -Wno-pre-c++20-compat-pedantic)
+    set(_warn_compat "${_warn_compat98};${_warn_compat14};${_warn_compat17};${_warn_compat20}")
+    # switch case default - intentionally, we don't use default case for enums
+    set(_warn_switch -Wno-switch-default)
     # misc
     set(_warn_misc -Wno-padded -Wno-global-constructors -Wno-exit-time-destructors)
     # boost.test macros hell, ibis is using rarely macros
     # boost.test fires [-Wused-but-marked-unused]
     set(_warn_boost -Wno-disabled-macro-expansion -Wno-used-but-marked-unused)
+    # get suggestions
+    # - unsafe pointer arithmetic[-Wunsafe-buffer-usage] - receive code hardening suggestions
+    set(_suggestions -fsafe-buffer-usage-suggestions)
+    # finally:
     add_compile_options(
-        "$<$<CXX_COMPILER_ID:Clang>:${_warn_compat};${_warn_boost};${_warn_misc}>"
+        "$<$<CXX_COMPILER_ID:Clang>:-Weverything;${_warn_compat};${_warn_switch};${_warn_boost};${_warn_misc};${_suggestions}>"
     )
 endif()
 
 
 ###############################################################################
-# Project wide compile definitions
+# Project wide **compile definitions**
 ###############################################################################
 
 ## -----------------------------------------------------------------------------

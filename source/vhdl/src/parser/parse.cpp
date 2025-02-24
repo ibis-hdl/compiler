@@ -5,28 +5,32 @@
 
 #include <ibis/vhdl/parser/parse.hpp>
 
+#include <ibis/util/get_iterator_pair.hpp>
+#include <ibis/vhdl/ast/node/design_file.hpp>
 #include <ibis/vhdl/parser/grammar.hpp>
 #include <ibis/vhdl/parser/parser_config.hpp>
 #include <ibis/vhdl/parser/skipper.hpp>
 
-#include <ibis/vhdl/ast/node/design_file.hpp>
-#include <ibis/vhdl/parser/position_cache.hpp>
-#include <ibis/vhdl/parser/diagnostic_handler.hpp>
-#include <ibis/vhdl/parser/context.hpp>
-#include <ibis/vhdl/parser/iterator_type.hpp>
-#include <ibis/vhdl/context.hpp>
-#include <ibis/util/get_iterator_pair.hpp>
+// #include <boost/spirit/home/x3.hpp>                    // IWYU pragma: keep
+#include <boost/spirit/home/x3/auxiliary/eoi.hpp>      // for eoi_parser, eoi
+#include <boost/spirit/home/x3/core/parse.hpp>         // for phrase_parse
+#include <boost/spirit/home/x3/directive/with.hpp>     // for with_directive, with, with_gen
+#include <boost/spirit/home/x3/nonterminal/rule.hpp>   // for rule, BOOST_SPIRIT_DECLARE
+#include <boost/spirit/home/x3/operator/sequence.hpp>  // for sequence, operator>>
 
-#include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
-#include <ibis/util/compiler/warnings_on.hpp>
 
-#include <iostream>
+#include <exception>
+#include <functional>
 #include <iterator>
-#include <new>  // for bad_alloc
-#include <ranges>
+#include <new>
+#include <ostream>
+#include <string>
 #include <type_traits>
+#include <utility>
+
+#include <ibis/namespace_alias.hpp>
 
 namespace ibis::vhdl::parser {
 
@@ -41,7 +45,7 @@ BOOST_SPIRIT_DECLARE(design_file_type)
 namespace ibis::vhdl::parser {
 
 bool parse::operator()(current_file_type&& current_file, position_cache_type& position_cache,
-                       vhdl_context_type& vhdl_ctx, ast::design_file& design_file)
+                       vhdl_context_type& vhdl_ctx, ast::design_file& design_file) const
 {
     using ibis::util::get_iterator_pair;
 
@@ -56,6 +60,7 @@ bool parse::operator()(current_file_type&& current_file, position_cache_type& po
     };
     // clang-format on
 
+    // FixMe Urgent - current_file moved before!!
     auto ast_annotator = position_cache.annotator_for(current_file.id());
 
     // clang-format off
@@ -67,6 +72,7 @@ bool parse::operator()(current_file_type&& current_file, position_cache_type& po
         ];
     // clang-format on
 
+    // FixMe Urgent - current_file moved before!!
     auto [iter, end] = get_iterator_pair(current_file.file_contents());
 
     // using different iterator_types causes linker errors, see e.g.

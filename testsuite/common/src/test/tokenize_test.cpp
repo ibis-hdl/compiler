@@ -5,13 +5,19 @@
 
 #include <ibis/util/tokenize.hpp>
 
-#include <boost/test/tools/interface.hpp>  // BOOST_TEST()
-#include <boost/test/unit_test_suite.hpp>  // BOOST_AUTO_TEST_CASE()
-#include <boost/test/unit_test.hpp>        // IWYU pragma: keep
-
-#include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
+#include <boost/test/tools/assertion.hpp>                    // for EQ, binary_expr, value_expr
+#include <boost/test/tools/detail/indirections.hpp>          // for assertion_type
+#include <boost/test/tools/detail/per_element_manip.hpp>     // for per_element
+#include <boost/test/tools/interface.hpp>                    // for BOOST_TEST
+#include <boost/test/unit_test.hpp>                          // for BOOST_PP...
+#include <boost/test/utils/basic_cstring/basic_cstring.hpp>  // for basic_cstring
+#include <boost/test/utils/lazy_ostream.hpp>                 // for operator<<
 
 #include <iostream>
+#include <string_view>
+#include <vector>
+
+#include <testsuite/namespace_alias.hpp>
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_SUITE(common_utils)

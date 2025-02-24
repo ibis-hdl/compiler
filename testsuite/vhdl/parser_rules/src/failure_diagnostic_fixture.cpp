@@ -5,6 +5,8 @@
 
 #include <testsuite/vhdl/parser/failure_diagnostic_fixture.hpp>
 
+#include <memory>
+
 namespace testsuite::vhdl::parser {
 
 void failure_diagnostic_fixture::setup()

@@ -8,10 +8,8 @@
 #include <initializer_list>
 #include <filesystem>
 
-#include <ibis/namespace_alias.hpp>
-
 namespace ibis {
-    namespace fs = std::filesystem;
+namespace fs = std::filesystem;
 }
 
 namespace ibis::util {

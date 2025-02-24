@@ -6,24 +6,21 @@
 
 cmake_minimum_required(VERSION 3.28)
 
-set(CMAKE_PROJECT_INCLUDE_BEFORE
-    "${CMAKE_SOURCE_DIR}/cmake/project-meta-info.cmake")
+include("${CMAKE_SOURCE_DIR}/cmake/project-meta-info.cmake")
 
-project(ibis
-    VERSION "${ibis_version}"
-    DESCRIPTION "${ibis_description}"
+project(ibis_hdl
+    VERSION      "${ibis_version}"
+    DESCRIPTION  "${ibis_description}"
     HOMEPAGE_URL "${ibis_homepage}"
     LANGUAGES CXX
 )
-message(STATUS "${CMAKE_PROJECT_NAME}: ${ibis_description} v${ibis_version} [${ibis_homepage}]")
-message(STATUS "System name: ${CMAKE_SYSTEM_NAME}")
+message(STATUS "    Project:     ${CMAKE_PROJECT_NAME}: ${ibis_description} v${ibis_version} [${ibis_homepage}]")
+message(STATUS "    System name: ${CMAKE_SYSTEM_NAME}")
+message(STATUS "    Compiler:    ${CMAKE_CXX_COMPILER}")
+message(STATUS "    Build type:  ${CMAKE_BUILD_TYPE}") # ToDo maybe uninitialized!
 
 
 ## global C++ Standard
-# Note:
-# - on C++ Std change, also set
-#   - GitHubs actions
-#   - VS Code devcontainer
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -36,10 +33,13 @@ list(APPEND
         ${PROJECT_SOURCE_DIR}/cmake/module
 )
 
-include(prevent_in_source_builds)
+include(prevent_in_source_builds)   # prelude
 include(options_build)
 include(options_developer)
 include(external_deps)
+include(codespell-targets)
+include(format-targets)
+include(coverage-target)
 
 
 # This requirement rises by use of CMake's PCH support, otherwise
@@ -69,6 +69,7 @@ add_subdirectory(source/vhdl)
 add_subdirectory(source/frontend)
 add_subdirectory(l10n)
 if (IBIS_BUILD_TESTS)
+    include(CTest)
     enable_testing()
     add_subdirectory(testsuite/common)
     add_subdirectory(testsuite/misc)
@@ -83,8 +84,3 @@ if (IBIS_BUILD_TESTS)
 endif()
 add_subdirectory(doc)
 add_subdirectory(doc_ng)
-
-
-##
-# Install
-include(GNUInstallDirs)

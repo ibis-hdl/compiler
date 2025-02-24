@@ -14,12 +14,11 @@
 
 #include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
+#include <array>
 #include <iostream>
 #include <format>
 #include <string_view>
 #include <optional>
-#include <limits>
-#include <cstdint>
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_SUITE(diagnostic_printer)
@@ -56,13 +55,17 @@ BOOST_AUTO_TEST_CASE(spacer_formatter, *utf::label("formatter"))
     // clang-format on
 }
 
-namespace valid_data {  // for issue_marker_formatter
+namespace /* anonymous */ {
 
 // helper function for make_issue() below to create an iterator pointing to char's position
 template <typename IteratorT>
-constexpr auto find_char = [](IteratorT begin, IteratorT end, char chr) {
-    return std::find_if(begin, end, [chr](char c) { return c == chr; });
+constexpr auto find_char = [](IteratorT begin, IteratorT end, char srch_chr) {
+    return std::find_if(begin, end, [srch_chr](char chr) { return chr == srch_chr; });
 };
+
+}  // namespace
+
+namespace valid_data {  // for issue_marker_formatter
 
 // create an issue_marker by generating a set of iterators - mimics x3 parser error handler result
 // for proof of concept including wrapper/formatter see https://godbolt.org/z/z5Yrz6e6M
@@ -71,9 +74,11 @@ constexpr auto make_issue = [](std::string_view str, char first_chr,
     using iterator_type = std::string_view::const_iterator;
     using ibis::vhdl::issue_marker;
 
-    auto start = str.begin();
-    auto failure_begin = find_char<iterator_type>(str.begin(), str.end(), first_chr);
-    auto failure_end = [&]() {
+    // NOLINTBEGIN(readability-qualified-auto) don't touch, since this may be an iterator classes
+    auto const start = str.begin();
+    auto const failure_begin = find_char<iterator_type>(str.begin(), str.end(), first_chr);
+    // NOLINTEND(readability-qualified-auto)
+    auto const failure_end = [&]() {
         if (last_chr.has_value()) {
             // clang-format off
             return std::optional<iterator_type>{
@@ -84,7 +89,7 @@ constexpr auto make_issue = [](std::string_view str, char first_chr,
         return std::optional<iterator_type>{};
     }();
 
-    return issue_marker{ start, failure_begin, failure_end };
+    return issue_marker<iterator_type>{ start, failure_begin, failure_end };
 };
 
 using ibis::vhdl::issue_marker;
@@ -95,13 +100,12 @@ constexpr auto const input_string =
     // simple input string with unique symbols to avoid unintentional errors such as (end < begin)
     "abcdefghijklmnopqrstuvwxyz.ABCDEFGHIJKLMNOPQRSTUVWXYZ,0123456789;"sv;
 
-// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
-struct {
-    // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members)
+struct test_data_type {
     issue_marker<iterator_type> issue;
-    // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members)
     std::string_view expected;
-} constexpr gold_data[] = {
+};
+
+constexpr auto gold_data = std::to_array<test_data_type>({
     //  --
     { .issue = make_issue(input_string, 'a'),  // single marker at begin
       //          "abcdefghijklmnopqrstuvwxyz.ABCDEFGHIJKLMNOPQRSTUVWXYZ,0123456789;"
@@ -130,7 +134,7 @@ struct {
     { .issue = make_issue(input_string, 'A', ';'),
       //          "abcdefghijklmnopqrstuvwxyz.ABCDEFGHIJKLMNOPQRSTUVWXYZ,0123456789;"
       .expected = "                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" },
-};
+});
 
 }  // namespace valid_data
 
@@ -141,7 +145,7 @@ BOOST_AUTO_TEST_CASE(issue_marker_formatter, *utf::label("formatter"))
 
     btt::output_test_stream output;  // reused, flushed/cleared after each test
 
-    for (auto index{ 0U }; auto const& [issue, expected] : valid_data::gold_data) {
+    for (auto index{ 0UL }; auto const& [issue, expected] : valid_data::gold_data) {
         BOOST_TEST_CONTEXT(">>> Test index at " << index << " <<<")
         {
             output << std::format("{}", issue);
@@ -162,7 +166,7 @@ BOOST_AUTO_TEST_CASE(issue_marker_formatter, *utf::label("formatter"))
                 );
             }
 
-            BOOST_REQUIRE(!output.str().empty());
+            BOOST_TEST_REQUIRE(!output.str().empty());
             BOOST_TEST(output.str() == expected, btt::per_element());
         }
         output.flush();  // clear output for next run

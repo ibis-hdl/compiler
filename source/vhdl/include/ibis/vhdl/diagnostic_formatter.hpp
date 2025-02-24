@@ -55,7 +55,7 @@ struct spacer {
 ///
 template <typename IteratorT>
 struct issue_range {
-    using difference_type = typename std::iterator_traits<IteratorT>::difference_type;
+    using difference_type = std::iter_difference_t<IteratorT>;
 
     constexpr issue_range(IteratorT begin, std::optional<IteratorT> end)
         : iter{ begin }
@@ -79,8 +79,10 @@ private:
     difference_type distance;
 };
 
+///
 /// @brief Wrapper for issue locator/indicator
-/// @tparam IteratorT
+/// @tparam IteratorT Iterator type
+///
 template <typename IteratorT = std::string_view::iterator>
 struct issue_marker {
     constexpr issue_marker(IteratorT start_, IteratorT failure_begin,
@@ -89,7 +91,7 @@ struct issue_marker {
         , failure{ failure_begin, failure_end }
     {
     }
-    // const_value impl, see https://godbolt.org/z/7Yf8n4ojs
+    // FixMe Make it private, or const_value impl, see https://godbolt.org/z/7Yf8n4ojs
     IteratorT const start;
     issue_range<IteratorT> const failure;
 };
@@ -111,8 +113,8 @@ struct std::formatter<ibis::vhdl::source_location> {
     template <class FmtContext>
     auto format(ibis::vhdl::source_location const& location, FmtContext& ctx) const
     {
-        std::string temp;
-        temp.reserve(256);  // inital guess
+        std::string temp;   // ToDo use pmr and buffer
+        temp.reserve(256);  // initial guess
 
         // Based on GNU standard of [Formatting Error Messages](
         // https://www.gnu.org/prep/standards/html_node/Errors.html)
@@ -143,10 +145,10 @@ struct std::formatter<ibis::vhdl::diagnostic_context::failure_type> {
         using namespace ibis::vhdl;
         using boost::locale::translate;
 
-        auto const as_str = [](auto failure) {
+        auto const as_str = [](auto failure_enum) {
             using enum ibis::vhdl::diagnostic_context::failure_type;
             // clang-format off
-            switch (failure) {
+            switch (failure_enum) {
                 case unspecific:
                     return translate("unspecific").str();
                 case parser:
@@ -193,13 +195,13 @@ struct std::formatter<ibis::vhdl::number_gutter> {
         // format_to_n() nor format() are constexpr in C++23
         auto const void_gutter = [&]() {
             // *Note* array isn't '\0' terminated, hence intended to be used with string_view only!!
-            static std::array<std::string_view::value_type, BUF_SZ - 1> const buf = [&]() {
+            static std::array<std::string_view::value_type, BUF_SZ - 1> const gutter_buf = [&]() {
                 std::array<std::string_view::value_type, BUF_SZ - 1> buf{};
                 std::ignore =
                     std::format_to_n(std::begin(buf), BUF_SZ - 1, default_fmt, "", number_width);
                 return buf;
             }();
-            return std::string_view{ buf };
+            return std::string_view{ gutter_buf };
         };
 
         if (gutter.number == 0UL) {

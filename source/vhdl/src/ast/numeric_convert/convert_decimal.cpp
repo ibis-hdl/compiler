@@ -4,30 +4,45 @@
 //
 
 #include <ibis/vhdl/ast/numeric_convert/convert_decimal.hpp>
-#include <ibis/vhdl/ast/numeric_convert/filter_range.hpp>
-#include <ibis/vhdl/ast/numeric_convert/dbg_trace.hpp>
 
-#include <ibis/vhdl/diagnostic_handler.hpp>
-
-#include <ibis/vhdl/ast/node/decimal_literal.hpp>
-#include <ibis/vhdl/ast/util/string_span.hpp>
 #include <ibis/concepts.hpp>
-
-#include <ibis/vhdl/type.hpp>
+#include <ibis/vhdl/ast/node/decimal_literal.hpp>
+// #include <ibis/vhdl/ast/numeric_convert/dbg_trace.hpp>
+#include <ibis/vhdl/ast/numeric_convert/filter_range.hpp>
+#include <ibis/vhdl/ast/util/string_span.hpp>
+#include <ibis/vhdl/diagnostic_handler.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/type.hpp>  // for explicit instanciation
 
 #include <ibis/util/cxx_bug_fatal.hpp>
 
-#include <ibis/namespace_alias.hpp>  // IWYU pragma: keep
+#include <boost/range/iterator_range_core.hpp>  // for iterator_range
 
-#include <ibis/util/compiler/warnings_off.hpp>
-// IWYU replaces a lot of other header, we stay with this one
-#include <boost/spirit/home/x3.hpp>  // IWYU pragma: keep
-#include <ibis/util/compiler/warnings_on.hpp>
+#include <boost/spirit/home/x3.hpp>                        // IWYU pragma: keep
+#include <boost/spirit/home/x3/auxiliary/any_parser.hpp>   // for any_parser
+#include <boost/spirit/home/x3/auxiliary/eoi.hpp>          // for eoi_parser, eoi
+#include <boost/spirit/home/x3/core/parse.hpp>             // for parse
+#include <boost/spirit/home/x3/core/parser.hpp>            // for as_parser
+#include <boost/spirit/home/x3/numeric/real.hpp>           // for real_parser
+#include <boost/spirit/home/x3/numeric/real_policies.hpp>  // for ureal_policies
+#include <boost/spirit/home/x3/operator/sequence.hpp>      // for sequence, operator>>
 
-#include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
+#include <range/v3/functional/invoke.hpp>        // for invoke_result_t
+#include <range/v3/iterator/basic_iterator.hpp>  // for operator==, operator!=, basic_iterator
+#include <range/v3/view/all.hpp>                 // for all_t
+#include <range/v3/view/facade.hpp>              // for facade_iterator_t
+#include <range/v3/view/view.hpp>                // for operator|
+
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
-#include <ibis/util/compiler/warnings_on.hpp>
+
+#include <iterator>
+#include <string>
+#include <string_view>
+#include <tuple>
+#include <utility>
+
+#include <ibis/namespace_alias.hpp>  // IWYU pragma: keep
 
 namespace /* anonymous */ {
 
@@ -60,8 +75,8 @@ struct real_policies : x3::ureal_policies<T> {
 };
 
 template <ibis::integer IntegerT, ibis::real RealT>
-convert_decimal<IntegerT, RealT>::convert_decimal(diagnostic_handler_type& diagnostic_handler_)
-    : diagnostic_handler{ diagnostic_handler_ }
+convert_decimal<IntegerT, RealT>::convert_decimal(diagnostic_handler_type& diag_handler)
+    : diagnostic_handler{ diag_handler }
 {
 }
 
@@ -75,19 +90,21 @@ typename convert_decimal<IntegerT, RealT>::return_type convert_decimal<IntegerT,
     auto const parse = [&](numeric_type_specifier type_specifier, auto const& literal) {
         // clang-format off
         switch (type_specifier) {
-            case numeric_type_specifier::integer: {
+            using enum ast::decimal_literal::numeric_type_specifier;
+            case integer: 
+            {
                 auto const [parse_ok, attribute] = parse_integer(literal);
                 // FixMe static_assert(std::is_same_v<decltype(attribute), integer_type>);
                 return return_type{ parse_ok, result_type(attribute) };
             }
-            case numeric_type_specifier::real: {
+            case real: 
+            {
                 auto const [parse_ok, attribute] = parse_real(literal);
                 // FixMe static_assert(std::is_same_v<decltype(attribute), real_type>);
                 return return_type{ parse_ok, result_type(attribute) };
             }
-            [[unlikely]] case numeric_type_specifier::unspecified:
-                // The caller must pass checked base_specifier
-                cxx_unreachable_bug_triggered();
+            [[unlikely]] case unspecified:
+                cxx_bug_fatal("caller must pass checked base_specifier");
             //
             // *No* default branch: let the compiler generate warning about enumeration
             // value not handled in switch

@@ -25,6 +25,21 @@ template <typename T, typename Tag>
 class tagged_treshold_counter {
 public:
     ///
+    /// Underlying value_type of the counter.
+    ///
+    using value_type = std::remove_cv_t<T>;
+
+    ///
+    /// The maximum numeric/count count_value.
+    ///
+    static constexpr value_type MAX_THRESHOLD = std::numeric_limits<value_type>::max();
+
+private:
+    value_type threshold_value = MAX_THRESHOLD;
+    value_type count_value = 0;
+
+public:
+    ///
     /// @brief Exception thrown if the counter limit has been reached.
     ///
     struct overflow : public std::overflow_error {
@@ -33,15 +48,6 @@ public:
         {
         }
     };
-
-public:
-    ///
-    /// Underlying value_type of the counter.
-    ///
-    using value_type = std::remove_cv_t<T>;
-
-    /// The maximum numeric/count count_value.
-    static constexpr value_type MAX_THRESHOLD = std::numeric_limits<value_type>::max();
 
 public:
     ///
@@ -78,12 +84,12 @@ public:
     }
 
     ///
-    /// user-defined conversion to get the curent count value.
+    /// user-defined conversion to get the current count value.
     ///
     operator value_type() const { return count_value; }
 
     ///
-    /// Get the curent count value.
+    /// Get the current count value.
     ///
     value_type get() const { return count_value; }
 
@@ -100,10 +106,6 @@ public:
     /// @return Threshold value.
     ///
     value_type threshold() const { return threshold_value; }
-
-private:
-    value_type threshold_value = MAX_THRESHOLD;
-    value_type count_value = 0;
 };
 
 }  // namespace ibis::util

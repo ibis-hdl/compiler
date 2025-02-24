@@ -6,41 +6,31 @@
 #pragma once
 
 #include <ibis/util/file_mapper.hpp>
-#include <ibis/vhdl/parser/position_cache.hpp>
-#include <ibis/vhdl/parser/iterator_type.hpp>
 #include <ibis/vhdl/diagnostic_context.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/parser/position_cache.hpp>
+#include <ibis/vhdl/source_location.hpp>
 
 #include <ibis/namespace_alias.hpp>  // IWYU pragma: keep
 
-#include <utility>
-#include <string>
-#include <optional>
-#include <tuple>
+#include <cctype>
+#include <cstddef>
+#include <functional>
 #include <iosfwd>
+#include <optional>
+#include <string_view>
+#include <tuple>
+#include <utility>
+
+#include <ibis/namespace_alias.hpp>
 
 namespace ibis::vhdl {
-
-// forward vhdl::context
 class context;
-// forward vhdl::source_location
-class source_location;
-
-namespace ast {
-
-// forward ast::position_tagged for parser::position_cache
-class position_tagged;
-
-}  // namespace ast
-
-namespace parser {
-
-// forward parser::position_cache
-template <typename IteratorT>
-class position_cache;
-
-}  // namespace parser
-
 }  // namespace ibis::vhdl
+
+namespace ibis::vhdl::ast {
+class position_tagged;
+}  // namespace ibis::vhdl::ast
 
 namespace ibis::vhdl {
 
@@ -52,10 +42,10 @@ namespace ibis::vhdl {
 ///
 // ToDo To much functionality in a single class, make free function of line_column_number(),
 // get_line_start() etc.
-template <typename Iterator>
+template <typename IteratorT>
 class diagnostic_handler {
 public:
-    using iterator_type = Iterator;
+    using iterator_type = IteratorT;
 
     using current_file_type = ibis::util::file_mapper::current_file;
     using position_cache_type = parser::position_cache<iterator_type>;
@@ -105,11 +95,11 @@ public:
     ///
     /// Render the diagnostic error_message.
     ///
-    /// @param error_first   Iterator position where the error occurred.
+    /// @param error_pos     Iterator position where the error occurred.
     /// @param error_last    optional Iterator position to end where the error occurred.
     /// @param error_message The information error message.
     ///
-    void parser_error(iterator_type error_first, std::optional<iterator_type> error_last,
+    void parser_error(iterator_type error_pos, std::optional<iterator_type> error_last,
                       std::string_view error_message) const;
 
     ///
@@ -123,11 +113,11 @@ public:
     ///
     /// Render the diagnostic error_message.
     ///
-    /// @param error_first   Iterator position where the error occurred.
+    /// @param error_pos     Iterator position where the error occurred.
     /// @param error_last    optional Iterator position to end where the error occurred.
     /// @param error_message The information error message.
     ///
-    void unsupported(iterator_type error_first, std::optional<iterator_type> error_last,
+    void unsupported(iterator_type error_pos, std::optional<iterator_type> error_last,
                      std::string_view error_message) const;
 
     ///
@@ -141,11 +131,11 @@ public:
     ///
     /// Render the diagnostic error_message.
     ///
-    /// @param error_first   Iterator position where the error occurred.
+    /// @param error_pos     Iterator position where the error occurred.
     /// @param error_last    optional Iterator position to end where the error occurred.
     /// @param error_message The information error message.
     ///
-    void numeric_error(iterator_type error_first, std::optional<iterator_type> error_last,
+    void numeric_error(iterator_type error_pos, std::optional<iterator_type> error_last,
                        std::string_view error_message) const;
 
 public:
@@ -237,7 +227,6 @@ private:
     /// be within the position cache range.
     ///
     /// @param pos Iterator position where to gather the line number.
-    /// @param tab_sz The tab size, required to calculate the column number.
     /// @return The line and column number.
     ///
     std::tuple<std::size_t, std::size_t> line_column_number(iterator_type pos) const;
@@ -247,7 +236,7 @@ private:
     /// The position must be within the position cache range.
     /// @note For this, the position iterator is modified.
     ///
-    /// @param pos Iterator position pointing to a line of interest.
+    /// @param pos_iter Iterator position pointing to a line of interest.
     /// @return Iterator position pointing to the begin of line.
     ///
     iterator_type get_line_start(iterator_type pos_iter) const;
@@ -258,25 +247,24 @@ private:
     /// @param first Iterator position pointing to a line of interest.
     /// @return String representing the source line.
     ///
-    std::string_view current_line(iterator_type start) const;
+    std::string_view current_line(iterator_type first) const;
 
     ///
     /// gather location information with file name etc.
     ///
-    /// @tparam IteratorT Error iterator type
-    /// @param diag_ctx VHDL diagnostic context to be filled with informations
+    /// @param diag_ctx VHDL diagnostic context to be filled with information
     /// @param first  iterator pointing to point of failure
     ///
     void set_source_location(vhdl::diagnostic_context& diag_ctx, iterator_type first) const
     {
         diag_ctx.set_source_location(get_source_location(first));
-    };
+    }
 
     ///
     /// gather location information with file name etc.
     ///
-    /// @param diag_ctx VHDL diagnostic context to be filled with informations
-    /// @param position_tagged AST tagged node with error/warning informations
+    /// @param diag_ctx VHDL diagnostic context to be filled with information
+    /// @param position_tagged AST tagged node with error/warning information
     ///
     void set_source_location(vhdl::diagnostic_context& diag_ctx,
                              ast::position_tagged const& position_tagged) const
@@ -288,8 +276,8 @@ private:
     ///
     /// gather erroneous part as source snippet, e.g. start label
     ///
-    /// @param diag_ctx VHDL diagnostic context to be filled with informations
-    /// @param position_tagged AST tagged node with error/warning informations
+    /// @param diag_ctx VHDL diagnostic context to be filled with information
+    /// @param position_tagged AST tagged node with error/warning information
     ///
     void set_source_snippet(vhdl::diagnostic_context& diag_ctx,
                             ast::position_tagged const& position_tagged) const
@@ -303,7 +291,7 @@ private:
     ///
     /// gather erroneous part as source snippet, e.g. on parser error
     ///
-    /// @param diag_ctx VHDL diagnostic context to be filled with informations
+    /// @param diag_ctx VHDL diagnostic context to be filled with information
     /// @param first Iterator to point of failure
     /// @param last optional Iterator to end point of failure
     ///

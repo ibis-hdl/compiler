@@ -5,17 +5,13 @@
 
 #pragma once
 
-#include <ibis/vhdl/type.hpp>
-#include <ibis/vhdl/parser/iterator_type.hpp>
 #include <ibis/concepts.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/type.hpp>
 
+#include <cstdint>
 #include <tuple>
 #include <variant>
-#include <iosfwd>
-#include <numeric>
-#include <limits>
-#include <variant>
-#include <type_traits>
 
 namespace ibis::vhdl::ast {
 // AST node forward
@@ -68,9 +64,9 @@ public:
     ///
     /// Construct a new numeric convert object.
     ///
-    /// @param diagnostic_handler_ Error reporter.
+    /// @param diag_handler Error reporter.
     ///
-    convert_based(diagnostic_handler_type& diagnostic_handler_);
+    explicit convert_based(diagnostic_handler_type& diag_handler);
 
     ///
     /// Convert the a bit string literal to numeric value.
@@ -102,8 +98,8 @@ private:
     diagnostic_handler_type& diagnostic_handler;
 
 private:
-    /// The BNF name of the literal to convert
-    std::string_view const node_name = "based literal";
+    /// The BNF name of the literal to convert, '\0' terminated
+    static constexpr char const* node_name{ "based literal" };  // NOLINT(hicpp-avoid-c-arrays)
 };
 
 }  // namespace ibis::vhdl::ast

@@ -59,12 +59,13 @@ struct based_literal : position_tagged {
     {
         // clang-format off
         switch (base) {
-            case numeric_base_specifier::base2:  [[fallthrough]];
-            case numeric_base_specifier::base8:  [[fallthrough]];
-            case numeric_base_specifier::base10: [[fallthrough]];
-            case numeric_base_specifier::base16: return true;
-            [[unlikely]] case numeric_base_specifier::unspecified: [[fallthrough]];
-            [[unlikely]] case numeric_base_specifier::unsupported: return false;
+            using enum based_literal::numeric_base_specifier;
+            case base2:  [[fallthrough]];
+            case base8:  [[fallthrough]];
+            case base10: [[fallthrough]];
+            case base16: return true;
+            [[unlikely]] case unspecified: [[fallthrough]];
+            [[unlikely]] case unsupported: return false;
             // *No* default branch: let the compiler generate warning about enumeration
             // value not handled in switch
             // *Note* on changes, also check `to_base_specifier()!`
@@ -78,10 +79,10 @@ struct based_literal : position_tagged {
     {
         // clang-format off
         switch (base) {
-            case 2:  return numeric_base_specifier::base2;
-            case 8:  return numeric_base_specifier::base8;
-            case 10: return numeric_base_specifier::base10;
-            case 16: return numeric_base_specifier::base16;
+            case 2U:  return numeric_base_specifier::base2;
+            case 8U:  return numeric_base_specifier::base8;
+            case 10U: return numeric_base_specifier::base10;
+            case 16U: return numeric_base_specifier::base16;
             // catch-them-all
             default: return numeric_base_specifier::unsupported;
         }

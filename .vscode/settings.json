@@ -8,15 +8,28 @@
     "C_Cpp.codeAnalysis.clangTidy.enabled": true,
     "C_Cpp.codeAnalysis.clangTidy.useBuildPath": true,
     "C_Cpp.codeAnalysis.clangTidy.args": [
-        " -extra-arg=-std=c++20"
+        " -extra-arg=-std=c++23"
     ],
     "C_Cpp.codeAnalysis.exclude": {
         "*grammar_def.hpp": true
     },
+     // Clangd
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "clangd.arguments": [
+        "-log=verbose",
+        "--offset-encoding=utf-8",
+        "--pretty",
+        "--background-index",
+        "-j=4",
+        "--compile-commands-dir=${workspaceFolder}/build",
+        "--header-insertion=iwyu"
+    ],
     // CMake
     "cmake.configureOnOpen": false,
     "cmake.useCMakePresets": "auto",
     "cmake.options.statusBarVisibility": "compact",
+    "cmake.automaticReconfigure": false,
+    "cmake.configureOnEdit": false,
     "cmake.options.advanced": {
         "cpack": {
             "statusBarVisibility": "hidden"
@@ -43,12 +56,14 @@
     "doxdocgen.c.lastLine": "///",
     // To-Do Tree
     "todo-tree.general.tags": [
-        "BUG", "HACK", "FIXME", "TODO", "XXX",
+        "BUG", "HACK", "FIXME", "TODO",
         "@todo", "@fixme",
         "FixMe [C++20]", "FixMe [C++23]", "FixMe [C++26]",
         "ToDo [C++20]",  "ToDo [C++23]",  "ToDo [C++26]",
         "FixMe [CMake]", "ToDo [CMake]",  "@todo [CMake]", "@fixme [CMake]",
         "FixMe [XXX]",   "ToDo [XXX]",    "@todo [XXX]",   "@fixme [XXX]", "XXX",
+        "FixMe [DRY]", "ToDo [DRY]", 
+        "FixMe [LINT]", "ToDo [LINT]",
         "<<<<<<<"
     ],
     "todo-tree.general.tagGroups": {
@@ -59,7 +74,10 @@
             "FixMe [XXX]",  "ToDo [XXX]",
             "@fixme [XXX]", "@todo [XXX]",
             "XXX"
-        ],        
+        ],
+        "Don't-Repeat-Yourself": [
+            "FixMe [DRY]", "ToDo [DRY]"
+        ],
         "TODO": [
             "FIXME", "TODO", "XXX",
             "@todo", "@fixme"
@@ -70,6 +88,9 @@
         ],
         "CMake": [
             "FixMe [CMake]", "ToDo [CMake]", "@fixme [CMake]", "@todo [CMake]"
+        ],
+        "Linting": [
+            "FixMe [LINT]", "ToDo [LINT]"
         ],
         "git-conflict": [
             "<<<<<<<"
@@ -151,6 +172,7 @@
             "*"
         ]
     },
+    "iwyu.max_line_length": 100,
     "files.associations": {
         "algorithm": "cpp",
         "any": "cpp",
@@ -267,6 +289,8 @@
         "execution": "cpp",
         "__hash_table": "cpp",
         "semaphore": "cpp",
-        "__locale": "cpp"
-    }
+        "__locale": "cpp",
+        "cinttypes": "cpp"
+    },
+    "cSpell.words": []
 }

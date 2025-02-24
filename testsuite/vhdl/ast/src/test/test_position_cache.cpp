@@ -4,19 +4,27 @@
 //
 
 #include <ibis/util/file_mapper.hpp>
-#include <ibis/vhdl/parser/iterator_type.hpp>
-#include <ibis/vhdl/parser/position_cache.hpp>
+#include <ibis/util/strong_type.hpp>
 #include <ibis/vhdl/ast/util/position_tagged.hpp>
+#include <ibis/vhdl/parser/position_cache.hpp>
 
-#include <boost/test/unit_test.hpp>
-#include <boost/test/tools/output_test_stream.hpp>
-#include <boost/test/tools/interface.hpp>
+#include <boost/test/tools/assertion.hpp>                 // for EQ, binary_expr, value_expr, NE
+#include <boost/test/tools/context.hpp>                   // for context_frame, BOOST_TEST_CONTEXT
+#include <boost/test/tools/cstring_comparison_op.hpp>     // for EQ
+#include <boost/test/tools/detail/indirections.hpp>       // for assertion_type
+#include <boost/test/tools/detail/per_element_manip.hpp>  // for per_element
+#include <boost/test/tools/interface.hpp>                 // for BOOST_TEST, BOOST_TEST_REQUIRE
+#include <boost/test/tree/decorator.hpp>                  // for label, base, collector_t
+#include <boost/test/unit_test.hpp>                       // for BOOST_PP...
+#include <boost/test/utils/basic_cstring/basic_cstring.hpp>  // for basic_cstring
+#include <boost/test/utils/lazy_ostream.hpp>  // for operator<<, lazy_ostream, lazy_ostream_impl
 
-#include <string_view>
-#include <utility>
-#include <tuple>
-#include <iostream>
+#include <array>
 #include <cassert>
+#include <iostream>
+#include <string_view>
+#include <tuple>
+#include <vector>
 
 #include <testsuite/namespace_alias.hpp>
 
@@ -42,6 +50,9 @@ belly tenderloin. Tongue filet mignon brisket, pork loin turkey venison kielbasa
 ball tip turducken boudin. Shankle jerky bacon brisket tongue turducken flank ground round.
 )"sv;
 
+}  // namespace valid_data
+
+namespace /* anonymous */ {
 ///
 /// helper to gather iterator pair inside the contents for "tagging"
 ///
@@ -53,19 +64,17 @@ auto find(std::string_view contents, std::string_view search_str,
 {
     auto pos = contents.find(search_str, pos_);
     // ensure correct found
-    assert(pos != std::string::npos);
-    assert(contents.substr(pos, search_str.size()).compare(search_str) == 0);
+    assert(pos != std::string_view::npos);
+    assert(contents.substr(pos, search_str.size()) == search_str);
 
     auto view = contents.substr(pos, search_str.size());
     return { pos, begin(view), end(view) };
 }
-
-}  // namespace valid_data
+}  // namespace
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_SUITE(position_cache)
 
-using valid_data::find;
 using namespace std::literals;
 
 ///
@@ -75,20 +84,20 @@ BOOST_AUTO_TEST_CASE(test_requirements)
 {
     auto const search_str{ "elitr"sv };
 
-    auto const verbose = [](auto pos, auto first, auto last) {
+    [[maybe_unused]] auto constexpr verbose = [](auto pos, auto first, auto last) {
         std::cout << std::format("pos = {:3d}: {}\n", pos, std::string_view{ first, last });
     };
 
     // find 1st
     auto const [pos1, first1, last1] = find(valid_data::lorem_ipsum, search_str);
-    verbose(pos1, first1, last1);
+    // verbose(pos1, first1, last1);
 
     // find 2nd
     auto const [pos2, first2, last2] = find(valid_data::lorem_ipsum, search_str, pos1 + 1);
-    verbose(pos2, first2, last2);
+    // verbose(pos2, first2, last2);
 
-    BOOST_REQUIRE(search_str == std::string_view(first1, last1));
-    BOOST_REQUIRE(search_str == std::string_view(first2, last2));
+    BOOST_TEST_REQUIRE(search_str == std::string_view(first1, last1));
+    BOOST_TEST_REQUIRE(search_str == std::string_view(first2, last2));
 }
 
 using iterator_type = std::string_view::iterator;
@@ -113,7 +122,7 @@ BOOST_AUTO_TEST_CASE(position_cache_basic,
     // order index equals to the position added into the vector. If more complex test cases are
     // created, make sure that the vector index can be clearly assigned to a test in order to avoid
     // mistakes during the check.
-    std::vector<valid_data::find_pos_type> find_pos;
+    std::vector<find_pos_type> find_pos;
 
     {  // #0
         auto const search_str{ "elitr"sv };
@@ -127,9 +136,9 @@ BOOST_AUTO_TEST_CASE(position_cache_basic,
         BOOST_TEST(ast_node.file_id == current_file.id());
         BOOST_TEST(ast_node.position_id == 0U);
         // getting iterators back (annotated by x3 on_success error_handler)
-        [[maybe_unused]] auto iter_range = position_cache.position_of(ast_node);
-        // ToDo BOOST_TEST(std::begin(iter_range) == first);
-        // ToDo BOOST_TEST(std::end(iter_range) == last);
+        auto iter_range = position_cache.position_of(ast_node);
+        BOOST_CHECK(std::begin(iter_range) == first);
+        BOOST_CHECK(std::end(iter_range) == last);
     }
     {  // #1
         auto const search_str{ "voluptua"sv };
@@ -143,15 +152,15 @@ BOOST_AUTO_TEST_CASE(position_cache_basic,
         BOOST_TEST(ast_node.file_id == current_file.id());
         BOOST_TEST(ast_node.position_id == 1U);
         // getting iterators back (annotated by x3 on_success error_handler)
-        [[maybe_unused]] auto iter_range = position_cache.position_of(ast_node);
-        // ToDo BOOST_TEST(std::begin(iter_range) == first);
-        // ToDo BOOST_TEST(std::end(iter_range) == last);
+        auto iter_range = position_cache.position_of(ast_node);
+        BOOST_CHECK(std::begin(iter_range) == first);
+        BOOST_CHECK(std::end(iter_range) == last);
     }
     {  // #2
         auto const search_str{ "elitr"sv };
-        [[maybe_unused]] auto [pos_prev, f, l] = find_pos[0];  // previous find pass
+        auto [pos_prev, f, l] = find_pos[0];  // previous find pass
         auto [pos, first, last] = find(valid_data::lorem_ipsum, search_str, pos_prev + 1);
-        BOOST_REQUIRE(pos_prev != pos);
+        BOOST_TEST_REQUIRE(pos_prev != pos);
         find_pos.emplace_back(pos, first, last);
 
         position_tagged ast_node;
@@ -161,7 +170,7 @@ BOOST_AUTO_TEST_CASE(position_cache_basic,
         auto const search_str{ "voluptua"sv };
         [[maybe_unused]] auto [pos_prev, f, l] = find_pos[1];  // previous find pass
         auto [pos, first, last] = find(valid_data::lorem_ipsum, search_str, pos_prev + 1);
-        BOOST_REQUIRE(pos_prev != pos);
+        BOOST_TEST_REQUIRE(pos_prev != pos);
         find_pos.emplace_back(pos, first, last);
 
         position_tagged ast_node;
@@ -192,30 +201,34 @@ BOOST_AUTO_TEST_CASE(position_cache_annotate,
     std::vector<position_tagged> tagged_nodes;
 
     // prepare
-    struct {  // NOCPPLINT(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+    struct file_data_type {
         ibis::util::file_mapper::file_id_type file_id;
         std::string_view search_str;
-    } const file_data[] = {
-        { lorem_ipsum_file.id(), "ipsum" },  // --
-        { bacon_ipsum_file.id(), "beef" }    // --
     };
 
-    for (auto [file_id, search_str] : file_data) {
+    auto const file_data = std::to_array<file_data_type>({
+        { lorem_ipsum_file.id(), "ipsum" },  // NOLINT(modernize-use-designated-initializers)
+        { bacon_ipsum_file.id(), "beef" }    // NOLINT(modernize-use-designated-initializers)
+    });
+
+    for (auto const& [file_id, search_str] : file_data) {
         auto annotator = position_cache.annotator_for(file_id);
         auto [pos, first, last] = find(file_mapper.file_contents(file_id), search_str);
 
         position_tagged ast_node;
         annotator.annotate(ast_node, first, last);
         // position represents order of ast_nodes inserted, hence order of file_data
-        tagged_nodes.emplace_back(std::move(ast_node));
+        tagged_nodes.emplace_back(ast_node);
     }
 
     // test
     {
-        for (auto index{ 0U }; auto const& ast_node : tagged_nodes) {
+        for (auto index{ 0UL }; auto const& ast_node : tagged_nodes) {
             BOOST_TEST_CONTEXT(">>> Test index at " << index << " <<<")
             {
-                auto gold_data = file_data[index];
+                // FixMe Tidy: do not use array subscript when the index is not an integer constant
+                // expression [cppcoreguidelines-pro-bounds-constant-array-index]
+                auto gold_data = file_data.at(index);
                 BOOST_TEST(ast_node.file_id == gold_data.file_id);
                 BOOST_TEST(ast_node.position_id == index);
                 auto iter_range = position_cache.position_of(ast_node);
