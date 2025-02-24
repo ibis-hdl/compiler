@@ -13,6 +13,7 @@
 
 #include <exception>
 #include <iosfwd>
+#include <iterator>
 #include <string_view>
 #include <string>
 #include <vector>
@@ -24,9 +25,10 @@ using design_file = std::vector<ast::design_unit>;  // FixMe not clever, include
 
 namespace ibis::vhdl::parser {
 
+template <std::random_access_iterator IteratorT /* = vhdl::parser::iterator_type */>
 class parse {
 public:
-    using iterator_type = vhdl::parser::iterator_type;
+    using iterator_type = IteratorT;
     using position_cache_type = position_cache<iterator_type>;
     using current_file_type = ibis::util::file_mapper::current_file;
     using vhdl_context_type = parser::context;
@@ -75,5 +77,12 @@ private:
 private:
     std::ostream& os;
 };
+
+}  // namespace ibis::vhdl::parser
+
+namespace ibis::vhdl::parser {
+
+/// Explicit template instantiation declaration
+extern template class parse<vhdl::parser::iterator_type>;
 
 }  // namespace ibis::vhdl::parser

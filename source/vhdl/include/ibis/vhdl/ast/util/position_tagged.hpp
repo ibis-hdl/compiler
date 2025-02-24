@@ -7,8 +7,8 @@
 
 #include <ibis/util/strong_type.hpp>
 
+#include <cstddef>
 #include <limits>
-#include <cstdint>
 
 namespace ibis::vhdl::ast {
 

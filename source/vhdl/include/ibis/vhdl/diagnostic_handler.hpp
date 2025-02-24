@@ -40,7 +40,7 @@ namespace ibis::vhdl {
 /// @tparam IteratorT Type of iterator used by `parser::position_cache`'s `proxy`. Generally
 /// equals to `vhdl::parser::iterator_type`.
 ///
-// ToDo To much functionality in a single class, make free function of line_column_number(),
+// ToDo Too much functionality in a single class, make free function of line_column_number(),
 // get_line_start() etc.
 template <typename IteratorT>
 class diagnostic_handler {

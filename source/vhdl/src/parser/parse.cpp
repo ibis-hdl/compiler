@@ -44,15 +44,12 @@ BOOST_SPIRIT_DECLARE(design_file_type)
 
 namespace ibis::vhdl::parser {
 
-bool parse::operator()(current_file_type&& current_file, position_cache_type& position_cache,
-                       vhdl_context_type& vhdl_ctx, ast::design_file& design_file) const
+template <std::random_access_iterator IteratorT>
+bool parse<IteratorT>::operator()(current_file_type&& current_file,
+                                  position_cache_type& position_cache, vhdl_context_type& vhdl_ctx,
+                                  ast::design_file& design_file) const
 {
     using ibis::util::get_iterator_pair;
-
-    static_assert(
-        std::is_base_of_v<std::forward_iterator_tag,
-                          typename std::iterator_traits<iterator_type>::iterator_category>,
-        "iterator type must be of multi-pass iterator");  // ToDo realize this as concept
 
     // clang-format off
     parser::diagnostic_handler_type diagnostic_handler{
@@ -63,6 +60,10 @@ bool parse::operator()(current_file_type&& current_file, position_cache_type& po
     // FixMe Urgent - current_file moved before!!
     auto ast_annotator = position_cache.annotator_for(current_file.id());
 
+    // FixMe Urgent - Check better approach [Cleanest way to handle both quoted and unquoted strings
+    // in Spirit.X3](
+    // https://stackoverflow.com/questions/74031183/cleanest-way-to-handle-both-quoted-and-unquoted-strings-in-spirit-x3)
+    // >>>>> related to current_file moved before and others
     // clang-format off
     auto const parser =
         x3::with<parser::annotator_tag>(std::ref(ast_annotator))[
@@ -117,8 +118,9 @@ bool parse::operator()(current_file_type&& current_file, position_cache_type& po
     return parse_ok;
 }
 
-std::string parse::make_exception_description(std::exception const& exception,
-                                              std::string_view filename)
+template <std::random_access_iterator IteratorT>
+std::string parse<IteratorT>::make_exception_description(std::exception const& exception,
+                                                         std::string_view filename)
 {
     using boost::locale::format;
     using boost::locale::translate;
@@ -131,7 +133,8 @@ std::string parse::make_exception_description(std::exception const& exception,
         .str();
 }
 
-std::string parse::make_exception_description(std::string_view filename)
+template <std::random_access_iterator IteratorT>
+std::string parse<IteratorT>::make_exception_description(std::string_view filename)
 {
     using boost::locale::format;
     using boost::locale::translate;
@@ -142,5 +145,14 @@ std::string parse::make_exception_description(std::string_view filename)
             )
         .str();
 }
+
+}  // namespace ibis::vhdl::parser
+
+// ----------------------------------------------------------------------------
+// Explicit template instantiation
+// ----------------------------------------------------------------------------
+namespace ibis::vhdl::parser {
+
+template class parse<vhdl::parser::iterator_type>;
 
 }  // namespace ibis::vhdl::parser

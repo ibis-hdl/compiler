@@ -23,13 +23,15 @@ public:
     using error_counter = util::tagged_treshold_counter<value_type, struct error_tag>;
     using warning_counter = util::tagged_treshold_counter<value_type, struct warning_tag>;
 
+    static constexpr auto DEFAULT_ERROR_LIMIT = 42U;
+
 public:
     ///
     /// Creates the VHDL context
     ///
     /// @param error_limit threshold of error count value.
     ///
-    explicit context(value_type error_limit = 42)
+    explicit context(value_type error_limit = DEFAULT_ERROR_LIMIT)
         : error_count{ error_limit }
         , warning_count{ warning_counter::MAX_THRESHOLD }
     {
@@ -44,7 +46,7 @@ public:
     context& operator=(context&) = delete;
 
 public:
-    enum class Standard { VHDL93, VHDL2000, VHDL2002, VHDL2007, VHDL2008, VHDL2019 };
+    enum class Standard : std::uint8_t { VHDL93, VHDL2000, VHDL2002, VHDL2007, VHDL2008, VHDL2019 };
 
 public:
     bool error_free() const { return error_count == 0; }
@@ -71,7 +73,7 @@ public:
     using value_type = context::value_type;
 
 public:
-    failure_status(std::reference_wrapper<context> ctx_)
+    explicit failure_status(std::reference_wrapper<context> ctx_)
         : ctx{ ctx_ }
     {
     }

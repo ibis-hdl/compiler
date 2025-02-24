@@ -4,6 +4,7 @@
 *.orig
 *.org
 *.bak
+*.log
 
 ## build and Python's virtual env related
 build/**
