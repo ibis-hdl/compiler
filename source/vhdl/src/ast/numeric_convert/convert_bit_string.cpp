@@ -38,8 +38,8 @@
 namespace ibis::vhdl::ast {
 
 template <ibis::integer IntegerT>
-convert_bit_string<IntegerT>::convert_bit_string(diagnostic_handler_type& diagnostic_handler_)
-    : diagnostic_handler{ diagnostic_handler_ }
+convert_bit_string<IntegerT>::convert_bit_string(diagnostic_handler_type& diag_handler)
+    : diagnostic_handler{ diag_handler }
 {
 }
 
@@ -55,20 +55,20 @@ typename convert_bit_string<IntegerT>::return_type convert_bit_string<IntegerT>:
         using numeric_base_specifier = ast::bit_string_literal::numeric_base_specifier;
         // select the concrete x3::uint-parser<> using the base_specifier
         auto const uint_parser = [](numeric_base_specifier base_spec, auto iter_t) {
-            using numeric_base_specifier = ast::bit_string_literal::numeric_base_specifier;
+            using enum ast::bit_string_literal::numeric_base_specifier;
             using iterator_type = decltype(iter_t);
 
             // clang-format off
             switch (base_spec) {
-                case numeric_base_specifier::base2: 
+                case base2: 
                     return detail::uint_parser<iterator_type, integer_type>::base(ast::numeric_base_specifier::base2);
-                case numeric_base_specifier::base8: 
+                case base8: 
                     return detail::uint_parser<iterator_type, integer_type>::base(ast::numeric_base_specifier::base8);
-                case numeric_base_specifier::base16: 
+                case base16: 
                     return detail::uint_parser<iterator_type, integer_type>::base(ast::numeric_base_specifier::base16);
                 // definitely wrong enum, the caller has not worked out properly
-                [[unlikely]] case numeric_base_specifier::unspecified: [[fallthrough]];
-                [[unlikely]] case numeric_base_specifier::unsupported:
+                [[unlikely]] case unspecified: [[fallthrough]];
+                [[unlikely]] case unsupported:
                     cxx_bug_fatal("unspecified or unsupported numeric base type for bit string");
                 //
                 // *No* default branch: let the compiler generate warning about enumeration

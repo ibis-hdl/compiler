@@ -15,7 +15,8 @@
 template <>
 struct std::formatter<ibis::vhdl::failure_status> : std::formatter<std::string> {
     // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-    auto format(ibis::vhdl::failure_status status, std::format_context& ctx) const
+    template <class FmtContext>
+    auto format(ibis::vhdl::failure_status status, FmtContext& ctx) const
     {
         using boost::locale::format;
         using boost::locale::translate;

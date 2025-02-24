@@ -28,12 +28,13 @@ static constexpr bool supported_base(numeric_base_specifier base_specifier)
 {
     // clang-format off
     switch (base_specifier) {
-        case numeric_base_specifier::base2:       [[fallthrough]];
-        case numeric_base_specifier::base8:       [[fallthrough]];
-        case numeric_base_specifier::base10:      [[fallthrough]];
-        case numeric_base_specifier::base16:      return true;
-        case numeric_base_specifier::unspecified: [[fallthrough]];
-        case numeric_base_specifier::unsupported: return false;
+        using enum ast::numeric_base_specifier;
+        case base2:       [[fallthrough]];
+        case base8:       [[fallthrough]];
+        case base10:      [[fallthrough]];
+        case base16:      return true;
+        case unspecified: [[fallthrough]];
+        case unsupported: return false;
     }
     // clang-format on
 
@@ -45,10 +46,10 @@ static constexpr auto to_base_specifier(unsigned base)
     // clang-format off
     // NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
     switch (base) {
-        case 2:  return numeric_base_specifier::base2;
-        case 8:  return numeric_base_specifier::base8;
-        case 10: return numeric_base_specifier::base10;
-        case 16: return numeric_base_specifier::base16;
+        case 2U:  return numeric_base_specifier::base2;
+        case 8U:  return numeric_base_specifier::base8;
+        case 10U: return numeric_base_specifier::base10;
+        case 16U: return numeric_base_specifier::base16;
         default: return numeric_base_specifier::unsupported;
     }
     // NOLINTEND(cppcoreguidelines-avoid-magic-numbers)

@@ -10,7 +10,6 @@
 #include <ibis/vhdl/type.hpp>
 
 #include <cstdint>
-#include <string_view>
 #include <tuple>
 #include <variant>
 
@@ -65,9 +64,9 @@ public:
     ///
     /// Construct a new numeric convert object.
     ///
-    /// @param diagnostic_handler_ Error reporter.
+    /// @param diag_handler Error reporter.
     ///
-    convert_based(diagnostic_handler_type& diagnostic_handler_);
+    explicit convert_based(diagnostic_handler_type& diag_handler);
 
     ///
     /// Convert the a bit string literal to numeric value.

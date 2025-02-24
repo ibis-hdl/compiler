@@ -75,8 +75,8 @@ struct real_policies : x3::ureal_policies<T> {
 };
 
 template <ibis::integer IntegerT, ibis::real RealT>
-convert_decimal<IntegerT, RealT>::convert_decimal(diagnostic_handler_type& diagnostic_handler_)
-    : diagnostic_handler{ diagnostic_handler_ }
+convert_decimal<IntegerT, RealT>::convert_decimal(diagnostic_handler_type& diag_handler)
+    : diagnostic_handler{ diag_handler }
 {
 }
 
@@ -90,17 +90,20 @@ typename convert_decimal<IntegerT, RealT>::return_type convert_decimal<IntegerT,
     auto const parse = [&](numeric_type_specifier type_specifier, auto const& literal) {
         // clang-format off
         switch (type_specifier) {
-            case numeric_type_specifier::integer: {
+            using enum ast::decimal_literal::numeric_type_specifier;
+            case integer: 
+            {
                 auto const [parse_ok, attribute] = parse_integer(literal);
                 // FixMe static_assert(std::is_same_v<decltype(attribute), integer_type>);
                 return return_type{ parse_ok, result_type(attribute) };
             }
-            case numeric_type_specifier::real: {
+            case real: 
+            {
                 auto const [parse_ok, attribute] = parse_real(literal);
                 // FixMe static_assert(std::is_same_v<decltype(attribute), real_type>);
                 return return_type{ parse_ok, result_type(attribute) };
             }
-            [[unlikely]] case numeric_type_specifier::unspecified:
+            [[unlikely]] case unspecified:
                 cxx_bug_fatal("caller must pass checked base_specifier");
             //
             // *No* default branch: let the compiler generate warning about enumeration

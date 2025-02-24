@@ -48,7 +48,7 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name)
     auto const match_result = check_label(node);
 
     // all went fine
-    if (match_result == label_match::result::OK) {
+    if (match_result == label_match::result::LABEL_OK) {
         return true;
     }
 
@@ -61,20 +61,21 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name)
 
     // clang-format off
     switch (match_result) {
-        case label_match::result::MISMATCH: {
+        using enum label_match::result;
+        case LABEL_MISMATCH: {
             auto const err_msg =  // --
                 (format(translate("Label mismatch in {1}")) % node_name).str();
             diagnostic_handler.syntax_error(node, start_label, end_label, err_msg);
             return false;
         }
-        case label_match::result::ILLFORMED: {
+        case LABEL_ILLFORMED: {
             auto const err_msg =  // --
                 (format(translate("Label ill-formed in {1}")) % node_name).str();
             diagnostic_handler.syntax_error(node, start_label, end_label, err_msg);
             return false;
         }
         // test on OK before on function entry, shouldn't be here
-        [[unlikely]] case label_match::result::OK:
+        [[unlikely]] case LABEL_OK:
             cxx_bug_fatal("Internal logic error");
         // *No* default branch: let the compiler generate warning about enumeration
         // value not handled in switch

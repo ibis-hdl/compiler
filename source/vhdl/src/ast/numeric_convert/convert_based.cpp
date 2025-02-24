@@ -73,8 +73,8 @@ namespace ibis::vhdl::ast {
 static constexpr unsigned BASE10 = 10;
 
 template <ibis::integer IntegerT, ibis::real RealT>
-convert_based<IntegerT, RealT>::convert_based(diagnostic_handler_type& diagnostic_handler_)
-    : diagnostic_handler{ diagnostic_handler_ }
+convert_based<IntegerT, RealT>::convert_based(diagnostic_handler_type& diag_handler)
+    : diagnostic_handler{ diag_handler }
 {
 }
 
@@ -88,23 +88,23 @@ convert_based<IntegerT, RealT>::parse_integer(unsigned base,
 
     // select a concrete parser depending the the base specifier
     auto const parser = [](unsigned base_spec, auto iter_t) {
-        using numeric_base_specifier = ast::numeric_base_specifier;
         auto const base_specifier = to_base_specifier(base_spec);
 
         using iterator_type = decltype(iter_t);
         // clang-format off
         switch (base_specifier) {
-            case numeric_base_specifier::base2:
+            using enum ast::numeric_base_specifier;
+            case base2:
                 return detail::uint_parser<iterator_type, integer_type>::base(ast::numeric_base_specifier::base2);
-            case numeric_base_specifier::base8:
+            case base8:
                 return detail::uint_parser<iterator_type, integer_type>::base(ast::numeric_base_specifier::base8);
-            case numeric_base_specifier::base10:
+            case base10:
                 return detail::uint_parser<iterator_type, integer_type>::base(ast::numeric_base_specifier::base10);
-            case numeric_base_specifier::base16:
+            case base16:
                 return detail::uint_parser<iterator_type, integer_type>::base(ast::numeric_base_specifier::base16);
             // definitely wrong enum, the caller has not worked out properly
-            [[unlikely]] case numeric_base_specifier::unspecified: [[fallthrough]];
-            [[unlikely]] case numeric_base_specifier::unsupported:
+            [[unlikely]] case unspecified: [[fallthrough]];
+            [[unlikely]] case unsupported:
                 cxx_bug_fatal("unspecified or unsupported base for based literal");
             //
             // *No* default branch: let the compiler generate warning about enumeration

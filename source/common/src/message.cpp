@@ -55,10 +55,9 @@ namespace ibis {
 
 std::ostream& message(std::string_view msg, ibis::severity severity, bool newline)
 {
-    using enum ibis::severity;
-
     // clang-format off
     switch (severity) {
+        using enum ibis::severity;
         case note:
             fmt::print(stdout, fg(fmt::color::green), "[{}] ", "Note");
             return write(std::cout, msg, newline);
@@ -83,10 +82,9 @@ std::ostream& message(std::string_view msg, ibis::severity severity, bool newlin
 
 std::ostream& message(boost::locale::basic_message<char> msg, ibis::severity severity, bool newline)
 {
-    using enum ibis::severity;
-
     // clang-format off
     switch (severity) {
+        using enum ibis::severity;
         case note:
             fmt::print(stdout, fg(fmt::color::green), "[{}] ", "Note");
             return write(std::cout, msg, newline);
@@ -112,10 +110,9 @@ std::ostream& message(boost::locale::basic_message<char> msg, ibis::severity sev
 std::ostream& message(boost::locale::basic_format<char> const& fmt, ibis::severity severity,
                       bool newline)
 {
-    using enum ibis::severity;
-
     // clang-format off
     switch (severity) {
+        using enum ibis::severity;
         case note:
             fmt::print(stdout, fg(fmt::color::green), "[{}] ", "Note");
             return write(std::cout, fmt, newline);

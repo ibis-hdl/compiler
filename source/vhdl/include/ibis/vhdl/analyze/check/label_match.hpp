@@ -40,7 +40,7 @@ namespace ibis::vhdl::analyze {
 ///
 class label_match {
 public:
-    enum class result { OK, MISMATCH, ILLFORMED };
+    enum class result { LABEL_OK, LABEL_MISMATCH, LABEL_ILLFORMED };
 
 public:
     result operator()(ast::architecture_body const& node) const;

@@ -113,7 +113,7 @@ struct std::formatter<ibis::vhdl::source_location> {
     template <class FmtContext>
     auto format(ibis::vhdl::source_location const& location, FmtContext& ctx) const
     {
-        std::string temp;
+        std::string temp;   // ToDo use pmr and buffer
         temp.reserve(256);  // initial guess
 
         // Based on GNU standard of [Formatting Error Messages](

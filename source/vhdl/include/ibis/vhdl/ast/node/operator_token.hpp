@@ -12,7 +12,7 @@
 namespace ibis::vhdl::ast {
 
 enum class operator_token {
-    UNSPECIFIED,
+    UNSPECIFIED_OPERATOR,
     // miscellaneous_operator
     EXPONENT,
     ABS,

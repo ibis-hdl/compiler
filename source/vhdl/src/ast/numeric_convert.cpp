@@ -10,8 +10,8 @@
 
 namespace ibis::vhdl::ast {
 
-numeric_convert::numeric_convert(diagnostic_handler_type& diagnostic_handler_)
-    : diagnostic_handler{ diagnostic_handler_ }
+numeric_convert::numeric_convert(diagnostic_handler_type& diag_handler)
+    : diagnostic_handler{ diag_handler }
 {
 }
 

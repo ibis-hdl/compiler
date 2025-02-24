@@ -68,8 +68,8 @@
         },
         {
             "name": "dev-clang-iwyu",
-            "displayName": "Clang/IWYU (Developer)",
-            "description": "Clang/IWYU compiler with developer settings (using GNU libstdc++)",
+            "displayName": "IWYU (Developer/Clang)",
+            "description": "IWYU clang compiler with developer settings (using GNU libstdc++)",
             "inherits": [
                 "tool-iwyu-clang",
                 "compiler-clang-dev",
@@ -88,7 +88,7 @@
         },
         {
             "name": "dev-gcc-iwyu",
-            "displayName": "IWYU (Developer)",
+            "displayName": "IWYU (Developer/Gcc)",
             "description": "IWYU gcc compiler with developer settings (using GNU libstdc++)",
             "inherits": [
                 "tool-iwyu-gcc",
@@ -105,16 +105,16 @@
                 "CONAN_BUILD_PROFILE": "gcc",
                 "CMAKE_BUILD_TYPE": "Release"
             }
-        },        
+        },
         {
             "name": "dev-clang-asan",
-            "displayName": "Clang ASAN/UBSAN (Developer)",
-            "description": "Clang ASAN/UBSAN compiler with developer settings (using GNU libstdc++)",
+            "displayName": "ASAN/UBSAN (Developer/Clang)",
+            "description": "ASAN/UBSAN clang with developer settings (using GNU libstdc++)",
             "binaryDir": "${sourceDir}/build/sanitize",
             "inherits": [
                 "tool-sanitize-asan-ubsan",
+                "compiler-clang",
                 "developer-mode",
-                "libstdcxx-debug",
                 "condition-linux-or-macos",
                 "ninja-multi-config",
                 "conan-toolchain",

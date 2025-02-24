@@ -8,12 +8,22 @@
     "C_Cpp.codeAnalysis.clangTidy.enabled": true,
     "C_Cpp.codeAnalysis.clangTidy.useBuildPath": true,
     "C_Cpp.codeAnalysis.clangTidy.args": [
-        " -extra-arg=-std=c++20"
+        " -extra-arg=-std=c++23"
     ],
     "C_Cpp.codeAnalysis.exclude": {
         "*grammar_def.hpp": true
     },
-    "C_Cpp.intelliSenseEngine": "disabled", // Clangd
+     // Clangd
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "clangd.arguments": [
+        "-log=verbose",
+        "--offset-encoding=utf-8",
+        "--pretty",
+        "--background-index",
+        "-j=4",
+        "--compile-commands-dir=${workspaceFolder}/build",
+        "--header-insertion=iwyu"
+    ],
     // CMake
     "cmake.configureOnOpen": false,
     "cmake.useCMakePresets": "auto",

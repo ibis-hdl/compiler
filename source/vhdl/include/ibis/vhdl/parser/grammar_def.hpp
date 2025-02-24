@@ -1214,10 +1214,10 @@ struct based_literal_base_type : x3::parser<based_literal_base_type> {
         // clang-format off
         switch (base) {
             // NOLINTNEXTLINE(bugprone-branch-clone)
-            case 2:  [[fallthrough]];
-            case 8:  [[fallthrough]];
-            case 10: [[fallthrough]];
-            case 16: return true;
+            case 2U:  [[fallthrough]];
+            case 8U:  [[fallthrough]];
+            case 10U: [[fallthrough]];
+            case 16U: return true;
             default: return false;
         }
         // clang-format on

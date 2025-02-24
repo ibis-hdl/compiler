@@ -37,26 +37,6 @@
             }
         },
         {
-            "name": "cmake-pedantic-settings",
-            "description": "Enable CMake pedantic warnings for developer mode",
-            "hidden": true,
-            "warnings": {
-                "dev": true,
-                "deprecated": true,
-                "uninitialized": false,
-                "unusedCli": true,
-                "systemVars": true
-            },
-            "errors": {
-              "dev": false,
-              "deprecated": true
-            },
-            "inherits": [ "cmake-common" ],
-            "cacheVariables": {
-                "CMAKE_VERBOSE_MAKEFILE": "OFF"
-            }
-        },
-        {
             "name": "ninja-common-settings",
             "description": "Common settings related to build tool Ninja.",
             "hidden": true,

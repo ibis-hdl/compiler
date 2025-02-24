@@ -18,7 +18,7 @@
 namespace ibis::vhdl::ast {
 
 enum class keyword_token {
-    UNSPECIFIED,
+    UNSPECIFIED_KEYWORD,
     ABS,
     ACCESS,
     AFTER,

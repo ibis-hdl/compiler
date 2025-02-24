@@ -66,7 +66,7 @@ set_source_files_properties(
 
 
 # Disable Clang -Weverything Warning regards:
-# [-Wshadow]: The ast_printer uses a lot of
+# [-Wshadow], [-Wshadow-uncaptured-local]: The ast_printer.cpp uses a lot of
 #    static const std::string_view symbol{ "<node-name>" }, even on dispatch inside same
 #    member, hence disable warning: declaration shadows a local variable [-Wshadow]
 # [-Wswitch-enum]: Rework required, or replacement with generic_ast_walker visitor
@@ -75,8 +75,9 @@ set_source_files_properties(
 # ToDo remove this compiler options
 if(IBIS_DEVELOPER_CLANG_WARN_EVERYTHING)
     target_compile_options(${PROJECT_NAME} PRIVATE # append
-        "-Wno-shadow" "-Wno-shadow-uncaptured-local" # XXX consider this!
-        "-Wno-switch-enum" "-Wno-extra-semi-stmt"
+        "-Wno-shadow" "-Wno-shadow-uncaptured-local"
+#       "-Wno-switch-enum" 
+        "-Wno-extra-semi-stmt"
     )
 endif()
 

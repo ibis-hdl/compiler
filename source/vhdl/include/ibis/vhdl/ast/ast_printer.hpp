@@ -252,7 +252,7 @@ private:
     }
 
     template <typename T>
-    void visit(std::vector<T> const& vector);
+    void visit_each(std::vector<T> const& vector);
 
 private:
     util::indent_ostream os;

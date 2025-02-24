@@ -38,28 +38,33 @@ public:
 
         // clang-format off
         switch (base_specifier) {
-            case numeric_base_specifier::base2: {
-                using parser_type = x3::uint_parser<integer_type, 2>;
+            using enum ast::numeric_base_specifier;
+            case base2: 
+            {
+                using parser_type = x3::uint_parser<integer_type, 2U>;
                 parser_type const uint_parser = parser_type{};
                 return as_any_parser(uint_parser);
             }
-            case numeric_base_specifier::base8: {
-                using parser_type = x3::uint_parser<integer_type, 8>;
+            case base8: 
+            {
+                using parser_type = x3::uint_parser<integer_type, 8U>;
                 parser_type const uint_parser = parser_type{};
                 return as_any_parser(uint_parser);
             }
-            case numeric_base_specifier::base10: {
-                using parser_type = x3::uint_parser<integer_type, 10>;
+            case base10: 
+            {
+                using parser_type = x3::uint_parser<integer_type, 10U>;
                 parser_type const uint_parser = parser_type{};
                 return as_any_parser(uint_parser);
             }
-            case numeric_base_specifier::base16: {
-                using parser_type = x3::uint_parser<integer_type, 16>;
+            case base16: 
+            {
+                using parser_type = x3::uint_parser<integer_type, 16U>;
                 parser_type const uint_parser = parser_type{};
                 return as_any_parser(uint_parser);
             }
-            [[unlikely]] case numeric_base_specifier::unspecified: [[fallthrough]];
-            [[unlikely]] case numeric_base_specifier::unsupported:
+            [[unlikely]] case unspecified: [[fallthrough]];
+            [[unlikely]] case unsupported:
                 // The caller must pass checked base_specifier
                 cxx_bug_fatal("unspecified or unsupported numeric base");
             //

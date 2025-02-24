@@ -3,11 +3,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
+#include <ibis/vhdl/ast/ast_printer.hpp>
+
 #include <ibis/util/indent_stream.hpp>
 #include <ibis/util/overloaded.hpp>  // IWYU pragma: keep
 #include <ibis/vhdl/ast.hpp>         // IWYU pragma: keep
 #include <ibis/vhdl/ast/ast_formatter.hpp>
-#include <ibis/vhdl/ast/ast_printer.hpp>
 #include <ibis/vhdl/ast/util/nullary.hpp>
 #include <ibis/vhdl/ast/util/optional.hpp>
 #include <ibis/vhdl/ast/util/string_span.hpp>
@@ -151,7 +152,7 @@ void printer::operator()(aggregate const& node)
     // It looks for an infinity recursive call here!
     // [BNF](https://www.vhdl-online.de/vhdl_reference_93/aggregates)
     // states: ( element_association { , element_association } )
-    visit(node);
+    visit_each(node);
 }
 
 void printer::operator()(alias_declaration const& node)
@@ -219,7 +220,7 @@ void printer::operator()(architecture_statement_part const& node)
 {
     static const std::string_view symbol{ "architecture_statement_part" };
     symbol_scope<architecture_statement_part> const _(*this, symbol);
-    visit(node);
+    visit_each(node);
 }
 
 void printer::operator()(array_type_definition const& node)
@@ -279,7 +280,7 @@ void printer::operator()(association_list const& node)
     static const std::string_view symbol{ "association_list" };
     symbol_scope<association_list> const _(*this, symbol);
 
-    visit(node);
+    visit_each(node);
 }
 
 void printer::operator()(attribute_declaration const& node)
@@ -351,17 +352,16 @@ void printer::operator()(based_literal const& node)
         os << ", exp: " << node.number.exponent;
     }
 
-    using numeric_type_specifier = ast::based_literal::numeric_type_specifier;
-
     os << ", type: ";
     switch (node.number.type_specifier) {
-        case numeric_type_specifier::integer:
+        using enum ast::based_literal::numeric_type_specifier;
+        case integer:
             os << "integer";
             break;
-        case numeric_type_specifier::real:
+        case real:
             os << "real";
             break;
-        default:
+        case unspecified:
             // BUG triggered by 'parser_rules/test_data/abstract_literal/decimal_literal_000'
             cxx_bug_fatal("unspecified numeric type for based literal");
     }
@@ -387,22 +387,23 @@ void printer::operator()(bit_string_literal const& node)
     static const std::string_view symbol{ "bit_string_literal" };
     symbol_scope<bit_string_literal> const _(*this, symbol);
 
-    using numeric_base_specifier = bit_string_literal::numeric_base_specifier;
-
     os << "base: ";
 
     switch (node.base_specifier) {
-        case numeric_base_specifier::base2:
+        using enum bit_string_literal::numeric_base_specifier;
+        case base2:
             os << "bin";
             break;
-        case numeric_base_specifier::base8:
+        case base8:
             os << "oct";
             break;
-        case numeric_base_specifier::base16:
+        case base16:
             os << "hex";
             break;
-        default:
-            cxx_bug_fatal("unreachable code path triggered");
+        case unsupported:
+            cxx_bug_fatal("unsupported numeric_base for bit_string_literal");
+        case unspecified:
+            cxx_bug_fatal("unspecified numeric_base for bit_string_literal");
     }
 
     os << ", literal: " << node.literal;
@@ -419,7 +420,7 @@ void printer::operator()(block_configuration const& node)
     {
         static const std::string_view symbol{ "use_clause*" };
         symbol_scope<block_configuration> const _(*this, symbol);
-        visit(node.use_clause_list);
+        visit_each(node.use_clause_list);
     }
 
     os << '\n';
@@ -427,7 +428,7 @@ void printer::operator()(block_configuration const& node)
     {
         static const std::string_view symbol{ "configuration_item*" };
         symbol_scope<block_configuration> const _(*this, symbol);
-        visit(node.configuration_item_list);
+        visit_each(node.configuration_item_list);
     }
 }
 
@@ -442,7 +443,7 @@ void printer::operator()(block_declarative_part const& node)
 {
     static const std::string_view symbol{ "block_declarative_part" };
     symbol_scope<block_declarative_part> const _(*this, symbol);
-    visit(node);
+    visit_each(node);
 }
 
 void printer::operator()(block_header const& node)
@@ -529,7 +530,7 @@ void printer::operator()(block_statement_part const& node)
 {
     static const std::string_view symbol{ "block_statement_part" };
     symbol_scope<block_statement_part> const _(*this, symbol);
-    visit(node);
+    visit_each(node);
 }
 
 void printer::operator()(case_statement const& node)
@@ -548,7 +549,7 @@ void printer::operator()(case_statement const& node)
     {
         static const std::string_view symbol{ "case_statement_alternative*" };
         symbol_scope<block_statement_part> const _(*this, symbol);
-        visit(node.alternatives);
+        visit_each(node.alternatives);
     }
 
     if (node.end_label) {
@@ -586,7 +587,7 @@ void printer::operator()(choices const& node)
 {
     static const std::string_view symbol{ "choices" };
     symbol_scope<choices> const _(*this, symbol);
-    visit(node);
+    visit_each(node);
 }
 
 void printer::operator()(component_configuration const& node)
@@ -830,7 +831,7 @@ void printer::operator()(configuration_declarative_part const& node)
 {
     static const std::string_view symbol{ "configuration_declarative_part" };
     symbol_scope<configuration_declarative_part> const _(*this, symbol);
-    visit(node);
+    visit_each(node);
 }
 
 void printer::operator()(configuration_item const& node)
@@ -888,7 +889,7 @@ void printer::operator()(context_clause const& node)
 {
     static const std::string_view symbol{ "context_clause" };
     symbol_scope<context_clause> const _(*this, symbol);
-    visit(node);
+    visit_each(node);
 }
 
 void printer::operator()(context_item const& node)
@@ -903,19 +904,18 @@ void printer::operator()(decimal_literal const& node)
     static const std::string_view symbol{ "decimal_literal" };
     symbol_scope<decimal_literal> const _(*this, symbol);
 
-    using numeric_type_specifier = decimal_literal::numeric_type_specifier;
-
     os << "literal: " << node.literal << ", type: ";
 
     switch (node.type_specifier) {
-        case numeric_type_specifier::integer:
+        using enum decimal_literal::numeric_type_specifier;
+        case integer:
             os << "integer";
             break;
-        case numeric_type_specifier::real:
+        case real:
             os << "real";
             break;
-        default:
-            cxx_bug_fatal("unreachable code path triggered");
+        case unspecified:
+            cxx_bug_fatal("unspecified numeric type for decimal_literal");
     }
 }
 
@@ -924,15 +924,18 @@ void printer::operator()(delay_mechanism const& node)
     static const std::string_view symbol{ "delay_mechanism" };
     symbol_scope<delay_mechanism> const _(*this, symbol);
 
-    switch (node.delay_type) {  // invalid keywords call unreachable_bug_triggered() on default
-        case ast::keyword_token::INERTIAL:
-            os << "INERTIAL_DELAY";
-            break;
-        case ast::keyword_token::TRANSPORT:
-            os << "TRANSPORT_DELAY";
-            break;
-        default:
-            cxx_bug_fatal("unreachable code path triggered");
+    using enum ast::keyword_token;
+
+    if (node.delay_type == INERTIAL || node.delay_type == TRANSPORT) {
+        os << std::format("{}", node.delay_type);
+    }
+    else if (node.delay_type == UNSPECIFIED_KEYWORD) [[unlikely]] {
+        cxx_bug_fatal("unspecified delay mechanism keyword");
+    }
+    else {
+        // handle all the other token like 'ABS', 'ACCESS'... which would require an explicit
+        // enumeration within a switch statement, according to strict Clang Tidy settings
+        cxx_bug_fatal("unexpected and invalid delay mechanism keyword");
     }
 
     if (node.time_expression) {
@@ -945,7 +948,7 @@ void printer::operator()(design_file const& node)
 {
     static const std::string_view symbol{ "design_file" };
     symbol_scope<design_file> const _(*this, symbol);
-    visit(node);
+    visit_each(node);
 }
 
 void printer::operator()(design_unit const& node)
@@ -1055,7 +1058,7 @@ void printer::operator()(entity_class_entry_list const& node)
 {
     static const std::string_view symbol{ "entity_class_entry_list" };
     symbol_scope<entity_class_entry_list> const _(*this, symbol);
-    visit(node);
+    visit_each(node);
 }
 
 void printer::operator()(entity_declaration const& node)
@@ -1097,7 +1100,7 @@ void printer::operator()(entity_declarative_part const& node)
 {
     static const std::string_view symbol{ "entity_declarative_part" };
     symbol_scope<entity_declarative_part> const _(*this, symbol);
-    visit(node);
+    visit_each(node);
 }
 
 void printer::operator()(entity_designator const& node)
@@ -1139,7 +1142,7 @@ void printer::operator()(entity_name_list const& node)
         [this](ast::entity_designator_list const& entity_designator_list) {
             static const std::string_view symbol{ "entity_designator*" };
             symbol_scope<entity_designator> const _(*this, symbol);
-            visit(entity_designator_list);
+            visit_each(entity_designator_list);
         },
         [this](ast::keyword_token token) {
             (*this)(token); // OTHERS | ALL
@@ -1172,7 +1175,7 @@ void printer::operator()(entity_statement_part const& node)
 {
     static const std::string_view symbol{ "entity_statement_part" };
     symbol_scope<entity_statement_part> const _(*this, symbol);
-    visit(node);
+    visit_each(node);
 }
 
 void printer::operator()(entity_tag const& node)
@@ -1193,7 +1196,7 @@ void printer::operator()(enumeration_type_definition const& node)
 {
     static const std::string_view symbol{ "enumeration_type_definition" };
     symbol_scope<enumeration_type_definition> const _(*this, symbol);
-    visit(node);
+    visit_each(node);
 }
 
 void printer::operator()(exit_statement const& node)
@@ -1375,7 +1378,7 @@ void printer::operator()(generate_statement const& node)
     if (!node.concurrent_statements.empty()) {
         static const std::string_view symbol{ "concurrent_statement*" };
         symbol_scope<struct _concurrent_statement> const _(*this, symbol);
-        visit(node.concurrent_statements);
+        visit_each(node.concurrent_statements);
     }
 
     if (node.end_label) {
@@ -1416,7 +1419,7 @@ void printer::operator()(group_constituent_list const& node)
 {
     static const std::string_view symbol{ "group_constituent_list" };
     symbol_scope<group_constituent_list> const _(*this, symbol);
-    visit(node);
+    visit_each(node);
 }
 
 void printer::operator()(group_declaration const& node)
@@ -1465,7 +1468,7 @@ void printer::operator()(identifier_list const& node)
 {
     static const std::string_view symbol{ "identifier_list" };
     symbol_scope<identifier_list> const _(*this, symbol);
-    visit(node);  // aka std::vector<ast::identifier>
+    visit_each(node);  // aka std::vector<ast::identifier>
 }
 
 void printer::operator()(if_statement const& node)
@@ -1513,7 +1516,7 @@ void printer::operator()(index_constraint const& node)
 {
     static const std::string_view symbol{ "index_constraint" };
     symbol_scope<index_constraint> const _(*this, symbol);
-    visit(node);
+    visit_each(node);
 }
 
 void printer::operator()(index_specification const& node)
@@ -1541,7 +1544,7 @@ void printer::operator()(indexed_name const& node)
     {
         static const std::string_view symbol{ "expression*" };
         symbol_scope<expression> const _(*this, symbol);
-        visit(node.expression_list);
+        visit_each(node.expression_list);
     }
 }
 
@@ -1588,7 +1591,7 @@ void printer::operator()(instantiation_list const& node)
         [this](ast::instantiation_label_list const& instantiation_label_list) {
             static const std::string_view symbol{ "label*" };
             symbol_scope<label> const _(*this, symbol);
-            visit(instantiation_label_list);
+            visit_each(instantiation_label_list);
         },
         [this](ast::keyword_token token) {
             (*this)(token);
@@ -1645,7 +1648,7 @@ void printer::operator()(interface_list const& node)
 {
     static const std::string_view symbol{ "interface_list" };
     symbol_scope<interface_list> const _(*this, symbol);
-    visit(node);
+    visit_each(node);
 }
 
 void printer::operator()(interface_signal_declaration const& node)
@@ -1713,7 +1716,7 @@ void printer::operator()(library_clause const& node)
 {
     static const std::string_view symbol{ "library_clause" };
     symbol_scope<library_clause> const _(*this, symbol);
-    visit(node.logical_name_list);
+    visit_each(node.logical_name_list);
 }
 
 void printer::operator()(library_unit const& node)
@@ -1844,7 +1847,7 @@ void printer::operator()(package_body_declarative_part const& node)
 {
     static const std::string_view symbol{ "package_body_declarative_part" };
     symbol_scope<package_body_declarative_part> const _(*this, symbol);
-    visit(node);
+    visit_each(node);
 }
 
 void printer::operator()(package_declaration const& node)
@@ -1876,7 +1879,7 @@ void printer::operator()(package_declarative_part const& node)
 {
     static const std::string_view symbol{ "package_declarative_part" };
     symbol_scope<package_declarative_part> const _(*this, symbol);
-    visit(node);
+    visit_each(node);
 }
 
 void printer::operator()(parameter_specification const& node)
@@ -1915,7 +1918,7 @@ void printer::operator()(physical_type_definition const& node)
     {
         static const std::string_view symbol{ "secondary_unit_declaration*" };
         symbol_scope<struct _secondary_unit_declarations> const _(*this, symbol);
-        visit(node.secondary_unit_declarations);
+        visit_each(node.secondary_unit_declarations);
     }
 
     if (node.physical_type_simple_name) {
@@ -1999,7 +2002,7 @@ void printer::operator()(process_declarative_part const& node)
 {
     static const std::string_view symbol{ "process_declarative_part" };
     symbol_scope<process_declarative_part> const _(*this, symbol);
-    visit(node);
+    visit_each(node);
 }
 
 void printer::operator()(process_statement const& node)
@@ -2092,7 +2095,7 @@ void printer::operator()(record_type_definition const& node)
     {
         static const std::string_view symbol{ "element_declaration*" };
         symbol_scope<element_declaration> const _(*this, symbol);
-        visit(node.element_declarations);
+        visit_each(node.element_declarations);
     }
 }
 
@@ -2228,14 +2231,14 @@ void printer::operator()(sensitivity_list const& node)
 {
     static const std::string_view symbol{ "sensitivity_list" };
     symbol_scope<sensitivity_list> const _(*this, symbol);
-    visit(node);
+    visit_each(node);
 }
 
 void printer::operator()(sequence_of_statements const& node)
 {
     static const std::string_view symbol{ "sequence_of_statements" };
     symbol_scope<sequence_of_statements> const _(*this, symbol);
-    visit(node);
+    visit_each(node);
 }
 
 void printer::operator()(sequential_statement const& node)
@@ -2308,7 +2311,7 @@ void printer::operator()(signal_list_list const& node)
 {
     static const std::string_view symbol{ "signal_list.names" };
     symbol_scope<signal_list_list> const _(*this, symbol);
-    visit(node);
+    visit_each(node);
 }
 
 void printer::operator()(signal_list const& node)
@@ -2327,7 +2330,7 @@ void printer::operator()(signature const& node)
     {
         static const std::string_view symbol{ "parameter_type_list" };
         symbol_scope<signature> const _(*this, symbol);
-        visit(node.parameter_type_list);
+        visit_each(node.parameter_type_list);
     }
 
     if (node.return_type) {
@@ -2426,7 +2429,7 @@ void printer::operator()(subprogram_declarative_part const& node)
 {
     static const std::string_view symbol{ "subprogram_declarative_part" };
     symbol_scope<subprogram_declarative_part> const _(*this, symbol);
-    visit(node);
+    visit_each(node);
 }
 
 void printer::operator()(subprogram_specification const& node)
@@ -2686,7 +2689,7 @@ void printer::operator()(waveform const& node)
         [this](ast::waveform_element_list const& list) {
             static const std::string_view symbol{ "waveform_element*" };
             symbol_scope<waveform_element> const _(*this, symbol);
-            visit(list);
+            visit_each(list);
         },
         [this](ast::keyword_token token) {
             (*this)(token);
@@ -2745,7 +2748,7 @@ void printer::operator()(ast::keyword_token token)
 }
 
 template <typename T>
-void printer::visit(std::vector<T> const& vector)
+void printer::visit_each(std::vector<T> const& vector)
 {
     if (vector.empty()) {
         os << "()";

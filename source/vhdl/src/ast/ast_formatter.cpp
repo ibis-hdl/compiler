@@ -64,7 +64,7 @@ std::string_view std::formatter<ibis::vhdl::ast::operator_token>::as_sv(
         case XOR:             return "XOR"sv;
         case XNOR:            return "XNOR"sv;
         // probably an unintentionally constructed enum by default
-        [[unlikely]] case UNSPECIFIED:
+        [[unlikely]] case UNSPECIFIED_OPERATOR:
             // something in the grammar is wired, stop here
             cxx_bug_fatal("operator_token is *unspecified*!");
         //
@@ -189,7 +189,7 @@ std::string_view std::formatter<ibis::vhdl::ast::keyword_token>::as_sv(
         case XNOR:            return "XNOR"sv;
         case XOR:             return "XOR"sv;
         // probably an unintentionally constructed enum by default
-        [[unlikely]] case UNSPECIFIED:
+        [[unlikely]] case UNSPECIFIED_KEYWORD:
             // something in the grammar is wired, stop here
             cxx_bug_fatal("keyword_token is *unspecified*!");
         //

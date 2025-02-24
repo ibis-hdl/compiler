@@ -48,9 +48,9 @@ public:
     ///
     /// Construct a new numeric convert object.
     ///
-    /// @param diagnostic_handler_  Error reporter.
+    /// @param diag_handler  Error reporter.
     ///
-    convert_bit_string(diagnostic_handler_type& diagnostic_handler_);
+    explicit convert_bit_string(diagnostic_handler_type& diag_handler);
 
     ///
     /// Convert the a bit string literal to numeric value.

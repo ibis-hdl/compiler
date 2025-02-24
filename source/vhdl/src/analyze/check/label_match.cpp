@@ -45,17 +45,17 @@ label_match::result label_match::compare(ast::optional<ast::label> const& start_
                                          ast::optional<ast::label> const& end_label)
 {
     if (!start_label && end_label) {
-        return result::ILLFORMED;
+        return result::LABEL_ILLFORMED;
     }
 
     if (start_label && end_label) {
         if (start_label == end_label) {
-            return result::OK;
+            return result::LABEL_OK;
         }
-        return result::MISMATCH;
+        return result::LABEL_MISMATCH;
     }
 
-    return result::OK;
+    return result::LABEL_OK;
 }
 
 label_match::result label_match::compare(ast::identifier const& start_identifier,
@@ -63,12 +63,12 @@ label_match::result label_match::compare(ast::identifier const& start_identifier
 {
     if (end_identifier) {
         if (start_identifier == end_identifier) {
-            return result::OK;
+            return result::LABEL_OK;
         }
-        return result::MISMATCH;
+        return result::LABEL_MISMATCH;
     }
 
-    return result::OK;
+    return result::LABEL_OK;
 }
 
 label_match::result label_match::operator()(ast::architecture_body const& node) const

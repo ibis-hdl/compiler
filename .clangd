@@ -1,12 +1,36 @@
+# Clangd - https://clangd.llvm.org/config.html
 CompileFlags:
   Add: [
-    -std=c++23
+    # -std=c++23
   ]
+  CompilationDatabase:
+    build
 
 Diagnostics:
-    ClangTidy:
-        # checks can been added, e.g. disabled in .clang-tidy
-        Add: [
-        ]
+  UnusedIncludes: Strict
+  AnalyzeAngledIncludes: Yes
+  ClangTidy:
+      FastCheckFilter: Loose # Strict
+      # checks can been added/removed, e.g. disabled/enabled before in .clang-tidy
+      Add: [
+        #modernize-use-trailing-return-type
+      ]
+      Remove: []
 Style:
-  AngledHeaders: [".*"]
+  QuotedHeaders: [
+    "src/.*"
+  ]
+  AngledHeaders: [ #".*"
+    "source/common/include/ibis/.*",
+    "source/frontend/include/ibis/.*",
+    "source/vhdl/include/ibis/.*",
+    "testsuite/common/include/.*",
+    "testsuite/misc/include/.*",
+    "testsuite/testsuite_util/include/testsuite.*"
+  ]
+
+InlayHints:
+  BlockEnd: No
+  DeducedTypes: Yes
+  DefaultArguments: Yes
+  ParameterNames: Yes  
