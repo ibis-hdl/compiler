@@ -69,7 +69,7 @@ jobs:
         deactivate
          
     - name: Install CMake and ninja
-      uses: lukka/get-cmake@v3.31.5
+      uses: lukka/get-cmake@v3.31.6
 
     - name: Checkout Repo
       uses: actions/checkout@v3
