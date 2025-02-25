@@ -65,6 +65,9 @@ std::string_view signal_name(int sig_num)
 
 void register_signal_handlers()
 {
+    // Actually, there isn't a signal handler available/installed. Prevent warnings from static
+    // analyzers by disabling this part of code.
+#if 0  // NOLINT(readability-avoid-unconditional-preprocessor-if)
     auto const signal_handler = []() {
         ibis::warning("No signal handler attached");
         return true;
@@ -76,6 +79,7 @@ void register_signal_handlers()
         ibis::failure("Failed to install signal handlers");
         std::exit(EXIT_FAILURE);
     }
+#endif
 }
 
 }  // namespace ibis::frontend

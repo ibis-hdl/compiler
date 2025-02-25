@@ -45,7 +45,7 @@ BOOST_SPIRIT_DECLARE(design_file_type)
 namespace ibis::vhdl::parser {
 
 template <std::random_access_iterator IteratorT>
-bool parse<IteratorT>::operator()(current_file_type&& current_file,
+bool parse<IteratorT>::operator()(current_file_type& current_file,
                                   position_cache_type& position_cache, vhdl_context_type& vhdl_ctx,
                                   ast::design_file& design_file) const
 {
@@ -53,17 +53,15 @@ bool parse<IteratorT>::operator()(current_file_type&& current_file,
 
     // clang-format off
     parser::diagnostic_handler_type diagnostic_handler{
-        os, std::move(current_file), std::ref(position_cache), std::ref(vhdl_ctx)
+        os, current_file, std::ref(position_cache), std::ref(vhdl_ctx)
     };
     // clang-format on
 
-    // FixMe Urgent - current_file moved before!!
     auto ast_annotator = position_cache.annotator_for(current_file.id());
 
-    // FixMe Urgent - Check better approach [Cleanest way to handle both quoted and unquoted strings
-    // in Spirit.X3](
+    // FixMe Check idea, approach used in
+    // [Cleanest way to handle both quoted and unquoted strings in Spirit.X3](
     // https://stackoverflow.com/questions/74031183/cleanest-way-to-handle-both-quoted-and-unquoted-strings-in-spirit-x3)
-    // >>>>> related to current_file moved before and others
     // clang-format off
     auto const parser =
         x3::with<parser::annotator_tag>(std::ref(ast_annotator))[
@@ -73,7 +71,6 @@ bool parse<IteratorT>::operator()(current_file_type&& current_file,
         ];
     // clang-format on
 
-    // FixMe Urgent - current_file moved before!!
     auto [iter, end] = get_iterator_pair(current_file.file_contents());
 
     // using different iterator_types causes linker errors, see e.g.

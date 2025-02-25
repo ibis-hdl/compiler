@@ -125,7 +125,7 @@ int main(int argc, const char* argv[])
             auto current_file = file_mapper.add_file(hdl_file, std::move(file_contents));
             ast::design_file design_file;
 
-            parse(std::move(current_file), position_cache, ctx, design_file);
+            parse(current_file, position_cache, ctx, design_file);
 
             if (!quiet) {
                 ast::printer ast_printer{ std::cout };

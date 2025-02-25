@@ -123,12 +123,12 @@ private:
 /// Current file proxy, holding information related to current_file_id
 ///
 class file_mapper::current_file {
-    std::reference_wrapper<file_mapper> file_mapper_ref;
+    std::reference_wrapper<file_mapper> ref_file_mapper;
     file_id_type /* const */ current_file_id;
 
 public:
     current_file(std::reference_wrapper<file_mapper> ref_self, file_id_type id)
-        : file_mapper_ref{ ref_self }
+        : ref_file_mapper{ ref_self }
         , current_file_id{ id }
     {
     }
@@ -138,17 +138,15 @@ public:
 
     current_file(current_file&&) = default;
     current_file& operator=(current_file&&) = default;
-
-    // non-copyable, otherwise the assignment of ID with file/contents may go wrong
-    current_file(current_file const&) = delete;
-    current_file& operator=(current_file const&) = delete;
+    current_file(current_file const&) = default;
+    current_file& operator=(current_file const&) = default;
 
 public:
     file_id_type id() const { return current_file_id; }
-    std::string_view file_name() const { return file_mapper_ref.get().file_name(this->id()); }
+    std::string_view file_name() const { return ref_file_mapper.get().file_name(this->id()); }
     std::string_view file_contents() const
     {
-        return file_mapper_ref.get().file_contents(this->id());
+        return ref_file_mapper.get().file_contents(this->id());
     }
 };
 

@@ -33,33 +33,33 @@ def workflow_dev(conan_profile : str, cmake_conf_preset: str, build_type : str, 
 def gcc_release():
     conan_profile = "gcc"
     cmake_conf_preset = "gcc"
-    jobs = 32
+    jobs = os.cpu_count()
     workflow_release(conan_profile, cmake_conf_preset, jobs)
 
 def clang_release():
     conan_profile = "clang"
     cmake_conf_preset = "clang"
-    jobs = 32
+    jobs = os.cpu_count()
     workflow_release(conan_profile, cmake_conf_preset, jobs)
 
 def clang_libcxx_release():
     conan_profile = "clang-libc++"
     cmake_conf_preset = "clang-libc++"
-    jobs = 32
+    jobs = os.cpu_count()
     workflow_release(conan_profile, cmake_conf_preset, jobs)
 
 def dev_clang():
     conan_profile = "clang"
     cmake_conf_preset = "dev-clang"
     build_type = "Debug"
-    jobs = 32
+    jobs = os.cpu_count()
     workflow_dev(conan_profile, cmake_conf_preset, build_type, jobs)
 
 def dev_clang_tidy():
     conan_profile = "clang"
     cmake_conf_preset = "dev-clang-tidy"
     build_type = "Release"
-    jobs = 32
+    jobs = os.cpu_count()
     workflow_dev(conan_profile, cmake_conf_preset, build_type, jobs)
 
 def dev_clang_iwyu():
@@ -67,14 +67,14 @@ def dev_clang_iwyu():
     conan_profile = "clang"
     cmake_conf_preset = "dev-clang-iwyu"
     build_type = "Release"
-    jobs = 32
+    jobs = os.cpu_count()
     workflow_dev(conan_profile, cmake_conf_preset, build_type, jobs)
 
 def dev_gcc_iwyu():
     conan_profile = "gcc"
     cmake_conf_preset = "dev-gcc-iwyu"
     build_type = "Release"
-    jobs = 32
+    jobs = os.cpu_count()
     workflow_dev(conan_profile, cmake_conf_preset, build_type, jobs)
 
 def dev_clang_asan():
@@ -82,14 +82,14 @@ def dev_clang_asan():
     conan_profile = "clang"
     cmake_conf_preset = "dev-clang-asan"
     build_type = "Debug"
-    jobs = 32
+    jobs = os.cpu_count()
     workflow_dev(conan_profile, cmake_conf_preset, build_type, jobs)
 
 run("cmake --list-presets")
 #gcc_release()
-#clang_release()
+clang_release()
 #clang_libcxx_release()
-dev_clang()
+#dev_clang()
 #dev_clang_tidy()
 #dev_clang_iwyu()
 #dev_gcc_iwyu()

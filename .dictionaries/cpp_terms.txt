@@ -6,4 +6,6 @@ NDEBUG
 NOLINTNEXTLINE
 PTHREAD
 vararg
+vtable
+vtables
 XNOR

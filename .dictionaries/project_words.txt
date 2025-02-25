@@ -28,6 +28,7 @@ pwsh
 pyspelling
 runneradmin
 sccache
+testrunner
 treshold
 vcvars
 venv

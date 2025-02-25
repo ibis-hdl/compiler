@@ -65,7 +65,7 @@ public:
     /// this is only required if you have recursive rules or need external linkage
     /// on rules (define them in separate translation units).
     ///
-    bool operator()(current_file_type&& current_file, position_cache_type& position_cache,
+    bool operator()(current_file_type& current_file, position_cache_type& position_cache,
                     vhdl_context_type& vhdl_ctx, ast::design_file& design_file) const;
 
 private:

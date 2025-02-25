@@ -56,7 +56,7 @@ BOOST_DATA_TEST_CASE(labels_ok,                                                 
     {
         parser::parse<iterator_type> const parse{ output };
 
-        bool const parse_ok = parse(std::move(current_file), position_cache, vhdl_ctx, design_file);
+        bool const parse_ok = parse(current_file, position_cache, vhdl_ctx, design_file);
 
         // syntactically correct
         BOOST_TEST_REQUIRE(parse_ok == true);
@@ -65,7 +65,7 @@ BOOST_DATA_TEST_CASE(labels_ok,                                                 
 
     {
         analyze::diagnostic_handler<parser::iterator_type> diagnostic_handler{
-            output, std::move(current_file), std::ref(position_cache), std::ref(vhdl_ctx)
+            output, current_file, std::ref(position_cache), std::ref(vhdl_ctx)
         };
         analyze::syntax_checker syntax_check{ output, vhdl_ctx, diagnostic_handler };
 
@@ -107,7 +107,7 @@ BOOST_DATA_TEST_CASE(
     {
         parser::parse<iterator_type> const parse{ output };
 
-        bool const parse_ok = parse(std::move(current_file), position_cache, vhdl_ctx, design_file);
+        bool const parse_ok = parse(current_file, position_cache, vhdl_ctx, design_file);
 
         // syntactically correct
         BOOST_TEST_REQUIRE(parse_ok == true);
@@ -116,7 +116,7 @@ BOOST_DATA_TEST_CASE(
 
     {
         analyze::diagnostic_handler<parser::iterator_type> diagnostic_handler{
-            output, std::move(current_file), std::ref(position_cache), std::ref(vhdl_ctx)
+            output, current_file, std::ref(position_cache), std::ref(vhdl_ctx)
         };
         analyze::syntax_checker syntax_check{ output, vhdl_ctx, diagnostic_handler };
 

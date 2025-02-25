@@ -45,12 +45,19 @@ namespace ibis::vhdl {
 template <typename IteratorT>
 class diagnostic_handler {
 public:
-    using iterator_type = IteratorT;
+    using iterator_type = std::remove_cv_t<IteratorT>;
 
     using current_file_type = ibis::util::file_mapper::current_file;
     using position_cache_type = parser::position_cache<iterator_type>;
     using vhdl_context_type = ibis::vhdl::context;
     using error_type = diagnostic_context::failure_type;
+
+private:
+    std::ostream& os;
+    current_file_type /* const */ current_file;
+    std::reference_wrapper<position_cache_type const> position_cache;  // only reading positions
+    std::reference_wrapper<vhdl_context_type> context;
+    std::size_t tab_sz;
 
 public:
     ///
@@ -64,7 +71,7 @@ public:
 
     diagnostic_handler() = delete;
 
-    diagnostic_handler(std::ostream& os_, current_file_type&& current_file_,
+    diagnostic_handler(std::ostream& os_, current_file_type current_file_,
                        std::reference_wrapper<position_cache_type const> position_cache_,
                        std::reference_wrapper<vhdl_context_type> context_, std::size_t tabs = 4)
         : os{ os_ }
@@ -331,13 +338,6 @@ private:
             }
         }
     }
-
-private:
-    std::ostream& os;
-    current_file_type current_file;  // moved proxy from file_mapper with fixed file_id
-    std::reference_wrapper<position_cache_type const> position_cache;  // only reading positions
-    std::reference_wrapper<vhdl_context_type> context;
-    std::size_t tab_sz;
 };
 
 }  // namespace ibis::vhdl

@@ -35,7 +35,7 @@ using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
 ///    https://stackoverflow.com/questions/66393775/what-are-contexts-in-boost-spirit-x3)
 /// - [Boost spirit x3 example calculator (calc8, calc9) linker error](
 ///    https://stackoverflow.com/questions/51627938/boost-spirit-x3-example-calculator-calc8-calc9-linker-error/51641878#51641878)
-/// - [X3: Linker Error (unresolved external symbol “parse_rule”) on nonterminal parser](
+/// - [X3: Linker Error (unresolved external symbol “parse_rule”) on non-terminal parser](
 ///     https://stackoverflow.com/questions/50277979/x3-linker-error-unresolved-external-symbol-parse-rule-on-nonterminal-parser/50301865#50301865)
 /// - [linking errors while separate parser using boost spirit x3](
 ///    https://stackoverflow.com/questions/40496357/linking-errors-while-separate-parser-using-boost-spirit-x3?answertab=active#tab-top)

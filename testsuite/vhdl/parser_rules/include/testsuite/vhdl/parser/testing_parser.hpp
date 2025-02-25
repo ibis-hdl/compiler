@@ -50,15 +50,13 @@ struct testing_parser {
 
         btt::output_test_stream output;
 
-        // FixMe API still not sufficient, shall be call of current_file.id(), but it's moved before
-        // same with iterators use later
         auto current_file = file_mapper.add_file(filename, input);
         auto const current_file_id = current_file.id();  // safe id and iters before move
         auto [iter, end] = ibis::util::get_iterator_pair(current_file.file_contents());
 
         // clang-format off
         parser::diagnostic_handler_type diagnostic_handler{
-            output, std::move(current_file), std::ref(position_cache), std::ref(vhdl_ctx)
+            output, current_file, std::ref(position_cache), std::ref(vhdl_ctx)
         };
         // clang-format on
 

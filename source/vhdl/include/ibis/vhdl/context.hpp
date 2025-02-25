@@ -14,7 +14,7 @@
 namespace ibis::vhdl {
 
 ///
-/// The VHDL context used for analyze and elaboration
+/// The VHDL context used for analyze and elaboration with {error, warnings} counter
 ///
 class context {  // ToDo [XXX] rename to vhdl_global_context
 public:
@@ -69,12 +69,14 @@ private:
 /// IO-manipulator to print the context error/warning status of context
 ///
 class failure_status {
+    std::reference_wrapper<context> ctx;
+
 public:
     using value_type = context::value_type;
 
 public:
-    explicit failure_status(std::reference_wrapper<context> ctx_)
-        : ctx{ ctx_ }
+    explicit failure_status(std::reference_wrapper<context> ref_ctx)
+        : ctx{ ref_ctx }
     {
     }
 
@@ -84,9 +86,6 @@ public:
 
     value_type errors() const { return ctx.get().errors(); }
     value_type warnings() const { return ctx.get().warnings(); }
-
-private:
-    std::reference_wrapper<context> ctx;
 };
 
 std::ostream& operator<<(std::ostream& os, vhdl::failure_status const& status);
