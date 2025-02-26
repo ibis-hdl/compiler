@@ -33,8 +33,8 @@ namespace ibis::vhdl::parser {
 ///
 struct success_handler {
     template <typename IteratorT, typename ContextT, typename... Types>
-    inline void on_success(IteratorT const& first, IteratorT const& last,
-                           ast::variant<Types...>& node, ContextT const& context) const
+    void on_success(IteratorT const& first, IteratorT const& last, ast::variant<Types...>& node,
+                    ContextT const& context) const
     {
         node.apply_visitor(x3::make_lambda_visitor<void>(  // --
             [&](auto& node_)                               // --
@@ -44,17 +44,17 @@ struct success_handler {
     }
 
     template <typename NodeT, typename IteratorT, typename ContextT>
-    inline void on_success(IteratorT const& first, IteratorT const& last,
-                           x3::forward_ast<NodeT>& node, ContextT const& context) const
+    void on_success(IteratorT const& first, IteratorT const& last, x3::forward_ast<NodeT>& node,
+                    ContextT const& context) const
     {
         this->on_success(first, last, node.get(), context);
     }
 
     template <typename NodeT, typename IteratorT, typename ContextT>
-    inline typename boost::disable_if<x3::traits::is_variant<NodeT>>::type on_success(  // --
+    typename boost::disable_if<x3::traits::is_variant<NodeT>>::type on_success(  // --
         IteratorT const& first, IteratorT const& last, NodeT& node, ContextT const& context) const
     {
-        // to get the type of the context, just uncomment next line
+        // Hint: to get the type of the context, just uncomment next line
         // struct {} _ = *static_cast<decltype(context)*>(nullptr);
 
         auto& annotator = x3::get<parser::annotator_tag>(context).get();

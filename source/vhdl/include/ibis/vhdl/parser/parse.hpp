@@ -19,8 +19,9 @@
 #include <vector>
 
 namespace ibis::vhdl::ast {
+
 struct design_unit;
-using design_file = std::vector<ast::design_unit>;  // FixMe not clever, include <.../ast.hpp>
+using design_file = std::vector<ast::design_unit>;
 }  // namespace ibis::vhdl::ast
 
 namespace ibis::vhdl::parser {
@@ -39,7 +40,7 @@ public:
     ///
     /// @param os_ Output stream for messages.
     ///
-    parse(std::ostream& os_)
+    explicit parse(std::ostream& os_)
         : os{ os_ }
     {
     }
