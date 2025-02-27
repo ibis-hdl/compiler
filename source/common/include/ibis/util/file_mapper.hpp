@@ -34,14 +34,12 @@ private:
         {
         }
         // NOLINTBEGIN(misc-non-private-member-variables-in-classes)
-        std::string filename;  // Todo Check on use of fs::path as filename argument
+        std::string filename;
         std::string contents;
         // NOLINTEND(misc-non-private-member-variables-in-classes)
     };
 
-    using file_registry_type = std::vector<entry>;
-
-    file_registry_type file_registry;
+    std::vector<entry> file_registry;
 
 private:
     static constexpr auto MAX_ID = vhdl::ast::position_tagged::MAX_FILE_ID;
@@ -116,7 +114,7 @@ private:
     ///
     /// Get an ID
     ///
-    std::size_t next_id() const { return file_registry.size(); }
+    file_id_type next_id() const { return file_id_type{ file_registry.size() }; }
 };
 
 ///
@@ -153,9 +151,9 @@ public:
 inline file_mapper::current_file file_mapper::add_file(std::string&& filename,
                                                        std::string&& contents)
 {
-    file_id_type const current_file_id{ next_id() };
+    auto current_file_id = next_id();  // aka strong_type<>
 
-    // ToDo OOM error handling (scope_exit would be overkill)
+    // ToDo OOM error handling/strategy missing, emplace_back() may fail
     file_registry.emplace_back(std::move(filename), std::move(contents));
 
     return { std::ref(*this), current_file_id };

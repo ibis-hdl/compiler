@@ -26,6 +26,7 @@ namespace ibis::vhdl::parser {
 ///
 struct annotator_tag;  // IWYU pragma: keep
 
+// Todo Consider renaming to iterator_position_mapper (according file_mapper)
 ///
 /// AST annotation/position cache
 ///
@@ -70,6 +71,14 @@ public:
     position_cache& operator=(position_cache const&) = delete;
 
 public:
+    position_id_type iterator_range_id(iterator_type first, iterator_type last)
+    {
+        auto position_id = next_id();
+        position_registry.push_back({ first, last });  // OOM alert!
+        return position_id;
+    }
+
+public:
     ///
     /// Create an annotation/position proxy.
     ///
@@ -100,6 +109,11 @@ private:
     ///
     bool valid_id(position_id_type id) const { return std::cmp_less(id, position_registry.size()); }
 
+    ///
+    /// Get an ID
+    ///
+    position_id_type next_id() const { return position_id_type{ position_registry.size() }; }
+
 private:
     ///
     /// Annotate the AST node with positional iterators.
@@ -113,6 +127,7 @@ private:
     /// @param last    End  of iterator position to tag.
     ///
     template <typename NodeT>
+    //[[deprecated("rework of API")]]
     void annotate(file_id_type file_id, NodeT& node, iterator_type first, iterator_type last)
     {
         if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_cv_t<NodeT>>) {
@@ -130,11 +145,6 @@ private:
             // ignored since isn't ast::position_tagged derived; since there is nothing to tag
         }
     }
-
-    ///
-    /// Get an ID
-    ///
-    std::size_t next_id() const { return position_registry.size(); }
 };
 
 ///
