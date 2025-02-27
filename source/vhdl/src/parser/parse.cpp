@@ -10,6 +10,7 @@
 #include <ibis/vhdl/parser/grammar.hpp>
 #include <ibis/vhdl/parser/parser_config.hpp>
 #include <ibis/vhdl/parser/skipper.hpp>
+#include <ibis/vhdl/ast/ast_context.hpp>
 
 // #include <boost/spirit/home/x3.hpp>                    // IWYU pragma: keep
 #include <boost/spirit/home/x3/auxiliary/eoi.hpp>      // for eoi_parser, eoi
@@ -51,13 +52,17 @@ bool parse<IteratorT>::operator()(current_file_type& current_file,
 {
     using ibis::util::get_iterator_pair;
 
+    ast::ast_context<iterator_type> ast_context{ current_file, std::ref(position_cache) };
+
     // clang-format off
     parser::diagnostic_handler_type diagnostic_handler{
-        os, current_file, std::ref(position_cache), std::ref(vhdl_ctx)
+        os, std::ref(ast_context), std::ref(vhdl_ctx)
     };
     // clang-format on
 
-    auto ast_annotator = position_cache.annotator_for(current_file.id());
+    // ToDo Replace ast_annotator with ast_context and ast_context.annotate(NodeT)
+
+    auto ast_annotator = position_cache.annotator_for(ast_context.file_id());
 
     // FixMe Check idea, approach used in
     // [Cleanest way to handle both quoted and unquoted strings in Spirit.X3](

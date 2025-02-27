@@ -77,6 +77,7 @@ public:
     ///
     /// @overload add_file(std::string_view filename, std::string&& contents)
     ///
+    [[nodiscard]]
     current_file add_file(std::string_view filename, std::string_view contents);
 
 public:
@@ -140,11 +141,11 @@ public:
     current_file& operator=(current_file const&) = default;
 
 public:
-    file_id_type id() const { return current_file_id; }
-    std::string_view file_name() const { return ref_file_mapper.get().file_name(this->id()); }
+    file_id_type file_id() const { return current_file_id; }
+    std::string_view file_name() const { return ref_file_mapper.get().file_name(this->file_id()); }
     std::string_view file_contents() const
     {
-        return ref_file_mapper.get().file_contents(this->id());
+        return ref_file_mapper.get().file_contents(this->file_id());
     }
 };
 

@@ -12,6 +12,7 @@
 #include <ibis/util/file_mapper.hpp>
 #include <ibis/vhdl/parser/position_cache.hpp>
 #include <ibis/vhdl/context.hpp>
+#include <ibis/vhdl/ast/ast_context.hpp>
 
 #include <testsuite/vhdl/syntax/failure_diagnostic_fixture.hpp>
 #include <testsuite/vhdl/syntax/dataset.hpp>
@@ -45,9 +46,10 @@ BOOST_DATA_TEST_CASE(labels_ok,                                                 
     using iterator_type = parser::iterator_type;
 
     ibis::util::file_mapper file_mapper{};
-    parser::position_cache<iterator_type> position_cache{};
-
     auto current_file = file_mapper.add_file(test_case_name, input);
+    parser::position_cache<iterator_type> position_cache{};
+    ibis::vhdl::ast::ast_context<iterator_type> ast_context{ current_file,
+                                                             std::ref(position_cache) };
 
     btt::output_test_stream output;
     ast::design_file design_file;
@@ -65,7 +67,7 @@ BOOST_DATA_TEST_CASE(labels_ok,                                                 
 
     {
         analyze::diagnostic_handler<parser::iterator_type> diagnostic_handler{
-            output, current_file, std::ref(position_cache), std::ref(vhdl_ctx)
+            output, std::ref(ast_context), std::ref(vhdl_ctx)
         };
         analyze::syntax_checker syntax_check{ output, vhdl_ctx, diagnostic_handler };
 
@@ -96,9 +98,9 @@ BOOST_DATA_TEST_CASE(
     using iterator_type = parser::iterator_type;
 
     ibis::util::file_mapper file_mapper{};
-    parser::position_cache<iterator_type> position_cache{};
-
     auto current_file = file_mapper.add_file(test_case_name, input);
+    parser::position_cache<iterator_type> position_cache{};
+    ast::ast_context<iterator_type> ast_context{ current_file, std::ref(position_cache) };
 
     btt::output_test_stream output;
     ast::design_file design_file;
@@ -116,7 +118,7 @@ BOOST_DATA_TEST_CASE(
 
     {
         analyze::diagnostic_handler<parser::iterator_type> diagnostic_handler{
-            output, current_file, std::ref(position_cache), std::ref(vhdl_ctx)
+            output, std::ref(ast_context), std::ref(vhdl_ctx)
         };
         analyze::syntax_checker syntax_check{ output, vhdl_ctx, diagnostic_handler };
 

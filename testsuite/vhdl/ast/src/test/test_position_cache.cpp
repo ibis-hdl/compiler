@@ -116,7 +116,7 @@ BOOST_AUTO_TEST_CASE(position_cache_basic,
     ibis::vhdl::parser::position_cache<iterator_type> position_cache;
     auto const filename{ "Lorem Ipsum"sv };
     auto current_file = file_mapper.add_file(filename, valid_data::lorem_ipsum);
-    auto annotator = position_cache.annotator_for(current_file.id());
+    auto annotator = position_cache.annotator_for(current_file.file_id());
 
     // store all found pos and iterators for this test for later/final evaluation. The test sequence
     // order index equals to the position added into the vector. If more complex test cases are
@@ -133,7 +133,7 @@ BOOST_AUTO_TEST_CASE(position_cache_basic,
         annotator.annotate(ast_node, first, last);
 
         BOOST_TEST(position_cache.position_count() == 1U);
-        BOOST_TEST(ast_node.file_id == current_file.id());
+        BOOST_TEST(ast_node.file_id == current_file.file_id());
         BOOST_TEST(ast_node.position_id == 0U);
         // getting iterators back (annotated by x3 on_success error_handler)
         auto iter_range = position_cache.position_of(ast_node);
@@ -149,7 +149,7 @@ BOOST_AUTO_TEST_CASE(position_cache_basic,
         annotator.annotate(ast_node, first, last);
 
         BOOST_TEST(position_cache.position_count() == 2U);
-        BOOST_TEST(ast_node.file_id == current_file.id());
+        BOOST_TEST(ast_node.file_id == current_file.file_id());
         BOOST_TEST(ast_node.position_id == 1U);
         // getting iterators back (annotated by x3 on_success error_handler)
         auto iter_range = position_cache.position_of(ast_node);
@@ -207,8 +207,8 @@ BOOST_AUTO_TEST_CASE(position_cache_annotate,
     };
 
     auto const file_data = std::to_array<file_data_type>({
-        { lorem_ipsum_file.id(), "ipsum" },  // NOLINT(modernize-use-designated-initializers)
-        { bacon_ipsum_file.id(), "beef" }    // NOLINT(modernize-use-designated-initializers)
+        { lorem_ipsum_file.file_id(), "ipsum" },  // NOLINT(modernize-use-designated-initializers)
+        { bacon_ipsum_file.file_id(), "beef" }    // NOLINT(modernize-use-designated-initializers)
     });
 
     for (auto const& [file_id, search_str] : file_data) {

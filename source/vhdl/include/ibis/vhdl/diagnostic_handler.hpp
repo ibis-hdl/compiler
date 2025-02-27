@@ -10,6 +10,7 @@
 #include <ibis/vhdl/parser/iterator_type.hpp>
 #include <ibis/vhdl/parser/position_cache.hpp>
 #include <ibis/vhdl/source_location.hpp>
+#include <ibis/vhdl/ast/ast_context.hpp>
 
 #include <ibis/namespace_alias.hpp>  // IWYU pragma: keep
 
@@ -54,9 +55,8 @@ public:
 
 private:
     std::ostream& os;
-    current_file_type /* const */ current_file;
-    std::reference_wrapper<position_cache_type const> position_cache;  // only reading positions
-    std::reference_wrapper<vhdl_context_type> context;
+    std::reference_wrapper<ast::ast_context<iterator_type>> ast_context;
+    std::reference_wrapper<vhdl_context_type> vhdl_context;
     std::size_t tab_sz;
 
 public:
@@ -71,79 +71,98 @@ public:
 
     diagnostic_handler() = delete;
 
-    diagnostic_handler(std::ostream& os_, current_file_type current_file_,
-                       std::reference_wrapper<position_cache_type const> position_cache_,
-                       std::reference_wrapper<vhdl_context_type> context_, std::size_t tabs = 4)
+    diagnostic_handler(std::ostream& os_,
+                       std::reference_wrapper<ast::ast_context<iterator_type>> ast_context_,
+                       std::reference_wrapper<vhdl_context_type> vhdl_context_,
+                       std::size_t tabs = 4)
         : os{ os_ }
-        , current_file{ std::move(current_file_) }
-        , position_cache{ position_cache_ }
-        , context{ context_ }
+        , ast_context{ ast_context_ }
+        , vhdl_context{ vhdl_context_ }
         , tab_sz{ tabs }
     {
     }
 
     ~diagnostic_handler() = default;
 
-    diagnostic_handler(diagnostic_handler const&) = delete;
-    diagnostic_handler& operator=(diagnostic_handler const&) = delete;
-
     diagnostic_handler(diagnostic_handler&&) = default;
     diagnostic_handler& operator=(diagnostic_handler&&) = default;
 
+    // non-copyable
+    diagnostic_handler(diagnostic_handler const&) = delete;
+    diagnostic_handler& operator=(diagnostic_handler const&) = delete;
+
 public:
     ///
-    /// Render the diagnostic error_message.
+    /// Render the diagnostic error_message. #1 - expectation error handler
     ///
     /// @param error_pos     Iterator position where the error occurred.
     /// @param error_message The information error message.
     ///
-    void parser_error(iterator_type error_pos, std::string_view error_message) const;
+    void parser_error(iterator_type error_pos, std::string_view error_message) const
+    {
+        error(error_pos, std::nullopt, error_message, error_type::parser);
+    }
 
     ///
-    /// Render the diagnostic error_message.
+    /// Render the diagnostic error_message. #2
     ///
     /// @param error_pos     Iterator position where the error occurred.
     /// @param error_last    optional Iterator position to end where the error occurred.
     /// @param error_message The information error message.
     ///
     void parser_error(iterator_type error_pos, std::optional<iterator_type> error_last,
-                      std::string_view error_message) const;
+                      std::string_view error_message) const
+    {
+        error(error_pos, error_last, error_message, error_type::parser);
+    }
 
     ///
-    /// Render the diagnostic error_message.
+    /// Render the diagnostic error_message. #3
     ///
     /// @param error_pos     Iterator position where the error occurred.
     /// @param error_message The information error message.
     ///
-    void unsupported(iterator_type error_pos, std::string_view error_message) const;
+    void unsupported(iterator_type error_pos, std::string_view error_message) const
+    {
+        error(error_pos, std::nullopt, error_message, error_type::not_supported);
+    }
 
     ///
-    /// Render the diagnostic error_message.
+    /// Render the diagnostic error_message. #4
     ///
     /// @param error_pos     Iterator position where the error occurred.
     /// @param error_last    optional Iterator position to end where the error occurred.
     /// @param error_message The information error message.
     ///
     void unsupported(iterator_type error_pos, std::optional<iterator_type> error_last,
-                     std::string_view error_message) const;
+                     std::string_view error_message) const
+    {
+        error(error_pos, error_last, error_message, error_type::not_supported);
+    }
 
     ///
-    /// Render the diagnostic error_message.
+    /// Render the diagnostic error_message. #5
     ///
     /// @param error_pos     Iterator position where the error occurred.
     /// @param error_message The information error message.
     ///
-    void numeric_error(iterator_type error_pos, std::string_view error_message) const;
+    void numeric_error(iterator_type error_pos, std::string_view error_message) const
+    {
+        error(error_pos, std::nullopt, error_message, error_type::numeric);
+    }
 
     ///
-    /// Render the diagnostic error_message.
+    /// Render the diagnostic error_message. #6
     ///
     /// @param error_pos     Iterator position where the error occurred.
     /// @param error_last    optional Iterator position to end where the error occurred.
     /// @param error_message The information error message.
     ///
     void numeric_error(iterator_type error_pos, std::optional<iterator_type> error_last,
-                       std::string_view error_message) const;
+                       std::string_view error_message) const
+    {
+        error(error_pos, error_last, error_message, error_type::numeric);
+    }
 
 public:
     ///
@@ -208,10 +227,9 @@ private:
     /// annotate. If the node is not tagged empty iterators (begin/end) are returned - for
     /// convenience false to mark these as invalid; otherwise true.
     ///
-    std::tuple<iterator_type, iterator_type> iterators_of(
-        ast::position_tagged const& tagged_node) const
+    std::tuple<iterator_type, iterator_type> iterators_of(ast::position_tagged const& node) const
     {
-        auto const iterator_range = position_cache.get().position_of(tagged_node);
+        auto const iterator_range = ast_context.get().position_of(node);
 
         auto first = iterator_range.begin();
         auto const last = iterator_range.end();

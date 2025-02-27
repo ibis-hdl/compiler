@@ -45,12 +45,12 @@ template <typename IteratorT>
 class position_cache {
 public:
     using iterator_type = std::remove_cv_t<IteratorT>;
-    using range_type = boost::iterator_range<iterator_type>;
     using file_id_type = vhdl::ast::position_tagged::file_id_type;
     using position_id_type = vhdl::ast::position_tagged::position_id_type;
+    using iterator_range_type = boost::iterator_range<iterator_type>;
 
 private:
-    std::vector<range_type> position_registry;
+    std::vector<iterator_range_type> position_registry;
 
 public:
     class annotator;
@@ -97,7 +97,7 @@ public:
     /// @param node The AST node.
     /// @return boost::iterator_range tagged before by @ref annotate.
     ///
-    range_type position_of(ast::position_tagged const& node) const
+    iterator_range_type position_of(ast::position_tagged const& node) const
     {
         assert(valid_id(node.position_id) && "node position_id out of range!");
         return position_registry[node.position_id];
@@ -112,7 +112,13 @@ private:
     ///
     /// Get an ID
     ///
-    position_id_type next_id() const { return position_id_type{ position_registry.size() }; }
+    position_id_type next_id() const
+    {
+        assert(std::cmp_less(position_registry.size(), ast::position_tagged::MAX_POSITION_ID) &&
+               "Insufficient range of numeric IDs for AST tagging");
+
+        return position_id_type{ position_registry.size() };
+    }
 
 private:
     ///
