@@ -54,6 +54,7 @@ public:
 
 private:
     std::ostream& os;
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init]) - default ctor is deleted
     std::reference_wrapper<ast::ast_context<iterator_type>> ast_context;
     std::reference_wrapper<vhdl_context_type> vhdl_context;
     std::size_t tab_sz;

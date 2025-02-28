@@ -5,7 +5,6 @@
 
 #pragma once
 
-#include <functional>
 #include <ibis/util/file_mapper.hpp>
 #include <ibis/vhdl/parser/position_cache.hpp>
 
@@ -27,9 +26,12 @@ private:
     using position_cache_type = ibis::vhdl::parser::position_cache<iterator_type>;
 
     current_file_type current_file;
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init]) - default ctor is deleted
     std::reference_wrapper<position_cache_type> ref_position_cache;
 
 public:
+    ast_context() = delete;
+
     ast_context(current_file_type current_file,
                 std::reference_wrapper<position_cache_type> position_cache)
         : current_file{ current_file }
