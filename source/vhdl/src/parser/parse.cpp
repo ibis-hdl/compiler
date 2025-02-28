@@ -63,6 +63,7 @@ bool parse<IteratorT>::operator()(current_file_type& current_file,
     // ToDo Check idea, approach used in
     // [Cleanest way to handle both quoted and unquoted strings in Spirit.X3](
     // https://stackoverflow.com/questions/74031183/cleanest-way-to-handle-both-quoted-and-unquoted-strings-in-spirit-x3)
+
     // clang-format off
     auto const parser =
         x3::with<parser::annotator_tag>(std::ref(ast_context))[

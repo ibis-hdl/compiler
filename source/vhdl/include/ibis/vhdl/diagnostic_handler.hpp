@@ -47,7 +47,6 @@ template <typename IteratorT>
 class diagnostic_handler {
 public:
     using iterator_type = std::remove_cv_t<IteratorT>;
-
     using current_file_type = ibis::util::file_mapper::current_file;
     using position_cache_type = parser::position_cache<iterator_type>;
     using vhdl_context_type = ibis::vhdl::context;

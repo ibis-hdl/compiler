@@ -18,7 +18,6 @@ namespace ibis::vhdl::parser {
 // using iterator_type = parser::iterator_type;
 using ast_context_type = ast::ast_context<iterator_type>;
 using diagnostic_handler_type = parser::diagnostic_handler<iterator_type>;
-
 using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
 
 ///
