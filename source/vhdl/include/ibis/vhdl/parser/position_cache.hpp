@@ -8,11 +8,8 @@
 #include <ibis/util/file_mapper.hpp>
 #include <ibis/vhdl/ast/util/position_tagged.hpp>
 #include <ibis/vhdl/parser/iterator_type.hpp>
-#include <ibis/literals.hpp>  // FixMe: unused in header position_cache.hpp
 
-#include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/range/iterator_range_core.hpp>
-#include <ibis/util/compiler/warnings_on.hpp>
 
 #include <iosfwd>
 #include <tuple>
@@ -29,6 +26,7 @@ namespace ibis::vhdl::parser {
 ///
 struct annotator_tag;  // IWYU pragma: keep
 
+// Todo Consider renaming to iterator_position_mapper (according file_mapper)
 ///
 /// AST annotation/position cache
 ///
@@ -47,18 +45,12 @@ template <typename IteratorT>
 class position_cache {
 public:
     using iterator_type = std::remove_cv_t<IteratorT>;
-    using range_type = boost::iterator_range<iterator_type>;
     using file_id_type = vhdl::ast::position_tagged::file_id_type;
     using position_id_type = vhdl::ast::position_tagged::position_id_type;
+    using iterator_range_type = boost::iterator_range<iterator_type>;
 
 private:
-    using position_registry_type = std::vector<range_type>;
-
-private:
-    position_registry_type position_registry;
-
-private:
-    static constexpr auto MAX_ID = ast::position_tagged::MAX_POSITION_ID;
+    std::vector<iterator_range_type> position_registry;
 
 public:
     class annotator;
@@ -66,6 +58,7 @@ public:
 public:
     position_cache() = default;
 
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
     explicit position_cache(std::size_t mem_reserve) { position_registry.reserve(mem_reserve); }
 
     ~position_cache() = default;
@@ -73,8 +66,17 @@ public:
     position_cache(position_cache&&) = default;
     position_cache& operator=(position_cache&&) = default;
 
+    // not copyable, there must be only one position cache in the app
     position_cache(position_cache const&) = delete;
     position_cache& operator=(position_cache const&) = delete;
+
+public:
+    position_id_type iterator_range_id(iterator_type first, iterator_type last)
+    {
+        auto position_id = next_id();
+        position_registry.push_back({ first, last });  // OOM alert!
+        return position_id;
+    }
 
 public:
     ///
@@ -95,7 +97,7 @@ public:
     /// @param node The AST node.
     /// @return boost::iterator_range tagged before by @ref annotate.
     ///
-    range_type position_of(ast::position_tagged const& node) const
+    iterator_range_type position_of(ast::position_tagged const& node) const
     {
         assert(valid_id(node.position_id) && "node position_id out of range!");
         return position_registry[node.position_id];
@@ -106,6 +108,17 @@ private:
     /// Check if a given position ID is valid
     ///
     bool valid_id(position_id_type id) const { return std::cmp_less(id, position_registry.size()); }
+
+    ///
+    /// Get an ID
+    ///
+    position_id_type next_id() const
+    {
+        assert(std::cmp_less(position_registry.size(), ast::position_tagged::MAX_POSITION_ID) &&
+               "Insufficient range of numeric IDs for AST tagging");
+
+        return position_id_type{ position_registry.size() };
+    }
 
 private:
     ///
@@ -120,12 +133,14 @@ private:
     /// @param last    End  of iterator position to tag.
     ///
     template <typename NodeT>
+    //[[deprecated("rework of API")]]
     void annotate(file_id_type file_id, NodeT& node, iterator_type first, iterator_type last)
     {
-        if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_reference_t<NodeT>>) {
+        if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_cv_t<NodeT>>) {
             // ToDo [C++26] use std::format to print the max ID on assert message
-            assert(std::cmp_less(position_registry.size(), MAX_ID) &&
-                   "Insufficient range of numeric IDs for AST tagging");
+            assert(
+                std::cmp_less(position_registry.size(), ast::position_tagged::MAX_POSITION_ID)  //
+                && "Insufficient range of numeric IDs for AST tagging");
 
             node.file_id = file_id;
             node.position_id = next_id();
@@ -133,15 +148,9 @@ private:
             position_registry.emplace_back(first, last);
         }
         else {
-            // ignored since isn't ast::position_tagged derived; since there is nothing to tag,
-            // no "tagged" error description about this node will be possible
+            // ignored since isn't ast::position_tagged derived; since there is nothing to tag
         }
     }
-
-    ///
-    /// Get an ID
-    ///
-    std::size_t next_id() const { return position_registry.size(); }
 };
 
 ///
@@ -153,12 +162,12 @@ private:
 ///
 template <typename IteratorT>
 class position_cache<IteratorT>::annotator {
-    std::reference_wrapper<position_cache<IteratorT>> position_cache_ref;
+    std::reference_wrapper<position_cache<IteratorT>> ref_position_cache;
     file_id_type current_file_id;
 
 public:
     annotator(std::reference_wrapper<position_cache<IteratorT>> ref_self, file_id_type id)
-        : position_cache_ref{ ref_self }
+        : ref_position_cache{ ref_self }
         , current_file_id{ id }
     {
     }
@@ -173,15 +182,11 @@ public:
     annotator& operator=(annotator const&) = default;
 
 public:
-    /// Get the id of current <file_name, contents>.
-    // file_id_type file_id() const { return current_file_id; }
-
-public:
     /// annotate the given node.
     template <typename NodeT>
     void annotate(NodeT& node, iterator_type first, iterator_type last)
     {
-        position_cache_ref.get().annotate(current_file_id, node, first, last);
+        ref_position_cache.get().annotate(current_file_id, node, first, last);
     }
 };
 

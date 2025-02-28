@@ -13,20 +13,23 @@
 
 #include <exception>
 #include <iosfwd>
+#include <iterator>
 #include <string_view>
 #include <string>
 #include <vector>
 
 namespace ibis::vhdl::ast {
+
 struct design_unit;
 using design_file = std::vector<ast::design_unit>;  // FixMe not clever, include <.../ast.hpp>
 }  // namespace ibis::vhdl::ast
 
 namespace ibis::vhdl::parser {
 
+template <std::random_access_iterator IteratorT /* = vhdl::parser::iterator_type */>
 class parse {
 public:
-    using iterator_type = vhdl::parser::iterator_type;
+    using iterator_type = IteratorT;
     using position_cache_type = position_cache<iterator_type>;
     using current_file_type = ibis::util::file_mapper::current_file;
     using vhdl_context_type = parser::context;
@@ -37,7 +40,7 @@ public:
     ///
     /// @param os_ Output stream for messages.
     ///
-    parse(std::ostream& os_)
+    explicit parse(std::ostream& os_)
         : os{ os_ }
     {
     }
@@ -63,7 +66,7 @@ public:
     /// this is only required if you have recursive rules or need external linkage
     /// on rules (define them in separate translation units).
     ///
-    bool operator()(current_file_type&& current_file, position_cache_type& position_cache,
+    bool operator()(current_file_type& current_file, position_cache_type& position_cache,
                     vhdl_context_type& vhdl_ctx, ast::design_file& design_file) const;
 
 private:
@@ -75,5 +78,12 @@ private:
 private:
     std::ostream& os;
 };
+
+}  // namespace ibis::vhdl::parser
+
+namespace ibis::vhdl::parser {
+
+/// Explicit template instantiation declaration
+extern template class parse<vhdl::parser::iterator_type>;
 
 }  // namespace ibis::vhdl::parser

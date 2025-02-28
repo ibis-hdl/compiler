@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <ibis/vhdl/parser/position_cache.hpp>
+#include <ibis/vhdl/ast/ast_context.hpp>
 #include <ibis/vhdl/ast/util/variant.hpp>
 
 #include <boost/spirit/home/x3/support/context.hpp>
@@ -15,6 +15,7 @@
 #include <ibis/namespace_alias.hpp>
 
 #include <boost/utility/enable_if.hpp>
+// #include <boost/type_index.hpp>
 
 namespace ibis::vhdl::parser {
 
@@ -33,32 +34,30 @@ namespace ibis::vhdl::parser {
 ///
 struct success_handler {
     template <typename IteratorT, typename ContextT, typename... Types>
-    inline void on_success(IteratorT const& first, IteratorT const& last,
-                           ast::variant<Types...>& node, ContextT const& context) const
+    void on_success(IteratorT first, IteratorT last, ast::variant<Types...>& node,
+                    ContextT const& x3_ctx) const
     {
         node.apply_visitor(x3::make_lambda_visitor<void>(  // --
             [&](auto& node_)                               // --
             {
-                this->on_success(first, last, node_, context);  // --
+                this->on_success(first, last, node_, x3_ctx);  // --
             }));
     }
 
     template <typename NodeT, typename IteratorT, typename ContextT>
-    inline void on_success(IteratorT const& first, IteratorT const& last,
-                           x3::forward_ast<NodeT>& node, ContextT const& context) const
+    void on_success(IteratorT first, IteratorT last, x3::forward_ast<NodeT>& node,
+                    ContextT const& x3_ctx) const
     {
-        this->on_success(first, last, node.get(), context);
+        this->on_success(first, last, node.get(), x3_ctx);
     }
 
     template <typename NodeT, typename IteratorT, typename ContextT>
-    inline typename boost::disable_if<x3::traits::is_variant<NodeT>>::type on_success(  // --
-        IteratorT const& first, IteratorT const& last, NodeT& node, ContextT const& context) const
+    typename boost::disable_if<x3::traits::is_variant<NodeT>>::type on_success(  // --
+        IteratorT first, IteratorT last, NodeT& node, ContextT const& x3_ctx) const
     {
-        // to get the type of the context, just uncomment next line
+        // Hint: to get the type of the context, just uncomment next line
         // struct {} _ = *static_cast<decltype(context)*>(nullptr);
-
-        auto& annotator = x3::get<parser::annotator_tag>(context).get();
-        annotator.annotate(node, first, last);
+        x3::get<parser::annotator_tag>(x3_ctx).get().annotate(node, first, last);
     }
 };
 

@@ -10,6 +10,7 @@
 #include <ibis/vhdl/parser/grammar.hpp>
 #include <ibis/vhdl/parser/parser_config.hpp>
 #include <ibis/vhdl/parser/skipper.hpp>
+#include <ibis/vhdl/ast/ast_context.hpp>
 
 // #include <boost/spirit/home/x3.hpp>                    // IWYU pragma: keep
 #include <boost/spirit/home/x3/auxiliary/eoi.hpp>      // for eoi_parser, eoi
@@ -44,36 +45,35 @@ BOOST_SPIRIT_DECLARE(design_file_type)
 
 namespace ibis::vhdl::parser {
 
-bool parse::operator()(current_file_type&& current_file, position_cache_type& position_cache,
-                       vhdl_context_type& vhdl_ctx, ast::design_file& design_file) const
+template <std::random_access_iterator IteratorT>
+bool parse<IteratorT>::operator()(current_file_type& current_file,
+                                  position_cache_type& position_cache, vhdl_context_type& vhdl_ctx,
+                                  ast::design_file& design_file) const
 {
     using ibis::util::get_iterator_pair;
 
-    static_assert(
-        std::is_base_of_v<std::forward_iterator_tag,
-                          typename std::iterator_traits<iterator_type>::iterator_category>,
-        "iterator type must be of multi-pass iterator");  // ToDo realize this as concept
+    ast::ast_context<iterator_type> ast_context{ current_file, std::ref(position_cache) };
 
     // clang-format off
-    parser::diagnostic_handler_type diagnostic_handler{
-        os, std::move(current_file), std::ref(position_cache), std::ref(vhdl_ctx)
+    diagnostic_handler_type diagnostic_handler{
+        os, std::ref(ast_context), std::ref(vhdl_ctx)
     };
     // clang-format on
 
-    // FixMe Urgent - current_file moved before!!
-    auto ast_annotator = position_cache.annotator_for(current_file.id());
+    // ToDo Check idea, approach used in
+    // [Cleanest way to handle both quoted and unquoted strings in Spirit.X3](
+    // https://stackoverflow.com/questions/74031183/cleanest-way-to-handle-both-quoted-and-unquoted-strings-in-spirit-x3)
 
     // clang-format off
     auto const parser =
-        x3::with<parser::annotator_tag>(std::ref(ast_annotator))[
+        x3::with<parser::annotator_tag>(std::ref(ast_context))[
             x3::with<parser::diagnostic_handler_tag>(std::ref(diagnostic_handler))[
                 parser::grammar()
             ]
         ];
     // clang-format on
 
-    // FixMe Urgent - current_file moved before!!
-    auto [iter, end] = get_iterator_pair(current_file.file_contents());
+    auto [iter, end] = get_iterator_pair(ast_context.file_contents());
 
     // using different iterator_types causes linker errors, see e.g.
     // [linking errors while separate parser using boost spirit x3](
@@ -81,7 +81,7 @@ bool parse::operator()(current_file_type&& current_file, position_cache_type& po
     //
     static_assert(std::is_same_v<decltype(iter), iterator_type>, "iterator types must be the same");
 
-    auto const filename = current_file.file_name();
+    auto const filename = ast_context.file_name();
     bool parse_ok = false;
 
     try {
@@ -117,8 +117,9 @@ bool parse::operator()(current_file_type&& current_file, position_cache_type& po
     return parse_ok;
 }
 
-std::string parse::make_exception_description(std::exception const& exception,
-                                              std::string_view filename)
+template <std::random_access_iterator IteratorT>
+std::string parse<IteratorT>::make_exception_description(std::exception const& exception,
+                                                         std::string_view filename)
 {
     using boost::locale::format;
     using boost::locale::translate;
@@ -131,7 +132,8 @@ std::string parse::make_exception_description(std::exception const& exception,
         .str();
 }
 
-std::string parse::make_exception_description(std::string_view filename)
+template <std::random_access_iterator IteratorT>
+std::string parse<IteratorT>::make_exception_description(std::string_view filename)
 {
     using boost::locale::format;
     using boost::locale::translate;
@@ -142,5 +144,14 @@ std::string parse::make_exception_description(std::string_view filename)
             )
         .str();
 }
+
+}  // namespace ibis::vhdl::parser
+
+// ----------------------------------------------------------------------------
+// Explicit template instantiation
+// ----------------------------------------------------------------------------
+namespace ibis::vhdl::parser {
+
+template class parse<vhdl::parser::iterator_type>;
 
 }  // namespace ibis::vhdl::parser

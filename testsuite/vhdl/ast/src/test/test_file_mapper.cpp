@@ -63,15 +63,15 @@ BOOST_AUTO_TEST_CASE(file_mapper_basic,
     auto current_file = file_mapper.add_file(filename, valid_data::lorem_ipsum);
 
     BOOST_TEST(file_mapper.file_count() == 1U);
-    BOOST_TEST((file_mapper.file_count() - 1) == current_file.id().get());
-    BOOST_TEST(file_mapper.valid_id(current_file.id()) == true);
-    BOOST_TEST(file_mapper.file_name(current_file.id()) == filename);
-    BOOST_TEST(file_mapper.file_contents(current_file.id()) == valid_data::lorem_ipsum,
+    BOOST_TEST((file_mapper.file_count() - 1) == current_file.file_id().get());
+    BOOST_TEST(file_mapper.valid_id(current_file.file_id()) == true);
+    BOOST_TEST(file_mapper.file_name(current_file.file_id()) == filename);
+    BOOST_TEST(file_mapper.file_contents(current_file.file_id()) == valid_data::lorem_ipsum,
                btt::per_element());
     // check correctness of current_file proxy
-    BOOST_TEST(current_file.file_name() == file_mapper.file_name(current_file.id()),
+    BOOST_TEST(current_file.file_name() == file_mapper.file_name(current_file.file_id()),
                btt::per_element());
-    BOOST_TEST(current_file.file_contents() == file_mapper.file_contents(current_file.id()),
+    BOOST_TEST(current_file.file_contents() == file_mapper.file_contents(current_file.file_id()),
                btt::per_element());
 
     // use move-sematic overload @fn add_file(std::string&& filename, std::string&& contents)
@@ -80,15 +80,15 @@ BOOST_AUTO_TEST_CASE(file_mapper_basic,
         file_mapper.add_file(std::string{ filename }, std::string{ valid_data::lorem_ipsum });
 
     BOOST_TEST(file_mapper.file_count() == 2U);
-    BOOST_TEST((file_mapper.file_count() - 1) == current_file.id().get());
-    BOOST_TEST(file_mapper.valid_id(current_file.id()) == true);
-    BOOST_TEST(file_mapper.file_name(current_file.id()) == filename);
-    BOOST_TEST(file_mapper.file_contents(current_file.id()) == valid_data::lorem_ipsum,
+    BOOST_TEST((file_mapper.file_count() - 1) == current_file.file_id().get());
+    BOOST_TEST(file_mapper.valid_id(current_file.file_id()) == true);
+    BOOST_TEST(file_mapper.file_name(current_file.file_id()) == filename);
+    BOOST_TEST(file_mapper.file_contents(current_file.file_id()) == valid_data::lorem_ipsum,
                btt::per_element());
     // check correctness of current_file proxy
-    BOOST_TEST(current_file.file_name() == file_mapper.file_name(current_file.id()),
+    BOOST_TEST(current_file.file_name() == file_mapper.file_name(current_file.file_id()),
                btt::per_element());
-    BOOST_TEST(current_file.file_contents() == file_mapper.file_contents(current_file.id()),
+    BOOST_TEST(current_file.file_contents() == file_mapper.file_contents(current_file.file_id()),
                btt::per_element());
 }
 
@@ -112,20 +112,20 @@ BOOST_AUTO_TEST_CASE(file_mapper_api,
 
     BOOST_TEST(file_mapper.file_count() == 2U);
 
-    BOOST_TEST(file_mapper.valid_id(lorem_ipsum.id()) == true);
-    BOOST_TEST(file_mapper.file_name(lorem_ipsum.id()) == filename_lorem);
-    BOOST_TEST(file_mapper.file_contents(lorem_ipsum.id()) == valid_data::lorem_ipsum,
+    BOOST_TEST(file_mapper.valid_id(lorem_ipsum.file_id()) == true);
+    BOOST_TEST(file_mapper.file_name(lorem_ipsum.file_id()) == filename_lorem);
+    BOOST_TEST(file_mapper.file_contents(lorem_ipsum.file_id()) == valid_data::lorem_ipsum,
                btt::per_element());
 
-    BOOST_TEST(file_mapper.valid_id(bacon_ipsum.id()) == true);
-    BOOST_TEST(file_mapper.file_name(bacon_ipsum.id()) == filename_bacon);
-    BOOST_TEST(file_mapper.file_contents(bacon_ipsum.id()) == valid_data::bacon_ipsum,
+    BOOST_TEST(file_mapper.valid_id(bacon_ipsum.file_id()) == true);
+    BOOST_TEST(file_mapper.file_name(bacon_ipsum.file_id()) == filename_bacon);
+    BOOST_TEST(file_mapper.file_contents(bacon_ipsum.file_id()) == valid_data::bacon_ipsum,
                btt::per_element());
 
     // check correctness of proxy
-    BOOST_TEST(lorem_ipsum.file_name() == file_mapper.file_name(lorem_ipsum.id()),
+    BOOST_TEST(lorem_ipsum.file_name() == file_mapper.file_name(lorem_ipsum.file_id()),
                btt::per_element());
-    BOOST_TEST(bacon_ipsum.file_name() == file_mapper.file_name(bacon_ipsum.id()),
+    BOOST_TEST(bacon_ipsum.file_name() == file_mapper.file_name(bacon_ipsum.file_id()),
                btt::per_element());
 
     // paranoid
