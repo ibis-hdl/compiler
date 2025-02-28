@@ -74,7 +74,7 @@ if (IBIS_BUILD_TESTS)
     add_subdirectory(testsuite/common)
     add_subdirectory(testsuite/misc)
     add_subdirectory(testsuite/testsuite_util)
-    #add_subdirectory(testsuite/vhdl/numeric_convert) # rewrite, hence disabled
+    ##add_subdirectory(testsuite/vhdl/numeric_convert) # rewrite, hence disabled
     add_subdirectory(testsuite/vhdl/ast)
     add_subdirectory(testsuite/vhdl/grammar)
     add_subdirectory(testsuite/vhdl/parser_rules)

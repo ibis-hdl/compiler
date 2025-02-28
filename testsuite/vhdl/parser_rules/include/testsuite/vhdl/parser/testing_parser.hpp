@@ -54,24 +54,22 @@ struct testing_parser {
         btt::output_test_stream output;
         parser::context vhdl_ctx;
 
-        auto [iter, end] = ibis::util::get_iterator_pair(ast_context.file_contents());
-
         // clang-format off
         parser::diagnostic_handler_type diagnostic_handler{
             output, std::ref(ast_context), std::ref(vhdl_ctx)
         };
         // clang-format on
 
-        auto ast_annotator = position_cache.annotator_for(ast_context.file_id());
-
         // clang-format off
         auto const parser =
-            x3::with<parser::annotator_tag>(std::ref(ast_annotator))[
+            x3::with<parser::annotator_tag>(std::ref(ast_context))[
                 x3::with<parser::diagnostic_handler_tag>(std::ref(diagnostic_handler))[
                     parser_rule
                 ]
             ];
         // clang-format on
+
+        auto [iter, end] = ibis::util::get_iterator_pair(ast_context.file_contents());
 
         // using different iterator_types causes linker errors, see e.g.
         // [linking errors while separate parser using boost spirit x3](

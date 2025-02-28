@@ -6,8 +6,9 @@
 #pragma once
 
 #include <ibis/vhdl/parser/diagnostic_handler.hpp>
-#include <ibis/vhdl/parser/position_cache.hpp>
-#include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/ast/ast_context.hpp>
+// #include <ibis/vhdl/parser/position_cache.hpp>
+// #include <ibis/vhdl/parser/iterator_type.hpp>
 #include <ibis/vhdl/parser/skipper.hpp>
 
 #include <ibis/namespace_alias.hpp>
@@ -15,7 +16,7 @@
 namespace ibis::vhdl::parser {
 
 // using iterator_type = parser::iterator_type;
-using position_annotator_type = parser::position_cache<iterator_type>::annotator;
+using ast_context_type = ast::ast_context<iterator_type>;
 using diagnostic_handler_type = parser::diagnostic_handler<iterator_type>;
 
 using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
@@ -65,7 +66,7 @@ using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
 /// @code{.cpp}
 /// x3::context<
 ///     parser::annotator_tag,
-///     std::reference_wrapper<parser::position_annotator_type>,
+///     std::reference_wrapper<parser::ast_context_type>,
 ///     x3::context<
 ///         parser::diagnostic_handler_tag,
 ///         std::reference_wrapper<parser::diagnostic_handler_type>,
@@ -84,7 +85,7 @@ using context_type =
         std::reference_wrapper<parser::diagnostic_handler_type>,
         x3::context<
             parser::annotator_tag,
-            std::reference_wrapper<parser::position_annotator_type>,
+            std::reference_wrapper<parser::ast_context_type>,
             phrase_context_type
         >
     >;

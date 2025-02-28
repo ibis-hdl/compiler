@@ -55,28 +55,24 @@ bool parse<IteratorT>::operator()(current_file_type& current_file,
     ast::ast_context<iterator_type> ast_context{ current_file, std::ref(position_cache) };
 
     // clang-format off
-    parser::diagnostic_handler_type diagnostic_handler{
+    diagnostic_handler_type diagnostic_handler{
         os, std::ref(ast_context), std::ref(vhdl_ctx)
     };
     // clang-format on
 
-    // ToDo Replace ast_annotator with ast_context and ast_context.annotate(NodeT)
-
-    auto ast_annotator = position_cache.annotator_for(ast_context.file_id());
-
-    // FixMe Check idea, approach used in
+    // ToDo Check idea, approach used in
     // [Cleanest way to handle both quoted and unquoted strings in Spirit.X3](
     // https://stackoverflow.com/questions/74031183/cleanest-way-to-handle-both-quoted-and-unquoted-strings-in-spirit-x3)
     // clang-format off
     auto const parser =
-        x3::with<parser::annotator_tag>(std::ref(ast_annotator))[
+        x3::with<parser::annotator_tag>(std::ref(ast_context))[
             x3::with<parser::diagnostic_handler_tag>(std::ref(diagnostic_handler))[
                 parser::grammar()
             ]
         ];
     // clang-format on
 
-    auto [iter, end] = get_iterator_pair(current_file.file_contents());
+    auto [iter, end] = get_iterator_pair(ast_context.file_contents());
 
     // using different iterator_types causes linker errors, see e.g.
     // [linking errors while separate parser using boost spirit x3](
@@ -84,7 +80,7 @@ bool parse<IteratorT>::operator()(current_file_type& current_file,
     //
     static_assert(std::is_same_v<decltype(iter), iterator_type>, "iterator types must be the same");
 
-    auto const filename = current_file.file_name();
+    auto const filename = ast_context.file_name();
     bool parse_ok = false;
 
     try {

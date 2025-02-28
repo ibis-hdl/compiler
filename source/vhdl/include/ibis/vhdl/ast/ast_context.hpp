@@ -27,13 +27,13 @@ private:
     using position_cache_type = ibis::vhdl::parser::position_cache<iterator_type>;
 
     current_file_type current_file;
-    std::reference_wrapper<position_cache_type> position_cache;
+    std::reference_wrapper<position_cache_type> ref_position_cache;
 
 public:
     ast_context(current_file_type current_file,
                 std::reference_wrapper<position_cache_type> position_cache)
         : current_file{ current_file }
-        , position_cache{ position_cache }
+        , ref_position_cache{ position_cache }
     {
     }
 
@@ -45,7 +45,7 @@ public:
             // OOM error handling/strategy missing, push_back()/emplace_back() may fail, even if
             // uncertainly
             node.file_id = current_file.file_id();
-            node.position_id = position_cache.iterator_range_id(first, last);
+            node.position_id = ref_position_cache.get().iterator_range_id(first, last);
         }
         else {
             // Subclassing of the x3 parser rule tag class determines the call of on_success() of
@@ -58,7 +58,7 @@ public:
 
     iterator_range_type position_of(ast::position_tagged const& node) const
     {
-        return position_cache.get().position_of(node);
+        return ref_position_cache.get().position_of(node);
     }
 
 public:

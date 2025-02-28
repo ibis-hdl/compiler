@@ -93,10 +93,28 @@ public:
 
 public:
     ///
-    /// Render the diagnostic error_message. #1 - expectation error handler
+    /// Render the diagnostic expectation error_message from x3 Parser.
+    ///
+    /// This gets called from x3 \fn error_handler::on_error on expectation errors in the grammar
+    /// rule .
     ///
     /// @param error_pos     Iterator position where the error occurred.
-    /// @param error_message The information error message.
+    /// @param error_message The information error message of expectation failure.
+    ///
+    void parser_expectation_error(iterator_type error_pos, std::string_view error_message) const
+    {
+        error(error_pos, std::nullopt, error_message, error_type::parser);
+    }
+
+    ///
+    /// Render the diagnostic error_message on failed x3 (phrase) parse.
+    ///
+    /// This function is normally called when x3::phrase_parse returns false to report more
+    /// information of subject to fail.
+    /// @note Same function signature as \fn parser_expectation_error()
+    ///
+    /// @param error_pos     Iterator position where the error occurred.
+    /// @param error_message The information error message of expectation failure.
     ///
     void parser_error(iterator_type error_pos, std::string_view error_message) const
     {
@@ -104,7 +122,7 @@ public:
     }
 
     ///
-    /// Render the diagnostic error_message. #2
+    /// Render the diagnostic error_message. #1
     ///
     /// @param error_pos     Iterator position where the error occurred.
     /// @param error_last    optional Iterator position to end where the error occurred.
@@ -117,7 +135,7 @@ public:
     }
 
     ///
-    /// Render the diagnostic error_message. #3
+    /// Render the diagnostic error_message. #2
     ///
     /// @param error_pos     Iterator position where the error occurred.
     /// @param error_message The information error message.
@@ -128,7 +146,7 @@ public:
     }
 
     ///
-    /// Render the diagnostic error_message. #4
+    /// Render the diagnostic error_message. #3
     ///
     /// @param error_pos     Iterator position where the error occurred.
     /// @param error_last    optional Iterator position to end where the error occurred.
@@ -141,7 +159,7 @@ public:
     }
 
     ///
-    /// Render the diagnostic error_message. #5
+    /// Render the diagnostic error_message. #4
     ///
     /// @param error_pos     Iterator position where the error occurred.
     /// @param error_message The information error message.
@@ -152,7 +170,7 @@ public:
     }
 
     ///
-    /// Render the diagnostic error_message. #6
+    /// Render the diagnostic error_message. #5
     ///
     /// @param error_pos     Iterator position where the error occurred.
     /// @param error_last    optional Iterator position to end where the error occurred.
