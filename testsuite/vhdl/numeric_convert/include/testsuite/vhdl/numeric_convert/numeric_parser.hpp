@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include <ibis/vhdl/ast_fwd.hpp>
-#include <ibis/vhdl/parser/diagnostic_handler.hpp>
+#include <ibis/vhdl/ast/nodes_fwd.hpp>
+#include <ibis/vhdl/diagnostic_handler.hpp>
 
 #include <tuple>
 
@@ -17,7 +17,7 @@ namespace testsuite {
 template <typename IteratorT>
 class literal_parser {
 public:
-    using diagnostic_handler_type = parser::diagnostic_handler<IteratorT>;
+    using diagnostic_handler_type = ibis::vhdl::diagnostic_handler<IteratorT>;
     using position_proxy = typename parser::position_cache<IteratorT>::proxy;
 
 public:

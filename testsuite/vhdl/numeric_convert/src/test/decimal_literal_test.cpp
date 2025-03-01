@@ -7,7 +7,7 @@
 
 #include <ibis/util/file_mapper.hpp>
 #include <ibis/vhdl/parser/position_cache.hpp>
-#include <ibis/vhdl/parser/diagnostic_handler.hpp>
+#include <ibis/vhdl/diagnostic_handler.hpp>
 #include <ibis/vhdl/parser/context.hpp>
 #include <ibis/vhdl/type.hpp>
 
@@ -113,7 +113,7 @@ BOOST_DATA_TEST_CASE(decimal_literal_integer, utf_data::make(dec_int_lit) ^ dec_
     BOOST_TEST_REQUIRE(conv_ok);
     BOOST_TEST(std::get<numeric_convert::integer_type>(value) == N);
 
-    os << failure_status(ctx);
+    os << ctx.get_failure_status();
     if (!os.str().empty()) {
         // std::cout << '\n' << os.str() << '\n';
     }
@@ -150,7 +150,7 @@ BOOST_AUTO_TEST_CASE(decimal_literal_uint64max_ovrflw)
     std::tie(conv_ok, std::ignore) = numeric(ast_node);
     BOOST_TEST_REQUIRE(!conv_ok);  // ... but must fail to convert
 
-    os << failure_status(ctx);
+    os << ctx.get_failure_status();
     if (!os.str().empty()) {
         // std::cout << '\n' << os.str() << '\n';
     }
@@ -235,7 +235,7 @@ BOOST_DATA_TEST_CASE(decimal_literal_real, utf_data::make(dec_real_lit) ^ dec_re
     BOOST_TEST_REQUIRE(conv_ok);
     BOOST_TEST(std::get<numeric_convert::real_type>(value) == N, btt::tolerance(REAL_TOLERANCE));
 
-    os << failure_status(ctx);
+    os << ctx.get_failure_status();
     if (!os.str().empty()) {
         std::cout << '\n' << os.str() << '\n';
     }

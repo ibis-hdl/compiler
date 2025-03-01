@@ -8,8 +8,8 @@
 #include <ibis/util/indent_stream.hpp>
 #include <ibis/util/pretty_typename.hpp>
 
-#include <ibis/vhdl/ast_fwd.hpp>
-#include <ibis/vhdl/ast.hpp>
+#include <ibis/vhdl/ast/nodes_fwd.hpp>
+#include <ibis/vhdl/ast/nodes.hpp>
 
 #include <ibis/vhdl/ast/ast_printer.hpp>
 

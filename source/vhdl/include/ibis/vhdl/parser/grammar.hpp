@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <ibis/vhdl/ast.hpp>
+#include <ibis/vhdl/ast/nodes.hpp>
 
 #include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/spirit/home/x3.hpp>

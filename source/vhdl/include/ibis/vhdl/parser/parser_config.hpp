@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <ibis/vhdl/parser/diagnostic_handler.hpp>
+#include <ibis/vhdl/diagnostic_handler.hpp>
 #include <ibis/vhdl/ast/ast_context.hpp>
 // #include <ibis/vhdl/parser/position_cache.hpp>
 // #include <ibis/vhdl/parser/iterator_type.hpp>
@@ -15,9 +15,14 @@
 
 namespace ibis::vhdl::parser {
 
+///
+/// tag used to get our error handler from the x3::context
+///
+struct diagnostic_handler_tag;  // IWYU pragma: keep
+
 // using iterator_type = parser::iterator_type;
 using ast_context_type = ast::ast_context<iterator_type>;
-using diagnostic_handler_type = parser::diagnostic_handler<iterator_type>;
+using diagnostic_handler_type = vhdl::diagnostic_handler<iterator_type>;
 using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
 
 ///
@@ -56,7 +61,7 @@ using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
 /// @todo Report a bug: It's curious, since e.g. ```parse.cpp``` instantiate the parser as:
 /// @code{.cpp}
 /// x3::with<parser::annotator_tag>(std::ref(position_cache_proxy))[
-///     x3::with<parser::diagnostic_handler_tag>(std::ref(diagnostic_handler))[
+///     x3::with<diagnostic_handler_tag>(std::ref(diagnostic_handler))[
 ///         parser::grammar()
 ///     ]
 /// ];
@@ -67,8 +72,8 @@ using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
 ///     parser::annotator_tag,
 ///     std::reference_wrapper<parser::ast_context_type>,
 ///     x3::context<
-///         parser::diagnostic_handler_tag,
-///         std::reference_wrapper<parser::diagnostic_handler_type>,
+///         diagnostic_handler_tag,
+///         std::reference_wrapper<diagnostic_handler_type>,
 ///         phrase_context_type
 ///     >
 /// >;

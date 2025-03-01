@@ -7,7 +7,7 @@
 
 // #include <ibis/vhdl/parser/parser_config.hpp>
 #include <ibis/util/file_mapper.hpp>
-#include <ibis/vhdl/parser/context.hpp>
+#include <ibis/vhdl/context.hpp>
 #include <ibis/vhdl/parser/iterator_type.hpp>
 #include <ibis/vhdl/parser/position_cache.hpp>
 
@@ -32,7 +32,7 @@ public:
     using iterator_type = IteratorT;
     using position_cache_type = position_cache<iterator_type>;
     using current_file_type = ibis::util::file_mapper::current_file;
-    using vhdl_context_type = parser::context;
+    using vhdl_context_type = vhdl::vhdl_global_context;
 
 public:
     ///

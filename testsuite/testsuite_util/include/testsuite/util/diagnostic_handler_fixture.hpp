@@ -10,7 +10,7 @@
 
 #include <ibis/util/file_mapper.hpp>
 #include <ibis/vhdl/parser/position_cache.hpp>
-#include <ibis/vhdl/parser/diagnostic_handler.hpp>
+#include <ibis/vhdl/diagnostic_handler.hpp>
 #include <ibis/vhdl/parser/context.hpp>
 #include <ibis/literals.hpp>
 

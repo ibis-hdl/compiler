@@ -32,10 +32,9 @@ private:
 public:
     ast_context() = delete;
 
-    ast_context(current_file_type current_file,
-                std::reference_wrapper<position_cache_type> position_cache)
+    ast_context(current_file_type current_file, position_cache_type& position_cache)
         : current_file{ current_file }
-        , ref_position_cache{ position_cache }
+        , ref_position_cache{ std::ref(position_cache) }
     {
     }
 

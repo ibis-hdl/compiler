@@ -8,13 +8,13 @@
 #include <ibis/vhdl/ast/basic_ast_walker.hpp>
 #include <ibis/vhdl/ast/ast_printer.hpp>
 #include <ibis/vhdl/ast/ast_formatter.hpp>
-#include <ibis/vhdl/parser/diagnostic_handler.hpp>
+#include <ibis/vhdl/diagnostic_handler.hpp>
 #include <ibis/vhdl/parser/context.hpp>
 #include <ibis/vhdl/type.hpp>
 #include <ibis/util/overloaded.hpp>
 
 #include <ibis/vhdl/parser/parse.hpp>
-#include <ibis/vhdl/ast.hpp>
+#include <ibis/vhdl/ast/nodes.hpp>
 
 #include <testsuite/testsuite_parser.hpp>
 #include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
@@ -303,7 +303,7 @@ BOOST_AUTO_TEST_CASE(based_literal_ng)
     verify(ast);
 
     using ibis::vhdl::failure_status;
-    os << failure_status(ctx) << '\n';
+    os << ctx.get_failure_status() << '\n';
 
     //std::cout << os.str() << '\n';
     BOOST_TEST(os.str() == expected_os);

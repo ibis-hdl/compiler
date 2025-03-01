@@ -5,8 +5,8 @@
 
 #pragma once
 
-// #include<ibis/vhdl/ast_fwd.hpp>
-#include <ibis/vhdl/ast.hpp>
+// #include<ibis/vhdl/ast/nodes_fwd.hpp>
+#include <ibis/vhdl/ast/nodes.hpp>
 
 #include <ibis/util/overloaded.hpp>
 

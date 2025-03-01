@@ -5,8 +5,8 @@
 
 #pragma once
 
-// #include <ibis/vhdl/ast_fwd.hpp>
-// #include <ibis/vhdl/ast.hpp>  // FixMe: not the best solution to include all
+// #include <ibis/vhdl/ast/nodes_fwd.hpp>
+// #include <ibis/vhdl/ast/nodes.hpp>  // FixMe: not the best solution to include all
 #include <ibis/vhdl/ast/node/design_file.hpp>
 
 #include <boost/test/tools/output_test_stream.hpp>

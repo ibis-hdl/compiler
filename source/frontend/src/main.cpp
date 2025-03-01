@@ -7,13 +7,12 @@
 
 #include <ibis/vhdl/parser/parse.hpp>
 #include <ibis/vhdl/parser/iterator_type.hpp>
-#include <ibis/vhdl/parser/context.hpp>
 
 #include <ibis/vhdl/ast/ast_printer.hpp>
 #include <ibis/vhdl/ast/node/design_unit.hpp>  // include doesn't work, linker errors
-#include <ibis/vhdl/ast.hpp>
+#include <ibis/vhdl/ast/nodes.hpp>
 #include <ibis/vhdl/diagnostic_formatter.hpp>
-#include <ibis/vhdl/context.hpp>  // failure_status
+#include <ibis/vhdl/context.hpp>
 
 #include <ibis/settings.hpp>
 #include <ibis/util/file/file_loader.hpp>
@@ -100,7 +99,7 @@ int main(int argc, const char* argv[])
         util::file_mapper file_mapper{};
         parser::position_cache<iterator_type> position_cache{ 4_KiB };
         parser::parse<iterator_type> const parse{ std::cout };
-        parser::context ctx;
+        vhdl::vhdl_global_context ctx;
 
         // iterate over property_tree::path by using API get_child()
         for (auto const& child : settings::instance().get_child("hdl-files")) {
@@ -157,7 +156,7 @@ int main(int argc, const char* argv[])
              % file_mapper.file_count()));
 
         // print error/warning state if any (failure_status takes care on it)
-        std::cout << vhdl::failure_status(ctx) << '\n';
+        std::cout << ctx.get_failure_status() << '\n';
 
         return EXIT_SUCCESS;
     }

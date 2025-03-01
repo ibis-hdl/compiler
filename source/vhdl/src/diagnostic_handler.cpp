@@ -41,9 +41,10 @@ void diagnostic_handler<IteratorT>::syntax_error(ast::position_tagged const& whe
 
     // The parser's position cache proxy is configured to have the same file id tagged as the node
     // holds. Probably somewhere forgotten position_proxy.set_id(where_tag.file_id) ??
-    cxx_assert(ast_context.get().file_id() == where_tag.file_id, "cache proxy file id different");
+    cxx_assert(ref_ast_context.get().file_id() == where_tag.file_id,
+               "cache proxy file id different");
 
-    auto const where_range = ast_context.get().position_of(where_tag);
+    auto const where_range = ref_ast_context.get().position_of(where_tag);
 
     constexpr auto syntax_error = diagnostic_context::failure_type::syntax;
 
@@ -60,9 +61,10 @@ void diagnostic_handler<IteratorT>::syntax_error(ast::position_tagged const& whe
     cxx_assert(where_tag.is_tagged(), "Node not tagged");
     cxx_assert(start_label.is_tagged(), "Node/StartLabel not tagged");
     cxx_assert(end_label.is_tagged(), "Node/EndLabel not tagged");
-    cxx_assert(ast_context.get().file_id() == where_tag.file_id, "cache proxy file id different");
+    cxx_assert(ref_ast_context.get().file_id() == where_tag.file_id,
+               "cache proxy file id different");
 
-    ++vhdl_context.get().errors();
+    ++ref_vhdl_context.get().errors();
 
     constexpr auto syntax_error = diagnostic_context::failure_type::syntax;
 
@@ -84,7 +86,7 @@ void diagnostic_handler<IteratorT>::error(iterator_type error_first,
     using boost::locale::format;
     using boost::locale::translate;
 
-    ++vhdl_context.get().errors();
+    ++ref_vhdl_context.get().errors();
 
     diagnostic_context diag_ctx{ err_type, error_message };
 
@@ -102,7 +104,7 @@ template <typename IteratorT>
 source_location diagnostic_handler<IteratorT>::get_source_location(iterator_type error_pos) const
 {
     auto const [line, column] = line_column_number(error_pos);
-    return source_location(ast_context.get().file_name(), line, column);
+    return source_location(ref_ast_context.get().file_name(), line, column);
 }
 
 template <typename IteratorT>
@@ -121,7 +123,7 @@ std::tuple<std::size_t, std::size_t> diagnostic_handler<IteratorT>::line_column_
     char_type chr_prev = 0;
 
     // ToDo Clang -Weverything Warning: ++iter unsafe pointer arithmetic [-Wunsafe-buffer-usage]
-    for (iterator_type iter = ast_context.get().file_contents().begin(); iter != pos; ++iter) {
+    for (iterator_type iter = ref_ast_context.get().file_contents().begin(); iter != pos; ++iter) {
         auto const chr = *iter;
         switch (chr) {
             case '\n':                   // Line Feed (Linux, Mac OS X)
@@ -156,7 +158,7 @@ auto diagnostic_handler<IteratorT>::get_line_start(iterator_type pos) const ->
     using ibis::util::get_iterator_pair;
 
     // FixMe This should be rewritten with range based loops
-    auto [begin, end] = get_iterator_pair(ast_context.get().file_contents());
+    auto [begin, end] = get_iterator_pair(ref_ast_context.get().file_contents());
 
     // based on [.../x3/support/utility/error_reporting.hpp:get_line_start(...)](
     // https://github.com/boostorg/spirit/blob/master/include/boost/spirit/home/x3/support/utility/error_reporting.hpp)
@@ -187,7 +189,7 @@ std::string_view diagnostic_handler<IteratorT>::current_line(iterator_type first
     auto line_end = first;
     // ClangTidy - don't touch, since this may be an iterator classes
     // NOLINTNEXTLINE(readability-qualified-auto,readability-qualified-auto)
-    auto const end = ast_context.get().file_contents().end();
+    auto const end = ref_ast_context.get().file_contents().end();
 
     while (line_end != end) {
         if (*line_end == '\r' || *line_end == '\n') {

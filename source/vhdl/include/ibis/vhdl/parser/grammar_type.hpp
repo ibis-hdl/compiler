@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <ibis/vhdl/ast.hpp>
+#include <ibis/vhdl/ast/nodes.hpp>
 #include <ibis/vhdl/parser/grammar_id.hpp>
 
 #include <boost/spirit/home/x3/core.hpp>

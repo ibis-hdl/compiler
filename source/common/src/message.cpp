@@ -30,7 +30,7 @@ std::ostream& write(std::ostream& os, std::string_view msg, bool newline)
     return os;
 }
 
-std::ostream& write(std::ostream& os, boost::locale::basic_message<char> msg, bool newline)
+std::ostream& write(std::ostream& os, boost::locale::basic_message<char> const& msg, bool newline)
 {
     msg.write(os);
     os << (newline ? "\n" : "");
@@ -80,7 +80,8 @@ std::ostream& message(std::string_view msg, ibis::severity severity, bool newlin
     std::unreachable();
 }
 
-std::ostream& message(boost::locale::basic_message<char> msg, ibis::severity severity, bool newline)
+std::ostream& message(boost::locale::basic_message<char> const& msg, ibis::severity severity,
+                      bool newline)
 {
     // clang-format off
     switch (severity) {

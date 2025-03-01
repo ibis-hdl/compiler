@@ -7,14 +7,17 @@
 
 #include <ibis/vhdl/ast/basic_ast_walker.hpp>
 
-#include <ibis/vhdl/analyze/diagnostic_handler.hpp>
+#include <ibis/vhdl/diagnostic_handler.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
 
 #include <string_view>
 #include <iosfwd>
+#include <utility>
 
 namespace ibis::vhdl {
-class context;
+class vhdl_global_context;
 }
+
 namespace ibis::vhdl::ast {
 struct architecture_body;
 struct block_statement;
@@ -33,11 +36,20 @@ namespace ibis::vhdl::analyze {
 
 class syntax_worker {
 public:
-    syntax_worker(std::ostream& os_, vhdl::context& context_,
-                  analyze::diagnostic_handler_type& diagnostic_handler_)
+    using iterator_type = parser::iterator_type;
+    using diagnostic_handler_type = vhdl::diagnostic_handler<iterator_type>;
+
+private:
+    [[maybe_unused]] std::ostream& os;  // required later on
+    std::reference_wrapper<vhdl::vhdl_global_context> ref_vhdl_context;
+    std::reference_wrapper<diagnostic_handler_type> ref_diagnostic_handler;
+
+public:
+    syntax_worker(std::ostream& os_, vhdl::vhdl_global_context& context,
+                  diagnostic_handler_type& diagnostic_handler)
         : os{ os_ }
-        , context{ context_ }
-        , diagnostic_handler{ diagnostic_handler_ }
+        , ref_vhdl_context{ std::ref(context) }
+        , ref_diagnostic_handler{ std::ref(diagnostic_handler) }
     {
     }
 
@@ -79,11 +91,6 @@ private:
     /// 1st optional postponed as error location with line number, the 2nd is not rendered.
     ///
     bool keyword_matches(ast::process_statement const& node, std::string_view node_name) const;
-
-private:
-    [[maybe_unused]] std::ostream& os;  // required later on
-    vhdl::context& context;
-    analyze::diagnostic_handler_type& diagnostic_handler;
 };
 
 using syntax_checker = ast::basic_ast_walker<syntax_worker>;

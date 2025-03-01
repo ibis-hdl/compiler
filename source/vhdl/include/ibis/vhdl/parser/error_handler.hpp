@@ -5,18 +5,17 @@
 
 #pragma once
 
-#include <ibis/vhdl/parser/diagnostic_handler.hpp>  // IWYU pragma: keep
+#include <ibis/vhdl/diagnostic_handler.hpp>
+#include <ibis/vhdl/parser/parser_config.hpp>  // diagnostic_handler_tag
 
-#include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
-#include <boost/spirit/home/x3.hpp>             // FixMe: How to avoid to include all these stuff?!
+#include <boost/spirit/home/x3.hpp>
 // #include <boost/spirit/home/x3/support/context.hpp>
 // #include <boost/spirit/home/x3/util/guard.hpp>
-#include <ibis/util/compiler/warnings_on.hpp>
-
-#include <ibis/namespace_alias.hpp>  // IWYU pragma: keep
 
 #include <string>
 #include <string_view>
+
+#include <ibis/namespace_alias.hpp>
 
 namespace ibis::vhdl::parser {
 ///
@@ -32,8 +31,8 @@ namespace ibis::vhdl::parser {
 /// days:
 /// @code
 /// context<
-///     parser::diagnostic_handler_tag, ...,
-///     context<parser::annotator_tag, ...,
+///     diagnostic_handler_tag, ...,
+///     context<annotator_tag, ...,
 ///         context<skipper_tag, ..., unused_type>
 ///     >
 /// >

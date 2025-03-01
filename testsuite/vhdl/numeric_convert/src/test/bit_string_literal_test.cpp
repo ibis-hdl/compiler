@@ -9,7 +9,7 @@
 
 #include <ibis/util/file_mapper.hpp>
 #include <ibis/vhdl/parser/position_cache.hpp>
-#include <ibis/vhdl/parser/diagnostic_handler.hpp>
+#include <ibis/vhdldiagnostic_handler.hpp>
 #include <ibis/vhdl/parser/context.hpp>
 #include <ibis/vhdl/type.hpp>
 
@@ -391,7 +391,7 @@ BOOST_DATA_TEST_CASE(bit_string_literal, utf_data::make(bit_literal) ^ bit_decim
     BOOST_TEST_REQUIRE(conv_ok);
     BOOST_TEST(std::get<numeric_convert::integer_type>(value) == N);
 
-    os << failure_status(ctx);
+    os << ctx.get_failure_status();
     if (!os.str().empty()) {
         // std::cout << '\n' << os.str() << '\n';
     }
@@ -433,7 +433,7 @@ BOOST_DATA_TEST_CASE(bit_string_literal_uint64_ovflw, utf_data::make(literal_ovf
     std::tie(conv_ok, std::ignore) = numeric(ast_node);
     BOOST_TEST_REQUIRE(!conv_ok);  // ... but must fail to convert
 
-    os << failure_status(ctx);
+    os << ctx.get_failure_status();
     if (!os.str().empty()) {
         // std::cout << '\n' << os.str() << '\n';
     }

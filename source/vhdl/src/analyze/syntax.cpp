@@ -3,10 +3,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#include <ibis/vhdl/analyze/syntax.hpp>
-#include <ibis/vhdl/analyze/diagnostic_handler.hpp>
 #include <ibis/vhdl/analyze/check/label_match.hpp>
 
+#include <ibis/vhdl/analyze/syntax.hpp>
 #include <ibis/vhdl/ast/node/architecture_body.hpp>
 #include <ibis/vhdl/ast/node/block_statement.hpp>
 #include <ibis/vhdl/ast/node/case_statement.hpp>
@@ -18,25 +17,22 @@
 #include <ibis/vhdl/ast/node/package_body.hpp>
 #include <ibis/vhdl/ast/node/package_declaration.hpp>
 #include <ibis/vhdl/ast/node/process_statement.hpp>
-#include <ibis/vhdl/ast/util/optional.hpp>
-
 #include <ibis/vhdl/ast/pretty_node_name.hpp>
-
+#include <ibis/vhdl/ast/util/optional.hpp>
 #include <ibis/vhdl/context.hpp>
+#include <ibis/vhdl/diagnostic_handler.hpp>
 
 #include <ibis/util/cxx_bug_fatal.hpp>
 
-#include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
-#include <ibis/util/compiler/warnings_on.hpp>
 
 #include <string_view>
 #include <utility>
 
 namespace ibis::vhdl::analyze {
 
-bool syntax_worker::success() const { return context.error_free(); }
+bool syntax_worker::success() const { return ref_vhdl_context.get().error_free(); }
 
 template <typename NodeT>
 bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name) const
@@ -65,13 +61,13 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name)
         case LABEL_MISMATCH: {
             auto const err_msg =  // --
                 (format(translate("Label mismatch in {1}")) % node_name).str();
-            diagnostic_handler.syntax_error(node, start_label, end_label, err_msg);
+            ref_diagnostic_handler.get().syntax_error(node, start_label, end_label, err_msg);
             return false;
         }
         case LABEL_ILLFORMED: {
             auto const err_msg =  // --
                 (format(translate("Label ill-formed in {1}")) % node_name).str();
-            diagnostic_handler.syntax_error(node, start_label, end_label, err_msg);
+            ref_diagnostic_handler.get().syntax_error(node, start_label, end_label, err_msg);
             return false;
         }
         // test on OK before on function entry, shouldn't be here
@@ -105,7 +101,7 @@ bool syntax_worker::keyword_matches(ast::process_statement const& node,
                               "(Hint: single trailing keyword 'postponed')"))  //--
              % node_name)
                 .str();
-        diagnostic_handler.syntax_error(node, err_msg);
+        ref_diagnostic_handler.get().syntax_error(node, err_msg);
 
         return false;
     }

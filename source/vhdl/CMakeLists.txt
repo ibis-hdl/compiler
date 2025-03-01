@@ -60,9 +60,14 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 )
 set_source_files_properties(
     src/parser/grammar.cpp  # memory exhausting
-    PROPERTIES
-        SKIP_UNITY_BUILD_INCLUSION true
+        PROPERTIES
+            SKIP_UNITY_BUILD_INCLUSION true
 )
+#set_source_files_properties(
+#    src/ast/ast_printer.cpp # lot of shadow warnings
+#        PROPERTIES
+#            SKIP_LINTING ON
+#)
 
 
 # Disable Clang -Weverything Warning regards:
@@ -70,14 +75,10 @@ set_source_files_properties(
 #    static const std::string_view symbol{ "<node-name>" }, even on dispatch inside same
 #    member, hence disable warning: declaration shadows a local variable [-Wshadow]
 # [-Wswitch-enum]: Rework required, or replacement with generic_ast_walker visitor
-# [-Wextra-semi-stmt]: a lot of macro stuff regards cxx_bug() etc.; also requires rework,
-#    so silence this
-# ToDo remove this compiler options
+# ToDo remove this compiler warning suppressions
 if(IBIS_DEVELOPER_CLANG_WARN_EVERYTHING)
     target_compile_options(${PROJECT_NAME} PRIVATE # append
         "-Wno-shadow" "-Wno-shadow-uncaptured-local"
-#       "-Wno-switch-enum" 
-        "-Wno-extra-semi-stmt"
     )
 endif()
 

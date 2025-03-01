@@ -26,7 +26,7 @@
 #include <ibis/namespace_alias.hpp>
 
 namespace ibis::vhdl {
-class context;
+class vhdl_global_context;
 }  // namespace ibis::vhdl
 
 namespace ibis::vhdl::ast {
@@ -49,14 +49,14 @@ public:
     using iterator_type = std::remove_cv_t<IteratorT>;
     using current_file_type = ibis::util::file_mapper::current_file;
     using position_cache_type = parser::position_cache<iterator_type>;
-    using vhdl_context_type = ibis::vhdl::context;
+    using vhdl_context_type = ibis::vhdl::vhdl_global_context;
     using error_type = diagnostic_context::failure_type;
 
 private:
     std::ostream& os;
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init]) - default ctor is deleted
-    std::reference_wrapper<ast::ast_context<iterator_type>> ast_context;
-    std::reference_wrapper<vhdl_context_type> vhdl_context;
+    std::reference_wrapper<ast::ast_context<iterator_type>> ref_ast_context;
+    std::reference_wrapper<vhdl_context_type> ref_vhdl_context;
     std::size_t tab_sz;
 
 public:
@@ -71,13 +71,11 @@ public:
 
     diagnostic_handler() = delete;
 
-    diagnostic_handler(std::ostream& os_,
-                       std::reference_wrapper<ast::ast_context<iterator_type>> ast_context_,
-                       std::reference_wrapper<vhdl_context_type> vhdl_context_,
-                       std::size_t tabs = 4)
+    diagnostic_handler(std::ostream& os_, ast::ast_context<iterator_type>& ast_context,
+                       vhdl_context_type& vhdl_context, std::size_t tabs = 4)
         : os{ os_ }
-        , ast_context{ ast_context_ }
-        , vhdl_context{ vhdl_context_ }
+        , ref_ast_context{ std::ref(ast_context) }
+        , ref_vhdl_context{ std::ref(vhdl_context) }
         , tab_sz{ tabs }
     {
     }
@@ -247,7 +245,7 @@ private:
     ///
     std::tuple<iterator_type, iterator_type> iterators_of(ast::position_tagged const& node) const
     {
-        auto const iterator_range = ast_context.get().position_of(node);
+        auto const iterator_range = ref_ast_context.get().position_of(node);
 
         auto first = iterator_range.begin();
         auto const last = iterator_range.end();

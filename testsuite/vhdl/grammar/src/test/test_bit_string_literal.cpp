@@ -7,7 +7,7 @@
 
 #include <testsuite/testsuite_parser.hpp>  // FixMe path not intuitive, missing ibis
 
-#include <ibis/vhdl/ast_fwd.hpp>
+#include <ibis/vhdl/ast/nodes_fwd.hpp>
 #include <ibis/vhdl/ast/node/design_file.hpp>
 #include <ibis/vhdl/ast/ast_formatter.hpp>
 #include <ibis/vhdl/ast/ast_printer.hpp>

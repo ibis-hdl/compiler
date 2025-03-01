@@ -13,10 +13,11 @@
 #include <string>
 
 template <>
-struct std::formatter<ibis::vhdl::failure_status> : std::formatter<std::string> {
+struct std::formatter<ibis::vhdl::vhdl_global_context::failure_status>
+    : std::formatter<std::string> {
     // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
     template <class FmtContext>
-    auto format(ibis::vhdl::failure_status status, FmtContext& ctx) const
+    auto format(ibis::vhdl::vhdl_global_context::failure_status status, FmtContext& ctx) const
     {
         using boost::locale::format;
         using boost::locale::translate;
@@ -67,7 +68,7 @@ struct std::formatter<ibis::vhdl::failure_status> : std::formatter<std::string> 
 
 namespace ibis::vhdl {
 
-std::ostream& operator<<(std::ostream& os, vhdl::failure_status const& status)
+std::ostream& operator<<(std::ostream& os, vhdl::vhdl_global_context::failure_status const& status)
 {
     os << std::format("{}", status);
     return os;

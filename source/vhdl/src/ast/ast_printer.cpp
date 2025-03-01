@@ -7,7 +7,7 @@
 
 #include <ibis/util/indent_stream.hpp>
 #include <ibis/util/overloaded.hpp>  // IWYU pragma: keep
-#include <ibis/vhdl/ast.hpp>         // IWYU pragma: keep
+#include <ibis/vhdl/ast/nodes.hpp>   // IWYU pragma: keep
 #include <ibis/vhdl/ast/ast_formatter.hpp>
 #include <ibis/vhdl/ast/util/nullary.hpp>
 #include <ibis/vhdl/ast/util/optional.hpp>

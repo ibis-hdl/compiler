@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <ibis/vhdl/ast.hpp>
+#include <ibis/vhdl/ast/nodes.hpp>
 
 #include <boost/fusion/include/adapt_struct.hpp>
 

@@ -66,9 +66,9 @@ typename convert_bit_string<IntegerT>::return_type convert_bit_string<IntegerT>:
                     return detail::uint_parser<iterator_type, integer_type>::base(ast::numeric_base_specifier::base8);
                 case base16: 
                     return detail::uint_parser<iterator_type, integer_type>::base(ast::numeric_base_specifier::base16);
-                // definitely wrong enum, the caller has not worked out properly
                 [[unlikely]] case unspecified: [[fallthrough]];
                 [[unlikely]] case unsupported:
+                    // definitely wrong enum, the caller has not worked out properly
                     cxx_bug_fatal("unspecified or unsupported numeric base type for bit string");
                 //
                 // *No* default branch: let the compiler generate warning about enumeration

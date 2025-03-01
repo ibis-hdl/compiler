@@ -15,8 +15,8 @@
 
 #include <ibis/util/support/boost/hana_overload.hpp>
 
-#include <ibis/vhdl/ast_fwd.hpp>
-#include <ibis/vhdl/ast.hpp>
+#include <ibis/vhdl/ast/nodes_fwd.hpp>
+#include <ibis/vhdl/ast/nodes.hpp>
 #include <ibis/vhdl/ast/ast_adapted.hpp>
 
 // #include <ibis/vhdl/parser/parser_config.hpp>

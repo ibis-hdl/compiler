@@ -3,12 +3,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 
-#include <ibis/vhdl/ast.hpp>
+#include <ibis/vhdl/ast/nodes.hpp>
 #include <ibis/vhdl/parser/parse.hpp>
 #include <ibis/vhdl/parser/parser_config.hpp>
-#include <ibis/vhdl/parser/context.hpp>
+#include <ibis/vhdl/context.hpp>
 #include <ibis/vhdl/analyze/syntax.hpp>
-#include <ibis/vhdl/analyze/diagnostic_handler.hpp>
+#include <ibis/vhdl/diagnostic_handler.hpp>
 #include <ibis/util/file_mapper.hpp>
 #include <ibis/vhdl/parser/position_cache.hpp>
 
@@ -48,11 +48,11 @@ BOOST_DATA_TEST_CASE(keyword_ok,                                                
     ibis::util::file_mapper file_mapper{};
     auto current_file = file_mapper.add_file(test_case_name, input);
     parser::position_cache<iterator_type> position_cache{};
-    ast::ast_context<iterator_type> ast_context{ current_file, std::ref(position_cache) };
+    ast::ast_context<iterator_type> ast_context{ current_file, position_cache };
 
     btt::output_test_stream output;
     ast::design_file design_file;
-    parser::context vhdl_ctx;
+    ibis::vhdl::vhdl_global_context vhdl_ctx;
 
     {
         parser::parse<iterator_type> parse{ output };  // NOLINT(misc-const-correctness)
@@ -65,9 +65,9 @@ BOOST_DATA_TEST_CASE(keyword_ok,                                                
     }
 
     {
-        analyze::diagnostic_handler<parser::iterator_type> diagnostic_handler{
-            output, std::ref(ast_context), std::ref(vhdl_ctx)
-        };
+        ibis::vhdl::diagnostic_handler<parser::iterator_type> diagnostic_handler{ output,
+                                                                                  ast_context,
+                                                                                  vhdl_ctx };
         analyze::syntax_checker syntax_check{ output, vhdl_ctx, diagnostic_handler };
 
         syntax_check(design_file);
@@ -99,11 +99,11 @@ BOOST_DATA_TEST_CASE(
     ibis::util::file_mapper file_mapper{};
     auto current_file = file_mapper.add_file(test_case_name, input);
     parser::position_cache<iterator_type> position_cache{};
-    ast::ast_context<iterator_type> ast_context{ current_file, std::ref(position_cache) };
+    ast::ast_context<iterator_type> ast_context{ current_file, position_cache };
 
     btt::output_test_stream output;
     ast::design_file design_file;
-    parser::context vhdl_ctx;
+    ibis::vhdl::vhdl_global_context vhdl_ctx;
 
     {
         parser::parse<iterator_type> const parse{ output };
@@ -116,9 +116,9 @@ BOOST_DATA_TEST_CASE(
     }
 
     {
-        analyze::diagnostic_handler<parser::iterator_type> diagnostic_handler{
-            output, std::ref(ast_context), std::ref(vhdl_ctx)
-        };
+        ibis::vhdl::diagnostic_handler<parser::iterator_type> diagnostic_handler{ output,
+                                                                                  ast_context,
+                                                                                  vhdl_ctx };
         analyze::syntax_checker syntax_check{ output, vhdl_ctx, diagnostic_handler };
 
         syntax_check(design_file);

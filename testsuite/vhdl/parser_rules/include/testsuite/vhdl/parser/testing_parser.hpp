@@ -13,8 +13,8 @@
 
 #include <ibis/util/file_mapper.hpp>
 #include <ibis/vhdl/parser/position_cache.hpp>
-#include <ibis/vhdl/parser/diagnostic_handler.hpp>
-#include <ibis/vhdl/parser/context.hpp>
+#include <ibis/vhdl/diagnostic_handler.hpp>
+#include <ibis/vhdl/context.hpp>
 #include <ibis/vhdl/ast/ast_context.hpp>
 
 #include <ibis/vhdl/ast/ast_printer.hpp>
@@ -48,17 +48,12 @@ struct testing_parser {
         ibis::util::file_mapper file_mapper{};
         auto current_file = file_mapper.add_file(filename, input);
         parser::position_cache<iterator_type> position_cache{ 1_KiB };
-        ibis::vhdl::ast::ast_context<iterator_type> ast_context{ current_file,
-                                                                 std::ref(position_cache) };
+        ibis::vhdl::ast::ast_context<iterator_type> ast_context{ current_file, position_cache };
 
         btt::output_test_stream output;
-        parser::context vhdl_ctx;
+        ibis::vhdl::vhdl_global_context vhdl_ctx;
 
-        // clang-format off
-        parser::diagnostic_handler_type diagnostic_handler{
-            output, std::ref(ast_context), std::ref(vhdl_ctx)
-        };
-        // clang-format on
+        parser::diagnostic_handler_type diagnostic_handler{ output, ast_context, vhdl_ctx };
 
         // clang-format off
         auto const parser =

@@ -7,17 +7,18 @@
 
 #include <ibis/vhdl/ast/basic_ast_walker.hpp>
 
-#include <functional>
-#include <utility>
-#include <type_traits>
 #include <algorithm>
-#include <vector>
-#include <string>
+#include <cstdlib>
+#include <functional>
 #include <iostream>
+#include <ranges>
+#include <string_view>
+#include <string>
+#include <type_traits>
 #include <unordered_map>
 #include <unordered_set>
-#include <string_view>
-#include <cstdlib>
+#include <utility>
+#include <vector>
 
 namespace ibis::vhdl::ast {
 class position_tagged;
@@ -27,31 +28,29 @@ namespace ibis::vhdl::ast {
 
 namespace detail {
 
-class collect_worker {
+class stats_worker {
 public:
     using map_type = std::unordered_map<std::string_view, std::size_t>;
     using set_type = std::unordered_set<std::string_view>;
 
 private:
-    // NOLINTBEGIN(cppcoreguidelines-avoid-const-or-ref-data-members)
-    map_type& count_map;
-    set_type& untagged_node;
-    // NOLINTEND(cppcoreguidelines-avoid-const-or-ref-data-members)
+    std::reference_wrapper<map_type> ref_count_map;
+    std::reference_wrapper<set_type> ref_untagged_node;
 
 public:
-    collect_worker(map_type& count_map_, set_type& untagged_node_)
-        : count_map{ count_map_ }
-        , untagged_node{ untagged_node_ }
+    stats_worker(map_type& count_map, set_type& untagged_nodes)
+        : ref_count_map{ std::ref(count_map) }
+        , ref_untagged_node{ std::ref(untagged_nodes) }
     {
     }
 
     template <typename NodeT>
     void operator()([[maybe_unused]] NodeT const& node, std::string_view node_name) const
     {
-        ++count_map[node_name];
+        ++ref_count_map.get()[node_name];
 
         if constexpr (!std::is_base_of_v<ast::position_tagged, std::decay_t<NodeT>>) {
-            untagged_node.insert(node_name);
+            ref_untagged_node.get().insert(node_name);
         }
     }
 };
@@ -60,12 +59,13 @@ public:
 
 ast_stats::ast_stats(ast::design_file const& design_file)
 {
-    using worker = ast::basic_ast_walker<detail::collect_worker>;
+    using stats_walker = ast::basic_ast_walker<detail::stats_worker>;
 
-    worker collector{ count_map, untagged_nodes };
-    collector(design_file);
+    stats_walker stats_collector{ count_map, untagged_nodes };
+    stats_collector(design_file);
 }
 
+// ToDo sort order - use enum sort::{ascending, descending}
 auto ast_stats::sort_by_count(bool ascending) const
 {
     using pair_type = std::pair<map_type::key_type, map_type::mapped_type>;
@@ -92,9 +92,8 @@ auto ast_stats::sort_by_count(bool ascending) const
         return std::function<bool(pair_type const&, pair_type const&)>{ descending_predicate };
     }(ascending);
 
-    // FixMe: Consider modernize-use-ranges
-    std::vector<pair_type> vec{ count_map.begin(), count_map.end() };
-    std::sort(vec.begin(), vec.end(), predicate);  // NOLINT(boost-use-ranges,modernize-use-ranges)
+    std::vector<pair_type> vec{ begin(count_map), end(count_map) };
+    std::ranges::sort(vec, predicate);
 
     return vec;
 }
@@ -104,13 +103,10 @@ std::ostream& ast_stats::print_on(std::ostream& os) const
 {
     auto const vec{ sort_by_count() };
 
-    std::size_t const max_key_size = [&] {  // ToDo [C++20] use std::ranges
-        std::size_t size{ 0 };
-        // NOLINTNEXTLINE(boost-use-ranges,modernize-use-ranges)
-        std::for_each(vec.begin(), vec.end(),
-                      [&size](auto const& pair) { size = std::max(size, pair.first.size()); });
-        return size;
-    }();
+    std::size_t const max_key_size = std::ranges::max(  // --
+        vec | std::views::transform([](auto const& pair) {
+            return pair.first.size();  // count_map's key
+        }));
 
     std::string const padding(max_key_size, ' ');
     std::size_t total_count{ 0 };

@@ -104,7 +104,8 @@ typename convert_decimal<IntegerT, RealT>::return_type convert_decimal<IntegerT,
                 return return_type{ parse_ok, result_type(attribute) };
             }
             [[unlikely]] case unspecified:
-                cxx_bug_fatal("caller must pass checked base_specifier");
+                // definitely wrong enum, the caller has not worked out properly
+                cxx_bug_fatal("unspecified numeric type for decimal literal");
             //
             // *No* default branch: let the compiler generate warning about enumeration
             // value not handled in switch

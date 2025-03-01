@@ -16,7 +16,7 @@ namespace ibis::vhdl {
 ///
 /// The VHDL context used for analyze and elaboration with {error, warnings} counter
 ///
-class context {  // ToDo [XXX] rename to vhdl_global_context
+class vhdl_global_context {
 public:
     using value_type = std::uint32_t;
 
@@ -31,24 +31,29 @@ public:
     ///
     /// @param error_limit threshold of error count value.
     ///
-    explicit context(value_type error_limit = DEFAULT_ERROR_LIMIT)
+    explicit vhdl_global_context(value_type error_limit = DEFAULT_ERROR_LIMIT)
         : error_count{ error_limit }
         , warning_count{ warning_counter::MAX_THRESHOLD }
     {
     }
 
-    ~context() = default;
+    ~vhdl_global_context() = default;
 
-    context(context&&) = default;
-    context& operator=(context&&) = default;
+    vhdl_global_context(vhdl_global_context&&) = default;
+    vhdl_global_context& operator=(vhdl_global_context&&) = default;
 
-    context(context&) = delete;
-    context& operator=(context&) = delete;
+    // non-copyable
+    vhdl_global_context(vhdl_global_context&) = delete;
+    vhdl_global_context& operator=(vhdl_global_context&) = delete;
 
 public:
     enum class Standard : std::uint8_t { VHDL93, VHDL2000, VHDL2002, VHDL2007, VHDL2008, VHDL2019 };
 
 public:
+    class failure_status;
+
+    failure_status get_failure_status() const;
+
     bool error_free() const { return error_count == 0; }
 
     bool has_errors() const { return error_count != 0; }
@@ -68,26 +73,31 @@ private:
 ///
 /// IO-manipulator to print the context error/warning status of context
 ///
-class failure_status {
-    std::reference_wrapper<context> ctx;
+class vhdl_global_context::failure_status {
+    std::reference_wrapper<vhdl_global_context const> ref_vhdl_ctx;
 
 public:
-    using value_type = context::value_type;
+    using value_type = vhdl_global_context::value_type;
 
 public:
-    explicit failure_status(std::reference_wrapper<context> ref_ctx)
-        : ctx{ ref_ctx }
+    explicit failure_status(vhdl_global_context const& ctx)
+        : ref_vhdl_ctx{ std::ref(ctx) }
     {
     }
 
-    bool error_free() const { return ctx.get().error_free(); }
-    bool has_errors() const { return ctx.get().has_errors(); }
-    bool has_warnings() const { return ctx.get().has_warnings(); }
+    bool error_free() const { return ref_vhdl_ctx.get().error_free(); }
+    bool has_errors() const { return ref_vhdl_ctx.get().has_errors(); }
+    bool has_warnings() const { return ref_vhdl_ctx.get().has_warnings(); }
 
-    value_type errors() const { return ctx.get().errors(); }
-    value_type warnings() const { return ctx.get().warnings(); }
+    value_type errors() const { return ref_vhdl_ctx.get().errors(); }
+    value_type warnings() const { return ref_vhdl_ctx.get().warnings(); }
 };
 
-std::ostream& operator<<(std::ostream& os, vhdl::failure_status const& status);
+inline vhdl_global_context::failure_status vhdl_global_context::get_failure_status() const
+{
+    return failure_status(*this);
+}
+
+std::ostream& operator<<(std::ostream& os, vhdl::vhdl_global_context::failure_status const& status);
 
 }  // namespace ibis::vhdl

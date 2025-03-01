@@ -79,11 +79,11 @@ struct std::formatter<ibis::vhdl::ast::bit_string_literal::numeric_base_specifie
                 return std::format_to(ctx.out(), "{}", "o"sv);
             case base16:
                 return std::format_to(ctx.out(), "{}", "x"sv);
-            // be graceful, probably an unintentionally constructed enum by default
             [[unlikely]] case unspecified:
+                // be graceful, probably an unintentionally constructed enum by default
                 return std::format_to(ctx.out(),"{}","unspecified"sv);
-            // be graceful, definitely wrong enum - the caller has not worked out properly
             [[unlikely]] case unsupported:
+                // be graceful, definitely wrong enum - the caller has not worked out properly
                 return std::format_to(ctx.out(),"{}","unsupported"sv);
             //
             // *No* default branch: let the compiler generate warning about enumeration
@@ -148,8 +148,8 @@ struct std::formatter<ibis::vhdl::ast::based_literal::numeric_type_specifier> {
                 return std::format_to(ctx.out(), "{}", "integer"sv);
             case real:
                 return std::format_to(ctx.out(), "{}", "real"sv);
-            // be graceful, probably an unintentionally constructed enum by default
             [[unlikely]] case unspecified:
+                // be graceful, probably an unintentionally constructed enum by default
                 return std::format_to(ctx.out(), "{}", "unspecified"sv);
             //
             // *No* default branch: let the compiler generate warning about enumeration
@@ -195,11 +195,11 @@ struct std::formatter<ibis::vhdl::ast::based_literal::numeric_base_specifier> {
                 return std::format_to(ctx.out(), "{}", "10"sv);
             case base16:
                 return std::format_to(ctx.out(), "{}", "16"sv);
-            // be graceful, probably an unintentionally constructed enum by default
             [[unlikely]] case unspecified:
+                // be graceful, probably an unintentionally constructed enum by default
                 return std::format_to(ctx.out(), "{}", "unspecified"sv);
-            // be graceful, definitely wrong enum - the caller has not worked out properly
             [[unlikely]] case unsupported:
+                // be graceful, definitely wrong enum - the caller has not worked out properly
                 return std::format_to(ctx.out(), "{}", "unsupported"sv);
             //
             // *No* default branch: let the compiler generate warning about enumeration

@@ -52,13 +52,8 @@ bool parse<IteratorT>::operator()(current_file_type& current_file,
 {
     using ibis::util::get_iterator_pair;
 
-    ast::ast_context<iterator_type> ast_context{ current_file, std::ref(position_cache) };
-
-    // clang-format off
-    diagnostic_handler_type diagnostic_handler{
-        os, std::ref(ast_context), std::ref(vhdl_ctx)
-    };
-    // clang-format on
+    ast::ast_context<iterator_type> ast_context{ current_file, position_cache };
+    diagnostic_handler_type diagnostic_handler{ os, ast_context, vhdl_ctx };
 
     // ToDo Check idea, approach used in
     // [Cleanest way to handle both quoted and unquoted strings in Spirit.X3](

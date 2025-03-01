@@ -63,7 +63,6 @@ def dev_clang_tidy():
     workflow_dev(conan_profile, cmake_conf_preset, build_type, jobs)
 
 def dev_clang_iwyu():
-    # ToDo Doesn't work as expected
     conan_profile = "clang"
     cmake_conf_preset = "dev-clang-iwyu"
     build_type = "Release"
@@ -87,10 +86,10 @@ def dev_clang_asan():
 
 run("cmake --list-presets")
 #gcc_release()
-clang_release()
+#clang_release()
 #clang_libcxx_release()
 #dev_clang()
-#dev_clang_tidy()
+dev_clang_tidy()
 #dev_clang_iwyu()
 #dev_gcc_iwyu()
 #dev_clang_asan()

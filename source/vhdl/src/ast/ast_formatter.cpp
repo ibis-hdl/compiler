@@ -66,7 +66,7 @@ std::string_view std::formatter<ibis::vhdl::ast::operator_token>::as_sv(
         // probably an unintentionally constructed enum by default
         [[unlikely]] case UNSPECIFIED_OPERATOR:
             // something in the grammar is wired, stop here
-            cxx_bug_fatal("operator_token is *unspecified*!");
+            cxx_bug_fatal("unspecified operator_token");
         //
         // *No* default branch: let the compiler generate warning about enumeration 
         // value not handled in switch
@@ -191,7 +191,7 @@ std::string_view std::formatter<ibis::vhdl::ast::keyword_token>::as_sv(
         // probably an unintentionally constructed enum by default
         [[unlikely]] case UNSPECIFIED_KEYWORD:
             // something in the grammar is wired, stop here
-            cxx_bug_fatal("keyword_token is *unspecified*!");
+            cxx_bug_fatal("unspecified keyword_token");
         //
         // *No* default branch: let the compiler generate warning about enumeration 
         // value not handled in switch
