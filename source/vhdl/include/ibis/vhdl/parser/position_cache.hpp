@@ -71,24 +71,20 @@ public:
     position_cache& operator=(position_cache const&) = delete;
 
 public:
+    ///
+    /// Store the iterator range for later use and return an identifier to map this id back to
+    /// iterator range.
+    ///
+    /// @param first begin of tagged iterator range.
+    /// @param last end of tagged iterator range.
+    /// @return position_id_type The id mapped to the iterator range stored.
+    ///
     position_id_type iterator_range_id(iterator_type first, iterator_type last)
     {
         auto position_id = next_id();
         position_registry.push_back({ first, last });  // OOM alert!
         return position_id;
     }
-
-public:
-    ///
-    /// Create an annotation/position proxy.
-    ///
-    /// @param current_file_id ID of actually processed file.
-    /// @return A proxy object with fixed file_id for convenience.
-    ///
-    annotator annotator_for(file_id_type current_file_id);
-
-public:
-    std::size_t position_count() const { return position_registry.size(); }
 
 public:
     ///
@@ -102,6 +98,9 @@ public:
         assert(valid_id(node.position_id) && "node position_id out of range!");
         return position_registry[node.position_id];
     }
+
+public:
+    std::size_t position_count() const { return position_registry.size(); }
 
 private:
     ///
@@ -119,82 +118,6 @@ private:
 
         return position_id_type{ position_registry.size() };
     }
-
-private:
-    ///
-    /// Annotate the AST node with positional iterators.
-    ///
-    /// This is called from parser::success_handler to allow expressive error handling. Only
-    /// AST nodes that are derived from @ref ast::position_tagged are tagged.
-    ///
-    /// @param file_id ID of actually processed file.
-    /// @param node    The AST node to tag
-    /// @param first   Begin of iterator position to tag.
-    /// @param last    End  of iterator position to tag.
-    ///
-    template <typename NodeT>
-    //[[deprecated("rework of API")]]
-    void annotate(file_id_type file_id, NodeT& node, iterator_type first, iterator_type last)
-    {
-        if constexpr (std::is_base_of_v<ast::position_tagged, std::remove_cv_t<NodeT>>) {
-            // ToDo [C++26] use std::format to print the max ID on assert message
-            assert(
-                std::cmp_less(position_registry.size(), ast::position_tagged::MAX_POSITION_ID)  //
-                && "Insufficient range of numeric IDs for AST tagging");
-
-            node.file_id = file_id;
-            node.position_id = next_id();
-            // ToDo OOM error handling (scope_exit would be overkill)
-            position_registry.emplace_back(first, last);
-        }
-        else {
-            // ignored since isn't ast::position_tagged derived; since there is nothing to tag
-        }
-    }
 };
-
-///
-/// AST annotation/position proxy
-///
-/// The sole purpose is to tag nodes derived from @ref ast::position_tagged with the
-/// current_file_id and iterator range during parsing within x3::context (on_success callback).
-/// The iterator pair/range IDs is stored in annotation_cache.
-///
-template <typename IteratorT>
-class position_cache<IteratorT>::annotator {
-    std::reference_wrapper<position_cache<IteratorT>> ref_position_cache;
-    file_id_type current_file_id;
-
-public:
-    annotator(std::reference_wrapper<position_cache<IteratorT>> ref_self, file_id_type id)
-        : ref_position_cache{ ref_self }
-        , current_file_id{ id }
-    {
-    }
-
-    annotator() = delete;
-    ~annotator() = default;
-
-    annotator(annotator&&) = default;
-    annotator& operator=(annotator&&) = default;
-
-    annotator(annotator const&) = default;
-    annotator& operator=(annotator const&) = default;
-
-public:
-    /// annotate the given node.
-    template <typename NodeT>
-    void annotate(NodeT& node, iterator_type first, iterator_type last)
-    {
-        ref_position_cache.get().annotate(current_file_id, node, first, last);
-    }
-};
-
-template <typename IteratorT>
-inline typename position_cache<IteratorT>::annotator position_cache<IteratorT>::annotator_for(
-    file_id_type current_file_id)
-{
-    return annotator{ std::ref(*this), current_file_id };
-}
 
 }  // namespace ibis::vhdl::parser

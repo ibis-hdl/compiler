@@ -52,6 +52,7 @@ struct testing_parser {
                                                                  std::ref(position_cache) };
 
         btt::output_test_stream output;
+        parser::context vhdl_ctx;
 
         // clang-format off
         parser::diagnostic_handler_type diagnostic_handler{
