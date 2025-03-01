@@ -75,11 +75,11 @@ public:
     x3::error_handler_result on_error([[maybe_unused]] IteratorT& first,
                                       [[maybe_unused]] IteratorT const& last,
                                       x3::expectation_failure<IteratorT> const& e,
-                                      ContextT const& context) const
+                                      ContextT const& x3_ctx) const
     {
-        auto& diagnostic_handler = x3::get<parser::diagnostic_handler_tag>(context).get();
+        auto& diagnostic_handler = x3::get<parser::diagnostic_handler_tag>(x3_ctx).get();
 
-        diagnostic_handler.parser_error(e.where(), make_error_description(e.which()));
+        diagnostic_handler.parser_expectation_error(e.where(), make_error_description(e.which()));
 
         return x3::error_handler_result::fail;
     }

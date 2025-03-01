@@ -42,6 +42,9 @@
       uninitialized variable 'CMAKE_RUNTIME_OUTPUT_DIRECTORY'
     This warning is for project developers.  Use -Wno-dev to suppress it.
 
+- file_mapper.add_file(filename, ...) - make filename of fs::path to ensure proper arguments and 
+  function signature. Internally it could make a string/view from this.
+
 ## CMake Presets
 
 - check approach cmake-init by friendlyanon, also Standards (https://github.com/ibis-hdl/compiler/community)

@@ -34,14 +34,12 @@ private:
         {
         }
         // NOLINTBEGIN(misc-non-private-member-variables-in-classes)
-        std::string filename;  // Todo Check on use of fs::path as filename argument
+        std::string filename;
         std::string contents;
         // NOLINTEND(misc-non-private-member-variables-in-classes)
     };
 
-    using file_registry_type = std::vector<entry>;
-
-    file_registry_type file_registry;
+    std::vector<entry> file_registry;
 
 private:
     static constexpr auto MAX_ID = vhdl::ast::position_tagged::MAX_FILE_ID;
@@ -79,6 +77,7 @@ public:
     ///
     /// @overload add_file(std::string_view filename, std::string&& contents)
     ///
+    [[nodiscard]]
     current_file add_file(std::string_view filename, std::string_view contents);
 
 public:
@@ -116,19 +115,19 @@ private:
     ///
     /// Get an ID
     ///
-    std::size_t next_id() const { return file_registry.size(); }
+    file_id_type next_id() const { return file_id_type{ file_registry.size() }; }
 };
 
 ///
 /// Current file proxy, holding information related to current_file_id
 ///
 class file_mapper::current_file {
-    std::reference_wrapper<file_mapper> file_mapper_ref;
+    std::reference_wrapper<file_mapper> ref_file_mapper;
     file_id_type /* const */ current_file_id;
 
 public:
     current_file(std::reference_wrapper<file_mapper> ref_self, file_id_type id)
-        : file_mapper_ref{ ref_self }
+        : ref_file_mapper{ ref_self }
         , current_file_id{ id }
     {
     }
@@ -138,26 +137,24 @@ public:
 
     current_file(current_file&&) = default;
     current_file& operator=(current_file&&) = default;
-
-    // non-copyable, otherwise the assignment of ID with file/contents may go wrong
-    current_file(current_file const&) = delete;
-    current_file& operator=(current_file const&) = delete;
+    current_file(current_file const&) = default;
+    current_file& operator=(current_file const&) = default;
 
 public:
-    file_id_type id() const { return current_file_id; }
-    std::string_view file_name() const { return file_mapper_ref.get().file_name(this->id()); }
+    file_id_type file_id() const { return current_file_id; }
+    std::string_view file_name() const { return ref_file_mapper.get().file_name(this->file_id()); }
     std::string_view file_contents() const
     {
-        return file_mapper_ref.get().file_contents(this->id());
+        return ref_file_mapper.get().file_contents(this->file_id());
     }
 };
 
 inline file_mapper::current_file file_mapper::add_file(std::string&& filename,
                                                        std::string&& contents)
 {
-    file_id_type const current_file_id{ next_id() };
+    auto current_file_id = next_id();  // aka strong_type<>
 
-    // ToDo OOM error handling (scope_exit would be overkill)
+    // ToDo OOM error handling/strategy missing, emplace_back() may fail
     file_registry.emplace_back(std::move(filename), std::move(contents));
 
     return { std::ref(*this), current_file_id };

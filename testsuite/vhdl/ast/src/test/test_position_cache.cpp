@@ -7,6 +7,8 @@
 #include <ibis/util/strong_type.hpp>
 #include <ibis/vhdl/ast/util/position_tagged.hpp>
 #include <ibis/vhdl/parser/position_cache.hpp>
+#include <ibis/vhdl/ast/ast_context.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
 
 #include <boost/test/tools/assertion.hpp>                 // for EQ, binary_expr, value_expr, NE
 #include <boost/test/tools/context.hpp>                   // for context_frame, BOOST_TEST_CONTEXT
@@ -21,7 +23,6 @@
 
 #include <array>
 #include <cassert>
-#include <iostream>
 #include <string_view>
 #include <tuple>
 #include <vector>
@@ -116,7 +117,7 @@ BOOST_AUTO_TEST_CASE(position_cache_basic,
     ibis::vhdl::parser::position_cache<iterator_type> position_cache;
     auto const filename{ "Lorem Ipsum"sv };
     auto current_file = file_mapper.add_file(filename, valid_data::lorem_ipsum);
-    auto annotator = position_cache.annotator_for(current_file.id());
+    ibis::vhdl::ast::ast_context<iterator_type> ast_context{ current_file, position_cache };
 
     // store all found pos and iterators for this test for later/final evaluation. The test sequence
     // order index equals to the position added into the vector. If more complex test cases are
@@ -130,10 +131,10 @@ BOOST_AUTO_TEST_CASE(position_cache_basic,
         find_pos.emplace_back(pos, first, last);
 
         position_tagged ast_node;
-        annotator.annotate(ast_node, first, last);
+        ast_context.annotate(ast_node, first, last);
 
         BOOST_TEST(position_cache.position_count() == 1U);
-        BOOST_TEST(ast_node.file_id == current_file.id());
+        BOOST_TEST(ast_node.file_id == current_file.file_id());
         BOOST_TEST(ast_node.position_id == 0U);
         // getting iterators back (annotated by x3 on_success error_handler)
         auto iter_range = position_cache.position_of(ast_node);
@@ -146,10 +147,10 @@ BOOST_AUTO_TEST_CASE(position_cache_basic,
         find_pos.emplace_back(pos, first, last);
 
         position_tagged ast_node;
-        annotator.annotate(ast_node, first, last);
+        ast_context.annotate(ast_node, first, last);
 
         BOOST_TEST(position_cache.position_count() == 2U);
-        BOOST_TEST(ast_node.file_id == current_file.id());
+        BOOST_TEST(ast_node.file_id == current_file.file_id());
         BOOST_TEST(ast_node.position_id == 1U);
         // getting iterators back (annotated by x3 on_success error_handler)
         auto iter_range = position_cache.position_of(ast_node);
@@ -164,7 +165,7 @@ BOOST_AUTO_TEST_CASE(position_cache_basic,
         find_pos.emplace_back(pos, first, last);
 
         position_tagged ast_node;
-        annotator.annotate(ast_node, first, last);
+        ast_context.annotate(ast_node, first, last);
     }
     {  // #3
         auto const search_str{ "voluptua"sv };
@@ -174,7 +175,7 @@ BOOST_AUTO_TEST_CASE(position_cache_basic,
         find_pos.emplace_back(pos, first, last);
 
         position_tagged ast_node;
-        annotator.annotate(ast_node, first, last);
+        ast_context.annotate(ast_node, first, last);
     }
     BOOST_TEST(position_cache.position_count() == 4U);
     BOOST_TEST(find_pos.size() == position_cache.position_count());
@@ -194,29 +195,34 @@ BOOST_AUTO_TEST_CASE(position_cache_annotate,
     ibis::util::file_mapper file_mapper;
     ibis::vhdl::parser::position_cache<iterator_type> position_cache;
 
-    // two input files
+    // two input files, {lorem,bacon}_ipsum_file are the proxies for file_mapper aka current_file
     auto lorem_ipsum_file = file_mapper.add_file("Lorem Ipsum", valid_data::lorem_ipsum);
     auto bacon_ipsum_file = file_mapper.add_file("Bacon Ipsum", valid_data::bacon_ipsum);
 
+    // AST nodes to be tagged
     std::vector<position_tagged> tagged_nodes;
 
     // prepare
     struct file_data_type {
-        ibis::util::file_mapper::file_id_type file_id;
+        ibis::vhdl::ast::ast_context<iterator_type> ast_context;
         std::string_view search_str;
     };
 
-    auto const file_data = std::to_array<file_data_type>({
-        { lorem_ipsum_file.id(), "ipsum" },  // NOLINT(modernize-use-designated-initializers)
-        { bacon_ipsum_file.id(), "beef" }    // NOLINT(modernize-use-designated-initializers)
+    // NOLINTBEGIN(modernize-use-designated-initializers)
+    // clang-format off
+    auto file_data = std::to_array<file_data_type>({ 
+        { { lorem_ipsum_file, position_cache }, "ipsum" },
+        { { bacon_ipsum_file, position_cache }, "beef" } 
     });
+    // clang-format on
+    // NOLINTEND(modernize-use-designated-initializers)
 
-    for (auto const& [file_id, search_str] : file_data) {
-        auto annotator = position_cache.annotator_for(file_id);
-        auto [pos, first, last] = find(file_mapper.file_contents(file_id), search_str);
+    // iterate over prepared file_data and store the tagged nodes; simulates tagged parsing.
+    for (auto& [ast_context, search_str] : file_data) {
+        auto [pos, first, last] = find(ast_context.file_contents(), search_str);
 
         position_tagged ast_node;
-        annotator.annotate(ast_node, first, last);
+        ast_context.annotate(ast_node, first, last);
         // position represents order of ast_nodes inserted, hence order of file_data
         tagged_nodes.emplace_back(ast_node);
     }
@@ -226,13 +232,12 @@ BOOST_AUTO_TEST_CASE(position_cache_annotate,
         for (auto index{ 0UL }; auto const& ast_node : tagged_nodes) {
             BOOST_TEST_CONTEXT(">>> Test index at " << index << " <<<")
             {
-                // FixMe Tidy: do not use array subscript when the index is not an integer constant
-                // expression [cppcoreguidelines-pro-bounds-constant-array-index]
-                auto gold_data = file_data.at(index);
-                BOOST_TEST(ast_node.file_id == gold_data.file_id);
+                // NOLINTNEXTLINE [cppcoreguidelines-pro-bounds-constant-array-index]
+                auto const& gold_file_data = file_data[index];
+                BOOST_TEST(ast_node.file_id == gold_file_data.ast_context.file_id());
                 BOOST_TEST(ast_node.position_id == index);
-                auto iter_range = position_cache.position_of(ast_node);
-                BOOST_TEST(std::string_view{ iter_range } == gold_data.search_str,
+                auto iter_range = gold_file_data.ast_context.position_of(ast_node);
+                BOOST_TEST(std::string_view{ iter_range } == gold_file_data.search_str,
                            btt::per_element());
             }
             ++index;
@@ -241,7 +246,7 @@ BOOST_AUTO_TEST_CASE(position_cache_annotate,
 }
 
 ///
-/// Pessimistic test
+/// Pessimistic test, check error handling/reporting
 ///
 // clang-format off
 BOOST_AUTO_TEST_CASE(position_cache_failure_handling,

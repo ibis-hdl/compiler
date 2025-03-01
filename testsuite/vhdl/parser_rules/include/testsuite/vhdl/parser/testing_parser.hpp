@@ -15,6 +15,7 @@
 #include <ibis/vhdl/parser/position_cache.hpp>
 #include <ibis/vhdl/parser/diagnostic_handler.hpp>
 #include <ibis/vhdl/parser/context.hpp>
+#include <ibis/vhdl/ast/ast_context.hpp>
 
 #include <ibis/vhdl/ast/ast_printer.hpp>
 #include <ibis/util/pretty_typename.hpp>
@@ -45,33 +46,30 @@ struct testing_parser {
         using iterator_type = parser::iterator_type;
 
         ibis::util::file_mapper file_mapper{};
+        auto current_file = file_mapper.add_file(filename, input);
         parser::position_cache<iterator_type> position_cache{ 1_KiB };
-        parser::context vhdl_ctx;
+        ibis::vhdl::ast::ast_context<iterator_type> ast_context{ current_file,
+                                                                 std::ref(position_cache) };
 
         btt::output_test_stream output;
-
-        // FixMe API still not sufficient, shall be call of current_file.id(), but it's moved before
-        // same with iterators use later
-        auto current_file = file_mapper.add_file(filename, input);
-        auto const current_file_id = current_file.id();  // safe id and iters before move
-        auto [iter, end] = ibis::util::get_iterator_pair(current_file.file_contents());
+        parser::context vhdl_ctx;
 
         // clang-format off
         parser::diagnostic_handler_type diagnostic_handler{
-            output, std::move(current_file), std::ref(position_cache), std::ref(vhdl_ctx)
+            output, std::ref(ast_context), std::ref(vhdl_ctx)
         };
         // clang-format on
 
-        auto ast_annotator = position_cache.annotator_for(current_file_id);
-
         // clang-format off
         auto const parser =
-            x3::with<parser::annotator_tag>(std::ref(ast_annotator))[
+            x3::with<parser::annotator_tag>(std::ref(ast_context))[
                 x3::with<parser::diagnostic_handler_tag>(std::ref(diagnostic_handler))[
                     parser_rule
                 ]
             ];
         // clang-format on
+
+        auto [iter, end] = ibis::util::get_iterator_pair(ast_context.file_contents());
 
         // using different iterator_types causes linker errors, see e.g.
         // [linking errors while separate parser using boost spirit x3](

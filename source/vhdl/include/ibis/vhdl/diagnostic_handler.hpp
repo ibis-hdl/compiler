@@ -10,6 +10,7 @@
 #include <ibis/vhdl/parser/iterator_type.hpp>
 #include <ibis/vhdl/parser/position_cache.hpp>
 #include <ibis/vhdl/source_location.hpp>
+#include <ibis/vhdl/ast/ast_context.hpp>
 
 #include <ibis/namespace_alias.hpp>  // IWYU pragma: keep
 
@@ -40,17 +41,23 @@ namespace ibis::vhdl {
 /// @tparam IteratorT Type of iterator used by `parser::position_cache`'s `proxy`. Generally
 /// equals to `vhdl::parser::iterator_type`.
 ///
-// ToDo To much functionality in a single class, make free function of line_column_number(),
+// ToDo Too much functionality in a single class, make free function of line_column_number(),
 // get_line_start() etc.
 template <typename IteratorT>
 class diagnostic_handler {
 public:
-    using iterator_type = IteratorT;
-
+    using iterator_type = std::remove_cv_t<IteratorT>;
     using current_file_type = ibis::util::file_mapper::current_file;
     using position_cache_type = parser::position_cache<iterator_type>;
     using vhdl_context_type = ibis::vhdl::context;
     using error_type = diagnostic_context::failure_type;
+
+private:
+    std::ostream& os;
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init]) - default ctor is deleted
+    std::reference_wrapper<ast::ast_context<iterator_type>> ast_context;
+    std::reference_wrapper<vhdl_context_type> vhdl_context;
+    std::size_t tab_sz;
 
 public:
     ///
@@ -64,79 +71,116 @@ public:
 
     diagnostic_handler() = delete;
 
-    diagnostic_handler(std::ostream& os_, current_file_type&& current_file_,
-                       std::reference_wrapper<position_cache_type const> position_cache_,
-                       std::reference_wrapper<vhdl_context_type> context_, std::size_t tabs = 4)
+    diagnostic_handler(std::ostream& os_,
+                       std::reference_wrapper<ast::ast_context<iterator_type>> ast_context_,
+                       std::reference_wrapper<vhdl_context_type> vhdl_context_,
+                       std::size_t tabs = 4)
         : os{ os_ }
-        , current_file{ std::move(current_file_) }
-        , position_cache{ position_cache_ }
-        , context{ context_ }
+        , ast_context{ ast_context_ }
+        , vhdl_context{ vhdl_context_ }
         , tab_sz{ tabs }
     {
     }
 
     ~diagnostic_handler() = default;
 
-    diagnostic_handler(diagnostic_handler const&) = delete;
-    diagnostic_handler& operator=(diagnostic_handler const&) = delete;
-
     diagnostic_handler(diagnostic_handler&&) = default;
     diagnostic_handler& operator=(diagnostic_handler&&) = default;
 
+    // non-copyable
+    diagnostic_handler(diagnostic_handler const&) = delete;
+    diagnostic_handler& operator=(diagnostic_handler const&) = delete;
+
 public:
     ///
-    /// Render the diagnostic error_message.
+    /// Render the diagnostic expectation error_message from x3 Parser.
+    ///
+    /// This gets called from x3 \fn error_handler::on_error on expectation errors in the grammar
+    /// rule .
     ///
     /// @param error_pos     Iterator position where the error occurred.
-    /// @param error_message The information error message.
+    /// @param error_message The information error message of expectation failure.
     ///
-    void parser_error(iterator_type error_pos, std::string_view error_message) const;
+    void parser_expectation_error(iterator_type error_pos, std::string_view error_message) const
+    {
+        error(error_pos, std::nullopt, error_message, error_type::parser);
+    }
 
     ///
-    /// Render the diagnostic error_message.
+    /// Render the diagnostic error_message on failed x3 (phrase) parse.
+    ///
+    /// This function is normally called when x3::phrase_parse returns false to report more
+    /// information of subject to fail.
+    /// @note Same function signature as \fn parser_expectation_error()
+    ///
+    /// @param error_pos     Iterator position where the error occurred.
+    /// @param error_message The information error message of expectation failure.
+    ///
+    void parser_error(iterator_type error_pos, std::string_view error_message) const
+    {
+        error(error_pos, std::nullopt, error_message, error_type::parser);
+    }
+
+    ///
+    /// Render the diagnostic error_message. #1
     ///
     /// @param error_pos     Iterator position where the error occurred.
     /// @param error_last    optional Iterator position to end where the error occurred.
     /// @param error_message The information error message.
     ///
     void parser_error(iterator_type error_pos, std::optional<iterator_type> error_last,
-                      std::string_view error_message) const;
+                      std::string_view error_message) const
+    {
+        error(error_pos, error_last, error_message, error_type::parser);
+    }
 
     ///
-    /// Render the diagnostic error_message.
+    /// Render the diagnostic error_message. #2
     ///
     /// @param error_pos     Iterator position where the error occurred.
     /// @param error_message The information error message.
     ///
-    void unsupported(iterator_type error_pos, std::string_view error_message) const;
+    void unsupported(iterator_type error_pos, std::string_view error_message) const
+    {
+        error(error_pos, std::nullopt, error_message, error_type::not_supported);
+    }
 
     ///
-    /// Render the diagnostic error_message.
+    /// Render the diagnostic error_message. #3
     ///
     /// @param error_pos     Iterator position where the error occurred.
     /// @param error_last    optional Iterator position to end where the error occurred.
     /// @param error_message The information error message.
     ///
     void unsupported(iterator_type error_pos, std::optional<iterator_type> error_last,
-                     std::string_view error_message) const;
+                     std::string_view error_message) const
+    {
+        error(error_pos, error_last, error_message, error_type::not_supported);
+    }
 
     ///
-    /// Render the diagnostic error_message.
+    /// Render the diagnostic error_message. #4
     ///
     /// @param error_pos     Iterator position where the error occurred.
     /// @param error_message The information error message.
     ///
-    void numeric_error(iterator_type error_pos, std::string_view error_message) const;
+    void numeric_error(iterator_type error_pos, std::string_view error_message) const
+    {
+        error(error_pos, std::nullopt, error_message, error_type::numeric);
+    }
 
     ///
-    /// Render the diagnostic error_message.
+    /// Render the diagnostic error_message. #5
     ///
     /// @param error_pos     Iterator position where the error occurred.
     /// @param error_last    optional Iterator position to end where the error occurred.
     /// @param error_message The information error message.
     ///
     void numeric_error(iterator_type error_pos, std::optional<iterator_type> error_last,
-                       std::string_view error_message) const;
+                       std::string_view error_message) const
+    {
+        error(error_pos, error_last, error_message, error_type::numeric);
+    }
 
 public:
     ///
@@ -201,10 +245,9 @@ private:
     /// annotate. If the node is not tagged empty iterators (begin/end) are returned - for
     /// convenience false to mark these as invalid; otherwise true.
     ///
-    std::tuple<iterator_type, iterator_type> iterators_of(
-        ast::position_tagged const& tagged_node) const
+    std::tuple<iterator_type, iterator_type> iterators_of(ast::position_tagged const& node) const
     {
-        auto const iterator_range = position_cache.get().position_of(tagged_node);
+        auto const iterator_range = ast_context.get().position_of(node);
 
         auto first = iterator_range.begin();
         auto const last = iterator_range.end();
@@ -331,13 +374,6 @@ private:
             }
         }
     }
-
-private:
-    std::ostream& os;
-    current_file_type current_file;  // moved proxy from file_mapper with fixed file_id
-    std::reference_wrapper<position_cache_type const> position_cache;  // only reading positions
-    std::reference_wrapper<vhdl_context_type> context;
-    std::size_t tab_sz;
 };
 
 }  // namespace ibis::vhdl

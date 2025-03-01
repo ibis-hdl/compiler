@@ -47,6 +47,7 @@ public:
     auto operator<=>(const_value const&) const = default;
 
     [[nodiscard]] constexpr const T& get() const noexcept { return val_; }
+    // NOLINTNEXTLINE(hicpp-explicit-conversions), implicit intended for POD like behaviour
     [[nodiscard]] constexpr operator T() const noexcept { return val_; }
 };
 

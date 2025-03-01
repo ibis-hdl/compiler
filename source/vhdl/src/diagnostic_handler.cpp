@@ -29,97 +29,40 @@
 
 namespace ibis::vhdl {
 
-// ----------------------------------------------------------------------------
-// diagnostic_handler - AST/parse related, expectation error handler
-// ----------------------------------------------------------------------------
-template <typename Iterator>
-void diagnostic_handler<Iterator>::parser_error(iterator_type error_pos,
-                                                std::string_view error_message) const
-{
-    error(error_pos, std::nullopt, error_message, error_type::parser);
-}
-
-template <typename Iterator>
-void diagnostic_handler<Iterator>::parser_error(iterator_type error_pos,
-                                                std::optional<iterator_type> error_last,
-                                                std::string_view error_message) const
-{
-    error(error_pos, error_last, error_message, error_type::parser);
-}
-
-template <typename Iterator>
-void diagnostic_handler<Iterator>::unsupported(iterator_type error_pos,
-                                               std::string_view error_message) const
-{
-    error(error_pos, std::nullopt, error_message, error_type::not_supported);
-}
-
-template <typename Iterator>
-void diagnostic_handler<Iterator>::unsupported(iterator_type error_pos,
-                                               std::optional<iterator_type> error_last,
-                                               std::string_view error_message) const
-{
-    error(error_pos, error_last, error_message, error_type::not_supported);
-}
-
-template <typename Iterator>
-void diagnostic_handler<Iterator>::numeric_error(iterator_type error_pos,
-                                                 std::string_view error_message) const
-{
-    error(error_pos, std::nullopt, error_message, error_type::numeric);
-}
-
-template <typename Iterator>
-void diagnostic_handler<Iterator>::numeric_error(iterator_type error_pos,
-                                                 std::optional<iterator_type> error_last,
-                                                 std::string_view error_message) const
-{
-    error(error_pos, error_last, error_message, error_type::numeric);
-}
-
 ///  ----------------------------------------------------------------------------
 /// Syntax and semantic related error handler
 /// ----------------------------------------------------------------------------
-template <typename Iterator>
-void diagnostic_handler<Iterator>::syntax_error(ast::position_tagged const& where_tag,
-                                                std::string_view error_message) const
+template <typename IteratorT>
+void diagnostic_handler<IteratorT>::syntax_error(ast::position_tagged const& where_tag,
+                                                 std::string_view error_message) const
 {
     // the node must be tagged before
     cxx_assert(where_tag.is_tagged(), "Node not correct tagged");
 
-#if 0  // NOLINT(readability-avoid-unconditional-preprocessor-if)
-    // ToDo [XXX] fix position_cache::proxy::set_id(), current_file().id()
-    // on branch code-review-2024 removed 
     // The parser's position cache proxy is configured to have the same file id tagged as the node
     // holds. Probably somewhere forgotten position_proxy.set_id(where_tag.file_id) ??
-    cxx_assert(current_file().id() == where_tag.file_id, "cache proxy file id different");
-#endif
+    cxx_assert(ast_context.get().file_id() == where_tag.file_id, "cache proxy file id different");
 
-    auto const where_range = position_cache.get().position_of(where_tag);
+    auto const where_range = ast_context.get().position_of(where_tag);
 
     constexpr auto syntax_error = diagnostic_context::failure_type::syntax;
 
     error(where_range.begin(), where_range.end(), error_message, syntax_error);
 }
 
-template <typename Iterator>
-void diagnostic_handler<Iterator>::syntax_error(ast::position_tagged const& where_tag,
-                                                ast::position_tagged const& start_label,
-                                                ast::position_tagged const& end_label,
-                                                std::string_view error_message) const
+template <typename IteratorT>
+void diagnostic_handler<IteratorT>::syntax_error(ast::position_tagged const& where_tag,
+                                                 ast::position_tagged const& start_label,
+                                                 ast::position_tagged const& end_label,
+                                                 std::string_view error_message) const
 {
     // check on applied tagging, related to position_cache
     cxx_assert(where_tag.is_tagged(), "Node not tagged");
     cxx_assert(start_label.is_tagged(), "Node/StartLabel not tagged");
     cxx_assert(end_label.is_tagged(), "Node/EndLabel not tagged");
+    cxx_assert(ast_context.get().file_id() == where_tag.file_id, "cache proxy file id different");
 
-    ++context.get().errors();
-
-#if 0  // NOLINT(readability-avoid-unconditional-preprocessor-if)
-    // ToDo [XXX] fix position_cache::proxy::set_id(), current_file().id()
-    // on branch code-review-2024 removed 
-    cxx_assert(current_file().id() == where_tag.file_id, "cache proxy file id different");
-#endif
+    ++vhdl_context.get().errors();
 
     constexpr auto syntax_error = diagnostic_context::failure_type::syntax;
 
@@ -133,15 +76,15 @@ void diagnostic_handler<Iterator>::syntax_error(ast::position_tagged const& wher
     os << diagnostic << '\n';
 }
 
-template <typename Iterator>
-void diagnostic_handler<Iterator>::error(iterator_type error_first,
-                                         std::optional<iterator_type> error_last,
-                                         std::string_view error_message, error_type err_type) const
+template <typename IteratorT>
+void diagnostic_handler<IteratorT>::error(iterator_type error_first,
+                                          std::optional<iterator_type> error_last,
+                                          std::string_view error_message, error_type err_type) const
 {
     using boost::locale::format;
     using boost::locale::translate;
 
-    ++context.get().errors();
+    ++vhdl_context.get().errors();
 
     diagnostic_context diag_ctx{ err_type, error_message };
 
@@ -155,11 +98,11 @@ void diagnostic_handler<Iterator>::error(iterator_type error_first,
 // ----------------------------------------------------------------------------
 // Private helper
 // ----------------------------------------------------------------------------
-template <typename Iterator>
-source_location diagnostic_handler<Iterator>::get_source_location(iterator_type error_pos) const
+template <typename IteratorT>
+source_location diagnostic_handler<IteratorT>::get_source_location(iterator_type error_pos) const
 {
     auto const [line, column] = line_column_number(error_pos);
-    return source_location(current_file.file_name(), line, column);
+    return source_location(ast_context.get().file_name(), line, column);
 }
 
 template <typename IteratorT>
@@ -178,7 +121,7 @@ std::tuple<std::size_t, std::size_t> diagnostic_handler<IteratorT>::line_column_
     char_type chr_prev = 0;
 
     // ToDo Clang -Weverything Warning: ++iter unsafe pointer arithmetic [-Wunsafe-buffer-usage]
-    for (iterator_type iter = current_file.file_contents().begin(); iter != pos; ++iter) {
+    for (iterator_type iter = ast_context.get().file_contents().begin(); iter != pos; ++iter) {
         auto const chr = *iter;
         switch (chr) {
             case '\n':                   // Line Feed (Linux, Mac OS X)
@@ -207,12 +150,13 @@ std::tuple<std::size_t, std::size_t> diagnostic_handler<IteratorT>::line_column_
 }
 
 template <typename IteratorT>
-IteratorT diagnostic_handler<IteratorT>::get_line_start(iterator_type pos) const
+auto diagnostic_handler<IteratorT>::get_line_start(iterator_type pos) const ->
+    typename diagnostic_handler<IteratorT>::iterator_type
 {
     using ibis::util::get_iterator_pair;
 
     // FixMe This should be rewritten with range based loops
-    auto [begin, end] = get_iterator_pair(current_file.file_contents());
+    auto [begin, end] = get_iterator_pair(ast_context.get().file_contents());
 
     // based on [.../x3/support/utility/error_reporting.hpp:get_line_start(...)](
     // https://github.com/boostorg/spirit/blob/master/include/boost/spirit/home/x3/support/utility/error_reporting.hpp)
@@ -243,7 +187,7 @@ std::string_view diagnostic_handler<IteratorT>::current_line(iterator_type first
     auto line_end = first;
     // ClangTidy - don't touch, since this may be an iterator classes
     // NOLINTNEXTLINE(readability-qualified-auto,readability-qualified-auto)
-    auto const end = current_file.file_contents().end();
+    auto const end = ast_context.get().file_contents().end();
 
     while (line_end != end) {
         if (*line_end == '\r' || *line_end == '\n') {
