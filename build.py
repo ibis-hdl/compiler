@@ -87,10 +87,10 @@ def dev_clang_asan():
 
 run("cmake --list-presets")
 #gcc_release()
-#clang_release()
+clang_release()
 #clang_libcxx_release()
 #dev_clang()
-dev_clang_tidy()
+#dev_clang_tidy()
 #dev_clang_iwyu()
 #dev_gcc_iwyu()
 #dev_clang_asan()
