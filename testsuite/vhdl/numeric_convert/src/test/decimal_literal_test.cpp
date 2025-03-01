@@ -5,6 +5,8 @@
 
 #include <testsuite/vhdl/numeric_convert/numeric_parser.hpp>
 
+#include <ibis/util/file_mapper.hpp>
+#include <ibis/vhdl/parser/position_cache.hpp>
 #include <ibis/vhdl/parser/diagnostic_handler.hpp>
 #include <ibis/vhdl/parser/context.hpp>
 #include <ibis/vhdl/type.hpp>
@@ -61,6 +63,8 @@ typename std::enable_if<std::is_floating_point<T>::value, std::string>::type to_
 
 namespace btt = boost::test_tools;
 
+using namespace ibis::vhdl;
+
 using ast::numeric_convert;
 
 //******************************************************************************
@@ -84,28 +88,32 @@ BOOST_DATA_TEST_CASE(decimal_literal_integer, utf_data::make(dec_int_lit) ^ dec_
 {
     using iterator_type = parser::iterator_type;
 
-    parser::position_cache<iterator_type> position_cache;
-    auto position_proxy = position_cache.add_file("<decimal_literal>", literal);
+    ibis::util::file_mapper file_mapper{};
+    auto const file_id = file_mapper.add_file("<decimal_literal>", literal);
+
+    parser::position_cache<iterator_type> position_cache{};
+    auto position_proxy = position_cache.get_proxy(file_id);
 
     btt::output_test_stream os;
     parser::context ctx;
-    parser::diagnostic_handler<iterator_type> diagnostic_handler{ os, ctx, position_proxy };
+    parser::diagnostic_handler<iterator_type> diagnostic_handler{ os, ctx,
+                                                                  std::move(position_proxy) };
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
     auto const [parse_ok, ast_node] = parse.decimal_literal(position_proxy, diagnostic_handler);
-    BOOST_REQUIRE(parse_ok);
+    BOOST_TEST_REQUIRE(parse_ok);
 
     using numeric_type_specifier = ibis::vhdl::ast::decimal_literal::numeric_type_specifier;
-    BOOST_REQUIRE(ast_node.type_specifier == numeric_type_specifier::integer);
+    BOOST_TEST_REQUIRE(ast_node.type_specifier == numeric_type_specifier::integer);
 
     numeric_convert numeric{ diagnostic_handler };
 
     auto const [conv_ok, value] = numeric(ast_node);
-    BOOST_REQUIRE(conv_ok);
+    BOOST_TEST_REQUIRE(conv_ok);
     BOOST_TEST(std::get<numeric_convert::integer_type>(value) == N);
 
-    os << vhdl::failure_status(ctx);
+    os << failure_status(ctx);
     if (!os.str().empty()) {
         // std::cout << '\n' << os.str() << '\n';
     }
@@ -120,25 +128,29 @@ BOOST_AUTO_TEST_CASE(decimal_literal_uint64max_ovrflw)
 
     using iterator_type = parser::iterator_type;
 
-    parser::position_cache<iterator_type> position_cache;
-    auto position_proxy = position_cache.add_file("<decimal_literal>", literal);
+    ibis::util::file_mapper file_mapper{};
+    auto const file_id = file_mapper.add_file("<decimal_literal>", literal);
+
+    parser::position_cache<iterator_type> position_cache{};
+    auto position_proxy = position_cache.get_proxy(file_id);
 
     btt::output_test_stream os;
     parser::context ctx;
-    parser::diagnostic_handler<iterator_type> diagnostic_handler{ os, ctx, position_proxy };
+    parser::diagnostic_handler<iterator_type> diagnostic_handler{ os, ctx,
+                                                                  std::move(position_proxy) };
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
     auto const [parse_ok, ast_node] = parse.decimal_literal(position_proxy, diagnostic_handler);
-    BOOST_REQUIRE(parse_ok);  // must parse ...
+    BOOST_TEST_REQUIRE(parse_ok);  // must parse ...
 
     numeric_convert numeric{ diagnostic_handler };
 
     bool conv_ok = true;
     std::tie(conv_ok, std::ignore) = numeric(ast_node);
-    BOOST_REQUIRE(!conv_ok);  // ... but must fail to convert
+    BOOST_TEST_REQUIRE(!conv_ok);  // ... but must fail to convert
 
-    os << vhdl::failure_status(ctx);
+    os << failure_status(ctx);
     if (!os.str().empty()) {
         // std::cout << '\n' << os.str() << '\n';
     }
@@ -198,28 +210,32 @@ BOOST_DATA_TEST_CASE(decimal_literal_real, utf_data::make(dec_real_lit) ^ dec_re
 {
     using iterator_type = parser::iterator_type;
 
-    parser::position_cache<iterator_type> position_cache;
-    auto position_proxy = position_cache.add_file("<decimal_literal>", literal);
+    ibis::util::file_mapper file_mapper{};
+    auto const file_id = file_mapper.add_file("<decimal_literal>", literal);
+
+    parser::position_cache<iterator_type> position_cache{};
+    auto position_proxy = position_cache.get_proxy(file_id);
 
     btt::output_test_stream os;
     parser::context ctx;
-    parser::diagnostic_handler<iterator_type> diagnostic_handler{ os, ctx, position_proxy };
+    parser::diagnostic_handler<iterator_type> diagnostic_handler{ os, ctx,
+                                                                  std::move(position_proxy) };
 
     auto const parse = testsuite::literal_parser<iterator_type>{};
 
     auto const [parse_ok, ast_node] = parse.decimal_literal(position_proxy, diagnostic_handler);
-    BOOST_REQUIRE(parse_ok);
+    BOOST_TEST_REQUIRE(parse_ok);
 
     using numeric_type_specifier = ibis::vhdl::ast::decimal_literal::numeric_type_specifier;
-    BOOST_REQUIRE(ast_node.type_specifier == numeric_type_specifier::real);
+    BOOST_TEST_REQUIRE(ast_node.type_specifier == numeric_type_specifier::real);
 
     numeric_convert numeric{ diagnostic_handler };
 
     auto const [conv_ok, value] = numeric(ast_node);
-    BOOST_REQUIRE(conv_ok);
+    BOOST_TEST_REQUIRE(conv_ok);
     BOOST_TEST(std::get<numeric_convert::real_type>(value) == N, btt::tolerance(REAL_TOLERANCE));
 
-    os << vhdl::failure_status(ctx);
+    os << failure_status(ctx);
     if (!os.str().empty()) {
         std::cout << '\n' << os.str() << '\n';
     }

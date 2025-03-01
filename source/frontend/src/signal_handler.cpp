@@ -4,15 +4,24 @@
 //
 
 #include <ibis/frontend/signal_handler.hpp>
+#include <ibis/platform.hpp>
 #include <ibis/message.hpp>
 
-#include <csignal>
-#include <functional>
-#include <iostream>
+#include <csignal>  // IWYU pragma: keep
+#include <cstdlib>
+#include <string_view>
+
+// IWYU pragma: begin_keep
+#if defined(IBIS_BUILD_PLATFORM_LINUX)
+// SIGUSR1, SIGBUS are linux specific
+// NOLINTNEXTLINE(misc-include-cleaner,modernize-deprecated-headers,hicpp-deprecated-headers)
+#include <signal.h>
+#endif
+// IWYU pragma: end_keep
 
 namespace ibis::frontend {
 
-#if 0  // avoid LINT errors
+#if 0  // NOLINT(readability-avoid-unconditional-preprocessor-if)
 void testing_signal_handler()
 {
 #if 0  // doesn't work ????
@@ -32,7 +41,7 @@ void testing_signal_handler()
 
 std::string_view signal_name(int sig_num)
 {
-    using namespace std::literals;
+    using namespace std::literals::string_view_literals;
 
     switch (sig_num) {
         case SIGSEGV:
@@ -56,15 +65,21 @@ std::string_view signal_name(int sig_num)
 
 void register_signal_handlers()
 {
+    // Actually, there isn't a signal handler available/installed. Prevent warnings from static
+    // analyzers by disabling this part of code.
+#if 0  // NOLINT(readability-avoid-unconditional-preprocessor-if)
     auto const signal_handler = []() {
         ibis::warning("No signal handler attached");
         return true;
     };
 
     if (!signal_handler()) {
+        // Don't worry about warning: code will never be executed [-Wunreachable-code] since we
+        // install an error_handler which always return successfully (true)
         ibis::failure("Failed to install signal handlers");
         std::exit(EXIT_FAILURE);
     }
+#endif
 }
 
 }  // namespace ibis::frontend

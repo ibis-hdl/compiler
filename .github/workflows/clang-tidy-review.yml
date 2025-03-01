@@ -9,7 +9,7 @@ jobs:
 
     env:
       # must be clang for clang-tidy!
-      cmake_cxx: clang++
+      cmake_CXX: clang++
       conan_profile: clang
       cmake_configure_preset: clang
 
@@ -23,7 +23,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install --no-install-recommends -y \
-          cmake ninja-build clang clang-tools clang-tidy
+          cmake ninja-build clang clang-tools
 
     - name: Checkout Repo
       uses: actions/checkout@v4
@@ -56,22 +56,25 @@ jobs:
    
     - name: Conan install
       run: |
-        virtualenv .venv
-        source .venv/bin/activate
-        pip install multipledispatch
         python3 conan_install.py --profile ${{ env.conan_profile }}
-        deactivate
+        # cleanup to get Github's cache small (clean sources, build, download, temp)
+        conan cache clean -s -b -d -t        
 
     - name: CMake configuration
       run: |
         cmake --preset ${{ env.cmake_configure_preset }}
         # no build required
+        # FixMe: Conan's generated toolchain file is loaded, but the INCLUDE paths are for some 
+        # unknown reasons incomplete, hence include errors will occur during clang-tidy-review.
+        # Nevertheless, current is Clang-18, which will fail to compile due to missing 
+        # std::expected support.
 
     - name: Run Clang tidy review
       id: clang-tidy-review
       uses: ZedThree/clang-tidy-review@v0.20.1
       with:
-        build_dir: ${{ github.workspace }}/build
+        # Note GITHUB_WORKSPACE and github.workspace are different when running in container #785
+        build_dir: build
         config_file: .clang-tidy
 
     - name: Uploads an artefact containing clang_fixes.json

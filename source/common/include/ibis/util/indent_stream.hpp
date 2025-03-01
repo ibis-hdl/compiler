@@ -5,8 +5,9 @@
 
 #pragma once
 
+#include <cstddef>
 #include <ostream>
-#include <streambuf>
+#include <string>
 
 namespace ibis::util {
 
@@ -18,6 +19,9 @@ namespace ibis::util {
 /// decrease_indent()
 ///
 /// FixMe: tabwith is hard coded.
+/// ToDo [C++20] Maybe simpler using std::formatter with std::fill_n(),
+/// see [Enhancement / Feature Request: Parameterization of fill characters](
+///      https://github.com/fmtlib/fmt/issues/2189)
 ///
 /// Note: clang-tidy may complain about the overloaded overload()
 ///       member function, since it can throw inside the destructor

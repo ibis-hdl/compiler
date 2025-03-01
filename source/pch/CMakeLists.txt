@@ -6,6 +6,7 @@
 
 project(ibis_pch LANGUAGES CXX)
 
+if(IBIS_ENABLE_PCH)
 
 # see [PCH: Unclear error when reusing precompiled headers from interface library](
 # https://gitlab.kitware.com/cmake/cmake/-/issues/20288)
@@ -22,10 +23,10 @@ target_precompile_headers(${PROJECT_NAME}
 
 
 target_include_directories(${PROJECT_NAME}
-    PRIVATE
+    PUBLIC
+        ${PROJECT_SOURCE_DIR}/include/ibis/pch_default.hpp
         $<BUILD_INTERFACE:${Boost_INCLUDE_DIR}>
         $<BUILD_INTERFACE:${CLI11_INCLUDE_DIR}>
-        $<BUILD_INTERFACE:${strong_type_INCLUDE_DIR}>
 )
 
 
@@ -49,8 +50,11 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 
-if(DEVELOPER_BOOST_SPIRIT_X3_DEBUG)
+if(IBIS_DEVELOPER_BOOST_SPIRIT_X3_DEBUG)
     target_compile_definitions(${PROJECT_NAME}
         PRIVATE BOOST_SPIRIT_X3_DEBUG
     )
 endif()
+
+
+endif() # IBIS_ENABLE_PCH

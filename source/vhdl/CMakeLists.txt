@@ -25,7 +25,6 @@ target_link_libraries(${PROJECT_NAME}
         # fmt::fmt
         range-v3::range-v3
         Boost::headers
-        rollbear::strong_type
         # cope with "fatal error LNK2011: precompiled object not linked in"
         #"$<$<CXX_COMPILER_ID:MSVC>:ibis_pch>"
 )
@@ -33,9 +32,7 @@ target_link_libraries(${PROJECT_NAME}
 
 target_sources(${PROJECT_NAME}
     PRIVATE
-        src/ast/literal_printer.cpp
-        src/ast/keyword_token.cpp
-        src/ast/operator_token.cpp
+        src/ast/ast_formatter.cpp
         src/ast/ast_printer.cpp
         src/ast/ast_stats.cpp
         src/ast/pretty_node_name.cpp
@@ -53,13 +50,39 @@ target_sources(${PROJECT_NAME}
         src/diagnostic_printer.cpp
 
         src/parser/error_handler.cpp
-        src/parser/position_cache.cpp
         src/parser/grammar.cpp  # ---- memory exhausting ----
         src/parser/parse.cpp
 )
+# https://cmake.org/cmake/help/latest/prop_tgt/UNITY_BUILD_MODE.html
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    UNITY_BUILD_MODE BATCH
+    UNITY_BUILD_BATCH_SIZE 3
+)
+set_source_files_properties(
+    src/parser/grammar.cpp  # memory exhausting
+    PROPERTIES
+        SKIP_UNITY_BUILD_INCLUSION true
+)
 
 
-if(DEVELOPER_BOOST_SPIRIT_X3_DEBUG)
+# Disable Clang -Weverything Warning regards:
+# [-Wshadow], [-Wshadow-uncaptured-local]: The ast_printer.cpp uses a lot of
+#    static const std::string_view symbol{ "<node-name>" }, even on dispatch inside same
+#    member, hence disable warning: declaration shadows a local variable [-Wshadow]
+# [-Wswitch-enum]: Rework required, or replacement with generic_ast_walker visitor
+# [-Wextra-semi-stmt]: a lot of macro stuff regards cxx_bug() etc.; also requires rework,
+#    so silence this
+# ToDo remove this compiler options
+if(IBIS_DEVELOPER_CLANG_WARN_EVERYTHING)
+    target_compile_options(${PROJECT_NAME} PRIVATE # append
+        "-Wno-shadow" "-Wno-shadow-uncaptured-local"
+#       "-Wno-switch-enum" 
+        "-Wno-extra-semi-stmt"
+    )
+endif()
+
+
+if(IBIS_DEVELOPER_BOOST_SPIRIT_X3_DEBUG)
     target_compile_definitions(${PROJECT_NAME}
         PRIVATE BOOST_SPIRIT_X3_DEBUG
     )
@@ -74,7 +97,7 @@ set_property(TARGET ${PROJECT_NAME}
 )
 
 
-if(IBIS_ENABLE_CXXSTD_PCH)
+if(IBIS_ENABLE_PCH)
     target_precompile_headers(${PROJECT_NAME} REUSE_FROM ibis_pch)
 endif()
 
@@ -82,8 +105,6 @@ endif()
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-    SYSTEM PUBLIC
-        $<INSTALL_INTERFACE:include>
 )
 
 
@@ -104,26 +125,23 @@ endif()
 ##
 # Clang -Weverything
 #
-# Disable some warning which aren't relevant here.
+# Disable some warnings.
 #
-#   -Wno-covered-switch-default
-#   - if one extended the enum, you'd fall into the default case which probably
+#   "-Wno-switch-default":
+#     If one extended an *enum*, you'd fall into the default case which probably
 #     isn't what you want. The correct thing to do is to remove the default case
 #     and get warnings for unhandled conditions, see
 #     [Why does Clang/LLVM warn me about using default in a switch statement where all enumerated cases are covered?](
 #     https://softwareengineering.stackexchange.com/questions/179269/why-does-clang-llvm-warn-me-about-using-default-in-a-switch-statement-where-all)
-#   - in project, default branches are covered with `cxx_unreachable_bug_triggered();`
-#     normally
+#     See also compiler test case [godbolt.org](https://godbolt.org/z/7hGecT6qx)
 if(COMPILER_CLANG_WARN_EVERYTHING)
     if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 
         set_source_files_properties(
-            src/ast/literal_printer.cpp
-            src/ast/keyword_token.cpp
-            src/ast/operator_token.cpp
+            src/ast/ast_formatter.cpp
             PROPERTIES
                 COMPILE_FLAGS
-                    -Wno-covered-switch-default
+                    -Wno-switch-default
         )
 
         set_source_files_properties(

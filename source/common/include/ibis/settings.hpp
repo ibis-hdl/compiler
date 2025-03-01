@@ -21,7 +21,7 @@ namespace ibis {
 ///
 /// @brief The settings class using Boost property tree.
 ///
-/// @todo Unfortunately RapidJSON has only a master branch in 2021, v1.1.0
+/// ToDo Unfortunately RapidJSON has only a master branch in 2021, v1.1.0
 /// is from 2016 and got compile errors using clang-11-win on Windows.
 /// Sometimes the master branch compiles, sometimes not. So it's
 /// decidet to get rid off RapidJSON and using boost's property_tree,
@@ -49,7 +49,7 @@ public:
         // [-Wexit-time-destructors]. Global and function static objects will get their
         // destructors called when the application is exiting. These destructors are "exit time
         // destructors" and are called in the reverse order that they were constructed in.
-        // There is no problem by use ony singleon, the warnign is ignored.
+        // There is no problem by use only singleton, the warning is ignored.
         static settings::type instance_;
         return instance_;
     }

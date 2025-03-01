@@ -58,8 +58,7 @@ static const as_type<T> as = {};
 namespace traits {
 
 template <typename Subject, typename Context>
-struct attribute_of<x3::protect_directive<Subject>, Context> : attribute_of<Subject, Context> {
-};
+struct attribute_of<x3::protect_directive<Subject>, Context> : attribute_of<Subject, Context> {};
 
 }  // namespace traits
 

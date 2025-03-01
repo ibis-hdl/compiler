@@ -5,7 +5,7 @@
 
 #pragma once
 
-//#include<ibis/vhdl/ast_fwd.hpp>
+// #include<ibis/vhdl/ast_fwd.hpp>
 #include <ibis/vhdl/ast.hpp>
 
 #include <ibis/util/overloaded.hpp>
@@ -35,7 +35,7 @@ private:
     }
 
     template <typename T>
-    void visit(std::vector<T> const& vector)
+    void visit_each(std::vector<T> const& vector)
     {
         std::for_each(vector.begin(), vector.end(), [this](auto const& e) { (*this)(e); });
     }
@@ -101,7 +101,7 @@ public:
         std::string_view const node_typename{ "aggregate" };
         worker(node, node_typename);
 
-        visit(node);
+        visit_each(node);
     }
 
     void operator()(ast::alias_declaration const& node)
@@ -164,7 +164,7 @@ public:
         std::string_view const node_typename{ "architecture_statement_part" };
         worker(node, node_typename);
 
-        visit(node);
+        visit_each(node);
     }
 
     void operator()(ast::array_type_definition const& node)
@@ -187,14 +187,14 @@ public:
         if (node.report) {
             std::string_view const node_typename{ "assertion.report" };
             worker(node.report, node_typename);
-            // XXXX
+            // FixMe from 2022
             (*this)(*node.report);
         }
 
         if (node.severity) {
             std::string_view const node_typename{ "assertion.severity" };
             worker(node.severity, node_typename);
-            // XXX
+            // FixMe from 2022
             (*this)(*node.severity);
         }
     }
@@ -227,7 +227,7 @@ public:
         std::string_view const node_typename{ "association_list" };
         worker(node, node_typename);
 
-        visit(node);
+        visit_each(node);
     }
 
     void operator()(ast::attribute_declaration const& node)
@@ -301,15 +301,15 @@ public:
         {
             std::string_view const node_typename{ "use_clause*" };
             worker(node.use_clause_list, node_typename);
-            // XXX
-            visit(node.use_clause_list);
+            // FixMe from 2022
+            visit_each(node.use_clause_list);
         }
 
         {
             std::string_view const node_typename{ "configuration_item*" };
             worker(node.configuration_item_list, node_typename);
-            // XXX
-            visit(node.configuration_item_list);
+            // FixMe from 2022
+            visit_each(node.configuration_item_list);
         }
     }
 
@@ -326,7 +326,7 @@ public:
         std::string_view const node_typename{ "block_declarative_part" };
         worker(node, node_typename);
 
-        visit(node);
+        visit_each(node);
     }
 
     void operator()(ast::block_header const& node)
@@ -407,7 +407,7 @@ public:
         std::string_view const node_typename{ "block_statement_part" };
         worker(node, node_typename);
 
-        visit(node);
+        visit_each(node);
     }
 
     void operator()(ast::case_statement const& node)
@@ -426,8 +426,8 @@ public:
         {
             std::string_view const node_typename{ "case_statement_alternative*" };
             worker(node.alternatives, node_typename);
-            // XXX
-            visit(node.alternatives);
+            // FixMe from 2022
+            visit_each(node.alternatives);
         }
 
         if (node.end_label) {
@@ -463,7 +463,7 @@ public:
         std::string_view const node_typename{ "choices" };
         worker(node, node_typename);
 
-        visit(node);
+        visit_each(node);
     }
 
     void operator()(ast::component_configuration const& node)
@@ -665,7 +665,7 @@ public:
         std::string_view const node_typename{ "configuration_declarative_part" };
         worker(node, node_typename);
 
-        visit(node);
+        visit_each(node);
     }
 
     void operator()(ast::configuration_item const& node)
@@ -720,7 +720,7 @@ public:
         std::string_view const node_typename{ "context_clause" };
         worker(node, node_typename);
 
-        visit(node);
+        visit_each(node);
     }
 
     void operator()(ast::context_item const& node)
@@ -752,7 +752,7 @@ public:
         std::string_view const node_typename{ "design_file" };
         worker(node, node_typename);
 
-        visit(node);
+        visit_each(node);
     }
 
     void operator()(ast::design_unit const& node)
@@ -853,7 +853,7 @@ public:
         std::string_view const node_typename{ "entity_class_entry_list" };
         worker(node, node_typename);
 
-        visit(node);
+        visit_each(node);
     }
 
     void operator()(ast::entity_declaration const& node)
@@ -893,7 +893,7 @@ public:
         std::string_view const node_typename{ "entity_declarative_part" };
         worker(node, node_typename);
 
-        visit(node);
+        visit_each(node);
     }
 
     void operator()(ast::entity_designator const& node)
@@ -929,7 +929,7 @@ public:
         // clang-format off
         boost::apply_visitor(util::overloaded {
             [this](ast::entity_designator_list const& entity_designator_list) {
-                visit(entity_designator_list);
+                visit_each(entity_designator_list);
             },
             [this](ast::keyword_token token) {
                 (*this)(token); // OTHERS | ALL
@@ -963,7 +963,7 @@ public:
         std::string_view const node_typename{ "entity_statement_part" };
         worker(node, node_typename);
 
-        visit(node);
+        visit_each(node);
     }
 
     void operator()(ast::entity_tag const& node)
@@ -987,7 +987,7 @@ public:
         std::string_view const node_typename{ "enumeration_type_definition" };
         worker(node, node_typename);
 
-        visit(node);
+        visit_each(node);
     }
 
     void operator()(ast::exit_statement const& node)
@@ -1087,22 +1087,17 @@ public:
         //    | function_name ( formal_designator )
         //    | type_mark ( formal_designator )
         switch (node.context_tied_names.size()) {
-            case 1: {
+            case 1:
                 // BNF: formal_designator
                 visit_formal_designator(node.context_tied_names[0]);
                 break;
-            }
-
-            case 2: {
+            case 2:
                 // BNF: {function_name|type_mark} ( formal_designator )
                 visit_name(node.context_tied_names[0]);
                 visit_formal_designator(node.context_tied_names[1]);
                 break;
-            }
-
-            default: {
+            default:
                 cxx_bug_fatal("VHDL BNF rules violation, parser rule failed!");
-            }
         }
     }
 
@@ -1142,7 +1137,7 @@ public:
         if (!node.concurrent_statements.empty()) {
             std::string_view const node_typename{ "concurrent_statement*" };
             worker(node, node_typename);
-            visit(node.concurrent_statements);
+            visit_each(node.concurrent_statements);
         }
 
         if (node.end_label) {
@@ -1186,7 +1181,7 @@ public:
         std::string_view const node_typename{ "group_constituent_list" };
         worker(node, node_typename);
 
-        visit(node);
+        visit_each(node);
     }
 
     void operator()(ast::group_declaration const& node)
@@ -1228,7 +1223,7 @@ public:
         std::string_view const node_typename{ "identifier_list" };
         worker(node, node_typename);
 
-        visit(node);
+        visit_each(node);
     }
 
     void operator()(ast::if_statement const& node)
@@ -1265,7 +1260,7 @@ public:
         std::string_view const node_typename{ "index_constraint" };
         worker(node, node_typename);
 
-        visit(node);
+        visit_each(node);
     }
 
     void operator()(ast::index_specification const& node)
@@ -1292,8 +1287,8 @@ public:
         (*this)(node.prefix);
 
         {
-            std::string_view const node_typename{ "expression*" };
-            worker(node, node_typename);
+            std::string_view const node_typename_{ "expression*" };
+            worker(node, node_typename_);
             visit(node.expression_list);
         }
     }
@@ -1332,7 +1327,7 @@ public:
         // clang-format off
         boost::apply_visitor(util::overloaded {
             [this](ast::instantiation_label_list const& instantiation_label_list) {
-                visit(instantiation_label_list);
+                visit_each(instantiation_label_list);
             },
             [this](ast::keyword_token token) {
                 (*this)(token);
@@ -1379,7 +1374,7 @@ public:
     {
         std::string_view const node_typename{ "interface_list" };
         worker(node, node_typename);
-        visit(node);
+        visit_each(node);
     }
 
     void operator()(ast::interface_signal_declaration const& node)
@@ -1431,7 +1426,7 @@ public:
         std::string_view const node_typename{ "library_clause" };
         worker(node, node_typename);
 
-        visit(node.logical_name_list);
+        visit_each(node.logical_name_list);
     }
 
     void operator()(ast::library_unit const& node)
@@ -1550,7 +1545,7 @@ public:
         std::string_view const node_typename{ "package_body_declarative_part" };
         worker(node, node_typename);
 
-        visit(node);
+        visit_each(node);
     }
 
     void operator()(ast::package_declaration const& node)
@@ -1580,7 +1575,7 @@ public:
         std::string_view const node_typename{ "package_declarative_part" };
         worker(node, node_typename);
 
-        visit(node);
+        visit_each(node);
     }
 
     void operator()(ast::parameter_specification const& node)
@@ -1611,7 +1606,7 @@ public:
         if (!node.secondary_unit_declarations.empty()) {
         }
 
-        visit(node.secondary_unit_declarations);
+        visit_each(node.secondary_unit_declarations);
 
         if (node.physical_type_simple_name) {
             (*this)(*node.physical_type_simple_name);
@@ -1695,7 +1690,7 @@ public:
         std::string_view const node_typename{ "process_declarative_part" };
         worker(node, node_typename);
 
-        visit(node);
+        visit_each(node);
     }
 
     void operator()(ast::process_statement const& node)
@@ -1775,7 +1770,7 @@ public:
         {
             std::string_view const node_typename{ "element_declaration*" };
             worker(node, node_typename);
-            visit(node.element_declarations);
+            visit_each(node.element_declarations);
         }
     }
 
@@ -1893,7 +1888,7 @@ public:
         std::string_view const node_typename{ "sensitivity_list" };
         worker(node, node_typename);
 
-        visit(node);
+        visit_each(node);
     }
 
     void operator()(ast::sequence_of_statements const& node)
@@ -1901,7 +1896,7 @@ public:
         std::string_view const node_typename{ "sequence_of_statements" };
         worker(node, node_typename);
 
-        visit(node);
+        visit_each(node);
     }
 
     void operator()(ast::sequential_statement const& node)
@@ -1967,7 +1962,7 @@ public:
         std::string_view const node_typename{ "signal_list.names" };
         worker(node, node_typename);
 
-        visit(node);
+        visit_each(node);
     }
 
     void operator()(ast::signal_list const& node)
@@ -1988,7 +1983,7 @@ public:
         {
             std::string_view const node_typename{ "parameter_type_list" };
             worker(node, node_typename);
-            visit(node.parameter_type_list);
+            visit_each(node.parameter_type_list);
         }
 
         if (node.return_type) {
@@ -2060,7 +2055,7 @@ public:
         std::string_view const node_typename{ "subprogram_declarative_part" };
         worker(node, node_typename);
 
-        visit(node);
+        visit_each(node);
     }
 
     void operator()(ast::subprogram_specification const& node)
@@ -2282,7 +2277,7 @@ public:
         // clang-format off
         boost::apply_visitor(util::overloaded {
             [this](ast::waveform_element_list const& list) {
-                visit(list);
+                visit_each(list);
             },
             [this](ast::keyword_token token) {
                 (*this)(token);
@@ -2326,7 +2321,7 @@ public:
     {
 #if 0
         std::string_view const node_typename{ "keyword" };
-        //XXX worker(node, node_typename);
+        //ToDo useful to call worker(node, node_typename); ??
 #endif
     }
 
@@ -2337,7 +2332,7 @@ public:
         //    SHALL NEVER BE HERE
         //******************************
         std::string_view const node_typename{ "*** nullary ***" };
-        // XXX call worker::fatal_failure() ????
+        // Todo: Decide of call of worker::fatal_failure() ????
         worker(node, node_typename);
 #endif
     }

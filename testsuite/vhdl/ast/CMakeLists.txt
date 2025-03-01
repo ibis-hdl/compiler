@@ -25,19 +25,10 @@ add_test(NAME test_ast
 )
 
 
-# Variables used to configure ctest project, also compile time builtin settings
-set(TESTSUITE_SOURCE_DIR ${PROJECT_SOURCE_DIR}/test_data)
-
-configure_file(
-    "${PROJECT_SOURCE_DIR}/include/testsuite/vhdl/ast/compile_builtin.hpp.in"
-    "${PROJECT_BINARY_DIR}/include/testsuite/vhdl/ast/compile_builtin.hpp"
-    @ONLY
-)
-
-
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
         ibis::vhdl
+        ibis::common
         testsuite::util
         Boost::headers
         Boost::system
@@ -51,13 +42,18 @@ target_link_libraries(${PROJECT_NAME}
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/test_ast.cpp
-        src/position_cache_fixture.cpp
         # concrete test cases
-        src/test/position_cache_test_1.cpp
-        src/test/position_cache_test_2.cpp
+        src/test/test_ast_formatter.cpp
+        src/test/test_file_mapper.cpp
+        src/test/test_position_tagged.cpp
+        src/test/test_position_cache.cpp
         src/test/literal_printer_test.cpp
 )
-
+# https://cmake.org/cmake/help/latest/prop_tgt/UNITY_BUILD_MODE.html
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    UNITY_BUILD_MODE BATCH
+    UNITY_BUILD_BATCH_SIZE 3
+)
 
 #set_source_files_properties(src/test_ast.cpp
 #    APPEND PROPERTIES
@@ -73,7 +69,7 @@ set_source_files_properties(src/test_ast.cpp
 )
 
 
-if(IBIS_ENABLE_CXXSTD_PCH)
+if(IBIS_ENABLE_PCH)
     target_precompile_headers(${PROJECT_NAME} REUSE_FROM ibis_pch)
 endif()
 
@@ -81,7 +77,4 @@ endif()
 target_include_directories(${PROJECT_NAME}
     PRIVATE
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
-    SYSTEM PUBLIC
-        $<BUILD_INTERFACE:${EXTERNAL_BOOST_TEST_INCLUDE_DIR}>
 )

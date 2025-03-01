@@ -55,7 +55,8 @@ information see [cmake-presets](https://cmake.org/cmake/help/latest/manual/cmake
 
 ### CCache on Linux
 
-To use, e.g. [CCache (a fast C/C++ compiler cache)](https://ccache.dev/) for CMake's configure phase, write your own `CMakeUserPresets.json` using e.g. GNU compiler with
+To use, e.g. [CCache (a fast C/C++ compiler cache)](https://ccache.dev/) for CMake's configure 
+phase, write your own `CMakeUserPresets.json` using e.g. GNU compiler with
 
 ```json
 {
@@ -141,52 +142,32 @@ Also, there are some already pre-configured user CMake presets below
 choice to `${source_dir}` as `CMakeUserPresets.json` - this file
 is excluded from *git*, see [`.gitignore`](../.gitignore).
 
-## Linting: Clang Tidy
+You can check the use of PCH with given `-H` argument, see SO
+[How do I check if precompiled headers are really used?](
+https://stackoverflow.com/questions/77838811/how-do-i-check-if-precompiled-headers-are-really-used)
 
-The [.clang-tidy](../.clang-tidy) config file applies some checks and disabled others.
+> **ToDo** See Clang Issue [Ccache clang and `-fno-pch-timestamp`](https://discourse.cmake.org/t/ccache-clang-and-fno-pch-timestamp/7253)
 
-### Disabled checks:
+### MSVC and sccache
 
-There are disabled checks which shouldn't be. Enabling this checks requires more effort:
+Following [SCCache Usage](https://github.com/mozilla/sccache?tab=readme-ov-file#usage) for
+MSVC and CMake 3.25 and later, you have to use the new `CMAKE_MSVC_DEBUG_INFORMATION_FORMAT` option,
+meant to configure the `-Z7` flag. Additionally, you must set the cmake policy number 
+[CMP0141](https://cmake.org/cmake/help/latest/policy/CMP0141.html) to the `NEW` setting.
 
-- [misc-no-recursion](https://clang.llvm.org/extra/clang-tidy/checks/misc-no-recursion.html):
-  *Until the ast_printer recursive call chain has been solved.*
+```json
+        {
+            "name": "sccache",
+            "description": "sccache - Mozilla's ccache-like tool",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER_LAUNCHER": "sccache",
+                "CMAKE_MSVC_DEBUG_INFORMATION_FORMAT": "Embedded",
+                "CMAKE_POLICY_DEFAULT_CMP0141": "NEW"                
+            }
+        },
+```
 
-- [cert-err58-cpp](https://clang.llvm.org/extra/clang-tidy/checks/cert-err58-cpp.html):
-  *It's correct, but depend on others libraries.*
-
-- [cppcoreguidelines-pro-bounds-array-to-pointer-decay](https://clang.llvm.org/extra/clang-tidy/checks/cppcoreguidelines-pro-bounds-array-to-pointer-decay.html):
-  *Ignored at this time. With C++20 with get [std::span](https://en.cppreference.com/w/cpp/container/span)
-   aka gsl::span aka gsl:: gsl::array_view.*
-
-- [bugprone-branch-clone](https://clang.llvm.org/extra/clang-tidy/checks/bugprone-branch-clone.html):
-  *This check ignores the C++ `[[fallthrough]]` attribute specifier, hence twice the source annotations.* But it  checks and examines conditional operators, so we can't
-  it disable completely. Hopefully later Clang-tidy version will honor those
-  attribute specifier.
-
-- [readability-identifier-naming](https://clang.llvm.org/extra/clang-tidy/checks/readability-identifier-naming.html)
-  *Here a lot of effort is required to consolidate and unify all the naming*, e.g. see
-  [.clang-tidy](https://github.com/xournalpp/xournalpp/blob/master/.clang-tidy) or
-  [.clang-tidy](https://github.com/ROCmSoftwarePlatform/AMDMIGraphX/blob/develop/.clang-tidy) as example.
-
-### Permanently disabled checks:
-
-- [modernize-use-trailing-return-type](https://clang.llvm.org/extra/clang-tidy/checks/modernize-use-trailing-return-type.html):
-  *This transformation is purely stylistic. We are not quite that modern.*
-
-- [modernize-use-nodiscard](https://clang.llvm.org/extra/clang-tidy/checks/modernize-use-nodiscard.html):
-  *This would affect a lot of value returning member functions everywhere and doesn't give any additional information.*
-
-- [readability-magic-numbers](https://clang.llvm.org/extra/clang-tidy/checks/readability-magic-numbers.html), cppcoreguidelines-avoid-magic-numbers:
-  *This goes too far to force this everywhere.*
-
-- [readability-redundant-access-specifiers](https://clang.llvm.org/extra/clang-tidy/checks/readability-redundant-access-specifiers.html):
-  *This is correct, but is used here for classification purposes.*
-
-- [cppcoreguidelines-pro-type-vararg](https://clang.llvm.org/extra/clang-tidy/checks/cppcoreguidelines-pro-type-vararg.html):
-  *By using Boost UTF this rule is triggered on each BOOST_TEST macros. No c-style vararg functions are written in this project.*
-
-## Formatting: Clang-Format
-
-The source format is given by Clang-Format's configuration [.clang-format](../.clang-format), or
-even simpler by [EditorConfig](https://editorconfig.org/)'s [.editorconfig](../.editorconfig).
+> **ToDo** See Issue [MSVC: /FC, and /Fp "Non-cacheable reasons #978](
+https://github.com/mozilla/sccache/issues/978), so we can have pre-compiled header or
+sccache.

@@ -7,6 +7,7 @@
 
 #include <ibis/vhdl/ast/basic_ast_walker.hpp>
 #include <ibis/vhdl/ast/ast_printer.hpp>
+#include <ibis/vhdl/ast/ast_formatter.hpp>
 #include <ibis/vhdl/parser/diagnostic_handler.hpp>
 #include <ibis/vhdl/parser/context.hpp>
 #include <ibis/vhdl/type.hpp>
@@ -15,6 +16,7 @@
 #include <ibis/vhdl/parser/parse.hpp>
 #include <ibis/vhdl/ast.hpp>
 
+#include <testsuite/testsuite_parser.hpp>
 #include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
 #include <boost/test/unit_test.hpp>  // IWYU pragma: keep
@@ -82,7 +84,10 @@ END PACKAGE;
 )";
 // clang-format on
 
+using namespace ibis::vhdl;
+
 using numeric_type_specifier = ast::based_literal::numeric_type_specifier;
+
 auto constexpr based_integer = numeric_type_specifier::integer;
 auto constexpr based_real = numeric_type_specifier::real;
 
@@ -95,7 +100,7 @@ struct {
         std::string_view fractional;
         std::string_view exponent;
     } literal;
-} const expect[] = {
+} constexpr expect[] = {
     // Examples from IEEE_VHDL_1076-1993: Chapter 13.4.2 Based literals
     { .numeric_type = based_integer,
       .value = 255U,
@@ -165,17 +170,16 @@ In 'based_literal':46:39: parse error: in based literal parse of integer part 'f
 template<typename ExpectT, bool verbose = false>
 struct verify_worker
 {
-    using diagnostic_handler_type = vhdl::diagnostic_handler<parser::iterator_type>;
-    using basic_integer_type = vhdl::intrinsic::signed_integer_type;
-    using integer_type = typename std::make_unsigned<basic_integer_type>::type;
-    using real_type = vhdl::intrinsic::real_type;
+    using diagnostic_handler_type = ibis::vhdl::diagnostic_handler<parser::iterator_type>;
+    using integer_type = ibis::vhdl::intrinsic::unsigned_integer_type;
+    using real_type = ibis::vhdl::intrinsic::real_type;
 
-    using converter_type = ast::convert_based<basic_integer_type, real_type>;
+    using converter_type = ast::convert_based<integer_type, real_type>;
 
     verify_worker(std::ostream& os_, ExpectT const& expect_, diagnostic_handler_type& handler_)
     : os{ os_ }
     , expect{ expect_ }
-    , max_index{ sizeof(expect_) / sizeof(expect_[0]) }
+    , max_index{ std::size(expect_) }
     , diagnostic_handler{ handler_ }
     , convert_based{ handler_ }
     {
@@ -203,7 +207,7 @@ struct verify_worker
             BOOST_TEST_MESSAGE("verify 'based_literal' success test with test_index = " << test_index);
             // check on parser
             BOOST_TEST(node.number.type_specifier == expect[test_index].numeric_type);
-            BOOST_TEST(node.base == expect[test_index].literal.base);
+            BOOST_TEST(node.base_id == expect[test_index].literal.base);
             BOOST_TEST(node.number.integer_part == expect[test_index].literal.integer);
             BOOST_TEST(node.number.fractional_part == expect[test_index].literal.fractional);
             BOOST_TEST(node.number.exponent == expect[test_index].literal.exponent);
@@ -237,7 +241,7 @@ struct verify_worker
                     }
                 }
             }, result);
-
+            
             ++test_index;
         }
         else {
@@ -260,21 +264,27 @@ private:
     converter_type convert_based;
 };
 
-using verifier_type = ast::basic_ast_walker<verify_worker<decltype(expect), false>>;
+using verifier_type = ast::basic_ast_walker<verify_worker<decltype(expect), false /* verbose */>>;
 
 } // namespace testsuite_data
 
 namespace utf = boost::unit_test;
 
+using namespace ibis::vhdl;
+
 BOOST_AUTO_TEST_CASE(based_literal_ng)
 {
     //using testsuite::testsuite_parse;
-    using diagnostic_handler_type = ibis::vhdl::diagnostic_handler<parser::iterator_type>;
-    using vhdl::ast::design_file;
+    using iterator_type = parser::iterator_type;
+    using diagnostic_handler_type = ibis::vhdl::diagnostic_handler<iterator_type>;
+    using ast::design_file;
     using namespace testsuite_data;
 
-    parser::position_cache<parser::iterator_type> position_cache;
-    auto position_cache_proxy = position_cache.add_file("based_literal", input);
+    ibis::util::file_mapper file_mapper{};
+    auto const file_id = file_mapper.add_file("<based_literal>", input);
+
+    parser::position_cache<iterator_type> position_cache{};
+    auto position_proxy = position_cache.get_proxy(file_id);  // FixMe: 2 copies required
 
     //auto& os = std::cout;
     btt::output_test_stream os;
@@ -283,11 +293,12 @@ BOOST_AUTO_TEST_CASE(based_literal_ng)
 
     // parse
     parser::parse parse{ os };
-    bool parse_ok = parse(position_cache_proxy, ctx, ast);
+    bool parse_ok = parse(std::move(position_proxy), ctx, ast);
     BOOST_TEST(parse_ok);
 
     // convert
-    diagnostic_handler_type diagnostic_handler{ os, ctx, position_cache_proxy };
+    // FixMe: Cloning position_cache_proxy twice isn't clever - look for other way
+    diagnostic_handler_type diagnostic_handler{ os, ctx, position_cache.get_proxy(file_id) };
     verifier_type verify(os, expect, diagnostic_handler);
     verify(ast);
 

@@ -6,17 +6,17 @@
 #pragma once
 
 #include <algorithm>
-#include <ctime>
-#include <iosfwd>
-#include <optional>
+#include <expected>
+#include <filesystem>
 #include <string>
 #include <vector>
-#include <filesystem>
+
+#include <ctime>
 
 #include <ibis/namespace_alias.hpp>  // IWYU pragma: keep
 
 namespace ibis {
-    namespace fs = std::filesystem;
+namespace fs = std::filesystem;
 }
 
 namespace ibis::util {
@@ -45,7 +45,7 @@ public:
 
 public:
     ///
-    /// Check on existence of the file and if it is an regular file.
+    /// Check on existence of the file and if it is a regular file.
     ///
     /// @param filename The file to test
     /// @return true if it exist and is a regular file
@@ -70,48 +70,43 @@ public:
     /// Detect duplicate files in the list and, if intended, prints the list. It detect duplicates
     /// even if the path notation is different, e.g. "/home/jail", "../jail".
     ///
-    /// @param file_list List of file to test
-    /// @return true if the \p file_list has unique files.
+    /// @param fs_path_list List of file to test
+    /// @return true if the \p fs_path_list has unique files.
     /// @return false otherwise, prints the duplicates
     ///
     /// The implementation concept based on can be found at
     /// @see[Wandbox](https://wandbox.org/permlink/n0WLazXzJ61WNQg9)
     /// @todo The algorithm is O(n^2); using a hashmap may prevent this.
     ///
-    bool unique_files(std::vector<fs::path> const& file_list) const;
+    bool unique_files(std::vector<fs::path> const& fs_path_list) const;
 
     ///
     /// file read method using rdbuf().
     ///
     /// @param filename the file to read into buffer string
-    /// @return std::optional<std::string> on success with contents of the
-    /// file in a string. Otherwise a default constructed std::optional.
+    /// @return std::expected<std::string, std::error_code> on success with contents of the
+    /// file in a string. Otherwise a std::error_code.
     /// @see[How to read in a file in C++](
     /// https://insanecoding.blogspot.com/2011/11/how-to-read-in-file-in-c.html)
     ///
-    std::optional<std::string> read_file(fs::path const& filename) const;
+    std::expected<std::string, std::error_code> read_file(fs::path const& filename) const;
 
     ///
     /// alternative read method using seek().
     ///
     /// @param filename the file to read into buffer string
-    /// @return std::optional<std::string> on success with contents of the
-    /// file in a string. Otherwise a default constructed std::optional.
-    /// @see[How to read in a file in C++](
-    /// https://insanecoding.blogspot.com/2011/11/how-to-read-in-file-in-c.html)
+    /// @return std::expected<std::string, std::error_code> on success with contents of the
+    /// file in a string. Otherwise a std::error_code.
+    /// @see [How to read in a file in C++](
+    ///        https://insanecoding.blogspot.com/2011/11/how-to-read-in-file-in-c.html)
+    /// @see [How do I read an entire file into a std::string in C++?](
+    ///       https://stackoverflow.com/questions/116038/how-do-i-read-an-entire-file-into-a-stdstring-in-c)
     ///
-    std::optional<std::string> read_file_alt(fs::path const& filename) const;
+    std::expected<std::string, std::error_code> read_file_alt(fs::path const& filename) const;
 
     ///
     /// Time point of last write occurrence. If the time cannot be determined, returns
     /// (std::time_t)(-1). This allows to skip files which are compiled before (and cached).
-    ///
-    /// FixMe [C++20] What for a mess, see
-    /// [How to convert std::filesystem::file_time_type to time_t?](
-    /// https://stackoverflow.com/questions/61030383/how-to-convert-stdfilesystemfile-time-type-to-time-t)
-    /// Since not all used compiler (MSVC17, gcc-11, clang-14) accept the specified solution, the
-    /// adaptation to C++20 is only carried out with the use of the `timestamp` function in
-    /// the project necessary.
     ///
     std::time_t timesstamp(fs::path const& filename) const;
 

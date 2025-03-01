@@ -27,13 +27,13 @@ namespace ibis::vhdl::parser {
 /// @todo This concept allows also to have different error handling strategies
 /// depending on concrete rule ID, for more see [Custom error on rule level? #657](
 ///  https://github.com/boostorg/spirit/issues/657).
-/// This may be used to get more detailed informations on which concrete BNF rule has
+/// This may be used to get more detailed information on which concrete BNF rule has
 /// thrown the exception, since the X3 context contains only the tags - in these
 /// days:
 /// @code
 /// context<
 ///     parser::diagnostic_handler_tag, ...,
-///     context<parser::position_cache_tag, ...,
+///     context<parser::annotator_tag, ...,
 ///         context<skipper_tag, ..., unused_type>
 ///     >
 /// >
@@ -68,28 +68,18 @@ public:
     ///     );
     /// @endcode
     ///
-    /// @todo Check [Custom error on rule level?
-    /// #657](https://github.com/boostorg/spirit/issues/657)
+    /// @todo Check [Custom error on rule level? #657](
+    ///              https://github.com/boostorg/spirit/issues/657)
     ///
     template <typename IteratorT, typename ContextT>
     x3::error_handler_result on_error([[maybe_unused]] IteratorT& first,
                                       [[maybe_unused]] IteratorT const& last,
                                       x3::expectation_failure<IteratorT> const& e,
-                                      ContextT const& context) const
+                                      ContextT const& x3_ctx) const
     {
-        auto& diagnostic_handler = x3::get<parser::diagnostic_handler_tag>(context).get();
+        auto& diagnostic_handler = x3::get<parser::diagnostic_handler_tag>(x3_ctx).get();
 
-        diagnostic_handler.parser_error(e.where(), make_error_description(e.which()));
-
-        // FixMe: just here as "concept" marker, but untested by testsuite yet. The idea is to
-        // accept some count of errors (using vhdl context for error/warning count) before to
-        // throw the towel.
-        if (e.which() == "';'") {
-            // advance iter after the error occurred to continue parsing, the error is reported
-            // before.
-            first = e.where();
-            return x3::error_handler_result::accept;
-        }
+        diagnostic_handler.parser_expectation_error(e.where(), make_error_description(e.which()));
 
         return x3::error_handler_result::fail;
     }

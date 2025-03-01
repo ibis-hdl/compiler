@@ -1,0 +1,11 @@
+constexpr
+libcxx
+libstdc
+libstdcxx
+NDEBUG
+NOLINTNEXTLINE
+PTHREAD
+vararg
+vtable
+vtables
+XNOR

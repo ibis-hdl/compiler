@@ -52,7 +52,7 @@ BOOST_FUSION_ADAPT_STRUCT(ibis::vhdl::ast::attribute_specification,
 )
 
 BOOST_FUSION_ADAPT_STRUCT(ibis::vhdl::ast::based_literal,
-    base, number
+    base_id, number
 )
 
 BOOST_FUSION_ADAPT_STRUCT(ibis::vhdl::ast::based_literal::number_chunk,
@@ -64,7 +64,7 @@ BOOST_FUSION_ADAPT_STRUCT(ibis::vhdl::ast::binding_indication,
 )
 
 BOOST_FUSION_ADAPT_STRUCT(ibis::vhdl::ast::bit_string_literal,
-    literal, base_type
+    literal, base_specifier
 )
 
 BOOST_FUSION_ADAPT_STRUCT(ibis::vhdl::ast::block_configuration,

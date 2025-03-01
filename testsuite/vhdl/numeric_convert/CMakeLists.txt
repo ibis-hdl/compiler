@@ -42,13 +42,16 @@ target_sources(${PROJECT_NAME}
     PRIVATE
         src/test_numeric_convert.cpp
         src/numeric_parser.cpp
-        src/binary_string.cpp
         # concrete test cases
         src/test/bit_string_literal_test.cpp
         src/test/decimal_literal_test.cpp
 		src/test/based_literal_test_ng.cpp
 )
-
+# https://cmake.org/cmake/help/latest/prop_tgt/UNITY_BUILD_MODE.html
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    UNITY_BUILD_MODE BATCH
+    UNITY_BUILD_BATCH_SIZE 3
+)
 
 #set_source_files_properties(src/test_numeric_convert.cpp
 #    APPEND PROPERTIES
@@ -64,7 +67,7 @@ set_source_files_properties(src/test_numeric_convert.cpp
 )
 
 
-if(IBIS_ENABLE_CXXSTD_PCH)
+if(IBIS_ENABLE_PCH)
     target_precompile_headers(${PROJECT_NAME} REUSE_FROM ibis_pch)
 endif()
 
@@ -73,6 +76,4 @@ target_include_directories(${PROJECT_NAME}
     PRIVATE
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-    SYSTEM PUBLIC
-        $<BUILD_INTERFACE:${EXTERNAL_BOOST_TEST_INCLUDE_DIR}>
 )

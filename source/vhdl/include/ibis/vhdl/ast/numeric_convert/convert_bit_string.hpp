@@ -5,13 +5,11 @@
 
 #pragma once
 
-#include <ibis/vhdl/type.hpp>
+#include <ibis/concepts.hpp>
 #include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/type.hpp>  // for explicit instanciation
 
 #include <tuple>
-#include <iosfwd>
-#include <numeric>
-#include <limits>
 
 namespace ibis::vhdl::ast {
 // AST node forward
@@ -29,15 +27,12 @@ namespace ibis::vhdl::ast {
 ///
 /// @tparam IntegerT The integer type of the numeric converted into.
 ///
-template <typename IntegerT>
+template <ibis::integer IntegerT>
 class convert_bit_string {
-    static_assert(std::numeric_limits<IntegerT>::is_integer,  // --
-                  "TargetType must be of type integer");
-
 public:
     ///
     /// The type, to which all literals will be converted.
-    using integer_type = typename std::make_unsigned<IntegerT>::type;
+    using integer_type = IntegerT;
 
     ///
     /// Return a tuple with the converted value and a boolean flag of
@@ -53,9 +48,9 @@ public:
     ///
     /// Construct a new numeric convert object.
     ///
-    /// @param diagnostic_handler_  Error reporter.
+    /// @param diag_handler  Error reporter.
     ///
-    convert_bit_string(diagnostic_handler_type& diagnostic_handler_);
+    explicit convert_bit_string(diagnostic_handler_type& diag_handler);
 
     ///
     /// Convert the a bit string literal to numeric value.
@@ -73,6 +68,6 @@ private:
 namespace ibis::vhdl::ast {
 
 /// Explicit template instantiation declaration
-extern template class convert_bit_string<intrinsic::signed_integer_type>;
+extern template class convert_bit_string<intrinsic::unsigned_integer_type>;
 
 }  // namespace ibis::vhdl::ast

@@ -18,57 +18,66 @@
 
 namespace ibis::vhdl {
 
+namespace detail {
+
+class source_snippet {
+public:
+    using iterator_type = parser::iterator_type;
+
+public:
+    explicit source_snippet(std::size_t line_no_, std::string_view src_line_, iterator_type first_,
+                            std::optional<iterator_type> last_)
+        : line_no{ line_no_ }
+        , src_line{ src_line_ }
+        , iter_first{ first_ }
+        , iter_last{ last_ }
+    {
+    }
+
+public:
+    /// The line number of source snippet
+    std::size_t line_number() const { return line_no; }
+
+    /// code snippet of erroneous part as text line
+    std::string_view source_line() const { return src_line; }
+
+    /// iterator position pointing to error/warning part inside code snippet
+    iterator_type first() const { return iter_first; }
+
+    /// iterator position pointing to error/warning part inside code snippet
+    std::optional<iterator_type> last() const { return iter_last; }
+
+private:
+    /// The line number of source snippet
+    std::size_t line_no;
+
+    /// code snippet of erroneous part as text line
+    std::string_view src_line;
+
+    /// iterator position pointing to error/warning beginning part inside code snippet
+    iterator_type const iter_first;
+
+    /// optional iterator position pointing to error/warning ending part inside code snippet
+    std::optional<iterator_type> const iter_last;
+};
+
+}  // namespace detail
+
 ///
 /// error/warning messages data
 ///
-/// @todo Find a more appropiate name for this - too much .._context in class names anywhere.
+/// ToDo Find a more appropriate name for this - too much .._context in class names anywhere, maybe
+/// failure_data
+/// ToDo Make it unformatted comparable for use in test, no need to compare diagnostic
+/// printer's
+///       output!
 ///
 class diagnostic_context {
 public:
-    /// @todo find a better name for this
-    enum class provider { unspecific, parser, syntax, semantic, numeric, not_supported };
+    enum class failure_type { unspecific, parser, syntax, semantic, numeric, not_supported };
 
 public:
-    class source_snippet {
-    public:
-        using iterator_type = parser::iterator_type;
-
-    public:
-        source_snippet(std::size_t line_no_, std::string_view src_line_, iterator_type first_,
-                       std::optional<iterator_type> last_)
-            : line_no{ line_no_ }
-            , src_line{ src_line_ }
-            , iter_first{ first_ }
-            , iter_last{ last_ }
-        {
-        }
-
-    public:
-        /// The line number of source snippet
-        std::size_t line_number() const { return line_no; }
-
-        /// code snippet of erroneous part as text line
-        std::string_view source_line() const { return src_line; }
-
-        /// iterator position pointing to error/warning part inside code snippet
-        iterator_type first() const { return iter_first; }
-
-        /// iterator position pointing to error/warning part inside code snippet
-        std::optional<iterator_type> last() const { return iter_last; }
-
-    private:
-        /// The line number of source snippet
-        std::size_t line_no;
-
-        /// code snippet of erroneous part as text line
-        std::string_view src_line;
-
-        /// iterator position pointing to error/warning beginning part inside code snippet
-        iterator_type const iter_first;
-
-        /// optional iterator position pointing to error/warning ending part inside code snippet
-        std::optional<iterator_type> const iter_last;
-    };
+    using source_snippet = detail::source_snippet;
 
 public:
     ///
@@ -77,7 +86,7 @@ public:
     /// @param provider_ The origin of issue
     /// @param err_message_ Store a copy of error _message
     ///
-    diagnostic_context(provider provider_, std::string_view err_message_)
+    diagnostic_context(failure_type provider_, std::string_view err_message_)
         : msg_provider{ provider_ }
         , err_message{ err_message_ }
     {
@@ -113,11 +122,11 @@ public:
     source_location const& location() const { return src_location; }
 
     ///
-    /// Get the message provider enum
+    /// Get the message failure_type enum
     ///
-    /// @return provider
+    /// @return failure_type
     ///
-    provider message_provider() const { return msg_provider; }
+    failure_type message_provider() const { return msg_provider; }
 
     ///
     /// Get the error/warning message
@@ -129,7 +138,7 @@ public:
     std::vector<source_snippet> const& source_snippets() const { return src_snippets; }
 
 private:
-    provider msg_provider;
+    failure_type msg_provider;
     std::string err_message;
     source_location src_location;
     std::vector<source_snippet> src_snippets;

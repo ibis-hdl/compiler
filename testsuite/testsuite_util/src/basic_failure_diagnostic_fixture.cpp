@@ -6,23 +6,28 @@
 #include <testsuite/util/basic_failure_diagnostic_fixture.hpp>
 #include <testsuite/util/cli_args.hpp>
 
-#include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
-
-#include <ibis/util/compiler/warnings_off.hpp>  // -Wsign-conversion
-#include <boost/test/unit_test.hpp>
-#include <ibis/util/compiler/warnings_on.hpp>
+#include <boost/test/framework.hpp>
 #include <boost/test/results_collector.hpp>
-#include <boost/test/tools/output_test_stream.hpp>
+#include <boost/test/tools/assertion.hpp>  // for value_expr
+#include <boost/test/tools/interface.hpp>  // BOOST_TEST_REQUIRE()
+// #include <boost/test/tree/test_unit.hpp>
+#include <boost/test/unit_test_log.hpp>
+#include <boost/test/unit_test.hpp>
+#include <boost/test/utils/lazy_ostream.hpp>
 
 #include <ibis/util/make_iomanip.hpp>
 #include <ibis/util/trim.hpp>
 
-#include <algorithm>
-#include <cctype>
+#include <cstddef>
+#include <filesystem>
 #include <fstream>
-#include <iterator>
-#include <sstream>
+#include <iostream>
+#include <stdexcept>
+#include <string_view>
 #include <system_error>
+#include <utility>
+
+#include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
 /// ---------------------------------------------------------------------------
 ///
@@ -46,7 +51,7 @@ void basic_failure_diagnostic_fixture::set_builtin(std::unique_ptr<compile_built
 {
     builtin = std::move(other);
 
-    int argc = boost::unit_test::framework::master_test_suite().argc;
+    int const argc = boost::unit_test::framework::master_test_suite().argc;
     char** argv = boost::unit_test::framework::master_test_suite().argv;
 
     cli_args::parse_cli(argc, argv);
@@ -84,7 +89,7 @@ void basic_failure_diagnostic_fixture::failure_closure(std::string test_case_nam
 
         auto hline = [&](std::string const& title, char fill = '~') {
             return util::make_iomanip(
-                [&title, fill](std::ostream& os) { head_line(os, title, col_width, fill); });
+                [&title, fill](std::ostream& ostrm) { head_line(ostrm, title, col_width, fill); });
         };
 
         using ibis::util::rtrim;
@@ -123,7 +128,7 @@ void basic_failure_diagnostic_fixture::failure_closure(std::string test_case_nam
 
         auto hline = [&](std::string const& title, char fill = '~') {
             return make_iomanip(
-                [&title, fill](std::ostream& os) { head_line(os, title, col_width, fill); });
+                [&title, fill](std::ostream& ostrm) { head_line(ostrm, title, col_width, fill); });
         };
 
         using ibis::util::rtrim;
@@ -243,12 +248,14 @@ void basic_failure_diagnostic_fixture::check_args()
 
 std::string_view basic_failure_diagnostic_fixture::name() const { return fixture_name; }
 
-// static
+// warning: 2 adjacent parameters of 'head_line' of convertible types are easily swapped by mistake
+// 'std::size_t' and 'char' may be implicitly converted:
+// NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
 void basic_failure_diagnostic_fixture::head_line(std::ostream& os, std::string_view title,
-                                                 std::size_t col_width, char fill)
+                                                 std::size_t col_width, char fill_char)
 {
     std::size_t const width = (col_width - title.size()) / 2;
-    std::string const line(width, fill);
+    std::string const line(width, fill_char);
     os << '\n' << line << title << line << '\n';
 }
 

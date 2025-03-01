@@ -5,12 +5,12 @@
 
 #pragma once
 
-#include <ibis/vhdl/type.hpp>
-#include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/concepts.hpp>
 #include <ibis/vhdl/ast/util/string_span.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/type.hpp>
 
 #include <tuple>
-#include <iosfwd>
 #include <variant>
 
 namespace ibis::vhdl::ast {
@@ -34,16 +34,10 @@ namespace ibis::vhdl::ast {
 /// @tparam IntegerT The integer type of the numeric converted into.
 /// @tparam RealT The real type of the numeric converted into.
 ///
-template <typename IntegerT, typename RealT>
+template <ibis::integer IntegerT, ibis::real RealT>
 class convert_decimal {
-    static_assert(std::numeric_limits<IntegerT>::is_integer,  // --
-                  "TargetType must be of type integer");
-
-    static_assert(std::numeric_limits<RealT>::is_iec559,  // --
-                  "TargetType must be IEC 559 (IEEE 754) real/float");
-
 public:
-    using integer_type = typename std::make_unsigned<IntegerT>::type;
+    using integer_type = IntegerT;
     using real_type = RealT;
 
     using result_type = std::variant<integer_type, real_type>;
@@ -62,9 +56,9 @@ public:
     ///
     /// Construct a new numeric convert object.
     ///
-    /// @param diagnostic_handler_  Error reporter.
+    /// @param diag_handler  Error reporter.
     ///
-    convert_decimal(diagnostic_handler_type& diagnostic_handler_);
+    explicit convert_decimal(diagnostic_handler_type& diag_handler);
 
     ///
     /// Convert the a bit string literal to numeric value.

@@ -14,14 +14,14 @@ temporary here.
 
 ## Required Tools to Build & Configuration
 
-e.g., see Ubuntu 20.24 [.devcontainer](/.devcontainer)
+e.g., see Ubuntu 24.04 [.devcontainer](/.devcontainer)
 
-* C++20 compliant compiler; developed and tested with the big three:
+* C++23 compliant compiler; developed and tested with the big three:
     - [Visual Studio 22 Community Edition](https://visualstudio.microsoft.com/de/vs/community/)
-      Command Prompt v17.11.5 (no clang-cl yet due to 
+      Command Prompt v17.11.5 (no ClangCL yet due to 
       missing/complete CMake support on project's side at this time)
-    - clang++ 18
-    - g++ 13
+    - clang++ 19
+    - g++ 14
 
 * CMake 3.28
 * ninja 1.10
@@ -41,7 +41,6 @@ and
     - locale
     - test (for testsuite)
 * [CLI11](https://github.com/CLIUtils/CLI11)
-* [strong_type](https://github.com/rollbear/strong_type)
 * [{fmt}](https://github.com/fmtlib/fmt)
 * [range-v3](https://github.com/ericniebler/range-v3)
 
@@ -133,20 +132,24 @@ Afterwards, you can disable Python's virtual environment by simply
 > deactivate
 ```
 
-Now you can start to build, i.e. on Windows:
+Now you can start to build:
 
 ```shell
-> cmake --preset msvc
+> cmake --list-presets
 ...
-> cmake --build --preset msvc-release
+> cmake --preset <configurePreset-name>
 ...
-> ctest.exe --preset msvc-release-test
+> cmake --build --list-presets
 ...
-> cmake --build --preset msvc-release-test --target help
+> cmake --build --preset <buildPreset-name>
+...
+> ctest --list-presets
+...
+> ctest --preset <testPreset-name>
+...
+> cmake --build --preset <testPreset-name> --target help
 ...
 ```
-
-The same procedure for Clang and GCC on Linux or macOS.
 
 ## Miscellaneous
 

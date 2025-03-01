@@ -7,6 +7,8 @@
 
 #include <testsuite/vhdl/syntax/dataset.hpp>
 
+#include <string_view>
+
 namespace testsuite::vhdl::syntax {
 
 std::string_view dataset::compile_builtin::source_dir() const  // --

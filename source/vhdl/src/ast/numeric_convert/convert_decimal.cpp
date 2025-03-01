@@ -4,42 +4,57 @@
 //
 
 #include <ibis/vhdl/ast/numeric_convert/convert_decimal.hpp>
-#include <ibis/vhdl/ast/numeric_convert/filter_range.hpp>
-#include <ibis/vhdl/ast/numeric_convert/dbg_trace.hpp>
 
-#include <ibis/vhdl/diagnostic_handler.hpp>
-
+#include <ibis/concepts.hpp>
 #include <ibis/vhdl/ast/node/decimal_literal.hpp>
+// #include <ibis/vhdl/ast/numeric_convert/dbg_trace.hpp>
+#include <ibis/vhdl/ast/numeric_convert/filter_range.hpp>
 #include <ibis/vhdl/ast/util/string_span.hpp>
-
-#include <ibis/vhdl/ast/literal_printer.hpp>
-#include <ibis/vhdl/type.hpp>
+#include <ibis/vhdl/diagnostic_handler.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/type.hpp>  // for explicit instanciation
 
 #include <ibis/util/cxx_bug_fatal.hpp>
 
-#include <ibis/namespace_alias.hpp>  // IWYU pragma: keep
+#include <boost/range/iterator_range_core.hpp>  // for iterator_range
 
-#include <ibis/util/compiler/warnings_off.hpp>
-// IWYU replaces a lot of other header, we stay with this one
-#include <boost/spirit/home/x3.hpp>  // IWYU pragma: keep
-#include <ibis/util/compiler/warnings_on.hpp>
+#include <boost/spirit/home/x3.hpp>                        // IWYU pragma: keep
+#include <boost/spirit/home/x3/auxiliary/any_parser.hpp>   // for any_parser
+#include <boost/spirit/home/x3/auxiliary/eoi.hpp>          // for eoi_parser, eoi
+#include <boost/spirit/home/x3/core/parse.hpp>             // for parse
+#include <boost/spirit/home/x3/core/parser.hpp>            // for as_parser
+#include <boost/spirit/home/x3/numeric/real.hpp>           // for real_parser
+#include <boost/spirit/home/x3/numeric/real_policies.hpp>  // for ureal_policies
+#include <boost/spirit/home/x3/operator/sequence.hpp>      // for sequence, operator>>
 
-#include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
+#include <range/v3/functional/invoke.hpp>        // for invoke_result_t
+#include <range/v3/iterator/basic_iterator.hpp>  // for operator==, operator!=, basic_iterator
+#include <range/v3/view/all.hpp>                 // for all_t
+#include <range/v3/view/facade.hpp>              // for facade_iterator_t
+#include <range/v3/view/view.hpp>                // for operator|
+
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
-#include <ibis/util/compiler/warnings_on.hpp>
+
+#include <iterator>
+#include <string>
+#include <string_view>
+#include <tuple>
+#include <utility>
+
+#include <ibis/namespace_alias.hpp>  // IWYU pragma: keep
 
 namespace /* anonymous */ {
 
 namespace x3 = boost::spirit::x3;
 
+// FixMe get rid of this, used to create integer|real parser at parse_real|parse_integer
 template <typename T, typename IteratorT = ibis::vhdl::parser::iterator_type>
 auto const as = [](auto derived_parser) {
     return x3::any_parser<IteratorT, T>{ x3::as_parser(derived_parser) };
 };
 
-using namespace std::literals;
-auto const literal_name = "decimal literal"sv;
+std::string_view const literal_name = "decimal literal";
 
 }  // namespace
 
@@ -59,44 +74,58 @@ struct real_policies : x3::ureal_policies<T> {
     static bool const expect_dot = false;
 };
 
-template <typename IntegerT, typename RealT>
-convert_decimal<IntegerT, RealT>::convert_decimal(diagnostic_handler_type& diagnostic_handler_)
-    : diagnostic_handler{ diagnostic_handler_ }
+template <ibis::integer IntegerT, ibis::real RealT>
+convert_decimal<IntegerT, RealT>::convert_decimal(diagnostic_handler_type& diag_handler)
+    : diagnostic_handler{ diag_handler }
 {
 }
 
-template <typename IntegerT, typename RealT>
+template <ibis::integer IntegerT, ibis::real RealT>
 typename convert_decimal<IntegerT, RealT>::return_type convert_decimal<IntegerT, RealT>::operator()(
     ast::decimal_literal const& node) const
 {
-    auto const parse = [&](ast::decimal_literal::numeric_type_specifier type_specifier,
-                           auto const& literal) {
-        using numeric_type_specifier = ast::decimal_literal::numeric_type_specifier;
+    using numeric_type_specifier = ast::decimal_literal::numeric_type_specifier;
 
+    // ToDo document the intend, result_type -> variant<IntegerT, RealT>> , explain x3 policies
+    auto const parse = [&](numeric_type_specifier type_specifier, auto const& literal) {
+        // clang-format off
         switch (type_specifier) {
-            case numeric_type_specifier::integer: {
+            using enum ast::decimal_literal::numeric_type_specifier;
+            case integer: 
+            {
                 auto const [parse_ok, attribute] = parse_integer(literal);
-                return std::tuple{ parse_ok, result_type(attribute) };
+                // FixMe static_assert(std::is_same_v<decltype(attribute), integer_type>);
+                return return_type{ parse_ok, result_type(attribute) };
             }
-            case numeric_type_specifier::real: {
+            case real: 
+            {
                 auto const [parse_ok, attribute] = parse_real(literal);
-                return std::tuple{ parse_ok, result_type(attribute) };
+                // FixMe static_assert(std::is_same_v<decltype(attribute), real_type>);
+                return return_type{ parse_ok, result_type(attribute) };
             }
-            default:  // cxx_unreachable_bug
-                cxx_unreachable_bug_triggered();
+            [[unlikely]] case unspecified:
+                cxx_bug_fatal("caller must pass checked base_specifier");
+            //
+            // *No* default branch: let the compiler generate warning about enumeration
+            // value not handled in switch
+            //
         }
+        // clang-format on
+
+        std::unreachable();
     };
 
     return parse(node.type_specifier, node.literal);
 }
 
-template <typename IntegerT, typename RealT>
+template <ibis::integer IntegerT, ibis::real RealT>
 std::tuple<bool, typename convert_decimal<IntegerT, RealT>::integer_type>
 convert_decimal<IntegerT, RealT>::parse_integer(ast::string_span const& literal) const
 {
     using boost::locale::format;
     using boost::locale::translate;
 
+    // really any_parser required??
     auto const parser = [](auto iter_t) {
         using iterator_type = decltype(iter_t);
         using parser_type = x3::real_parser<integer_type, integer_policies<integer_type>>;
@@ -130,7 +159,7 @@ convert_decimal<IntegerT, RealT>::parse_integer(ast::string_span const& literal)
     return std::tuple{ parse_ok, attribute };
 }
 
-template <typename IntegerT, typename RealT>
+template <ibis::integer IntegerT, ibis::real RealT>
 std::tuple<bool, typename convert_decimal<IntegerT, RealT>::real_type>
 convert_decimal<IntegerT, RealT>::parse_real(ast::string_span const& literal) const
 {
@@ -177,6 +206,6 @@ convert_decimal<IntegerT, RealT>::parse_real(ast::string_span const& literal) co
 // ----------------------------------------------------------------------------
 namespace ibis::vhdl::ast {
 
-template class convert_decimal<intrinsic::signed_integer_type, intrinsic::real_type>;
+template class convert_decimal<intrinsic::unsigned_integer_type, intrinsic::real_type>;
 
 }  // namespace ibis::vhdl::ast

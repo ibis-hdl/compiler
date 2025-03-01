@@ -19,31 +19,29 @@ jobs:
         os:                     [ linux ]
         cmake:
         - {
-            cxx:                "g++",
+            cxx:                "g++-14",
             conan_profile:      "gcc",
             configure_preset:   "gcc",
             build_preset:       "gcc-release",
             test_preset:        "gcc-release-test"
           }
         - {
-            cxx:                "clang++",
+            cxx:                "clang++-19",
             conan_profile:      "clang",
             configure_preset:   "clang",
             build_preset:       "clang-release",
             test_preset:        "clang-release-test"
           }
         - {
-            cxx:                "clang++",
+            cxx:                "clang++-19",
             conan_profile:      "clang-libc++",
             configure_preset:   "clang-libc++",
             build_preset:       "clang-libc++-release",
-            test_preset:        "clang-libc++-release-test",
-            depend_pkgs:        "libc++-dev"
+            test_preset:        "clang-libc++-release-test"
           }
-        # exclude temporary clang-libc++ due to conan/cmake provider issues
-        # see: https://github.com/actions/runner/issues/1512
-        #exclude:
-        #  - { cmake: {configure_preset: "clang-libc++" } }
+        # exclude temporary e.g. clang-libc++
+        # exclude:
+        #   - { cmake: {configure_preset: "clang-libc++" } }
 
     steps:
 
@@ -58,7 +56,19 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install --no-install-recommends -y \
-          cmake ninja-build ccache g++ clang "${{ matrix.cmake.depend_pkgs }}"
+          cmake ninja-build ccache \
+          lsb-release wget software-properties-common gnupg
+        # Install Clang-19 from llvm.org, as we do not have actually any official package available
+        # for GH-Runner Ubuntu 24.04 used currently
+        wget https://apt.llvm.org/llvm.sh -O - | sudo bash -s -- 19 all
+        sudo update-alternatives --install /usr/bin/llvm-config llvm-config /usr/bin/llvm-config-18 18
+        sudo update-alternatives --install /usr/bin/llvm-config llvm-config /usr/bin/llvm-config-19 19
+        sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-18 18
+        sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-19 19
+        sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-18 18
+        sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-19 19
+        sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-19 19
+        sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-19 19           
 
     - name: Checkout Repo
       uses: actions/checkout@v4
@@ -69,6 +79,7 @@ jobs:
       run: |
         {
           echo CXX=${{ matrix.cmake.cxx }}
+          echo CMAKE_CXX_COMPILER=${{ matrix.cmake.cxx }}
           echo CCACHE_DIR=${HOME}/.cache/ccache
           echo CCACHE_NOCOMPRESS=true   # GitHub actions automatically zstd compresses caches
         } >> "$GITHUB_ENV"
@@ -114,26 +125,28 @@ jobs:
           ~/.config/ccache
           ~/.cache/ccache
 
-    - name: Show CMake configure and build pre-conditions
-      if: false
-      run: |
-        env
-        echo $HOME
-
     - name: Conan install
       run: |
         virtualenv .venv
         source .venv/bin/activate
         pip install multipledispatch
         python3 conan_install.py --profile ${{ matrix.cmake.conan_profile }}
+        # cleanup to get Github's cache small (clean sources, build, download, temp)
+        conan cache clean -s -b -d -t
         deactivate
+
+    - name: Show prerequisites
+      if: true
+      run: |
+        eval ${CXX} --version
+        conan list '*'
+        cmake --version
+        cmake --list-presets
 
     - name: CMake configuration
       env:
         CMAKE_CXX_COMPILER_LAUNCHER: ccache
       run: |
-        conan list '*'
-        cmake --list-presets
         cmake --preset ${{ matrix.cmake.configure_preset }}
 
     - name: CMake build

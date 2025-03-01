@@ -5,30 +5,42 @@
 
 #pragma once
 
-#include <ibis/vhdl/parser/position_cache.hpp>
-#include <ibis/vhdl/parser/parser_config.hpp>
+// #include <ibis/vhdl/parser/parser_config.hpp>
+#include <ibis/util/file_mapper.hpp>
 #include <ibis/vhdl/parser/context.hpp>
+#include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/parser/position_cache.hpp>
 
-#include <iosfwd>
-#include <string>
-#include <string_view>
 #include <exception>
+#include <iosfwd>
+#include <iterator>
+#include <string_view>
+#include <string>
+#include <vector>
 
 namespace ibis::vhdl::ast {
+
 struct design_unit;
-using design_file = std::vector<ast::design_unit>;
+using design_file = std::vector<ast::design_unit>;  // FixMe not clever, include <.../ast.hpp>
 }  // namespace ibis::vhdl::ast
 
 namespace ibis::vhdl::parser {
 
+template <std::random_access_iterator IteratorT /* = vhdl::parser::iterator_type */>
 class parse {
+public:
+    using iterator_type = IteratorT;
+    using position_cache_type = position_cache<iterator_type>;
+    using current_file_type = ibis::util::file_mapper::current_file;
+    using vhdl_context_type = parser::context;
+
 public:
     ///
     /// Construct a new parse object.
     ///
     /// @param os_ Output stream for messages.
     ///
-    parse(std::ostream& os_)
+    explicit parse(std::ostream& os_)
         : os{ os_ }
     {
     }
@@ -36,8 +48,9 @@ public:
     ///
     /// Functor to call parse implementation.
     ///
-    /// @param position_cache_proxy Proxy of position_cache with the file contents to be parsed.
-    /// @param ctx The context used to parse and others.
+    /// @param current_file file_mapper proxy with current_file context
+    /// @param position_cache position_cache with the file contents to be parsed.
+    /// @param vhdl_ctx The context used to parse and others.
     /// @param design_file AST node of input/file contents.
     /// @return true success.
     /// @return false failure.
@@ -53,8 +66,8 @@ public:
     /// this is only required if you have recursive rules or need external linkage
     /// on rules (define them in separate translation units).
     ///
-    bool operator()(position_cache<parser::iterator_type>::proxy& position_cache_proxy,
-                    parser::context& ctx, ast::design_file& design_file);
+    bool operator()(current_file_type& current_file, position_cache_type& position_cache,
+                    vhdl_context_type& vhdl_ctx, ast::design_file& design_file) const;
 
 private:
     static std::string make_exception_description(std::exception const& exception,
@@ -65,5 +78,12 @@ private:
 private:
     std::ostream& os;
 };
+
+}  // namespace ibis::vhdl::parser
+
+namespace ibis::vhdl::parser {
+
+/// Explicit template instantiation declaration
+extern template class parse<vhdl::parser::iterator_type>;
 
 }  // namespace ibis::vhdl::parser

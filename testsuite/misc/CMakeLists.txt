@@ -1,0 +1,62 @@
+################################################################################
+## IBIS/testsuite misc project
+##
+## file: testsuite/misc/CMakeLists.txt
+################################################################################
+project(testrunner_misc
+    VERSION "${ibis_version}"
+    DESCRIPTION "${ibis_description}"
+    HOMEPAGE_URL "${ibis_homepage}"
+    LANGUAGES CXX
+)
+message(STATUS
+    "project ${CMAKE_PROJECT_NAME}/${PROJECT_NAME} @v${ibis_version}: "
+    "${ibis_description} [${ibis_homepage}]")
+
+
+add_executable(${PROJECT_NAME})
+
+add_test(NAME test_misc
+    COMMAND
+        ${PROJECT_NAME} # using ENV, old: --log_level=error
+)
+
+
+target_link_libraries(${PROJECT_NAME}
+    PRIVATE
+        Boost::headers
+        ibis::vhdl
+        testsuite::util
+        Boost::unit_test_framework 
+)
+
+
+target_sources(${PROJECT_NAME}
+    PRIVATE
+        src/tests/test_diagnostic_printer.cpp
+        src/test_main.cpp
+)
+# https://cmake.org/cmake/help/latest/prop_tgt/UNITY_BUILD_MODE.html
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    UNITY_BUILD_MODE BATCH
+    UNITY_BUILD_BATCH_SIZE 3
+)
+
+
+# [Boost.Test linker error by use with pre-compiled headers (PCH)](
+#  https://stackoverflow.com/questions/66535719/boost-test-linker-error-by-use-with-precompiled-headers-pch)
+set_source_files_properties(src/test_main.cpp
+    PROPERTIES
+        SKIP_PRECOMPILE_HEADERS ON
+)
+
+
+if(IBIS_ENABLE_PCH)
+    target_precompile_headers(${PROJECT_NAME} REUSE_FROM ibis_pch)
+endif()
+
+
+target_include_directories(${PROJECT_NAME}
+    PRIVATE
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+)

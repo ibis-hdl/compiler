@@ -7,14 +7,12 @@
 
 #include <range/v3/view/filter.hpp>
 
-#include <format>
-
 namespace ibis::vhdl::ast::numeric_convert::detail {
 
 ///
 /// Filter separators from numeric string
 ///
-/// @tparam RangeType
+/// @tparam RangeType The range template argument
 /// @param range The range (string) to be filter
 /// @return auto a filtered view object
 ///
@@ -23,7 +21,8 @@ namespace ibis::vhdl::ast::numeric_convert::detail {
 /// Also read [Why must a std::ranges::filter_view object be non-const for querying its elements?](
 ///  https://stackoverflow.com/questions/67667318/why-must-a-stdrangesfilter-view-object-be-non-const-for-querying-its-element)
 ///
-/// Concept @see [godbolt.org](https://godbolt.org/z/5Mv6zbhEM)
+/// Concept @see [godbolt](https://godbolt.org/z/5Mv6zbhEM), or
+///              [godbolt](https://godbolt.org/z/4Tf33MePK)
 ///
 /// @code{.cpp}
 /// ...
@@ -42,6 +41,9 @@ namespace ibis::vhdl::ast::numeric_convert::detail {
 ///     foo(input_f.begin(), input_f.end());
 /// }
 /// @endcode
+///
+/// ToDo [C++20] Make generic use of std::format/std::formatter, even it's not easy, see
+///      https://godbolt.org/z/Yvbvxxo4v
 ///
 template <typename RangeType>
 static inline auto filter_range(RangeType const& range)

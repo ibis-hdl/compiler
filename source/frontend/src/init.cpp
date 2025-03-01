@@ -7,11 +7,9 @@
 #include <ibis/frontend/signal_handler.hpp>
 #include <ibis/frontend/version.hpp>
 
-#include <ibis/buildinfo.hpp>
-
 #include <ibis/settings.hpp>
 
-#include <ibis/util/platform.hpp>
+#include <ibis/platform.hpp>
 
 #include <ibis/util/file/file_loader.hpp>
 #include <ibis/util/file/user_home_dir.hpp>
@@ -36,9 +34,7 @@
 #include <vector>
 #include <filesystem>
 #include <locale>
-#include <stdexcept>
 #include <system_error>
-#include <unordered_map>
 #include <iostream>
 
 namespace ibis::frontend {
@@ -53,18 +49,20 @@ init::init(int argc, const char* argv[])
     l10n();
 }
 
-// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays)
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays,readability-convert-member-functions-to-static)
 void init::parse_cli(int argc, const char* argv[])
 {
     using boost::locale::format;
     using boost::locale::translate;
+
+    static constexpr std::size_t cli_column_width = 80;
 
     CLI::App app{ std::string{ IBIS_HDL_VERSION_STR }, std::string{ "ibis" } };
 
     struct Formatter : public CLI::Formatter {};
 
     auto fmt = std::make_shared<Formatter>();
-    fmt->column_width(40);
+    fmt->column_width(cli_column_width);
     app.formatter(fmt);
 
     app.footer((format(translate("\nReport bugs to {1}")) % IBIS_HDL_HOMEPAGE_URL).str());
@@ -106,14 +104,13 @@ void init::parse_cli(int argc, const char* argv[])
         app.add_flag("--version") // FixMe: set_version_flag() @CLI11 v1.10
             ->description(translate("Show version."))
             ;
-        app.add_flag("--build-info")
-            ->description(translate("Show build informations."))
-            ;
 
         //
         // Message option group
         //
         {
+            static constexpr int MAX_TAB_SIZE = 10;
+
             auto* group = app.add_option_group(translate("Message Options"), // --
                 translate("Options regards to messages."));
 
@@ -136,7 +133,7 @@ void init::parse_cli(int argc, const char* argv[])
                 ;
             group->add_option("--tab-size", cli_parameter.tab_size) // ToDo: unused in e.g. diagnostic_handler.cpp
                 ->description(translate("Tabulator size, affects printing source snippet on error printing."))
-                ->check(CLI::Range(1, 10))
+                ->check(CLI::Range(1, MAX_TAB_SIZE))
                 ;
         }
 
@@ -149,7 +146,7 @@ void init::parse_cli(int argc, const char* argv[])
 
             group->add_option("--locale-dir", cli_parameter.locale_dir)
                 ->description(translate("localization catalog data"))
-                ->envname("IBIS_LOCALE_DIR")
+                ->envname("IBIS_HDL_LOCALE_DIR")
                 ->check(CLI::ExistingDirectory)
                 ;
         }
@@ -178,7 +175,7 @@ void init::parse_cli(int argc, const char* argv[])
                 ->description(translate("Warn for others."))
                 ;
             // Option to Control Error and Warning Messages Flags
-            // FixMe: unused in context.cpp, also CLI11's range check should use tagged_counter::MAX
+            // FixMe: unused in context.cpp, also CLI11's range check should use treshold_counter::MAX
             group->add_option("--ferror-limit", cli_parameter.error_limit) // --
                 ->description(translate("Limit emitting diagnostics, can be disabled with --ferror-limit=0."))
                 ->check(CLI::Range(0, std::numeric_limits<std::int32_t>::max()))
@@ -232,16 +229,12 @@ void init::parse_cli(int argc, const char* argv[])
         std::exit(EXIT_SUCCESS);
     }
 
-    if (app.count("--build-info") != 0) {
-        std::cout << ibis::buildinfo{} << '\n';
-        std::exit(EXIT_SUCCESS);
-    }
-
     // quick&dirty helper for configure settings from CLI args
     class setup {
+        // NOLINTBEGIN(cppcoreguidelines-avoid-const-or-ref-data-members)
         CLI::App const& app;
         ibis::settings::reference_type pt;
-
+        // NOLINTEND(cppcoreguidelines-avoid-const-or-ref-data-members)
     public:
         setup(CLI::App const& app_, ibis::settings::reference_type pt_)
             : app{ app_ }
@@ -259,6 +252,7 @@ void init::parse_cli(int argc, const char* argv[])
             pt.put(setting_flag, option);
         }
 
+        // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
         void option(std::string const& cli_arg, std::string const& setting_flag, unsigned option)
         {
             if (app.count(cli_arg) != 0) {
@@ -266,6 +260,7 @@ void init::parse_cli(int argc, const char* argv[])
             }
         }
 
+        // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
         void option(std::string const& cli_arg, std::string const& setting_flag,
                     std::string const& option)
         {
@@ -334,7 +329,7 @@ void init::l10n()
 {
     using namespace boost::locale;
     using namespace ibis;
-    using namespace std::literals;
+    using namespace std::literals::string_view_literals;
 
     // [Using Localization Backends](
     //  https://www.boost.org/doc/libs/1_68_0/libs/locale/doc/html/using_localization_backends.html)
@@ -347,7 +342,7 @@ void init::l10n()
         l10n_backend.select(static_cast<std::string>("std"));
     }
 
-    generator gen_{ l10n_backend };
+    generator const gen_{ l10n_backend };
     localization_backend_manager::global(l10n_backend);
 
     generator gen{};
@@ -371,19 +366,19 @@ void init::l10n()
         if (verbose_level > 1) {
             // FixMe: notice or warning level for those message
             std::cerr << R"(locale directory ')" << l10n_path.string() << R"( failure: )"
-                      << ec.message() << std::endl;
+                      << ec.message() << '\n';
         }
         return;
     }
 
     if (verbose_level > 2) {
-        std::cout << "LC_PATH = " << lc_path.make_preferred().string() << std::endl;
+        std::cout << "LC_PATH = " << lc_path.make_preferred().string() << '\n';
     }
 
     gen.add_messages_path(lc_path.make_preferred().string());
     gen.add_messages_domain("ibis");
 
-    std::locale locale = gen("");
+    std::locale const locale = gen("");
     std::locale::global(locale);
     std::cout.imbue(locale);
     std::cerr.imbue(locale);

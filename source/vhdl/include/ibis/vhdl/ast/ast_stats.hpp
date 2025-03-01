@@ -18,6 +18,7 @@ using design_file = std::vector<ast::design_unit>;
 
 namespace ibis::vhdl::ast {
 
+// ToDoDocument the intend, simplify - separate data from algorithm
 class ast_stats {
 public:
     ast_stats(ast::design_file const& design_file);

@@ -8,15 +8,28 @@
     "C_Cpp.codeAnalysis.clangTidy.enabled": true,
     "C_Cpp.codeAnalysis.clangTidy.useBuildPath": true,
     "C_Cpp.codeAnalysis.clangTidy.args": [
-        " -extra-arg=-std=c++20"
+        "-extra-arg=-std=c++23"
     ],
     "C_Cpp.codeAnalysis.exclude": {
         "*grammar_def.hpp": true
     },
+    // Clangd - disabled, see https://cpplang.slack.com/archives/C5Y2GDECX/p1740593872521539
+    //"C_Cpp.intelliSenseEngine": "disabled",
+    "clangd.arguments": [
+        "-log=verbose",
+        "--offset-encoding=utf-8",
+        "--pretty",
+        "--background-index",
+        "-j=4",
+        "--compile-commands-dir=${workspaceFolder}/build",
+        "--header-insertion=iwyu"
+    ],
     // CMake
     "cmake.configureOnOpen": false,
     "cmake.useCMakePresets": "auto",
     "cmake.options.statusBarVisibility": "compact",
+    "cmake.automaticReconfigure": false,
+    "cmake.configureOnEdit": false,
     "cmake.options.advanced": {
         "cpack": {
             "statusBarVisibility": "hidden"
@@ -43,32 +56,50 @@
     "doxdocgen.c.lastLine": "///",
     // To-Do Tree
     "todo-tree.general.tags": [
-        "BUG", "HACK", "FIXME", "TODO", "XXX",
+        "BUG", "HACK", "FIXME", "TODO",
         "@todo", "@fixme",
-        "FixMe [C++20]", "FixMe: [C++20]", "@todo [C++20]", 
-        "FixMe [C++23]", "FixMe: [C++23]", "@todo [C++23]",
-        "FixMe [CMake]", "ToDo [CMake]", "@fixme [CMake]", "@todo [CMake]",
+        "FixMe [C++20]", "FixMe [C++23]", "FixMe [C++26]",
+        "ToDo [C++20]",  "ToDo [C++23]",  "ToDo [C++26]",
+        "FixMe [CMake]", "ToDo [CMake]",  "@todo [CMake]", "@fixme [CMake]",
+        "FixMe [XXX]",   "ToDo [XXX]",    "@todo [XXX]",   "@fixme [XXX]", "XXX",
+        "FixMe [DRY]", "ToDo [DRY]", 
+        "FixMe [LINT]", "ToDo [LINT]",
         "<<<<<<<"
     ],
     "todo-tree.general.tagGroups": {
         "BUGS": [
             "BUG", "HACK"
         ],
+        "Urgent": [
+            "FixMe [XXX]",  "ToDo [XXX]",
+            "@fixme [XXX]", "@todo [XXX]",
+            "XXX"
+        ],
+        "Don't-Repeat-Yourself": [
+            "FixMe [DRY]", "ToDo [DRY]"
+        ],
         "TODO": [
             "FIXME", "TODO", "XXX",
             "@todo", "@fixme"
         ],
-        "C++20/C++23": [
-            "FixMe [C++20]", "FixMe: [C++20]", "@todo [C++20]", 
-            "FixMe [C++23]", "FixMe: [C++20]", "@todo [C++23]",
+        "C++20/23/26": [
+            "FixMe [C++20]", "FixMe [C++23]", "FixMe [C++26]",
+            "ToDo [C++20]",  "ToDo [C++23]",  "ToDo [C++26]",
         ],
         "CMake": [
             "FixMe [CMake]", "ToDo [CMake]", "@fixme [CMake]", "@todo [CMake]"
+        ],
+        "Linting": [
+            "FixMe [LINT]", "ToDo [LINT]"
         ],
         "git-conflict": [
             "<<<<<<<"
         ]
     },
+    "todo-tree.filtering.excludeGlobs": [
+        "**/doxyfilter.py",
+        "**/conf.py.in"
+    ],
     "todo-tree.tree.buttons.groupBySubTag": true,
     "todo-tree.general.debug": true,
     "todo-tree.general.periodicRefreshInterval": 15,
@@ -140,5 +171,126 @@
             "**/settings.json",
             "*"
         ]
-    }
+    },
+    "iwyu.max_line_length": 100,
+    "files.associations": {
+        "algorithm": "cpp",
+        "any": "cpp",
+        "array": "cpp",
+        "atomic": "cpp",
+        "bit": "cpp",
+        "bitset": "cpp",
+        "cctype": "cpp",
+        "cfenv": "cpp",
+        "charconv": "cpp",
+        "chrono": "cpp",
+        "clocale": "cpp",
+        "cmath": "cpp",
+        "codecvt": "cpp",
+        "compare": "cpp",
+        "complex": "cpp",
+        "concepts": "cpp",
+        "condition_variable": "cpp",
+        "coroutine": "cpp",
+        "csignal": "cpp",
+        "cstdarg": "cpp",
+        "cstddef": "cpp",
+        "cstdint": "cpp",
+        "cstdio": "cpp",
+        "cstdlib": "cpp",
+        "cstring": "cpp",
+        "ctime": "cpp",
+        "cwchar": "cpp",
+        "cwctype": "cpp",
+        "deque": "cpp",
+        "exception": "cpp",
+        "filesystem": "cpp",
+        "format": "cpp",
+        "forward_list": "cpp",
+        "fstream": "cpp",
+        "functional": "cpp",
+        "future": "cpp",
+        "initializer_list": "cpp",
+        "iomanip": "cpp",
+        "ios": "cpp",
+        "iosfwd": "cpp",
+        "iostream": "cpp",
+        "istream": "cpp",
+        "iterator": "cpp",
+        "limits": "cpp",
+        "list": "cpp",
+        "locale": "cpp",
+        "map": "cpp",
+        "memory": "cpp",
+        "memory_resource": "cpp",
+        "mutex": "cpp",
+        "new": "cpp",
+        "numbers": "cpp",
+        "numeric": "cpp",
+        "optional": "cpp",
+        "ostream": "cpp",
+        "print": "cpp",
+        "queue": "cpp",
+        "random": "cpp",
+        "ranges": "cpp",
+        "ratio": "cpp",
+        "regex": "cpp",
+        "resumable": "cpp",
+        "set": "cpp",
+        "shared_mutex": "cpp",
+        "source_location": "cpp",
+        "span": "cpp",
+        "sstream": "cpp",
+        "stdexcept": "cpp",
+        "stdfloat": "cpp",
+        "stop_token": "cpp",
+        "streambuf": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "strstream": "cpp",
+        "system_error": "cpp",
+        "thread": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "typeindex": "cpp",
+        "typeinfo": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "utility": "cpp",
+        "valarray": "cpp",
+        "variant": "cpp",
+        "vector": "cpp",
+        "xfacet": "cpp",
+        "xhash": "cpp",
+        "xiosbase": "cpp",
+        "xlocale": "cpp",
+        "xlocbuf": "cpp",
+        "xlocinfo": "cpp",
+        "xlocmes": "cpp",
+        "xlocmon": "cpp",
+        "xlocnum": "cpp",
+        "xloctime": "cpp",
+        "xmemory": "cpp",
+        "xstring": "cpp",
+        "xtr1common": "cpp",
+        "xtree": "cpp",
+        "xutility": "cpp",
+        "*.ipp": "cpp",
+        "*.tcc": "cpp",
+        "__bit_reference": "cpp",
+        "__node_handle": "cpp",
+        "__split_buffer": "cpp",
+        "__threading_support": "cpp",
+        "__tree": "cpp",
+        "__verbose_abort": "cpp",
+        "expected": "cpp",
+        "cerrno": "cpp",
+        "text_encoding": "cpp",
+        "execution": "cpp",
+        "__hash_table": "cpp",
+        "semaphore": "cpp",
+        "__locale": "cpp",
+        "cinttypes": "cpp"
+    },
+    "cSpell.words": []
 }

@@ -50,7 +50,7 @@ std::tuple<bool, AttrType> literal_parser<IteratorT>::parse(  // --
 {
     // clang-format off
     auto const parser =
-        x3::with<parser::position_cache_tag>(std::ref(position_cache_proxy))[
+        x3::with<parser::annotator_tag>(std::ref(position_cache_proxy))[
             x3::with<parser::diagnostic_handler_tag>(std::ref(diagnostic_handler))[
                 numeric_parser
             ]

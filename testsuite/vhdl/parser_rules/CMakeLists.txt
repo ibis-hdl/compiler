@@ -178,6 +178,23 @@ target_sources(${PROJECT_NAME}
         src/test/wait_statement_test.cpp
         src/test/waveform_test.cpp
 )
+# https://cmake.org/cmake/help/latest/prop_tgt/UNITY_BUILD_MODE.html
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    UNITY_BUILD_MODE BATCH
+    UNITY_BUILD_BATCH_SIZE 3
+)
+
+
+# Disable Clang -Weverything Warning regards:
+# BOOST_DATA_TEST_CASE() - warning: '<test name>case' has no out-of-line virtual method definitions;
+#   its vtable will be emitted in every translation unit [-Wweak-vtables]
+# ToDo remove this compiler options
+if(IBIS_DEVELOPER_CLANG_WARN_EVERYTHING)
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        "-Wno-weak-vtables"
+    )
+endif()
+
 
 # (^1) linker error on gcc/clang (not msvc):
 # std::tuple<bool, std::string>
@@ -213,7 +230,7 @@ set_property(TARGET ${PROJECT_NAME}
 )
 
 
-if(IBIS_ENABLE_CXXSTD_PCH)
+if(IBIS_ENABLE_PCH)
     target_precompile_headers(${PROJECT_NAME} REUSE_FROM ibis_pch)
 endif()
 
@@ -221,6 +238,4 @@ endif()
 target_include_directories(${PROJECT_NAME}
     PRIVATE
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-    SYSTEM PUBLIC
-        $<BUILD_INTERFACE:${EXTERNAL_BOOST_TEST_INCLUDE_DIR}>
 )

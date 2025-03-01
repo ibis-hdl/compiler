@@ -1,0 +1,96 @@
+//
+// Copyright (c) 2017-2022 Olaf (<ibis-hdl@users.noreply.github.com>).
+// SPDX-License-Identifier: GPL-3.0-or-later
+//
+
+#pragma once
+
+// DO NOT EDIT! GENERATED AUTOMATICALLY BY CMAKE!
+
+#include <cstdint>
+
+///
+/// Variables as determined by CMake, see
+/// [How To Write Platform Checks](
+///  https://gitlab.kitware.com/cmake/community/-/wikis/doc/tutorials/How-To-Write-Platform-Checks)
+/// This allows to prevent the use of preprocessor using ```constexpr```.
+
+#cmakedefine IBIS_BUILD_PLATFORM_LINUX 1
+#cmakedefine IBIS_BUILD_PLATFORM_WINDOWS 1
+#cmakedefine IBIS_BUILD_PLATFORM_DARWIN 1
+#cmakedefine IBIS_BUILD_PLATFORM_FREEBSD 1
+
+#cmakedefine IBIS_BUILD_COMPILER_Clang 1
+#cmakedefine IBIS_BUILD_COMPILER_Clang_GNU 1
+#cmakedefine IBIS_BUILD_COMPILER_Clang_MSVC 1
+#cmakedefine IBIS_BUILD_COMPILER_GNU 1
+#cmakedefine IBIS_BUILD_COMPILER_Intel 1
+#cmakedefine IBIS_BUILD_COMPILER_MSVC 1
+
+// platform support goes to namespace ibis for syntactical reasons!
+namespace ibis {
+
+///
+/// Enum which represents the build operating platform.
+///
+enum class platform : std::uint8_t {
+    Linux,    ///< Linux
+    Windows,  ///< Windows
+    Darwin,   ///< macOS/OS X
+    FreeBSD   ///< FreeBSD
+};
+
+#ifdef IBIS_BUILD_PLATFORM_LINUX
+constexpr ibis::platform platform = platform::Linux;
+#elif IBIS_BUILD_PLATFORM_WINDOWS
+constexpr ibis::platform platform = platform::Windows;
+#elif IBIS_BUILD_PLATFORM_DARWIN
+constexpr ibis::platform platform = platform::Darwin;
+#elif IBIS_BUILD_PLATFORM_FREEBSD
+constexpr ibis::platform platform = platform::FreeBSD;
+#endif
+
+///
+/// Enum which represents the platform compiler.
+/// The list is based on CMake's [Compiler identification string](
+/// https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_ID.html),
+/// but not all compiler are supported.
+///
+enum class platform_compiler : std::uint8_t {
+    Clang,       ///< LLVM Clang (clang.llvm.org)
+    Clang_GNU,   ///< LLVM Clang with regular front end (clang.llvm.org)
+    Clang_MSVC,  ///< LLVM Clang with ClangCL front (clang.llvm.org)
+    GNU,         ///< GNU Compiler Collection (gcc.gnu.org)
+    Intel,       ///< Intel Compiler (intel.com)
+    MSVC         ///< Microsoft Visual Studio (microsoft.com)
+};
+
+#ifdef IBIS_BUILD_COMPILER_Clang
+constexpr ibis::platform_compiler build_compiler = platform_compiler::Clang;
+#elif IBIS_BUILD_COMPILER_GNU
+constexpr ibis::platform_compiler build_compiler = platform_compiler::GNU;
+#elif IBIS_BUILD_COMPILER_Intel
+constexpr ibis::platform_compiler build_compiler = platform_compiler::Intel;
+#elif IBIS_BUILD_COMPILER_MSVC
+constexpr ibis::platform_compiler build_compiler = platform_compiler::MSVC;
+#endif
+
+#ifdef IBIS_BUILD_COMPILER_Clang_GNU
+constexpr ibis::platform_compiler build_compiler_variant = platform_compiler::Clang_GNU;
+#elif IBIS_BUILD_COMPILER_Clang_MSVC
+constexpr ibis::platform_compiler build_compiler_variant = platform_compiler::Clang_MSVC;
+#endif
+
+///
+/// Some code parts require special handling for use with libc++, namely macOS
+///
+#if defined(_LIBCPP_VERSION)
+// [How to detect -stdlib=libc++ in the preprocessor?](
+//  https://stackoverflow.com/questions/31657499/how-to-detect-stdlib-libc-in-the-preprocessor)
+constexpr bool build_compiler_has_libcpp = true;
+// #pragma message "libc++"
+#else
+constexpr bool build_compiler_has_libcpp = false;
+#endif
+
+}  // namespace ibis

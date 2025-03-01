@@ -4,12 +4,18 @@
 *.orig
 *.org
 *.bak
+*.log
 
 ## build and Python's virtual env related
 build/**
 out/**
 .venv/**
 .win64-venv/**
+
+## Git merge conflicts
+*.BASE.txt
+*.LOCAL.txt
+*.REMOTE.txt
 
 ## Windows
 desktop.ini
@@ -27,3 +33,9 @@ Thumbs.db
 ## CMake user, conan presets
 CMakeUserPresets.json
 ConanCMakePresets.json
+
+## CMake
+Testing/**
+
+# Clangd
+.cache/**

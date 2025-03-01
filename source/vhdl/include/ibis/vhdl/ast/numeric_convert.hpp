@@ -5,12 +5,11 @@
 
 #pragma once
 
-#include <ibis/vhdl/type.hpp>
 #include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/type.hpp>
 
 #include <tuple>
 #include <variant>
-#include <iosfwd>
 
 namespace ibis::vhdl::ast {
 struct based_literal;
@@ -31,7 +30,7 @@ namespace ibis::vhdl::ast {
 /// Note #1: About numeric literals
 /// ----------------------------------
 /// The correct tagged type_specifier of {based, decimal}_literal is elementary on
-/// elaboration time, since after converting to numeric the informations about
+/// elaboration time, since after converting to numeric the information about
 /// the integer/real string are lost, see concrete why it's important e.g.
 /// [vhdl error: integer literal cannot have negative exponent](
 /// https://stackoverflow.com/questions/22113223/vhdl-error-integer-literal-cannot-have-negative-exponent)
@@ -47,13 +46,16 @@ namespace ibis::vhdl::ast {
 /// correct converting depends on correct parsing of the VHDL grammar, since the
 /// exponent of integer doesn't allow a negative sign.
 ///
+/// Note #3:
+/// --------
+/// The conversion always takes place to an unsigned type. However, this also means
+/// that the sign from the AST must be taken into account during the actual assignment
+/// and a range overflow of the signed target type must be checked.
+///
 class numeric_convert {
 public:
-    /// basic integer type
-    using basic_integer_type = intrinsic::signed_integer_type;
-
     /// integer type.
-    using integer_type = typename std::make_unsigned<basic_integer_type>::type;
+    using integer_type = intrinsic::unsigned_integer_type;
 
     /// real type for floats/doubles.
     using real_type = intrinsic::real_type;
@@ -75,9 +77,9 @@ public:
     ///
     /// Construct a new numeric convert object.
     ///
-    /// @param diagnostic_handler_ Error reporter.
+    /// @param diag_handler Error reporter.
     ///
-    numeric_convert(diagnostic_handler_type& diagnostic_handler_);
+    explicit numeric_convert(diagnostic_handler_type& diag_handler);
 
     ///
     /// Convert the a bit string literal to numeric value.

@@ -9,8 +9,10 @@
 #include <ibis/vhdl/analyze/syntax.hpp>
 #include <ibis/vhdl/analyze/diagnostic_handler.hpp>
 #include <ibis/vhdl/analyze/context.hpp>
+#include <ibis/util/file_mapper.hpp>
 #include <ibis/vhdl/parser/position_cache.hpp>
 #include <ibis/vhdl/context.hpp>
+#include <ibis/vhdl/ast/ast_context.hpp>
 
 #include <testsuite/vhdl/syntax/failure_diagnostic_fixture.hpp>
 #include <testsuite/vhdl/syntax/dataset.hpp>
@@ -18,17 +20,21 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>
 #include <boost/test/tools/output_test_stream.hpp>
+#include <boost/test/tools/interface.hpp>  // BOOST_TEST_REQUIRE, BOOST_TEST
+#include <boost/test/unit_test_suite.hpp>  // BOOST_FIXTURE_TEST_SUITE
 
-#include <boost/core/ignore_unused.hpp>
-
-#include <iostream>
+#include <functional>
 
 namespace analyze = ibis::vhdl::analyze;
+
+using namespace ibis::vhdl;
 
 using testsuite::vhdl::syntax::failure_diagnostic_fixture;
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_FIXTURE_TEST_SUITE(syntax_check, failure_diagnostic_fixture)
+
+// ToDo Source same as keyboard_match_test.cpp - unify test
 
 //
 // SUCCESS test case
@@ -37,41 +43,48 @@ BOOST_DATA_TEST_CASE(labels_ok,                                                 
                      utf_data::make_delayed<testsuite::vhdl::syntax::dataset>("labels_ok"),  // --
                      input, expected, test_case_name)
 {
-    btt::output_test_stream os;
-    parser::position_cache<parser::iterator_type> position_cache;
-    ast::design_file design_file;
+    using iterator_type = parser::iterator_type;
 
-    auto position_cache_proxy = position_cache.add_file(test_case_name, input);
+    ibis::util::file_mapper file_mapper{};
+    auto current_file = file_mapper.add_file(test_case_name, input);
+    parser::position_cache<iterator_type> position_cache{};
+    ibis::vhdl::ast::ast_context<iterator_type> ast_context{ current_file,
+                                                             std::ref(position_cache) };
+
+    btt::output_test_stream output;
+    ast::design_file design_file;
+    parser::context vhdl_ctx;
 
     {
-        parser::parse parse{ os };
-        parser::context ctx;
+        parser::parse<iterator_type> const parse{ output };
 
-        bool const parse_ok = parse(position_cache_proxy, ctx, design_file);
+        bool const parse_ok = parse(current_file, position_cache, vhdl_ctx, design_file);
 
-        BOOST_TEST_REQUIRE(parse_ok);
+        // syntactically correct
+        BOOST_TEST_REQUIRE(parse_ok == true);
+        BOOST_TEST_REQUIRE(vhdl_ctx.error_free() == true);
     }
 
     {
-        analyze::context ctx;
         analyze::diagnostic_handler<parser::iterator_type> diagnostic_handler{
-            os, ctx, position_cache_proxy
+            output, std::ref(ast_context), std::ref(vhdl_ctx)
         };
-        analyze::syntax_checker syntax_check{ os, ctx, diagnostic_handler };
+        analyze::syntax_checker syntax_check{ output, vhdl_ctx, diagnostic_handler };
 
         syntax_check(design_file);
 
-        bool const syntax_ok = ctx.error_free();
-        BOOST_TEST(syntax_ok);
+        BOOST_TEST(vhdl_ctx.error_free() == true);
     }
 
     if (!current_test_passing()) {
-        failure_closure(test_case_name, input, os.str());
+        // failure_closure(test_case_name, input, output.str());
         return;
     }
 
-    BOOST_TEST(os.str() == expected, btt::per_element());
-    failure_closure(test_case_name, input, expected, os.str());
+    // std::cout << "### output:\n" << os.str() << " -- -- -- -- -- -- -- -- -- -- -- -- -- --\n ";
+
+    BOOST_TEST(output.str() == expected, btt::per_element());
+    // failure_closure(test_case_name, input, expected, output.str());
 }
 
 //
@@ -82,41 +95,48 @@ BOOST_DATA_TEST_CASE(
     utf_data::make_delayed<testsuite::vhdl::syntax::dataset>("label_mismatch"),  // --
     input, expected, test_case_name)
 {
-    btt::output_test_stream os;
-    parser::position_cache<parser::iterator_type> position_cache;
-    ast::design_file design_file;
+    using iterator_type = parser::iterator_type;
 
-    auto position_cache_proxy = position_cache.add_file(test_case_name, input);
+    ibis::util::file_mapper file_mapper{};
+    auto current_file = file_mapper.add_file(test_case_name, input);
+    parser::position_cache<iterator_type> position_cache{};
+    ast::ast_context<iterator_type> ast_context{ current_file, std::ref(position_cache) };
+
+    btt::output_test_stream output;
+    ast::design_file design_file;
+    parser::context vhdl_ctx;
 
     {
-        parser::parse parse{ os };
-        parser::context ctx;
+        parser::parse<iterator_type> const parse{ output };
 
-        bool const parse_ok = parse(position_cache_proxy, ctx, design_file);
+        bool const parse_ok = parse(current_file, position_cache, vhdl_ctx, design_file);
 
-        BOOST_TEST_REQUIRE(parse_ok);
+        // syntactically correct
+        BOOST_TEST_REQUIRE(parse_ok == true);
+        BOOST_TEST_REQUIRE(vhdl_ctx.error_free() == true);
     }
 
     {
-        analyze::context ctx;
         analyze::diagnostic_handler<parser::iterator_type> diagnostic_handler{
-            os, ctx, position_cache_proxy
+            output, std::ref(ast_context), std::ref(vhdl_ctx)
         };
-        analyze::syntax_checker syntax_check{ os, ctx, diagnostic_handler };
+        analyze::syntax_checker syntax_check{ output, vhdl_ctx, diagnostic_handler };
 
         syntax_check(design_file);
 
-        bool const syntax_ok = ctx.error_free();
-        BOOST_TEST(!syntax_ok);
+        BOOST_TEST(vhdl_ctx.error_free() == false);
     }
 
     if (!current_test_passing()) {
-        failure_closure(test_case_name, input, os.str());
+        // failure_closure(test_case_name, input, output.str());
         return;
     }
 
-    BOOST_TEST(os.str() == expected, btt::per_element());
-    failure_closure(test_case_name, input, expected, os.str());
+    // std::cout << "### output:\n" << output.str() << " -- -- -- -- -- -- -- -- -- -- -- -- -- --\n
+    // ";
+
+    BOOST_TEST(output.str() == expected, btt::per_element());
+    // failure_closure(test_case_name, input, expected, output.str());
 }
 
 BOOST_AUTO_TEST_SUITE_END()

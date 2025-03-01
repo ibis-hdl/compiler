@@ -1,0 +1,149 @@
+{
+    "version": 8,
+    "include": [
+        "cmake/presets/common.json"
+    ], 
+    "configurePresets": [
+        {
+            "name": "gcc-ccache",
+            "displayName": "GnuC (CCache)",
+            "description": "GnuC compiler using compiler (CCache)",
+            "inherits": [
+                "gcc",
+                "ccache"
+            ]
+        },
+        {
+            "name": "clang-ccache",
+            "displayName": "Clang (CCache)",
+            "description": "Clang compiler using compiler (CCache)",
+            "inherits": [
+                "clang",
+                "ccache"
+            ]
+        },
+        {
+            "name": "msvc-sccache",
+            "displayName": "MSVC (SCCache)",
+            "description": "Microsoft Visual Studio C++ compiler (SCCache)",
+            "inherits": [
+                "msvc",
+                "sccache"
+            ]
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "gcc-ccache-release",
+            "displayName": "Release",
+            "description": "Release build with GnuC",
+            "configuration": "Release",
+            "configurePreset": "gcc-ccache"
+        },
+        {
+            "name": "clang-ccache-release",
+            "displayName": "Release",
+            "description": "Release build with LLVM Clang",
+            "configuration": "Release",
+            "configurePreset": "clang-ccache"
+        },
+        {
+            "name": "msvc-sccache-release",
+            "displayName": "Release",
+            "description": "Release build with MSVC",
+            "configuration": "Release",
+            "configurePreset": "msvc-sccache"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "gcc-ccache-release-test",
+            "displayName": "Release Test",
+            "description": "Test GnuC build",
+            "configuration": "Release",
+            "configurePreset": "gcc-ccache",
+            "inherits": [
+                "default-testPreset"
+            ]
+        },
+        {
+            "name": "clang-ccache-release-test",
+            "displayName": "Release Test",
+            "description": "Test LLVM Clang build",
+            "configuration": "Release",
+            "configurePreset": "clang-ccache",
+            "inherits": [
+                "default-testPreset"
+            ]
+        },
+        {
+            "name": "msvc-sccache-release-test",
+            "displayName": "Release Test",
+            "description": "Test LLVM Clang build",
+            "configuration": "Release",
+            "configurePreset": "msvc-sccache",
+            "inherits": [
+                "default-testPreset"
+            ]
+        }
+    ],
+    "workflowPresets": [
+        {
+            "name": "GnuC Release (CCache)",
+            "displayName": "CI GnuC Release (CCache)",
+            "description": "Continuous Integration/Continuous Delivery using GnUC (Release)",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "gcc-ccache"
+                },
+                {
+                    "type": "build",
+                    "name": "gcc-ccache-release"
+                },
+                {
+                    "type": "test",
+                    "name": "gcc-ccache-release-test"
+                }
+            ]
+        },
+        {
+            "name": "LLVM Clang Release (CCache)",
+            "displayName": "CI LLVM Clang Release (CCache)",
+            "description": "Continuous Integration/Continuous Delivery using LLVM Clang (Release)",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "clang-ccache"
+                },
+                {
+                    "type": "build",
+                    "name": "clang-ccache-release"
+                },
+                {
+                    "type": "test",
+                    "name": "clang-ccache-release-test"
+                }
+            ]
+        },
+        {
+            "name": "MSVC Release (SCCache)",
+            "displayName": "CI MSVC Release (SCCache)",
+            "description": "Continuous Integration/Continuous Delivery using MSVC (Release)",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "msvc-sccache"
+                },
+                {
+                    "type": "build",
+                    "name": "msvc-sccache-release"
+                },
+                {
+                    "type": "test",
+                    "name": "msvc-sccache-release-test"
+                }
+            ]
+        }
+    ]
+}

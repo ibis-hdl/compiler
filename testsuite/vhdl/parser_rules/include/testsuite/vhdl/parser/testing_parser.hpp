@@ -11,11 +11,16 @@
 #include <ibis/vhdl/parser/grammar_decl.hpp>
 #include <ibis/vhdl/parser/parser_config.hpp>
 
+#include <ibis/util/file_mapper.hpp>
+#include <ibis/vhdl/parser/position_cache.hpp>
 #include <ibis/vhdl/parser/diagnostic_handler.hpp>
 #include <ibis/vhdl/parser/context.hpp>
+#include <ibis/vhdl/ast/ast_context.hpp>
 
 #include <ibis/vhdl/ast/ast_printer.hpp>
 #include <ibis/util/pretty_typename.hpp>
+#include <ibis/util/get_iterator_pair.hpp>
+#include <ibis/literals.hpp>
 
 #include <iostream>
 #include <filesystem>
@@ -23,7 +28,7 @@
 #include <testsuite/namespace_alias.hpp>
 
 namespace testsuite {
-    namespace fs = std::filesystem;
+namespace fs = std::filesystem;
 }
 
 namespace testsuite::vhdl::parser::util {
@@ -34,27 +39,37 @@ struct testing_parser {
 
     template <typename ParserType>
     std::tuple<bool, std::string> operator()(std::string_view input, ParserType const &parser_rule,
-                                             fs::path const &filename = "", bool full_match = true)
+                                             std::string_view filename,
+                                             bool full_match = true) const
     {
-        parser::position_cache<parser::iterator_type> position_cache;
-        auto position_cache_proxy =
-            position_cache.add_file(filename.generic_string() + ".input", input);
+        using namespace ibis::literals::memory;
+        using iterator_type = parser::iterator_type;
+
+        ibis::util::file_mapper file_mapper{};
+        auto current_file = file_mapper.add_file(filename, input);
+        parser::position_cache<iterator_type> position_cache{ 1_KiB };
+        ibis::vhdl::ast::ast_context<iterator_type> ast_context{ current_file,
+                                                                 std::ref(position_cache) };
 
         btt::output_test_stream output;
-        parser::context ctx;
+        parser::context vhdl_ctx;
 
-        parser::diagnostic_handler_type diagnostic_handler{ output, ctx, position_cache_proxy };
+        // clang-format off
+        parser::diagnostic_handler_type diagnostic_handler{
+            output, std::ref(ast_context), std::ref(vhdl_ctx)
+        };
+        // clang-format on
 
         // clang-format off
         auto const parser =
-            x3::with<parser::position_cache_tag>(std::ref(position_cache_proxy))[
+            x3::with<parser::annotator_tag>(std::ref(ast_context))[
                 x3::with<parser::diagnostic_handler_tag>(std::ref(diagnostic_handler))[
                     parser_rule
                 ]
             ];
         // clang-format on
 
-        auto [iter, end] = position_cache_proxy.file_contents_range();
+        auto [iter, end] = ibis::util::get_iterator_pair(ast_context.file_contents());
 
         // using different iterator_types causes linker errors, see e.g.
         // [linking errors while separate parser using boost spirit x3](

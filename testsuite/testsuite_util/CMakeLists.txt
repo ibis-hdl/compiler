@@ -20,27 +20,34 @@ add_library(testsuite::util ALIAS ${PROJECT_NAME})
 
 target_sources(${PROJECT_NAME}
     PRIVATE
+        src/testsuite_parser.cpp
         src/cli_args.cpp
         src/dataset_loader.cpp
         src/basic_failure_diagnostic_fixture.cpp
 )
+# https://cmake.org/cmake/help/latest/prop_tgt/UNITY_BUILD_MODE.html
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    UNITY_BUILD_MODE BATCH
+    UNITY_BUILD_BATCH_SIZE 3
+)
+
 
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
-    ibis::util
-    Boost::headers
-    CLI11::CLI11
+        ibis::vhdl
+        ibis::common
+        Boost::headers
+        Boost::unit_test_framework
+        CLI11::CLI11
 )
 
-if(IBIS_ENABLE_CXXSTD_PCH)
+
+if(IBIS_ENABLE_PCH)
     target_precompile_headers(${PROJECT_NAME} REUSE_FROM ibis_pch)
 endif()
+
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-    SYSTEM PUBLIC
-        $<BUILD_INTERFACE:${EXTERNAL_BOOST_TEST_INCLUDE_DIR}>
-    PRIVATE
-        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
 )

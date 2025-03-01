@@ -5,19 +5,21 @@
 
 #pragma once
 
-#include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
-
+// FixMe [Bug] work around for Clang19 libc++ && Boost 1.86
+#include <cstddef>  // IWYU pragma: keep
 #include <boost/test/data/size.hpp>
 
+#include <filesystem>
 #include <memory>
-#include <string>
 #include <string_view>
+#include <string>
 #include <tuple>
 #include <vector>
-#include <filesystem>
+
+#include <testsuite/namespace_alias.hpp>
 
 namespace testsuite {
-    namespace fs = std::filesystem;
+namespace fs = std::filesystem;
 }
 
 namespace testsuite::util {
@@ -32,7 +34,7 @@ namespace testsuite::util {
 /// A dataset holds:
 ///
 /// - one or more input files.
-/// - one or more correspondending expected file.
+/// - one or more corescondending expected file.
 /// - the bundled basename of these pair of files, aka name of test_case.
 ///
 /// The data for input and expected are linked to the corresponding testdata file
@@ -143,7 +145,7 @@ public:
     /// available replaced with the compile builtin values. Then the actual dataset
     /// files are loaded and the iterator object is returned with this data.
     ///
-    /// @return iterator holding the datset contents.
+    /// @return iterator holding the dataset contents.
     ///
     iterator begin() const;
 
@@ -167,7 +169,7 @@ protected:
     ///
     /// Set the builtin object
     ///
-    /// @param other The bultin object intended to replace the current one.
+    /// @param other The builtin object intended to replace the current one.
     ///
     void set_builtin(std::unique_ptr<compile_builtin> other);
 

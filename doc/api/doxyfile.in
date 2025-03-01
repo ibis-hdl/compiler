@@ -48,7 +48,7 @@ PROJECT_NAME           = @CMAKE_PROJECT_NAME@
 # could be handy for archiving the generated documentation or if some version
 # control system is used.
 
-PROJECT_NUMBER         = @ibis_VERSION@
+PROJECT_NUMBER         = @ibis_hdl_VERSION@
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description
 # for a project that appears at the top of each page and should give viewer a
@@ -202,8 +202,7 @@ STRIP_FROM_INC_PATH    = @PROJECT_SOURCE_DIR@/source/vhdl/include \
                          @PROJECT_SOURCE_DIR@/source/common/src \
                          @PROJECT_BINARY_DIR@/source/frontend/include \
                          @PROJECT_BINARY_DIR@/source/common/include \
-                         @CLI11_INCLUDE_DIR@ \
-                         @STRONG_TYPE_INCLUDE_DIR@
+                         @CLI11_INCLUDE_DIR@
 
 # If the SHORT_NAMES tag is set to YES, doxygen will generate much shorter (but
 # less readable) file names. This can be useful is your file systems doesn't

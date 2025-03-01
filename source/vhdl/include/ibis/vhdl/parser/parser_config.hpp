@@ -6,17 +6,18 @@
 #pragma once
 
 #include <ibis/vhdl/parser/diagnostic_handler.hpp>
-#include <ibis/vhdl/parser/position_cache.hpp>
-#include <ibis/vhdl/parser/iterator_type.hpp>
+#include <ibis/vhdl/ast/ast_context.hpp>
+// #include <ibis/vhdl/parser/position_cache.hpp>
+// #include <ibis/vhdl/parser/iterator_type.hpp>
 #include <ibis/vhdl/parser/skipper.hpp>
 
 #include <ibis/namespace_alias.hpp>
 
 namespace ibis::vhdl::parser {
 
-using position_proxy_type = parser::position_cache<iterator_type>::proxy;
+// using iterator_type = parser::iterator_type;
+using ast_context_type = ast::ast_context<iterator_type>;
 using diagnostic_handler_type = parser::diagnostic_handler<iterator_type>;
-
 using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
 
 ///
@@ -34,13 +35,13 @@ using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
 ///    https://stackoverflow.com/questions/66393775/what-are-contexts-in-boost-spirit-x3)
 /// - [Boost spirit x3 example calculator (calc8, calc9) linker error](
 ///    https://stackoverflow.com/questions/51627938/boost-spirit-x3-example-calculator-calc8-calc9-linker-error/51641878#51641878)
-/// - [X3: Linker Error (unresolved external symbol “parse_rule”) on nonterminal parser](
+/// - [X3: Linker Error (unresolved external symbol “parse_rule”) on non-terminal parser](
 ///     https://stackoverflow.com/questions/50277979/x3-linker-error-unresolved-external-symbol-parse-rule-on-nonterminal-parser/50301865#50301865)
 /// - [linking errors while separate parser using boost spirit x3](
 ///    https://stackoverflow.com/questions/40496357/linking-errors-while-separate-parser-using-boost-spirit-x3?answertab=active#tab-top)
 /// - [x3 linker error with separate TU](
 ///    https://stackoverflow.com/questions/43791079/x3-linker-error-with-separate-tu?answertab=active#tab-top)
-/// - [Mixing non-terminal rules from separeted translation unit](
+/// - [Mixing non-terminal rules from separated translation unit](
 ///    https://stackoverflow.com/questions/66036568/mixing-non-terminal-rules-from-separeted-translation-unit)
 ///
 /// Using boost.type_index the concrete type can be printed there:
@@ -54,7 +55,7 @@ using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
 ///
 /// @todo Report a bug: It's curious, since e.g. ```parse.cpp``` instantiate the parser as:
 /// @code{.cpp}
-/// x3::with<parser::position_cache_tag>(std::ref(position_cache_proxy))[
+/// x3::with<parser::annotator_tag>(std::ref(position_cache_proxy))[
 ///     x3::with<parser::diagnostic_handler_tag>(std::ref(diagnostic_handler))[
 ///         parser::grammar()
 ///     ]
@@ -63,8 +64,8 @@ using phrase_context_type = x3::phrase_parse_context<skipper_type>::type;
 /// naturally the ```context_type``` here should be in the same order
 /// @code{.cpp}
 /// x3::context<
-///     parser::position_cache_tag,
-///     std::reference_wrapper<parser::position_proxy_type>,
+///     parser::annotator_tag,
+///     std::reference_wrapper<parser::ast_context_type>,
 ///     x3::context<
 ///         parser::diagnostic_handler_tag,
 ///         std::reference_wrapper<parser::diagnostic_handler_type>,
@@ -82,8 +83,8 @@ using context_type =
         parser::diagnostic_handler_tag,
         std::reference_wrapper<parser::diagnostic_handler_type>,
         x3::context<
-            parser::position_cache_tag,
-            std::reference_wrapper<parser::position_proxy_type>,
+            parser::annotator_tag,
+            std::reference_wrapper<parser::ast_context_type>,
             phrase_context_type
         >
     >;

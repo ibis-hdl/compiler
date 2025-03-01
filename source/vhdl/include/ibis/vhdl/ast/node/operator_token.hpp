@@ -12,7 +12,7 @@
 namespace ibis::vhdl::ast {
 
 enum class operator_token {
-    UNSPECIFIED,
+    UNSPECIFIED_OPERATOR,
     // miscellaneous_operator
     EXPONENT,
     ABS,
@@ -52,22 +52,7 @@ enum class operator_token {
     XNOR
 };
 
-std::string_view as_string_view(operator_token token);
-
-inline std::ostream& operator<<(std::ostream& os, operator_token token)
-{
-    os << as_string_view(token);
-
-    return os;
-}
+// required for BOOST_SPIRIT_X3_DEBUG
+std::ostream& operator<<(std::ostream& os, operator_token token);
 
 }  // namespace ibis::vhdl::ast
-
-template <>
-struct std::formatter<ibis::vhdl::ast::operator_token> : std::formatter<std::string_view> {
-    template <typename FormatContext>
-    std::string_view format(ibis::vhdl::ast::operator_token token, FormatContext& ctx) const
-    {
-        return std::formatter<std::string_view>::format(as_string_view(token), ctx);
-    }
-};

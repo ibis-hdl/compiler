@@ -14,8 +14,10 @@
 #include <ibis/util/pretty_typename.hpp>
 #include <ibis/util/cxx_bug_fatal.hpp>
 
-#include <type_traits>
+#include <format>
+#include <iostream>
 #include <tuple>
+#include <type_traits>
 
 namespace ibis::vhdl::ast {
 struct architecture_body;
@@ -38,7 +40,7 @@ namespace ibis::vhdl::analyze {
 ///
 class label_match {
 public:
-    enum class result { OK, MISMATCH, ILLFORMED };
+    enum class result { LABEL_OK, LABEL_MISMATCH, LABEL_ILLFORMED };
 
 public:
     result operator()(ast::architecture_body const& node) const;
@@ -73,43 +75,28 @@ private:
 namespace detail {
 
 template <typename NodeT>
-concept has_identifier = requires(const NodeT& node)
-{
-    {
-        node.identifier
-        } -> std::convertible_to<ast::identifier>;
+concept has_identifier = requires(const NodeT& node) {
+    { node.identifier } -> std::convertible_to<ast::identifier>;
 };
 
 template <typename NodeT>
-concept has_optional_end_identifier = requires(const NodeT& node)
-{
-    {
-        node.end_identifier.get()
-        } -> std::convertible_to<ast::identifier>;
+concept has_optional_end_identifier = requires(const NodeT& node) {
+    { node.end_identifier.get() } -> std::convertible_to<ast::identifier>;
 };
 
 template <typename NodeT>
-concept has_label = requires(const NodeT& node)
-{
-    {
-        node.label
-        } -> std::convertible_to<ast::label>;
+concept has_label = requires(const NodeT& node) {
+    { node.label } -> std::convertible_to<ast::label>;
 };
 
 template <typename NodeT>
-concept has_optional_label = requires(const NodeT& node)
-{
-    {
-        node.label.get()
-        } -> std::convertible_to<ast::label>;
+concept has_optional_label = requires(const NodeT& node) {
+    { node.label.get() } -> std::convertible_to<ast::label>;
 };
 
 template <typename NodeT>
-concept has_optional_end_label = requires(const NodeT& node)
-{
-    {
-        node.end_label.get()
-        } -> std::convertible_to<ast::label>;
+concept has_optional_end_label = requires(const NodeT& node) {
+    { node.end_label.get() } -> std::convertible_to<ast::label>;
 };
 
 }  // namespace detail
@@ -158,8 +145,8 @@ std::tuple<ast::identifier, ast::identifier> inline labels_of(NodeT const& node)
         // An access to optional's .get() has been performed, where the optional doesn't contain
         // a value. This shouldn't happen since Spirit.X3 grammar should prevent this.
         // @todo [Assert] Render Warning only so we can continue with misleading error message.
-        std::cerr << "caught '" << e.what() << "' by accessing AST node '"
-                  << util::pretty_typename<NodeT>().str() << "'\n";
+        std::cerr << std::format("caught '{}' by accessing AST node '{}'\n",  // --
+                                 e.what(), util::pretty_typename<NodeT>().str());
     }
 
     // we shouldn't be here, but isn't critical

@@ -3,6 +3,9 @@ ToDo
 
 Obviously the intend is to get the parser working and hence the project. 
 
+> **Note**: This point are from 2022 and may become obsolete in 2024/2025, rework and 
+  clarification is required.
+
 ## CMake build
 
 * Hide time intensive compiling from Clang-Tidy like

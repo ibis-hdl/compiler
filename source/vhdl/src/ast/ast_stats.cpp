@@ -14,9 +14,13 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <unordered_map>
+#include <unordered_set>
+#include <string_view>
+#include <cstdlib>
 
 namespace ibis::vhdl::ast {
-struct position_tagged;
+class position_tagged;
 }
 
 namespace ibis::vhdl::ast {
@@ -28,6 +32,13 @@ public:
     using map_type = std::unordered_map<std::string_view, std::size_t>;
     using set_type = std::unordered_set<std::string_view>;
 
+private:
+    // NOLINTBEGIN(cppcoreguidelines-avoid-const-or-ref-data-members)
+    map_type& count_map;
+    set_type& untagged_node;
+    // NOLINTEND(cppcoreguidelines-avoid-const-or-ref-data-members)
+
+public:
     collect_worker(map_type& count_map_, set_type& untagged_node_)
         : count_map{ count_map_ }
         , untagged_node{ untagged_node_ }
@@ -43,10 +54,6 @@ public:
             untagged_node.insert(node_name);
         }
     }
-
-private:
-    map_type& count_map;
-    set_type& untagged_node;
 };
 
 }  // namespace detail
@@ -85,19 +92,21 @@ auto ast_stats::sort_by_count(bool ascending) const
         return std::function<bool(pair_type const&, pair_type const&)>{ descending_predicate };
     }(ascending);
 
-    // FixMe: Consider use of std::set since it's sorted by C++ std.
+    // FixMe: Consider modernize-use-ranges
     std::vector<pair_type> vec{ count_map.begin(), count_map.end() };
-    std::sort(vec.begin(), vec.end(), predicate);
+    std::sort(vec.begin(), vec.end(), predicate);  // NOLINT(boost-use-ranges,modernize-use-ranges)
 
     return vec;
 }
 
+// ToDo [C++20] use std::format, or as member format_to()
 std::ostream& ast_stats::print_on(std::ostream& os) const
 {
     auto const vec{ sort_by_count() };
 
-    std::size_t const max_key_size = [&] {
+    std::size_t const max_key_size = [&] {  // ToDo [C++20] use std::ranges
         std::size_t size{ 0 };
+        // NOLINTNEXTLINE(boost-use-ranges,modernize-use-ranges)
         std::for_each(vec.begin(), vec.end(),
                       [&size](auto const& pair) { size = std::max(size, pair.first.size()); });
         return size;

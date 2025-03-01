@@ -26,7 +26,6 @@ target_link_libraries(${PROJECT_NAME}
         Boost::system
         Boost::locale
         CLI11::CLI11
-        rollbear::strong_type
         Threads::Threads
         # cope with "fatal error LNK2011: precompiled object not linked in"
         #"$<$<CXX_COMPILER_ID:MSVC>:ibis_pch>"
@@ -47,9 +46,13 @@ target_sources(${PROJECT_NAME}
         src/init.cpp
         src/signal_handler.cpp
 )
+# https://cmake.org/cmake/help/latest/prop_tgt/UNITY_BUILD_MODE.html
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    UNITY_BUILD_MODE BATCH
+    UNITY_BUILD_BATCH_SIZE 3
+)
 
-
-if(IBIS_ENABLE_CXXSTD_PCH)
+if(IBIS_ENABLE_PCH)
     target_precompile_headers(${PROJECT_NAME} REUSE_FROM ibis_pch)
 endif()
 

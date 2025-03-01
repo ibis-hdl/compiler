@@ -5,20 +5,29 @@
 
 #include <ibis/util/file/file_loader.hpp>
 
+#include <ibis/platform.hpp>
 #include <ibis/settings.hpp>
+#include <ibis/message.hpp>
 
 #include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
 #include <ibis/util/compiler/warnings_on.hpp>
 
-#include <fstream>
-#include <map>
-#include <sstream>
-#include <utility>
-#include <filesystem>
+#include <cerrno>
 #include <chrono>
-#include <ratio>
+#include <ctime>
+#include <filesystem>
+#include <format>
+#include <fstream>
+#include <iostream>
+#include <iterator>
+#include <map>
+#include <string_view>
+#include <string>
+#include <utility>
+#include <vector>
+#include <expected>
 #include <system_error>
 
 namespace ibis::util {
@@ -64,7 +73,7 @@ bool file_loader::exist_file(fs::path const& filename) const
     }
 }
 
-bool file_loader::unique_files(std::vector<fs::path> const& file_list) const
+bool file_loader::unique_files(std::vector<fs::path> const& fs_path_list) const
 {
     using boost::locale::format;
     using boost::locale::translate;
@@ -74,11 +83,10 @@ bool file_loader::unique_files(std::vector<fs::path> const& file_list) const
     };
 
     auto const print_duplicates = [&](auto const& canonical_filename) {
-        const char* delimiter = "";
-        for (auto const& filename : file_list) {
-            if (canonical_filename == canonical(filename)) {
-                os << delimiter << '"' << filename << '"';
-                delimiter = ", ";
+        std::string_view delimiter{ "" };  // NOLINT(readability-redundant-string-init)
+        for (auto const& filename : fs_path_list) {
+            if (canonical(filename) == canonical_filename) {
+                os << std::format("{}'{}'", std::exchange(delimiter, ", "), filename.string());
             }
         }
     };
@@ -88,7 +96,7 @@ bool file_loader::unique_files(std::vector<fs::path> const& file_list) const
              >
         occurrence;
 
-    for (auto const& filename : file_list) {
+    for (auto const& filename : fs_path_list) {
         if (!exist_file(filename)) {
             return false;
         }
@@ -110,91 +118,133 @@ bool file_loader::unique_files(std::vector<fs::path> const& file_list) const
     return true;
 }
 
-std::optional<std::string> file_loader::read_file(fs::path const& filename) const
+std::expected<std::string, std::error_code> file_loader::read_file(fs::path const& filename) const
 {
     using boost::locale::format;
     using boost::locale::translate;
 
     std::ifstream ifs{ filename, std::ios::in | std::ios::binary };
 
-    if (!ifs) {
+    if (!ifs.is_open()) {
+        std::error_code const ec{ errno, std::iostream_category() };
+        // ToDo: replace *all* if(!quiet) { ... } with single report_verbose_error() member
         if (!quiet) {
-            os << format(translate("Unable to open file \"{1}\"")) % filename << '\n';
+            std::cout << format(translate("Error opening file \"{1}\" ({2})"))  // --
+                             % filename % ec.message();
         }
-        return {};
+        return std::unexpected{ ec };
     }
 
-    ifs.unsetf(std::ios::skipws);
-
-    std::ostringstream ss{};
-    ss << ifs.rdbuf();
+    // see Scott Meyers "Effective STL" item 29
+    std::string contents{ std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>() };
 
     if (ifs.fail() && !ifs.eof()) {
+        std::error_code const ec{ errno, std::iostream_category() };
         if (!quiet) {
-            os << format(translate("Error reading file \"{1}\"")) % filename << '\n';
+            std::cout << format(translate("Error reading file \"{1}\" ({2})"))  // --
+                             % filename % ec.message();
         }
-        return {};
+        return std::unexpected{ ec };
     }
 
-    return ss.str();
+    if (!quiet) {
+        std::cout << std::format("read '{}' ({} bytes)\n", filename.generic_string(),
+                                 contents.size());
+    }
+
+    return contents;
 }
 
-std::optional<std::string> file_loader::read_file_alt(fs::path const& filename) const
+std::expected<std::string, std::error_code> file_loader::read_file_alt(
+    fs::path const& filename) const
 {
+    // ToDo Seems not as easy as one can read on blogs (regards tellg()), see notes at SO
+    // [How do I read an entire file into a std::string in C++?](
+    //  https://stackoverflow.com/questions/116038/how-do-i-read-an-entire-file-into-a-stdstring-in-c)
+
     using boost::locale::format;
     using boost::locale::translate;
 
     std::ifstream ifs{ filename, std::ios::in | std::ios::binary | std::ios::ate };
 
-    if (!ifs) {
+    if (!ifs.is_open()) {
+        std::error_code const ec{ errno, std::generic_category() };
         if (!quiet) {
-            os << format(translate("Unable to open file \"{1}\"")) % filename << '\n';
+            std::cout << format(translate("Unable opening file \"{1}\" ({2})"))  // --
+                             % filename % ec.message();
         }
-        return {};
+        return std::unexpected{ ec };
     }
 
     ifs.unsetf(std::ios::skipws);
 
-    std::ifstream::pos_type const size = ifs.tellg();
-    ifs.seekg(0, std::ios::beg);
-
-    std::string contents{};
-    contents.reserve(static_cast<std::string::size_type>(size));
-
-    ifs.read(contents.data(), size);
-
-    if (ifs.fail() && !ifs.eof()) {
+    std::ifstream::pos_type const file_size = ifs.tellg();
+    if (file_size < 0) {
+        std::error_code const ec{ errno, std::generic_category() };
         if (!quiet) {
-            os << format(translate("Error reading file \"{1}\"")) % filename << '\n';
+            std::cout << format(translate("Error tellg() for file \"{1}\" ({2})"))  // --
+                             % filename % ec.message();
         }
-        return {};
+        return std::unexpected{ ec };
     }
 
-    return std::optional<std::string>{ contents };
+    std::string contents{};
+    contents.reserve(static_cast<std::string::size_type>(file_size));
+
+    ifs.seekg(0, std::ios::beg);
+    ifs.read(contents.data(), file_size);
+
+    if (ifs.fail() && !ifs.eof()) {
+        std::error_code const ec{ errno, std::generic_category() };
+        if (!quiet) {
+            std::cout << format(translate("Error reading file \"{1}\" ({2})"))  // --
+                             % filename % ec.message();
+        }
+        return std::unexpected{ ec };
+    }
+
+    return contents;
 }
 
 std::time_t file_loader::timesstamp(fs::path const& filename) const
 {
-    std::error_code ec;
-    auto const ftime = fs::last_write_time(filename, ec);
+    namespace chrono = std::chrono;
+    using boost::locale::format;
+    using boost::locale::translate;
 
-    if (ec && !quiet) {
-        os << "Failed to determine file time of " << fs::path{ filename }.make_preferred() << ": "
-           << ec.message() << std::endl;
-    }
-
-    // FixMe [C++20] What for a mess, see
-    // [How to convert std::filesystem::file_time_type to time_t?](
-    // https://stackoverflow.com/questions/61030383/how-to-convert-stdfilesystemfile-time-type-to-time-t)
-    auto const to_time_t = [](fs::file_time_type time_point) {
-        using namespace std::chrono;
-        auto sctp = time_point_cast<system_clock::duration>(
-            time_point - fs::file_time_type::clock::now() + system_clock::now());
-        return system_clock::to_time_t(sctp);
+    auto const report_error = [&](std::error_code ec) {
+        if (ec && !quiet) {
+            ibis::warning(                                                      // --
+                format(translate("Failed to determine file time of {1}: {2}"))  // --
+                // [C++26] has std::formatter<std::filesystem::path>
+                % fs::path{ filename }.make_preferred() % ec.message());
+        }
     };
 
-    std::time_t cftime = to_time_t(ftime);
-    return cftime;
+    std::error_code ec;
+    auto const file_time = fs::last_write_time(filename, ec);
+    report_error(ec);  // not tragic from today's perspective, as not (yet) used (and tested)
+
+    // See [How to convert std::filesystem::file_time_type to time_t?](
+    //  https://stackoverflow.com/questions/61030383/how-to-convert-stdfilesystemfile-time-type-to-time-t)
+    if constexpr (ibis::build_compiler_has_libcpp) {
+        // handle libc++ compile error: no member named 'clock_cast' in namespace 'std::chrono'
+        auto const to_time_t = [](fs::file_time_type time_point) {
+            using namespace std::chrono;
+            auto sctp = time_point_cast<system_clock::duration>(
+                time_point - fs::file_time_type::clock::now() + system_clock::now());
+            return system_clock::to_time_t(sctp);
+        };
+
+        std::time_t sys_time = to_time_t(file_time);  // NOLINT(misc-const-correctness); -> moveable
+        return sys_time;
+    }
+    else {
+#if !defined(_LIBCPP_VERSION)  // hide "faulty code" from Clang/libc++ 18 (clock_cast<> won't found)
+        auto const sys_time = chrono::clock_cast<chrono::system_clock>(file_time);
+        return chrono::system_clock::to_time_t(sys_time);
+#endif
+    }
 }
 
 }  // namespace ibis::util

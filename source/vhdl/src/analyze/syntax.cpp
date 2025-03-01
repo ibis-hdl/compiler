@@ -31,9 +31,8 @@
 #include <boost/locale/message.hpp>
 #include <ibis/util/compiler/warnings_on.hpp>
 
-#include <sstream>
+#include <string_view>
 #include <utility>
-#include <iostream>
 
 namespace ibis::vhdl::analyze {
 
@@ -49,43 +48,47 @@ bool syntax_worker::label_matches(NodeT const& node, std::string_view node_name)
     auto const match_result = check_label(node);
 
     // all went fine
-    if (match_result == label_match::result::OK) {
+    if (match_result == label_match::result::LABEL_OK) {
         return true;
     }
 
     // failure diagnostic to user
-    // @todo Check, if label_of alway return valid (non empty) ast::identifier, even on ill-formed
+    // @todo Check, if label_of always return valid (non empty) ast::identifier, even on ill-formed
     // nodes. diagnostic_handler::syntax_error() doesn't care about!
 
     auto const [start_label, end_label] = labels_of(node);
     node_name = ast::pretty_node_name(node_name);
 
+    // clang-format off
     switch (match_result) {
-        case label_match::result::MISMATCH: {
+        using enum label_match::result;
+        case LABEL_MISMATCH: {
             auto const err_msg =  // --
                 (format(translate("Label mismatch in {1}")) % node_name).str();
             diagnostic_handler.syntax_error(node, start_label, end_label, err_msg);
             return false;
         }
-
-        case label_match::result::ILLFORMED: {
+        case LABEL_ILLFORMED: {
             auto const err_msg =  // --
                 (format(translate("Label ill-formed in {1}")) % node_name).str();
             diagnostic_handler.syntax_error(node, start_label, end_label, err_msg);
             return false;
         }
-
-        default:  // unreachable_bug_triggered
-            cxx_unreachable_bug_triggered();
+        // test on OK before on function entry, shouldn't be here
+        [[unlikely]] case LABEL_OK:
+            cxx_bug_fatal("Internal logic error");
+        // *No* default branch: let the compiler generate warning about enumeration
+        // value not handled in switch
     }
+    // clang-format on
 
-    cxx_unreachable_bug_triggered();
+    std::unreachable();
 }
 
 bool syntax_worker::keyword_matches(ast::process_statement const& node,
                                     std::string_view node_name) const
 {
-    // Note: Re-Using label_match here results into misleading error message
+    // Note: Reusing label_match here results into misleading error message
     //       "Label mismatch". Further, the keywords aren't tagged so beauty
     //       error messages aren't possible this way.
     // FixMe: pretty error rendering; the error message's node lookup shows the

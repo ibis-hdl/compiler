@@ -1124,7 +1124,8 @@ struct based_literal_error_handler {
     {
         auto& diagnostic_handler = x3::get<parser::diagnostic_handler_tag>(context).get();
 
-        std::string const message =  // --
+        std::string const message =
+            // FixMe e.which() contains rule name 'based literal base', hence misleading error msg
             "in based literal '" + e.which() +
             "' the base specifier isn't supported; only 2, 8, 10 and 16!";
 
@@ -1139,7 +1140,7 @@ struct based_literal_error_handler {
 };
 
 template <typename T = x3::unused_type>
-auto const as = [](auto parser, const char* name = typeid(T).name()) {
+static inline auto const as = [](auto parser, const char* name = typeid(T).name()) {
     struct tag : based_literal_error_handler {};
     return x3::rule<tag, T>{ name } = parser;
 };
@@ -1163,6 +1164,10 @@ auto const as = [](auto parser, const char* name = typeid(T).name()) {
 /// https://stackoverflow.com/questions/47008258/x3-parse-rule-doesnt-compile/47013918#47013918)
 /// which also uses a 2nd pass using `stoull`.
 ///
+//
+// ToDo Revert Spirit.X3 here, make mini-parser for 3-chars-width and convert
+// see notes at ast::based_literal header
+//
 struct based_literal_base_type : x3::parser<based_literal_base_type> {
     using attribute_type = std::uint32_t;
 
@@ -1172,11 +1177,11 @@ struct based_literal_base_type : x3::parser<based_literal_base_type> {
     {
         skip_over(first, last, ctx);  // pre-skip using surrounding skipper
 
-        using range_type = ast::string_span;
-        range_type base_literal;
+        using string_range_type = ast::string_span;
+        string_range_type base_literal;
 
         // clang-format off
-        auto const integer_literal = x3::rule<struct _, range_type>{ "based literal's base" } =
+        auto const integer_literal = x3::rule<struct _, string_range_type>{ "based literal's base" } =
             raw[ lexeme [
                 digit >> *( -lit("_") >> digit )
             ]]
@@ -1192,10 +1197,11 @@ struct based_literal_base_type : x3::parser<based_literal_base_type> {
         using namespace ranges;
         auto pruned_literal = base_literal | views::filter([](char chr) { return chr != '_'; });
 
-        auto iter = std::begin(pruned_literal);
-        auto const end = std::end(pruned_literal);
+        auto parse_iter = std::begin(pruned_literal);
+        auto const parse_last = std::end(pruned_literal);
 
-        bool const parse_ok = x3::parse(iter, end, x3::uint_ >> x3::eoi, base_attribute);
+        bool const parse_ok =
+            x3::parse(parse_iter, parse_last, x3::uint_ >> x3::eoi, base_attribute);
 
         if (!parse_ok || !supported_base(base_attribute)) {
             return false;
@@ -1208,10 +1214,10 @@ struct based_literal_base_type : x3::parser<based_literal_base_type> {
         // clang-format off
         switch (base) {
             // NOLINTNEXTLINE(bugprone-branch-clone)
-            case 2:  [[fallthrough]];
-            case 8:  [[fallthrough]];
-            case 10: [[fallthrough]];
-            case 16: return true;
+            case 2U:  [[fallthrough]];
+            case 8U:  [[fallthrough]];
+            case 10U: [[fallthrough]];
+            case 16U: return true;
             default: return false;
         }
         // clang-format on
@@ -1334,9 +1340,9 @@ auto const bit_string_literal = [](auto&& base, auto&& char_range, auto&& attr) 
 
 // clang-format off
 auto const bit_string_literal_def =
-    detail::bit_string_literal("Bb", "01", ast::bit_string_literal::base_specifier::bin) |
-    detail::bit_string_literal("Xx", "0-9a-fA-F", ast::bit_string_literal::base_specifier::hex) |
-    detail::bit_string_literal("Oo", "0-7", ast::bit_string_literal::base_specifier::oct);
+    detail::bit_string_literal("Bb", "01", ast::bit_string_literal::numeric_base_specifier::base2) |
+    detail::bit_string_literal("Xx", "0-9a-fA-F", ast::bit_string_literal::numeric_base_specifier::base16) |
+    detail::bit_string_literal("Oo", "0-7", ast::bit_string_literal::numeric_base_specifier::base8);
 // clang-format on
 
 #if 0  // Note: UNUSED, embedded directly into bit_string_literal
@@ -4323,7 +4329,7 @@ BOOST_SPIRIT_DEFINE(  // -- W --
 //******************************************************************************
 // Annotation and Error handling
 //
-// Here the "classic" approach from spirit x3's examples/documention is used:
+// Here the "classic" approach from spirit x3's examples/documentation is used:
 // Derive the tag class from success "handler" to tag the node self and from
 // error "handler" to cope with parser/expectation exceptions using on_error()
 // member function.
