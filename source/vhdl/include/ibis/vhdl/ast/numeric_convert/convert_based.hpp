@@ -10,7 +10,9 @@
 #include <ibis/vhdl/type.hpp>
 
 #include <cstdint>
+#include <functional>
 #include <tuple>
+#include <utility>
 #include <variant>
 
 namespace ibis::vhdl::ast {
@@ -28,7 +30,7 @@ namespace ibis::vhdl::ast {
 ///
 /// @brief Convert based literal to numeric.
 ///
-/// BNF
+/// BNF:
 /// @code{.bnf}
 /// base # based_integer [ . based_integer ] # [ exponent ]
 /// @endcode
@@ -38,11 +40,19 @@ namespace ibis::vhdl::ast {
 /// - specifies based decimal literal must not have negative sign for the exponent.
 ///
 /// @tparam IntegerT The integer type of the numeric converted into.
-///
 /// @tparam RealT The real type of the numeric converted into.
 ///
 template <ibis::integer IntegerT, ibis::real RealT>
 class convert_based {
+    using iterator_type = parser::iterator_type;
+
+public:
+    /// diagnostic/error handler used for error reporting
+    using diagnostic_handler_type = ibis::vhdl::diagnostic_handler<iterator_type>;
+
+private:
+    std::reference_wrapper<diagnostic_handler_type> ref_diagnostic_handler;
+
 public:
     using integer_type = IntegerT;
     using real_type = RealT;
@@ -58,15 +68,13 @@ public:
     /// literal can fit the target_type).
     using return_type = std::tuple<bool, result_type>;
 
-    /// diagnostic/error handler used for error reporting
-    using diagnostic_handler_type = ibis::vhdl::diagnostic_handler<parser::iterator_type>;
-
+public:
     ///
     /// Construct a new numeric convert object.
     ///
-    /// @param diag_handler Error reporter.
+    /// @param diagnostic_handler Error reporter.
     ///
-    explicit convert_based(diagnostic_handler_type& diag_handler);
+    explicit convert_based(diagnostic_handler_type& diagnostic_handler);
 
     ///
     /// Convert the a bit string literal to numeric value.
@@ -93,9 +101,6 @@ private:
 
     /// parse the the `ast::based_literal` as real with base of 10.
     std::tuple<bool, double> parse_real10(ast::based_literal const& literal) const;
-
-private:
-    diagnostic_handler_type& diagnostic_handler;
 
 private:
     /// The BNF name of the literal to convert, '\0' terminated

@@ -73,8 +73,8 @@ namespace ibis::vhdl::ast {
 static constexpr unsigned BASE10 = 10;
 
 template <ibis::integer IntegerT, ibis::real RealT>
-convert_based<IntegerT, RealT>::convert_based(diagnostic_handler_type& diag_handler)
-    : diagnostic_handler{ diag_handler }
+convert_based<IntegerT, RealT>::convert_based(diagnostic_handler_type& diagnostic_handler)
+    : ref_diagnostic_handler{ std::ref(diagnostic_handler) }
 {
 }
 
@@ -123,7 +123,7 @@ convert_based<IntegerT, RealT>::parse_integer(unsigned base,
     auto range_f = numeric_convert::detail::filter_range(integer_literal);
 
     if (ranges::distance(range_f) > std::numeric_limits<integer_type>::digits10) {
-        diagnostic_handler.parser_error(                     // --
+        ref_diagnostic_handler.get().parser_error(           // --
             integer_literal.begin(), integer_literal.end(),  // --
             // TRANSLATORS: error message for numeric target type
             (format(translate("in {1} integer part '{2}' can't fit the numeric type"))  // --
@@ -139,7 +139,7 @@ convert_based<IntegerT, RealT>::parse_integer(unsigned base,
     bool const parse_ok = x3::parse(iter, end, parser(base, iter) >> x3::eoi, integer_attribute);
 
     if (!parse_ok) {
-        diagnostic_handler.parser_error(                     // --
+        ref_diagnostic_handler.get().parser_error(           // --
             integer_literal.begin(), integer_literal.end(),  // --
             // TRANSLATORS: error message for numeric target type
             (format(translate("in {1} parse of integer part '{2}' failed"))  // --
@@ -218,7 +218,7 @@ std::tuple<bool, double> convert_based<IntegerT, RealT>::parse_fractional(
 
     // during accumulation a numeric IEEE754 errors may occur
     if (!std::isnormal(fractional)) {
-        diagnostic_handler.numeric_error(                          // --
+        ref_diagnostic_handler.get().numeric_error(                // --
             fractional_literal.begin(), fractional_literal.end(),  // --
             (format(translate(  // TRANSLATORS: error message for numeric target type
                  "in {1} numeric error occurred during calculation of fractional part '{2}'"))  //
@@ -259,7 +259,7 @@ std::tuple<bool, std::int32_t> convert_based<IntegerT, RealT>::parse_exponent(
         translate("in {1} the exponent part '{2}' can't fit the {3} type");
 
     if (ranges::distance(range_f) > std::numeric_limits<exponent_type>::digits10) {
-        diagnostic_handler.parser_error(                       // --
+        ref_diagnostic_handler.get().parser_error(             // --
             exponent_literal.begin(), exponent_literal.end(),  // --
             (format(translate(error_msg_tr))                   //
              % node_name % exponent_literal_sv)
@@ -276,7 +276,7 @@ std::tuple<bool, std::int32_t> convert_based<IntegerT, RealT>::parse_exponent(
     bool const parse_ok = x3::parse(iter, end, exp >> x3::eoi, exponent_attribute);
 
     if (!parse_ok) {
-        diagnostic_handler.parser_error(                       // --
+        ref_diagnostic_handler.get().parser_error(             // --
             exponent_literal.begin(), exponent_literal.end(),  // --
             // TRANSLATORS: error message for numeric target type
             (format(translate("in {1} parse of exponent '{2}' failed"))  // --
@@ -292,7 +292,7 @@ std::tuple<bool, std::int32_t> convert_based<IntegerT, RealT>::parse_exponent(
     if (literal.number.type_specifier == numeric_type_specifier::real) {
         // max. exponent for e.g. double 308 as in 1.0e308
         if (exponent_attribute > std::numeric_limits<real_type>::max_exponent10) {
-            diagnostic_handler.parser_error(                       // --
+            ref_diagnostic_handler.get().parser_error(             // --
                 exponent_literal.begin(), exponent_literal.end(),  // --
                 (format(error_msg_tr) % node_name % exponent_literal_sv % "real").str());
             return { false, exponent_attribute };
@@ -301,7 +301,7 @@ std::tuple<bool, std::int32_t> convert_based<IntegerT, RealT>::parse_exponent(
     else {
         // max. exponent for e.g. 32bit integer 9 as in 1e+9
         if (exponent_attribute > std::numeric_limits<integer_type>::digits10) {
-            diagnostic_handler.parser_error(                       // --
+            ref_diagnostic_handler.get().parser_error(             // --
                 exponent_literal.begin(), exponent_literal.end(),  // --
                 (format(error_msg_tr) % node_name % exponent_literal_sv % "integer").str());
             return { false, exponent_attribute };
@@ -340,7 +340,7 @@ std::tuple<bool, double> convert_based<IntegerT, RealT>::parse_real10(
 
     if (!parse_ok) {
         auto const real10_str = range_f | to<std::string>();
-        diagnostic_handler.parser_error(                             // --
+        ref_diagnostic_handler.get().parser_error(                   // --
             literal.number.integer_part.begin(),                     // --
             (format(translate("in {1} parse of real '{2}' failed"))  //--
              % node_name % real10_str)
