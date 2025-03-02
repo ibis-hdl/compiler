@@ -32,8 +32,8 @@ private:
 public:
     ast_context() = delete;
 
-    ast_context(current_file_type current_file, position_cache_type& position_cache)
-        : current_file{ current_file }
+    ast_context(current_file_type current_file_, position_cache_type& position_cache)
+        : current_file{ current_file_ }
         , ref_position_cache{ std::ref(position_cache) }
     {
     }
@@ -63,7 +63,7 @@ public:
     }
 
 public:
-    file_id_type file_id() const { return current_file.file_id(); };
+    file_id_type file_id() const { return current_file.file_id(); }
     std::string_view file_name() const { return current_file.file_name(); }
     std::string_view file_contents() const { return current_file.file_contents(); }
 };

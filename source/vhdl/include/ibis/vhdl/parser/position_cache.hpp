@@ -106,15 +106,19 @@ private:
     ///
     /// Check if a given position ID is valid
     ///
-    bool valid_id(position_id_type id) const { return std::cmp_less(id, position_registry.size()); }
+    bool valid_id(position_id_type id) const
+    {
+        return std::cmp_less(id.get(), position_registry.size());
+    }
 
     ///
     /// Get an ID
     ///
     position_id_type next_id() const
     {
-        assert(std::cmp_less(position_registry.size(), ast::position_tagged::MAX_POSITION_ID) &&
-               "Insufficient range of numeric IDs for AST tagging");
+        assert(
+            std::cmp_less(position_registry.size(), ast::position_tagged::MAX_POSITION_ID.get())  //
+            && "Insufficient range of numeric IDs for AST tagging");
 
         return position_id_type{ position_registry.size() };
     }

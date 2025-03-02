@@ -237,8 +237,7 @@ if(IBIS_DEVELOPER_CLANG_WARN_EVERYTHING)
     set(_warn_switch -Wno-switch-default)
     # misc
     set(_warn_misc -Wno-padded -Wno-global-constructors -Wno-exit-time-destructors)
-    # boost.test macros hell, ibis is using rarely macros
-    # boost.test fires [-Wused-but-marked-unused]
+    # boost.test macros hell [-Wused-but-marked-unused], ibis is using rarely macros
     set(_warn_boost -Wno-disabled-macro-expansion -Wno-used-but-marked-unused)
     # get suggestions
     # - unsafe pointer arithmetic[-Wunsafe-buffer-usage] - receive code hardening suggestions

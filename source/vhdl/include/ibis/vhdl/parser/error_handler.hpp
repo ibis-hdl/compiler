@@ -53,7 +53,7 @@ public:
     /// @param first Iterator to the begin of somewhat, unused
     /// @param last  Iterator to the end of somewhat, unused
     /// @param e Boost.Spirit X3 x3::expectation_failure<IteratorT> exception
-    /// @param context Boost.Spirit X3 context
+    /// @param x3_ctx Boost.Spirit X3 context
     /// @return x3::diagnostic_handler_result
     ///
     /// @todo recursive include problem; `parser_config` requires on_error definition,

@@ -301,7 +301,10 @@ struct std::formatter<ibis::vhdl::ast::string_literal> {
         for (auto it = begin(ctx); it != end(ctx); ++it) {
             if (std::string_view{ ctx }.starts_with(raw_spec)) {
                 raw_format = true;
-                ctx.advance_to(begin(ctx) + raw_spec.size());
+                // avoid Clang's warning about unsafe pointer used for buffer access
+                // [-Wunsafe-buffer-usage]
+                std::advance(it, raw_spec.size());
+                ctx.advance_to(it);
             }
             if (*it == '}') {
                 return it;
@@ -318,8 +321,8 @@ struct std::formatter<ibis::vhdl::ast::string_literal> {
             return std::format_to(ctx.out(), "{}", string.literal);
         }
 
-        // ToDo: Find a better way to unquote, not robust in all cases (maybe Boost.Parser?)
-        /* from clack channel:
+        // ToDo: Find a better way to unquote, not robust in all cases
+        /* from slack channel:
             prev_quote is just:
             % -> the second % is then canceled, and prev_quote is assigned to \0;
             repeat 1;

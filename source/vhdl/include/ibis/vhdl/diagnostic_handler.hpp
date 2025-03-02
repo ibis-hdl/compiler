@@ -238,7 +238,7 @@ private:
     /// Wraps the call of @ref position_cache::position_of() to get begin/end iterators for
     /// convenience..
     ///
-    /// @param tagged_node The AST node to lookup for iterators
+    /// @param node The AST node to lookup for iterators
     /// @return std::tuple<iterator_type, iterator_type, bool> The iterators tagged before by @ref
     /// annotate. If the node is not tagged empty iterators (begin/end) are returned - for
     /// convenience false to mark these as invalid; otherwise true.
