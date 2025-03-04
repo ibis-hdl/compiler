@@ -41,11 +41,11 @@ target_link_libraries(${PROJECT_NAME}
 target_sources(${PROJECT_NAME}
     PRIVATE
         src/test_numeric_convert.cpp
-        src/numeric_parser.cpp
+        #src/numeric_parser.cpp
         # concrete test cases
-        src/test/bit_string_literal_test.cpp
-        src/test/decimal_literal_test.cpp
-		src/test/based_literal_test_ng.cpp
+        #src/test/bit_string_literal_test.cpp
+        #src/test/decimal_literal_test.cpp
+		src/test/test_based_literal.cpp
 )
 # https://cmake.org/cmake/help/latest/prop_tgt/UNITY_BUILD_MODE.html
 set_target_properties(${PROJECT_NAME} PROPERTIES

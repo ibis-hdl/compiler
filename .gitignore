@@ -37,5 +37,8 @@ ConanCMakePresets.json
 ## CMake
 Testing/**
 
-# Clangd
+## Clangd
 .cache/**
+
+## temporay developer files
+ToDo.md

@@ -8,7 +8,8 @@
             "name": "developer-mode",
             "hidden": true,
             "cacheVariables": {
-              "IBIS_DEVELOPER_MODE": "ON"
+              "IBIS_DEVELOPER_MODE": "ON",
+              "IBIS_DEVELOPER_RUN_CLANG_TIME_TRACE": "ON"
             }
         },
         {

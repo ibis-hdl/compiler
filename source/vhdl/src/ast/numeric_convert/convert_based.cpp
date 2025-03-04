@@ -244,7 +244,6 @@ std::tuple<bool, std::int32_t> convert_based<IntegerT, RealT>::parse_exponent(
 
     // convenience alias
     auto const& exponent_literal = literal.number.exponent;
-    auto const exponent_literal_sv = as_string_view(exponent_literal);
 
     // optional exponent is empty
     if (exponent_literal.empty()) {
@@ -252,7 +251,8 @@ std::tuple<bool, std::int32_t> convert_based<IntegerT, RealT>::parse_exponent(
         return { true, exponent_attribute };
     }
 
-    auto range_f = numeric_convert::detail::filter_range(exponent_literal);
+    auto const exponent_literal_sv = as_string_view(exponent_literal);
+    auto range_f = numeric_convert::detail::filter_range(exponent_literal_sv);
 
     // TRANSLATORS: error message for numeric target type
     std::string const error_msg_tr =  // same message template for several error messages
