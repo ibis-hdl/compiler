@@ -99,32 +99,35 @@ int main(int argc, const char* argv[])
         util::file_mapper file_mapper{};
         parser::position_cache<iterator_type> position_cache{ 4_KiB };
         parser::parse<iterator_type> const parse{ std::cout };
-        vhdl::vhdl_global_context ctx;
+        vhdl::vhdl_global_context vhdl_ctx;
 
         // iterate over property_tree::path by using API get_child()
         for (auto const& child : settings::instance().get_child("hdl-files")) {
-            std::string_view const hdl_file = child.second.data();
+            std::string hdl_file_name = child.second.data();
 
-            auto const file_expected = file_reader.read_file(hdl_file);
-            if (!file_expected) {
-                auto const ec = file_expected.error();
+            auto const file_data = file_reader.read_file(hdl_file_name);
+            if (!file_data) {
+                // report error and exit if file data can't be read.
+                auto const ec = file_data.error();
                 ibis::error(format(translate("Error loading file \"{1}\" ({2})"))  // --
-                            % hdl_file % ec.message());
+                            % hdl_file_name % ec.message());
                 return EXIT_FAILURE;
             }
             if (!quiet) {
-                ibis::note((format(translate("processing: {1}")) % hdl_file));
+                ibis::note((format(translate("processing: {1}")) % hdl_file_name));
             }
 
-            auto file_contents{ file_expected.value() };
+            auto file_contents{ file_data.value() };
 
             render_source(file_contents);
 
-            // prepare to parse
-            auto current_file = file_mapper.add_file(hdl_file, std::move(file_contents));
+            // prepare to parse the current file
+            auto current_file =
+                file_mapper.add_file(std::move(hdl_file_name), std::move(file_contents));
+            ast::ast_context<iterator_type> ast_context{ current_file, position_cache };
             ast::design_file design_file;
 
-            parse(current_file, position_cache, ctx, design_file);
+            parse(ast_context, vhdl_ctx, design_file);
 
             if (!quiet) {
                 ast::printer ast_printer{ std::cout };
@@ -156,7 +159,7 @@ int main(int argc, const char* argv[])
              % file_mapper.file_count()));
 
         // print error/warning state if any (failure_status takes care on it)
-        std::cout << ctx.get_failure_status() << '\n';
+        std::cout << vhdl_ctx.get_failure_status() << '\n';
 
         return EXIT_SUCCESS;
     }

@@ -32,6 +32,12 @@ private:
 public:
     ast_context() = delete;
 
+    ///
+    /// @brief Construct a new ast context object
+    ///
+    /// @param current_file_ file_mapper proxy with current_file context
+    /// @param position_cache position_cache with the file contents to be parsed.
+    ///
     ast_context(current_file_type current_file_, position_cache_type& position_cache)
         : current_file{ current_file_ }
         , ref_position_cache{ std::ref(position_cache) }

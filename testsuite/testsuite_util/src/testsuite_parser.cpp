@@ -34,13 +34,15 @@ bool testsuite_parse::operator()(std::string_view contents, ast::design_file& de
     try {
         util::file_mapper file_mapper{};
         parser::position_cache<iterator_type> position_cache{ 4_KiB };
-        parser::parse<iterator_type> const parse{ os };
-        vhdl::vhdl_global_context vhdl_ctx;
 
-        // no std::move of the variable 'contents' (trivially-copyable type 'std::string_view')
         auto current_file = file_mapper.add_file(this->file_name(), contents);
 
-        parse_ok = parse(current_file, position_cache, vhdl_ctx, design_file);
+        ast::ast_context<iterator_type> ast_context{ current_file, position_cache };
+        vhdl::vhdl_global_context vhdl_ctx;
+
+        parser::parse<iterator_type> const parse{ os };
+
+        parse_ok = parse(ast_context, vhdl_ctx, design_file);
 
         os << vhdl_ctx.get_failure_status() << '\n';
         return parse_ok;

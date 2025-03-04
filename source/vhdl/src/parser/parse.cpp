@@ -46,13 +46,12 @@ BOOST_SPIRIT_DECLARE(design_file_type)
 namespace ibis::vhdl::parser {
 
 template <std::random_access_iterator IteratorT>
-bool parse<IteratorT>::operator()(current_file_type& current_file,
-                                  position_cache_type& position_cache, vhdl_context_type& vhdl_ctx,
+bool parse<IteratorT>::operator()(ast_context_type& ast_context, vhdl_context_type& vhdl_ctx,
                                   ast::design_file& design_file) const
 {
     using ibis::util::get_iterator_pair;
 
-    ast::ast_context<iterator_type> ast_context{ current_file, position_cache };
+    // ast::ast_context<iterator_type> ast_context{ current_file, position_cache };
     diagnostic_handler_type diagnostic_handler{ os, ast_context, vhdl_ctx };
 
     // ToDo Check idea, approach used in

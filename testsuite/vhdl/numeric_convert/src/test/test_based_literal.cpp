@@ -304,7 +304,7 @@ BOOST_AUTO_TEST_CASE(based_literal)
 
     // parse
     parser::parse<iterator_type> parse{ os };
-    bool parse_ok = parse(current_file, position_cache, vhdl_ctx, ast);
+    bool parse_ok = parse(ast_context, vhdl_ctx, ast);
     BOOST_TEST(parse_ok);
 
     // convert and check results

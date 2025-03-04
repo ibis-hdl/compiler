@@ -56,7 +56,7 @@ BOOST_DATA_TEST_CASE(labels_ok,                                                 
     {
         parser::parse<iterator_type> const parse{ output };
 
-        bool const parse_ok = parse(current_file, position_cache, vhdl_ctx, design_file);
+        bool const parse_ok = parse(ast_context, vhdl_ctx, design_file);
 
         // syntactically correct
         BOOST_TEST_REQUIRE(parse_ok == true);
@@ -64,9 +64,10 @@ BOOST_DATA_TEST_CASE(labels_ok,                                                 
     }
 
     {
-        ibis::vhdl::diagnostic_handler<parser::iterator_type> diagnostic_handler{ output,
-                                                                                  ast_context,
-                                                                                  vhdl_ctx };
+        ibis::vhdl::diagnostic_handler<parser::iterator_type> diagnostic_handler{
+            // --
+            output, ast_context, vhdl_ctx
+        };
         analyze::syntax_checker syntax_check{ output, vhdl_ctx, diagnostic_handler };
 
         syntax_check(design_file);
@@ -107,7 +108,7 @@ BOOST_DATA_TEST_CASE(
     {
         parser::parse<iterator_type> const parse{ output };
 
-        bool const parse_ok = parse(current_file, position_cache, vhdl_ctx, design_file);
+        bool const parse_ok = parse(ast_context, vhdl_ctx, design_file);
 
         // syntactically correct
         BOOST_TEST_REQUIRE(parse_ok == true);
@@ -115,9 +116,10 @@ BOOST_DATA_TEST_CASE(
     }
 
     {
-        ibis::vhdl::diagnostic_handler<parser::iterator_type> diagnostic_handler{ output,
-                                                                                  ast_context,
-                                                                                  vhdl_ctx };
+        ibis::vhdl::diagnostic_handler<parser::iterator_type> diagnostic_handler{
+            //
+            output, ast_context, vhdl_ctx
+        };
         analyze::syntax_checker syntax_check{ output, vhdl_ctx, diagnostic_handler };
 
         syntax_check(design_file);
