@@ -36,7 +36,7 @@ struct number_gutter {
 ///
 struct spacer {
     constexpr spacer() = default;
-    constexpr spacer(std::size_t const width_, std::string_view chr_sv = " ")
+    constexpr explicit spacer(std::size_t width_, std::string_view chr_sv = " ")
         : width{ width_ }
         , chr{ chr_sv.front() }
     {
@@ -60,7 +60,9 @@ struct issue_range {
     constexpr issue_range(IteratorT begin, std::optional<IteratorT> end)
         : iter{ begin }
         , distance{ [&]() -> difference_type {
-            if (end.has_value()) return std::distance(begin, end.value());
+            if (end.has_value()) {
+                return std::distance(begin, end.value());
+            }
             return 0;
         }() }
     {
@@ -113,9 +115,6 @@ struct std::formatter<ibis::vhdl::source_location> {
     template <class FmtContext>
     auto format(ibis::vhdl::source_location const& location, FmtContext& ctx) const
     {
-        std::string temp;   // ToDo use pmr and buffer
-        temp.reserve(256);  // initial guess
-
         // Based on GNU standard of [Formatting Error Messages](
         // https://www.gnu.org/prep/standards/html_node/Errors.html)
         return std::format_to(ctx.out(), "{}:{}:{}",  // --
@@ -127,7 +126,7 @@ struct std::formatter<ibis::vhdl::source_location> {
 };
 
 template <>
-struct std::formatter<ibis::vhdl::diagnostic_context::failure_type> {
+struct std::formatter<ibis::vhdl::diagnostic_context::failure_kind> {
     template <class ParseContext>
     static constexpr auto parse(ParseContext& ctx)
     {
@@ -135,18 +134,18 @@ struct std::formatter<ibis::vhdl::diagnostic_context::failure_type> {
             return begin;
         }
         throw std::format_error(
-            "non-empty format specification for <vhdl::diagnostic_context::failure_type>");
+            "non-empty format specification for <vhdl::diagnostic_context::failure_kind>");
     }
 
     // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
     template <class FmtContext>
-    auto format(ibis::vhdl::diagnostic_context::failure_type failure, FmtContext& ctx) const
+    auto format(ibis::vhdl::diagnostic_context::failure_kind failure, FmtContext& ctx) const
     {
         using namespace ibis::vhdl;
         using boost::locale::translate;
 
         auto const as_str = [](auto failure_enum) {
-            using enum ibis::vhdl::diagnostic_context::failure_type;
+            using enum ibis::vhdl::diagnostic_context::failure_kind;
             // clang-format off
             switch (failure_enum) {
                 case unspecific:
@@ -219,11 +218,11 @@ struct std::formatter<ibis::vhdl::number_gutter> {
     }
 
 private:
-    // pow(base, exp) using C++23 deducing this; for proof of concept
-    // @see https://coliru.stacked-crooked.com/a/9ff087b87abb54fc
-    static constexpr auto pow = [](this auto const& self, unsigned b,
-                                   unsigned e) constexpr -> unsigned {
-        return (e == 0) ? 1u : b * self(b, e - 1);
+    // pow(base, exp) using C++23 deducing this
+    // for proof of concept @see https://coliru.stacked-crooked.com/a/9ff087b87abb54fc
+    static constexpr auto pow = [](this auto const& self, unsigned base,
+                                   unsigned exp) constexpr -> unsigned {
+        return (exp == 0) ? 1U : base * self(base, exp - 1U);
     };
 
 private:
@@ -311,7 +310,7 @@ struct std::formatter<ibis::vhdl::issue_marker<IteratorT>> {
         // left margin/offset to issue marker begin
         auto const distance = std::distance(issue.start, issue.failure.position());
         cxx_assert(!(distance < 0), "unexpected order of iterators, end() comes before begin()");
-        std::size_t const width = static_cast<std::size_t>(distance);
+        auto const width = static_cast<std::size_t>(distance);
 
         return std::format_to(ctx.out(), "{}{}", spacer{ width }, issue.failure);
     }

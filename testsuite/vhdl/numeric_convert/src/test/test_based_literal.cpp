@@ -146,7 +146,7 @@ constexpr auto gold_data = std::to_array<gold_data_type>({
 });
 
 // clang-format off
-auto const expected_os = R"(
+auto const  expected_os [[maybe_unused]] = R"(
 In 'based_literal':29:40: parse error: in based literal parse of integer part '012' failed
   29|     CONSTANT invalid_01 : INTEGER := 2#012#;            -- invalid char(s)
     |                                        ~~~ <<-- here

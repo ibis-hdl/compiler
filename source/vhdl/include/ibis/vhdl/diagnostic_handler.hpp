@@ -50,7 +50,7 @@ public:
     using current_file_type = ibis::util::file_mapper::current_file;
     using position_cache_type = parser::position_cache<iterator_type>;
     using vhdl_context_type = ibis::vhdl::vhdl_global_context;
-    using error_type = diagnostic_context::failure_type;
+    using error_type = diagnostic_context::failure_kind;
 
 private:
     std::ostream& os;

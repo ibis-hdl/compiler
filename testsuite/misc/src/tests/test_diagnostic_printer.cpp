@@ -77,6 +77,7 @@ constexpr auto make_issue = [](std::string_view str, char first_chr,
     // NOLINTBEGIN(readability-qualified-auto) don't touch, since this may be an iterator classes
     auto const start = str.begin();
     auto const failure_begin = find_char<iterator_type>(str.begin(), str.end(), first_chr);
+    // ClangTidy - don't touch, since this may be an iterator classes
     // NOLINTEND(readability-qualified-auto)
     auto const failure_end = [&]() {
         if (last_chr.has_value()) {
@@ -154,6 +155,7 @@ BOOST_AUTO_TEST_CASE(issue_marker_formatter, *utf::label("formatter"))
             if constexpr (verbose) {
                 using valid_data::input_string;
                 std::cout << std::format(
+                    // --- format ---
                     "{0:-^76}\n"        // -- top border
                     "input    |{1}|\n"  // -- | <input> |
                     "output   |{2}|\n"  // -- | <issue marker> |

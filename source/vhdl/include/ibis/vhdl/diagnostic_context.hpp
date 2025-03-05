@@ -9,12 +9,11 @@
 
 #include <ibis/vhdl/ast/util/string_span.hpp>
 
+#include <cstdint>
 #include <string>
 #include <string_view>
 #include <optional>
 #include <vector>
-
-#include <iostream>
 
 namespace ibis::vhdl {
 
@@ -25,6 +24,8 @@ public:
     using iterator_type = parser::iterator_type;
 
 public:
+    source_snippet() = delete;
+
     explicit source_snippet(std::size_t line_no_, std::string_view src_line_, iterator_type first_,
                             std::optional<iterator_type> last_)
         : line_no{ line_no_ }
@@ -55,43 +56,55 @@ private:
     std::string_view src_line;
 
     /// iterator position pointing to error/warning beginning part inside code snippet
-    iterator_type const iter_first;
+    iterator_type /* const */ iter_first;
 
     /// optional iterator position pointing to error/warning ending part inside code snippet
-    std::optional<iterator_type> const iter_last;
+    std::optional<iterator_type> /* const */ iter_last;
 };
 
 }  // namespace detail
 
 ///
-/// error/warning messages data
+/// error and warning messages data
 ///
-/// ToDo Find a more appropriate name for this - too much .._context in class names anywhere, maybe
-/// failure_data
 /// ToDo Make it unformatted comparable for use in test, no need to compare diagnostic
-/// printer's
-///       output!
+/// printer's output!
 ///
 class diagnostic_context {
 public:
-    enum class failure_type { unspecific, parser, syntax, semantic, numeric, not_supported };
+    enum class failure_kind : std::uint8_t {
+        unspecific,
+        parser,
+        syntax,
+        semantic,
+        numeric,
+        not_supported
+    };
 
-public:
     using source_snippet = detail::source_snippet;
 
+private:
+    failure_kind failure_type;
+    std::string failure_message;
+    source_location src_location;
+    std::vector<source_snippet> src_snippets;
+
 public:
+    diagnostic_context() = delete;
+
     ///
     /// @brief Construct a new diagnostic context object
     ///
-    /// @param provider_ The origin of issue
-    /// @param err_message_ Store a copy of error _message
+    /// @param failure The kind/origin of failure issue
+    /// @param error_message Store a copy of error _message
     ///
-    diagnostic_context(failure_type provider_, std::string_view err_message_)
-        : msg_provider{ provider_ }
-        , err_message{ err_message_ }
+    diagnostic_context(failure_kind failure, std::string_view error_message)
+        : failure_type{ failure }
+        , failure_message{ error_message }
     {
     }
 
+public:
     ///
     /// Set the source location object
     ///
@@ -122,26 +135,20 @@ public:
     source_location const& location() const { return src_location; }
 
     ///
-    /// Get the message failure_type enum
+    /// Get the message failure_kind enum
     ///
-    /// @return failure_type
+    /// @return failure_kind
     ///
-    failure_type message_provider() const { return msg_provider; }
+    failure_kind message_provider() const { return failure_type; }
 
     ///
     /// Get the error/warning message
     ///
     /// @return std::string_view
     ///
-    std::string_view message() const { return err_message; }
+    std::string_view message() const { return failure_message; }
 
     std::vector<source_snippet> const& source_snippets() const { return src_snippets; }
-
-private:
-    failure_type msg_provider;
-    std::string err_message;
-    source_location src_location;
-    std::vector<source_snippet> src_snippets;
 };
 
 }  // namespace ibis::vhdl

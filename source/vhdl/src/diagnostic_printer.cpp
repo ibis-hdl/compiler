@@ -15,15 +15,13 @@
 #include <string>
 #include <string_view>
 
-#include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
 #include <boost/locale/format.hpp>
 #include <boost/locale/message.hpp>
-#include <ibis/util/compiler/warnings_on.hpp>
 
 namespace ibis::vhdl {
 
 diagnostic_printer::diagnostic_printer(diagnostic_context const& ctx)
-    : context{ ctx }
+    : ref_context{ ctx }
 {
 }
 
@@ -33,10 +31,12 @@ std::ostream& diagnostic_printer::print_snippets(std::ostream& os) const
     using boost::locale::format;
     using boost::locale::translate;
 
-    auto const snippet_count = context.source_snippets().size();
+    auto const snippet_count = ref_context.get().source_snippets().size();
 
-    for (auto snippet_idx{ 0UL }; auto const& source_snippet : context.source_snippets()) {
-        // NOLINTNEXTLINE(readability-qualified-auto): different implementations for iterators
+    for (auto snippet_idx{ 0UL };
+         auto const& source_snippet : ref_context.get().source_snippets()) {
+        // ClangTidy - don't touch, since this may be an iterator classes
+        // NOLINTNEXTLINE(readability-qualified-auto)
         auto const line_start = source_snippet.source_line().begin();
         constexpr bool debug = true;
 
@@ -47,7 +47,7 @@ std::ostream& diagnostic_printer::print_snippets(std::ostream& os) const
             "{}|{}{}",  // <gutter>|<issue_marker>
             number_gutter{ source_snippet.line_number() }, source_snippet.source_line(),
             number_gutter{},
-            // considering the Clang' warning: 'issue_marker' may not intend to support class
+            // Note: considering the Clang' warning: 'issue_marker' may not intend to support class
             // template argument deduction [-Wctad-maybe-unsupported]
             issue_marker<iterator_type>{ line_start, source_snippet.first(),
                                          source_snippet.last() },
@@ -84,8 +84,8 @@ std::ostream& diagnostic_printer::print_on(std::ostream& os) const
 
         // ToDo The diagnostic context has to ensure that there is a message, shouldn't it?
         // With this we get rid off this cumbersome fix
-        if (!context.message().empty()) [[likely]] {
-            return context.message();
+        if (!ref_context.get().message().empty()) [[likely]] {
+            return ref_context.get().message();
         }
         return std::string_view{ unspecified_error_str };
     };
@@ -93,8 +93,8 @@ std::ostream& diagnostic_printer::print_on(std::ostream& os) const
     // ToDo print the failure message in color
     os << std::format("{} {} {}: {}\n",       //
                       translate("In").str(),  // TRANSLATOR "In <'file':line:column> <failure>..."
-                      context.location(),     //
-                      failure_type{},         // FixMe always 'unspecified'- what was the intend?
+                      ref_context.get().location(),  //
+                      failure_kind{},  // FixMe always 'unspecified'- what was the intend?
                       context_message())
        << snippets();
 

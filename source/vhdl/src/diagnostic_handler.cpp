@@ -46,7 +46,7 @@ void diagnostic_handler<IteratorT>::syntax_error(ast::position_tagged const& whe
 
     auto const where_range = ref_ast_context.get().position_of(where_tag);
 
-    constexpr auto syntax_error = diagnostic_context::failure_type::syntax;
+    constexpr auto syntax_error = diagnostic_context::failure_kind::syntax;
 
     error(where_range.begin(), where_range.end(), error_message, syntax_error);
 }
@@ -66,7 +66,7 @@ void diagnostic_handler<IteratorT>::syntax_error(ast::position_tagged const& whe
 
     ++ref_vhdl_context.get().errors();
 
-    constexpr auto syntax_error = diagnostic_context::failure_type::syntax;
+    constexpr auto syntax_error = diagnostic_context::failure_kind::syntax;
 
     diagnostic_context diag_ctx{ syntax_error, error_message };
 
@@ -188,7 +188,7 @@ std::string_view diagnostic_handler<IteratorT>::current_line(iterator_type first
 
     auto line_end = first;
     // ClangTidy - don't touch, since this may be an iterator classes
-    // NOLINTNEXTLINE(readability-qualified-auto,readability-qualified-auto)
+    // NOLINTNEXTLINE(readability-qualified-auto)
     auto const end = ref_ast_context.get().file_contents().end();
 
     while (line_end != end) {

@@ -8,8 +8,10 @@
 #include <ibis/vhdl/diagnostic_handler.hpp>
 #include <ibis/vhdl/diagnostic_context.hpp>
 
+#include <functional>
 #include <iosfwd>
 #include <string>
+#include <utility>
 
 namespace ibis::vhdl {
 
@@ -17,16 +19,23 @@ namespace ibis::vhdl {
 /// Class to display the formatted message.
 ///
 class diagnostic_printer {
-public:
-    using failure_type = diagnostic_context::failure_type;
+    std::reference_wrapper<diagnostic_context const> ref_context;
+    std::size_t tab_size = 4;
+    char marker_symbol = '~';
+    char location_symbol = '^';
 
 public:
+    using failure_kind = diagnostic_context::failure_kind;
+
+public:
+    diagnostic_printer() = delete;
+
     ///
     /// @brief Construct a new printer object
     ///
     /// @param ctx diagnostic_context with location of the error to print.
     ///
-    /// @todo The failure_type specifier must be accessible by the header to allow specific error
+    /// @todo The failure_kind specifier must be accessible by the header to allow specific error
     /// messages. Best would be to make it an own non-nested class.
     ///
     /// @todo: This class does the formatting only for some peaces of the final error/warning
@@ -35,9 +44,7 @@ public:
     /// hence it isn't configurable/derivable as intended. Maybe introduce an `error_context` for
     /// all the information carried?
     ///
-    diagnostic_printer(diagnostic_context const& ctx);
-
-    std::ostream& print_snippets(std::ostream& os) const;
+    explicit diagnostic_printer(diagnostic_context const& ctx);
 
     std::ostream& print_on(std::ostream& os) const;
 
@@ -45,11 +52,7 @@ public:
     void set_tab_size(std::size_t sz) { tab_size = sz; }
 
 private:
-    diagnostic_context const& context;
-
-    std::size_t tab_size = 4;
-    char marker_symbol = '~';
-    char location_symbol = '^';
+    std::ostream& print_snippets(std::ostream& os) const;
 };
 
 inline std::ostream& operator<<(std::ostream& os, diagnostic_printer const& diag_format)
