@@ -5,19 +5,14 @@
 
 #pragma once
 
-#include <ibis/util/compiler/warnings_off.hpp>  // [-Wsign-conversion]
-#include <boost/range/iterator_range_core.hpp>
-#include <ibis/util/compiler/warnings_on.hpp>
-
 #include <ibis/vhdl/parser/iterator_type.hpp>
+
+#include <boost/range/iterator_range_core.hpp>
 
 #include <string_view>
 
 namespace ibis::vhdl::ast {
 
-//
-// Hot Fix
-//
 // This is required to work with 'string_view', later version of Spirit.X3
 // as 1.64. Note the hard coded iterator type!!, \see
 // [Spirit.X3 using string_view and member named 'insert' compiler error](

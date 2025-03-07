@@ -7,6 +7,7 @@
 
 #include <ibis/util/file_mapper.hpp>
 #include <ibis/vhdl/diagnostic_context.hpp>
+#include <ibis/diagnostic/util.hpp>
 #include <ibis/vhdl/parser/iterator_type.hpp>
 #include <ibis/vhdl/parser/position_cache.hpp>
 #include <ibis/vhdl/source_location.hpp>
@@ -16,6 +17,7 @@
 
 #include <cctype>
 #include <cstddef>
+#include <cstdint>
 #include <functional>
 #include <iosfwd>
 #include <optional>
@@ -41,8 +43,6 @@ namespace ibis::vhdl {
 /// @tparam IteratorT Type of iterator used by `parser::position_cache`'s `proxy`. Generally
 /// equals to `vhdl::parser::iterator_type`.
 ///
-// ToDo Too much functionality in a single class, make free function of line_column_number(),
-// get_line_start() etc.
 template <typename IteratorT>
 class diagnostic_handler {
 public:
@@ -57,7 +57,7 @@ private:
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init]) - default ctor is deleted
     std::reference_wrapper<ast::ast_context<iterator_type>> ref_ast_context;
     std::reference_wrapper<vhdl_context_type> ref_vhdl_context;
-    std::size_t tab_sz;
+    std::uint32_t tab_sz;
 
 public:
     ///
@@ -72,12 +72,14 @@ public:
     diagnostic_handler() = delete;
 
     diagnostic_handler(std::ostream& os_, ast::ast_context<iterator_type>& ast_context,
-                       vhdl_context_type& vhdl_context, std::size_t tabs = 4)
+                       vhdl_context_type& vhdl_context, std::uint32_t tabs = 4)
         : os{ os_ }
         , ref_ast_context{ std::ref(ast_context) }
         , ref_vhdl_context{ std::ref(vhdl_context) }
         , tab_sz{ tabs }
     {
+        // limit tabulator to reasonable size
+        assert((tab_sz < 30) && "invalid tabulator size, must be < 30");
     }
 
     ~diagnostic_handler() = default;
@@ -222,14 +224,14 @@ public:
     ///
     /// @param sz new tabulator size to set
     ///
-    void set_tabulator_size(std::size_t sz) { tab_sz = sz; }
+    void set_tabulator_size(std::uint32_t sz) { tab_sz = sz; }
 
     ///
     /// Get the current the tabulator size
     ///
     /// @return std::size_t tabulator size
     ///
-    std::size_t tabulator_size() const { return tab_sz; }
+    std::uint32_t tabulator_size() const { return tab_sz; }
 
 private:
     ///
@@ -245,11 +247,13 @@ private:
     ///
     std::tuple<iterator_type, iterator_type> iterators_of(ast::position_tagged const& node) const
     {
+        using ibis::diagnostic::util::skip_whitespace;
+
         auto const iterator_range = ref_ast_context.get().position_of(node);
 
         auto first = iterator_range.begin();
         auto const last = iterator_range.end();
-        skip_whitespace(first, last);
+        // skip_whitespace(first, last); // ToDo Consider appropriate handling of white spaces
 
         return std::tuple{ first, last };
     }
@@ -262,33 +266,6 @@ private:
     /// @return source_location
     ///
     source_location get_source_location(iterator_type error_pos) const;
-
-    ///
-    /// Return the line number of a given iterator position. The position must
-    /// be within the position cache range.
-    ///
-    /// @param pos Iterator position where to gather the line number.
-    /// @return The line and column number.
-    ///
-    std::tuple<std::size_t, std::size_t> line_column_number(iterator_type pos) const;
-
-    ///
-    /// Return an iterator to the begin of the line. White spaces are skipped.
-    /// The position must be within the position cache range.
-    /// @note For this, the position iterator is modified.
-    ///
-    /// @param pos_iter Iterator position pointing to a line of interest.
-    /// @return Iterator position pointing to the begin of line.
-    ///
-    iterator_type get_line_start(iterator_type pos_iter) const;
-
-    ///
-    /// Print the line where the iterator points to until end-of-line.
-    ///
-    /// @param first Iterator position pointing to a line of interest.
-    /// @return String representing the source line.
-    ///
-    std::string_view current_line(iterator_type first) const;
 
     ///
     /// gather location information with file name etc.
@@ -315,7 +292,7 @@ private:
     }
 
     ///
-    /// gather erroneous part as source snippet, e.g. start label
+    /// gather erroneous part as source snippet, e.g. start label of blocks
     ///
     /// @param diag_ctx VHDL diagnostic context to be filled with information
     /// @param position_tagged AST tagged node with error/warning information
@@ -323,10 +300,18 @@ private:
     void set_source_snippet(vhdl::diagnostic_context& diag_ctx,
                             ast::position_tagged const& position_tagged) const
     {
+        using ibis::diagnostic::util::current_line;
+        using ibis::diagnostic::util::get_line_start;
+        using ibis::diagnostic::util::line_column_number;
+
+        auto file_contents = ref_ast_context.get().file_contents();
+
         auto const [first, last] = iterators_of(position_tagged);
-        auto const line_no = std::get<0>(line_column_number(first));
-        diag_ctx.set_source_snippet(line_no, current_line(get_line_start(first)),  // --
-                                    first, last);
+        auto const position = line_column_number(file_contents, first, tabulator_size());
+
+        diag_ctx.set_source_snippet(
+            position.line, current_line(file_contents, get_line_start(file_contents, first)),  // --
+            first, last);
     }
 
     ///
@@ -339,38 +324,23 @@ private:
     void set_source_snippet(vhdl::diagnostic_context& diag_ctx, iterator_type first,
                             std::optional<iterator_type> last) const
     {
+        using ibis::diagnostic::util::current_line;
+        using ibis::diagnostic::util::get_line_start;
+        using ibis::diagnostic::util::line_column_number;
+        using ibis::diagnostic::util::skip_whitespace;
+
+        // ToDo rethink skipping whitespaces here
         if (last.has_value()) {
             skip_whitespace(first, last.value());
         }
-        auto const line_no = std::get<0>(line_column_number(first));
-        diag_ctx.set_source_snippet(line_no, current_line(get_line_start(first)), first, last);
-    }
 
-    ///
-    /// Move the first iterator forward, ensure iter does not point to white space
-    ///
-    /// @param first iterator to be adjust
-    /// @param last end iterator
-    ///
-    /// @see
-    /// - [X3: error_handler should not skip whitespaces #670](
-    ///    https://github.com/boostorg/spirit/pull/670)
-    /// - [ X3 3.0.10 error_handler where() is wrong #712 ](
-    ///    https://github.com/boostorg/spirit/issues/712)
-    ///
-    static void skip_whitespace(iterator_type& first, iterator_type last)
-    {
-        // make sure first does not point to white space
-        while (first != last) {
-            // see [isspace](https://en.cppreference.com/w/cpp/string/byte/isspace)
-            auto const chr = static_cast<unsigned char>(*first);
-            if (std::isspace(chr)) {
-                ++first;
-            }
-            else {
-                break;
-            }
-        }
+        auto file_contents = ref_ast_context.get().file_contents();
+
+        auto const position = line_column_number(file_contents, first, tabulator_size());
+
+        diag_ctx.set_source_snippet(
+            position.line, current_line(file_contents, get_line_start(file_contents, first)), first,
+            last);
     }
 };
 

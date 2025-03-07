@@ -20,9 +20,6 @@ namespace ibis::vhdl {
 ///
 class diagnostic_printer {
     std::reference_wrapper<diagnostic_context const> ref_context;
-    std::size_t tab_size = 4;
-    char marker_symbol = '~';
-    char location_symbol = '^';
 
 public:
     using failure_kind = diagnostic_context::failure_kind;
@@ -47,9 +44,6 @@ public:
     explicit diagnostic_printer(diagnostic_context const& ctx);
 
     std::ostream& print_on(std::ostream& os) const;
-
-public:
-    void set_tab_size(std::size_t sz) { tab_size = sz; }
 
 private:
     std::ostream& print_snippets(std::ostream& os) const;

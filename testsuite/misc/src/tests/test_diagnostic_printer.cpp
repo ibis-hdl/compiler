@@ -12,13 +12,13 @@
 #include <boost/test/tree/decorator.hpp>   // utf::label
 #include <boost/test/tools/output_test_stream.hpp>
 
-#include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
-
 #include <array>
 #include <iostream>
 #include <format>
 #include <string_view>
 #include <optional>
+
+#include <testsuite/namespace_alias.hpp>  // IWYU pragma: keep
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 BOOST_AUTO_TEST_SUITE(diagnostic_printer)
@@ -162,9 +162,9 @@ BOOST_AUTO_TEST_CASE(issue_marker_formatter, *utf::label("formatter"))
                     "expected |{3}|\n"  // -- | expected |
                     "{4:-^76}\n",       // -- bottom border
                     // --- data ---
-                    " verbose ",                    // top border
+                    " verbose ",                    // top border title
                     input_string, issue, expected,  // <input>, <issue marker>, <expected>
-                    ""                              // bottom border
+                    ""                              // (empty) bottom border title
                 );
             }
 

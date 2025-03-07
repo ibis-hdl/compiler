@@ -8,7 +8,7 @@
 #include <concepts>
 #include <tuple>
 
-// utility functions, too small top put them into own header
+// collection of utility functions, too small top put them into own header
 namespace ibis::util {
 
 ///

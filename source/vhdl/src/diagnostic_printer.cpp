@@ -66,8 +66,6 @@ std::ostream& diagnostic_printer::print_snippets(std::ostream& os) const
     return os;
 }
 
-// ToDo: With retirement of the ibis::color code base, the diagnostic_printer API must be renewed
-// - it is no longer intuitive.
 std::ostream& diagnostic_printer::print_on(std::ostream& os) const
 {
     auto const snippets = [&]() {

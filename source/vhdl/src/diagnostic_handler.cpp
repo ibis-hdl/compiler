@@ -5,6 +5,7 @@
 
 #include <ibis/vhdl/diagnostic_handler.hpp>
 
+#include <ibis/diagnostic/util.hpp>
 #include <ibis/util/get_iterator_pair.hpp>
 #include <ibis/vhdl/ast/util/position_tagged.hpp>
 #include <ibis/vhdl/context.hpp>
@@ -103,103 +104,12 @@ void diagnostic_handler<IteratorT>::error(iterator_type error_first,
 template <typename IteratorT>
 source_location diagnostic_handler<IteratorT>::get_source_location(iterator_type error_pos) const
 {
-    auto const [line, column] = line_column_number(error_pos);
-    return source_location(ref_ast_context.get().file_name(), line, column);
-}
+    using ibis::diagnostic::util::line_column_number;
 
-template <typename IteratorT>
-std::tuple<std::size_t, std::size_t> diagnostic_handler<IteratorT>::line_column_number(
-    iterator_type pos) const
-{
-    // based on [.../x3/support/utility/error_reporting.hpp:position(...)](
-    // https://github.com/boostorg/spirit/blob/master/include/boost/spirit/home/x3/support/utility/error_reporting.hpp)
-    // Further reading at [What is the unit of a text column number?](
-    // https://www.foonathan.net/2021/02/column/#content).
+    auto const position =
+        line_column_number(ref_ast_context.get().file_contents(), error_pos, tabulator_size());
 
-    using char_type = std::iter_value_t<iterator_type>;
-
-    std::size_t line_no = 1;
-    std::size_t col_no = 1;
-    char_type chr_prev = 0;
-
-    // ToDo Clang -Weverything Warning: ++iter unsafe pointer arithmetic [-Wunsafe-buffer-usage]
-    for (iterator_type iter = ref_ast_context.get().file_contents().begin(); iter != pos; ++iter) {
-        auto const chr = *iter;
-        switch (chr) {
-            case '\n':                   // Line Feed (Linux, Mac OS X)
-                if (chr_prev != '\r') {  // EOL - End of Line (Windows)
-                    ++line_no;
-                    col_no = 1;
-                }
-                break;
-            case '\r':  // Carriage Return (Mac pre-OS X)
-                ++line_no;
-                col_no = 1;
-                break;
-            case '\t':
-                // https://github.com/boostorg/spirit/blob/master/include/boost/spirit/home/support/iterators/line_pos_iterator.hpp
-                col_no += tab_sz;  //  - (col_no - 1) % tab_sz;
-                break;
-            default:
-                // On UTF8, skip code points, VHDL is fortunately ASCII.
-                ++col_no;
-                break;
-        }
-        chr_prev = chr;
-    }
-
-    return { line_no, col_no };
-}
-
-template <typename IteratorT>
-auto diagnostic_handler<IteratorT>::get_line_start(iterator_type pos) const ->
-    typename diagnostic_handler<IteratorT>::iterator_type
-{
-    using ibis::util::get_iterator_pair;
-
-    // FixMe This should be rewritten with range based loops
-    auto [begin, end] = get_iterator_pair(ref_ast_context.get().file_contents());
-
-    // based on [.../x3/support/utility/error_reporting.hpp:get_line_start(...)](
-    // https://github.com/boostorg/spirit/blob/master/include/boost/spirit/home/x3/support/utility/error_reporting.hpp)
-    auto last_iter = begin;
-
-    for (auto iter = begin; iter != pos;) {
-        // Windows ('\r\n')
-        if (*iter == '\r' || *iter == '\n') {
-            last_iter = ++iter;
-        }
-        else {
-            ++iter;
-        }
-    }
-
-    return last_iter;
-}
-
-template <typename IteratorT>
-std::string_view diagnostic_handler<IteratorT>::current_line(iterator_type first) const
-{
-    // based on [.../x3/support/utility/error_reporting.hpp:print_line(...)](
-    // https://github.com/boostorg/spirit/blob/master/include/boost/spirit/home/x3/support/utility/error_reporting.hpp)
-    // Note: VHDL has no UTF8, see [VHDL file encoding](
-    // https://insights.sigasi.com/tech/vhdl-file-encoding/). The X3 way is using
-    // `x3::to_utf8(line)` above.
-
-    auto line_end = first;
-    // ClangTidy - don't touch, since this may be an iterator classes
-    // NOLINTNEXTLINE(readability-qualified-auto)
-    auto const end = ref_ast_context.get().file_contents().end();
-
-    while (line_end != end) {
-        if (*line_end == '\r' || *line_end == '\n') {
-            break;
-        }
-
-        ++line_end;
-    }
-
-    return std::string_view(first, line_end);
+    return source_location(ref_ast_context.get().file_name(), position.line, position.character);
 }
 
 }  // namespace ibis::vhdl

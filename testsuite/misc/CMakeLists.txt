@@ -33,6 +33,7 @@ target_link_libraries(${PROJECT_NAME}
 
 target_sources(${PROJECT_NAME}
     PRIVATE
+        src/tests/test_diagnostic_util.cpp
         src/tests/test_diagnostic_printer.cpp
         src/test_main.cpp
 )

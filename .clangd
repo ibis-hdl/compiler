@@ -21,12 +21,12 @@ Style:
     "src/.*"
   ]
   AngledHeaders: [ #".*"
-    "source/common/include/ibis/.*",
-    "source/frontend/include/ibis/.*",
-    "source/vhdl/include/ibis/.*",
+    "source/common/include/.*",
+    "source/frontend/include/.*",
+    "source/vhdl/include/.*",
     "testsuite/common/include/.*",
     "testsuite/misc/include/.*",
-    "testsuite/testsuite_util/include/testsuite.*"
+    "testsuite/testsuite_util/include/.*"
   ]
 
 InlayHints:
