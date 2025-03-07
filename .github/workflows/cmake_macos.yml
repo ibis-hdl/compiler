@@ -79,7 +79,7 @@ jobs:
         conan profile show -pr=${{ matrix.cmake.conan_profile }}
 
     - name: Setup Github cache for compiler cache (Mozilla sccache-cache)
-      uses: mozilla-actions/sccache-action@v0.0.7
+      uses: mozilla-actions/sccache-action@v0.0.8
       env:
         SCCACHE_GHA_ENABLED: "true"
 
