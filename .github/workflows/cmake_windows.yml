@@ -57,7 +57,7 @@ jobs:
         # pipx install virtualenv   # Windows 2022 image, based on Python 3.9!!, match statements are a feature of Python 3.10
 
     - name: Checkout Repo
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: true
 

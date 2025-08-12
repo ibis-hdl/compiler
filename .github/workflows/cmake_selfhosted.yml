@@ -72,7 +72,7 @@ jobs:
       uses: lukka/get-cmake@v3.31.6
 
     - name: Checkout Repo
-      uses: actions/checkout@v3
+      uses: actions/checkout@v5
       with:
         submodules: true
 
